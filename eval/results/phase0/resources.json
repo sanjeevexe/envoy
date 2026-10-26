@@ -1,0 +1,87 @@
+[
+  {
+    "time": "2026-10-26T22:33:46+00:00",
+    "label": "one-emulator-idle",
+    "seconds": 30,
+    "emulators": {
+      "envoy-test": {
+        "pid": 2525,
+        "cpu_pct_median": 9.0,
+        "cpu_pct_max": 13.0,
+        "footprint_mb_median": 6671.0,
+        "rss_mb_median": 2825.890625,
+        "n": 17
+      }
+    },
+    "system": {
+      "used_gb": 23.0,
+      "wired_gb": 2.4736328125,
+      "compressor_gb": 12.0,
+      "unused_gb": 0.0849609375,
+      "free_pct": 36.0,
+      "swap": "total = 8192.00M  used = 7139.44M  free = 1052.56M  (encrypted)"
+    }
+  },
+  {
+    "time": "2026-10-26T22:35:18+00:00",
+    "label": "two-emulators-idle",
+    "seconds": 30,
+    "emulators": {
+      "envoy-test": {
+        "pid": 2525,
+        "cpu_pct_median": 2.9,
+        "cpu_pct_max": 33.3,
+        "footprint_mb_median": 6575.0,
+        "rss_mb_median": 966.4375,
+        "n": 17
+      },
+      "envoy-real": {
+        "pid": 2690,
+        "cpu_pct_median": 41.8,
+        "cpu_pct_max": 158.8,
+        "footprint_mb_median": 7327.0,
+        "rss_mb_median": 3122.203125,
+        "n": 17
+      }
+    },
+    "system": {
+      "used_gb": 23.0,
+      "wired_gb": 2.48046875,
+      "compressor_gb": 12.0,
+      "unused_gb": 0.1611328125,
+      "free_pct": 35.0,
+      "swap": "total = 10240.00M  used = 9939.31M  free = 300.69M  (encrypted)"
+    }
+  },
+  {
+    "time": "2026-10-26T22:40:04+00:00",
+    "label": "two-emulators-settled",
+    "seconds": 30,
+    "emulators": {
+      "envoy-test": {
+        "pid": 2525,
+        "cpu_pct_median": 5.8,
+        "cpu_pct_max": 18.9,
+        "footprint_mb_median": 6656.0,
+        "rss_mb_median": 1059.734375,
+        "n": 17
+      },
+      "envoy-real": {
+        "pid": 2690,
+        "cpu_pct_median": 3.8,
+        "cpu_pct_max": 32.3,
+        "footprint_mb_median": 7303.0,
+        "rss_mb_median": 1487.28125,
+        "n": 17
+      }
+    },
+    "system": {
+      "used_gb": 23.0,
+      "wired_gb": 2.4921875,
+      "compressor_gb": 12.0,
+      "unused_gb": 0.0908203125,
+      "free_pct": 37.0,
+      "swap": "total = 11264.00M  used = 10433.31M  free = 830.69M  (encrypted)"
+    }
+  }
+]

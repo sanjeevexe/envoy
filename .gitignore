@@ -12,9 +12,6 @@ __pycache__/
 .ruff_cache/
 .mypy_cache/
 
-# Generated gRPC stubs (regenerate with scripts/gen_emulator_grpc.sh)
-backend/devices/grpc_gen/*_pb2*.py
-backend/devices/grpc_gen/*_pb2*.pyi
 
 # Logs and runtime output
 logs/
