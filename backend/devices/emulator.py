@@ -1,0 +1,311 @@
+"""EmulatorDevice: the Device interface on an Android emulator, via uiautomator2 + adbutils + emulator gRPC.
+
+uiautomator2 is synchronous, so every call runs in a worker thread. One EmulatorDevice per emulator;
+calls on one device are serialized by a lock (Android allows a single automation session anyway).
+"""
+
+from __future__ import annotations
+
+import asyncio
+import io
+import os
+import re
+import subprocess
+import time
+from pathlib import Path
+
+import adbutils
+import uiautomator2 as u2
+from PIL import Image
+
+from devices.emulator_grpc import EmulatorGrpc
+from devices.screen import build_state, content_hash, has_app_content, parse_hierarchy
+from devices.types import Action, ActionResult, Capabilities, ScreenState, StreamHandle
+
+# Must match scripts/start_emulator.sh
+AVDS = {
+    "envoy-test": {"serial": "emulator-5554", "grpc_port": 8554, "can_snapshot": True},
+    "envoy-real": {"serial": "emulator-5556", "grpc_port": 8556, "can_snapshot": False},
+}
+
+_FOCUS = re.compile(r"mCurrentFocus=Window\{(\S+) \S+ ([^/\s}]+)/?([^\s}]*)\}")
+
+
+def _adb_path() -> str:
+    home = os.environ.get("ANDROID_HOME", str(Path.home() / "Library/Android/sdk"))
+    return str(Path(home) / "platform-tools" / "adb")
+
+
+class EmulatorDevice:
+    def __init__(self, avd: str) -> None:
+        cfg = AVDS[avd]
+        self.avd = avd
+        self.id = cfg["serial"]
+        self.serial: str = cfg["serial"]
+        self.grpc_port: int = cfg["grpc_port"]
+        self._can_snapshot: bool = cfg["can_snapshot"]
+        self._lock = asyncio.Lock()
+        self._last: ScreenState | None = None
+        self._forwards: list[tuple[str, str]] = []  # (local, remote) adb forwards to restore after a snapshot load
+        self.adb: adbutils.AdbDevice
+        self.u2: u2.Device
+        self.grpc = EmulatorGrpc(self.grpc_port)
+        self.capabilities: Capabilities
+
+    # ---- connection -------------------------------------------------------------------------
+
+    def connect(self) -> "EmulatorDevice":
+        self.adb = adbutils.adb.device(self.serial)
+        self.u2 = u2.connect(self.serial)
+        info = self.u2.info  # starts the uiautomator2 server if needed
+        density = int(re.search(r"(\d+)", self.adb.shell("wm density")).group(1))  # type: ignore[union-attr]
+        self.capabilities = Capabilities(
+            real_phone=False,
+            has_sim=False,
+            can_snapshot=self._can_snapshot,
+            width=info["displayWidth"],
+            height=info["displayHeight"],
+            density=density,
+        )
+        self.grpc.connect()
+        return self
+
+    def add_forward(self, local: str, remote: str) -> None:
+        self.adb.forward(local, remote)
+        self._forwards.append((local, remote))
+
+    def _reconnect(self, timeout_s: float = 60) -> None:
+        """After a snapshot load: wait for adb, restore forwards, restart the uiautomator2 session, reopen gRPC."""
+        deadline = time.time() + timeout_s
+        subprocess.run([_adb_path(), "-s", self.serial, "wait-for-device"], timeout=timeout_s, check=True)
+        self.adb = adbutils.adb.device(self.serial)
+        while self.adb.shell("getprop sys.boot_completed").strip() != "1":
+            if time.time() > deadline:
+                raise TimeoutError("device did not come back after snapshot load")
+            time.sleep(0.2)
+        for local, remote in self._forwards:
+            self.adb.forward(local, remote)
+        last_error: Exception | None = None
+        while time.time() < deadline:
+            try:
+                self.u2 = u2.connect(self.serial)
+                self.u2.dump_hierarchy()  # proves the automation server answers
+                break
+            except Exception as e:  # server restarting; retry
+                last_error = e
+                time.sleep(0.3)
+        else:
+            raise TimeoutError(f"uiautomator2 did not recover: {last_error}")
+        self.grpc.close()
+        self.grpc.connect()
+        self._last = None
+
+    # ---- observe ----------------------------------------------------------------------------
+
+    def _foreground(self) -> tuple[str, str, bool]:
+        """Focused app, activity, and whether its window is FLAG_SECURE (one dumpsys call, ~25 ms).
+
+        The emulator's gRPC screenshot still captures secure windows (scrcpy and screencap are black),
+        so secure screens must be detected from the window flag, not from black frames.
+        """
+        out = self.adb.shell("dumpsys window | grep -E '^  Window #|mCurrentFocus|^      fl='")
+        m = _FOCUS.search(out)
+        if not m:
+            return "", "", False
+        token, pkg, act = m.group(1), m.group(2), m.group(3)
+        if act.startswith("."):
+            act = pkg + act
+        secure = False
+        lines = out.splitlines()
+        for i, line in enumerate(lines):
+            if line.startswith("  Window #") and f"Window{{{token} " in line:
+                flags = next((l for l in lines[i + 1 : i + 3] if l.strip().startswith("fl=")), "")
+                secure = "SECURE" in flags.split()
+                break
+        return pkg, act, secure
+
+    def _observe_sync(self, screenshot: bool, settle_ms: float | None = None) -> ScreenState:
+        t0 = time.perf_counter()
+        xml = self.u2.dump_hierarchy()
+        read_ms = (time.perf_counter() - t0) * 1000
+        pkg, act, secure = self._foreground()
+        state = build_state(
+            xml,
+            pkg,
+            act,
+            self.capabilities.width,
+            self.capabilities.height,
+            settle_ms=settle_ms,
+            read_ms=read_ms,
+            secure=secure,
+        )
+        if screenshot:
+            state.screenshot_png = self._screenshot_sync()
+        self._last = state
+        return state
+
+    async def observe(self, screenshot: bool = False) -> ScreenState:
+        async with self._lock:
+            return await asyncio.to_thread(self._observe_sync, screenshot)
+
+    def _settle_sync(self, timeout_s: float, quiet_ms: float = 250, poll_ms: float = 60) -> ScreenState:
+        """Poll the tree until nothing visible has changed for `quiet_ms` and app content is present.
+        settle_ms = time until the last change."""
+        start = time.perf_counter()
+        last_hash = None
+        last_change = start
+        while True:
+            xml = self.u2.dump_hierarchy()
+            now = time.perf_counter()
+            elements = parse_hierarchy(xml, self.capabilities.height)
+            h = content_hash(elements)
+            if h != last_hash:
+                last_hash, last_change = h, now
+            elif (now - last_change) * 1000 >= quiet_ms and has_app_content(elements):
+                break
+            if now - start >= timeout_s:
+                break
+            time.sleep(poll_ms / 1000)
+        return self._observe_sync(False, settle_ms=(last_change - start) * 1000)
+
+    async def wait_until_settled(self, timeout_s: float = 5) -> ScreenState:
+        async with self._lock:
+            return await asyncio.to_thread(self._settle_sync, timeout_s)
+
+    # ---- act --------------------------------------------------------------------------------
+
+    def _tap(self, x: int, y: int, hold_s: float = 0.0) -> None:
+        """Emulator gRPC touch (~1 ms) with uiautomator2 (~150 ms) as the fallback."""
+        try:
+            if hold_s:
+                self.grpc.touch(x, y, pressure=1)
+                time.sleep(hold_s)
+                self.grpc.touch(x, y, pressure=0)
+            else:
+                self.grpc.tap(x, y)
+        except Exception:
+            if hold_s:
+                self.u2.long_click(x, y, duration=hold_s)
+            else:
+                self.u2.click(x, y)
+
+    def _act_sync(self, a: Action) -> ActionResult:
+        t0 = time.perf_counter()
+        target = None
+        try:
+            if a.kind in ("tap", "long_press", "type") or (a.kind == "scroll" and a.element is not None):
+                if self._last is None:
+                    self._observe_sync(False)
+                assert self._last is not None
+                el = self._last.element(a.element or 0)
+                target = el.to_json()
+            if a.kind == "tap":
+                self._tap(*el.center)
+            elif a.kind == "long_press":
+                self._tap(*el.center, hold_s=0.8)
+            elif a.kind == "type":
+                if not el.focused:
+                    self.u2.click(*el.center)
+                # Accessibility set-text (ACTION_SET_TEXT): any language and emoji, replaces the field's text.
+                # uiautomator2's send_keys pastes through the clipboard, which would leak typed text into
+                # the clipboard and the keyboard's clipboard history (measured in Phase 0), so it is only a fallback.
+                focused = self.u2(focused=True)
+                if focused.exists:
+                    focused.set_text(a.text or "")
+                else:
+                    self.u2.send_keys(a.text or "", clear=True)
+                    self.u2.set_clipboard("")
+                if a.submit:
+                    self.u2.send_action()  # IME "smart enter": search / go / done, whichever the field wants
+            elif a.kind == "scroll":
+                x1, y1, x2, y2 = el.bounds if a.element is not None else (0, 0, self.capabilities.width, self.capabilities.height)
+                cx, cy = (x1 + x2) // 2, (y1 + y2) // 2
+                dx, dy = int((x2 - x1) * 0.3), int((y2 - y1) * 0.3)
+                # "scroll down" = reveal content further down = finger moves up.
+                start, end = {
+                    "down": ((cx, cy + dy), (cx, cy - dy)),
+                    "up": ((cx, cy - dy), (cx, cy + dy)),
+                    "right": ((cx + dx, cy), (cx - dx, cy)),
+                    "left": ((cx - dx, cy), (cx + dx, cy)),
+                }[a.direction or "down"]
+                self.u2.swipe(*start, *end, duration=0.25)
+            elif a.kind == "swipe":
+                self.u2.swipe(a.x, a.y, a.x2, a.y2, duration=0.3)
+            elif a.kind == "back":
+                self.u2.press("back")
+            elif a.kind == "home":
+                self.u2.press("home")
+            elif a.kind == "launch":
+                self.u2.app_start(a.package or "")
+            elif a.kind == "tap_point":
+                self._tap(a.x or 0, a.y or 0)
+            elif a.kind == "wait":
+                time.sleep(a.seconds or 1.0)
+            self._last = None  # any action may change the screen
+            return ActionResult(ok=True, duration_ms=(time.perf_counter() - t0) * 1000, target=target)
+        except Exception as e:  # reported to the runtime, which decides whether to retry
+            return ActionResult(ok=False, error=f"{type(e).__name__}: {e}", duration_ms=(time.perf_counter() - t0) * 1000, target=target)
+
+    async def act(self, action: Action) -> ActionResult:
+        async with self._lock:
+            return await asyncio.to_thread(self._act_sync, action)
+
+    async def launch(self, package: str) -> None:
+        result = await self.act(Action(kind="launch", package=package))
+        if not result.ok:
+            raise RuntimeError(result.error)
+
+    # ---- snapshots (envoy-test only) --------------------------------------------------------
+
+    def _emu(self, *args: str, timeout: float = 120) -> str:
+        out = subprocess.run(
+            [_adb_path(), "-s", self.serial, "emu", *args], capture_output=True, text=True, timeout=timeout
+        )
+        text = (out.stdout + out.stderr).strip()
+        if out.returncode != 0 or "KO" in text.split():
+            raise RuntimeError(f"adb emu {' '.join(args)} failed: {text}")
+        return text
+
+    def _check_snapshots_allowed(self) -> None:
+        if not self.capabilities.can_snapshot:
+            raise PermissionError(f"{self.avd} is long-lived; snapshots are never restored on it")
+
+    async def snapshot_save(self, name: str) -> None:
+        self._check_snapshots_allowed()
+        async with self._lock:
+            await asyncio.to_thread(self._emu, "avd", "snapshot", "save", name)
+
+    async def snapshot_load(self, name: str) -> None:
+        self._check_snapshots_allowed()
+        async with self._lock:
+            await asyncio.to_thread(self._emu, "avd", "snapshot", "load", name)
+            await asyncio.to_thread(self._reconnect)
+
+    # ---- screenshots ------------------------------------------------------------------------
+
+    def screencap_png(self) -> bytes:
+        """Fallback screenshot via `adb exec-out screencap -p`."""
+        out = subprocess.run(
+            [_adb_path(), "-s", self.serial, "exec-out", "screencap", "-p"], capture_output=True, timeout=30
+        )
+        if out.returncode != 0 or not out.stdout.startswith(b"\x89PNG"):
+            raise RuntimeError(f"screencap failed: {out.stderr.decode(errors='replace')}")
+        return out.stdout
+
+    def _screenshot_sync(self) -> bytes:
+        try:
+            return self.grpc.png()
+        except Exception:
+            return self.screencap_png()
+
+    async def screenshot(self) -> bytes:
+        return await asyncio.to_thread(self._screenshot_sync)
+
+    def screenshot_image(self) -> Image.Image:
+        try:
+            return self.grpc.image()
+        except Exception:
+            return Image.open(io.BytesIO(self.screencap_png()))
+
+    def video_stream(self) -> StreamHandle:
+        raise NotImplementedError("live video comes from the Node scrcpy relay (Phase 4)")
