@@ -41,6 +41,7 @@ Development tools (not shipped): [uv](https://github.com/astral-sh/uv) (MIT or A
 | [PyAV](https://github.com/PyAV-Org/PyAV) | BSD-3-Clause | Decoding scrcpy frames for the agent |
 | [Google API Python client](https://github.com/googleapis/google-api-python-client) | Apache-2.0 | Gmail and Calendar |
 | [Jetpack Compose](https://developer.android.com/jetpack/compose) / AndroidX | Apache-2.0 | Test apps (SkyLark Air) |
+| `meta-sam-parser` (PyPI) / `@meta-sam/parser` (npm), from Meta | License to check when added | Parsing SAM 3.1's special-token output (Phase 6) |
 
 ## Considered and not used
 
