@@ -1,0 +1,11 @@
+App: com.google.android.deskclock · Screen: DeskClock · settled 844 ms
+[1] Text "Clock" (id: action_bar_title)
+[2] Button "More options" (id: overflow_action_button)
+[3] Text "7:08 PM" (id: digital_clock)
+[4] Text "Mon, Oct 26" (id: date_and_next_alarm)
+[5] Button "Add city" (id: fab)
+[6] Button "Alarm" (id: tab_menu_alarm)
+[7] Text "Clock" (id: tab_menu_clock) (selected)
+[8] Button "Timer" (id: tab_menu_timer)
+[9] Button "Stopwatch" (id: tab_menu_stopwatch)
+[10] Button "Bedtime" (id: tab_menu_bedtime)

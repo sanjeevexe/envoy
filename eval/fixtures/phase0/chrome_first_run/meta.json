@@ -1,0 +1,16 @@
+{
+  "name": "chrome_first_run",
+  "package": "com.android.chrome",
+  "activity": "org.chromium.chrome.browser.firstrun.FirstRunActivity",
+  "signature": "b78bad6d9e3d16b3",
+  "width": 1080,
+  "height": 2400,
+  "elements_total": 44,
+  "elements_numbered": 6,
+  "compact_chars": 502,
+  "captured_at": "2026-10-26T23:08:49+00:00",
+  "device": "envoy-test (Pixel 6 profile, API 35 Google Play arm64)",
+  "task": {
+    "goal": "Continue without signing in"
+  }
+}

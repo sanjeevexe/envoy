@@ -1,0 +1,8 @@
+App: com.android.chrome · Screen: FirstRunActivity · settled 1160 ms
+[1] List (scrollable)
+[2] Text "Welcome to Chrome" (id: title)
+[3] Text "Sign in to browse easier across devices" (id: subtitle)
+[4] Button "Add account to device" (id: signin_fre_continue_button)
+[5] Button "Use without an account" (id: signin_fre_dismiss_button)
+[6] Button "By continuing, you agree to the Terms of Service. To help improve the app, Chro…" (id: signin_fre_footer)
+(screen has a scrollable list; scroll to see more)

@@ -1,0 +1,41 @@
+{
+  "name": "settings_home",
+  "package": "com.android.settings",
+  "activity": "com.android.settings.Settings",
+  "signature": "817bb4a33582bb01",
+  "width": 1080,
+  "height": 2400,
+  "elements_total": 86,
+  "elements_numbered": 12,
+  "compact_chars": 783,
+  "captured_at": "2026-10-26T23:08:43+00:00",
+  "device": "envoy-test (Pixel 6 profile, API 35 Google Play arm64)",
+  "task": {
+    "goal": "Open the Battery settings",
+    "expected_action": {
+      "type": "tap",
+      "element": 10
+    }
+  },
+  "grounding_target": {
+    "description": "the Battery row",
+    "element_number": 10,
+    "resource_id": "",
+    "bbox_px": [
+      0,
+      1694,
+      1080,
+      1925
+    ],
+    "bbox_1000": [
+      0,
+      706,
+      1000,
+      802
+    ],
+    "center_px": [
+      540,
+      1809
+    ]
+  }
+}

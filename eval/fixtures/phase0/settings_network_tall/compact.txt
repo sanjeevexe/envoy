@@ -1,0 +1,15 @@
+App: com.android.settings · Screen: SubSettings · settled 774 ms
+[1] List (id: content_parent) (scrollable)
+[2] Text "Network & internet" (id: collapsing_toolbar)
+[3] Button "Navigate up"
+[4] Button "Internet · AndroidWifi"
+[5] Button "SIMs · T-Mobile"
+[6] Button "Airplane mode"
+[7] Switch (id: switchWidget) (off)
+[8] Button "Hotspot & tethering · Off"
+[9] Button "Data Saver · Off"
+[10] Button "VPN · None"
+[11] Button "Private DNS · Automatic"
+[12] Button "Adaptive connectivity · On"
+[13] Button "Mobile network security · Network type, encryption, notification controls"
+(screen has a scrollable list; scroll to see more)

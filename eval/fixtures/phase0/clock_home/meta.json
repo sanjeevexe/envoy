@@ -1,0 +1,16 @@
+{
+  "name": "clock_home",
+  "package": "com.google.android.deskclock",
+  "activity": "com.android.deskclock.DeskClock",
+  "signature": "1b33bedea9fc841c",
+  "width": 1080,
+  "height": 2400,
+  "elements_total": 74,
+  "elements_numbered": 10,
+  "compact_chars": 507,
+  "captured_at": "2026-10-26T23:08:50+00:00",
+  "device": "envoy-test (Pixel 6 profile, API 35 Google Play arm64)",
+  "task": {
+    "goal": "Open the Timer tab"
+  }
+}

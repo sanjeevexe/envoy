@@ -1,0 +1,14 @@
+App: com.android.settings · Screen: Settings · settled 799 ms
+[1] List (id: settings_homepage_container) (scrollable)
+[2] Button "Profile picture, double tap to open Google Account" (id: account_avatar)
+[3] Text "Settings" (id: homepage_title)
+[4] Button "Search settings" (id: search_action_bar)
+[5] List (id: main_content_scrollable_container) (scrollable)
+[6] Button "Network & internet · Mobile, Wi‑Fi, hotspot"
+[7] Button "Connected devices · Bluetooth, pairing"
+[8] Button "Apps · Assistant, recent apps, default apps"
+[9] Button "Notifications · Notification history, conversations"
+[10] Button "Battery · 100%"
+[11] Button "Storage · 49% used - 8.15 GB free"
+[12] Button "Sound & vibration · Volume, haptics, Do Not Disturb"
+(screen has a scrollable list; scroll to see more)

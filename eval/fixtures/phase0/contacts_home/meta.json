@@ -1,0 +1,16 @@
+{
+  "name": "contacts_home",
+  "package": "com.google.android.contacts",
+  "activity": "com.android.contacts.activities.PeopleActivity",
+  "signature": "3b3b8f7fc20f89f0",
+  "width": 1080,
+  "height": 2400,
+  "elements_total": 83,
+  "elements_numbered": 11,
+  "compact_chars": 547,
+  "captured_at": "2026-10-26T23:08:47+00:00",
+  "device": "envoy-test (Pixel 6 profile, API 35 Google Play arm64)",
+  "task": {
+    "goal": "Start creating a new contact"
+  }
+}

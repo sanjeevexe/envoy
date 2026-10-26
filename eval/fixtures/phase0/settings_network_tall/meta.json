@@ -1,0 +1,62 @@
+{
+  "name": "settings_network_tall",
+  "package": "com.android.settings",
+  "activity": "com.android.settings.SubSettings",
+  "signature": "ccefb600c33d8cd1",
+  "width": 1080,
+  "height": 2400,
+  "elements_total": 89,
+  "elements_numbered": 13,
+  "compact_chars": 627,
+  "captured_at": "2026-10-26T23:08:45+00:00",
+  "device": "envoy-test (Pixel 6 profile, API 35 Google Play arm64)",
+  "task": {
+    "goal": "Turn on Airplane mode",
+    "expected_action": {
+      "type": "tap",
+      "element": 7
+    }
+  },
+  "grounding_target": {
+    "description": "the Airplane mode switch",
+    "element_number": 7,
+    "resource_id": "com.android.settings:id/switchWidget",
+    "bbox_px": [
+      901,
+      1024,
+      1038,
+      1150
+    ],
+    "bbox_1000": [
+      834,
+      427,
+      961,
+      479
+    ],
+    "center_px": [
+      969,
+      1087
+    ]
+  },
+  "grounding_target_row": {
+    "description": "the Airplane mode row",
+    "element_number": 6,
+    "resource_id": "",
+    "bbox_px": [
+      0,
+      1010,
+      1080,
+      1165
+    ],
+    "bbox_1000": [
+      0,
+      421,
+      1000,
+      485
+    ],
+    "center_px": [
+      540,
+      1087
+    ]
+  }
+}

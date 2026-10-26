@@ -1,0 +1,12 @@
+App: com.google.android.contacts · Screen: PeopleActivity · settled 1311 ms
+[1] EditText "Search contacts" (id: open_search_bar) (empty)
+[2] Button "Search"
+[3] Button "Signed in as Device Account and settings." (id: selected_account_disc)
+[4] Button "Device"
+[5] Button "View labels"
+[6] Toggle "Show list filters" (off)
+[7] Text "No contacts yet" (id: text1)
+[8] Button "Create contact" (id: floating_action_button)
+[9] Text "Contacts" (id: contacts) (selected)
+[10] Button "Highlights" (id: highlights)
+[11] Button "Organize" (id: nav_organize)
