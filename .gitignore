@@ -1,0 +1,48 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Generated gRPC stubs (regenerate with scripts/gen_emulator_grpc.sh)
+backend/devices/grpc_gen/*_pb2*.py
+backend/devices/grpc_gen/*_pb2*.pyi
+
+# Logs and runtime output
+logs/
+*.log
+*.jsonl
+
+# Emulator artifacts
+*.avd/
+*.img
+*.qcow2
+snapshots/
+emulator-*.txt
+*.apk
+*.aab
+
+# Large screenshots and recordings (fixtures under eval/fixtures are kept)
+screenshots/
+captures/
+*.mp4
+*.mkv
+*.h264
+
+# Node
+node_modules/
+.next/
+dist/
+
+# macOS / editors
+.DS_Store
+.idea/
+.vscode/

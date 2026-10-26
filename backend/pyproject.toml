@@ -1,0 +1,26 @@
+[project]
+name = "envoy-backend"
+version = "0.1.0"
+description = "Envoy backend: device layer, agent runtime, routines, memory, model adapter, MCP"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "adbutils>=2.12.0",
+    "fastapi>=0.162.0",
+    "grpcio>=1.85.0",
+    "grpcio-tools>=1.85.0",
+    "httpx>=0.28.1",
+    "mcp[cli]>=2.3.0",
+    "openai>=3.39.0",
+    "pillow>=13.0.0",
+    "pydantic>=2.14.1",
+    "python-dotenv>=1.2.4",
+    "uiautomator2>=3.7.1",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["devices", "models", "mcp_stub"]
