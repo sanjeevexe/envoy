@@ -1,0 +1,58 @@
+{
+  "first_run_steps": [
+    "tapped 'Use without an account'",
+    "tapped 'Got it'"
+  ],
+  "normal_tab": {
+    "case": "chrome_normal",
+    "tree": {
+      "nodes": 57,
+      "numbered": 12,
+      "readable": true,
+      "has_password_field": false,
+      "compact": "App: com.android.chrome · Screen: Main · settled 42 ms\n[1] List \"Example Domain\" (scrollable)\n[2] Text \"This domain is for use in documentation examples without needing permission. Th…\"\n[3] Text \"هذا النطاق مُخصص للاستخدام في أمثلة التوثيق دون الحاجة إلى إذن. هذه ليست خدمة، …\"\n[4] Text \"该域名仅用于文档示例，无需获得许可。这并非一项服务，请勿将其用于测试和监控目的。\"\n[5] Text \"L’usage de ce domaine est réservé à des exemples de documentation, sans autoris…\"\n[6] Text \"Данный домен предназначен для использования в примерах документации без необход…\"\n[7] Text \"Este dominio está destinado al uso en ejemplos de documentación sin necesidad d…\"\n[8] Button \"Open the home page\" (id: home_button)\n[9] Button \"Connection is secure\" (id: location_bar_status)\n[10] EditText \"example.com\" (id: url_bar)\n[11] Button \"Switch or close tabs\" (id: tab_switcher_button)\n[12] Button \"Customize and control Google Chrome\" (id: menu_button)\n(screen has a scrollable list; scroll to see more)"
+    },
+    "grpc_screenshot": {
+      "black_fraction": 0.0009,
+      "file": "eval/fixtures/phase0/secure/chrome_normal_grpc.png",
+      "black": false
+    },
+    "adb_screencap": {
+      "black_fraction": 0.0,
+      "file": "eval/fixtures/phase0/secure/chrome_normal_screencap.png",
+      "black": false
+    },
+    "scrcpy_video": {
+      "black_fraction": 0.0,
+      "file": "eval/fixtures/phase0/secure/chrome_normal_scrcpy.png",
+      "black": false
+    },
+    "window_flags_excerpt": "mCurrentFocus=Window{240190d u0 com.android.chrome/com.google.android.apps.chrome.Main}"
+  },
+  "incognito_tab": {
+    "case": "chrome_incognito",
+    "tree": {
+      "nodes": 62,
+      "numbered": 14,
+      "readable": true,
+      "has_password_field": false,
+      "compact": "App: com.android.chrome · Screen: Main · settled 50 ms\n[1] Text \"New Incognito tab\"\n[2] Text \"You’ve gone Incognito\" (id: new_tab_incognito_title)\n[3] Button \"Others who use this device won’t see your activity, so you can browse more priv…\" (id: new_tab_incognito_subtitle)\n[4] Text \"Chrome won’t save: Your browsing history Cookies and site data Information ente…\" (id: new_tab_incognito_features)\n[5] Text \"Your activity might still be visible to: Websites you visit Your employer or sc…\" (id: new_tab_incognito_warning)\n[6] Button \"Learn more\" (id: learn_more)\n[7] Text \"Block third-party cookies\" (id: cookie_controls_card_title)\n[8] Text \"When on, sites can't use cookies that track you across the web. Features on som…\" (id: cookie_controls_card_subtitle)\n[9] Switch \"Block third-party cookies\" (id: cookie_controls_card_toggle) (on)\n[10] Button \"Open the home page\" (id: home_button)\n[11] Button \"Incognito mode\" (id: location_bar_status)\n[12] EditText \"Search or type URL\" (id: url_bar) (empty)\n[13] Button \"Switch or close tabs\" (id: tab_switcher_button)\n[14] Button \"Customize and control Google Chrome\" (id: menu_button)"
+    },
+    "grpc_screenshot": {
+      "black_fraction": 0.0215,
+      "file": "eval/fixtures/phase0/secure/chrome_incognito_grpc.png",
+      "black": false
+    },
+    "adb_screencap": {
+      "black_fraction": 0.995,
+      "file": "eval/fixtures/phase0/secure/chrome_incognito_screencap.png",
+      "black": true
+    },
+    "scrcpy_video": {
+      "black_fraction": 0.995,
+      "file": "eval/fixtures/phase0/secure/chrome_incognito_scrcpy.png",
+      "black": true
+    },
+    "window_flags_excerpt": "mCurrentFocus=Window{240190d u0 com.android.chrome/com.google.android.apps.chrome.Main}\n      fl=LAYOUT_IN_SCREEN SECURE LAYOUT_INSET_DECOR SPLIT_TOUCH HARDWARE_ACCELERATED DRAWS_SYSTEM_BAR_BACKGROUNDS"
+  }
+}
