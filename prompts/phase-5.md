@@ -22,10 +22,10 @@ Phases 0–4 are done, and their gates passed. This phase makes Envoy usable fro
 - Emulators: `envoy-test` (SkyLark; snapshots allowed; gRPC 8554) and `envoy-real` (real apps; never snapshot-restored; always stopped with `scripts/stop_emulator.sh`). Start with `scripts/start_emulator.sh <avd> [--window]`. At most two run at once.
 - Repo: `~/Desktop/Envoy`, private GitHub repo `sanjeevexe/envoy` (must be public by Nov 4; I'll say when). MIT.
 - Meta API: a **shared key** in `.env`, about **$31 left** (all-time spend is in `logs/model_costs.jsonl`; $6.94 billed so far). The Contributor tier is allowed for SkyLark test data only, never real apps or real data.
-- Installed: `cloudflared` (used for the Phase 0 Muse connector test). **Not installed:** Tailscale, mkcert.
+- **Tailscale is installed and signed in** on the Mac (`sanjeevs-macbook-pro`) and my iPhone (`iphone174`), same tailnet. The Mac app's CLI is `/Applications/Tailscale.app/Contents/MacOS/Tailscale` (version 1.104.2; not on the PATH). Also installed: `cloudflared` (the Phase 0 Muse connector test). Not installed: mkcert.
 - My iPhone: you can see and drive it through **iPhone Mirroring** on this Mac (computer use), as in the Phase 0 Muse test. I start tunnels and enter tokens myself.
 
-**Running the demo (Phase 4)**
+**Running the demo (Phase 4).** Nothing of Envoy is running when you start: the API is stopped (`envoy-test` may still be up; `start_emulator.sh` copes either way). **Before you begin, start it:** the emulator, then `demo_setup.py`, then the API in the background, and check `curl http://127.0.0.1:8700/healthz`.
 ```bash
 scripts/start_emulator.sh envoy-test
 uv run --project backend python scripts/demo_setup.py        # SkyLark signed out + demo memory (with the API stopped)
@@ -54,7 +54,7 @@ open "http://127.0.0.1:8700/login?k=$(cat data/api/session_token)"   # I run thi
 
 Build what the design doc's **iPhone companion app** and **Voice** sections describe. The **gate** (from the build-phases diagram): **approve from the iPhone; a boarding-pass screenshot becomes a fact.**
 
-1. **HTTPS reachable from my iPhone.** The iPhone needs a trusted HTTPS address for the web app. Recommended: **Tailscale Serve** (a real certificate on a private `*.ts.net` name, reachable only by my devices); it needs me to install Tailscale on the Mac and the iPhone and sign in, so ask me when you get there and notify me. Alternatives: a local CA (mkcert; I'd install its profile on the iPhone) or a Cloudflare tunnel (public: ask me first). Pick one with me, document it, and make the API's cookie and host checks work on that address.
+1. **HTTPS reachable from my iPhone.** The iPhone needs a trusted HTTPS address for the web app. Use **Tailscale Serve** (already set up on both devices: a real certificate on a private `*.ts.net` name, reachable only by my devices), proxying to the API on 127.0.0.1:8700. Never use Tailscale **Funnel** (public) without asking me. If Serve needs MagicDNS or HTTPS certificates turned on in the tailnet's admin console, that's my sign-in: ask me and notify me. Document the setup, and make the API's cookie, host checks and the MCP server's allowed hosts work on that address.
 2. **Home Screen web app (PWA).** Web app manifest, icons, a service worker, a mobile layout (the phone panel, chat and approvals usable one-handed on an iPhone screen), and a sign-in flow that works on the iPhone without me typing the long token by hand (for example, a short one-time pairing code shown on the Mac).
 3. **Push approvals.** Web Push with VAPID: subscribe from the iPhone, store subscriptions, and send a notification when an approval is requested, when the agent needs a takeover, and when a task finishes or fails. Tapping opens the approval page. Approvals still come only from my session; a push never approves anything. Respect the approval modes (no push for an approval my request already gave).
 4. **Live view and takeover on the iPhone.** The same live panel, with touch: tap, swipe, typing through the iPhone keyboard. Measure latency over the network you set up.
