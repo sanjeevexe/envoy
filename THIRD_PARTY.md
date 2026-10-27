@@ -25,7 +25,23 @@ Licenses for Python packages were read from the installed package metadata (Oct 
 | [scrcpy](https://github.com/Genymobile/scrcpy) | 5.0.1 | Apache-2.0 | Phone screen video (Phase 0 secure-screen test; live view later through the relay) |
 | [cloudflared](https://github.com/cloudflare/cloudflared) | 2026.10.3 | Apache-2.0 | Quick tunnel giving the MCP stub a public HTTPS address |
 
-Development tools (not shipped): [uv](https://github.com/astral-sh/uv) (MIT or Apache-2.0), Homebrew OpenJDK 21 (GPL-2.0 with Classpath Exception), Android SDK command-line tools, platform-tools and emulator (Android Software Development Kit License; not open source, used as tools only).
+uiautomator2 also installs its own helper APK (`app-uiautomator`, same project, MIT) on the phone when it is first used.
+
+Development tools (not shipped):
+- [uv](https://github.com/astral-sh/uv) (MIT or Apache-2.0)
+- Homebrew OpenJDK 21 (GPL-2.0 with Classpath Exception)
+- [FFmpeg](https://ffmpeg.org) (LGPL-2.1+/GPL; run as an external tool to pull a frame from scrcpy recordings)
+- Android SDK command-line tools, platform-tools and emulator (Android Software Development Kit License; not open source, used as tools only)
+
+## What Envoy builds itself
+
+Envoy uses open source as plumbing (talking to phones, streaming video, serving HTTP). Everything below is Envoy's own work, and it is what the write-up and demo claim:
+
+- **App routines:** compiling one successful run into a program with inputs, code checks before and after every step, element-based locators, local self-repair saved as versioned patches with a trial period and rollback, and portability across screen sizes and devices.
+- **A memory graph built from phone screens:** facts pulled from app screens, email and photos, each with screen-level provenance and two timelines; one entity per real-world thing across sources; user edits that outrank extracted facts; routine inputs filled from memory and outputs written back.
+- **A device layer that routes between phones:** one interface over emulators and real phones, the compact screen format, settle detection, secure-screen detection from window flags, and the hand-off to the user for sign-in.
+- **A policy engine:** three independent signals vote on irreversible actions, and approvals come only from Envoy's own screens, never from an AI client.
+- **Muse integration:** Envoy as the phone layer behind the real Muse app, through a custom MCP connector.
 
 ## Planned (later phases)
 
