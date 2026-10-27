@@ -44,3 +44,6 @@ dist/
 .DS_Store
 .idea/
 .vscode/
+
+# Agent run traces and screenshots (large; eval summaries go to eval/results/)
+data/

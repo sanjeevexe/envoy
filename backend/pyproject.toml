@@ -24,3 +24,8 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["devices", "models", "mcp_stub", "testapps", "agent", "policy"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]

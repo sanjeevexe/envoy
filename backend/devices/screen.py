@@ -34,7 +34,8 @@ def _short_class(cls: str) -> str:
     return cls.rsplit(".", 1)[-1]
 
 
-STATUS_BAR_FRACTION = 0.05  # System UI nodes entirely within the top 5% of the screen
+STATUS_BAR_FRACTION = 0.07  # System UI nodes entirely within the top 7% of the screen (the bar is ~5.7% on a Pixel 6)
+_STATUS_IDS = re.compile(r"(status_?bar|notification_icon|notificationIcons|system_icons|clock)", re.I)
 
 
 def parse_hierarchy(xml: str, screen_h: int) -> list[Element]:
@@ -73,7 +74,9 @@ def parse_hierarchy(xml: str, screen_h: int) -> list[Element]:
             visible=node.get("visible-to-user", "true") == "true",
             in_list=in_list,
         )
-        el.status_bar = el.package == "com.android.systemui" and 0 < bounds[3] <= screen_h * STATUS_BAR_FRACTION
+        el.status_bar = el.package == "com.android.systemui" and (
+            0 < bounds[3] <= screen_h * STATUS_BAR_FRACTION or bool(_STATUS_IDS.search(el.resource_id.split("/")[-1]))
+        )
         out.append(el)
         for child in node.findall("node"):
             walk(child, el.index, depth + 1, in_list or el.scrollable)

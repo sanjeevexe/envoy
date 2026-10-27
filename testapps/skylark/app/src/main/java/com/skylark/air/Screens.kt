@@ -62,6 +62,8 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.password
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -99,6 +101,10 @@ private fun Page(
         Box(Modifier.padding(padding).fillMaxSize()) { content() }
     }
 }
+
+/** Dialogs get their own window, so test tags must be exposed as resource IDs there as well. */
+@OptIn(ExperimentalComposeUiApi::class)
+private val DialogTags = Modifier.semantics { testTagsAsResourceId = true }
 
 @Composable
 private fun ScrollColumn(content: @Composable () -> Unit) {
@@ -211,6 +217,7 @@ fun TabsScreen(s: AppState, nav: Nav, tab: HomeTab) {
     }
     if (s.showRatingPrompt) {
         AlertDialog(
+            modifier = DialogTags,
             onDismissRequest = { Store.dismissRatingPrompt() },
             title = { Text("Enjoying SkyLark?") },
             text = { Text("Tap a star to rate us on the Play Store.") },
@@ -387,6 +394,7 @@ fun TripDetailsScreen(s: AppState, nav: Nav, code: String) {
         }
     }
     if (confirmBag) AlertDialog(
+        modifier = DialogTags,
         onDismissRequest = { confirmBag = false },
         title = { Text("Add a checked bag?") },
         text = { Text("Your card ending in 4242 will be charged $35.00.") },
@@ -394,6 +402,7 @@ fun TripDetailsScreen(s: AppState, nav: Nav, code: String) {
         dismissButton = { TextButton(onClick = { confirmBag = false }, Modifier.testTag("btn_dialog_cancel")) { Text("Cancel") } },
     )
     if (confirmCancel) AlertDialog(
+        modifier = DialogTags,
         onDismissRequest = { confirmCancel = false },
         title = { Text("Cancel this trip?") },
         text = { Text("This cancels ${t.flight.number} to ${t.city}. This can't be undone.") },

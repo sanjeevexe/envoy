@@ -127,13 +127,22 @@ class StepOutput(_Strict):
 
 
 class SuccessCheck(_Strict):
-    kind: Literal["text_visible", "element_present", "app_foreground", "field_equals"]
+    kind: Literal["text_visible", "element_present", "app_foreground", "field_equals", "info"] = Field(
+        description=(
+            "text_visible: a text that will be on screen when the goal is done (e.g. \"You're checked in\"); "
+            "element_present: a button or element label that only exists once done; "
+            "app_foreground: an app package that must be in front; "
+            "field_equals: a field (field_hint) must hold value; "
+            "info: the goal asks a question; the answer must be read off the screen (value: what to look for)"
+        )
+    )
     value: str
-    field_hint: str | None = Field(description="For field_equals: the field's hint or label")
+    field_hint: str | None = Field(description="For field_equals: the field's label; otherwise null")
 
 
 class Plan(_Strict):
-    subgoals: list[str]
+    app: str | None = Field(description="Android package of the app the task needs, if known, e.g. com.skylark.air; else null")
+    subgoals: list[str] = Field(description="2 to 6 short steps, in order")
     success_check: SuccessCheck
 
 
