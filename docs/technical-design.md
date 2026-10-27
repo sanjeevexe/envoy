@@ -411,12 +411,12 @@ Every interface talks to the same task API and memory service, and every change 
 
 | Interface | What the user does there | Built with |
 | --- | --- | --- |
-| Web app | Chat, watch tasks run, take over the phone, approve actions, browse and edit the memory graph, manage routines and permissions | React (Next.js), WebSocket event stream, scrcpy live view over WebSocket (WebCodecs) |
+| Web app | Chat, watch tasks run, take over the phone, approve actions, browse and edit the memory graph, manage routines and permissions | React (Next.js, a static export served by the API), WebSocket event stream, live view over WebSocket (emulator frames; scrcpy for real phones) |
 | Voice | Speak requests on the web or iPhone and hear short spoken replies | Meta's Muse Voice Transcribe for speech to text (public preview); spoken replies from the browser's or iPhone's built-in speech |
 | iPhone companion | Approve actions from notifications, follow a running task, watch or take over the phone, send screenshots and photos in | The web app added to the Home Screen |
 | MCP server | Muse (if custom connectors accept it), Claude, ChatGPT or any MCP client can use Envoy's phone and memory | MCP Python SDK v2, Streamable HTTP, OAuth 2.1 |
 | Gmail and Calendar | Envoy reads confirmation emails and adds events | Google APIs on a personal Google Cloud project |
-| Scheduler | Tasks that run at a time or when something happens | APScheduler inside the backend |
+| Scheduler | Tasks that run at a time or when something happens | Envoy's own small scheduler inside the backend |
 
 ### Tasks: the shared unit of work
 
@@ -515,7 +515,7 @@ The phone's screen streams to the browser and iPhone as video, and a "Take over"
 - **HTTPS is required** for WebCodecs, so development uses Tailscale Serve for HTTPS inside the private network, and Tailscale Funnel or a Cloudflare Tunnel for the public MCP address.
 - **Target:** under 150 ms from the phone to the screen on the same network.
 
-Google's emulator WebRTC stack was considered, but it works only for emulators and its container scripts run only on Linux x86 machines, so scrcpy is used everywhere.
+Google's emulator WebRTC stack was considered, but it works only for emulators and its container scripts run only on Linux x86 machines. On emulators, Phase 4 streams the emulator's own gRPC frames instead (JPEG over the API's WebSocket, 18 to 60 ms locally), because scrcpy shows secure sign-in screens black and the gRPC frames don't; scrcpy and the relay are for real phones.
 
 ### Take over and hand back
 
@@ -557,7 +557,7 @@ A `type` action that also submits (presses Enter) is classified by the screen's 
 ### Approvals
 
 - An approval request shows a screenshot, a one-line description ("Place order at Chipotle, $14.82"), and the amount if any. It goes to the iPhone as an actionable push notification and to the web app.
-- The approval is bound to the exact screen it was shown for. If the screen changes before the tap (price changed, new pop-up), the agent asks again.
+- The approval is bound to the exact screen it was shown for: the app's own elements, not the keyboard or status bar, which come and go. If the screen changes before the tap (price changed, new pop-up), the agent asks again.
 - No answer within a time limit means the task is paused, never auto-approved.
 - **Standing approvals** let a user pre-approve low-risk routines with limits (for example, "check in for my flights automatically"). They are never allowed for payments or purchases.
 
@@ -666,9 +666,9 @@ Python runs the agent and memory, a small Node service relays video, React is th
 | Phone control | `adbutils` (MIT), Envoy bridge over WebSocket; `uiautomator2` (MIT) for the first days |  |
 | Frames for the agent | PyAV decoding the scrcpy stream |  |
 | Storage | SQLite with FTS5 and `sqlite-vec` | One file on the FileVault-encrypted disk; embeddings only if needed |
-| Scheduler | APScheduler 3.x inside FastAPI | Temporal or Inngest only if durable long waits become necessary |
+| Scheduler | Envoy's own, inside FastAPI (Phase 4) | Times derived from memory are recomputed on every check; Temporal or Inngest only if durable long waits become necessary |
 | MCP server | MCP Python SDK v2, Streamable HTTP, OAuth 2.1 | Needs a public HTTPS address for outside assistants |
-| Video relay | Node with TypeScript, `@yume-chan/adb` and `@yume-chan/adb-scrcpy` | Pin the scrcpy server version these libraries expect |
+| Video relay | Node with TypeScript, `@yume-chan/adb` and `@yume-chan/adb-scrcpy` | Real phones (Phase 6); emulators stream gRPC frames from the API. Pin the scrcpy server version these libraries expect |
 | Web app | Next.js, React, TypeScript, Tailwind; Cytoscape.js for the graph; WebCodecs decoder |  |
 | Envoy bridge | Kotlin accessibility service | Sideloaded over adb |
 | Test apps | Kotlin with Jetpack Compose | SkyLark Air (airline) and a small shop app, each with switchable layout versions to inject UI changes |
@@ -847,6 +847,26 @@ The evaluation drove five changes to memory:
 - An extracted value must appear in its source, and an answer from memory must appear in the notes it was given.
 - A routine's outputs are anchored on its own final screen, since an input like a city may not identify one trip.
 - Memory is one user's: a greeting is not a person, and agreeing names fold into the one person memory knows.
+
+## Phase 4 results
+
+Phase 4 passed its gate on Oct 27, 2026: the user ran the full check-in in the web app, signing in through the live view and approving, and memory updated. Details are in `docs/phase-4-results.md`.
+
+| Measure | Result |
+| --- | --- |
+| Gate, by the user in the web app | Passed (second attempt; the first found a bug, fixed below) |
+| Gate, scripted | 10/10 in 83 s: sign-in hand-off, takeover, hand back, approval with a screenshot, check-in, memory update, MCP task, chat from memory |
+| Model calls for the check-in | 1 (choosing the routine); the routine ran with none |
+| Approval rules | Opening an approval decides nothing; the MCP token, a stale nonce and a cross-site POST are refused; no answer means no |
+| Live view on the emulator | 18 to 60 ms from capture to the browser locally; shows secure sign-in screens; input only during a takeover |
+| MCP server | 7 tools, none can approve |
+| Whole of Phase 4 | 142 model calls, $0.80 at standard prices |
+
+The gate runs drove these changes:
+
+- An approval is bound to the app's own elements: the user's run found a closing keyboard making an approval look stale. A stale approval is asked again, never treated as a decline.
+- A task is done as soon as the phone work is; memory is written right after, instead of keeping the task "running" for 11 seconds.
+- On emulators the live view uses the emulator's gRPC frames, not scrcpy; one process serves the API, the MCP server and the web app; takeover is a lease that makes the agent wait at its next call to the phone; the scheduler is Envoy's own, so delayed flights move their triggers.
 
 ## Open questions
 

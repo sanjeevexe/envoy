@@ -83,3 +83,12 @@ The submission form asks for "feedback from your experience using Meta products"
 **What could be better**
 - **Placeholder actions.** In 12 of 18 runs it chose a coordinate tap with made-up coordinates ("tap_point" at 0,0 or 500,500, with the stated reason "Placeholder") 52 times. That happened even though the screen's elements were listed and the instructions say coordinate taps are only for screens without elements. Each costs a call and a step, and twice the agent lost the app afterwards. It looks like the model fills an action when it is unsure instead of choosing `look` or `scroll`. We will stop offering that action when elements are listed. A model that never emits a self-described placeholder would be better.
 
+## Muse Spark as Envoy's chat assistant (Oct 27, Phase 4)
+
+**What worked well**
+- As a router (memory question, task, or reply) with a three-field structured output, it made the right call on every message we sent ("What's my gate?" → memory; "Check me in for my flight" → task), at `low` effort and about a second.
+- Answers from memory kept the source and age we asked for ("Gate B12, from the SkyLark app just now").
+
+**What could be better**
+- Nothing new beyond the placeholder actions noted above; the chat path was only tried on a handful of messages.
+

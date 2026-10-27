@@ -4,14 +4,14 @@ Envoy builds on the open-source projects below. The hackathon rules allow open s
 
 Licenses for Python packages were read from the installed package metadata (Oct 26, 2026). Licenses for planned components come from their repositories and must be re-checked when they are added.
 
-## In use (Phases 0–3)
+## In use (Phases 0–4)
 
 | Component | Version | License | What we use it for |
 | --- | --- | --- | --- |
 | [uiautomator2](https://github.com/openatx/uiautomator2) (and its on-device `android-uiautomator-server`) | 3.7.1 | MIT | Reads the accessibility tree, taps, types any language through its input method |
 | [adbutils](https://github.com/openatx/adbutils) | 2.12.0 | MIT | Python adb client: shell, port forwarding, `screencap` |
-| [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk) (`mcp`) | 2.3.0 | MIT | Phase 0 MCP stub server (Streamable HTTP); the real MCP server later |
-| [FastAPI](https://github.com/fastapi/fastapi) | 0.162.0 | MIT | REST fallback for the Muse connector test; task API later |
+| [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk) (`mcp`) | 2.3.0 | MIT | Phase 0 MCP stub server; Envoy's MCP server at `/mcp` (Phase 4) |
+| [FastAPI](https://github.com/fastapi/fastapi) | 0.162.0 | MIT | The task API, event stream, approvals and live view (Phase 4); REST fallback for the Muse connector test |
 | [Starlette](https://github.com/encode/starlette) | 1.10.0 | BSD-3-Clause | ASGI layer under FastAPI and the MCP server; bearer-token middleware |
 | [Uvicorn](https://github.com/encode/uvicorn) | 0.54.0 | BSD-3-Clause | ASGI server |
 | [Pydantic](https://github.com/pydantic/pydantic) | 2.14.1 | MIT | Data models and the action JSON schema |
@@ -26,8 +26,14 @@ Licenses for Python packages were read from the installed package metadata (Oct 
 | [Google API Python client](https://github.com/googleapis/google-api-python-client) | 2.201.0 | Apache-2.0 | Gmail (read-only) for memory (Phase 3; runs once you connect an account) |
 | [google-auth-oauthlib](https://github.com/googleapis/google-auth-library-python-oauthlib), google-auth, google-auth-httplib2 | 1.5.0 / 2.62.0 / 0.4.4 | Apache-2.0 | The Gmail sign-in flow and tokens |
 | httplib2, uritemplate, oauthlib, requests-oauthlib | 0.32.0 / 4.2.0 / 4.0.0 / 2.0.0 | MIT / BSD-3-Clause or Apache-2.0 / BSD-3-Clause / ISC | Dependencies of the Google client |
-| [Pillow](https://github.com/python-pillow/Pillow) | 13.0.0 | MIT-CMU | Screenshot decoding, black-frame detection, image crops |
-| [scrcpy](https://github.com/Genymobile/scrcpy) | 5.0.1 | Apache-2.0 | Phone screen video (Phase 0 secure-screen test; live view later through the relay) |
+| [Pillow](https://github.com/python-pillow/Pillow) | 13.0.0 | MIT-CMU | Screenshot decoding, black-frame detection, image crops, live-view JPEG frames |
+| [websockets](https://github.com/python-websockets/websockets) | 17.3 | BSD-3-Clause | WebSocket support under Uvicorn (event stream, live view); the Phase 4 gate script's client |
+| [Next.js](https://github.com/vercel/next.js) | 16.4.3 | MIT | The web app, built as a static export the API serves (Phase 4) |
+| [React](https://github.com/facebook/react), React DOM | 19.3.0 | MIT | Web app UI |
+| [Tailwind CSS](https://github.com/tailwindlabs/tailwindcss) (with `@tailwindcss/turbopack`) | 4.3.3 | MIT | Web app styling |
+| [Cytoscape.js](https://github.com/cytoscape/cytoscape.js) | 3.34.4 | MIT | Memory graph view |
+| [TypeScript](https://github.com/microsoft/TypeScript) | 5.9.3 | Apache-2.0 | Web app language (build time) |
+| [scrcpy](https://github.com/Genymobile/scrcpy) | 5.0.1 | Apache-2.0 | Phone screen video (Phase 0 secure-screen test; the real-phone live view in Phase 6) |
 | [cloudflared](https://github.com/cloudflare/cloudflared) | 2026.10.3 | Apache-2.0 | Quick tunnel giving the MCP stub a public HTTPS address |
 
 uiautomator2 also installs its own helper APK (`app-uiautomator`, same project, MIT) on the phone when it is first used.
@@ -46,17 +52,14 @@ Envoy uses open source as plumbing (talking to phones, streaming video, serving 
 - **A memory graph built from phone screens** (built in Phase 3, Oct 27, `backend/memory/`; SQLite is only the storage): facts pulled from app screens, email and photos, each with screen-level provenance and two timelines; one entity per real-world thing across sources; user edits that outrank extracted facts; routine inputs filled from memory and outputs written back.
 - **A device layer that routes between phones:** one interface over emulators and real phones, the compact screen format, settle detection, secure-screen detection from window flags, and the hand-off to the user for sign-in.
 - **A policy engine:** three independent signals vote on irreversible actions, and approvals come only from Envoy's own screens, never from an AI client.
+- **The task runner, takeover and approvals** (built in Phase 4, Oct 27, `backend/api/`): one task model for every interface, device leases where the agent waits at its next call to the phone while the user is in control, web approvals bound to the app's own screen with per-approval nonces, the live-view protocol on emulator gRPC frames, the scheduler with memory-derived triggers, chat routing, the MCP tools, and the web app (`web/`). FastAPI, the MCP SDK, Next.js, React, Tailwind and Cytoscape.js are plumbing.
 - **Muse integration:** Envoy as the phone layer behind the real Muse app, through a custom MCP connector.
 
 ## Planned (later phases)
 
 | Component | License | What we will use it for |
 | --- | --- | --- |
-| [Tango](https://github.com/yume-chan/ya-webadb) `@yume-chan/adb`, `@yume-chan/adb-scrcpy`, `@yume-chan/scrcpy-decoder-webcodecs` | MIT | Node video relay and in-browser WebCodecs decoding for the live view |
-| [Next.js](https://github.com/vercel/next.js), [React](https://github.com/facebook/react) | MIT | Web app |
-| [Tailwind CSS](https://github.com/tailwindlabs/tailwindcss) | MIT | Web app styling |
-| [Cytoscape.js](https://github.com/cytoscape/cytoscape.js) | MIT | Memory graph view |
-| [APScheduler](https://github.com/agronholm/apscheduler) 3.x | MIT | Scheduled tasks and watchers |
+| [Tango](https://github.com/yume-chan/ya-webadb) `@yume-chan/adb`, `@yume-chan/adb-scrcpy`, `@yume-chan/scrcpy-decoder-webcodecs` | MIT | Node video relay and in-browser WebCodecs decoding for the real-phone live view (Phase 6; emulators use the emulator's own gRPC frames) |
 | [sqlite-vec](https://github.com/asg017/sqlite-vec) | MIT or Apache-2.0 | Similarity search, only if needed |
 | [PyAV](https://github.com/PyAV-Org/PyAV) | BSD-3-Clause | Decoding scrcpy frames for the agent |
 | [Jetpack Compose](https://developer.android.com/jetpack/compose) / AndroidX | Apache-2.0 | Test apps (SkyLark Air) |
