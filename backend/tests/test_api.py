@@ -231,3 +231,22 @@ def test_mcp_has_no_approve_tool_and_needs_its_token(api):
         assert names == {"run_task", "get_task", "list_routines", "run_routine", "memory_search", "memory_get", "memory_note"}
         assert not any("approv" in n for n in names)
         assert c.get("/api/state", headers={"Authorization": "Bearer mcp-test-token"}).status_code == 401  # the MCP token is not a session
+
+
+def test_the_keyboard_coming_and_going_is_not_a_screen_change():
+    """Found in the human gate run: the keyboard (another app's window) was up when the approval was asked and gone when
+    it was given, so the approval was wrongly treated as stale. Only the app's own elements bind an approval."""
+    from api.approvals import _key
+
+    @dataclass
+    class PEl:
+        label: str
+        package: str
+        status_bar: bool = False
+
+    app = [PEl("Confirm check-in", "com.skylark.air"), PEl("Seat · 14C", "com.skylark.air")]
+    keyboard = [PEl("Delete", "com.google.android.inputmethod.latin"), PEl("Done", "com.google.android.inputmethod.latin")]
+    up = SimpleNamespace(package="com.skylark.air", numbered=app + keyboard)
+    down = SimpleNamespace(package="com.skylark.air", numbered=app)
+    changed = SimpleNamespace(package="com.skylark.air", numbered=[app[0], PEl("Seat · 22F", "com.skylark.air")])
+    assert _key(up) == _key(down) and _key(down) != _key(changed)

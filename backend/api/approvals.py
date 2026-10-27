@@ -27,9 +27,11 @@ SHOTS = API_DIR / "approvals"
 
 
 def _key(screen: Any) -> tuple[str, ...]:
-    """What the user approved looking at: the app and every visible label outside the status bar (its clock moves).
-    A new pop-up, a changed price or another screen all change it."""
-    return (screen.package, *sorted(e.label for e in screen.numbered if not e.status_bar and e.label))
+    """What the user approved looking at: the app and every label of the app's own elements. A new pop-up in the app, a
+    changed price or another screen all change it; the status bar's clock and the on-screen keyboard (other windows,
+    which come and go on their own) don't."""
+    own = [e for e in screen.numbered if not e.status_bar and e.label and getattr(e, "package", screen.package) == screen.package]
+    return (screen.package, *sorted(e.label for e in own))
 
 
 class WebApprover:
@@ -93,7 +95,9 @@ class WebApprover:
             try:
                 now = self._run(device.observe())
                 if screen is not None and _key(now) != _key(screen):
-                    self.store.db.execute("UPDATE approvals SET note=? WHERE id=?", ("the screen changed before the action ran: asked again", rec["id"]))
+                    before, after = set(_key(screen)), set(_key(now))
+                    diff = "; ".join([*(f"gone: {x[:40]}" for x in sorted(before - after)), *(f"new: {x[:40]}" for x in sorted(after - before))])[:300]
+                    self.store.db.execute("UPDATE approvals SET note=? WHERE id=?", (f"the screen changed before the action ran ({diff}): asked again", rec["id"]))
                     self.store.db.commit()
                     return ApprovalDecision(False, by="screen_changed", note="the screen changed while waiting")
             except Exception:  # noqa: BLE001

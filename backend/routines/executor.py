@@ -533,17 +533,31 @@ class RoutineExecutor:
 
     # ---- acting -----------------------------------------------------------------------------
 
-    async def _gate(self, ctx: _Ctx, action: Action, screen: ScreenState, risk: str, label: str, sr: StepRun) -> bool:
-        """The same policy gate the agent uses. Irreversible always asks a person (or the test app's scripted approver)."""
+    async def _gate(self, ctx: _Ctx, action: Action, screen: ScreenState, risk: str, label: str, sr: StepRun) -> Action | None:
+        """The same policy gate the agent uses. Irreversible always asks a person (or the test app's scripted approver).
+        Returns the action to run, or None if it was declined. An approval is bound to the screen it was shown for: if
+        the screen changed while waiting, the same control is found on the new screen and the person is asked again."""
         verdict = classify(action, screen, risk if risk in ("read", "reversible", "irreversible") else None)  # type: ignore[arg-type]
         if not verdict.irreversible:
-            return True
-        req = ApprovalRequest(task_id=ctx.task_id, goal=render_str(ctx.routine.intent, ctx.inputs) or "", app=screen.package,
-                              description=f'{action.kind} "{label}" in {screen.package} (routine {ctx.routine.routine} v{ctx.routine.version})',
-                              reasons=verdict.reasons, screen=screen.compact)
-        decision = await asyncio.to_thread(self.approver.request, req)
-        ctx.out.approvals.append({"step": sr.id, "description": req.description, "reasons": req.reasons, "approved": decision.approved, "by": decision.by})
-        return decision.approved
+            return action
+        for _ in range(3):
+            req = ApprovalRequest(task_id=ctx.task_id, goal=render_str(ctx.routine.intent, ctx.inputs) or "", app=screen.package,
+                                  description=f'{action.kind} "{label}" in {screen.package} (routine {ctx.routine.routine} v{ctx.routine.version})',
+                                  reasons=verdict.reasons, screen=screen.compact)
+            decision = await asyncio.to_thread(self.approver.request, req)
+            ctx.out.approvals.append({"step": sr.id, "description": req.description, "reasons": req.reasons, "approved": decision.approved, "by": decision.by})
+            if decision.by != "screen_changed":
+                return action if decision.approved else None
+            screen = await self.device.observe()
+            same = [e for e in screen.numbered if e.label == label]
+            if action.element is not None:
+                if len(same) != 1:
+                    return None  # the control is gone or ambiguous: nothing irreversible runs
+                action = action.model_copy(update={"element": same[0].number})
+            verdict = classify(action, screen, risk if risk in ("read", "reversible", "irreversible") else None)  # type: ignore[arg-type]
+            if not verdict.irreversible:
+                return action
+        return None
 
     async def _act(self, ctx: _Ctx, step: Step, screen: ScreenState, el: Element | None, sr: StepRun) -> Literal["ok", "stop"]:
         """Run the step's action through the policy gate. A scroll_until that doesn't find its target returns "ok":
@@ -575,10 +589,13 @@ class RoutineExecutor:
                 action = Action(kind="type", element=el.number, text=render_str(a.value, ctx.inputs) or "", submit=a.submit)
             else:
                 action = Action(kind=a.kind, element=el.number)
-        if not await self._gate(ctx, action, screen, step.risk, el.label if el is not None else a.kind, sr):
-            sr.status, sr.detail = "declined", "the user declined the approval"
+        gated = await self._gate(ctx, action, screen, step.risk, el.label if el is not None else a.kind, sr)
+        if gated is None:
+            sr.status, sr.detail = "declined", ("the screen changed while waiting for approval" if ctx.out.approvals and ctx.out.approvals[-1]["by"]
+                                                 == "screen_changed" else "the user declined the approval")
             ctx.out.status = "declined"
             return "stop"
+        action = gated
         res = await self.device.act(action)
         if not res.ok:
             sr.status, sr.detail = "failed", f"action failed: {res.error}"
@@ -711,10 +728,12 @@ class RoutineExecutor:
             if action is None:
                 continue
             el = s.numbered[action.element - 1] if action.element else None
-            if not await self._gate(ctx, action, s, d.risk, el.label if el else action.kind, sr):
+            gated = await self._gate(ctx, action, s, d.risk, el.label if el else action.kind, sr)
+            if gated is None:
                 sr.status, sr.detail = "declined", "the user declined a repair action"
                 ctx.out.status = "declined"
                 return "declined"
+            action = gated
             shot_b = await self._screenshot(ctx, f"repair_{idx + 1:02d}_{len(actions) + 1}_before")
             r = await self.device.act(action)
             after = await self._settle_after_repair(step, ctx.inputs, start)
