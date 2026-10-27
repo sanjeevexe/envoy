@@ -440,7 +440,7 @@ The web app and iPhone stream microphone audio through the backend (which holds 
 
 The companion is the web app added to the iPhone's Home Screen, which needs no Apple Developer account. (TestFlight is not a free option: it requires the paid $99 program.) If web push approvals or photo sharing don't work well enough in practice, the fallback is paying for the Apple Developer Program and building the native SwiftUI app, which adds lock-screen Live Activities and on-device text reading. Phase 5 built it: the app reaches the Mac through Tailscale Serve, a real certificate on a private `*.ts.net` name (HTTPS on :8443) reachable only by the user's devices, and the API answers only to its own names. The Home Screen app keeps its own cookies, apart from Safari, so the user signs in by typing a 6-digit pairing code from the Mac inside the installed app (single use, 5 minutes, 5 tries); each device gets its own revocable session, and the Share Sheet shortcut gets a token that can only upload images.
 
-- **Approvals:** web push notifications, which iOS supports for Home Screen web apps from iOS 16.4. Web notifications have no action buttons, so tapping one opens the approval page, where the user approves or declines. A push never carries the approval's nonce, and it is sent only when Envoy actually asks (an approval the user's request already gave doesn't push). Phase 5: delivered 0.7 to 1.0 s after sending.
+- **Approvals:** web push notifications, which iOS supports for Home Screen web apps from iOS 16.4. Web notifications have no action buttons, so tapping one opens the approval page, where the user approves or declines. A push never carries the approval's nonce, and it is sent only when Envoy actually asks (an approval the user's request already gave doesn't push). Phase 5: delivered 0.7 to 2.3 s after sending (4 of 5 pushes under 1.2 s).
 - **Running task:** the app shows the current step and screenshot; key moments (approval needed, task done, task failed) also send a notification. Lock-screen Live Activities need a native app and are left out.
 - **Live view:** the same stream as the web app (the emulator's gRPC frames; scrcpy for real phones), with touch forwarded to the phone: tap, swipe, long press, and typing through the iPhone's keyboard. Phase 5: 66 to 115 ms from capture to the iPhone's screen over the tailnet.
 - **Voice:** push to talk with the microphone, streamed through the backend to Muse Voice Transcribe.
@@ -469,7 +469,7 @@ Envoy is built to plug into the real Muse app, but it never depends on that: thr
 | Route | What it takes | Status |
 | --- | --- | --- |
 | 1. Envoy's own assistant, built on Muse Spark | Nothing beyond the Meta API | Always works; the fallback demo |
-| 2. Muse custom connector | A public HTTPS address for the MCP server, a bearer token, and asking the Muse app to connect to it | Verified in Phase 0: Muse's free tier added Envoy as a custom connector, called both tools and showed the approval link |
+| 2. Muse custom connector | A public HTTPS address for the MCP server, a bearer token, and asking the Muse app to connect to it | Verified in Phase 0: Muse's free tier added Envoy as a custom connector, called both tools and showed the approval link. Phase 5: the Muse app ran a real check-in through Envoy's own MCP server, waited for the user's approval on Envoy's page and reported the seat and gate |
 | 3. Listed connector or Meta AI Connectors preview | A submission to the Muse Connector Platform review, and joining the Meta AI Connectors waitlist | Apply on day one; unlikely to clear review before Nov 4 |
 
 **Phase 0 connector test (about 2 hours):**
@@ -482,7 +482,7 @@ Envoy is built to plug into the real Muse app, but it never depends on that: thr
 
 **Decision after the test.** Route 2 works (Phase 0), so the demo opens in the real Muse app ("check me in for my flight") and Envoy does the phone work, with the approval on the user's iPhone. If it doesn't, the demo uses Envoy's own Muse Spark assistant, and the pitch shows the standard MCP server that Muse can connect to once connector access opens.
 
-**Safety is unchanged:** Muse is an AI client like any other. It gets no approve tool, approvals still come only from Envoy's own screens, it sees only what tools return, and its token can be revoked at any time.
+**Safety is unchanged:** Muse is an AI client like any other. It gets no approve tool, approvals still come only from Envoy's own screens, it sees only what tools return, and its token can be revoked at any time. Its approval links point at the user's tailnet, so link previews can't fetch them.
 
 ### Gmail and Calendar
 
@@ -871,13 +871,13 @@ The gate runs drove these changes:
 
 ## Phase 5 results
 
-Phase 5 passed its gate on Oct 27, 2026, on the user's iPhone: the approval arrived as a push, the user approved on the iPhone and the check-in finished; a SkyLark boarding-pass screenshot shared with "Send to Envoy" became facts on the existing flight, with a photo source. Details are in `docs/phase-5-results.md`.
+Phase 5 passed its gate on Oct 27, 2026, on the user's iPhone: the approval arrived as a push, the user approved on the iPhone and the check-in finished; a SkyLark boarding-pass screenshot shared with "Send to Envoy" became facts on the existing flight, with a photo source. The same check-in also ran from the Muse app through Envoy's MCP server: Muse can't approve, so it waited for the user and reported the result when asked. Details are in `docs/phase-5-results.md`.
 
 | Measure | Result |
 | --- | --- |
-| Gate, on the user's iPhone | Passed: push, approval on the iPhone, check-in done; screenshot to facts on SL 482, image deleted |
+| Gate, on the user's iPhone | Passed: push, approval on the iPhone, check-in done; screenshot to facts on SL 482, image deleted. From the Muse app too: Muse said it couldn't approve, the user approved from the push, Muse reported the seat and gate |
 | Gate, scripted | 8/8: takeover, approval and done pushes (decrypted by a fake push service; no nonce in any push); screenshot to facts; voice; live view over HTTPS |
-| Push delivery to the iPhone | 0.7 to 1.0 s from sending to the service worker's receipt |
+| Push delivery to the iPhone | 0.7 to 2.3 s from sending to the service worker's receipt (4 of 5 under 1.2 s) |
 | Live view on the iPhone over the tailnet | 66 to 115 ms from capture to screen; round trip 27 to 47 ms |
 | Voice (Muse Voice Transcribe) | Exact transcript; final text about 90 ms after release; $0.0001 for a 2.6 s turn |
 | Screenshot extraction | 73 of 73 values right on 7 app screenshots, none wrong, all merged into known trips and flights; about $0.007 each |

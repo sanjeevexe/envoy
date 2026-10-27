@@ -4,7 +4,9 @@ Oct 27, 2026. **Gate passed on your iPhone.** The gate was "approve from the iPh
 
 On your iPhone, Envoy runs as a Home Screen app over a private HTTPS address on your tailnet. You asked it to check you in from the iPhone's chat. The approval arrived as a push. You opened it and approved on the iPhone 170 s later, and the check-in finished with memory updated; a "Done" push followed. A SkyLark boarding-pass screenshot in the iPhone's Photos, shared with **Send to Envoy** from the Share Sheet, became facts on the existing SL 482 flight, with the source "your screenshot (shared with Send to Envoy)". The image was deleted from the Mac 4 s after it arrived. A scripted version of both halves passes 8/8 (`eval/run_phase5.py`).
 
-Plan: `prompts/phase-5-plan.md`. Results: `eval/results/phase5/` (`gate.json` scripted, `iphone_gate.json` your run, `photos.json` screenshot accuracy).
+The same check-in also ran from the **Muse app** on the iPhone, through Envoy's real MCP server: Muse started it, waited for your approval without being able to give it, and reported the boarding details once you had approved on Envoy's page.
+
+Plan: `prompts/phase-5-plan.md`. Results: `eval/results/phase5/` (`gate.json` scripted, `iphone_gate.json` your run, `muse_gate.json` the Muse run, `photos.json` screenshot accuracy).
 
 ## What was built
 
@@ -28,8 +30,9 @@ About 1,350 lines of Python, Swift and shell (`backend/api/auth.py`, `push.py`, 
 | Check | Result |
 | --- | --- |
 | Gate, on your iPhone | Passed. Approval push delivered 905 ms after sending, approved on the iPhone, check-in done, memory 14 confirmed and 1 replaced; "Done" push 687 ms. The boarding-pass screenshot, shared with Send to Envoy, merged into SL 482 (7 flights and 7 trips before and after) with a photo source; image deleted. |
+| Muse route 2, real MCP server (`eval/results/phase5/muse_gate.json`) | **Passed.** In the Muse app (driven through iPhone Mirroring), "Use Envoy to check me in for my SkyLark flight" became `run_task` on Envoy's own MCP server through the tunnel. Envoy ran the SkyLark routine and stopped at "Confirm check-in"; the approval push reached the iPhone in 1.1 s; Muse said it was waiting "for your approval" and "I can't approve that for you", with a link card to the tailnet approval page. You approved on Envoy's page; the check-in finished 139 s after the request (121 s of it waiting for you) and the "Done" push arrived 2.3 s after sending. Asked "Is the check-in done?", Muse called `get_task` and answered with SL 482, seat 14C, gate B12, boarding 5:30 AM, Group 3. Screenshots: `muse_waiting_for_approval.jpg`, `muse_done.jpg`. |
 | Gate, scripted (`eval/run_phase5.py`) | 8/8 in 45 s: takeover, approval and "Done" pushes to a fake push service that checks the VAPID signature and decrypts each push; the approval push opens `/approve/?id=…` and carries no nonce; the approval stays pending until the session approves; the emulator's boarding pass uploaded with a Shortcut token became facts on SL 482 with the image gone and the token unable to read anything; voice through the real Transcribe API; live view through the tailnet HTTPS address. |
-| Push delivery (Apple's push service → the iPhone's service worker) | 687 to 972 ms from sending to the receipt (3 pushes); Apple accepted each in 135 to 359 ms |
+| Push delivery (Apple's push service → the iPhone's service worker) | 0.7 to 2.3 s from sending to the receipt (5 pushes; 4 of them under 1.2 s); Apple accepted each in 108 to 359 ms |
 | Live view on the iPhone, over the tailnet | Frame latency (capture → screen) p50 66 to 115 ms, round trip 27 to 47 ms, 76 to 108 KB per 720 px frame; input acknowledged in 10 to 241 ms. From this Mac through the same HTTPS address: 20 ms. Target was under 150 ms. |
 | Takeover from the iPhone | Tap, typing with the iPhone keyboard (Backspace included), search, hand back: all worked on SkyLark |
 | Voice, scripted (real Transcribe) | "What's my gate for my Chicago flight?" heard exactly. Final text 90 to 93 ms after release (connecting takes 0.25 to 1.45 s but overlaps the speech, which is buffered). Chat answered from memory in 3.4 s ("Gate B12, from your screenshot and the SkyLark app just now"): release → reply 3.5 s. Cost $0.0001 for a 2.6 s turn ($0.18 per audio hour). |
@@ -45,13 +48,20 @@ About 1,350 lines of Python, Swift and shell (`backend/api/auth.py`, `push.py`, 
 1. **A microphone that sends nothing ends the Transcribe stream.** iPhone Mirroring blocks the iPhone's microphone, and Muse Voice Transcribe closed the session with "Ingress audio slower than real-time". Meta's docs say to keep sending silence on a live source, so the relay now pads the stream with silence whenever the browser's audio falls 300 ms behind (a stalled microphone, a slow network), and the app says when no sound reached it. Regression test added.
 2. **Vision skipped a lone code.** On one trip screen, Apple's text recognition missed the confirmation code on the right of its row, so the value Spark read correctly couldn't be checked and was dropped (missing, never wrong). A second pass over four overlapping tiles recovers it (0.25 → 0.46 s). Where Vision did read it, it read 3J8N**O**D for 3J8N**0**D, so the check now treats O/0 and I/l/1 as one glyph in codes that mix letters and digits. 72/73 became 73/73.
 3. **Which device approved.** Approvals now record the device ("user on iPhone (Home Screen app)") for the audit log.
-4. **iPhone Mirroring limits** (testing only): the iPhone's microphone is unavailable, iPhone notifications show on the Mac, swipe gestures don't come through (an automation can't be deleted, only set to Don't Run), and fast typing into fields with autocorrect garbles.
+4. **Muse with the real server.**
+   - Muse adds a custom connector from a chat request: its "Add custom connector" card fills in the URL, and only the key is typed (by you, into Muse's secure store).
+   - Setup raised three "Allow the agent to share information with …trycloudflare.com?" prompts (verify, list tools, verify again); the chat-time tool calls raised none. Muse listed all seven tools.
+   - Pasting the URL in chat made Muse's link preview and Meta's crawler fetch `/mcp` without a token (401), as in Phase 0. The approval link now points at the tailnet, so no preview crawler can reach it at all.
+   - Muse called `get_task` twice within 5 s of `run_task` and once more a minute later, then reported the wait honestly; it doesn't follow up on its own, so Envoy's "Done" push is what tells you it finished.
+   - Every call opened a new MCP session from a different Meta IPv6 address, all with the bearer token; stateless HTTP handled it.
+5. **iPhone Mirroring limits** (testing only): the iPhone's microphone is unavailable, iPhone notifications show on the Mac, swipe gestures don't come through (an automation can't be deleted, only set to Don't Run), and fast typing into fields with autocorrect garbles.
 
 ## Honest limits
 
 - **Voice on your devices isn't measured yet**: the relay and the real Transcribe API are, with a recorded phrase.
 - **The tailnet is the network.** The iPhone was on the same campus network (Tailscale connected directly); over cellular, frame latency will be higher. Fewer, smaller frames are one setting away (`fps`, `width`, `quality`).
 - **Web Push on iOS needs the Home Screen app**, and notifications have no action buttons: tapping opens the approval page.
+- **A quick tunnel's address changes every run**, so the Muse connector is added again each time (about a minute: the URL, the key, three "Allow once"). A stable address (a named Cloudflare tunnel, or Tailscale Funnel) needs your account and your OK; worth it for the demo video.
 - **The code test used a message you sent yourself** (iMessage to your own Apple ID). A real one-time code from a service should behave the same, but that wasn't tried.
 - **Photos are read by Muse Spark on Meta's servers** (with redacted regions blacked out first); only the text check is on-device.
 - **Cookies are per host, not per port**, so your browser also sends Envoy's cookie to the other app on the same `ts.net` name (port 443). Both run on your Mac; noted for when either moves.
@@ -69,5 +79,5 @@ For the design doc (applied in both copies):
 
 ## Next
 
-- **You:** try voice once on the iPhone (in hand) and once on the Mac: hold the mic in Envoy and ask "What's my gate?". If you want the code-test automation gone, swipe left on it in Shortcuts → Automation (it's set to Don't Run). For the Muse run, start `scripts/start_muse_test.sh` and add its URL and token in Muse.
+- **You:** try voice once on the iPhone (in hand) and once on the Mac: hold the mic in Envoy and ask "What's my gate?". If you want the code-test automation gone, swipe left on it in Shortcuts → Automation (it's set to Don't Run). The Muse connector now points at a stopped tunnel with a rotated token; remove it in Muse whenever you like.
 - **Phase 6 (real Android phone):** turn on Developer options and Wireless debugging on the phone; for USB, a cable to the Mac; for wireless, the Mac and phone on the same Wi-Fi (campus Wi-Fi often isolates devices, so a hotspot from the phone may be needed). Tell me its Android version (15+ hides codes from notification readers).

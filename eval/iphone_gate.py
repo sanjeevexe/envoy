@@ -2,7 +2,7 @@
 
   uv run --project backend python eval/iphone_gate.py prepare [--signed-out]   # SkyLark ready, "always ask" for the run
   ... on the iPhone: ask Envoy to check in; the approval arrives as a push; open it; approve ...
-  uv run --project backend python eval/iphone_gate.py report                   # what happened, with timings
+  uv run --project backend python eval/iphone_gate.py report [--out=PATH]      # what happened, with timings
   uv run --project backend python eval/iphone_gate.py restore                  # approval rules as they were
 
 The person does the deciding on the iPhone; this script only prepares the test app and reads the record. It reads
@@ -47,7 +47,7 @@ def restore() -> None:
     print("approval rules restored")
 
 
-def report() -> None:
+def report(out_path: Path = OUT) -> None:
     since = json.loads(STATE.read_text())["since"] if STATE.exists() else time.time() - 3600
     tasks = [t for t in httpx.get(f"{BASE}/api/tasks", params={"limit": 20}, headers=H).json() if t["created_at"] >= since]
     pushes = [json.loads(x) for x in (REPO / "logs" / "push.jsonl").read_text().splitlines() if json.loads(x)["time"] >= since]
@@ -66,11 +66,12 @@ def report() -> None:
     out["pushes_without_receipt"] = [p["kind"] for p in sent.values() if p["push"] not in {r["push"] for r in pushes if r["event"] == "receipt"}]
     metrics = REPO / "logs" / "client_metrics.jsonl"
     out["client_metrics"] = [m for m in (json.loads(x) for x in metrics.read_text().splitlines()) if m["time"] >= since] if metrics.exists() else []
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(out, indent=1))
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(out, indent=1))
     print(json.dumps(out, indent=1)[:6000])
 
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "report"
-    {"prepare": lambda: prepare("--signed-out" in sys.argv), "restore": restore, "report": report}[cmd]()
+    out = next((REPO / a.split("=", 1)[1] for a in sys.argv if a.startswith("--out=")), OUT)  # e.g. the Muse run
+    {"prepare": lambda: prepare("--signed-out" in sys.argv), "restore": restore, "report": lambda: report(out)}[cmd]()

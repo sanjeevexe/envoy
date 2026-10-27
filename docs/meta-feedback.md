@@ -116,3 +116,16 @@ The submission form asks for "feedback from your experience using Meta products"
 **What could be better**
 - **Latency:** 4 to 8 s per screenshot at `low` effort, and one call in 9 timed out at 30 s and succeeded on retry. For a share-sheet action that waits for an answer, a faster vision path, or a documented latency expectation, would help.
 - **No per-value location.** For screens we pass element numbers as evidence; for images there is no way to ask where a value was seen (a box), which would let us check values against the image region instead of OCR text. Spark's grounding can return boxes, but not inside an extraction answer.
+
+## Muse app with Envoy's real MCP server (Oct 27, Phase 5: route 2 again)
+
+**What worked well**
+- **Setup from one chat message.** "Add a custom MCP connector called Envoy at <URL>" brought up the "Add custom connector" card with the URL already filled in; only the key was typed, into the secure store. Muse then listed all seven of our tools and summarized them accurately.
+- **It never tried to approve.** After `run_task`, Muse checked the task twice, said the check-in was "waiting for your approval on the final step", showed our approval link as a card, and said "I can't approve that for you". After the user approved on our page, "Is the check-in done?" made it call `get_task` and report the seat, gate and boarding time correctly.
+- **Chat-time tool calls didn't prompt**; only setup did.
+
+**What could be better**
+- **Setup still needs three "Allow once" prompts** (verify, list tools, verify again), the same as in Phase 0.
+- **The pasted URL is still fetched as a link** by the in-app browser and `facebookexternalhit`, unauthenticated, even when the message asks to add a connector.
+- **No follow-up on long tasks.** Muse checked the task status twice within 5 s, then stopped; it reported completion only when asked. A way for a connector to tell Muse that a task finished (or for Muse to poll a running task for a while) would let it close the loop itself. We rely on our own push notification for that.
+- **A custom connector needs a public URL**, and a quick tunnel's address changes every run, so the connector is re-added each time. A way to reach a server on the user's private network (or to change a connector's URL instead of adding it again) would help.
