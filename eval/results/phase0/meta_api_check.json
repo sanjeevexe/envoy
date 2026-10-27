@@ -1,0 +1,275 @@
+{
+  "2_latency": {
+    "minimal": {
+      "median_ms": 986,
+      "p90_ms": 1441,
+      "runs": 10,
+      "correct_action_rate": 0.6
+    },
+    "low": {
+      "median_ms": 866,
+      "p90_ms": 1090,
+      "runs": 10,
+      "correct_action_rate": 1.0
+    }
+  },
+  "3_output_tokens": {
+    "minimal": {
+      "output_median": 70.0,
+      "output_p90": 81,
+      "reasoning_median": 12.0,
+      "input_median": 1932.0,
+      "cost_per_step_median_usd": 0.0006212500000000001
+    },
+    "low": {
+      "output_median": 144.0,
+      "output_p90": 174,
+      "reasoning_median": 88.5,
+      "input_median": 1932.0,
+      "cost_per_step_median_usd": 0.0009315
+    }
+  },
+  "5_caching": {
+    "text_calls": [
+      {
+        "input_tokens": 1932,
+        "cached_tokens": 0
+      },
+      {
+        "input_tokens": 1932,
+        "cached_tokens": 1905
+      },
+      {
+        "input_tokens": 1932,
+        "cached_tokens": 1905
+      },
+      {
+        "input_tokens": 1932,
+        "cached_tokens": 1905
+      },
+      {
+        "input_tokens": 1932,
+        "cached_tokens": 1905
+      },
+      {
+        "input_tokens": 1932,
+        "cached_tokens": 1905
+      },
+      {
+        "input_tokens": 1932,
+        "cached_tokens": 1905
+      },
+      {
+        "input_tokens": 1932,
+        "cached_tokens": 1905
+      },
+      {
+        "input_tokens": 1932,
+        "cached_tokens": 1905
+      },
+      {
+        "input_tokens": 1932,
+        "cached_tokens": 1905
+      },
+      {
+        "input_tokens": 1932,
+        "cached_tokens": 1649
+      },
+      {
+        "input_tokens": 1932,
+        "cached_tokens": 1905
+      },
+      {
+        "input_tokens": 1932,
+        "cached_tokens": 1905
+      },
+      {
+        "input_tokens": 1932,
+        "cached_tokens": 1905
+      },
+      {
+        "input_tokens": 1932,
+        "cached_tokens": 1905
+      },
+      {
+        "input_tokens": 1932,
+        "cached_tokens": 1905
+      },
+      {
+        "input_tokens": 1932,
+        "cached_tokens": 1905
+      },
+      {
+        "input_tokens": 1932,
+        "cached_tokens": 1905
+      },
+      {
+        "input_tokens": 1932,
+        "cached_tokens": 1905
+      },
+      {
+        "input_tokens": 1932,
+        "cached_tokens": 1905
+      }
+    ],
+    "text_cache_hit_calls": 19,
+    "image_calls": [
+      {
+        "input_tokens": 5164,
+        "cached_tokens": 1905,
+        "output_tokens": 262,
+        "reasoning_tokens": 204,
+        "total_tokens": 5426
+      },
+      {
+        "input_tokens": 5164,
+        "cached_tokens": 5105,
+        "output_tokens": 96,
+        "reasoning_tokens": 38,
+        "total_tokens": 5260
+      }
+    ],
+    "works": true
+  },
+  "4_grounding": {
+    "targets": [
+      {
+        "target": "the Battery row",
+        "fixture": "settings_home",
+        "truth_1000": [
+          0,
+          706,
+          1000,
+          802
+        ],
+        "latency_ms": 2108,
+        "usage": {
+          "input_tokens": 3290,
+          "cached_tokens": 0,
+          "output_tokens": 472,
+          "reasoning_tokens": 423,
+          "total_tokens": 3762
+        },
+        "pred_1000": [
+          50,
+          720,
+          990,
+          785
+        ],
+        "iou": 0.636,
+        "center_inside": true,
+        "center_error_px": [
+          22,
+          -4
+        ]
+      },
+      {
+        "target": "the Airplane mode switch",
+        "fixture": "settings_network_tall",
+        "truth_1000": [
+          834,
+          427,
+          961,
+          479
+        ],
+        "latency_ms": 2057,
+        "usage": {
+          "input_tokens": 3292,
+          "cached_tokens": 0,
+          "output_tokens": 256,
+          "reasoning_tokens": 205,
+          "total_tokens": 3548
+        },
+        "pred_1000": [
+          832,
+          431,
+          962,
+          474
+        ],
+        "iou": 0.811,
+        "center_inside": true,
+        "center_error_px": [
+          -1,
+          -1
+        ]
+      },
+      {
+        "target": "the Airplane mode row",
+        "fixture": "settings_network_tall",
+        "truth_1000": [
+          0,
+          421,
+          1000,
+          485
+        ],
+        "latency_ms": 1688,
+        "usage": {
+          "input_tokens": 3292,
+          "cached_tokens": 3,
+          "output_tokens": 364,
+          "reasoning_tokens": 312,
+          "total_tokens": 3656
+        },
+        "pred_1000": [
+          0,
+          426,
+          1000,
+          482
+        ],
+        "iou": 0.875,
+        "center_inside": true,
+        "center_error_px": [
+          0,
+          2
+        ]
+      }
+    ],
+    "hit_rate": 1.0
+  },
+  "6_sam": {
+    "latency_ms": 553,
+    "objects": 0,
+    "boxes": [],
+    "usage": {
+      "input_tokens": 0,
+      "cached_tokens": 0,
+      "output_tokens": 0,
+      "reasoning_tokens": 0,
+      "total_tokens": 0,
+      "images_processed": 1
+    },
+    "cost_usd": 0.0025,
+    "raw_chars": 0
+  },
+  "7_wonder": {
+    "models_listed": [
+      "muse-wonder-1.0",
+      "sam-3.1",
+      "muse-spark-1.3-contributor",
+      "muse-voice-transcribe-1.0",
+      "muse-spark-1.3",
+      "muse-image-1.0",
+      "muse-spark-1.2-contributor",
+      "muse-spark-1.2",
+      "muse-spark-1.1"
+    ],
+    "wonder_listed": true,
+    "call_ok": true,
+    "text": "OK",
+    "usage": {
+      "input_tokens": 15,
+      "cached_tokens": 0,
+      "output_tokens": 16,
+      "reasoning_tokens": 6,
+      "total_tokens": 31
+    },
+    "latency_ms": 1536,
+    "cost_usd": 0.00038
+  },
+  "summary": {
+    "time": "2026-10-27T01:46:06+00:00",
+    "estimated_usd": 0.1513,
+    "spent_usd": 0.0445,
+    "gate_passed": null
+  }
+}

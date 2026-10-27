@@ -31,4 +31,17 @@ The submission form asks for "feedback from your experience using Meta products"
 - SAM 3.1 returns special-token text rather than JSON, so a parser library is needed. A JSON option would make it easier to use.
 - The docs use `MODEL_API_KEY`, which the OpenAI SDK doesn't read by default, so it must be passed explicitly.
 
-_(Add results from `scripts/meta_api_check.py` here once credits arrive: latency, reasoning tokens per step, caching hit rate, grounding accuracy, SAM on UI screenshots.)_
+## Meta Model API in use (Oct 27, Phase 0 gate: 37 calls, $0.06)
+
+**What worked well**
+- **Structured output just works.** Every step returned schema-valid action JSON on the first try, and the first live call picked the right element and ran on the phone.
+- **Speed and cost:** Muse Spark 1.3 at `low` effort took a median 0.87 s per agent step, with only about 88 reasoning tokens, so a step costs about $0.001. That's cheap enough to run an agent loop freely.
+- **Automatic prompt caching** hit on 19/20 repeated calls with no configuration, and it caches screenshots too.
+- **Visual grounding** on tall 1080×2400 phone screenshots was precise: a 137×126 px toggle was located within 1 px.
+- SAM 3.1 segments UI parts well when given specific noun phrases ("toggle switch", "search bar").
+
+**What could be better**
+- **`minimal` effort was no faster than `low`** in our test (median 0.99 s against 0.87 s) and was less accurate on a simple element choice (11/15 against 10/10). Guidance on when `minimal` helps would be useful.
+- **A full-resolution phone screenshot costs about 3,200 input tokens**, about twice the docs' "~1,300–1,500 for ~1280 px". A documented token formula per resolution would help budgeting.
+- SAM 3.1 returns nothing for generic UI phrases such as "button" or "text". Examples of good prompts for screenshots would help.
+- **Billing:** our own account's billing was not working, so the $50 balance and the hackathon's $150 credits couldn't be used, and we fell back to a teammate's key. Faster billing support during a 10-day hackathon would matter.

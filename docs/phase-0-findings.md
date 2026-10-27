@@ -1,6 +1,6 @@
 # Phase 0 findings
 
-Oct 26–27, 2026. Parts A and B are done. **The only Phase 0 item left is the Meta API test** (`scripts/meta_api_check.py`, the Phase 0 gate), which waits for credits.
+Oct 26–27, 2026. **Phase 0 is complete. The gate passed:** Muse Spark 1.3 read a live emulator screen and returned a valid action that ran on the phone (see "Meta API test results").
 
 Raw data: `eval/results/phase0/` (device timings, resource samples, secure-screen results) and `eval/fixtures/phase0/` (screens). Scripts that produced them are named in each section, so every number can be re-measured.
 
@@ -28,7 +28,10 @@ Raw data: `eval/results/phase0/` (device timings, resource samples, secure-scree
   - Only web-based sign-ins are marked secure.
   - The emulator image's 2024 Chrome and WebView must be updated first.
 - **Muse (B2): route 2 works.** Muse's free tier added Envoy as a custom MCP connector, called `memory_search` and `run_task`, and showed Envoy's approval link without approving anything.
-- **Meta API test:** ready. The dry run sends nothing and estimates $0.16 expected and $0.54 worst case for 28 calls. The gate pipeline passed end to end with a stubbed model reply.
+- **Meta API (gate passed):**
+  - A `low`-effort step takes 0.87 s and $0.0009, about 4× cheaper than estimated.
+  - Grounding hit 3/3 targets, caching works, and SAM 3.1 finds UI parts with specific phrases.
+  - 37 calls cost $0.06 in total.
 
 ## This Mac (verified)
 
@@ -290,7 +293,28 @@ Part B repeats this on real apps' sign-in and payment screens.
   - `envoy-test` has the snapshot `phase0-gate` (Settings home) for check 1.
 - `scripts/meta_api_check.py` and `docs/meta-api-test-plan.md`.
 
-## Ready for the Meta API test
+## Meta API test results: Phase 0 gate passed
+
+Oct 27, run on the shared API key (`scripts/meta_api_check.py`). Raw data: `eval/results/phase0/meta_api_check.json` and `model_costs.json`. **37 calls cost $0.06 in total; none failed.**
+
+| Check | Result |
+| --- | --- |
+| **1. Gate** | **PASS on the first try.** `muse-spark-1.3` (effort `low`, `json_schema` StepOutput) read the live Settings screen and returned `{"type": "tap", "element": 10}`, risk `read`, with expected result "Battery settings screen opens". The emulator executed it in 8 ms and Battery settings opened. 1,932 input and 97 output tokens (39 reasoning), 1.65 s, $0.0028. |
+| 2. Latency (10 runs each) | `low`: median **866 ms**, p90 1,090 ms, correct element 10/10. `minimal`: median 986 ms, p90 1,441 ms, correct 6/10, then 5/5 in a follow-up (11/15 overall). **Use `low`**: more reliable and no slower. |
+| 3. Tokens per step | `low`: median **144 output tokens (88 reasoning)**, 1,932 input, **$0.0009 per step** with caching. `minimal`: 70 output (12 reasoning), $0.0006. The design assumed 500 output tokens and $0.004 per step, so steps cost about **4× less** than estimated. |
+| 4. Grounding (1080×2400) | Battery row: IoU 0.64, center 22 px off. **Airplane mode switch** (137×126 px): IoU 0.81, center 1 px off. Airplane mode row: IoU 0.88. All centers inside the target, about 2 s and 250–470 output tokens per call. |
+| 5. Prompt caching | **Works without a minimum we could hit.** 19/20 repeated text calls reused 1,905 cached tokens (instructions plus schema). Screenshots are cached as well: a repeat image call had 5,105 of 5,164 tokens cached. |
+| 6. SAM 3.1 | "button" and "text": **0 objects**. "toggle switch": 1 object, exactly the Airplane mode switch. "search bar": 1, the search bar. "icon": 14 objects, confidence about 0.85–0.9. About 0.55 s and $0.0025 per image. |
+| 7. Muse Wonder | Listed by `GET /v1/models`, and a call works ("OK", 31 tokens, 1.5 s). |
+
+**What changes**
+- **Costs are about 4× below the estimate.** At about $0.001 per text step and about $0.0055 per first screenshot step ($0.0013 once cached), a 15-step first run with 5 screenshots costs about $0.04, not $0.09. The shared $38 alone covers roughly 900 such runs.
+- **A 1080×2400 screenshot costs about 3,230 input tokens**, not the 1,300–1,500 the design assumed. Downscale screenshots before sending, e.g. to 540×1200: grounding is on a 0–1000 grid, so scale doesn't matter. Text-first matters even more than planned.
+- **Use `low` effort for steps.** `minimal` saved no time and was less reliable.
+- **SAM 3.1 is worth keeping as a helper for screens with no tree**, prompted with specific phrases ("toggle switch", "search bar", "icon"), never "button".
+- Each step is about 0.9 s of model time plus about 1.6 s of device time, so a 10-step agent run is about 25 s, and a routine rerun is far less.
+
+## Ready for the Meta API test (done Oct 26)
 
 - [x] `META_API_KEY` slot in `.env` (empty). The script exits with code 2 and sends nothing when it is missing (verified).
 - [x] `--dry-run` runs cleanly. It builds all 28 requests and prints them with images and schemas shortened.
@@ -298,7 +322,7 @@ Part B repeats this on real apps' sign-in and payment screens.
 - [x] Check 1 (gate): restore snapshot → live observe → model → validate → execute → verify Battery settings opened. Passed end to end with a **stubbed** model reply.
 - [x] Checks 2–7: request building and result handling exercised offline with fake replies (latency, tokens, caching counts, grounding IoU, SAM box parsing, Wonder listing and error capture).
 - [x] Fixtures, snapshot, adapter, schemas, cost meter and test plan are committed.
-- [ ] Add the key, start `envoy-test`, run `scripts/meta_api_check.py` (with you).
+- [x] Added the key, started `envoy-test`, ran `scripts/meta_api_check.py`. **The gate passed** (see above).
 
 ## Decisions made without you
 
@@ -332,10 +356,10 @@ Part B repeats this on real apps' sign-in and payment screens.
 
 | Question | Status after Part A |
 | --- | --- |
-| Credits (do they cover Wonder, SAM 3.1, Voice?) | **Open.** Prices confirmed from the docs. Coverage → API test checks 6 and 7. |
-| Speed of a Spark 1.3 step | **Open** for the model → check 2. **Device side settled:** about 0.07 s to read a screen, under 1 ms to tap, about 1.5 s to settle after a screen change. |
-| Grounding on tall screenshots; SAM 3.1 on UI | **Open** → checks 4 and 6. Fixtures with known boxes are ready. |
-| Limits: max output tokens, minimum cacheable prompt | **Open.** Neither is documented. Check 5 shows whether our roughly 2.5k-token prefix gets cached. |
+| Credits (do they cover Wonder, SAM 3.1, Voice?) | **Partly answered.** On the shared key in use now (about $38), Muse Wonder and SAM 3.1 both work, and all 9 models are listed, including Voice Transcribe. Your own $50 and the $150 hackathon credits are blocked by a Meta billing issue (expected to clear within about 4 business days). |
+| Speed of a Spark 1.3 step | **Answered.** At `low` effort: median 0.87 s, p90 1.09 s (10 runs). At `minimal`: median 0.99 s, p90 1.44 s. Device side: about 0.07 s to read a screen, under 1 ms to tap, about 1.5 s to settle after a screen change. A full agent step is about 2.5 s. |
+| Grounding on tall screenshots; SAM 3.1 on UI | **Answered.** Spark grounding on 1080×2400 screenshots: 3/3 box centers on target, center error at most 22 px, IoU 0.64–0.88, about 2 s per call. SAM 3.1 finds UI parts with specific noun phrases ("toggle switch", "search bar", "icon") but nothing for "button" or "text". |
+| Limits: max output tokens, minimum cacheable prompt | **Partly answered.** Caching works for our prefix of about 1,900 tokens: 19 of 20 repeated calls had 1,905 cached tokens, and screenshots are cached too. The minimum length and maximum output tokens are still undocumented, but neither matters at our sizes. |
 | Path into Muse | **Answered (B2): route 2 works.** Muse's free tier adds a custom MCP connector (bearer token in its secure credentials store), calls the tools, and shows Envoy's approval link without approving anything. |
 | Real apps on the emulator | **Answered (B1):** Target, Starbucks, Chipotle and Amazon run and work as guests; DoorDash runs but its guest mode hangs (sign-in works, and the session survives restarts); Uber Eats won't install ("device isn't compatible"). |
 | Android phone (IPaT loan, Oct 28) | **Open** |
@@ -523,6 +547,6 @@ From the public event page (cerebralvalley.ai/e/meta-ai-developer-hackathon, rea
 ### B4. Remaining for Phase 0
 
 - [x] B1 real apps, B2 Muse connector, B3 rules and submission requirements, recorded above
-- [ ] **Run `scripts/meta_api_check.py` once credits arrive** (the Phase 0 gate; `docs/meta-api-test-plan.md`)
+- [x] **Ran `scripts/meta_api_check.py` on the shared key. The Phase 0 gate passed** (Oct 27).
 - [ ] You: submit the Meta AI Connectors waitlist (optional: the Muse Connector Platform)
 - [ ] You: decide on the proposed design-doc changes (A-section list plus the B1 and B2 implications)

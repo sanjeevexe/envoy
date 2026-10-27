@@ -247,7 +247,8 @@ class Check:
             e: {"median_ms": round(statistics.median(r["latency_ms"] for r in rows)),
                 "p90_ms": round(p90([r["latency_ms"] for r in rows])),
                 "runs": len(rows),
-                "correct_action_rate": sum(1 for r in rows if (r["action"] or {}).get("element") == fixture("settings_home")["meta"]["task"]["expected_action"]["element"]) / len(rows)}
+                "correct_action_rate": sum(1 for r in rows if (r["action"] or {}).get("element") == fixture("settings_home")["meta"]["task"]["expected_action"]["element"]) / len(rows),
+                "actions": [r["action"] for r in rows]}
             for e, rows in per_effort.items()
         }
         self.results["3_output_tokens"] = {
