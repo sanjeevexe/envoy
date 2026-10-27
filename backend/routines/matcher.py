@@ -20,6 +20,7 @@ from routines.store import RoutineStore
 
 _STOP = {"the", "a", "an", "my", "me", "to", "for", "on", "of", "in", "and", "is", "what", "whats", "s", "i", "it", "from", "with", "do", "does", "please"}
 SHORTLIST_FLOOR = 0.12
+FALLBACK_K = 5
 
 
 def _words(s: str) -> set[str]:
@@ -50,25 +51,25 @@ class RoutineMatcher:
         self.contributor = contributor
 
     def shortlist(self, request: str, app: str | None = None, k: int = 3) -> list[tuple[Routine, float]]:
-        """Filters 1–3 in code: app, intent patterns, description similarity."""
+        """Filters 1–3 in code: app, intent patterns, description similarity. Words can't see paraphrases
+        ("is it on time" = status), so when nothing passes, the model sees the best few anyway."""
         req = _words(request)
-        out = []
+        scored = []
         for r in self.store.active():
             if app and r.app != app:
                 continue
             pattern = max((_overlap(_words(p), req) for p in r.patterns), default=0.0)  # how much of a pattern the request says
             desc = _overlap(req, _words(r.intent + " " + r.description))  # how much of the request the routine covers
-            score = 0.6 * pattern + 0.4 * desc
-            if score >= SHORTLIST_FLOOR:
-                out.append((r, round(score, 3)))
-        out.sort(key=lambda t: -t[1])
-        return out[:k]
+            scored.append((r, round(0.6 * pattern + 0.4 * desc, 3)))
+        scored.sort(key=lambda t: -t[1])
+        passed = [t for t in scored if t[1] >= SHORTLIST_FLOOR]
+        return passed[:k] if passed else scored[:FALLBACK_K]
 
     async def match(self, request: str, memory: str = "", app: str | None = None, task_id: str | None = None) -> MatchResult:
         cands = self.shortlist(request, app)
         res = MatchResult(None, candidates=[(r.routine, s) for r, s in cands])
         if not cands:
-            res.stage = "no candidate passed the app, pattern and description filters"
+            res.stage = "no routine for this app"
             return res
         lines = []
         for r, _ in cands:

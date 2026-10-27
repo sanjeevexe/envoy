@@ -188,22 +188,31 @@ steps:
   risk: irreversible
   extract:
     seat:
+      near: Seat
       locator: {resource_id: row_bp_seat, kind: Text}
       segment: 1
+      first_in_list: false
+      next_element: false
     gate:
+      near: Gate
       locator: {resource_id: row_bp_gate, kind: Text}
       segment: 1
+      first_in_list: false
+      next_element: false
     boarding_time:
+      near: Boarding
       locator: {resource_id: row_bp_boarding, kind: Text}
       segment: 1
+      first_in_list: false
+      next_element: false
   note: trace step 8
 done:
 - {text_visible: checked in}
 compiled_from:
   task_id: p2-src-check_in
   goal: Check me in for my flight to Denver.
-  compiler: muse-wonder-1.0
-  compiled_at: "2026-10-27 00:32:21"
+  compiler: cached
+  compiled_at: "2026-10-27 01:17:59"
   trace_steps_kept: [1, 2, 3, 4, 5, 6, 7, 8]
   trace_steps_dropped: 0
-  cost_usd: 0.066
+  cost_usd: 0.0

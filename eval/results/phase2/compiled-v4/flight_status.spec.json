@@ -1,0 +1,57 @@
+{
+ "name": "skylark_check_flight_status",
+ "intent": "Check the status of a SkyLark flight",
+ "description": "Opens SkyLark flight status, searches by flight number, and returns the flight status summary shown for that flight.",
+ "patterns": [
+  "What's the status of my flight?",
+  "Check flight status",
+  "Is my SkyLark flight delayed?",
+  "Look up a SkyLark flight"
+ ],
+ "inputs": [
+  {
+   "name": "flight_number",
+   "type": "text",
+   "description": "Flight number to look up",
+   "from_memory": null,
+   "example": "SL 1190"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "open_flight_status",
+   "intent": "Tap Flight status to open the flight status lookup",
+   "target_fixed_text": "Flight status",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "enter_flight_number",
+   "intent": "Type {{flight_number}} into the Flight number field",
+   "target_fixed_text": "Flight number",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "search_flight",
+   "intent": "Tap Search to look up the flight status",
+   "target_fixed_text": "Search",
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "flight_status_summary",
+   "near": "Check any SkyLark flight",
+   "example": "SL 1190 · ATL → DEN · Sat, Nov 14, 2026 · Delayed 25 min · Gate A7 · Departs 2:45 PM"
+  }
+ ],
+ "data_values": [
+  "ATL → DEN",
+  "Sat, Nov 14, 2026",
+  "Delayed 25 min",
+  "A7",
+  "2:45 PM"
+ ]
+}

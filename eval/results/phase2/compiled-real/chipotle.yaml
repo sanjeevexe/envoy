@@ -1,0 +1,250 @@
+routine: chipotle_get_menu_item_price
+app: com.chipotle.ordering
+version: 1
+status: draft
+intent: Find the price of a Chipotle menu item
+description: Uses the preferred ZIP code to select a nearby Chipotle pickup location, opens the Chips & Sides menu, and returns the requested
+  item's price.
+patterns: [How much is a menu item at Chipotle, Find the price of a Chipotle menu item, Check a Chipotle item price]
+outputs: [price]
+start: fresh_launch
+inputs:
+  zip_code: {type: text, description: The ZIP code for the preferred nearby Chipotle location., from_memory: preferred_location.zip_code, example: '10001'}
+steps:
+- id: open_menu
+  intent: Tap MENU to open the ordering menu
+  pre:
+  - {app_foreground: com.chipotle.ordering}
+  - element_present: {resource_id: tab_item_container, text: HOME, kind: Text}
+  action:
+    tap:
+      resource_id: menuFragment
+      text: MENU
+      kind: Button
+      cls: FrameLayout
+      in_list: false
+      position: [0.278, 0.941]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: btn_group_order, text: GROUP, kind: Button}
+  - element_present: {resource_id: rv_menu, kind: List}
+  risk: reversible
+  note: trace step 1
+- id: find_chipote_for_full_menu
+  intent: Tap FIND A CHIPOTLE FOR THE FULL MENU to choose a pickup location
+  pre:
+  - {app_foreground: com.chipotle.ordering}
+  action:
+    tap:
+      resource_id: btn_find_a_chipotle
+      text: FIND A CHIPOTLE FOR THE FULL MENU
+      kind: Button
+      cls: ViewGroup
+      parent: cl_top_level_container
+      in_list: false
+      position: [0.5, 0.869]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 3
+- id: dismiss_location_notice
+  intent: Tap OKAY to dismiss the location data notice
+  pre:
+  - {app_foreground: com.chipotle.ordering}
+  action:
+    tap:
+      resource_id: md_button_positive
+      text: OKAY
+      kind: Button
+      cls: Button
+      parent: md_button_layout
+      in_list: false
+      position: [0.825, 0.57]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 4
+- id: enter_zip_code
+  intent: "Type {{zip_code}} into the City, State, or ZIP search field"
+  pre:
+  - {app_foreground: com.chipotle.ordering}
+  action:
+    type:
+      field:
+        resource_id: view_search_input
+        text: City, State, or ZIP
+        hint: City, State, or ZIP
+        kind: EditText
+        cls: EditText
+        parent: view_search_container
+        in_list: false
+        position: [0.541, 0.083]
+      value: "{{zip_code}}"
+  post:
+  - field_equals:
+      field: {resource_id: view_search_input, text: 'City, State, or ZIP', kind: EditText}
+      value: "{{zip_code}}"
+  risk: reversible
+  note: trace step 6
+- id: select_zip_code_suggestion
+  intent: "Tap the location search suggestion for {{zip_code}}"
+  pre:
+  - {app_foreground: com.chipotle.ordering}
+  action:
+    tap:
+      resource_id: cl_auto_search
+      text_has: "{{zip_code}}"
+      kind: Button
+      cls: ViewGroup
+      parent: rv_search_list
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: view_search_input
+      text: "City, State, or ZIP: New York, NY {{zip_code}}, USA"
+      kind: EditText
+  - element_present: {resource_id: fab_location, kind: Button}
+  risk: reversible
+  note: trace step 7
+- id: expand_store_list
+  intent: Expand the bottom sheet to show the nearby store list
+  pre:
+  - {app_foreground: com.chipotle.ordering}
+  action:
+    tap:
+      resource_id: view_tabs_bottom_sheet
+      text: ''
+      kind: Button
+      cls: ViewGroup
+      parent: view_main_content
+      in_list: false
+      position: [0.5, 0.929]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: vp_pager, kind: List}
+  - element_present:
+      resource_id: view_section_header
+      text: "NEW YORK, NY {{zip_code}}, USA"
+      kind: Text
+  risk: reversible
+  note: trace step 13
+- id: find_select_pickup_store
+  intent: "Scroll to {{zip_code}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: view_container
+        text_has: "{{zip_code}}"
+        kind: Button
+        cls: ViewGroup
+        parent: rv_pick_up_list
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: view_container
+      text_has: "{{zip_code}}"
+      kind: Button
+      cls: ViewGroup
+      parent: rv_pick_up_list
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: select_pickup_store
+  intent: "Tap a pickup store near {{zip_code}}"
+  pre:
+  - {app_foreground: com.chipotle.ordering}
+  action:
+    tap:
+      resource_id: view_container
+      text_has: "{{zip_code}}"
+      kind: Button
+      cls: ViewGroup
+      parent: rv_pick_up_list
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: fab_peek_back, kind: Button}
+  - element_present: {resource_id: card_restaurant_details, text: CURRENTLY CLOSED, kind: Button}
+  risk: reversible
+  note: trace step 14
+- id: confirm_pickup_location
+  intent: Tap PICK UP HERE to confirm the pickup location and access the menu
+  pre:
+  - {app_foreground: com.chipotle.ordering}
+  action:
+    tap:
+      resource_id: btn_select_restaurant
+      text: PICK UP HERE
+      kind: Button
+      cls: Button
+      siblings: [CURRENTLY CLOSED, Pickup]
+      in_list: false
+      position: [0.5, 0.882]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: tv_title, text: PICKING UP FROM, kind: Text}
+  - element_present: {resource_id: tab_item_container, text: HOME, kind: Text}
+  risk: reversible
+  note: trace step 15
+- id: scroll_to_chips_and_sides
+  intent: "Scroll until the CHIPS & SIDES section containing {{menu_item_name}} is visible"
+  pre:
+  - {app_foreground: com.chipotle.ordering}
+  action:
+    scroll_until:
+      target:
+        resource_id: view_container
+        text: CHIPS & SIDES
+        kind: Button
+        cls: ViewGroup
+        parent: rv_menu
+        in_list: true
+        position: [0.5, 0.664]
+      direction: down
+      max_scrolls: 8
+      container: {resource_id: rv_menu, kind: List}
+  post:
+  - element_present:
+      resource_id: view_container
+      text: CHIPS & SIDES
+      kind: Button
+      cls: ViewGroup
+      parent: rv_menu
+      in_list: true
+      position: [0.5, 0.664]
+  risk: read
+  note: trace step 16 (+1 scrolls)
+- id: open_chips_and_sides
+  intent: "Tap CHIPS & SIDES to view the price of {{menu_item_name}}"
+  pre:
+  - {app_foreground: com.chipotle.ordering}
+  action:
+    tap:
+      resource_id: view_container
+      text: CHIPS & SIDES
+      kind: Button
+      cls: ViewGroup
+      parent: rv_menu
+      in_list: true
+      position: [0.5, 0.664]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: view_coordinator, kind: List}
+  risk: reversible
+  extract:
+    price:
+      locator: {resource_id: tv_price, kind: Text}
+      first_in_list: false
+      next_element: false
+  note: trace step 17
+compiled_from:
+  task_id: p2-real-chipotle
+  goal: In the Chipotle app, find the price of Chips & Guacamole.
+  compiler: cached
+  compiled_at: "2026-10-27 01:19:31"
+  trace_steps_kept: [1, 3, 4, 6, 7, 13, 14, 15, 16, 17]
+  trace_steps_dropped: 7
+  cost_usd: 0.0

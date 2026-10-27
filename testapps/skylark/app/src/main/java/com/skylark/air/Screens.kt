@@ -102,9 +102,9 @@ private fun Page(
     }
 }
 
-/** Dialogs get their own window, so test tags must be exposed as resource IDs there as well. */
+/** Dialogs get their own window, so test tags must be exposed as resource IDs there as well (unless the variant hides them). */
 @OptIn(ExperimentalComposeUiApi::class)
-private val DialogTags = Modifier.semantics { testTagsAsResourceId = true }
+private fun dialogTags(s: AppState) = Modifier.semantics { testTagsAsResourceId = s.showsIds }
 
 @Composable
 private fun ScrollColumn(content: @Composable () -> Unit) {
@@ -217,7 +217,7 @@ fun TabsScreen(s: AppState, nav: Nav, tab: HomeTab) {
     }
     if (s.showRatingPrompt) {
         AlertDialog(
-            modifier = DialogTags,
+            modifier = dialogTags(s),
             onDismissRequest = { Store.dismissRatingPrompt() },
             title = { Text("Enjoying SkyLark?") },
             text = { Text("Tap a star to rate us on the Play Store.") },
@@ -394,7 +394,7 @@ fun TripDetailsScreen(s: AppState, nav: Nav, code: String) {
         }
     }
     if (confirmBag) AlertDialog(
-        modifier = DialogTags,
+        modifier = dialogTags(s),
         onDismissRequest = { confirmBag = false },
         title = { Text("Add a checked bag?") },
         text = { Text("Your card ending in 4242 will be charged $35.00.") },
@@ -402,7 +402,7 @@ fun TripDetailsScreen(s: AppState, nav: Nav, code: String) {
         dismissButton = { TextButton(onClick = { confirmBag = false }, Modifier.testTag("btn_dialog_cancel")) { Text("Cancel") } },
     )
     if (confirmCancel) AlertDialog(
-        modifier = DialogTags,
+        modifier = dialogTags(s),
         onDismissRequest = { confirmCancel = false },
         title = { Text("Cancel this trip?") },
         text = { Text("This cancels ${t.flight.number} to ${t.city}. This can't be undone.") },

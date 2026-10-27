@@ -1,0 +1,84 @@
+{
+ "time": "2026-10-27T05:21:27+00:00",
+ "rows": [
+  {
+   "family": "check_in",
+   "compiled": true,
+   "routine": "skylark_check_in_flight",
+   "version": 2,
+   "status": "added",
+   "steps": 14,
+   "inputs": {
+    "trip_city": {
+     "type": "text",
+     "description": "Destination city of the flight to check in for.",
+     "from_memory": null,
+     "example": "Denver",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "check_in_status",
+    "seat",
+    "gate",
+    "boarding_time",
+    "boarding_group"
+   ],
+   "dropped": [],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "compile_cost_usd": 0.054958400000000004,
+   "compile_latency_s": 16.66,
+   "verify": [
+    {
+     "case": "same-inputs",
+     "inputs": {
+      "trip_city": "Denver"
+     },
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "duration_s": 7.69,
+     "outputs": {
+      "check_in_status": "You're checked in",
+      "seat": "22F",
+      "gate": "A7",
+      "boarding_time": "2:05 PM",
+      "boarding_group": "Group 5"
+     }
+    },
+    {
+     "case": "second-inputs",
+     "inputs": {
+      "trip_city": "Tampa"
+     },
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "duration_s": 6.72,
+     "outputs": {
+      "check_in_status": "You're checked in",
+      "seat": "11E",
+      "gate": "B17",
+      "boarding_time": "6:00 AM",
+      "boarding_group": "Group 5"
+     }
+    }
+   ]
+  }
+ ]
+}

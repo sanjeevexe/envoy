@@ -18,6 +18,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
+import shutil
 import statistics
 import sys
 import time
@@ -52,13 +53,39 @@ def now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
+TAG = ""  # a track: "" (compiled on the original layout), "-v4" (compiled with IDs hidden), "-v3" (compiled on the extra-screen layout)
+SRC_VARIANT = 0
+
+
+def set_track(tag: str, src_variant: int) -> None:
+    global TAG, SRC_VARIANT, LIB
+    TAG, SRC_VARIANT = tag, src_variant
+    LIB = REPO / "data" / "routines" if not tag else OUT / f"library{tag}"
+
+
 def save(name: str, payload: Any) -> None:
     OUT.mkdir(parents=True, exist_ok=True)
-    (OUT / f"{name}.json").write_text(json.dumps(payload, indent=1, default=str, ensure_ascii=False))
+    (OUT / f"{name}{TAG}.json").write_text(json.dumps(payload, indent=1, default=str, ensure_ascii=False))
 
 
 def load(name: str) -> Any:
-    return json.loads((OUT / f"{name}.json").read_text())
+    return json.loads((OUT / f"{name}{TAG}.json").read_text())
+
+
+def exists(name: str) -> bool:
+    return (OUT / f"{name}{TAG}.json").exists()
+
+
+def families(args: argparse.Namespace) -> list[Family]:
+    return [BY_ID[f] for f in args.families.split(",")] if args.families else FAMILIES
+
+
+def src_of(fam: Family) -> Booking:
+    return fam.only_booking() if fam.only_booking else compile_booking()
+
+
+def source_trace(fam: Family) -> Path:
+    return RUNS / (fam.source_task or f"p2-src{TAG}-{fam.id}")
 
 
 class Env:
@@ -108,33 +135,33 @@ def answer_of(outcome: RunOutcome) -> str:
 
 
 async def cmd_record(env: Env, args: argparse.Namespace) -> None:
-    src = compile_booking()
     rows = []
-    for fam in [BY_ID[f] for f in args.families.split(",")] if args.families else FAMILIES:
-        await env.reset(compile_extra())
-        task_id = f"p2-src-{fam.id}"
+    for fam in families(args):
+        src = src_of(fam)
+        await env.reset(compile_extra(), SRC_VARIANT)
+        task_id = f"p2-src{TAG}-{fam.id}"
         res = await env.agent().run(fam.goal(src), task_id=task_id, memory=fam.memory(src))
         state = env.app.state()
         ok = fam.check(state, state, src, {}, res.result) and res.status == "done"
         print(f"{'PASS' if ok else 'FAIL'} {fam.id:14s} {res.status:12s} {res.steps} steps {res.model_calls} calls ${res.cost_usd:.4f} {res.duration_s}s  {res.result[:80]!r}", flush=True)
         rows.append({"family": fam.id, "task_id": task_id, "passed": ok, "status": res.status, "steps": res.steps, "model_calls": res.model_calls,
                      "cost_usd": res.cost_usd, "cost_at_standard_usd": res.cost_at_standard_usd, "duration_s": res.duration_s, "result": res.result})
-    prev = load("record")["rows"] if (OUT / "record.json").exists() and args.families else []
+    prev = load("record")["rows"] if exists("record") and args.families else []
     keep = [r for r in prev if r["family"] not in {x["family"] for x in rows}]
-    save("record", {"time": now(), "rows": keep + rows})
+    save("record", {"time": now(), "variant": SRC_VARIANT, "rows": keep + rows})
 
 
 async def cmd_compile(env: Env, args: argparse.Namespace) -> None:
-    src = compile_booking()
     second = generate(args.verify_seed, 2)
     store = RoutineStore(LIB)
     rows = []
-    old = load("compile")["rows"] if (OUT / "compile.json").exists() else []
+    old = load("compile")["rows"] if exists("compile") else []
     prev_cost = {r["family"]: r.get("compile_cost_usd", 0.0) for r in old}
     prev_lat = {r["family"]: r.get("compile_latency_s", 0.0) for r in old}
-    for fam in [BY_ID[f] for f in args.families.split(",")] if args.families else FAMILIES:
-        trace = RUNS / f"p2-src-{fam.id}"
-        spec_file = OUT / "compiled" / f"{fam.id}.spec.json"
+    for fam in families(args):
+        src = src_of(fam)
+        trace = source_trace(fam)
+        spec_file = OUT / f"compiled{TAG}" / f"{fam.id}.spec.json"
         cached = CompiledRoutine.model_validate_json(spec_file.read_text()) if args.reuse_spec and spec_file.exists() else None
         try:
             routine, report = await compile_trace(trace, adapter=env.adapter, memory=fam.memory(src), effort=args.effort, spec=cached)
@@ -148,20 +175,21 @@ async def cmd_compile(env: Env, args: argparse.Namespace) -> None:
             held: dict[str, Any] = {}
 
             async def reset() -> None:
-                held["before"] = await env.reset(extra, snapshot=True)
+                held["before"] = await env.reset(extra, SRC_VARIANT, snapshot=True)
 
             async def success(outcome: RunOutcome) -> bool:
                 return fam.check(env.app.state(), held["before"], b, outcome.outputs, answer_of(outcome))
             return VerifyCase(name, inputs_for(routine, src, b), reset, success)
 
-        # Same inputs (the source booking), then a second set: a booking the source run never saw.
-        cases = [case("same-inputs", src, compile_extra()), case("second-inputs", second[0], second)]
+        # Same inputs (the source booking), then a second set: a booking the source run never saw
+        # (unless the routine is only valid for one booking, like the next trip).
+        cases = [case("same-inputs", src, compile_extra())] + ([] if fam.only_booking else [case("second-inputs", second[0], second)])
         v = await verify(routine, ex, cases)
         status = "added" if v.passed else "rejected"
         if v.passed:
             routine = store.add(routine, {"cases": v.cases})
-        (OUT / "compiled").mkdir(parents=True, exist_ok=True)
-        (OUT / "compiled" / f"{fam.id}.yaml").write_text(dump_yaml(routine))
+        (OUT / f"compiled{TAG}").mkdir(parents=True, exist_ok=True)
+        (OUT / f"compiled{TAG}" / f"{fam.id}.yaml").write_text(dump_yaml(routine))
         if cached is None and report.wonder:
             spec_file.write_text(json.dumps(report.wonder, indent=1, ensure_ascii=False))
         print(f"{status.upper():8s} {fam.id:14s} {routine.routine} v{routine.version}: {len(routine.steps)} steps, inputs {list(routine.inputs)}, "
@@ -174,14 +202,15 @@ async def cmd_compile(env: Env, args: argparse.Namespace) -> None:
                      "dropped": report.dropped, "kept": report.kept, "warnings": report.warnings, "compiler": report.model,
                      "compile_cost_usd": report.cost_at_standard_usd if cached is None else prev_cost.get(fam.id, 0.0),
                      "compile_latency_s": report.latency_s if cached is None else prev_lat.get(fam.id, 0.0), "verify": v.cases})
-    prev = load("compile")["rows"] if (OUT / "compile.json").exists() and args.families else []
+    prev = load("compile")["rows"] if exists("compile") and args.families else []
     keep = [r for r in prev if r["family"] not in {x["family"] for x in rows}]
     save("compile", {"time": now(), "rows": keep + rows})
 
 
 def routine_for(store: RoutineStore, fam: Family) -> Routine:
-    name = next(r["routine"] for r in load("compile")["rows"] if r["family"] == fam.id and r.get("status") == "added")
-    return store.get(name, 1)
+    """The routine compiled for this family in this track (its first version)."""
+    row = next(r for r in load("compile")["rows"] if r["family"] == fam.id and r.get("status") == "added")
+    return store.get(row["routine"], row.get("version", 1))
 
 
 def outcome_row(kind: str, fam: Family, b: Booking, variant: int, outcome: RunOutcome, ok: bool, **extra: Any) -> dict[str, Any]:
@@ -207,30 +236,33 @@ async def run_routine(env: Env, routine: Routine, fam: Family, src: Booking, b: 
 
 async def cmd_new_inputs(env: Env, args: argparse.Namespace) -> None:
     store = RoutineStore(LIB)
-    src = compile_booking()
     rows = []
     for k in range(args.k):
         extra = generate(args.seed + k, 4)
-        for fam in [BY_ID[f] for f in args.families.split(",")] if args.families else FAMILIES:
+        for fam in families(args):
+            src = src_of(fam)
             routine = routine_for(store, fam)
             target = extra[k % len(extra)] if k % 5 != 4 else chicago_booking()  # mostly new bookings; sometimes the next trip
-            row, outcome = await run_routine(env, routine, fam, src, target, extra, 0, kind="newinput")
+            row, outcome = await run_routine(env, routine, fam, src, target, extra, SRC_VARIANT, kind="newinput")
             store.record_run(routine.routine, outcome)
             rows.append(row)
     save(args.name or "new_inputs", {"time": now(), "rows": rows})
 
 
 async def cmd_variants(env: Env, args: argparse.Namespace) -> None:
-    src = compile_booking()
     main = RoutineStore(LIB)
-    rows = []
+    rows = load("variants")["experiments"] if exists("variants") and args.append else []
     variants = [int(v) for v in args.variants.split(",")]
-    for fam in [BY_ID[f] for f in args.families.split(",")] if args.families else FAMILIES:
+    for fam in families(args):
+        src = src_of(fam)
         base = routine_for(main, fam)
         for variant in variants:
             bookings = generate(args.seed + 100 * variant, 4)
-            a, b, c, d = bookings
-            lib = RoutineStore(EXP_LIB / f"{fam.id}-v{variant}")
+            a, b, c, d = [fam.only_booking()] * 4 if fam.only_booking else bookings
+            lib_dir = EXP_LIB / f"{fam.id}{TAG}-v{variant}"
+            if lib_dir.exists():
+                shutil.rmtree(lib_dir)  # each experiment starts from the compiled v1
+            lib = RoutineStore(lib_dir)
             if not lib.names():
                 lib.add(base.model_copy(update={"changes": [f"v1 compiled from {base.compiled_from.get('task_id')}"]}))
             v1 = lib.get(base.routine, 1)
@@ -254,9 +286,9 @@ async def cmd_variants(env: Env, args: argparse.Namespace) -> None:
             arow, aoutcome = await run_routine(env, active, fam, src, c, bookings, variant, kind="after")
             lib.record_run(base.routine, aoutcome)
             exp["after"] = arow
-            # 4. The patched version back on the original layout (patches must not break it).
-            if active.version != 1:
-                orow, _ = await run_routine(env, active, fam, src, d, bookings, 0, kind="backcompat", allow_repair=False, allow_agent=False)
+            # 4. The patched version back on the layout it was compiled on (patches must not break it).
+            if active.version != 1 and variant != SRC_VARIANT:
+                orow, _ = await run_routine(env, active, fam, src, d, bookings, SRC_VARIANT, kind="backcompat", allow_repair=False, allow_agent=False)
                 exp["backcompat"] = orow
             rows.append(exp)
             save(args.name or "variants", {"time": now(), "experiments": rows})
@@ -292,8 +324,13 @@ async def run_fixed_baseline(env: Env, fam: Family, src: Booking, b: Booking, ex
 
 async def cmd_baselines(env: Env, args: argparse.Namespace) -> None:
     src = compile_booking()
-    rows = []
+    old = load("baselines")["rows"] if exists("baselines") else []
+    rows: list[dict] = []
     systems = args.systems.split(",")
+
+    def merged() -> list[dict]:  # this invocation's rows replace earlier ones for the same cell
+        mine = {(r["kind"], r["family"], r["variant"]) for r in rows}
+        return [r for r in old if (r["kind"], r["family"], r["variant"]) not in mine] + rows
     for fam in [BY_ID[f] for f in args.families.split(",")] if args.families else FAMILIES:
         for variant in [int(v) for v in args.variants.split(",")]:
             bookings = generate(args.seed + 100 * variant, 4)
@@ -308,7 +345,7 @@ async def cmd_baselines(env: Env, args: argparse.Namespace) -> None:
                 routine = routine_for(RoutineStore(LIB), fam)
                 row, _ = await run_routine(env, routine, fam, src, a, generate(args.seed, 4), 0, kind="routine-v0")
                 rows.append(row)
-            save(args.name or "baselines", {"time": now(), "rows": rows})
+            save(args.name or "baselines", {"time": now(), "rows": merged()})
 
 
 # ---- main ---------------------------------------------------------------------------------------
@@ -327,7 +364,11 @@ async def main() -> int:
     ap.add_argument("--reuse-spec", action="store_true", help="reuse the cached Wonder answer per family (no model cost)")
     ap.add_argument("--name", default=None)
     ap.add_argument("--contributor", action="store_true", help="Contributor tier for model calls (our test app only)")
+    ap.add_argument("--tag", default="", help="track: '' (compiled on the original layout), '-v4' (compiled with IDs hidden), ...")
+    ap.add_argument("--src-variant", type=int, default=0, help="the layout the track's routines are recorded and compiled on")
+    ap.add_argument("--append", action="store_true", help="add to the existing variants report instead of replacing it")
     args = ap.parse_args()
+    set_track(args.tag, args.src_variant)
     env = Env(contributor=args.contributor)
     t0 = time.time()
     if args.cmd == "snapshot":

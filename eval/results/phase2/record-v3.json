@@ -1,0 +1,18 @@
+{
+ "time": "2026-10-27T05:05:52+00:00",
+ "variant": 3,
+ "rows": [
+  {
+   "family": "check_in",
+   "task_id": "p2-src-v3-check_in",
+   "passed": true,
+   "status": "done",
+   "steps": 12,
+   "model_calls": 14,
+   "cost_usd": 0.020598599999999998,
+   "cost_at_standard_usd": 0.020598599999999998,
+   "duration_s": 25.73,
+   "result": "Checked in for flight SL 1190 ATL → DEN on Sat, Nov 14, 2026 (Confirmation PT4R8Z). Status: You're checked in, Seat 22F, Gate A7, Boarding 2:05 PM Group 5."
+  }
+ ]
+}

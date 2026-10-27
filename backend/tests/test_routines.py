@@ -225,3 +225,25 @@ def test_recompile_flag_after_most_recent_runs_fail(tmp_path):
     flags = [store.record_run(r.routine, RunOutcome(r.routine, 1, f"t{i}", status)) for i, status in
              enumerate(["done", "agent_done", "failed", "agent_done", "failed"])]
     assert flags[-1] is True and flags[2] is False
+
+
+def _labels_screen(labels: list[tuple[str, str, bool]]) -> ScreenState:
+    """A tiny screen: (kind, label, in_list) per element, stacked top to bottom."""
+    from routines.screens import screen_from_tree
+    els = [{"index": i, "parent": None, "number": i + 1, "kind": k, "class": "android.widget.TextView", "label": lab, "text": lab,
+            "bounds": [0, 100 * i, 1080, 100 * i + 90], "in_list": in_list} for i, (k, lab, in_list) in enumerate(labels)]
+    return screen_from_tree({"package": "app", "activity": "A", "elements": els, "width": 1080, "height": 2400})
+
+
+def test_extract_next_element_and_first_in_list():
+    s = _labels_screen([("Text", "Seat", False), ("Text", "22F", False), ("Button", "KODAK AA (24 Pack)", True),
+                        ("Button", "$13.49", True), ("Button", "$23.99", True)])
+    assert extract_value(Extract(near="Seat", next_element=True), s, {}) == "22F"
+    assert extract_value(Extract(pattern=r"\$\d+\.\d+", first_in_list=True), s, {}) == "$13.49"
+
+
+def test_accents_do_not_break_input_matching():
+    assert contains_value("Caffè Latte", "Caffe Latte")
+    s = _labels_screen([("Button", "Caffè Latte", True), ("Button", "Iced Caffè Latte", True)])
+    m = locators.locate(Locator(text_has="{{drink}}", kind="Button"), s, {"drink": "Caffe Latte"})
+    assert m.element is not None and m.element.label == "Caffè Latte"  # the row that is exactly the input wins over one that contains it

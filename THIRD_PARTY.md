@@ -4,7 +4,7 @@ Envoy builds on the open-source projects below. The hackathon rules allow open s
 
 Licenses for Python packages were read from the installed package metadata (Oct 26, 2026). Licenses for planned components come from their repositories and must be re-checked when they are added.
 
-## In use (Phase 0)
+## In use (Phases 0–2)
 
 | Component | Version | License | What we use it for |
 | --- | --- | --- | --- |
@@ -21,6 +21,7 @@ Licenses for Python packages were read from the installed package metadata (Oct 
 | Android emulator `emulator_controller.proto` (AOSP, ships with the emulator) | emulator 37.x | Apache-2.0 | Source for the generated gRPC stubs |
 | [HTTPX](https://github.com/encode/httpx) | 0.28.1 | BSD-3-Clause | HTTP client for tests and the MCP client |
 | [python-dotenv](https://github.com/theskumar/python-dotenv) | 1.2.4 | BSD-3-Clause | Loads `.env` |
+| [PyYAML](https://github.com/yaml/pyyaml) | 6.0.3 | MIT | Reads and writes routine files (Phase 2) |
 | [Pillow](https://github.com/python-pillow/Pillow) | 13.0.0 | MIT-CMU | Screenshot decoding, black-frame detection, image crops |
 | [scrcpy](https://github.com/Genymobile/scrcpy) | 5.0.1 | Apache-2.0 | Phone screen video (Phase 0 secure-screen test; live view later through the relay) |
 | [cloudflared](https://github.com/cloudflare/cloudflared) | 2026.10.3 | Apache-2.0 | Quick tunnel giving the MCP stub a public HTTPS address |
@@ -37,7 +38,7 @@ Development tools (not shipped):
 
 Envoy uses open source as plumbing (talking to phones, streaming video, serving HTTP). Everything below is Envoy's own work, and it is what the write-up and demo claim:
 
-- **App routines:** compiling one successful run into a program with inputs, code checks before and after every step, element-based locators, local self-repair saved as versioned patches with a trial period and rollback, and portability across screen sizes and devices.
+- **App routines** (built in Phase 2, Oct 27, `backend/routines/`): compiling one successful run into a program with inputs, code checks before and after every step, element-based locators, local self-repair saved as versioned patches with a trial period and rollback, and portability across screen sizes and devices. No routine, macro or workflow library is used; the format, compiler, locator scoring, check writer, executor, fallback ladder, patcher and store are Envoy's own code.
 - **A memory graph built from phone screens:** facts pulled from app screens, email and photos, each with screen-level provenance and two timelines; one entity per real-world thing across sources; user edits that outrank extracted facts; routine inputs filled from memory and outputs written back.
 - **A device layer that routes between phones:** one interface over emulators and real phones, the compact screen format, settle detection, secure-screen detection from window flags, and the hand-off to the user for sign-in.
 - **A policy engine:** three independent signals vote on irreversible actions, and approvals come only from Envoy's own screens, never from an AI client.

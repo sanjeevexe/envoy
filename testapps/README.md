@@ -17,7 +17,7 @@ adb -s emulator-5554 install -r app/build/outputs/apk/debug/app-debug.apk
 | --- | --- |
 | Reset to bundled fixtures | `am broadcast -n com.skylark.air/.DebugReceiver -a com.skylark.air.RESET` |
 | Seed custom fixtures | `… -a com.skylark.air.SEED --es json_b64 <base64 JSON>` |
-| Layout variant | `… -a com.skylark.air.VARIANT --ei variant N`: 0 original, 1 moved button, 2 renamed labels, 3 extra confirmation screen |
+| Layout variant | `… -a com.skylark.air.VARIANT --ei variant N`: 0 original, 1 moved button, 2 renamed labels, 3 extra confirmation screen, 4 hidden IDs (no test tags, like an obfuscated release), 5 renamed labels and hidden IDs |
 | Change a gate | `… -a com.skylark.air.SET_GATE --es code KX7Q2M --es gate C14` |
 | Sign out | `… -a com.skylark.air.SIGN_OUT` |
 | Read state | `content read --uri content://com.skylark.air.debug/state` (JSON) |

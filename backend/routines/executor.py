@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import asyncio
 import io
+import re
 import time
 import uuid
 from dataclasses import dataclass, field
@@ -82,13 +83,14 @@ class RepairAction:
 class Patch:
     """A candidate change to a routine, from a step that needed rung 2 or 4."""
 
-    kind: Literal["locator", "check", "insert_before", "insert_after", "replace", "remove"]
+    kind: Literal["locator", "check", "post", "insert_before", "insert_after", "replace", "remove"]
     step_id: str
     description: str
     locator: Locator | None = None  # kind=locator: the step's new target
     check_index: int | None = None  # kind=check: which post-check (index into step.post)
     check: Check | None = None
     steps: list[Step] = field(default_factory=list)  # inserted or replacing steps
+    checks: list[Check] = field(default_factory=list)  # kind=post: the step's new after-checks
     evidence: dict[str, Any] = field(default_factory=dict)
 
 
@@ -160,6 +162,7 @@ class _Ctx:
     memory: str
     repairs_run: int = 0
     started: float = 0.0
+    jump_to: int | None = None  # set when the app skipped ahead to a later step's screen
 
 
 class RoutineExecutor:
@@ -260,7 +263,8 @@ class RoutineExecutor:
                                                               "total": round((time.perf_counter() - t0) * 1000)},
                             "detail": sr.detail, "repairs": sr.repairs})
                 if verdict == "next":
-                    i += 1
+                    i = ctx.jump_to if ctx.jump_to is not None else i + 1
+                    ctx.jump_to = None
                     continue
                 if verdict == "finished":  # the full agent finished the task
                     return out
@@ -278,6 +282,16 @@ class RoutineExecutor:
             if not ok:
                 return self._finish(ctx, "failed", "done-check failed: " + "; ".join(o.detail for o in outs if not o.passed))
             missing_out = [n for n in routine.outputs if not out.outputs.get(n)]
+            if missing_out:  # content can load after the last check passes (search results): keep reading for a while
+                specs = {n: e for st in routine.steps for n, e in (st.extract or {}).items()}
+                deadline = time.perf_counter() + self.config.post_timeout_s
+                while missing_out and time.perf_counter() < deadline:
+                    await asyncio.sleep(0.2)
+                    screen = await self._observe()
+                    for n in missing_out:
+                        if n in specs:
+                            out.outputs[n] = extract_value(specs[n], screen, ctx.inputs)
+                    missing_out = [n for n in routine.outputs if not out.outputs.get(n)]
             if missing_out:
                 return self._finish(ctx, "failed", f"outputs not found: {', '.join(missing_out)}")
             return self._finish(ctx, "done", "all steps and checks passed")
@@ -416,9 +430,6 @@ class RoutineExecutor:
             if now >= deadline:
                 failed = [o.detail for o in pre_outs if not o.passed]
                 why = ("before-checks failed: " + "; ".join(failed)) if failed else f"target not found: {m.summary() if m else '?'}"
-                # The screen this step expects never came, but the next step's did: the app dropped a screen.
-                if nxt is not None and step.risk != "irreversible" and self._ready_now(nxt, s, ctx.inputs) and not nxt.optional:
-                    return _Ready("skip", s, why=f"the next step ({nxt.id}) is ready", removed=True)
                 sr.climb(1, f"waited {cfg.pre_timeout_s:.0f} s")
                 return _Ready("not_ready", s, why=why)
             await asyncio.sleep(cfg.poll_s)
@@ -477,12 +488,48 @@ class RoutineExecutor:
                                                          f"updated to {new.locator.describe() if new.locator else ''}", check_index=j, check=new))
                     return _Ready("ok", s)
                 tried_relaxed = stable
+            # Only "where the app went" checks failed, the screen changed, and the next step is ready: the checks were
+            # over-specific (something optional that didn't show this time). Accept, and patch them to what happened.
+            nav_only = all(o.passed or o.check.kind in ("element_present", "element_absent", "text_visible", "screen_like") for o in outs)
+            if changed and stable and nav_only and nxt is not None and not nxt.optional and self._ready_now(nxt, s, ctx.inputs):
+                fresh = chk.derive_post(before, s, step.action.kind, None, None, {k: v for k, v in ctx.inputs.items() if v})
+                fresh = [g for c in fresh if (g := chk_generalize(c, ctx.inputs, [])) is not None] or [Check(kind="screen_changed")]
+                failed = "; ".join(o.detail for o in outs if not o.passed)
+                ctx.out.patches.append(Patch("post", step.id, f"step {step.id!r}: after-checks failed ({failed[:80]}) but the next step "
+                                             f"was ready; after-checks rewritten from what happened", checks=fresh))
+                sr.climb(2, f"after-checks failed but the next step ({nxt.id}) is ready")
+                return _Ready("ok", s)
             # A screen that changed and then sat still for a while won't fix itself.
             if (changed and stable and now - start >= cfg.stable_s + 0.5) or now >= deadline:
+                # The app may have dropped the next screen: a later step is ready and the next one is not.
+                later = self._skipped_ahead(ctx, idx, s)
+                if later is not None:
+                    removed = ctx.routine.steps[idx + 1:later]
+                    for st in removed:
+                        ctx.out.patches.append(Patch("remove", st.id, f"step {st.id!r} removed: its screen no longer appears after "
+                                                     f"{step.id!r}; the app went straight to {ctx.routine.steps[later].id!r}"))
+                    ctx.out.steps.extend(StepRun(st.id, status="skipped", detail="its screen no longer appears") for st in removed)
+                    ctx.jump_to = later
+                    sr.climb(2, f"the app skipped ahead to {ctx.routine.steps[later].id}")
+                    return _Ready("skip", s, why=f"the app went straight to {ctx.routine.steps[later].id}")
                 failed = "; ".join(o.detail for o in outs if not o.passed)
                 sr.climb(1, f"waited {now - start:.1f} s")
                 return _Ready("not_ready", s, why=f"after-checks failed: {failed}")
             await asyncio.sleep(cfg.poll_s)
+
+    def _skipped_ahead(self, ctx: _Ctx, idx: int, s: ScreenState) -> int | None:
+        """The index of a later step (at most two ahead) that is ready now while the steps in between are not,
+        if none of those in-between steps is irreversible."""
+        steps = ctx.routine.steps
+        if idx + 2 >= len(steps) or self._ready_now(steps[idx + 1], s, ctx.inputs):
+            return None
+        for j in range(idx + 2, min(idx + 4, len(steps))):
+            between = steps[idx + 1:j]
+            if any(b.risk == "irreversible" for b in between):
+                return None
+            if self._ready_now(steps[j], s, ctx.inputs) and not any(self._ready_now(b, s, ctx.inputs) for b in between):
+                return j
+        return None
 
     # ---- acting -----------------------------------------------------------------------------
 
@@ -499,15 +546,24 @@ class RoutineExecutor:
         return decision.approved
 
     async def _act(self, ctx: _Ctx, step: Step, screen: ScreenState, el: Element | None, sr: StepRun) -> Literal["ok", "stop"]:
+        """Run the step's action through the policy gate. A scroll_until that doesn't find its target returns "ok":
+        its after-check (the target is visible) then fails and the fallback ladder continues from there."""
         a = step.action
         if a.kind == "scroll_until":
             found = await self._scroll_until(ctx, step, sr)
-            if not found:
-                sr.status, sr.detail = "failed", f"scrolled {a.max_scrolls or 8} times without finding {a.target.describe() if a.target else '?'}"
-                ctx.out.status = "failed"
-                return "stop"
+            if not found:  # the after-checks (the target is visible) fail; the ladder's next rungs take over
+                sr.climb(1, f"scrolled {a.max_scrolls or 8} times without finding {a.target.describe() if a.target else '?'}")
             return "ok"
-        if a.kind == "back":
+        if a.kind == "swipe":
+            w, h = screen.width or 1080, screen.height or 2400
+            if a.target is not None:
+                m = locators.locate(a.target, screen, ctx.inputs, threshold=locators.RELAXED, margin=0.0)
+                cx, cy = m.element.center if m.element is not None else (int((a.start or (0.5, 0.5))[0] * w), int((a.start or (0.5, 0.5))[1] * h))
+            else:
+                cx, cy = int((a.start or (0.5, 0.5))[0] * w), int((a.start or (0.5, 0.5))[1] * h)
+            dx, dy = a.vector or (0.0, -0.3)
+            action = Action(kind="swipe", x=cx, y=cy, x2=max(1, min(w - 1, int(cx + dx * w))), y2=max(1, min(h - 1, int(cy + dy * h))))
+        elif a.kind == "back":
             action = Action(kind="back")
         elif a.kind == "launch":
             action = Action(kind="launch", package=a.package or ctx.routine.app)
@@ -519,7 +575,7 @@ class RoutineExecutor:
                 action = Action(kind="type", element=el.number, text=render_str(a.value, ctx.inputs) or "", submit=a.submit)
             else:
                 action = Action(kind=a.kind, element=el.number)
-        if not await self._gate(ctx, action, screen, step.risk, el.label if el else a.kind, sr):
+        if not await self._gate(ctx, action, screen, step.risk, el.label if el is not None else a.kind, sr):
             sr.status, sr.detail = "declined", "the user declined the approval"
             ctx.out.status = "declined"
             return "stop"
@@ -698,7 +754,8 @@ class RoutineExecutor:
             action = StepAction(kind="scroll_until", target=target, direction=a.action.get("direction") or "down", max_scrolls=8)
         else:
             action = StepAction(kind="wait", seconds=1.0)
-        post = chk.derive_post(a.before, a.after or a.before, kind, a.element, a.action.get("text"), examples) if a.after else [Check(kind="screen_changed")]
+        post = chk.derive_post(a.before, a.after or a.before, kind, a.element, a.action.get("text"), examples,
+                               submit=a.action.get("submit", False)) if a.after else [Check(kind="screen_changed")]
         post = [g for c in post if (g := chk_generalize(c, examples, [])) is not None] or [Check(kind="screen_changed")]
         pre = [Check(kind="app_foreground", package=a.before.package)]
         risk = a.risk if a.risk in ("read", "reversible", "irreversible") else "reversible"
@@ -787,9 +844,27 @@ class RoutineExecutor:
 
 
 def extract_value(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str | None:
+    value = _extract(spec, screen, inputs)
+    if value is not None and spec.expect_digits and not any(ch.isdigit() for ch in value):
+        return None  # a placeholder while the page loads ("- calories"): not the value yet
+    return value
+
+
+def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str | None:
+    spec = render(spec, inputs)
     """The value in an element: the recorded " · " part of its label if there are several ("Gate · B12" → B12),
     with the label in front of it ("Known traveler number: 98765432" → 98765432) and fixed text after it removed."""
     el = None
+    if spec.pattern:
+        for e in screen.numbered:
+            if (e.in_list or not spec.first_in_list) and re.fullmatch(spec.pattern, " ".join(e.label.split())):
+                return " ".join(e.label.split())
+        return None
+    if spec.next_element and spec.near:
+        label_el = next((e for e in screen.numbered if norm(e.label) == norm(spec.near)), None)
+        if label_el is None or not label_el.number or label_el.number >= len(screen.numbered):
+            return None
+        return " ".join(screen.numbered[label_el.number].label.split()) or None
     if spec.locator is not None:
         m = locators.locate(render(spec.locator, inputs), screen, threshold=locators.RELAXED, margin=0.0, role="check")
         el = m.element
@@ -805,7 +880,7 @@ def extract_value(spec: Extract, screen: ScreenState, inputs: dict[str, str]) ->
         if spec.segment >= len(parts):
             return None
         value = parts[spec.segment]
-    if near and norm(value).startswith(near):
+    if near and norm(value).startswith(near) and norm(value) != near:
         value = value[len(spec.near or ""):].strip(" ·:,")
     if spec.after and norm(value).endswith(norm(spec.after)):
         value = value[: len(value) - len(spec.after)].strip(" ·:,")

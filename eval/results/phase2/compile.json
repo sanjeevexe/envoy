@@ -1,5 +1,5 @@
 {
- "time": "2026-10-27T04:37:26+00:00",
+ "time": "2026-10-27T05:20:37+00:00",
  "rows": [
   {
    "family": "check_in",
@@ -34,7 +34,7 @@
     8
    ],
    "warnings": [],
-   "compiler": "muse-wonder-1.0",
+   "compiler": "cached",
    "compile_cost_usd": 0.065964,
    "compile_latency_s": 21.6,
    "verify": [
@@ -46,7 +46,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 4.51,
+     "duration_s": 5.47,
      "outputs": {
       "seat": "22F",
       "gate": "A7",
@@ -61,195 +61,11 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 4.48,
+     "duration_s": 5.09,
      "outputs": {
       "seat": "11E",
       "gate": "B17",
       "boarding_time": "6:00 AM"
-     }
-    }
-   ]
-  },
-  {
-   "family": "gate",
-   "compiled": true,
-   "routine": "skylark_get_flight_gate",
-   "version": 1,
-   "status": "added",
-   "steps": 3,
-   "inputs": {
-    "trip_city": {
-     "type": "text",
-     "description": "The destination city of the flight, shown in the goal and matched against the trip rows in My Trips.",
-     "from_memory": null,
-     "example": "Denver",
-     "choices": null
-    }
-   },
-   "outputs": [
-    "gate"
-   ],
-   "dropped": [],
-   "kept": [
-    1,
-    2
-   ],
-   "warnings": [],
-   "compiler": "muse-wonder-1.0",
-   "compile_cost_usd": 0.0375944,
-   "compile_latency_s": 13.43,
-   "verify": [
-    {
-     "case": "same-inputs",
-     "inputs": {
-      "trip_city": "Denver"
-     },
-     "passed": true,
-     "status": "done",
-     "detail": "all steps and checks passed",
-     "duration_s": 2.39,
-     "outputs": {
-      "gate": "A7"
-     }
-    },
-    {
-     "case": "second-inputs",
-     "inputs": {
-      "trip_city": "Tampa"
-     },
-     "passed": true,
-     "status": "done",
-     "detail": "all steps and checks passed",
-     "duration_s": 2.43,
-     "outputs": {
-      "gate": "B17"
-     }
-    }
-   ]
-  },
-  {
-   "family": "flight_status",
-   "compiled": true,
-   "routine": "skylark_check_flight_status",
-   "version": 1,
-   "status": "added",
-   "steps": 3,
-   "inputs": {
-    "flight_number": {
-     "type": "text",
-     "description": "The SkyLark flight number to look up.",
-     "from_memory": null,
-     "example": "SL 1190",
-     "choices": null
-    }
-   },
-   "outputs": [
-    "flight_status",
-    "route",
-    "date",
-    "gate",
-    "departure_time"
-   ],
-   "dropped": [],
-   "kept": [
-    1,
-    2,
-    3
-   ],
-   "warnings": [],
-   "compiler": "muse-wonder-1.0",
-   "compile_cost_usd": 0.0456048,
-   "compile_latency_s": 12.11,
-   "verify": [
-    {
-     "case": "same-inputs",
-     "inputs": {
-      "flight_number": "SL 1190"
-     },
-     "passed": true,
-     "status": "done",
-     "detail": "all steps and checks passed",
-     "duration_s": 3.06,
-     "outputs": {
-      "flight_status": "Delayed 25 min",
-      "route": "ATL → DEN",
-      "date": "Sat, Nov 14, 2026",
-      "gate": "A7",
-      "departure_time": "2:45 PM"
-     }
-    },
-    {
-     "case": "second-inputs",
-     "inputs": {
-      "flight_number": "SL 291"
-     },
-     "passed": true,
-     "status": "done",
-     "detail": "all steps and checks passed",
-     "duration_s": 3.14,
-     "outputs": {
-      "flight_status": "On time",
-      "route": "ATL → TPA",
-      "date": "Wed, Nov 25, 2026",
-      "gate": "B17",
-      "departure_time": "6:00 AM"
-     }
-    }
-   ]
-  },
-  {
-   "family": "find_trip",
-   "compiled": true,
-   "routine": "skylark_lookup_trip_destination",
-   "version": 1,
-   "status": "added",
-   "steps": 3,
-   "inputs": {
-    "trip_confirmation_code": {
-     "type": "text",
-     "description": "",
-     "from_memory": null,
-     "example": "PT4R8Z",
-     "choices": null
-    }
-   },
-   "outputs": [
-    "destination"
-   ],
-   "dropped": [],
-   "kept": [
-    1,
-    2
-   ],
-   "warnings": [],
-   "compiler": "muse-wonder-1.0",
-   "compile_cost_usd": 0.0517064,
-   "compile_latency_s": 16.1,
-   "verify": [
-    {
-     "case": "same-inputs",
-     "inputs": {
-      "trip_confirmation_code": "PT4R8Z"
-     },
-     "passed": true,
-     "status": "done",
-     "detail": "all steps and checks passed",
-     "duration_s": 2.38,
-     "outputs": {
-      "destination": "Denver"
-     }
-    },
-    {
-     "case": "second-inputs",
-     "inputs": {
-      "trip_confirmation_code": "RPOIG8"
-     },
-     "passed": true,
-     "status": "done",
-     "detail": "all steps and checks passed",
-     "duration_s": 2.39,
-     "outputs": {
-      "destination": "Tampa"
      }
     }
    ]
@@ -294,7 +110,7 @@
     6
    ],
    "warnings": [],
-   "compiler": "muse-wonder-1.0",
+   "compiler": "cached",
    "compile_cost_usd": 0.047955199999999996,
    "compile_latency_s": 11.36,
    "verify": [
@@ -307,7 +123,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 4.94,
+     "duration_s": 6.05,
      "outputs": {
       "seat": "21C"
      }
@@ -321,7 +137,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 6.73,
+     "duration_s": 8.45,
      "outputs": {
       "seat": "23B"
      }
@@ -363,7 +179,7 @@
     4
    ],
    "warnings": [],
-   "compiler": "muse-wonder-1.0",
+   "compiler": "cached",
    "compile_cost_usd": 0.0690952,
    "compile_latency_s": 17.17,
    "verify": [
@@ -376,7 +192,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 3.89,
+     "duration_s": 4.65,
      "outputs": {
       "known_traveler_number": "55501234",
       "confirmation_code": "PT4R8Z"
@@ -391,10 +207,252 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 4.02,
+     "duration_s": 4.66,
      "outputs": {
       "known_traveler_number": "13561597",
       "confirmation_code": "RPOIG8"
+     }
+    }
+   ]
+  },
+  {
+   "family": "gate",
+   "compiled": true,
+   "routine": "skylark_get_flight_gate",
+   "version": 1,
+   "status": "added",
+   "steps": 3,
+   "inputs": {
+    "trip_city": {
+     "type": "text",
+     "description": "The destination city of the flight, shown in the goal and matched against the trip rows in My Trips.",
+     "from_memory": null,
+     "example": "Denver",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "gate"
+   ],
+   "dropped": [],
+   "kept": [
+    1,
+    2
+   ],
+   "warnings": [],
+   "compiler": "cached",
+   "compile_cost_usd": 0.0375944,
+   "compile_latency_s": 13.43,
+   "verify": [
+    {
+     "case": "same-inputs",
+     "inputs": {
+      "trip_city": "Denver"
+     },
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "duration_s": 2.75,
+     "outputs": {
+      "gate": "A7"
+     }
+    },
+    {
+     "case": "second-inputs",
+     "inputs": {
+      "trip_city": "Tampa"
+     },
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "duration_s": 2.45,
+     "outputs": {
+      "gate": "B17"
+     }
+    }
+   ]
+  },
+  {
+   "family": "flight_status",
+   "compiled": true,
+   "routine": "skylark_check_flight_status",
+   "version": 1,
+   "status": "added",
+   "steps": 3,
+   "inputs": {
+    "flight_number": {
+     "type": "text",
+     "description": "The SkyLark flight number to look up.",
+     "from_memory": null,
+     "example": "SL 1190",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "flight_status",
+    "route",
+    "date",
+    "gate",
+    "departure_time"
+   ],
+   "dropped": [],
+   "kept": [
+    1,
+    2,
+    3
+   ],
+   "warnings": [],
+   "compiler": "cached",
+   "compile_cost_usd": 0.0456048,
+   "compile_latency_s": 12.11,
+   "verify": [
+    {
+     "case": "same-inputs",
+     "inputs": {
+      "flight_number": "SL 1190"
+     },
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "duration_s": 2.48,
+     "outputs": {
+      "flight_status": "Delayed 25 min",
+      "route": "ATL → DEN",
+      "date": "Sat, Nov 14, 2026",
+      "gate": "A7",
+      "departure_time": "2:45 PM"
+     }
+    },
+    {
+     "case": "second-inputs",
+     "inputs": {
+      "flight_number": "SL 291"
+     },
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "duration_s": 3.17,
+     "outputs": {
+      "flight_status": "On time",
+      "route": "ATL → TPA",
+      "date": "Wed, Nov 25, 2026",
+      "gate": "B17",
+      "departure_time": "6:00 AM"
+     }
+    }
+   ]
+  },
+  {
+   "family": "find_trip",
+   "compiled": true,
+   "routine": "skylark_lookup_trip_destination",
+   "version": 1,
+   "status": "added",
+   "steps": 3,
+   "inputs": {
+    "trip_confirmation_code": {
+     "type": "text",
+     "description": "",
+     "from_memory": null,
+     "example": "PT4R8Z",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "destination"
+   ],
+   "dropped": [],
+   "kept": [
+    1,
+    2
+   ],
+   "warnings": [],
+   "compiler": "cached",
+   "compile_cost_usd": 0.0517064,
+   "compile_latency_s": 16.1,
+   "verify": [
+    {
+     "case": "same-inputs",
+     "inputs": {
+      "trip_confirmation_code": "PT4R8Z"
+     },
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "duration_s": 2.47,
+     "outputs": {
+      "destination": "Denver"
+     }
+    },
+    {
+     "case": "second-inputs",
+     "inputs": {
+      "trip_confirmation_code": "RPOIG8"
+     },
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "duration_s": 2.43,
+     "outputs": {
+      "destination": "Tampa"
+     }
+    }
+   ]
+  },
+  {
+   "family": "check_in_next",
+   "compiled": true,
+   "routine": "skylark_check_in_flight",
+   "version": 1,
+   "status": "added",
+   "steps": 6,
+   "inputs": {
+    "trip_city": {
+     "type": "text",
+     "description": "Destination city of the flight to check in for",
+     "from_memory": null,
+     "example": "Chicago",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "seat",
+    "gate",
+    "boarding_time",
+    "boarding_group",
+    "flight"
+   ],
+   "dropped": [],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "warnings": [
+    "input 'trip_city' is not used by any action: step 'tap_check_in' now requires the screen to show it (Button 'Next trip · Chicago · Fri, Oct 30, 2026 · SL 482 ·'); other values need a repair or a recompile"
+   ],
+   "compiler": "cached",
+   "compile_cost_usd": 0.0,
+   "compile_latency_s": 0.0,
+   "verify": [
+    {
+     "case": "same-inputs",
+     "inputs": {
+      "trip_city": "Chicago"
+     },
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "duration_s": 3.13,
+     "outputs": {
+      "seat": "14C",
+      "gate": "B12",
+      "boarding_time": "5:30 AM",
+      "boarding_group": "Group 3",
+      "flight": "SL 482"
      }
     }
    ]

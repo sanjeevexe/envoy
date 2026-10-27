@@ -100,7 +100,7 @@ class Check(_Model):
         return f"screen like the recorded one (≥{self.min_similarity})"
 
 
-ActionKind = Literal["tap", "long_press", "type", "scroll_until", "back", "launch", "wait"]
+ActionKind = Literal["tap", "long_press", "type", "scroll_until", "swipe", "back", "launch", "wait"]
 
 
 class StepAction(_Model):
@@ -113,6 +113,8 @@ class StepAction(_Model):
     container: Locator | None = None  # scroll_until: the list to scroll (None: the largest list on screen)
     package: str | None = None  # launch
     seconds: float | None = None  # wait
+    vector: tuple[float, float] | None = None  # swipe: the drag as fractions of the screen (dx, dy), from the target's centre
+    start: tuple[float, float] | None = None  # swipe: where it started on the recorded screen (used only without a target)
 
 
 class Extract(_Model):
@@ -122,6 +124,10 @@ class Extract(_Model):
     locator: Locator | None = None
     segment: int | None = None  # which " · "-separated part of the label holds the value, when there are several
     after: str | None = None  # fixed text that follows the value in its part ("21C. Tap a seat to change it.")
+    pattern: str | None = None  # the value's shape, for values with no label or ID ("$13.49" → \$\d+\.\d+)
+    first_in_list: bool = False  # with pattern: the first element in a list with that shape ("the first result's price")
+    next_element: bool = False  # the value is the element right after the one labelled `near` ("Seat", then "22F")
+    expect_digits: bool = False  # the recorded value starts with a number: a placeholder ("- calories") is not the value yet
 
 
 class Step(_Model):
@@ -269,6 +275,8 @@ def _action_out(a: StepAction) -> dict[str, Any]:
     if k == "scroll_until":
         return {k: _clean({"target": tgt, "direction": a.direction, "max_scrolls": a.max_scrolls,
                            "container": a.container.model_dump() if a.container else None})}
+    if k == "swipe":
+        return {k: _clean({"from": tgt, "vector": list(a.vector or ()), "start": list(a.start or ())})}
     if k == "back":
         return {k: True}
     if k == "launch":
@@ -285,6 +293,9 @@ def _action_in(d: dict[str, Any]) -> StepAction:
     if k == "scroll_until":
         return StepAction(kind=k, target=Locator.model_validate(v["target"]), direction=v.get("direction", "down"),
                           max_scrolls=v.get("max_scrolls"), container=Locator.model_validate(v["container"]) if v.get("container") else None)
+    if k == "swipe":
+        return StepAction(kind=k, target=Locator.model_validate(v["from"]) if v.get("from") else None,
+                          vector=tuple(v["vector"]) if v.get("vector") else None, start=tuple(v["start"]) if v.get("start") else None)
     if k == "back":
         return StepAction(kind=k)
     if k == "launch":

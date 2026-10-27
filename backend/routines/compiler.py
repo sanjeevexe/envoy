@@ -31,7 +31,7 @@ from models.schemas import CompiledRoutine
 from routines import checks as chk
 from routines import locators
 from routines.model import Check, Extract, InputSpec, Locator, Routine, Step, StepAction, has_slot
-from routines.screens import contains_value, load_tree, norm, short_id, usable_id
+from routines.screens import contains_value, fold, load_tree, norm, short_id, usable_id
 
 _DIGIT = re.compile(r"\d")
 _SLUG = re.compile(r"[^a-z0-9]+")
@@ -60,6 +60,7 @@ class TStep:
     expected: str = ""
     risk: str = "read"
     scrolls: int = 0
+    swipe: tuple[int, int, int, int] | None = None  # recorded swipe start and end, device pixels
 
 
 @dataclass
@@ -130,17 +131,26 @@ def clean(trace_dir: Path, records: list[dict]) -> tuple[list[TStep], list[tuple
         steps.append(TStep(
             n=n, kind=dev["kind"], before=before, after=after, target=target, typed=dev.get("text"), submit=dev.get("submit", False),
             direction=dev.get("direction"), container=container, reason=(r.get("decision") or {}).get("reason", ""),
+            swipe=(dev["x"], dev["y"], dev["x2"], dev["y2"]) if dev["kind"] == "swipe" and dev.get("x") is not None else None,
             expected=(r.get("decision") or {}).get("expected_result", ""), risk=(r.get("risk") or {}).get("level", "read"),
         ))
 
-    # Back-tracks: a stretch of steps that ends on exactly the screen it started from changed nothing that lasts.
+    # Back-tracks: a stretch of navigation that ends on exactly the screen it started from (same labels and the
+    # same layout) changed nothing that lasts. A stretch with an effect (an approved or irreversible action,
+    # typing, a toggle) is never a back-track, even if it ends where it began: checking in and returning to
+    # Home looks like a round trip, but the trip is checked in.
+    def effectful(t: TStep) -> bool:
+        return t.risk == "irreversible" or t.kind == "type" or (t.target is not None and t.target.checkable)
+
     changed = True
     while changed:
         changed = False
         for i in range(len(steps)):
             for j in range(len(steps) - 1, i, -1):
                 a, b = steps[i].before, steps[j].after
-                if a.signature == b.signature and a.compact == b.compact:
+                if any(effectful(t) for t in steps[i:j + 1]):
+                    continue
+                if a.signature == b.signature and _layout_key(a) == _layout_key(b):
                     for s in steps[i:j + 1]:
                         dropped.append((s.n, f"back-track: steps {steps[i].n}–{steps[j].n} returned to the same screen"))
                     del steps[i:j + 1]
@@ -173,6 +183,11 @@ def clean(trace_dir: Path, records: list[dict]) -> tuple[list[TStep], list[tuple
         out.append(s)
         i += 1
     return out, dropped
+
+
+def _layout_key(s: ScreenState) -> str:
+    """Labels, states and positions of the listed elements: a bottom sheet dragged up has the same labels but not the same bounds."""
+    return "\n".join(f"{e.label}|{e.kind}|{e.checked}|{e.bounds}" for e in s.numbered)
 
 
 # ---- 3: generalize ----------------------------------------------------------------------------
@@ -208,7 +223,16 @@ def _call_compiler(adapter: ModelAdapter, content: str, task_id: str, effort: st
 
 
 def _replace_value(s: str, value: str, repl: str) -> str:
-    return re.sub(rf"(?<![0-9A-Za-z]){re.escape(value)}(?![0-9A-Za-z])", repl, s, flags=re.I)
+    """Replace `value` on word boundaries, ignoring case and accents ("Caffe Latte" in "Grande Caffè Latte")."""
+    pattern = rf"(?<![0-9A-Za-z]){re.escape(fold(value))}(?![0-9A-Za-z])"
+    folded = fold(s)
+    if len(folded) != len(s):  # decomposed input: fall back to an exact (case-insensitive) match
+        return re.sub(rf"(?<![0-9A-Za-z]){re.escape(value)}(?![0-9A-Za-z])", repl, s, flags=re.I)
+    out, last = [], 0
+    for m in re.finditer(pattern, folded, flags=re.I):
+        out += [s[last:m.start()], repl]
+        last = m.end()
+    return "".join(out) + s[last:]
 
 
 def bind_inputs(s: str | None, examples: dict[str, str]) -> str | None:
@@ -307,6 +331,11 @@ def _slug(s: str, fallback: str) -> str:
     return out or fallback
 
 
+def _shape(example: str) -> str:
+    """A regex for values shaped like the example: digit runs become \\d+ ("$13.49" → \\$\\d+\\.\\d+)."""
+    return re.sub(r"(\\\d)+|\d+", r"\\d+", re.escape(example.strip()))
+
+
 def _extract_for(name: str, near: str, example: str, final: ScreenState, examples: dict[str, str],
                  data_values: list[str]) -> Extract | None:
     """Where an output can be read on the final screen: the element showing the example value
@@ -316,9 +345,28 @@ def _extract_for(name: str, near: str, example: str, final: ScreenState, example
         return None
     found.sort(key=lambda e: (e.in_list, not (near and norm(e.label).startswith(norm(near))), len(e.label)))
     el = found[0]
+    letters = sum(ch.isalpha() for ch in example)
+    if el.in_list and not usable_id(el.resource_id) and norm(el.label) == norm(example) and len(example) <= 24 \
+            and any(ch.isdigit() for ch in example) and letters <= len(example) / 2:
+        # A bare, number-like value in a list ("$13.49" in search results): read the first list element with that shape.
+        first = next((e for e in final.numbered if e.in_list and re.fullmatch(_shape(example), e.label.strip())), None)
+        if first is not None and first.index == el.index:
+            return Extract(pattern=_shape(example), first_in_list=True)
+    if not usable_id(el.resource_id) and norm(el.label) == norm(example) and el.number and el.number > 1:
+        # The value is its own element right after its label ("Seat", then "22F"): read the element after the label.
+        prev = final.numbered[el.number - 2]
+        label = bind_inputs(prev.label, examples) or ""  # the label may be the input itself ("Caffè Latte", then "190 calories")
+        if label and _data_free(label, data_values) and len(label) <= 40 and \
+                (not near or norm(prev.label) == norm(near) or norm(near) in norm(prev.label)):
+            return Extract(near=label, next_element=True)
     loc = None
     if usable_id(el.resource_id):
         loc = Locator(resource_id=_glob_id(short_id(el.resource_id), examples, data_values), kind=el.kind)
+    else:
+        # No ID: an input shown in the same element is the anchor ("SL 1190 · ATL → DEN · …" for flight {{flight_number}}).
+        bound = next((n for n, v in examples.items() if v and contains_value(el.label, v)), None)
+        if bound:
+            loc = Locator(text_has="{{" + bound + "}}", kind=el.kind)
     # Several values in one element ("Boarding · 5:30 AM · Group 3"): remember which part holds this one.
     parts = [p.strip(" :,") for p in el.label.split(" · ") if p.strip(" :,")]
     segment = next((i for i, p in enumerate(parts) if contains_value(p, example)), None) if len(parts) > 1 else None
@@ -332,8 +380,12 @@ def _extract_for(name: str, near: str, example: str, final: ScreenState, example
     elif pos > 0:
         prefix = part[:pos].strip(" ·:,")  # "Departs 2:45 PM" → near "Departs"
         near_text = prefix if prefix and _data_free(prefix, data_values) else None
+    if near_text is None and segment and _data_free(parts[0], data_values):
+        near_text = parts[0]  # "Choose a seat · SL 1190": the element is found by its first part (no ID needed)
     after = part[pos + len(example):].strip() if pos >= 0 else ""
     after_text = after if after and _data_free(after, data_values) and len(after) > 1 else None
+    if loc is None and near_text is None:
+        return None  # nothing to find it by on another run (no ID, no label, no input in it, no list shape)
     return Extract(near=near_text, locator=loc, segment=segment, after=after_text)
 
 
@@ -349,7 +401,8 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
     steps, dropped = clean(trace_dir, records)
     report.dropped = dropped
     report.kept = [s.n for s in steps]
-    final = steps[-1].after if steps else _final_screen(trace_dir, records)
+    # The screen the agent answered from (its done step) is the most up to date: content can load after a step settles.
+    final = _done_screen(trace_dir, records) or (steps[-1].after if steps else _final_screen(trace_dir, records))
     answer = run.get("result", "")
 
     # Ask Wonder to name inputs, steps and outputs, and to classify the run's values.
@@ -422,7 +475,15 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
                                 container=chk.anchor_locator(s.container, s.before) if s.container is not None else None)
         elif s.kind == "back":
             action = StepAction(kind="back")
-        elif s.kind == "launch":
+        elif s.kind == "swipe" and s.swipe is not None:
+            # A drag (a bottom sheet, a carousel) anchored on the element under the finger, as a vector in screen fractions.
+            x, y, x2, y2 = s.swipe
+            w, h = s.before.width or 1080, s.before.height or 2400
+            under = min((e for e in s.before.numbered if e.bounds[0] <= x <= e.bounds[2] and e.bounds[1] <= y <= e.bounds[3]),
+                        key=lambda e: e.area, default=None)
+            anchor = generalize_locator(locators.build(under, s.before), examples, data_values, None, None) if under is not None else None
+            action = StepAction(kind="swipe", target=anchor, vector=(round((x2 - x) / w, 3), round((y2 - y) / h, 3)),
+                                start=(round(x / w, 3), round(y / h, 3)))
             action = StepAction(kind="launch", package=s.before.package)
         else:
             report.warnings.append(f"step {i}: {s.kind} is not supported in routines; dropped")
@@ -432,7 +493,7 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
         if s.kind == "scroll_until":
             post = [Check(kind="element_present", locator=loc)] if loc is not None else []
         else:
-            post = chk.derive_post(s.before, s.after, s.kind, s.target, s.typed, examples)
+            post = chk.derive_post(s.before, s.after, s.kind, s.target, s.typed, examples, submit=s.submit)
         pre = [g for c in pre if (g := chk_generalize(c, examples, data_values)) is not None]
         post = [g for c in post if (g := chk_generalize(c, examples, data_values)) is not None]
         if not post:
@@ -453,7 +514,7 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
                 post=[Check(kind="element_present", locator=tgt)], risk="read", note="added: input-based list choice"))
         with_scrolls.append(st)
     out_steps = with_scrolls
-    _add_witnesses(out_steps, steps, examples, inputs, report)
+    limits = _add_witnesses(out_steps, steps, examples, inputs, report)
 
     # Outputs: where each value is read on the final screen.
     outputs: list[str] = []
@@ -462,10 +523,11 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
         for o in spec.outputs:
             ex = _extract_for(o.name, o.near, o.example, final, examples, data_values)
             if ex is None:
-                report.warnings.append(f"output {o.name!r}: {o.example!r} is not on the final screen; dropped")
+                report.warnings.append(f"output {o.name!r}: {o.example!r} is not on the final screen, or nothing anchors it; dropped")
                 continue
             outputs.append(o.name)
-            extract[o.name] = ex
+            # A value recorded as a number ("190 calories", "$13.49", "2:05 PM") must be one at run time too.
+            extract[o.name] = ex.model_copy(update={"expect_digits": bool(re.match(r"^[$€£]?\d", o.example.strip()))})
     # A trailing scroll toward an answer: reveal the first output's element.
     for st in out_steps:
         if st.action.kind == "scroll_until" and st.action.target is None:
@@ -476,10 +538,15 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
         if out_steps:
             out_steps[-1].extract = extract
 
+    # Safety net: the run's irreversible action must survive cleanup, or the routine would "succeed" without doing the job.
+    if any(r.get("approval", {}).get("approved") for r in records if r.get("kind") == "action") and \
+            not any(st.risk == "irreversible" for st in out_steps):
+        raise NotCompilable("cleanup removed the run's approved irreversible step; refusing to compile a routine that would skip it")
     done = _done_checks(run, examples, data_values, final)
     app = (final.package if final else "") or (run.get("plan") or {}).get("app") or ""
     routine = Routine(
-        routine=_slug(spec.name, "routine"), app=app, version=1, status="draft", intent=spec.intent, description=spec.description,
+        routine=_slug(spec.name, "routine"), app=app, version=1, status="draft", intent=spec.intent,
+        description=" ".join([spec.description, *limits]),
         patterns=spec.patterns, inputs=inputs, outputs=outputs, steps=out_steps, done=done,
         compiled_from={"task_id": run["task_id"], "goal": run["goal"], "compiler": compiler_model, "compiled_at": time.strftime("%Y-%m-%d %H:%M:%S"),
                        "trace_steps_kept": report.kept, "trace_steps_dropped": len(dropped), "cost_usd": round(report.cost_at_standard_usd, 4)},
@@ -494,7 +561,7 @@ def _consumed(step: Step, name: str) -> bool:
 
 
 def _add_witnesses(out_steps: list[Step], steps: list[TStep], examples: dict[str, str], inputs: dict[str, InputSpec],
-                   report: CompileReport) -> None:
+                   report: CompileReport) -> list[str]:
     """An input that no action uses must at least be visible before the step that depends on it.
 
     Example: an agent checked in through Home's "Check in" button, which always means the next trip.
@@ -502,6 +569,7 @@ def _add_witnesses(out_steps: list[Step], steps: list[TStep], examples: dict[str
     {{trip_city}} before the tap means a request for another trip fails the check and climbs the
     fallback ladder, instead of quietly checking in the wrong trip."""
     by_trace = {s.n: s for s in steps}
+    limits: list[str] = []
     for name, value in list(examples.items()):
         if any(_consumed(st, name) for st in out_steps):
             continue
@@ -519,16 +587,25 @@ def _add_witnesses(out_steps: list[Step], steps: list[TStep], examples: dict[str
             st.pre.append(Check(kind="element_present", locator=loc))
             report.warnings.append(f"input {name!r} is not used by any action: step {st.id!r} now requires the screen to show it "
                                    f"({el.kind} {el.label[:50]!r}); other values need a repair or a recompile")
+            limits.append(f"Only works when {name} is the one already shown on {el.label.split(' · ')[0]!r}.")
             placed = True
             break
         if not placed:
             report.warnings.append(f"input {name!r} is never used or shown; dropped")
             examples.pop(name)
             inputs.pop(name, None)
+    return limits
 
 
 def chk_generalize(c: Check, examples: dict[str, str], data_values: list[str]) -> Check | None:
     return generalize_check(c, examples, data_values)
+
+
+def _done_screen(trace_dir: Path, records: list[dict]) -> ScreenState | None:
+    for r in reversed(records):
+        if r.get("kind") == "action" and (r.get("decision") or {}).get("action", {}).get("type") == "done" and r.get("tree_before"):
+            return load_tree(trace_dir / r["tree_before"])
+    return None
 
 
 def _final_screen(trace_dir: Path, records: list[dict]) -> ScreenState | None:

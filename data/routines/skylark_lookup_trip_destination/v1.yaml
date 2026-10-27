@@ -74,12 +74,14 @@ steps:
     destination:
       near: Trip to
       locator: {resource_id: screen_title, kind: Text}
+      first_in_list: false
+      next_element: false
   note: trace step 2
 compiled_from:
   task_id: p2-src-find_trip
   goal: Look up my trip with confirmation code PT4R8Z and tell me where it goes.
-  compiler: muse-wonder-1.0
-  compiled_at: "2026-10-27 00:35:18"
+  compiler: cached
+  compiled_at: "2026-10-27 01:20:05"
   trace_steps_kept: [1, 2]
   trace_steps_dropped: 0
-  cost_usd: 0.0517
+  cost_usd: 0.0

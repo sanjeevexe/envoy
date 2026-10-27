@@ -37,7 +37,7 @@ def apply_patches(base: Routine, patches: list[Patch]) -> tuple[Routine, list[st
     latest: dict[tuple[str, str, int | None], Patch] = {}
     for p in patches:  # one patch per step and kind: the latest wins
         latest[(p.step_id, p.kind, p.check_index)] = p
-    order = {"locator": 0, "check": 1, "remove": 2, "replace": 3, "insert_before": 4, "insert_after": 5}
+    order = {"locator": 0, "check": 1, "post": 1, "remove": 2, "replace": 3, "insert_before": 4, "insert_after": 5}
     for p in sorted(latest.values(), key=lambda p: order[p.kind]):
         try:
             i = r.step_index(p.step_id)
@@ -51,7 +51,12 @@ def apply_patches(base: Routine, patches: list[Patch]) -> tuple[Routine, list[st
                     c.locator = c.locator.model_copy(update={"text": p.locator.text})
         elif p.kind == "check" and p.check is not None and p.check_index is not None and p.check_index < len(step.post):
             step.post[p.check_index] = p.check
+        elif p.kind == "post" and p.checks:
+            step.post = p.checks
         elif p.kind == "remove":
+            # The screen that used to follow this step now follows the one before it.
+            if i > 0 and r.steps[i].post and any(c.kind != "screen_changed" for c in r.steps[i].post):
+                r.steps[i - 1].post = r.steps[i].post
             del r.steps[i]
         elif p.kind == "replace" and p.steps:
             r.steps[i:i + 1] = p.steps

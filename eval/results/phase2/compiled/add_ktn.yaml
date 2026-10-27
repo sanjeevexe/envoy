@@ -117,17 +117,22 @@ steps:
     known_traveler_number:
       near: Known traveler number
       locator: {resource_id: field_ktn, kind: EditText}
+      first_in_list: false
+      next_element: false
     confirmation_code:
+      near: Confirmation
       locator: {resource_id: row_confirmation, kind: Text}
       segment: 1
+      first_in_list: false
+      next_element: false
   note: trace step 4
 done:
 - text_visible: "{{user_known_traveler_number}}"
 compiled_from:
   task_id: p2-src-add_ktn
   goal: Add my known traveler number to my Denver trip.
-  compiler: muse-wonder-1.0
-  compiled_at: "2026-10-27 00:37:08"
+  compiler: cached
+  compiled_at: "2026-10-27 01:18:57"
   trace_steps_kept: [1, 2, 3, 4]
   trace_steps_dropped: 0
-  cost_usd: 0.0691
+  cost_usd: 0.0

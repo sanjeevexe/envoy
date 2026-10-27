@@ -21,7 +21,8 @@ import android.util.Log
  *   adb shell am broadcast -n com.skylark.air/.DebugReceiver -a com.skylark.air.SET_GATE --es code KX7Q2M --es gate C14
  *   adb shell am broadcast -n com.skylark.air/.DebugReceiver -a com.skylark.air.SIGN_OUT
  *
- * Layout variants: 0 original, 1 moved button, 2 renamed labels, 3 extra confirmation screen.
+ * Layout variants: 0 original, 1 moved button, 2 renamed labels, 3 extra confirmation screen,
+ * 4 hidden IDs (no test tags, like obfuscated resource IDs), 5 renamed labels and hidden IDs.
  */
 class DebugReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {

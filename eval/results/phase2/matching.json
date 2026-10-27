@@ -1,0 +1,318 @@
+{
+ "summary": "12/12 correct (routine and every input right, or no routine when none fits); 12 model calls, $0.0327 at standard prices.",
+ "rows": [
+  {
+   "request": "Check me in for my Denver flight",
+   "notes": "",
+   "expected": "skylark_air_check_in_flight",
+   "matched": "skylark_air_check_in_flight",
+   "inputs": {
+    "trip_city": "Denver"
+   },
+   "missing": [],
+   "stage": "model confirmed",
+   "shortlist": [
+    [
+     "skylark_air_check_in_flight",
+     0.867
+    ],
+    [
+     "skylark_check_in_flight",
+     0.867
+    ],
+    [
+     "skylark_check_flight_status",
+     0.667
+    ]
+   ],
+   "model_calls": 1,
+   "correct": true
+  },
+  {
+   "request": "I need to check in for my trip to Tampa",
+   "notes": "",
+   "expected": "skylark_air_check_in_flight",
+   "matched": "skylark_air_check_in_flight",
+   "inputs": {
+    "trip_city": "Tampa"
+   },
+   "missing": [],
+   "stage": "model confirmed",
+   "shortlist": [
+    [
+     "skylark_air_check_in_flight",
+     0.8
+    ],
+    [
+     "skylark_check_in_flight",
+     0.5
+    ],
+    [
+     "skylark_add_known_traveler_number",
+     0.3
+    ]
+   ],
+   "model_calls": 1,
+   "correct": true
+  },
+  {
+   "request": "Check me in",
+   "notes": "Upcoming trip: Chicago (confirmation KX7Q2M), the next trip",
+   "expected": "skylark_air_check_in_flight or skylark_check_in_flight",
+   "matched": "skylark_check_in_flight",
+   "inputs": {
+    "trip_city": "Chicago"
+   },
+   "missing": [],
+   "stage": "model confirmed",
+   "shortlist": [
+    [
+     "skylark_air_check_in_flight",
+     1.0
+    ],
+    [
+     "skylark_check_in_flight",
+     0.7
+    ],
+    [
+     "skylark_check_flight_status",
+     0.6
+    ]
+   ],
+   "model_calls": 1,
+   "correct": true
+  },
+  {
+   "request": "Move me to seat 21C on the Denver flight",
+   "notes": "",
+   "expected": "skylark_change_seat",
+   "matched": "skylark_change_seat",
+   "inputs": {
+    "trip_city": "Denver",
+    "desired_seat": "21C"
+   },
+   "missing": [],
+   "stage": "model confirmed",
+   "shortlist": [
+    [
+     "skylark_change_seat",
+     0.6
+    ],
+    [
+     "skylark_air_check_in_flight",
+     0.4
+    ],
+    [
+     "skylark_check_in_flight",
+     0.4
+    ]
+   ],
+   "model_calls": 1,
+   "correct": true
+  },
+  {
+   "request": "Change my seat to 22A",
+   "notes": "Upcoming trip: Tampa",
+   "expected": "skylark_change_seat",
+   "matched": "skylark_change_seat",
+   "inputs": {
+    "trip_city": "Tampa",
+    "desired_seat": "22A"
+   },
+   "missing": [],
+   "stage": "model confirmed",
+   "shortlist": [
+    [
+     "skylark_change_seat",
+     1.0
+    ]
+   ],
+   "model_calls": 1,
+   "correct": true
+  },
+  {
+   "request": "Add my TSA PreCheck number to my Tampa trip",
+   "notes": "Known traveler number: 55501234",
+   "expected": "skylark_add_known_traveler_number",
+   "matched": "skylark_add_known_traveler_number",
+   "inputs": {
+    "trip_city": "Tampa",
+    "user_known_traveler_number": "55501234"
+   },
+   "missing": [],
+   "stage": "model confirmed",
+   "shortlist": [
+    [
+     "skylark_add_known_traveler_number",
+     0.6
+    ],
+    [
+     "skylark_air_check_in_flight",
+     0.367
+    ],
+    [
+     "skylark_lookup_trip_destination",
+     0.267
+    ]
+   ],
+   "model_calls": 1,
+   "correct": true
+  },
+  {
+   "request": "Which gate is my Boise flight at?",
+   "notes": "",
+   "expected": "skylark_get_flight_gate",
+   "matched": "skylark_get_flight_gate",
+   "inputs": {
+    "trip_city": "Boise"
+   },
+   "missing": [],
+   "stage": "model confirmed",
+   "shortlist": [
+    [
+     "skylark_get_flight_gate",
+     0.76
+    ],
+    [
+     "skylark_air_check_in_flight",
+     0.38
+    ],
+    [
+     "skylark_check_in_flight",
+     0.38
+    ]
+   ],
+   "model_calls": 1,
+   "correct": true
+  },
+  {
+   "request": "Is SL 1190 on time?",
+   "notes": "",
+   "expected": "skylark_check_flight_status",
+   "matched": "skylark_check_flight_status",
+   "inputs": {
+    "flight_number": "SL 1190"
+   },
+   "missing": [],
+   "stage": "model confirmed",
+   "shortlist": [
+    [
+     "skylark_add_known_traveler_number",
+     0.0
+    ],
+    [
+     "skylark_air_check_in_flight",
+     0.0
+    ],
+    [
+     "skylark_change_seat",
+     0.0
+    ],
+    [
+     "skylark_check_flight_status",
+     0.0
+    ],
+    [
+     "skylark_check_in_flight",
+     0.0
+    ]
+   ],
+   "model_calls": 1,
+   "correct": true
+  },
+  {
+   "request": "Where does trip PT4R8Z go?",
+   "notes": "Last name: Patel",
+   "expected": "skylark_lookup_trip_destination",
+   "matched": "skylark_lookup_trip_destination",
+   "inputs": {
+    "trip_confirmation_code": "PT4R8Z"
+   },
+   "missing": [],
+   "stage": "model confirmed",
+   "shortlist": [
+    [
+     "skylark_lookup_trip_destination",
+     0.867
+    ],
+    [
+     "skylark_air_check_in_flight",
+     0.433
+    ],
+    [
+     "skylark_add_known_traveler_number",
+     0.333
+    ]
+   ],
+   "model_calls": 1,
+   "correct": true
+  },
+  {
+   "request": "Cancel my Denver trip",
+   "notes": "",
+   "expected": null,
+   "matched": null,
+   "inputs": {},
+   "missing": [],
+   "stage": "model: no confident match (None)",
+   "shortlist": [
+    [
+     "skylark_air_check_in_flight",
+     0.433
+    ],
+    [
+     "skylark_add_known_traveler_number",
+     0.333
+    ],
+    [
+     "skylark_lookup_trip_destination",
+     0.333
+    ]
+   ],
+   "model_calls": 1,
+   "correct": true
+  },
+  {
+   "request": "What seat am I in on my Denver flight?",
+   "notes": "",
+   "expected": null,
+   "matched": null,
+   "inputs": {},
+   "missing": [],
+   "stage": "model: no confident match (None)",
+   "shortlist": [
+    [
+     "skylark_change_seat",
+     0.6
+    ],
+    [
+     "skylark_air_check_in_flight",
+     0.4
+    ],
+    [
+     "skylark_check_in_flight",
+     0.4
+    ]
+   ],
+   "model_calls": 1,
+   "correct": true
+  },
+  {
+   "request": "How many SkyLark miles do I have?",
+   "notes": "",
+   "expected": null,
+   "matched": null,
+   "inputs": {},
+   "missing": [],
+   "stage": "model: no confident match (None)",
+   "shortlist": [
+    [
+     "skylark_check_flight_status",
+     0.28
+    ]
+   ],
+   "model_calls": 1,
+   "correct": true
+  }
+ ]
+}

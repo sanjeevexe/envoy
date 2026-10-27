@@ -104,9 +104,21 @@ def _anchor_key(e: Element) -> tuple[str, str, str]:
     return (short_id(e.resource_id) if usable_id(e.resource_id) else "", e.kind, norm(e.label))
 
 
+_SYSTEM_PKGS = ("com.android.systemui", "com.google.android.permissioncontroller", "com.android.permissioncontroller",
+                "com.google.android.gms", "android")
+_POPUP_TEXT = re.compile(r"(allow .{0,40} to access|send you notifications|turn on notifications|enjoying|rate (us|this app)|"
+                         r"leave a review|isn.?t responding|location data|while using the app|only this time|don.?t allow)", re.I)
+
+
+def _popup_like(e: Element, screen: ScreenState) -> bool:
+    """System dialogs and known interruptions: the shared pop-up handler covers them, so checks must not expect them
+    (Android stops showing a permission prompt after it was denied, so such a check would never pass again)."""
+    return (e.package or screen.package) in _SYSTEM_PKGS or bool(_POPUP_TEXT.search(e.label or ""))
+
+
 def _distinctiveness(e: Element, screen: ScreenState, inputs: dict[str, str]) -> float:
     """How good an element is as a check anchor: stable across runs and specific to this screen."""
-    if e.status_bar or not (e.label or usable_id(e.resource_id)):
+    if e.status_bar or not (e.label or usable_id(e.resource_id)) or _popup_like(e, screen):
         return -9.0
     s = 0.0
     rid = short_id(e.resource_id)
@@ -154,7 +166,7 @@ def derive_pre(before: ScreenState, target: Element | None, inputs: dict[str, st
 
 
 def derive_post(before: ScreenState, after: ScreenState, action_kind: str, target: Element | None,
-                typed: str | None, inputs: dict[str, str], max_anchors: int = 2) -> list[Check]:
+                typed: str | None, inputs: dict[str, str], max_anchors: int = 2, submit: bool = False) -> list[Check]:
     checks: list[Check] = []
     after_target = None
     if target is not None:
@@ -163,9 +175,10 @@ def derive_post(before: ScreenState, after: ScreenState, action_kind: str, targe
         if after_target is None and usable_id(target.resource_id):
             after_target = next((e for e in after.elements if e.resource_id == target.resource_id), None)
 
-    if action_kind == "type" and target is not None and typed is not None:
+    if action_kind == "type" and target is not None and typed is not None and not submit:
         checks.append(Check(kind="field_equals", locator=anchor_locator(target, before), value=typed))
         return checks
+    # Typing with Enter (a search) leaves the field's screen: check where the app went, like a tap.
     if target is not None and target.checkable and after_target is not None and after_target.checked != target.checked:
         checks.append(Check(kind="toggle_is", locator=anchor_locator(target, before), value="on" if after_target.checked else "off"))
 
@@ -174,6 +187,10 @@ def derive_post(before: ScreenState, after: ScreenState, action_kind: str, targe
     appeared = [e for e in after.numbered if _anchor_key(e) not in before_keys]
     disappeared = [e for e in before.numbered if _anchor_key(e) not in after_keys]
     new_screen = after.signature != before.signature
+    if after.package in _SYSTEM_PKGS or any(_popup_like(e, after) for e in after.numbered[:3]):
+        # A pop-up came up right after the action: nothing behind it can be checked here. The shared handler
+        # dismisses it at run time, and the next step's before-checks show where the app went.
+        return [Check(kind="screen_changed")] if new_screen else [Check(kind="app_foreground", package=before.package)]
 
     if new_screen:
         checks.insert(0, Check(kind="screen_changed"))

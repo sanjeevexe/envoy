@@ -1,0 +1,48 @@
+{
+ "name": "skylark_check_flight_status",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-27 01:17:17",
+   "parent": null,
+   "changes": [
+    "compiled from p2-src-v4-flight_status"
+   ],
+   "verification": {
+    "cases": [
+     {
+      "case": "same-inputs",
+      "inputs": {
+       "flight_number": "SL 1190"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 3.99,
+      "outputs": {
+       "flight_status_summary": "SL 1190 · ATL → DEN · Sat, Nov 14, 2026 · Delayed 25 min · Gate A7 · Departs 2:45 PM"
+      }
+     },
+     {
+      "case": "second-inputs",
+      "inputs": {
+       "flight_number": "SL 291"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 3.93,
+      "outputs": {
+       "flight_status_summary": "SL 291 · ATL → TPA · Wed, Nov 25, 2026 · On time · Gate B17 · Departs 6:00 AM"
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

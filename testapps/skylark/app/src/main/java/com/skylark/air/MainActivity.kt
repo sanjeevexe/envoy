@@ -66,7 +66,7 @@ fun SkyLarkApp() {
     BackHandler(enabled = stack.size > 1) { nav.back() }
 
     MaterialTheme(colorScheme = lightColorScheme(primary = SkyLarkBlue)) {
-        Surface(Modifier.fillMaxSize().semantics { testTagsAsResourceId = true }) {
+        Surface(Modifier.fillMaxSize().semantics { testTagsAsResourceId = s.showsIds }) {
             Box(Modifier.fillMaxSize()) {
                 when (val screen = stack.last()) {
                     Screen.SignIn -> SignInScreen(s, nav)
@@ -90,7 +90,7 @@ class Nav(
     val resetTo: (Screen) -> Unit,
 )
 
-/** Variant 2 renames labels; everything else keeps the original text. */
+/** Variants 2 and 5 rename labels; everything else keeps the original text. */
 private val renames = mapOf(
     "Check in" to "Check-in now",
     "My Trips" to "Trips",
@@ -101,4 +101,7 @@ private val renames = mapOf(
     "Find trip" to "Look up",
 )
 
-fun label(s: AppState, original: String): String = if (s.variant == 2) renames[original] ?: original else original
+fun label(s: AppState, original: String): String = if (s.variant == 2 || s.variant == 5) renames[original] ?: original else original
+
+/** Variants 4 and 5 hide the test tags, like a release build with obfuscated resource IDs. */
+val AppState.showsIds: Boolean get() = variant != 4 && variant != 5

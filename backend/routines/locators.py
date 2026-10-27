@@ -173,6 +173,9 @@ def score(loc: Locator, e: Element, screen: ScreenState, *, use_ids: bool = True
         add("resource_id", 1.0 if id_matches(loc.resource_id, short_id(e.resource_id)) else 0.0)
     if loc.text:
         add("text", max(text_similarity(loc.text, label), text_similarity(loc.text, e.text) if e.text else 0.0))
+    elif loc.text_has:
+        # Several rows can show the input ("Caffè Latte", "Iced Caffè Latte"): the one that is exactly it ranks first.
+        add("text", text_similarity(loc.text_has, label))
     if loc.desc:
         add("desc", text_similarity(loc.desc, e.desc or label))
     if loc.hint:

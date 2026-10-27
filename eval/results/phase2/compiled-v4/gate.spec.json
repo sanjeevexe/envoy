@@ -1,0 +1,54 @@
+{
+ "name": "skylark_get_gate",
+ "intent": "Find the departure gate for a SkyLark flight",
+ "description": "Opens My Trips in SkyLark, selects the trip matching the requested city, and reads the departure gate from the trip details.",
+ "patterns": [
+  "What gate does my flight leave from",
+  "What is my departure gate",
+  "Find the gate for my flight"
+ ],
+ "inputs": [
+  {
+   "name": "trip_city",
+   "type": "text",
+   "description": "The city of the trip whose gate is requested.",
+   "from_memory": null,
+   "example": "Denver"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "open_my_trips",
+   "intent": "Open My Trips to find the {{trip_city}} flight",
+   "target_fixed_text": "My Trips",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "open_trip",
+   "intent": "Open the {{trip_city}} flight to read its gate",
+   "target_fixed_text": null,
+   "choice_input": "trip_city"
+  }
+ ],
+ "outputs": [
+  {
+   "name": "gate",
+   "near": "Gate",
+   "example": "A7"
+  }
+ ],
+ "data_values": [
+  "SL 1190",
+  "Sat, Nov 14, 2026",
+  "PT4R8Z",
+  "2:45 PM",
+  "4:05 PM",
+  "Delayed 25 min",
+  "A7",
+  "22F",
+  "2:05 PM · Group 5",
+  "0"
+ ]
+}

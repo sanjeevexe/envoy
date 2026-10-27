@@ -5,7 +5,7 @@
   {
    "version": 1,
    "status": "active",
-   "created": "2026-10-27 00:34:33",
+   "created": "2026-10-27 01:19:42",
    "parent": null,
    "changes": [
     "compiled from p2-src-gate"
@@ -20,7 +20,7 @@
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 2.39,
+      "duration_s": 2.75,
       "outputs": {
        "gate": "A7"
       }
@@ -33,7 +33,7 @@
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 2.43,
+      "duration_s": 2.45,
       "outputs": {
        "gate": "B17"
       }
@@ -42,63 +42,7 @@
    }
   }
  ],
- "runs": [
-  {
-   "time": "2026-10-27 00:38:37",
-   "kind": "run",
-   "version": 1,
-   "task_id": "p2-newinput-gate-v0-E3K81I",
-   "status": "done",
-   "rung": 0,
-   "model_calls": 0,
-   "duration_s": 1.62,
-   "patches": 0
-  },
-  {
-   "time": "2026-10-27 00:39:15",
-   "kind": "run",
-   "version": 1,
-   "task_id": "p2-newinput-gate-v0-0IGQ1E",
-   "status": "done",
-   "rung": 0,
-   "model_calls": 0,
-   "duration_s": 1.63,
-   "patches": 0
-  },
-  {
-   "time": "2026-10-27 00:39:55",
-   "kind": "run",
-   "version": 1,
-   "task_id": "p2-newinput-gate-v0-UJ0E5F",
-   "status": "done",
-   "rung": 0,
-   "model_calls": 0,
-   "duration_s": 1.64,
-   "patches": 0
-  },
-  {
-   "time": "2026-10-27 00:40:38",
-   "kind": "run",
-   "version": 1,
-   "task_id": "p2-newinput-gate-v0-IQLBYM",
-   "status": "done",
-   "rung": 0,
-   "model_calls": 0,
-   "duration_s": 3.19,
-   "patches": 0
-  },
-  {
-   "time": "2026-10-27 00:41:17",
-   "kind": "run",
-   "version": 1,
-   "task_id": "p2-newinput-gate-v0-KX7Q2M",
-   "status": "done",
-   "rung": 0,
-   "model_calls": 0,
-   "duration_s": 1.65,
-   "patches": 0
-  }
- ],
+ "runs": [],
  "needs_recompile": false,
  "app": "com.skylark.air"
 }

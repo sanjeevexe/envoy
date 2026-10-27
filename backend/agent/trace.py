@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import gzip
 import json
+import shutil
 import time
 from dataclasses import asdict, is_dataclass
 from pathlib import Path
@@ -50,6 +51,8 @@ def screen_record(s: ScreenState) -> dict[str, Any]:
 class TraceWriter:
     def __init__(self, task_id: str, root: Path = RUNS) -> None:
         self.dir = root / task_id
+        if (self.dir / "steps.jsonl").exists():  # a rerun with the same task id replaces the old trace (compiling mixed runs would be wrong)
+            shutil.rmtree(self.dir)
         (self.dir / "screens").mkdir(parents=True, exist_ok=True)
         self._steps = (self.dir / "steps.jsonl").open("a")
 

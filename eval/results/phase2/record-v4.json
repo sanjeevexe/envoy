@@ -1,0 +1,78 @@
+{
+ "time": "2026-10-27T05:08:17+00:00",
+ "variant": 4,
+ "rows": [
+  {
+   "family": "check_in",
+   "task_id": "p2-src-v4-check_in",
+   "passed": true,
+   "status": "done",
+   "steps": 8,
+   "model_calls": 11,
+   "cost_usd": 0.014479949999999998,
+   "cost_at_standard_usd": 0.014479949999999998,
+   "duration_s": 21.37,
+   "result": "done"
+  },
+  {
+   "family": "change_seat",
+   "task_id": "p2-src-v4-change_seat",
+   "passed": true,
+   "status": "done",
+   "steps": 5,
+   "model_calls": 8,
+   "cost_usd": 0.0181116,
+   "cost_at_standard_usd": 0.0181116,
+   "duration_s": 15.54,
+   "result": "Seat changed to 21C on Denver flight SL 1190"
+  },
+  {
+   "family": "add_ktn",
+   "task_id": "p2-src-v4-add_ktn",
+   "passed": true,
+   "status": "done",
+   "steps": 4,
+   "model_calls": 7,
+   "cost_usd": 0.0104992,
+   "cost_at_standard_usd": 0.0104992,
+   "duration_s": 14.83,
+   "result": "Added known traveler number 55501234 to Denver trip (SL 1190, ATL → DEN, confirmation PT4R8Z) - screen shows 'Known traveler number saved'."
+  },
+  {
+   "family": "gate",
+   "task_id": "p2-src-v4-gate",
+   "passed": true,
+   "status": "done",
+   "steps": 2,
+   "model_calls": 4,
+   "cost_usd": 0.0060527,
+   "cost_at_standard_usd": 0.0060527,
+   "duration_s": 7.79,
+   "result": "Gate A7"
+  },
+  {
+   "family": "flight_status",
+   "task_id": "p2-src-v4-flight_status",
+   "passed": true,
+   "status": "done",
+   "steps": 3,
+   "model_calls": 5,
+   "cost_usd": 0.00691545,
+   "cost_at_standard_usd": 0.00691545,
+   "duration_s": 10.42,
+   "result": "SL 1190 · ATL → DEN · Sat, Nov 14, 2026 · Delayed 25 min · Gate A7 · Departs 2:45 PM"
+  },
+  {
+   "family": "find_trip",
+   "task_id": "p2-src-v4-find_trip",
+   "passed": true,
+   "status": "done",
+   "steps": 2,
+   "model_calls": 4,
+   "cost_usd": 0.0070596,
+   "cost_at_standard_usd": 0.0070596,
+   "duration_s": 8.21,
+   "result": "Your trip PT4R8Z goes to Denver (DEN) - Trip to Denver, SL 1190 ATL 2:45 PM → DEN 4:05 PM on Sat, Nov 14, 2026"
+  }
+ ]
+}

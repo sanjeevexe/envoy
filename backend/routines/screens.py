@@ -9,6 +9,7 @@ from __future__ import annotations
 import gzip
 import json
 import re
+import unicodedata
 from pathlib import Path
 
 from devices.screen import _kind, _on_screen, _short_id, format_compact
@@ -28,12 +29,17 @@ def usable_id(resource_id: str | None) -> bool:
     return bool(rid) and not _OBFUSCATED.search(rid)
 
 
+def fold(s: str | None) -> str:
+    """Accents removed: people type "Caffe Latte" where the app shows "Caffè Latte" (seen on Starbucks)."""
+    return "".join(ch for ch in unicodedata.normalize("NFKD", s or "") if not unicodedata.combining(ch))
+
+
 def norm(s: str | None) -> str:
-    return " ".join((s or "").replace("’", "'").split()).casefold()
+    return " ".join(fold(s).replace("’", "'").split()).casefold()
 
 
 def tokens(s: str | None) -> list[str]:
-    return [t.casefold() for t in _WORD.findall(s or "")]
+    return [t.casefold() for t in _WORD.findall(fold(s))]
 
 
 def contains_value(haystack: str | None, value: str | None) -> bool:

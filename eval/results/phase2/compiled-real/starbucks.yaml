@@ -1,0 +1,174 @@
+routine: starbucks_lookup_drink_calories
+app: com.starbucks.mobilecard
+version: 1
+status: draft
+intent: Look up the calories in a Grande drink in the Starbucks app
+description: Searches for a drink in the Starbucks app, opens its product details with the Grande size selected, and returns the displayed calorie
+  count.
+patterns: [how many calories are in a drink, what is the calorie count for a drink, check the calories in a menu drink]
+outputs: [calories]
+start: fresh_launch
+inputs:
+  drink_name: {type: text, description: The drink to look up in the menu search, example: Caffe Latte}
+steps:
+- id: tap_order
+  intent: Tap Order to open the menu
+  pre:
+  - {app_foreground: com.starbucks.mobilecard}
+  action:
+    tap:
+      text: Order
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.373, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: button2, text: 'No, thanks', kind: Button}
+  - element_present: {resource_id: button1, text: Share location, kind: Button}
+  risk: reversible
+  note: trace step 1
+- id: dismiss_location_prompt
+  intent: Tap No, thanks to dismiss the location prompt
+  pre:
+  - {app_foreground: com.starbucks.mobilecard}
+  action:
+    tap:
+      resource_id: button2
+      text: No, thanks
+      kind: Button
+      cls: Button
+      siblings: [Share location]
+      in_list: false
+      position: [0.313, 0.63]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: stores_tab_empty_state_title, text: No cafés found, kind: Text}
+  - element_present: {resource_id: stores_tab_empty_state_body, text: 'Try searching another area, removing filters, or zooming in or out to get
+        a better look.', kind: Text}
+  risk: reversible
+  note: trace step 2
+- id: skip_store_selection
+  intent: Tap Skip to skip store selection
+  pre:
+  - {app_foreground: com.starbucks.mobilecard}
+  action:
+    tap:
+      text: Skip
+      kind: Button
+      cls: View
+      siblings: [Search]
+      in_list: false
+      position: [0.923, 0.057]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: button2, text: Choose a café, kind: Button}
+  - element_present: {resource_id: button1, text: 'Yes', kind: Button}
+  risk: reversible
+  note: trace step 3
+- id: confirm_skip_to_menu
+  intent: Tap Yes to confirm skipping to the menu
+  pre:
+  - {app_foreground: com.starbucks.mobilecard}
+  action:
+    tap:
+      resource_id: button1
+      text: 'Yes'
+      kind: Button
+      cls: Button
+      siblings: [Choose a café]
+      in_list: false
+      position: [0.737, 0.581]
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: button2, text: Choose a café, kind: Button}
+  risk: reversible
+  note: trace step 4
+- id: open_menu_search
+  intent: Tap Search Menu to open menu search
+  pre:
+  - {app_foreground: com.starbucks.mobilecard}
+  action:
+    tap:
+      text: Search Menu
+      kind: Button
+      cls: Button
+      in_list: true
+      position: [0.941, 0.052]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 5
+- id: search_for_drink
+  intent: "Type {{drink_name}} into the Search Menu field"
+  pre:
+  - {app_foreground: com.starbucks.mobilecard}
+  action:
+    type:
+      field:
+        text: Search Menu
+        hint: Search Menu
+        kind: EditText
+        cls: EditText
+        siblings: [Clear search]
+        in_list: false
+        position: [0.519, 0.057]
+      value: "{{drink_name}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      text: "Search Menu: {{drink_name}}"
+      kind: EditText
+  risk: reversible
+  note: trace step 6
+- id: find_open_drink_details
+  intent: "Scroll to {{drink_name}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        text_has: "{{drink_name}}"
+        kind: Button
+        cls: RelativeLayout
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      text_has: "{{drink_name}}"
+      kind: Button
+      cls: RelativeLayout
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: open_drink_details
+  intent: "Tap the {{drink_name}} search result to open its product details"
+  pre:
+  - {app_foreground: com.starbucks.mobilecard}
+  action:
+    tap:
+      text_has: "{{drink_name}}"
+      kind: Button
+      cls: RelativeLayout
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      text: "Grande {{drink_name}}. Add to order"
+      kind: Button
+  risk: reversible
+  extract:
+    calories:
+      near: "{{drink_name}}"
+      first_in_list: false
+      next_element: true
+      expect_digits: true
+  note: trace step 7
+compiled_from:
+  task_id: p2-real-starbucks
+  goal: In the Starbucks app, how many calories are in a Grande Caffè Latte?
+  compiler: cached
+  compiled_at: "2026-10-27 01:23:49"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6, 7]
+  trace_steps_dropped: 0
+  cost_usd: 0.0

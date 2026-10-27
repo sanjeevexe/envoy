@@ -1,0 +1,107 @@
+{
+ "name": "skylark_check_in_flight",
+ "intent": "Check in for a SkyLark flight",
+ "description": "Checks in for a SkyLark flight by opening My Trips, selecting the trip to the requested city, selecting the passenger, confirming no hazardous materials, and confirming check-in, then returns the seat, gate, and boarding information.",
+ "patterns": [
+  "Check me in for my flight",
+  "Check in for my flight",
+  "Please check me in",
+  "Check in for my upcoming trip"
+ ],
+ "inputs": [
+  {
+   "name": "trip_city",
+   "type": "text",
+   "description": "The destination city of the flight to check in for.",
+   "from_memory": null,
+   "example": "Denver"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "open_my_trips",
+   "intent": "Tap My Trips to find the flight to {{trip_city}}",
+   "target_fixed_text": "My Trips",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "select_trip_by_city",
+   "intent": "Select the trip to {{trip_city}} from the list",
+   "target_fixed_text": null,
+   "choice_input": "trip_city"
+  },
+  {
+   "step": 3,
+   "id": "tap_check_in",
+   "intent": "Tap Check in for the selected flight",
+   "target_fixed_text": "Check in",
+   "choice_input": null
+  },
+  {
+   "step": 4,
+   "id": "select_passenger",
+   "intent": "Select the passenger for check-in",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 5,
+   "id": "continue_after_passenger",
+   "intent": "Tap Continue after selecting the passenger",
+   "target_fixed_text": "Continue",
+   "choice_input": null
+  },
+  {
+   "step": 6,
+   "id": "confirm_no_hazardous_materials",
+   "intent": "Toggle the declaration that I'm not carrying hazardous materials",
+   "target_fixed_text": "I'm not carrying hazardous materials",
+   "choice_input": null
+  },
+  {
+   "step": 7,
+   "id": "continue_after_hazardous_materials",
+   "intent": "Tap Continue after confirming the hazardous materials declaration",
+   "target_fixed_text": "Continue",
+   "choice_input": null
+  },
+  {
+   "step": 8,
+   "id": "confirm_check_in",
+   "intent": "Tap Confirm check-in to complete check-in",
+   "target_fixed_text": "Confirm check-in",
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "seat",
+   "near": "Seat",
+   "example": "22F"
+  },
+  {
+   "name": "gate",
+   "near": "Gate",
+   "example": "A7"
+  },
+  {
+   "name": "boarding",
+   "near": "Boarding",
+   "example": "2:05 PM · Group 5"
+  }
+ ],
+ "data_values": [
+  "SL 1190",
+  "PT4R8Z",
+  "Sat, Nov 14, 2026",
+  "ATL → DEN",
+  "2:45 PM",
+  "4:05 PM",
+  "Maya Patel",
+  "22F",
+  "A7",
+  "2:05 PM · Group 5"
+ ]
+}

@@ -147,7 +147,7 @@ object Store {
     // Debug hooks
     fun reset() { update { parseState(defaults) }; _epoch.value += 1 }
     fun seed(json: String) { update { parseState(json) }; _epoch.value += 1 }
-    fun setVariant(v: Int) = update { it.copy(variant = v.coerceIn(0, 3)) }
+    fun setVariant(v: Int) = update { it.copy(variant = v.coerceIn(0, 5)) }
     fun setGate(code: String, gate: String) = updateTrip(code) { it.copy(flight = it.flight.copy(gate = gate)) }
     fun signOut() { update { it.copy(signedIn = false) }; _epoch.value += 1 }
 

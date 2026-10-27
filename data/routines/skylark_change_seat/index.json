@@ -5,7 +5,7 @@
   {
    "version": 1,
    "status": "active",
-   "created": "2026-10-27 00:36:51",
+   "created": "2026-10-27 01:18:57",
    "parent": null,
    "changes": [
     "compiled from p2-src-change_seat"
@@ -21,7 +21,7 @@
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 4.94,
+      "duration_s": 6.05,
       "outputs": {
        "seat": "21C"
       }
@@ -35,7 +35,7 @@
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 6.73,
+      "duration_s": 8.45,
       "outputs": {
        "seat": "23B"
       }
@@ -44,63 +44,7 @@
    }
   }
  ],
- "runs": [
-  {
-   "time": "2026-10-27 00:38:23",
-   "kind": "run",
-   "version": 1,
-   "task_id": "p2-newinput-change_seat-v0-E3K81I",
-   "status": "done",
-   "rung": 1,
-   "model_calls": 0,
-   "duration_s": 4.26,
-   "patches": 0
-  },
-  {
-   "time": "2026-10-27 00:39:03",
-   "kind": "run",
-   "version": 1,
-   "task_id": "p2-newinput-change_seat-v0-0IGQ1E",
-   "status": "done",
-   "rung": 1,
-   "model_calls": 0,
-   "duration_s": 3.97,
-   "patches": 0
-  },
-  {
-   "time": "2026-10-27 00:39:42",
-   "kind": "run",
-   "version": 1,
-   "task_id": "p2-newinput-change_seat-v0-UJ0E5F",
-   "status": "done",
-   "rung": 0,
-   "model_calls": 0,
-   "duration_s": 3.9,
-   "patches": 0
-  },
-  {
-   "time": "2026-10-27 00:40:24",
-   "kind": "run",
-   "version": 1,
-   "task_id": "p2-newinput-change_seat-v0-IQLBYM",
-   "status": "done",
-   "rung": 1,
-   "model_calls": 0,
-   "duration_s": 5.51,
-   "patches": 0
-  },
-  {
-   "time": "2026-10-27 00:41:06",
-   "kind": "run",
-   "version": 1,
-   "task_id": "p2-newinput-change_seat-v0-KX7Q2M",
-   "status": "done",
-   "rung": 1,
-   "model_calls": 0,
-   "duration_s": 4.02,
-   "patches": 0
-  }
- ],
+ "runs": [],
  "needs_recompile": false,
  "app": "com.skylark.air"
 }

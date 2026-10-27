@@ -1,0 +1,110 @@
+{
+ "name": "chipotle_get_menu_item_price",
+ "intent": "Find the price of a Chipotle menu item",
+ "description": "Uses the preferred ZIP code to select a nearby Chipotle pickup location, opens the Chips & Sides menu, and returns the requested item's price.",
+ "patterns": [
+  "How much is a menu item at Chipotle",
+  "Find the price of a Chipotle menu item",
+  "Check a Chipotle item price"
+ ],
+ "inputs": [
+  {
+   "name": "menu_item_name",
+   "type": "text",
+   "description": "The menu item whose price should be found.",
+   "from_memory": null,
+   "example": "Chips & Guacamole"
+  },
+  {
+   "name": "zip_code",
+   "type": "text",
+   "description": "The ZIP code for the preferred nearby Chipotle location.",
+   "from_memory": "preferred_location.zip_code",
+   "example": "10001"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "open_menu",
+   "intent": "Tap MENU to open the ordering menu",
+   "target_fixed_text": "MENU",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "find_chipote_for_full_menu",
+   "intent": "Tap FIND A CHIPOTLE FOR THE FULL MENU to choose a pickup location",
+   "target_fixed_text": "FIND A CHIPOTLE FOR THE FULL MENU",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "dismiss_location_notice",
+   "intent": "Tap OKAY to dismiss the location data notice",
+   "target_fixed_text": "OKAY",
+   "choice_input": null
+  },
+  {
+   "step": 4,
+   "id": "enter_zip_code",
+   "intent": "Type {{zip_code}} into the City, State, or ZIP search field",
+   "target_fixed_text": "City, State, or ZIP",
+   "choice_input": null
+  },
+  {
+   "step": 5,
+   "id": "select_zip_code_suggestion",
+   "intent": "Tap the location search suggestion for {{zip_code}}",
+   "target_fixed_text": null,
+   "choice_input": "zip_code"
+  },
+  {
+   "step": 6,
+   "id": "expand_store_list",
+   "intent": "Expand the bottom sheet to show the nearby store list",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 7,
+   "id": "select_pickup_store",
+   "intent": "Tap a pickup store near {{zip_code}}",
+   "target_fixed_text": null,
+   "choice_input": "zip_code"
+  },
+  {
+   "step": 8,
+   "id": "confirm_pickup_location",
+   "intent": "Tap PICK UP HERE to confirm the pickup location and access the menu",
+   "target_fixed_text": "PICK UP HERE",
+   "choice_input": null
+  },
+  {
+   "step": 9,
+   "id": "scroll_to_chips_and_sides",
+   "intent": "Scroll until the CHIPS & SIDES section containing {{menu_item_name}} is visible",
+   "target_fixed_text": "CHIPS & SIDES",
+   "choice_input": null
+  },
+  {
+   "step": 10,
+   "id": "open_chips_and_sides",
+   "intent": "Tap CHIPS & SIDES to view the price of {{menu_item_name}}",
+   "target_fixed_text": "CHIPS & SIDES",
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "price",
+   "near": "CHIPS & GUACAMOLE",
+   "example": "$5.25"
+  }
+ ],
+ "data_values": [
+  "500 W 33rd street · New York, NY 10001",
+  "New York, NY, USA",
+  "Near 10th Ave & 33st Street."
+ ]
+}

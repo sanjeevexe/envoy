@@ -5,7 +5,7 @@
   {
    "version": 1,
    "status": "active",
-   "created": "2026-10-27 00:37:26",
+   "created": "2026-10-27 01:19:21",
    "parent": null,
    "changes": [
     "compiled from p2-src-add_ktn"
@@ -21,7 +21,7 @@
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 3.89,
+      "duration_s": 4.65,
       "outputs": {
        "known_traveler_number": "55501234",
        "confirmation_code": "PT4R8Z"
@@ -36,7 +36,7 @@
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 4.02,
+      "duration_s": 4.66,
       "outputs": {
        "known_traveler_number": "13561597",
        "confirmation_code": "RPOIG8"
@@ -46,63 +46,7 @@
    }
   }
  ],
- "runs": [
-  {
-   "time": "2026-10-27 00:38:31",
-   "kind": "run",
-   "version": 1,
-   "task_id": "p2-newinput-add_ktn-v0-E3K81I",
-   "status": "done",
-   "rung": 0,
-   "model_calls": 0,
-   "duration_s": 3.24,
-   "patches": 0
-  },
-  {
-   "time": "2026-10-27 00:39:10",
-   "kind": "run",
-   "version": 1,
-   "task_id": "p2-newinput-add_ktn-v0-0IGQ1E",
-   "status": "done",
-   "rung": 0,
-   "model_calls": 0,
-   "duration_s": 3.12,
-   "patches": 0
-  },
-  {
-   "time": "2026-10-27 00:39:48",
-   "kind": "run",
-   "version": 1,
-   "task_id": "p2-newinput-add_ktn-v0-UJ0E5F",
-   "status": "done",
-   "rung": 0,
-   "model_calls": 0,
-   "duration_s": 3.32,
-   "patches": 0
-  },
-  {
-   "time": "2026-10-27 00:40:32",
-   "kind": "run",
-   "version": 1,
-   "task_id": "p2-newinput-add_ktn-v0-IQLBYM",
-   "status": "done",
-   "rung": 0,
-   "model_calls": 0,
-   "duration_s": 4.58,
-   "patches": 0
-  },
-  {
-   "time": "2026-10-27 00:41:12",
-   "kind": "run",
-   "version": 1,
-   "task_id": "p2-newinput-add_ktn-v0-KX7Q2M",
-   "status": "done",
-   "rung": 0,
-   "model_calls": 0,
-   "duration_s": 3.02,
-   "patches": 0
-  }
- ],
+ "runs": [],
  "needs_recompile": false,
  "app": "com.skylark.air"
 }

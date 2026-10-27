@@ -1,0 +1,100 @@
+{
+ "name": "skylark_check_in_flight",
+ "intent": "Check in for a SkyLark flight",
+ "description": "Starts SkyLark check-in for the flight to the requested city, selects the passenger, confirms no hazardous materials are being carried, confirms check-in, and returns the boarding pass details shown on completion.",
+ "patterns": [
+  "Check me in for my flight",
+  "Check in for my flight",
+  "Check me in for my upcoming flight"
+ ],
+ "inputs": [
+  {
+   "name": "trip_city",
+   "type": "text",
+   "description": "Destination city of the flight to check in for",
+   "from_memory": null,
+   "example": "Chicago"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "tap_check_in",
+   "intent": "Tap Check in to start check-in for the flight to {{trip_city}}",
+   "target_fixed_text": "Check in",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "select_passenger",
+   "intent": "Select the passenger to check in",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "tap_continue_after_passenger",
+   "intent": "Tap Continue after selecting the passenger",
+   "target_fixed_text": "Continue",
+   "choice_input": null
+  },
+  {
+   "step": 4,
+   "id": "confirm_no_hazardous_materials",
+   "intent": "Toggle the confirmation that I'm not carrying hazardous materials",
+   "target_fixed_text": "I'm not carrying hazardous materials",
+   "choice_input": null
+  },
+  {
+   "step": 5,
+   "id": "tap_continue_after_hazmat",
+   "intent": "Tap Continue after confirming no hazardous materials",
+   "target_fixed_text": "Continue",
+   "choice_input": null
+  },
+  {
+   "step": 6,
+   "id": "confirm_check_in",
+   "intent": "Tap Confirm check-in to complete check-in for the flight to {{trip_city}}",
+   "target_fixed_text": "Confirm check-in",
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "seat",
+   "near": "Seat",
+   "example": "14C"
+  },
+  {
+   "name": "gate",
+   "near": "Gate",
+   "example": "B12"
+  },
+  {
+   "name": "boarding_time",
+   "near": "Boarding",
+   "example": "5:30 AM"
+  },
+  {
+   "name": "boarding_group",
+   "near": "Boarding",
+   "example": "Group 3"
+  },
+  {
+   "name": "flight",
+   "near": "Flight",
+   "example": "SL 482"
+  }
+ ],
+ "data_values": [
+  "Maya Patel",
+  "SL 482",
+  "ATL → ORD",
+  "Fri, Oct 30, 2026",
+  "14C",
+  "B12",
+  "5:30 AM",
+  "Group 3"
+ ]
+}

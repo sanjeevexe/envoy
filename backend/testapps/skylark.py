@@ -1,7 +1,8 @@
 """SkyLark Air, Envoy's test airline app (testapps/skylark), driven through its debug hooks.
 
 Every eval run starts from a known state: `reset()` (bundled fixtures) or `seed()` (custom fixtures),
-a layout `variant` (0 original, 1 moved button, 2 renamed labels, 3 extra confirmation screen),
+a layout `variant` (0 original, 1 moved button, 2 renamed labels, 3 extra confirmation screen,
+4 hidden IDs, 5 renamed labels and hidden IDs),
 then a cold launch. `state()` reads the whole app state, so success checks are exact.
 """
 
@@ -25,7 +26,8 @@ FIXTURES = PROJECT / "app" / "src" / "main" / "assets" / "fixtures.json"
 RECEIVER = f"{PACKAGE}/.DebugReceiver"
 STATE_URI = "content://com.skylark.air.debug/state"
 
-VARIANTS = {0: "original", 1: "moved button", 2: "renamed labels", 3: "extra confirmation screen"}
+VARIANTS = {0: "original", 1: "moved button", 2: "renamed labels", 3: "extra confirmation screen",
+            4: "hidden IDs", 5: "renamed labels and hidden IDs"}
 
 
 def default_fixtures() -> dict[str, Any]:

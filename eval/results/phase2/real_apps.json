@@ -1,0 +1,648 @@
+{
+ "time": "2026-10-27T05:24:08+00:00",
+ "workflows": {
+  "target": {
+   "app": "com.target.ui",
+   "goal": "In the Target app, what are today's hours for my Target store?",
+   "time": "2026-10-27T05:11:45+00:00",
+   "agent": {
+    "status": "handoff",
+    "result": "Bot verification required to enter Target app",
+    "steps": 3,
+    "model_calls": 4,
+    "cost_usd": 0.0074,
+    "duration_s": 19.12,
+    "popups": [
+     "permission prompt: deny"
+    ],
+    "approvals": 0,
+    "check": null
+   },
+   "compile": {
+    "compiled": false,
+    "reason": "run ended 'handoff' with check None; only verified runs are compiled"
+   }
+  },
+  "chipotle": {
+   "app": "com.chipotle.ordering",
+   "goal": "In the Chipotle app, find the price of Chips & Guacamole.",
+   "time": "2026-10-27T05:19:31+00:00",
+   "agent": {
+    "status": "done",
+    "result": "Chips & Guacamole is $5.25",
+    "steps": 14,
+    "model_calls": 18,
+    "cost_usd": 0.0308,
+    "duration_s": 47.44,
+    "popups": [
+     "permission prompt: deny"
+    ],
+    "approvals": 0,
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Chips, Guacamole, 5, 25"
+    }
+   },
+   "compile": {
+    "compiled": true,
+    "routine": "chipotle_get_menu_item_price",
+    "steps": 11,
+    "inputs": {
+     "zip_code": "10001"
+    },
+    "outputs": [
+     "price"
+    ],
+    "dropped": [
+     [
+      2,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      5,
+      "pop-up (permission prompt: deny): the shared handler covers it"
+     ],
+     [
+      9,
+      "look: not a device action"
+     ],
+     [
+      11,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      8,
+      "back-track: steps 8–12 returned to the same screen"
+     ],
+     [
+      10,
+      "back-track: steps 8–12 returned to the same screen"
+     ],
+     [
+      12,
+      "back-track: steps 8–12 returned to the same screen"
+     ]
+    ],
+    "warnings": [
+     "input 'menu_item_name' is never used or shown; dropped"
+    ],
+    "cost_usd": 0.0
+   },
+   "routine_runs": [
+    {
+     "case": "same-inputs",
+     "inputs": {
+      "zip_code": "10001"
+     },
+     "repair_allowed": false,
+     "status": "failed",
+     "detail": "step select_zip_code_suggestion: target not found: no match (best 0.98 < 0.80 or ambiguous, runner-up 0.90)",
+     "outputs": {},
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 11.83,
+     "steps": [
+      {
+       "id": "open_menu",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 2.5 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 3196
+      },
+      {
+       "id": "find_chipote_for_full_menu",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1252
+      },
+      {
+       "id": "dismiss_location_notice",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 970
+      },
+      {
+       "id": "enter_zip_code",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 994
+      },
+      {
+       "id": "select_zip_code_suggestion",
+       "status": "failed",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: waited 5 s"
+       ],
+       "score": null,
+       "detail": "step select_zip_code_suggestion: target not found: no match (best 0.98 < 0.80 or ambiguous, runner-up 0.90)",
+       "ms": 5088
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "same-inputs",
+     "inputs": {
+      "zip_code": "10001"
+     },
+     "repair_allowed": true,
+     "status": "failed",
+     "detail": "step scroll_to_chips_and_sides: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+     "outputs": {},
+     "rung": 4,
+     "model_calls": 3,
+     "cost_usd": 0.0174,
+     "duration_s": 57.02,
+     "steps": [
+      {
+       "id": "open_menu",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 2.4 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2995
+      },
+      {
+       "id": "find_chipote_for_full_menu",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1257
+      },
+      {
+       "id": "dismiss_location_notice",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 815
+      },
+      {
+       "id": "enter_zip_code",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1031
+      },
+      {
+       "id": "select_zip_code_suggestion",
+       "status": "done",
+       "rung": 4,
+       "rungs": [
+        "wait and retry: waited 5 s",
+        "local repair: 1 repair action(s) satisfied the after-checks"
+       ],
+       "score": null,
+       "detail": "",
+       "ms": 5042
+      },
+      {
+       "id": "expand_store_list",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 777
+      },
+      {
+       "id": "find_select_pickup_store",
+       "status": "done",
+       "rung": 2,
+       "rungs": [
+        "wait and retry: scrolled 8 times without finding {text_has='{{zip_code}}', resource_id='view_container', kind='Button'}",
+        "relaxed match: the app skipped ahead to scroll_to_chips_and_sides"
+       ],
+       "score": null,
+       "detail": "",
+       "ms": 13888
+      },
+      {
+       "id": "select_pickup_store",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its screen no longer appears",
+       "ms": 0
+      },
+      {
+       "id": "confirm_pickup_location",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its screen no longer appears",
+       "ms": 0
+      },
+      {
+       "id": "scroll_to_chips_and_sides",
+       "status": "failed",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: scrolled 8 times without finding {text='CHIPS & SIDES', resource_id='view_container', kind='Button'}",
+        "wait and retry: waited 5.0 s"
+       ],
+       "score": null,
+       "detail": "step scroll_to_chips_and_sides: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+       "ms": 9619
+      }
+     ],
+     "patches": [
+      "step 'select_zip_code_suggestion': the element moved or changed; new locator {text_has='{{zip_code}}', text='10001 · New York, NY, USA', resource_id='cl_auto_search', kind='Button'}",
+      "step 'select_pickup_store' removed: its screen no longer appears after 'find_select_pickup_store'; the app went straight to 'scroll_to_chips_and_sides'",
+      "step 'confirm_pickup_location' removed: its screen no longer appears after 'find_select_pickup_store'; the app went straight to 'scroll_to_chips_and_sides'"
+     ],
+     "popups": []
+    }
+   ]
+  },
+  "amazon": {
+   "app": "com.amazon.mShop.android.shopping",
+   "goal": "In the Amazon app, search for AA batteries and tell me the price of the first result.",
+   "time": "2026-10-27T05:20:40+00:00",
+   "agent": {
+    "status": "done",
+    "result": "$13.49 for KODAK AA Alkaline Batteries (24 Pack) - the first result for AA batteries",
+    "steps": 2,
+    "model_calls": 4,
+    "cost_usd": 0.0102,
+    "duration_s": 23.01,
+    "popups": [],
+    "approvals": 0,
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: 13, 49, KODAK, Alkaline"
+    }
+   },
+   "compile": {
+    "compiled": true,
+    "routine": "amazon_search_first_result_price",
+    "steps": 2,
+    "inputs": {
+     "search_query": "AA batteries"
+    },
+    "outputs": [
+     "first_result_price"
+    ],
+    "dropped": [],
+    "warnings": [
+     "output 'first_result_product': 'KODAK AA Alkaline Batteries (24 Pack) Double A Battery, LR6, 1.5V | 10-Year Shelf Life, Advanced Leak-Resistant Design,…' is not on the final screen, or nothing anchors it; dropped"
+    ],
+    "cost_usd": 0.0
+   },
+   "routine_runs": [
+    {
+     "case": "same-inputs",
+     "inputs": {
+      "search_query": "AA batteries"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "first_result_price": "$13.49"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 8.9,
+     "steps": [
+      {
+       "id": "tap_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 4.7 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 5136
+      },
+      {
+       "id": "enter_search_query",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2481
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "second-input",
+     "inputs": {
+      "search_query": "USB-C cable"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "first_result_price": "$15.49"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 9.46,
+     "steps": [
+      {
+       "id": "tap_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 4.1 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 4765
+      },
+      {
+       "id": "enter_search_query",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2904
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ]
+  },
+  "doordash": {
+   "app": "com.dd.doordash",
+   "goal": "In the DoorDash app, what is my saved delivery address?",
+   "time": "2026-10-27T05:07:50+00:00",
+   "agent": {
+    "status": "failed",
+    "result": "[redacted]",
+    "steps": 19,
+    "model_calls": 24,
+    "cost_usd": 0.0494,
+    "duration_s": 73.34,
+    "popups": [],
+    "approvals": 0,
+    "check": null
+   },
+   "compile": {
+    "compiled": false,
+    "reason": "run ended 'failed' with check None; only verified runs are compiled"
+   }
+  },
+  "starbucks": {
+   "app": "com.starbucks.mobilecard",
+   "goal": "In the Starbucks app, how many calories are in a Grande Caffè Latte?",
+   "time": "2026-10-27T05:23:49+00:00",
+   "agent": {
+    "status": "done",
+    "result": "Grande Caffè Latte is 190 calories as shown on the Caffè Latte detail page with Grande (16 fl oz) selected.",
+    "steps": 7,
+    "model_calls": 9,
+    "cost_usd": 0.0129,
+    "duration_s": 25.72,
+    "popups": [],
+    "approvals": 0,
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Grande, Caff, Latte, 190"
+    }
+   },
+   "compile": {
+    "compiled": true,
+    "routine": "starbucks_lookup_drink_calories",
+    "steps": 8,
+    "inputs": {
+     "drink_name": "Caffe Latte"
+    },
+    "outputs": [
+     "calories"
+    ],
+    "dropped": [],
+    "warnings": [],
+    "cost_usd": 0.0
+   },
+   "routine_runs": [
+    {
+     "case": "same-inputs",
+     "inputs": {
+      "drink_name": "Caffe Latte"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "calories": "190 calories"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 9.14,
+     "steps": [
+      {
+       "id": "tap_order",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.9 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2642
+      },
+      {
+       "id": "dismiss_location_prompt",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 595
+      },
+      {
+       "id": "skip_store_selection",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 575
+      },
+      {
+       "id": "confirm_skip_to_menu",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 883
+      },
+      {
+       "id": "open_menu_search",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1029
+      },
+      {
+       "id": "search_for_drink",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1290
+      },
+      {
+       "id": "find_open_drink_details",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 298
+      },
+      {
+       "id": "open_drink_details",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 660
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "second-input",
+     "inputs": {
+      "drink_name": "Caramel Macchiato"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "calories": "250 calories"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 9.24,
+     "steps": [
+      {
+       "id": "tap_order",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.9 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2734
+      },
+      {
+       "id": "dismiss_location_prompt",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 609
+      },
+      {
+       "id": "skip_store_selection",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 650
+      },
+      {
+       "id": "confirm_skip_to_menu",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1143
+      },
+      {
+       "id": "open_menu_search",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 656
+      },
+      {
+       "id": "search_for_drink",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1220
+      },
+      {
+       "id": "find_open_drink_details",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 312
+      },
+      {
+       "id": "open_drink_details",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 697
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ]
+  }
+ }
+}

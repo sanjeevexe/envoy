@@ -1,0 +1,52 @@
+{
+ "name": "skylark_add_known_traveler_number",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-27 01:16:40",
+   "parent": null,
+   "changes": [
+    "compiled from p2-src-v4-add_ktn"
+   ],
+   "verification": {
+    "cases": [
+     {
+      "case": "same-inputs",
+      "inputs": {
+       "trip_city": "Denver",
+       "user_known_traveler_number": "55501234"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 4.0,
+      "outputs": {
+       "known_traveler_number": "55501234",
+       "save_confirmation": "Known traveler number saved"
+      }
+     },
+     {
+      "case": "second-inputs",
+      "inputs": {
+       "trip_city": "Tampa",
+       "user_known_traveler_number": "13561597"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 3.91,
+      "outputs": {
+       "known_traveler_number": "13561597",
+       "save_confirmation": "Known traveler number saved"
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

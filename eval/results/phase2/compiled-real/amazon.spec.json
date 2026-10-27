@@ -1,0 +1,49 @@
+{
+ "name": "amazon_search_first_result_price",
+ "intent": "Search Amazon for a product and report the price of the first result",
+ "description": "Searches Amazon for the requested product, identifies the first result shown, and returns that product's name and price.",
+ "patterns": [
+  "search for a product and tell me the price of the first result",
+  "what is the price of the first result for this product",
+  "look up a product and report its first result price",
+  "find the first result price for a product"
+ ],
+ "inputs": [
+  {
+   "name": "search_query",
+   "type": "text",
+   "description": "The product or search term to look up on Amazon.",
+   "from_memory": null,
+   "example": "AA batteries"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "tap_search",
+   "intent": "Tap Search to open Amazon search",
+   "target_fixed_text": "Search",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "enter_search_query",
+   "intent": "Type {{search_query}} into the Search Amazon field and submit the search",
+   "target_fixed_text": "Search Amazon",
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "first_result_product",
+   "near": "$13.49",
+   "example": "KODAK AA Alkaline Batteries (24 Pack) Double A Battery, LR6, 1.5V | 10-Year Shelf Life, Advanced Leak-Resistant Design,…"
+  },
+  {
+   "name": "first_result_price",
+   "near": "KODAK AA Alkaline Batteries (24 Pack) Double A Battery, LR6, 1.5V | 10-Year Shelf Life, Advanced Leak-Resistant Design,…",
+   "example": "$13.49"
+  }
+ ],
+ "data_values": []
+}

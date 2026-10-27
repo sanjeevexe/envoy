@@ -151,7 +151,7 @@ class Family:
     memory: Callable[[Booking], str]
     check: Callable[[dict[str, Any], dict[str, Any], Booking, dict[str, str | None], str], bool]  # (state, state_before, booking, outputs, answer)
     source_task: str | None = None  # an existing trace to compile instead of a fresh agent run
-    outputs_expected: Callable[[Booking], dict[str, str]] = field(default=lambda b: {})
+    only_booking: Callable[[], Booking] | None = None  # the routine only works for this booking (e.g. the next trip)
 
 
 def _outputs_ok(outputs: dict[str, str | None], expected: dict[str, str]) -> bool:
@@ -159,8 +159,11 @@ def _outputs_ok(outputs: dict[str, str | None], expected: dict[str, str]) -> boo
     return all(v.casefold() in flat for v in expected.values())
 
 
-def _answer_ok(answer: str, outputs: dict[str, str | None], needle: str) -> bool:
-    return needle.casefold() in (answer + " " + " ".join(v or "" for v in outputs.values())).casefold()
+def _answer_ok(answer: str, outputs: dict[str, str | None], *needles: str) -> bool:
+    """Every needle appears as whole words in the answer or the outputs (a loose substring would let "on" match anything)."""
+    from routines.screens import contains_value
+    text = answer + " · " + " · ".join(v or "" for v in outputs.values())
+    return all(contains_value(text, n) for n in needles)
 
 
 FAMILIES: list[Family] = [
@@ -173,8 +176,17 @@ FAMILIES: list[Family] = [
     Family("gate", lambda b: f"What gate does my {b.city} flight leave from?", lambda b: "",
            lambda s, s0, b, o, a: _answer_ok(a, o, b.gate)),
     Family("flight_status", lambda b: f"What's the status of SkyLark flight {b.number}?", lambda b: "",
-           lambda s, s0, b, o, a: _answer_ok(a, o, b.status.split()[0])),
+           lambda s, s0, b, o, a: _answer_ok(a, o, b.status) and (_answer_ok(a, o, b.number) or _answer_ok(a, o, b.airport))),
     Family("find_trip", lambda b: f"Look up my trip with confirmation code {b.code} and tell me where it goes.", lambda b: "Last name: Patel",
            lambda s, s0, b, o, a: _answer_ok(a, o, b.city) or _answer_ok(a, o, b.airport)),
 ]
-BY_ID = {f.id: f for f in FAMILIES}
+# Extra routines for the patch kinds the four layouts don't reach.
+EXTRAS: list[Family] = [
+    # Compiled from the Phase 1 run that checked in through Home's "Check in" button, which always means the next
+    # trip: the routine is valid only for the next trip (an input witness check enforces it). On the moved-button
+    # layout that button is gone, so the step has to be replaced.
+    Family("check_in_next", lambda b: f"Check me in for my flight to {b.city}.", lambda b: "",
+           lambda s, s0, b, o, a: _trip(s, b.code)["checked_in"] and _others_untouched(s, b.code, "checked_in", s0),
+           source_task="p1-final-code-check-checkin-v0-r0", only_booking=lambda: chicago_booking()),
+]
+BY_ID = {f.id: f for f in FAMILIES + EXTRAS}

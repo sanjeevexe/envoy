@@ -49,3 +49,16 @@ The submission form asks for "feedback from your experience using Meta products"
 - **A full-resolution phone screenshot costs about 3,200 input tokens**, about twice the docs' "~1,300–1,500 for ~1280 px". A documented token formula per resolution would help budgeting.
 - SAM 3.1 returns nothing for generic UI phrases such as "button" or "text". Examples of good prompts for screenshots would help.
 - **Billing:** our own account's billing was not working, so the $50 balance and the hackathon's $150 credits couldn't be used, and we fell back to a teammate's key. Faster billing support during a 10-day hackathon would matter.
+
+## Muse Wonder and Muse Spark in Phase 2: compiling app routines (Oct 27)
+
+**What worked well**
+- **Muse Wonder accepts `json_schema` structured output** on the Responses API, so the routine compiler gets a typed answer (inputs, step names, outputs, booking data) in one call. At `medium` effort a compile took a median 14 s, about 2,300 output tokens (1,700 reasoning) and about $0.05.
+- **Wonder's generalization is good where it matters.** Given a cleaned agent trace, it named inputs sensibly (`trip_city`, `desired_seat`, `known_traveler_number` with `from_memory`), wrote generic step intents with `{{slots}}`, and picked the right fixed text inside merged labels ("Next trip" out of "Next trip · Chicago · Fri, Oct 30 …").
+- **Spark at `medium` repaired a broken routine step in one call** (7.2 s, $0.006): on SkyLark's extra-confirmation layout it read the step's intent and after-checks and tapped "Looks good"; the repair was saved as a patch and later runs needed no model.
+- **Spark at `low` matches requests to routines well**: 12/12 on our matching set, including inputs filled from notes and three requests that no routine covers (it declined "Cancel my Denver trip" rather than matching check-in).
+
+**What could be better**
+- **Wonder's answers vary run to run, sometimes structurally.** On a second compile of the same six traces, two answers were wrong in ways that broke replay: one numbered the steps from 0 although the prompt listed them from 1, and one returned field names (`"flight_number"`, `"route"`) in a field described as literal values. Both passed the schema. Envoy now aligns step numbers and ignores identifier-like values in code, and verification by replay caught both before they reached the library. A `strict` schema can't express "these are values, not names"; examples in the docs of prompting Wonder for extraction-style answers would help.
+- **Wonder at `medium` reasons a lot for small jobs**: a one-line naming question used 1,210 reasoning tokens (11 s, $0.025). Guidance on when `low` is enough for Wonder would help budgeting.
+- **Contributor-tier latency**: one `muse-spark-1.3-contributor` call took 5.9 s for a 400-token reply, against about 0.9 s for a typical standard-tier step. We kept all timed comparisons on the standard tier so the Contributor tier wouldn't distort them. Documented latency expectations for the Contributor tier would help.
