@@ -389,12 +389,12 @@ Oct 26, on `envoy-real` (API 35 Google Play, signed in to Play with the dedicate
 
 | App | Installs | Launches | Blocks the emulator? | How far without signing in | Sign-in screen: secure flag; black in scrcpy / screencap / gRPC | Tree on sign-in screen | Session survives restart |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| **Target** | Yes (55 MB; 335 s, mostly first-time Play setup) | Yes | No | Far: home, deals, search, categories, cart. First asks for a home store (zip search; a neutral zip, 10001, was used). | Email step (native): not secure; not black anywhere | Readable. The email field has no label of its own (the text sits in a sibling). The password step needs a real email. | _pending_ |
-| **Starbucks** | Yes | Yes | No | Home, café finder, menu. Ordering needs sign-in. | Chrome Custom Tab (auth.starbucks.com): **secure**; **black / black / visible** | Readable, including `username` and `password` fields; password flagged | _pending_ |
-| **DoorDash** | Yes | Yes, after about 20 s on "Launching…" | **Partly.** Guest "Search Nearby" spins for 40 s+ (blank white screen) | Login screen only (phone, email, Google, Facebook, Apple) | Login screen: not secure; not black | Readable | _pending_ |
+| **Target** | Yes (55 MB; 335 s, mostly first-time Play setup) | Yes | No | Far: home, deals, search, categories, cart. First asks for a home store (zip search; a neutral zip, 10001, was used). | Email step (native): not secure; not black anywhere | Readable. The email field has no label of its own (the text sits in a sibling). The password step needs a real email. | Not tested (not signed in) |
+| **Starbucks** | Yes | Yes | No | Home, café finder, menu. Ordering needs sign-in. | Chrome Custom Tab (auth.starbucks.com): **secure**; **black / black / visible** | Readable, including `username` and `password` fields; password flagged | Not tested (not signed in) |
+| **DoorDash** | Yes | Yes, after about 20 s on "Launching…" | **Partly.** Guest "Search Nearby" spins for 40 s+ (blank white screen) | Login screen only (phone, email, Google, Facebook, Apple). **You signed in with "Continue with Google"**; it then asks for a delivery address. | Login screen: not secure; not black | Readable | **Yes.** Still signed in after a clean shutdown and cold boot. |
 | **Uber Eats** | **No.** Play Store says "Your device isn't compatible with this version." | n/a | **Yes** (at install) | n/a | n/a | n/a | n/a |
-| **Chipotle** | Yes | Yes | No | Home and full menu as a guest | Native sign-in: **not secure**; not black anywhere | Readable; password field flagged | _pending_ |
-| **Amazon** | Yes | Yes | No | Far: home, search, categories, cart | WebView sign-in (`AuthPortalUIActivity`): **secure**; **black / black / visible** | **Not readable.** The WebView puts nothing in the tree, only its container. | _pending_ |
+| **Chipotle** | Yes | Yes | No | Home and full menu as a guest | Native sign-in: **not secure**; not black anywhere | Readable; password field flagged | Not tested (not signed in) |
+| **Amazon** | Yes | Yes | No | Far: home, search, categories, cart | WebView sign-in (`AuthPortalUIActivity`): **secure**; **black / black / visible** | **Not readable.** The WebView puts nothing in the tree, only its container. | Not tested (not signed in) |
 
 **Emulator window on a secure screen** (Amazon sign-in, checked by you): **visible, not black.**
 - On emulators, only scrcpy and `adb screencap` honor `FLAG_SECURE`. The emulator window and its gRPC screenshots both show secure screens.
