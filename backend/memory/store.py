@@ -396,6 +396,37 @@ class MemoryStore:
         self._after_change(other)
         return other
 
+    def delete_source(self, sid: str) -> dict[str, int]:
+        """The user deletes a source (an email, a screen): facts only it supports are retired and the history is
+        re-chained; facts other sources also saw are kept, without this source."""
+        retired = kept = 0
+        touched: set[tuple[str, str]] = set()
+        fids = {r["fact"] for r in self.db.execute("select fact from fact_sources where source = ?", (sid,)).fetchall()}
+        fids |= {r["id"] for r in self.db.execute("select id from facts where source = ?", (sid,)).fetchall()}
+        now = self.clock()
+        for fid in fids:
+            others = self.db.execute("select source from fact_sources where fact = ? and source != ?", (fid, sid)).fetchall()
+            f = self.db.execute("select * from facts where id = ?", (fid,)).fetchone()
+            if f is None:
+                continue
+            if others:
+                self.db.execute("update facts set source = ? where id = ? and source = ?", (others[0]["source"], fid, sid))
+                kept += 1
+            else:
+                self.db.execute("update facts set retired_at = ?, retired_reason = 'source deleted by the user' where id = ?", (now, fid))
+                retired += 1
+            touched.add((f["entity"], f["attribute"]))
+        self.db.execute("delete from fact_sources where source = ?", (sid,))
+        self.db.execute("update sources set snapshot = '', reference = '{}' where id = ?", (sid,))
+        for eid, attr in touched:
+            # The previous value becomes current again if the retired one had replaced it.
+            self.db.execute("update facts set valid_to = null, superseded_by = null where entity = ? and attribute = ? and retired_at is null "
+                            "and superseded_by in (select id from facts where retired_at is not null)", (eid, attr))
+            self._after_change(eid)
+        self._event("source_deleted", {"source": sid, "facts_retired": retired, "facts_kept": kept})
+        self.db.commit()
+        return {"retired": retired, "kept": kept}
+
     # ---- search -----------------------------------------------------------------------------
 
     def _reindex(self, eid: str) -> None:

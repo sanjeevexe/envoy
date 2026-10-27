@@ -1,0 +1,39 @@
+[
+ {
+  "kind": "locator",
+  "step": "open_my_trips",
+  "description": "step 'open_my_trips': target found only by relaxed match; locator updated to {text='Trips', kind='Button'}",
+  "evidence": {
+   "score": 0.733
+  }
+ },
+ {
+  "kind": "locator",
+  "step": "open_change_seat",
+  "description": "step 'open_change_seat': the element moved or changed; new locator {text='Seats', kind='Button'}",
+  "evidence": {
+   "screenshots": [
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-changed-change_seat-v5-FUXUOJ/screens/repair_04_1_before.png",
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-changed-change_seat-v5-FUXUOJ/screens/repair_04_1_after.png"
+   ],
+   "reasons": [
+    "Seats button is the renamed entry to change seat selection"
+   ],
+   "task_id": "p2-changed-change_seat-v5-FUXUOJ"
+  }
+ },
+ {
+  "kind": "check",
+  "step": "find_select_desired_seat",
+  "description": "step 'find_select_desired_seat': after-check 0 matched only relaxed; updated to {text='Seat 21D, aisle, available', kind='Button'}",
+  "evidence": {}
+ },
+ {
+  "kind": "locator",
+  "step": "select_desired_seat",
+  "description": "step 'select_desired_seat': target found only by relaxed match; locator updated to {text_has='{{desired_seat}}', text='Seat', kind='Button'}",
+  "evidence": {
+   "score": 0.758
+  }
+ }
+]

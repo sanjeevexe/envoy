@@ -8,7 +8,7 @@ Full tables: `eval/results/phase2/report.md` (generated from the JSON next to it
 
 ## What was built
 
-All of it is Envoy's own code (`backend/routines/`, about 2,300 lines); no routine, macro or workflow library is used. PyYAML (MIT) reads and writes the files.
+All of it is Envoy's own code (`backend/routines/`, about 2,850 lines); no routine, macro or workflow library is used. PyYAML (MIT) reads and writes the files.
 
 | Part | Where | What it does |
 | --- | --- | --- |

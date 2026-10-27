@@ -1,0 +1,64 @@
+{
+ "name": "skylark_check_in_flight",
+ "active": 2,
+ "versions": [
+  {
+   "version": 1,
+   "status": "retired",
+   "created": "2026-10-27 03:00:38",
+   "parent": null,
+   "changes": [
+    "v1 compiled from p1-final-code-check-checkin-v0-r0"
+   ],
+   "verification": null
+  },
+  {
+   "version": 2,
+   "status": "active",
+   "created": "2026-10-27 03:01:00",
+   "parent": 1,
+   "changes": [
+    "step 'tap_check_in' replaced by tap None, tap Check in"
+   ],
+   "source_task": "p2-changed-check_in_next-v1-KX7Q2M",
+   "screenshots": [
+    "history/v2/repair_01_1_before.png",
+    "history/v2/repair_01_1_after.png",
+    "history/v2/repair_01_2_before.png",
+    "history/v2/repair_01_2_after.png"
+   ],
+   "trial": {
+    "passed": true,
+    "task_id": "p2-trial-check_in_next-v1-KX7Q2M",
+    "status": "done",
+    "duration_s": 2.92
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-27 03:01:00",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-changed-check_in_next-v1-KX7Q2M",
+   "status": "done",
+   "rung": 4,
+   "model_calls": 2,
+   "duration_s": 18.2,
+   "patches": 1
+  },
+  {
+   "time": "2026-10-27 03:01:13",
+   "kind": "run",
+   "version": 2,
+   "task_id": "p2-after-check_in_next-v1-KX7Q2M",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 2.91,
+   "patches": 0
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

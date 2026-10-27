@@ -1,0 +1,16 @@
+[
+ {
+  "kind": "check",
+  "step": "find_select_trip",
+  "description": "step 'find_select_trip': after-check 0 matched only relaxed; updated to {text='Savannah', kind='Button'}",
+  "evidence": {}
+ },
+ {
+  "kind": "locator",
+  "step": "select_trip",
+  "description": "step 'select_trip': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}",
+  "evidence": {
+   "score": 0.791
+  }
+ }
+]

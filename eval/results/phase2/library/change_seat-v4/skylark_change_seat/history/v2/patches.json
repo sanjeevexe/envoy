@@ -1,0 +1,30 @@
+[
+ {
+  "kind": "check",
+  "step": "find_open_trip",
+  "description": "step 'find_open_trip': after-check 0 matched only relaxed; updated to {text='Savannah', kind='Button'}",
+  "evidence": {}
+ },
+ {
+  "kind": "locator",
+  "step": "open_trip",
+  "description": "step 'open_trip': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}",
+  "evidence": {
+   "score": 0.791
+  }
+ },
+ {
+  "kind": "check",
+  "step": "find_select_seat",
+  "description": "step 'find_select_seat': after-check 0 matched only relaxed; updated to {text='Seat 10C, aisle, available', kind='Button'}",
+  "evidence": {}
+ },
+ {
+  "kind": "locator",
+  "step": "select_seat",
+  "description": "step 'select_seat': target found only by relaxed match; locator updated to {text_has='{{desired_seat}}', text='Seat', resource_id='seat_{{desired_seat}}', kind='Button'}",
+  "evidence": {
+   "score": 0.62
+  }
+ }
+]

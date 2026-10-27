@@ -46,13 +46,13 @@ def save(name: str, payload: Any) -> None:
     (OUT / f"{name}.json").write_text(json.dumps(payload, indent=1, default=str, ensure_ascii=False))
 
 
-def bookings_for_eval() -> list[Booking]:
-    """Chicago (the next trip), Denver, four new bookings, and a second Denver trip on another date (a hard case)."""
-    extra = generate(2024, 5)
+def bookings_for_eval(n_new: int = 4) -> list[Booking]:
+    """Chicago (the next trip), Denver, n new bookings, and a second Denver trip on another date (a hard case)."""
+    extra = generate(2024, n_new + 1)
     second_denver = copy.deepcopy(extra[-1])
     second_denver.city, second_denver.airport, second_denver.code = "Denver", "DEN", "DN7Q4X"
     second_denver.date, second_denver.number = "Fri, Dec 4, 2026", "SL 1192"
-    return [chicago_booking(), compile_booking()] + extra[:4] + [second_denver]
+    return [chicago_booking(), compile_booking()] + extra[:n_new] + [second_denver]
 
 
 class Clock:
@@ -109,7 +109,7 @@ def source_kinds(store: MemoryStore, eid: str) -> set[str]:
 
 
 async def cmd_emails(args: argparse.Namespace) -> dict:
-    bookings = bookings_for_eval()
+    bookings = bookings_for_eval(args.new_bookings)
     mails = build_inbox(bookings, seed=args.seed)
     inbox = WORK / "inbox"
     write_inbox(mails, inbox)
@@ -149,12 +149,58 @@ async def cmd_emails(args: argparse.Namespace) -> dict:
         "attributes": tot, "recall": round(tot["found"] / max(1, sum(tot.values())), 3),
         "precision": round(tot["found"] / max(1, tot["found"] + tot["wrong"]), 3),
         "by_method": {m: {k: sum(r[k] for r in rows if r["method"] == m) for k in ("found", "wrong", "missing")} for m in ("markup", "model")},
-        "bookings_one_trip_one_flight": f"{sum(r['ok'] for r in match_rows)}/{len(match_rows)}",
+        "bookings": len(bookings), "bookings_one_trip_one_flight": f"{sum(r['ok'] for r in match_rows)}/{len(match_rows)}",
         "trips_without_a_booking": promo_trips, "cancelled_marked": cancelled_ok, "denver_trips_kept_apart": len(denvers) == 2,
         "traceable": traceable, "entities": {t: len(store.entities(t)) for t in ("Trip", "Flight", "Person", "Order", "Item")},
     }
     print(json.dumps(summary, indent=1))
-    save("emails", {"time": now(), "summary": summary, "rows": rows, "matching": match_rows})
+    save(args.name or "emails", {"time": now(), "summary": summary, "rows": rows, "matching": match_rows})
+    return summary
+
+
+# ---- 2. app screens -------------------------------------------------------------------------------
+
+
+async def cmd_screens(args: argparse.Namespace) -> dict:
+    """Each booking's trip details screen in SkyLark (reached by the gate routine, no model), read by Muse Spark,
+    scored against the booking."""
+    from devices.emulator import EmulatorDevice
+    from policy.approvals import ScriptedApprover
+    from routines.executor import ExecConfig, RoutineExecutor
+    from routines.store import RoutineStore
+    from testapps.skylark import SkyLark
+    from memory import extract as ex_mod
+
+    bookings = [chicago_booking(), compile_booking()] + generate(5150, args.new_bookings)
+    routines = RoutineStore(REPO / "data" / "routines")
+    gate_routine = routines.get(next(n for n in routines.names() if "gate" in n and "flight_status" not in n))
+    device = EmulatorDevice("envoy-test").connect()
+    app = SkyLark(device.serial)
+    adapter = ModelAdapter()
+    ex = RoutineExecutor(device, adapter=adapter, approver=ScriptedApprover(True), config=ExecConfig(data_scope="test_app"))
+    fx = fixtures(bookings[2:])
+    rows, cost = [], 0.0
+    for b in bookings:
+        app.prepare(fixtures=fx, variant=0)
+        out = await ex.run(gate_routine, {"trip_city": b.city}, task_id=f"p3-screen-{b.code}", launch="never")
+        screen = await device.observe()
+        extraction = await ex_mod.from_screen(screen, adapter, data_scope="test_app", task_id="p3-screens")
+        cost += extraction.cost_usd
+        truth = [{"type": "Trip", "confirmation_code": b.code, "destination": b.city},
+                 {"type": "Flight", "number": b.number, "date": b.date, "gate": b.gate, "seat": b.seat, "depart_time": b.depart}]
+        sc = score_extraction(extraction.entities, truth)
+        with_evidence = sum(1 for e in extraction.entities for o in e.observations if o.evidence)
+        total_obs = sum(len(e.observations) for e in extraction.entities)
+        rows.append({"booking": b.code, "city": b.city, "routine": out.status, **sc, "dropped": extraction.dropped,
+                     "evidence": f"{with_evidence}/{total_obs}"})
+        print(f"{b.code} {b.city:12s} routine={out.status} found={sc['found']} wrong={sc['wrong']} missing={sc['missing']} "
+              f"dropped={extraction.dropped[:2]} evidence={with_evidence}/{total_obs}", flush=True)
+    app.prepare()
+    tot = {k: sum(r[k] for r in rows) for k in ("found", "wrong", "missing")}
+    summary = {"screens": len(rows), "attributes": tot, "recall": round(tot["found"] / max(1, sum(tot.values())), 3),
+               "precision": round(tot["found"] / max(1, tot["found"] + tot["wrong"]), 3), "model_calls": len(rows), "cost_usd": round(cost, 4)}
+    print(json.dumps(summary, indent=1))
+    save("screens", {"time": now(), "summary": summary, "rows": rows})
     return summary
 
 
@@ -287,11 +333,13 @@ def device_actions(device: Any) -> int:
 
 async def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["emails", "gate"])
+    ap.add_argument("cmd", choices=["emails", "screens", "gate"])
     ap.add_argument("--seed", type=int, default=3)
+    ap.add_argument("--new-bookings", type=int, default=4)
+    ap.add_argument("--name", default=None)
     args = ap.parse_args()
     WORK.mkdir(parents=True, exist_ok=True)
-    await {"emails": cmd_emails, "gate": cmd_gate}[args.cmd](args)
+    await {"emails": cmd_emails, "screens": cmd_screens, "gate": cmd_gate}[args.cmd](args)
     return 0
 
 

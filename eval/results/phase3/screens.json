@@ -1,0 +1,137 @@
+{
+ "time": "2026-10-27T07:17:59+00:00",
+ "summary": {
+  "screens": 12,
+  "attributes": {
+   "found": 82,
+   "wrong": 0,
+   "missing": 2
+  },
+  "recall": 0.976,
+  "precision": 1.0,
+  "model_calls": 12,
+  "cost_usd": 0.0862
+ },
+ "rows": [
+  {
+   "booking": "KX7Q2M",
+   "city": "Chicago",
+   "routine": "done",
+   "found": 6,
+   "wrong": 0,
+   "missing": 1,
+   "dropped": [],
+   "evidence": "13/13"
+  },
+  {
+   "booking": "PT4R8Z",
+   "city": "Denver",
+   "routine": "done",
+   "found": 7,
+   "wrong": 0,
+   "missing": 0,
+   "dropped": [],
+   "evidence": "14/14"
+  },
+  {
+   "booking": "LRK51J",
+   "city": "Spokane",
+   "routine": "done",
+   "found": 7,
+   "wrong": 0,
+   "missing": 0,
+   "dropped": [],
+   "evidence": "16/16"
+  },
+  {
+   "booking": "M1W6JU",
+   "city": "Dallas",
+   "routine": "done",
+   "found": 7,
+   "wrong": 0,
+   "missing": 0,
+   "dropped": [],
+   "evidence": "14/14"
+  },
+  {
+   "booking": "9RF5TP",
+   "city": "Portland",
+   "routine": "done",
+   "found": 7,
+   "wrong": 0,
+   "missing": 0,
+   "dropped": [],
+   "evidence": "14/14"
+  },
+  {
+   "booking": "4VPHVZ",
+   "city": "Louisville",
+   "routine": "done",
+   "found": 6,
+   "wrong": 0,
+   "missing": 1,
+   "dropped": [],
+   "evidence": "13/13"
+  },
+  {
+   "booking": "TYV7EN",
+   "city": "Sacramento",
+   "routine": "done",
+   "found": 7,
+   "wrong": 0,
+   "missing": 0,
+   "dropped": [],
+   "evidence": "16/16"
+  },
+  {
+   "booking": "L3N6SJ",
+   "city": "Minneapolis",
+   "routine": "done",
+   "found": 7,
+   "wrong": 0,
+   "missing": 0,
+   "dropped": [],
+   "evidence": "16/16"
+  },
+  {
+   "booking": "8GYFPZ",
+   "city": "Buffalo",
+   "routine": "done",
+   "found": 7,
+   "wrong": 0,
+   "missing": 0,
+   "dropped": [],
+   "evidence": "14/14"
+  },
+  {
+   "booking": "S4PDGI",
+   "city": "Omaha",
+   "routine": "done",
+   "found": 7,
+   "wrong": 0,
+   "missing": 0,
+   "dropped": [],
+   "evidence": "16/16"
+  },
+  {
+   "booking": "MQZ5ZZ",
+   "city": "Boise",
+   "routine": "done",
+   "found": 7,
+   "wrong": 0,
+   "missing": 0,
+   "dropped": [],
+   "evidence": "14/14"
+  },
+  {
+   "booking": "CS6BIJ",
+   "city": "Albuquerque",
+   "routine": "done",
+   "found": 7,
+   "wrong": 0,
+   "missing": 0,
+   "dropped": [],
+   "evidence": "14/14"
+  }
+ ]
+}

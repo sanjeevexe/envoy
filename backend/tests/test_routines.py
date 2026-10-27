@@ -199,7 +199,7 @@ def test_apply_patches_inserts_replaces_removes_and_relocates():
     ])
     assert len(changes) == 3
     ids = [s.id for s in patched.steps]
-    assert ids[1] == "extra" and r.steps[1].id not in ids
+    assert ids[1] == "extra" and next(s for s in patched.steps if s.id == r.steps[1].id).optional  # "removed" = optional, kept
     assert patched.steps[-1].action.target.text == "Save number"
     assert r.steps[1].id in [s.id for s in r.steps]  # the base version is untouched
 
@@ -255,3 +255,29 @@ def test_screen_without_ids_does_not_count_ids_against_elements():
     assert locators.locate(title, s, role="check").ok  # strict: the app shows no IDs anywhere, so the label carries it
     tab = Locator(resource_id="nav_trips", text="My Trips", kind="Button")
     assert locators.locate(tab, s).element.label == "My Trips"
+
+
+def test_outputs_fall_back_to_labels_when_ids_and_merged_rows_are_gone():
+    s = _labels_screen([("Text", "You're checked in", False), ("Text", "Seat", False), ("Text", "22F", False),
+                        ("Text", "Gate", False), ("Text", "A7", False)])
+    spec = Extract(near="Seat", locator=Locator(resource_id="row_bp_seat", kind="Text"), segment=1)
+    assert extract_value(spec, s, {}) == "22F"
+    assert extract_value(Extract(near="Gate", locator=Locator(resource_id="row_bp_gate", kind="Text"), segment=1), s, {}) == "A7"
+
+
+def test_patched_row_locator_keeps_fixed_text_and_id():
+    s = screen("skylark_trips")
+    row = next(e for e in s.numbered if "Chicago" in e.label)
+    loc = Locator(resource_id="trip_row_*", text_has="{{trip_city}}", kind="Button", in_list=True)
+    new = locators.updated(loc, row, s)
+    assert new.text_has == "{{trip_city}}" and new.resource_id == "trip_row_*" and new.text is None  # no booking data copied in
+    assert locators.locate(new, s, {"trip_city": "Denver"}).element.label.startswith("Denver")
+
+
+def test_patched_locator_remembers_the_old_label():
+    s_new = _labels_screen([("Button", "Seats", False), ("Button", "Cancel trip", False)])
+    s_old = _labels_screen([("Button", "Change seat", False), ("Button", "Cancel trip", False)])
+    loc = Locator(text="Change seat", kind="Button")
+    patched = locators.updated(loc, s_new.numbered[0], s_new)
+    assert patched.text == "Seats" and "Change seat" in patched.alt_texts
+    assert locators.locate(patched, s_old).element.label == "Change seat"  # back on the old labels, still found

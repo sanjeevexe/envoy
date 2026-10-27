@@ -1,0 +1,338 @@
+{
+ "time": "2026-10-27T07:21:19+00:00",
+ "summary": {
+  "passed": true,
+  "steps_ok": "18/18",
+  "duration_s": 190.5,
+  "entities": {
+   "Trip": 7,
+   "Flight": 7,
+   "Person": 1,
+   "Order": 1
+  },
+  "facts": 144,
+  "events": 175
+ },
+ "steps": [
+  {
+   "step": "inbox ingested",
+   "ok": true,
+   "emails": 14,
+   "trips": 7,
+   "flights": 7
+  },
+  {
+   "step": "app read for Chicago KX7Q2M",
+   "ok": true,
+   "inputs": {
+    "trip_city": "Chicago"
+   },
+   "input_sources": {
+    "trip_city": "Trip Chicago · Fri, Oct 30, 2026 (destination): email from SkyLark Air, Oct 1"
+   },
+   "outputs": {
+    "gate": "B12"
+   },
+   "screen_resolved": [
+    [
+     "Trip",
+     "key"
+    ],
+    [
+     "Flight",
+     "key"
+    ]
+   ],
+   "routine_resolved": [
+    [
+     "Trip",
+     "anchor"
+    ],
+    [
+     "Flight",
+     "anchor"
+    ]
+   ],
+   "dropped": []
+  },
+  {
+   "step": "app read for Denver PT4R8Z",
+   "ok": true,
+   "inputs": {
+    "trip_city": "Denver"
+   },
+   "input_sources": {
+    "trip_city": "Trip Denver · Sat, Nov 14, 2026 (destination): email from SkyLark Air, Oct 2"
+   },
+   "outputs": {
+    "gate": "A7"
+   },
+   "screen_resolved": [
+    [
+     "Trip",
+     "key"
+    ],
+    [
+     "Flight",
+     "key"
+    ]
+   ],
+   "routine_resolved": [
+    [
+     "Trip",
+     "anchor"
+    ],
+    [
+     "Flight",
+     "anchor"
+    ]
+   ],
+   "dropped": []
+  },
+  {
+   "step": "app read for Louisville 0Q8P5W",
+   "ok": true,
+   "inputs": {
+    "trip_city": "Louisville"
+   },
+   "input_sources": {
+    "trip_city": "Trip Louisville · Fri, Dec 4, 2026 (destination): email from SkyLark Air, Oct 3"
+   },
+   "outputs": {
+    "gate": "E3"
+   },
+   "screen_resolved": [
+    [
+     "Trip",
+     "key"
+    ],
+    [
+     "Flight",
+     "key"
+    ]
+   ],
+   "routine_resolved": [
+    [
+     "Trip",
+     "anchor"
+    ],
+    [
+     "Flight",
+     "anchor"
+    ]
+   ],
+   "dropped": []
+  },
+  {
+   "step": "app read for Savannah 3J8N0D",
+   "ok": true,
+   "inputs": {
+    "trip_city": "Savannah"
+   },
+   "input_sources": {
+    "trip_city": "Trip Savannah · Sun, Nov 22, 2026 (destination): email from SkyLark Air, Oct 4"
+   },
+   "outputs": {
+    "gate": "C13"
+   },
+   "screen_resolved": [
+    [
+     "Trip",
+     "key"
+    ],
+    [
+     "Flight",
+     "key"
+    ]
+   ],
+   "routine_resolved": [
+    [
+     "Trip",
+     "anchor"
+    ],
+    [
+     "Flight",
+     "anchor"
+    ]
+   ],
+   "dropped": []
+  },
+  {
+   "step": "app read for Boise MU10UN",
+   "ok": true,
+   "inputs": {
+    "trip_city": "Boise"
+   },
+   "input_sources": {
+    "trip_city": "Trip Boise · Wed, Nov 25, 2026 (destination): email from SkyLark Air, Oct 5"
+   },
+   "outputs": {
+    "gate": "A28"
+   },
+   "screen_resolved": [
+    [
+     "Trip",
+     "key"
+    ],
+    [
+     "Flight",
+     "key"
+    ]
+   ],
+   "routine_resolved": [
+    [
+     "Trip",
+     "anchor"
+    ],
+    [
+     "Flight",
+     "anchor"
+    ]
+   ],
+   "dropped": []
+  },
+  {
+   "step": "app read for Tampa U0HVOP",
+   "ok": true,
+   "inputs": {
+    "trip_city": "Tampa"
+   },
+   "input_sources": {
+    "trip_city": "Trip Tampa · Thu, Dec 10, 2026 (destination): email from SkyLark Air, Oct 6"
+   },
+   "outputs": {
+    "gate": "E27"
+   },
+   "screen_resolved": [
+    [
+     "Flight",
+     "key"
+    ],
+    [
+     "Trip",
+     "link"
+    ]
+   ],
+   "routine_resolved": [
+    [
+     "Trip",
+     "anchor"
+    ],
+    [
+     "Flight",
+     "anchor"
+    ]
+   ],
+   "dropped": []
+  },
+  {
+   "step": "one trip for Chicago KX7Q2M",
+   "ok": true,
+   "trips": 1,
+   "flights": 1,
+   "sources": [
+    "app_screen",
+    "email"
+   ]
+  },
+  {
+   "step": "one trip for Denver PT4R8Z",
+   "ok": true,
+   "trips": 1,
+   "flights": 1,
+   "sources": [
+    "app_screen",
+    "email",
+    "email_markup"
+   ]
+  },
+  {
+   "step": "one trip for Louisville 0Q8P5W",
+   "ok": true,
+   "trips": 1,
+   "flights": 1,
+   "sources": [
+    "app_screen",
+    "email"
+   ]
+  },
+  {
+   "step": "one trip for Savannah 3J8N0D",
+   "ok": true,
+   "trips": 1,
+   "flights": 1,
+   "sources": [
+    "app_screen",
+    "email_markup"
+   ]
+  },
+  {
+   "step": "one trip for Boise MU10UN",
+   "ok": true,
+   "trips": 1,
+   "flights": 1,
+   "sources": [
+    "app_screen",
+    "email"
+   ]
+  },
+  {
+   "step": "one trip for Tampa U0HVOP",
+   "ok": true,
+   "trips": 1,
+   "flights": 1,
+   "sources": [
+    "app_screen",
+    "email",
+    "email_markup"
+   ]
+  },
+  {
+   "step": "What's my gate? (from memory)",
+   "ok": true,
+   "answer": "Gate B12, from the SkyLark app just now.",
+   "stale": false,
+   "supported": true,
+   "notes": "## Flight: SL 482 · Fri, Oct 30, 2026  [[Trip Chicago · Fri, Oct 30, 2026]]  (the next upcoming flight)\n- Airline: SkyLark Air — email from SkyLark Air, Oct 1\n- Number: SL 482 — SkyLark app, just now (also email from SkyLark Air, Oct 1)\n- Date: Fri, Oct 30, 2026 — SkyLark app, just now (also email from SkyLark Air, Oct 1)\n- From: Atlanta (ATL) — SkyLark app, just now (also email from SkyLark Air, Oct 1)\n- To: Chicago (ORD) — SkyLark app, just now (also email from SkyLark Air, Oct 1)\n- Departs: 6:10 AM — SkyLark app, just now (also email from SkyLark Air, Oct 1)\n- Arrives: 7:25 AM — SkyLark app, just now (also email from SkyLark Air, Oct 1)\n- Gate: B12 — SkyLark app (routine skylark_get_flight_gate), just now (also SkyLark app, just now)\n- Seat: 14C — SkyLark app, just now (also email from SkyLark Air, Oct 1)\n- Boarding: 5:30 AM — SkyLark app, just now\n- Boarding group: Group 3 — SkyLark app, just now\n- Status: On time — SkyLark app, just now\n- Confirmation: KX7Q2M — SkyLark app, just now (also email from SkyLark Air, Oct 1)\n\n## Trip: Chicago · Fri, Oct 30, 2026  [[Flight SL 482 · Fri, Oct 30, 2026]] [[Person Maya Patel]]  (the next upcoming trip)\n- Destination: Chicago — SkyLark ap"
+  },
+  {
+   "step": "gate change replaces the old value",
+   "ok": true,
+   "answer": "Gate C14, from the SkyLark app just now.",
+   "history": [
+    "B12",
+    "C14"
+   ]
+  },
+  {
+   "step": "a 45-minute-old gate is marked stale",
+   "ok": true,
+   "answer": "Gate C14, from the SkyLark app 45 minutes ago, but it may have changed.",
+   "stale_lines": 10
+  },
+  {
+   "step": "check me in, filled from memory",
+   "ok": true,
+   "routine": "skylark_check_in_flight",
+   "inputs": {
+    "trip_city": "Chicago"
+   },
+   "sources": {},
+   "outputs": {
+    "seat": "14C",
+    "gate": "B12",
+    "boarding_time": "5:30 AM",
+    "boarding_group": "Group 3",
+    "flight": "SL 482"
+   },
+   "memory_seat": "14C",
+   "model_calls": 1
+  },
+  {
+   "step": "every fact has a source",
+   "ok": true,
+   "facts": 144,
+   "traceable": 144
+  }
+ ]
+}

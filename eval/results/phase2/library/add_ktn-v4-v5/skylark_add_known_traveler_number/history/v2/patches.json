@@ -1,0 +1,10 @@
+[
+ {
+  "kind": "locator",
+  "step": "open_my_trips",
+  "description": "step 'open_my_trips': target found only by relaxed match; locator updated to {text='Trips', kind='Button'}",
+  "evidence": {
+   "score": 0.733
+  }
+ }
+]

@@ -44,10 +44,19 @@ class SkyLark:
             raise RuntimeError(f"adb {' '.join(args[:3])}… failed: {out.stderr.strip() or out.stdout.strip()}")
         return out.stdout
 
-    def _broadcast(self, action: str, *extras: str) -> None:
-        out = self._adb("shell", "am", "broadcast", "-n", RECEIVER, "-a", f"{PACKAGE}.{action}", *extras)
-        if 'result=0' not in out:
-            raise RuntimeError(f"SkyLark {action} failed: {out.strip()}")
+    def _broadcast(self, action: str, *extras: str, attempts: int = 3) -> None:
+        """A debug hook; retried, since a broadcast can fail while the app is still starting."""
+        last = ""
+        for i in range(attempts):
+            try:
+                out = self._adb("shell", "am", "broadcast", "-n", RECEIVER, "-a", f"{PACKAGE}.{action}", *extras)
+                if 'result=0' in out:
+                    return
+                last = out.strip()
+            except RuntimeError as e:
+                last = str(e)
+            time.sleep(0.5 * (i + 1))
+        raise RuntimeError(f"SkyLark {action} failed: {last}")
 
     # ---- install and state -----------------------------------------------------------------
 

@@ -54,10 +54,12 @@ def apply_patches(base: Routine, patches: list[Patch]) -> tuple[Routine, list[st
         elif p.kind == "post" and p.checks:
             step.post = p.checks
         elif p.kind == "remove":
-            # The screen that used to follow this step now follows the one before it.
+            # The screen this step handled no longer appears: what used to follow it now follows the step before, and
+            # the step becomes optional (skipped when its screen doesn't come, used if it ever does) rather than
+            # deleted, so the patched routine still runs on the old layout.
             if i > 0 and r.steps[i].post and any(c.kind != "screen_changed" for c in r.steps[i].post):
-                r.steps[i - 1].post = r.steps[i].post
-            del r.steps[i]
+                r.steps[i - 1].post = [c.model_copy(deep=True) for c in r.steps[i].post]
+            r.steps[i].optional = True
         elif p.kind == "replace" and p.steps:
             r.steps[i:i + 1] = p.steps
         elif p.kind == "insert_before" and p.steps:

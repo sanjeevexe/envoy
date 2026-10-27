@@ -122,3 +122,19 @@ def test_staleness_follows_freshness_rules(mem):
     c.tick(45 * 60)
     gate, seat = m.current(f, "gate"), m.current(f, "seat")
     assert m.is_stale(gate, "Flight") and not m.is_stale(seat, "Flight")
+
+
+def test_deleting_a_source_retires_only_what_it_alone_supports(mem):
+    m, c = mem
+    f = m.create_entity("Flight")
+    email = m.add_source("email", {"subject": "confirmation"})
+    app = m.add_source("app_screen", {"app": "com.skylark.air"})
+    m.observe(f, "seat", "14C", source=email, observed_at=c.t - 86400)
+    m.observe(f, "seat", "14C", source=app)  # the app saw the same seat
+    m.observe(f, "gate", "B12", source=email, observed_at=c.t - 86400)
+    c.tick(60)
+    m.observe(f, "gate", "C14", source=app)
+    res = m.delete_source(app)
+    assert res == {"retired": 1, "kept": 1}
+    assert m.current(f, "seat")["value"] == "14C"  # still supported by the email
+    assert m.current(f, "gate")["value"] == "B12"  # the app's C14 is gone; the email's value is current again

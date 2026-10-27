@@ -48,6 +48,7 @@ class Locator(_Model):
     resource_id: str | None = None
     text: str | None = None  # the element's label as the agent saw it (own text, else desc, else merged child text)
     text_has: str | None = None
+    alt_texts: list[str] = Field(default_factory=list)  # earlier labels of the same element (kept by patches: "Change seat" → "Seats")
     desc: str | None = None
     hint: str | None = None  # a text field's label
     kind: str | None = None  # Button, Text, EditText, Toggle, Switch, List, Tab, ...

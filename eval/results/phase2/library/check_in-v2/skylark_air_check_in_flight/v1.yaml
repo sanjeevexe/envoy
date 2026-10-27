@@ -1,7 +1,7 @@
 routine: skylark_air_check_in_flight
 app: com.skylark.air
 version: 1
-status: active
+status: retired
 intent: Check in for a SkyLark flight
 description: Check in for a SkyLark flight to a selected city by going to My Trips, opening that trip, selecting the passenger, confirming no
   hazardous materials, and confirming check-in to obtain the boarding pass.

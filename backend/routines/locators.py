@@ -172,7 +172,7 @@ def score(loc: Locator, e: Element, screen: ScreenState, *, use_ids: bool = True
     if use_ids and loc.resource_id and usable_id(loc.resource_id):
         add("resource_id", 1.0 if id_matches(loc.resource_id, short_id(e.resource_id)) else 0.0)
     if loc.text:
-        add("text", max(text_similarity(loc.text, label), text_similarity(loc.text, e.text) if e.text else 0.0))
+        add("text", max([text_similarity(t, label) for t in [loc.text, *loc.alt_texts]] + [text_similarity(loc.text, e.text) if e.text else 0.0]))
     elif loc.text_has:
         # Several rows can show the input ("Caffè Latte", "Iced Caffè Latte"): the one that is exactly it ranks first.
         add("text", text_similarity(loc.text_has, label))
@@ -247,11 +247,21 @@ def locate(loc: Locator, screen: ScreenState, inputs: dict[str, str] | None = No
 def updated(loc: Locator, e: Element, screen: ScreenState) -> Locator:
     """A locator patched to a new look of the same element (after a relaxed match or a repair).
 
-    Input-bound parts ({{slots}} in text_has, resource_id) are kept as they were."""
+    Input-bound parts ({{slots}}, `text_has`) are kept. For an element chosen by an input (a list row), the new
+    label, neighbors and position are this run's booking data, so its old fixed text stays. An ID the new screen
+    doesn't show (a build without IDs) is kept rather than dropped: such screens ignore IDs anyway."""
     fresh = build(e, screen)
-    keep = {"text_has": loc.text_has}
+    upd: dict = {"text_has": loc.text_has}
+    if not fresh.resource_id and loc.resource_id:
+        upd["resource_id"] = loc.resource_id
     if loc.resource_id and "{{" in loc.resource_id:
-        keep["resource_id"] = loc.resource_id
+        upd["resource_id"] = loc.resource_id
     if loc.text and "{{" in loc.text:
-        keep["text"] = loc.text
-    return fresh.model_copy(update={k: v for k, v in keep.items() if v})
+        upd["text"] = loc.text
+    if loc.text_has or loc.in_list:
+        upd.update(text=loc.text, siblings=loc.siblings, position=loc.position, parent=loc.parent or fresh.parent, desc=loc.desc,
+                   resource_id=loc.resource_id or fresh.resource_id)
+    new_text = upd.get("text", fresh.text)
+    # The old label stays known: the same routine still matches the element if the app goes back to it.
+    upd["alt_texts"] = [t for t in dict.fromkeys([*loc.alt_texts, loc.text or ""]) if t and t != new_text and "{{" not in t][:4]
+    return fresh.model_copy(update={k: v for k, v in upd.items() if v is not None or k in ("text", "position")})

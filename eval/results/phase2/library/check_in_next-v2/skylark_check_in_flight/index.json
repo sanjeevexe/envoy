@@ -1,0 +1,61 @@
+{
+ "name": "skylark_check_in_flight",
+ "active": 2,
+ "versions": [
+  {
+   "version": 1,
+   "status": "retired",
+   "created": "2026-10-27 03:01:20",
+   "parent": null,
+   "changes": [
+    "v1 compiled from p1-final-code-check-checkin-v0-r0"
+   ],
+   "verification": null
+  },
+  {
+   "version": 2,
+   "status": "active",
+   "created": "2026-10-27 03:01:29",
+   "parent": 1,
+   "changes": [
+    "step 'tap_continue_after_passenger': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}",
+    "step 'tap_continue_after_hazmat': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}",
+    "step 'tap_check_in': after-checks failed (no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) but the next step was ready; after-checks rewritten from what happened"
+   ],
+   "source_task": "p2-changed-check_in_next-v2-KX7Q2M",
+   "screenshots": [],
+   "trial": {
+    "passed": true,
+    "task_id": "p2-trial-check_in_next-v2-KX7Q2M",
+    "status": "done",
+    "duration_s": 2.44
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-27 03:01:29",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-changed-check_in_next-v2-KX7Q2M",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 5.25,
+   "patches": 3
+  },
+  {
+   "time": "2026-10-27 03:01:41",
+   "kind": "run",
+   "version": 2,
+   "task_id": "p2-after-check_in_next-v2-KX7Q2M",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 2.44,
+   "patches": 0
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

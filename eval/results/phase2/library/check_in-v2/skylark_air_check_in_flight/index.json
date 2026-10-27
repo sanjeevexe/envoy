@@ -1,19 +1,63 @@
 {
  "name": "skylark_air_check_in_flight",
- "active": 1,
+ "active": 2,
  "versions": [
   {
    "version": 1,
-   "status": "active",
-   "created": "2026-10-27 02:47:41",
+   "status": "retired",
+   "created": "2026-10-27 02:54:46",
    "parent": null,
    "changes": [
     "v1 compiled from p2-src-check_in"
    ],
    "verification": null
+  },
+  {
+   "version": 2,
+   "status": "active",
+   "created": "2026-10-27 02:54:58",
+   "parent": 1,
+   "changes": [
+    "step 'continue_after_passenger': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}",
+    "step 'continue_after_hazmat': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}",
+    "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}",
+    "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}",
+    "step 'start_check_in': after-checks failed (no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) but the next step was ready; after-checks rewritten from what happened"
+   ],
+   "source_task": "p2-changed-check_in-v2-EMQC52",
+   "screenshots": [],
+   "trial": {
+    "passed": true,
+    "task_id": "p2-trial-check_in-v2-A4MD1L",
+    "status": "done",
+    "duration_s": 3.91
+   }
   }
  ],
- "runs": [],
+ "runs": [
+  {
+   "time": "2026-10-27 02:54:58",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-changed-check_in-v2-EMQC52",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 7.64,
+   "patches": 5
+  },
+  {
+   "time": "2026-10-27 02:55:12",
+   "kind": "run",
+   "version": 2,
+   "task_id": "p2-after-check_in-v2-CIZ4PU",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.88,
+   "patches": 0
+  }
+ ],
  "needs_recompile": false,
  "app": "com.skylark.air"
 }

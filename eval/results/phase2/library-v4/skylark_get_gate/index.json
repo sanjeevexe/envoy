@@ -42,7 +42,41 @@
    }
   }
  ],
- "runs": [],
+ "runs": [
+  {
+   "time": "2026-10-27 03:03:35",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-gate-v4-E3K81I",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 1.64,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-27 03:04:17",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-gate-v4-0IGQ1E",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 1.64,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-27 03:04:58",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-gate-v4-UJ0E5F",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 1.62,
+   "patches": 0
+  }
+ ],
  "needs_recompile": false,
  "app": "com.skylark.air"
 }

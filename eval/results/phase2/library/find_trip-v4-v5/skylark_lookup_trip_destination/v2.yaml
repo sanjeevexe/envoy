@@ -1,0 +1,77 @@
+routine: skylark_lookup_trip_destination
+app: com.skylark.air
+version: 2
+status: active
+intent: Look up a SkyLark trip by confirmation code and find its destination
+description: Opens My Trips, selects the trip matching the given confirmation code, and reports the destination shown for that trip.
+patterns: [Look up my trip and tell me where it goes, Where does my trip go, Find my trip by confirmation code, What is the destination of my
+    trip]
+outputs: [destination]
+start: fresh_launch
+inputs:
+  confirmation_code: {type: text, description: The confirmation code of the trip to look up., example: PT4R8Z}
+steps:
+- id: tap_my_trips
+  intent: Tap My Trips
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      text: Trips
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.373, 0.93]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 1
+- id: find_tap_trip_matching_confirmation_code
+  intent: "Scroll to {{confirmation_code}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        text_has: "{{confirmation_code}}"
+        kind: Button
+        cls: View
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      text_has: "{{confirmation_code}}"
+      kind: Button
+      cls: View
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: tap_trip_matching_confirmation_code
+  intent: "Tap the trip in the list showing {{confirmation_code}}"
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      text_has: "{{confirmation_code}}"
+      kind: Button
+      cls: View
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      text: "{{confirmation_code}}"
+      kind: Text
+  risk: reversible
+  extract:
+    destination: {near: Trip to, first_in_list: false, next_element: false, expect_digits: false}
+  note: trace step 2
+parent_version: 1
+changes:
+- "step 'tap_my_trips': target found only by relaxed match; locator updated to {text='Trips', kind='Button'}"
+compiled_from:
+  task_id: p2-src-v4-find_trip
+  goal: Look up my trip with confirmation code PT4R8Z and tell me where it goes.
+  compiler: cached
+  compiled_at: "2026-10-27 02:34:10"
+  trace_steps_kept: [1, 2]
+  trace_steps_dropped: 0
+  cost_usd: 0.0

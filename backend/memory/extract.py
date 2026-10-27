@@ -21,7 +21,7 @@ from typing import Any
 from devices.types import ScreenState
 from integrations.mail import Email
 from memory.redact import redact_text, screen_text
-from memory.types import TYPES, ExtractedEntity, Observation, canonical_attribute
+from memory.types import TYPES, ExtractedEntity, Observation, canonical_attribute, memory_path
 from models.adapter import DataScope, ModelAdapter
 from models.prompts import extract_input, extract_instructions
 from models.schemas import ExtractionOutput
@@ -203,6 +203,8 @@ def from_routine(inputs: dict[str, str], outputs: dict[str, str | None], input_p
         if not value:
             continue
         path = input_paths.get(name) or ""
+        if not path and name in inputs and (mp := memory_path(None, name)):
+            path = f"{mp[0].lower().replace('person', 'user')}.{mp[1]}"
         attr = canonical_attribute(path.split(".")[-1] if path else name)
         target = {"trip": trip, "flight": flight, "user": person}.get(path.split(".")[0]) if path else None
         if attr == "destination" or (target is trip and attr in TRIP_ATTRS):

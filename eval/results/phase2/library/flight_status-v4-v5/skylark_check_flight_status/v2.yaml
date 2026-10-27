@@ -1,0 +1,86 @@
+routine: skylark_check_flight_status
+app: com.skylark.air
+version: 2
+status: active
+intent: Check the status of a SkyLark flight
+description: Opens SkyLark flight status, searches by flight number, and returns the flight status summary shown for that flight.
+patterns: ['What''s the status of my flight?', Check flight status, 'Is my SkyLark flight delayed?', Look up a SkyLark flight]
+outputs: [flight_status_summary]
+start: fresh_launch
+inputs:
+  flight_number: {type: text, description: Flight number to look up, example: SL 1190}
+steps:
+- id: open_flight_status
+  intent: Tap Flight status to open the flight status lookup
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      text: Status
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.628, 0.93]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 1
+- id: enter_flight_number
+  intent: "Type {{flight_number}} into the Flight number field"
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    type:
+      field:
+        text: Flight number
+        hint: Flight number
+        kind: EditText
+        cls: EditText
+        siblings: [Check any SkyLark flight]
+        in_list: false
+        position: [0.5, 0.215]
+      value: "{{flight_number}}"
+  post:
+  - field_equals:
+      field:
+        text: "Flight number: SL 667"
+        kind: EditText
+      value: "{{flight_number}}"
+  risk: reversible
+  note: trace step 2
+- id: search_flight
+  intent: Tap Search to look up the flight status
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      text: Search
+      kind: Button
+      cls: View
+      siblings: [Check any SkyLark flight]
+      in_list: false
+      position: [0.5, 0.29]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  extract:
+    flight_status_summary:
+      locator:
+        text_has: "{{flight_number}}"
+        kind: Text
+      first_in_list: false
+      next_element: false
+      expect_digits: false
+  note: trace step 3
+parent_version: 1
+changes:
+- "step 'open_flight_status': target found only by relaxed match; locator updated to {text='Status', kind='Button'}"
+- "step 'enter_flight_number': after-check 0 matched only relaxed; updated to {text='Flight number: SL 667', kind='EditText'}"
+compiled_from:
+  task_id: p2-src-v4-flight_status
+  goal: What's the status of SkyLark flight SL 1190?
+  compiler: cached
+  compiled_at: "2026-10-27 02:33:56"
+  trace_steps_kept: [1, 2, 3]
+  trace_steps_dropped: 0
+  cost_usd: 0.0

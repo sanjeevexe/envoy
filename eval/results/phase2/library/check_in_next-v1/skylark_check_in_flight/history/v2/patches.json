@@ -1,0 +1,20 @@
+[
+ {
+  "kind": "replace",
+  "step": "tap_check_in",
+  "description": "step 'tap_check_in' replaced by tap None, tap Check in",
+  "evidence": {
+   "screenshots": [
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-changed-check_in_next-v1-KX7Q2M/screens/repair_01_1_before.png",
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-changed-check_in_next-v1-KX7Q2M/screens/repair_01_1_after.png",
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-changed-check_in_next-v1-KX7Q2M/screens/repair_01_2_before.png",
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-changed-check_in_next-v1-KX7Q2M/screens/repair_01_2_after.png"
+   ],
+   "reasons": [
+    "Check in button missing on home, Next trip card for Chicago should lead to check-in flow.",
+    "Check in button exists with slightly different id btn_checkin, tapping to start check-in"
+   ],
+   "task_id": "p2-changed-check_in_next-v1-KX7Q2M"
+  }
+ }
+]

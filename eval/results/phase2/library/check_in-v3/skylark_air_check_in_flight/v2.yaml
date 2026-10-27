@@ -1,0 +1,243 @@
+routine: skylark_air_check_in_flight
+app: com.skylark.air
+version: 2
+status: active
+intent: Check in for a SkyLark flight
+description: Check in for a SkyLark flight to a selected city by going to My Trips, opening that trip, selecting the passenger, confirming no
+  hazardous materials, and confirming check-in to obtain the boarding pass.
+patterns: [check me in for my flight, check in for my trip, please check me in, complete flight check-in]
+outputs: [seat, gate, boarding_time]
+start: fresh_launch
+inputs:
+  trip_city: {type: text, description: City of trip to check in, example: Denver}
+steps:
+- id: open_my_trips
+  intent: "(single selection) Tap 'My Trips' to find the flight to {{trip_city}}"
+  pre:
+  - {app_foreground: com.skylark.air}
+  - element_present: {resource_id: screen_title, text: SkyLark Air, kind: Text}
+  action:
+    tap:
+      resource_id: nav_trips
+      text: My Trips
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.373, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: screen_title, text: My Trips, kind: Text}
+  - element_present: {resource_id: nav_trips, text: My Trips, kind: Text}
+  risk: reversible
+  note: trace step 1
+- id: find_select_trip
+  intent: "Scroll to {{trip_city}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: trip_row_*
+        text_has: "{{trip_city}}"
+        kind: Button
+        cls: View
+        parent: list_trips
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: trip_row_*
+      text_has: "{{trip_city}}"
+      kind: Button
+      cls: View
+      parent: list_trips
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: select_trip
+  intent: "(single selection) In the list, tap the trip to {{trip_city}}"
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      resource_id: trip_row_*
+      text_has: "{{trip_city}}"
+      kind: Button
+      cls: View
+      parent: list_trips
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: screen_title
+      text: "Trip to {{trip_city}}"
+      kind: Text
+  - element_present: {resource_id: btn_checkin, text: Check in, kind: Button}
+  risk: reversible
+  note: trace step 2
+- id: start_check_in
+  intent: "(single selection) Tap 'Check in' to start check-in for the {{trip_city}} trip"
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      resource_id: btn_checkin
+      text: Check in
+      kind: Button
+      cls: View
+      siblings: [Known traveler number]
+      in_list: false
+      position: [0.5, 0.484]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: cb_passenger_0, kind: Toggle}
+  - element_present: {resource_id: btn_continue, text: Continue, kind: Button}
+  risk: reversible
+  note: trace step 3
+- id: select_passenger
+  intent: (single selection) Select the passenger shown on the booking to proceed with check-in
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      resource_id: cb_passenger_0
+      kind: Toggle
+      cls: View
+      siblings: ['Who''s checking in?']
+      in_list: false
+      position: [0.5, 0.238]
+  post:
+  - toggle_is:
+      target: {resource_id: cb_passenger_0, kind: Toggle}
+      value: 'on'
+  risk: reversible
+  note: trace step 4
+- id: continue_after_passenger
+  intent: (single selection) Tap 'Continue' after selecting the passenger
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      resource_id: btn_continue
+      text: Continue
+      kind: Button
+      cls: View
+      siblings: ['Who''s checking in?']
+      in_list: false
+      position: [0.5, 0.295]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: cb_hazmat, text: I'm not carrying hazardous materials, kind: Toggle}
+  risk: reversible
+  note: trace step 5
+- id: confirm_no_hazardous_materials
+  intent: (single selection) Select 'I'm not carrying hazardous materials'
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      resource_id: cb_hazmat
+      text: I'm not carrying hazardous materials
+      kind: Toggle
+      cls: View
+      siblings: [Travel safety, 'Lithium batteries, fireworks, flammable liquids and other hazardous materials are not allowed in checked or carry-on
+          bags.']
+      in_list: false
+      position: [0.5, 0.33]
+  post:
+  - toggle_is:
+      target: {resource_id: cb_hazmat, text: I'm not carrying hazardous materials, kind: Toggle}
+      value: 'on'
+  risk: reversible
+  note: trace step 6
+- id: continue_after_hazmat
+  intent: (single selection) Tap 'Continue' after hazardous materials confirmation
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      resource_id: btn_continue
+      text: Continue
+      kind: Button
+      cls: View
+      siblings: [Travel safety, 'Lithium batteries, fireworks, flammable liquids and other hazardous materials are not allowed in checked or carry-on
+          bags.']
+      in_list: false
+      position: [0.5, 0.388]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: btn_confirm_checkin, text: Confirm check-in, kind: Button}
+  - element_present: {resource_id: row_confirm_passenger, text: Passenger, kind: Text}
+  risk: reversible
+  note: trace step 7
+- id: continue_after_hazmat_extra_1
+  intent: Review page blocks progress to Confirm check-in, main button advances flow
+  optional: true
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      resource_id: btn_looks_good
+      text: Looks good
+      kind: Button
+      cls: View
+      siblings: [Review your trip]
+      in_list: false
+      position: [0.5, 0.365]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: btn_confirm_checkin, text: Confirm check-in, kind: Button}
+  - element_present: {resource_id: row_confirm_passenger, text: Passenger, kind: Text}
+  risk: read
+  note: added by local repair
+- id: confirm_check_in
+  intent: "(single selection) Tap 'Confirm check-in' to complete check-in for the flight to {{trip_city}}"
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      resource_id: btn_confirm_checkin
+      text: Confirm check-in
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.5, 0.365]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: screen_title, text: Boarding pass, kind: Text}
+  - element_present: {resource_id: text_checked_in, text: You're checked in, kind: Text}
+  risk: irreversible
+  extract:
+    seat:
+      near: Seat
+      locator: {resource_id: row_bp_seat, kind: Text}
+      segment: 1
+      first_in_list: false
+      next_element: false
+      expect_digits: true
+    gate:
+      near: Gate
+      locator: {resource_id: row_bp_gate, kind: Text}
+      segment: 1
+      first_in_list: false
+      next_element: false
+      expect_digits: false
+    boarding_time:
+      near: Boarding
+      locator: {resource_id: row_bp_boarding, kind: Text}
+      segment: 1
+      first_in_list: false
+      next_element: false
+      expect_digits: true
+  note: trace step 8
+done:
+- {text_visible: checked in}
+parent_version: 1
+changes: ['after ''continue_after_hazmat'', an extra screen appeared; inserted continue_after_hazmat_extra_1 (tap Looks good)']
+compiled_from:
+  task_id: p2-src-check_in
+  goal: Check me in for my flight to Denver.
+  compiler: cached
+  compiled_at: "2026-10-27 02:25:42"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6, 7, 8]
+  trace_steps_dropped: 0
+  cost_usd: 0.0

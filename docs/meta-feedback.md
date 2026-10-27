@@ -62,3 +62,14 @@ The submission form asks for "feedback from your experience using Meta products"
 - **Wonder's answers vary run to run, sometimes structurally.** On a second compile of the same six traces, two answers were wrong in ways that broke replay: one numbered the steps from 0 although the prompt listed them from 1, and one returned field names (`"flight_number"`, `"route"`) in a field described as literal values. Both passed the schema. Envoy now aligns step numbers and ignores identifier-like values in code, and verification by replay caught both before they reached the library. A `strict` schema can't express "these are values, not names"; examples in the docs of prompting Wonder for extraction-style answers would help.
 - **Wonder at `medium` reasons a lot for small jobs**: a one-line naming question used 1,210 reasoning tokens (11 s, $0.025). Guidance on when `low` is enough for Wonder would help budgeting.
 - **Contributor-tier latency**: one `muse-spark-1.3-contributor` call took 5.9 s for a 400-token reply, against about 0.9 s for a typical standard-tier step. We kept all timed comparisons on the standard tier so the Contributor tier wouldn't distort them. Documented latency expectations for the Contributor tier would help.
+
+## Muse Spark in Phase 3: extracting memory from emails and screens (Oct 27)
+
+**What worked well**
+- **Extraction with structured output is precise.** On 28 test confirmation emails (18 bookings), Muse Spark at `low` read the plain-text ones with **131 of 133 attributes right and none wrong**; every value it returned was found verbatim in the email, so our "the value must appear in the source" check dropped nothing. About $0.006 per email.
+- **It follows "a promotion is not a booking".** Fare promotions naming a booked city and listing flight numbers produced no trip or flight in every run.
+- **One cheap call settles thin matches.** When keys don't decide whether two descriptions are one trip, a `low` call with both descriptions answers; with the rule "different dates mean different trips" in the instructions, two trips to Denver were never merged.
+
+**What could be better**
+- **Values are copied but not normalized.** The same flight arrives as "SL 1190" and "SL1190", a departure as "6:10 AM" and an ISO time, an airport as "Atlanta (ATL)" and "ATL". That's what we asked for (verbatim values are checkable), so Envoy normalizes keys in code; a documented way to get both a verbatim span and a normalized value in one structured answer would help.
+- **Attribute placement varies.** Plain emails sometimes put the trip's date only on the flight, never on the trip, so "the next upcoming trip" had to fall back to the trip's flight in code.

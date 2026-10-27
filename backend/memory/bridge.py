@@ -15,7 +15,7 @@ from devices.types import ScreenState
 from memory.retrieval import Retriever
 from memory.service import IngestReport, MemoryService
 from memory.store import MemoryStore
-from memory.types import MEMORY_PATHS
+from memory.types import memory_path
 from routines.model import Routine
 
 
@@ -51,7 +51,7 @@ def fill_inputs(store: MemoryStore, routine: Routine, request: str, given: dict[
     for name, spec in routine.inputs.items():
         if out.inputs.get(name):
             continue
-        path = MEMORY_PATHS.get(spec.from_memory or "")
+        path = memory_path(spec.from_memory, name)
         if path is None:
             out.missing.append(name)
             continue

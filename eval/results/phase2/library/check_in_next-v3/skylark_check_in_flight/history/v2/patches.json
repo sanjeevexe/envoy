@@ -1,0 +1,17 @@
+[
+ {
+  "kind": "insert_after",
+  "step": "tap_continue_after_hazmat",
+  "description": "after 'tap_continue_after_hazmat', an extra screen appeared; inserted tap_continue_after_hazmat_extra_1 (tap Looks good)",
+  "evidence": {
+   "screenshots": [
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-changed-check_in_next-v3-KX7Q2M/screens/repair_05_1_before.png",
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-changed-check_in_next-v3-KX7Q2M/screens/repair_05_1_after.png"
+   ],
+   "reasons": [
+    "Review screen blocks progress, main button advances toward confirm check-in"
+   ],
+   "task_id": "p2-changed-check_in_next-v3-KX7Q2M"
+  }
+ }
+]

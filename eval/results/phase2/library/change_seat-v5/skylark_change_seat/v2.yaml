@@ -1,0 +1,183 @@
+routine: skylark_change_seat
+app: com.skylark.air
+version: 2
+status: active
+intent: Change a seat on a SkyLark flight
+description: Opens My Trips in SkyLark Air, opens the requested trip, opens seat selection, selects the requested seat, and confirms the change.
+patterns: [change my seat, change my seat on my flight, move me to a different seat, pick a new seat for my flight]
+outputs: [seat]
+start: fresh_launch
+inputs:
+  trip_city: {type: text, description: '', example: Denver}
+  desired_seat: {type: text, description: '', example: 21C}
+steps:
+- id: open_my_trips
+  intent: Tap My Trips to find the flight
+  pre:
+  - {app_foreground: com.skylark.air}
+  - element_present: {resource_id: screen_title, text: SkyLark Air, kind: Text}
+  action:
+    tap:
+      resource_id: nav_trips
+      text: Trips
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.373, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {text: Trips, kind: Text}
+  - element_present: {text: Trips, kind: Text}
+  risk: reversible
+  note: trace step 1
+- id: find_open_trip
+  intent: "Scroll to {{trip_city}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: trip_row_*
+        text_has: "{{trip_city}}"
+        kind: Button
+        cls: View
+        parent: list_trips
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present: {text: Boise, kind: Button}
+  risk: read
+  note: "added: input-based list choice"
+- id: open_trip
+  intent: "Tap the trip to {{trip_city}}"
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      resource_id: trip_row_*
+      text_has: "{{trip_city}}"
+      kind: Button
+      cls: View
+      parent: list_trips
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: screen_title
+      text: "Trip to {{trip_city}}"
+      kind: Text
+  - element_present: {resource_id: btn_checkin, text: Check in, kind: Button}
+  risk: reversible
+  note: trace step 2
+- id: open_change_seat
+  intent: Tap Change seat to open seat selection
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      resource_id: btn_change_seat
+      text: Seats
+      kind: Button
+      cls: View
+      siblings:
+      - "SL 667 · ATL 7:35 AM → BOI 9:20 AM"
+      - Known traveler number
+      in_list: false
+      position: [0.5, 0.55]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: list_seats, kind: List}
+  risk: reversible
+  note: trace step 3
+- id: find_select_seat
+  intent: "Scroll to {{desired_seat}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: "seat_{{desired_seat}}"
+        text: Seat
+        text_has: "{{desired_seat}}"
+        kind: Button
+        cls: View
+        parent: list_seats
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present: {text: 'Seat 21D, aisle, available', kind: Button}
+  risk: read
+  note: "added: input-based list choice"
+- id: select_seat
+  intent: "Tap seat {{desired_seat}} to select it"
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      resource_id: "seat_{{desired_seat}}"
+      text: Seat
+      text_has: "{{desired_seat}}"
+      kind: Button
+      cls: View
+      parent: list_seats
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: text_seat_selection
+      text: "Selected: {{desired_seat}}"
+      kind: Text
+  - element_present: {resource_id: btn_confirm_seat, text: Confirm seat, kind: Button}
+  risk: reversible
+  note: trace step 5
+- id: confirm_seat
+  intent: Tap Confirm seat to confirm the seat change
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      resource_id: btn_confirm_seat
+      text: Confirm seat
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.5, 0.957]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: text_seat_selection
+      text: "Your seat: {{desired_seat}}. Tap a seat to change it."
+      kind: Text
+  - element_present:
+      resource_id: text_seat_message
+      text: "Seat changed to {{desired_seat}}"
+      kind: Text
+  risk: irreversible
+  extract:
+    seat:
+      near: "Your seat:"
+      locator: {resource_id: text_seat_selection, kind: Text}
+      after: . Tap a seat to change it.
+      first_in_list: false
+      next_element: false
+      expect_digits: true
+  note: trace step 6
+done:
+- text_visible: "{{desired_seat}}"
+parent_version: 1
+changes:
+- "step 'open_my_trips': target found only by relaxed match; locator updated to {text='Trips', resource_id='nav_trips', kind='Button'}"
+- "step 'open_trip': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}"
+- "step 'open_change_seat': the element moved or changed; new locator {text='Seats', resource_id='btn_change_seat', kind='Button'}"
+- "step 'select_seat': target found only by relaxed match; locator updated to {text_has='{{desired_seat}}', text='Seat', resource_id='seat_{{desired_seat}}',\
+  \ kind='Button'}"
+- "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', kind='Text'}"
+- "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', kind='Text'}"
+- "step 'find_open_trip': after-check 0 matched only relaxed; updated to {text='Boise', kind='Button'}"
+- "step 'find_select_seat': after-check 0 matched only relaxed; updated to {text='Seat 21D, aisle, available', kind='Button'}"
+compiled_from:
+  task_id: p2-src-change_seat
+  goal: Change my seat on my Denver flight to 21C.
+  compiler: cached
+  compiled_at: "2026-10-27 02:26:02"
+  trace_steps_kept: [1, 2, 3, 5, 6]
+  trace_steps_dropped: 1
+  cost_usd: 0.0

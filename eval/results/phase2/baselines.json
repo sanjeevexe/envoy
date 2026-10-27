@@ -1,5 +1,5 @@
 {
- "time": "2026-10-27T05:01:54+00:00",
+ "time": "2026-10-27T07:14:52+00:00",
  "rows": [
   {
    "kind": "agent",
@@ -28,107 +28,6 @@
    "handoff_at": null,
    "similarity": null,
    "replayed": 8
-  },
-  {
-   "kind": "routine-v0",
-   "family": "check_in",
-   "booking": "E3K81I",
-   "city": "Spokane",
-   "variant": 0,
-   "passed": true,
-   "status": "done",
-   "detail": "all steps and checks passed",
-   "outputs": {
-    "seat": "18A",
-    "gate": "B26",
-    "boarding_time": "12:40 PM"
-   },
-   "rung": 0,
-   "model_calls": 0,
-   "cost_usd": 0.0,
-   "billed_usd": 0.0,
-   "duration_s": 3.69,
-   "steps": [
-    {
-     "id": "open_my_trips",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 732
-    },
-    {
-     "id": "find_select_trip",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 366
-    },
-    {
-     "id": "select_trip",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 432
-    },
-    {
-     "id": "start_check_in",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 371
-    },
-    {
-     "id": "select_passenger",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 329
-    },
-    {
-     "id": "continue_after_passenger",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 331
-    },
-    {
-     "id": "confirm_no_hazardous_materials",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 329
-    },
-    {
-     "id": "continue_after_hazmat",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 351
-    },
-    {
-     "id": "confirm_check_in",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 383
-    }
-   ],
-   "patches": [],
-   "approvals": 1,
-   "popups": [],
-   "agent": null,
-   "task_id": "p2-routine-v0-check_in-v0-E3K81I",
-   "routine": "skylark_air_check_in_flight",
-   "version": 1
   },
   {
    "kind": "agent",
@@ -243,89 +142,6 @@
    "replayed": 5
   },
   {
-   "kind": "routine-v0",
-   "family": "change_seat",
-   "booking": "E3K81I",
-   "city": "Spokane",
-   "variant": 0,
-   "passed": true,
-   "status": "done",
-   "detail": "all steps and checks passed",
-   "outputs": {
-    "seat": "18C"
-   },
-   "rung": 0,
-   "model_calls": 0,
-   "cost_usd": 0.0,
-   "billed_usd": 0.0,
-   "duration_s": 4.63,
-   "steps": [
-    {
-     "id": "open_my_trips",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 1005
-    },
-    {
-     "id": "find_open_trip",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 482
-    },
-    {
-     "id": "open_trip",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 552
-    },
-    {
-     "id": "open_change_seat",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 557
-    },
-    {
-     "id": "find_select_seat",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 0.976,
-     "ms": 528
-    },
-    {
-     "id": "select_seat",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 0.976,
-     "ms": 698
-    },
-    {
-     "id": "confirm_seat",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 697
-    }
-   ],
-   "patches": [],
-   "approvals": 1,
-   "popups": [],
-   "agent": null,
-   "task_id": "p2-routine-v0-change_seat-v0-E3K81I",
-   "routine": "skylark_change_seat",
-   "version": 1
-  },
-  {
    "kind": "agent",
    "family": "change_seat",
    "booking": "0I7MMD",
@@ -438,74 +254,6 @@
    "replayed": 4
   },
   {
-   "kind": "routine-v0",
-   "family": "add_ktn",
-   "booking": "E3K81I",
-   "city": "Spokane",
-   "variant": 0,
-   "passed": true,
-   "status": "done",
-   "detail": "all steps and checks passed",
-   "outputs": {
-    "known_traveler_number": "34568702",
-    "confirmation_code": "E3K81I"
-   },
-   "rung": 0,
-   "model_calls": 0,
-   "cost_usd": 0.0,
-   "billed_usd": 0.0,
-   "duration_s": 3.07,
-   "steps": [
-    {
-     "id": "open_my_trips",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 769
-    },
-    {
-     "id": "find_open_trip",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 372
-    },
-    {
-     "id": "open_trip",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 419
-    },
-    {
-     "id": "enter_known_traveler_number",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 1022
-    },
-    {
-     "id": "save_known_traveler_number",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 393
-    }
-   ],
-   "patches": [],
-   "approvals": 0,
-   "popups": [],
-   "agent": null,
-   "task_id": "p2-routine-v0-add_ktn-v0-E3K81I",
-   "routine": "skylark_add_known_traveler_number",
-   "version": 1
-  },
-  {
    "kind": "agent",
    "family": "add_ktn",
    "booking": "0I7MMD",
@@ -604,57 +352,6 @@
    "task_id": "p2-agent-gate-v0-E3K81I"
   },
   {
-   "kind": "routine-v0",
-   "family": "gate",
-   "booking": "E3K81I",
-   "city": "Spokane",
-   "variant": 0,
-   "passed": true,
-   "status": "done",
-   "detail": "all steps and checks passed",
-   "outputs": {
-    "gate": "B26"
-   },
-   "rung": 0,
-   "model_calls": 0,
-   "cost_usd": 0.0,
-   "billed_usd": 0.0,
-   "duration_s": 1.63,
-   "steps": [
-    {
-     "id": "tap_my_trips",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 734
-    },
-    {
-     "id": "find_tap_trip_row",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 381
-    },
-    {
-     "id": "tap_trip_row",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 440
-    }
-   ],
-   "patches": [],
-   "approvals": 0,
-   "popups": [],
-   "agent": null,
-   "task_id": "p2-routine-v0-gate-v0-E3K81I",
-   "routine": "skylark_get_flight_gate",
-   "version": 1
-  },
-  {
    "kind": "agent",
    "family": "gate",
    "booking": "0I7MMD",
@@ -709,61 +406,6 @@
    "steps": 3,
    "result": "SL 515 · ATL → GEG · Fri, Dec 4, 2026 · On time · Gate B26 · Departs 2:15 PM",
    "task_id": "p2-agent-flight_status-v0-E3K81I"
-  },
-  {
-   "kind": "routine-v0",
-   "family": "flight_status",
-   "booking": "E3K81I",
-   "city": "Spokane",
-   "variant": 0,
-   "passed": true,
-   "status": "done",
-   "detail": "all steps and checks passed",
-   "outputs": {
-    "flight_status": "On time",
-    "route": "ATL → GEG",
-    "date": "Fri, Dec 4, 2026",
-    "gate": "B26",
-    "departure_time": "2:15 PM"
-   },
-   "rung": 0,
-   "model_calls": 0,
-   "cost_usd": 0.0,
-   "billed_usd": 0.0,
-   "duration_s": 2.39,
-   "steps": [
-    {
-     "id": "tap_flight_status",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 718
-    },
-    {
-     "id": "enter_flight_number",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 1183
-    },
-    {
-     "id": "tap_search",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 411
-    }
-   ],
-   "patches": [],
-   "approvals": 0,
-   "popups": [],
-   "agent": null,
-   "task_id": "p2-routine-v0-flight_status-v0-E3K81I",
-   "routine": "skylark_check_flight_status",
-   "version": 1
   },
   {
    "kind": "agent",
@@ -822,57 +464,6 @@
    "task_id": "p2-agent-find_trip-v0-E3K81I"
   },
   {
-   "kind": "routine-v0",
-   "family": "find_trip",
-   "booking": "E3K81I",
-   "city": "Spokane",
-   "variant": 0,
-   "passed": true,
-   "status": "done",
-   "detail": "all steps and checks passed",
-   "outputs": {
-    "destination": "Spokane"
-   },
-   "rung": 0,
-   "model_calls": 0,
-   "cost_usd": 0.0,
-   "billed_usd": 0.0,
-   "duration_s": 1.6,
-   "steps": [
-    {
-     "id": "tap_my_trips",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 722
-    },
-    {
-     "id": "find_tap_trip_by_confirmation_code",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 351
-    },
-    {
-     "id": "tap_trip_by_confirmation_code",
-     "status": "done",
-     "rung": 0,
-     "rungs": [],
-     "score": 1.0,
-     "ms": 460
-    }
-   ],
-   "patches": [],
-   "approvals": 0,
-   "popups": [],
-   "agent": null,
-   "task_id": "p2-routine-v0-find_trip-v0-E3K81I",
-   "routine": "skylark_lookup_trip_destination",
-   "version": 1
-  },
-  {
    "kind": "agent",
    "family": "find_trip",
    "booking": "0I7MMD",
@@ -913,6 +504,695 @@
    "steps": 2,
    "result": "Trip AXZG87 goes to Memphis (ATL → MEM, SL 1976 on Mon, Dec 7, 2026)",
    "task_id": "p2-agent-find_trip-v3-AXZG87"
+  },
+  {
+   "kind": "routine-v0",
+   "family": "check_in",
+   "booking": "E3K81I",
+   "city": "Spokane",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "seat": "18A",
+    "gate": "B26",
+    "boarding_time": "12:40 PM"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 4.55,
+   "steps": [
+    {
+     "id": "open_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 1477
+    },
+    {
+     "id": "find_select_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.982,
+     "ms": 376
+    },
+    {
+     "id": "select_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.982,
+     "ms": 444
+    },
+    {
+     "id": "start_check_in",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 380
+    },
+    {
+     "id": "select_passenger",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 342
+    },
+    {
+     "id": "continue_after_passenger",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 361
+    },
+    {
+     "id": "confirm_no_hazardous_materials",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 346
+    },
+    {
+     "id": "continue_after_hazmat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 356
+    },
+    {
+     "id": "confirm_check_in",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 392
+    }
+   ],
+   "patches": [],
+   "approvals": 1,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-routine-v0-check_in-v0-E3K81I",
+   "routine": "skylark_air_check_in_flight",
+   "version": 1
+  },
+  {
+   "kind": "routine-v0",
+   "family": "change_seat",
+   "booking": "E3K81I",
+   "city": "Spokane",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "seat": "18C"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 4.22,
+   "steps": [
+    {
+     "id": "open_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 740
+    },
+    {
+     "id": "find_open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.982,
+     "ms": 380
+    },
+    {
+     "id": "open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.982,
+     "ms": 446
+    },
+    {
+     "id": "open_change_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 575
+    },
+    {
+     "id": "find_select_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.872,
+     "ms": 540
+    },
+    {
+     "id": "select_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.872,
+     "ms": 687
+    },
+    {
+     "id": "confirm_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 729
+    }
+   ],
+   "patches": [],
+   "approvals": 1,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-routine-v0-change_seat-v0-E3K81I",
+   "routine": "skylark_change_seat",
+   "version": 1
+  },
+  {
+   "kind": "routine-v0",
+   "family": "add_ktn",
+   "booking": "E3K81I",
+   "city": "Spokane",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "known_traveler_number": "34568702",
+    "confirmation_code": "E3K81I"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 3.19,
+   "steps": [
+    {
+     "id": "open_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 744
+    },
+    {
+     "id": "find_open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.982,
+     "ms": 381
+    },
+    {
+     "id": "open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.982,
+     "ms": 444
+    },
+    {
+     "id": "enter_known_traveler_number",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 1130
+    },
+    {
+     "id": "save_known_traveler_number",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 420
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-routine-v0-add_ktn-v0-E3K81I",
+   "routine": "skylark_add_known_traveler_number",
+   "version": 1
+  },
+  {
+   "kind": "routine-v0",
+   "family": "gate",
+   "booking": "E3K81I",
+   "city": "Spokane",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "gate": "B26"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 1.66,
+   "steps": [
+    {
+     "id": "tap_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 747
+    },
+    {
+     "id": "find_tap_trip_row",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.982,
+     "ms": 375
+    },
+    {
+     "id": "tap_trip_row",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.982,
+     "ms": 459
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-routine-v0-gate-v0-E3K81I",
+   "routine": "skylark_get_flight_gate",
+   "version": 1
+  },
+  {
+   "kind": "routine-v0",
+   "family": "flight_status",
+   "booking": "E3K81I",
+   "city": "Spokane",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "flight_status": "On time",
+    "route": "ATL → GEG",
+    "date": "Fri, Dec 4, 2026",
+    "gate": "B26",
+    "departure_time": "2:15 PM"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 2.36,
+   "steps": [
+    {
+     "id": "tap_flight_status",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 707
+    },
+    {
+     "id": "enter_flight_number",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 1164
+    },
+    {
+     "id": "tap_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 416
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-routine-v0-flight_status-v0-E3K81I",
+   "routine": "skylark_check_flight_status",
+   "version": 1
+  },
+  {
+   "kind": "routine-v0",
+   "family": "find_trip",
+   "booking": "E3K81I",
+   "city": "Spokane",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "destination": "Spokane"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 1.65,
+   "steps": [
+    {
+     "id": "tap_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 748
+    },
+    {
+     "id": "find_tap_trip_by_confirmation_code",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.982,
+     "ms": 374
+    },
+    {
+     "id": "tap_trip_by_confirmation_code",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.982,
+     "ms": 449
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-routine-v0-find_trip-v0-E3K81I",
+   "routine": "skylark_lookup_trip_destination",
+   "version": 1
+  },
+  {
+   "kind": "fixed",
+   "family": "gate",
+   "booking": "E3K81I",
+   "variant": 0,
+   "passed": false,
+   "status": "replayed",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 2.48,
+   "handoff_at": null,
+   "similarity": null,
+   "replayed": 2
+  },
+  {
+   "kind": "fixed",
+   "family": "gate",
+   "booking": "0I7MMD",
+   "variant": 1,
+   "passed": false,
+   "status": "replayed",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 1.74,
+   "handoff_at": null,
+   "similarity": null,
+   "replayed": 2
+  },
+  {
+   "kind": "fixed",
+   "family": "gate",
+   "booking": "EMQC52",
+   "variant": 2,
+   "passed": false,
+   "status": "replayed",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 1.71,
+   "handoff_at": null,
+   "similarity": null,
+   "replayed": 2
+  },
+  {
+   "kind": "fixed",
+   "family": "gate",
+   "booking": "AXZG87",
+   "variant": 3,
+   "passed": false,
+   "status": "replayed",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 1.71,
+   "handoff_at": null,
+   "similarity": null,
+   "replayed": 2
+  },
+  {
+   "kind": "fixed",
+   "family": "flight_status",
+   "booking": "E3K81I",
+   "variant": 0,
+   "passed": false,
+   "status": "replayed",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 3.6,
+   "handoff_at": null,
+   "similarity": null,
+   "replayed": 3
+  },
+  {
+   "kind": "fixed",
+   "family": "flight_status",
+   "booking": "0I7MMD",
+   "variant": 1,
+   "passed": true,
+   "status": "done",
+   "model_calls": 5,
+   "cost_usd": 0.0111,
+   "duration_s": 14.96,
+   "handoff_at": 2,
+   "similarity": 0.27,
+   "replayed": 1
+  },
+  {
+   "kind": "fixed",
+   "family": "flight_status",
+   "booking": "EMQC52",
+   "variant": 2,
+   "passed": false,
+   "status": "replayed",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 3.56,
+   "handoff_at": null,
+   "similarity": null,
+   "replayed": 3
+  },
+  {
+   "kind": "fixed",
+   "family": "flight_status",
+   "booking": "AXZG87",
+   "variant": 3,
+   "passed": false,
+   "status": "replayed",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 3.61,
+   "handoff_at": null,
+   "similarity": null,
+   "replayed": 3
+  },
+  {
+   "kind": "fixed",
+   "family": "find_trip",
+   "booking": "E3K81I",
+   "variant": 0,
+   "passed": false,
+   "status": "replayed",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 1.75,
+   "handoff_at": null,
+   "similarity": null,
+   "replayed": 2
+  },
+  {
+   "kind": "fixed",
+   "family": "find_trip",
+   "booking": "0I7MMD",
+   "variant": 1,
+   "passed": false,
+   "status": "replayed",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 1.75,
+   "handoff_at": null,
+   "similarity": null,
+   "replayed": 2
+  },
+  {
+   "kind": "fixed",
+   "family": "find_trip",
+   "booking": "EMQC52",
+   "variant": 2,
+   "passed": false,
+   "status": "replayed",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 1.72,
+   "handoff_at": null,
+   "similarity": null,
+   "replayed": 2
+  },
+  {
+   "kind": "fixed",
+   "family": "find_trip",
+   "booking": "AXZG87",
+   "variant": 3,
+   "passed": false,
+   "status": "replayed",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 1.72,
+   "handoff_at": null,
+   "similarity": null,
+   "replayed": 2
+  },
+  {
+   "kind": "agent",
+   "family": "check_in",
+   "booking": "1Y8EYP",
+   "variant": 4,
+   "passed": true,
+   "status": "done",
+   "model_calls": 14,
+   "cost_usd": 0.01817,
+   "duration_s": 26.38,
+   "steps": 8,
+   "result": "Checked in for flight SL 574 ATL to SAV on Nov 16, 2026. Seat 24A, Gate B4, Boarding 12:40 PM Group 4. Boarding pass shown.",
+   "task_id": "p2-agent-check_in-v4-1Y8EYP"
+  },
+  {
+   "kind": "fixed",
+   "family": "check_in",
+   "booking": "1Y8EYP",
+   "variant": 4,
+   "passed": true,
+   "status": "done",
+   "model_calls": 13,
+   "cost_usd": 0.01634,
+   "duration_s": 24.39,
+   "handoff_at": 1,
+   "similarity": 0.08,
+   "replayed": 0
+  },
+  {
+   "kind": "agent",
+   "family": "check_in",
+   "booking": "FUXUOJ",
+   "variant": 5,
+   "passed": true,
+   "status": "done",
+   "model_calls": 13,
+   "cost_usd": 0.01819,
+   "duration_s": 25.89,
+   "steps": 8,
+   "result": "Checked in for flight SL 667 ATL to BOI on Mon, Nov 16, 2026. Seat 11B, Gate A26, Boarding 6:00 AM Group 4.",
+   "task_id": "p2-agent-check_in-v5-FUXUOJ"
+  },
+  {
+   "kind": "fixed",
+   "family": "check_in",
+   "booking": "FUXUOJ",
+   "variant": 5,
+   "passed": true,
+   "status": "done",
+   "model_calls": 11,
+   "cost_usd": 0.016,
+   "duration_s": 22.6,
+   "handoff_at": 1,
+   "similarity": 0.08,
+   "replayed": 0
+  },
+  {
+   "kind": "agent",
+   "family": "change_seat",
+   "booking": "1Y8EYP",
+   "variant": 4,
+   "passed": true,
+   "status": "done",
+   "model_calls": 9,
+   "cost_usd": 0.02128,
+   "duration_s": 19.38,
+   "steps": 5,
+   "result": "Seat changed to 10C on Savannah flight SL 574",
+   "task_id": "p2-agent-change_seat-v4-1Y8EYP"
+  },
+  {
+   "kind": "fixed",
+   "family": "change_seat",
+   "booking": "1Y8EYP",
+   "variant": 4,
+   "passed": true,
+   "status": "done",
+   "model_calls": 7,
+   "cost_usd": 0.01564,
+   "duration_s": 16.97,
+   "handoff_at": 1,
+   "similarity": 0.08,
+   "replayed": 0
+  },
+  {
+   "kind": "agent",
+   "family": "change_seat",
+   "booking": "FUXUOJ",
+   "variant": 5,
+   "passed": true,
+   "status": "done",
+   "model_calls": 9,
+   "cost_usd": 0.01708,
+   "duration_s": 18.55,
+   "steps": 5,
+   "result": "done",
+   "task_id": "p2-agent-change_seat-v5-FUXUOJ"
+  },
+  {
+   "kind": "fixed",
+   "family": "change_seat",
+   "booking": "FUXUOJ",
+   "variant": 5,
+   "passed": true,
+   "status": "done",
+   "model_calls": 8,
+   "cost_usd": 0.01838,
+   "duration_s": 17.21,
+   "handoff_at": 1,
+   "similarity": 0.08,
+   "replayed": 0
   }
  ]
 }

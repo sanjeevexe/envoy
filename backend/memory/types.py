@@ -82,6 +82,18 @@ MEMORY_PATHS = {
 }
 
 
+def memory_path(from_memory: str | None, input_name: str) -> tuple[str, str] | None:
+    """Where memory can fill a routine input: its `from_memory` hint, else what its name means
+    (trip_city → the trip's destination; flight_number → the flight's number; last_name → the user's)."""
+    if from_memory and from_memory in MEMORY_PATHS:
+        return MEMORY_PATHS[from_memory]
+    attr = canonical_attribute(input_name)
+    for type_ in ("Trip", "Flight", "Person", "Loyalty program", "Order", "Reservation"):
+        if attr in TYPES[type_].attributes and attr not in ("seat", "status", "date"):
+            return type_, attr
+    return None
+
+
 def canonical_attribute(name: str) -> str:
     n = re.sub(r"[^a-z0-9]+", "_", name.casefold()).strip("_")
     return ATTRIBUTE_SYNONYMS.get(n, n)

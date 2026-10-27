@@ -1,0 +1,60 @@
+{
+ "name": "skylark_air_check_in_flight",
+ "active": 2,
+ "versions": [
+  {
+   "version": 1,
+   "status": "retired",
+   "created": "2026-10-27 02:56:06",
+   "parent": null,
+   "changes": [
+    "v1 compiled from p2-src-check_in"
+   ],
+   "verification": null
+  },
+  {
+   "version": 2,
+   "status": "active",
+   "created": "2026-10-27 02:56:15",
+   "parent": 1,
+   "changes": [
+    "step 'select_trip': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}",
+    "step 'find_select_trip': after-check 0 matched only relaxed; updated to {text='Savannah', kind='Button'}"
+   ],
+   "source_task": "p2-changed-check_in-v4-1Y8EYP",
+   "screenshots": [],
+   "trial": {
+    "passed": true,
+    "task_id": "p2-trial-check_in-v4-JNATRD",
+    "status": "done",
+    "duration_s": 4.81
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-27 02:56:15",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-changed-check_in-v4-1Y8EYP",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 5.64,
+   "patches": 2
+  },
+  {
+   "time": "2026-10-27 02:56:32",
+   "kind": "run",
+   "version": 2,
+   "task_id": "p2-after-check_in-v4-QRYYJC",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 4.82,
+   "patches": 1
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

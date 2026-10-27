@@ -44,7 +44,41 @@
    }
   }
  ],
- "runs": [],
+ "runs": [
+  {
+   "time": "2026-10-27 03:03:29",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-add_ktn-v4-E3K81I",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.19,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-27 03:04:12",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-add_ktn-v4-0IGQ1E",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.25,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-27 03:04:53",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-add_ktn-v4-UJ0E5F",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.31,
+   "patches": 0
+  }
+ ],
  "needs_recompile": false,
  "app": "com.skylark.air"
 }

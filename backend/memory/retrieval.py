@@ -170,8 +170,12 @@ class Retriever:
         if types:
             ordered = [e for e in ordered if (self.store.entity(e) or {}).get("type") in types]
         blocks, used, out = [], 0, Notes("", linked=linked)
+        why = {e: w for e, w in linked}
         for eid in ordered:
             block, n_facts, n_stale = self.render_entity(eid)
+            if eid in why and block:
+                head, _, rest = block.partition("\n")
+                block = f"{head}  ({why[eid]})\n{rest}"
             if not n_facts:
                 continue
             if used + len(block) > budget_chars and blocks:

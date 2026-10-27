@@ -1,0 +1,16 @@
+[
+ {
+  "kind": "locator",
+  "step": "open_flight_status",
+  "description": "step 'open_flight_status': target found only by relaxed match; locator updated to {text='Status', kind='Button'}",
+  "evidence": {
+   "score": 0.733
+  }
+ },
+ {
+  "kind": "check",
+  "step": "enter_flight_number",
+  "description": "step 'enter_flight_number': after-check 0 matched only relaxed; updated to {text='Flight number: SL 667', kind='EditText'}",
+  "evidence": {}
+ }
+]

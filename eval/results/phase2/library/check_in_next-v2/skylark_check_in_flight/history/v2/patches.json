@@ -1,0 +1,24 @@
+[
+ {
+  "kind": "post",
+  "step": "tap_check_in",
+  "description": "step 'tap_check_in': after-checks failed (no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) but the next step was ready; after-checks rewritten from what happened",
+  "evidence": {}
+ },
+ {
+  "kind": "locator",
+  "step": "tap_continue_after_passenger",
+  "description": "step 'tap_continue_after_passenger': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}",
+  "evidence": {
+   "score": 0.676
+  }
+ },
+ {
+  "kind": "locator",
+  "step": "tap_continue_after_hazmat",
+  "description": "step 'tap_continue_after_hazmat': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}",
+  "evidence": {
+   "score": 0.676
+  }
+ }
+]

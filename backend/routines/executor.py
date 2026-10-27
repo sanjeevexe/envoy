@@ -44,7 +44,7 @@ from routines import checks as chk
 from routines import locators
 from routines.compiler import bind_inputs, chk_generalize, generalize_locator
 from routines.model import Check, Extract, Locator, Routine, Step, StepAction, render, render_str
-from routines.screens import body, norm
+from routines.screens import body, norm, usable_id
 
 RUNG_NAMES = {0: "none", 1: "wait and retry", 2: "relaxed match", 3: "pop-up handler", 4: "local repair", 5: "full agent", 6: "ask the user"}
 Status = Literal["done", "failed", "declined", "handoff", "needs_user", "agent_done", "agent_failed"]
@@ -654,13 +654,18 @@ class RoutineExecutor:
         cfg = self.config
         if not ctx.allow_repair:
             return "gave_up"
-        specific = self._specific(step.post) or step.post
+        specific = self._specific(step.post)
+        start = before or screen  # "the screen changed" is judged against where the step began, never against nothing
         actions: list[RepairAction] = []
         tried: list[str] = [f"(runtime) {why}"]
         s = screen
         while True:
             fields = await self._field_values(specific, s, ctx.inputs)
-            if specific and self._check(specific, s, ctx.inputs, before=before, field_text=fields)[0]:
+            # The app changed (that's why we're repairing), so its after-checks may only match at the relaxed threshold.
+            # A step whose only after-check is "the screen changed" counts as done only after a repair action changed it.
+            done = (self._check(specific, s, ctx.inputs, before=start, field_text=fields, relaxed=True)[0] if specific
+                    else bool(actions) and body(s) != body(start))
+            if done:
                 if actions or phase == "after":
                     self._propose(ctx, idx, phase, actions, s)
                     sr.climb(4, f"{len(actions)} repair action(s) satisfied the after-checks")
@@ -712,7 +717,7 @@ class RoutineExecutor:
                 return "declined"
             shot_b = await self._screenshot(ctx, f"repair_{idx + 1:02d}_{len(actions) + 1}_before")
             r = await self.device.act(action)
-            after = await self._settle_after_repair(step, ctx.inputs, before)
+            after = await self._settle_after_repair(step, ctx.inputs, start)
             shot_a = await self._screenshot(ctx, f"repair_{idx + 1:02d}_{len(actions) + 1}_after")
             actions.append(RepairAction(d.reason, action.model_dump(), el, s, after, d.risk, shot_b, shot_a))
             rec.update({"action": action.model_dump(exclude_none=True), "target": el.label if el else None, "ok": r.ok,
@@ -722,14 +727,15 @@ class RoutineExecutor:
             tried.append(f"{action.kind} on {el.label if el else ''!r} → screen now: {after.compact.splitlines()[1] if len(after.compact.splitlines()) > 1 else ''}")
             s = after
 
-    async def _settle_after_repair(self, step: Step, inputs: dict[str, str], before: ScreenState | None) -> ScreenState:
+    async def _settle_after_repair(self, step: Step, inputs: dict[str, str], before: ScreenState) -> ScreenState:
         """After a repair action: until the after-checks pass, or the screen stops changing."""
         start = time.perf_counter()
         last, since = None, start
+        specific = self._specific(step.post)
         while True:
             s = await self._observe()
             now = time.perf_counter()
-            if self._check(self._specific(step.post) or step.post, s, inputs, before=before)[0]:
+            if specific and self._check(specific, s, inputs, before=before, relaxed=True)[0]:
                 return s
             if body(s) != last:
                 last, since = body(s), now
@@ -866,12 +872,23 @@ def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str 
         if label_el is None or not label_el.number or label_el.number >= len(screen.numbered):
             return None
         return " ".join(screen.numbered[label_el.number].label.split()) or None
-    if spec.locator is not None:
-        m = locators.locate(render(spec.locator, inputs), screen, threshold=locators.RELAXED, margin=0.0, role="check")
+    loc = render(spec.locator, inputs) if spec.locator is not None else None
+    ids_shown = any(usable_id(e.resource_id) for e in screen.numbered)
+    if loc is not None and (loc.text or loc.desc or loc.text_has or (loc.resource_id and ids_shown)):
+        # An ID-only locator means nothing on a screen that shows no IDs: fall back to the label (`near`).
+        m = locators.locate(loc, screen, threshold=locators.RELAXED, margin=0.0, role="check")
         el = m.element
     near = norm(spec.near) if spec.near else ""
     if el is None and near:
         el = next((e for e in screen.numbered if norm(e.label).startswith(near)), None)
+        if el is not None and norm(el.label) == near and el.number and el.number < len(screen.numbered):
+            # The label stands alone ("Seat", then "22F"): the value is the next element (its parts shift by one, as the
+            # label is no longer the first part: "Boarding · 5:30 AM · Group 3" → "5:30 AM · Group 3").
+            value = " ".join(screen.numbered[el.number].label.split())
+            if spec.segment:
+                parts = [p.strip(" :,") for p in value.split(" · ") if p.strip(" :,")]
+                value = parts[spec.segment - 1] if spec.segment - 1 < len(parts) else value
+            return value or None
     if el is None:
         return None
     label = " ".join(el.label.split())

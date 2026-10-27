@@ -42,7 +42,41 @@
    }
   }
  ],
- "runs": [],
+ "runs": [
+  {
+   "time": "2026-10-27 03:03:42",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-flight_status-v4-E3K81I",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 3.38,
+   "patches": 1
+  },
+  {
+   "time": "2026-10-27 03:04:24",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-flight_status-v4-0IGQ1E",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 3.35,
+   "patches": 1
+  },
+  {
+   "time": "2026-10-27 03:05:05",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-flight_status-v4-UJ0E5F",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 3.29,
+   "patches": 1
+  }
+ ],
  "needs_recompile": false,
  "app": "com.skylark.air"
 }

@@ -1,0 +1,42 @@
+{
+ "name": "skylark_change_seat",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-27 02:58:36",
+   "parent": null,
+   "changes": [
+    "v1 compiled from p2-src-change_seat"
+   ],
+   "verification": null
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-27 02:58:45",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-changed-change_seat-v3-AXZG87",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 6.01,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-27 02:58:53",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-after-change_seat-v3-UIAEW1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 4.24,
+   "patches": 0
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

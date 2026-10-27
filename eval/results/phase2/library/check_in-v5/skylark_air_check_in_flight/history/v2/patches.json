@@ -1,0 +1,80 @@
+[
+ {
+  "kind": "locator",
+  "step": "open_my_trips",
+  "description": "step 'open_my_trips': target found only by relaxed match; locator updated to {text='Trips', resource_id='nav_trips', kind='Button'}",
+  "evidence": {
+   "score": 0.733
+  }
+ },
+ {
+  "kind": "check",
+  "step": "open_my_trips",
+  "description": "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', kind='Text'}",
+  "evidence": {}
+ },
+ {
+  "kind": "check",
+  "step": "open_my_trips",
+  "description": "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', kind='Text'}",
+  "evidence": {}
+ },
+ {
+  "kind": "check",
+  "step": "find_select_trip",
+  "description": "step 'find_select_trip': after-check 0 matched only relaxed; updated to {text='Boise', kind='Button'}",
+  "evidence": {}
+ },
+ {
+  "kind": "locator",
+  "step": "select_trip",
+  "description": "step 'select_trip': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}",
+  "evidence": {
+   "score": 0.791
+  }
+ },
+ {
+  "kind": "post",
+  "step": "start_check_in",
+  "description": "step 'start_check_in': after-checks failed (no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) but the next step was ready; after-checks rewritten from what happened",
+  "evidence": {}
+ },
+ {
+  "kind": "locator",
+  "step": "continue_after_passenger",
+  "description": "step 'continue_after_passenger': the element moved or changed; new locator {text='Next', resource_id='btn_continue', kind='Button'}",
+  "evidence": {
+   "screenshots": [
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-changed-check_in-v5-FUXUOJ/screens/repair_06_1_before.png",
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-changed-check_in-v5-FUXUOJ/screens/repair_06_1_after.png"
+   ],
+   "reasons": [
+    "'Next' is the renamed 'Continue' button to proceed with selected passenger."
+   ],
+   "task_id": "p2-changed-check_in-v5-FUXUOJ"
+  }
+ },
+ {
+  "kind": "locator",
+  "step": "continue_after_hazmat",
+  "description": "step 'continue_after_hazmat': the element moved or changed; new locator {text='Next', resource_id='btn_continue', kind='Button'}",
+  "evidence": {
+   "screenshots": [
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-changed-check_in-v5-FUXUOJ/screens/repair_08_1_before.png",
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-changed-check_in-v5-FUXUOJ/screens/repair_08_1_after.png"
+   ],
+   "reasons": [
+    "'Next' is the renamed 'Continue' for the hazardous materials step."
+   ],
+   "task_id": "p2-changed-check_in-v5-FUXUOJ"
+  }
+ },
+ {
+  "kind": "locator",
+  "step": "confirm_check_in",
+  "description": "step 'confirm_check_in': target found only by relaxed match; locator updated to {text='Complete check-in', resource_id='btn_confirm_checkin', kind='Button'}",
+  "evidence": {
+   "score": 0.771
+  }
+ }
+]

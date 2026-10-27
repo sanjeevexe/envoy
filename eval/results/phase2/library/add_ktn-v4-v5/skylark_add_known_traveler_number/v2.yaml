@@ -1,0 +1,125 @@
+routine: skylark_add_known_traveler_number
+app: com.skylark.air
+version: 2
+status: active
+intent: Add a known traveler number to a SkyLark trip
+description: Opens My Trips in SkyLark, opens the trip for the requested city, enters the user's known traveler number from memory into the Known
+  traveler number field, and saves it.
+patterns: [Add my known traveler number to my trip, Add my known traveler number to my city trip, Put my known traveler number on my flight, Save
+    my known traveler number to my trip]
+outputs: [known_traveler_number]
+start: fresh_launch
+inputs:
+  trip_city: {type: text, description: City of the trip to update, example: Denver}
+  user_known_traveler_number: {type: text, description: User's known traveler number to add to the trip, from_memory: user.known_traveler_number,
+    example: '55501234'}
+steps:
+- id: open_my_trips
+  intent: Open My Trips to find a trip
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      text: Trips
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.373, 0.93]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 2
+- id: find_open_trip_for_city
+  intent: "Scroll to {{trip_city}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        text_has: "{{trip_city}}"
+        kind: Button
+        cls: View
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      text_has: "{{trip_city}}"
+      kind: Button
+      cls: View
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: open_trip_for_city
+  intent: "Open the trip to {{trip_city}} from the list"
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      text_has: "{{trip_city}}"
+      kind: Button
+      cls: View
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      text: "Trip to {{trip_city}}"
+      kind: Text
+  risk: reversible
+  note: trace step 3
+- id: enter_known_traveler_number
+  intent: "Type {{user_known_traveler_number}} into the Known traveler number field"
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    type:
+      field:
+        text: Known traveler number
+        hint: Known traveler number
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.5, 0.678]
+      value: "{{user_known_traveler_number}}"
+  post:
+  - field_equals:
+      field: {text: Known traveler number, kind: EditText}
+      value: "{{user_known_traveler_number}}"
+  risk: reversible
+  note: trace step 4
+- id: save_known_traveler_number
+  intent: Save the known traveler number
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      text: Save
+      kind: Button
+      cls: View
+      siblings: [Known traveler number]
+      in_list: false
+      position: [0.5, 0.753]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  extract:
+    known_traveler_number:
+      near: Known traveler number
+      locator:
+        text_has: "{{user_known_traveler_number}}"
+        kind: EditText
+      first_in_list: false
+      next_element: false
+      expect_digits: true
+  note: trace step 5
+done:
+- text_visible: "{{user_known_traveler_number}}"
+parent_version: 1
+changes:
+- "step 'open_my_trips': target found only by relaxed match; locator updated to {text='Trips', kind='Button'}"
+compiled_from:
+  task_id: p2-src-v4-add_ktn
+  goal: Add my known traveler number to my Denver trip.
+  compiler: cached
+  compiled_at: "2026-10-27 02:33:31"
+  trace_steps_kept: [2, 3, 4, 5]
+  trace_steps_dropped: 1
+  cost_usd: 0.0

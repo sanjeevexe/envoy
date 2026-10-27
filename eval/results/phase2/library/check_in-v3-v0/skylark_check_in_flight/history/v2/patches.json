@@ -1,0 +1,8 @@
+[
+ {
+  "kind": "remove",
+  "step": "confirm_trip_review",
+  "description": "step 'confirm_trip_review' removed: its screen no longer appears after 'continue_after_hazardous_materials'; the app went straight to 'confirm_check_in'",
+  "evidence": {}
+ }
+]
