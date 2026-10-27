@@ -137,6 +137,38 @@ def usage_dict(resp: Any) -> dict[str, int]:
     return out
 
 
+def parse_structured(schema: type[BaseModel], resp: Any, text: str) -> tuple[BaseModel, str]:
+    """Parse schema-constrained output. Normally the whole text is the JSON; if a model adds a sentence
+    before it, take the last message item's text, then the last JSON object in the text that validates."""
+    try:
+        return schema.model_validate_json(text), "direct"
+    except ValueError:
+        pass
+    for item in reversed(getattr(resp, "output", []) or []):
+        if getattr(item, "type", "") == "message":
+            for part in reversed(getattr(item, "content", []) or []):
+                t = getattr(part, "text", "") or ""
+                try:
+                    return schema.model_validate_json(t), "last_message_part"
+                except ValueError:
+                    continue
+    decoder = json.JSONDecoder()
+    candidates = []
+    for i, ch in enumerate(text):
+        if ch == "{":
+            try:
+                obj, _ = decoder.raw_decode(text[i:])
+                candidates.append(obj)
+            except ValueError:
+                continue
+    for obj in reversed(candidates):
+        try:
+            return schema.model_validate(obj), "embedded_json"
+        except ValueError:
+            continue
+    return schema.model_validate_json(text), "direct"  # raises with the original error
+
+
 class CostMeter:
     def __init__(self, path: Path = COST_LOG, daily_cap_usd: float | None = None) -> None:
         self.path = path
@@ -313,7 +345,15 @@ class ModelAdapter:
             raise last_error or RuntimeError("model call failed")
 
         text = getattr(resp, "output_text", "") or ""
-        parsed = cfg.schema.model_validate_json(text) if cfg.schema is not None and text else None
+        parsed = None
+        if cfg.schema is not None and text:
+            parsed, how = parse_structured(cfg.schema, resp, text)
+            if how != "direct":
+                # Seen in Phase 1 (2 of ~60 calls): a sentence of preamble before the schema JSON.
+                self.meter.record({"time": datetime.now(timezone.utc).isoformat(timespec="milliseconds"), "job": cfg.name,
+                                   "event": "structured_output_recovered", "how": how, "text_head": text[:120],
+                                   "output_items": [getattr(i, "type", "?") for i in getattr(resp, "output", []) or []],
+                                   "cost_usd": 0.0})
         return ModelResult(
             job=cfg.name,
             model=model,

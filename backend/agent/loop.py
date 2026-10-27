@@ -140,6 +140,10 @@ class AgentRunner:
         stuck_recoveries = 0
         plan: Plan | None = None
         last_bodies: list[str] = []
+        visits: dict[str, int] = {}  # screen signature -> times seen
+        names: dict[str, str] = {}  # screen signature -> readable name
+        replans = 0
+        prev_sig = ""
 
         def account(res) -> None:
             out.model_calls += 1
@@ -158,15 +162,23 @@ class AgentRunner:
             return out
 
         try:
-            screen = await self.device.wait_until_settled()
-            if self.config.plan:
+            async def make_plan(current: ScreenState, tried: str = "", step_no: int = 0) -> Plan | None:
                 t0 = time.perf_counter()
-                res = await asyncio.to_thread(self._call, "plan", [{"type": "input_text", "text": plan_input(goal, screen.compact, memory)}],
+                res = await asyncio.to_thread(self._call, "plan", [{"type": "input_text", "text": plan_input(goal, current.compact, memory, tried)}],
                                               PLAN_INSTRUCTIONS, self.config.plan_effort, task_id)
                 account(res)
-                plan = res.parsed  # type: ignore[assignment]
+                new_plan: Plan | None = res.parsed  # type: ignore[assignment]
+                trace.step({"step": step_no, "kind": "replan" if tried else "plan", "plan": new_plan.model_dump() if new_plan else None,
+                            "tried": tried or None, "model_ms": round((time.perf_counter() - t0) * 1000), "usage": res.usage, "cost_usd": res.cost_usd})
+                return new_plan
+
+            def visited_text() -> str:
+                return " · ".join(f"{names[k]} ×{n}" for k, n in visits.items())
+
+            screen = await self.device.wait_until_settled()
+            if self.config.plan:
+                plan = await make_plan(screen)
                 out.plan = plan.model_dump() if plan else None
-                trace.step({"step": 0, "kind": "plan", "plan": out.plan, "model_ms": round((time.perf_counter() - t0) * 1000), "usage": res.usage, "cost_usd": res.cost_usd})
             plan_text = "\n".join(f"{i}. {s}" for i, s in enumerate(plan.subgoals, 1)) if plan else ""
 
             step = 0
@@ -213,6 +225,22 @@ class AgentRunner:
                     else:
                         return finish("failed", "stuck on the same screen after two recoveries")
 
+                # 3b. Cycle detection: coming back to a screen for the 4th time means the plan is not working.
+                sig = screen.signature
+                names.setdefault(sig, _where(screen).split(" · ", 1)[-1].strip("'\"") or screen.activity.rsplit(".", 1)[-1])
+                visits[sig] = visits.get(sig, 0) + 1
+                if sig != prev_sig and visits[sig] >= 4 + 3 * replans and self.config.plan and replans < 2:
+                    replans += 1
+                    tried = f"Screens visited so far, with counts: {visited_text()}"
+                    new_plan = await make_plan(screen, tried, step)
+                    if new_plan is not None:
+                        plan = new_plan
+                        plan_text = "\n".join(f"{i}. {x}" for i, x in enumerate(plan.subgoals, 1))
+                        out.plan = plan.model_dump()
+                    feedback = "You were going in circles, so the plan was rewritten. Follow the new PLAN and avoid screens that did not help."
+                    history.append(f"(runtime) going in circles ({names[sig]} visited {visits[sig]} times): replanned")
+                prev_sig = sig
+
                 # 4. Decide.
                 png = None
                 if not screen.secure and self.config.screenshots != "never":
@@ -220,11 +248,16 @@ class AgentRunner:
                         png = await self._screenshot()
                 content = [{"type": "input_text", "text": step_input(goal, screen.compact, plan=plan_text,
                                                                       history="\n".join(history[-HISTORY_STEPS:]),
-                                                                      memory=memory, feedback=feedback)}]
+                                                                      memory=memory, feedback=feedback, visited=visited_text())}]
                 if png:
                     content.append(image_part(png))
                 t_model = time.perf_counter()
-                res = await asyncio.to_thread(self._call, "step", content, STEP_INSTRUCTIONS, self.config.step_effort, task_id)
+                try:
+                    res = await asyncio.to_thread(self._call, "step", content, STEP_INSTRUCTIONS, self.config.step_effort, task_id)
+                except ValueError as e:  # unparseable output even after recovery: ask once more
+                    history.append(f"step {step}: (runtime) the model's reply was not valid JSON; asked again")
+                    trace.step({"step": step, "kind": "model_error", "error": str(e)[:300]})
+                    res = await asyncio.to_thread(self._call, "step", content, STEP_INSTRUCTIONS, self.config.step_effort, task_id)
                 model_ms = (time.perf_counter() - t_model) * 1000
                 account(res)
                 decision: StepOutput = res.parsed  # type: ignore[assignment]
@@ -257,8 +290,9 @@ class AgentRunner:
                     field_value = None
                     if plan and plan.success_check.kind == "field_equals" and plan.success_check.field_hint:
                         hint = plan.success_check.field_hint.casefold()
-                        f = next((e for e in screen.numbered if e.editable and hint in e.label.casefold()), None)
-                        field_value = f.text if f else None
+                        f = next((e for e in screen.numbered if (e.editable or e.checkable) and hint in e.label.casefold()), None)
+                        if f is not None:
+                            field_value = ("On" if f.checked else "Off") if f.checkable else f.text
                     chk = evaluate(plan.success_check if plan else None, screen, result, field_value)
                     if chk.passed or not chk.evaluable:
                         return finish("done" if chk.passed else "done_unverified", result, chk)

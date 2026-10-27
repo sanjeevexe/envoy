@@ -13,6 +13,7 @@ You are Envoy's phone agent. You operate an Android phone for the user, one acti
 ## What you receive each step
 - GOAL: what the user wants done.
 - PLAN: the steps written at the start of the task. Follow it loosely; the screen is the truth.
+- VISITED: the screens you have already been on in this task, with how many times. Do not keep returning to a screen that did not have what you need; try another part of the app (other tabs, menus, profile or settings).
 - HISTORY: your recent actions and what happened after each (did the screen change, did it match what you expected).
 - NOTES: facts about the user that may help (for example a last name or a known traveler number).
 - SCREEN: the current screen as a numbered list of elements. Each line is
@@ -63,7 +64,7 @@ You are the planner for Envoy's phone agent. Given a goal and the phone's curren
 - success_check: how code can tell the goal is done, from the final screen:
   - text_visible: a text that appears only once the goal is done (for example "You're checked in" or "Seat changed to 12C").
   - element_present: a button or element label that only exists once done (for example "View boarding pass").
-  - field_equals: a field must hold a value (field_hint is the field's label).
+  - field_equals: a field or switch must hold a value (field_hint is its label; for a switch the value is On or Off).
   - app_foreground: an app package must be in front.
   - info: the goal asks a question; value names what to read off the screen (for example "gate number").
   Prefer text that the app itself is likely to show; do not invent exact wording you have not seen. If unsure, use info or element_present with a short, likely label.
@@ -76,11 +77,13 @@ GROUNDING_PROMPT = (
 )
 
 
-def step_input(goal: str, screen_compact: str, *, plan: str = "", subgoal: str = "", history: str = "", memory: str = "", feedback: str = "") -> str:
+def step_input(goal: str, screen_compact: str, *, plan: str = "", subgoal: str = "", history: str = "", memory: str = "",
+               feedback: str = "", visited: str = "") -> str:
     """The variable part of a step, after the cached instructions."""
     parts = [
         f"GOAL: {goal}",
         f"PLAN:\n{plan or '(none)'}",
+        f"VISITED:\n{visited or '(just started)'}",
         f"HISTORY:\n{history or '(first step)'}",
         f"NOTES:\n{memory or '(none)'}",
     ]
@@ -90,5 +93,9 @@ def step_input(goal: str, screen_compact: str, *, plan: str = "", subgoal: str =
     return "\n\n".join(parts) + "\n"
 
 
-def plan_input(goal: str, screen_compact: str, memory: str = "") -> str:
-    return f"GOAL: {goal}\n\nNOTES:\n{memory or '(none)'}\n\nSCREEN (where the phone is now):\n{screen_compact}\n"
+def plan_input(goal: str, screen_compact: str, memory: str = "", tried: str = "") -> str:
+    text = f"GOAL: {goal}\n\nNOTES:\n{memory or '(none)'}\n\n"
+    if tried:
+        text += ("REPLANNING: the previous plan did not work. The agent already looked here without finding what it needs, "
+                 f"so plan a route through other parts of the app (other tabs, menus, profile or settings):\n{tried}\n\n")
+    return text + f"SCREEN (where the phone is now):\n{screen_compact}\n"
