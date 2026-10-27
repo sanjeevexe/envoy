@@ -329,8 +329,8 @@ Part B repeats this on real apps' sign-in and payment screens.
 | Speed of a Spark 1.3 step | **Open** for the model → check 2. **Device side settled:** about 0.07 s to read a screen, under 1 ms to tap, about 1.5 s to settle after a screen change. |
 | Grounding on tall screenshots; SAM 3.1 on UI | **Open** → checks 4 and 6. Fixtures with known boxes are ready. |
 | Limits: max output tokens, minimum cacheable prompt | **Open.** Neither is documented. Check 5 shows whether our roughly 2.5k-token prefix gets cached. |
-| Path into Muse | **Open** → B2. The stub is ready. Route 3 now looks harder (organization-level review). |
-| Real apps on the emulator | **Open** → B1 |
+| Path into Muse | **Answered (B2): route 2 works.** Muse's free tier adds a custom MCP connector (bearer token in its secure credentials store), calls the tools, and shows Envoy's approval link without approving anything. |
+| Real apps on the emulator | **Answered (B1):** Target, Starbucks, Chipotle and Amazon run and work as guests; DoorDash runs but its guest mode hangs (sign-in works, and the session survives restarts); Uber Eats won't install ("device isn't compatible"). |
 | Android phone (IPaT loan, Oct 28) | **Open** |
 | Sign-in codes on iPhone (Shortcuts while locked) | **Open** |
 | Official rules | **Open** → B3 |
@@ -427,13 +427,55 @@ Oct 26, on `envoy-real` (API 35 Google Play, signed in to Play with the dedicate
 
 ### B2. Muse connector test
 
-- Tunnel public check (one-time):
-- Did Muse connect (MCP)?
-- Tools called, with arguments (from `logs/mcp_stub.jsonl`):
-- How Muse presented the approval link:
-- REST fallback (if needed):
-- Token rotated after the test: [ ]
-- **Decision on the "Path into Muse" route:**
+Oct 26–27. Muse free tier on your iPhone 16 Plus, driven partly through iPhone Mirroring. The full request log, with your campus IPs masked and no tokens, is in `eval/results/phase0/muse_connector_log.json`.
+
+**Result: route 2 works end to end.** Muse added Envoy as a custom MCP connector, called both tools with the right arguments, and showed the approval link. It also never claimed it could approve.
+
+**What happened, in order**
+1. **Tunnel check:** `scripts/test_mcp_stub.py` passed 6/6 against the public URL, including 401s for missing and wrong tokens. You started the tunnel; my permission settings blocked me from doing it.
+2. **Asking in chat is not enough.** Pasting the URL and token into Muse made it treat the URL as a link. Its in-app browser (`FBAN/HatchForiOS`) and Meta's preview crawler (`facebookexternalhit`) fetched `/mcp` with plain GETs and no token, all 401.
+3. **Muse's own setup flow:**
+   - Muse replied that the token belongs on its secure setup page "so it won't be kept in chat or in any file I create", and showed a **"Secure credentials store / Add custom connector"** card.
+   - You entered the token there. (I don't enter tokens into third-party credential pages.)
+   - Muse then said it would "scaffold the Envoy client and verify it with a harmless read".
+4. **Muse asks before each background call:**
+   - Its verification steps each raised a prompt: "Allow the agent to share information with keep-helicopter-package-game.trycloudflare.com?", with *Allow once / Always allow this site / Deny*.
+   - Three prompts came before setup finished (verify the connection, list tools, check the server). With "Allow once", every background step asks again.
+   - The chat-time tool calls below did **not** prompt.
+5. **The MCP traffic:**
+   - Client: `{"name": "muse-custom-connector", "version": "1"}`, user agent `Python-urllib/3.12`, protocol **2025-11-25** (not 2026-07-28).
+   - Each request came from a **different IPv6 address** in `2606:54c1:1::/48`.
+   - **Every tool call opens a new session** (`initialize` → `notifications/initialized` → call). Stateless HTTP was the right choice.
+   - One extra unauthenticated `initialize` from a client named `probe` (curl) got 401. It looks like Muse checking that auth is enforced.
+6. **"what's my gate?"**
+   - Muse called `memory_search {"query": "what's my gate?"}`, passing your words as the query.
+   - It answered that it had gate B12 for the Chicago trip on Oct 30, **but wouldn't rely on it, because the result said it was fake data from the Phase 0 stub**. Muse reads every field of a tool result and reasons about where the data came from.
+7. **"check me in for my flight"**
+   - Muse called `run_task {"goal": "check me in for my flight"}`.
+   - It said: "Envoy started the check-in and is waiting **for your approval, not mine**… task ID task_6edae31c". It showed `approve_url` as a link card titled **"Envoy approval (stub)"**, taken from the approval page's `<title>`.
+   - Your phone fetched that page for the preview (`facebookexternalhit`), **without anyone tapping it**.
+8. **Unrelated traffic on the public URL within minutes:**
+   - A Google Cloud scanner.
+   - Discord's link-preview bot (the URL was pasted into Discord).
+   - Meta's preview crawler.
+   - The bearer token rejected all of them.
+9. **REST fallback:** not needed.
+10. **Cleanup:** the tunnel and server are stopped (the public URL returns 530), and `MCP_BEARER_TOKEN` is rotated in `.env`. The Envoy connector is still listed in your Muse account and now points at a dead URL; delete it in Muse whenever you like.
+
+**Decision on "Path into Muse":** go with **route 2** for the demo. Open in the real Muse app ("check me in for my flight"), let Envoy do the phone work, and approve on Envoy's own page. Route 1 (Envoy's own Muse Spark assistant) stays as the fallback. Route 3 is not needed.
+
+**Design implications (proposed; your call)**
+- **Approval links must never act on a GET.**
+  - Link previews fetch `approve_url` automatically: Meta's crawler did, from your phone, before anyone tapped it.
+  - The approval page may only *show* the request. Approving takes a separate, authenticated POST from Envoy's own page or notification.
+  - Its `<title>` becomes the card title in Muse, so make it descriptive, e.g. "Approve check-in: SkyLark SL 482".
+- **Tool results should describe facts honestly but not call themselves fake.** Muse discounts anything a result labels as stub or test data. For the demo, results come from the SkyLark test app with real-looking sources; the source field does the work.
+- **The MCP server must be stateless and tolerant:**
+  - It must support protocol 2025-11-25 (Muse doesn't use 2026-07-28 yet).
+  - It must handle a new session per call from rotating IPs. IP allowlists won't work; bearer auth is the control.
+- **A public URL is found within minutes.** Bearer auth on every route is required, plus rate limits and a token you can rotate.
+- **Muse's own per-site prompts** ("Allow once / Always allow this site") sit in front of Envoy's approvals. For the demo, choose "Always allow this site" for the Envoy domain once, so the only approval left is Envoy's.
+- **Setup is a 2-minute script:** say "add a custom connector called Envoy at <URL>", tap Add, paste the token, allow once three times. Worth rehearsing for the demo video, with a stable URL (a named Cloudflare tunnel or Tailscale Funnel) rather than a random quick tunnel.
 
 ### B3. Official rules
 

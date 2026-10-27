@@ -1,0 +1,362 @@
+[
+ {
+  "time": "2026-10-27T00:37:56.486+00:00",
+  "http": "GET /healthz",
+  "status": 200,
+  "auth": "open_path",
+  "rpc_method": null,
+  "tool": null,
+  "arguments": null,
+  "client_info": null,
+  "protocol": null,
+  "source": "your campus network",
+  "user_agent": "curl/8.7.1"
+ },
+ {
+  "time": "2026-10-27T00:41:41.505+00:00",
+  "http": "GET /",
+  "status": 401,
+  "auth": "missing",
+  "rpc_method": null,
+  "tool": null,
+  "arguments": null,
+  "client_info": null,
+  "protocol": null,
+  "source": "34.72.176.129",
+  "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.6422.60 Safari/537.36 Edge/12.246"
+ },
+ {
+  "time": "2026-10-27T01:11:29.417+00:00",
+  "http": "GET /mcp",
+  "status": 401,
+  "auth": "missing",
+  "rpc_method": null,
+  "tool": null,
+  "arguments": null,
+  "client_info": null,
+  "protocol": null,
+  "source": "35.227.62.178",
+  "user_agent": "Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)"
+ },
+ {
+  "time": "2026-10-27T01:11:55.239+00:00",
+  "http": "GET /mcp",
+  "status": 401,
+  "auth": "missing",
+  "rpc_method": null,
+  "tool": null,
+  "arguments": null,
+  "client_info": null,
+  "protocol": null,
+  "source": "your campus network",
+  "user_agent": "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)"
+ },
+ {
+  "time": "2026-10-27T01:11:55.461+00:00",
+  "http": "GET /mcp",
+  "status": 401,
+  "auth": "missing",
+  "rpc_method": null,
+  "tool": null,
+  "arguments": null,
+  "client_info": null,
+  "protocol": null,
+  "source": "your campus network",
+  "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 26_6_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/23G90 [FBAN/HatchForiOS;FBDV/iPhone17,4;FBMD/iPhone;FBSN/iOS;FBSV/26.6.2;FBSS/3;FBID/phone;FBLC/en_US;FBOP/5]"
+ },
+ {
+  "time": "2026-10-27T01:11:55.846+00:00",
+  "http": "GET /favicon.ico",
+  "status": 401,
+  "auth": "missing",
+  "rpc_method": null,
+  "tool": null,
+  "arguments": null,
+  "client_info": null,
+  "protocol": null,
+  "source": "your campus network",
+  "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 26_6_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/23G90 [FBAN/HatchForiOS;FBDV/iPhone17,4;FBMD/iPhone;FBSN/iOS;FBSV/26.6.2;FBSS/3;FBID/phone;FBLC/en_US;FBOP/5]"
+ },
+ {
+  "time": "2026-10-27T01:12:02.649+00:00",
+  "http": "GET /favicon.ico",
+  "status": 401,
+  "auth": "missing",
+  "rpc_method": null,
+  "tool": null,
+  "arguments": null,
+  "client_info": null,
+  "protocol": null,
+  "source": "your campus network",
+  "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 26_6_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/23G90 [FBAN/HatchForiOS;FBDV/iPhone17,4;FBMD/iPhone;FBSN/iOS;FBSV/26.6.2;FBSS/3;FBID/phone;FBLC/en_US;FBOP/5]"
+ },
+ {
+  "time": "2026-10-27T01:15:08.636+00:00",
+  "http": "GET /mcp",
+  "status": 401,
+  "auth": "missing",
+  "rpc_method": null,
+  "tool": null,
+  "arguments": null,
+  "client_info": null,
+  "protocol": null,
+  "source": "your campus network",
+  "user_agent": "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)"
+ },
+ {
+  "time": "2026-10-27T01:15:08.636+00:00",
+  "http": "GET /favicon.ico",
+  "status": 401,
+  "auth": "missing",
+  "rpc_method": null,
+  "tool": null,
+  "arguments": null,
+  "client_info": null,
+  "protocol": null,
+  "source": "your campus network",
+  "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 26_6_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/23G90 [FBAN/HatchForiOS;FBDV/iPhone17,4;FBMD/iPhone;FBSN/iOS;FBSV/26.6.2;FBSS/3;FBID/phone;FBLC/en_US;FBOP/5]"
+ },
+ {
+  "time": "2026-10-27T01:15:08.798+00:00",
+  "http": "GET /mcp",
+  "status": 401,
+  "auth": "missing",
+  "rpc_method": null,
+  "tool": null,
+  "arguments": null,
+  "client_info": null,
+  "protocol": null,
+  "source": "your campus network",
+  "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 26_6_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/23G90 [FBAN/HatchForiOS;FBDV/iPhone17,4;FBMD/iPhone;FBSN/iOS;FBSV/26.6.2;FBSS/3;FBID/phone;FBLC/en_US;FBOP/5]"
+ },
+ {
+  "time": "2026-10-27T01:18:11.579+00:00",
+  "http": "POST /mcp",
+  "status": 200,
+  "auth": "ok",
+  "rpc_method": "initialize",
+  "tool": null,
+  "arguments": null,
+  "client_info": {
+   "name": "muse-custom-connector",
+   "version": "1"
+  },
+  "protocol": "2025-11-25",
+  "source": "2606:54c1:1:daa::4d0:1b",
+  "user_agent": "Python-urllib/3.12"
+ },
+ {
+  "time": "2026-10-27T01:18:22.785+00:00",
+  "http": "POST /mcp",
+  "status": 401,
+  "auth": "missing",
+  "rpc_method": "initialize",
+  "tool": null,
+  "arguments": null,
+  "client_info": {
+   "name": "probe",
+   "version": "1"
+  },
+  "protocol": "2025-11-25",
+  "source": "2606:54c1:1:9ba::2c7:60",
+  "user_agent": "curl/8.5.0"
+ },
+ {
+  "time": "2026-10-27T01:18:53.636+00:00",
+  "http": "POST /mcp",
+  "status": 200,
+  "auth": "ok",
+  "rpc_method": "initialize",
+  "tool": null,
+  "arguments": null,
+  "client_info": {
+   "name": "muse-custom-connector",
+   "version": "1"
+  },
+  "protocol": "2025-11-25",
+  "source": "2606:54c1:1:15c::b:2c2",
+  "user_agent": "Python-urllib/3.12"
+ },
+ {
+  "time": "2026-10-27T01:18:54.211+00:00",
+  "http": "POST /mcp",
+  "status": 202,
+  "auth": "ok",
+  "rpc_method": "notifications/initialized",
+  "tool": null,
+  "arguments": null,
+  "client_info": null,
+  "protocol": "2025-11-25",
+  "source": "2606:54c1:1:14ed::4f8:d",
+  "user_agent": "Python-urllib/3.12"
+ },
+ {
+  "time": "2026-10-27T01:18:54.659+00:00",
+  "http": "POST /mcp",
+  "status": 200,
+  "auth": "ok",
+  "rpc_method": "tools/list",
+  "tool": null,
+  "arguments": null,
+  "client_info": null,
+  "protocol": "2025-11-25",
+  "source": "2606:54c1:1:cd8::f:35b",
+  "user_agent": "Python-urllib/3.12"
+ },
+ {
+  "time": "2026-10-27T01:19:01.294+00:00",
+  "http": "POST /mcp",
+  "status": 200,
+  "auth": "ok",
+  "rpc_method": "initialize",
+  "tool": null,
+  "arguments": null,
+  "client_info": {
+   "name": "muse-custom-connector",
+   "version": "1"
+  },
+  "protocol": "2025-11-25",
+  "source": "2606:54c1:1:daa::1d1:61",
+  "user_agent": "Python-urllib/3.12"
+ },
+ {
+  "time": "2026-10-27T01:19:01.830+00:00",
+  "http": "POST /mcp",
+  "status": 202,
+  "auth": "ok",
+  "rpc_method": "notifications/initialized",
+  "tool": null,
+  "arguments": null,
+  "client_info": null,
+  "protocol": "2025-11-25",
+  "source": "2606:54c1:1:cd8::499:1b",
+  "user_agent": "Python-urllib/3.12"
+ },
+ {
+  "time": "2026-10-27T01:19:02.616+00:00",
+  "http": "POST /mcp",
+  "status": 200,
+  "auth": "ok",
+  "rpc_method": "tools/list",
+  "tool": null,
+  "arguments": null,
+  "client_info": null,
+  "protocol": "2025-11-25",
+  "source": "2606:54c1:1:eff::50c:73",
+  "user_agent": "Python-urllib/3.12"
+ },
+ {
+  "time": "2026-10-27T01:20:28.066+00:00",
+  "http": "POST /mcp",
+  "status": 200,
+  "auth": "ok",
+  "rpc_method": "initialize",
+  "tool": null,
+  "arguments": null,
+  "client_info": {
+   "name": "muse-custom-connector",
+   "version": "1"
+  },
+  "protocol": "2025-11-25",
+  "source": "2606:54c1:1:cd8::3cd:32",
+  "user_agent": "Python-urllib/3.12"
+ },
+ {
+  "time": "2026-10-27T01:20:28.738+00:00",
+  "http": "POST /mcp",
+  "status": 202,
+  "auth": "ok",
+  "rpc_method": "notifications/initialized",
+  "tool": null,
+  "arguments": null,
+  "client_info": null,
+  "protocol": "2025-11-25",
+  "source": "2606:54c1:1:14ed::4f8:d",
+  "user_agent": "Python-urllib/3.12"
+ },
+ {
+  "time": "2026-10-27T01:20:29.238+00:00",
+  "http": "POST /mcp",
+  "status": 200,
+  "auth": "ok",
+  "rpc_method": "tools/call",
+  "tool": "memory_search",
+  "arguments": {
+   "query": "what's my gate?"
+  },
+  "client_info": null,
+  "protocol": "2025-11-25",
+  "source": "2606:54c1:1:14ed::4d3:55",
+  "user_agent": "Python-urllib/3.12"
+ },
+ {
+  "time": "2026-10-27T01:21:16.857+00:00",
+  "http": "POST /mcp",
+  "status": 200,
+  "auth": "ok",
+  "rpc_method": "initialize",
+  "tool": null,
+  "arguments": null,
+  "client_info": {
+   "name": "muse-custom-connector",
+   "version": "1"
+  },
+  "protocol": "2025-11-25",
+  "source": "2606:54c1:1:16e::21e:130",
+  "user_agent": "Python-urllib/3.12"
+ },
+ {
+  "time": "2026-10-27T01:21:17.572+00:00",
+  "http": "POST /mcp",
+  "status": 202,
+  "auth": "ok",
+  "rpc_method": "notifications/initialized",
+  "tool": null,
+  "arguments": null,
+  "client_info": null,
+  "protocol": "2025-11-25",
+  "source": "2606:54c1:1:6f::4fa:1d",
+  "user_agent": "Python-urllib/3.12"
+ },
+ {
+  "time": "2026-10-27T01:21:18.082+00:00",
+  "http": "POST /mcp",
+  "status": 200,
+  "auth": "ok",
+  "rpc_method": "tools/call",
+  "tool": "run_task",
+  "arguments": {
+   "goal": "check me in for my flight"
+  },
+  "client_info": null,
+  "protocol": "2025-11-25",
+  "source": "2606:54c1:1:16e::21f:f8",
+  "user_agent": "Python-urllib/3.12"
+ },
+ {
+  "time": "2026-10-27T01:21:35.057+00:00",
+  "http": "GET /approve/task_6edae31c",
+  "status": 200,
+  "auth": "open_path",
+  "rpc_method": null,
+  "tool": null,
+  "arguments": null,
+  "client_info": null,
+  "protocol": null,
+  "source": "your campus network",
+  "user_agent": "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)"
+ },
+ {
+  "time": "2026-10-27T01:21:35.058+00:00",
+  "http": "GET /favicon.ico",
+  "status": 401,
+  "auth": "missing",
+  "rpc_method": null,
+  "tool": null,
+  "arguments": null,
+  "client_info": null,
+  "protocol": null,
+  "source": "your campus network",
+  "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 26_6_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/23G90 [FBAN/HatchForiOS;FBDV/iPhone17,4;FBMD/iPhone;FBSN/iOS;FBSV/26.6.2;FBSS/3;FBID/phone;FBLC/en_US;FBOP/5]"
+ }
+]
