@@ -18,7 +18,7 @@ import xml.etree.ElementTree as ET
 from devices.types import Element, ScreenState
 
 _BOUNDS = re.compile(r"\[(-?\d+),(-?\d+)\]\[(-?\d+),(-?\d+)\]")
-MAX_LABEL = 80
+MAX_LABEL = 120  # long enough for most answers (a flight status line); the model taps "…" text to expand it otherwise
 MAX_MERGED_PARTS = 3
 
 

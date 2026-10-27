@@ -29,6 +29,13 @@ def main() -> int:
             print(f"[{r['step']}] popup: {r['handler']}")
         elif k == "handoff":
             print(f"[{r['step']}] HANDOFF: {r['reason']}")
+        elif k == "replan":
+            p = r["plan"] or {}
+            print(f"[{r['step']}] REPLAN ({r.get('tried')}) → {p.get('subgoals')}")
+        elif k == "model_error":
+            print(f"[{r['step']}] model reply unparseable, asked again: {r['error'][:100]}")
+        elif "decision" not in r:
+            print(f"[{r.get('step')}] {k}")
         else:
             d = r["decision"]
             t = r.get("timings_ms", {})

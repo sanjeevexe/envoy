@@ -110,6 +110,18 @@ class EmulatorDevice:
 
     # ---- observe ----------------------------------------------------------------------------
 
+    def _dump(self, attempts: int = 3) -> str:
+        """Read the tree; if the automation server stopped, reconnect with backoff (design doc: up to 3 times)."""
+        for attempt in range(attempts + 1):
+            try:
+                return self.u2.dump_hierarchy()
+            except Exception:
+                if attempt == attempts:
+                    raise
+                time.sleep(0.5 * 2**attempt)
+                self.u2 = u2.connect(self.serial)
+        raise AssertionError("unreachable")
+
     def _foreground(self) -> tuple[str, str, bool]:
         """Focused app, activity, and whether its window is FLAG_SECURE (one dumpsys call, ~25 ms).
 
@@ -134,7 +146,7 @@ class EmulatorDevice:
 
     def _observe_sync(self, screenshot: bool, settle_ms: float | None = None) -> ScreenState:
         t0 = time.perf_counter()
-        xml = self.u2.dump_hierarchy()
+        xml = self._dump()
         read_ms = (time.perf_counter() - t0) * 1000
         pkg, act, secure = self._foreground()
         state = build_state(
@@ -163,7 +175,7 @@ class EmulatorDevice:
         last_hash = None
         last_change = start
         while True:
-            xml = self.u2.dump_hierarchy()
+            xml = self._dump()
             now = time.perf_counter()
             elements = parse_hierarchy(xml, self.capabilities.height)
             h = content_hash(elements)

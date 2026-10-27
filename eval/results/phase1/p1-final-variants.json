@@ -1,0 +1,1341 @@
+{
+ "name": "p1-final-variants",
+ "summary": {
+  "all": {
+   "runs": 30,
+   "success_rate": 1.0,
+   "median_steps": 3.0,
+   "median_model_calls": 5.0,
+   "median_duration_s": 9.469999999999999,
+   "median_cost_usd": 0.00799,
+   "total_cost_usd": 0.2981,
+   "cache_hit_share": 0.728,
+   "approval_gate_correct": "24/24"
+  },
+  "core": {
+   "runs": 30,
+   "success_rate": 1.0,
+   "median_steps": 3.0,
+   "median_model_calls": 5.0,
+   "median_duration_s": 9.469999999999999,
+   "median_cost_usd": 0.00799,
+   "total_cost_usd": 0.2981,
+   "cache_hit_share": 0.728,
+   "approval_gate_correct": "24/24"
+  },
+  "core_variant_1": {
+   "runs": 10,
+   "success_rate": 1.0,
+   "median_steps": 3.0,
+   "median_model_calls": 5.5,
+   "median_duration_s": 9.690000000000001,
+   "median_cost_usd": 0.00906,
+   "total_cost_usd": 0.0932,
+   "cache_hit_share": 0.734,
+   "approval_gate_correct": "8/8"
+  },
+  "core_variant_2": {
+   "runs": 10,
+   "success_rate": 1.0,
+   "median_steps": 2.5,
+   "median_model_calls": 4.5,
+   "median_duration_s": 9.899999999999999,
+   "median_cost_usd": 0.00846,
+   "total_cost_usd": 0.1153,
+   "cache_hit_share": 0.717,
+   "approval_gate_correct": "8/8"
+  },
+  "core_variant_3": {
+   "runs": 10,
+   "success_rate": 1.0,
+   "median_steps": 2.5,
+   "median_model_calls": 4.5,
+   "median_duration_s": 9.02,
+   "median_cost_usd": 0.00717,
+   "total_cost_usd": 0.0896,
+   "cache_hit_share": 0.735,
+   "approval_gate_correct": "8/8"
+  }
+ },
+ "rows": [
+  {
+   "task": "checkin",
+   "suite": "core",
+   "variant": 1,
+   "rep": 0,
+   "goal": "Check me in for my flight to Chicago.",
+   "passed": true,
+   "status": "done",
+   "result": "Checked in for flight SL 482 ATL \u2192 ORD. Boarding pass shows: Maya Patel, Date Fri Oct 30 2026, Seat 14C, Gate B12, Boarding 5:30 AM Group 3. Status: You're checked in.",
+   "steps": 7,
+   "model_calls": 9,
+   "cost_usd": 0.01297,
+   "input_tokens": 18982,
+   "cached_tokens": 15353,
+   "output_tokens": 1442,
+   "reasoning_tokens": 842,
+   "duration_s": 16.32,
+   "approvals": [
+    {
+     "step": 7,
+     "description": "tap \"Confirm check-in\" in com.skylark.air",
+     "reasons": [
+      "rule: target says 'Confirm check-in'",
+      "model: labeled irreversible"
+     ],
+     "approved": true,
+     "by": "eval-policy"
+    }
+   ],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open the trip to Chicago from Home",
+     "Start check-in for flight SL 482",
+     "Complete and confirm check-in"
+    ],
+    "success_check": {
+     "kind": "element_present",
+     "value": "Boarding pass",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "element 'Boarding pass' present"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-checkin-v1-r0"
+  },
+  {
+   "task": "gate",
+   "suite": "core",
+   "variant": 1,
+   "rep": 0,
+   "goal": "What gate does my Chicago flight leave from?",
+   "passed": true,
+   "status": "done",
+   "result": "Gate B12",
+   "steps": 1,
+   "model_calls": 3,
+   "cost_usd": 0.00533,
+   "input_tokens": 5289,
+   "cached_tokens": 4051,
+   "output_tokens": 748,
+   "reasoning_tokens": 562,
+   "duration_s": 5.42,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open the next trip to Chicago SL 482",
+     "Open flight details or boarding information",
+     "Read the departure gate"
+    ],
+    "success_check": {
+     "kind": "info",
+     "value": "gate number",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "answer visible on screen: B12"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-gate-v1-r0"
+  },
+  {
+   "task": "seat",
+   "suite": "core",
+   "variant": 1,
+   "rep": 0,
+   "goal": "What seat do I have on my flight to Chicago?",
+   "passed": true,
+   "status": "done",
+   "result": "14C",
+   "steps": 1,
+   "model_calls": 3,
+   "cost_usd": 0.00534,
+   "input_tokens": 5295,
+   "cached_tokens": 4179,
+   "output_tokens": 781,
+   "reasoning_tokens": 596,
+   "duration_s": 5.08,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open the Chicago trip from Next trip card or My Trips",
+     "View trip details or boarding pass to find seat assignment"
+    ],
+    "success_check": {
+     "kind": "info",
+     "value": "seat number",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "answer visible on screen: 14C"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-seat-v1-r0"
+  },
+  {
+   "task": "change_seat",
+   "suite": "core",
+   "variant": 1,
+   "rep": 0,
+   "goal": "Change my seat on the Chicago flight to 12C.",
+   "passed": true,
+   "status": "done",
+   "result": "Changed seat on Chicago flight SL 482 to 12C - screen shows 'Your seat: 12C' and 'Seat changed to 12C'",
+   "steps": 4,
+   "model_calls": 6,
+   "cost_usd": 0.01777,
+   "input_tokens": 18218,
+   "cached_tokens": 9894,
+   "output_tokens": 1384,
+   "reasoning_tokens": 983,
+   "duration_s": 12.0,
+   "approvals": [
+    {
+     "step": 4,
+     "description": "tap \"Confirm seat\" in com.skylark.air",
+     "reasons": [
+      "rule: target says 'Confirm seat'",
+      "model: labeled irreversible"
+     ],
+     "approved": true,
+     "by": "eval-policy"
+    }
+   ],
+   "approval_gate_ok": null,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open the Chicago flight SL 482 trip details",
+     "Open seat selection or Change seat",
+     "Select seat 12C",
+     "Confirm the seat change"
+    ],
+    "success_check": {
+     "kind": "text_visible",
+     "value": "12C",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "'12C' is visible"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-change_seat-v1-r0"
+  },
+  {
+   "task": "ktn",
+   "suite": "core",
+   "variant": 1,
+   "rep": 0,
+   "goal": "Add my known traveler number to my Chicago trip.",
+   "passed": true,
+   "status": "done",
+   "result": "Known traveler number 98765432 added to Chicago trip SL 482 (Oct 30, 2026, confirmation KX7Q2M). Trip screen shows 'Known traveler number saved' and field shows 98765432.",
+   "steps": 4,
+   "model_calls": 6,
+   "cost_usd": 0.00944,
+   "input_tokens": 13353,
+   "cached_tokens": 10022,
+   "output_tokens": 888,
+   "reasoning_tokens": 448,
+   "duration_s": 11.45,
+   "approvals": [],
+   "approval_gate_ok": null,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open the Chicago trip from Next trip card or My Trips",
+     "Open passenger details or edit traveler info",
+     "Enter known traveler number 98765432",
+     "Save changes and verify number is shown"
+    ],
+    "success_check": {
+     "kind": "text_visible",
+     "value": "98765432",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "'98765432' is visible"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-ktn-v1-r0"
+  },
+  {
+   "task": "flight_status",
+   "suite": "core",
+   "variant": 1,
+   "rep": 0,
+   "goal": "What's the status of SkyLark flight SL 1190?",
+   "passed": true,
+   "status": "done",
+   "result": "SL 1190 \u00b7 ATL \u2192 DEN \u00b7 Sat, Nov 14, 2026 \u00b7 Delayed 25 min \u00b7 Gate A7 \u00b7 Departs 2:45 PM",
+   "steps": 3,
+   "model_calls": 6,
+   "cost_usd": 0.01176,
+   "input_tokens": 12647,
+   "cached_tokens": 9638,
+   "output_tokens": 1541,
+   "reasoning_tokens": 1091,
+   "duration_s": 12.21,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Tap Flight status",
+     "Look up flight SL 1190",
+     "Read the status for SL 1190"
+    ],
+    "success_check": {
+     "kind": "info",
+     "value": "status of flight SL 1190",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "answer visible on screen: 1190, ATL, DEN, Sat"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-flight_status-v1-r0"
+  },
+  {
+   "task": "miles",
+   "suite": "core",
+   "variant": 1,
+   "rep": 0,
+   "goal": "How many SkyLark miles do I have?",
+   "passed": true,
+   "status": "done",
+   "result": "You have 38,240 SkyLark miles.",
+   "steps": 0,
+   "model_calls": 2,
+   "cost_usd": 0.00488,
+   "input_tokens": 2972,
+   "cached_tokens": 2402,
+   "output_tokens": 895,
+   "reasoning_tokens": 763,
+   "duration_s": 4.48,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Stay on Home screen where Rewards balance is shown",
+     "Read SkyLark Rewards miles value"
+    ],
+    "success_check": {
+     "kind": "info",
+     "value": "SkyLark miles balance",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "answer visible on screen: 38,240, SkyLark"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-miles-v1-r0"
+  },
+  {
+   "task": "find_trip",
+   "suite": "core",
+   "variant": 1,
+   "rep": 0,
+   "goal": "Look up my trip with confirmation code PT4R8Z and tell me where it goes.",
+   "passed": true,
+   "status": "done",
+   "result": "Trip PT4R8Z goes to Denver (ATL \u2192 DEN, flight SL 1190 on Sat, Nov 14, 2026).",
+   "steps": 4,
+   "model_calls": 6,
+   "cost_usd": 0.01029,
+   "input_tokens": 12573,
+   "cached_tokens": 9894,
+   "output_tokens": 1284,
+   "reasoning_tokens": 862,
+   "duration_s": 10.75,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open My Trips",
+     "Look up confirmation PT4R8Z with last name Patel",
+     "Open trip details to see destination"
+    ],
+    "success_check": {
+     "kind": "info",
+     "value": "destination for trip PT4R8Z",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "answer visible on screen: Trip, PT4R8Z, Denver, ATL"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-find_trip-v1-r0"
+  },
+  {
+   "task": "past_trip",
+   "suite": "core",
+   "variant": 1,
+   "rep": 0,
+   "goal": "When did I fly to Seattle?",
+   "passed": true,
+   "status": "done",
+   "result": "Tue, Mar 3, 2026 - Seattle SL 1708 ATL \u2192 SEA",
+   "steps": 2,
+   "model_calls": 4,
+   "cost_usd": 0.00674,
+   "input_tokens": 7787,
+   "cached_tokens": 5828,
+   "output_tokens": 803,
+   "reasoning_tokens": 511,
+   "duration_s": 8.48,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open My Trips",
+     "Show past or completed trips",
+     "Find the Seattle trip and note its date"
+    ],
+    "success_check": {
+     "kind": "info",
+     "value": "date flown to Seattle",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "answer visible on screen: Tue, Mar, 3, 2026"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-past_trip-v1-r0"
+  },
+  {
+   "task": "gate_alerts",
+   "suite": "core",
+   "variant": 1,
+   "rep": 0,
+   "goal": "Turn on gate change alerts.",
+   "passed": true,
+   "status": "done",
+   "result": "Gate change alerts are turned on in Profile - toggle shows on.",
+   "steps": 3,
+   "model_calls": 5,
+   "cost_usd": 0.00868,
+   "input_tokens": 10349,
+   "cached_tokens": 7605,
+   "output_tokens": 967,
+   "reasoning_tokens": 660,
+   "duration_s": 8.63,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open Profile",
+     "Open notification or alert settings",
+     "Turn on gate change alerts",
+     "Confirm setting is saved"
+    ],
+    "success_check": {
+     "kind": "field_equals",
+     "value": "On",
+     "field_hint": "Gate change alerts"
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "field 'Gate change alerts' holds 'On'"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-gate_alerts-v1-r0"
+  },
+  {
+   "task": "checkin",
+   "suite": "core",
+   "variant": 2,
+   "rep": 0,
+   "goal": "Check me in for my flight to Chicago.",
+   "passed": true,
+   "status": "done",
+   "result": "Checked in for flight SL 482 ATL to ORD (Chicago) on Fri, Oct 30, 2026. Passenger Maya Patel, Seat 14C, Gate B12, Boarding 5:30 AM Group 3. Boarding pass is displayed.",
+   "steps": 9,
+   "model_calls": 11,
+   "cost_usd": 0.01816,
+   "input_tokens": 25395,
+   "cached_tokens": 18907,
+   "output_tokens": 1698,
+   "reasoning_tokens": 932,
+   "duration_s": 18.72,
+   "approvals": [
+    {
+     "step": 9,
+     "description": "tap \"Complete check-in\" in com.skylark.air",
+     "reasons": [
+      "rule: target says 'Complete check-in'",
+      "model: labeled irreversible"
+     ],
+     "approved": true,
+     "by": "eval-policy"
+    }
+   ],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open check-in for the Chicago trip via Check-in now",
+     "Complete check-in steps and confirm details",
+     "Verify check-in confirmation"
+    ],
+    "success_check": {
+     "kind": "element_present",
+     "value": "boarding pass",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "element 'boarding pass' present"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-checkin-v2-r0"
+  },
+  {
+   "task": "gate",
+   "suite": "core",
+   "variant": 2,
+   "rep": 0,
+   "goal": "What gate does my Chicago flight leave from?",
+   "passed": true,
+   "status": "done",
+   "result": "Gate B12",
+   "steps": 1,
+   "model_calls": 3,
+   "cost_usd": 0.00447,
+   "input_tokens": 5300,
+   "cached_tokens": 4051,
+   "output_tokens": 541,
+   "reasoning_tokens": 362,
+   "duration_s": 9.61,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open the Chicago trip SL 482 details",
+     "Locate the departure gate information"
+    ],
+    "success_check": {
+     "kind": "info",
+     "value": "gate number for Chicago flight",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "answer visible on screen: B12"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-gate-v2-r0"
+  },
+  {
+   "task": "seat",
+   "suite": "core",
+   "variant": 2,
+   "rep": 0,
+   "goal": "What seat do I have on my flight to Chicago?",
+   "passed": true,
+   "status": "done",
+   "result": "14C",
+   "steps": 2,
+   "model_calls": 4,
+   "cost_usd": 0.0073,
+   "input_tokens": 8300,
+   "cached_tokens": 5956,
+   "output_tokens": 818,
+   "reasoning_tokens": 576,
+   "duration_s": 7.28,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open the Chicago trip from the Next trip card",
+     "Locate the seat assignment for flight SL 482"
+    ],
+    "success_check": {
+     "kind": "info",
+     "value": "seat number",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "answer visible on screen: 14C"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-seat-v2-r0"
+  },
+  {
+   "task": "change_seat",
+   "suite": "core",
+   "variant": 2,
+   "rep": 0,
+   "goal": "Change my seat on the Chicago flight to 12C.",
+   "passed": true,
+   "status": "done",
+   "result": "Changed seat on Chicago flight SL 482 to 12C. Screen shows 'Your seat: 12C' and 'Seat changed to 12C'.",
+   "steps": 4,
+   "model_calls": 6,
+   "cost_usd": 0.0186,
+   "input_tokens": 18241,
+   "cached_tokens": 9894,
+   "output_tokens": 1573,
+   "reasoning_tokens": 1174,
+   "duration_s": 12.84,
+   "approvals": [
+    {
+     "step": 4,
+     "description": "tap \"Confirm seat\" in com.skylark.air",
+     "reasons": [
+      "rule: target says 'Confirm seat'"
+     ],
+     "approved": true,
+     "by": "eval-policy"
+    }
+   ],
+   "approval_gate_ok": null,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open the Chicago trip from Home",
+     "Open seat selection for flight SL 482",
+     "Select seat 12C",
+     "Confirm seat change"
+    ],
+    "success_check": {
+     "kind": "text_visible",
+     "value": "12C",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "'12C' is visible"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-change_seat-v2-r0"
+  },
+  {
+   "task": "ktn",
+   "suite": "core",
+   "variant": 2,
+   "rep": 0,
+   "goal": "Add my known traveler number to my Chicago trip.",
+   "passed": true,
+   "status": "done",
+   "result": "Known traveler number 98765432 added to Chicago trip (SL 482) and confirmed saved",
+   "steps": 3,
+   "model_calls": 5,
+   "cost_usd": 0.00962,
+   "input_tokens": 10310,
+   "cached_tokens": 7989,
+   "output_tokens": 1299,
+   "reasoning_tokens": 963,
+   "duration_s": 10.19,
+   "approvals": [],
+   "approval_gate_ok": null,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open the Chicago trip from Home",
+     "Open traveler or passenger details",
+     "Enter known traveler number 98765432",
+     "Save changes and confirm number is shown"
+    ],
+    "success_check": {
+     "kind": "text_visible",
+     "value": "98765432",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "'98765432' is visible"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-ktn-v2-r0"
+  },
+  {
+   "task": "flight_status",
+   "suite": "core",
+   "variant": 2,
+   "rep": 0,
+   "goal": "What's the status of SkyLark flight SL 1190?",
+   "passed": true,
+   "status": "done",
+   "result": "SL 1190 \u00b7 ATL \u2192 DEN \u00b7 Sat, Nov 14, 2026 \u00b7 Delayed 25 min \u00b7 Gate A7 \u00b7 Departs 2:45 PM",
+   "steps": 4,
+   "model_calls": 6,
+   "cost_usd": 0.01093,
+   "input_tokens": 12696,
+   "cached_tokens": 9638,
+   "output_tokens": 1333,
+   "reasoning_tokens": 901,
+   "duration_s": 12.98,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open the Status tab for flight tracking",
+     "Search for flight SL 1190",
+     "View the flight status result"
+    ],
+    "success_check": {
+     "kind": "info",
+     "value": "status of flight SL 1190",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "answer visible on screen: 1190, ATL, DEN, Sat"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-flight_status-v2-r0"
+  },
+  {
+   "task": "miles",
+   "suite": "core",
+   "variant": 2,
+   "rep": 0,
+   "goal": "How many SkyLark miles do I have?",
+   "passed": true,
+   "status": "done",
+   "result": "You have 38,240 miles (SkyLark Rewards: 38,240 miles)",
+   "steps": 0,
+   "model_calls": 2,
+   "cost_usd": 0.0054,
+   "input_tokens": 3001,
+   "cached_tokens": 2402,
+   "output_tokens": 1009,
+   "reasoning_tokens": 865,
+   "duration_s": 5.21,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "View Home screen showing SkyLark Rewards balance",
+     "Read total SkyLark miles"
+    ],
+    "success_check": {
+     "kind": "info",
+     "value": "SkyLark miles balance",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "answer visible on screen: 38,240, SkyLark, Rewards, 38,240"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-miles-v2-r0"
+  },
+  {
+   "task": "find_trip",
+   "suite": "core",
+   "variant": 2,
+   "rep": 0,
+   "goal": "Look up my trip with confirmation code PT4R8Z and tell me where it goes.",
+   "passed": true,
+   "status": "done",
+   "result": "Your trip PT4R8Z goes to Denver (DEN) - flight SL 1190 ATL \u2192 DEN on Sat, Nov 14, 2026.",
+   "steps": 2,
+   "model_calls": 4,
+   "cost_usd": 0.00672,
+   "input_tokens": 7791,
+   "cached_tokens": 6212,
+   "output_tokens": 897,
+   "reasoning_tokens": 596,
+   "duration_s": 8.26,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open Trips tab",
+     "Open Find trip / Manage booking lookup",
+     "Enter confirmation PT4R8Z and last name Patel and search",
+     "Read destination from trip details"
+    ],
+    "success_check": {
+     "kind": "info",
+     "value": "destination city/airport of trip PT4R8Z",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "answer visible on screen: PT4R8Z, Denver, DEN, 1190"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-find_trip-v2-r0"
+  },
+  {
+   "task": "past_trip",
+   "suite": "core",
+   "variant": 2,
+   "rep": 0,
+   "goal": "When did I fly to Seattle?",
+   "passed": true,
+   "status": "done",
+   "result": "Tue, Mar 3, 2026",
+   "steps": 2,
+   "model_calls": 4,
+   "cost_usd": 0.00636,
+   "input_tokens": 7792,
+   "cached_tokens": 5828,
+   "output_tokens": 714,
+   "reasoning_tokens": 443,
+   "duration_s": 8.32,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open Trips",
+     "Find past trip to Seattle",
+     "Read date of Seattle flight"
+    ],
+    "success_check": {
+     "kind": "info",
+     "value": "date of Seattle flight",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "answer visible on screen: Tue, Mar, 3, 2026"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-past_trip-v2-r0"
+  },
+  {
+   "task": "gate_alerts",
+   "suite": "core",
+   "variant": 2,
+   "rep": 0,
+   "goal": "Turn on gate change alerts.",
+   "passed": true,
+   "status": "done",
+   "result": "Gate change alerts are now turned on in Profile settings.",
+   "steps": 11,
+   "model_calls": 15,
+   "cost_usd": 0.02772,
+   "input_tokens": 35207,
+   "cached_tokens": 25247,
+   "output_tokens": 2703,
+   "reasoning_tokens": 1700,
+   "duration_s": 33.37,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Go back from Trip to Chicago to main Trips list",
+     "Open profile, menu, or app Settings",
+     "Open Notifications or Flight alerts settings",
+     "Turn on gate change alerts and save"
+    ],
+    "success_check": {
+     "kind": "field_equals",
+     "value": "On",
+     "field_hint": "Gate change alerts"
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "field 'Gate change alerts' holds 'On'"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-gate_alerts-v2-r0"
+  },
+  {
+   "task": "checkin",
+   "suite": "core",
+   "variant": 3,
+   "rep": 0,
+   "goal": "Check me in for my flight to Chicago.",
+   "passed": true,
+   "status": "done",
+   "result": "Checked in for flight SL 482 ATL \u2192 ORD (Chicago). Boarding pass shows Maya Patel, Date Fri Oct 30 2026, Seat 14C, Gate B12, Boarding 5:30 AM Group 3.",
+   "steps": 8,
+   "model_calls": 10,
+   "cost_usd": 0.01484,
+   "input_tokens": 21731,
+   "cached_tokens": 17002,
+   "output_tokens": 1500,
+   "reasoning_tokens": 853,
+   "duration_s": 16.15,
+   "approvals": [
+    {
+     "step": 7,
+     "description": "tap \"Looks good\" in com.skylark.air",
+     "reasons": [
+      "model: labeled irreversible"
+     ],
+     "approved": true,
+     "by": "eval-policy"
+    },
+    {
+     "step": 8,
+     "description": "tap \"Confirm check-in\" in com.skylark.air",
+     "reasons": [
+      "rule: target says 'Confirm check-in'",
+      "model: labeled irreversible"
+     ],
+     "approved": true,
+     "by": "eval-policy"
+    }
+   ],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Tap Check in for the Chicago trip SL 482",
+     "Complete check-in steps",
+     "Confirm check-in and show boarding pass"
+    ],
+    "success_check": {
+     "kind": "element_present",
+     "value": "Boarding pass",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "element 'Boarding pass' present"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-checkin-v3-r0"
+  },
+  {
+   "task": "gate",
+   "suite": "core",
+   "variant": 3,
+   "rep": 0,
+   "goal": "What gate does my Chicago flight leave from?",
+   "passed": true,
+   "status": "done",
+   "result": "Gate B12",
+   "steps": 1,
+   "model_calls": 3,
+   "cost_usd": 0.0049,
+   "input_tokens": 5327,
+   "cached_tokens": 4179,
+   "output_tokens": 667,
+   "reasoning_tokens": 478,
+   "duration_s": 5.77,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open the Next trip Chicago flight SL 482 details",
+     "Navigate to flight details or boarding information",
+     "Read the departure gate number"
+    ],
+    "success_check": {
+     "kind": "info",
+     "value": "gate number",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "answer visible on screen: B12"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-gate-v3-r0"
+  },
+  {
+   "task": "seat",
+   "suite": "core",
+   "variant": 3,
+   "rep": 0,
+   "goal": "What seat do I have on my flight to Chicago?",
+   "passed": true,
+   "status": "done",
+   "result": "14C",
+   "steps": 1,
+   "model_calls": 3,
+   "cost_usd": 0.00438,
+   "input_tokens": 5335,
+   "cached_tokens": 4179,
+   "output_tokens": 542,
+   "reasoning_tokens": 347,
+   "duration_s": 4.61,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open the Next trip to Chicago flight SL 482",
+     "View trip details or boarding pass for seat assignment",
+     "Read the seat number"
+    ],
+    "success_check": {
+     "kind": "info",
+     "value": "seat number for flight to Chicago",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "answer visible on screen: 14C"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-seat-v3-r0"
+  },
+  {
+   "task": "change_seat",
+   "suite": "core",
+   "variant": 3,
+   "rep": 0,
+   "goal": "Change my seat on the Chicago flight to 12C.",
+   "passed": true,
+   "status": "done",
+   "result": "Seat on Chicago flight SL 482 changed to 12C. Screen shows 'Your seat: 12C' and 'Seat changed to 12C'.",
+   "steps": 4,
+   "model_calls": 6,
+   "cost_usd": 0.01751,
+   "input_tokens": 18248,
+   "cached_tokens": 9894,
+   "output_tokens": 1313,
+   "reasoning_tokens": 909,
+   "duration_s": 12.58,
+   "approvals": [
+    {
+     "step": 4,
+     "description": "tap \"Confirm seat\" in com.skylark.air",
+     "reasons": [
+      "rule: target says 'Confirm seat'",
+      "model: labeled irreversible"
+     ],
+     "approved": true,
+     "by": "eval-policy"
+    }
+   ],
+   "approval_gate_ok": null,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open the Chicago trip from Home",
+     "Open seat selection or change seat",
+     "Select seat 12C",
+     "Confirm seat change to 12C"
+    ],
+    "success_check": {
+     "kind": "text_visible",
+     "value": "12C",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "'12C' is visible"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-change_seat-v3-r0"
+  },
+  {
+   "task": "ktn",
+   "suite": "core",
+   "variant": 3,
+   "rep": 0,
+   "goal": "Add my known traveler number to my Chicago trip.",
+   "passed": true,
+   "status": "done",
+   "result": "Known traveler number 98765432 saved for Chicago trip SL 482 - confirmation 'Known traveler number saved' shown",
+   "steps": 3,
+   "model_calls": 5,
+   "cost_usd": 0.0072,
+   "input_tokens": 10296,
+   "cached_tokens": 7989,
+   "output_tokens": 733,
+   "reasoning_tokens": 399,
+   "duration_s": 8.63,
+   "approvals": [],
+   "approval_gate_ok": null,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open the Chicago trip from Home",
+     "Open passenger or secure traveler details",
+     "Enter known traveler number 98765432",
+     "Save changes and confirm"
+    ],
+    "success_check": {
+     "kind": "text_visible",
+     "value": "98765432",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "'98765432' is visible"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-ktn-v3-r0"
+  },
+  {
+   "task": "flight_status",
+   "suite": "core",
+   "variant": 3,
+   "rep": 0,
+   "goal": "What's the status of SkyLark flight SL 1190?",
+   "passed": true,
+   "status": "done",
+   "result": "SL 1190 \u00b7 ATL \u2192 DEN \u00b7 Sat, Nov 14, 2026 \u00b7 Delayed 25 min \u00b7 Gate A7 \u00b7 Departs 2:45 PM",
+   "steps": 4,
+   "model_calls": 6,
+   "cost_usd": 0.01106,
+   "input_tokens": 12737,
+   "cached_tokens": 9638,
+   "output_tokens": 1350,
+   "reasoning_tokens": 908,
+   "duration_s": 11.73,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open Flight status tab",
+     "Look up flight SL 1190",
+     "View status details for SL 1190"
+    ],
+    "success_check": {
+     "kind": "info",
+     "value": "status of flight SL 1190",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "answer visible on screen: 1190, ATL, DEN, Sat"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-flight_status-v3-r0"
+  },
+  {
+   "task": "miles",
+   "suite": "core",
+   "variant": 3,
+   "rep": 0,
+   "goal": "How many SkyLark miles do I have?",
+   "passed": true,
+   "status": "done",
+   "result": "You have 38,240 SkyLark miles.",
+   "steps": 0,
+   "model_calls": 2,
+   "cost_usd": 0.0053,
+   "input_tokens": 3002,
+   "cached_tokens": 2402,
+   "output_tokens": 986,
+   "reasoning_tokens": 852,
+   "duration_s": 4.44,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Stay on Home screen showing SkyLark Rewards",
+     "Read the miles balance number"
+    ],
+    "success_check": {
+     "kind": "info",
+     "value": "SkyLark miles balance",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "answer visible on screen: 38,240, SkyLark"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-miles-v3-r0"
+  },
+  {
+   "task": "find_trip",
+   "suite": "core",
+   "variant": 3,
+   "rep": 0,
+   "goal": "Look up my trip with confirmation code PT4R8Z and tell me where it goes.",
+   "passed": true,
+   "status": "done",
+   "result": "Trip PT4R8Z goes to Denver - SL 1190 \u00b7 ATL 2:45 PM \u2192 DEN 4:05 PM on Sat, Nov 14, 2026",
+   "steps": 4,
+   "model_calls": 6,
+   "cost_usd": 0.01066,
+   "input_tokens": 12815,
+   "cached_tokens": 10022,
+   "output_tokens": 1333,
+   "reasoning_tokens": 899,
+   "duration_s": 12.9,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open My Trips",
+     "Look up confirmation code PT4R8Z with last name Patel",
+     "Open the matching trip details",
+     "Read where the trip goes"
+    ],
+    "success_check": {
+     "kind": "info",
+     "value": "destination for trip PT4R8Z",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "answer visible on screen: Trip, PT4R8Z, Denver, 1190"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-find_trip-v3-r0"
+  },
+  {
+   "task": "past_trip",
+   "suite": "core",
+   "variant": 3,
+   "rep": 0,
+   "goal": "When did I fly to Seattle?",
+   "passed": true,
+   "status": "done",
+   "result": "Tue, Mar 3, 2026 - Seattle flight SL 1708 ATL \u2192 SEA",
+   "steps": 2,
+   "model_calls": 4,
+   "cost_usd": 0.00714,
+   "input_tokens": 7823,
+   "cached_tokens": 5828,
+   "output_tokens": 887,
+   "reasoning_tokens": 613,
+   "duration_s": 9.33,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open My Trips",
+     "Show past or completed trips",
+     "Find the Seattle flight",
+     "Read its date"
+    ],
+    "success_check": {
+     "kind": "info",
+     "value": "date of Seattle flight",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "answer visible on screen: Tue, Mar, 3, 2026"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-past_trip-v3-r0"
+  },
+  {
+   "task": "gate_alerts",
+   "suite": "core",
+   "variant": 3,
+   "rep": 0,
+   "goal": "Turn on gate change alerts.",
+   "passed": true,
+   "status": "done",
+   "result": "Gate change alerts are turned on in Profile.",
+   "steps": 2,
+   "model_calls": 4,
+   "cost_usd": 0.00663,
+   "input_tokens": 7385,
+   "cached_tokens": 5828,
+   "output_tokens": 897,
+   "reasoning_tokens": 652,
+   "duration_s": 8.71,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open Profile",
+     "Open notification or alerts settings",
+     "Turn on gate change alerts"
+    ],
+    "success_check": {
+     "kind": "field_equals",
+     "value": "On",
+     "field_hint": "Gate change alerts"
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "field 'Gate change alerts' holds 'On'"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-final-variants-gate_alerts-v3-r0"
+  }
+ ]
+}

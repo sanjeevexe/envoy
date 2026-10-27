@@ -1,0 +1,193 @@
+{
+ "name": "p1-fix-parse",
+ "summary": {
+  "all": {
+   "runs": 4,
+   "success_rate": 0.5,
+   "median_steps": 12.0,
+   "median_model_calls": 15.0,
+   "median_duration_s": 32.765,
+   "median_cost_usd": 0.03065,
+   "total_cost_usd": 0.1241,
+   "cache_hit_share": 0.677,
+   "approval_gate_correct": "4/4"
+  },
+  "core": {
+   "runs": 4,
+   "success_rate": 0.5,
+   "median_steps": 12.0,
+   "median_model_calls": 15.0,
+   "median_duration_s": 32.765,
+   "median_cost_usd": 0.03065,
+   "total_cost_usd": 0.1241,
+   "cache_hit_share": 0.677,
+   "approval_gate_correct": "4/4"
+  },
+  "core_variant_0": {
+   "runs": 4,
+   "success_rate": 0.5,
+   "median_steps": 12.0,
+   "median_model_calls": 15.0,
+   "median_duration_s": 32.765,
+   "median_cost_usd": 0.03065,
+   "total_cost_usd": 0.1241,
+   "cache_hit_share": 0.677,
+   "approval_gate_correct": "4/4"
+  }
+ },
+ "rows": [
+  {
+   "task": "past_trip",
+   "suite": "core",
+   "variant": 0,
+   "rep": 0,
+   "goal": "When did I fly to Seattle?",
+   "passed": true,
+   "status": "done",
+   "result": "Tue, Mar 3, 2026 - Flight SL 1708 ATL 8:20 AM \u2192 SEA 10:55 AM",
+   "steps": 3,
+   "model_calls": 5,
+   "cost_usd": 0.00699,
+   "input_tokens": 9871,
+   "cached_tokens": 7733,
+   "output_tokens": 743,
+   "reasoning_tokens": 418,
+   "duration_s": 11.82,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open My Trips from the bottom navigation",
+     "Find past or completed trips including Seattle",
+     "Open the Seattle trip to read its date"
+    ],
+    "success_check": {
+     "kind": "info",
+     "value": "date of Seattle flight",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "answer visible on screen: Tue, Mar, 3, 2026"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-fix-parse-past_trip-v0-r0"
+  },
+  {
+   "task": "past_trip",
+   "suite": "core",
+   "variant": 0,
+   "rep": 1,
+   "goal": "When did I fly to Seattle?",
+   "passed": true,
+   "status": "done",
+   "result": "Tue, Mar 3, 2026 - Seattle trip SL 1708 ATL \u2192 SEA",
+   "steps": 2,
+   "model_calls": 4,
+   "cost_usd": 0.00668,
+   "input_tokens": 7608,
+   "cached_tokens": 5828,
+   "output_tokens": 843,
+   "reasoning_tokens": 573,
+   "duration_s": 8.5,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open My Trips",
+     "View past or completed trips",
+     "Find the Seattle trip and read its date"
+    ],
+    "success_check": {
+     "kind": "info",
+     "value": "date of flight to Seattle",
+     "field_hint": null
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "answer visible on screen: Tue, Mar, 3, 2026"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-fix-parse-past_trip-v0-r1"
+  },
+  {
+   "task": "gate_alerts",
+   "suite": "core",
+   "variant": 0,
+   "rep": 0,
+   "goal": "Turn on gate change alerts.",
+   "passed": false,
+   "status": "step_limit",
+   "result": "stopped after 25 steps",
+   "steps": 21,
+   "model_calls": 26,
+   "cost_usd": 0.05616,
+   "input_tokens": 68261,
+   "cached_tokens": 45306,
+   "output_tokens": 4863,
+   "reasoning_tokens": 3091,
+   "duration_s": 53.71,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open My Trips and select the Chicago trip SL 482",
+     "Open notification or alerts settings for the trip",
+     "Turn on gate change alerts",
+     "Confirm gate change alerts are enabled"
+    ],
+    "success_check": {
+     "kind": "field_equals",
+     "value": "On",
+     "field_hint": "Gate change alerts"
+    }
+   },
+   "check": null,
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-fix-parse-gate_alerts-v0-r0"
+  },
+  {
+   "task": "gate_alerts",
+   "suite": "core",
+   "variant": 0,
+   "rep": 1,
+   "goal": "Turn on gate change alerts.",
+   "passed": false,
+   "status": "step_limit",
+   "result": "stopped after 25 steps",
+   "steps": 21,
+   "model_calls": 25,
+   "cost_usd": 0.05431,
+   "input_tokens": 65242,
+   "cached_tokens": 43401,
+   "output_tokens": 4824,
+   "reasoning_tokens": 3175,
+   "duration_s": 56.42,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open the next trip to Chicago",
+     "Open notifications or alerts settings for the trip",
+     "Turn on gate change alerts"
+    ],
+    "success_check": {
+     "kind": "field_equals",
+     "value": "On",
+     "field_hint": "Gate change alerts"
+    }
+   },
+   "check": null,
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-fix-parse-gate_alerts-v0-r1"
+  }
+ ]
+}

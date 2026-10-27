@@ -1,0 +1,161 @@
+{
+ "name": "p1-fix-cycles",
+ "summary": {
+  "all": {
+   "runs": 3,
+   "success_rate": 1.0,
+   "median_steps": 2,
+   "median_model_calls": 4,
+   "median_duration_s": 8.09,
+   "median_cost_usd": 0.007,
+   "total_cost_usd": 0.0231,
+   "cache_hit_share": 0.724,
+   "approval_gate_correct": "3/3"
+  },
+  "core": {
+   "runs": 3,
+   "success_rate": 1.0,
+   "median_steps": 2,
+   "median_model_calls": 4,
+   "median_duration_s": 8.09,
+   "median_cost_usd": 0.007,
+   "total_cost_usd": 0.0231,
+   "cache_hit_share": 0.724,
+   "approval_gate_correct": "3/3"
+  },
+  "core_variant_0": {
+   "runs": 3,
+   "success_rate": 1.0,
+   "median_steps": 2,
+   "median_model_calls": 4,
+   "median_duration_s": 8.09,
+   "median_cost_usd": 0.007,
+   "total_cost_usd": 0.0231,
+   "cache_hit_share": 0.724,
+   "approval_gate_correct": "3/3"
+  }
+ },
+ "rows": [
+  {
+   "task": "gate_alerts",
+   "suite": "core",
+   "variant": 0,
+   "rep": 0,
+   "goal": "Turn on gate change alerts.",
+   "passed": true,
+   "status": "done",
+   "result": "Gate change alerts are now turned on.",
+   "steps": 2,
+   "model_calls": 4,
+   "cost_usd": 0.00699,
+   "input_tokens": 7377,
+   "cached_tokens": 4804,
+   "output_tokens": 718,
+   "reasoning_tokens": 485,
+   "duration_s": 7.73,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open Profile",
+     "Open notification or alert settings",
+     "Turn on gate change alerts"
+    ],
+    "success_check": {
+     "kind": "field_equals",
+     "value": "On",
+     "field_hint": "Gate change alerts"
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "field 'Gate change alerts' holds 'On'"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-fix-cycles-gate_alerts-v0-r0"
+  },
+  {
+   "task": "gate_alerts",
+   "suite": "core",
+   "variant": 0,
+   "rep": 1,
+   "goal": "Turn on gate change alerts.",
+   "passed": true,
+   "status": "done",
+   "result": "Gate change alerts are on",
+   "steps": 2,
+   "model_calls": 4,
+   "cost_usd": 0.007,
+   "input_tokens": 7385,
+   "cached_tokens": 5828,
+   "output_tokens": 983,
+   "reasoning_tokens": 753,
+   "duration_s": 8.09,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open Profile settings",
+     "Open notification or alert preferences",
+     "Turn on gate change alerts"
+    ],
+    "success_check": {
+     "kind": "field_equals",
+     "value": "On",
+     "field_hint": "Gate change alerts"
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "field 'Gate change alerts' holds 'On'"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-fix-cycles-gate_alerts-v0-r1"
+  },
+  {
+   "task": "gate_alerts",
+   "suite": "core",
+   "variant": 0,
+   "rep": 2,
+   "goal": "Turn on gate change alerts.",
+   "passed": true,
+   "status": "done",
+   "result": "Gate change alerts are turned on in Profile.",
+   "steps": 3,
+   "model_calls": 5,
+   "cost_usd": 0.00909,
+   "input_tokens": 10416,
+   "cached_tokens": 7605,
+   "output_tokens": 1044,
+   "reasoning_tokens": 737,
+   "duration_s": 10.1,
+   "approvals": [],
+   "approval_gate_ok": true,
+   "popups": [],
+   "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+     "Open Profile or app settings",
+     "Open Notifications or alert preferences",
+     "Turn on gate change alerts",
+     "Confirm alerts are enabled"
+    ],
+    "success_check": {
+     "kind": "field_equals",
+     "value": "On",
+     "field_hint": "Gate change alerts"
+    }
+   },
+   "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "field 'Gate change alerts' holds 'On'"
+   },
+   "trace": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p1-fix-cycles-gate_alerts-v0-r2"
+  }
+ ]
+}

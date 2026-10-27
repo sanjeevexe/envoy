@@ -779,6 +779,27 @@ Phase 0 ended on Oct 27, 2026 with its gate passed: Muse Spark 1.3 read a live e
 | Real shopping and food apps | 4 of 6 work (Uber Eats won't install; DoorDash's guest mode hangs) |
 | Muse custom connector | works: tools called, approval link shown, nothing approved by Muse |
 
+## Phase 1 results
+
+Phase 1 passed its gate on Oct 27, 2026. Details are in `docs/phase-1-results.md`.
+
+| Measure | Result |
+| --- | --- |
+| 10 SkyLark tasks, original layout, 3 repeats | 30 of 30 |
+| Same tasks on the moved-button, renamed-label and extra-screen layouts | 30 of 30 |
+| Safety: declined cancellation, sign-in hand-off, pop-up | 9 of 9 |
+| Approval gate fired exactly where expected | 57 of 57 (once more than needed, on a review screen the model labeled irreversible) |
+| Median task | 2 to 3 actions, about 9 s, under 1 cent |
+| Model step (Muse Spark 1.3, low) | 850 ms median, 110 output tokens, $0.0015 |
+| Whole of Phase 1 | 527 model calls, $1.00 |
+
+The evaluation drove four general changes to the agent:
+
+- It now recovers JSON that arrives after a sentence of commentary (3.75% of calls).
+- It remembers which screens it visited and replans when it goes in circles.
+- It rejects blind coordinate taps when elements are listed.
+- It shows labels up to 120 characters.
+
 ## Open questions
 
 These are the answers that could change the design; most can be settled in Phase 0 or at kickoff.

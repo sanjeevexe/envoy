@@ -318,6 +318,14 @@ class AgentRunner:
                 if action is None:
                     trace.step(record)
                     continue
+                if action.kind == "tap_point" and png is None and len(screen.numbered) >= 3:
+                    # Design: tap_point is only for screens with no usable tree, with coordinates from a screenshot.
+                    feedback = ("tap_point is only for screens without usable elements, using coordinates read from a screenshot. "
+                                "This screen has numbered elements: tap one of them (or use look first if you need to see the screen).")
+                    history.append(f"step {step}: {desc} → rejected: blind tap_point while elements are listed")
+                    record["error"] = "tap_point rejected: elements available and no screenshot"
+                    trace.step(record)
+                    continue
 
                 verdict = classify(action, screen, decision.risk)
                 record["risk"] = {"level": verdict.level, "reasons": verdict.reasons, "model": decision.risk}

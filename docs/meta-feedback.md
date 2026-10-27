@@ -40,6 +40,10 @@ The submission form asks for "feedback from your experience using Meta products"
 - **Visual grounding** on tall 1080×2400 phone screenshots was precise: a 137×126 px toggle was located within 1 px.
 - SAM 3.1 segments UI parts well when given specific noun phrases ("toggle switch", "search bar").
 
+**Agent loop in Phase 1 (Oct 27, 480 calls, $0.91)**
+- **What worked well:** Muse Spark 1.3 at `low` drove a phone agent through 69 of 69 evaluation runs on our test app, including three changed layouts. Steps took a median of 850 ms and cost $0.0015, and the cache served 73% of input tokens.
+- **A preamble before structured JSON.** In 18 of 480 calls (3.75%) with `text.format` json_schema, the response came as two text parts: a sentence of commentary, then the schema JSON, so `output_text` is not valid JSON. The last message part was always valid. Either constrain all output text to the schema, or document that only the last part is constrained.
+
 **What could be better**
 - **`minimal` effort was no faster than `low`** in our test (median 0.99 s against 0.87 s) and was less accurate on a simple element choice (11/15 against 10/10). Guidance on when `minimal` helps would be useful.
 - **A full-resolution phone screenshot costs about 3,200 input tokens**, about twice the docs' "~1,300–1,500 for ~1280 px". A documented token formula per resolution would help budgeting.
