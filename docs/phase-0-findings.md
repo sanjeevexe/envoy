@@ -479,7 +479,18 @@ Oct 26–27. Muse free tier on your iPhone 16 Plus, driven partly through iPhone
 
 ### B3. Official rules
 
-- Open-source use:
+From the public event page (cerebralvalley.ai/e/meta-ai-developer-hackathon, read Oct 27). The full Official Rules aren't public: they go to accepted participants.
+- **Indie track judging:** "creativity, technical ambition, and whether it works". The startup track is judged on production readiness.
+- **Theme "Push the Frontier":** use Meta's models to give machines new capabilities. Envoy's "phone layer for agents" fits.
+- **Dates (ET):**
+  - Workshops and Discord office hours: Oct 27 – Nov 4
+  - **Submissions due: Nov 4, 9:00 PM**
+  - Judging: Nov 4–8
+  - Winners: Nov 9
+- **Models listed:** Muse Spark series, Muse Wonder, Muse Image and SAM 3.1 (Model API), open-weights models, and Muse Code. The page doesn't explicitly require any of them.
+- **Not on the public page:** open-source and pre-existing code rules, attribution, required materials, demo video length, team size. These need the Official Rules text.
+
+- Open-source use (Official Rules):
 - Submission requirements (materials, demo video length):
 - `THIRD_PARTY.md` check:
 - Connector applications submitted: [ ] Muse Connector Platform  [ ] Meta AI Connectors waitlist
