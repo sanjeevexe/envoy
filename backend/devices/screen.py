@@ -157,6 +157,16 @@ def number_elements(elements: list[Element], width: int, height: int) -> list[El
             p = pe.parent
         return False
 
+    def text_only_group(idx: int) -> bool:
+        """A container whose descendants are all non-interactive (a label/value row, a card of text)."""
+        stack = list(children.get(idx, []))
+        while stack:
+            c = stack.pop()
+            if _interactive(elements[c]):
+                return False
+            stack.extend(children.get(c, []))
+        return True
+
     numbered: list[Element] = []
     for e in elements:
         if not _on_screen(e, width, height):
@@ -166,18 +176,32 @@ def number_elements(elements: list[Element], width: int, height: int) -> list[El
             label = e.text or e.desc
             if label and not e.scrollable:
                 absorb_repeats(e.index, label)
-            if not label and not e.editable and not e.scrollable:
-                parts: list[str] = []
+            if e.editable:
+                # Compose and Material fields carry their label as a child text node, not a hint.
+                parts = []
+                descendant_text(e.index, parts)
+                field_label = parts[0] if parts else e.hint
+                if not e.text or e.text == field_label:
+                    label = field_label
+                elif field_label:
+                    label = f"{field_label}: {e.text}"
+            elif not label and not e.scrollable:
+                parts = []
                 descendant_text(e.index, parts)
                 label = " · ".join(dict.fromkeys(parts))  # drop repeats such as "Order · Order"
-            if e.editable and not label:
-                label = e.hint
             e.label = _clip(label)
             if e.label or e.resource_id or e.editable or e.scrollable or e.checkable:
                 numbered.append(e)
         elif (e.text or e.desc) and e.index not in absorbed and not repeats_ancestor(e):
             e.label = _clip(e.text or e.desc)
             numbered.append(e)
+        elif _short_id(e.resource_id) and e.index not in absorbed and children.get(e.index) and text_only_group(e.index):
+            # A merged row with an ID but no text of its own ("Date" + "Fri, Oct 30"): one line, with its ID.
+            parts = []
+            descendant_text(e.index, parts)
+            if parts:
+                e.label = _clip(" · ".join(dict.fromkeys(parts)))
+                numbered.append(e)
 
     # Parents come before children in document order, so absorbed children are already skipped.
     for i, e in enumerate(numbered, start=1):

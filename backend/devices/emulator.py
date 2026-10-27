@@ -197,6 +197,46 @@ class EmulatorDevice:
             else:
                 self.u2.click(x, y)
 
+    def _focused_field(self, bounds: tuple[int, int, int, int], timeout_s: float = 2.0):
+        """The focused node once it is the field at `bounds` (focus moves a moment after the tap)."""
+        x1, y1, x2, y2 = bounds
+        cx, cy = (x1 + x2) // 2, (y1 + y2) // 2
+        deadline = time.time() + timeout_s
+        while time.time() < deadline:
+            node = self.u2(focused=True)
+            if node.exists:
+                b = node.info.get("bounds", {})
+                if b.get("left", -1) <= cx <= b.get("right", -1) and b.get("top", -1) <= cy <= b.get("bottom", -1):
+                    return node
+            time.sleep(0.1)
+        return None
+
+    def _type_into(self, el, text: str) -> None:
+        """Accessibility set-text (ACTION_SET_TEXT) into the field: any language and emoji, replacing its text.
+
+        uiautomator2's send_keys pastes through the clipboard, which would leak typed text into the
+        clipboard and the keyboard's clipboard history (measured in Phase 0), so it is only a fallback.
+        The tap that focuses the field takes effect a moment later, so wait for focus before setting text,
+        and read the field back (get_text keeps emoji, which the XML dump garbles).
+        """
+        node = None if not el.focused else self._focused_field(el.bounds, 0.3)
+        if node is None:
+            self._tap(*el.center)
+            node = self._focused_field(el.bounds)
+        if node is None:
+            self.u2.send_keys(text, clear=True)
+            self.u2.set_clipboard("")
+            return
+        def norm(v: str) -> str:
+            return "".join(v.split()).casefold()
+
+        for _ in range(2):
+            node.set_text(text)
+            time.sleep(0.15)
+            if norm(node.get_text() or "") == norm(text):
+                return
+        # Fields may reformat input (upper-casing a code, dropping symbols); the next observation shows the result.
+
     def _act_sync(self, a: Action) -> ActionResult:
         t0 = time.perf_counter()
         target = None
@@ -212,17 +252,7 @@ class EmulatorDevice:
             elif a.kind == "long_press":
                 self._tap(*el.center, hold_s=0.8)
             elif a.kind == "type":
-                if not el.focused:
-                    self.u2.click(*el.center)
-                # Accessibility set-text (ACTION_SET_TEXT): any language and emoji, replaces the field's text.
-                # uiautomator2's send_keys pastes through the clipboard, which would leak typed text into
-                # the clipboard and the keyboard's clipboard history (measured in Phase 0), so it is only a fallback.
-                focused = self.u2(focused=True)
-                if focused.exists:
-                    focused.set_text(a.text or "")
-                else:
-                    self.u2.send_keys(a.text or "", clear=True)
-                    self.u2.set_clipboard("")
+                self._type_into(el, a.text or "")
                 if a.submit:
                     # A plain Enter key. uiautomator2's send_action() would install and switch to its own IME
                     # (seen in Phase 0), replacing the keyboard the user sees during a takeover.
