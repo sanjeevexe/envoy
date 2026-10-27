@@ -114,7 +114,7 @@ Build exactly what the design doc's **App routines** section describes. In short
 ## Rules and constraints
 
 - **The demo may only show work built during the hackathon (Oct 27 – Nov 4), clearly identified**, or the project can be disqualified. Keep `THIRD_PARTY.md` current. Open source is plumbing; routines, repair and versioning are ours. Don't adopt an existing routine or macro library wholesale.
-- **Budget:** the shared key is limited (about $36.9 left until my own credits arrive), so don't overspend. Spend where it makes the work better; avoid waste such as needless repeats or high effort where `low` works. Don't use the Contributor tier on this shared key unless I say so.
+- **Budget:** the shared key is limited (about $36.9 left until my own credits arrive), so don't overspend. Spend where it makes the work better; avoid waste such as needless repeats or high effort where `low` works. The Contributor tier is allowed for SkyLark (our test app's fake data) to save credits; never for real apps or real data.
 - **Safety is unchanged in routines:** irreversible steps always go through the policy gate, approvals come only from a person (or the scripted approver on SkyLark), and nothing types passwords.
 - Keep `envoy-real` long-lived: never restore a snapshot on it, and always stop it with `scripts/stop_emulator.sh`. Run at most two emulators at once; Chrome stays open on this Mac.
 - Before any change visible outside this Mac (making the repo public, submitting forms, posting), ask me.
