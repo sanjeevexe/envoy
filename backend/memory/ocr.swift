@@ -4,7 +4,9 @@
 //   envoy-ocr <image>   →   {"width": W, "height": H, "lines": [{"text": "...", "confidence": 0.98, "box": [x, y, w, h]}]}
 //
 // Boxes are fractions of the image, origin at the top left. Language correction is off, so codes like KX7Q2M come
-// back as printed instead of being "corrected" into words.
+// back as printed instead of being "corrected" into words. A second pass reads four overlapping tiles and adds the
+// words the full pass missed: on SkyLark's trip screen Vision skipped a lone confirmation code on the right of a row,
+// and read it in a tile.
 import Foundation
 import Vision
 import ImageIO
@@ -20,26 +22,47 @@ guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
     exit(1)
 }
 
-let request = VNRecognizeTextRequest()
-request.recognitionLevel = .accurate
-request.usesLanguageCorrection = false
-request.minimumTextHeight = 0.008
-
 let handler = VNImageRequestHandler(cgImage: image, options: [:])
-do {
-    try handler.perform([request])
-} catch {
-    FileHandle.standardError.write("vision failed: \(error)\n".data(using: .utf8)!)
-    exit(1)
+
+// Text in `region` (normalized, origin bottom left), with boxes mapped back to the whole image.
+func read(_ region: CGRect) -> [(String, Double, CGRect)] {
+    let request = VNRecognizeTextRequest()
+    request.recognitionLevel = .accurate
+    request.usesLanguageCorrection = false
+    request.minimumTextHeight = 0.008
+    request.regionOfInterest = region
+    do {
+        try handler.perform([request])
+    } catch {
+        FileHandle.standardError.write("vision failed: \(error)\n".data(using: .utf8)!)
+        exit(1)
+    }
+    return (request.results ?? []).compactMap { obs in
+        guard let best = obs.topCandidates(1).first else { return nil }
+        let b = obs.boundingBox
+        let box = CGRect(x: region.minX + b.minX * region.width, y: region.minY + b.minY * region.height,
+                         width: b.width * region.width, height: b.height * region.height)
+        return (best.string, Double(best.confidence), box)
+    }
+}
+
+var found = read(CGRect(x: 0, y: 0, width: 1, height: 1))
+let tiles = [CGRect(x: 0, y: 0.45, width: 0.55, height: 0.55), CGRect(x: 0.45, y: 0.45, width: 0.55, height: 0.55),
+             CGRect(x: 0, y: 0, width: 0.55, height: 0.55), CGRect(x: 0.45, y: 0, width: 0.55, height: 0.55)]
+for tile in tiles {
+    for (text, conf, box) in read(tile) {
+        let center = CGPoint(x: box.midX, y: box.midY)
+        if !found.contains(where: { $0.2.insetBy(dx: -0.005, dy: -0.005).contains(center) || box.contains(CGPoint(x: $0.2.midX, y: $0.2.midY)) }) {
+            found.append((text, conf, box))
+        }
+    }
 }
 
 var lines: [[String: Any]] = []
-for obs in request.results ?? [] {
-    guard let best = obs.topCandidates(1).first else { continue }
-    let b = obs.boundingBox  // normalized, origin bottom left
+for (text, conf, b) in found {
     lines.append([
-        "text": best.string,
-        "confidence": Double(best.confidence),
+        "text": text,
+        "confidence": conf,
         "box": [Double(b.minX), Double(1 - b.maxY), Double(b.width), Double(b.height)],
     ])
 }

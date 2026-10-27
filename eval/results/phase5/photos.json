@@ -1,0 +1,217 @@
+{
+ "time": "2026-10-27T16:55:28",
+ "summary": {
+  "expected": 80,
+  "right": 73,
+  "wrong": 0,
+  "missed": 7,
+  "dropped": 0,
+  "new_flights": 0,
+  "new_trips": 0,
+  "cost": 0.0586,
+  "accuracy": "73/80",
+  "screens": 8,
+  "ocr_ms_median": 464.1,
+  "model_ms_median": 4789.4,
+  "all_deleted": true
+ },
+ "screens": [
+  {
+   "screen": "home_chicago",
+   "kind": "home",
+   "expected": 7,
+   "right": 7,
+   "wrong": [],
+   "missed": [],
+   "extra": [
+    "miles",
+    "program",
+    "start_date"
+   ],
+   "dropped": [],
+   "new_flights": 0,
+   "new_trips": 0,
+   "resolved": [
+    "Flight:key",
+    "Trip:link",
+    "Loyalty program:new"
+   ],
+   "deleted": true,
+   "redacted_lines": 0,
+   "ocr_ms": 488.7,
+   "model_ms": 4789.4,
+   "total_s": 5.33,
+   "cost_usd": 0.00723
+  },
+  {
+   "screen": "details_chicago",
+   "kind": "details",
+   "expected": 13,
+   "right": 13,
+   "wrong": [],
+   "missed": [],
+   "extra": [],
+   "dropped": [],
+   "new_flights": 0,
+   "new_trips": 0,
+   "resolved": [
+    "Trip:key",
+    "Flight:key"
+   ],
+   "deleted": true,
+   "redacted_lines": 0,
+   "ocr_ms": 468.4,
+   "model_ms": 4252.8,
+   "total_s": 4.75,
+   "cost_usd": 0.0067
+  },
+  {
+   "screen": "bp_chicago",
+   "kind": "boarding_pass",
+   "expected": 9,
+   "right": 9,
+   "wrong": [],
+   "missed": [],
+   "extra": [],
+   "dropped": [],
+   "new_flights": 0,
+   "new_trips": 0,
+   "resolved": [
+    "Flight:key",
+    "Person:rule"
+   ],
+   "deleted": true,
+   "redacted_lines": 0,
+   "ocr_ms": 432.4,
+   "model_ms": 4092.6,
+   "total_s": 4.55,
+   "cost_usd": 0.00624
+  },
+  {
+   "screen": "details_denver",
+   "kind": "details",
+   "expected": 13,
+   "right": 13,
+   "wrong": [],
+   "missed": [],
+   "extra": [
+    "checked_in",
+    "start_date"
+   ],
+   "dropped": [],
+   "new_flights": 0,
+   "new_trips": 0,
+   "resolved": [
+    "Trip:key",
+    "Flight:key"
+   ],
+   "deleted": true,
+   "redacted_lines": 0,
+   "ocr_ms": 488.1,
+   "model_ms": 5193.7,
+   "total_s": 5.71,
+   "cost_usd": 0.00831
+  },
+  {
+   "screen": "bp_denver",
+   "kind": "boarding_pass",
+   "expected": 9,
+   "right": 9,
+   "wrong": [],
+   "missed": [],
+   "extra": [
+    "destination"
+   ],
+   "dropped": [],
+   "new_flights": 0,
+   "new_trips": 0,
+   "resolved": [
+    "Flight:key",
+    "Person:rule",
+    "Trip:link"
+   ],
+   "deleted": true,
+   "redacted_lines": 0,
+   "ocr_ms": 442.3,
+   "model_ms": 4889.1,
+   "total_s": 5.36,
+   "cost_usd": 0.00775
+  },
+  {
+   "screen": "details_savannah",
+   "kind": "details",
+   "expected": 13,
+   "right": 13,
+   "wrong": [],
+   "missed": [],
+   "extra": [
+    "checked_in"
+   ],
+   "dropped": [],
+   "new_flights": 0,
+   "new_trips": 0,
+   "resolved": [
+    "Trip:key",
+    "Flight:key"
+   ],
+   "deleted": true,
+   "redacted_lines": 0,
+   "ocr_ms": 449.6,
+   "model_ms": 4591.0,
+   "total_s": 5.07,
+   "cost_usd": 0.00794
+  },
+  {
+   "screen": "bp_savannah",
+   "kind": "boarding_pass",
+   "expected": 9,
+   "right": 9,
+   "wrong": [],
+   "missed": [],
+   "extra": [
+    "checked_in"
+   ],
+   "dropped": [],
+   "new_flights": 0,
+   "new_trips": 0,
+   "resolved": [
+    "Flight:key",
+    "Person:rule",
+    "Trip:link"
+   ],
+   "deleted": true,
+   "redacted_lines": 0,
+   "ocr_ms": 425.2,
+   "model_ms": 6807.5,
+   "total_s": 7.26,
+   "cost_usd": 0.0106
+  },
+  {
+   "screen": "status_louisville",
+   "kind": "status",
+   "expected": 7,
+   "right": 0,
+   "wrong": [],
+   "missed": [
+    "number",
+    "date",
+    "from",
+    "to",
+    "status",
+    "gate",
+    "depart_time"
+   ],
+   "extra": [],
+   "dropped": [],
+   "new_flights": 0,
+   "new_trips": 0,
+   "resolved": [],
+   "deleted": true,
+   "redacted_lines": 0,
+   "ocr_ms": 464.1,
+   "model_ms": 1407.8,
+   "total_s": 1.9,
+   "cost_usd": 0.00384
+  }
+ ]
+}

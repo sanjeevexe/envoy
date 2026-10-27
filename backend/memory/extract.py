@@ -132,7 +132,14 @@ def _present(value: str, text: str) -> bool:
     if v in t:
         return True
     squeeze = lambda s: re.sub(r"[^0-9a-z]", "", s)  # noqa: E731 - "SL1190" vs "SL 1190", "6:10AM" vs "6:10 AM"
-    return len(squeeze(v)) >= 2 and squeeze(v) in squeeze(t)
+    if len(squeeze(v)) >= 2 and squeeze(v) in squeeze(t):
+        return True
+    # Codes mixing letters and digits (3J8N0D): text read from an image (OCR) confuses O/0 and I/l/1, so those count as
+    # the same glyph. The model's reading is what is stored; the image's text only has to agree up to that.
+    if re.fullmatch(r"(?=.*\d)(?=.*[a-z])[0-9a-z]{5,}", squeeze(v)):
+        glyph = str.maketrans("oil", "011")
+        return squeeze(v).translate(glyph) in squeeze(t).translate(glyph)
+    return False
 
 
 def _from_output(out: ExtractionOutput, text: str, screen: ScreenState | None) -> tuple[list[ExtractedEntity], list[str]]:

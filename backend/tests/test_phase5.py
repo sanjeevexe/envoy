@@ -469,3 +469,14 @@ def test_a_public_tunnel_reaches_mcp_only(env):
             assert c.get(path, headers={**tunnel, **me(env.token)}).status_code == 421
         (env.tmp / "mcp_public_url").unlink()  # the tunnel script stopped
         assert c.post("/mcp", json=body, headers={**hdr, **tunnel, "Authorization": "Bearer mcp-test-token"}).status_code == 421
+
+
+def test_codes_read_from_images_tolerate_ocr_confusions_only():
+    """Found on SkyLark's Savannah trip: Spark read 3J8N0D from the screenshot, Vision's text said 3J8NOD, and the code was
+    dropped. O/0 and I/l/1 now count as the same glyph in codes that mix letters and digits; nothing else does."""
+    from memory.extract import _present
+    assert _present("3J8N0D", "Confirmation · 3J8NOD")
+    assert _present("KX7Q2M", "Confirmation · KX7Q2M")
+    assert not _present("3J8N0E", "Confirmation · 3J8NOD")  # a different code
+    assert not _present("B12", "Gate · 812")  # short values: exact only
+    assert not _present("Denver", "Dallas")
