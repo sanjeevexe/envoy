@@ -150,7 +150,9 @@ steps:
         kind: Text
       after: . Tap a seat to change it.
       first_in_list: false
-    flight_number: {near: Choose a seat, segment: 1, first_in_list: false}
+      next_element: false
+      expect_digits: true
+    flight_number: {near: Choose a seat, segment: 1, first_in_list: false, next_element: false, expect_digits: false}
   note: trace step 6
 done:
 - text_visible: "{{desired_seat}}"
@@ -158,7 +160,7 @@ compiled_from:
   task_id: p2-src-v4-change_seat
   goal: Change my seat on my Denver flight to 21C.
   compiler: cached
-  compiled_at: "2026-10-27 01:15:48"
+  compiled_at: "2026-10-27 02:33:10"
   trace_steps_kept: [1, 2, 3, 5, 6]
   trace_steps_dropped: 1
   cost_usd: 0.0

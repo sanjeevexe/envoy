@@ -225,8 +225,12 @@ def locate(loc: Locator, screen: ScreenState, inputs: dict[str, str] | None = No
            margin: float = MARGIN, use_ids: bool = True, role: str = "target") -> Match:
     """The element `loc` describes on `screen`, or a Match with element None (too weak or ambiguous)."""
     rendered: Locator = render(loc, inputs or {})
+    cands = candidates(screen)
+    # A screen that exposes no usable IDs at all (a release with stripped or obfuscated IDs) can't count a missing ID
+    # against any element: text, type and neighbors carry the score there, as on most real apps.
+    use_ids = use_ids and any(usable_id(e.resource_id) for e in cands)
     scored = []
-    for e in candidates(screen):
+    for e in cands:
         sc, det = score(rendered, e, screen, use_ids=use_ids, role=role)
         if sc > 0:
             scored.append((sc, e, det))

@@ -247,3 +247,11 @@ def test_accents_do_not_break_input_matching():
     s = _labels_screen([("Button", "Caffè Latte", True), ("Button", "Iced Caffè Latte", True)])
     m = locators.locate(Locator(text_has="{{drink}}", kind="Button"), s, {"drink": "Caffe Latte"})
     assert m.element is not None and m.element.label == "Caffè Latte"  # the row that is exactly the input wins over one that contains it
+
+
+def test_screen_without_ids_does_not_count_ids_against_elements():
+    s = _labels_screen([("Text", "SkyLark Air", False), ("Button", "My Trips", False), ("Button", "Profile", False)])
+    title = Locator(resource_id="screen_title", text="SkyLark Air", kind="Text")
+    assert locators.locate(title, s, role="check").ok  # strict: the app shows no IDs anywhere, so the label carries it
+    tab = Locator(resource_id="nav_trips", text="My Trips", kind="Button")
+    assert locators.locate(tab, s).element.label == "My Trips"

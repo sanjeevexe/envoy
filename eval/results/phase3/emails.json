@@ -1,0 +1,435 @@
+{
+ "time": "2026-10-27T06:43:32+00:00",
+ "summary": {
+  "emails": 14,
+  "model_calls": 11,
+  "cost_usd": 0.0539,
+  "attributes": {
+   "found": 87,
+   "wrong": 0,
+   "missing": 1
+  },
+  "recall": 0.989,
+  "precision": 1.0,
+  "by_method": {
+   "markup": {
+    "found": 27,
+    "wrong": 0,
+    "missing": 0
+   },
+   "model": {
+    "found": 60,
+    "wrong": 0,
+    "missing": 1
+   }
+  },
+  "bookings_one_trip_one_flight": "7/7",
+  "trips_without_a_booking": [],
+  "cancelled_marked": true,
+  "denver_trips_kept_apart": true,
+  "traceable": true,
+  "entities": {
+   "Trip": 7,
+   "Flight": 7,
+   "Person": 1,
+   "Order": 1,
+   "Item": 1
+  }
+ },
+ "rows": [
+  {
+   "email": "000-plain-KX7Q2M",
+   "kind": "plain",
+   "method": "model",
+   "resolved": [
+    [
+     "Trip",
+     "new"
+    ],
+    [
+     "Flight",
+     "new"
+    ],
+    [
+     "Person",
+     "new"
+    ]
+   ],
+   "facts": {
+    "new": 15
+   },
+   "merged": [],
+   "dropped": [],
+   "found": 9,
+   "wrong": 0,
+   "missing": 0
+  },
+  {
+   "email": "001-markup-PT4R8Z",
+   "kind": "markup",
+   "method": "markup",
+   "resolved": [
+    [
+     "Trip",
+     "new"
+    ],
+    [
+     "Flight",
+     "new"
+    ],
+    [
+     "Person",
+     "rule"
+    ]
+   ],
+   "facts": {
+    "new": 16,
+    "same": 1
+   },
+   "merged": [],
+   "dropped": [],
+   "found": 9,
+   "wrong": 0,
+   "missing": 0
+  },
+  {
+   "email": "002-forward-PT4R8Z",
+   "kind": "forward",
+   "method": "model",
+   "resolved": [
+    [
+     "Trip",
+     "key"
+    ],
+    [
+     "Flight",
+     "key"
+    ],
+    [
+     "Person",
+     "link"
+    ]
+   ],
+   "facts": {
+    "same": 14,
+    "new": 1
+   },
+   "merged": [],
+   "dropped": [],
+   "found": 9,
+   "wrong": 0,
+   "missing": 0
+  },
+  {
+   "email": "003-plain-0Q8P5W",
+   "kind": "plain",
+   "method": "model",
+   "resolved": [
+    [
+     "Trip",
+     "new"
+    ],
+    [
+     "Flight",
+     "new"
+    ],
+    [
+     "Person",
+     "rule"
+    ]
+   ],
+   "facts": {
+    "new": 14,
+    "same": 1
+   },
+   "merged": [],
+   "dropped": [],
+   "found": 9,
+   "wrong": 0,
+   "missing": 0
+  },
+  {
+   "email": "004-markup-3J8N0D",
+   "kind": "markup",
+   "method": "markup",
+   "resolved": [
+    [
+     "Person",
+     "key"
+    ],
+    [
+     "Trip",
+     "new"
+    ],
+    [
+     "Flight",
+     "new"
+    ]
+   ],
+   "facts": {
+    "new": 15,
+    "same": 2
+   },
+   "merged": [],
+   "dropped": [],
+   "found": 9,
+   "wrong": 0,
+   "missing": 0
+  },
+  {
+   "email": "005-plain-MU10UN",
+   "kind": "plain",
+   "method": "model",
+   "resolved": [
+    [
+     "Trip",
+     "new"
+    ],
+    [
+     "Flight",
+     "new"
+    ],
+    [
+     "Person",
+     "rule"
+    ]
+   ],
+   "facts": {
+    "new": 13,
+    "same": 1
+   },
+   "merged": [],
+   "dropped": [],
+   "found": 8,
+   "wrong": 0,
+   "missing": 1
+  },
+  {
+   "email": "006-markup-U0HVOP",
+   "kind": "markup",
+   "method": "markup",
+   "resolved": [
+    [
+     "Person",
+     "key"
+    ],
+    [
+     "Trip",
+     "new"
+    ],
+    [
+     "Flight",
+     "new"
+    ]
+   ],
+   "facts": {
+    "new": 15,
+    "same": 2
+   },
+   "merged": [],
+   "dropped": [],
+   "found": 9,
+   "wrong": 0,
+   "missing": 0
+  },
+  {
+   "email": "007-forward-U0HVOP",
+   "kind": "forward",
+   "method": "model",
+   "resolved": [
+    [
+     "Trip",
+     "key"
+    ],
+    [
+     "Flight",
+     "key"
+    ],
+    [
+     "Person",
+     "link"
+    ]
+   ],
+   "facts": {
+    "same": 14,
+    "replaced": 1,
+    "new": 1
+   },
+   "merged": [],
+   "dropped": [],
+   "found": 9,
+   "wrong": 0,
+   "missing": 0
+  },
+  {
+   "email": "008-plain-DN7Q4X",
+   "kind": "plain",
+   "method": "model",
+   "resolved": [
+    [
+     "Trip",
+     "new"
+    ],
+    [
+     "Flight",
+     "new"
+    ],
+    [
+     "Person",
+     "rule"
+    ]
+   ],
+   "facts": {
+    "new": 14,
+    "same": 1
+   },
+   "merged": [],
+   "dropped": [],
+   "found": 9,
+   "wrong": 0,
+   "missing": 0
+  },
+  {
+   "email": "009-seat-PT4R8Z",
+   "kind": "seat_change",
+   "method": "model",
+   "resolved": [
+    [
+     "Flight",
+     "key"
+    ]
+   ],
+   "facts": {
+    "same": 6,
+    "replaced": 1
+   },
+   "merged": [],
+   "dropped": [],
+   "found": 3,
+   "wrong": 0,
+   "missing": 0
+  },
+  {
+   "email": "010-cancel-DN7Q4X",
+   "kind": "cancellation",
+   "method": "model",
+   "resolved": [
+    [
+     "Trip",
+     "key"
+    ],
+    [
+     "Flight",
+     "key"
+    ]
+   ],
+   "facts": {
+    "same": 4,
+    "new": 1
+   },
+   "merged": [],
+   "dropped": [],
+   "found": 2,
+   "wrong": 0,
+   "missing": 0
+  },
+  {
+   "email": "011-promo-Chicago",
+   "kind": "promo",
+   "method": "model",
+   "resolved": [],
+   "facts": {},
+   "merged": [],
+   "dropped": [],
+   "found": 0,
+   "wrong": 0,
+   "missing": 0
+  },
+  {
+   "email": "012-promo-Phoenix",
+   "kind": "promo",
+   "method": "model",
+   "resolved": [],
+   "facts": {},
+   "merged": [],
+   "dropped": [],
+   "found": 0,
+   "wrong": 0,
+   "missing": 0
+  },
+  {
+   "email": "013-receipt",
+   "kind": "receipt",
+   "method": "model",
+   "resolved": [
+    [
+     "Order",
+     "new"
+    ],
+    [
+     "Item",
+     "new"
+    ]
+   ],
+   "facts": {
+    "new": 7
+   },
+   "merged": [],
+   "dropped": [],
+   "found": 2,
+   "wrong": 0,
+   "missing": 0
+  }
+ ],
+ "matching": [
+  {
+   "booking": "KX7Q2M",
+   "city": "Chicago",
+   "trips": 1,
+   "flights": 1,
+   "ok": true
+  },
+  {
+   "booking": "PT4R8Z",
+   "city": "Denver",
+   "trips": 1,
+   "flights": 1,
+   "ok": true
+  },
+  {
+   "booking": "0Q8P5W",
+   "city": "Louisville",
+   "trips": 1,
+   "flights": 1,
+   "ok": true
+  },
+  {
+   "booking": "3J8N0D",
+   "city": "Savannah",
+   "trips": 1,
+   "flights": 1,
+   "ok": true
+  },
+  {
+   "booking": "MU10UN",
+   "city": "Boise",
+   "trips": 1,
+   "flights": 1,
+   "ok": true
+  },
+  {
+   "booking": "U0HVOP",
+   "city": "Tampa",
+   "trips": 1,
+   "flights": 1,
+   "ok": true
+  },
+  {
+   "booking": "DN7Q4X",
+   "city": "Denver",
+   "trips": 1,
+   "flights": 1,
+   "ok": true
+  }
+ ]
+}

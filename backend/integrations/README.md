@@ -1,2 +1,7 @@
 # integrations
-Gmail, Calendar, scheduler and triggers (Phase 3+).
+
+| File | What |
+| --- | --- |
+| `mail.py` | Mailboxes for memory: `LocalMailbox` (a folder of `.eml` files, e.g. the SkyLark test inbox) and `GmailMailbox` (read-only scope, first a recent-messages list, then Gmail's history API from the last history ID). |
+
+Gmail needs a one-time setup by you (a Google Cloud project in testing mode, the test account as a test user, an OAuth client file, one consent): see `scripts/connect_gmail.py`. Calendar, the scheduler and triggers come later.

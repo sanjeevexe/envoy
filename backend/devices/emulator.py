@@ -46,6 +46,7 @@ class EmulatorDevice:
         self._can_snapshot: bool = cfg["can_snapshot"]
         self._lock = asyncio.Lock()
         self._last: ScreenState | None = None
+        self._actions = 0  # actions run on the phone (taps, typing, scrolls): lets tests prove an answer touched nothing
         self._forwards: list[tuple[str, str]] = []  # (local, remote) adb forwards to restore after a snapshot load
         self.adb: adbutils.AdbDevice
         self.u2: u2.Device
@@ -250,6 +251,7 @@ class EmulatorDevice:
         # Fields may reformat input (upper-casing a code, dropping symbols); the next observation shows the result.
 
     def _act_sync(self, a: Action) -> ActionResult:
+        self._actions += 1
         t0 = time.perf_counter()
         target = None
         try:

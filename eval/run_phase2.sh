@@ -9,10 +9,10 @@ cd "$(dirname "$0")"
 export GRPC_VERBOSITY=ERROR
 R="uv run --project ../backend python run_routines.py"
 
-rm -rf ../data/routines                                                   # the library is rebuilt from scratch
+rm -rf ../data/routines results/phase2/library results/phase2/library-v3 results/phase2/library-v4   # libraries are rebuilt from scratch
 $R compile --reuse-spec                                                   # 6 families, original layout
 $R compile --families check_in_next --reuse-spec                          # the next-trip-only routine (Phase 1 trace)
-$R compile --tag=-v3 --src-variant 3 --families check_in                  # fresh Wonder answer: the cleaned steps changed
+$R compile --tag=-v3 --src-variant 3 --families check_in --reuse-spec     # its Wonder answer was cached by the final compiler
 $R compile --tag=-v4 --src-variant 4 --reuse-spec                         # compiled with IDs hidden
 uv run --project ../backend python run_matching.py
 

@@ -67,12 +67,14 @@ steps:
         text_has: "{{flight_number}}"
         kind: Text
       first_in_list: false
+      next_element: false
+      expect_digits: false
   note: trace step 3
 compiled_from:
   task_id: p2-src-v4-flight_status
   goal: What's the status of SkyLark flight SL 1190?
   compiler: cached
-  compiled_at: "2026-10-27 01:16:57"
+  compiled_at: "2026-10-27 02:33:56"
   trace_steps_kept: [1, 2, 3]
   trace_steps_dropped: 0
   cost_usd: 0.0

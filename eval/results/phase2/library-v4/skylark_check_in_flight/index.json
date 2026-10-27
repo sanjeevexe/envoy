@@ -5,7 +5,7 @@
   {
    "version": 1,
    "status": "active",
-   "created": "2026-10-27 01:15:48",
+   "created": "2026-10-27 02:33:10",
    "parent": null,
    "changes": [
     "compiled from p2-src-v4-check_in"
@@ -20,8 +20,12 @@
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 4.97,
-      "outputs": {}
+      "duration_s": 4.13,
+      "outputs": {
+       "seat": "22F",
+       "gate": "A7",
+       "boarding": "2:05 PM · Group 5"
+      }
      },
      {
       "case": "second-inputs",
@@ -31,8 +35,12 @@
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 5.35,
-      "outputs": {}
+      "duration_s": 4.01,
+      "outputs": {
+       "seat": "11E",
+       "gate": "B17",
+       "boarding": "6:00 AM · Group 5"
+      }
      }
     ]
    }

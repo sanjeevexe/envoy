@@ -5,7 +5,7 @@
   {
    "version": 1,
    "status": "active",
-   "created": "2026-10-27 01:16:40",
+   "created": "2026-10-27 02:33:45",
    "parent": null,
    "changes": [
     "compiled from p2-src-v4-add_ktn"
@@ -21,10 +21,9 @@
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 4.0,
+      "duration_s": 3.38,
       "outputs": {
-       "known_traveler_number": "55501234",
-       "save_confirmation": "Known traveler number saved"
+       "known_traveler_number": "55501234"
       }
      },
      {
@@ -36,10 +35,9 @@
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 3.91,
+      "duration_s": 3.37,
       "outputs": {
-       "known_traveler_number": "13561597",
-       "save_confirmation": "Known traveler number saved"
+       "known_traveler_number": "13561597"
       }
      }
     ]

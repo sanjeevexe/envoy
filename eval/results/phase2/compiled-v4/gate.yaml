@@ -1,10 +1,11 @@
 routine: skylark_get_gate
 app: com.skylark.air
 version: 1
-status: draft
+status: active
 intent: Find the departure gate for a SkyLark flight
 description: Opens My Trips in SkyLark, selects the trip matching the requested city, and reads the departure gate from the trip details.
 patterns: [What gate does my flight leave from, What is my departure gate, Find the gate for my flight]
+outputs: [gate]
 start: fresh_launch
 inputs:
   trip_city: {type: text, description: The city of the trip whose gate is requested., example: Denver}
@@ -59,12 +60,14 @@ steps:
       text: "Trip to {{trip_city}}"
       kind: Text
   risk: reversible
+  extract:
+    gate: {near: Gate, first_in_list: false, next_element: true, expect_digits: false}
   note: trace step 2
 compiled_from:
   task_id: p2-src-v4-gate
   goal: What gate does my Denver flight leave from?
   compiler: cached
-  compiled_at: "2026-10-27 01:16:40"
+  compiled_at: "2026-10-27 02:33:45"
   trace_steps_kept: [1, 2]
   trace_steps_dropped: 0
   cost_usd: 0.0

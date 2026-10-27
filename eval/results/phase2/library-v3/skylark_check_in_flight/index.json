@@ -1,11 +1,11 @@
 {
  "name": "skylark_check_in_flight",
- "active": 2,
+ "active": 1,
  "versions": [
   {
    "version": 1,
-   "status": "retired",
-   "created": "2026-10-27 01:15:20",
+   "status": "active",
+   "created": "2026-10-27 02:28:07",
    "parent": null,
    "changes": [
     "compiled from p2-src-v3-check_in"
@@ -20,52 +20,7 @@
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 7.65,
-      "outputs": {
-       "seat": "22F",
-       "gate": "A7",
-       "boarding": "2:05 PM · Group 5",
-       "check_in_status": "You're checked in"
-      }
-     },
-     {
-      "case": "second-inputs",
-      "inputs": {
-       "trip_city": "Tampa"
-      },
-      "passed": true,
-      "status": "done",
-      "detail": "all steps and checks passed",
-      "duration_s": 7.21,
-      "outputs": {
-       "seat": "11E",
-       "gate": "B17",
-       "boarding": "6:00 AM · Group 5",
-       "check_in_status": "You're checked in"
-      }
-     }
-    ]
-   }
-  },
-  {
-   "version": 2,
-   "status": "active",
-   "created": "2026-10-27 01:21:27",
-   "parent": 1,
-   "changes": [
-    "recompiled from p2-src-v3-check_in"
-   ],
-   "verification": {
-    "cases": [
-     {
-      "case": "same-inputs",
-      "inputs": {
-       "trip_city": "Denver"
-      },
-      "passed": true,
-      "status": "done",
-      "detail": "all steps and checks passed",
-      "duration_s": 7.69,
+      "duration_s": 6.46,
       "outputs": {
        "check_in_status": "You're checked in",
        "seat": "22F",
@@ -82,7 +37,7 @@
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 6.72,
+      "duration_s": 6.44,
       "outputs": {
        "check_in_status": "You're checked in",
        "seat": "11E",

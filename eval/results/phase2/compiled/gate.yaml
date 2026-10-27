@@ -82,12 +82,13 @@ steps:
       segment: 1
       first_in_list: false
       next_element: false
+      expect_digits: false
   note: trace step 2
 compiled_from:
   task_id: p2-src-gate
   goal: What gate does my Denver flight leave from?
   compiler: cached
-  compiled_at: "2026-10-27 01:19:21"
+  compiled_at: "2026-10-27 02:26:43"
   trace_steps_kept: [1, 2]
   trace_steps_dropped: 0
   cost_usd: 0.0

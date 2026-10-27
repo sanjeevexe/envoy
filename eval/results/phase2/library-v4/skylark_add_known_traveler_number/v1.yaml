@@ -7,7 +7,7 @@ description: Opens My Trips in SkyLark, opens the trip for the requested city, e
   traveler number field, and saves it.
 patterns: [Add my known traveler number to my trip, Add my known traveler number to my city trip, Put my known traveler number on my flight, Save
     my known traveler number to my trip]
-outputs: [known_traveler_number, save_confirmation]
+outputs: [known_traveler_number]
 start: fresh_launch
 inputs:
   trip_city: {type: text, description: City of the trip to update, example: Denver}
@@ -107,7 +107,8 @@ steps:
         text_has: "{{user_known_traveler_number}}"
         kind: EditText
       first_in_list: false
-    save_confirmation: {pattern: Known\ traveler\ number\ saved, first_in_list: true}
+      next_element: false
+      expect_digits: true
   note: trace step 5
 done:
 - text_visible: "{{user_known_traveler_number}}"
@@ -115,7 +116,7 @@ compiled_from:
   task_id: p2-src-v4-add_ktn
   goal: Add my known traveler number to my Denver trip.
   compiler: cached
-  compiled_at: "2026-10-27 01:16:20"
+  compiled_at: "2026-10-27 02:33:31"
   trace_steps_kept: [2, 3, 4, 5]
   trace_steps_dropped: 1
   cost_usd: 0.0

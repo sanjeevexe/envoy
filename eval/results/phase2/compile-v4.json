@@ -1,5 +1,5 @@
 {
- "time": "2026-10-27T05:17:35+00:00",
+ "time": "2026-10-27T06:34:21+00:00",
  "rows": [
   {
    "family": "check_in",
@@ -17,7 +17,11 @@
      "choices": null
     }
    },
-   "outputs": [],
+   "outputs": [
+    "seat",
+    "gate",
+    "boarding"
+   ],
    "dropped": [
     [
      6,
@@ -34,11 +38,7 @@
     8,
     9
    ],
-   "warnings": [
-    "output 'seat': '22F' is not on the final screen, or nothing anchors it; dropped",
-    "output 'gate': 'A7' is not on the final screen, or nothing anchors it; dropped",
-    "output 'boarding': '2:05 PM · Group 5' is not on the final screen, or nothing anchors it; dropped"
-   ],
+   "warnings": [],
    "compiler": "cached",
    "compile_cost_usd": 0.0622,
    "compile_latency_s": 16.21,
@@ -51,8 +51,12 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 4.97,
-     "outputs": {}
+     "duration_s": 4.13,
+     "outputs": {
+      "seat": "22F",
+      "gate": "A7",
+      "boarding": "2:05 PM · Group 5"
+     }
     },
     {
      "case": "second-inputs",
@@ -62,8 +66,12 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 5.35,
-     "outputs": {}
+     "duration_s": 4.01,
+     "outputs": {
+      "seat": "11E",
+      "gate": "B17",
+      "boarding": "6:00 AM · Group 5"
+     }
     }
    ]
   },
@@ -121,9 +129,9 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 8.05,
+     "duration_s": 6.04,
      "outputs": {
-      "seat": "21C",
+      "seat": "Seat changed to 21C",
       "flight_number": "SL 1190"
      }
     },
@@ -136,9 +144,9 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 8.59,
+     "duration_s": 8.01,
      "outputs": {
-      "seat": "23B",
+      "seat": "Seat changed to 23B",
       "flight_number": "SL 291"
      }
     }
@@ -168,8 +176,7 @@
     }
    },
    "outputs": [
-    "known_traveler_number",
-    "save_confirmation"
+    "known_traveler_number"
    ],
    "dropped": [
     [
@@ -183,7 +190,9 @@
     4,
     5
    ],
-   "warnings": [],
+   "warnings": [
+    "output 'save_confirmation': 'Known traveler number saved' is not on the final screen, or nothing anchors it; dropped"
+   ],
    "compiler": "cached",
    "compile_cost_usd": 0.0501856,
    "compile_latency_s": 15.84,
@@ -197,10 +206,9 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 4.0,
+     "duration_s": 3.38,
      "outputs": {
-      "known_traveler_number": "55501234",
-      "save_confirmation": "Known traveler number saved"
+      "known_traveler_number": "55501234"
      }
     },
     {
@@ -212,10 +220,9 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 3.91,
+     "duration_s": 3.37,
      "outputs": {
-      "known_traveler_number": "13561597",
-      "save_confirmation": "Known traveler number saved"
+      "known_traveler_number": "13561597"
      }
     }
    ]
@@ -225,7 +232,7 @@
    "compiled": true,
    "routine": "skylark_get_gate",
    "version": 1,
-   "status": "rejected",
+   "status": "added",
    "steps": 3,
    "inputs": {
     "trip_city": {
@@ -236,15 +243,15 @@
      "choices": null
     }
    },
-   "outputs": [],
+   "outputs": [
+    "gate"
+   ],
    "dropped": [],
    "kept": [
     1,
     2
    ],
-   "warnings": [
-    "output 'gate': 'A7' is not on the final screen, or nothing anchors it; dropped"
-   ],
+   "warnings": [],
    "compiler": "cached",
    "compile_cost_usd": 0.04346,
    "compile_latency_s": 11.85,
@@ -254,22 +261,26 @@
      "inputs": {
       "trip_city": "Denver"
      },
-     "passed": false,
+     "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 2.49,
-     "outputs": {}
+     "duration_s": 1.72,
+     "outputs": {
+      "gate": "A7"
+     }
     },
     {
      "case": "second-inputs",
      "inputs": {
       "trip_city": "Tampa"
      },
-     "passed": false,
+     "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 2.38,
-     "outputs": {}
+     "duration_s": 1.77,
+     "outputs": {
+      "gate": "B17"
+     }
     }
    ]
   },
@@ -311,7 +322,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 3.99,
+     "duration_s": 3.35,
      "outputs": {
       "flight_status_summary": "SL 1190 · ATL → DEN · Sat, Nov 14, 2026 · Delayed 25 min · Gate A7 · Departs 2:45 PM"
      }
@@ -324,7 +335,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 3.93,
+     "duration_s": 3.32,
      "outputs": {
       "flight_status_summary": "SL 291 · ATL → TPA · Wed, Nov 25, 2026 · On time · Gate B17 · Departs 6:00 AM"
      }
@@ -368,7 +379,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 2.39,
+     "duration_s": 1.75,
      "outputs": {
       "destination": "Denver"
      }
@@ -381,7 +392,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 2.35,
+     "duration_s": 1.76,
      "outputs": {
       "destination": "Tampa"
      }

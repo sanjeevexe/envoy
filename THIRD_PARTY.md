@@ -4,7 +4,7 @@ Envoy builds on the open-source projects below. The hackathon rules allow open s
 
 Licenses for Python packages were read from the installed package metadata (Oct 26, 2026). Licenses for planned components come from their repositories and must be re-checked when they are added.
 
-## In use (Phases 0–2)
+## In use (Phases 0–3)
 
 | Component | Version | License | What we use it for |
 | --- | --- | --- | --- |
@@ -22,6 +22,10 @@ Licenses for Python packages were read from the installed package metadata (Oct 
 | [HTTPX](https://github.com/encode/httpx) | 0.28.1 | BSD-3-Clause | HTTP client for tests and the MCP client |
 | [python-dotenv](https://github.com/theskumar/python-dotenv) | 1.2.4 | BSD-3-Clause | Loads `.env` |
 | [PyYAML](https://github.com/yaml/pyyaml) | 6.0.3 | MIT | Reads and writes routine files (Phase 2) |
+| [SQLite](https://sqlite.org) with FTS5 (Python's `sqlite3`) | 3.53.1 | Public domain | The memory store and its keyword index (Phase 3) |
+| [Google API Python client](https://github.com/googleapis/google-api-python-client) | 2.201.0 | Apache-2.0 | Gmail (read-only) for memory (Phase 3; runs once you connect an account) |
+| [google-auth-oauthlib](https://github.com/googleapis/google-auth-library-python-oauthlib), google-auth, google-auth-httplib2 | 1.5.0 / 2.62.0 / 0.4.4 | Apache-2.0 | The Gmail sign-in flow and tokens |
+| httplib2, uritemplate, oauthlib, requests-oauthlib | 0.32.0 / 4.2.0 / 4.0.0 / 2.0.0 | MIT / BSD-3-Clause or Apache-2.0 / BSD-3-Clause / ISC | Dependencies of the Google client |
 | [Pillow](https://github.com/python-pillow/Pillow) | 13.0.0 | MIT-CMU | Screenshot decoding, black-frame detection, image crops |
 | [scrcpy](https://github.com/Genymobile/scrcpy) | 5.0.1 | Apache-2.0 | Phone screen video (Phase 0 secure-screen test; live view later through the relay) |
 | [cloudflared](https://github.com/cloudflare/cloudflared) | 2026.10.3 | Apache-2.0 | Quick tunnel giving the MCP stub a public HTTPS address |
@@ -39,7 +43,7 @@ Development tools (not shipped):
 Envoy uses open source as plumbing (talking to phones, streaming video, serving HTTP). Everything below is Envoy's own work, and it is what the write-up and demo claim:
 
 - **App routines** (built in Phase 2, Oct 27, `backend/routines/`): compiling one successful run into a program with inputs, code checks before and after every step, element-based locators, local self-repair saved as versioned patches with a trial period and rollback, and portability across screen sizes and devices. No routine, macro or workflow library is used; the format, compiler, locator scoring, check writer, executor, fallback ladder, patcher and store are Envoy's own code.
-- **A memory graph built from phone screens:** facts pulled from app screens, email and photos, each with screen-level provenance and two timelines; one entity per real-world thing across sources; user edits that outrank extracted facts; routine inputs filled from memory and outputs written back.
+- **A memory graph built from phone screens** (built in Phase 3, Oct 27, `backend/memory/`; SQLite is only the storage): facts pulled from app screens, email and photos, each with screen-level provenance and two timelines; one entity per real-world thing across sources; user edits that outrank extracted facts; routine inputs filled from memory and outputs written back.
 - **A device layer that routes between phones:** one interface over emulators and real phones, the compact screen format, settle detection, secure-screen detection from window flags, and the hand-off to the user for sign-in.
 - **A policy engine:** three independent signals vote on irreversible actions, and approvals come only from Envoy's own screens, never from an AI client.
 - **Muse integration:** Envoy as the phone layer behind the real Muse app, through a custom MCP connector.
@@ -53,10 +57,8 @@ Envoy uses open source as plumbing (talking to phones, streaming video, serving 
 | [Tailwind CSS](https://github.com/tailwindlabs/tailwindcss) | MIT | Web app styling |
 | [Cytoscape.js](https://github.com/cytoscape/cytoscape.js) | MIT | Memory graph view |
 | [APScheduler](https://github.com/agronholm/apscheduler) 3.x | MIT | Scheduled tasks and watchers |
-| [SQLite](https://sqlite.org) (FTS5) | Public domain | Memory store |
 | [sqlite-vec](https://github.com/asg017/sqlite-vec) | MIT or Apache-2.0 | Similarity search, only if needed |
 | [PyAV](https://github.com/PyAV-Org/PyAV) | BSD-3-Clause | Decoding scrcpy frames for the agent |
-| [Google API Python client](https://github.com/googleapis/google-api-python-client) | Apache-2.0 | Gmail and Calendar |
 | [Jetpack Compose](https://developer.android.com/jetpack/compose) / AndroidX | Apache-2.0 | Test apps (SkyLark Air) |
 | `meta-sam-parser` (PyPI) / `@meta-sam/parser` (npm), from Meta | License to check when added | Parsing SAM 3.1's special-token output (Phase 6) |
 

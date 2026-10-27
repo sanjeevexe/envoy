@@ -193,18 +193,21 @@ steps:
       segment: 1
       first_in_list: false
       next_element: false
+      expect_digits: true
     gate:
       near: Gate
       locator: {resource_id: row_bp_gate, kind: Text}
       segment: 1
       first_in_list: false
       next_element: false
+      expect_digits: false
     boarding_time:
       near: Boarding
       locator: {resource_id: row_bp_boarding, kind: Text}
       segment: 1
       first_in_list: false
       next_element: false
+      expect_digits: true
   note: trace step 8
 done:
 - {text_visible: checked in}
@@ -212,7 +215,7 @@ compiled_from:
   task_id: p2-src-check_in
   goal: Check me in for my flight to Denver.
   compiler: cached
-  compiled_at: "2026-10-27 01:17:59"
+  compiled_at: "2026-10-27 02:25:42"
   trace_steps_kept: [1, 2, 3, 4, 5, 6, 7, 8]
   trace_steps_dropped: 0
   cost_usd: 0.0

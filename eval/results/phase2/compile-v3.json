@@ -1,11 +1,11 @@
 {
- "time": "2026-10-27T05:21:27+00:00",
+ "time": "2026-10-27T06:28:07+00:00",
  "rows": [
   {
    "family": "check_in",
    "compiled": true,
    "routine": "skylark_check_in_flight",
-   "version": 2,
+   "version": 1,
    "status": "added",
    "steps": 14,
    "inputs": {
@@ -40,7 +40,7 @@
     12
    ],
    "warnings": [],
-   "compiler": "muse-wonder-1.0",
+   "compiler": "cached",
    "compile_cost_usd": 0.054958400000000004,
    "compile_latency_s": 16.66,
    "verify": [
@@ -52,7 +52,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 7.69,
+     "duration_s": 6.46,
      "outputs": {
       "check_in_status": "You're checked in",
       "seat": "22F",
@@ -69,7 +69,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 6.72,
+     "duration_s": 6.44,
      "outputs": {
       "check_in_status": "You're checked in",
       "seat": "11E",

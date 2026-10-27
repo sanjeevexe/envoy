@@ -6,6 +6,7 @@ intent: Check in for a SkyLark flight
 description: Checks in for a SkyLark flight by opening My Trips, selecting the trip to the requested city, selecting the passenger, confirming
   no hazardous materials, and confirming check-in, then returns the seat, gate, and boarding information.
 patterns: [Check me in for my flight, Check in for my flight, Please check me in, Check in for my upcoming trip]
+outputs: [seat, gate, boarding]
 start: fresh_launch
 inputs:
   trip_city: {type: text, description: The destination city of the flight to check in for., example: Denver}
@@ -161,6 +162,10 @@ steps:
   post:
   - {screen_changed: true}
   risk: irreversible
+  extract:
+    seat: {near: Seat, first_in_list: false, next_element: true, expect_digits: true}
+    gate: {near: Gate, first_in_list: false, next_element: true, expect_digits: false}
+    boarding: {near: Boarding, first_in_list: false, next_element: true, expect_digits: true}
   note: trace step 9
 done:
 - element_present: {text: Boarding pass}
@@ -168,7 +173,7 @@ compiled_from:
   task_id: p2-src-v4-check_in
   goal: Check me in for my flight to Denver.
   compiler: cached
-  compiled_at: "2026-10-27 01:15:23"
+  compiled_at: "2026-10-27 02:32:55"
   trace_steps_kept: [1, 2, 3, 4, 5, 7, 8, 9]
   trace_steps_dropped: 1
   cost_usd: 0.0

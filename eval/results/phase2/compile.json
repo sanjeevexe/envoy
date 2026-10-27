@@ -1,5 +1,5 @@
 {
- "time": "2026-10-27T05:20:37+00:00",
+ "time": "2026-10-27T06:27:42+00:00",
  "rows": [
   {
    "family": "check_in",
@@ -46,7 +46,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 5.47,
+     "duration_s": 4.57,
      "outputs": {
       "seat": "22F",
       "gate": "A7",
@@ -61,7 +61,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 5.09,
+     "duration_s": 4.56,
      "outputs": {
       "seat": "11E",
       "gate": "B17",
@@ -123,7 +123,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 6.05,
+     "duration_s": 4.94,
      "outputs": {
       "seat": "21C"
      }
@@ -137,7 +137,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 8.45,
+     "duration_s": 6.8,
      "outputs": {
       "seat": "23B"
      }
@@ -192,7 +192,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 4.65,
+     "duration_s": 4.09,
      "outputs": {
       "known_traveler_number": "55501234",
       "confirmation_code": "PT4R8Z"
@@ -207,7 +207,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 4.66,
+     "duration_s": 3.96,
      "outputs": {
       "known_traveler_number": "13561597",
       "confirmation_code": "RPOIG8"
@@ -252,7 +252,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 2.75,
+     "duration_s": 2.44,
      "outputs": {
       "gate": "A7"
      }
@@ -265,7 +265,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 2.45,
+     "duration_s": 2.4,
      "outputs": {
       "gate": "B17"
      }
@@ -314,7 +314,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 2.48,
+     "duration_s": 3.13,
      "outputs": {
       "flight_status": "Delayed 25 min",
       "route": "ATL → DEN",
@@ -331,7 +331,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 3.17,
+     "duration_s": 3.04,
      "outputs": {
       "flight_status": "On time",
       "route": "ATL → TPA",
@@ -379,7 +379,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 2.47,
+     "duration_s": 2.45,
      "outputs": {
       "destination": "Denver"
      }
@@ -392,7 +392,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 2.43,
+     "duration_s": 2.4,
      "outputs": {
       "destination": "Tampa"
      }
@@ -446,7 +446,7 @@
      "passed": true,
      "status": "done",
      "detail": "all steps and checks passed",
-     "duration_s": 3.13,
+     "duration_s": 3.18,
      "outputs": {
       "seat": "14C",
       "gate": "B12",

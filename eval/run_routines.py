@@ -18,6 +18,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
+import os
 import shutil
 import statistics
 import sys
@@ -97,10 +98,18 @@ class Env:
         self.adapter = ModelAdapter()
         self.contributor = contributor
         self.approver = ScriptedApprover(approve=True)  # our own test app: irreversible steps are approved by the script, and logged
+        self.snapshot_failures = 0
 
     async def reset(self, extra: list[Booking], variant: int = 0, snapshot: bool = False) -> dict[str, Any]:
-        if snapshot:
-            await self.device.snapshot_load(SNAPSHOT)
+        # ENVOY_RESET=fixtures: reset through SkyLark's fixture hook only (the emulator hung on snapshot restores after
+        # dozens of them in one session; the hook resets all app state, as Phase 1's eval did).
+        if snapshot and os.environ.get("ENVOY_RESET", "snapshot") == "snapshot":
+            try:
+                await asyncio.wait_for(self.device.snapshot_load(SNAPSHOT), timeout=90)
+            except Exception as e:  # noqa: BLE001 - a restore that hangs must not take the whole suite down
+                self.snapshot_failures += 1
+                print(f"  (snapshot restore failed: {type(e).__name__}; reset by fixtures only)", flush=True)
+                self.device.connect()
         self.app.prepare(fixtures=fixtures(extra), variant=variant)
         return self.app.state()
 
@@ -251,8 +260,9 @@ async def cmd_new_inputs(env: Env, args: argparse.Namespace) -> None:
 
 async def cmd_variants(env: Env, args: argparse.Namespace) -> None:
     main = RoutineStore(LIB)
-    rows = load("variants")["experiments"] if exists("variants") and args.append else []
     variants = [int(v) for v in args.variants.split(",")]
+    redo = {(f.id, v) for f in families(args) for v in variants}  # --append replaces these experiments and keeps the rest
+    rows = [e for e in load("variants")["experiments"] if (e["family"], e["variant"]) not in redo] if exists("variants") and args.append else []
     for fam in families(args):
         src = src_of(fam)
         base = routine_for(main, fam)

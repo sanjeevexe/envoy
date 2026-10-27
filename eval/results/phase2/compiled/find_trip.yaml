@@ -76,12 +76,13 @@ steps:
       locator: {resource_id: screen_title, kind: Text}
       first_in_list: false
       next_element: false
+      expect_digits: false
   note: trace step 2
 compiled_from:
   task_id: p2-src-find_trip
   goal: Look up my trip with confirmation code PT4R8Z and tell me where it goes.
   compiler: cached
-  compiled_at: "2026-10-27 01:20:05"
+  compiled_at: "2026-10-27 02:27:15"
   trace_steps_kept: [1, 2]
   trace_steps_dropped: 0
   cost_usd: 0.0

@@ -119,12 +119,14 @@ steps:
       locator: {resource_id: field_ktn, kind: EditText}
       first_in_list: false
       next_element: false
+      expect_digits: true
     confirmation_code:
       near: Confirmation
       locator: {resource_id: row_confirmation, kind: Text}
       segment: 1
       first_in_list: false
       next_element: false
+      expect_digits: false
   note: trace step 4
 done:
 - text_visible: "{{user_known_traveler_number}}"
@@ -132,7 +134,7 @@ compiled_from:
   task_id: p2-src-add_ktn
   goal: Add my known traveler number to my Denver trip.
   compiler: cached
-  compiled_at: "2026-10-27 01:18:57"
+  compiled_at: "2026-10-27 02:26:24"
   trace_steps_kept: [1, 2, 3, 4]
   trace_steps_dropped: 0
   cost_usd: 0.0

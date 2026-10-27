@@ -266,8 +266,8 @@ class RoutineExecutor:
                     i = ctx.jump_to if ctx.jump_to is not None else i + 1
                     ctx.jump_to = None
                     continue
-                if verdict == "finished":  # the full agent finished the task
-                    return out
+                if verdict == "finished":  # the full agent took over (rung 5) and ended the task
+                    return self._finish(ctx, out.status, out.detail)
                 return self._finish(ctx, out.status, sr.detail)
 
             # End of routine: done-checks and outputs.
@@ -823,13 +823,14 @@ class RoutineExecutor:
             screen = await self._observe()
             for st in ctx.routine.steps[idx:]:
                 await self._extract(ctx, st, screen)
-            self._finish(ctx, "agent_done", f"step {step.id} failed ({why}); the full agent finished: {res.result}")
+            ctx.out.status, ctx.out.detail = "agent_done", f"step {step.id} failed ({why}); the full agent finished: {res.result}"
         elif res.status in ("needs_user", "handoff"):
             sr.climb(6, res.result)
-            self._finish(ctx, "needs_user" if res.status == "needs_user" else "handoff", res.result)
+            ctx.out.status, ctx.out.detail = ("needs_user" if res.status == "needs_user" else "handoff"), res.result
         else:
             sr.climb(6, f"agent {res.status}: {res.result}")
-            self._finish(ctx, "needs_user", f"routine step {step.id} failed ({why}) and the agent could not finish ({res.status}); asking the user")
+            ctx.out.status = "needs_user"
+            ctx.out.detail = f"routine step {step.id} failed ({why}) and the agent could not finish ({res.status}); asking the user"
         return "finished"
 
     # ---- outputs ----------------------------------------------------------------------------

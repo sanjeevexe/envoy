@@ -1,0 +1,50 @@
+From: SkyLark Air <reservations@skylark.example>
+To: Maya Patel <maya.patel@example.com>
+Subject: Your SkyLark trip to Denver is confirmed (PT4R8Z)
+Date: Mon, 12 Oct 2026 09:00:00 -0400
+Message-ID: <179308342719.32290.8060188367444590675@skylark.example>
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============0567990949582473356=="
+
+--===============0567990949582473356==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+Hi Maya,
+
+Your trip to Denver is booked. Thanks for flying SkyLark Air.
+
+Confirmation code: PT4R8Z
+Flight: SL 1190
+From: Atlanta (ATL) to Denver (DEN)
+Date: Sat, Nov 14, 2026
+Departs: 2:45 PM  Arrives: 4:05 PM
+Seat: 22F
+Passenger: Maya Patel
+
+Check in opens 24 hours before departure in the SkyLark app.
+
+SkyLark Air
+
+--===============0567990949582473356==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<html><head><script type=3D"application/ld+json">{"@context": "http://schema.=
+org", "@type": "FlightReservation", "reservationNumber": "PT4R8Z", "reservati=
+onStatus": "http://schema.org/ReservationConfirmed", "underName": {"@type": "=
+Person", "name": "Maya Patel", "email": "maya.patel@example.com"}, "reservati=
+onFor": {"@type": "Flight", "flightNumber": "1190", "airline": {"@type": "Air=
+line", "name": "SkyLark Air", "iataCode": "SL"}, "departureAirport": {"@type"=
+: "Airport", "name": "Atlanta", "iataCode": "ATL"}, "departureTime": "2026-11=
+-14T14:45:00-04:00", "arrivalAirport": {"@type": "Airport", "name": "Denver I=
+nternational", "iataCode": "DEN", "address": {"@type": "PostalAddress", "addr=
+essLocality": "Denver"}}, "arrivalTime": "2026-11-14T16:05:00-04:00"}, "airpl=
+aneSeat": "22F", "boardingGroup": "5"}</script></head><body><h1>You're going =
+to Denver!</h1><p>Confirmation <b>PT4R8Z</b></p><p>SL 1190 =C2=B7 ATL 2:45 PM=
+ =E2=86=92 DEN 4:05 PM =C2=B7 Sat, Nov 14, 2026</p><p>Seat 22F</p></body></ht=
+ml>
+
+--===============0567990949582473356==--

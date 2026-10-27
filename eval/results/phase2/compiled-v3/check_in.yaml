@@ -1,6 +1,6 @@
 routine: skylark_check_in_flight
 app: com.skylark.air
-version: 2
+version: 1
 status: active
 intent: Check in for a SkyLark flight
 description: Opens My Trips in SkyLark Air, selects the trip matching the requested destination, completes the passenger, hazardous-materials
@@ -289,38 +289,41 @@ steps:
       locator: {resource_id: text_checked_in, kind: Text}
       first_in_list: false
       next_element: false
+      expect_digits: false
     seat:
       near: Seat
       locator: {resource_id: row_seat, kind: Text}
       segment: 1
       first_in_list: false
       next_element: false
+      expect_digits: true
     gate:
       near: Gate
       locator: {resource_id: row_gate, kind: Text}
       segment: 1
       first_in_list: false
       next_element: false
+      expect_digits: false
     boarding_time:
       near: Boarding
       locator: {resource_id: row_boarding, kind: Text}
       segment: 1
       first_in_list: false
       next_element: false
+      expect_digits: true
     boarding_group:
       near: Boarding
       locator: {resource_id: row_boarding, kind: Text}
       segment: 2
       first_in_list: false
       next_element: false
+      expect_digits: false
   note: trace step 12
-parent_version: 1
-changes: [recompiled from p2-src-v3-check_in]
 compiled_from:
   task_id: p2-src-v3-check_in
   goal: Check me in for my flight to Denver.
-  compiler: muse-wonder-1.0
-  compiled_at: "2026-10-27 01:20:56"
+  compiler: cached
+  compiled_at: "2026-10-27 02:27:44"
   trace_steps_kept: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
   trace_steps_dropped: 0
-  cost_usd: 0.055
+  cost_usd: 0.0

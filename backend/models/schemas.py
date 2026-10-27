@@ -284,3 +284,45 @@ class InputValue(_Strict):
 
 MatchOutput.model_rebuild()
 COMPILE_SCHEMA = strict_json_schema(CompiledRoutine)
+
+
+# --------------------------------------------------------------------------------------------
+# Memory: extraction from screens and emails, entity matching, answers from memory
+# --------------------------------------------------------------------------------------------
+
+EntityTypeName = Literal["Person", "Trip", "Flight", "Reservation", "Order", "Item", "Place", "App", "Account", "Loyalty program",
+                         "Subscription", "Event", "Preference", "Note"]
+
+
+class ExtractedFactOut(_Strict):
+    attribute: str = Field(description="One of the type's attributes, e.g. gate, seat, confirmation_code")
+    value: str = Field(description="The value copied exactly as the source writes it")
+    evidence: str | None = Field(description="For screens: the element number it was read from, e.g. \"6\"; for emails: null")
+
+
+class ExtractedEntityOut(_Strict):
+    ref: str = Field(description="A short local id for links, e.g. e1")
+    type: EntityTypeName
+    facts: list[ExtractedFactOut]
+
+
+class ExtractedLinkOut(_Strict):
+    from_ref: str
+    relation: Literal["includes", "travels_on", "booked_with", "member_of", "at", "for"]
+    to_ref: str
+
+
+class ExtractionOutput(_Strict):
+    entities: list[ExtractedEntityOut]
+    links: list[ExtractedLinkOut]
+
+
+class SameEntityOutput(_Strict):
+    same: bool = Field(description="True only if both descriptions are the same real-world thing")
+    reason: str
+
+
+class MemoryAnswer(_Strict):
+    answer: str = Field(description="The answer in one short sentence, with where and when it was seen; or say memory doesn't have it")
+    found: bool
+    stale: bool = Field(description="True if the notes mark the fact as possibly out of date")

@@ -1,0 +1,48 @@
+{
+ "name": "skylark_get_gate",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-27 02:33:56",
+   "parent": null,
+   "changes": [
+    "compiled from p2-src-v4-gate"
+   ],
+   "verification": {
+    "cases": [
+     {
+      "case": "same-inputs",
+      "inputs": {
+       "trip_city": "Denver"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 1.72,
+      "outputs": {
+       "gate": "A7"
+      }
+     },
+     {
+      "case": "second-inputs",
+      "inputs": {
+       "trip_city": "Tampa"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 1.77,
+      "outputs": {
+       "gate": "B17"
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}
