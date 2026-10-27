@@ -396,7 +396,10 @@ Oct 26, on `envoy-real` (API 35 Google Play, signed in to Play with the dedicate
 | **Chipotle** | Yes | Yes | No | Home and full menu as a guest | Native sign-in: **not secure**; not black anywhere | Readable; password field flagged | _pending_ |
 | **Amazon** | Yes | Yes | No | Far: home, search, categories, cart | WebView sign-in (`AuthPortalUIActivity`): **secure**; **black / black / visible** | **Not readable.** The WebView puts nothing in the tree, only its container. | _pending_ |
 
-Emulator window on a secure screen (Amazon sign-in): _pending your look_.
+**Emulator window on a secure screen** (Amazon sign-in, checked by you): **visible, not black.**
+- On emulators, only scrcpy and `adb screencap` honor `FLAG_SECURE`. The emulator window and its gRPC screenshots both show secure screens.
+- So the design's sign-in path through the emulator window works.
+- A gRPC-fed live view would also let you sign in from the web app or iPhone.
 
 ### B1. Secure screens on real apps, and other findings
 
