@@ -272,7 +272,7 @@ steps:
 ```
 
 - **Inputs** have types (text, code, date, phone, choice) and a hint for where memory can fill them, so "check me in" needs no further questions.
-- **Locators** score several attributes of an element (resource ID, text, description, class, parent and sibling text) instead of coordinates. Real apps often obfuscate resource IDs (the Play Store's are all 0_resource_name_obfuscated), so text and descriptions carry most of the weight. A strict and a relaxed match threshold come from prior work and are tuned on our test set. When an element has no usable attributes (icon-only buttons, Flutter apps), the locator stores a visual crop matched by image similarity, with Muse Spark's visual grounding as the fallback (SAM 3.1 is tested here too; see Agent runtime).
+- **Locators** score several attributes of an element (resource ID, text, description, class, parent and sibling text) instead of coordinates. Real apps often obfuscate resource IDs (the Play Store's are all 0_resource_name_obfuscated), so text and descriptions carry most of the weight. A strict and a relaxed match threshold (0.80 and 0.60, tuned on SkyLark's layouts with and without IDs) separate a confident match from a changed element; a check, unlike a tap target, also needs text evidence and its element type, since an ID alone is shared across screens. When an element has no usable attributes (icon-only buttons, Flutter apps), the locator stores a visual crop matched by image similarity, with Muse Spark's visual grounding as the fallback (SAM 3.1 is tested here too; see Agent runtime).
 - **Checks** are code, not model judgments: app in front, element present or absent, text visible, field holds a value (read with get_text, since tree dumps garble emoji), screen signature similar enough. The signature is the app, the window title, and the sorted resource IDs and element types outside lists, ignoring all text and list contents, so it survives changing data. This avoids the failure seen in prior work where a model misreads whether a condition holds.
 - **Outputs** pull values from screens (seat, gate) and write them to memory with their source. Extraction takes the text after the label in the same element (apps often merge them, as in "Seat 14C"), else the next element, else one Spark call with the outputs schema.
 - **Risk** is recorded per step; an irreversible step always goes through approval, even in a routine.
@@ -799,6 +799,54 @@ The evaluation drove four general changes to the agent:
 - It remembers which screens it visited and replans when it goes in circles.
 - It rejects blind coordinate taps when elements are listed.
 - It shows labels up to 120 characters.
+
+## Phase 2 results
+
+Phase 2 passed its gate on Oct 27, 2026. Details are in `docs/phase-2-results.md`.
+
+| Measure | Result |
+| --- | --- |
+| Routine on bookings it has never seen | 30 of 30 with no model call (median 3.3 s); 18 of 18 with IDs hidden |
+| Recovery after an injected UI change (moved button, renamed labels, extra screen) | 21 of 21; 18 of 18 more on two harder layouts (hidden IDs, renamed labels with hidden IDs) |
+| Patched versions | Every trial passed; each then ran with no model call and still ran on the original layout |
+| Model calls against the full agent, same requests | 7 against 242 (97% fewer); median 4.2 s against 11.7 s |
+| Fixed replay of recorded coordinates | Acted on the wrong booking in 14 of 24 requests |
+| Matching a request to a routine | 12 of 12 |
+| Real apps, read-only | Amazon and Starbucks rerun in about 9 s with no model call, on a second input too; Chipotle's store picker doesn't replay; Target (bot check) and DoorDash (address setup) are blocked |
+| Whole of Phase 2 | 859 model calls, $3.48 |
+
+The evaluation drove these changes to app routines:
+
+- Locators have two roles. A check needs text evidence and its element type, since an ID alone is shared across screens; a tap target may lean on its ID, type and position. Thresholds were tuned on SkyLark: 0.80 strict, 0.60 relaxed, 0.08 margin. IDs are ignored on screens that show none.
+- An input that no action uses must be visible before the step that depends on it, so a routine learned on "the next trip" never acts on another booking.
+- Cleanup never removes an effect: back-tracks can't cross an approved, typed or toggled step, and a compile that loses the run's irreversible step is refused. Pop-ups never become checks.
+- The compiler checks Wonder's answer in code, and verification with a second booking stays mandatory: it rejected 8 bad routines.
+- Steps settle on their after-checks rather than a generic quiet window: about 0.3 to 0.5 s of device time per step.
+- Patches keep a button's old labels, keep booking data out of locators, and make a vanished step optional rather than deleting it, so a patched routine still runs on the old layout.
+- Real apps are stateful: one-time screens get baked in, so a routine should start from a known screen. Bot checks and setup gates stop it, as they should.
+
+## Phase 3 results
+
+Phase 3 passed its gate on Oct 27, 2026. Details are in `docs/phase-3-results.md`.
+
+| Measure | Result |
+| --- | --- |
+| Email and app facts merge into one trip | 6 of 6 bookings, each holding facts from both |
+| "What's my gate?" from memory | Answered with its source and age, with no phone action |
+| Gate changes in the app | B12 replaced by C14, history kept; marked possibly out of date after 30 minutes |
+| "Check me in" with its trip filled from memory | Routine ran with no model call; outputs written back |
+| Fact extraction (54 labeled emails and screens) | 99% of attributes from emails, 98% from screens; no wrong value stored |
+| Entity matching (18 bookings and hard cases) | 18 of 18; no trips from promotions; two trips to one city kept apart; a cancellation applied |
+| Facts traceable to a source | 100% |
+| Whole of Phase 3 | 76 model calls, $0.45 |
+
+The evaluation drove five changes to memory:
+
+- Every observation records its source, not only the first, so a fact shows everywhere it was seen and deleting a source retires only what it alone supported.
+- Values stay as the source wrote them; flight numbers, dates, times and airports are normalized only for comparing keys.
+- An extracted value must appear in its source, and an answer from memory must appear in the notes it was given.
+- A routine's outputs are anchored on its own final screen, since an input like a city may not identify one trip.
+- Memory is one user's: a greeting is not a person, and agreeing names fold into the one person memory knows.
 
 ## Open questions
 

@@ -1,0 +1,28 @@
+[
+ {
+  "kind": "locator",
+  "step": "tap_flight_status",
+  "description": "step 'tap_flight_status': target found only by relaxed match; locator updated to {text='Status', resource_id='nav_status', kind='Button'}",
+  "evidence": {
+   "score": 0.733
+  }
+ },
+ {
+  "kind": "check",
+  "step": "tap_flight_status",
+  "description": "step 'tap_flight_status': after-check 1 matched only relaxed; updated to {text='Status', kind='Text'}",
+  "evidence": {}
+ },
+ {
+  "kind": "check",
+  "step": "tap_flight_status",
+  "description": "step 'tap_flight_status': after-check 2 matched only relaxed; updated to {text='Status', kind='Text'}",
+  "evidence": {}
+ },
+ {
+  "kind": "check",
+  "step": "enter_flight_number",
+  "description": "step 'enter_flight_number': after-check 0 matched only relaxed; updated to {text='Flight number: SL 667', kind='EditText'}",
+  "evidence": {}
+ }
+]

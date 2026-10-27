@@ -1,0 +1,36 @@
+[
+ {
+  "kind": "locator",
+  "step": "tap_my_trips",
+  "description": "step 'tap_my_trips': target found only by relaxed match; locator updated to {text='Trips', resource_id='nav_trips', kind='Button'}",
+  "evidence": {
+   "score": 0.733
+  }
+ },
+ {
+  "kind": "check",
+  "step": "tap_my_trips",
+  "description": "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', kind='Text'}",
+  "evidence": {}
+ },
+ {
+  "kind": "check",
+  "step": "tap_my_trips",
+  "description": "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', kind='Text'}",
+  "evidence": {}
+ },
+ {
+  "kind": "check",
+  "step": "find_tap_trip_by_confirmation_code",
+  "description": "step 'find_tap_trip_by_confirmation_code': after-check 0 matched only relaxed; updated to {text='Boise', kind='Button'}",
+  "evidence": {}
+ },
+ {
+  "kind": "locator",
+  "step": "tap_trip_by_confirmation_code",
+  "description": "step 'tap_trip_by_confirmation_code': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}",
+  "evidence": {
+   "score": 0.791
+  }
+ }
+]

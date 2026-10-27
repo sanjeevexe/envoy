@@ -1,0 +1,60 @@
+{
+ "name": "skylark_get_flight_gate",
+ "active": 2,
+ "versions": [
+  {
+   "version": 1,
+   "status": "retired",
+   "created": "2026-10-27 03:34:28",
+   "parent": null,
+   "changes": [
+    "v1 compiled from p2-src-gate"
+   ],
+   "verification": null
+  },
+  {
+   "version": 2,
+   "status": "active",
+   "created": "2026-10-27 03:34:36",
+   "parent": 1,
+   "changes": [
+    "step 'tap_trip_row': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}",
+    "step 'find_tap_trip_row': after-check 0 matched only relaxed; updated to {text='Savannah', kind='Button'}"
+   ],
+   "source_task": "p2-changed-gate-v4-1Y8EYP",
+   "screenshots": [],
+   "trial": {
+    "passed": true,
+    "task_id": "p2-trial-gate-v4-JNATRD",
+    "status": "done",
+    "duration_s": 2.6
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-27 03:34:36",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-changed-gate-v4-1Y8EYP",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 3.58,
+   "patches": 2
+  },
+  {
+   "time": "2026-10-27 03:34:48",
+   "kind": "run",
+   "version": 2,
+   "task_id": "p2-after-gate-v4-QRYYJC",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 2.57,
+   "patches": 1
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

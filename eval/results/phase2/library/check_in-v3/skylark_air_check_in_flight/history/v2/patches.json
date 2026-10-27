@@ -9,7 +9,7 @@
     "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-changed-check_in-v3-AXZG87/screens/repair_08_1_after.png"
    ],
    "reasons": [
-    "Review page blocks progress to Confirm check-in, main button advances flow"
+    "Review page is an extra step before confirmation, so proceed with its main button."
    ],
    "task_id": "p2-changed-check_in-v3-AXZG87"
   }

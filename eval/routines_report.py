@@ -41,7 +41,7 @@ def compile_table(tag: str, title: str) -> list[str]:
             continue
         ver = " / ".join("✅" if v["passed"] else f"❌ {v['detail'][:40]}" for v in r["verify"])
         lines.append(f"| {r['family']} | `{r['routine']}` | {r['steps']} | {', '.join(r['inputs'])} | {', '.join(r['outputs'])} | {len(r['dropped'])} | "
-                     f"{r['compiler']} | ${r['compile_cost_usd']:.3f} | {ver} |")
+                     f"{'muse-wonder-1.0 (cached answer)' if r['compiler'] == 'cached' else r['compiler']} | ${r['compile_cost_usd']:.3f} | {ver} |")
     return lines + [""]
 
 

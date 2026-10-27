@@ -169,6 +169,26 @@ steps:
   - element_present: {resource_id: row_confirm_passenger, text: Passenger, kind: Text}
   risk: reversible
   note: trace step 7
+- id: confirm_trip_review
+  intent: Tap Looks good to confirm the trip review
+  optional: true
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      resource_id: btn_looks_good
+      text: Looks good
+      kind: Button
+      cls: View
+      siblings: [Review your trip]
+      in_list: false
+      position: [0.5, 0.365]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: btn_confirm_checkin, text: Confirm check-in, kind: Button}
+  - element_present: {resource_id: row_confirm_passenger, text: Passenger, kind: Text}
+  risk: reversible
+  note: trace step 8
 - id: confirm_check_in
   intent: Tap Confirm check-in to finish checking in
   pre:

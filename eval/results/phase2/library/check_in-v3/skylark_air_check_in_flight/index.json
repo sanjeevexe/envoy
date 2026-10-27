@@ -5,7 +5,7 @@
   {
    "version": 1,
    "status": "retired",
-   "created": "2026-10-27 02:55:25",
+   "created": "2026-10-27 03:26:31",
    "parent": null,
    "changes": [
     "v1 compiled from p2-src-check_in"
@@ -15,7 +15,7 @@
   {
    "version": 2,
    "status": "active",
-   "created": "2026-10-27 02:55:41",
+   "created": "2026-10-27 03:26:48",
    "parent": 1,
    "changes": [
     "after 'continue_after_hazmat', an extra screen appeared; inserted continue_after_hazmat_extra_1 (tap Looks good)"
@@ -29,31 +29,31 @@
     "passed": true,
     "task_id": "p2-trial-check_in-v3-XAWX2N",
     "status": "done",
-    "duration_s": 4.31
+    "duration_s": 4.24
    }
   }
  ],
  "runs": [
   {
-   "time": "2026-10-27 02:55:41",
+   "time": "2026-10-27 03:26:48",
    "kind": "run",
    "version": 1,
    "task_id": "p2-changed-check_in-v3-AXZG87",
    "status": "done",
    "rung": 4,
    "model_calls": 1,
-   "duration_s": 12.14,
+   "duration_s": 13.77,
    "patches": 1
   },
   {
-   "time": "2026-10-27 02:55:57",
+   "time": "2026-10-27 03:27:04",
    "kind": "run",
    "version": 2,
    "task_id": "p2-after-check_in-v3-UIAEW1",
    "status": "done",
    "rung": 0,
    "model_calls": 0,
-   "duration_s": 4.24,
+   "duration_s": 4.28,
    "patches": 0
   }
  ],

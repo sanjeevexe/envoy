@@ -1,10 +1,14 @@
 # Phase 2 results: app routines
 
-Oct 27, 2026. **Draft: the final rerun of the SkyLark suites on the final code is still pending** (the emulator hung during it and was restarted). The numbers quoted below are from the first full run; the real-app checkpoint and matching are final. **Gate (first full run): passed.** The gate was "a routine works on a new booking (new inputs) and recovers from an injected UI change (SkyLark variants 1–3)".
+Oct 27, 2026. **Gate passed.** The gate was "a routine works on a new booking (new inputs) and recovers from an injected UI change (SkyLark variants 1–3)".
 
-First full run (before the last round of real-app fixes): routines succeeded on **30/30 unseen bookings with 0 model calls** (median about 3 s), and **recovered from 18/18 injected changes** on variants 1–3 (moved button: no rung needed; renamed labels: relaxed match, no model; extra screen: one local repair, $0.006). Patched versions passed their trial replays and then ran with no model calls. Matching: 12/12. Real apps: Amazon and Starbucks routines rerun in about 9 s with no model calls, on new inputs too; Chipotle doesn't; Target and DoorDash are blocked (bot check, address setup).
+- **New bookings:** compiled routines succeeded on **30/30 bookings they had never seen, with 0 model calls** (median 3.3 s), and 18/18 more for routines compiled with IDs hidden.
+- **Injected UI changes:** **21/21 recovered on variants 1–3** (7 routines × 3 layouts) and **18/18 more on two harder layouts** we added (hidden IDs; renamed labels and hidden IDs). A moved button needed nothing; renamed labels were carried by the relaxed match with no model; an extra screen took one local repair (about $0.005). Every patched version passed its trial replay, then ran with no model calls, and still ran on the original layout.
+- **Against the full agent** on the same requests: **7 model calls against 242 (97% fewer)**, median **4.2 s against 11.7 s**, no cost against about a cent per request. Fixed replay (recorded coordinates, like Mobilerun macros) acted on the wrong booking or answered from the wrong one in 14 of 24 cells on the first four layouts.
+- **Matching** requests to routines: 12/12. **Real apps:** Amazon and Starbucks routines rerun in about 9 s with no model calls, on a second input too; Chipotle's does not; Target and DoorDash are blocked (a bot check; an address to set up).
+- **Phase 2 used 859 model calls and $3.48**, about half of it Muse Wonder compiles (35 calls, many of them recompiles while the compiler was being fixed).
 
-Full tables: `eval/results/phase2/report.md` (generated from the JSON next to it by `eval/routines_report.py`). Everything below was rerun on the final code with `eval/run_phase2.sh`. Routines: `data/routines/` (the library), `eval/results/phase2/compiled*/` (as compiled), `eval/results/phase2/library/` (one library per injected-change experiment, with patched versions, their status and before/after screenshots of each repair).
+Full tables: `eval/results/phase2/report.md` (generated from the JSON next to it by `eval/routines_report.py`). The final numbers come from one run of every suite on the finished code (`eval/run_phase2.sh` for compiling, then `eval/run_phase2_final.sh`). Routines: `data/routines/` (the library), `eval/results/phase2/compiled*/` (as compiled), `eval/results/phase2/library/` (one library per injected-change experiment, with patched versions, their status and before/after screenshots of each repair).
 
 ## What was built
 
@@ -25,7 +29,69 @@ All of it is Envoy's own code (`backend/routines/`, about 2,850 lines); no routi
 
 ## Results
 
-To be regenerated from `eval/results/phase2/report.md` after the final rerun (`eval/run_phase2.sh`).
+Ground truth is SkyLark's real state (the right trip checked in, its seat changed, its known traveler number saved, and no other trip touched) or the returned outputs, checked on word boundaries. Model calls ran on the standard tier.
+
+### Compiling (`run_routines.py record` + `compile`)
+
+Six source runs by the full agent on the Denver booking (2–12 actions, 4–14 calls, $0.007–0.022 each). Each was compiled by Muse Wonder ($0.04–0.07, about 14 s) and verified by replay on the same booking and on one it had never seen; only routines that passed both entered the library.
+
+| Routine | Steps | Inputs | Outputs |
+| --- | --- | --- | --- |
+| `skylark_air_check_in_flight` | 9 | trip_city | seat, gate, boarding_time |
+| `skylark_change_seat` | 7 | trip_city, desired_seat | seat |
+| `skylark_add_known_traveler_number` | 5 | trip_city, known traveler number (from memory) | known_traveler_number, confirmation_code |
+| `skylark_get_flight_gate` | 3 | trip_city | gate |
+| `skylark_check_flight_status` | 3 | flight_number | status, route, date, gate, departure_time |
+| `skylark_lookup_trip_destination` | 3 | trip_confirmation_code | destination |
+| `skylark_check_in_flight` (Phase 1's trace, next trip only) | 6 | trip_city (must be the trip on Home's card) | seat, gate, boarding time and group, flight |
+
+The same six were also compiled from runs on the hidden-ID layout and one from the extra-screen layout. All passed verification. Verification rejected 8 compiled routines over the phase: 2 from bad Wonder answers, 1 from the back-track bug, and 5 whose outputs couldn't be read without IDs (all fixed, below).
+
+### New inputs (`new-inputs`)
+
+| Routines | Runs | Success | Model calls | Median time | Slowest |
+| --- | --- | --- | --- | --- | --- |
+| Compiled on the original layout, run on it | 30 (6 routines × 5 bookings, 1 of them the next trip) | **30/30** | 0 | 3.3 s | 5.8 s (a seat change that scrolls) |
+| Compiled with IDs hidden, run with IDs hidden | 18 (6 × 3) | **18/18** | 0 | 3.3 s | 6.2 s |
+
+### Injected UI changes (`variants`)
+
+Each experiment: the routine meets the changed layout on a new booking (repair and the agent allowed); its patches become a trial version, replayed at once on another new booking with no repair or agent allowed, then activated or rejected; the active version runs on a third booking; a patched version runs back on the original layout.
+
+| Change | Experiments | Recovered | Saved by | Model calls | Median time | Patches | Trial passed | Patched version alone, 0 calls | Original layout still works |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1: moved button | 7 | **7/7** | nothing needed ×6, local repair ×1 | 2 | 3.2 s | replace ×1 | 1/1 | 1/1 | 1/1 |
+| 2: renamed labels | 7 | **7/7** | relaxed match ×7 | 0 | 4.0 s | locator ×5, check ×12, post ×2 | 7/7 | 7/7 | 7/7 |
+| 3: extra screen | 7 | **7/7** | nothing needed ×5, local repair ×2 | 2 | 3.3 s | insert ×2 | 2/2 | 2/2 | 2/2 |
+| 4: hidden IDs | 6 | **6/6** | relaxed match ×6 | 0 | 4.3 s | locator ×6, check ×7 | 6/6 | 6/6 | 6/6 |
+| 5: renamed + hidden IDs | 6 | **6/6** | relaxed ×4, local repair ×2 | 3 | 6.2 s | locator ×16, check ×19, post ×1 | 6/6 | 6/6 | 6/6 |
+| Extra screen removed (compiled on variant 3, run on the original) | 1 | **1/1** | relaxed (the screen was skipped) | 0 | 7.7 s | remove ×1 | 1/1 | 1/1 | 1/1 |
+| Renamed + hidden IDs (compiled with IDs hidden) | 6 | **6/6** | relaxed ×4, local repair ×2 | 3 | 4.1 s | locator ×11, check ×2 | 6/6 | 6/6 | 6/6 |
+
+Every patch kind the design names appeared and was verified: a new locator, an updated or rewritten check, an inserted step (the extra review screen), a replaced step (the Home "Check in" button gone in variant 1: "tap the trip card, then Check in"), and a removed step (the review screen gone). Variants 1 and 3 touch only check-in, which is why most routines needed nothing there.
+
+### Three systems on the same requests
+
+One request per routine family on a booking none of the systems was built from (the routine row on variants 1–5 is its first run on the changed layout, before any patch).
+
+| Layout | Full agent | Fixed replay | Envoy routine |
+| --- | --- | --- | --- |
+| 0: original | 6/6 · 5.5 calls · 12.1 s | 0/6 (6 on the wrong booking) · 3.6 s | **6/6 · 0 calls · 2.8 s** |
+| 1: moved button | 6/6 · 6 calls · 12.8 s | 3/6 (3 wrong) · 14.7 s | **7/7 · 0 calls · 3.2 s** |
+| 2: renamed labels | 6/6 · 5.5 calls · 11.7 s | 0/6 (6 wrong) · 3.5 s | **7/7 · 0 calls · 4.0 s** |
+| 3: extra screen | 6/6 · 5.5 calls · 10.7 s | 1/6 (5 wrong) · 3.5 s | **7/7 · 0 calls · 3.3 s** |
+| 4: hidden IDs | 6/6 · 6 calls · 13.9 s | 6/6 (all handed to the agent) · 15.0 s | **6/6 · 0 calls · 4.3 s** |
+| 5: renamed + hidden IDs | 6/6 · 6.5 calls · 15.0 s | 6/6 (all handed to the agent) · 15.9 s | **6/6 · 0 calls · 6.2 s** |
+
+Medians per cell. Across all of them, **routines used 7 model calls against 242 for the full agent (97% fewer)**, a median of 4.2 s against 11.7 s, $0.00 against about $0.01 per request. Fixed replay is fast when it acts, but it replays the Denver booking's taps and text whatever the request says; it only succeeds by handing the whole task to the agent when the screen looks different.
+
+### Locators (`eval/tune_locators.py`)
+
+8,268 cases: 24 routine locators against recorded SkyLark screens from all layouts, scored with and without IDs. Chosen: **STRICT 0.80, RELAXED 0.60, MARGIN 0.08**. With IDs, the right element always wins at strict on unchanged screens, 95–100% of renamed elements are recovered at relaxed, and no wrong element wins anywhere. Without IDs, renamed buttons are recoverable without a model 76% of the time, and a check that names one button ("Check in") can't tell two screens apart, which is why compiled checks pair a title with the button.
+
+### Speed
+
+A routine step costs about 0.3–0.5 s of device time: two reads where the target sits still, the tap, and two passing reads of the after-check (settling on the checks themselves instead of a generic quiet window). Check-in (9 steps) runs in about 3.8 s; a 10-step routine would be about 5 s, well under the 30-second target.
 
 ## Real-app checkpoint (envoy-real, read-only)
 
@@ -43,7 +109,7 @@ Read-only workflows on the long-lived real-app emulator (never snapshot-restored
 
 ## What the evaluation found, and what changed
 
-Verification by replay earned its place: it rejected four bad routines before they reached the library. Each finding below led to a general fix, not a SkyLark-specific one.
+Verification by replay earned its place: it rejected 8 bad routines before they reached the library. Each finding below led to a general fix, not a SkyLark-specific one.
 
 1. **The "first card" trap.** The Phase 1 check-in trace used Home's "Check in", which always means the next trip. Compiled naively, the routine would have checked in Chicago when asked for Denver. Now an input that no action uses must be visible before the step that depends on it (an **input witness check**), and the routine's description says it only works for the next trip. On another trip it fails loudly and climbs the ladder.
 2. **Back-tracks that weren't.** A run that checked in and then returned Home looked like a round trip, so cleanup dropped ten steps, and the routine "passed" its own checks without checking in. Verification's state check caught it. Back-tracks may no longer cross an effect (an approved or irreversible action, typing, a toggle) and must match layout as well as labels; a compile that loses the run's approved irreversible step is refused.
@@ -58,13 +124,28 @@ Verification by replay earned its place: it rejected four bad routines before th
 11. **Removed screens are found one step earlier.** Skipping a step because the next step's target was visible skipped a needed Chipotle step. A dropped screen is now detected when the previous step's after-check fails and a later step is ready; that step is removed by patch, and its after-checks move to the step before.
 12. **Over-specific checks.** When a navigation step's after-check fails but the next step is clearly ready, the run continues (rung 2) and the check is rewritten from what happened.
 
+The two harder layouts (hidden IDs; renamed labels and hidden IDs) and the final reruns found eight more, all fixed in code and rerun:
+
+13. **IDs that a screen doesn't show can't count against anyone.** With no test tags at all, every check that had an ID topped out at 0.57, below the relaxed threshold, so check-in fell to the full agent (12 calls, 31 s). A screen that exposes no usable IDs now ignores the ID attribute, which is what the no-ID tuning assumed. The same run then needed no model.
+14. **Outputs without IDs or merged rows.** Without test tags, "Seat" and "22F" are separate elements and the output locator was ID-only. Outputs now fall back to their label and read the element right after it.
+15. **A full-agent rescue was marked a failure.** When the agent took over (rung 5) and finished, the executor wrote to the run's already-closed trace and reported failed. Fixed; the run now counts as recovered by the agent.
+16. **A weak after-check passed by itself.** A step whose only after-check was "the screen changed" was judged against nothing during repair, so it passed and the step was skipped untapped. Repair now judges it against the screen it started from.
+17. **Repairs judged success too strictly.** After a repair on a changed app, the next screen's checks may only match at the relaxed threshold; repair now accepts that, so renamed labels with hidden IDs are fixed by one or two repair calls instead of the full agent.
+18. **Patches copied booking data.** A relaxed match on a trip row copied that run's whole row label (city, date, code) into the patched locator and dropped an ID the screen hid; the patched version then failed on another booking. Patched locators keep their fixed text, globbed IDs and input filter.
+19. **Patches forgot old labels.** A patch learned on renamed labels replaced the old label, so without IDs the patched routine failed back on the old layout. Patched locators now keep earlier labels (`alt_texts`).
+20. **"Removed" steps became optional.** Deleting a step whose screen disappeared broke the patched routine on the layout that still had it; the step is now kept as optional, like inserted ones.
+
+Two environment notes: the emulator hung twice on snapshot restores after dozens of them in one session (adb stopped answering; only killing the emulator process recovered it), so the final run resets SkyLark through its fixture hook, as Phase 1 did; snapshot restores were used for verification and trials before that. And a SkyLark debug broadcast failed once while the app was starting; the hooks now retry.
+
 ## Honest limits
 
 - **SkyLark is our own app.** Its test tags make variants 1–3 gentle: renamed labels are carried by stable IDs, and the moved button and extra screen touch only check-in. Variants 4 and 5 (hidden IDs) are the harder test, and the real apps are the honest one.
 - **Real apps are stateful.** Without snapshot resets, first-run screens (location notices, store pickers) get baked into routines and don't come back. Map and bottom-sheet pickers (Chipotle) didn't replay; that needs gestures and visual grounding, which this phase didn't build.
 - **Two of five real apps couldn't be tried:** Target opens on a "press and hold" bot check (the agent hands off, by design), and DoorDash needs a delivery address set first.
 - Visual-crop locators are a stub; portability across screen sizes and to a real phone is untested (Phase 3+).
-- The full-agent baseline was run once per cell, not repeated.
+- The full-agent baseline was run once per cell, not repeated; the variant experiments ran once each.
+- The final run reset SkyLark through its fixture hook, not snapshots (see the environment note above); verification and trials used snapshot restores earlier in the phase without a problem.
+- After a scroll, a list row can stop at the screen's edge and match only at the relaxed level (the trip lookup on new bookings); it still works with no model, but a short extra scroll would make it strict.
 
 ## Changes to the design
 
@@ -81,5 +162,5 @@ These change the design doc's App routines section (applied in both copies):
 
 ## Next
 
-- Finish the final rerun (`eval/run_phase2.sh`), regenerate the report, fill the tables above.
-- You: set a DoorDash delivery address and complete Target's bot check if you want those two workflows tried.
+- Phase 3 (memory) is done: `docs/phase-3-results.md`. Routine inputs are now filled from memory and outputs written back.
+- **You (optional):** set a DoorDash delivery address and clear Target's "press and hold" check on `envoy-real` if you want those two workflows tried; Chipotle's store picker needs gestures and visual grounding (Phase 6).

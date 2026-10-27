@@ -82,6 +82,7 @@ steps:
     tap:
       resource_id: btn_change_seat
       text: Seats
+      alt_texts: [Change seat]
       kind: Button
       cls: View
       siblings:

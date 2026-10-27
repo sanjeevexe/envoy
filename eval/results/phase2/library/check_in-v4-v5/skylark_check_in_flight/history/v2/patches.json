@@ -1,0 +1,48 @@
+[
+ {
+  "kind": "locator",
+  "step": "open_my_trips",
+  "description": "step 'open_my_trips': target found only by relaxed match; locator updated to {text='Trips', kind='Button'}",
+  "evidence": {
+   "score": 0.733
+  }
+ },
+ {
+  "kind": "locator",
+  "step": "continue_after_passenger",
+  "description": "step 'continue_after_passenger': the element moved or changed; new locator {text='Next', kind='Button'}",
+  "evidence": {
+   "screenshots": [
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-changed-check_in-v5-FUXUOJ/screens/repair_06_1_before.png",
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-changed-check_in-v5-FUXUOJ/screens/repair_06_1_after.png"
+   ],
+   "reasons": [
+    "Next is the renamed Continue button to advance after selecting passenger"
+   ],
+   "task_id": "p2-changed-check_in-v5-FUXUOJ"
+  }
+ },
+ {
+  "kind": "locator",
+  "step": "continue_after_hazardous_materials",
+  "description": "step 'continue_after_hazardous_materials': the element moved or changed; new locator {text='Next', kind='Button'}",
+  "evidence": {
+   "screenshots": [
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-changed-check_in-v5-FUXUOJ/screens/repair_08_1_before.png",
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-changed-check_in-v5-FUXUOJ/screens/repair_08_1_after.png"
+   ],
+   "reasons": [
+    "Continue was renamed to Next and the hazardous toggle is already on, so tap Next."
+   ],
+   "task_id": "p2-changed-check_in-v5-FUXUOJ"
+  }
+ },
+ {
+  "kind": "locator",
+  "step": "confirm_check_in",
+  "description": "step 'confirm_check_in': target found only by relaxed match; locator updated to {text='Complete check-in', kind='Button'}",
+  "evidence": {
+   "score": 0.771
+  }
+ }
+]

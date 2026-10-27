@@ -112,7 +112,7 @@ steps:
   risk: reversible
   note: trace step 5
 - id: tap_continue_after_hazmat_extra_1
-  intent: Review screen blocks progress, main button advances toward confirm check-in
+  intent: Review page blocks progress, tapping its main button advances toward confirm screen.
   optional: true
   pre:
   - {app_foreground: com.skylark.air}
@@ -129,7 +129,7 @@ steps:
   - {screen_changed: true}
   - element_present: {resource_id: btn_confirm_checkin, text: Confirm check-in, kind: Button}
   - element_present: {resource_id: row_confirm_passenger, text: Passenger, kind: Text}
-  risk: reversible
+  risk: read
   note: added by local repair
 - id: confirm_check_in
   intent: "Tap Confirm check-in to complete check-in for the flight to {{trip_city}}"

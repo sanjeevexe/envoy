@@ -17,6 +17,7 @@ steps:
   action:
     tap:
       text: Status
+      alt_texts: [Flight status]
       kind: Button
       cls: View
       in_list: false

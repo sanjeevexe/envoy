@@ -5,7 +5,7 @@
   {
    "version": 1,
    "status": "retired",
-   "created": "2026-10-27 02:54:46",
+   "created": "2026-10-27 03:25:55",
    "parent": null,
    "changes": [
     "v1 compiled from p2-src-check_in"
@@ -15,7 +15,7 @@
   {
    "version": 2,
    "status": "active",
-   "created": "2026-10-27 02:54:58",
+   "created": "2026-10-27 03:26:06",
    "parent": 1,
    "changes": [
     "step 'continue_after_passenger': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}",
@@ -30,31 +30,31 @@
     "passed": true,
     "task_id": "p2-trial-check_in-v2-A4MD1L",
     "status": "done",
-    "duration_s": 3.91
+    "duration_s": 3.82
    }
   }
  ],
  "runs": [
   {
-   "time": "2026-10-27 02:54:58",
+   "time": "2026-10-27 03:26:06",
    "kind": "run",
    "version": 1,
    "task_id": "p2-changed-check_in-v2-EMQC52",
    "status": "done",
    "rung": 2,
    "model_calls": 0,
-   "duration_s": 7.64,
+   "duration_s": 7.58,
    "patches": 5
   },
   {
-   "time": "2026-10-27 02:55:12",
+   "time": "2026-10-27 03:26:21",
    "kind": "run",
    "version": 2,
    "task_id": "p2-after-check_in-v2-CIZ4PU",
    "status": "done",
    "rung": 0,
    "model_calls": 0,
-   "duration_s": 3.88,
+   "duration_s": 3.79,
    "patches": 0
   }
  ],

@@ -1,0 +1,63 @@
+{
+ "name": "skylark_get_flight_gate",
+ "active": 2,
+ "versions": [
+  {
+   "version": 1,
+   "status": "retired",
+   "created": "2026-10-27 03:34:55",
+   "parent": null,
+   "changes": [
+    "v1 compiled from p2-src-gate"
+   ],
+   "verification": null
+  },
+  {
+   "version": 2,
+   "status": "active",
+   "created": "2026-10-27 03:35:04",
+   "parent": 1,
+   "changes": [
+    "step 'tap_my_trips': target found only by relaxed match; locator updated to {text='Trips', resource_id='nav_trips', kind='Button'}",
+    "step 'tap_trip_row': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}",
+    "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', kind='Text'}",
+    "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', kind='Text'}",
+    "step 'find_tap_trip_row': after-check 0 matched only relaxed; updated to {text='Boise', kind='Button'}"
+   ],
+   "source_task": "p2-changed-gate-v5-FUXUOJ",
+   "screenshots": [],
+   "trial": {
+    "passed": true,
+    "task_id": "p2-trial-gate-v5-QP2LX6",
+    "status": "done",
+    "duration_s": 2.59
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-27 03:35:04",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-changed-gate-v5-FUXUOJ",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 5.48,
+   "patches": 5
+  },
+  {
+   "time": "2026-10-27 03:35:17",
+   "kind": "run",
+   "version": 2,
+   "task_id": "p2-after-gate-v5-B7Z4UV",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 2.65,
+   "patches": 1
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

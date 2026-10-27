@@ -5,7 +5,7 @@
   {
    "version": 1,
    "status": "retired",
-   "created": "2026-10-27 03:08:44",
+   "created": "2026-10-27 03:46:54",
    "parent": null,
    "changes": [
     "v1 compiled from p2-src-v4-find_trip"
@@ -15,7 +15,7 @@
   {
    "version": 2,
    "status": "active",
-   "created": "2026-10-27 03:08:50",
+   "created": "2026-10-27 03:47:01",
    "parent": 1,
    "changes": [
     "step 'tap_my_trips': target found only by relaxed match; locator updated to {text='Trips', kind='Button'}"
@@ -26,31 +26,31 @@
     "passed": true,
     "task_id": "p2-trial-find_trip-v5-QP2LX6",
     "status": "done",
-    "duration_s": 1.64
+    "duration_s": 1.61
    }
   }
  ],
  "runs": [
   {
-   "time": "2026-10-27 03:08:50",
+   "time": "2026-10-27 03:47:01",
    "kind": "run",
    "version": 1,
    "task_id": "p2-changed-find_trip-v5-FUXUOJ",
    "status": "done",
    "rung": 2,
    "model_calls": 0,
-   "duration_s": 2.62,
+   "duration_s": 2.61,
    "patches": 1
   },
   {
-   "time": "2026-10-27 03:09:03",
+   "time": "2026-10-27 03:47:13",
    "kind": "run",
    "version": 2,
    "task_id": "p2-after-find_trip-v5-B7Z4UV",
    "status": "done",
    "rung": 0,
    "model_calls": 0,
-   "duration_s": 3.43,
+   "duration_s": 3.42,
    "patches": 0
   }
  ],

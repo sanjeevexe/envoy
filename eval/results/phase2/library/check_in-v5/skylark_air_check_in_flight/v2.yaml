@@ -20,6 +20,7 @@ steps:
     tap:
       resource_id: nav_trips
       text: Trips
+      alt_texts: [My Trips]
       kind: Button
       cls: View
       in_list: false
@@ -114,6 +115,7 @@ steps:
     tap:
       resource_id: btn_continue
       text: Next
+      alt_texts: [Continue]
       kind: Button
       cls: View
       siblings: [Step 1 of 3, 'Who''s checking in?']
@@ -152,6 +154,7 @@ steps:
     tap:
       resource_id: btn_continue
       text: Next
+      alt_texts: [Continue]
       kind: Button
       cls: View
       siblings: [Step 2 of 3, Travel safety, 'Lithium batteries, fireworks, flammable liquids and other hazardous materials are not allowed in
@@ -172,6 +175,7 @@ steps:
     tap:
       resource_id: btn_confirm_checkin
       text: Complete check-in
+      alt_texts: [Confirm check-in]
       kind: Button
       cls: View
       siblings: [Step 3 of 3, Confirm check-in]

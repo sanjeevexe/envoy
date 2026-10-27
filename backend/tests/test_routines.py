@@ -281,3 +281,12 @@ def test_patched_locator_remembers_the_old_label():
     patched = locators.updated(loc, s_new.numbered[0], s_new)
     assert patched.text == "Seats" and "Change seat" in patched.alt_texts
     assert locators.locate(patched, s_old).element.label == "Change seat"  # back on the old labels, still found
+
+
+def test_output_found_by_the_input_it_shows_when_ids_are_hidden():
+    s = _labels_screen([("EditText", "Flight number: SL 1190", False), ("Button", "Search", False),
+                        ("Text", "SL 1190 · ATL → DEN · Sat, Nov 14, 2026 · Delayed 25 min · Gate A7 · Departs 2:45 PM", False)])
+    spec = Extract(locator=Locator(resource_id="text_status_result", kind="Text"), segment=3)
+    assert extract_value(spec, s, {"flight_number": "SL 1190"}) == "Delayed 25 min"
+    gate = Extract(near="Gate", locator=Locator(resource_id="text_status_result", kind="Text"), segment=4)
+    assert extract_value(gate, s, {"flight_number": "SL 1190"}) == "A7"

@@ -5,7 +5,7 @@
   {
    "version": 1,
    "status": "retired",
-   "created": "2026-10-27 03:02:23",
+   "created": "2026-10-27 03:40:48",
    "parent": null,
    "changes": [
     "v1 compiled from p2-src-v3-check_in"
@@ -15,7 +15,7 @@
   {
    "version": 2,
    "status": "active",
-   "created": "2026-10-27 03:02:34",
+   "created": "2026-10-27 03:40:59",
    "parent": 1,
    "changes": [
     "step 'confirm_trip_review' removed: its screen no longer appears after 'continue_after_hazardous_materials'; the app went straight to 'confirm_check_in'"
@@ -26,31 +26,31 @@
     "passed": true,
     "task_id": "p2-trial-check_in-v0-C5J30M",
     "status": "done",
-    "duration_s": 5.51
+    "duration_s": 5.65
    }
   }
  ],
  "runs": [
   {
-   "time": "2026-10-27 03:02:34",
+   "time": "2026-10-27 03:40:59",
    "kind": "run",
    "version": 1,
    "task_id": "p2-changed-check_in-v0-E3K81I",
    "status": "done",
    "rung": 2,
    "model_calls": 0,
-   "duration_s": 7.61,
+   "duration_s": 7.72,
    "patches": 1
   },
   {
-   "time": "2026-10-27 03:02:53",
+   "time": "2026-10-27 03:41:17",
    "kind": "run",
    "version": 2,
    "task_id": "p2-after-check_in-v0-AUBQS7",
    "status": "done",
    "rung": 0,
    "model_calls": 0,
-   "duration_s": 5.58,
+   "duration_s": 5.59,
    "patches": 0
   }
  ],

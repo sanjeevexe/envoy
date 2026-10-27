@@ -1,0 +1,92 @@
+routine: skylark_lookup_trip_destination
+app: com.skylark.air
+version: 2
+status: active
+intent: Look up a SkyLark trip by confirmation code and tell where it goes
+description: Opens My Trips in SkyLark Air, selects the trip matching the given confirmation code, and reports the destination shown on the trip
+  details screen.
+patterns: [look up my trip, where does my trip go, find my trip by confirmation code, show my trip destination]
+outputs: [destination]
+start: fresh_launch
+inputs:
+  trip_confirmation_code: {type: text, description: '', example: PT4R8Z}
+steps:
+- id: tap_my_trips
+  intent: Tap My Trips to open the trips list
+  pre:
+  - {app_foreground: com.skylark.air}
+  - element_present: {resource_id: screen_title, text: SkyLark Air, kind: Text}
+  action:
+    tap:
+      resource_id: nav_trips
+      text: My Trips
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.373, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: screen_title, text: Trips, kind: Text}
+  - element_present: {resource_id: nav_trips, text: Trips, kind: Text}
+  risk: reversible
+  note: trace step 1
+- id: find_tap_trip_by_confirmation_code
+  intent: "Scroll to {{trip_confirmation_code}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: "trip_row_{{trip_confirmation_code}}"
+        text_has: "{{trip_confirmation_code}}"
+        kind: Button
+        cls: View
+        parent: list_trips
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: "trip_row_{{trip_confirmation_code}}"
+      text_has: "{{trip_confirmation_code}}"
+      kind: Button
+      cls: View
+      parent: list_trips
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: tap_trip_by_confirmation_code
+  intent: "Tap the trip row showing confirmation code {{trip_confirmation_code}}"
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      resource_id: "trip_row_{{trip_confirmation_code}}"
+      text_has: "{{trip_confirmation_code}}"
+      kind: Button
+      cls: View
+      parent: list_trips
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: screen_title, kind: Text}
+  - element_present: {resource_id: row_confirmation, text: Confirmation, kind: Text}
+  risk: reversible
+  extract:
+    destination:
+      near: Trip to
+      locator: {resource_id: screen_title, kind: Text}
+      first_in_list: false
+      next_element: false
+      expect_digits: false
+  note: trace step 2
+parent_version: 1
+changes:
+- "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}"
+- "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}"
+compiled_from:
+  task_id: p2-src-find_trip
+  goal: Look up my trip with confirmation code PT4R8Z and tell me where it goes.
+  compiler: cached
+  compiled_at: "2026-10-27 02:27:15"
+  trace_steps_kept: [1, 2]
+  trace_steps_dropped: 0
+  cost_usd: 0.0

@@ -18,11 +18,13 @@ def load(name: str) -> dict | None:
 
 def main() -> int:
     md = ["# Phase 3 evaluation: the shared memory graph on SkyLark Air", ""]
-    e = load("emails")
-    if e:
+    for name, title in (("emails_large", "The large test inbox"), ("emails", "The gate's test inbox")):
+        e = load(name)
+        if not e:
+            continue
         s = e["summary"]
-        md += ["## The test inbox: extraction and matching (no phone)", "",
-               f"{s['emails']} emails for 7 bookings (Chicago, Denver, four new bookings, a second Denver trip on another date): confirmations "
+        md += [f"## {title}: extraction and matching (no phone)", "",
+               f"{s['emails']} emails for {s.get('bookings', 7)} bookings (Chicago, Denver, new bookings, a second Denver trip on another date): confirmations "
                "with schema.org markup or as plain text, forwards, a seat change, a cancellation, two promotions and a receipt. "
                f"{s['model_calls']} model calls, ${s['cost_usd']}.", "",
                "| Measure | Result |", "| --- | --- |",
@@ -38,6 +40,17 @@ def main() -> int:
                "| Email | Kind | Read by | Resolved as | Found | Wrong | Missing |", "| --- | --- | --- | --- | --- | --- | --- |"]
         md += [f"| {r['email']} | {r['kind']} | {r['method']} | {', '.join(f'{t} {h}' for t, h in r['resolved']) or '–'} | {r['found']} | {r['wrong']} | {r['missing']} |"
                for r in e["rows"]]
+        md.append("")
+    sc = load("screens")
+    if sc:
+        s = sc["summary"]
+        md += ["## App screens: extraction", "", f"{s['screens']} SkyLark trip-details screens, each reached by the gate routine (no model) and read by "
+               f"Muse Spark; scored on confirmation code, destination, flight number, date, gate, seat and departure time. "
+               f"{s['model_calls']} model calls, ${s['cost_usd']}.", "",
+               f"Attributes right: {s['attributes']['found']}/{sum(s['attributes'].values())} ({s['recall']:.0%}); precision {s['precision']:.0%}. "
+               "Every fact kept the element it was read from.", "",
+               "| Booking | City | Found | Wrong | Missing | Facts with element evidence |", "| --- | --- | --- | --- | --- | --- |"]
+        md += [f"| {r['booking']} | {r['city']} | {r['found']} | {r['wrong']} | {r['missing']} | {r['evidence']} |" for r in sc["rows"]]
         md.append("")
     g = load("gate")
     if g:

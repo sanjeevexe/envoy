@@ -18,6 +18,7 @@ steps:
   action:
     tap:
       text: Trips
+      alt_texts: [My Trips]
       kind: Button
       cls: View
       in_list: false

@@ -5,7 +5,7 @@
   {
    "version": 1,
    "status": "retired",
-   "created": "2026-10-27 02:56:41",
+   "created": "2026-10-27 03:27:48",
    "parent": null,
    "changes": [
     "v1 compiled from p2-src-check_in"
@@ -15,7 +15,7 @@
   {
    "version": 2,
    "status": "active",
-   "created": "2026-10-27 02:57:15",
+   "created": "2026-10-27 03:28:22",
    "parent": 1,
    "changes": [
     "step 'open_my_trips': target found only by relaxed match; locator updated to {text='Trips', resource_id='nav_trips', kind='Button'}",
@@ -45,25 +45,25 @@
  ],
  "runs": [
   {
-   "time": "2026-10-27 02:57:15",
+   "time": "2026-10-27 03:28:22",
    "kind": "run",
    "version": 1,
    "task_id": "p2-changed-check_in-v5-FUXUOJ",
    "status": "done",
    "rung": 4,
    "model_calls": 2,
-   "duration_s": 30.62,
+   "duration_s": 29.83,
    "patches": 9
   },
   {
-   "time": "2026-10-27 02:57:33",
+   "time": "2026-10-27 03:28:40",
    "kind": "run",
    "version": 2,
    "task_id": "p2-after-check_in-v5-B7Z4UV",
    "status": "done",
    "rung": 2,
    "model_calls": 0,
-   "duration_s": 5.69,
+   "duration_s": 5.68,
    "patches": 2
   }
  ],

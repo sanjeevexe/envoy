@@ -135,30 +135,35 @@ steps:
       segment: 1
       first_in_list: false
       next_element: false
+      expect_digits: true
     gate:
       near: Gate
       locator: {resource_id: row_bp_gate, kind: Text}
       segment: 1
       first_in_list: false
       next_element: false
+      expect_digits: false
     boarding_time:
       near: Boarding
       locator: {resource_id: row_bp_boarding, kind: Text}
       segment: 1
       first_in_list: false
       next_element: false
+      expect_digits: true
     boarding_group:
       near: Boarding
       locator: {resource_id: row_bp_boarding, kind: Text}
       segment: 2
       first_in_list: false
       next_element: false
+      expect_digits: false
     flight:
       near: Flight
       locator: {resource_id: row_bp_flight, kind: Text}
       segment: 1
       first_in_list: false
       next_element: false
+      expect_digits: false
   note: trace step 6
 done:
 - element_present: {text: Boarding pass}
@@ -166,7 +171,7 @@ compiled_from:
   task_id: p1-final-code-check-checkin-v0-r0
   goal: Check me in for my flight to Chicago.
   compiler: cached
-  compiled_at: "2026-10-27 01:20:27"
+  compiled_at: "2026-10-27 02:27:33"
   trace_steps_kept: [1, 2, 3, 4, 5, 6]
   trace_steps_dropped: 0
   cost_usd: 0.0

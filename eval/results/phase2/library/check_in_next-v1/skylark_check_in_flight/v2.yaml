@@ -12,7 +12,7 @@ inputs:
   trip_city: {type: text, description: Destination city of the flight to check in for, example: Chicago}
 steps:
 - id: tap_check_in_1
-  intent: Check in button missing on home, Next trip card for Chicago should lead to check-in flow.
+  intent: Check in button is missing, Next trip card for Chicago likely leads to check-in.
   pre:
   - {app_foreground: com.skylark.air}
   - element_present: {resource_id: screen_title, text: SkyLark Air, kind: Text}
@@ -37,7 +37,7 @@ steps:
   risk: read
   note: added by local repair
 - id: tap_check_in_2
-  intent: Check in button exists with slightly different id btn_checkin, tapping to start check-in
+  intent: Check in button appears with new ID btn_checkin on trip details screen.
   pre:
   - {app_foreground: com.skylark.air}
   action:

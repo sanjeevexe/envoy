@@ -1,5 +1,5 @@
 {
- "time": "2026-10-27T07:05:12+00:00",
+ "time": "2026-10-27T07:43:40+00:00",
  "rows": [
   {
    "kind": "newinput",
@@ -19,7 +19,7 @@
    "model_calls": 0,
    "cost_usd": 0.0,
    "billed_usd": 0.0,
-   "duration_s": 4.57,
+   "duration_s": 4.56,
    "steps": [
     {
      "id": "open_my_trips",
@@ -27,7 +27,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 1458
+     "ms": 1478
     },
     {
      "id": "find_select_trip_by_city",
@@ -35,7 +35,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 419
+     "ms": 393
     },
     {
      "id": "select_trip_by_city",
@@ -43,7 +43,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 461
+     "ms": 463
     },
     {
      "id": "tap_check_in",
@@ -51,7 +51,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 383
+     "ms": 384
     },
     {
      "id": "select_passenger",
@@ -59,7 +59,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 358
+     "ms": 356
     },
     {
      "id": "continue_after_passenger",
@@ -67,7 +67,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 342
+     "ms": 352
     },
     {
      "id": "confirm_no_hazardous_materials",
@@ -75,7 +75,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 346
+     "ms": 332
     },
     {
      "id": "continue_after_hazardous_materials",
@@ -83,7 +83,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 375
+     "ms": 344
     },
     {
      "id": "confirm_check_in",
@@ -91,7 +91,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 359
+     "ms": 389
     }
    ],
    "patches": [],
@@ -119,7 +119,7 @@
    "model_calls": 0,
    "cost_usd": 0.0,
    "billed_usd": 0.0,
-   "duration_s": 6.08,
+   "duration_s": 5.92,
    "steps": [
     {
      "id": "open_my_trips",
@@ -127,7 +127,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 732
+     "ms": 742
     },
     {
      "id": "find_open_trip_to_city",
@@ -135,7 +135,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 379
+     "ms": 397
     },
     {
      "id": "open_trip_to_city",
@@ -143,7 +143,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 449
+     "ms": 446
     },
     {
      "id": "open_change_seat",
@@ -151,7 +151,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 594
+     "ms": 580
     },
     {
      "id": "find_select_desired_seat",
@@ -162,7 +162,7 @@
       "relaxed match: after-checks held at the relaxed threshold"
      ],
      "score": 0.758,
-     "ms": 1536
+     "ms": 1372
     },
     {
      "id": "select_desired_seat",
@@ -172,7 +172,7 @@
       "relaxed match: relaxed match [62] \"Seat 18C, aisle, available · C\" score 0.76 (runner-up 0.00)"
      ],
      "score": 0.758,
-     "ms": 1536
+     "ms": 1529
     },
     {
      "id": "confirm_seat",
@@ -180,7 +180,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 736
+     "ms": 735
     }
    ],
    "patches": [
@@ -218,7 +218,7 @@
    "model_calls": 0,
    "cost_usd": 0.0,
    "billed_usd": 0.0,
-   "duration_s": 3.19,
+   "duration_s": 3.38,
    "steps": [
     {
      "id": "open_my_trips",
@@ -226,7 +226,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 781
+     "ms": 734
     },
     {
      "id": "find_open_trip_for_city",
@@ -234,7 +234,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 400
+     "ms": 380
     },
     {
      "id": "open_trip_for_city",
@@ -242,7 +242,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 444
+     "ms": 457
     },
     {
      "id": "enter_known_traveler_number",
@@ -250,7 +250,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 1048
+     "ms": 1260
     },
     {
      "id": "save_known_traveler_number",
@@ -258,7 +258,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 424
+     "ms": 464
     }
    ],
    "patches": [],
@@ -285,7 +285,7 @@
    "model_calls": 0,
    "cost_usd": 0.0,
    "billed_usd": 0.0,
-   "duration_s": 1.64,
+   "duration_s": 1.63,
    "steps": [
     {
      "id": "open_my_trips",
@@ -293,7 +293,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 743
+     "ms": 732
     },
     {
      "id": "find_open_trip",
@@ -309,7 +309,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 444
+     "ms": 441
     }
    ],
    "patches": [],
@@ -336,7 +336,7 @@
    "model_calls": 0,
    "cost_usd": 0.0,
    "billed_usd": 0.0,
-   "duration_s": 3.38,
+   "duration_s": 3.31,
    "steps": [
     {
      "id": "open_flight_status",
@@ -344,7 +344,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 690
+     "ms": 700
     },
     {
      "id": "enter_flight_number",
@@ -354,7 +354,7 @@
       "relaxed match: after-checks held at the relaxed threshold"
      ],
      "score": 1.0,
-     "ms": 2173
+     "ms": 2082
     },
     {
      "id": "search_flight",
@@ -362,7 +362,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 414
+     "ms": 449
     }
    ],
    "patches": [
@@ -395,7 +395,7 @@
    "model_calls": 0,
    "cost_usd": 0.0,
    "billed_usd": 0.0,
-   "duration_s": 1.64,
+   "duration_s": 1.65,
    "steps": [
     {
      "id": "tap_my_trips",
@@ -411,7 +411,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 367
+     "ms": 371
     },
     {
      "id": "tap_trip_matching_confirmation_code",
@@ -419,7 +419,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 450
+     "ms": 461
     }
    ],
    "patches": [],
@@ -448,7 +448,7 @@
    "model_calls": 0,
    "cost_usd": 0.0,
    "billed_usd": 0.0,
-   "duration_s": 3.84,
+   "duration_s": 3.87,
    "steps": [
     {
      "id": "open_my_trips",
@@ -456,7 +456,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 741
+     "ms": 743
     },
     {
      "id": "find_select_trip_by_city",
@@ -464,7 +464,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 392
+     "ms": 381
     },
     {
      "id": "select_trip_by_city",
@@ -472,7 +472,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 433
+     "ms": 436
     },
     {
      "id": "tap_check_in",
@@ -480,7 +480,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 366
+     "ms": 388
     },
     {
      "id": "select_passenger",
@@ -488,7 +488,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 357
+     "ms": 350
     },
     {
      "id": "continue_after_passenger",
@@ -496,7 +496,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 349
+     "ms": 359
     },
     {
      "id": "confirm_no_hazardous_materials",
@@ -504,7 +504,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 349
+     "ms": 358
     },
     {
      "id": "continue_after_hazardous_materials",
@@ -512,7 +512,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 370
+     "ms": 368
     },
     {
      "id": "confirm_check_in",
@@ -520,7 +520,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 413
+     "ms": 408
     }
    ],
    "patches": [],
@@ -548,7 +548,7 @@
    "model_calls": 0,
    "cost_usd": 0.0,
    "billed_usd": 0.0,
-   "duration_s": 6.08,
+   "duration_s": 6.19,
    "steps": [
     {
      "id": "open_my_trips",
@@ -556,7 +556,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 775
+     "ms": 748
     },
     {
      "id": "find_open_trip_to_city",
@@ -564,7 +564,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 416
+     "ms": 374
     },
     {
      "id": "open_trip_to_city",
@@ -572,7 +572,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 450
+     "ms": 444
     },
     {
      "id": "open_change_seat",
@@ -580,7 +580,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 573
+     "ms": 571
     },
     {
      "id": "find_select_desired_seat",
@@ -591,7 +591,7 @@
       "relaxed match: after-checks held at the relaxed threshold"
      ],
      "score": 0.758,
-     "ms": 1512
+     "ms": 1513
     },
     {
      "id": "select_desired_seat",
@@ -601,7 +601,7 @@
       "relaxed match: relaxed match [20] \"Seat 12C, aisle, available · C\" score 0.76 (runner-up 0.00)"
      ],
      "score": 0.758,
-     "ms": 1510
+     "ms": 1703
     },
     {
      "id": "confirm_seat",
@@ -609,7 +609,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 728
+     "ms": 724
     }
    ],
    "patches": [
@@ -647,7 +647,7 @@
    "model_calls": 0,
    "cost_usd": 0.0,
    "billed_usd": 0.0,
-   "duration_s": 3.25,
+   "duration_s": 3.24,
    "steps": [
     {
      "id": "open_my_trips",
@@ -655,7 +655,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 760
+     "ms": 749
     },
     {
      "id": "find_open_trip_for_city",
@@ -663,7 +663,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 377
+     "ms": 385
     },
     {
      "id": "open_trip_for_city",
@@ -671,7 +671,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 457
+     "ms": 459
     },
     {
      "id": "enter_known_traveler_number",
@@ -679,7 +679,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 1108
+     "ms": 1133
     },
     {
      "id": "save_known_traveler_number",
@@ -687,7 +687,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 464
+     "ms": 445
     }
    ],
    "patches": [],
@@ -714,7 +714,7 @@
    "model_calls": 0,
    "cost_usd": 0.0,
    "billed_usd": 0.0,
-   "duration_s": 1.64,
+   "duration_s": 1.65,
    "steps": [
     {
      "id": "open_my_trips",
@@ -722,7 +722,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 743
+     "ms": 754
     },
     {
      "id": "find_open_trip",
@@ -730,7 +730,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 375
+     "ms": 381
     },
     {
      "id": "open_trip",
@@ -738,7 +738,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 447
+     "ms": 443
     }
    ],
    "patches": [],
@@ -765,7 +765,7 @@
    "model_calls": 0,
    "cost_usd": 0.0,
    "billed_usd": 0.0,
-   "duration_s": 3.35,
+   "duration_s": 3.22,
    "steps": [
     {
      "id": "open_flight_status",
@@ -773,7 +773,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 685
+     "ms": 687
     },
     {
      "id": "enter_flight_number",
@@ -783,7 +783,7 @@
       "relaxed match: after-checks held at the relaxed threshold"
      ],
      "score": 1.0,
-     "ms": 2147
+     "ms": 2045
     },
     {
      "id": "search_flight",
@@ -791,7 +791,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 440
+     "ms": 404
     }
    ],
    "patches": [
@@ -824,7 +824,7 @@
    "model_calls": 0,
    "cost_usd": 0.0,
    "billed_usd": 0.0,
-   "duration_s": 1.66,
+   "duration_s": 1.64,
    "steps": [
     {
      "id": "tap_my_trips",
@@ -832,7 +832,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 741
+     "ms": 733
     },
     {
      "id": "find_tap_trip_matching_confirmation_code",
@@ -840,7 +840,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 392
+     "ms": 386
     },
     {
      "id": "tap_trip_matching_confirmation_code",
@@ -848,7 +848,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 453
+     "ms": 447
     }
    ],
    "patches": [],
@@ -877,7 +877,7 @@
    "model_calls": 0,
    "cost_usd": 0.0,
    "billed_usd": 0.0,
-   "duration_s": 3.87,
+   "duration_s": 3.85,
    "steps": [
     {
      "id": "open_my_trips",
@@ -885,7 +885,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 765
+     "ms": 759
     },
     {
      "id": "find_select_trip_by_city",
@@ -893,7 +893,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 377
+     "ms": 417
     },
     {
      "id": "select_trip_by_city",
@@ -901,7 +901,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 454
+     "ms": 445
     },
     {
      "id": "tap_check_in",
@@ -909,7 +909,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 386
+     "ms": 379
     },
     {
      "id": "select_passenger",
@@ -917,7 +917,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 347
+     "ms": 348
     },
     {
      "id": "continue_after_passenger",
@@ -925,7 +925,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 340
+     "ms": 360
     },
     {
      "id": "confirm_no_hazardous_materials",
@@ -933,7 +933,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 350
+     "ms": 351
     },
     {
      "id": "continue_after_hazardous_materials",
@@ -941,7 +941,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 374
+     "ms": 348
     },
     {
      "id": "confirm_check_in",
@@ -949,7 +949,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 396
+     "ms": 372
     }
    ],
    "patches": [],
@@ -977,7 +977,7 @@
    "model_calls": 0,
    "cost_usd": 0.0,
    "billed_usd": 0.0,
-   "duration_s": 5.83,
+   "duration_s": 5.87,
    "steps": [
     {
      "id": "open_my_trips",
@@ -993,7 +993,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 378
+     "ms": 376
     },
     {
      "id": "open_trip_to_city",
@@ -1001,7 +1001,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 453
+     "ms": 433
     },
     {
      "id": "open_change_seat",
@@ -1009,7 +1009,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 577
+     "ms": 578
     },
     {
      "id": "find_select_desired_seat",
@@ -1020,7 +1020,7 @@
       "relaxed match: after-checks held at the relaxed threshold"
      ],
      "score": 0.758,
-     "ms": 1360
+     "ms": 1543
     },
     {
      "id": "select_desired_seat",
@@ -1030,7 +1030,7 @@
       "relaxed match: relaxed match [92] \"Seat 22E, middle, available · E\" score 0.76 (runner-up 0.00)"
      ],
      "score": 0.758,
-     "ms": 1611
+     "ms": 1468
     },
     {
      "id": "confirm_seat",
@@ -1038,7 +1038,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 588
+     "ms": 607
     }
    ],
    "patches": [
@@ -1076,7 +1076,7 @@
    "model_calls": 0,
    "cost_usd": 0.0,
    "billed_usd": 0.0,
-   "duration_s": 3.31,
+   "duration_s": 3.21,
    "steps": [
     {
      "id": "open_my_trips",
@@ -1084,7 +1084,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 736
+     "ms": 745
     },
     {
      "id": "find_open_trip_for_city",
@@ -1092,7 +1092,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 387
+     "ms": 373
     },
     {
      "id": "open_trip_for_city",
@@ -1100,7 +1100,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 453
+     "ms": 457
     },
     {
      "id": "enter_known_traveler_number",
@@ -1108,7 +1108,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 1184
+     "ms": 1100
     },
     {
      "id": "save_known_traveler_number",
@@ -1116,7 +1116,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 463
+     "ms": 461
     }
    ],
    "patches": [],
@@ -1143,7 +1143,7 @@
    "model_calls": 0,
    "cost_usd": 0.0,
    "billed_usd": 0.0,
-   "duration_s": 1.62,
+   "duration_s": 1.65,
    "steps": [
     {
      "id": "open_my_trips",
@@ -1151,7 +1151,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 735
+     "ms": 747
     },
     {
      "id": "find_open_trip",
@@ -1159,7 +1159,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 373
+     "ms": 394
     },
     {
      "id": "open_trip",
@@ -1194,7 +1194,7 @@
    "model_calls": 0,
    "cost_usd": 0.0,
    "billed_usd": 0.0,
-   "duration_s": 3.29,
+   "duration_s": 3.19,
    "steps": [
     {
      "id": "open_flight_status",
@@ -1202,7 +1202,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 691
+     "ms": 712
     },
     {
      "id": "enter_flight_number",
@@ -1212,7 +1212,7 @@
       "relaxed match: after-checks held at the relaxed threshold"
      ],
      "score": 1.0,
-     "ms": 2078
+     "ms": 1987
     },
     {
      "id": "search_flight",
@@ -1220,7 +1220,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 436
+     "ms": 415
     }
    ],
    "patches": [
@@ -1253,7 +1253,7 @@
    "model_calls": 0,
    "cost_usd": 0.0,
    "billed_usd": 0.0,
-   "duration_s": 3.36,
+   "duration_s": 3.42,
    "steps": [
     {
      "id": "tap_my_trips",
@@ -1261,7 +1261,7 @@
      "rung": 0,
      "rungs": [],
      "score": 1.0,
-     "ms": 747
+     "ms": 777
     },
     {
      "id": "find_tap_trip_matching_confirmation_code",
@@ -1269,7 +1269,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 2091
+     "ms": 2113
     },
     {
      "id": "tap_trip_matching_confirmation_code",
@@ -1277,7 +1277,7 @@
      "rung": 0,
      "rungs": [],
      "score": 0.967,
-     "ms": 457
+     "ms": 459
     }
    ],
    "patches": [],

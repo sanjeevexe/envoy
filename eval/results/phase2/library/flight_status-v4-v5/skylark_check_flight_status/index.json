@@ -5,7 +5,7 @@
   {
    "version": 1,
    "status": "retired",
-   "created": "2026-10-27 03:08:15",
+   "created": "2026-10-27 03:46:25",
    "parent": null,
    "changes": [
     "v1 compiled from p2-src-v4-flight_status"
@@ -15,7 +15,7 @@
   {
    "version": 2,
    "status": "active",
-   "created": "2026-10-27 03:08:23",
+   "created": "2026-10-27 03:46:33",
    "parent": 1,
    "changes": [
     "step 'open_flight_status': target found only by relaxed match; locator updated to {text='Status', kind='Button'}",
@@ -27,31 +27,31 @@
     "passed": true,
     "task_id": "p2-trial-flight_status-v5-QP2LX6",
     "status": "done",
-    "duration_s": 3.31
+    "duration_s": 3.32
    }
   }
  ],
  "runs": [
   {
-   "time": "2026-10-27 03:08:23",
+   "time": "2026-10-27 03:46:33",
    "kind": "run",
    "version": 1,
    "task_id": "p2-changed-flight_status-v5-FUXUOJ",
    "status": "done",
    "rung": 2,
    "model_calls": 0,
-   "duration_s": 4.25,
+   "duration_s": 4.09,
    "patches": 2
   },
   {
-   "time": "2026-10-27 03:08:37",
+   "time": "2026-10-27 03:46:47",
    "kind": "run",
    "version": 2,
    "task_id": "p2-after-flight_status-v5-B7Z4UV",
    "status": "done",
    "rung": 2,
    "model_calls": 0,
-   "duration_s": 3.2,
+   "duration_s": 3.27,
    "patches": 1
   }
  ],

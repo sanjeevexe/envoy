@@ -1,5 +1,5 @@
 {
- "time": "2026-10-27T07:03:02+00:00",
+ "time": "2026-10-27T07:41:30+00:00",
  "experiments": [
   {
    "family": "check_in",
@@ -25,7 +25,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 7.61,
+    "duration_s": 7.72,
     "steps": [
      {
       "id": "open_my_trips",
@@ -33,7 +33,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 1490
+      "ms": 1543
      },
      {
       "id": "find_open_trip_to_destination",
@@ -41,7 +41,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 395
+      "ms": 392
      },
      {
       "id": "open_trip_to_destination",
@@ -49,7 +49,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 445
+      "ms": 448
      },
      {
       "id": "start_check_in",
@@ -57,7 +57,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 377
+      "ms": 359
      },
      {
       "id": "select_passenger",
@@ -65,7 +65,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 353
+      "ms": 363
      },
      {
       "id": "continue_after_passenger",
@@ -73,7 +73,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 346
+      "ms": 362
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -81,7 +81,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 354
+      "ms": 358
      },
      {
       "id": "continue_after_hazardous_materials",
@@ -91,7 +91,7 @@
        "relaxed match: the app skipped ahead to confirm_check_in"
       ],
       "score": 1.0,
-      "ms": 1703
+      "ms": 1730
      },
      {
       "id": "confirm_trip_review",
@@ -107,7 +107,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 379
+      "ms": 382
      },
      {
       "id": "dismiss_boarding_pass",
@@ -115,7 +115,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 379
+      "ms": 410
      },
      {
       "id": "reopen_my_trips",
@@ -123,7 +123,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 566
+      "ms": 567
      },
      {
       "id": "find_reopen_trip_to_destination",
@@ -139,7 +139,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 427
+      "ms": 402
      }
     ],
     "patches": [
@@ -180,7 +180,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 5.51,
+    "duration_s": 5.65,
     "steps": [
      {
       "id": "open_my_trips",
@@ -188,7 +188,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 757
+      "ms": 741
      },
      {
       "id": "find_open_trip_to_destination",
@@ -204,7 +204,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 452
+      "ms": 450
      },
      {
       "id": "start_check_in",
@@ -212,7 +212,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 379
+      "ms": 386
      },
      {
       "id": "select_passenger",
@@ -220,7 +220,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 347
+      "ms": 323
      },
      {
       "id": "continue_after_passenger",
@@ -228,7 +228,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 336
+      "ms": 352
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -236,7 +236,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 351
+      "ms": 368
      },
      {
       "id": "continue_after_hazardous_materials",
@@ -244,7 +244,15 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 337
+      "ms": 377
+     },
+     {
+      "id": "confirm_trip_review",
+      "status": "skipped",
+      "rung": 0,
+      "rungs": [],
+      "score": null,
+      "ms": 63
      },
      {
       "id": "confirm_check_in",
@@ -252,7 +260,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 381
+      "ms": 418
      },
      {
       "id": "dismiss_boarding_pass",
@@ -260,7 +268,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 402
+      "ms": 415
      },
      {
       "id": "reopen_my_trips",
@@ -268,7 +276,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 579
+      "ms": 559
      },
      {
       "id": "find_reopen_trip_to_destination",
@@ -276,7 +284,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 355
+      "ms": 349
      },
      {
       "id": "reopen_trip_to_destination",
@@ -284,7 +292,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 395
+      "ms": 405
      }
     ],
     "patches": [],
@@ -314,7 +322,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 5.58,
+    "duration_s": 5.59,
     "steps": [
      {
       "id": "open_my_trips",
@@ -322,7 +330,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 755
+      "ms": 743
      },
      {
       "id": "find_open_trip_to_destination",
@@ -330,7 +338,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 380
+      "ms": 384
      },
      {
       "id": "open_trip_to_destination",
@@ -338,7 +346,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 450
+      "ms": 439
      },
      {
       "id": "start_check_in",
@@ -346,7 +354,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 386
+      "ms": 369
      },
      {
       "id": "select_passenger",
@@ -354,7 +362,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 346
+      "ms": 340
      },
      {
       "id": "continue_after_passenger",
@@ -362,7 +370,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 353
+      "ms": 334
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -370,7 +378,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 344
+      "ms": 345
      },
      {
       "id": "continue_after_hazardous_materials",
@@ -378,7 +386,15 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 364
+      "ms": 379
+     },
+     {
+      "id": "confirm_trip_review",
+      "status": "skipped",
+      "rung": 0,
+      "rungs": [],
+      "score": null,
+      "ms": 62
      },
      {
       "id": "confirm_check_in",
@@ -394,7 +410,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 423
+      "ms": 404
      },
      {
       "id": "reopen_my_trips",
@@ -402,7 +418,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 572
+      "ms": 590
      },
      {
       "id": "find_reopen_trip_to_destination",
@@ -410,7 +426,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 331
+      "ms": 341
      },
      {
       "id": "reopen_trip_to_destination",
@@ -418,7 +434,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 423
+      "ms": 396
      }
     ],
     "patches": [],
@@ -435,15 +451,21 @@
     "booking": "HSY3X5",
     "city": "Savannah",
     "variant": 3,
-    "passed": false,
-    "status": "failed",
-    "detail": "step continue_after_hazardous_materials: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00); no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
-    "outputs": {},
-    "rung": 1,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "check_in_status": "You're checked in",
+     "seat": "21D",
+     "gate": "B15",
+     "boarding_time": "12:40 PM",
+     "boarding_group": "Group 6"
+    },
+    "rung": 0,
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 6.51,
+    "duration_s": 9.3,
     "steps": [
      {
       "id": "open_my_trips",
@@ -459,7 +481,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 2237
+      "ms": 2071
      },
      {
       "id": "open_trip_to_destination",
@@ -467,7 +489,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 457
+      "ms": 470
      },
      {
       "id": "start_check_in",
@@ -475,7 +497,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 352
+      "ms": 371
      },
      {
       "id": "select_passenger",
@@ -483,7 +505,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 344
+      "ms": 334
      },
      {
       "id": "continue_after_passenger",
@@ -491,7 +513,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 348
+      "ms": 351
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -499,21 +521,67 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 324
+      "ms": 348
      },
      {
       "id": "continue_after_hazardous_materials",
-      "status": "failed",
-      "rung": 1,
-      "rungs": [
-       "wait and retry: waited 1.5 s"
-      ],
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
       "score": 1.0,
-      "ms": 1696
+      "ms": 445
+     },
+     {
+      "id": "confirm_trip_review",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 347
+     },
+     {
+      "id": "confirm_check_in",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 365
+     },
+     {
+      "id": "dismiss_boarding_pass",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 376
+     },
+     {
+      "id": "reopen_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 593
+     },
+     {
+      "id": "find_reopen_trip_to_destination",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 2028
+     },
+     {
+      "id": "reopen_trip_to_destination",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 386
      }
     ],
     "patches": [],
-    "approvals": 1,
+    "approvals": 2,
     "popups": [],
     "agent": null,
     "task_id": "p2-backcompat-check_in-v3-HSY3X5",

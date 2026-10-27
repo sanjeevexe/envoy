@@ -1,8 +1,8 @@
 # Phase 3 results: the shared memory graph
 
-Oct 27, 2026. **Gate: ⟨GATE⟩.** The gate was "email and app facts merge into one trip; 'What's my gate?' answered from memory".
+Oct 27, 2026. **Gate passed.** The gate was "email and app facts merge into one trip; 'What's my gate?' answered from memory".
 
-⟨HEADLINE⟩
+On the phone, every booking's email and app facts merged into one trip and one flight; "What's my gate?" was answered from memory ("Gate B12, from the SkyLark app just now") with no phone action; when the gate changed in the app, a routine refresh replaced B12 with C14 and kept the history; 45 minutes later the answer warned it may have changed; and "check me in" ran with its trip filled from memory. Extraction was 99% right on 28 test emails and 98% on 12 app screens, with no wrong value stored. All of Phase 3 used 76 model calls and $0.45.
 
 Plan: `prompts/phase-3.md` (written by Claude from the design doc, at your request to continue unattended). Reports: `eval/results/phase3/report.md` and the JSON next to it (`eval/run_memory.py`, `eval/memory_report.py`). The memory database itself (`data/memory.db`, `data/phase3/`) is not committed.
 
@@ -25,7 +25,35 @@ All of it is Envoy's own code (`backend/memory/`, `backend/integrations/mail.py`
 
 ## Results
 
-⟨TABLES⟩
+Reports: `eval/results/phase3/report.md`. Ground truth comes from the bookings that seed both SkyLark and the test inbox, so every number is exact.
+
+### The gate on the phone (`eval/run_memory.py gate`)
+
+**Passed, 18/18 steps** in 190 s. Seven bookings (Chicago is the next trip; a second Denver trip is cancelled), their 14-email inbox ingested, then each upcoming trip's details read in SkyLark by the gate routine with its input filled from memory.
+
+| Step | Result |
+| --- | --- |
+| Routine inputs filled from memory | 6/6 (`trip_city` from the trip found in the inbox, with its source: "email from SkyLark Air, Oct 1") |
+| One trip and one flight per booking, holding email and app facts | 6/6 (the app's screen matched the email's trip by confirmation code, its flight by number and date; the routine's outputs were anchored on that screen) |
+| "What's my gate?" from memory | "Gate B12, from the SkyLark app just now", the next trip's gate, with **0 phone actions** |
+| The gate changes in the app (B12 → C14) and a routine refreshes it | "Gate C14, from the SkyLark app just now"; history B12 → C14; the notes say "(was B12 until just now)" |
+| 45 minutes later | "Gate C14, from the SkyLark app 45 minutes ago, but it may have changed" (the 30-minute freshness rule) |
+| "Check me in for my flight" | the matcher chose the check-in routine and filled Chicago from memory's notes (1 model call); the routine checked in with no model call; seat, gate and boarding time were written back |
+| Facts traceable to a source | 144/144 (175 events logged) |
+
+### Extraction and matching
+
+| Set | Items | Attributes right | Wrong values stored | Matching |
+| --- | --- | --- | --- | --- |
+| Large test inbox (`emails_large`) | 28 emails, 18 bookings | 212/214 (99%): markup 81/81, plain (Spark) 131/133 | 0 | 18/18 bookings → exactly one trip and one flight; 0 trips from promotions; the cancellation applied to its trip; two Denver trips kept apart |
+| The gate's inbox (`emails`) | 14 emails, 7 bookings | 87/88 (99%): markup 27/27, plain 60/61 | 0 | 7/7; same hard cases passed |
+| App screens (`screens`) | 12 trip-details screens | 82/84 (98%) | 0 | every fact kept the element it was read from |
+
+That is 54 labeled emails and screens against the design's 50. Precision is 100% by construction as much as by the model: a value the model returns that is not in the source is dropped (none had to be).
+
+### Cost
+
+76 model calls, **$0.45**: 72 extractions (about $0.004 an email, $0.007 a screen), 3 answers and 1 routine match. Muse Spark at `low` throughout; no Wonder calls (routines were compiled in Phase 2).
 
 ## What the evaluation found, and what changed
 
@@ -37,7 +65,6 @@ All of it is Envoy's own code (`backend/memory/`, `backend/integrations/mail.py`
 6. **A city can't tell two trips apart.** A routine's input `trip_city = Denver` is ambiguous with two Denver trips, so a routine's outputs are now anchored on the entities its own final screen resolved to (confirmation code, flight number and date).
 7. **Routines didn't say where inputs come from.** Wonder left `from_memory` empty when the source run's city came from the request, so memory had nothing to fill. The bridge now infers it from the input's name (`trip_city` → the trip's destination, `flight_number` → the flight's number).
 8. **"My gate" pulled in every gate.** The keyword part of retrieval also matched other flights with gates; the notes now say why each entity is there ("the next upcoming flight"), so the answer uses the right one.
-⟨MOREFINDINGS⟩
 
 ## Honest limits
 
@@ -48,8 +75,15 @@ All of it is Envoy's own code (`backend/memory/`, `backend/integrations/mail.py`
 
 ## Changes to the design
 
-⟨DESIGN⟩
+For the design doc's Shared memory section (applied in both copies):
+
+1. **Every observation records its source** (`fact_sources`), not only the first: provenance shows every place a fact was seen, and deleting a source retires only what it alone supported.
+2. **Values stay as the source wrote them; keys are normalized in code** (flight numbers, dates, times, airports), so checks against the source text keep working.
+3. **Extracted values must appear in their source** (headers included) or they are dropped; answers from memory are rejected if their specifics aren't in the notes.
+4. **Routine outputs are anchored on the run's own final screen**, since a routine's inputs (a city) may not identify one entity; routine inputs are filled through `from_memory` hints or, when the compiler left none, the input's name.
+5. **Memory is one user's**: a person whose names agree with the one known person is that person; a greeting is not a person.
 
 ## Next
 
-⟨NEXT⟩
+- **You (optional, about 10 minutes):** connect Gmail for the test account with `scripts/connect_gmail.py` (Google Cloud project in testing mode, the test account as a test user, the OAuth client file, one consent). Then the same service ingests real confirmation emails.
+- **Phase 4** (web app, live view, full approvals, MCP server): the MCP `memory_search` / `memory_get` / `memory_note` tools can now read this store; the event log is ready for the WebSocket stream and the graph view.

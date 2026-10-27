@@ -17,7 +17,7 @@
     "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-changed-change_seat-v5-FUXUOJ/screens/repair_04_1_after.png"
    ],
    "reasons": [
-    "Seats button is the renamed entry to change seat selection"
+    "'Seats' is the renamed seat selection entry for 'Change seat'."
    ],
    "task_id": "p2-changed-change_seat-v5-FUXUOJ"
   }

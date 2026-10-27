@@ -1,40 +1,65 @@
 {
  "name": "skylark_check_in_flight",
- "active": 1,
+ "active": 2,
  "versions": [
   {
    "version": 1,
-   "status": "active",
-   "created": "2026-10-27 03:05:14",
+   "status": "retired",
+   "created": "2026-10-27 03:43:43",
    "parent": null,
    "changes": [
     "v1 compiled from p2-src-v4-check_in"
    ],
    "verification": null
+  },
+  {
+   "version": 2,
+   "status": "active",
+   "created": "2026-10-27 03:44:14",
+   "parent": 1,
+   "changes": [
+    "step 'open_my_trips': target found only by relaxed match; locator updated to {text='Trips', kind='Button'}",
+    "step 'continue_after_passenger': the element moved or changed; new locator {text='Next', kind='Button'}",
+    "step 'continue_after_hazardous_materials': the element moved or changed; new locator {text='Next', kind='Button'}",
+    "step 'confirm_check_in': target found only by relaxed match; locator updated to {text='Complete check-in', kind='Button'}"
+   ],
+   "source_task": "p2-changed-check_in-v5-FUXUOJ",
+   "screenshots": [
+    "history/v2/repair_06_1_before.png",
+    "history/v2/repair_06_1_after.png",
+    "history/v2/repair_08_1_before.png",
+    "history/v2/repair_08_1_after.png"
+   ],
+   "trial": {
+    "passed": true,
+    "task_id": "p2-trial-check_in-v5-QP2LX6",
+    "status": "done",
+    "duration_s": 3.78
+   }
   }
  ],
  "runs": [
   {
-   "time": "2026-10-27 03:05:52",
+   "time": "2026-10-27 03:44:14",
    "kind": "run",
    "version": 1,
    "task_id": "p2-changed-check_in-v5-FUXUOJ",
-   "status": "failed",
+   "status": "done",
    "rung": 4,
-   "model_calls": 1,
-   "duration_s": 35.61,
-   "patches": 5
+   "model_calls": 2,
+   "duration_s": 28.33,
+   "patches": 4
   },
   {
-   "time": "2026-10-27 03:06:30",
+   "time": "2026-10-27 03:44:29",
    "kind": "run",
-   "version": 1,
+   "version": 2,
    "task_id": "p2-after-check_in-v5-B7Z4UV",
-   "status": "failed",
-   "rung": 4,
-   "model_calls": 1,
-   "duration_s": 35.56,
-   "patches": 5
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.85,
+   "patches": 0
   }
  ],
  "needs_recompile": false,

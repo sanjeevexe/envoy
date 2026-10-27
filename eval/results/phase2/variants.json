@@ -1,5 +1,5 @@
 {
- "time": "2026-10-27T07:02:21+00:00",
+ "time": "2026-10-27T07:59:46+00:00",
  "experiments": [
   {
    "family": "check_in",
@@ -23,7 +23,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 3.84,
+    "duration_s": 4.55,
     "steps": [
      {
       "id": "open_my_trips",
@@ -31,7 +31,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 750
+      "ms": 1466
      },
      {
       "id": "find_select_trip",
@@ -39,7 +39,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 385
+      "ms": 398
      },
      {
       "id": "select_trip",
@@ -47,7 +47,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 436
+      "ms": 450
      },
      {
       "id": "start_check_in",
@@ -55,7 +55,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.815,
-      "ms": 368
+      "ms": 370
      },
      {
       "id": "select_passenger",
@@ -63,7 +63,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 341
+      "ms": 347
      },
      {
       "id": "continue_after_passenger",
@@ -71,7 +71,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 355
+      "ms": 361
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -79,7 +79,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 335
+      "ms": 354
      },
      {
       "id": "continue_after_hazmat",
@@ -87,7 +87,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 374
+      "ms": 358
      },
      {
       "id": "confirm_check_in",
@@ -95,7 +95,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 415
+      "ms": 380
      }
     ],
     "patches": [],
@@ -125,7 +125,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 3.9,
+    "duration_s": 3.86,
     "steps": [
      {
       "id": "open_my_trips",
@@ -133,7 +133,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 760
+      "ms": 731
      },
      {
       "id": "find_select_trip",
@@ -141,7 +141,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 416
+      "ms": 387
      },
      {
       "id": "select_trip",
@@ -149,7 +149,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 436
+      "ms": 450
      },
      {
       "id": "start_check_in",
@@ -157,7 +157,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.815,
-      "ms": 388
+      "ms": 393
      },
      {
       "id": "select_passenger",
@@ -165,7 +165,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 337
+      "ms": 349
      },
      {
       "id": "continue_after_passenger",
@@ -173,7 +173,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 349
+      "ms": 366
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -181,7 +181,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 353
+      "ms": 359
      },
      {
       "id": "continue_after_hazmat",
@@ -189,7 +189,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 378
+      "ms": 364
      },
      {
       "id": "confirm_check_in",
@@ -197,7 +197,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 414
+      "ms": 388
      }
     ],
     "patches": [],
@@ -231,7 +231,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 7.64,
+    "duration_s": 7.58,
     "steps": [
      {
       "id": "open_my_trips",
@@ -241,7 +241,7 @@
        "relaxed match: after-checks held at the relaxed threshold"
       ],
       "score": 0.83,
-      "ms": 1745
+      "ms": 1724
      },
      {
       "id": "find_select_trip",
@@ -249,7 +249,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 348
+      "ms": 351
      },
      {
       "id": "select_trip",
@@ -257,7 +257,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 440
+      "ms": 443
      },
      {
       "id": "start_check_in",
@@ -267,7 +267,7 @@
        "relaxed match: after-checks failed but the next step (select_passenger) is ready"
       ],
       "score": 0.93,
-      "ms": 1320
+      "ms": 1322
      },
      {
       "id": "select_passenger",
@@ -285,7 +285,7 @@
        "relaxed match: relaxed match [4] \"Next\" score 0.68 (runner-up 0.23)"
       ],
       "score": 0.676,
-      "ms": 1338
+      "ms": 1283
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -293,7 +293,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 347
+      "ms": 344
      },
      {
       "id": "continue_after_hazmat",
@@ -303,7 +303,7 @@
        "relaxed match: relaxed match [5] \"Next\" score 0.68 (runner-up 0.23)"
       ],
       "score": 0.676,
-      "ms": 1304
+      "ms": 1300
      },
      {
       "id": "confirm_check_in",
@@ -311,7 +311,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.854,
-      "ms": 371
+      "ms": 385
      }
     ],
     "patches": [
@@ -374,7 +374,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 3.91,
+    "duration_s": 3.82,
     "steps": [
      {
       "id": "open_my_trips",
@@ -382,7 +382,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.83,
-      "ms": 782
+      "ms": 751
      },
      {
       "id": "find_select_trip",
@@ -390,7 +390,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 408
+      "ms": 390
      },
      {
       "id": "select_trip",
@@ -398,7 +398,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 432
+      "ms": 435
      },
      {
       "id": "start_check_in",
@@ -406,7 +406,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.93,
-      "ms": 377
+      "ms": 368
      },
      {
       "id": "select_passenger",
@@ -422,7 +422,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 353
+      "ms": 337
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -430,7 +430,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 350
+      "ms": 354
      },
      {
       "id": "continue_after_hazmat",
@@ -438,7 +438,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 386
+      "ms": 381
      },
      {
       "id": "confirm_check_in",
@@ -446,7 +446,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.854,
-      "ms": 398
+      "ms": 391
      }
     ],
     "patches": [],
@@ -474,7 +474,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 3.88,
+    "duration_s": 3.79,
     "steps": [
      {
       "id": "open_my_trips",
@@ -482,7 +482,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.83,
-      "ms": 758
+      "ms": 741
      },
      {
       "id": "find_select_trip",
@@ -490,7 +490,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 377
+      "ms": 393
      },
      {
       "id": "select_trip",
@@ -498,7 +498,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 444
+      "ms": 454
      },
      {
       "id": "start_check_in",
@@ -506,7 +506,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.93,
-      "ms": 380
+      "ms": 366
      },
      {
       "id": "select_passenger",
@@ -514,7 +514,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 335
+      "ms": 354
      },
      {
       "id": "continue_after_passenger",
@@ -522,7 +522,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 366
+      "ms": 347
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -530,7 +530,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 353
+      "ms": 349
      },
      {
       "id": "continue_after_hazmat",
@@ -538,7 +538,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 378
+      "ms": 356
      },
      {
       "id": "confirm_check_in",
@@ -546,7 +546,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.854,
-      "ms": 417
+      "ms": 367
      }
     ],
     "patches": [],
@@ -575,7 +575,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 8.15,
+    "duration_s": 6.27,
     "steps": [
      {
       "id": "open_my_trips",
@@ -583,7 +583,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 736
+      "ms": 755
      },
      {
       "id": "find_select_trip",
@@ -591,7 +591,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 1951
+      "ms": 1947
      },
      {
       "id": "select_trip",
@@ -599,7 +599,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 452
+      "ms": 465
      },
      {
       "id": "start_check_in",
@@ -609,7 +609,7 @@
        "relaxed match: after-checks failed but the next step (select_passenger) is ready"
       ],
       "score": 1.0,
-      "ms": 1330
+      "ms": 1287
      },
      {
       "id": "select_passenger",
@@ -617,17 +617,15 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 365
+      "ms": 359
      },
      {
       "id": "continue_after_passenger",
       "status": "done",
-      "rung": 2,
-      "rungs": [
-       "relaxed match: relaxed match [4] \"Continue\" score 0.68 (runner-up 0.23)"
-      ],
-      "score": 0.676,
-      "ms": 1265
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 356
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -635,17 +633,15 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 355
+      "ms": 335
      },
      {
       "id": "continue_after_hazmat",
       "status": "done",
-      "rung": 2,
-      "rungs": [
-       "relaxed match: relaxed match [5] \"Continue\" score 0.68 (runner-up 0.23)"
-      ],
-      "score": 0.676,
-      "ms": 1267
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 341
      },
      {
       "id": "confirm_check_in",
@@ -653,7 +649,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 355
+      "ms": 357
      }
     ],
     "patches": [
@@ -661,16 +657,6 @@
       "kind": "post",
       "step": "start_check_in",
       "description": "step 'start_check_in': after-checks failed (no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) but the next step was ready; after-checks rewritten from what happened"
-     },
-     {
-      "kind": "locator",
-      "step": "continue_after_passenger",
-      "description": "step 'continue_after_passenger': target found only by relaxed match; locator updated to {text='Continue', resource_id='btn_continue', kind='Button'}"
-     },
-     {
-      "kind": "locator",
-      "step": "continue_after_hazmat",
-      "description": "step 'continue_after_hazmat': target found only by relaxed match; locator updated to {text='Continue', resource_id='btn_continue', kind='Button'}"
      }
     ],
     "approvals": 1,
@@ -701,9 +687,9 @@
     },
     "rung": 4,
     "model_calls": 1,
-    "cost_usd": 0.00524,
-    "billed_usd": 0.00524,
-    "duration_s": 12.14,
+    "cost_usd": 0.00671,
+    "billed_usd": 0.00671,
+    "duration_s": 13.77,
     "steps": [
      {
       "id": "open_my_trips",
@@ -711,7 +697,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 777
+      "ms": 750
      },
      {
       "id": "find_select_trip",
@@ -719,7 +705,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 401
+      "ms": 382
      },
      {
       "id": "select_trip",
@@ -727,7 +713,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 438
+      "ms": 440
      },
      {
       "id": "start_check_in",
@@ -735,7 +721,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 372
+      "ms": 366
      },
      {
       "id": "select_passenger",
@@ -743,7 +729,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 323
+      "ms": 343
      },
      {
       "id": "continue_after_passenger",
@@ -751,7 +737,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 337
+      "ms": 345
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -759,7 +745,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 336
+      "ms": 357
      },
      {
       "id": "continue_after_hazmat",
@@ -770,7 +756,7 @@
        "local repair: 1 repair action(s) satisfied the after-checks"
       ],
       "score": 1.0,
-      "ms": 1752
+      "ms": 1740
      },
      {
       "id": "confirm_check_in",
@@ -778,7 +764,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 386
+      "ms": 394
      }
     ],
     "patches": [
@@ -817,7 +803,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 4.31,
+    "duration_s": 4.24,
     "steps": [
      {
       "id": "open_my_trips",
@@ -825,7 +811,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 737
+      "ms": 736
      },
      {
       "id": "find_select_trip",
@@ -841,7 +827,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 462
+      "ms": 437
      },
      {
       "id": "start_check_in",
@@ -849,7 +835,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 380
+      "ms": 372
      },
      {
       "id": "select_passenger",
@@ -857,7 +843,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 351
+      "ms": 340
      },
      {
       "id": "continue_after_passenger",
@@ -865,7 +851,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 358
+      "ms": 350
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -873,7 +859,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 354
+      "ms": 338
      },
      {
       "id": "continue_after_hazmat",
@@ -881,7 +867,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 469
+      "ms": 466
      },
      {
       "id": "continue_after_hazmat_extra_1",
@@ -889,7 +875,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 348
+      "ms": 354
      },
      {
       "id": "confirm_check_in",
@@ -897,7 +883,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 408
+      "ms": 393
      }
     ],
     "patches": [],
@@ -925,7 +911,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 4.24,
+    "duration_s": 4.28,
     "steps": [
      {
       "id": "open_my_trips",
@@ -933,7 +919,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 731
+      "ms": 749
      },
      {
       "id": "find_select_trip",
@@ -941,7 +927,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 380
+      "ms": 379
      },
      {
       "id": "select_trip",
@@ -949,7 +935,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 451
+      "ms": 450
      },
      {
       "id": "start_check_in",
@@ -957,7 +943,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 392
+      "ms": 378
      },
      {
       "id": "select_passenger",
@@ -965,7 +951,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 344
+      "ms": 345
      },
      {
       "id": "continue_after_passenger",
@@ -973,7 +959,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 337
+      "ms": 343
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -981,7 +967,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 346
+      "ms": 338
      },
      {
       "id": "continue_after_hazmat",
@@ -989,7 +975,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 471
+      "ms": 479
      },
      {
       "id": "continue_after_hazmat_extra_1",
@@ -997,7 +983,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 343
+      "ms": 360
      },
      {
       "id": "confirm_check_in",
@@ -1005,7 +991,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 378
+      "ms": 392
      }
     ],
     "patches": [],
@@ -1034,7 +1020,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 5.52,
+    "duration_s": 5.44,
     "steps": [
      {
       "id": "open_my_trips",
@@ -1042,7 +1028,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 782
+      "ms": 745
      },
      {
       "id": "find_select_trip",
@@ -1050,7 +1036,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 2042
+      "ms": 1982
      },
      {
       "id": "select_trip",
@@ -1058,7 +1044,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 483
+      "ms": 462
      },
      {
       "id": "start_check_in",
@@ -1066,7 +1052,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 352
+      "ms": 374
      },
      {
       "id": "select_passenger",
@@ -1074,7 +1060,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 348
+      "ms": 349
      },
      {
       "id": "continue_after_passenger",
@@ -1082,7 +1068,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 328
+      "ms": 338
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -1090,7 +1076,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 344
+      "ms": 341
      },
      {
       "id": "continue_after_hazmat",
@@ -1098,7 +1084,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 347
+      "ms": 345
      },
      {
       "id": "continue_after_hazmat_extra_1",
@@ -1106,7 +1092,7 @@
       "rung": 0,
       "rungs": [],
       "score": null,
-      "ms": 60
+      "ms": 62
      },
      {
       "id": "confirm_check_in",
@@ -1114,7 +1100,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 361
+      "ms": 373
      }
     ],
     "patches": [],
@@ -1148,7 +1134,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 5.64,
+    "duration_s": 5.67,
     "steps": [
      {
       "id": "open_my_trips",
@@ -1156,7 +1142,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 746
+      "ms": 726
      },
      {
       "id": "find_select_trip",
@@ -1167,7 +1153,7 @@
        "relaxed match: after-checks held at the relaxed threshold"
       ],
       "score": 0.791,
-      "ms": 1334
+      "ms": 1321
      },
      {
       "id": "select_trip",
@@ -1177,7 +1163,7 @@
        "relaxed match: relaxed match [9] \"Savannah · Mon, Nov 16, 2026 · SL 574 · \" score 0.79 (runner-up 0.00)"
       ],
       "score": 0.791,
-      "ms": 1417
+      "ms": 1437
      },
      {
       "id": "start_check_in",
@@ -1185,7 +1171,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 354
+      "ms": 361
      },
      {
       "id": "select_passenger",
@@ -1193,7 +1179,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 340
+      "ms": 349
      },
      {
       "id": "continue_after_passenger",
@@ -1209,7 +1195,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 324
+      "ms": 336
      },
      {
       "id": "continue_after_hazmat",
@@ -1217,7 +1203,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 347
+      "ms": 350
      },
      {
       "id": "confirm_check_in",
@@ -1225,7 +1211,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 362
+      "ms": 381
      }
     ],
     "patches": [
@@ -1270,7 +1256,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 4.81,
+    "duration_s": 4.73,
     "steps": [
      {
       "id": "open_my_trips",
@@ -1278,7 +1264,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 744
+      "ms": 730
      },
      {
       "id": "find_select_trip",
@@ -1288,7 +1274,7 @@
        "relaxed match: relaxed match while scrolling: [10] \"Richmond · Thu, Dec 10, 2026 · SL 1112 ·\" score 0.79 (runner-up 0.00)"
       ],
       "score": 0.791,
-      "ms": 428
+      "ms": 377
      },
      {
       "id": "select_trip",
@@ -1298,7 +1284,7 @@
        "relaxed match: relaxed match [10] \"Richmond · Thu, Dec 10, 2026 · SL 1112 ·\" score 0.79 (runner-up 0.00)"
       ],
       "score": 0.791,
-      "ms": 1398
+      "ms": 1424
      },
      {
       "id": "start_check_in",
@@ -1306,7 +1292,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 377
+      "ms": 358
      },
      {
       "id": "select_passenger",
@@ -1314,7 +1300,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 360
+      "ms": 353
      },
      {
       "id": "continue_after_passenger",
@@ -1322,7 +1308,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 355
+      "ms": 354
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -1338,7 +1324,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 358
+      "ms": 353
      },
      {
       "id": "confirm_check_in",
@@ -1346,7 +1332,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 376
+      "ms": 369
      }
     ],
     "patches": [
@@ -1380,7 +1366,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 4.82,
+    "duration_s": 4.78,
     "steps": [
      {
       "id": "open_my_trips",
@@ -1388,7 +1374,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 784
+      "ms": 747
      },
      {
       "id": "find_select_trip",
@@ -1398,7 +1384,7 @@
        "relaxed match: relaxed match while scrolling: [11] \"Memphis · Fri, Dec 4, 2026\" score 0.79 (runner-up 0.00)"
       ],
       "score": 0.791,
-      "ms": 410
+      "ms": 416
      },
      {
       "id": "select_trip",
@@ -1408,7 +1394,7 @@
        "relaxed match: relaxed match [11] \"Memphis · Fri, Dec 4, 2026\" score 0.79 (runner-up 0.00)"
       ],
       "score": 0.791,
-      "ms": 1375
+      "ms": 1409
      },
      {
       "id": "start_check_in",
@@ -1416,7 +1402,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 366
+      "ms": 363
      },
      {
       "id": "select_passenger",
@@ -1424,7 +1410,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 365
+      "ms": 355
      },
      {
       "id": "continue_after_passenger",
@@ -1432,7 +1418,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 366
+      "ms": 345
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -1440,7 +1426,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 343
+      "ms": 336
      },
      {
       "id": "continue_after_hazmat",
@@ -1448,7 +1434,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 358
+      "ms": 362
      },
      {
       "id": "confirm_check_in",
@@ -1456,7 +1442,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 383
+      "ms": 374
      }
     ],
     "patches": [
@@ -1491,7 +1477,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 5.33,
+    "duration_s": 5.32,
     "steps": [
      {
       "id": "open_my_trips",
@@ -1499,7 +1485,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 752
+      "ms": 746
      },
      {
       "id": "find_select_trip",
@@ -1507,7 +1493,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 1953
+      "ms": 1949
      },
      {
       "id": "select_trip",
@@ -1515,7 +1501,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 444
+      "ms": 456
      },
      {
       "id": "start_check_in",
@@ -1523,7 +1509,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 373
+      "ms": 375
      },
      {
       "id": "select_passenger",
@@ -1531,7 +1517,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 328
+      "ms": 344
      },
      {
       "id": "continue_after_passenger",
@@ -1539,7 +1525,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 346
+      "ms": 351
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -1547,7 +1533,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 334
+      "ms": 331
      },
      {
       "id": "continue_after_hazmat",
@@ -1555,7 +1541,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 352
+      "ms": 341
      },
      {
       "id": "confirm_check_in",
@@ -1563,7 +1549,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 380
+      "ms": 366
      }
     ],
     "patches": [],
@@ -1595,9 +1581,9 @@
     },
     "rung": 4,
     "model_calls": 2,
-    "cost_usd": 0.00864,
-    "billed_usd": 0.00864,
-    "duration_s": 30.62,
+    "cost_usd": 0.00677,
+    "billed_usd": 0.00677,
+    "duration_s": 29.83,
     "steps": [
      {
       "id": "open_my_trips",
@@ -1608,7 +1594,7 @@
        "relaxed match: after-checks held at the relaxed threshold"
       ],
       "score": 0.733,
-      "ms": 2658
+      "ms": 2596
      },
      {
       "id": "find_select_trip",
@@ -1619,7 +1605,7 @@
        "relaxed match: after-checks held at the relaxed threshold"
       ],
       "score": 0.791,
-      "ms": 1290
+      "ms": 1304
      },
      {
       "id": "select_trip",
@@ -1629,7 +1615,7 @@
        "relaxed match: relaxed match [9] \"Boise · Mon, Nov 16, 2026 · SL 667 · ATL\" score 0.79 (runner-up 0.00)"
       ],
       "score": 0.791,
-      "ms": 1420
+      "ms": 1395
      },
      {
       "id": "start_check_in",
@@ -1639,7 +1625,7 @@
        "relaxed match: after-checks failed but the next step (select_passenger) is ready"
       ],
       "score": 0.896,
-      "ms": 1321
+      "ms": 1322
      },
      {
       "id": "select_passenger",
@@ -1647,7 +1633,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 346
+      "ms": 341
      },
      {
       "id": "continue_after_passenger",
@@ -1658,7 +1644,7 @@
        "local repair: 1 repair action(s) satisfied the after-checks"
       ],
       "score": null,
-      "ms": 5060
+      "ms": 5106
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -1666,7 +1652,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 332
+      "ms": 345
      },
      {
       "id": "continue_after_hazmat",
@@ -1677,7 +1663,7 @@
        "local repair: 1 repair action(s) satisfied the after-checks"
       ],
       "score": null,
-      "ms": 5068
+      "ms": 5023
      },
      {
       "id": "confirm_check_in",
@@ -1687,7 +1673,7 @@
        "relaxed match: relaxed match [9] \"Complete check-in\" score 0.77 (runner-up 0.62)"
       ],
       "score": 0.771,
-      "ms": 1317
+      "ms": 1285
      }
     ],
     "patches": [
@@ -1782,7 +1768,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 755
+      "ms": 754
      },
      {
       "id": "find_select_trip",
@@ -1792,7 +1778,7 @@
        "relaxed match: relaxed match while scrolling: [10] \"Portland · Fri, Dec 4, 2026 · SL 844 · A\" score 0.79 (runner-up 0.00)"
       ],
       "score": 0.791,
-      "ms": 379
+      "ms": 365
      },
      {
       "id": "select_trip",
@@ -1802,7 +1788,7 @@
        "relaxed match: relaxed match [10] \"Portland · Fri, Dec 4, 2026 · SL 844 · A\" score 0.79 (runner-up 0.00)"
       ],
       "score": 0.791,
-      "ms": 1397
+      "ms": 1422
      },
      {
       "id": "start_check_in",
@@ -1810,7 +1796,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.896,
-      "ms": 365
+      "ms": 382
      },
      {
       "id": "select_passenger",
@@ -1818,7 +1804,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 344
+      "ms": 359
      },
      {
       "id": "continue_after_passenger",
@@ -1826,7 +1812,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 353
+      "ms": 346
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -1834,7 +1820,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 328
+      "ms": 325
      },
      {
       "id": "continue_after_hazmat",
@@ -1844,7 +1830,7 @@
        "relaxed match: after-checks held at the relaxed threshold"
       ],
       "score": 1.0,
-      "ms": 1302
+      "ms": 1267
      },
      {
       "id": "confirm_check_in",
@@ -1852,7 +1838,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 382
+      "ms": 378
      }
     ],
     "patches": [
@@ -1891,7 +1877,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 5.69,
+    "duration_s": 5.68,
     "steps": [
      {
       "id": "open_my_trips",
@@ -1899,7 +1885,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 746
+      "ms": 739
      },
      {
       "id": "find_select_trip",
@@ -1919,7 +1905,7 @@
        "relaxed match: relaxed match [11] \"Spokane · Thu, Nov 19, 2026\" score 0.79 (runner-up 0.00)"
       ],
       "score": 0.791,
-      "ms": 1415
+      "ms": 1418
      },
      {
       "id": "start_check_in",
@@ -1927,7 +1913,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.896,
-      "ms": 369
+      "ms": 373
      },
      {
       "id": "select_passenger",
@@ -1935,7 +1921,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 362
+      "ms": 356
      },
      {
       "id": "continue_after_passenger",
@@ -1943,7 +1929,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 359
+      "ms": 357
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -1951,7 +1937,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 341
+      "ms": 331
      },
      {
       "id": "continue_after_hazmat",
@@ -1961,7 +1947,7 @@
        "relaxed match: after-checks held at the relaxed threshold"
       ],
       "score": 1.0,
-      "ms": 1278
+      "ms": 1286
      },
      {
       "id": "confirm_check_in",
@@ -1969,7 +1955,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 379
+      "ms": 375
      }
     ],
     "patches": [
@@ -2009,7 +1995,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 8.14,
+    "duration_s": 6.27,
     "steps": [
      {
       "id": "open_my_trips",
@@ -2018,8 +2004,8 @@
       "rungs": [
        "relaxed match: after-checks held at the relaxed threshold"
       ],
-      "score": 0.9,
-      "ms": 1701
+      "score": 1.0,
+      "ms": 1729
      },
      {
       "id": "find_select_trip",
@@ -2027,7 +2013,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 1984
+      "ms": 1901
      },
      {
       "id": "select_trip",
@@ -2035,7 +2021,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 415
+      "ms": 447
      },
      {
       "id": "start_check_in",
@@ -2043,7 +2029,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 372
+      "ms": 363
      },
      {
       "id": "select_passenger",
@@ -2051,17 +2037,15 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 351
+      "ms": 346
      },
      {
       "id": "continue_after_passenger",
       "status": "done",
-      "rung": 2,
-      "rungs": [
-       "relaxed match: relaxed match [4] \"Continue\" score 0.68 (runner-up 0.23)"
-      ],
-      "score": 0.676,
-      "ms": 1257
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 345
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -2069,25 +2053,23 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 332
+      "ms": 341
      },
      {
       "id": "continue_after_hazmat",
       "status": "done",
-      "rung": 2,
-      "rungs": [
-       "relaxed match: relaxed match [5] \"Continue\" score 0.68 (runner-up 0.23)"
-      ],
-      "score": 0.676,
-      "ms": 1272
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 361
      },
      {
       "id": "confirm_check_in",
       "status": "done",
       "rung": 0,
       "rungs": [],
-      "score": 0.87,
-      "ms": 385
+      "score": 1.0,
+      "ms": 368
      }
     ],
     "patches": [
@@ -2100,16 +2082,6 @@
       "kind": "check",
       "step": "open_my_trips",
       "description": "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='My Trips', resource_id='screen_title', kind='Text'}"
-     },
-     {
-      "kind": "locator",
-      "step": "continue_after_passenger",
-      "description": "step 'continue_after_passenger': target found only by relaxed match; locator updated to {text='Continue', resource_id='btn_continue', kind='Button'}"
-     },
-     {
-      "kind": "locator",
-      "step": "continue_after_hazmat",
-      "description": "step 'continue_after_hazmat': target found only by relaxed match; locator updated to {text='Continue', resource_id='btn_continue', kind='Button'}"
      }
     ],
     "approvals": 1,
@@ -2140,7 +2112,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 4.18,
+    "duration_s": 4.21,
     "steps": [
      {
       "id": "open_my_trips",
@@ -2148,7 +2120,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 747
+      "ms": 754
      },
      {
       "id": "find_open_trip",
@@ -2156,7 +2128,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 385
+      "ms": 374
      },
      {
       "id": "open_trip",
@@ -2164,7 +2136,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 447
+      "ms": 444
      },
      {
       "id": "open_change_seat",
@@ -2172,7 +2144,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.989,
-      "ms": 567
+      "ms": 576
      },
      {
       "id": "find_select_seat",
@@ -2180,7 +2152,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.872,
-      "ms": 522
+      "ms": 532
      },
      {
       "id": "select_seat",
@@ -2188,7 +2160,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.872,
-      "ms": 680
+      "ms": 700
      },
      {
       "id": "confirm_seat",
@@ -2196,7 +2168,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 716
+      "ms": 713
      }
     ],
     "patches": [],
@@ -2224,7 +2196,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 3.98,
+    "duration_s": 4.01,
     "steps": [
      {
       "id": "open_my_trips",
@@ -2232,7 +2204,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 741
+      "ms": 734
      },
      {
       "id": "find_open_trip",
@@ -2240,7 +2212,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 356
+      "ms": 382
      },
      {
       "id": "open_trip",
@@ -2248,7 +2220,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 448
+      "ms": 449
      },
      {
       "id": "open_change_seat",
@@ -2256,7 +2228,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.989,
-      "ms": 577
+      "ms": 578
      },
      {
       "id": "find_select_seat",
@@ -2264,7 +2236,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.872,
-      "ms": 533
+      "ms": 532
      },
      {
       "id": "select_seat",
@@ -2272,7 +2244,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.872,
-      "ms": 621
+      "ms": 612
      },
      {
       "id": "confirm_seat",
@@ -2280,7 +2252,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 584
+      "ms": 593
      }
     ],
     "patches": [],
@@ -2312,7 +2284,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 6.12,
+    "duration_s": 5.93,
     "steps": [
      {
       "id": "open_my_trips",
@@ -2322,7 +2294,7 @@
        "relaxed match: after-checks held at the relaxed threshold"
       ],
       "score": 0.83,
-      "ms": 1726
+      "ms": 1674
      },
      {
       "id": "find_open_trip",
@@ -2330,7 +2302,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 343
+      "ms": 342
      },
      {
       "id": "open_trip",
@@ -2338,7 +2310,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 447
+      "ms": 454
      },
      {
       "id": "open_change_seat",
@@ -2348,7 +2320,7 @@
        "relaxed match: relaxed match [10] \"Seats\" score 0.68 (runner-up 0.36)"
       ],
       "score": 0.676,
-      "ms": 1557
+      "ms": 1532
      },
      {
       "id": "find_select_seat",
@@ -2356,7 +2328,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.872,
-      "ms": 507
+      "ms": 516
      },
      {
       "id": "select_seat",
@@ -2364,7 +2336,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.872,
-      "ms": 702
+      "ms": 648
      },
      {
       "id": "confirm_seat",
@@ -2372,7 +2344,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 711
+      "ms": 653
      }
     ],
     "patches": [
@@ -2421,7 +2393,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 4.19,
+    "duration_s": 4.25,
     "steps": [
      {
       "id": "open_my_trips",
@@ -2429,7 +2401,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.83,
-      "ms": 747
+      "ms": 771
      },
      {
       "id": "find_open_trip",
@@ -2437,7 +2409,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 385
+      "ms": 392
      },
      {
       "id": "open_trip",
@@ -2445,7 +2417,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 451
+      "ms": 455
      },
      {
       "id": "open_change_seat",
@@ -2453,7 +2425,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.946,
-      "ms": 572
+      "ms": 562
      },
      {
       "id": "find_select_seat",
@@ -2461,7 +2433,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.872,
-      "ms": 527
+      "ms": 538
      },
      {
       "id": "select_seat",
@@ -2469,7 +2441,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.872,
-      "ms": 677
+      "ms": 704
      },
      {
       "id": "confirm_seat",
@@ -2477,7 +2449,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 712
+      "ms": 715
      }
     ],
     "patches": [],
@@ -2503,7 +2475,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 4.0,
+    "duration_s": 3.97,
     "steps": [
      {
       "id": "open_my_trips",
@@ -2511,7 +2483,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.83,
-      "ms": 740
+      "ms": 729
      },
      {
       "id": "find_open_trip",
@@ -2519,7 +2491,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 379
+      "ms": 356
      },
      {
       "id": "open_trip",
@@ -2527,7 +2499,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 456
+      "ms": 464
      },
      {
       "id": "open_change_seat",
@@ -2535,7 +2507,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.946,
-      "ms": 578
+      "ms": 577
      },
      {
       "id": "find_select_seat",
@@ -2543,7 +2515,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.872,
-      "ms": 540
+      "ms": 521
      },
      {
       "id": "select_seat",
@@ -2551,7 +2523,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.872,
-      "ms": 603
+      "ms": 606
      },
      {
       "id": "confirm_seat",
@@ -2559,7 +2531,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 596
+      "ms": 604
      }
     ],
     "patches": [],
@@ -2582,11 +2554,11 @@
     "outputs": {
      "seat": "21F"
     },
-    "rung": 2,
+    "rung": 0,
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 6.61,
+    "duration_s": 5.91,
     "steps": [
      {
       "id": "open_my_trips",
@@ -2594,7 +2566,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 735
+      "ms": 747
      },
      {
       "id": "find_open_trip",
@@ -2602,7 +2574,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 2049
+      "ms": 2163
      },
      {
       "id": "open_trip",
@@ -2610,17 +2582,15 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 462
+      "ms": 447
      },
      {
       "id": "open_change_seat",
       "status": "done",
-      "rung": 2,
-      "rungs": [
-       "relaxed match: relaxed match [10] \"Change seat\" score 0.62 (runner-up 0.29)"
-      ],
-      "score": 0.622,
-      "ms": 1455
+      "rung": 0,
+      "rungs": [],
+      "score": 0.946,
+      "ms": 535
      },
      {
       "id": "find_select_seat",
@@ -2628,7 +2598,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.872,
-      "ms": 511
+      "ms": 530
      },
      {
       "id": "select_seat",
@@ -2636,7 +2606,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.872,
-      "ms": 649
+      "ms": 664
      },
      {
       "id": "confirm_seat",
@@ -2644,16 +2614,10 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 639
+      "ms": 707
      }
     ],
-    "patches": [
-     {
-      "kind": "locator",
-      "step": "open_change_seat",
-      "description": "step 'open_change_seat': target found only by relaxed match; locator updated to {text='Change seat', resource_id='btn_change_seat', kind='Button'}"
-     }
-    ],
+    "patches": [],
     "approvals": 1,
     "popups": [],
     "agent": null,
@@ -2682,7 +2646,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 6.01,
+    "duration_s": 6.07,
     "steps": [
      {
       "id": "open_my_trips",
@@ -2690,7 +2654,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 739
+      "ms": 783
      },
      {
       "id": "find_open_trip",
@@ -2698,7 +2662,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 363
+      "ms": 402
      },
      {
       "id": "open_trip",
@@ -2706,7 +2670,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 445
+      "ms": 447
      },
      {
       "id": "open_change_seat",
@@ -2714,7 +2678,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 567
+      "ms": 574
      },
      {
       "id": "find_select_seat",
@@ -2722,7 +2686,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.872,
-      "ms": 2294
+      "ms": 2296
      },
      {
       "id": "select_seat",
@@ -2730,7 +2694,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.872,
-      "ms": 730
+      "ms": 709
      },
      {
       "id": "confirm_seat",
@@ -2738,7 +2702,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 744
+      "ms": 732
      }
     ],
     "patches": [],
@@ -2766,7 +2730,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 4.24,
+    "duration_s": 4.2,
     "steps": [
      {
       "id": "open_my_trips",
@@ -2774,7 +2738,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 736
+      "ms": 740
      },
      {
       "id": "find_open_trip",
@@ -2782,7 +2746,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 391
+      "ms": 369
      },
      {
       "id": "open_trip",
@@ -2790,7 +2754,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 460
+      "ms": 449
      },
      {
       "id": "open_change_seat",
@@ -2798,7 +2762,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 579
+      "ms": 581
      },
      {
       "id": "find_select_seat",
@@ -2806,7 +2770,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.872,
-      "ms": 530
+      "ms": 520
      },
      {
       "id": "select_seat",
@@ -2814,7 +2778,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.872,
-      "ms": 701
+      "ms": 696
      },
      {
       "id": "confirm_seat",
@@ -2822,7 +2786,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 726
+      "ms": 729
      }
     ],
     "patches": [],
@@ -2854,7 +2818,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 8.03,
+    "duration_s": 7.95,
     "steps": [
      {
       "id": "open_my_trips",
@@ -2862,7 +2826,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 746
+      "ms": 743
      },
      {
       "id": "find_open_trip",
@@ -2873,7 +2837,7 @@
        "relaxed match: after-checks held at the relaxed threshold"
       ],
       "score": 0.791,
-      "ms": 1321
+      "ms": 1345
      },
      {
       "id": "open_trip",
@@ -2883,7 +2847,7 @@
        "relaxed match: relaxed match [9] \"Savannah · Mon, Nov 16, 2026 · SL 574 · \" score 0.79 (runner-up 0.00)"
       ],
       "score": 0.791,
-      "ms": 1422
+      "ms": 1437
      },
      {
       "id": "open_change_seat",
@@ -2891,7 +2855,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 530
+      "ms": 535
      },
      {
       "id": "find_select_seat",
@@ -2902,7 +2866,7 @@
        "relaxed match: after-checks held at the relaxed threshold"
       ],
       "score": 0.62,
-      "ms": 1517
+      "ms": 1510
      },
      {
       "id": "select_seat",
@@ -2912,7 +2876,7 @@
        "relaxed match: relaxed match [6] \"Seat 10C, aisle, available · C\" score 0.62 (runner-up 0.00)"
       ],
       "score": 0.62,
-      "ms": 1660
+      "ms": 1536
      },
      {
       "id": "confirm_seat",
@@ -2920,7 +2884,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 720
+      "ms": 724
      }
     ],
     "patches": [
@@ -2975,7 +2939,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 6.14,
+    "duration_s": 6.19,
     "steps": [
      {
       "id": "open_my_trips",
@@ -2983,7 +2947,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 732
+      "ms": 764
      },
      {
       "id": "find_open_trip",
@@ -2993,7 +2957,7 @@
        "relaxed match: relaxed match while scrolling: [10] \"Richmond · Thu, Dec 10, 2026 · SL 1112 ·\" score 0.79 (runner-up 0.00)"
       ],
       "score": 0.791,
-      "ms": 401
+      "ms": 365
      },
      {
       "id": "open_trip",
@@ -3003,7 +2967,7 @@
        "relaxed match: relaxed match [10] \"Richmond · Thu, Dec 10, 2026 · SL 1112 ·\" score 0.79 (runner-up 0.00)"
       ],
       "score": 0.791,
-      "ms": 1393
+      "ms": 1413
      },
      {
       "id": "open_change_seat",
@@ -3011,7 +2975,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 576
+      "ms": 590
      },
      {
       "id": "find_select_seat",
@@ -3021,7 +2985,7 @@
        "relaxed match: relaxed match while scrolling: [64] \"Seat 18E, middle, available · E\" score 0.62 (runner-up 0.00)"
       ],
       "score": 0.62,
-      "ms": 518
+      "ms": 524
      },
      {
       "id": "select_seat",
@@ -3031,7 +2995,7 @@
        "relaxed match: relaxed match [64] \"Seat 18E, middle, available · E\" score 0.62 (runner-up 0.00)"
       ],
       "score": 0.62,
-      "ms": 1681
+      "ms": 1692
      },
      {
       "id": "confirm_seat",
@@ -3039,7 +3003,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 723
+      "ms": 728
      }
     ],
     "patches": [
@@ -3076,7 +3040,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 5.98,
+    "duration_s": 6.15,
     "steps": [
      {
       "id": "open_my_trips",
@@ -3084,7 +3048,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 738
+      "ms": 748
      },
      {
       "id": "find_open_trip",
@@ -3094,7 +3058,7 @@
        "relaxed match: relaxed match while scrolling: [11] \"Memphis · Fri, Dec 4, 2026\" score 0.79 (runner-up 0.00)"
       ],
       "score": 0.791,
-      "ms": 382
+      "ms": 372
      },
      {
       "id": "open_trip",
@@ -3104,7 +3068,7 @@
        "relaxed match: relaxed match [11] \"Memphis · Fri, Dec 4, 2026\" score 0.79 (runner-up 0.00)"
       ],
       "score": 0.791,
-      "ms": 1399
+      "ms": 1402
      },
      {
       "id": "open_change_seat",
@@ -3112,7 +3076,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 567
+      "ms": 571
      },
      {
       "id": "find_select_seat",
@@ -3122,7 +3086,7 @@
        "relaxed match: relaxed match while scrolling: [27] \"Seat 13C, aisle, available · C\" score 0.62 (runner-up 0.00)"
       ],
       "score": 0.62,
-      "ms": 514
+      "ms": 524
      },
      {
       "id": "select_seat",
@@ -3132,7 +3096,7 @@
        "relaxed match: relaxed match [27] \"Seat 13C, aisle, available · C\" score 0.62 (runner-up 0.00)"
       ],
       "score": 0.62,
-      "ms": 1546
+      "ms": 1691
      },
      {
       "id": "confirm_seat",
@@ -3140,7 +3104,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 712
+      "ms": 724
      }
     ],
     "patches": [
@@ -3178,7 +3142,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 5.7,
+    "duration_s": 5.85,
     "steps": [
      {
       "id": "open_my_trips",
@@ -3186,7 +3150,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 738
+      "ms": 752
      },
      {
       "id": "find_open_trip",
@@ -3194,7 +3158,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 2001
+      "ms": 2104
      },
      {
       "id": "open_trip",
@@ -3202,7 +3166,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 450
+      "ms": 448
      },
      {
       "id": "open_change_seat",
@@ -3210,7 +3174,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 527
+      "ms": 517
      },
      {
       "id": "find_select_seat",
@@ -3218,7 +3182,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.872,
-      "ms": 528
+      "ms": 530
      },
      {
       "id": "select_seat",
@@ -3226,7 +3190,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.872,
-      "ms": 666
+      "ms": 664
      },
      {
       "id": "confirm_seat",
@@ -3234,7 +3198,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 673
+      "ms": 717
      }
     ],
     "patches": [],
@@ -3264,9 +3228,9 @@
     },
     "rung": 4,
     "model_calls": 1,
-    "cost_usd": 0.00276,
-    "billed_usd": 0.00276,
-    "duration_s": 17.61,
+    "cost_usd": 0.00324,
+    "billed_usd": 0.00324,
+    "duration_s": 19.45,
     "steps": [
      {
       "id": "open_my_trips",
@@ -3277,7 +3241,7 @@
        "relaxed match: after-checks held at the relaxed threshold"
       ],
       "score": 0.733,
-      "ms": 2617
+      "ms": 2631
      },
      {
       "id": "find_open_trip",
@@ -3288,7 +3252,7 @@
        "relaxed match: after-checks held at the relaxed threshold"
       ],
       "score": 0.791,
-      "ms": 1275
+      "ms": 1322
      },
      {
       "id": "open_trip",
@@ -3309,7 +3273,7 @@
        "local repair: 1 repair action(s) satisfied the after-checks"
       ],
       "score": null,
-      "ms": 5101
+      "ms": 5017
      },
      {
       "id": "find_select_seat",
@@ -3320,7 +3284,7 @@
        "relaxed match: after-checks held at the relaxed threshold"
       ],
       "score": 0.62,
-      "ms": 1358
+      "ms": 1509
      },
      {
       "id": "select_seat",
@@ -3330,7 +3294,7 @@
        "relaxed match: relaxed match [84] \"Seat 21D, aisle, available · D\" score 0.62 (runner-up 0.00)"
       ],
       "score": 0.62,
-      "ms": 1654
+      "ms": 1518
      },
      {
       "id": "confirm_seat",
@@ -3338,7 +3302,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 656
+      "ms": 718
      }
     ],
     "patches": [
@@ -3417,7 +3381,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 7.89,
+    "duration_s": 7.87,
     "steps": [
      {
       "id": "open_my_trips",
@@ -3425,7 +3389,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 728
+      "ms": 747
      },
      {
       "id": "find_open_trip",
@@ -3435,7 +3399,7 @@
        "relaxed match: relaxed match while scrolling: [10] \"Portland · Fri, Dec 4, 2026 · SL 844 · A\" score 0.79 (runner-up 0.00)"
       ],
       "score": 0.791,
-      "ms": 386
+      "ms": 428
      },
      {
       "id": "open_trip",
@@ -3445,7 +3409,7 @@
        "relaxed match: relaxed match [10] \"Portland · Fri, Dec 4, 2026 · SL 844 · A\" score 0.79 (runner-up 0.00)"
       ],
       "score": 0.791,
-      "ms": 1437
+      "ms": 1402
      },
      {
       "id": "open_change_seat",
@@ -3453,7 +3417,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.92,
-      "ms": 621
+      "ms": 571
      },
      {
       "id": "find_select_seat",
@@ -3463,7 +3427,7 @@
        "relaxed match: relaxed match while scrolling: [91] \"Seat 23E, middle, available · E\" score 0.62 (runner-up 0.00)"
       ],
       "score": 0.62,
-      "ms": 2276
+      "ms": 2281
      },
      {
       "id": "select_seat",
@@ -3473,7 +3437,7 @@
        "relaxed match: relaxed match [91] \"Seat 23E, middle, available · E\" score 0.62 (runner-up 0.00)"
       ],
       "score": 0.62,
-      "ms": 1577
+      "ms": 1588
      },
      {
       "id": "confirm_seat",
@@ -3481,7 +3445,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 735
+      "ms": 731
      }
     ],
     "patches": [
@@ -3518,7 +3482,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 6.14,
+    "duration_s": 6.23,
     "steps": [
      {
       "id": "open_my_trips",
@@ -3526,7 +3490,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 749
+      "ms": 745
      },
      {
       "id": "find_open_trip",
@@ -3536,7 +3500,7 @@
        "relaxed match: relaxed match while scrolling: [11] \"Spokane · Thu, Nov 19, 2026\" score 0.79 (runner-up 0.00)"
       ],
       "score": 0.791,
-      "ms": 388
+      "ms": 375
      },
      {
       "id": "open_trip",
@@ -3546,7 +3510,7 @@
        "relaxed match: relaxed match [11] \"Spokane · Thu, Nov 19, 2026\" score 0.79 (runner-up 0.00)"
       ],
       "score": 0.791,
-      "ms": 1402
+      "ms": 1420
      },
      {
       "id": "open_change_seat",
@@ -3554,7 +3518,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.92,
-      "ms": 568
+      "ms": 597
      },
      {
       "id": "find_select_seat",
@@ -3564,7 +3528,7 @@
        "relaxed match: relaxed match while scrolling: [8] \"Seat 10E, middle, available · E\" score 0.62 (runner-up 0.00)"
       ],
       "score": 0.62,
-      "ms": 517
+      "ms": 537
      },
      {
       "id": "select_seat",
@@ -3574,7 +3538,7 @@
        "relaxed match: relaxed match [8] \"Seat 10E, middle, available · E\" score 0.62 (runner-up 0.00)"
       ],
       "score": 0.62,
-      "ms": 1692
+      "ms": 1723
      },
      {
       "id": "confirm_seat",
@@ -3582,7 +3546,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 706
+      "ms": 710
      }
     ],
     "patches": [
@@ -3620,7 +3584,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 9.68,
+    "duration_s": 8.43,
     "steps": [
      {
       "id": "open_my_trips",
@@ -3629,8 +3593,8 @@
       "rungs": [
        "relaxed match: after-checks held at the relaxed threshold"
       ],
-      "score": 0.9,
-      "ms": 1722
+      "score": 1.0,
+      "ms": 1618
      },
      {
       "id": "find_open_trip",
@@ -3638,7 +3602,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 2111
+      "ms": 1942
      },
      {
       "id": "open_trip",
@@ -3646,17 +3610,15 @@
       "rung": 0,
       "rungs": [],
       "score": 0.982,
-      "ms": 427
+      "ms": 440
      },
      {
       "id": "open_change_seat",
       "status": "done",
-      "rung": 2,
-      "rungs": [
-       "relaxed match: relaxed match [10] \"Change seat\" score 0.62 (runner-up 0.29)"
-      ],
-      "score": 0.622,
-      "ms": 1513
+      "rung": 0,
+      "rungs": [],
+      "score": 0.946,
+      "ms": 525
      },
      {
       "id": "find_select_seat",
@@ -3664,7 +3626,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.872,
-      "ms": 2305
+      "ms": 2312
      },
      {
       "id": "select_seat",
@@ -3672,7 +3634,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.872,
-      "ms": 704
+      "ms": 702
      },
      {
       "id": "confirm_seat",
@@ -3680,7 +3642,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 768
+      "ms": 757
      }
     ],
     "patches": [
@@ -3693,11 +3655,6 @@
       "kind": "check",
       "step": "open_my_trips",
       "description": "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='My Trips', resource_id='screen_title', kind='Text'}"
-     },
-     {
-      "kind": "locator",
-      "step": "open_change_seat",
-      "description": "step 'open_change_seat': target found only by relaxed match; locator updated to {text='Change seat', resource_id='btn_change_seat', kind='Button'}"
      }
     ],
     "approvals": 1,
@@ -3705,6 +3662,3722 @@
     "agent": null,
     "task_id": "p2-backcompat-change_seat-v0-VVQEYJ",
     "routine": "skylark_change_seat",
+    "version": 2
+   }
+  },
+  {
+   "family": "add_ktn",
+   "variant": 1,
+   "routine": "skylark_add_known_traveler_number",
+   "first": {
+    "kind": "changed",
+    "family": "add_ktn",
+    "booking": "0I7MMD",
+    "city": "Dallas",
+    "variant": 1,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "63363840",
+     "confirmation_code": "0I7MMD"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.19,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 747
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 368
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 459
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.99,
+      "ms": 1083
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.989,
+      "ms": 447
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-add_ktn-v1-0I7MMD",
+    "routine": "skylark_add_known_traveler_number",
+    "version": 1
+   },
+   "trial": null,
+   "after": {
+    "kind": "after",
+    "family": "add_ktn",
+    "booking": "RQDKE5",
+    "city": "Minneapolis",
+    "variant": 1,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "56711113",
+     "confirmation_code": "RQDKE5"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.2,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 744
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 382
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 459
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.99,
+      "ms": 1072
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.989,
+      "ms": 465
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-add_ktn-v1-RQDKE5",
+    "routine": "skylark_add_known_traveler_number",
+    "version": 1
+   }
+  },
+  {
+   "family": "add_ktn",
+   "variant": 2,
+   "routine": "skylark_add_known_traveler_number",
+   "first": {
+    "kind": "changed",
+    "family": "add_ktn",
+    "booking": "EMQC52",
+    "city": "Boise",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "36907316",
+     "confirmation_code": "EMQC52"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 4.02,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.83,
+      "ms": 1715
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 342
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 441
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1070
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 380
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "open_my_trips",
+      "description": "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "open_my_trips",
+      "description": "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-add_ktn-v2-EMQC52",
+    "routine": "skylark_add_known_traveler_number",
+    "version": 1
+   },
+   "trial": {
+    "version": 2,
+    "changes": [
+     "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}",
+     "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}"
+    ],
+    "kind": "trial",
+    "family": "add_ktn",
+    "booking": "A4MD1L",
+    "city": "Richmond",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "26194379",
+     "confirmation_code": "A4MD1L"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.3,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.83,
+      "ms": 741
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 369
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 440
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1198
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 483
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-trial-add_ktn-v2-A4MD1L",
+    "routine": "skylark_add_known_traveler_number"
+   },
+   "after": {
+    "kind": "after",
+    "family": "add_ktn",
+    "booking": "CIZ4PU",
+    "city": "Tampa",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "17552008",
+     "confirmation_code": "CIZ4PU"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.31,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.83,
+      "ms": 744
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 376
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 459
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1198
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 458
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-add_ktn-v2-CIZ4PU",
+    "routine": "skylark_add_known_traveler_number",
+    "version": 2
+   },
+   "backcompat": {
+    "kind": "backcompat",
+    "family": "add_ktn",
+    "booking": "SJUTTY",
+    "city": "Albuquerque",
+    "variant": 0,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "46095175",
+     "confirmation_code": "SJUTTY"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 4.8,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 742
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 2146
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 432
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1027
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 383
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-backcompat-add_ktn-v0-SJUTTY",
+    "routine": "skylark_add_known_traveler_number",
+    "version": 2
+   }
+  },
+  {
+   "family": "add_ktn",
+   "variant": 3,
+   "routine": "skylark_add_known_traveler_number",
+   "first": {
+    "kind": "changed",
+    "family": "add_ktn",
+    "booking": "AXZG87",
+    "city": "Memphis",
+    "variant": 3,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "56851096",
+     "confirmation_code": "AXZG87"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.33,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 732
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 388
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 461
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1215
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 464
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-add_ktn-v3-AXZG87",
+    "routine": "skylark_add_known_traveler_number",
+    "version": 1
+   },
+   "trial": null,
+   "after": {
+    "kind": "after",
+    "family": "add_ktn",
+    "booking": "UIAEW1",
+    "city": "Albuquerque",
+    "variant": 3,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "81675297",
+     "confirmation_code": "UIAEW1"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.2,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 740
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 384
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 457
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1074
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 458
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-add_ktn-v3-UIAEW1",
+    "routine": "skylark_add_known_traveler_number",
+    "version": 1
+   }
+  },
+  {
+   "family": "add_ktn",
+   "variant": 4,
+   "routine": "skylark_add_known_traveler_number",
+   "first": {
+    "kind": "changed",
+    "family": "add_ktn",
+    "booking": "1Y8EYP",
+    "city": "Savannah",
+    "variant": 4,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "Known traveler number: 66912443",
+     "confirmation_code": "1Y8EYP"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 4.95,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 742
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match while scrolling: [9] \"Savannah · Mon, Nov 16, 2026 · SL 574 · \" score 0.79 (runner-up 0.00)",
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.791,
+      "ms": 1340
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [9] \"Savannah · Mon, Nov 16, 2026 · SL 574 · \" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 1424
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 992
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 376
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "find_open_trip",
+      "description": "step 'find_open_trip': after-check 0 matched only relaxed; updated to {text='Savannah', kind='Button'}"
+     },
+     {
+      "kind": "locator",
+      "step": "open_trip",
+      "description": "step 'open_trip': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-add_ktn-v4-1Y8EYP",
+    "routine": "skylark_add_known_traveler_number",
+    "version": 1
+   },
+   "trial": {
+    "version": 2,
+    "changes": [
+     "step 'open_trip': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}",
+     "step 'find_open_trip': after-check 0 matched only relaxed; updated to {text='Savannah', kind='Button'}"
+    ],
+    "kind": "trial",
+    "family": "add_ktn",
+    "booking": "JNATRD",
+    "city": "Richmond",
+    "variant": 4,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "Known traveler number: 24814154",
+     "confirmation_code": "JNATRD"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 4.27,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 743
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match while scrolling: [10] \"Richmond · Thu, Dec 10, 2026 · SL 1112 ·\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 386
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [10] \"Richmond · Thu, Dec 10, 2026 · SL 1112 ·\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 1423
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1230
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 405
+     }
+    ],
+    "patches": [
+     {
+      "kind": "locator",
+      "step": "open_trip",
+      "description": "step 'open_trip': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-trial-add_ktn-v4-JNATRD",
+    "routine": "skylark_add_known_traveler_number"
+   },
+   "after": {
+    "kind": "after",
+    "family": "add_ktn",
+    "booking": "QRYYJC",
+    "city": "Memphis",
+    "variant": 4,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "Known traveler number: 56928586",
+     "confirmation_code": "QRYYJC"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 4.13,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 742
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match while scrolling: [11] \"Memphis · Fri, Dec 4, 2026\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 378
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [11] \"Memphis · Fri, Dec 4, 2026\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 1393
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1131
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 409
+     }
+    ],
+    "patches": [
+     {
+      "kind": "locator",
+      "step": "open_trip",
+      "description": "step 'open_trip': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-add_ktn-v4-QRYYJC",
+    "routine": "skylark_add_known_traveler_number",
+    "version": 2
+   },
+   "backcompat": {
+    "kind": "backcompat",
+    "family": "add_ktn",
+    "booking": "2P773J",
+    "city": "Tampa",
+    "variant": 0,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "56174271",
+     "confirmation_code": "2P773J"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 4.84,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 760
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 2035
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 453
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1134
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 383
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-backcompat-add_ktn-v0-2P773J",
+    "routine": "skylark_add_known_traveler_number",
+    "version": 2
+   }
+  },
+  {
+   "family": "add_ktn",
+   "variant": 5,
+   "routine": "skylark_add_known_traveler_number",
+   "first": {
+    "kind": "changed",
+    "family": "add_ktn",
+    "booking": "FUXUOJ",
+    "city": "Boise",
+    "variant": 5,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "Known traveler number: 88230843",
+     "confirmation_code": "FUXUOJ"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 6.99,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [10] \"Trips\" score 0.73 (runner-up 0.36)",
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.733,
+      "ms": 2659
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match while scrolling: [9] \"Boise · Mon, Nov 16, 2026 · SL 667 · ATL\" score 0.79 (runner-up 0.00)",
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.791,
+      "ms": 1322
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [9] \"Boise · Mon, Nov 16, 2026 · SL 667 · ATL\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 1392
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1169
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 374
+     }
+    ],
+    "patches": [
+     {
+      "kind": "locator",
+      "step": "open_my_trips",
+      "description": "step 'open_my_trips': target found only by relaxed match; locator updated to {text='Trips', resource_id='nav_trips', kind='Button'}"
+     },
+     {
+      "kind": "check",
+      "step": "open_my_trips",
+      "description": "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "open_my_trips",
+      "description": "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "find_open_trip",
+      "description": "step 'find_open_trip': after-check 0 matched only relaxed; updated to {text='Boise', kind='Button'}"
+     },
+     {
+      "kind": "locator",
+      "step": "open_trip",
+      "description": "step 'open_trip': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-add_ktn-v5-FUXUOJ",
+    "routine": "skylark_add_known_traveler_number",
+    "version": 1
+   },
+   "trial": {
+    "version": 2,
+    "changes": [
+     "step 'open_my_trips': target found only by relaxed match; locator updated to {text='Trips', resource_id='nav_trips', kind='Button'}",
+     "step 'open_trip': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}",
+     "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', kind='Text'}",
+     "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', kind='Text'}",
+     "step 'find_open_trip': after-check 0 matched only relaxed; updated to {text='Boise', kind='Button'}"
+    ],
+    "kind": "trial",
+    "family": "add_ktn",
+    "booking": "QP2LX6",
+    "city": "Portland",
+    "variant": 5,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "Known traveler number: 32536399",
+     "confirmation_code": "QP2LX6"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 4.19,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 740
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match while scrolling: [10] \"Portland · Fri, Dec 4, 2026 · SL 844 · A\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 383
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [10] \"Portland · Fri, Dec 4, 2026 · SL 844 · A\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 1400
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1168
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 431
+     }
+    ],
+    "patches": [
+     {
+      "kind": "locator",
+      "step": "open_trip",
+      "description": "step 'open_trip': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-trial-add_ktn-v5-QP2LX6",
+    "routine": "skylark_add_known_traveler_number"
+   },
+   "after": {
+    "kind": "after",
+    "family": "add_ktn",
+    "booking": "B7Z4UV",
+    "city": "Spokane",
+    "variant": 5,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "Known traveler number: 39166377",
+     "confirmation_code": "B7Z4UV"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 4.11,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 741
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match while scrolling: [11] \"Spokane · Thu, Nov 19, 2026\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 387
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [11] \"Spokane · Thu, Nov 19, 2026\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 1413
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1096
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 398
+     }
+    ],
+    "patches": [
+     {
+      "kind": "locator",
+      "step": "open_trip",
+      "description": "step 'open_trip': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-add_ktn-v5-B7Z4UV",
+    "routine": "skylark_add_known_traveler_number",
+    "version": 2
+   },
+   "backcompat": {
+    "kind": "backcompat",
+    "family": "add_ktn",
+    "booking": "VVQEYJ",
+    "city": "Savannah",
+    "variant": 0,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "63963722",
+     "confirmation_code": "VVQEYJ"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 5.9,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 1.0,
+      "ms": 1749
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 2153
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 439
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1123
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 364
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "open_my_trips",
+      "description": "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='My Trips', resource_id='screen_title', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "open_my_trips",
+      "description": "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='My Trips', resource_id='screen_title', kind='Text'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-backcompat-add_ktn-v0-VVQEYJ",
+    "routine": "skylark_add_known_traveler_number",
+    "version": 2
+   }
+  },
+  {
+   "family": "gate",
+   "variant": 1,
+   "routine": "skylark_get_flight_gate",
+   "first": {
+    "kind": "changed",
+    "family": "gate",
+    "booking": "0I7MMD",
+    "city": "Dallas",
+    "variant": 1,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "E2"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 1.67,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 746
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 392
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 458
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-gate-v1-0I7MMD",
+    "routine": "skylark_get_flight_gate",
+    "version": 1
+   },
+   "trial": null,
+   "after": {
+    "kind": "after",
+    "family": "gate",
+    "booking": "RQDKE5",
+    "city": "Minneapolis",
+    "variant": 1,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "A14"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 1.65,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 736
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 369
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 466
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-gate-v1-RQDKE5",
+    "routine": "skylark_get_flight_gate",
+    "version": 1
+   }
+  },
+  {
+   "family": "gate",
+   "variant": 2,
+   "routine": "skylark_get_flight_gate",
+   "first": {
+    "kind": "changed",
+    "family": "gate",
+    "booking": "EMQC52",
+    "city": "Boise",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "E15"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.54,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.83,
+      "ms": 1721
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 328
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 414
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "tap_my_trips",
+      "description": "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "tap_my_trips",
+      "description": "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-gate-v2-EMQC52",
+    "routine": "skylark_get_flight_gate",
+    "version": 1
+   },
+   "trial": {
+    "version": 2,
+    "changes": [
+     "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}",
+     "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}"
+    ],
+    "kind": "trial",
+    "family": "gate",
+    "booking": "A4MD1L",
+    "city": "Richmond",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "D2"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 1.64,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.83,
+      "ms": 744
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 370
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 452
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-trial-gate-v2-A4MD1L",
+    "routine": "skylark_get_flight_gate"
+   },
+   "after": {
+    "kind": "after",
+    "family": "gate",
+    "booking": "CIZ4PU",
+    "city": "Tampa",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "B13"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 1.66,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.83,
+      "ms": 763
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 367
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 456
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-gate-v2-CIZ4PU",
+    "routine": "skylark_get_flight_gate",
+    "version": 2
+   },
+   "backcompat": {
+    "kind": "backcompat",
+    "family": "gate",
+    "booking": "SJUTTY",
+    "city": "Albuquerque",
+    "variant": 0,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "A16"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.22,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 753
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 1941
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 454
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-backcompat-gate-v0-SJUTTY",
+    "routine": "skylark_get_flight_gate",
+    "version": 2
+   }
+  },
+  {
+   "family": "gate",
+   "variant": 3,
+   "routine": "skylark_get_flight_gate",
+   "first": {
+    "kind": "changed",
+    "family": "gate",
+    "booking": "AXZG87",
+    "city": "Memphis",
+    "variant": 3,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "C27"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 1.69,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 779
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 404
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 435
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-gate-v3-AXZG87",
+    "routine": "skylark_get_flight_gate",
+    "version": 1
+   },
+   "trial": null,
+   "after": {
+    "kind": "after",
+    "family": "gate",
+    "booking": "UIAEW1",
+    "city": "Albuquerque",
+    "variant": 3,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "A8"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 1.65,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 754
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 396
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 432
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-gate-v3-UIAEW1",
+    "routine": "skylark_get_flight_gate",
+    "version": 1
+   }
+  },
+  {
+   "family": "gate",
+   "variant": 4,
+   "routine": "skylark_get_flight_gate",
+   "first": {
+    "kind": "changed",
+    "family": "gate",
+    "booking": "1Y8EYP",
+    "city": "Savannah",
+    "variant": 4,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "B4"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.58,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 748
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match while scrolling: [9] \"Savannah · Mon, Nov 16, 2026 · SL 574 · \" score 0.79 (runner-up 0.00)",
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.791,
+      "ms": 1321
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [9] \"Savannah · Mon, Nov 16, 2026 · SL 574 · \" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 1445
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "find_tap_trip_row",
+      "description": "step 'find_tap_trip_row': after-check 0 matched only relaxed; updated to {text='Savannah', kind='Button'}"
+     },
+     {
+      "kind": "locator",
+      "step": "tap_trip_row",
+      "description": "step 'tap_trip_row': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-gate-v4-1Y8EYP",
+    "routine": "skylark_get_flight_gate",
+    "version": 1
+   },
+   "trial": {
+    "version": 2,
+    "changes": [
+     "step 'tap_trip_row': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}",
+     "step 'find_tap_trip_row': after-check 0 matched only relaxed; updated to {text='Savannah', kind='Button'}"
+    ],
+    "kind": "trial",
+    "family": "gate",
+    "booking": "JNATRD",
+    "city": "Richmond",
+    "variant": 4,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "E28"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.6,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 759
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match while scrolling: [10] \"Richmond · Thu, Dec 10, 2026 · SL 1112 ·\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 359
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [10] \"Richmond · Thu, Dec 10, 2026 · SL 1112 ·\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 1417
+     }
+    ],
+    "patches": [
+     {
+      "kind": "locator",
+      "step": "tap_trip_row",
+      "description": "step 'tap_trip_row': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-trial-gate-v4-JNATRD",
+    "routine": "skylark_get_flight_gate"
+   },
+   "after": {
+    "kind": "after",
+    "family": "gate",
+    "booking": "QRYYJC",
+    "city": "Memphis",
+    "variant": 4,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "E26"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.57,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 725
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match while scrolling: [11] \"Memphis · Fri, Dec 4, 2026\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 376
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [11] \"Memphis · Fri, Dec 4, 2026\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 1398
+     }
+    ],
+    "patches": [
+     {
+      "kind": "locator",
+      "step": "tap_trip_row",
+      "description": "step 'tap_trip_row': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-gate-v4-QRYYJC",
+    "routine": "skylark_get_flight_gate",
+    "version": 2
+   },
+   "backcompat": {
+    "kind": "backcompat",
+    "family": "gate",
+    "booking": "2P773J",
+    "city": "Tampa",
+    "variant": 0,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "C9"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.4,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 762
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 2115
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 447
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-backcompat-gate-v0-2P773J",
+    "routine": "skylark_get_flight_gate",
+    "version": 2
+   }
+  },
+  {
+   "family": "gate",
+   "variant": 5,
+   "routine": "skylark_get_flight_gate",
+   "first": {
+    "kind": "changed",
+    "family": "gate",
+    "booking": "FUXUOJ",
+    "city": "Boise",
+    "variant": 5,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "A26"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 5.48,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [10] \"Trips\" score 0.73 (runner-up 0.36)",
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.733,
+      "ms": 2703
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match while scrolling: [9] \"Boise · Mon, Nov 16, 2026 · SL 667 · ATL\" score 0.79 (runner-up 0.00)",
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.791,
+      "ms": 1299
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [9] \"Boise · Mon, Nov 16, 2026 · SL 667 · ATL\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 1409
+     }
+    ],
+    "patches": [
+     {
+      "kind": "locator",
+      "step": "tap_my_trips",
+      "description": "step 'tap_my_trips': target found only by relaxed match; locator updated to {text='Trips', resource_id='nav_trips', kind='Button'}"
+     },
+     {
+      "kind": "check",
+      "step": "tap_my_trips",
+      "description": "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "tap_my_trips",
+      "description": "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "find_tap_trip_row",
+      "description": "step 'find_tap_trip_row': after-check 0 matched only relaxed; updated to {text='Boise', kind='Button'}"
+     },
+     {
+      "kind": "locator",
+      "step": "tap_trip_row",
+      "description": "step 'tap_trip_row': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-gate-v5-FUXUOJ",
+    "routine": "skylark_get_flight_gate",
+    "version": 1
+   },
+   "trial": {
+    "version": 2,
+    "changes": [
+     "step 'tap_my_trips': target found only by relaxed match; locator updated to {text='Trips', resource_id='nav_trips', kind='Button'}",
+     "step 'tap_trip_row': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}",
+     "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', kind='Text'}",
+     "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', kind='Text'}",
+     "step 'find_tap_trip_row': after-check 0 matched only relaxed; updated to {text='Boise', kind='Button'}"
+    ],
+    "kind": "trial",
+    "family": "gate",
+    "booking": "QP2LX6",
+    "city": "Portland",
+    "variant": 5,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "A26"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.59,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 741
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match while scrolling: [10] \"Portland · Fri, Dec 4, 2026 · SL 844 · A\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 383
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [10] \"Portland · Fri, Dec 4, 2026 · SL 844 · A\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 1395
+     }
+    ],
+    "patches": [
+     {
+      "kind": "locator",
+      "step": "tap_trip_row",
+      "description": "step 'tap_trip_row': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-trial-gate-v5-QP2LX6",
+    "routine": "skylark_get_flight_gate"
+   },
+   "after": {
+    "kind": "after",
+    "family": "gate",
+    "booking": "B7Z4UV",
+    "city": "Spokane",
+    "variant": 5,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "A14"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.65,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 752
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match while scrolling: [11] \"Spokane · Thu, Nov 19, 2026\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 434
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [11] \"Spokane · Thu, Nov 19, 2026\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 1392
+     }
+    ],
+    "patches": [
+     {
+      "kind": "locator",
+      "step": "tap_trip_row",
+      "description": "step 'tap_trip_row': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-gate-v5-B7Z4UV",
+    "routine": "skylark_get_flight_gate",
+    "version": 2
+   },
+   "backcompat": {
+    "kind": "backcompat",
+    "family": "gate",
+    "booking": "VVQEYJ",
+    "city": "Savannah",
+    "variant": 0,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "D25"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 4.01,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 1.0,
+      "ms": 1619
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 1907
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 427
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "tap_my_trips",
+      "description": "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='My Trips', resource_id='screen_title', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "tap_my_trips",
+      "description": "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='My Trips', resource_id='screen_title', kind='Text'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-backcompat-gate-v0-VVQEYJ",
+    "routine": "skylark_get_flight_gate",
+    "version": 2
+   }
+  },
+  {
+   "family": "flight_status",
+   "variant": 1,
+   "routine": "skylark_check_flight_status",
+   "first": {
+    "kind": "changed",
+    "family": "flight_status",
+    "booking": "0I7MMD",
+    "city": "Dallas",
+    "variant": 1,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → DFW",
+     "date": "Wed, Nov 25, 2026",
+     "gate": "E2",
+     "departure_time": "6:00 AM"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.36,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.909,
+      "ms": 699
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1182
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 398
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-flight_status-v1-0I7MMD",
+    "routine": "skylark_check_flight_status",
+    "version": 1
+   },
+   "trial": null,
+   "after": {
+    "kind": "after",
+    "family": "flight_status",
+    "booking": "RQDKE5",
+    "city": "Minneapolis",
+    "variant": 1,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → MSP",
+     "date": "Wed, Nov 25, 2026",
+     "gate": "A14",
+     "departure_time": "11:05 AM"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.29,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.909,
+      "ms": 689
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1108
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 415
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-flight_status-v1-RQDKE5",
+    "routine": "skylark_check_flight_status",
+    "version": 1
+   }
+  },
+  {
+   "family": "flight_status",
+   "variant": 2,
+   "routine": "skylark_check_flight_status",
+   "first": {
+    "kind": "changed",
+    "family": "flight_status",
+    "booking": "EMQC52",
+    "city": "Boise",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → BOI",
+     "date": "Tue, Dec 1, 2026",
+     "gate": "E15",
+     "departure_time": "11:05 AM"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.23,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.83,
+      "ms": 1671
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1056
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 425
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "tap_flight_status",
+      "description": "step 'tap_flight_status': after-check 1 matched only relaxed; updated to {text='Status', resource_id='screen_title', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "tap_flight_status",
+      "description": "step 'tap_flight_status': after-check 2 matched only relaxed; updated to {text='Status', resource_id='nav_status', kind='Text'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-flight_status-v2-EMQC52",
+    "routine": "skylark_check_flight_status",
+    "version": 1
+   },
+   "trial": {
+    "version": 2,
+    "changes": [
+     "step 'tap_flight_status': after-check 1 matched only relaxed; updated to {text='Status', resource_id='screen_title', kind='Text'}",
+     "step 'tap_flight_status': after-check 2 matched only relaxed; updated to {text='Status', resource_id='nav_status', kind='Text'}"
+    ],
+    "kind": "trial",
+    "family": "flight_status",
+    "booking": "A4MD1L",
+    "city": "Richmond",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → RIC",
+     "date": "Wed, Nov 25, 2026",
+     "gate": "D2",
+     "departure_time": "11:05 AM"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.31,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.83,
+      "ms": 692
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1128
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 414
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-trial-flight_status-v2-A4MD1L",
+    "routine": "skylark_check_flight_status"
+   },
+   "after": {
+    "kind": "after",
+    "family": "flight_status",
+    "booking": "CIZ4PU",
+    "city": "Tampa",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → TPA",
+     "date": "Mon, Dec 7, 2026",
+     "gate": "B13",
+     "departure_time": "11:05 AM"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.26,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.83,
+      "ms": 687
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1064
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 422
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-flight_status-v2-CIZ4PU",
+    "routine": "skylark_check_flight_status",
+    "version": 2
+   },
+   "backcompat": {
+    "kind": "backcompat",
+    "family": "flight_status",
+    "booking": "SJUTTY",
+    "city": "Albuquerque",
+    "variant": 0,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → ABQ",
+     "date": "Fri, Dec 4, 2026",
+     "gate": "A16",
+     "departure_time": "11:05 AM"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.36,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 699
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1154
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 425
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-backcompat-flight_status-v0-SJUTTY",
+    "routine": "skylark_check_flight_status",
+    "version": 2
+   }
+  },
+  {
+   "family": "flight_status",
+   "variant": 3,
+   "routine": "skylark_check_flight_status",
+   "first": {
+    "kind": "changed",
+    "family": "flight_status",
+    "booking": "AXZG87",
+    "city": "Memphis",
+    "variant": 3,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → MEM",
+     "date": "Mon, Dec 7, 2026",
+     "gate": "C27",
+     "departure_time": "9:20 AM"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.24,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 701
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1074
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 383
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-flight_status-v3-AXZG87",
+    "routine": "skylark_check_flight_status",
+    "version": 1
+   },
+   "trial": null,
+   "after": {
+    "kind": "after",
+    "family": "flight_status",
+    "booking": "UIAEW1",
+    "city": "Albuquerque",
+    "variant": 3,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → ABQ",
+     "date": "Thu, Dec 10, 2026",
+     "gate": "A8",
+     "departure_time": "6:00 AM"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.36,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 703
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1141
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 420
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-flight_status-v3-UIAEW1",
+    "routine": "skylark_check_flight_status",
+    "version": 1
+   }
+  },
+  {
+   "family": "find_trip",
+   "variant": 1,
+   "routine": "skylark_lookup_trip_destination",
+   "first": {
+    "kind": "changed",
+    "family": "find_trip",
+    "booking": "0I7MMD",
+    "city": "Dallas",
+    "variant": 1,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Dallas"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 1.67,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 778
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 376
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 448
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-find_trip-v1-0I7MMD",
+    "routine": "skylark_lookup_trip_destination",
+    "version": 1
+   },
+   "trial": null,
+   "after": {
+    "kind": "after",
+    "family": "find_trip",
+    "booking": "RQDKE5",
+    "city": "Minneapolis",
+    "variant": 1,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Minneapolis"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.57,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 741
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match while scrolling: [11] \"Minneapolis · Wed, Nov 25, 2026\" score 0.65 (runner-up 0.00)",
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.647,
+      "ms": 1321
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [11] \"Minneapolis · Wed, Nov 25, 2026\" score 0.65 (runner-up 0.00)"
+      ],
+      "score": 0.647,
+      "ms": 1442
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "find_tap_trip_by_confirmation_code",
+      "description": "step 'find_tap_trip_by_confirmation_code': after-check 0 matched only relaxed; updated to {text='Minneapolis', resource_id='trip_row_RQDKE5', kind='Button'}"
+     },
+     {
+      "kind": "locator",
+      "step": "tap_trip_by_confirmation_code",
+      "description": "step 'tap_trip_by_confirmation_code': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-find_trip-v1-RQDKE5",
+    "routine": "skylark_lookup_trip_destination",
+    "version": 1
+   }
+  },
+  {
+   "family": "find_trip",
+   "variant": 2,
+   "routine": "skylark_lookup_trip_destination",
+   "first": {
+    "kind": "changed",
+    "family": "find_trip",
+    "booking": "EMQC52",
+    "city": "Boise",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Boise"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.57,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.83,
+      "ms": 1709
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 337
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 456
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "tap_my_trips",
+      "description": "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "tap_my_trips",
+      "description": "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-find_trip-v2-EMQC52",
+    "routine": "skylark_lookup_trip_destination",
+    "version": 1
+   },
+   "trial": {
+    "version": 2,
+    "changes": [
+     "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}",
+     "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}"
+    ],
+    "kind": "trial",
+    "family": "find_trip",
+    "booking": "A4MD1L",
+    "city": "Richmond",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Richmond"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 1.66,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.83,
+      "ms": 735
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 376
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 474
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-trial-find_trip-v2-A4MD1L",
+    "routine": "skylark_lookup_trip_destination"
+   },
+   "after": {
+    "kind": "after",
+    "family": "find_trip",
+    "booking": "CIZ4PU",
+    "city": "Tampa",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Tampa"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.54,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.83,
+      "ms": 747
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match while scrolling: [11] \"Tampa · Mon, Dec 7, 2026\" score 0.65 (runner-up 0.00)",
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.647,
+      "ms": 1301
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [11] \"Tampa · Mon, Dec 7, 2026\" score 0.65 (runner-up 0.00)"
+      ],
+      "score": 0.647,
+      "ms": 1428
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "find_tap_trip_by_confirmation_code",
+      "description": "step 'find_tap_trip_by_confirmation_code': after-check 0 matched only relaxed; updated to {text='Tampa', resource_id='trip_row_CIZ4PU', kind='Button'}"
+     },
+     {
+      "kind": "locator",
+      "step": "tap_trip_by_confirmation_code",
+      "description": "step 'tap_trip_by_confirmation_code': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-find_trip-v2-CIZ4PU",
+    "routine": "skylark_lookup_trip_destination",
+    "version": 2
+   },
+   "backcompat": {
+    "kind": "backcompat",
+    "family": "find_trip",
+    "booking": "SJUTTY",
+    "city": "Albuquerque",
+    "variant": 0,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Albuquerque"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.32,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 730
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 2060
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 464
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-backcompat-find_trip-v0-SJUTTY",
+    "routine": "skylark_lookup_trip_destination",
+    "version": 2
+   }
+  },
+  {
+   "family": "find_trip",
+   "variant": 3,
+   "routine": "skylark_lookup_trip_destination",
+   "first": {
+    "kind": "changed",
+    "family": "find_trip",
+    "booking": "AXZG87",
+    "city": "Memphis",
+    "variant": 3,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Memphis"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 1.64,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 749
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 391
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 434
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-find_trip-v3-AXZG87",
+    "routine": "skylark_lookup_trip_destination",
+    "version": 1
+   },
+   "trial": null,
+   "after": {
+    "kind": "after",
+    "family": "find_trip",
+    "booking": "UIAEW1",
+    "city": "Albuquerque",
+    "variant": 3,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Albuquerque"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.59,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 744
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match while scrolling: [11] \"Albuquerque · Thu, Dec 10, 2026\" score 0.65 (runner-up 0.00)",
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.647,
+      "ms": 1350
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [11] \"Albuquerque · Thu, Dec 10, 2026\" score 0.65 (runner-up 0.00)"
+      ],
+      "score": 0.647,
+      "ms": 1430
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "find_tap_trip_by_confirmation_code",
+      "description": "step 'find_tap_trip_by_confirmation_code': after-check 0 matched only relaxed; updated to {text='Albuquerque', resource_id='trip_row_UIAEW1', kind='Button'}"
+     },
+     {
+      "kind": "locator",
+      "step": "tap_trip_by_confirmation_code",
+      "description": "step 'tap_trip_by_confirmation_code': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-find_trip-v3-UIAEW1",
+    "routine": "skylark_lookup_trip_destination",
+    "version": 1
+   }
+  },
+  {
+   "family": "find_trip",
+   "variant": 4,
+   "routine": "skylark_lookup_trip_destination",
+   "first": {
+    "kind": "changed",
+    "family": "find_trip",
+    "booking": "1Y8EYP",
+    "city": "Savannah",
+    "variant": 4,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Savannah"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.58,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 749
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match while scrolling: [9] \"Savannah · Mon, Nov 16, 2026 · SL 574 · \" score 0.79 (runner-up 0.00)",
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.791,
+      "ms": 1344
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [9] \"Savannah · Mon, Nov 16, 2026 · SL 574 · \" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 1422
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "find_tap_trip_by_confirmation_code",
+      "description": "step 'find_tap_trip_by_confirmation_code': after-check 0 matched only relaxed; updated to {text='Savannah', kind='Button'}"
+     },
+     {
+      "kind": "locator",
+      "step": "tap_trip_by_confirmation_code",
+      "description": "step 'tap_trip_by_confirmation_code': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-find_trip-v4-1Y8EYP",
+    "routine": "skylark_lookup_trip_destination",
+    "version": 1
+   },
+   "trial": {
+    "version": 2,
+    "changes": [
+     "step 'tap_trip_by_confirmation_code': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}",
+     "step 'find_tap_trip_by_confirmation_code': after-check 0 matched only relaxed; updated to {text='Savannah', kind='Button'}"
+    ],
+    "kind": "trial",
+    "family": "find_trip",
+    "booking": "JNATRD",
+    "city": "Richmond",
+    "variant": 4,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Richmond"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.57,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 732
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match while scrolling: [10] \"Richmond · Thu, Dec 10, 2026 · SL 1112 ·\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 380
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [10] \"Richmond · Thu, Dec 10, 2026 · SL 1112 ·\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 1388
+     }
+    ],
+    "patches": [
+     {
+      "kind": "locator",
+      "step": "tap_trip_by_confirmation_code",
+      "description": "step 'tap_trip_by_confirmation_code': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-trial-find_trip-v4-JNATRD",
+    "routine": "skylark_lookup_trip_destination"
+   },
+   "after": {
+    "kind": "after",
+    "family": "find_trip",
+    "booking": "QRYYJC",
+    "city": "Memphis",
+    "variant": 4,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Memphis"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 4.18,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 744
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match while scrolling: [5] \"Memphis · Fri, Dec 4, 2026 · SL 913 · AT\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 1951
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [5] \"Memphis · Fri, Dec 4, 2026 · SL 913 · AT\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 1414
+     }
+    ],
+    "patches": [
+     {
+      "kind": "locator",
+      "step": "tap_trip_by_confirmation_code",
+      "description": "step 'tap_trip_by_confirmation_code': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-find_trip-v4-QRYYJC",
+    "routine": "skylark_lookup_trip_destination",
+    "version": 2
+   },
+   "backcompat": {
+    "kind": "backcompat",
+    "family": "find_trip",
+    "booking": "2P773J",
+    "city": "Tampa",
+    "variant": 0,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Tampa"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.28,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 750
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 1995
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 460
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-backcompat-find_trip-v0-2P773J",
+    "routine": "skylark_lookup_trip_destination",
+    "version": 2
+   }
+  },
+  {
+   "family": "find_trip",
+   "variant": 5,
+   "routine": "skylark_lookup_trip_destination",
+   "first": {
+    "kind": "changed",
+    "family": "find_trip",
+    "booking": "FUXUOJ",
+    "city": "Boise",
+    "variant": 5,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Boise"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 5.44,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [10] \"Trips\" score 0.73 (runner-up 0.36)",
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.733,
+      "ms": 2683
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match while scrolling: [9] \"Boise · Mon, Nov 16, 2026 · SL 667 · ATL\" score 0.79 (runner-up 0.00)",
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.791,
+      "ms": 1302
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [9] \"Boise · Mon, Nov 16, 2026 · SL 667 · ATL\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 1385
+     }
+    ],
+    "patches": [
+     {
+      "kind": "locator",
+      "step": "tap_my_trips",
+      "description": "step 'tap_my_trips': target found only by relaxed match; locator updated to {text='Trips', resource_id='nav_trips', kind='Button'}"
+     },
+     {
+      "kind": "check",
+      "step": "tap_my_trips",
+      "description": "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "tap_my_trips",
+      "description": "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "find_tap_trip_by_confirmation_code",
+      "description": "step 'find_tap_trip_by_confirmation_code': after-check 0 matched only relaxed; updated to {text='Boise', kind='Button'}"
+     },
+     {
+      "kind": "locator",
+      "step": "tap_trip_by_confirmation_code",
+      "description": "step 'tap_trip_by_confirmation_code': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-find_trip-v5-FUXUOJ",
+    "routine": "skylark_lookup_trip_destination",
+    "version": 1
+   },
+   "trial": {
+    "version": 2,
+    "changes": [
+     "step 'tap_my_trips': target found only by relaxed match; locator updated to {text='Trips', resource_id='nav_trips', kind='Button'}",
+     "step 'tap_trip_by_confirmation_code': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}",
+     "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', kind='Text'}",
+     "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', kind='Text'}",
+     "step 'find_tap_trip_by_confirmation_code': after-check 0 matched only relaxed; updated to {text='Boise', kind='Button'}"
+    ],
+    "kind": "trial",
+    "family": "find_trip",
+    "booking": "QP2LX6",
+    "city": "Portland",
+    "variant": 5,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Portland"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.59,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 728
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match while scrolling: [10] \"Portland · Fri, Dec 4, 2026 · SL 844 · A\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 378
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [10] \"Portland · Fri, Dec 4, 2026 · SL 844 · A\" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 1413
+     }
+    ],
+    "patches": [
+     {
+      "kind": "locator",
+      "step": "tap_trip_by_confirmation_code",
+      "description": "step 'tap_trip_by_confirmation_code': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-trial-find_trip-v5-QP2LX6",
+    "routine": "skylark_lookup_trip_destination"
+   },
+   "after": {
+    "kind": "after",
+    "family": "find_trip",
+    "booking": "B7Z4UV",
+    "city": "Spokane",
+    "variant": 5,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Spokane"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 4.35,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 736
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match while scrolling: [4] \"Spokane · Thu, Nov 19, 2026 · SL 1253 · \" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 2151
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [4] \"Spokane · Thu, Nov 19, 2026 · SL 1253 · \" score 0.79 (runner-up 0.00)"
+      ],
+      "score": 0.791,
+      "ms": 1393
+     }
+    ],
+    "patches": [
+     {
+      "kind": "locator",
+      "step": "tap_trip_by_confirmation_code",
+      "description": "step 'tap_trip_by_confirmation_code': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-find_trip-v5-B7Z4UV",
+    "routine": "skylark_lookup_trip_destination",
+    "version": 2
+   },
+   "backcompat": {
+    "kind": "backcompat",
+    "family": "find_trip",
+    "booking": "VVQEYJ",
+    "city": "Savannah",
+    "variant": 0,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Savannah"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 4.32,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 1.0,
+      "ms": 1708
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 2116
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.982,
+      "ms": 428
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "tap_my_trips",
+      "description": "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='My Trips', resource_id='screen_title', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "tap_my_trips",
+      "description": "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='My Trips', resource_id='screen_title', kind='Text'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-backcompat-find_trip-v0-VVQEYJ",
+    "routine": "skylark_lookup_trip_destination",
     "version": 2
    }
   },
@@ -3730,9 +7403,9 @@
     },
     "rung": 4,
     "model_calls": 2,
-    "cost_usd": 0.00849,
-    "billed_usd": 0.00849,
-    "duration_s": 18.2,
+    "cost_usd": 0.00956,
+    "billed_usd": 0.00956,
+    "duration_s": 18.62,
     "steps": [
      {
       "id": "tap_check_in",
@@ -3743,7 +7416,7 @@
        "local repair: 2 repair action(s) satisfied the after-checks"
       ],
       "score": null,
-      "ms": 5024
+      "ms": 5049
      },
      {
       "id": "select_passenger",
@@ -3751,7 +7424,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 350
+      "ms": 341
      },
      {
       "id": "tap_continue_after_passenger",
@@ -3759,7 +7432,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 353
+      "ms": 348
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -3767,7 +7440,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 338
+      "ms": 336
      },
      {
       "id": "tap_continue_after_hazmat",
@@ -3775,7 +7448,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 338
+      "ms": 339
      },
      {
       "id": "confirm_check_in",
@@ -3783,7 +7456,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 372
+      "ms": 377
      }
     ],
     "patches": [
@@ -3824,7 +7497,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 2.92,
+    "duration_s": 2.88,
     "steps": [
      {
       "id": "tap_check_in_1",
@@ -3832,7 +7505,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.98,
-      "ms": 540
+      "ms": 553
      },
      {
       "id": "tap_check_in_2",
@@ -3840,7 +7513,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 401
+      "ms": 382
      },
      {
       "id": "select_passenger",
@@ -3848,7 +7521,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 421
+      "ms": 387
      },
      {
       "id": "tap_continue_after_passenger",
@@ -3856,7 +7529,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 350
+      "ms": 364
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -3864,7 +7537,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 351
+      "ms": 346
      },
      {
       "id": "tap_continue_after_hazmat",
@@ -3872,7 +7545,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 349
+      "ms": 345
      },
      {
       "id": "confirm_check_in",
@@ -3880,7 +7553,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 423
+      "ms": 414
      }
     ],
     "patches": [],
@@ -3910,7 +7583,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 2.91,
+    "duration_s": 2.87,
     "steps": [
      {
       "id": "tap_check_in_1",
@@ -3918,7 +7591,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.98,
-      "ms": 547
+      "ms": 531
      },
      {
       "id": "tap_check_in_2",
@@ -3926,7 +7599,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 390
+      "ms": 372
      },
      {
       "id": "select_passenger",
@@ -3934,7 +7607,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 417
+      "ms": 418
      },
      {
       "id": "tap_continue_after_passenger",
@@ -3942,7 +7615,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 349
+      "ms": 363
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -3950,7 +7623,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 351
+      "ms": 352
      },
      {
       "id": "tap_continue_after_hazmat",
@@ -3958,7 +7631,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 351
+      "ms": 349
      },
      {
       "id": "confirm_check_in",
@@ -3966,7 +7639,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 422
+      "ms": 399
      }
     ],
     "patches": [],
@@ -3997,7 +7670,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 2.88,
+    "duration_s": 2.86,
     "steps": [
      {
       "id": "tap_check_in_1",
@@ -4005,7 +7678,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.98,
-      "ms": 543
+      "ms": 516
      },
      {
       "id": "tap_check_in_2",
@@ -4013,7 +7686,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.914,
-      "ms": 385
+      "ms": 396
      },
      {
       "id": "select_passenger",
@@ -4021,7 +7694,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 390
+      "ms": 388
      },
      {
       "id": "tap_continue_after_passenger",
@@ -4029,7 +7702,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 354
+      "ms": 365
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -4037,7 +7710,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 367
+      "ms": 362
      },
      {
       "id": "tap_continue_after_hazmat",
@@ -4045,7 +7718,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 369
+      "ms": 347
      },
      {
       "id": "confirm_check_in",
@@ -4053,7 +7726,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 399
+      "ms": 410
      }
     ],
     "patches": [],
@@ -4089,7 +7762,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 5.25,
+    "duration_s": 5.33,
     "steps": [
      {
       "id": "tap_check_in",
@@ -4099,7 +7772,7 @@
        "relaxed match: after-checks failed but the next step (select_passenger) is ready"
       ],
       "score": 0.93,
-      "ms": 1464
+      "ms": 1439
      },
      {
       "id": "select_passenger",
@@ -4107,7 +7780,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 379
+      "ms": 414
      },
      {
       "id": "tap_continue_after_passenger",
@@ -4117,7 +7790,7 @@
        "relaxed match: relaxed match [4] \"Next\" score 0.68 (runner-up 0.23)"
       ],
       "score": 0.676,
-      "ms": 1332
+      "ms": 1345
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -4125,7 +7798,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 342
+      "ms": 351
      },
      {
       "id": "tap_continue_after_hazmat",
@@ -4135,7 +7808,7 @@
        "relaxed match: relaxed match [5] \"Next\" score 0.68 (runner-up 0.23)"
       ],
       "score": 0.676,
-      "ms": 1277
+      "ms": 1304
      },
      {
       "id": "confirm_check_in",
@@ -4143,7 +7816,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.854,
-      "ms": 381
+      "ms": 399
      }
     ],
     "patches": [
@@ -4196,7 +7869,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 2.44,
+    "duration_s": 2.46,
     "steps": [
      {
       "id": "tap_check_in",
@@ -4204,7 +7877,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.93,
-      "ms": 450
+      "ms": 472
      },
      {
       "id": "select_passenger",
@@ -4212,7 +7885,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 416
+      "ms": 399
      },
      {
       "id": "tap_continue_after_passenger",
@@ -4220,7 +7893,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 364
+      "ms": 361
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -4228,7 +7901,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 364
+      "ms": 343
      },
      {
       "id": "tap_continue_after_hazmat",
@@ -4236,7 +7909,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 356
+      "ms": 372
      },
      {
       "id": "confirm_check_in",
@@ -4244,7 +7917,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.854,
-      "ms": 412
+      "ms": 428
      }
     ],
     "patches": [],
@@ -4274,7 +7947,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 2.44,
+    "duration_s": 2.46,
     "steps": [
      {
       "id": "tap_check_in",
@@ -4282,7 +7955,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.93,
-      "ms": 459
+      "ms": 466
      },
      {
       "id": "select_passenger",
@@ -4290,7 +7963,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 389
+      "ms": 405
      },
      {
       "id": "tap_continue_after_passenger",
@@ -4298,7 +7971,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 386
+      "ms": 363
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -4306,7 +7979,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 356
+      "ms": 361
      },
      {
       "id": "tap_continue_after_hazmat",
@@ -4314,7 +7987,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 347
+      "ms": 372
      },
      {
       "id": "confirm_check_in",
@@ -4322,7 +7995,7 @@
       "rung": 0,
       "rungs": [],
       "score": 0.854,
-      "ms": 417
+      "ms": 418
      }
     ],
     "patches": [],
@@ -4353,7 +8026,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 5.22,
+    "duration_s": 3.38,
     "steps": [
      {
       "id": "tap_check_in",
@@ -4363,7 +8036,7 @@
        "relaxed match: after-checks failed but the next step (select_passenger) is ready"
       ],
       "score": 1.0,
-      "ms": 1439
+      "ms": 1432
      },
      {
       "id": "select_passenger",
@@ -4371,17 +8044,15 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 398
+      "ms": 371
      },
      {
       "id": "tap_continue_after_passenger",
       "status": "done",
-      "rung": 2,
-      "rungs": [
-       "relaxed match: relaxed match [4] \"Continue\" score 0.68 (runner-up 0.23)"
-      ],
-      "score": 0.676,
-      "ms": 1327
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 355
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -4389,17 +8060,15 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 341
+      "ms": 356
      },
      {
       "id": "tap_continue_after_hazmat",
       "status": "done",
-      "rung": 2,
-      "rungs": [
-       "relaxed match: relaxed match [5] \"Continue\" score 0.68 (runner-up 0.23)"
-      ],
-      "score": 0.676,
-      "ms": 1256
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 346
      },
      {
       "id": "confirm_check_in",
@@ -4407,7 +8076,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 387
+      "ms": 440
      }
     ],
     "patches": [
@@ -4415,16 +8084,6 @@
       "kind": "post",
       "step": "tap_check_in",
       "description": "step 'tap_check_in': after-checks failed (no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) but the next step was ready; after-checks rewritten from what happened"
-     },
-     {
-      "kind": "locator",
-      "step": "tap_continue_after_passenger",
-      "description": "step 'tap_continue_after_passenger': target found only by relaxed match; locator updated to {text='Continue', resource_id='btn_continue', kind='Button'}"
-     },
-     {
-      "kind": "locator",
-      "step": "tap_continue_after_hazmat",
-      "description": "step 'tap_continue_after_hazmat': target found only by relaxed match; locator updated to {text='Continue', resource_id='btn_continue', kind='Button'}"
      }
     ],
     "approvals": 1,
@@ -4457,9 +8116,9 @@
     },
     "rung": 4,
     "model_calls": 1,
-    "cost_usd": 0.00332,
-    "billed_usd": 0.00332,
-    "duration_s": 7.82,
+    "cost_usd": 0.0042,
+    "billed_usd": 0.0042,
+    "duration_s": 9.12,
     "steps": [
      {
       "id": "tap_check_in",
@@ -4467,7 +8126,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 547
+      "ms": 462
      },
      {
       "id": "select_passenger",
@@ -4475,7 +8134,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 385
+      "ms": 376
      },
      {
       "id": "tap_continue_after_passenger",
@@ -4483,7 +8142,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 368
+      "ms": 372
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -4491,7 +8150,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 361
+      "ms": 364
      },
      {
       "id": "tap_continue_after_hazmat",
@@ -4502,7 +8161,7 @@
        "local repair: 1 repair action(s) satisfied the after-checks"
       ],
       "score": 1.0,
-      "ms": 1701
+      "ms": 1685
      },
      {
       "id": "confirm_check_in",
@@ -4510,7 +8169,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 413
+      "ms": 399
      }
     ],
     "patches": [
@@ -4551,7 +8210,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 2.91,
+    "duration_s": 2.92,
     "steps": [
      {
       "id": "tap_check_in",
@@ -4559,7 +8218,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 443
+      "ms": 442
      },
      {
       "id": "select_passenger",
@@ -4567,7 +8226,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 427
+      "ms": 425
      },
      {
       "id": "tap_continue_after_passenger",
@@ -4575,7 +8234,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 359
+      "ms": 351
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -4583,7 +8242,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 365
+      "ms": 379
      },
      {
       "id": "tap_continue_after_hazmat",
@@ -4591,7 +8250,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 460
+      "ms": 466
      },
      {
       "id": "tap_continue_after_hazmat_extra_1",
@@ -4599,7 +8258,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 369
+      "ms": 360
      },
      {
       "id": "confirm_check_in",
@@ -4607,7 +8266,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 412
+      "ms": 416
      }
     ],
     "patches": [],
@@ -4637,7 +8296,7 @@
     "model_calls": 0,
     "cost_usd": 0.0,
     "billed_usd": 0.0,
-    "duration_s": 2.86,
+    "duration_s": 2.92,
     "steps": [
      {
       "id": "tap_check_in",
@@ -4645,7 +8304,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 451
+      "ms": 470
      },
      {
       "id": "select_passenger",
@@ -4653,7 +8312,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 370
+      "ms": 366
      },
      {
       "id": "tap_continue_after_passenger",
@@ -4661,7 +8320,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 358
+      "ms": 368
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -4669,7 +8328,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 365
+      "ms": 359
      },
      {
       "id": "tap_continue_after_hazmat",
@@ -4677,7 +8336,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 475
+      "ms": 490
      },
      {
       "id": "tap_continue_after_hazmat_extra_1",
@@ -4685,7 +8344,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 358
+      "ms": 379
      },
      {
       "id": "confirm_check_in",
@@ -4693,7 +8352,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 400
+      "ms": 403
      }
     ],
     "patches": [],
@@ -4732,7 +8391,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 451
+      "ms": 457
      },
      {
       "id": "select_passenger",
@@ -4740,7 +8399,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 363
+      "ms": 381
      },
      {
       "id": "tap_continue_after_passenger",
@@ -4748,7 +8407,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 373
+      "ms": 354
      },
      {
       "id": "confirm_no_hazardous_materials",
@@ -4756,7 +8415,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 356
+      "ms": 361
      },
      {
       "id": "tap_continue_after_hazmat",
@@ -4764,7 +8423,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 364
+      "ms": 360
      },
      {
       "id": "tap_continue_after_hazmat_extra_1",
@@ -4772,7 +8431,7 @@
       "rung": 0,
       "rungs": [],
       "score": null,
-      "ms": 69
+      "ms": 71
      },
      {
       "id": "confirm_check_in",
@@ -4780,7 +8439,7 @@
       "rung": 0,
       "rungs": [],
       "score": 1.0,
-      "ms": 425
+      "ms": 417
      }
     ],
     "patches": [],
@@ -4789,6 +8448,559 @@
     "agent": null,
     "task_id": "p2-backcompat-check_in_next-v0-KX7Q2M",
     "routine": "skylark_check_in_flight",
+    "version": 2
+   }
+  },
+  {
+   "family": "flight_status",
+   "variant": 4,
+   "routine": "skylark_check_flight_status",
+   "first": {
+    "kind": "changed",
+    "family": "flight_status",
+    "booking": "1Y8EYP",
+    "city": "Savannah",
+    "variant": 4,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → SAV",
+     "date": "Mon, Nov 16, 2026",
+     "gate": "B4",
+     "departure_time": "2:15 PM"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.3,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 704
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 1.0,
+      "ms": 2090
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 425
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "enter_flight_number",
+      "description": "step 'enter_flight_number': after-check 0 matched only relaxed; updated to {text='Flight number: SL 574', kind='EditText'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-flight_status-v4-1Y8EYP",
+    "routine": "skylark_check_flight_status",
+    "version": 1
+   },
+   "trial": {
+    "version": 2,
+    "changes": [
+     "step 'enter_flight_number': after-check 0 matched only relaxed; updated to {text='Flight number: SL 574', kind='EditText'}"
+    ],
+    "kind": "trial",
+    "family": "flight_status",
+    "booking": "JNATRD",
+    "city": "Richmond",
+    "variant": 4,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → RIC",
+     "date": "Thu, Dec 10, 2026",
+     "gate": "E28",
+     "departure_time": "12:40 PM"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.23,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 693
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 1.0,
+      "ms": 2051
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 415
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "enter_flight_number",
+      "description": "step 'enter_flight_number': after-check 0 matched only relaxed; updated to {text='Flight number: SL 1112', kind='EditText'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-trial-flight_status-v4-JNATRD",
+    "routine": "skylark_check_flight_status"
+   },
+   "after": {
+    "kind": "after",
+    "family": "flight_status",
+    "booking": "QRYYJC",
+    "city": "Memphis",
+    "variant": 4,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → MEM",
+     "date": "Fri, Dec 4, 2026",
+     "gate": "E26",
+     "departure_time": "7:35 AM"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.24,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 696
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 1.0,
+      "ms": 2037
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 423
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "enter_flight_number",
+      "description": "step 'enter_flight_number': after-check 0 matched only relaxed; updated to {text='Flight number: SL 913', kind='EditText'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-flight_status-v4-QRYYJC",
+    "routine": "skylark_check_flight_status",
+    "version": 2
+   },
+   "backcompat": {
+    "kind": "backcompat",
+    "family": "flight_status",
+    "booking": "2P773J",
+    "city": "Tampa",
+    "variant": 0,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → TPA",
+     "date": "Tue, Dec 1, 2026",
+     "gate": "C9",
+     "departure_time": "6:00 AM"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.33,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 708
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 1.0,
+      "ms": 2106
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 441
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "enter_flight_number",
+      "description": "step 'enter_flight_number': after-check 0 matched only relaxed; updated to {text='Flight number: SL 1978', resource_id='field_flight_number', kind='EditText'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-backcompat-flight_status-v0-2P773J",
+    "routine": "skylark_check_flight_status",
+    "version": 2
+   }
+  },
+  {
+   "family": "flight_status",
+   "variant": 5,
+   "routine": "skylark_check_flight_status",
+   "first": {
+    "kind": "changed",
+    "family": "flight_status",
+    "booking": "FUXUOJ",
+    "city": "Boise",
+    "variant": 5,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → BOI",
+     "date": "Mon, Nov 16, 2026",
+     "gate": "A26",
+     "departure_time": "7:35 AM"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 5.14,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [11] \"Status\" score 0.73 (runner-up 0.36)",
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.733,
+      "ms": 2599
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 1.0,
+      "ms": 2076
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 387
+     }
+    ],
+    "patches": [
+     {
+      "kind": "locator",
+      "step": "tap_flight_status",
+      "description": "step 'tap_flight_status': target found only by relaxed match; locator updated to {text='Status', resource_id='nav_status', kind='Button'}"
+     },
+     {
+      "kind": "check",
+      "step": "tap_flight_status",
+      "description": "step 'tap_flight_status': after-check 1 matched only relaxed; updated to {text='Status', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "tap_flight_status",
+      "description": "step 'tap_flight_status': after-check 2 matched only relaxed; updated to {text='Status', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "enter_flight_number",
+      "description": "step 'enter_flight_number': after-check 0 matched only relaxed; updated to {text='Flight number: SL 667', kind='EditText'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-flight_status-v5-FUXUOJ",
+    "routine": "skylark_check_flight_status",
+    "version": 1
+   },
+   "trial": {
+    "version": 2,
+    "changes": [
+     "step 'tap_flight_status': target found only by relaxed match; locator updated to {text='Status', resource_id='nav_status', kind='Button'}",
+     "step 'tap_flight_status': after-check 1 matched only relaxed; updated to {text='Status', kind='Text'}",
+     "step 'tap_flight_status': after-check 2 matched only relaxed; updated to {text='Status', kind='Text'}",
+     "step 'enter_flight_number': after-check 0 matched only relaxed; updated to {text='Flight number: SL 667', kind='EditText'}"
+    ],
+    "kind": "trial",
+    "family": "flight_status",
+    "booking": "QP2LX6",
+    "city": "Portland",
+    "variant": 5,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → PDX",
+     "date": "Fri, Dec 4, 2026",
+     "gate": "A26",
+     "departure_time": "7:35 AM"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.31,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 701
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 1.0,
+      "ms": 2085
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 446
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "enter_flight_number",
+      "description": "step 'enter_flight_number': after-check 0 matched only relaxed; updated to {text='Flight number: SL 844', kind='EditText'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-trial-flight_status-v5-QP2LX6",
+    "routine": "skylark_check_flight_status"
+   },
+   "after": {
+    "kind": "after",
+    "family": "flight_status",
+    "booking": "B7Z4UV",
+    "city": "Spokane",
+    "variant": 5,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → GEG",
+     "date": "Thu, Nov 19, 2026",
+     "gate": "A14",
+     "departure_time": "9:20 AM"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.26,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 694
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 1.0,
+      "ms": 2082
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 407
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "enter_flight_number",
+      "description": "step 'enter_flight_number': after-check 0 matched only relaxed; updated to {text='Flight number: SL 1253', kind='EditText'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-flight_status-v5-B7Z4UV",
+    "routine": "skylark_check_flight_status",
+    "version": 2
+   },
+   "backcompat": {
+    "kind": "backcompat",
+    "family": "flight_status",
+    "booking": "VVQEYJ",
+    "city": "Savannah",
+    "variant": 0,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → SAV",
+     "date": "Fri, Dec 4, 2026",
+     "gate": "D25",
+     "departure_time": "6:00 AM"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 4.21,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 1.0,
+      "ms": 1671
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 1.0,
+      "ms": 2076
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 391
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "tap_flight_status",
+      "description": "step 'tap_flight_status': after-check 1 matched only relaxed; updated to {text='Flight status', resource_id='screen_title', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "tap_flight_status",
+      "description": "step 'tap_flight_status': after-check 2 matched only relaxed; updated to {text='Flight status', resource_id='screen_title', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "enter_flight_number",
+      "description": "step 'enter_flight_number': after-check 0 matched only relaxed; updated to {text='Flight number: SL 648', resource_id='field_flight_number', kind='EditText'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-backcompat-flight_status-v0-VVQEYJ",
+    "routine": "skylark_check_flight_status",
     "version": 2
    }
   }

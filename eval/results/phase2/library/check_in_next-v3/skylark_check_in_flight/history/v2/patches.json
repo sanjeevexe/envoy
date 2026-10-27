@@ -9,7 +9,7 @@
     "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-changed-check_in_next-v3-KX7Q2M/screens/repair_05_1_after.png"
    ],
    "reasons": [
-    "Review screen blocks progress, main button advances toward confirm check-in"
+    "Review page blocks progress, tapping its main button advances toward confirm screen."
    ],
    "task_id": "p2-changed-check_in_next-v3-KX7Q2M"
   }

@@ -1,0 +1,190 @@
+routine: skylark_check_in_flight
+app: com.skylark.air
+version: 2
+status: active
+intent: Check in for a SkyLark flight
+description: Checks in for a SkyLark flight by opening My Trips, selecting the trip to the requested city, selecting the passenger, confirming
+  no hazardous materials, and confirming check-in, then returns the seat, gate, and boarding information.
+patterns: [Check me in for my flight, Check in for my flight, Please check me in, Check in for my upcoming trip]
+outputs: [seat, gate, boarding]
+start: fresh_launch
+inputs:
+  trip_city: {type: text, description: The destination city of the flight to check in for., example: Denver}
+steps:
+- id: open_my_trips
+  intent: "Tap My Trips to find the flight to {{trip_city}}"
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      text: Trips
+      alt_texts: [My Trips]
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.373, 0.93]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 1
+- id: find_select_trip_by_city
+  intent: "Scroll to {{trip_city}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        text_has: "{{trip_city}}"
+        kind: Button
+        cls: View
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      text_has: "{{trip_city}}"
+      kind: Button
+      cls: View
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: select_trip_by_city
+  intent: "Select the trip to {{trip_city}} from the list"
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      text_has: "{{trip_city}}"
+      kind: Button
+      cls: View
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      text: "Trip to {{trip_city}}"
+      kind: Text
+  risk: reversible
+  note: trace step 2
+- id: tap_check_in
+  intent: Tap Check in for the selected flight
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      text: Check in
+      kind: Button
+      cls: View
+      siblings: [Known traveler number]
+      in_list: false
+      position: [0.5, 0.484]
+  post:
+  - {screen_changed: true}
+  - element_absent:
+      text: "Trip to {{trip_city}}"
+      kind: Text
+  risk: reversible
+  note: trace step 3
+- id: select_passenger
+  intent: Select the passenger for check-in
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      kind: Toggle
+      cls: View
+      siblings: ['Who''s checking in?']
+      in_list: false
+      position: [0.5, 0.238]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 4
+- id: continue_after_passenger
+  intent: Tap Continue after selecting the passenger
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      text: Next
+      alt_texts: [Continue]
+      kind: Button
+      cls: View
+      siblings: [Step 1 of 3, 'Who''s checking in?']
+      in_list: false
+      position: [0.5, 0.295]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 5
+- id: confirm_no_hazardous_materials
+  intent: Toggle the declaration that I'm not carrying hazardous materials
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      text: I'm not carrying hazardous materials
+      kind: Toggle
+      cls: View
+      siblings: [Travel safety, 'Lithium batteries, fireworks, flammable liquids and other hazardous materials are not allowed in checked or carry-on
+          bags.']
+      in_list: false
+      position: [0.5, 0.33]
+  post:
+  - toggle_is:
+      target: {text: I'm not carrying hazardous materials, kind: Toggle}
+      value: 'on'
+  risk: reversible
+  note: trace step 7
+- id: continue_after_hazardous_materials
+  intent: Tap Continue after confirming the hazardous materials declaration
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      text: Next
+      alt_texts: [Continue]
+      kind: Button
+      cls: View
+      siblings: [Step 2 of 3, Travel safety, 'Lithium batteries, fireworks, flammable liquids and other hazardous materials are not allowed in
+          checked or carry-on bags.']
+      in_list: false
+      position: [0.5, 0.388]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 8
+- id: confirm_check_in
+  intent: Tap Confirm check-in to complete check-in
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      text: Complete check-in
+      alt_texts: [Confirm check-in]
+      kind: Button
+      cls: View
+      siblings: [Step 3 of 3, Confirm check-in]
+      in_list: false
+      position: [0.5, 0.365]
+  post:
+  - {screen_changed: true}
+  risk: irreversible
+  extract:
+    seat: {near: Seat, first_in_list: false, next_element: true, expect_digits: true}
+    gate: {near: Gate, first_in_list: false, next_element: true, expect_digits: false}
+    boarding: {near: Boarding, first_in_list: false, next_element: true, expect_digits: true}
+  note: trace step 9
+done:
+- element_present: {text: Boarding pass}
+parent_version: 1
+changes:
+- "step 'open_my_trips': target found only by relaxed match; locator updated to {text='Trips', kind='Button'}"
+- "step 'continue_after_passenger': the element moved or changed; new locator {text='Next', kind='Button'}"
+- "step 'continue_after_hazardous_materials': the element moved or changed; new locator {text='Next', kind='Button'}"
+- "step 'confirm_check_in': target found only by relaxed match; locator updated to {text='Complete check-in', kind='Button'}"
+compiled_from:
+  task_id: p2-src-v4-check_in
+  goal: Check me in for my flight to Denver.
+  compiler: cached
+  compiled_at: "2026-10-27 02:32:55"
+  trace_steps_kept: [1, 2, 3, 4, 5, 7, 8, 9]
+  trace_steps_dropped: 1
+  cost_usd: 0.0

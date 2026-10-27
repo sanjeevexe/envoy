@@ -11,8 +11,8 @@
     "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-changed-check_in_next-v1-KX7Q2M/screens/repair_01_2_after.png"
    ],
    "reasons": [
-    "Check in button missing on home, Next trip card for Chicago should lead to check-in flow.",
-    "Check in button exists with slightly different id btn_checkin, tapping to start check-in"
+    "Check in button is missing, Next trip card for Chicago likely leads to check-in.",
+    "Check in button appears with new ID btn_checkin on trip details screen."
    ],
    "task_id": "p2-changed-check_in_next-v1-KX7Q2M"
   }

@@ -44,7 +44,7 @@ from routines import checks as chk
 from routines import locators
 from routines.compiler import bind_inputs, chk_generalize, generalize_locator
 from routines.model import Check, Extract, Locator, Routine, Step, StepAction, render, render_str
-from routines.screens import body, norm, usable_id
+from routines.screens import body, contains_value, norm, usable_id
 
 RUNG_NAMES = {0: "none", 1: "wait and retry", 2: "relaxed match", 3: "pop-up handler", 4: "local repair", 5: "full agent", 6: "ask the user"}
 Status = Literal["done", "failed", "declined", "handoff", "needs_user", "agent_done", "agent_failed"]
@@ -858,10 +858,10 @@ def extract_value(spec: Extract, screen: ScreenState, inputs: dict[str, str]) ->
 
 
 def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str | None:
-    spec = render(spec, inputs)
     """The value in an element: the recorded " · " part of its label if there are several ("Gate · B12" → B12),
-    with the label in front of it ("Known traveler number: 98765432" → 98765432) and fixed text after it removed."""
-    el = None
+    with the label in front of it ("Known traveler number: 98765432" → 98765432) and fixed text after it removed.
+    Without IDs it falls back to the label (`near`), then to the element that shows one of the routine's inputs."""
+    spec = render(spec, inputs)
     if spec.pattern:
         for e in screen.numbered:
             if (e.in_list or not spec.first_in_list) and re.fullmatch(spec.pattern, " ".join(e.label.split())):
@@ -872,12 +872,12 @@ def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str 
         if label_el is None or not label_el.number or label_el.number >= len(screen.numbered):
             return None
         return " ".join(screen.numbered[label_el.number].label.split()) or None
+    el = None
     loc = render(spec.locator, inputs) if spec.locator is not None else None
     ids_shown = any(usable_id(e.resource_id) for e in screen.numbered)
     if loc is not None and (loc.text or loc.desc or loc.text_has or (loc.resource_id and ids_shown)):
         # An ID-only locator means nothing on a screen that shows no IDs: fall back to the label (`near`).
-        m = locators.locate(loc, screen, threshold=locators.RELAXED, margin=0.0, role="check")
-        el = m.element
+        el = locators.locate(loc, screen, threshold=locators.RELAXED, margin=0.0, role="check").element
     near = norm(spec.near) if spec.near else ""
     if el is None and near:
         el = next((e for e in screen.numbered if norm(e.label).startswith(near)), None)
@@ -889,6 +889,11 @@ def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str 
                 parts = [p.strip(" :,") for p in value.split(" · ") if p.strip(" :,")]
                 value = parts[spec.segment - 1] if spec.segment - 1 < len(parts) else value
             return value or None
+    if el is None and loc is not None and loc.kind:
+        # No ID shown and no element starting with the label: the element of that type that shows one of the routine's
+        # inputs (a status line containing the flight number that was searched, with "Gate A7" inside it).
+        shown = [e for e in screen.numbered if e.kind == loc.kind and any(v and contains_value(e.label, v) for v in inputs.values())]
+        el = shown[0] if len(shown) == 1 else None
     if el is None:
         return None
     label = " ".join(el.label.split())
