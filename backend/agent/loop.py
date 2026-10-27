@@ -340,6 +340,11 @@ class AgentRunner:
                     out.approvals.append({"step": step, "description": req.description, "reasons": req.reasons,
                                           "approved": decision_.approved, "by": decision_.by})
                     record["approval"] = {"approved": decision_.approved, "by": decision_.by}
+                    if not decision_.approved and decision_.by == "screen_changed":
+                        # Approvals are bound to the screen they were shown for: look again, and ask again if still needed.
+                        history.append(f"step {step}: {desc} → not done: the screen changed while waiting for approval. Look again.")
+                        trace.step(record)
+                        continue
                     if not decision_.approved:
                         history.append(f"step {step}: {desc} → the user DECLINED this action. Do not retry it.")
                         trace.step(record)

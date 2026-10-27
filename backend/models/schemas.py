@@ -326,3 +326,12 @@ class MemoryAnswer(_Strict):
     answer: str = Field(description="The answer in one short sentence, with where and when it was seen; or say memory doesn't have it")
     found: bool
     stale: bool = Field(description="True if the notes mark the fact as possibly out of date")
+
+
+class ChatRoute(_Strict):
+    """Envoy's assistant deciding what a chat message asks for."""
+
+    kind: Literal["memory", "task", "reply"] = Field(description="memory: a question memory can answer; task: something to do in a phone app; reply: anything else")
+    goal: str = Field(description="For task (and for memory, the task that would check it in the app): the goal as one instruction, e.g. 'Check me in for my flight to Chicago'; else empty")
+    reply: str = Field(description="For reply: a short answer to the user; else empty")
+

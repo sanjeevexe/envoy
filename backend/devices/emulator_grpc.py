@@ -74,6 +74,37 @@ class EmulatorGrpc:
         self.touch(x, y, 1, timeout)
         self.touch(x, y, 0, timeout)
 
+    def frame(self, width: int, timeout: float = 5) -> Image.Image:
+        """A frame scaled by the emulator to `width` pixels wide (the live view: less to copy and encode)."""
+        if self._stub is None:
+            self.connect()
+        assert self._stub is not None
+        img = self._stub.getScreenshot(pb.ImageFormat(format=pb.ImageFormat.RGB888, width=width), timeout=timeout, metadata=self._metadata)
+        return Image.frombytes("RGB", (img.format.width, img.format.height), img.image)
+
+    def key(self, key: str, timeout: float = 5) -> None:
+        """Press one named key ("Backspace", "Enter", "Tab", "GoBack", "GoHome", "AppSwitch")."""
+        if self._stub is None:
+            self.connect()
+        assert self._stub is not None
+        self._stub.sendKey(pb.KeyboardEvent(eventType=pb.KeyboardEvent.keypress, key=key), timeout=timeout, metadata=self._metadata)
+
+    def text(self, text: str, timeout: float = 5) -> None:
+        """Type text into the focused field, as a keyboard would."""
+        if self._stub is None:
+            self.connect()
+        assert self._stub is not None
+        self._stub.sendKey(pb.KeyboardEvent(text=text), timeout=timeout, metadata=self._metadata)
+
+    def swipe(self, x1: int, y1: int, x2: int, y2: int, duration_s: float = 0.3, steps: int = 12) -> None:
+        """A finger drag from (x1, y1) to (x2, y2)."""
+        import time as _time
+        self.touch(x1, y1, 1)
+        for i in range(1, steps + 1):
+            _time.sleep(duration_s / steps)
+            self.touch(round(x1 + (x2 - x1) * i / steps), round(y1 + (y2 - y1) * i / steps), 1)
+        self.touch(x2, y2, 0)
+
     def image(self, timeout: float = 10) -> Image.Image:
         """Current frame as a Pillow image (raw RGB888 transfer)."""
         img = self._call(pb.ImageFormat.RGB888, timeout)

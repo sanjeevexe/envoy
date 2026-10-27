@@ -17,7 +17,7 @@ import shutil
 import time
 from dataclasses import asdict, is_dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 from devices.types import Element, ScreenState
 
@@ -49,7 +49,12 @@ def screen_record(s: ScreenState) -> dict[str, Any]:
 
 
 class TraceWriter:
+    # Called with (task_id, record) for every step and (task_id, {"kind": "finish", ...}) at the end: the API turns these
+    # into live events. Listeners must be quick and never raise; a failing one is skipped.
+    listeners: list[Callable[[str, dict[str, Any]], None]] = []
+
     def __init__(self, task_id: str, root: Path = RUNS) -> None:
+        self.task_id = task_id
         self.dir = root / task_id
         if (self.dir / "steps.jsonl").exists():  # a rerun with the same task id replaces the old trace (compiling mixed runs would be wrong)
             shutil.rmtree(self.dir)
@@ -71,10 +76,19 @@ class TraceWriter:
         record = {"time": time.time(), **record}
         self._steps.write(json.dumps(record, default=_default, ensure_ascii=False) + "\n")
         self._steps.flush()
+        self._notify(record)
 
     def finish(self, summary: dict[str, Any]) -> None:
         (self.dir / "run.json").write_text(json.dumps(summary, default=_default, indent=2, ensure_ascii=False))
         self._steps.close()
+        self._notify({"kind": "finish", **summary})
+
+    def _notify(self, record: dict[str, Any]) -> None:
+        for listener in list(self.listeners):
+            try:
+                listener(self.task_id, record)
+            except Exception:  # noqa: BLE001 - a live view must never break a run
+                pass
 
 
 def _default(o: Any) -> Any:
