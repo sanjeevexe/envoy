@@ -275,7 +275,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
         return FileResponse(API_DIR / "approvals" / a["screenshot"], media_type="image/jpeg")
 
     @app.post("/api/approvals/{aid}", dependencies=[Depends(session)])
-    def decide(aid: str, body: dict[str, Any] = Body(...)) -> dict[str, Any]:
+    def decide(aid: str, request: Request, body: dict[str, Any] = Body(...)) -> dict[str, Any]:
         a = tasks.approval(aid)
         if a is None:
             raise HTTPException(404)
@@ -286,7 +286,9 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
         approver = runner.approvers.get(a["task_id"])
         if approver is None:
             raise HTTPException(409, "the task is no longer waiting")
-        rec = approver.decide(aid, body.get("decision") == "approve", by="user")
+        me = caller(request)
+        by = "user" if me is None or me.kind == "owner" else f"user on {me.name}"  # the audit log says which of your devices
+        rec = approver.decide(aid, body.get("decision") == "approve", by=by)
         if rec is None:
             raise HTTPException(409, "already decided")
         return _public(rec)

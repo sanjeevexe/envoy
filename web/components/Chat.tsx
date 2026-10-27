@@ -22,6 +22,7 @@ export default function Chat({ tasks, openTask, compact }: { tasks: Record<strin
   const end = useRef<HTMLDivElement>(null);
   const spokenTasks = useRef<Record<string, string>>({});
   const held = useRef<{ t: number; latched: boolean }>({ t: 0, latched: false });
+  const [latched, setLatched] = useState(false);
 
   useEffect(() => { end.current?.scrollIntoView({ block: "end" }); }, [msgs.length, busy]);
 
@@ -57,7 +58,8 @@ export default function Chat({ tasks, openTask, compact }: { tasks: Record<strin
     }
   }, []);
 
-  const ptt = usePushToTalk(useCallback((turn: Turn) => ask(turn.text, turn), [ask]), setError);
+  const ptt = usePushToTalk(useCallback((turn: Turn) => ask(turn.text, turn), [ask]),
+    useCallback((msg: string) => { setError(msg); held.current = { t: 0, latched: false }; setLatched(false); }, []));
 
   const send = (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,7 +88,7 @@ export default function Chat({ tasks, openTask, compact }: { tasks: Record<strin
   // Hold to talk; a quick tap starts listening until the next tap.
   const micDown = (e: React.PointerEvent) => {
     e.preventDefault();
-    if (ptt.state === "listening" && held.current.latched) { held.current.latched = false; ptt.stop(); return; }
+    if (ptt.state === "listening" && held.current.latched) { held.current.latched = false; setLatched(false); ptt.stop(); return; }
     if (ptt.state !== "idle") return;
     setError(null);
     held.current = { t: performance.now(), latched: false };
@@ -95,7 +97,7 @@ export default function Chat({ tasks, openTask, compact }: { tasks: Record<strin
   const micUp = (e: React.PointerEvent) => {
     e.preventDefault();
     if (held.current.latched || held.current.t === 0) return;
-    if (performance.now() - held.current.t < 350) { held.current.latched = true; return; }
+    if (performance.now() - held.current.t < 350) { held.current.latched = true; setLatched(true); return; }
     held.current.t = 0;
     ptt.stop();
   };
@@ -126,7 +128,7 @@ export default function Chat({ tasks, openTask, compact }: { tasks: Record<strin
       </div>
       {(listening || ptt.state === "finishing" || error) && (
         <div className={`mx-3 mb-2 rounded-lg px-3 py-2 text-sm ${error ? "bg-rose-50 text-rose-800" : "bg-emerald-50 text-emerald-900"}`}>
-          {error ?? (ptt.state === "finishing" ? `“${ptt.partial || "…"}”` : ptt.partial ? `“${ptt.partial}”` : held.current.latched ? "Listening… tap the mic to send" : "Listening… release to send")}
+          {error ?? (ptt.state === "finishing" ? `“${ptt.partial || "…"}”` : ptt.partial ? `“${ptt.partial}”` : latched ? "Listening… tap the mic to send" : "Listening… release to send")}
         </div>
       )}
       <form onSubmit={send} className={`flex items-center gap-2 border-t border-stone-200 bg-white p-3 ${compact ? "pb-3" : ""}`}>

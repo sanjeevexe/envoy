@@ -15,6 +15,11 @@ Protocol (`WS /api/voice`, your session only):
   "cost_usd"}` after release, or `{"type": "error", "error"}`.
 The transcript then goes to chat like typed text, with source `voice` (your own words for the approval rules).
 Audio is never stored; the cost of each turn ($0.18 per audio hour, billed per whole second) goes to the cost log.
+
+Transcribe closes a stream that falls behind real time ("Ingress audio slower than real-time", found on the iPhone when
+its microphone delivered nothing), and Meta's docs say to keep sending silence on a live source. So the relay keeps the
+stream at real time: whenever the browser's audio falls more than 300 ms behind (a stalled microphone, a slow network),
+it fills the gap with silence.
 """
 
 from __future__ import annotations
@@ -65,7 +70,7 @@ async def voice_session(ws: WebSocket, *, api_key: str, meter: CostMeter, url: s
         return None
 
     queue: asyncio.Queue = asyncio.Queue()
-    stats: dict[str, Any] = {"audio_bytes": 0, "connect_ms": None, "finalize_ms": None, "final": None, "error": None}
+    stats: dict[str, Any] = {"audio_bytes": 0, "padded_bytes": 0, "connect_ms": None, "finalize_ms": None, "final": None, "error": None}
     t0 = time.perf_counter()
     stopped_at: list[float] = []
 
@@ -115,7 +120,19 @@ async def voice_session(ws: WebSocket, *, api_key: str, meter: CostMeter, url: s
                     elif ev.get("type") == "error":
                         stats["error"] = ev.get("message") or "Transcribe error"
 
+            async def pace() -> None:  # keep the stream at real time with silence when the browser's audio stalls
+                t_ready = time.perf_counter()
+                while True:
+                    await asyncio.sleep(0.1)
+                    behind = (time.perf_counter() - t_ready) * BYTES_PER_S - stats["audio_bytes"]
+                    if behind > 0.3 * BYTES_PER_S:
+                        pad = int(behind - 0.1 * BYTES_PER_S) // 2 * 2
+                        stats["audio_bytes"] += pad
+                        stats["padded_bytes"] += pad
+                        await up.send(b"\x00" * pad)
+
             reader = asyncio.create_task(from_meta())
+            pacer = asyncio.create_task(pace())
             try:
                 while True:
                     getter = asyncio.create_task(queue.get())
@@ -128,17 +145,20 @@ async def voice_session(ws: WebSocket, *, api_key: str, meter: CostMeter, url: s
                     if item is CANCEL:
                         return
                     if item is STOP:
+                        pacer.cancel()
                         await up.send(json.dumps({"type": "endStream"}))
                         break
                     stats["audio_bytes"] += len(item)
                     await up.send(item)
                     if stats["audio_bytes"] >= MAX_TURN_S * BYTES_PER_S:
+                        pacer.cancel()
                         stopped_at.append(time.perf_counter())
                         await up.send(json.dumps({"type": "endStream"}))
                         await ws.send_json({"type": "notice", "text": f"stopped listening after {MAX_TURN_S} s"})
                         break
                 await asyncio.wait_for(reader, 15)  # the final transcript, then Meta closes the stream
             finally:
+                pacer.cancel()
                 reader.cancel()
 
     listener = asyncio.create_task(from_client())
@@ -153,10 +173,11 @@ async def voice_session(ws: WebSocket, *, api_key: str, meter: CostMeter, url: s
     cost = turn_cost(stats["audio_bytes"])
     meter.record({"time": datetime.now(timezone.utc).isoformat(timespec="milliseconds"), "job": "voice", "model": MODEL, "data_scope": "real",
                   "task_id": "voice", "ok": stats["final"] is not None, "error": stats["error"], "audio_s": round(stats["audio_bytes"] / BYTES_PER_S, 2),
-                  "latency_ms": stats["finalize_ms"], "connect_ms": stats["connect_ms"], "cost_usd": round(cost, 6), "cost_at_standard_usd": round(cost, 6)})
+                  "latency_ms": stats["finalize_ms"], "connect_ms": stats["connect_ms"], "padded_s": round(stats["padded_bytes"] / BYTES_PER_S, 2), "cost_usd": round(cost, 6), "cost_at_standard_usd": round(cost, 6)})
     try:
         if stats["final"] is not None:
             await ws.send_json({"type": "final", "text": stats["final"].strip(), "audio_ms": round(stats["audio_bytes"] / BYTES_PER_S * 1000),
+                                "silence_ms": round(stats["padded_bytes"] / BYTES_PER_S * 1000),
                                 "connect_ms": stats["connect_ms"], "finalize_ms": stats["finalize_ms"], "cost_usd": round(cost, 6)})
         elif stats["error"]:
             await ws.send_json({"type": "error", "error": stats["error"], "fallback": True})

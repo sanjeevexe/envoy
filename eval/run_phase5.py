@@ -181,6 +181,9 @@ async def photo(c: httpx.AsyncClient) -> None:
         trips=f"{before.get('Trip')}→{after.get('Trip')}", deleted=res.get("deleted"), files_left=left, token_can_read=can_read != 401,
         ocr_ms=res.get("ocr_ms"), model_ms=res.get("model_ms"), round_trip_s=took, cost_usd=res.get("cost_usd"))
     shot.unlink(missing_ok=True)
+    for d in (await c.get(f"{BASE}/api/paired", headers=H)).json()["devices"]:  # the eval's token goes away with it
+        if d["name"] == "eval Shortcut":
+            await c.delete(f"{BASE}/api/paired/{d['id']}", headers=H)
 
 
 # ---- 3. voice ---------------------------------------------------------------------------------------------

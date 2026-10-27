@@ -93,6 +93,7 @@ export function usePushToTalk(onTurn: (t: Turn) => void, onError: (msg: string) 
         setState("idle");
         setPartial("");
         if (msg.text) onTurn(turn);
+        else onError(msg.silence_ms >= msg.audio_ms - 300 ? "No sound reached Envoy from the microphone." : "I didn't catch that. Try again?");
       } else if (msg.type === "error") {
         cleanup();
         setState("idle");

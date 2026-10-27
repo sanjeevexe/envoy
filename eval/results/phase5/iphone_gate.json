@@ -1,0 +1,103 @@
+{
+ "time": "2026-10-27T16:09:22",
+ "tasks": [
+  {
+   "goal": "Check me in for my flight",
+   "source": "chat",
+   "status": "done",
+   "result": "seat: 14C; gate: B12; boarding time: 5:30 AM; boarding group: Group 3; flight: SL 482",
+   "approvals": [
+    {
+     "id": "appr-1027-160558-8708",
+     "status": "approved",
+     "decided_by": "user",
+     "created_at": 1793131558.7165499,
+     "decided_at": 1793131728.80487,
+     "description": "tap \"Confirm check-in\" in com.skylark.air (routine skylark_check_in_flight v1)",
+     "decided_after_s": 170.1
+    }
+   ],
+   "memory": "memory updated: 14 same, 1 replaced",
+   "duration_s": 183.8
+  }
+ ],
+ "pushes": [
+  {
+   "kind": "approval",
+   "service": "web.push.apple.com",
+   "status": 201,
+   "send_ms": 358.7,
+   "delivery_ms": 905
+  },
+  {
+   "kind": "task",
+   "service": "web.push.apple.com",
+   "status": 201,
+   "send_ms": 134.8,
+   "delivery_ms": 687
+  }
+ ],
+ "pushes_without_receipt": [],
+ "client_metrics": [
+  {
+   "time": 1793131550.5952241,
+   "device": "this Mac",
+   "kind": "live",
+   "avd": "envoy-test",
+   "width": 540,
+   "quality": 70,
+   "frames": 26,
+   "frame_ms_p50": 33,
+   "rtt_ms_p50": 3,
+   "kb_per_frame": 90,
+   "standalone": false,
+   "host": "127.0.0.1:8700",
+   "net": "4g"
+  },
+  {
+   "time": 1793131610.591001,
+   "device": "this Mac",
+   "kind": "live",
+   "avd": "envoy-test",
+   "width": 540,
+   "quality": 70,
+   "frames": 33,
+   "frame_ms_p50": 32,
+   "rtt_ms_p50": 4,
+   "kb_per_frame": 81,
+   "standalone": false,
+   "host": "127.0.0.1:8700",
+   "net": "4g"
+  },
+  {
+   "time": 1793131670.59196,
+   "device": "this Mac",
+   "kind": "live",
+   "avd": "envoy-test",
+   "width": 540,
+   "quality": 70,
+   "frames": 3,
+   "frame_ms_p50": 30,
+   "rtt_ms_p50": 2,
+   "kb_per_frame": 76,
+   "standalone": false,
+   "host": "127.0.0.1:8700",
+   "net": "4g"
+  },
+  {
+   "time": 1793131730.588934,
+   "device": "this Mac",
+   "kind": "live",
+   "avd": "envoy-test",
+   "width": 540,
+   "quality": 70,
+   "frames": 2,
+   "frame_ms_p50": 28,
+   "rtt_ms_p50": 2,
+   "kb_per_frame": 107,
+   "standalone": false,
+   "host": "127.0.0.1:8700",
+   "net": "4g"
+  }
+ ]
+}

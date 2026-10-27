@@ -434,3 +434,21 @@ def test_no_new_path_approves(env):
     assert out["d"].approved
     rec = json.loads((env.tmp / "code_test.jsonl").read_text())
     assert rec["has_code_word"] and "123456" not in json.dumps(rec)  # only that a message came, never its text or code
+
+
+def test_a_stalled_microphone_is_padded_with_silence_to_real_time(env, monkeypatch):
+    """Found on the iPhone: with no audio from the microphone, Transcribe closed the stream ("Ingress audio slower than
+    real-time"). The relay now keeps the stream at real time with silence."""
+    fake = FakeTranscribe("")
+    monkeypatch.setattr("api.voice.ASR_URL", fake.url)
+    with TestClient(env.ctx.asgi) as c:
+        with c.websocket_connect("/api/voice", headers=me(env.token)) as ws:
+            ws.send_json({"type": "start"})
+            assert ws.receive_json()["type"] == "ready"
+            time.sleep(1.2)  # the microphone sends nothing
+            ws.send_json({"type": "stop"})
+            final = ws.receive_json()
+            while final["type"] == "partial":
+                final = ws.receive_json()
+    assert final["type"] == "final" and final["text"] == ""
+    assert fake.audio >= 0.8 * 48000 and final["silence_ms"] >= 800  # silence kept the stream at real time
