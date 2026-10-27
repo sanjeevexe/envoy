@@ -6,7 +6,7 @@ Envoy is a Muse-powered agent that operates Android apps on emulated phones, com
 
 - Design: [`docs/technical-design.md`](docs/technical-design.md) (live version: https://claude.ai/artifact/Sf51zMf4SMi5ZZmJabgPR5)
 - Phase 0 findings: [`docs/phase-0-findings.md`](docs/phase-0-findings.md)
-- Open-source credits: [`THIRD_PARTY.md`](THIRD_PARTY.md)
+- Open-source credits: [`THIRD_PARTY.md`](THIRD_PARTY.md) · License: MIT ([`LICENSE`](LICENSE))
 
 ## Layout
 
