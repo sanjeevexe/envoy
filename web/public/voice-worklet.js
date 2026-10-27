@@ -1,4 +1,4 @@
-// Microphone → 24 kHz 16-bit PCM for Muse Voice Transcribe (Phase 5, push to talk).
+// Microphone → 24 kHz 16-bit PCM for Muse Voice Transcribe (Phase 5, dictation).
 // Runs on the audio thread. Each output sample is the mean of the input samples it covers (a box filter, enough to keep
 // speech clean when going from 48 or 44.1 kHz down to 24 kHz). Posts 80 ms chunks (1,920 samples), the size Meta's
 // sample client uses; on {flush: true} it posts what is left.

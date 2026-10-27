@@ -50,7 +50,7 @@ scripts/serve_tailnet.sh on                                           # https://
 uv run --project backend python scripts/make_shortcut.py              # the "Send to Envoy" Share Sheet shortcut (signed; open it to add)
 ```
 
-On the Mac, open the **Devices** tab: scan the QR code with the iPhone, add the page to the Home Screen (Share → Add to Home Screen), open Envoy from there and type the 6-digit pairing code, then turn on notifications. Approvals arrive as pushes; the Phone tab is the live phone with touch and the iPhone keyboard; hold the mic in Chat to talk (Muse Voice Transcribe); turn on Photos in Devices, then share a screenshot with **Send to Envoy** or pick one in Chat. `eval/run_phase5.py` checks push, photos, voice and the live view with scripts; `eval/run_photos.py` measures screenshot extraction. For Muse (route 2), `scripts/start_muse_test.sh` opens a public tunnel to `/mcp` only.
+On the Mac, open the **Devices** tab: scan the QR code with the iPhone, add the page to the Home Screen (Share → Add to Home Screen), open Envoy from there and type the 6-digit pairing code, then turn on notifications. Approvals arrive as pushes; the Phone tab is the live phone with touch and the iPhone keyboard; tap the mic in Chat to dictate (Muse Voice Transcribe), check the words, then send; turn on Photos in Devices, then share a screenshot with **Send to Envoy** or pick one in Chat. `eval/run_phase5.py` checks push, photos, voice and the live view with scripts; `eval/run_photos.py` measures screenshot extraction. For Muse (route 2), `scripts/start_muse_test.sh` opens a public tunnel to `/mcp` only.
 
 ## App routines in one minute
 

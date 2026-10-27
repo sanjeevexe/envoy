@@ -434,7 +434,7 @@ Every request, from any interface, becomes a **task**: a goal, the interface it 
 
 ### Voice
 
-The web app and iPhone stream microphone audio through the backend (which holds the API key) to Meta's **Muse Voice Transcribe** (real-time speech to text over WebSocket, in public preview since September 2026). The transcript goes to the assistant like typed text, as the user's own words for the approval rules (source `voice`). Replies are short and spoken by the device's built-in speech engine, which keeps voice on Meta models and costs nothing extra. If Muse Voice Transcribe is unavailable or too slow, the fallback is the browser's own speech recognition in Chrome. Phase 5: each press of push to talk is one Transcribe session (24 kHz PCM from an AudioWorklet; audio is buffered while the session connects). The final text arrives about 90 ms after release, at $0.18 per audio hour. Transcribe closes a stream that falls behind real time, so the relay pads silence whenever the browser's audio stalls.
+The web app and iPhone stream microphone audio through the backend (which holds the API key) to Meta's **Muse Voice Transcribe** (real-time speech to text over WebSocket, in public preview since September 2026). The transcript goes into the message box for the user to check; once sent, it reaches the assistant like typed text, as the user's own words for the approval rules (source `voice`). Replies are short and spoken by the device's built-in speech engine, which keeps voice on Meta models and costs nothing extra. If Muse Voice Transcribe is unavailable or too slow, the fallback is the browser's own speech recognition in Chrome. Phase 5: voice is dictation. The user taps the mic, taps stop, and the transcript lands in the message box to check and send; sending on release had started a check-in the moment the user let go. Each dictation is one Transcribe session (24 kHz PCM from an AudioWorklet; audio is buffered while the session connects). The final text arrives about 70 to 300 ms after stopping, on the user's Mac and iPhone alike, at $0.18 per audio hour. Transcribe closes a stream that falls behind real time, so the relay pads silence whenever the browser's audio stalls.
 
 ### iPhone companion app
 
@@ -443,7 +443,7 @@ The companion is the web app added to the iPhone's Home Screen, which needs no A
 - **Approvals:** web push notifications, which iOS supports for Home Screen web apps from iOS 16.4. Web notifications have no action buttons, so tapping one opens the approval page, where the user approves or declines. A push never carries the approval's nonce, and it is sent only when Envoy actually asks (an approval the user's request already gave doesn't push). Phase 5: delivered 0.7 to 2.3 s after sending (4 of 5 pushes under 1.2 s).
 - **Running task:** the app shows the current step and screenshot; key moments (approval needed, task done, task failed) also send a notification. Lock-screen Live Activities need a native app and are left out.
 - **Live view:** the same stream as the web app (the emulator's gRPC frames; scrcpy for real phones), with touch forwarded to the phone: tap, swipe, long press, and typing through the iPhone's keyboard. Phase 5: 66 to 115 ms from capture to the iPhone's screen over the tailnet.
-- **Voice:** push to talk with the microphone, streamed through the backend to Muse Voice Transcribe.
+- **Voice:** dictation: tap the mic, tap stop, check the words in the message box and send; the audio streams through the backend to Muse Voice Transcribe.
 - **Screenshots and photos:** the user picks photos or screenshots in the app, or uses a free "Send to Envoy" shortcut from the iOS share sheet. The image goes to the server, text is read on the Mac (Apple's Vision framework), Muse Spark extracts facts checked against that text, and the image is deleted once its facts are saved. The app cannot scan the photo library on its own.
 - **Sign-in codes:** iOS does not let apps read texts. An optional Shortcuts automation ("when a message containing 'code' arrives, send it to Envoy") can forward codes and works without any app. Tested in Phase 5: it forwarded a message about 2 s after it arrived, with the phone locked, once the shortcut had been run by hand to grant its network permission. The fallback is the user typing the code in the live view.
 
@@ -879,14 +879,14 @@ Phase 5 passed its gate on Oct 27, 2026, on the user's iPhone: the approval arri
 | Gate, scripted | 8/8: takeover, approval and done pushes (decrypted by a fake push service; no nonce in any push); screenshot to facts; voice; live view over HTTPS |
 | Push delivery to the iPhone | 0.7 to 2.3 s from sending to the service worker's receipt (4 of 5 under 1.2 s) |
 | Live view on the iPhone over the tailnet | 66 to 115 ms from capture to screen; round trip 27 to 47 ms |
-| Voice (Muse Voice Transcribe) | Exact transcript; final text about 90 ms after release; $0.0001 for a 2.6 s turn |
+| Voice (Muse Voice Transcribe) | Exact transcript; final text about 90 ms after stopping; $0.0001 for a 2.6 s turn. On the user's Mac and iPhone: 8 tries, final text 74 to 296 ms after stopping |
 | Screenshot extraction | 73 of 73 values right on 7 app screenshots, none wrong, all merged into known trips and flights; about $0.007 each |
 | Sign-in codes on a locked iPhone | A Shortcuts message automation forwarded a code about 2 s after it arrived |
 | Whole of Phase 5 | 70 model calls, $0.41 at standard prices |
 
 The gate runs drove these changes:
 
-- The voice relay pads silence to keep Transcribe at real time: a microphone that sent nothing (blocked by iPhone Mirroring) made Transcribe close the stream.
+- The voice relay pads silence to keep Transcribe at real time: a microphone that sent nothing (blocked by iPhone Mirroring) made Transcribe close the stream. Voice also became dictation into the message box, sent by the user: sending on release started a check-in the moment the user let go.
 - Photo text is read twice, the whole image and four tiles, because Apple's Vision skipped a lone confirmation code; codes tolerate the O/0 and I/1 confusions of OCR.
 - Signing in on the iPhone is a pairing code typed inside the Home Screen app, since it keeps its own cookies; Shortcuts get tokens that can only upload images.
 - HTTPS is Tailscale Serve on its own port, and a public tunnel for Muse reaches only `/mcp`.

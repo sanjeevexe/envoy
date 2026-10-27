@@ -1,28 +1,33 @@
 "use client";
 
 // Chat with Envoy's assistant (Muse Spark): answers from memory with where each fact was seen, or starts a task.
-// Phase 5: hold the mic to talk (Muse Voice Transcribe; spoken replies), and send screenshots or photos into memory.
+// Phase 5: tap the mic to dictate into the message box (Muse Voice Transcribe), check it, then send; replies to a
+// dictated message are spoken. Screenshots and photos go into memory.
 import { useCallback, useEffect, useRef, useState } from "react";
 import { post, Task } from "@/lib/api";
 import { metric, uploadPhotos } from "@/lib/device";
-import { speak, Turn, usePushToTalk } from "@/lib/voice";
+import { speak, Turn, useDictation } from "@/lib/voice";
 
 type Msg = { from: "you" | "envoy"; text: string; task?: Task; memory?: boolean; stale?: boolean; voice?: boolean; photo?: boolean };
 
 const SPOKEN_END: Record<string, string> = { done: "Done.", failed: "That didn't work.", declined: "Declined.", needs_you: "I need you." };
 
+// Dictated words go after whatever is already in the box.
+const joinText = (before: string, words: string) => (before.trim() ? `${before.trimEnd()} ${words}` : words);
+
 export default function Chat({ tasks, openTask, compact }: { tasks: Record<string, Task>; openTask: (id: string) => void; compact?: boolean }) {
   const [msgs, setMsgs] = useState<Msg[]>([
-    { from: "envoy", text: "Hi! Ask me about your trips (\"What's my gate?\") or ask me to do something (\"Check me in for my flight\"). Hold the mic to talk, or send a screenshot." },
+    { from: "envoy", text: "Hi! Ask me about your trips (\"What's my gate?\") or ask me to do something (\"Check me in for my flight\"). Tap the mic to dictate, or send a screenshot." },
   ]);
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const file = useRef<HTMLInputElement>(null);
+  const box = useRef<HTMLInputElement>(null);
   const end = useRef<HTMLDivElement>(null);
   const spokenTasks = useRef<Record<string, string>>({});
-  const held = useRef<{ t: number; latched: boolean }>({ t: 0, latched: false });
-  const [latched, setLatched] = useState(false);
+  const before = useRef(""); // the box's text when dictation started
+  const dictated = useRef<string | null>(null); // the box's text right after the last transcript landed
 
   useEffect(() => { end.current?.scrollIntoView({ block: "end" }); }, [msgs.length, busy]);
 
@@ -37,19 +42,19 @@ export default function Chat({ tasks, openTask, compact }: { tasks: Record<strin
     }
   }, [tasks]);
 
-  const ask = useCallback(async (message: string, turn?: Turn) => {
-    setMsgs((m) => [...m, { from: "you", text: message, voice: !!turn }]);
+  // `dictation`: the message was dictated (and whether you changed the transcript before sending).
+  const ask = useCallback(async (message: string, dictation?: { edited: boolean }) => {
+    setMsgs((m) => [...m, { from: "you", text: message, voice: !!dictation }]);
     setBusy(true);
     const t0 = performance.now();
     try {
-      const r = await post("/api/chat", { message, source: turn ? "voice" : "chat" });
+      const r = await post("/api/chat", { message, source: dictation ? "voice" : "chat" });
       setMsgs((m) => [...m, { from: "envoy", text: r.reply, task: r.task, memory: r.from_memory, stale: r.stale }]);
-      if (turn) {
+      if (dictation) {
         const chatMs = Math.round(performance.now() - t0);
         if (r.task?.id) spokenTasks.current[r.task.id] = r.task.status;
-        speak(r.spoken || r.reply, () => metric({ kind: "voice_turn", source: turn.source, audio_ms: turn.audio_ms, connect_ms: turn.connect_ms,
-          finalize_ms: turn.finalize_ms, release_to_text_ms: turn.release_to_text_ms, chat_ms: chatMs,
-          release_to_speech_ms: turn.release_to_text_ms + Math.round(performance.now() - t0), cost_usd: turn.cost_usd, reply_kind: r.kind }));
+        speak(r.spoken || r.reply, () => metric({ kind: "voice_sent", edited: dictation.edited, chat_ms: chatMs,
+          send_to_speech_ms: Math.round(performance.now() - t0), reply_kind: r.kind }));
       }
     } catch (err: any) {
       setMsgs((m) => [...m, { from: "envoy", text: `Sorry, that didn't work: ${err.message}` }]);
@@ -58,15 +63,24 @@ export default function Chat({ tasks, openTask, compact }: { tasks: Record<strin
     }
   }, []);
 
-  const ptt = usePushToTalk(useCallback((turn: Turn) => ask(turn.text, turn), [ask]),
-    useCallback((msg: string) => { setError(msg); held.current = { t: 0, latched: false }; setLatched(false); }, []));
+  const onText = useCallback((turn: Turn) => {
+    const value = joinText(before.current, turn.text);
+    setText(value);
+    dictated.current = value;
+    box.current?.focus();
+    metric({ kind: "voice_turn", source: turn.source, audio_ms: turn.audio_ms, connect_ms: turn.connect_ms, finalize_ms: turn.finalize_ms,
+      stop_to_text_ms: turn.stop_to_text_ms, cost_usd: turn.cost_usd });
+  }, []);
+  const voice = useDictation(onText, useCallback((msg: string) => setError(msg), []));
 
   const send = (e: React.FormEvent) => {
     e.preventDefault();
     const message = text.trim();
-    if (!message || busy) return;
+    if (!message || busy || voice.state !== "idle") return;
+    const wasDictated = dictated.current;
+    dictated.current = null;
     setText("");
-    ask(message);
+    ask(message, wasDictated === null ? undefined : { edited: wasDictated.trim() !== message });
   };
 
   const onPhotos = async (files: FileList | null) => {
@@ -85,24 +99,17 @@ export default function Chat({ tasks, openTask, compact }: { tasks: Record<strin
     }
   };
 
-  // Hold to talk; a quick tap starts listening until the next tap.
-  const micDown = (e: React.PointerEvent) => {
-    e.preventDefault();
-    if (ptt.state === "listening" && held.current.latched) { held.current.latched = false; setLatched(false); ptt.stop(); return; }
-    if (ptt.state !== "idle") return;
-    setError(null);
-    held.current = { t: performance.now(), latched: false };
-    ptt.start();
-  };
-  const micUp = (e: React.PointerEvent) => {
-    e.preventDefault();
-    if (held.current.latched || held.current.t === 0) return;
-    if (performance.now() - held.current.t < 350) { held.current.latched = true; setLatched(true); return; }
-    held.current.t = 0;
-    ptt.stop();
+  // Tap to start dictating, tap again to stop; the transcript lands in the box.
+  const mic = () => {
+    if (voice.state === "idle") {
+      setError(null);
+      before.current = text;
+      voice.start();
+    } else if (voice.state !== "finishing") voice.stop();
   };
 
-  const listening = ptt.state === "listening" || ptt.state === "starting";
+  const listening = voice.state === "listening" || voice.state === "starting";
+  const shown = voice.state !== "idle" && voice.partial ? joinText(before.current, voice.partial) : text;
   return (
     <div className="flex h-full flex-col">
       <div className="flex-1 space-y-3 overflow-y-auto p-4">
@@ -126,26 +133,26 @@ export default function Chat({ tasks, openTask, compact }: { tasks: Record<strin
         {busy && <div className="text-sm text-stone-400">Envoy is thinking…</div>}
         <div ref={end} />
       </div>
-      {(listening || ptt.state === "finishing" || error) && (
+      {(listening || voice.state === "finishing" || error) && (
         <div className={`mx-3 mb-2 rounded-lg px-3 py-2 text-sm ${error ? "bg-rose-50 text-rose-800" : "bg-emerald-50 text-emerald-900"}`}>
-          {error ?? (ptt.state === "finishing" ? `“${ptt.partial || "…"}”` : ptt.partial ? `“${ptt.partial}”` : latched ? "Listening… tap the mic to send" : "Listening… release to send")}
+          {error ?? (voice.state === "finishing" ? "Transcribing…" : voice.state === "starting" ? "Starting the microphone…" : "Listening… tap ■ when you're done")}
         </div>
       )}
       <form onSubmit={send} className={`flex items-center gap-2 border-t border-stone-200 bg-white p-3 ${compact ? "pb-3" : ""}`}>
         <input ref={file} type="file" accept="image/*" multiple hidden onChange={(e) => onPhotos(e.target.files)} />
         <button type="button" onClick={() => file.current?.click()} aria-label="Send a screenshot or photo"
                 className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-stone-100 text-lg">🖼</button>
-        <input value={text} onChange={(e) => setText(e.target.value)} placeholder="Message Envoy" enterKeyHint="send"
+        <input ref={box} value={shown} readOnly={voice.state !== "idle"} enterKeyHint="send"
+               onChange={(e) => { setText(e.target.value); if (!e.target.value.trim()) dictated.current = null; }}
+               placeholder={listening ? "Listening…" : "Message Envoy"}
                className="min-w-0 flex-1 rounded-full border border-stone-300 px-4 py-2 text-base md:text-sm" />
-        {text.trim() ? (
-          <button disabled={busy} className="h-11 shrink-0 rounded-full bg-stone-800 px-4 text-sm font-medium text-white disabled:opacity-50">Send</button>
-        ) : (
-          <button type="button" aria-label="Hold to talk" onPointerDown={micDown} onPointerUp={micUp} onPointerCancel={() => ptt.cancel()}
-                  onContextMenu={(e) => e.preventDefault()}
-                  className={`flex h-11 w-11 shrink-0 select-none items-center justify-center rounded-full text-lg text-white [touch-action:none] [-webkit-touch-callout:none] ${listening ? "scale-110 bg-emerald-600" : ptt.state === "finishing" ? "bg-emerald-800" : "bg-stone-800"} transition`}>
-            🎙
-          </button>
-        )}
+        <button type="button" onClick={mic} disabled={voice.state === "finishing"}
+                aria-label={voice.state === "idle" ? "Dictate" : voice.state === "finishing" ? "Transcribing" : "Stop and transcribe"}
+                className={`flex h-11 w-11 shrink-0 select-none items-center justify-center rounded-full text-lg transition ${listening ? "bg-emerald-600 text-white" : voice.state === "finishing" ? "bg-emerald-800 text-white" : "bg-stone-100"}`}>
+          {listening ? "■" : voice.state === "finishing" ? "…" : "🎙"}
+        </button>
+        <button disabled={busy || !text.trim() || voice.state !== "idle"} aria-label="Send"
+                className="h-11 shrink-0 rounded-full bg-stone-800 px-4 text-sm font-medium text-white disabled:opacity-40">Send</button>
       </form>
     </div>
   );
