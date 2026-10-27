@@ -5,7 +5,7 @@
 Envoy is a Muse-powered agent that operates Android apps on emulated phones, compiles successful runs into reusable **app routines**, and keeps a shared **memory graph** across web, voice, iPhone and MCP clients. Built solo for the Meta Global AI Developer Hackathon (Oct 26 – Nov 4, 2026, indie track).
 
 - Design: [`docs/technical-design.md`](docs/technical-design.md) (live version: https://claude.ai/artifact/Sf51zMf4SMi5ZZmJabgPR5)
-- Phase results: [`docs/phase-0-findings.md`](docs/phase-0-findings.md) · [`docs/phase-1-results.md`](docs/phase-1-results.md) (agent loop) · [`docs/phase-2-results.md`](docs/phase-2-results.md) (app routines) · [`docs/phase-3-results.md`](docs/phase-3-results.md) (memory graph) · [`docs/phase-4-results.md`](docs/phase-4-results.md) (web app, live view, approvals, MCP) · [`docs/real-app-test-set.md`](docs/real-app-test-set.md)
+- Phase results: [`docs/phase-0-findings.md`](docs/phase-0-findings.md) · [`docs/phase-1-results.md`](docs/phase-1-results.md) (agent loop) · [`docs/phase-2-results.md`](docs/phase-2-results.md) (app routines) · [`docs/phase-3-results.md`](docs/phase-3-results.md) (memory graph) · [`docs/phase-4-results.md`](docs/phase-4-results.md) (web app, live view, approvals, MCP) · [`docs/phase-5-results.md`](docs/phase-5-results.md) (iPhone companion, voice, photos) · [`docs/real-app-test-set.md`](docs/real-app-test-set.md)
 - Open-source credits: [`THIRD_PARTY.md`](THIRD_PARTY.md) · License: MIT ([`LICENSE`](LICENSE))
 
 ## Layout
@@ -42,6 +42,15 @@ open "http://127.0.0.1:8700/login?k=$(cat data/api/session_token)"    # sign in 
 ```
 
 Then ask in Chat: "Check me in for my flight". Envoy asks you to take over for SkyLark's sign-in (any email and password, test code 482913), then asks you to approve the check-in. `eval/run_phase4.py` runs the same path with a scripted person. How the API works: [`backend/api/README.md`](backend/api/README.md).
+
+## Use it from your iPhone (Home Screen app, push approvals, voice, photos)
+
+```bash
+scripts/serve_tailnet.sh on                                           # https://<mac>.<tailnet>.ts.net:8443, tailnet only (restart the API after)
+uv run --project backend python scripts/make_shortcut.py              # the "Send to Envoy" Share Sheet shortcut (signed; open it to add)
+```
+
+On the Mac, open the **Devices** tab: scan the QR code with the iPhone, add the page to the Home Screen (Share → Add to Home Screen), open Envoy from there and type the 6-digit pairing code, then turn on notifications. Approvals arrive as pushes; the Phone tab is the live phone with touch and the iPhone keyboard; hold the mic in Chat to talk (Muse Voice Transcribe); turn on Photos in Devices, then share a screenshot with **Send to Envoy** or pick one in Chat. `eval/run_phase5.py` checks push, photos, voice and the live view with scripts; `eval/run_photos.py` measures screenshot extraction. For Muse (route 2), `scripts/start_muse_test.sh` opens a public tunnel to `/mcp` only.
 
 ## App routines in one minute
 

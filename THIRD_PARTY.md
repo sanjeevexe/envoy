@@ -4,7 +4,7 @@ Envoy builds on the open-source projects below. The hackathon rules allow open s
 
 Licenses for Python packages were read from the installed package metadata (Oct 26, 2026). Licenses for planned components come from their repositories and must be re-checked when they are added.
 
-## In use (Phases 0–4)
+## In use (Phases 0–5)
 
 | Component | Version | License | What we use it for |
 | --- | --- | --- | --- |
@@ -34,7 +34,17 @@ Licenses for Python packages were read from the installed package metadata (Oct 
 | [Cytoscape.js](https://github.com/cytoscape/cytoscape.js) | 3.34.4 | MIT | Memory graph view |
 | [TypeScript](https://github.com/microsoft/TypeScript) | 5.9.3 | Apache-2.0 | Web app language (build time) |
 | [scrcpy](https://github.com/Genymobile/scrcpy) | 5.0.1 | Apache-2.0 | Phone screen video (Phase 0 secure-screen test; the real-phone live view in Phase 6) |
-| [cloudflared](https://github.com/cloudflare/cloudflared) | 2026.10.3 | Apache-2.0 | Quick tunnel giving the MCP stub a public HTTPS address |
+| [cloudflared](https://github.com/cloudflare/cloudflared) | 2026.10.3 | Apache-2.0 | Quick tunnel giving the MCP stub (Phase 0) and Envoy's MCP server (Phase 5, `/mcp` only) a public HTTPS address for Muse |
+| [pywebpush](https://github.com/web-push-libs/pywebpush) | 2.5.0 | MPL-2.0 | Web Push sending (RFC 8030/8291 encryption, VAPID) for approval, takeover and task notifications (Phase 5); unmodified |
+| [py-vapid](https://github.com/web-push-libs/vapid) | 1.9.6 | MPL-2.0 | VAPID signing, used by pywebpush; unmodified |
+| [http-ece](https://github.com/web-push-libs/encrypted-content-encoding) | 1.2.1 | MIT | aes128gcm content encryption, used by pywebpush (and by our fake push service in tests to decrypt) |
+| [cryptography](https://github.com/pyca/cryptography) | 50.0.2 | Apache-2.0 or BSD-3-Clause | The server's VAPID key pair |
+| aiohttp, requests (pulled in by pywebpush) | 3.14.5 / 2.34.2 | Apache-2.0 and MIT / Apache-2.0 | HTTP for pywebpush (Envoy uses its synchronous path) |
+| [python-multipart](https://github.com/Kludex/python-multipart) | 0.0.32 | Apache-2.0 | Photo uploads from the app's picker (multipart forms) |
+| [segno](https://github.com/heuer/segno) | 1.6.6 | BSD-3-Clause | The QR code of Envoy's tailnet address on the pairing screen |
+| [Tailscale](https://github.com/tailscale/tailscale) (client, Serve) | 1.104.2 | BSD-3-Clause (client) | Private HTTPS on your tailnet for the iPhone (`scripts/serve_tailnet.sh`); the coordination service is Tailscale's |
+| Apple Vision framework (`VNRecognizeTextRequest`), via `backend/memory/ocr.swift` | macOS 26 | Apple system framework | On-device text reading for photos and screenshots (Phase 5) |
+| Apple Shortcuts (`shortcuts sign`) | macOS 26 / iOS 26 | Apple system app | Signing and running the "Send to Envoy" shortcut that `scripts/make_shortcut.py` writes |
 
 uiautomator2 also installs its own helper APK (`app-uiautomator`, same project, MIT) on the phone when it is first used.
 
@@ -53,7 +63,8 @@ Envoy uses open source as plumbing (talking to phones, streaming video, serving 
 - **A device layer that routes between phones:** one interface over emulators and real phones, the compact screen format, settle detection, secure-screen detection from window flags, and the hand-off to the user for sign-in.
 - **A policy engine:** three independent signals vote on irreversible actions, and approvals come only from Envoy's own screens, never from an AI client.
 - **The task runner, takeover and approvals** (built in Phase 4, Oct 27, `backend/api/`): one task model for every interface, device leases where the agent waits at its next call to the phone while the user is in control, web approvals bound to the app's own screen with per-approval nonces, the live-view protocol on emulator gRPC frames, the scheduler with memory-derived triggers, chat routing, the MCP tools, and the web app (`web/`). FastAPI, the MCP SDK, Next.js, React, Tailwind and Cytoscape.js are plumbing.
-- **Muse integration:** Envoy as the phone layer behind the real Muse app, through a custom MCP connector.
+- **The iPhone companion and voice** (built in Phase 5, Oct 27; `backend/api/auth.py`, `push.py`, `voice.py`, `backend/memory/photos.py`, `ocr.swift`, `web/lib/device.ts`, `web/lib/voice.ts`, `web/public/sw.js`): pairing a device with a short code typed inside the Home Screen app, scoped device tokens that can only upload images, the host and origin checks, which events push and what a push may carry (never a nonce), push receipts that measure delivery, the push-to-talk relay to Muse Voice Transcribe with silence padding to real time, the AudioWorklet resampler, touch and iPhone-keyboard input for the live view with clock-offset latency, and photos to facts: on-device OCR with a tiled second pass, redaction of the image before it leaves the Mac, Spark vision extraction checked against the image's text (tolerating only OCR glyph confusions in codes), photo sources, merging into known trips by natural keys, and deleting the image. The "Send to Envoy" shortcut is generated by `scripts/make_shortcut.py`; the icons are drawn by `scripts/make_icons.py`. pywebpush, Tailscale, Apple's Vision framework and Shortcuts are plumbing.
+- **Muse integration:** Envoy as the phone layer behind the real Muse app, through a custom MCP connector (a public tunnel reaches `/mcp` and nothing else).
 
 ## Planned (later phases)
 

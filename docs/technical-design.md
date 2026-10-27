@@ -1,6 +1,6 @@
 # Envoy — Technical Design
 
-Oct 26, 2026 · Exported from the [live design doc](https://claude.ai/artifact/Sf51zMf4SMi5ZZmJabgPR5)
+Oct 27, 2026 · Exported from the [live design doc](https://claude.ai/artifact/Sf51zMf4SMi5ZZmJabgPR5)
 
 ## Overview
 
@@ -354,7 +354,7 @@ Each fact has two timelines, an idea taken from Graphiti: when it was true in th
 | App screens | At the end of a task and on routine `extract` steps, the redacted screen text goes to Muse Spark with the entity schemas (structured output). Every fact keeps a pointer to the screen and element it came from. |
 | Gmail | Many confirmation emails carry schema.org markup (for example `FlightReservation`), which is parsed directly with no model call. Other emails go through the model. |
 | Calendar | Events are read directly and linked to trips and reservations. |
-| iPhone photos | Photos and screenshots the user shares: text is extracted on the server, then the image is deleted (see Safety). |
+| iPhone photos | Photos and screenshots the user shares (photo picker or the "Send to Envoy" Shortcut): text is read on the Mac with Apple's Vision framework, Muse Spark reads the image, every value must appear in that text, and the image is deleted (see Safety). Phase 5: 73 of 73 values right on 7 app screenshots, each merged into the known trip and flight. |
 | Routine runs | Routine outputs (seat, gate, order total) are written directly as facts. |
 | The user | Notes, edits and preferences from the graph view, chat or MCP. |
 
@@ -413,7 +413,7 @@ Every interface talks to the same task API and memory service, and every change 
 | --- | --- | --- |
 | Web app | Chat, watch tasks run, take over the phone, approve actions, browse and edit the memory graph, manage routines and permissions | React (Next.js, a static export served by the API), WebSocket event stream, live view over WebSocket (emulator frames; scrcpy for real phones) |
 | Voice | Speak requests on the web or iPhone and hear short spoken replies | Meta's Muse Voice Transcribe for speech to text (public preview); spoken replies from the browser's or iPhone's built-in speech |
-| iPhone companion | Approve actions from notifications, follow a running task, watch or take over the phone, send screenshots and photos in | The web app added to the Home Screen |
+| iPhone companion | Approve actions from notifications, follow a running task, watch or take over the phone, send screenshots and photos in | The web app added to the Home Screen, over Tailscale Serve HTTPS on the user's tailnet; Web Push; a 6-digit pairing code |
 | MCP server | Muse (if custom connectors accept it), Claude, ChatGPT or any MCP client can use Envoy's phone and memory | MCP Python SDK v2, Streamable HTTP, OAuth 2.1 |
 | Gmail and Calendar | Envoy reads confirmation emails and adds events | Google APIs on a personal Google Cloud project |
 | Scheduler | Tasks that run at a time or when something happens | Envoy's own small scheduler inside the backend |
@@ -434,18 +434,18 @@ Every request, from any interface, becomes a **task**: a goal, the interface it 
 
 ### Voice
 
-The web app and iPhone stream microphone audio through the backend (which holds the API key) to Meta's **Muse Voice Transcribe** (real-time speech to text over WebSocket, in public preview since September 2026). The transcript goes to the assistant like typed text. Replies are short and spoken by the device's built-in speech engine, which keeps voice on Meta models and costs nothing extra. If Muse Voice Transcribe is unavailable or too slow, the fallback is the browser's own speech recognition in Chrome.
+The web app and iPhone stream microphone audio through the backend (which holds the API key) to Meta's **Muse Voice Transcribe** (real-time speech to text over WebSocket, in public preview since September 2026). The transcript goes to the assistant like typed text, as the user's own words for the approval rules (source `voice`). Replies are short and spoken by the device's built-in speech engine, which keeps voice on Meta models and costs nothing extra. If Muse Voice Transcribe is unavailable or too slow, the fallback is the browser's own speech recognition in Chrome. Phase 5: each press of push to talk is one Transcribe session (24 kHz PCM from an AudioWorklet; audio is buffered while the session connects). The final text arrives about 90 ms after release, at $0.18 per audio hour. Transcribe closes a stream that falls behind real time, so the relay pads silence whenever the browser's audio stalls.
 
 ### iPhone companion app
 
-The companion is the web app added to the iPhone's Home Screen, which needs no Apple Developer account. (TestFlight is not a free option: it requires the paid $99 program.) If web push approvals or photo sharing don't work well enough in practice, the fallback is paying for the Apple Developer Program and building the native SwiftUI app, which adds lock-screen Live Activities and on-device text reading.
+The companion is the web app added to the iPhone's Home Screen, which needs no Apple Developer account. (TestFlight is not a free option: it requires the paid $99 program.) If web push approvals or photo sharing don't work well enough in practice, the fallback is paying for the Apple Developer Program and building the native SwiftUI app, which adds lock-screen Live Activities and on-device text reading. Phase 5 built it: the app reaches the Mac through Tailscale Serve, a real certificate on a private `*.ts.net` name (HTTPS on :8443) reachable only by the user's devices, and the API answers only to its own names. The Home Screen app keeps its own cookies, apart from Safari, so the user signs in by typing a 6-digit pairing code from the Mac inside the installed app (single use, 5 minutes, 5 tries); each device gets its own revocable session, and the Share Sheet shortcut gets a token that can only upload images.
 
-- **Approvals:** web push notifications, which iOS supports for Home Screen web apps from iOS 16.4. Web notifications have no action buttons, so tapping one opens the approval page, where the user approves or declines.
+- **Approvals:** web push notifications, which iOS supports for Home Screen web apps from iOS 16.4. Web notifications have no action buttons, so tapping one opens the approval page, where the user approves or declines. A push never carries the approval's nonce, and it is sent only when Envoy actually asks (an approval the user's request already gave doesn't push). Phase 5: delivered 0.7 to 1.0 s after sending.
 - **Running task:** the app shows the current step and screenshot; key moments (approval needed, task done, task failed) also send a notification. Lock-screen Live Activities need a native app and are left out.
-- **Live view:** the same scrcpy video stream as the web app, with touch forwarded to the phone.
+- **Live view:** the same stream as the web app (the emulator's gRPC frames; scrcpy for real phones), with touch forwarded to the phone: tap, swipe, long press, and typing through the iPhone's keyboard. Phase 5: 66 to 115 ms from capture to the iPhone's screen over the tailnet.
 - **Voice:** push to talk with the microphone, streamed through the backend to Muse Voice Transcribe.
-- **Screenshots and photos:** the user picks photos or screenshots in the app, or uses a free "Send to Envoy" shortcut from the iOS share sheet. The image goes to the server, text is extracted, and the image is deleted once its facts are saved. The app cannot scan the photo library on its own.
-- **Sign-in codes:** iOS does not let apps read texts. An optional Shortcuts automation ("when a message containing 'code' arrives, send it to Envoy") can forward codes and works without any app; this needs testing, especially while the phone is locked. The fallback is the user typing the code in the live view.
+- **Screenshots and photos:** the user picks photos or screenshots in the app, or uses a free "Send to Envoy" shortcut from the iOS share sheet. The image goes to the server, text is read on the Mac (Apple's Vision framework), Muse Spark extracts facts checked against that text, and the image is deleted once its facts are saved. The app cannot scan the photo library on its own.
+- **Sign-in codes:** iOS does not let apps read texts. An optional Shortcuts automation ("when a message containing 'code' arrives, send it to Envoy") can forward codes and works without any app. Tested in Phase 5: it forwarded a message about 2 s after it arrived, with the phone locked, once the shortcut had been run by hand to grant its network permission. The fallback is the user typing the code in the live view.
 
 ### MCP server
 
@@ -512,7 +512,7 @@ The phone's screen streams to the browser and iPhone as video, and a "Take over"
 - **Relay:** a small Node service using the Tango libraries (`@yume-chan/adb`, `@yume-chan/adb-scrcpy`, MIT license) reads the stream over adb and forwards it to browsers over a WebSocket. The same relay serves emulators and real phones.
 - **In the browser:** the video is decoded with WebCodecs (`@yume-chan/scrcpy-decoder-webcodecs`) and drawn on a canvas inside the React app.
 - **On the iPhone:** the same page inside the companion app's web view. Safari supports WebCodecs fully from iOS 26.
-- **HTTPS is required** for WebCodecs, so development uses Tailscale Serve for HTTPS inside the private network, and Tailscale Funnel or a Cloudflare Tunnel for the public MCP address.
+- **HTTPS is required** for WebCodecs, Web Push and the microphone, so the iPhone reaches the Mac through Tailscale Serve (HTTPS inside the private network), and a Cloudflare Tunnel gives the MCP server its public address only while Muse needs it (the tunnel reaches `/mcp` and nothing else).
 - **Target:** under 150 ms from the phone to the screen on the same network.
 
 Google's emulator WebRTC stack was considered, but it works only for emulators and its container scripts run only on Linux x86 machines. On emulators, Phase 4 streams the emulator's own gRPC frames instead (JPEG over the API's WebSocket, 18 to 60 ms locally), because scrcpy shows secure sign-in screens black and the gRPC frames don't; scrcpy and the relay are for real phones.
@@ -535,7 +535,7 @@ Google's emulator WebRTC stack was considered, but it works only for emulators a
 The emulator has no SIM, so text-message codes arrive on the user's iPhone. Three ways to finish a sign-in, in order of preference:
 
 1. **The user types the code** in the live view (always available).
-2. **An iPhone Shortcuts automation** forwards messages containing "code" to Envoy, and the agent types it. This must be tested on a locked phone and asks the user's permission once.
+2. **An iPhone Shortcuts automation** forwards messages containing "code" to Envoy, and the agent types it. Phase 5 tested it on a locked phone: it works, once the shortcut has been run by hand to grant its network permission.
 3. **A real Android phone** with the bridge can read the code from the notification. Android 15 hides codes from untrusted notification readers, so this may need the agent to read the notification on screen instead.
 
 For testing, codes can be injected into the emulator with `adb emu sms send`. Codes are used once and never stored (see Safety).
@@ -588,7 +588,7 @@ Before a screen, log line or fact is saved, a redaction pass removes password-fi
 
 ### Photos and messages
 
-- **Photos:** off by default. The default scope is screenshots only, not the whole camera roll. Only photos the user picks or shares are sent; text is extracted on the server and the image is deleted once its facts are saved.
+- **Photos:** off by default. The default scope is screenshots only, not the whole camera roll. Only photos the user picks or shares are sent; text is read on the Mac, lines with card numbers, codes or ID numbers are blacked out in the copy Muse Spark sees, and the image is deleted once its facts are saved (or when nothing is found).
 - **Messages:** not part of this build. A later Android companion could read business texts the same way; personal conversations would stay excluded unless the user includes them.
 - Every resulting fact links back to its source and can be deleted.
 
@@ -869,6 +869,28 @@ The gate runs drove these changes:
 - Approvals are configurable: by default Envoy doesn't ask for the step the user asked for (money, other actions, other details and requests from triggers or AI clients still ask); "always ask" and per-routine standing approvals are settings. Checked on SkyLark: 4/4 modes behave as intended.
 - On emulators the live view uses the emulator's gRPC frames, not scrcpy; one process serves the API, the MCP server and the web app; takeover is a lease that makes the agent wait at its next call to the phone; the scheduler is Envoy's own, so delayed flights move their triggers.
 
+## Phase 5 results
+
+Phase 5 passed its gate on Oct 27, 2026, on the user's iPhone: the approval arrived as a push, the user approved on the iPhone and the check-in finished; a SkyLark boarding-pass screenshot shared with "Send to Envoy" became facts on the existing flight, with a photo source. Details are in `docs/phase-5-results.md`.
+
+| Measure | Result |
+| --- | --- |
+| Gate, on the user's iPhone | Passed: push, approval on the iPhone, check-in done; screenshot to facts on SL 482, image deleted |
+| Gate, scripted | 8/8: takeover, approval and done pushes (decrypted by a fake push service; no nonce in any push); screenshot to facts; voice; live view over HTTPS |
+| Push delivery to the iPhone | 0.7 to 1.0 s from sending to the service worker's receipt |
+| Live view on the iPhone over the tailnet | 66 to 115 ms from capture to screen; round trip 27 to 47 ms |
+| Voice (Muse Voice Transcribe) | Exact transcript; final text about 90 ms after release; $0.0001 for a 2.6 s turn |
+| Screenshot extraction | 73 of 73 values right on 7 app screenshots, none wrong, all merged into known trips and flights; about $0.007 each |
+| Sign-in codes on a locked iPhone | A Shortcuts message automation forwarded a code about 2 s after it arrived |
+| Whole of Phase 5 | 70 model calls, $0.41 at standard prices |
+
+The gate runs drove these changes:
+
+- The voice relay pads silence to keep Transcribe at real time: a microphone that sent nothing (blocked by iPhone Mirroring) made Transcribe close the stream.
+- Photo text is read twice, the whole image and four tiles, because Apple's Vision skipped a lone confirmation code; codes tolerate the O/0 and I/1 confusions of OCR.
+- Signing in on the iPhone is a pairing code typed inside the Home Screen app, since it keeps its own cookies; Shortcuts get tokens that can only upload images.
+- HTTPS is Tailscale Serve on its own port, and a public tunnel for Muse reaches only `/mcp`.
+
 ## Open questions
 
 These are the answers that could change the design; most can be settled in Phase 0 or at kickoff.
@@ -880,7 +902,7 @@ These are the answers that could change the design; most can be settled in Phase
 - [x] **Path into Muse:** Muse builds custom connectors itself when a user asks (reportedly as an MCP client in Meta's cloud), listed connectors go through a review on the Muse Connector Platform, and Meta AI Connectors is a waitlisted preview. Which, if any, can Envoy use during the hackathon? Answered in Phase 0: the custom-connector route works (see Path into Muse).
 - [x] **Real apps:** which shopping and food apps run on the emulator without blocking sign-in? Answered in Phase 0: Target, Starbucks, Chipotle and Amazon; DoorDash runs but its guest mode hangs; Uber Eats won't install.
 - [ ] **Android phone:** the IPaT loan arrives Wednesday, Oct 28; which Android version does it run (Android 15 changes notification access).
-- [ ] **Sign-in codes on iPhone:** does a Shortcuts message automation forward codes while the phone is locked?
+- [x] **Sign-in codes on iPhone:** does a Shortcuts message automation forward codes while the phone is locked? Answered in Phase 5: yes, about 2 s after the message, once the shortcut has been run by hand to grant its network permission.
 - [ ] **Official rules:** limits on open-source code, required submission materials, demo video length.
 - [ ] **Apple account:** decided: the iPhone companion is a Home Screen web app, so no paid account is needed.
 

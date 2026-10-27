@@ -11,6 +11,7 @@ The shared memory graph (design doc, Shared memory): one SQLite database behind 
 | `service.py` | `MemoryService`, the only writer: resolve each extracted entity (keys → links in the same source → keyword candidates with a rule or one Spark call → new), write facts and links, merge entities that turn out to share a key. Routine outputs can be anchored on the run's final screen. |
 | `retrieval.py` | Facts out: link mentions ("my flight" = the next upcoming flight; codes, cities, numbers), neighbors, keyword matches by reciprocal rank fusion, valid facts only, Markdown notes with source and age within about 2,000 tokens, stale facts marked; answers from memory, checked against the notes. |
 | `bridge.py` | Memory ↔ routines and the agent: notes for the agent and the matcher, routine inputs from `from_memory` hints, routine runs written back. |
+| `photos.py`, `ocr.swift` | Photos and screenshots (Phase 5): text read on the Mac with Apple's Vision (full pass + tiles), redacted lines blacked out before Muse Spark reads the image, values checked against that text, a `photo` source, the image deleted. `eval/run_photos.py` measures it. |
 
 ```bash
 uv run --project backend python eval/run_memory.py emails     # extraction + matching from the SkyLark test inbox

@@ -92,3 +92,27 @@ The submission form asks for "feedback from your experience using Meta products"
 **What could be better**
 - Nothing new beyond the placeholder actions noted above; the chat path was only tried on a handful of messages.
 
+
+## Muse Voice Transcribe (Oct 27, Phase 5: push to talk on the web app and iPhone)
+
+**What worked well**
+- **Fast and exact on short commands.** "What's my gate for my Chicago flight?" came back word for word, and the final transcript arrived **90 to 93 ms** after we sent `endStream` (4 runs). Cumulative partials arrived while the audio streamed, so the app can show text as you talk.
+- **Cheap enough to leave on.** A 2.6 s turn cost $0.0001 ($0.18 per audio hour, billed per whole second).
+- **The protocol is small and easy to relay.** A handshake JSON with the key inside it (so a server can hold the key and relay a browser's audio), binary PCM, `endStream`, a final `transcript`. The keyword list (`keywords`) is a nice touch for app names like "SkyLark".
+
+**What could be better**
+- **Connecting takes a while:** 0.25 to 1.45 s from opening the socket to the `{"sessionId"}` acknowledgement. We buffer audio during the handshake so the user doesn't wait, but push to talk opens a new session per press (the docs say `endStream` ends the session), so a way to keep one session open across turns in push-to-talk mode would remove it.
+- **"Ingress audio slower than real-time" closes the stream.** When a browser's microphone delivered nothing (the iPhone's mic is blocked during iPhone Mirroring), the server closed the session. The docs do say to keep sending silence on a live source; we now pad silence in the relay. A grace period, or an error that names the fix, would help.
+- **The docs disagree with themselves on the handshake.** The speech-to-text page says the handshake has nine fields; the schema lists eight. The realtime reference shows four. One complete table on the realtime page would save a round of reading.
+- **No browser example.** Browsers capture 44.1 or 48 kHz float audio; an example AudioWorklet that produces 24 kHz 16-bit PCM (or accepting 48 kHz) would help web developers.
+
+## Muse Spark vision: screenshots and photos into memory (Oct 27, Phase 5)
+
+**What worked well**
+- **Accurate on real UI screenshots.** On 7 SkyLark booking screens (trip details, boarding passes, the home card), Spark at `low` with structured output returned **73 of 73 values right and none wrong**; it copied codes, times and flight numbers exactly as drawn. It correctly stored nothing from a flight-status search result, which isn't the user's booking.
+- **It reads values that OCR misses or misreads.** Spark read the confirmation code 3J8N0D where Apple's on-device OCR missed it once and read "3J8NOD" another time.
+- About **$0.007 and 4.8 s** per phone screenshot sent at a 1,600 px long side (about 2,500 input tokens).
+
+**What could be better**
+- **Latency:** 4 to 8 s per screenshot at `low` effort, and one call in 9 timed out at 30 s and succeeded on retry. For a share-sheet action that waits for an answer, a faster vision path, or a documented latency expectation, would help.
+- **No per-value location.** For screens we pass element numbers as evidence; for images there is no way to ask where a value was seen (a box), which would let us check values against the image region instead of OCR text. Spark's grounding can return boxes, but not inside an extraction answer.
