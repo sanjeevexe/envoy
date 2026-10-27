@@ -265,7 +265,7 @@ class TaskRunner:
         for r in reps:
             for k, v in r.facts.items():
                 facts[k] = facts.get(k, 0) + v
-        ents = sorted({f"{x.type} {x.entity}" for r in reps for x in r.resolved})
+        ents = sorted({f"{x.type} {(self.memory.entity(x.entity) or {}).get('name') or x.entity}" for r in reps for x in r.resolved})
         summary = {"facts": facts, "entities": ents}
         self._step(tid, {"kind": "memory", "text": "memory updated: " + (", ".join(f"{v} {k}" for k, v in facts.items() if v) or "nothing new"),
                          "entities": ents})

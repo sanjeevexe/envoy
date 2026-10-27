@@ -7,6 +7,7 @@ the interface it came from, its status, its steps and its approvals.
 from __future__ import annotations
 
 import json
+import os
 import secrets
 import sqlite3
 import threading
@@ -15,7 +16,7 @@ from pathlib import Path
 from typing import Any
 
 REPO = Path(__file__).resolve().parents[2]
-API_DIR = REPO / "data" / "api"
+API_DIR = Path(os.environ.get("ENVOY_API_DIR") or REPO / "data" / "api")  # tasks, approvals, screenshots, the session token
 
 # queued → running → (needs_you ↔ taken_over) → (waiting_approval) → done | failed | declined | stopped
 ACTIVE = ("queued", "running", "needs_you", "taken_over", "waiting_approval")

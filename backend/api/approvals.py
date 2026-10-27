@@ -71,19 +71,19 @@ class WebApprover:
         except Exception:  # noqa: BLE001 - an approval without a picture is still an approval request
             pass
         rec = self.store.add_approval(self.task_id, req.description, req.reasons, req.app, req.screen, None)
+        done = threading.Event()
+        self._events[rec["id"]] = done  # registered at once, so a decision that comes right away still wakes us
         if shot:
             path = SHOTS / f"{rec['id']}.jpg"
             path.write_bytes(shot)
             self.store.db.execute("UPDATE approvals SET screenshot=? WHERE id=?", (path.name, rec["id"]))
             self.store.db.commit()
             rec = self.store.approval(rec["id"])
-        done = threading.Event()
-        self._events[rec["id"]] = done
         self.on_wait(rec["id"])
         self.bus.publish("approval_requested", approval={k: v for k, v in rec.items() if k != "nonce"}, task_id=self.task_id)
         try:
-            if not done.wait(self.timeout_s):
-                self.store.decide_approval(rec["id"], "expired", "timeout", "no answer in time: not done, never auto-approved")
+            if not done.wait(self.timeout_s) and self.store.decide_approval(rec["id"], "expired", "timeout",
+                                                                            "no answer in time: not done, never auto-approved"):
                 self.bus.publish("approval_decided", approval=self.store.approval(rec["id"]), task_id=self.task_id)
                 return ApprovalDecision(False, by="timeout", note="no answer in time")
             final = self.store.approval(rec["id"]) or {}
