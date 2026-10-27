@@ -353,12 +353,28 @@ def _extract_for(name: str, near: str, example: str, final: ScreenState, example
         if first is not None and first.index == el.index:
             return Extract(pattern=_shape(example), first_in_list=True)
     if not usable_id(el.resource_id) and norm(el.label) == norm(example) and el.number and el.number > 1:
-        # The value is its own element right after its label ("Seat", then "22F"): read the element after the label.
-        prev = final.numbered[el.number - 2]
-        label = bind_inputs(prev.label, examples) or ""  # the label may be the input itself ("Caffè Latte", then "190 calories")
-        if label and _data_free(label, data_values) and len(label) <= 40 and \
-                (not near or norm(prev.label) == norm(near) or norm(near) in norm(prev.label)):
-            return Extract(near=label, next_element=True)
+        # The value is its own element after its label ("Seat", then "22F"; "Today", "10/27", "8am open"): read the
+        # element that many places after the label, stepping back over other values to the nearest fixed text.
+        for offset in range(1, min(4, el.number)):
+            prev = final.numbered[el.number - 1 - offset]
+            label = bind_inputs(prev.label, examples) or ""  # the label may be the input itself ("Caffè Latte", then "190 calories")
+            if not label or not _data_free(label, data_values):
+                continue  # another value between the label and this one ("10/27")
+            named = near and (norm(prev.label) == norm(near) or norm(near) in norm(prev.label))
+            if len(label) <= 40 and (named or (offset == 1 and not near)):
+                return Extract(near=label, next_element=True, offset=offset if offset > 1 else None)
+            break
+    if el.in_list and not usable_id(el.resource_id) and norm(el.label).startswith(norm(example)) and norm(el.label) != norm(example):
+        # A list row read aloud as "name, details" ("Mountain Mike's Pizza, 9.2 mi away, Estimated time …", the
+        # content description Android apps give rows): read the first row of that shape. The first detail, with its
+        # numbers generalized, is the row's signature; it must be fixed text, not booking data ("mi away", not "Nov").
+        rest = " ".join(el.label.split())[len(" ".join(example.split())):]
+        m = re.match(r",\s*([^,]+)", rest)
+        words = re.sub(r"\d+(?:\.\d+)?", " ", m.group(1)).strip() if m else ""
+        if words and any(ch.isalpha() for ch in words) and _data_free(words, data_values) \
+                and not any(v and contains_value(v, words) for v in data_values):
+            sig = re.sub(r"\d+(?:\\\.\d+)?", r"\\d+(?:\\.\\d+)?", re.escape(m.group(1).strip()))
+            return Extract(pattern=rf"(?P<v>[^,]+?),\s*{sig}(?:,.*)?", first_in_list=True)
     loc = None
     if usable_id(el.resource_id):
         loc = Locator(resource_id=_glob_id(short_id(el.resource_id), examples, data_values), kind=el.kind)

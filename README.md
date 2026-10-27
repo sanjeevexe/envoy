@@ -39,4 +39,4 @@ uv run --project backend python scripts/compile_routine.py <task_id>            
 eval/run_phase2.sh                                                                                                  # the Phase 2 evaluation
 ```
 
-How routines work: [`backend/routines/README.md`](backend/routines/README.md). How memory works: [`backend/memory/README.md`](backend/memory/README.md) (`eval/run_memory.py`, `scripts/show_memory.py`). Example routines: [`eval/results/phase2/compiled/`](eval/results/phase2/compiled/); the library with versions and patch evidence: [`data/routines/`](data/routines/) and [`eval/results/phase2/library/`](eval/results/phase2/library/).
+How routines work: [`backend/routines/README.md`](backend/routines/README.md). How memory works: [`backend/memory/README.md`](backend/memory/README.md) (`eval/run_memory.py`, `scripts/show_memory.py`; real mail: `scripts/connect_gmail.py` once, then `scripts/ingest_mail.py`). Example routines: [`eval/results/phase2/compiled/`](eval/results/phase2/compiled/); the library with versions and patch evidence: [`data/routines/`](data/routines/) and [`eval/results/phase2/library/`](eval/results/phase2/library/).

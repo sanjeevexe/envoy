@@ -1,0 +1,87 @@
+routine: doordash_find_first_restaurant
+app: com.dd.doordash
+version: 1
+status: draft
+intent: Find the first restaurant for a DoorDash search
+description: Search DoorDash for a requested food or item, filter the results to restaurants, and report the name of the first restaurant shown.
+patterns: [search DoorDash and tell me the first restaurant, find the first restaurant for a DoorDash search, what is the first restaurant that
+    comes up]
+outputs: [first_restaurant_name]
+start: fresh_launch
+inputs:
+  search_query: {type: text, description: The food or item to search for in DoorDash., example: pizza}
+steps:
+- id: open_search
+  intent: Tap Search DoorDash to open search
+  pre:
+  - {app_foreground: com.dd.doordash}
+  - element_present: {resource_id: coordinatorLayout_homepage, kind: List}
+  action:
+    tap:
+      text: Search DoorDash
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.49, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: title, text: Recommended, kind: Text}
+  - element_present: {resource_id: edit_text, text: Search DoorDash, kind: EditText}
+  risk: reversible
+  note: trace step 1
+- id: enter_search_query
+  intent: "Type {{search_query}} in the Search DoorDash field"
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    type:
+      field:
+        resource_id: edit_text
+        text: Search DoorDash
+        hint: Search DoorDash
+        kind: EditText
+        cls: AutoCompleteTextView
+        in_list: false
+        position: [0.573, 0.079]
+      value: "{{search_query}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: search_query_title
+      text: "{{search_query}}"
+      kind: Button
+  - element_present: {resource_id: results_list, kind: List}
+  risk: reversible
+  note: trace step 2
+- id: filter_by_restaurant
+  intent: Tap Restaurant to filter the results to restaurants
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      text: Restaurant
+      kind: Button
+      cls: LinearLayout
+      siblings: [All, Grocery, Retail]
+      in_list: true
+      position: [0.31, 0.129]
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: results_list, kind: List}
+  risk: reversible
+  extract:
+    first_restaurant_name:
+      pattern: "(?P<v>[^,]+?),\\s*\\d+(?:\\.\\d+)?\\ mi\\ away(?:,.*)?"
+      first_in_list: true
+      next_element: false
+      expect_digits: false
+  note: trace step 3
+compiled_from:
+  task_id: p2-real-doordash_search
+  goal: In the DoorDash app, search for pizza and tell me the name of the first restaurant in the results.
+  compiler: cached
+  compiled_at: "2026-10-27 12:07:08"
+  trace_steps_kept: [1, 2, 3]
+  trace_steps_dropped: 0
+  cost_usd: 0.0

@@ -1,27 +1,100 @@
 {
- "time": "2026-10-27T05:24:08+00:00",
+ "time": "2026-10-27T16:07:33+00:00",
  "workflows": {
   "target": {
    "app": "com.target.ui",
    "goal": "In the Target app, what are today's hours for my Target store?",
-   "time": "2026-10-27T05:11:45+00:00",
+   "time": "2026-10-27T16:06:53+00:00",
    "agent": {
-    "status": "handoff",
-    "result": "Bot verification required to enter Target app",
-    "steps": 3,
-    "model_calls": 4,
-    "cost_usd": 0.0074,
-    "duration_s": 19.12,
-    "popups": [
-     "permission prompt: deny"
-    ],
+    "status": "done",
+    "result": "My Target store (Chelsea 23rd and 8th) today's hours for Today 10/27: 8am open - 11pm close",
+    "steps": 4,
+    "model_calls": 7,
+    "cost_usd": 0.0173,
+    "duration_s": 22.24,
+    "popups": [],
     "approvals": 0,
-    "check": null
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Target, Today, 10, 27"
+    }
    },
    "compile": {
-    "compiled": false,
-    "reason": "run ended 'handoff' with check None; only verified runs are compiled"
-   }
+    "compiled": true,
+    "routine": "target_get_store_hours",
+    "steps": 4,
+    "inputs": {},
+    "outputs": [
+     "today_open_time",
+     "today_close_time",
+     "today_date"
+    ],
+    "dropped": [
+     [
+      4,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ]
+    ],
+    "warnings": [],
+    "cost_usd": 0.0
+   },
+   "routine_runs": [
+    {
+     "case": "same-inputs",
+     "inputs": {},
+     "repair_allowed": false,
+     "status": "failed",
+     "detail": "step open_my_target: before-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+     "outputs": {},
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 5.28,
+     "steps": [
+      {
+       "id": "open_my_target",
+       "status": "failed",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: waited 5 s"
+       ],
+       "score": null,
+       "detail": "step open_my_target: before-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+       "ms": 5048
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "same-inputs",
+     "inputs": {},
+     "repair_allowed": true,
+     "status": "failed",
+     "detail": "step open_my_target: before-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+     "outputs": {},
+     "rung": 1,
+     "model_calls": 2,
+     "cost_usd": 0.0042,
+     "duration_s": 9.86,
+     "steps": [
+      {
+       "id": "open_my_target",
+       "status": "failed",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: waited 5 s"
+       ],
+       "score": null,
+       "detail": "step open_my_target: before-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+       "ms": 5014
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ]
   },
   "chipotle": {
    "app": "com.chipotle.ordering",
@@ -403,22 +476,65 @@
   "doordash": {
    "app": "com.dd.doordash",
    "goal": "In the DoorDash app, what is my saved delivery address?",
-   "time": "2026-10-27T05:07:50+00:00",
+   "time": "2026-10-27T15:59:42+00:00",
    "agent": {
-    "status": "failed",
+    "status": "done",
     "result": "[redacted]",
-    "steps": 19,
-    "model_calls": 24,
-    "cost_usd": 0.0494,
-    "duration_s": 73.34,
+    "steps": 1,
+    "model_calls": 3,
+    "cost_usd": 0.0054,
+    "duration_s": 7.81,
     "popups": [],
     "approvals": 0,
-    "check": null
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: 1, Hacker, Way, Menlo"
+    }
    },
    "compile": {
-    "compiled": false,
-    "reason": "run ended 'failed' with check None; only verified runs are compiled"
-   }
+    "compiled": true,
+    "routine": "doordash_get_saved_delivery_address",
+    "steps": 1,
+    "inputs": {},
+    "outputs": [
+     "saved_delivery_address"
+    ],
+    "dropped": [],
+    "warnings": [],
+    "cost_usd": 0.0333
+   },
+   "routine_runs": [
+    {
+     "case": "same-inputs",
+     "inputs": {},
+     "repair_allowed": false,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "saved_delivery_address": "[redacted]"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 5.68,
+     "steps": [
+      {
+       "id": "tap_delivery_address_toolbar",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 4.6 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 5218
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ]
   },
   "starbucks": {
    "app": "com.starbucks.mobilecard",
@@ -643,6 +759,164 @@
      "popups": []
     }
    ]
+  },
+  "doordash_search": {
+   "app": "com.dd.doordash",
+   "goal": "In the DoorDash app, search for pizza and tell me the name of the first restaurant in the results.",
+   "time": "2026-10-27T16:07:08+00:00",
+   "agent": {
+    "status": "done",
+    "result": "Mountain Mike's Pizza",
+    "steps": 3,
+    "model_calls": 5,
+    "cost_usd": 0.0091,
+    "duration_s": 13.24,
+    "popups": [],
+    "approvals": 0,
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Mountain, Mike, Pizza"
+    }
+   },
+   "compile": {
+    "compiled": true,
+    "routine": "doordash_find_first_restaurant",
+    "steps": 3,
+    "inputs": {
+     "search_query": "pizza"
+    },
+    "outputs": [
+     "first_restaurant_name"
+    ],
+    "dropped": [],
+    "warnings": [],
+    "cost_usd": 0.0
+   },
+   "routine_runs": [
+    {
+     "case": "same-inputs",
+     "inputs": {
+      "search_query": "pizza"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "first_restaurant_name": "Mountain Mike's Pizza"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 12.35,
+     "steps": [
+      {
+       "id": "open_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 4.4 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 5595
+      },
+      {
+       "id": "enter_search_query",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 1.9 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 4803
+      },
+      {
+       "id": "filter_by_restaurant",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1135
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "second-input",
+     "inputs": {
+      "search_query": "sushi"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "first_restaurant_name": "La Casa De Los Huevos"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 12.13,
+     "steps": [
+      {
+       "id": "open_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 4.3 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 5423
+      },
+      {
+       "id": "enter_search_query",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 1.6 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 4724
+      },
+      {
+       "id": "filter_by_restaurant",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.942,
+       "detail": "",
+       "ms": 1220
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ]
+  },
+  "target_search": {
+   "app": "com.target.ui",
+   "goal": "In the Target app, search for paper towels and tell me the price of the first result.",
+   "time": "2026-10-27T16:01:19+00:00",
+   "agent": {
+    "status": "handoff",
+    "result": "Human verification press-and-hold check must be completed by user",
+    "steps": 0,
+    "model_calls": 2,
+    "cost_usd": 0.0044,
+    "duration_s": 11.85,
+    "popups": [],
+    "approvals": 0,
+    "check": null
+   },
+   "compile": {
+    "compiled": false,
+    "reason": "run ended 'handoff' with check None; only verified runs are compiled"
+   }
   }
  }
 }

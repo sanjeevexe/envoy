@@ -55,6 +55,11 @@ WORKFLOWS = [
     Workflow("amazon", "com.amazon.mShop.android.shopping", "In the Amazon app, search for AA batteries and tell me the price of the first result.",
              second={"AA batteries": "USB-C cable"}),
     Workflow("doordash", "com.dd.doordash", "In the DoorDash app, what is my saved delivery address?", private=True),
+    # Added after the address screen and Target's bot check were cleared (Oct 27): searches with a second input.
+    Workflow("doordash_search", "com.dd.doordash", "In the DoorDash app, search for pizza and tell me the name of the first restaurant in the results.",
+             second={"pizza": "sushi"}),
+    Workflow("target_search", "com.target.ui", "In the Target app, search for paper towels and tell me the price of the first result.",
+             second={"paper towels": "AA batteries"}),
     Workflow("starbucks", "com.starbucks.mobilecard", "In the Starbucks app, how many calories are in a Grande Caffè Latte?",
              second={"Caffè Latte": "Caramel Macchiato", "Caffe Latte": "Caramel Macchiato"}),
 ]

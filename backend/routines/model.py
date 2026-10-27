@@ -125,9 +125,11 @@ class Extract(_Model):
     locator: Locator | None = None
     segment: int | None = None  # which " · "-separated part of the label holds the value, when there are several
     after: str | None = None  # fixed text that follows the value in its part ("21C. Tap a seat to change it.")
-    pattern: str | None = None  # the value's shape, for values with no label or ID ("$13.49" → \$\d+\.\d+)
+    pattern: str | None = None  # the value's shape, for values with no label or ID ("$13.49" → \$\d+\.\d+); group `v`, if
+    # present, is the value inside a longer label ("Mountain Mike's Pizza, 9.2 mi away, …" → (?P<v>.+?), \d+\.\d+ mi away…)
     first_in_list: bool = False  # with pattern: the first element in a list with that shape ("the first result's price")
     next_element: bool = False  # the value is the element right after the one labelled `near` ("Seat", then "22F")
+    offset: int | None = None  # with next_element: how many elements after the label ("Today", "10/27", "8am open" → 2)
     expect_digits: bool = False  # the recorded value starts with a number: a placeholder ("- calories") is not the value yet
 
 

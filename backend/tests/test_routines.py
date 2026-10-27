@@ -290,3 +290,49 @@ def test_output_found_by_the_input_it_shows_when_ids_are_hidden():
     assert extract_value(spec, s, {"flight_number": "SL 1190"}) == "Delayed 25 min"
     gate = Extract(near="Gate", locator=Locator(resource_id="text_status_result", kind="Text"), segment=4)
     assert extract_value(gate, s, {"flight_number": "SL 1190"}) == "A7"
+
+
+# ---- real-app layouts (Target, DoorDash on envoy-real) ------------------------------------------
+
+def test_value_several_elements_after_its_label():
+    """Target's store hours: "Today", "10/27", "8am open", "11pm close" (each its own element, no IDs)."""
+    from routines.compiler import _extract_for
+    rows = [("Text", "Store hours", False)]
+    for day, date in (("Today", "10/27"), ("Wednesday", "10/28")):
+        rows += [("Text", day, False), ("Text", date, False), ("Text", "8am open", False), ("Text", "11pm close", False)]
+    s = _labels_screen(rows)
+    data = ["10/27", "8am open", "11pm close", "10/28"]
+    close = _extract_for("today_close", "Today", "11pm close", s, {}, data)
+    assert close == Extract(near="Today", next_element=True, offset=3)
+    assert extract_value(close, s, {}) == "11pm close"
+    assert extract_value(_extract_for("today_open", "Today", "8am open", s, {}, data), s, {}) == "8am open"
+    later = _labels_screen([("Text", "Today", False), ("Text", "10/29", False), ("Text", "7am open", False), ("Text", "10pm close", False)])
+    assert extract_value(close, later, {}) == "10pm close"  # another day, other hours: same place
+
+
+def test_first_result_row_by_its_shape_not_the_search_term():
+    """DoorDash search: rows read "name, 9.2 mi away, …"; the search chip shows only the query."""
+    from routines.compiler import _extract_for
+    s = _labels_screen([("Button", "pizza", False), ("Button", "Restaurant", True),
+                        ("Button", "Mountain Mike's Pizza, 9.2 mi away, Estimated time of arrival 49 min", True),
+                        ("Button", "Tandoori Pizza, 11.8 mi away, Estimated time of arrival 47 min", True)])
+    spec = _extract_for("first_restaurant_name", "Restaurant", "Mountain Mike's Pizza", s, {"search_query": "pizza"}, [])
+    assert spec.pattern and spec.first_in_list
+    assert extract_value(spec, s, {"search_query": "pizza"}) == "Mountain Mike's Pizza"
+    sushi = _labels_screen([("Button", "sushi", False), ("Button", "Kaito, 3 mi away, Estimated time of arrival 30 min", True)])
+    assert extract_value(spec, sushi, {"search_query": "sushi"}) == "Kaito"  # no "sushi" in the name; 3 mi, not 9.2 mi
+    # An input-anchored output never returns the element that shows only the input (the search chip).
+    old = Extract(locator=Locator(text_has="{{search_query}}", kind="Button"))
+    assert extract_value(old, s, {"search_query": "pizza"}).startswith("Mountain Mike's Pizza")
+
+
+def test_identical_list_rows_are_told_apart_by_their_slot():
+    """Target's store locator: rows share an ID and the store name was booking data; the first row is the saved store."""
+    from routines.screens import screen_from_tree
+    els = [{"index": i, "parent": None, "number": i + 1, "kind": "Button", "class": "android.widget.RelativeLayout", "label": name,
+            "text": name, "resource_id": "com.target.ui:id/store_list_item", "bounds": [0, 400 + 300 * i, 1080, 680 + 300 * i],
+            "in_list": True} for i, name in enumerate(["Chelsea 23rd and 8th", "Union Square", "Herald Square"])]
+    s = screen_from_tree({"package": "app", "activity": "A", "elements": els, "width": 1080, "height": 2400})
+    loc = Locator(resource_id="store_list_item", kind="Button", in_list=True, position=(0.5, 0.225))
+    assert locators.locate(loc, s).element.label == "Chelsea 23rd and 8th"
+    assert not locators.locate(Locator(resource_id="store_list_item", kind="Button", in_list=True), s).ok  # no slot: still ambiguous

@@ -19,7 +19,7 @@ All of it is Envoy's own code (`backend/memory/`, `backend/integrations/mail.py`
 | Service | `service.py` | The only writer. Resolving: natural keys → links in the same source (a boarding pass's flight is already linked to its trip) → keyword candidates (a rule when the evidence is strong, one Spark call when it is thin) → new. A key that turns out to belong to two entities merges them. Routine outputs are anchored on the run's own final screen. |
 | Retrieval | `retrieval.py` | "my flight / gate / trip" → the next upcoming one (cancelled trips skipped); cities, codes and numbers → named entities; neighbors two links away; keyword matches; reciprocal rank fusion; current facts only; Markdown notes with the source and age of every fact, "(was B12 until …)" for a recent change and a staleness mark past the freshness window. Answers come from the notes only and are rejected if their specifics aren't in them. |
 | Bridge | `bridge.py` | Notes for the agent and the routine matcher; routine inputs filled from memory (the `from_memory` hint, else what the input's name means: `trip_city` → the trip's destination); routine runs written back. `scripts/run_task.py --with-memory` gives the agent its NOTES from memory and remembers its final screen. |
-| Mail | `integrations/mail.py`, `scripts/connect_gmail.py` | A local test inbox and a read-only Gmail client (recent messages, then the history API from the last history ID). |
+| Mail | `integrations/mail.py`, `scripts/connect_gmail.py`, `scripts/ingest_mail.py` | A local test inbox and a read-only Gmail client (recent messages, then the history API from the last history ID, kept between runs). |
 | Test inbox | `eval/skylark_mail.py` | The confirmation emails SkyLark would send for the same bookings that seed the app: with markup or plain, forwarded, a seat change, a cancellation, promotions that mention a booked city, and a receipt, each with exact ground truth. |
 | Tests | `backend/tests/test_memory_store.py`, `test_memory.py` | 18 offline tests (62 in all) with a scripted model. |
 
@@ -68,7 +68,7 @@ That is 54 labeled emails and screens against the design's 50. Precision is 100%
 
 ## Honest limits
 
-- **Gmail is built but not run against a real account**: it needs your one-time Google Cloud setup and consent (`scripts/connect_gmail.py`). Every result here is on the local test inbox, whose emails we generated: real airline emails are messier.
+- **Gmail is connected, but the real inbox is nearly empty.** The test account (Google Cloud project `envoy-personal`, testing mode, `gmail.readonly` only) was connected on Oct 27. Its 6 emails (account notices, one DoorDash promotion) were read for $0.024: memory kept only the account holder's name and address and nothing from the promotion or security notices, which is right but is not a test of real confirmations. Every extraction number here is on the local test inbox, whose emails we generated: real airline emails are messier.
 - **SkyLark's screens are clean.** Real apps' screens (Phase 2's checkpoint) will extract less cleanly; screen extraction was not tried on them in this phase.
 - Matching is tested on one person's travel: trips, flights, one order. Places, reservations other than flights, loyalty programs and photos have types but little or no testing.
 - The graph view, the WebSocket stream of events, Calendar and photos are later phases; the event log they will read is in place.
@@ -85,5 +85,5 @@ For the design doc's Shared memory section (applied in both copies):
 
 ## Next
 
-- **You (optional, about 10 minutes):** connect Gmail for the test account with `scripts/connect_gmail.py` (Google Cloud project in testing mode, the test account as a test user, the OAuth client file, one consent). Then the same service ingests real confirmation emails.
+- **You (optional):** forward a few real travel or order confirmations to the test account; `scripts/ingest_mail.py` then reads only what is new. In testing mode Google ends the sign-in every 7 days: rerun `scripts/connect_gmail.py`.
 - **Phase 4** (web app, live view, full approvals, MCP server): the MCP `memory_search` / `memory_get` / `memory_note` tools can now read this store; the event log is ready for the WebSocket stream and the graph view.

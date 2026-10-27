@@ -239,9 +239,30 @@ def locate(loc: Locator, screen: ScreenState, inputs: dict[str, str] | None = No
         return Match(None, 0.0, 0.0, threshold)
     best, e, det = scored[0]
     runner = scored[1][0] if len(scored) > 1 else 0.0
+    if best >= threshold and best - runner < margin and (slot := _same_slot(rendered, scored, screen, margin)) is not None:
+        e, det = slot
+        return Match(e, best, runner, threshold, det)
     if best < threshold or best - runner < margin:
         return Match(None, best, runner, threshold, det)
     return Match(e, best, runner, threshold, det)
+
+
+def _same_slot(loc: Locator, scored: list, screen: ScreenState, margin: float) -> tuple[Element, dict] | None:
+    """Repeated list rows that nothing but their place tells apart ("the first store in the list"): a locator with no
+    text to choose a row by (its text was booking data) means the row in the recorded slot, if one is clearly nearest."""
+    if not (loc.in_list and loc.position and loc.resource_id) or loc.text or loc.text_has or loc.desc:
+        return None
+    tied = [(e, det) for sc, e, det in scored if scored[0][0] - sc < margin]
+    if len(tied) < 2 or not all(e.in_list and id_matches(loc.resource_id, short_id(e.resource_id)) for e, _ in tied):
+        return None
+    w, h = screen.width or 1080, screen.height or 2400
+
+    def dist(e: Element) -> float:
+        x1, y1, x2, y2 = e.bounds
+        return (((x1 + x2) / 2 / w - loc.position[0]) ** 2 + ((y1 + y2) / 2 / h - loc.position[1]) ** 2) ** 0.5
+
+    tied.sort(key=lambda t: dist(t[0]))
+    return tied[0] if dist(tied[1][0]) - dist(tied[0][0]) >= 0.03 else None
 
 
 def updated(loc: Locator, e: Element, screen: ScreenState) -> Locator:

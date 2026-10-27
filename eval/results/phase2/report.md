@@ -182,13 +182,16 @@ Across these cells, routines used **7 model calls against 242 for the full agent
 
 | App | Agent run | Compiled | Rerun (inputs) | Without repair | With repair allowed |
 | --- | --- | --- | --- | --- | --- |
-| target | handoff · 3 steps · 4 calls · 19.12 s · $0.0074 | no: run ended 'handoff' with check None; only verified runs are  | – | – | – |
+| target | done · 4 steps · 7 calls · 22.24 s · $0.0173 | 4 steps, inputs none, outputs today_open_time, today_close_time, today_date | same-inputs {} | ❌ failed, rung 1, 0 calls, 5.28 s: step open_my_target: before-checks failed: no match (best 0.00 < 0.80  | ❌ failed, rung 1, 2 calls, 9.86 s: step open_my_target: before-checks failed: no match (best 0.00 < 0.80  |
 | chipotle | done · 14 steps · 18 calls · 47.44 s · $0.0308 | 11 steps, inputs zip_code, outputs price | same-inputs {'zip_code': '10001'} | ❌ failed, rung 1, 0 calls, 11.83 s: step select_zip_code_suggestion: target not found: no match (best 0.98 | ❌ failed, rung 4, 3 calls, 57.02 s: step scroll_to_chips_and_sides: after-checks failed: no match (best 0. |
 | amazon | done · 2 steps · 4 calls · 23.01 s · $0.0102 | 2 steps, inputs search_query, outputs first_result_price | same-inputs {'search_query': 'AA batteries'} | ✅ done, rung 1, 0 calls, 8.9 s | not needed |
 | amazon |  |  | second-input {'search_query': 'USB-C cable'} | ✅ done, rung 1, 0 calls, 9.46 s | not needed |
-| doordash | failed · 19 steps · 24 calls · 73.34 s · $0.0494 | no: run ended 'failed' with check None; only verified runs are c | – | – | – |
+| doordash | done · 1 steps · 3 calls · 7.81 s · $0.0054 | 1 steps, inputs none, outputs saved_delivery_address | same-inputs {} | ✅ done, rung 1, 0 calls, 5.68 s | not needed |
 | starbucks | done · 7 steps · 9 calls · 25.72 s · $0.0129 | 8 steps, inputs drink_name, outputs calories | same-inputs {'drink_name': 'Caffe Latte'} | ✅ done, rung 1, 0 calls, 9.14 s | not needed |
 | starbucks |  |  | second-input {'drink_name': 'Caramel Macchiato'} | ✅ done, rung 1, 0 calls, 9.24 s | not needed |
+| doordash_search | done · 3 steps · 5 calls · 13.24 s · $0.0091 | 3 steps, inputs search_query, outputs first_restaurant_name | same-inputs {'search_query': 'pizza'} | ✅ done, rung 1, 0 calls, 12.35 s | not needed |
+| doordash_search |  |  | second-input {'search_query': 'sushi'} | ✅ done, rung 1, 0 calls, 12.13 s | not needed |
+| target_search | handoff · 0 steps · 2 calls · 11.85 s · $0.0044 | no: run ended 'handoff' with check None; only verified runs are  | – | – | – |
 
 ## Matching requests to routines
 

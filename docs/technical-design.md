@@ -812,7 +812,7 @@ Phase 2 passed its gate on Oct 27, 2026. Details are in `docs/phase-2-results.md
 | Model calls against the full agent, same requests | 7 against 242 (97% fewer); median 4.2 s against 11.7 s |
 | Fixed replay of recorded coordinates | Acted on the wrong booking in 14 of 24 requests |
 | Matching a request to a routine | 12 of 12 |
-| Real apps, read-only | Amazon and Starbucks rerun in about 9 s with no model call, on a second input too; Chipotle's store picker doesn't replay; Target (bot check) and DoorDash (address setup) are blocked |
+| Real apps, read-only | Amazon, Starbucks and DoorDash rerun in 6–12 s with no model call, on a second input too; Chipotle's store picker doesn't replay; Target shows a bot check on most fresh launches, so it stays a hand-off |
 | Whole of Phase 2 | 859 model calls, $3.48 |
 
 The evaluation drove these changes to app routines:
