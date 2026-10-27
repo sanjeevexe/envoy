@@ -1,0 +1,16 @@
+routine: contacts_get_contact_count
+app: com.google.android.contacts
+version: 1
+status: draft
+intent: Count the contacts in the Contacts app
+description: Open the Contacts app and determine how many contacts are present from the contacts list shown on the first screen, reporting zero
+  when it shows no contacts.
+patterns: [how many contacts do I have, count my contacts, how many contacts are in my contacts app, what is the number of my contacts]
+start: fresh_launch
+compiled_from:
+  task_id: p2-real-contacts_count
+  goal: In the Contacts app, how many contacts do I have?
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-27 12:48:04"
+  trace_steps_dropped: 16
+  cost_usd: 0.0405

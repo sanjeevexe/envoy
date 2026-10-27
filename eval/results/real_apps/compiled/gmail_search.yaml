@@ -1,0 +1,92 @@
+routine: gmail_search_mail
+app: com.google.android.gm
+version: 1
+status: draft
+intent: Search Gmail mail for a term and report the first result's subject
+description: Searches Gmail for a given term or sender and opens the first matching conversation to report its subject line.
+patterns: [search my mail for a term, find an email and tell me the subject of the first result, search Gmail and report the first matching subject,
+  what is the subject of the first email about this]
+outputs: [first_result_subject]
+start: fresh_launch
+inputs:
+  search_query: {type: text, description: Search term to look for in Gmail, example: DoorDash}
+steps:
+- id: search_in_mail
+  intent: "Type {{search_query}} into the Search in mail field and submit the search"
+  pre:
+  - {app_foreground: com.google.android.gm}
+  - element_present: {resource_id: compose_button, text: Compose, kind: Button}
+  action:
+    type:
+      field:
+        resource_id: open_search
+        text: Search in mail
+        hint: Search in mail
+        kind: EditText
+        cls: EditText
+        parent: osb_app_bar_layout
+        in_list: true
+        position: [0.5, 0.093]
+      value: "{{search_query}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: compose_button, text: Compose, kind: Button}
+  risk: reversible
+  note: trace step 4
+- id: find_open_first_search_result
+  intent: "Scroll to {{search_query}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: viewified_conversation_item_view
+        text_has: "{{search_query}}"
+        kind: Button
+        cls: ViewGroup
+        parent: thread_list_view
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: viewified_conversation_item_view
+      text_has: "{{search_query}}"
+      kind: Button
+      cls: ViewGroup
+      parent: thread_list_view
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: open_first_search_result
+  intent: "Tap the first search result for {{search_query}} to open it and read its subject"
+  pre:
+  - {app_foreground: com.google.android.gm}
+  action:
+    tap:
+      resource_id: viewified_conversation_item_view
+      text_has: "{{search_query}}"
+      kind: Button
+      cls: ViewGroup
+      parent: thread_list_view
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: item_pager, kind: List}
+  - element_present: {resource_id: archive, text: Archive, kind: Button}
+  risk: reversible
+  extract:
+    first_result_subject:
+      locator: {resource_id: subject_and_folder_view, kind: Button}
+      after: Inbox
+      first_in_list: false
+      next_element: false
+      expect_digits: false
+  note: trace step 6
+compiled_from:
+  task_id: p2-real-gmail_search
+  goal: In the Gmail app, search my mail for DoorDash and tell me the subject of the first result.
+  compiler: cached
+  compiled_at: "2026-10-27 12:58:19"
+  trace_steps_kept: [4, 6]
+  trace_steps_dropped: 4
+  cost_usd: 0.0

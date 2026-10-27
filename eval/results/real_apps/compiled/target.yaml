@@ -1,0 +1,93 @@
+routine: target_get_store_hours
+app: com.target.ui
+version: 1
+status: draft
+intent: Get today's hours for the user's Target store
+description: Opens My Target in the Target app, opens the saved My store entry, selects that store in the store locator, opens its Store hours
+  details, and reads the hours listed for Today.
+patterns: ['What are today''s hours for my Target store?', 'When does my Target store open today?', 'When does my Target store close today?',
+  Check today's hours for my store]
+outputs: [today_open_time, today_close_time, today_date]
+start: fresh_launch
+steps:
+- id: open_my_target
+  intent: Open My Target
+  pre:
+  - {app_foreground: com.target.ui}
+  - element_present: {resource_id: menu_home, text: Discover, kind: Text}
+  action:
+    tap:
+      resource_id: menu_account
+      text: My Target
+      kind: Button
+      cls: FrameLayout
+      siblings: [Discover, Buy Again, Wallet]
+      in_list: false
+      position: [0.9, 0.942]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: menu_account, text: My Target, kind: Text}
+  - element_present: {resource_id: menu_home, text: Discover, kind: Button}
+  risk: reversible
+  note: trace step 1
+- id: open_my_store
+  intent: Open the My store entry
+  pre:
+  - {app_foreground: com.target.ui}
+  action:
+    tap:
+      text: My store
+      kind: Button
+      cls: View
+      in_list: true
+      position: [0.5, 0.13]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: toolbar_container, text: Store locator, kind: Text}
+  - element_present: {resource_id: store_locator_list_view, kind: List}
+  risk: reversible
+  note: trace step 2
+- id: open_saved_store_details
+  intent: Open the saved store from the store locator list
+  pre:
+  - {app_foreground: com.target.ui}
+  action:
+    tap:
+      resource_id: store_list_item
+      kind: Button
+      cls: RelativeLayout
+      parent: store_locator_list_view
+      in_list: true
+      position: [0.5, 0.206]
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: toolbar_container, text: Store locator, kind: Text}
+  risk: reversible
+  note: trace step 3
+- id: open_store_hours_details
+  intent: Open the Store hours details
+  pre:
+  - {app_foreground: com.target.ui}
+  action:
+    tap:
+      text: Store hours
+      kind: Button
+      cls: View
+      in_list: true
+      position: [0.5, 0.62]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  extract:
+    today_open_time: {near: Today, first_in_list: false, next_element: true, offset: 2, expect_digits: true}
+    today_close_time: {near: Today, first_in_list: false, next_element: true, offset: 3, expect_digits: true}
+    today_date: {near: Today, first_in_list: false, next_element: true, expect_digits: true}
+  note: trace step 5
+compiled_from:
+  task_id: p2-real-target
+  goal: In the Target app, what are today's hours for my Target store?
+  compiler: cached
+  compiled_at: "2026-10-27 12:39:10"
+  trace_steps_kept: [1, 2, 3, 5]
+  trace_steps_dropped: 1
+  cost_usd: 0.0

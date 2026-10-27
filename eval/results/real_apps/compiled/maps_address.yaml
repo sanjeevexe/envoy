@@ -1,0 +1,146 @@
+routine: maps_look_up_place_address
+app: com.google.android.apps.maps
+version: 1
+status: draft
+intent: Look up a place's street address in Google Maps
+description: Search for a named place in Google Maps, open its place result, reveal its details, and return the street address shown for that
+  place.
+patterns: [tell me the street address of a place, find the address of a place in Maps, what is the address of this place]
+outputs: [street_address]
+start: fresh_launch
+inputs:
+  place_name: {type: text, description: '', example: Empire State Building}
+steps:
+- id: tap_search_field
+  intent: Tap the search field to start a place search
+  pre:
+  - {app_foreground: com.google.android.apps.maps}
+  - element_present: {resource_id: explore_tab_strip_button, text: Explore, kind: Text}
+  action:
+    tap:
+      resource_id: search_omnibox_text_box
+      text: Search here
+      hint: Search here
+      kind: EditText
+      cls: EditText
+      parent: mod_search_omnibox_layout
+      in_list: false
+      position: [0.38, 0.088]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: recycler_view, kind: List}
+  - element_present: {resource_id: search_omnibox_text_box, kind: EditText}
+  risk: reversible
+  note: trace step 1
+- id: type_place_name
+  intent: "Type {{place_name}} into the search field"
+  pre:
+  - {app_foreground: com.google.android.apps.maps}
+  action:
+    type:
+      field:
+        resource_id: search_omnibox_edit_text
+        text: Search here
+        hint: Search here
+        kind: EditText
+        cls: EditText
+        parent: search_omnibox_text_box
+        in_list: false
+        position: [0.499, 0.088]
+      value: "{{place_name}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: search_omnibox_text_box
+      text: "{{place_name}}"
+      kind: EditText
+  - element_present:
+      resource_id: street_view_thumbnail
+      text: "View Street view imagery for {{place_name}}"
+      kind: Button
+  risk: reversible
+  note: trace step 3
+- id: find_open_place_result
+  intent: "Scroll to {{place_name}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        text_has: "{{place_name}}"
+        kind: Button
+        cls: LinearLayout
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      text_has: "{{place_name}}"
+      kind: Button
+      cls: LinearLayout
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: open_place_result
+  intent: "Tap the {{place_name}} result in the search results list"
+  pre:
+  - {app_foreground: com.google.android.apps.maps}
+  action:
+    tap:
+      text_has: "{{place_name}}"
+      kind: Button
+      cls: LinearLayout
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: lightbox_view_pager, kind: List}
+  - element_present: {resource_id: zen_app_bar_immersive_overflow_button, text: Overflow menu, kind: Button}
+  risk: reversible
+  note: trace step 4
+- id: close_immersive_preview
+  intent: Close the immersive preview to reveal the place details
+  pre:
+  - {app_foreground: com.google.android.apps.maps}
+  action:
+    tap:
+      resource_id: zen_app_bar_immersive_nav_button
+      text: Close
+      kind: Button
+      cls: Button
+      siblings: [Overflow menu]
+      in_list: false
+      position: [0.912, 0.08]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: overflow_button
+      text: "More options for {{place_name}}"
+      kind: Button
+  - element_present:
+      resource_id: street_view_thumbnail
+      text: "View Street view imagery for {{place_name}}"
+      kind: Button
+  risk: reversible
+  note: trace step 8
+- id: scroll_to_street_address
+  intent: Scroll the place details to reveal the street address
+  pre:
+  - {app_foreground: com.google.android.apps.maps}
+  action:
+    scroll_until:
+      target: {text: Address}
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present: {text: Address}
+  risk: read
+  extract:
+    street_address: {near: Address, first_in_list: false, next_element: false, expect_digits: true}
+  note: trace step 9 (+1 scrolls)
+compiled_from:
+  task_id: p2-real-maps_address
+  goal: In Google Maps, search for the Empire State Building and tell me its street address.
+  compiler: cached
+  compiled_at: "2026-10-27 12:58:27"
+  trace_steps_kept: [1, 3, 4, 8, 9]
+  trace_steps_dropped: 4
+  cost_usd: 0.0

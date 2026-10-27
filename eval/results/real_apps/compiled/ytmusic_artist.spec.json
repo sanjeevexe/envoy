@@ -1,0 +1,47 @@
+{
+ "name": "youtube_music_search_song",
+ "intent": "Find the artist of a song in YouTube Music",
+ "description": "Search YouTube Music for a requested song and report the artist shown for the first song result.",
+ "patterns": [
+  "search for a song and tell me the artist",
+  "who is the artist of this song",
+  "find the artist of the first song result",
+  "look up a song in YouTube Music"
+ ],
+ "inputs": [
+  {
+   "name": "song_name",
+   "type": "text",
+   "description": "The song title to search for.",
+   "from_memory": null,
+   "example": "Bohemian Rhapsody"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "open_search",
+   "intent": "Tap Search to open search",
+   "target_fixed_text": "Search",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "enter_song_name",
+   "intent": "Type {{song_name}} into the search field",
+   "target_fixed_text": "Search songs, artists, podcasts",
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "artist",
+   "near": "Bohemian Rhapsody · Song",
+   "example": "Queen"
+  }
+ ],
+ "data_values": [
+  "5:55",
+  "2.7B plays"
+ ]
+}

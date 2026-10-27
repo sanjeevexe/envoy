@@ -1,0 +1,55 @@
+routine: calendar_check_todays_events
+app: com.google.android.calendar
+version: 1
+status: draft
+intent: Check today's events in Google Calendar
+description: Opens Google Calendar, advances past the welcome screens without signing in or enabling sync, and reports what is planned for today.
+patterns: [do I have any events today, what is on my calendar today, check my calendar for today, am I busy today]
+start: fresh_launch
+steps:
+- id: tap_next_page
+  intent: Advance past the Google Calendar welcome screen
+  pre:
+  - {app_foreground: com.google.android.calendar}
+  - element_present: {resource_id: pager, kind: List}
+  action:
+    tap:
+      resource_id: next_arrow
+      text: next page
+      kind: Button
+      cls: ImageButton
+      parent: footer
+      in_list: false
+      position: [0.932, 0.938]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: oobe_done_button, text: Got it, kind: Button}
+  risk: reversible
+  note: trace step 1
+- id: tap_got_it
+  intent: Dismiss the introductory screen to reach the calendar
+  pre:
+  - {app_foreground: com.google.android.calendar}
+  action:
+    tap:
+      resource_id: oobe_done_button
+      text: Got it
+      kind: Button
+      cls: Button
+      parent: main_frame
+      in_list: false
+      position: [0.5, 0.906]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: date_picker_content, kind: Text}
+  - element_present: {resource_id: date_picker_button, kind: Button}
+  risk: reversible
+  note: trace step 10
+compiled_from:
+  task_id: p2-real-calendar_today
+  goal: In Google Calendar, do I have any events today?
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-27 12:45:58"
+  trace_steps_kept: [1, 10]
+  trace_steps_dropped: 9
+  cost_usd: 0.0371

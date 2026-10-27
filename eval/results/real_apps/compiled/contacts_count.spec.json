@@ -1,0 +1,23 @@
+{
+ "name": "contacts_get_contact_count",
+ "intent": "Count the contacts in the Contacts app",
+ "description": "Open the Contacts app and determine how many contacts are present from the contacts list shown on the first screen, reporting zero when it shows no contacts.",
+ "patterns": [
+  "how many contacts do I have",
+  "count my contacts",
+  "how many contacts are in my contacts app",
+  "what is the number of my contacts"
+ ],
+ "inputs": [],
+ "steps": [],
+ "outputs": [
+  {
+   "name": "contact_count",
+   "near": "No contacts yet",
+   "example": "0"
+  }
+ ],
+ "data_values": [
+  "envoy3955@gmail.com"
+ ]
+}

@@ -1,0 +1,40 @@
+{
+ "name": "calendar_check_todays_events",
+ "intent": "Check today's events in Google Calendar",
+ "description": "Opens Google Calendar, advances past the welcome screens without signing in or enabling sync, and reports what is planned for today.",
+ "patterns": [
+  "do I have any events today",
+  "what is on my calendar today",
+  "check my calendar for today",
+  "am I busy today"
+ ],
+ "inputs": [],
+ "steps": [
+  {
+   "step": 1,
+   "id": "tap_next_page",
+   "intent": "Advance past the Google Calendar welcome screen",
+   "target_fixed_text": "next page",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "tap_got_it",
+   "intent": "Dismiss the introductory screen to reach the calendar",
+   "target_fixed_text": "Got it",
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "todays_events",
+   "near": "Tuesday 27 October 2026, Open Day View",
+   "example": "Nothing planned. Tap to create."
+  }
+ ],
+ "data_values": [
+  "Tuesday 27 October 2026",
+  "Nothing planned. Tap to create.",
+  "October"
+ ]
+}

@@ -1,0 +1,68 @@
+{
+ "name": "maps_look_up_place_address",
+ "intent": "Look up a place's street address in Google Maps",
+ "description": "Search for a named place in Google Maps, open its place result, reveal its details, and return the street address shown for that place.",
+ "patterns": [
+  "tell me the street address of a place",
+  "find the address of a place in Maps",
+  "what is the address of this place"
+ ],
+ "inputs": [
+  {
+   "name": "place_name",
+   "type": "text",
+   "description": "",
+   "from_memory": null,
+   "example": "Empire State Building"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "tap_search_field",
+   "intent": "Tap the search field to start a place search",
+   "target_fixed_text": "Search here",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "type_place_name",
+   "intent": "Type {{place_name}} into the search field",
+   "target_fixed_text": "Search here",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "open_place_result",
+   "intent": "Tap the {{place_name}} result in the search results list",
+   "target_fixed_text": null,
+   "choice_input": "place_name"
+  },
+  {
+   "step": 4,
+   "id": "close_immersive_preview",
+   "intent": "Close the immersive preview to reveal the place details",
+   "target_fixed_text": "Close",
+   "choice_input": null
+  },
+  {
+   "step": 5,
+   "id": "scroll_to_street_address",
+   "intent": "Scroll the place details to reveal the street address",
+   "target_fixed_text": null,
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "street_address",
+   "near": "Address",
+   "example": "20 W 34th St., New York, NY 10001"
+  }
+ ],
+ "data_values": [
+  "4.7 stars (130,965)",
+  "Observation deck",
+  "Open · Closes 11 PM"
+ ]
+}

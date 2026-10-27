@@ -1,0 +1,50 @@
+{
+ "name": "doordash_find_first_restaurant",
+ "intent": "Find the first restaurant for a DoorDash search",
+ "description": "Search DoorDash for a requested food or item, filter the results to restaurants, and report the name of the first restaurant shown.",
+ "patterns": [
+  "search DoorDash and tell me the first restaurant",
+  "find the first restaurant for a DoorDash search",
+  "what is the first restaurant that comes up"
+ ],
+ "inputs": [
+  {
+   "name": "search_query",
+   "type": "text",
+   "description": "The food or item to search for in DoorDash.",
+   "from_memory": null,
+   "example": "pizza"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "open_search",
+   "intent": "Tap Search DoorDash to open search",
+   "target_fixed_text": "Search DoorDash",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "enter_search_query",
+   "intent": "Type {{search_query}} in the Search DoorDash field",
+   "target_fixed_text": "Search DoorDash",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "filter_by_restaurant",
+   "intent": "Tap Restaurant to filter the results to restaurants",
+   "target_fixed_text": "Restaurant",
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "first_restaurant_name",
+   "near": "Restaurant",
+   "example": "Mountain Mike's Pizza"
+  }
+ ],
+ "data_values": []
+}

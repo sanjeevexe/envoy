@@ -1,0 +1,78 @@
+{
+ "name": "starbucks_lookup_drink_calories",
+ "intent": "Look up the calories in a Grande drink in the Starbucks app",
+ "description": "Searches for a drink in the Starbucks app, opens its product details with the Grande size selected, and returns the displayed calorie count.",
+ "patterns": [
+  "how many calories are in a drink",
+  "what is the calorie count for a drink",
+  "check the calories in a menu drink"
+ ],
+ "inputs": [
+  {
+   "name": "drink_name",
+   "type": "text",
+   "description": "The drink to look up in the menu search",
+   "from_memory": null,
+   "example": "Caffe Latte"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "tap_order",
+   "intent": "Tap Order to open the menu",
+   "target_fixed_text": "Order",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "dismiss_location_prompt",
+   "intent": "Tap No, thanks to dismiss the location prompt",
+   "target_fixed_text": "No, thanks",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "skip_store_selection",
+   "intent": "Tap Skip to skip store selection",
+   "target_fixed_text": "Skip",
+   "choice_input": null
+  },
+  {
+   "step": 4,
+   "id": "confirm_skip_to_menu",
+   "intent": "Tap Yes to confirm skipping to the menu",
+   "target_fixed_text": "Yes",
+   "choice_input": null
+  },
+  {
+   "step": 5,
+   "id": "open_menu_search",
+   "intent": "Tap Search Menu to open menu search",
+   "target_fixed_text": "Search Menu",
+   "choice_input": null
+  },
+  {
+   "step": 6,
+   "id": "search_for_drink",
+   "intent": "Type {{drink_name}} into the Search Menu field",
+   "target_fixed_text": "Search Menu",
+   "choice_input": null
+  },
+  {
+   "step": 7,
+   "id": "open_drink_details",
+   "intent": "Tap the {{drink_name}} search result to open its product details",
+   "target_fixed_text": null,
+   "choice_input": "drink_name"
+  }
+ ],
+ "outputs": [
+  {
+   "name": "calories",
+   "near": "Caffè Latte",
+   "example": "190 calories"
+  }
+ ],
+ "data_values": []
+}

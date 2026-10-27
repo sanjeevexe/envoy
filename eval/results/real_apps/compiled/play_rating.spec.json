@@ -1,0 +1,85 @@
+{
+ "name": "play_store_get_app_rating",
+ "intent": "Get the star rating of an app in the Google Play Store",
+ "description": "Dismiss the Google Play Store onboarding without signing in, search for the requested app, open its listing, and report the average star rating shown for that app without installing anything.",
+ "patterns": [
+  "what is the star rating of this app",
+  "check an app rating in the Play Store",
+  "how many stars does this app have",
+  "find the app rating on Google Play"
+ ],
+ "inputs": [
+  {
+   "name": "app_name",
+   "type": "text",
+   "description": "The app to look up in the Google Play Store.",
+   "from_memory": null,
+   "example": "Duolingo"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "skip_interests_onboarding",
+   "intent": "Tap Skip to bypass the interests onboarding",
+   "target_fixed_text": "Skip",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "continue_onboarding",
+   "intent": "Tap Continue to finish onboarding without signing in",
+   "target_fixed_text": "Continue",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "dismiss_offer_prompt",
+   "intent": "Tap Not now to dismiss the offer prompt",
+   "target_fixed_text": "Not now",
+   "choice_input": null
+  },
+  {
+   "step": 4,
+   "id": "dismiss_onboarding_tooltip",
+   "intent": "Tap Got it to dismiss the onboarding tooltip",
+   "target_fixed_text": "Got it",
+   "choice_input": null
+  },
+  {
+   "step": 5,
+   "id": "open_search",
+   "intent": "Tap Search to start searching the Play Store",
+   "target_fixed_text": "Search",
+   "choice_input": null
+  },
+  {
+   "step": 6,
+   "id": "open_search_input",
+   "intent": "Tap the search entry to open the search input",
+   "target_fixed_text": "Search or ask Play",
+   "choice_input": null
+  },
+  {
+   "step": 7,
+   "id": "type_app_name",
+   "intent": "Type {{app_name}} into the search field",
+   "target_fixed_text": "Search apps & games",
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "star_rating",
+   "near": "Average rating",
+   "example": "4.7 stars"
+  }
+ ],
+ "data_values": [
+  "48 million reviews",
+  "110 MB",
+  "4.6 stars",
+  "1 million reviews",
+  "36 MB"
+ ]
+}

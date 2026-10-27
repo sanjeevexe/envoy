@@ -73,3 +73,13 @@ The submission form asks for "feedback from your experience using Meta products"
 **What could be better**
 - **Values are copied but not normalized.** The same flight arrives as "SL 1190" and "SL1190", a departure as "6:10 AM" and an ISO time, an airport as "Atlanta (ATL)" and "ATL". That's what we asked for (verbatim values are checkable), so Envoy normalizes keys in code; a documented way to get both a verbatim span and a normalized value in one structured answer would help.
 - **Attribute placement varies.** Plain emails sometimes put the trip's date only on the flight, never on the trip, so "the next upcoming trip" had to fall back to the trip's flight in code.
+
+## Muse Spark as the agent on 18 real-app workflows (Oct 27, real-app test set)
+
+**What worked well**
+- 13 of 18 first runs gave a right answer on apps it had never seen (Settings, Gmail, Calendar, Contacts, Maps, Play Store, YouTube Music, Chrome, five shopping and food apps), at `low` effort, typically in 3 to 7 steps.
+- It handles one-time prompts sensibly (declines notification and permission prompts, continues without an account when told to) and hands off at a bot check instead of trying it.
+
+**What could be better**
+- **Placeholder actions.** In 12 of 18 runs it chose a coordinate tap with made-up coordinates ("tap_point" at 0,0 or 500,500, with the stated reason "Placeholder") 52 times. That happened even though the screen's elements were listed and the instructions say coordinate taps are only for screens without elements. Each costs a call and a step, and twice the agent lost the app afterwards. It looks like the model fills an action when it is unsure instead of choosing `look` or `scroll`. We will stop offering that action when elements are listed. A model that never emits a self-described placeholder would be better.
+

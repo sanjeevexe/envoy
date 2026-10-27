@@ -1,0 +1,2193 @@
+{
+ "time": "2026-10-27T17:00:30+00:00",
+ "workflows": {
+  "amazon": {
+   "app": "com.amazon.mShop.android.shopping",
+   "category": "shopping",
+   "goal": "In the Amazon app, search for AA batteries and tell me the price of the first result.",
+   "graded_by": "shape",
+   "time": "2026-10-27T16:38:54+00:00",
+   "expect": "\\$\\s?\\d+(\\.\\d{2})?",
+   "expect_second": "\\$\\s?\\d+(\\.\\d{2})?",
+   "agent": {
+    "status": "done",
+    "result": "$13.49 for KODAK AA Alkaline Batteries (24 Pack) - the first result for AA batteries",
+    "steps": 2,
+    "model_calls": 4,
+    "cost_at_standard_usd": 0.0102026,
+    "duration_s": 23.01,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: 13, 49, KODAK, Alkaline"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "amazon_search_first_result_price",
+    "steps": 2,
+    "inputs": {
+     "search_query": "AA batteries"
+    },
+    "outputs": [
+     "first_result_price"
+    ],
+    "dropped": [],
+    "warnings": [
+     "output 'first_result_product': 'KODAK AA Alkaline Batteries (24 Pack) Double A Battery, LR6, 1.5V | 10-Year Shelf Life, Advanced Leak-Resistant Design,…' is not on the final screen, or nothing anchors it; dropped"
+    ],
+    "cost_usd": 0.0
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "search_query": "AA batteries"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "first_result_price": "$13.49"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 8.51,
+     "steps": [
+      {
+       "id": "tap_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 4.1 s"
+       ],
+       "score": 0.995,
+       "detail": "",
+       "ms": 4570
+      },
+      {
+       "id": "enter_search_query",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.996,
+       "detail": "",
+       "ms": 2279
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "search_query": "USB-C cable"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "first_result_price": "$15.49"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 7.37,
+     "steps": [
+      {
+       "id": "tap_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 3.1 s"
+       ],
+       "score": 0.995,
+       "detail": "",
+       "ms": 3615
+      },
+      {
+       "id": "enter_search_query",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.996,
+       "detail": "",
+       "ms": 2214
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ]
+  },
+  "target": {
+   "app": "com.target.ui",
+   "category": "shopping",
+   "goal": "In the Target app, what are today's hours for my Target store?",
+   "graded_by": "shape",
+   "time": "2026-10-27T16:39:10+00:00",
+   "expect": "\\d{1,2}(:\\d\\d)?\\s*(am|pm)",
+   "expect_second": null,
+   "agent": {
+    "status": "done",
+    "result": "My Target store (Chelsea 23rd and 8th) today's hours for Today 10/27: 8am open - 11pm close",
+    "steps": 4,
+    "model_calls": 7,
+    "cost_at_standard_usd": 0.017262,
+    "duration_s": 22.24,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Target, Today, 10, 27"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "target_get_store_hours",
+    "steps": 4,
+    "inputs": {},
+    "outputs": [
+     "today_open_time",
+     "today_close_time",
+     "today_date"
+    ],
+    "dropped": [
+     [
+      4,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ]
+    ],
+    "warnings": [],
+    "cost_usd": 0.0
+   },
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {},
+     "repair_allowed": false,
+     "status": "failed",
+     "result": "bot check",
+     "detail": "step open_my_target: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00); no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+     "outputs": {},
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 7.72,
+     "steps": [
+      {
+       "id": "open_my_target",
+       "status": "failed",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 4.1 s",
+        "wait and retry: waited 3.4 s"
+       ],
+       "score": 1.0,
+       "detail": "step open_my_target: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00); no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+       "ms": 7460
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ]
+  },
+  "target_search": {
+   "app": "com.target.ui",
+   "category": "shopping",
+   "goal": "In the Target app, search for paper towels and tell me the price of the first result.",
+   "graded_by": "shape",
+   "time": "2026-10-27T16:39:18+00:00",
+   "expect": "\\$\\s?\\d+(\\.\\d{2})?",
+   "expect_second": "\\$\\s?\\d+(\\.\\d{2})?",
+   "agent": {
+    "status": "handoff",
+    "result": "Human verification press-and-hold check must be completed by user",
+    "steps": 0,
+    "model_calls": 2,
+    "cost_at_standard_usd": 0.0044321000000000004,
+    "duration_s": 11.85,
+    "popups": [],
+    "check": null
+   },
+   "first_run": "bot check",
+   "compile": {
+    "compiled": false,
+    "reason": "run ended 'handoff' with check None; only verified runs are compiled"
+   }
+  },
+  "starbucks": {
+   "app": "com.starbucks.mobilecard",
+   "category": "food",
+   "goal": "In the Starbucks app, how many calories are in a Grande Caffè Latte?",
+   "graded_by": "truth",
+   "time": "2026-10-27T16:39:18+00:00",
+   "expect": "\\b190\\b",
+   "expect_second": "\\b250\\b",
+   "agent": {
+    "status": "done",
+    "result": "Grande Caffè Latte is 190 calories as shown on the Caffè Latte detail page with Grande (16 fl oz) selected.",
+    "steps": 7,
+    "model_calls": 9,
+    "cost_at_standard_usd": 0.01293685,
+    "duration_s": 25.72,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Grande, Caff, Latte, 190"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "starbucks_lookup_drink_calories",
+    "steps": 8,
+    "inputs": {
+     "drink_name": "Caffe Latte"
+    },
+    "outputs": [
+     "calories"
+    ],
+    "dropped": [],
+    "warnings": [],
+    "cost_usd": 0.0
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "drink_name": "Caffe Latte"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "calories": "190 calories"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 9.94,
+     "steps": [
+      {
+       "id": "tap_order",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 2.0 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 3178
+      },
+      {
+       "id": "dismiss_location_prompt",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 702
+      },
+      {
+       "id": "skip_store_selection",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.994,
+       "detail": "",
+       "ms": 602
+      },
+      {
+       "id": "confirm_skip_to_menu",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 832
+      },
+      {
+       "id": "open_menu_search",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.997,
+       "detail": "",
+       "ms": 1275
+      },
+      {
+       "id": "search_for_drink",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.995,
+       "detail": "",
+       "ms": 1100
+      },
+      {
+       "id": "find_open_drink_details",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 304
+      },
+      {
+       "id": "open_drink_details",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 611
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "drink_name": "Caramel Macchiato"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "calories": "250 calories"
+     },
+     "rung": 2,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 9.18,
+     "steps": [
+      {
+       "id": "tap_order",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.5 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2283
+      },
+      {
+       "id": "dismiss_location_prompt",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 576
+      },
+      {
+       "id": "skip_store_selection",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.994,
+       "detail": "",
+       "ms": 619
+      },
+      {
+       "id": "confirm_skip_to_menu",
+       "status": "done",
+       "rung": 2,
+       "rungs": [
+        "relaxed match: after-checks failed but the next step (open_menu_search) is ready"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2028
+      },
+      {
+       "id": "open_menu_search",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.997,
+       "detail": "",
+       "ms": 661
+      },
+      {
+       "id": "search_for_drink",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.995,
+       "detail": "",
+       "ms": 804
+      },
+      {
+       "id": "find_open_drink_details",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 331
+      },
+      {
+       "id": "open_drink_details",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 644
+      }
+     ],
+     "patches": [
+      "step 'confirm_skip_to_menu': after-checks failed (still present: [28] \"For item availability · Choose a café\" score 0.96 (runner-u) but the next step was ready; after-checks rewritten from what happened"
+     ],
+     "popups": []
+    }
+   ]
+  },
+  "chipotle": {
+   "app": "com.chipotle.ordering",
+   "category": "food",
+   "goal": "In the Chipotle app, find the price of Chips & Guacamole.",
+   "graded_by": "shape",
+   "time": "2026-10-27T16:39:37+00:00",
+   "expect": "\\$\\s?\\d+(\\.\\d{2})?",
+   "expect_second": "\\$\\s?\\d+(\\.\\d{2})?",
+   "agent": {
+    "status": "done",
+    "result": "Chips & Guacamole is $5.25",
+    "steps": 14,
+    "model_calls": 18,
+    "cost_at_standard_usd": 0.030795100000000002,
+    "duration_s": 47.44,
+    "popups": [
+     "permission prompt: deny"
+    ],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Chips, Guacamole, 5, 25"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "chipotle_get_menu_item_price",
+    "steps": 11,
+    "inputs": {
+     "zip_code": "10001"
+    },
+    "outputs": [
+     "price"
+    ],
+    "dropped": [
+     [
+      2,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      5,
+      "pop-up (permission prompt: deny): the shared handler covers it"
+     ],
+     [
+      9,
+      "look: not a device action"
+     ],
+     [
+      11,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      8,
+      "back-track: steps 8–12 returned to the same screen"
+     ],
+     [
+      10,
+      "back-track: steps 8–12 returned to the same screen"
+     ],
+     [
+      12,
+      "back-track: steps 8–12 returned to the same screen"
+     ]
+    ],
+    "warnings": [
+     "input 'menu_item_name' is never used or shown; dropped"
+    ],
+    "cost_usd": 0.0
+   },
+   "second_input_bound": false,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "zip_code": "10001"
+     },
+     "repair_allowed": false,
+     "status": "failed",
+     "result": "fail",
+     "detail": "step select_zip_code_suggestion: target not found: no match (best 0.98 < 0.80 or ambiguous, runner-up 0.90)",
+     "outputs": {},
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 9.68,
+     "steps": [
+      {
+       "id": "open_menu",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.5 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2143
+      },
+      {
+       "id": "find_chipote_for_full_menu",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 817
+      },
+      {
+       "id": "dismiss_location_notice",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.998,
+       "detail": "",
+       "ms": 704
+      },
+      {
+       "id": "enter_zip_code",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 728
+      },
+      {
+       "id": "select_zip_code_suggestion",
+       "status": "failed",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: waited 5 s"
+       ],
+       "score": null,
+       "detail": "step select_zip_code_suggestion: target not found: no match (best 0.98 < 0.80 or ambiguous, runner-up 0.90)",
+       "ms": 5078
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "same input",
+     "inputs": {
+      "zip_code": "10001"
+     },
+     "repair_allowed": true,
+     "status": "failed",
+     "result": "fail",
+     "detail": "step scroll_to_chips_and_sides: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+     "outputs": {},
+     "rung": 4,
+     "model_calls": 3,
+     "cost_usd": 0.0131,
+     "duration_s": 44.97,
+     "steps": [
+      {
+       "id": "open_menu",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.3 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1813
+      },
+      {
+       "id": "find_chipote_for_full_menu",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 693
+      },
+      {
+       "id": "dismiss_location_notice",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.998,
+       "detail": "",
+       "ms": 510
+      },
+      {
+       "id": "enter_zip_code",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 800
+      },
+      {
+       "id": "select_zip_code_suggestion",
+       "status": "done",
+       "rung": 4,
+       "rungs": [
+        "wait and retry: waited 5 s",
+        "local repair: 1 repair action(s) satisfied the after-checks"
+       ],
+       "score": null,
+       "detail": "",
+       "ms": 5033
+      },
+      {
+       "id": "expand_store_list",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 836
+      },
+      {
+       "id": "find_select_pickup_store",
+       "status": "done",
+       "rung": 2,
+       "rungs": [
+        "wait and retry: scrolled 8 times without finding {text_has='{{zip_code}}', resource_id='view_container', kind='Button'}",
+        "relaxed match: the app skipped ahead to scroll_to_chips_and_sides"
+       ],
+       "score": null,
+       "detail": "",
+       "ms": 12097
+      },
+      {
+       "id": "select_pickup_store",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its screen no longer appears",
+       "ms": 0
+      },
+      {
+       "id": "confirm_pickup_location",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its screen no longer appears",
+       "ms": 0
+      },
+      {
+       "id": "scroll_to_chips_and_sides",
+       "status": "failed",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: scrolled 8 times without finding {text='CHIPS & SIDES', resource_id='view_container', kind='Button'}",
+        "wait and retry: waited 5.0 s"
+       ],
+       "score": null,
+       "detail": "step scroll_to_chips_and_sides: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+       "ms": 9172
+      }
+     ],
+     "patches": [
+      "step 'select_zip_code_suggestion': the element moved or changed; new locator {text_has='{{zip_code}}', resource_id='cl_auto_search', kind='Button'}",
+      "step 'select_pickup_store' removed: its screen no longer appears after 'find_select_pickup_store'; the app went straight to 'scroll_to_chips_and_sides'",
+      "step 'confirm_pickup_location' removed: its screen no longer appears after 'find_select_pickup_store'; the app went straight to 'scroll_to_chips_and_sides'"
+     ],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "result": "input not learned",
+     "detail": "the compiled routine has no input the second value fits"
+    }
+   ]
+  },
+  "doordash": {
+   "app": "com.dd.doordash",
+   "category": "food",
+   "goal": "In the DoorDash app, what is my saved delivery address?",
+   "graded_by": "truth",
+   "time": "2026-10-27T16:40:32+00:00",
+   "expect": "Hacker Way",
+   "expect_second": null,
+   "agent": {
+    "status": "done",
+    "result": "[redacted]",
+    "steps": 1,
+    "model_calls": 3,
+    "cost_at_standard_usd": 0.00539365,
+    "duration_s": 7.81,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: 1, Hacker, Way, Menlo"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "doordash_get_saved_delivery_address",
+    "steps": 1,
+    "inputs": {},
+    "outputs": [
+     "saved_delivery_address"
+    ],
+    "dropped": [],
+    "warnings": [],
+    "cost_usd": 0.0
+   },
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {},
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "saved_delivery_address": "[redacted]"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 6.89,
+     "steps": [
+      {
+       "id": "tap_delivery_address_toolbar",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 6.1 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 6645
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ]
+  },
+  "doordash_search": {
+   "app": "com.dd.doordash",
+   "category": "food",
+   "goal": "In the DoorDash app, search for pizza and tell me the name of the first restaurant in the results.",
+   "graded_by": "shape",
+   "time": "2026-10-27T16:40:39+00:00",
+   "expect": "\\w",
+   "expect_second": "\\w",
+   "agent": {
+    "status": "done",
+    "result": "Mountain Mike's Pizza",
+    "steps": 3,
+    "model_calls": 5,
+    "cost_at_standard_usd": 0.009078949999999999,
+    "duration_s": 13.24,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Mountain, Mike, Pizza"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "doordash_find_first_restaurant",
+    "steps": 3,
+    "inputs": {
+     "search_query": "pizza"
+    },
+    "outputs": [
+     "first_restaurant_name"
+    ],
+    "dropped": [],
+    "warnings": [],
+    "cost_usd": 0.0
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "search_query": "pizza"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "first_restaurant_name": "Papa Johns Pizza"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 8.51,
+     "steps": [
+      {
+       "id": "open_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 3.1 s",
+        "wait and retry: after-checks held after 1.7 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 4838
+      },
+      {
+       "id": "enter_search_query",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1965
+      },
+      {
+       "id": "filter_by_restaurant",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 417
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "search_query": "sushi"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "first_restaurant_name": "La Casa De Los Huevos"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 8.91,
+     "steps": [
+      {
+       "id": "open_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 4.2 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 5413
+      },
+      {
+       "id": "enter_search_query",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1625
+      },
+      {
+       "id": "filter_by_restaurant",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.942,
+       "detail": "",
+       "ms": 817
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ]
+  },
+  "settings_version": {
+   "app": "com.android.settings",
+   "category": "system",
+   "goal": "In the Settings app, what Android version is this phone running?",
+   "graded_by": "truth",
+   "time": "2026-10-27T16:40:56+00:00",
+   "expect": "\\b15\\b",
+   "expect_second": null,
+   "agent": {
+    "status": "failed",
+    "result": "stuck on the same screen after two recoveries",
+    "steps": 8,
+    "model_calls": 12,
+    "cost_at_standard_usd": 0.02569195,
+    "duration_s": 29.06,
+    "popups": [],
+    "check": null
+   },
+   "first_run": "failed",
+   "compile": {
+    "compiled": false,
+    "reason": "run ended 'failed' with check None; only verified runs are compiled"
+   }
+  },
+  "settings_bluetooth": {
+   "app": "com.android.settings",
+   "category": "system",
+   "goal": "In the Settings app, is Bluetooth turned on or off?",
+   "graded_by": "truth",
+   "time": "2026-10-27T16:40:56+00:00",
+   "expect": "^(?!.*\\boff\\b).*\\b(on|enabled)\\b",
+   "expect_second": null,
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "Bluetooth is turned on",
+    "steps": 3,
+    "model_calls": 7,
+    "cost_at_standard_usd": 0.0119136,
+    "duration_s": 13.97,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Bluetooth"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "settings_check_bluetooth_status",
+    "steps": 3,
+    "inputs": {},
+    "outputs": [
+     "bluetooth_status"
+    ],
+    "dropped": [
+     [
+      1,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      3,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ]
+    ],
+    "warnings": [],
+    "cost_usd": 0.036
+   },
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {},
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "bluetooth_status": "on"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 2.68,
+     "steps": [
+      {
+       "id": "open_connected_devices",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 0.7 s"
+       ],
+       "score": 0.997,
+       "detail": "",
+       "ms": 1292
+      },
+      {
+       "id": "open_connection_preferences",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.997,
+       "detail": "",
+       "ms": 568
+      },
+      {
+       "id": "open_bluetooth",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.991,
+       "detail": "",
+       "ms": 490
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ]
+  },
+  "gmail_newest": {
+   "app": "com.google.android.gm",
+   "category": "google",
+   "goal": "In the Gmail app, what is the subject of the newest email in my inbox?",
+   "graded_by": "truth",
+   "time": "2026-10-27T16:41:47+00:00",
+   "expect": "Your.*Android.*device.*will",
+   "expect_second": null,
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "step_limit",
+    "result": "stopped after 25 steps",
+    "steps": 16,
+    "model_calls": 27,
+    "cost_at_standard_usd": 0.05413395,
+    "duration_s": 63.03,
+    "popups": [
+     "permission prompt: deny"
+    ],
+    "check": null
+   },
+   "first_run": "step_limit",
+   "compile": {
+    "compiled": false,
+    "reason": "run ended 'step_limit' with check None; only verified runs are compiled"
+   }
+  },
+  "gmail_search": {
+   "app": "com.google.android.gm",
+   "category": "google",
+   "goal": "In the Gmail app, search my mail for DoorDash and tell me the subject of the first result.",
+   "graded_by": "truth",
+   "time": "2026-10-27T16:58:19+00:00",
+   "expect": "Hey.*you.*made.*Here",
+   "expect_second": "Security.*alert",
+   "agent": {
+    "status": "done",
+    "result": "Hey, you made it .. Here’s 40% off",
+    "steps": 3,
+    "model_calls": 8,
+    "cost_at_standard_usd": 0.0152791,
+    "duration_s": 15.28,
+    "popups": [
+     "permission prompt: deny"
+    ],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Hey, Here, 40"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "gmail_search_mail",
+    "steps": 3,
+    "inputs": {
+     "search_query": "DoorDash"
+    },
+    "outputs": [
+     "first_result_subject"
+    ],
+    "dropped": [
+     [
+      1,
+      "pop-up (permission prompt: deny): the shared handler covers it"
+     ],
+     [
+      2,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      3,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      5,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ]
+    ],
+    "warnings": [],
+    "cost_usd": 0.0
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "search_query": "DoorDash"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "wrong",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "first_result_subject": ", , , Google, , You shared some Google Account data with DoorDash Consumer, Keep track of your Google Account data envo…"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 3.8,
+     "steps": [
+      {
+       "id": "search_in_mail",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its after-checks already hold",
+       "ms": 108
+      },
+      {
+       "id": "find_open_first_search_result",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.848,
+       "detail": "",
+       "ms": 2495
+      },
+      {
+       "id": "open_first_search_result",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.848,
+       "detail": "",
+       "ms": 840
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "search_query": "Security alert"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "first_result_subject": "Security alert"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 3.59,
+     "steps": [
+      {
+       "id": "search_in_mail",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its after-checks already hold",
+       "ms": 106
+      },
+      {
+       "id": "find_open_first_search_result",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.856,
+       "detail": "",
+       "ms": 2389
+      },
+      {
+       "id": "open_first_search_result",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.856,
+       "detail": "",
+       "ms": 725
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ]
+  },
+  "calendar_today": {
+   "app": "com.google.android.calendar",
+   "category": "google",
+   "goal": "In Google Calendar, do I have any events today?",
+   "graded_by": "truth",
+   "time": "2026-10-27T16:45:02+00:00",
+   "expect": "\\b(no|none|nothing|not any|don't|do not)\\b",
+   "expect_second": null,
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "No - Today Tuesday 27 October 2026 shows \"Nothing planned. Tap to create.\"",
+    "steps": 3,
+    "model_calls": 15,
+    "cost_at_standard_usd": 0.0204161,
+    "duration_s": 21.1,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Today, Tuesday, 27, October"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "calendar_check_todays_events",
+    "steps": 2,
+    "inputs": {},
+    "outputs": [],
+    "dropped": [
+     [
+      2,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      3,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      4,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      5,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      6,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      7,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      8,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      9,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      11,
+      "no visible change (a retry or a dead tap)"
+     ]
+    ],
+    "warnings": [
+     "output 'todays_events': 'Nothing planned. Tap to create.' is not on the final screen, or nothing anchors it; dropped"
+    ],
+    "cost_usd": 0.0371
+   },
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {},
+     "repair_allowed": false,
+     "status": "failed",
+     "result": "fail",
+     "detail": "step tap_next_page: before-checks failed: no match (best 0.25 < 0.80 or ambiguous, runner-up 0.25)",
+     "outputs": {},
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 5.44,
+     "steps": [
+      {
+       "id": "tap_next_page",
+       "status": "failed",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: waited 5 s"
+       ],
+       "score": null,
+       "detail": "step tap_next_page: before-checks failed: no match (best 0.25 < 0.80 or ambiguous, runner-up 0.25)",
+       "ms": 5104
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "same input",
+     "inputs": {},
+     "repair_allowed": true,
+     "status": "failed",
+     "result": "fail",
+     "detail": "step tap_next_page: repair gave up: fail",
+     "outputs": {},
+     "rung": 1,
+     "model_calls": 2,
+     "cost_usd": 0.0272,
+     "duration_s": 30.52,
+     "steps": [
+      {
+       "id": "tap_next_page",
+       "status": "failed",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: waited 5 s"
+       ],
+       "score": null,
+       "detail": "step tap_next_page: repair gave up: fail",
+       "ms": 5109
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ]
+  },
+  "contacts_count": {
+   "app": "com.google.android.contacts",
+   "category": "google",
+   "goal": "In the Contacts app, how many contacts do I have?",
+   "graded_by": "truth",
+   "time": "2026-10-27T16:46:35+00:00",
+   "expect": "\\b(no|none|zero|0)\\b",
+   "expect_second": null,
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "You have 0 contacts - Contacts app shows 'No contacts yet'",
+    "steps": 13,
+    "model_calls": 21,
+    "cost_at_standard_usd": 0.0441473,
+    "duration_s": 49.69,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Contacts"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "contacts_get_contact_count",
+    "steps": 0,
+    "inputs": {},
+    "outputs": [],
+    "dropped": [
+     [
+      2,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      3,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      4,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      5,
+      "back-track: steps 5–17 returned to the same screen"
+     ],
+     [
+      6,
+      "back-track: steps 5–17 returned to the same screen"
+     ],
+     [
+      7,
+      "back-track: steps 5–17 returned to the same screen"
+     ],
+     [
+      8,
+      "back-track: steps 5–17 returned to the same screen"
+     ],
+     [
+      9,
+      "back-track: steps 5–17 returned to the same screen"
+     ],
+     [
+      10,
+      "back-track: steps 5–17 returned to the same screen"
+     ],
+     [
+      11,
+      "back-track: steps 5–17 returned to the same screen"
+     ],
+     [
+      12,
+      "back-track: steps 5–17 returned to the same screen"
+     ],
+     [
+      13,
+      "back-track: steps 5–17 returned to the same screen"
+     ],
+     [
+      14,
+      "back-track: steps 5–17 returned to the same screen"
+     ],
+     [
+      15,
+      "back-track: steps 5–17 returned to the same screen"
+     ],
+     [
+      16,
+      "back-track: steps 5–17 returned to the same screen"
+     ],
+     [
+      17,
+      "back-track: steps 5–17 returned to the same screen"
+     ]
+    ],
+    "warnings": [
+     "output 'contact_count': '0' is not on the final screen, or nothing anchors it; dropped"
+    ],
+    "cost_usd": 0.0405
+   },
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {},
+     "repair_allowed": false,
+     "status": "done",
+     "result": "wrong",
+     "detail": "all steps and checks passed",
+     "outputs": {},
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 0.39,
+     "steps": [],
+     "patches": [],
+     "popups": []
+    }
+   ]
+  },
+  "maps_address": {
+   "app": "com.google.android.apps.maps",
+   "category": "maps",
+   "goal": "In Google Maps, search for the Empire State Building and tell me its street address.",
+   "graded_by": "truth",
+   "time": "2026-10-27T16:58:27+00:00",
+   "expect": "350\\s+(5th|fifth)\\s+ave|20\\s+w(est)?\\.?\\s+34th",
+   "expect_second": "400\\s+broad\\s+st",
+   "agent": {
+    "status": "done",
+    "result": "20 W 34th St., New York, NY 10001",
+    "steps": 5,
+    "model_calls": 11,
+    "cost_at_standard_usd": 0.0158854,
+    "duration_s": 46.38,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: 20, 34th, New, York"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "maps_look_up_place_address",
+    "steps": 6,
+    "inputs": {
+     "place_name": "Empire State Building"
+    },
+    "outputs": [
+     "street_address"
+    ],
+    "dropped": [
+     [
+      2,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      5,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      6,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      7,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ]
+    ],
+    "warnings": [],
+    "cost_usd": 0.0
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "place_name": "Empire State Building"
+     },
+     "repair_allowed": false,
+     "status": "failed",
+     "result": "fail",
+     "detail": "step scroll_to_street_address: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+     "outputs": {},
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 40.93,
+     "steps": [
+      {
+       "id": "tap_search_field",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.3 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1949
+      },
+      {
+       "id": "type_place_name",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 2.6 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 5679
+      },
+      {
+       "id": "find_open_place_result",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.967,
+       "detail": "",
+       "ms": 1962
+      },
+      {
+       "id": "open_place_result",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.967,
+       "detail": "",
+       "ms": 1884
+      },
+      {
+       "id": "close_immersive_preview",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 959
+      },
+      {
+       "id": "scroll_to_street_address",
+       "status": "failed",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: scrolled 8 times without finding {text='Address'}",
+        "wait and retry: waited 1.6 s"
+       ],
+       "score": null,
+       "detail": "step scroll_to_street_address: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+       "ms": 28345
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "same input",
+     "inputs": {
+      "place_name": "Empire State Building"
+     },
+     "repair_allowed": true,
+     "status": "failed",
+     "result": "fail",
+     "detail": "step scroll_to_street_address: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+     "outputs": {},
+     "rung": 1,
+     "model_calls": 2,
+     "cost_usd": 0.0081,
+     "duration_s": 54.07,
+     "steps": [
+      {
+       "id": "tap_search_field",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.7 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2535
+      },
+      {
+       "id": "type_place_name",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 2.1 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 5232
+      },
+      {
+       "id": "find_open_place_result",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.967,
+       "detail": "",
+       "ms": 2169
+      },
+      {
+       "id": "open_place_result",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.967,
+       "detail": "",
+       "ms": 1990
+      },
+      {
+       "id": "close_immersive_preview",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 945
+      },
+      {
+       "id": "scroll_to_street_address",
+       "status": "failed",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: scrolled 8 times without finding {text='Address'}",
+        "wait and retry: waited 1.5 s"
+       ],
+       "score": null,
+       "detail": "step scroll_to_street_address: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+       "ms": 28248
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "place_name": "Space Needle"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "street_address": "400 Broad St, Seattle, WA 98109"
+     },
+     "rung": 2,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 12.08,
+     "steps": [
+      {
+       "id": "tap_search_field",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.7 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2661
+      },
+      {
+       "id": "type_place_name",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 1.5 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2134
+      },
+      {
+       "id": "find_open_place_result",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.967,
+       "detail": "",
+       "ms": 699
+      },
+      {
+       "id": "open_place_result",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.967,
+       "detail": "",
+       "ms": 1262
+      },
+      {
+       "id": "close_immersive_preview",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1147
+      },
+      {
+       "id": "scroll_to_street_address",
+       "status": "done",
+       "rung": 2,
+       "rungs": [
+        "relaxed match: relaxed match while scrolling: [18] \"Address: 400 Broad St, Seattle, WA 98109\" score 0.60 (runner-up 0.00)",
+        "relaxed match: after-checks held at the relaxed threshold"
+       ],
+       "score": 0.6,
+       "detail": "",
+       "ms": 3857
+      }
+     ],
+     "patches": [
+      "step 'scroll_to_street_address': after-check 0 matched only relaxed; updated to {text='Address: 400 Broad St, Seattle, WA 98109', kind='Button'}"
+     ],
+     "popups": []
+    }
+   ]
+  },
+  "play_rating": {
+   "app": "com.android.vending",
+   "category": "store",
+   "goal": "In the Google Play Store app, what is the star rating of the Duolingo app?",
+   "graded_by": "shape",
+   "time": "2026-10-27T16:51:14+00:00",
+   "expect": "\\b[1-5]\\.\\d\\b",
+   "expect_second": "\\b[1-5]\\.\\d\\b",
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "4.7 stars - Average rating 4.7 stars in 48 million reviews",
+    "steps": 7,
+    "model_calls": 12,
+    "cost_at_standard_usd": 0.01686135,
+    "duration_s": 27.0,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: 4, 7, Average, 4"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "play_store_get_app_rating",
+    "steps": 7,
+    "inputs": {
+     "app_name": "Duolingo"
+    },
+    "outputs": [
+     "star_rating"
+    ],
+    "dropped": [
+     [
+      1,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      2,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ],
+     [
+      7,
+      "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+     ]
+    ],
+    "warnings": [],
+    "cost_usd": 0.0545
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "app_name": "Duolingo"
+     },
+     "repair_allowed": false,
+     "status": "failed",
+     "result": "fail",
+     "detail": "step skip_interests_onboarding: target not found: no match (best 0.25 < 0.80 or ambiguous, runner-up 0.00)",
+     "outputs": {},
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 5.34,
+     "steps": [
+      {
+       "id": "skip_interests_onboarding",
+       "status": "failed",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: waited 5 s"
+       ],
+       "score": null,
+       "detail": "step skip_interests_onboarding: target not found: no match (best 0.25 < 0.80 or ambiguous, runner-up 0.00)",
+       "ms": 5040
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "same input",
+     "inputs": {
+      "app_name": "Duolingo"
+     },
+     "repair_allowed": true,
+     "status": "failed",
+     "result": "fail",
+     "detail": "step continue_onboarding: target not found: no match (best 0.42 < 0.80 or ambiguous, runner-up 0.41)",
+     "outputs": {},
+     "rung": 4,
+     "model_calls": 4,
+     "cost_usd": 0.0351,
+     "duration_s": 43.43,
+     "steps": [
+      {
+       "id": "skip_interests_onboarding",
+       "status": "done",
+       "rung": 4,
+       "rungs": [
+        "wait and retry: waited 5 s",
+        "local repair: 1 repair action(s) satisfied the after-checks"
+       ],
+       "score": null,
+       "detail": "",
+       "ms": 5051
+      },
+      {
+       "id": "continue_onboarding",
+       "status": "failed",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: waited 5 s"
+       ],
+       "score": null,
+       "detail": "step continue_onboarding: target not found: no match (best 0.42 < 0.80 or ambiguous, runner-up 0.41)",
+       "ms": 5061
+      }
+     ],
+     "patches": [
+      "step 'skip_interests_onboarding': the element moved or changed; new locator {text='Search', kind='Button'}"
+     ],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "app_name": "Spotify"
+     },
+     "repair_allowed": false,
+     "status": "failed",
+     "result": "fail",
+     "detail": "step skip_interests_onboarding: target not found: no match (best 0.41 < 0.80 or ambiguous, runner-up 0.36)",
+     "outputs": {},
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 5.24,
+     "steps": [
+      {
+       "id": "skip_interests_onboarding",
+       "status": "failed",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: waited 5 s"
+       ],
+       "score": null,
+       "detail": "step skip_interests_onboarding: target not found: no match (best 0.41 < 0.80 or ambiguous, runner-up 0.36)",
+       "ms": 5025
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "app_name": "Spotify"
+     },
+     "repair_allowed": true,
+     "status": "failed",
+     "result": "fail",
+     "detail": "step continue_onboarding: target not found: no match (best 0.42 < 0.80 or ambiguous, runner-up 0.41)",
+     "outputs": {},
+     "rung": 4,
+     "model_calls": 3,
+     "cost_usd": 0.0192,
+     "duration_s": 29.11,
+     "steps": [
+      {
+       "id": "skip_interests_onboarding",
+       "status": "done",
+       "rung": 4,
+       "rungs": [
+        "wait and retry: waited 5 s",
+        "local repair: 1 repair action(s) satisfied the after-checks"
+       ],
+       "score": null,
+       "detail": "",
+       "ms": 5098
+      },
+      {
+       "id": "continue_onboarding",
+       "status": "failed",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: waited 5 s"
+       ],
+       "score": null,
+       "detail": "step continue_onboarding: target not found: no match (best 0.42 < 0.80 or ambiguous, runner-up 0.41)",
+       "ms": 5092
+      }
+     ],
+     "patches": [
+      "step 'skip_interests_onboarding': the element moved or changed; new locator {text='Search', kind='Button'}"
+     ],
+     "popups": []
+    }
+   ]
+  },
+  "youtube_search": {
+   "app": "com.google.android.youtube",
+   "category": "media",
+   "goal": "In the YouTube app, search for lofi hip hop and tell me the title of the first video in the results.",
+   "graded_by": "shape",
+   "time": "2026-10-27T16:53:48+00:00",
+   "expect": "\\w",
+   "expect_second": "\\w",
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "step_limit",
+    "result": "stopped after 25 steps",
+    "steps": 15,
+    "model_calls": 26,
+    "cost_at_standard_usd": 0.04377394999999999,
+    "duration_s": 46.54,
+    "popups": [
+     "permission prompt: deny"
+    ],
+    "check": null
+   },
+   "first_run": "step_limit",
+   "compile": {
+    "compiled": false,
+    "reason": "run ended 'step_limit' with check None; only verified runs are compiled"
+   }
+  },
+  "ytmusic_artist": {
+   "app": "com.google.android.apps.youtube.music",
+   "category": "media",
+   "goal": "In the YouTube Music app, search for the song Bohemian Rhapsody and tell me the artist of the first song result.",
+   "graded_by": "truth",
+   "time": "2026-10-27T17:00:14+00:00",
+   "expect": "^\\W*queen\\W*$",
+   "expect_second": "^\\W*ed sheeran\\W*$",
+   "agent": {
+    "status": "done",
+    "result": "Queen",
+    "steps": 3,
+    "model_calls": 4,
+    "cost_at_standard_usd": 0.0068471,
+    "duration_s": 9.45,
+    "popups": [
+     "permission prompt: deny"
+    ],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Queen"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "youtube_music_search_song",
+    "steps": 2,
+    "inputs": {
+     "song_name": "Bohemian Rhapsody"
+    },
+    "outputs": [
+     "artist"
+    ],
+    "dropped": [
+     [
+      1,
+      "pop-up (permission prompt: deny): the shared handler covers it"
+     ]
+    ],
+    "warnings": [],
+    "cost_usd": 0.0
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "song_name": "Bohemian Rhapsody"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "wrong",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "artist": "Queen • 5:55 • 2.7B plays"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 7.76,
+     "steps": [
+      {
+       "id": "open_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.5 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2037
+      },
+      {
+       "id": "enter_song_name",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 1.7 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 4754
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "song_name": "Shape of You"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "wrong",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "artist": "Ed Sheeran • 3:54 • 9.5B plays"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 8.19,
+     "steps": [
+      {
+       "id": "open_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 2.1 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2747
+      },
+      {
+       "id": "enter_song_name",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 4320
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ]
+  },
+  "chrome_wikipedia": {
+   "app": "com.android.chrome",
+   "category": "web",
+   "goal": "In Chrome, go to en.m.wikipedia.org, search for Eiffel Tower and tell me the year it opened.",
+   "graded_by": "truth",
+   "time": "2026-10-27T17:00:30+00:00",
+   "expect": "\\b1889\\b",
+   "expect_second": "\\b1886\\b",
+   "agent": {
+    "status": "done_unverified",
+    "result": "The Eiffel Tower opened in 1889 - Opening: 15 May 1889; 137 years ago as shown in the Wikipedia infobox",
+    "steps": 13,
+    "model_calls": 23,
+    "cost_at_standard_usd": 0.05138245,
+    "duration_s": 94.27,
+    "popups": [
+     "notification prompt: no thanks"
+    ],
+    "check": {
+     "passed": false,
+     "evaluable": true,
+     "detail": "none of ['Eiffel', 'Tower', '1889', 'Opening', '15'] is visible on the current screen"
+    }
+   },
+   "first_run": "right, unverified",
+   "compile": {
+    "compiled": false,
+    "reason": "run ended 'done_unverified' with check \"none of ['Eiffel', 'Tower', '1889', 'Opening', '15'] is visible on the current screen\"; only verified runs are compiled"
+   }
+  }
+ }
+}

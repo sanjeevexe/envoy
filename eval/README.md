@@ -10,5 +10,5 @@ Task sets, injected UI changes, runners and reports. `fixtures/phase0/` holds th
 | `baselines.py` | Fixed replay (recorded coordinates + screen-similarity check, like Mobilerun macros) |
 | `tune_locators.py` | Locator thresholds tuned on SkyLark screens from all layouts, with and without IDs |
 | `run_matching.py` | Request → routine matching set |
-| `run_real_apps.py` | Real-app checkpoint on envoy-real (read-only) |
+| `run_real_apps.py` | The real-app test set on envoy-real (read-only): 18 workflows across shopping, food, Google's apps, maps, media and the web, each scored at first run, compile, same-input rerun and new-input rerun, against ground truth where there is one. `--regression` after any routines change (no agent runs, cached compile answers: 0 model calls unless a repair runs). Results: `results/real_apps/report.md` |
 | `run_phase2.sh`, `routines_report.py` | The whole Phase 2 evaluation and its report (`results/phase2/report.md`) |

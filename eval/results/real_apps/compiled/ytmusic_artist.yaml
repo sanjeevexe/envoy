@@ -1,0 +1,74 @@
+routine: youtube_music_search_song
+app: com.google.android.apps.youtube.music
+version: 1
+status: draft
+intent: Find the artist of a song in YouTube Music
+description: Search YouTube Music for a requested song and report the artist shown for the first song result.
+patterns: [search for a song and tell me the artist, who is the artist of this song, find the artist of the first song result, look up a song
+    in YouTube Music]
+outputs: [artist]
+start: fresh_launch
+inputs:
+  song_name: {type: text, description: The song title to search for., example: Bohemian Rhapsody}
+steps:
+- id: open_search
+  intent: Tap Search to open search
+  pre:
+  - {app_foreground: com.google.android.apps.youtube.music}
+  - element_present: {resource_id: watch_fragment_container, text: Video player, kind: Text}
+  action:
+    tap:
+      resource_id: action_search_button
+      text: Search
+      kind: Button
+      cls: ImageButton
+      siblings: [Account]
+      in_list: true
+      position: [0.814, 0.08]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: toolbar_back_navigation, text: Search back, kind: Button}
+  - element_present: {resource_id: search_edit_text, text: 'Search songs, artists, podcasts', kind: EditText}
+  risk: reversible
+  note: trace step 2
+- id: enter_song_name
+  intent: "Type {{song_name}} into the search field"
+  pre:
+  - {app_foreground: com.google.android.apps.youtube.music}
+  action:
+    type:
+      field:
+        resource_id: search_edit_text
+        text: Search songs, artists, podcasts
+        hint: Search songs, artists, podcasts
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.494, 0.08]
+      value: "{{song_name}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: search_edit_text
+      text: "Search songs, artists, podcasts: {{song_name}}"
+      kind: EditText
+  - element_present: {resource_id: search_clear, text: Clear search, kind: Button}
+  risk: reversible
+  extract:
+    artist:
+      near: Song •
+      locator: {resource_id: music_card_container, kind: Button}
+      segment: 1
+      first_in_list: false
+      next_element: false
+      expect_digits: false
+  note: trace step 3
+compiled_from:
+  task_id: p2-real-ytmusic_artist
+  goal: In the YouTube Music app, search for the song Bohemian Rhapsody and tell me the artist of the first song result.
+  compiler: cached
+  compiled_at: "2026-10-27 13:00:14"
+  trace_steps_kept: [2, 3]
+  trace_steps_dropped: 1
+  cost_usd: 0.0
