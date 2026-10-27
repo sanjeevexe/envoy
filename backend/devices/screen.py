@@ -169,7 +169,7 @@ def number_elements(elements: list[Element], width: int, height: int) -> list[El
             if not label and not e.editable and not e.scrollable:
                 parts: list[str] = []
                 descendant_text(e.index, parts)
-                label = " · ".join(parts)
+                label = " · ".join(dict.fromkeys(parts))  # drop repeats such as "Order · Order"
             if e.editable and not label:
                 label = e.hint
             e.label = _clip(label)
@@ -189,7 +189,7 @@ def format_line(e: Element) -> str:
     parts = [f"[{e.number}] {e.kind}"]
     if e.label:
         parts.append(f'"{e.label}"')
-    if e.resource_id:
+    if _short_id(e.resource_id):
         parts.append(f"(id: {_short_id(e.resource_id)})")
     flags = []
     if e.editable:

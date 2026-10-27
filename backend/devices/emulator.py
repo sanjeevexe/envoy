@@ -57,7 +57,15 @@ class EmulatorDevice:
     def connect(self) -> "EmulatorDevice":
         self.adb = adbutils.adb.device(self.serial)
         self.u2 = u2.connect(self.serial)
-        info = self.u2.info  # starts the uiautomator2 server if needed
+        for attempt in range(3):  # the server sometimes restarts when a new client connects (seen in Phase 0)
+            try:
+                info = self.u2.info  # starts the uiautomator2 server if needed
+                self.u2.dump_hierarchy()  # and proves it answers
+                break
+            except Exception:
+                if attempt == 2:
+                    raise
+                time.sleep(1.5)
         density = int(re.search(r"(\d+)", self.adb.shell("wm density")).group(1))  # type: ignore[union-attr]
         self.capabilities = Capabilities(
             real_phone=False,
@@ -216,7 +224,9 @@ class EmulatorDevice:
                     self.u2.send_keys(a.text or "", clear=True)
                     self.u2.set_clipboard("")
                 if a.submit:
-                    self.u2.send_action()  # IME "smart enter": search / go / done, whichever the field wants
+                    # A plain Enter key. uiautomator2's send_action() would install and switch to its own IME
+                    # (seen in Phase 0), replacing the keyboard the user sees during a takeover.
+                    self.u2.press("enter")
             elif a.kind == "scroll":
                 x1, y1, x2, y2 = el.bounds if a.element is not None else (0, 0, self.capabilities.width, self.capabilities.height)
                 cx, cy = (x1 + x2) // 2, (y1 + y2) // 2

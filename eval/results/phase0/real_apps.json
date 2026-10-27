@@ -1,0 +1,280 @@
+[
+ {
+  "time": "2026-10-26T23:42:14+00:00",
+  "package": "com.target.ui",
+  "step": "install",
+  "result": "no Install button",
+  "screen": "App: com.android.vending · Screen: TransparentMainActivityPrivate · settled 8384 ms\n[1] Image \"Google Play services notification: Google Account updated\"\n[2] Button \"Close sheet\"\n[3] List (scrollable)\n[4] Text \"Target: Shop. Style. Save.\"\n[5] Button \"Target Corporation\"\n[6] Text \"Contains ads\"\n[7] List (scrollable)\n[8] Button \"Average rating 4.9 stars in 438 thousand reviews\"\n[9] Button \"Content rating Everyone\"\n[10] Text \"55 MB\"\n[11] Text \"Downloaded 10 million plus times\"\n[12] Button \"Install · Install\"\n[13] List (scrollable)\n[14] Text \"Play trailer for \"Target: Shop. Style. Save.\"\"\n[15] Button \"Play trailer for \"Target: Shop. Style. Save.\"\"\n[16] Text \"Play Trailer\"\n[17] Button \"Screenshot 1 of 8\"\n[18] Button \"About this app\"\n[19] Button \"Learn more About this app\"\n[20] Text \"Find great deals on fashion, beauty, essentials, accessories & home decor\"\n[21] Toggle \"Shopping tag\" (off)\n[22] Toggle \"Retailer tag\" (off)\n[23] Toggle \"Android Auto tag\" (off)\n[24] Button \"More options\"\n[25] Button \"Close\"\n(screen has a scrollable list; scroll to see more)"
+ },
+ {
+  "time": "2026-10-26T23:48:06+00:00",
+  "package": "com.target.ui",
+  "step": "install",
+  "result": "installed",
+  "seconds": 335
+ },
+ {
+  "time": "2026-10-26T23:49:12+00:00",
+  "package": "com.target.ui",
+  "step": "launch",
+  "foreground": "com.target.ui",
+  "activity": "com.target.ui.activity.NavigationActivity",
+  "running": true,
+  "secure": false,
+  "password_field": false,
+  "tree_nodes": 41,
+  "tree_readable": true,
+  "black": {
+   "grpc": false,
+   "screencap": false,
+   "scrcpy": false
+  },
+  "black_fraction": {
+   "grpc": 0.0,
+   "screencap": 0.0,
+   "scrcpy": 0.0
+  },
+  "blocking_words": [],
+  "screen": "App: com.target.ui · Screen: NavigationActivity · settled 120 ms\n[1] Button \"Sign in or create account\"\n[2] Button \"Skip\"\n[3] Image \"Google Play services notification: Google Account updated\""
+ },
+ {
+  "time": "2026-10-26T23:53:22+00:00",
+  "package": "com.target.ui",
+  "step": "signin",
+  "foreground": "com.target.ui",
+  "activity": "com.target.android.gspnative.sdk.ui.entry.AuthEntryActivity",
+  "running": true,
+  "secure": false,
+  "password_field": false,
+  "tree_nodes": 61,
+  "tree_readable": true,
+  "black": {
+   "grpc": false,
+   "screencap": false,
+   "scrcpy": false
+  },
+  "black_fraction": {
+   "grpc": 0.0,
+   "screencap": 0.0,
+   "scrcpy": 0.0
+  },
+  "blocking_words": [],
+  "screen": "App: com.target.ui · Screen: AuthEntryActivity · settled 43 ms\n[1] Text \"Sign in or create account\"\n[2] Text \"By continuing, you agree to Target’s terms and privacy policy\"\n[3] EditText (empty)\n[4] Text \"Email or mobile number\"\n[5] Button \"Continue\"\n[6] Text \"or\"\n[7] Button \"Sign in with passkey\"\n[8] Button \"What’s a passkey?\"\n[9] Button \"close\"\n[10] Image \"Google Play services notification: Google Account updated\"\n[11] Image \"Android System notification: Configure qwerty2\""
+ },
+ {
+  "time": "2026-10-26T23:53:48+00:00",
+  "package": "com.starbucks.mobilecard",
+  "step": "launch",
+  "foreground": "com.google.android.permissioncontroller",
+  "activity": "com.android.permissioncontroller.permission.ui.GrantPermissionsActivity",
+  "running": true,
+  "secure": false,
+  "password_field": false,
+  "tree_nodes": 41,
+  "tree_readable": true,
+  "black": {
+   "grpc": false,
+   "screencap": false,
+   "scrcpy": false
+  },
+  "black_fraction": {
+   "grpc": 0.0,
+   "screencap": 0.0,
+   "scrcpy": 0.0
+  },
+  "blocking_words": [],
+  "screen": "App: com.google.android.permissioncontroller · Screen: GrantPermissionsActivity · settled 5020 ms\n[1] Button (id: grant_singleton)\n[2] Button \"Allow Starbucks to send you notifications?\" (id: grant_dialog)\n[3] Button \"Allow\" (id: permission_allow_button)\n[4] Button \"Don’t allow\" (id: permission_deny_button)\n[5] Image \"Google Play services notification: Google Account updated\"\n[6] Image \"Android System notification: Configure qwerty2\""
+ },
+ {
+  "time": "2026-10-27T00:07:20+00:00",
+  "package": "com.starbucks.mobilecard",
+  "step": "signin",
+  "foreground": "com.android.chrome",
+  "activity": "org.chromium.chrome.browser.firstrun.FirstRunActivity",
+  "running": true,
+  "secure": false,
+  "password_field": false,
+  "tree_nodes": 58,
+  "tree_readable": true,
+  "black": {
+   "grpc": false,
+   "screencap": false,
+   "scrcpy": false
+  },
+  "black_fraction": {
+   "grpc": 0.0,
+   "screencap": 0.0,
+   "scrcpy": 0.0
+  },
+  "blocking_words": [],
+  "screen": "App: com.android.chrome · Screen: FirstRunActivity · settled 38 ms\n[1] Image \"Google Play services notification: Google Account updated\"\n[2] Image \"Android System notification: Configure qwerty2\"\n[3] List (scrollable)\n[4] Text \"Make Chrome your own\" (id: title)\n[5] Text \"Sign in to get your bookmarks, passwords, and more on all your devices\" (id: subtitle)\n[6] Button \"envoy, <email> currently selected. Choose an account.\" (id: signin_fre_selected_account)\n[7] Text \"<email>\" (id: account_text_secondary)\n[8] Button \"Continue as envoy\" (id: signin_fre_continue_button)\n[9] Button \"Stay signed out\" (id: signin_fre_dismiss_button)\n[10] Button \"By continuing, you agree to the Terms of Service. To help improve the app, Chro…\" (id: signin_fre_footer)\n(screen has a scrollable list; scroll to see more)"
+ },
+ {
+  "time": "2026-10-27T00:08:02+00:00",
+  "package": "com.starbucks.mobilecard",
+  "step": "signin_customtab",
+  "foreground": "com.android.chrome",
+  "activity": "org.chromium.chrome.browser.customtabs.CustomTabActivity",
+  "running": true,
+  "secure": true,
+  "password_field": true,
+  "tree_nodes": 78,
+  "tree_readable": true,
+  "black": {
+   "grpc": false,
+   "screencap": true,
+   "scrcpy": true
+  },
+  "black_fraction": {
+   "grpc": 0.0,
+   "screencap": 1.0,
+   "scrcpy": 1.0
+  },
+  "blocking_words": [],
+  "screen": "App: com.android.chrome · Screen: CustomTabActivity · settled 47 ms\n(secure screen: the app marked it private; sign-in and payment here are for the user)\n[1] Text \"Welcome back!\"\n[2] Text \"Email address\" (id: username-label)\n[3] EditText (id: username) (empty, focused)\n[4] Text \"Password\" (id: password-label)\n[5] EditText (id: password) (password, empty)\n[6] Button \"Show password\"\n[7] Button \"Forgot your password?\"\n[8] Button \"Sign in\"\n[9] Text \"Don't have an account?\"\n[10] Button \"Join now\"\n[11] Button (id: toolbar)\n[12] Button \"Close tab\" (id: close_button)\n[13] Button (id: title_url_container)\n[14] Button \"Sign into Starbucks Rewards Account\" (id: title_bar)\n[15] Button \"auth.starbucks.com\" (id: url_bar)\n[16] Button \"Customize and control Google Chrome\" (id: menu_button)\n[17] Image \"Google Play services notification: Google Account updated\"\n[18] Image \"Android System notification: Configure qwerty2\""
+ },
+ {
+  "time": "2026-10-27T00:08:41+00:00",
+  "package": "com.dd.doordash",
+  "step": "launch",
+  "foreground": "com.dd.doordash",
+  "activity": "com.doordash.consumer.ui.login.LauncherActivity",
+  "running": true,
+  "secure": false,
+  "password_field": false,
+  "tree_nodes": 40,
+  "tree_readable": true,
+  "black": {
+   "grpc": false,
+   "screencap": false,
+   "scrcpy": false
+  },
+  "black_fraction": {
+   "grpc": 0.0,
+   "screencap": 0.0,
+   "scrcpy": 0.0
+  },
+  "blocking_words": [],
+  "screen": "App: com.dd.doordash · Screen: LauncherActivity · settled 10864 ms\n[1] Text \"15.298.4\" (id: version_tag)\n[2] Text \"Launching…\" (id: progress_message)\n[3] Button \"CANCEL\" (id: cancel_button)\n[4] Image \"Google Play services notification: Google Account updated\"\n[5] Image \"Android System notification: Configure qwerty2\""
+ },
+ {
+  "time": "2026-10-27T00:09:16+00:00",
+  "package": "com.dd.doordash",
+  "step": "signin",
+  "foreground": "com.dd.doordash",
+  "activity": "com.doordash.consumer.ui.login.v2.login.LoginActivity",
+  "running": true,
+  "secure": false,
+  "password_field": false,
+  "tree_nodes": 83,
+  "tree_readable": true,
+  "black": {
+   "grpc": false,
+   "screencap": false,
+   "scrcpy": false
+  },
+  "black_fraction": {
+   "grpc": 0.0,
+   "screencap": 0.0,
+   "scrcpy": 0.0
+  },
+  "blocking_words": [],
+  "screen": "App: com.dd.doordash · Screen: LoginActivity · settled 56 ms\n[1] Image \"Google Play services notification: Google Account updated\"\n[2] Image \"Android System notification: Configure qwerty2\"\n[3] Text \"Enter phone number\"\n[4] Button \"+1 .... · Close\"\n[5] EditText \"201-555-0123\" (id: edit_text) (empty)\n[6] Button \"Use email instead\"\n[7] Button \"Continue\"\n[8] Text \"or\"\n[9] Button \"Continue with Google\"\n[10] Button \"Continue with Facebook\"\n[11] Button \"Continue with Apple\"\n[12] Button \"Search Nearby\"\n[13] Text \"By tapping any “Continue” button, you agree to DoorDash’s Terms, including a wa…\""
+ },
+ {
+  "time": "2026-10-27T00:13:17+00:00",
+  "package": "com.chipotle.ordering",
+  "step": "launch",
+  "foreground": "com.chipotle.ordering",
+  "activity": "com.chipotle.ordering.ui.activity.main.MainActivity",
+  "running": true,
+  "secure": false,
+  "password_field": false,
+  "tree_nodes": 97,
+  "tree_readable": true,
+  "black": {
+   "grpc": false,
+   "screencap": false,
+   "scrcpy": false
+  },
+  "black_fraction": {
+   "grpc": 0.0,
+   "screencap": 0.0,
+   "scrcpy": 0.0
+  },
+  "blocking_words": [],
+  "screen": "App: com.chipotle.ordering · Screen: MainActivity · settled 7569 ms\n[1] Text \"ALL-NEW\"\n[2] Text \"POLLO ASADO\"\n[3] List (scrollable)\n[4] Button \"CHIPOTLE REWARDS · EAT. EARN. GET REWARDED.\"\n[5] Button \"JOIN NOW\"\n[6] Button \"SIGN IN\"\n[7] Button \"HOW REWARDS WORKS\"\n[8] Button \"Rewards\"\n[9] Button \"HOME\" (id: homeFragment)\n[10] Button \"MENU\" (id: menuFragment)\n[11] Button \"REORDER\" (id: viewAllOrdersFragment)\n[12] Button \"REWARDS\" (id: quickRewardsHostFragment)\n[13] Button \"SCAN\" (id: scanFabFragment)\n[14] Button \"PICKUP OR DELIVERY\"\n[15] Image \"Google Play services notification: Google Account updated\"\n[16] Image \"Android System notification: Configure qwerty2\"\n(screen has a scrollable list; scroll to see more)"
+ },
+ {
+  "time": "2026-10-27T00:13:48+00:00",
+  "package": "com.chipotle.ordering",
+  "step": "signin",
+  "foreground": "com.chipotle.ordering",
+  "activity": "com.chipotle.ordering.ui.activity.main.MainActivity",
+  "running": true,
+  "secure": false,
+  "password_field": true,
+  "tree_nodes": 90,
+  "tree_readable": true,
+  "black": {
+   "grpc": false,
+   "screencap": false,
+   "scrcpy": false
+  },
+  "black_fraction": {
+   "grpc": 0.0,
+   "screencap": 0.0,
+   "scrcpy": 0.0
+  },
+  "blocking_words": [],
+  "screen": "App: com.chipotle.ordering · Screen: MainActivity · settled 60 ms\n[1] Button \"CLOSE\"\n[2] Text \"SIGN IN\"\n[3] Text \"Build your dreams, then eat them.\"\n[4] EditText (empty, focused)\n[5] Text \"Email Address\"\n[6] EditText (password, empty)\n[7] Text \"Password\"\n[8] Button \"Toggle Show Password\"\n[9] Button \"FORGOT PASSWORD\"\n[10] Button \"SIGN IN\"\n[11] Button \"CREATE ACCOUNT\"\n[12] Text \"By signing in, I agree to Chipotle’s Privacy Policy, Terms of Use, and if you a…\"\n[13] Button \"Delete\"\n[14] Button \"Enter\"\n[15] Button \"Show emoji keyboard\"\n[16] Button \"More stylus options\"\n[17] Image \"Google Play services notification: Google Account updated\"\n[18] Image \"Android System notification: Configure qwerty2\""
+ },
+ {
+  "time": "2026-10-27T00:14:16+00:00",
+  "package": "com.amazon.mShop.android.shopping",
+  "step": "launch",
+  "foreground": "com.google.android.permissioncontroller",
+  "activity": "com.android.permissioncontroller.permission.ui.GrantPermissionsActivity",
+  "running": true,
+  "secure": false,
+  "password_field": false,
+  "tree_nodes": 41,
+  "tree_readable": true,
+  "black": {
+   "grpc": false,
+   "screencap": false,
+   "scrcpy": false
+  },
+  "black_fraction": {
+   "grpc": 0.003,
+   "screencap": 0.003,
+   "scrcpy": 0.004
+  },
+  "blocking_words": [],
+  "screen": "App: com.google.android.permissioncontroller · Screen: GrantPermissionsActivity · settled 9639 ms\n[1] Button (id: grant_singleton)\n[2] Button \"Allow Amazon Shopping to send you notifications?\" (id: grant_dialog)\n[3] Button \"Allow\" (id: permission_allow_button)\n[4] Button \"Don’t allow\" (id: permission_deny_button)\n[5] Image \"Google Play services notification: Google Account updated\"\n[6] Image \"Android System notification: Configure qwerty2\""
+ },
+ {
+  "time": "2026-10-27T00:14:52+00:00",
+  "package": "com.amazon.mShop.android.shopping",
+  "step": "signin",
+  "foreground": "com.amazon.mShop.android.shopping",
+  "activity": "com.amazon.identity.auth.device.AuthPortalUIActivity",
+  "running": true,
+  "secure": true,
+  "password_field": false,
+  "tree_nodes": 35,
+  "tree_readable": true,
+  "black": {
+   "grpc": false,
+   "screencap": true,
+   "scrcpy": true
+  },
+  "black_fraction": {
+   "grpc": 0.069,
+   "screencap": 0.994,
+   "scrcpy": 0.994
+  },
+  "blocking_words": [],
+  "screen": "App: com.amazon.mShop.android.shopping · Screen: AuthPortalUIActivity · settled 130 ms\n(secure screen: the app marked it private; sign-in and payment here are for the user)\n[1] Image \"Google Play services notification: Google Account updated\"\n[2] Image \"Android System notification: Configure qwerty2\"\n[3] Button (id: apwebview)"
+ }
+]

@@ -385,13 +385,42 @@ Settled by Part A, though not on the list:
 
 ### B1. Real-app compatibility (`envoy-real`)
 
-| App | Installs | Launches | Blocks emulator? | How far before sign-in | Sign-in screen black in scrcpy / gRPC / emulator window | Tree readable on sign-in; password field flagged | Session survives restart |
+Oct 26, on `envoy-real` (API 35 Google Play, signed in to Play with the dedicated test account). Script: `scripts/real_app_check.py`. Raw data (emails redacted): `eval/results/phase0/real_apps.json`, with thumbnails of pre-sign-in screens.
+
+| App | Installs | Launches | Blocks the emulator? | How far without signing in | Sign-in screen: secure flag; black in scrcpy / screencap / gRPC | Tree on sign-in screen | Session survives restart |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| | | | | | | | |
+| **Target** | Yes (55 MB; 335 s, mostly first-time Play setup) | Yes | No | Far: home, deals, search, categories, cart. First asks for a home store (zip search; a neutral zip, 10001, was used). | Email step (native): not secure; not black anywhere | Readable. The email field has no label of its own (the text sits in a sibling). The password step needs a real email. | _pending_ |
+| **Starbucks** | Yes | Yes | No | Home, café finder, menu. Ordering needs sign-in. | Chrome Custom Tab (auth.starbucks.com): **secure**; **black / black / visible** | Readable, including `username` and `password` fields; password flagged | _pending_ |
+| **DoorDash** | Yes | Yes, after about 20 s on "Launching…" | **Partly.** Guest "Search Nearby" spins for 40 s+ (blank white screen) | Login screen only (phone, email, Google, Facebook, Apple) | Login screen: not secure; not black | Readable | _pending_ |
+| **Uber Eats** | **No.** Play Store says "Your device isn't compatible with this version." | n/a | **Yes** (at install) | n/a | n/a | n/a | n/a |
+| **Chipotle** | Yes | Yes | No | Home and full menu as a guest | Native sign-in: **not secure**; not black anywhere | Readable; password field flagged | _pending_ |
+| **Amazon** | Yes | Yes | No | Far: home, search, categories, cart | WebView sign-in (`AuthPortalUIActivity`): **secure**; **black / black / visible** | **Not readable.** The WebView puts nothing in the tree, only its container. | _pending_ |
 
-### B1. Secure screens on real apps
+Emulator window on a secure screen (Amazon sign-in): _pending your look_.
 
-_(to fill)_
+### B1. Secure screens on real apps, and other findings
+
+1. **The secure flag is not a reliable sign-in signal.**
+   - Only the web-based sign-ins were secure (Starbucks' Chrome Custom Tab, Amazon's WebView).
+   - Native sign-ins were not: Target, Chipotle, DoorDash, and Google's own account sign-in.
+   - The hand-off rule needs all three signals: the secure flag, a password field, and known sign-in screens (an email or phone field next to "Sign in" or "Continue").
+2. **The tree on secure screens is not always readable.**
+   - Starbucks' custom tab exposes the full form. Amazon's sign-in WebView exposes nothing.
+   - The design doc's "their accessibility tree is still readable" holds only for some apps. A secure screen with an empty tree is an immediate hand-off.
+3. **On real apps, the emulator's gRPC screenshot captured both secure sign-in screens**, while scrcpy and `screencap` were black. This confirms A4.
+4. **The emulator image ships Chrome and WebView 124 (May 2024).**
+   - Starbucks' sign-in failed with "Your browser is out of date" until both were updated from the Play Store (Chrome 156, WebView 155).
+   - Every new emulator needs this update before real-app work.
+5. **First-launch pop-ups:** most apps ask for notifications (Target, Starbucks, Amazon) or location (Target, Starbucks) on first launch. "Don't allow" or "Not this time" were taken each time. These belong in the shared pop-up handler library.
+6. **Obfuscated identifiers.** The Play Store's resource IDs are all `0_resource_name_obfuscated`. Starbucks' activity is called `dIu`. Locators for real apps must lean on text and descriptions; the screen signature should not lean only on IDs.
+7. **The tree can lag the pixels.**
+   - When DoorDash's guest screen showed a spinner, the tree still described the previous login screen.
+   - When Target's account page loaded over the network, the settle loop returned before the content arrived.
+   - The runtime's "no visible change → screenshot" rule and `expected_result` checks are needed. Settle alone is not enough.
+8. **uiautomator2 side effects** (both fixed in `EmulatorDevice`):
+   - Its `send_action()` (Enter via IME) silently installed and switched to its own keyboard. Submit is now a plain Enter key, and Gboard was restored on `envoy-real`.
+   - Its server sometimes restarts when a new process connects. `connect()` now retries, and Phase 1 should keep one long-lived connection.
+9. **Memory with Chrome open on the Mac:** one emulator plus Chrome ran without problems (5.3 GB free before launch).
 
 ### B2. Muse connector test
 
