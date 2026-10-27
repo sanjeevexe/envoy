@@ -10,7 +10,7 @@ import asyncio
 import itertools
 import time
 from collections import deque
-from typing import Any, AsyncIterator
+from typing import Any, AsyncIterator, Callable
 
 
 class EventBus:
@@ -19,6 +19,7 @@ class EventBus:
         self.recent: deque[dict[str, Any]] = deque(maxlen=keep)
         self._seq = itertools.count(1)
         self.loop: asyncio.AbstractEventLoop | None = None
+        self.listeners: list[Callable[[dict[str, Any]], None]] = []  # called for every event, on the loop (push notifications)
 
     def bind(self, loop: asyncio.AbstractEventLoop) -> None:
         self.loop = loop
@@ -41,6 +42,11 @@ class EventBus:
         for q in list(self._subs):
             if q.qsize() < 500:  # a stalled client drops events rather than growing without bound
                 q.put_nowait(ev)
+        for fn in list(self.listeners):
+            try:
+                fn(ev)
+            except Exception:  # noqa: BLE001 - a listener's failure never stops the stream
+                pass
 
     async def subscribe(self, after_seq: int = 0) -> AsyncIterator[dict[str, Any]]:
         q: asyncio.Queue = asyncio.Queue()

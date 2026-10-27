@@ -38,18 +38,19 @@ def task_view(task: dict[str, Any], steps: list[dict[str, Any]], approvals: list
         "task_id": task["id"], "goal": task["goal"], "status": task["status"], "result": task.get("result"), "detail": task.get("detail"),
         "routine": task.get("routine"), "app": task.get("app"),
         "steps": [{"kind": s.get("kind"), "text": s.get("text"), "risk": s.get("risk")} for s in steps[-12:]],
-        "pending_approvals": [{"approval_id": a["id"], "description": a["description"], "approve_url": f"{base}/approve?id={a['id']}"}
+        "pending_approvals": [{"approval_id": a["id"], "description": a["description"], "approve_url": f"{base}/approve/?id={a['id']}"}
                               for a in approvals if a["status"] == "pending"],
         "waiting_for_user": task["status"] == "needs_you",
         "task_url": f"{base}/?task={task['id']}",
     }
 
 
-def build_mcp(ctx: Any, port: int) -> MCPServer:
-    """`ctx` holds the API's runner, task store, memory and routine library."""
+def build_mcp(ctx: Any, port: int, base: str | None = None) -> MCPServer:
+    """`ctx` holds the API's runner, task store, memory and routine library. `base` is where approval links point (the
+    tailnet address, where your paired iPhone is signed in)."""
     server = MCPServer(name="envoy", title="Envoy", description="Envoy operates Android apps on the user's behalf and remembers what it sees.",
-                       instructions=INSTRUCTIONS, version="0.4.0")
-    base = public_base(port)
+                       instructions=INSTRUCTIONS, version="0.5.0")
+    base = base or public_base(port)
 
     @server.tool(annotations=ToolAnnotations(title="Run a task on the user's phone", readOnlyHint=False, destructiveHint=False, openWorldHint=True))
     def run_task(goal: str) -> dict:
@@ -113,9 +114,10 @@ def build_mcp(ctx: Any, port: int) -> MCPServer:
     return server
 
 
-def mcp_app(server: MCPServer, port: int) -> Any:
+def mcp_app(server: MCPServer, port: int, extra_hosts: set[str] | None = None) -> Any:
     from mcp_stub.common import allowed_hosts
+    hosts = sorted(set(allowed_hosts(port)) | (extra_hosts or set()))
     return server.streamable_http_app(
         streamable_http_path="/mcp", stateless_http=True, json_response=True,
-        transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=True, allowed_hosts=allowed_hosts(port), allowed_origins=[]),
+        transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=True, allowed_hosts=hosts, allowed_origins=[]),
     )

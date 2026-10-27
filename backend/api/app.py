@@ -1,10 +1,15 @@
 """Envoy's API: tasks, the event stream, approvals, takeover and the live view, chat, memory, routines, triggers, the MCP
 server and the web app, all in one process (`python -m api`, port 8700).
 
-Two kinds of caller:
+Kinds of caller (api/auth.py):
 - **You**, through the web app: a session (cookie, or the same token as a bearer header for scripts). Only a session can
   approve, take over or edit memory. The login link with the session token is printed when the server starts.
+- **Your paired devices** (the iPhone's Home Screen app, Phase 5): their own session, from a pairing code shown on the Mac.
+- **Device tokens with a scope** (the "Send to Envoy" Shortcut): can upload images, nothing else.
 - **AI clients**, through `/mcp` with the MCP bearer token. They can start and follow tasks and use memory, never approve.
+
+The API answers only to the names it is served on (127.0.0.1, localhost, its Tailscale Serve name), and WebSockets
+check their Origin, so a page on another name can't reach it (DNS rebinding).
 
 Browser POSTs must carry an `X-Envoy` header, which another site can't add without a CORS preflight (refused), so a
 page elsewhere can't make your browser approve something.
@@ -14,14 +19,16 @@ from __future__ import annotations
 
 import asyncio
 import hmac
+import json
 import os
 import secrets
+import time
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from typing import Any
 
 from fastapi import Body, Depends, FastAPI, HTTPException, Query, Request, WebSocket, WebSocketDisconnect
-from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse, Response
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 
 from memory.retrieval import Retriever
@@ -30,17 +37,21 @@ from models.adapter import ModelAdapter
 from routines.model import dump_yaml
 from routines.store import RoutineStore
 
+from api.auth import Auth, Caller, allowed_hosts, public_url
 from api.chat import chat
 from api.devices import DevicePool
 from api.events import EventBus
 from api.live import live_view
+from api.push import Pusher, VapidKeys
 from api.runner import SHOTS, TaskRunner
 from api.scheduler import Scheduler
-from api.store import API_DIR, REPO, TaskStore
+from api.store import API_DIR, REPO, TaskStore, new_id
+from api.voice import voice_session
 
 PORT = int(os.environ.get("ENVOY_PORT", "8700"))
 PROFILES = {"demo": REPO / "data" / "demo" / "memory.db", "real": REPO / "data" / "memory.db"}
 WEB_OUT = REPO / "web" / "out"
+LOGS = REPO / "logs"
 COOKIE = "envoy_session"
 
 
@@ -64,6 +75,9 @@ class Ctx:
     runner: TaskRunner
     scheduler: Scheduler
     profile: str
+    auth: Any = None
+    pusher: Any = None
+    public: str = ""
 
 
 def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, memory: MemoryStore | None = None,
@@ -82,11 +96,17 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     ctx = Ctx(tasks, bus, pool, memory, routines, adapter, runner, scheduler, profile)
     memory.subscribe(lambda ev: bus.publish("memory", event=ev))
     token = session_token()
+    auth = Auth(tasks, token)
+    public = public_url(PORT)
+    hosts = allowed_hosts(PORT, public)
+    pusher = Pusher(tasks, VapidKeys(API_DIR), public)
+    bus.listeners.append(pusher.on_event)
+    ctx.auth, ctx.pusher, ctx.public = auth, pusher, public
 
     from mcp_server.server import build_mcp, mcp_app
     from mcp_stub.common import bearer_token
     from mcp_stub.middleware import BearerAuthLogMiddleware
-    mcp_inner = mcp_app(build_mcp(ctx, PORT), PORT)
+    mcp_inner = mcp_app(build_mcp(ctx, PORT, base=public), PORT, extra_hosts=hosts)
     mcp = BearerAuthLogMiddleware(mcp_inner, token=bearer_token(), log_path=REPO / "logs" / "mcp.jsonl", server="mcp")
 
     @asynccontextmanager
@@ -102,33 +122,92 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
 
     # ---- auth ------------------------------------------------------------------------------------
 
-    def is_session(request: Request | WebSocket) -> bool:
+    def caller(request: Request | WebSocket) -> Caller | None:
         got = request.cookies.get(COOKIE) or ""
-        auth = request.headers.get("authorization", "")
-        if auth.lower().startswith("bearer "):
-            got = got or auth[7:]
-        return bool(got) and hmac.compare_digest(got, token)
+        bearer = request.headers.get("authorization", "")
+        if bearer.lower().startswith("bearer "):
+            got = got or bearer[7:]
+        return auth.check(got)
 
-    def session(request: Request) -> None:
-        if not is_session(request):
-            raise HTTPException(401, "sign in to Envoy with the link the server printed")
+    def is_session(request: Request | WebSocket) -> bool:
+        c = caller(request)
+        return c is not None and c.is_session
+
+    def csrf(request: Request) -> None:
         if request.method in ("POST", "PUT", "PATCH", "DELETE") and request.cookies.get(COOKIE) and request.headers.get("x-envoy") != "1":
             raise HTTPException(403, "missing X-Envoy header")
 
+    def session(request: Request) -> None:
+        if not is_session(request):
+            raise HTTPException(401, "sign in to Envoy with the link the server printed, or pair this device")
+        csrf(request)
+
+    def owner(request: Request) -> None:
+        """This Mac's own session: pairing new devices and revoking them happen here."""
+        c = caller(request)
+        if c is None or c.kind != "owner":
+            raise HTTPException(403, "do this from Envoy on your Mac")
+        csrf(request)
+
+    def https(request: Request) -> bool:
+        return request.headers.get("x-forwarded-proto") == "https" or request.url.scheme == "https"
+
+    def set_session_cookie(resp: Response, request: Request, value: str, days: int) -> None:
+        resp.set_cookie(COOKIE, value, httponly=True, samesite="strict", secure=https(request), max_age=days * 86400)
+
     @app.get("/login")
-    def login(k: str = "") -> Response:
+    def login(request: Request, k: str = "") -> Response:
         if not k or not hmac.compare_digest(k, token):
             return HTMLResponse("<p>That link is not valid. Use the one the Envoy server printed.</p>", status_code=401)
         resp = RedirectResponse("/", status_code=303)
-        resp.set_cookie(COOKIE, token, httponly=True, samesite="strict", max_age=30 * 86400)
+        set_session_cookie(resp, request, token, 30)
         return resp
+
+    # ---- pairing your iPhone, and device tokens ------------------------------------------------------
+
+    @app.post("/api/pair/start", dependencies=[Depends(owner)])
+    def pair_start() -> dict[str, Any]:
+        return {**auth.start_pairing(), "url": public}
+
+    @app.post("/api/pair")
+    def pair(request: Request, body: dict[str, Any] = Body(...)) -> Response:
+        if request.headers.get("x-envoy") != "1":
+            raise HTTPException(403, "missing X-Envoy header")
+        name = str(body.get("name") or "iPhone")[:60]
+        got = auth.finish_pairing(str(body.get("code") or ""), name, request.headers.get("user-agent", ""))
+        if got is None:
+            raise HTTPException(403, "That code didn't work. Use the code on your Mac (it lasts 5 minutes).")
+        resp = JSONResponse({"paired": True, "name": name})
+        set_session_cookie(resp, request, got, 365)
+        bus.publish("paired", name=name)
+        return resp
+
+    @app.get("/api/paired", dependencies=[Depends(session)])
+    def paired(request: Request) -> dict[str, Any]:
+        me = caller(request)
+        return {"devices": auth.devices(), "push": pusher.subscriptions(), "me": {"kind": me.kind, "device_id": me.device_id, "name": me.name} if me else None}
+
+    @app.delete("/api/paired/{did}", dependencies=[Depends(owner)])
+    def unpair(did: str) -> dict[str, Any]:
+        pusher.forget_device(did)
+        return {"revoked": auth.revoke(did)}
+
+    @app.post("/api/tokens", dependencies=[Depends(session)])
+    def new_token(body: dict[str, Any] = Body(...)) -> dict[str, Any]:
+        """A narrow token for a Shortcut: `photos` (upload images) or `code_test`. Shown once; it is not a session."""
+        scope = body.get("scope")
+        if scope not in ("photos", "code_test"):
+            raise HTTPException(400, "scope must be photos or code_test")
+        return {"token": auth.issue(scope, str(body.get("name") or f"Shortcut ({scope})")), "scope": scope, "upload_url": f"{public}/api/photos"}
 
     # ---- state and tasks -----------------------------------------------------------------------
 
     @app.get("/api/state", dependencies=[Depends(session)])
-    def state() -> dict[str, Any]:
+    def state(request: Request) -> dict[str, Any]:
+        me = caller(request)
         return {"profile": ctx.profile, "devices": pool.status(), "tasks": tasks.list(20), "approvals": tasks.approvals("pending"),
-                "routines": len(routines.active()), "memory": {"entities": len(memory.entities())}}
+                "routines": len(routines.active()), "memory": {"entities": len(memory.entities())}, "public_url": public,
+                "me": {"kind": me.kind, "name": me.name} if me else None, "push_key": pusher.keys.public_key}
 
     @app.post("/api/tasks", dependencies=[Depends(session)])
     async def create_task(body: dict[str, Any] = Body(...)) -> dict[str, Any]:
@@ -227,11 +306,11 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
         return lease.state()
 
     @app.websocket("/api/live/{avd}")
-    async def live(ws: WebSocket, avd: str, fps: float = 10, width: int = 540) -> None:
+    async def live(ws: WebSocket, avd: str, fps: float = 10, width: int = 540, quality: int = 70) -> None:
         if not is_session(ws):
             await ws.close(code=4401)
             return
-        await live_view(ws, avd, pool, fps=min(fps, 20), width=max(240, min(width, 1080)))
+        await live_view(ws, avd, pool, fps=min(fps, 20), width=max(240, min(width, 1080)), quality=max(30, min(quality, 90)))
 
     @app.websocket("/api/events")
     async def events(ws: WebSocket, after: int = 0) -> None:
@@ -252,9 +331,149 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
         msg = (body.get("message") or "").strip()
         if not msg:
             raise HTTPException(400, "message needed")
-        out = await chat(msg, adapter=adapter, memory=memory, runner=runner, routines=routines)
-        bus.publish("chat", message=msg, reply=out.get("reply"), kind=out.get("kind"), task_id=(out.get("task") or {}).get("id"))
+        source = "voice" if body.get("source") == "voice" else "chat"  # spoken or typed, both your own words
+        out = await chat(msg, adapter=adapter, memory=memory, runner=runner, routines=routines, source=source)
+        bus.publish("chat", message=msg, reply=out.get("reply"), kind=out.get("kind"), task_id=(out.get("task") or {}).get("id"), source=source)
         return out
+
+    # ---- voice: push to talk, relayed to Muse Voice Transcribe (the key stays here) ------------------
+
+    @app.websocket("/api/voice")
+    async def voice(ws: WebSocket) -> None:
+        if not is_session(ws):
+            await ws.close(code=4401)
+            return
+        from models.adapter import CostMeter
+        await voice_session(ws, api_key=getattr(adapter, "api_key", "") or os.environ.get("META_API_KEY", ""),
+                            meter=getattr(adapter, "meter", None) or CostMeter())
+
+    # ---- push notifications --------------------------------------------------------------------------
+
+    @app.get("/api/push/key", dependencies=[Depends(session)])
+    def push_key() -> dict[str, Any]:
+        return {"key": pusher.keys.public_key}
+
+    @app.post("/api/push/subscribe", dependencies=[Depends(session)])
+    def push_subscribe(request: Request, body: dict[str, Any] = Body(...)) -> dict[str, Any]:
+        me = caller(request)
+        try:
+            return pusher.subscribe(body.get("subscription") or body, me.device_id if me else None, request.headers.get("user-agent", ""))
+        except ValueError as e:
+            raise HTTPException(400, str(e)) from e
+
+    @app.post("/api/push/unsubscribe", dependencies=[Depends(session)])
+    def push_unsubscribe(body: dict[str, Any] = Body(...)) -> dict[str, Any]:
+        return {"removed": pusher.unsubscribe(str(body.get("endpoint") or ""))}
+
+    @app.post("/api/push/test", dependencies=[Depends(session)])
+    async def push_test() -> dict[str, Any]:
+        futures = pusher.notify("test", "Envoy", "Notifications work. Approvals will arrive like this.", "/", urgency="high", ttl=600)
+        results = [await asyncio.wrap_future(f) for f in futures]
+        return {"sent": len(results), "results": results}
+
+    @app.post("/api/push/receipt", dependencies=[Depends(session)])
+    def push_receipt(body: dict[str, Any] = Body(...)) -> dict[str, Any]:
+        shown = body.get("shown_at")
+        return {"receipt": pusher.receipt(str(body.get("id") or ""), float(shown) / 1000 if shown else None)}
+
+    # ---- photos and screenshots → memory -------------------------------------------------------------
+
+    @app.get("/api/settings/photos", dependencies=[Depends(session)])
+    def get_photo_settings() -> dict[str, Any]:
+        return tasks.setting("photos", {"enabled": False, "scope": "screenshots"})
+
+    @app.post("/api/settings/photos", dependencies=[Depends(session)])
+    def set_photo_settings(body: dict[str, Any] = Body(...)) -> dict[str, Any]:
+        value = {"enabled": bool(body.get("enabled")), "scope": "photos" if body.get("scope") == "photos" else "screenshots"}
+        tasks.set_setting("photos", value)
+        return value
+
+    @app.post("/api/photos")
+    async def photos(request: Request) -> dict[str, Any]:
+        """Images you pick in the app (your session) or share with the Shortcut (a `photos` token, which can do nothing else)."""
+        from memory.photos import ingest_photo, summary
+        from memory.service import MemoryService
+        from PIL import Image
+        c = caller(request)
+        if c is None or c.scope not in ("session", "photos"):
+            raise HTTPException(401, "sign in, or use the Shortcut's device token")
+        csrf(request)
+        prefs = tasks.setting("photos", {"enabled": False, "scope": "screenshots"})
+        if not prefs.get("enabled"):
+            raise HTTPException(403, "Photos are off. Turn them on in Envoy's Settings.")
+        ctype = request.headers.get("content-type", "")
+        blobs: list[bytes] = []
+        if ctype.startswith("multipart/form-data"):
+            form = await request.form(max_part_size=25 * 1024 * 1024)
+            for _, v in form.multi_items():
+                if hasattr(v, "read"):
+                    blobs.append(await v.read())
+        else:
+            blobs.append(await request.body())
+        blobs = [b for b in blobs if b][:10]
+        if not blobs:
+            raise HTTPException(400, "no image")
+        folder = API_DIR / "photos"
+        folder.mkdir(parents=True, exist_ok=True)
+        origin = "shortcut" if c.scope == "photos" else "picker"
+        out = []
+        for blob in blobs:
+            if len(blob) > 25 * 1024 * 1024:
+                raise HTTPException(413, "image too large")
+            pid = new_id("photo")
+            path = folder / f"{pid}.img"
+            path.write_bytes(blob)
+            path.chmod(0o600)
+            try:
+                with Image.open(path) as im:
+                    im.verify()
+            except Exception as e:  # noqa: BLE001
+                path.unlink(missing_ok=True)
+                raise HTTPException(400, "that isn't an image") from e
+            svc = MemoryService(memory, adapter, data_scope="real")
+            try:
+                res = await ingest_photo(svc, path, photo_id=pid, origin=origin, device=c.name, allow_camera_photos=prefs.get("scope") == "photos")
+            except Exception as e:  # noqa: BLE001 - the image is already deleted (ingest_photo's finally)
+                out.append({"photo_id": pid, "error": f"{type(e).__name__}: {e}"[:300], "deleted": not path.exists()})
+                continue
+            rep = res.report
+            item = {"photo_id": pid, "summary": summary(res, memory), "facts": rep.facts if rep else {}, "dropped": rep.dropped if rep else [],
+                    "entities": sorted({memory.resolve(r.entity) for r in rep.resolved}) if rep else [], "lines": res.lines,
+                    "redacted_lines": res.redacted_lines, "ocr_ms": res.ocr_ms, "model_ms": res.model_ms, "total_ms": res.timings.get("total_ms"),
+                    "cost_usd": round(rep.cost_usd, 5) if rep else 0, "deleted": res.deleted, "skipped": res.skipped}
+            out.append(item)
+            bus.publish("photo", photo_id=pid, summary=item["summary"], origin=origin, entities=item["entities"])
+        return {"results": out, "summary": " ".join(x.get("summary") or x.get("error", "") for x in out)}
+
+    # ---- numbers the apps measure (live-view latency, voice turns) ------------------------------------
+
+    @app.post("/api/metrics", dependencies=[Depends(session)])
+    def metrics(request: Request, body: dict[str, Any] = Body(...)) -> dict[str, Any]:
+        me = caller(request)
+        rec = {"time": time.time(), "device": me.name if me else "", **{k: v for k, v in list(body.items())[:40] if isinstance(v, (int, float, str, bool))}}
+        path = LOGS / "client_metrics.jsonl"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("a") as f:
+            f.write(json.dumps(rec)[:4000] + "\n")
+        return {"ok": True}
+
+    # ---- sign-in codes: the Phase 5 test only (does an iOS automation reach us while the phone is locked?) --
+
+    @app.post("/api/codes/test")
+    async def code_test(request: Request) -> dict[str, Any]:
+        c = caller(request)
+        if c is None or c.scope not in ("session", "code_test"):
+            raise HTTPException(401)
+        raw = (await request.body())[:2000].decode("utf-8", "replace")
+        # Only that a message arrived, and when: never the message, never the code.
+        rec = {"time": time.time(), "event": "code_message", "device": c.name, "length": len(raw), "has_code_word": "code" in raw.lower(),
+               "has_digits": any(ch.isdigit() for ch in raw)}
+        path = LOGS / "code_test.jsonl"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("a") as f:
+            f.write(json.dumps(rec) + "\n")
+        bus.publish("code_test", **{k: v for k, v in rec.items() if k != "time"})
+        return {"received": True}
 
     # ---- memory --------------------------------------------------------------------------------
 
@@ -394,7 +613,20 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
             return HTMLResponse("<p>Envoy API is running. Build the web app: <code>cd web && npm run build</code></p>")
 
     async def dispatch(scope: dict, receive: Any, send: Any) -> None:
-        """/mcp goes to the MCP server (its own bearer token); everything else to the API and web app."""
+        """Only the names Envoy is served on (DNS rebinding); WebSockets only from those origins. /mcp goes to the MCP server
+        (its own bearer token); everything else to the API and web app."""
+        if scope["type"] in ("http", "websocket"):
+            headers = {k.decode("latin-1").lower(): v.decode("latin-1") for k, v in scope.get("headers") or []}
+            origin = headers.get("origin", "")
+            bad_host = headers.get("host", "") not in hosts
+            bad_origin = scope["type"] == "websocket" and origin and origin.split("://", 1)[-1] not in hosts
+            if bad_host or bad_origin:
+                if scope["type"] == "http":
+                    await Response("unknown host", status_code=421)(scope, receive, send)
+                else:
+                    await receive()
+                    await send({"type": "websocket.close", "code": 4403})
+                return
         if scope["type"] == "http" and (scope["path"] == "/mcp" or scope["path"].startswith("/mcp/")):
             await mcp(scope, receive, send)
         else:

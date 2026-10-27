@@ -185,7 +185,10 @@ def test_email_trigger_takes_typed_values_only():
 @pytest.fixture()
 def api(tmp_path, monkeypatch):
     monkeypatch.setenv("MCP_BEARER_TOKEN", "mcp-test-token")
+    monkeypatch.setenv("ENVOY_PUBLIC_URL", "https://envoy-mac.example.ts.net:8443")
+    monkeypatch.setenv("ENVOY_ALLOWED_HOSTS", "testserver")  # TestClient's host name
     monkeypatch.setattr("api.app.API_DIR", tmp_path)
+    monkeypatch.setattr("api.push.LOG", tmp_path / "push.jsonl")
     from api.app import build, session_token
     from routines.store import RoutineStore
     app, ctx = build("demo", memory=MemoryStore(":memory:"), tasks=TaskStore(":memory:"), routines=RoutineStore(tmp_path / "routines"),

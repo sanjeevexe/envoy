@@ -8,9 +8,12 @@ Protocol (`WS /api/live/{avd}`):
 - server → client: one JSON `hello` (device size), then binary frames: 8 bytes big-endian float64 (capture time,
   seconds since the epoch) followed by a JPEG. Identical frames are skipped. A JSON `control` message whenever who
   controls the phone changes.
-- client → server (JSON), only while the user is in control: `tap` {x, y}, `swipe` {x1, y1, x2, y2, ms},
-  `text` {text}, `key` {key: Back | Home | Enter | Backspace | Tab}. Coordinates are fractions of the screen (0–1).
-  Input is passed straight to the phone: never logged, never stored, never shown to a model.
+- client → server (JSON), only while the user is in control: `tap` {x, y}, `long_press` {x, y}, `swipe` {x1, y1, x2,
+  y2, ms}, `text` {text}, `key` {key: Back | Home | Enter | Backspace | Tab}. Coordinates are fractions of the screen
+  (0–1). Input is passed straight to the phone: never logged, never stored, never shown to a model. An input with an
+  `id` is acknowledged with `{"type": "ack", id, ms}` once the phone has it.
+- `ping` {t} at any time → `pong` {t, server}: the client's clock offset and round trip, so it can measure capture →
+  screen latency on another device (the iPhone over the tailnet) without trusting the two clocks to agree.
 """
 
 from __future__ import annotations
@@ -84,14 +87,21 @@ async def live_view(ws: WebSocket, avd: str, pool: Any, fps: float = 10, width: 
     async def receive_input() -> None:
         while not stop.is_set():
             msg = json.loads(await ws.receive_text())
+            if msg.get("type") == "ping":
+                await ws.send_text(json.dumps({"type": "pong", "t": msg.get("t"), "server": time.time()}))
+                continue
             if not lease.user_control:
                 await ws.send_text(json.dumps({"type": "error", "error": "take over first: the agent has the phone"}))
                 continue
             w, h = caps.width, caps.height
             px = lambda fx, fy: (max(0, min(w - 1, round(float(fx) * w))), max(0, min(h - 1, round(float(fy) * h))))  # noqa: E731
             kind = msg.get("type")
+            t0 = time.perf_counter()
             if kind == "tap":
                 await asyncio.to_thread(device.grpc.tap, *px(msg["x"], msg["y"]))
+            elif kind == "long_press":
+                x, y = px(msg["x"], msg["y"])
+                await asyncio.to_thread(device.grpc.swipe, x, y, x, y, 0.7)
             elif kind == "swipe":
                 (x1, y1), (x2, y2) = px(msg["x1"], msg["y1"]), px(msg["x2"], msg["y2"])
                 await asyncio.to_thread(device.grpc.swipe, x1, y1, x2, y2, float(msg.get("ms", 300)) / 1000)
@@ -99,6 +109,8 @@ async def live_view(ws: WebSocket, avd: str, pool: Any, fps: float = 10, width: 
                 await asyncio.to_thread(device.grpc.text, msg["text"][:500])
             elif kind == "key" and msg.get("key") in KEYS:
                 await asyncio.to_thread(device.grpc.key, KEYS[msg["key"]])
+            if msg.get("id") is not None:
+                await ws.send_text(json.dumps({"type": "ack", "id": msg["id"], "ms": round((time.perf_counter() - t0) * 1000, 1)}))
 
     sender = asyncio.create_task(send_frames())
     try:
