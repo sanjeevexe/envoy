@@ -529,7 +529,7 @@ From the public event page (cerebralvalley.ai/e/meta-ai-developer-hackathon, rea
 | --- | --- |
 | Team name* / members | Team of one (you). Pick a name; "Envoy" works. |
 | Track* | Indie |
-| Problem statement* | A dropdown we haven't seen. Check the options early, so the write-up and demo use its wording. |
+| Problem statement* | Two options: "Build for Your World" or "Push the Frontier" ("give a machine a new capability"). **Choose Push the Frontier**: Envoy gives Muse a capability it lacks, operating phone apps. |
 | Most Viral Track (optional) | An X post link. A short clip of Muse checking you in through Envoy is the shareable moment. |
 | Project description* | Start from the design doc's overview: "Agents can search the web. Your phone knows your life." |
 | **Public GitHub repository*** | The repo must be public by Nov 4. That means no secrets ever committed (`.env` is gitignored; Phase 0 results are already redacted), a LICENSE, `THIRD_PARTY.md`, and a README a judge can run. **It has no GitHub remote yet.** |
@@ -542,7 +542,17 @@ From the public event page (cerebralvalley.ai/e/meta-ai-developer-hackathon, rea
 
 **`THIRD_PARTY.md` check:** every component we use is credited with its license. All are permissive (MIT, Apache-2.0, BSD-3-Clause), and the copyleft Mobilerun Portal is deliberately not used. Added: ffmpeg (an external tool in Phase 0 scripts), uiautomator2's on-device helper APK, and a "What Envoy builds itself" section.
 
-**Connector applications:** with route 2 working, the Muse Connector Platform submission is optional, and it needs business verification. The Meta AI Connectors waitlist is still worth two minutes. Status: [ ] Muse Connector Platform (optional)  [ ] Meta AI Connectors waitlist. Both are yours to submit.
+**Participant guide rules that matter (pasted Oct 27):**
+- Repos must be public.
+- Teams have at most 4 people; solo is allowed.
+- **The demo may only show features built during the hackathon (Oct 27 – Nov 4), clearly identified**, or the project can be disqualified. Our git history starts Oct 26 and `THIRD_PARTY.md` separates plumbing from our own work, which keeps this clean.
+- **Judging** runs in stages: a pass/fail check that the project fits the theme and uses Meta's models, then a 0–10 rubric, then a top-5 final per track with the videos watched live.
+- **Dates (ET):** the closing ceremony is Nov 9, and the $150 credit claim is due by Nov 4, 9 PM, through Meta's form (yours to file).
+- **Anti-projects** (basic RAG, chatbots and so on): none apply to Envoy.
+
+**Connector applications:** both are **deferred** (decided Oct 27). Route 2 already works without approval, and an application is stronger once there's a public repo and a working demo. Revisit after Phase 4.
+**Muse:** you confirmed the old Envoy connector is disconnected.
+ with route 2 working, the Muse Connector Platform submission is optional, and it needs business verification. The Meta AI Connectors waitlist is still worth two minutes. Status: [ ] Muse Connector Platform (optional)  [ ] Meta AI Connectors waitlist. Both are yours to submit.
 
 ### B4. Remaining for Phase 0
 
