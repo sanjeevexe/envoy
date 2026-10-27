@@ -94,7 +94,8 @@ class TaskRunner:
         self.takeover_timeout_s, self.approval_timeout_s = takeover_timeout_s, approval_timeout_s
         self.approvers: dict[str, WebApprover] = {}  # task id → its approver (the POST handler decides through it)
         self.trace_task: dict[str, str] = {}  # trace id → task id
-        self.jobs: dict[str, asyncio.Task] = {}
+        self.jobs: dict[str, Any] = {}  # asyncio tasks, or concurrent futures when started from another thread
+        self.loop: asyncio.AbstractEventLoop | None = None  # the API's loop (set at startup)
         self.devices: dict[str, Any] = {}  # task id → raw device (for step screenshots)
         TraceWriter.listeners.append(self._on_trace)
 
@@ -104,7 +105,18 @@ class TaskRunner:
               app: str | None = None) -> dict[str, Any]:
         task = self.store.create(goal, source, routine=routine, inputs=inputs or {}, app=app)
         self.bus.publish("task", task=task)
-        self.jobs[task["id"]] = asyncio.get_running_loop().create_task(self._run(task["id"], goal, routine, inputs or {}, app))
+        coro = self._run(task["id"], goal, routine, inputs or {}, app)
+        try:
+            running = asyncio.get_running_loop()
+        except RuntimeError:  # MCP tools and approvers call in from worker threads
+            running = None
+        if running is not None and (self.loop is None or running is self.loop):
+            self.jobs[task["id"]] = running.create_task(coro)
+        elif self.loop is not None:
+            self.jobs[task["id"]] = asyncio.run_coroutine_threadsafe(coro, self.loop)  # type: ignore[assignment]
+        else:
+            coro.close()
+            raise RuntimeError("the task runner has no event loop yet")
         return task
 
     def stop(self, tid: str) -> bool:

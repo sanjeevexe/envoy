@@ -1,0 +1,96 @@
+{
+ "time": "2026-10-27T13:48:25",
+ "summary": {
+  "passed": true,
+  "steps_ok": "10/10",
+  "duration_s": 112.5
+ },
+ "steps": [
+  {
+   "step": "API up, demo memory loaded",
+   "ok": true,
+   "t": 0.1,
+   "entities": 17,
+   "routines": 7
+  },
+  {
+   "step": "live view",
+   "ok": true,
+   "t": 5.8,
+   "device": "1080x2400",
+   "frames": 1,
+   "latency_ms": 43,
+   "input_refused_without_takeover": true
+  },
+  {
+   "step": "task started",
+   "ok": true,
+   "t": 5.8,
+   "task": "task-1027-134639-35cc"
+  },
+  {
+   "step": "asked to take over",
+   "ok": true,
+   "t": 13.3,
+   "reason": "sign-in needed: password field on screen"
+  },
+  {
+   "step": "took over, signed in, handed back",
+   "ok": true,
+   "t": 15.8,
+   "status_during_takeover": "taken_over"
+  },
+  {
+   "step": "approval requested and approved by the person",
+   "ok": true,
+   "t": 18.3,
+   "description": "tap \"Confirm check-in\" in com.skylark.air (routine skylark_check_in_flight v1)",
+   "screenshot": true,
+   "opening_decided_nothing": true,
+   "mcp_token_refused": true
+  },
+  {
+   "step": "check-in done in the app",
+   "ok": true,
+   "t": 29.2,
+   "status": "done",
+   "result": "seat: 14C; gate: B12; boarding time: 5:30 AM; boarding group: Group 3; flight: SL 482",
+   "routine": "skylark_check_in_flight",
+   "model_calls": 1,
+   "checked_in": true,
+   "steps": 11,
+   "step_events": 11,
+   "step_screenshots": 6
+  },
+  {
+   "step": "memory updated",
+   "ok": true,
+   "t": 29.2,
+   "memory_step": "memory updated: 11 same, 4 new",
+   "memory_events": 4,
+   "notes_excerpt": "## Flight: SL 482 \u00b7 Fri, Oct 30, 2026  [[Trip Chicago \u00b7 Fri, Oct 30, 2026]]\n- Airline: SkyLark Air \u2014 email from SkyLark Air, Oct 1\n- Number: SL 482 \u2014 SkyLark app, just now (also email from SkyLark Air, Oct 1)\n- Date: Fri, Oct 30, 2026 \u2014 SkyLark app, just now (also email from SkyLark Air, Oct 1)\n- From: Atlanta (ATL) \u2014 SkyLark app, just now (also email from SkyLark Air, Oct 1)\n- To: Chicago (ORD) \u2014"
+  },
+  {
+   "step": "MCP: tools, run_task and get_task",
+   "ok": true,
+   "t": 97.6,
+   "tools": [
+    "get_task",
+    "list_routines",
+    "memory_get",
+    "memory_note",
+    "memory_search",
+    "run_routine",
+    "run_task"
+   ],
+   "mcp_task": "done",
+   "result": "gate: B12"
+  },
+  {
+   "step": "chat answers from memory",
+   "ok": true,
+   "t": 102.5,
+   "reply": "Gate B12, from the SkyLark app just now."
+  }
+ ]
+}

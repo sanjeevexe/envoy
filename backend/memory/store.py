@@ -71,7 +71,8 @@ class MemoryStore:
         self.path = Path(path) if str(path) != ":memory:" else path
         if isinstance(self.path, Path):
             self.path.parent.mkdir(parents=True, exist_ok=True)
-        self.db = sqlite3.connect(str(path))
+        # Shared by the API's event loop, its worker threads and MCP tools; SQLite serializes the calls.
+        self.db = sqlite3.connect(str(path), check_same_thread=False)
         self.db.row_factory = sqlite3.Row
         self.db.executescript(SCHEMA)
         self.clock = clock

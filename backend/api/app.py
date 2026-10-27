@@ -92,6 +92,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         bus.bind(asyncio.get_running_loop())
+        runner.loop = asyncio.get_running_loop()
         scheduler.run_in_background()
         async with mcp_inner.router.lifespan_context(mcp_inner):
             yield
