@@ -169,6 +169,16 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     def pair_start() -> dict[str, Any]:
         return {**auth.start_pairing(), "url": public}
 
+    @app.get("/api/pair/qr", dependencies=[Depends(owner)])
+    def pair_qr() -> Response:
+        """A QR code of Envoy's tailnet address (not a secret), so the iPhone's camera opens it in Safari."""
+        import io as _io
+
+        import segno
+        buf = _io.BytesIO()
+        segno.make(public + "/", error="m").save(buf, kind="svg", scale=6, border=2, dark="#1c1c1a")
+        return Response(buf.getvalue(), media_type="image/svg+xml")
+
     @app.post("/api/pair")
     def pair(request: Request, body: dict[str, Any] = Body(...)) -> Response:
         if request.headers.get("x-envoy") != "1":
@@ -606,6 +616,8 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
         return {"ok": True, "profile": ctx.profile}
 
     if WEB_OUT.exists():
+        import mimetypes
+        mimetypes.add_type("application/manifest+json", ".webmanifest")
         app.mount("/", StaticFiles(directory=WEB_OUT, html=True), name="web")
     else:
         @app.get("/")

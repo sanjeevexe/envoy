@@ -38,7 +38,7 @@ OCR_BIN = REPO / "data" / "bin" / "envoy-ocr"
 MODEL_MAX_SIDE = 1600  # long side of the copy sent to the model (a phone screenshot: about 1,500 tokens)
 
 PHOTO_NOTE = """
-This source is a photo or screenshot the user shared. You get the image and the text read from it on the user's device,
+This source is a photo or screenshot the user shared. You get the image and the text read from it on the user's own computer,
 one row per line ("Seat · 14C" means the label Seat and the value 14C). Copy values exactly as that text writes them;
 evidence is null. Status-bar text (the clock, battery) and app chrome are not facts. A boarding pass or trip screen is
 the user's own booking: return the Flight (number as written, e.g. "SL 482"; date; from; to; seat; gate; boarding_time;

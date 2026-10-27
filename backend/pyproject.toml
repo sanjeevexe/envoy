@@ -19,6 +19,7 @@ dependencies = [
     "python-multipart>=0.0.32",
     "pywebpush>=2.5.0",
     "pyyaml>=6.0.3",
+    "segno>=1.6.6",
     "uiautomator2>=3.7.1",
     "uvicorn[standard]>=0.54.0",
 ]

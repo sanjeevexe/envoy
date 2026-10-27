@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { api, ago, Approval, post } from "@/lib/api";
 
-export function ApprovalCard({ a, onDone }: { a: Approval; onDone?: () => void }) {
+export function ApprovalCard({ a, onDone, large }: { a: Approval; onDone?: () => void; large?: boolean }) {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
   const decide = async (decision: "approve" | "decline") => {
@@ -20,6 +20,26 @@ export function ApprovalCard({ a, onDone }: { a: Approval; onDone?: () => void }
       setBusy(false);
     }
   };
+  if (large) {
+    // One-handed on a phone: the screen it's for, what it does, and two big buttons within thumb reach.
+    return (
+      <div className="space-y-3 rounded-2xl bg-white p-4 shadow-sm">
+        <div className="text-lg font-semibold">{a.description}</div>
+        {a.goal && <div className="text-sm text-stone-600">Task: {a.goal}</div>}
+        {a.screenshot && <img src={`/api/approvals/${a.id}/shot`} alt="The screen this approval is for" className="mx-auto max-h-[45dvh] rounded-lg border border-stone-200" />}
+        <ul className="list-disc pl-5 text-xs text-stone-500">{a.reasons.map((r) => <li key={r}>{r}</li>)}</ul>
+        <div className="text-xs text-stone-400">{a.app} · {ago(a.created_at)}</div>
+        {a.status === "pending" && !msg ? (
+          <div className="grid grid-cols-2 gap-3">
+            <button disabled={busy} onClick={() => decide("decline")} className="h-14 rounded-xl bg-stone-200 text-base font-medium disabled:opacity-50">Decline</button>
+            <button disabled={busy} onClick={() => decide("approve")} className="h-14 rounded-xl bg-emerald-600 text-base font-semibold text-white disabled:opacity-50">Approve</button>
+          </div>
+        ) : (
+          <div className="rounded-xl bg-stone-100 p-3 text-center text-base font-medium">{msg ?? `${a.status}${a.decided_by ? ` by ${a.decided_by}` : ""}${a.note ? ` (${a.note})` : ""}`}</div>
+        )}
+      </div>
+    );
+  }
   return (
     <div className="flex gap-3 rounded-xl bg-white p-3 shadow-sm">
       {a.screenshot ? <img src={`/api/approvals/${a.id}/shot`} alt="The screen this approval is for" className="w-28 shrink-0 rounded border border-stone-200" />

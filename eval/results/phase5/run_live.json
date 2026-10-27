@@ -1,0 +1,25 @@
+{
+ "time": "2026-10-27T15:57:22",
+ "summary": {
+  "passed": true,
+  "steps_ok": "1/1",
+  "duration_s": 8.4,
+  "parts": [
+   "live"
+  ]
+ },
+ "steps": [
+  {
+   "step": "live view over the tailnet (HTTPS + Tailscale, from this Mac)",
+   "ok": true,
+   "t": 8.4,
+   "host": "https://sanjeevs-macbook-pro.tailffb391.ts.net:8443",
+   "device": "1080x2400",
+   "frames": 54,
+   "frame_ms_p50": 20,
+   "frame_ms_max": 37,
+   "rtt_ms_p50": 0,
+   "kb_per_frame": 80
+  }
+ ]
+}

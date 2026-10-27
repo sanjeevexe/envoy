@@ -98,6 +98,9 @@ class Retriever:
             return "your edit"
         if kind == "client":
             return f"note from {ref.get('author', 'an assistant')}"
+        if kind == "photo":
+            how = {"shortcut": "shared with Send to Envoy", "picker": "sent in the app"}.get(ref.get("origin", ""), "shared")
+            return f"your screenshot ({how}), {self.ago(s['captured_at'])}"
         return f"{kind}, {self.ago(s['captured_at'])}"
 
     # ---- linking --------------------------------------------------------------------------------

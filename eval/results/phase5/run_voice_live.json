@@ -1,0 +1,44 @@
+{
+ "time": "2026-10-27T15:52:36",
+ "summary": {
+  "passed": true,
+  "steps_ok": "2/2",
+  "duration_s": 18.0,
+  "parts": [
+   "voice",
+   "live"
+  ]
+ },
+ "steps": [
+  {
+   "step": "voice \u2192 Muse Voice Transcribe \u2192 chat",
+   "ok": true,
+   "t": 7.9,
+   "said": "What's my gate for my Chicago flight?",
+   "heard": "What's my gate for my Chicago flight?",
+   "partials": 4,
+   "connect_ms": 1451,
+   "ready_ms": 1456,
+   "audio_ms": 2638,
+   "release_to_text_ms": 93,
+   "chat_ms": 4325,
+   "release_to_reply_ms": 4418,
+   "cost_usd": 0.0001,
+   "reply": "Memory doesn't have that yet, so I'm checking: Find the departure gate for my SkyLark flight to Chicago.",
+   "spoken": "I don't know yet. I'm checking.",
+   "reply_kind": "task"
+  },
+  {
+   "step": "live view over the tailnet (HTTPS + Tailscale, from this Mac)",
+   "ok": true,
+   "t": 18.0,
+   "host": "https://sanjeevs-macbook-pro.tailffb391.ts.net:8443",
+   "device": "1080x2400",
+   "frames": 25,
+   "frame_ms_p50": 24,
+   "frame_ms_max": 341,
+   "rtt_ms_p50": 0,
+   "kb_per_frame": 88
+  }
+ ]
+}
