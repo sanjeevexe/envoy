@@ -244,6 +244,7 @@ dependencies = [
     { name = "pillow" },
     { name = "pydantic" },
     { name = "python-dotenv" },
+    { name = "pyyaml" },
     { name = "uiautomator2" },
     { name = "uvicorn", extra = ["standard"] },
 ]
@@ -265,6 +266,7 @@ requires-dist = [
     { name = "pillow", specifier = ">=13.0.0" },
     { name = "pydantic", specifier = ">=2.14.1" },
     { name = "python-dotenv", specifier = ">=1.2.4" },
+    { name = "pyyaml", specifier = ">=6.0.3" },
     { name = "uiautomator2", specifier = ">=3.7.1" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.54.0" },
 ]

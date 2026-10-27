@@ -1,0 +1,77 @@
+{
+ "name": "skylark_check_flight_status",
+ "intent": "Check the status of a SkyLark flight",
+ "description": "Look up the current status of a SkyLark flight by entering its flight number and return the resulting status information.",
+ "patterns": [
+  "What's the status of my SkyLark flight?",
+  "Check flight status",
+  "Is my SkyLark flight delayed?",
+  "Look up a SkyLark flight"
+ ],
+ "inputs": [
+  {
+   "name": "flight_number",
+   "type": "text",
+   "description": "The SkyLark flight number to look up.",
+   "from_memory": null,
+   "example": "SL 1190"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "tap_flight_status",
+   "intent": "Tap Flight status",
+   "target_fixed_text": "Flight status",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "enter_flight_number",
+   "intent": "Enter {{flight_number}} into the Flight number field",
+   "target_fixed_text": "Flight number",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "tap_search",
+   "intent": "Tap Search to look up the flight status",
+   "target_fixed_text": "Search",
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "flight_status",
+   "near": "SL 1190",
+   "example": "Delayed 25 min"
+  },
+  {
+   "name": "route",
+   "near": "SL 1190",
+   "example": "ATL → DEN"
+  },
+  {
+   "name": "date",
+   "near": "ATL → DEN",
+   "example": "Sat, Nov 14, 2026"
+  },
+  {
+   "name": "gate",
+   "near": "Gate",
+   "example": "A7"
+  },
+  {
+   "name": "departure_time",
+   "near": "Departs",
+   "example": "2:45 PM"
+  }
+ ],
+ "data_values": [
+  "ATL → DEN",
+  "Sat, Nov 14, 2026",
+  "Delayed 25 min",
+  "A7",
+  "2:45 PM"
+ ]
+}

@@ -1,0 +1,810 @@
+"""Routine executor (design doc, App routines › Running a routine).
+
+For each step: wait for its before-checks (up to 5 s), find the element, act through the same policy
+gate as the agent (irreversible steps always ask for approval, even in routines), then wait for its
+after-checks. Settling is done on the after-checks themselves rather than a generic quiet window,
+and no model is called while checks pass.
+
+When a check fails, the fallback ladder climbs one rung at a time:
+  1. wait and retry (slow loading)
+  2. relaxed matching (the lower locator threshold)
+  3. the shared pop-up handler (agent/popups.py)
+  4. local repair: one model call at a time with the step's intent, checks and the current screen,
+     proposing an action toward the after-checks; at most 2 per step and 5 per run
+  5. the full agent takes over the rest of the task from the current screen
+  6. the user is asked
+Every rung that saved a step is recorded, and rungs 2 and 4 leave candidate patches (a new locator,
+inserted steps, a removed step) for routines/store.py to try as a new version.
+"""
+
+from __future__ import annotations
+
+import asyncio
+import io
+import time
+import uuid
+from dataclasses import dataclass, field
+from typing import Any, Literal
+
+from PIL import Image
+
+from agent.loop import AgentRunner, RunConfig
+from agent.popups import match_popup
+from agent.trace import TraceWriter, screen_record
+from devices.types import Action, Device, Element, InvalidElement, ScreenState
+from models.adapter import DataScope, ModelAdapter
+from models.prompts import REPAIR_INSTRUCTIONS, repair_input
+from models.schemas import StepOutput
+from models.translate import to_device_action
+from policy.approvals import ApprovalRequest, Approver, TerminalApprover
+from policy.risk import classify
+from policy.signin import sign_in_reason
+from routines import checks as chk
+from routines import locators
+from routines.compiler import bind_inputs, chk_generalize, generalize_locator
+from routines.model import Check, Extract, Locator, Routine, Step, StepAction, render, render_str
+from routines.screens import body, norm
+
+RUNG_NAMES = {0: "none", 1: "wait and retry", 2: "relaxed match", 3: "pop-up handler", 4: "local repair", 5: "full agent", 6: "ask the user"}
+Status = Literal["done", "failed", "declined", "handoff", "needs_user", "agent_done", "agent_failed"]
+SCREENSHOT_WIDTH = 540
+
+
+@dataclass
+class ExecConfig:
+    pre_timeout_s: float = 5.0  # design: wait up to 5 s for before-checks
+    post_timeout_s: float = 5.0
+    poll_s: float = 0.04
+    stable_s: float = 1.0  # a screen unchanged this long won't fix itself: try the next rung early
+    max_repairs_step: int = 2
+    max_repairs_run: int = 5
+    max_popups_step: int = 3
+    data_scope: DataScope = "real"
+    contributor: bool = False
+    repair_effort: str = "medium"
+    patch_screenshots: bool = True
+    agent: RunConfig | None = None
+
+
+@dataclass
+class RepairAction:
+    reason: str
+    action: dict[str, Any]
+    element: Element | None
+    before: ScreenState
+    after: ScreenState | None
+    risk: str
+    screenshot_before: str | None = None
+    screenshot_after: str | None = None
+
+
+@dataclass
+class Patch:
+    """A candidate change to a routine, from a step that needed rung 2 or 4."""
+
+    kind: Literal["locator", "check", "insert_before", "insert_after", "replace", "remove"]
+    step_id: str
+    description: str
+    locator: Locator | None = None  # kind=locator: the step's new target
+    check_index: int | None = None  # kind=check: which post-check (index into step.post)
+    check: Check | None = None
+    steps: list[Step] = field(default_factory=list)  # inserted or replacing steps
+    evidence: dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class StepRun:
+    id: str
+    status: str = "pending"  # done, skipped, failed, declined, handoff, agent
+    rung: int = 0
+    rungs: list[str] = field(default_factory=list)
+    score: float | None = None
+    wait_ms: float = 0.0
+    act_ms: float = 0.0
+    post_ms: float = 0.0
+    detail: str = ""
+    repairs: list[dict[str, Any]] = field(default_factory=list)
+
+    def climb(self, rung: int, note: str) -> None:
+        self.rung = max(self.rung, rung)
+        self.rungs.append(f"{RUNG_NAMES[rung]}: {note}")
+
+
+@dataclass
+class RunOutcome:
+    routine: str
+    version: int
+    task_id: str
+    status: Status
+    detail: str = ""
+    outputs: dict[str, str | None] = field(default_factory=dict)
+    steps: list[StepRun] = field(default_factory=list)
+    patches: list[Patch] = field(default_factory=list)
+    model_calls: int = 0
+    cost_usd: float = 0.0
+    cost_at_standard_usd: float = 0.0
+    duration_s: float = 0.0
+    approvals: list[dict[str, Any]] = field(default_factory=list)
+    popups: list[str] = field(default_factory=list)
+    agent: dict[str, Any] | None = None
+    trace_dir: str = ""
+
+    @property
+    def rung(self) -> int:
+        return max((s.rung for s in self.steps), default=0)
+
+    @property
+    def succeeded(self) -> bool:
+        return self.status in ("done", "agent_done")
+
+
+@dataclass
+class _Ready:
+    kind: Literal["ok", "skip", "not_ready", "handoff"]
+    screen: ScreenState
+    element: Element | None = None
+    relaxed: bool = False
+    why: str = ""
+    removed: bool = False  # skipped because the screen it expected never came (a candidate "remove" patch)
+
+
+@dataclass
+class _Ctx:
+    routine: Routine
+    inputs: dict[str, str]
+    task_id: str
+    out: RunOutcome
+    trace: TraceWriter
+    allow_repair: bool
+    allow_agent: bool
+    memory: str
+    repairs_run: int = 0
+    started: float = 0.0
+
+
+class RoutineExecutor:
+    def __init__(self, device: Device, adapter: ModelAdapter | None = None, approver: Approver | None = None,
+                 config: ExecConfig | None = None) -> None:
+        self.device = device
+        self.adapter = adapter or ModelAdapter()
+        self.approver = approver or TerminalApprover()
+        self.config = config or ExecConfig()
+
+    # ---- observing --------------------------------------------------------------------------
+
+    async def _observe(self) -> ScreenState:
+        return await self.device.observe()
+
+    async def _screenshot(self, ctx: _Ctx, name: str) -> str | None:
+        if not self.config.patch_screenshots:
+            return None
+        try:
+            png = await self.device.screenshot()
+            img = Image.open(io.BytesIO(png))
+            if img.width > SCREENSHOT_WIDTH:
+                img = img.resize((SCREENSHOT_WIDTH, round(img.height * SCREENSHOT_WIDTH / img.width)))
+            buf = io.BytesIO()
+            img.convert("RGB").save(buf, format="PNG", optimize=True)
+            path = ctx.trace.dir / "screens" / f"{name}.png"
+            path.write_bytes(buf.getvalue())
+            return str(path)
+        except Exception:  # noqa: BLE001 - screenshots are evidence only
+            return None
+
+    async def _field_values(self, checks: list[Check], screen: ScreenState, inputs: dict[str, str]) -> dict[int, str]:
+        """get_text for fields whose expected value the XML dump can't show (emoji, Phase 0)."""
+        if not chk.needs_field_read(checks, inputs) or not hasattr(self.device, "read_field"):
+            return {}
+        out: dict[int, str] = {}
+        for c in checks:
+            if c.kind == "field_equals" and c.locator is not None:
+                m = locators.locate(render(c.locator, inputs), screen, threshold=locators.RELAXED, margin=0.0)
+                if m.element is not None:
+                    v = await self.device.read_field(m.element)  # type: ignore[attr-defined]
+                    if v is not None:
+                        out[m.element.index] = v
+        return out
+
+    def _check(self, checks: list[Check], screen: ScreenState, inputs: dict[str, str], *, before: ScreenState | None = None,
+               relaxed: bool = False, field_text: dict[int, str] | None = None) -> tuple[bool, list[chk.CheckOutcome]]:
+        outs = chk.evaluate_all(checks, screen, inputs, before=before, relaxed=relaxed, field_text=field_text)
+        return all(o.passed for o in outs), outs
+
+    @staticmethod
+    def _specific(checks: list[Check]) -> list[Check]:
+        """Checks that say something about this step's effect (not just 'the screen changed')."""
+        return [c for c in checks if c.kind not in ("screen_changed", "screen_like", "app_foreground")]
+
+    def _target(self, step: Step, screen: ScreenState, inputs: dict[str, str], relaxed: bool = False) -> locators.Match | None:
+        if step.action.kind not in ("tap", "long_press", "type") or step.action.target is None:
+            return None
+        th = locators.RELAXED if relaxed else locators.STRICT
+        return locators.locate(step.action.target, screen, inputs, threshold=th)
+
+    def _ready_now(self, step: Step, screen: ScreenState, inputs: dict[str, str]) -> bool:
+        """Strictly ready: before-checks pass and the target is found."""
+        ok, _ = self._check(step.pre, screen, inputs)
+        if not ok:
+            return False
+        m = self._target(step, screen, inputs)
+        return m is None or m.ok
+
+    # ---- the run ----------------------------------------------------------------------------
+
+    async def run(self, routine: Routine, inputs: dict[str, str], *, task_id: str | None = None, launch: Literal["fresh", "if_needed", "never"] = "if_needed",
+                  allow_repair: bool = True, allow_agent: bool = True, memory: str = "") -> RunOutcome:
+        task_id = task_id or f"routine-{routine.routine}-{uuid.uuid4().hex[:6]}"
+        trace = TraceWriter(task_id)
+        out = RunOutcome(routine=routine.routine, version=routine.version, task_id=task_id, status="failed", trace_dir=str(trace.dir))
+        ctx = _Ctx(routine, {k: str(v) for k, v in inputs.items()}, task_id, out, trace, allow_repair, allow_agent, memory, started=time.time())
+        try:
+            missing = routine.missing_inputs(ctx.inputs)
+            if missing:
+                return self._finish(ctx, "needs_user", f"missing inputs: {', '.join(missing)}")
+            if launch == "fresh" and hasattr(self.device, "launch"):
+                await self.device.launch(routine.app, fresh=True)  # type: ignore[call-arg]
+            elif launch == "if_needed":
+                s = await self._observe()
+                if s.package != routine.app:
+                    await self.device.launch(routine.app)
+
+            i = 0
+            while i < len(routine.steps):
+                step = routine.steps[i]
+                sr = StepRun(step.id)
+                out.steps.append(sr)
+                t0 = time.perf_counter()
+                verdict = await self._run_step(ctx, i, sr)
+                trace.step({"kind": "routine_step", "step": i + 1, "id": step.id, "status": sr.status, "rung": sr.rung, "rungs": sr.rungs,
+                            "score": sr.score, "timings_ms": {"wait": round(sr.wait_ms), "act": round(sr.act_ms), "post": round(sr.post_ms),
+                                                              "total": round((time.perf_counter() - t0) * 1000)},
+                            "detail": sr.detail, "repairs": sr.repairs})
+                if verdict == "next":
+                    i += 1
+                    continue
+                if verdict == "finished":  # the full agent finished the task
+                    return out
+                return self._finish(ctx, out.status, sr.detail)
+
+            # End of routine: done-checks and outputs.
+            screen = await self._observe()
+            ok, outs = self._check(routine.done, screen, ctx.inputs)
+            if not ok:
+                deadline = time.perf_counter() + self.config.post_timeout_s
+                while not ok and time.perf_counter() < deadline:
+                    await asyncio.sleep(self.config.poll_s)
+                    screen = await self._observe()
+                    ok, outs = self._check(routine.done, screen, ctx.inputs)
+            if not ok:
+                return self._finish(ctx, "failed", "done-check failed: " + "; ".join(o.detail for o in outs if not o.passed))
+            missing_out = [n for n in routine.outputs if not out.outputs.get(n)]
+            if missing_out:
+                return self._finish(ctx, "failed", f"outputs not found: {', '.join(missing_out)}")
+            return self._finish(ctx, "done", "all steps and checks passed")
+        except Exception as e:  # noqa: BLE001 - a failed run keeps its trace
+            return self._finish(ctx, "failed", f"{type(e).__name__}: {e}")
+
+    def _finish(self, ctx: _Ctx, status: Status, detail: str) -> RunOutcome:
+        out = ctx.out
+        out.status, out.detail = status, detail
+        out.duration_s = round(time.time() - ctx.started, 2)
+        ctx.trace.finish({"routine": out.routine, "version": out.version, "task_id": out.task_id, "status": status, "detail": detail,
+                          "outputs": out.outputs, "rung": out.rung, "model_calls": out.model_calls, "cost_usd": out.cost_usd,
+                          "duration_s": out.duration_s, "patches": [p.description for p in out.patches], "approvals": out.approvals})
+        return out
+
+    # ---- one step ---------------------------------------------------------------------------
+
+    async def _run_step(self, ctx: _Ctx, idx: int, sr: StepRun) -> Literal["next", "stop", "finished"]:
+        step = ctx.routine.steps[idx]
+        t0 = time.perf_counter()
+        ready = await self._ready(ctx, idx, sr)
+        sr.wait_ms = (time.perf_counter() - t0) * 1000
+        if ready.kind == "handoff":
+            sr.status, sr.detail = "handoff", ready.why
+            ctx.out.status = "handoff"
+            return "stop"
+        if ready.kind == "skip":
+            sr.status, sr.detail = "skipped", ready.why
+            if ready.removed:
+                ctx.out.patches.append(Patch("remove", step.id, f"step {step.id!r} skipped: its screen never appeared and {ready.why}"))
+            await self._extract(ctx, step, ready.screen)
+            return "next"
+        if ready.kind == "not_ready":
+            rep = await self._repair(ctx, idx, sr, phase="before", screen=ready.screen, why=ready.why)
+            if rep == "post_ok":
+                sr.status = "done"
+                await self._extract(ctx, step, await self._observe())
+                return "next"
+            if isinstance(rep, _Ready):
+                ready = rep
+            else:
+                return await self._escalate(ctx, idx, sr, ready.why if rep == "gave_up" else rep)
+
+        # Act through the policy gate.
+        before = ready.screen
+        if ready.relaxed and ready.element is not None and step.action.target is not None:
+            new_loc = locators.updated(step.action.target, ready.element, before)
+            ctx.out.patches.append(Patch("locator", step.id, f"step {step.id!r}: target found only by relaxed match; locator updated to "
+                                         f"{new_loc.describe()}", locator=new_loc, evidence={"score": sr.score}))
+        t_act = time.perf_counter()
+        verdict = await self._act(ctx, step, before, ready.element, sr)
+        sr.act_ms = (time.perf_counter() - t_act) * 1000
+        if verdict != "ok":
+            return "stop"
+
+        # After-checks.
+        t_post = time.perf_counter()
+        post = await self._wait_post(ctx, idx, sr, before)
+        sr.post_ms = (time.perf_counter() - t_post) * 1000
+        if post.kind in ("ok", "skip"):
+            sr.status = "done"
+            await self._extract(ctx, step, post.screen)
+            return "next"
+        if post.kind == "handoff":
+            sr.status, sr.detail = "handoff", post.why
+            ctx.out.status = "handoff"
+            return "stop"
+        rep = await self._repair(ctx, idx, sr, phase="after", screen=post.screen, why=post.why, before=before)
+        if rep == "post_ok":
+            sr.status = "done"
+            await self._extract(ctx, step, await self._observe())
+            return "next"
+        return await self._escalate(ctx, idx, sr, post.why if rep in ("gave_up",) else str(rep))
+
+    async def _ready(self, ctx: _Ctx, idx: int, sr: StepRun) -> _Ready:
+        """Rungs 1–3 before acting: wait for the before-checks and the target, then relaxed matching, then pop-ups."""
+        step = ctx.routine.steps[idx]
+        nxt = ctx.routine.steps[idx + 1] if idx + 1 < len(ctx.routine.steps) else None
+        cfg = self.config
+        start = time.perf_counter()
+        deadline = start + cfg.pre_timeout_s
+        last_body, stable_since = None, start
+        last_bounds = None
+        popups = 0
+        tried_relaxed = False
+        while True:
+            s = await self._observe()
+            now = time.perf_counter()
+            b = body(s)
+            if b != last_body:
+                last_body, stable_since = b, now
+            if (why := sign_in_reason(s)) is not None:
+                return _Ready("handoff", s, why=f"sign-in needed: {why}")
+            pre_ok, pre_outs = self._check(step.pre, s, ctx.inputs)
+            m = self._target(step, s, ctx.inputs)
+            if pre_ok and (m is None or m.ok):
+                bounds = m.element.bounds if m is not None and m.element is not None else None
+                if bounds is None or bounds == last_bounds or now >= deadline:  # the target sits still: safe to tap
+                    if m is not None:
+                        sr.score = round(m.score, 3)
+                    if now - start > 0.3:
+                        sr.climb(1, f"ready after {now - start:.1f} s")
+                    return _Ready("ok", s, m.element if m else None)
+                last_bounds = bounds
+                await asyncio.sleep(cfg.poll_s)
+                continue
+            last_bounds = None
+            # Already done (the effect is there) or an optional step whose screen didn't come.
+            specific = self._specific(step.post)
+            if specific and self._check(specific, s, ctx.inputs)[0]:
+                return _Ready("skip", s, why="its after-checks already hold")
+            if step.optional and nxt is not None and self._ready_now(nxt, s, ctx.inputs):
+                return _Ready("skip", s, why=f"optional, and the next step ({nxt.id}) is ready")
+            stable = now - stable_since >= cfg.stable_s
+            # Rung 3: a known pop-up in the way.
+            if popups < cfg.max_popups_step and now - stable_since >= 0.25 and (pop := match_popup(s, ctx.routine.intent)) is not None:
+                await self.device.act(Action(kind="tap", element=pop.element.number))
+                popups += 1
+                ctx.out.popups.append(pop.handler)
+                sr.climb(3, pop.handler)
+                deadline = time.perf_counter() + cfg.pre_timeout_s
+                await asyncio.sleep(cfg.poll_s)
+                continue
+            # Rung 2: relaxed matching, once the screen has stopped changing (or time is up).
+            if (stable or now >= deadline) and not tried_relaxed:
+                rel_ok, _ = self._check(step.pre, s, ctx.inputs, relaxed=True)
+                rm = self._target(step, s, ctx.inputs, relaxed=True)
+                if rel_ok and (rm is None or rm.ok):
+                    sr.climb(2, f"relaxed match {rm.summary() if rm else '(checks)'}")
+                    if rm is not None:
+                        sr.score = round(rm.score, 3)
+                    return _Ready("ok", s, rm.element if rm else None, relaxed=rm is not None and not (m and m.ok))
+                tried_relaxed = stable
+            if now >= deadline:
+                failed = [o.detail for o in pre_outs if not o.passed]
+                why = ("before-checks failed: " + "; ".join(failed)) if failed else f"target not found: {m.summary() if m else '?'}"
+                # The screen this step expects never came, but the next step's did: the app dropped a screen.
+                if nxt is not None and step.risk != "irreversible" and self._ready_now(nxt, s, ctx.inputs) and not nxt.optional:
+                    return _Ready("skip", s, why=f"the next step ({nxt.id}) is ready", removed=True)
+                sr.climb(1, f"waited {cfg.pre_timeout_s:.0f} s")
+                return _Ready("not_ready", s, why=why)
+            await asyncio.sleep(cfg.poll_s)
+
+    async def _wait_post(self, ctx: _Ctx, idx: int, sr: StepRun, before: ScreenState) -> _Ready:
+        """Rungs 1–3 after acting: settle on the after-checks themselves."""
+        step = ctx.routine.steps[idx]
+        nxt = ctx.routine.steps[idx + 1] if idx + 1 < len(ctx.routine.steps) else None
+        cfg = self.config
+        start = time.perf_counter()
+        deadline = start + cfg.post_timeout_s
+        last_body, stable_since = None, start
+        popups = 0
+        passes = 0
+        tried_relaxed = False
+        while True:
+            s = await self._observe()
+            now = time.perf_counter()
+            b = body(s)
+            if b != last_body:
+                last_body, stable_since = b, now
+            fields = await self._field_values(step.post, s, ctx.inputs)
+            ok, outs = self._check(step.post, s, ctx.inputs, before=before, field_text=fields)
+            if ok:
+                passes += 1
+                if passes >= 2 or now - start > 0.5:  # two reads in a row, so a passing transition frame doesn't count
+                    if now - start > 1.5:
+                        sr.climb(1, f"after-checks held after {now - start:.1f} s")
+                    return _Ready("ok", s)
+                await asyncio.sleep(cfg.poll_s)
+                continue
+            passes = 0
+            if (why := sign_in_reason(s)) is not None:
+                return _Ready("handoff", s, why=f"sign-in needed: {why}")
+            # An inserted optional step (from an earlier patch) handles the screen that came instead.
+            if nxt is not None and nxt.optional and now - stable_since >= 0.15 and self._ready_now(nxt, s, ctx.inputs):
+                return _Ready("skip", s, why=f"the optional step {nxt.id} takes over")
+            changed = body(s) != body(before) or s.signature != before.signature
+            stable = now - stable_since >= cfg.stable_s
+            if popups < cfg.max_popups_step and now - stable_since >= 0.25 and (pop := match_popup(s, ctx.routine.intent)) is not None:
+                await self.device.act(Action(kind="tap", element=pop.element.number))
+                popups += 1
+                ctx.out.popups.append(pop.handler)
+                sr.climb(3, pop.handler)
+                deadline = time.perf_counter() + cfg.post_timeout_s
+                await asyncio.sleep(cfg.poll_s)
+                continue
+            if (stable or now >= deadline) and not tried_relaxed:
+                rel_ok, rel_outs = self._check(step.post, s, ctx.inputs, before=before, relaxed=True, field_text=fields)
+                if rel_ok:
+                    sr.climb(2, "after-checks held at the relaxed threshold")
+                    for j, o in enumerate(rel_outs):
+                        if o.relaxed and o.element is not None and o.check.locator is not None:
+                            new = o.check.model_copy(update={"locator": chk.anchor_locator(o.element, s)})
+                            ctx.out.patches.append(Patch("check", step.id, f"step {step.id!r}: after-check {j} matched only relaxed; "
+                                                         f"updated to {new.locator.describe() if new.locator else ''}", check_index=j, check=new))
+                    return _Ready("ok", s)
+                tried_relaxed = stable
+            # A screen that changed and then sat still for a while won't fix itself.
+            if (changed and stable and now - start >= cfg.stable_s + 0.5) or now >= deadline:
+                failed = "; ".join(o.detail for o in outs if not o.passed)
+                sr.climb(1, f"waited {now - start:.1f} s")
+                return _Ready("not_ready", s, why=f"after-checks failed: {failed}")
+            await asyncio.sleep(cfg.poll_s)
+
+    # ---- acting -----------------------------------------------------------------------------
+
+    async def _gate(self, ctx: _Ctx, action: Action, screen: ScreenState, risk: str, label: str, sr: StepRun) -> bool:
+        """The same policy gate the agent uses. Irreversible always asks a person (or the test app's scripted approver)."""
+        verdict = classify(action, screen, risk if risk in ("read", "reversible", "irreversible") else None)  # type: ignore[arg-type]
+        if not verdict.irreversible:
+            return True
+        req = ApprovalRequest(task_id=ctx.task_id, goal=render_str(ctx.routine.intent, ctx.inputs) or "", app=screen.package,
+                              description=f'{action.kind} "{label}" in {screen.package} (routine {ctx.routine.routine} v{ctx.routine.version})',
+                              reasons=verdict.reasons, screen=screen.compact)
+        decision = await asyncio.to_thread(self.approver.request, req)
+        ctx.out.approvals.append({"step": sr.id, "description": req.description, "reasons": req.reasons, "approved": decision.approved, "by": decision.by})
+        return decision.approved
+
+    async def _act(self, ctx: _Ctx, step: Step, screen: ScreenState, el: Element | None, sr: StepRun) -> Literal["ok", "stop"]:
+        a = step.action
+        if a.kind == "scroll_until":
+            found = await self._scroll_until(ctx, step, sr)
+            if not found:
+                sr.status, sr.detail = "failed", f"scrolled {a.max_scrolls or 8} times without finding {a.target.describe() if a.target else '?'}"
+                ctx.out.status = "failed"
+                return "stop"
+            return "ok"
+        if a.kind == "back":
+            action = Action(kind="back")
+        elif a.kind == "launch":
+            action = Action(kind="launch", package=a.package or ctx.routine.app)
+        elif a.kind == "wait":
+            action = Action(kind="wait", seconds=a.seconds or 1.0)
+        else:
+            assert el is not None
+            if a.kind == "type":
+                action = Action(kind="type", element=el.number, text=render_str(a.value, ctx.inputs) or "", submit=a.submit)
+            else:
+                action = Action(kind=a.kind, element=el.number)
+        if not await self._gate(ctx, action, screen, step.risk, el.label if el else a.kind, sr):
+            sr.status, sr.detail = "declined", "the user declined the approval"
+            ctx.out.status = "declined"
+            return "stop"
+        res = await self.device.act(action)
+        if not res.ok:
+            sr.status, sr.detail = "failed", f"action failed: {res.error}"
+            ctx.out.status = "failed"
+            return "stop"
+        return "ok"
+
+    async def _scroll_until(self, ctx: _Ctx, step: Step, sr: StepRun) -> bool:
+        a = step.action
+        assert a.target is not None
+        direction = a.direction or "down"
+        flipped = False
+        for k in range(2 * (a.max_scrolls or 8) + 1):
+            s = await self._observe()
+            m = locators.locate(a.target, s, ctx.inputs, threshold=locators.STRICT)
+            if not m.ok:
+                rm = locators.locate(a.target, s, ctx.inputs, threshold=locators.RELAXED)
+                if rm.ok:
+                    sr.climb(2, f"relaxed match while scrolling: {rm.summary()}")
+                    m = rm
+            if m.ok:
+                sr.score = round(m.score, 3)
+                return True
+            if k >= (a.max_scrolls or 8) and flipped:
+                return False
+            container = None
+            if a.container is not None:
+                cm = locators.locate(a.container, s, ctx.inputs, threshold=locators.RELAXED, margin=0.0)
+                container = cm.element.number if cm.element is not None else None
+            if container is None:
+                lists = [e for e in s.numbered if e.kind == "List"]
+                container = max(lists, key=lambda e: e.area).number if lists else None
+            before_body = body(s)
+            await self.device.act(Action(kind="scroll", direction=direction, element=container))
+            settled = await self._settle_quick()
+            if body(settled) == before_body:  # the end of the list: the tree stopped changing
+                if flipped:
+                    return False
+                direction = {"down": "up", "up": "down", "left": "right", "right": "left"}[direction]
+                flipped = True
+        return False
+
+    async def _settle_quick(self, quiet_s: float = 0.15, timeout_s: float = 2.0) -> ScreenState:
+        """Until two reads `quiet_s` apart are the same (after a scroll's fling)."""
+        start = time.perf_counter()
+        prev = await self._observe()
+        while time.perf_counter() - start < timeout_s:
+            await asyncio.sleep(quiet_s)
+            cur = await self._observe()
+            if body(cur) == body(prev):
+                return cur
+            prev = cur
+        return prev
+
+    # ---- rung 4: local repair ---------------------------------------------------------------
+
+    def _step_text(self, step: Step, inputs: dict[str, str]) -> str:
+        r: Step = render(step, inputs)
+        tgt = r.action.target.describe() if r.action.target else ""
+        lines = [f"intent: {r.intent}", f"action: {r.action.kind} {tgt}".strip()]
+        if r.action.kind == "type":
+            lines.append(f"text to type: {r.action.value!r}")
+        lines.append("AFTER-CHECKS (must hold when the step is done):")
+        lines += [f"- {c.describe()}" for c in r.post] or ["- (none)"]
+        return "\n".join(lines)
+
+    async def _repair(self, ctx: _Ctx, idx: int, sr: StepRun, *, phase: Literal["before", "after"], screen: ScreenState,
+                      why: str, before: ScreenState | None = None) -> str | _Ready:
+        """Up to 2 model calls (5 per run), one action each, toward the step's after-checks.
+
+        Returns "post_ok" (the step's effect now holds), a _Ready (the step itself can now run), or a reason it gave up."""
+        step = ctx.routine.steps[idx]
+        cfg = self.config
+        if not ctx.allow_repair:
+            return "gave_up"
+        specific = self._specific(step.post) or step.post
+        actions: list[RepairAction] = []
+        tried: list[str] = [f"(runtime) {why}"]
+        s = screen
+        while True:
+            fields = await self._field_values(specific, s, ctx.inputs)
+            if specific and self._check(specific, s, ctx.inputs, before=before, field_text=fields)[0]:
+                if actions or phase == "after":
+                    self._propose(ctx, idx, phase, actions, s)
+                    sr.climb(4, f"{len(actions)} repair action(s) satisfied the after-checks")
+                    return "post_ok"
+                ctx.out.patches.append(Patch("remove", step.id, f"step {step.id!r}: its effect already held without it"))
+                return "post_ok"
+            if phase == "before" and actions and self._ready_now(step, s, ctx.inputs):
+                self._propose(ctx, idx, "before_ready", actions, s)
+                sr.climb(4, f"{len(actions)} repair action(s) reached the step's screen")
+                m = self._target(step, s, ctx.inputs)
+                return _Ready("ok", s, m.element if m else None)
+            if len([a for a in sr.repairs if a.get("model")]) >= cfg.max_repairs_step or ctx.repairs_run >= cfg.max_repairs_run:
+                return "gave_up"
+            remaining = "\n".join(f"- {render_str(x.intent, ctx.inputs)}" for x in ctx.routine.steps[idx + 1:])
+            content = [{"type": "input_text", "text": repair_input(render_str(ctx.routine.intent, ctx.inputs) or "",
+                                                                  self._step_text(step, ctx.inputs), remaining, "\n".join(tried), s.compact)}]
+            t0 = time.perf_counter()
+            res = await asyncio.to_thread(self.adapter.call, "repair", content, instructions=REPAIR_INSTRUCTIONS, data_scope=cfg.data_scope,
+                                          contributor=cfg.contributor, task_id=ctx.task_id, effort=cfg.repair_effort)
+            ctx.repairs_run += 1
+            ctx.out.model_calls += 1
+            ctx.out.cost_usd += res.cost_usd
+            ctx.out.cost_at_standard_usd += res.cost_at_standard_usd
+            d: StepOutput = res.parsed  # type: ignore[assignment]
+            rec: dict[str, Any] = {"model": True, "phase": phase, "decision": d.model_dump(), "model_ms": round((time.perf_counter() - t0) * 1000),
+                                   "cost_usd": res.cost_at_standard_usd}
+            sr.repairs.append(rec)
+            kind = d.action.type
+            if kind in ("done", "fail", "handoff", "ask_user", "look"):
+                tried.append(f"model returned {kind}: {getattr(d.action, 'result', None) or getattr(d.action, 'reason', '')}")
+                if kind in ("fail", "handoff", "ask_user"):
+                    return f"repair gave up: {kind}"
+                s = await self._observe()
+                continue
+            try:
+                action = to_device_action(d.action, s)
+                if action is not None and action.element is not None:
+                    s.element(action.element)
+            except InvalidElement as e:
+                tried.append(f"invalid element: {e}")
+                s = await self._observe()
+                continue
+            if action is None:
+                continue
+            el = s.numbered[action.element - 1] if action.element else None
+            if not await self._gate(ctx, action, s, d.risk, el.label if el else action.kind, sr):
+                sr.status, sr.detail = "declined", "the user declined a repair action"
+                ctx.out.status = "declined"
+                return "declined"
+            shot_b = await self._screenshot(ctx, f"repair_{idx + 1:02d}_{len(actions) + 1}_before")
+            r = await self.device.act(action)
+            after = await self._settle_after_repair(step, ctx.inputs, before)
+            shot_a = await self._screenshot(ctx, f"repair_{idx + 1:02d}_{len(actions) + 1}_after")
+            actions.append(RepairAction(d.reason, action.model_dump(), el, s, after, d.risk, shot_b, shot_a))
+            rec.update({"action": action.model_dump(exclude_none=True), "target": el.label if el else None, "ok": r.ok,
+                        "screen_before": screen_record(s), "screen_after": screen_record(after),
+                        "tree_before": ctx.trace.save_tree(idx + 1, f"repair{len(actions)}_before", s),
+                        "tree_after": ctx.trace.save_tree(idx + 1, f"repair{len(actions)}_after", after)})
+            tried.append(f"{action.kind} on {el.label if el else ''!r} → screen now: {after.compact.splitlines()[1] if len(after.compact.splitlines()) > 1 else ''}")
+            s = after
+
+    async def _settle_after_repair(self, step: Step, inputs: dict[str, str], before: ScreenState | None) -> ScreenState:
+        """After a repair action: until the after-checks pass, or the screen stops changing."""
+        start = time.perf_counter()
+        last, since = None, start
+        while True:
+            s = await self._observe()
+            now = time.perf_counter()
+            if self._check(self._specific(step.post) or step.post, s, inputs, before=before)[0]:
+                return s
+            if body(s) != last:
+                last, since = body(s), now
+            elif now - since >= 0.6 or now - start > 4.0:
+                return s
+            await asyncio.sleep(self.config.poll_s)
+
+    def _new_step(self, ctx: _Ctx, a: RepairAction, sid: str, optional: bool) -> Step:
+        """A routine step from one repair action, with checks written from its before and after trees."""
+        examples = {k: v for k, v in ctx.inputs.items() if v}
+        kind = a.action["kind"]
+        target = None
+        if a.element is not None:
+            target = generalize_locator(locators.build(a.element, a.before), examples, [], None, None)
+        if kind == "type":
+            action = StepAction(kind="type", target=target, value=bind_inputs(a.action.get("text") or "", examples), submit=a.action.get("submit", False))
+        elif kind in ("tap", "long_press"):
+            action = StepAction(kind=kind, target=target)
+        elif kind == "back":
+            action = StepAction(kind="back")
+        elif kind == "scroll":
+            action = StepAction(kind="scroll_until", target=target, direction=a.action.get("direction") or "down", max_scrolls=8)
+        else:
+            action = StepAction(kind="wait", seconds=1.0)
+        post = chk.derive_post(a.before, a.after or a.before, kind, a.element, a.action.get("text"), examples) if a.after else [Check(kind="screen_changed")]
+        post = [g for c in post if (g := chk_generalize(c, examples, [])) is not None] or [Check(kind="screen_changed")]
+        pre = [Check(kind="app_foreground", package=a.before.package)]
+        risk = a.risk if a.risk in ("read", "reversible", "irreversible") else "reversible"
+        return Step(id=sid, intent=a.reason, pre=pre, action=action, post=post, risk=risk, optional=optional, note="added by local repair")
+
+    def _propose(self, ctx: _Ctx, idx: int, phase: str, actions: list[RepairAction], screen: ScreenState) -> None:
+        if not actions:
+            return
+        step = ctx.routine.steps[idx]
+        ev = {"screenshots": [p for a in actions for p in (a.screenshot_before, a.screenshot_after) if p],
+              "reasons": [a.reason for a in actions], "task_id": ctx.task_id}
+        if phase == "after":
+            new = [self._new_step(ctx, a, f"{step.id}_extra_{k + 1}", optional=True) for k, a in enumerate(actions)]
+            ctx.out.patches.append(Patch("insert_after", step.id, f"after {step.id!r}, an extra screen appeared; inserted "
+                                         + ", ".join(f"{s.id} ({s.action.kind} {s.action.target.text if s.action.target else ''})" for s in new),
+                                         steps=new, evidence=ev))
+        elif phase == "before_ready":
+            new = [self._new_step(ctx, a, f"{step.id}_pre_{k + 1}", optional=True) for k, a in enumerate(actions)]
+            ctx.out.patches.append(Patch("insert_before", step.id, f"before {step.id!r}, the screen needed "
+                                         + ", ".join(f"{s.action.kind} {s.action.target.text if s.action.target else ''}" for s in new),
+                                         steps=new, evidence=ev))
+        else:  # the step's own action never ran; the repair did its job
+            same_screen = len(actions) == 1 and actions[0].element is not None and step.action.kind in ("tap", "long_press", "type") \
+                and actions[0].action["kind"] == step.action.kind
+            if same_screen:
+                a = actions[0]
+                new_loc = locators.updated(step.action.target or Locator(), a.element, a.before)  # type: ignore[arg-type]
+                ctx.out.patches.append(Patch("locator", step.id, f"step {step.id!r}: the element moved or changed; new locator {new_loc.describe()}",
+                                             locator=new_loc, evidence=ev))
+            else:
+                new = [self._new_step(ctx, a, f"{step.id}_{k + 1}", optional=False) for k, a in enumerate(actions)]
+                new[-1].post = new[-1].post + [c for c in step.post if c.kind != "screen_changed" and c not in new[-1].post]
+                new[0].pre = step.pre + [c for c in new[0].pre if c not in step.pre]
+                ctx.out.patches.append(Patch("replace", step.id, f"step {step.id!r} replaced by "
+                                             + ", ".join(f"{s.action.kind} {s.action.target.text if s.action.target else ''}" for s in new),
+                                             steps=new, evidence=ev))
+
+    # ---- rungs 5 and 6 ----------------------------------------------------------------------
+
+    async def _escalate(self, ctx: _Ctx, idx: int, sr: StepRun, why: str) -> Literal["stop", "finished"]:
+        if why == "declined":
+            return "stop"
+        step = ctx.routine.steps[idx]
+        if not ctx.allow_agent:
+            sr.status, sr.detail = "failed", f"step {step.id}: {why}"
+            ctx.out.status = "failed"
+            return "stop"
+        sr.climb(5, why)
+        done = [render_str(s.intent, ctx.inputs) for s in ctx.routine.steps[:idx]]
+        goal = (f"{render_str(ctx.routine.intent, ctx.inputs)}. "
+                + (f"Inputs: {', '.join(f'{k} = {v}' for k, v in ctx.inputs.items())}. " if ctx.inputs else "")
+                + (f"A saved routine already did: {'; '.join(done)}. " if done else "")
+                + "Finish the task from the current screen.")
+        cfg = self.config.agent or RunConfig(data_scope=self.config.data_scope, contributor=self.config.contributor)
+        runner = AgentRunner(self.device, adapter=self.adapter, approver=self.approver, config=cfg)
+        res = await runner.run(goal, task_id=f"{ctx.task_id}-agent", memory=ctx.memory)
+        ctx.out.model_calls += res.model_calls
+        ctx.out.cost_usd += res.cost_usd
+        ctx.out.cost_at_standard_usd += res.cost_at_standard_usd
+        ctx.out.approvals += res.approvals
+        ctx.out.agent = {"task_id": res.task_id, "status": res.status, "result": res.result, "steps": res.steps,
+                         "model_calls": res.model_calls, "cost_usd": res.cost_usd, "trace_dir": res.trace_dir}
+        sr.status, sr.detail = "agent", f"full agent took over: {res.status}"
+        if res.succeeded:
+            screen = await self._observe()
+            for st in ctx.routine.steps[idx:]:
+                await self._extract(ctx, st, screen)
+            self._finish(ctx, "agent_done", f"step {step.id} failed ({why}); the full agent finished: {res.result}")
+        elif res.status in ("needs_user", "handoff"):
+            sr.climb(6, res.result)
+            self._finish(ctx, "needs_user" if res.status == "needs_user" else "handoff", res.result)
+        else:
+            sr.climb(6, f"agent {res.status}: {res.result}")
+            self._finish(ctx, "needs_user", f"routine step {step.id} failed ({why}) and the agent could not finish ({res.status}); asking the user")
+        return "finished"
+
+    # ---- outputs ----------------------------------------------------------------------------
+
+    async def _extract(self, ctx: _Ctx, step: Step, screen: ScreenState) -> None:
+        if not step.extract:
+            return
+        for name, spec in step.extract.items():
+            if ctx.out.outputs.get(name):
+                continue
+            ctx.out.outputs[name] = extract_value(spec, screen, ctx.inputs)
+
+
+def extract_value(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str | None:
+    """The value in an element: the recorded " · " part of its label if there are several ("Gate · B12" → B12),
+    with the label in front of it ("Known traveler number: 98765432" → 98765432) and fixed text after it removed."""
+    el = None
+    if spec.locator is not None:
+        m = locators.locate(render(spec.locator, inputs), screen, threshold=locators.RELAXED, margin=0.0)
+        el = m.element
+    near = norm(spec.near) if spec.near else ""
+    if el is None and near:
+        el = next((e for e in screen.numbered if norm(e.label).startswith(near)), None)
+    if el is None:
+        return None
+    label = " ".join(el.label.split())
+    value = label
+    if spec.segment is not None:
+        parts = [p.strip(" :,") for p in label.split(" · ") if p.strip(" :,")]
+        if spec.segment >= len(parts):
+            return None
+        value = parts[spec.segment]
+    if near and norm(value).startswith(near):
+        value = value[len(spec.near or ""):].strip(" ·:,")
+    if spec.after and norm(value).endswith(norm(spec.after)):
+        value = value[: len(value) - len(spec.after)].strip(" ·:,")
+    return value or None

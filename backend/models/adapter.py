@@ -26,7 +26,7 @@ from typing import Any, Literal
 from dotenv import load_dotenv
 from pydantic import BaseModel
 
-from models.schemas import GroundingResult, Plan, StepOutput, strict_json_schema
+from models.schemas import CompiledRoutine, GroundingResult, MatchOutput, Plan, StepOutput, strict_json_schema
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 load_dotenv(REPO_ROOT / ".env")
@@ -70,7 +70,8 @@ JOBS: dict[str, JobConfig] = {
     "repair": JobConfig("repair", "muse-spark-1.3", "medium", StepOutput, max_output_tokens=8000),
     "grounding": JobConfig("grounding", "muse-spark-1.3", "low", GroundingResult, max_output_tokens=4000),
     "extract": JobConfig("extract", "muse-spark-1.3", "low", None, max_output_tokens=4000),
-    "compile": JobConfig("compile", "muse-wonder-1.0", "high", None, max_output_tokens=32000),
+    "compile": JobConfig("compile", "muse-wonder-1.0", "medium", CompiledRoutine, max_output_tokens=32000, timeout_s=120),
+    "match": JobConfig("match", "muse-spark-1.3", "low", MatchOutput, max_output_tokens=4000),
 }
 
 

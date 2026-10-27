@@ -1,0 +1,77 @@
+{
+ "name": "skylark_change_seat",
+ "intent": "Change a seat on a SkyLark flight",
+ "description": "Opens My Trips in SkyLark Air, opens the requested trip, opens seat selection, selects the requested seat, and confirms the change.",
+ "patterns": [
+  "change my seat",
+  "change my seat on my flight",
+  "move me to a different seat",
+  "pick a new seat for my flight"
+ ],
+ "inputs": [
+  {
+   "name": "trip_city",
+   "type": "text",
+   "description": "",
+   "from_memory": null,
+   "example": "Denver"
+  },
+  {
+   "name": "desired_seat",
+   "type": "text",
+   "description": "",
+   "from_memory": null,
+   "example": "21C"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "open_my_trips",
+   "intent": "Tap My Trips to find the flight",
+   "target_fixed_text": "My Trips",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "open_trip",
+   "intent": "Tap the trip to {{trip_city}}",
+   "target_fixed_text": null,
+   "choice_input": "trip_city"
+  },
+  {
+   "step": 3,
+   "id": "open_change_seat",
+   "intent": "Tap Change seat to open seat selection",
+   "target_fixed_text": "Change seat",
+   "choice_input": null
+  },
+  {
+   "step": 4,
+   "id": "select_seat",
+   "intent": "Tap seat {{desired_seat}} to select it",
+   "target_fixed_text": "Seat",
+   "choice_input": "desired_seat"
+  },
+  {
+   "step": 5,
+   "id": "confirm_seat",
+   "intent": "Tap Confirm seat to confirm the seat change",
+   "target_fixed_text": "Confirm seat",
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "seat",
+   "near": "Your seat:",
+   "example": "21C"
+  }
+ ],
+ "data_values": [
+  "SL 1190",
+  "Sat, Nov 14, 2026",
+  "PT4R8Z",
+  "ATL → DEN"
+ ]
+}

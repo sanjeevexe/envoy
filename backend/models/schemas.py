@@ -230,3 +230,57 @@ def check_strict_subset(schema: dict[str, Any]) -> list[str]:
 STEP_SCHEMA = strict_json_schema(StepOutput)
 PLAN_SCHEMA = strict_json_schema(Plan)
 GROUNDING_SCHEMA = strict_json_schema(GroundingResult)
+
+
+# --------------------------------------------------------------------------------------------
+# Routines: compiling a trace (Muse Wonder) and local repair
+# --------------------------------------------------------------------------------------------
+
+
+class CompileInput(_Strict):
+    name: str = Field(description="snake_case, e.g. trip_city, confirmation_code, last_name, seat, known_traveler_number")
+    type: Literal["text", "code", "date", "phone", "choice"]
+    description: str = Field(description="What the value is, in a few words")
+    from_memory: str | None = Field(description="Where memory can fill it, e.g. trip.city, trip.confirmation_code, user.last_name; null if only the request can give it")
+    example: str = Field(description="The value exactly as it appears in this run (copied from the goal, notes, a typed text or a tapped label)")
+
+
+class CompileStep(_Strict):
+    step: int = Field(description="The step number from STEPS")
+    id: str = Field(description="snake_case step id, e.g. open_trips")
+    intent: str = Field(description="What the step does in any run; write inputs as {{name}}")
+    target_fixed_text: str | None = Field(description="The words of the target's label that identify it in every run (no booking data, no input values); null if there are none")
+    choice_input: str | None = Field(description="If the target was chosen because it shows an input's value (a list row for the trip, a seat), that input's name; else null")
+
+
+class CompileOutputValue(_Strict):
+    name: str = Field(description="snake_case output name, e.g. gate, seat, boarding_time, status")
+    near: str = Field(description="The label shown next to the value on the final screen, e.g. Gate")
+    example: str = Field(description="The value in this run")
+
+
+class CompiledRoutine(_Strict):
+    name: str = Field(description="app_verb_object in snake_case, e.g. skylark_check_in")
+    intent: str = Field(description="One generic line, e.g. check in for a SkyLark flight")
+    description: str = Field(description="One or two sentences on what the routine does and returns")
+    patterns: list[str] = Field(description="3 to 6 short phrases a user might say for this, with no specific values")
+    inputs: list[CompileInput]
+    steps: list[CompileStep]
+    outputs: list[CompileOutputValue]
+    data_values: list[str] = Field(description="Values in this run that come from the booking or account but are not inputs (flight numbers, dates, gates, times): they change between runs and must not be hard-coded")
+
+
+class MatchOutput(_Strict):
+    routine: str | None = Field(description="The routine name that does what the request asks, or null if none does")
+    confident: bool = Field(description="True only if the routine clearly does what the request asks")
+    inputs: list["InputValue"] = Field(description="A value for every input the routine needs, from the request or the notes")
+
+
+class InputValue(_Strict):
+    name: str
+    value: str | None = Field(description="The value, or null if neither the request nor the notes give it")
+    source: Literal["request", "notes", "missing"]
+
+
+MatchOutput.model_rebuild()
+COMPILE_SCHEMA = strict_json_schema(CompiledRoutine)

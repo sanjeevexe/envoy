@@ -1,0 +1,197 @@
+"""Routine checks: evaluated in code on a screen, and written automatically from tree diffs.
+
+Evaluating: every check is a pure function of the current screen (plus the screen before the action,
+for `screen_changed`), so the executor can poll it cheaply and needs no model while checks pass.
+`field_equals` reads the field with get_text when the tree can't be trusted (the XML dump turns
+emoji into "..", Phase 0).
+
+Writing (`derive_post`, `derive_pre`): the compiler compares a step's before and after trees and
+keeps what must be true before (the app, a distinctive element of the screen) and what must change
+after (a new screen with its distinctive elements, a toggle's new state, a field's value, a message
+that appeared, a dialog that closed). Distinctive means stable across runs: a usable resource ID,
+short static text, not inside a list, and no booking data unless it is an input.
+"""
+
+from __future__ import annotations
+
+import re
+from dataclasses import dataclass
+from typing import Awaitable, Callable
+
+from devices.types import Element, ScreenState
+from routines import locators
+from routines.model import Check, Locator, render, render_str
+from routines.screens import body, contains_value, jaccard, norm, screen_text, short_id, signature_keys, usable_id
+
+FieldReader = Callable[[Element], Awaitable[str | None]]
+
+
+@dataclass
+class CheckOutcome:
+    check: Check
+    passed: bool
+    detail: str
+    relaxed: bool = False  # passed only at the relaxed locator threshold
+    element: Element | None = None
+
+
+def _norm_value(v: str | None) -> str:
+    return "".join((v or "").split()).casefold()
+
+
+def evaluate(check: Check, screen: ScreenState, inputs: dict[str, str], *, before: ScreenState | None = None,
+             relaxed: bool = False, field_text: dict[int, str] | None = None) -> CheckOutcome:
+    """One check on one screen. `relaxed` lets element checks pass at the relaxed threshold.
+    `field_text` holds values read with get_text, by element index (for field_equals)."""
+    c: Check = render(check, inputs)
+    k = c.kind
+    if k == "app_foreground":
+        ok = screen.package == c.package
+        return CheckOutcome(check, ok, f"app in front is {screen.package}")
+    if k in ("text_visible", "text_absent"):
+        present = norm(c.text) in norm(screen_text(screen)) if c.text else False
+        ok = present if k == "text_visible" else not present
+        return CheckOutcome(check, ok, f"{c.text!r} {'visible' if present else 'not visible'}")
+    if k == "screen_changed":
+        if before is None:
+            return CheckOutcome(check, True, "no before-screen to compare")
+        ok = screen.signature != before.signature or body(screen) != body(before)
+        return CheckOutcome(check, ok, "screen changed" if ok else "screen did not change")
+    if k == "screen_like":
+        sim = jaccard(signature_keys(screen), c.keys or [])
+        ok = sim >= (c.min_similarity or 0.6)
+        return CheckOutcome(check, ok, f"signature similarity {sim:.2f}")
+    assert c.locator is not None
+    m = locators.locate(c.locator, screen, threshold=locators.STRICT, margin=0.0)
+    used_relaxed = False
+    if not m.ok and relaxed:
+        m = locators.locate(c.locator, screen, threshold=locators.RELAXED, margin=0.0)
+        used_relaxed = m.ok
+    if k == "element_present":
+        return CheckOutcome(check, m.ok, m.summary(), used_relaxed, m.element)
+    if k == "element_absent":
+        strict = locators.locate(c.locator, screen, threshold=locators.STRICT, margin=0.0)
+        return CheckOutcome(check, not strict.ok, "absent" if not strict.ok else f"still present: {strict.summary()}")
+    if not m.ok or m.element is None:
+        return CheckOutcome(check, False, f"element not found: {m.summary()}")
+    e = m.element
+    if k == "field_equals":
+        tree_value = e.text if not (e.hint and e.text == e.hint) else ""
+        value = (field_text or {}).get(e.index, tree_value)
+        ok = _norm_value(value) == _norm_value(c.value)
+        return CheckOutcome(check, ok, f"field holds {value!r}", used_relaxed, e)
+    if k == "toggle_is":
+        state = "on" if e.checked else "off"
+        return CheckOutcome(check, state == (c.value or "on"), f"toggle is {state}", used_relaxed, e)
+    return CheckOutcome(check, False, f"unknown check {k}")
+
+
+def evaluate_all(checks: list[Check], screen: ScreenState, inputs: dict[str, str], **kw) -> list[CheckOutcome]:
+    return [evaluate(c, screen, inputs, **kw) for c in checks]
+
+
+def needs_field_read(checks: list[Check], inputs: dict[str, str]) -> bool:
+    """field_equals with non-ASCII values must be read with get_text (the dump garbles emoji)."""
+    return any(c.kind == "field_equals" and any(ord(ch) > 127 for ch in (render_str(c.value, inputs) or "")) for c in checks)
+
+
+# ---- writing checks from trees ----------------------------------------------------------------
+
+_DIGITS = re.compile(r"\d")
+
+
+def _anchor_key(e: Element) -> tuple[str, str, str]:
+    return (short_id(e.resource_id) if usable_id(e.resource_id) else "", e.kind, norm(e.label))
+
+
+def _distinctiveness(e: Element, screen: ScreenState, inputs: dict[str, str]) -> float:
+    """How good an element is as a check anchor: stable across runs and specific to this screen."""
+    if e.status_bar or not (e.label or usable_id(e.resource_id)):
+        return -9.0
+    s = 0.0
+    rid = short_id(e.resource_id)
+    if usable_id(e.resource_id):
+        s += 2.0
+        if "title" in rid or "header" in rid:
+            s += 1.0
+    if e.in_list:
+        s -= 3.0  # list contents are data: another booking or seat shows other rows
+    label = e.label or ""
+    has_input = any(v and contains_value(label, v) for v in inputs.values())
+    if has_input:
+        s += 1.0
+    elif _DIGITS.search(label):
+        s -= 1.5  # booking data (flight numbers, dates, seats) changes between runs
+    if len(label) > 60:
+        s -= 1.0
+    if " · " in label:
+        s -= 1.0  # a merged label/value row ("Status · On time"): the value part is booking data
+    if e.kind in ("Text",) and label and not _DIGITS.search(label):
+        s += 0.5
+    if e.kind == "Button" and rid in ("btn_back",) or norm(label) in ("back", "navigate up"):
+        s -= 2.0  # present on every screen, says nothing
+    return s
+
+
+def anchor_locator(e: Element, screen: ScreenState) -> Locator:
+    """A lean locator for a check: ID, label and type (no position or neighbors, which change)."""
+    full = locators.build(e, screen)
+    text = full.text
+    if text and " · " in text and not e.editable:
+        text = text.split(" · ", 1)[0]  # keep the row's label ("Status"), not its value
+    return Locator(resource_id=full.resource_id, text=text, kind=full.kind, desc=full.desc)
+
+
+def derive_pre(before: ScreenState, target: Element | None, inputs: dict[str, str], first: bool) -> list[Check]:
+    checks = [Check(kind="app_foreground", package=before.package)]
+    if first:
+        # The routine's starting screen: one distinctive element besides the target.
+        cands = [e for e in before.numbered if target is None or e.index != target.index]
+        cands.sort(key=lambda e: -_distinctiveness(e, before, inputs))
+        if cands and _distinctiveness(cands[0], before, inputs) >= 2.0:
+            checks.append(Check(kind="element_present", locator=anchor_locator(cands[0], before)))
+    return checks
+
+
+def derive_post(before: ScreenState, after: ScreenState, action_kind: str, target: Element | None,
+                typed: str | None, inputs: dict[str, str], max_anchors: int = 2) -> list[Check]:
+    checks: list[Check] = []
+    after_target = None
+    if target is not None:
+        after_target = next((e for e in after.elements if e.index == target.index and e.resource_id == target.resource_id
+                             and e.cls == target.cls), None)
+        if after_target is None and usable_id(target.resource_id):
+            after_target = next((e for e in after.elements if e.resource_id == target.resource_id), None)
+
+    if action_kind == "type" and target is not None and typed is not None:
+        checks.append(Check(kind="field_equals", locator=anchor_locator(target, before), value=typed))
+        return checks
+    if target is not None and target.checkable and after_target is not None and after_target.checked != target.checked:
+        checks.append(Check(kind="toggle_is", locator=anchor_locator(target, before), value="on" if after_target.checked else "off"))
+
+    before_keys = {_anchor_key(e) for e in before.numbered}
+    after_keys = {_anchor_key(e) for e in after.numbered}
+    appeared = [e for e in after.numbered if _anchor_key(e) not in before_keys]
+    disappeared = [e for e in before.numbered if _anchor_key(e) not in after_keys]
+    new_screen = after.signature != before.signature
+
+    if new_screen:
+        checks.insert(0, Check(kind="screen_changed"))
+    good = [e for e in appeared if _distinctiveness(e, after, inputs) >= 1.0]
+    good.sort(key=lambda e: -_distinctiveness(e, after, inputs))
+    seen_ids: set[str] = set()
+    for e in good:
+        rid = short_id(e.resource_id)
+        if rid and rid in seen_ids:
+            continue
+        seen_ids.add(rid)
+        checks.append(Check(kind="element_present", locator=anchor_locator(e, after)))
+        if len([c for c in checks if c.kind == "element_present"]) >= max_anchors:
+            break
+    if not any(c.kind in ("element_present", "toggle_is") for c in checks) and disappeared:
+        gone = sorted(disappeared, key=lambda e: -_distinctiveness(e, before, inputs))
+        if _distinctiveness(gone[0], before, inputs) >= 1.0:
+            checks.append(Check(kind="element_absent", locator=anchor_locator(gone[0], before)))
+    if not checks:
+        checks.append(Check(kind="screen_changed"))
+    return checks

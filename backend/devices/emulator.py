@@ -302,10 +302,37 @@ class EmulatorDevice:
         async with self._lock:
             return await asyncio.to_thread(self._act_sync, action)
 
-    async def launch(self, package: str) -> None:
+    async def launch(self, package: str, fresh: bool = False) -> None:
+        """Bring an app to the front; `fresh` force-stops it first (a routine's start on real apps)."""
+        if fresh:
+            async with self._lock:
+                await asyncio.to_thread(self.u2.app_stop, package)
+                self._last = None
         result = await self.act(Action(kind="launch", package=package))
         if not result.ok:
             raise RuntimeError(result.error)
+
+    def _read_field_sync(self, el) -> str | None:
+        """A field's text through the accessibility object API (get_text keeps emoji; the XML dump shows '..')."""
+        if self._last is None:
+            return None
+        same = [e for e in self._last.elements if e.cls == el.cls]
+        try:
+            k = next(i for i, e in enumerate(same) if e.index == el.index)
+        except StopIteration:
+            return None
+        node = self.u2(className=el.cls, instance=k)
+        if not node.exists:
+            return None
+        b = node.info.get("bounds", {})
+        cx, cy = el.center
+        if not (b.get("left", -1) <= cx <= b.get("right", -1) and b.get("top", -1) <= cy <= b.get("bottom", -1)):
+            return None
+        return node.get_text()
+
+    async def read_field(self, el) -> str | None:
+        async with self._lock:
+            return await asyncio.to_thread(self._read_field_sync, el)
 
     # ---- snapshots (envoy-test only) --------------------------------------------------------
 

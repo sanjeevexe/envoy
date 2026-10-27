@@ -1,0 +1,403 @@
+{
+ "time": "2026-10-27T04:37:26+00:00",
+ "rows": [
+  {
+   "family": "check_in",
+   "compiled": true,
+   "routine": "skylark_air_check_in_flight",
+   "version": 1,
+   "status": "added",
+   "steps": 9,
+   "inputs": {
+    "trip_city": {
+     "type": "text",
+     "description": "City of trip to check in",
+     "from_memory": null,
+     "example": "Denver",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "seat",
+    "gate",
+    "boarding_time"
+   ],
+   "dropped": [],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "compile_cost_usd": 0.065964,
+   "compile_latency_s": 21.6,
+   "verify": [
+    {
+     "case": "same-inputs",
+     "inputs": {
+      "trip_city": "Denver"
+     },
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "duration_s": 4.51,
+     "outputs": {
+      "seat": "22F",
+      "gate": "A7",
+      "boarding_time": "2:05 PM"
+     }
+    },
+    {
+     "case": "second-inputs",
+     "inputs": {
+      "trip_city": "Tampa"
+     },
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "duration_s": 4.48,
+     "outputs": {
+      "seat": "11E",
+      "gate": "B17",
+      "boarding_time": "6:00 AM"
+     }
+    }
+   ]
+  },
+  {
+   "family": "gate",
+   "compiled": true,
+   "routine": "skylark_get_flight_gate",
+   "version": 1,
+   "status": "added",
+   "steps": 3,
+   "inputs": {
+    "trip_city": {
+     "type": "text",
+     "description": "The destination city of the flight, shown in the goal and matched against the trip rows in My Trips.",
+     "from_memory": null,
+     "example": "Denver",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "gate"
+   ],
+   "dropped": [],
+   "kept": [
+    1,
+    2
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "compile_cost_usd": 0.0375944,
+   "compile_latency_s": 13.43,
+   "verify": [
+    {
+     "case": "same-inputs",
+     "inputs": {
+      "trip_city": "Denver"
+     },
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "duration_s": 2.39,
+     "outputs": {
+      "gate": "A7"
+     }
+    },
+    {
+     "case": "second-inputs",
+     "inputs": {
+      "trip_city": "Tampa"
+     },
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "duration_s": 2.43,
+     "outputs": {
+      "gate": "B17"
+     }
+    }
+   ]
+  },
+  {
+   "family": "flight_status",
+   "compiled": true,
+   "routine": "skylark_check_flight_status",
+   "version": 1,
+   "status": "added",
+   "steps": 3,
+   "inputs": {
+    "flight_number": {
+     "type": "text",
+     "description": "The SkyLark flight number to look up.",
+     "from_memory": null,
+     "example": "SL 1190",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "flight_status",
+    "route",
+    "date",
+    "gate",
+    "departure_time"
+   ],
+   "dropped": [],
+   "kept": [
+    1,
+    2,
+    3
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "compile_cost_usd": 0.0456048,
+   "compile_latency_s": 12.11,
+   "verify": [
+    {
+     "case": "same-inputs",
+     "inputs": {
+      "flight_number": "SL 1190"
+     },
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "duration_s": 3.06,
+     "outputs": {
+      "flight_status": "Delayed 25 min",
+      "route": "ATL → DEN",
+      "date": "Sat, Nov 14, 2026",
+      "gate": "A7",
+      "departure_time": "2:45 PM"
+     }
+    },
+    {
+     "case": "second-inputs",
+     "inputs": {
+      "flight_number": "SL 291"
+     },
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "duration_s": 3.14,
+     "outputs": {
+      "flight_status": "On time",
+      "route": "ATL → TPA",
+      "date": "Wed, Nov 25, 2026",
+      "gate": "B17",
+      "departure_time": "6:00 AM"
+     }
+    }
+   ]
+  },
+  {
+   "family": "find_trip",
+   "compiled": true,
+   "routine": "skylark_lookup_trip_destination",
+   "version": 1,
+   "status": "added",
+   "steps": 3,
+   "inputs": {
+    "trip_confirmation_code": {
+     "type": "text",
+     "description": "",
+     "from_memory": null,
+     "example": "PT4R8Z",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "destination"
+   ],
+   "dropped": [],
+   "kept": [
+    1,
+    2
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "compile_cost_usd": 0.0517064,
+   "compile_latency_s": 16.1,
+   "verify": [
+    {
+     "case": "same-inputs",
+     "inputs": {
+      "trip_confirmation_code": "PT4R8Z"
+     },
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "duration_s": 2.38,
+     "outputs": {
+      "destination": "Denver"
+     }
+    },
+    {
+     "case": "second-inputs",
+     "inputs": {
+      "trip_confirmation_code": "RPOIG8"
+     },
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "duration_s": 2.39,
+     "outputs": {
+      "destination": "Tampa"
+     }
+    }
+   ]
+  },
+  {
+   "family": "change_seat",
+   "compiled": true,
+   "routine": "skylark_change_seat",
+   "version": 1,
+   "status": "added",
+   "steps": 7,
+   "inputs": {
+    "trip_city": {
+     "type": "text",
+     "description": "",
+     "from_memory": null,
+     "example": "Denver",
+     "choices": null
+    },
+    "desired_seat": {
+     "type": "text",
+     "description": "",
+     "from_memory": null,
+     "example": "21C",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "seat"
+   ],
+   "dropped": [
+    [
+     4,
+     "tap_point: not a device action (tap_point rejected: elements available and no screenshot)"
+    ]
+   ],
+   "kept": [
+    1,
+    2,
+    3,
+    5,
+    6
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "compile_cost_usd": 0.047955199999999996,
+   "compile_latency_s": 11.36,
+   "verify": [
+    {
+     "case": "same-inputs",
+     "inputs": {
+      "trip_city": "Denver",
+      "desired_seat": "21C"
+     },
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "duration_s": 4.94,
+     "outputs": {
+      "seat": "21C"
+     }
+    },
+    {
+     "case": "second-inputs",
+     "inputs": {
+      "trip_city": "Tampa",
+      "desired_seat": "23B"
+     },
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "duration_s": 6.73,
+     "outputs": {
+      "seat": "23B"
+     }
+    }
+   ]
+  },
+  {
+   "family": "add_ktn",
+   "compiled": true,
+   "routine": "skylark_add_known_traveler_number",
+   "version": 1,
+   "status": "added",
+   "steps": 5,
+   "inputs": {
+    "trip_city": {
+     "type": "text",
+     "description": "City of the trip to update",
+     "from_memory": null,
+     "example": "Denver",
+     "choices": null
+    },
+    "user_known_traveler_number": {
+     "type": "text",
+     "description": "Known traveler number to add to the trip",
+     "from_memory": "user.known_traveler_number",
+     "example": "55501234",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "known_traveler_number",
+    "confirmation_code"
+   ],
+   "dropped": [],
+   "kept": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "compile_cost_usd": 0.0690952,
+   "compile_latency_s": 17.17,
+   "verify": [
+    {
+     "case": "same-inputs",
+     "inputs": {
+      "trip_city": "Denver",
+      "user_known_traveler_number": "55501234"
+     },
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "duration_s": 3.89,
+     "outputs": {
+      "known_traveler_number": "55501234",
+      "confirmation_code": "PT4R8Z"
+     }
+    },
+    {
+     "case": "second-inputs",
+     "inputs": {
+      "trip_city": "Tampa",
+      "user_known_traveler_number": "13561597"
+     },
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "duration_s": 4.02,
+     "outputs": {
+      "known_traveler_number": "13561597",
+      "confirmation_code": "RPOIG8"
+     }
+    }
+   ]
+  }
+ ]
+}

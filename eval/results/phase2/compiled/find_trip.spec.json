@@ -1,0 +1,54 @@
+{
+ "name": "skylark_lookup_trip_destination",
+ "intent": "Look up a SkyLark trip by confirmation code and tell where it goes",
+ "description": "Opens My Trips in SkyLark Air, selects the trip matching the given confirmation code, and reports the destination shown on the trip details screen.",
+ "patterns": [
+  "look up my trip",
+  "where does my trip go",
+  "find my trip by confirmation code",
+  "show my trip destination"
+ ],
+ "inputs": [
+  {
+   "name": "trip_confirmation_code",
+   "type": "text",
+   "description": "",
+   "from_memory": null,
+   "example": "PT4R8Z"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "tap_my_trips",
+   "intent": "Tap My Trips to open the trips list",
+   "target_fixed_text": "My Trips",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "tap_trip_by_confirmation_code",
+   "intent": "Tap the trip row showing confirmation code {{trip_confirmation_code}}",
+   "target_fixed_text": null,
+   "choice_input": "trip_confirmation_code"
+  }
+ ],
+ "outputs": [
+  {
+   "name": "destination",
+   "near": "Trip to",
+   "example": "Denver"
+  }
+ ],
+ "data_values": [
+  "SL 1190",
+  "ATL 2:45 PM",
+  "DEN 4:05 PM",
+  "Sat, Nov 14, 2026",
+  "Delayed 25 min",
+  "A7",
+  "22F",
+  "2:05 PM",
+  "Group 5"
+ ]
+}

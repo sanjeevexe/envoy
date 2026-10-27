@@ -1,0 +1,77 @@
+{
+ "time": "2026-10-27T04:27:18+00:00",
+ "rows": [
+  {
+   "family": "check_in",
+   "task_id": "p2-src-check_in",
+   "passed": true,
+   "status": "done",
+   "steps": 8,
+   "model_calls": 10,
+   "cost_usd": 0.01830115,
+   "cost_at_standard_usd": 0.01830115,
+   "duration_s": 19.2,
+   "result": "Checked in for flight SL 1190 ATL to DEN on Sat, Nov 14, 2026. Passenger Maya Patel, Seat 22F, Gate A7, Boarding 2:05 PM Group 5. Boarding pass shows You're checked in."
+  },
+  {
+   "family": "change_seat",
+   "task_id": "p2-src-change_seat",
+   "passed": true,
+   "status": "done",
+   "steps": 5,
+   "model_calls": 8,
+   "cost_usd": 0.0216017,
+   "cost_at_standard_usd": 0.0216017,
+   "duration_s": 14.75,
+   "result": "Seat changed to 21C on Denver flight SL 1190"
+  },
+  {
+   "family": "add_ktn",
+   "task_id": "p2-src-add_ktn",
+   "passed": true,
+   "status": "done",
+   "steps": 4,
+   "model_calls": 6,
+   "cost_usd": 0.009561150000000001,
+   "cost_at_standard_usd": 0.009561150000000001,
+   "duration_s": 11.73,
+   "result": "Known traveler number 55501234 added to Denver trip (PT4R8Z) - screen shows 'Known traveler number saved'"
+  },
+  {
+   "family": "gate",
+   "task_id": "p2-src-gate",
+   "passed": true,
+   "status": "done",
+   "steps": 2,
+   "model_calls": 4,
+   "cost_usd": 0.0065176999999999995,
+   "cost_at_standard_usd": 0.0065176999999999995,
+   "duration_s": 7.27,
+   "result": "Gate A7"
+  },
+  {
+   "family": "flight_status",
+   "task_id": "p2-src-flight_status",
+   "passed": true,
+   "status": "done",
+   "steps": 3,
+   "model_calls": 5,
+   "cost_usd": 0.0074725,
+   "cost_at_standard_usd": 0.0074725,
+   "duration_s": 8.78,
+   "result": "SkyLark flight SL 1190 · ATL → DEN · Sat, Nov 14, 2026 · Delayed 25 min · Gate A7 · Departs 2:45 PM"
+  },
+  {
+   "family": "find_trip",
+   "task_id": "p2-src-find_trip",
+   "passed": true,
+   "status": "done",
+   "steps": 2,
+   "model_calls": 4,
+   "cost_usd": 0.007302100000000001,
+   "cost_at_standard_usd": 0.007302100000000001,
+   "duration_s": 7.43,
+   "result": "Trip PT4R8Z goes to Denver - Trip to Denver, SL 1190 ATL → DEN on Sat, Nov 14, 2026"
+  }
+ ]
+}

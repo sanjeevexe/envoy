@@ -56,6 +56,7 @@ class RunResult:
     steps: int = 0
     model_calls: int = 0
     cost_usd: float = 0.0
+    cost_at_standard_usd: float = 0.0  # what the same tokens cost at standard prices (differs on the Contributor tier)
     input_tokens: int = 0
     cached_tokens: int = 0
     output_tokens: int = 0
@@ -148,6 +149,7 @@ class AgentRunner:
         def account(res) -> None:
             out.model_calls += 1
             out.cost_usd += res.cost_usd
+            out.cost_at_standard_usd += res.cost_at_standard_usd
             out.input_tokens += res.usage.get("input_tokens", 0)
             out.cached_tokens += res.usage.get("cached_tokens", 0)
             out.output_tokens += res.usage.get("output_tokens", 0)

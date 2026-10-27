@@ -1,0 +1,55 @@
+{
+ "name": "skylark_get_flight_gate",
+ "intent": "Find the departure gate for a SkyLark flight to a given city",
+ "description": "Open My Trips in SkyLark Air, select the trip to the requested destination city, and read the departure gate from the trip details screen.",
+ "patterns": [
+  "What gate does my flight leave from",
+  "What gate is my flight departing from",
+  "Find the departure gate for my flight",
+  "What is the gate for my flight"
+ ],
+ "inputs": [
+  {
+   "name": "trip_city",
+   "type": "text",
+   "description": "The destination city of the flight, shown in the goal and matched against the trip rows in My Trips.",
+   "from_memory": null,
+   "example": "Denver"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "tap_my_trips",
+   "intent": "Tap the My Trips button to open the trips list.",
+   "target_fixed_text": "My Trips",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "tap_trip_row",
+   "intent": "Tap the trip row for {{trip_city}} in the list.",
+   "target_fixed_text": null,
+   "choice_input": "trip_city"
+  }
+ ],
+ "outputs": [
+  {
+   "name": "gate",
+   "near": "Gate",
+   "example": "A7"
+  }
+ ],
+ "data_values": [
+  "SL 1190",
+  "ATL",
+  "Sat, Nov 14, 2026",
+  "PT4R8Z",
+  "2:45 PM",
+  "4:05 PM",
+  "Delayed 25 min",
+  "22F",
+  "2:05 PM",
+  "Group 5"
+ ]
+}
