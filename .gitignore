@@ -18,6 +18,7 @@ __pycache__/
 logs/
 *.log
 *.jsonl
+!backend/tests/traces/**/steps.jsonl
 
 # Emulator artifacts
 *.avd/
@@ -46,4 +47,6 @@ dist/
 .vscode/
 
 # Agent run traces and screenshots (large; eval summaries go to eval/results/)
-data/
+data/*
+# The routine library (YAML versions, index, patch evidence) is part of the record
+!data/routines/

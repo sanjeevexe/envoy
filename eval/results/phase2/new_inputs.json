@@ -1,0 +1,2058 @@
+{
+ "time": "2026-10-27T04:41:28+00:00",
+ "rows": [
+  {
+   "kind": "newinput",
+   "family": "check_in",
+   "booking": "E3K81I",
+   "city": "Spokane",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "seat": "18A",
+    "gate": "B26",
+    "boarding_time": "12:40 PM"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 3.79,
+   "steps": [
+    {
+     "id": "open_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 775
+    },
+    {
+     "id": "find_select_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 381
+    },
+    {
+     "id": "select_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 428
+    },
+    {
+     "id": "start_check_in",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 360
+    },
+    {
+     "id": "select_passenger",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 332
+    },
+    {
+     "id": "continue_after_passenger",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 331
+    },
+    {
+     "id": "confirm_no_hazardous_materials",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 357
+    },
+    {
+     "id": "continue_after_hazmat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 370
+    },
+    {
+     "id": "confirm_check_in",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 385
+    }
+   ],
+   "patches": [],
+   "approvals": 1,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-check_in-v0-E3K81I",
+   "routine": "skylark_air_check_in_flight",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "change_seat",
+   "booking": "E3K81I",
+   "city": "Spokane",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "seat": "18C"
+   },
+   "rung": 1,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 4.26,
+   "steps": [
+    {
+     "id": "open_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 787
+    },
+    {
+     "id": "find_open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 395
+    },
+    {
+     "id": "open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 443
+    },
+    {
+     "id": "open_change_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 573
+    },
+    {
+     "id": "find_select_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.976,
+     "ms": 520
+    },
+    {
+     "id": "select_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.976,
+     "ms": 693
+    },
+    {
+     "id": "confirm_seat",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 0.4 s"
+     ],
+     "score": 1.0,
+     "ms": 738
+    }
+   ],
+   "patches": [],
+   "approvals": 1,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-change_seat-v0-E3K81I",
+   "routine": "skylark_change_seat",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "add_ktn",
+   "booking": "E3K81I",
+   "city": "Spokane",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "known_traveler_number": "34568702",
+    "confirmation_code": "E3K81I"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 3.24,
+   "steps": [
+    {
+     "id": "open_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 772
+    },
+    {
+     "id": "find_open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 375
+    },
+    {
+     "id": "open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 427
+    },
+    {
+     "id": "enter_known_traveler_number",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 1153
+    },
+    {
+     "id": "save_known_traveler_number",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 443
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-add_ktn-v0-E3K81I",
+   "routine": "skylark_add_known_traveler_number",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "gate",
+   "booking": "E3K81I",
+   "city": "Spokane",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "gate": "B26"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 1.62,
+   "steps": [
+    {
+     "id": "tap_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 762
+    },
+    {
+     "id": "find_tap_trip_row",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 358
+    },
+    {
+     "id": "tap_trip_row",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 433
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-gate-v0-E3K81I",
+   "routine": "skylark_get_flight_gate",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "flight_status",
+   "booking": "E3K81I",
+   "city": "Spokane",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "flight_status": "On time",
+    "route": "ATL → GEG",
+    "date": "Fri, Dec 4, 2026",
+    "gate": "B26",
+    "departure_time": "2:15 PM"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 2.22,
+   "steps": [
+    {
+     "id": "tap_flight_status",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 698
+    },
+    {
+     "id": "enter_flight_number",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 1037
+    },
+    {
+     "id": "tap_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 413
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-flight_status-v0-E3K81I",
+   "routine": "skylark_check_flight_status",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "find_trip",
+   "booking": "E3K81I",
+   "city": "Spokane",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "destination": "Spokane"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 1.61,
+   "steps": [
+    {
+     "id": "tap_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 730
+    },
+    {
+     "id": "find_tap_trip_by_confirmation_code",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 351
+    },
+    {
+     "id": "tap_trip_by_confirmation_code",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 461
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-find_trip-v0-E3K81I",
+   "routine": "skylark_lookup_trip_destination",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "check_in",
+   "booking": "0IGQ1E",
+   "city": "Pittsburgh",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "seat": "22E",
+    "gate": "A5",
+    "boarding_time": "11:05 AM"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 3.73,
+   "steps": [
+    {
+     "id": "open_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 746
+    },
+    {
+     "id": "find_select_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 372
+    },
+    {
+     "id": "select_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 443
+    },
+    {
+     "id": "start_check_in",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 377
+    },
+    {
+     "id": "select_passenger",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 339
+    },
+    {
+     "id": "continue_after_passenger",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 324
+    },
+    {
+     "id": "confirm_no_hazardous_materials",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 329
+    },
+    {
+     "id": "continue_after_hazmat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 359
+    },
+    {
+     "id": "confirm_check_in",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 379
+    }
+   ],
+   "patches": [],
+   "approvals": 1,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-check_in-v0-0IGQ1E",
+   "routine": "skylark_air_check_in_flight",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "change_seat",
+   "booking": "0IGQ1E",
+   "city": "Pittsburgh",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "seat": "12C"
+   },
+   "rung": 1,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 3.97,
+   "steps": [
+    {
+     "id": "open_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 704
+    },
+    {
+     "id": "find_open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 350
+    },
+    {
+     "id": "open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 435
+    },
+    {
+     "id": "open_change_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 547
+    },
+    {
+     "id": "find_select_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.976,
+     "ms": 510
+    },
+    {
+     "id": "select_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.976,
+     "ms": 632
+    },
+    {
+     "id": "confirm_seat",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 0.3 s"
+     ],
+     "score": 1.0,
+     "ms": 683
+    }
+   ],
+   "patches": [],
+   "approvals": 1,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-change_seat-v0-0IGQ1E",
+   "routine": "skylark_change_seat",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "add_ktn",
+   "booking": "0IGQ1E",
+   "city": "Pittsburgh",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "known_traveler_number": "91576649",
+    "confirmation_code": "0IGQ1E"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 3.12,
+   "steps": [
+    {
+     "id": "open_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 752
+    },
+    {
+     "id": "find_open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 357
+    },
+    {
+     "id": "open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 446
+    },
+    {
+     "id": "enter_known_traveler_number",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 1039
+    },
+    {
+     "id": "save_known_traveler_number",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 437
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-add_ktn-v0-0IGQ1E",
+   "routine": "skylark_add_known_traveler_number",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "gate",
+   "booking": "0IGQ1E",
+   "city": "Pittsburgh",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "gate": "A5"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 1.63,
+   "steps": [
+    {
+     "id": "tap_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 749
+    },
+    {
+     "id": "find_tap_trip_row",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 370
+    },
+    {
+     "id": "tap_trip_row",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 444
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-gate-v0-0IGQ1E",
+   "routine": "skylark_get_flight_gate",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "flight_status",
+   "booking": "0IGQ1E",
+   "city": "Pittsburgh",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "flight_status": "On time",
+    "route": "ATL → PIT",
+    "date": "Mon, Dec 7, 2026",
+    "gate": "A5",
+    "departure_time": "12:40 PM"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 2.19,
+   "steps": [
+    {
+     "id": "tap_flight_status",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 685
+    },
+    {
+     "id": "enter_flight_number",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 1041
+    },
+    {
+     "id": "tap_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 383
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-flight_status-v0-0IGQ1E",
+   "routine": "skylark_check_flight_status",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "find_trip",
+   "booking": "0IGQ1E",
+   "city": "Pittsburgh",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "destination": "Pittsburgh"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 1.61,
+   "steps": [
+    {
+     "id": "tap_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 754
+    },
+    {
+     "id": "find_tap_trip_by_confirmation_code",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 346
+    },
+    {
+     "id": "tap_trip_by_confirmation_code",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 443
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-find_trip-v0-0IGQ1E",
+   "routine": "skylark_lookup_trip_destination",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "check_in",
+   "booking": "UJ0E5F",
+   "city": "Omaha",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "seat": "13F",
+    "gate": "A16",
+    "boarding_time": "6:00 AM"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 3.68,
+   "steps": [
+    {
+     "id": "open_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 727
+    },
+    {
+     "id": "find_select_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 356
+    },
+    {
+     "id": "select_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 454
+    },
+    {
+     "id": "start_check_in",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 365
+    },
+    {
+     "id": "select_passenger",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 328
+    },
+    {
+     "id": "continue_after_passenger",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 323
+    },
+    {
+     "id": "confirm_no_hazardous_materials",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 328
+    },
+    {
+     "id": "continue_after_hazmat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 347
+    },
+    {
+     "id": "confirm_check_in",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 382
+    }
+   ],
+   "patches": [],
+   "approvals": 1,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-check_in-v0-UJ0E5F",
+   "routine": "skylark_air_check_in_flight",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "change_seat",
+   "booking": "UJ0E5F",
+   "city": "Omaha",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "seat": "22E"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 3.9,
+   "steps": [
+    {
+     "id": "open_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 730
+    },
+    {
+     "id": "find_open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 360
+    },
+    {
+     "id": "open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 462
+    },
+    {
+     "id": "open_change_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 559
+    },
+    {
+     "id": "find_select_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.976,
+     "ms": 501
+    },
+    {
+     "id": "select_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.976,
+     "ms": 584
+    },
+    {
+     "id": "confirm_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 597
+    }
+   ],
+   "patches": [],
+   "approvals": 1,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-change_seat-v0-UJ0E5F",
+   "routine": "skylark_change_seat",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "add_ktn",
+   "booking": "UJ0E5F",
+   "city": "Omaha",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "known_traveler_number": "76118984",
+    "confirmation_code": "UJ0E5F"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 3.32,
+   "steps": [
+    {
+     "id": "open_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 763
+    },
+    {
+     "id": "find_open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 399
+    },
+    {
+     "id": "open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 448
+    },
+    {
+     "id": "enter_known_traveler_number",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 1168
+    },
+    {
+     "id": "save_known_traveler_number",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 457
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-add_ktn-v0-UJ0E5F",
+   "routine": "skylark_add_known_traveler_number",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "gate",
+   "booking": "UJ0E5F",
+   "city": "Omaha",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "gate": "A16"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 1.64,
+   "steps": [
+    {
+     "id": "tap_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 757
+    },
+    {
+     "id": "find_tap_trip_row",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 378
+    },
+    {
+     "id": "tap_trip_row",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 437
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-gate-v0-UJ0E5F",
+   "routine": "skylark_get_flight_gate",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "flight_status",
+   "booking": "UJ0E5F",
+   "city": "Omaha",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "flight_status": "On time",
+    "route": "ATL → OMA",
+    "date": "Mon, Dec 7, 2026",
+    "gate": "A16",
+    "departure_time": "6:00 AM"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 2.37,
+   "steps": [
+    {
+     "id": "tap_flight_status",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 711
+    },
+    {
+     "id": "enter_flight_number",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 1181
+    },
+    {
+     "id": "tap_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 393
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-flight_status-v0-UJ0E5F",
+   "routine": "skylark_check_flight_status",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "find_trip",
+   "booking": "UJ0E5F",
+   "city": "Omaha",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "destination": "Omaha"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 1.63,
+   "steps": [
+    {
+     "id": "tap_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 730
+    },
+    {
+     "id": "find_tap_trip_by_confirmation_code",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 357
+    },
+    {
+     "id": "tap_trip_by_confirmation_code",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 473
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-find_trip-v0-UJ0E5F",
+   "routine": "skylark_lookup_trip_destination",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "check_in",
+   "booking": "IQLBYM",
+   "city": "Sacramento",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "seat": "23C",
+    "gate": "D4",
+    "boarding_time": "12:40 PM"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 5.19,
+   "steps": [
+    {
+     "id": "open_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 760
+    },
+    {
+     "id": "find_select_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 1896
+    },
+    {
+     "id": "select_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 416
+    },
+    {
+     "id": "start_check_in",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 372
+    },
+    {
+     "id": "select_passenger",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 337
+    },
+    {
+     "id": "continue_after_passenger",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 335
+    },
+    {
+     "id": "confirm_no_hazardous_materials",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 320
+    },
+    {
+     "id": "continue_after_hazmat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 332
+    },
+    {
+     "id": "confirm_check_in",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 362
+    }
+   ],
+   "patches": [],
+   "approvals": 1,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-check_in-v0-IQLBYM",
+   "routine": "skylark_air_check_in_flight",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "change_seat",
+   "booking": "IQLBYM",
+   "city": "Sacramento",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "seat": "13E"
+   },
+   "rung": 1,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 5.51,
+   "steps": [
+    {
+     "id": "open_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 755
+    },
+    {
+     "id": "find_open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 1879
+    },
+    {
+     "id": "open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 420
+    },
+    {
+     "id": "open_change_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 593
+    },
+    {
+     "id": "find_select_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.976,
+     "ms": 496
+    },
+    {
+     "id": "select_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.976,
+     "ms": 641
+    },
+    {
+     "id": "confirm_seat",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 0.3 s"
+     ],
+     "score": 1.0,
+     "ms": 624
+    }
+   ],
+   "patches": [],
+   "approvals": 1,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-change_seat-v0-IQLBYM",
+   "routine": "skylark_change_seat",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "add_ktn",
+   "booking": "IQLBYM",
+   "city": "Sacramento",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "known_traveler_number": "17975123",
+    "confirmation_code": "IQLBYM"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 4.58,
+   "steps": [
+    {
+     "id": "open_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 727
+    },
+    {
+     "id": "find_open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 2000
+    },
+    {
+     "id": "open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 440
+    },
+    {
+     "id": "enter_known_traveler_number",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 988
+    },
+    {
+     "id": "save_known_traveler_number",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 363
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-add_ktn-v0-IQLBYM",
+   "routine": "skylark_add_known_traveler_number",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "gate",
+   "booking": "IQLBYM",
+   "city": "Sacramento",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "gate": "D4"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 3.19,
+   "steps": [
+    {
+     "id": "tap_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 737
+    },
+    {
+     "id": "find_tap_trip_row",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 1965
+    },
+    {
+     "id": "tap_trip_row",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 426
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-gate-v0-IQLBYM",
+   "routine": "skylark_get_flight_gate",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "flight_status",
+   "booking": "IQLBYM",
+   "city": "Sacramento",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "flight_status": "On time",
+    "route": "ATL → SMF",
+    "date": "Mon, Dec 7, 2026",
+    "gate": "D4",
+    "departure_time": "2:15 PM"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 2.26,
+   "steps": [
+    {
+     "id": "tap_flight_status",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 689
+    },
+    {
+     "id": "enter_flight_number",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 1095
+    },
+    {
+     "id": "tap_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 397
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-flight_status-v0-IQLBYM",
+   "routine": "skylark_check_flight_status",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "find_trip",
+   "booking": "IQLBYM",
+   "city": "Sacramento",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "destination": "Sacramento"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 3.16,
+   "steps": [
+    {
+     "id": "tap_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 753
+    },
+    {
+     "id": "find_tap_trip_by_confirmation_code",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 1909
+    },
+    {
+     "id": "tap_trip_by_confirmation_code",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 436
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-find_trip-v0-IQLBYM",
+   "routine": "skylark_lookup_trip_destination",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "check_in",
+   "booking": "KX7Q2M",
+   "city": "Chicago",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "seat": "14C",
+    "gate": "B12",
+    "boarding_time": "5:30 AM"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 3.77,
+   "steps": [
+    {
+     "id": "open_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 757
+    },
+    {
+     "id": "find_select_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 350
+    },
+    {
+     "id": "select_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 464
+    },
+    {
+     "id": "start_check_in",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 366
+    },
+    {
+     "id": "select_passenger",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 337
+    },
+    {
+     "id": "continue_after_passenger",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 336
+    },
+    {
+     "id": "confirm_no_hazardous_materials",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 329
+    },
+    {
+     "id": "continue_after_hazmat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 351
+    },
+    {
+     "id": "confirm_check_in",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 404
+    }
+   ],
+   "patches": [],
+   "approvals": 1,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-check_in-v0-KX7Q2M",
+   "routine": "skylark_air_check_in_flight",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "change_seat",
+   "booking": "KX7Q2M",
+   "city": "Chicago",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "seat": "20B"
+   },
+   "rung": 1,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 4.02,
+   "steps": [
+    {
+     "id": "open_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 744
+    },
+    {
+     "id": "find_open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 347
+    },
+    {
+     "id": "open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 439
+    },
+    {
+     "id": "open_change_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 553
+    },
+    {
+     "id": "find_select_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.976,
+     "ms": 503
+    },
+    {
+     "id": "select_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.976,
+     "ms": 649
+    },
+    {
+     "id": "confirm_seat",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 0.3 s"
+     ],
+     "score": 1.0,
+     "ms": 680
+    }
+   ],
+   "patches": [],
+   "approvals": 1,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-change_seat-v0-KX7Q2M",
+   "routine": "skylark_change_seat",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "add_ktn",
+   "booking": "KX7Q2M",
+   "city": "Chicago",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "known_traveler_number": "98765432",
+    "confirmation_code": "KX7Q2M"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 3.02,
+   "steps": [
+    {
+     "id": "open_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 742
+    },
+    {
+     "id": "find_open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 349
+    },
+    {
+     "id": "open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 437
+    },
+    {
+     "id": "enter_known_traveler_number",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 999
+    },
+    {
+     "id": "save_known_traveler_number",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 413
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-add_ktn-v0-KX7Q2M",
+   "routine": "skylark_add_known_traveler_number",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "gate",
+   "booking": "KX7Q2M",
+   "city": "Chicago",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "gate": "B12"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 1.65,
+   "steps": [
+    {
+     "id": "tap_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 777
+    },
+    {
+     "id": "find_tap_trip_row",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 367
+    },
+    {
+     "id": "tap_trip_row",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 440
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-gate-v0-KX7Q2M",
+   "routine": "skylark_get_flight_gate",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "flight_status",
+   "booking": "KX7Q2M",
+   "city": "Chicago",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "flight_status": "On time",
+    "route": "ATL → ORD",
+    "date": "Fri, Oct 30, 2026",
+    "gate": "B12",
+    "departure_time": "6:10 AM"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 2.19,
+   "steps": [
+    {
+     "id": "tap_flight_status",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 698
+    },
+    {
+     "id": "enter_flight_number",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 992
+    },
+    {
+     "id": "tap_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 430
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-flight_status-v0-KX7Q2M",
+   "routine": "skylark_check_flight_status",
+   "version": 1
+  },
+  {
+   "kind": "newinput",
+   "family": "find_trip",
+   "booking": "KX7Q2M",
+   "city": "Chicago",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "destination": "Chicago"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 1.6,
+   "steps": [
+    {
+     "id": "tap_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 740
+    },
+    {
+     "id": "find_tap_trip_by_confirmation_code",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 369
+    },
+    {
+     "id": "tap_trip_by_confirmation_code",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 425
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-newinput-find_trip-v0-KX7Q2M",
+   "routine": "skylark_lookup_trip_destination",
+   "version": 1
+  }
+ ]
+}

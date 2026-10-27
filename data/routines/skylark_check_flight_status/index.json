@@ -1,0 +1,112 @@
+{
+ "name": "skylark_check_flight_status",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-27 00:35:01",
+   "parent": null,
+   "changes": [
+    "compiled from p2-src-flight_status"
+   ],
+   "verification": {
+    "cases": [
+     {
+      "case": "same-inputs",
+      "inputs": {
+       "flight_number": "SL 1190"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 3.06,
+      "outputs": {
+       "flight_status": "Delayed 25 min",
+       "route": "ATL → DEN",
+       "date": "Sat, Nov 14, 2026",
+       "gate": "A7",
+       "departure_time": "2:45 PM"
+      }
+     },
+     {
+      "case": "second-inputs",
+      "inputs": {
+       "flight_number": "SL 291"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 3.14,
+      "outputs": {
+       "flight_status": "On time",
+       "route": "ATL → TPA",
+       "date": "Wed, Nov 25, 2026",
+       "gate": "B17",
+       "departure_time": "6:00 AM"
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-27 00:38:42",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-flight_status-v0-E3K81I",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 2.22,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-27 00:39:20",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-flight_status-v0-0IGQ1E",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 2.19,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-27 00:40:01",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-flight_status-v0-UJ0E5F",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 2.37,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-27 00:40:44",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-flight_status-v0-IQLBYM",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 2.26,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-27 00:41:23",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-flight_status-v0-KX7Q2M",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 2.19,
+   "patches": 0
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

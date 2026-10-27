@@ -1,0 +1,108 @@
+{
+ "name": "skylark_air_check_in_flight",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-27 00:32:41",
+   "parent": null,
+   "changes": [
+    "compiled from p2-src-check_in"
+   ],
+   "verification": {
+    "cases": [
+     {
+      "case": "same-inputs",
+      "inputs": {
+       "trip_city": "Denver"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 4.51,
+      "outputs": {
+       "seat": "22F",
+       "gate": "A7",
+       "boarding_time": "2:05 PM"
+      }
+     },
+     {
+      "case": "second-inputs",
+      "inputs": {
+       "trip_city": "Tampa"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 4.48,
+      "outputs": {
+       "seat": "11E",
+       "gate": "B17",
+       "boarding_time": "6:00 AM"
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-27 00:38:14",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-check_in-v0-E3K81I",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.79,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-27 00:38:55",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-check_in-v0-0IGQ1E",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.73,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-27 00:39:34",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-check_in-v0-UJ0E5F",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.68,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-27 00:40:15",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-check_in-v0-IQLBYM",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 5.19,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-27 00:40:58",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-check_in-v0-KX7Q2M",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.77,
+   "patches": 0
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

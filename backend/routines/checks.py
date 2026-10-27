@@ -62,15 +62,15 @@ def evaluate(check: Check, screen: ScreenState, inputs: dict[str, str], *, befor
         ok = sim >= (c.min_similarity or 0.6)
         return CheckOutcome(check, ok, f"signature similarity {sim:.2f}")
     assert c.locator is not None
-    m = locators.locate(c.locator, screen, threshold=locators.STRICT, margin=0.0)
+    m = locators.locate(c.locator, screen, threshold=locators.STRICT, margin=0.0, role="check")
     used_relaxed = False
     if not m.ok and relaxed:
-        m = locators.locate(c.locator, screen, threshold=locators.RELAXED, margin=0.0)
+        m = locators.locate(c.locator, screen, threshold=locators.RELAXED, margin=0.0, role="check")
         used_relaxed = m.ok
     if k == "element_present":
         return CheckOutcome(check, m.ok, m.summary(), used_relaxed, m.element)
     if k == "element_absent":
-        strict = locators.locate(c.locator, screen, threshold=locators.STRICT, margin=0.0)
+        strict = locators.locate(c.locator, screen, threshold=locators.STRICT, margin=0.0, role="check")
         return CheckOutcome(check, not strict.ok, "absent" if not strict.ok else f"still present: {strict.summary()}")
     if not m.ok or m.element is None:
         return CheckOutcome(check, False, f"element not found: {m.summary()}")

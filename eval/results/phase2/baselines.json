@@ -1,0 +1,509 @@
+{
+ "time": "2026-10-27T04:56:03+00:00",
+ "rows": [
+  {
+   "kind": "agent",
+   "family": "check_in",
+   "booking": "E3K81I",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "model_calls": 10,
+   "cost_usd": 0.01913,
+   "duration_s": 20.15,
+   "steps": 8,
+   "result": "Checked in for flight to Spokane (SL 515 ATL→GEG on Fri, Dec 4, 2026). Passenger Maya Patel, Seat 18A, Gate B26, Boarding 12:40 PM Group 4. Boarding pass shown.",
+   "task_id": "p2-agent-check_in-v0-E3K81I"
+  },
+  {
+   "kind": "fixed",
+   "family": "check_in",
+   "booking": "E3K81I",
+   "variant": 0,
+   "passed": false,
+   "status": "replayed",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 3.93,
+   "handoff_at": null,
+   "similarity": null,
+   "replayed": 8
+  },
+  {
+   "kind": "routine-v0",
+   "family": "check_in",
+   "booking": "E3K81I",
+   "city": "Spokane",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "seat": "18A",
+    "gate": "B26",
+    "boarding_time": "12:40 PM"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 3.69,
+   "steps": [
+    {
+     "id": "open_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 732
+    },
+    {
+     "id": "find_select_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 366
+    },
+    {
+     "id": "select_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 432
+    },
+    {
+     "id": "start_check_in",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 371
+    },
+    {
+     "id": "select_passenger",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 329
+    },
+    {
+     "id": "continue_after_passenger",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 331
+    },
+    {
+     "id": "confirm_no_hazardous_materials",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 329
+    },
+    {
+     "id": "continue_after_hazmat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 351
+    },
+    {
+     "id": "confirm_check_in",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 383
+    }
+   ],
+   "patches": [],
+   "approvals": 1,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-routine-v0-check_in-v0-E3K81I",
+   "routine": "skylark_air_check_in_flight",
+   "version": 1
+  },
+  {
+   "kind": "agent",
+   "family": "check_in",
+   "booking": "0I7MMD",
+   "variant": 1,
+   "passed": true,
+   "status": "done",
+   "model_calls": 11,
+   "cost_usd": 0.01527,
+   "duration_s": 18.08,
+   "steps": 8,
+   "result": "Checked in for flight to Dallas: SL 1293 ATL → DFW on Wed, Nov 25, 2026. Seat 24F, Gate E2, Boarding 6:00 AM Group 3. Boarding pass shows 'You're checked in' for Maya Patel.",
+   "task_id": "p2-agent-check_in-v1-0I7MMD"
+  },
+  {
+   "kind": "fixed",
+   "family": "check_in",
+   "booking": "0I7MMD",
+   "variant": 1,
+   "passed": false,
+   "status": "done",
+   "model_calls": 21,
+   "cost_usd": 0.05358,
+   "duration_s": 51.73,
+   "handoff_at": 4,
+   "similarity": 0.38,
+   "replayed": 3
+  },
+  {
+   "kind": "agent",
+   "family": "check_in",
+   "booking": "EMQC52",
+   "variant": 2,
+   "passed": true,
+   "status": "done",
+   "model_calls": 13,
+   "cost_usd": 0.01993,
+   "duration_s": 22.07,
+   "steps": 11,
+   "result": "Checked in for flight to Boise (SL 116 ATL → BOI on Tue, Dec 1, 2026). Status shows 'You're checked in' with Seat 12D, Gate E15, Boarding 9:20 AM Group 5.",
+   "task_id": "p2-agent-check_in-v2-EMQC52"
+  },
+  {
+   "kind": "fixed",
+   "family": "check_in",
+   "booking": "EMQC52",
+   "variant": 2,
+   "passed": false,
+   "status": "replayed",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 3.96,
+   "handoff_at": null,
+   "similarity": null,
+   "replayed": 8
+  },
+  {
+   "kind": "agent",
+   "family": "check_in",
+   "booking": "AXZG87",
+   "variant": 3,
+   "passed": true,
+   "status": "done",
+   "model_calls": 14,
+   "cost_usd": 0.02081,
+   "duration_s": 23.82,
+   "steps": 12,
+   "result": "done",
+   "task_id": "p2-agent-check_in-v3-AXZG87"
+  },
+  {
+   "kind": "fixed",
+   "family": "check_in",
+   "booking": "AXZG87",
+   "variant": 3,
+   "passed": true,
+   "status": "done",
+   "model_calls": 17,
+   "cost_usd": 0.03049,
+   "duration_s": 39.42,
+   "handoff_at": 8,
+   "similarity": 0.33,
+   "replayed": 7
+  },
+  {
+   "kind": "agent",
+   "family": "change_seat",
+   "booking": "E3K81I",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "model_calls": 7,
+   "cost_usd": 0.02018,
+   "duration_s": 16.03,
+   "steps": 5,
+   "result": "Seat changed to 18C on Spokane flight SL 515",
+   "task_id": "p2-agent-change_seat-v0-E3K81I"
+  },
+  {
+   "kind": "fixed",
+   "family": "change_seat",
+   "booking": "E3K81I",
+   "variant": 0,
+   "passed": false,
+   "status": "replayed",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 3.61,
+   "handoff_at": null,
+   "similarity": null,
+   "replayed": 5
+  },
+  {
+   "kind": "routine-v0",
+   "family": "change_seat",
+   "booking": "E3K81I",
+   "city": "Spokane",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "seat": "18C"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 4.63,
+   "steps": [
+    {
+     "id": "open_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 1005
+    },
+    {
+     "id": "find_open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 482
+    },
+    {
+     "id": "open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 552
+    },
+    {
+     "id": "open_change_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 557
+    },
+    {
+     "id": "find_select_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.976,
+     "ms": 528
+    },
+    {
+     "id": "select_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 0.976,
+     "ms": 698
+    },
+    {
+     "id": "confirm_seat",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 697
+    }
+   ],
+   "patches": [],
+   "approvals": 1,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-routine-v0-change_seat-v0-E3K81I",
+   "routine": "skylark_change_seat",
+   "version": 1
+  },
+  {
+   "kind": "agent",
+   "family": "change_seat",
+   "booking": "0I7MMD",
+   "variant": 1,
+   "passed": true,
+   "status": "done",
+   "model_calls": 8,
+   "cost_usd": 0.01844,
+   "duration_s": 14.85,
+   "steps": 5,
+   "result": "done",
+   "task_id": "p2-agent-change_seat-v1-0I7MMD"
+  },
+  {
+   "kind": "fixed",
+   "family": "change_seat",
+   "booking": "0I7MMD",
+   "variant": 1,
+   "passed": true,
+   "status": "done",
+   "model_calls": 9,
+   "cost_usd": 0.023,
+   "duration_s": 19.65,
+   "handoff_at": 4,
+   "similarity": 0.16,
+   "replayed": 3
+  },
+  {
+   "kind": "agent",
+   "family": "change_seat",
+   "booking": "EMQC52",
+   "variant": 2,
+   "passed": true,
+   "status": "done",
+   "model_calls": 7,
+   "cost_usd": 0.01862,
+   "duration_s": 14.62,
+   "steps": 5,
+   "result": "Seat changed to 17F on Boise flight SL 116 - Your seat is now 17F",
+   "task_id": "p2-agent-change_seat-v2-EMQC52"
+  },
+  {
+   "kind": "fixed",
+   "family": "change_seat",
+   "booking": "EMQC52",
+   "variant": 2,
+   "passed": false,
+   "status": "replayed",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 3.45,
+   "handoff_at": null,
+   "similarity": null,
+   "replayed": 5
+  },
+  {
+   "kind": "agent",
+   "family": "change_seat",
+   "booking": "AXZG87",
+   "variant": 3,
+   "passed": true,
+   "status": "done",
+   "model_calls": 9,
+   "cost_usd": 0.02731,
+   "duration_s": 18.65,
+   "steps": 6,
+   "result": "Seat on Memphis flight SL 1976 changed to 24F. Screen shows 'Your seat: 24F' and 'Seat changed to 24F'.",
+   "task_id": "p2-agent-change_seat-v3-AXZG87"
+  },
+  {
+   "kind": "fixed",
+   "family": "change_seat",
+   "booking": "AXZG87",
+   "variant": 3,
+   "passed": false,
+   "status": "replayed",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 3.43,
+   "handoff_at": null,
+   "similarity": null,
+   "replayed": 5
+  },
+  {
+   "kind": "agent",
+   "family": "add_ktn",
+   "booking": "E3K81I",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "model_calls": 6,
+   "cost_usd": 0.00946,
+   "duration_s": 10.94,
+   "steps": 4,
+   "result": "Added Known Traveler Number 34568702 to Spokane trip (SL 515, confirmation E3K81I) - screen shows 'Known traveler number saved'",
+   "task_id": "p2-agent-add_ktn-v0-E3K81I"
+  },
+  {
+   "kind": "fixed",
+   "family": "add_ktn",
+   "booking": "E3K81I",
+   "variant": 0,
+   "passed": false,
+   "status": "replayed",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 3.98,
+   "handoff_at": null,
+   "similarity": null,
+   "replayed": 4
+  },
+  {
+   "kind": "routine-v0",
+   "family": "add_ktn",
+   "booking": "E3K81I",
+   "city": "Spokane",
+   "variant": 0,
+   "passed": true,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "known_traveler_number": "34568702",
+    "confirmation_code": "E3K81I"
+   },
+   "rung": 0,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "billed_usd": 0.0,
+   "duration_s": 3.07,
+   "steps": [
+    {
+     "id": "open_my_trips",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 769
+    },
+    {
+     "id": "find_open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 372
+    },
+    {
+     "id": "open_trip",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 419
+    },
+    {
+     "id": "enter_known_traveler_number",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 1022
+    },
+    {
+     "id": "save_known_traveler_number",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "score": 1.0,
+     "ms": 393
+    }
+   ],
+   "patches": [],
+   "approvals": 0,
+   "popups": [],
+   "agent": null,
+   "task_id": "p2-routine-v0-add_ktn-v0-E3K81I",
+   "routine": "skylark_add_known_traveler_number",
+   "version": 1
+  }
+ ]
+}

@@ -1,0 +1,37 @@
+{
+  "task_id": "p2-src-add_ktn",
+  "goal": "Add my known traveler number to my Denver trip.",
+  "status": "done",
+  "result": "Known traveler number 55501234 added to Denver trip (PT4R8Z) - screen shows 'Known traveler number saved'",
+  "steps": 4,
+  "model_calls": 6,
+  "cost_usd": 0.009561150000000001,
+  "cost_at_standard_usd": 0.009561150000000001,
+  "input_tokens": 12843,
+  "cached_tokens": 9766,
+  "output_tokens": 1000,
+  "reasoning_tokens": 593,
+  "duration_s": 11.73,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+    "app": "com.skylark.air",
+    "subgoals": [
+      "Open My Trips and find the Denver trip",
+      "Open the Denver trip details",
+      "Add known traveler number 55501234 to traveler info",
+      "Save changes and confirm"
+    ],
+    "success_check": {
+      "kind": "text_visible",
+      "value": "55501234",
+      "field_hint": null
+    }
+  },
+  "check": {
+    "passed": true,
+    "evaluable": true,
+    "detail": "'55501234' is visible"
+  },
+  "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-src-add_ktn"
+}

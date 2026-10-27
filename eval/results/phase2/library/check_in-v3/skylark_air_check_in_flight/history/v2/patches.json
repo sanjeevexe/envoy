@@ -1,0 +1,17 @@
+[
+ {
+  "kind": "insert_after",
+  "step": "continue_after_hazmat",
+  "description": "after 'continue_after_hazmat', an extra screen appeared; inserted continue_after_hazmat_extra_1 (tap Looks good)",
+  "evidence": {
+   "screenshots": [
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-changed-check_in-v3-AXZG87/screens/repair_08_1_before.png",
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/p2-changed-check_in-v3-AXZG87/screens/repair_08_1_after.png"
+   ],
+   "reasons": [
+    "Review page stands between current screen and Confirm check-in, Looks good is its main forward button"
+   ],
+   "task_id": "p2-changed-check_in-v3-AXZG87"
+  }
+ }
+]

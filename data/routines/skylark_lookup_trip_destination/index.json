@@ -1,0 +1,104 @@
+{
+ "name": "skylark_lookup_trip_destination",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-27 00:35:36",
+   "parent": null,
+   "changes": [
+    "compiled from p2-src-find_trip"
+   ],
+   "verification": {
+    "cases": [
+     {
+      "case": "same-inputs",
+      "inputs": {
+       "trip_confirmation_code": "PT4R8Z"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 2.38,
+      "outputs": {
+       "destination": "Denver"
+      }
+     },
+     {
+      "case": "second-inputs",
+      "inputs": {
+       "trip_confirmation_code": "RPOIG8"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 2.39,
+      "outputs": {
+       "destination": "Tampa"
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-27 00:38:48",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-find_trip-v0-E3K81I",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 1.61,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-27 00:39:27",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-find_trip-v0-0IGQ1E",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 1.61,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-27 00:40:06",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-find_trip-v0-UJ0E5F",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 1.63,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-27 00:40:51",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-find_trip-v0-IQLBYM",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.16,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-27 00:41:28",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-newinput-find_trip-v0-KX7Q2M",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 1.6,
+   "patches": 0
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

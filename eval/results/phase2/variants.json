@@ -1,0 +1,3780 @@
+{
+ "time": "2026-10-27T04:48:44+00:00",
+ "experiments": [
+  {
+   "family": "check_in",
+   "variant": 1,
+   "routine": "skylark_air_check_in_flight",
+   "first": {
+    "kind": "changed",
+    "family": "check_in",
+    "booking": "0I7MMD",
+    "city": "Dallas",
+    "variant": 1,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "seat": "24F",
+     "gate": "E2",
+     "boarding_time": "6:00 AM"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.69,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 751
+     },
+     {
+      "id": "find_select_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 360
+     },
+     {
+      "id": "select_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 439
+     },
+     {
+      "id": "start_check_in",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.815,
+      "ms": 368
+     },
+     {
+      "id": "select_passenger",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 335
+     },
+     {
+      "id": "continue_after_passenger",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 320
+     },
+     {
+      "id": "confirm_no_hazardous_materials",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 318
+     },
+     {
+      "id": "continue_after_hazmat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 342
+     },
+     {
+      "id": "confirm_check_in",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 387
+     }
+    ],
+    "patches": [],
+    "approvals": 1,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-check_in-v1-0I7MMD",
+    "routine": "skylark_air_check_in_flight",
+    "version": 1
+   },
+   "trial": null,
+   "after": {
+    "kind": "after",
+    "family": "check_in",
+    "booking": "RQDKE5",
+    "city": "Minneapolis",
+    "variant": 1,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "seat": "20A",
+     "gate": "A14",
+     "boarding_time": "9:20 AM"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.67,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 720
+     },
+     {
+      "id": "find_select_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 376
+     },
+     {
+      "id": "select_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 440
+     },
+     {
+      "id": "start_check_in",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.815,
+      "ms": 369
+     },
+     {
+      "id": "select_passenger",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 323
+     },
+     {
+      "id": "continue_after_passenger",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 315
+     },
+     {
+      "id": "confirm_no_hazardous_materials",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 328
+     },
+     {
+      "id": "continue_after_hazmat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 356
+     },
+     {
+      "id": "confirm_check_in",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 366
+     }
+    ],
+    "patches": [],
+    "approvals": 1,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-check_in-v1-RQDKE5",
+    "routine": "skylark_air_check_in_flight",
+    "version": 1
+   }
+  },
+  {
+   "family": "check_in",
+   "variant": 2,
+   "routine": "skylark_air_check_in_flight",
+   "first": {
+    "kind": "changed",
+    "family": "check_in",
+    "booking": "EMQC52",
+    "city": "Boise",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "seat": "12D",
+     "gate": "E15",
+     "boarding_time": "9:20 AM"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 7.42,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.83,
+      "ms": 1673
+     },
+     {
+      "id": "find_select_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 326
+     },
+     {
+      "id": "select_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 433
+     },
+     {
+      "id": "start_check_in",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.993,
+      "ms": 1267
+     },
+     {
+      "id": "select_passenger",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 324
+     },
+     {
+      "id": "continue_after_passenger",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [4] \"Next\" score 0.68 (runner-up 0.23)"
+      ],
+      "score": 0.676,
+      "ms": 1313
+     },
+     {
+      "id": "confirm_no_hazardous_materials",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 327
+     },
+     {
+      "id": "continue_after_hazmat",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [5] \"Next\" score 0.68 (runner-up 0.23)"
+      ],
+      "score": 0.676,
+      "ms": 1324
+     },
+     {
+      "id": "confirm_check_in",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.854,
+      "ms": 363
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "open_my_trips",
+      "description": "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "open_my_trips",
+      "description": "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "start_check_in",
+      "description": "step 'start_check_in': after-check 2 matched only relaxed; updated to {text='Next', resource_id='btn_continue', kind='Button'}"
+     },
+     {
+      "kind": "locator",
+      "step": "continue_after_passenger",
+      "description": "step 'continue_after_passenger': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}"
+     },
+     {
+      "kind": "locator",
+      "step": "continue_after_hazmat",
+      "description": "step 'continue_after_hazmat': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}"
+     }
+    ],
+    "approvals": 1,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-check_in-v2-EMQC52",
+    "routine": "skylark_air_check_in_flight",
+    "version": 1
+   },
+   "trial": {
+    "version": 2,
+    "changes": [
+     "step 'continue_after_passenger': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}",
+     "step 'continue_after_hazmat': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}",
+     "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}",
+     "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}",
+     "step 'start_check_in': after-check 2 matched only relaxed; updated to {text='Next', resource_id='btn_continue', kind='Button'}"
+    ],
+    "kind": "trial",
+    "family": "check_in",
+    "booking": "A4MD1L",
+    "city": "Richmond",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "seat": "13F",
+     "gate": "D2",
+     "boarding_time": "9:20 AM"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 4.42,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.83,
+      "ms": 1433
+     },
+     {
+      "id": "find_select_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 361
+     },
+     {
+      "id": "select_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 457
+     },
+     {
+      "id": "start_check_in",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.993,
+      "ms": 351
+     },
+     {
+      "id": "select_passenger",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 340
+     },
+     {
+      "id": "continue_after_passenger",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 358
+     },
+     {
+      "id": "confirm_no_hazardous_materials",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 338
+     },
+     {
+      "id": "continue_after_hazmat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 344
+     },
+     {
+      "id": "confirm_check_in",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.854,
+      "ms": 372
+     }
+    ],
+    "patches": [],
+    "approvals": 1,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-trial-check_in-v2-A4MD1L",
+    "routine": "skylark_air_check_in_flight"
+   },
+   "after": {
+    "kind": "after",
+    "family": "check_in",
+    "booking": "CIZ4PU",
+    "city": "Tampa",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "seat": "10C",
+     "gate": "B13",
+     "boarding_time": "9:20 AM"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.68,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.83,
+      "ms": 735
+     },
+     {
+      "id": "find_select_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 358
+     },
+     {
+      "id": "select_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 446
+     },
+     {
+      "id": "start_check_in",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.993,
+      "ms": 361
+     },
+     {
+      "id": "select_passenger",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 328
+     },
+     {
+      "id": "continue_after_passenger",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 332
+     },
+     {
+      "id": "confirm_no_hazardous_materials",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 328
+     },
+     {
+      "id": "continue_after_hazmat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 353
+     },
+     {
+      "id": "confirm_check_in",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.854,
+      "ms": 380
+     }
+    ],
+    "patches": [],
+    "approvals": 1,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-check_in-v2-CIZ4PU",
+    "routine": "skylark_air_check_in_flight",
+    "version": 2
+   },
+   "backcompat": {
+    "kind": "backcompat",
+    "family": "check_in",
+    "booking": "SJUTTY",
+    "city": "Albuquerque",
+    "variant": 0,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "seat": "24B",
+     "gate": "A16",
+     "boarding_time": "9:20 AM"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 8.23,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 745
+     },
+     {
+      "id": "find_select_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 2111
+     },
+     {
+      "id": "select_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 449
+     },
+     {
+      "id": "start_check_in",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 1.0,
+      "ms": 1268
+     },
+     {
+      "id": "select_passenger",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 336
+     },
+     {
+      "id": "continue_after_passenger",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [4] \"Continue\" score 0.68 (runner-up 0.23)"
+      ],
+      "score": 0.676,
+      "ms": 1236
+     },
+     {
+      "id": "confirm_no_hazardous_materials",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 325
+     },
+     {
+      "id": "continue_after_hazmat",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [5] \"Continue\" score 0.68 (runner-up 0.23)"
+      ],
+      "score": 0.676,
+      "ms": 1327
+     },
+     {
+      "id": "confirm_check_in",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 366
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "start_check_in",
+      "description": "step 'start_check_in': after-check 2 matched only relaxed; updated to {text='Continue', resource_id='btn_continue', kind='Button'}"
+     },
+     {
+      "kind": "locator",
+      "step": "continue_after_passenger",
+      "description": "step 'continue_after_passenger': target found only by relaxed match; locator updated to {text='Continue', resource_id='btn_continue', kind='Button'}"
+     },
+     {
+      "kind": "locator",
+      "step": "continue_after_hazmat",
+      "description": "step 'continue_after_hazmat': target found only by relaxed match; locator updated to {text='Continue', resource_id='btn_continue', kind='Button'}"
+     }
+    ],
+    "approvals": 1,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-backcompat-check_in-v0-SJUTTY",
+    "routine": "skylark_air_check_in_flight",
+    "version": 2
+   }
+  },
+  {
+   "family": "check_in",
+   "variant": 3,
+   "routine": "skylark_air_check_in_flight",
+   "first": {
+    "kind": "changed",
+    "family": "check_in",
+    "booking": "AXZG87",
+    "city": "Memphis",
+    "variant": 3,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "seat": "21C",
+     "gate": "C27",
+     "boarding_time": "7:35 AM"
+    },
+    "rung": 4,
+    "model_calls": 1,
+    "cost_usd": 0.00607,
+    "billed_usd": 0.00607,
+    "duration_s": 12.72,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 746
+     },
+     {
+      "id": "find_select_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 360
+     },
+     {
+      "id": "select_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 404
+     },
+     {
+      "id": "start_check_in",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 346
+     },
+     {
+      "id": "select_passenger",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 324
+     },
+     {
+      "id": "continue_after_passenger",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 340
+     },
+     {
+      "id": "confirm_no_hazardous_materials",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 326
+     },
+     {
+      "id": "continue_after_hazmat",
+      "status": "done",
+      "rung": 4,
+      "rungs": [
+       "wait and retry: waited 1.5 s",
+       "local repair: 1 repair action(s) satisfied the after-checks"
+      ],
+      "score": 1.0,
+      "ms": 1668
+     },
+     {
+      "id": "confirm_check_in",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 380
+     }
+    ],
+    "patches": [
+     {
+      "kind": "insert_after",
+      "step": "continue_after_hazmat",
+      "description": "after 'continue_after_hazmat', an extra screen appeared; inserted continue_after_hazmat_extra_1 (tap Looks good)"
+     }
+    ],
+    "approvals": 1,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-check_in-v3-AXZG87",
+    "routine": "skylark_air_check_in_flight",
+    "version": 1
+   },
+   "trial": {
+    "version": 2,
+    "changes": [
+     "after 'continue_after_hazmat', an extra screen appeared; inserted continue_after_hazmat_extra_1 (tap Looks good)"
+    ],
+    "kind": "trial",
+    "family": "check_in",
+    "booking": "XAWX2N",
+    "city": "Boise",
+    "variant": 3,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "seat": "10E",
+     "gate": "C3",
+     "boarding_time": "9:20 AM"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 4.9,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1428
+     },
+     {
+      "id": "find_select_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 352
+     },
+     {
+      "id": "select_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 473
+     },
+     {
+      "id": "start_check_in",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 367
+     },
+     {
+      "id": "select_passenger",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 340
+     },
+     {
+      "id": "continue_after_passenger",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 368
+     },
+     {
+      "id": "confirm_no_hazardous_materials",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 343
+     },
+     {
+      "id": "continue_after_hazmat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 453
+     },
+     {
+      "id": "continue_after_hazmat_extra_1",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 336
+     },
+     {
+      "id": "confirm_check_in",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 371
+     }
+    ],
+    "patches": [],
+    "approvals": 1,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-trial-check_in-v3-XAWX2N",
+    "routine": "skylark_air_check_in_flight"
+   },
+   "after": {
+    "kind": "after",
+    "family": "check_in",
+    "booking": "UIAEW1",
+    "city": "Albuquerque",
+    "variant": 3,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "seat": "18B",
+     "gate": "A8",
+     "boarding_time": "6:00 AM"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 4.19,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 804
+     },
+     {
+      "id": "find_select_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 392
+     },
+     {
+      "id": "select_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 422
+     },
+     {
+      "id": "start_check_in",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 348
+     },
+     {
+      "id": "select_passenger",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 336
+     },
+     {
+      "id": "continue_after_passenger",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 325
+     },
+     {
+      "id": "confirm_no_hazardous_materials",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 328
+     },
+     {
+      "id": "continue_after_hazmat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 467
+     },
+     {
+      "id": "continue_after_hazmat_extra_1",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 337
+     },
+     {
+      "id": "confirm_check_in",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 368
+     }
+    ],
+    "patches": [],
+    "approvals": 1,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-check_in-v3-UIAEW1",
+    "routine": "skylark_air_check_in_flight",
+    "version": 2
+   },
+   "backcompat": {
+    "kind": "backcompat",
+    "family": "check_in",
+    "booking": "I5Q9MK",
+    "city": "Dallas",
+    "variant": 0,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "seat": "18C",
+     "gate": "D15",
+     "boarding_time": "6:00 AM"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 5.36,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 739
+     },
+     {
+      "id": "find_select_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1959
+     },
+     {
+      "id": "select_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 460
+     },
+     {
+      "id": "start_check_in",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 360
+     },
+     {
+      "id": "select_passenger",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 335
+     },
+     {
+      "id": "continue_after_passenger",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 334
+     },
+     {
+      "id": "confirm_no_hazardous_materials",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 333
+     },
+     {
+      "id": "continue_after_hazmat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 344
+     },
+     {
+      "id": "continue_after_hazmat_extra_1",
+      "status": "skipped",
+      "rung": 0,
+      "rungs": [],
+      "score": null,
+      "ms": 61
+     },
+     {
+      "id": "confirm_check_in",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 365
+     }
+    ],
+    "patches": [],
+    "approvals": 1,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-backcompat-check_in-v0-I5Q9MK",
+    "routine": "skylark_air_check_in_flight",
+    "version": 2
+   }
+  },
+  {
+   "family": "change_seat",
+   "variant": 1,
+   "routine": "skylark_change_seat",
+   "first": {
+    "kind": "changed",
+    "family": "change_seat",
+    "booking": "0I7MMD",
+    "city": "Dallas",
+    "variant": 1,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "seat": "21F"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 4.11,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 781
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 409
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 440
+     },
+     {
+      "id": "open_change_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.989,
+      "ms": 548
+     },
+     {
+      "id": "find_select_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.976,
+      "ms": 509
+     },
+     {
+      "id": "select_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.976,
+      "ms": 659
+     },
+     {
+      "id": "confirm_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 649
+     }
+    ],
+    "patches": [],
+    "approvals": 1,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-change_seat-v1-0I7MMD",
+    "routine": "skylark_change_seat",
+    "version": 1
+   },
+   "trial": null,
+   "after": {
+    "kind": "after",
+    "family": "change_seat",
+    "booking": "RQDKE5",
+    "city": "Minneapolis",
+    "variant": 1,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "seat": "22A"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.91,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 741
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 381
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 432
+     },
+     {
+      "id": "open_change_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.989,
+      "ms": 557
+     },
+     {
+      "id": "find_select_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.976,
+      "ms": 508
+     },
+     {
+      "id": "select_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.976,
+      "ms": 581
+     },
+     {
+      "id": "confirm_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 595
+     }
+    ],
+    "patches": [],
+    "approvals": 1,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-change_seat-v1-RQDKE5",
+    "routine": "skylark_change_seat",
+    "version": 1
+   }
+  },
+  {
+   "family": "change_seat",
+   "variant": 2,
+   "routine": "skylark_change_seat",
+   "first": {
+    "kind": "changed",
+    "family": "change_seat",
+    "booking": "EMQC52",
+    "city": "Boise",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "seat": "17F"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 5.85,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.83,
+      "ms": 1698
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 328
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 417
+     },
+     {
+      "id": "open_change_seat",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [10] \"Seats\" score 0.68 (runner-up 0.36)"
+      ],
+      "score": 0.676,
+      "ms": 1509
+     },
+     {
+      "id": "find_select_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.976,
+      "ms": 516
+     },
+     {
+      "id": "select_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.976,
+      "ms": 647
+     },
+     {
+      "id": "confirm_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 628
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "open_my_trips",
+      "description": "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "open_my_trips",
+      "description": "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}"
+     },
+     {
+      "kind": "locator",
+      "step": "open_change_seat",
+      "description": "step 'open_change_seat': target found only by relaxed match; locator updated to {text='Seats', resource_id='btn_change_seat', kind='Button'}"
+     }
+    ],
+    "approvals": 1,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-change_seat-v2-EMQC52",
+    "routine": "skylark_change_seat",
+    "version": 1
+   },
+   "trial": {
+    "version": 2,
+    "changes": [
+     "step 'open_change_seat': target found only by relaxed match; locator updated to {text='Seats', resource_id='btn_change_seat', kind='Button'}",
+     "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}",
+     "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}"
+    ],
+    "kind": "trial",
+    "family": "change_seat",
+    "booking": "A4MD1L",
+    "city": "Richmond",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "seat": "18B"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 4.82,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.83,
+      "ms": 1465
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 368
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 431
+     },
+     {
+      "id": "open_change_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.946,
+      "ms": 557
+     },
+     {
+      "id": "find_select_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.976,
+      "ms": 516
+     },
+     {
+      "id": "select_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.976,
+      "ms": 674
+     },
+     {
+      "id": "confirm_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 699
+     }
+    ],
+    "patches": [],
+    "approvals": 1,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-trial-change_seat-v2-A4MD1L",
+    "routine": "skylark_change_seat"
+   },
+   "after": {
+    "kind": "after",
+    "family": "change_seat",
+    "booking": "CIZ4PU",
+    "city": "Tampa",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "seat": "22E"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.95,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.83,
+      "ms": 786
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 393
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 425
+     },
+     {
+      "id": "open_change_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.946,
+      "ms": 557
+     },
+     {
+      "id": "find_select_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.976,
+      "ms": 508
+     },
+     {
+      "id": "select_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.976,
+      "ms": 599
+     },
+     {
+      "id": "confirm_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 577
+     }
+    ],
+    "patches": [],
+    "approvals": 1,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-change_seat-v2-CIZ4PU",
+    "routine": "skylark_change_seat",
+    "version": 2
+   },
+   "backcompat": {
+    "kind": "backcompat",
+    "family": "change_seat",
+    "booking": "SJUTTY",
+    "city": "Albuquerque",
+    "variant": 0,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "seat": "21F"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 6.59,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 793
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1899
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 427
+     },
+     {
+      "id": "open_change_seat",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: relaxed match [10] \"Change seat\" score 0.62 (runner-up 0.29)"
+      ],
+      "score": 0.622,
+      "ms": 1572
+     },
+     {
+      "id": "find_select_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.976,
+      "ms": 497
+     },
+     {
+      "id": "select_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.976,
+      "ms": 643
+     },
+     {
+      "id": "confirm_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 644
+     }
+    ],
+    "patches": [
+     {
+      "kind": "locator",
+      "step": "open_change_seat",
+      "description": "step 'open_change_seat': target found only by relaxed match; locator updated to {text='Change seat', resource_id='btn_change_seat', kind='Button'}"
+     }
+    ],
+    "approvals": 1,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-backcompat-change_seat-v0-SJUTTY",
+    "routine": "skylark_change_seat",
+    "version": 2
+   }
+  },
+  {
+   "family": "change_seat",
+   "variant": 3,
+   "routine": "skylark_change_seat",
+   "first": {
+    "kind": "changed",
+    "family": "change_seat",
+    "booking": "AXZG87",
+    "city": "Memphis",
+    "variant": 3,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "seat": "24F"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 5.85,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 746
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 363
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 433
+     },
+     {
+      "id": "open_change_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 545
+     },
+     {
+      "id": "find_select_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.976,
+      "ms": 2248
+     },
+     {
+      "id": "select_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.976,
+      "ms": 666
+     },
+     {
+      "id": "confirm_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 734
+     }
+    ],
+    "patches": [],
+    "approvals": 1,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-change_seat-v3-AXZG87",
+    "routine": "skylark_change_seat",
+    "version": 1
+   },
+   "trial": null,
+   "after": {
+    "kind": "after",
+    "family": "change_seat",
+    "booking": "UIAEW1",
+    "city": "Albuquerque",
+    "variant": 3,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "seat": "21F"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 4.05,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 750
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 350
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 448
+     },
+     {
+      "id": "open_change_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 539
+     },
+     {
+      "id": "find_select_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.976,
+      "ms": 507
+     },
+     {
+      "id": "select_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.976,
+      "ms": 648
+     },
+     {
+      "id": "confirm_seat",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 702
+     }
+    ],
+    "patches": [],
+    "approvals": 1,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-change_seat-v3-UIAEW1",
+    "routine": "skylark_change_seat",
+    "version": 1
+   }
+  },
+  {
+   "family": "add_ktn",
+   "variant": 1,
+   "routine": "skylark_add_known_traveler_number",
+   "first": {
+    "kind": "changed",
+    "family": "add_ktn",
+    "booking": "0I7MMD",
+    "city": "Dallas",
+    "variant": 1,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "63363840",
+     "confirmation_code": "0I7MMD"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.18,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 753
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 347
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 456
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.99,
+      "ms": 1093
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.989,
+      "ms": 455
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-add_ktn-v1-0I7MMD",
+    "routine": "skylark_add_known_traveler_number",
+    "version": 1
+   },
+   "trial": null,
+   "after": {
+    "kind": "after",
+    "family": "add_ktn",
+    "booking": "RQDKE5",
+    "city": "Minneapolis",
+    "variant": 1,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "56711113",
+     "confirmation_code": "RQDKE5"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.03,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 745
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 339
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 469
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.99,
+      "ms": 986
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.989,
+      "ms": 406
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-add_ktn-v1-RQDKE5",
+    "routine": "skylark_add_known_traveler_number",
+    "version": 1
+   }
+  },
+  {
+   "family": "add_ktn",
+   "variant": 2,
+   "routine": "skylark_add_known_traveler_number",
+   "first": {
+    "kind": "changed",
+    "family": "add_ktn",
+    "booking": "EMQC52",
+    "city": "Boise",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "36907316",
+     "confirmation_code": "EMQC52"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.91,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.83,
+      "ms": 1667
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 317
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 428
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1042
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 385
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "open_my_trips",
+      "description": "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "open_my_trips",
+      "description": "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-add_ktn-v2-EMQC52",
+    "routine": "skylark_add_known_traveler_number",
+    "version": 1
+   },
+   "trial": {
+    "version": 2,
+    "changes": [
+     "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}",
+     "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}"
+    ],
+    "kind": "trial",
+    "family": "add_ktn",
+    "booking": "A4MD1L",
+    "city": "Richmond",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "26194379",
+     "confirmation_code": "A4MD1L"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 4.02,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.83,
+      "ms": 1454
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 357
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 435
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1318
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 383
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-trial-add_ktn-v2-A4MD1L",
+    "routine": "skylark_add_known_traveler_number"
+   },
+   "after": {
+    "kind": "after",
+    "family": "add_ktn",
+    "booking": "CIZ4PU",
+    "city": "Tampa",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "17552008",
+     "confirmation_code": "CIZ4PU"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.23,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.83,
+      "ms": 740
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 353
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 458
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1189
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 410
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-add_ktn-v2-CIZ4PU",
+    "routine": "skylark_add_known_traveler_number",
+    "version": 2
+   },
+   "backcompat": {
+    "kind": "backcompat",
+    "family": "add_ktn",
+    "booking": "SJUTTY",
+    "city": "Albuquerque",
+    "variant": 0,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "46095175",
+     "confirmation_code": "SJUTTY"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 4.62,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 747
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1943
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 413
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1068
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 379
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-backcompat-add_ktn-v0-SJUTTY",
+    "routine": "skylark_add_known_traveler_number",
+    "version": 2
+   }
+  },
+  {
+   "family": "add_ktn",
+   "variant": 3,
+   "routine": "skylark_add_known_traveler_number",
+   "first": {
+    "kind": "changed",
+    "family": "add_ktn",
+    "booking": "AXZG87",
+    "city": "Memphis",
+    "variant": 3,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "56851096",
+     "confirmation_code": "AXZG87"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.19,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 764
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 352
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 430
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1154
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 408
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-add_ktn-v3-AXZG87",
+    "routine": "skylark_add_known_traveler_number",
+    "version": 1
+   },
+   "trial": null,
+   "after": {
+    "kind": "after",
+    "family": "add_ktn",
+    "booking": "UIAEW1",
+    "city": "Albuquerque",
+    "variant": 3,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "known_traveler_number": "81675297",
+     "confirmation_code": "UIAEW1"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.25,
+    "steps": [
+     {
+      "id": "open_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 740
+     },
+     {
+      "id": "find_open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 361
+     },
+     {
+      "id": "open_trip",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 445
+     },
+     {
+      "id": "enter_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1192
+     },
+     {
+      "id": "save_known_traveler_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 440
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-add_ktn-v3-UIAEW1",
+    "routine": "skylark_add_known_traveler_number",
+    "version": 1
+   }
+  },
+  {
+   "family": "gate",
+   "variant": 1,
+   "routine": "skylark_get_flight_gate",
+   "first": {
+    "kind": "changed",
+    "family": "gate",
+    "booking": "0I7MMD",
+    "city": "Dallas",
+    "variant": 1,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "E2"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 1.6,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 740
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 346
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 451
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-gate-v1-0I7MMD",
+    "routine": "skylark_get_flight_gate",
+    "version": 1
+   },
+   "trial": null,
+   "after": {
+    "kind": "after",
+    "family": "gate",
+    "booking": "RQDKE5",
+    "city": "Minneapolis",
+    "variant": 1,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "A14"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 1.61,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 758
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 351
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 429
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-gate-v1-RQDKE5",
+    "routine": "skylark_get_flight_gate",
+    "version": 1
+   }
+  },
+  {
+   "family": "gate",
+   "variant": 2,
+   "routine": "skylark_get_flight_gate",
+   "first": {
+    "kind": "changed",
+    "family": "gate",
+    "booking": "EMQC52",
+    "city": "Boise",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "E15"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.47,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.83,
+      "ms": 1638
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 328
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 434
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "tap_my_trips",
+      "description": "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "tap_my_trips",
+      "description": "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-gate-v2-EMQC52",
+    "routine": "skylark_get_flight_gate",
+    "version": 1
+   },
+   "trial": {
+    "version": 2,
+    "changes": [
+     "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}",
+     "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}"
+    ],
+    "kind": "trial",
+    "family": "gate",
+    "booking": "A4MD1L",
+    "city": "Richmond",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "D2"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.33,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.83,
+      "ms": 1462
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 375
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 433
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-trial-gate-v2-A4MD1L",
+    "routine": "skylark_get_flight_gate"
+   },
+   "after": {
+    "kind": "after",
+    "family": "gate",
+    "booking": "CIZ4PU",
+    "city": "Tampa",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "B13"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 1.63,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.83,
+      "ms": 763
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 356
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 445
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-gate-v2-CIZ4PU",
+    "routine": "skylark_get_flight_gate",
+    "version": 2
+   },
+   "backcompat": {
+    "kind": "backcompat",
+    "family": "gate",
+    "booking": "SJUTTY",
+    "city": "Albuquerque",
+    "variant": 0,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "A16"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.31,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 754
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 2079
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 421
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-backcompat-gate-v0-SJUTTY",
+    "routine": "skylark_get_flight_gate",
+    "version": 2
+   }
+  },
+  {
+   "family": "gate",
+   "variant": 3,
+   "routine": "skylark_get_flight_gate",
+   "first": {
+    "kind": "changed",
+    "family": "gate",
+    "booking": "AXZG87",
+    "city": "Memphis",
+    "variant": 3,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "C27"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 1.58,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 727
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 343
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 443
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-gate-v3-AXZG87",
+    "routine": "skylark_get_flight_gate",
+    "version": 1
+   },
+   "trial": null,
+   "after": {
+    "kind": "after",
+    "family": "gate",
+    "booking": "UIAEW1",
+    "city": "Albuquerque",
+    "variant": 3,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "gate": "A8"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 1.63,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 769
+     },
+     {
+      "id": "find_tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 357
+     },
+     {
+      "id": "tap_trip_row",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 436
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-gate-v3-UIAEW1",
+    "routine": "skylark_get_flight_gate",
+    "version": 1
+   }
+  },
+  {
+   "family": "flight_status",
+   "variant": 1,
+   "routine": "skylark_check_flight_status",
+   "first": {
+    "kind": "changed",
+    "family": "flight_status",
+    "booking": "0I7MMD",
+    "city": "Dallas",
+    "variant": 1,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → DFW",
+     "date": "Wed, Nov 25, 2026",
+     "gate": "E2",
+     "departure_time": "6:00 AM"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.52,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.909,
+      "ms": 692
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1339
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 399
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-flight_status-v1-0I7MMD",
+    "routine": "skylark_check_flight_status",
+    "version": 1
+   },
+   "trial": null,
+   "after": {
+    "kind": "after",
+    "family": "flight_status",
+    "booking": "RQDKE5",
+    "city": "Minneapolis",
+    "variant": 1,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → MSP",
+     "date": "Wed, Nov 25, 2026",
+     "gate": "A14",
+     "departure_time": "11:05 AM"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.3,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.909,
+      "ms": 700
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1135
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 383
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-flight_status-v1-RQDKE5",
+    "routine": "skylark_check_flight_status",
+    "version": 1
+   }
+  },
+  {
+   "family": "flight_status",
+   "variant": 2,
+   "routine": "skylark_check_flight_status",
+   "first": {
+    "kind": "changed",
+    "family": "flight_status",
+    "booking": "EMQC52",
+    "city": "Boise",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → BOI",
+     "date": "Tue, Dec 1, 2026",
+     "gate": "E15",
+     "departure_time": "11:05 AM"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.08,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.83,
+      "ms": 1607
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 997
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 395
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "tap_flight_status",
+      "description": "step 'tap_flight_status': after-check 1 matched only relaxed; updated to {text='Status', resource_id='screen_title', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "tap_flight_status",
+      "description": "step 'tap_flight_status': after-check 2 matched only relaxed; updated to {text='Status', resource_id='nav_status', kind='Text'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-flight_status-v2-EMQC52",
+    "routine": "skylark_check_flight_status",
+    "version": 1
+   },
+   "trial": {
+    "version": 2,
+    "changes": [
+     "step 'tap_flight_status': after-check 1 matched only relaxed; updated to {text='Status', resource_id='screen_title', kind='Text'}",
+     "step 'tap_flight_status': after-check 2 matched only relaxed; updated to {text='Status', resource_id='nav_status', kind='Text'}"
+    ],
+    "kind": "trial",
+    "family": "flight_status",
+    "booking": "A4MD1L",
+    "city": "Richmond",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → RIC",
+     "date": "Wed, Nov 25, 2026",
+     "gate": "D2",
+     "departure_time": "11:05 AM"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.98,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.83,
+      "ms": 1426
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1079
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 399
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-trial-flight_status-v2-A4MD1L",
+    "routine": "skylark_check_flight_status"
+   },
+   "after": {
+    "kind": "after",
+    "family": "flight_status",
+    "booking": "CIZ4PU",
+    "city": "Tampa",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → TPA",
+     "date": "Mon, Dec 7, 2026",
+     "gate": "B13",
+     "departure_time": "11:05 AM"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.25,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.83,
+      "ms": 697
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1085
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 393
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-flight_status-v2-CIZ4PU",
+    "routine": "skylark_check_flight_status",
+    "version": 2
+   },
+   "backcompat": {
+    "kind": "backcompat",
+    "family": "flight_status",
+    "booking": "SJUTTY",
+    "city": "Albuquerque",
+    "variant": 0,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → ABQ",
+     "date": "Fri, Dec 4, 2026",
+     "gate": "A16",
+     "departure_time": "11:05 AM"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.26,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 683
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1095
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 403
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-backcompat-flight_status-v0-SJUTTY",
+    "routine": "skylark_check_flight_status",
+    "version": 2
+   }
+  },
+  {
+   "family": "flight_status",
+   "variant": 3,
+   "routine": "skylark_check_flight_status",
+   "first": {
+    "kind": "changed",
+    "family": "flight_status",
+    "booking": "AXZG87",
+    "city": "Memphis",
+    "variant": 3,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → MEM",
+     "date": "Mon, Dec 7, 2026",
+     "gate": "C27",
+     "departure_time": "9:20 AM"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.31,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 690
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1106
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 431
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-flight_status-v3-AXZG87",
+    "routine": "skylark_check_flight_status",
+    "version": 1
+   },
+   "trial": null,
+   "after": {
+    "kind": "after",
+    "family": "flight_status",
+    "booking": "UIAEW1",
+    "city": "Albuquerque",
+    "variant": 3,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "flight_status": "On time",
+     "route": "ATL → ABQ",
+     "date": "Thu, Dec 10, 2026",
+     "gate": "A8",
+     "departure_time": "6:00 AM"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.22,
+    "steps": [
+     {
+      "id": "tap_flight_status",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 696
+     },
+     {
+      "id": "enter_flight_number",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1028
+     },
+     {
+      "id": "tap_search",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 410
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-flight_status-v3-UIAEW1",
+    "routine": "skylark_check_flight_status",
+    "version": 1
+   }
+  },
+  {
+   "family": "find_trip",
+   "variant": 1,
+   "routine": "skylark_lookup_trip_destination",
+   "first": {
+    "kind": "changed",
+    "family": "find_trip",
+    "booking": "0I7MMD",
+    "city": "Dallas",
+    "variant": 1,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Dallas"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 1.61,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 737
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 336
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 466
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-find_trip-v1-0I7MMD",
+    "routine": "skylark_lookup_trip_destination",
+    "version": 1
+   },
+   "trial": null,
+   "after": {
+    "kind": "after",
+    "family": "find_trip",
+    "booking": "RQDKE5",
+    "city": "Minneapolis",
+    "variant": 1,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Minneapolis"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 1.61,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 756
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 350
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 439
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-find_trip-v1-RQDKE5",
+    "routine": "skylark_lookup_trip_destination",
+    "version": 1
+   }
+  },
+  {
+   "family": "find_trip",
+   "variant": 2,
+   "routine": "skylark_lookup_trip_destination",
+   "first": {
+    "kind": "changed",
+    "family": "find_trip",
+    "booking": "EMQC52",
+    "city": "Boise",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Boise"
+    },
+    "rung": 2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.49,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 2,
+      "rungs": [
+       "relaxed match: after-checks held at the relaxed threshold"
+      ],
+      "score": 0.83,
+      "ms": 1680
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 321
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 425
+     }
+    ],
+    "patches": [
+     {
+      "kind": "check",
+      "step": "tap_my_trips",
+      "description": "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}"
+     },
+     {
+      "kind": "check",
+      "step": "tap_my_trips",
+      "description": "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}"
+     }
+    ],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-find_trip-v2-EMQC52",
+    "routine": "skylark_lookup_trip_destination",
+    "version": 1
+   },
+   "trial": {
+    "version": 2,
+    "changes": [
+     "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}",
+     "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}"
+    ],
+    "kind": "trial",
+    "family": "find_trip",
+    "booking": "A4MD1L",
+    "city": "Richmond",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Richmond"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 2.33,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.83,
+      "ms": 1459
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 378
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 427
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-trial-find_trip-v2-A4MD1L",
+    "routine": "skylark_lookup_trip_destination"
+   },
+   "after": {
+    "kind": "after",
+    "family": "find_trip",
+    "booking": "CIZ4PU",
+    "city": "Tampa",
+    "variant": 2,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Tampa"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 1.62,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 0.83,
+      "ms": 781
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 359
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 414
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-find_trip-v2-CIZ4PU",
+    "routine": "skylark_lookup_trip_destination",
+    "version": 2
+   },
+   "backcompat": {
+    "kind": "backcompat",
+    "family": "find_trip",
+    "booking": "SJUTTY",
+    "city": "Albuquerque",
+    "variant": 0,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Albuquerque"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 3.15,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 747
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 1900
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 440
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-backcompat-find_trip-v0-SJUTTY",
+    "routine": "skylark_lookup_trip_destination",
+    "version": 2
+   }
+  },
+  {
+   "family": "find_trip",
+   "variant": 3,
+   "routine": "skylark_lookup_trip_destination",
+   "first": {
+    "kind": "changed",
+    "family": "find_trip",
+    "booking": "AXZG87",
+    "city": "Memphis",
+    "variant": 3,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Memphis"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 1.63,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 753
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 356
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 453
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-changed-find_trip-v3-AXZG87",
+    "routine": "skylark_lookup_trip_destination",
+    "version": 1
+   },
+   "trial": null,
+   "after": {
+    "kind": "after",
+    "family": "find_trip",
+    "booking": "UIAEW1",
+    "city": "Albuquerque",
+    "variant": 3,
+    "passed": true,
+    "status": "done",
+    "detail": "all steps and checks passed",
+    "outputs": {
+     "destination": "Albuquerque"
+    },
+    "rung": 0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "billed_usd": 0.0,
+    "duration_s": 1.59,
+    "steps": [
+     {
+      "id": "tap_my_trips",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 720
+     },
+     {
+      "id": "find_tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 363
+     },
+     {
+      "id": "tap_trip_by_confirmation_code",
+      "status": "done",
+      "rung": 0,
+      "rungs": [],
+      "score": 1.0,
+      "ms": 446
+     }
+    ],
+    "patches": [],
+    "approvals": 0,
+    "popups": [],
+    "agent": null,
+    "task_id": "p2-after-find_trip-v3-UIAEW1",
+    "routine": "skylark_lookup_trip_destination",
+    "version": 1
+   }
+  }
+ ]
+}

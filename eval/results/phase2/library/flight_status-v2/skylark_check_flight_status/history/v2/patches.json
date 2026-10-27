@@ -1,0 +1,14 @@
+[
+ {
+  "kind": "check",
+  "step": "tap_flight_status",
+  "description": "step 'tap_flight_status': after-check 1 matched only relaxed; updated to {text='Status', resource_id='screen_title', kind='Text'}",
+  "evidence": {}
+ },
+ {
+  "kind": "check",
+  "step": "tap_flight_status",
+  "description": "step 'tap_flight_status': after-check 2 matched only relaxed; updated to {text='Status', resource_id='nav_status', kind='Text'}",
+  "evidence": {}
+ }
+]

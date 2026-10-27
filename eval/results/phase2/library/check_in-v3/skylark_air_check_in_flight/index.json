@@ -1,0 +1,62 @@
+{
+ "name": "skylark_air_check_in_flight",
+ "active": 2,
+ "versions": [
+  {
+   "version": 1,
+   "status": "retired",
+   "created": "2026-10-27 00:43:18",
+   "parent": null,
+   "changes": [
+    "v1 compiled from p2-src-check_in"
+   ],
+   "verification": null
+  },
+  {
+   "version": 2,
+   "status": "active",
+   "created": "2026-10-27 00:43:34",
+   "parent": 1,
+   "changes": [
+    "after 'continue_after_hazmat', an extra screen appeared; inserted continue_after_hazmat_extra_1 (tap Looks good)"
+   ],
+   "source_task": "p2-changed-check_in-v3-AXZG87",
+   "screenshots": [
+    "history/v2/repair_08_1_before.png",
+    "history/v2/repair_08_1_after.png"
+   ],
+   "trial": {
+    "passed": true,
+    "task_id": "p2-trial-check_in-v3-XAWX2N",
+    "status": "done",
+    "duration_s": 4.9
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-27 00:43:34",
+   "kind": "run",
+   "version": 1,
+   "task_id": "p2-changed-check_in-v3-AXZG87",
+   "status": "done",
+   "rung": 4,
+   "model_calls": 1,
+   "duration_s": 12.72,
+   "patches": 1
+  },
+  {
+   "time": "2026-10-27 00:43:52",
+   "kind": "run",
+   "version": 2,
+   "task_id": "p2-after-check_in-v3-UIAEW1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 4.19,
+   "patches": 0
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

@@ -24,8 +24,11 @@ from routines.screens import contains_value, norm, short_id, tokens, usable_id
 
 # Tuned on SkyLark across the four layout variants (eval/tune_locators.py; see docs/phase-2-results.md).
 STRICT = 0.80
-RELAXED = 0.55
+RELAXED = 0.60
 MARGIN = 0.08  # the winner must beat the runner-up by this much, or the match is ambiguous
+# A check describes a state ("the screen titled My Trips", "the selected tab"), so it must show text
+# evidence and keep its element type; an ID alone is shared across screens (screen_title is on every one).
+CHECK_TEXT_MIN = 0.4
 
 WEIGHTS = {
     "resource_id": 3.0,
@@ -107,9 +110,10 @@ def from_record(rec: dict, screen: ScreenState) -> Locator:
 
 
 def text_similarity(a: str | None, b: str | None) -> float:
-    """1.0 for the same label. A recorded label that still appears as a phrase in the new one scores
-    0.9+ ("Next trip" in "Next trip · Denver · …", "Check in" in "Check-in now"); otherwise partial
-    credit for shared words."""
+    """1.0 for the same label. A recorded label that is a whole " · " part of the new one scores 0.95
+    ("Next trip" in "Next trip · Denver · …"). One that only appears inside a longer label is scored by
+    how much of it it covers ("Check in" in "Check-in now" or in "Confirm check-in": 0.78), since the
+    words alone can't tell a renamed button from a different one. Otherwise, partial credit for shared words."""
     na, nb = norm(a), norm(b)
     if not na or not nb:
         return 0.0
@@ -118,12 +122,18 @@ def text_similarity(a: str | None, b: str | None) -> float:
     ta, tb = tokens(na), tokens(nb)
     if not ta or not tb:
         return SequenceMatcher(None, na, nb).ratio() * 0.8
+    phrase = " ".join(ta)
+    for seg in nb.split(" · "):
+        ts = tokens(seg)
+        if ts and " ".join(ts) == phrase:
+            return 0.95
+    for seg in nb.split(" · "):
+        ts = tokens(seg)
+        if ts and f" {phrase} " in f" {' '.join(ts)} ":
+            return round(0.55 + 0.35 * len(ta) / len(ts), 4)
     sa, sb = set(ta), set(tb)
     inter = len(sa & sb)
     dice = 2 * inter / (len(sa) + len(sb))
-    phrase = " ".join(ta)
-    if f" {phrase} " in f" {' '.join(tb)} ":
-        return round(0.9 + 0.1 * dice, 4)
     contain = inter / len(sa)  # how much of the recorded label is still there
     return round(0.5 * dice + 0.4 * contain, 4)
 
@@ -138,8 +148,11 @@ def _kind_compatible(loc: Locator, e: Element) -> bool:
     return True
 
 
-def score(loc: Locator, e: Element, screen: ScreenState, *, use_ids: bool = True) -> tuple[float, dict[str, float]]:
-    """Score in [0, 1] of element `e` against a rendered locator (no {{slots}} left)."""
+def score(loc: Locator, e: Element, screen: ScreenState, *, use_ids: bool = True, role: str = "target") -> tuple[float, dict[str, float]]:
+    """Score in [0, 1] of element `e` against a rendered locator (no {{slots}} left).
+
+    role "target": an element to act on; a usable ID, type and position can carry a renamed label.
+    role "check": a state to confirm; it needs some of its text and the same element type."""
     label = e.label or e.text or e.desc
     if loc.text_has and not any(contains_value(t, loc.text_has) for t in (label, e.text, e.desc, e.resource_id.replace("_", " "))):
         return 0.0, {"text_has": 0.0}
@@ -185,6 +198,12 @@ def score(loc: Locator, e: Element, screen: ScreenState, *, use_ids: bool = True
         add("position", max(0.0, 1.0 - d / 0.5), WEIGHTS["position"] * (0.4 if loc.in_list else 1.0))
     if weight == 0:
         return 0.0, got
+    if role == "check":
+        if loc.kind and e.kind != loc.kind:
+            return 0.0, {**got, "check": 0.0}
+        text_sim = max(got.get("text", 1.0 if not loc.text else 0.0), got.get("desc", 0.0))
+        if (loc.text or loc.desc) and text_sim < CHECK_TEXT_MIN:
+            return 0.0, {**got, "check": 0.0}
     return total / weight, got
 
 
@@ -200,12 +219,12 @@ def candidates(screen: ScreenState) -> list[Element]:
 
 
 def locate(loc: Locator, screen: ScreenState, inputs: dict[str, str] | None = None, *, threshold: float = STRICT,
-           margin: float = MARGIN, use_ids: bool = True) -> Match:
+           margin: float = MARGIN, use_ids: bool = True, role: str = "target") -> Match:
     """The element `loc` describes on `screen`, or a Match with element None (too weak or ambiguous)."""
     rendered: Locator = render(loc, inputs or {})
     scored = []
     for e in candidates(screen):
-        sc, det = score(rendered, e, screen, use_ids=use_ids)
+        sc, det = score(rendered, e, screen, use_ids=use_ids, role=role)
         if sc > 0:
             scored.append((sc, e, det))
     scored.sort(key=lambda t: -t[0])

@@ -363,6 +363,7 @@ class RoutineExecutor:
         last_bounds = None
         popups = 0
         tried_relaxed = False
+        failed_once = False  # rung 1 counts only when a check actually failed first (not the two-read stillness check)
         while True:
             s = await self._observe()
             now = time.perf_counter()
@@ -378,13 +379,14 @@ class RoutineExecutor:
                 if bounds is None or bounds == last_bounds or now >= deadline:  # the target sits still: safe to tap
                     if m is not None:
                         sr.score = round(m.score, 3)
-                    if now - start > 0.3:
+                    if failed_once and now - start > 0.3:
                         sr.climb(1, f"ready after {now - start:.1f} s")
                     return _Ready("ok", s, m.element if m else None)
                 last_bounds = bounds
                 await asyncio.sleep(cfg.poll_s)
                 continue
             last_bounds = None
+            failed_once = True
             # Already done (the effect is there) or an optional step whose screen didn't come.
             specific = self._specific(step.post)
             if specific and self._check(specific, s, ctx.inputs)[0]:
@@ -789,7 +791,7 @@ def extract_value(spec: Extract, screen: ScreenState, inputs: dict[str, str]) ->
     with the label in front of it ("Known traveler number: 98765432" → 98765432) and fixed text after it removed."""
     el = None
     if spec.locator is not None:
-        m = locators.locate(render(spec.locator, inputs), screen, threshold=locators.RELAXED, margin=0.0)
+        m = locators.locate(render(spec.locator, inputs), screen, threshold=locators.RELAXED, margin=0.0, role="check")
         el = m.element
     near = norm(spec.near) if spec.near else ""
     if el is None and near:
