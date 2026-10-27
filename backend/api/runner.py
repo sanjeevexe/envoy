@@ -158,7 +158,7 @@ class TaskRunner:
     async def _run(self, tid: str, goal: str, routine_name: str | None, inputs: dict[str, str], app: str | None) -> None:
         t0 = time.time()
         calls, cost = 0, 0.0
-        avd = None
+        avd, done, final, outputs, scope, routine = None, False, None, {}, "real", None
         try:
             self._set(tid, status="running")
             routine, inputs, app, sources, calls = await self._plan(tid, goal, routine_name, inputs, app)
@@ -216,13 +216,17 @@ class TaskRunner:
                     break
                 final = await device.observe()
                 done = status in ("done", "agent_done", "done_unverified")
-                memory = await self._remember(tid, routine, inputs, outputs, final, scope) if done else None
                 text = result
                 if routine and outputs:
                     text = "; ".join(f"{k.replace('_', ' ')}: {v}" for k, v in outputs.items() if v) or result
                 end = "done" if done else ("declined" if status == "declined" else ("needs_you" if status in ("needs_you", "needs_user") else "failed"))
-                self._set(tid, status=end, result=text, detail=result, model_calls=calls, cost_usd=round(cost, 4),
-                          memory=memory, waiting_for=None)
+                # Done as soon as the phone work is: memory is written afterwards, with the phone already free.
+                self._set(tid, status=end, result=text, detail=result, model_calls=calls, cost_usd=round(cost, 4), waiting_for=None)
+                lease.task_id = None
+            if done:
+                self._step(tid, {"kind": "note", "text": "saving what it saw to memory"})
+                memory = await self._remember(tid, routine, inputs, outputs, final, scope)
+                self._set(tid, memory=memory)
         except asyncio.CancelledError:
             self._set(tid, status="stopped", detail="stopped by you", waiting_for=None)
             raise

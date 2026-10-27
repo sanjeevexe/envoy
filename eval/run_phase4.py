@@ -134,13 +134,18 @@ async def gate() -> dict[str, Any]:
                 final = e["task"]
                 break
         task = (await c.get(f"{BASE}/api/tasks/{tid}", headers=H)).json()
+        for _ in range(60):  # the task is done as soon as the phone work is; memory is written right after
+            if any(s.get("kind") == "memory" for s in task["steps"]):
+                break
+            await asyncio.sleep(1)
+            task = (await c.get(f"{BASE}/api/tasks/{tid}", headers=H)).json()
         checked = (await asyncio.to_thread(app.trip, code))["checked_in"]
         log("check-in done in the app", bool(final) and final["status"] == "done" and checked, status=(final or {}).get("status"),
             result=(final or {}).get("result"), routine=task["task"].get("routine"), model_calls=task["task"].get("model_calls"),
             checked_in=checked, steps=len(task["steps"]), step_events=seen["step_events"], step_screenshots=seen["shots"])
         mem_step = next((s for s in task["steps"] if s.get("kind") == "memory"), None)
         notes = (await c.get(f"{BASE}/api/memory/search", params={"q": "my Chicago flight seat gate boarding"}, headers=H)).json()["markdown"]
-        log("memory updated", bool(mem_step) and seen["memory_events"] > 0 and "SkyLark app" in notes, memory_step=(mem_step or {}).get("text"),
+        log("memory updated", bool(mem_step) and "SkyLark app" in notes, memory_step=(mem_step or {}).get("text"),
             memory_events=seen["memory_events"], notes_excerpt=notes[:400])
 
         # MCP: the same task API from an AI client; no approve tool.

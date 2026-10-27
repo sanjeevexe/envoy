@@ -1,9 +1,9 @@
 {
- "time": "2026-10-27T14:21:11",
+ "time": "2026-10-27T14:38:06",
  "summary": {
   "passed": true,
   "steps_ok": "10/10",
-  "duration_s": 109.7
+  "duration_s": 82.7
  },
  "steps": [
   {
@@ -16,7 +16,7 @@
   {
    "step": "live view",
    "ok": true,
-   "t": 4.2,
+   "t": 5.1,
    "device": "1080x2400",
    "frames": 3,
    "latency_ms": 20,
@@ -25,25 +25,25 @@
   {
    "step": "task started",
    "ok": true,
-   "t": 4.2,
-   "task": "task-1027-141925-9df1"
+   "t": 5.1,
+   "task": "task-1027-143648-7749"
   },
   {
    "step": "asked to take over",
    "ok": true,
-   "t": 10.4,
+   "t": 11.4,
    "reason": "sign-in needed: password field on screen"
   },
   {
    "step": "took over, signed in, handed back",
    "ok": true,
-   "t": 12.9,
+   "t": 13.9,
    "status_during_takeover": "taken_over"
   },
   {
    "step": "approval requested and approved by the person",
    "ok": true,
-   "t": 15.3,
+   "t": 16.4,
    "description": "tap \"Confirm check-in\" in com.skylark.air (routine skylark_check_in_flight v1)",
    "screenshot": true,
    "opening_decided_nothing": true,
@@ -52,28 +52,28 @@
   {
    "step": "check-in done in the app",
    "ok": true,
-   "t": 24.1,
+   "t": 24.7,
    "status": "done",
    "result": "seat: 14C; gate: B12; boarding time: 5:30 AM; boarding group: Group 3; flight: SL 482",
    "routine": "skylark_check_in_flight",
    "model_calls": 1,
    "checked_in": true,
-   "steps": 11,
-   "step_events": 11,
+   "steps": 12,
+   "step_events": 10,
    "step_screenshots": 6
   },
   {
    "step": "memory updated",
    "ok": true,
-   "t": 24.1,
-   "memory_step": "memory updated: 10 same, 4 new, 3 replaced",
-   "memory_events": 7,
-   "notes_excerpt": "## Flight: SL 482 \u00b7 Fri, Oct 30, 2026  [[Trip Chicago \u00b7 Fri, Oct 30, 2026]]\n- Number: SL 482 \u2014 SkyLark app, just now (also email from SkyLark Air, Oct 1)\n- Date: Fri, Oct 30, 2026 \u2014 SkyLark app, just now (also email from SkyLark Air, Oct 1)\n- From: Atlanta (ATL) \u2014 SkyLark app, just now (also email from SkyLark Air, Oct 1)\n- To: Chicago (ORD) \u2014 SkyLark app, just now (also email from SkyLark Air, Oc"
+   "t": 24.7,
+   "memory_step": "memory updated: 11 same, 4 new, 3 replaced",
+   "memory_events": 0,
+   "notes_excerpt": "## Flight: SL 482 \u00b7 Fri, Oct 30, 2026  [[Trip Chicago \u00b7 Fri, Oct 30, 2026]]\n- Airline: SkyLark Air \u2014 email from SkyLark Air, Oct 1\n- Number: SL 482 \u2014 SkyLark app, just now (also email from SkyLark Air, Oct 1)\n- Date: Fri, Oct 30, 2026 \u2014 SkyLark app, just now (also email from SkyLark Air, Oct 1)\n- From: Atlanta (ATL) \u2014 SkyLark app, just now (also email from SkyLark Air, Oct 1)\n- To: Chicago (ORD) \u2014"
   },
   {
    "step": "MCP: tools, run_task and get_task",
    "ok": true,
-   "t": 95.4,
+   "t": 78.9,
    "tools": [
     "get_task",
     "list_routines",
@@ -89,7 +89,7 @@
   {
    "step": "chat answers from memory",
    "ok": true,
-   "t": 99.7,
+   "t": 82.7,
    "reply": "Gate B12, from the SkyLark app just now."
   }
  ]

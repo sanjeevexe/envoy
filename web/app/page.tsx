@@ -80,7 +80,7 @@ export default function Home() {
         <span className={`text-xs ${connected ? "text-emerald-700" : "text-rose-700"}`}>{connected ? "● live" : "● reconnecting"}</span>
       </header>
       <div className="flex min-h-0 flex-1 flex-col md:flex-row">
-        <section className="flex min-h-0 flex-1 flex-col">
+        <section className="flex min-h-0 min-w-0 flex-1 flex-col">
           <nav className="flex gap-1 overflow-x-auto border-b border-stone-200 bg-white px-2">
             {TABS.map((t) => (
               <button key={t} onClick={() => { setTab(t); if (t !== "Tasks") setOpenTask(null); }}
