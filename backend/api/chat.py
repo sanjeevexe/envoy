@@ -28,14 +28,14 @@ async def chat(message: str, *, adapter: Any, memory: Any, runner: Any, routines
             out.update(reply=ans.answer, stale=ans.stale, notes=ans.notes.markdown, from_memory=True)
             return out
         if route.goal:
-            task = runner.start(route.goal, "chat")
+            task = runner.start(route.goal, "chat", request=message)
             out.update(kind="task", reply=f"Memory doesn't have that yet, so I'm checking: {route.goal}.", task=task)
             return out
         out.update(reply=ans.answer or "Memory doesn't have that yet.", from_memory=True)
         return out
     if route.kind == "task":
-        task = runner.start(route.goal or message, "chat")
-        out.update(reply=f"On it: {route.goal or message}. You can follow it here, and I'll ask you before anything that can't be undone.",
+        task = runner.start(route.goal or message, "chat", request=message)
+        out.update(reply=f"On it: {route.goal or message}. You can follow it here; anything that costs money, or that you didn't ask for, waits for your OK.",
                    task=task)
         return out
     out["reply"] = route.reply or "I can answer from what I remember, or do things in your phone apps."

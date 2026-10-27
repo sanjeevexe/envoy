@@ -88,6 +88,9 @@ async def gate() -> dict[str, Any]:
         log("API up, demo memory loaded", state["memory"]["entities"] > 0, entities=state["memory"]["entities"], routines=state["routines"])
         log("live view", True, **await live_check())
 
+        # The gate is "the user approves": ask before every irreversible step for this run (restored at the end).
+        before_rules = (await c.get(f"{BASE}/api/settings/approvals", headers=H)).json()["rules"]
+        await c.post(f"{BASE}/api/settings/approvals", json={**before_rules, "default": "always", "apps": {}, "routines": {}}, headers=H)
         r = await c.post(f"{BASE}/api/tasks", json={"goal": "Check me in for my flight"}, headers=H)
         tid = r.json()["id"]
         log("task started", r.status_code == 200, task=tid)
@@ -163,6 +166,7 @@ async def gate() -> dict[str, Any]:
         log("MCP: tools, run_task and get_task", "approve" not in " ".join(names) and info.get("status") == "done", tools=names,
             mcp_task=info.get("status"), result=info.get("result"))
 
+        await c.post(f"{BASE}/api/settings/approvals", json=before_rules, headers=H)
         chat = (await c.post(f"{BASE}/api/chat", json={"message": "What's my gate?"}, headers=H)).json()
         log("chat answers from memory", chat.get("kind") == "memory" and bool(chat.get("from_memory")), reply=chat.get("reply"))
     passed = all(s["ok"] for s in steps)

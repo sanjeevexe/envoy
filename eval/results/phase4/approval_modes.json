@@ -1,0 +1,87 @@
+{
+ "time": "2026-10-27T14:56:13",
+ "cases": [
+  {
+   "case": "your own request, default mode",
+   "via": "web",
+   "rules": {
+    "default": "unless_requested",
+    "apps": {},
+    "routines": {}
+   },
+   "asked": false,
+   "expected_ask": false,
+   "status": "done",
+   "checked_in": true,
+   "approvals": [
+    [
+     "approved",
+     "your request"
+    ]
+   ],
+   "ok": true
+  },
+  {
+   "case": "the same request from MCP",
+   "via": "mcp",
+   "rules": {
+    "default": "unless_requested",
+    "apps": {},
+    "routines": {}
+   },
+   "asked": true,
+   "expected_ask": true,
+   "status": "done",
+   "checked_in": true,
+   "approvals": [
+    [
+     "approved",
+     "user"
+    ]
+   ],
+   "ok": true
+  },
+  {
+   "case": "MCP with a standing approval on the routine",
+   "via": "mcp",
+   "rules": {
+    "default": "unless_requested",
+    "apps": {},
+    "routines": {
+     "skylark_check_in_flight": "never"
+    }
+   },
+   "asked": false,
+   "expected_ask": false,
+   "status": "done",
+   "checked_in": true,
+   "approvals": [
+    [
+     "approved",
+     "standing approval"
+    ]
+   ],
+   "ok": true
+  },
+  {
+   "case": "your own request, always ask",
+   "via": "web",
+   "rules": {
+    "default": "always",
+    "apps": {},
+    "routines": {}
+   },
+   "asked": true,
+   "expected_ask": true,
+   "status": "done",
+   "checked_in": true,
+   "approvals": [
+    [
+     "approved",
+     "user"
+    ]
+   ],
+   "ok": true
+  }
+ ]
+}

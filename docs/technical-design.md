@@ -559,7 +559,7 @@ A `type` action that also submits (presses Enter) is classified by the screen's 
 - An approval request shows a screenshot, a one-line description ("Place order at Chipotle, $14.82"), and the amount if any. It goes to the iPhone as an actionable push notification and to the web app.
 - The approval is bound to the exact screen it was shown for: the app's own elements, not the keyboard or status bar, which come and go. If the screen changes before the tap (price changed, new pop-up), the agent asks again.
 - No answer within a time limit means the task is paused, never auto-approved.
-- **Standing approvals** let a user pre-approve low-risk routines with limits (for example, "check in for my flights automatically"). They are never allowed for payments or purchases.
+- **The user chooses when Envoy asks**, for everything, per app or per routine: *always ask*; *ask unless I asked for it* (the default: "check me in" is the OK to tap "Confirm check-in" for that trip, and Envoy says so afterwards); or, for a routine, *never ask* (a standing approval, e.g. "check in for my flights automatically", which also covers a trigger starting it). Envoy still asks whenever money is involved, when the step isn't what was asked (the button's own words must be in the request), when the details differ (names, codes and numbers in the request must be on the screen or in the task's inputs), and when the request came from a trigger, an email or an AI client rather than the user, unless a standing approval covers the routine. These are rules, not model judgments.
 
 **Only a person can approve.** Approvals are accepted only from Envoy's own approval screen or iPhone notification, never through MCP or the chat assistant's tools, so no AI (including the one running the task) can approve its own action.
 
@@ -866,6 +866,7 @@ The gate runs drove these changes:
 
 - An approval is bound to the app's own elements: the user's run found a closing keyboard making an approval look stale. A stale approval is asked again, never treated as a decline.
 - A task is done as soon as the phone work is; memory is written right after, instead of keeping the task "running" for 11 seconds.
+- Approvals are configurable: by default Envoy doesn't ask for the step the user asked for (money, other actions, other details and requests from triggers or AI clients still ask); "always ask" and per-routine standing approvals are settings. Checked on SkyLark: 4/4 modes behave as intended.
 - On emulators the live view uses the emulator's gRPC frames, not scrcpy; one process serves the API, the MCP server and the web app; takeover is a lease that makes the agent wait at its next call to the phone; the scheduler is Envoy's own, so delayed flights move their triggers.
 
 ## Open questions

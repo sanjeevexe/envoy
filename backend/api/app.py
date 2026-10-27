@@ -137,7 +137,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
             raise HTTPException(400, "goal or routine needed")
         if body.get("routine"):
             goal = goal or routines.get(body["routine"]).intent
-        return runner.start(goal, body.get("source", "web"), routine=body.get("routine"), inputs=body.get("inputs") or {})
+        return runner.start(goal, "web", routine=body.get("routine"), inputs=body.get("inputs") or {})
 
     @app.get("/api/tasks", dependencies=[Depends(session)])
     def list_tasks(limit: int = 50) -> list[dict[str, Any]]:
@@ -314,6 +314,26 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     @app.get("/api/memory/events", dependencies=[Depends(session)])
     def memory_events(after: int = 0) -> list[dict[str, Any]]:
         return memory.events(after)[-300:]
+
+    # ---- settings: when Envoy asks before an irreversible step ---------------------------------------
+
+    @app.get("/api/settings/approvals", dependencies=[Depends(session)])
+    def get_approval_rules() -> dict[str, Any]:
+        from api.runner import APP_NAMES
+        from policy.approval_rules import MODES, ApprovalRules
+        rules = ApprovalRules.from_dict(tasks.setting("approval_rules"))
+        apps = sorted({r.app for r in routines.active()} | set(APP_NAMES.values()))
+        return {"rules": rules.to_dict(), "modes": list(MODES), "apps": apps,
+                "routines": [{"name": r.routine, "app": r.app, "intent": r.intent,
+                              "irreversible": any(s.risk == "irreversible" for s in r.steps)} for r in routines.active()]}
+
+    @app.post("/api/settings/approvals", dependencies=[Depends(session)])
+    def set_approval_rules(body: dict[str, Any] = Body(...)) -> dict[str, Any]:
+        from policy.approval_rules import ApprovalRules
+        rules = ApprovalRules.from_dict(body)  # unknown modes are dropped; "never" only for routines
+        tasks.set_setting("approval_rules", rules.to_dict())
+        bus.publish("settings", approvals=rules.to_dict())
+        return rules.to_dict()
 
     # ---- routines and triggers -----------------------------------------------------------------
 

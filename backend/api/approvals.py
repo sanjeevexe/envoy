@@ -19,6 +19,7 @@ import io
 import threading
 from typing import Any, Callable
 
+from policy.approval_rules import ApprovalRules, decide as already_approved
 from policy.approvals import ApprovalDecision, ApprovalRequest
 
 from api.store import API_DIR, TaskStore
@@ -36,11 +37,13 @@ def _key(screen: Any) -> tuple[str, ...]:
 
 class WebApprover:
     def __init__(self, store: TaskStore, bus: Any, loop: asyncio.AbstractEventLoop, task_id: str,
-                 phone: Callable[[], Any], on_wait: Callable[[str | None], None], timeout_s: float = 900) -> None:
+                 phone: Callable[[], Any], on_wait: Callable[[str | None], None], timeout_s: float = 900,
+                 rules: Callable[[], ApprovalRules] = ApprovalRules) -> None:
         self.store, self.bus, self.loop, self.task_id = store, bus, loop, task_id
         self.phone = phone  # the raw (ungated) device, for the screenshot and the screen check
         self.on_wait = on_wait  # tells the runner the task is waiting (approval id) or not (None)
         self.timeout_s = timeout_s
+        self.rules = rules  # the user's approval settings (read on every request: changes apply at once)
         self._events: dict[str, threading.Event] = {}
         self.requests: list[ApprovalRequest] = []
 
@@ -53,6 +56,15 @@ class WebApprover:
                 ev.set()
             self.bus.publish("approval_decided", approval=rec, task_id=self.task_id)
         return rec
+
+    def _save_shot(self, approval_id: str, shot: bytes | None) -> None:
+        if not shot:
+            return
+        path = SHOTS / f"{approval_id}.jpg"
+        path.write_bytes(shot)
+        with self.store.lock:
+            self.store.db.execute("UPDATE approvals SET screenshot=? WHERE id=?", (path.name, approval_id))
+            self.store.db.commit()
 
     def _run(self, coro: Any, timeout: float = 15) -> Any:
         return asyncio.run_coroutine_threadsafe(coro, self.loop).result(timeout)
@@ -72,14 +84,25 @@ class WebApprover:
                 shot = buf.getvalue()
         except Exception:  # noqa: BLE001 - an approval without a picture is still an approval request
             pass
+        task = self.store.get(self.task_id) or {}
+        auto = already_approved(self.rules(), goal=task.get("request") or task.get("goal") or "", source=task.get("source") or "",
+                                app=req.app, routine=task.get("routine"), origin=req.origin, target=req.target,
+                                screen_text=req.screen, inputs=task.get("inputs") or {})
         rec = self.store.add_approval(self.task_id, req.description, req.reasons, req.app, req.screen, None)
+        if auto is not None:
+            # Done without asking, and said so: the approval is on record with who gave it and why.
+            self._save_shot(rec["id"], shot)
+            final = self.store.decide_approval(rec["id"], "approved", auto.by, auto.why)
+            self.bus.publish("approval_decided", approval={k: v for k, v in (final or rec).items() if k != "nonce"}, task_id=self.task_id, auto=True)
+            seq = self.store.add_step(self.task_id, {"kind": "approval", "text": f"{req.target or req.description}: done without asking ({auto.by})",
+                                                     "reason": auto.why})
+            self.bus.publish("step", task_id=self.task_id, step={"seq": seq, "kind": "approval", "text": f"{req.target or req.description}: done without asking ({auto.by})",
+                                                               "reason": auto.why})
+            return ApprovalDecision(True, by=auto.by, note=auto.why)
         done = threading.Event()
         self._events[rec["id"]] = done  # registered at once, so a decision that comes right away still wakes us
         if shot:
-            path = SHOTS / f"{rec['id']}.jpg"
-            path.write_bytes(shot)
-            self.store.db.execute("UPDATE approvals SET screenshot=? WHERE id=?", (path.name, rec["id"]))
-            self.store.db.commit()
+            self._save_shot(rec["id"], shot)
             rec = self.store.approval(rec["id"])
         self.on_wait(rec["id"])
         self.bus.publish("approval_requested", approval={k: v for k, v in rec.items() if k != "nonce"}, task_id=self.task_id)

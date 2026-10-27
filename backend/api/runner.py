@@ -26,6 +26,7 @@ from memory.bridge import fill_inputs, notes_for, remember_run
 from memory.service import MemoryService
 from memory.store import MemoryStore
 from models.adapter import ModelAdapter
+from policy.approval_rules import ApprovalRules
 from policy.signin import sign_in_reason
 from routines.executor import ExecConfig, RoutineExecutor
 from routines.matcher import RoutineMatcher
@@ -102,8 +103,9 @@ class TaskRunner:
     # ---- starting and stopping -----------------------------------------------------------------
 
     def start(self, goal: str, source: str, *, routine: str | None = None, inputs: dict[str, str] | None = None,
-              app: str | None = None) -> dict[str, Any]:
-        task = self.store.create(goal, source, routine=routine, inputs=inputs or {}, app=app)
+              app: str | None = None, request: str | None = None) -> dict[str, Any]:
+        """`request` is the user's own words when the goal was rephrased (chat): approvals are matched against it."""
+        task = self.store.create(goal, source, routine=routine, inputs=inputs or {}, app=app, request=request or goal)
         self.bus.publish("task", task=task)
         coro = self._run(task["id"], goal, routine, inputs or {}, app)
         try:
@@ -180,6 +182,7 @@ class TaskRunner:
                 gated = self.pool.gated(avd, device)
                 loop = asyncio.get_running_loop()
                 approver = WebApprover(self.store, self.bus, loop, tid, phone=lambda: device, timeout_s=self.approval_timeout_s,
+                                       rules=lambda: ApprovalRules.from_dict(self.store.setting("approval_rules")),
                                        on_wait=lambda aid: self._set(tid, status="waiting_approval" if aid else "running", waiting_for=aid))
                 self.approvers[tid] = approver
                 skylark = app == SKYLARK

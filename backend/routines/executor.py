@@ -533,7 +533,8 @@ class RoutineExecutor:
 
     # ---- acting -----------------------------------------------------------------------------
 
-    async def _gate(self, ctx: _Ctx, action: Action, screen: ScreenState, risk: str, label: str, sr: StepRun) -> Action | None:
+    async def _gate(self, ctx: _Ctx, action: Action, screen: ScreenState, risk: str, label: str, sr: StepRun,
+                    origin: str = "routine_step") -> Action | None:
         """The same policy gate the agent uses. Irreversible always asks a person (or the test app's scripted approver).
         Returns the action to run, or None if it was declined. An approval is bound to the screen it was shown for: if
         the screen changed while waiting, the same control is found on the new screen and the person is asked again."""
@@ -543,7 +544,7 @@ class RoutineExecutor:
         for _ in range(3):
             req = ApprovalRequest(task_id=ctx.task_id, goal=render_str(ctx.routine.intent, ctx.inputs) or "", app=screen.package,
                                   description=f'{action.kind} "{label}" in {screen.package} (routine {ctx.routine.routine} v{ctx.routine.version})',
-                                  reasons=verdict.reasons, screen=screen.compact)
+                                  reasons=verdict.reasons, screen=screen.compact, origin=origin, target=label)
             decision = await asyncio.to_thread(self.approver.request, req)
             ctx.out.approvals.append({"step": sr.id, "description": req.description, "reasons": req.reasons, "approved": decision.approved, "by": decision.by})
             if decision.by != "screen_changed":
@@ -728,7 +729,7 @@ class RoutineExecutor:
             if action is None:
                 continue
             el = s.numbered[action.element - 1] if action.element else None
-            gated = await self._gate(ctx, action, s, d.risk, el.label if el else action.kind, sr)
+            gated = await self._gate(ctx, action, s, d.risk, el.label if el else action.kind, sr, origin="repair")
             if gated is None:
                 sr.status, sr.detail = "declined", "the user declined a repair action"
                 ctx.out.status = "declined"

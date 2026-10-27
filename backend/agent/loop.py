@@ -335,7 +335,8 @@ class AgentRunner:
                     target = screen.numbered[action.element - 1] if action.element else None
                     req = ApprovalRequest(task_id=task_id, goal=goal, app=screen.package,
                                           description=f'{action.kind} "{target.label if target else action.kind}" in {screen.package}',
-                                          reasons=verdict.reasons, screen=screen.compact)
+                                          reasons=verdict.reasons, screen=screen.compact, origin="agent",
+                                          target=target.label if target else "")
                     decision_ = await asyncio.to_thread(self.approver.request, req)
                     out.approvals.append({"step": step, "description": req.description, "reasons": req.reasons,
                                           "approved": decision_.approved, "by": decision_.by})

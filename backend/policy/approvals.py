@@ -21,6 +21,8 @@ class ApprovalRequest:
     reasons: list[str]
     screen: str  # the compact screen the action is bound to
     screenshot_path: str | None = None
+    origin: str = "agent"  # "agent", "routine_step" (the routine's own step) or "repair" (a step found by repair)
+    target: str = ""  # the button's words ("Confirm check-in"), for matching against what the user asked
 
 
 @dataclass

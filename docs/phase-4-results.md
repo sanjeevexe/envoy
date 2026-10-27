@@ -45,6 +45,20 @@ All of it is Envoy's own code: about 1,700 lines of Python (`backend/api/`, `bac
 4. **MCP tools run in worker threads** with no event loop, so `run_task` failed; tasks can now start from any thread.
 5. **An approval made in the same instant it was created could be missed**; the approver now registers before anything can decide.
 
+## Configurable approvals (added after the gate, at your request)
+
+Asking "check me in" is already your OK to check in, so by default Envoy no longer asks again. Three modes, for everything, per app or per routine (`policy/approval_rules.py`, Settings tab):
+
+| Mode | When Envoy asks before an irreversible step |
+| --- | --- |
+| Ask unless I asked for it (default) | Only when it isn't what you asked for |
+| Always ask | Every time |
+| Never ask (routines only) | Never for that routine's own steps, even when a trigger starts it: a standing approval |
+
+Whatever the mode, Envoy asks when money is involved, when the button's own words aren't in your request ("Cancel trip" during a check-in), when your request's details aren't on the screen or in the task's inputs (another flight, another seat), and when the request came from a trigger, an email or an AI client over MCP, unless a standing approval covers the routine. These are rules, not model judgments, matched against your own words (chat keeps them, not the assistant's rephrasing). An approval given this way is on record with who gave it ("your request", "standing approval") and shows in the task.
+
+On SkyLark (`eval/run_approval_modes.py`, 4/4): your own "check me in" checked in without asking; the same request from MCP asked; with a standing approval on the routine, the MCP request didn't ask; with "always ask", your request asked. 4 new offline tests (79 in all). The scripted gate sets "always ask" for its run, since the gate is "the user approves", and still passes 10/10.
+
 ## Honest limits
 
 - **The live view is local.** It is a JPEG stream over WebSocket, fine on this Mac and on the local network; over a tunnel it will need a lower frame rate or real video. HTTPS (needed by the iPhone, Phase 5) is not set up yet.
@@ -63,6 +77,7 @@ For the design doc (applied in both copies):
 4. **An approval is bound to the app's own elements**, not the whole screen (the keyboard and status bar come and go); a stale approval is asked again, never treated as a decline.
 5. **A task is done when the phone work is**; memory is written right after.
 6. **The scheduler is Envoy's own small one** (about 200 lines) instead of APScheduler: times derived from memory are recomputed on every check, so a delayed flight moves its trigger, and each occasion fires once.
+7. **Approvals are configurable** (always ask; ask unless I asked for it, the default; standing approvals per routine), with money, other actions, other details and requests not from you always asking.
 
 ## Next
 

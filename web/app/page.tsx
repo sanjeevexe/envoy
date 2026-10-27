@@ -7,11 +7,12 @@ import Chat from "@/components/Chat";
 import LivePhone from "@/components/LivePhone";
 import MemoryGraph from "@/components/MemoryGraph";
 import Routines from "@/components/Routines";
+import Settings from "@/components/Settings";
 import { TaskDetail, TaskList } from "@/components/Tasks";
 import Triggers from "@/components/Triggers";
 import { api, ApiError, Approval, EnvoyEvent, Lease, Step, Task, useEvents } from "@/lib/api";
 
-const TABS = ["Chat", "Tasks", "Approvals", "Memory", "Routines", "Triggers"] as const;
+const TABS = ["Chat", "Tasks", "Approvals", "Memory", "Routines", "Triggers", "Settings"] as const;
 type Tab = (typeof TABS)[number];
 
 export default function Home() {
@@ -99,6 +100,7 @@ export default function Home() {
             {tab === "Memory" && <MemoryGraph version={memVersion} />}
             {tab === "Routines" && <Routines openTask={(id) => { setOpenTask(id); setTab("Tasks"); }} />}
             {tab === "Triggers" && <Triggers />}
+            {tab === "Settings" && <Settings />}
           </div>
         </section>
         <aside className="w-full shrink-0 overflow-y-auto border-t border-stone-200 bg-stone-50 p-4 md:w-[340px] md:border-l md:border-t-0">

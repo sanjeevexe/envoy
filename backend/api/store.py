@@ -25,7 +25,7 @@ SCHEMA = """
 CREATE TABLE IF NOT EXISTS tasks (
   id TEXT PRIMARY KEY, goal TEXT NOT NULL, source TEXT NOT NULL, status TEXT NOT NULL, created_at REAL, updated_at REAL,
   app TEXT, device TEXT, kind TEXT, routine TEXT, inputs TEXT, result TEXT, detail TEXT, waiting_for TEXT,
-  model_calls INTEGER DEFAULT 0, cost_usd REAL DEFAULT 0, traces TEXT DEFAULT '[]', memory TEXT
+  model_calls INTEGER DEFAULT 0, cost_usd REAL DEFAULT 0, traces TEXT DEFAULT '[]', memory TEXT, request TEXT
 );
 CREATE TABLE IF NOT EXISTS steps (
   task_id TEXT, seq INTEGER, time REAL, data TEXT, PRIMARY KEY (task_id, seq)
@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS approvals (
   id TEXT PRIMARY KEY, task_id TEXT, created_at REAL, status TEXT, description TEXT, reasons TEXT, app TEXT,
   screen TEXT, screenshot TEXT, nonce TEXT, decided_at REAL, decided_by TEXT, note TEXT
 );
+CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT);
 CREATE TABLE IF NOT EXISTS triggers (
   id TEXT PRIMARY KEY, kind TEXT, name TEXT, spec TEXT, action TEXT, enabled INTEGER DEFAULT 1, created_at REAL,
   last_fired REAL, fired TEXT DEFAULT '[]'
@@ -54,6 +55,8 @@ class TaskStore:
         self.lock = threading.RLock()
         with self.lock:
             self.db.executescript(SCHEMA)
+            if "request" not in {r[1] for r in self.db.execute("PRAGMA table_info(tasks)")}:  # databases from before approval rules
+                self.db.execute("ALTER TABLE tasks ADD COLUMN request TEXT")
             # A restart ends whatever was running: the runner that owned it is gone.
             self.db.execute("UPDATE tasks SET status='stopped', detail='the server restarted' WHERE status IN (%s)" % ",".join("?" * len(ACTIVE)), ACTIVE)
             self.db.execute("UPDATE approvals SET status='expired', note='the server restarted' WHERE status='pending'")
@@ -148,6 +151,18 @@ class TaskStore:
             if cur.rowcount == 0:
                 return None  # already decided (or unknown): a decision is final
         return self.approval(aid)
+
+    # ---- settings ------------------------------------------------------------------------------
+
+    def setting(self, key: str, default: Any = None) -> Any:
+        with self.lock:
+            row = self.db.execute("SELECT value FROM settings WHERE key=?", (key,)).fetchone()
+        return json.loads(row[0]) if row else default
+
+    def set_setting(self, key: str, value: Any) -> None:
+        with self.lock:
+            self.db.execute("INSERT INTO settings VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value=excluded.value", (key, json.dumps(value)))
+            self.db.commit()
 
     # ---- triggers ------------------------------------------------------------------------------
 
