@@ -22,7 +22,7 @@ Phases 0–5 are done, and their gates passed. This is the last build phase: it 
 - Emulators: `envoy-test` (SkyLark; snapshots allowed; gRPC 8554) and `envoy-real` (real apps; never snapshot-restored; always stopped with `scripts/stop_emulator.sh`). Start with `scripts/start_emulator.sh <avd> [--window]`. At most two run at once.
 - Repo: `~/Desktop/Envoy`, private GitHub repo `sanjeevexe/envoy` (must be public by Nov 4; I'll say when). MIT.
 - Meta API: a **shared key** in `.env`, about **$30 left** ($7.36 billed so far; all spend is in `logs/model_costs.jsonl`). The Contributor tier is allowed for SkyLark test data only, never real apps or real data.
-- **The Android phone** is a loan from IPaT, arriving **Wednesday, Oct 28**. I'll tell you its model and Android version when I have it, and I'll turn on Developer options. It's borrowed: see the rules below.
+- **The Android phone** is a loan from IPaT, arriving **Wednesday, Oct 28**. I'll tell you its model and Android version when I have it, and I'll turn on Developer options. I factory-reset it when I give it back, so set it up however Envoy needs.
 - **My iPhone** (iOS 26.6) has Envoy on its Home Screen, paired, with push on; Tailscale Serve gives the API `https://sanjeevs-macbook-pro.tailffb391.ts.net:8443` (tailnet only). You can drive the iPhone through iPhone Mirroring, which blocks its microphone. Muse route 2 works through `scripts/start_muse_test.sh`; I start tunnels and enter tokens.
 
 **Running the demo (Phase 5).** The API may still be running (`curl http://127.0.0.1:8700/healthz`). If it isn't:
@@ -85,7 +85,6 @@ Write the plan as `prompts/phase-6-plan.md` first (like `prompts/phase-5-plan.md
 
 ## Rules and constraints
 
-- **The phone is a loan.** Install only what Envoy needs (SkyLark's debug APK, uiautomator2's helper, the scrcpy server). Change no settings beyond the developer options I turn on, unless you ask first. Never sign in to anything, and never factory-reset it. Keep a list of what you installed in `docs/phase-6-results.md`, and add a script that removes it all before I return the phone.
 - **The demo may only show work built during the hackathon (Oct 27 – Nov 4), clearly identified**, or the project can be disqualified. Keep `THIRD_PARTY.md` current (the Tango libraries or scrcpy, for example). Open source is plumbing; the routines, memory, policy and routing are ours.
 - **Budget:** spend where it makes the work better; avoid needless repeats; use `low` effort where it works; downscale screenshots. Contributor tier for SkyLark only.
 - **Safety is unchanged, plus the real phone:** approvals come only from my session (or the scripted person on SkyLark); MCP, chat, voice, Shortcuts and pushes can never approve; nothing types passwords; secure screens are never stored or sent to a model; the real phone is used only after I say yes, with the banner showing and Pause working.
@@ -98,7 +97,7 @@ Write the plan as `prompts/phase-6-plan.md` first (like `prompts/phase-5-plan.md
 - The gate passes on the real phone: SkyLark's check-in routine, learned on the emulator, runs on the phone; I approve from the iPhone; the check-in is confirmed by SkyLark's state hook; memory updates.
 - Routine portability is measured on a second emulator profile. Screens with no tree work through grounding, SAM 3.1 is measured against it, and a routine step on such a screen replays.
 - The live view and takeover work for the real phone, in the web app and on the iPhone, with measured latency.
-- Tests and the scripted checks pass. These are updated: `docs/phase-6-results.md` (with the loaner's install list), both copies of the design doc (a "Phase 6 results" section, any design changes, and the Android phone open question answered), `THIRD_PARTY.md`, `README.md`, and `docs/meta-feedback.md` (grounding and SAM 3.1 on UI screens). Everything is committed and pushed.
+- Tests and the scripted checks pass. These are updated: `docs/phase-6-results.md`, both copies of the design doc (a "Phase 6 results" section, any design changes, and the Android phone open question answered), `THIRD_PARTY.md`, `README.md`, and `docs/meta-feedback.md` (grounding and SAM 3.1 on UI screens). Everything is committed and pushed.
 - Finish with a short summary:
   1. what was built
   2. the key numbers: routine success and model calls on the real phone and the second emulator profile, live-view latency for the phone, and grounding against SAM 3.1 (accuracy, latency, cost)
