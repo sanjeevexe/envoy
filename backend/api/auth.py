@@ -26,6 +26,7 @@ import subprocess
 import threading
 import time
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 from api.store import TaskStore
@@ -158,6 +159,17 @@ def public_url(port: int) -> str:
     """The address links point at (approval pages in pushes and MCP results): ENVOY_PUBLIC_URL, else the tailnet address,
     else this Mac only."""
     return (os.environ.get("ENVOY_PUBLIC_URL") or tailnet_url(port) or f"http://127.0.0.1:{port}").rstrip("/")
+
+
+def tunnel_hosts(url_file: Path) -> set[str]:
+    """The public tunnel's host, only while `scripts/start_muse_test.sh` runs (it writes the URL to this file and removes
+    it on exit). An AI client such as Muse reaches Envoy's MCP server through it; nothing else is served there."""
+    try:
+        url = url_file.read_text().strip()
+    except OSError:
+        return set()
+    host = url.split("://", 1)[-1].split("/", 1)[0]
+    return {host, f"{host}:443"} if url.startswith("https://") and host else set()
 
 
 def allowed_hosts(port: int, public: str) -> set[str]:

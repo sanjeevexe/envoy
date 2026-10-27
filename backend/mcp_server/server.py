@@ -115,9 +115,11 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> MCPServer:
 
 
 def mcp_app(server: MCPServer, port: int, extra_hosts: set[str] | None = None) -> Any:
+    """Inside the API, the API's dispatcher checks the Host header first (including a public tunnel that comes and
+    goes while the API runs), so the SDK's own fixed host list would only refuse the tunnel."""
     from mcp_stub.common import allowed_hosts
     hosts = sorted(set(allowed_hosts(port)) | (extra_hosts or set()))
     return server.streamable_http_app(
         streamable_http_path="/mcp", stateless_http=True, json_response=True,
-        transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=True, allowed_hosts=hosts, allowed_origins=[]),
+        transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=extra_hosts is None, allowed_hosts=hosts, allowed_origins=[]),
     )

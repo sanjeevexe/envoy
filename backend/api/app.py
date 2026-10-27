@@ -37,7 +37,7 @@ from models.adapter import ModelAdapter
 from routines.model import dump_yaml
 from routines.store import RoutineStore
 
-from api.auth import Auth, Caller, allowed_hosts, public_url
+from api.auth import Auth, Caller, allowed_hosts, public_url, tunnel_hosts
 from api.chat import chat
 from api.devices import DevicePool
 from api.events import EventBus
@@ -627,12 +627,15 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
             return HTMLResponse("<p>Envoy API is running. Build the web app: <code>cd web && npm run build</code></p>")
 
     async def dispatch(scope: dict, receive: Any, send: Any) -> None:
-        """Only the names Envoy is served on (DNS rebinding); WebSockets only from those origins. /mcp goes to the MCP server
-        (its own bearer token); everything else to the API and web app."""
+        """Only the names Envoy is served on (DNS rebinding); WebSockets only from those origins. A public tunnel for AI
+        clients (Muse) reaches /mcp and nothing else. /mcp goes to the MCP server (its own bearer token); everything else
+        to the API and web app."""
         if scope["type"] in ("http", "websocket"):
             headers = {k.decode("latin-1").lower(): v.decode("latin-1") for k, v in scope.get("headers") or []}
             origin = headers.get("origin", "")
-            bad_host = headers.get("host", "") not in hosts
+            host = headers.get("host", "")
+            is_mcp = scope["type"] == "http" and (scope["path"] == "/mcp" or scope["path"].startswith("/mcp/"))
+            bad_host = host not in hosts and not (is_mcp and host in tunnel_hosts(API_DIR / "mcp_public_url"))
             bad_origin = scope["type"] == "websocket" and origin and origin.split("://", 1)[-1] not in hosts
             if bad_host or bad_origin:
                 if scope["type"] == "http":

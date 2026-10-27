@@ -452,3 +452,20 @@ def test_a_stalled_microphone_is_padded_with_silence_to_real_time(env, monkeypat
                 final = ws.receive_json()
     assert final["type"] == "final" and final["text"] == ""
     assert fake.audio >= 0.8 * 48000 and final["silence_ms"] >= 800  # silence kept the stream at real time
+
+
+def test_a_public_tunnel_reaches_mcp_only(env):
+    """Muse needs a public address for Envoy's MCP server (route 2). The tunnel's host is accepted for /mcp alone; the
+    web app, the API and the approval pages are never served there."""
+    (env.tmp / "mcp_public_url").write_text("https://quiet-river-1234.trycloudflare.com")
+    tunnel = {"Host": "quiet-river-1234.trycloudflare.com"}
+    body = {"jsonrpc": "2.0", "id": 1, "method": "tools/list", "params": {}}
+    hdr = {"Accept": "application/json, text/event-stream", "Content-Type": "application/json", "MCP-Protocol-Version": "2025-11-25"}
+    with TestClient(env.ctx.asgi) as c:
+        r = c.post("/mcp", json=body, headers={**hdr, **tunnel, "Authorization": "Bearer mcp-test-token"})
+        assert r.status_code == 200 and "run_task" in r.text
+        assert c.post("/mcp", json=body, headers={**hdr, **tunnel}).status_code == 401  # still needs its token
+        for path in ("/", "/api/state", "/approve/", "/login?k=x", "/api/pair"):
+            assert c.get(path, headers={**tunnel, **me(env.token)}).status_code == 421
+        (env.tmp / "mcp_public_url").unlink()  # the tunnel script stopped
+        assert c.post("/mcp", json=body, headers={**hdr, **tunnel, "Authorization": "Bearer mcp-test-token"}).status_code == 421
