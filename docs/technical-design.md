@@ -102,25 +102,25 @@ class Device(Protocol):
 
 ### Envoy bridge (on every Android device)
 
-Built only if Phase 1 shows that screen reads are the bottleneck or that waiting for the screen to settle is unreliable. A model step likely takes 2 to 5 seconds, which may dwarf a 0.5 to 1 second tree read. If built, it is a small Kotlin accessibility service that:
+Built only if Phase 1 shows that waiting for the screen to settle, or setting text, is unreliable on real apps. Phase 0 measured a uiautomator2 tree read at 31 ms and a full observation at about 70 ms, so read speed is no longer a reason to build it. If built, it is a small Kotlin accessibility service that:
 
-- **Reads the screen** in-process as JSON (bounds, resource ID, text, description, class, clickable, editable, password flag) in roughly tens of milliseconds, versus about 0.5 to 1 second for `uiautomator dump`.
+- **Reads the screen** in-process as JSON (bounds, resource ID, text, description, class, clickable, editable, password flag) in roughly tens of milliseconds, against about 31 ms through uiautomator2's server (Phase 0) and 0.5 to 1 second for `uiautomator dump`.
 - **Knows when the screen has settled,** because it receives accessibility events; no fixed sleeps.
 - **Acts reliably:** click, set text (including non-English text and emoji, which `adb input text` cannot type), gestures, back and home.
 - **Talks over a WebSocket** forwarded through `adb forward`, so the same code works over USB, Wi-Fi or in the cloud.
 
-**uiautomator2** (MIT license) is the default from day one: it reads the tree, acts, and types any language through its own input method. Only one of uiautomator2 and the bridge can run at a time, since Android allows a single automation session. Mobilerun's Portal app is not reused: its license is AGPL-3.0.
+**uiautomator2** (MIT license) is the default from day one: it reads the tree and acts, and Envoy types any language and emoji through accessibility set-text. uiautomator2's own typing pastes through the clipboard, which would leak typed text, so it is never used, and submitting is a plain Enter key, because its IME action would switch the user's keyboard. Only one of uiautomator2 and the bridge can run at a time, since Android allows a single automation session. Mobilerun's Portal app is not reused: its license is AGPL-3.0.
 
 ### Screenshots and video
 
-On emulators, the agent's screenshots come from the emulator's own gRPC screenshot call (enabled by `-grpc`), measured in Phase 0. A Node relay is the only **scrcpy** client per device (Apache-2.0); it streams H.264 video for the live view. On a real phone, the agent takes screenshots from the relay's latest frame or `adb screencap` (0.5 to 2.6 seconds). Either way, screenshots are the exception: the agent reads text first (see Agent runtime).
+On emulators, the agent's screenshots come from the emulator's own gRPC screenshot call (enabled by `-grpc`), measured in Phase 0 at 6 ms for a raw frame (20 ms as PNG). Emulator taps also go through gRPC (under 1 ms, against about 150 ms through uiautomator2). A Node relay is the only **scrcpy** client per device (Apache-2.0); it streams H.264 video for the live view. On a real phone, the agent takes screenshots from the relay's latest frame or `adb screencap` (0.5 to 2.6 seconds on phones; 142 ms on the emulator). Either way, screenshots are the exception: the agent reads text first (see Agent runtime).
 
 ### Backend 1: cloud phones (emulators)
 
 - **Image:** Android 15 or 16 (API 35/36) with Google Play, arm64, regular page size. Play images allow signing in to the Play Store; they cannot be rooted, which is fine.
-- **Launch:** headless (`-no-window -no-audio -no-boot-anim -memory 4096 -grpc <port>`), 4 GB each, at most two running at once on the 24 GB laptop.
-- **Snapshots for test apps:** test apps and evaluation restore a known snapshot before each task, which makes runs and routine verification repeatable. After a restore, the backend re-establishes adb forwarding, the automation server and the video session.
-- **No rollback for real apps:** real apps run on a long-lived emulator that is never restored to an old snapshot. Restoring an old signed-in session can replay expired sign-in tokens, which can get the session revoked or the account flagged.
+- **Launch:** headless (`-no-window -no-audio -no-boot-anim -memory 4096 -grpc <port>`), 4 GB of guest RAM but about 7 GB of Mac memory each (measured), at most two at once on the 24 GB laptop, with the browser and other heavy apps closed. Always add -grpc-use-token: plain -grpc listens on every network interface with no auth. Also add -feature -WiFiPacketStream: netsim Wi-Fi crashed emulator 37.2.12 on snapshot load. On a new emulator, update Chrome and Android System WebView from the Play Store, because the image ships 2024 versions that break web sign-ins.
+- **Snapshots for test apps:** test apps and evaluation restore a known snapshot before each task, which makes runs and routine verification repeatable. A restore takes about 1.8 s including reconnecting (Phase 0), and each snapshot is about 3.8 GB on disk, so old ones are pruned. After a restore, the backend re-establishes adb forwarding, the automation server and the video session.
+- **No rollback for real apps:** real apps run on a long-lived emulator that is never restored to an old snapshot. Restoring an old signed-in session can replay expired sign-in tokens, which can get the session revoked or the account flagged. It always cold-boots with snapshots off and is shut down cleanly, because a hard kill can lose recent writes.
 - **Pool:** a task leases a device for its duration; other tasks queue (see Leases and failures). Price comparisons would lease two emulators at once (stretch).
 - **Later, in the cloud:** the same stack on a Google Cloud N2 machine with nested virtualization (about $0.19 per hour) or an AWS C8i machine (about $0.38 per hour), or Genymotion's hosted phones. For the hackathon, the emulators run on the laptop.
 
@@ -151,7 +151,7 @@ The iPhone runs Envoy's companion app (see Interfaces): approvals, the live view
 
 ### Setting up this Mac
 
-Not yet installed: the Android SDK, emulator, adb and scrcpy. Two fixes are needed first: install an arm64 Java 21 (the current one runs under Rosetta) and use Python 3.12 or 3.13, since some Android tools do not yet support the installed 3.14.
+Done in Phase 0: the Android SDK, emulator, adb, scrcpy and cloudflared are installed, with an arm64 Java 21 (Homebrew) and Python 3.13 through uv. scripts/env.sh sets the paths.
 
 ## Agent runtime
 
@@ -183,14 +183,14 @@ App: SkyLark Air · Screen: TripDetailsActivity · settled 220 ms
 (list scrolls down)
 ```
 
-A screen of this size costs a few hundred tokens. A screenshot (about 1,300 to 1,500 tokens) is attached only when the tree is sparse (Flutter, games, custom drawing), the last action had no visible effect, the model asks for one with a `look` action, or a repair is in progress.
+A screen of this size costs a few hundred tokens. A screenshot (about 3,200 tokens at the full 1080 by 2400 resolution, measured in Phase 0, so it is downscaled before sending) is attached only when the tree is sparse (Flutter, games, custom drawing), the last action had no visible effect, the model asks for one with a `look` action, or a repair is in progress.
 
 ### Actions
 
 | Action | Notes |
 | --- | --- |
 | `tap(el)`, `long_press(el)` | By element number; the runtime stores the element's full description for routines |
-| `type(el, text, submit?)` | Uses the bridge's set-text, so any language or emoji works |
+| `type(el, text, submit?)` | Uses accessibility set-text (through uiautomator2, or the bridge if built), so any language or emoji works; submit is a plain Enter key |
 | `scroll(direction, el?)`, `swipe(...)` | Scrolls a list or the screen |
 | `back`, `home`, `launch(app)` | Navigation |
 | `tap_point(x, y)` | Only for screens with no usable tree; coordinates come from visual grounding |
@@ -272,8 +272,8 @@ steps:
 ```
 
 - **Inputs** have types (text, code, date, phone, choice) and a hint for where memory can fill them, so "check me in" needs no further questions.
-- **Locators** score several attributes of an element (resource ID, text, description, class, parent and sibling text) instead of coordinates. A strict and a relaxed match threshold come from prior work and are tuned on our test set. When an element has no usable attributes (icon-only buttons, Flutter apps), the locator stores a visual crop matched by image similarity, with Muse Spark's visual grounding as the fallback (SAM 3.1 is tested here too; see Agent runtime).
-- **Checks** are code, not model judgments: app in front, element present or absent, text visible, field holds a value, screen signature similar enough. The signature is the app, the window title, and the sorted resource IDs and element types outside lists, ignoring all text and list contents, so it survives changing data. This avoids the failure seen in prior work where a model misreads whether a condition holds.
+- **Locators** score several attributes of an element (resource ID, text, description, class, parent and sibling text) instead of coordinates. Real apps often obfuscate resource IDs (the Play Store's are all 0_resource_name_obfuscated), so text and descriptions carry most of the weight. A strict and a relaxed match threshold come from prior work and are tuned on our test set. When an element has no usable attributes (icon-only buttons, Flutter apps), the locator stores a visual crop matched by image similarity, with Muse Spark's visual grounding as the fallback (SAM 3.1 is tested here too; see Agent runtime).
+- **Checks** are code, not model judgments: app in front, element present or absent, text visible, field holds a value (read with get_text, since tree dumps garble emoji), screen signature similar enough. The signature is the app, the window title, and the sorted resource IDs and element types outside lists, ignoring all text and list contents, so it survives changing data. This avoids the failure seen in prior work where a model misreads whether a condition holds.
 - **Outputs** pull values from screens (seat, gate) and write them to memory with their source. Extraction takes the text after the label in the same element (apps often merge them, as in "Seat 14C"), else the next element, else one Spark call with the outputs schema.
 - **Risk** is recorded per step; an irreversible step always goes through approval, even in a routine.
 
@@ -449,7 +449,7 @@ The companion is the web app added to the iPhone's Home Screen, which needs no A
 
 ### MCP server
 
-Envoy exposes its abilities as an MCP server (spec version 2026-07-28, Streamable HTTP, OAuth 2.1), so any assistant that accepts remote MCP servers can use them.
+Envoy exposes its abilities as an MCP server (Streamable HTTP and stateless, serving spec versions 2026-07-28 and 2025-11-25, the version Muse's connector uses; bearer token, plus OAuth 2.1 if a client requires it), so any assistant that accepts remote MCP servers can use them.
 
 | Tool | Purpose |
 | --- | --- |
@@ -460,7 +460,7 @@ Envoy exposes its abilities as an MCP server (spec version 2026-07-28, Streamabl
 | `memory_get(entity_id)` | One entity, its facts and links |
 | `memory_note(text, links?)` | Add a note; recorded with the client as its author |
 
-There is deliberately no approve tool: an assistant must never approve its own irreversible action (see Safety). For the hackathon the server requires a bearer token, since `run_task` drives a phone; OAuth 2.1 is added if a client requires it.
+There is deliberately no approve tool: an assistant must never approve its own irreversible action (see Safety). Approval links must never approve on a page load, because Muse's link preview fetches them automatically (Phase 0). For the hackathon the server requires a bearer token, since `run_task` drives a phone; OAuth 2.1 is added if a client requires it.
 
 ### Path into Muse
 
@@ -469,7 +469,7 @@ Envoy is built to plug into the real Muse app, but it never depends on that: thr
 | Route | What it takes | Status |
 | --- | --- | --- |
 | 1. Envoy's own assistant, built on Muse Spark | Nothing beyond the Meta API | Always works; the fallback demo |
-| 2. Muse custom connector | A public HTTPS address for the MCP server, a bearer token, and asking the Muse app to connect to it | Unverified: only one vendor report says Muse builds MCP clients this way; tested in Phase 0 |
+| 2. Muse custom connector | A public HTTPS address for the MCP server, a bearer token, and asking the Muse app to connect to it | Verified in Phase 0: Muse's free tier added Envoy as a custom connector, called both tools and showed the approval link |
 | 3. Listed connector or Meta AI Connectors preview | A submission to the Muse Connector Platform review, and joining the Meta AI Connectors waitlist | Apply on day one; unlikely to clear review before Nov 4 |
 
 **Phase 0 connector test (about 2 hours):**
@@ -480,7 +480,7 @@ Envoy is built to plug into the real Muse app, but it never depends on that: thr
 4. If MCP fails but Muse can call ordinary web APIs, expose the same tools as a small REST API with an OpenAPI description and try again.
 5. Ask Meta's team at kickoff or in Discord office hours whether hackathon builders can get connector access.
 
-**Decision after the test.** If route 2 works, the demo opens in the real Muse app ("check me in for my flight") and Envoy does the phone work, with the approval on the user's iPhone. If it doesn't, the demo uses Envoy's own Muse Spark assistant, and the pitch shows the standard MCP server that Muse can connect to once connector access opens.
+**Decision after the test.** Route 2 works (Phase 0), so the demo opens in the real Muse app ("check me in for my flight") and Envoy does the phone work, with the approval on the user's iPhone. If it doesn't, the demo uses Envoy's own Muse Spark assistant, and the pitch shows the standard MCP server that Muse can connect to once connector access opens.
 
 **Safety is unchanged:** Muse is an AI client like any other. It gets no approve tool, approvals still come only from Envoy's own screens, it sees only what tools return, and its token can be revoked at any time.
 
@@ -527,7 +527,7 @@ Google's emulator WebRTC stack was considered, but it works only for emulators a
 ### Sign-in
 
 - **First use of an app:** the agent opens it and hands off at the sign-in screen. Afterward, the long-lived emulator stays signed in (test apps are saved in a snapshot instead).
-- **Secure screens.** Screens marked secure (`FLAG_SECURE`), common for sign-in and payment, are black in scrcpy video on emulators and real phones, but their accessibility tree is still readable. The agent hands off when it sees a black frame with a non-empty tree, or a password field. On an emulator, the user then signs in through the emulator's own window on the laptop, or through the emulator's gRPC screen stream if Phase 0 shows it captures secure screens. On a real phone, the user signs in on the phone itself.
+- **Secure screens.** Screens marked secure (`FLAG_SECURE`), common for sign-in and payment, are black in scrcpy video and adb screencap on emulators and real phones, but not in the emulator's own window or its gRPC screenshot (Phase 0). Their accessibility tree is usually readable, but not always: Amazon's sign-in WebView exposes nothing. Many native sign-in screens are not marked secure at all (Target, Chipotle, DoorDash, Google). The agent hands off when the window is marked secure, a password field appears, or the screen matches a known sign-in pattern (an email or phone field next to Sign in or Continue). It takes no screenshots while the window is secure. On an emulator, the user then signs in through the emulator's own window on the laptop, or through the emulator's gRPC screen stream. Phase 0 showed that stream does capture secure screens, so a remote sign-in from the web app or iPhone works on emulators. On a real phone, the user signs in on the phone itself.
 - **Expired sessions:** the agent detects a sign-in screen at any point and hands off again.
 
 ### Sign-in codes
@@ -584,7 +584,7 @@ Categories come from the app's Play Store category and a maintained list of pack
 
 ### Redaction before anything is stored
 
-Before a screen, log line or fact is saved, a redaction pass removes password-field contents, card numbers (detected by pattern and checksum), sign-in codes, and government ID numbers. Screens that Android marks as secure (`FLAG_SECURE`) appear black in screenshots and video; the agent treats them as a hand-off point (see Live view and sign-in).
+Before a screen, log line or fact is saved, a redaction pass removes password-field contents, card numbers (detected by pattern and checksum), sign-in codes, and government ID numbers. Screens that Android marks as secure (`FLAG_SECURE`) appear black in scrcpy video and adb screencap but not in emulator gRPC screenshots. So the agent takes no screenshots while such a window is in front, and treats it as a hand-off point (see Live view and sign-in).
 
 ### Photos and messages
 
@@ -610,7 +610,7 @@ App screens, emails, notifications and web pages are treated as data, never as i
 
 ## Models and cost
 
-Every model call goes through Meta's Model API, mostly to Muse Spark 1.3; by these estimates a first run of a task costs about 9 cents and a routine rerun under 1 cent, so about $200 of credits covers development and evaluation with room to spare. The API is compatible with the OpenAI SDK, and Meta recommends its Responses API for agents.
+Every model call goes through Meta's Model API, mostly to Muse Spark 1.3; as measured in Phase 0, an agent step at low effort costs about $0.001 and takes about 0.9 s, so a first run of a task costs about 4 cents and a routine rerun well under 1 cent, so about $200 of credits covers development and evaluation with room to spare. The API is compatible with the OpenAI SDK, and Meta recommends its Responses API for agents.
 
 ### Which model does what
 
@@ -620,13 +620,13 @@ Every model call goes through Meta's Model API, mostly to Muse Spark 1.3; by the
 | Plans, local repairs, entity matching | `muse-spark-1.3` | Medium to high effort | Same |
 | Compiling routines, hard merges (Spark at high effort if Wonder is not covered by credits) | `muse-wonder-1.0` (preview) | High effort | $4.00 / $20.00 |
 | Elements on screens with no tree | `muse-spark-1.3` visual grounding | Points or boxes | Same as Spark |
-| UI region segmentation (experiment) | `sam-3.1` | Noun-phrase prompts | $2.50 per 1,000 images |
+| UI region segmentation (experiment) | `sam-3.1` | Specific noun phrases (toggle switch, search bar, icon); generic ones such as button find nothing | $2.50 per 1,000 images |
 | Voice input | `muse-voice-transcribe-1.0` | Real-time, turn detection | $0.18 per audio hour |
 | Spoken replies | Device speech engines | None | Free (Meta has no text-to-speech API) |
 
 **Optional Meta models:** Muse Glimmer (30B open weights, Apache 2.0) could take cheap steps like routine matching if partner GPU credits come through; it needs about 18 to 20 GB at 4-bit, too much next to two emulators on this laptop. Muse Image is not needed for the core product.
 
-**Contributor tier:** Spark costs $0.10 / $0.20 per million tokens in Meta's Contributor tier, but Meta may train on what is sent. It is used only for evaluation runs on our own test apps, never for the user's real screens, emails or photos.
+**Contributor tier:** Spark costs $0.10 / $0.20 per million tokens in Meta's Contributor tier, but Meta may train on what is sent. It is a separate model ID (muse-spark-1.3-contributor) limited to 150 requests per minute. It is used only for evaluation runs on our own test apps, never for the user's real screens, emails or photos.
 
 ### Estimated cost per task
 
@@ -634,8 +634,8 @@ These are estimates from Meta's published prices, to be replaced with measured n
 
 | Run type | What is sent | Estimated cost |
 | --- | --- | --- |
-| One agent step | About 3,000 cached prompt tokens, 1,200 new tokens, 500 output tokens (reasoning is billed as output) | About $0.004, plus about $0.002 with a screenshot |
-| First run, 15 steps | Plan, 15 steps (5 with screenshots), fact extraction | About $0.09 |
+| One agent step | Measured: about 1,900 cached prompt tokens, a few hundred new tokens, and 144 output tokens, 88 of them reasoning (low effort) | About $0.001 (measured), plus about $0.004 with a full-size screenshot |
+| First run, 15 steps | Plan, 15 steps (5 with screenshots), fact extraction | About $0.04 |
 | Compiling a routine | Full trace to Muse Wonder, once per task type | About $0.18 |
 | Routine rerun | One matching call; no model calls while checks pass | About $0.003 |
 | Rerun with one local repair | Matching plus one repair call | About $0.02 |
@@ -646,7 +646,7 @@ At standard prices, $200 covers roughly 2,000 first runs, and development (about
 ### Keeping costs down
 
 - **Text first:** the accessibility tree instead of screenshots wherever possible.
-- **Stable prompt prefix:** system prompt, schemas and plan come first and are cached (Meta's prefix cache, with `prompt_cache_key` and 24-hour retention).
+- **Stable prompt prefix:** system prompt, schemas and plan come first and are cached (Meta's prefix cache, with `prompt_cache_key` as a routing hint and prompt_cache_retention set to 24h. Caching is automatic and hit 19 of 20 repeated calls in Phase 0, screenshots included).
 - **Low reasoning effort** for routine steps; reasoning cannot be turned off and is billed as output.
 - **Routines** remove model calls from repeat tasks, which is both the product's main claim and its main saving.
 - **A cost meter** records tokens and dollars per call, task and routine, with a daily cap that pauses work when reached.
@@ -687,7 +687,7 @@ envoy/
     devices/        # Device interface, emulator and phone backends, pool, router
     models/         # Meta API adapter, prompts, schemas, cost meter
     integrations/   # Gmail, Calendar, scheduler, triggers
-    mcp/            # MCP server tools
+    mcp_server/     # MCP server tools (not mcp/, which would shadow the SDK)
   bridge-android/   # Kotlin accessibility service (Envoy bridge)
   relay/            # Node scrcpy video relay
   web/              # Next.js app
@@ -754,7 +754,7 @@ The biggest risk is reliability: phone agents are flaky, and "whether it works" 
 | Agent loop is too unreliable on real apps | High | High | Build and test on our own test apps first; add real apps only after the loop is stable; keep a fixed test task set and track success rate daily |
 | Meta models lack an ability the design assumes (image input, tool calls, coordinates, speed) | Medium | High | Verify at kickoff (see Open questions); the agent relies on the accessibility tree first, so text-only planning still works; model calls go through one adapter so a model can be swapped |
 | API credits (about $200) run out | Medium | High | Text-first screen representation, screenshots only when needed, routines that skip the model on reruns, a cost meter with a daily cap, cheaper models for routine steps |
-| Target apps refuse to run on the emulator | Medium | Medium | Test each app on day one of using it; route to the real Android phone; keep alternative apps in the same category |
+| Target apps refuse to run on the emulator | Medium | Medium | Phase 0: 4 of 6 shopping and food apps work on the emulator (Uber Eats refuses to install, and DoorDash's guest mode hangs). Test each app on day one of using it; route to the real Android phone; keep alternative apps in the same category |
 | No Android phone available for the real-device backend | Low | Low | The device layer is built and tested against emulators first; the real-phone backend uses the same interface and adb commands, so it can be finished in a short session once a phone is borrowed |
 | Learned routines break often on app updates | Medium | Medium | Element-based targeting, step checks, local repair, and versioned routines with rollback |
 | Memory fills with wrong or duplicate facts | Medium | Medium | Facts record source, time and confidence; entity matching before insert; newer facts replace older ones; the user can correct facts in the graph view |
@@ -763,16 +763,32 @@ The biggest risk is reliability: phone agents are flaky, and "whether it works" 
 | Muse custom connectors are not open to hackathon developers | Medium | Low | Envoy's own web app and MCP server work without it; the connector is an add-on |
 | Scope grows beyond what one person can finish | High | High | Strict build phases with exit criteria; nothing from a later phase starts until the current phase passes |
 
+## Phase 0 results
+
+Phase 0 ended on Oct 27, 2026 with its gate passed: Muse Spark 1.3 read a live emulator screen and returned a valid action that ran on the phone. The numbers behind the changes above are in `docs/phase-0-findings.md`. The main ones:
+
+| Measure | Result |
+| --- | --- |
+| Agent step (Muse Spark 1.3, low effort) | 0.87 s median, about 144 output tokens, about $0.001 |
+| Screen read / tap / screenshot (emulator) | 31 ms / under 1 ms (gRPC) / 6 ms raw (gRPC) |
+| Screen settles after a new screen opens | about 1.5 s |
+| Snapshot restore | about 1.8 s; 3.8 GB per snapshot |
+| Emulator memory | about 7 GB each; two fit at once |
+| Visual grounding on 1080 by 2400 screenshots | 3 of 3 targets, center error at most 22 px |
+| Prompt caching | automatic, 19 of 20 repeated calls hit |
+| Real shopping and food apps | 4 of 6 work (Uber Eats won't install; DoorDash's guest mode hangs) |
+| Muse custom connector | works: tools called, approval link shown, nothing approved by Muse |
+
 ## Open questions
 
 These are the answers that could change the design; most can be settled in Phase 0 or at kickoff.
 
 - [ ] **Credits:** how much, and do they cover Muse Wonder, SAM 3.1 and Voice Transcribe?
-- [ ] **Speed:** how long does one Muse Spark 1.3 step take at low and minimal reasoning effort? Meta publishes no latency figures.
-- [ ] **Grounding on phones:** how accurate is Spark's visual grounding on tall phone screenshots (1080 by 2400), and does SAM 3.1 segment UI elements usefully?
+- [x] **Speed:** how long does one Muse Spark 1.3 step take at low and minimal reasoning effort? Answered in Phase 0: a median of 0.87 s at low and 0.99 s at minimal, and low is also more reliable.
+- [x] **Grounding on phones:** how accurate is Spark's visual grounding on tall phone screenshots (1080 by 2400), and does SAM 3.1 segment UI elements usefully? Answered in Phase 0: grounding hit 3 of 3 targets (center error at most 22 px), and SAM 3.1 works with specific noun phrases.
 - [ ] **Limits:** maximum output tokens, and the minimum prompt length for caching.
-- [ ] **Path into Muse:** Muse builds custom connectors itself when a user asks (reportedly as an MCP client in Meta's cloud), listed connectors go through a review on the Muse Connector Platform, and Meta AI Connectors is a waitlisted preview. Which, if any, can Envoy use during the hackathon? The Phase 0 connector test answers the custom-connector route (see Path into Muse).
-- [ ] **Real apps:** which shopping and food apps run on the emulator without blocking sign-in?
+- [x] **Path into Muse:** Muse builds custom connectors itself when a user asks (reportedly as an MCP client in Meta's cloud), listed connectors go through a review on the Muse Connector Platform, and Meta AI Connectors is a waitlisted preview. Which, if any, can Envoy use during the hackathon? Answered in Phase 0: the custom-connector route works (see Path into Muse).
+- [x] **Real apps:** which shopping and food apps run on the emulator without blocking sign-in? Answered in Phase 0: Target, Starbucks, Chipotle and Amazon; DoorDash runs but its guest mode hangs; Uber Eats won't install.
 - [ ] **Android phone:** the IPaT loan arrives Wednesday, Oct 28; which Android version does it run (Android 15 changes notification access).
 - [ ] **Sign-in codes on iPhone:** does a Shortcuts message automation forward codes while the phone is locked?
 - [ ] **Official rules:** limits on open-source code, required submission materials, demo video length.

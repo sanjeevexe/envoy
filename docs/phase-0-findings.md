@@ -549,4 +549,4 @@ From the public event page (cerebralvalley.ai/e/meta-ai-developer-hackathon, rea
 - [x] B1 real apps, B2 Muse connector, B3 rules and submission requirements, recorded above
 - [x] **Ran `scripts/meta_api_check.py` on the shared key. The Phase 0 gate passed** (Oct 27).
 - [ ] You: submit the Meta AI Connectors waitlist (optional: the Muse Connector Platform)
-- [ ] You: decide on the proposed design-doc changes (A-section list plus the B1 and B2 implications)
+- [x] Design-doc changes applied Oct 27 (you said to use my judgment): all proposed changes from A, B1, B2 and the API results are in `docs/technical-design.md` and the live doc, plus a "Phase 0 results" section and the answered open questions ticked.
