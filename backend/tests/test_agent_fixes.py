@@ -85,6 +85,14 @@ def test_a_ticking_clock_is_not_progress(tmp_path, monkeypatch):
     assert any("NO VISIBLE CHANGE" in p for p in model.prompts)
 
 
+def test_the_history_shows_what_happened_not_the_models_prose(tmp_path, monkeypatch):
+    monkeypatch.setattr(TraceWriter.__init__, "__defaults__", (tmp_path,))
+    model = Model(BACK)
+    asyncio.run(AgentRunner(TickingHome(), model, ScriptedApprover(True), RunConfig(max_steps=3, data_scope="test_app"))
+                .run("Open the file manager", task_id="echo", memory=""))
+    assert len(model.prompts) >= 2 and not any("Incorrect but required placeholder" in p for p in model.prompts)
+
+
 def test_volatile_lines():
     a, b = home("00:01"), home("00:02")
     assert _volatile(a, b) == {0}
