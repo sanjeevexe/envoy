@@ -37,6 +37,7 @@ from models.adapter import ModelAdapter
 from routines.model import dump_yaml
 from routines.store import RoutineStore
 
+from api import routine_view
 from api.auth import Auth, Caller, allowed_hosts, public_url, tunnel_hosts
 from api.chat import chat
 from api.devices import DevicePool
@@ -616,6 +617,20 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     def get_routine(name: str, version: int | None = None) -> dict[str, Any]:
         r = routines.get(name, version)
         return {"index": routines.index(name), "yaml": dump_yaml(r)}
+
+    @app.get("/api/routines/{name}/detail", dependencies=[Depends(session)])
+    def routine_detail(name: str) -> dict[str, Any]:
+        """Read only: steps, versions with what each patch changed, runs and their savings (api/routine_view.py)."""
+        if name not in routines.names():
+            raise HTTPException(404, "no such routine")
+        return routine_view.detail(routines, name, tasks)
+
+    @app.get("/api/routines/{name}/history/{version}/{file}", dependencies=[Depends(session)])
+    def routine_evidence(name: str, version: int, file: str) -> FileResponse:
+        path = routine_view.evidence_path(routines, name, version, file)
+        if path is None:
+            raise HTTPException(404, "no such screenshot")
+        return FileResponse(path, media_type="image/png")
 
     @app.get("/api/triggers", dependencies=[Depends(session)])
     def list_triggers() -> list[dict[str, Any]]:
