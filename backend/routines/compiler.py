@@ -31,7 +31,7 @@ from models.schemas import CompiledRoutine
 from routines import checks as chk
 from routines import locators
 from routines.model import Check, Extract, InputSpec, Locator, Routine, Step, StepAction, has_slot
-from routines.screens import contains_value, fold, load_tree, norm, short_id, usable_id
+from routines.screens import contains_value, fold, load_tree, norm, parts_of, short_id, usable_id
 from routines.visual import encode as encode_png
 
 _DIGIT = re.compile(r"\d")
@@ -64,6 +64,20 @@ class TStep:
     swipe: tuple[int, int, int, int] | None = None  # recorded swipe start and end, device pixels
     vision: dict[str, Any] | None = None  # a tap_point's target as the agent saw it (Phase 6): description, box, crop
     trace_dir: Path | None = None
+
+
+# Screens an app shows once (onboarding, a welcome tour, "what's new", a promo): a step that only gets past one is kept
+# optional, since on the next run the screen is gone and the routine would wait for it forever (Play Store's interests
+# onboarding, Calendar's welcome pages in the real-app test set).
+_ONE_TIME_LABEL = re.compile(r"^(skip|skip for now|not now|no,? thanks|maybe later|later|got it|dismiss|close|i'?ll do (it|this) later|"
+                             r"continue without.*|use without.*)$", re.I)
+_ONE_TIME_INTENT = re.compile(r"onboard|welcome|intro\b|tutorial|first[ _-]?(run|launch|time)|what'?s[ _-]?new|dismiss|promo", re.I)
+
+
+def _one_time(s: "TStep", sid: str, intent: str) -> bool:
+    if s.kind != "tap" or s.risk == "irreversible" or s.target is None:
+        return False
+    return bool(_ONE_TIME_LABEL.match((s.target.label or s.target.desc or "").strip()) or _ONE_TIME_INTENT.search(f"{sid} {intent}"))
 
 
 @dataclass
@@ -388,7 +402,7 @@ def _extract_for(name: str, near: str, example: str, final: ScreenState, example
         if bound:
             loc = Locator(text_has="{{" + bound + "}}", kind=el.kind)
     # Several values in one element ("Boarding · 5:30 AM · Group 3"): remember which part holds this one.
-    parts = [p.strip(" :,") for p in el.label.split(" · ") if p.strip(" :,")]
+    parts = parts_of(el.label)
     segment = next((i for i, p in enumerate(parts) if contains_value(p, example)), None) if len(parts) > 1 else None
     part = parts[segment] if segment is not None else el.label
     near_text = None
@@ -532,7 +546,9 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             post = [Check(kind="screen_changed")]
         out_steps.append(Step(id=sid, intent=intent, pre=pre, action=action, post=post,
                               risk=s.risk if s.risk in ("read", "reversible", "irreversible") else "read",
-                              note=f"trace step {s.n}" + (f" (+{s.scrolls} scrolls)" if s.scrolls else "")))
+                              optional=_one_time(s, sid, intent),
+                              note=f"trace step {s.n}" + (f" (+{s.scrolls} scrolls)" if s.scrolls else "")
+                              + (" · one-time screen: optional" if _one_time(s, sid, intent) else "")))
 
     # A list row chosen by an input may sit further down for another value: reveal it first.
     with_scrolls: list[Step] = []

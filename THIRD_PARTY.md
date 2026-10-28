@@ -4,7 +4,7 @@ Envoy builds on the open-source projects below. The hackathon rules allow open s
 
 Licenses for Python packages were read from the installed package metadata (Oct 26, 2026). Licenses for planned components come from their repositories and must be re-checked when they are added.
 
-## In use (Phases 0–6)
+## In use (Phases 0–7)
 
 | Component | Version | License | What we use it for |
 | --- | --- | --- | --- |
@@ -47,7 +47,9 @@ Licenses for Python packages were read from the installed package metadata (Oct 
 | [Tailscale](https://github.com/tailscale/tailscale) (client, Serve) | 1.104.2 | BSD-3-Clause (client) | Private HTTPS on your tailnet for the iPhone (`scripts/serve_tailnet.sh`); the coordination service is Tailscale's |
 | Apple Vision framework (`VNRecognizeTextRequest`), via `backend/memory/ocr.swift` | macOS 26 | Apple system framework | On-device text reading for photos and screenshots (Phase 5) |
 | Apple Shortcuts (`shortcuts sign`) | macOS 26 / iOS 26 | Apple system app | Signing and running the "Send to Envoy" shortcut that `scripts/make_shortcut.py` writes |
-| [Jetpack Compose](https://developer.android.com/jetpack/compose) / AndroidX | BOM 2026.09.00 | Apache-2.0 | SkyLark Air, Envoy's test app (Phase 1; the canvas seat map in Phase 6) |
+| [Jetpack Compose](https://developer.android.com/jetpack/compose) / AndroidX | BOM 2026.09.00 | Apache-2.0 | SkyLark Air, Envoy's test app (Phase 1; the canvas seat map in Phase 6; the notice card for planted instructions in Phase 7) |
+| [Matplotlib](https://github.com/matplotlib/matplotlib) | 3.11.2 | Matplotlib License (PSF-based, BSD-compatible) | Phase 7: the evaluation report's charts (`eval/final_report.py`); an eval-only dependency group, not used by Envoy itself |
+| contourpy, cycler, fonttools, kiwisolver, pyparsing, python-dateutil, six, packaging (pulled in by Matplotlib) | 1.4.0 / 0.12.1 / 4.68.0 / 1.5.1 / 3.3.3 / 3.0.0 / 1.17.0 / 26.3 | BSD-3-Clause / BSD-3-Clause / MIT / BSD-3-Clause / MIT / Apache-2.0 or BSD-3-Clause / MIT / Apache-2.0 or BSD-2-Clause | Matplotlib's dependencies, unmodified |
 
 uiautomator2 also installs its own helper APK (`app-uiautomator`, same project, MIT) on the phone when it is first used.
 

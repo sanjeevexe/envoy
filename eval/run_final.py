@@ -48,6 +48,7 @@ async def main() -> int:
     s.add_argument("--seeds", type=int, default=3)
     s.add_argument("--tries", type=int, default=3)
     s.add_argument("--append", action="store_true", help="keep earlier rows (for a suite run in parts)")
+    s.add_argument("--name", default="", help="save under another name (a side experiment, e.g. the Contributor tier)")
     r = p("repeats")
     r.add_argument("--n", type=int, default=10)
     ch = p("change")

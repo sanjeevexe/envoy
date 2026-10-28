@@ -57,7 +57,7 @@ def chart_systems(d: dict[str, Any]) -> str | None:
         return None
     plt = _plt()
     fig, ax = plt.subplots(figsize=(10, 5.2))
-    width = 0.24
+    width = 0.22
     for i, (key, name) in enumerate(SYSTEMS):
         xs, ys, labels = [], [], []
         for j, layout in enumerate(layouts):
@@ -74,11 +74,13 @@ def chart_systems(d: dict[str, Any]) -> str | None:
     ax.set_ylim(0, 112)
     ax.set_yticks([0, 25, 50, 75, 100], ["0%", "25%", "50%", "75%", "100%"])
     ax.set_ylabel("Tasks right on the first try")
-    ax.set_title("Success by system and layout (SkyLark core set)")
-    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.1), ncol=3)
+    ax.set_title("Success by system and layout (SkyLark core set)", pad=34)
+    ax.legend(loc="lower left", bbox_to_anchor=(0, 1.0), ncol=3, handlelength=1.2, borderaxespad=0.3)
     cells = max(v["cells"] for v in sm.values())
+    seeds = cells // 10
     return _finish(fig, ax, "success_by_system_and_layout",
-                   f"{cells} requests per bar (10 tasks × {cells // 10} seeds of bookings). Checked in code on the app's state; anything else changed counts as a failure.")
+                   f"{cells} requests per bar (10 tasks × {seeds} seed{'s' if seeds != 1 else ''} of bookings). Checked in code on the app's state; "
+                   "anything else changed in the app counts as a failure.")
 
 
 def chart_repeats(d: dict[str, Any], systems: dict[str, Any] | None) -> str | None:
@@ -114,8 +116,8 @@ def chart_repeats(d: dict[str, Any], systems: dict[str, Any] | None) -> str | No
                 ax.annotate(f"{ag:.1f} s", (ns[-1], ag), textcoords="offset points", xytext=(-10, 6), fontsize=9, color=INK2, ha="right")
         ax.grid(axis="x", visible=False)
         ax.tick_params(length=0)
-    a1.legend(loc="upper center", bbox_to_anchor=(1.1, -0.18), ncol=2)
-    fig.suptitle("First run vs later runs: the same request, ten times", x=0.01, ha="left", fontsize=14, fontweight="bold", color=INK)
+    fig.suptitle("First run vs later runs: the same request, ten times", x=0.01, y=1.06, ha="left", fontsize=14, fontweight="bold", color=INK)
+    fig.legend(*a1.get_legend_handles_labels(), loc="lower left", bbox_to_anchor=(0.01, 0.95), ncol=2, handlelength=1.6)
     fig.tight_layout()
     return _finish(fig, a2, "cost_and_time_over_repeated_runs",
                    "Medians over the 10 core tasks. Request 1 includes compiling (Muse Wonder) and verifying the routine; later requests include the matcher's one call.")
@@ -145,8 +147,8 @@ def chart_change(d: dict[str, Any]) -> str | None:
     ax.set_ylim(0, 112)
     ax.set_yticks([0, 25, 50, 75, 100], ["0%", "25%", "50%", "75%", "100%"])
     ax.set_ylabel("Routines (of 10)")
-    ax.set_title("Recovery by type of injected UI change")
-    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.12), ncol=2)
+    ax.set_title("Recovery by type of injected UI change", pad=34)
+    ax.legend(loc="lower left", bbox_to_anchor=(0, 1.0), ncol=2, handlelength=1.2, borderaxespad=0.3)
     return _finish(fig, ax, "recovery_by_injected_change",
                    "Each of the 10 routines, compiled on the original layout, meets each changed layout on a new booking (repair and the agent allowed); its patches go on trial, then the active version runs on another booking.")
 
@@ -174,7 +176,36 @@ def chart_real(d: dict[str, Any]) -> str | None:
 
 # ---- the report ----------------------------------------------------------------------------------------------------------
 
-def _body(name: str) -> str:
+def _render(name: str, d: dict[str, Any]) -> str | None:
+    """A suite's tables, rendered again from its JSON (so the report never shows stale formatting)."""
+    import final_core as fc
+    if name == "systems":
+        return fc.systems_md(d["rows"])
+    if name == "repeats":
+        return fc.repeats_md(d["rows"])
+    if name == "change":
+        return fc.change_md(d.get("new_inputs", []), d.get("experiments", []))
+    if name == "sizes":
+        return fc.sizes_md(d["devices"])
+    if name == "real":
+        import final_real
+        return final_real.real_md(d["workflows"], d["stages"])
+    if name == "memory":
+        import final_memory
+        return final_memory.memory_md(d)
+    if name in ("safety", "injection"):
+        import final_safety
+        return final_safety.safety_md(d.get("screens", {}), d.get("live", {})) if name == "safety" else \
+            final_safety.injection_md(d.get("screens", {}), d.get("inbox", {}))
+    return None
+
+
+def _body(name: str, d: dict[str, Any] | None = None) -> str:
+    from final_common import header
+    if d is not None and (body := _render(name, d)) is not None:
+        text = header(d["meta"], name) + body
+        (OUT / f"{name}.md").write_text(text)
+        return text.split("\n", 2)[2]
     p = OUT / f"{name}.md"
     if not p.exists():
         return "_Not run yet._\n"
@@ -198,10 +229,11 @@ def headline(name: str, d: dict[str, Any] | None) -> str:
         out = []
         for key, label in SYSTEMS:
             vs = [v for v in sm.values() if v["system"] == key]
+            firsts = [r for r in d["rows"] if r["system"] == key and r["try"] == 1]
             if vs:
                 c = sum(v["cells"] for v in vs)
                 out.append(f"{label} {pct(sum(v['first_try'] for v in vs), c)} first try, {sum(v['within_3'] for v in vs)}/{c} within 3, "
-                           f"median {med([v['median_calls'] for v in vs])} calls")
+                           f"median {med([r['calls'] for r in firsts])} calls, {med([r['duration_s'] for r in firsts])} s")
         return "; ".join(out)
     if name == "repeats":
         rows = d["rows"]
@@ -252,6 +284,44 @@ def headline(name: str, d: dict[str, Any] | None) -> str:
     return ""
 
 
+def targets(data: dict[str, Any]) -> list[str]:
+    """The design doc's success targets, each measured by a suite."""
+    rows = []
+    sy, ch, rp, mem, sa, inj = (data.get(k) for k in ("systems", "change", "repeats", "memory", "safety", "injection"))
+    if sy:
+        a0 = [r for r in sy["rows"] if r["system"] == "agent" and r["layout"] == 0 and r["try"] == 1]
+        aall = [r for r in sy["rows"] if r["system"] == "agent" and r["try"] == 1]
+        rows.append(("First-run task success on the test task set", "70% or more",
+                     f"{pct(sum(r['passed'] for r in a0), len(a0))} on the original layout, {pct(sum(r['passed'] for r in aall), len(aall))} across all 4 layouts (the agent, first try)"))
+    if ch and ch.get("new_inputs"):
+        ni = ch["new_inputs"]
+        rows.append(("Routine success on new inputs", "85% or more", f"{pct(sum(r['passed'] for r in ni), len(ni))} ({sum(r['passed'] and r['calls'] == 0 for r in ni)} with no model call)"))
+    if ch and ch.get("experiments"):
+        ex = ch["experiments"]
+        rows.append(("Recovery after an injected UI change", "70% or more", f"{pct(sum(e['first']['passed'] for e in ex), len(ex))} over 5 kinds of change"))
+    if rp:
+        first = [r for r in rp["rows"] if r["n"] == 1]
+        later = [r for r in rp["rows"] if r["n"] > 1]
+        if first and later:
+            f_calls, l_calls = sum(r["calls"] for r in first) / len(first), sum(r["calls"] for r in later) / len(later)
+            rows.append(("Model calls on a routine rerun vs the first run", "80% fewer",
+                         f"{100 * (1 - l_calls / f_calls):.0f}% fewer ({l_calls:.1f} vs {f_calls:.1f} per request, the matcher's call included)"))
+            longest = max((r for r in later if r.get("passed")), key=lambda r: r["duration_s"], default=None)
+            rows.append(("Time per task on a routine rerun", "Under 30 s for a 10-step task",
+                         f"median {med([r['duration_s'] for r in later])} s; slowest {longest['duration_s']} s ({longest['task']})" if longest else "–"))
+    if mem:
+        tr = [mem[k]["matching"]["traceable"] for k in ("emails_large", "emails_new") if k in mem]
+        if tr:
+            rows.append(("Facts traceable to a source", "100%", "100%" if all(tr) else "not all"))
+    if sa or inj:
+        live = (sa or {}).get("live", {}).get("rows", [])
+        ir = [r for r in (inj or {}).get("screens", {}).get("rows", []) if r["irreversible_without_approval"]]
+        changed = [r for r in live if r["state_changed"]]
+        rows.append(("Irreversible actions taken without approval", "0",
+                     f"{len(changed) + len(ir)} (Envoy: {len(live)} declined live runs, {len((inj or {}).get('screens', {}).get('rows', []))} runs with planted instructions)"))
+    return ["| Target | Goal | Measured |", "| --- | --- | --- |"] + [f"| {a} | {b} | {c} |" for a, b, c in rows]
+
+
 def build() -> None:
     data = {n: load(n) for n in ("compile", "systems", "repeats", "change", "sizes", "real", "memory", "safety", "injection", "interfaces")}
     charts = {}
@@ -281,12 +351,12 @@ def build() -> None:
         md.append(f"| {title} | {headline(n, data[n]) if n != 'compile' else (str(sum(r.get('status') == 'added' for r in data[n]['rows'])) + ' of ' + str(len(data[n]['rows'])) + ' routines compiled and verified' if data[n] else 'not run yet')} | {_ran_on(data[n])} |")
     aw = androidworld()
     md.append(f"| 8. AndroidWorld (the other chat's branch) | {aw['headline']} | `androidworld` branch |")
-    md.append("")
+    md += ["", "## The design's success targets", ""] + targets(data) + [""]
     for n, title in titles.items():
         md += [f"## {title}", ""]
         if charts.get(n):
             md += [f"![{title}]({charts[n]})", ""]
-        md += [_body(n), f"Data: `eval/results/final/{n}.json`.", ""]
+        md += [_body(n, data[n]), f"Data: `eval/results/final/{n}.json`.", ""]
     md += ["## 8. AndroidWorld", "", aw["section"], "",
            "## Reproduce", "", "```bash", "eval/run_final.sh            # every suite in order, one emulator at a time", "```", "",
            "Or one suite: `uv run --project backend python eval/run_final.py <suite>` (see its `--help`). The real-app suite needs `envoy-real` "

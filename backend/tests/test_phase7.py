@@ -136,3 +136,32 @@ def test_worlds_are_deterministic_and_their_targets_unambiguous():
     assert a.fixtures() == b.fixtures()
     cities = [t["city"] for t in a.fixtures()["trips"]]
     assert len(cities) == len(set(cities))  # "my flight to X" and "when did I fly to X" name one trip each
+
+
+# ---- list rows with the app's own separators ---------------------------------------------------------------------------------
+
+def test_row_parts_split_on_the_apps_own_separators():
+    from routines.model import Extract, Locator
+    from routines.screens import parts_of, screen_from_tree
+    label = "Bohemian Rhapsody · Song · Queen • 5:55 • 2.7B plays"
+    assert parts_of(label) == ["Bohemian Rhapsody", "Song", "Queen", "5:55", "2.7B plays"]
+    assert parts_of("Gate · B12") == ["Gate", "B12"] and parts_of("Rock & Roll") == ["Rock & Roll"]
+    s = screen_from_tree({"package": "app", "activity": "A", "width": 1080, "height": 2400, "elements": [
+        {"index": 0, "parent": None, "number": 1, "kind": "Button", "class": "android.view.View", "label": label, "text": label,
+         "resource_id": "song_row", "bounds": [0, 100, 1080, 300], "in_list": True}]})
+    assert extract_value(Extract(locator=Locator(resource_id="song_row", kind="Button"), segment=2), s, {}) == "Queen"
+
+
+def test_steps_past_one_time_screens_compile_as_optional():
+    from routines.compiler import TStep, _one_time
+    from routines.screens import screen_from_tree
+    s = screen_from_tree({"package": "com.android.vending", "activity": "A", "width": 1080, "height": 2400, "elements": [
+        {"index": 0, "parent": None, "number": 1, "kind": "Button", "class": "android.widget.Button", "label": "Skip", "text": "Skip",
+         "bounds": [0, 100, 300, 200]},
+        {"index": 1, "parent": None, "number": 2, "kind": "Button", "class": "android.widget.Button", "label": "Search", "text": "Search",
+         "bounds": [0, 300, 300, 400]}]})
+    tap = lambda el, risk="read": TStep(n=1, kind="tap", before=s, after=s, target=s.numbered[el], risk=risk)  # noqa: E731
+    assert _one_time(tap(0), "skip_interests", "Skip the interests screen")
+    assert _one_time(tap(1), "continue_onboarding", "Continue past onboarding")  # Wonder's own words name the screen
+    assert not _one_time(tap(1), "open_search", "Open search")
+    assert not _one_time(tap(0, "irreversible"), "skip", "Skip")  # never for an irreversible step

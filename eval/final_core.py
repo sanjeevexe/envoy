@@ -481,12 +481,13 @@ SYSTEM_SEEDS = [101, 102, 103]
 
 async def cmd_systems(args: Any) -> None:
     env = Env(contributor=args.contributor)
-    s = Suite("systems", contributor=args.contributor, devices=[env.device.serial], label="Three systems on SkyLark's core set")
+    name = args.name or "systems"
+    s = Suite(name, contributor=args.contributor, devices=[env.device.serial], label="Three systems on SkyLark's core set")
     comp = compiled()
     systems = args.systems.split(",")
     layouts = [int(x) for x in args.layouts.split(",")]
     seeds = SYSTEM_SEEDS[: args.seeds]
-    prev = (load("systems") or {}).get("rows", []) if args.append else []
+    prev = (load(name) or {}).get("rows", []) if args.append else []
     rows: list[dict[str, Any]] = []
     sel = tasks(args.tasks)
     for layout in layouts:
@@ -512,6 +513,9 @@ async def cmd_systems(args: Any) -> None:
                         rows.append(row)
                         if row["passed"]:
                             break
+                        if system == "fixed" and row["status"] == "replayed":
+                            row["deterministic"] = True  # a replay with no takeover repeats exactly: its first try stands for all three
+                            break
                 s.save({"seeds": seeds, "layouts": layouts, "rows": prev + rows}, systems_md(prev + rows))
     await env.reset(compile_world())
 
@@ -532,7 +536,7 @@ def systems_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
             "median_calls": med([r["calls"] for r in firsts], 1), "median_s": med([r["duration_s"] for r in firsts], 1),
             "median_usd": med([r["standard_usd"] for r in firsts], 5), "median_steps": med([r["steps"] for r in firsts], 1),
             "mean_usd": round(sum(r["standard_usd"] for r in firsts) / len(firsts), 5),
-            "median_tokens": med([r["input_tokens"] + r["output_tokens"] for r in firsts], 0),
+            "median_tokens": int(med([r["input_tokens"] + r["output_tokens"] for r in firsts], 0) or 0),
             "calls_total": sum(r["calls"] for r in tries), "usd_total": round(sum(r["standard_usd"] for r in tries), 4),
             "interventions": sum(r.get("interventions", 0) for r in tries), "approvals": sum(r.get("approvals", 0) for r in tries),
             "zero_call_first_tries": sum(r["calls"] == 0 for r in firsts),
@@ -554,12 +558,14 @@ def systems_md(rows: list[dict[str, Any]]) -> str:
                   f"{v['median_steps']} | {v['interventions']} | {v['approvals']} | {v['side_effects']} |")
     fails = [r for r in rows if not r["passed"]]
     if fails:
-        md += ["", "Failed tries:", ""]
+        groups: dict[tuple, list[dict[str, Any]]] = {}
         for r in fails:
-            md.append(f"- {r['system']} · {r['task']} · layout {r['layout']} · seed {r['seed']} · try {r['try']}: {r['status']}"
-                      + (f" · side effects {', '.join(r['side_effects'])}" if r.get("side_effects") else "")
-                      + (f" · {r.get('match')}" if r.get("match") and r["system"] == "routine" else "")
-                      + f" · {str(r.get('answer', ''))[:100]}")
+            why = "acted on another booking" if any(not x.startswith(("profile", "app")) for x in r.get("side_effects") or []) else (
+                "changed something else" if r.get("side_effects") else ("wrong answer" if r["status"] in ("replayed", "done", "done_unverified") else r["status"]))
+            groups.setdefault((names.get(r["system"], r["system"]), r["task"], why), []).append(r)
+        md += ["", "Failed tries, by kind (layouts and tries counted):", "", "| System | Task | What went wrong | Tries | Layouts |", "| --- | --- | --- | --- | --- |"]
+        for (sysn, task, why), rs in sorted(groups.items()):
+            md.append(f"| {sysn} | {task} | {why} | {len(rs)} | {', '.join(str(x) for x in sorted({r['layout'] for r in rs}))} |")
     return "\n".join(md) + "\n"
 
 

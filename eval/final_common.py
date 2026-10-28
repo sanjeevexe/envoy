@@ -146,6 +146,11 @@ class Suite:
                 "devices": self.devices, "cost": costs([self.prefix, *self.extra_prefixes], self.started),
                 "spend_total_this_checkout": spend_total(), "host": os.uname().nodename.split(".")[0]}
 
+    def stamp(self) -> dict[str, Any]:
+        """Which run produced a part (a suite rerun in parts keeps the others' stamps)."""
+        return {"run_id": self.rid, "commit": self.code["short"], "is_eval_final": self.code["is_eval_final"], "dirty": bool(self.code["dirty"]),
+                "cost": costs([self.prefix], self.started)}
+
     def save(self, payload: dict[str, Any], markdown: str | None = None, name: str | None = None) -> Path:
         OUT.mkdir(parents=True, exist_ok=True)
         name = name or self.name

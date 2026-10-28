@@ -52,6 +52,14 @@ def contains_value(haystack: str | None, value: str | None) -> bool:
     return re.search(rf"(?<![0-9a-z]){re.escape(v)}(?![0-9a-z])", h) is not None
 
 
+_PART_SEPARATORS = re.compile(r"\s[·•|]\s")
+
+
+def parts_of(label: str) -> list[str]:
+    """A row's parts: Envoy joins child texts with " · ", and apps use their own separators ("Queen • 5:55 • 2.7B plays")."""
+    return [p.strip(" :,") for p in _PART_SEPARATORS.split(label) if p.strip(" :,")]
+
+
 def element_text(e: Element) -> str:
     """Everything the element shows: its label (merged child text) plus own text and description."""
     parts = [e.label, e.text, e.desc]

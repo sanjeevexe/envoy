@@ -18,7 +18,7 @@ import shutil
 import time
 from typing import Any
 
-from final_common import REPO, Suite, pct
+from final_common import REPO, Suite, load, pct
 
 from integrations.mail import LocalMailbox  # noqa: E402
 from memory.service import MemoryService  # noqa: E402
@@ -274,7 +274,7 @@ async def cmd_memory(args: Any) -> None:
     from run_memory import bookings_for_eval
     from skylark_routines import generate
     s = Suite("memory", label="Memory: extraction, entity matching and stale facts")
-    out: dict[str, Any] = {}
+    out: dict[str, Any] = {k: v for k, v in (load("memory") or {}).items() if k != "meta"}  # parts not run keep their earlier result
     if "extraction" in args.parts:
         out["emails_large"] = await inbox_suite(s, "emails_large", bookings_for_eval(15), seed=3)
         out["emails_new"] = await inbox_suite(s, "emails_new", generate(4242, 8), seed=9)
@@ -282,4 +282,6 @@ async def cmd_memory(args: Any) -> None:
         out["photos"] = await photos_suite(s)
     if "stale" in args.parts:
         out["stale"] = await stale_suite(s)
+    for k in (["emails_large", "emails_new", "screens", "photos"] if "extraction" in args.parts else []) + (["stale"] if "stale" in args.parts else []):
+        out[k]["run"] = s.stamp()
     s.save(out, memory_md(out))
