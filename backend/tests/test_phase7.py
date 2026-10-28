@@ -152,8 +152,8 @@ def test_row_parts_split_on_the_apps_own_separators():
     assert extract_value(Extract(locator=Locator(resource_id="song_row", kind="Button"), segment=2), s, {}) == "Queen"
 
 
-def test_steps_past_one_time_screens_compile_as_optional():
-    from routines.compiler import TStep, _one_time
+def test_steps_past_one_time_screens_and_closing_the_keyboard_compile_as_optional():
+    from routines.compiler import TStep, _optional_why
     from routines.screens import screen_from_tree
     s = screen_from_tree({"package": "com.android.vending", "activity": "A", "width": 1080, "height": 2400, "elements": [
         {"index": 0, "parent": None, "number": 1, "kind": "Button", "class": "android.widget.Button", "label": "Skip", "text": "Skip",
@@ -161,10 +161,16 @@ def test_steps_past_one_time_screens_compile_as_optional():
         {"index": 1, "parent": None, "number": 2, "kind": "Button", "class": "android.widget.Button", "label": "Search", "text": "Search",
          "bounds": [0, 300, 300, 400]}]})
     tap = lambda el, risk="read": TStep(n=1, kind="tap", before=s, after=s, target=s.numbered[el], risk=risk)  # noqa: E731
-    assert _one_time(tap(0), "skip_interests", "Skip the interests screen")
-    assert _one_time(tap(1), "continue_onboarding", "Continue past onboarding")  # Wonder's own words name the screen
-    assert not _one_time(tap(1), "open_search", "Open search")
-    assert not _one_time(tap(0, "irreversible"), "skip", "Skip")  # never for an irreversible step
+    back = TStep(n=1, kind="back", before=s, after=s)
+    assert _optional_why(tap(0), "skip_interests", "Skip the interests screen") == "one-time screen"
+    assert _optional_why(tap(1), "continue_onboarding", "Continue past onboarding")  # Wonder's own words name the screen
+    assert _optional_why(tap(1), "open_search", "Open search") is None
+    assert _optional_why(tap(0, "irreversible"), "skip", "Skip") is None  # never for an irreversible step
+    assert _optional_why(back, "close_upsell", "Close the Premium upsell") == "one-time screen"
+    assert _optional_why(back, "go_back", "Go back to the results") is None
+    # Closing the keyboard: the routine moves a target out from under it, and Back with it already gone leaves the page.
+    assert _optional_why(back, "dismiss_keyboard", "Hide the keyboard") == "closes the keyboard"
+    assert _optional_why(tap(1), "dismiss_keyboard", "Tap Done to dismiss the keyboard") == "closes the keyboard"
 
 
 # ---- the safety suite's classifier cases (eval/fixtures/safety/screens, captured from SkyLark and real apps) ------------------

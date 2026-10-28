@@ -75,14 +75,20 @@ _ONE_TIME_INTENT = re.compile(r"onboard|welcome|intro\b|tutorial|first[ _-]?(run
                               r"premium|offer\b", re.I)
 
 
-def _one_time(s: "TStep", sid: str, intent: str) -> bool:
-    if s.risk == "irreversible" or re.search(r"keyboard", f"{sid} {intent}", re.I):
-        return False  # closing the keyboard ("Tap Done to dismiss the keyboard") is part of typing, not a one-time screen
+def _optional_why(s: "TStep", sid: str, intent: str) -> str | None:
+    """Why a step may be skipped at run time, or None: a one-time screen, or closing the keyboard."""
+    if s.risk == "irreversible" or s.kind not in ("tap", "back"):
+        return None
+    if re.search(r"keyboard", f"{sid} {intent}", re.I):
+        # The routine moves a target out from under the keyboard itself, so closing it is never needed; done blind it
+        # can hurt (Back with the keyboard already gone leaves the screen; its keys are not part of the screen).
+        return "closes the keyboard"
     if s.kind == "back":  # Back that closes an upsell or a tour (Wonder's own words for the step say so)
-        return bool(_ONE_TIME_INTENT.search(f"{sid} {intent}"))
-    if s.kind != "tap" or s.target is None:
-        return False
-    return bool(_ONE_TIME_LABEL.match((s.target.label or s.target.desc or "").strip()) or _ONE_TIME_INTENT.search(f"{sid} {intent}"))
+        return "one-time screen" if _ONE_TIME_INTENT.search(f"{sid} {intent}") else None
+    if s.target is None:
+        return None
+    one = _ONE_TIME_LABEL.match((s.target.label or s.target.desc or "").strip()) or _ONE_TIME_INTENT.search(f"{sid} {intent}")
+    return "one-time screen" if one else None
 
 
 @dataclass
@@ -635,9 +641,9 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             post = [Check(kind="screen_changed")]
         out_steps.append(Step(id=sid, intent=intent, pre=pre, action=action, post=post,
                               risk=s.risk if s.risk in ("read", "reversible", "irreversible") else "read",
-                              optional=_one_time(s, sid, intent),
+                              optional=(why := _optional_why(s, sid, intent)) is not None,
                               note=f"trace step {s.n}" + (f" (+{s.scrolls} scrolls)" if s.scrolls else "")
-                              + (" · one-time screen: optional" if _one_time(s, sid, intent) else "")))
+                              + (f" · {why}: optional" if why else "")))
 
     # A list row chosen by an input may sit further down for another value: reveal it first.
     with_scrolls: list[Step] = []
