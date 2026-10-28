@@ -28,7 +28,7 @@ from typing import Any, Callable
 
 from memory.retrieval import Retriever
 from memory.store import MemoryStore
-from memory.types import TYPES, canonical_attribute, normalize_key_value
+from memory.types import NOT_ABOUT_YOU, TYPES, canonical_attribute, normalize_key_value
 
 from api.store import TaskStore
 
@@ -68,6 +68,8 @@ class ChangeAlerts:
     def on_memory(self, ev: dict[str, Any]) -> None:
         try:
             if ev.get("kind") != "fact_replaced":
+                return
+            if (self.memory.entity(ev.get("entity", "")) or {}).get("type") in NOT_ABOUT_YOU:  # app notes are about apps, not you
                 return
             row = self.memory.db.execute("select source from facts where id = ?", (ev.get("fact"),)).fetchone()
             sid = row["source"] if row else None

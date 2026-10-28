@@ -171,11 +171,12 @@ class _Ctx:
 
 class RoutineExecutor:
     def __init__(self, device: Device, adapter: ModelAdapter | None = None, approver: Approver | None = None,
-                 config: ExecConfig | None = None) -> None:
+                 config: ExecConfig | None = None, app_notes: Any = None) -> None:
         self.device = device
         self.adapter = adapter or ModelAdapter()
         self.approver = approver or TerminalApprover()
         self.config = config or ExecConfig()
+        self.app_notes = app_notes  # memory's AppNotes: a repair (and the fallback agent) reads the app's notes
 
     # ---- observing --------------------------------------------------------------------------
 
@@ -866,8 +867,10 @@ class RoutineExecutor:
             if len([a for a in sr.repairs if a.get("model")]) >= cfg.max_repairs_step or ctx.repairs_run >= cfg.max_repairs_run:
                 return "gave_up"
             remaining = "\n".join(f"- {render_str(x.intent, ctx.inputs)}" for x in ctx.routine.steps[idx + 1:])
+            notes = self.app_notes.for_prompt(s.package or ctx.routine.app) if self.app_notes is not None else None
             content = [{"type": "input_text", "text": repair_input(render_str(ctx.routine.intent, ctx.inputs) or "",
-                                                                  self._step_text(step, ctx.inputs), remaining, "\n".join(tried), s.compact)}]
+                                                                  self._step_text(step, ctx.inputs), remaining, "\n".join(tried), s.compact,
+                                                                  app_notes=notes.text if notes else "")}]
             t0 = time.perf_counter()
             res = await asyncio.to_thread(self.adapter.call, "repair", content, instructions=REPAIR_INSTRUCTIONS, data_scope=cfg.data_scope,
                                           contributor=cfg.contributor, task_id=ctx.task_id, effort=cfg.repair_effort)
@@ -878,6 +881,8 @@ class RoutineExecutor:
             d: StepOutput = res.parsed  # type: ignore[assignment]
             rec: dict[str, Any] = {"model": True, "phase": phase, "decision": d.model_dump(), "model_ms": round((time.perf_counter() - t0) * 1000),
                                    "cost_usd": res.cost_at_standard_usd}
+            if notes and notes.ids:
+                rec["app_notes"] = notes.ids
             sr.repairs.append(rec)
             kind = d.action.type
             if kind in ("done", "fail", "handoff", "ask_user", "look"):
@@ -1030,7 +1035,7 @@ class RoutineExecutor:
                 + (f"A saved routine already did: {'; '.join(done)}. " if done else "")
                 + "Finish the task from the current screen.")
         cfg = self.config.agent or RunConfig(data_scope=self.config.data_scope, contributor=self.config.contributor)
-        runner = AgentRunner(self.device, adapter=self.adapter, approver=self.approver, config=cfg)
+        runner = AgentRunner(self.device, adapter=self.adapter, approver=self.approver, config=cfg, app_notes=self.app_notes)
         res = await runner.run(goal, task_id=f"{ctx.task_id}-agent", memory=ctx.memory)
         ctx.out.model_calls += res.model_calls
         ctx.out.cost_usd += res.cost_usd

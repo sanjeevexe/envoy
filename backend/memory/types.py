@@ -13,8 +13,10 @@ from datetime import date, datetime
 
 ENTITY_TYPES = (
     "Person", "Trip", "Flight", "Reservation", "Order", "Item", "Place", "App", "Account", "Loyalty program",
-    "Subscription", "Event", "Preference", "Note", "Routine", "Task",
+    "Subscription", "Event", "Preference", "Note", "Routine", "Task", "App note",
 )
+# Kept in the graph but not facts about the user: never in memory's notes, answers, graph or change alerts (memory/app_notes.py).
+NOT_ABOUT_YOU = ("App note",)
 
 
 @dataclass(frozen=True)
@@ -48,6 +50,7 @@ TYPES: dict[str, TypeSpec] = {t.name: t for t in [
     TypeSpec("Note", ("body",), title=("body",)),
     TypeSpec("Routine", ("name", "app", "version"), keys=(("name",),), title=("name",)),
     TypeSpec("Task", ("goal", "status"), title=("goal",)),
+    TypeSpec("App note", ("app", "text", "status"), title=("text",)),
 ]}
 
 # Freshness: how long an observed value may be served as current (seconds). None = until replaced.

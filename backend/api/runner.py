@@ -25,6 +25,7 @@ from typing import Any
 
 from agent.loop import AgentRunner, RunConfig
 from agent.trace import TraceWriter
+from memory.app_notes import AppNotes
 from memory.bridge import fill_inputs, notes_for, remember_run
 from memory.service import MemoryService
 from memory.store import MemoryStore
@@ -108,6 +109,7 @@ class TaskRunner:
         self.phone_asks: dict[str, asyncio.Future] = {}  # task id → your answer to "use your Android phone?"
         self.on_final: list[Any] = []  # called with (task id, final screen, routine outputs) after a run's last look (api/crossapp.py)
         self.crossapp: Any = None  # cross-app answers (api/crossapp.py), set by the app
+        self.app_notes = AppNotes(memory, self.adapter)  # what Envoy has learned about each app (memory/app_notes.py)
         TraceWriter.listeners.append(self._on_trace)
 
     # ---- starting and stopping -----------------------------------------------------------------
@@ -214,6 +216,7 @@ class TaskRunner:
                 skylark = app == SKYLARK
                 scope = "test_app" if skylark else "real"
                 status, result, outputs, final = "failed", "", {}, None
+                learn: list[str] = []  # traces the app notes learn from once the phone is free
                 for attempt in range(1, 4):
                     if attempt == 1 and app:
                         await gated.launch(app, fresh=True)
@@ -227,7 +230,8 @@ class TaskRunner:
                     if routine:
                         ex = RoutineExecutor(gated, adapter=self.adapter, approver=approver,
                                              config=ExecConfig(data_scope=scope, contributor=skylark,
-                                                               agent=RunConfig(data_scope=scope, contributor=skylark, max_cost_usd=0.25)))
+                                                               agent=RunConfig(data_scope=scope, contributor=skylark, max_cost_usd=0.25)),
+                                             app_notes=self.app_notes)
                         out = await ex.run(routine, inputs, task_id=trace_id, launch="if_needed", allow_repair=True, allow_agent=True, memory=notes,
                                            request=goal)
                         life = after_run(self.routines, routine, out)  # repairs become a version on trial; a trial is activated or rolled back
@@ -237,12 +241,18 @@ class TaskRunner:
                         status, result, outputs = out.status, out.detail, out.outputs
                         calls += out.model_calls
                         cost += out.cost_at_standard_usd
+                        if out.model_calls:  # a repair or the fallback agent: what broke and what worked is worth a note
+                            learn.append(out.trace_dir)
+                            if out.agent and out.agent.get("trace_dir"):
+                                learn.append(out.agent["trace_dir"])
                     else:
                         res = await AgentRunner(gated, adapter=self.adapter, approver=approver,
-                                                config=RunConfig(data_scope=scope, contributor=skylark, max_cost_usd=0.25)).run(goal, task_id=trace_id, memory=notes)
+                                                config=RunConfig(data_scope=scope, contributor=skylark, max_cost_usd=0.25),
+                                                app_notes=self.app_notes).run(goal, task_id=trace_id, memory=notes)
                         status, result = res.status, res.result
                         calls += res.model_calls
                         cost += res.cost_at_standard_usd
+                        learn.append(res.trace_dir)
                     if status == "handoff":
                         if await self._wait_for_user(tid, avd, result or "the agent needs you"):
                             continue
@@ -271,6 +281,8 @@ class TaskRunner:
                 self._step(tid, {"kind": "note", "text": "saving what it saw to memory"})
                 memory = await self._remember(tid, routine, inputs, outputs, final, scope)
                 self._set(tid, memory=memory)
+            if avd is not None and learn:
+                await self._learn_notes(tid, learn, app, goal, status, result, inputs, outputs, scope)
         except asyncio.CancelledError:
             self._set(tid, status="stopped", detail="stopped by you", waiting_for=None)
             raise
@@ -370,6 +382,20 @@ class TaskRunner:
             self._step(tid, {"kind": "note", "text": "handed back: the agent looks at the screen again"})
             self._set(tid, status="running", waiting_for=None)
         return ok
+
+    async def _learn_notes(self, tid: str, traces: list[str], app: str | None, goal: str, status: str, result: str,
+                           inputs: dict[str, str], outputs: dict[str, Any], scope: str) -> None:
+        """After a run (done or not): what it shows about the app becomes, confirms or retires an app note."""
+        for trace in traces:
+            try:
+                rep = await self.app_notes.learn(trace, app=app, goal=goal, status=status, result=result, inputs=inputs, outputs=outputs,
+                                                 task_id=tid, data_scope=scope, contributor=scope == "test_app")  # type: ignore[arg-type]
+            except Exception as e:  # noqa: BLE001 - notes never fail a task
+                self._step(tid, {"kind": "error", "text": f"app notes: {type(e).__name__}: {e}"[:300]})
+                continue
+            if rep.applied:
+                self._step(tid, {"kind": "app_notes", "text": "app notes: " + ", ".join(f"{a['op']} {a.get('text') or a['note']}"[:90] for a in rep.applied),
+                                 "applied": rep.applied, "dropped": rep.dropped})
 
     async def _remember(self, tid: str, routine: Routine | None, inputs: dict[str, str], outputs: dict[str, Any],
                         final: Any, scope: str) -> dict[str, Any] | None:

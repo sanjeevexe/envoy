@@ -107,11 +107,22 @@ def _describe(a: StepOutput, screen: ScreenState) -> str:
 
 class AgentRunner:
     def __init__(self, device: Device, adapter: ModelAdapter | None = None, approver: Approver | None = None,
-                 config: RunConfig | None = None) -> None:
+                 config: RunConfig | None = None, app_notes: Any = None) -> None:
+        """`app_notes`: memory's AppNotes (memory/app_notes.py), whose notes for the app on screen go into each prompt."""
         self.device = device
         self.adapter = adapter or ModelAdapter()
         self.approver = approver or TerminalApprover()
         self.config = config or RunConfig()
+        self.app_notes = app_notes
+
+    def _notes_for(self, package: str) -> tuple[str, list[str]]:
+        if self.app_notes is None:
+            return "", []
+        try:
+            block = self.app_notes.for_prompt(package)
+        except Exception:  # noqa: BLE001 - notes are a hint; a broken one never stops a run
+            return "", []
+        return block.text, block.ids
 
     # ---- model calls ------------------------------------------------------------------------
 
@@ -170,12 +181,15 @@ class AgentRunner:
         try:
             async def make_plan(current: ScreenState, tried: str = "", step_no: int = 0) -> Plan | None:
                 t0 = time.perf_counter()
-                res = await asyncio.to_thread(self._call, "plan", [{"type": "input_text", "text": plan_input(goal, current.compact, memory, tried)}],
+                notes_text, note_ids = self._notes_for(current.package)
+                res = await asyncio.to_thread(self._call, "plan", [{"type": "input_text", "text": plan_input(goal, current.compact, memory, tried,
+                                                                                                               app_notes=notes_text)}],
                                               PLAN_INSTRUCTIONS, self.config.plan_effort, task_id)
                 account(res)
                 new_plan: Plan | None = res.parsed  # type: ignore[assignment]
                 trace.step({"step": step_no, "kind": "replan" if tried else "plan", "plan": new_plan.model_dump() if new_plan else None,
-                            "tried": tried or None, "model_ms": round((time.perf_counter() - t0) * 1000), "usage": res.usage, "cost_usd": res.cost_usd})
+                            "tried": tried or None, "model_ms": round((time.perf_counter() - t0) * 1000), "usage": res.usage, "cost_usd": res.cost_usd,
+                            **({"app_notes": note_ids} if note_ids else {})})
                 return new_plan
 
             def visited_text() -> str:
@@ -252,9 +266,11 @@ class AgentRunner:
                 if not screen.secure and self.config.screenshots != "never":
                     if want_screenshot or len(screen.numbered) < 3:
                         png = await self._screenshot()
+                notes_text, note_ids = self._notes_for(screen.package)
                 content = [{"type": "input_text", "text": step_input(goal, screen.compact, plan=plan_text,
                                                                       history="\n".join(history[-HISTORY_STEPS:]),
-                                                                      memory=memory, feedback=feedback, visited=visited_text())}]
+                                                                      memory=memory, feedback=feedback, visited=visited_text(),
+                                                                      app_notes=notes_text)}]
                 if png:
                     content.append(image_part(png))
                 t_model = time.perf_counter()
@@ -278,6 +294,8 @@ class AgentRunner:
                     "decision": decision.model_dump(), "usage": res.usage, "cost_usd": res.cost_usd,
                     "timings_ms": {"observe": round(observe_ms), "model": round(model_ms)},
                 }
+                if note_ids:
+                    record["app_notes"] = note_ids  # which notes this decision saw ("used note X")
                 desc = _describe(decision, screen)
                 kind = decision.action.type
 

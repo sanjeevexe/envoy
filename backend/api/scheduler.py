@@ -40,7 +40,7 @@ from pathlib import Path
 from typing import Any, Callable
 
 from memory.store import MemoryStore
-from memory.types import TYPES, normalize_key_value, parse_date
+from memory.types import NOT_ABOUT_YOU, TYPES, normalize_key_value, parse_date
 
 from api.store import TaskStore
 
@@ -110,7 +110,7 @@ class Scheduler:
             spec.setdefault("after_rowid", self._last_email_rowid())  # only mail that arrives from now on
         if kind == "fact_changed":
             type_ = spec.get("entity_type")
-            if type_ not in TYPES:
+            if type_ not in TYPES or type_ in NOT_ABOUT_YOU:
                 raise ValueError(f"unknown entity type {type_!r}")
             attrs = spec.get("attributes") or ([spec["attribute"]] if spec.get("attribute") else [])
             if not attrs or not all(isinstance(a, str) for a in attrs):

@@ -346,6 +346,18 @@ class MemoryAnswer(_Strict):
     stale: bool = Field(description="True if the notes mark the fact as possibly out of date")
 
 
+class AppNoteOp(_Strict):
+    op: Literal["add", "confirm", "update", "retire"]
+    note_id: str = Field(description="For confirm, update and retire: the id of a CURRENT NOTE; else empty")
+    text: str = Field(description="For add and update: the note, one short sentence about the app; else empty")
+    step: int = Field(description="The RUN line the note comes from; 0 if none")
+    reason: str
+
+
+class AppNoteOutput(_Strict):
+    ops: list[AppNoteOp] = Field(description="0 to 3 operations")
+
+
 class ChatRoute(_Strict):
     """Envoy's assistant deciding what a chat message asks for."""
 

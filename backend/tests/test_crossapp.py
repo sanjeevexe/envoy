@@ -121,7 +121,7 @@ TRACED: dict[str, int] = {}  # app → how many steps its routine traces (each g
 
 
 class FakeExecutor:
-    def __init__(self, gated, adapter=None, approver=None, config=None) -> None:
+    def __init__(self, gated, adapter=None, approver=None, config=None, app_notes=None) -> None:
         self.gated, self.approver = gated, approver
 
     async def run(self, routine, inputs, task_id, **kw):

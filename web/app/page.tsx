@@ -8,6 +8,7 @@ import Approvals from "@/components/Approvals";
 import Chat from "@/components/Chat";
 import Companion from "@/components/Companion";
 import LivePhone from "@/components/LivePhone";
+import AppNotes from "@/components/AppNotes";
 import MemoryGraph from "@/components/MemoryGraph";
 import Pair from "@/components/Pair";
 import PhoneAsk from "@/components/PhoneAsk";
@@ -113,7 +114,7 @@ export default function Home() {
         : <TaskList tasks={taskList} open={setOpenTask} />)}
       {tab === "Approvals" && <Approvals approvals={Object.values(approvals)} />}
       {tab === "Memory" && <MemoryGraph version={memVersion} />}
-      {tab === "Routines" && <Routines openTask={openTaskTab} />}
+      {tab === "Routines" && <><Routines openTask={openTaskTab} /><AppNotes openTask={openTaskTab} /></>}
       {tab === "Triggers" && <Triggers />}
       {tab === "Devices" && <Companion publicUrl={publicUrl} />}
       {tab === "Settings" && <Settings />}

@@ -259,3 +259,18 @@ def test_the_keyboard_coming_and_going_is_not_a_screen_change():
     down = SimpleNamespace(package="com.skylark.air", numbered=app)
     changed = SimpleNamespace(package="com.skylark.air", numbered=[app[0], PEl("Seat · 22F", "com.skylark.air")])
     assert _key(up) == _key(down) and _key(down) != _key(changed)
+
+
+def test_app_notes_listed_apart_from_memory_and_retired_by_you(api):
+    from memory.app_notes import AppNotes
+    app, ctx, token = api
+    notes = AppNotes(ctx.memory)
+    nid = notes.add("com.skylark.air", "The gate is on the trip detail screen, under Flight.", {"task_id": "task-1", "step": 3})
+    me = {"Authorization": f"Bearer {token}", "X-Envoy": "1"}
+    with TestClient(ctx.asgi) as c:
+        assert c.get("/api/app-notes").status_code == 401
+        got = c.get("/api/app-notes", headers=me).json()["apps"]
+        assert got[0]["app"] == "com.skylark.air" and {k: got[0]["notes"][0]["sources"][0][k] for k in ("task_id", "step")} == {"task_id": "task-1", "step": 3}
+        assert all(n["type"] != "App note" for n in c.get("/api/memory/graph", headers=me).json()["nodes"])
+        assert c.post(f"/api/app-notes/{nid}/retire", headers=me).json() == {"retired": True}
+        assert c.get("/api/app-notes", headers=me).json()["apps"] == []

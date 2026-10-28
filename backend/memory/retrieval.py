@@ -17,7 +17,7 @@ from datetime import date, datetime
 
 from agent.checks import answer_tokens
 from memory.store import MemoryStore
-from memory.types import TYPES, parse_date
+from memory.types import NOT_ABOUT_YOU, TYPES, parse_date
 from models.adapter import DataScope, ModelAdapter
 from models.prompts import ANSWER_INSTRUCTIONS
 from routines.screens import norm
@@ -171,7 +171,7 @@ class Retriever:
         for lst in lists:
             for rank, eid in enumerate(dict.fromkeys(lst)):
                 scores[eid] = scores.get(eid, 0.0) + 1.0 / (RRF_K + rank + 1)
-        ordered = sorted(scores, key=lambda e: -scores[e])
+        ordered = [e for e in sorted(scores, key=lambda e: -scores[e]) if (self.store.entity(e) or {}).get("type") not in NOT_ABOUT_YOU]
         if types:
             ordered = [e for e in ordered if (self.store.entity(e) or {}).get("type") in types]
         blocks, used, out = [], 0, Notes("", linked=linked)
@@ -200,7 +200,7 @@ class Retriever:
         links = []
         for n in self.store.neighbors(eid):
             ne = self.store.entity(n)
-            if ne and ne["type"] not in ("Note",):
+            if ne and ne["type"] not in ("Note", *NOT_ABOUT_YOU):
                 links.append(f"[[{ne['type']} {ne['name']}]]")
         head = f"## {e['type']}: {e['name'] or '(unnamed)'}" + (f"  {' '.join(links[:4])}" if links else "")
         lines, stale_n = [head], 0

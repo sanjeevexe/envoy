@@ -31,8 +31,10 @@ from fastapi import Body, Depends, FastAPI, HTTPException, Query, Request, WebSo
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 
+from memory.app_notes import AppNotes
 from memory.retrieval import Retriever
 from memory.store import MemoryStore
+from memory.types import NOT_ABOUT_YOU
 from models.adapter import ModelAdapter
 from routines.model import dump_yaml
 from routines.store import RoutineStore
@@ -513,6 +515,8 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     def graph() -> dict[str, Any]:
         nodes, edges, seen = [], [], set()
         for e in memory.entities():
+            if e["type"] in NOT_ABOUT_YOU:  # app notes have their own section
+                continue
             facts = memory.current_facts(e["id"])
             nodes.append({"id": e["id"], "type": e["type"], "name": e["name"] or e["type"], "facts": len(facts),
                           "stale": any(memory.is_stale(f, e["type"]) for f in facts), "user_edited": bool(e.get("user_edited"))})
@@ -561,6 +565,24 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     def search(q: str = Query(...)) -> dict[str, Any]:
         n = Retriever(memory).notes(q)
         return {"markdown": n.markdown, "entities": n.entities, "stale": n.stale}
+
+    @app.get("/api/app-notes", dependencies=[Depends(session)])
+    def app_notes(app_: str | None = Query(None, alias="app"), retired: bool = False) -> dict[str, Any]:
+        """Envoy's notes about each app (memory/app_notes.py), with where each was learned."""
+        notes = AppNotes(memory)
+        by_app: dict[str, list[dict[str, Any]]] = {}
+        for n in notes.list(app_, include_retired=retired):
+            by_app.setdefault(n.app, []).append({**n.to_json(), "sources": [
+                {k: s.get(k) for k in ("task_id", "step", "outcome", "kind", "observed_at", "retired_by", "reason") if s.get(k) is not None}
+                for s in n.sources]})
+        return {"apps": [{"app": a, "notes": v} for a, v in sorted(by_app.items())]}
+
+    @app.post("/api/app-notes/{nid}/retire", dependencies=[Depends(session)])
+    def retire_app_note(nid: str) -> dict[str, Any]:
+        notes = AppNotes(memory)
+        if notes.get(nid) is None:
+            raise HTTPException(404)
+        return {"retired": notes.retire(nid, "retired by you", by="user")}
 
     @app.get("/api/memory/events", dependencies=[Depends(session)])
     def memory_events(after: int = 0) -> list[dict[str, Any]]:
