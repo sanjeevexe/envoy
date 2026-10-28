@@ -24,6 +24,7 @@ AVDS = {
     "envoy-test": {"serial": "emulator-5554", "grpc_port": 8554, "can_snapshot": True},
     "envoy-real": {"serial": "emulator-5556", "grpc_port": 8556, "can_snapshot": False},
     "envoy-small": {"serial": "emulator-5558", "grpc_port": 8558, "can_snapshot": True},  # Phase 6: a smaller screen
+    "envoy-large": {"serial": "emulator-5562", "grpc_port": 8562, "can_snapshot": True},  # Phase 7: a larger screen (5560 is AndroidWorld's)
 }
 
 

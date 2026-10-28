@@ -37,3 +37,9 @@ packages = ["devices", "models", "mcp_stub", "testapps", "agent", "policy", "rou
 dev = [
     "pytest>=9.1.1",
 ]
+eval = [
+    "matplotlib>=3.11.2",
+]
+
+[tool.uv]
+default-groups = ["dev", "eval"]  # eval: matplotlib for the Phase 7 report charts

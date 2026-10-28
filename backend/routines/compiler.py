@@ -567,8 +567,12 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             st.action.target = first.locator if first and first.locator else Locator(text=first.near if first else None)
             st.post = [Check(kind="element_present", locator=st.action.target)]
     if extract:
-        if out_steps:
-            out_steps[-1].extract = extract
+        if not out_steps:
+            # The answer is on the screen the app opens to ("How many miles do I have?"): outputs are read by steps, so a
+            # routine with none would promise outputs it can never read. One read-only step carries them.
+            out_steps.append(Step(id="read_answer", intent="Read the answer on the app's first screen",
+                                  action=StepAction(kind="wait", seconds=0.3), risk="read", note="added: the answer is on the start screen"))
+        out_steps[-1].extract = extract
 
     # Safety net: the run's irreversible action must survive cleanup, or the routine would "succeed" without doing the job.
     if any(r.get("approval", {}).get("approved") for r in records if r.get("kind") == "action") and \

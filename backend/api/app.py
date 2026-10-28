@@ -640,9 +640,12 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
 
     # ---- the web app ---------------------------------------------------------------------------
 
+    import subprocess
+    started_on = subprocess.run(["git", "rev-parse", "HEAD"], cwd=REPO, capture_output=True, text=True).stdout.strip()
+
     @app.get("/healthz")
     def health() -> dict[str, Any]:
-        return {"ok": True, "profile": ctx.profile}
+        return {"ok": True, "profile": ctx.profile, "commit": started_on}  # the commit the API started on (evaluations check it)
 
     if WEB_OUT.exists():
         import mimetypes

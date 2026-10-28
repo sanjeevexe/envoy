@@ -32,6 +32,7 @@ from models.adapter import ModelAdapter
 from policy.approval_rules import ApprovalRules
 from policy.signin import sign_in_reason
 from routines.executor import ExecConfig, RoutineExecutor
+from routines.lifecycle import after_run, version_for_run
 from routines.matcher import RoutineMatcher
 from routines.model import Routine
 from routines.store import RoutineStore
@@ -161,6 +162,7 @@ class TaskRunner:
                 routine, inputs = m.routine, {**m.inputs, **inputs}
         if routine is None:
             return None, inputs, app or app_for(goal), {}, calls
+        routine = version_for_run(self.routines, routine.routine)  # a patched version on trial is decided by this run
         filled = fill_inputs(self.memory, routine, goal, inputs)
         if filled.missing:
             self._step(tid, {"kind": "note", "text": f"routine {routine.routine} needs {', '.join(filled.missing)}: the agent does it instead"})
@@ -221,6 +223,10 @@ class TaskRunner:
                                              config=ExecConfig(data_scope=scope, contributor=skylark,
                                                                agent=RunConfig(data_scope=scope, contributor=skylark, max_cost_usd=0.25)))
                         out = await ex.run(routine, inputs, task_id=trace_id, launch="if_needed", allow_repair=True, allow_agent=True, memory=notes)
+                        life = after_run(self.routines, routine, out)  # repairs become a version on trial; a trial is activated or rolled back
+                        if life:
+                            self._step(tid, {"kind": "note", "text": (f"routine {routine.routine}: patched version v{life['proposed']} on trial for the next run"
+                                                                      if "proposed" in life else f"routine {routine.routine} v{life['trial']}: trial {life['result']}")})
                         status, result, outputs = out.status, out.detail, out.outputs
                         calls += out.model_calls
                         cost += out.cost_at_standard_usd

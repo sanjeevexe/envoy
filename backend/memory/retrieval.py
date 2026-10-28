@@ -78,9 +78,11 @@ class Retriever:
             return f"{int(d // 60)} min ago"
         if then.date() == today.date():
             return f"today {clock}"
-        if (today.date() - then.date()).days == 1:
+        days = (today.date() - then.date()).days
+        if days == 1:
             return f"yesterday {clock}"
-        return f"{then:%b} {then.day}"
+        # The age itself, not only a date: a model answering "how long ago" reads a bare date against its own idea of today.
+        return f"{days} days ago ({then:%b} {then.day})"
 
     def where(self, source_id: str | None) -> str:
         s = self.store.source(source_id) if source_id else None
@@ -230,7 +232,9 @@ class Retriever:
         notes = self.notes(question)
         if not notes.markdown:
             return Answer("Memory doesn't have that yet.", False, False, True, notes)
-        res = await asyncio.to_thread(adapter.call, "answer", f"QUESTION: {question}\n\nNOTES:\n{notes.markdown}\n", instructions=ANSWER_INSTRUCTIONS,
+        now = datetime.fromtimestamp(self._now())
+        res = await asyncio.to_thread(adapter.call, "answer", f"NOW: {now:%a %b} {now.day}, {now:%Y %I:%M %p}\n\nQUESTION: {question}\n\nNOTES:\n{notes.markdown}\n",
+                                      instructions=ANSWER_INSTRUCTIONS,
                                       data_scope=data_scope, task_id=task_id)
         a = res.parsed
         toks = [t for t in answer_tokens(a.answer) if any(ch.isdigit() for ch in t)]  # type: ignore[union-attr]

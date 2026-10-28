@@ -33,7 +33,7 @@ async def fixed_replay(device: Any, trace_dir: Path, agent: AgentRunner, goal: s
             res = await agent.run(goal, task_id=task_id, memory=memory)
             return {"status": res.status, "model_calls": res.model_calls, "cost_usd": round(res.cost_at_standard_usd, 5),
                     "duration_s": round(time.time() - t0, 2), "handoff_at": replayed + 1, "similarity": round(sim, 2),
-                    "replayed": replayed, "result": res.result}
+                    "replayed": replayed, "result": res.result, "agent_steps": res.steps, "approvals": len(res.approvals)}
         a = r["device_action"]
         tgt = r.get("target") or {}
         x1, y1, x2, y2 = tgt.get("bounds", (0, 0, 0, 0))
@@ -53,4 +53,4 @@ async def fixed_replay(device: Any, trace_dir: Path, agent: AgentRunner, goal: s
         replayed += 1
     await device.wait_until_settled()
     return {"status": "replayed", "model_calls": 0, "cost_usd": 0.0, "duration_s": round(time.time() - t0, 2), "handoff_at": None,
-            "similarity": None, "replayed": replayed, "result": ""}
+            "similarity": None, "replayed": replayed, "result": "", "agent_steps": 0, "approvals": 0}

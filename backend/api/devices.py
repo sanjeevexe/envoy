@@ -27,7 +27,7 @@ from devices.emulator import AVDS, EmulatorDevice
 from devices.phone import PhoneDevice, discover
 
 SKYLARK = "com.skylark.air"
-NAMES = {"envoy-test": "Test phone", "envoy-real": "Real-app phone", "envoy-small": "Small test phone"}
+NAMES = {"envoy-test": "Test phone", "envoy-real": "Real-app phone", "envoy-small": "Small test phone", "envoy-large": "Large test phone"}
 # Apps that may come to the front on their own without it being you: Envoy's banner, the launcher Envoy itself opens.
 BENIGN_FRONT = {"ai.envoy.banner", "com.android.systemui"}
 
@@ -81,7 +81,7 @@ class GatedDevice:
 class DevicePool:
     def __init__(self, bus: Any) -> None:
         self.bus = bus
-        self.leases = {avd: Lease(avd) for avd in AVDS if avd != "envoy-small"}
+        self.leases = {avd: Lease(avd) for avd in AVDS if avd not in ("envoy-small", "envoy-large")}  # evaluation-only screen sizes
         self._devices: dict[str, Any] = {}
         self._connect_lock = asyncio.Lock()
         self.phones: dict[str, dict[str, Any]] = {}  # id → {id, serial, model, android, state}, from the last discovery
