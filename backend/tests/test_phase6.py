@@ -22,7 +22,7 @@ import api.runner as runner_mod
 from agent.vision import Vision, mark, parse_sam
 from api.devices import DevicePool, Lease
 from api.events import EventBus
-from api.install import Installer, app_named_in, guess_installed, pick_result, read_listing
+from api.install import Installer, app_named_in, card_listing, card_title, guess_installed, pick_result, read_listing
 from api.routing import BLOCKS_EMULATOR, EMULATOR_REFUSED, Choice, app_names, asks_for_phone, blocks_emulator, choose, strip_phone_words
 from api.runner import FRESH_INSTALL, TaskRunner, app_for
 from api.store import TaskStore
@@ -734,9 +734,11 @@ def test_the_app_a_request_names():
 class PlayPhone:
     """envoy-real with the Play Store: real captured pages; Install makes the package appear a few looks later."""
 
-    def __init__(self, *, packages=(), account=True, paid=False, incompatible=False, after=2):
+    def __init__(self, *, packages=(), account=True, paid=False, incompatible=False, after=2, search="search", installs=None):
         self.packages, self.account, self.after = set(packages) | {"com.android.vending"}, account, after
         self.details = "paid" if paid else "incompatible" if incompatible else "free"
+        self.search = search
+        self.installs = installs or {}  # an Install button's bounds → the package it installs (search results)
         self.screen, self.taps, self.opened, self.target, self.looks = page("launcher.Home", "launcher"), [], [], None, 0
         self.adb = SimpleNamespace(shell=self.shell)
 
@@ -752,7 +754,7 @@ class PlayPhone:
         if c.startswith("am start"):
             uri = cmd[cmd.index("-d") + 1]
             self.opened.append(uri)
-            self.screen = store_page("search" if "search?" in uri else self.details)
+            self.screen = store_page(self.search if "search?" in uri else self.details)
         return ""
 
     async def wait_until_settled(self):
@@ -766,10 +768,12 @@ class PlayPhone:
     observe = wait_until_settled
 
     async def act(self, a):
-        label = self.screen.element(a.element).label
+        e = self.screen.element(a.element)
+        label = e.label
         self.taps.append(label)
         if label == "Install":
-            self.target, self.screen = WIKI, store_page("installing")
+            self.target = self.installs.get(e.bounds, WIKI)
+            self.screen = store_page("installing")
         elif label.startswith("Wikipedia"):
             self.screen = store_page("free")
         return SimpleNamespace(ok=True)
@@ -805,12 +809,29 @@ def test_a_free_app_is_installed_by_its_package_or_by_the_name_the_request_gives
     assert (got.status, got.package, got.title) == ("installed", WIKI, "Wikipedia") and dev.taps == ["Install"]
     assert dev.opened == [f"market://details?id={WIKI}"] and any(s["text"].startswith("installed Wikipedia in") for s in log.steps)
     dev = PlayPhone()
-    got = asyncio.run(installer(dev)[0].ensure(None, "Wikipedia"))  # by name: search, pick the result, install, see what arrived
-    assert (got.status, got.package) == ("installed", WIKI) and dev.taps[0].startswith("Wikipedia Wikimedia") and dev.taps[1] == "Install"
+    got = asyncio.run(installer(dev)[0].ensure(None, "Wikipedia"))  # by name: the result's own Install, then what arrived
+    assert (got.status, got.package, got.title) == ("installed", WIKI, "Wikipedia") and dev.taps == ["Install"]
+    assert dev.opened == ["market://search?q=Wikipedia&c=apps"]
     # Already there: nothing opens.
     dev = PlayPhone(packages={WIKI})
     assert asyncio.run(installer(dev)[0].ensure(WIKI)).status == "already" and asyncio.run(installer(dev)[0].ensure(None, "Wikipedia")).package == WIKI
     assert dev.opened == []
+
+
+def test_a_sponsored_look_alike_is_never_installed():
+    """envoy-real, Oct 28: searching "Google Translate" showed a sponsored translator first, with its own Install button.
+    The first build tapped it. Only the result that is the app counts, and only its own button."""
+    ads = store_page("search_ads")
+    assert read_listing(ads).state == "unknown"  # a results page is not an app's page: no Install to take from it
+    for q in ("Google Translate", "Translate"):
+        card = pick_result(ads, q)
+        assert card_title(ads, card) == "Google Translate" and card_listing(ads, card).button.bounds == (831, 1033, 1017, 1159)
+    ad, real = (831, 405, 1017, 531), (831, 1033, 1017, 1159)
+    translate, look_alike = "com.google.android.apps.translate", "com.newgeneration.translator"
+    dev = PlayPhone(search="search_ads", installs={ad: look_alike, real: translate})
+    got = asyncio.run(installer(dev)[0].ensure(None, "Google Translate"))
+    assert (got.status, got.package, got.title) == ("installed", translate, "Google Translate") and look_alike not in dev.packages
+    assert dev.opened == ["market://search?q=Google%20Translate&c=apps"]
 
 
 def test_a_paid_app_asks_first_and_envoy_never_pays():
