@@ -218,6 +218,8 @@ class AgentRunner:
                 last_bodies = (last_bodies + [body])[-3:]
                 if len(last_bodies) == 3 and len(set(last_bodies)) == 1 and no_change_streak >= 2:
                     stuck_recoveries += 1
+                    trace.step({"step": step, "kind": "stuck", "recovery": stuck_recoveries,
+                                "action": {1: "feedback", 2: "back"}.get(stuck_recoveries, "fail")})
                     if stuck_recoveries == 1:
                         feedback = "You are stuck: the last actions did not change the screen. Try a different element, scroll, or go back."
                     elif stuck_recoveries == 2:
