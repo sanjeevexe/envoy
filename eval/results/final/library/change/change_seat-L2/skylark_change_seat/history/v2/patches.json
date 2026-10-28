@@ -1,0 +1,22 @@
+[
+ {
+  "kind": "check",
+  "step": "open_my_trips",
+  "description": "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}",
+  "evidence": {}
+ },
+ {
+  "kind": "check",
+  "step": "open_my_trips",
+  "description": "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}",
+  "evidence": {}
+ },
+ {
+  "kind": "locator",
+  "step": "tap_change_seat",
+  "description": "step 'tap_change_seat': target found only by relaxed match; locator updated to {text='Seats', resource_id='btn_change_seat', kind='Button'}",
+  "evidence": {
+   "score": 0.676
+  }
+ }
+]

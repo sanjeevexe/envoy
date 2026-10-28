@@ -1,0 +1,19 @@
+{
+ "name": "skylark_get_flight_seat",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-28 00:03:29",
+   "parent": null,
+   "changes": [
+    "v1 compiled from f7-1027215614-src-seat-a1"
+   ],
+   "verification": null
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

@@ -1,0 +1,1566 @@
+{
+ "meta": {
+  "suite": "sizes",
+  "run_id": "1028001450",
+  "started": "2026-10-28T04:14:50+00:00",
+  "finished": "2026-10-28T04:18:08+00:00",
+  "wall_s": 198.2,
+  "code": {
+   "commit": "e875c4a3387cd8ff5bad8252e0f9463be3863580",
+   "short": "e875c4a",
+   "tags": [],
+   "is_eval_final": false,
+   "dirty": [
+    "ocs/phase-7-results.md",
+    "eval/final_report.py"
+   ],
+   "branch": "main"
+  },
+  "models": {
+   "tier": "standard",
+   "jobs": {
+    "step": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "plan": {
+     "model": "muse-spark-1.3",
+     "effort": "medium"
+    },
+    "repair": {
+     "model": "muse-spark-1.3",
+     "effort": "medium"
+    },
+    "grounding": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "choose": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "extract": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "answer": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "compile": {
+     "model": "muse-wonder-1.0",
+     "effort": "medium"
+    },
+    "match": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    }
+   }
+  },
+  "devices": [
+   "emulator-5554"
+  ],
+  "cost": {
+   "by_job": {},
+   "by_model": {}
+  },
+  "spend_total_this_checkout": {
+   "billed_usd": 10.722,
+   "standard_usd": 11.526
+  },
+  "host": "Sanjeevs-MacBook-Pro"
+ },
+ "devices": {
+  "envoy-test": {
+   "size": [
+    1080,
+    2400
+   ],
+   "density": 420,
+   "dp": [
+    411,
+    914
+   ],
+   "model": "sdk_gphone64_arm64",
+   "android": "15",
+   "real_phone": false,
+   "run_id": "1028001450",
+   "code": "e875c4a",
+   "rows": [
+    {
+     "task": "check_in",
+     "layout": 0,
+     "seed": 900,
+     "target": "FPVDK2",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "seat": "18A",
+      "gate": "B19",
+      "boarding_time": "11:05 AM",
+      "boarding_group": "Group 1"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_select_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "select_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "tap_check_in",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "select_passenger",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "continue_after_passenger_selection",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "confirm_no_hazardous_materials",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "continue_after_hazmat_declaration",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "confirm_check_in",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 4.62,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-check_in-k0",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "change_seat",
+     "layout": 0,
+     "seed": 900,
+     "target": "FPVDK2",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "confirmed_seat": "23B",
+      "flight_number": "SL 1912"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_open_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "open_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "tap_change_seat",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_select_seat",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "select_seat",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "confirm_seat",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 6.28,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-change_seat-k0",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "add_ktn",
+     "layout": 0,
+     "seed": 900,
+     "target": "FPVDK2",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "known_traveler_number": "71253619",
+      "save_confirmation": "Known traveler number saved",
+      "confirmation_code": "FPVDK2"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_select_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "select_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "enter_known_traveler_number",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "save_known_traveler_number",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 3.29,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-add_ktn-k0",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "gate",
+     "layout": 0,
+     "seed": 900,
+     "target": "FPVDK2",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "gate": "B19"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_open_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "open_trip",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 1.98,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-gate-k0",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "seat",
+     "layout": 0,
+     "seed": 900,
+     "target": "FPVDK2",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "seat": "18A"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_select_trip_to_city",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "select_trip_to_city",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 1.69,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-seat-k0",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "flight_status",
+     "layout": 0,
+     "seed": 900,
+     "target": "FPVDK2",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "flight_status": "On time",
+      "route": "ATL → OMA",
+      "flight_date": "Mon, Dec 7, 2026",
+      "gate": "B19",
+      "departure_time": "12:40 PM"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_flight_status",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "enter_flight_number",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "dismiss_keyboard",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "search_flight_status",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 2.88,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-flight_status-k0",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "miles",
+     "layout": 0,
+     "seed": 900,
+     "target": 71426,
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "skylark_miles": "71,426 miles"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "read_answer",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 0.69,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-miles-k0",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "find_trip",
+     "layout": 0,
+     "seed": 900,
+     "target": "FPVDK2",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "destination": "Omaha"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_open_trip_by_confirmation_code",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "open_trip_by_confirmation_code",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 1.72,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-find_trip-k0",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "past_trip",
+     "layout": 0,
+     "seed": 900,
+     "target": "UTU24R",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "flight_date": "Sun, Apr 26, 2026",
+      "flight": "SL 1023 · ATL 9:00 AM → OKC 11:00 AM"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "scroll_to_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "open_trip_details",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 5.05,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-past_trip-k0",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "gate_alerts",
+     "layout": 0,
+     "seed": 900,
+     "target": 71426,
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {},
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_profile",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "turn_on_gate_change_alerts",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 1.31,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-gate_alerts-k0",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "check_in",
+     "layout": 0,
+     "seed": 901,
+     "target": "WGB094",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "seat": "20A",
+      "gate": "A11",
+      "boarding_time": "2:15 PM",
+      "boarding_group": "Group 5"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_select_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "select_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "tap_check_in",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "select_passenger",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "continue_after_passenger_selection",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "confirm_no_hazardous_materials",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "continue_after_hazmat_declaration",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "confirm_check_in",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 3.83,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-check_in-k1",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "change_seat",
+     "layout": 0,
+     "seed": 901,
+     "target": "WGB094",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "confirmed_seat": "20B",
+      "flight_number": "SL 1266"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_open_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "open_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "tap_change_seat",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_select_seat",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "select_seat",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "confirm_seat",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 4.3,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-change_seat-k1",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "add_ktn",
+     "layout": 0,
+     "seed": 901,
+     "target": "WGB094",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "known_traveler_number": "15515142",
+      "save_confirmation": "Known traveler number saved",
+      "confirmation_code": "WGB094"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_select_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "select_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "enter_known_traveler_number",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "save_known_traveler_number",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 3.38,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-add_ktn-k1",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "gate",
+     "layout": 0,
+     "seed": 901,
+     "target": "WGB094",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "gate": "A11"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_open_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "open_trip",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 1.63,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-gate-k1",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "seat",
+     "layout": 0,
+     "seed": 901,
+     "target": "WGB094",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "seat": "20A"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_select_trip_to_city",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "select_trip_to_city",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 1.62,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-seat-k1",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "flight_status",
+     "layout": 0,
+     "seed": 901,
+     "target": "WGB094",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "flight_status": "On time",
+      "route": "ATL → BOI",
+      "flight_date": "Sun, Nov 22, 2026",
+      "gate": "A11",
+      "departure_time": "3:50 PM"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_flight_status",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "enter_flight_number",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "dismiss_keyboard",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "search_flight_status",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 3.19,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-flight_status-k1",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "miles",
+     "layout": 0,
+     "seed": 901,
+     "target": 15614,
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "skylark_miles": "15,614 miles"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "read_answer",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 0.72,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-miles-k1",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "find_trip",
+     "layout": 0,
+     "seed": 901,
+     "target": "WGB094",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "destination": "Boise"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_open_trip_by_confirmation_code",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "open_trip_by_confirmation_code",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 1.68,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-find_trip-k1",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "past_trip",
+     "layout": 0,
+     "seed": 901,
+     "target": "RVXLCD",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "flight_date": "Sun, Aug 9, 2026",
+      "flight": "SL 1718 · ATL 9:00 AM → BDL 11:00 AM"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "scroll_to_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "open_trip_details",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 3.32,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-past_trip-k1",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "gate_alerts",
+     "layout": 0,
+     "seed": 901,
+     "target": 15614,
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {},
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_profile",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "turn_on_gate_change_alerts",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 1.3,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-gate_alerts-k1",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "check_in",
+     "layout": 0,
+     "seed": 902,
+     "target": "JJWMZZ",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "seat": "19D",
+      "gate": "B22",
+      "boarding_time": "6:00 AM",
+      "boarding_group": "Group 1"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_select_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "select_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "tap_check_in",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "select_passenger",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "continue_after_passenger_selection",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "confirm_no_hazardous_materials",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "continue_after_hazmat_declaration",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "confirm_check_in",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 4.28,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-check_in-k2",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "change_seat",
+     "layout": 0,
+     "seed": 902,
+     "target": "JJWMZZ",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "confirmed_seat": "10D",
+      "flight_number": "SL 144"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_open_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "open_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "tap_change_seat",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_select_seat",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "select_seat",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "confirm_seat",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 4.21,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-change_seat-k2",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "add_ktn",
+     "layout": 0,
+     "seed": 902,
+     "target": "JJWMZZ",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "known_traveler_number": "72626391",
+      "save_confirmation": "Known traveler number saved",
+      "confirmation_code": "JJWMZZ"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_select_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "select_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "enter_known_traveler_number",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "save_known_traveler_number",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 3.24,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-add_ktn-k2",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "gate",
+     "layout": 0,
+     "seed": 902,
+     "target": "JJWMZZ",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "gate": "B22"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_open_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "open_trip",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 1.81,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-gate-k2",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "seat",
+     "layout": 0,
+     "seed": 902,
+     "target": "JJWMZZ",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "seat": "19D"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_select_trip_to_city",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "select_trip_to_city",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 1.7,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-seat-k2",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "flight_status",
+     "layout": 0,
+     "seed": 902,
+     "target": "JJWMZZ",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "flight_status": "On time",
+      "route": "ATL → SDF",
+      "flight_date": "Thu, Nov 19, 2026",
+      "gate": "B22",
+      "departure_time": "7:35 AM"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_flight_status",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "enter_flight_number",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "dismiss_keyboard",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "search_flight_status",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 2.82,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-flight_status-k2",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "miles",
+     "layout": 0,
+     "seed": 902,
+     "target": 19037,
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "skylark_miles": "19,037 miles"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "read_answer",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 0.7,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-miles-k2",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "find_trip",
+     "layout": 0,
+     "seed": 902,
+     "target": "JJWMZZ",
+     "passed": true,
+     "status": "done",
+     "rung": 2,
+     "agent_fallback": false,
+     "outputs": {
+      "destination": "Louisville"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [
+      {
+       "kind": "locator",
+       "step": "open_trip_by_confirmation_code",
+       "description": "step 'open_trip_by_confirmation_code': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}"
+      }
+     ],
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_open_trip_by_confirmation_code",
+       "status": "done",
+       "rung": 2
+      },
+      {
+       "id": "open_trip_by_confirmation_code",
+       "status": "done",
+       "rung": 2
+      }
+     ],
+     "duration_s": 3.55,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-find_trip-k2",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "past_trip",
+     "layout": 0,
+     "seed": 902,
+     "target": "H0V6EA",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "flight_date": "Wed, Apr 29, 2026",
+      "flight": "SL 705 · ATL 9:00 AM → ANC 11:00 AM"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "scroll_to_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "open_trip_details",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 4.78,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-past_trip-k2",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "gate_alerts",
+     "layout": 0,
+     "seed": 902,
+     "target": 19037,
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {},
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_profile",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "turn_on_gate_change_alerts",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 1.2,
+     "side_effects": [],
+     "task_id": "f7-1028001450-size-envoy-test-gate_alerts-k2",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    }
+   ]
+  }
+ }
+}

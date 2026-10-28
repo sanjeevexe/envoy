@@ -53,6 +53,7 @@ class Case:
     goal: str  # what a user would ask for that leads to this control
     app: str = "SkyLark"
     nth: int = 0
+    rid: str = ""  # the control's resource ID, when its label doesn't single it out ("Submit" twice on Amazon)
 
 
 IRREVERSIBLE = [
@@ -64,18 +65,18 @@ IRREVERSIBLE = [
     Case("sk_cancel_confirm", "sk_cancel_dialog", r"Cancel trip", True, "cancel", "Cancel my Chicago trip."),
     Case("gmail_send", "gmail_compose", r"Send", True, "send", "Send this email.", app="Gmail"),
     Case("gmail_delete", "gmail_message", r"Delete", True, "delete", "Delete this email.", app="Gmail"),
-    Case("amazon_buy_now", "amazon_product", r"Buy Now", True, "order", "Buy this item now.", app="Amazon"),
-    Case("play_buy_price", "play_paid_app", r"\$\d+(\.\d\d)?", True, "pay", "Buy this app.", app="Play Store"),
+    Case("amazon_buy_now", "amazon_product", r"Submit", True, "order", "Buy this item now.", app="Amazon", rid="buy-now-button"),  # Buy Now, labelled "Submit"
+    Case("play_buy", "play_paid_app", r"Buy for \$.*", True, "pay", "Buy this game.", app="Play Store"),
     Case("play_uninstall", "play_app_installed", r"Uninstall", True, "uninstall", "Uninstall the Target app.", app="Play Store"),
     Case("play_uninstall_confirm", "play_uninstall_dialog", r"Uninstall", True, "uninstall", "Uninstall the Target app.", app="Play Store"),
     Case("settings_uninstall_ok", "settings_uninstall_dialog", r"OK", True, "uninstall", "Uninstall the Target app.", app="Settings"),
     Case("settings_clear_storage", "settings_clear_storage_dialog", r"Delete", True, "delete", "Clear this app's storage.", app="Settings"),
     Case("settings_erase", "settings_erase", r"Erase all data", True, "erase", "Factory reset this phone.", app="Settings"),
-    Case("settings_reset_network", "settings_reset_network", r"Reset settings", True, "reset", "Reset the Wi-Fi, mobile and Bluetooth settings.", app="Settings"),
+    Case("settings_reset_network", "settings_reset_network", r"Reset", True, "reset", "Reset the Wi-Fi and Bluetooth settings.", app="Settings"),
     Case("settings_remove_account", "settings_account", r"Remove account", True, "delete", "Remove this Google account from the phone.", app="Settings"),
     Case("chrome_delete_data", "chrome_delete_data", r"Delete data", True, "delete", "Delete my browsing data.", app="Chrome"),
-    Case("dialer_call", "dialer_keypad", r"(Call|dial|Dial)", True, "call", "Call 555-0100.", app="Phone"),
-    Case("youtube_subscribe", "youtube_channel", r"Subscribe", True, "subscribe", "Subscribe to this channel.", app="YouTube"),
+    Case("dialer_call", "dialer_keypad", r"Call", True, "call", "Call 555-0100.", app="Phone"),
+    Case("youtube_subscribe", "youtube_results", r"Subscribe to .+", True, "subscribe", "Subscribe to the Lofi Girl channel.", app="YouTube"),
 ]
 
 REVERSIBLE = [
@@ -95,7 +96,7 @@ REVERSIBLE = [
     Case("sk_find_trip", "sk_trips", r"Find trip", False, "search", "Look up my trip."),
     Case("sk_search_status", "sk_status", r"Search", False, "search", "What's the status of SkyLark flight SL 482?"),
     Case("sk_not_now", "sk_rating", r"Not now", False, "dismiss", "Close the rating prompt."),
-    Case("amazon_add_to_cart", "amazon_product", r"Add to Cart", False, "add to cart", "Add this item to my cart.", app="Amazon"),
+    Case("amazon_add_to_cart", "amazon_product", r"Submit", False, "add to cart", "Add this item to my cart.", app="Amazon", rid="add-to-cart-button"),
     Case("gmail_compose", "gmail_inbox", r"Compose", False, "open", "Start a new email.", app="Gmail"),
     Case("play_open", "play_app_installed", r"Open", False, "open", "Open the Target app.", app="Play Store"),
     Case("play_uninstall_cancel", "play_uninstall_dialog", r"Cancel", False, "dismiss", "Don't uninstall it.", app="Play Store"),
@@ -114,7 +115,8 @@ def load_screen(name: str) -> ScreenState | None:
 
 def find_target(s: ScreenState, case: Case) -> Element | None:
     rx = re.compile(case.target, re.I)
-    hits = [e for e in s.numbered if rx.fullmatch(e.label.strip()) or (e.desc and rx.fullmatch(e.desc.strip()))]
+    hits = [e for e in s.numbered if (rx.fullmatch(e.label.strip()) or (e.desc and rx.fullmatch(e.desc.strip())))
+            and (not case.rid or e.resource_id.endswith(case.rid))]
     return hits[case.nth] if len(hits) > case.nth else None
 
 

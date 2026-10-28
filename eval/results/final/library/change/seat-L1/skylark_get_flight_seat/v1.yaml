@@ -1,0 +1,92 @@
+routine: skylark_get_flight_seat
+app: com.skylark.air
+version: 1
+status: active
+intent: Get the seat for a SkyLark flight
+description: Open My Trips in SkyLark Air, select the trip to the requested city, and read the seat shown on the trip details screen.
+patterns: [What seat do I have on my flight, What is my seat, Find my seat assignment, My seat on my flight]
+outputs: [seat]
+start: fresh_launch
+inputs:
+  trip_city: {type: text, description: The destination city of the flight whose seat is being requested., example: Denver}
+steps:
+- id: open_my_trips
+  intent: Tap My Trips
+  pre:
+  - {app_foreground: com.skylark.air}
+  - element_present: {resource_id: screen_title, text: SkyLark Air, kind: Text}
+  action:
+    tap:
+      resource_id: nav_trips
+      text: My Trips
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.373, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: screen_title, text: My Trips, kind: Text}
+  - element_present: {resource_id: nav_trips, text: My Trips, kind: Text}
+  risk: reversible
+  note: trace step 1
+- id: find_select_trip_to_city
+  intent: "Scroll to {{trip_city}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: trip_row_*
+        text_has: "{{trip_city}}"
+        kind: Button
+        cls: View
+        parent: list_trips
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: trip_row_*
+      text_has: "{{trip_city}}"
+      kind: Button
+      cls: View
+      parent: list_trips
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: select_trip_to_city
+  intent: "Tap the trip to {{trip_city}}"
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      resource_id: trip_row_*
+      text_has: "{{trip_city}}"
+      kind: Button
+      cls: View
+      parent: list_trips
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: screen_title
+      text: "Trip to {{trip_city}}"
+      kind: Text
+  - element_present: {resource_id: btn_checkin, text: Check in, kind: Button}
+  risk: reversible
+  extract:
+    seat:
+      near: Seat
+      locator: {resource_id: row_seat, kind: Text}
+      segment: 1
+      first_in_list: false
+      next_element: false
+      expect_digits: true
+  note: trace step 2
+changes: [v1 compiled from f7-1027215614-src-seat-a1]
+compiled_from:
+  task_id: f7-1027215614-src-seat-a1
+  goal: What seat do I have on my flight to Denver?
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-27 22:00:07"
+  trace_steps_kept: [1, 2]
+  trace_steps_dropped: 0
+  cost_usd: 0.0431

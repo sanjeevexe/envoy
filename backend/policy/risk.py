@@ -34,14 +34,19 @@ _IRREVERSIBLE = re.compile(
     re.IGNORECASE,
 )
 # Resource-ID fragments that mean the same, for buttons without readable text.
-_IRREVERSIBLE_ID = re.compile(r"(^|_)(pay|purchase|checkout|confirm|submit|send|delete|place_order|buy|book|cancel_(trip|order|booking))(_|$)", re.I)
+_IRREVERSIBLE_ID = re.compile(r"(^|[_-])(pay|purchase|checkout|confirm|submit|send|delete|place[_-]order|buy|book|cancel[_-](trip|order|booking))([_-]|$)", re.I)
+# A label that says nothing about what it does ("Submit", "OK"): web forms label every button that way (Amazon's Add to Cart
+# and Buy Now are both "Submit"), so an ID that plainly names a reversible action speaks for it instead.
+_GENERIC = re.compile(r"^(submit|ok|okay|continue|go|done)$", re.I)
+_REVERSIBLE_ID = re.compile(r"(^|[_-])(add[_-]to[_-](cart|bag|basket|list|wishlist)|wishlist|save[_-]for[_-]later|search|filter)([_-]|$)", re.I)
 # A button that is only a price ("$4.99", "€7"): it buys something.
 _PRICE = re.compile(r"^\s*(US\s?)?[$€£¥₹]\s?\d[\d,]*(\.\d{1,2})?(\s*/\s*(mo|month|yr|year|wk|week))?\s*$", re.I)
 # A dialog or page asking to confirm something that can't be taken back: its positive button (often a bare "OK") is the act.
 _DESTRUCTIVE = re.compile(
     r"((do you|are you sure you) want to|want to) (uninstall|delete|remove|erase|reset|unsubscribe|cancel)|"
     r"will (permanently )?(delete|erase|remove|be deleted|be erased|be removed)|(data|everything|all .{0,30}) will be (deleted|erased|lost|removed)|"
-    r"permanently (delete|remove|erase)|factory reset|can.?t be undone|cannot be undone",
+    r"permanently (delete|remove|erase)|factory reset|can.?t be undone|cannot be undone|can.?t undo|cannot undo|"
+    r"this will (reset|erase|delete|remove|wipe)",
     re.IGNORECASE,
 )
 # A button that places a phone call (the dialer's dial button, "Call store"): it reaches a person outside the phone.
@@ -106,9 +111,11 @@ def classify(action: Action, screen: ScreenState, model_risk: Risk | None) -> Ri
     if target is not None and action.kind in ("tap", "long_press", "type", "tap_point"):
         text = _target_text(target)
         if action.kind != "type" or action.submit:
-            if _IRREVERSIBLE.search(text) and not _SAFE.match(target.label.strip()):
+            rid = target.resource_id.split("/")[-1]
+            named_reversible = _GENERIC.match(target.label.strip()) and _REVERSIBLE_ID.search(rid) and not _IRREVERSIBLE_ID.search(rid)
+            if _IRREVERSIBLE.search(text) and not _SAFE.match(target.label.strip()) and not named_reversible:
                 reasons.append(f"rule: target says {target.label!r}")
-            elif _IRREVERSIBLE_ID.search(target.resource_id.split("/")[-1]):
+            elif _IRREVERSIBLE_ID.search(rid):
                 reasons.append(f"rule: target id {target.resource_id!r}")
             elif _PRICE.match(target.label or ""):
                 reasons.append(f"rule: target is a price {target.label!r}")

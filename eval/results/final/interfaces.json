@@ -1,0 +1,466 @@
+{
+ "meta": {
+  "suite": "interfaces",
+  "run_id": "1028010615",
+  "started": "2026-10-28T05:06:15+00:00",
+  "finished": "2026-10-28T05:08:30+00:00",
+  "wall_s": 134.8,
+  "code": {
+   "commit": "849e51a660c30d9656ccbcd60fb06d056ee76fbe",
+   "short": "849e51a",
+   "tags": [],
+   "is_eval_final": false,
+   "dirty": [
+    "ata/routines/skylark_check_in_flight/index.json"
+   ],
+   "branch": "main"
+  },
+  "models": {
+   "tier": "standard",
+   "jobs": {
+    "step": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "plan": {
+     "model": "muse-spark-1.3",
+     "effort": "medium"
+    },
+    "repair": {
+     "model": "muse-spark-1.3",
+     "effort": "medium"
+    },
+    "grounding": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "choose": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "extract": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "answer": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "compile": {
+     "model": "muse-wonder-1.0",
+     "effort": "medium"
+    },
+    "match": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    }
+   }
+  },
+  "devices": [],
+  "cost": {
+   "input_tokens": 8961,
+   "cached_tokens": 2741,
+   "output_tokens": 6282,
+   "reasoning_tokens": 5569,
+   "calls": 6,
+   "errors": 0,
+   "billed_usd": 0.035,
+   "standard_usd": 0.035,
+   "by_job": {
+    "match": {
+     "calls": 1,
+     "standard_usd": 0.0078
+    },
+    "extract": {
+     "calls": 2,
+     "standard_usd": 0.0199
+    },
+    "voice": {
+     "calls": 1,
+     "standard_usd": 0.0001
+    },
+    "chat": {
+     "calls": 1,
+     "standard_usd": 0.0023
+    },
+    "answer": {
+     "calls": 1,
+     "standard_usd": 0.0049
+    }
+   },
+   "by_model": {
+    "muse-spark-1.3": 5,
+    "muse-voice-transcribe-1.0": 1
+   }
+  },
+  "spend_total_this_checkout": {
+   "billed_usd": 12.446,
+   "standard_usd": 13.282
+  },
+  "host": "Sanjeevs-MacBook-Pro"
+ },
+ "checks": {
+  "phase4": {
+   "result": "passed",
+   "exit": 0,
+   "seconds": 122,
+   "checks": [
+    "OK  API up, demo memory loaded: entities=17, routines=7",
+    "OK  live view: device=1080x2400, frames=1, latency_ms=45, input_refused_without_takeover=True",
+    "OK  task started: task=task-1028-010018-484a",
+    "OK  asked to take over: reason=sign-in needed: password field on screen",
+    "OK  took over, signed in, handed back: status_during_takeover=taken_over",
+    "OK  approval requested and approved by the person: description=tap \"Confirm check-in\" in com.skylark.air (routine skylark_check_in_flight v1), screenshot=True, opening_decided_nothing=True, mcp_token_refused=True",
+    "OK  check-in done in the app: status=done, result=seat: 14C; gate: B12; boarding time: 5:30 AM; boarding group: Group 3; flight: SL 482, routine=skylark_check_in_flight, model_calls=1, checked_in=True, steps=12, step_events=10, step_screenshots=6",
+    "OK  memory updated: memory_step=memory updated: 4 new, 11 same, memory_events=0, notes_excerpt=## Flight: SL 482 · Fri, Oct 30, 2026  [[Trip Chicago · Fri, Oct 30, 2026]]",
+    "OK  MCP: tools, run_task and get_task: tools=['get_task', 'list_routines', 'memory_get', 'memory_note', 'memory_search', 'run_routine', 'run_task'], mcp_task=done, result=gate: B12",
+    "OK  chat answers from memory: reply=Gate B12, from the SkyLark app just now."
+   ],
+   "results": {
+    "gate.json": {
+     "time": "2026-10-28T01:02:11",
+     "summary": {
+      "passed": true,
+      "steps_ok": "10/10",
+      "duration_s": 119.5
+     },
+     "steps": [
+      {
+       "step": "API up, demo memory loaded",
+       "ok": true,
+       "t": 0.1,
+       "entities": 17,
+       "routines": 7
+      },
+      {
+       "step": "live view",
+       "ok": true,
+       "t": 5.9,
+       "device": "1080x2400",
+       "frames": 1,
+       "latency_ms": 45,
+       "input_refused_without_takeover": true
+      },
+      {
+       "step": "task started",
+       "ok": true,
+       "t": 6.0,
+       "task": "task-1028-010018-484a"
+      },
+      {
+       "step": "asked to take over",
+       "ok": true,
+       "t": 18.1,
+       "reason": "sign-in needed: password field on screen"
+      },
+      {
+       "step": "took over, signed in, handed back",
+       "ok": true,
+       "t": 20.6,
+       "status_during_takeover": "taken_over"
+      },
+      {
+       "step": "approval requested and approved by the person",
+       "ok": true,
+       "t": 23.5,
+       "description": "tap \"Confirm check-in\" in com.skylark.air (routine skylark_check_in_flight v1)",
+       "screenshot": true,
+       "opening_decided_nothing": true,
+       "mcp_token_refused": true
+      },
+      {
+       "step": "check-in done in the app",
+       "ok": true,
+       "t": 35.9,
+       "status": "done",
+       "result": "seat: 14C; gate: B12; boarding time: 5:30 AM; boarding group: Group 3; flight: SL 482",
+       "routine": "skylark_check_in_flight",
+       "model_calls": 1,
+       "checked_in": true,
+       "steps": 12,
+       "step_events": 10,
+       "step_screenshots": 6
+      },
+      {
+       "step": "memory updated",
+       "ok": true,
+       "t": 35.9,
+       "memory_step": "memory updated: 4 new, 11 same",
+       "memory_events": 0,
+       "notes_excerpt": "## Flight: SL 482 · Fri, Oct 30, 2026  [[Trip Chicago · Fri, Oct 30, 2026]]\n- Airline: SkyLark Air — email from SkyLark Air, 27 days ago (Oct 1)\n- Number: SL 482 — SkyLark app, just now (also email from SkyLark Air, 27 days ago (Oct 1))\n- Date: Fri, Oct 30, 2026 — SkyLark app, just now (also email from SkyLark Air, 27 days ago (Oct 1))\n- From: Atlanta (ATL) — SkyLark app, just now (also email from"
+      },
+      {
+       "step": "MCP: tools, run_task and get_task",
+       "ok": true,
+       "t": 104.3,
+       "tools": [
+        "get_task",
+        "list_routines",
+        "memory_get",
+        "memory_note",
+        "memory_search",
+        "run_routine",
+        "run_task"
+       ],
+       "mcp_task": "done",
+       "result": "gate: B12"
+      },
+      {
+       "step": "chat answers from memory",
+       "ok": true,
+       "t": 109.5,
+       "reply": "Gate B12, from the SkyLark app just now."
+      }
+     ]
+    }
+   },
+   "api_commit": "5c64da9ae4568ebac6fb4f80302d4c2b775344b2"
+  },
+  "approval_modes": {
+   "result": "passed",
+   "exit": 0,
+   "seconds": 53,
+   "checks": [
+    "OK  your own request, default mode: asked=False (expected False), done, approvals [('approved', 'your request')]",
+    "OK  the same request from MCP: asked=True (expected True), done, approvals [('approved', 'user')]",
+    "OK  MCP with a standing approval on the routine: asked=False (expected False), done, approvals [('approved', 'standing approval')]",
+    "OK  your own request, always ask: asked=True (expected True), done, approvals [('approved', 'user')]"
+   ],
+   "results": {
+    "approval_modes.json": {
+     "time": "2026-10-28T01:03:04",
+     "cases": [
+      {
+       "case": "your own request, default mode",
+       "via": "web",
+       "rules": {
+        "default": "unless_requested",
+        "apps": {},
+        "routines": {}
+       },
+       "asked": false,
+       "expected_ask": false,
+       "status": "done",
+       "checked_in": true,
+       "approvals": [
+        [
+         "approved",
+         "your request"
+        ]
+       ],
+       "ok": true
+      },
+      {
+       "case": "the same request from MCP",
+       "via": "mcp",
+       "rules": {
+        "default": "unless_requested",
+        "apps": {},
+        "routines": {}
+       },
+       "asked": true,
+       "expected_ask": true,
+       "status": "done",
+       "checked_in": true,
+       "approvals": [
+        [
+         "approved",
+         "user"
+        ]
+       ],
+       "ok": true
+      },
+      {
+       "case": "MCP with a standing approval on the routine",
+       "via": "mcp",
+       "rules": {
+        "default": "unless_requested",
+        "apps": {},
+        "routines": {
+         "skylark_check_in_flight": "never"
+        }
+       },
+       "asked": false,
+       "expected_ask": false,
+       "status": "done",
+       "checked_in": true,
+       "approvals": [
+        [
+         "approved",
+         "standing approval"
+        ]
+       ],
+       "ok": true
+      },
+      {
+       "case": "your own request, always ask",
+       "via": "web",
+       "rules": {
+        "default": "always",
+        "apps": {},
+        "routines": {}
+       },
+       "asked": true,
+       "expected_ask": true,
+       "status": "done",
+       "checked_in": true,
+       "approvals": [
+        [
+         "approved",
+         "user"
+        ]
+       ],
+       "ok": true
+      }
+     ]
+    }
+   },
+   "api_commit": "5c64da9ae4568ebac6fb4f80302d4c2b775344b2"
+  },
+  "phase5": {
+   "result": "passed",
+   "exit": 0,
+   "seconds": 50,
+   "checks": [
+    "OK  fake push service subscribed: service={'id': 'push-47f622eb', 'service': '127.0.0.1:50201'}",
+    "OK  takeover request → push: push_ms=45, title=Envoy needs you to take over, url=/?phone=envoy-test&task=task-1028-010743-8992",
+    "OK  approval request → push: push_ms=2, title=Envoy needs your OK, body=tap \"Confirm check-in\" in com.skylark.air (routine skylark_check_in_flight v1) · Check me in for my flight, url=/approve/?id=appr-1028-010800-ca9a, encrypted=aes128gcm, urgency=high, no_nonce_in_push=True, still_pending=True",
+    "OK  approved by the person (session + nonce), not by the push: pushes_before=1",
+    "OK  check-in done; finished task → push: status=done, result=seat: 14C; gate: B12; boarding time: 5:30 AM; boarding group: Group 3; flight: SL 482, checked_in=True, push_title=Done: Check me in for my flight, pushes=['takeover', 'approval', 'task']",
+    "OK  boarding-pass screenshot → facts on SL 482 (photo source), image deleted: summary=Saved to Flight SL 482 · Fri, Oct 30, 2026, Person Maya Patel: 1 new, 8 confirmed., facts={'same': 8, 'replaced': 1}, dropped=[], photo_facts={'boarding_group': '3', 'boarding_time': '5:30 AM', 'date': 'Fri, Oct 30, 2026', 'from': 'Atlanta (ATL)', 'gate': 'B12', 'number': 'SL 482', 'seat': '14C', 'to': 'Chicago (ORD)'}, accuracy=7/7, flights=7→7, trips=7→7, deleted=True, files_left=[], tok",
+    "OK  voice → Muse Voice Transcribe → chat: said=What's my gate for my Chicago flight?, heard=What's my gate for my Chicago flight?, partials=6, connect_ms=439, ready_ms=447, audio_ms=2638, release_to_text_ms=87, chat_ms=4469, release_to_reply_ms=4555, cost_usd=0.0001, reply=Gate B12, from your screenshot just now., spoken=Gate B12, from your screenshot just now., reply_kind=memory",
+    "OK  live view over the tailnet (HTTPS + Tailscale, from this Mac): host=https://sanjeevs-macbook-pro.tailffb391.ts.net:8443, device=1080x2400, frames=54, frame_ms_p50=21, frame_ms_max=32, rtt_ms_p50=0, kb_per_frame=80"
+   ],
+   "results": {
+    "gate.json": {
+     "time": "2026-10-28T01:08:30",
+     "summary": {
+      "passed": true,
+      "steps_ok": "8/8",
+      "duration_s": 49.5,
+      "parts": [
+       "push",
+       "photo",
+       "voice",
+       "live"
+      ]
+     },
+     "steps": [
+      {
+       "step": "fake push service subscribed",
+       "ok": true,
+       "t": 2.2,
+       "service": {
+        "id": "push-47f622eb",
+        "service": "127.0.0.1:50201"
+       }
+      },
+      {
+       "step": "takeover request → push",
+       "ok": true,
+       "t": 13.5,
+       "push_ms": 45,
+       "title": "Envoy needs you to take over",
+       "url": "/?phone=envoy-test&task=task-1028-010743-8992"
+      },
+      {
+       "step": "approval request → push",
+       "ok": true,
+       "t": 19.0,
+       "push_ms": 2,
+       "title": "Envoy needs your OK",
+       "body": "tap \"Confirm check-in\" in com.skylark.air (routine skylark_check_in_flight v1) · Check me in for my flight",
+       "url": "/approve/?id=appr-1028-010800-ca9a",
+       "encrypted": "aes128gcm",
+       "urgency": "high",
+       "no_nonce_in_push": true,
+       "still_pending": true
+      },
+      {
+       "step": "approved by the person (session + nonce), not by the push",
+       "ok": true,
+       "t": 19.0,
+       "pushes_before": 1
+      },
+      {
+       "step": "check-in done; finished task → push",
+       "ok": true,
+       "t": 20.4,
+       "status": "done",
+       "result": "seat: 14C; gate: B12; boarding time: 5:30 AM; boarding group: Group 3; flight: SL 482",
+       "checked_in": true,
+       "push_title": "Done: Check me in for my flight",
+       "pushes": [
+        "takeover",
+        "approval",
+        "task"
+       ]
+      },
+      {
+       "step": "boarding-pass screenshot → facts on SL 482 (photo source), image deleted",
+       "ok": true,
+       "t": 33.1,
+       "summary": "Saved to Flight SL 482 · Fri, Oct 30, 2026, Person Maya Patel: 1 new, 8 confirmed.",
+       "facts": {
+        "same": 8,
+        "replaced": 1
+       },
+       "dropped": [],
+       "photo_facts": {
+        "boarding_group": "3",
+        "boarding_time": "5:30 AM",
+        "date": "Fri, Oct 30, 2026",
+        "from": "Atlanta (ATL)",
+        "gate": "B12",
+        "number": "SL 482",
+        "seat": "14C",
+        "to": "Chicago (ORD)"
+       },
+       "accuracy": "7/7",
+       "flights": "7→7",
+       "trips": "7→7",
+       "deleted": true,
+       "files_left": [],
+       "token_can_read": false,
+       "ocr_ms": 480.4,
+       "model_ms": 10997.5,
+       "round_trip_s": 11.51,
+       "cost_usd": 0.01099
+      },
+      {
+       "step": "voice → Muse Voice Transcribe → chat",
+       "ok": true,
+       "t": 41.1,
+       "said": "What's my gate for my Chicago flight?",
+       "heard": "What's my gate for my Chicago flight?",
+       "partials": 6,
+       "connect_ms": 439,
+       "ready_ms": 447,
+       "audio_ms": 2638,
+       "release_to_text_ms": 87,
+       "chat_ms": 4469,
+       "release_to_reply_ms": 4555,
+       "cost_usd": 0.0001,
+       "reply": "Gate B12, from your screenshot just now.",
+       "spoken": "Gate B12, from your screenshot just now.",
+       "reply_kind": "memory"
+      },
+      {
+       "step": "live view over the tailnet (HTTPS + Tailscale, from this Mac)",
+       "ok": true,
+       "t": 49.5,
+       "host": "https://sanjeevs-macbook-pro.tailffb391.ts.net:8443",
+       "device": "1080x2400",
+       "frames": 54,
+       "frame_ms_p50": 21,
+       "frame_ms_max": 32,
+       "rtt_ms_p50": 0,
+       "kb_per_frame": 80
+      }
+     ]
+    }
+   },
+   "api_commit": "849e51a660c30d9656ccbcd60fb06d056ee76fbe"
+  }
+ }
+}

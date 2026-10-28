@@ -1,0 +1,146 @@
+routine: skylark_add_known_traveler_number
+app: com.skylark.air
+version: 1
+status: retired
+intent: Add a known traveler number to a SkyLark flight trip
+description: Opens My Trips in SkyLark Air, selects the trip for the requested city, enters the user's known traveler number from memory, and
+  saves it.
+patterns: [Add my known traveler number to my trip, Put my known traveler number on my booking, Add my KTN to my trip, Save my known traveler
+    number to my flight]
+outputs: [known_traveler_number, save_confirmation, confirmation_code]
+start: fresh_launch
+inputs:
+  trip_city: {type: text, description: City of the trip to update, example: Denver}
+  user_known_traveler_number: {type: text, description: The user's known traveler number, from_memory: user.known_traveler_number, example: '55501234'}
+steps:
+- id: open_my_trips
+  intent: Tap 'My Trips' to open the trips list
+  pre:
+  - {app_foreground: com.skylark.air}
+  - element_present: {resource_id: screen_title, text: SkyLark Air, kind: Text}
+  action:
+    tap:
+      resource_id: nav_trips
+      text: My Trips
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.373, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: screen_title, text: My Trips, kind: Text}
+  - element_present: {resource_id: nav_trips, text: My Trips, kind: Text}
+  risk: reversible
+  note: trace step 5
+- id: find_select_trip
+  intent: "Scroll to {{trip_city}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: trip_row_*
+        text_has: "{{trip_city}}"
+        kind: Button
+        cls: View
+        parent: list_trips
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: trip_row_*
+      text_has: "{{trip_city}}"
+      kind: Button
+      cls: View
+      parent: list_trips
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: select_trip
+  intent: "Tap the trip to {{trip_city}} in the list"
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      resource_id: trip_row_*
+      text_has: "{{trip_city}}"
+      kind: Button
+      cls: View
+      parent: list_trips
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: screen_title
+      text: "Trip to {{trip_city}}"
+      kind: Text
+  - element_present: {resource_id: btn_checkin, text: Check in, kind: Button}
+  risk: reversible
+  note: trace step 6
+- id: enter_known_traveler_number
+  intent: "Type {{user_known_traveler_number}} into the 'Known traveler number' field"
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    type:
+      field:
+        resource_id: field_ktn
+        text: Known traveler number
+        hint: Known traveler number
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.5, 0.678]
+      value: "{{user_known_traveler_number}}"
+  post:
+  - field_equals:
+      field: {resource_id: field_ktn, text: Known traveler number, kind: EditText}
+      value: "{{user_known_traveler_number}}"
+  risk: reversible
+  note: trace step 7
+- id: save_known_traveler_number
+  intent: Tap 'Save' to save the known traveler number
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      resource_id: btn_save_ktn
+      text: Save
+      kind: Button
+      cls: View
+      siblings: [Known traveler number]
+      in_list: false
+      position: [0.5, 0.753]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  extract:
+    known_traveler_number:
+      near: Known traveler number
+      locator: {resource_id: field_ktn, kind: EditText}
+      first_in_list: false
+      next_element: false
+      expect_digits: true
+    save_confirmation:
+      locator: {resource_id: text_ktn_saved, kind: Text}
+      first_in_list: false
+      next_element: false
+      expect_digits: false
+    confirmation_code:
+      near: Confirmation
+      locator: {resource_id: row_confirmation, kind: Text}
+      segment: 1
+      first_in_list: false
+      next_element: false
+      expect_digits: false
+  note: trace step 8
+done:
+- text_visible: "{{user_known_traveler_number}}"
+changes: [v1 compiled from f7-1027215614-src-add_ktn-a1]
+compiled_from:
+  task_id: f7-1027215614-src-add_ktn-a1
+  goal: Add my known traveler number to my Denver trip.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-27 21:58:48"
+  trace_steps_kept: [5, 6, 7, 8]
+  trace_steps_dropped: 4
+  cost_usd: 0.058

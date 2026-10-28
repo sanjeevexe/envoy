@@ -1,7 +1,7 @@
 routine: skylark_look_up_trip
 app: com.skylark.air
 version: 1
-status: active
+status: retired
 intent: Look up a SkyLark trip by confirmation code
 description: Open SkyLark Air My Trips, select the trip matching the given confirmation code, and report where that trip goes.
 patterns: [look up my trip, where does my trip go, find my trip with my confirmation code, tell me my trip destination]

@@ -1,29 +1,17 @@
 {
  "meta": {
   "suite": "memory",
-  "run_id": "1027220545",
-  "started": "2026-10-28T02:05:45+00:00",
-  "finished": "2026-10-28T02:06:20+00:00",
-  "wall_s": 35.0,
+  "run_id": "1028003834",
+  "started": "2026-10-28T04:38:34+00:00",
+  "finished": "2026-10-28T04:42:39+00:00",
+  "wall_s": 245.3,
   "code": {
-   "commit": "ad9a67be7e933625e87f3efda1cdee824be11b73",
-   "short": "ad9a67b",
+   "commit": "5c3d716bcf6130ba31642de6c1e80c5cee819a20",
+   "short": "5c3d716",
    "tags": [],
    "is_eval_final": false,
    "dirty": [
-    "ackend/memory/retrieval.py",
-    "backend/models/prompts.py",
-    "backend/routines/compiler.py",
-    "eval/baselines.py",
-    "testapps/skylark/app/src/main/java/com/skylark/air/Screens.kt",
-    "testapps/skylark/app/src/main/java/com/skylark/air/Store.kt",
-    "backend/routines/lifecycle.py",
-    "eval/capture_safety.py",
-    "eval/final_common.py",
-    "eval/final_core.py",
-    "eval/final_memory.py",
-    "eval/final_safety.py",
-    "eval/run_final.py"
+    "val/final_memory.py"
    ],
    "branch": "main"
   },
@@ -70,27 +58,27 @@
   },
   "devices": [],
   "cost": {
-   "input_tokens": 13206,
-   "cached_tokens": 5400,
-   "output_tokens": 10276,
-   "reasoning_tokens": 9243,
-   "calls": 24,
+   "input_tokens": 32882,
+   "cached_tokens": 19156,
+   "output_tokens": 29478,
+   "reasoning_tokens": 22964,
+   "calls": 20,
    "errors": 0,
-   "billed_usd": 0.0542,
-   "standard_usd": 0.0542,
+   "billed_usd": 0.1453,
+   "standard_usd": 0.1453,
    "by_job": {
-    "answer": {
-     "calls": 24,
-     "standard_usd": 0.0542
+    "extract": {
+     "calls": 20,
+     "standard_usd": 0.1453
     }
    },
    "by_model": {
-    "muse-spark-1.3": 24
+    "muse-spark-1.3": 20
    }
   },
   "spend_total_this_checkout": {
-   "billed_usd": 9.198,
-   "standard_usd": 9.835
+   "billed_usd": 11.759,
+   "standard_usd": 12.563
   },
   "host": "Sanjeevs-MacBook-Pro"
  },
@@ -386,5 +374,979 @@
    }
   ],
   "questions": 24
+ },
+ "emails_large": {
+  "items": 28,
+  "kind": "emails",
+  "attributes": {
+   "found": 211,
+   "wrong": 0,
+   "missing": 3
+  },
+  "by_method": {
+   "markup": {
+    "found": 81,
+    "wrong": 0,
+    "missing": 0
+   },
+   "model": {
+    "found": 130,
+    "wrong": 0,
+    "missing": 3
+   }
+  },
+  "matching": {
+   "bookings": 18,
+   "one_trip_one_flight": 18,
+   "trips_without_a_booking": [],
+   "cancellation_applied": true,
+   "same_city_kept_apart": true,
+   "traceable": true
+  },
+  "rows": [
+   {
+    "email": "000-plain-KX7Q2M",
+    "kind": "plain",
+    "method": "model",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "001-markup-PT4R8Z",
+    "kind": "markup",
+    "method": "markup",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "002-forward-PT4R8Z",
+    "kind": "forward",
+    "method": "model",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "003-plain-8V7EN3",
+    "kind": "plain",
+    "method": "model",
+    "found": 8,
+    "wrong": 0,
+    "missing": 1,
+    "dropped": []
+   },
+   {
+    "email": "004-markup-UYVWMU",
+    "kind": "markup",
+    "method": "markup",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "005-plain-BQ6U0H",
+    "kind": "plain",
+    "method": "model",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "006-markup-JQYVV3",
+    "kind": "markup",
+    "method": "markup",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "007-forward-JQYVV3",
+    "kind": "forward",
+    "method": "model",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "008-plain-LAJ2PW",
+    "kind": "plain",
+    "method": "model",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "009-markup-10METT",
+    "kind": "markup",
+    "method": "markup",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "010-plain-6OUWC8",
+    "kind": "plain",
+    "method": "model",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "011-markup-F6LP5K",
+    "kind": "markup",
+    "method": "markup",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "012-forward-F6LP5K",
+    "kind": "forward",
+    "method": "model",
+    "found": 8,
+    "wrong": 0,
+    "missing": 1,
+    "dropped": []
+   },
+   {
+    "email": "013-plain-8UAHRB",
+    "kind": "plain",
+    "method": "model",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "014-markup-UR32NZ",
+    "kind": "markup",
+    "method": "markup",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "015-plain-3AHVAO",
+    "kind": "plain",
+    "method": "model",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "016-markup-1VA6V9",
+    "kind": "markup",
+    "method": "markup",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "017-forward-1VA6V9",
+    "kind": "forward",
+    "method": "model",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "018-plain-BVTQ5K",
+    "kind": "plain",
+    "method": "model",
+    "found": 8,
+    "wrong": 0,
+    "missing": 1,
+    "dropped": []
+   },
+   {
+    "email": "019-markup-X1L6GD",
+    "kind": "markup",
+    "method": "markup",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "020-plain-NG1GR1",
+    "kind": "plain",
+    "method": "model",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "021-markup-DN7Q4X",
+    "kind": "markup",
+    "method": "markup",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "022-forward-DN7Q4X",
+    "kind": "forward",
+    "method": "model",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "023-seat-PT4R8Z",
+    "kind": "seat_change",
+    "method": "model",
+    "found": 3,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "024-cancel-DN7Q4X",
+    "kind": "cancellation",
+    "method": "model",
+    "found": 2,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "025-promo-Chicago",
+    "kind": "promo",
+    "method": "model",
+    "found": 0,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "026-promo-Phoenix",
+    "kind": "promo",
+    "method": "model",
+    "found": 0,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "027-receipt",
+    "kind": "receipt",
+    "method": "model",
+    "found": 2,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   }
+  ],
+  "matching_rows": [
+   {
+    "booking": "KX7Q2M",
+    "city": "Chicago",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "PT4R8Z",
+    "city": "Denver",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "8V7EN3",
+    "city": "Louisville",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "UYVWMU",
+    "city": "Savannah",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "BQ6U0H",
+    "city": "Boise",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "JQYVV3",
+    "city": "Tampa",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "LAJ2PW",
+    "city": "Memphis",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "10METT",
+    "city": "Pittsburgh",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "6OUWC8",
+    "city": "Spokane",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "F6LP5K",
+    "city": "Minneapolis",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "8UAHRB",
+    "city": "Tucson",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "UR32NZ",
+    "city": "Buffalo",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "3AHVAO",
+    "city": "Omaha",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "1VA6V9",
+    "city": "Raleigh",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "BVTQ5K",
+    "city": "Madison",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "X1L6GD",
+    "city": "Richmond",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "NG1GR1",
+    "city": "Portland",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "DN7Q4X",
+    "city": "Denver",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   }
+  ],
+  "run": {
+   "run_id": "1028003158",
+   "commit": "5c3d716",
+   "is_eval_final": false,
+   "dirty": true,
+   "cost": {
+    "input_tokens": 58994,
+    "cached_tokens": 38418,
+    "output_tokens": 65428,
+    "reasoning_tokens": 49565,
+    "calls": 50,
+    "errors": 0,
+    "billed_usd": 0.3095,
+    "standard_usd": 0.3095,
+    "by_job": {
+     "extract": {
+      "calls": 50,
+      "standard_usd": 0.3095
+     }
+    },
+    "by_model": {
+     "muse-spark-1.3": 50
+    }
+   }
+  }
+ },
+ "emails_new": {
+  "items": 15,
+  "kind": "emails",
+  "attributes": {
+   "found": 95,
+   "wrong": 0,
+   "missing": 2
+  },
+  "by_method": {
+   "markup": {
+    "found": 36,
+    "wrong": 0,
+    "missing": 0
+   },
+   "model": {
+    "found": 59,
+    "wrong": 0,
+    "missing": 2
+   }
+  },
+  "matching": {
+   "bookings": 8,
+   "one_trip_one_flight": 8,
+   "trips_without_a_booking": [],
+   "cancellation_applied": true,
+   "same_city_kept_apart": null,
+   "traceable": true
+  },
+  "rows": [
+   {
+    "email": "000-plain-L65B4K",
+    "kind": "plain",
+    "method": "model",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "001-markup-PO2DRV",
+    "kind": "markup",
+    "method": "markup",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "002-forward-PO2DRV",
+    "kind": "forward",
+    "method": "model",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "003-plain-TKW95R",
+    "kind": "plain",
+    "method": "model",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "004-markup-GY134O",
+    "kind": "markup",
+    "method": "markup",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "005-plain-N7YFTD",
+    "kind": "plain",
+    "method": "model",
+    "found": 8,
+    "wrong": 0,
+    "missing": 1,
+    "dropped": []
+   },
+   {
+    "email": "006-markup-NQ15N1",
+    "kind": "markup",
+    "method": "markup",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "007-forward-NQ15N1",
+    "kind": "forward",
+    "method": "model",
+    "found": 8,
+    "wrong": 0,
+    "missing": 1,
+    "dropped": []
+   },
+   {
+    "email": "008-plain-H5O3XS",
+    "kind": "plain",
+    "method": "model",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "009-markup-63INOU",
+    "kind": "markup",
+    "method": "markup",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "010-seat-PO2DRV",
+    "kind": "seat_change",
+    "method": "model",
+    "found": 3,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "011-cancel-63INOU",
+    "kind": "cancellation",
+    "method": "model",
+    "found": 2,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "012-promo-Spokane",
+    "kind": "promo",
+    "method": "model",
+    "found": 0,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "013-promo-Phoenix",
+    "kind": "promo",
+    "method": "model",
+    "found": 0,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   },
+   {
+    "email": "014-receipt",
+    "kind": "receipt",
+    "method": "model",
+    "found": 2,
+    "wrong": 0,
+    "missing": 0,
+    "dropped": []
+   }
+  ],
+  "matching_rows": [
+   {
+    "booking": "L65B4K",
+    "city": "Spokane",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "PO2DRV",
+    "city": "Minneapolis",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "TKW95R",
+    "city": "Dallas",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "GY134O",
+    "city": "Boise",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "N7YFTD",
+    "city": "Pittsburgh",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "NQ15N1",
+    "city": "Madison",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "H5O3XS",
+    "city": "Savannah",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   },
+   {
+    "booking": "63INOU",
+    "city": "Sacramento",
+    "trips": 1,
+    "flights": 1,
+    "ok": true
+   }
+  ],
+  "run": {
+   "run_id": "1028003158",
+   "commit": "5c3d716",
+   "is_eval_final": false,
+   "dirty": true,
+   "cost": {
+    "input_tokens": 58994,
+    "cached_tokens": 38418,
+    "output_tokens": 65428,
+    "reasoning_tokens": 49565,
+    "calls": 50,
+    "errors": 0,
+    "billed_usd": 0.3095,
+    "standard_usd": 0.3095,
+    "by_job": {
+     "extract": {
+      "calls": 50,
+      "standard_usd": 0.3095
+     }
+    },
+    "by_model": {
+     "muse-spark-1.3": 50
+    }
+   }
+  }
+ },
+ "screens": {
+  "items": 12,
+  "kind": "app screens",
+  "attributes": {
+   "found": 80,
+   "wrong": 0,
+   "missing": 4
+  },
+  "rows": [
+   {
+    "booking": "KX7Q2M",
+    "city": "Chicago",
+    "found": 6,
+    "wrong": 0,
+    "missing": 1,
+    "missing_attrs": [
+     "Trip.confirmation_code"
+    ],
+    "evidence": "13/13",
+    "dropped": []
+   },
+   {
+    "booking": "PT4R8Z",
+    "city": "Denver",
+    "found": 7,
+    "wrong": 0,
+    "missing": 0,
+    "missing_attrs": [],
+    "evidence": "16/16",
+    "dropped": []
+   },
+   {
+    "booking": "LRK51J",
+    "city": "Spokane",
+    "found": 7,
+    "wrong": 0,
+    "missing": 0,
+    "missing_attrs": [],
+    "evidence": "14/14",
+    "dropped": []
+   },
+   {
+    "booking": "M1W6JU",
+    "city": "Dallas",
+    "found": 6,
+    "wrong": 0,
+    "missing": 1,
+    "missing_attrs": [
+     "Trip.confirmation_code"
+    ],
+    "evidence": "13/13",
+    "dropped": []
+   },
+   {
+    "booking": "9RF5TP",
+    "city": "Portland",
+    "found": 7,
+    "wrong": 0,
+    "missing": 0,
+    "missing_attrs": [],
+    "evidence": "14/14",
+    "dropped": []
+   },
+   {
+    "booking": "4VPHVZ",
+    "city": "Louisville",
+    "found": 6,
+    "wrong": 0,
+    "missing": 1,
+    "missing_attrs": [
+     "Trip.confirmation_code"
+    ],
+    "evidence": "13/13",
+    "dropped": []
+   },
+   {
+    "booking": "TYV7EN",
+    "city": "Sacramento",
+    "found": 7,
+    "wrong": 0,
+    "missing": 0,
+    "missing_attrs": [],
+    "evidence": "14/14",
+    "dropped": []
+   },
+   {
+    "booking": "L3N6SJ",
+    "city": "Minneapolis",
+    "found": 6,
+    "wrong": 0,
+    "missing": 1,
+    "missing_attrs": [
+     "Trip.confirmation_code"
+    ],
+    "evidence": "13/13",
+    "dropped": []
+   },
+   {
+    "booking": "8GYFPZ",
+    "city": "Buffalo",
+    "found": 7,
+    "wrong": 0,
+    "missing": 0,
+    "missing_attrs": [],
+    "evidence": "14/14",
+    "dropped": []
+   },
+   {
+    "booking": "S4PDGI",
+    "city": "Omaha",
+    "found": 7,
+    "wrong": 0,
+    "missing": 0,
+    "missing_attrs": [],
+    "evidence": "15/15",
+    "dropped": []
+   },
+   {
+    "booking": "MQZ5ZZ",
+    "city": "Boise",
+    "found": 7,
+    "wrong": 0,
+    "missing": 0,
+    "missing_attrs": [],
+    "evidence": "14/14",
+    "dropped": []
+   },
+   {
+    "booking": "CS6BIJ",
+    "city": "Albuquerque",
+    "found": 7,
+    "wrong": 0,
+    "missing": 0,
+    "missing_attrs": [],
+    "evidence": "15/15",
+    "dropped": []
+   }
+  ],
+  "run": {
+   "run_id": "1028003834",
+   "commit": "5c3d716",
+   "is_eval_final": false,
+   "dirty": true,
+   "cost": {
+    "input_tokens": 32882,
+    "cached_tokens": 19156,
+    "output_tokens": 29478,
+    "reasoning_tokens": 22964,
+    "calls": 20,
+    "errors": 0,
+    "billed_usd": 0.1453,
+    "standard_usd": 0.1453,
+    "by_job": {
+     "extract": {
+      "calls": 20,
+      "standard_usd": 0.1453
+     }
+    },
+    "by_model": {
+     "muse-spark-1.3": 20
+    }
+   }
+  }
+ },
+ "photos": {
+  "items": 7,
+  "kind": "screenshots",
+  "attributes": {
+   "found": 73,
+   "wrong": 0,
+   "missing": 0
+  },
+  "merged_into_known": 7,
+  "other_flight_created_nothing": true,
+  "all_deleted": true,
+  "rows": [
+   {
+    "screen": "home_chicago",
+    "kind": "home",
+    "found": 7,
+    "wrong": 0,
+    "missing": 0,
+    "wrong_detail": [],
+    "new_flights": 0,
+    "new_trips": 0,
+    "deleted": true
+   },
+   {
+    "screen": "details_chicago",
+    "kind": "details",
+    "found": 13,
+    "wrong": 0,
+    "missing": 0,
+    "wrong_detail": [],
+    "new_flights": 0,
+    "new_trips": 0,
+    "deleted": true
+   },
+   {
+    "screen": "bp_chicago",
+    "kind": "boarding_pass",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "wrong_detail": [],
+    "new_flights": 0,
+    "new_trips": 0,
+    "deleted": true
+   },
+   {
+    "screen": "details_denver",
+    "kind": "details",
+    "found": 13,
+    "wrong": 0,
+    "missing": 0,
+    "wrong_detail": [],
+    "new_flights": 0,
+    "new_trips": 0,
+    "deleted": true
+   },
+   {
+    "screen": "bp_denver",
+    "kind": "boarding_pass",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "wrong_detail": [],
+    "new_flights": 0,
+    "new_trips": 0,
+    "deleted": true
+   },
+   {
+    "screen": "details_savannah",
+    "kind": "details",
+    "found": 13,
+    "wrong": 0,
+    "missing": 0,
+    "wrong_detail": [],
+    "new_flights": 0,
+    "new_trips": 0,
+    "deleted": true
+   },
+   {
+    "screen": "bp_savannah",
+    "kind": "boarding_pass",
+    "found": 9,
+    "wrong": 0,
+    "missing": 0,
+    "wrong_detail": [],
+    "new_flights": 0,
+    "new_trips": 0,
+    "deleted": true
+   },
+   {
+    "screen": "status_louisville",
+    "kind": "status",
+    "negative": true,
+    "stored": 0,
+    "new_flights": 0,
+    "new_trips": 0,
+    "deleted": true
+   }
+  ],
+  "run": {
+   "run_id": "1028003834",
+   "commit": "5c3d716",
+   "is_eval_final": false,
+   "dirty": true,
+   "cost": {
+    "input_tokens": 32882,
+    "cached_tokens": 19156,
+    "output_tokens": 29478,
+    "reasoning_tokens": 22964,
+    "calls": 20,
+    "errors": 0,
+    "billed_usd": 0.1453,
+    "standard_usd": 0.1453,
+    "by_job": {
+     "extract": {
+      "calls": 20,
+      "standard_usd": 0.1453
+     }
+    },
+    "by_model": {
+     "muse-spark-1.3": 20
+    }
+   }
+  }
  }
 }

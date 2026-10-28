@@ -313,7 +313,7 @@ class AndroidDevice:
                 self._launchers[package] = comp
         if not comp:
             raise RuntimeError(f"{package} has no launcher activity (is it installed?)")
-        self.adb.shell(f"am start -n {comp}")
+        self.adb.shell(["am", "start", "-n", comp])  # an argument list: a launcher like ".Shell$HomeActivity" must not meet the shell
 
     async def launch(self, package: str, fresh: bool = False) -> None:
         """Bring an app to the front; `fresh` force-stops it first (a routine's start on real apps)."""
