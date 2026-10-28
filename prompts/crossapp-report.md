@@ -40,7 +40,7 @@ place DoorDash shows for a latte?"):
 | `backend/api/app.py` | wire `CrossApp` in `build()` (+2) |
 | `web/components/Tasks.tsx`, `web/lib/api.ts`, `web/app/page.tsx` | parts under their parent, part cards with live status |
 | `backend/tests/test_crossapp.py` | 27 offline tests |
-| `eval/run_crossapp.py`, `eval/results/crossapp/` | end to end and its evidence |
+| `eval/run_crossapp.py`, `eval/smoke_crossapp.py`, `eval/results/crossapp/` | end to end, the device check of the follow-ups, and their evidence |
 
 Not touched: `backend/agent/`, `backend/routines/`, `backend/policy/`, `backend/memory/`, `backend/models/`, existing
 `eval/` files.
@@ -113,7 +113,26 @@ library (SkyLark + Phase 7's `real_compiled`); standard tier; every approval dec
 - **Spend**: $0.59 in 244 standard-tier calls in this worktree today (the 10 kept runs: 174 calls, $0.42; the rest are
   the first R1 pair, the pre-fix R2 runs and the device-failure runs).
 
+### Device check of the follow-ups (053adf0) on envoy-real (`eval/results/crossapp/smoke.json`, `eval/smoke_crossapp.py`)
+
+One run of each on a cold-booted envoy-real (07:46–07:50): a single-app Starbucks task, R1 through chat, R1 through
+MCP `run_task` over HTTP (the API copy's own bearer token), and a single-app DoorDash task. Every task's step list
+matched its run's trace step for step, and every step has its picture (8/8 for each Starbucks part, 2/2 for each
+DoorDash part). Pushes Envoy decided to send: exactly one per question (each cross-app parent's "Done", none from its
+parts) and one per single-app task. The copy has no push subscription, so nothing was delivered. MCP returned 200 with
+`parts` and the parent answered. No approvals were asked; $0.05 in 16 standard-tier calls. The Starbucks part
+failed every time ("outputs not found: calories"), and the cause is the app's state, not this change. Last night's runs
+left five recent searches in the Starbucks app. The routine's `select_recent_search_result` locator (`in_list: false`)
+no longer matches that longer list (it waited 5 s and skipped). Its repair then tapped a recent search, which opens a
+results list, not the drink (`smoke_starbucks_results_list.jpg`), and the repair's after-checks accepted it. DoorDash
+answered each time (Philz Coffee), and the cross-app answers named Starbucks as not checked.
+
 ## Not done
+
+- **The Starbucks calories routine on envoy-real now** (not my files): it fails while the app shows a longer
+  recent-search list (above). Its step would need a locator that also finds the entry in a list. The repair would need
+  to check that the drink's page opened. Clearing the app's search history would hide the problem rather than fix it,
+  so I left it.
 
 - **Two real phones at once.** Not granted (AndroidWorld held the second slot); proven offline only. `eval/run_crossapp.py
   --questions T1,T2` is ready: it seeds SkyLark on envoy-test the way the routine suites do (untested on a device).
