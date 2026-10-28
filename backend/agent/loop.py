@@ -50,7 +50,7 @@ class RunConfig:
     plan_effort: str = "low"
     plan: bool = True
     screenshots: Literal["auto", "never", "always"] = "auto"
-    max_done_rejections: int = 2
+    max_done_rejections: int = 1  # the plan's check is written before the app is seen; AndroidWorld: 6/6 rejections were wrong
     vision: Literal["hybrid", "grounding", "sam", "step"] = "hybrid"  # how a tap_point's target is found (Phase 6: agent/vision.py)
 
 
@@ -345,8 +345,10 @@ class AgentRunner:
                     rejections += 1
                     if rejections > self.config.max_done_rejections:
                         return finish("done_unverified", result, chk)
-                    feedback = (f"Your done was rejected: {chk.detail}. If the goal is really done, get to the screen that shows it "
-                                f"(or state the answer exactly as the screen shows it); otherwise keep going.")
+                    feedback = (f"Your done was not confirmed: the plan's check found that {chk.detail}. That check was written before "
+                                f"seeing this app, so it may expect words the app doesn't use. If this screen shows the goal is "
+                                f"done, answer done again now and it will be accepted; do not undo or redo finished work. If "
+                                f"something is still missing, do only that.")
                     history.append(f"step {step}: done rejected by the success check ({chk.detail})")
                     continue
 

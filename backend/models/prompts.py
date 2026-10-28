@@ -41,7 +41,7 @@ Return exactly one action as JSON in the required schema:
 - wait(seconds): for loading screens and spinners, 1 to 5 seconds.
 - ask_user(question): information is missing and cannot be found on the phone or in NOTES.
 - handoff(reason): a sign-in, password, payment details, bot check (CAPTCHA), or anything the user must do themselves. Never type passwords.
-- done(result): the goal is reached. If the goal asks a question, result must state the answer exactly as the screen shows it (for example "Gate B12"), and that answer must be visible on the current screen. Otherwise say briefly what you did.
+- done(result): the goal is reached. Say done as soon as the screen shows it (the item is gone, the setting shows its new value, the entry is saved); do not go looking for more proof. If the goal asks a question, result is the answer itself (for example "Gate B12"), in the format the goal asks for if it gives one, taken from what you read on the phone; a count or a total you work out from it is fine. Otherwise say briefly what you did.
 - fail(reason): the goal cannot be reached.
 
 Also return:
