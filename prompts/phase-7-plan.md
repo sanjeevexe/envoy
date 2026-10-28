@@ -102,3 +102,11 @@ If the phone never comes, every document says so plainly.
 - The Phase 6 gate passed on the real phone with its numbers recorded (or every document says the phone never came).
 - Every suite above ran on `eval-final`; `eval/results/final/report.md` and its charts exist; the design doc's Evaluation metrics are filled in from them.
 - `docs/phase-7-results.md`, both copies of the design doc, `THIRD_PARTY.md`, `README.md` and `docs/meta-feedback.md` are final; `prompts/submission-notes.md` has the final numbers; everything is committed and pushed.
+
+## Where it stands (Oct 28, early morning)
+
+Measurement passes are done for every suite; the fixes they found are in `docs/phase-7-results.md` (findings 1–24), each with a test. Not final numbers: everything reruns on `eval-final`.
+
+- **Left before the freeze:** the phone (tonight, needs you: USB debugging, the iPhone approval); AndroidWorld's results from its branch (and your merge decision by Nov 1); one more real-app pass if a fix lands.
+- **Nov 2:** tag `eval-final`, `eval/run_final.sh` (~4.5 h, ~$5.7), read the shape-graded real-app answers by hand against their saved screens (`real_hand_checks.json`; the suite prints the ones waiting), `run_final.py report`, then the documents: both design-doc copies (live doc last read at rev 144, unchanged since), `docs/phase-7-results.md`, README, THIRD_PARTY, meta-feedback, submission notes.
+- **Environment notes:** `envoy-real`'s system server died twice under load (`DEAD_OBJECT`); a clean `scripts/stop_emulator.sh envoy-real` and cold start fixed it each time. The routine library (`eval/results/final/library/compiled`) holds the measurement-pass compiles; flight_status there was recompiled from its saved Wonder answer for finding 24.

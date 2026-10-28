@@ -43,6 +43,7 @@ git describe --exact-match --tags HEAD 2>/dev/null | grep -qx eval-final || echo
 
 if step compile; then only envoy-test; run compile compile; fi
 if step systems; then only envoy-test; run systems systems; fi
+if step tiers; then only envoy-test; run tiers systems --systems agent --layouts 0 --seeds 1 --tries 1 --contributor --name systems-contributor; fi
 if step repeats; then only envoy-test; run repeats repeats; fi
 if step change; then only envoy-test; run change change; run sizes-test sizes --device envoy-test; fi
 if step injection; then only envoy-test; run injection injection; fi

@@ -242,6 +242,11 @@ def _render(name: str, d: dict[str, Any]) -> str | None:
     return None
 
 
+def _demote(text: str) -> str:
+    """A suite's own headings, one level under its section in the report."""
+    return re.sub(r"(?m)^(#{2,5}) ", r"#\1 ", text)
+
+
 def _body(name: str, d: dict[str, Any] | None = None) -> str:
     from final_common import header
     if d is not None and (body := _render(name, d)) is not None:
@@ -401,13 +406,35 @@ def build() -> None:
         md += [f"## {title}", ""]
         if charts.get(n):
             md += [f"![{title}]({charts[n]})", ""]
-        md += [_body(n, data[n]), f"Data: `eval/results/final/{n}.json`.", ""]
-    md += ["## 8. AndroidWorld", "", aw["section"], "",
+        md += [_demote(_body(n, data[n])), f"Data: `eval/results/final/{n}.json`.", ""]
+        if n == "systems":
+            md += tiers_section(data["systems"])
+    md += ["## 8. AndroidWorld", "", _demote(aw["section"]), "",
            "## Reproduce", "", "```bash", "eval/run_final.sh            # every suite in order, one emulator at a time", "```", "",
            "Or one suite: `uv run --project backend python eval/run_final.py <suite>` (see its `--help`). The real-app suite needs `envoy-real` "
            "signed in to the test Google account; the interface checks need the API running with the demo profile.", ""]
     (OUT / "report.md").write_text("\n".join(md))
     print(f"wrote {(OUT / 'report.md').relative_to(REPO)} with {sum(1 for c in charts.values() if c)} charts")
+
+
+def tiers_section(systems: dict[str, Any] | None) -> list[str]:
+    """The Contributor tier against the standard tier: the full agent, the original layout, the same seed's 10 tasks."""
+    contrib = load("systems-contributor")
+    if not contrib or not systems:
+        return []
+    c = [r for r in contrib["rows"] if r["system"] == "agent" and r["layout"] == 0 and r["try"] == 1]
+    cells = {(r["task"], r["seed"]) for r in c}
+    s = [r for r in systems["rows"] if r["system"] == "agent" and r["layout"] == 0 and r["try"] == 1 and (r["task"], r["seed"]) in cells]
+    if not c or len(s) != len(c):
+        return []
+    row = lambda name, rs: (f"| {name} | {sum(r['passed'] for r in rs)}/{len(rs)} | {sum(r['steps'] for r in rs)} | {sum(r['calls'] for r in rs)} | "  # noqa: E731
+                            f"{sum(r['duration_s'] for r in rs):.0f} s | {max(r['steps'] for r in rs)} |")
+    return ["## 1c. The Contributor tier against the standard tier", "",
+            f"The full agent on the same {len(c)} cells (each core task on the original layout, the same seed and booking), first try only. "
+            f"Contributor: {_ran_on(contrib)}; standard: {_ran_on(systems)}. Every measurement in this report runs on the standard tier.", "",
+            "| Tier | Right | Actions | Model calls | Time, summed | Most actions in one task |", "| --- | --- | --- | --- | --- | --- |",
+            row("Standard (`muse-spark-1.3`)", s), row("Contributor (`muse-spark-1.3-contributor`)", c), "",
+            "Data: `eval/results/final/systems-contributor.json` beside `systems.json`.", ""]
 
 
 def androidworld() -> dict[str, str]:
