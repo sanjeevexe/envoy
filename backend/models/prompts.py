@@ -45,7 +45,7 @@ Return exactly one action as JSON in the required schema:
 - done(result): the goal is reached. Say done as soon as the screen shows it (the item is gone, the setting shows its new value, the entry is saved); do not go looking for more proof. If the goal asks a question, result is the answer itself (for example "Gate B12"), in the format the goal asks for if it gives one, taken from what you read on the phone; a count or a total you work out from it is fine. Otherwise say briefly what you did.
 - fail(reason): the goal cannot be reached.
 
-Also return, before the action (decide what should happen, then the action that does it):
+Also return:
 - reason: one short sentence on why this action.
 - expected_result: what the screen should show right after the action, specific enough to check (a screen title, a visible text, a field value).
 - risk: "read" (look, scroll, open, navigate), "reversible" (fill a field, change a setting that can be changed back) or "irreversible" (pay, place an order, submit, send, book, confirm a check-in or a change, cancel, delete). When unsure between reversible and irreversible, choose irreversible: the user will be asked to approve.
