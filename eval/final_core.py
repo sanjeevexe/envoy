@@ -758,6 +758,9 @@ async def cmd_sizes(args: Any) -> None:
             row, _ = await run_direct(env, r, task, task.pick(w, k), w, 0, s.tid("size", args.device, task.id, f"k{k}"))
             rows.append(row)
     devices = prev.get("devices", {})
+    if args.tasks and args.device in devices:  # a rerun of some tasks replaces only their rows
+        redone = {r["task"] for r in rows}
+        rows = [r for r in devices[args.device]["rows"] if r["task"] not in redone] + rows
     devices[args.device] = {"size": [caps.width, caps.height], "density": caps.density, "dp": [round(caps.width * 160 / caps.density), round(caps.height * 160 / caps.density)],
                             "model": getattr(dev, "model", ""), "android": getattr(dev, "android", ""), "real_phone": caps.real_phone,
                             "run_id": s.rid, "code": s.code["short"], "rows": rows}
