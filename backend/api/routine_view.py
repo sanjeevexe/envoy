@@ -51,8 +51,8 @@ def thing(loc: Locator | None) -> str:
     if loc.text_has:
         return f"a {kind} with “{loc.text_has}”"
     label = loc.text or loc.desc or loc.hint
-    if label:
-        return f"“{label}” {kind}"
+    if label:  # with its ID, so two checks on the same words (a title and a tab) read apart
+        return f"“{label}” {kind}" + (f" ({loc.resource_id})" if loc.resource_id else "")
     return f"the {loc.resource_id} {kind}" if loc.resource_id else f"a {kind}"
 
 

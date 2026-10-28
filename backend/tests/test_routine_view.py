@@ -100,7 +100,7 @@ def test_versions_show_what_each_patch_changed_and_its_fate(library):
 
     assert (v3["status"], v3["trial"]["passed"], v3["trial"]["model_calls"]) == ("rejected", False, 2)
     (check,) = v3["changes"]
-    assert check["what"] == "After-check 2" and check["before"]["text"] == "Shows “My Trips” text" and check["after"]["text"] == "Shows “Trips” text"
+    assert check["what"] == "After-check 2" and check["before"]["text"] == "Shows “My Trips” text (screen_title)" and check["after"]["text"] == "Shows “Trips” text (screen_title)"
     assert "relaxed threshold" in check["why"]
 
 
@@ -111,7 +111,7 @@ def test_steps_are_the_active_version_with_their_repairs_marked(library):
     assert steps["tap_change_seat"]["changed_in"] == [{"version": 2, "kind": "locator"}]
     assert steps["open_trips"]["changed_in"] == []
     assert steps["open_trips"]["pre"][0]["text"] == "The app com.skylark.air is in front"
-    assert [c["text"] for c in steps["open_trips"]["post"]] == ["The screen changed", "Shows “My Trips” text"]
+    assert [c["text"] for c in steps["open_trips"]["post"]] == ["The screen changed", "Shows “My Trips” text (screen_title)"]
     assert steps["confirm"]["risk"] == "irreversible" and steps["confirm"]["optional"] is False
 
 
