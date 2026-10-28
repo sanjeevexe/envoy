@@ -121,7 +121,8 @@ class EnvoyAgent(base_agent.EnvironmentInteractingAgent):
         rid = payload["run_id"]
         p_in, p_out, p_dig = work / f"{rid}.payload.json", work / f"{rid}.json", work / f"{rid}.jsonl.gz"
         p_in.write_text(json.dumps(payload))
-        cmd = ["uv", "run", "--project", "backend", "python", "eval/androidworld/envoy_episode.py",
+        script = "envoy_routine.py" if payload["config"].get("mode") == "routine" else "envoy_episode.py"
+        cmd = ["uv", "run", "--project", "backend", "python", f"eval/androidworld/{script}",
                "--payload", str(p_in), "--out", str(p_out), "--digest", str(p_dig)]
         t0 = time.time()
         try:
@@ -146,7 +147,10 @@ class EnvoyAgent(base_agent.EnvironmentInteractingAgent):
         aw_env.park_forwarder()  # see aw_env: uiautomator2 would suppress it and it can crash on screen
         rec = self.run_envoy(make_payload(goal, int(self._max_steps or 10), run_id, self.config))
         rec["harness"] = {"crash_dialog_after_episode": aw_env.crash_dialog() or None}
-        rec["harness"]["forwarder_restore_s"] = round(aw_env.restore_forwarder(self.env), 1)
+        try:
+            rec["harness"]["forwarder_restore_s"] = round(aw_env.restore_forwarder(self.env), 1)
+        except RuntimeError as e:  # AndroidWorld's scoring then reads the screen with its own retries; recorded either way
+            rec["harness"]["forwarder_restore_error"] = str(e)
         if rec.get("answer"):
             self.env.execute_action(json_action.JSONAction(action_type=json_action.ANSWER, text=rec["answer"]))
         self.last = rec

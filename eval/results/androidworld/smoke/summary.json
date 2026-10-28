@@ -1,0 +1,88 @@
+{
+ "stage": "smoke",
+ "overall": {
+  "n": 1,
+  "success": 0.0,
+  "rate": 0.0
+ },
+ "by_half": {
+  "dev": {
+   "n": 1,
+   "success": 0.0,
+   "rate": 0.0
+  }
+ },
+ "by_difficulty": {
+  "easy": {
+   "n": 1,
+   "success": 0.0,
+   "rate": 0.0
+  }
+ },
+ "by_app": {
+  "settings": {
+   "n": 1,
+   "success": 0.0,
+   "rate": 0.0
+  }
+ },
+ "harness_exceptions": [],
+ "envoy_status": {
+  "step_limit": 1
+ },
+ "success_by_envoy_status": {},
+ "cost_billed_usd": {
+  "total": 0.0017,
+  "median_task": 0.0017
+ },
+ "cost_standard_usd": {
+  "total": 0.0264,
+  "median_task": 0.0264
+ },
+ "time_s": {
+  "envoy_median": 41.32,
+  "envoy_total": 41.32,
+  "model_median": 27.93,
+  "device_median": 13.39,
+  "androidworld_task_median": 49.0
+ },
+ "steps": {
+  "median": 10,
+  "total": 10,
+  "budget_total": 10
+ },
+ "model_calls": {
+  "median": 11,
+  "total": 11
+ },
+ "approvals": {
+  "total": 0,
+  "tasks": 0
+ },
+ "popups_handled": 0,
+ "screenshots_sent": 0,
+ "looks": 0,
+ "vision_calls": 0,
+ "stuck_recoveries": 0,
+ "replans": 0,
+ "crash_dialogs": 0,
+ "tasks": [
+  {
+   "task": "SystemBluetoothTurnOn",
+   "half": "dev",
+   "difficulty": "easy",
+   "app": "settings",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 10,
+   "budget": 10,
+   "calls": 11,
+   "cost_usd": 0.001697,
+   "duration_s": 41.32,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/smoke/traces/SystemBluetoothTurnOn__s1644527541.jsonl.gz"
+  }
+ ]
+}

@@ -1,0 +1,79 @@
+{
+ "task": "FilesDeleteFile",
+ "seed": 1206130099,
+ "goal": "Delete the file q2a8_fancy_banana.mp3 from the Android filesystem located in the Notifications folder within the sdk_gphone_x86_64 storage area.",
+ "score": 0.0,
+ "aw_run_time_s": 88.6,
+ "aw_episode_length": 22,
+ "agent": "envoy",
+ "finished": "2026-10-27 22:25:55.027829",
+ "envoy": {
+  "run_id": "aw-pilot-1027-222430-c681",
+  "goal": "Delete the file q2a8_fancy_banana.mp3 from the Android filesystem located in the Notifications folder within the sdk_gphone_x86_64 storage area.",
+  "max_steps": 22,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 22 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 20,
+  "iterations": 22,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "launch": 4,
+   "look": 2,
+   "back": 10,
+   "tap": 5,
+   "scroll": 1
+  },
+  "model_calls": 23,
+  "input_tokens": 56308,
+  "cached_tokens": 42407,
+  "output_tokens": 3931,
+  "reasoning_tokens": 2544,
+  "cost_usd": 0.002261,
+  "cost_at_standard_usd": 0.040444,
+  "duration_s": 78.49,
+  "model_s": 47.71,
+  "device_s": 30.78,
+  "connect_s": 0.91,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": null,
+   "subgoals": [
+    "Open the Files app",
+    "Open sdk_gphone_x86_64 storage and go to Notifications folder",
+    "Select q2a8_fancy_banana.mp3 and delete it",
+    "Confirm deletion if prompted"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Deleted",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-pilot-1027-222430-c681",
+  "envoy_commit": "bb5a85c46153f2aa867d24c8299d8fd7f754ec77",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/pilot/traces/FilesDeleteFile__s1206130099.jsonl.gz",
+  "wall_s": 81.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 3.2
+  }
+ }
+}

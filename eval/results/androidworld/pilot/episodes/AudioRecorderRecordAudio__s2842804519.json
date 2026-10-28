@@ -1,0 +1,78 @@
+{
+ "task": "AudioRecorderRecordAudio",
+ "seed": 2842804519,
+ "goal": "Record an audio clip using Audio Recorder app and save it.",
+ "score": 0.0,
+ "aw_run_time_s": 57.6,
+ "aw_episode_length": 12,
+ "agent": "envoy",
+ "finished": "2026-10-27 22:20:13.281514",
+ "envoy": {
+  "run_id": "aw-pilot-1027-221916-5de7",
+  "goal": "Record an audio clip using Audio Recorder app and save it.",
+  "max_steps": 12,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 12 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 12,
+  "iterations": 12,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 7,
+   "swipe": 1,
+   "tap": 3,
+   "launch": 1
+  },
+  "model_calls": 14,
+  "input_tokens": 30484,
+  "cached_tokens": 23357,
+  "output_tokens": 2732,
+  "reasoning_tokens": 1902,
+  "cost_usd": 0.001306,
+  "cost_at_standard_usd": 0.024023,
+  "duration_s": 50.6,
+  "model_s": 30.18,
+  "device_s": 20.42,
+  "connect_s": 0.93,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": null,
+   "subgoals": [
+    "Open the app drawer and launch the Audio Recorder app",
+    "Start a new audio recording",
+    "Stop the recording after a few seconds",
+    "Save the clip and confirm it appears in recordings"
+   ],
+   "success_check": {
+    "kind": "element_present",
+    "value": "Play",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-pilot-1027-221916-5de7",
+  "envoy_commit": "bb5a85c46153f2aa867d24c8299d8fd7f754ec77",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/pilot/traces/AudioRecorderRecordAudio__s2842804519.jsonl.gz",
+  "wall_s": 53.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 3.6
+  }
+ }
+}

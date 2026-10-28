@@ -1,0 +1,82 @@
+{
+ "task": "SimpleCalendarEventsOnDate",
+ "seed": 1569884782,
+ "goal": "What events do I have October 24 in Simple Calendar Pro? Answer with the titles only. If there are multiple titles, format your answer as a comma separated list.",
+ "score": 1.0,
+ "aw_run_time_s": 55.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-27 22:32:16.290538",
+ "envoy": {
+  "run_id": "aw-pilot-1027-223122-97c9",
+  "goal": "What events do I have October 24 in Simple Calendar Pro? Answer with the titles only. If there are multiple titles, format your answer as a comma separated list.",
+  "max_steps": 10,
+  "config": {},
+  "status": "done",
+  "result": "Trivia Night",
+  "done": true,
+  "answer": "Trivia Night",
+  "steps_device": 5,
+  "iterations": 8,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 2,
+   "launch": 2,
+   "look": 2,
+   "tap_point": 1,
+   "done": 1
+  },
+  "model_calls": 13,
+  "input_tokens": 22828,
+  "cached_tokens": 15737,
+  "output_tokens": 2264,
+  "reasoning_tokens": 1664,
+  "cost_usd": 0.006755,
+  "cost_at_standard_usd": 0.034968,
+  "duration_s": 48.03,
+  "model_s": 24.36,
+  "device_s": 23.68,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Open Simple Calendar Pro",
+    "Navigate to October 24",
+    "Read the event titles for that day"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "event titles on October 24",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Trivia, Night"
+  },
+  "trace_dir": "data/runs/aw-pilot-1027-223122-97c9",
+  "envoy_commit": "bb5a85c46153f2aa867d24c8299d8fd7f754ec77",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/pilot/traces/SimpleCalendarEventsOnDate__s1569884782.jsonl.gz",
+  "wall_s": 50.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 3.3
+  }
+ }
+}

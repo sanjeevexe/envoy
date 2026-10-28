@@ -123,22 +123,38 @@ def park_forwarder() -> None:
     adb_shell("am", "force-stop", FORWARDER)
 
 
+def _send_grpc_port(wrapper) -> None:
+    """The one part of android_env's `_configure_grpc` the forwarder needs after a restart: the host server's port.
+    `_configure_grpc` itself also calls `attempt_enable_networking()` (airplane mode off, `svc wifi enable`), which would
+    undo an agent's work on Wi-Fi tasks: the pilot's SystemWifiTurnOff was scored with Wi-Fi switched back on."""
+    from android_env.proto import adb_pb2
+
+    wrapper.execute_adb_call(adb_pb2.AdbRequest(send_broadcast=adb_pb2.AdbRequest.SendBroadcast(
+        action=f'accessibility_forwarder.intent.action.SET_GRPC --ei "port" {wrapper.get_port()}',
+        component=f"{FORWARDER}/{FORWARDER}.FlagsBroadcastReceiver")))
+
+
 def restore_forwarder(env, timeout_s: float = 30) -> float:
-    """Re-enable and reconfigure the forwarder; returns seconds until AndroidWorld reads the screen again."""
+    """Re-enable the forwarder and give it the host port and tree logging, with no other change to the phone.
+    Returns seconds until AndroidWorld reads the screen again; raises if it doesn't (the episode records it)."""
     import time
 
+    from android_world.env import android_world_controller
+
     t0 = time.time()
+    last = "no tree yet"
     wrapper = env.controller.env  # android_env's A11yGrpcWrapper
     wrapper._start_a11y_services()  # noqa: SLF001 - android_env's own setup steps, unchanged
-    time.sleep(1.0)
-    wrapper._configure_grpc()  # noqa: SLF001
-    wrapper._enable_a11y_tree_logs()  # noqa: SLF001
-    while time.time() - t0 < timeout_s:
-        try:
-            if env.get_state(wait_to_stabilize=False).ui_elements:
-                return time.time() - t0
-        except Exception:  # noqa: BLE001 - not ready yet
-            pass
+    for attempt in range(2):
         time.sleep(1.0)
-    env.controller.refresh_env()  # AndroidWorld's own last resort (reconnects and reinstalls forwarding)
-    return time.time() - t0
+        _send_grpc_port(wrapper)
+        wrapper._enable_a11y_tree_logs()  # noqa: SLF001
+        deadline = time.time() + timeout_s / 2
+        while time.time() < deadline:
+            try:  # AndroidWorld's own tree read, without the controller's fallback (refresh_env re-enables networking)
+                if android_world_controller.get_a11y_tree(wrapper, max_retries=1, sleep_duration=0.5):
+                    return time.time() - t0
+            except Exception as e:  # noqa: BLE001 - not ready yet
+                last = f"{type(e).__name__}: {e}"
+            time.sleep(0.5)
+    raise RuntimeError(f"AndroidWorld's accessibility forwarder did not come back in {timeout_s:.0f} s ({last})")

@@ -1,0 +1,415 @@
+{
+ "stage": "pilot",
+ "overall": {
+  "n": 15,
+  "success": 2.0,
+  "rate": 13.3
+ },
+ "by_half": {
+  "dev": {
+   "n": 8,
+   "success": 2.0,
+   "rate": 25.0
+  },
+  "held_out": {
+   "n": 7,
+   "success": 0.0,
+   "rate": 0.0
+  }
+ },
+ "by_difficulty": {
+  "easy": {
+   "n": 8,
+   "success": 1.0,
+   "rate": 12.5
+  },
+  "hard": {
+   "n": 1,
+   "success": 0.0,
+   "rate": 0.0
+  },
+  "medium": {
+   "n": 6,
+   "success": 1.0,
+   "rate": 16.7
+  }
+ },
+ "by_app": {
+  "audio recorder": {
+   "n": 1,
+   "success": 0.0,
+   "rate": 0.0
+  },
+  "broccoli app": {
+   "n": 1,
+   "success": 0.0,
+   "rate": 0.0
+  },
+  "camera": {
+   "n": 1,
+   "success": 0.0,
+   "rate": 0.0
+  },
+  "clock": {
+   "n": 1,
+   "success": 1.0,
+   "rate": 100.0
+  },
+  "contacts": {
+   "n": 1,
+   "success": 0.0,
+   "rate": 0.0
+  },
+  "files": {
+   "n": 1,
+   "success": 0.0,
+   "rate": 0.0
+  },
+  "markor": {
+   "n": 1,
+   "success": 0.0,
+   "rate": 0.0
+  },
+  "multi-app": {
+   "n": 1,
+   "success": 0.0,
+   "rate": 0.0
+  },
+  "osmand": {
+   "n": 1,
+   "success": 0.0,
+   "rate": 0.0
+  },
+  "pro expense": {
+   "n": 1,
+   "success": 0.0,
+   "rate": 0.0
+  },
+  "retro music": {
+   "n": 1,
+   "success": 0.0,
+   "rate": 0.0
+  },
+  "settings": {
+   "n": 1,
+   "success": 0.0,
+   "rate": 0.0
+  },
+  "simple calendar pro": {
+   "n": 1,
+   "success": 1.0,
+   "rate": 100.0
+  },
+  "simple sms messenger": {
+   "n": 1,
+   "success": 0.0,
+   "rate": 0.0
+  },
+  "tasks": {
+   "n": 1,
+   "success": 0.0,
+   "rate": 0.0
+  }
+ },
+ "harness_exceptions": [],
+ "envoy_status": {
+  "step_limit": 12,
+  "done": 2,
+  "done_unverified": 1
+ },
+ "success_by_envoy_status": {
+  "done": 2
+ },
+ "cost_billed_usd": {
+  "total": 0.0327,
+  "median_task": 0.0013
+ },
+ "cost_standard_usd": {
+  "total": 0.4099,
+  "median_task": 0.024
+ },
+ "time_s": {
+  "envoy_median": 48.03,
+  "envoy_total": 756.2,
+  "model_median": 28.23,
+  "device_median": 15.62,
+  "androidworld_task_median": 57.6
+ },
+ "steps": {
+  "median": 12,
+  "total": 192,
+  "budget_total": 195
+ },
+ "model_calls": {
+  "median": 13,
+  "total": 215
+ },
+ "approvals": {
+  "total": 2,
+  "tasks": 1
+ },
+ "popups_handled": 1,
+ "screenshots_sent": 23,
+ "looks": 19,
+ "vision_calls": 2,
+ "stuck_recoveries": 1,
+ "replans": 2,
+ "crash_dialogs": 0,
+ "tasks": [
+  {
+   "task": "AudioRecorderRecordAudio",
+   "half": "held_out",
+   "difficulty": "easy",
+   "app": "audio recorder",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 12,
+   "budget": 12,
+   "calls": 14,
+   "cost_usd": 0.001306,
+   "duration_s": 50.6,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/pilot/traces/AudioRecorderRecordAudio__s2842804519.jsonl.gz"
+  },
+  {
+   "task": "CameraTakePhoto",
+   "half": "dev",
+   "difficulty": "easy",
+   "app": "camera",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 10,
+   "budget": 10,
+   "calls": 14,
+   "cost_usd": 0.00678,
+   "duration_s": 60.39,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/pilot/traces/CameraTakePhoto__s3729977769.jsonl.gz"
+  },
+  {
+   "task": "ClockTimerEntry",
+   "half": "dev",
+   "difficulty": "easy",
+   "app": "clock",
+   "score": 1.0,
+   "status": "done",
+   "answer": "Timer setup shows 00h 16m 35s and was left unstarted on the Timer tab",
+   "steps": 10,
+   "budget": 10,
+   "calls": 12,
+   "cost_usd": 0.002381,
+   "duration_s": 65.44,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/pilot/traces/ClockTimerEntry__s1172248264.jsonl.gz"
+  },
+  {
+   "task": "ContactsAddContact",
+   "half": "held_out",
+   "difficulty": "easy",
+   "app": "contacts",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 12,
+   "budget": 12,
+   "calls": 12,
+   "cost_usd": 0.001695,
+   "duration_s": 42.26,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/pilot/traces/ContactsAddContact__s1155463587.jsonl.gz"
+  },
+  {
+   "task": "ExpenseAddSingle",
+   "half": "held_out",
+   "difficulty": "easy",
+   "app": "pro expense",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 12,
+   "budget": 12,
+   "calls": 13,
+   "cost_usd": 0.000993,
+   "duration_s": 49.37,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/pilot/traces/ExpenseAddSingle__s2452300024.jsonl.gz"
+  },
+  {
+   "task": "FilesDeleteFile",
+   "half": "held_out",
+   "difficulty": "medium",
+   "app": "files",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 22,
+   "budget": 22,
+   "calls": 23,
+   "cost_usd": 0.002261,
+   "duration_s": 78.49,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/pilot/traces/FilesDeleteFile__s1206130099.jsonl.gz"
+  },
+  {
+   "task": "MarkorCreateFolder",
+   "half": "held_out",
+   "difficulty": "easy",
+   "app": "markor",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 10,
+   "budget": 10,
+   "calls": 11,
+   "cost_usd": 0.001102,
+   "duration_s": 36.77,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/pilot/traces/MarkorCreateFolder__s3163095783.jsonl.gz"
+  },
+  {
+   "task": "MarkorCreateNoteAndSms",
+   "half": "held_out",
+   "difficulty": "hard",
+   "app": "multi-app",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 18,
+   "budget": 18,
+   "calls": 19,
+   "cost_usd": 0.002423,
+   "duration_s": 63.34,
+   "approvals": 2,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/pilot/traces/MarkorCreateNoteAndSms__s3221046986.jsonl.gz"
+  },
+  {
+   "task": "OsmAndFavorite",
+   "half": "dev",
+   "difficulty": "medium",
+   "app": "osmand",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 13,
+   "budget": 13,
+   "calls": 14,
+   "cost_usd": 0.001157,
+   "duration_s": 42.87,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/pilot/traces/OsmAndFavorite__s2436087218.jsonl.gz"
+  },
+  {
+   "task": "RecipeDeleteSingleRecipe",
+   "half": "dev",
+   "difficulty": "easy",
+   "app": "broccoli app",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 10,
+   "budget": 10,
+   "calls": 11,
+   "cost_usd": 0.000882,
+   "duration_s": 38.2,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/pilot/traces/RecipeDeleteSingleRecipe__s4252496861.jsonl.gz"
+  },
+  {
+   "task": "RetroCreatePlaylist",
+   "half": "dev",
+   "difficulty": "medium",
+   "app": "retro music",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 24,
+   "budget": 24,
+   "calls": 25,
+   "cost_usd": 0.002139,
+   "duration_s": 75.95,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/pilot/traces/RetroCreatePlaylist__s916405052.jsonl.gz"
+  },
+  {
+   "task": "SimpleCalendarEventsOnDate",
+   "half": "dev",
+   "difficulty": "medium",
+   "app": "simple calendar pro",
+   "score": 1.0,
+   "status": "done",
+   "answer": "Trivia Night",
+   "steps": 8,
+   "budget": 10,
+   "calls": 13,
+   "cost_usd": 0.006755,
+   "duration_s": 48.03,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/pilot/traces/SimpleCalendarEventsOnDate__s1569884782.jsonl.gz"
+  },
+  {
+   "task": "SimpleSmsSend",
+   "half": "dev",
+   "difficulty": "medium",
+   "app": "simple sms messenger",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 12,
+   "budget": 12,
+   "calls": 13,
+   "cost_usd": 0.001004,
+   "duration_s": 40.46,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/pilot/traces/SimpleSmsSend__s4209246460.jsonl.gz"
+  },
+  {
+   "task": "SystemWifiTurnOff",
+   "half": "held_out",
+   "difficulty": "easy",
+   "app": "settings",
+   "score": 0.0,
+   "status": "done_unverified",
+   "answer": "Wi-Fi is turned off - Internet settings show Wi-Fi switch is Off",
+   "steps": 9,
+   "budget": 10,
+   "calls": 10,
+   "cost_usd": 0.000706,
+   "duration_s": 29.62,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/pilot/traces/SystemWifiTurnOff__s2760691905.jsonl.gz"
+  },
+  {
+   "task": "TasksHighPriorityTasks",
+   "half": "dev",
+   "difficulty": "medium",
+   "app": "tasks",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 10,
+   "budget": 10,
+   "calls": 11,
+   "cost_usd": 0.001165,
+   "duration_s": 34.41,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/pilot/traces/TasksHighPriorityTasks__s521701125.jsonl.gz"
+  }
+ ]
+}

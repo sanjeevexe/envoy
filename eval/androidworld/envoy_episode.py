@@ -35,7 +35,9 @@ PAYLOAD_KEYS = {"goal", "max_steps", "run_id", "config"}
 # Statuses where the agent itself ended the episode (AndroidWorld's "done"); the rest are limits or crashes.
 AGENT_ENDED = {"done", "done_unverified", "failed", "handoff", "needs_user"}
 ANSWERED = {"done", "done_unverified"}
-CONFIG_KEYS = {"plan", "screenshots", "vision", "step_effort", "plan_effort", "max_done_rejections"}
+RUNCONFIG_KEYS = {"plan", "screenshots", "vision", "step_effort", "plan_effort", "max_done_rejections"}  # agent overrides
+ROUTINE_KEYS = {"mode", "library", "allow_repair"}  # the routines experiment (envoy_routine.py)
+CONFIG_KEYS = RUNCONFIG_KEYS | ROUTINE_KEYS
 
 
 def make_payload(goal: str, max_steps: int, run_id: str, config: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -130,7 +132,8 @@ async def run_episode(payload: dict[str, Any]) -> dict[str, Any]:
     device = emulator.EmulatorDevice("AndroidWorldAvd").connect()
     connect_s = time.time() - t0
     approver = ScriptedApprover(approve=True)  # AndroidWorld's synthetic test apps only (user's permission for this benchmark)
-    cfg = RunConfig(max_steps=payload["max_steps"], data_scope="test_app", contributor=True, **payload["config"])
+    cfg = RunConfig(max_steps=payload["max_steps"], data_scope="test_app", contributor=True,
+                    **{k: v for k, v in payload["config"].items() if k in RUNCONFIG_KEYS})
     adapter = ModelAdapter()
     runner = AgentRunner(device, adapter, approver, cfg)
     try:

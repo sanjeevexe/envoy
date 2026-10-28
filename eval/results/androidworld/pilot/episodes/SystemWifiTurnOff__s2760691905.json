@@ -1,0 +1,81 @@
+{
+ "task": "SystemWifiTurnOff",
+ "seed": 2760691905,
+ "goal": "Turn wifi off.",
+ "score": 0.0,
+ "aw_run_time_s": 36.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-27 22:33:53.575423",
+ "envoy": {
+  "run_id": "aw-pilot-1027-223317-0333",
+  "goal": "Turn wifi off.",
+  "max_steps": 10,
+  "config": {},
+  "status": "done_unverified",
+  "result": "Wi-Fi is turned off - Internet settings show Wi-Fi switch is Off",
+  "done": true,
+  "answer": "Wi-Fi is turned off - Internet settings show Wi-Fi switch is Off",
+  "steps_device": 8,
+  "iterations": 9,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 4,
+   "launch": 1,
+   "tap": 3,
+   "done": 1
+  },
+  "model_calls": 10,
+  "input_tokens": 21386,
+  "cached_tokens": 17642,
+  "output_tokens": 1481,
+  "reasoning_tokens": 947,
+  "cost_usd": 0.000706,
+  "cost_at_standard_usd": 0.013621,
+  "duration_s": 29.62,
+  "model_s": 17.77,
+  "device_s": 11.85,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.android.settings",
+   "subgoals": [
+    "Open Settings app",
+    "Open Wi-Fi settings",
+    "Turn Wi-Fi toggle off"
+   ],
+   "success_check": {
+    "kind": "field_equals",
+    "value": "Off",
+    "field_hint": "Wi-Fi"
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": false,
+   "detail": "field 'Wi-Fi' not found"
+  },
+  "trace_dir": "data/runs/aw-pilot-1027-223317-0333",
+  "envoy_commit": "bb5a85c46153f2aa867d24c8299d8fd7f754ec77",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/pilot/traces/SystemWifiTurnOff__s2760691905.jsonl.gz",
+  "wall_s": 32.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 3.6
+  }
+ }
+}
