@@ -1,0 +1,52 @@
+{
+ "name": "skylark_turn_on_gate_change_alerts",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-27 22:04:52",
+   "parent": null,
+   "changes": [
+    "compiled from f7-1027215614-src-gate_alerts-a1"
+   ],
+   "verification": {
+    "cases": [
+     {
+      "case": "same-inputs",
+      "inputs": {},
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 1.37,
+      "outputs": {}
+     },
+     {
+      "case": "second-inputs",
+      "inputs": {},
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 1.37,
+      "outputs": {}
+     }
+    ]
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-27 22:23:24",
+   "kind": "run",
+   "version": 1,
+   "task_id": "f7-1027220657-rou-gate_alerts-L1-s101-t1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 1.31,
+   "patches": 0
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

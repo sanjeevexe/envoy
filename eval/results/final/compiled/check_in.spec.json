@@ -1,0 +1,110 @@
+{
+ "name": "skylark_check_in_flight",
+ "intent": "Check in for a SkyLark flight",
+ "description": "Opens My Trips in SkyLark Air, selects the trip for the requested destination, and completes check-in by selecting the passenger, confirming no hazardous materials, and confirming check-in.",
+ "patterns": [
+  "Check me in for my flight",
+  "Check in for my upcoming flight",
+  "I want to check in for my trip"
+ ],
+ "inputs": [
+  {
+   "name": "trip_city",
+   "type": "text",
+   "description": "Destination city of the flight to check in for.",
+   "from_memory": null,
+   "example": "Denver"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "open_my_trips",
+   "intent": "Open My Trips",
+   "target_fixed_text": "My Trips",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "select_trip",
+   "intent": "Select the trip to {{trip_city}}",
+   "target_fixed_text": null,
+   "choice_input": "trip_city"
+  },
+  {
+   "step": 3,
+   "id": "tap_check_in",
+   "intent": "Tap Check in",
+   "target_fixed_text": "Check in",
+   "choice_input": null
+  },
+  {
+   "step": 4,
+   "id": "select_passenger",
+   "intent": "Select the passenger",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 5,
+   "id": "continue_after_passenger_selection",
+   "intent": "Tap Continue after selecting the passenger",
+   "target_fixed_text": "Continue",
+   "choice_input": null
+  },
+  {
+   "step": 6,
+   "id": "confirm_no_hazardous_materials",
+   "intent": "Confirm I'm not carrying hazardous materials",
+   "target_fixed_text": "I'm not carrying hazardous materials",
+   "choice_input": null
+  },
+  {
+   "step": 7,
+   "id": "continue_after_hazmat_declaration",
+   "intent": "Tap Continue after the hazardous materials declaration",
+   "target_fixed_text": "Continue",
+   "choice_input": null
+  },
+  {
+   "step": 8,
+   "id": "confirm_check_in",
+   "intent": "Confirm check-in",
+   "target_fixed_text": "Confirm check-in",
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "seat",
+   "near": "Seat",
+   "example": "22F"
+  },
+  {
+   "name": "gate",
+   "near": "Gate",
+   "example": "A7"
+  },
+  {
+   "name": "boarding_time",
+   "near": "Boarding",
+   "example": "2:05 PM"
+  },
+  {
+   "name": "boarding_group",
+   "near": "Boarding",
+   "example": "Group 5"
+  }
+ ],
+ "data_values": [
+  "PT4R8Z",
+  "SL 1190",
+  "Sat, Nov 14, 2026",
+  "ATL → DEN",
+  "Maya Patel",
+  "22F",
+  "A7",
+  "2:05 PM",
+  "Group 5"
+ ]
+}

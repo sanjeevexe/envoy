@@ -1,0 +1,89 @@
+{
+ "name": "skylark_add_known_traveler_number",
+ "intent": "Add a known traveler number to a SkyLark flight trip",
+ "description": "Opens My Trips in SkyLark Air, selects the trip for the requested city, enters the user's known traveler number from memory, and saves it.",
+ "patterns": [
+  "Add my known traveler number to my trip",
+  "Put my known traveler number on my booking",
+  "Add my KTN to my trip",
+  "Save my known traveler number to my flight"
+ ],
+ "inputs": [
+  {
+   "name": "trip_city",
+   "type": "text",
+   "description": "City of the trip to update",
+   "from_memory": null,
+   "example": "Denver"
+  },
+  {
+   "name": "user_known_traveler_number",
+   "type": "text",
+   "description": "The user's known traveler number",
+   "from_memory": "user.known_traveler_number",
+   "example": "55501234"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "open_my_trips",
+   "intent": "Tap 'My Trips' to open the trips list",
+   "target_fixed_text": "My Trips",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "select_trip",
+   "intent": "Tap the trip to {{trip_city}} in the list",
+   "target_fixed_text": null,
+   "choice_input": "trip_city"
+  },
+  {
+   "step": 3,
+   "id": "enter_known_traveler_number",
+   "intent": "Type {{user_known_traveler_number}} into the 'Known traveler number' field",
+   "target_fixed_text": "Known traveler number",
+   "choice_input": null
+  },
+  {
+   "step": 4,
+   "id": "save_known_traveler_number",
+   "intent": "Tap 'Save' to save the known traveler number",
+   "target_fixed_text": "Save",
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "known_traveler_number",
+   "near": "Known traveler number",
+   "example": "55501234"
+  },
+  {
+   "name": "save_confirmation",
+   "near": "Known traveler number",
+   "example": "Known traveler number saved"
+  },
+  {
+   "name": "confirmation_code",
+   "near": "Confirmation",
+   "example": "PT4R8Z"
+  }
+ ],
+ "data_values": [
+  "SL 1190",
+  "Sat, Nov 14, 2026",
+  "PT4R8Z",
+  "ATL",
+  "DEN",
+  "2:45 PM",
+  "4:05 PM",
+  "Delayed 25 min",
+  "A7",
+  "22F",
+  "2:05 PM",
+  "Group 5",
+  "0"
+ ]
+}

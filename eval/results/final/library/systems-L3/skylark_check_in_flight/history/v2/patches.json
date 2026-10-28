@@ -1,0 +1,17 @@
+[
+ {
+  "kind": "insert_after",
+  "step": "continue_after_hazmat_declaration",
+  "description": "after 'continue_after_hazmat_declaration', an extra screen appeared; inserted continue_after_hazmat_declaration_extra_1 (tap Looks good)",
+  "evidence": {
+   "screenshots": [
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/f7-1027220657-rou-check_in-L3-s101-t1/screens/repair_08_1_before.png",
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/f7-1027220657-rou-check_in-L3-s101-t1/screens/repair_08_1_after.png"
+   ],
+   "reasons": [
+    "Review trip screen is blocking Confirm step, Looks good is its main continue button."
+   ],
+   "task_id": "f7-1027220657-rou-check_in-L3-s101-t1"
+  }
+ }
+]

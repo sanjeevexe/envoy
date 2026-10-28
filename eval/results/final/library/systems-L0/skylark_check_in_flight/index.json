@@ -1,0 +1,66 @@
+{
+ "name": "skylark_check_in_flight",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-27 21:57:10",
+   "parent": null,
+   "changes": [
+    "compiled from f7-1027215614-src-check_in-a1"
+   ],
+   "verification": {
+    "cases": [
+     {
+      "case": "same-inputs",
+      "inputs": {
+       "trip_city": "Denver"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 4.58,
+      "outputs": {
+       "seat": "22F",
+       "gate": "A7",
+       "boarding_time": "2:05 PM",
+       "boarding_group": "Group 5"
+      }
+     },
+     {
+      "case": "second-inputs",
+      "inputs": {
+       "trip_city": "Tampa"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 4.0,
+      "outputs": {
+       "seat": "11E",
+       "gate": "B17",
+       "boarding_time": "6:00 AM",
+       "boarding_group": "Group 5"
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-27 22:08:00",
+   "kind": "run",
+   "version": 1,
+   "task_id": "f7-1027220657-rou-check_in-L0-s101-t1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.87,
+   "patches": 0
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}
