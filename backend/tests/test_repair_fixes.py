@@ -187,6 +187,17 @@ def test_a_repair_onto_the_renamed_screen_is_accepted_by_the_next_steps_anchor()
     assert [p.kind for p in out.patches] == ["locator"] and out.patches[0].locator.text == "Journeys"
 
 
+def test_a_relaxed_repair_followed_by_back_is_accepted_for_lack_of_evidence_against_it():
+    """Chipotle (real-app pass, Oct 28): the zip field's check held only relaxed and the next step was Back, which shows
+    nothing to look for. The repair must count, as before: only evidence against the screen rejects it."""
+    phone, r = _trip_app("lookalike")
+    r.steps[1] = Step(id="go_back", intent="Go back", action=StepAction(kind="back"), post=[Check(kind="screen_changed")])
+    model = Model(["Journeys"])
+    model.screen = lambda: asyncio.run(phone.observe())
+    out = run(phone, r, {"city": "Denver"}, adapter=model)
+    assert out.steps[0].status == "done" and out.model_calls == 1 and [p.kind for p in out.patches] == ["locator"]
+
+
 # ---- c. a patch that changes nothing makes no version ------------------------------------------------------------------------
 
 def _look_up_trip() -> Routine:
