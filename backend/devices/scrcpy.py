@@ -76,6 +76,7 @@ class ScrcpyStream:
         self._thread: threading.Thread | None = None
         self.error: str | None = None
         self.started_at = 0.0
+        self._src_colorspace: str | None = None  # set when the stream's own colorspace tag can't be converted
 
     # ---- lifecycle --------------------------------------------------------------------------
 
@@ -196,11 +197,23 @@ class ScrcpyStream:
     def frame(self, width: int, timeout: float = 5) -> Image.Image:
         f = self._latest(timeout)
         if width >= f.width:
-            return f.to_image()
-        return f.reformat(width=width, height=round(f.height * width / f.width), format="rgb24").to_image()
+            return self._rgb(f)
+        return self._rgb(f, width, round(f.height * width / f.width))
 
     def image(self, timeout: float = 5) -> Image.Image:
-        return self._latest(timeout).to_image()
+        return self._rgb(self._latest(timeout))
+
+    def _rgb(self, f: av.VideoFrame, width: int | None = None, height: int | None = None) -> Image.Image:
+        """The frame as RGB. Some phones' encoders tag their video with a colorspace FFmpeg's scaler can't convert (the
+        Pixel 5 says YCgCo over ordinary BT.601 video, so every conversion failed and screenshots silently fell back to
+        `adb screencap`): those are converted as BT.601, which matched the phone's own screenshot."""
+        size = {"width": width, "height": height} if width else {}
+        if self._src_colorspace is None:
+            try:
+                return f.reformat(format="rgb24", **size).to_image()
+            except av.error.OSError:
+                self._src_colorspace = "ITU601"
+        return f.reformat(format="rgb24", src_colorspace=self._src_colorspace, **size).to_image()
 
     def png(self, timeout: float = 5) -> bytes:
         buf = io.BytesIO()

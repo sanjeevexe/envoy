@@ -1,0 +1,17 @@
+{
+ "time": "2026-10-28T20:49:32+00:00",
+ "id": "phone-09031FDD4000C6",
+ "model": "Pixel 5",
+ "manufacturer": "Google",
+ "device": "redfin",
+ "android": "13",
+ "sdk": "33",
+ "security_patch": "2022-08-05",
+ "build": "TP1A.220624.014",
+ "abi": "arm64-v8a",
+ "sim": "LOADED",
+ "size": "Physical size: 1080x2340",
+ "density": "Physical density: 440",
+ "keyboard": "com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME",
+ "clock_offset_s": -1
+}

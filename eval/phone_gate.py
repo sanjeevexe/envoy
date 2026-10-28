@@ -3,7 +3,7 @@ the check-in in SkyLark's own state, memory).
 
   uv run --project backend python eval/phone_gate.py prepare      # SkyLark on the phone, seeded, signed in; "always ask" for the run
   ... from the iPhone (or the web app): "Check me in for my flight on my phone"; allow the phone; approve the push ...
-  uv run --project backend python eval/phone_gate.py report       # what happened, with timings → eval/results/phase6/phone_gate.json
+  uv run --project backend python eval/phone_gate.py report [name]  # what happened, with timings → eval/results/phase6/<name>.json
   uv run --project backend python eval/phone_gate.py restore      # approval rules as they were
 
 The person decides everything on the iPhone; this only prepares the test app on the phone and reads the record. The
@@ -68,7 +68,7 @@ def restore() -> None:
     print("approval rules restored")
 
 
-def report() -> None:
+def report(name: str = "phone_gate") -> None:
     st = json.loads(STATE.read_text()) if STATE.exists() else {"since": time.time() - 3600}
     since = st["since"]
     p = st.get("phone") or phone()
@@ -88,10 +88,15 @@ def report() -> None:
     out["skylark_on_phone"] = {"checked_in": {t["code"]: t["checked_in"] for t in state["trips"] if t["upcoming"]}}
     pushes = REPO / "logs" / "push.jsonl"
     out["pushes"] = [x for x in (json.loads(line) for line in pushes.read_text().splitlines()) if x["time"] >= since] if pushes.exists() else []
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(out, indent=1, default=str))
+    path = OUT.parent / f"{name}.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(out, indent=1, default=str))
     print(json.dumps(out, indent=1, default=str)[:6000])
 
 
 if __name__ == "__main__":
-    {"prepare": prepare, "restore": restore, "report": report}[sys.argv[1] if len(sys.argv) > 1 else "report"]()
+    cmd = sys.argv[1] if len(sys.argv) > 1 else "report"
+    if cmd == "report":
+        report(*sys.argv[2:3])
+    else:
+        {"prepare": prepare, "restore": restore}[cmd]()

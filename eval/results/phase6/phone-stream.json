@@ -1,0 +1,35 @@
+{
+ "time": "2026-10-28T21:05:34+00:00",
+ "phone": "phone-09031FDD4000C6",
+ "model": "Pixel 5",
+ "android": "13",
+ "real_phone": true,
+ "frame_size": [
+  590,
+  1280
+ ],
+ "start_ms": 610,
+ "fps_idle": 3.7,
+ "tap_to_frame_ms": {
+  "n": 10,
+  "seen": 10,
+  "p50": 65,
+  "max": 75,
+  "all": [
+   75,
+   65,
+   63,
+   68,
+   56,
+   61,
+   65,
+   70,
+   68,
+   65
+  ]
+ },
+ "screenshot_ms": {
+  "stream_p50": 7.8,
+  "adb_screencap_p50": 358
+ }
+}

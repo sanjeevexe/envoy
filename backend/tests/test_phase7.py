@@ -481,3 +481,16 @@ def test_emoji_match_the_dump_and_ads_are_skipped_only_when_the_agent_skipped_th
     ex = _extract_for("first_video_title", "", "lofi hip hop radio 📚 beats to relax/study to", trace, {"search_query": "lofi hip hop"}, [], picked)
     assert ex is not None and ex.first_row and ex.skip_ads  # the agent passed the ad, so the routine does too
     assert extract_value(ex, trace, {}) == "lofi hip hop radio .. beats to relax/study to"
+
+
+def test_frames_tagged_with_a_colorspace_ffmpeg_cannot_convert_still_convert():
+    import av
+    from devices.scrcpy import ScrcpyStream
+    # The Pixel 5's encoder tags its video YCgCo (colorspace 8); every conversion failed, so screenshots quietly fell
+    # back to adb screencap and the live view had no frames.
+    f = av.VideoFrame(64, 128, "yuv420p")
+    f.colorspace = 8
+    s = ScrcpyStream("phone", (1080, 2340))
+    s._frame = f
+    assert s.image().size == (64, 128) and s.frame(32).size == (32, 64)
+    assert s._src_colorspace in (None, "ITU601")  # overridden only where the tag can't be converted
