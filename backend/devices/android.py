@@ -53,6 +53,7 @@ class AndroidDevice:
         self.model = ""  # "Pixel 8" on a real phone
         self.android = ""  # Android release, e.g. "15"
         self.stream: Any = None  # frames and input for the live view (set by subclasses)
+        self._launchers: dict[str, str] = {}  # package → its launcher activity
 
     # ---- connection -------------------------------------------------------------------------
 
@@ -269,7 +270,7 @@ class AndroidDevice:
             elif a.kind == "home":
                 self.u2.press("home")
             elif a.kind == "launch":
-                self.u2.app_start(a.package or "")
+                self._launch(a.package or "")
             elif a.kind == "tap_point":
                 self._tap(a.x or 0, a.y or 0)
             elif a.kind == "wait":
@@ -282,6 +283,21 @@ class AndroidDevice:
     async def act(self, action: Action) -> ActionResult:
         async with self._lock:
             return await asyncio.to_thread(self._act_sync, action)
+
+    def _launch(self, package: str) -> None:
+        """Start the app's launcher activity with `am start`. uiautomator2's app_start without an activity runs
+        `monkey … 1`, which took ~11 s on a fresh device and injects one random event (it opened the app drawer in
+        Phase 6): never acceptable on someone's real phone."""
+        comp = self._launchers.get(package)
+        if comp is None:
+            out = self.adb.shell(f"cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.LAUNCHER {package}")
+            last = out.strip().splitlines()[-1].strip() if out.strip() else ""
+            comp = last if "/" in last else ""
+            if comp:
+                self._launchers[package] = comp
+        if not comp:
+            raise RuntimeError(f"{package} has no launcher activity (is it installed?)")
+        self.adb.shell(f"am start -n {comp}")
 
     async def launch(self, package: str, fresh: bool = False) -> None:
         """Bring an app to the front; `fresh` force-stops it first (a routine's start on real apps)."""

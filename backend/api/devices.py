@@ -42,6 +42,7 @@ class Lease:
     requested_at: float = 0.0  # when the agent last asked the user to take over
     handed_back_at: float = 0.0
     last_agent_call: float = 0.0  # when the agent last acted (a foreground change soon after is its own doing)
+    guard: Any = None  # on a real phone: checked before every call of the agent's; True means it just paused for you
     agent_turn: asyncio.Event = field(default_factory=asyncio.Event)  # set while the agent may use the phone
     run_lock: asyncio.Lock = field(default_factory=asyncio.Lock)  # one task at a time per phone
 
@@ -67,6 +68,8 @@ class GatedDevice:
 
         async def gated(*args: Any, **kwargs: Any) -> Any:
             await self._lease.agent_turn.wait()
+            if self._lease.guard is not None and self._lease.guard():  # you touched the phone a moment ago
+                await self._lease.agent_turn.wait()
             try:
                 return await attr(*args, **kwargs)
             finally:
@@ -152,26 +155,56 @@ class DevicePool:
                 pass
         threading.Thread(target=run, daemon=True).start()
 
-    def start_watch(self, did: str, device: Any, app: str | None, banner_text: str = "Envoy is using this phone") -> None:
+    def start_watch(self, did: str, device: Any, app: str | None, banner_text: str = "Envoy is using this phone",
+                    on_change: Any = None) -> None:
+        """`on_change(paused, reason)`: the task's status follows pauses that come from the phone itself."""
         if not self.is_phone(did):
             return
         self._background(device.banner.show, banner_text)
         self.stop_watch(did)
-        self._watchers[did] = asyncio.get_running_loop().create_task(self.watch(did, device, app))
+        started = time.time()
+        # The touch watcher hears a finger within milliseconds; checking it before each of the agent's calls (no adb)
+        # stops the very next action, which the 0.5 s watch loop alone could miss (Phase 6: two steps slipped through).
+        self.leases[did].guard = lambda: self._touched(did, device, started, on_change)
+        self._watchers[did] = asyncio.get_running_loop().create_task(self.watch(did, device, app, on_change=on_change, started=started))
+
+    def _touched(self, did: str, device: Any, started: float, on_change: Any = None) -> bool:
+        lease = self.leases[did]
+        if lease.user_control or not device.touches.touched_since(max(started, lease.handed_back_at + 1.0)):
+            return False
+        reason = "paused: you touched the phone"
+        self.take_over(did, reason, by="phone")
+        self._background(device.banner.pause, "you touched the phone")  # the banner offers Resume
+        if on_change:
+            on_change(True, reason)
+        return True
 
     def stop_watch(self, did: str, device: Any = None) -> None:
         task = self._watchers.pop(did, None)
         if task is not None:
             task.cancel()
+        if did in self.leases:
+            self.leases[did].guard = None
         if device is not None and self.is_phone(did):
             self._background(device.banner.hide)
 
-    async def watch(self, did: str, device: Any, app: str | None, every_s: float = 0.5) -> None:
+    async def watch(self, did: str, device: Any, app: str | None, every_s: float = 0.5, on_change: Any = None,
+                    started: float | None = None) -> None:
         """While a task uses the real phone: hand it to you the moment you touch it, press Pause, or another app comes
-        to the front without an action of Envoy's; give it back when you press Resume on the phone."""
+        to the front without an action of Envoy's; give it back when you press Resume on the phone. After a hand back
+        the agent goes on from whatever you left on screen, so that app becomes the expected one."""
         lease = self.leases[did]
-        started = time.time()
+        started = started or time.time()
         last_pkg = app or ""
+        seen_handback = lease.handed_back_at
+
+        def pause(reason: str, banner_reason: str | None) -> None:
+            self.take_over(did, reason, by="phone")
+            if banner_reason:
+                self._background(device.banner.pause, banner_reason)  # the banner offers Resume
+            if on_change:
+                on_change(True, reason)
+
         while True:
             await asyncio.sleep(every_s)
             try:
@@ -180,16 +213,20 @@ class DevicePool:
                     if banner["shown"] and not banner["paused"] and banner["changed_at"] > lease.since:
                         self.hand_back(did, by="you, on the phone")
                     continue
+                if lease.handed_back_at > seen_handback:  # you gave it back (here, in the app, or on the iPhone)
+                    seen_handback = lease.handed_back_at
+                    last_pkg = await asyncio.to_thread(device.foreground_package) or last_pkg
+                    if on_change:
+                        on_change(False, "")
                 if banner["paused"]:
-                    self.take_over(did, f"paused: {banner['reason'] or 'you pressed Pause on the phone'}", by="phone")
+                    pause(f"paused: {banner['reason'] or 'you pressed Pause on the phone'}", None)
                     continue
-                if device.touches.touched_since(max(started, lease.handed_back_at + 1.0)):
-                    self.take_over(did, "paused: you touched the phone", by="phone")
+                if self._touched(did, device, started, on_change):
                     continue
                 pkg = await asyncio.to_thread(device.foreground_package)
                 if pkg and pkg != last_pkg and pkg not in BENIGN_FRONT:
                     if time.time() - lease.last_agent_call > 3:
-                        self.take_over(did, f"paused: {pkg} came to the front on its own", by="phone")
+                        pause(f"paused: {pkg} came to the front on its own", "another app came to the front")
                         continue
                     last_pkg = pkg
             except asyncio.CancelledError:

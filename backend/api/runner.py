@@ -196,7 +196,7 @@ class TaskRunner:
                 lease.task_id = tid
                 self.devices[tid] = device
                 self._set(tid, device=avd)
-                self.pool.start_watch(avd, device, app)
+                self.pool.start_watch(avd, device, app, on_change=lambda paused, why: self._phone_paused(tid, paused, why))
                 gated = self.pool.gated(avd, device)
                 loop = asyncio.get_running_loop()
                 approver = WebApprover(self.store, self.bus, loop, tid, phone=lambda: device, timeout_s=self.approval_timeout_s,
@@ -242,6 +242,7 @@ class TaskRunner:
                     text = "; ".join(f"{k.replace('_', ' ')}: {v}" for k, v in outputs.items() if v) or result
                 end = "done" if done else ("declined" if status == "declined" else ("needs_you" if status in ("needs_you", "needs_user") else "failed"))
                 # Done as soon as the phone work is: memory is written afterwards, with the phone already free.
+                self.pool.stop_watch(avd, device)  # the phone is free: the banner goes, and touches are yours again
                 self._set(tid, status=end, result=text, detail=result, model_calls=calls, cost_usd=round(cost, 4), waiting_for=None)
                 lease.task_id = None
             if done:
@@ -330,6 +331,12 @@ class TaskRunner:
             await asyncio.to_thread(SkyLark(device.serial).install)
             return
         raise RuntimeError(f"{app} isn't installed on your phone (install it from the Play Store)")
+
+    def _phone_paused(self, tid: str, paused: bool, why: str) -> None:
+        """Your real phone paused or resumed the task (a touch, Pause, Resume): the task says so while it is running."""
+        task = self.store.get(tid) or {}
+        if task.get("status") in ("running", "taken_over", "needs_you", "waiting_approval"):
+            self._set(tid, status="taken_over" if paused else "running", detail=why or None)
 
     async def _wait_for_user(self, tid: str, avd: str, reason: str) -> bool:
         self._set(tid, status="needs_you", waiting_for="takeover", detail=reason)

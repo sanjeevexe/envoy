@@ -236,7 +236,11 @@ def test_a_touch_pause_or_another_app_hands_the_phone_to_you():
         dev.front = "com.android.dialer"  # a call comes in: not something Envoy did
         await asyncio.sleep(0.1)
         other_app = (lease.user_control, lease.reason)
+        pool.hand_back(did)  # you hand back with the call still on screen: the agent goes on from there
+        await asyncio.sleep(0.15)
+        after_hand_back = lease.user_control
         watcher.cancel()
+        assert after_hand_back is False
         return touched, resumed, paused, other_app
     touched, resumed, paused, other_app = asyncio.run(scenario())
     assert touched == (True, "paused: you touched the phone", False)  # the agent's next call waits
@@ -393,3 +397,44 @@ def test_a_routine_step_on_a_drawn_target_replays_from_its_picture_then_groundin
     assert asyncio.run(ex._visual_point(ctx, slotted, screen, sr)) == (108, 448) and adapter.calls[-1] == "grounding"
     secure = ScreenState(**{**screen.__dict__, "secure": True})
     assert asyncio.run(ex._visual_point(ctx, step_seat, secure, sr)) is None  # never a picture of a secure screen
+
+
+def test_a_touch_stops_the_very_next_action():
+    """Found on the stand-in phone: with only the 0.5 s watch loop, two routine steps (the last one irreversible) ran
+    after the touch. The gated phone checks the touch watcher before each call."""
+    async def scenario():
+        pool = DevicePool(EventBus())
+        did = "phone-R5CT"
+        pool.leases[did] = Lease(did, task_id="task-1")
+        dev = FakePhone()
+        acted: list[str] = []
+
+        async def act(a):
+            acted.append(a)
+            return "ok"
+        dev.act = act  # type: ignore[attr-defined]
+        pool._devices[did] = dev
+        pool.start_watch(did, dev, "com.skylark.air")
+        gated = pool.gated(did, dev)
+        await gated.act("tap 1")
+        dev.touches.last_touch = time.time() + 0.001  # your finger, a moment later
+        blocked = asyncio.create_task(gated.act("Confirm check-in"))
+        await asyncio.sleep(0.05)  # well inside the watch loop's 0.5 s
+        waiting = not blocked.done() and acted == ["tap 1"] and pool.leases[did].user_control
+        pool.hand_back(did)
+        await asyncio.wait_for(blocked, 1)
+        pool.stop_watch(did)
+        return waiting, acted
+    waiting, acted = asyncio.run(scenario())
+    assert waiting and acted == ["tap 1", "Confirm check-in"]
+
+
+def test_asking_for_your_phone_is_pushed_to_the_iphone(tmp_path):
+    from api.push import Pusher, VapidKeys
+    store = TaskStore(":memory:")
+    task = store.create("Check me in for my flight", "web")
+    pusher = Pusher(store, VapidKeys(tmp_path), "https://envoy-mac.example.ts.net:8443", send=lambda *a, **k: None)
+    sent = []
+    pusher.notify = lambda kind, title, body, path, **kw: sent.append((kind, title, body, path, kw.get("urgency")))  # type: ignore[method-assign]
+    pusher.on_event({"type": "phone_requested", "task_id": task["id"], "device": "phone-R5CT", "model": "Galaxy S22"})
+    assert sent == [("phone", "Use your Galaxy S22?", "Check me in for my flight", f"/?task={task['id']}", "high")]
