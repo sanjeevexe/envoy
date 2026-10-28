@@ -19,6 +19,7 @@ from PIL import Image
 from agent.checks import CheckResult, evaluate
 from agent.popups import match_popup
 from agent.trace import TraceWriter, element_record, screen_record
+from agent.vision import Vision, crop
 from devices.types import Action, Device, InvalidElement, ScreenState
 from models.adapter import DataScope, ModelAdapter, image_part
 from models.prompts import PLAN_INSTRUCTIONS, STEP_INSTRUCTIONS, plan_input, step_input
@@ -45,6 +46,7 @@ class RunConfig:
     plan: bool = True
     screenshots: Literal["auto", "never", "always"] = "auto"
     max_done_rejections: int = 2
+    vision: Literal["hybrid", "grounding", "sam", "step"] = "hybrid"  # how a tap_point's target is found (Phase 6: agent/vision.py)
 
 
 @dataclass
@@ -328,6 +330,24 @@ class AgentRunner:
                     record["error"] = "tap_point rejected: elements available and no screenshot"
                     trace.step(record)
                     continue
+
+                if action.kind == "tap_point" and self.config.vision != "step" and not screen.secure:
+                    # The step model read rough coordinates off a 540 px screenshot; find the named target properly.
+                    target = getattr(decision.action, "target", "") or ""
+                    full = await self.device.screenshot()
+                    size = (screen.width, screen.height)
+                    vis = Vision(self.adapter, data_scope=self.config.data_scope, contributor=self.config.contributor, task_id=task_id)
+                    loc = await asyncio.to_thread(vis.locate, self.config.vision, full, target, size)
+                    out.model_calls += loc.calls
+                    out.cost_usd += loc.cost_usd
+                    out.cost_at_standard_usd += loc.cost_at_standard_usd
+                    record["vision"] = {"method": loc.method, "target": target, "box": loc.box, "ms": round(loc.ms), "calls": loc.calls,
+                                        "candidates": loc.candidates, "cost_usd": round(loc.cost_usd, 5), "detail": loc.detail,
+                                        "model_point": [action.x, action.y], "size": list(size),
+                                        "density": getattr(getattr(self.device, "capabilities", None), "density", None)}
+                    if loc.point is not None:
+                        action = action.model_copy(update={"x": loc.point[0], "y": loc.point[1]})
+                        record["vision"]["crop"] = trace.save_png(step, "target", crop(full, loc.box, size))  # type: ignore[arg-type]
 
                 verdict = classify(action, screen, decision.risk)
                 record["risk"] = {"level": verdict.level, "reasons": verdict.reasons, "model": decision.risk}

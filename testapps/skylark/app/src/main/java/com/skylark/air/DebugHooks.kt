@@ -22,7 +22,8 @@ import android.util.Log
  *   adb shell am broadcast -n com.skylark.air/.DebugReceiver -a com.skylark.air.SIGN_OUT
  *
  * Layout variants: 0 original, 1 moved button, 2 renamed labels, 3 extra confirmation screen,
- * 4 hidden IDs (no test tags, like obfuscated resource IDs), 5 renamed labels and hidden IDs.
+ * 4 hidden IDs (no test tags, like obfuscated resource IDs), 5 renamed labels and hidden IDs,
+ * 6 the seat map drawn on a canvas (no accessibility nodes; seat rectangles in the state hook).
  */
 class DebugReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -76,6 +77,13 @@ class StateProvider : ContentProvider() {
         c.addRow(arrayOf("variant", st.variant.toString()))
         c.addRow(arrayOf("gate_alerts", st.profile.gateAlerts.toString()))
         c.addRow(arrayOf("miles", st.profile.miles.toString()))
+        if (st.variant == 6) {
+            val vp = Store.seatViewport
+            val visible = org.json.JSONObject()
+            for ((seat, r) in Store.seatRects) if (r[1] >= vp[1] && r[3] <= vp[3]) visible.put(seat, org.json.JSONArray(r.toList()))
+            c.addRow(arrayOf("seat_rects", visible.toString()))
+            c.addRow(arrayOf("seat_viewport", org.json.JSONArray(vp.toList()).toString()))
+        }
         for (t in st.trips.filter { it.upcoming }) {
             c.addRow(arrayOf("${t.code}.checked_in", t.checkedIn.toString()))
             c.addRow(arrayOf("${t.code}.seat", t.flight.seat))

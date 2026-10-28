@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Shut an Envoy emulator down:  scripts/stop_emulator.sh envoy-test|envoy-real [--hard]
+# Shut an Envoy emulator down:  scripts/stop_emulator.sh envoy-test|envoy-real|envoy-small [--hard]
 #
 # Default is a clean Android shutdown (reboot -p), then wait for the emulator process to exit.
 # `adb emu kill` is a hard power-off: Android can lose writes it has not flushed yet (measured in
@@ -7,10 +7,11 @@
 # always stop cleanly; --hard is only for envoy-test or a hung emulator.
 set -euo pipefail
 source "$(dirname "$0")/env.sh"
-AVD="${1:?usage: $0 envoy-test|envoy-real [--hard]}"
+AVD="${1:?usage: $0 envoy-test|envoy-real|envoy-small [--hard]}"
 case "$AVD" in
   envoy-test) SERIAL=emulator-5554 ;;
   envoy-real) SERIAL=emulator-5556 ;;
+  envoy-small) SERIAL=emulator-5558 ;;
   *) echo "unknown AVD: $AVD" >&2; exit 2 ;;
 esac
 

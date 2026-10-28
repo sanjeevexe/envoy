@@ -23,7 +23,7 @@ TEST_EMULATOR, REAL_EMULATOR = "envoy-test", "envoy-real"
 # Apps that refuse to run on an emulator (Phase 0: Uber Eats won't install: "your device isn't compatible").
 EMULATOR_REFUSED = {"com.ubercab.eats": "Uber Eats"}
 
-_ON_MY_PHONE = re.compile(r"\b(?:on|using|with)\s+my\s+(?:android(?:\s+phone)?|real\s+phone|phone|pixel|galaxy)\b", re.I)
+_ON_MY_PHONE = re.compile(r"\b(?:on|using|use|with)\s+my\s+(?:android(?:\s+phone)?|real\s+phone|phone|pixel|galaxy)\b", re.I)
 
 
 def asks_for_phone(text: str) -> bool:

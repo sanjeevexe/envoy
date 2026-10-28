@@ -48,6 +48,9 @@ class FakeDevice:
         self.calls: list[str] = []
         self.grpc = SimpleNamespace(frame=lambda width, timeout=5: Image.new("RGB", (width, width * 2)))
 
+    def frame(self, width: int, timeout: float = 5) -> Image.Image:
+        return self.grpc.frame(width, timeout)
+
     async def observe(self, screenshot: bool = False) -> Screen:
         self.calls.append("observe")
         return self.screen

@@ -1,0 +1,390 @@
+"""Phase 6 offline tests: the real-phone device layer, routing between phones, asking before using your phone, pausing
+when you touch it, and screens with no accessibility tree (grounding, SAM 3.1, routines that replay drawn targets)."""
+
+from __future__ import annotations
+
+import asyncio
+import base64
+import io
+import struct
+import time
+from types import SimpleNamespace
+
+import numpy as np
+import pytest
+from PIL import Image, ImageDraw
+
+from agent.vision import Vision, mark, parse_sam
+from api.devices import DevicePool, Lease
+from api.events import EventBus
+from api.routing import Choice, asks_for_phone, choose, strip_phone_words
+from api.runner import TaskRunner
+from api.store import TaskStore
+from devices import phone as phone_mod
+from devices.phone import is_physical_input, phone_id
+from devices.scrcpy import DOWN, MSG_TOUCH, UP, key_msg, text_msg, touch_msg
+from memory.store import MemoryStore
+from routines.visual import match_crop, ncc
+
+# ---- the scrcpy control protocol -----------------------------------------------------------------
+
+
+def test_scrcpy_control_messages_have_scrcpys_byte_layout():
+    m = touch_msg(DOWN, 300, 640, 576, 1280)
+    assert len(m) == 32
+    kind, action, pointer, x, y, w, h, pressure, action_button, buttons = struct.unpack(">BBqIIHHHII", m)
+    assert (kind, action, x, y, w, h, pressure) == (MSG_TOUCH, DOWN, 300, 640, 576, 1280, 0xFFFF)
+    assert struct.unpack(">BBqIIHHHII", touch_msg(UP, 1, 2, 576, 1280, 0.0))[7] == 0  # finger up: no pressure
+    k = key_msg(0, 4)
+    assert len(k) == 14 and struct.unpack(">BBIII", k) == (0, 0, 4, 0, 0)
+    t = text_msg("héllo")
+    assert t[0] == 1 and struct.unpack(">I", t[1:5])[0] == len("héllo".encode()) and t[5:] == "héllo".encode()
+
+
+# ---- finding phones, and telling your touches from Envoy's -----------------------------------------
+
+
+def test_physical_input_is_a_finger_down_or_a_key_press_never_a_release():
+    assert is_physical_input("/dev/input/event1: EV_ABS       ABS_MT_TRACKING_ID   00000000")
+    assert not is_physical_input("/dev/input/event1: EV_ABS       ABS_MT_TRACKING_ID   ffffffff")  # finger lifted
+    assert is_physical_input("/dev/input/event0: EV_KEY       KEY_VOLUMEDOWN       DOWN")
+    assert not is_physical_input("/dev/input/event0: EV_KEY       KEY_VOLUMEDOWN       UP")
+    assert not is_physical_input("/dev/input/event1: EV_ABS       ABS_MT_POSITION_X    000059b7")
+    assert not is_physical_input("add device 1: /dev/input/event1")
+
+
+def test_discover_lists_phones_not_emulators(monkeypatch):
+    out = ("List of devices attached\n"
+           "emulator-5554          device product:sdk_gphone64_arm64 model:sdk_gphone64_arm64 device:emu64a transport_id:9\n"
+           "R5CT30ABCDE            device usb:1-1 product:o1q model:SM_S901U device:o1q transport_id:12\n"
+           "192.168.4.20:41233     unauthorized transport_id:13\n")
+
+    def fake_run(cmd, **kw):
+        if cmd[-2:] == ["devices", "-l"]:
+            return SimpleNamespace(stdout=out, returncode=0)
+        return SimpleNamespace(stdout="", returncode=0)
+
+    def fake_adb(serial, *args, **kw):
+        props = {"ro.serialno": "R5CT30ABCDE", "ro.build.version.release": "15"}
+        return SimpleNamespace(stdout=props.get(args[-1], ""), returncode=0)
+
+    monkeypatch.setattr(phone_mod.subprocess, "run", fake_run)
+    monkeypatch.setattr(phone_mod, "adb", fake_adb)
+    monkeypatch.delenv("ENVOY_TEST_PHONE", raising=False)
+    found = phone_mod.discover()
+    assert [p["serial"] for p in found] == ["R5CT30ABCDE", "192.168.4.20:41233"]
+    assert found[0] == {"id": "phone-R5CT30ABCDE", "serial": "R5CT30ABCDE", "model": "SM S901U", "android": "15", "state": "device"}
+    assert found[1]["state"] == "unauthorized"
+    monkeypatch.setenv("ENVOY_TEST_PHONE", "emulator-5554")  # an emulator can stand in for a phone in tests
+    assert "emulator-5554" in [p["serial"] for p in phone_mod.discover()]
+    assert phone_id("adb-R5CT._adb-tls-connect._tcp") == "phone-adb-R5CT-adb-tls-connect-tcp"
+
+
+# ---- routing -------------------------------------------------------------------------------------
+
+PHONE = {"id": "phone-R5CT", "serial": "R5CT", "model": "Galaxy S22", "state": "device"}
+
+
+def test_routing_follows_the_design_table():
+    assert choose("com.skylark.air").device == "envoy-test"
+    assert choose("com.amazon.mShop.android.shopping").device == "envoy-real"
+    c = choose("com.skylark.air", request="check me in on my phone", phones=[PHONE])
+    assert c.device == "phone-R5CT" and c.real_phone and "you asked" in c.reason
+    assert choose("com.skylark.air", asked="phone", phones=[PHONE]).real_phone
+    assert choose("com.skylark.air", phone_apps=["com.skylark.air"], phones=[PHONE]).real_phone  # set to run on your phone
+    assert choose("com.ubercab.eats", phones=[PHONE]).real_phone  # refuses emulators
+    # Your phone is needed but not there: never silently somewhere else when you asked for it.
+    missing = choose("com.skylark.air", request="on my phone")
+    assert missing.device is None and "isn't connected" in (missing.error or "")
+    assert "allowed USB debugging" in (choose("com.ubercab.eats", phones=[{**PHONE, "state": "unauthorized"}]).error or "")
+    # A setting falls back to the emulator (the app works there); an explicit choice wins.
+    assert choose("com.skylark.air", phone_apps=["com.skylark.air"]).device == "envoy-test"
+    assert choose("com.skylark.air", asked="emulator", phones=[PHONE]).device == "envoy-test"
+    assert choose("com.skylark.air", phones=[PHONE]).device == "envoy-test"  # a connected phone isn't used by default
+
+
+def test_on_my_phone_is_recognized_and_removed_from_the_goal():
+    assert asks_for_phone("Check me in on my phone") and asks_for_phone("use my android phone to order")
+    assert not asks_for_phone("what's my phone number?") and not asks_for_phone("call my phone")
+    assert strip_phone_words("Check me in for my flight on my phone") == "Check me in for my flight"
+
+
+# ---- asking before using your phone ---------------------------------------------------------------
+
+
+class FakePool:
+    def __init__(self) -> None:
+        self.phones = {PHONE["id"]: PHONE}
+        self.leases = {"envoy-test": Lease("envoy-test"), PHONE["id"]: Lease(PHONE["id"])}
+
+    def refresh_phones(self):
+        return list(self.phones.values())
+
+    @staticmethod
+    def avd_for(app):
+        return "envoy-test"
+
+
+def runner_with(pool) -> TaskRunner:
+    bus = EventBus()
+    r = TaskRunner(TaskStore(":memory:"), bus, pool, MemoryStore(":memory:"), SimpleNamespace(), adapter=SimpleNamespace())
+    return r
+
+
+def test_no_answer_is_never_a_yes_for_your_phone():
+    async def scenario():
+        r = runner_with(FakePool())
+        r.approval_timeout_s = 0.2
+        task = r.store.create("check in", "web")
+        choice = await r._choose_phone(task["id"], "com.skylark.air", "phone")
+        return r, task, choice
+    r, task, choice = asyncio.run(scenario())
+    assert choice == Choice("envoy-test", "you chose the emulator")  # SkyLark works on the emulator: it runs there instead
+    steps = [s["text"] for s in r.store.steps(task["id"])]
+    assert any("not used (no answer)" in s for s in steps)
+
+
+def test_your_yes_lets_envoy_use_the_phone():
+    async def scenario():
+        r = runner_with(FakePool())
+        r.loop = asyncio.get_running_loop()
+        task = r.store.create("check in", "web")
+        waiting = asyncio.create_task(r._choose_phone(task["id"], "com.skylark.air", "phone"))
+        for _ in range(50):
+            await asyncio.sleep(0.01)
+            if r.store.get(task["id"])["waiting_for"] == "phone":
+                break
+        assert r.store.get(task["id"])["status"] == "needs_you"
+        assert r.answer_phone(task["id"], True, "you on iPhone")
+        return await waiting, r, task
+    choice, r, task = asyncio.run(scenario())
+    assert choice.device == "phone-R5CT" and choice.real_phone
+    assert r.answer_phone(task["id"], True, "you") is False  # nothing is waiting any more
+
+
+def test_a_phone_that_refuses_emulators_is_declined_not_rerouted():
+    async def scenario():
+        r = runner_with(FakePool())
+        r.approval_timeout_s = 0.1
+        task = r.store.create("order lunch", "web")
+        return await r._choose_phone(task["id"], "com.ubercab.eats", None), r.store.get(task["id"])
+    choice, task = asyncio.run(scenario())
+    assert choice is None and task["status"] == "declined"
+
+
+# ---- pausing when you touch the phone ------------------------------------------------------------
+
+
+class FakeBanner:
+    def __init__(self) -> None:
+        self.st = {"paused": False, "reason": "", "changed_at": 0.0, "shown": True}
+        self.calls: list[str] = []
+
+    def state(self):
+        return dict(self.st)
+
+    def pause(self, reason):
+        self.calls.append(f"pause:{reason}")
+        self.st.update(paused=True, reason=reason, changed_at=time.time())
+
+    def resume(self):
+        self.calls.append("resume")
+        self.st.update(paused=False, changed_at=time.time())
+
+    def show(self, text):
+        self.calls.append("show")
+
+    def hide(self):
+        self.calls.append("hide")
+
+
+class FakePhone:
+    def __init__(self) -> None:
+        self.banner = FakeBanner()
+        self.touches = SimpleNamespace(last_touch=0.0, touched_since=lambda t: self.touches.last_touch > t)
+        self.front = "com.skylark.air"
+
+    def foreground_package(self):
+        return self.front
+
+
+def test_a_touch_pause_or_another_app_hands_the_phone_to_you():
+    async def scenario():
+        bus = EventBus()
+        bus.bind(asyncio.get_running_loop())
+        pool = DevicePool(bus)
+        did = "phone-R5CT"
+        pool.leases[did] = Lease(did, task_id="task-1")
+        dev = FakePhone()
+        pool._devices[did] = dev
+        watcher = asyncio.create_task(pool.watch(did, dev, "com.skylark.air", every_s=0.02))
+        lease = pool.leases[did]
+        await asyncio.sleep(0.1)
+        assert not lease.user_control
+        dev.touches.last_touch = time.time()  # you touch the phone
+        await asyncio.sleep(0.1)
+        touched = (lease.user_control, lease.reason, lease.agent_turn.is_set())
+        dev.banner.resume()  # Resume on the phone's banner
+        await asyncio.sleep(0.1)
+        resumed = lease.user_control
+        dev.banner.st.update(paused=True, reason="you pressed Pause on the phone", changed_at=time.time())
+        await asyncio.sleep(0.1)
+        paused = (lease.user_control, lease.reason)
+        dev.banner.resume()
+        await asyncio.sleep(0.1)
+        lease.last_agent_call = time.time() - 10
+        dev.front = "com.android.dialer"  # a call comes in: not something Envoy did
+        await asyncio.sleep(0.1)
+        other_app = (lease.user_control, lease.reason)
+        watcher.cancel()
+        return touched, resumed, paused, other_app
+    touched, resumed, paused, other_app = asyncio.run(scenario())
+    assert touched == (True, "paused: you touched the phone", False)  # the agent's next call waits
+    assert resumed is False
+    assert paused == (True, "paused: you pressed Pause on the phone")
+    assert other_app == (True, "paused: com.android.dialer came to the front on its own")
+
+
+def test_the_agents_own_app_switch_does_not_pause():
+    async def scenario():
+        pool = DevicePool(EventBus())
+        did = "phone-R5CT"
+        pool.leases[did] = Lease(did, task_id="task-1")
+        dev = FakePhone()
+        pool._devices[did] = dev
+        lease = pool.leases[did]
+        watcher = asyncio.create_task(pool.watch(did, dev, "com.skylark.air", every_s=0.02))
+        lease.last_agent_call = time.time()  # Envoy just tapped something that opens the browser
+        dev.front = "com.android.chrome"
+        await asyncio.sleep(0.15)
+        watcher.cancel()
+        return lease.user_control
+    assert asyncio.run(scenario()) is False
+
+
+# ---- screens with no tree ------------------------------------------------------------------------
+
+
+def test_sam_output_is_parsed_into_boxes():
+    text = ("<0f>0<|box;x1=161;y1=1022;x2=212;y2=1055;w=540;h=1200;c=0.75|><|mask;x=0;y=0;c=0.75;data=34,52,~!!|>,"
+            "1<|box;x1=430;y1=313;x2=481;y2=365;w=540;h=1200;c=0.81|><|box;x1=5;y1=5;x2=5;y2=9;w=540;h=1200|>")
+    boxes = parse_sam(text)
+    assert len(boxes) == 2  # the empty box is dropped
+    assert boxes[0][:2] == pytest.approx((161 / 540, 1022 / 1200)) and boxes[1][4] == pytest.approx(0.81)
+    assert parse_sam("") == []
+
+
+def _screen(seats: dict[str, tuple[int, int]], size=(720, 1280)) -> bytes:
+    img = Image.new("RGB", size, (250, 248, 252))
+    d = ImageDraw.Draw(img)
+    for i, (label, (x, y)) in enumerate(seats.items()):
+        d.rounded_rectangle((x, y, x + 80, y + 80), 8, fill=(220, 232, 245) if i % 2 else (189, 189, 189))
+        d.text((x + 34, y + 30), label, fill=(0, 0, 0))
+    d.ellipse((600, 1100, 680, 1180), fill=(200, 30, 60))  # one unique mark: a red pin
+    d.line((610, 1140, 670, 1140), fill=(255, 255, 255), width=6)
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    return buf.getvalue()
+
+
+def _crop(png: bytes, box) -> str:
+    img = Image.open(io.BytesIO(png)).crop(box)
+    buf = io.BytesIO()
+    img.save(buf, format="PNG")
+    return base64.b64encode(buf.getvalue()).decode()
+
+
+def test_a_recorded_picture_is_found_only_when_it_is_unique():
+    png = _screen({"A": (100, 400), "B": (200, 400), "C": (300, 400), "A ": (100, 600), "B ": (200, 600)})
+    point, best, _ = match_crop(png, _crop(png, (594, 1094, 686, 1186)), (720, 1280))
+    assert point is not None and abs(point[0] - 640) <= 4 and abs(point[1] - 1140) <= 4 and best > 0.95
+    # Two identical-looking seats: no guess, so the executor asks grounding instead.
+    twin = _screen({"A": (100, 400), "B": (200, 400), "A ": (100, 600)})  # same letter, same color
+    point, best, second = match_crop(twin, _crop(twin, (96, 396, 184, 484)), (720, 1280))
+    assert point is None and best - second < 0.04
+
+
+def test_a_picture_recorded_on_another_phone_is_scaled_by_density():
+    big = _screen({"x": (10, 10)}, size=(1080, 1920))  # recorded at 480 dpi
+    crop = _crop(big, (594, 1094, 686, 1186))  # the red pin
+    small = Image.open(io.BytesIO(big)).resize((720, 1280))  # the same screen on a 320 dpi phone
+    buf = io.BytesIO()
+    small.save(buf, format="PNG")
+    point, best, _ = match_crop(buf.getvalue(), crop, (720, 1280), scale=320 / 480)
+    assert point is not None and abs(point[0] - 427) <= 6 and abs(point[1] - 760) <= 6
+
+
+def test_ncc_is_one_at_an_exact_copy():
+    rng = np.random.default_rng(1)
+    img = rng.random((60, 80)).astype(np.float32)
+    s = ncc(img, img[20:30, 40:55].copy())
+    assert s.shape == (51, 66) and np.unravel_index(int(np.argmax(s)), s.shape) == (20, 40) and s.max() == pytest.approx(1, abs=1e-3)
+
+
+class FakeAdapter:
+    """Grounding returns a box on the 0–1000 grid; the box-choosing call picks a number."""
+
+    def __init__(self, box=(100, 300, 200, 400), pick=2):
+        self.box, self.pick, self.calls = box, pick, []
+
+    def call(self, job, content, **kw):
+        self.calls.append(job)
+        from models.schemas import ChooseOutput, GroundedBox, GroundingResult
+        parsed = (GroundingResult(objects=[GroundedBox(object_name="t", x_min=self.box[0], y_min=self.box[1], x_max=self.box[2], y_max=self.box[3])])
+                  if job == "grounding" else ChooseOutput(number=self.pick))
+        return SimpleNamespace(parsed=parsed, cost_usd=0.001, cost_at_standard_usd=0.002, text="")
+
+    def send(self, cfg, req, **kw):
+        self.calls.append("sam")
+        return SimpleNamespace(text="<|box;x1=10;y1=10;x2=60;y2=60;w=720;h=1280;c=0.9|><|box;x1=300;y1=500;x2=380;y2=580;w=720;h=1280;c=0.8|>",
+                               cost_usd=0.0025, cost_at_standard_usd=0.0025)
+
+
+def test_grounding_and_sam_return_device_pixels():
+    png = _screen({"A": (100, 400)})
+    g = Vision(FakeAdapter()).ground(png, "seat 10A", (1080, 2400))
+    assert g.box == (108, 720, 216, 960) and g.point == (162, 840) and g.calls == 1
+    s = Vision(FakeAdapter(pick=2)).sam_choose(png, "seat 10A", (1080, 2400), ("square button",))
+    assert s.candidates == 2 and s.box == (450, 938, 570, 1088) and s.calls == 2  # one SAM phrase + the choice
+    none = Vision(FakeAdapter(pick=0)).sam_choose(png, "seat 10A", (1080, 2400), ("square button",))
+    assert none.box is None and "none" in none.detail
+    assert Image.open(io.BytesIO(mark(Image.open(io.BytesIO(png)), parse_sam("<|box;x1=1;y1=1;x2=9;y2=9;w=10;h=10|>")))).size == (720, 1280)
+
+
+def test_a_routine_step_on_a_drawn_target_replays_from_its_picture_then_grounding():
+    from routines.executor import ExecConfig, RoutineExecutor
+    from routines.model import Locator, Routine, Step, StepAction
+    from devices.types import Action, ActionResult, Capabilities, ScreenState
+
+    png = _screen({"A": (100, 400), "B": (200, 400)})
+
+    class Dev:
+        capabilities = Capabilities(False, False, True, 720, 1280, 320)
+
+        def __init__(self):
+            self.acts: list[Action] = []
+
+        async def screenshot(self):
+            return png
+
+        async def act(self, a):
+            self.acts.append(a)
+            return ActionResult(ok=True, duration_ms=1)
+
+    screen = ScreenState(package="com.skylark.air", activity="", elements=[], numbered=[], signature="", compact="", timestamp=0,
+                         width=720, height=1280)
+    step_pin = Step(id="pin", intent="tap the pin", pre=[], post=[], action=StepAction(kind="tap", target=Locator(
+        visual="the red pin", crop=_crop(png, (594, 1094, 686, 1186)), density=320)))
+    step_seat = Step(id="seat", intent="pick a seat", pre=[], post=[], action=StepAction(kind="tap", target=Locator(visual="seat {{seat}}")))
+    dev, adapter = Dev(), FakeAdapter(box=(100, 300, 200, 400), pick=0)  # SAM's boxes aren't it: grounding finds it
+    ex = RoutineExecutor(dev, adapter=adapter, config=ExecConfig(data_scope="test_app", contributor=True))  # type: ignore[arg-type]
+    routine = Routine(routine="r", app="com.skylark.air", intent="x", steps=[step_pin, step_seat])
+    ctx = SimpleNamespace(inputs={"seat": "10A"}, task_id="t", out=SimpleNamespace(model_calls=0, cost_usd=0.0, cost_at_standard_usd=0.0,
+                                                                                   status="", approvals=[], patches=[]), routine=routine)
+    sr = SimpleNamespace(rungs=[], climb=lambda *a: None, status="", detail="")
+    assert asyncio.run(ex._visual_point(ctx, step_pin, screen, sr)) is not None and ctx.out.model_calls == 0  # its picture, no call
+    point = asyncio.run(ex._visual_point(ctx, step_seat, screen, sr))
+    assert point == (108, 448) and adapter.calls == ["sam", "sam", "choose", "grounding"] and ctx.out.model_calls == 4
+    assert "looked for 'seat 10A' (sam→grounding" in sr.rungs[-1]
+    secure = ScreenState(**{**screen.__dict__, "secure": True})
+    assert asyncio.run(ex._visual_point(ctx, step_seat, secure, sr)) is None  # never a picture of a secure screen

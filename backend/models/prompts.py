@@ -33,7 +33,7 @@ Return exactly one action as JSON in the required schema:
 - scroll: direction "down" reveals content further down. Give the List number, or null for the whole screen. Scroll when what you need is probably off screen; after two scrolls with no new elements, you are at the end.
 - swipe: only for carousels and gestures, with 0-1000 grid coordinates (0,0 is top-left, 1000,1000 is bottom-right).
 - back, home, launch(app package name): navigation.
-- tap_point(x, y): only when SCREEN has no usable elements; 0-1000 grid coordinates from the screenshot.
+- tap_point(x, y, target): only for something drawn on screen that SCREEN doesn't list (a seat map, a map pin, a canvas); 0-1000 grid coordinates from the screenshot (use look first to get one), and in target say what it is as it looks ("seat 21A").
 - look: ask for a screenshot in the next step, when the element list is not enough to decide.
 - wait(seconds): for loading screens and spinners, 1 to 5 seconds.
 - ask_user(question): information is missing and cannot be found on the phone or in NOTES.

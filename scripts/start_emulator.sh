@@ -4,6 +4,7 @@
 #   scripts/start_emulator.sh envoy-test            # headless, console 5554, gRPC 8554
 #   scripts/start_emulator.sh envoy-real            # headless, console 5556, gRPC 8556
 #   scripts/start_emulator.sh envoy-real --window   # with a window (for sign-ins)
+#   scripts/start_emulator.sh envoy-small           # Phase 6: a smaller screen (720x1280, 320 dpi), console 5558, gRPC 8558
 #
 # envoy-test: snapshots allowed (the agent saves and loads named snapshots); quick-boot
 #   state is not saved on exit, so every run starts from the same default boot.
@@ -12,12 +13,13 @@
 set -euo pipefail
 source "$(dirname "$0")/env.sh"
 
-AVD="${1:?usage: $0 envoy-test|envoy-real [--window]}"
+AVD="${1:?usage: $0 envoy-test|envoy-real|envoy-small [--window]}"
 WINDOW="${2:-}"
 
 case "$AVD" in
   envoy-test) CONSOLE=5554; GRPC=8554; SNAP=(-no-snapshot-save) ;;
   envoy-real) CONSOLE=5556; GRPC=8556; SNAP=(-no-snapshot) ;;
+  envoy-small) CONSOLE=5558; GRPC=8558; SNAP=(-no-snapshot-save) ;;
   *) echo "unknown AVD: $AVD" >&2; exit 2 ;;
 esac
 SERIAL="emulator-$CONSOLE"

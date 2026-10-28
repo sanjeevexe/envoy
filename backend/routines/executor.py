@@ -7,7 +7,8 @@ and no model is called while checks pass.
 
 When a check fails, the fallback ladder climbs one rung at a time:
   1. wait and retry (slow loading)
-  2. relaxed matching (the lower locator threshold)
+  2. relaxed matching (the lower locator threshold); then, if the target may be off screen (a shorter phone than the
+     one the routine was learned on), scrolling the screen's list to reveal it, with no model call
   3. the shared pop-up handler (agent/popups.py)
   4. local repair: one model call at a time with the step's intent, checks and the current screen,
      proposing an action toward the after-checks; at most 2 per step and 5 per run
@@ -32,6 +33,7 @@ from PIL import Image
 from agent.loop import AgentRunner, RunConfig
 from agent.popups import match_popup
 from agent.trace import TraceWriter, screen_record
+from agent.vision import Vision
 from devices.types import Action, Device, Element, InvalidElement, ScreenState
 from models.adapter import DataScope, ModelAdapter
 from models.prompts import REPAIR_INSTRUCTIONS, repair_input
@@ -45,6 +47,7 @@ from routines import locators
 from routines.compiler import bind_inputs, chk_generalize, generalize_locator
 from routines.model import Check, Extract, Locator, Routine, Step, StepAction, render, render_str
 from routines.screens import body, contains_value, norm, usable_id
+from routines.visual import match_crop
 
 RUNG_NAMES = {0: "none", 1: "wait and retry", 2: "relaxed match", 3: "pop-up handler", 4: "local repair", 5: "full agent", 6: "ask the user"}
 Status = Literal["done", "failed", "declined", "handoff", "needs_user", "agent_done", "agent_failed"]
@@ -219,8 +222,8 @@ class RoutineExecutor:
         return [c for c in checks if c.kind not in ("screen_changed", "screen_like", "app_foreground")]
 
     def _target(self, step: Step, screen: ScreenState, inputs: dict[str, str], relaxed: bool = False) -> locators.Match | None:
-        if step.action.kind not in ("tap", "long_press", "type") or step.action.target is None:
-            return None
+        if step.action.kind not in ("tap", "long_press", "type") or step.action.target is None or step.action.target.visual:
+            return None  # a drawn target (no node in the tree) is found by looking, when the step acts
         th = locators.RELAXED if relaxed else locators.STRICT
         return locators.locate(step.action.target, screen, inputs, threshold=th)
 
@@ -292,6 +295,8 @@ class RoutineExecutor:
                         if n in specs:
                             out.outputs[n] = extract_value(specs[n], screen, ctx.inputs)
                     missing_out = [n for n in routine.outputs if not out.outputs.get(n)]
+            if missing_out:  # on a shorter screen an output can be scrolled away (Phase 6): look up the list, then down
+                missing_out = await self._read_scrolled(ctx, specs, missing_out)
             if missing_out:
                 return self._finish(ctx, "failed", f"outputs not found: {', '.join(missing_out)}")
             return self._finish(ctx, "done", "all steps and checks passed")
@@ -377,6 +382,7 @@ class RoutineExecutor:
         last_bounds = None
         popups = 0
         tried_relaxed = False
+        tried_reveal = False
         failed_once = False  # rung 1 counts only when a check actually failed first (not the two-read stillness check)
         while True:
             s = await self._observe()
@@ -427,6 +433,17 @@ class RoutineExecutor:
                         sr.score = round(rm.score, 3)
                     return _Ready("ok", s, rm.element if rm else None, relaxed=rm is not None and not (m and m.ok))
                 tried_relaxed = stable
+            # Still rung 2: on a shorter screen the target can be below the fold (Phase 6, envoy-small).
+            if tried_relaxed and not tried_reveal and step.action.target is not None and step.action.kind != "scroll_until":
+                tried_reveal = True
+                found = await self._reveal(ctx, step)
+                if found is not None:
+                    s2, m2 = found
+                    sr.climb(2, f"scrolled to reveal the target {m2.summary()}")
+                    sr.score = round(m2.score, 3)
+                    return _Ready("ok", s2, m2.element, relaxed=m2.score < locators.STRICT)
+                deadline = max(deadline, time.perf_counter() + 0.5)
+                continue
             if now >= deadline:
                 failed = [o.detail for o in pre_outs if not o.passed]
                 why = ("before-checks failed: " + "; ".join(failed)) if failed else f"target not found: {m.summary() if m else '?'}"
@@ -584,6 +601,13 @@ class RoutineExecutor:
             action = Action(kind="launch", package=a.package or ctx.routine.app)
         elif a.kind == "wait":
             action = Action(kind="wait", seconds=a.seconds or 1.0)
+        elif a.target is not None and a.target.visual:
+            point = await self._visual_point(ctx, step, screen, sr)
+            if point is None:
+                sr.status, sr.detail = "failed", f"couldn't see {render_str(a.target.visual, ctx.inputs)!r} on the screen"
+                ctx.out.status = "failed"
+                return "stop"
+            action = Action(kind="tap_point", x=point[0], y=point[1])
         else:
             assert el is not None
             if a.kind == "type":
@@ -638,6 +662,73 @@ class RoutineExecutor:
                 direction = {"down": "up", "up": "down", "left": "right", "right": "left"}[direction]
                 flipped = True
         return False
+
+    async def _visual_point(self, ctx: _Ctx, step: Step, screen: ScreenState, sr: StepRun) -> tuple[int, int] | None:
+        """A drawn target: the recorded picture if it is clearly and uniquely on screen (no model call), else Muse Spark's
+        SAM 3.1 + choose, then grounding, for its description (agent/vision.py). Never on a secure screen."""
+        loc = step.action.target
+        assert loc is not None and loc.visual
+        if screen.secure:
+            return None
+        png = await self.device.screenshot()
+        size = (screen.width, screen.height)
+        density = getattr(getattr(self.device, "capabilities", None), "density", None)
+        if loc.crop:
+            scale = density / loc.density if density and loc.density else 1.0
+            point, best, second = await asyncio.to_thread(match_crop, png, loc.crop, size, scale)
+            if point is not None:
+                sr.rungs.append(f"found its picture (match {best:.2f}, next {second:.2f})")
+                return point
+        desc = render_str(loc.visual, ctx.inputs) or loc.visual
+        vis = Vision(self.adapter, data_scope=self.config.data_scope, contributor=self.config.contributor, task_id=ctx.task_id)
+        found = await asyncio.to_thread(vis.locate, "hybrid", png, desc, size)
+        ctx.out.model_calls += found.calls
+        ctx.out.cost_usd += found.cost_usd
+        ctx.out.cost_at_standard_usd += found.cost_at_standard_usd
+        sr.rungs.append(f"looked for {desc!r} ({found.method}, {found.ms / 1000:.1f} s)" + ("" if found.point else ": not found"))
+        return found.point
+
+    async def _reveal(self, ctx: _Ctx, step: Step, max_scrolls: int = 8) -> tuple[ScreenState, locators.Match] | None:
+        """Scroll the screen's largest list down (then back up) until the step's target and before-checks hold.
+        None if the screen has no list or the target never shows: the ladder goes on to repair."""
+        s = await self._observe()
+        direction, flipped = "down", False
+        for _ in range(2 * max_scrolls):
+            lists = [e for e in s.numbered if e.kind == "List"]
+            if not lists:
+                return None
+            before_body = body(s)
+            await self.device.act(Action(kind="scroll", direction=direction, element=max(lists, key=lambda e: e.area).number))
+            s = await self._settle_quick()
+            m = self._target(step, s, ctx.inputs)
+            if not m or not m.ok:
+                m = self._target(step, s, ctx.inputs, relaxed=True)
+            if m is not None and m.ok and self._check(step.pre, s, ctx.inputs, relaxed=True)[0]:
+                return s, m
+            if body(s) == before_body:  # the end of the list
+                if flipped:
+                    return None
+                direction, flipped = "up", True
+        return None
+
+    async def _read_scrolled(self, ctx: _Ctx, specs: dict[str, Any], missing: list[str], max_scrolls: int = 8) -> list[str]:
+        """Read outputs that aren't on screen by scrolling the largest list up, then down. Returns what is still missing."""
+        missing = [n for n in missing if n in specs]
+        s = await self._observe()
+        for direction in ("up", "down"):
+            for _ in range(max_scrolls):
+                lists = [e for e in s.numbered if e.kind == "List"]
+                if not missing or not lists:
+                    return [n for n in ctx.routine.outputs if not ctx.out.outputs.get(n)]
+                before_body = body(s)
+                await self.device.act(Action(kind="scroll", direction=direction, element=max(lists, key=lambda e: e.area).number))
+                s = await self._settle_quick()
+                for n in missing:
+                    ctx.out.outputs[n] = ctx.out.outputs.get(n) or extract_value(specs[n], s, ctx.inputs)
+                missing = [n for n in missing if not ctx.out.outputs.get(n)]
+                if body(s) == before_body:
+                    break
+        return [n for n in ctx.routine.outputs if not ctx.out.outputs.get(n)]
 
     async def _settle_quick(self, quiet_s: float = 0.15, timeout_s: float = 2.0) -> ScreenState:
         """Until two reads `quiet_s` apart are the same (after a scroll's fling)."""

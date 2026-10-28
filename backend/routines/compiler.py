@@ -32,6 +32,7 @@ from routines import checks as chk
 from routines import locators
 from routines.model import Check, Extract, InputSpec, Locator, Routine, Step, StepAction, has_slot
 from routines.screens import contains_value, fold, load_tree, norm, short_id, usable_id
+from routines.visual import encode as encode_png
 
 _DIGIT = re.compile(r"\d")
 _SLUG = re.compile(r"[^a-z0-9]+")
@@ -61,6 +62,8 @@ class TStep:
     risk: str = "read"
     scrolls: int = 0
     swipe: tuple[int, int, int, int] | None = None  # recorded swipe start and end, device pixels
+    vision: dict[str, Any] | None = None  # a tap_point's target as the agent saw it (Phase 6): description, box, crop
+    trace_dir: Path | None = None
 
 
 @dataclass
@@ -132,6 +135,7 @@ def clean(trace_dir: Path, records: list[dict]) -> tuple[list[TStep], list[tuple
             n=n, kind=dev["kind"], before=before, after=after, target=target, typed=dev.get("text"), submit=dev.get("submit", False),
             direction=dev.get("direction"), container=container, reason=(r.get("decision") or {}).get("reason", ""),
             swipe=(dev["x"], dev["y"], dev["x2"], dev["y2"]) if dev["kind"] == "swipe" and dev.get("x") is not None else None,
+            vision=r.get("vision") if dev["kind"] == "tap_point" else None, trace_dir=trace_dir,
             expected=(r.get("decision") or {}).get("expected_result", ""), risk=(r.get("risk") or {}).get("level", "read"),
         ))
 
@@ -501,6 +505,15 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             action = StepAction(kind="swipe", target=anchor, vector=(round((x2 - x) / w, 3), round((y2 - y) / h, 3)),
                                 start=(round(x / w, 3), round(y / h, 3)))
             action = StepAction(kind="launch", package=s.before.package)
+        elif s.kind == "tap_point" and s.vision and s.vision.get("box") and s.vision.get("target"):
+            # Phase 6: a target drawn on screen (no node in the tree), kept as what it looks like plus its picture.
+            v = s.vision
+            w, h = v.get("size") or [s.before.width or 1080, s.before.height or 2400]
+            x1, y1, x2, y2 = v["box"]
+            crop = (s.trace_dir / v["crop"]).read_bytes() if s.trace_dir and v.get("crop") and (s.trace_dir / v["crop"]).exists() else None
+            action = StepAction(kind="tap", target=Locator(visual=bind_inputs(v["target"], examples), crop=encode_png(crop) if crop else None,
+                                                           region=(round(x1 / w, 4), round(y1 / h, 4), round(x2 / w, 4), round(y2 / h, 4)),
+                                                           density=v.get("density")))
         else:
             report.warnings.append(f"step {i}: {s.kind} is not supported in routines; dropped")
             continue

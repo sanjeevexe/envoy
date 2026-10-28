@@ -509,6 +509,10 @@ fun SeatMapScreen(s: AppState, nav: Nav, code: String) {
             }
         }
     }) {
+        if (s.variant == 6) {
+            CanvasSeatMap(s, t, selected) { selected = it; message = "" }
+            return@Page
+        }
         LazyColumn(Modifier.fillMaxSize().testTag("list_seats"), contentPadding = androidx.compose.foundation.layout.PaddingValues(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             item { Text("A and F are windows. C and D are aisles. Rows ${sm.paidRows.joinToString(" and ")} have extra legroom for $${sm.paidPrice}.", color = Color.Gray) }
             items((sm.firstRow..sm.lastRow).toList()) { row ->

@@ -57,11 +57,16 @@ class Locator(_Model):
     siblings: list[str] = Field(default_factory=list)
     in_list: bool | None = None
     position: tuple[float, float] | None = None  # centre as a fraction of the screen (weak tiebreaker only)
-    crop: str | None = None  # visual crop for elements with no usable attributes (fallback; stub in Phase 2)
+    # Phase 6: a target drawn on screen with no accessibility node (a canvas seat map, a map pin). The executor looks
+    # for the recorded picture first (no model call), then asks Muse Spark's grounding for `visual` (one call).
+    visual: str | None = None  # what it looks like, with inputs as {{slots}}: "seat {{seat}}"
+    crop: str | None = None  # its picture when recorded (base64 PNG, device pixels)
+    region: tuple[float, float, float, float] | None = None  # where it was, as fractions of the screen (x1, y1, x2, y2)
+    density: int | None = None  # screen density it was recorded at, to scale the picture on another phone
 
     def describe(self) -> str:
         bits = []
-        for k in ("text_has", "text", "desc", "hint", "resource_id", "kind"):
+        for k in ("visual", "text_has", "text", "desc", "hint", "resource_id", "kind"):
             v = getattr(self, k)
             if v:
                 bits.append(f"{k}={v!r}")

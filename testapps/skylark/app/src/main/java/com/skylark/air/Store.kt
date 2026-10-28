@@ -147,7 +147,11 @@ object Store {
     // Debug hooks
     fun reset() { update { parseState(defaults) }; _epoch.value += 1 }
     fun seed(json: String) { update { parseState(json) }; _epoch.value += 1 }
-    fun setVariant(v: Int) = update { it.copy(variant = v.coerceIn(0, 5)) }
+    fun setVariant(v: Int) = update { it.copy(variant = v.coerceIn(0, 6)) }
+
+    // Variant 6 (canvas seat map): where each seat was drawn, in screen pixels, and the visible part of the map.
+    @Volatile var seatRects: Map<String, IntArray> = emptyMap()
+    @Volatile var seatViewport: IntArray = IntArray(4)
     fun setGate(code: String, gate: String) = updateTrip(code) { it.copy(flight = it.flight.copy(gate = gate)) }
     fun signOut() { update { it.copy(signedIn = false) }; _epoch.value += 1 }
 

@@ -26,7 +26,7 @@ from typing import Any, Literal
 from dotenv import load_dotenv
 from pydantic import BaseModel
 
-from models.schemas import (ChatRoute, CompiledRoutine, ExtractionOutput, GroundingResult, MatchOutput, MemoryAnswer, Plan, SameEntityOutput,
+from models.schemas import (ChatRoute, ChooseOutput, CompiledRoutine, ExtractionOutput, GroundingResult, MatchOutput, MemoryAnswer, Plan, SameEntityOutput,
                             StepOutput, strict_json_schema)
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -70,6 +70,7 @@ JOBS: dict[str, JobConfig] = {
     "plan": JobConfig("plan", "muse-spark-1.3", "medium", Plan, max_output_tokens=8000),
     "repair": JobConfig("repair", "muse-spark-1.3", "medium", StepOutput, max_output_tokens=8000),
     "grounding": JobConfig("grounding", "muse-spark-1.3", "low", GroundingResult, max_output_tokens=4000),
+    "choose": JobConfig("choose", "muse-spark-1.3", "low", ChooseOutput, max_output_tokens=2000),
     "extract": JobConfig("extract", "muse-spark-1.3", "low", ExtractionOutput, max_output_tokens=6000),
     "same_entity": JobConfig("same_entity", "muse-spark-1.3", "low", SameEntityOutput, max_output_tokens=2000),
     "answer": JobConfig("answer", "muse-spark-1.3", "low", MemoryAnswer, max_output_tokens=2000),

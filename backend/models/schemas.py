@@ -73,6 +73,7 @@ class TapPoint(_Strict):
     type: Literal["tap_point"]
     x: int = Field(description="0-1000 grid, left to right; only for screens with no usable element list")
     y: int = Field(description="0-1000 grid, top to bottom")
+    target: str = Field(description="What you are tapping, as someone would see it on screen, e.g. 'seat 21A' or 'the blue map pin labelled Main St'")
 
 
 class Look(_Strict):
@@ -161,6 +162,10 @@ class GroundedBox(_Strict):
 
 class GroundingResult(_Strict):
     objects: list[GroundedBox]
+
+
+class ChooseOutput(_Strict):
+    number: int = Field(description="The number of the box that is the target, or 0 if none is")
 
 
 # --------------------------------------------------------------------------------------------
