@@ -14,6 +14,7 @@ shows {{trip_city}}"), so a routine can never pick the Denver row for a Chicago 
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from difflib import SequenceMatcher
 from fnmatch import fnmatchcase
@@ -110,8 +111,8 @@ def from_record(rec: dict, screen: ScreenState) -> Locator:
 
 
 def text_similarity(a: str | None, b: str | None) -> float:
-    """1.0 for the same label. A recorded label that is a whole " · " part of the new one scores 0.95
-    ("Next trip" in "Next trip · Denver · …"). One that only appears inside a longer label is scored by
+    """1.0 for the same label. A recorded label that is a whole " · " part of the new one, or the label before its
+    colon, scores 0.95 ("Next trip" in "Next trip · Denver · …", "Address" in "Address: 20 W 34th St."). One that only appears inside a longer label is scored by
     how much of it it covers ("Check in" in "Check-in now" or in "Confirm check-in": 0.78), since the
     words alone can't tell a renamed button from a different one. Otherwise, partial credit for shared words."""
     na, nb = norm(a), norm(b)
@@ -123,7 +124,8 @@ def text_similarity(a: str | None, b: str | None) -> float:
     if not ta or not tb:
         return SequenceMatcher(None, na, nb).ratio() * 0.8
     phrase = " ".join(ta)
-    for seg in nb.split(" · "):
+    head = nb.split(":", 1)[0]  # "Address: 20 W 34th St." is a label and its value, like "Address · 20 W 34th St."
+    for seg in nb.split(" · ") + ([head] if ":" in nb and re.search(r"[a-z]", head) else []):
         ts = tokens(seg)
         if ts and " ".join(ts) == phrase:
             return 0.95

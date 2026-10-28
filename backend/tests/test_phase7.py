@@ -414,3 +414,11 @@ def test_the_keyboards_own_buttons_are_not_part_of_the_screen():
 """
     s2 = build_state(xml.replace("</hierarchy>", overlay + "</hierarchy>"), "com.example.app", "com.example.app.Main", 1080, 2400)
     assert [e.label for e in s2.numbered] == ["Save"] and s2.signature == s.signature
+
+
+def test_a_label_before_its_colon_scores_like_a_whole_part():
+    from routines.locators import text_similarity
+    # Maps' "Address: 20 W 34th St., …" was found by "Address" only at the relaxed threshold, so the strict scroll missed it.
+    assert text_similarity("Address", "Address: 20 W 34th St., New York, NY 10001") == 0.95
+    assert text_similarity("Address", "Address · 20 W 34th St.") == 0.95
+    assert text_similarity("10", "10:30 AM") < 0.8  # a time is not a label and its value
