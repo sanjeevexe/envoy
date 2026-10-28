@@ -301,6 +301,17 @@ class TaskRunner:
             self._step(tid, {"kind": "error", "text": choice.error or "no phone can run this"})
             return None
         if not choice.real_phone:
+            running = getattr(self.pool, "running", None)
+            if running is not None and not (await asyncio.to_thread(running)).get(choice.device, True):
+                # Said plainly, not as the device layer's error ("envoy-test is not running (scripts/...)"), and with the
+                # phone you have connected as the other way: it is used only when you ask for it.
+                phone = next((p for p in self.pool.phones.values() if p.get("state") == "device"), None)
+                why = f"The emulator for this app ({choice.device}) isn't running right now. " + (
+                    f"Ask again with \"on my phone\" to use your {phone.get('model') or 'Android phone'}, or start the emulator and ask again."
+                    if phone else f"Start it (scripts/start_emulator.sh {choice.device}) and ask again.")
+                self._set(tid, status="failed", detail=why, waiting_for=None)
+                self._step(tid, {"kind": "error", "text": why})
+                return None
             if asked or choice.reason.startswith("set to run"):
                 self._step(tid, {"kind": "note", "text": f"phone: {choice.device} ({choice.reason})"})
             return choice
