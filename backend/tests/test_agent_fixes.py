@@ -116,6 +116,9 @@ def test_the_screen_says_when_the_keyboard_is_open():
     up = screen_of(node("Title"), key)
     assert "(the on-screen keyboard is open" in up.compact and '"q"' not in up.compact
     assert "keyboard" not in screen_of(node("Title")).compact
+    # a dump without the keyboard's window: the navigation bar's keyboard buttons say it is up
+    nav = node("", pkg="android", rid="android:id/input_method_nav_back", clickable="true", bounds="[0,2300][150,2400]")
+    assert "(the on-screen keyboard is open" in screen_of(node("Title"), nav).compact
 
 
 def test_long_text_is_shown_at_length_but_rows_stay_short():
@@ -238,4 +241,3 @@ def test_what_the_model_keeps_from_a_screen_comes_back_on_later_steps(tmp_path, 
     later = model.prompts[3]
     assert "REMEMBERED (what you kept from earlier screens of this task):\n- Recipes: Pad Thai, Tofu Bowl\n" in later
     assert later.count("Pad Thai") == 1  # kept once, though the model wrote it twice
-
