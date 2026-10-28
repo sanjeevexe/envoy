@@ -264,7 +264,9 @@ def _ran_on(d: dict[str, Any] | None) -> str:
     if not d:
         return "not run"
     code = d["meta"]["code"]
-    return "`eval-final`" if code["is_eval_final"] else f"`{code['short']}`{' (uncommitted changes)' if code['dirty'] else ''}"
+    here = "`eval-final`" if code["is_eval_final"] else f"`{code['short']}`{' (uncommitted changes)' if code['dirty'] else ''}"
+    runs = {(r.get("run") or {}).get("run_id") for r in (d.get("workflows") or {}).values()}
+    return f"{len(runs)} runs, the last on {here}" if len(runs) > 1 else here  # rows merged from `--only` reruns
 
 
 def headline(name: str, d: dict[str, Any] | None) -> str:

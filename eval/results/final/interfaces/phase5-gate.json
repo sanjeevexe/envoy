@@ -1,9 +1,9 @@
 {
- "time": "2026-10-28T01:08:30",
+ "time": "2026-10-28T03:55:11",
  "summary": {
   "passed": true,
   "steps_ok": "8/8",
-  "duration_s": 49.5,
+  "duration_s": 38.0,
   "parts": [
    "push",
    "photo",
@@ -15,28 +15,28 @@
   {
    "step": "fake push service subscribed",
    "ok": true,
-   "t": 2.2,
+   "t": 2.7,
    "service": {
-    "id": "push-47f622eb",
-    "service": "127.0.0.1:50201"
+    "id": "push-5d1e5e85",
+    "service": "127.0.0.1:59341"
    }
   },
   {
    "step": "takeover request \u2192 push",
    "ok": true,
-   "t": 13.5,
-   "push_ms": 45,
+   "t": 10.0,
+   "push_ms": 56,
    "title": "Envoy needs you to take over",
-   "url": "/?phone=envoy-test&task=task-1028-010743-8992"
+   "url": "/?phone=envoy-test&task=task-1028-035435-dd20"
   },
   {
    "step": "approval request \u2192 push",
    "ok": true,
-   "t": 19.0,
+   "t": 15.7,
    "push_ms": 2,
    "title": "Envoy needs your OK",
    "body": "tap \"Confirm check-in\" in com.skylark.air (routine skylark_check_in_flight v1) \u00b7 Check me in for my flight",
-   "url": "/approve/?id=appr-1028-010800-ca9a",
+   "url": "/approve/?id=appr-1028-035448-3c66",
    "encrypted": "aes128gcm",
    "urgency": "high",
    "no_nonce_in_push": true,
@@ -45,13 +45,13 @@
   {
    "step": "approved by the person (session + nonce), not by the push",
    "ok": true,
-   "t": 19.0,
+   "t": 15.7,
    "pushes_before": 1
   },
   {
    "step": "check-in done; finished task \u2192 push",
    "ok": true,
-   "t": 20.4,
+   "t": 17.2,
    "status": "done",
    "result": "seat: 14C; gate: B12; boarding time: 5:30 AM; boarding group: Group 3; flight: SL 482",
    "checked_in": true,
@@ -65,7 +65,7 @@
   {
    "step": "boarding-pass screenshot \u2192 facts on SL 482 (photo source), image deleted",
    "ok": true,
-   "t": 33.1,
+   "t": 23.2,
    "summary": "Saved to Flight SL 482 \u00b7 Fri, Oct 30, 2026, Person Maya Patel: 1 new, 8 confirmed.",
    "facts": {
     "same": 8,
@@ -88,24 +88,24 @@
    "deleted": true,
    "files_left": [],
    "token_can_read": false,
-   "ocr_ms": 480.4,
-   "model_ms": 10997.5,
-   "round_trip_s": 11.51,
-   "cost_usd": 0.01099
+   "ocr_ms": 469.6,
+   "model_ms": 4195.0,
+   "round_trip_s": 4.7,
+   "cost_usd": 0.00766
   },
   {
    "step": "voice \u2192 Muse Voice Transcribe \u2192 chat",
    "ok": true,
-   "t": 41.1,
+   "t": 29.6,
    "said": "What's my gate for my Chicago flight?",
-   "heard": "What's my gate for my Chicago flight?",
-   "partials": 6,
-   "connect_ms": 439,
-   "ready_ms": 447,
+   "heard": "what's my gate for my Chicago flight?",
+   "partials": 4,
+   "connect_ms": 919,
+   "ready_ms": 928,
    "audio_ms": 2638,
-   "release_to_text_ms": 87,
-   "chat_ms": 4469,
-   "release_to_reply_ms": 4555,
+   "release_to_text_ms": 89,
+   "chat_ms": 2630,
+   "release_to_reply_ms": 2719,
    "cost_usd": 0.0001,
    "reply": "Gate B12, from your screenshot just now.",
    "spoken": "Gate B12, from your screenshot just now.",
@@ -114,12 +114,12 @@
   {
    "step": "live view over the tailnet (HTTPS + Tailscale, from this Mac)",
    "ok": true,
-   "t": 49.5,
+   "t": 38.0,
    "host": "https://sanjeevs-macbook-pro.tailffb391.ts.net:8443",
    "device": "1080x2400",
    "frames": 54,
-   "frame_ms_p50": 21,
-   "frame_ms_max": 32,
+   "frame_ms_p50": 24,
+   "frame_ms_max": 45,
    "rtt_ms_p50": 0,
    "kb_per_frame": 80
   }

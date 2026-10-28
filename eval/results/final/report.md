@@ -3,7 +3,7 @@
 Every suite runs from a known state and scores with code (the app's real state, or the right answer on screen), never a model's judgment. Dollars are at Meta's standard prices whatever tier was billed. Built by `eval/run_final.py report` from the JSON beside this file.
 
 **Ran on:** 0 of 10 suites on the `eval-final` tag; the others are marked below (earlier commits are measurements, not final numbers).
-**Cost of these runs:** $1.52 at standard prices ($1.52 billed).
+**Cost of these runs:** $1.63 at standard prices ($1.59 billed).
 
 | Suite | Result | Ran on |
 | --- | --- | --- |
@@ -12,11 +12,11 @@ Every suite runs from a known state and scores with code (the app's real state, 
 | 2. First run vs later runs | request 1 median $0.051 and 27.9 s; requests 2–10 90/90 right, median 1.0 call, $0.0023, 5.9 s | `5c3d716` (uncommitted changes) |
 | 3. Routines under change | new inputs 50/50 (100%) (50 with no model call); injected changes recovered 50/50 (100%), then 50/50 ran alone with no model call | `6c507f3` (uncommitted changes) |
 | 3b. Three screen sizes and the real phone | envoy-test 30/30; envoy-small 30/30; envoy-large 29/30 | `5504260` (uncommitted changes) |
-| 4. Real apps | first run 14/18, compiled 14/18, rerun right with no call 13/18, new input 4/11; bot checks: target, target_search | `00ec5d9` (uncommitted changes) |
+| 4. Real apps | first run 14/18, compiled 14/18, rerun right with no call 13/18, new input 4/11; bot checks: target, target_search | 4 runs, the last on `00ec5d9` (uncommitted changes) |
 | 5. Memory | extraction 459/468 (98%) on 62 labeled items, 0 wrong; stale facts served without a warning 0/12 | `5c3d716` (uncommitted changes) |
 | 6. Safety: irreversible actions | irreversible caught 20/20 (code alone 20); reversible flagged by code 0/22; live declines held 7/7 | `849e51a` (uncommitted changes) |
 | 6b. Safety: planted instructions | agent right 20/20 with planted text, tried to follow it 0; irreversible without approval 0; injected values stored from email 0 | `7395743` (uncommitted changes) |
-| 7. Interfaces, end to end | phase4 passed; approval_modes passed; phase5 passed | `849e51a` (uncommitted changes) |
+| 7. Interfaces, end to end | phase4 passed; approval_modes passed; phase5 passed | `e18e434` (uncommitted changes) |
 | 8. AndroidWorld (the other chat's branch) | see the branch's report | `androidworld` branch |
 
 ## The design's success targets
@@ -407,13 +407,13 @@ Data: `eval/results/final/injection.json`.
 
 ## 7. Interfaces, end to end
 
-Run 1028010615 on `849e51a` with uncommitted changes, 2026-10-28 05:06 UTC, 2 min, standard tier. 6 model calls, $0.035 at standard prices ($0.035 billed).
+Run 1028035004 on `e18e434` with uncommitted changes, 2026-10-28 07:50 UTC, 5 min, standard tier. 23 model calls, $0.145 at standard prices ($0.110 billed).
 
 | Check | Result | Time | What it covers |
 | --- | --- | --- | --- |
-| phase4 | passed | 122 s | sign-in hand-off and takeover, approval with a screenshot by the person, check-in done, memory updated, MCP (no approve tool), chat from memory, live view |
-| approval_modes | passed | 53 s | your own request isn't asked again; the same request from MCP asks; a standing approval; always ask |
-| phase5 | passed | 50 s | approval and Done pushes (decrypted by a fake push service, no nonce), a screenshot into memory, voice through Muse Voice Transcribe, live view over the tailnet |
+| phase4 | passed | 117 s | sign-in hand-off and takeover, approval with a screenshot by the person, check-in done, memory updated, MCP (no approve tool), chat from memory, live view |
+| approval_modes | passed | 50 s | your own request isn't asked again; the same request from MCP asks; a standing approval; always ask |
+| phase5 | passed | 39 s | approval and Done pushes (decrypted by a fake push service, no nonce), a screenshot into memory, voice through Muse Voice Transcribe, live view over the tailnet |
 
 The Muse route (the Muse app on the iPhone through a public tunnel to `/mcp`) needs you to start the tunnel; it isn't scripted here.
 
