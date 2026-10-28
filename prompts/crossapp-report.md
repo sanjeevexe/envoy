@@ -37,7 +37,7 @@ place DoorDash shows for a latte?"):
 | `backend/api/chat.py` | ask the lead first when the pre-filter fires (+19/−2) |
 | `backend/api/app.py` | wire `CrossApp` in `build()` (+2) |
 | `web/components/Tasks.tsx`, `web/lib/api.ts`, `web/app/page.tsx` | parts under their parent, part cards with live status |
-| `backend/tests/test_crossapp.py` | 21 offline tests |
+| `backend/tests/test_crossapp.py` | 24 offline tests |
 | `eval/run_crossapp.py`, `eval/results/crossapp/` | end to end and its evidence |
 
 Not touched: `backend/agent/`, `backend/routines/`, `backend/policy/`, `backend/memory/`, `backend/models/`, existing
@@ -45,7 +45,7 @@ Not touched: `backend/agent/`, `backend/routines/`, `backend/policy/`, `backend/
 
 ## Evidence
 
-### Offline: two phones at once (`backend/tests/test_crossapp.py`, 21 tests; `eval/results/crossapp/offline.txt`)
+### Offline: two phones at once (`backend/tests/test_crossapp.py`, 24 tests; `eval/results/crossapp/offline.txt`)
 
 A real `TaskRunner` (its routing, per-phone lease, statuses, approvals) with fake phones whose routine work takes 0.5 s:
 
@@ -57,12 +57,17 @@ A real `TaskRunner` (its routing, per-phone lease, statuses, approvals) with fak
 | One-app requests (3) | same model calls, same task started, same reply as a runner without cross-app answers |
 | Lead says one app / lead call fails | today's path, same task (+1 call when the lead ran) |
 | Split checks | unknown apps, inputs not in the request, inputs not of that app's routines: dropped; > 4 parts trimmed |
-| Combine | an invented number falls back to the answer built from the parts; a difference of two prices is allowed |
-| Partial / all failed / declined / stop | named in the answer / parent failed with no combine call / declined part named / parts stopped |
+| Combine | only whole numbers from the results or the request (not the 45 of $5.45), codes like B22 from a result, a cite from every part that answered and found in the answer; else the answer is built from the parts; a difference of two prices is allowed |
+| Partial / all failed / declined / stop | named in the answer / parent failed with no combine call / declined part named / running parts stopped, a part that already answered kept |
 | Live status | parent `waiting_approval` with "Starbucks: …" while a part waits; each answer shows as it comes in |
 | Memory | a Note with the answer; source `cross-app answer` with each part's task, app, screen and time |
 
-Full backend suite: 159 passed (138 before this work + 21 new) with `main` d909d1a merged in; the web build passes.
+Full backend suite: 162 passed (138 before this work + 24 new) with `main` d909d1a merged in; the web build passes.
+
+An independent review of the diff found, and I fixed: the combine check accepted pieces of numbers ("$5" against
+$5.45), codes (gate B23) and uncited names; stopping the parent also stopped parts that had already answered (losing
+their memory write); a parent that crashed left its parts running; overlap was summed per pair (three phones could
+report more than the wall time); the eval's cost column used billed rather than standard prices. Each has a test.
 
 ### End to end on envoy-real (`eval/results/crossapp/report.md`, `runs.json`)
 
@@ -113,6 +118,10 @@ library (SkyLark + Phase 7's `real_compiled`); standard tier; every approval dec
   Routing it through the lead is a small follow-up in `mcp_server/server.py`.
 - **Matcher precision** (not my files): for "a Caffè Latte on DoorDash" without the word price, the matcher chose the
   first-restaurant routine. The lead's price rule avoids that wording now.
+- **Pushes**: each part and the parent send their own "Done" push (`api/push.py` doesn't know about parts), so a
+  two-app question sends three. A one-line skip for tasks with a `parent` in push.py would fix it (not my file).
+- **The lead may add an app the user didn't name** (needed: "how long is the drive" names no app). A same-app comparison
+  that fires the pre-filter ("is the Starbucks latte cheaper than the mocha?") relies on the lead saying one app.
 - The parent's `cost_usd` doesn't include matcher calls (the runner doesn't count their cost); the cost log is the
   reference, and the eval reports from it.
 - The design doc's "Several phones at once" still calls this a stretch goal; suggested text: "Built: a lead step (one Muse

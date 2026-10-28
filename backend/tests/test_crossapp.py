@@ -143,7 +143,7 @@ def fake_phone_work(monkeypatch, tmp_path):
                  DD: (0.5, {"first_restaurant_name": "Philz Coffee"}, "done", False)})
 
 
-def make(combine=None):
+def make(combine=None, remember_s: float = 0):
     store, bus, mem = TaskStore(":memory:"), EventBus(), MemoryStore(":memory:")
     adapter = FakeAdapter({"combine": combine or (lambda c: CombinedAnswer(answer="Starbucks says 190 calories; DoorDash's first latte place is Philz Coffee.",
                                                                            cites=[]))})
@@ -154,6 +154,7 @@ def make(combine=None):
         return SimpleNamespace(routine=f"routine_{app}", version=1, app=app), inputs, app, {}, 0
 
     async def remember(*a, **k):
+        await asyncio.sleep(remember_s)
         return None
 
     r._plan, r._remember = plan, remember
@@ -371,8 +372,32 @@ def test_the_combined_answer_uses_only_values_the_parts_returned():
     assert verified(invented, "latte Starbucks vs DoorDash", VALUES) is None
     wrong_cite = CombinedAnswer(answer="Starbucks is cheaper.", cites=[{"part": 1, "value": "$6.55"}])
     assert verified(wrong_cite, "q", VALUES) is None
-    assert verified(CombinedAnswer(answer="Gate B22, 35 min from 1 Hacker Way.", cites=[]), "drive from 1 Hacker Way",
-                    [{"result": "gate: B22"}, {"result": "35 min"}]) is not None  # numbers from the request are fine
+    gate = [{"status": "done", "result": "gate: B22"}, {"status": "done", "result": "35 min"}]
+    cites = [{"part": 1, "value": "B22"}, {"part": 2, "value": "35 min"}]
+    assert verified(CombinedAnswer(answer="Gate B22, 35 min from 1 Hacker Way.", cites=cites), "drive from 1 Hacker Way", gate) is not None
+    assert verified(CombinedAnswer(answer="Gate B23, 35 min from 1 Hacker Way.", cites=cites[1:]), "drive from 1 Hacker Way", gate) is None
+
+
+def test_verification_wants_whole_numbers_and_a_cite_from_every_part():
+    q = "latte Starbucks vs DoorDash"
+    both = [{"part": 1, "value": "$5.45"}, {"part": 2, "value": "$6.55"}]
+    assert verified(CombinedAnswer(answer="It's $5 at Starbucks and $6.55 on DoorDash.", cites=both[1:]), q, VALUES) is None  # a piece of 5.45
+    assert verified(CombinedAnswer(answer="$5.45 at Starbucks, 45 calories, $6.55 on DoorDash.", cites=both), q, VALUES) is None
+    assert verified(CombinedAnswer(answer="Starbucks is $5.45.", cites=both[:1]), q, VALUES) is None  # DoorDash answered: cite it
+    assert verified(CombinedAnswer(answer="Starbucks is $5.45, DoorDash more.", cites=both), q, VALUES) is None  # $6.55 isn't in the answer
+    names = [{"status": "done", "result": "first restaurant name: Blue Bottle"}, {"status": "done", "result": "calories: 190"}]
+    assert verified(CombinedAnswer(answer="DoorDash shows Peets Coffee first; 190 calories.", cites=[{"part": 2, "value": "190"}]), "q", names) is None
+    ok = CombinedAnswer(answer="DoorDash shows Blue Bottle first; a latte is 190 calories.",
+                        cites=[{"part": 1, "value": "Blue Bottle"}, {"part": 2, "value": "190"}])
+    assert verified(ok, "q", names) == ok.answer
+
+
+def test_overlap_counts_time_with_two_or_more_phones_busy_once():
+    from api.crossapp import busy_together
+    assert busy_together([(0, 1), (0, 1), (0, 1)]) == 1.0  # three phones at once for 1 s: 1 s, not 3
+    assert busy_together([(0, 2), (1, 3)]) == 1.0
+    assert busy_together([(0, 1), (1, 2)]) == 0.0  # one ends as the next starts
+    assert busy_together([(0, 5)]) == 0.0
     failed = [VALUES[0], {"label": "x", "app_name": "DoorDash", "status": "failed", "result": "", "why": "no address"}]
     assert built_answer(failed) == "Starbucks: price: $5.45; DoorDash: couldn't check (no address)."
 
@@ -465,6 +490,27 @@ def test_the_parent_shows_each_answer_as_it_comes_in():
         return mid
     mid = asyncio.run(scenario())
     assert mid["status"] == "running" and mid["result"] == "SkyLark: gate: B22 · Starbucks: checking…"
+
+
+def test_stopping_the_parent_keeps_a_part_that_already_answered():
+    WORK[SB] = (0.1, {"calories": "190"}, "done", False)
+    WORK[DD] = (5, {}, "done", False)
+
+    async def scenario():
+        r, cross, _ = make(remember_s=1.0)  # the Starbucks part is still writing memory when you press Stop
+        parent = cross.start("q", Split(parts(SB, DD)), "chat")
+        kids: list = []
+        for _ in range(200):
+            await asyncio.sleep(0.01)
+            kids = sorted((t for t in r.store.list() if t.get("parent") == parent["id"]), key=lambda t: t["created_at"])
+            if kids and kids[0]["status"] == "done":
+                break
+        assert r.stop(parent["id"])
+        with pytest.raises(asyncio.CancelledError):
+            await r.jobs[parent["id"]]
+        await asyncio.gather(*(r.jobs[k["id"]] for k in kids), return_exceptions=True)
+        return [r.store.get(k["id"])["status"] for k in kids]
+    assert asyncio.run(scenario()) == ["done", "stopped"]
 
 
 def test_stopping_the_parent_stops_its_parts():

@@ -11,12 +11,15 @@ tests/test_crossapp.py::test_parts_that_need_the_same_phone_wait_for_it PASSED
 tests/test_crossapp.py::test_sequential_runs_one_part_at_a_time_even_on_two_phones PASSED
 tests/test_crossapp.py::test_parts_are_ordinary_tasks_with_the_users_words PASSED
 tests/test_crossapp.py::test_the_combined_answer_uses_only_values_the_parts_returned PASSED
+tests/test_crossapp.py::test_verification_wants_whole_numbers_and_a_cite_from_every_part PASSED
+tests/test_crossapp.py::test_overlap_counts_time_with_two_or_more_phones_busy_once PASSED
 tests/test_crossapp.py::test_an_invented_value_is_replaced_by_the_answer_built_from_the_parts PASSED
 tests/test_crossapp.py::test_a_failing_combine_call_still_answers PASSED
 tests/test_crossapp.py::test_one_part_failing_gives_a_partial_answer_and_all_failing_a_failed_task PASSED
 tests/test_crossapp.py::test_the_parent_waits_on_you_when_a_part_does_and_a_declined_part_is_said PASSED
 tests/test_crossapp.py::test_the_parent_shows_each_answer_as_it_comes_in PASSED
+tests/test_crossapp.py::test_stopping_the_parent_keeps_a_part_that_already_answered PASSED
 tests/test_crossapp.py::test_stopping_the_parent_stops_its_parts PASSED
 tests/test_crossapp.py::test_the_combined_answer_is_remembered_with_each_part_as_its_source PASSED
 tests/test_crossapp.py::test_a_screen_is_named_by_its_activity_or_else_its_title PASSED
-============================== 21 passed in 9.44s ==============================
+============================= 24 passed in 10.37s ==============================

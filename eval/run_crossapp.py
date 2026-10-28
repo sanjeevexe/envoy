@@ -85,7 +85,7 @@ def costs_between(t0: float, t1: float) -> dict[str, Any]:
             if t0 <= t <= t1 and e.get("model"):
                 j = by_job.setdefault(e["job"], {"calls": 0, "usd": 0.0})
                 j["calls"] += 1
-                j["usd"] += e.get("cost_usd") or 0.0
+                j["usd"] += e.get("cost_at_standard_usd") or 0.0
     return {"by_job": by_job, "calls": sum(int(j["calls"]) for j in by_job.values()), "usd": round(sum(j["usd"] for j in by_job.values()), 5)}
 
 
@@ -166,7 +166,7 @@ async def run_one(ctx: Any, watch: Watch, qid: str, mode: str) -> dict[str, Any]
                        "detail": k.get("detail"), "model_calls": k.get("model_calls"), "steps": lean_steps(ctx.tasks.steps(k["id"]))} for k in kids],
             "parent_steps": lean_steps(steps), "approvals": [a for a in watch.declined if a["task_id"] in {k["id"] for k in kids}],
             "approvals_requested": sum(len(ctx.tasks.approvals(task_id=k["id"])) for k in kids),
-            "cost": costs_between(t0 - 1, finished + 1)}
+            "cost": costs_between(t0, finished)}
 
 
 def idle(run: dict[str, Any]) -> float:
@@ -194,8 +194,11 @@ def report(runs: list[dict[str, Any]], meta: dict[str, Any]) -> str:
             md.append(f"| {r['question']} | {r['mode']} | – | – | – | {r['error']} | – | – | – | error |")
             continue
         spans = {p["task_id"]: p for p in r.get("timeline") or []}
-        parts = "; ".join(f"{NAMES.get(p['app'], p['app'])} ({p.get('device')}, {p.get('routine') or p.get('kind')}, "
-                          f"{(spans.get(p['task_id'], {}).get('ended_at') or 0) - (spans.get(p['task_id'], {}).get('phone_at') or 0):.1f})"
+
+        def on_phone(tid: str) -> str:
+            s = spans.get(tid, {})
+            return f"{s['ended_at'] - s['phone_at']:.1f}" if s.get("phone_at") and s.get("ended_at") else "–"  # never got a phone
+        parts = "; ".join(f"{NAMES.get(p['app'], p['app'])} ({p.get('device')}, {p.get('routine') or p.get('kind')}, {on_phone(p['task_id'])})"
                           for p in r["parts"])
         md.append(f"| {r['question']} | {r['mode']} | {r['wall_s']} | {r.get('overlap_s')} | {idle(r):.1f} | {parts} | {r['cost']['calls']} | "
                   f"{r['cost']['usd']:.3f} | {r['approvals_requested']} | {r['status']} |")
