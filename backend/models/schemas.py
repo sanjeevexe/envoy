@@ -22,34 +22,46 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class _Strict(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", validate_by_name=True, validate_by_alias=True)
+
+
+# Meta's structured output writes an object's keys in alphabetical order, whatever order the schema lists them in (checked
+# Oct 28, 2026 on both tiers: properties zebra_first, middle, apple_last always came back apple, middle, zebra). So the model
+# writes whichever field sorts first before it has written the others. The names it sees (aliases; the code keeps its own
+# names) are chosen so that sorting puts them in the order a person would decide them:
+# - in an action, its kind comes first ("act"), then the kind's fields. Named "type", the kind sorted after every other
+#   field, so an action begun the usual way, {"type": ..., could only become back, home or look, the three kinds with no
+#   other field. On AndroidWorld, back was 44% of all actions; the model's own words before the JSON said it would open
+#   or swipe to an app, and the JSON said back (eval/results/androidworld, docs/androidworld-results.md).
+# - in a step, the reason and the expected result come before the action and the risk ("1_reason" … "4_risk").
+ACT = "act"
 
 
 class Tap(_Strict):
-    type: Literal["tap"]
+    type: Literal["tap"] = Field(alias=ACT)
     element: int = Field(description="Element number from the screen list, e.g. 4 for [4]")
 
 
 class LongPress(_Strict):
-    type: Literal["long_press"]
+    type: Literal["long_press"] = Field(alias=ACT)
     element: int
 
 
 class TypeText(_Strict):
-    type: Literal["type"]
+    type: Literal["type"] = Field(alias=ACT)
     element: int = Field(description="Number of the text field")
     text: str
     submit: bool = Field(description="Press Enter/Search/Done after typing")
 
 
 class Scroll(_Strict):
-    type: Literal["scroll"]
+    type: Literal["scroll"] = Field(alias=ACT)
     direction: Literal["up", "down", "left", "right"] = Field(description="'down' reveals content further down")
     element: int | None = Field(description="Number of the list to scroll, or null for the whole screen")
 
 
 class Swipe(_Strict):
-    type: Literal["swipe"]
+    type: Literal["swipe"] = Field(alias=ACT)
     from_x: int = Field(description="0-1000 grid, left to right")
     from_y: int = Field(description="0-1000 grid, top to bottom")
     to_x: int
@@ -57,51 +69,51 @@ class Swipe(_Strict):
 
 
 class Back(_Strict):
-    type: Literal["back"]
+    type: Literal["back"] = Field(alias=ACT)
 
 
 class Home(_Strict):
-    type: Literal["home"]
+    type: Literal["home"] = Field(alias=ACT)
 
 
 class Launch(_Strict):
-    type: Literal["launch"]
+    type: Literal["launch"] = Field(alias=ACT)
     app: str = Field(description="The app's name as people call it, e.g. 'Settings' or 'Simple Calendar Pro', or its package name")
 
 
 class TapPoint(_Strict):
-    type: Literal["tap_point"]
+    type: Literal["tap_point"] = Field(alias=ACT)
     x: int = Field(description="0-1000 grid, left to right; only for screens with no usable element list")
     y: int = Field(description="0-1000 grid, top to bottom")
     target: str = Field(description="What you are tapping, as someone would see it on screen, e.g. 'seat 21A' or 'the blue map pin labelled Main St'")
 
 
 class Look(_Strict):
-    type: Literal["look"]
+    type: Literal["look"] = Field(alias=ACT)
 
 
 class Wait(_Strict):
-    type: Literal["wait"]
+    type: Literal["wait"] = Field(alias=ACT)
     seconds: float
 
 
 class AskUser(_Strict):
-    type: Literal["ask_user"]
+    type: Literal["ask_user"] = Field(alias=ACT)
     question: str
 
 
 class Handoff(_Strict):
-    type: Literal["handoff"]
+    type: Literal["handoff"] = Field(alias=ACT)
     reason: str = Field(description="Why the user must take over: sign-in, password, bot check, ...")
 
 
 class Done(_Strict):
-    type: Literal["done"]
+    type: Literal["done"] = Field(alias=ACT)
     result: str
 
 
 class Fail(_Strict):
-    type: Literal["fail"]
+    type: Literal["fail"] = Field(alias=ACT)
     reason: str
 
 
@@ -114,11 +126,12 @@ AgentAction = Annotated[
 class StepOutput(_Strict):
     """What the step model returns each step."""
 
-    reason: str = Field(description="One short sentence: why this action")
-    action: AgentAction
-    expected_result: str = Field(description="What the screen should show after the action, checkable by code")
+    reason: str = Field(alias="1_reason", description="One short sentence: why this action")
+    expected_result: str = Field(alias="2_expected_result", description="What the screen should show after the action, checkable by code")
+    action: AgentAction = Field(alias="3_action")
     risk: Literal["read", "reversible", "irreversible"] = Field(
-        description="read: look/scroll/open; reversible: fill a field, add to cart; irreversible: pay, order, submit, send, confirm, cancel, delete"
+        alias="4_risk",
+        description="read: look/scroll/open; reversible: fill a field, add to cart; irreversible: pay, order, submit, send, confirm, cancel, delete",
     )
 
 
@@ -132,7 +145,7 @@ AgentActionListed = Annotated[
 
 
 class StepOutputListed(StepOutput):
-    action: AgentActionListed  # type: ignore[assignment]
+    action: AgentActionListed = Field(alias="3_action")  # type: ignore[assignment]
 
 
 # --------------------------------------------------------------------------------------------

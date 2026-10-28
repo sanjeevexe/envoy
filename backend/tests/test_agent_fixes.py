@@ -14,7 +14,7 @@ from agent.loop import AgentRunner, RunConfig, _masked, _volatile
 from agent.trace import TraceWriter
 from devices.screen import build_state
 from devices.types import ActionResult
-from models.schemas import Plan, StepOutput, SuccessCheck
+from models.schemas import Plan, StepOutput, StepOutputListed, SuccessCheck, strict_json_schema
 from policy.approvals import ScriptedApprover
 
 ATTRS = ('checkable="false" checked="false" enabled="true" focusable="false" focused="false" scrollable="false" '
@@ -210,3 +210,19 @@ def test_stuck_recoveries_start_afresh_after_progress(tmp_path, monkeypatch):
     res = asyncio.run(AgentRunner(Moving(), model, ScriptedApprover(True), RunConfig(max_steps=30, data_scope="test_app"))
                       .run("Open Gmail", task_id="st", memory=""))
     assert res.status != "failed"
+
+
+def test_the_step_is_written_in_the_order_a_person_decides_it():
+    # Meta's decoder writes keys alphabetically: the names the model sees sort into reason → expected result → action →
+    # risk, and in every kind of action its name ("act") sorts before its fields
+    for model in (StepOutput, StepOutputListed):
+        schema = strict_json_schema(model)
+        assert list(schema["properties"]) == sorted(schema["properties"]) == ["1_reason", "2_expected_result", "3_action", "4_risk"]
+        kinds = [d for d in schema["$defs"].values() if "act" in d.get("properties", {})]
+        assert len(kinds) >= 14 and all(sorted(d["properties"])[0] == "act" for d in kinds)
+    wire = ('{"1_reason": "open the app drawer", "2_expected_result": "the app list", "3_action": {"act": "swipe", "from_x": 500, '
+            '"from_y": 900, "to_x": 500, "to_y": 200}, "4_risk": "read"}')
+    out = StepOutput.model_validate_json(wire)
+    assert out.action.type == "swipe" and out.reason == "open the app drawer"
+    assert out.model_dump()["action"]["type"] == "swipe" and "reason" in out.model_dump()  # code and traces keep their names
+
