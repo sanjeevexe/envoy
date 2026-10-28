@@ -300,9 +300,13 @@ class RoutineExecutor:
                 while missing_out and time.perf_counter() < deadline:
                     await asyncio.sleep(0.2)
                     screen = await self._observe()
+                    read = False
                     for n in missing_out:
                         if n in specs:
                             out.outputs[n] = extract_value(specs[n], screen, ctx.inputs)
+                            read = read or bool(out.outputs[n])
+                    if read:  # evidence, as for outputs read by a step
+                        ctx.trace.save_tree(len(out.steps) + 1, "outputs_late", screen)
                     missing_out = [n for n in routine.outputs if not out.outputs.get(n)]
             if missing_out:  # on a shorter screen an output can be scrolled away (Phase 6): look up the list, then down
                 missing_out = await self._read_scrolled(ctx, specs, missing_out)
@@ -788,6 +792,8 @@ class RoutineExecutor:
                 s = await self._settle_quick()
                 for n in missing:
                     ctx.out.outputs[n] = ctx.out.outputs.get(n) or extract_value(specs[n], s, ctx.inputs)
+                if any(ctx.out.outputs.get(n) for n in missing):
+                    ctx.trace.save_tree(len(ctx.out.steps) + 1, "outputs_scrolled", s)
                 missing = [n for n in missing if not ctx.out.outputs.get(n)]
                 if body(s) == before_body:
                     break

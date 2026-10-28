@@ -49,6 +49,14 @@ def answer_on_screen(result: str, screen: ScreenState) -> CheckResult:
     text = _norm(_screen_text(screen))
     tokens = answer_tokens(result)
     if not tokens:
+        # An answer in lower case with no numbers ("lofi hip hop radio 📚 beats to relax/study to", a video title): all of
+        # its longer words must be on screen.
+        words = [w for w in re.findall(r"[A-Za-z]{4,}", result) if w.lower() not in _STOP]
+        if len(words) >= 2:
+            missing = [w for w in words if _norm(w) not in text]
+            if not missing:
+                return CheckResult(True, True, f"the answer's words are on screen: {', '.join(words[:4])}")
+            return CheckResult(False, True, f"{missing[:5]} from the answer are not on the current screen")
         return CheckResult(False, True, "the answer has nothing specific to look for on screen")
     found = [t for t in tokens if _norm(t) in text]
     if found:

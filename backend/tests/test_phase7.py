@@ -422,3 +422,17 @@ def test_a_label_before_its_colon_scores_like_a_whole_part():
     assert text_similarity("Address", "Address: 20 W 34th St., New York, NY 10001") == 0.95
     assert text_similarity("Address", "Address · 20 W 34th St.") == 0.95
     assert text_similarity("10", "10:30 AM") < 0.8  # a time is not a label and its value
+
+
+def test_a_lower_case_answer_is_verified_by_its_words():
+    from agent.checks import answer_on_screen
+    from routines.screens import screen_from_tree
+    s = screen_from_tree({"package": "com.google.android.youtube", "activity": "Shell", "width": 1080, "height": 2400, "elements": [
+        {"index": 0, "parent": None, "number": 1, "kind": "Button", "class": "android.view.View", "label": "lofi hip hop",
+         "text": "lofi hip hop", "bounds": [0, 80, 1080, 200]},
+        {"index": 1, "parent": None, "number": 2, "kind": "Button", "class": "android.view.View", "clickable": True,
+         "label": "lofi hip hop radio .. beats to relax/study to - Lofi Girl", "desc": "lofi hip hop radio .. beats to relax/study to - Lofi Girl",
+         "bounds": [0, 300, 1080, 900]}]})
+    # A video title with no numbers or capitals used to be unverifiable, so the run could never compile.
+    assert answer_on_screen("lofi hip hop radio 📚 beats to relax/study to", s).passed
+    assert not answer_on_screen("lofi chill jazz piano mix", s).passed  # only the search term is on screen
