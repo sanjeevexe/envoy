@@ -436,3 +436,28 @@ def test_a_lower_case_answer_is_verified_by_its_words():
     # A video title with no numbers or capitals used to be unverifiable, so the run could never compile.
     assert answer_on_screen("lofi hip hop radio 📚 beats to relax/study to", s).passed
     assert not answer_on_screen("lofi chill jazz piano mix", s).passed  # only the search term is on screen
+
+
+def test_the_top_result_for_an_entered_term_is_read_by_its_place():
+    from routines.compiler import TStep, _extract_for
+    from routines.screens import screen_from_tree
+
+    def results(query: str, rows: list[str]):
+        els = [{"index": 0, "parent": None, "number": 1, "kind": "Button", "class": "android.view.View", "clickable": True,
+                "label": query, "text": query, "bounds": [100, 80, 900, 200]},
+               {"index": 1, "parent": None, "number": 2, "kind": "List", "class": "androidx.recyclerview.widget.RecyclerView",
+                "scrollable": True, "bounds": [0, 250, 1080, 2400]}]
+        for i, lab in enumerate(rows):
+            els.append({"index": len(els), "parent": 1, "number": len(els) + 1, "kind": "Button", "class": "android.view.View",
+                        "clickable": True, "in_list": True, "label": lab, "desc": lab, "bounds": [0, 260 + 700 * i, 1080, 900 + 700 * i]})
+        return screen_from_tree({"package": "com.google.android.youtube", "activity": "Shell", "width": 1080, "height": 2400, "elements": els})
+    trace = results("lofi hip hop", ["lofi hip hop radio .. beats to relax/study to - Lofi Girl - 18 thousand watching",
+                                     "Mix - lofi hip hop radio .. beats to relax/study to - 50 videos"])
+    suggestion = results("lofi hip hop", []).numbered[0]
+    picked = [TStep(n=1, kind="tap", before=trace, after=trace, target=suggestion)]  # a suggestion tapped, not typed
+    ex = _extract_for("first_video_title", "results", "lofi hip hop radio .. beats to relax/study to", trace,
+                      {"search_query": "lofi hip hop"}, [], picked)
+    assert ex is not None and ex.first_row and ex.until == " - "  # the video row, not the shorter "Mix - …" that contains it
+    assert extract_value(ex, trace, {"search_query": "lofi hip hop"}) == "lofi hip hop radio .. beats to relax/study to"
+    other = results("pasta carbonara recipe", ["The BEST Carbonara | Gennaro Contaldo - 1 million views", "Pasta 101 - 3 videos"])
+    assert extract_value(ex, other, {"search_query": "pasta carbonara recipe"}) == "The BEST Carbonara | Gennaro Contaldo"

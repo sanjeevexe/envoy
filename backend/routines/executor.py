@@ -1058,6 +1058,19 @@ def _in_card(loc: Locator, card: str, screen: ScreenState) -> Element | None:
     return None
 
 
+def _first_row(spec: Extract, screen: ScreenState) -> str | None:
+    """The top result row: the highest list element of the recorded type among the big clickable ones (not a chip or a
+    button inside a row), its text up to `until`."""
+    kind = spec.locator.kind if spec.locator else None
+    rows = [e for e in screen.numbered if e.in_list and e.clickable and (not kind or e.kind == kind) and (e.full_label or e.label)]
+    if not rows:
+        return None
+    big = max(e.area for e in rows)
+    top = min((e for e in rows if e.area > big / 3), key=lambda e: e.bounds[1])
+    label = " ".join((top.full_label or top.label).split())
+    return (label.split(spec.until, 1)[0] if spec.until else label).strip() or None
+
+
 def _after_card(card: str, near: str, screen: ScreenState) -> Element | None:
     """The first element labelled `near` after the one that shows `card` among other words (a result, not the search box
     that shows only the term)."""
@@ -1073,6 +1086,8 @@ def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str 
     with the label in front of it ("Known traveler number: 98765432" → 98765432) and fixed text after it removed.
     Without IDs it falls back to the label (`near`), then to the element that shows one of the routine's inputs."""
     spec = render(spec, inputs)
+    if spec.first_row:
+        return _first_row(spec, screen)
     if spec.pattern:
         for e in screen.numbered:
             label = " ".join(e.label.split())
@@ -1121,8 +1136,10 @@ def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str 
             return value or None
     if el is None and loc is not None and loc.kind:
         # No ID shown and no element starting with the label: the element of that type that shows one of the routine's
-        # inputs (a status line containing the flight number that was searched, with "Gate A7" inside it).
-        shown = [e for e in screen.numbered if e.kind == loc.kind and any(v and contains_value(e.label, v) for v in inputs.values())]
+        # inputs (a status line containing the flight number that was searched, with "Gate A7" inside it). Never one that
+        # shows only the input (the search box, while results load).
+        shown = [e for e in screen.numbered if e.kind == loc.kind and any(v and contains_value(e.label, v) and norm(e.label) != norm(v)
+                                                                          for v in inputs.values())]
         el = shown[0] if len(shown) == 1 else None
     if el is None:
         return None

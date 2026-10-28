@@ -373,11 +373,14 @@ def _state_text(near: str | None, final: ScreenState, data_values: list[str]) ->
 
 
 def _search_result(el: Element, screen: ScreenState, earlier: list["TStep"], examples: dict[str, str]) -> str | None:
-    """The input name if `el` is the top row of a list showing results for a value typed earlier in the run, and the
-    row shows more than that value (a row that *is* the value, "Caffè Latte", was chosen by it)."""
+    """The input name if `el` is the top row of a list showing results for a value entered earlier in the run (typed, or a
+    suggestion tapped), and the row shows more than that value (a row that *is* the value, "Caffè Latte", was chosen by it)."""
     if not el.in_list:
         return None
-    typed = {n for n, v in examples.items() if v and any(t.typed and contains_value(t.typed, v) for t in earlier)}
+    # Entered: typed, or a suggestion tapped that is the term itself (YouTube's "lofi hip hop" under the search box).
+    typed = {n for n, v in examples.items() if v and any((t.typed and contains_value(t.typed, v))
+                                                         or (t.kind == "tap" and t.target is not None and norm(t.target.label) == norm(v))
+                                                         for t in earlier)}
     shown = [n for n in typed if contains_value(el.label, examples[n]) and norm(el.label) != norm(examples[n])]
     if not shown:
         return None
@@ -419,13 +422,16 @@ def _shape(example: str) -> str:
 
 
 def _extract_for(name: str, near: str, example: str, final: ScreenState, examples: dict[str, str],
-                 data_values: list[str]) -> Extract | None:
+                 data_values: list[str], steps: list["TStep"] | None = None) -> Extract | None:
     """Where an output can be read on the final screen: the element showing the example value
     (outside lists first, then the one whose label starts with `near`, then the shortest)."""
     found = [e for e in final.numbered if contains_value(e.label, example)]
     if not found:
         return None
-    found.sort(key=lambda e: (e.in_list, not (near and norm(e.label).startswith(norm(near))), len(e.label)))
+    # Outside lists first, then the element labelled `near`, then one the value starts (a video row starts with its title; a
+    # "Mix - <title> - …" row only contains it), then the shortest.
+    found.sort(key=lambda e: (e.in_list, not (near and norm(e.label).startswith(norm(near))), not norm(e.label).startswith(norm(example)),
+                              len(e.label)))
     el = found[0]
     letters = sum(ch.isalpha() for ch in example)
     if el.in_list and not usable_id(el.resource_id) and norm(el.label) == norm(example) and len(example) <= 24 \
@@ -468,6 +474,13 @@ def _extract_for(name: str, near: str, example: str, final: ScreenState, example
                 and not any(v and contains_value(v, words) for v in data_values):
             sig = re.sub(r"\d+(?:\\\.\d+)?", r"\\d+(?:\\.\\d+)?", re.escape(m.group(1).strip()))
             return Extract(pattern=rf"(?P<v>[^,]+?),\s*{sig}(?:,.*)?", first_in_list=True)
+    if steps and el.in_list and norm(label).startswith(norm(example)) and norm(label) != norm(example) \
+            and _search_result(el, final, steps, examples) is not None:
+        # The top result for a term typed in the run ("the first video for lofi hip hop"): read by its place, not by showing
+        # the term (another search's first video doesn't), up to the separator after the value.
+        rest = label[len(" ".join(example.split())):]
+        until = next((sep for sep in (" - ", " · ", " • ", " | ", ", ") if rest.startswith(sep)), None)
+        return Extract(locator=Locator(kind=el.kind), first_row=True, until=until)
     loc = None
     card = None
     if usable_id(el.resource_id):
@@ -693,7 +706,7 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
     extract: dict[str, Extract] = {}
     if final is not None:
         for o in spec.outputs:
-            ex = _switch_state(o.near, o.example, final) or _extract_for(o.name, o.near, o.example, final, examples, data_values)
+            ex = _switch_state(o.near, o.example, final) or _extract_for(o.name, o.near, o.example, final, examples, data_values, steps)
             state = bool(ex and ex.switch)
             if ex is None and (ex := _state_text(o.near, final, data_values)) is not None:
                 # An answer the agent inferred ("0" from "No contacts yet"): the routine reports the words it was read from.
