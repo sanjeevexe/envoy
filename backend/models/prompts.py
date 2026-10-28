@@ -31,8 +31,9 @@ Return exactly one action as JSON in the required schema:
 - tap / long_press: an element number from SCREEN. Prefer the element whose label or id matches the goal most directly.
 - type: the number of an EditText and the full text it should contain (it replaces what is there). submit=true only for search boxes or single-field forms that need Enter.
 - scroll: direction "down" reveals content further down. Give the List number, or null for the whole screen. Scroll when what you need is probably off screen; after two scrolls with no new elements, you are at the end.
-- swipe: only for carousels and gestures, with 0-1000 grid coordinates (0,0 is top-left, 1000,1000 is bottom-right).
-- back, home, launch(app package name): navigation.
+- swipe: gestures that are not a list scroll (carousels, pull-down shades), with 0-1000 grid coordinates (0,0 is top-left, 1000,1000 is bottom-right).
+- launch(app): open an app by its name (as the goal or the phone calls it) or its package. This is the way to open an app; no need to look for its icon.
+- back, home: navigation.
 - tap_point(x, y, target): only for something drawn on screen that SCREEN doesn't list (a seat map, a map pin, a canvas); 0-1000 grid coordinates from the screenshot (use look first to get one), and in target say what it is as it looks ("seat 21A").
 - look: ask for a screenshot in the next step, when the element list is not enough to decide.
 - wait(seconds): for loading screens and spinners, 1 to 5 seconds.
@@ -59,7 +60,7 @@ Also return:
 PLAN_INSTRUCTIONS = """\
 You are the planner for Envoy's phone agent. Given a goal and the phone's current screen, write a short plan and a success check that code can evaluate.
 
-- app: the Android package the task needs if you can tell (for example com.skylark.air for SkyLark Air), else null.
+- app: the app the task needs, by its name as APPS ON THIS PHONE lists it (or its package), else null.
 - subgoals: 2 to 6 short steps in the order the agent should do them, phrased as screens or outcomes ("Open the trip to Chicago", "Confirm check-in").
 - success_check: how code can tell the goal is done, from the final screen:
   - text_visible: a text that appears only once the goal is done (for example "You're checked in" or "Seat changed to 12C").
@@ -93,8 +94,10 @@ def step_input(goal: str, screen_compact: str, *, plan: str = "", subgoal: str =
     return "\n\n".join(parts) + "\n"
 
 
-def plan_input(goal: str, screen_compact: str, memory: str = "", tried: str = "") -> str:
+def plan_input(goal: str, screen_compact: str, memory: str = "", tried: str = "", apps: str = "") -> str:
     text = f"GOAL: {goal}\n\nNOTES:\n{memory or '(none)'}\n\n"
+    if apps:
+        text += f"APPS ON THIS PHONE:\n{apps}\n\n"
     if tried:
         text += ("REPLANNING: the previous plan did not work. The agent already looked here without finding what it needs, "
                  f"so plan a route through other parts of the app (other tabs, menus, profile or settings):\n{tried}\n\n")
