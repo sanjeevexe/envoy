@@ -1,0 +1,87 @@
+{
+ "name": "starbucks_get_drink_calories",
+ "intent": "Check how many calories are in a Starbucks drink",
+ "description": "Opens a Starbucks menu item, uses its preselected Grande size, and reads the calorie count shown on the product page.",
+ "patterns": [
+  "how many calories are in a drink",
+  "what is the calorie count for a menu item",
+  "check the calories in a drink"
+ ],
+ "inputs": [
+  {
+   "name": "drink_name",
+   "type": "text",
+   "description": "The Starbucks menu drink to look up.",
+   "from_memory": null,
+   "example": "Caffè Latte"
+  },
+  {
+   "name": "size_name",
+   "type": "text",
+   "description": "The drink size whose calories are requested; Grande is preselected on the product page in this run.",
+   "from_memory": null,
+   "example": "Grande"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "tap_order",
+   "intent": "Tap Order to open the ordering section",
+   "target_fixed_text": "Order",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "dismiss_location_prompt",
+   "intent": "Go back to dismiss the location permission prompt",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "tap_skip",
+   "intent": "Tap Skip to bypass café selection",
+   "target_fixed_text": "Skip",
+   "choice_input": null
+  },
+  {
+   "step": 4,
+   "id": "confirm_skip_to_menu",
+   "intent": "Confirm skipping to the menu",
+   "target_fixed_text": "Yes",
+   "choice_input": null
+  },
+  {
+   "step": 5,
+   "id": "tap_search_menu",
+   "intent": "Tap Search Menu to look for {{drink_name}}",
+   "target_fixed_text": "Search Menu",
+   "choice_input": null
+  },
+  {
+   "step": 6,
+   "id": "select_recent_search_result",
+   "intent": "Select {{drink_name}} from the available search suggestions",
+   "target_fixed_text": null,
+   "choice_input": "drink_name"
+  },
+  {
+   "step": 7,
+   "id": "open_drink_product",
+   "intent": "Open {{drink_name}} from the results to view the calories for the {{size_name}} size",
+   "target_fixed_text": null,
+   "choice_input": "drink_name"
+  }
+ ],
+ "outputs": [
+  {
+   "name": "calories",
+   "near": "Caffè Latte",
+   "example": "190 calories"
+  }
+ ],
+ "data_values": [
+  "16 fl oz"
+ ]
+}

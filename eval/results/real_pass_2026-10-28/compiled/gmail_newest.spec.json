@@ -1,0 +1,34 @@
+{
+ "name": "gmail_get_newest_email_subject",
+ "intent": "Get the subject of the newest email in the Gmail inbox",
+ "description": "Opens the newest, topmost email in the Gmail inbox and returns its subject line.",
+ "patterns": [
+  "what is the subject of my newest email",
+  "what is my latest email about",
+  "subject of the newest email in my inbox",
+  "what's the subject of my most recent email"
+ ],
+ "inputs": [],
+ "steps": [
+  {
+   "step": 1,
+   "id": "open_newest_email",
+   "intent": "Open the newest, topmost email in the inbox to read its subject",
+   "target_fixed_text": null,
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "newest_email_subject",
+   "near": "Inbox",
+   "example": "Your Android device will soon join the Find Hub network"
+  }
+ ],
+ "data_values": [
+  "Google’s Find Hub",
+  "Yesterday",
+  "Your Android device will soon join the Find Hub network",
+  "Find Hub network"
+ ]
+}

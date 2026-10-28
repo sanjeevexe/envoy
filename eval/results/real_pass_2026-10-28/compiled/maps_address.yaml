@@ -1,0 +1,85 @@
+routine: google_maps_get_place_address
+app: com.google.android.apps.maps
+version: 1
+status: draft
+intent: Look up the street address of a place in Google Maps
+description: Search for a named place in Google Maps, open its details, scroll to reveal its address, and return the street address.
+patterns: [what is the address of a place, find the street address for a place in Maps, look up a place's address]
+outputs: [street_address]
+start: fresh_launch
+inputs:
+  place_name: {type: text, description: The name of the place to search for, example: Empire State Building}
+steps:
+- id: tap_search_field
+  intent: Tap the search field to start a search
+  pre:
+  - {app_foreground: com.google.android.apps.maps}
+  - element_present: {resource_id: explore_tab_strip_button, text: Explore, kind: Text}
+  action:
+    tap:
+      resource_id: search_omnibox_text_box
+      text: Search here
+      hint: Search here
+      kind: EditText
+      cls: EditText
+      parent: mod_search_omnibox_layout
+      in_list: false
+      position: [0.38, 0.088]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: textbox, text: Recent, kind: Text}
+  - element_present: {resource_id: search_omnibox_text_box, kind: EditText}
+  risk: reversible
+  note: trace step 1
+- id: type_place_name
+  intent: "Type {{place_name}} into the search field and open the matching place"
+  pre:
+  - {app_foreground: com.google.android.apps.maps}
+  action:
+    type:
+      field:
+        resource_id: search_omnibox_edit_text
+        text: Search here
+        hint: Search here
+        kind: EditText
+        cls: EditText
+        parent: search_omnibox_text_box
+        in_list: false
+        position: [0.499, 0.088]
+      value: "{{place_name}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: search_omnibox_text_box
+      text: "{{place_name}}"
+      kind: EditText
+  - element_present:
+      resource_id: street_view_thumbnail
+      text: "View Street view imagery for {{place_name}}"
+      kind: Button
+  risk: reversible
+  note: trace step 2
+- id: scroll_to_address
+  intent: Scroll down to reveal the street address in the place details
+  pre:
+  - {app_foreground: com.google.android.apps.maps}
+  action:
+    scroll_until:
+      target: {text: Address}
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present: {text: Address}
+  risk: read
+  extract:
+    street_address: {near: Address, expect_digits: true}
+  note: trace step 3 (+2 scrolls)
+compiled_from:
+  task_id: f7-1028030222-real-maps_address
+  goal: In Google Maps, search for the Empire State Building and tell me its street address.
+  compiler: cached
+  compiled_at: "2026-10-28 17:20:12"
+  trace_steps_kept: [1, 2, 3]
+  trace_steps_dropped: 0
+  cost_usd: 0.0
