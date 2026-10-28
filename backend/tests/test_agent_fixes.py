@@ -217,12 +217,25 @@ def test_the_step_is_written_in_the_order_a_person_decides_it():
     # risk, and in every kind of action its name ("act") sorts before its fields
     for model in (StepOutput, StepOutputListed):
         schema = strict_json_schema(model)
-        assert list(schema["properties"]) == sorted(schema["properties"]) == ["1_reason", "2_expected_result", "3_action", "4_risk"]
+        assert list(schema["properties"]) == sorted(schema["properties"]) == ["0_remember", "1_reason", "2_expected_result", "3_action", "4_risk"]
         kinds = [d for d in schema["$defs"].values() if "act" in d.get("properties", {})]
         assert len(kinds) >= 14 and all(sorted(d["properties"])[0] == "act" for d in kinds)
-    wire = ('{"1_reason": "open the app drawer", "2_expected_result": "the app list", "3_action": {"act": "swipe", "from_x": 500, '
+    wire = ('{"0_remember": "", "1_reason": "open the app drawer", "2_expected_result": "the app list", "3_action": {"act": "swipe", "from_x": 500, '
             '"from_y": 900, "to_x": 500, "to_y": 200}, "4_risk": "read"}')
     out = StepOutput.model_validate_json(wire)
     assert out.action.type == "swipe" and out.reason == "open the app drawer"
     assert out.model_dump()["action"]["type"] == "swipe" and "reason" in out.model_dump()  # code and traces keep their names
+
+
+def test_what_the_model_keeps_from_a_screen_comes_back_on_later_steps(tmp_path, monkeypatch):
+    monkeypatch.setattr(TraceWriter.__init__, "__defaults__", (tmp_path,))
+    keep = {**step({"type": "swipe", "from_x": 500, "from_y": 900, "to_x": 500, "to_y": 200}), "remember": "Recipes: Pad Thai, Tofu Bowl"}
+    model = Seq(step({"type": "swipe", "from_x": 500, "from_y": 900, "to_x": 500, "to_y": 200}), keep, keep,
+                step({"type": "swipe", "from_x": 500, "from_y": 900, "to_x": 500, "to_y": 200}), step({"type": "done", "result": "ok"}))
+    asyncio.run(AgentRunner(Phone(), model, ScriptedApprover(True), RunConfig(max_steps=6, data_scope="test_app"))
+                .run("Copy the recipes", task_id="rm", memory=""))
+    assert "REMEMBERED" not in model.prompts[0] and "REMEMBERED" not in model.prompts[1]
+    later = model.prompts[3]
+    assert "REMEMBERED (what you kept from earlier screens of this task):\n- Recipes: Pad Thai, Tofu Bowl\n" in later
+    assert later.count("Pad Thai") == 1  # kept once, though the model wrote it twice
 

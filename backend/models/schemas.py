@@ -33,7 +33,8 @@ class _Strict(BaseModel):
 #   field, so an action begun the usual way, {"type": ..., could only become back, home or look, the three kinds with no
 #   other field. On AndroidWorld, back was 44% of all actions; the model's own words before the JSON said it would open
 #   or swipe to an app, and the JSON said back (eval/results/androidworld, docs/androidworld-results.md).
-# - in a step, the reason and the expected result come before the action and the risk ("1_reason" … "4_risk").
+# - in a step, what to keep from this screen, the reason and the expected result come before the action and the risk
+#   ("0_remember" … "4_risk").
 ACT = "act"
 
 
@@ -126,6 +127,10 @@ AgentAction = Annotated[
 class StepOutput(_Strict):
     """What the step model returns each step."""
 
+    remember: str = Field(
+        default="", alias="0_remember",
+        description="What on this screen you will need on a later screen of this task (text to copy, values to compare or add up, what is still to do), word for word; empty if nothing new",
+    )
     reason: str = Field(alias="1_reason", description="One short sentence: why this action")
     expected_result: str = Field(alias="2_expected_result", description="What the screen should show after the action, checkable by code")
     action: AgentAction = Field(alias="3_action")
