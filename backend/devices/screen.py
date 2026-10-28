@@ -37,6 +37,14 @@ def _short_class(cls: str) -> str:
 STATUS_BAR_FRACTION = 0.07  # System UI nodes entirely within the top 7% of the screen (the bar is ~5.7% on a Pixel 6)
 BANNER_PACKAGE = "ai.envoy.banner"  # Envoy's own banner on a real phone: like the status bar, never shown, hashed or signed
 _STATUS_IDS = re.compile(r"(status_?bar|notification_icon|notificationIcons|system_icons|clock)", re.I)
+# The on-screen keyboard's own window (keys, its toolbar's "Delete", "Done", "Clipboard") and the system's keyboard buttons
+# in the navigation bar: never part of the app's screen. A keyboard's "Delete" beside an app's buttons misleads the model,
+# the policy rules and routine checks alike (a check was once written on Gboard's "Clipboard").
+_KEYBOARD_PACKAGES = re.compile(r"(inputmethod|honeyboard|swiftkey|\.keyboard\b|gboard)", re.I)
+_KEYBOARD_IDS = re.compile(r"^input_method_nav_", re.I)
+# System UI drawn over the app for a moment: the "Copied" clipboard preview after typing (with "Send to nearby device"),
+# the screenshot preview. Like the keyboard, not the app's screen: two visits to the same page must look the same.
+_OVERLAY_IDS = re.compile(r"^com\.android\.systemui:id/(clipboard_|screenshot_)", re.I)
 
 
 def parse_hierarchy(xml: str, screen_h: int) -> list[Element]:
@@ -47,7 +55,7 @@ def parse_hierarchy(xml: str, screen_h: int) -> list[Element]:
     root = ET.fromstring(xml)
     out: list[Element] = []
 
-    def walk(node: ET.Element, parent: int | None, depth: int, in_list: bool) -> None:
+    def walk(node: ET.Element, parent: int | None, depth: int, in_list: bool, overlay: bool = False) -> None:
         m = _BOUNDS.match(node.get("bounds", ""))
         bounds = tuple(int(v) for v in m.groups()) if m else (0, 0, 0, 0)
         cls = node.get("class", "")
@@ -77,10 +85,12 @@ def parse_hierarchy(xml: str, screen_h: int) -> list[Element]:
         )
         el.status_bar = el.package == BANNER_PACKAGE or el.package == "com.android.systemui" and (
             0 < bounds[3] <= screen_h * STATUS_BAR_FRACTION or bool(_STATUS_IDS.search(el.resource_id.split("/")[-1]))
-        )
+        ) or bool(_KEYBOARD_PACKAGES.search(el.package)) or bool(_KEYBOARD_IDS.search(el.resource_id.split("/")[-1]))
+        overlay = overlay or bool(_OVERLAY_IDS.search(el.resource_id))
+        el.status_bar = el.status_bar or overlay
         out.append(el)
         for child in node.findall("node"):
-            walk(child, el.index, depth + 1, in_list or el.scrollable)
+            walk(child, el.index, depth + 1, in_list or el.scrollable, overlay)
 
     for top in root.findall("node"):
         walk(top, None, 0, False)
@@ -117,6 +127,13 @@ def _on_screen(e: Element, width: int, height: int) -> bool:
 def _clip(s: str) -> str:
     s = " ".join(s.split())
     return s if len(s) <= MAX_LABEL else s[: MAX_LABEL - 1] + "…"
+
+
+def _set_label(e: Element, text: str) -> None:
+    """The model sees at most MAX_LABEL characters; the whole text stays on the element for reading outputs."""
+    e.label = _clip(text)
+    whole = " ".join(text.split())
+    e.full_label = whole if whole != e.label else ""
 
 
 def number_elements(elements: list[Element], width: int, height: int) -> list[Element]:
@@ -193,18 +210,18 @@ def number_elements(elements: list[Element], width: int, height: int) -> list[El
                 parts = []
                 descendant_text(e.index, parts)
                 label = " · ".join(dict.fromkeys(parts))  # drop repeats such as "Order · Order"
-            e.label = _clip(label)
+            _set_label(e, label)
             if e.label or e.resource_id or e.editable or e.scrollable or e.checkable:
                 numbered.append(e)
         elif (e.text or e.desc) and e.index not in absorbed and not repeats_ancestor(e):
-            e.label = _clip(e.text or e.desc)
+            _set_label(e, e.text or e.desc)
             numbered.append(e)
         elif _short_id(e.resource_id) and e.index not in absorbed and children.get(e.index) and text_only_group(e.index):
             # A merged row with an ID but no text of its own ("Date" + "Fri, Oct 30"): one line, with its ID.
             parts = []
             descendant_text(e.index, parts)
             if parts:
-                e.label = _clip(" · ".join(dict.fromkeys(parts)))
+                _set_label(e, " · ".join(dict.fromkeys(parts)))
                 numbered.append(e)
 
     # Parents come before children in document order, so absorbed children are already skipped.

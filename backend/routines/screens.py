@@ -29,9 +29,14 @@ def usable_id(resource_id: str | None) -> bool:
     return bool(rid) and not _OBFUSCATED.search(rid)
 
 
+_ASTRAL = re.compile("[\U00010000-\U0010FFFF]")
+
+
 def fold(s: str | None) -> str:
-    """Accents removed: people type "Caffe Latte" where the app shows "Caffè Latte" (seen on Starbucks)."""
-    return "".join(ch for ch in unicodedata.normalize("NFKD", s or "") if not unicodedata.combining(ch))
+    """Accents removed: people type "Caffe Latte" where the app shows "Caffè Latte" (seen on Starbucks). Emoji written as
+    the XML dump writes them, ".." ("radio 📚 beats" is "radio .. beats" on screen, Phase 0)."""
+    s = _ASTRAL.sub("..", s or "")
+    return "".join(ch for ch in unicodedata.normalize("NFKD", s) if not unicodedata.combining(ch))
 
 
 def norm(s: str | None) -> str:
@@ -110,7 +115,7 @@ def screen_from_tree(tree: dict) -> ScreenState:
             checked=d.get("checked", False), enabled=d.get("enabled", True), focused=d.get("focused", False),
             selected=d.get("selected", False), password=d.get("password", False), visible=True,
             in_list=d.get("in_list", False), status_bar=d.get("status_bar", False), number=d.get("number"),
-            label=d.get("label", ""), kind=d.get("kind", ""),
+            label=d.get("label", ""), kind=d.get("kind", ""), full_label=d.get("full_label", ""),
         )
         els.append(e)
     numbered = sorted((e for e in els if e.number), key=lambda e: e.number or 0)

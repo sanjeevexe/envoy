@@ -17,6 +17,7 @@ import gzip
 import json
 import os
 import re
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any
@@ -36,6 +37,7 @@ DENY = re.compile(r"\b(send|delete|buy|purchase|place (your )?order|pay|checkout
 
 def redact(text: str) -> str:
     text = re.sub(r"[\w.+-]+@[\w-]+\.[\w.]+", "user@example.com", text)
+    text = re.sub(r"[\w.+-]+@[\w.-]*(…|\\u2026)", "user@…", text)  # an address cut short by the label clip
     return re.sub(r"\+?\d[\d\s().-]{8,}\d", "555-0100", text)
 
 
@@ -79,7 +81,7 @@ class Nav:
 
     async def type(self, text: str, submit: bool = False, **match: Any) -> None:
         s = await self.screen()
-        el = find(s, **match) or next((e for e in s.numbered if e.editable), None)
+        el = (find(s, **match) if match else None) or next((e for e in s.numbered if e.editable), None)
         if el is None:
             raise RuntimeError(f"no field {match}")
         await self.dev.act(Action(kind="type", element=el.number, text=text, submit=submit))
@@ -199,17 +201,13 @@ def recipe(name: str):
 @recipe("gmail")
 async def _gmail(dev: EmulatorDevice, nav: Nav) -> None:
     await launch(dev, "com.google.android.gm")
-    await nav.save("gmail_inbox")                                   # Compose (reversible)
+    await nav.save("gmail_inbox", must_show=r"^Compose$")           # Compose (reversible)
     await nav.tap(label_re=r"^Compose$")
     await nav.save("gmail_compose", must_show=r"^Send$")            # Send
     await nav.back()
     await nav.back()
     await launch(dev, "com.google.android.gm")
-    s = await nav.screen()
-    row = next((e for e in s.numbered if e.in_list and e.clickable and len(e.label) > 20), None)
-    if row is None:
-        raise RuntimeError("no email in the inbox")
-    await dev.act(Action(kind="tap", element=row.number))
+    await nav.tap(label_re=r"^(Unread, )?Google, Security alert")   # an account notice in the test inbox
     await asyncio.sleep(1.5)
     await nav.save("gmail_message", must_show=r"^Delete$")          # Delete (to trash), Archive
 
@@ -220,48 +218,37 @@ async def _amazon(dev: EmulatorDevice, nav: Nav) -> None:
     await nav.tap(label_re=r"^Search Amazon")
     await nav.type("AA batteries", submit=True)
     await asyncio.sleep(3.0)
-    s = await nav.screen()
-    price = next(e for e in s.numbered if re.search(r"\$\d", e.label))
-    await dev.act(Action(kind="tap", element=price.number))
+    await nav.tap(label_re=r"^Go to detail page for")
     await asyncio.sleep(3.0)
-    await nav.scroll_to(label_re=r"^Buy Now$", max_scrolls=10)
-    await nav.save("amazon_product", must_show=r"^(Add to Cart|Buy Now)$")  # Buy Now; Add to Cart (reversible)
+    await nav.scroll_to(label_re=r"^Submit$", max_scrolls=4)       # the guest page's Buy Now is a form button labelled "Submit"
+    await nav.save("amazon_product", must_show=r"^Submit$")         # Buy Now (as "Submit", id buy-now-button); Add to cart
+
+
+async def deep_link(url: str) -> None:
+    subprocess.run(["adb", "-s", "emulator-5556", "shell", "am", "start", "-a", "android.intent.action.VIEW", "-d", url], capture_output=True)
+    await asyncio.sleep(4.0)
 
 
 @recipe("youtube")
 async def _youtube(dev: EmulatorDevice, nav: Nav) -> None:
     await launch(dev, "com.google.android.youtube")
-    await nav.tap(desc="Search")
+    await asyncio.sleep(3.0)  # the home feed keeps loading after the first frame
+    await nav.tap(label_re=r"^Search YouTube$")
+    await asyncio.sleep(1.5)
     await nav.type("Lofi Girl", submit=True)
     await asyncio.sleep(3.0)
-    s = await nav.screen()
-    if not any(re.fullmatch(r"Subscribe", e.label or e.desc or "", re.I) for e in s.numbered):
-        await nav.tap(label_re=r"^Lofi Girl")
-        await asyncio.sleep(2.5)
-    await nav.save("youtube_channel", must_show=r"^Subscribe$")        # Subscribe
+    await nav.save("youtube_results", must_show=r"^Subscribe to ")   # Subscribe to <channel>
 
 
 @recipe("play")
 async def _play(dev: EmulatorDevice, nav: Nav) -> None:
-    await launch(dev, "com.android.vending")
-    await nav.tap(label_re=r"^Search")
-    await nav.tap(label_re=r"Search apps|Search for apps")
-    await nav.type("YouTube Music", submit=True)
-    await asyncio.sleep(3.0)
-    await nav.tap(label_re=r"^YouTube Music")
-    await asyncio.sleep(2.0)
+    await deep_link("market://details?id=com.target.ui")            # a user-installed app (system apps can't be uninstalled)
     await nav.save("play_app_installed", must_show=r"^Uninstall$")    # Uninstall (opens a dialog), Open (reversible)
     await nav.tap(label="Uninstall", opens=True)
-    await nav.save("play_uninstall_dialog", must_show=r"^Uninstall$")  # Uninstall / Cancel
+    await nav.save("play_uninstall_dialog", must_show=r"^Uninstall$")  # "Uninstall this app?" Uninstall / Cancel
     await nav.tap(label="Cancel", opens=True)
-    await launch(dev, "com.android.vending")
-    await nav.tap(label_re=r"^Search")
-    await nav.tap(label_re=r"Search apps|Search for apps")
-    await nav.type("Minecraft", submit=True)
-    await asyncio.sleep(3.0)
-    await nav.tap(label_re=r"^Minecraft")
-    await asyncio.sleep(2.0)
-    await nav.save("play_paid_app", must_show=r"^\$\d")                # the price button (buys the app)
+    await deep_link("market://details?id=com.mojang.minecraftpe")
+    await nav.save("play_paid_app", must_show=r"^Buy for \$")         # "Buy for $6.99 · $6.99"
 
 
 @recipe("settings")
@@ -270,45 +257,44 @@ async def _settings(dev: EmulatorDevice, nav: Nav) -> None:
     await nav.scroll_to(label_re=r"^System")
     await nav.tap(label_re=r"^System")
     await nav.scroll_to(label_re=r"^Reset options")
-    await nav.tap(label_re=r"^Reset options")
+    await nav.tap(label_re=r"^Reset options", opens=True)
     await nav.save("settings_reset_options")
-    await nav.tap(label_re=r"^Reset (Wi.?Fi|mobile)", opens=True)
-    await asyncio.sleep(1.0)
-    await nav.scroll_to(label_re=r"^Reset settings$")
-    await nav.save("settings_reset_network", must_show=r"^Reset settings$")  # Reset settings
-    await nav.back()
+    await nav.tap(label_re=r"^Reset Bluetooth & Wi.Fi", opens=True)
+    await nav.save("settings_reset_network", must_show=r"^Reset$")    # Reset / Cancel ("You can't undo this action")
+    await nav.tap(label="Cancel", opens=True)
     await nav.tap(label_re=r"^Erase all data \(factory reset\)", opens=True)
     await asyncio.sleep(1.0)
-    await nav.scroll_to(label_re=r"^Erase all data$")
-    await nav.save("settings_erase", must_show=r"^Erase all data$")   # Erase all data
+    await nav.save("settings_erase", must_show=r"^ERASE ALL DATA$")   # ERASE ALL DATA / CANCEL
+    await nav.tap(label="CANCEL", opens=True)
     await launch(dev, "com.android.settings")
     await nav.scroll_to(label_re=r"^Apps")
     await nav.tap(label_re=r"^Apps")
-    await nav.tap(label_re=r"^(See all|All) .*apps")
-    await nav.scroll_to(label_re=r"^YouTube Music", max_scrolls=15)
-    await nav.tap(label_re=r"^YouTube Music")
-    await nav.save("settings_app_info", must_show=r"^Uninstall$")     # Uninstall, Force stop
+    await nav.tap(label_re=r"^See all")
+    await nav.scroll_to(label_re=r"^Target\b", max_scrolls=15)
+    await nav.tap(label_re=r"^Target\b")
+    await nav.save("settings_app_info", must_show=r"^Uninstall$")     # Uninstall, Force stop, Archive
     await nav.tap(label="Uninstall", opens=True)
-    await nav.save("settings_uninstall_dialog", must_show=r"^OK$")    # OK / Cancel: a bare OK
+    await nav.save("settings_uninstall_dialog", must_show=r"^OK$")    # "Do you want to uninstall this app?" OK / Cancel: a bare OK
     await nav.tap(label="Cancel", opens=True)
-    await nav.tap(label_re=r"^Storage")
+    await nav.tap(label_re=r"^Storage & cache")
     await nav.tap(label_re=r"^Clear storage", opens=True)
     await nav.save("settings_clear_storage_dialog", must_show=r"^Delete$")  # Delete / Cancel
     await nav.tap(label="Cancel", opens=True)
     await launch(dev, "com.android.settings")
-    await nav.scroll_to(label_re=r"^(Passwords|Accounts)")
-    await nav.tap(label_re=r"^(Passwords|Accounts)")
-    await nav.tap(label_re=r"@|Google")
+    await nav.scroll_to(label_re=r"^Passwords")
+    await nav.tap(label_re=r"^Passwords")
+    await nav.tap(label_re=r"· Google$")
     await nav.save("settings_account", must_show=r"^Remove account$")  # Remove account
 
 
 @recipe("chrome")
 async def _chrome(dev: EmulatorDevice, nav: Nav) -> None:
     await launch(dev, "com.android.chrome")
-    await nav.tap(desc="More options")
+    await nav.tap(desc="Customize and control Google Chrome")
     await nav.tap(label_re=r"^Delete browsing data", opens=True)
     await asyncio.sleep(1.5)
-    await nav.save("chrome_delete_data", must_show=r"^Delete data$")  # Delete data
+    await nav.save("chrome_delete_data", must_show=r"^Delete data$")  # Delete data / Cancel
+    await nav.tap(label="Cancel", opens=True)
 
 
 @recipe("dialer")
@@ -316,7 +302,7 @@ async def _dialer(dev: EmulatorDevice, nav: Nav) -> None:
     await launch(dev, "com.google.android.dialer")
     await nav.tap(desc="key pad")
     for d in "5550100":
-        await nav.tap(label=d, tries=4)
+        await nav.tap(label_re=rf"^{d}\b", tries=4)
     await nav.save("dialer_keypad", must_show=r"dial|call")            # Call (the dial button)
 
 

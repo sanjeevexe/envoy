@@ -1,0 +1,52 @@
+{
+ "chipotle | first run | \"$5.25\"": {
+  "verdict": "right",
+  "note": "CHIPS & GUACAMOLE $5.25 on the agent's final screen",
+  "run": "1028023735"
+ },
+ "chipotle | same input | {\"price\": \"$4.90\"}": {
+  "verdict": "right",
+  "note": "the repair picked another store (Chips $1.95 there); its CHIPS & GUACAMOLE row shows $4.90",
+  "run": "1028023735"
+ },
+ "chipotle | new input | {\"price\": \"$4.90\"}": {
+  "verdict": "right",
+  "note": "the CHIPS & QUESO BLANCO row shows $4.90",
+  "run": "1028023735"
+ },
+ "doordash_search | first run | \"Pizza My Heart\"": {
+  "verdict": "right",
+  "note": "Pizza My Heart is the first result for pizza",
+  "run": "1028023735"
+ },
+ "doordash_search | same input | {\"first_restaurant_name\": \"Pizza My Heart\"}": {
+  "verdict": "right",
+  "note": "Pizza My Heart is the first result on the screen it was read from",
+  "run": "1028023735"
+ },
+ "doordash_search | new input | {\"first_restaurant_name\": \"SH HAWAIIAN BBQ &DONUTS\"}": {
+  "verdict": "right",
+  "note": "SH HAWAIIAN BBQ &DONUTS is the first result DoorDash shows for sushi",
+  "run": "1028023735"
+ },
+ "amazon | first run | \"$19.44 ($0.97/count) for Energizer MAX AA Batteries (20 Pack) - first result for 'aa batteries'\"": {
+  "verdict": "right",
+  "note": "Energizer MAX AA (20 Pack) $19.44 ( $0.97 /count) is the first product row, below a sponsored brand carousel (Eveready)",
+  "run": "1028030222"
+ },
+ "amazon | same input | {\"first_result_price\": \"$19.44 ( $0.97 /count)\", \"first_result_product\": \"Energizer MAX AA Batteries (20 Pack), Double A Alkaline Batteries\"}": {
+  "verdict": "right",
+  "note": "the same product and price the agent read on this run minutes earlier; this run kept no screen (output read in the end-of-run loop, now saved too)",
+  "run": "1028030222"
+ },
+ "play_rating | first run | \"Duolingo app star rating is 4.7 stars (Average rating 4.7 stars in 48 million reviews)\"": {
+  "verdict": "right",
+  "note": "Duolingo: Learn Languages listing shows Average rating 4.7 stars in 48 million reviews",
+  "run": "1028030222"
+ },
+ "play_rating | same input | {\"star_rating\": \"4.7 stars in 48 million reviews\"}": {
+  "verdict": "right",
+  "note": "read on the Duolingo listing it opened: 4.7 stars in 48 million reviews",
+  "run": "1028030222"
+ }
+}

@@ -1,6 +1,6 @@
 # Real-app test set: first results
 
-Oct 27, 2026. 18 read-only workflows on `envoy-real` across shopping, food, Google's own apps, maps, the Play Store, media and the web. 11 are graded against ground truth (the phone's settings over adb, the Gmail API, published facts such as an address or a year), the rest by the answer's shape (a price, a rating). Run with `eval/run_real_apps.py`. After any change to routines, rerun it with `--regression`: no agent runs and cached compile answers, so no model calls unless a repair runs. Full table: `eval/results/real_apps/report.md`.
+Oct 27, 2026. 18 read-only workflows on `envoy-real` across shopping, food, Google's own apps, maps, the Play Store, media and the web. 11 are graded against ground truth (the phone's settings over adb, the Gmail API, published facts such as an address or a year), the rest by the answer's shape (a price, a rating); in the final evaluation (`eval/run_final.py real`) a person also reads each shape-graded answer against the screen it came from, and a right-shaped wrong value doesn't count (`eval/results/final/real_hand_checks.json`). Run with `eval/run_real_apps.py`. After any change to routines, rerun it with `--regression`: no agent runs and cached compile answers, so no model calls unless a repair runs. Full table: `eval/results/real_apps/report.md`.
 
 The point of the set is to show where learning breaks before we try to improve it, so nothing below has been fixed yet.
 

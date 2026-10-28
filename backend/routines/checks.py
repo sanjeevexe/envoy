@@ -126,8 +126,8 @@ def _distinctiveness(e: Element, screen: ScreenState, inputs: dict[str, str]) ->
         s += 2.0
         if "title" in rid or "header" in rid:
             s += 1.0
-    if e.in_list:
-        s -= 3.0  # list contents are data: another booking or seat shows other rows
+    if e.in_list or re.search(r"(row|cell|item|index|position)[-_]?\d", rid or ""):
+        s -= 3.0  # list contents are data: another booking or seat shows other rows (also rows numbered in their IDs)
     label = e.label or ""
     has_input = any(v and contains_value(label, v) for v in inputs.values())
     if has_input:

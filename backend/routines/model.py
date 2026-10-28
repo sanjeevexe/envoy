@@ -136,6 +136,11 @@ class Extract(_Model):
     next_element: bool = False  # the value is the element right after the one labelled `near` ("Seat", then "22F")
     offset: int | None = None  # with next_element: how many elements after the label ("Today", "10/27", "8am open" → 2)
     expect_digits: bool = False  # the recorded value starts with a number: a placeholder ("- calories") is not the value yet
+    switch: bool = False  # the value is the element's on/off state ("Is Bluetooth on?"), not its words
+    card: str | None = None  # an ID every row shares (each menu item's price): read it in the row that shows this text
+    first_row: bool = False  # the top result row of the locator's type, by its place ("the first video" for a search)
+    until: str | None = None  # with first_row: the value ends where this separator starts ("<title> - <channel> - …")
+    skip_ads: bool = False  # with first_row: the top row that isn't an ad ("Sponsored - …"), as the agent chose
 
 
 class Step(_Model):
@@ -331,7 +336,7 @@ def to_dict(r: Routine) -> dict[str, Any]:
             sd["post"] = [_check_out(c) for c in s.post]
         sd["risk"] = s.risk
         if s.extract:
-            sd["extract"] = {n: _clean(e.model_dump()) for n, e in s.extract.items()}
+            sd["extract"] = {n: _clean(e.model_dump(exclude_defaults=True)) for n, e in s.extract.items()}
         if s.note:
             sd["note"] = s.note
         out["steps"].append(sd)

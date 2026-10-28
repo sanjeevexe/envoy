@@ -46,6 +46,8 @@ async def inbox_suite(s: Suite, name: str, bookings: list[Any], seed: int) -> di
         tm = by_name[mail.id]
         rep = await svc.ingest_email(mail, task_id=s.tid("mem", name, mail.id[:16]))
         sc = score_extraction(rep.extracted, tm.truth)
+        got = {(e.type, o.attribute) for e in rep.extracted for o in e.observations}
+        sc["missing_attrs"] = [f"{t['type']}.{a}" for t in tm.truth for a in t if a != "type" and (t["type"], a) not in got]
         rows.append({"email": mail.id, "kind": tm.kind, "method": rep.method, **sc, "dropped": rep.dropped[:5]})
         print(f"{name:12s} {mail.id:28s} {tm.kind:12s} {rep.method:7s} found={sc['found']:2d} wrong={sc['wrong']} missing={sc['missing']}", flush=True)
     matching = []
@@ -93,6 +95,8 @@ async def screens_suite(s: Suite) -> dict[str, Any]:
         truth = [{"type": "Trip", "confirmation_code": b.code, "destination": b.city},
                  {"type": "Flight", "number": b.number, "date": b.date, "gate": b.gate, "seat": b.seat, "depart_time": b.depart}]
         sc = score_extraction(extraction.entities, truth)
+        got = {(e.type, o.attribute) for e in extraction.entities for o in e.observations}
+        sc["missing_attrs"] = [f"{t['type']}.{a}" for t in truth for a in t if a != "type" and (t["type"], a) not in got]
         ev = sum(1 for e in extraction.entities for o in e.observations if o.evidence)
         n = sum(len(e.observations) for e in extraction.entities)
         rows.append({"booking": b.code, "city": b.city, **sc, "evidence": f"{ev}/{n}", "dropped": extraction.dropped[:5]})
@@ -137,14 +141,24 @@ async def photos_suite(s: Suite) -> dict[str, Any]:
                 got.setdefault(o.attribute, []).append(o.value)
         right = [a for a, v in exp.items() if any(rp.same(a, v, g) for g in got.get(a, []))]
         wrong = [a for a in exp if a in got and a not in right]
+        if kind == "status":
+            # Another flight's status, looked up: not evidence of a booking of yours. Right is storing nothing about it.
+            rows.append({"screen": path.stem, "kind": kind, "negative": True, "stored": sum(len(e.observations) for e in (res.report.extracted if res.report else [])),
+                         "new_flights": len(store.entities("Flight")) - flights, "new_trips": len(store.entities("Trip")) - trips, "deleted": res.deleted})
+            print(f"photo {path.stem:20s} (another flight) new F/T={rows[-1]['new_flights']}/{rows[-1]['new_trips']}", flush=True)
+            continue
         rows.append({"screen": path.stem, "kind": kind, "found": len(right), "wrong": len(wrong), "missing": len([a for a in exp if a not in got]),
                      "wrong_detail": [f"{a}: {got[a]} (expected {exp[a]})" for a in wrong], "new_flights": len(store.entities("Flight")) - flights,
                      "new_trips": len(store.entities("Trip")) - trips, "deleted": res.deleted})
         print(f"photo {path.stem:20s} {len(right)}/{len(exp)} wrong={wrong} new F/T={rows[-1]['new_flights']}/{rows[-1]['new_trips']}", flush=True)
     shutil.rmtree(rp.WORK, ignore_errors=True)
     app.prepare(fixtures=demo_fixtures(signed_in=True), variant=0)
-    tot = {k: sum(r[k] for r in rows) for k in ("found", "wrong", "missing")}
-    return {"items": len(rows), "kind": "screenshots", "attributes": tot, "merged_into_known": sum(r["new_flights"] == 0 and r["new_trips"] == 0 for r in rows),
+    scored = [r for r in rows if not r.get("negative")]
+    neg = [r for r in rows if r.get("negative")]
+    tot = {k: sum(r[k] for r in scored) for k in ("found", "wrong", "missing")}
+    return {"items": len(scored), "kind": "screenshots", "attributes": tot,
+            "merged_into_known": sum(r["new_flights"] == 0 and r["new_trips"] == 0 for r in scored),
+            "other_flight_created_nothing": all(r["new_flights"] == 0 and r["new_trips"] == 0 for r in neg) if neg else None,
             "all_deleted": all(r["deleted"] for r in rows), "rows": rows}
 
 
@@ -255,7 +269,15 @@ def memory_md(out: dict[str, Any]) -> str:
                           f"{'n/a' if m['same_city_kept_apart'] is None else m['same_city_kept_apart']} | {m['traceable']} |")
         if "photos" in out:
             md.append(f"\nScreenshots merged into the trip and flight memory already knew: {out['photos']['merged_into_known']} of {out['photos']['items']}; "
+                      f"a status lookup of another flight created no trip or flight: {out['photos'].get('other_flight_created_nothing')}; "
                       f"every image deleted: {out['photos']['all_deleted']}.")
+        misses: dict[str, int] = {}
+        for k in parts:
+            for r in out[k].get("rows", []):
+                for a in r.get("missing_attrs", []):
+                    misses[a] = misses.get(a, 0) + 1
+        if misses:
+            md.append("Missing attributes: " + ", ".join(f"{a} ×{n}" for a, n in sorted(misses.items(), key=lambda kv: -kv[1])) + ".")
     if "stale" in out:
         rs = out["stale"]["rows"]
         st = [r for r in rs if r["stale"]]
@@ -275,13 +297,19 @@ async def cmd_memory(args: Any) -> None:
     from skylark_routines import generate
     s = Suite("memory", label="Memory: extraction, entity matching and stale facts")
     out: dict[str, Any] = {k: v for k, v in (load("memory") or {}).items() if k != "meta"}  # parts not run keep their earlier result
-    if "extraction" in args.parts:
+    parts = set(args.parts.split(","))
+    if "extraction" in parts:
+        parts |= {"emails", "screens", "photos"}
+    if "emails" in parts:
         out["emails_large"] = await inbox_suite(s, "emails_large", bookings_for_eval(15), seed=3)
         out["emails_new"] = await inbox_suite(s, "emails_new", generate(4242, 8), seed=9)
+    if "screens" in parts:
         out["screens"] = await screens_suite(s)
+    if "photos" in parts:
         out["photos"] = await photos_suite(s)
     if "stale" in args.parts:
         out["stale"] = await stale_suite(s)
-    for k in (["emails_large", "emails_new", "screens", "photos"] if "extraction" in args.parts else []) + (["stale"] if "stale" in args.parts else []):
+    ran = (["emails_large", "emails_new"] if "emails" in parts else []) + [k for k in ("screens", "photos", "stale") if k in parts]
+    for k in ran:
         out[k]["run"] = s.stamp()
     s.save(out, memory_md(out))

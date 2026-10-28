@@ -44,9 +44,9 @@ from policy.risk import classify
 from policy.signin import sign_in_reason
 from routines import checks as chk
 from routines import locators
-from routines.compiler import bind_inputs, chk_generalize, generalize_locator
+from routines.compiler import bind_inputs, chk_generalize, generalize_locator, is_ad
 from routines.model import Check, Extract, Locator, Routine, Step, StepAction, has_slot, render, render_str
-from routines.screens import body, contains_value, norm, parts_of, usable_id
+from routines.screens import body, contains_value, norm, parts_of, short_id, usable_id
 from routines.visual import match_crop
 
 RUNG_NAMES = {0: "none", 1: "wait and retry", 2: "relaxed match", 3: "pop-up handler", 4: "local repair", 5: "full agent", 6: "ask the user"}
@@ -163,6 +163,7 @@ class _Ctx:
     allow_repair: bool
     allow_agent: bool
     memory: str
+    request: str = ""  # the user's own words, when the caller has them: what a fallback agent should finish
     repairs_run: int = 0
     started: float = 0.0
     jump_to: int | None = None  # set when the app skipped ahead to a later step's screen
@@ -243,11 +244,12 @@ class RoutineExecutor:
     # ---- the run ----------------------------------------------------------------------------
 
     async def run(self, routine: Routine, inputs: dict[str, str], *, task_id: str | None = None, launch: Literal["fresh", "if_needed", "never"] = "if_needed",
-                  allow_repair: bool = True, allow_agent: bool = True, memory: str = "") -> RunOutcome:
+                  allow_repair: bool = True, allow_agent: bool = True, memory: str = "", request: str = "") -> RunOutcome:
         task_id = task_id or f"routine-{routine.routine}-{uuid.uuid4().hex[:6]}"
         trace = TraceWriter(task_id)
         out = RunOutcome(routine=routine.routine, version=routine.version, task_id=task_id, status="failed", trace_dir=str(trace.dir))
-        ctx = _Ctx(routine, {k: str(v) for k, v in inputs.items()}, task_id, out, trace, allow_repair, allow_agent, memory, started=time.time())
+        ctx = _Ctx(routine, {k: str(v) for k, v in inputs.items()}, task_id, out, trace, allow_repair, allow_agent, memory, request,
+                   started=time.time())
         try:
             missing = routine.missing_inputs(ctx.inputs)
             if missing:
@@ -287,6 +289,8 @@ class RoutineExecutor:
                     await asyncio.sleep(self.config.poll_s)
                     screen = await self._observe()
                     ok, outs = self._check(routine.done, screen, ctx.inputs)
+            if not ok and (seen := await self._reveal_checks(ctx, routine.done, None)) is not None:
+                ok, screen = True, seen  # the proof is on the page, past the edge of the screen (a smaller screen, a banner above)
             if not ok:
                 return self._finish(ctx, "failed", "done-check failed: " + "; ".join(o.detail for o in outs if not o.passed))
             missing_out = [n for n in routine.outputs if not out.outputs.get(n)]
@@ -296,9 +300,13 @@ class RoutineExecutor:
                 while missing_out and time.perf_counter() < deadline:
                     await asyncio.sleep(0.2)
                     screen = await self._observe()
+                    read = False
                     for n in missing_out:
                         if n in specs:
                             out.outputs[n] = extract_value(specs[n], screen, ctx.inputs)
+                            read = read or bool(out.outputs[n])
+                    if read:  # evidence, as for outputs read by a step
+                        ctx.trace.save_tree(len(out.steps) + 1, "outputs_late", screen)
                     missing_out = [n for n in routine.outputs if not out.outputs.get(n)]
             if missing_out:  # on a shorter screen an output can be scrolled away (Phase 6): look up the list, then down
                 missing_out = await self._read_scrolled(ctx, specs, missing_out)
@@ -416,9 +424,12 @@ class RoutineExecutor:
             specific = self._specific(step.post)
             if specific and self._check(specific, s, ctx.inputs)[0]:
                 return _Ready("skip", s, why="its after-checks already hold")
-            if step.optional and (req := self._next_required(ctx, idx)) is not None and self._ready_now(req, s, ctx.inputs):
+            req = self._next_required(ctx, idx) if step.optional else None
+            if step.optional and req is not None and self._ready_now(req, s, ctx.inputs):
                 return _Ready("skip", s, why=f"optional, and the next required step ({req.id}) is ready")
             stable = now - stable_since >= cfg.stable_s
+            if step.optional and req is None and stable:  # nothing required after it to tell us its screen was skipped
+                return _Ready("skip", s, why="optional, its screen didn't come, and only optional steps are left")
             # Rung 3: a known pop-up in the way.
             if popups < cfg.max_popups_step and now - stable_since >= 0.25 and (pop := match_popup(s, ctx.routine.intent)) is not None:
                 await self.device.act(Action(kind="tap", element=pop.element.number))
@@ -466,7 +477,7 @@ class RoutineExecutor:
         last_body, stable_since = None, start
         popups = 0
         passes = 0
-        tried_relaxed = False
+        tried_relaxed = tried_scroll = False
         while True:
             s = await self._observe()
             now = time.perf_counter()
@@ -505,11 +516,24 @@ class RoutineExecutor:
                     sr.climb(2, "after-checks held at the relaxed threshold")
                     for j, o in enumerate(rel_outs):
                         if o.relaxed and o.element is not None and o.check.locator is not None:
+                            old_loc = o.check.locator
+                            if old_loc.text_has or any("{{" in (x or "") for x in (old_loc.resource_id, old_loc.text)):
+                                continue  # bound to an input (the row for {{code}}): this run's row is this booking's data
                             new = o.check.model_copy(update={"locator": chk.anchor_locator(o.element, s)})
+                            if any(v and contains_value(new.locator.describe(), v) for v in ctx.inputs.values()):
+                                continue  # a check that names this run's input value would fail on every other one
                             ctx.out.patches.append(Patch("check", step.id, f"step {step.id!r}: after-check {j} matched only relaxed; "
                                                          f"updated to {new.locator.describe() if new.locator else ''}", check_index=j, check=new))
                     return _Ready("ok", s)
                 tried_relaxed = stable
+            # What the step should show may be past the edge of the screen ("Known traveler number saved" under the Save
+            # button, once a banner pushed the page down): scroll to look before calling it a failure. No model call.
+            if stable and tried_relaxed and not tried_scroll and any(e.kind == "List" for e in s.numbered) and \
+                    all(o.passed or o.check.kind in ("element_present", "text_visible", "screen_changed") for o in outs):  # a change below the fold
+                tried_scroll = True
+                if (seen := await self._reveal_checks(ctx, step.post, before)) is not None:
+                    sr.climb(2, "after-checks held past the edge of the screen (scrolled to see them)")
+                    return _Ready("ok", seen)
             # Only "where the app went" checks failed, the screen changed, and the next step is ready: the checks were
             # over-specific (something optional that didn't show this time). Accept, and patch them to what happened.
             nav_only = all(o.passed or o.check.kind in ("element_present", "element_absent", "text_visible", "screen_like") for o in outs)
@@ -582,6 +606,20 @@ class RoutineExecutor:
                 return action
         return None
 
+    async def _clear_keyboard(self, el: Element, screen: ScreenState) -> ScreenState | None:
+        """The on-screen keyboard is up and covers the element's centre (the tree still lists it): drag the page up just
+        enough to bring it above the keyboard. Back is never used for this: in some apps it also leaves the screen. Returns
+        the new screen, or None if nothing needed doing."""
+        top_of = getattr(self.device, "keyboard_top", None)
+        top = await asyncio.to_thread(top_of) if top_of is not None else None
+        if top is None or el.center[1] < top:
+            return None
+        w = screen.width or 1080
+        dy = min(int(el.center[1] - top + 0.08 * (screen.height or 2400)), int(0.6 * top))
+        y1 = int(top * 0.85)
+        await self.device.act(Action(kind="swipe", x=w // 2, y=y1, x2=w // 2, y2=max(1, y1 - dy)))
+        return await self._settle_quick()
+
     async def _act(self, ctx: _Ctx, step: Step, screen: ScreenState, el: Element | None, sr: StepRun) -> Literal["ok", "stop"]:
         """Run the step's action through the policy gate. A scroll_until that doesn't find its target returns "ok":
         its after-check (the target is visible) then fails and the fallback ladder continues from there."""
@@ -615,6 +653,13 @@ class RoutineExecutor:
             action = Action(kind="tap_point", x=point[0], y=point[1])
         else:
             assert el is not None
+            if a.kind in ("tap", "long_press") and (moved := await self._clear_keyboard(el, screen)) is not None:
+                # Typing left the keyboard up over the target: a tap would land on a key. The page was scrolled to bring it out.
+                screen = moved
+                m = self._target(step, screen, ctx.inputs)
+                if m is not None and m.element is not None:
+                    el = m.element
+                sr.rungs.append("scrolled the target out from under the on-screen keyboard")
             if a.kind == "type":
                 action = Action(kind="type", element=el.number, text=render_str(a.value, ctx.inputs) or "", submit=a.submit)
             else:
@@ -716,6 +761,23 @@ class RoutineExecutor:
                 direction, flipped = "up", True
         return None
 
+    async def _reveal_checks(self, ctx: _Ctx, checks: list[Check], before: ScreenState | None, max_scrolls: int = 4) -> ScreenState | None:
+        """Scroll the largest list down, then up, until the checks hold; the screen where they did, or None."""
+        s = await self._observe()
+        for direction in ("down", "up"):
+            for _ in range(max_scrolls):
+                lists = [e for e in s.numbered if e.kind == "List"]
+                if not lists:
+                    return None
+                before_body = body(s)
+                await self.device.act(Action(kind="scroll", direction=direction, element=max(lists, key=lambda e: e.area).number))
+                s = await self._settle_quick()
+                if self._check(checks, s, ctx.inputs, before=before)[0]:
+                    return s
+                if body(s) == before_body:
+                    break
+        return None
+
     async def _read_scrolled(self, ctx: _Ctx, specs: dict[str, Any], missing: list[str], max_scrolls: int = 8) -> list[str]:
         """Read outputs that aren't on screen by scrolling the largest list up, then down. Returns what is still missing."""
         missing = [n for n in missing if n in specs]
@@ -730,6 +792,8 @@ class RoutineExecutor:
                 s = await self._settle_quick()
                 for n in missing:
                     ctx.out.outputs[n] = ctx.out.outputs.get(n) or extract_value(specs[n], s, ctx.inputs)
+                if any(ctx.out.outputs.get(n) for n in missing):
+                    ctx.trace.save_tree(len(ctx.out.steps) + 1, "outputs_scrolled", s)
                 missing = [n for n in missing if not ctx.out.outputs.get(n)]
                 if body(s) == before_body:
                     break
@@ -927,7 +991,9 @@ class RoutineExecutor:
             return "stop"
         sr.climb(5, why)
         done = [render_str(s.intent, ctx.inputs) for s in ctx.routine.steps[:idx]]
-        goal = (f"{render_str(ctx.routine.intent, ctx.inputs)}. "
+        # The agent finishes what the user asked (their own words when we have them; the routine's intent otherwise).
+        goal = (f"{ctx.request.rstrip('.')}. " if ctx.request else f"{render_str(ctx.routine.intent, ctx.inputs)}. ")
+        goal = (goal
                 + (f"Inputs: {', '.join(f'{k} = {v}' for k, v in ctx.inputs.items())}. " if ctx.inputs else "")
                 + (f"A saved routine already did: {'; '.join(done)}. " if done else "")
                 + "Finish the task from the current screen.")
@@ -960,10 +1026,14 @@ class RoutineExecutor:
     async def _extract(self, ctx: _Ctx, step: Step, screen: ScreenState) -> None:
         if not step.extract:
             return
+        read = False
         for name, spec in step.extract.items():
             if ctx.out.outputs.get(name):
                 continue
             ctx.out.outputs[name] = extract_value(spec, screen, ctx.inputs)
+            read = read or bool(ctx.out.outputs[name])
+        if read:  # the screen the answer was read from (its tree, never a screenshot): evidence for checking it
+            ctx.trace.save_tree(len(ctx.out.steps) + 1, f"outputs_{step.id}"[:48], screen)
 
 
 def extract_value(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str | None:
@@ -973,11 +1043,52 @@ def extract_value(spec: Extract, screen: ScreenState, inputs: dict[str, str]) ->
     return value
 
 
+def _in_card(loc: Locator, card: str, screen: ScreenState) -> Element | None:
+    """The element `loc` names inside the row (same parent) that shows `card`: "CHIPS & GUACAMOLE" before
+    "CHILI LIME CHIPS & GUACAMOLE", so an exact match first."""
+    want = norm(card)
+    for exact in (True, False):
+        for holder in [e for e in screen.elements if e.parent is not None and want
+                       and (norm(e.label or e.text or e.desc) == want if exact else want in norm(e.label or e.text or e.desc))]:
+            el = next((e for e in screen.numbered if e.parent == holder.parent and e.index != holder.index
+                       and (not loc.resource_id or locators.id_matches(loc.resource_id, short_id(e.resource_id)))
+                       and (not loc.kind or e.kind == loc.kind)), None)
+            if el is not None:
+                return el
+    return None
+
+
+def _first_row(spec: Extract, screen: ScreenState) -> str | None:
+    """The top result row: the highest list element of the recorded type among the big clickable ones (not a chip or a
+    button inside a row), its text up to `until`."""
+    kind = spec.locator.kind if spec.locator else None
+    rows = [e for e in screen.numbered if e.in_list and e.clickable and (not kind or e.kind == kind) and (e.full_label or e.label)
+            and not (spec.skip_ads and is_ad(e))]
+    if not rows:
+        return None
+    big = max(e.area for e in rows)
+    top = min((e for e in rows if e.area > big / 3), key=lambda e: e.bounds[1])
+    label = " ".join((top.full_label or top.label).split())
+    return (label.split(spec.until, 1)[0] if spec.until else label).strip() or None
+
+
+def _after_card(card: str, near: str, screen: ScreenState) -> Element | None:
+    """The first element labelled `near` after the one that shows `card` among other words (a result, not the search box
+    that shows only the term)."""
+    want = norm(card)
+    shown = next((e for e in screen.numbered if want and want in norm(e.full_label or e.label) and norm(e.label) != want), None)
+    if shown is None:
+        return None
+    return next((e for e in screen.numbered if (e.number or 0) > (shown.number or 0) and norm(e.label).startswith(near)), None)
+
+
 def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str | None:
     """The value in an element: the recorded " · " part of its label if there are several ("Gate · B12" → B12),
     with the label in front of it ("Known traveler number: 98765432" → 98765432) and fixed text after it removed.
     Without IDs it falls back to the label (`near`), then to the element that shows one of the routine's inputs."""
     spec = render(spec, inputs)
+    if spec.first_row:
+        return _first_row(spec, screen)
     if spec.pattern:
         for e in screen.numbered:
             label = " ".join(e.label.split())
@@ -993,7 +1104,11 @@ def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str 
     el = None
     loc = render(spec.locator, inputs) if spec.locator is not None else None
     ids_shown = any(usable_id(e.resource_id) for e in screen.numbered)
-    if loc is not None and (loc.text or loc.desc or loc.text_has or (loc.resource_id and ids_shown)):
+    if spec.card and loc is not None:
+        el = _in_card(loc, spec.card, screen)
+        if el is None:
+            return None  # the row isn't on screen: the output is missing, and the ladder takes over
+    elif loc is not None and (loc.text or loc.desc or loc.text_has or (loc.resource_id and ids_shown)):
         # An ID-only locator means nothing on a screen that shows no IDs: fall back to the label (`near`).
         el = locators.locate(loc, screen, threshold=locators.RELAXED, margin=0.0, role="check").element
         if el is not None and loc.text_has and norm(el.label) == norm(loc.text_has):
@@ -1002,24 +1117,36 @@ def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str 
             el = next((e for e in screen.numbered if (not loc.kind or e.kind == loc.kind) and norm(e.label) != norm(loc.text_has)
                        and contains_value(e.label, loc.text_has)), None)
     near = norm(spec.near) if spec.near else ""
+    if el is None and spec.card and loc is None and near:
+        el = _after_card(spec.card, near, screen)
+        if el is None:
+            return None  # the requested result isn't on screen: missing, and the ladder takes over
     if el is None and near:
-        el = next((e for e in screen.numbered if norm(e.label).startswith(near)), None)
+        named = [e for e in screen.numbered if norm(e.label).startswith(near)]
+        if spec.segment:  # the value is part N of a row: a row with that many parts, not a page title that only says the label
+            el = next((e for e in named if len(parts_of(e.full_label or e.label)) > spec.segment), None)
+        el = el or (named[0] if named else None)
         if el is not None and norm(el.label) == near and el.number and el.number < len(screen.numbered):
             # The label stands alone ("Seat", then "22F"): the value is the next element (its parts shift by one, as the
             # label is no longer the first part: "Boarding · 5:30 AM · Group 3" → "5:30 AM · Group 3").
-            value = " ".join(screen.numbered[el.number].label.split())
+            nxt_el = screen.numbered[el.number]
+            value = " ".join((nxt_el.full_label or nxt_el.label).split())
             if spec.segment:
                 parts = parts_of(value)
                 value = parts[spec.segment - 1] if spec.segment - 1 < len(parts) else value
             return value or None
     if el is None and loc is not None and loc.kind:
         # No ID shown and no element starting with the label: the element of that type that shows one of the routine's
-        # inputs (a status line containing the flight number that was searched, with "Gate A7" inside it).
-        shown = [e for e in screen.numbered if e.kind == loc.kind and any(v and contains_value(e.label, v) for v in inputs.values())]
+        # inputs (a status line containing the flight number that was searched, with "Gate A7" inside it). Never one that
+        # shows only the input (the search box, while results load).
+        shown = [e for e in screen.numbered if e.kind == loc.kind and any(v and contains_value(e.label, v) and norm(e.label) != norm(v)
+                                                                          for v in inputs.values())]
         el = shown[0] if len(shown) == 1 else None
     if el is None:
         return None
-    label = " ".join(el.label.split())
+    if spec.switch:
+        return ("on" if el.checked else "off") if el.checkable else None
+    label = " ".join((el.full_label or el.label).split())  # the whole text: a long row's later parts are past the model's clip
     value = label
     if spec.segment is not None:
         parts = parts_of(label)

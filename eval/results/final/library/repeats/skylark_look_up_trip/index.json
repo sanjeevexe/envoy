@@ -1,10 +1,10 @@
 {
  "name": "skylark_look_up_trip",
- "active": 1,
+ "active": 3,
  "versions": [
   {
    "version": 1,
-   "status": "active",
+   "status": "retired",
    "created": "2026-10-27 22:03:29",
    "parent": null,
    "changes": [
@@ -40,9 +40,156 @@
      }
     ]
    }
+  },
+  {
+   "version": 2,
+   "status": "retired",
+   "created": "2026-10-28 00:43:12",
+   "parent": 1,
+   "changes": [
+    "step 'open_trip_by_confirmation_code': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}"
+   ],
+   "source_task": "f7-1028004301-rep-find_trip-n2",
+   "screenshots": [],
+   "trial": {
+    "passed": true,
+    "task_id": "f7-1028004301-rep-find_trip-n3",
+    "status": "done",
+    "model_calls": 0,
+    "duration_s": 3.45
+   }
+  },
+  {
+   "version": 3,
+   "status": "active",
+   "created": "2026-10-28 00:43:47",
+   "parent": 2,
+   "changes": [
+    "step 'open_trip_by_confirmation_code': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}"
+   ],
+   "source_task": "f7-1028004301-rep-find_trip-n6",
+   "screenshots": [],
+   "trial": {
+    "passed": true,
+    "task_id": "f7-1028004301-rep-find_trip-n7",
+    "status": "done",
+    "model_calls": 0,
+    "duration_s": 3.15
+   }
+  },
+  {
+   "version": 4,
+   "status": "trial",
+   "created": "2026-10-28 00:44:22",
+   "parent": 3,
+   "changes": [
+    "step 'open_trip_by_confirmation_code': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}"
+   ],
+   "source_task": "f7-1028004301-rep-find_trip-n10",
+   "screenshots": []
   }
  ],
- "runs": [],
+ "runs": [
+  {
+   "time": "2026-10-28 00:43:12",
+   "kind": "run",
+   "version": 1,
+   "task_id": "f7-1028004301-rep-find_trip-n2",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 3.53,
+   "patches": 1
+  },
+  {
+   "time": "2026-10-28 00:43:21",
+   "kind": "run",
+   "version": 2,
+   "task_id": "f7-1028004301-rep-find_trip-n3",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.45,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 00:43:29",
+   "kind": "run",
+   "version": 2,
+   "task_id": "f7-1028004301-rep-find_trip-n4",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 1.74,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 00:43:37",
+   "kind": "run",
+   "version": 2,
+   "task_id": "f7-1028004301-rep-find_trip-n5",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 1.67,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 00:43:47",
+   "kind": "run",
+   "version": 2,
+   "task_id": "f7-1028004301-rep-find_trip-n6",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 3.49,
+   "patches": 1
+  },
+  {
+   "time": "2026-10-28 00:43:56",
+   "kind": "run",
+   "version": 3,
+   "task_id": "f7-1028004301-rep-find_trip-n7",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.15,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 00:44:04",
+   "kind": "run",
+   "version": 3,
+   "task_id": "f7-1028004301-rep-find_trip-n8",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 1.76,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 00:44:12",
+   "kind": "run",
+   "version": 3,
+   "task_id": "f7-1028004301-rep-find_trip-n9",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 1.69,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 00:44:22",
+   "kind": "run",
+   "version": 3,
+   "task_id": "f7-1028004301-rep-find_trip-n10",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 3.65,
+   "patches": 1
+  }
+ ],
  "needs_recompile": false,
  "app": "com.skylark.air"
 }

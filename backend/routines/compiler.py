@@ -71,13 +71,24 @@ class TStep:
 # onboarding, Calendar's welcome pages in the real-app test set).
 _ONE_TIME_LABEL = re.compile(r"^(skip|skip for now|not now|no,? thanks|maybe later|later|got it|dismiss|close|i'?ll do (it|this) later|"
                              r"continue without.*|use without.*)$", re.I)
-_ONE_TIME_INTENT = re.compile(r"onboard|welcome|intro\b|tutorial|first[ _-]?(run|launch|time)|what'?s[ _-]?new|dismiss|promo", re.I)
+_ONE_TIME_INTENT = re.compile(r"onboard|welcome|intro\b|tutorial|first[ _-]?(run|launch|time)|what'?s[ _-]?new|dismiss|promo|upsell|"
+                              r"premium|offer\b", re.I)
 
 
-def _one_time(s: "TStep", sid: str, intent: str) -> bool:
-    if s.kind != "tap" or s.risk == "irreversible" or s.target is None:
-        return False
-    return bool(_ONE_TIME_LABEL.match((s.target.label or s.target.desc or "").strip()) or _ONE_TIME_INTENT.search(f"{sid} {intent}"))
+def _optional_why(s: "TStep", sid: str, intent: str) -> str | None:
+    """Why a step may be skipped at run time, or None: a one-time screen, or closing the keyboard."""
+    if s.risk == "irreversible" or s.kind not in ("tap", "back"):
+        return None
+    if re.search(r"keyboard", f"{sid} {intent}", re.I):
+        # The routine moves a target out from under the keyboard itself, so closing it is never needed; done blind it
+        # can hurt (Back with the keyboard already gone leaves the screen; its keys are not part of the screen).
+        return "closes the keyboard"
+    if s.kind == "back":  # Back that closes an upsell or a tour (Wonder's own words for the step say so)
+        return "one-time screen" if _ONE_TIME_INTENT.search(f"{sid} {intent}") else None
+    if s.target is None:
+        return None
+    one = _ONE_TIME_LABEL.match((s.target.label or s.target.desc or "").strip()) or _ONE_TIME_INTENT.search(f"{sid} {intent}")
+    return "one-time screen" if one else None
 
 
 @dataclass
@@ -322,6 +333,71 @@ def generalize_locator(loc: Locator, examples: dict[str, str], data_values: list
     return loc.model_copy(update=upd)
 
 
+def _before_typed(c: Check, step: int, typed_at: dict[str, int]) -> bool:
+    """A check that names an input before the step that types it (search history: "aa batteries · delete")."""
+    loc = c.locator
+    text = " ".join(x or "" for x in ((loc.text, loc.text_has, loc.resource_id) if loc else ()) ) + " " + (c.text or "")
+    return any("{{" + n + "}}" in text and step < k for n, k in typed_at.items())
+
+
+_ON_OFF = {"on", "off", "enabled", "disabled", "true", "false", "yes", "no", "checked", "unchecked"}
+
+
+def _read_back(ex: Extract, screen: ScreenState, examples: dict[str, str]) -> str:
+    from routines.executor import extract_value  # the executor imports this module
+    return extract_value(ex, screen, examples) or ""
+
+
+def _switch_state(near: str | None, example: str, final: ScreenState) -> Extract | None:
+    """An answer that is a switch's state ("Bluetooth is on"): read the on/off state of the switch labelled `near`."""
+    if not near or norm(example) not in _ON_OFF:
+        return None
+    switches = [e for e in final.numbered if e.checkable and e.label]
+    el = next((e for e in switches if norm(e.label) == norm(near)), None)
+    if el is None:
+        return None
+    return Extract(locator=Locator(text=el.label, kind=el.kind), switch=True)
+
+
+def _state_text(near: str | None, final: ScreenState, data_values: list[str]) -> Extract | None:
+    """The short fixed text an inferred answer was read from ("No contacts yet", "Nothing planned"), as an output that
+    reports it whole: on another run it is there or it isn't, and the routine says so rather than inventing a value."""
+    if not near or len(near) > 60 or not _data_free(near, data_values):
+        return None
+    words = [e for e in final.numbered if not (e.checkable or e.editable)]  # a switch's state is on/off, not its words
+    el = next((e for e in words if norm(e.label) == norm(near)), None) or \
+        next((e for e in words if norm(near) in norm(e.label) and len(e.label) <= 80 and _data_free(e.label, data_values)), None)
+    if el is None:
+        return None
+    return Extract(locator=Locator(text=el.label, kind=el.kind))
+
+
+def _search_result(el: Element, screen: ScreenState, earlier: list["TStep"], examples: dict[str, str], skip_ads: bool = False) -> str | None:
+    """The input name if `el` is the top row of a list showing results for a value entered earlier in the run (typed, or a
+    suggestion tapped), and the row shows more than that value (a row that *is* the value, "Caffè Latte", was chosen by it)."""
+    if not el.in_list:
+        return None
+    # Entered: typed, or a suggestion tapped that is the term itself (YouTube's "lofi hip hop" under the search box).
+    typed = {n for n, v in examples.items() if v and any((t.typed and contains_value(t.typed, v))
+                                                         or (t.kind == "tap" and t.target is not None and norm(t.target.label) == norm(v))
+                                                         for t in earlier)}
+    shown = [n for n in typed if contains_value(el.label, examples[n]) and norm(el.label) != norm(examples[n])]
+    if not shown:
+        return None
+    rows = [e for e in screen.numbered if e.in_list and e.kind == el.kind and e.clickable and e.area > el.area / 3
+            and not (skip_ads and is_ad(e))]
+    top = min(rows, key=lambda e: e.bounds[1], default=None)
+    return shown[0] if top is not None and top.index == el.index else None
+
+
+_AD = re.compile(r"^\W*(sponsored|ad)\b|\bsponsored ad\b", re.I)
+
+
+def is_ad(e: Element) -> bool:
+    """A result row that is an ad ("Sponsored - …" on YouTube)."""
+    return bool(_AD.search(e.full_label or e.label or ""))
+
+
 def generalize_check(c: Check, examples: dict[str, str], data_values: list[str]) -> Check | None:
     """Template inputs into a check, and drop booking data it can't depend on (None: drop the check)."""
     if c.kind in ("text_visible", "text_absent"):
@@ -355,13 +431,16 @@ def _shape(example: str) -> str:
 
 
 def _extract_for(name: str, near: str, example: str, final: ScreenState, examples: dict[str, str],
-                 data_values: list[str]) -> Extract | None:
+                 data_values: list[str], steps: list["TStep"] | None = None) -> Extract | None:
     """Where an output can be read on the final screen: the element showing the example value
     (outside lists first, then the one whose label starts with `near`, then the shortest)."""
     found = [e for e in final.numbered if contains_value(e.label, example)]
     if not found:
         return None
-    found.sort(key=lambda e: (e.in_list, not (near and norm(e.label).startswith(norm(near))), len(e.label)))
+    # Outside lists first, then the element labelled `near`, then one the value starts (a video row starts with its title; a
+    # "Mix - <title> - …" row only contains it), then the shortest.
+    found.sort(key=lambda e: (e.in_list, not (near and norm(e.label).startswith(norm(near))), not norm(e.label).startswith(norm(example)),
+                              len(e.label)))
     el = found[0]
     letters = sum(ch.isalpha() for ch in example)
     if el.in_list and not usable_id(el.resource_id) and norm(el.label) == norm(example) and len(example) <= 24 \
@@ -370,6 +449,17 @@ def _extract_for(name: str, near: str, example: str, final: ScreenState, example
         first = next((e for e in final.numbered if e.in_list and re.fullmatch(_shape(example), e.label.strip())), None)
         if first is not None and first.index == el.index:
             return Extract(pattern=_shape(example), first_in_list=True)
+    label = " ".join(el.label.split())
+    if el.in_list and not usable_id(el.resource_id) and norm(label).startswith(norm(example)) and norm(label) != norm(example) \
+            and len(example) <= 24 and any(ch.isdigit() for ch in example) and letters <= len(example) / 2:
+        # A number-like value leading a list element, then fixed words around other numbers ("$16.49 ( $0.82 /count)", a
+        # result's price): the first list element of that whole shape, its leading value.
+        rest = label[len(" ".join(example.split())):]
+        if any(ch.isalpha() for ch in rest) and _data_free(re.sub(r"\d", "", rest), data_values):
+            shape = rf"(?P<v>{_shape(example)})\s*{_shape(rest)}"
+            first = next((e for e in final.numbered if e.in_list and re.fullmatch(shape, " ".join(e.label.split()))), None)
+            if first is not None and first.index == el.index:
+                return Extract(pattern=shape, first_in_list=True)
     if not usable_id(el.resource_id) and norm(el.label) == norm(example) and el.number and el.number > 1:
         # The value is its own element after its label ("Seat", then "22F"; "Today", "10/27", "8am open"): read the
         # element that many places after the label, stepping back over other values to the nearest fixed text.
@@ -393,9 +483,22 @@ def _extract_for(name: str, near: str, example: str, final: ScreenState, example
                 and not any(v and contains_value(v, words) for v in data_values):
             sig = re.sub(r"\d+(?:\\\.\d+)?", r"\\d+(?:\\.\\d+)?", re.escape(m.group(1).strip()))
             return Extract(pattern=rf"(?P<v>[^,]+?),\s*{sig}(?:,.*)?", first_in_list=True)
+    skip_ads = None
+    if steps and el.in_list and norm(label).startswith(norm(example)) and norm(label) != norm(example):
+        skip_ads = False if _search_result(el, final, steps, examples) is not None else \
+            (True if _search_result(el, final, steps, examples, skip_ads=True) is not None else None)
+    if skip_ads is not None:
+        # The top result for a term entered in the run ("the first video for lofi hip hop"): read by its place, not by
+        # showing the term (another search's first video doesn't), up to the separator after the value; past the ads
+        # above it if the agent passed them.
+        rest = label[len(" ".join(fold(example).split())):] if norm(label).startswith(norm(example)) else ""
+        until = next((sep for sep in (" - ", " · ", " • ", " | ", ", ") if rest.startswith(sep)), None)
+        return Extract(locator=Locator(kind=el.kind), first_row=True, until=until, skip_ads=skip_ads)
     loc = None
+    card = None
     if usable_id(el.resource_id):
         loc = Locator(resource_id=_glob_id(short_id(el.resource_id), examples, data_values), kind=el.kind)
+        card = _card_of(el, final, examples, near, data_values)
     else:
         # No ID: an input shown in the same element is the anchor ("SL 1190 · ATL → DEN · …" for flight {{flight_number}}).
         bound = next((n for n, v in examples.items() if v and contains_value(el.label, v)), None)
@@ -418,9 +521,44 @@ def _extract_for(name: str, near: str, example: str, final: ScreenState, example
         near_text = parts[0]  # "Choose a seat · SL 1190": the element is found by its first part (no ID needed)
     after = part[pos + len(example):].strip() if pos >= 0 else ""
     after_text = after if after and _data_free(after, data_values) and len(after) > 1 else None
+    if loc is None and near_text is None and segment is None and norm(part) == norm(example) and len(example) >= 12 \
+            and _data_free(example, others := [v for v in data_values if norm(v) != norm(example)]) \
+            and not any(v and contains_value(example, v) for v in others):
+        # A fixed message that is the answer itself ("Nothing planned. Tap to create."): found by its own words. On a
+        # run where the app shows something else, the output is missing and the ladder takes over.
+        loc = Locator(text=el.label, kind=el.kind)
     if loc is None and near_text is None:
         return None  # nothing to find it by on another run (no ID, no label, no input in it, no list shape)
-    return Extract(near=near_text, locator=loc, segment=segment, after=after_text)
+    if card is None and loc is None and near_text and sum(norm(e.label).startswith(norm(near_text)) for e in final.numbered) > 1:
+        card = _card_before(el, final, examples, near_text)
+    return Extract(near=near_text, locator=loc, segment=segment, after=after_text, card=card)
+
+
+def _card_before(el: Element, screen: ScreenState, examples: dict[str, str], near: str) -> str | None:
+    """For a label every result repeats ("Average rating" on each app in Play's results): the input shown between the
+    previous such label and this one (the app's own name, "{{app_name}}"), so the value is read after that app, not the
+    sponsored one above it."""
+    prev = max((e.number or 0 for e in screen.numbered if (e.number or 0) < (el.number or 0) and norm(e.label).startswith(norm(near))), default=0)
+    for name, v in examples.items():
+        if v and any(prev < (e.number or 0) < (el.number or 0) and contains_value(e.label, v) and norm(e.label) != norm(v)
+                     for e in screen.numbered):
+            return "{{" + name + "}}"
+    return None
+
+
+def _card_of(el: Element, screen: ScreenState, examples: dict[str, str], near: str | None, data_values: list[str]) -> str | None:
+    """For a value whose ID repeats down a list (every menu item has a `tv_price`): what tells its own row apart, an
+    input shown in the row ("{{menu_item_name}}"), else Wonder's fixed label for it. None when the ID is unique."""
+    if el.parent is None or sum(e.resource_id == el.resource_id for e in screen.numbered) < 2:
+        return None
+    mates = [e.label or e.text or e.desc or "" for e in screen.elements if e.parent == el.parent and e.index != el.index]
+    for exact in (True, False):
+        for name, v in examples.items():
+            if v and any((norm(m) == norm(v)) if exact else contains_value(m, v) for m in mates):
+                return "{{" + name + "}}"
+    if near and _data_free(near, data_values) and any(norm(m) == norm(near) for m in mates):
+        return near
+    return None
 
 
 # ---- the compiler -----------------------------------------------------------------------------
@@ -485,6 +623,10 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
 
     out_steps: list[Step] = []
     used_ids: set[str] = set()
+    # Where each input is first typed: before then, the input on screen can only be history (a recent search), so no check
+    # may expect it there.
+    typed_at = {n: k for n, v in examples.items() if v
+                and (k := next((k for k, t in enumerate(steps, 1) if t.kind == "type" and t.typed and contains_value(t.typed, v)), 0))}
     for i, s in enumerate(steps, 1):
         meta = per_step.get(i)
         sid = _slug(meta.id if meta else s.reason, f"step_{i}")
@@ -495,8 +637,17 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
         target_screen = getattr(s, "before_for_target", s.before)
         loc = None
         if s.target is not None:
-            loc = generalize_locator(locators.build(s.target, target_screen), examples, data_values,
-                                     meta.target_fixed_text if meta else None, meta.choice_input if meta else None)
+            choice = meta.choice_input if meta else None
+            ex = examples
+            if (searched := _search_result(s.target, target_screen, steps[: i - 1], examples)) is not None:
+                # The top row of results for a term typed in this run: "the first result", chosen by its place, not by
+                # showing the term (Gmail: the first row *containing* "DoorDash" was another email). Its slot picks it.
+                choice, ex = None, {k: v for k, v in examples.items() if k != searched}
+                report.warnings.append(f"step {i}: the first result for {{{{{searched}}}}}: chosen by its place in the list")
+            loc = generalize_locator(locators.build(s.target, target_screen), ex, data_values,
+                                     meta.target_fixed_text if meta else None, choice)
+            if searched is not None:  # a result's words are that result's: only its place (and ID, type) say "first"
+                loc = loc.model_copy(update={"text": None, "desc": None, "siblings": [], "text_has": None, "alt_texts": []})
         if s.kind in ("tap", "long_press"):
             action = StepAction(kind=s.kind, target=loc)
         elif s.kind == "type":
@@ -540,15 +691,15 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             post = [Check(kind="element_present", locator=loc)] if loc is not None else []
         else:
             post = chk.derive_post(s.before, s.after, s.kind, s.target, s.typed, examples, submit=s.submit)
-        pre = [g for c in pre if (g := chk_generalize(c, examples, data_values)) is not None]
-        post = [g for c in post if (g := chk_generalize(c, examples, data_values)) is not None]
+        pre = [g for c in pre if (g := chk_generalize(c, examples, data_values)) is not None and not _before_typed(g, i, typed_at)]
+        post = [g for c in post if (g := chk_generalize(c, examples, data_values)) is not None and not _before_typed(g, i, typed_at)]
         if not post:
             post = [Check(kind="screen_changed")]
         out_steps.append(Step(id=sid, intent=intent, pre=pre, action=action, post=post,
                               risk=s.risk if s.risk in ("read", "reversible", "irreversible") else "read",
-                              optional=_one_time(s, sid, intent),
+                              optional=(why := _optional_why(s, sid, intent)) is not None,
                               note=f"trace step {s.n}" + (f" (+{s.scrolls} scrolls)" if s.scrolls else "")
-                              + (" · one-time screen: optional" if _one_time(s, sid, intent) else "")))
+                              + (f" · {why}: optional" if why else "")))
 
     # A list row chosen by an input may sit further down for another value: reveal it first.
     with_scrolls: list[Step] = []
@@ -562,20 +713,38 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
                 post=[Check(kind="element_present", locator=tgt)], risk="read", note="added: input-based list choice"))
         with_scrolls.append(st)
     out_steps = with_scrolls
-    limits = _add_witnesses(out_steps, steps, examples, inputs, report)
 
     # Outputs: where each value is read on the final screen.
     outputs: list[str] = []
     extract: dict[str, Extract] = {}
     if final is not None:
         for o in spec.outputs:
-            ex = _extract_for(o.name, o.near, o.example, final, examples, data_values)
+            ex = _switch_state(o.near, o.example, final) or _extract_for(o.name, o.near, o.example, final, examples, data_values, steps)
+            state = bool(ex and ex.switch)
+            if ex is None and (ex := _state_text(o.near, final, data_values)) is not None:
+                # An answer the agent inferred ("0" from "No contacts yet"): the routine reports the words it was read from.
+                state = True
+                report.warnings.append(f"output {o.name!r}: {o.example!r} was inferred from {o.near!r}; the routine reports that text")
             if ex is None:
                 report.warnings.append(f"output {o.name!r}: {o.example!r} is not on the final screen, or nothing anchors it; dropped")
                 continue
             outputs.append(o.name)
             # A value recorded as a number ("190 calories", "$13.49", "2:05 PM") must be one at run time too.
-            extract[o.name] = ex.model_copy(update={"expect_digits": bool(re.match(r"^[$€£]?\d", o.example.strip()))})
+            extract[o.name] = ex.model_copy(update={"expect_digits": not state and bool(re.match(r"^[$€£]?\d", o.example.strip()))})
+            if not state and not contains_value(got := _read_back(extract[o.name], final, examples), o.example):
+                # Read it back from the screen the agent answered from: a routine that reads something else there is wrong.
+                report.warnings.append(f"output {o.name!r} reads {got!r} on the run's own final screen, not {o.example!r}")
+    question = bool(re.search(r"\?\s*$|^(what|how|when|where|which|who|is|are|do|does|did|can)\b", (run.get("goal") or "").strip(), re.I))
+    if not extract and final is not None and question and answer:
+        # A question answered from what the screen says rather than a value on it ("No events today" from "Nothing planned"),
+        # with no output named: report the screen text the answer quotes, word for word.
+        quoted = [e for e in final.numbered if len(e.label) >= 12 and not (e.checkable or e.editable)
+                  and e.label.casefold() in answer.casefold() and _data_free(e.label, data_values)]
+        if quoted:
+            el = max(quoted, key=lambda e: len(e.label))
+            outputs.append("answer")
+            extract["answer"] = Extract(locator=Locator(text=el.label, kind=el.kind))
+            report.warnings.append(f"no output named; the routine reports the screen text the answer quoted: {el.label!r}")
     # A trailing scroll toward an answer: reveal the first output's element.
     for st in out_steps:
         if st.action.kind == "scroll_until" and st.action.target is None:
@@ -589,13 +758,17 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             out_steps.append(Step(id="read_answer", intent="Read the answer on the app's first screen",
                                   action=StepAction(kind="wait", seconds=0.3), risk="read", note="added: the answer is on the start screen"))
         out_steps[-1].extract = extract
+    # After the outputs: an output read in the row an input names (a menu item's price) uses that input.
+    limits = _add_witnesses(out_steps, steps, examples, inputs, report)
 
     # Safety net: the run's irreversible action must survive cleanup, or the routine would "succeed" without doing the job.
     if any(r.get("approval", {}).get("approved") for r in records if r.get("kind") == "action") and \
             not any(st.risk == "irreversible" for st in out_steps):
         raise NotCompilable("cleanup removed the run's approved irreversible step; refusing to compile a routine that would skip it")
     done = _done_checks(run, examples, data_values, final)
-    app = (final.package if final else "") or (run.get("plan") or {}).get("app") or ""
+    # The app the run worked in: where its first step started (Settings' search screen belongs to another package, and a
+    # routine launched as that one never starts), else the plan's app, else the final screen's.
+    app = (steps[0].before.package if steps else "") or (run.get("plan") or {}).get("app") or (final.package if final else "") or ""
     routine = Routine(
         routine=_slug(spec.name, "routine"), app=app, version=1, status="draft", intent=spec.intent,
         description=" ".join([spec.description, *limits]),
@@ -609,7 +782,8 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
 def _consumed(step: Step, name: str) -> bool:
     slot = "{{" + name + "}}"
     a = step.action
-    return slot in (a.value or "") or (a.target is not None and slot in a.target.model_dump_json())
+    return slot in (a.value or "") or (a.target is not None and slot in a.target.model_dump_json()) \
+        or any(slot in (x.card or "") for x in (step.extract or {}).values())  # the row an output is read in
 
 
 def _add_witnesses(out_steps: list[Step], steps: list[TStep], examples: dict[str, str], inputs: dict[str, InputSpec],

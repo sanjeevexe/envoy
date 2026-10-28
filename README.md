@@ -87,4 +87,4 @@ uv run --project backend python eval/run_final.py systems               # one su
 uv run --project backend python eval/run_final.py report                # eval/results/final/report.md and charts/
 ```
 
-`compile` must run first (it records and compiles the 10 core routines the SkyLark suites use). `real` needs `envoy-real` signed in to the test Google account; `interfaces --restart-api` restarts the API on the current commit; `sizes --device phone` needs a phone connected. What each suite measures: [`eval/README.md`](eval/README.md).
+`compile` must run first (it records and compiles the 10 core routines the SkyLark suites use). `real` needs `envoy-real` signed in to the test Google account; its answers that can only be graded by their shape (a price, a title) are also read by a person against the screen they came from (`eval/results/final/real_hand_checks.json`); `interfaces --restart-api` restarts the API on the current commit; `sizes --device phone` needs a phone connected. What each suite measures: [`eval/README.md`](eval/README.md).

@@ -1,0 +1,45 @@
+routine: gmail_get_newest_email_subject
+app: com.google.android.gm
+version: 1
+status: draft
+intent: Get the subject of the newest email in the Gmail inbox
+description: Opens the newest, topmost email in the Gmail inbox and returns its subject line.
+patterns: [what is the subject of my newest email, what is my latest email about, subject of the newest email in my inbox, what's the subject
+    of my most recent email]
+outputs: [newest_email_subject]
+start: fresh_launch
+steps:
+- id: open_newest_email
+  intent: Open the newest, topmost email in the inbox to read its subject
+  pre:
+  - {app_foreground: com.google.android.gm}
+  - element_present: {resource_id: compose_button, text: Compose, kind: Button}
+  action:
+    tap:
+      kind: Button
+      cls: FrameLayout
+      parent: thread_list_view
+      in_list: true
+      position: [0.5, 0.233]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: item_pager, kind: List}
+  - element_present: {resource_id: archive, text: Archive, kind: Button}
+  risk: reversible
+  extract:
+    newest_email_subject:
+      locator: {resource_id: subject_and_folder_view, kind: Button}
+      after: Inbox
+      first_in_list: false
+      next_element: false
+      expect_digits: false
+      switch: false
+  note: trace step 15
+compiled_from:
+  task_id: f7-1028031054-real-gmail_newest
+  goal: In the Gmail app, what is the subject of the newest email in my inbox?
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 03:11:57"
+  trace_steps_kept: [15]
+  trace_steps_dropped: 14
+  cost_usd: 0.0449

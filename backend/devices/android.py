@@ -180,6 +180,22 @@ class AndroidDevice:
 
     # ---- act --------------------------------------------------------------------------------
 
+    def keyboard_top(self) -> int | None:
+        """Where the on-screen keyboard starts (screen pixels), or None when none is shown. The tree still lists what's under
+        it. From the input method window's frame and its content inset (a hardware keyboard leaves only a thin strip)."""
+        try:
+            if "mInputShown=true" not in self.adb.shell("dumpsys input_method | grep mInputShown"):
+                return None
+            out = self.adb.shell("dumpsys window InputMethod")
+        except Exception:  # noqa: BLE001 - unknown means "don't touch it"
+            return None
+        frame = re.search(r"\bframe=\[\d+,(\d+)\]\[\d+,(\d+)\]", out)
+        inset = re.search(r"mGivenContentInsets=\[\d+,(\d+)\]", out)
+        if not frame or not inset:
+            return None
+        top = int(frame.group(1)) + int(inset.group(1))
+        return top if top < int(frame.group(2)) else None
+
     def _tap(self, x: int, y: int, hold_s: float = 0.0) -> None:
         """uiautomator2 injects the touch (~150 ms). Subclasses use faster paths when they have one."""
         if hold_s:
@@ -297,7 +313,7 @@ class AndroidDevice:
                 self._launchers[package] = comp
         if not comp:
             raise RuntimeError(f"{package} has no launcher activity (is it installed?)")
-        self.adb.shell(f"am start -n {comp}")
+        self.adb.shell(["am", "start", "-n", comp])  # an argument list: a launcher like ".Shell$HomeActivity" must not meet the shell
 
     async def launch(self, package: str, fresh: bool = False) -> None:
         """Bring an app to the front; `fresh` force-stops it first (a routine's start on real apps)."""

@@ -174,6 +174,7 @@ class TaskRunner:
         t0 = time.time()
         calls, cost = 0, 0.0
         avd, done, final, outputs, scope, routine = None, False, None, {}, "real", None
+        announced = False
         try:
             self._set(tid, status="running")
             routine, inputs, app, sources, calls = await self._plan(tid, goal, routine_name, inputs, app)
@@ -222,7 +223,8 @@ class TaskRunner:
                         ex = RoutineExecutor(gated, adapter=self.adapter, approver=approver,
                                              config=ExecConfig(data_scope=scope, contributor=skylark,
                                                                agent=RunConfig(data_scope=scope, contributor=skylark, max_cost_usd=0.25)))
-                        out = await ex.run(routine, inputs, task_id=trace_id, launch="if_needed", allow_repair=True, allow_agent=True, memory=notes)
+                        out = await ex.run(routine, inputs, task_id=trace_id, launch="if_needed", allow_repair=True, allow_agent=True, memory=notes,
+                                           request=goal)
                         life = after_run(self.routines, routine, out)  # repairs become a version on trial; a trial is activated or rolled back
                         if life:
                             self._step(tid, {"kind": "note", "text": (f"routine {routine.routine}: patched version v{life['proposed']} on trial for the next run"
@@ -251,6 +253,9 @@ class TaskRunner:
                 self.pool.stop_watch(avd, device)  # the phone is free: the banner goes, and touches are yours again
                 self._set(tid, status=end, result=text, detail=result, model_calls=calls, cost_usd=round(cost, 4), waiting_for=None)
                 lease.task_id = None
+                # Finished as far as you're concerned: the "Done" push goes now, not after memory is written (~10 s later).
+                self.bus.publish("task_finished", task_id=tid, duration_s=round(time.time() - t0, 1))
+                announced = True
             if done:
                 self._step(tid, {"kind": "note", "text": "saving what it saw to memory"})
                 memory = await self._remember(tid, routine, inputs, outputs, final, scope)
@@ -271,7 +276,8 @@ class TaskRunner:
             self.phone_asks.pop(tid, None)
             self.approvers.pop(tid, None)
             self.devices.pop(tid, None)
-            self.bus.publish("task_finished", task_id=tid, duration_s=round(time.time() - t0, 1))
+            if not announced:  # failures, stops and early returns
+                self.bus.publish("task_finished", task_id=tid, duration_s=round(time.time() - t0, 1))
 
     # ---- which phone, and asking before your own -----------------------------------------------
 

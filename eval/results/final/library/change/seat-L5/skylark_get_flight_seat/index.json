@@ -1,0 +1,39 @@
+{
+ "name": "skylark_get_flight_seat",
+ "active": 2,
+ "versions": [
+  {
+   "version": 1,
+   "status": "retired",
+   "created": "2026-10-28 00:12:18",
+   "parent": null,
+   "changes": [
+    "v1 compiled from f7-1027215614-src-seat-a1"
+   ],
+   "verification": null
+  },
+  {
+   "version": 2,
+   "status": "active",
+   "created": "2026-10-28 00:12:27",
+   "parent": 1,
+   "changes": [
+    "step 'open_my_trips': target found only by relaxed match; locator updated to {text='Trips', resource_id='nav_trips', kind='Button'}",
+    "step 'select_trip_to_city': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}",
+    "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', kind='Text'}",
+    "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', kind='Text'}",
+    "step 'find_select_trip_to_city': after-check 0 matched only relaxed; updated to {text='Omaha', kind='Button'}"
+   ],
+   "source_task": "f7-1027234941-chg-seat-L5-first",
+   "screenshots": [],
+   "trial": {
+    "passed": true,
+    "task_id": "f7-1027234941-chg-seat-L5-trial",
+    "status": "done"
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

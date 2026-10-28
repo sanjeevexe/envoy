@@ -122,6 +122,19 @@ class StepOutput(_Strict):
     )
 
 
+# The same step without tap_point, for screens that list their elements and came with no screenshot: a point there can only
+# be a guess (the runtime rejected such taps anyway; on 18 real-app runs the model sent 55 of them, 51 rejected, each a
+# wasted call: "tap_point 500,500 · Advance past welcome screens" eight times beside a listed "Got it" button).
+AgentActionListed = Annotated[
+    Union[Tap, LongPress, TypeText, Scroll, Swipe, Back, Home, Launch, Look, Wait, AskUser, Handoff, Done, Fail],
+    Field(discriminator="type"),
+]
+
+
+class StepOutputListed(StepOutput):
+    action: AgentActionListed  # type: ignore[assignment]
+
+
 # --------------------------------------------------------------------------------------------
 # Plan (start of task)
 # --------------------------------------------------------------------------------------------

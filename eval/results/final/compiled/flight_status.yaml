@@ -55,6 +55,7 @@ steps:
   note: trace step 4
 - id: dismiss_keyboard
   intent: Tap Done to dismiss the keyboard
+  optional: true
   pre:
   - {app_foreground: com.skylark.air}
   action:
@@ -68,7 +69,7 @@ steps:
   post:
   - {screen_changed: true}
   risk: reversible
-  note: trace step 5
+  note: "trace step 5 · closes the keyboard: optional"
 - id: search_flight_status
   intent: "Tap Search to look up the status of {{flight_number}}"
   pre:
@@ -96,18 +97,21 @@ steps:
       first_in_list: false
       next_element: false
       expect_digits: false
+      switch: false
     route:
       locator: {resource_id: text_status_result, kind: Text}
       segment: 1
       first_in_list: false
       next_element: false
       expect_digits: false
+      switch: false
     flight_date:
       locator: {resource_id: text_status_result, kind: Text}
       segment: 2
       first_in_list: false
       next_element: false
       expect_digits: false
+      switch: false
     gate:
       near: Gate
       locator: {resource_id: text_status_result, kind: Text}
@@ -115,6 +119,7 @@ steps:
       first_in_list: false
       next_element: false
       expect_digits: false
+      switch: false
     departure_time:
       near: Departs
       locator: {resource_id: text_status_result, kind: Text}
@@ -122,12 +127,13 @@ steps:
       first_in_list: false
       next_element: false
       expect_digits: true
+      switch: false
   note: trace step 6
 compiled_from:
   task_id: f7-1027215614-src-flight_status-a1
   goal: What's the status of SkyLark flight SL 1190?
-  compiler: muse-wonder-1.0
-  compiled_at: "2026-10-27 22:00:55"
+  compiler: muse-wonder-1.0 (cached answer, recompiled Oct 28 with the keyboard step optional)
+  compiled_at: "2026-10-28 02:27:54"
   trace_steps_kept: [3, 4, 5, 6]
   trace_steps_dropped: 2
-  cost_usd: 0.0547
+  cost_usd: 0.0

@@ -170,7 +170,7 @@ steps:
   risk: reversible
   note: trace step 9
 - id: continue_after_hazmat_declaration_extra_1
-  intent: Review trip screen is blocking Confirm step, Looks good is its main continue button.
+  intent: Extra Review screen blocks Confirm check-in, advance with its main button.
   optional: true
   pre:
   - {app_foreground: com.skylark.air}
@@ -211,30 +211,20 @@ steps:
       near: Seat
       locator: {resource_id: row_bp_seat, kind: Text}
       segment: 1
-      first_in_list: false
-      next_element: false
       expect_digits: true
     gate:
       near: Gate
       locator: {resource_id: row_bp_gate, kind: Text}
       segment: 1
-      first_in_list: false
-      next_element: false
-      expect_digits: false
     boarding_time:
       near: Boarding
       locator: {resource_id: row_bp_boarding, kind: Text}
       segment: 1
-      first_in_list: false
-      next_element: false
       expect_digits: true
     boarding_group:
       near: Boarding
       locator: {resource_id: row_bp_boarding, kind: Text}
       segment: 2
-      first_in_list: false
-      next_element: false
-      expect_digits: false
   note: trace step 10
 done:
 - element_present: {text: Boarding pass}

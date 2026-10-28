@@ -1,0 +1,16 @@
+[
+ {
+  "kind": "check",
+  "step": "find_open_trip_by_confirmation_code",
+  "description": "step 'find_open_trip_by_confirmation_code': after-check 0 matched only relaxed; updated to {text='Memphis', kind='Button'}",
+  "evidence": {}
+ },
+ {
+  "kind": "locator",
+  "step": "open_trip_by_confirmation_code",
+  "description": "step 'open_trip_by_confirmation_code': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}",
+  "evidence": {
+   "score": 0.791
+  }
+ }
+]

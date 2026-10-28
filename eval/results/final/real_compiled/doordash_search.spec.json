@@ -1,0 +1,49 @@
+{
+ "name": "doordash_search_restaurants",
+ "intent": "Search DoorDash for food and report the first restaurant in the results",
+ "description": "Searches DoorDash for a requested food or cuisine and returns the name of the first restaurant shown in the search results.",
+ "patterns": [
+  "search DoorDash for food",
+  "find restaurants on DoorDash",
+  "look up food on DoorDash",
+  "what is the first DoorDash restaurant for this food"
+ ],
+ "inputs": [
+  {
+   "name": "search_query",
+   "type": "text",
+   "description": "The food or cuisine to search for in DoorDash.",
+   "from_memory": null,
+   "example": "pizza"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "open_search",
+   "intent": "Tap 'Search DoorDash' to open search",
+   "target_fixed_text": "Search DoorDash",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "enter_search_query",
+   "intent": "Type {{search_query}} into the 'Search DoorDash' field and view the results",
+   "target_fixed_text": "Search DoorDash",
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "first_restaurant_name",
+   "near": "results_list",
+   "example": "Pizza My Heart"
+  }
+ ],
+ "data_values": [
+  "3.3 mi • 45 min",
+  "4.6 · (20k+)",
+  "Lower fees",
+  "Mountain Mike's Pizza"
+ ]
+}

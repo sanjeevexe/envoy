@@ -159,12 +159,13 @@ BOT_CHECK = re.compile(r"press (&|and) hold|verify (that )?you('re| are) (a )?hu
 
 
 def bot_check(screen: ScreenState | None) -> bool:
-    """A bot check on screen: a known blocking activity, or the words such checks use."""
+    """A bot check on screen: a known blocking activity, or a short screen that is mostly the challenge's words (a place
+    page whose reviews mention 'unusual traffic' is not one)."""
     if screen is None:
         return False
     if re.search(r"(HSBlock|captcha|challenge)", screen.activity or "", re.I):
         return True
-    return any(BOT_CHECK.search(e.label or "") for e in screen.numbered)
+    return len(screen.numbered) <= 15 and any(BOT_CHECK.search(e.label or "") for e in screen.numbered)
 
 
 def now() -> str:
@@ -189,6 +190,13 @@ def right(text: str | None, pattern: str | None, inputs: dict[str, str], truth: 
     if not truth and any(v and norm(text) == norm(v) for v in inputs.values()):
         return False
     return re.search(pattern, " ".join(text.split()), re.I) is not None
+
+
+def in_sentence(pattern: str) -> str:
+    """A pattern written for a routine's bare output ("^\\W*queen\\W*$") as it appears inside the agent's sentence
+    ("... is by Queen - Bohemian Rhapsody · Queen • 5:55")."""
+    core = re.sub(r"\\W\*\$$", "", re.sub(r"^\^\\W\*", "", pattern))
+    return rf"\b(?:{core})\b" if core != pattern else pattern
 
 
 def agent_row(task_id: str) -> dict | None:
@@ -228,10 +236,10 @@ async def run_one(wf: Workflow, args, device: EmulatorDevice, adapter: ModelAdap
     if a is None:
         row["first_run"] = "not run"
         return row
-    a_ok = a["status"] == "done" and right(a["result"], expect, {})
+    a_ok = a["status"] == "done" and right(a["result"], in_sentence(expect), {})
     row["agent"] = {**a, "result": redact(wf, a["result"])}
     row["first_run"] = ("pass" if a_ok else "wrong") if a["status"] == "done" else ("right, unverified" if a["status"] == "done_unverified"
-                        and right(a["result"], expect, {}) else
+                        and right(a["result"], in_sentence(expect), {}) else
         "bot check" if row.get("bot_check_at_launch") or re.search(r"bot|human verification|captcha", a["result"] or "", re.I) else a["status"])
 
     # 2. Compile (Muse Wonder, or its cached answer).

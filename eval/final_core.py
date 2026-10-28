@@ -453,7 +453,8 @@ async def run_routine_system(env: Env, lib: RoutineStore, task: CoreTask, t: Any
                    interventions=int(res.status in ("handoff", "needs_user")), rung=None, agent_fallback=True, side_effects=side)
     else:
         routine = version_for_run(lib, m.routine.routine)
-        out = await env.executor().run(routine, m.inputs, task_id=tid, launch="never", allow_repair=True, allow_agent=True, memory=notes)
+        out = await env.executor().run(routine, m.inputs, task_id=tid, launch="never", allow_repair=True, allow_agent=True, memory=notes,
+                                       request=goal)
         ok, side = task.check(env.state(), before, t, out.outputs, answer_of(out) or (out.agent or {}).get("result", ""))
         life = after_run(lib, routine, out)
         row.update(passed=ok and out.succeeded, status=out.status, answer=answer_of(out)[:200], steps=len(out.steps) + ((out.agent or {}).get("steps") or 0),
@@ -580,7 +581,8 @@ async def cmd_repeats(args: Any) -> None:
     env = Env(contributor=args.contributor)
     s = Suite("repeats", contributor=args.contributor, devices=[env.device.serial], label="First run vs later runs")
     comp = compiled()
-    rows = []
+    sel = {t.id for t in tasks(args.tasks)}
+    rows = [r for r in (load("repeats") or {}).get("rows", []) if r["task"] not in sel] if args.tasks else []  # a rerun of some tasks
     lib = fresh_library("repeats")
     for task in tasks(args.tasks):
         c = comp.get(task.id)
@@ -636,7 +638,10 @@ async def cmd_change(args: Any) -> None:
     s = Suite("change", contributor=args.contributor, devices=[env.device.serial], label="Routines under change")
     base = RoutineStore(LIB_COMPILED)
     sel = tasks(args.tasks)
-    new_inputs, experiments = [], []
+    prev = load("change") or {} if args.tasks else {}
+    ids = {t.id for t in sel}
+    new_inputs = [r for r in prev.get("new_inputs", []) if r["task"] not in ids or "inputs" not in args.parts]
+    experiments = [e for e in prev.get("experiments", []) if e["task"] not in ids or "variants" not in args.parts]
     if "inputs" in args.parts:
         for k in range(args.k):
             w = world(800 + k)
@@ -753,6 +758,9 @@ async def cmd_sizes(args: Any) -> None:
             row, _ = await run_direct(env, r, task, task.pick(w, k), w, 0, s.tid("size", args.device, task.id, f"k{k}"))
             rows.append(row)
     devices = prev.get("devices", {})
+    if args.tasks and args.device in devices:  # a rerun of some tasks replaces only their rows
+        redone = {r["task"] for r in rows}
+        rows = [r for r in devices[args.device]["rows"] if r["task"] not in redone] + rows
     devices[args.device] = {"size": [caps.width, caps.height], "density": caps.density, "dp": [round(caps.width * 160 / caps.density), round(caps.height * 160 / caps.density)],
                             "model": getattr(dev, "model", ""), "android": getattr(dev, "android", ""), "real_phone": caps.real_phone,
                             "run_id": s.rid, "code": s.code["short"], "rows": rows}

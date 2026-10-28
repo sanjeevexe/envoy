@@ -1,0 +1,36 @@
+{
+ "name": "skylark_check_flight_status",
+ "active": 2,
+ "versions": [
+  {
+   "version": 1,
+   "status": "retired",
+   "created": "2026-10-28 00:00:19",
+   "parent": null,
+   "changes": [
+    "v1 compiled from f7-1027215614-src-flight_status-a1"
+   ],
+   "verification": null
+  },
+  {
+   "version": 2,
+   "status": "active",
+   "created": "2026-10-28 00:00:27",
+   "parent": 1,
+   "changes": [
+    "step 'open_flight_status': after-check 1 matched only relaxed; updated to {text='Status', resource_id='screen_title', kind='Text'}",
+    "step 'open_flight_status': after-check 2 matched only relaxed; updated to {text='Status', resource_id='nav_status', kind='Text'}"
+   ],
+   "source_task": "f7-1027234941-chg-flight_status-L2-first",
+   "screenshots": [],
+   "trial": {
+    "passed": true,
+    "task_id": "f7-1027234941-chg-flight_status-L2-trial",
+    "status": "done"
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}
