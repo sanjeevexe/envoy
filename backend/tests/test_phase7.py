@@ -541,3 +541,16 @@ def test_a_request_for_an_emulator_that_isnt_running_says_so_plainly_and_names_y
     choice, t = asyncio.run(scenario())
     assert choice is None and t["status"] == "failed" and "isn't running" in t["detail"] and "on my phone" in t["detail"]
     assert "scripts/" not in t["detail"]  # a phone is connected: the way out is the phone, not a script
+
+
+def test_a_pause_from_the_phone_and_its_resume_are_kept_in_the_task_history():
+    from test_phase6 import FakePool, runner_with
+    r = runner_with(FakePool())
+    task = r.store.create("check me in", "chat")
+    r._set(task["id"], status="running")
+    r._phone_paused(task["id"], True, "you touched the phone")
+    r._phone_paused(task["id"], True, "you touched the phone")  # the watcher says it again: one entry
+    r._phone_paused(task["id"], False, "")
+    notes = [s["text"] for s in r.store.steps(task["id"]) if s["kind"] == "note"]
+    assert notes == ["paused: you touched the phone", "resumed on your phone"]
+    assert r.store.get(task["id"])["status"] == "running"

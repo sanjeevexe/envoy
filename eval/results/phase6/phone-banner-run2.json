@@ -1,0 +1,18 @@
+{
+ "time": "2026-10-28T21:28:05+00:00",
+ "phone": "phone-09031FDD4000C6",
+ "states": {
+  "working": {
+   "after_s": 100.1,
+   "png": "eval/results/phase6/phone-banner-working.png",
+   "state_row": "Row: 0 paused=0, reason=, changed_at=1793222873854, shown=1",
+   "banner_node": null
+  },
+  "paused": {
+   "after_s": 108.4,
+   "png": "eval/results/phase6/phone-banner-paused.png",
+   "state_row": "Row: 0 paused=1, reason=you touched the phone, changed_at=1793222882465, shown=1",
+   "banner_node": null
+  }
+ }
+}

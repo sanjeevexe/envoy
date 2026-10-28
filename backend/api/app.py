@@ -323,8 +323,11 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     def take_over(avd: str) -> dict[str, Any]:
         if avd not in pool.leases:
             raise HTTPException(404)
+        was = pool.leases[avd].user_control
         lease = pool.take_over(avd)
         if lease.task_id:
+            if not was:  # kept in the task's history, not only its status
+                runner._step(lease.task_id, {"kind": "note", "text": "taken over by you"})
             runner._set(lease.task_id, status="taken_over")
         return lease.state()
 
@@ -332,8 +335,11 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     def hand_back(avd: str) -> dict[str, Any]:
         if avd not in pool.leases:
             raise HTTPException(404)
+        held = time.time() - pool.leases[avd].since if pool.leases[avd].user_control else None
         lease = pool.hand_back(avd)
         if lease.task_id:
+            if held is not None:
+                runner._step(lease.task_id, {"kind": "note", "text": f"handed back by you after {held:.0f} s"})
             runner._set(lease.task_id, status="running", waiting_for=None)
         return lease.state()
 

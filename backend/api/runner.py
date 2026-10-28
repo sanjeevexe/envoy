@@ -369,6 +369,8 @@ class TaskRunner:
         """Your real phone paused or resumed the task (a touch, Pause, Resume): the task says so while it is running."""
         task = self.store.get(tid) or {}
         if task.get("status") in ("running", "taken_over", "needs_you", "waiting_approval"):
+            if paused != (task.get("status") == "taken_over"):  # a change, kept in the task's history (Pixel 5: it wasn't)
+                self._step(tid, {"kind": "note", "text": f"paused: {why}" if paused else "resumed on your phone"})
             self._set(tid, status="taken_over" if paused else "running", detail=why or None)
 
     async def _wait_for_user(self, tid: str, avd: str, reason: str) -> bool:

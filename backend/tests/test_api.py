@@ -259,3 +259,18 @@ def test_the_keyboard_coming_and_going_is_not_a_screen_change():
     down = SimpleNamespace(package="com.skylark.air", numbered=app)
     changed = SimpleNamespace(package="com.skylark.air", numbered=[app[0], PEl("Seat · 22F", "com.skylark.air")])
     assert _key(up) == _key(down) and _key(down) != _key(changed)
+
+
+def test_a_takeover_and_its_hand_back_are_kept_in_the_task_history(api):
+    app, ctx, token = api
+    task = ctx.tasks.create("check in", "web")
+    ctx.runner._set(task["id"], status="running")
+    ctx.runner.pool.leases["envoy-test"].task_id = task["id"]
+    me = {"Authorization": f"Bearer {token}", "X-Envoy": "1"}
+    with TestClient(ctx.asgi) as c:
+        assert c.post("/api/devices/envoy-test/takeover", headers=me).status_code == 200
+        assert c.post("/api/devices/envoy-test/takeover", headers=me).status_code == 200  # again: one entry
+        assert c.post("/api/devices/envoy-test/handback", headers=me).status_code == 200
+    notes = [s["text"] for s in ctx.tasks.steps(task["id"]) if s["kind"] == "note"]
+    assert notes[0] == "taken over by you" and notes[1].startswith("handed back by you after") and len(notes) == 2
+    assert ctx.tasks.get(task["id"])["status"] == "running"
