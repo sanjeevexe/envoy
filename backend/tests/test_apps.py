@@ -87,6 +87,37 @@ def test_index_reads_labels_once_per_app_version(tmp_path):
     assert again.listing() == "Pro Expense, Tasks"
 
 
+def test_a_label_that_cant_be_read_is_retried_not_cached(tmp_path):
+    def shell(cmd: str) -> str:
+        if "query-activities" in cmd:
+            return "    com.google.android.documentsui/.Files\n"
+        if "list packages" in cmd:
+            return "package:com.google.android.documentsui versionCode:3\n"
+        return "package:/system/priv-app/DocumentsUIGoogle/DocumentsUIGoogle.apk\n"
+
+    idx = AppIndex(shell, lambda remote, local: None, cache=tmp_path / "labels.json", aapt2="true")
+    idx._label_of = lambda p: (_ for _ in ()).throw(OSError("pull failed"))  # type: ignore[method-assign]
+    assert idx.listing() == "documentsui" and idx.errors == {"com.google.android.documentsui": "OSError: pull failed"}
+    again = AppIndex(shell, lambda remote, local: None, cache=tmp_path / "labels.json", aapt2="true")
+    again._label_of = lambda p: "Files"  # type: ignore[method-assign]
+    assert again.resolve("Files").package == "com.google.android.documentsui" and not again.errors
+
+
+def test_aapt2_is_found_when_android_home_has_a_tilde_or_is_wrong(tmp_path, monkeypatch):
+    from devices.apps import _find_aapt2
+
+    tool = tmp_path / "Library/Android/sdk/build-tools/37.0.0/aapt2"
+    tool.parent.mkdir(parents=True)
+    tool.write_text("")
+    monkeypatch.setenv("HOME", str(tmp_path))
+    monkeypatch.setenv("ANDROID_HOME", "~/Library/Android/sdk")  # as a .env file writes it: no shell expands the "~"
+    assert _find_aapt2() == str(tool)
+    monkeypatch.setenv("ANDROID_HOME", str(tmp_path / "nowhere"))
+    assert _find_aapt2() == str(tool)
+    monkeypatch.delenv("ANDROID_HOME")  # android_env deletes it
+    assert _find_aapt2() == str(tool)
+
+
 def device_with(apps):
     d = AndroidDevice("emulator-test")
     shell = []

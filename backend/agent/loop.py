@@ -198,6 +198,8 @@ class AgentRunner:
                     apps = await self.device.app_listing()  # type: ignore[attr-defined]
                 except Exception as e:  # noqa: BLE001 - the plan works without it
                     trace.step({"step": 0, "kind": "apps_unavailable", "error": f"{type(e).__name__}: {e}"[:300]})
+                if errors := getattr(self.device, "app_errors", None):
+                    trace.step({"step": 0, "kind": "apps_unlabeled", "count": len(errors), "errors": dict(list(errors.items())[:5])})
 
             async def make_plan(current: ScreenState, tried: str = "", step_no: int = 0) -> Plan | None:
                 t0 = time.perf_counter()
