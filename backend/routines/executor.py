@@ -916,14 +916,13 @@ class RoutineExecutor:
             s = after
 
     def _reached(self, ctx: _Ctx, idx: int, s: ScreenState) -> bool:
-        """Whether `s` is the screen step `idx` leads to, judged by what comes next (relaxed, as the app changed): the next
-        required step's before-checks and target, or, after the last step, its outputs and the routine's done-checks.
-        Without any such evidence it is not."""
+        """Whether `s` can be the screen step `idx` leads to, judged by what comes next (relaxed, as the app changed): the
+        next required step's before-checks and target, or, after the last step, its outputs and the routine's done-checks.
+        Only evidence against it says no: a next step with nothing on screen to look for (Back, a wait) says nothing, as
+        on Chipotle, where a field check holding booking data matched only relaxed and Back came next."""
         step = ctx.routine.steps[idx]
         nxt = self._next_required(ctx, idx)
         if nxt is None:
-            if not step.extract and not ctx.routine.done:
-                return False
             outputs = all(extract_value(e, s, ctx.inputs) for e in (step.extract or {}).values())
             return outputs and self._check(ctx.routine.done, s, ctx.inputs, relaxed=True)[0]
         pre = self._specific(nxt.pre)
@@ -933,11 +932,12 @@ class RoutineExecutor:
         if a.kind == "scroll_until" and a.target is not None:
             if locators.locate(a.target, s, ctx.inputs, threshold=locators.RELAXED).ok:
                 return True
-            # Its row may be below the fold: the list it scrolls is the anchor, if the routine names one.
+            # Its row may be below the fold: the list it scrolls, if the routine names one, or its before-checks, vouch
+            # for the screen. Without either, a scroll is "ready" anywhere, so the row must show.
             return bool(pre) or (a.container is not None and locators.locate(a.container, s, ctx.inputs, threshold=locators.RELAXED,
                                                                               margin=0.0).ok)
         m = self._target(nxt, s, ctx.inputs, relaxed=True)
-        return m.ok if m is not None else bool(pre)
+        return m is None or m.ok
 
     async def _settle_after_repair(self, step: Step, inputs: dict[str, str], before: ScreenState) -> ScreenState:
         """After a repair action: until the after-checks pass, or the screen stops changing."""
