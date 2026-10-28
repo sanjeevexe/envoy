@@ -258,12 +258,14 @@ def format_line(e: Element) -> str:
 
 
 def format_compact(
-    package: str, activity: str, numbered: list[Element], settle_ms: float | None, secure: bool = False
+    package: str, activity: str, numbered: list[Element], settle_ms: float | None, secure: bool = False, keyboard: bool = False
 ) -> str:
     header = f"App: {package} · Screen: {activity.rsplit('.', 1)[-1] or '?'}"
     if settle_ms is not None:
         header += f" · settled {settle_ms:.0f} ms"
     lines = [header]
+    if keyboard:  # its keys are not listed; without this line the model pressed back "to close the keyboard" when none was up
+        lines.append("(the on-screen keyboard is open over the bottom of the screen)")
     if secure:
         lines.append("(secure screen: the app marked it private; sign-in and payment here are for the user)")
     lines += [format_line(e) for e in numbered]
@@ -306,6 +308,11 @@ def content_hash(elements: list[Element]) -> str:
     return h.hexdigest()
 
 
+def keyboard_open(elements: list[Element]) -> bool:
+    """The on-screen keyboard's own window is in the tree (its keys are dropped from the screen, not from the tree)."""
+    return any(e.visible and _KEYBOARD_PACKAGES.search(e.package) for e in elements)
+
+
 def build_state(
     xml: str,
     package: str,
@@ -326,7 +333,7 @@ def build_state(
         elements=elements,
         numbered=numbered,
         signature=signature(package, activity, elements, width, height),
-        compact=format_compact(package, activity, numbered, settle_ms, secure),
+        compact=format_compact(package, activity, numbered, settle_ms, secure, keyboard_open(elements)),
         timestamp=time.time(),
         settle_ms=settle_ms,
         read_ms=read_ms,

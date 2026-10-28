@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import io
+import re
 import time
 import uuid
 from dataclasses import dataclass, field
@@ -33,6 +34,10 @@ Status = Literal["done", "done_unverified", "failed", "handoff", "needs_user", "
 
 SCREENSHOT_WIDTH = 540  # a full 1080x2400 frame costs ~3,200 input tokens (Phase 0); half width costs ~4x less
 HISTORY_STEPS = 5
+# The model's own words for an action it doesn't mean ("Placeholder to comply with schema", "Mistake: should swipe up"). On
+# AndroidWorld such a back left the app or threw away a form: it is asked again instead of carried out.
+_PLACEHOLDER = re.compile(r"placeholder|schema requires|(required by|comply with|satisfy) (the )?schema|incorrect but|"
+                          r"wrong action|this is wrong|\bmistake\b|^\W*\w?\W*$|^one short sentence", re.I)
 
 
 @dataclass
@@ -302,15 +307,27 @@ class AgentRunner:
                     history.append(f"step {step}: (runtime) the model's reply was not valid JSON; asked again")
                     trace.step({"step": step, "kind": "model_error", "error": str(e)[:300]})
                     res = await asyncio.to_thread(self._call, "step", content, STEP_INSTRUCTIONS, self.config.step_effort, task_id, schema)
-                model_ms = (time.perf_counter() - t_model) * 1000
                 account(res)
                 decision: StepOutput = res.parsed  # type: ignore[assignment]
+                placeholder = None
+                if decision.action.type not in ("done", "fail", "look") and _PLACEHOLDER.search(decision.reason.strip()):
+                    # Asked once more, in the same step: nothing was done on the phone.
+                    placeholder = decision.model_dump()
+                    again = (f"FEEDBACK FROM THE RUNTIME:\nYour answer for this step was {_describe(decision, screen)}, and your reason "
+                             f"called it a placeholder or a mistake ({decision.reason.strip()[:80]!r}). It was not carried out. "
+                             f"Every action you return is carried out on the phone: return the action you actually want.")
+                    content[0] = {"type": "input_text", "text": content[0]["text"] + "\n" + again + "\n"}
+                    res = await asyncio.to_thread(self._call, "step", content, STEP_INSTRUCTIONS, self.config.step_effort, task_id, schema)
+                    account(res)
+                    decision = res.parsed  # type: ignore[assignment]
+                model_ms = (time.perf_counter() - t_model) * 1000
                 feedback, want_screenshot = "", self.config.screenshots == "always"
                 record: dict[str, Any] = {
                     "step": step, "kind": "action", "screen_before": screen_record(screen),
                     "tree_before": trace.save_tree(step, "before", screen),
                     "screenshot_before": trace.save_png(step, "before", png) if png else None,
                     "decision": decision.model_dump(), "usage": res.usage, "cost_usd": res.cost_usd,
+                    **({"placeholder": placeholder} if placeholder else {}),
                     "timings_ms": {"observe": round(observe_ms), "model": round(model_ms)},
                 }
                 if note_ids:
