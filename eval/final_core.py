@@ -453,7 +453,8 @@ async def run_routine_system(env: Env, lib: RoutineStore, task: CoreTask, t: Any
                    interventions=int(res.status in ("handoff", "needs_user")), rung=None, agent_fallback=True, side_effects=side)
     else:
         routine = version_for_run(lib, m.routine.routine)
-        out = await env.executor().run(routine, m.inputs, task_id=tid, launch="never", allow_repair=True, allow_agent=True, memory=notes)
+        out = await env.executor().run(routine, m.inputs, task_id=tid, launch="never", allow_repair=True, allow_agent=True, memory=notes,
+                                       request=goal)
         ok, side = task.check(env.state(), before, t, out.outputs, answer_of(out) or (out.agent or {}).get("result", ""))
         life = after_run(lib, routine, out)
         row.update(passed=ok and out.succeeded, status=out.status, answer=answer_of(out)[:200], steps=len(out.steps) + ((out.agent or {}).get("steps") or 0),

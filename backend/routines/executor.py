@@ -163,6 +163,7 @@ class _Ctx:
     allow_repair: bool
     allow_agent: bool
     memory: str
+    request: str = ""  # the user's own words, when the caller has them: what a fallback agent should finish
     repairs_run: int = 0
     started: float = 0.0
     jump_to: int | None = None  # set when the app skipped ahead to a later step's screen
@@ -243,11 +244,12 @@ class RoutineExecutor:
     # ---- the run ----------------------------------------------------------------------------
 
     async def run(self, routine: Routine, inputs: dict[str, str], *, task_id: str | None = None, launch: Literal["fresh", "if_needed", "never"] = "if_needed",
-                  allow_repair: bool = True, allow_agent: bool = True, memory: str = "") -> RunOutcome:
+                  allow_repair: bool = True, allow_agent: bool = True, memory: str = "", request: str = "") -> RunOutcome:
         task_id = task_id or f"routine-{routine.routine}-{uuid.uuid4().hex[:6]}"
         trace = TraceWriter(task_id)
         out = RunOutcome(routine=routine.routine, version=routine.version, task_id=task_id, status="failed", trace_dir=str(trace.dir))
-        ctx = _Ctx(routine, {k: str(v) for k, v in inputs.items()}, task_id, out, trace, allow_repair, allow_agent, memory, started=time.time())
+        ctx = _Ctx(routine, {k: str(v) for k, v in inputs.items()}, task_id, out, trace, allow_repair, allow_agent, memory, request,
+                   started=time.time())
         try:
             missing = routine.missing_inputs(ctx.inputs)
             if missing:
@@ -508,7 +510,12 @@ class RoutineExecutor:
                     sr.climb(2, "after-checks held at the relaxed threshold")
                     for j, o in enumerate(rel_outs):
                         if o.relaxed and o.element is not None and o.check.locator is not None:
+                            old_loc = o.check.locator
+                            if old_loc.text_has or any("{{" in (x or "") for x in (old_loc.resource_id, old_loc.text)):
+                                continue  # bound to an input (the row for {{code}}): this run's row is this booking's data
                             new = o.check.model_copy(update={"locator": chk.anchor_locator(o.element, s)})
+                            if any(v and contains_value(new.locator.describe(), v) for v in ctx.inputs.values()):
+                                continue  # a check that names this run's input value would fail on every other one
                             ctx.out.patches.append(Patch("check", step.id, f"step {step.id!r}: after-check {j} matched only relaxed; "
                                                          f"updated to {new.locator.describe() if new.locator else ''}", check_index=j, check=new))
                     return _Ready("ok", s)
@@ -930,7 +937,9 @@ class RoutineExecutor:
             return "stop"
         sr.climb(5, why)
         done = [render_str(s.intent, ctx.inputs) for s in ctx.routine.steps[:idx]]
-        goal = (f"{render_str(ctx.routine.intent, ctx.inputs)}. "
+        # The agent finishes what the user asked (their own words when we have them; the routine's intent otherwise).
+        goal = (f"{ctx.request.rstrip('.')}. " if ctx.request else f"{render_str(ctx.routine.intent, ctx.inputs)}. ")
+        goal = (goal
                 + (f"Inputs: {', '.join(f'{k} = {v}' for k, v in ctx.inputs.items())}. " if ctx.inputs else "")
                 + (f"A saved routine already did: {'; '.join(done)}. " if done else "")
                 + "Finish the task from the current screen.")
