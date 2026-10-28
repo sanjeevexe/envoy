@@ -1,0 +1,22 @@
+{
+ "name": "settings_set_brightness_max_2",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-28 17:50:27",
+   "parent": null,
+   "changes": [
+    "compiled from aw-final-standard-1028-172045-de53"
+   ],
+   "verification": {
+    "source": "final-standard",
+    "source_seed": 3514529162
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.google.android.apps.nexuslauncher"
+}

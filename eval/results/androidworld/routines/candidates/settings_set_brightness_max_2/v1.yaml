@@ -1,0 +1,130 @@
+routine: settings_set_brightness_max_2
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Turn the screen brightness to the maximum in Settings
+description: Opens Settings, navigates to Display and then Brightness level, and drags the brightness slider fully to the right to reach the maximum
+  value.
+patterns: [turn brightness to max, set brightness to maximum, make the screen as bright as possible, turn brightness all the way up]
+outputs: [display_brightness]
+start: fresh_launch
+steps:
+- id: launch_settings
+  intent: Launch Settings
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.android.settings}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: settings_homepage_container, kind: List}
+  risk: read
+  note: trace step 1
+- id: scroll_to_display
+  intent: Scroll until the Display settings item is visible
+  pre:
+  - {app_foreground: com.android.settings}
+  action:
+    scroll_until:
+      target:
+        text: Display · Dark theme, font size, brightness
+        kind: Button
+        cls: LinearLayout
+        parent: recycler_view
+        in_list: true
+        position: [0.5, 0.395]
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      text: Display · Dark theme, font size, brightness
+      kind: Button
+      cls: LinearLayout
+      parent: recycler_view
+      in_list: true
+      position: [0.5, 0.395]
+  risk: read
+  note: trace step 2 (+1 scrolls)
+- id: tap_display
+  intent: Tap the Display settings item
+  pre:
+  - {app_foreground: com.android.settings}
+  action:
+    tap:
+      text: Display · Dark theme, font size, brightness
+      kind: Button
+      cls: LinearLayout
+      parent: recycler_view
+      in_list: true
+      position: [0.5, 0.395]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: content_parent, kind: List}
+  risk: reversible
+  note: trace step 3
+- id: tap_brightness_level
+  intent: Tap the Brightness level item to open the brightness slider
+  pre:
+  - {app_foreground: com.android.settings}
+  action:
+    tap:
+      text: Brightness level
+      kind: Button
+      cls: LinearLayout
+      parent: recycler_view
+      in_list: true
+      position: [0.5, 0.348]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 4
+- id: swipe_brightness_toward_max
+  intent: Drag the brightness slider toward the maximum
+  pre:
+  - {app_foreground: com.android.systemui}
+  action:
+    swipe:
+      from:
+        resource_id: brightness_mirror_container
+        kind: Text
+        cls: FrameLayout
+        in_list: false
+        position: [0.5, 0.088]
+      vector: [0.799, 0.0]
+      start: [0.133, 0.076]
+  post:
+  - {app_foreground: com.android.systemui}
+  risk: reversible
+  note: trace step 5
+- id: swipe_brightness_to_full_max
+  intent: Drag the brightness slider fully to the right to reach the maximum
+  pre:
+  - {app_foreground: com.android.systemui}
+  action:
+    swipe:
+      from:
+        resource_id: brightness_mirror_container
+        kind: Text
+        cls: FrameLayout
+        in_list: false
+        position: [0.5, 0.088]
+      vector: [0.27, 0.0]
+      start: [0.7, 0.104]
+  post:
+  - {app_foreground: com.android.systemui}
+  risk: reversible
+  extract:
+    display_brightness:
+      near: Display brightness
+      locator: {resource_id: content, kind: Text}
+      segment: 1
+      expect_digits: true
+  note: trace step 6
+compiled_from:
+  task_id: aw-final-standard-1028-172045-de53
+  goal: Turn brightness to the max value.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:50:27"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6]
+  trace_steps_dropped: 0
+  cost_usd: 0.0393

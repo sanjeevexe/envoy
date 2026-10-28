@@ -1,0 +1,53 @@
+routine: clock_pause_stopwatch
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Pause the stopwatch in the Clock app
+description: Opens the Clock app and navigates to the Stopwatch tab so the stopwatch is shown in its paused state with the Start button visible.
+patterns: [pause the stopwatch, pause my stopwatch, stop the stopwatch]
+outputs: [elapsed_time]
+start: fresh_launch
+steps:
+- id: launch_clock
+  intent: Launch the Clock app
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.google.android.deskclock}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: action_bar_title, text: Clock, kind: Text}
+  - element_present: {resource_id: navigation_bar_item_labels_group, text: Alarm, kind: Text}
+  risk: read
+  note: trace step 1
+- id: open_stopwatch_tab
+  intent: Tap the Stopwatch tab
+  pre:
+  - {app_foreground: com.google.android.deskclock}
+  action:
+    tap:
+      resource_id: tab_menu_stopwatch
+      text: Stopwatch
+      kind: Button
+      cls: FrameLayout
+      siblings: [Alarm, Clock, Timer]
+      in_list: false
+      position: [0.7, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: action_bar_title, text: Stopwatch, kind: Text}
+  - element_present: {resource_id: tab_menu_stopwatch, text: Stopwatch, kind: Text}
+  risk: reversible
+  extract:
+    elapsed_time:
+      locator: {resource_id: stopwatch_time_wrapper, kind: Button}
+      expect_digits: true
+  note: trace step 2
+compiled_from:
+  task_id: aw-final-standard-1028-103817-db71
+  goal: Pause the stopwatch.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:40:22"
+  trace_steps_kept: [1, 2]
+  trace_steps_dropped: 1
+  cost_usd: 0.0355

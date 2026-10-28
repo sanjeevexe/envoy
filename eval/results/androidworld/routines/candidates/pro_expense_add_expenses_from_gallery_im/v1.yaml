@@ -1,0 +1,605 @@
+routine: pro_expense_add_expenses_from_gallery_im
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Add expenses from an image in Simple Gallery Pro to Pro Expense
+description: "Opens an expense image from the DCIM folder in Simple Gallery Pro, then adds each listed expense, including its amount, category,\
+  \ and note, as a new entry in Pro Expense. Only works when expense_3_note is the one already shown on 'Note: A need'."
+patterns: [Add the expenses from this image to Pro Expense, Import expenses from a gallery image into Pro Expense, Enter the expenses shown in
+    a photo into Pro Expense]
+outputs: [total_outcome, most_recent_expense]
+start: fresh_launch
+inputs:
+  expense_image_filename: {type: text, description: Expense image to look for in Simple Gallery Pro, example: expenses.jpg}
+  expense_1_name: {type: text, description: Name of the first expense shown in the image, example: Dress}
+  expense_1_amount: {type: text, description: Amount of the first expense, example: '436.35'}
+  expense_1_category: {type: text, description: Category of the first expense, example: Clothes}
+  expense_1_note: {type: text, description: Note for the first expense, example: Paid by card}
+  expense_2_name: {type: text, description: Name of the second expense shown in the image, example: Furnishing}
+  expense_2_amount: {type: text, description: Amount of the second expense, example: '350.07'}
+  expense_2_category: {type: text, description: Category of the second expense, example: Housing}
+  expense_2_note: {type: text, description: Note for the second expense, example: A need}
+  expense_3_name: {type: text, description: Name of the third expense shown in the image, example: Dental Care}
+  expense_3_amount: {type: text, description: Amount of the third expense, example: '39.54'}
+  expense_3_category: {type: text, description: Category of the third expense, example: Health Care}
+  expense_3_note: {type: text, description: Note for the third expense, example: A need}
+steps:
+- id: open_simple_gallery_pro
+  intent: Open Simple Gallery Pro to find the expense image
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.simplemobiletools.gallery.pro}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: directories_coordinator, kind: List}
+  risk: read
+  note: trace step 1
+- id: open_dcim_folder
+  intent: Open the DCIM folder
+  pre:
+  - {app_foreground: com.simplemobiletools.gallery.pro}
+  action:
+    tap:
+      resource_id: dir_holder
+      text: DCIM
+      kind: Button
+      cls: RelativeLayout
+      parent: directories_grid
+      in_list: true
+      position: [0.25, 0.236]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: media_coordinator, kind: List}
+  risk: reversible
+  note: trace step 2
+- id: search_for_expense_image
+  intent: "Search in DCIM for {{expense_image_filename}}"
+  pre:
+  - {app_foreground: com.simplemobiletools.gallery.pro}
+  action:
+    type:
+      field:
+        resource_id: top_toolbar_search
+        text: Search in DCIM
+        hint: Search in DCIM
+        kind: EditText
+        cls: EditText
+        parent: top_toolbar_holder
+        siblings: [Back]
+        in_list: true
+        position: [0.358, 0.088]
+      value: "{{expense_image_filename}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 4
+- id: find_open_expense_image
+  intent: "Scroll to {{expense_image_filename}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: media_item_holder
+        text_has: "{{expense_image_filename}}"
+        kind: Button
+        cls: RelativeLayout
+        parent: media_grid
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: media_item_holder
+      text_has: "{{expense_image_filename}}"
+      kind: Button
+      cls: RelativeLayout
+      parent: media_grid
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: open_expense_image
+  intent: "Open the image matching {{expense_image_filename}} to read the expense details"
+  pre:
+  - {app_foreground: com.simplemobiletools.gallery.pro}
+  action:
+    tap:
+      resource_id: media_item_holder
+      text_has: "{{expense_image_filename}}"
+      kind: Button
+      cls: RelativeLayout
+      parent: media_grid
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: view_pager, kind: List}
+  - element_present: {resource_id: menu_rotate, text: Rotate, kind: Button}
+  risk: reversible
+  note: trace step 6
+- id: open_pro_expense
+  intent: Open Pro Expense
+  pre:
+  - {app_foreground: com.simplemobiletools.gallery.pro}
+  action: {launch: com.arduia.expense}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: rv_home, kind: List}
+  - element_present: {resource_id: fb_main_add, kind: Button}
+  risk: read
+  note: trace step 8
+- id: add_first_expense
+  intent: Tap the add button to open a new expense entry
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: fb_main_add
+      text: ''
+      kind: Button
+      cls: ImageButton
+      parent: cl_main
+      in_list: false
+      position: [0.893, 0.908]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: time, text: Time, kind: Button}
+  - element_present: {resource_id: calendar, text: Calendar, kind: Button}
+  risk: reversible
+  note: trace step 9
+- id: enter_expense_1_name
+  intent: "Enter {{expense_1_name}} as the expense name"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    type:
+      field:
+        resource_id: edt_name
+        text: Name
+        hint: Name
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.5, 0.178]
+      value: "{{expense_1_name}}"
+  post:
+  - field_equals:
+      field: {resource_id: edt_name, text: Name, kind: EditText}
+      value: "{{expense_1_name}}"
+  risk: reversible
+  note: trace step 10
+- id: enter_expense_1_amount
+  intent: "Enter {{expense_1_amount}} as the expense amount"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    type:
+      field:
+        resource_id: edt_amount
+        text: Amount
+        hint: Amount
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.5, 0.268]
+      value: "{{expense_1_amount}}"
+  post:
+  - field_equals:
+      field: {resource_id: edt_amount, text: Amount, kind: EditText}
+      value: "{{expense_1_amount}}"
+  risk: reversible
+  note: trace step 11
+- id: swipe_expense_1_categories
+  intent: "Swipe the category list to reveal {{expense_1_category}}"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    swipe:
+      from:
+        resource_id: cd_category
+        text: Entertainment
+        kind: Toggle
+        cls: CardView
+        parent: rv_category
+        in_list: true
+        position: [0.863, 0.34]
+      vector: [-0.6, 0.0]
+      start: [0.8, 0.335]
+  post:
+  - {screen_changed: true}
+  risk: read
+  note: trace step 16
+- id: find_select_expense_1_category
+  intent: "Scroll to {{expense_1_category}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: cd_category
+        text_has: "{{expense_1_category}}"
+        kind: Toggle
+        cls: CardView
+        parent: rv_category
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: cd_category
+      text_has: "{{expense_1_category}}"
+      kind: Toggle
+      cls: CardView
+      parent: rv_category
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: select_expense_1_category
+  intent: "Select the {{expense_1_category}} category"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: cd_category
+      text_has: "{{expense_1_category}}"
+      kind: Toggle
+      cls: CardView
+      parent: rv_category
+      in_list: true
+  post:
+  - toggle_is:
+      target:
+        resource_id: cd_category
+        text: "{{expense_1_category}}"
+        kind: Toggle
+      value: 'on'
+  risk: reversible
+  note: trace step 17
+- id: enter_expense_1_note
+  intent: "Enter {{expense_1_note}} as the expense note"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    type:
+      field:
+        resource_id: edt_note
+        text: Note
+        hint: Note
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.5, 0.443]
+      value: "{{expense_1_note}}"
+  post:
+  - field_equals:
+      field: {resource_id: edt_note, text: Note, kind: EditText}
+      value: "{{expense_1_note}}"
+  risk: reversible
+  note: trace step 18
+- id: save_expense_1
+  intent: Save the expense entry
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: btn_save
+      text: SAVE
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.42, 0.543]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: rv_home, kind: List}
+  - element_present: {resource_id: fb_main_add, kind: Button}
+  risk: reversible
+  note: trace step 19
+- id: add_second_expense
+  intent: Tap the add button to open a new expense entry
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: fb_main_add
+      text: ''
+      kind: Button
+      cls: ImageButton
+      parent: cl_main
+      in_list: false
+      position: [0.893, 0.908]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: time, text: Time, kind: Button}
+  - element_present: {resource_id: calendar, text: Calendar, kind: Button}
+  risk: reversible
+  note: trace step 20
+- id: enter_expense_2_name
+  intent: "Enter {{expense_2_name}} as the expense name"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    type:
+      field:
+        resource_id: edt_name
+        text: Name
+        hint: Name
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.5, 0.178]
+      value: "{{expense_2_name}}"
+  post:
+  - field_equals:
+      field: {resource_id: edt_name, text: Name, kind: EditText}
+      value: "{{expense_2_name}}"
+  risk: reversible
+  note: trace step 21
+- id: enter_expense_2_amount
+  intent: "Enter {{expense_2_amount}} as the expense amount"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    type:
+      field:
+        resource_id: edt_amount
+        text: Amount
+        hint: Amount
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.5, 0.268]
+      value: "{{expense_2_amount}}"
+  post:
+  - field_equals:
+      field: {resource_id: edt_amount, text: Amount, kind: EditText}
+      value: "{{expense_2_amount}}"
+  risk: reversible
+  note: trace step 22
+- id: find_select_expense_2_category
+  intent: "Scroll to {{expense_2_category}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: cd_category
+        text_has: "{{expense_2_category}}"
+        kind: Toggle
+        cls: CardView
+        parent: rv_category
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: cd_category
+      text_has: "{{expense_2_category}}"
+      kind: Toggle
+      cls: CardView
+      parent: rv_category
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: select_expense_2_category
+  intent: "Select the {{expense_2_category}} category"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: cd_category
+      text_has: "{{expense_2_category}}"
+      kind: Toggle
+      cls: CardView
+      parent: rv_category
+      in_list: true
+  post:
+  - toggle_is:
+      target:
+        resource_id: cd_category
+        text: "{{expense_2_category}}"
+        kind: Toggle
+      value: 'on'
+  risk: reversible
+  note: trace step 23
+- id: enter_expense_2_note
+  intent: "Enter {{expense_2_note}} as the expense note"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    type:
+      field:
+        resource_id: edt_note
+        text: Note
+        hint: Note
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.5, 0.443]
+      value: "{{expense_2_note}}"
+  post:
+  - field_equals:
+      field: {resource_id: edt_note, text: Note, kind: EditText}
+      value: "{{expense_2_note}}"
+  risk: reversible
+  note: trace step 24
+- id: save_expense_2
+  intent: Save the expense entry
+  pre:
+  - {app_foreground: com.arduia.expense}
+  - element_present:
+      resource_id: edt_note
+      text_has: "{{expense_3_note}}"
+      kind: EditText
+  action:
+    tap:
+      resource_id: btn_save
+      text: SAVE
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.42, 0.543]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: rv_home, kind: List}
+  - element_present: {resource_id: fb_main_add, kind: Button}
+  risk: irreversible
+  note: trace step 25
+- id: add_third_expense
+  intent: Tap the add button to open a new expense entry
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: fb_main_add
+      text: ''
+      kind: Button
+      cls: ImageButton
+      parent: cl_main
+      in_list: false
+      position: [0.893, 0.908]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: time, text: Time, kind: Button}
+  - element_present: {resource_id: calendar, text: Calendar, kind: Button}
+  risk: reversible
+  note: trace step 29
+- id: enter_expense_3_name
+  intent: "Enter {{expense_3_name}} as the expense name"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    type:
+      field:
+        resource_id: edt_name
+        text: Name
+        hint: Name
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.5, 0.178]
+      value: "{{expense_3_name}}"
+  post:
+  - field_equals:
+      field: {resource_id: edt_name, text: Name, kind: EditText}
+      value: "{{expense_3_name}}"
+  risk: reversible
+  note: trace step 30
+- id: enter_expense_3_amount
+  intent: "Enter {{expense_3_amount}} as the expense amount"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    type:
+      field:
+        resource_id: edt_amount
+        text: Amount
+        hint: Amount
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.5, 0.268]
+      value: "{{expense_3_amount}}"
+  post:
+  - field_equals:
+      field: {resource_id: edt_amount, text: Amount, kind: EditText}
+      value: "{{expense_3_amount}}"
+  risk: reversible
+  note: trace step 31
+- id: scroll_to_expense_3_category
+  intent: "Scroll the category list to reveal {{expense_3_category}}"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    scroll_until:
+      target:
+        resource_id: cd_category
+        text_has: "{{expense_3_category}}"
+        kind: Toggle
+        cls: CardView
+        parent: rv_category
+        in_list: true
+      direction: right
+      max_scrolls: 8
+      container: {resource_id: rv_category, kind: List}
+  post:
+  - element_present:
+      resource_id: cd_category
+      text_has: "{{expense_3_category}}"
+      kind: Toggle
+      cls: CardView
+      parent: rv_category
+      in_list: true
+  risk: read
+  note: trace step 33 (+1 scrolls)
+- id: select_expense_3_category
+  intent: "Select the {{expense_3_category}} category"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: cd_category
+      text_has: "{{expense_3_category}}"
+      kind: Toggle
+      cls: CardView
+      parent: rv_category
+      in_list: true
+  post:
+  - toggle_is:
+      target:
+        resource_id: cd_category
+        text: "{{expense_3_category}}"
+        kind: Toggle
+      value: 'on'
+  risk: reversible
+  note: trace step 34
+- id: enter_expense_3_note
+  intent: "Enter {{expense_3_note}} as the expense note"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    type:
+      field:
+        resource_id: edt_note
+        text: Note
+        hint: Note
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.5, 0.443]
+      value: "{{expense_2_note}}"
+  post:
+  - field_equals:
+      field: {resource_id: edt_note, text: Note, kind: EditText}
+      value: "{{expense_2_note}}"
+  risk: reversible
+  note: trace step 35
+- id: save_expense_3
+  intent: Save the expense entry
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: btn_save
+      text: SAVE
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.42, 0.543]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: rv_home, kind: List}
+  - element_present: {resource_id: fb_main_add, kind: Button}
+  risk: irreversible
+  extract:
+    total_outcome:
+      locator: {resource_id: tv_outcome_value, kind: Text}
+      expect_digits: true
+    most_recent_expense:
+      locator: {resource_id: cd_expense, kind: Button}
+      card: "{{expense_1_name}}"
+  note: trace step 36
+done:
+- text_visible: "{{expense_3_name}}"
+compiled_from:
+  task_id: aw-final-standard-1028-104348-cb5b
+  goal: Add the expenses from expenses.jpg in Simple Gallery Pro to pro expense.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:41:07"
+  trace_steps_kept: [1, 2, 4, 6, 8, 9, 10, 11, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 29, 30, 31, 33, 34, 35, 36]
+  trace_steps_dropped: 13
+  cost_usd: 0.0918

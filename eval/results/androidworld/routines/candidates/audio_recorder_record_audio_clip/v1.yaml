@@ -1,0 +1,152 @@
+routine: audio_recorder_record_audio_clip
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Record and save an audio clip in Audio Recorder
+description: Launches Audio Recorder, accepts the default recording setup, records a short audio clip, stops and saves it with the default name,
+  and verifies it appears in the Records list.
+patterns: [record an audio clip, record and save audio, make a new audio recording, record audio using Audio Recorder]
+outputs: [saved_recording]
+start: fresh_launch
+steps:
+- id: launch_audio_recorder
+  intent: Launch the Audio Recorder app
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.dimowner.audiorecorder}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: pager, kind: List}
+  - element_present: {resource_id: btn_action, text: Get started, kind: Button}
+  risk: read
+  note: trace step 1
+- id: tap_get_started
+  intent: Tap Get started to begin onboarding
+  optional: true
+  pre:
+  - {app_foreground: com.dimowner.audiorecorder}
+  action:
+    tap:
+      resource_id: btn_action
+      text: Get started
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.5, 0.895]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: setting_title
+      text: "Recording format:"
+      kind: Text
+  - element_present: {resource_id: toolbar, text: Setup, kind: Text}
+  risk: reversible
+  note: "trace step 2 · one-time screen: optional"
+- id: tap_apply_recording_format
+  intent: Tap Apply to accept the default recording format and reach the recorder
+  pre:
+  - {app_foreground: com.dimowner.audiorecorder}
+  action:
+    tap:
+      resource_id: btn_apply
+      text: Apply
+      kind: Button
+      cls: Button
+      siblings: [Reset]
+      in_list: false
+      position: [0.748, 0.939]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: btn_import, kind: Button}
+  - element_present: {resource_id: btn_settings, text: Settings, kind: Button}
+  risk: reversible
+  note: trace step 3
+- id: start_recording
+  intent: Tap the record button to start a new audio recording
+  pre:
+  - {app_foreground: com.dimowner.audiorecorder}
+  action:
+    tap:
+      resource_id: btn_record
+      text: "Recording: %s"
+      kind: Button
+      cls: ImageButton
+      in_list: false
+      position: [0.5, 0.91]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: toolbar, text: Audio Recorder, kind: Text}
+  - element_present: {resource_id: txt_name, text: Recording…, kind: Text}
+  risk: reversible
+  note: trace step 4
+- id: stop_recording
+  intent: Tap the stop button to stop the ongoing recording
+  pre:
+  - {app_foreground: com.dimowner.audiorecorder}
+  action:
+    tap:
+      resource_id: btn_record_stop
+      text: ''
+      kind: Button
+      cls: ImageButton
+      siblings:
+      - Delete
+      - "Recording: %s"
+      in_list: false
+      position: [0.687, 0.91]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: dialog_title, text: New name, kind: Text}
+  - element_present: {resource_id: check_box, text: Don't ask again, kind: CheckBox}
+  risk: reversible
+  note: trace step 5
+- id: save_recording
+  intent: Tap Save to save the recording with the default name
+  pre:
+  - {app_foreground: com.dimowner.audiorecorder}
+  action:
+    tap:
+      resource_id: dialog_positive_btn
+      text: Save
+      kind: Button
+      cls: Button
+      siblings: [Cancel]
+      in_list: false
+      position: [0.76, 0.551]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: btn_import, kind: Button}
+  - element_present: {resource_id: btn_share, kind: Button}
+  risk: reversible
+  note: trace step 6
+- id: open_records_list
+  intent: Tap the records list button to confirm the saved clip appears in the list
+  pre:
+  - {app_foreground: com.dimowner.audiorecorder}
+  action:
+    tap:
+      resource_id: btn_records_list
+      text: ''
+      kind: Button
+      cls: ImageButton
+      siblings: [Settings]
+      in_list: false
+      position: [0.898, 0.91]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: title, text: Records, kind: Text}
+  - element_present: {resource_id: list_item_bookmark, kind: Button}
+  risk: reversible
+  extract:
+    saved_recording:
+      locator: {resource_id: container, kind: Button}
+  note: trace step 7
+compiled_from:
+  task_id: aw-final-standard-1028-103200-a286
+  goal: Record an audio clip using Audio Recorder app and save it.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:39:59"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6, 7]
+  trace_steps_dropped: 0
+  cost_usd: 0.044

@@ -1,0 +1,101 @@
+routine: broccoli_delete_recipe
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Delete a recipe from the Broccoli app
+description: Delete a named recipe from the Broccoli app by opening its details, selecting Delete from More options, and confirming the deletion.
+patterns: [delete a recipe from Broccoli, remove a recipe, delete a recipe in the Broccoli app]
+start: fresh_launch
+inputs:
+  recipe_name: {type: text, description: '', example: Thai Peanut Noodle Salad}
+steps:
+- id: launch_broccoli
+  intent: Launch the Broccoli app to open the Recipes list
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.flauschcode.broccoli}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: recycler_view, text: Recipes, kind: Text}
+  - element_present: {resource_id: spinner, text: Categories, kind: List}
+  risk: read
+  note: trace step 1
+- id: open_recipe_details
+  intent: "Tap the recipe row for {{recipe_name}} to open its details"
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    tap:
+      text: Recipe photo
+      text_has: "{{recipe_name}}"
+      kind: Button
+      cls: CardView
+      parent: Recipes
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: recycler_view, text: Recipes, kind: Text}
+  risk: reversible
+  note: trace step 2
+- id: open_more_options
+  intent: Tap More options to open the recipe menu
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    tap:
+      text: More options
+      kind: Button
+      cls: ImageView
+      siblings: [Mark as favorite]
+      in_list: true
+      position: [0.951, 0.084]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: content, text: Share, kind: Text}
+  risk: reversible
+  note: trace step 3
+- id: tap_delete
+  intent: Tap Delete in the menu
+  pre:
+  - app_foreground: "PopupWindow:2096839"
+  action:
+    tap:
+      text: Delete
+      kind: Button
+      cls: LinearLayout
+      in_list: false
+      position: [0.752, 0.25]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: contentPanel, text: 'Delete this recipe?', kind: Text}
+  - element_present: {resource_id: scrollView, text: 'Delete this recipe?', kind: Text}
+  risk: irreversible
+  note: trace step 4
+- id: confirm_delete
+  intent: "Tap DELETE to confirm deletion of {{recipe_name}}"
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    tap:
+      resource_id: button1
+      text: DELETE
+      kind: Button
+      cls: Button
+      siblings: [CANCEL]
+      in_list: false
+      position: [0.797, 0.54]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: recycler_view, text: Recipes, kind: Text}
+  - element_present: {resource_id: spinner, text: Categories, kind: List}
+  risk: irreversible
+  note: trace step 5
+compiled_from:
+  task_id: aw-final-standard-1028-164537-fb4d
+  goal: "Delete the following recipes from Broccoli app: Thai Peanut Noodle Salad."
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:45:23"
+  trace_steps_kept: [1, 2, 3, 4, 5]
+  trace_steps_dropped: 0
+  cost_usd: 0.0455

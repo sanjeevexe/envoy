@@ -1,0 +1,301 @@
+routine: simple_draw_create_drawing
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Create a new drawing in Simple Draw Pro and save it to a chosen folder
+description: Launches Simple Draw Pro, saves a new drawing under a requested filename in a chosen folder on a chosen storage volume, then opens
+  Files to verify that the saved file appears in that folder.
+patterns: [Create a new drawing in Simple Draw Pro, Make a new drawing and save it with this name, Save a new drawing to a folder, Create and
+    save a drawing in Simple Draw Pro]
+outputs: [saved_file_name, saved_file_size]
+start: fresh_launch
+inputs:
+  file_name: {type: text, description: 'Base filename typed for the new drawing, without the file extension added by the app.', example: adipiscing_fair_jelly_final}
+  storage_volume_name: {type: text, description: Name of the storage volume to open when choosing the save location., example: sdk_gphone64_arm64}
+  destination_folder_name: {type: text, description: Name of the destination folder in which to save the drawing., example: Pictures}
+steps:
+- id: launch_simple_draw_pro
+  intent: Launch Simple Draw Pro to create a new drawing
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.simplemobiletools.draw.pro}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: menu_save, text: Save, kind: Button}
+  - element_present: {resource_id: clear, text: Clear, kind: Button}
+  risk: read
+  note: trace step 1
+- id: tap_save
+  intent: Tap Save to start saving the new drawing
+  pre:
+  - {app_foreground: com.simplemobiletools.draw.pro}
+  action:
+    tap:
+      resource_id: menu_save
+      text: Save
+      kind: Button
+      cls: Button
+      siblings: [Clear, Share, More options]
+      in_list: false
+      position: [0.609, 0.088]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: title_template, text: Save as, kind: Text}
+  - element_present: {resource_id: topPanel, text: Save as, kind: Text}
+  risk: reversible
+  note: trace step 3
+- id: enter_file_name
+  intent: "Type {{file_name}} as the filename for the drawing"
+  pre:
+  - {app_foreground: com.simplemobiletools.draw.pro}
+  action:
+    type:
+      field:
+        resource_id: save_image_filename
+        text: "Filename:"
+        hint: Filename
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.5, 0.398]
+      value: "{{file_name}}"
+  post:
+  - field_equals:
+      field: {resource_id: save_image_filename, kind: EditText}
+      value: "{{file_name}}"
+  risk: reversible
+  note: trace step 4
+- id: tap_ok
+  intent: Tap OK to confirm the filename and proceed to folder selection
+  pre:
+  - {app_foreground: com.simplemobiletools.draw.pro}
+  action:
+    tap:
+      resource_id: button1
+      text: OK
+      kind: Button
+      cls: Button
+      siblings: [Cancel]
+      in_list: false
+      position: [0.78, 0.624]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: title
+      text: "{{file_name}}.png"
+      kind: EditText
+  risk: reversible
+  note: trace step 5
+- id: tap_show_roots
+  intent: Tap Show roots to navigate to the storage volumes
+  pre:
+  - {app_foreground: com.google.android.documentsui}
+  action:
+    tap:
+      text: Show roots
+      kind: Button
+      cls: ImageButton
+      parent: toolbar
+      siblings: [Downloads]
+      in_list: true
+      position: [0.068, 0.08]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: roots_toolbar, text: Save to, kind: Text}
+  - element_present:
+      text: "{{storage_volume_name}}"
+      kind: Button
+  risk: reversible
+  note: trace step 6
+- id: select_storage_volume
+  intent: "Tap the {{storage_volume_name}} storage volume"
+  pre:
+  - {app_foreground: com.google.android.documentsui}
+  action:
+    tap:
+      text_has: "{{storage_volume_name}}"
+      kind: Button
+      cls: LinearLayout
+      parent: roots_list
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: header_title
+      text: "Files on {{storage_volume_name}}"
+      kind: Text
+  risk: reversible
+  note: trace step 8
+- id: find_select_destination_folder
+  intent: "Scroll to {{destination_folder_name}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: item_root
+        text_has: "{{destination_folder_name}}"
+        kind: Button
+        cls: CardView
+        parent: dir_list
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: item_root
+      text_has: "{{destination_folder_name}}"
+      kind: Button
+      cls: CardView
+      parent: dir_list
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: select_destination_folder
+  intent: "Tap the {{destination_folder_name}} folder to open it as the save location"
+  pre:
+  - {app_foreground: com.google.android.documentsui}
+  action:
+    tap:
+      resource_id: item_root
+      text_has: "{{destination_folder_name}}"
+      kind: Button
+      cls: CardView
+      parent: dir_list
+      in_list: true
+  post:
+  - element_present:
+      resource_id: header_title
+      text: "Files in {{destination_folder_name}}"
+      kind: Text
+  risk: reversible
+  note: trace step 9
+- id: tap_save_in_folder
+  intent: Tap SAVE to save the drawing in the selected folder
+  pre:
+  - {app_foreground: com.google.android.documentsui}
+  action:
+    tap:
+      resource_id: button1
+      text: SAVE
+      kind: Button
+      cls: Button
+      in_list: true
+      position: [0.859, 0.948]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: menu_save, text: Save, kind: Button}
+  - element_present: {resource_id: clear, text: Clear, kind: Button}
+  risk: irreversible
+  note: trace step 10
+- id: launch_files_to_verify
+  intent: Launch Files to verify the saved drawing
+  pre:
+  - {app_foreground: com.simplemobiletools.draw.pro}
+  action: {launch: com.google.android.documentsui}
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: menu_save, text: Save, kind: Button}
+  risk: read
+  note: trace step 11
+- id: tap_show_roots_to_verify
+  intent: Tap Show roots to navigate toward the destination folder for verification
+  pre:
+  - {app_foreground: com.google.android.documentsui}
+  action:
+    tap:
+      text: Show roots
+      kind: Button
+      cls: ImageButton
+      parent: toolbar
+      siblings: [Downloads]
+      in_list: true
+      position: [0.068, 0.08]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: roots_toolbar, text: Files, kind: Text}
+  - element_present:
+      text: "{{storage_volume_name}}"
+      kind: Button
+  risk: reversible
+  note: trace step 12
+- id: select_storage_volume_to_verify
+  intent: "Tap the {{storage_volume_name}} storage volume to verify the saved file"
+  pre:
+  - {app_foreground: com.google.android.documentsui}
+  action:
+    tap:
+      text_has: "{{storage_volume_name}}"
+      kind: Button
+      cls: LinearLayout
+      parent: roots_list
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: header_title
+      text: "Files on {{storage_volume_name}}"
+      kind: Text
+  risk: reversible
+  note: trace step 13
+- id: find_select_destination_folder_to_verify
+  intent: "Scroll to {{destination_folder_name}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: item_root
+        text_has: "{{destination_folder_name}}"
+        kind: Button
+        cls: CardView
+        parent: dir_list
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: item_root
+      text_has: "{{destination_folder_name}}"
+      kind: Button
+      cls: CardView
+      parent: dir_list
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: select_destination_folder_to_verify
+  intent: "Tap the {{destination_folder_name}} folder to confirm the saved drawing is inside"
+  pre:
+  - {app_foreground: com.google.android.documentsui}
+  action:
+    tap:
+      resource_id: item_root
+      text_has: "{{destination_folder_name}}"
+      kind: Button
+      cls: CardView
+      parent: dir_list
+      in_list: true
+  post:
+  - element_present:
+      resource_id: header_title
+      text: "Files in {{destination_folder_name}}"
+      kind: Text
+  risk: reversible
+  extract:
+    saved_file_name:
+      locator: {kind: Button}
+      first_row: true
+      until: " · "
+    saved_file_size:
+      locator: {resource_id: item_root, kind: Button}
+      segment: 1
+      expect_digits: true
+  note: trace step 14
+done:
+- text_visible: "{{file_name}}.png"
+compiled_from:
+  task_id: aw-final-standard-1028-170718-baae
+  goal: Create a new drawing in Simple Draw Pro. Name it adipiscing_fair_jelly_final.png. Save it in the Pictures folder within the sdk_gphone_x86_64
+    storage area.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:49:26"
+  trace_steps_kept: [1, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14]
+  trace_steps_dropped: 2
+  cost_usd: 0.0671

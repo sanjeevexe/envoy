@@ -1,0 +1,86 @@
+routine: settings_turn_off_wifi_2
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Turn Wi-Fi off in Settings
+description: Opens Settings, navigates through Network & internet to the Internet screen, and turns the Wi-Fi switch off.
+patterns: [turn wifi off, disable wi-fi, switch wifi off]
+outputs: [wifi_state]
+start: fresh_launch
+steps:
+- id: launch_settings
+  intent: Launch Settings
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.android.settings}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: settings_homepage_container, kind: List}
+  risk: read
+  note: trace step 2
+- id: open_network_and_internet
+  intent: Open Network & internet settings
+  pre:
+  - {app_foreground: com.android.settings}
+  action:
+    tap:
+      text: Network & internet · Mobile, Wi‑Fi, hotspot
+      kind: Button
+      cls: LinearLayout
+      parent: recycler_view
+      in_list: true
+      position: [0.5, 0.369]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: content_parent, kind: List}
+  risk: reversible
+  note: trace step 3
+- id: open_internet
+  intent: Open Internet settings
+  pre:
+  - {app_foreground: com.android.settings}
+  action:
+    tap:
+      text: Internet · Networks available
+      kind: Button
+      cls: LinearLayout
+      parent: recycler_view
+      in_list: true
+      position: [0.5, 0.292]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 4
+- id: turn_off_wifi
+  intent: Tap the Wi-Fi switch to turn Wi-Fi off
+  pre:
+  - {app_foreground: com.android.settings}
+  action:
+    tap:
+      resource_id: switch_widget
+      text: ''
+      kind: Switch
+      cls: Switch
+      parent: widget_frame
+      in_list: true
+      position: [0.894, 0.37]
+  post:
+  - toggle_is:
+      target: {resource_id: switch_widget, kind: Switch}
+      value: 'off'
+  risk: reversible
+  extract:
+    wifi_state:
+      near: To improve device experience, apps and services can still scan for Wi‑Fi networks at any time, even when Wi‑Fi is
+      locator: {resource_id: title, kind: Text}
+      after: . …
+  note: trace step 5
+compiled_from:
+  task_id: aw-baseline-standard-1028-050915-3eb4
+  goal: Turn wifi off.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 05:45:52"
+  trace_steps_kept: [2, 3, 4, 5]
+  trace_steps_dropped: 1
+  cost_usd: 0.0418

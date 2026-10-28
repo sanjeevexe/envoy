@@ -1,0 +1,22 @@
+{
+ "name": "broccoli_delete_recipes",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-28 17:44:56",
+   "parent": null,
+   "changes": [
+    "compiled from aw-final-standard-1028-164411-35b6"
+   ],
+   "verification": {
+    "source": "final-standard",
+    "source_seed": 3796418188
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.google.android.apps.nexuslauncher"
+}

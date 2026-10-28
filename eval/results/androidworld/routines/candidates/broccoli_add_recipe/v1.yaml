@@ -1,0 +1,246 @@
+routine: broccoli_add_recipe
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Add a recipe to the Broccoli app
+description: Creates a new recipe in Broccoli by entering its title, description, servings, preparation time, ingredients, and directions, then
+  saves it.
+patterns: [Add a recipe to Broccoli, Create a new recipe in Broccoli, Add this recipe to Broccoli, Save a new recipe in Broccoli]
+outputs: [saved_recipe_title, saved_recipe_servings, saved_recipe_preparation_time]
+start: fresh_launch
+inputs:
+  recipe_title: {type: text, description: '', example: Chicken Caesar Salad Wrap}
+  recipe_description: {type: text, description: '', example: An ideal recipe for experimenting with different flavors and ingredients.}
+  recipe_servings: {type: text, description: '', example: 3-4 servings}
+  recipe_preparation_time: {type: text, description: '', example: 2 hrs}
+  recipe_ingredients: {type: text, description: '', example: as desired}
+  recipe_directions: {type: text, description: '', example: 'Toss chopped romaine lettuce with Caesar dressing, grilled chicken strips, and Parmesan
+      cheese. Wrap in a large tortilla. Feel free to substitute with ingredients you have on hand.'}
+steps:
+- id: open_broccoli_app
+  intent: Open the Broccoli app
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.flauschcode.broccoli}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: spinner, text: Categories, kind: List}
+  - element_present: {resource_id: action_search, text: Search, kind: Button}
+  risk: read
+  note: trace step 1
+- id: tap_new_recipe
+  intent: Tap New Recipe to open the new recipe creation screen
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    tap:
+      resource_id: fab_recipes
+      text: New Recipe
+      kind: Button
+      cls: ImageButton
+      siblings: [Recipes]
+      in_list: false
+      position: [0.893, 0.926]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: button_save_recipe, text: SAVE, kind: Button}
+  risk: reversible
+  note: trace step 2
+- id: enter_recipe_title
+  intent: "Enter {{recipe_title}} in the Title field"
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    type:
+      field:
+        resource_id: new_title
+        text: Title
+        hint: Title
+        kind: EditText
+        cls: EditText
+        in_list: true
+        position: [0.5, 0.383]
+      value: "{{recipe_title}}"
+  post:
+  - field_equals:
+      field: {resource_id: new_title, text: Title, kind: EditText}
+      value: "{{recipe_title}}"
+  risk: reversible
+  note: trace step 3
+- id: enter_recipe_description
+  intent: "Enter {{recipe_description}} in the Description field"
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    type:
+      field:
+        resource_id: new_description
+        text: Description
+        hint: Description
+        kind: EditText
+        cls: EditText
+        in_list: true
+        position: [0.5, 0.552]
+      value: "{{recipe_description}}"
+  post:
+  - field_equals:
+      field: {resource_id: new_description, text: Description, kind: EditText}
+      value: "{{recipe_description}}"
+  risk: reversible
+  note: trace step 4
+- id: enter_recipe_servings
+  intent: "Enter {{recipe_servings}} in the Servings field"
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    type:
+      field:
+        resource_id: new_servings
+        text: Servings
+        hint: Servings
+        kind: EditText
+        cls: EditText
+        in_list: true
+        position: [0.5, 0.742]
+      value: "{{recipe_servings}}"
+  post:
+  - field_equals:
+      field: {resource_id: new_servings, text: Servings, kind: EditText}
+      value: "{{recipe_servings}}"
+  risk: reversible
+  note: trace step 5
+- id: enter_recipe_preparation_time
+  intent: "Enter {{recipe_preparation_time}} in the Time field"
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    type:
+      field:
+        resource_id: new_preparation_time
+        text: Time
+        hint: Time
+        kind: EditText
+        cls: EditText
+        in_list: true
+        position: [0.5, 0.826]
+      value: "{{recipe_preparation_time}}"
+  post:
+  - field_equals:
+      field: {resource_id: new_preparation_time, text: Time, kind: EditText}
+      value: "{{recipe_preparation_time}}"
+  risk: reversible
+  note: trace step 6
+- id: enter_recipe_ingredients
+  intent: "Enter {{recipe_ingredients}} in the Ingredients field"
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    type:
+      field:
+        resource_id: new_ingredients
+        text: Ingredients
+        hint: Ingredients
+        kind: EditText
+        cls: EditText
+        in_list: true
+        position: [0.5, 0.891]
+      value: "{{recipe_ingredients}}"
+  post:
+  - field_equals:
+      field: {resource_id: new_ingredients, text: Ingredients, kind: EditText}
+      value: "{{recipe_ingredients}}"
+  risk: reversible
+  note: trace step 7
+- id: scroll_to_directions
+  intent: Scroll down until the Directions field is visible
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    scroll_until:
+      target:
+        resource_id: new_directions
+        text: Directions
+        hint: Directions
+        kind: EditText
+        cls: EditText
+        in_list: true
+        position: [0.5, 0.832]
+      direction: down
+      max_scrolls: 8
+      container: {kind: List}
+  post:
+  - element_present:
+      resource_id: new_directions
+      text: Directions
+      hint: Directions
+      kind: EditText
+      cls: EditText
+      in_list: true
+      position: [0.5, 0.832]
+  risk: read
+  note: trace step 8 (+1 scrolls)
+- id: enter_recipe_directions
+  intent: "Enter {{recipe_directions}} in the Directions field"
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    type:
+      field:
+        resource_id: new_directions
+        text: Directions
+        hint: Directions
+        kind: EditText
+        cls: EditText
+        in_list: true
+        position: [0.5, 0.832]
+      value: "{{recipe_directions}}"
+  post:
+  - field_equals:
+      field: {resource_id: new_directions, text: Directions, kind: EditText}
+      value: "{{recipe_directions}}"
+  risk: reversible
+  note: trace step 9
+- id: save_recipe
+  intent: Tap SAVE to save the recipe
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    tap:
+      resource_id: button_save_recipe
+      text: SAVE
+      kind: Button
+      cls: Button
+      parent: toolbar
+      siblings: [Navigate up, New Recipe]
+      in_list: false
+      position: [0.883, 0.084]
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: button_save_recipe, text: SAVE, kind: Button}
+  risk: reversible
+  extract:
+    saved_recipe_title:
+      locator: {resource_id: toolbar_layout, kind: Text}
+    saved_recipe_servings:
+      near: Chicken Caesar Salad Wrap
+      locator: {resource_id: scroll_view, kind: Text}
+      segment: 2
+      expect_digits: true
+    saved_recipe_preparation_time:
+      locator: {resource_id: details_preparation_time, kind: Text}
+      expect_digits: true
+  note: trace step 10
+done:
+- text_visible: "{{recipe_title}}"
+compiled_from:
+  task_id: aw-final-standard-1028-163643-439d
+  goal: "Add the following recipes into the Broccoli app:\nRecipe: Chicken Caesar Salad Wrap\n description: An ideal recipe for experimenting\
+    \ with different flavors and ingredients.\n servings: 3-4 servings\n preparationTime: 2 hrs\n ingredients: as desired\n directions: Toss chopped\
+    \ romaine lettuce with Caesar dressing, grilled chicken strips, and Parmesan cheese. Wrap in a large tortilla. Feel free to substitute with\
+    \ ingredients you have on hand.\n"
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:44:35"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  trace_steps_dropped: 0
+  cost_usd: 0.0631

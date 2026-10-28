@@ -1,0 +1,3200 @@
+{
+ "rows": [
+  {
+   "task": "ClockStopWatchRunning",
+   "compiled": true,
+   "routine": "clock_start_stopwatch",
+   "steps": 3,
+   "inputs": {},
+   "outputs": [],
+   "kept": [
+    1,
+    2,
+    3
+   ],
+   "dropped": [],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.038456,
+   "cost_at_standard_usd": 0.038456,
+   "latency_s": 11.99,
+   "source": "baseline-standard"
+  },
+  {
+   "task": "ContactsNewContactDraft",
+   "compiled": true,
+   "routine": "contacts_create_contact",
+   "steps": 8,
+   "inputs": {
+    "first_name": {
+     "type": "text",
+     "description": "The contact's first name",
+     "from_memory": null,
+     "example": "Grace",
+     "choices": null
+    },
+    "last_name": {
+     "type": "text",
+     "description": "The contact's last name",
+     "from_memory": null,
+     "example": "Taylor",
+     "choices": null
+    },
+    "phone_number": {
+     "type": "text",
+     "description": "The contact's phone number",
+     "from_memory": null,
+     "example": "799-802-1530",
+     "choices": null
+    },
+    "phone_label": {
+     "type": "text",
+     "description": "The label for the phone number",
+     "from_memory": null,
+     "example": "Work",
+     "choices": null
+    }
+   },
+   "outputs": [],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    8,
+    9
+   ],
+   "dropped": [
+    [
+     6,
+     "back-track: steps 6–7 returned to the same screen"
+    ],
+    [
+     7,
+     "back-track: steps 6–7 returned to the same screen"
+    ]
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.040824,
+   "cost_at_standard_usd": 0.040824,
+   "latency_s": 11.09,
+   "source": "baseline-standard"
+  },
+  {
+   "task": "MarkorEditNote",
+   "compiled": true,
+   "routine": "markor_edit_note",
+   "steps": 5,
+   "inputs": {
+    "note_file_name": {
+     "type": "text",
+     "description": "The name of the note file to edit.",
+     "from_memory": null,
+     "example": "note_SiFbv.txt",
+     "choices": null
+    },
+    "text_to_add": {
+     "type": "text",
+     "description": "The text to add to the top of the note.",
+     "from_memory": null,
+     "example": "Hello, World!",
+     "choices": null
+    }
+   },
+   "outputs": [],
+   "kept": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "dropped": [
+    [
+     7,
+     "look: not a device action"
+    ],
+    [
+     8,
+     "no visible change (a retry or a dead tap)"
+    ],
+    [
+     5,
+     "back-track: steps 5–6 returned to the same screen"
+    ],
+    [
+     6,
+     "back-track: steps 5–6 returned to the same screen"
+    ]
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.045832,
+   "cost_at_standard_usd": 0.045832,
+   "latency_s": 11.86,
+   "source": "baseline-standard"
+  },
+  {
+   "task": "NotesRecipeIngredientCount",
+   "compiled": true,
+   "routine": "joplin_get_ingredient_quantity",
+   "steps": 5,
+   "inputs": {
+    "recipe_name": {
+     "type": "text",
+     "description": "The name of the recipe to open.",
+     "from_memory": null,
+     "example": "Chicken Alfredo",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "ingredient_quantity"
+   ],
+   "kept": [
+    2,
+    5,
+    6,
+    7
+   ],
+   "dropped": [
+    [
+     1,
+     "look: not a device action"
+    ],
+    [
+     3,
+     "back-track: steps 3–4 returned to the same screen"
+    ],
+    [
+     4,
+     "back-track: steps 3–4 returned to the same screen"
+    ]
+   ],
+   "warnings": [
+    "input 'ingredient_name' is never used or shown; dropped"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.055296,
+   "cost_at_standard_usd": 0.055296,
+   "latency_s": 14.14,
+   "source": "baseline-standard"
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipesWithConstraint",
+   "compiled": true,
+   "routine": "broccoli_delete_recipes_by_ingredient",
+   "steps": 19,
+   "inputs": {
+    "ingredient": {
+     "type": "text",
+     "description": "Ingredient to search for in recipe directions",
+     "from_memory": null,
+     "example": "black garlic",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "matching_recipes_status"
+   ],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    19,
+    20,
+    21,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+   ],
+   "dropped": [
+    [
+     5,
+     "back-track: steps 5–7 returned to the same screen"
+    ],
+    [
+     6,
+     "back-track: steps 5–7 returned to the same screen"
+    ],
+    [
+     7,
+     "back-track: steps 5–7 returned to the same screen"
+    ],
+    [
+     14,
+     "back-track: steps 14–18 returned to the same screen"
+    ],
+    [
+     15,
+     "back-track: steps 14–18 returned to the same screen"
+    ],
+    [
+     16,
+     "back-track: steps 14–18 returned to the same screen"
+    ],
+    [
+     17,
+     "back-track: steps 14–18 returned to the same screen"
+    ],
+    [
+     18,
+     "back-track: steps 14–18 returned to the same screen"
+    ],
+    [
+     22,
+     "back-track: steps 22–23 returned to the same screen"
+    ],
+    [
+     23,
+     "back-track: steps 22–23 returned to the same screen"
+    ]
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.061752,
+   "cost_at_standard_usd": 0.061752,
+   "latency_s": 17.14,
+   "source": "baseline-standard"
+  },
+  {
+   "task": "RetroSavePlaylist",
+   "compiled": true,
+   "routine": "retro_music_create_and_export_playlist",
+   "steps": 14,
+   "inputs": {
+    "playlist_name": {
+     "type": "text",
+     "description": "Title of the new playlist.",
+     "from_memory": null,
+     "example": "Blues Break 567",
+     "choices": null
+    },
+    "first_song": {
+     "type": "text",
+     "description": "Title of the first song in the playlist.",
+     "from_memory": null,
+     "example": "Chasing Shadows",
+     "choices": null
+    },
+    "second_song": {
+     "type": "text",
+     "description": "Title of the second song in the playlist.",
+     "from_memory": null,
+     "example": "Lost in the Echo",
+     "choices": null
+    },
+    "third_song": {
+     "type": "text",
+     "description": "Title of the third song in the playlist.",
+     "from_memory": null,
+     "example": "Twilight Calling",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "exported_playlist_file"
+   ],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    27,
+    31,
+    32,
+    44
+   ],
+   "dropped": [
+    [
+     8,
+     "look: not a device action"
+    ],
+    [
+     5,
+     "back-track: steps 5–12 returned to the same screen"
+    ],
+    [
+     6,
+     "back-track: steps 5–12 returned to the same screen"
+    ],
+    [
+     7,
+     "back-track: steps 5–12 returned to the same screen"
+    ],
+    [
+     9,
+     "back-track: steps 5–12 returned to the same screen"
+    ],
+    [
+     10,
+     "back-track: steps 5–12 returned to the same screen"
+    ],
+    [
+     11,
+     "back-track: steps 5–12 returned to the same screen"
+    ],
+    [
+     12,
+     "back-track: steps 5–12 returned to the same screen"
+    ],
+    [
+     19,
+     "back-track: steps 19–26 returned to the same screen"
+    ],
+    [
+     20,
+     "back-track: steps 19–26 returned to the same screen"
+    ],
+    [
+     21,
+     "back-track: steps 19–26 returned to the same screen"
+    ],
+    [
+     22,
+     "back-track: steps 19–26 returned to the same screen"
+    ],
+    [
+     23,
+     "back-track: steps 19–26 returned to the same screen"
+    ],
+    [
+     24,
+     "back-track: steps 19–26 returned to the same screen"
+    ],
+    [
+     25,
+     "back-track: steps 19–26 returned to the same screen"
+    ],
+    [
+     26,
+     "back-track: steps 19–26 returned to the same screen"
+    ],
+    [
+     28,
+     "back-track: steps 28–30 returned to the same screen"
+    ],
+    [
+     29,
+     "back-track: steps 28–30 returned to the same screen"
+    ],
+    [
+     30,
+     "back-track: steps 28–30 returned to the same screen"
+    ],
+    [
+     33,
+     "back-track: steps 33–43 returned to the same screen"
+    ],
+    [
+     34,
+     "back-track: steps 33–43 returned to the same screen"
+    ],
+    [
+     35,
+     "back-track: steps 33–43 returned to the same screen"
+    ],
+    [
+     37,
+     "back-track: steps 33–43 returned to the same screen"
+    ],
+    [
+     38,
+     "back-track: steps 33–43 returned to the same screen"
+    ],
+    [
+     39,
+     "back-track: steps 33–43 returned to the same screen"
+    ],
+    [
+     40,
+     "back-track: steps 33–43 returned to the same screen"
+    ],
+    [
+     41,
+     "back-track: steps 33–43 returned to the same screen"
+    ],
+    [
+     42,
+     "back-track: steps 33–43 returned to the same screen"
+    ],
+    [
+     43,
+     "back-track: steps 33–43 returned to the same screen"
+    ]
+   ],
+   "warnings": [
+    "step 13: the first result for {{playlist_name}}: chosen by its place in the list",
+    "input 'first_song' is not used by any action: step 'scroll_to_third_song' now requires the screen to show it (Button 'Chasing Shadows · Mohammad'); other values need a repair or a recompile",
+    "input 'second_song' is not used by any action: step 'scroll_to_third_song' now requires the screen to show it (Button 'Lost in the Echo · Ana'); other values need a repair or a recompile",
+    "input 'third_song' is not used by any action: step 'return_to_playlists' now requires the screen to show it (Button 'Twilight Calling · Amelia'); other values need a repair or a recompile"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.073848,
+   "cost_at_standard_usd": 0.073848,
+   "latency_s": 26.64,
+   "source": "baseline-standard"
+  },
+  {
+   "task": "SimpleCalendarAddOneEvent",
+   "compiled": true,
+   "routine": "simple_calendar_pro_create_event",
+   "steps": 21,
+   "inputs": {
+    "event_title": {
+     "type": "text",
+     "description": "Title of the calendar event to create",
+     "from_memory": null,
+     "example": "Call with the Team",
+     "choices": null
+    },
+    "event_description": {
+     "type": "text",
+     "description": "Description of the calendar event",
+     "from_memory": null,
+     "example": "We will understand upcoming project milestones.",
+     "choices": null
+    },
+    "event_date": {
+     "type": "date",
+     "description": "Date on which the event takes place",
+     "from_memory": null,
+     "example": "2023-10-29",
+     "choices": null
+    },
+    "event_start_time": {
+     "type": "text",
+     "description": "Time at which the event starts",
+     "from_memory": null,
+     "example": "13:00",
+     "choices": null
+    },
+    "event_end_time": {
+     "type": "text",
+     "description": "Time at which the event ends, derived from the start time plus the duration",
+     "from_memory": null,
+     "example": "14:00",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "created_event_title",
+    "created_event_time_range",
+    "created_event_day"
+   ],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22
+   ],
+   "dropped": [
+    [
+     9,
+     "back-track: steps 9–10 returned to the same screen"
+    ],
+    [
+     10,
+     "back-track: steps 9–10 returned to the same screen"
+    ]
+   ],
+   "warnings": [
+    "output 'created_event_day' reads '' on the run's own final screen, not '29 Sunday'",
+    "input 'event_duration_minutes' is never used or shown; dropped"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.103408,
+   "cost_at_standard_usd": 0.103408,
+   "latency_s": 26.74,
+   "source": "baseline-standard"
+  },
+  {
+   "task": "SimpleCalendarAnyEventsOnDate",
+   "compiled": true,
+   "routine": "simple_calendar_pro_list_events_on_date",
+   "steps": 2,
+   "inputs": {},
+   "outputs": [],
+   "kept": [
+    2,
+    5
+   ],
+   "dropped": [
+    [
+     1,
+     "look: not a device action"
+    ],
+    [
+     3,
+     "look: not a device action"
+    ],
+    [
+     4,
+     "look: not a device action"
+    ]
+   ],
+   "warnings": [
+    "output 'event_titles': 'Game night, Product demo, Date night' is not on the final screen, or nothing anchors it; dropped",
+    "input 'target_date' is never used or shown; dropped"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.051768,
+   "cost_at_standard_usd": 0.051768,
+   "latency_s": 15.94,
+   "source": "baseline-standard"
+  },
+  {
+   "task": "SimpleCalendarEventsOnDate",
+   "compiled": true,
+   "routine": "simple_calendar_pro_list_events",
+   "steps": 5,
+   "inputs": {},
+   "outputs": [
+    "event_titles"
+   ],
+   "kept": [
+    2,
+    3,
+    4,
+    5,
+    7
+   ],
+   "dropped": [
+    [
+     1,
+     "no visible change (a retry or a dead tap)"
+    ],
+    [
+     6,
+     "look: not a device action"
+    ],
+    [
+     8,
+     "scroll with no new content (end of list)"
+    ],
+    [
+     9,
+     "scroll with no new content (end of list)"
+    ]
+   ],
+   "warnings": [
+    "input 'target_date' is never used or shown; dropped"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.062716,
+   "cost_at_standard_usd": 0.062716,
+   "latency_s": 17.7,
+   "source": "baseline-standard"
+  },
+  {
+   "task": "SimpleSmsReplyMostRecent",
+   "compiled": true,
+   "routine": "simple_sms_messenger_reply_most_recent_m",
+   "steps": 6,
+   "inputs": {
+    "message_text": {
+     "type": "text",
+     "description": "The message text to send as the reply.",
+     "from_memory": null,
+     "example": "A quick brown fox",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "sent_message_text"
+   ],
+   "kept": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "dropped": [
+    [
+     1,
+     "no visible change (a retry or a dead tap)"
+    ],
+    [
+     2,
+     "no visible change (a retry or a dead tap)"
+    ]
+   ],
+   "warnings": [
+    "output 'recipient_number': '+17594820731' is not on the final screen, or nothing anchors it; dropped",
+    "output 'sent_message_text' reads 'The early bird catches the worm.' on the run's own final screen, not 'A quick brown fox'"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.050884,
+   "cost_at_standard_usd": 0.050884,
+   "latency_s": 12.99,
+   "source": "baseline-standard"
+  },
+  {
+   "task": "SimpleSmsSendClipboardContent",
+   "compiled": true,
+   "routine": "simple_sms_messenger_send_clipboard_mess",
+   "steps": 7,
+   "inputs": {
+    "recipient_phone_number": {
+     "type": "phone",
+     "description": "Phone number to send the SMS to.",
+     "from_memory": null,
+     "example": "+15459061746",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "sent_message_text",
+    "sent_message_time"
+   ],
+   "kept": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "dropped": [
+    [
+     1,
+     "no visible change (a retry or a dead tap)"
+    ],
+    [
+     2,
+     "back-track: steps 2–3 returned to the same screen"
+    ],
+    [
+     3,
+     "back-track: steps 2–3 returned to the same screen"
+    ]
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.060704,
+   "cost_at_standard_usd": 0.060704,
+   "latency_s": 18.76,
+   "source": "baseline-standard"
+  },
+  {
+   "task": "SystemBluetoothTurnOffVerify",
+   "compiled": true,
+   "routine": "settings_turn_off_bluetooth",
+   "steps": 6,
+   "inputs": {},
+   "outputs": [
+    "bluetooth_state"
+   ],
+   "kept": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "dropped": [
+    [
+     1,
+     "no visible change (a retry or a dead tap)"
+    ]
+   ],
+   "warnings": [
+    "output 'bluetooth_state': 'off' was inferred from 'Use Bluetooth'; the routine reports that text"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.038688,
+   "cost_at_standard_usd": 0.038688,
+   "latency_s": 9.38,
+   "source": "baseline-standard"
+  },
+  {
+   "task": "SystemBluetoothTurnOnVerify",
+   "compiled": true,
+   "routine": "settings_turn_on_bluetooth",
+   "steps": 4,
+   "inputs": {},
+   "outputs": [
+    "bluetooth_enabled"
+   ],
+   "kept": [
+    2,
+    3,
+    6,
+    7
+   ],
+   "dropped": [
+    [
+     1,
+     "no visible change (a retry or a dead tap)"
+    ],
+    [
+     4,
+     "back-track: steps 4–5 returned to the same screen"
+    ],
+    [
+     5,
+     "back-track: steps 4–5 returned to the same screen"
+    ]
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.037584,
+   "cost_at_standard_usd": 0.037584,
+   "latency_s": 10.42,
+   "source": "baseline-standard"
+  },
+  {
+   "task": "SystemBrightnessMaxVerify",
+   "compiled": true,
+   "routine": "settings_set_brightness_max",
+   "steps": 4,
+   "inputs": {},
+   "outputs": [
+    "display_brightness"
+   ],
+   "kept": [
+    5,
+    6,
+    7,
+    8
+   ],
+   "dropped": [
+    [
+     1,
+     "no visible change (a retry or a dead tap)"
+    ],
+    [
+     2,
+     "no visible change (a retry or a dead tap)"
+    ],
+    [
+     3,
+     "no visible change (a retry or a dead tap)"
+    ]
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.035372,
+   "cost_at_standard_usd": 0.035372,
+   "latency_s": 8.62,
+   "source": "baseline-standard"
+  },
+  {
+   "task": "SystemBrightnessMinVerify",
+   "compiled": true,
+   "routine": "settings_set_brightness_minimum",
+   "steps": 4,
+   "inputs": {},
+   "outputs": [
+    "brightness_level"
+   ],
+   "kept": [
+    3,
+    4,
+    5,
+    6
+   ],
+   "dropped": [
+    [
+     1,
+     "no visible change (a retry or a dead tap)"
+    ],
+    [
+     2,
+     "no visible change (a retry or a dead tap)"
+    ],
+    [
+     7,
+     "look: not a device action"
+    ]
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.045036,
+   "cost_at_standard_usd": 0.045036,
+   "latency_s": 14.83,
+   "source": "baseline-standard"
+  },
+  {
+   "task": "SystemBrightnessMin",
+   "compiled": true,
+   "routine": "settings_set_brightness_minimum_2",
+   "steps": 5,
+   "inputs": {},
+   "outputs": [
+    "brightness"
+   ],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "dropped": [],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.0476256,
+   "cost_at_standard_usd": 0.0476256,
+   "latency_s": 11.32,
+   "source": "baseline-standard"
+  },
+  {
+   "task": "SystemWifiTurnOffVerify",
+   "compiled": true,
+   "routine": "settings_turn_off_wifi",
+   "steps": 3,
+   "inputs": {},
+   "outputs": [
+    "wifi_status"
+   ],
+   "kept": [
+    2,
+    3,
+    6
+   ],
+   "dropped": [
+    [
+     1,
+     "no visible change (a retry or a dead tap)"
+    ],
+    [
+     4,
+     "back-track: steps 4–5 returned to the same screen"
+    ],
+    [
+     5,
+     "back-track: steps 4–5 returned to the same screen"
+    ]
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.039632,
+   "cost_at_standard_usd": 0.039632,
+   "latency_s": 12.93,
+   "source": "baseline-standard"
+  },
+  {
+   "task": "SystemWifiTurnOff",
+   "compiled": true,
+   "routine": "settings_turn_off_wifi_2",
+   "steps": 4,
+   "inputs": {},
+   "outputs": [
+    "wifi_state"
+   ],
+   "kept": [
+    2,
+    3,
+    4,
+    5
+   ],
+   "dropped": [
+    [
+     1,
+     "no visible change (a retry or a dead tap)"
+    ]
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.041792,
+   "cost_at_standard_usd": 0.041792,
+   "latency_s": 9.76,
+   "source": "baseline-standard"
+  },
+  {
+   "task": "SystemWifiTurnOnVerify",
+   "compiled": true,
+   "routine": "settings_turn_on_wifi",
+   "steps": 3,
+   "inputs": {},
+   "outputs": [
+    "wifi_status"
+   ],
+   "kept": [
+    3,
+    8,
+    9
+   ],
+   "dropped": [
+    [
+     1,
+     "no visible change (a retry or a dead tap)"
+    ],
+    [
+     2,
+     "no visible change (a retry or a dead tap)"
+    ],
+    [
+     4,
+     "back-track: steps 4–7 returned to the same screen"
+    ],
+    [
+     5,
+     "back-track: steps 4–7 returned to the same screen"
+    ],
+    [
+     6,
+     "back-track: steps 4–7 returned to the same screen"
+    ],
+    [
+     7,
+     "back-track: steps 4–7 returned to the same screen"
+    ]
+   ],
+   "warnings": [
+    "output 'wifi_status' reads '' on the run's own final screen, not 'on'"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.036144,
+   "cost_at_standard_usd": 0.036144,
+   "latency_s": 12.06,
+   "source": "baseline-standard"
+  },
+  {
+   "task": "SystemWifiTurnOn",
+   "compiled": true,
+   "routine": "settings_turn_on_wifi_2",
+   "steps": 4,
+   "inputs": {},
+   "outputs": [
+    "wifi_status"
+   ],
+   "kept": [
+    5,
+    6,
+    7,
+    8
+   ],
+   "dropped": [
+    [
+     1,
+     "no visible change (a retry or a dead tap)"
+    ],
+    [
+     2,
+     "no visible change (a retry or a dead tap)"
+    ],
+    [
+     3,
+     "no visible change (a retry or a dead tap)"
+    ]
+   ],
+   "warnings": [
+    "output 'wifi_status' reads '' on the run's own final screen, not 'on'"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.050944,
+   "cost_at_standard_usd": 0.050944,
+   "latency_s": 16.86,
+   "source": "baseline-standard"
+  },
+  {
+   "task": "TurnOnWifiAndOpenApp",
+   "compiled": true,
+   "routine": "settings_turn_on_wifi_3",
+   "steps": 5,
+   "inputs": {},
+   "outputs": [],
+   "kept": [
+    1,
+    6,
+    7,
+    8,
+    9
+   ],
+   "dropped": [
+    [
+     2,
+     "back-track: steps 2–5 returned to the same screen"
+    ],
+    [
+     3,
+     "back-track: steps 2–5 returned to the same screen"
+    ],
+    [
+     4,
+     "back-track: steps 2–5 returned to the same screen"
+    ],
+    [
+     5,
+     "back-track: steps 2–5 returned to the same screen"
+    ]
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.03092,
+   "cost_at_standard_usd": 0.03092,
+   "latency_s": 8.04,
+   "source": "baseline-standard"
+  },
+  {
+   "task": "AudioRecorderRecordAudioWithFileName",
+   "compiled": true,
+   "routine": "audio_recorder_record_clip",
+   "steps": 9,
+   "inputs": {
+    "recording_file_name": {
+     "type": "text",
+     "description": "The file name to save the recorded audio clip with, including its extension.",
+     "from_memory": null,
+     "example": "presentation_fGwr.m4a",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "saved_file_name",
+    "recording_duration",
+    "file_info"
+   ],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+   ],
+   "dropped": [],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.064348,
+   "cost_at_standard_usd": 0.064348,
+   "latency_s": 17.3,
+   "source": "final-standard"
+  },
+  {
+   "task": "AudioRecorderRecordAudio",
+   "compiled": true,
+   "routine": "audio_recorder_record_audio_clip",
+   "steps": 7,
+   "inputs": {},
+   "outputs": [
+    "saved_recording"
+   ],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "dropped": [],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.043964,
+   "cost_at_standard_usd": 0.043964,
+   "latency_s": 11.26,
+   "source": "final-standard"
+  },
+  {
+   "task": "CameraTakePhoto",
+   "compiled": true,
+   "routine": "camera_take_photo",
+   "steps": 3,
+   "inputs": {},
+   "outputs": [],
+   "kept": [
+    1,
+    2,
+    4
+   ],
+   "dropped": [
+    [
+     3,
+     "look: not a device action"
+    ]
+   ],
+   "warnings": [
+    "output 'photo_taken_timestamp': 'Photo taken on Oct 15, 2023 15:34:28' is not on the final screen, or nothing anchors it; dropped"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.03938,
+   "cost_at_standard_usd": 0.03938,
+   "latency_s": 9.66,
+   "source": "final-standard"
+  },
+  {
+   "task": "ClockStopWatchPausedVerify",
+   "compiled": true,
+   "routine": "clock_pause_stopwatch",
+   "steps": 2,
+   "inputs": {},
+   "outputs": [
+    "elapsed_time"
+   ],
+   "kept": [
+    1,
+    2
+   ],
+   "dropped": [
+    [
+     3,
+     "look: not a device action"
+    ]
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.035456,
+   "cost_at_standard_usd": 0.035456,
+   "latency_s": 13.5,
+   "source": "final-standard"
+  },
+  {
+   "task": "ClockTimerEntry",
+   "compiled": true,
+   "routine": "clock_create_timer",
+   "steps": 6,
+   "inputs": {
+    "timer_hours": {
+     "type": "text",
+     "description": "Number of hours for the timer",
+     "from_memory": null,
+     "example": "0",
+     "choices": null
+    },
+    "timer_minutes": {
+     "type": "text",
+     "description": "Number of minutes for the timer",
+     "from_memory": null,
+     "example": "16",
+     "choices": null
+    },
+    "timer_seconds": {
+     "type": "text",
+     "description": "Number of seconds for the timer",
+     "from_memory": null,
+     "example": "35",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "timer_duration"
+   ],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "dropped": [],
+   "warnings": [
+    "input 'timer_hours' is not used by any action: step 'enter_minutes_first_digit' now requires the screen to show it (Button '0'); other values need a repair or a recompile"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.060484,
+   "cost_at_standard_usd": 0.060484,
+   "latency_s": 15.58,
+   "source": "final-standard"
+  },
+  {
+   "task": "ContactsAddContact",
+   "compiled": true,
+   "routine": "contacts_create_contact_2",
+   "steps": 6,
+   "inputs": {
+    "first_name": {
+     "type": "text",
+     "description": "The contact's first name",
+     "from_memory": null,
+     "example": "Hugo",
+     "choices": null
+    },
+    "last_name": {
+     "type": "text",
+     "description": "The contact's last name",
+     "from_memory": null,
+     "example": "Pereira",
+     "choices": null
+    },
+    "phone_number": {
+     "type": "text",
+     "description": "The contact's phone number",
+     "from_memory": null,
+     "example": "+13920741751",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "contact_name",
+    "phone_number"
+   ],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "dropped": [],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.051332,
+   "cost_at_standard_usd": 0.051332,
+   "latency_s": 8.84,
+   "source": "final-standard"
+  },
+  {
+   "task": "ExpenseAddMultipleFromGallery",
+   "compiled": true,
+   "routine": "pro_expense_add_expenses_from_gallery_im",
+   "steps": 28,
+   "inputs": {
+    "expense_image_filename": {
+     "type": "text",
+     "description": "Expense image to look for in Simple Gallery Pro",
+     "from_memory": null,
+     "example": "expenses.jpg",
+     "choices": null
+    },
+    "expense_1_name": {
+     "type": "text",
+     "description": "Name of the first expense shown in the image",
+     "from_memory": null,
+     "example": "Dress",
+     "choices": null
+    },
+    "expense_1_amount": {
+     "type": "text",
+     "description": "Amount of the first expense",
+     "from_memory": null,
+     "example": "436.35",
+     "choices": null
+    },
+    "expense_1_category": {
+     "type": "text",
+     "description": "Category of the first expense",
+     "from_memory": null,
+     "example": "Clothes",
+     "choices": null
+    },
+    "expense_1_note": {
+     "type": "text",
+     "description": "Note for the first expense",
+     "from_memory": null,
+     "example": "Paid by card",
+     "choices": null
+    },
+    "expense_2_name": {
+     "type": "text",
+     "description": "Name of the second expense shown in the image",
+     "from_memory": null,
+     "example": "Furnishing",
+     "choices": null
+    },
+    "expense_2_amount": {
+     "type": "text",
+     "description": "Amount of the second expense",
+     "from_memory": null,
+     "example": "350.07",
+     "choices": null
+    },
+    "expense_2_category": {
+     "type": "text",
+     "description": "Category of the second expense",
+     "from_memory": null,
+     "example": "Housing",
+     "choices": null
+    },
+    "expense_2_note": {
+     "type": "text",
+     "description": "Note for the second expense",
+     "from_memory": null,
+     "example": "A need",
+     "choices": null
+    },
+    "expense_3_name": {
+     "type": "text",
+     "description": "Name of the third expense shown in the image",
+     "from_memory": null,
+     "example": "Dental Care",
+     "choices": null
+    },
+    "expense_3_amount": {
+     "type": "text",
+     "description": "Amount of the third expense",
+     "from_memory": null,
+     "example": "39.54",
+     "choices": null
+    },
+    "expense_3_category": {
+     "type": "text",
+     "description": "Category of the third expense",
+     "from_memory": null,
+     "example": "Health Care",
+     "choices": null
+    },
+    "expense_3_note": {
+     "type": "text",
+     "description": "Note for the third expense",
+     "from_memory": null,
+     "example": "A need",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "total_outcome",
+    "most_recent_expense"
+   ],
+   "kept": [
+    1,
+    2,
+    4,
+    6,
+    8,
+    9,
+    10,
+    11,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    29,
+    30,
+    31,
+    33,
+    34,
+    35,
+    36
+   ],
+   "dropped": [
+    [
+     3,
+     "look: not a device action"
+    ],
+    [
+     5,
+     "look: not a device action"
+    ],
+    [
+     7,
+     "look: not a device action"
+    ],
+    [
+     12,
+     "scroll with no new content (end of list)"
+    ],
+    [
+     13,
+     "no visible change (a retry or a dead tap)"
+    ],
+    [
+     14,
+     "no visible change (a retry or a dead tap)"
+    ],
+    [
+     27,
+     "look: not a device action"
+    ],
+    [
+     32,
+     "scroll with no new content (end of list)"
+    ],
+    [
+     38,
+     "look: not a device action"
+    ],
+    [
+     26,
+     "back-track: steps 26–28 returned to the same screen"
+    ],
+    [
+     28,
+     "back-track: steps 26–28 returned to the same screen"
+    ],
+    [
+     37,
+     "back-track: steps 37–39 returned to the same screen"
+    ],
+    [
+     39,
+     "back-track: steps 37–39 returned to the same screen"
+    ]
+   ],
+   "warnings": [
+    "input 'expense_3_note' is not used by any action: step 'save_expense_2' now requires the screen to show it (EditText 'Note: A need'); other values need a repair or a recompile"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.091776,
+   "cost_at_standard_usd": 0.091776,
+   "latency_s": 20.73,
+   "source": "final-standard"
+  },
+  {
+   "task": "ExpenseDeleteDuplicates",
+   "compiled": true,
+   "routine": "pro_expense_delete_duplicate_expenses",
+   "steps": 6,
+   "inputs": {},
+   "outputs": [
+    "kept_expense_name",
+    "kept_expense_amount"
+   ],
+   "kept": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7
+   ],
+   "dropped": [
+    [
+     4,
+     "scroll with no new content (end of list)"
+    ],
+    [
+     8,
+     "scroll with no new content (end of list)"
+    ]
+   ],
+   "warnings": [
+    "output 'kept_expense_name' reads 'Flight Tickets' on the run's own final screen, not 'Public Transit'",
+    "output 'kept_expense_amount' reads '422.14 · $' on the run's own final screen, not '204.41 · $'"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.069184,
+   "cost_at_standard_usd": 0.069184,
+   "latency_s": 18.92,
+   "source": "final-standard"
+  },
+  {
+   "task": "ExpenseDeleteMultiple",
+   "compiled": true,
+   "routine": "pro_expense_delete_expenses",
+   "steps": 14,
+   "inputs": {
+    "first_expense_to_delete": {
+     "type": "text",
+     "description": "The first expense deleted in the run.",
+     "from_memory": null,
+     "example": "Taxi Fare",
+     "choices": null
+    },
+    "second_expense_to_delete": {
+     "type": "text",
+     "description": "The second expense deleted in the run.",
+     "from_memory": null,
+     "example": "Ride-Sharing",
+     "choices": null
+    },
+    "third_expense_to_delete": {
+     "type": "text",
+     "description": "The third expense deleted in the run.",
+     "from_memory": null,
+     "example": "Flight Tickets",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "expense_logs_status"
+   ],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    9,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16
+   ],
+   "dropped": [
+    [
+     5,
+     "look: not a device action"
+    ],
+    [
+     10,
+     "look: not a device action"
+    ]
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.080432,
+   "cost_at_standard_usd": 0.080432,
+   "latency_s": 23.21,
+   "source": "final-standard"
+  },
+  {
+   "task": "ExpenseDeleteSingle",
+   "compiled": true,
+   "routine": "pro_expense_delete_expense",
+   "steps": 4,
+   "inputs": {
+    "expense_name": {
+     "type": "text",
+     "description": "The name of the expense entry to delete as shown in the list.",
+     "from_memory": null,
+     "example": "Rental Income",
+     "choices": null
+    }
+   },
+   "outputs": [],
+   "kept": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "dropped": [
+    [
+     5,
+     "look: not a device action"
+    ],
+    [
+     9,
+     "look: not a device action"
+    ],
+    [
+     6,
+     "back-track: steps 6–8 returned to the same screen"
+    ],
+    [
+     7,
+     "back-track: steps 6–8 returned to the same screen"
+    ],
+    [
+     8,
+     "back-track: steps 6–8 returned to the same screen"
+    ]
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.042636,
+   "cost_at_standard_usd": 0.042636,
+   "latency_s": 10.98,
+   "source": "final-standard"
+  },
+  {
+   "task": "MarkorCreateFolder",
+   "compiled": true,
+   "routine": "markor_create_folder",
+   "steps": 4,
+   "inputs": {
+    "folder_name": {
+     "type": "text",
+     "description": "The name to give the new folder.",
+     "from_memory": null,
+     "example": "folder_20261028_112141",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "created_folder_name"
+   ],
+   "kept": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "dropped": [],
+   "warnings": [
+    "output 'created_folder_name' reads '..' on the run's own final screen, not 'folder_20261028_112141'"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.056132,
+   "cost_at_standard_usd": 0.056132,
+   "latency_s": 17.96,
+   "source": "final-standard"
+  },
+  {
+   "task": "MarkorCreateNoteAndSms",
+   "compiled": true,
+   "routine": "markor_create_note_and_send_by_sms",
+   "steps": 14,
+   "inputs": {
+    "note_file_name": {
+     "type": "text",
+     "description": "Base name of the new note file, without its extension.",
+     "from_memory": null,
+     "example": "fair_ant_XOdi",
+     "choices": null
+    },
+    "file_extension": {
+     "type": "text",
+     "description": "Extension for the new note file.",
+     "from_memory": null,
+     "example": ".txt",
+     "choices": null
+    },
+    "note_content": {
+     "type": "text",
+     "description": "Text content to write in the note and send by SMS.",
+     "from_memory": null,
+     "example": "Actions speak louder than words.",
+     "choices": null
+    },
+    "recipient_phone_number": {
+     "type": "phone",
+     "description": "Phone number to receive the SMS.",
+     "from_memory": null,
+     "example": "+13192815309",
+     "choices": null
+    }
+   },
+   "outputs": [],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+   ],
+   "dropped": [
+    [
+     15,
+     "look: not a device action"
+    ]
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.0734,
+   "cost_at_standard_usd": 0.0734,
+   "latency_s": 19.31,
+   "source": "final-standard"
+  },
+  {
+   "task": "MarkorCreateNoteFromClipboard",
+   "compiled": true,
+   "routine": "markor_create_note",
+   "steps": 8,
+   "inputs": {
+    "note_name": {
+     "type": "text",
+     "description": "Base name of the note file to create, without the extension.",
+     "from_memory": null,
+     "example": "2023_09_08_active_umbrella",
+     "choices": null
+    },
+    "file_extension": {
+     "type": "text",
+     "description": "File extension for the new note.",
+     "from_memory": null,
+     "example": ".txt",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "note_title",
+    "pasted_content"
+   ],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "dropped": [],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.0691,
+   "cost_at_standard_usd": 0.0691,
+   "latency_s": 21.68,
+   "source": "final-standard"
+  },
+  {
+   "task": "MarkorCreateNote",
+   "compiled": true,
+   "routine": "markor_create_note_2",
+   "steps": 7,
+   "inputs": {
+    "note_name": {
+     "type": "text",
+     "description": "Base name for the new note file, without its extension",
+     "from_memory": null,
+     "example": "2023_01_26_wise_yacht",
+     "choices": null
+    },
+    "note_extension": {
+     "type": "text",
+     "description": "File extension for the new note, including the leading dot",
+     "from_memory": null,
+     "example": ".md",
+     "choices": null
+    },
+    "note_content": {
+     "type": "text",
+     "description": "Text content to enter into the new note",
+     "from_memory": null,
+     "example": "Ignorance is bliss.",
+     "choices": null
+    }
+   },
+   "outputs": [],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "dropped": [],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.060764,
+   "cost_at_standard_usd": 0.060764,
+   "latency_s": 18.77,
+   "source": "final-standard"
+  },
+  {
+   "task": "NotesIsTodo",
+   "compiled": true,
+   "routine": "joplin_check_note_todo_status",
+   "steps": 4,
+   "inputs": {
+    "note_title": {
+     "type": "text",
+     "description": "The title of the Joplin note to check.",
+     "from_memory": null,
+     "example": "To-Do List",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "is_todo"
+   ],
+   "kept": [
+    1,
+    2,
+    3
+   ],
+   "dropped": [],
+   "warnings": [
+    "output 'is_todo': 'True' was inferred from 'Convert to note'; the routine reports that text"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.03832,
+   "cost_at_standard_usd": 0.03832,
+   "latency_s": 11.78,
+   "source": "final-standard"
+  },
+  {
+   "task": "NotesMeetingAttendeeCount",
+   "compiled": true,
+   "routine": "joplin_count_meeting_attendees",
+   "steps": 7,
+   "inputs": {
+    "meeting_title": {
+     "type": "text",
+     "description": "The title of the meeting note to look up.",
+     "from_memory": null,
+     "example": "Employee Performance Evaluation",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "attendee_count"
+   ],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    6
+   ],
+   "dropped": [
+    [
+     5,
+     "look: not a device action"
+    ],
+    [
+     7,
+     "look: not a device action"
+    ]
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.04626,
+   "cost_at_standard_usd": 0.04626,
+   "latency_s": 14.59,
+   "source": "final-standard"
+  },
+  {
+   "task": "OpenAppTaskEval",
+   "compiled": true,
+   "routine": "contacts_open_app",
+   "steps": 2,
+   "inputs": {},
+   "outputs": [],
+   "kept": [
+    1,
+    2
+   ],
+   "dropped": [],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.039588,
+   "cost_at_standard_usd": 0.039588,
+   "latency_s": 13.28,
+   "source": "final-standard"
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromImage",
+   "compiled": true,
+   "routine": "broccoli_add_recipes_from_image",
+   "steps": 37,
+   "inputs": {
+    "image_filename": {
+     "type": "text",
+     "description": "Image file to open in Simple Gallery Pro containing the recipes to add.",
+     "from_memory": null,
+     "example": "recipes.jpg",
+     "choices": null
+    },
+    "recipe_1_title": {
+     "type": "text",
+     "description": "Title of the first recipe from the image.",
+     "from_memory": null,
+     "example": "Eggplant Parmesan",
+     "choices": null
+    },
+    "recipe_1_description": {
+     "type": "text",
+     "description": "Description of the first recipe from the image.",
+     "from_memory": null,
+     "example": "An ideal recipe for experimenting with different flavors and ingredients.",
+     "choices": null
+    },
+    "recipe_1_servings": {
+     "type": "text",
+     "description": "Servings for the first recipe from the image.",
+     "from_memory": null,
+     "example": "8 servings",
+     "choices": null
+    },
+    "recipe_1_preparation_time": {
+     "type": "text",
+     "description": "Preparation time for the first recipe from the image.",
+     "from_memory": null,
+     "example": "10 mins",
+     "choices": null
+    },
+    "recipe_1_ingredients": {
+     "type": "text",
+     "description": "Ingredients for the first recipe from the image.",
+     "from_memory": null,
+     "example": "varies",
+     "choices": null
+    },
+    "recipe_1_directions": {
+     "type": "text",
+     "description": "Directions for the first recipe from the image.",
+     "from_memory": null,
+     "example": "Slice eggplant, bread, and fry. Layer in a baking dish with marinara sauce and mozzarella cheese. Bake until bubbly. Garnish with fresh herbs for a more vibrant taste.",
+     "choices": null
+    },
+    "recipe_2_title": {
+     "type": "text",
+     "description": "Title of the second recipe from the image.",
+     "from_memory": null,
+     "example": "Baked Cod with Lemon and Dill",
+     "choices": null
+    },
+    "recipe_2_description": {
+     "type": "text",
+     "description": "Description of the second recipe from the image.",
+     "from_memory": null,
+     "example": "A quick and easy meal, perfect for busy weekdays.",
+     "choices": null
+    },
+    "recipe_2_servings": {
+     "type": "text",
+     "description": "Servings for the second recipe from the image.",
+     "from_memory": null,
+     "example": "2 servings",
+     "choices": null
+    },
+    "recipe_2_preparation_time": {
+     "type": "text",
+     "description": "Preparation time for the second recipe from the image.",
+     "from_memory": null,
+     "example": "45 mins",
+     "choices": null
+    },
+    "recipe_2_ingredients": {
+     "type": "text",
+     "description": "Ingredients for the second recipe from the image.",
+     "from_memory": null,
+     "example": "subject to change",
+     "choices": null
+    },
+    "recipe_2_directions": {
+     "type": "text",
+     "description": "Directions for the second recipe from the image.",
+     "from_memory": null,
+     "example": "Place cod fillets in a baking dish, season with lemon juice, dill, salt, and pepper. Bake until fish flakes easily. Garnish with fresh herbs for a more vibrant taste.",
+     "choices": null
+    },
+    "recipe_3_title": {
+     "type": "text",
+     "description": "Title of the third recipe from the image.",
+     "from_memory": null,
+     "example": "Chickpea Vegetable Soup",
+     "choices": null
+    },
+    "recipe_3_description": {
+     "type": "text",
+     "description": "Description of the third recipe from the image.",
+     "from_memory": null,
+     "example": "An ideal recipe for experimenting with different flavors and ingredients.",
+     "choices": null
+    },
+    "recipe_3_servings": {
+     "type": "text",
+     "description": "Servings for the third recipe from the image.",
+     "from_memory": null,
+     "example": "2 servings",
+     "choices": null
+    },
+    "recipe_3_preparation_time": {
+     "type": "text",
+     "description": "Preparation time for the third recipe from the image.",
+     "from_memory": null,
+     "example": "2 hrs",
+     "choices": null
+    },
+    "recipe_3_ingredients": {
+     "type": "text",
+     "description": "Ingredients for the third recipe from the image.",
+     "from_memory": null,
+     "example": "as desired",
+     "choices": null
+    },
+    "recipe_3_directions": {
+     "type": "text",
+     "description": "Directions for the third recipe from the image.",
+     "from_memory": null,
+     "example": "Saute onions, carrots, and celery, add broth, canned tomatoes, and chickpeas. Simmer with spinach and seasonings. Try adding a pinch of your favorite spices for extra flavor.",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "added_recipe_2_title",
+    "added_recipe_3_title",
+    "added_recipe_1_title"
+   ],
+   "kept": [
+    1,
+    2,
+    4,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38
+   ],
+   "dropped": [
+    [
+     3,
+     "look: not a device action"
+    ],
+    [
+     5,
+     "look: not a device action"
+    ],
+    [
+     39,
+     "back-track: steps 39–46 returned to the same screen"
+    ],
+    [
+     40,
+     "back-track: steps 39–46 returned to the same screen"
+    ],
+    [
+     41,
+     "back-track: steps 39–46 returned to the same screen"
+    ],
+    [
+     42,
+     "back-track: steps 39–46 returned to the same screen"
+    ],
+    [
+     43,
+     "back-track: steps 39–46 returned to the same screen"
+    ],
+    [
+     44,
+     "back-track: steps 39–46 returned to the same screen"
+    ],
+    [
+     45,
+     "back-track: steps 39–46 returned to the same screen"
+    ],
+    [
+     46,
+     "back-track: steps 39–46 returned to the same screen"
+    ]
+   ],
+   "warnings": [
+    "input 'recipe_3_description' is not used by any action: step 'start_first_new_recipe' now requires the screen to show it (Button 'Recipe photo · Pan-Seared Salmon with Quinoa · An '); other values need a repair or a recompile",
+    "input 'recipe_3_servings' is not used by any action: step 'enter_recipe_2_time' now requires the screen to show it (EditText 'Servings: 2 servings'); other values need a repair or a recompile"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.111664,
+   "cost_at_standard_usd": 0.111664,
+   "latency_s": 21.51,
+   "source": "final-standard"
+  },
+  {
+   "task": "RecipeAddSingleRecipe",
+   "compiled": true,
+   "routine": "broccoli_add_recipe",
+   "steps": 10,
+   "inputs": {
+    "recipe_title": {
+     "type": "text",
+     "description": "",
+     "from_memory": null,
+     "example": "Chicken Caesar Salad Wrap",
+     "choices": null
+    },
+    "recipe_description": {
+     "type": "text",
+     "description": "",
+     "from_memory": null,
+     "example": "An ideal recipe for experimenting with different flavors and ingredients.",
+     "choices": null
+    },
+    "recipe_servings": {
+     "type": "text",
+     "description": "",
+     "from_memory": null,
+     "example": "3-4 servings",
+     "choices": null
+    },
+    "recipe_preparation_time": {
+     "type": "text",
+     "description": "",
+     "from_memory": null,
+     "example": "2 hrs",
+     "choices": null
+    },
+    "recipe_ingredients": {
+     "type": "text",
+     "description": "",
+     "from_memory": null,
+     "example": "as desired",
+     "choices": null
+    },
+    "recipe_directions": {
+     "type": "text",
+     "description": "",
+     "from_memory": null,
+     "example": "Toss chopped romaine lettuce with Caesar dressing, grilled chicken strips, and Parmesan cheese. Wrap in a large tortilla. Feel free to substitute with ingredients you have on hand.",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "saved_recipe_title",
+    "saved_recipe_servings",
+    "saved_recipe_preparation_time"
+   ],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "dropped": [],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.063116,
+   "cost_at_standard_usd": 0.063116,
+   "latency_s": 15.15,
+   "source": "final-standard"
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipesWithNoise",
+   "compiled": true,
+   "routine": "broccoli_delete_recipes",
+   "steps": 25,
+   "inputs": {
+    "first_recipe_name": {
+     "type": "text",
+     "description": "The first recipe to delete.",
+     "from_memory": null,
+     "example": "Chicken Alfredo Pasta",
+     "choices": null
+    },
+    "second_recipe_name": {
+     "type": "text",
+     "description": "The second recipe to delete.",
+     "from_memory": null,
+     "example": "Tomato Basil Bruschetta",
+     "choices": null
+    },
+    "third_recipe_name": {
+     "type": "text",
+     "description": "The third recipe to delete.",
+     "from_memory": null,
+     "example": "Grilled Cheese with Tomato and Basil",
+     "choices": null
+    }
+   },
+   "outputs": [],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
+   ],
+   "dropped": [],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.07292,
+   "cost_at_standard_usd": 0.07292,
+   "latency_s": 21.33,
+   "source": "final-standard"
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipes",
+   "compiled": true,
+   "routine": "broccoli_delete_recipes_2",
+   "steps": 13,
+   "inputs": {
+    "recipe_1_name": {
+     "type": "text",
+     "description": "The first recipe to delete",
+     "from_memory": null,
+     "example": "Zucchini Noodles with Pesto",
+     "choices": null
+    },
+    "recipe_2_name": {
+     "type": "text",
+     "description": "The second recipe to delete",
+     "from_memory": null,
+     "example": "Garlic Butter Shrimp",
+     "choices": null
+    },
+    "recipe_3_name": {
+     "type": "text",
+     "description": "The third recipe to delete",
+     "from_memory": null,
+     "example": "Lentil Soup",
+     "choices": null
+    }
+   },
+   "outputs": [],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+   ],
+   "dropped": [],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.049796,
+   "cost_at_standard_usd": 0.049796,
+   "latency_s": 11.08,
+   "source": "final-standard"
+  },
+  {
+   "task": "RecipeDeleteSingleRecipe",
+   "compiled": true,
+   "routine": "broccoli_delete_recipe",
+   "steps": 5,
+   "inputs": {
+    "recipe_name": {
+     "type": "text",
+     "description": "",
+     "from_memory": null,
+     "example": "Thai Peanut Noodle Salad",
+     "choices": null
+    }
+   },
+   "outputs": [],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "dropped": [],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.045488,
+   "cost_at_standard_usd": 0.045488,
+   "latency_s": 16.0,
+   "source": "final-standard"
+  },
+  {
+   "task": "RecipeDeleteSingleWithRecipeWithNoise",
+   "compiled": true,
+   "routine": "broccoli_delete_recipe_2",
+   "steps": 9,
+   "inputs": {
+    "recipe_name": {
+     "type": "text",
+     "description": "The name of the recipe to delete from Broccoli.",
+     "from_memory": null,
+     "example": "Classic Margherita Pizza",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "post_deletion_search_result"
+   ],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+   ],
+   "dropped": [],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.045436,
+   "cost_at_standard_usd": 0.045436,
+   "latency_s": 13.12,
+   "source": "final-standard"
+  },
+  {
+   "task": "SimpleCalendarAddOneEventInTwoWeeks",
+   "compiled": true,
+   "routine": "simple_calendar_create_event",
+   "steps": 21,
+   "inputs": {
+    "event_title": {
+     "type": "text",
+     "description": "Title of the calendar event.",
+     "from_memory": null,
+     "example": "Meeting with the Team",
+     "choices": null
+    },
+    "event_description": {
+     "type": "text",
+     "description": "Description of the calendar event.",
+     "from_memory": null,
+     "example": "We will prepare for annual budget.",
+     "choices": null
+    },
+    "event_date": {
+     "type": "date",
+     "description": "Date on which the event starts, selected in the date picker.",
+     "from_memory": null,
+     "example": "October 29",
+     "choices": null
+    },
+    "event_start_time": {
+     "type": "text",
+     "description": "Time at which the event starts.",
+     "from_memory": null,
+     "example": "17:00",
+     "choices": null
+    },
+    "event_end_time": {
+     "type": "text",
+     "description": "Time at which the event ends.",
+     "from_memory": null,
+     "example": "17:30",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "event_date",
+    "event_time"
+   ],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    19
+   ],
+   "dropped": [
+    [
+     18,
+     "look: not a device action"
+    ]
+   ],
+   "warnings": [
+    "output 'event_date' reads 'October' on the run's own final screen, not 'October 29 (Sun)'"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.093872,
+   "cost_at_standard_usd": 0.093872,
+   "latency_s": 29.51,
+   "source": "final-standard"
+  },
+  {
+   "task": "SimpleCalendarAddOneEventRelativeDay",
+   "compiled": true,
+   "routine": "simple_calendar_pro_create_event_2",
+   "steps": 18,
+   "inputs": {
+    "event_title": {
+     "type": "text",
+     "description": "Title of the calendar event.",
+     "from_memory": null,
+     "example": "Call with the Team",
+     "choices": null
+    },
+    "event_description": {
+     "type": "text",
+     "description": "Description of the calendar event.",
+     "from_memory": null,
+     "example": "We will celebrate team roles.",
+     "choices": null
+    },
+    "event_day": {
+     "type": "text",
+     "description": "Day of the month on which the event occurs.",
+     "from_memory": null,
+     "example": "19",
+     "choices": null
+    },
+    "event_start_hour": {
+     "type": "text",
+     "description": "Hour at which the event starts.",
+     "from_memory": null,
+     "example": "5",
+     "choices": null
+    },
+    "event_end_hour": {
+     "type": "text",
+     "description": "Hour at which the event ends.",
+     "from_memory": null,
+     "example": "6",
+     "choices": null
+    }
+   },
+   "outputs": [],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    19
+   ],
+   "dropped": [
+    [
+     17,
+     "back-track: steps 17–18 returned to the same screen"
+    ],
+    [
+     18,
+     "back-track: steps 17–18 returned to the same screen"
+    ]
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.085812,
+   "cost_at_standard_usd": 0.085812,
+   "latency_s": 26.51,
+   "source": "final-standard"
+  },
+  {
+   "task": "SimpleCalendarAddOneEventTomorrow",
+   "compiled": true,
+   "routine": "calendar_create_event",
+   "steps": 19,
+   "inputs": {
+    "event_title": {
+     "type": "text",
+     "description": "Title of the calendar event",
+     "from_memory": null,
+     "example": "Call with the Team",
+     "choices": null
+    },
+    "event_description": {
+     "type": "text",
+     "description": "Description of the calendar event",
+     "from_memory": null,
+     "example": "We will prepare for team roles.",
+     "choices": null
+    },
+    "event_day": {
+     "type": "text",
+     "description": "Day of the month on which the event occurs, as shown in the date picker",
+     "from_memory": null,
+     "example": "16",
+     "choices": null
+    },
+    "event_start_hour": {
+     "type": "text",
+     "description": "Hour at which the event starts, in 24-hour format",
+     "from_memory": null,
+     "example": "20",
+     "choices": null
+    },
+    "event_duration_minutes": {
+     "type": "text",
+     "description": "Duration of the event in minutes, used to set the ending minute when the event starts on the hour",
+     "from_memory": null,
+     "example": "30",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "created_event",
+    "event_time_range"
+   ],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+   ],
+   "dropped": [],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.08758,
+   "cost_at_standard_usd": 0.08758,
+   "latency_s": 25.58,
+   "source": "final-standard"
+  },
+  {
+   "task": "SimpleCalendarAddRepeatingEvent",
+   "compiled": true,
+   "routine": "simple_calendar_create_recurring_event",
+   "steps": 18,
+   "inputs": {
+    "event_title": {
+     "type": "text",
+     "description": "Title of the calendar event",
+     "from_memory": null,
+     "example": "Review session for Budget Planning",
+     "choices": null
+    },
+    "event_description": {
+     "type": "text",
+     "description": "Description of the calendar event",
+     "from_memory": null,
+     "example": "We will understand business objectives. Remember to confirm attendance.",
+     "choices": null
+    },
+    "event_start_time": {
+     "type": "text",
+     "description": "Start time of each event occurrence",
+     "from_memory": null,
+     "example": "14:00",
+     "choices": null
+    },
+    "event_end_time": {
+     "type": "text",
+     "description": "End time of each event occurrence",
+     "from_memory": null,
+     "example": "15:00",
+     "choices": null
+    },
+    "recurrence_frequency": {
+     "type": "text",
+     "description": "How often the event repeats",
+     "from_memory": null,
+     "example": "Weekly",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "event_title",
+    "event_start_time",
+    "event_end_time",
+    "repetition"
+   ],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    17,
+    18
+   ],
+   "dropped": [
+    [
+     16,
+     "look: not a device action"
+    ]
+   ],
+   "warnings": [
+    "input 'event_start_date' is never used or shown; dropped"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.115136,
+   "cost_at_standard_usd": 0.115136,
+   "latency_s": 37.86,
+   "source": "final-standard"
+  },
+  {
+   "task": "SimpleCalendarDeleteEventsOnRelativeDay",
+   "compiled": true,
+   "routine": "simple_calendar_pro_delete_day_events",
+   "steps": 8,
+   "inputs": {},
+   "outputs": [],
+   "kept": [
+    1,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+   ],
+   "dropped": [
+    [
+     2,
+     "look: not a device action"
+    ],
+    [
+     10,
+     "look: not a device action"
+    ]
+   ],
+   "warnings": [
+    "input 'weekday' is never used or shown; dropped"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.067336,
+   "cost_at_standard_usd": 0.067336,
+   "latency_s": 28.77,
+   "source": "final-standard"
+  },
+  {
+   "task": "SimpleCalendarDeleteEvents",
+   "compiled": true,
+   "routine": "simple_calendar_pro_delete_events_on_dat",
+   "steps": 11,
+   "inputs": {},
+   "outputs": [],
+   "kept": [
+    1,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "dropped": [
+    [
+     2,
+     "look: not a device action"
+    ],
+    [
+     13,
+     "look: not a device action"
+    ]
+   ],
+   "warnings": [
+    "input 'event_date' is never used or shown; dropped"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.048272,
+   "cost_at_standard_usd": 0.048272,
+   "latency_s": 13.64,
+   "source": "final-standard"
+  },
+  {
+   "task": "SimpleCalendarEventOnDateAtTime",
+   "compiled": true,
+   "routine": "simple_calendar_pro_get_event_titles",
+   "steps": 2,
+   "inputs": {},
+   "outputs": [
+    "event_title"
+   ],
+   "kept": [
+    1,
+    3
+   ],
+   "dropped": [
+    [
+     2,
+     "look: not a device action"
+    ],
+    [
+     4,
+     "scroll with no new content (end of list)"
+    ]
+   ],
+   "warnings": [
+    "output 'event_title' reads 'Review session for Annual Report' on the run's own final screen, not 'Product demo'",
+    "input 'schedule_date' is never used or shown; dropped",
+    "input 'schedule_time' is never used or shown; dropped"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.061396,
+   "cost_at_standard_usd": 0.061396,
+   "latency_s": 20.3,
+   "source": "final-standard"
+  },
+  {
+   "task": "SimpleCalendarLocationOfEvent",
+   "compiled": true,
+   "routine": "simple_calendar_pro_get_event_location",
+   "steps": 3,
+   "inputs": {
+    "event_title": {
+     "type": "text",
+     "description": "The title of the event to look up",
+     "from_memory": null,
+     "example": "Family reunion",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "location"
+   ],
+   "kept": [
+    1,
+    2,
+    3
+   ],
+   "dropped": [],
+   "warnings": [
+    "input 'location' is never used or shown; dropped"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.039452,
+   "cost_at_standard_usd": 0.039452,
+   "latency_s": 9.81,
+   "source": "final-standard"
+  },
+  {
+   "task": "SimpleCalendarNextEvent",
+   "compiled": true,
+   "routine": "simple_calendar_get_next_event",
+   "steps": 3,
+   "inputs": {},
+   "outputs": [
+    "next_event_title"
+   ],
+   "kept": [
+    1,
+    2,
+    3
+   ],
+   "dropped": [],
+   "warnings": [
+    "output 'next_event_title' reads 'Call with Marketing' on the run's own final screen, not 'Board meeting'"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.061904,
+   "cost_at_standard_usd": 0.061904,
+   "latency_s": 19.65,
+   "source": "final-standard"
+  },
+  {
+   "task": "SimpleDrawProCreateDrawing",
+   "compiled": true,
+   "routine": "simple_draw_create_drawing",
+   "steps": 14,
+   "inputs": {
+    "file_name": {
+     "type": "text",
+     "description": "Base filename typed for the new drawing, without the file extension added by the app.",
+     "from_memory": null,
+     "example": "adipiscing_fair_jelly_final",
+     "choices": null
+    },
+    "storage_volume_name": {
+     "type": "text",
+     "description": "Name of the storage volume to open when choosing the save location.",
+     "from_memory": null,
+     "example": "sdk_gphone64_arm64",
+     "choices": null
+    },
+    "destination_folder_name": {
+     "type": "text",
+     "description": "Name of the destination folder in which to save the drawing.",
+     "from_memory": null,
+     "example": "Pictures",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "saved_file_name",
+    "saved_file_size"
+   ],
+   "kept": [
+    1,
+    3,
+    4,
+    5,
+    6,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+   ],
+   "dropped": [
+    [
+     2,
+     "look: not a device action"
+    ],
+    [
+     7,
+     "no visible change (a retry or a dead tap)"
+    ]
+   ],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.067064,
+   "cost_at_standard_usd": 0.067064,
+   "latency_s": 17.58,
+   "source": "final-standard"
+  },
+  {
+   "task": "SimpleSmsReply",
+   "compiled": true,
+   "routine": "simple_sms_messenger_reply_to_conversati",
+   "steps": 5,
+   "inputs": {
+    "recipient_phone_number": {
+     "type": "phone",
+     "description": "Phone number of the conversation to reply to",
+     "from_memory": null,
+     "example": "+18407874306",
+     "choices": null
+    },
+    "message_text": {
+     "type": "text",
+     "description": "Message text to send",
+     "from_memory": null,
+     "example": "Yoga class every Tuesday and Thursday at 6 PM.",
+     "choices": null
+    }
+   },
+   "outputs": [],
+   "kept": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "dropped": [],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.046804,
+   "cost_at_standard_usd": 0.046804,
+   "latency_s": 12.71,
+   "source": "final-standard"
+  },
+  {
+   "task": "SimpleSmsSendReceivedAddress",
+   "compiled": true,
+   "routine": "simple_sms_messenger_text_event_address",
+   "steps": 10,
+   "inputs": {
+    "recipient_name": {
+     "type": "text",
+     "description": "",
+     "from_memory": null,
+     "example": "Gabriel Ibrahim",
+     "choices": null
+    },
+    "source_contact_name": {
+     "type": "text",
+     "description": "",
+     "from_memory": null,
+     "example": "Oscar Mohamed",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "recipient",
+    "sent_message"
+   ],
+   "kept": [
+    1,
+    4,
+    5,
+    6,
+    7,
+    8,
+    10,
+    11,
+    12,
+    13
+   ],
+   "dropped": [
+    [
+     9,
+     "scroll with no new content (end of list)"
+    ],
+    [
+     2,
+     "back-track: steps 2–3 returned to the same screen"
+    ],
+    [
+     3,
+     "back-track: steps 2–3 returned to the same screen"
+    ]
+   ],
+   "warnings": [
+    "step 9: typed '789 E Oak St, Phoenix AZ 85006' is not an input; kept as a fixed value",
+    "output 'recipient' reads '' on the run's own final screen, not 'Gabriel Ibrahim'"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.0633,
+   "cost_at_standard_usd": 0.0633,
+   "latency_s": 21.04,
+   "source": "final-standard"
+  },
+  {
+   "task": "SimpleSmsSend",
+   "compiled": true,
+   "routine": "simple_sms_messenger_send_message",
+   "steps": 6,
+   "inputs": {
+    "recipient_phone_number": {
+     "type": "phone",
+     "description": "The phone number to send the text message to.",
+     "from_memory": null,
+     "example": "+16597910719",
+     "choices": null
+    },
+    "message_text": {
+     "type": "text",
+     "description": "The text to include in the message.",
+     "from_memory": null,
+     "example": "Beauty is in the eye of the beholder",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "sent_time"
+   ],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "dropped": [],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.05372,
+   "cost_at_standard_usd": 0.05372,
+   "latency_s": 16.72,
+   "source": "final-standard"
+  },
+  {
+   "task": "SystemBrightnessMax",
+   "compiled": true,
+   "routine": "settings_set_brightness_max_2",
+   "steps": 6,
+   "inputs": {},
+   "outputs": [
+    "display_brightness"
+   ],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "dropped": [],
+   "warnings": [],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.039312,
+   "cost_at_standard_usd": 0.039312,
+   "latency_s": 10.37,
+   "source": "final-standard"
+  },
+  {
+   "task": "VlcCreatePlaylist",
+   "compiled": true,
+   "routine": "vlc_create_playlist",
+   "steps": 11,
+   "inputs": {
+    "playlist_title": {
+     "type": "text",
+     "description": "Title for the new playlist",
+     "from_memory": null,
+     "example": "Ultimate Fails Series",
+     "choices": null
+    },
+    "storage_folder_name": {
+     "type": "text",
+     "description": "Storage location containing the video folder",
+     "from_memory": null,
+     "example": "Internal memory",
+     "choices": null
+    },
+    "video_folder_name": {
+     "type": "text",
+     "description": "Folder containing the videos to add",
+     "from_memory": null,
+     "example": "VLCVideos",
+     "choices": null
+    },
+    "first_video_filename": {
+     "type": "text",
+     "description": "First video file to add to the playlist",
+     "from_memory": null,
+     "example": "highlight_41_4K_2023_03_30.mp4",
+     "choices": null
+    },
+    "second_video_filename": {
+     "type": "text",
+     "description": "Second video file to add to the playlist, after the first",
+     "from_memory": null,
+     "example": "scene_68_4K_copy.mp4",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "playlist_title",
+    "first_track",
+    "second_track",
+    "total_duration"
+   ],
+   "kept": [
+    1,
+    2,
+    3,
+    4,
+    8,
+    9,
+    10,
+    11,
+    15,
+    16,
+    17
+   ],
+   "dropped": [
+    [
+     5,
+     "back-track: steps 5–7 returned to the same screen"
+    ],
+    [
+     6,
+     "back-track: steps 5–7 returned to the same screen"
+    ],
+    [
+     7,
+     "back-track: steps 5–7 returned to the same screen"
+    ],
+    [
+     12,
+     "back-track: steps 12–14 returned to the same screen"
+    ],
+    [
+     13,
+     "back-track: steps 12–14 returned to the same screen"
+    ],
+    [
+     14,
+     "back-track: steps 12–14 returned to the same screen"
+    ]
+   ],
+   "warnings": [
+    "output 'second_track' reads 'highlight_41_4K_2023_03_30, Duration: 1 minutes 21 seconds' on the run's own final screen, not 'scene_68_4K_copy'",
+    "input 'second_video_filename' is not used by any action: step 'open_more_actions_for_first_video' now requires the screen to show it (Text 'scene_68_4K_copy.mp4'); other values need a repair or a recompile"
+   ],
+   "compiler": "muse-wonder-1.0",
+   "cost_usd": 0.083208,
+   "cost_at_standard_usd": 0.083208,
+   "latency_s": 23.36,
+   "source": "final-standard"
+  }
+ ]
+}

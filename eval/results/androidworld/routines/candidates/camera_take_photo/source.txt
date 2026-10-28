@@ -1,0 +1,1 @@
+final-standard CameraTakePhoto seed 3729977769

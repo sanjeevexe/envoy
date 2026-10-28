@@ -1,0 +1,127 @@
+routine: clock_create_timer
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Create a timer in the Clock app without starting it
+description: Opens the Clock app's Timer tab and enters the requested hours, minutes, and seconds using the digit keypad, leaving the timer set
+  but not started. Only works when timer_hours is the one already shown on '0'.
+patterns: [create a timer, set a timer, make a timer but don't start it, set up a timer without starting it]
+outputs: [timer_duration]
+start: fresh_launch
+inputs:
+  timer_hours: {type: text, description: Number of hours for the timer, example: '0'}
+  timer_minutes: {type: text, description: Number of minutes for the timer, example: '16'}
+  timer_seconds: {type: text, description: Number of seconds for the timer, example: '35'}
+steps:
+- id: launch_clock
+  intent: Launch the Clock app
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.google.android.deskclock}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: action_bar_title, text: Clock, kind: Text}
+  - element_present: {resource_id: navigation_bar_item_labels_group, text: Alarm, kind: Text}
+  risk: read
+  note: trace step 1
+- id: open_timer_tab
+  intent: Tap the Timer tab
+  pre:
+  - {app_foreground: com.google.android.deskclock}
+  action:
+    tap:
+      resource_id: tab_menu_timer
+      text: Timer
+      kind: Button
+      cls: FrameLayout
+      siblings: [Alarm, Clock, Stopwatch]
+      in_list: false
+      position: [0.5, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: action_bar_title, text: Timer, kind: Text}
+  - element_present:
+      resource_id: "timer_setup_digit_{{timer_hours}}"
+      text: "{{timer_hours}}"
+      kind: Button
+  risk: reversible
+  note: trace step 2
+- id: enter_minutes_first_digit
+  intent: "Tap the first digit of {{timer_minutes}} as part of entering a {{timer_hours}} hour, {{timer_minutes}} minute, {{timer_seconds}} second\
+    \ timer"
+  pre:
+  - {app_foreground: com.google.android.deskclock}
+  - element_present:
+      resource_id: timer_setup_digit_0
+      text_has: "{{timer_hours}}"
+      kind: Button
+  action:
+    tap:
+      resource_id: timer_setup_digit_*
+      text_has: "{{timer_minutes}}"
+      kind: Button
+      cls: Button
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: fab, text: Start, kind: Button}
+  risk: reversible
+  note: trace step 3
+- id: enter_minutes_second_digit
+  intent: "Tap the second digit of {{timer_minutes}}"
+  pre:
+  - {app_foreground: com.google.android.deskclock}
+  action:
+    tap:
+      resource_id: timer_setup_digit_*
+      text_has: "{{timer_minutes}}"
+      kind: Button
+      cls: Button
+      in_list: false
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 4
+- id: enter_seconds_first_digit
+  intent: "Tap the first digit of {{timer_seconds}}"
+  pre:
+  - {app_foreground: com.google.android.deskclock}
+  action:
+    tap:
+      resource_id: timer_setup_digit_*
+      text_has: "{{timer_seconds}}"
+      kind: Button
+      cls: Button
+      in_list: false
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 5
+- id: enter_seconds_second_digit
+  intent: "Tap the second digit of {{timer_seconds}}, completing the timer duration entry without starting the timer"
+  pre:
+  - {app_foreground: com.google.android.deskclock}
+  action:
+    tap:
+      resource_id: timer_setup_digit_*
+      text_has: "{{timer_seconds}}"
+      kind: Button
+      cls: Button
+      in_list: false
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  extract:
+    timer_duration:
+      locator: {resource_id: timer_setup_time, kind: Text}
+      expect_digits: true
+  note: trace step 6
+compiled_from:
+  task_id: aw-final-standard-1028-103906-da00
+  goal: Create a timer with 0 hours, 16 minutes, and 35 seconds. Do not start the timer.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:40:38"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6]
+  trace_steps_dropped: 0
+  cost_usd: 0.0605

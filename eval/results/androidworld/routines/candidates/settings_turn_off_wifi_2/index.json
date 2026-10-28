@@ -1,0 +1,22 @@
+{
+ "name": "settings_turn_off_wifi_2",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-28 05:45:52",
+   "parent": null,
+   "changes": [
+    "compiled from aw-baseline-standard-1028-050915-3eb4"
+   ],
+   "verification": {
+    "source": "baseline-standard",
+    "source_seed": 2760691905
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.google.android.apps.nexuslauncher"
+}

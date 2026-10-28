@@ -1,0 +1,22 @@
+{
+ "name": "joplin_get_ingredient_quantity",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-28 05:42:19",
+   "parent": null,
+   "changes": [
+    "compiled from aw-baseline-standard-1028-035923-e4eb"
+   ],
+   "verification": {
+    "source": "baseline-standard",
+    "source_seed": 4265237062
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.google.android.apps.nexuslauncher"
+}

@@ -1,0 +1,263 @@
+routine: vlc_create_playlist
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Create a playlist in VLC
+description: Launches VLC, browses to the specified folder, creates a new playlist with the requested title using the specified videos in order,
+  and opens the created playlist to verify its contents. Only works when second_video_filename is the one already shown on 'scene_68_4K_copy.mp4'.
+patterns: [create a playlist in VLC, make a new VLC playlist, create a titled playlist from these videos, add these videos to a new playlist in
+    order, make a playlist from files in a folder]
+outputs: [playlist_title, first_track, second_track, total_duration]
+start: fresh_launch
+inputs:
+  playlist_title: {type: text, description: Title for the new playlist, example: Ultimate Fails Series}
+  storage_folder_name: {type: text, description: Storage location containing the video folder, example: Internal memory}
+  video_folder_name: {type: text, description: Folder containing the videos to add, example: VLCVideos}
+  first_video_filename: {type: text, description: First video file to add to the playlist, example: highlight_41_4K_2023_03_30.mp4}
+  second_video_filename: {type: text, description: 'Second video file to add to the playlist, after the first', example: scene_68_4K_copy.mp4}
+steps:
+- id: launch_vlc
+  intent: Launch the VLC app
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: org.videolan.vlc}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: toolbar_vlc_title, text: VLC, kind: Text}
+  - element_present: {resource_id: loadingFlipper, text: ., kind: Text}
+  risk: read
+  note: trace step 1
+- id: tap_browse
+  intent: Tap Browse to browse files
+  pre:
+  - {app_foreground: org.videolan.vlc}
+  action:
+    tap:
+      resource_id: nav_directories
+      text: Browse
+      kind: Button
+      cls: FrameLayout
+      siblings: [Video, Audio, Playlists]
+      in_list: false
+      position: [0.5, 0.943]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: title
+      text: Favorites
+      desc: "Header: Favorites"
+      kind: Text
+  - element_present: {resource_id: title_content, kind: Button}
+  risk: reversible
+  note: trace step 2
+- id: open_storage_folder
+  intent: "Open the folder for {{storage_folder_name}}"
+  pre:
+  - {app_foreground: org.videolan.vlc}
+  action:
+    tap:
+      resource_id: browser_container
+      text: "Folder:"
+      text_has: "{{storage_folder_name}}"
+      kind: Button
+      cls: CardView
+      parent: list
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: browser_container, kind: Button}
+  - element_present: {resource_id: ml_menu_filter, text: Search…, kind: Button}
+  risk: reversible
+  note: trace step 3
+- id: open_video_folder
+  intent: "Open the {{video_folder_name}} folder containing {{first_video_filename}} and {{second_video_filename}}"
+  pre:
+  - {app_foreground: org.videolan.vlc}
+  action:
+    tap:
+      resource_id: browser_container
+      text: "Folder:"
+      text_has: "{{video_folder_name}}"
+      kind: Button
+      cls: ViewGroup
+      parent: network_list
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: title
+      text: "{{first_video_filename}}"
+      kind: Text
+  - element_present:
+      text: "{{video_folder_name}}"
+      kind: Text
+  risk: reversible
+  note: trace step 4
+- id: open_more_actions_for_first_video
+  intent: "Open More Actions for {{first_video_filename}}"
+  pre:
+  - {app_foreground: org.videolan.vlc}
+  - element_present:
+      resource_id: title
+      text_has: "{{second_video_filename}}"
+      kind: Text
+  action:
+    tap:
+      resource_id: item_more
+      text: More Actions
+      text_has: "{{first_video_filename}}"
+      kind: Button
+      cls: ImageView
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: touch_outside, kind: Button}
+  risk: reversible
+  note: trace step 8
+- id: tap_add_to_playlist
+  intent: "Tap Add to playlist for {{first_video_filename}}"
+  pre:
+  - {app_foreground: org.videolan.vlc}
+  action:
+    tap:
+      text: Add to playlist
+      kind: Button
+      cls: ViewGroup
+      parent: ctx_list
+      in_list: false
+      position: [0.5, 0.882]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: textView9, text: Add to new playlist, kind: Text}
+  - element_present: {resource_id: textView8, text: Add to existing playlist, kind: Text}
+  risk: reversible
+  note: trace step 9
+- id: enter_playlist_title
+  intent: "Type {{playlist_title}} into the Playlist name field"
+  pre:
+  - {app_foreground: org.videolan.vlc}
+  action:
+    type:
+      field:
+        text: Playlist name
+        hint: Playlist name
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.412, 0.843]
+      value: "{{playlist_title}}"
+  post:
+  - field_equals:
+      field: {text: Playlist name, kind: EditText}
+      value: "{{playlist_title}}"
+  risk: reversible
+  note: trace step 10
+- id: save_playlist
+  intent: "Tap SAVE to save the new playlist {{playlist_title}} containing {{first_video_filename}} and {{second_video_filename}} in order"
+  pre:
+  - {app_foreground: org.videolan.vlc}
+  action:
+    tap:
+      resource_id: dialog_playlist_save
+      text: SAVE
+      kind: Button
+      cls: Button
+      siblings: [Add to new playlist, Add to existing playlist]
+      in_list: false
+      position: [0.903, 0.844]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: title
+      text: "{{first_video_filename}}"
+      kind: Text
+  - element_present: {resource_id: ml_menu_filter, text: Search…, kind: Button}
+  risk: reversible
+  note: trace step 11
+- id: navigate_up
+  intent: Tap Navigate up to return to the main VLC screen
+  pre:
+  - {app_foreground: org.videolan.vlc}
+  action:
+    tap:
+      text: Navigate up
+      kind: Button
+      cls: ImageButton
+      parent: main_toolbar
+      siblings: [VLCVideos]
+      in_list: false
+      position: [0.068, 0.084]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: toolbar_vlc_title, text: VLC, kind: Text}
+  - element_present:
+      resource_id: title
+      text: Favorites
+      desc: "Header: Favorites"
+      kind: Text
+  risk: reversible
+  note: trace step 15
+- id: open_playlists
+  intent: Tap Playlists to open the playlists list
+  pre:
+  - {app_foreground: org.videolan.vlc}
+  action:
+    tap:
+      resource_id: nav_playlists
+      text: Playlists
+      kind: Button
+      cls: FrameLayout
+      siblings: [Video, Audio, Browse]
+      in_list: false
+      position: [0.7, 0.943]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: container, kind: Button}
+  - element_present: {resource_id: nav_playlists, text: Playlists, kind: Text}
+  risk: reversible
+  note: trace step 16
+- id: open_created_playlist
+  intent: "Open the playlist {{playlist_title}} to verify it contains {{first_video_filename}} followed by {{second_video_filename}}"
+  pre:
+  - {app_foreground: org.videolan.vlc}
+  action:
+    tap:
+      resource_id: container
+      text: "Playlist:"
+      text_has: "{{playlist_title}}"
+      kind: Button
+      cls: ViewGroup
+      parent: audio_list
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: header_list_title
+      text: "{{playlist_title}}"
+      desc: "Album: Ultimate Fails Series"
+      kind: Text
+  - element_present: {resource_id: play_btn, text: PLAY, kind: Button}
+  risk: reversible
+  extract:
+    playlist_title:
+      locator: {resource_id: header_list_title, kind: Text}
+    first_track:
+      near: "Video:"
+    second_track:
+      near: "Video:"
+    total_duration:
+      locator: {resource_id: duration, kind: Text}
+      expect_digits: true
+  note: trace step 17
+done:
+- text_visible: "{{playlist_title}}"
+compiled_from:
+  task_id: aw-final-standard-1028-173455-364c
+  goal: "Create a playlist titled \"Ultimate Fails Series\" with the following files in VLC (located in Internal Memory/VLCVideos), in order:\
+    \ highlight_41_4K_2023_03_30.mp4, scene_68_4K_copy.mp4"
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:50:50"
+  trace_steps_kept: [1, 2, 3, 4, 8, 9, 10, 11, 15, 16, 17]
+  trace_steps_dropped: 6
+  cost_usd: 0.0832

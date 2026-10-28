@@ -1,0 +1,193 @@
+routine: broccoli_delete_recipe_2
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Delete a recipe from Broccoli
+description: Searches for a named recipe in the Broccoli app, opens it, deletes it from the recipe detail options, confirms the deletion, and
+  verifies by searching again that no matching recipe remains.
+patterns: [delete a recipe from Broccoli, remove a recipe from Broccoli, delete the following recipe, remove the following recipe]
+outputs: [post_deletion_search_result]
+start: fresh_launch
+inputs:
+  recipe_name: {type: text, description: The name of the recipe to delete from Broccoli., example: Classic Margherita Pizza}
+steps:
+- id: launch_broccoli
+  intent: Launch the Broccoli app
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.flauschcode.broccoli}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: spinner, text: Categories, kind: List}
+  - element_present: {resource_id: action_search, text: Search, kind: Button}
+  risk: read
+  note: trace step 1
+- id: tap_search
+  intent: Tap Search to find the recipe to delete
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    tap:
+      resource_id: action_search
+      text: Search
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.941, 0.145]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: search_src_text, text: Search in ALL RECIPES, kind: EditText}
+  risk: reversible
+  note: trace step 2
+- id: search_recipe
+  intent: "Type {{recipe_name}} into the recipe search field"
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    type:
+      field:
+        resource_id: search_src_text
+        text: Search in ALL RECIPES
+        hint: Search in ALL RECIPES
+        kind: EditText
+        cls: AutoCompleteTextView
+        parent: search_plate
+        in_list: false
+        position: [0.568, 0.145]
+      value: "{{recipe_name}}"
+  post:
+  - field_equals:
+      field: {resource_id: search_src_text, text: Search in ALL RECIPES, kind: EditText}
+      value: "{{recipe_name}}"
+  risk: reversible
+  note: trace step 3
+- id: open_matching_recipe
+  intent: "Open the recipe that matches {{recipe_name}}"
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    tap:
+      text: Recipe photo
+      text_has: "{{recipe_name}}"
+      kind: Button
+      cls: CardView
+      parent: Recipes
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_absent:
+      resource_id: search_src_text
+      text: "Search in ALL RECIPES: {{recipe_name}}"
+      kind: EditText
+  risk: reversible
+  note: trace step 4
+- id: tap_more_options
+  intent: Tap More options on the recipe detail screen
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    tap:
+      text: More options
+      kind: Button
+      cls: ImageView
+      siblings: [Mark as favorite]
+      in_list: true
+      position: [0.951, 0.084]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: content, text: Share, kind: Text}
+  risk: reversible
+  note: trace step 5
+- id: tap_delete
+  intent: Tap Delete to start deleting the recipe
+  pre:
+  - app_foreground: "PopupWindow:61e7a18"
+  action:
+    tap:
+      text: Delete
+      kind: Button
+      cls: LinearLayout
+      in_list: false
+      position: [0.752, 0.25]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: contentPanel, text: 'Delete this recipe?', kind: Text}
+  - element_present: {resource_id: scrollView, text: 'Delete this recipe?', kind: Text}
+  risk: irreversible
+  note: trace step 6
+- id: confirm_delete
+  intent: Tap DELETE to confirm deletion of the recipe
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    tap:
+      resource_id: button1
+      text: DELETE
+      kind: Button
+      cls: Button
+      siblings: [CANCEL]
+      in_list: false
+      position: [0.797, 0.54]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: search_src_text
+      text: "Search in ALL RECIPES: {{recipe_name}}"
+      kind: EditText
+  - element_present: {resource_id: recycler_view, text: Recipes, kind: Text}
+  risk: irreversible
+  note: trace step 7
+- id: clear_search_query
+  intent: Tap Clear query to reset the search before verification
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    tap:
+      resource_id: search_close_btn
+      text: Clear query
+      kind: Button
+      cls: ImageView
+      parent: search_plate
+      siblings: [Classic Margherita Pizza]
+      in_list: false
+      position: [0.932, 0.145]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: search_src_text, text: Search in ALL RECIPES, kind: EditText}
+  - element_present: {resource_id: recycler_view, text: Recipes, kind: List}
+  risk: reversible
+  note: trace step 8
+- id: verify_recipe_deleted
+  intent: "Type {{recipe_name}} into the recipe search field again to verify the recipe is gone"
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    type:
+      field:
+        resource_id: search_src_text
+        text: Search in ALL RECIPES
+        hint: Search in ALL RECIPES
+        kind: EditText
+        cls: AutoCompleteTextView
+        parent: search_plate
+        in_list: false
+        position: [0.568, 0.145]
+      value: "{{recipe_name}}"
+  post:
+  - field_equals:
+      field: {resource_id: search_src_text, text: Search in ALL RECIPES, kind: EditText}
+      value: "{{recipe_name}}"
+  risk: reversible
+  extract:
+    post_deletion_search_result:
+      locator: {resource_id: recipes_empty, kind: Text}
+  note: trace step 9
+compiled_from:
+  task_id: aw-final-standard-1028-164610-aa0f
+  goal: "Delete the following recipes from Broccoli app: Classic Margherita Pizza."
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:45:36"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  trace_steps_dropped: 0
+  cost_usd: 0.0454

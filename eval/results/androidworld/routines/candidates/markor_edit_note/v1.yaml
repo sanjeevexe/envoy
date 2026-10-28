@@ -1,0 +1,111 @@
+routine: markor_edit_note
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Edit a note in Markor by adding text to the top
+description: Opens a named note file in Markor, prepends the requested text to the top of its existing content, and dismisses the keyboard so
+  the edit is saved.
+patterns: [Edit a note in Markor, Add text to the top of a note, Prepend text to my note]
+start: fresh_launch
+inputs:
+  note_file_name: {type: text, description: The name of the note file to edit., example: note_SiFbv.txt}
+  text_to_add: {type: text, description: The text to add to the top of the note., example: 'Hello, World!'}
+steps:
+- id: launch_markor
+  intent: Launch Markor
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: net.gsantner.markor}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: nav_notebook, text: Files, kind: Text}
+  - element_present: {resource_id: navigation_bar_item_labels_group, text: Files, kind: Text}
+  risk: read
+  note: trace step 1
+- id: find_open_note_file
+  intent: "Scroll to {{note_file_name}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: opoc_filesystem_item__root
+        text: File
+        text_has: "{{note_file_name}}"
+        kind: Button
+        cls: LinearLayout
+        parent: ui__filesystem_dialog__list
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: opoc_filesystem_item__root
+      text: File
+      text_has: "{{note_file_name}}"
+      kind: Button
+      cls: LinearLayout
+      parent: ui__filesystem_dialog__list
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: open_note_file
+  intent: "Tap the file {{note_file_name}} to open the note"
+  pre:
+  - {app_foreground: net.gsantner.markor}
+  action:
+    tap:
+      resource_id: opoc_filesystem_item__root
+      text: File
+      text_has: "{{note_file_name}}"
+      kind: Button
+      cls: LinearLayout
+      parent: ui__filesystem_dialog__list
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: toolbar, text: note_SiFbv, kind: Button}
+  - element_present: {resource_id: action_undo, text: Undo, kind: Button}
+  risk: reversible
+  note: trace step 2
+- id: prepend_text_to_note
+  intent: "Prepend {{text_to_add}} followed by a newline to the top of the existing note content"
+  pre:
+  - {app_foreground: net.gsantner.markor}
+  action:
+    type:
+      field:
+        resource_id: document__fragment__edit__highlighting_editor
+        hint: Don't forget to water the plants while I'm away.
+        kind: EditText
+        cls: EditText
+        parent: document__fragment__edit__content_editor__scrolling_parent
+        in_list: false
+        position: [0.5, 0.519]
+      value: "{{text_to_add}}\nDon't forget to water the plants while I'm away."
+  post:
+  - field_equals:
+      field: {resource_id: document__fragment__edit__highlighting_editor, kind: EditText}
+      value: "{{text_to_add}}\nDon't forget to water the plants while I'm away."
+  risk: reversible
+  note: trace step 3
+- id: dismiss_keyboard
+  intent: Go back to dismiss the keyboard and allow the note to save
+  optional: true
+  pre:
+  - {app_foreground: net.gsantner.markor}
+  action: {back: true}
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: input_method_nav_ime_switcher, text: Switch input method, kind: Button}
+  risk: read
+  note: "trace step 4 · closes the keyboard: optional"
+done:
+- text_visible: "{{text_to_add}}"
+compiled_from:
+  task_id: aw-baseline-standard-1028-035139-c0fa
+  goal: Edit note_SiFbv.txt in Markor. Add to the top of the note Hello, World!
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 05:42:05"
+  trace_steps_kept: [1, 2, 3, 4]
+  trace_steps_dropped: 4
+  cost_usd: 0.0458

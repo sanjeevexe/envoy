@@ -65,9 +65,13 @@ async def cmd_compile(args: argparse.Namespace) -> None:
               f"outputs {routine.outputs}, ${report.cost_at_standard_usd:.3f}", flush=True)
         (LIBS / "candidates" / routine.routine / "source.txt").write_text(f"{args.source} {ep['task']} seed {ep['seed']}\n")
     out = LIBS / "compile.json"
-    prev = json.loads(out.read_text())["rows"] if out.exists() and only else []
-    keep = [r for r in prev if r["task"] not in {x["task"] for x in rows}]
-    out.write_text(json.dumps({"source": args.source, "rows": keep + rows}, indent=1, ensure_ascii=False, default=str))
+    prev = json.loads(out.read_text()) if out.exists() and only else {"rows": []}
+    for r in prev["rows"]:  # rows from an earlier compile keep the stage they came from
+        r.setdefault("source", prev.get("source"))
+    for r in rows:
+        r["source"] = args.source
+    keep = [r for r in prev["rows"] if r["task"] not in {x["task"] for x in rows}]
+    out.write_text(json.dumps({"rows": keep + rows}, indent=1, ensure_ascii=False, default=str))
 
 
 def cmd_promote(args: argparse.Namespace) -> None:
