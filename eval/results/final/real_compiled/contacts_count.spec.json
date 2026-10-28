@@ -1,0 +1,20 @@
+{
+ "name": "contacts_count_contacts",
+ "intent": "Count the contacts in the Contacts app",
+ "description": "Open the Contacts app and report how many contacts it contains, continuing without an account if prompted and without signing in, creating an account, turning on sync, or installing anything.",
+ "patterns": [
+  "how many contacts do I have",
+  "count my contacts",
+  "how many contacts are in my contacts app"
+ ],
+ "inputs": [],
+ "steps": [],
+ "outputs": [
+  {
+   "name": "contact_count",
+   "near": "No contacts yet",
+   "example": "0"
+  }
+ ],
+ "data_values": []
+}

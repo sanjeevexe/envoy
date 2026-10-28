@@ -1,0 +1,75 @@
+routine: play_store_get_app_rating
+app: com.android.vending
+version: 1
+status: draft
+intent: Get the star rating of an app in the Google Play Store
+description: Open the Google Play Store, find the requested app, open its listing, and read its average star rating from the details page without
+  installing it.
+patterns: [what is the star rating of an app, check an app's rating in the Play Store, how many stars does an app have, find an app's Play Store
+    rating]
+outputs: [star_rating]
+start: fresh_launch
+inputs:
+  app_name:
+    type: text
+    description: The app whose star rating is requested
+    example: "Duolingo: Learn Languages"
+steps:
+- id: tap_search
+  intent: "Tap Search to look for {{app_name}}"
+  pre:
+  - {app_foreground: com.android.vending}
+  action:
+    tap:
+      text: Search
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.5, 0.939]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 5
+- id: find_open_app_listing
+  intent: "Scroll to {{app_name}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        text_has: "{{app_name}}"
+        kind: Button
+        cls: View
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      text_has: "{{app_name}}"
+      kind: Button
+      cls: View
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: open_app_listing
+  intent: "Tap the {{app_name}} result to open its listing and see its star rating"
+  pre:
+  - {app_foreground: com.android.vending}
+  action:
+    tap:
+      text_has: "{{app_name}}"
+      kind: Button
+      cls: View
+      in_list: true
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  extract:
+    star_rating: {near: Average rating, first_in_list: false, next_element: false, expect_digits: true, switch: false}
+  note: trace step 6
+compiled_from:
+  task_id: f7-1028030222-real-play_rating
+  goal: In the Google Play Store app, what is the star rating of the Duolingo app?
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 03:07:10"
+  trace_steps_kept: [5, 6]
+  trace_steps_dropped: 4
+  cost_usd: 0.045

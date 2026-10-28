@@ -1,0 +1,74 @@
+{
+ "name": "target_get_store_hours",
+ "intent": "Get today's hours for the user's Target store",
+ "description": "Opens My Target in the Target app, opens the saved My store entry, selects that store in the store locator, opens its Store hours details, and reads the hours listed for Today.",
+ "patterns": [
+  "What are today's hours for my Target store?",
+  "When does my Target store open today?",
+  "When does my Target store close today?",
+  "Check today's hours for my store"
+ ],
+ "inputs": [],
+ "steps": [
+  {
+   "step": 1,
+   "id": "open_my_target",
+   "intent": "Open My Target",
+   "target_fixed_text": "My Target",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "open_my_store",
+   "intent": "Open the My store entry",
+   "target_fixed_text": "My store",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "open_saved_store_details",
+   "intent": "Open the saved store from the store locator list",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 4,
+   "id": "open_store_hours_details",
+   "intent": "Open the Store hours details",
+   "target_fixed_text": "Store hours",
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "today_open_time",
+   "near": "Today",
+   "example": "8am open"
+  },
+  {
+   "name": "today_close_time",
+   "near": "Today",
+   "example": "11pm close"
+  },
+  {
+   "name": "today_date",
+   "near": "Today",
+   "example": "10/27"
+  }
+ ],
+ "data_values": [
+  "Chelsea 23rd and 8th",
+  "258 8th Ave",
+  "0.3 Miles",
+  "Open until 11pm",
+  "10/27",
+  "8am open",
+  "11pm close",
+  "10/28",
+  "10/29",
+  "10/30",
+  "10/31",
+  "11/1",
+  "11/2"
+ ]
+}

@@ -1,4 +1,4 @@
-# Safety: irreversible actions reach a person
+# safety
 
 Run 1028012740 on `849e51a` with uncommitted changes, 2026-10-28 05:27 UTC, 1 min, standard tier. 51 model calls, $0.072 at standard prices ($0.072 billed).
 
