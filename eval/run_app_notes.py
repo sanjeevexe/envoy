@@ -146,7 +146,7 @@ async def main_async(args: argparse.Namespace) -> int:
     from models.adapter import ModelAdapter, active_profile
     from testapps.skylark import SkyLark
 
-    out = OUT_ROOT / datetime.now().strftime("%Y-%m-%d")
+    out = OUT_ROOT / (datetime.now().strftime("%Y-%m-%d") + (f"-{args.label}" if args.label else ""))
     out.mkdir(parents=True, exist_ok=True)
     db = Path(args.scratch) / f"notes-{args.phase}.db"
     if db.exists():
@@ -155,7 +155,7 @@ async def main_async(args: argparse.Namespace) -> int:
     notes = AppNotes(store, ModelAdapter())
     device = EmulatorDevice(AVD[args.phase]).connect()
     sky = SkyLark(SERIAL["skylark"]) if args.phase == "skylark" else None
-    tasks = PHASES[args.phase]
+    tasks = {k: v[: args.limit or None] for k, v in PHASES[args.phase].items()}
     rows: list[dict[str, Any]] = []
     t0 = time.time()
     os.environ["ENVOY_APP_NOTES"] = "off"
@@ -185,6 +185,8 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--phase", choices=list(PHASES), default="skylark")
     ap.add_argument("--scratch", default=os.environ.get("TMPDIR", "/tmp"))
+    ap.add_argument("--limit", type=int, default=0, help="only the first N tasks of each pass (a smoke test)")
+    ap.add_argument("--label", default="", help="a suffix for the results folder")
     args = ap.parse_args()
     sys.path.insert(0, str(REPO / "backend"))
     return asyncio.run(main_async(args))
