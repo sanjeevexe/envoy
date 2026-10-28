@@ -156,6 +156,19 @@ class AndroidDevice:
         async with self._lock:
             return await asyncio.to_thread(self._observe_sync, screenshot)
 
+    def _peek_sync(self) -> ScreenState:
+        last = self._last
+        try:
+            return self._observe_sync(False)
+        finally:
+            self._last = last  # element numbers keep referring to the screen the agent decided on
+
+    async def peek(self) -> ScreenState:
+        """A fresh read that doesn't change what element numbers refer to (the agent's next action still targets the
+        screen it decided on). Used to see what changes on its own, such as a clock."""
+        async with self._lock:
+            return await asyncio.to_thread(self._peek_sync)
+
     def _settle_sync(self, timeout_s: float, quiet_ms: float = 250, poll_ms: float = 60) -> ScreenState:
         """Poll the tree until nothing visible has changed for `quiet_ms` and app content is present.
         settle_ms = time until the last change."""

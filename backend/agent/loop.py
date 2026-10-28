@@ -80,6 +80,17 @@ def _body(compact: str) -> str:
     return compact.split("\n", 1)[1] if "\n" in compact else ""
 
 
+def _volatile(before: ScreenState, now: ScreenState) -> set[int]:
+    """Lines of a screen that changed with no action (a clock, a timer, a progress bar): compared with no action in
+    between, same layout. They must not count as an action's effect, or a no-op looks like progress."""
+    a, b = _body(before.compact).split("\n"), _body(now.compact).split("\n")
+    return {i for i, (x, y) in enumerate(zip(a, b)) if x != y} if len(a) == len(b) else set()
+
+
+def _masked(compact: str, lines: set[int]) -> str:
+    return "\n".join("~" if i in lines else x for i, x in enumerate(_body(compact).split("\n")))
+
+
 def _where(s: ScreenState) -> str:
     title = next((e.label for e in s.numbered if e.resource_id.endswith("title") and e.label), None)
     title = title or next((e.label for e in s.numbered if e.kind == "Text" and e.label), "")
@@ -143,7 +154,8 @@ class AgentRunner:
         no_change_streak = 0
         stuck_recoveries = 0
         plan: Plan | None = None
-        last_bodies: list[str] = []
+        last_bodies: list[str] = []  # the last screens' compact forms, for stuck detection
+        volatile: dict[str, set[int]] = {}  # screen signature → lines seen changing on their own
         visits: dict[str, int] = {}  # screen signature -> times seen
         names: dict[str, str] = {}  # screen signature -> readable name
         replans = 0
@@ -222,9 +234,9 @@ class AgentRunner:
                     continue
 
                 # 3. Stuck detection: the same screen three times with no effect.
-                body = _body(screen.compact)
-                last_bodies = (last_bodies + [body])[-3:]
-                if len(last_bodies) == 3 and len(set(last_bodies)) == 1 and no_change_streak >= 2:
+                last_bodies = (last_bodies + [screen.compact])[-3:]
+                vol = volatile.get(screen.signature, set())
+                if len(last_bodies) == 3 and len({_masked(c, vol) for c in last_bodies}) == 1 and no_change_streak >= 2:
                     stuck_recoveries += 1
                     trace.step({"step": step, "kind": "stuck", "recovery": stuck_recoveries,
                                 "action": {1: "feedback", 2: "back"}.get(stuck_recoveries, "fail")})
@@ -384,12 +396,15 @@ class AgentRunner:
                         trace.step(record)
                         continue
 
+                if hasattr(self.device, "peek"):  # what changed by itself while the model was deciding (no renumbering)
+                    volatile.setdefault(screen.signature, set()).update(_volatile(screen, await self.device.peek()))  # type: ignore[attr-defined]
                 t_act = time.perf_counter()
                 result_ = await self.device.act(action)
                 out.steps += 1
                 act_ms = (time.perf_counter() - t_act) * 1000
                 after = await self.device.wait_until_settled()
-                changed = _body(after.compact) != body
+                vol = volatile.get(screen.signature, set())
+                changed = _masked(after.compact, vol) != _masked(screen.compact, vol) if after.signature == screen.signature else True
                 no_change_streak = 0 if changed else no_change_streak + 1
                 record.update({
                     "device_action": action.model_dump(), "result": result_.model_dump(),
