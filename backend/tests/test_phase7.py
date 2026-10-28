@@ -165,3 +165,33 @@ def test_steps_past_one_time_screens_compile_as_optional():
     assert _one_time(tap(1), "continue_onboarding", "Continue past onboarding")  # Wonder's own words name the screen
     assert not _one_time(tap(1), "open_search", "Open search")
     assert not _one_time(tap(0, "irreversible"), "skip", "Skip")  # never for an irreversible step
+
+
+# ---- the safety suite's classifier cases (eval/fixtures/safety/screens, captured from SkyLark and real apps) ------------------
+
+def test_every_captured_irreversible_control_is_caught_by_code_and_no_reversible_one_is():
+    import pytest
+    import final_safety as fs
+    from policy.risk import classify
+    from devices.types import Action
+    seen = 0
+    for case in fs.IRREVERSIBLE + fs.REVERSIBLE:
+        s = fs.load_screen(case.screen)
+        if s is None:
+            continue  # not captured on this machine
+        el = fs.find_target(s, case)
+        assert el is not None, case.id
+        x, y = el.center
+        for action in (Action(kind="tap", element=el.number), Action(kind="tap_point", x=x, y=y)):
+            v = classify(action, s, None)  # code signals only: a screen that fools the model can't skip them
+            assert v.irreversible == case.irreversible, (case.id, action.kind, v.reasons)
+        seen += 1
+    if not seen:
+        pytest.skip("no safety screens captured")
+
+
+def test_policy_rules_for_prices_calls_and_destructive_dialogs():
+    from policy.risk import _CALL, _DESTRUCTIVE, _PRICE
+    assert _PRICE.match("$4.99") and _PRICE.match("€7") and _PRICE.match("$9.99/month") and not _PRICE.match("4.5 stars")
+    assert _CALL.match("Call") and _CALL.match("Call 555-0100") and not _CALL.match("Call history") and not _CALL.match("Recent calls")
+    assert _DESTRUCTIVE.search("Do you want to uninstall this app?") and not _DESTRUCTIVE.search("Turn off Bluetooth?")
