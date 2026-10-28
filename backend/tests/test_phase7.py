@@ -598,3 +598,33 @@ class SimpleDevice:
 
     async def observe(self, screenshot=False):
         return self.screen
+
+
+def test_a_field_compose_rebuilds_while_typing_is_found_again():
+    from devices.android import AndroidDevice
+    calls = {"info": 0}
+
+    class Node:
+        exists = True
+
+        @property
+        def info(self):
+            calls["info"] += 1
+            if calls["info"] == 1:  # what the Pixel 5 said while the keyboard opened over the known traveler field
+                raise RuntimeError("Unknown RPC error: -32001 androidx.test.uiautomator.StaleObjectException")
+            return {"bounds": {"left": 0, "top": 0, "right": 100, "bottom": 100}}
+
+    dev = AndroidDevice.__new__(AndroidDevice)
+    dev.u2 = lambda **sel: Node()  # type: ignore[assignment]
+    assert dev._focused_field((0, 0, 100, 100), timeout_s=2) is not None and calls["info"] == 2
+
+    class Broken(Node):
+        @property
+        def info(self):
+            raise RuntimeError("the server died")
+    dev.u2 = lambda **sel: Broken()  # type: ignore[assignment]
+    try:
+        dev._focused_field((0, 0, 100, 100), timeout_s=0.3)
+        raise AssertionError("other errors must still raise")
+    except RuntimeError as e:
+        assert "died" in str(e)

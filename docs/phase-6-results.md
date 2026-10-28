@@ -1,17 +1,17 @@
 # Phase 6 results: real Android phone and SAM 3.1
 
-Oct 27, 2026 (evening). **Everything except the gate itself is built and measured; the gate waits for the phone** (the IPaT loan arrives Oct 28). The gate is "a routine learned on the emulator runs on the real phone".
+Oct 27, 2026 (evening); the real phone on Oct 28 (evening, in Phase 7). **The gate passed on a real phone**: a Google Pixel 5 on Android 13 (IPaT loan), through the API, with every decision made on the iPhone. The gate is "a routine learned on the emulator runs on the real phone". The phone also found six bugs the stand-in couldn't; all are fixed, with tests (below, "On the real phone").
 
 Until the phone came, an emulator stood in for it (`ENVOY_TEST_PHONE`): the same code path a real phone uses, with no gRPC (frames, taps and screenshots through Envoy's own scrcpy client), the banner app, the physical-touch watcher, routing and asking first. On it, the check-in routine compiled on `envoy-test` ran end to end through the API, and all 6 SkyLark routines passed 12 of 12 with no model calls. Screens with no accessibility tree now work: on 52 targets, SAM 3.1 then grounding found all 52 (grounding alone 92 to 94%, the step model's own coordinates 37%).
 
 Plan: `prompts/phase-6-plan.md`. Results: `eval/results/phase6/`.
 
-## Not finished yet (needs the real phone; carried into Phase 7, `prompts/phase-7.md`)
+## Not finished
 
-- [ ] **The gate:** `skylark_check_in_flight` (compiled on `envoy-test`) runs on the real phone through the API, after Envoy asks; the banner shows; you approve from the iPhone; SkyLark's state hook confirms it; memory updates. Plus `eval/run_phase6.py portability --device phone`.
-- [ ] **Phone measurements:** scrcpy on the phone (start, tap → frame, screenshot time); the live view on the Mac and on the iPhone over the tailnet against the 150 ms target; a takeover; a touch that pauses a run; the banner on that phone's Android skin.
-- [ ] **Answers:** the phone's model and Android version (the design doc's open question); whether the Envoy bridge is needed (only if settling or set-text fail on the phone).
-- [ ] **Optional:** sign-in codes from the notification shade (only with a SIM); a real-app routine from `envoy-real` on the phone (only if the app is there without a sign-in of yours).
+- [x] **The gate** on the real phone (Pixel 5, Android 13), four times through the API; portability and all 10 core routines on it.
+- [x] **Phone measurements:** scrcpy, the live view on the Mac and on the iPhone over the tailnet, a takeover, a touch that pauses a run, the banner on stock Android 13.
+- [x] **Answers:** the phone is a Pixel 5 on Android 13 (Android 15's notification limits don't apply to it, and weren't tested); the Envoy bridge is **not needed** (settling and set-text held on the phone).
+- [ ] **Not done (optional):** sign-in codes from the notification shade. The phone has a SIM, but no service sent it a code tonight, and Envoy doesn't sign in for you. A real-app routine from `envoy-real` on the phone: the phone was set up with no Google account, so it has no Play Store apps.
 
 ## What was built
 
@@ -32,11 +32,45 @@ All of it is Envoy's own code: about 1,700 lines of Python (`backend/devices/`, 
 | Routines on drawn screens | `routines/compiler.py`, `executor.py`, `visual.py` | Such a step compiles to a **visual locator**: what it looks like with inputs as slots ("seat {{new_seat}}"), plus its recorded picture when the target doesn't change with the inputs. Replaying, the executor finds the picture (NumPy FFT cross-correlation, scaled by screen density, accepted only when clear and unique), or looks again (SAM then grounding). |
 | SkyLark variant 6 | `testapps/skylark/.../CanvasSeatMap.kt` | The seat map drawn on a Canvas with no accessibility nodes; the drawn seat rectangles are published in the state hook, so every answer is checked exactly. |
 
-## Results
+## On the real phone (Oct 28)
+
+Google Pixel 5 (`redfin`), Android 13 (API 33, security patch Aug 2022), 1080×2340 at 440 dpi (393×851 dp), Gboard, a SIM; connected over USB, no Google account, no Wi-Fi needed (everything Envoy does goes over the cable; the iPhone reaches the Mac over the tailnet). Results: `eval/results/phase6/phone-*.json`; the device checks are `eval/phone_check.py`, the gate's set-up and record `eval/phone_gate.py`.
 
 | Check | Result |
 | --- | --- |
-| **Gate, on the real phone** | **Waiting for the phone (Oct 28).** Everything it needs ran on the stand-in phone (below). |
+| **The gate** ("Check me in for my flight on my phone", from the iPhone) | **Passed.** Envoy asked to use the Pixel 5 and you allowed it on the iPhone; the banner showed; `skylark_check_in_flight` v1, compiled on `envoy-test`, ran on the phone with no model call; you approved the check-in on the iPhone 4.8 s after it was asked; SkyLark's own state on the phone: Chicago checked in; memory updated (14 same, 1 replaced); 27.2 s end to end, both of your waits included. |
+| A touch that pauses a run | Passed: your touch on the Pixel paused it before the next action (banner "Envoy paused · Resume", reason "you touched the phone"); Resume on the banner finished it (checked in, 32 s). |
+| A takeover from the iPhone | Passed twice: taken over and handed back from the iPhone's live view, with the check-in's approval pending across it; approved once, checked in (32 s and 66 s). The first attempt at this found a bug (below, 5). |
+| Pushes to the iPhone | All 12 delivered: asking for the phone 0.55 to 0.69 s, approvals 0.32 to 0.70 s, Done 0.32 to 0.49 s. |
+| The banner on stock Android 13 | Renders as designed, centred under the status bar, over the app's top bar (pictures: `phone-banner-working.png`, `phone-banner-paused.png`). |
+| scrcpy on the phone | Starts in 0.6 s; a tap shows as a changed frame in **65 ms** (median of 10, max 75); a screenshot from the stream **7.8 ms** (`adb screencap` 358 ms); frames are 590×1280. |
+| Live view of the phone on the Mac (through the API) | 9.1 fps; a frame arrives **5 ms** after capture (median; max 108); 30 KB per frame. |
+| Live view of the phone on the iPhone, over the tailnet | The web app's own measurement on the Home Screen app, 5 windows of 20 s: frame **27 to 39 ms** after capture (median per window), round trip 11 to 16 ms, 32 to 48 KB per frame. Against the 150 ms target: roughly 100 ms from the phone's screen to the iPhone, adding the phone's own 65 ms tap-to-frame. |
+| Reading the screen | Tree read 157 ms, full observation 245 ms (medians; the emulator: 31 and 70 ms). |
+| **Settling** (the bridge question) | 50 taps, 0.9 to 1.4 s to settled. In SkyLark, 0 of 20 changed after settling. In the phone's Settings, 5 of 30 changed a secondary line after settling (a row's summary recomputed on Apps 4 times, a footer once on Battery); battery levels ticking are counted apart. The expected content was on the settled screen in all 50. |
+| **Set-text** (the bridge question) | **20 of 20 exact** ("Café Ñandú 東京 Привет 😀") in a Compose field (SkyLark, 0.75 s) and an Android view (Settings' search, 0.49 s); Gboard stayed the keyboard; nothing touched the clipboard (no "Copied" preview, contents unchanged); Enter submitted the search. |
+| Portability (`run_phase6.py portability --device phone`) | PORTABILITY_RESULT |
+| All 10 core routines (`run_final.py sizes --device phone`) | SIZES_RESULT |
+
+**The bridge: not needed.** It was to be built only if settling or setting text proved unreliable on the phone; both held, and you agreed. Reading is slower than on the emulator (157 ms against 31 ms per tree) but it is one read per step.
+
+### What the phone found, and what changed
+
+1. **Every frame from the phone failed to convert.** The Pixel's encoder labels its video with a colorspace FFmpeg's scaler can't convert (YCgCo, over ordinary BT.601 video). Screenshots silently fell back to `adb screencap` (358 ms) and the live view would have had no frames. Frames whose label can't be converted are converted as BT.601, which matched the phone's own screenshot.
+2. **Envoy's taps under the banner landed on the banner.** The banner is a window above the app, and on the Pixel it sits over the top bar, where the Phone and Messages apps (and Gmail, Maps, Play) put their search boxes. A tap there was swallowed by the pill, and one on the pill's Pause button paused the run as if you had pressed it. A tap inside the pill's bounds now hides it, taps, and shows it again (on the Phone app's search box: before, search didn't open; after, it did).
+3. **A request without "on my phone" failed with a developer's message.** It went, as designed, to the emulator, which wasn't running, and the task said "envoy-test is not running (scripts/start_emulator.sh envoy-test)". It now says the emulator isn't running and that "on my phone" uses your Pixel 5.
+4. **Pauses and takeovers weren't in the task's history.** The status changed and nothing was written, so a pause showed only as a 7 s gap between steps. Each pause, resume, takeover and hand back is now an entry.
+5. **A takeover taught the routine a wrong step.** The check-in's approval was pending while you took over; after the hand back you approved, but the tap didn't take effect (the same screen, the same button: the cause is unknown; it didn't happen again in later runs). The routine's repair tapped again, which asked you a second, identical time, and the repair became version 2 on trial: "an extra screen appeared; a second tap on Confirm check-in". Version 2 was rejected by hand, and now a run you took over or paused teaches the routine nothing (no patch, no trial decided); an approval asked again for a control you already approved says why on the card; and every tap on the phone is logged (point, input path, stream age) in `logs/phone_taps.jsonl` so a lost tap can be traced.
+6. **Back-to-back attempts met a finished check-in.** Not a product bug: SkyLark is reset between evaluation runs, and your retries right after a finished run found Chicago already checked in, so you stopped them. The gate's script now resets SkyLark a few seconds after any run ends.
+
+### Who uses which phone
+
+iPhone users use Envoy's emulators; Android users use an emulator or their own phone. The gate is the second path, not a requirement for everyone. The limits, plainly: you sign in to each app once on the emulator; apps that refuse emulators (Target's bot check, banking apps) need a real Android phone, so they are out of reach for someone with only an iPhone; the emulators run on a Mac today (a cloud host later).
+
+## Results (emulators and the stand-in, Oct 27)
+
+| Check | Result |
+| --- | --- |
 | Routine portability, `envoy-small` (720×1280, 320 dpi) vs `envoy-test` (1080×2400, 420 dpi) | **18 of 18 on each, no model calls** (6 SkyLark routines × 3 bookings never seen). Median 5.0 s vs 3.6 s. Before the fixes, the first try on the small screen needed the full agent once (18 calls, $0.055): the Known Traveler field was below the fold. |
 | The phone code path (stand-in, no gRPC) | **12 of 12, no model calls** (6 routines × 2 bookings); 4 to 23 s per run. |
 | End to end through the API (stand-in) | "Check me in for my flight" with your phone chosen: asked, allowed, banner shown, `skylark_check_in_flight` (compiled on `envoy-test`) ran, a touch right after the first step paused it before the next action (task "taken over", banner "Resume", SkyLark not checked in 3 s later), Resume on the banner finished it: checked in, memory updated, banner gone; 13 s. |
@@ -59,7 +93,8 @@ All of it is Envoy's own code: about 1,700 lines of Python (`backend/devices/`, 
 
 ## Honest limits
 
-- **The real phone hasn't been used yet.** Everything above ran on emulators; on a phone, frames are black on secure screens, input latency and encoding differ, and Samsung or Xiaomi skins can behave differently. The gate and its numbers come on Oct 28.
+- **One real phone, one evening.** A Pixel 5 on stock Android 13. Samsung or Xiaomi skins, Android 14 and 15, and other encoders weren't tried; the frame-colorspace bug (finding 1 above) is the kind of thing another phone could add.
+- **One approved tap didn't take effect, and the cause is unknown.** It came right after a takeover with an approval pending; it didn't recur in three later runs. The repair caught it safely (it asked again), and taps are now logged to find the cause if it happens again.
 - **Drawn targets cost a look each time** (about $0.0075 and 3 to 8 s): the replay is no longer free when a step depends on its input. A fixed target (a map pin with a logo) replays from its picture with no call.
 - **SAM's latency varies with the number of candidates**: one agent step took 15 s with 84 boxes to choose from.
 - **The real-app vision targets have trees.** Their truth came from the tree while the methods saw only the picture; the truly drawn targets are SkyLark's. Chipotle's map store picker wasn't scored.
@@ -76,5 +111,4 @@ For the design doc (applied in both copies):
 
 ## Next
 
-- **You (Oct 28):** plug the phone in by USB, unlock it, and tap **Allow** on "Allow USB debugging?" (tick "Always allow from this computer"). On a Samsung, Settings → Security → Auto Blocker off first. Then tell me its model and Android version; I'll run the gate, and you'll approve the check-in on your iPhone.
-- **Phase 7:** evaluation (the core set, the baselines, real-app tasks), the demo video, the write-up, and making the repo public (your call).
+- **Phase 7:** the final evaluation on the frozen commit (Nov 2) includes all 10 core routines on the phone again if it is still on loan (`run_final.sh` runs `sizes --device phone` when a phone is connected).

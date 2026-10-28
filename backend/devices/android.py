@@ -40,6 +40,12 @@ def adb(serial: str, *args: str, timeout: float = 30, check: bool = False) -> su
     return subprocess.run([_adb_path(), "-s", serial, *args], capture_output=True, text=True, timeout=timeout, check=check)
 
 
+def _stale(e: Exception) -> bool:
+    """uiautomator2's node went stale between finding it and using it: Compose rebuilt it (the Pixel 5, typing a known
+    traveler number while the keyboard opened). Looking it up again finds the new one."""
+    return "StaleObjectException" in str(e)
+
+
 class AndroidDevice:
     def __init__(self, serial: str, device_id: str | None = None) -> None:
         self.id = device_id or serial
@@ -212,11 +218,15 @@ class AndroidDevice:
         cx, cy = (x1 + x2) // 2, (y1 + y2) // 2
         deadline = time.time() + timeout_s
         while time.time() < deadline:
-            node = self.u2(focused=True)
-            if node.exists:
-                b = node.info.get("bounds", {})
-                if b.get("left", -1) <= cx <= b.get("right", -1) and b.get("top", -1) <= cy <= b.get("bottom", -1):
-                    return node
+            try:
+                node = self.u2(focused=True)
+                if node.exists:
+                    b = node.info.get("bounds", {})
+                    if b.get("left", -1) <= cx <= b.get("right", -1) and b.get("top", -1) <= cy <= b.get("bottom", -1):
+                        return node
+            except Exception as e:  # noqa: BLE001
+                if not _stale(e):
+                    raise
             time.sleep(0.1)
         return None
 
@@ -239,11 +249,17 @@ class AndroidDevice:
         def norm(v: str) -> str:
             return "".join(v.split()).casefold()
 
-        for _ in range(2):
-            node.set_text(text)
-            time.sleep(0.15)
-            if norm(node.get_text() or "") == norm(text):
-                return
+        for _ in range(3):
+            try:
+                node.set_text(text)
+                time.sleep(0.15)
+                if norm(node.get_text() or "") == norm(text):
+                    return
+            except Exception as e:  # noqa: BLE001
+                if not _stale(e):
+                    raise
+                time.sleep(0.15)
+                node = self._focused_field(el.bounds) or node
         # Fields may reformat input (upper-casing a code, dropping symbols); the next observation shows the result.
 
     def _act_sync(self, a: Action) -> ActionResult:
