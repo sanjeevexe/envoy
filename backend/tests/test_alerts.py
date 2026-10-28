@@ -396,3 +396,112 @@ def test_the_scheduler_keeps_an_alert_setting_saved_during_its_check():
     s.sched.tick()
     spec = s.store.trigger(trig["id"])["spec"]
     assert spec["alert"] is True and spec["after_seq"] == s.mem.events(kind="fact_replaced")[-1]["seq"]
+
+
+# ---- cursors and memory profiles: triggers are shared, memory databases are not ------------------
+
+
+def boot(store, mem, started):
+    """The API starting on this memory database, with the triggers it already had."""
+    def start(goal, src, **kw):
+        started.append(goal)
+        return store.create(goal, src)
+    return Scheduler(store, mem, start, SimpleNamespace(publish=lambda *a, **k: None))
+
+
+def flight_in(mem):
+    src = mem.add_source("email", {"subject": "Your trip", "from": "SkyLark Air <trips@skylark.example>"})
+    flight = mem.create_entity("Flight")
+    mem.observe(flight, "number", "SL 482", source=src)
+    mem.observe(flight, "depart_time", "6:10 AM", source=src)
+    return flight, src
+
+
+DEPARTURE = ("fact_changed", "departure moved", {"entity_type": "Flight", "attribute": "depart_time"}, {"goal": "now {change.new}"})
+
+
+def test_fact_changed_trigger_after_a_profile_switch_neither_replays_nor_stays_silent(tmp_path):
+    store, started = TaskStore(":memory:"), []
+    demo, real = MemoryStore(tmp_path / "demo" / "memory.db"), MemoryStore(tmp_path / "memory.db")
+    (df, dsrc), (rf, rsrc) = flight_in(demo), flight_in(real)
+    for i in range(20):  # your own memory has the longer log
+        real.observe(rf, "depart_time", f"7:{i:02d} AM", source=rsrc)
+    trig = boot(store, demo, started).add(*DEPARTURE)
+    assert trig["spec"]["after_seq"] < real.events()[-1]["seq"]
+
+    on_real = boot(store, real, started)  # restarted on the other profile
+    assert on_real.tick() == [] and started == []  # its changes past demo's cursor are old: not replayed
+    real.observe(rf, "depart_time", "8:00 AM", source=rsrc)
+    assert len(on_real.tick()) == 1 and started == ["now 8:00 AM"]
+    real_cursor = store.trigger(trig["id"])["spec"]["after_seq"]
+
+    demo.observe(df, "depart_time", "6:20 AM", source=dsrc)  # demo changed while nothing watched it
+    on_demo = boot(store, demo, started)  # and back
+    assert on_demo.tick() == [] and len(started) == 1
+    back = store.trigger(trig["id"])
+    assert back["spec"]["after_seq"] == demo.events()[-1]["seq"] < real_cursor and back["fired"] == []
+    demo.observe(df, "depart_time", "6:30 AM", source=dsrc)  # below real's cursor, and it still fires
+    assert demo.events()[-1]["seq"] < real_cursor
+    assert len(on_demo.tick()) == 1 and started[-1] == "now 6:30 AM"
+
+
+def test_restarting_on_the_same_memory_keeps_the_cursor(tmp_path):
+    store, started = TaskStore(":memory:"), []
+    mem = MemoryStore(tmp_path / "memory.db")
+    flight, src = flight_in(mem)
+    boot(store, mem, started).add(*DEPARTURE)
+    mem.observe(flight, "depart_time", "6:20 AM", source=src)  # written after its last check, before it stopped
+    assert len(boot(store, MemoryStore(tmp_path / "memory.db"), started).tick()) == 1 and started == ["now 6:20 AM"]
+
+
+def test_a_rebuilt_memory_database_starts_the_cursor_again(tmp_path):
+    """scripts/demo_setup.py deletes the demo memory and builds it again: a new log at the same path."""
+    path, store, started = tmp_path / "demo" / "memory.db", TaskStore(":memory:"), []
+    old = MemoryStore(path)  # kept open, so its file can't pass its inode on
+    flight_in(old)
+    trig = boot(store, old, started).add(*DEPARTURE)
+    path.unlink()
+    new = MemoryStore(path)
+    flight, src = flight_in(new)
+    for t in ("6:20 AM", "6:30 AM", "6:40 AM"):
+        new.observe(flight, "depart_time", t, source=src)  # the rebuild's own changes, past the old cursor
+    assert new.events()[-1]["seq"] > trig["spec"]["after_seq"]
+    on_new = boot(store, new, started)
+    assert on_new.tick() == []
+    new.observe(flight, "depart_time", "6:50 AM", source=src)
+    assert len(on_new.tick()) == 1 and started == ["now 6:50 AM"]
+
+
+def test_a_trigger_saved_before_cursors_named_their_database_starts_from_now():
+    store, started, mem = TaskStore(":memory:"), [], MemoryStore(":memory:")
+    flight, src = flight_in(mem)
+    mem.observe(flight, "depart_time", "6:20 AM", source=src)
+    store.add_trigger("fact_changed", "departure moved", {"entity_type": "Flight", "attributes": ["depart_time"], "after_seq": 0}, {"goal": "now {change.new}"})
+    sched = boot(store, mem, started)
+    assert sched.tick() == []
+    mem.observe(flight, "depart_time", "6:30 AM", source=src)
+    assert len(sched.tick()) == 1 and started == ["now 6:30 AM"]
+
+
+def test_email_trigger_after_a_profile_switch_neither_replays_nor_stays_silent(tmp_path):
+    store, started = TaskStore(":memory:"), []
+    demo, real = MemoryStore(tmp_path / "demo" / "memory.db"), MemoryStore(tmp_path / "memory.db")
+
+    def mail(mem, subject):
+        mem.add_source("email", {"from": "SkyLark Air <trips@skylark.example>", "subject": subject})
+        return mem.db.execute("select max(rowid) from sources").fetchone()[0]
+    mail(demo, "Booked")
+    for i in range(10):
+        mail(real, f"Booked {i}")
+    trig = boot(store, demo, started).add("email", "new SkyLark booking", {"sender_contains": "skylark"}, {"goal": "new booking"})
+
+    on_real = boot(store, real, started)
+    assert on_real.tick() == []  # real's earlier mail isn't replayed
+    mail(real, "Booked again")
+    assert len(on_real.tick()) == 1
+    real_cursor = store.trigger(trig["id"])["spec"]["after_rowid"]
+
+    on_demo = boot(store, demo, started)
+    assert on_demo.tick() == [] and store.trigger(trig["id"])["fired"] == []
+    assert mail(demo, "Booked on demo") < real_cursor  # below real's cursor, and it still fires
+    assert len(on_demo.tick()) == 1 and len(started) == 2
