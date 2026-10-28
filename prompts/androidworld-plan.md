@@ -158,3 +158,13 @@ Cross-cutting: a Clock timer left running by an earlier task ticks on the home s
 **Fixes, one commit each, all general** (none names a task, an app's screens or an answer): (1) open apps by name, the planner sees the phone's apps; (2) screen lines that change by themselves are not progress; (3) history without the model's expected text; (4) SCREEN says when the keyboard is open, back is explained, an action the model itself calls a placeholder is asked again; (5) done once the screen shows it, answers in the goal's format, a second done accepted; (6) stuck recoveries start afresh after progress; (7) the phone's date to plan and steps; (8) long text at length; (9) a routine-compiler bug on main (swipes compiled as launches, launches dropped); (10) expected_result before the action in the step schema. Harness: hide android_env's pointer overlay as AndroidWorld's agents do; count rejected dones.
 
 **Order of measurement:** merge main into the branch (the fixes are proposed against current main); dev half on the Contributor tier with the fixes, compared with the Contributor baseline's dev half; iterate on dev only; then all 116 on the standard tier, reported by half against the standard baseline. A held-out gain is the evidence for a merge; a dev-only gain is flagged as such.
+
+## Rounds 2–3 and the final set (Oct 28, 09:05, written while round 3 runs, before its result)
+
+- **Round 1** (fixes 1–9, `4c3c989`): dev 27/58 against the Contributor baseline's 13 (+16 −2, p = 0.0013).
+- **Round 2** (+10b, `598a6cd`): dev 25/58, against 27 for round 1 (+2 −4, p = 0.69). Back fell from 13% to 8% of actions; no score effect I can measure. Kept: it repairs how the step is written, and nothing in the traces shows harm.
+- **Round 3** (+11 working memory, `23a845d`; +4b keyboard from the navigation bar, `a80b976`) is running on dev now.
+
+**Rule for the final set, fixed before round 3's result:** the final re-measure runs the branch as it stands after round 3, unless round 3 is clearly worse than round 2 on dev: at least 4 more tasks lost than gained, or a mechanism in the traces that the change introduced (for example, steps spent writing memory instead of acting, or the keyboard line shown with no keyboard up). In that case the change responsible is reverted, in its own commit, and the final set is round 2 plus whatever of round 3 is not implicated. No round 4 on dev: further dev iteration would fit the dev half, and the held-out half is what's left to measure.
+
+**Final re-measure:** all 116 on the standard tier, seed 30, pass@1, one run (stage `final-standard`), compared by half against `baseline-standard`. The held-out half is the estimate; dev is reported beside it and labelled as the half the fixes were chosen on.
