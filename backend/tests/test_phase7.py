@@ -461,3 +461,23 @@ def test_the_top_result_for_an_entered_term_is_read_by_its_place():
     assert extract_value(ex, trace, {"search_query": "lofi hip hop"}) == "lofi hip hop radio .. beats to relax/study to"
     other = results("pasta carbonara recipe", ["The BEST Carbonara | Gennaro Contaldo - 1 million views", "Pasta 101 - 3 videos"])
     assert extract_value(ex, other, {"search_query": "pasta carbonara recipe"}) == "The BEST Carbonara | Gennaro Contaldo"
+
+
+def test_emoji_match_the_dump_and_ads_are_skipped_only_when_the_agent_skipped_them():
+    from routines.compiler import TStep, _extract_for
+    from routines.screens import contains_value, screen_from_tree
+    assert contains_value("lofi hip hop radio .. beats to relax/study to", "lofi hip hop radio 📚 beats")  # the dump writes ".."
+
+    def results(rows: list[str]):
+        els = [{"index": 0, "parent": None, "number": 1, "kind": "List", "class": "androidx.recyclerview.widget.RecyclerView",
+                "scrollable": True, "bounds": [0, 250, 1080, 2400]}]
+        for i, lab in enumerate(rows):
+            els.append({"index": len(els), "parent": 0, "number": len(els) + 1, "kind": "Button", "class": "android.view.View",
+                        "clickable": True, "in_list": True, "label": lab, "desc": lab, "bounds": [0, 260 + 700 * i, 1080, 900 + 700 * i]})
+        return screen_from_tree({"package": "com.google.android.youtube", "activity": "Shell", "width": 1080, "height": 2400, "elements": els})
+    trace = results(["Sponsored - Am I The Only One - 23 seconds", "lofi hip hop radio .. beats to relax/study to - Lofi Girl"])
+    term = results(["lofi hip hop"]).numbered[1]
+    picked = [TStep(n=1, kind="tap", before=trace, after=trace, target=term)]
+    ex = _extract_for("first_video_title", "", "lofi hip hop radio 📚 beats to relax/study to", trace, {"search_query": "lofi hip hop"}, [], picked)
+    assert ex is not None and ex.first_row and ex.skip_ads  # the agent passed the ad, so the routine does too
+    assert extract_value(ex, trace, {}) == "lofi hip hop radio .. beats to relax/study to"
