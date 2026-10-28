@@ -18,6 +18,7 @@ from mcp.server.mcpserver import MCPServer
 from mcp.server.transport_security import TransportSecuritySettings
 from mcp_types import ToolAnnotations
 
+from api.crossapp import lead, may_span_apps
 from memory.retrieval import Retriever
 from memory.service import MemoryService
 
@@ -53,11 +54,22 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> MCPServer:
     base = base or public_base(port)
 
     @server.tool(annotations=ToolAnnotations(title="Run a task on the user's phone", readOnlyHint=False, destructiveHint=False, openWorldHint=True))
-    def run_task(goal: str) -> dict:
+    async def run_task(goal: str) -> dict:
         """Ask Envoy to do something in one of the user's phone apps, e.g. "check me in for my flight".
 
         Returns a task ID; follow it with get_task. Irreversible steps wait for the user's approval (share the approve_url).
         """
+        # A question that needs two or more apps becomes one task with a part per app, as in chat (api/crossapp.py).
+        cross = getattr(ctx.runner, "crossapp", None)
+        if cross is not None and may_span_apps(goal):
+            try:
+                split, _ = await lead(goal, ctx.adapter, ctx.routines)
+            except Exception:  # noqa: BLE001 - the lead is an extra step: the task starts as before
+                split = None
+            if split is not None:
+                task = cross.start(goal, split, "mcp")
+                return {"task_id": task["id"], "status": task["status"], "task_url": f"{base}/?task={task['id']}",
+                        "parts": [p.label for p in split.parts]}
         task = ctx.runner.start(goal, "mcp")
         return {"task_id": task["id"], "status": task["status"], "task_url": f"{base}/?task={task['id']}"}
 

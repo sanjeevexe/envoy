@@ -7,6 +7,7 @@ the phone is a fake that sleeps, so two parts on two phones can be seen overlapp
 from __future__ import annotations
 
 import asyncio
+import json
 import time
 from types import SimpleNamespace
 
@@ -14,6 +15,7 @@ import pytest
 from PIL import Image
 
 import api.runner as runner_mod
+from agent.trace import TraceWriter
 from api.chat import chat
 from api.crossapp import (CombinedAnswer, CrossApp, LeadInput, LeadPart, LeadSplit, Part, Split, apps_in, built_answer, check_split,
                           may_span_apps, verified)
@@ -62,6 +64,8 @@ def screen(pkg: str | None = None) -> SimpleNamespace:
 
 
 class Phone:
+    frame_s = 0.0  # how long a screenshot takes (on an emulator, a gRPC call)
+
     def __init__(self) -> None:
         self.pkg: str | None = None
 
@@ -75,6 +79,7 @@ class Phone:
         return screen(self.pkg)
 
     def frame(self, width, timeout=5):
+        time.sleep(self.frame_s)
         return Image.new("RGB", (width, width * 2))
 
 
@@ -112,6 +117,7 @@ class Pool:
 # What each app's routine does on its phone: (seconds, outputs, status, asks for an approval)
 WORK: dict[str, tuple] = {}
 SPANS: list[tuple[str, float, float]] = []
+TRACED: dict[str, int] = {}  # app → how many steps its routine traces (each gets a screenshot)
 
 
 class FakeExecutor:
@@ -125,7 +131,13 @@ class FakeExecutor:
             req = ApprovalRequest(task_id, "goal", routine.app, 'Tap "Place order"', ["irreversible"], "screen", target="Place order")
             if not (await asyncio.to_thread(self.approver.request, req)).approved:
                 status = "declined"
-        await asyncio.sleep(delay)
+        steps = TRACED.get(routine.app, 0)
+        for i in range(steps):
+            for listen in list(TraceWriter.listeners):
+                listen(task_id, {"kind": "action", "decision": {"action": {"type": "tap"}}, "target": {"label": f"step {i + 1}"}})
+            await asyncio.sleep(delay / steps)
+        if not steps:
+            await asyncio.sleep(delay)
         SPANS.append((routine.app, t0, time.time()))
         return SimpleNamespace(status=status, detail="all steps and checks passed" if status == "done" else status,
                                outputs=outputs if status == "done" else {}, model_calls=0, cost_at_standard_usd=0.0)
@@ -139,6 +151,7 @@ def fake_phone_work(monkeypatch, tmp_path):
     monkeypatch.setattr(runner_mod, "SHOTS", tmp_path / "shots")
     WORK.clear()
     SPANS.clear()
+    TRACED.clear()
     WORK.update({SKYLARK: (0.5, {"gate": "B22"}, "done", False), SB: (0.5, {"calories": "190"}, "done", False),
                  DD: (0.5, {"first_restaurant_name": "Philz Coffee"}, "done", False)})
 
@@ -197,7 +210,7 @@ class SpyRunner:
 
     def start(self, goal, source, **kw):
         self.started.append((goal, source, kw))
-        return {"id": f"task-{len(self.started)}", "goal": goal}
+        return {"id": f"task-{len(self.started)}", "goal": goal, "status": "queued"}
 
 
 class SpyCross:
@@ -206,7 +219,7 @@ class SpyCross:
 
     def start(self, message, split, source, **kw):
         self.calls.append((message, split, source))
-        return {"id": "task-parent", "goal": message, "kind": "crossapp"}
+        return {"id": "task-parent", "goal": message, "kind": "crossapp", "status": "running"}
 
 
 def chat_adapter(lead_reply=None):
@@ -560,3 +573,77 @@ def test_a_screen_is_named_by_its_activity_or_else_its_title():
     assert screen_name(SimpleNamespace(activity="com.dd.DashboardActivity", numbered=[])) == "DashboardActivity"
     obfuscated = SimpleNamespace(activity="com.starbucks.dIu", numbered=[el("9:41", bar=True), el("Back", "Button"), el("Caffè Latte")])
     assert screen_name(obfuscated) == 'the "Caffè Latte" screen'
+
+
+# ---- pushes, screenshots and MCP -------------------------------------------------------------------------
+
+
+def test_a_cross_app_question_pushes_once_with_its_answer(tmp_path):
+    from api.push import Pusher, VapidKeys
+
+    async def scenario():
+        r, cross, _ = make()
+        pusher = Pusher(r.store, VapidKeys(tmp_path), "https://envoy.example", send=lambda *a, **k: None)
+        sent = []
+        pusher.notify = lambda kind, title, body, path, **kw: sent.append((kind, title, path))  # type: ignore[method-assign]
+        r.bus.listeners.append(pusher.on_event)
+        parent = cross.start("Gate and calories?", Split(parts(SKYLARK, SB)), "chat")
+        await finish(r, parent["id"])
+        one = r.start("How many calories are in a Caffè Latte at Starbucks?", "chat", app=SB)
+        await asyncio.wait_for(asyncio.shield(r.jobs[one["id"]]), 10)
+        return parent["id"], one["id"], sent
+    pid, tid, sent = asyncio.run(scenario())
+    # The parts are quiet; the parent's answer pushes, and a task on its own still does.
+    assert [(k, path) for k, _, path in sent] == [("task", f"/?task={pid}"), ("task", f"/?task={tid}")]
+    assert sent[0][1] == "Done: Gate and calories?"
+
+
+def test_step_screenshots_never_hold_up_the_other_phone(monkeypatch):
+    """Each traced step takes a screenshot (0.15 s here, a gRPC call on an emulator). Taken on the event loop, six of
+    them would stall both parts by 0.9 s; taken in a thread, the parts still overlap. Steps keep their order."""
+    monkeypatch.setattr(Phone, "frame_s", 0.15)
+    TRACED.update({SKYLARK: 3, SB: 3})
+
+    async def scenario():
+        r, cross, _ = make()
+        t0 = time.time()
+        parent = cross.start("What's my gate, and how many calories are in a Caffè Latte at Starbucks?", Split(parts(SKYLARK, SB)), "chat")
+        await finish(r, parent["id"])
+        return r, parent["id"], time.time() - t0
+    r, pid, wall = asyncio.run(scenario())
+    assert len(SPANS) == 2 and spans_overlap(*SPANS) > 0.4
+    assert wall < 0.85
+    for kid in (t for t in r.store.list() if t.get("parent") == pid):
+        taps = [s for s in r.store.steps(kid["id"]) if s["kind"] == "action"]
+        assert [s["text"] for s in taps] == ['tap "step 1"', 'tap "step 2"', 'tap "step 3"']
+        assert all(s.get("shot") for s in taps) and kid["status"] == "done"
+    assert r.pending_steps == {}
+
+
+def test_mcp_run_task_asks_the_lead_for_a_cross_app_question():
+    from mcp_server.server import build_mcp
+    message = "How many calories are in a Caffè Latte at Starbucks, and what's the first place DoorDash shows for a latte?"
+    split = LeadSplit(multi_app=True, relation="separate", parts=[
+        LeadPart(app="starbucks", label="Caffè Latte calories", goal="Check how many calories are in a Caffè Latte at Starbucks",
+                 inputs=[LeadInput(name="drink_name", value="Caffè Latte")]),
+        LeadPart(app="doordash", label="first latte place", goal="Search DoorDash for latte and report the first restaurant", inputs=[])])
+
+    def run(goal, lead_reply):
+        cross = SpyCross()
+        runner = SpyRunner(cross)
+        adapter = FakeAdapter({"lead": lead_reply})
+        server = build_mcp(SimpleNamespace(runner=runner, adapter=adapter, routines=Routines()), 8713, base="https://envoy.example")
+        res = asyncio.run(server.call_tool("run_task", {"goal": goal}))
+        return json.loads(res.content[0].text), adapter.jobs, runner.started, cross.calls
+
+    out, jobs, started, calls = run(message, split)
+    assert jobs == ["lead"] and started == [] and out["task_id"] == "task-parent"
+    (msg, got, source), = calls
+    assert msg == message and source == "mcp" and [p.app for p in got.parts] == [SB, DD]
+    assert out["parts"] == ["Caffè Latte calories", "first latte place"]
+    # One app: no lead call, the task starts as before; a failing lead: the same.
+    out, jobs, started, calls = run("Check me in for my flight to Chicago", AssertionError("the lead must not be called"))
+    assert jobs == [] and calls == [] and [s[:2] for s in started] == [("Check me in for my flight to Chicago", "mcp")]
+    assert "parts" not in out
+    out, jobs, started, calls = run(message, RuntimeError("timeout"))
+    assert jobs == ["lead"] and calls == [] and len(started) == 1
