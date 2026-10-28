@@ -109,11 +109,12 @@ def diff(parent: Routine, child: Routine) -> list[dict[str, Any]]:
     """What a version changed against its parent, step by step, with each changed part before and after."""
     old = {s.id: s for s in parent.steps}
     out: list[dict[str, Any]] = []
-    for s in child.steps:
+    for i, s in enumerate(child.steps):
         base = {"step": s.id, "intent": s.intent}
         p = old.get(s.id)
         if p is None:
-            out.append({**base, "kind": "inserted", "what": "New step", "before": None, "after": step_view(s)})
+            out.append({**base, "kind": "inserted", "what": "New step", "before": None, "after": step_view(s),
+                        "follows": child.steps[i - 1].intent if i else None})
             continue
         if p.action.model_dump(exclude={"target"}) != s.action.model_dump(exclude={"target"}):
             out.append({**base, "kind": "action", "what": "What it does", "before": action_view(p.action), "after": action_view(s.action)})
