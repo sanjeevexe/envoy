@@ -598,15 +598,23 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     def get_phone_settings() -> dict[str, Any]:
         from api.routing import EMULATOR_REFUSED
         from api.runner import APP_NAMES
-        apps = sorted({r.app for r in routines.active()} | set(APP_NAMES.values()))
+        learned = tasks.setting("phone_apps_learned", {}) or {}
+        installed = tasks.setting("apps_installed", {}) or {}
+        apps = sorted({r.app for r in routines.active()} | set(APP_NAMES.values()) | set(learned) | set(installed))
+        names = {**{p: n.title() for n, p in APP_NAMES.items()}, **{p: a.get("name") for p, a in installed.items()},
+                 **EMULATOR_REFUSED, **{p: a.get("name") for p, a in learned.items()}}
         return {"phone_apps": tasks.setting("phone_apps", []) or [], "apps": apps, "emulator_refused": EMULATOR_REFUSED,
+                "learned": learned, "names": {p: n for p, n in names.items() if n},
                 "phones": [d for d in pool.status() if d["kind"] == "phone"]}
 
     @app.post("/api/settings/phones", dependencies=[Depends(session)])
     def set_phone_settings(body: dict[str, Any] = Body(...)) -> dict[str, Any]:
         apps = [str(a) for a in body.get("phone_apps") or [] if isinstance(a, str)][:50]
         tasks.set_setting("phone_apps", apps)
-        return {"phone_apps": apps}
+        # An app Envoy set to your phone (it blocked the emulator) that you untick goes back to the emulator for good.
+        learned = {p: a for p, a in (tasks.setting("phone_apps_learned", {}) or {}).items() if p in apps}
+        tasks.set_setting("phone_apps_learned", learned)
+        return {"phone_apps": apps, "learned": learned}
 
     # ---- routines and triggers -----------------------------------------------------------------
 

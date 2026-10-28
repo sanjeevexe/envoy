@@ -1,0 +1,30 @@
+{
+ "label": "today",
+ "serial": "emulator-5556",
+ "install_on_demand": false,
+ "runs": [
+  {
+   "goal": "In the Wikipedia app, search for Eiffel Tower and tell me the year it opened.",
+   "task_id": "task-1028-181137-b21a",
+   "time": "2026-10-28T22:11:37+00:00",
+   "status": "failed",
+   "result": null,
+   "detail": "The emulator for this app (envoy-test) isn't running right now. Start it (scripts/start_emulator.sh envoy-test) and ask again.",
+   "app": null,
+   "kind": "agent",
+   "device": null,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 0.0,
+   "steps": [
+    {
+     "t": 0.0,
+     "kind": "error",
+     "text": "The emulator for this app (envoy-test) isn't running right now. Start it (scripts/start_emulator.sh envoy-test) and ask again."
+    }
+   ],
+   "events": [],
+   "installed_after": null
+  }
+ ]
+}
