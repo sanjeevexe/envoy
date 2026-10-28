@@ -135,11 +135,17 @@ def _send_grpc_port(wrapper) -> None:
 
 
 def restore_forwarder(env, timeout_s: float = 30) -> float:
-    """Re-enable the forwarder and give it the host port and tree logging, with no other change to the phone.
-    Returns seconds until AndroidWorld reads the screen again; raises if it doesn't (the episode records it)."""
+    """Re-enable the forwarder and give it the host port and tree logging, with no other change to the phone, then wait
+    until AndroidWorld reads a real screen: the forwarder's first tree after a restart is empty (measured: 0 elements,
+    then 18 a few seconds later), and AndroidWorld's screen-based checks would score that empty screen.
+    Returns seconds until two successive reads are non-empty; raises if that doesn't happen in time."""
     import time
 
-    from android_world.env import android_world_controller
+    from android_world.env import android_world_controller, representation_utils
+
+    def read() -> list:
+        forest = android_world_controller.get_a11y_tree(wrapper, max_retries=1, sleep_duration=0.5)
+        return representation_utils.forest_to_ui_elements(forest, exclude_invisible_elements=True)
 
     t0 = time.time()
     last = "no tree yet"
@@ -150,10 +156,14 @@ def restore_forwarder(env, timeout_s: float = 30) -> float:
         _send_grpc_port(wrapper)
         wrapper._enable_a11y_tree_logs()  # noqa: SLF001
         deadline = time.time() + timeout_s / 2
+        prev = None
         while time.time() < deadline:
             try:  # AndroidWorld's own tree read, without the controller's fallback (refresh_env re-enables networking)
-                if android_world_controller.get_a11y_tree(wrapper, max_retries=1, sleep_duration=0.5):
+                els = read()
+                if els and prev:  # two non-empty reads in a row (a running stopwatch never reads the same twice)
                     return time.time() - t0
+                prev = els or None
+                last = f"{len(els)} elements"
             except Exception as e:  # noqa: BLE001 - not ready yet
                 last = f"{type(e).__name__}: {e}"
             time.sleep(0.5)

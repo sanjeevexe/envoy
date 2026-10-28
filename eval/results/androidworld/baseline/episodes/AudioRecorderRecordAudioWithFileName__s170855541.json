@@ -1,0 +1,83 @@
+{
+ "task": "AudioRecorderRecordAudioWithFileName",
+ "seed": 170855541,
+ "goal": "Record an audio clip and save it with name \"presentation_fGwr.m4a\" using Audio Recorder app.",
+ "score": 1.0,
+ "aw_run_time_s": 50.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-27 22:48:16.254446",
+ "envoy": {
+  "run_id": "aw-baseline-1027-224728-47fb",
+  "goal": "Record an audio clip and save it with name \"presentation_fGwr.m4a\" using Audio Recorder app.",
+  "max_steps": 20,
+  "config": {},
+  "status": "done",
+  "result": "Recorded audio clip and saved as presentation_fGwr.m4a (0.03 Mb, M4a, 2 seconds) in Audio Recorder",
+  "done": true,
+  "answer": "Recorded audio clip and saved as presentation_fGwr.m4a (0.03 Mb, M4a, 2 seconds) in Audio Recorder",
+  "steps_device": 12,
+  "iterations": 13,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 4,
+   "swipe": 1,
+   "tap": 6,
+   "type": 1,
+   "done": 1
+  },
+  "model_calls": 14,
+  "input_tokens": 33513,
+  "cached_tokens": 23357,
+  "output_tokens": 2052,
+  "reasoning_tokens": 1183,
+  "cost_usd": 0.001473,
+  "cost_at_standard_usd": 0.02492,
+  "duration_s": 43.82,
+  "model_s": 23.58,
+  "device_s": 20.24,
+  "connect_s": 0.87,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": null,
+   "subgoals": [
+    "Open the Audio Recorder app",
+    "Start a new audio recording",
+    "Stop the recording",
+    "Save the file with name presentation_fGwr.m4a"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "presentation_fGwr.m4a",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'presentation_fGwr.m4a' is visible"
+  },
+  "trace_dir": "data/runs/aw-baseline-1027-224728-47fb",
+  "envoy_commit": "0037c863bb3197052e3d5f160d61c7c1fac61c12",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/AudioRecorderRecordAudioWithFileName__s170855541.jsonl.gz",
+  "wall_s": 46.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.1
+  }
+ }
+}
