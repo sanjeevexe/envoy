@@ -75,6 +75,11 @@ library, to check that b and c cost no recoveries. 50 experiments, 134 runs, all
 | 4: hidden IDs | 10/10 | relaxed ×7, nothing ×3 | 0 | **0** | 10/10 | – | **7** | 8 patched (8/8): no-op copies |
 | 5: renamed + hidden IDs | 10/10 | relaxed ×6, local repair ×2, nothing ×2 | 3 | 8 (8/8) | 10/10 | 8/8 | 0 | same |
 
+After the real-app pass refined b (a relaxed match is turned down only by evidence against the screen, `265177e`), the
+suite was run again on that code (`change_variants_final.json` for layouts 1–3, `change_variants_final_L45.json` for 4–5;
+the first file stopped at layout 4 when an `adb content read` of SkyLark's state failed once). The table is identical
+on every layout: 50/50, 134 runs, 4 model calls, $0.015.
+
 The one difference is c working: at layout 4 a relaxed match "updates" a locator to what it already was (the hidden ID
 is kept), which Phase 7 saved as 8 new versions that each passed a trial. Now each is one line in `patch_attempts`. No
 proposed version holds a run's input value in place of its `{{slot}}` (checked for every experiment).
