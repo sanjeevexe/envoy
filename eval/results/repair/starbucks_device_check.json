@@ -1,0 +1,286 @@
+{
+ "date": "2026-10-28 16:36 EDT",
+ "phone": "envoy-real",
+ "rows": [
+  {
+   "run": 1,
+   "drink": "Caffè Latte",
+   "task_id": "repairfix-sbx-163529-1",
+   "version": 2,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "calories": "190 calories"
+   },
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 13.34,
+   "rung": 1,
+   "patches": [],
+   "steps": [
+    {
+     "id": "tap_order",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 3.3 s",
+      "wait and retry: after-checks held after 1.5 s"
+     ]
+    },
+    {
+     "id": "dismiss_location_prompt",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_skip",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "confirm_skip_to_menu",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_search_menu",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "search_drink_name",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "find_open_drink_product",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "open_drink_product",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    }
+   ],
+   "approvals": []
+  },
+  {
+   "run": 2,
+   "drink": "Caffè Latte",
+   "task_id": "repairfix-sbx-163543-2",
+   "version": 2,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "calories": "190 calories"
+   },
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 20.56,
+   "rung": 2,
+   "patches": [],
+   "steps": [
+    {
+     "id": "tap_order",
+     "status": "done",
+     "rung": 2,
+     "rungs": [
+      "relaxed match: scrolled to reveal the target [20] \"Order\" score 1.00 (runner-up 0.36)"
+     ]
+    },
+    {
+     "id": "dismiss_location_prompt",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_skip",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "confirm_skip_to_menu",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_search_menu",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "search_drink_name",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "find_open_drink_product",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "open_drink_product",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 1.6 s"
+     ]
+    }
+   ],
+   "approvals": []
+  },
+  {
+   "run": 3,
+   "drink": "Caffè Latte",
+   "task_id": "repairfix-sbx-163603-3",
+   "version": 2,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "calories": "190 calories"
+   },
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 16.89,
+   "rung": 2,
+   "patches": [],
+   "steps": [
+    {
+     "id": "tap_order",
+     "status": "done",
+     "rung": 2,
+     "rungs": [
+      "relaxed match: scrolled to reveal the target [20] \"Order\" score 1.00 (runner-up 0.36)",
+      "wait and retry: after-checks held after 1.7 s"
+     ]
+    },
+    {
+     "id": "dismiss_location_prompt",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_skip",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "confirm_skip_to_menu",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_search_menu",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "search_drink_name",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "find_open_drink_product",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "open_drink_product",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    }
+   ],
+   "approvals": []
+  },
+  {
+   "run": 4,
+   "drink": "Caramel Macchiato",
+   "task_id": "repairfix-sbx-163621-4",
+   "version": 2,
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "outputs": {
+    "calories": "250 calories"
+   },
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 12.54,
+   "rung": 1,
+   "patches": [],
+   "steps": [
+    {
+     "id": "tap_order",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 2.0 s"
+     ]
+    },
+    {
+     "id": "dismiss_location_prompt",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_skip",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "confirm_skip_to_menu",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_search_menu",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "search_drink_name",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "find_open_drink_product",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "open_drink_product",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    }
+   ],
+   "approvals": []
+  }
+ ]
+}

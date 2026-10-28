@@ -72,6 +72,17 @@ def apply_patches(base: Routine, patches: list[Patch]) -> tuple[Routine, list[st
     return r, changes
 
 
+VERSION_FIELDS = {"version", "status", "parent_version", "changes"}  # a version's own bookkeeping, not what it runs
+
+
+def same_program(a: Routine, b: Routine) -> bool:
+    """Two routines that run the same way: every field but the version's bookkeeping is equal, as saved (the YAML round
+    trip leaves out defaults and turns tuples into lists, which don't change how a routine runs)."""
+    def saved(r: Routine) -> dict[str, Any]:
+        return load_yaml(dump_yaml(r)).model_dump(exclude=VERSION_FIELDS)
+    return saved(a) == saved(b)
+
+
 class RoutineStore:
     def __init__(self, root: Path = LIBRARY) -> None:
         self.root = root
@@ -149,9 +160,17 @@ class RoutineStore:
         return r
 
     def propose(self, base: Routine, patches: list[Patch], source_task: str) -> Routine | None:
-        """Apply candidate patches to `base` as a new version on trial. None if nothing applied."""
+        """Apply candidate patches to `base` as a new version on trial. None if nothing applied, or if the patched routine
+        runs exactly like `base` (a relaxed match that rewrote a locator to what it already was): that attempt is logged
+        in the index (`patch_attempts`), and no version or trial is made."""
         r, changes = apply_patches(base, patches)
         if not changes:
+            return None
+        if same_program(r, base):
+            idx = self.index(base.routine)
+            idx.setdefault("patch_attempts", []).append({"time": time.strftime("%Y-%m-%d %H:%M:%S"), "version": base.version,
+                                                         "source_task": source_task, "result": "unchanged", "changes": changes})
+            self._write_index(base.routine, idx)
             return None
         r.version = self._next_version(base.routine)
         r.status = "trial"
