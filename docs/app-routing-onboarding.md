@@ -25,8 +25,9 @@ Oct 28, 2026. Branch `app-routing` (worktree `~/Desktop/Envoy-app-routing`), cut
   task ends at once with "Target blocks emulators; it needs a real Android phone. …". "On the emulator" in a request
   still wins.
 - Settings › Phones shows apps by name, marks what Envoy set ("Set by Envoy: it showed a bot check (HSBlockActivity)
-  on the emulator (10/28/2026)"), and lists the starting set. Unticking an app Envoy set undoes it for good. The iPhone
-  push for "use your phone?" now says why.
+  on the emulator (10/28/2026)"), and lists the starting set. Unticking an app Envoy set undoes it for good (checked in
+  the browser on a test copy of the API). The iPhone push and the web prompt for "use your phone?" now say why; for an
+  app that blocks emulators the other answer reads "Not my phone" instead of "Use an emulator".
 
 **2. Install on demand** (`backend/api/install.py`, called by the runner on emulators only).
 
@@ -47,8 +48,8 @@ Oct 28, 2026. Branch `app-routing` (worktree `~/Desktop/Envoy-app-routing`), cut
   existing hand-off ("sign in as you go"). No batch sign-in, no Apps page.
 - "Isn't compatible" on an emulator means the app blocks emulators: it is learned exactly like a bot check.
 
-Tests: 16 new in `backend/tests/test_phase6.py`, beside the routing tests, on real Play Store pages captured from
-envoy-real (`backend/tests/screens/playstore_*.xml`, account names scrubbed). Full suite: 229 passed.
+Tests: 17 new in `backend/tests/test_phase6.py`, beside the routing tests, on real Play Store pages captured from
+envoy-real (`backend/tests/screens/playstore_*.xml`, account names scrubbed). Full suite: 230 passed.
 
 ## Before: a request naming an app the emulator doesn't have
 
@@ -68,7 +69,48 @@ tell me the year it opened." Wikipedia wasn't installed.
 
 ## Measured on envoy-real
 
-RERUN_TABLE
+Standard tier (Muse Spark 1.3), through the task runner (the same path as a request from the web app), with its own
+data folder, no phone (discovery off), and nobody answering: approvals and "use your phone?" are declined by the
+script. Every app installed was uninstalled afterwards; envoy-real is back to its 9 third-party apps.
+
+**First build** (`install.json`):
+
+| Request | Result | Time | Model calls | Cost |
+| --- | --- | --- | --- | --- |
+| In the Wikipedia app, … the year the Eiffel Tower opened | done, "1889"; installed in 22 s | 82 s | 20 | $0.035 |
+| In the Google Translate app, translate "good morning" … | **wrong app**: a sponsored look-alike installed and used; failed at 25 steps | 104 s | 27 | $0.062 |
+| In the Wikipedia app, … Statue of Liberty dedicated (known now) | done, "1886"; no search, no install | 24 s | 8 | $0.013 |
+| In the Minecraft app, … ($6.99) | declined through the approval flow; price never tapped | 6 s | 0 | $0 |
+| The price of AirPods Pro at Target | "Target blocks emulators; it needs a real Android phone. …" (no phone connected) | 0 s | 0 | $0 |
+
+The Google Translate run was the important finding. The results page put a sponsored translator, with its own
+Install button, above Google Translate. The first build read the results page as if it were an app's page and
+tapped the first Install: the ad's. That bug is fixed, and the real page is now a test fixture (only the matched
+result's own button counts, and the result after "Sponsored" is never picked). Titles were wrong too ("Sponsored",
+"New!"), also fixed.
+
+**After the fix** (`install-after-fix*.json`):
+
+| Request | Install | Task | Time | Model calls | Cost |
+| --- | --- | --- | --- | --- | --- |
+| In the Wikipedia app, … Eiffel Tower | right app, 22 s (find 2, download and install 20) | failed: 25 steps in the article | 103 s | 26 | $0.045 |
+| (again, after the note below) | right app, 8 s (find 3, install 5) | failed: 25 steps in the article | 86 s | 27 | $0.047 |
+| In the Google Translate app, translate "good morning" … | right app, 6 s | failed: the app said "Can't translate · Check your connection" on every try | 105 s | 28 | $0.060 |
+| In the Merriam-Webster app, look up serendipity (never installed before) | right app, 26 s (find 2, download and install 24) | done: "the ability to find valuable or agreeable things not sought for" | 63 s | 10 | $0.026 |
+| In the Wikipedia app, … Statue of Liberty (known now) | none needed | done, "1886" | 24 s | 6 | $0.010 |
+| In the Minecraft app, … | paid, $6.99: asked, declined; price never tapped | declined | 4 s | 0 | $0 |
+| The price of AirPods Pro at Target | | "Target blocks emulators; it needs a real Android phone. …" | 0 s | 0 | $0 |
+
+What this shows. Finding and installing the app is now right every time: after the fix 4 of 4 installs got the app
+asked for (and the first build's Wikipedia install did too), in 6 to 26 s, with no model calls. What follows depends on the agent in an app it has never seen. Wikipedia's Eiffel
+Tower question passed 1 of 3 first runs. Twice the agent reached the article but didn't find the year in its
+collapsed "Quick facts" box within 25 steps (the baseline agent ran out of steps too, still in the onboarding). Merriam-Webster passed. Translate
+couldn't reach its service from the emulator. The agent's first step after an install was often Back on the welcome
+screen, which closed Wikipedia, so the note it gets after an install now says to use the screen's own Skip, Next or
+Forward. On the rerun it still pressed Back once, with a garbled reason ("UNUSED - placeholder"), which looks like the
+step-schema ordering issue the AndroidWorld branch fixes. Compared with before: the same Wikipedia request went to
+SkyLark's emulator (or, on envoy-real, spent 18 steps finding the Play Store before installing by itself); now it is
+installed in 8 to 22 s before the agent starts.
 
 ## Weak spots
 
@@ -91,8 +133,16 @@ RERUN_TABLE
 
 ## Spend
 
-SPEND
+$0.36 on the Meta key, all standard tier and real-app scope: 189 calls (183 Muse Spark 1.3, plus 6 empty $0 rows),
+from this worktree's own cost log (`logs/model_costs.jsonl`). The baseline run cost $0.051, the first build's runs
+$0.109, the runs after the fix $0.187; the other $0.011 was finished tasks writing what they saw into the run's own
+throwaway memory. Unit tests make no model calls.
 
 ## Merge
 
-MERGE
+Waiting for your OK. On your OK, in `~/Desktop/Envoy-app-routing`: `git merge main` (main had moved to `3719818`, already
+merged), run `uv run --project backend pytest backend/tests -q` and `npm run build` in `web/`, tell the active sessions,
+then in `~/Desktop/Envoy`: `git merge --ff-only app-routing`. No push.
+
+Files other sessions should know about: `api/runner.py` (the Wonder branch also edits it, in other lines),
+`eval/run_real_apps.py` (`bot_check` keeps its name and behavior; `run_one`'s row is unchanged).
