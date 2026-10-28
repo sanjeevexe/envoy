@@ -769,6 +769,10 @@ class PlayPhone:
     observe = wait_until_settled
 
     async def act(self, a):
+        if a.kind == "tap_point":  # a result's name: its page opens
+            self.taps.append(f"point {a.x},{a.y}")
+            self.screen = store_page(self.details)
+            return SimpleNamespace(ok=True)
         e = self.screen.element(a.element)
         label = e.label
         self.taps.append(label)
@@ -833,6 +837,25 @@ def test_a_sponsored_look_alike_is_never_installed():
     got = asyncio.run(installer(dev)[0].ensure(None, "Google Translate"))
     assert (got.status, got.package, got.title) == ("installed", translate, "Google Translate") and look_alike not in dev.packages
     assert dev.opened == ["market://search?q=Google%20Translate&c=apps"]
+
+
+def test_a_result_without_its_own_button_is_opened_by_its_name():
+    dev = PlayPhone()
+    bare = store_page("search")
+    bare.numbered[2].label = ""  # the Wikipedia result's Install, as for a result the Play Store shows collapsed
+    real_open = PlayPhone.shell
+
+    def shell(self, cmd):
+        out = real_open(self, cmd)
+        if "search?" in " ".join(cmd if isinstance(cmd, list) else [cmd]):
+            self.screen = bare
+        return out
+    dev.shell = shell.__get__(dev)  # type: ignore[method-assign]
+    dev.adb = SimpleNamespace(shell=dev.shell)
+    got = asyncio.run(installer(dev)[0].ensure(None, "Wikipedia"))
+    x1, y1, x2, y2 = bare.numbered[1].bounds
+    assert dev.taps == [f"point {x1 + (x2 - x1) // 4},{y1 + 60}", "Install"]  # its name, never its middle (a question box)
+    assert (got.status, got.package, got.title) == ("installed", WIKI, "Wikipedia")
 
 
 def test_a_paid_app_asks_first_and_envoy_never_pays():

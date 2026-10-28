@@ -329,6 +329,7 @@ class Installer:
             card = pick_result(screen, name or "")
             if card is None:
                 return Installed("not_found", None, name or "", detail=f"no app called {name!r} in the Play Store's results")
+            name_on_card = card_title(screen, card)
         listing = read_listing(screen) if package else card_listing(screen, card)
         if not package and listing.state == "unknown":  # a result with no button of its own: its page says why
             x1, y1, x2, y2 = card.bounds
@@ -336,7 +337,7 @@ class Installer:
             await asyncio.sleep(self.wait_s)
             screen = await self._settled_page()
             listing = read_listing(screen)
-            listing.title = listing.title or card_title(screen, card)
+            listing.title = listing.title or name_on_card
         secs["find"] = round(time.perf_counter() - t0, 1)
         title = listing.title or name or package or "the app"
         if listing.state == "sign_in":
