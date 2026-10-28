@@ -6,6 +6,13 @@ Until the phone came, an emulator stood in for it (`ENVOY_TEST_PHONE`): the same
 
 Plan: `prompts/phase-6-plan.md`. Results: `eval/results/phase6/`.
 
+## Not finished yet (needs the real phone; carried into Phase 7, `prompts/phase-7.md`)
+
+- [ ] **The gate:** `skylark_check_in_flight` (compiled on `envoy-test`) runs on the real phone through the API, after Envoy asks; the banner shows; you approve from the iPhone; SkyLark's state hook confirms it; memory updates. Plus `eval/run_phase6.py portability --device phone`.
+- [ ] **Phone measurements:** scrcpy on the phone (start, tap → frame, screenshot time); the live view on the Mac and on the iPhone over the tailnet against the 150 ms target; a takeover; a touch that pauses a run; the banner on that phone's Android skin.
+- [ ] **Answers:** the phone's model and Android version (the design doc's open question); whether the Envoy bridge is needed (only if settling or set-text fail on the phone).
+- [ ] **Optional:** sign-in codes from the notification shade (only with a SIM); a real-app routine from `envoy-real` on the phone (only if the app is there without a sign-in of yours).
+
 ## What was built
 
 All of it is Envoy's own code: about 1,700 lines of Python (`backend/devices/`, `backend/api/routing.py`, `backend/agent/vision.py`, `backend/routines/visual.py`, executor, compiler, runner and live-view changes; about 250 of them are the emulator's code moved into the shared base), 900 of tests and evaluation (`backend/tests/test_phase6.py`, `eval/run_phase6.py`), 300 of Kotlin (`android/banner`, SkyLark's canvas seat map) and 100 of TypeScript. scrcpy's server, PyAV (FFmpeg) and NumPy are plumbing (`THIRD_PARTY.md`).
