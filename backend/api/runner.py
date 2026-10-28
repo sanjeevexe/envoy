@@ -104,6 +104,7 @@ class TaskRunner:
         self.jobs: dict[str, Any] = {}  # asyncio tasks, or concurrent futures when started from another thread
         self.loop: asyncio.AbstractEventLoop | None = None  # the API's loop (set at startup)
         self.devices: dict[str, Any] = {}  # task id → raw device (for step screenshots)
+        self.pending_steps: dict[str, asyncio.Task] = {}  # task id → its latest step still taking its picture
         self.phone_asks: dict[str, asyncio.Future] = {}  # task id → your answer to "use your Android phone?"
         self.on_final: list[Any] = []  # called with (task id, final screen, routine outputs) after a run's last look (api/crossapp.py)
         self.crossapp: Any = None  # cross-app answers (api/crossapp.py), set by the app
@@ -246,6 +247,7 @@ class TaskRunner:
                             continue
                         status, result = "needs_you", "waiting for you timed out"
                     break
+                await self._steps_written(tid)
                 final = await device.observe()
                 for hook in list(self.on_final):
                     try:
@@ -403,11 +405,44 @@ class TaskRunner:
         data = describe(record)
         if data is None:
             return
-        if data["kind"] in ("action", "routine_step") and not data.get("secure"):
-            shot = self._thumbnail(tid)
+        wants_shot = data["kind"] in ("action", "routine_step") and not data.get("secure")
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:  # called from a worker thread: the frame can be taken right here
+            loop = None
+        if loop is None:
+            shot = self._thumbnail(tid) if wants_shot else None
             if shot:
                 data["shot"] = shot
+            self._step(tid, data)
+            return
+        # On the loop, the frame is taken in a thread, so a task on another phone never waits on this one's screenshots.
+        # Steps keep their order: each is written after the one before it.
+        grab = loop.run_in_executor(None, self._thumbnail, tid) if wants_shot else None
+        before = self.pending_steps.get(tid)
+        if grab is None and before is None:
+            self._step(tid, data)
+            return
+        self.pending_steps[tid] = loop.create_task(self._step_after(tid, data, grab, before))
+
+    async def _step_after(self, tid: str, data: dict[str, Any], grab: Any, before: asyncio.Task | None) -> None:
+        try:
+            shot = await grab if grab is not None else None
+        except Exception:  # noqa: BLE001 - a step is written without its picture
+            shot = None
+        if before is not None:
+            await asyncio.wait([before])
+        if shot:
+            data["shot"] = shot
         self._step(tid, data)
+        if self.pending_steps.get(tid) is asyncio.current_task():
+            self.pending_steps.pop(tid, None)
+
+    async def _steps_written(self, tid: str) -> None:
+        """Wait for steps still taking their picture, so a task's steps are all there when it finishes."""
+        pending = self.pending_steps.get(tid)
+        if pending is not None:
+            await asyncio.wait([pending], timeout=5)
 
     def _thumbnail(self, tid: str) -> str | None:
         """A small picture of the screen after a step, never of a secure screen."""

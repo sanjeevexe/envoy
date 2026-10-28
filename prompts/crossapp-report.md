@@ -32,12 +32,14 @@ place DoorDash shows for a latte?"):
 | File | Change |
 | --- | --- |
 | `backend/api/crossapp.py` | new: pre-filter, lead, checks, parent task, combine, sources, memory |
-| `backend/api/runner.py` | `start(parent=)`, `on_final` hook (final screen + outputs), `crossapp` slot (+14/−3) |
+| `backend/api/runner.py` | `start(parent=)`, `on_final` hook (final screen + outputs), `crossapp` slot; step screenshots taken in a thread, steps kept in order |
+| `backend/api/push.py` | a part doesn't push "Done"; its parent's answer does (+2) |
+| `backend/mcp_server/server.py` | `run_task` asks the lead first, as chat does (+12/−2) |
 | `backend/api/store.py` | `parent` column and its migration (+5/−2) |
 | `backend/api/chat.py` | ask the lead first when the pre-filter fires (+19/−2) |
 | `backend/api/app.py` | wire `CrossApp` in `build()` (+2) |
 | `web/components/Tasks.tsx`, `web/lib/api.ts`, `web/app/page.tsx` | parts under their parent, part cards with live status |
-| `backend/tests/test_crossapp.py` | 24 offline tests |
+| `backend/tests/test_crossapp.py` | 27 offline tests |
 | `eval/run_crossapp.py`, `eval/results/crossapp/` | end to end and its evidence |
 
 Not touched: `backend/agent/`, `backend/routines/`, `backend/policy/`, `backend/memory/`, `backend/models/`, existing
@@ -45,7 +47,7 @@ Not touched: `backend/agent/`, `backend/routines/`, `backend/policy/`, `backend/
 
 ## Evidence
 
-### Offline: two phones at once (`backend/tests/test_crossapp.py`, 24 tests; `eval/results/crossapp/offline.txt`)
+### Offline: two phones at once (`backend/tests/test_crossapp.py`, 27 tests; `eval/results/crossapp/offline.txt`)
 
 A real `TaskRunner` (its routing, per-phone lease, statuses, approvals) with fake phones whose routine work takes 0.5 s:
 
@@ -61,8 +63,11 @@ A real `TaskRunner` (its routing, per-phone lease, statuses, approvals) with fak
 | Partial / all failed / declined / stop | named in the answer / parent failed with no combine call / declined part named / running parts stopped, a part that already answered kept |
 | Live status | parent `waiting_approval` with "Starbucks: …" while a part waits; each answer shows as it comes in |
 | Memory | a Note with the answer; source `cross-app answer` with each part's task, app, screen and time |
+| Pushes | one "Done" push per cross-app question (the parent's answer), not one per part too; a task on its own still pushes |
+| Screenshots | each traced step's screenshot (0.15 s, blocking, as a gRPC call is) is taken in a thread: two parts on two phones still overlap (> 0.4 s, wall < 0.85 s) and each part's steps keep their order with their pictures; taken on the event loop as before, the same test took 1.18 s |
+| MCP | `run_task` with a cross-app question asks the lead and starts the parent (its reply lists the parts); a one-app goal starts its task with no lead call, and a failing lead falls back to that |
 
-Full backend suite: 162 passed (138 before this work + 24 new) with `main` d909d1a merged in; the web build passes.
+Full backend suite: 165 passed (138 before this work + 27 new) with `main` d909d1a merged in; the web build passes.
 
 An independent review of the diff found, and I fixed: the combine check accepted pieces of numbers ("$5" against
 $5.45), codes (gate B23) and uncited names; stopping the parent also stopped parts that had already answered (losing
@@ -112,14 +117,10 @@ library (SkyLark + Phase 7's `real_compiled`); standard tier; every approval dec
 
 - **Two real phones at once.** Not granted (AndroidWorld held the second slot); proven offline only. `eval/run_crossapp.py
   --questions T1,T2` is ready: it seeds SkyLark on envoy-test the way the routine suites do (untested on a device).
-- **Event-loop stalls** (plan § 6): `runner._thumbnail` grabs a frame on the loop at every step, which may cut real
-  two-phone overlap a little. Unmeasured without two phones; the fix (take it in a thread) would be a small runner change.
-- **MCP**: Muse's `start_task` calls `runner.start` directly, so cross-app answers come through chat and voice only.
-  Routing it through the lead is a small follow-up in `mcp_server/server.py`.
+- **MCP**: when the lead says one app, its call's cost isn't added to the task MCP starts (chat adds it to its reply);
+  the cost log has it.
 - **Matcher precision** (not my files): for "a Caffè Latte on DoorDash" without the word price, the matcher chose the
   first-restaurant routine. The lead's price rule avoids that wording now.
-- **Pushes**: each part and the parent send their own "Done" push (`api/push.py` doesn't know about parts), so a
-  two-app question sends three. A one-line skip for tasks with a `parent` in push.py would fix it (not my file).
 - **The lead may add an app the user didn't name** (needed: "how long is the drive" names no app). A same-app comparison
   that fires the pre-filter ("is the Starbucks latte cheaper than the mocha?") relies on the lead saying one app.
 - The parent's `cost_usd` doesn't include matcher calls (the runner doesn't count their cost); the cost log is the
@@ -131,6 +132,7 @@ library (SkyLark + Phase 7's `real_compiled`); standard tier; every approval dec
 ## Merging
 
 From the main checkout: `git merge claude/cross-app-answers-522e1d` (main d909d1a is already merged in; no conflicts).
-Shared files touched, all additively: `backend/api/runner.py`, `store.py`, `chat.py`, `app.py`, `web/components/Tasks.tsx`,
-`web/lib/api.ts`, `web/app/page.tsx`. After merging: `uv run --project backend pytest backend/tests -q` and
+Shared files touched, all additively: `backend/api/runner.py`, `store.py`, `chat.py`, `app.py`, `push.py`,
+`backend/mcp_server/server.py`, `web/components/Tasks.tsx`, `web/lib/api.ts`, `web/app/page.tsx`. In `push.py` the change is
+two lines in `on_event`'s `task_finished` branch; the alerts branch changes its docstring and `notify`, not that branch. After merging: `uv run --project backend pytest backend/tests -q` and
 `npm run build` in `web/`. The `parent` column is added to existing task databases on the API's next start.

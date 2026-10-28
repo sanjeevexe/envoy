@@ -209,6 +209,8 @@ class Pusher:
                         f"/?task={tid}", tag=f"phone-{tid}", urgency="high", ttl=900)
         elif kind == "task_finished":
             task = self.store.get(ev.get("task_id") or "") or {}
+            if task.get("parent"):
+                return  # a part of a cross-app question (api/crossapp.py): only its parent's answer pushes
             status = task.get("status")
             if status not in FINAL:
                 return
