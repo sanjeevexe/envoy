@@ -13,7 +13,7 @@ export type Step = {
   rung?: number; detail?: string; shot?: string; approval?: { approved: boolean; by: string }; error?: string;
   entities?: string[]; sources?: Record<string, string>;
   // a "change" step: a remembered fact changed during this task (api/alerts.py)
-  entity_label?: string; old?: string; new?: string; source?: string; pushed?: boolean; why_not?: string | null;
+  entity_label?: string; old?: string; new?: string; source?: string; pushed?: boolean; why_not?: string | null; alerted_for?: string;
 };
 export type Approval = {
   id: string; task_id: string; created_at: number; status: string; description: string; reasons: string[];

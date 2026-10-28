@@ -84,7 +84,7 @@ export function TaskDetail({ id, task, liveSteps, back }: { id: string; task?: T
               {s.kind === "memory" && s.entities && <div className="text-xs text-stone-500">{s.entities.join(", ")}</div>}
               {s.kind === "change" && (
                 <div className="text-xs text-amber-900">
-                  {s.entity_label}{s.source ? ` · seen in ${s.source}` : ""} · {s.pushed ? "🔔 pushed to your devices" : `not pushed: ${s.why_not}`}
+                  {s.entity_label}{s.source ? ` · seen in ${s.source}` : ""} · {s.pushed ? `🔔 pushed to your devices${s.alerted_for ? ` (for “${s.alerted_for}”)` : ""}` : `not pushed: ${s.why_not}`}
                 </div>
               )}
               {s.sources && Object.keys(s.sources).length > 0 && (

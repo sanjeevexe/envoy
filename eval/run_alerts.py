@@ -242,9 +242,11 @@ async def main() -> int:
                     task=run and run["id"], result=run and run["result"], change_steps=ch, pushes=len(svc.received) - n,
                     memory_gate=(memory.current(flight, "gate") or {}).get("value"))
             last_run = run
+            seen_last = run
 
             for i, gate in enumerate(args.changes):
                 offset = args.offsets[i % len(args.offsets)]
+                last_run = max(await watcher_runs(), key=lambda t: t["created_at"])
                 wait = last_run["created_at"] + offset - time.time()
                 if wait > 0:
                     await asyncio.sleep(wait)
@@ -259,10 +261,10 @@ async def main() -> int:
                 while time.time() < deadline and got is None:
                     got = next((g for g in svc.received[n:] if g["payload"]["kind"] == "change"), None)
                     await asyncio.sleep(0.05)
-                if got:  # the run that saw it: the push opens it
+                if got:  # the task that saw it first (the push opens it): a watcher run, or the fact-changed follow-up of the last change
                     await asyncio.sleep(1)
                     d = await detail(got["payload"]["url"].split("task=", 1)[-1])
-                    run = d["task"] if d.get("task", {}).get("source") == "trigger:Watch my gate" else None
+                    run = d["task"] if d.get("task", {}).get("source") in ("trigger:Watch my gate", "trigger:When my gate changes") else None
                 else:
                     run = await finished_run(t_set)
                     d = await detail(run["id"]) if run else {"task": {}, "steps": []}
@@ -270,11 +272,12 @@ async def main() -> int:
                 mem_step = next((s["time"] for s in d["steps"] if s["kind"] == "memory"), None)
                 ch = [s for s in d["steps"] if s["kind"] == "change"]
                 sample = {"from": old, "to": gate, "offset_in_minute_s": offset, "set_at": t_set, "app_gate_after_set": now_gate,
-                          "task": run and run["id"], "push": got and got["payload"], "push_received_at": got and got.get("at")}
+                          "task": run and run["id"], "seen_by": run and run["source"], "push": got and got["payload"], "push_received_at": got and got.get("at"),
+                          "alerted_for": next((s.get("alerted_for") for s in d["steps"] if s["kind"] == "change" and s.get("pushed")), None)}
                 if got and run:
                     sample["latency_s"] = round(got["at"] - t_set, 2)
                     sample["split_s"] = {
-                        "wait_for_next_watcher_run": round(run["created_at"] - t_set, 2),
+                        "wait_for_the_task_that_saw_it": round(run["created_at"] - t_set, 2),  # negative: it was already running
                         "routine_run": round((saving or run["created_at"]) - run["created_at"], 2),
                         "memory_write": round((mem_step or 0) - (saving or 0), 2) if mem_step and saving else None,
                         "alert_and_push": round(got["at"] - mem_step, 3) if mem_step else None,
@@ -284,24 +287,28 @@ async def main() -> int:
                 log(f"gate {old} → {gate}: one push", bool(got) and p.get("title") == f"Gate changed: {old} → {gate}" and p.get("url") == f"/?task={run and run['id']}"
                     and "Flight SL 482" in p.get("body", "") and len([g for g in svc.received[n:] if g['payload']['kind'] == 'change']) == 1,
                     title=p.get("title"), body=p.get("body"), url=p.get("url"), latency_s=sample.get("latency_s"), split=sample.get("split_s"),
+                    seen_by=sample["seen_by"], alerted_for=sample["alerted_for"],
                     change_steps=[(s["text"], s["pushed"], s.get("why_not")) for s in ch], set_broadcast_s=round(t_set_done - t_set, 2))
-                last_run = run or last_run
+                seen_last = run or seen_last
                 memory_gate = (memory.current(flight, "gate") or {}).get("value")
                 log(f"memory's gate is now {gate}", memory_gate == gate, memory_gate=memory_gate)
 
             n = len(svc.received)
-            run = await finished_run(last_run["created_at"] + 1)
+            run = await finished_run(max(t["created_at"] for t in await watcher_runs()) + 1)
             await asyncio.sleep(2)
             d = await detail(run["id"]) if run else {"steps": []}
-            log("the next run sees the same gate: no repeat push", bool(run) and run["status"] == "done" and len(svc.received) == n
-                and not [s for s in d["steps"] if s["kind"] == "change"], task=run and run["id"], result=run and run["result"], pushes=len(svc.received) - n)
+            gate_steps = [s for s in d["steps"] if s["kind"] == "change" and s["attribute"] == "gate"]
+            log("the next watcher run sees the same gate: no repeat push", bool(run) and run["status"] == "done" and len(svc.received) == n and not gate_steps,
+                task=run and run["id"], result=run and run["result"], pushes=len(svc.received) - n,
+                other_changes=[(s["text"], s["pushed"], s.get("why_not")) for s in d["steps"] if s["kind"] == "change" and s["attribute"] != "gate"])
 
             # The fact-changed trigger: one status check per change, with typed values only.
             await asyncio.sleep(12)  # its last task may still be running
             fc = sorted([t for t in (await c.get("/api/tasks", params={"limit": 200})).json() if t["source"] == "trigger:When my gate changes"],
                         key=lambda t: t["created_at"])
             first_change = samples[0]["set_at"] if samples else time.time()
-            expect = [f"My gate moved to {s['to']} (was {s['from']}): check flight SL 482" for s in samples]
+            # One follow-up per change, except a change its own follow-up made (it can't feed itself).
+            expect = [f"My gate moved to {s['to']} (was {s['from']}): check flight SL 482" for s in samples if s.get("seen_by") != "trigger:When my gate changes"]
             log("fact-changed trigger: one task per change, typed values only", [t["goal"] for t in fc] == expect and all(t["created_at"] > first_change for t in fc),
                 tasks=[{"goal": t["goal"], "routine": t.get("routine"), "inputs": t.get("inputs"), "status": t["status"], "result": t.get("result"),
                         "after_change_s": round(t["created_at"] - s["set_at"], 1) if (s := next((x for x in samples if x["to"] in t["goal"]), None)) else None}
@@ -315,7 +322,7 @@ async def main() -> int:
             writer = memory.db.execute("select source from facts where id = ?", (cur["id"],)).fetchone() if cur else None
             src = memory.source(writer[0]) if writer and writer[0] else None  # the source that wrote the value (later runs only saw it again)
             ref = (src or {}).get("reference") or {}
-            log("memory shows the new gate with its source", bool(cur) and cur["value"] == args.changes[-1] and ref.get("task_id") == last_run["id"],
+            log("memory shows the new gate with its source", bool(cur) and cur["value"] == args.changes[-1] and ref.get("task_id") == (seen_last or {}).get("id"),
                 current=cur and cur["value"], source=cur and cur["sources"][0]["where"], source_kind=(src or {}).get("kind"), source_task=ref.get("task_id"),
                 history=[h["value"] for h in hist])
             report["gate_history"] = hist

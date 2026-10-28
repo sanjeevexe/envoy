@@ -8,9 +8,11 @@ the same value seen again.
   it (the source's `task_id`), so a change some other writer made while the task ran isn't credited to it.
 - **Reporting**: when the runner reports the task's memory step, each change becomes a `change` step in the task, and
   the run sends at most one push. Changes from a write path with no memory step are reported a few seconds later.
-- **Who is told**: only for a task a trigger started, when that trigger has alerts on (`spec.alert`: on by default for
-  watchers, off for the other kinds) and the attribute is one it watches (`spec.alert_on`: by default what the
-  watcher's routine reads, so a seat re-read from the same screen doesn't buzz the phone; `"*"` is any). A task you
+- **Who is told**: only for a task a trigger started, when a trigger has alerts on (`spec.alert`: on by default for
+  watchers, off for the other kinds) for that attribute (`spec.alert_on`: by default what the watcher's routine reads,
+  so a seat re-read from the same screen doesn't buzz the phone; `"*"` is any). That is the task's own trigger, or
+  another one whose runs have read this entity: when a fact-changed follow-up or a second watcher happens to see the
+  new gate first, the watcher you set up still tells you (otherwise its next run would find nothing new). A task you
   started shows the change and doesn't push: you're already looking.
 - **Once**: each (entity, attribute, new value) pushes once (the `change_alerts` table, next to the tasks). A flip back
   to an earlier value is a new change and pushes again.
@@ -146,13 +148,15 @@ class ChangeAlerts:
                 self.tasks.db.execute(
                     "INSERT INTO change_alerts (time, task_id, trigger_id, entity, entity_label, attribute, old, new, norm, fact, source, "
                     "seen_at, pushed, why_not, push_id, title, body) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                    (self.clock(), tid, (trig or {}).get("id"), c["entity"], c["entity_label"], c["attribute"], c["old"], c["new"],
+                    (self.clock(), tid, (c.get("alerted_by") or trig or {}).get("id"), c["entity"], c["entity_label"], c["attribute"], c["old"], c["new"],
                      normalize_key_value(c["attribute"], c["new"] or ""), c["fact"], c["source"], c["seen_at"], int(pushed),
                      c["why_not"], push_id if pushed else None, c["title"], c.get("body")))
                 self.tasks.db.commit()
             step = {"kind": "change", "text": c["title"], "entity": c["entity"], "entity_label": c["entity_label"],
                     "attribute": c["attribute"], "old": c["old"], "new": c["new"], "source": c["where"], "pushed": pushed,
                     "why_not": c["why_not"]}
+            if pushed and c.get("alerted_by") and c["alerted_by"]["id"] != (trig or {}).get("id"):
+                step["alerted_for"] = c["alerted_by"]["name"]  # another trigger's alert (the watcher you set up)
             seq = self.tasks.add_step(tid, step)
             self.bus.publish("step", task_id=tid, step={"seq": seq, "time": time.time(), **step})
             out.append(step)
@@ -196,20 +200,42 @@ class ChangeAlerts:
         return attrs or ["*"]
 
     def why_not(self, task: dict[str, Any], trig: dict[str, Any] | None, c: dict[str, Any]) -> str | None:
-        """None when this change pushes; otherwise why it doesn't."""
+        """None when this change pushes (`c["alerted_by"]` is the trigger it pushes for); otherwise why it doesn't."""
         if trig is None:
             return "you started this task" if not str(task.get("source") or "").startswith("trigger") else "its trigger was deleted"
-        on, watched = self.settings(trig)
-        if not on:
-            return "alerts are off for this trigger"
-        if "*" not in watched and c["attribute"] not in watched:
-            return f"this trigger alerts on {', '.join(label(a).lower() for a in watched)} only"
+        by = trig if self.watches(trig, c["attribute"]) else next(self.watchers_of(c["entity"], c["attribute"], skip=trig["id"]), None)
+        if by is None:
+            on, watched = self.settings(trig)
+            return "alerts are off for this trigger" if not on else f"this trigger alerts on {', '.join(label(a).lower() for a in watched)} only"
+        c["alerted_by"] = by
         with self.tasks.lock:
             last = self.tasks.db.execute("SELECT norm FROM change_alerts WHERE entity=? AND attribute=? AND pushed=1 ORDER BY id DESC LIMIT 1",
                                          (c["entity"], c["attribute"])).fetchone()
         if last and last["norm"] == normalize_key_value(c["attribute"], c["new"] or ""):
             return "already told you"
         return None
+
+    def watches(self, trig: dict[str, Any], attribute: str) -> bool:
+        on, watched = self.settings(trig)
+        return on and ("*" in watched or attribute in watched)
+
+    def watchers_of(self, entity: str, attribute: str, skip: str = "") -> Any:
+        """Other enabled triggers with alerts on for this attribute whose own runs have read this entity."""
+        for t in self.tasks.triggers():
+            if t["id"] != skip and t["enabled"] and self.watches(t, attribute) and self.has_read(t, entity):
+                yield t
+
+    def has_read(self, trig: dict[str, Any], entity: str) -> bool:
+        """A run of this trigger saw a fact of this entity (any attribute, the same value seen again included)."""
+        with self.tasks.lock:
+            ids = [r[0] for r in self.tasks.db.execute("SELECT id FROM tasks WHERE source=? ORDER BY created_at DESC LIMIT 50",
+                                                       (f"trigger:{trig['name']}",)).fetchall()]
+        ids += [tid for tid, t in list(self.started_by.items()) if t == trig["id"] and tid not in ids]
+        if not ids:
+            return False
+        q = ("select 1 from fact_sources fs join sources s on s.id = fs.source join facts f on f.id = fs.fact "
+             f"where f.entity = ? and json_extract(s.reference, '$.task_id') in ({','.join('?' * len(ids))}) limit 1")
+        return self.memory.db.execute(q, (self.memory.resolve(entity), *ids)).fetchone() is not None
 
     def entity_label(self, eid: str) -> str:
         e = self.memory.entity(eid) or {}

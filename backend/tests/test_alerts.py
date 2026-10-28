@@ -130,6 +130,29 @@ def test_who_gets_told(env):
     assert [s["pushed"] for s in changes(env, both)] == [True, True]
 
 
+def test_a_change_another_background_task_saw_first_still_alerts_for_the_watcher(env):
+    """Found on envoy-test: the fact-changed follow-up read the next gate before the watcher's next run did. Its trigger
+    doesn't alert, and the watcher then saw nothing new, so the change was never announced."""
+    w = watcher(env)
+    env.ctx.scheduler.add("fact_changed", "when my gate changes", {"entity_type": "Flight", "attribute": "gate"},
+                          {"routine": "skylark_check_flight_status", "inputs_from": {"flight_number": "flight.number"}})
+    run(env, "trigger:watch gate", {"gate": "B12"})  # the watcher has read this flight
+    other = env.ctx.memory.create_entity("Flight")
+    src = env.ctx.memory.add_source("email", {"subject": "Your other trip"})
+    env.ctx.memory.observe(other, "number", "SL 77", source=src)
+    env.ctx.memory.observe(other, "gate", "A1", source=src)
+    follow_up = run(env, "trigger:when my gate changes", {"gate": "C14"}, routine=True)
+    got = env.svc.wait(1)
+    assert len(got) == 1 and got[0]["payload"]["title"] == "Gate changed: B12 → C14" and got[0]["payload"]["url"] == f"/?task={follow_up['id']}"
+    step = changes(env, follow_up)[0]
+    assert step["pushed"] is True and step["alerted_for"] == "watch gate"
+    assert env.ctx.alerts.recent()[0]["trigger_id"] == w["id"]
+    run(env, "trigger:watch gate", {"gate": "C14"})  # the watcher's own next run: nothing new
+    elsewhere = run(env, "trigger:when my gate changes", {"gate": "A2"}, flight=other, routine=True)  # a flight the watcher never read
+    assert quiet(env.svc, 1)
+    assert changes(env, elsewhere)[0]["why_not"] == "alerts are off for this trigger"
+
+
 def test_a_change_read_by_the_routine_itself_pushes_and_names_it(env):
     trig = watcher(env)
     run(env, "trigger:watch gate", {"gate": "B12"}, routine=True)
