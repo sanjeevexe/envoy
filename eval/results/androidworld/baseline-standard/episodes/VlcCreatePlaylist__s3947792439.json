@@ -1,0 +1,81 @@
+{
+ "task": "VlcCreatePlaylist",
+ "seed": 3947792439,
+ "goal": "Create a playlist titled \"Ultimate Fails Series\" with the following files in VLC (located in Internal Memory/VLCVideos), in order: highlight_41_4K_2023_03_30.mp4, scene_68_4K_copy.mp4",
+ "score": 0.0,
+ "aw_run_time_s": 78.8,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 05:18:21.290606",
+ "envoy": {
+  "run_id": "aw-baseline-standard-1028-051705-84ab",
+  "goal": "Create a playlist titled \"Ultimate Fails Series\" with the following files in VLC (located in Internal Memory/VLCVideos), in order: highlight_41_4K_2023_03_30.mp4, scene_68_4K_copy.mp4",
+  "max_steps": 28,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "failed",
+  "result": "stuck on the same screen after two recoveries",
+  "done": true,
+  "answer": null,
+  "steps_device": 24,
+  "iterations": 26,
+  "looks": 1,
+  "screenshots_sent": 6,
+  "replans": 1,
+  "stuck_recoveries": 3,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 11,
+   "launch": 2,
+   "tap": 9,
+   "long_press": 1,
+   "look": 1
+  },
+  "model_calls": 26,
+  "input_tokens": 71348,
+  "cached_tokens": 49658,
+  "output_tokens": 4140,
+  "reasoning_tokens": 2380,
+  "cost_usd": 0.052156,
+  "cost_at_standard_usd": 0.052156,
+  "duration_s": 70.78,
+  "model_s": 33.12,
+  "device_s": 37.66,
+  "connect_s": 0.9,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "org.videolan.vlc",
+   "subgoals": [
+    "Open VLC playlists section via menu or Playlists tab",
+    "Create new playlist titled Ultimate Fails Series",
+    "Add highlight_41_4K_2023_03_30.mp4 then scene_68_4K_copy.mp4 from Internal Memory/VLCVideos in order",
+    "Save and open playlist to verify both videos"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Ultimate Fails Series",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-standard-1028-051705-84ab",
+  "envoy_commit": "0807a1631c3da2f8fc36e25853eeb50d9eb3f80b+dirty-backend",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline-standard/traces/VlcCreatePlaylist__s3947792439.jsonl.gz",
+  "wall_s": 73.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}

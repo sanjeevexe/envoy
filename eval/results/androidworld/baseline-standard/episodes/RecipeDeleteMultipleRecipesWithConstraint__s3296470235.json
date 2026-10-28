@@ -1,0 +1,86 @@
+{
+ "task": "RecipeDeleteMultipleRecipesWithConstraint",
+ "seed": 3296470235,
+ "goal": "Delete the recipes from Broccoli app that use black garlic in the directions.",
+ "score": 1.0,
+ "aw_run_time_s": 98.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 04:24:25.836880",
+ "envoy": {
+  "run_id": "aw-baseline-standard-1028-042250-371f",
+  "goal": "Delete the recipes from Broccoli app that use black garlic in the directions.",
+  "max_steps": 40,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "All recipes using black garlic in directions have been deleted - search for 'black garlic' in ALL RECIPES shows 'No recipes found.'",
+  "done": true,
+  "answer": "All recipes using black garlic in directions have been deleted - search for 'black garlic' in ALL RECIPES shows 'No recipes found.'",
+  "steps_device": 29,
+  "iterations": 30,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 7,
+   "swipe": 1,
+   "tap": 14,
+   "type": 7,
+   "done": 1
+  },
+  "model_calls": 33,
+  "input_tokens": 77783,
+  "cached_tokens": 59409,
+  "output_tokens": 8379,
+  "reasoning_tokens": 6124,
+  "cost_usd": 0.06749,
+  "cost_at_standard_usd": 0.06749,
+  "duration_s": 90.33,
+  "model_s": 52.21,
+  "device_s": 38.12,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.flauschcode.broccoli",
+   "subgoals": [
+    "Open navigation drawer to explore other sections and filters",
+    "Search for black garlic across all recipes",
+    "Open matching recipes to verify black garlic in directions",
+    "Delete each recipe that uses black garlic in directions",
+    "Verify search for black garlic shows no remaining recipes"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "confirmation that no recipes using black garlic remain",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: All, ALL, RECIPES"
+  },
+  "trace_dir": "data/runs/aw-baseline-standard-1028-042250-371f",
+  "envoy_commit": "0807a1631c3da2f8fc36e25853eeb50d9eb3f80b+dirty-backend",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline-standard/traces/RecipeDeleteMultipleRecipesWithConstraint__s3296470235.jsonl.gz",
+  "wall_s": 92.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

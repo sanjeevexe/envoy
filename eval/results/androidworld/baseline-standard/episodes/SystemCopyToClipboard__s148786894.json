@@ -1,0 +1,79 @@
+{
+ "task": "SystemCopyToClipboard",
+ "seed": 148786894,
+ "goal": "Copy the following text to the clipboard: Tracking #: 5K672F4C",
+ "score": 0.0,
+ "aw_run_time_s": 48.7,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 05:09:12.003184",
+ "envoy": {
+  "run_id": "aw-baseline-standard-1028-050826-37fc",
+  "goal": "Copy the following text to the clipboard: Tracking #: 5K672F4C",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 10,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 3,
+  "replans": 1,
+  "stuck_recoveries": 1,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 5,
+   "tap": 4
+  },
+  "model_calls": 11,
+  "input_tokens": 24799,
+  "cached_tokens": 18139,
+  "output_tokens": 2747,
+  "reasoning_tokens": 2140,
+  "cost_usd": 0.022721,
+  "cost_at_standard_usd": 0.022721,
+  "duration_s": 37.79,
+  "model_s": 19.89,
+  "device_s": 17.9,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [
+   "notification prompt: no thanks"
+  ],
+  "plan": {
+   "app": null,
+   "subgoals": [
+    "Open Chrome to get a text input area",
+    "Enter the text Tracking #: 5K672F4C",
+    "Select the text and copy it to the clipboard"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "5K672F4C",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-standard-1028-050826-37fc",
+  "envoy_commit": "0807a1631c3da2f8fc36e25853eeb50d9eb3f80b+dirty-backend",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline-standard/traces/SystemCopyToClipboard__s148786894.jsonl.gz",
+  "wall_s": 40.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

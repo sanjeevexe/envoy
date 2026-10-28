@@ -1,0 +1,80 @@
+{
+ "task": "ClockTimerEntry",
+ "seed": 1172248264,
+ "goal": "Create a timer with 0 hours, 16 minutes, and 35 seconds. Do not start the timer.",
+ "score": 0.0,
+ "aw_run_time_s": 39.2,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 03:27:35.169330",
+ "envoy": {
+  "run_id": "aw-baseline-standard-1028-032657-b0fa",
+  "goal": "Create a timer with 0 hours, 16 minutes, and 35 seconds. Do not start the timer.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 9,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 2,
+   "launch": 1,
+   "tap": 6,
+   "done": 1
+  },
+  "model_calls": 11,
+  "input_tokens": 26024,
+  "cached_tokens": 19547,
+  "output_tokens": 4566,
+  "reasoning_tokens": 3808,
+  "cost_usd": 0.030434,
+  "cost_at_standard_usd": 0.030434,
+  "duration_s": 33.13,
+  "model_s": 21.21,
+  "device_s": 11.92,
+  "connect_s": 0.91,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.google.android.deskclock",
+   "subgoals": [
+    "Open the Clock app",
+    "Go to the Timer tab",
+    "Set 0 hours, 16 minutes, 35 seconds",
+    "Create timer but do not start it"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "16:35",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-standard-1028-032657-b0fa",
+  "envoy_commit": "0807a1631c3da2f8fc36e25853eeb50d9eb3f80b+dirty-backend",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline-standard/traces/ClockTimerEntry__s1172248264.jsonl.gz",
+  "wall_s": 35.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

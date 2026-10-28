@@ -1,0 +1,84 @@
+{
+ "task": "SimpleCalendarNextEvent",
+ "seed": 20352009,
+ "goal": "What is my next upcoming event in Simple Calendar Pro? Answer with the title only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 0.0,
+ "aw_run_time_s": 25.1,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 04:50:42.299306",
+ "envoy": {
+  "run_id": "aw-baseline-standard-1028-045019-223d",
+  "goal": "What is my next upcoming event in Simple Calendar Pro? Answer with the title only. If there are multiples titles, format your answer in a comma separated list.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Call with Marketing",
+  "done": true,
+  "answer": "Call with Marketing",
+  "steps_device": 5,
+  "iterations": 7,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "look": 1,
+   "launch": 2,
+   "back": 1,
+   "tap": 2,
+   "done": 1
+  },
+  "model_calls": 8,
+  "input_tokens": 18675,
+  "cached_tokens": 13832,
+  "output_tokens": 1130,
+  "reasoning_tokens": 679,
+  "cost_usd": 0.012931,
+  "cost_at_standard_usd": 0.012931,
+  "duration_s": 17.72,
+  "model_s": 8.03,
+  "device_s": 9.69,
+  "connect_s": 0.92,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Open Simple Calendar Pro app",
+    "Navigate to upcoming events or agenda view",
+    "Read the title of the next upcoming event"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "next upcoming event title",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Call, Marketing"
+  },
+  "trace_dir": "data/runs/aw-baseline-standard-1028-045019-223d",
+  "envoy_commit": "0807a1631c3da2f8fc36e25853eeb50d9eb3f80b+dirty-backend",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline-standard/traces/SimpleCalendarNextEvent__s20352009.jsonl.gz",
+  "wall_s": 20.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.3
+  }
+ }
+}

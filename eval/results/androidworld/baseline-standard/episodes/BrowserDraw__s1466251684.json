@@ -1,0 +1,78 @@
+{
+ "task": "BrowserDraw",
+ "seed": 1466251684,
+ "goal": "Open the file task.html in Downloads in the file manager; when prompted open it with Chrome. Then create a drawing using the three colors shown at the top and hit submit.",
+ "score": 0.0,
+ "aw_run_time_s": 30.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 03:22:12.686869",
+ "envoy": {
+  "run_id": "aw-baseline-standard-1028-032145-f03f",
+  "goal": "Open the file task.html in Downloads in the file manager; when prompted open it with Chrome. Then create a drawing using the three colors shown at the top and hit submit.",
+  "max_steps": 20,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "failed",
+  "result": "stuck on the same screen after two recoveries",
+  "done": true,
+  "answer": null,
+  "steps_device": 6,
+  "iterations": 7,
+  "looks": 0,
+  "screenshots_sent": 3,
+  "replans": 0,
+  "stuck_recoveries": 3,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 4,
+   "launch": 1
+  },
+  "model_calls": 6,
+  "input_tokens": 14558,
+  "cached_tokens": 10022,
+  "output_tokens": 1939,
+  "reasoning_tokens": 1548,
+  "cost_usd": 0.015414,
+  "cost_at_standard_usd": 0.015414,
+  "duration_s": 22.64,
+  "model_s": 11.25,
+  "device_s": 11.39,
+  "connect_s": 0.9,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.android.chrome",
+   "subgoals": [
+    "Open file manager and go to Downloads",
+    "Open task.html with Chrome",
+    "Create drawing using the three colors shown at top",
+    "Tap Submit"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "submission result shown after drawing and submit",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-standard-1028-032145-f03f",
+  "envoy_commit": "0807a1631c3da2f8fc36e25853eeb50d9eb3f80b+dirty-backend",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline-standard/traces/BrowserDraw__s1466251684.jsonl.gz",
+  "wall_s": 25.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

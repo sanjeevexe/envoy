@@ -1,0 +1,82 @@
+{
+ "task": "RecipeAddMultipleRecipesFromImage",
+ "seed": 2293877352,
+ "goal": "Add the recipes from recipes.jpg in Simple Gallery Pro to the Broccoli recipe app.",
+ "score": 0.0,
+ "aw_run_time_s": 157.2,
+ "aw_episode_length": 60,
+ "agent": "envoy",
+ "finished": "2026-10-28 04:11:33.080067",
+ "envoy": {
+  "run_id": "aw-baseline-standard-1028-040900-5ebf",
+  "goal": "Add the recipes from recipes.jpg in Simple Gallery Pro to the Broccoli recipe app.",
+  "max_steps": 60,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 60 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 47,
+  "iterations": 60,
+  "looks": 13,
+  "screenshots_sent": 13,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 24,
+   "launch": 7,
+   "tap": 6,
+   "look": 13,
+   "home": 7,
+   "swipe": 3
+  },
+  "model_calls": 63,
+  "input_tokens": 156385,
+  "cached_tokens": 116303,
+  "output_tokens": 14129,
+  "reasoning_tokens": 9873,
+  "cost_usd": 0.127596,
+  "cost_at_standard_usd": 0.127596,
+  "duration_s": 148.12,
+  "model_s": 81.45,
+  "device_s": 66.67,
+  "connect_s": 0.9,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": null,
+   "subgoals": [
+    "Open Simple Gallery Pro and view recipes.jpg to read the recipe names",
+    "Open the Broccoli recipe app to the Recipes list",
+    "Use Add or New recipe to create entries for the recipes from the image",
+    "Confirm the new recipes appear in the Recipes list"
+   ],
+   "success_check": {
+    "kind": "element_present",
+    "value": "Recipes",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-standard-1028-040900-5ebf",
+  "envoy_commit": "0807a1631c3da2f8fc36e25853eeb50d9eb3f80b+dirty-backend",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline-standard/traces/RecipeAddMultipleRecipesFromImage__s2293877352.jsonl.gz",
+  "wall_s": 150.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

@@ -1,0 +1,83 @@
+{
+ "task": "RecipeAddMultipleRecipesFromMarkor",
+ "seed": 4162951690,
+ "goal": "Add the recipes from recipes.txt in Markor to the Broccoli recipe app.",
+ "score": 0.0,
+ "aw_run_time_s": 175.9,
+ "aw_episode_length": 60,
+ "agent": "envoy",
+ "finished": "2026-10-28 04:14:31.396884",
+ "envoy": {
+  "run_id": "aw-baseline-standard-1028-041138-f71f",
+  "goal": "Add the recipes from recipes.txt in Markor to the Broccoli recipe app.",
+  "max_steps": 60,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 60 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 45,
+  "iterations": 60,
+  "looks": 15,
+  "screenshots_sent": 16,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 15,
+   "swipe": 3,
+   "tap": 10,
+   "look": 15,
+   "home": 2,
+   "launch": 8,
+   "scroll": 7
+  },
+  "model_calls": 63,
+  "input_tokens": 163934,
+  "cached_tokens": 116175,
+  "output_tokens": 15480,
+  "reasoning_tokens": 10973,
+  "cost_usd": 0.142915,
+  "cost_at_standard_usd": 0.142915,
+  "duration_s": 167.75,
+  "model_s": 92.27,
+  "device_s": 75.48,
+  "connect_s": 0.9,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.flauschcode.broccoli",
+   "subgoals": [
+    "Copy the recipe details from recipes.txt in Markor",
+    "Open the Broccoli recipe app",
+    "Use Add or New Recipe to create an entry",
+    "Fill in title and details from the file and save"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Thai Peanut Noodle Salad",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-standard-1028-041138-f71f",
+  "envoy_commit": "0807a1631c3da2f8fc36e25853eeb50d9eb3f80b+dirty-backend",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline-standard/traces/RecipeAddMultipleRecipesFromMarkor__s4162951690.jsonl.gz",
+  "wall_s": 170.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

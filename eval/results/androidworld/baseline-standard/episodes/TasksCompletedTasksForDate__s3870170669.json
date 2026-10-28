@@ -1,0 +1,81 @@
+{
+ "task": "TasksCompletedTasksForDate",
+ "seed": 3870170669,
+ "goal": "Which tasks have I completed for October 16 2023 in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 0.0,
+ "aw_run_time_s": 37.2,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 05:11:53.228991",
+ "envoy": {
+  "run_id": "aw-baseline-standard-1028-051117-1f0f",
+  "goal": "Which tasks have I completed for October 16 2023 in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 8,
+  "iterations": 10,
+  "looks": 2,
+  "screenshots_sent": 5,
+  "replans": 1,
+  "stuck_recoveries": 2,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "look": 2,
+   "launch": 1,
+   "back": 4,
+   "tap": 1,
+   "swipe": 1
+  },
+  "model_calls": 11,
+  "input_tokens": 26748,
+  "cached_tokens": 18267,
+  "output_tokens": 1851,
+  "reasoning_tokens": 1053,
+  "cost_usd": 0.021208,
+  "cost_at_standard_usd": 0.021208,
+  "duration_s": 31.25,
+  "model_s": 14.78,
+  "device_s": 16.47,
+  "connect_s": 0.91,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.google.android.apps.tasks",
+   "subgoals": [
+    "Open the Tasks app from Home or app drawer",
+    "Navigate to task lists and find entries dated October 16 2023",
+    "Show completed tasks for that date",
+    "Read the completed task titles"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "completed task titles for October 16 2023",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-standard-1028-051117-1f0f",
+  "envoy_commit": "0807a1631c3da2f8fc36e25853eeb50d9eb3f80b+dirty-backend",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline-standard/traces/TasksCompletedTasksForDate__s3870170669.jsonl.gz",
+  "wall_s": 33.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

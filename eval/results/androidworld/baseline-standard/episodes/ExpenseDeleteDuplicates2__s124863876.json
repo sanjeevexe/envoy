@@ -1,0 +1,82 @@
+{
+ "task": "ExpenseDeleteDuplicates2",
+ "seed": 124863876,
+ "goal": "Delete all but one of any expenses in pro expense that are exact duplicates, ensuring at least one instance of each unique expense remains.",
+ "score": 0.0,
+ "aw_run_time_s": 62.7,
+ "aw_episode_length": 18,
+ "agent": "envoy",
+ "finished": "2026-10-28 03:38:43.304633",
+ "envoy": {
+  "run_id": "aw-baseline-standard-1028-033743-2948",
+  "goal": "Delete all but one of any expenses in pro expense that are exact duplicates, ensuring at least one instance of each unique expense remains.",
+  "max_steps": 18,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 18 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 16,
+  "iterations": 18,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 2,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 10,
+   "swipe": 2,
+   "type": 1,
+   "tap": 1,
+   "look": 2,
+   "tap_point": 2
+  },
+  "model_calls": 26,
+  "input_tokens": 47936,
+  "cached_tokens": 35412,
+  "output_tokens": 3828,
+  "reasoning_tokens": 2468,
+  "cost_usd": 0.052445,
+  "cost_at_standard_usd": 0.052445,
+  "duration_s": 54.73,
+  "model_s": 22.06,
+  "device_s": 32.67,
+  "connect_s": 0.89,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": null,
+   "subgoals": [
+    "Open app drawer and launch Pro Expense",
+    "Navigate to expenses list or history",
+    "Identify exact duplicate expenses",
+    "Delete duplicates keeping one instance of each unique expense"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "expenses list showing only one instance per unique expense",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-standard-1028-033743-2948",
+  "envoy_commit": "0807a1631c3da2f8fc36e25853eeb50d9eb3f80b+dirty-backend",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline-standard/traces/ExpenseDeleteDuplicates2__s124863876.jsonl.gz",
+  "wall_s": 57.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

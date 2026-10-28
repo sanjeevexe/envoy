@@ -1,0 +1,80 @@
+{
+ "task": "SportsTrackerActivitiesCountForWeek",
+ "seed": 3624822263,
+ "goal": "How many running activities did I do this week in the OpenTracks app? Assume the week starts from Monday. Express your answer as a single integer.",
+ "score": 0.0,
+ "aw_run_time_s": 41.4,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 04:59:40.943625",
+ "envoy": {
+  "run_id": "aw-baseline-standard-1028-045902-d704",
+  "goal": "How many running activities did I do this week in the OpenTracks app? Assume the week starts from Monday. Express your answer as a single integer.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 10,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 1,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 4,
+   "swipe": 1,
+   "tap": 4,
+   "launch": 1
+  },
+  "model_calls": 12,
+  "input_tokens": 27075,
+  "cached_tokens": 20044,
+  "output_tokens": 2349,
+  "reasoning_tokens": 1521,
+  "cost_usd": 0.021779,
+  "cost_at_standard_usd": 0.021779,
+  "duration_s": 33.94,
+  "model_s": 17.71,
+  "device_s": 16.23,
+  "connect_s": 0.91,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": null,
+   "subgoals": [
+    "Open the OpenTracks app from the app drawer",
+    "Go to track list, history or statistics section",
+    "Identify running activities dated from Monday of this week",
+    "Count the running activities for this week"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "number of running activities this week",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-standard-1028-045902-d704",
+  "envoy_commit": "0807a1631c3da2f8fc36e25853eeb50d9eb3f80b+dirty-backend",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline-standard/traces/SportsTrackerActivitiesCountForWeek__s3624822263.jsonl.gz",
+  "wall_s": 37.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

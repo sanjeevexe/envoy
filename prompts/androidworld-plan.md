@@ -139,3 +139,22 @@ uv run --project backend python eval/androidworld/report.py            # tables 
 - **App setup:** two onboarding steps failed during AndroidWorld's automatic setup (Contacts' "Don't allow", OpenTracks' "Allow"); finished by hand and noted.
 - **Noise:** model non-determinism; the held-out half is 58 tasks, so a difference of a few tasks is within noise. I'll say so rather than over-claim.
 - **Contributor latency** inflates the agent's time against routines; times are reported split into model and device time so they can be compared at standard latency.
+
+## Dev-half analysis and the fixes chosen from it (Oct 28, before any re-measurement)
+
+Written before any run with the fixes, from the **dev half only** (held-out traces not read for causes). Each of the 45 failed dev episodes of the Contributor baseline was read step by step and labeled with its decisive step and quotes (`eval/results/androidworld/baseline/labels_dev.jsonl`); mechanism counts come from `signals.py`.
+
+| Group | Failures | Mechanism, in the traces' words |
+| --- | ---: | --- |
+| A. Could not open the app | 15 | The plan named no app or a wrong package (`net.osmand.plus`, `com.google.android.apps.tasks`, `…nbu.files`); launch failed with no fallback; the model wanted the app drawer but pressed back ("Placeholder to comply with schema while opening drawer"). 1,057 of 2,146 Contributor steps were on the home screen. |
+| B. An action the model didn't mean, inside the app | 16 | back with a reason saying otherwise ("No, must continue timer entry"), copied from history ("Accidental back, need to recover" right after the app opened), or "to dismiss the keyboard" with none up (closing Markor's editor, discarding recipe forms). |
+| C. Finished, never concluded | 8 | Two correct dones rejected by the plan's invented check ("Resume", "Thumbnail") and not repeated; six kept verifying a deletion or a setting until the budget ran out. |
+| D. Couldn't read or keep content | 3 | Markor's recipes.txt (12,101 characters in one EditText) showed as its first 120; a note read and forgotten (5-step history). |
+| E. Dates | 2 | The model never knew the phone's date (Sunday, October 15 2023): "this Monday October 26"; "Thursday" not mapped to October 12. |
+| F. Ambiguity | 1 | "after 5:20pm" read strictly; AndroidWorld means at or after. |
+
+Cross-cutting: a Clock timer left running by an earlier task ticks on the home screen in every later task (AndroidWorld resets the phone's clock per task), so no-op backs read as "screen changed" (255 in the dev half) and stuck detection never fired; the history echoed the model's own expectations back (375 repeats in 40 of 45 failures).
+
+**Fixes, one commit each, all general** (none names a task, an app's screens or an answer): (1) open apps by name, the planner sees the phone's apps; (2) screen lines that change by themselves are not progress; (3) history without the model's expected text; (4) SCREEN says when the keyboard is open, back is explained, an action the model itself calls a placeholder is asked again; (5) done once the screen shows it, answers in the goal's format, a second done accepted; (6) stuck recoveries start afresh after progress; (7) the phone's date to plan and steps; (8) long text at length; (9) a routine-compiler bug on main (swipes compiled as launches, launches dropped); (10) expected_result before the action in the step schema. Harness: hide android_env's pointer overlay as AndroidWorld's agents do; count rejected dones.
+
+**Order of measurement:** merge main into the branch (the fixes are proposed against current main); dev half on the Contributor tier with the fixes, compared with the Contributor baseline's dev half; iterate on dev only; then all 116 on the standard tier, reported by half against the standard baseline. A held-out gain is the evidence for a merge; a dev-only gain is flagged as such.

@@ -1,0 +1,81 @@
+{
+ "task": "RecipeAddMultipleRecipesFromMarkor2",
+ "seed": 1406555389,
+ "goal": "Add the recipes from recipes.txt in Markor that take 10 mins to prepare into the Broccoli recipe app.",
+ "score": 0.0,
+ "aw_run_time_s": 108.8,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 04:16:21.433444",
+ "envoy": {
+  "run_id": "aw-baseline-standard-1028-041436-62f8",
+  "goal": "Add the recipes from recipes.txt in Markor that take 10 mins to prepare into the Broccoli recipe app.",
+  "max_steps": 60,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "failed",
+  "result": "stuck on the same screen after two recoveries",
+  "done": true,
+  "answer": null,
+  "steps_device": 25,
+  "iterations": 31,
+  "looks": 5,
+  "screenshots_sent": 12,
+  "replans": 2,
+  "stuck_recoveries": 3,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 8,
+   "look": 5,
+   "scroll": 8,
+   "back": 7
+  },
+  "model_calls": 32,
+  "input_tokens": 86567,
+  "cached_tokens": 57248,
+  "output_tokens": 9442,
+  "reasoning_tokens": 6937,
+  "cost_usd": 0.085364,
+  "cost_at_standard_usd": 0.085364,
+  "duration_s": 100.13,
+  "model_s": 58.11,
+  "device_s": 42.02,
+  "connect_s": 0.91,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": null,
+   "subgoals": [
+    "Read recipes.txt in Markor to identify recipes with preparationTime 10 mins",
+    "Open the Broccoli recipe app",
+    "Create new recipes in Broccoli for each 10-min entry from the file",
+    "Verify the added recipes appear in Broccoli"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Turkey and Cheese Panini",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-standard-1028-041436-62f8",
+  "envoy_commit": "0807a1631c3da2f8fc36e25853eeb50d9eb3f80b+dirty-backend",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline-standard/traces/RecipeAddMultipleRecipesFromMarkor2__s1406555389.jsonl.gz",
+  "wall_s": 102.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.3
+  }
+ }
+}

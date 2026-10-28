@@ -1,0 +1,82 @@
+{
+ "task": "ExpenseAddMultiple",
+ "seed": 3130695708,
+ "goal": "Add the following expenses into the pro expense:\nExpense: Social Club Dues\n amount_dollars: $67.41\n category_name: Social\n note: Monthly recurring\n\nExpense: Legal Fees\n amount_dollars: $10.14\n category_name: Others\n note: Monthly recurring\n\nExpense: Stationery\n amount_dollars: $118.93\n category_name: Others\n note: Remember to transfer funds\n",
+ "score": 0.0,
+ "aw_run_time_s": 173.0,
+ "aw_episode_length": 60,
+ "agent": "envoy",
+ "finished": "2026-10-28 03:31:47.956675",
+ "envoy": {
+  "run_id": "aw-baseline-standard-1028-032857-7199",
+  "goal": "Add the following expenses into the pro expense:\nExpense: Social Club Dues\n amount_dollars: $67.41\n category_name: Social\n note: Monthly recurring\n\nExpense: Legal Fees\n amount_dollars: $10.14\n category_name: Others\n note: Monthly recurring\n\nExpense: Stationery\n amount_dollars: $118.93\n category_name: Others\n note: Remember to transfer funds\n",
+  "max_steps": 60,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 60 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 59,
+  "iterations": 60,
+  "looks": 1,
+  "screenshots_sent": 6,
+  "replans": 2,
+  "stuck_recoveries": 1,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 10,
+   "tap": 26,
+   "type": 14,
+   "scroll": 3,
+   "swipe": 6,
+   "look": 1
+  },
+  "model_calls": 63,
+  "input_tokens": 167524,
+  "cached_tokens": 123471,
+  "output_tokens": 11903,
+  "reasoning_tokens": 7484,
+  "cost_usd": 0.124175,
+  "cost_at_standard_usd": 0.124175,
+  "duration_s": 166.07,
+  "model_s": 79.03,
+  "device_s": 87.04,
+  "connect_s": 0.89,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.arduia.expense",
+   "subgoals": [
+    "Finish Legal Fees $10.14 entry: select Others category, enter Monthly recurring note, save",
+    "Add Social Club Dues $67.41 entry: select Social category, enter Monthly recurring note, save",
+    "Add Stationery $118.93 entry: select Others category, enter Remember to transfer funds note, save",
+    "Verify all three expenses appear in Pro Expense list"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Stationery",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-standard-1028-032857-7199",
+  "envoy_commit": "0807a1631c3da2f8fc36e25853eeb50d9eb3f80b+dirty-backend",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline-standard/traces/ExpenseAddMultiple__s3130695708.jsonl.gz",
+  "wall_s": 168.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

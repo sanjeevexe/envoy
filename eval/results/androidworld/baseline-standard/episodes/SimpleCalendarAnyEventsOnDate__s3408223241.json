@@ -1,0 +1,83 @@
+{
+ "task": "SimpleCalendarAnyEventsOnDate",
+ "seed": 3408223241,
+ "goal": "Do I have any events October 28 in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 1.0,
+ "aw_run_time_s": 35.9,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 04:43:18.633409",
+ "envoy": {
+  "run_id": "aw-baseline-standard-1028-044245-e548",
+  "goal": "Do I have any events October 28 in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Game night, Product demo, Date night",
+  "done": true,
+  "answer": "Game night, Product demo, Date night",
+  "steps_device": 2,
+  "iterations": 6,
+  "looks": 3,
+  "screenshots_sent": 3,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "look": 3,
+   "launch": 1,
+   "tap_point": 1,
+   "done": 1
+  },
+  "model_calls": 11,
+  "input_tokens": 18564,
+  "cached_tokens": 11927,
+  "output_tokens": 1634,
+  "reasoning_tokens": 1175,
+  "cost_usd": 0.031622,
+  "cost_at_standard_usd": 0.031622,
+  "duration_s": 29.15,
+  "model_s": 12.38,
+  "device_s": 16.77,
+  "connect_s": 0.9,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Open Simple Calendar Pro app",
+    "Navigate to October 28",
+    "Read event titles shown for October 28"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "event titles on October 28",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Game, Product, Date"
+  },
+  "trace_dir": "data/runs/aw-baseline-standard-1028-044245-e548",
+  "envoy_commit": "0807a1631c3da2f8fc36e25853eeb50d9eb3f80b+dirty-backend",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline-standard/traces/SimpleCalendarAnyEventsOnDate__s3408223241.jsonl.gz",
+  "wall_s": 31.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}
