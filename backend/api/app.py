@@ -39,6 +39,7 @@ from routines.store import RoutineStore
 
 from api.auth import Auth, Caller, allowed_hosts, public_url, tunnel_hosts
 from api.chat import chat
+from api.crossapp import CrossApp
 from api.devices import DevicePool
 from api.events import EventBus
 from api.live import live_view
@@ -92,6 +93,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     adapter = adapter or ModelAdapter()
     pool = DevicePool(bus)
     runner = TaskRunner(tasks, bus, pool, memory, routines, adapter)
+    runner.crossapp = CrossApp(runner, routines, memory, adapter)
     scheduler = Scheduler(tasks, memory, runner.start, bus, routines, every_s=scheduler_every_s)
     ctx = Ctx(tasks, bus, pool, memory, routines, adapter, runner, scheduler, profile)
     memory.subscribe(lambda ev: bus.publish("memory", event=ev))
