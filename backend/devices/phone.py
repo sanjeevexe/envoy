@@ -117,6 +117,8 @@ class Banner:
     def __init__(self, serial: str) -> None:
         self.serial = serial
         self.ready = False
+        self.visible = False  # shown by Envoy and not hidden since
+        self.text = "Envoy is using this phone"
 
     def _svc(self, action: str, *extra: str) -> None:
         adb(self.serial, "shell", "am", "start-foreground-service", "-n", f"{BANNER_PACKAGE}/.BannerService",
@@ -137,6 +139,7 @@ class Banner:
 
     def show(self, text: str) -> None:
         if self.install():
+            self.text, self.visible = text, True
             self._svc("SHOW", "--es", "text", _shell_quote(text[:60]))
 
     def pause(self, reason: str) -> None:
@@ -149,6 +152,7 @@ class Banner:
 
     def hide(self) -> None:
         if self.ready:
+            self.visible = False
             self._svc("HIDE")
 
     def state(self) -> dict[str, Any]:
@@ -200,6 +204,31 @@ class PhoneDevice(AndroidDevice):
     # ---- act --------------------------------------------------------------------------------
 
     def _tap(self, x: int, y: int, hold_s: float = 0.0) -> None:
+        """A tap under the banner would land on the banner, not the app: it is a window of its own above the app, and on
+        its Pause button an injected tap paused the run as if you had pressed it (Pixel 5, where the pill sits over the
+        app's top bar, the search box of many apps). The banner steps aside for that tap and comes back."""
+        rect = self._banner_rect()
+        if rect is not None and rect[0] <= x <= rect[2] and rect[1] <= y <= rect[3]:
+            self.banner.hide()
+            time.sleep(0.15)
+            try:
+                self._tap_now(x, y, hold_s)
+            finally:
+                self.banner.show(self.banner.text)
+            return
+        self._tap_now(x, y, hold_s)
+
+    def _banner_rect(self, pad: int = 12) -> tuple[int, int, int, int] | None:
+        """The banner's pill on the screen read last (its own window, left out of what Envoy reads), padded a little."""
+        if not self.banner.visible or self._last is None:
+            return None
+        pills = [e.bounds for e in self._last.elements if e.package == BANNER_PACKAGE and e.bounds[2] > e.bounds[0]]
+        if not pills:
+            return None
+        x1, y1, x2, y2 = max(pills, key=lambda b: (b[2] - b[0]) * (b[3] - b[1]))
+        return x1 - pad, y1 - pad, x2 + pad, y2 + pad
+
+    def _tap_now(self, x: int, y: int, hold_s: float = 0.0) -> None:
         """scrcpy's control socket (milliseconds), uiautomator2 (~150 ms) as the fallback; both are injected, so the
         touch watcher never mistakes them for you."""
         try:

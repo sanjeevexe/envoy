@@ -494,3 +494,34 @@ def test_frames_tagged_with_a_colorspace_ffmpeg_cannot_convert_still_convert():
     s._frame = f
     assert s.image().size == (64, 128) and s.frame(32).size == (32, 64)
     assert s._src_colorspace in (None, "ITU601")  # overridden only where the tag can't be converted
+
+
+def test_a_tap_under_the_phone_banner_steps_the_banner_aside():
+    from devices.phone import BANNER_PACKAGE, Banner, PhoneDevice
+    from routines.screens import screen_from_tree
+    calls: list[str] = []
+
+    class Recorder(Banner):
+        def _svc(self, action, *extra):
+            calls.append(action)
+    dev = PhoneDevice.__new__(PhoneDevice)
+    dev.banner = Recorder("phone")
+    dev.banner.ready = True
+    dev._tap_now = lambda x, y, hold_s=0.0: calls.append(f"tap {x},{y}")  # type: ignore[method-assign]
+    s = screen_from_tree({"package": "com.google.android.gm", "activity": "A", "width": 1080, "height": 2340, "elements": [
+        {"index": 0, "parent": None, "number": 1, "kind": "EditText", "class": "android.widget.EditText", "label": "Search in mail",
+         "text": "", "bounds": [40, 150, 1040, 270]},
+        {"index": 1, "parent": None, "kind": "", "class": "android.widget.LinearLayout", "bounds": [208, 141, 872, 243]}]})
+    s.elements[1].package = BANNER_PACKAGE  # the pill, as the Pixel 5 put it: over the app's search box
+    dev._last = s
+    dev.banner.show("Envoy is using this phone")
+    calls.clear()
+    dev._tap(540, 200)  # Gmail's search box, under the pill
+    assert calls == ["HIDE", "tap 540,200", "SHOW"] and dev.banner.visible
+    calls.clear()
+    dev._tap(540, 1200)  # elsewhere: the banner stays
+    assert calls == ["tap 540,1200"]
+    dev.banner.hide()
+    calls.clear()
+    dev._tap(540, 200)  # no banner showing: nothing to step aside
+    assert calls == ["tap 540,200"]
