@@ -165,3 +165,30 @@ def test_a_second_done_is_accepted_when_the_plans_check_disagrees(tmp_path, monk
                       .run("Pause the stopwatch", task_id="dn", memory=""))
     assert res.status == "done_unverified" and len(model.prompts) == 2
     assert "answer done again now and it will be accepted" in model.prompts[1]
+
+
+class Moving(TickingHome):
+    """Each tap changes the screen; back changes nothing."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.page = 0
+
+    def _read(self):
+        return home(f"page {self.page}")
+
+    async def act(self, action):
+        self.actions.append(action)
+        if action.kind == "tap":
+            self.page += 1
+        return ActionResult(ok=True, duration_ms=1.0)
+
+
+def test_stuck_recoveries_start_afresh_after_progress(tmp_path, monkeypatch):
+    monkeypatch.setattr(TraceWriter.__init__, "__defaults__", (tmp_path,))
+    back, tap = step({"type": "back"}, "Go back"), step({"type": "tap", "element": 2})
+    # stuck twice (recoveries 1 and 2), then real progress, then stuck again: before, the third recovery failed the run
+    model = Seq(back, back, back, tap, tap, tap, back, back, back, step({"type": "done", "result": "ok"}))
+    res = asyncio.run(AgentRunner(Moving(), model, ScriptedApprover(True), RunConfig(max_steps=30, data_scope="test_app"))
+                      .run("Open Gmail", task_id="st", memory=""))
+    assert res.status != "failed"

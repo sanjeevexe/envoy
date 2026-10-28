@@ -38,6 +38,7 @@ HISTORY_STEPS = 5
 # AndroidWorld such a back left the app or threw away a form: it is asked again instead of carried out.
 _PLACEHOLDER = re.compile(r"placeholder|schema requires|(required by|comply with|satisfy) (the )?schema|incorrect but|"
                           r"wrong action|this is wrong|\bmistake\b|^\W*\w?\W*$|^one short sentence", re.I)
+PROGRESS_STEPS = 3  # changed screens in a row after which earlier stuck recoveries no longer count
 
 
 @dataclass
@@ -168,6 +169,7 @@ class AgentRunner:
         want_screenshot = self.config.screenshots == "always"
         rejections = 0
         no_change_streak = 0
+        progress_streak = 0
         stuck_recoveries = 0
         plan: Plan | None = None
         last_bodies: list[str] = []  # the last screens' compact forms, for stuck detection
@@ -442,6 +444,9 @@ class AgentRunner:
                 vol = volatile.get(screen.signature, set())
                 changed = _masked(after.compact, vol) != _masked(screen.compact, vol) if after.signature == screen.signature else True
                 no_change_streak = 0 if changed else no_change_streak + 1
+                progress_streak = progress_streak + 1 if changed else 0
+                if progress_streak >= PROGRESS_STEPS:  # moving again: a later stuck spell starts its recoveries afresh
+                    stuck_recoveries = 0
                 record.update({
                     "device_action": action.model_dump(), "result": result_.model_dump(),
                     "target": element_record(screen.numbered[action.element - 1], screen) if action.element else None,
