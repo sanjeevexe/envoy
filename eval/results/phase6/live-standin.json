@@ -1,0 +1,24 @@
+{
+ "time": "2026-10-28T00:35:57+00:00",
+ "url": "ws://127.0.0.1:8701/api/live/phone-EMULATOR37X2X12X0",
+ "hello": {
+  "type": "hello",
+  "avd": "phone-EMULATOR37X2X12X0",
+  "width": 720,
+  "height": 1280,
+  "control": {
+   "avd": "phone-EMULATOR37X2X12X0",
+   "task_id": null,
+   "user_control": false,
+   "since": 0.0,
+   "reason": ""
+  },
+  "kind": "phone"
+ },
+ "frames": 58,
+ "fps": 6.4,
+ "frame_ms_p50": 12,
+ "frame_ms_max": 60,
+ "rtt_ms_p50": 0,
+ "kb_per_frame": 31.7
+}

@@ -377,9 +377,9 @@ async def cmd_live(args: argparse.Namespace) -> None:
             while True:
                 m = await ws.recv()
                 if isinstance(m, str) and json.loads(m).get("type") == "pong":
-                    now = time.time()
-                    rtts.append((now - t) * 1000)
-                    offset = json.loads(m)["server"] - (t + now) / 2
+                    back = time.time()
+                    rtts.append((back - t) * 1000)
+                    offset = json.loads(m)["server"] - (t + back) / 2
                     break
 
         async def change_screen() -> None:

@@ -1,0 +1,865 @@
+{
+ "time": "2026-10-28T00:45:34+00:00",
+ "k": 2,
+ "devices": {
+  "phone": {
+   "size": [
+    720,
+    1280
+   ],
+   "density": 320,
+   "model": "sdk_gphone64_arm64",
+   "android": "15",
+   "real_phone": false,
+   "summary": {
+    "runs": 12,
+    "passed": 12,
+    "success": 1.0,
+    "no_model_calls": 12,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "median_s": 7.5,
+    "repairs": 0,
+    "agent_fallbacks": 0
+   },
+   "rows": [
+    {
+     "kind": "port-phone",
+     "family": "check_in",
+     "booking": "GYZ21D",
+     "city": "Tucson",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "seat": "11B",
+      "gate": "B1",
+      "boarding_time": "12:40 PM"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 9.65,
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.995,
+       "ms": 1375
+      },
+      {
+       "id": "find_select_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 2567
+      },
+      {
+       "id": "select_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 685
+      },
+      {
+       "id": "start_check_in",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.963,
+       "ms": 519
+      },
+      {
+       "id": "select_passenger",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.97,
+       "ms": 704
+      },
+      {
+       "id": "continue_after_passenger",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.976,
+       "ms": 1048
+      },
+      {
+       "id": "confirm_no_hazardous_materials",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.973,
+       "ms": 984
+      },
+      {
+       "id": "continue_after_hazmat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.97,
+       "ms": 1129
+      },
+      {
+       "id": "confirm_check_in",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.968,
+       "ms": 519
+      }
+     ],
+     "patches": [],
+     "approvals": 1,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-phone-check_in-v0-GYZ21D",
+     "routine": "skylark_air_check_in_flight",
+     "version": 1,
+     "device": "phone"
+    },
+    {
+     "kind": "port-phone",
+     "family": "change_seat",
+     "booking": "GYZ21D",
+     "city": "Tucson",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "seat": "10C"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 9.24,
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.995,
+       "ms": 1593
+      },
+      {
+       "id": "find_open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 3221
+      },
+      {
+       "id": "open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 691
+      },
+      {
+       "id": "open_change_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.958,
+       "ms": 696
+      },
+      {
+       "id": "find_select_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.872,
+       "ms": 618
+      },
+      {
+       "id": "select_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.872,
+       "ms": 1288
+      },
+      {
+       "id": "confirm_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.996,
+       "ms": 973
+      }
+     ],
+     "patches": [],
+     "approvals": 1,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-phone-change_seat-v0-GYZ21D",
+     "routine": "skylark_change_seat",
+     "version": 1,
+     "device": "phone"
+    },
+    {
+     "kind": "port-phone",
+     "family": "add_ktn",
+     "booking": "GYZ21D",
+     "city": "Tucson",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "known_traveler_number": "31740181",
+      "confirmation_code": "GYZ21D"
+     },
+     "rung": 2,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 20.52,
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.995,
+       "ms": 1604
+      },
+      {
+       "id": "find_open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 3517
+      },
+      {
+       "id": "open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 585
+      },
+      {
+       "id": "enter_known_traveler_number",
+       "status": "done",
+       "rung": 2,
+       "rungs": [
+        "relaxed match: scrolled to reveal the target [6] \"Known traveler number\" score 0.99 (runner-up 0.00)"
+       ],
+       "score": 0.987,
+       "ms": 5773
+      },
+      {
+       "id": "save_known_traveler_number",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.99,
+       "ms": 868
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-phone-add_ktn-v0-GYZ21D",
+     "routine": "skylark_add_known_traveler_number",
+     "version": 1,
+     "device": "phone"
+    },
+    {
+     "kind": "port-phone",
+     "family": "gate",
+     "booking": "GYZ21D",
+     "city": "Tucson",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "gate": "B1"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 5.41,
+     "steps": [
+      {
+       "id": "tap_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.995,
+       "ms": 1212
+      },
+      {
+       "id": "find_tap_trip_row",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 3494
+      },
+      {
+       "id": "tap_trip_row",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 625
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-phone-gate-v0-GYZ21D",
+     "routine": "skylark_get_flight_gate",
+     "version": 1,
+     "device": "phone"
+    },
+    {
+     "kind": "port-phone",
+     "family": "flight_status",
+     "booking": "GYZ21D",
+     "city": "Tucson",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "flight_status": "On time",
+      "route": "ATL → TUS",
+      "date": "Thu, Nov 19, 2026",
+      "gate": "B1",
+      "departure_time": "2:15 PM"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 5.0,
+     "steps": [
+      {
+       "id": "tap_flight_status",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.995,
+       "ms": 966
+      },
+      {
+       "id": "enter_flight_number",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.985,
+       "ms": 2642
+      },
+      {
+       "id": "tap_search",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.976,
+       "ms": 1099
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-phone-flight_status-v0-GYZ21D",
+     "routine": "skylark_check_flight_status",
+     "version": 1,
+     "device": "phone"
+    },
+    {
+     "kind": "port-phone",
+     "family": "find_trip",
+     "booking": "GYZ21D",
+     "city": "Tucson",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "destination": "Tucson"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 5.4,
+     "steps": [
+      {
+       "id": "tap_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.995,
+       "ms": 1508
+      },
+      {
+       "id": "find_tap_trip_by_confirmation_code",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 3077
+      },
+      {
+       "id": "tap_trip_by_confirmation_code",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 716
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-phone-find_trip-v0-GYZ21D",
+     "routine": "skylark_lookup_trip_destination",
+     "version": 1,
+     "device": "phone"
+    },
+    {
+     "kind": "port-phone",
+     "family": "check_in",
+     "booking": "OP2CYP",
+     "city": "Portland",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "seat": "10C",
+      "gate": "E9",
+      "boarding_time": "6:00 AM"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 10.35,
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.995,
+       "ms": 1550
+      },
+      {
+       "id": "find_select_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 3250
+      },
+      {
+       "id": "select_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 641
+      },
+      {
+       "id": "start_check_in",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.963,
+       "ms": 497
+      },
+      {
+       "id": "select_passenger",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.97,
+       "ms": 977
+      },
+      {
+       "id": "continue_after_passenger",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.976,
+       "ms": 757
+      },
+      {
+       "id": "confirm_no_hazardous_materials",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.973,
+       "ms": 856
+      },
+      {
+       "id": "continue_after_hazmat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.97,
+       "ms": 1138
+      },
+      {
+       "id": "confirm_check_in",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.968,
+       "ms": 582
+      }
+     ],
+     "patches": [],
+     "approvals": 1,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-phone-check_in-v0-OP2CYP",
+     "routine": "skylark_air_check_in_flight",
+     "version": 1,
+     "device": "phone"
+    },
+    {
+     "kind": "port-phone",
+     "family": "change_seat",
+     "booking": "OP2CYP",
+     "city": "Portland",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "seat": "11A"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 12.57,
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 2.2 s"
+       ],
+       "score": 0.995,
+       "ms": 3576
+      },
+      {
+       "id": "find_open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 4237
+      },
+      {
+       "id": "open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 686
+      },
+      {
+       "id": "open_change_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.958,
+       "ms": 719
+      },
+      {
+       "id": "find_select_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.872,
+       "ms": 676
+      },
+      {
+       "id": "select_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.872,
+       "ms": 1389
+      },
+      {
+       "id": "confirm_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.996,
+       "ms": 1078
+      }
+     ],
+     "patches": [],
+     "approvals": 1,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-phone-change_seat-v0-OP2CYP",
+     "routine": "skylark_change_seat",
+     "version": 1,
+     "device": "phone"
+    },
+    {
+     "kind": "port-phone",
+     "family": "add_ktn",
+     "booking": "OP2CYP",
+     "city": "Portland",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "known_traveler_number": "81246978",
+      "confirmation_code": "OP2CYP"
+     },
+     "rung": 2,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 23.17,
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.995,
+       "ms": 1287
+      },
+      {
+       "id": "find_open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 4490
+      },
+      {
+       "id": "open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 751
+      },
+      {
+       "id": "enter_known_traveler_number",
+       "status": "done",
+       "rung": 2,
+       "rungs": [
+        "relaxed match: scrolled to reveal the target [6] \"Known traveler number\" score 0.99 (runner-up 0.00)"
+       ],
+       "score": 0.987,
+       "ms": 6370
+      },
+      {
+       "id": "save_known_traveler_number",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.99,
+       "ms": 1229
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-phone-add_ktn-v0-OP2CYP",
+     "routine": "skylark_add_known_traveler_number",
+     "version": 1,
+     "device": "phone"
+    },
+    {
+     "kind": "port-phone",
+     "family": "gate",
+     "booking": "OP2CYP",
+     "city": "Portland",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "gate": "E9"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 5.81,
+     "steps": [
+      {
+       "id": "tap_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.995,
+       "ms": 1892
+      },
+      {
+       "id": "find_tap_trip_row",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 3177
+      },
+      {
+       "id": "tap_trip_row",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 659
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-phone-gate-v0-OP2CYP",
+     "routine": "skylark_get_flight_gate",
+     "version": 1,
+     "device": "phone"
+    },
+    {
+     "kind": "port-phone",
+     "family": "flight_status",
+     "booking": "OP2CYP",
+     "city": "Portland",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "flight_status": "On time",
+      "route": "ATL → PDX",
+      "date": "Wed, Nov 25, 2026",
+      "gate": "E9",
+      "departure_time": "7:35 AM"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 3.91,
+     "steps": [
+      {
+       "id": "tap_flight_status",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.995,
+       "ms": 1282
+      },
+      {
+       "id": "enter_flight_number",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.985,
+       "ms": 1673
+      },
+      {
+       "id": "tap_search",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.976,
+       "ms": 769
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-phone-flight_status-v0-OP2CYP",
+     "routine": "skylark_check_flight_status",
+     "version": 1,
+     "device": "phone"
+    },
+    {
+     "kind": "port-phone",
+     "family": "find_trip",
+     "booking": "OP2CYP",
+     "city": "Portland",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "destination": "Portland"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 3.98,
+     "steps": [
+      {
+       "id": "tap_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.995,
+       "ms": 888
+      },
+      {
+       "id": "find_tap_trip_by_confirmation_code",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 2415
+      },
+      {
+       "id": "tap_trip_by_confirmation_code",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 593
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-phone-find_trip-v0-OP2CYP",
+     "routine": "skylark_lookup_trip_destination",
+     "version": 1,
+     "device": "phone"
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,35 @@
+{
+ "time": "2026-10-28T00:34:27+00:00",
+ "device": "phone",
+ "model": "sdk_gphone64_arm64",
+ "android": "15",
+ "real_phone": false,
+ "frame_size": [
+  720,
+  1280
+ ],
+ "start_ms": 396,
+ "fps_idle": 3.0,
+ "tap_to_frame_ms": {
+  "n": 10,
+  "seen": 10,
+  "p50": 62,
+  "max": 81,
+  "all": [
+   76,
+   62,
+   59,
+   37,
+   77,
+   62,
+   62,
+   81,
+   43,
+   35
+  ]
+ },
+ "screenshot_ms": {
+  "stream_p50": 7.0,
+  "adb_screencap_p50": 84
+ }
+}

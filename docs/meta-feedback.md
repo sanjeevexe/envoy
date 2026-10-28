@@ -130,3 +130,19 @@ The submission form asks for "feedback from your experience using Meta products"
 - **The pasted URL is still fetched as a link** by the in-app browser and `facebookexternalhit`, unauthenticated, even when the message asks to add a connector.
 - **No follow-up on long tasks.** Muse checked the task status twice within 5 s, then stopped; it reported completion only when asked. A way for a connector to tell Muse that a task finished (or for Muse to poll a running task for a while) would let it close the loop itself. We rely on our own push notification for that.
 - **A custom connector needs a public URL**, and a quick tunnel's address changes every run, so the connector is re-added each time. A way to reach a server on the user's private network (or to change a connector's URL instead of adding it again) would help.
+
+## SAM 3.1 and Muse Spark grounding on phone screens (Oct 27, Phase 6: screens with no accessibility tree)
+
+Measured on 52 targets (seats on a seat map drawn on a canvas, at two screen sizes, and buttons, fields and icons on real-app screenshots whose accessibility tree gave the truth), then again on a fresh 52.
+
+**What worked well**
+- **SAM 3.1's boxes are pixel-exact.** On the seat map, the box Muse Spark picked from SAM's candidates was 1 px from the seat's centre (median), and 15 of 16 picks were right.
+- **Shown numbered boxes, Muse Spark never picked a wrong one.** In 104 targets it either picked the right box or said none of them was the target. That makes SAM + a pick a safe first pass with a fallback.
+- **Grounding is strong on labelled UI**: 35 of 36 real-app targets (median error 10 px), about 2 s and $0.003 each.
+- **Together they found all 104** (SAM first, grounding when SAM's candidates don't include the target), against 37% for the step model reading coordinates off its own 540 px screenshot.
+
+**What could be better**
+- **SAM 3.1 needs shape words, not UI words.** "seat", "button" and "text" return nothing on a phone screenshot; "square button" returns every seat (84 boxes) and "icon" returns icons. Text buttons ("OKAY", "Compose", a search field) were never among the candidates. A UI-element mode, or documented phrases for UI screenshots, would make it usable alone.
+- **Grounding drifts on dense, repeated grids.** On a 720×1280 screen it landed one seat row off 3 times in 16 (46 to 71 px), where SAM's boxes were exact.
+- **SAM's output is special-token text** (`<|box;x1=…;w=…;h=…;c=…|>` plus base85 masks, about 38 KB for one image) rather than JSON. A structured response, or masks only on request, would save parsing and bandwidth.
+- **The pick slows with many candidates**: choosing among 84 numbered boxes took 15 s once (about 3 s typically). A way to ask SAM for the top N candidates would help.

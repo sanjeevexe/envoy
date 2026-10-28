@@ -113,7 +113,7 @@ Built only if Phase 1 shows that waiting for the screen to settle, or setting te
 
 ### Screenshots and video
 
-On emulators, the agent's screenshots come from the emulator's own gRPC screenshot call (enabled by `-grpc`), measured in Phase 0 at 6 ms for a raw frame (20 ms as PNG). Emulator taps also go through gRPC (under 1 ms, against about 150 ms through uiautomator2). A Node relay is the only **scrcpy** client per device (Apache-2.0); it streams H.264 video for the live view. On a real phone, the agent takes screenshots from the relay's latest frame or `adb screencap` (0.5 to 2.6 seconds on phones; 142 ms on the emulator). Either way, screenshots are the exception: the agent reads text first (see Agent runtime).
+On emulators, the agent's screenshots come from the emulator's own gRPC screenshot call (enabled by `-grpc`), measured in Phase 0 at 6 ms for a raw frame (20 ms as PNG). Emulator taps also go through gRPC (under 1 ms, against about 150 ms through uiautomator2). On a real phone, Envoy's own Python client (Phase 6) is the only **scrcpy** client per device (the Apache-2.0 server, decoded on the Mac with PyAV); it serves the live view, and the agent takes screenshots from its latest frame (7 ms) rather than `adb screencap` (0.5 to 2.6 seconds on phones; 142 ms on the emulator). Either way, screenshots are the exception: the agent reads text first (see Agent runtime).
 
 ### Backend 1: cloud phones (emulators)
 
@@ -143,7 +143,7 @@ On emulators, the agent's screenshots come from the emulator's own gRPC screensh
 | Two apps compared at once | Two cloud phones | Runs in parallel |
 | No real phone connected | Cloud phone, or the user is told the app is unsupported | Never fails silently |
 
-Before using the real phone, Envoy asks the user, shows a banner on the phone while it works, and pauses when the screen changes in a way its last action did not cause, or when the user presses Pause on the banner.
+Before using the real phone, Envoy asks the user, shows a banner on the phone while it works, and pauses when the screen changes in a way its last action did not cause, or when the user presses Pause on the banner. Phase 6 builds it: the task waits on "Use your Android phone for this task?" (in the app and as an iPhone push; only the user's session answers, and no answer is never a yes); a small overlay app shows "Envoy is using this phone · Pause"; and a touch is told from Envoy's own input by getevent, which sees only the phone's physical input (everything Envoy does is injected). A touch, Pause, or another app coming to the front without an action of Envoy's hands the phone to the user like a takeover, checked before every action of the agent's; Resume on the phone or in the app gives it back. The user also picks the phone by saying "on my phone" or by setting an app to run there.
 
 ### iPhone companion
 
@@ -207,7 +207,7 @@ The action is returned through Meta's structured output (`json_schema`), not too
 For Flutter apps, games and custom-drawn screens:
 
 1. Muse Spark's **visual grounding** returns points or boxes for a described element (on a 0 to 1000 grid), which become `tap_point` actions.
-2. **SAM 3.1** is tested as a helper: prompted with phrases like "button" or "text field", it segments candidate regions that the model then chooses between. Meta's documentation does not cover UI screenshots, so this is an experiment, measured against grounding alone, and kept only if it improves accuracy.
+2. **SAM 3.1** proposes candidate regions from generic shape phrases ("square button", "icon"; it finds nothing for "seat" or "button"); they are numbered on the screenshot and the model picks one. Measured in Phase 6 on 52 targets (SkyLark's canvas seat map and real-app screens): the step model's own coordinates hit 37%, grounding 92%, SAM and a pick 75% (no wrong pick: it says none when its shapes miss a text button), and SAM first with grounding as the fallback 52 of 52, again on a fresh sample (grounding alone 49 of 52), at about 4 s and $0.007 per target. Envoy uses that combination: a tap at a point now names its target ("seat 21A"), and the runtime finds it on a full screenshot. Routines keep such a step as what it looks like plus its picture, find the picture again when the target is fixed, and look again (one SAM-then-grounding pass) when it depends on an input.
 3. Meta also offers a native computer-use tool, but it acts in pixels for desktop-style actions. Envoy keeps element-based actions so routines stay portable, and uses that tool only as a comparison.
 
 ### Getting unstuck
@@ -309,7 +309,7 @@ A request is matched to a routine in four filters: the app, the intent pattern, 
 
 ### Working on any phone
 
-Because locators use element attributes, not coordinates, the same routine runs on emulators of different screen sizes and on a real phone. Portability is tested cheaply before a real phone is available by running each routine on two emulator profiles (a small phone and a large phone).
+Because locators use element attributes, not coordinates, the same routine runs on emulators of different screen sizes and on a real phone. Portability is tested cheaply before a real phone is available by running each routine on two emulator profiles (a small phone and a large phone). Phase 6: the 6 SkyLark routines compiled on a 1080 by 2400 emulator passed 18 of 18 on a 720 by 1280, 320 dpi one with no model calls, once a target below the fold is found by scrolling its list and an output scrolled out of view is read by scrolling back (neither needs a model call), and 12 of 12 through the real-phone code path.
 
 ### What is new, honestly
 
@@ -509,11 +509,11 @@ The phone's screen streams to the browser and iPhone as video, and a "Take over"
 ### Streaming
 
 - **On the phone:** the scrcpy server encodes the screen as H.264 (scrcpy reports 35 to 70 ms latency).
-- **Relay:** a small Node service using the Tango libraries (`@yume-chan/adb`, `@yume-chan/adb-scrcpy`, MIT license) reads the stream over adb and forwards it to browsers over a WebSocket. The same relay serves emulators and real phones.
-- **In the browser:** the video is decoded with WebCodecs (`@yume-chan/scrcpy-decoder-webcodecs`) and drawn on a canvas inside the React app.
-- **On the iPhone:** the same page inside the companion app's web view. Safari supports WebCodecs fully from iOS 26.
+- **Relay:** Envoy's own scrcpy client in the API (Phase 6), instead of the planned Node service using the Tango libraries (`@yume-chan/adb`, `@yume-chan/adb-scrcpy`, MIT license) reads the stream over adb, decodes it on the Mac (PyAV, FFmpeg) and sends JPEG frames over the same WebSocket as the emulators' gRPC frames, with the same touch input and latency measurement.
+- **In the browser:** frames are drawn on a canvas; decoding with WebCodecs (`@yume-chan/scrcpy-decoder-webcodecs`) is no longer needed.
+- **On the iPhone:** the same page inside the companion app's web view. The same frames as on the Mac.
 - **HTTPS is required** for WebCodecs, Web Push and the microphone, so the iPhone reaches the Mac through Tailscale Serve (HTTPS inside the private network), and a Cloudflare Tunnel gives the MCP server its public address only while Muse needs it (the tunnel reaches `/mcp` and nothing else).
-- **Target:** under 150 ms from the phone to the screen on the same network.
+- **Target:** under 150 ms from the phone to the screen on the same network. Phase 6, on an emulator standing in for the phone: a tap shows as a changed frame in 62 ms, and that frame reaches the page 12 ms after decoding.
 
 Google's emulator WebRTC stack was considered, but it works only for emulators and its container scripts run only on Linux x86 machines. On emulators, Phase 4 streams the emulator's own gRPC frames instead (JPEG over the API's WebSocket, 18 to 60 ms locally), because scrcpy shows secure sign-in screens black and the gRPC frames don't; scrcpy and the relay are for real phones.
 
@@ -668,7 +668,7 @@ Python runs the agent and memory, a small Node service relays video, React is th
 | Storage | SQLite with FTS5 and `sqlite-vec` | One file on the FileVault-encrypted disk; embeddings only if needed |
 | Scheduler | Envoy's own, inside FastAPI (Phase 4) | Times derived from memory are recomputed on every check; Temporal or Inngest only if durable long waits become necessary |
 | MCP server | MCP Python SDK v2, Streamable HTTP, OAuth 2.1 | Needs a public HTTPS address for outside assistants |
-| Video relay | Node with TypeScript, `@yume-chan/adb` and `@yume-chan/adb-scrcpy` | Real phones (Phase 6); emulators stream gRPC frames from the API. Pin the scrcpy server version these libraries expect |
+| Video relay | Node with TypeScript, `@yume-chan/adb` and `@yume-chan/adb-scrcpy` | Real phones (Phase 6); emulators stream gRPC frames from the API. Phase 6 replaced it with Envoy's own scrcpy client in Python (frames decoded with PyAV), pinned to scrcpy server 5.0.1 |
 | Web app | Next.js, React, TypeScript, Tailwind; Cytoscape.js for the graph; WebCodecs decoder |  |
 | Envoy bridge | Kotlin accessibility service | Sideloaded over adb |
 | Test apps | Kotlin with Jetpack Compose | SkyLark Air (airline) and a small shop app, each with switchable layout versions to inject UI changes |
@@ -890,6 +890,28 @@ The gate runs drove these changes:
 - Photo text is read twice, the whole image and four tiles, because Apple's Vision skipped a lone confirmation code; codes tolerate the O/0 and I/1 confusions of OCR.
 - Signing in on the iPhone is a pairing code typed inside the Home Screen app, since it keeps its own cookies; Shortcuts get tokens that can only upload images.
 - HTTPS is Tailscale Serve on its own port, and a public tunnel for Muse reaches only `/mcp`.
+
+## Phase 6 results
+
+Phase 6 is built and measured on emulators; its gate (a routine learned on the emulator runs on the real phone) waits for the loaned phone, which arrives Oct 28. Until then an emulator stood in for the phone, through the same code path a real phone uses (no gRPC; Envoy's own scrcpy client, the banner, the touch watcher, routing and asking first). Details are in `docs/phase-6-results.md`.
+
+| Measure | Result |
+| --- | --- |
+| Gate, on the real phone | Waiting for the phone |
+| Routines on a smaller screen (720 by 1280, 320 dpi) | 18 of 18, no model calls (18 of 18 on the 1080 by 2400 control) |
+| Routines through the real-phone code path (stand-in) | 12 of 12, no model calls |
+| End to end through the API (stand-in) | Asked first, banner shown, the emulator-compiled check-in ran; a touch paused it before the next action; Resume on the phone finished it, with memory updated |
+| Drawn targets, 52 (canvas seats and real-app screens) | Step model 37%, grounding 92%, SAM 3.1 and a pick 75% (never a wrong pick), SAM then grounding 100%; on a fresh 52, SAM then grounding 52 of 52 against 49 of 52 |
+| A routine step on SkyLark's canvas seat map | Learned by the agent on one screen size; 6 of 6 replays with new seats on both sizes, 3 model calls each |
+| scrcpy (stand-in) | Starts in 0.4 s; tap to changed frame 62 ms; a screenshot from the stream 7 ms (screencap 84 ms) |
+| Whole of Phase 6 so far | 514 model calls, $1.44 at standard prices |
+
+The runs drove these changes:
+
+- Apps start through their launcher activity, never uiautomator2's monkey launch, which took about 11 s and injected a random event.
+- The touch watcher is checked before every action of the agent's: with only a 0.5 s loop, two routine steps ran after a touch.
+- Routines find targets below the fold and read outputs scrolled out of view without a model call.
+- A routine's picture of a drawn target is used only when the target doesn't depend on an input; otherwise it looks again.
 
 ## Open questions
 
