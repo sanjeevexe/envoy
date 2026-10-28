@@ -159,12 +159,13 @@ BOT_CHECK = re.compile(r"press (&|and) hold|verify (that )?you('re| are) (a )?hu
 
 
 def bot_check(screen: ScreenState | None) -> bool:
-    """A bot check on screen: a known blocking activity, or the words such checks use."""
+    """A bot check on screen: a known blocking activity, or a short screen that is mostly the challenge's words (a place
+    page whose reviews mention 'unusual traffic' is not one)."""
     if screen is None:
         return False
     if re.search(r"(HSBlock|captcha|challenge)", screen.activity or "", re.I):
         return True
-    return any(BOT_CHECK.search(e.label or "") for e in screen.numbered)
+    return len(screen.numbered) <= 15 and any(BOT_CHECK.search(e.label or "") for e in screen.numbered)
 
 
 def now() -> str:

@@ -71,11 +71,16 @@ class TStep:
 # onboarding, Calendar's welcome pages in the real-app test set).
 _ONE_TIME_LABEL = re.compile(r"^(skip|skip for now|not now|no,? thanks|maybe later|later|got it|dismiss|close|i'?ll do (it|this) later|"
                              r"continue without.*|use without.*)$", re.I)
-_ONE_TIME_INTENT = re.compile(r"onboard|welcome|intro\b|tutorial|first[ _-]?(run|launch|time)|what'?s[ _-]?new|dismiss|promo", re.I)
+_ONE_TIME_INTENT = re.compile(r"onboard|welcome|intro\b|tutorial|first[ _-]?(run|launch|time)|what'?s[ _-]?new|dismiss|promo|upsell|"
+                              r"premium|offer\b", re.I)
 
 
 def _one_time(s: "TStep", sid: str, intent: str) -> bool:
-    if s.kind != "tap" or s.risk == "irreversible" or s.target is None:
+    if s.risk == "irreversible":
+        return False
+    if s.kind == "back":  # Back that closes an upsell or a tour (Wonder's own words for the step say so)
+        return bool(_ONE_TIME_INTENT.search(f"{sid} {intent}"))
+    if s.kind != "tap" or s.target is None:
         return False
     return bool(_ONE_TIME_LABEL.match((s.target.label or s.target.desc or "").strip()) or _ONE_TIME_INTENT.search(f"{sid} {intent}"))
 
@@ -329,13 +334,28 @@ def _before_typed(c: Check, step: int, typed_at: dict[str, int]) -> bool:
     return any("{{" + n + "}}" in text and step < k for n, k in typed_at.items())
 
 
+_ON_OFF = {"on", "off", "enabled", "disabled", "true", "false", "yes", "no", "checked", "unchecked"}
+
+
+def _switch_state(near: str | None, example: str, final: ScreenState) -> Extract | None:
+    """An answer that is a switch's state ("Bluetooth is on"): read the on/off state of the switch labelled `near`."""
+    if not near or norm(example) not in _ON_OFF:
+        return None
+    switches = [e for e in final.numbered if e.checkable and e.label]
+    el = next((e for e in switches if norm(e.label) == norm(near)), None)
+    if el is None:
+        return None
+    return Extract(locator=Locator(text=el.label, kind=el.kind), switch=True)
+
+
 def _state_text(near: str | None, final: ScreenState, data_values: list[str]) -> Extract | None:
     """The short fixed text an inferred answer was read from ("No contacts yet", "Nothing planned"), as an output that
     reports it whole: on another run it is there or it isn't, and the routine says so rather than inventing a value."""
     if not near or len(near) > 60 or not _data_free(near, data_values):
         return None
-    el = next((e for e in final.numbered if norm(e.label) == norm(near)), None) or \
-        next((e for e in final.numbered if norm(near) in norm(e.label) and len(e.label) <= 80 and _data_free(e.label, data_values)), None)
+    words = [e for e in final.numbered if not (e.checkable or e.editable)]  # a switch's state is on/off, not its words
+    el = next((e for e in words if norm(e.label) == norm(near)), None) or \
+        next((e for e in words if norm(near) in norm(e.label) and len(e.label) <= 80 and _data_free(e.label, data_values)), None)
     if el is None:
         return None
     return Extract(locator=Locator(text=el.label, kind=el.kind))
@@ -451,6 +471,12 @@ def _extract_for(name: str, near: str, example: str, final: ScreenState, example
         near_text = parts[0]  # "Choose a seat · SL 1190": the element is found by its first part (no ID needed)
     after = part[pos + len(example):].strip() if pos >= 0 else ""
     after_text = after if after and _data_free(after, data_values) and len(after) > 1 else None
+    if loc is None and near_text is None and segment is None and norm(part) == norm(example) and len(example) >= 12 \
+            and _data_free(example, others := [v for v in data_values if norm(v) != norm(example)]) \
+            and not any(v and contains_value(example, v) for v in others):
+        # A fixed message that is the answer itself ("Nothing planned. Tap to create."): found by its own words. On a
+        # run where the app shows something else, the output is missing and the ladder takes over.
+        loc = Locator(text=el.label, kind=el.kind)
     if loc is None and near_text is None:
         return None  # nothing to find it by on another run (no ID, no label, no input in it, no list shape)
     return Extract(near=near_text, locator=loc, segment=segment, after=after_text)
@@ -615,8 +641,8 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
     extract: dict[str, Extract] = {}
     if final is not None:
         for o in spec.outputs:
-            ex = _extract_for(o.name, o.near, o.example, final, examples, data_values)
-            state = False
+            ex = _switch_state(o.near, o.example, final) or _extract_for(o.name, o.near, o.example, final, examples, data_values)
+            state = bool(ex and ex.switch)
             if ex is None and (ex := _state_text(o.near, final, data_values)) is not None:
                 # An answer the agent inferred ("0" from "No contacts yet"): the routine reports the words it was read from.
                 state = True
@@ -627,6 +653,17 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             outputs.append(o.name)
             # A value recorded as a number ("190 calories", "$13.49", "2:05 PM") must be one at run time too.
             extract[o.name] = ex.model_copy(update={"expect_digits": not state and bool(re.match(r"^[$€£]?\d", o.example.strip()))})
+    question = bool(re.search(r"\?\s*$|^(what|how|when|where|which|who|is|are|do|does|did|can)\b", (run.get("goal") or "").strip(), re.I))
+    if not extract and final is not None and question and answer:
+        # A question answered from what the screen says rather than a value on it ("No events today" from "Nothing planned"),
+        # with no output named: report the screen text the answer quotes, word for word.
+        quoted = [e for e in final.numbered if len(e.label) >= 12 and not (e.checkable or e.editable)
+                  and e.label.casefold() in answer.casefold() and _data_free(e.label, data_values)]
+        if quoted:
+            el = max(quoted, key=lambda e: len(e.label))
+            outputs.append("answer")
+            extract["answer"] = Extract(locator=Locator(text=el.label, kind=el.kind))
+            report.warnings.append(f"no output named; the routine reports the screen text the answer quoted: {el.label!r}")
     # A trailing scroll toward an answer: reveal the first output's element.
     for st in out_steps:
         if st.action.kind == "scroll_until" and st.action.target is None:
@@ -646,7 +683,9 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             not any(st.risk == "irreversible" for st in out_steps):
         raise NotCompilable("cleanup removed the run's approved irreversible step; refusing to compile a routine that would skip it")
     done = _done_checks(run, examples, data_values, final)
-    app = (final.package if final else "") or (run.get("plan") or {}).get("app") or ""
+    # The app the run worked in: where its first step started (Settings' search screen belongs to another package, and a
+    # routine launched as that one never starts), else the plan's app, else the final screen's.
+    app = (steps[0].before.package if steps else "") or (run.get("plan") or {}).get("app") or (final.package if final else "") or ""
     routine = Routine(
         routine=_slug(spec.name, "routine"), app=app, version=1, status="draft", intent=spec.intent,
         description=" ".join([spec.description, *limits]),

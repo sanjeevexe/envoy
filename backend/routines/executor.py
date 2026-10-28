@@ -1080,6 +1080,8 @@ def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str 
         el = shown[0] if len(shown) == 1 else None
     if el is None:
         return None
+    if spec.switch:
+        return ("on" if el.checked else "off") if el.checkable else None
     label = " ".join((el.full_label or el.label).split())  # the whole text: a long row's later parts are past the model's clip
     value = label
     if spec.segment is not None:

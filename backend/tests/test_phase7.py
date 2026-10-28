@@ -245,6 +245,25 @@ def test_an_inferred_answer_is_reported_as_the_words_it_came_from():
     assert _state_text("38,240 miles", s, ["38,240 miles"]) is None  # data is never a state text
 
 
+def test_a_switch_answer_reports_the_switch_state_not_a_row_that_names_it():
+    from routines.compiler import _state_text, _switch_state
+    from routines.screens import screen_from_tree
+
+    def settings(on: bool):
+        return screen_from_tree({"package": "settings", "activity": "Search", "width": 1080, "height": 2400, "elements": [
+            {"index": 0, "parent": None, "number": 1, "kind": "Button", "class": "android.widget.LinearLayout", "clickable": True,
+             "label": "Bluetooth · Connected devices > Connection preferences", "text": "Bluetooth", "bounds": [0, 300, 1080, 450]},
+            {"index": 1, "parent": None, "number": 2, "kind": "Switch", "class": "android.widget.Switch", "checkable": True,
+             "checked": on, "label": "Bluetooth", "resource_id": "android:id/switch_widget", "bounds": [900, 320, 1040, 420]},
+            {"index": 2, "parent": None, "number": 3, "kind": "Switch", "class": "android.widget.Switch", "checkable": True,
+             "checked": not on, "label": "Bluetooth scanning", "resource_id": "android:id/switch_widget", "bounds": [900, 520, 1040, 620]}]})
+    ex = _switch_state("Bluetooth", "on", settings(True))
+    assert ex is not None and ex.switch
+    assert extract_value(ex, settings(True), {}) == "on" and extract_value(ex, settings(False), {}) == "off"
+    assert _switch_state("Bluetooth", "Connected", settings(True)) is None  # not an on/off answer
+    assert _state_text("Bluetooth", settings(True), []).locator.kind == "Button"  # without it, the row's words (the old bug)
+
+
 def test_outputs_are_read_past_the_models_clip():
     from devices.screen import MAX_LABEL, _set_label
     from devices.types import Element
