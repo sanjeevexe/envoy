@@ -1,0 +1,1303 @@
+{
+ "note": "R2 before the lead fixes: first the lead rewrote the price question to fit learned routines (calories, first restaurant); then it kept the words but read 'what's a Caffè Latte' literally (a description).",
+ "runs": [
+  {
+   "question": "R2",
+   "mode": "parallel",
+   "message": "What's a Caffè Latte at Starbucks vs on DoorDash?",
+   "parent_id": "task-1028-053333-65e0",
+   "started": 1793180007.873486,
+   "wall_s": 33.31,
+   "with_memory_s": 33.54,
+   "overlap_s": 0.0,
+   "status": "done",
+   "answer": "At Starbucks a Caffè Latte is 190 calories, while on DoorDash the first restaurant name is McDonald's.",
+   "values": [
+    {
+     "label": "Caffè Latte calories at Starbucks",
+     "app_name": "Starbucks",
+     "status": "done",
+     "result": "calories: 190 calories",
+     "screen": "the \"Caffè Latte\" screen",
+     "time": 1793180038.331033,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "starbucks_get_drink_calories",
+     "why": null
+    },
+    {
+     "label": "Caffè Latte on DoorDash",
+     "app_name": "DoorDash",
+     "status": "done",
+     "result": "first restaurant name: McDonald's",
+     "screen": "DashboardActivity",
+     "time": 1793180025.768779,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "doordash_search_restaurants",
+     "why": null
+    }
+   ],
+   "sources": {
+    "Caffè Latte calories at Starbucks": "Starbucks · the \"Caffè Latte\" screen · 5:33 AM",
+    "Caffè Latte on DoorDash": "DoorDash · DashboardActivity · 5:33 AM"
+   },
+   "timeline": [
+    {
+     "task_id": "task-1028-053333-3ab0",
+     "app": "Starbucks",
+     "device": "envoy-real",
+     "queued_at": 1793180013.384137,
+     "phone_at": 1793180025.77951,
+     "ended_at": 1793180038.332022,
+     "status": "done"
+    },
+    {
+     "task_id": "task-1028-053333-be5f",
+     "app": "DoorDash",
+     "device": "envoy-real",
+     "queued_at": 1793180013.385029,
+     "phone_at": 1793180017.155075,
+     "ended_at": 1793180025.7697291,
+     "status": "done"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-053333-3ab0",
+     "goal": "Check how many calories are in a Caffè Latte at Starbucks",
+     "app": "com.starbucks.mobilecard",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "starbucks_get_drink_calories",
+     "inputs": {
+      "drink_name": "Caffè Latte"
+     },
+     "status": "done",
+     "result": "calories: 190 calories",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793180017.1497972,
+       "kind": "note",
+       "text": "using routine starbucks_get_drink_calories v1 with drink_name = Caffè Latte"
+      },
+      {
+       "seq": 2,
+       "time": 1793180017.163143,
+       "kind": "note",
+       "text": "waiting for envoy-real: another task is using it"
+      },
+      {
+       "seq": 3,
+       "time": 1793180029.9504828,
+       "kind": "routine_step",
+       "text": "tap_order",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793180030.546206,
+       "kind": "routine_step",
+       "text": "dismiss_location_prompt",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793180031.248201,
+       "kind": "routine_step",
+       "text": "tap_skip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 6,
+       "time": 1793180033.524576,
+       "kind": "routine_step",
+       "text": "confirm_skip_to_menu",
+       "status": "done",
+       "rung": 2
+      },
+      {
+       "seq": 7,
+       "time": 1793180034.283059,
+       "kind": "routine_step",
+       "text": "tap_search_menu",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 8,
+       "time": 1793180035.090073,
+       "kind": "routine_step",
+       "text": "select_recent_search_result",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 9,
+       "time": 1793180035.4255822,
+       "kind": "routine_step",
+       "text": "find_open_drink_product",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 10,
+       "time": 1793180038.13854,
+       "kind": "routine_step",
+       "text": "open_drink_product",
+       "status": "done",
+       "rung": 2
+      },
+      {
+       "seq": 11,
+       "time": 1793180038.2307699,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 12,
+       "time": 1793180038.237901,
+       "kind": "note",
+       "text": "routine starbucks_get_drink_calories: patched version v2 on trial for the next run"
+      },
+      {
+       "seq": 13,
+       "time": 1793180038.337471,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 14,
+       "time": 1793180041.399223,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-053333-be5f",
+     "goal": "Search DoorDash for Caffè Latte and report the first restaurant in the results",
+     "app": "com.dd.doordash",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "doordash_search_restaurants",
+     "inputs": {
+      "search_query": "Caffè Latte"
+     },
+     "status": "done",
+     "result": "first restaurant name: McDonald's",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793180015.140887,
+       "kind": "note",
+       "text": "using routine doordash_search_restaurants v1 with search_query = Caffè Latte"
+      },
+      {
+       "seq": 2,
+       "time": 1793180022.8424551,
+       "kind": "routine_step",
+       "text": "open_search",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 3,
+       "time": 1793180025.614054,
+       "kind": "routine_step",
+       "text": "enter_search_query",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793180025.691759,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 5,
+       "time": 1793180025.774844,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 6,
+       "time": 1793180027.53302,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793180013.38302,
+     "kind": "plan",
+     "text": "2 apps: Starbucks: Check how many calories are in a Caffè Latte at Starbucks; DoorDash: Search DoorDash for Caffè Latte and report the first restaurant in the results"
+    },
+    {
+     "seq": 2,
+     "time": 1793180041.154421,
+     "kind": "answer",
+     "text": "At Starbucks a Caffè Latte is 190 calories, while on DoorDash the first restaurant name is McDonald's.",
+     "sources": {
+      "Caffè Latte calories at Starbucks": "Starbucks · the \"Caffè Latte\" screen · 5:33 AM",
+      "Caffè Latte on DoorDash": "DoorDash · DashboardActivity · 5:33 AM"
+     }
+    },
+    {
+     "seq": 3,
+     "time": 1793180041.1564522,
+     "kind": "timeline",
+     "text": "answered in 27.77 s; phones busy at the same time for 0.0 s"
+    },
+    {
+     "seq": 4,
+     "time": 1793180041.408001,
+     "kind": "memory",
+     "text": "memory updated: the combined answer, with each app as its source",
+     "entities": [
+      "Note At Starbucks a Caffè Latte is 190 calories, while on DoorDash the first restaurant name is McDonald's."
+     ]
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "lead": {
+      "calls": 1,
+      "usd": 0.004782
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.004146
+     },
+     "extract": {
+      "calls": 2,
+      "usd": 0.004838
+     },
+     "combine": {
+      "calls": 1,
+      "usd": 0.002726
+     }
+    },
+    "calls": 6,
+    "usd": 0.01649
+   },
+   "lead_version": "bebe4e0 (first lead prompt)"
+  },
+  {
+   "question": "R2",
+   "mode": "sequential",
+   "message": "What's a Caffè Latte at Starbucks vs on DoorDash?",
+   "parent_id": "task-1028-053404-92b8",
+   "started": 1793180041.570591,
+   "wall_s": 29.11,
+   "with_memory_s": 29.54,
+   "overlap_s": 0.0,
+   "status": "done",
+   "answer": "A Caffè Latte at Starbucks has 190 calories, while on DoorDash the first restaurant name is McDonald's.",
+   "values": [
+    {
+     "label": "Caffè Latte at Starbucks",
+     "app_name": "Starbucks",
+     "status": "done",
+     "result": "calories: 190 calories",
+     "screen": "the \"Caffè Latte\" screen",
+     "time": 1793180058.315716,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "starbucks_get_drink_calories",
+     "why": null
+    },
+    {
+     "label": "Caffè Latte on DoorDash",
+     "app_name": "DoorDash",
+     "status": "done",
+     "result": "first restaurant name: McDonald's",
+     "screen": "DashboardActivity",
+     "time": 1793180068.304626,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "doordash_search_restaurants",
+     "why": null
+    }
+   ],
+   "sources": {
+    "Caffè Latte at Starbucks": "Starbucks · the \"Caffè Latte\" screen · 5:34 AM",
+    "Caffè Latte on DoorDash": "DoorDash · DashboardActivity · 5:34 AM"
+   },
+   "timeline": [
+    {
+     "task_id": "task-1028-053404-3913",
+     "app": "Starbucks",
+     "device": "envoy-real",
+     "queued_at": 1793180044.8755388,
+     "phone_at": 1793180046.681023,
+     "ended_at": 1793180058.3179069,
+     "status": "done"
+    },
+    {
+     "task_id": "task-1028-053418-c13f",
+     "app": "DoorDash",
+     "device": "envoy-real",
+     "queued_at": 1793180058.334553,
+     "phone_at": 1793180060.879297,
+     "ended_at": 1793180068.3056178,
+     "status": "done"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-053404-3913",
+     "goal": "Check how many calories are in a Caffè Latte at Starbucks",
+     "app": "com.starbucks.mobilecard",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "starbucks_get_drink_calories",
+     "inputs": {
+      "drink_name": "Caffè Latte"
+     },
+     "status": "done",
+     "result": "calories: 190 calories",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793180046.654328,
+       "kind": "note",
+       "text": "using routine starbucks_get_drink_calories v2 with drink_name = Caffè Latte"
+      },
+      {
+       "seq": 2,
+       "time": 1793180050.8217778,
+       "kind": "routine_step",
+       "text": "tap_order",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 3,
+       "time": 1793180051.418611,
+       "kind": "routine_step",
+       "text": "dismiss_location_prompt",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793180052.099256,
+       "kind": "routine_step",
+       "text": "tap_skip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793180052.927506,
+       "kind": "routine_step",
+       "text": "confirm_skip_to_menu",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 6,
+       "time": 1793180054.349067,
+       "kind": "routine_step",
+       "text": "tap_search_menu",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 7,
+       "time": 1793180055.0781598,
+       "kind": "routine_step",
+       "text": "select_recent_search_result",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 8,
+       "time": 1793180055.4771671,
+       "kind": "routine_step",
+       "text": "find_open_drink_product",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 9,
+       "time": 1793180058.119756,
+       "kind": "routine_step",
+       "text": "open_drink_product",
+       "status": "done",
+       "rung": 2
+      },
+      {
+       "seq": 10,
+       "time": 1793180058.201731,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 11,
+       "time": 1793180058.217845,
+       "kind": "note",
+       "text": "routine starbucks_get_drink_calories v2: trial activated"
+      },
+      {
+       "seq": 12,
+       "time": 1793180058.31851,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 13,
+       "time": 1793180061.802392,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-053418-c13f",
+     "goal": "Search DoorDash for Caffè Latte and report the first restaurant in the results",
+     "app": "com.dd.doordash",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "doordash_search_restaurants",
+     "inputs": {
+      "search_query": "Caffè Latte"
+     },
+     "status": "done",
+     "result": "first restaurant name: McDonald's",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793180060.861078,
+       "kind": "note",
+       "text": "using routine doordash_search_restaurants v1 with search_query = Caffè Latte"
+      },
+      {
+       "seq": 2,
+       "time": 1793180065.6752121,
+       "kind": "routine_step",
+       "text": "open_search",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 3,
+       "time": 1793180068.1464598,
+       "kind": "routine_step",
+       "text": "enter_search_query",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793180068.2252429,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 5,
+       "time": 1793180068.33627,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 6,
+       "time": 1793180071.094809,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793180044.874506,
+     "kind": "plan",
+     "text": "2 apps: Starbucks: Check how many calories are in a Caffè Latte at Starbucks; DoorDash: Search DoorDash for Caffè Latte and report the first restaurant in the results"
+    },
+    {
+     "seq": 2,
+     "time": 1793180070.586211,
+     "kind": "answer",
+     "text": "A Caffè Latte at Starbucks has 190 calories, while on DoorDash the first restaurant name is McDonald's.",
+     "sources": {
+      "Caffè Latte at Starbucks": "Starbucks · the \"Caffè Latte\" screen · 5:34 AM",
+      "Caffè Latte on DoorDash": "DoorDash · DashboardActivity · 5:34 AM"
+     }
+    },
+    {
+     "seq": 3,
+     "time": 1793180070.58763,
+     "kind": "timeline",
+     "text": "answered in 25.71 s; phones busy at the same time for 0.0 s"
+    },
+    {
+     "seq": 4,
+     "time": 1793180071.113438,
+     "kind": "memory",
+     "text": "memory updated: the combined answer, with each app as its source",
+     "entities": [
+      "Note A Caffè Latte at Starbucks has 190 calories, while on DoorDash the first restaurant name is McDonald's."
+     ]
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "combine": {
+      "calls": 2,
+      "usd": 0.004932000000000001
+     },
+     "extract": {
+      "calls": 3,
+      "usd": 0.007946
+     },
+     "lead": {
+      "calls": 1,
+      "usd": 0.003304
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.004813
+     }
+    },
+    "calls": 8,
+    "usd": 0.02099
+   },
+   "lead_version": "bebe4e0 (first lead prompt)"
+  },
+  {
+   "question": "R2",
+   "mode": "parallel",
+   "message": "What's a Caffè Latte at Starbucks vs on DoorDash?",
+   "parent_id": "task-1028-053549-b38c",
+   "started": 1793180144.2672682,
+   "wall_s": 88.89,
+   "with_memory_s": 88.89,
+   "overlap_s": 0.0,
+   "status": "done",
+   "answer": "Starbucks: Caffè Latte at Starbucks: Our dark, rich espresso balanced with steamed milk and a light layer of foam. A perfect milk-forward warm-up. 190 calories, 18g sugar, 7g fat, 13g protein. 200★ item.; DoorDash: first restaurant name: Safeway.",
+   "values": [
+    {
+     "label": "Caffè Latte at Starbucks",
+     "app_name": "Starbucks",
+     "status": "done",
+     "result": "Caffè Latte at Starbucks: Our dark, rich espresso balanced with steamed milk and a light layer of foam. A perfect milk-forward warm-up. 190 calories, 18g sugar, 7g fat, 13g protein. 200★ item.",
+     "screen": "the \"Caffè Latte\" screen",
+     "time": 1793180220.064498,
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "why": null
+    },
+    {
+     "label": "Caffè Latte on DoorDash",
+     "app_name": "DoorDash",
+     "status": "done",
+     "result": "first restaurant name: Safeway",
+     "screen": "DashboardActivity",
+     "time": 1793180228.535082,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "doordash_search_restaurants",
+     "why": null
+    }
+   ],
+   "sources": {
+    "Caffè Latte at Starbucks": "Starbucks · the \"Caffè Latte\" screen · 5:37 AM",
+    "Caffè Latte on DoorDash": "DoorDash · DashboardActivity · 5:37 AM"
+   },
+   "timeline": [
+    {
+     "task_id": "task-1028-053549-5990",
+     "app": "Starbucks",
+     "device": "envoy-real",
+     "queued_at": 1793180149.456445,
+     "phone_at": 1793180151.693892,
+     "ended_at": 1793180220.0670972,
+     "status": "done"
+    },
+    {
+     "task_id": "task-1028-053549-9ac5",
+     "app": "DoorDash",
+     "device": "envoy-real",
+     "queued_at": 1793180149.458085,
+     "phone_at": 1793180220.088474,
+     "ended_at": 1793180228.5359821,
+     "status": "done"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-053549-5990",
+     "goal": "Tell what's a Caffè Latte at Starbucks",
+     "app": "com.starbucks.mobilecard",
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "inputs": {},
+     "status": "done",
+     "result": "Caffè Latte at Starbucks: Our dark, rich espresso balanced with steamed milk and a light layer of foam. A perfect milk-forward warm-up. 190 calories, 18g sugar, 7g fat, 13g protein. 200★ item.",
+     "detail": "Caffè Latte at Starbucks: Our dark, rich espresso balanced with steamed milk and a light layer of foam. A perfect milk-forward warm-up. 190 calories, 18g sugar, 7g fat, 13g protein. 200★ item.",
+     "model_calls": 27,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793180156.599773,
+       "kind": "plan",
+       "text": "Open Order menu; Find Caffè Latte in drinks menu; Open Caffè Latte details; Read its description"
+      },
+      {
+       "seq": 2,
+       "time": 1793180159.3771389,
+       "kind": "action",
+       "text": "tap \"Order\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 3,
+       "time": 1793180160.995679,
+       "kind": "action",
+       "text": "tap \"No, thanks\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 4,
+       "time": 1793180164.0105448,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 5,
+       "time": 1793180166.3458009,
+       "kind": "action",
+       "text": "tap \"Skip\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 6,
+       "time": 1793180169.046436,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 7,
+       "time": 1793180170.9137511,
+       "kind": "action",
+       "text": "tap \"Skip\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 8,
+       "time": 1793180173.633065,
+       "kind": "action",
+       "text": "tap \"Yes\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 9,
+       "time": 1793180175.893718,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 10,
+       "time": 1793180179.219512,
+       "kind": "action",
+       "text": "launch",
+       "risk": "read"
+      },
+      {
+       "seq": 11,
+       "time": 1793180181.342098,
+       "kind": "action",
+       "text": "tap \"Order\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 12,
+       "time": 1793180185.8703601,
+       "kind": "replan",
+       "text": "Dismiss location prompt with No, thanks to continue in app; Open Menu via bottom tabs or other navigation avoiding store-location Order flow; Browse Espresso or Hot Coffees category to find Caffè Latte; Open Caffè Latte details to read its description"
+      },
+      {
+       "seq": 13,
+       "time": 1793180186.750845,
+       "kind": "action",
+       "text": "tap \"No, thanks\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 14,
+       "time": 1793180189.1099288,
+       "kind": "action",
+       "text": "tap \"Home\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 15,
+       "time": 1793180190.408371,
+       "kind": "action",
+       "text": "look"
+      },
+      {
+       "seq": 16,
+       "time": 1793180194.3206809,
+       "kind": "action",
+       "text": "scroll",
+       "risk": "read"
+      },
+      {
+       "seq": 17,
+       "time": 1793180198.7041721,
+       "kind": "action",
+       "text": "tap \"Order\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 18,
+       "time": 1793180199.0606341,
+       "kind": "popup",
+       "text": "dismissed a pop-up (permission prompt: deny)"
+      },
+      {
+       "seq": 19,
+       "time": 1793180201.621493,
+       "kind": "action",
+       "text": "tap \"Skip\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 20,
+       "time": 1793180204.560103,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 21,
+       "time": 1793180206.616334,
+       "kind": "action",
+       "text": "tap \"Skip\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 22,
+       "time": 1793180208.838352,
+       "kind": "action",
+       "text": "tap \"Yes\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 23,
+       "time": 1793180210.8502321,
+       "kind": "action",
+       "text": "tap \"Search Menu\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 24,
+       "time": 1793180212.660589,
+       "kind": "action",
+       "text": "tap \"Caffe Latte\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 25,
+       "time": 1793180214.7075431,
+       "kind": "action",
+       "text": "tap \"Caffè Latte\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 26,
+       "time": 1793180218.342062,
+       "kind": "action",
+       "text": "scroll",
+       "risk": "read"
+      },
+      {
+       "seq": 27,
+       "time": 1793180219.9662132,
+       "kind": "action",
+       "text": "done"
+      },
+      {
+       "seq": 28,
+       "time": 1793180219.967593,
+       "kind": "finish",
+       "text": "Caffè Latte at Starbucks: Our dark, rich espresso balanced with steamed milk and a light layer of foam. A perfect milk-forward warm-up. 190 calories, 18g sugar, 7g fat, 13g protein. 200★ item.",
+       "status": "done"
+      },
+      {
+       "seq": 29,
+       "time": 1793180220.076629,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 30,
+       "time": 1793180223.580914,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-053549-9ac5",
+     "goal": "Tell what's a Caffè Latte on DoorDash",
+     "app": "com.dd.doordash",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "doordash_search_restaurants",
+     "inputs": {
+      "search_query": "Caffè Latte"
+     },
+     "status": "done",
+     "result": "first restaurant name: Safeway",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793180154.84895,
+       "kind": "note",
+       "text": "using routine doordash_search_restaurants v1 with search_query = Caffè Latte"
+      },
+      {
+       "seq": 2,
+       "time": 1793180154.8642628,
+       "kind": "note",
+       "text": "waiting for envoy-real: another task is using it"
+      },
+      {
+       "seq": 3,
+       "time": 1793180225.46842,
+       "kind": "routine_step",
+       "text": "open_search",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 4,
+       "time": 1793180228.377422,
+       "kind": "routine_step",
+       "text": "enter_search_query",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793180228.4614668,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 6,
+       "time": 1793180228.542721,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 7,
+       "time": 1793180231.353199,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793180149.454585,
+     "kind": "plan",
+     "text": "2 apps: Starbucks: Tell what's a Caffè Latte at Starbucks; DoorDash: Tell what's a Caffè Latte on DoorDash"
+    },
+    {
+     "seq": 2,
+     "time": 1793180233.0929081,
+     "kind": "note",
+     "text": "combine: its sentence used a value no part returned; the answer is built from the parts"
+    },
+    {
+     "seq": 3,
+     "time": 1793180233.0935261,
+     "kind": "answer",
+     "text": "Starbucks: Caffè Latte at Starbucks: Our dark, rich espresso balanced with steamed milk and a light layer of foam. A perfect milk-forward warm-up. 190 calories, 18g sugar, 7g fat, 13g protein. 200★ item.; DoorDash: first restaurant name: Safeway.",
+     "sources": {
+      "Caffè Latte at Starbucks": "Starbucks · the \"Caffè Latte\" screen · 5:37 AM",
+      "Caffè Latte on DoorDash": "DoorDash · DashboardActivity · 5:37 AM"
+     }
+    },
+    {
+     "seq": 4,
+     "time": 1793180233.093805,
+     "kind": "timeline",
+     "text": "answered in 83.64 s; one phone (envoy-real): the parts took turns"
+    },
+    {
+     "seq": 5,
+     "time": 1793180233.0963898,
+     "kind": "memory",
+     "text": "memory updated: the combined answer, with each app as its source",
+     "entities": [
+      "Note Starbucks: Caffè Latte at Starbucks: Our dark, rich espresso balanced with steamed milk and a light layer of foam. A perfect milk-forward warm-up. 190 calories, 18g sugar, 7g fat, 13g protein. 200★ item.; DoorDash: first restaurant name: Safeway."
+     ]
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "lead": {
+      "calls": 1,
+      "usd": 0.005473
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.007383000000000001
+     },
+     "plan": {
+      "calls": 2,
+      "usd": 0.006183
+     },
+     "step": {
+      "calls": 24,
+      "usd": 0.03697799999999999
+     },
+     "extract": {
+      "calls": 2,
+      "usd": 0.0058779999999999995
+     },
+     "combine": {
+      "calls": 1,
+      "usd": 0.005782
+     }
+    },
+    "calls": 32,
+    "usd": 0.06768
+   },
+   "lead_version": "b188b40 (question kept, no price rule)"
+  },
+  {
+   "question": "R2",
+   "mode": "sequential",
+   "message": "What's a Caffè Latte at Starbucks vs on DoorDash?",
+   "parent_id": "task-1028-053716-8224",
+   "started": 1793180233.3055518,
+   "wall_s": 61.58,
+   "with_memory_s": 61.58,
+   "overlap_s": 0.0,
+   "status": "done",
+   "answer": "Starbucks describes it as \"Our dark, rich espresso balanced with steamed milk and a light layer of foam. A perfect milk-forward warm-up.\" while DoorDash didn't give what was asked, giving \"first restaurant name: Safeway\" instead.",
+   "values": [
+    {
+     "label": "Caffè Latte at Starbucks",
+     "app_name": "Starbucks",
+     "status": "done",
+     "result": "Caffè Latte at Starbucks: Our dark, rich espresso balanced with steamed milk and a light layer of foam. A perfect milk-forward warm-up. 190 calories, 18g sugar, 7g fat, 13g protein. 200★ item.",
+     "screen": "the \"Caffè Latte\" screen",
+     "time": 1793180273.48528,
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "why": null
+    },
+    {
+     "label": "Caffè Latte on DoorDash",
+     "app_name": "DoorDash",
+     "status": "done",
+     "result": "first restaurant name: Safeway",
+     "screen": "DashboardActivity",
+     "time": 1793180288.9688041,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "doordash_search_restaurants",
+     "why": null
+    }
+   ],
+   "sources": {
+    "Caffè Latte at Starbucks": "Starbucks · the \"Caffè Latte\" screen · 5:37 AM",
+    "Caffè Latte on DoorDash": "DoorDash · DashboardActivity · 5:38 AM"
+   },
+   "timeline": [
+    {
+     "task_id": "task-1028-053716-2299",
+     "app": "Starbucks",
+     "device": "envoy-real",
+     "queued_at": 1793180236.900249,
+     "phone_at": 1793180243.1422741,
+     "ended_at": 1793180273.486372,
+     "status": "done"
+    },
+    {
+     "task_id": "task-1028-053753-5c7a",
+     "app": "DoorDash",
+     "device": "envoy-real",
+     "queued_at": 1793180273.506929,
+     "phone_at": 1793180280.1162088,
+     "ended_at": 1793180288.9698088,
+     "status": "done"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-053716-2299",
+     "goal": "Tell what's a Caffè Latte at Starbucks",
+     "app": "com.starbucks.mobilecard",
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "inputs": {},
+     "status": "done",
+     "result": "Caffè Latte at Starbucks: Our dark, rich espresso balanced with steamed milk and a light layer of foam. A perfect milk-forward warm-up. 190 calories, 18g sugar, 7g fat, 13g protein. 200★ item.",
+     "detail": "Caffè Latte at Starbucks: Our dark, rich espresso balanced with steamed milk and a light layer of foam. A perfect milk-forward warm-up. 190 calories, 18g sugar, 7g fat, 13g protein. 200★ item.",
+     "model_calls": 11,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793180247.940764,
+       "kind": "plan",
+       "text": "Open Order in the Starbucks app; Find Caffè Latte; Open Caffè Latte details to show its description"
+      },
+      {
+       "seq": 2,
+       "time": 1793180250.498674,
+       "kind": "action",
+       "text": "tap \"Order\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 3,
+       "time": 1793180252.6166022,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 4,
+       "time": 1793180256.034226,
+       "kind": "action",
+       "text": "tap \"Skip\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 5,
+       "time": 1793180259.61941,
+       "kind": "action",
+       "text": "tap \"Yes\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 6,
+       "time": 1793180262.3017,
+       "kind": "action",
+       "text": "tap \"Search Menu\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 7,
+       "time": 1793180264.609799,
+       "kind": "action",
+       "text": "tap \"Caffe Latte\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 8,
+       "time": 1793180266.9540968,
+       "kind": "action",
+       "text": "tap \"Caffè Latte\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 9,
+       "time": 1793180271.05779,
+       "kind": "action",
+       "text": "scroll",
+       "risk": "read"
+      },
+      {
+       "seq": 10,
+       "time": 1793180273.343824,
+       "kind": "action",
+       "text": "done"
+      },
+      {
+       "seq": 11,
+       "time": 1793180273.3446112,
+       "kind": "finish",
+       "text": "Caffè Latte at Starbucks: Our dark, rich espresso balanced with steamed milk and a light layer of foam. A perfect milk-forward warm-up. 190 calories, 18g sugar, 7g fat, 13g protein. 200★ item.",
+       "status": "done"
+      },
+      {
+       "seq": 12,
+       "time": 1793180273.486897,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 13,
+       "time": 1793180275.633454,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-053753-5c7a",
+     "goal": "Tell what's a Caffè Latte on DoorDash",
+     "app": "com.dd.doordash",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "doordash_search_restaurants",
+     "inputs": {
+      "search_query": "Caffè Latte"
+     },
+     "status": "done",
+     "result": "first restaurant name: Safeway",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793180280.0947142,
+       "kind": "note",
+       "text": "using routine doordash_search_restaurants v1 with search_query = Caffè Latte"
+      },
+      {
+       "seq": 2,
+       "time": 1793180286.257282,
+       "kind": "routine_step",
+       "text": "open_search",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 3,
+       "time": 1793180288.813517,
+       "kind": "routine_step",
+       "text": "enter_search_query",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793180288.886243,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 5,
+       "time": 1793180289.067296,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 6,
+       "time": 1793180291.4170141,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793180236.899521,
+     "kind": "plan",
+     "text": "2 apps: Starbucks: Tell what's a Caffè Latte at Starbucks; DoorDash: Tell what's a Caffè Latte on DoorDash"
+    },
+    {
+     "seq": 2,
+     "time": 1793180294.843605,
+     "kind": "answer",
+     "text": "Starbucks describes it as \"Our dark, rich espresso balanced with steamed milk and a light layer of foam. A perfect milk-forward warm-up.\" while DoorDash didn't give what was asked, giving \"first restaurant name: Safeway\" instead.",
+     "sources": {
+      "Caffè Latte at Starbucks": "Starbucks · the \"Caffè Latte\" screen · 5:37 AM",
+      "Caffè Latte on DoorDash": "DoorDash · DashboardActivity · 5:38 AM"
+     }
+    },
+    {
+     "seq": 3,
+     "time": 1793180294.8442082,
+     "kind": "timeline",
+     "text": "answered in 57.94 s; one phone (envoy-real): the parts took turns"
+    },
+    {
+     "seq": 4,
+     "time": 1793180294.8501,
+     "kind": "memory",
+     "text": "memory updated: the combined answer, with each app as its source",
+     "entities": [
+      "Note Starbucks describes it as \"Our dark, rich espresso balanced with steamed milk and a light layer of foam. A perfect milk-forward warm-up.\" while DoorDash didn't give what was asked, giving \"first restaurant name: Safeway\" instead."
+     ]
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "combine": {
+      "calls": 2,
+      "usd": 0.011495
+     },
+     "lead": {
+      "calls": 1,
+      "usd": 0.003943
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.012254999999999999
+     },
+     "plan": {
+      "calls": 1,
+      "usd": 0.003468
+     },
+     "step": {
+      "calls": 9,
+      "usd": 0.015097999999999999
+     },
+     "extract": {
+      "calls": 2,
+      "usd": 0.005105999999999999
+     }
+    },
+    "calls": 17,
+    "usd": 0.05136
+   },
+   "lead_version": "b188b40 (question kept, no price rule)"
+  }
+ ]
+}

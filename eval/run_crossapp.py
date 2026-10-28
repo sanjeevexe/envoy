@@ -243,6 +243,13 @@ async def main_async(args: argparse.Namespace) -> None:
     watch = Watch(ctx)
     decliner = asyncio.create_task(watch.decline_forever())
     phones = sorted({p for q in args.questions for p in QUESTIONS[q][1]})
+    if "envoy-test" in phones:  # SkyLark (our test app) seeded as the routine suites seed it: a Denver trip with a gate
+        from skylark_routines import fixtures
+        from testapps.skylark import SkyLark
+        sky = SkyLark(SERIALS["envoy-test"])
+        if not sky.installed():
+            sky.install()
+        sky.seed(fixtures())
     for p in phones:  # the first connection to a phone is slow and one at a time: not part of any timing
         await ctx.pool.device(p)
     t_all = time.time()
