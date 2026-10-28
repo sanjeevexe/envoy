@@ -35,6 +35,9 @@ pushed. The plan is `prompts/alerts-plan.md`, and the end-to-end evidence is in 
    - It doesn't fire on first sightings, repeats, user edits, other types, or changes made by tasks it started itself.
    - Several changes to one fact between two checks fire once, from the first old value to the last new one, and
      not at all if the fact went back. Changes made while the trigger is paused are skipped on resume, not replayed.
+   - Its cursor names the memory database it counts in (`spec.memory_db`). After a restart on the other profile, or
+     on a rebuilt demo memory, it starts from the end of that database's log. The email trigger's cursor works the
+     same way now.
    - Its action is fixed when it is created. The change supplies only typed, cleaned values: `{flight.number}`,
      `{trip.destination}`, `{change.attribute}`, `{change.old}`, `{change.new}`, and routine inputs through
      `inputs_from`.
@@ -54,14 +57,14 @@ pushed. The plan is `prompts/alerts-plan.md`, and the end-to-end evidence is in 
 ## Evidence
 
 - **Offline**:
-  - `backend/tests/test_alerts.py` has 17 tests: silent when nothing changed; one push per change with no repeat;
+  - `backend/tests/test_alerts.py` has 22 tests: silent when nothing changed; one push per change with no repeat;
     who gets told; the case found on the device; no subscribed device; a broken event; reporting without a memory
     step; the fact-changed trigger firing on a change and not otherwise, with typed values and no self-feeding; the
-    API; and six for the review fixes below.
+    API; and eleven for the review fixes below.
   - The fake push service decrypts every push.
   - The silent-watcher assertion in `test_phase5.py` was changed deliberately and states what it means: a watcher
     finishing "done" still doesn't push.
-  - **The full suite passes, 155 tests, on `main` merged in.**
+  - **The full suite passes, 160 tests, on `main` merged in.**
 - **End to end on envoy-test** (`eval/run_alerts.py`, final run at 174f919, all checks passed; the review fixes came
   after it and change only cases the run doesn't reach):
   - Four gate changes made through SkyLark's debug broadcast, B12 → C14 → D3 → E7 → B12, gave four decrypted pushes.
@@ -82,7 +85,7 @@ pushed. The plan is `prompts/alerts-plan.md`, and the end-to-end evidence is in 
   - Its trigger doesn't alert, and the watcher then found nothing new, so the change was never announced.
   - The fix is in commit 174f919 with an offline test. In the final run the same timing came up, and the follow-up
     pushed for "Watch my gate" 5.4 s after the change.
-- **Code review** (a separate reviewer read the diff; seven of its eight findings are fixed, each with a test):
+- **Code review** (a separate reviewer read the diff; all eight findings are fixed, each with a test):
   1. A paused fact-changed trigger replayed every change it missed when resumed. It now skips them.
   2. Several changes between two checks started one task each, including a back-and-forth within one run. They now
      collapse into one net change, or none.
@@ -96,9 +99,16 @@ pushed. The plan is `prompts/alerts-plan.md`, and the end-to-end evidence is in 
      step, up to two minutes.
   7. A push could be recorded under another push's id. `Pusher.notify` now takes the caller's id.
 
-  Not fixed: `after_seq`, like the email trigger's existing `after_rowid`, counts rows in one memory database but is
-  stored with the triggers, which both profiles share. After restarting on the other profile, a fact-changed trigger
-  can stay silent for a while or replay. A fix would store the profile with it.
+  8. `after_seq`, like the email trigger's existing `after_rowid`, counts rows in one memory database but was stored
+     with the triggers, which both profiles share. After a restart on the other profile, a trigger could replay that
+     database's older changes or mail, or stay silent until the count caught up. Fixed in a follow-up commit:
+     - Each cursor now stores which memory database it counts in: a hash of the file's path and inode. So
+       `scripts/demo_setup.py`, which deletes and rebuilds the demo memory, counts as a new database too.
+     - When the cursor doesn't match the running database, or points past the end of its log, the trigger starts
+       again from the end of that log. It also drops its fired keys, which are row numbers in the other log.
+     - Restarting on the same database keeps the cursor, so changes made while the API was down are still picked up.
+     - Five tests cover a switch both ways for each kind, a rebuilt database, a restart on the same database, and a
+       trigger saved before this change.
 - **Memory normalization** (owner: memory, Phase 7; not changed here): "Group 3" and "3" are different boarding-group
   values in `normalize_key_value`, so a re-read flips it back and forth as a change. Alerts filter it already.
 
@@ -143,3 +153,5 @@ The branch is ready to merge into `main` as it is. It already contains `main` at
 - After merging, rebuild the web app: `cd web && npm run build`.
 - Existing triggers keep working unchanged. A watcher saved before this change alerts by default from now on. To
   silence one, use its Alerts off button.
+- An email trigger saved before this change has no `memory_db`. On its first check it starts from the end of the log,
+  so mail that arrived while the API was stopped before that first start isn't handled. That happens once.
