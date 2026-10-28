@@ -179,10 +179,17 @@ class AgentRunner:
             return out
 
         try:
+            apps = ""
+            if self.config.plan and hasattr(self.device, "app_listing"):
+                try:  # the phone's apps by name, so the plan can name the app the goal means
+                    apps = await self.device.app_listing()  # type: ignore[attr-defined]
+                except Exception as e:  # noqa: BLE001 - the plan works without it
+                    trace.step({"step": 0, "kind": "apps_unavailable", "error": f"{type(e).__name__}: {e}"[:300]})
+
             async def make_plan(current: ScreenState, tried: str = "", step_no: int = 0) -> Plan | None:
                 t0 = time.perf_counter()
                 notes_text, note_ids = self._notes_for(current.package)
-                res = await asyncio.to_thread(self._call, "plan", [{"type": "input_text", "text": plan_input(goal, current.compact, memory, tried,
+                res = await asyncio.to_thread(self._call, "plan", [{"type": "input_text", "text": plan_input(goal, current.compact, memory, tried, apps,
                                                                                                                app_notes=notes_text)}],
                                               PLAN_INSTRUCTIONS, self.config.plan_effort, task_id)
                 account(res)

@@ -66,7 +66,7 @@ class Home(_Strict):
 
 class Launch(_Strict):
     type: Literal["launch"]
-    app: str = Field(description="Android package name, e.g. com.android.settings")
+    app: str = Field(description="The app's name as people call it, e.g. 'Settings' or 'Simple Calendar Pro', or its package name")
 
 
 class TapPoint(_Strict):
@@ -155,7 +155,7 @@ class SuccessCheck(_Strict):
 
 
 class Plan(_Strict):
-    app: str | None = Field(description="Android package of the app the task needs, if known, e.g. com.skylark.air; else null")
+    app: str | None = Field(description="The app the task needs, by name or package, if known, e.g. SkyLark Air or com.skylark.air; else null")
     subgoals: list[str] = Field(description="2 to 6 short steps, in order")
     success_check: SuccessCheck
 
