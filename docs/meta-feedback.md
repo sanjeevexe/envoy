@@ -136,7 +136,7 @@ The submission form asks for "feedback from your experience using Meta products"
 Measured on 52 targets (seats on a seat map drawn on a canvas, at two screen sizes, and buttons, fields and icons on real-app screenshots whose accessibility tree gave the truth), then again on a fresh 52.
 
 **What worked well**
-- **SAM 3.1's boxes are pixel-exact.** On the seat map, the box Muse Spark picked from SAM's candidates was 1 px from the seat's centre (median), and 15 of 16 picks were right.
+- **SAM 3.1's boxes are pixel-exact.** On the seat map, the box Muse Spark picked from SAM's candidates was 1 px from the seat's centre (median); it found 15 of 16 seats and said none for the last.
 - **Shown numbered boxes, Muse Spark never picked a wrong one.** In 104 targets it either picked the right box or said none of them was the target. That makes SAM + a pick a safe first pass with a fallback.
 - **Grounding is strong on labelled UI**: 35 of 36 real-app targets (median error 10 px), about 2 s and $0.003 each.
 - **Together they found all 104** (SAM first, grounding when SAM's candidates don't include the target), against 37% for the step model reading coordinates off its own 540 px screenshot.
