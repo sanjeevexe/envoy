@@ -581,7 +581,8 @@ async def cmd_repeats(args: Any) -> None:
     env = Env(contributor=args.contributor)
     s = Suite("repeats", contributor=args.contributor, devices=[env.device.serial], label="First run vs later runs")
     comp = compiled()
-    rows = []
+    sel = {t.id for t in tasks(args.tasks)}
+    rows = [r for r in (load("repeats") or {}).get("rows", []) if r["task"] not in sel] if args.tasks else []  # a rerun of some tasks
     lib = fresh_library("repeats")
     for task in tasks(args.tasks):
         c = comp.get(task.id)
@@ -637,7 +638,10 @@ async def cmd_change(args: Any) -> None:
     s = Suite("change", contributor=args.contributor, devices=[env.device.serial], label="Routines under change")
     base = RoutineStore(LIB_COMPILED)
     sel = tasks(args.tasks)
-    new_inputs, experiments = [], []
+    prev = load("change") or {} if args.tasks else {}
+    ids = {t.id for t in sel}
+    new_inputs = [r for r in prev.get("new_inputs", []) if r["task"] not in ids or "inputs" not in args.parts]
+    experiments = [e for e in prev.get("experiments", []) if e["task"] not in ids or "variants" not in args.parts]
     if "inputs" in args.parts:
         for k in range(args.k):
             w = world(800 + k)
