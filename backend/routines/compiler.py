@@ -510,8 +510,11 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             v = s.vision
             w, h = v.get("size") or [s.before.width or 1080, s.before.height or 2400]
             x1, y1, x2, y2 = v["box"]
-            crop = (s.trace_dir / v["crop"]).read_bytes() if s.trace_dir and v.get("crop") and (s.trace_dir / v["crop"]).exists() else None
-            action = StepAction(kind="tap", target=Locator(visual=bind_inputs(v["target"], examples), crop=encode_png(crop) if crop else None,
+            visual = bind_inputs(v["target"], examples)
+            # The picture shows the recorded value (seat 10C): keep it only when the target doesn't change with the inputs.
+            crop = (s.trace_dir / v["crop"]).read_bytes() if (s.trace_dir and v.get("crop") and not has_slot(visual)
+                                                               and (s.trace_dir / v["crop"]).exists()) else None
+            action = StepAction(kind="tap", target=Locator(visual=visual, crop=encode_png(crop) if crop else None,
                                                            region=(round(x1 / w, 4), round(y1 / h, 4), round(x2 / w, 4), round(y2 / h, 4)),
                                                            density=v.get("density")))
         else:

@@ -386,5 +386,10 @@ def test_a_routine_step_on_a_drawn_target_replays_from_its_picture_then_groundin
     point = asyncio.run(ex._visual_point(ctx, step_seat, screen, sr))
     assert point == (108, 448) and adapter.calls == ["sam", "sam", "choose", "grounding"] and ctx.out.model_calls == 4
     assert "looked for 'seat 10A' (sam→grounding" in sr.rungs[-1]
+    # A picture of the recorded value (the red pin standing in for seat 10C) is never used for "seat {{seat}}".
+    slotted = Step(id="seat2", intent="pick a seat", pre=[], post=[], action=StepAction(kind="tap", target=Locator(
+        visual="seat {{seat}}", crop=_crop(png, (594, 1094, 686, 1186)), density=320)))
+    adapter.calls.clear()
+    assert asyncio.run(ex._visual_point(ctx, slotted, screen, sr)) == (108, 448) and adapter.calls[-1] == "grounding"
     secure = ScreenState(**{**screen.__dict__, "secure": True})
     assert asyncio.run(ex._visual_point(ctx, step_seat, secure, sr)) is None  # never a picture of a secure screen

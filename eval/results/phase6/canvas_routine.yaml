@@ -1,0 +1,158 @@
+routine: skylark_change_seat
+app: com.skylark.air
+version: 1
+status: draft
+intent: Change the seat on a SkyLark flight
+description: Open a SkyLark trip for the requested city, open seat selection, choose the requested seat, and confirm the change.
+patterns: [Change my seat on my flight, Change the seat for my trip, Move to a different seat on my flight]
+outputs: [seat]
+start: fresh_launch
+inputs:
+  trip_city: {type: text, description: City of the trip/flight whose seat should be changed., example: Denver}
+  new_seat: {type: text, description: The new seat to select., example: 10C}
+steps:
+- id: tap_my_trips
+  intent: Tap My Trips
+  pre:
+  - {app_foreground: com.skylark.air}
+  - element_present: {resource_id: screen_title, text: SkyLark Air, kind: Text}
+  action:
+    tap:
+      resource_id: nav_trips
+      text: My Trips
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.373, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: screen_title, text: My Trips, kind: Text}
+  - element_present: {resource_id: nav_trips, text: My Trips, kind: Text}
+  risk: reversible
+  note: trace step 6
+- id: find_open_trip
+  intent: "Scroll to {{trip_city}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: trip_row_*
+        text_has: "{{trip_city}}"
+        kind: Button
+        cls: View
+        parent: list_trips
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: trip_row_*
+      text_has: "{{trip_city}}"
+      kind: Button
+      cls: View
+      parent: list_trips
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: open_trip
+  intent: "Tap the trip to {{trip_city}}"
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      resource_id: trip_row_*
+      text_has: "{{trip_city}}"
+      kind: Button
+      cls: View
+      parent: list_trips
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: screen_title
+      text: "Trip to {{trip_city}}"
+      kind: Text
+  - element_present: {resource_id: btn_checkin, text: Check in, kind: Button}
+  risk: reversible
+  note: trace step 7
+- id: tap_change_seat
+  intent: Tap Change seat
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      resource_id: btn_change_seat
+      text: Change seat
+      kind: Button
+      cls: View
+      siblings: [Known traveler number]
+      in_list: false
+      position: [0.5, 0.55]
+  post:
+  - {screen_changed: true}
+  - element_absent:
+      resource_id: screen_title
+      text: "Trip to {{trip_city}}"
+      kind: Text
+  risk: reversible
+  note: trace step 8
+- id: select_seat
+  intent: "Tap seat {{new_seat}}"
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      visual: "seat {{new_seat}}"
+      crop: iVBORw0KGgoAAAANSUhEUgAAAHQAAAByCAIAAAANoWJtAAAFq0lEQVR42u2da2wUVRTHz9x57pZ2KbVqpJSXDwhRK1AeWoOEaIJ8wAdCINXwCPL4QNSohACCaYgS+WCiMRFiIEaCqUIVCIpGqfJQVGKFVAR5aAMtjxZ2t+2+ZuaOH9ZU6O7szG4BZ8v/92mymU02vzl77rl3Zs4VeNQicH1gUAC5kAuuRurJlw1umZZl9fakzQQSmSAKwnWXyy3q0I2IYcYMzq2baDCUmOCTRL8kFsiiy68I7qsFblnBuBGK6zd5eSEzIaDKRYp0zeR2JIy2mG5aqNv+RRVZiU/RRNZTuW0xPRTXITSVUp9SaB/CzrF9MZpoTxjwaCfHIrJLEQ6l2KWYDrOZaY0mOnQza7mduhlENnDn1+BWFnItorZYAuJc1lFpXdnKDcb1tFcD2P3Lo4bpVm44jlSbHeGUwYnZXQeUtDkEbzdp6eVGDBOycqBbZkgvN25ymMqBmMGd5SYgNyd07pQWkG2pB2uwDnLhNmcssnAngnCbB3IB5EIu5ALIhVzIBZALuZALIBdyIRdALuQCyIVcyAWQC7mQC3qvXNM0TcPo/S/53TAMXf9+z9f13+z++cf9p0+dIKIhQ+8aPuLexx6f+vAjk/wFfbz5s9O8zWNwq6k96p2f2Hik4Y3Vy376YR+3iKyrn3Rj7J7hI2reeqdiZKVHXgQsL/TljdyDB/YunD29PRwmojvvHjZl6rTygYMFxs6fa/5i+7bDDYeISJLlLXW7Hxg9FnKz4OyZpqcnT2i9eIGIlq5cM/v5xbKs0H/PtFmbN61fvewlIiofNGTrrvrifiWekuvpAe3ttTVJs68ur5m3aMmVZolIEITqOQvmL36BMdb016mdn33COUe14IqTJ47vqKslovsqRlXPW8BY+p9aPXdB8mDThvcs04RcV3z71a5kJM6onqNpPrvT+peVj6+aQER/nz7Z0nwGpZgrfjl4IHlQOb7KLmyTzF24ZOKjk4mIoxRzyahh/UPBoKpqDSdaumXbbnSl2szX4MYPaB6N3GikMxQMEtEdZQMym/WC0zzLuZFIJHlQFOiLtYVrTFfjHCH7zjKQS1gV+9/oqr0inR2Qe43xFxRIskxE51uavTbvynu5jLGKkZUksFAoeOF8S+aTW5rPHDvaeOxoY3J9B3KdqRz3EBOIiA7/eihz8K55bemUiWOmTBzTcrYJcl1RNWGSwBgRbd9WS/Zyw6HQ/n31RBQI9B0waAjkumL02AfvrxhFRF/urNu/7zu703Zt39oZDhPRrNnzVVWDXFeIovjyyprk7GvZi4saj/yWes7hhkNra5Zzzn0+/zMzn/PaVE1ctWJ1arfGkDfaXfUvK5cV9cDePR0d7Z9/ukXXE4qimNxsbb14/I/fP/7wgxWvLIlEOolo3bsbKsdVeaClphBQZcqX2zymaX608f11a1ZFoxHG2JWxyTnnnBcWFS1//c2nZjzrhbDNs3toSU6d/HPzxvU76movtbV2fVg2YOCT02c9MW3mwMFDyTOdSvNPbpJ4PHau+WwweFlVtX79SkpuKRUlyWttYPNVLuVDj928uUGJhRsAuZALuQByIRdyAeRCLuQCyIVcyAWQC7kAciEXcgHkQi7kAsiFXMgFLhEc5TIBlnJ/ytFRbi77igMikpjgnBYUEemCctvG2lmuT4LcXNAk0VlugSzCFGW/wb3mJnJlxvwS/GZH6qbrtn//gCrBl3tEQQgoslu5PkksVODXLcWanFphZRq4SjRFZhjZnOkjS0XpApFlLInpVr+COYVDhSCyUr+Sy/RXFdntfo1hTmFbe7HbClTBfQOhVBKct0YSMWwGnFIelPqU7Loz2XE5rgdjOvatTZa0xZrcR5aybn2VAdOywnGjXTe67R58U01wC5X0w1dP5dIVm7HHDJ7g3OS9fw9mJpAkCIrINEmUsxnfc5QLsFgOuZALcuAfapw+QkJolrgAAAAASUVORK5CYII=
+      region: [0.409, 0.205, 0.506, 0.247]
+      density: 420
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: text_seat_selection
+      text: "Selected: {{new_seat}}"
+      kind: Text
+  - element_present: {resource_id: btn_confirm_seat, text: Confirm seat, kind: Button}
+  risk: reversible
+  note: trace step 10
+- id: tap_confirm_seat
+  intent: Tap Confirm seat
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      resource_id: btn_confirm_seat
+      text: Confirm seat
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.5, 0.957]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: text_seat_selection
+      text: "Your seat: {{new_seat}}. Tap a seat to change it."
+      kind: Text
+  - element_present:
+      resource_id: text_seat_message
+      text: "Seat changed to {{new_seat}}"
+      kind: Text
+  risk: irreversible
+  extract:
+    seat:
+      near: "Your seat:"
+      locator: {resource_id: text_seat_selection, kind: Text}
+      after: . Tap a seat to change it.
+      first_in_list: false
+      next_element: false
+      expect_digits: true
+  note: trace step 11
+done:
+- text_visible: "{{new_seat}}"
+compiled_from:
+  task_id: p6-canvas-src
+  goal: Change my seat on my Denver flight to 10C.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-27 20:32:14"
+  trace_steps_kept: [6, 7, 8, 10, 11]
+  trace_steps_dropped: 6
+  cost_usd: 0.0467

@@ -4,7 +4,7 @@ Envoy builds on the open-source projects below. The hackathon rules allow open s
 
 Licenses for Python packages were read from the installed package metadata (Oct 26, 2026). Licenses for planned components come from their repositories and must be re-checked when they are added.
 
-## In use (Phases 0–5)
+## In use (Phases 0–6)
 
 | Component | Version | License | What we use it for |
 | --- | --- | --- | --- |
@@ -33,7 +33,9 @@ Licenses for Python packages were read from the installed package metadata (Oct 
 | [Tailwind CSS](https://github.com/tailwindlabs/tailwindcss) (with `@tailwindcss/turbopack`) | 4.3.3 | MIT | Web app styling |
 | [Cytoscape.js](https://github.com/cytoscape/cytoscape.js) | 3.34.4 | MIT | Memory graph view |
 | [TypeScript](https://github.com/microsoft/TypeScript) | 5.9.3 | Apache-2.0 | Web app language (build time) |
-| [scrcpy](https://github.com/Genymobile/scrcpy) | 5.0.1 | Apache-2.0 | Phone screen video (Phase 0 secure-screen test; the real-phone live view in Phase 6) |
+| [scrcpy](https://github.com/Genymobile/scrcpy) (its server, `scrcpy-server`, from the Homebrew install) | 5.0.1 | Apache-2.0 | Phase 6: the real phone's screen and input. Envoy pushes the unmodified server to the phone and speaks its protocol itself (`backend/devices/scrcpy.py`: H.264 video socket, binary control messages); Phase 0's secure-screen test |
+| [PyAV](https://github.com/PyAV-Org/PyAV) | 19.0.2 | BSD-3-Clause | Phase 6: decodes the phone's H.264 stream on the Mac (its wheels bundle FFmpeg's libraries, LGPL-2.1+, unmodified) |
+| [NumPy](https://github.com/numpy/numpy) | 2.5.4 | BSD-3-Clause | Phase 6: FFT cross-correlation that finds a routine's recorded picture of a target on the screen |
 | [cloudflared](https://github.com/cloudflare/cloudflared) | 2026.10.3 | Apache-2.0 | Quick tunnel giving the MCP stub (Phase 0) and Envoy's MCP server (Phase 5, `/mcp` only) a public HTTPS address for Muse |
 | [pywebpush](https://github.com/web-push-libs/pywebpush) | 2.5.0 | MPL-2.0 | Web Push sending (RFC 8030/8291 encryption, VAPID) for approval, takeover and task notifications (Phase 5); unmodified |
 | [py-vapid](https://github.com/web-push-libs/vapid) | 1.9.6 | MPL-2.0 | VAPID signing, used by pywebpush; unmodified |
@@ -45,8 +47,11 @@ Licenses for Python packages were read from the installed package metadata (Oct 
 | [Tailscale](https://github.com/tailscale/tailscale) (client, Serve) | 1.104.2 | BSD-3-Clause (client) | Private HTTPS on your tailnet for the iPhone (`scripts/serve_tailnet.sh`); the coordination service is Tailscale's |
 | Apple Vision framework (`VNRecognizeTextRequest`), via `backend/memory/ocr.swift` | macOS 26 | Apple system framework | On-device text reading for photos and screenshots (Phase 5) |
 | Apple Shortcuts (`shortcuts sign`) | macOS 26 / iOS 26 | Apple system app | Signing and running the "Send to Envoy" shortcut that `scripts/make_shortcut.py` writes |
+| [Jetpack Compose](https://developer.android.com/jetpack/compose) / AndroidX | BOM 2026.09.00 | Apache-2.0 | SkyLark Air, Envoy's test app (Phase 1; the canvas seat map in Phase 6) |
 
 uiautomator2 also installs its own helper APK (`app-uiautomator`, same project, MIT) on the phone when it is first used.
+
+Envoy's own Android code (ours, built with the Android Gradle Plugin and Kotlin, Apache-2.0 build tools): SkyLark Air (`testapps/skylark`, Jetpack Compose) and, in Phase 6, the banner app (`android/banner`) that shows on a real phone while Envoy works on it.
 
 Development tools (not shipped):
 - [uv](https://github.com/astral-sh/uv) (MIT or Apache-2.0)
@@ -65,16 +70,13 @@ Envoy uses open source as plumbing (talking to phones, streaming video, serving 
 - **The task runner, takeover and approvals** (built in Phase 4, Oct 27, `backend/api/`): one task model for every interface, device leases where the agent waits at its next call to the phone while the user is in control, web approvals bound to the app's own screen with per-approval nonces, the live-view protocol on emulator gRPC frames, the scheduler with memory-derived triggers, chat routing, the MCP tools, and the web app (`web/`). FastAPI, the MCP SDK, Next.js, React, Tailwind and Cytoscape.js are plumbing.
 - **The iPhone companion and voice** (built in Phase 5, Oct 27; `backend/api/auth.py`, `push.py`, `voice.py`, `backend/memory/photos.py`, `ocr.swift`, `web/lib/device.ts`, `web/lib/voice.ts`, `web/public/sw.js`): pairing a device with a short code typed inside the Home Screen app, scoped device tokens that can only upload images, the host and origin checks, which events push and what a push may carry (never a nonce), push receipts that measure delivery, the push-to-talk relay to Muse Voice Transcribe with silence padding to real time, the AudioWorklet resampler, touch and iPhone-keyboard input for the live view with clock-offset latency, and photos to facts: on-device OCR with a tiled second pass, redaction of the image before it leaves the Mac, Spark vision extraction checked against the image's text (tolerating only OCR glyph confusions in codes), photo sources, merging into known trips by natural keys, and deleting the image. The "Send to Envoy" shortcut is generated by `scripts/make_shortcut.py`; the icons are drawn by `scripts/make_icons.py`. pywebpush, Tailscale, Apple's Vision framework and Shortcuts are plumbing.
 - **Muse integration:** Envoy as the phone layer behind the real Muse app, through a custom MCP connector (a public tunnel reaches `/mcp` and nothing else).
+- **The real phone and screens with no tree** (built in Phase 6, Oct 27–28; `backend/devices/android.py`, `phone.py`, `scrcpy.py`, `backend/api/routing.py`, `backend/agent/vision.py`, `backend/routines/visual.py`, `android/banner`): one device layer over emulators and real phones; a scrcpy client of our own (the server's video and control protocols, decoded on the Mac) for the phone's live view, input and screenshots; telling your touches from Envoy's (`getevent` sees only physical input); routing between phones by the design's table, asking before your phone is used, the on-phone banner with Pause, and pausing on a touch or another app; scroll-to-reveal and scrolled-output reading that made routines portable to a smaller screen; finding drawn targets (grounding, SAM 3.1 + a model's pick, and the two combined) and routines that replay them from their recorded picture (density-scaled cross-correlation) or by looking again; SkyLark's canvas seat map for exact checks.
 
 ## Planned (later phases)
 
 | Component | License | What we will use it for |
 | --- | --- | --- |
-| [Tango](https://github.com/yume-chan/ya-webadb) `@yume-chan/adb`, `@yume-chan/adb-scrcpy`, `@yume-chan/scrcpy-decoder-webcodecs` | MIT | Node video relay and in-browser WebCodecs decoding for the real-phone live view (Phase 6; emulators use the emulator's own gRPC frames) |
 | [sqlite-vec](https://github.com/asg017/sqlite-vec) | MIT or Apache-2.0 | Similarity search, only if needed |
-| [PyAV](https://github.com/PyAV-Org/PyAV) | BSD-3-Clause | Decoding scrcpy frames for the agent |
-| [Jetpack Compose](https://developer.android.com/jetpack/compose) / AndroidX | Apache-2.0 | Test apps (SkyLark Air) |
-| `meta-sam-parser` (PyPI) / `@meta-sam/parser` (npm), from Meta | License to check when added | Parsing SAM 3.1's special-token output (Phase 6) |
 
 ## Considered and not used
 
@@ -82,6 +84,8 @@ Envoy uses open source as plumbing (talking to phones, streaming video, serving 
 | --- | --- | --- |
 | Mobilerun Portal | AGPL-3.0 | Copyleft; Envoy uses uiautomator2 (and possibly its own bridge) instead |
 | Android emulator WebRTC (`android-emulator-webrtc`) | Apache-2.0 | Emulator-only, container scripts are Linux x86 only; scrcpy is used everywhere |
+| [Tango](https://github.com/yume-chan/ya-webadb) `@yume-chan/adb-scrcpy`, `@yume-chan/scrcpy-decoder-webcodecs` | MIT | The design's plan for the real-phone live view (a Node relay, H.264 decoded in the browser). Phase 6 decodes on the Mac instead (PyAV), which reuses the live view's JPEG protocol and gives the agent screenshots from the same frames |
+| `meta-sam-parser` (PyPI) / `@meta-sam/parser` (npm), from Meta | Not checked | SAM 3.1's box tokens are parsed by Envoy's own few lines (`backend/agent/vision.py`); masks aren't used |
 
 ## Ideas borrowed (no code used)
 

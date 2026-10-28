@@ -1,0 +1,2145 @@
+{
+ "time": "2026-10-28T00:30:55+00:00",
+ "methods": [
+  "hybrid",
+  "grounding"
+ ],
+ "summary": {
+  "skylark-canvas": {
+   "hybrid": {
+    "targets": 16,
+    "hits": 16,
+    "accuracy": 1.0,
+    "median_ms": 6723,
+    "median_error_px": 1.0,
+    "cost_per_target": 0.00597
+   },
+   "grounding": {
+    "targets": 16,
+    "hits": 14,
+    "accuracy": 0.875,
+    "median_ms": 5869,
+    "median_error_px": 7.0,
+    "cost_per_target": 0.00339
+   }
+  },
+  "real": {
+   "hybrid": {
+    "targets": 36,
+    "hits": 36,
+    "accuracy": 1.0,
+    "median_ms": 3588,
+    "median_error_px": 11.5,
+    "cost_per_target": 0.00795
+   },
+   "grounding": {
+    "targets": 36,
+    "hits": 35,
+    "accuracy": 0.972,
+    "median_ms": 2195,
+    "median_error_px": 9.5,
+    "cost_per_target": 0.00244
+   }
+  },
+  "all": {
+   "hybrid": {
+    "targets": 52,
+    "hits": 52,
+    "accuracy": 1.0,
+    "median_ms": 4022,
+    "median_error_px": 2.0,
+    "cost_per_target": 0.00734
+   },
+   "grounding": {
+    "targets": 52,
+    "hits": 49,
+    "accuracy": 0.942,
+    "median_ms": 2572,
+    "median_error_px": 8.0,
+    "cost_per_target": 0.00273
+   }
+  }
+ },
+ "rows": [
+  {
+   "source": "skylark-canvas@envoy-test",
+   "description": "seat 10D",
+   "truth": [
+    616,
+    490,
+    721,
+    595
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     668,
+     542
+    ],
+    "ms": 5423.241000040434,
+    "cost": 0.00562545,
+    "calls": 2,
+    "detail": "",
+    "candidates": 78,
+    "hit": true,
+    "error_px": 1
+   },
+   "grounding": {
+    "point": [
+     670,
+     536
+    ],
+    "ms": 6065.362374996766,
+    "cost": 0.0038832,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 7
+   }
+  },
+  {
+   "source": "skylark-canvas@envoy-test",
+   "description": "seat 12A",
+   "truth": [
+    201,
+    763,
+    306,
+    868
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     252,
+     815
+    ],
+    "ms": 7483.88770793099,
+    "cost": 0.0054172000000000005,
+    "calls": 2,
+    "detail": "",
+    "candidates": 78,
+    "hit": true,
+    "error_px": 2
+   },
+   "grounding": {
+    "point": [
+     254,
+     815
+    ],
+    "ms": 4098.4472499694675,
+    "cost": 0.0038661999999999998,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 1
+   }
+  },
+  {
+   "source": "skylark-canvas@envoy-test",
+   "description": "seat 13D",
+   "truth": [
+    616,
+    900,
+    721,
+    1005
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     668,
+     952
+    ],
+    "ms": 4014.3912500934675,
+    "cost": 0.0054512,
+    "calls": 2,
+    "detail": "",
+    "candidates": 78,
+    "hit": true,
+    "error_px": 1
+   },
+   "grounding": {
+    "point": [
+     667,
+     954
+    ],
+    "ms": 6906.653166981414,
+    "cost": 0.0038322,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 2
+   }
+  },
+  {
+   "source": "skylark-canvas@envoy-test",
+   "description": "seat 15A",
+   "truth": [
+    201,
+    1173,
+    306,
+    1278
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     252,
+     1225
+    ],
+    "ms": 9633.85520898737,
+    "cost": 0.005731699999999999,
+    "calls": 2,
+    "detail": "",
+    "candidates": 78,
+    "hit": true,
+    "error_px": 2
+   },
+   "grounding": {
+    "point": [
+     254,
+     1225
+    ],
+    "ms": 4405.9690000722185,
+    "cost": 0.0038916999999999997,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 1
+   }
+  },
+  {
+   "source": "skylark-canvas@envoy-test",
+   "description": "seat 16D",
+   "truth": [
+    616,
+    1309,
+    721,
+    1414
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     668,
+     1361
+    ],
+    "ms": 4958.812584052794,
+    "cost": 0.0055957,
+    "calls": 2,
+    "detail": "",
+    "candidates": 78,
+    "hit": true,
+    "error_px": 1
+   },
+   "grounding": {
+    "point": [
+     669,
+     1355
+    ],
+    "ms": 4820.300624938682,
+    "cost": 0.0045292,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 7
+   }
+  },
+  {
+   "source": "skylark-canvas@envoy-test",
+   "description": "seat 18A",
+   "truth": [
+    201,
+    1582,
+    306,
+    1687
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     254,
+     1636
+    ],
+    "ms": 9158.90279202722,
+    "cost": 0.0097594,
+    "calls": 3,
+    "detail": "SAM: the model chose none of the candidates; grounding found it",
+    "candidates": 78,
+    "hit": true,
+    "error_px": 2
+   },
+   "grounding": {
+    "point": [
+     256,
+     1644
+    ],
+    "ms": 5671.884374925867,
+    "cost": 0.0026441,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 10
+   }
+  },
+  {
+   "source": "skylark-canvas@envoy-test",
+   "description": "seat 19D",
+   "truth": [
+    616,
+    1719,
+    721,
+    1824
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     667,
+     1768
+    ],
+    "ms": 16607.750623952597,
+    "cost": 0.01301065,
+    "calls": 3,
+    "detail": "SAM: the model chose none of the candidates; grounding found it",
+    "candidates": 78,
+    "hit": true,
+    "error_px": 4
+   },
+   "grounding": {
+    "point": [
+     668,
+     1770
+    ],
+    "ms": 15031.912541948259,
+    "cost": 0.0028013499999999998,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 2
+   }
+  },
+  {
+   "source": "skylark-canvas@envoy-test",
+   "description": "seat 21A",
+   "truth": [
+    201,
+    1992,
+    306,
+    2097
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     252,
+     2044
+    ],
+    "ms": 4672.711749910377,
+    "cost": 0.00554045,
+    "calls": 2,
+    "detail": "",
+    "candidates": 78,
+    "hit": true,
+    "error_px": 2
+   },
+   "grounding": {
+    "point": [
+     254,
+     2038
+    ],
+    "ms": 6584.538500057533,
+    "cost": 0.00402345,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 7
+   }
+  },
+  {
+   "source": "skylark-canvas@envoy-small",
+   "description": "seat 10D",
+   "truth": [
+    418,
+    404,
+    498,
+    484
+   ],
+   "size": [
+    720,
+    1280
+   ],
+   "hybrid": {
+    "point": [
+     457,
+     443
+    ],
+    "ms": 19439.262166968547,
+    "cost": 0.0046574500000000005,
+    "calls": 2,
+    "detail": "",
+    "candidates": 48,
+    "hit": true,
+    "error_px": 1
+   },
+   "grounding": {
+    "point": [
+     459,
+     444
+    ],
+    "ms": 37698.81779095158,
+    "cost": 0.002328,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 1
+   }
+  },
+  {
+   "source": "skylark-canvas@envoy-small",
+   "description": "seat 11C",
+   "truth": [
+    286,
+    508,
+    366,
+    588
+   ],
+   "size": [
+    720,
+    1280
+   ],
+   "hybrid": {
+    "point": [
+     325,
+     547
+    ],
+    "ms": 15308.021874981932,
+    "cost": 0.00532045,
+    "calls": 2,
+    "detail": "",
+    "candidates": 48,
+    "hit": true,
+    "error_px": 1
+   },
+   "grounding": {
+    "point": [
+     325,
+     560
+    ],
+    "ms": 37096.56629199162,
+    "cost": 0.0025915,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 12
+   }
+  },
+  {
+   "source": "skylark-canvas@envoy-small",
+   "description": "seat 12B",
+   "truth": [
+    194,
+    612,
+    274,
+    692
+   ],
+   "size": [
+    720,
+    1280
+   ],
+   "hybrid": {
+    "point": [
+     233,
+     651
+    ],
+    "ms": 14059.270874946378,
+    "cost": 0.00492095,
+    "calls": 2,
+    "detail": "",
+    "candidates": 48,
+    "hit": true,
+    "error_px": 1
+   },
+   "grounding": {
+    "point": [
+     234,
+     624
+    ],
+    "ms": 33974.12050003186,
+    "cost": 0.0018775,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 28
+   }
+  },
+  {
+   "source": "skylark-canvas@envoy-small",
+   "description": "seat 13A",
+   "truth": [
+    102,
+    716,
+    182,
+    796
+   ],
+   "size": [
+    720,
+    1280
+   ],
+   "hybrid": {
+    "point": [
+     141,
+     755
+    ],
+    "ms": 26625.937999924645,
+    "cost": 0.0051674500000000005,
+    "calls": 2,
+    "detail": "",
+    "candidates": 48,
+    "hit": true,
+    "error_px": 1
+   },
+   "grounding": {
+    "point": [
+     142,
+     755
+    ],
+    "ms": 4502.929124981165,
+    "cost": 0.00370145,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 1
+   }
+  },
+  {
+   "source": "skylark-canvas@envoy-small",
+   "description": "seat 13F",
+   "truth": [
+    602,
+    716,
+    682,
+    796
+   ],
+   "size": [
+    720,
+    1280
+   ],
+   "hybrid": {
+    "point": [
+     641,
+     755
+    ],
+    "ms": 3892.3550830222666,
+    "cost": 0.0048912,
+    "calls": 2,
+    "detail": "",
+    "candidates": 48,
+    "hit": true,
+    "error_px": 1
+   },
+   "grounding": {
+    "point": [
+     641,
+     722
+    ],
+    "ms": 5616.422999999486,
+    "cost": 0.00388845,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 34
+   }
+  },
+  {
+   "source": "skylark-canvas@envoy-small",
+   "description": "seat 14E",
+   "truth": [
+    510,
+    820,
+    590,
+    900
+   ],
+   "size": [
+    720,
+    1280
+   ],
+   "hybrid": {
+    "point": [
+     549,
+     859
+    ],
+    "ms": 3332.0868329610676,
+    "cost": 0.0046872,
+    "calls": 2,
+    "detail": "",
+    "candidates": 48,
+    "hit": true,
+    "error_px": 1
+   },
+   "grounding": {
+    "point": [
+     550,
+     805
+    ],
+    "ms": 5154.449499910697,
+    "cost": 0.0035994499999999997,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": false,
+    "error_px": 55
+   }
+  },
+  {
+   "source": "skylark-canvas@envoy-small",
+   "description": "seat 15D",
+   "truth": [
+    418,
+    924,
+    498,
+    1004
+   ],
+   "size": [
+    720,
+    1280
+   ],
+   "hybrid": {
+    "point": [
+     457,
+     963
+    ],
+    "ms": 3457.10949995555,
+    "cost": 0.0049082,
+    "calls": 2,
+    "detail": "",
+    "candidates": 48,
+    "hit": true,
+    "error_px": 1
+   },
+   "grounding": {
+    "point": [
+     458,
+     963
+    ],
+    "ms": 5306.300624972209,
+    "cost": 0.00371845,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 1
+   }
+  },
+  {
+   "source": "skylark-canvas@envoy-small",
+   "description": "seat 16C",
+   "truth": [
+    286,
+    1028,
+    366,
+    1108
+   ],
+   "size": [
+    720,
+    1280
+   ],
+   "hybrid": {
+    "point": [
+     325,
+     1067
+    ],
+    "ms": 5962.660165969282,
+    "cost": 0.0047934499999999994,
+    "calls": 2,
+    "detail": "",
+    "candidates": 48,
+    "hit": true,
+    "error_px": 1
+   },
+   "grounding": {
+    "point": [
+     325,
+     1012
+    ],
+    "ms": 18572.142750024796,
+    "cost": 0.0030851999999999997,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": false,
+    "error_px": 56
+   }
+  },
+  {
+   "source": "com.google.android.apps.nexuslauncher:p1-final-v0x3-flight_status-v0-r1/006_before.png",
+   "description": "the \"Settings\" button",
+   "truth": [
+    824,
+    1873,
+    997,
+    2068
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     909,
+     1970
+    ],
+    "ms": 2743.1828329572454,
+    "cost": 0.0066527,
+    "calls": 3,
+    "detail": "",
+    "candidates": 14,
+    "hit": true,
+    "error_px": 2
+   },
+   "grounding": {
+    "point": [
+     911,
+     1924
+    ],
+    "ms": 2464.6788330283016,
+    "cost": 0.00280995,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 47
+   }
+  },
+  {
+   "source": "com.google.android.apps.nexuslauncher:p1-final-v0x3-flight_status-v0-r1/006_before.png",
+   "description": "the \"Messages\" button",
+   "truth": [
+    330,
+    1873,
+    503,
+    2068
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     416,
+     1970
+    ],
+    "ms": 4305.535459076054,
+    "cost": 0.0070607,
+    "calls": 3,
+    "detail": "",
+    "candidates": 14,
+    "hit": true,
+    "error_px": 1
+   },
+   "grounding": {
+    "point": [
+     418,
+     1909
+    ],
+    "ms": 2980.981917004101,
+    "cost": 0.0031287,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 62
+   }
+  },
+  {
+   "source": "com.google.android.apps.nexuslauncher:p1-final-v0x3-flight_status-v0-r1/008_before.png",
+   "description": "the \"Messages\" button",
+   "truth": [
+    540,
+    1362,
+    787,
+    1677
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     662,
+     1486
+    ],
+    "ms": 3042.9219999350607,
+    "cost": 0.00691195,
+    "calls": 3,
+    "detail": "",
+    "candidates": 31,
+    "hit": true,
+    "error_px": 34
+   },
+   "grounding": {
+    "point": [
+     666,
+     1498
+    ],
+    "ms": 3760.6794589664787,
+    "cost": 0.00467145,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 22
+   }
+  },
+  {
+   "source": "com.google.android.apps.nexuslauncher:p1-final-v0x3-flight_status-v0-r1/008_before.png",
+   "description": "the \"Safety\" button",
+   "truth": [
+    540,
+    1677,
+    787,
+    1992
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     662,
+     1802
+    ],
+    "ms": 1835.6540000531822,
+    "cost": 0.00669945,
+    "calls": 3,
+    "detail": "",
+    "candidates": 31,
+    "hit": true,
+    "error_px": 33
+   },
+   "grounding": {
+    "point": [
+     664,
+     1818
+    ],
+    "ms": 2286.212916020304,
+    "cost": 0.0032009499999999997,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 17
+   }
+  },
+  {
+   "source": "com.google.android.calendar:p2-real-calendar_today/012_before.png",
+   "description": "the \"Search\" button",
+   "truth": [
+    679,
+    148,
+    806,
+    274
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     740,
+     208
+    ],
+    "ms": 2387.8079999703914,
+    "cost": 0.0062329,
+    "calls": 3,
+    "detail": "",
+    "candidates": 15,
+    "hit": true,
+    "error_px": 4
+   },
+   "grounding": {
+    "point": [
+     740,
+     199
+    ],
+    "ms": 1814.425666932948,
+    "cost": 0.00176965,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 12
+   }
+  },
+  {
+   "source": "com.google.android.calendar:p2-real-calendar_today/012_before.png",
+   "description": "the \"October\" button",
+   "truth": [
+    159,
+    138,
+    669,
+    285
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     291,
+     204
+    ],
+    "ms": 6248.087125015445,
+    "cost": 0.01176285,
+    "calls": 4,
+    "detail": "SAM: the model chose none of the candidates; grounding found it",
+    "candidates": 15,
+    "hit": true,
+    "error_px": 123
+   },
+   "grounding": {
+    "point": [
+     292,
+     202
+    ],
+    "ms": 2281.9456250872463,
+    "cost": 0.0023944,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 122
+   }
+  },
+  {
+   "source": "com.chipotle.ordering:p2-real-chipotle/004_before.png",
+   "description": "the \"OKAY\" button",
+   "truth": [
+    795,
+    1299,
+    986,
+    1436
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     889,
+     1310
+    ],
+    "ms": 4129.284875001758,
+    "cost": 0.00864255,
+    "calls": 4,
+    "detail": "SAM: the model chose none of the candidates; grounding found it",
+    "candidates": 4,
+    "hit": true,
+    "error_px": 58
+   },
+   "grounding": {
+    "point": [
+     891,
+     1272
+    ],
+    "ms": 1595.0523329665884,
+    "cost": 0.00181765,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": false,
+    "error_px": 96
+   }
+  },
+  {
+   "source": "com.chipotle.ordering:p2-real-chipotle/010_before.png",
+   "description": "the \"SEARCH THIS AREA\" button",
+   "truth": [
+    304,
+    325,
+    777,
+    427
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     542,
+     363
+    ],
+    "ms": 5318.806373979896,
+    "cost": 0.009570599999999999,
+    "calls": 4,
+    "detail": "SAM: the model chose none of the candidates; grounding found it",
+    "candidates": 36,
+    "hit": true,
+    "error_px": 13
+   },
+   "grounding": {
+    "point": [
+     541,
+     360
+    ],
+    "ms": 1547.8074160637334,
+    "cost": 0.00180615,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 16
+   }
+  },
+  {
+   "source": "com.chipotle.ordering:p2-real-chipotle/010_before.png",
+   "description": "the \"DELIVERY\" button",
+   "truth": [
+    541,
+    2196,
+    824,
+    2298
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     683,
+     2245
+    ],
+    "ms": 6672.736249980517,
+    "cost": 0.0110844,
+    "calls": 4,
+    "detail": "SAM: the model chose none of the candidates; grounding found it",
+    "candidates": 36,
+    "hit": true,
+    "error_px": 2
+   },
+   "grounding": {
+    "point": [
+     681,
+     2243
+    ],
+    "ms": 2496.9573330599815,
+    "cost": 0.00259115,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 4
+   }
+  },
+  {
+   "source": "com.google.android.gm:p2-real-gmail_newest/001_before.png",
+   "description": "the \"GOT IT\" button",
+   "truth": [
+    0,
+    2190,
+    1080,
+    2337
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     539,
+     2271
+    ],
+    "ms": 5227.879166952334,
+    "cost": 0.0100858,
+    "calls": 4,
+    "detail": "SAM: the model chose none of the candidates; grounding found it",
+    "candidates": 10,
+    "hit": true,
+    "error_px": 8
+   },
+   "grounding": {
+    "point": [
+     539,
+     2280
+    ],
+    "ms": 2236.2350840121508,
+    "cost": 0.0020739,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 17
+   }
+  },
+  {
+   "source": "com.google.android.gm:p2-real-gmail_newest/008_before.png",
+   "description": "the \"Compose\" button",
+   "truth": [
+    661,
+    2022,
+    1017,
+    2169
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     733,
+     2095
+    ],
+    "ms": 4495.925833005458,
+    "cost": 0.00951295,
+    "calls": 3,
+    "detail": "",
+    "candidates": 15,
+    "hit": true,
+    "error_px": 106
+   },
+   "grounding": {
+    "point": [
+     836,
+     2070
+    ],
+    "ms": 2083.154792082496,
+    "cost": 0.0018759,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 26
+   }
+  },
+  {
+   "source": "com.google.android.gm:p2-real-gmail_newest/008_before.png",
+   "description": "the \"Meet\" button",
+   "truth": [
+    540,
+    2211,
+    982,
+    2337
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     760,
+     2273
+    ],
+    "ms": 2288.0929169477895,
+    "cost": 0.0073624499999999996,
+    "calls": 3,
+    "detail": "",
+    "candidates": 15,
+    "hit": true,
+    "error_px": 1
+   },
+   "grounding": {
+    "point": [
+     756,
+     2271
+    ],
+    "ms": 2100.019459030591,
+    "cost": 0.00276745,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 6
+   }
+  },
+  {
+   "source": "com.google.android.gm:p2-real-gmail_newest/009_before.png",
+   "description": "the \"Dismiss\" button",
+   "truth": [
+    807,
+    456,
+    1038,
+    596
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     920,
+     540
+    ],
+    "ms": 3915.60066700913,
+    "cost": 0.008457300000000001,
+    "calls": 4,
+    "detail": "SAM: the model chose none of the candidates; grounding found it",
+    "candidates": 15,
+    "hit": true,
+    "error_px": 14
+   },
+   "grounding": {
+    "point": [
+     918,
+     529
+    ],
+    "ms": 1558.961958042346,
+    "cost": 0.0017909,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 5
+   }
+  },
+  {
+   "source": "com.google.android.gm:p2-real-gmail_newest/009_before.png",
+   "description": "the \"Meet\" button",
+   "truth": [
+    540,
+    2211,
+    982,
+    2337
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     760,
+     2273
+    ],
+    "ms": 2220.997874974273,
+    "cost": 0.0073582000000000005,
+    "calls": 3,
+    "detail": "",
+    "candidates": 15,
+    "hit": true,
+    "error_px": 1
+   },
+   "grounding": {
+    "point": [
+     761,
+     2280
+    ],
+    "ms": 2548.231541994028,
+    "cost": 0.00237315,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 6
+   }
+  },
+  {
+   "source": "com.google.android.gm:p2-real-gmail_newest/017_before.png",
+   "description": "the \"Meet\" button",
+   "truth": [
+    540,
+    2211,
+    982,
+    2337
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     760,
+     2273
+    ],
+    "ms": 1734.7955409204587,
+    "cost": 0.00653465,
+    "calls": 3,
+    "detail": "",
+    "candidates": 14,
+    "hit": true,
+    "error_px": 1
+   },
+   "grounding": {
+    "point": [
+     761,
+     2270
+    ],
+    "ms": 1670.6826660083607,
+    "cost": 0.0020969,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 4
+   }
+  },
+  {
+   "source": "com.google.android.gm:p2-real-gmail_newest/017_before.png",
+   "description": "the \"Search in mail\" edittext",
+   "truth": [
+    42,
+    149,
+    1038,
+    296
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     539,
+     217
+    ],
+    "ms": 8059.943333035335,
+    "cost": 0.0141494,
+    "calls": 4,
+    "detail": "SAM: the model chose none of the candidates; grounding found it",
+    "candidates": 14,
+    "hit": true,
+    "error_px": 6
+   },
+   "grounding": {
+    "point": [
+     540,
+     213
+    ],
+    "ms": 1400.043374975212,
+    "cost": 0.0017564000000000002,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 10
+   }
+  },
+  {
+   "source": "com.google.android.gm:p2-real-gmail_newest/018_before.png",
+   "description": "the \"Search in mail\" edittext",
+   "truth": [
+    42,
+    149,
+    1038,
+    296
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     539,
+     213
+    ],
+    "ms": 4057.287500007078,
+    "cost": 0.00896205,
+    "calls": 4,
+    "detail": "SAM: the model chose none of the candidates; grounding found it",
+    "candidates": 14,
+    "hit": true,
+    "error_px": 10
+   },
+   "grounding": {
+    "point": [
+     540,
+     209
+    ],
+    "ms": 1631.0238749720156,
+    "cost": 0.0016799,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 14
+   }
+  },
+  {
+   "source": "com.google.android.gm:p2-real-gmail_newest/018_before.png",
+   "description": "the \"Meet\" button",
+   "truth": [
+    540,
+    2211,
+    982,
+    2337
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     760,
+     2273
+    ],
+    "ms": 1987.4598750611767,
+    "cost": 0.00650065,
+    "calls": 3,
+    "detail": "",
+    "candidates": 14,
+    "hit": true,
+    "error_px": 1
+   },
+   "grounding": {
+    "point": [
+     760,
+     2266
+    ],
+    "ms": 2017.7300829673186,
+    "cost": 0.0021521500000000002,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 8
+   }
+  },
+  {
+   "source": "com.google.android.apps.nexuslauncher:p2-real-settings_version/007_before.png",
+   "description": "the \"YouTube\" button",
+   "truth": [
+    808,
+    1483,
+    1013,
+    1756
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     909,
+     1587
+    ],
+    "ms": 3073.3265839517117,
+    "cost": 0.00701945,
+    "calls": 3,
+    "detail": "",
+    "candidates": 16,
+    "hit": true,
+    "error_px": 33
+   },
+   "grounding": {
+    "point": [
+     909,
+     1628
+    ],
+    "ms": 2766.038375091739,
+    "cost": 0.0022809,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 9
+   }
+  },
+  {
+   "source": "com.google.android.apps.nexuslauncher:p2-real-settings_version/007_before.png",
+   "description": "the \"Photos\" button",
+   "truth": [
+    561,
+    1483,
+    766,
+    1756
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     662,
+     1586
+    ],
+    "ms": 2872.4533750209957,
+    "cost": 0.00676745,
+    "calls": 3,
+    "detail": "",
+    "candidates": 16,
+    "hit": true,
+    "error_px": 34
+   },
+   "grounding": {
+    "point": [
+     663,
+     1639
+    ],
+    "ms": 3374.222708051093,
+    "cost": 0.0034942,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 20
+   }
+  },
+  {
+   "source": "com.google.android.apps.nexuslauncher:p2-real-settings_version/008_before.png",
+   "description": "the \"Google app\" button",
+   "truth": [
+    101,
+    2144,
+    227,
+    2270
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     162,
+     2206
+    ],
+    "ms": 5746.095707989298,
+    "cost": 0.00828265,
+    "calls": 3,
+    "detail": "",
+    "candidates": 16,
+    "hit": true,
+    "error_px": 2
+   },
+   "grounding": {
+    "point": [
+     162,
+     2211
+    ],
+    "ms": 3487.35008307267,
+    "cost": 0.0030969,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 4
+   }
+  },
+  {
+   "source": "com.google.android.apps.nexuslauncher:p2-real-settings_version/008_before.png",
+   "description": "the \"Google Lens\" button",
+   "truth": [
+    853,
+    2125,
+    979,
+    2290
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     915,
+     2206
+    ],
+    "ms": 3748.524499940686,
+    "cost": 0.0060769,
+    "calls": 3,
+    "detail": "",
+    "candidates": 16,
+    "hit": true,
+    "error_px": 2
+   },
+   "grounding": {
+    "point": [
+     915,
+     2200
+    ],
+    "ms": 2892.755417036824,
+    "cost": 0.00222565,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 8
+   }
+  },
+  {
+   "source": "com.google.android.apps.nexuslauncher:p2-real-settings_version/009_before.png",
+   "description": "the \"Google Lens\" button",
+   "truth": [
+    853,
+    2125,
+    979,
+    2290
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     915,
+     2206
+    ],
+    "ms": 4295.90708296746,
+    "cost": 0.0066124,
+    "calls": 3,
+    "detail": "",
+    "candidates": 16,
+    "hit": true,
+    "error_px": 2
+   },
+   "grounding": {
+    "point": [
+     914,
+     2212
+    ],
+    "ms": 2343.150999979116,
+    "cost": 0.0018474000000000001,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 5
+   }
+  },
+  {
+   "source": "com.google.android.apps.nexuslauncher:p2-real-settings_version/009_before.png",
+   "description": "the \"YouTube\" button",
+   "truth": [
+    808,
+    1483,
+    1013,
+    1756
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     909,
+     1587
+    ],
+    "ms": 2959.143874933943,
+    "cost": 0.00609815,
+    "calls": 3,
+    "detail": "",
+    "candidates": 16,
+    "hit": true,
+    "error_px": 33
+   },
+   "grounding": {
+    "point": [
+     910,
+     1613
+    ],
+    "ms": 2154.536292073317,
+    "cost": 0.0019069,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 7
+   }
+  },
+  {
+   "source": "com.google.android.apps.nexuslauncher:p2-real-settings_version/011_before.png",
+   "description": "the \"Messages\" button",
+   "truth": [
+    330,
+    1873,
+    503,
+    2068
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     416,
+     1970
+    ],
+    "ms": 4029.6855421038345,
+    "cost": 0.00721795,
+    "calls": 3,
+    "detail": "",
+    "candidates": 16,
+    "hit": true,
+    "error_px": 1
+   },
+   "grounding": {
+    "point": [
+     416,
+     1926
+    ],
+    "ms": 2944.7960830293596,
+    "cost": 0.00317545,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 45
+   }
+  },
+  {
+   "source": "com.google.android.apps.nexuslauncher:p2-real-settings_version/011_before.png",
+   "description": "the \"Google app\" button",
+   "truth": [
+    101,
+    2144,
+    227,
+    2270
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     162,
+     2206
+    ],
+    "ms": 3443.80762509536,
+    "cost": 0.006837650000000001,
+    "calls": 3,
+    "detail": "",
+    "candidates": 16,
+    "hit": true,
+    "error_px": 2
+   },
+   "grounding": {
+    "point": [
+     160,
+     2211
+    ],
+    "ms": 3765.569041017443,
+    "cost": 0.0036154,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 6
+   }
+  },
+  {
+   "source": "com.google.android.apps.nexuslauncher:p2-real-settings_version/012_before.png",
+   "description": "the \"Gmail\" button",
+   "truth": [
+    314,
+    1483,
+    519,
+    1756
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     415,
+     1586
+    ],
+    "ms": 3062.7062920248136,
+    "cost": 0.00579515,
+    "calls": 3,
+    "detail": "",
+    "candidates": 16,
+    "hit": true,
+    "error_px": 34
+   },
+   "grounding": {
+    "point": [
+     416,
+     1656
+    ],
+    "ms": 2596.627459046431,
+    "cost": 0.0023774,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 37
+   }
+  },
+  {
+   "source": "com.google.android.apps.nexuslauncher:p2-real-settings_version/012_before.png",
+   "description": "the \"Google Lens\" button",
+   "truth": [
+    853,
+    2125,
+    979,
+    2290
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     915,
+     2206
+    ],
+    "ms": 2967.3920000204816,
+    "cost": 0.0063064,
+    "calls": 3,
+    "detail": "",
+    "candidates": 16,
+    "hit": true,
+    "error_px": 2
+   },
+   "grounding": {
+    "point": [
+     913,
+     2211
+    ],
+    "ms": 2636.9641659548506,
+    "cost": 0.0022129000000000003,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 5
+   }
+  },
+  {
+   "source": "com.google.android.youtube:p2-real-youtube_search/006_before.png",
+   "description": "the \"Home\" button",
+   "truth": [
+    0,
+    2211,
+    270,
+    2337
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     135,
+     2257
+    ],
+    "ms": 2251.553124981001,
+    "cost": 0.0071541999999999994,
+    "calls": 3,
+    "detail": "",
+    "candidates": 14,
+    "hit": true,
+    "error_px": 17
+   },
+   "grounding": {
+    "point": [
+     135,
+     2307
+    ],
+    "ms": 2136.7739170091227,
+    "cost": 0.0031117,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 33
+   }
+  },
+  {
+   "source": "com.google.android.youtube:p2-real-youtube_search/006_before.png",
+   "description": "the \"RETRY\" button",
+   "truth": [
+    424,
+    1245,
+    655,
+    1371
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     540,
+     1334
+    ],
+    "ms": 4574.000583030283,
+    "cost": 0.01077415,
+    "calls": 4,
+    "detail": "SAM: the model chose none of the candidates; grounding found it",
+    "candidates": 14,
+    "hit": true,
+    "error_px": 26
+   },
+   "grounding": {
+    "point": [
+     540,
+     1283
+    ],
+    "ms": 1568.1762500898913,
+    "cost": 0.0019196500000000002,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 25
+   }
+  },
+  {
+   "source": "com.google.android.youtube:p2-real-youtube_search/007_before.png",
+   "description": "the \"lofi hip hop\" button",
+   "truth": [
+    189,
+    128,
+    954,
+    254
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     277,
+     186
+    ],
+    "ms": 4827.499376027845,
+    "cost": 0.01016055,
+    "calls": 4,
+    "detail": "SAM: the model chose none of the candidates; grounding found it",
+    "candidates": 14,
+    "hit": true,
+    "error_px": 295
+   },
+   "grounding": {
+    "point": [
+     280,
+     187
+    ],
+    "ms": 2377.758290967904,
+    "cost": 0.0030569,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 292
+   }
+  },
+  {
+   "source": "com.google.android.youtube:p2-real-youtube_search/007_before.png",
+   "description": "the \"Home\" button",
+   "truth": [
+    0,
+    2211,
+    270,
+    2337
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     135,
+     2257
+    ],
+    "ms": 2688.5527500417084,
+    "cost": 0.007370949999999999,
+    "calls": 3,
+    "detail": "",
+    "candidates": 14,
+    "hit": true,
+    "error_px": 17
+   },
+   "grounding": {
+    "point": [
+     132,
+     2277
+    ],
+    "ms": 1388.493041973561,
+    "cost": 0.00233395,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 4
+   }
+  },
+  {
+   "source": "com.google.android.youtube:p2-real-youtube_search/009_before.png",
+   "description": "the \"Shorts\" button",
+   "truth": [
+    270,
+    2211,
+    540,
+    2337
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     405,
+     2256
+    ],
+    "ms": 1567.011334002018,
+    "cost": 0.0068792,
+    "calls": 3,
+    "detail": "",
+    "candidates": 15,
+    "hit": true,
+    "error_px": 18
+   },
+   "grounding": {
+    "point": [
+     407,
+     2277
+    ],
+    "ms": 1856.9597080349922,
+    "cost": 0.0022214,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 4
+   }
+  },
+  {
+   "source": "com.google.android.youtube:p2-real-youtube_search/009_before.png",
+   "description": "the \"Subscriptions\" button",
+   "truth": [
+    540,
+    2211,
+    810,
+    2337
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     674,
+     2256
+    ],
+    "ms": 3732.1171250659972,
+    "cost": 0.00843345,
+    "calls": 3,
+    "detail": "",
+    "candidates": 15,
+    "hit": true,
+    "error_px": 18
+   },
+   "grounding": {
+    "point": [
+     675,
+     2278
+    ],
+    "ms": 1434.1040840372443,
+    "cost": 0.0026782,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 4
+   }
+  },
+  {
+   "source": "com.google.android.youtube:p2-real-youtube_search/013_before.png",
+   "description": "the \"Clear\" button",
+   "truth": [
+    954,
+    128,
+    1080,
+    254
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     1018,
+     186
+    ],
+    "ms": 3990.1592500973493,
+    "cost": 0.00852105,
+    "calls": 4,
+    "detail": "SAM: the model chose none of the candidates; grounding found it",
+    "candidates": 14,
+    "hit": true,
+    "error_px": 5
+   },
+   "grounding": {
+    "point": [
+     1015,
+     186
+    ],
+    "ms": 1453.5701250424609,
+    "cost": 0.0018461500000000002,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 5
+   }
+  },
+  {
+   "source": "com.google.android.youtube:p2-real-youtube_search/013_before.png",
+   "description": "the \"Shorts\" button",
+   "truth": [
+    270,
+    2211,
+    540,
+    2337
+   ],
+   "size": [
+    1080,
+    2400
+   ],
+   "hybrid": {
+    "point": [
+     405,
+     2256
+    ],
+    "ms": 1944.7346249362454,
+    "cost": 0.0064594000000000006,
+    "calls": 3,
+    "detail": "",
+    "candidates": 14,
+    "hit": true,
+    "error_px": 18
+   },
+   "grounding": {
+    "point": [
+     408,
+     2271
+    ],
+    "ms": 1301.459833048284,
+    "cost": 0.0016689,
+    "calls": 1,
+    "detail": "",
+    "candidates": 1,
+    "hit": true,
+    "error_px": 4
+   }
+  }
+ ]
+}

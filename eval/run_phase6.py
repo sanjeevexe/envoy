@@ -244,6 +244,168 @@ async def cmd_vision(args: argparse.Namespace) -> None:
     print("saved", save(args.name or "vision", {"time": now(), "methods": methods, "summary": summary, "rows": rows}))
 
 
+# ---- a routine step on a drawn screen: learned on envoy-test's canvas seat map, replayed on both sizes ----------------
+
+async def cmd_canvas(args: argparse.Namespace) -> None:
+    from dataclasses import replace
+
+    from agent.trace import RUNS
+    from routines.compiler import compile_trace
+    from routines.model import dump_yaml
+    from skylark_routines import BY_ID, _free_seats, compile_booking
+    from skylark_routines import fixtures as sk_fixtures
+    fam = BY_ID["change_seat"]
+    extra = rr.compile_extra()
+    near = [x for x in _free_seats(sk_fixtures(extra), set()) if int(x[:-1]) <= 13]  # on screen on both phones
+    src = replace(compile_booking(), new_seat=near[0])
+    env = Env(open_device("envoy-test"))
+    out: dict[str, Any] = {"time": now(), "seats": near}
+    task_id = args.task or "p6-canvas-src"
+    if not args.task:
+        before = await env.reset(extra, 6)
+        res = await env.agent().run(fam.goal(src), task_id=task_id, memory=fam.memory(src))
+        ok = fam.check(env.app.state(), before, src, {}, res.result) and res.status == "done"
+        print(f"{'PASS' if ok else 'FAIL'} agent on the canvas map: {res.status} {res.steps} steps {res.model_calls} calls "
+              f"${res.cost_at_standard_usd:.4f} {res.duration_s}s {res.result[:80]!r}", flush=True)
+        out["agent"] = {"passed": ok, "status": res.status, "steps": res.steps, "model_calls": res.model_calls,
+                        "cost_usd": res.cost_at_standard_usd, "duration_s": res.duration_s, "task_id": task_id}
+        if not ok:
+            save("canvas", out)
+            return
+    routine, report = await compile_trace(RUNS / task_id, adapter=env.adapter, memory=fam.memory(src))
+    (OUT / "canvas_routine.yaml").write_text(dump_yaml(routine))
+    visual = [st.id for st in routine.steps if st.action.target is not None and st.action.target.visual]
+    print(f"compiled {routine.routine}: {len(routine.steps)} steps, visual steps {visual}, inputs {list(routine.inputs)}, "
+          f"${report.cost_at_standard_usd:.3f}", flush=True)
+    out["compile"] = {"routine": routine.routine, "steps": len(routine.steps), "visual_steps": visual, "inputs": list(routine.inputs),
+                      "cost_usd": report.cost_at_standard_usd, "warnings": report.warnings}
+    rows = []
+    for name in ("envoy-test", "envoy-small"):
+        env2 = env if name == "envoy-test" else Env(open_device(name))
+        for seat in near[1:1 + args.k]:
+            b = replace(src, new_seat=seat)
+            before = await env2.reset(extra, 6)
+            outcome = await env2.executor().run(routine, rr.inputs_for(routine, src, b), task_id=f"p6-canvas-{name}-{seat}", launch="never",
+                                               allow_repair=True, allow_agent=False)
+            ok = outcome.succeeded and fam.check(env2.app.state(), before, b, outcome.outputs, rr.answer_of(outcome))
+            how = [r for st in outcome.steps for r in st.rungs if r.startswith(("found its picture", "looked for"))]
+            print(f"{'PASS' if ok else 'FAIL'} {name:11s} seat {seat}: {outcome.status} calls={outcome.model_calls} "
+                  f"${outcome.cost_at_standard_usd:.4f} {outcome.duration_s}s {how} {outcome.detail[:60]}", flush=True)
+            rows.append({"device": name, "seat": seat, "passed": ok, "status": outcome.status, "model_calls": outcome.model_calls,
+                         "cost_usd": outcome.cost_at_standard_usd, "duration_s": outcome.duration_s, "found": how, "detail": outcome.detail})
+    out["replays"] = rows
+    print("saved", save("canvas", out))
+
+
+# ---- the scrcpy path: frames, screenshots and input on a phone -----------------------------------------------------
+
+async def cmd_stream(args: argparse.Namespace) -> None:
+    """scrcpy on a phone (or an emulator standing in): start time, frame rate, screenshot time against adb screencap, and
+    tap → visibly different frame (input + app + encode + decode), alternating two SkyLark tabs."""
+    import hashlib
+    from devices.scrcpy import ScrcpyStream
+    from devices.types import Action
+    dev = open_device(args.device)
+    app = SkyLark(dev.serial)
+    from skylark_routines import fixtures as sk_fixtures
+    app.prepare(fixtures=sk_fixtures([]), variant=0)
+    await dev.wait_until_settled()
+    caps = dev.capabilities
+    stream = ScrcpyStream(dev.serial, (caps.width, caps.height))
+    t0 = time.perf_counter()
+    stream.start()
+    stream.frame(200, timeout=5)
+    start_ms = (time.perf_counter() - t0) * 1000
+    n0, t1 = stream.frames, time.time()
+    await asyncio.sleep(3)
+    fps_idle = (stream.frames - n0) / (time.time() - t1)
+
+    def digest() -> str:
+        return hashlib.blake2b(stream.frame(270).tobytes(), digest_size=8).hexdigest()
+
+    shots_stream, shots_adb, taps = [], [], []
+    for i in range(args.n):
+        s = await dev.observe()
+        target = next(e for e in s.numbered if e.label.startswith("My Trips" if i % 2 == 0 else "Home"))
+        await asyncio.sleep(0.6)
+        before = digest()
+        sent = time.time()
+        stream.tap(*target.center)
+        changed = None
+        while time.time() - sent < 3:
+            if stream.wait_for_new_frame(stream.frame_time, 0.5) and digest() != before:
+                changed = (stream.frame_time - sent) * 1000
+                break
+        taps.append(changed)
+        t = time.perf_counter(); stream.png(); shots_stream.append((time.perf_counter() - t) * 1000)
+        t = time.perf_counter(); dev.screencap_png(); shots_adb.append((time.perf_counter() - t) * 1000)
+    stream.stop()
+    ok = [x for x in taps if x is not None]
+    out = {"time": now(), "device": args.device, "model": dev.model, "android": dev.android, "real_phone": caps.real_phone,
+           "frame_size": [stream._frame.width, stream._frame.height] if stream._frame else None,
+           "start_ms": round(start_ms), "fps_idle": round(fps_idle, 1),
+           "tap_to_frame_ms": {"n": len(taps), "seen": len(ok), "p50": round(statistics.median(ok)) if ok else None,
+                               "max": round(max(ok)) if ok else None, "all": [round(x) if x else None for x in taps]},
+           "screenshot_ms": {"stream_p50": round(statistics.median(shots_stream), 1), "adb_screencap_p50": round(statistics.median(shots_adb))}}
+    print(json.dumps(out, indent=1))
+    print("saved", save(args.name or f"stream-{args.device}", out))
+    if isinstance(dev, PhoneDevice):
+        dev.close()
+
+
+# ---- the live view of a phone, through the API (the same WebSocket the web app and the iPhone use) ----------------
+
+async def cmd_live(args: argparse.Namespace) -> None:
+    """Frames from `WS /api/live/{id}` while the screen changes (the notification shade opening and closing):
+    capture → received latency on this Mac (clock offset from ping/pong), frame size, frames per second."""
+    import ssl
+    import struct
+    import subprocess
+
+    import websockets
+    token = Path(args.token_file).read_text().strip()
+    base = args.base.rstrip("/")
+    url = base.replace("https://", "wss://").replace("http://", "ws://") + f"/api/live/{args.id}?fps=10&width={args.width}&quality=60"
+    hdr = {"Authorization": f"Bearer {token}", "Origin": base}
+    lat, rtts, sizes, offset = [], [], [], 0.0
+    kw: dict[str, Any] = {"ssl": ssl.create_default_context()} if url.startswith("wss://") else {}
+    async with websockets.connect(url, additional_headers=hdr, max_size=None, **kw) as ws:
+        hello = json.loads(await ws.recv())
+        for _ in range(5):
+            t = time.time()
+            await ws.send(json.dumps({"type": "ping", "t": t * 1000}))
+            while True:
+                m = await ws.recv()
+                if isinstance(m, str) and json.loads(m).get("type") == "pong":
+                    now = time.time()
+                    rtts.append((now - t) * 1000)
+                    offset = json.loads(m)["server"] - (t + now) / 2
+                    break
+
+        async def change_screen() -> None:
+            for i in range(10):
+                cmd = "expand-notifications" if i % 2 == 0 else "collapse"
+                await asyncio.to_thread(subprocess.run, ["adb", "-s", args.serial, "shell", "cmd", "statusbar", cmd], timeout=20)
+                await asyncio.sleep(0.8)
+        changer = asyncio.create_task(change_screen())
+        t0 = time.time()
+        while time.time() - t0 < 9:
+            try:
+                m = await asyncio.wait_for(ws.recv(), 2)
+            except asyncio.TimeoutError:
+                continue
+            if isinstance(m, bytes):
+                lat.append((time.time() + offset - struct.unpack(">d", m[:8])[0]) * 1000)
+                sizes.append(len(m))
+        await changer
+    med = lambda xs: round(statistics.median(xs)) if xs else None  # noqa: E731
+    out = {"time": now(), "url": url.split("?")[0], "hello": hello, "frames": len(lat), "fps": round(len(lat) / 9, 1),
+           "frame_ms_p50": med(lat), "frame_ms_max": round(max(lat)) if lat else None, "rtt_ms_p50": med(rtts),
+           "kb_per_frame": round(statistics.median(sizes) / 1024, 1) if sizes else None}
+    print(json.dumps(out, indent=1))
+    print("saved", save(args.name or f"live-{args.id}", out))
+
+
 async def main() -> int:
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -262,11 +424,31 @@ async def main() -> int:
     v.add_argument("--offset", type=int, default=0, help="which seats (another sample of the same map)")
     v.add_argument("--seed", type=int, default=6, help="which real-app targets")
     v.add_argument("--name", default="")
+    st = sub.add_parser("stream")
+    st.add_argument("--device", default="phone")
+    st.add_argument("--n", type=int, default=10)
+    st.add_argument("--name", default="")
+    lv = sub.add_parser("live")
+    lv.add_argument("--base", default="http://127.0.0.1:8700")
+    lv.add_argument("--id", required=True)
+    lv.add_argument("--serial", required=True)
+    lv.add_argument("--token-file", default=str(REPO / "data" / "api" / "session_token"))  # read here, never printed
+    lv.add_argument("--width", type=int, default=720)
+    lv.add_argument("--name", default="")
+    c = sub.add_parser("canvas")
+    c.add_argument("--k", type=int, default=3)
+    c.add_argument("--task", default="", help="compile an earlier agent run instead of recording one")
     args = ap.parse_args()
     if args.cmd == "portability":
         await cmd_portability(args)
     elif args.cmd == "vision":
         await cmd_vision(args)
+    elif args.cmd == "canvas":
+        await cmd_canvas(args)
+    elif args.cmd == "stream":
+        await cmd_stream(args)
+    elif args.cmd == "live":
+        await cmd_live(args)
     return 0
 
 

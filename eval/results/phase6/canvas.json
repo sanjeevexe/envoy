@@ -1,0 +1,120 @@
+{
+ "time": "2026-10-28T00:30:07+00:00",
+ "seats": [
+  "10C",
+  "10D",
+  "10E",
+  "11A",
+  "11B",
+  "11E",
+  "11F",
+  "12C",
+  "12D",
+  "13B",
+  "13C",
+  "13E",
+  "13F"
+ ],
+ "agent": {
+  "passed": true,
+  "status": "done",
+  "steps": 10,
+  "model_calls": 16,
+  "cost_usd": 0.029048699999999997,
+  "duration_s": 68.61,
+  "task_id": "p6-canvas-src"
+ },
+ "compile": {
+  "routine": "skylark_change_seat",
+  "steps": 6,
+  "visual_steps": [
+   "select_seat"
+  ],
+  "inputs": [
+   "trip_city",
+   "new_seat"
+  ],
+  "cost_usd": 0.04674,
+  "warnings": []
+ },
+ "replays": [
+  {
+   "device": "envoy-test",
+   "seat": "10D",
+   "passed": true,
+   "status": "done",
+   "model_calls": 3,
+   "cost_usd": 0.0075092,
+   "duration_s": 11.18,
+   "found": [
+    "looked for 'seat 10D' (sam, 8.5 s)"
+   ],
+   "detail": "all steps and checks passed"
+  },
+  {
+   "device": "envoy-test",
+   "seat": "10E",
+   "passed": true,
+   "status": "done",
+   "model_calls": 3,
+   "cost_usd": 0.007832200000000001,
+   "duration_s": 8.53,
+   "found": [
+    "looked for 'seat 10E' (sam, 4.9 s)"
+   ],
+   "detail": "all steps and checks passed"
+  },
+  {
+   "device": "envoy-test",
+   "seat": "11A",
+   "passed": true,
+   "status": "done",
+   "model_calls": 3,
+   "cost_usd": 0.00845695,
+   "duration_s": 8.4,
+   "found": [
+    "looked for 'seat 11A' (sam, 5.0 s)"
+   ],
+   "detail": "all steps and checks passed"
+  },
+  {
+   "device": "envoy-small",
+   "seat": "10D",
+   "passed": true,
+   "status": "done",
+   "model_calls": 3,
+   "cost_usd": 0.0073997,
+   "duration_s": 7.42,
+   "found": [
+    "looked for 'seat 10D' (sam, 3.4 s)"
+   ],
+   "detail": "all steps and checks passed"
+  },
+  {
+   "device": "envoy-small",
+   "seat": "10E",
+   "passed": true,
+   "status": "done",
+   "model_calls": 3,
+   "cost_usd": 0.00725095,
+   "duration_s": 7.95,
+   "found": [
+    "looked for 'seat 10E' (sam, 3.6 s)"
+   ],
+   "detail": "all steps and checks passed"
+  },
+  {
+   "device": "envoy-small",
+   "seat": "11A",
+   "passed": true,
+   "status": "done",
+   "model_calls": 3,
+   "cost_usd": 0.007233949999999999,
+   "duration_s": 7.47,
+   "found": [
+    "looked for 'seat 11A' (sam, 3.3 s)"
+   ],
+   "detail": "all steps and checks passed"
+  }
+ ]
+}

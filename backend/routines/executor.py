@@ -45,7 +45,7 @@ from policy.signin import sign_in_reason
 from routines import checks as chk
 from routines import locators
 from routines.compiler import bind_inputs, chk_generalize, generalize_locator
-from routines.model import Check, Extract, Locator, Routine, Step, StepAction, render, render_str
+from routines.model import Check, Extract, Locator, Routine, Step, StepAction, has_slot, render, render_str
 from routines.screens import body, contains_value, norm, usable_id
 from routines.visual import match_crop
 
@@ -673,7 +673,7 @@ class RoutineExecutor:
         png = await self.device.screenshot()
         size = (screen.width, screen.height)
         density = getattr(getattr(self.device, "capabilities", None), "density", None)
-        if loc.crop:
+        if loc.crop and not has_slot(loc.visual):  # a picture of seat 10C is never the target "seat {{seat}}"
             scale = density / loc.density if density and loc.density else 1.0
             point, best, second = await asyncio.to_thread(match_crop, png, loc.crop, size, scale)
             if point is not None:
