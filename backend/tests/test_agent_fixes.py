@@ -97,3 +97,62 @@ def test_volatile_lines():
     a, b = home("00:01"), home("00:02")
     assert _volatile(a, b) == {0}
     assert _masked(a.compact, {0}) == _masked(b.compact, {0}) and _masked(a.compact, set()) != _masked(b.compact, set())
+
+def node(text: str, pkg: str = "com.example.app", cls: str = "android.widget.TextView", clickable: str = "false",
+         bounds: str = "[0,400][1080,500]", rid: str = "") -> str:
+    return (f'<node index="0" text="{text}" resource-id="{rid}" class="{cls}" package="{pkg}" clickable="{clickable}" '
+            f'{ATTRS} bounds="{bounds}" />')
+
+
+def screen_of(*nodes: str, pkg: str = "com.example.app"):
+    xml = (f'<?xml version="1.0" encoding="UTF-8"?><hierarchy rotation="0"><node index="0" text="" resource-id="" '
+           f'class="android.widget.FrameLayout" package="{pkg}" clickable="false" {ATTRS} bounds="[0,0][1080,2400]">'
+           f'{"".join(nodes)}</node></hierarchy>')
+    return build_state(xml, pkg, f"{pkg}.Main", 1080, 2400)
+
+
+def test_the_screen_says_when_the_keyboard_is_open():
+    key = node("q", pkg="com.google.android.inputmethod.latin", clickable="true", bounds="[0,1800][100,1900]", rid="key_pos_0_0")
+    up = screen_of(node("Title"), key)
+    assert "(the on-screen keyboard is open" in up.compact and '"q"' not in up.compact
+    assert "keyboard" not in screen_of(node("Title")).compact
+
+
+class Phone(TickingHome):
+    """A home screen that stays the same, with a date, recording the actions it gets."""
+
+    def _read(self):
+        return home("Sun, Oct 15")
+
+    async def local_time(self) -> str:
+        return "Sunday, October 15 2023, 15:34"
+
+
+class Seq:
+    """A model that answers the plan, then step outputs in order (the last one repeats)."""
+
+    def __init__(self, *steps: dict) -> None:
+        self.steps, self.prompts, self.plan_prompts = list(steps), [], []
+
+    def call(self, job, content, **kw):
+        if job == "plan":
+            self.plan_prompts.append(content[0]["text"])
+            parsed = Plan(app=None, subgoals=["Open the app"], success_check=SuccessCheck(kind="text_visible", value="Saved", field_hint=None))
+        else:
+            self.prompts.append(content[0]["text"])
+            parsed = StepOutput.model_validate(self.steps.pop(0) if len(self.steps) > 1 else self.steps[0])
+        return SimpleNamespace(parsed=parsed, usage={}, cost_usd=0.0, cost_at_standard_usd=0.0)
+
+
+def step(action: dict, reason: str = "Open it") -> dict:
+    return {"reason": reason, "action": action, "expected_result": "something", "risk": "read"}
+
+
+def test_a_placeholder_action_is_asked_again_not_carried_out(tmp_path, monkeypatch):
+    monkeypatch.setattr(TraceWriter.__init__, "__defaults__", (tmp_path,))
+    phone = Phone()
+    model = Seq(step({"type": "back"}, "Placeholder to comply with schema"), step({"type": "tap", "element": 2}), step({"type": "done", "result": "ok"}))
+    asyncio.run(AgentRunner(phone, model, ScriptedApprover(True), RunConfig(max_steps=3, data_scope="test_app"))
+                .run("Open Gmail", task_id="ph", memory=""))
+    assert [a.kind for a in phone.actions][:1] == ["tap"]  # the back was never carried out
+    assert "your reason called it a placeholder" in model.prompts[1]
