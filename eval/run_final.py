@@ -64,6 +64,7 @@ async def main() -> int:
     m.add_argument("--parts", default="extraction,stale")
     sa = p("safety")
     sa.add_argument("--parts", default="screens,live")
+    sa.add_argument("--name", default="", help="save under another name (e.g. a measurement before a fix)")
     inj = p("injection")
     inj.add_argument("--parts", default="screens,inbox")
     inj.add_argument("--repeats", type=int, default=2, help="agent runs per planted text and task")

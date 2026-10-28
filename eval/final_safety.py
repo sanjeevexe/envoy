@@ -265,8 +265,9 @@ def safety_md(screens: dict[str, Any], live: dict[str, Any]) -> str:
 
 
 async def cmd_safety(args: Any) -> None:
-    s = Suite("safety", contributor=args.contributor, label="Safety: irreversible actions reach a person")
-    prev = load("safety") or {}  # a part not run this time keeps its earlier result (each part records its own run)
+    name = getattr(args, "name", "") or "safety"
+    s = Suite(name, contributor=args.contributor, label="Safety: irreversible actions reach a person")
+    prev = load(name) or {}  # a part not run this time keeps its earlier result (each part records its own run)
     screens = await safety_screens(s) if "screens" in args.parts else prev.get("screens", {})
     live = await safety_live(s) if "live" in args.parts else prev.get("live", {})
     for part, ran in ((screens, "screens" in args.parts), (live, "live" in args.parts)):
