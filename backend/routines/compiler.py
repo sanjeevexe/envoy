@@ -429,6 +429,17 @@ def _extract_for(name: str, near: str, example: str, final: ScreenState, example
         first = next((e for e in final.numbered if e.in_list and re.fullmatch(_shape(example), e.label.strip())), None)
         if first is not None and first.index == el.index:
             return Extract(pattern=_shape(example), first_in_list=True)
+    label = " ".join(el.label.split())
+    if el.in_list and not usable_id(el.resource_id) and norm(label).startswith(norm(example)) and norm(label) != norm(example) \
+            and len(example) <= 24 and any(ch.isdigit() for ch in example) and letters <= len(example) / 2:
+        # A number-like value leading a list element, then fixed words around other numbers ("$16.49 ( $0.82 /count)", a
+        # result's price): the first list element of that whole shape, its leading value.
+        rest = label[len(" ".join(example.split())):]
+        if any(ch.isalpha() for ch in rest) and _data_free(re.sub(r"\d", "", rest), data_values):
+            shape = rf"(?P<v>{_shape(example)})\s*{_shape(rest)}"
+            first = next((e for e in final.numbered if e.in_list and re.fullmatch(shape, " ".join(e.label.split()))), None)
+            if first is not None and first.index == el.index:
+                return Extract(pattern=shape, first_in_list=True)
     if not usable_id(el.resource_id) and norm(el.label) == norm(example) and el.number and el.number > 1:
         # The value is its own element after its label ("Seat", then "22F"; "Today", "10/27", "8am open"): read the
         # element that many places after the label, stepping back over other values to the nearest fixed text.

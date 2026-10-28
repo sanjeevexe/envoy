@@ -278,6 +278,25 @@ def test_a_value_every_row_shares_an_id_for_is_read_in_the_row_the_input_names()
     assert extract_value(ex, menu([("Chips", "$2.30")]), {"menu_item_name": "Chips & Guacamole"}) is None  # not shown: missing
 
 
+def test_a_price_leading_a_result_row_is_read_from_the_first_row_of_that_shape():
+    from routines.compiler import _extract_for
+    from routines.screens import screen_from_tree
+
+    def results(labels: list[str]):
+        els = [{"index": 0, "parent": None, "number": 1, "kind": "List", "class": "android.widget.ListView", "scrollable": True,
+                "resource_id": "", "bounds": [0, 200, 1080, 2400]}]
+        for i, lab in enumerate(labels, 1):
+            els.append({"index": i, "parent": 0, "number": i + 1, "kind": "Button", "class": "android.widget.Button", "clickable": True,
+                        "in_list": True, "label": lab, "text": lab, "bounds": [0, 200 + 150 * i, 1080, 330 + 150 * i]})
+        return screen_from_tree({"package": "shop", "activity": "Results", "width": 1080, "height": 2400, "elements": els})
+    # Amazon: a brand carousel's bare "$6.53" comes first; the first result's row reads "$16.49 ( $0.82 /count)".
+    trace = results(["$6.53", "Energizer MAX AA Batteries (20 Pack)", "$16.49 ( $0.82 /count)", "$9.99 ( $2.50 /count)"])
+    ex = _extract_for("first_result_price", "", "$16.49", trace, {}, ["$16.49"])
+    assert ex is not None and ex.first_in_list
+    assert extract_value(ex, trace, {}) == "$16.49"
+    assert extract_value(ex, results(["$7.10", "USB-C cable", "$9.99 ( $3.33 /count)"]), {}) == "$9.99"
+
+
 def test_a_switch_answer_reports_the_switch_state_not_a_row_that_names_it():
     from routines.compiler import _state_text, _switch_state
     from routines.screens import screen_from_tree
