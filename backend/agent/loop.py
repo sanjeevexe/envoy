@@ -434,10 +434,10 @@ class AgentRunner:
 
                 if not result_.ok:
                     history.append(f"step {step}: {desc} → FAILED: {result_.error}")
-                elif changed:
-                    history.append(f"step {step}: {desc} → screen changed, now {_where(after)} (expected: {decision.expected_result})")
+                elif changed:  # what happened, not the model's own words: echoed prose was copied into later steps
+                    history.append(f"step {step}: {desc} → screen changed, now {_where(after)}")
                 else:
                     want_screenshot = self.config.screenshots != "never"
-                    history.append(f"step {step}: {desc} → NO VISIBLE CHANGE (expected: {decision.expected_result})")
+                    history.append(f"step {step}: {desc} → NO VISIBLE CHANGE")
         except Exception as e:  # noqa: BLE001 - a failed run keeps its trace
             return finish("error", f"{type(e).__name__}: {e}")
