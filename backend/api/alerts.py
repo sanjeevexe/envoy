@@ -137,6 +137,8 @@ class ChangeAlerts:
             push_id = self._last_push_id()
             for c in push:
                 c["body"], c["sent_to"] = body, len(futures)
+                if not futures:
+                    c["why_not"] = "no device has notifications on"
         out = []
         for c in reports:
             pushed = c["why_not"] is None

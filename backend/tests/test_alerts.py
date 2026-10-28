@@ -140,6 +140,18 @@ def test_a_change_read_by_the_routine_itself_pushes_and_names_it(env):
     assert got[0]["payload"]["body"] == "Flight SL 482 · SkyLark app (routine skylark_get_flight_gate), just now"
 
 
+def test_with_no_device_subscribed_the_change_says_so(env):
+    watcher(env)
+    env.ctx.pusher.unsubscribe(env.svc.subscription()["endpoint"])
+    run(env, "trigger:watch gate", {"gate": "B12"})
+    task = run(env, "trigger:watch gate", {"gate": "C14"})
+    step = changes(env, task)[0]
+    assert (step["pushed"], step["why_not"]) == (False, "no device has notifications on")
+    env.ctx.pusher.subscribe(env.svc.subscription(), None)  # turned on later: the next change pushes
+    run(env, "trigger:watch gate", {"gate": "D3"})
+    assert env.svc.wait(1)[0]["payload"]["title"] == "Gate changed: C14 → D3"
+
+
 def test_a_broken_event_cannot_break_memory(env):
     alerts = env.ctx.alerts
     alerts.on_memory({"kind": "fact_replaced"})  # no entity, no fact

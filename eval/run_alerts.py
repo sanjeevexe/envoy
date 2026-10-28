@@ -3,6 +3,7 @@ fake push service (it checks VAPID and decrypts, the way Apple's service and the
 
   scripts/start_emulator.sh envoy-test
   META_DAILY_COST_CAP_USD=1 uv run --project backend python eval/run_alerts.py [--changes C14 D3 B12] [--scratch DIR]
+  uv run --project backend python eval/run_alerts.py --serve-only   # the finished run in the web app, no phone needed
 
 Everything runs on a copy of the API, in this process, on 127.0.0.1:8712: its own data dir and session token (in the
 scratch folder), memory built from the demo inbox at a scratch path, and a scratch copy of data/routines. Its only push
@@ -117,6 +118,7 @@ async def main() -> int:
     ap.add_argument("--scratch", default=os.environ.get("ENVOY_ALERTS_SCRATCH") or str(Path(os.environ.get("TMPDIR", "/tmp")) / "envoy-alerts"))
     ap.add_argument("--hold", type=float, default=0, help="keep the API copy up this many seconds at the end")
     ap.add_argument("--memory-only", action="store_true", help="only build the scratch memory (no phone needed)")
+    ap.add_argument("--serve-only", action="store_true", help="serve the finished run's API copy (triggers paused) until stopped")
     args = ap.parse_args()
     scratch = Path(args.scratch)
     scratch.mkdir(parents=True, exist_ok=True)
@@ -139,6 +141,15 @@ async def main() -> int:
     from routines.store import RoutineStore
     from test_phase5 import FakePushService
     from testapps.skylark import SkyLark
+
+    if args.serve_only:
+        memory, tasks = MemoryStore(db), TaskStore(scratch / "api" / "envoy.db")
+        _, ctx = build("demo", memory=memory, tasks=tasks, routines=RoutineStore(scratch / "routines"))
+        assert not any(t["enabled"] for t in tasks.triggers()), "pause the run's triggers first"
+        session_token()
+        print(f"serving the alerts run on http://127.0.0.1:{PORT} (sign in with /login?k=<{scratch / 'api' / 'session_token'}>)", flush=True)
+        await uvicorn.Server(uvicorn.Config(ctx.asgi, host="127.0.0.1", port=PORT, log_level="warning")).serve()
+        return 0
 
     started_at = time.time()
     if adb("get-state") != "device":
