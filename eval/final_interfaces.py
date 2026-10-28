@@ -100,8 +100,9 @@ async def cmd_interfaces(args: Any) -> None:
             start_api()
         commit = api_commit()
         if commit != head:
-            checks[name] = {"result": "not run", "why": f"the API runs {str(commit)[:8]}, not this commit {head[:8]} (use --restart-api)"}
-            print(f"SKIP {name}: {checks[name]['why']}", flush=True)
+            why = f"the API runs {str(commit)[:8]}, not this commit {head[:8]} (use --restart-api)"
+            print(f"SKIP {name}: {why}", flush=True)
+            checks.setdefault(name, {"result": "not run", "why": why})  # an earlier result stays, with the commit it ran on
             continue
         checks[name] = {**run_script(name), "api_commit": commit}
     md = ["| Check | Result | Time | What it covers |", "| --- | --- | --- | --- |"]
@@ -109,7 +110,8 @@ async def cmd_interfaces(args: Any) -> None:
             "approval_modes": "your own request isn't asked again; the same request from MCP asks; a standing approval; always ask",
             "phase5": "approval and Done pushes (decrypted by a fake push service, no nonce), a screenshot into memory, voice through Muse Voice Transcribe, live view over the tailnet"}
     for k, v in checks.items():
-        md.append(f"| {k} | {v['result']}{' — ' + v['why'] if v.get('why') else ''} | {v.get('seconds', '–')} s | {what[k]} |")
+        on = f" (on `{str(v['api_commit'])[:7]}`)" if v.get("api_commit") and str(v["api_commit"]) != head else ""
+        md.append(f"| {k} | {v['result']}{on}{' — ' + v['why'] if v.get('why') else ''} | {v.get('seconds', '–')} s | {what[k]} |")
     md += ["", "The Muse route (the Muse app on the iPhone through a public tunnel to `/mcp`) needs you to start the tunnel; it isn't scripted here."]
     s.save({"checks": checks}, "\n".join(md) + "\n")
 

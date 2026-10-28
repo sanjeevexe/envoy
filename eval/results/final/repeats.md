@@ -1,4 +1,4 @@
-# First run vs later runs
+# repeats
 
 Run 1028004301 on `5c3d716` with uncommitted changes, 2026-10-28 04:43 UTC, 1 min, standard tier. 9 model calls, $0.021 at standard prices ($0.021 billed).
 

@@ -44,7 +44,7 @@ from policy.risk import classify
 from policy.signin import sign_in_reason
 from routines import checks as chk
 from routines import locators
-from routines.compiler import bind_inputs, chk_generalize, generalize_locator
+from routines.compiler import bind_inputs, chk_generalize, generalize_locator, is_ad
 from routines.model import Check, Extract, Locator, Routine, Step, StepAction, has_slot, render, render_str
 from routines.screens import body, contains_value, norm, parts_of, short_id, usable_id
 from routines.visual import match_crop
@@ -1062,7 +1062,8 @@ def _first_row(spec: Extract, screen: ScreenState) -> str | None:
     """The top result row: the highest list element of the recorded type among the big clickable ones (not a chip or a
     button inside a row), its text up to `until`."""
     kind = spec.locator.kind if spec.locator else None
-    rows = [e for e in screen.numbered if e.in_list and e.clickable and (not kind or e.kind == kind) and (e.full_label or e.label)]
+    rows = [e for e in screen.numbered if e.in_list and e.clickable and (not kind or e.kind == kind) and (e.full_label or e.label)
+            and not (spec.skip_ads and is_ad(e))]
     if not rows:
         return None
     big = max(e.area for e in rows)
