@@ -88,6 +88,8 @@ in two or more different apps from APPS, and if so split it into one part per ap
   that someone could follow without the rest of the request, keeping the user's specifics (items, sizes, places, cities).
 - The goal asks exactly what the user asked of that app (a price stays a price, a drive time stays a drive time), whether
   or not a routine in APPS does it: Envoy can operate any app step by step. Never change the question to fit a routine.
+- Comparing an item across shopping, food or delivery apps without saying what to compare ("a latte at Starbucks vs on
+  DoorDash") means its price: each goal asks for the item's price in that app.
 - `inputs`: only when one of that app's routines answers that same question, values for its inputs by input name, copied
   from REQUEST; else empty.
 - Parts only look up or do what the user asked. Never add buying, ordering, booking or sending.
