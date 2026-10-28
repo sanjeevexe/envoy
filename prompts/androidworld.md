@@ -40,7 +40,7 @@ The main chat (`prompts/phase-7.md`) is evaluating Envoy and preparing the submi
 - **Envoy's agent:** Muse Spark 1.3 at `low` effort with structured output. One model call per step (about $0.001 text-only, more with a screenshot). It plans first, sees a compact numbered element list, asks for a screenshot (`look`) when it needs one, and taps drawn targets with `tap_point` + SAM 3.1 then grounding. It handles pop-ups, sign-in hand-off, stuck screens and cycles in code. Its own success check runs before `done`. Its actions go through uiautomator2 (tree, typing by accessibility set-text) and the emulator's gRPC (taps, screenshots) via `EmulatorDevice`.
 - **Envoy's launch action takes a package name.** AndroidWorld tasks name apps the way a person would ("Simple Calendar Pro", "Markor"). How Envoy opens an app it doesn't know the package of is likely its first gap.
 - **uiautomator2 runs a UiAutomation session**, which can suppress other accessibility services. If any task's setup or scoring reads the screen through AndroidWorld's own accessibility service, the two may conflict. Check it in the pilot.
-- **Model tier:** the Contributor tier is for SkyLark only. Use the **standard tier** for AndroidWorld, and ask me if you think the Contributor tier should apply to its synthetic data.
+- **Model tier:** use the **Contributor tier** for AndroidWorld, as for SkyLark: its apps hold only synthetic test data, so I allow it here. It is a separate model ID (`muse-spark-1.3-contributor`), limited to 150 requests a minute, with no `max` effort; Envoy picks it when a run passes `contributor=True` (see how `eval/run_routines.py` and `eval/run_phase6.py` do it). It is never for real apps or real data.
 - **Approvals:** Envoy's policy asks before irreversible steps (delete, send, confirm). On AndroidWorld's synthetic test apps, a scripted person may approve them, the way it does on SkyLark. That is my permission for this benchmark only. Count every approval and report it.
 
 ## The job
@@ -102,7 +102,7 @@ Write the plan first as `prompts/androidworld-plan.md` (like `prompts/phase-6-pl
 
 - **Integrity first.** No tuning to specific tasks and no peeking at expected answers. Report every number with its setting. Never report a selected subset as if it were the full benchmark.
 - **The hackathon rule:** the demo may only show work built during the hackathon, clearly identified. AndroidWorld is Google's benchmark (credit it, with its license, in your proposed `THIRD_PARTY.md` text); the adapter, the analysis and the improvements are ours.
-- **Budget:** $10, standard tier, `low` effort as Envoy uses it; avoid needless repeats; ask before exceeding.
+- **Budget:** $10, Contributor tier, `low` effort as Envoy uses it; avoid needless repeats; ask before exceeding. Report costs at both the billed price and the standard price (the adapter logs both), so the numbers compare with other agents.
 - **Safety is unchanged:** nothing types passwords; no real accounts or real data; no real phone; secure screens are never stored; the scripted person approves only on AndroidWorld's synthetic apps.
 - Commit after each meaningful step and push your branch (`androidworld` only).
 - When you need me (a decision, the budget, a blocker), ask right away and send a notification.
