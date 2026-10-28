@@ -59,6 +59,6 @@ All of it is Envoy's own code (about 2,300 lines of Python in `eval/` and `backe
 
 - [x] Every suite's measurement pass, and the fixes they found (1–31).
 - [ ] The final run on `eval-final` (Nov 2), and the hand checks of its shape-graded real-app answers.
-- [ ] The Phase 6 gate on the real phone (the loan is due Oct 28 in the evening), and the phone's portability, stream and live-view numbers.
+- [x] The Phase 6 gate on the real phone (Oct 28: a Pixel 5 on Android 13), with portability 18/18, all 10 core routines 30/30, and the stream and live-view numbers: `docs/phase-6-results.md`.
 - [ ] AndroidWorld's results from the `androidworld` branch.
 - [ ] Both copies of the design doc, `docs/meta-feedback.md`, `prompts/submission-notes.md`.
