@@ -98,6 +98,32 @@ def test_each_episode_runs_envoy_once(agent):
     assert agent.env.automation_ui_hidden == 2  # pointer location off before every episode, as AndroidWorld's agents do
 
 
+def test_an_outage_before_acting_waits_and_runs_the_episode_again(agent, monkeypatch):
+    waits = []
+    monkeypatch.setattr(run_aw, "wait_for_api", lambda: waits.append(1) or True)
+    outcomes = iter([{"status": "error", "result": "APIConnectionError: Connection error.", "done": False, "answer": None,
+                      "steps_device": 0},
+                     {"status": "done", "result": "ok", "done": True, "answer": "ok", "steps_device": 4}])
+    seen = []
+    agent.run_envoy = lambda payload: seen.append(payload) or {"run_id": payload["run_id"], **next(outcomes)}
+    agent.reset(go_home=True)
+    agent.set_max_steps(10)
+    assert agent.step("Turn bluetooth on.").done
+    assert len(seen) == 2 and seen[0]["run_id"] != seen[1]["run_id"] and len(waits) == 1
+    assert agent.last["harness"]["api_outage_retries"] == 1
+
+
+def test_an_outage_after_acting_is_recorded_as_it_happened(agent, monkeypatch):
+    monkeypatch.setattr(run_aw, "wait_for_api", lambda: True)
+    fake, seen = _envoy({"status": "error", "result": "APIConnectionError: Connection error.", "done": False,
+                         "answer": None, "steps_device": 3})
+    agent.run_envoy = fake
+    agent.reset(go_home=True)
+    agent.set_max_steps(10)
+    assert agent.step("Turn bluetooth on.").done is False
+    assert len(seen) == 1 and agent.last["harness"]["api_lost_mid_episode"] is True
+
+
 def test_the_noop_agent_never_acts():
     env = FakeEnv()
     a = run_aw.NoopAgent(env)

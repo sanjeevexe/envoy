@@ -32,6 +32,8 @@ import shutil
 import subprocess
 import sys
 import time
+import urllib.error
+import urllib.request
 import uuid
 from pathlib import Path
 from typing import Any
@@ -50,6 +52,34 @@ EC = constants.EpisodeConstants
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from envoy_episode import make_payload  # noqa: E402  (pure function; the Envoy run itself is a subprocess)
+
+
+API_URL = os.environ.get("META_API_BASE_URL", "https://api.meta.ai/v1").rstrip("/") + "/models"
+OUTAGE_WAIT_S = 3600  # how long a stage waits for the model API before it stops (a resume reruns the task)
+
+
+def api_reachable(timeout: float = 10) -> bool:
+    """Any HTTP answer from the model API (401 without a key is fine) means the network path is up."""
+    try:
+        urllib.request.urlopen(API_URL, timeout=timeout)
+    except urllib.error.HTTPError:
+        return True
+    except OSError:
+        return False
+    return True
+
+
+def wait_for_api(limit_s: float = OUTAGE_WAIT_S, every_s: float = 30) -> bool:
+    deadline = time.time() + limit_s
+    while not api_reachable():
+        if time.time() > deadline:
+            return False
+        time.sleep(every_s)
+    return True
+
+
+def api_unreachable(rec: dict[str, Any]) -> bool:
+    return rec.get("status") == "error" and "APIConnectionError" in str(rec.get("result"))
 
 
 def _envoy_env() -> dict[str, str]:
@@ -149,7 +179,25 @@ class EnvoyAgent(base_agent.EnvironmentInteractingAgent):
         run_id = f"aw-{self.stage}-{dt.datetime.now().strftime('%m%d-%H%M%S')}-{uuid.uuid4().hex[:4]}"
         aw_env.park_forwarder()  # see aw_env: uiautomator2 would suppress it and it can crash on screen
         rec = self.run_envoy(make_payload(goal, int(self._max_steps or 10), run_id, self.config))
+        retries = 0
+        # A network outage is not the agent's doing. On Oct 28 one turned 98 episodes in a row into instant errors. If
+        # Envoy couldn't reach the model before it touched the phone, the phone is as AndroidWorld set it up, so the
+        # episode starts again once the API answers. If it never does, the stage stops and a resume reruns this task.
+        while api_unreachable(rec) and not rec.get("steps_device"):
+            retries += 1
+            if retries > 3 or not wait_for_api():
+                print("STOP: the model API is unreachable; resume the stage to rerun this task", flush=True)
+                os._exit(3)
+            run_id = f"aw-{self.stage}-{dt.datetime.now().strftime('%m%d-%H%M%S')}-{uuid.uuid4().hex[:4]}"
+            rec = self.run_envoy(make_payload(goal, int(self._max_steps or 10), run_id, self.config))
         rec["harness"] = {"crash_dialog_after_episode": aw_env.crash_dialog() or None}
+        if retries:
+            rec["harness"]["api_outage_retries"] = retries
+        if api_unreachable(rec):  # lost mid-episode: recorded as it happened, flagged, and the next task waits
+            rec["harness"]["api_lost_mid_episode"] = True
+            if not wait_for_api():
+                print("STOP: the model API is unreachable; resume the stage to rerun the next task", flush=True)
+                os._exit(3)
         try:
             rec["harness"]["forwarder_restore_s"] = round(aw_env.restore_forwarder(self.env), 1)
         except RuntimeError as e:  # AndroidWorld's scoring then reads the screen with its own retries; recorded either way
