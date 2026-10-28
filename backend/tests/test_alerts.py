@@ -302,3 +302,97 @@ def test_alerts_settings_and_the_api(env):
             time.sleep(0.02)
         assert [(a["title"], a["task_id"], a["pushed"]) for a in got] == [("Gate changed: B12 → C14", task["id"], 1)]
         assert c.get("/api/alerts").status_code == 401
+
+
+# ---- from the review --------------------------------------------------------------------------------
+
+
+def test_a_flip_back_you_saw_in_your_own_task_is_announced_again(env):
+    watcher(env)
+    run(env, "trigger:watch gate", {"gate": "B12"})
+    run(env, "trigger:watch gate", {"gate": "C14"})  # pushed: B12 → C14
+    mine = run(env, "chat", {"gate": "B12"})  # you asked, and saw C14 → B12 in your task
+    assert changes(env, mine)[0]["why_not"] == "you started this task"
+    again = run(env, "trigger:watch gate", {"gate": "C14"})  # the last value you were told is B12, so this is news
+    got = env.svc.wait(2)
+    assert len(got) == 2 and got[1]["payload"]["title"] == "Gate changed: B12 → C14" and changes(env, again)[0]["pushed"] is True
+
+
+def test_one_run_whose_memory_write_is_slow_still_sends_one_push(env):
+    import asyncio
+    watcher(env, alert_on=["gate", "boarding_time"])
+    run(env, "trigger:watch gate", {"gate": "B12", "boarding_time": "5:30 AM"})
+
+    async def main():
+        env.ctx.bus.bind(asyncio.get_running_loop())
+        env.ctx.alerts.flush_after_s = 0.1
+        task = env.ctx.tasks.create("run routine skylark_get_flight_gate", "trigger:watch gate")
+        env.ctx.runner._step(task["id"], {"kind": "note", "text": "saving what it saw to memory"})
+        src = env.ctx.memory.add_source("app_screen", {"app": "com.skylark.air", "task_id": task["id"]})
+        env.ctx.memory.observe(env.flight, "gate", "C14", source=src)  # the screen's facts
+        await asyncio.sleep(0.4)  # longer than the fallback: the memory write is still going
+        n = len(env.svc.received)
+        env.ctx.memory.observe(env.flight, "boarding_time", "5:50 AM", source=src)  # the routine's outputs, later
+        env.ctx.runner._step(task["id"], {"kind": "memory", "text": "memory updated"})
+        await asyncio.sleep(0.2)
+        return n
+
+    assert asyncio.run(main()) == 0
+    got = env.svc.wait(1)
+    assert quiet(env.svc, 1) and got[0]["payload"]["body"].startswith("Flight SL 482 · also Boarding 5:30 AM → 5:50 AM")
+
+
+def test_trigger_updates_are_checked_before_anything_is_saved(env):
+    with TestClient(env.ctx.asgi) as c:
+        w = c.post("/api/triggers", json={"kind": "watch", "name": "watch gate", "spec": {"every_minutes": 1, "wait_first": True},
+                                          "action": {"routine": "skylark_get_flight_gate"}}, headers=me(env.token)).json()
+        for bad in ({"alert_on": "gate"}, {"alert": "false"}, {"alert_on": 5}, {"enabled": False, "alert_on": "gate"}):
+            assert c.post(f"/api/triggers/{w['id']}", json=bad, headers=me(env.token)).status_code == 400
+        t = env.ctx.tasks.trigger(w["id"])
+        assert t["enabled"] and "alert" not in t["spec"] and "alert_on" not in t["spec"]
+        ok = c.post(f"/api/triggers/{w['id']}", json={"alert_on": ["gate", "boarding_time"]}, headers=me(env.token)).json()
+        assert env.ctx.alerts.settings(ok) == (True, ["gate", "boarding_time"])
+        back = c.post(f"/api/triggers/{w['id']}", json={"alert_on": []}, headers=me(env.token)).json()
+        assert env.ctx.alerts.settings(back) == (True, ["gate"])
+
+
+def test_fact_changed_trigger_skips_what_changed_while_paused():
+    s = scheduler()
+    trig = s.sched.add("fact_changed", "departure moved", {"entity_type": "Flight", "attribute": "depart_time"}, {"goal": "now {change.new}"})
+    s.store.update_trigger(trig["id"], enabled=0)
+    for t in ("6:20 AM", "6:30 AM", "6:40 AM"):
+        s.mem.observe(s.flight, "depart_time", t, source=s.src)
+        s.sched.tick()
+    s.store.update_trigger(trig["id"], enabled=1)
+    assert s.sched.tick() == []  # resumed: nothing replayed
+    s.mem.observe(s.flight, "depart_time", "6:50 AM", source=s.src)
+    assert len(s.sched.tick()) == 1 and s.started[0][0] == "now 6:50 AM"
+
+
+def test_fact_changed_trigger_fires_once_for_several_changes_between_checks():
+    s = scheduler()
+    s.sched.add("fact_changed", "departure moved", {"entity_type": "Flight", "attribute": "depart_time"},
+                {"goal": "moved from {change.old} to {change.new}"})
+    s.mem.observe(s.flight, "depart_time", "6:50 AM", source=s.src)  # one run's screen read
+    s.mem.observe(s.flight, "depart_time", "6:10 AM", source=s.src)  # and its routine output: back where it was
+    assert s.sched.tick() == []
+    for t in ("6:20 AM", "6:30 AM", "6:40 AM"):
+        s.mem.observe(s.flight, "depart_time", t, source=s.src)
+    assert len(s.sched.tick()) == 1 and s.started[0][0] == "moved from 6:10 AM to 6:40 AM"
+    assert s.sched.tick() == []
+
+
+def test_the_scheduler_keeps_an_alert_setting_saved_during_its_check():
+    s = scheduler()
+    trig = s.sched.add("fact_changed", "departure moved", {"entity_type": "Flight", "attribute": "depart_time"}, {"goal": "x"})
+    s.mem.observe(s.flight, "depart_time", "6:20 AM", source=s.src)
+    due = s.sched.due
+
+    def due_while_you_save(t, now):
+        out = due(t, now)
+        s.store.update_trigger(t["id"], spec={**s.store.trigger(t["id"])["spec"], "alert": True})  # saved from the web app meanwhile
+        return out
+    s.sched.due = due_while_you_save
+    s.sched.tick()
+    spec = s.store.trigger(trig["id"])["spec"]
+    assert spec["alert"] is True and spec["after_seq"] == s.mem.events(kind="fact_replaced")[-1]["seq"]

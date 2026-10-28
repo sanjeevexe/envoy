@@ -131,11 +131,11 @@ class Pusher:
     # ---- sending -------------------------------------------------------------------------------
 
     def notify(self, kind: str, title: str, body: str, path: str, *, tag: str | None = None, urgency: str = "normal",
-               ttl: int = 3600) -> list[Any]:
-        """Push to every subscription, in worker threads; returns the futures."""
+               ttl: int = 3600, push_id: str | None = None) -> list[Any]:
+        """Push to every subscription, in worker threads; returns the futures. `push_id`: the caller's own id for it."""
         with self.store.lock:
             subs = [dict(r) for r in self.store.db.execute("SELECT * FROM push_subs").fetchall()]
-        pid = f"p{int(time.time() * 1000)}-{secrets.token_hex(2)}"
+        pid = push_id or f"p{int(time.time() * 1000)}-{secrets.token_hex(2)}"
         payload = {"id": pid, "kind": kind, "title": title[:80], "body": body[:180], "url": path, "tag": tag or pid, "sent_at": time.time()}
         with self._lock:
             self.sent[pid] = {"kind": kind, "sent_at": payload["sent_at"], "receipts": []}

@@ -33,6 +33,8 @@ pushed. The plan is `prompts/alerts-plan.md`, and the end-to-end evidence is in 
      types.
    - It reads memory's own event log from `after_seq` onward and fires once per `fact_replaced`.
    - It doesn't fire on first sightings, repeats, user edits, other types, or changes made by tasks it started itself.
+   - Several changes to one fact between two checks fire once, from the first old value to the last new one, and
+     not at all if the fact went back. Changes made while the trigger is paused are skipped on resume, not replayed.
    - Its action is fixed when it is created. The change supplies only typed, cleaned values: `{flight.number}`,
      `{trip.destination}`, `{change.attribute}`, `{change.old}`, `{change.new}`, and routine inputs through
      `inputs_from`.
@@ -52,15 +54,16 @@ pushed. The plan is `prompts/alerts-plan.md`, and the end-to-end evidence is in 
 ## Evidence
 
 - **Offline**:
-  - `backend/tests/test_alerts.py` has 11 tests: silent when nothing changed; one push per change with no repeat;
+  - `backend/tests/test_alerts.py` has 17 tests: silent when nothing changed; one push per change with no repeat;
     who gets told; the case found on the device; no subscribed device; a broken event; reporting without a memory
-    step; the fact-changed trigger firing on a change and not otherwise, with typed values and no self-feeding; and
-    the API.
+    step; the fact-changed trigger firing on a change and not otherwise, with typed values and no self-feeding; the
+    API; and six for the review fixes below.
   - The fake push service decrypts every push.
   - The silent-watcher assertion in `test_phase5.py` was changed deliberately and states what it means: a watcher
     finishing "done" still doesn't push.
-  - **The full suite passes, 149 tests, on `main` merged in.**
-- **End to end on envoy-test** (`eval/run_alerts.py`, final run at 174f919, all checks passed):
+  - **The full suite passes, 155 tests, on `main` merged in.**
+- **End to end on envoy-test** (`eval/run_alerts.py`, final run at 174f919, all checks passed; the review fixes came
+  after it and change only cases the run doesn't reach):
   - Four gate changes made through SkyLark's debug broadcast, B12 → C14 → D3 → E7 → B12, gave four decrypted pushes.
   - Latency from change to push was 5.4–56.7 s, mean 30.3 s. It is dominated by waiting for the next one-minute
     watcher run. After that, the routine takes about 4 s, memory's extraction about 5 s, and alert plus push under
@@ -79,6 +82,23 @@ pushed. The plan is `prompts/alerts-plan.md`, and the end-to-end evidence is in 
   - Its trigger doesn't alert, and the watcher then found nothing new, so the change was never announced.
   - The fix is in commit 174f919 with an offline test. In the final run the same timing came up, and the follow-up
     pushed for "Watch my gate" 5.4 s after the change.
+- **Code review** (a separate reviewer read the diff; seven of its eight findings are fixed, each with a test):
+  1. A paused fact-changed trigger replayed every change it missed when resumed. It now skips them.
+  2. Several changes between two checks started one task each, including a back-and-forth within one run. They now
+     collapse into one net change, or none.
+  3. A flip back that you had seen in your own task was muted as "already told you". Dedupe now compares with the
+     last value you were told about, pushed or shown in a task you started.
+  4. `POST /api/triggers/{id}` stored `{"alert_on": "gate"}` as letters and `{"alert": "false"}` as on. It now
+     checks the input the way creating a trigger does, before saving anything.
+  5. The scheduler could overwrite an alert setting saved at the same moment. It now reads the trigger again before
+     saving `after_seq`.
+  6. A run whose memory write took more than 15 s could push twice. The fallback now waits for the runner's memory
+     step, up to two minutes.
+  7. A push could be recorded under another push's id. `Pusher.notify` now takes the caller's id.
+
+  Not fixed: `after_seq`, like the email trigger's existing `after_rowid`, counts rows in one memory database but is
+  stored with the triggers, which both profiles share. After restarting on the other profile, a fact-changed trigger
+  can stay silent for a while or replay. A fix would store the profile with it.
 - **Memory normalization** (owner: memory, Phase 7; not changed here): "Group 3" and "3" are different boarding-group
   values in `normalize_key_value`, so a re-read flips it back and forth as a change. Alerts filter it already.
 
@@ -94,7 +114,6 @@ pushed. The plan is `prompts/alerts-plan.md`, and the end-to-end evidence is in 
 
   A real push service may still refuse the copy's `mailto:envoy@localhost` VAPID subject.
 - **A conflicting user edit** (`fact_conflict`) doesn't alert. It could become "SkyLark says C14, your note says B12".
-- **A paused fact-changed trigger** fires, on resume, for changes made while it was paused. Each still fires once.
 - **A memory merge** re-chains history without a `fact_replaced` event, so a change that arrives through a merge
   wouldn't alert. It didn't happen in these runs: the screen resolved to the existing flight by number and date.
 - **Docs** belong to their owners. Paste-ins:
@@ -114,7 +133,7 @@ The branch is ready to merge into `main` as it is. It already contains `main` at
 - Changes to shared files are additive:
   - `backend/api/app.py`: wiring, `GET /api/alerts`, the alert settings in the trigger list, and the partial trigger
     update;
-  - `backend/api/push.py`: docstring only;
+  - `backend/api/push.py`: the docstring, and an optional `push_id` argument to `notify`;
   - `web/components/Tasks.tsx`: the change row;
   - `web/lib/api.ts`: optional Step fields;
   - `backend/tests/test_phase5.py`: one assertion reworded.

@@ -21,6 +21,7 @@ the same value seen again.
 from __future__ import annotations
 
 import asyncio
+import secrets
 import threading
 import time
 from typing import Any, Callable
@@ -39,6 +40,7 @@ CREATE TABLE IF NOT EXISTS change_alerts (
 );
 CREATE INDEX IF NOT EXISTS change_alerts_key ON change_alerts(entity, attribute, id);
 """
+YOU_STARTED = "you started this task"
 LABELS = {"gate": "Gate", "depart_time": "Departure", "arrive_time": "Arrival", "boarding_time": "Boarding",
           "boarding_group": "Boarding group", "status": "Status", "seat": "Seat", "terminal": "Terminal",
           "delivery_eta": "Delivery", "confirmation_code": "Confirmation"}
@@ -92,8 +94,19 @@ class ChangeAlerts:
             running = asyncio.get_running_loop()
         except RuntimeError:
             running = None
-        later = lambda: loop.call_later(self.flush_after_s, self.flush, tid)  # noqa: E731
+        later = lambda: loop.call_later(self.flush_after_s, self._timer, tid, self.clock())  # noqa: E731
         later() if running is loop else loop.call_soon_threadsafe(later)
+
+    def _timer(self, tid: str, armed_at: float) -> None:
+        """The fallback: while the runner is still writing this task's memory (a slow extraction), wait for its memory
+        step, up to two minutes, so one run still sends one push."""
+        steps = self.tasks.steps(tid)
+        saving = max((s["seq"] for s in steps if s["kind"] == "note" and str(s.get("text", "")).startswith("saving what it saw")), default=None)
+        reported = any(s["kind"] in ("memory", "error") and s["seq"] > saving for s in steps) if saving is not None else True
+        if not reported and self.clock() - armed_at < 120 and self.bus.loop is not None:
+            self.bus.loop.call_later(self.flush_after_s, self._timer, tid, armed_at)
+            return
+        self.flush(tid)
 
     # ---- reporting (an EventBus listener, on the API's loop) -------------------------------------
 
@@ -134,9 +147,9 @@ class ChangeAlerts:
             first = push[0]
             also = "; ".join(f"{label(c['attribute'])} {c['old']} → {c['new']}" for c in push[1:])
             body = " · ".join(x for x in (first["entity_label"], f"also {also}" if also else "", first["where"]) if x)
-            futures = self.pusher.notify("change", first["title"], body, f"/?task={tid}",
-                                         tag=f"change-{first['entity']}-{first['attribute']}", urgency="high", ttl=1800) if self.pusher else []
-            push_id = self._last_push_id()
+            push_id = f"p{int(time.time() * 1000)}-{secrets.token_hex(2)}"
+            futures = self.pusher.notify("change", first["title"], body, f"/?task={tid}", tag=f"change-{first['entity']}-{first['attribute']}",
+                                         urgency="high", ttl=1800, push_id=push_id) if self.pusher else []
             for c in push:
                 c["body"], c["sent_to"] = body, len(futures)
                 if not futures:
@@ -163,10 +176,6 @@ class ChangeAlerts:
         if out:
             self.bus.publish("fact_changed", task_id=tid, changes=[{k: s[k] for k in ("entity", "attribute", "old", "new", "pushed")} for s in out])
         return out
-
-    def _last_push_id(self) -> str | None:
-        sent = getattr(self.pusher, "sent", None) or {}
-        return next(reversed(sent), None) if sent else None
 
     # ---- who is told ---------------------------------------------------------------------------
 
@@ -202,15 +211,15 @@ class ChangeAlerts:
     def why_not(self, task: dict[str, Any], trig: dict[str, Any] | None, c: dict[str, Any]) -> str | None:
         """None when this change pushes (`c["alerted_by"]` is the trigger it pushes for); otherwise why it doesn't."""
         if trig is None:
-            return "you started this task" if not str(task.get("source") or "").startswith("trigger") else "its trigger was deleted"
+            return YOU_STARTED if not str(task.get("source") or "").startswith("trigger") else "its trigger was deleted"
         by = trig if self.watches(trig, c["attribute"]) else next(self.watchers_of(c["entity"], c["attribute"], skip=trig["id"]), None)
         if by is None:
             on, watched = self.settings(trig)
             return "alerts are off for this trigger" if not on else f"this trigger alerts on {', '.join(label(a).lower() for a in watched)} only"
         c["alerted_by"] = by
-        with self.tasks.lock:
-            last = self.tasks.db.execute("SELECT norm FROM change_alerts WHERE entity=? AND attribute=? AND pushed=1 ORDER BY id DESC LIMIT 1",
-                                         (c["entity"], c["attribute"])).fetchone()
+        with self.tasks.lock:  # the last value you were told: pushed, or shown in a task you started
+            last = self.tasks.db.execute("SELECT norm FROM change_alerts WHERE entity=? AND attribute=? AND (pushed=1 OR why_not=?) "
+                                         "ORDER BY id DESC LIMIT 1", (c["entity"], c["attribute"], YOU_STARTED)).fetchone()
         if last and last["norm"] == normalize_key_value(c["attribute"], c["new"] or ""):
             return "already told you"
         return None

@@ -8,8 +8,10 @@ Five kinds of trigger, checked every few seconds:
 - **watch**: rerun a read-only routine every N minutes (for example, the gate) until a moment.
 - **email**: a new email from a sender (and subject) starts a routine.
 - **fact_changed**: a remembered fact changes (memory's `fact_replaced`: a new value superseding an old one, not a first
-  sighting and not your own edit), e.g. a flight's departure time. Each change fires once. A change made by a task this
-  same trigger started doesn't fire it again.
+  sighting and not your own edit), e.g. a flight's departure time. Each change fires once; several changes to the same
+  fact between two checks fire once, from the first old value to the last new one (none if it went back). Changes made
+  while the trigger is paused are skipped, not replayed. A change made by a task this same trigger started doesn't fire
+  it again.
 
 A watcher's run pushes when it changed a remembered fact it watches (`spec.alert`, on by default for watchers;
 `spec.alert_on`, by default what its routine reads); the sending is in api/alerts.py.
@@ -31,11 +33,19 @@ from datetime import datetime, timedelta
 from typing import Any, Callable
 
 from memory.store import MemoryStore
-from memory.types import TYPES, parse_date
+from memory.types import TYPES, normalize_key_value, parse_date
 
 from api.store import TaskStore
 
 KINDS = ("time", "before_fact", "watch", "email", "fact_changed")
+
+
+def check_alert(spec: dict[str, Any]) -> None:
+    """A trigger's alert settings (api/alerts.py): `alert` on or off, `alert_on` a list of attributes."""
+    if "alert" in spec and not isinstance(spec["alert"], bool):
+        raise ValueError("alert is on or off (true or false)")
+    if spec.get("alert_on") is not None and not (isinstance(spec["alert_on"], list) and all(isinstance(a, str) for a in spec["alert_on"])):
+        raise ValueError("alert_on is a list of attributes")
 
 
 def _clean(v: Any) -> str:
@@ -88,10 +98,7 @@ class Scheduler:
                 raise ValueError(f"{type_} has no attribute {bad[0]!r}")
             spec["attributes"] = attrs
             spec.setdefault("after_seq", self._last_event_seq())  # only changes from now on
-        if "alert" in spec and not isinstance(spec["alert"], bool):
-            raise ValueError("alert is on or off (true or false)")
-        if spec.get("alert_on") is not None and not (isinstance(spec["alert_on"], list) and all(isinstance(a, str) for a in spec["alert_on"])):
-            raise ValueError("alert_on is a list of attributes")
+        check_alert(spec)
         return self.store.add_trigger(kind, name, spec, action)
 
     # ---- the loop ------------------------------------------------------------------------------
@@ -113,6 +120,8 @@ class Scheduler:
         started = []
         for trig in self.store.triggers():
             if not trig["enabled"]:
+                if trig["kind"] == "fact_changed" and (last := self._last_event_seq()) > trig["spec"].get("after_seq", 0):
+                    self._advance(trig["id"], last)  # paused: what changes meanwhile isn't replayed on resume
                 continue
             for key, values in self.due(trig, now):
                 task = self._fire(trig, values)
@@ -121,8 +130,13 @@ class Scheduler:
                 trig["fired"] = fired
                 started.append(task)
             if (upto := self._scanned.pop(trig["id"], None)) is not None and upto > trig["spec"].get("after_seq", 0):
-                self.store.update_trigger(trig["id"], spec={**trig["spec"], "after_seq": upto})  # keeps each check short
+                self._advance(trig["id"], upto)  # keeps each check short
         return started
+
+    def _advance(self, tid: str, seq: int) -> None:
+        cur = self.store.trigger(tid)  # read again: an alert setting saved during this tick stays
+        if cur is not None:
+            self.store.update_trigger(tid, spec={**cur["spec"], "after_seq": seq})
 
     def due(self, trig: dict[str, Any], now: float) -> list[tuple[str, dict[str, str]]]:
         """(a key that fires once, the values it brings) for each occasion that is due now."""
@@ -232,8 +246,8 @@ class Scheduler:
         """Memory's changes since the last check that match: (seq, typed values for the action)."""
         spec = trig["spec"]
         attrs = set(spec.get("attributes") or [spec.get("attribute")])
-        out = []
         events = self.memory.events(spec.get("after_seq", 0), kind="fact_replaced")  # read-only: memory's own log
+        net: dict[tuple[str, str], dict[str, Any]] = {}  # (entity, attribute) → first old, last new, last seq
         for ev in events:
             if f"chg{ev['seq']}" in fired or ev.get("attribute") not in attrs:
                 continue
@@ -241,12 +255,18 @@ class Scheduler:
             e = self.memory.entity(eid) or {}
             if e.get("type") != spec.get("entity_type") or self._made_by(trig, ev):
                 continue
+            k = (eid, ev["attribute"])
+            net[k] = {"type": e["type"], "old": net[k]["old"] if k in net else ev.get("old") or "", "new": ev.get("value") or "", "seq": int(ev["seq"])}
+        out = []
+        for (eid, attr), ch in net.items():
+            if normalize_key_value(attr, ch["old"]) == normalize_key_value(attr, ch["new"]):
+                continue  # it went back within one check: nothing changed
             values = self.values(eid)
-            type_ = e["type"].lower()
+            type_ = ch["type"].lower()
             for f in self.memory.current_facts(eid):
                 values[f"{type_}.{f['attribute']}"] = f["value"]
-            values.update({"change.attribute": ev["attribute"], "change.old": ev.get("old") or "", "change.new": ev.get("value") or ""})
-            out.append((int(ev["seq"]), values))
+            values.update({"change.attribute": attr, "change.old": ch["old"], "change.new": ch["new"]})
+            out.append((ch["seq"], values))
         if events:
             self._scanned[trig["id"]] = int(events[-1]["seq"])
         return out

@@ -45,7 +45,7 @@ from api.events import EventBus
 from api.live import live_view
 from api.push import Pusher, VapidKeys
 from api.runner import SHOTS, TaskRunner
-from api.scheduler import Scheduler
+from api.scheduler import Scheduler, check_alert
 from api.store import API_DIR, REPO, TaskStore, new_id
 from api.voice import voice_session
 
@@ -639,14 +639,18 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
         trig = tasks.trigger(tid)
         if trig is None:
             raise HTTPException(404, "no such trigger")
+        spec = None
+        if "alert" in body or "alert_on" in body:  # only the fields given: turning alerts off doesn't pause the trigger
+            spec = {**trig["spec"], **{k: body[k] for k in ("alert", "alert_on") if k in body}}
+            if spec.get("alert_on") == []:
+                spec["alert_on"] = None  # back to the default
+            try:
+                check_alert(spec)
+            except ValueError as e:
+                raise HTTPException(400, str(e)) from e
         if "enabled" in body:
             tasks.update_trigger(tid, enabled=1 if body.get("enabled") else 0)
-        if "alert" in body or "alert_on" in body:  # only the fields given: turning alerts off doesn't pause the trigger
-            spec = dict(trig["spec"])
-            if "alert" in body:
-                spec["alert"] = bool(body["alert"])
-            if "alert_on" in body:
-                spec["alert_on"] = [str(a) for a in body["alert_on"] or []] or None
+        if spec is not None:
             tasks.update_trigger(tid, spec=spec)
         return tasks.trigger(tid) or {}
 
