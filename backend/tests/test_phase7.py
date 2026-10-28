@@ -195,3 +195,19 @@ def test_policy_rules_for_prices_calls_and_destructive_dialogs():
     assert _PRICE.match("$4.99") and _PRICE.match("€7") and _PRICE.match("$9.99/month") and not _PRICE.match("4.5 stars")
     assert _CALL.match("Call") and _CALL.match("Call 555-0100") and not _CALL.match("Call history") and not _CALL.match("Recent calls")
     assert _DESTRUCTIVE.search("Do you want to uninstall this app?") and not _DESTRUCTIVE.search("Turn off Bluetooth?")
+
+
+# ---- the step schema: tap_point only where the runtime accepts it ------------------------------------------------------------
+
+def test_listed_screens_get_a_step_schema_without_tap_point():
+    import pytest
+    from pydantic import ValidationError
+    from models.schemas import StepOutput, StepOutputListed, strict_json_schema
+    full, listed = json.dumps(strict_json_schema(StepOutput)), json.dumps(strict_json_schema(StepOutputListed))
+    assert '"tap_point"' in full and '"tap_point"' not in listed and '"look"' in listed
+    point = {"reason": "x", "action": {"type": "tap_point", "x": 500, "y": 500, "target": "next"}, "expected_result": "x", "risk": "read"}
+    assert StepOutput.model_validate(point).action.type == "tap_point"
+    with pytest.raises(ValidationError):
+        StepOutputListed.model_validate(point)
+    tap = {**point, "action": {"type": "tap", "element": 3}}
+    assert StepOutputListed.model_validate(tap).action.type == "tap"

@@ -94,6 +94,9 @@ def test_approval_waits_for_a_person_and_is_bound_to_the_screen(tmp_path):
     approver, bus, waits = approver_for(store, device)
     out = ask(approver)
     rec = pending(store)
+    t0 = time.time()
+    while not waits and time.time() - t0 < 2:  # the "waiting" callback fires just after the request is stored
+        time.sleep(0.01)
     assert rec["description"] == 'tap "Confirm check-in"' and rec["nonce"] and waits[-1] == rec["id"]
     assert approver.decide(rec["id"], True)["status"] == "approved"
     out["thread"].join(3)

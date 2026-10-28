@@ -23,7 +23,7 @@ from agent.vision import Vision, crop
 from devices.types import Action, Device, InvalidElement, ScreenState
 from models.adapter import DataScope, ModelAdapter, image_part
 from models.prompts import PLAN_INSTRUCTIONS, STEP_INSTRUCTIONS, plan_input, step_input
-from models.schemas import Plan, StepOutput
+from models.schemas import Plan, StepOutput, StepOutputListed
 from models.translate import to_device_action
 from policy.approvals import ApprovalRequest, Approver, TerminalApprover
 from policy.risk import classify
@@ -115,9 +115,10 @@ class AgentRunner:
 
     # ---- model calls ------------------------------------------------------------------------
 
-    def _call(self, job: str, content: list[dict[str, Any]], instructions: str, effort: str, task_id: str):
+    def _call(self, job: str, content: list[dict[str, Any]], instructions: str, effort: str, task_id: str, schema: Any = None):
+        extra = {"schema": schema} if schema is not None else {}
         return self.adapter.call(job, content, instructions=instructions, data_scope=self.config.data_scope,
-                                 contributor=self.config.contributor, task_id=task_id, effort=effort)
+                                 contributor=self.config.contributor, task_id=task_id, effort=effort, **extra)
 
     async def _screenshot(self) -> bytes:
         png = await self.device.screenshot()
@@ -256,12 +257,15 @@ class AgentRunner:
                 if png:
                     content.append(image_part(png))
                 t_model = time.perf_counter()
+                # tap_point is offered only where the runtime accepts it: no usable element list, or a screenshot to read
+                # coordinates from. Elsewhere structured output keeps the model from guessing a point.
+                schema = StepOutput if (png is not None or len(screen.numbered) < 3) else StepOutputListed
                 try:
-                    res = await asyncio.to_thread(self._call, "step", content, STEP_INSTRUCTIONS, self.config.step_effort, task_id)
+                    res = await asyncio.to_thread(self._call, "step", content, STEP_INSTRUCTIONS, self.config.step_effort, task_id, schema)
                 except ValueError as e:  # unparseable output even after recovery: ask once more
                     history.append(f"step {step}: (runtime) the model's reply was not valid JSON; asked again")
                     trace.step({"step": step, "kind": "model_error", "error": str(e)[:300]})
-                    res = await asyncio.to_thread(self._call, "step", content, STEP_INSTRUCTIONS, self.config.step_effort, task_id)
+                    res = await asyncio.to_thread(self._call, "step", content, STEP_INSTRUCTIONS, self.config.step_effort, task_id, schema)
                 model_ms = (time.perf_counter() - t_model) * 1000
                 account(res)
                 decision: StepOutput = res.parsed  # type: ignore[assignment]
