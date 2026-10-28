@@ -37,7 +37,14 @@ AGENT_ENDED = {"done", "done_unverified", "failed", "handoff", "needs_user"}
 ANSWERED = {"done", "done_unverified"}
 RUNCONFIG_KEYS = {"plan", "screenshots", "vision", "step_effort", "plan_effort", "max_done_rejections"}  # agent overrides
 ROUTINE_KEYS = {"mode", "library", "allow_repair"}  # the routines experiment (envoy_routine.py)
-CONFIG_KEYS = RUNCONFIG_KEYS | ROUTINE_KEYS
+CONFIG_KEYS = RUNCONFIG_KEYS | ROUTINE_KEYS | {"tier"}  # tier: "contributor" (default) or "standard"
+
+
+def contributor_tier(config: dict[str, Any]) -> bool:
+    tier = config.get("tier", "contributor")
+    if tier not in ("contributor", "standard"):
+        raise ValueError(f"unknown tier {tier!r}")
+    return tier == "contributor"
 
 
 def make_payload(goal: str, max_steps: int, run_id: str, config: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -46,6 +53,7 @@ def make_payload(goal: str, max_steps: int, run_id: str, config: dict[str, Any] 
     unknown = set(config) - CONFIG_KEYS
     if unknown:
         raise ValueError(f"unknown config keys: {sorted(unknown)}")
+    contributor_tier(config)
     if not isinstance(goal, str) or not goal.strip():
         raise ValueError("goal must be non-empty text")
     if not isinstance(max_steps, int) or max_steps < 1:
@@ -132,7 +140,7 @@ async def run_episode(payload: dict[str, Any]) -> dict[str, Any]:
     device = emulator.EmulatorDevice("AndroidWorldAvd").connect()
     connect_s = time.time() - t0
     approver = ScriptedApprover(approve=True)  # AndroidWorld's synthetic test apps only (user's permission for this benchmark)
-    cfg = RunConfig(max_steps=payload["max_steps"], data_scope="test_app", contributor=True,
+    cfg = RunConfig(max_steps=payload["max_steps"], data_scope="test_app", contributor=contributor_tier(payload["config"]),
                     **{k: v for k, v in payload["config"].items() if k in RUNCONFIG_KEYS})
     adapter = ModelAdapter()
     runner = AgentRunner(device, adapter, approver, cfg)
@@ -175,7 +183,7 @@ async def run_episode(payload: dict[str, Any]) -> dict[str, Any]:
         "check": res.check,
         "trace_dir": str(trace_dir.relative_to(REPO)) if trace_dir.is_relative_to(REPO) else str(trace_dir),
         "envoy_commit": git_commit(),
-        "model": adapter.resolve_model(JOBS["step"], "test_app", True),
+        "model": adapter.resolve_model(JOBS["step"], "test_app", cfg.contributor),
         "effort": {"step": cfg.step_effort, "plan": cfg.plan_effort},
     }
 

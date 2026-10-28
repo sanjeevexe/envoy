@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from envoy_episode import GRPC_PORT, PAYLOAD_KEYS, REPO, SERIAL, git_commit  # noqa: E402
+from envoy_episode import GRPC_PORT, PAYLOAD_KEYS, REPO, SERIAL, contributor_tier, git_commit  # noqa: E402
 
 LIBRARIES = REPO / "eval" / "results" / "androidworld" / "routines"
 
@@ -41,6 +41,7 @@ async def run_routine(payload: dict[str, Any]) -> dict[str, Any]:
     from routines.store import RoutineStore
 
     cfg = payload["config"]
+    contributor = contributor_tier(cfg)
     emulator.AVDS.setdefault("AndroidWorldAvd", {"serial": SERIAL, "grpc_port": GRPC_PORT, "can_snapshot": False})
     device = emulator.EmulatorDevice("AndroidWorldAvd").connect()
     adapter = ModelAdapter()
@@ -50,7 +51,7 @@ async def run_routine(payload: dict[str, Any]) -> dict[str, Any]:
     rec: dict[str, Any] = {"run_id": payload["run_id"], "goal": payload["goal"], "max_steps": payload["max_steps"], "config": cfg,
                            "envoy_commit": git_commit(), "mode": "routine"}
     try:
-        m = await RoutineMatcher(store, adapter, data_scope="test_app", contributor=True).match(payload["goal"], task_id=payload["run_id"])
+        m = await RoutineMatcher(store, adapter, data_scope="test_app", contributor=contributor).match(payload["goal"], task_id=payload["run_id"])
         rec["match"] = {"routine": m.routine.routine if m.routine else None, "stage": m.stage, "inputs": m.inputs, "missing": m.missing,
                         "candidates": m.candidates}
         calls, cost, cost_std = m.model_calls, 0.0, m.cost_usd  # the matcher reports its cost at standard prices
@@ -59,8 +60,8 @@ async def run_routine(payload: dict[str, Any]) -> dict[str, Any]:
                        model_calls=calls, cost_at_standard_usd=round(cost_std, 6), duration_s=round(time.time() - t0, 2))
             return rec
         ex = RoutineExecutor(device, adapter=adapter, approver=approver,
-                             config=ExecConfig(data_scope="test_app", contributor=True,
-                                               agent=RunConfig(max_steps=payload["max_steps"], data_scope="test_app", contributor=True)))
+                             config=ExecConfig(data_scope="test_app", contributor=contributor,
+                                               agent=RunConfig(max_steps=payload["max_steps"], data_scope="test_app", contributor=contributor)))
         out = await ex.run(m.routine, m.inputs, task_id=payload["run_id"], launch="if_needed",
                            allow_repair=bool(cfg.get("allow_repair", True)), allow_agent=False)
         steps_used = sum(1 for s in out.steps if s.status in ("done", "agent")) + sum(len(s.repairs) for s in out.steps)

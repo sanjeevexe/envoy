@@ -198,7 +198,7 @@ def main() -> None:
     meta.update({"stage": args.stage, "agent": args.agent, "seed": args.seed, "instances": instances, "split": args.split,
                  "tasks": sorted(suite), "androidworld_commit": aw_env.aw_commit(),
                  "emulator": "AndroidWorldAvd: Pixel 6 1080x2400 420 dpi, API 33 google_apis arm64-v8a r17, 4 GB",
-                 "envoy_config": config, "tier": "contributor" if args.agent == "envoy" else None})
+                 "envoy_config": config, "tier": config.get("tier", "contributor") if args.agent == "envoy" else None})
     meta["sessions"].append({"started": dt.datetime.now().isoformat(timespec="seconds"),
                              "envoy_commit": subprocess.run(["git", "-C", str(REPO), "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip(),
                              "note": args.note})

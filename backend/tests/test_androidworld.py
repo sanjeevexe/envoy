@@ -134,3 +134,11 @@ def test_done_answer_reaches_the_record_and_the_digest_keeps_no_trees(tmp_path, 
     rows = [json.loads(l) for l in gzip.open(dest, "rt")]
     assert [r["kind"] for r in rows] == ["plan", "action"]
     assert "B12" in rows[1]["screen"] and not any("tree_before" in r or "screenshot_before" in r for r in rows)
+
+
+def test_the_tier_is_contributor_unless_the_run_says_standard():
+    assert ee.contributor_tier({}) is True and ee.contributor_tier({"tier": "contributor"}) is True
+    assert ee.contributor_tier({"tier": "standard"}) is False
+    assert ee.make_payload("x", 10, "r", {"tier": "standard"})["config"] == {"tier": "standard"}
+    with pytest.raises(ValueError):
+        ee.make_payload("x", 10, "r", {"tier": "max"})

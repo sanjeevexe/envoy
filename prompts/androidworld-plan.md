@@ -2,6 +2,14 @@
 
 Written by Claude from `prompts/androidworld.md` on Oct 27, 2026 (evening), after reading AndroidWorld's code at commit `55ddaf5` (Oct 23, 2026), its paper and leaderboard, and Envoy's design doc, Phase 1/2/6 results and code. Branch `androidworld`, worktree `~/Desktop/Envoy-androidworld`. Where this plan and the prompt's "what I know" differ, the code was checked and the code wins (noted inline).
 
+## Decision after the pilot (Oct 27, with the user): both tiers
+
+The Phase 7 chat measured that the Contributor-tier model takes about twice the steps of the standard tier on SkyLark's core tasks (75 vs 37 actions, same code and cells), with "placeholder" actions such as backing out of an enabled button. The pilot traces here show the same thing: 116 of 231 actions were `back`, 37 with a reason naming another action, 7 saying "placeholder". AndroidWorld's budgets are tight (48 tasks get 10 steps) and a task counts only if the agent says done within them, so the tier can move the headline for reasons unrelated to Envoy's design. The user chose:
+
+- **Baseline on both tiers:** all 116 on Contributor (as planned) and all 116 on the standard tier (`muse-spark-1.3`), same code, seed and adapter (`--config '{"tier": "standard"}'`). The standard tier is the model Envoy uses in the product, so its number is the headline; the gap between the two is a finding.
+- **Development of fixes on the dev half on Contributor** (cheap), then the **re-measure on the standard tier** (both halves).
+- **Budget:** the $10 guards against needless spending, not justified runs; no need to ask before exceeding it. Spend is still reported at each checkpoint. The daily cap in this checkout is $15 so a run can't stop halfway.
+
 ## Rules (from the prompt)
 
 - No passwords, no sign-ins, no payment methods; ask before anything visible outside this Mac; never touch the real phone, the iPhone, the main chat's emulators, its API or `main`.
