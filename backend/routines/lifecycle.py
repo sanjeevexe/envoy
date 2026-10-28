@@ -23,9 +23,14 @@ def version_for_run(store: RoutineStore, name: str) -> Routine:
     return store.get(name, max(trials)) if trials else store.get(name)
 
 
-def after_run(store: RoutineStore, routine: Routine, outcome: RunOutcome, kind: str = "run") -> dict[str, Any]:
-    """Record the run, decide a trial it was, or put its patches on trial. Returns what happened, for the record."""
+def after_run(store: RoutineStore, routine: Routine, outcome: RunOutcome, kind: str = "run", held: bool = False) -> dict[str, Any]:
+    """Record the run, decide a trial it was, or put its patches on trial. Returns what happened, for the record.
+    `held`: the person took over or paused the run. What the screens did was then partly their doing, so the run teaches
+    nothing: no patch is proposed and a trial isn't decided (on the Pixel 5 an approved tap after a takeover didn't go
+    through, and the repair that tapped again became "an extra screen appeared" on trial)."""
     store.record_run(routine.routine, outcome, kind=kind)
+    if held:
+        return {"held": routine.version} if routine.status == "trial" or outcome.patches else {}
     if routine.status == "trial":
         passed = outcome.status == "done" and outcome.model_calls == 0
         verdict = {"passed": passed, "task_id": outcome.task_id, "status": outcome.status, "model_calls": outcome.model_calls,

@@ -588,10 +588,16 @@ class RoutineExecutor:
         verdict = classify(action, screen, risk if risk in ("read", "reversible", "irreversible") else None)  # type: ignore[arg-type]
         if not verdict.irreversible:
             return action
+        reasons = list(verdict.reasons)
+        if any(a["approved"] and f'"{label}"' in a["description"] for a in ctx.out.approvals):
+            # Asked again for a control you already approved in this run: say why (on the Pixel 5 an approved tap didn't take
+            # effect, the repair tapped again, and the second request looked like a duplicate).
+            reasons.append("You approved this a moment ago, but the tap didn't take effect (nothing changed on screen), "
+                           "so Envoy asks again before trying once more.")
         for _ in range(3):
             req = ApprovalRequest(task_id=ctx.task_id, goal=render_str(ctx.routine.intent, ctx.inputs) or "", app=screen.package,
                                   description=f'{action.kind} "{label}" in {screen.package} (routine {ctx.routine.routine} v{ctx.routine.version})',
-                                  reasons=verdict.reasons, screen=screen.compact, origin=origin, target=label)
+                                  reasons=reasons, screen=screen.compact, origin=origin, target=label)
             decision = await asyncio.to_thread(self.approver.request, req)
             ctx.out.approvals.append({"step": sr.id, "description": req.description, "reasons": req.reasons, "approved": decision.approved, "by": decision.by})
             if decision.by != "screen_changed":

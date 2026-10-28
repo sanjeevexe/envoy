@@ -229,8 +229,11 @@ class TaskRunner:
                                                                agent=RunConfig(data_scope=scope, contributor=skylark, max_cost_usd=0.25)))
                         out = await ex.run(routine, inputs, task_id=trace_id, launch="if_needed", allow_repair=True, allow_agent=True, memory=notes,
                                            request=goal)
-                        life = after_run(self.routines, routine, out)  # repairs become a version on trial; a trial is activated or rolled back
-                        if life and "unchanged" not in life:  # a patch that changed nothing is logged in the library, not shown
+                        held = any(s.get("kind") == "note" and (s.get("text") or "").startswith(("taken over", "paused:")) for s in self.store.steps(tid))
+                        life = after_run(self.routines, routine, out, held=held) or {}  # repairs become a version on trial; a trial is activated or rolled back
+                        if "held" in life:
+                            self._step(tid, {"kind": "note", "text": f"routine {routine.routine}: nothing learned from this run (you took over or paused it)"})
+                        elif life and "unchanged" not in life:  # a patch that changed nothing is logged in the library, not shown
                             self._step(tid, {"kind": "note", "text": (f"routine {routine.routine}: patched version v{life['proposed']} on trial for the next run"
                                                                       if "proposed" in life else f"routine {routine.routine} v{life['trial']}: trial {life['result']}")})
                         status, result, outputs = out.status, out.detail, out.outputs

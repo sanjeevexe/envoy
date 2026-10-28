@@ -554,3 +554,47 @@ def test_a_pause_from_the_phone_and_its_resume_are_kept_in_the_task_history():
     notes = [s["text"] for s in r.store.steps(task["id"]) if s["kind"] == "note"]
     assert notes == ["paused: you touched the phone", "resumed on your phone"]
     assert r.store.get(task["id"])["status"] == "running"
+
+
+def test_a_run_the_person_took_over_or_paused_teaches_the_routine_nothing(tmp_path):
+    store = RoutineStore(tmp_path)
+    v1 = store.add(_routine())
+    held = RunOutcome(v1.routine, 1, "t1", "done", patches=[_patch(v1)], model_calls=1)
+    assert after_run(store, v1, held, held=True) == {"held": 1}  # no patch on trial
+    assert version_for_run(store, v1.routine).version == 1
+    after_run(store, v1, RunOutcome(v1.routine, 1, "t2", "done", patches=[_patch(v1)], model_calls=1))
+    trial = version_for_run(store, v1.routine)
+    assert after_run(store, trial, RunOutcome(v1.routine, 2, "t3", "done", model_calls=0), held=True) == {"held": 2}
+    assert version_for_run(store, v1.routine).status == "trial"  # still on trial: a held run doesn't decide it
+
+
+def test_asking_again_for_a_control_already_approved_in_the_run_says_why():
+    from devices.types import Action
+    from policy.approvals import ApprovalDecision
+    from routines.executor import RoutineExecutor, StepRun, _Ctx
+    from routines.screens import screen_from_tree
+    asked = []
+
+    class Person:
+        def request(self, req):
+            asked.append(req)
+            return ApprovalDecision(True, by="user")
+    s = screen_from_tree({"package": "com.skylark.air", "activity": "A", "width": 1080, "height": 2340, "elements": [
+        {"index": 0, "parent": None, "number": 1, "kind": "Button", "class": "android.view.View", "clickable": True,
+         "label": "Confirm check-in", "text": "Confirm check-in", "resource_id": "btn_confirm_checkin", "bounds": [44, 851, 1036, 983]}]})
+    ex = RoutineExecutor(SimpleDevice(s), approver=Person())
+    r = _routine()
+    ctx = _Ctx(r, {}, "t1", RunOutcome(r.routine, 1, "t1", "running"), None, True, False, "")  # type: ignore[arg-type]
+    tap = Action(kind="tap", element=1)
+    asyncio.run(ex._gate(ctx, tap, s, "irreversible", "Confirm check-in", StepRun("confirm_check_in")))
+    assert not any("approved this a moment ago" in x for x in asked[0].reasons)
+    asyncio.run(ex._gate(ctx, tap, s, "irreversible", "Confirm check-in", StepRun("confirm_check_in")))  # the repair, after a lost tap
+    assert any("approved this a moment ago" in x for x in asked[1].reasons)
+
+
+class SimpleDevice:
+    def __init__(self, screen):
+        self.screen = screen
+
+    async def observe(self, screenshot=False):
+        return self.screen

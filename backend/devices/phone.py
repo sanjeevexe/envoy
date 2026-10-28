@@ -16,6 +16,7 @@ code path is exercised before a real phone is connected.
 
 from __future__ import annotations
 
+import json
 import os
 import re
 import subprocess
@@ -29,6 +30,7 @@ from devices.scrcpy import ScrcpyStream
 from devices.screen import BANNER_PACKAGE
 
 REPO = Path(__file__).resolve().parents[2]
+TAP_LOG = REPO / "logs" / "phone_taps.jsonl"  # where every tap on a real phone went (no screen content: points only)
 BANNER_APK = REPO / "android" / "banner" / "app" / "build" / "outputs" / "apk" / "debug" / "app-debug.apk"
 _ROW = re.compile(r"paused=(\d), reason=(.*?), changed_at=(\d+), shown=(\d)")
 
@@ -208,15 +210,30 @@ class PhoneDevice(AndroidDevice):
         its Pause button an injected tap paused the run as if you had pressed it (Pixel 5, where the pill sits over the
         app's top bar, the search box of many apps). The banner steps aside for that tap and comes back."""
         rect = self._banner_rect()
-        if rect is not None and rect[0] <= x <= rect[2] and rect[1] <= y <= rect[3]:
+        stepped = rect is not None and rect[0] <= x <= rect[2] and rect[1] <= y <= rect[3]
+        if stepped:
             self.banner.hide()
             time.sleep(0.15)
-            try:
-                self._tap_now(x, y, hold_s)
-            finally:
+        try:
+            path = self._tap_now(x, y, hold_s)
+        finally:
+            if stepped:
                 self.banner.show(self.banner.text)
-            return
-        self._tap_now(x, y, hold_s)
+        self._log_tap(x, y, hold_s, path, stepped)
+
+    def _log_tap(self, x: int, y: int, hold_s: float, path: str, stepped: bool) -> None:
+        """One line per tap: the point, the input path, and how long the stream had been up (an approved tap on the Pixel 5
+        once didn't take effect after a takeover; this says which path it went through)."""
+        try:
+            st = self._stream
+            row = {"time": round(time.time(), 3), "serial": self.serial, "x": x, "y": y, "hold_s": hold_s, "path": path, "banner_stepped": stepped,
+                   "stream_age_s": round(time.time() - st.started_at, 2) if st is not None and st.started_at else None,
+                   "frames": getattr(st, "frames", None)}
+            TAP_LOG.parent.mkdir(parents=True, exist_ok=True)
+            with TAP_LOG.open("a") as f:
+                f.write(json.dumps(row) + "\n")
+        except Exception:  # noqa: BLE001 - a log line never stops a tap
+            pass
 
     def _banner_rect(self, pad: int = 12) -> tuple[int, int, int, int] | None:
         """The banner's pill on the screen read last (its own window, left out of what Envoy reads), padded a little."""
@@ -228,7 +245,7 @@ class PhoneDevice(AndroidDevice):
         x1, y1, x2, y2 = max(pills, key=lambda b: (b[2] - b[0]) * (b[3] - b[1]))
         return x1 - pad, y1 - pad, x2 + pad, y2 + pad
 
-    def _tap_now(self, x: int, y: int, hold_s: float = 0.0) -> None:
+    def _tap_now(self, x: int, y: int, hold_s: float = 0.0) -> str:
         """scrcpy's control socket (milliseconds), uiautomator2 (~150 ms) as the fallback; both are injected, so the
         touch watcher never mistakes them for you."""
         try:
@@ -236,8 +253,10 @@ class PhoneDevice(AndroidDevice):
                 self.stream.swipe(x, y, x, y, hold_s, steps=4)
             else:
                 self.stream.tap(x, y)
-        except Exception:  # noqa: BLE001
+            return "scrcpy"
+        except Exception as e:  # noqa: BLE001
             super()._tap(x, y, hold_s)
+            return f"uiautomator2 ({type(e).__name__})"
 
     # ---- screenshots ------------------------------------------------------------------------
 
