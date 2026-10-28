@@ -38,6 +38,7 @@ from routines.model import dump_yaml
 from routines.store import RoutineStore
 
 from api import routine_view
+from api.alerts import ChangeAlerts
 from api.auth import Auth, Caller, allowed_hosts, public_url, tunnel_hosts
 from api.chat import chat
 from api.devices import DevicePool
@@ -45,7 +46,7 @@ from api.events import EventBus
 from api.live import live_view
 from api.push import Pusher, VapidKeys
 from api.runner import SHOTS, TaskRunner
-from api.scheduler import Scheduler
+from api.scheduler import Scheduler, check_alert
 from api.store import API_DIR, REPO, TaskStore, new_id
 from api.voice import voice_session
 
@@ -79,6 +80,7 @@ class Ctx:
     auth: Any = None
     pusher: Any = None
     public: str = ""
+    alerts: Any = None
 
 
 def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, memory: MemoryStore | None = None,
@@ -103,6 +105,10 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     pusher = Pusher(tasks, VapidKeys(API_DIR), public)
     bus.listeners.append(pusher.on_event)
     ctx.auth, ctx.pusher, ctx.public = auth, pusher, public
+    alerts = ChangeAlerts(tasks, memory, pusher, bus, routines)  # a watcher's run pushes when it changed a remembered fact
+    memory.subscribe(alerts.on_memory)
+    bus.listeners.append(alerts.on_event)
+    ctx.alerts = alerts
 
     from mcp_server.server import build_mcp, mcp_app
     from mcp_stub.common import bearer_token
@@ -637,7 +643,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
 
     @app.get("/api/triggers", dependencies=[Depends(session)])
     def list_triggers() -> list[dict[str, Any]]:
-        return [{**t, "next": scheduler.next_runs(t)} for t in tasks.triggers()]
+        return [{**t, "next": scheduler.next_runs(t), "alerts": dict(zip(("on", "attributes"), alerts.settings(t)))} for t in tasks.triggers()]
 
     @app.post("/api/triggers", dependencies=[Depends(session)])
     def add_trigger(body: dict[str, Any] = Body(...)) -> dict[str, Any]:
@@ -648,8 +654,28 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
 
     @app.post("/api/triggers/{tid}", dependencies=[Depends(session)])
     def toggle_trigger(tid: str, body: dict[str, Any] = Body(...)) -> dict[str, Any]:
-        tasks.update_trigger(tid, enabled=1 if body.get("enabled") else 0)
+        trig = tasks.trigger(tid)
+        if trig is None:
+            raise HTTPException(404, "no such trigger")
+        spec = None
+        if "alert" in body or "alert_on" in body:  # only the fields given: turning alerts off doesn't pause the trigger
+            spec = {**trig["spec"], **{k: body[k] for k in ("alert", "alert_on") if k in body}}
+            if spec.get("alert_on") == []:
+                spec["alert_on"] = None  # back to the default
+            try:
+                check_alert(spec)
+            except ValueError as e:
+                raise HTTPException(400, str(e)) from e
+        if "enabled" in body:
+            tasks.update_trigger(tid, enabled=1 if body.get("enabled") else 0)
+        if spec is not None:
+            tasks.update_trigger(tid, spec=spec)
         return tasks.trigger(tid) or {}
+
+    @app.get("/api/alerts", dependencies=[Depends(session)])
+    def list_alerts(limit: int = 30) -> list[dict[str, Any]]:
+        """Recent changes to remembered facts, newest first: what changed, from which task, and whether it pushed."""
+        return alerts.recent(min(limit, 200))
 
     @app.delete("/api/triggers/{tid}", dependencies=[Depends(session)])
     def delete_trigger(tid: str) -> dict[str, Any]:

@@ -1,0 +1,700 @@
+{
+ "started": 1793177419.4922612,
+ "avd": "envoy-test",
+ "serial": "emulator-5554",
+ "flight": "flight_d72683aea0",
+ "commit": "17dc69d",
+ "gate_in_memory_before": null,
+ "fact_changed_tasks": [
+  {
+   "id": "task-1028-045239-4c27",
+   "goal": "My gate moved to C14 (was B12): check flight SL 482",
+   "routine": "skylark_check_flight_status",
+   "inputs": {
+    "flight_number": "SL 482"
+   },
+   "status": "done",
+   "result": "flight status: On time; route: ATL \u2192 ORD; date: Fri, Oct 30, 2026; gate: C14; departure time: 6:10 AM",
+   "created_at": 1793177559.952461
+  },
+  {
+   "id": "task-1028-045349-cd56",
+   "goal": "My gate moved to D3 (was C14): check flight SL 482",
+   "routine": "skylark_check_flight_status",
+   "inputs": {
+    "flight_number": "SL 482"
+   },
+   "status": "done",
+   "result": "flight status: On time; route: ATL \u2192 ORD; date: Fri, Oct 30, 2026; gate: D3; departure time: 6:10 AM",
+   "created_at": 1793177629.971945
+  },
+  {
+   "id": "task-1028-045453-1bb7",
+   "goal": "My gate moved to E7 (was D3): check flight SL 482",
+   "routine": "skylark_check_flight_status",
+   "inputs": {
+    "flight_number": "SL 482"
+   },
+   "status": "done",
+   "result": "flight status: On time; route: ATL \u2192 ORD; date: Fri, Oct 30, 2026; gate: B12; departure time: 6:10 AM",
+   "created_at": 1793177693.006127
+  }
+ ],
+ "gate_history": [
+  {
+   "value": "B12",
+   "current": false,
+   "valid_from": 1793177435.2748601,
+   "sources": [
+    "SkyLark app (routine skylark_get_flight_gate), 6 min ago",
+    "SkyLark app, 6 min ago",
+    "SkyLark app (routine skylark_get_flight_gate), 7 min ago",
+    "SkyLark app, 7 min ago"
+   ]
+  },
+  {
+   "value": "C14",
+   "current": false,
+   "valid_from": 1793177554.328495,
+   "sources": [
+    "SkyLark app (routine skylark_check_flight_status), 5 min ago",
+    "SkyLark app (routine skylark_get_flight_gate), 5 min ago",
+    "SkyLark app, 5 min ago"
+   ]
+  },
+  {
+   "value": "D3",
+   "current": false,
+   "valid_from": 1793177613.499268,
+   "sources": [
+    "SkyLark app (routine skylark_check_flight_status), 4 min ago",
+    "SkyLark app (routine skylark_get_flight_gate), 4 min ago",
+    "SkyLark app, 4 min ago"
+   ]
+  },
+  {
+   "value": "E7",
+   "current": false,
+   "valid_from": 1793177673.997653,
+   "sources": [
+    "SkyLark app (routine skylark_get_flight_gate), 3 min ago",
+    "SkyLark app, 3 min ago"
+   ]
+  },
+  {
+   "value": "B12",
+   "current": true,
+   "valid_from": 1793177699.482065,
+   "sources": [
+    "SkyLark app (routine skylark_get_flight_gate), just now",
+    "SkyLark app, just now",
+    "SkyLark app (routine skylark_get_flight_gate), just now",
+    "SkyLark app, 1 min ago",
+    "SkyLark app (routine skylark_get_flight_gate), 2 min ago",
+    "SkyLark app, 2 min ago",
+    "SkyLark app (routine skylark_check_flight_status), 3 min ago"
+   ]
+  }
+ ],
+ "alerts": [
+  {
+   "id": 5,
+   "time": 1793177802.707915,
+   "task_id": "task-1028-045633-3808",
+   "trigger_id": "trig-1028-045022-d66a",
+   "entity": "flight_d72683aea0",
+   "entity_label": "Flight SL 482",
+   "attribute": "boarding_group",
+   "old": "Group 3",
+   "new": "3",
+   "norm": "3",
+   "fact": "fact_35721af46c",
+   "source": "src_7b693cbdfb",
+   "seen_at": 1793177802.701914,
+   "pushed": 0,
+   "why_not": "this trigger alerts on gate only",
+   "push_id": null,
+   "title": "Boarding group changed: Group 3 \u2192 3",
+   "body": null
+  },
+  {
+   "id": 4,
+   "time": 1793177699.484086,
+   "task_id": "task-1028-045453-1bb7",
+   "trigger_id": "trig-1028-045022-c420",
+   "entity": "flight_d72683aea0",
+   "entity_label": "Flight SL 482",
+   "attribute": "gate",
+   "old": "E7",
+   "new": "B12",
+   "norm": "b12",
+   "fact": "fact_df0a760383",
+   "source": "src_fc2a637bc2",
+   "seen_at": 1793177699.482555,
+   "pushed": 0,
+   "why_not": "alerts are off for this trigger",
+   "push_id": null,
+   "title": "Gate changed: E7 \u2192 B12",
+   "body": null
+  },
+  {
+   "id": 3,
+   "time": 1793177681.052758,
+   "task_id": "task-1028-045429-deb4",
+   "trigger_id": "trig-1028-045022-d66a",
+   "entity": "flight_d72683aea0",
+   "entity_label": "Flight SL 482",
+   "attribute": "gate",
+   "old": "D3",
+   "new": "E7",
+   "norm": "e7",
+   "fact": "fact_216c91f93d",
+   "source": "src_de29009943",
+   "seen_at": 1793177681.046273,
+   "pushed": 1,
+   "why_not": null,
+   "push_id": "p1793177681052-1405",
+   "title": "Gate changed: D3 \u2192 E7",
+   "body": "Flight SL 482 \u00b7 SkyLark app, just now"
+  },
+  {
+   "id": 2,
+   "time": 1793177620.384334,
+   "task_id": "task-1028-045329-7459",
+   "trigger_id": "trig-1028-045022-d66a",
+   "entity": "flight_d72683aea0",
+   "entity_label": "Flight SL 482",
+   "attribute": "gate",
+   "old": "C14",
+   "new": "D3",
+   "norm": "d3",
+   "fact": "fact_bf373c80a2",
+   "source": "src_36395a2ecc",
+   "seen_at": 1793177620.379331,
+   "pushed": 1,
+   "why_not": null,
+   "push_id": "p1793177620384-bd9a",
+   "title": "Gate changed: C14 \u2192 D3",
+   "body": "Flight SL 482 \u00b7 SkyLark app, just now"
+  },
+  {
+   "id": 1,
+   "time": 1793177558.695945,
+   "task_id": "task-1028-045229-a64c",
+   "trigger_id": "trig-1028-045022-d66a",
+   "entity": "flight_d72683aea0",
+   "entity_label": "Flight SL 482",
+   "attribute": "gate",
+   "old": "B12",
+   "new": "C14",
+   "norm": "c14",
+   "fact": "fact_5bd6198b4b",
+   "source": "src_7387ddd142",
+   "seen_at": 1793177558.68911,
+   "pushed": 1,
+   "why_not": null,
+   "push_id": "p1793177558695-7374",
+   "title": "Gate changed: B12 \u2192 C14",
+   "body": "Flight SL 482 \u00b7 SkyLark app, just now"
+  }
+ ],
+ "other_changes_not_pushed": [
+  {
+   "id": 5,
+   "time": 1793177802.707915,
+   "task_id": "task-1028-045633-3808",
+   "trigger_id": "trig-1028-045022-d66a",
+   "entity": "flight_d72683aea0",
+   "entity_label": "Flight SL 482",
+   "attribute": "boarding_group",
+   "old": "Group 3",
+   "new": "3",
+   "norm": "3",
+   "fact": "fact_35721af46c",
+   "source": "src_7b693cbdfb",
+   "seen_at": 1793177802.701914,
+   "pushed": 0,
+   "why_not": "this trigger alerts on gate only",
+   "push_id": null,
+   "title": "Boarding group changed: Group 3 \u2192 3",
+   "body": null
+  },
+  {
+   "id": 4,
+   "time": 1793177699.484086,
+   "task_id": "task-1028-045453-1bb7",
+   "trigger_id": "trig-1028-045022-c420",
+   "entity": "flight_d72683aea0",
+   "entity_label": "Flight SL 482",
+   "attribute": "gate",
+   "old": "E7",
+   "new": "B12",
+   "norm": "b12",
+   "fact": "fact_df0a760383",
+   "source": "src_fc2a637bc2",
+   "seen_at": 1793177699.482555,
+   "pushed": 0,
+   "why_not": "alerts are off for this trigger",
+   "push_id": null,
+   "title": "Gate changed: E7 \u2192 B12",
+   "body": null
+  }
+ ],
+ "triggers": [
+  {
+   "id": "trig-1028-045022-d66a",
+   "kind": "watch",
+   "name": "Watch my gate",
+   "spec": {
+    "every_minutes": 1,
+    "alert": true
+   },
+   "action": {
+    "routine": "skylark_get_flight_gate",
+    "inputs": {
+     "trip_city": "Chicago"
+    },
+    "goal": "What's my gate for Chicago?"
+   },
+   "enabled": false,
+   "created_at": 1793177422.7823749,
+   "last_fired": 1793177853.050406,
+   "fired": [
+    "t1793177429",
+    "t1793177489",
+    "t1793177549",
+    "t1793177609",
+    "t1793177669",
+    "t1793177733",
+    "t1793177793",
+    "t1793177853"
+   ],
+   "next": [
+    {
+     "at": 1793177913.050406
+    }
+   ],
+   "alerts": {
+    "on": true,
+    "attributes": [
+     "gate"
+    ]
+   }
+  },
+  {
+   "id": "trig-1028-045022-c420",
+   "kind": "fact_changed",
+   "name": "When my gate changes",
+   "spec": {
+    "entity_type": "Flight",
+    "attribute": "gate",
+    "attributes": [
+     "gate"
+    ],
+    "after_seq": 154
+   },
+   "action": {
+    "routine": "skylark_check_flight_status",
+    "inputs_from": {
+     "flight_number": "flight.number"
+    },
+    "goal": "My gate moved to {change.new} (was {change.old}): check flight {flight.number}"
+   },
+   "enabled": false,
+   "created_at": 1793177422.784672,
+   "last_fired": 1793177693.004082,
+   "fired": [
+    "chg150",
+    "chg151",
+    "chg152"
+   ],
+   "next": [],
+   "alerts": {
+    "on": false,
+    "attributes": [
+     "*"
+    ]
+   }
+  }
+ ],
+ "finished": 1793177893.050634,
+ "steps": [
+  {
+   "step": "API copy up",
+   "ok": true,
+   "t": 1.5,
+   "base": "http://127.0.0.1:8712",
+   "data_dir": "/private/tmp/claude-501/-Users-sanjeevvarma-Desktop-Envoy--claude-worktrees-change-alerts-6f322a/f9664751-02bb-47e5-a09c-92e53d96f7fa/scratchpad/alerts2/api",
+   "memory": "/private/tmp/claude-501/-Users-sanjeevvarma-Desktop-Envoy--claude-worktrees-change-alerts-6f322a/f9664751-02bb-47e5-a09c-92e53d96f7fa/scratchpad/alerts2/memory.db",
+   "scheduler_every_s": 10
+  },
+  {
+   "step": "SkyLark seeded, signed in",
+   "ok": true,
+   "t": 4.3,
+   "trip": "KX7Q2M",
+   "gate": "B12"
+  },
+  {
+   "step": "fake push service is the only subscription",
+   "ok": true,
+   "t": 4.4,
+   "subscriptions": [
+    "127.0.0.1:55575"
+   ]
+  },
+  {
+   "step": "triggers created",
+   "ok": true,
+   "t": 4.4,
+   "watcher": {
+    "every_minutes": 1,
+    "alert": true
+   },
+   "fact_changed": {
+    "entity_type": "Flight",
+    "attribute": "gate",
+    "attributes": [
+     "gate"
+    ],
+    "after_seq": 145
+   }
+  },
+  {
+   "step": "baseline run 1: gate B12, nothing changed \u2192 no push",
+   "ok": true,
+   "t": 23.1,
+   "task": "task-1028-045029-3fcb",
+   "result": "gate: B12",
+   "change_steps": [],
+   "pushes": 0,
+   "memory_gate": "B12"
+  },
+  {
+   "step": "baseline run 2: gate B12, nothing changed \u2192 no push",
+   "ok": true,
+   "t": 85.1,
+   "task": "task-1028-045129-4ba9",
+   "result": "gate: B12",
+   "change_steps": [],
+   "pushes": 0,
+   "memory_gate": "B12"
+  },
+  {
+   "step": "gate B12 \u2192 C14: one push",
+   "ok": true,
+   "t": 141.4,
+   "title": "Gate changed: B12 \u2192 C14",
+   "body": "Flight SL 482 \u00b7 SkyLark app, just now",
+   "url": "/?task=task-1028-045229-a64c",
+   "latency_s": 54.31,
+   "split": {
+    "wait_for_next_watcher_run": 45.51,
+    "routine_run": 4.38,
+    "memory_write": 4.36,
+    "alert_and_push": 0.053,
+    "push_send_to_receive": 0.049
+   },
+   "change_steps": [
+    [
+     "Gate changed: B12 \u2192 C14",
+     true,
+     null
+    ]
+   ],
+   "set_broadcast_s": 0.05
+  },
+  {
+   "step": "memory's gate is now C14",
+   "ok": true,
+   "t": 141.4,
+   "memory_gate": "C14"
+  },
+  {
+   "step": "gate C14 \u2192 D3: one push",
+   "ok": true,
+   "t": 203.1,
+   "title": "Gate changed: C14 \u2192 D3",
+   "body": "Flight SL 482 \u00b7 SkyLark app, just now",
+   "url": "/?task=task-1028-045329-7459",
+   "latency_s": 19.5,
+   "split": {
+    "wait_for_next_watcher_run": 9.08,
+    "routine_run": 3.53,
+    "memory_write": 6.88,
+    "alert_and_push": 0.006,
+    "push_send_to_receive": 0.002
+   },
+   "change_steps": [
+    [
+     "Gate changed: C14 \u2192 D3",
+     true,
+     null
+    ]
+   ],
+   "set_broadcast_s": 0.35
+  },
+  {
+   "step": "memory's gate is now D3",
+   "ok": true,
+   "t": 203.1,
+   "memory_gate": "D3"
+  },
+  {
+   "step": "gate D3 \u2192 E7: one push",
+   "ok": true,
+   "t": 263.7,
+   "title": "Gate changed: D3 \u2192 E7",
+   "body": "Flight SL 482 \u00b7 SkyLark app, just now",
+   "url": "/?task=task-1028-045429-deb4",
+   "latency_s": 40.15,
+   "split": {
+    "wait_for_next_watcher_run": 29.08,
+    "routine_run": 4.02,
+    "memory_write": 7.05,
+    "alert_and_push": 0.007,
+    "push_send_to_receive": 0.002
+   },
+   "change_steps": [
+    [
+     "Gate changed: D3 \u2192 E7",
+     true,
+     null
+    ]
+   ],
+   "set_broadcast_s": 0.03
+  },
+  {
+   "step": "memory's gate is now E7",
+   "ok": true,
+   "t": 263.7,
+   "memory_gate": "E7"
+  },
+  {
+   "step": "gate E7 \u2192 B12: one push",
+   "ok": false,
+   "t": 457.3,
+   "title": null,
+   "body": null,
+   "url": null,
+   "latency_s": null,
+   "split": null,
+   "change_steps": [],
+   "set_broadcast_s": 0.03
+  },
+  {
+   "step": "memory's gate is now B12",
+   "ok": true,
+   "t": 457.3,
+   "memory_gate": "B12"
+  },
+  {
+   "step": "the next run sees the same gate: no repeat push",
+   "ok": false,
+   "t": 459.8,
+   "task": "task-1028-045633-3808",
+   "result": "gate: B12",
+   "pushes": 0
+  },
+  {
+   "step": "fact-changed trigger: one task per change, typed values only",
+   "ok": false,
+   "t": 471.8,
+   "tasks": [
+    {
+     "goal": "My gate moved to C14 (was B12): check flight SL 482",
+     "routine": "skylark_check_flight_status",
+     "inputs": {
+      "flight_number": "SL 482"
+     },
+     "status": "done",
+     "result": "flight status: On time; route: ATL \u2192 ORD; date: Fri, Oct 30, 2026; gate: C14; departure time: 6:10 AM",
+     "after_change_s": 55.5
+    },
+    {
+     "goal": "My gate moved to D3 (was C14): check flight SL 482",
+     "routine": "skylark_check_flight_status",
+     "inputs": {
+      "flight_number": "SL 482"
+     },
+     "status": "done",
+     "result": "flight status: On time; route: ATL \u2192 ORD; date: Fri, Oct 30, 2026; gate: D3; departure time: 6:10 AM",
+     "after_change_s": 125.5
+    },
+    {
+     "goal": "My gate moved to E7 (was D3): check flight SL 482",
+     "routine": "skylark_check_flight_status",
+     "inputs": {
+      "flight_number": "SL 482"
+     },
+     "status": "done",
+     "result": "flight status: On time; route: ATL \u2192 ORD; date: Fri, Oct 30, 2026; gate: B12; departure time: 6:10 AM",
+     "after_change_s": 92.1
+    }
+   ]
+  },
+  {
+   "step": "memory shows the new gate with its source",
+   "ok": false,
+   "t": 471.8,
+   "current": "B12",
+   "source": "SkyLark app (routine skylark_get_flight_gate), just now",
+   "source_kind": "routine_run",
+   "source_task": "task-1028-045453-1bb7",
+   "history": [
+    "B12",
+    "C14",
+    "D3",
+    "E7",
+    "B12"
+   ]
+  },
+  {
+   "step": "triggers paused (kept for the web app)",
+   "ok": true,
+   "t": 471.8,
+   "n": 2
+  },
+  {
+   "step": "SkyLark left as demo_setup leaves it (demo bookings, signed out, variant 0)",
+   "ok": true,
+   "t": 474.5,
+   "signed_in": false
+  }
+ ],
+ "samples": [
+  {
+   "from": "B12",
+   "to": "C14",
+   "offset_in_minute_s": 10.0,
+   "set_at": 1793177504.439646,
+   "app_gate_after_set": "C14",
+   "task": "task-1028-045229-a64c",
+   "push": {
+    "id": "p1793177558695-7374",
+    "kind": "change",
+    "title": "Gate changed: B12 \u2192 C14",
+    "body": "Flight SL 482 \u00b7 SkyLark app, just now",
+    "url": "/?task=task-1028-045229-a64c",
+    "tag": "change-flight_d72683aea0-gate",
+    "sent_at": 1793177558.695755
+   },
+   "push_received_at": 1793177558.74478,
+   "latency_s": 54.31,
+   "split_s": {
+    "wait_for_next_watcher_run": 45.51,
+    "routine_run": 4.38,
+    "memory_write": 4.36,
+    "alert_and_push": 0.053,
+    "push_send_to_receive": 0.049
+   }
+  },
+  {
+   "from": "C14",
+   "to": "D3",
+   "offset_in_minute_s": 50.0,
+   "set_at": 1793177600.883411,
+   "app_gate_after_set": "D3",
+   "task": "task-1028-045329-7459",
+   "push": {
+    "id": "p1793177620384-bd9a",
+    "kind": "change",
+    "title": "Gate changed: C14 \u2192 D3",
+    "body": "Flight SL 482 \u00b7 SkyLark app, just now",
+    "url": "/?task=task-1028-045329-7459",
+    "tag": "change-flight_d72683aea0-gate",
+    "sent_at": 1793177620.384306
+   },
+   "push_received_at": 1793177620.386566,
+   "latency_s": 19.5,
+   "split_s": {
+    "wait_for_next_watcher_run": 9.08,
+    "routine_run": 3.53,
+    "memory_write": 6.88,
+    "alert_and_push": 0.006,
+    "push_send_to_receive": 0.002
+   }
+  },
+  {
+   "from": "D3",
+   "to": "E7",
+   "offset_in_minute_s": 30.0,
+   "set_at": 1793177640.90029,
+   "app_gate_after_set": "E7",
+   "task": "task-1028-045429-deb4",
+   "push": {
+    "id": "p1793177681052-1405",
+    "kind": "change",
+    "title": "Gate changed: D3 \u2192 E7",
+    "body": "Flight SL 482 \u00b7 SkyLark app, just now",
+    "url": "/?task=task-1028-045429-deb4",
+    "tag": "change-flight_d72683aea0-gate",
+    "sent_at": 1793177681.052725
+   },
+   "push_received_at": 1793177681.055147,
+   "latency_s": 40.15,
+   "split_s": {
+    "wait_for_next_watcher_run": 29.08,
+    "routine_run": 4.02,
+    "memory_write": 7.05,
+    "alert_and_push": 0.007,
+    "push_send_to_receive": 0.002
+   }
+  },
+  {
+   "from": "E7",
+   "to": "B12",
+   "offset_in_minute_s": 20.0,
+   "set_at": 1793177694.219487,
+   "app_gate_after_set": "B12",
+   "task": "task-1028-045533-28b7",
+   "push": null,
+   "push_received_at": null
+  }
+ ],
+ "pushes": [
+  {
+   "id": "p1793177558695-7374",
+   "kind": "change",
+   "title": "Gate changed: B12 \u2192 C14",
+   "body": "Flight SL 482 \u00b7 SkyLark app, just now",
+   "url": "/?task=task-1028-045229-a64c",
+   "tag": "change-flight_d72683aea0-gate",
+   "sent_at": 1793177558.695755
+  },
+  {
+   "id": "p1793177620384-bd9a",
+   "kind": "change",
+   "title": "Gate changed: C14 \u2192 D3",
+   "body": "Flight SL 482 \u00b7 SkyLark app, just now",
+   "url": "/?task=task-1028-045329-7459",
+   "tag": "change-flight_d72683aea0-gate",
+   "sent_at": 1793177620.384306
+  },
+  {
+   "id": "p1793177681052-1405",
+   "kind": "change",
+   "title": "Gate changed: D3 \u2192 E7",
+   "body": "Flight SL 482 \u00b7 SkyLark app, just now",
+   "url": "/?task=task-1028-045429-deb4",
+   "tag": "change-flight_d72683aea0-gate",
+   "sent_at": 1793177681.052725
+  }
+ ],
+ "latency_s": {
+  "samples": [
+   54.31,
+   19.5,
+   40.15
+  ],
+  "min": 19.5,
+  "max": 54.31,
+  "mean": 37.99
+ },
+ "cost": {
+  "model_calls": 11,
+  "cost_usd": 0.0614,
+  "log": "logs/model_costs.jsonl"
+ },
+ "ok": false
+}

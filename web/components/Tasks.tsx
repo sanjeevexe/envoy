@@ -70,7 +70,7 @@ export function TaskDetail({ id, task, liveSteps, back }: { id: string; task?: T
       )}
       <ol className="mt-4 space-y-2">
         {steps.map((s) => (
-          <li key={s.seq} className="flex gap-3 rounded-lg bg-white p-2 shadow-sm">
+          <li key={s.seq} className={`flex gap-3 rounded-lg p-2 shadow-sm ${s.kind === "change" ? "bg-amber-50" : "bg-white"}`}>
             {s.shot ? <img src={`/api/shots/${s.shot}`} alt="" className="h-28 w-[52px] shrink-0 rounded object-cover object-top" />
                     : (s.kind === "action" || s.kind === "routine_step") ? <div className="h-28 w-[52px] shrink-0 rounded bg-stone-100" title="No picture: secure screen or none taken" /> : null}
             <div className="min-w-0 text-sm">
@@ -82,6 +82,11 @@ export function TaskDetail({ id, task, liveSteps, back }: { id: string; task?: T
               {s.kind === "routine_step" && <div className="text-xs text-stone-500">{s.status}{s.rung ? ` (rung ${s.rung})` : ""}{s.detail ? ` · ${s.detail}` : ""}</div>}
               {s.approval && <div className="text-xs">{s.approval.approved ? "✅ approved" : "⛔ not approved"} by {s.approval.by}</div>}
               {s.kind === "memory" && s.entities && <div className="text-xs text-stone-500">{s.entities.join(", ")}</div>}
+              {s.kind === "change" && (
+                <div className="text-xs text-amber-900">
+                  {s.entity_label}{s.source ? ` · seen in ${s.source}` : ""} · {s.pushed ? `🔔 pushed to your devices${s.alerted_for ? ` (for “${s.alerted_for}”)` : ""}` : `not pushed: ${s.why_not}`}
+                </div>
+              )}
               {s.sources && Object.keys(s.sources).length > 0 && (
                 <div className="text-xs text-stone-500">{Object.entries(s.sources).map(([k, v]) => `${k} from ${v}`).join("; ")}</div>
               )}
