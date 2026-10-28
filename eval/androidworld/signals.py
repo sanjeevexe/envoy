@@ -11,6 +11,9 @@ Signals:
 - done_rejected: done decisions the runtime's success check rejected (the episode went on after them)
 - first_done_step: the step of the first done decision
 - looks, approvals (with what was approved)
+- actions, back: decisions carried out, and how many were back (the old schema's trap: see docs/androidworld-results.md)
+- launch_by_name: launches by an app's name (not a package) that opened something
+- asked_again: actions the model called a placeholder, which the loop asked again instead of carrying out
 """
 
 from __future__ import annotations
@@ -30,7 +33,8 @@ def signals(ep: dict) -> dict:
     e = ep.get("envoy") or {}
     out = {"task": ep["task"], "score": ep.get("score"), "status": e.get("status"), "steps": e.get("iterations"),
            "budget": e.get("max_steps"), "placeholder": 0, "echo": 0, "launcher_steps": 0, "bad_launch": 0, "false_change": 0,
-           "done_rejected": 0, "first_done_step": None, "looks": e.get("looks", 0),
+           "done_rejected": 0, "first_done_step": None, "looks": e.get("looks", 0), "actions": 0, "back": 0,
+           "launch_by_name": 0, "asked_again": 0,
            "approvals": [a.get("description") for a in e.get("approvals") or []]}
     dig = RESULTS.parents[2] / e["trace_digest"] if e.get("trace_digest") else None
     if not dig or not dig.exists():
@@ -43,6 +47,12 @@ def signals(ep: dict) -> dict:
         a = (d.get("action") or {}).get("type")
         text = f"{d.get('reason', '')} {d.get('expected_result', '')}"
         out["placeholder"] += bool(PLACEHOLDER.search(text))
+        out["asked_again"] += bool(r.get("placeholder"))
+        out["actions"] += 1
+        out["back"] += a == "back"
+        app = (d.get("action") or {}).get("app") or ""
+        if a == "launch" and (r.get("result") or {}).get("ok") and "." not in app:
+            out["launch_by_name"] += 1
         exp = (d.get("expected_result") or "").strip()
         if exp and exp in seen_expected and len(exp) > 15:
             out["echo"] += 1
@@ -76,6 +86,10 @@ def main() -> None:
     for r in rows:
         print(f"{r['task'][:42]:42} {r['score']:<5} {str(r['status']):15} {r['steps']}/{r['budget']:<4} "
               + " ".join(f"{r[k]:>9}" for k in keys) + f"  {str(r['first_done_step']):>10} {len(r['approvals'])}")
+    tot = {k: sum(r[k] for r in rows) for k in keys + ["actions", "back", "launch_by_name", "asked_again"]}
+    print(f"\nAll {len(rows)} episodes: {tot['actions']} actions, back {tot['back']} ({100 * tot['back'] / max(1, tot['actions']):.0f}%), "
+          f"on the launcher {tot['launcher_steps']}, placeholder reasons {tot['placeholder']}, asked again {tot['asked_again']}, "
+          f"launches by name {tot['launch_by_name']}, failed launches {tot['bad_launch']}, false changes {tot['false_change']}")
     fails = [r for r in rows if (r["score"] or 0) < 0.5]
     print(f"\n{len(rows)} episodes, {len(fails)} failures. Among failures:")
     for k in keys:

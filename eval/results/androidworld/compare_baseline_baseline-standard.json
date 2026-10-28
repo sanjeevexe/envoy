@@ -1,0 +1,57 @@
+{
+ "before": "baseline",
+ "after": "baseline-standard",
+ "by_half": {
+  "dev": {
+   "n": 58,
+   "before": 13.0,
+   "after": 9.0,
+   "gained": 4,
+   "lost": 8,
+   "p_paired": 0.3877
+  },
+  "held_out": {
+   "n": 58,
+   "before": 8.5,
+   "after": 12.0,
+   "gained": 7,
+   "lost": 4,
+   "p_paired": 0.5488
+  },
+  "all": {
+   "n": 116,
+   "before": 21.5,
+   "after": 21.0,
+   "gained": 11,
+   "lost": 12,
+   "p_paired": 1.0
+  }
+ },
+ "gained": [
+  "ContactsNewContactDraft",
+  "NotesRecipeIngredientCount",
+  "RecipeDeleteMultipleRecipesWithConstraint",
+  "RetroSavePlaylist",
+  "SimpleCalendarAddOneEvent",
+  "SimpleSmsReplyMostRecent",
+  "SystemBluetoothTurnOffVerify",
+  "SystemBrightnessMaxVerify",
+  "SystemBrightnessMin",
+  "SystemWifiTurnOff",
+  "SystemWifiTurnOnVerify"
+ ],
+ "lost": [
+  "AudioRecorderRecordAudioWithFileName",
+  "ContactsAddContact",
+  "OpenAppTaskEval",
+  "RecipeDeleteSingleRecipe",
+  "RecipeDeleteSingleWithRecipeWithNoise",
+  "RetroPlayingQueue",
+  "SimpleCalendarAddOneEventRelativeDay",
+  "SimpleCalendarAddRepeatingEvent",
+  "SimpleCalendarLocationOfEvent",
+  "SimpleSmsReply",
+  "SimpleSmsSend",
+  "TurnOffWifiAndTurnOnBluetooth"
+ ]
+}

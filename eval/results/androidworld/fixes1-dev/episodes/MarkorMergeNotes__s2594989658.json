@@ -1,0 +1,79 @@
+{
+ "task": "MarkorMergeNotes",
+ "seed": 2594989658,
+ "goal": "Merge the contents of Markor notes tough_frog_2023_08_05.txt, proud_cat_edited.txt and 2023_08_21_friendly_koala.md (in the same order) into a new Markor note named mIObBbo4 and save it. Add a new line between the content of each note.",
+ "score": 0.0,
+ "aw_run_time_s": 292.6,
+ "aw_episode_length": 78,
+ "agent": "envoy",
+ "finished": "2026-10-28 06:07:15.856464",
+ "envoy": {
+  "run_id": "aw-fixes1-dev-1028-060225-bb2a",
+  "goal": "Merge the contents of Markor notes tough_frog_2023_08_05.txt, proud_cat_edited.txt and 2023_08_21_friendly_koala.md (in the same order) into a new Markor note named mIObBbo4 and save it. Add a new line between the content of each note.",
+  "max_steps": 78,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 78 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 63,
+  "iterations": 78,
+  "looks": 15,
+  "screenshots_sent": 15,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 31,
+   "look": 15,
+   "back": 31
+  },
+  "model_calls": 81,
+  "input_tokens": 237035,
+  "cached_tokens": 171841,
+  "output_tokens": 15821,
+  "reasoning_tokens": 10210,
+  "cost_usd": 0.010027,
+  "cost_at_standard_usd": 0.174508,
+  "duration_s": 286.17,
+  "model_s": 197.03,
+  "device_s": 89.14,
+  "connect_s": 0.89,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Record the text content shown for tough_frog_2023_08_05.txt",
+    "Go back to file list and open proud_cat_edited.txt to record its content",
+    "Open 2023_08_21_friendly_koala.md to record its content",
+    "Create new note named mIObBbo4 with the three contents in order separated by new line and save it"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "mIObBbo4",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-fixes1-dev-1028-060225-bb2a",
+  "envoy_commit": "821d713df93e6bb5536df7e6f89b6684779d58da",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes1-dev/traces/MarkorMergeNotes__s2594989658.jsonl.gz",
+  "wall_s": 288.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

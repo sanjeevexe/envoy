@@ -1,0 +1,84 @@
+{
+ "task": "SimpleCalendarFirstEventAfterStartTime",
+ "seed": 970532311,
+ "goal": "What is my first event after 5:20pm October 29 2023 in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 1.0,
+ "aw_run_time_s": 41.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 06:51:27.849631",
+ "envoy": {
+  "run_id": "aw-fixes1-dev-1028-065049-bde2",
+  "goal": "What is my first event after 5:20pm October 29 2023 in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+  "max_steps": 10,
+  "config": {},
+  "status": "done",
+  "result": "Grocery Shopping",
+  "done": true,
+  "answer": "Grocery Shopping",
+  "steps_device": 3,
+  "iterations": 5,
+  "looks": 1,
+  "screenshots_sent": 2,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "look": 1,
+   "tap_point": 1,
+   "scroll": 1,
+   "done": 1
+  },
+  "model_calls": 10,
+  "input_tokens": 16769,
+  "cached_tokens": 11302,
+  "output_tokens": 1809,
+  "reasoning_tokens": 1309,
+  "cost_usd": 0.006452,
+  "cost_at_standard_usd": 0.029587,
+  "duration_s": 34.47,
+  "model_s": 17.48,
+  "device_s": 16.98,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Open Simple Calendar Pro",
+    "Navigate to October 29, 2023",
+    "Find events after 5:20pm on that day",
+    "Read the title(s) of the first event after 5:20pm"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "titles of first event(s) after 5:20pm October 29 2023",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Grocery, Shopping"
+  },
+  "trace_dir": "data/runs/aw-fixes1-dev-1028-065049-bde2",
+  "envoy_commit": "821d713df93e6bb5536df7e6f89b6684779d58da",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes1-dev/traces/SimpleCalendarFirstEventAfterStartTime__s970532311.jsonl.gz",
+  "wall_s": 36.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

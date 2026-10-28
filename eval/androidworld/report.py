@@ -127,13 +127,27 @@ def compare(a: str, b: str) -> dict:
     tb = {t["task"]: t for t in sb["tasks"]}
     common = sorted(set(ta) & set(tb))
     out = {"before": a, "after": b, "by_half": {}, "gained": [], "lost": []}
-    for h in ("dev", "held_out"):
-        names = [t for t in common if ta[t]["half"] == h]
-        out["by_half"][h] = {"n": len(names), "before": sum(ta[t]["score"] or 0 for t in names),
-                             "after": sum(tb[t]["score"] or 0 for t in names)}
+    for h in ("dev", "held_out", None):
+        names = [t for t in common if h is None or ta[t]["half"] == h]
+        g = [t for t in names if (tb[t]["score"] or 0) > (ta[t]["score"] or 0)]
+        lo = [t for t in names if (tb[t]["score"] or 0) < (ta[t]["score"] or 0)]
+        out["by_half"][h or "all"] = {"n": len(names), "before": sum(ta[t]["score"] or 0 for t in names),
+                                      "after": sum(tb[t]["score"] or 0 for t in names), "gained": len(g), "lost": len(lo),
+                                      "p_paired": sign_test(len(g), len(lo))}
     out["gained"] = [t for t in common if (tb[t]["score"] or 0) > (ta[t]["score"] or 0)]
     out["lost"] = [t for t in common if (tb[t]["score"] or 0) < (ta[t]["score"] or 0)]
     return out
+
+
+def sign_test(gained: int, lost: int) -> float:
+    """Exact two-sided McNemar (sign) test on the tasks that changed: how likely a split this uneven is if the change
+    did nothing and each changed task was a coin flip. Two runs of the same agent differ on ~20% of tasks."""
+    from math import comb
+
+    n, k = gained + lost, min(gained, lost)
+    if n == 0:
+        return 1.0
+    return round(min(1.0, 2 * sum(comb(n, i) for i in range(k + 1)) / 2 ** n), 4)
 
 
 def main() -> None:

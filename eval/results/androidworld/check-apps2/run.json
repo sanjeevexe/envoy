@@ -1,0 +1,25 @@
+{
+ "sessions": [
+  {
+   "started": "2026-10-28T05:36:55",
+   "envoy_commit": "dca91918b2902797e6269a7e3b77219d0652d341",
+   "note": "check that app labels load inside an episode, after the aapt2 lookup fix",
+   "androidworld_setup_rerun": false,
+   "app_snapshots": 24
+  }
+ ],
+ "stage": "check-apps2",
+ "agent": "envoy",
+ "seed": 30,
+ "instances": [
+  0
+ ],
+ "split": null,
+ "tasks": [
+  "BrowserMaze"
+ ],
+ "androidworld_commit": "55ddaf5edc6f6c25673aed343907d5b9dca66f84",
+ "emulator": "AndroidWorldAvd: Pixel 6 1080x2400 420 dpi, API 33 google_apis arm64-v8a r17, 4 GB",
+ "envoy_config": {},
+ "tier": "contributor"
+}

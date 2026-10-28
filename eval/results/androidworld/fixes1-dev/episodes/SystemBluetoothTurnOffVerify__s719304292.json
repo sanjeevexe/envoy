@@ -1,0 +1,82 @@
+{
+ "task": "SystemBluetoothTurnOffVerify",
+ "seed": 719304292,
+ "goal": "Turn bluetooth off.",
+ "score": 1.0,
+ "aw_run_time_s": 24.9,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 06:58:55.491373",
+ "envoy": {
+  "run_id": "aw-fixes1-dev-1028-065832-cc12",
+  "goal": "Turn bluetooth off.",
+  "max_steps": 10,
+  "config": {},
+  "status": "done_unverified",
+  "result": "Bluetooth is already off - Connected devices screen shows 'Turn on Bluetooth to connect to other devices'",
+  "done": true,
+  "answer": "Bluetooth is already off - Connected devices screen shows 'Turn on Bluetooth to connect to other devices'",
+  "steps_device": 2,
+  "iterations": 4,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 1,
+   "look": 1,
+   "done": 1
+  },
+  "model_calls": 5,
+  "input_tokens": 11328,
+  "cached_tokens": 6596,
+  "output_tokens": 1180,
+  "reasoning_tokens": 881,
+  "cost_usd": 0.000722,
+  "cost_at_standard_usd": 0.011919,
+  "duration_s": 18.97,
+  "model_s": 14.69,
+  "device_s": 4.28,
+  "connect_s": 0.87,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Settings",
+   "subgoals": [
+    "Open Settings",
+    "Open Bluetooth settings",
+    "Turn Bluetooth switch off"
+   ],
+   "success_check": {
+    "kind": "field_equals",
+    "value": "Off",
+    "field_hint": "Bluetooth"
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": false,
+   "detail": "field 'Bluetooth' not found"
+  },
+  "trace_dir": "data/runs/aw-fixes1-dev-1028-065832-cc12",
+  "envoy_commit": "821d713df93e6bb5536df7e6f89b6684779d58da",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes1-dev/traces/SystemBluetoothTurnOffVerify__s719304292.jsonl.gz",
+  "wall_s": 21.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

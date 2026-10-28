@@ -1,0 +1,82 @@
+{
+ "task": "ContactsNewContactDraft",
+ "seed": 3954285476,
+ "goal": "Go to the new contact screen and enter the following details: First Name: Grace, Last Name: Taylor, Phone: 799-802-1530, Phone Label: Work. Do NOT hit save.",
+ "score": 1.0,
+ "aw_run_time_s": 53.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 05:46:18.495990",
+ "envoy": {
+  "run_id": "aw-fixes1-dev-1028-054525-eec1",
+  "goal": "Go to the new contact screen and enter the following details: First Name: Grace, Last Name: Taylor, Phone: 799-802-1530, Phone Label: Work. Do NOT hit save.",
+  "max_steps": 12,
+  "config": {},
+  "status": "done",
+  "result": "Entered First Name Grace, Last Name Taylor, Phone 799-802-1530 with label Work on Create contact screen without saving.",
+  "done": true,
+  "answer": "Entered First Name Grace, Last Name Taylor, Phone 799-802-1530 with label Work on Create contact screen without saving.",
+  "steps_device": 7,
+  "iterations": 8,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 3,
+   "type": 3,
+   "done": 1
+  },
+  "model_calls": 10,
+  "input_tokens": 22677,
+  "cached_tokens": 18282,
+  "output_tokens": 2486,
+  "reasoning_tokens": 1820,
+  "cost_usd": 0.000973,
+  "cost_at_standard_usd": 0.018802,
+  "duration_s": 47.36,
+  "model_s": 26.93,
+  "device_s": 20.43,
+  "connect_s": 1.01,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Contacts",
+   "subgoals": [
+    "Stay on the Create contact screen without tapping Save",
+    "Ensure First Name is Grace and Last Name is Taylor",
+    "Ensure Phone is 799-802-1530 with label Work"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "799-802-1530",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'799-802-1530' is visible"
+  },
+  "trace_dir": "data/runs/aw-fixes1-dev-1028-054525-eec1",
+  "envoy_commit": "821d713df93e6bb5536df7e6f89b6684779d58da",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes1-dev/traces/ContactsNewContactDraft__s3954285476.jsonl.gz",
+  "wall_s": 50.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

@@ -13,6 +13,10 @@
   "done_rejected": 0,
   "first_done_step": 13,
   "looks": 0,
+  "actions": 13,
+  "back": 4,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -29,6 +33,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 20,
+  "back": 17,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -45,6 +53,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 3,
+  "actions": 22,
+  "back": 9,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": [
    "tap \"Help make Chrome better by sending usage statistics and crash reports to Google.\" in com.android.chrome"
   ]
@@ -63,6 +75,10 @@
   "done_rejected": 1,
   "first_done_step": 7,
   "looks": 2,
+  "actions": 10,
+  "back": 0,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -79,6 +95,10 @@
   "done_rejected": 1,
   "first_done_step": 5,
   "looks": 2,
+  "actions": 9,
+  "back": 4,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -95,6 +115,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 10,
+  "back": 6,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -111,6 +135,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 11,
+  "back": 9,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -127,6 +155,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 1,
+  "actions": 60,
+  "back": 43,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -143,6 +175,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 2,
+  "actions": 34,
+  "back": 7,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": [
    "tap \"\" in com.arduia.expense",
    "tap \"CONFIRM\" in com.arduia.expense",
@@ -168,6 +204,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 2,
+  "actions": 10,
+  "back": 0,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": [
    "tap \"\" in com.arduia.expense",
    "tap \"CONFIRM\" in com.arduia.expense"
@@ -187,6 +227,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 6,
+  "actions": 20,
+  "back": 8,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -203,6 +247,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 12,
+  "back": 6,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -219,6 +267,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 2,
+  "actions": 14,
+  "back": 5,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -235,6 +287,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 2,
+  "actions": 16,
+  "back": 13,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -251,6 +307,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 3,
+  "actions": 13,
+  "back": 7,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -267,6 +327,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 3,
+  "actions": 10,
+  "back": 2,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": [
    "tap \"Delete\" in net.gsantner.markor",
    "tap \"OK\" in net.gsantner.markor"
@@ -286,6 +350,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 16,
+  "actions": 78,
+  "back": 32,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -302,6 +370,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 12,
+  "actions": 20,
+  "back": 5,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -318,6 +390,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 3,
+  "actions": 10,
+  "back": 5,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -334,6 +410,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 5,
+  "actions": 10,
+  "back": 4,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -350,6 +430,10 @@
   "done_rejected": 0,
   "first_done_step": 5,
   "looks": 0,
+  "actions": 5,
+  "back": 2,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -366,6 +450,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 1,
+  "actions": 13,
+  "back": 11,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -382,6 +470,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 31,
+  "actions": 120,
+  "back": 59,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -398,6 +490,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 5,
+  "actions": 39,
+  "back": 26,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -414,6 +510,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 13,
+  "actions": 60,
+  "back": 9,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -430,6 +530,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 60,
+  "back": 11,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -446,6 +550,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 24,
+  "back": 24,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -462,6 +570,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 3,
+  "actions": 24,
+  "back": 17,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -478,6 +590,10 @@
   "done_rejected": 0,
   "first_done_step": 10,
   "looks": 0,
+  "actions": 10,
+  "back": 3,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": [
    "tap \"Delete\" in PopupWindow:d8ee7e",
    "tap \"DELETE\" in com.flauschcode.broccoli"
@@ -497,6 +613,10 @@
   "done_rejected": 0,
   "first_done_step": 13,
   "looks": 0,
+  "actions": 13,
+  "back": 1,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": [
    "tap \"Delete\" in PopupWindow:606529f",
    "tap \"DELETE\" in com.flauschcode.broccoli"
@@ -516,6 +636,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 2,
+  "actions": 24,
+  "back": 13,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -532,6 +656,10 @@
   "done_rejected": 0,
   "first_done_step": 30,
   "looks": 0,
+  "actions": 30,
+  "back": 1,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -548,6 +676,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 5,
+  "actions": 16,
+  "back": 9,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -564,6 +696,10 @@
   "done_rejected": 0,
   "first_done_step": 31,
   "looks": 0,
+  "actions": 31,
+  "back": 6,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": [
    "tap \"Save\" in com.simplemobiletools.calendar.pro"
   ]
@@ -582,6 +718,10 @@
   "done_rejected": 0,
   "first_done_step": 4,
   "looks": 1,
+  "actions": 4,
+  "back": 0,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -598,6 +738,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 5,
+  "actions": 12,
+  "back": 2,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -614,6 +758,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 7,
+  "actions": 14,
+  "back": 3,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -630,6 +778,10 @@
   "done_rejected": 0,
   "first_done_step": 5,
   "looks": 1,
+  "actions": 5,
+  "back": 0,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -646,6 +798,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 3,
+  "actions": 10,
+  "back": 1,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -662,6 +818,10 @@
   "done_rejected": 0,
   "first_done_step": 5,
   "looks": 0,
+  "actions": 5,
+  "back": 1,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -678,6 +838,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 1,
+  "actions": 10,
+  "back": 3,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -694,6 +858,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 10,
+  "back": 2,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -710,6 +878,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 12,
+  "back": 3,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -726,6 +898,10 @@
   "done_rejected": 0,
   "first_done_step": 7,
   "looks": 0,
+  "actions": 7,
+  "back": 0,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": [
    "tap \"\" in com.simplemobiletools.smsmessenger",
    "tap \"SMS\" in com.simplemobiletools.smsmessenger"
@@ -745,6 +921,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 10,
+  "back": 1,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -761,6 +941,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 5,
+  "actions": 9,
+  "back": 4,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -777,6 +961,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 9,
+  "back": 6,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -793,6 +981,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 10,
+  "back": 5,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -809,6 +1001,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 5,
+  "back": 5,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -825,6 +1021,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 10,
+  "back": 4,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -841,6 +1041,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 10,
+  "back": 5,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -857,6 +1061,10 @@
   "done_rejected": 0,
   "first_done_step": 4,
   "looks": 0,
+  "actions": 4,
+  "back": 0,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -873,6 +1081,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 9,
+  "back": 7,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -889,6 +1101,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 1,
+  "actions": 6,
+  "back": 4,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -905,6 +1121,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 4,
+  "actions": 9,
+  "back": 4,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -921,6 +1141,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 1,
+  "actions": 6,
+  "back": 5,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -937,6 +1161,10 @@
   "done_rejected": 0,
   "first_done_step": 6,
   "looks": 0,
+  "actions": 6,
+  "back": 0,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -953,6 +1181,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 7,
+  "back": 6,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  }
 ]

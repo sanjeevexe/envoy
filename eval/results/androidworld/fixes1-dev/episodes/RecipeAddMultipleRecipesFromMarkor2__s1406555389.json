@@ -1,0 +1,80 @@
+{
+ "task": "RecipeAddMultipleRecipesFromMarkor2",
+ "seed": 1406555389,
+ "goal": "Add the recipes from recipes.txt in Markor that take 10 mins to prepare into the Broccoli recipe app.",
+ "score": 0.0,
+ "aw_run_time_s": 197.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 06:33:15.337396",
+ "envoy": {
+  "run_id": "aw-fixes1-dev-1028-063001-d1d7",
+  "goal": "Add the recipes from recipes.txt in Markor that take 10 mins to prepare into the Broccoli recipe app.",
+  "max_steps": 60,
+  "config": {},
+  "status": "failed",
+  "result": "stuck on the same screen after two recoveries",
+  "done": true,
+  "answer": null,
+  "steps_device": 28,
+  "iterations": 32,
+  "looks": 3,
+  "screenshots_sent": 14,
+  "replans": 2,
+  "stuck_recoveries": 6,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 8,
+   "scroll": 12,
+   "back": 5,
+   "look": 3
+  },
+  "model_calls": 32,
+  "input_tokens": 105577,
+  "cached_tokens": 59981,
+  "output_tokens": 8393,
+  "reasoning_tokens": 5951,
+  "cost_usd": 0.006358,
+  "cost_at_standard_usd": 0.101662,
+  "duration_s": 187.64,
+  "model_s": 140.21,
+  "device_s": 47.43,
+  "connect_s": 0.89,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Find all recipes with preparationTime 10 mins in recipes.txt (scroll to see full list)",
+    "Open the Broccoli recipe app",
+    "Add each 10 mins recipe from the file into Broccoli",
+    "Verify the added 10 mins recipes appear in Broccoli"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Beef Stir Fry",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-fixes1-dev-1028-063001-d1d7",
+  "envoy_commit": "821d713df93e6bb5536df7e6f89b6684779d58da",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes1-dev/traces/RecipeAddMultipleRecipesFromMarkor2__s1406555389.jsonl.gz",
+  "wall_s": 192.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

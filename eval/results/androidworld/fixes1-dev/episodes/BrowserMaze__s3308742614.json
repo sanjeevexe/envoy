@@ -1,0 +1,79 @@
+{
+ "task": "BrowserMaze",
+ "seed": 3308742614,
+ "goal": "Open the file task.html in Downloads in the file manager; when prompted open it with Chrome. Then navigate the X to the bottom-right cell, by using the direction buttons.",
+ "score": 0.0,
+ "aw_run_time_s": 106.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 07:16:15.393658",
+ "envoy": {
+  "run_id": "aw-fixes1-dev-1028-071431-6d12",
+  "goal": "Open the file task.html in Downloads in the file manager; when prompted open it with Chrome. Then navigate the X to the bottom-right cell, by using the direction buttons.",
+  "max_steps": 20,
+  "config": {},
+  "status": "failed",
+  "result": "stuck on the same screen after two recoveries",
+  "done": true,
+  "answer": null,
+  "steps_device": 15,
+  "iterations": 19,
+  "looks": 3,
+  "screenshots_sent": 8,
+  "replans": 1,
+  "stuck_recoveries": 3,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 11,
+   "look": 3,
+   "back": 1,
+   "tap_point": 1
+  },
+  "model_calls": 23,
+  "input_tokens": 51851,
+  "cached_tokens": 24524,
+  "output_tokens": 6065,
+  "reasoning_tokens": 4875,
+  "cost_usd": 0.00946,
+  "cost_at_standard_usd": 0.075689,
+  "duration_s": 99.17,
+  "model_s": 70.38,
+  "device_s": 28.79,
+  "connect_s": 0.91,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Chrome",
+   "subgoals": [
+    "Tap Just once to open task.html with Chrome",
+    "Wait for task page with X and direction buttons to load",
+    "Use direction buttons to move X to the bottom-right cell"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "X in bottom-right cell",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-fixes1-dev-1028-071431-6d12",
+  "envoy_commit": "821d713df93e6bb5536df7e6f89b6684779d58da",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes1-dev/traces/BrowserMaze__s3308742614.jsonl.gz",
+  "wall_s": 101.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.1
+  }
+ }
+}

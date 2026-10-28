@@ -13,6 +13,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 20,
+  "back": 6,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -29,6 +33,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 2,
+  "actions": 19,
+  "back": 4,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -45,6 +53,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 3,
+  "actions": 22,
+  "back": 8,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": [
    "tap \"Accept & continue\" in com.android.chrome"
   ]
@@ -63,6 +75,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 5,
+  "back": 4,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -79,6 +95,10 @@
   "done_rejected": 1,
   "first_done_step": 8,
   "looks": 2,
+  "actions": 10,
+  "back": 2,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -95,6 +115,10 @@
   "done_rejected": 1,
   "first_done_step": 9,
   "looks": 0,
+  "actions": 10,
+  "back": 2,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -111,6 +135,10 @@
   "done_rejected": 0,
   "first_done_step": 10,
   "looks": 0,
+  "actions": 10,
+  "back": 1,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -127,6 +155,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 1,
+  "actions": 60,
+  "back": 10,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -143,6 +175,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 1,
+  "actions": 34,
+  "back": 21,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -159,6 +195,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 10,
+  "back": 9,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -175,6 +215,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 3,
+  "actions": 20,
+  "back": 6,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -191,6 +235,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 3,
+  "actions": 12,
+  "back": 8,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -207,6 +255,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 4,
+  "actions": 14,
+  "back": 7,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -223,6 +275,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 16,
+  "back": 7,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -239,6 +295,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 2,
+  "actions": 14,
+  "back": 6,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -255,6 +315,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 2,
+  "actions": 10,
+  "back": 2,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": [
    "tap \"Delete\" in net.gsantner.markor",
    "tap \"OK\" in net.gsantner.markor"
@@ -274,6 +338,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 12,
+  "actions": 66,
+  "back": 31,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -290,6 +358,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 2,
+  "actions": 20,
+  "back": 8,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -306,6 +378,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 2,
+  "actions": 10,
+  "back": 6,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -322,6 +398,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 2,
+  "actions": 10,
+  "back": 4,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -338,6 +418,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 10,
+  "back": 6,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -354,6 +438,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 13,
+  "back": 7,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -370,6 +458,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 7,
+  "actions": 76,
+  "back": 27,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -386,6 +478,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 5,
+  "actions": 29,
+  "back": 7,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -402,6 +498,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 15,
+  "actions": 60,
+  "back": 15,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -418,6 +518,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 60,
+  "back": 11,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -434,6 +538,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 24,
+  "back": 11,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -450,6 +558,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 24,
+  "back": 2,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": [
    "tap \"Delete\" in PopupWindow:5910411",
    "tap \"DELETE\" in com.flauschcode.broccoli"
@@ -469,6 +581,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 10,
+  "back": 8,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -485,6 +601,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 20,
+  "back": 13,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -501,6 +621,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 3,
+  "actions": 24,
+  "back": 15,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -517,6 +641,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 1,
+  "actions": 32,
+  "back": 15,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -533,6 +661,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 1,
+  "actions": 16,
+  "back": 7,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -549,6 +681,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 2,
+  "actions": 9,
+  "back": 6,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -565,6 +701,10 @@
   "done_rejected": 0,
   "first_done_step": 6,
   "looks": 3,
+  "actions": 6,
+  "back": 0,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -581,6 +721,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 4,
+  "actions": 12,
+  "back": 2,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": [
    "tap \"Delete\" in com.simplemobiletools.calendar.pro",
    "tap \"Delete\" in com.simplemobiletools.calendar.pro",
@@ -601,6 +745,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 3,
+  "actions": 10,
+  "back": 6,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -617,6 +765,10 @@
   "done_rejected": 0,
   "first_done_step": 10,
   "looks": 1,
+  "actions": 10,
+  "back": 1,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -633,6 +785,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 1,
+  "actions": 10,
+  "back": 3,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -649,6 +805,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 1,
+  "actions": 9,
+  "back": 6,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -665,6 +825,10 @@
   "done_rejected": 0,
   "first_done_step": 7,
   "looks": 1,
+  "actions": 7,
+  "back": 1,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -681,6 +845,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 2,
+  "actions": 10,
+  "back": 4,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -697,6 +865,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 5,
+  "actions": 12,
+  "back": 1,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -713,6 +885,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 12,
+  "back": 6,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -729,6 +905,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 2,
+  "actions": 10,
+  "back": 4,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -745,6 +925,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 4,
+  "actions": 10,
+  "back": 2,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -761,6 +945,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 2,
+  "actions": 9,
+  "back": 5,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -777,6 +965,10 @@
   "done_rejected": 0,
   "first_done_step": 8,
   "looks": 0,
+  "actions": 8,
+  "back": 2,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -793,6 +985,10 @@
   "done_rejected": 0,
   "first_done_step": 8,
   "looks": 0,
+  "actions": 8,
+  "back": 2,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -809,6 +1005,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 10,
+  "back": 5,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -825,6 +1025,10 @@
   "done_rejected": 0,
   "first_done_step": 6,
   "looks": 0,
+  "actions": 6,
+  "back": 0,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -841,6 +1045,10 @@
   "done_rejected": 0,
   "first_done_step": 7,
   "looks": 0,
+  "actions": 7,
+  "back": 2,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -857,6 +1065,10 @@
   "done_rejected": 0,
   "first_done_step": 10,
   "looks": 0,
+  "actions": 10,
+  "back": 4,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -873,6 +1085,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 3,
+  "actions": 9,
+  "back": 3,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -889,6 +1105,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 0,
+  "actions": 5,
+  "back": 4,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -905,6 +1125,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 1,
+  "actions": 10,
+  "back": 2,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -921,6 +1145,10 @@
   "done_rejected": 0,
   "first_done_step": 10,
   "looks": 0,
+  "actions": 10,
+  "back": 2,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  },
  {
@@ -937,6 +1165,10 @@
   "done_rejected": 0,
   "first_done_step": null,
   "looks": 8,
+  "actions": 48,
+  "back": 19,
+  "launch_by_name": 0,
+  "asked_again": 0,
   "approvals": []
  }
 ]

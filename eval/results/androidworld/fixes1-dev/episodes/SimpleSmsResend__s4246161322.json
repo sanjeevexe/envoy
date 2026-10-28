@@ -1,0 +1,94 @@
+{
+ "task": "SimpleSmsResend",
+ "seed": 4246161322,
+ "goal": "Resend the message I just sent to Noa Mohammed in Simple SMS Messenger",
+ "score": 1.0,
+ "aw_run_time_s": 91.8,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 06:55:08.552575",
+ "envoy": {
+  "run_id": "aw-fixes1-dev-1028-065401-bebb",
+  "goal": "Resend the message I just sent to Noa Mohammed in Simple SMS Messenger",
+  "max_steps": 12,
+  "config": {},
+  "status": "done",
+  "result": "Resent \"Inconceivable!\" to Noa Mohammed in Simple SMS Messenger by copying and sending it again. The thread now shows the message sent again.",
+  "done": true,
+  "answer": "Resent \"Inconceivable!\" to Noa Mohammed in Simple SMS Messenger by copying and sending it again. The thread now shows the message sent again.",
+  "steps_device": 7,
+  "iterations": 10,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 4,
+   "look": 2,
+   "long_press": 1,
+   "type": 1,
+   "done": 1
+  },
+  "model_calls": 12,
+  "input_tokens": 29493,
+  "cached_tokens": 17273,
+  "output_tokens": 3514,
+  "reasoning_tokens": 2667,
+  "cost_usd": 0.001959,
+  "cost_at_standard_usd": 0.0328,
+  "duration_s": 61.33,
+  "model_s": 43.43,
+  "device_s": 17.9,
+  "connect_s": 0.91,
+  "approvals": [
+   {
+    "step": 9,
+    "description": "tap \"SMS\" in com.simplemobiletools.smsmessenger",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/thread_send_message'"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "SMS Messenger",
+   "subgoals": [
+    "Long-press the 'Inconceivable!' message bubble in the Noa Mohammed thread to open message options",
+    "Select Resend, Forward or Copy option from the message menu",
+    "Confirm Noa Mohammed as recipient and send the message again"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Inconceivable!",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Inconceivable!' is visible"
+  },
+  "trace_dir": "data/runs/aw-fixes1-dev-1028-065401-bebb",
+  "envoy_commit": "821d713df93e6bb5536df7e6f89b6684779d58da",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes1-dev/traces/SimpleSmsResend__s4246161322.jsonl.gz",
+  "wall_s": 63.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

@@ -1,0 +1,84 @@
+{
+ "task": "SimpleCalendarAddOneEventRelativeDay",
+ "seed": 3130305423,
+ "goal": "In Simple Calendar Pro, create a calendar event for this Thursday at 5h with the title 'Call with the Team' and the description 'We will celebrate team roles.'. The event should last for 60 mins.",
+ "score": 1.0,
+ "aw_run_time_s": 131.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 06:46:24.682027",
+ "envoy": {
+  "run_id": "aw-fixes1-dev-1028-064416-1f7e",
+  "goal": "In Simple Calendar Pro, create a calendar event for this Thursday at 5h with the title 'Call with the Team' and the description 'We will celebrate team roles.'. The event should last for 60 mins.",
+  "max_steps": 34,
+  "config": {},
+  "status": "done",
+  "result": "Event 'Call with the Team' created for Thursday October 19, 05:00-06:00 with description 'We will celebrate team roles.'",
+  "done": true,
+  "answer": "Event 'Call with the Team' created for Thursday October 19, 05:00-06:00 with description 'We will celebrate team roles.'",
+  "steps_device": 22,
+  "iterations": 24,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "look": 1,
+   "tap_point": 1,
+   "tap": 13,
+   "type": 2,
+   "back": 5,
+   "done": 1
+  },
+  "model_calls": 30,
+  "input_tokens": 69004,
+  "cached_tokens": 52730,
+  "output_tokens": 7560,
+  "reasoning_tokens": 5917,
+  "cost_usd": 0.008758,
+  "cost_at_standard_usd": 0.073471,
+  "duration_s": 123.68,
+  "model_s": 83.54,
+  "device_s": 40.14,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Tap Save to create the event with the entered details",
+    "Verify the event appears on October 19"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Call with the Team",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Call with the Team' is visible"
+  },
+  "trace_dir": "data/runs/aw-fixes1-dev-1028-064416-1f7e",
+  "envoy_commit": "821d713df93e6bb5536df7e6f89b6684779d58da",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes1-dev/traces/SimpleCalendarAddOneEventRelativeDay__s3130305423.jsonl.gz",
+  "wall_s": 126.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}
