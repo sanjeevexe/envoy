@@ -68,14 +68,16 @@ FRESH_INSTALL = ("{name} was just installed from the Play Store, so its first-ru
 
 
 def app_for(goal: str, learned: dict[str, str] | None = None) -> str | None:
-    """The app a goal is about: one Envoy knows by name (APP_NAMES, the apps that block emulators, and `learned`: apps it
-    installed before, name → package), else SkyLark for travel words, unless the goal names an app Envoy doesn't know."""
+    """The app a goal is about: one Envoy knows by name (APP_NAMES, the apps that block emulators), one it installed
+    before when the goal names it as an app (`learned`: name → package), else SkyLark for travel words."""
     g = goal.lower()
-    for name, pkg in {**APP_NAMES, **blocking_app_names(), **(learned or {})}.items():
+    for name, pkg in {**APP_NAMES, **blocking_app_names()}.items():
         if re.search(rf"\b{re.escape(name)}\b", g):
             return pkg
-    if app_named_in(goal):
-        return None  # "in the Expedia app, check my flight": an app to install, not SkyLark because of its travel words
+    if (named := app_named_in(goal)) is not None:
+        # Only as an app ("in the Weather app"), so an installed Weather app doesn't take every question about the weather;
+        # one Envoy doesn't know yet is an app to install, not SkyLark because of travel words ("in the Expedia app, my flight").
+        return (learned or {}).get(norm(named))
     return SKYLARK if TRAVEL.search(goal) else None  # the demo's airline is SkyLark
 
 

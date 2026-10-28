@@ -138,12 +138,16 @@ On emulators, the agent's screenshots come from the emulator's own gRPC screensh
 | --- | --- | --- |
 | Default | Cloud phone | Keeps the user's phone free; snapshots make runs repeatable |
 | App refuses to run on an emulator (device integrity checks) | Real phone | Emulators never pass Google's device integrity check |
+| App showed a bot check on an emulator, or the Play Store says the emulator isn't compatible | Real phone, from then on | Envoy sets "use my phone" for the app itself (Settings › Phones, with the reason; unticking undoes it) and offers to move the task |
+| App the task names isn't installed on the emulator | Cloud phone, after installing it from the Play Store | Free apps only; a paid app asks through the approval flow and Envoy never pays |
 | App allows only one signed-in device, and the user is signed in on their phone | Real phone | Avoids signing out the user's phone |
 | Task needs the SIM or the phone's own number | Real phone | The emulator has no SIM |
 | Two apps compared at once | Two cloud phones | Runs in parallel |
 | No real phone connected | Cloud phone, or the user is told the app is unsupported | Never fails silently |
 
 Before using the real phone, Envoy asks the user, shows a banner on the phone while it works, and pauses when the screen changes in a way its last action did not cause, or when the user presses Pause on the banner. Phase 6 builds it: the task waits on "Use your Android phone for this task?" (in the app and as an iPhone push; only the user's session answers, and no answer is never a yes); a small overlay app shows "Envoy is using this phone · Pause"; and a touch is told from Envoy's own input by getevent, which sees only the phone's physical input (everything Envoy does is injected). A touch, Pause, or another app coming to the front without an action of Envoy's hands the phone to the user like a takeover, checked before every action of the agent's; Resume on the phone or in the app gives it back. The user also picks the phone by saying "on my phone" or by setting an app to run there.
+
+Apps that block emulators are data, not code: a starting list (`api/emulator_blocked.json`: Target, Uber Eats, common banking and payment apps) plus the ones Envoy finds itself. With no phone connected, Envoy says plainly that the app blocks emulators and needs a real Android phone, instead of trying the emulator (docs/app-routing-onboarding.md).
 
 ### iPhone companion
 

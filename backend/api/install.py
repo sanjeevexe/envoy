@@ -241,7 +241,7 @@ class Installer:
         if not package and name and (pkg := guess_installed(name, await self.launchers())) is not None:
             return Installed("already", pkg, name, detail="already on the phone", seconds={"total": round(time.perf_counter() - t0, 1)})
         if not await self.has_google_account():
-            if not await self.hand_off("sign-in needed: the Play Store needs a Google account on this phone (sign in, then hand back)") \
+            if not await self.hand_off("sign-in needed: the Play Store has no Google account on this phone") \
                     or not await self.has_google_account():
                 return Installed("no_account", package, name or "", detail="the Play Store needs a Google account on the emulator, and none is signed in")
         before = await self.packages()
@@ -261,7 +261,7 @@ class Installer:
         listing = read_listing(screen)
         title = listing.title or name or package or "the app"
         if listing.state == "sign_in":
-            if not await self.hand_off("sign-in needed: the Play Store asks you to sign in (then hand back)"):
+            if not await self.hand_off("sign-in needed: the Play Store asks you to sign in"):
                 return Installed("no_account", package, title, detail=listing.detail)
             screen = await self._settled_page()
             listing = read_listing(screen)
@@ -345,7 +345,7 @@ class Installer:
             why = "no answer" if decision.by == "timeout" else "you said no"
             return Installed("declined", package, title, listing.price, detail=f"{title} costs {listing.price}; Envoy installs only free apps ({why})",
                              seconds=secs)
-        if not await self.hand_off(f"buy {title} ({listing.price}) in the Play Store yourself, then hand back"):
+        if not await self.hand_off(f"buy {title} ({listing.price}) in the Play Store yourself"):
             return Installed("declined", package, title, listing.price, detail="waiting for you to buy it timed out", seconds=secs)
         pkg = package if package and await self.installed(package) else next(iter(await self.packages() - before), None)
         secs["total"] = round(time.perf_counter() - t0, 1)

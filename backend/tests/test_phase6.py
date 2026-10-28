@@ -823,7 +823,7 @@ def test_a_paid_app_asks_first_and_envoy_never_pays():
     dev = PlayPhone(paid=True)
     inst, log = installer(dev, approve=True, handed_back=True, also=lambda: dev.packages.add("com.mojang.minecraftpe"))
     got = asyncio.run(inst.ensure("com.mojang.minecraftpe"))
-    assert got.status == "bought" and log.hand_offs == ["buy Minecraft: Dream it, Build it! ($6.99) in the Play Store yourself, then hand back"]
+    assert got.status == "bought" and log.hand_offs == ["buy Minecraft: Dream it, Build it! ($6.99) in the Play Store yourself"]
     assert dev.taps == []
 
 
@@ -833,7 +833,7 @@ def test_an_app_the_emulator_cant_have_or_no_google_account_stops_and_says_why()
     dev = PlayPhone(account=False)
     inst, log = installer(dev)
     got = asyncio.run(inst.ensure(WIKI))
-    assert got.status == "no_account" and log.hand_offs[0].startswith("sign-in needed: the Play Store needs a Google account") and dev.opened == []
+    assert got.status == "no_account" and log.hand_offs[0] == "sign-in needed: the Play Store has no Google account on this phone" and dev.opened == []
 
 
 def test_a_task_naming_an_app_the_emulator_lacks_installs_it_and_carries_on(monkeypatch):
