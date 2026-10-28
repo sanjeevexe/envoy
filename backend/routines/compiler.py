@@ -669,7 +669,9 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             anchor = generalize_locator(locators.build(under, s.before), examples, data_values, None, None) if under is not None else None
             action = StepAction(kind="swipe", target=anchor, vector=(round((x2 - x) / w, 3), round((y2 - y) / h, 3)),
                                 start=(round(x / w, 3), round(y / h, 3)))
-            action = StepAction(kind="launch", package=s.before.package)
+        elif s.kind == "launch":
+            # The app that came up: the model may have named it ("Broccoli") rather than given its package.
+            action = StepAction(kind="launch", package=s.after.package)
         elif s.kind == "tap_point" and s.vision and s.vision.get("box") and s.vision.get("target"):
             # Phase 6: a target drawn on screen (no node in the tree), kept as what it looks like plus its picture.
             v = s.vision
