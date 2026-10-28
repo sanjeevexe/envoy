@@ -327,8 +327,12 @@ def content_hash(elements: list[Element]) -> str:
 
 
 def keyboard_open(elements: list[Element]) -> bool:
-    """The on-screen keyboard's own window is in the tree (its keys are dropped from the screen, not from the tree)."""
-    return any(e.visible and _KEYBOARD_PACKAGES.search(e.package) for e in elements)
+    """The on-screen keyboard's own window is in the tree (its keys are dropped from the screen, not from the tree), or
+    the system's keyboard buttons are in the navigation bar. Some dumps leave the keyboard's window out (AndroidWorld's
+    emulator: no key in any tree), but the navigation bar's input_method_nav_* buttons appear exactly while it is up
+    (after 78 of 87 typing steps; after 6 of 138 backs)."""
+    return any(e.visible and (_KEYBOARD_PACKAGES.search(e.package) or _KEYBOARD_IDS.search(e.resource_id.split("/")[-1]))
+               for e in elements)
 
 
 def build_state(
