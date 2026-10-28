@@ -118,6 +118,16 @@ def test_the_screen_says_when_the_keyboard_is_open():
     assert "keyboard" not in screen_of(node("Title")).compact
 
 
+def test_long_text_is_shown_at_length_but_rows_stay_short():
+    body = " ".join(f"word{i}" for i in range(900))  # ~6,900 characters, like a note or an open file
+    row = node(" ".join(f"row{i}" for i in range(60)), clickable="true", bounds="[0,300][1080,380]")
+    s = screen_of(node(body, bounds="[0,400][1080,2000]"), row)
+    lines = s.compact.split("\n")
+    note = next(l for l in lines if "word0" in l)
+    assert 3900 < len(note) < 4100  # MAX_TEXT
+    assert len(next(l for l in lines if "row0" in l)) < 160  # a clickable row keeps MAX_LABEL
+
+
 class Phone(TickingHome):
     """A home screen that stays the same, with a date, recording the actions it gets."""
 
