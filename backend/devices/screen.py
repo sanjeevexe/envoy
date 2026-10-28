@@ -37,6 +37,11 @@ def _short_class(cls: str) -> str:
 STATUS_BAR_FRACTION = 0.07  # System UI nodes entirely within the top 7% of the screen (the bar is ~5.7% on a Pixel 6)
 BANNER_PACKAGE = "ai.envoy.banner"  # Envoy's own banner on a real phone: like the status bar, never shown, hashed or signed
 _STATUS_IDS = re.compile(r"(status_?bar|notification_icon|notificationIcons|system_icons|clock)", re.I)
+# The on-screen keyboard's own window (keys, its toolbar's "Delete", "Done", "Clipboard") and the system's keyboard buttons
+# in the navigation bar: never part of the app's screen. A keyboard's "Delete" beside an app's buttons misleads the model,
+# the policy rules and routine checks alike (a check was once written on Gboard's "Clipboard").
+_KEYBOARD_PACKAGES = re.compile(r"(inputmethod|honeyboard|swiftkey|\.keyboard\b|gboard)", re.I)
+_KEYBOARD_IDS = re.compile(r"^input_method_nav_", re.I)
 
 
 def parse_hierarchy(xml: str, screen_h: int) -> list[Element]:
@@ -77,7 +82,7 @@ def parse_hierarchy(xml: str, screen_h: int) -> list[Element]:
         )
         el.status_bar = el.package == BANNER_PACKAGE or el.package == "com.android.systemui" and (
             0 < bounds[3] <= screen_h * STATUS_BAR_FRACTION or bool(_STATUS_IDS.search(el.resource_id.split("/")[-1]))
-        )
+        ) or bool(_KEYBOARD_PACKAGES.search(el.package)) or bool(_KEYBOARD_IDS.search(el.resource_id.split("/")[-1]))
         out.append(el)
         for child in node.findall("node"):
             walk(child, el.index, depth + 1, in_list or el.scrollable)

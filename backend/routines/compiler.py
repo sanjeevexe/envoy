@@ -322,6 +322,13 @@ def generalize_locator(loc: Locator, examples: dict[str, str], data_values: list
     return loc.model_copy(update=upd)
 
 
+def _before_typed(c: Check, step: int, typed_at: dict[str, int]) -> bool:
+    """A check that names an input before the step that types it (search history: "aa batteries · delete")."""
+    loc = c.locator
+    text = " ".join(x or "" for x in ((loc.text, loc.text_has, loc.resource_id) if loc else ()) ) + " " + (c.text or "")
+    return any("{{" + n + "}}" in text and step < k for n, k in typed_at.items())
+
+
 def _state_text(near: str | None, final: ScreenState, data_values: list[str]) -> Extract | None:
     """The short fixed text an inferred answer was read from ("No contacts yet", "Nothing planned"), as an output that
     reports it whole: on another run it is there or it isn't, and the routine says so rather than inventing a value."""
@@ -511,6 +518,10 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
 
     out_steps: list[Step] = []
     used_ids: set[str] = set()
+    # Where each input is first typed: before then, the input on screen can only be history (a recent search), so no check
+    # may expect it there.
+    typed_at = {n: k for n, v in examples.items() if v
+                and (k := next((k for k, t in enumerate(steps, 1) if t.kind == "type" and t.typed and contains_value(t.typed, v)), 0))}
     for i, s in enumerate(steps, 1):
         meta = per_step.get(i)
         sid = _slug(meta.id if meta else s.reason, f"step_{i}")
@@ -575,8 +586,8 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             post = [Check(kind="element_present", locator=loc)] if loc is not None else []
         else:
             post = chk.derive_post(s.before, s.after, s.kind, s.target, s.typed, examples, submit=s.submit)
-        pre = [g for c in pre if (g := chk_generalize(c, examples, data_values)) is not None]
-        post = [g for c in post if (g := chk_generalize(c, examples, data_values)) is not None]
+        pre = [g for c in pre if (g := chk_generalize(c, examples, data_values)) is not None and not _before_typed(g, i, typed_at)]
+        post = [g for c in post if (g := chk_generalize(c, examples, data_values)) is not None and not _before_typed(g, i, typed_at)]
         if not post:
             post = [Check(kind="screen_changed")]
         out_steps.append(Step(id=sid, intent=intent, pre=pre, action=action, post=post,

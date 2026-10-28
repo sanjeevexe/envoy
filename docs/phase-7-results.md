@@ -33,6 +33,9 @@ All of it is Envoy's own code (about 2,300 lines of Python in `eval/` and `backe
 
 13. **Checks past the edge of the screen.** With a notice card on the trip page, "Known traveler number saved" appeared below the screen's edge: the number was saved, but the Save step's checks failed and the fallback agent took over. After-checks about what is shown, and the routine's final check, now scroll to look before the ladder goes on (no model call). On the same run, pressing Back to close the keyboard (an earlier attempt at this fix) also left the trip page in Compose, so a target under the keyboard is now scrolled out from under it instead.
 14. **Long rows were read from the model's 120-character view.** A status line padded with planted text pushed the gate and departure time past the clip, and the routine lost them. Elements keep their whole text beside the clipped label, and outputs are read from it.
+15. **Amazon labels Add to Cart and Buy Now both "Submit".** Told apart only by their IDs (`add-to-cart-button`, `buy-now-button`), so the rules flagged both (over-asking on Add to Cart). A generic label ("Submit", "OK") now defers to an ID that plainly names a reversible action, and the ID rule reads hyphenated IDs. On the 20 irreversible controls the code signals now catch 20 by element and 20 as a point (the Phase 6 classifier: 14 and 0), with 0 of 22 reversible controls flagged (was 1).
+16. **YouTube never opened.** Its launcher activity is an inner class (`.app.honeycomb.Shell$HomeActivity`); `am start -n` went through the device's shell unquoted, so `$HomeActivity` became nothing and the launch failed silently. Launches now pass the component as an argument.
+17. **The "Done" push waited for memory.** The finished event fired only after the task's memory was written, 10+ s after the phone work ended, so the Phase 5 check (and you) heard late. It now fires when the phone work ends.
 
 ## Not finished yet
 
