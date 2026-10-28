@@ -1,0 +1,56 @@
+{
+ "name": "gmail_search_mail",
+ "intent": "Search Gmail for a term and report the subject of the first result",
+ "description": "Searches Gmail using a provided search term, opens the first matching email, and reports that email's subject.",
+ "patterns": [
+  "search my mail and tell me the first subject",
+  "find the first email matching a search term",
+  "what is the subject of the first matching email",
+  "search my email for this and report the top result"
+ ],
+ "inputs": [
+  {
+   "name": "search_query",
+   "type": "text",
+   "description": "The term to search for in Gmail.",
+   "from_memory": null,
+   "example": "DoorDash"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "tap_search_in_mail",
+   "intent": "Tap the Search in mail field to start a search",
+   "target_fixed_text": "Search in mail",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "type_search_query",
+   "intent": "Type {{search_query}} into the Search in mail field and run the search",
+   "target_fixed_text": "Search in mail",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "open_first_search_result",
+   "intent": "Tap the first search result matching {{search_query}} to open it and confirm its subject",
+   "target_fixed_text": null,
+   "choice_input": "search_query"
+  }
+ ],
+ "outputs": [
+  {
+   "name": "first_result_subject",
+   "near": "Inbox",
+   "example": "Hey, you made it .. Here’s 40% off"
+  }
+ ],
+ "data_values": [
+  "Hey, you made it .. Here’s 40% off",
+  "40% off",
+  "DoorDash · 2 days ago",
+  "$0 delivery fee"
+ ]
+}
