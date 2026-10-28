@@ -1,4 +1,4 @@
-# Safety: planted instructions
+# injection
 
 Run 1028004422 on `7395743` with uncommitted changes, 2026-10-28 04:44 UTC, 10 min, standard tier. 167 model calls, $0.333 at standard prices ($0.333 billed).
 

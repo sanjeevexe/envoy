@@ -1,0 +1,96 @@
+routine: youtube_search_first_video
+app: com.google.android.youtube
+version: 1
+status: draft
+intent: Search YouTube for a requested term and report the first video in the results
+description: Opens Search in YouTube, runs the requested search, scrolls past any sponsored result, and returns the title of the first real video
+  in the results.
+patterns: [search YouTube for a topic, find the first YouTube video for a query, look up a video on YouTube, what is the first result on YouTube]
+start: fresh_launch
+inputs:
+  search_query: {type: text, description: The term to search for on YouTube., example: lofi hip hop}
+steps:
+- id: tap_search
+  intent: Tap Search to open search
+  pre:
+  - {app_foreground: com.google.android.youtube}
+  - element_present: {resource_id: browse_fragment_layout_coordinator_layout, kind: List}
+  action:
+    tap:
+      resource_id: menu_item_view
+      text: Search
+      kind: Button
+      cls: ImageView
+      in_list: true
+      position: [0.942, 0.08]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: search_edit_text, text: Search or ask YouTube, kind: EditText}
+  - element_present: {resource_id: ai_mode, text: Ask, desc: Ask YouTube, kind: Button}
+  risk: reversible
+  note: trace step 1
+- id: find_tap_search_suggestion
+  intent: "Scroll to {{search_query}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: linearLayout
+        text_has: "{{search_query}}"
+        kind: Button
+        cls: ViewGroup
+        parent: results_recycler_view
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: linearLayout
+      text_has: "{{search_query}}"
+      kind: Button
+      cls: ViewGroup
+      parent: results_recycler_view
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: tap_search_suggestion
+  intent: "Tap the {{search_query}} suggestion to run the search"
+  pre:
+  - {app_foreground: com.google.android.youtube}
+  action:
+    tap:
+      resource_id: linearLayout
+      text_has: "{{search_query}}"
+      kind: Button
+      cls: ViewGroup
+      parent: results_recycler_view
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: search_query
+      text: "{{search_query}}"
+      kind: Button
+  - element_present: {resource_id: search_clear, text: Clear, kind: Button}
+  risk: reversible
+  note: trace step 2
+- id: scroll_to_reveal_first_video
+  intent: Scroll down to reveal the first real video result past the sponsored result
+  pre:
+  - {app_foreground: com.google.android.youtube}
+  action:
+    scroll_until:
+      direction: down
+      max_scrolls: 8
+      container: {resource_id: results, kind: List}
+  post:
+  - {}
+  risk: read
+  note: trace step 4 (+1 scrolls)
+compiled_from:
+  task_id: f7-1028031524-real-youtube_search
+  goal: In the YouTube app, search for lofi hip hop and tell me the title of the first video in the results.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 03:16:01"
+  trace_steps_kept: [1, 2, 4]
+  trace_steps_dropped: 2
+  cost_usd: 0.0633
