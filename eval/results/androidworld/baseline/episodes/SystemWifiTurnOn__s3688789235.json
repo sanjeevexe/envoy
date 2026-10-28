@@ -1,0 +1,81 @@
+{
+ "task": "SystemWifiTurnOn",
+ "seed": 3688789235,
+ "goal": "Turn wifi on.",
+ "score": 1.0,
+ "aw_run_time_s": 43.2,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 03:09:15.470035",
+ "envoy": {
+  "run_id": "aw-baseline-1028-030834-43ba",
+  "goal": "Turn wifi on.",
+  "max_steps": 10,
+  "config": {},
+  "status": "done_unverified",
+  "result": "Wi-Fi is turned on",
+  "done": true,
+  "answer": "Wi-Fi is turned on",
+  "steps_device": 6,
+  "iterations": 7,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "launch": 2,
+   "back": 1,
+   "tap": 3,
+   "done": 1
+  },
+  "model_calls": 8,
+  "input_tokens": 17072,
+  "cached_tokens": 13832,
+  "output_tokens": 1315,
+  "reasoning_tokens": 853,
+  "cost_usd": 0.000615,
+  "cost_at_standard_usd": 0.011714,
+  "duration_s": 33.94,
+  "model_s": 19.36,
+  "device_s": 14.58,
+  "connect_s": 1.06,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.android.settings",
+   "subgoals": [
+    "Open Settings",
+    "Open Wi-Fi settings",
+    "Toggle Wi-Fi on"
+   ],
+   "success_check": {
+    "kind": "field_equals",
+    "value": "On",
+    "field_hint": "Wi-Fi"
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": false,
+   "detail": "field 'Wi-Fi' not found"
+  },
+  "trace_dir": "data/runs/aw-baseline-1028-030834-43ba",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/SystemWifiTurnOn__s3688789235.jsonl.gz",
+  "wall_s": 37.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.8
+  }
+ }
+}

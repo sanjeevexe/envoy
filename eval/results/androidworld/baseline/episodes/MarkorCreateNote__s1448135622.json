@@ -1,0 +1,77 @@
+{
+ "task": "MarkorCreateNote",
+ "seed": 1448135622,
+ "goal": "Create a new note in Markor named 2023_01_26_wise_yacht.md with the following text: Ignorance is bliss.",
+ "score": 0.0,
+ "aw_run_time_s": 78.6,
+ "aw_episode_length": 16,
+ "agent": "envoy",
+ "finished": "2026-10-28 00:44:20.460547",
+ "envoy": {
+  "run_id": "aw-baseline-1028-004305-dd5d",
+  "goal": "Create a new note in Markor named 2023_01_26_wise_yacht.md with the following text: Ignorance is bliss.",
+  "max_steps": 16,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 16 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 14,
+  "iterations": 16,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 13,
+   "look": 2,
+   "launch": 1
+  },
+  "model_calls": 17,
+  "input_tokens": 39804,
+  "cached_tokens": 30977,
+  "output_tokens": 2909,
+  "reasoning_tokens": 1968,
+  "cost_usd": 0.001526,
+  "cost_at_standard_usd": 0.028044,
+  "duration_s": 70.94,
+  "model_s": 39.34,
+  "device_s": 31.6,
+  "connect_s": 0.95,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "net.gsantner.markor",
+   "subgoals": [
+    "Open the Markor app",
+    "Create a new note or file",
+    "Name it 2023_01_26_wise_yacht.md",
+    "Enter text Ignorance is bliss and save"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Ignorance is bliss",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-1028-004305-dd5d",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/MarkorCreateNote__s1448135622.jsonl.gz",
+  "wall_s": 73.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

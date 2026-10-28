@@ -1,0 +1,77 @@
+{
+ "task": "NotesIsTodo",
+ "seed": 2511191301,
+ "goal": "Is the note titled 'To-Do List' in the Joplin app marked as a todo item? Respond with either 'True' if it is a todo or 'False' if not.",
+ "score": 0.0,
+ "aw_run_time_s": 67.5,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 01:02:14.862292",
+ "envoy": {
+  "run_id": "aw-baseline-1028-010115-c6f8",
+  "goal": "Is the note titled 'To-Do List' in the Joplin app marked as a todo item? Respond with either 'True' if it is a todo or 'False' if not.",
+  "max_steps": 10,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 7,
+  "iterations": 10,
+  "looks": 3,
+  "screenshots_sent": 3,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "look": 3,
+   "back": 5,
+   "launch": 2
+  },
+  "model_calls": 12,
+  "input_tokens": 28952,
+  "cached_tokens": 20172,
+  "output_tokens": 2596,
+  "reasoning_tokens": 1827,
+  "cost_usd": 0.001438,
+  "cost_at_standard_usd": 0.025034,
+  "duration_s": 54.69,
+  "model_s": 34.3,
+  "device_s": 20.38,
+  "connect_s": 0.94,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "net.cozic.joplin",
+   "subgoals": [
+    "Open app drawer and launch the Joplin app",
+    "Navigate to notes list and locate note titled 'To-Do List'",
+    "Open the 'To-Do List' note details",
+    "Check whether note is marked as todo item to answer True or False"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "whether 'To-Do List' is marked as a todo item",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-1028-010115-c6f8",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/NotesIsTodo__s2511191301.jsonl.gz",
+  "wall_s": 57.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

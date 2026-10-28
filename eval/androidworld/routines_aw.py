@@ -86,6 +86,46 @@ def cmd_promote(args: argparse.Namespace) -> None:
     (LIBS / "verify.json").write_text(json.dumps({"stage": args.verify, "rows": rows}, indent=1))
 
 
+def cmd_report(args: argparse.Namespace) -> None:
+    """Routines vs the agent on the same unseen seeds: success, model calls, cost, time (model vs device), repairs."""
+    import statistics as st
+
+    def rows(stage: str) -> dict[tuple[str, int], dict]:
+        return {(ep["task"], ep["seed"]): ep for ep in episodes(stage)} if (RESULTS / stage).exists() else {}
+
+    r, a = rows(args.routines), rows(args.agent)
+    tasks = sorted({t for t, _ in r})
+    table, totals = [], {"routine": [], "agent": []}
+    for t in tasks:
+        seeds = sorted(s for (tt, s) in r if tt == t)
+        rr = [r[(t, s)] for s in seeds]
+        aa = [a[(t, s)] for s in seeds if (t, s) in a]
+        def agg(eps, key):
+            vals = [(e.get("envoy") or {}).get(key) for e in eps]
+            return [v for v in vals if v is not None]
+        row = {"task": t, "seeds": seeds,
+               "routine_success": sum(e.get("score", 0) for e in rr), "agent_success": sum(e.get("score", 0) for e in aa),
+               "routine_calls": agg(rr, "model_calls"), "agent_calls": agg(aa, "model_calls"),
+               "routine_cost_std": agg(rr, "cost_at_standard_usd"), "agent_cost_std": agg(aa, "cost_at_standard_usd"),
+               "routine_s": agg(rr, "duration_s"), "agent_s": agg(aa, "duration_s"),
+               "routine_status": [(e.get("envoy") or {}).get("status") for e in rr],
+               "repaired_steps": sorted({x for e in rr for x in (e.get("envoy") or {}).get("repaired_steps") or []}),
+               "match": [((e.get("envoy") or {}).get("match") or {}).get("routine") for e in rr]}
+        table.append(row)
+        totals["routine"] += rr
+        totals["agent"] += aa
+    summary = {k: {"episodes": len(v), "success": sum(e.get("score", 0) for e in v),
+                   "median_calls": st.median([(e.get("envoy") or {}).get("model_calls") or 0 for e in v]) if v else None,
+                   "median_cost_std": st.median([(e.get("envoy") or {}).get("cost_at_standard_usd") or 0 for e in v]) if v else None,
+                   "median_s": st.median([(e.get("envoy") or {}).get("duration_s") or 0 for e in v]) if v else None}
+               for k, v in totals.items()}
+    (LIBS / "report.json").write_text(json.dumps({"summary": summary, "tasks": table}, indent=1, default=str))
+    print(json.dumps(summary, indent=1))
+    for row in table:
+        print(f"{row['task']:42} routine {row['routine_success']:g}/{len(row['seeds'])} {row['routine_status']} calls {row['routine_calls']}"
+              f" | agent {row['agent_success']:g}/{len(row['seeds'])} calls {row['agent_calls']} | repaired {row['repaired_steps']}")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -94,8 +134,13 @@ def main() -> None:
     c.add_argument("--tasks", default="")
     p = sub.add_parser("promote")
     p.add_argument("--verify", required=True)
+    r = sub.add_parser("report")
+    r.add_argument("--routines", default="routines-seeds")
+    r.add_argument("--agent", default="agent-seeds")
     args = ap.parse_args()
-    if args.cmd == "compile":
+    if args.cmd == "report":
+        cmd_report(args)
+    elif args.cmd == "compile":
         asyncio.run(cmd_compile(args))
     elif args.cmd == "promote":
         cmd_promote(args)

@@ -1,0 +1,104 @@
+{
+ "task": "SimpleSmsSendClipboardContent",
+ "seed": 3566412234,
+ "goal": "Send a message to +15459061746 with the clipboard content in Simple SMS Messenger",
+ "score": 1.0,
+ "aw_run_time_s": 72.0,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 02:47:56.323207",
+ "envoy": {
+  "run_id": "aw-baseline-1028-024652-77e6",
+  "goal": "Send a message to +15459061746 with the clipboard content in Simple SMS Messenger",
+  "max_steps": 12,
+  "config": {},
+  "status": "done",
+  "result": "Message 'I think, therefore I am.' sent to +15459061746 and shown in thread at 15:34",
+  "done": true,
+  "answer": "Message 'I think, therefore I am.' sent to +15459061746 and shown in thread at 15:34",
+  "steps_device": 9,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 2,
+   "launch": 1,
+   "tap": 4,
+   "type": 1,
+   "long_press": 1,
+   "done": 1
+  },
+  "model_calls": 11,
+  "input_tokens": 25095,
+  "cached_tokens": 19547,
+  "output_tokens": 2087,
+  "reasoning_tokens": 1395,
+  "cost_usd": 0.001011,
+  "cost_at_standard_usd": 0.018737,
+  "duration_s": 48.7,
+  "model_s": 26.4,
+  "device_s": 22.3,
+  "connect_s": 1.05,
+  "approvals": [
+   {
+    "step": 6,
+    "description": "tap \"\" in com.simplemobiletools.smsmessenger",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/new_conversation_confirm'"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 9,
+    "description": "tap \"SMS\" in com.simplemobiletools.smsmessenger",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/thread_send_message'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.smsmessenger",
+   "subgoals": [
+    "Open Simple SMS Messenger app",
+    "Start new conversation to +15459061746",
+    "Paste clipboard content into message field",
+    "Send message and show it in the thread"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "+15459061746",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'+15459061746' is visible"
+  },
+  "trace_dir": "data/runs/aw-baseline-1028-024652-77e6",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/SimpleSmsSendClipboardContent__s3566412234.jsonl.gz",
+  "wall_s": 51.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.3
+  }
+ }
+}

@@ -1,0 +1,78 @@
+{
+ "task": "ExpenseDeleteDuplicates",
+ "seed": 3926414058,
+ "goal": "Delete all but one of any expenses in pro expense that are exact duplicates, ensuring at least one instance of each unique expense remains.",
+ "score": 0.0,
+ "aw_run_time_s": 74.9,
+ "aw_episode_length": 12,
+ "agent": "envoy",
+ "finished": "2026-10-28 00:28:33.377711",
+ "envoy": {
+  "run_id": "aw-baseline-1028-002721-2b76",
+  "goal": "Delete all but one of any expenses in pro expense that are exact duplicates, ensuring at least one instance of each unique expense remains.",
+  "max_steps": 12,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 12 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 11,
+  "iterations": 12,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 10,
+   "swipe": 1,
+   "look": 1
+  },
+  "model_calls": 14,
+  "input_tokens": 30866,
+  "cached_tokens": 23854,
+  "output_tokens": 3355,
+  "reasoning_tokens": 2474,
+  "cost_usd": 0.00142,
+  "cost_at_standard_usd": 0.026602,
+  "duration_s": 67.1,
+  "model_s": 42.51,
+  "device_s": 24.59,
+  "connect_s": 0.94,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": null,
+   "subgoals": [
+    "Open app drawer and launch Pro Expense app",
+    "Navigate to expenses list or history",
+    "Identify exact duplicate expense entries",
+    "Delete duplicate copies keeping one of each unique expense",
+    "Confirm only one instance per unique expense remains"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "deleted",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-1028-002721-2b76",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/ExpenseDeleteDuplicates__s3926414058.jsonl.gz",
+  "wall_s": 69.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

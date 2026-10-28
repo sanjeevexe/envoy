@@ -1,0 +1,78 @@
+{
+ "task": "ContactsNewContactDraft",
+ "seed": 3954285476,
+ "goal": "Go to the new contact screen and enter the following details: First Name: Grace, Last Name: Taylor, Phone: 799-802-1530, Phone Label: Work. Do NOT hit save.",
+ "score": 0.0,
+ "aw_run_time_s": 71.0,
+ "aw_episode_length": 12,
+ "agent": "envoy",
+ "finished": "2026-10-28 00:11:40.534643",
+ "envoy": {
+  "run_id": "aw-baseline-1028-001034-1157",
+  "goal": "Go to the new contact screen and enter the following details: First Name: Grace, Last Name: Taylor, Phone: 799-802-1530, Phone Label: Work. Do NOT hit save.",
+  "max_steps": 12,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 12 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 12,
+  "iterations": 12,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 9,
+   "launch": 2
+  },
+  "model_calls": 13,
+  "input_tokens": 27731,
+  "cached_tokens": 22077,
+  "output_tokens": 3049,
+  "reasoning_tokens": 2260,
+  "cost_usd": 0.001219,
+  "cost_at_standard_usd": 0.023337,
+  "duration_s": 61.1,
+  "model_s": 37.32,
+  "device_s": 23.78,
+  "connect_s": 0.93,
+  "approvals": [],
+  "popups": [
+   "permission prompt: deny"
+  ],
+  "plan": {
+   "app": "com.google.android.contacts",
+   "subgoals": [
+    "Open the Contacts app from Home",
+    "Open the create new contact screen",
+    "Enter First Name Grace and Last Name Taylor",
+    "Enter Phone 799-802-1530 and set label to Work without saving"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "799-802-1530",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-1028-001034-1157",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/ContactsNewContactDraft__s3954285476.jsonl.gz",
+  "wall_s": 63.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

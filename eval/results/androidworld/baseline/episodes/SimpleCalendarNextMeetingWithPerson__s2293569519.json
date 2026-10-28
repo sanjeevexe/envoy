@@ -1,0 +1,78 @@
+{
+ "task": "SimpleCalendarNextMeetingWithPerson",
+ "seed": 2293569519,
+ "goal": "When is my next meeting with Ava in Simple Calendar Pro? Express your answer in the format <month name> <day> <year> <hour in 24-hour format>:<minutes>.",
+ "score": 0.0,
+ "aw_run_time_s": 81.9,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 02:38:57.661554",
+ "envoy": {
+  "run_id": "aw-baseline-1028-023741-5dc8",
+  "goal": "When is my next meeting with Ava in Simple Calendar Pro? Express your answer in the format <month name> <day> <year> <hour in 24-hour format>:<minutes>.",
+  "max_steps": 10,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 10,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "launch": 1,
+   "type": 1,
+   "tap": 6,
+   "back": 2
+  },
+  "model_calls": 12,
+  "input_tokens": 27751,
+  "cached_tokens": 20172,
+  "output_tokens": 3740,
+  "reasoning_tokens": 2938,
+  "cost_usd": 0.001546,
+  "cost_at_standard_usd": 0.028395,
+  "duration_s": 69.68,
+  "model_s": 38.86,
+  "device_s": 30.82,
+  "connect_s": 1.0,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Go back from event details to main calendar view",
+    "Switch to agenda list or use search to list events",
+    "Find upcoming events containing Ava",
+    "Open the next meeting with Ava to read its date and time"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "next meeting with Ava date and time",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-1028-023741-5dc8",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/SimpleCalendarNextMeetingWithPerson__s2293569519.jsonl.gz",
+  "wall_s": 73.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.4
+  }
+ }
+}

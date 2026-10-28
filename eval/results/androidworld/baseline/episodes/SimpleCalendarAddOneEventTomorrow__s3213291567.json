@@ -1,0 +1,79 @@
+{
+ "task": "SimpleCalendarAddOneEventTomorrow",
+ "seed": 3213291567,
+ "goal": "In Simple Calendar Pro, create a calendar event for tomorrow at 20h with the title 'Call with the Team' and the description 'We will prepare for team roles.'. The event should last for 30 mins.",
+ "score": 0.0,
+ "aw_run_time_s": 185.7,
+ "aw_episode_length": 34,
+ "agent": "envoy",
+ "finished": "2026-10-28 02:20:45.074234",
+ "envoy": {
+  "run_id": "aw-baseline-1028-021743-13a1",
+  "goal": "In Simple Calendar Pro, create a calendar event for tomorrow at 20h with the title 'Call with the Team' and the description 'We will prepare for team roles.'. The event should last for 30 mins.",
+  "max_steps": 34,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 34 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 32,
+  "iterations": 34,
+  "looks": 2,
+  "screenshots_sent": 4,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "launch": 4,
+   "back": 8,
+   "tap": 16,
+   "type": 4,
+   "look": 2
+  },
+  "model_calls": 37,
+  "input_tokens": 95344,
+  "cached_tokens": 69205,
+  "output_tokens": 7883,
+  "reasoning_tokens": 5652,
+  "cost_usd": 0.004329,
+  "cost_at_standard_usd": 0.076557,
+  "duration_s": 176.31,
+  "model_s": 98.71,
+  "device_s": 77.6,
+  "connect_s": 0.94,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Tap New Event to open event editor",
+    "Enter title 'Call with the Team' and description 'We will prepare for team roles.'",
+    "Set date to tomorrow with start 20:00 and end 20:30",
+    "Save the event"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Call with the Team",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-1028-021743-13a1",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/SimpleCalendarAddOneEventTomorrow__s3213291567.jsonl.gz",
+  "wall_s": 179.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

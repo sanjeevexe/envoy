@@ -1,0 +1,81 @@
+{
+ "task": "RetroSavePlaylist",
+ "seed": 1865481993,
+ "goal": "Create a playlist in Retro Music titled \"Blues Break 567\" with the following songs, in order: Chasing Shadows, Lost in the Echo, Twilight Calling. Then export the playlist to the Downloads directory on the device.",
+ "score": 0.0,
+ "aw_run_time_s": 246.9,
+ "aw_episode_length": 50,
+ "agent": "envoy",
+ "finished": "2026-10-28 02:07:30.343437",
+ "envoy": {
+  "run_id": "aw-baseline-1028-020328-9a0c",
+  "goal": "Create a playlist in Retro Music titled \"Blues Break 567\" with the following songs, in order: Chasing Shadows, Lost in the Echo, Twilight Calling. Then export the playlist to the Downloads directory on the device.",
+  "max_steps": 50,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 50 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 45,
+  "iterations": 50,
+  "looks": 5,
+  "screenshots_sent": 7,
+  "replans": 2,
+  "stuck_recoveries": 1,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "swipe": 2,
+   "look": 5,
+   "back": 12,
+   "type": 2,
+   "tap": 26,
+   "scroll": 1,
+   "wait": 2
+  },
+  "model_calls": 53,
+  "input_tokens": 134144,
+  "cached_tokens": 98179,
+  "output_tokens": 8533,
+  "reasoning_tokens": 5168,
+  "cost_usd": 0.005499,
+  "cost_at_standard_usd": 0.095948,
+  "duration_s": 236.44,
+  "model_s": 128.44,
+  "device_s": 108.0,
+  "connect_s": 0.93,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "code.name.monkey.retromusic",
+   "subgoals": [
+    "Create new playlist named Blues Break 567 via Playlists More options",
+    "Find Chasing Shadows, Lost in the Echo, Twilight Calling in Songs library",
+    "Add the three songs to Blues Break 567 in order",
+    "Export Blues Break 567 playlist to Downloads directory"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Blues Break 567",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-1028-020328-9a0c",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/RetroSavePlaylist__s1865481993.jsonl.gz",
+  "wall_s": 239.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.1
+  }
+ }
+}

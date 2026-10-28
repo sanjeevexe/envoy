@@ -1,0 +1,78 @@
+{
+ "task": "ClockStopWatchPausedVerify",
+ "seed": 3959502054,
+ "goal": "Pause the stopwatch.",
+ "score": 0.0,
+ "aw_run_time_s": 61.9,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 00:07:27.239844",
+ "envoy": {
+  "run_id": "aw-baseline-1028-000625-9416",
+  "goal": "Pause the stopwatch.",
+  "max_steps": 10,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 7,
+  "iterations": 10,
+  "looks": 2,
+  "screenshots_sent": 4,
+  "replans": 0,
+  "stuck_recoveries": 2,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "look": 2,
+   "launch": 1,
+   "tap": 1,
+   "done": 1,
+   "back": 4
+  },
+  "model_calls": 10,
+  "input_tokens": 24743,
+  "cached_tokens": 17642,
+  "output_tokens": 2801,
+  "reasoning_tokens": 2205,
+  "cost_usd": 0.001306,
+  "cost_at_standard_usd": 0.023427,
+  "duration_s": 56.57,
+  "model_s": 37.94,
+  "device_s": 18.63,
+  "connect_s": 0.93,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.google.android.deskclock",
+   "subgoals": [
+    "Open the Clock app",
+    "Go to the Stopwatch tab",
+    "Tap Pause to pause the running stopwatch"
+   ],
+   "success_check": {
+    "kind": "element_present",
+    "value": "Resume",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-1028-000625-9416",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/ClockStopWatchPausedVerify__s3959502054.jsonl.gz",
+  "wall_s": 59.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}

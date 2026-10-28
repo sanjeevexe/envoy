@@ -14,6 +14,13 @@
    "started": "2026-10-27T23:41:26",
    "envoy_commit": "999b256c8bfe066a986ade3eec04484a4f831563",
    "note": "resumed after the restore fix; the two invalidated Clock episodes rerun"
+  },
+  {
+   "started": "2026-10-28T00:06:25",
+   "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52",
+   "note": "resumed after the app-snapshot fix; 8 episodes rerun",
+   "androidworld_setup_rerun": false,
+   "app_snapshots": 24
   }
  ],
  "stage": "baseline",

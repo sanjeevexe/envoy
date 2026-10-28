@@ -1,0 +1,77 @@
+{
+ "task": "RecipeDeleteMultipleRecipesWithConstraint",
+ "seed": 3296470235,
+ "goal": "Delete the recipes from Broccoli app that use black garlic in the directions.",
+ "score": 0.0,
+ "aw_run_time_s": 197.5,
+ "aw_episode_length": 40,
+ "agent": "envoy",
+ "finished": "2026-10-28 01:50:39.422332",
+ "envoy": {
+  "run_id": "aw-baseline-1028-014724-de7a",
+  "goal": "Delete the recipes from Broccoli app that use black garlic in the directions.",
+  "max_steps": 40,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 40 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 39,
+  "iterations": 40,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 38,
+   "look": 1,
+   "swipe": 1
+  },
+  "model_calls": 42,
+  "input_tokens": 95547,
+  "cached_tokens": 77194,
+  "output_tokens": 7334,
+  "reasoning_tokens": 5120,
+  "cost_usd": 0.003456,
+  "cost_at_standard_usd": 0.06569,
+  "duration_s": 190.45,
+  "model_s": 97.01,
+  "device_s": 93.44,
+  "connect_s": 0.97,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": null,
+   "subgoals": [
+    "Open the Broccoli app from the launcher",
+    "Navigate to My Recipes or full recipes list",
+    "Search for black garlic and open recipes where directions mention it",
+    "Delete each black garlic recipe and confirm deletion"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Recipe deleted",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-1028-014724-de7a",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/RecipeDeleteMultipleRecipesWithConstraint__s3296470235.jsonl.gz",
+  "wall_s": 193.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

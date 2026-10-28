@@ -1,0 +1,79 @@
+{
+ "task": "NotesMeetingAttendeeCount",
+ "seed": 1619313862,
+ "goal": "How many attendees were present in the meeting titled 'Employee Performance Evaluation' in the Joplin app? Express your answer as just a single number.",
+ "score": 0.0,
+ "aw_run_time_s": 56.9,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 01:03:13.545467",
+ "envoy": {
+  "run_id": "aw-baseline-1028-010224-bbcf",
+  "goal": "How many attendees were present in the meeting titled 'Employee Performance Evaluation' in the Joplin app? Express your answer as just a single number.",
+  "max_steps": 10,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 8,
+  "iterations": 10,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "look": 2,
+   "launch": 1,
+   "tap": 2,
+   "type": 1,
+   "back": 4
+  },
+  "model_calls": 11,
+  "input_tokens": 28633,
+  "cached_tokens": 19547,
+  "output_tokens": 1590,
+  "reasoning_tokens": 965,
+  "cost_usd": 0.001266,
+  "cost_at_standard_usd": 0.021047,
+  "duration_s": 44.58,
+  "model_s": 22.16,
+  "device_s": 22.42,
+  "connect_s": 0.94,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "net.cozic.joplin",
+   "subgoals": [
+    "Open the Joplin app",
+    "Find the note titled 'Employee Performance Evaluation'",
+    "Open the meeting note",
+    "Count attendees marked present"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "number of attendees present in Employee Performance Evaluation",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-1028-010224-bbcf",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/NotesMeetingAttendeeCount__s1619313862.jsonl.gz",
+  "wall_s": 47.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}
