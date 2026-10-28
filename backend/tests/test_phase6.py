@@ -720,6 +720,7 @@ def test_play_store_pages_are_read_without_a_model():
     assert card.label.startswith("Wikipedia Wikimedia Foundation") and card.in_list  # not the search box that repeats it
     assert pick_result(store_page("search"), "Spotify") is None
     assert guess_installed("Wikipedia", {WIKI, "com.android.chrome"}) == WIKI and guess_installed("Maps", {"a.maps", "b.maps"}) is None
+    assert guess_installed("Messages", {"com.google.android.apps.messaging"}) == "com.google.android.apps.messaging"  # not a search
 
 
 def test_the_app_a_request_names():

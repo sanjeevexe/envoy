@@ -144,9 +144,19 @@ def read_listing(screen: ScreenState) -> Listing:
     return Listing("unknown", title, detail="no Install button, price or Open on the page")
 
 
+# Android's own apps, whose names aren't in their package ids: the one on the phone is meant, not a Play Store search.
+_BUILT_IN = {"messages": ("com.google.android.apps.messaging", "com.android.messaging"), "phone": ("com.google.android.dialer", "com.android.dialer"),
+             "files": ("com.google.android.documentsui", "com.android.documentsui"), "clock": ("com.google.android.deskclock", "com.android.deskclock"),
+             "camera": ("com.android.camera2", "com.google.android.GoogleCamera"), "drive": ("com.google.android.apps.docs",),
+             "keep": ("com.google.android.keep",), "keep notes": ("com.google.android.keep",)}
+
+
 def guess_installed(name: str, packages: set[str]) -> str | None:
-    """An installed app the name clearly points at: the only launcher package whose id holds the name's letters
-    ("Wikipedia" → org.wikipedia, "YouTube Music" → com.google.android.apps.youtube.music). None when it's not one."""
+    """An installed app the name clearly points at: one of Android's own ("Messages"), or the only launcher package whose
+    id holds the name's letters ("Wikipedia" → org.wikipedia, "YouTube Music" → com.google.android.apps.youtube.music).
+    None when it's not one."""
+    if (own := next((p for p in _BUILT_IN.get(norm(name), ()) if p in packages), None)) is not None:
+        return own
     want = re.sub(r"[^a-z0-9]", "", name.lower())
     if len(want) < 4:
         return None
