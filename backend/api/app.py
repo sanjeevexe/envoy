@@ -625,7 +625,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
 
     @app.get("/api/triggers", dependencies=[Depends(session)])
     def list_triggers() -> list[dict[str, Any]]:
-        return [{**t, "next": scheduler.next_runs(t)} for t in tasks.triggers()]
+        return [{**t, "next": scheduler.next_runs(t), "alerts": dict(zip(("on", "attributes"), alerts.settings(t)))} for t in tasks.triggers()]
 
     @app.post("/api/triggers", dependencies=[Depends(session)])
     def add_trigger(body: dict[str, Any] = Body(...)) -> dict[str, Any]:

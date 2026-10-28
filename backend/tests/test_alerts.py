@@ -247,6 +247,9 @@ def test_alerts_settings_and_the_api(env):
         w = c.post("/api/triggers", json={"kind": "watch", "name": "watch gate", "spec": {"every_minutes": 1, "wait_first": True},
                                           "action": {"routine": "skylark_get_flight_gate"}}, headers=me(env.token)).json()
         assert env.ctx.alerts.settings(w) == (True, ["gate"])  # a watcher alerts by default, on what its routine reads
+        listed = {t["name"]: t for t in c.get("/api/triggers", headers=me(env.token)).json()}
+        assert listed["watch gate"]["alerts"] == {"on": True, "attributes": ["gate"]}
+        assert listed["departure moved"]["alerts"] == {"on": False, "attributes": ["*"]} and listed["departure moved"]["next"] == []
         off = c.post(f"/api/triggers/{w['id']}", json={"alert": False}, headers=me(env.token)).json()
         assert off["enabled"] and off["spec"]["alert"] is False  # turning alerts off doesn't pause it
         assert env.ctx.alerts.settings(off) == (False, ["gate"])

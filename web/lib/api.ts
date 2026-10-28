@@ -12,6 +12,8 @@ export type Step = {
   seq: number; time: number; kind: string; text?: string; reason?: string; risk?: string | null; status?: string;
   rung?: number; detail?: string; shot?: string; approval?: { approved: boolean; by: string }; error?: string;
   entities?: string[]; sources?: Record<string, string>;
+  // a "change" step: a remembered fact changed during this task (api/alerts.py)
+  entity_label?: string; old?: string; new?: string; source?: string; pushed?: boolean; why_not?: string | null;
 };
 export type Approval = {
   id: string; task_id: string; created_at: number; status: string; description: string; reasons: string[];
