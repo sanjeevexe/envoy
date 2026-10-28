@@ -137,6 +137,7 @@ class Extract(_Model):
     offset: int | None = None  # with next_element: how many elements after the label ("Today", "10/27", "8am open" → 2)
     expect_digits: bool = False  # the recorded value starts with a number: a placeholder ("- calories") is not the value yet
     switch: bool = False  # the value is the element's on/off state ("Is Bluetooth on?"), not its words
+    card: str | None = None  # an ID every row shares (each menu item's price): read it in the row that shows this text
 
 
 class Step(_Model):

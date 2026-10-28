@@ -76,8 +76,8 @@ _ONE_TIME_INTENT = re.compile(r"onboard|welcome|intro\b|tutorial|first[ _-]?(run
 
 
 def _one_time(s: "TStep", sid: str, intent: str) -> bool:
-    if s.risk == "irreversible":
-        return False
+    if s.risk == "irreversible" or re.search(r"keyboard", f"{sid} {intent}", re.I):
+        return False  # closing the keyboard ("Tap Done to dismiss the keyboard") is part of typing, not a one-time screen
     if s.kind == "back":  # Back that closes an upsell or a tour (Wonder's own words for the step say so)
         return bool(_ONE_TIME_INTENT.search(f"{sid} {intent}"))
     if s.kind != "tap" or s.target is None:
@@ -447,8 +447,10 @@ def _extract_for(name: str, near: str, example: str, final: ScreenState, example
             sig = re.sub(r"\d+(?:\\\.\d+)?", r"\\d+(?:\\.\\d+)?", re.escape(m.group(1).strip()))
             return Extract(pattern=rf"(?P<v>[^,]+?),\s*{sig}(?:,.*)?", first_in_list=True)
     loc = None
+    card = None
     if usable_id(el.resource_id):
         loc = Locator(resource_id=_glob_id(short_id(el.resource_id), examples, data_values), kind=el.kind)
+        card = _card_of(el, final, examples, near, data_values)
     else:
         # No ID: an input shown in the same element is the anchor ("SL 1190 · ATL → DEN · …" for flight {{flight_number}}).
         bound = next((n for n, v in examples.items() if v and contains_value(el.label, v)), None)
@@ -479,7 +481,22 @@ def _extract_for(name: str, near: str, example: str, final: ScreenState, example
         loc = Locator(text=el.label, kind=el.kind)
     if loc is None and near_text is None:
         return None  # nothing to find it by on another run (no ID, no label, no input in it, no list shape)
-    return Extract(near=near_text, locator=loc, segment=segment, after=after_text)
+    return Extract(near=near_text, locator=loc, segment=segment, after=after_text, card=card)
+
+
+def _card_of(el: Element, screen: ScreenState, examples: dict[str, str], near: str | None, data_values: list[str]) -> str | None:
+    """For a value whose ID repeats down a list (every menu item has a `tv_price`): what tells its own row apart, an
+    input shown in the row ("{{menu_item_name}}"), else Wonder's fixed label for it. None when the ID is unique."""
+    if el.parent is None or sum(e.resource_id == el.resource_id for e in screen.numbered) < 2:
+        return None
+    mates = [e.label or e.text or e.desc or "" for e in screen.elements if e.parent == el.parent and e.index != el.index]
+    for exact in (True, False):
+        for name, v in examples.items():
+            if v and any((norm(m) == norm(v)) if exact else contains_value(m, v) for m in mates):
+                return "{{" + name + "}}"
+    if near and _data_free(near, data_values) and any(norm(m) == norm(near) for m in mates):
+        return near
+    return None
 
 
 # ---- the compiler -----------------------------------------------------------------------------
@@ -634,7 +651,6 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
                 post=[Check(kind="element_present", locator=tgt)], risk="read", note="added: input-based list choice"))
         with_scrolls.append(st)
     out_steps = with_scrolls
-    limits = _add_witnesses(out_steps, steps, examples, inputs, report)
 
     # Outputs: where each value is read on the final screen.
     outputs: list[str] = []
@@ -677,6 +693,8 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             out_steps.append(Step(id="read_answer", intent="Read the answer on the app's first screen",
                                   action=StepAction(kind="wait", seconds=0.3), risk="read", note="added: the answer is on the start screen"))
         out_steps[-1].extract = extract
+    # After the outputs: an output read in the row an input names (a menu item's price) uses that input.
+    limits = _add_witnesses(out_steps, steps, examples, inputs, report)
 
     # Safety net: the run's irreversible action must survive cleanup, or the routine would "succeed" without doing the job.
     if any(r.get("approval", {}).get("approved") for r in records if r.get("kind") == "action") and \
@@ -699,7 +717,8 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
 def _consumed(step: Step, name: str) -> bool:
     slot = "{{" + name + "}}"
     a = step.action
-    return slot in (a.value or "") or (a.target is not None and slot in a.target.model_dump_json())
+    return slot in (a.value or "") or (a.target is not None and slot in a.target.model_dump_json()) \
+        or any(slot in (x.card or "") for x in (step.extract or {}).values())  # the row an output is read in
 
 
 def _add_witnesses(out_steps: list[Step], steps: list[TStep], examples: dict[str, str], inputs: dict[str, InputSpec],

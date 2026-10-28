@@ -245,6 +245,33 @@ def test_an_inferred_answer_is_reported_as_the_words_it_came_from():
     assert _state_text("38,240 miles", s, ["38,240 miles"]) is None  # data is never a state text
 
 
+def test_a_value_every_row_shares_an_id_for_is_read_in_the_row_the_input_names():
+    from routines.compiler import _extract_for
+    from routines.screens import screen_from_tree
+
+    def menu(items: list[tuple[str, str]]):
+        els = [{"index": 0, "parent": None, "kind": "List", "class": "androidx.recyclerview.widget.RecyclerView", "scrollable": True,
+                "resource_id": "app:id/rv_meal_builder", "bounds": [0, 200, 1080, 2400]}]
+        for i, (name, price) in enumerate(items):
+            card = len(els)
+            y = 300 + 300 * i
+            els += [{"index": card, "parent": 0, "kind": "Button", "class": "android.view.ViewGroup", "clickable": True, "in_list": True,
+                     "resource_id": "app:id/view_container", "bounds": [0, y, 1080, y + 280]},
+                    {"index": card + 1, "parent": card, "kind": "Text", "class": "android.widget.TextView", "label": name.upper(), "text": name.upper(),
+                     "in_list": True, "resource_id": "app:id/tv_primary_name", "bounds": [40, y + 20, 700, y + 90]},
+                    {"index": card + 2, "parent": card, "kind": "Text", "class": "android.widget.TextView", "label": price, "text": price,
+                     "in_list": True, "resource_id": "app:id/tv_price", "bounds": [40, y + 100, 300, y + 160]}]
+        for n, e in enumerate(els, 1):
+            e["number"] = n
+        return screen_from_tree({"package": "app", "activity": "Menu", "width": 1080, "height": 2400, "elements": els})
+    trace = menu([("Chips", "$2.30"), ("Chili Lime Chips & Guacamole", "$5.75"), ("Chips & Guacamole", "$5.25")])
+    ex = _extract_for("price", "CHIPS & GUACAMOLE", "$5.25", trace, {"menu_item_name": "Chips & Guacamole"}, ["$5.25"])
+    assert ex is not None and ex.card == "{{menu_item_name}}"
+    assert extract_value(ex, trace, {"menu_item_name": "Chips & Guacamole"}) == "$5.25"  # its own row, not the first price
+    assert extract_value(ex, trace, {"menu_item_name": "Chips"}) == "$2.30"  # exact name first ("Chips" is in every row)
+    assert extract_value(ex, menu([("Chips", "$2.30")]), {"menu_item_name": "Chips & Guacamole"}) is None  # not shown: missing
+
+
 def test_a_switch_answer_reports_the_switch_state_not_a_row_that_names_it():
     from routines.compiler import _state_text, _switch_state
     from routines.screens import screen_from_tree

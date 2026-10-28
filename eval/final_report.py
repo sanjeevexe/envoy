@@ -366,6 +366,9 @@ def targets(data: dict[str, Any]) -> list[str]:
 
 def build() -> None:
     data = {n: load(n) for n in ("compile", "systems", "repeats", "change", "sizes", "real", "memory", "safety", "injection", "interfaces")}
+    if data["real"]:
+        import final_real
+        data["real"]["stages"] = final_real.stages(data["real"]["workflows"])  # with the hand checks given since the run
     charts = {}
     if data["systems"]:
         charts["systems"] = chart_systems(data["systems"])

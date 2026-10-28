@@ -46,7 +46,7 @@ from routines import checks as chk
 from routines import locators
 from routines.compiler import bind_inputs, chk_generalize, generalize_locator
 from routines.model import Check, Extract, Locator, Routine, Step, StepAction, has_slot, render, render_str
-from routines.screens import body, contains_value, norm, parts_of, usable_id
+from routines.screens import body, contains_value, norm, parts_of, short_id, usable_id
 from routines.visual import match_crop
 
 RUNG_NAMES = {0: "none", 1: "wait and retry", 2: "relaxed match", 3: "pop-up handler", 4: "local repair", 5: "full agent", 6: "ask the user"}
@@ -1020,10 +1020,14 @@ class RoutineExecutor:
     async def _extract(self, ctx: _Ctx, step: Step, screen: ScreenState) -> None:
         if not step.extract:
             return
+        read = False
         for name, spec in step.extract.items():
             if ctx.out.outputs.get(name):
                 continue
             ctx.out.outputs[name] = extract_value(spec, screen, ctx.inputs)
+            read = read or bool(ctx.out.outputs[name])
+        if read:  # the screen the answer was read from (its tree, never a screenshot): evidence for checking it
+            ctx.trace.save_tree(len(ctx.out.steps) + 1, f"outputs_{step.id}"[:48], screen)
 
 
 def extract_value(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str | None:
@@ -1031,6 +1035,21 @@ def extract_value(spec: Extract, screen: ScreenState, inputs: dict[str, str]) ->
     if value is not None and spec.expect_digits and not any(ch.isdigit() for ch in value):
         return None  # a placeholder while the page loads ("- calories"): not the value yet
     return value
+
+
+def _in_card(loc: Locator, card: str, screen: ScreenState) -> Element | None:
+    """The element `loc` names inside the row (same parent) that shows `card`: "CHIPS & GUACAMOLE" before
+    "CHILI LIME CHIPS & GUACAMOLE", so an exact match first."""
+    want = norm(card)
+    for exact in (True, False):
+        for holder in [e for e in screen.elements if e.parent is not None and want
+                       and (norm(e.label or e.text or e.desc) == want if exact else want in norm(e.label or e.text or e.desc))]:
+            el = next((e for e in screen.numbered if e.parent == holder.parent and e.index != holder.index
+                       and (not loc.resource_id or locators.id_matches(loc.resource_id, short_id(e.resource_id)))
+                       and (not loc.kind or e.kind == loc.kind)), None)
+            if el is not None:
+                return el
+    return None
 
 
 def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str | None:
@@ -1053,7 +1072,11 @@ def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str 
     el = None
     loc = render(spec.locator, inputs) if spec.locator is not None else None
     ids_shown = any(usable_id(e.resource_id) for e in screen.numbered)
-    if loc is not None and (loc.text or loc.desc or loc.text_has or (loc.resource_id and ids_shown)):
+    if spec.card and loc is not None:
+        el = _in_card(loc, spec.card, screen)
+        if el is None:
+            return None  # the row isn't on screen: the output is missing, and the ladder takes over
+    elif loc is not None and (loc.text or loc.desc or loc.text_has or (loc.resource_id and ids_shown)):
         # An ID-only locator means nothing on a screen that shows no IDs: fall back to the label (`near`).
         el = locators.locate(loc, screen, threshold=locators.RELAXED, margin=0.0, role="check").element
         if el is not None and loc.text_has and norm(el.label) == norm(loc.text_has):
