@@ -6,7 +6,9 @@ tap on "Turn on notifications"; each device's subscription is stored here. Envoy
 - an approval is **asked** (one that your own request already gave, or a standing approval, doesn't ask, so it
   doesn't push either);
 - Envoy needs you to **take over** the phone (a sign-in, a bot check);
-- a task is **done, failed or declined** (tasks started by a trigger push only when they fail).
+- a task is **done, failed or declined** (tasks started by a trigger push only when they fail);
+- a task a trigger started **changed a remembered fact** it watches ("Gate changed: B12 → C14"; api/alerts.py decides,
+  and sends through `notify` with kind `change`).
 
 A push carries a title, a line of text and the page to open; tapping it opens that page. It never carries an approval's
 nonce, so it can't decide anything: the approval page still needs your session and a POST.

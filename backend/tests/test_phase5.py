@@ -230,7 +230,9 @@ def test_takeover_and_finished_tasks_push_and_dead_subscriptions_are_dropped(env
     kinds = [(g["payload"]["kind"], g["payload"]["title"]) for g in got]
     assert ("takeover", "Envoy needs you to take over") in kinds
     assert ("task", "Done: Check me in for my flight") in kinds
-    assert len(got) == 2  # a watcher's routine "done" doesn't buzz the phone
+    # A watcher's routine finishing "done" doesn't buzz the phone; it pushes only when its run changed a remembered fact
+    # it watches ("Gate changed: B12 → C14", tests/test_alerts.py), and this run changed nothing.
+    assert ("task", "Done: What's my gate?") not in kinds and len(got) == 2
     assert [s["endpoint"].endswith("/sub1") for s in pusher.subscriptions()] == [True]  # 410 → forgotten
 
 

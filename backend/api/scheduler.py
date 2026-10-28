@@ -1,15 +1,22 @@
 """Scheduled and event-triggered tasks (design doc, Scheduled and event-triggered tasks).
 
-Four kinds of trigger, checked every few seconds:
+Five kinds of trigger, checked every few seconds:
 
 - **time**: every N minutes, daily at a time, or once at a moment.
 - **before_fact**: a time derived from memory, e.g. 24 hours before any flight departs. It is computed again on every
   check, so when the departure changes (a delay), the trigger moves with it; each departure fires once.
 - **watch**: rerun a read-only routine every N minutes (for example, the gate) until a moment.
 - **email**: a new email from a sender (and subject) starts a routine.
+- **fact_changed**: a remembered fact changes (memory's `fact_replaced`: a new value superseding an old one, not a first
+  sighting and not your own edit), e.g. a flight's departure time. Each change fires once. A change made by a task this
+  same trigger started doesn't fire it again.
 
-What a trigger runs is fixed when you create it: a goal written by you, or a routine. Memory and emails only supply
-typed values: `{trip.destination}` in a goal template, or a routine input mapped to `Trip.destination`. They never
+A watcher's run pushes when it changed a remembered fact it watches (`spec.alert`, on by default for watchers;
+`spec.alert_on`, by default what its routine reads); the sending is in api/alerts.py.
+
+What a trigger runs is fixed when you create it: a goal written by you, or a routine. Memory, emails and changes only
+supply typed values: `{trip.destination}` in a goal template, `{change.old}` and `{change.new}`, or a routine input mapped
+to `Trip.destination`. They never
 supply the goal or the plan, and values are cut to one short line. Triggered tasks go through the same policy as any
 other: an irreversible step still needs your approval.
 """
@@ -24,11 +31,11 @@ from datetime import datetime, timedelta
 from typing import Any, Callable
 
 from memory.store import MemoryStore
-from memory.types import parse_date
+from memory.types import TYPES, parse_date
 
 from api.store import TaskStore
 
-KINDS = ("time", "before_fact", "watch", "email")
+KINDS = ("time", "before_fact", "watch", "email", "fact_changed")
 
 
 def _clean(v: Any) -> str:
@@ -52,6 +59,7 @@ class Scheduler:
         self.store, self.memory, self.start_task, self.bus, self.routines = store, memory, start, bus, routines
         self.clock, self.every_s = clock, every_s
         self._task: asyncio.Task | None = None
+        self._scanned: dict[str, int] = {}  # fact_changed trigger → the last memory event seq its check read
 
     # ---- creating ------------------------------------------------------------------------------
 
@@ -69,6 +77,21 @@ class Scheduler:
                     raise ValueError("a watcher may only rerun a read-only routine")
         if kind == "email":
             spec.setdefault("after_rowid", self._last_email_rowid())  # only mail that arrives from now on
+        if kind == "fact_changed":
+            type_ = spec.get("entity_type")
+            if type_ not in TYPES:
+                raise ValueError(f"unknown entity type {type_!r}")
+            attrs = spec.get("attributes") or ([spec["attribute"]] if spec.get("attribute") else [])
+            if not attrs or not all(isinstance(a, str) for a in attrs):
+                raise ValueError("a fact-changed trigger names the attribute it watches")
+            if bad := [a for a in attrs if a not in TYPES[type_].attributes]:
+                raise ValueError(f"{type_} has no attribute {bad[0]!r}")
+            spec["attributes"] = attrs
+            spec.setdefault("after_seq", self._last_event_seq())  # only changes from now on
+        if "alert" in spec and not isinstance(spec["alert"], bool):
+            raise ValueError("alert is on or off (true or false)")
+        if spec.get("alert_on") is not None and not (isinstance(spec["alert_on"], list) and all(isinstance(a, str) for a in spec["alert_on"])):
+            raise ValueError("alert_on is a list of attributes")
         return self.store.add_trigger(kind, name, spec, action)
 
     # ---- the loop ------------------------------------------------------------------------------
@@ -97,6 +120,8 @@ class Scheduler:
                 self.store.update_trigger(trig["id"], last_fired=now, fired=fired)
                 trig["fired"] = fired
                 started.append(task)
+            if (upto := self._scanned.pop(trig["id"], None)) is not None and upto > trig["spec"].get("after_seq", 0):
+                self.store.update_trigger(trig["id"], spec={**trig["spec"], "after_seq": upto})  # keeps each check short
         return started
 
     def due(self, trig: dict[str, Any], now: float) -> list[tuple[str, dict[str, str]]]:
@@ -126,6 +151,9 @@ class Scheduler:
         elif kind == "email":
             for rowid, values in self._new_emails(spec, fired):
                 out.append((f"mail{rowid}", values))
+        elif kind == "fact_changed":
+            for seq, values in self._changes(trig, fired):
+                out.append((f"chg{seq}", values))
         return out
 
     def occasions(self, spec: dict[str, Any]) -> list[tuple[float, str, dict[str, str]]]:
@@ -193,6 +221,43 @@ class Scheduler:
                     values.setdefault(f"{e.get('type', '')}.{k}", v)
             out.append((int(r[0]), values))
         return out
+
+    # ---- fact-changed triggers ---------------------------------------------------------------
+
+    def _last_event_seq(self) -> int:
+        row = self.memory.db.execute("select max(seq) from events").fetchone()
+        return int(row[0] or 0)
+
+    def _changes(self, trig: dict[str, Any], fired: set[str]) -> list[tuple[int, dict[str, str]]]:
+        """Memory's changes since the last check that match: (seq, typed values for the action)."""
+        spec = trig["spec"]
+        attrs = set(spec.get("attributes") or [spec.get("attribute")])
+        out = []
+        events = self.memory.events(spec.get("after_seq", 0), kind="fact_replaced")  # read-only: memory's own log
+        for ev in events:
+            if f"chg{ev['seq']}" in fired or ev.get("attribute") not in attrs:
+                continue
+            eid = self.memory.resolve(ev["entity"])
+            e = self.memory.entity(eid) or {}
+            if e.get("type") != spec.get("entity_type") or self._made_by(trig, ev):
+                continue
+            values = self.values(eid)
+            type_ = e["type"].lower()
+            for f in self.memory.current_facts(eid):
+                values[f"{type_}.{f['attribute']}"] = f["value"]
+            values.update({"change.attribute": ev["attribute"], "change.old": ev.get("old") or "", "change.new": ev.get("value") or ""})
+            out.append((int(ev["seq"]), values))
+        if events:
+            self._scanned[trig["id"]] = int(events[-1]["seq"])
+        return out
+
+    def _made_by(self, trig: dict[str, Any], ev: dict[str, Any]) -> bool:
+        """The change came from a task this trigger started (so "when the gate changes, read the gate" can't feed itself)."""
+        row = self.memory.db.execute("select source from facts where id = ?", (ev.get("fact"),)).fetchone()
+        src = self.memory.source(row[0]) if row and row[0] else None
+        tid = ((src or {}).get("reference") or {}).get("task_id")
+        task = self.store.get(tid) if tid else None
+        return bool(task and task.get("source") == f"trigger:{trig['name']}")
 
     # ---- firing --------------------------------------------------------------------------------
 
