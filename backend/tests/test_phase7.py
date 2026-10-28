@@ -353,3 +353,12 @@ def test_the_keyboards_own_buttons_are_not_part_of_the_screen():
 </hierarchy>"""
     s = build_state(xml, "com.example.app", "com.example.app.Main", 1080, 2400)
     assert [e.label for e in s.numbered] == ["Save"]  # no keyboard "Delete", "Clipboard" or its Back
+    # The "Copied" preview System UI shows over the app after typing (seen on YouTube: it made the results page look
+    # different from itself, so a detour into a video and back stayed in the routine).
+    overlay = """<node index="3" text="" resource-id="com.android.systemui:id/clipboard_ui" class="android.widget.FrameLayout" package="com.example.app" bounds="[0,1900][700,2250]" clickable="false" enabled="true" visible-to-user="true">
+  <node index="0" text="" content-desc="Copied" resource-id="com.android.systemui:id/clipboard_preview" class="android.widget.FrameLayout" package="com.example.app" bounds="[20,1950][300,2200]" clickable="true" enabled="true" visible-to-user="true" />
+  <node index="1" text="Send to nearby device" resource-id="" class="android.widget.Button" package="com.example.app" bounds="[320,2100][700,2200]" clickable="true" enabled="true" visible-to-user="true" />
+</node>
+"""
+    s2 = build_state(xml.replace("</hierarchy>", overlay + "</hierarchy>"), "com.example.app", "com.example.app.Main", 1080, 2400)
+    assert [e.label for e in s2.numbered] == ["Save"] and s2.signature == s.signature

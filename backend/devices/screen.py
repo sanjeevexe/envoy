@@ -42,6 +42,9 @@ _STATUS_IDS = re.compile(r"(status_?bar|notification_icon|notificationIcons|syst
 # the policy rules and routine checks alike (a check was once written on Gboard's "Clipboard").
 _KEYBOARD_PACKAGES = re.compile(r"(inputmethod|honeyboard|swiftkey|\.keyboard\b|gboard)", re.I)
 _KEYBOARD_IDS = re.compile(r"^input_method_nav_", re.I)
+# System UI drawn over the app for a moment: the "Copied" clipboard preview after typing (with "Send to nearby device"),
+# the screenshot preview. Like the keyboard, not the app's screen: two visits to the same page must look the same.
+_OVERLAY_IDS = re.compile(r"^com\.android\.systemui:id/(clipboard_|screenshot_)", re.I)
 
 
 def parse_hierarchy(xml: str, screen_h: int) -> list[Element]:
@@ -52,7 +55,7 @@ def parse_hierarchy(xml: str, screen_h: int) -> list[Element]:
     root = ET.fromstring(xml)
     out: list[Element] = []
 
-    def walk(node: ET.Element, parent: int | None, depth: int, in_list: bool) -> None:
+    def walk(node: ET.Element, parent: int | None, depth: int, in_list: bool, overlay: bool = False) -> None:
         m = _BOUNDS.match(node.get("bounds", ""))
         bounds = tuple(int(v) for v in m.groups()) if m else (0, 0, 0, 0)
         cls = node.get("class", "")
@@ -83,9 +86,11 @@ def parse_hierarchy(xml: str, screen_h: int) -> list[Element]:
         el.status_bar = el.package == BANNER_PACKAGE or el.package == "com.android.systemui" and (
             0 < bounds[3] <= screen_h * STATUS_BAR_FRACTION or bool(_STATUS_IDS.search(el.resource_id.split("/")[-1]))
         ) or bool(_KEYBOARD_PACKAGES.search(el.package)) or bool(_KEYBOARD_IDS.search(el.resource_id.split("/")[-1]))
+        overlay = overlay or bool(_OVERLAY_IDS.search(el.resource_id))
+        el.status_bar = el.status_bar or overlay
         out.append(el)
         for child in node.findall("node"):
-            walk(child, el.index, depth + 1, in_list or el.scrollable)
+            walk(child, el.index, depth + 1, in_list or el.scrollable, overlay)
 
     for top in root.findall("node"):
         walk(top, None, 0, False)
