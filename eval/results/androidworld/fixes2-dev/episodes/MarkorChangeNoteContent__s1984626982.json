@@ -1,0 +1,78 @@
+{
+ "task": "MarkorChangeNoteContent",
+ "seed": 1984626982,
+ "goal": "Update the content of strong_jacket_h1hZ.txt to \"inNqu8UNNtyXBHCZpYp7\" in Markor and change its name to lively_fox_2023_03_22.md.",
+ "score": 0.0,
+ "aw_run_time_s": 57.9,
+ "aw_episode_length": 12,
+ "agent": "envoy",
+ "finished": "2026-10-28 07:37:02.742990",
+ "envoy": {
+  "run_id": "aw-fixes2-dev-1028-073605-9102",
+  "goal": "Update the content of strong_jacket_h1hZ.txt to \"inNqu8UNNtyXBHCZpYp7\" in Markor and change its name to lively_fox_2023_03_22.md.",
+  "max_steps": 12,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 12 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 12,
+  "iterations": 12,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 7,
+   "type": 1,
+   "back": 3
+  },
+  "model_calls": 14,
+  "input_tokens": 33971,
+  "cached_tokens": 27054,
+  "output_tokens": 3159,
+  "reasoning_tokens": 2154,
+  "cost_usd": 0.001378,
+  "cost_at_standard_usd": 0.02613,
+  "duration_s": 52.27,
+  "model_s": 38.13,
+  "device_s": 14.14,
+  "connect_s": 0.89,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Confirm document content is inNqu8UNNtyXBHCZpYp7 and save it",
+    "Open More options menu to access file actions",
+    "Rename file to lively_fox_2023_03_22.md"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "lively_fox_2023_03_22",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-fixes2-dev-1028-073605-9102",
+  "envoy_commit": "598a6cde6830a440bb68512465aa1e6692600144",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes2-dev/traces/MarkorChangeNoteContent__s1984626982.jsonl.gz",
+  "wall_s": 54.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

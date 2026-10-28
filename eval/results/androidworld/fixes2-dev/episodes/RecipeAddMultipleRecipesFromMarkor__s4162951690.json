@@ -1,0 +1,77 @@
+{
+ "task": "RecipeAddMultipleRecipesFromMarkor",
+ "seed": 4162951690,
+ "goal": "Add the recipes from recipes.txt in Markor to the Broccoli recipe app.",
+ "score": 0.0,
+ "aw_run_time_s": 254.3,
+ "aw_episode_length": 60,
+ "agent": "envoy",
+ "finished": "2026-10-28 08:11:08.220453",
+ "envoy": {
+  "run_id": "aw-fixes2-dev-1028-080657-4b24",
+  "goal": "Add the recipes from recipes.txt in Markor to the Broccoli recipe app.",
+  "max_steps": 60,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 60 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 60,
+  "iterations": 60,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 40,
+   "tap": 20
+  },
+  "model_calls": 63,
+  "input_tokens": 168374,
+  "cached_tokens": 112741,
+  "output_tokens": 14075,
+  "reasoning_tokens": 9632,
+  "cost_usd": 0.008604,
+  "cost_at_standard_usd": 0.146271,
+  "duration_s": 246.06,
+  "model_s": 166.62,
+  "device_s": 79.44,
+  "connect_s": 0.87,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Open recipes.txt in Markor to read the recipe contents",
+    "Open the Broccoli app",
+    "Add the recipes from the file into Broccoli",
+    "Verify the new recipes appear in Broccoli"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "added recipes shown in Broccoli",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-fixes2-dev-1028-080657-4b24",
+  "envoy_commit": "598a6cde6830a440bb68512465aa1e6692600144",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes2-dev/traces/RecipeAddMultipleRecipesFromMarkor__s4162951690.jsonl.gz",
+  "wall_s": 248.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

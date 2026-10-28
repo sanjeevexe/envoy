@@ -1,0 +1,89 @@
+{
+ "task": "FilesMoveFile",
+ "seed": 4058110435,
+ "goal": "Move the file holiday_photos.jpg from Podcasts within the sdk_gphone_x86_64 storage area to the DCIM within the same sdk_gphone_x86_64 storage area in the Android filesystem.",
+ "score": 0.0,
+ "aw_run_time_s": 111.1,
+ "aw_episode_length": 20,
+ "agent": "envoy",
+ "finished": "2026-10-28 07:36:03.324444",
+ "envoy": {
+  "run_id": "aw-fixes2-dev-1028-073415-e3d8",
+  "goal": "Move the file holiday_photos.jpg from Podcasts within the sdk_gphone_x86_64 storage area to the DCIM within the same sdk_gphone_x86_64 storage area in the Android filesystem.",
+  "max_steps": 20,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 20 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 20,
+  "iterations": 20,
+  "looks": 0,
+  "screenshots_sent": 3,
+  "replans": 0,
+  "stuck_recoveries": 2,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 14,
+   "scroll": 3,
+   "long_press": 1
+  },
+  "model_calls": 20,
+  "input_tokens": 55620,
+  "cached_tokens": 41684,
+  "output_tokens": 5198,
+  "reasoning_tokens": 3820,
+  "cost_usd": 0.002517,
+  "cost_at_standard_usd": 0.045764,
+  "duration_s": 101.98,
+  "model_s": 71.5,
+  "device_s": 30.48,
+  "connect_s": 0.9,
+  "approvals": [
+   {
+    "step": 18,
+    "description": "tap \"MOVE\" in com.google.android.documentsui",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Files",
+   "subgoals": [
+    "Open the Files app",
+    "Navigate to sdk_gphone_x86_64 storage and open the Podcasts folder",
+    "Move holiday_photos.jpg to the DCIM folder",
+    "Open DCIM to confirm holiday_photos.jpg is there"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "holiday_photos.jpg",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-fixes2-dev-1028-073415-e3d8",
+  "envoy_commit": "598a6cde6830a440bb68512465aa1e6692600144",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes2-dev/traces/FilesMoveFile__s4058110435.jsonl.gz",
+  "wall_s": 104.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.7
+  }
+ }
+}

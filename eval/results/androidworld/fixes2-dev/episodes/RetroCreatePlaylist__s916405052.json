@@ -1,0 +1,79 @@
+{
+ "task": "RetroCreatePlaylist",
+ "seed": 916405052,
+ "goal": "Create a playlist in Retro Music titled \"Hip Hop Bangers 270\" with the following songs, in order: Golden Days, Dreamer's Awake, Hidden Paths",
+ "score": 0.0,
+ "aw_run_time_s": 106.1,
+ "aw_episode_length": 24,
+ "agent": "envoy",
+ "finished": "2026-10-28 08:19:20.001085",
+ "envoy": {
+  "run_id": "aw-fixes2-dev-1028-081739-0d2f",
+  "goal": "Create a playlist in Retro Music titled \"Hip Hop Bangers 270\" with the following songs, in order: Golden Days, Dreamer's Awake, Hidden Paths",
+  "max_steps": 24,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 24 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 24,
+  "iterations": 24,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 18,
+   "type": 1,
+   "back": 4
+  },
+  "model_calls": 26,
+  "input_tokens": 64365,
+  "cached_tokens": 52858,
+  "output_tokens": 5046,
+  "reasoning_tokens": 3304,
+  "cost_usd": 0.002266,
+  "cost_at_standard_usd": 0.043758,
+  "duration_s": 95.3,
+  "model_s": 64.72,
+  "device_s": 30.58,
+  "connect_s": 0.9,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Retro Music",
+   "subgoals": [
+    "Open add-songs action for Hip Hop Bangers 270 via More options or library",
+    "Add Golden Days to Hip Hop Bangers 270",
+    "Add Dreamer's Awake then Hidden Paths in order",
+    "Verify playlist shows 3 songs in order"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Golden Days",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-fixes2-dev-1028-081739-0d2f",
+  "envoy_commit": "598a6cde6830a440bb68512465aa1e6692600144",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes2-dev/traces/RetroCreatePlaylist__s916405052.jsonl.gz",
+  "wall_s": 97.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.4
+  }
+ }
+}

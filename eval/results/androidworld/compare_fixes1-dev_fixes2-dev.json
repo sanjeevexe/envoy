@@ -1,0 +1,40 @@
+{
+ "before": "fixes1-dev",
+ "after": "fixes2-dev",
+ "by_half": {
+  "dev": {
+   "n": 58,
+   "before": 27.0,
+   "after": 25.0,
+   "gained": 2,
+   "lost": 4,
+   "p_paired": 0.6875
+  },
+  "held_out": {
+   "n": 0,
+   "before": 0,
+   "after": 0,
+   "gained": 0,
+   "lost": 0,
+   "p_paired": 1.0
+  },
+  "all": {
+   "n": 58,
+   "before": 27.0,
+   "after": 25.0,
+   "gained": 2,
+   "lost": 4,
+   "p_paired": 0.6875
+  }
+ },
+ "gained": [
+  "SimpleCalendarDeleteEvents",
+  "SystemBluetoothTurnOn"
+ ],
+ "lost": [
+  "MarkorCreateNote",
+  "SimpleCalendarAddOneEventRelativeDay",
+  "SimpleCalendarFirstEventAfterStartTime",
+  "SimpleCalendarNextMeetingWithPerson"
+ ]
+}

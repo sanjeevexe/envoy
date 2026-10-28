@@ -1,0 +1,83 @@
+{
+ "task": "CameraTakePhoto",
+ "seed": 3729977769,
+ "goal": "Take one photo.",
+ "score": 1.0,
+ "aw_run_time_s": 34.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 07:22:36.790849",
+ "envoy": {
+  "run_id": "aw-fixes2-dev-1028-072202-9124",
+  "goal": "Take one photo.",
+  "max_steps": 10,
+  "config": {},
+  "status": "done_unverified",
+  "result": "Took one photo; thumbnail preview is visible",
+  "done": true,
+  "answer": "Took one photo; thumbnail preview is visible",
+  "steps_device": 3,
+  "iterations": 6,
+  "looks": 1,
+  "screenshots_sent": 2,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 1,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "look": 1,
+   "done": 2
+  },
+  "model_calls": 7,
+  "input_tokens": 16804,
+  "cached_tokens": 13463,
+  "output_tokens": 2146,
+  "reasoning_tokens": 1691,
+  "cost_usd": 0.00079,
+  "cost_at_standard_usd": 0.015316,
+  "duration_s": 29.59,
+  "model_s": 23.21,
+  "device_s": 6.38,
+  "connect_s": 0.89,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Camera",
+   "subgoals": [
+    "Open the Camera app",
+    "Ensure photo mode is selected",
+    "Tap shutter to take one photo",
+    "Confirm thumbnail or preview appears"
+   ],
+   "success_check": {
+    "kind": "element_present",
+    "value": "photo thumbnail",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": true,
+   "detail": "element 'photo thumbnail' not present"
+  },
+  "trace_dir": "data/runs/aw-fixes2-dev-1028-072202-9124",
+  "envoy_commit": "598a6cde6830a440bb68512465aa1e6692600144",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes2-dev/traces/CameraTakePhoto__s3729977769.jsonl.gz",
+  "wall_s": 32.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

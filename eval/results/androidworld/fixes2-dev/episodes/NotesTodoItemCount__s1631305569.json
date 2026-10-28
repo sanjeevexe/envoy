@@ -1,0 +1,78 @@
+{
+ "task": "NotesTodoItemCount",
+ "seed": 1631305569,
+ "goal": "How many to-dos do I have in the 'Ideas' folder in the Joplin app? Express your answer as just a single number.",
+ "score": 0.0,
+ "aw_run_time_s": 56.3,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 07:51:08.643804",
+ "envoy": {
+  "run_id": "aw-fixes2-dev-1028-075018-0410",
+  "goal": "How many to-dos do I have in the 'Ideas' folder in the Joplin app? Express your answer as just a single number.",
+  "max_steps": 10,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 7,
+  "iterations": 10,
+  "looks": 3,
+  "screenshots_sent": 2,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 4,
+   "look": 3,
+   "back": 2
+  },
+  "model_calls": 12,
+  "input_tokens": 30280,
+  "cached_tokens": 18154,
+  "output_tokens": 2582,
+  "reasoning_tokens": 1803,
+  "cost_usd": 0.001765,
+  "cost_at_standard_usd": 0.028854,
+  "duration_s": 44.73,
+  "model_s": 31.35,
+  "device_s": 13.38,
+  "connect_s": 0.91,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Joplin",
+   "subgoals": [
+    "Open the notebooks navigation drawer",
+    "Select the Ideas folder",
+    "Count to-dos visible in Ideas"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "number of to-dos in Ideas folder",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-fixes2-dev-1028-075018-0410",
+  "envoy_commit": "598a6cde6830a440bb68512465aa1e6692600144",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes2-dev/traces/NotesTodoItemCount__s1631305569.jsonl.gz",
+  "wall_s": 47.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.4
+  }
+ }
+}

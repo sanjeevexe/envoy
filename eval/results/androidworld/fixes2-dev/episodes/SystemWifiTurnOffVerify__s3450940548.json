@@ -1,0 +1,81 @@
+{
+ "task": "SystemWifiTurnOffVerify",
+ "seed": 3450940548,
+ "goal": "Turn wifi off.",
+ "score": 1.0,
+ "aw_run_time_s": 32.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 08:41:36.999787",
+ "envoy": {
+  "run_id": "aw-fixes2-dev-1028-084106-7d1f",
+  "goal": "Turn wifi off.",
+  "max_steps": 10,
+  "config": {},
+  "status": "done_unverified",
+  "result": "Wi-Fi is off",
+  "done": true,
+  "answer": "Wi-Fi is off",
+  "steps_device": 3,
+  "iterations": 4,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "done": 1
+  },
+  "model_calls": 5,
+  "input_tokens": 10791,
+  "cached_tokens": 8260,
+  "output_tokens": 1344,
+  "reasoning_tokens": 1023,
+  "cost_usd": 0.000538,
+  "cost_at_standard_usd": 0.010115,
+  "duration_s": 25.68,
+  "model_s": 20.19,
+  "device_s": 5.49,
+  "connect_s": 0.91,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Settings",
+   "subgoals": [
+    "Open Settings",
+    "Open Network & internet / Wi-Fi settings",
+    "Switch Wi-Fi toggle off"
+   ],
+   "success_check": {
+    "kind": "field_equals",
+    "value": "Off",
+    "field_hint": "Wi-Fi"
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": false,
+   "detail": "field 'Wi-Fi' not found"
+  },
+  "trace_dir": "data/runs/aw-fixes2-dev-1028-084106-7d1f",
+  "envoy_commit": "598a6cde6830a440bb68512465aa1e6692600144",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes2-dev/traces/SystemWifiTurnOffVerify__s3450940548.jsonl.gz",
+  "wall_s": 28.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.6
+  }
+ }
+}

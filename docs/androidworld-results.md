@@ -90,7 +90,7 @@ Some evidence, quoted from the traces:
 - D, MarkorMergeNotes, step 10: "Got first note content m4kMyOGWaENoPj6FqLjd, need second note". Step 11 opened the first note again.
 
 **Two runtime problems under all of them.**
-- *A ticking line hid the loops.* From ClockTimerEntry on, a Clock timer from an earlier task ticks on the home screen's smartspace in every later task. AndroidWorld clears the Clock app's data, but it also resets the phone's clock each task, so the timer never ends. To Envoy every back on the home screen "changed the screen" (255 such false changes in the dev half), so its stuck detection didn't fire. In BrowserMaze it recorded 0 stuck recoveries in 17 backs.
+- *A ticking line hid the loops.* A running Clock timer's chip ticked on the home screen in 62 of the Contributor baseline's 116 episodes and 57 of the standard baseline's. AndroidWorld clears the Clock app's data between tasks, but it also resets the phone's clock each task, so the timer never ends and its chip stays. To Envoy every back on the home screen "changed the screen" (255 such false changes in the dev half), so its stuck detection didn't fire. In BrowserMaze it recorded 0 stuck recoveries in 17 backs. In the standard run, Envoy started that timer itself. In ClockTimerEntry ("Do not start the timer") its correct done was rejected by its own plan check, and on the next step it tapped Start. In the Contributor run it was left running by an earlier episode. With fix 5 the second done is accepted; no run with the fixes has had a timer on the home screen, so later runs did not face this handicap. Part of the improvement below is therefore Envoy no longer harming its own later tasks.
 - *The model echoed its own history.* Each history line carried the model's own expected result. In 40 of 45 failures the model then repeated earlier expected results word for word (375 times), and its new actions followed the copied text, not the screen. NotesTodoItemCount, step 5, copies step 2: "Accidental back, need to recover", with Joplin open on the screen.
 
 Measured from the digests over the whole run (`signals.py`), not just the labelled half: 1,057 of the Contributor baseline's 2,101 decisions and 861 of the standard baseline's 2,049 were made on the home screen or app drawer. The standard run's dev failures show the same mechanisms (placeholder reasons in 21 of 49, echoed expectations in 46, false "changed" on 31), so this is not a Contributor-tier effect.
@@ -119,5 +119,38 @@ Each change is general (no app, task or AndroidWorld knowledge), has its own com
 - Inside an action, `type` sorted after every other field. An action begun the usual way, `{"type": …`, could only become one of the three kinds with no other field: back, home or look. Back was 44% of all actions in the Contributor baseline (916 of 2,101) and 37% on standard. Some answers came with a sentence before the JSON: a third on the standard tier (665 of 2,049), 13% on Contributor (283 of 2,212). In both baselines together, where that sentence said the model would open or launch something, the JSON said back 79 times and look 70 times, against 51 launches. One live call on the old schema reproduced the trace pattern exactly: `{"action": {"type": "back"}, "expected_result": "This is wrong; should be swipe but schema requires? Actually swipe allowed. Let's do swipe.", "reason": "placeholder", …}`.
 
 The names the model sees are now aliases that sort in the order a person decides: `1_reason`, `2_expected_result`, `3_action`, `4_risk`, and in every action `act` (its kind) before its fields. Envoy's code, traces and routines keep their own names. On a clean single-screen probe both schemas chose the right swipe 25 of 25 times, so the failure needs a real episode's context, and only episodes can measure the fix.
+
+## Dev-half rounds (Contributor tier, seed 30)
+
+Each round runs the 58 dev tasks once, on the Contributor tier, as the dev work was agreed. The held-out half is not run until the final re-measure. The two baselines are on the same tasks; "p" is the exact two-sided sign test on the tasks that changed, paired by task. Two runs of an unchanged agent differed on about 23 of 116 tasks, so a few tasks either way is noise.
+
+| Stage | Agent | Dev score | vs. Contributor baseline | vs. previous round | Cost (billed / at standard prices) | Median time per task | Model calls |
+| --- | --- | ---: | --- | --- | --- | ---: | ---: |
+| Contributor baseline | `main` | 13/58 | | | $0.17 / $2.41 | 58 s | 1,184 |
+| Standard baseline | `main` | 9/58 | | | $2.33 / $2.33 | 36 s | 1,169 |
+| Round 1 (`4c3c989`) | fixes 1–9 | **27/58** | +16 −2, p = 0.0013 | | $0.20 / $2.74 | 54 s | 1,188 |
+| Round 2 (`598a6cd`) | round 1 + 10b | 25/58 | +15 −3, p = 0.0075 | +2 −4, p = 0.69 | $0.22 / $2.87 | 57 s | 1,149 |
+
+Every success in rounds 1 and 2 ended with Envoy's own done: no task was scored a success after running out of steps.
+
+**What each change did** (`fix_effects.py`, counted from Envoy's full traces of the 58 dev episodes; JSON in each stage's `fix_effects_dev.json`):
+
+| # | Measure | Contributor baseline | Standard baseline | Round 1 | Round 2 |
+| --- | --- | ---: | ---: | ---: | ---: |
+| 1 | Launches that failed | 21 | 13 | 0 | 0 |
+| 1 | Launches by an app's name (all opened it) | — | — | 105 | 101 |
+| 1 | Decisions made on the home screen or app drawer | 539 (50%) | 442 (42%) | 68 (6%) | 60 (6%) |
+| 2 | Home-screen decisions with a ticking timer on screen | 403 | 226 | 0 | 0 |
+| 3 | Expected results that repeat an earlier one word for word | 397 | 337 | 137 | 97 |
+| 4 | Reasons calling the action a placeholder | 69 | 39 | 0 | 0 |
+| 4 | Actions asked again for that | — | — | 3 | 0 |
+| 5 | A second done accepted after the plan's check rejected the first | 1 | 4 | 9 (all 9 scored 1) | 12 (all 12 scored 1) |
+| 10b | Back, as a share of all actions | 42% | 37% | 13% | 8% |
+
+Round 1 is the large step, and it is mostly one mechanism removed. In the baselines half of all decisions were made on the home screen, where a wrong package name failed to launch, and the model, writing `{"type": …` first, could only go back. Fix 1 took launch failures to zero; fix 5's second done turned 9 correct answers that the plan's check would have refused into successes. The two tasks round 1 lost (RetroPlayingQueue, TurnOnWifiAndOpenApp) ran out of steps in long in-app navigation. Neither shows a mechanism the fixes introduced.
+
+Round 2 shows that 10b does what it was built to do, without a score change I can measure. Back fell from 13% to 8% of actions, and echoed expectations from 137 to 97. The score moved by two tasks the other way (25 against 27; 2 gained, 4 lost, p = 0.69), inside the noise. In the four losses Envoy repeated a check it had already made, the same way it did when it won them in round 1. In SimpleCalendarNextMeetingWithPerson it opened the same event and went back 4 times in both rounds. Round 1 answered on its last step (`October 27 2023 15:15`); round 2 ran out. I keep 10b because it fixes a real defect in how the step is written, but I don't claim a score effect for it.
+
+**What still fails on dev after round 2** (33 tasks): 30 ran out of steps, 2 stopped with `failed`, 1 answered wrong. In 22 of the 33 Envoy made the same tap or launch on the same screen 3 or more times, led by MarkorMergeNotes (34 times), RecipeAddMultipleRecipesFromMarkor (20) and RetroPlayingQueue (15). Some of that repetition is the task's own (adding several items with the same button). The longest runs are something else: Envoy went back to re-read what it had already read. In RecipeAddMultipleRecipesFromMarkor, round 1 launched Markor 39 times in 60 steps, re-reading recipes.txt each time it reached Broccoli. That points to round 3: a working memory the model writes to itself.
 
 <!-- Improvements, routines, leaderboard comparison and proposals follow once measured. -->

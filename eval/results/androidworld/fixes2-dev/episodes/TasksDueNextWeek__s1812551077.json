@@ -1,0 +1,79 @@
+{
+ "task": "TasksDueNextWeek",
+ "seed": 1812551077,
+ "goal": "How many tasks do I have due next week in Tasks app? Assume the week starts from Monday. Express your answer as a single integer.",
+ "score": 0.0,
+ "aw_run_time_s": 79.3,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 08:43:27.194096",
+ "envoy": {
+  "run_id": "aw-fixes2-dev-1028-084210-bec7",
+  "goal": "How many tasks do I have due next week in Tasks app? Assume the week starts from Monday. Express your answer as a single integer.",
+  "max_steps": 10,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 9,
+  "iterations": 10,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "back": 1,
+   "scroll": 5,
+   "look": 1
+  },
+  "model_calls": 11,
+  "input_tokens": 29745,
+  "cached_tokens": 11174,
+  "output_tokens": 5083,
+  "reasoning_tokens": 4246,
+  "cost_usd": 0.002896,
+  "cost_at_standard_usd": 0.046493,
+  "duration_s": 72.56,
+  "model_s": 53.44,
+  "device_s": 19.12,
+  "connect_s": 0.87,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Tasks",
+   "subgoals": [
+    "Open the Tasks app",
+    "View all task lists with due dates",
+    "Count tasks due Monday Oct 16 to Sunday Oct 22"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "number of tasks due next week",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-fixes2-dev-1028-084210-bec7",
+  "envoy_commit": "598a6cde6830a440bb68512465aa1e6692600144",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes2-dev/traces/TasksDueNextWeek__s1812551077.jsonl.gz",
+  "wall_s": 75.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

@@ -1,0 +1,82 @@
+{
+ "task": "ClockTimerEntry",
+ "seed": 1172248264,
+ "goal": "Create a timer with 0 hours, 16 minutes, and 35 seconds. Do not start the timer.",
+ "score": 1.0,
+ "aw_run_time_s": 48.4,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 07:24:00.964641",
+ "envoy": {
+  "run_id": "aw-fixes2-dev-1028-072314-58fe",
+  "goal": "Create a timer with 0 hours, 16 minutes, and 35 seconds. Do not start the timer.",
+  "max_steps": 10,
+  "config": {},
+  "status": "done_unverified",
+  "result": "Timer created with 0 hours, 16 minutes, 35 seconds (shows 00h 16m 35s) and not started.",
+  "done": true,
+  "answer": "Timer created with 0 hours, 16 minutes, 35 seconds (shows 00h 16m 35s) and not started.",
+  "steps_device": 6,
+  "iterations": 8,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 1,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 5,
+   "done": 2
+  },
+  "model_calls": 9,
+  "input_tokens": 22677,
+  "cached_tokens": 17657,
+  "output_tokens": 3293,
+  "reasoning_tokens": 2589,
+  "cost_usd": 0.001196,
+  "cost_at_standard_usd": 0.022919,
+  "duration_s": 42.28,
+  "model_s": 33.85,
+  "device_s": 8.43,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Clock",
+   "subgoals": [
+    "Open the Clock app",
+    "Go to the Timer tab",
+    "Set timer to 0 hours 16 minutes 35 seconds",
+    "Save timer without starting it"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "16:35",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": true,
+   "detail": "'16:35' is not visible"
+  },
+  "trace_dir": "data/runs/aw-fixes2-dev-1028-072314-58fe",
+  "envoy_commit": "598a6cde6830a440bb68512465aa1e6692600144",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes2-dev/traces/ClockTimerEntry__s1172248264.jsonl.gz",
+  "wall_s": 44.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}
