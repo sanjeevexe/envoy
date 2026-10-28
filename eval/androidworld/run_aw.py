@@ -187,6 +187,7 @@ def main() -> None:
     ckpt.mkdir(parents=True, exist_ok=True)
 
     env = aw_env.connect()
+    reset_by_setup = aw_env.ensure_setup(env)  # Android deletes AndroidWorld's app snapshots on every boot (aw_env)
     suite = build_suite(tasks, args.seed, instances)
     config = json.loads(args.config)
     agent = {"noop": lambda: NoopAgent(env), "hand": lambda: HandAgent(env, args.stage),
@@ -201,7 +202,8 @@ def main() -> None:
                  "envoy_config": config, "tier": config.get("tier", "contributor") if args.agent == "envoy" else None})
     meta["sessions"].append({"started": dt.datetime.now().isoformat(timespec="seconds"),
                              "envoy_commit": subprocess.run(["git", "-C", str(REPO), "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip(),
-                             "note": args.note})
+                             "note": args.note, "androidworld_setup_rerun": reset_by_setup,
+                             "app_snapshots": aw_env.snapshot_count()})
     run_meta_path.write_text(json.dumps(meta, indent=1))
 
     def record(episode: dict[str, Any]) -> bool:

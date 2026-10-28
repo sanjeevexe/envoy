@@ -168,3 +168,59 @@ def restore_forwarder(env, timeout_s: float = 30) -> float:
                 last = f"{type(e).__name__}: {e}"
             time.sleep(0.5)
     raise RuntimeError(f"AndroidWorld's accessibility forwarder did not come back in {timeout_s:.0f} s ({last})")
+
+
+# ---- AndroidWorld's app snapshots don't survive a reboot -------------------------------------------------------------
+# AndroidWorld saves each app's post-setup data under /data/data/android_world/snapshots and restores it before and
+# after every task. On API 33, Android's boot-time reconcileAppsData deletes that directory (no package owns it):
+# measured Oct 28 with a marker file. Without it AndroidWorld only warns "Skipping app snapshot loading" and apps carry
+# state from task to task. So after every boot, AndroidWorld's setup runs again (it clears each app and re-saves its
+# snapshot), followed by the two onboarding steps its setup misses on this image.
+
+SNAPSHOTS = "/data/data/android_world/snapshots"
+EXPECTED_SNAPSHOTS = 20  # AndroidWorld saved 24 app snapshots in its setup on this image (Oct 28); 0 after any reboot
+
+
+def snapshot_count() -> int:
+    out = adb_shell(f"ls {SNAPSHOTS} 2>/dev/null")
+    return len([l for l in out.split() if "." in l])
+
+
+def finish_setup(env) -> None:
+    """The two steps AndroidWorld's setup misses here (see aw_fix_setup.py), then their snapshots are re-saved."""
+    import time
+
+    from android_world.env import adb_utils, tools
+    from android_world.utils import app_snapshot
+
+    adb_utils.launch_app("contacts", env.controller)
+    time.sleep(3)
+    try:  # Android 13 says "Don’t allow" (U+2019); AndroidWorld's setup looks for "Don't allow"
+        tools.AndroidToolController(env=env.controller).click_element("Don’t allow")
+        time.sleep(1.5)
+    except ValueError:
+        pass  # no prompt: nothing to dismiss
+    adb_utils.close_app("contacts", env.controller)
+    adb_utils.launch_app("activity tracker", env.controller)
+    time.sleep(3)
+    adb_utils.close_app("activity tracker", env.controller)
+    for app in ("contacts", "open tracks sports tracker"):
+        app_snapshot.save_snapshot(app, env.controller)
+    adb_utils.press_home_button(env.controller)
+
+
+def ensure_setup(env, log=print) -> bool:
+    """Run AndroidWorld's setup again if its snapshots are missing (after a reboot). Returns True if it ran."""
+    n = snapshot_count()
+    if n >= EXPECTED_SNAPSHOTS:
+        return False
+    from android_world.env import env_launcher
+
+    log(f"AndroidWorld's app snapshots are missing ({n} found): running its setup again")
+    env_launcher.setup_env(env, emulator_setup=True, freeze_datetime=True)
+    finish_setup(env)
+    n = snapshot_count()
+    if n < EXPECTED_SNAPSHOTS:
+        raise RuntimeError(f"AndroidWorld setup left {n} app snapshots (expected {EXPECTED_SNAPSHOTS})")
+    log(f"AndroidWorld setup done: {n} app snapshots")
+    return True

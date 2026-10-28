@@ -9,6 +9,11 @@
    "started": "2026-10-27T23:32:36",
    "envoy_commit": "41df104c0ed4712f006396e42da0f4745ced216c",
    "note": "resumed after a pause at the user's request; main merged in (agent unchanged)"
+  },
+  {
+   "started": "2026-10-27T23:41:26",
+   "envoy_commit": "999b256c8bfe066a986ade3eec04484a4f831563",
+   "note": "resumed after the restore fix; the two invalidated Clock episodes rerun"
   }
  ],
  "stage": "baseline",

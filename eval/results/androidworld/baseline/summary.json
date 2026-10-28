@@ -1,0 +1,335 @@
+{
+ "stage": "baseline",
+ "overall": {
+  "n": 13,
+  "success": 3.0,
+  "rate": 23.1
+ },
+ "by_half": {
+  "dev": {
+   "n": 8,
+   "success": 2.0,
+   "rate": 25.0
+  },
+  "held_out": {
+   "n": 5,
+   "success": 1.0,
+   "rate": 20.0
+  }
+ },
+ "by_difficulty": {
+  "easy": {
+   "n": 10,
+   "success": 3.0,
+   "rate": 30.0
+  },
+  "hard": {
+   "n": 1,
+   "success": 0.0,
+   "rate": 0.0
+  },
+  "medium": {
+   "n": 2,
+   "success": 0.0,
+   "rate": 0.0
+  }
+ },
+ "by_app": {
+  "audio recorder": {
+   "n": 2,
+   "success": 1.0,
+   "rate": 50.0
+  },
+  "camera": {
+   "n": 2,
+   "success": 0.0,
+   "rate": 0.0
+  },
+  "chrome": {
+   "n": 3,
+   "success": 0.0,
+   "rate": 0.0
+  },
+  "clock": {
+   "n": 3,
+   "success": 1.0,
+   "rate": 33.3
+  },
+  "contacts": {
+   "n": 2,
+   "success": 1.0,
+   "rate": 50.0
+  },
+  "pro expense": {
+   "n": 1,
+   "success": 0.0,
+   "rate": 0.0
+  }
+ },
+ "harness_exceptions": [],
+ "envoy_status": {
+  "step_limit": 10,
+  "done": 3
+ },
+ "success_by_envoy_status": {
+  "done": 3
+ },
+ "cost_billed_usd": {
+  "total": 0.0254,
+  "median_task": 0.0015
+ },
+ "cost_standard_usd": {
+  "total": 0.4526,
+  "median_task": 0.0263
+ },
+ "time_s": {
+  "envoy_median": 61.2,
+  "envoy_total": 1007.71,
+  "model_median": 40.38,
+  "device_median": 24.14,
+  "androidworld_task_median": 66.8
+ },
+ "steps": {
+  "median": 12,
+  "total": 217,
+  "budget_total": 228
+ },
+ "model_calls": {
+  "median": 13,
+  "total": 237
+ },
+ "approvals": {
+  "total": 2,
+  "tasks": 2
+ },
+ "popups_handled": 0,
+ "screenshots_sent": 21,
+ "looks": 20,
+ "vision_calls": 0,
+ "stuck_recoveries": 0,
+ "replans": 7,
+ "crash_dialogs": 0,
+ "tasks": [
+  {
+   "task": "AudioRecorderRecordAudioWithFileName",
+   "half": "dev",
+   "difficulty": "easy",
+   "app": "audio recorder",
+   "score": 1.0,
+   "status": "done",
+   "answer": "Recorded audio clip and saved as presentation_fGwr.m4a (0.03 Mb, M4a, 2 seconds) in Audio Recorder",
+   "steps": 13,
+   "budget": 20,
+   "calls": 14,
+   "cost_usd": 0.001473,
+   "duration_s": 43.82,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/baseline/traces/AudioRecorderRecordAudioWithFileName__s170855541.jsonl.gz"
+  },
+  {
+   "task": "AudioRecorderRecordAudio",
+   "half": "held_out",
+   "difficulty": "easy",
+   "app": "audio recorder",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 12,
+   "budget": 12,
+   "calls": 13,
+   "cost_usd": 0.001127,
+   "duration_s": 45.5,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/baseline/traces/AudioRecorderRecordAudio__s2842804519.jsonl.gz"
+  },
+  {
+   "task": "BrowserDraw",
+   "half": "held_out",
+   "difficulty": "easy",
+   "app": "chrome",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 20,
+   "budget": 20,
+   "calls": 22,
+   "cost_usd": 0.002341,
+   "duration_s": 91.23,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/baseline/traces/BrowserDraw__s1466251684.jsonl.gz"
+  },
+  {
+   "task": "BrowserMaze",
+   "half": "dev",
+   "difficulty": "easy",
+   "app": "chrome",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 20,
+   "budget": 20,
+   "calls": 23,
+   "cost_usd": 0.002117,
+   "duration_s": 93.69,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/baseline/traces/BrowserMaze__s3308742614.jsonl.gz"
+  },
+  {
+   "task": "BrowserMultiply",
+   "half": "dev",
+   "difficulty": "hard",
+   "app": "chrome",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 22,
+   "budget": 22,
+   "calls": 23,
+   "cost_usd": 0.002136,
+   "duration_s": 74.8,
+   "approvals": 1,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/baseline/traces/BrowserMultiply__s1325351943.jsonl.gz"
+  },
+  {
+   "task": "CameraTakePhoto",
+   "half": "dev",
+   "difficulty": "easy",
+   "app": "camera",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 10,
+   "budget": 10,
+   "calls": 11,
+   "cost_usd": 0.001291,
+   "duration_s": 48.87,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/baseline/traces/CameraTakePhoto__s3729977769.jsonl.gz"
+  },
+  {
+   "task": "CameraTakeVideo",
+   "half": "held_out",
+   "difficulty": "medium",
+   "app": "camera",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 10,
+   "budget": 10,
+   "calls": 12,
+   "cost_usd": 0.001311,
+   "duration_s": 56.79,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/baseline/traces/CameraTakeVideo__s2841656497.jsonl.gz"
+  },
+  {
+   "task": "ClockStopWatchPausedVerify",
+   "half": "dev",
+   "difficulty": "easy",
+   "app": "clock",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 10,
+   "budget": 10,
+   "calls": 11,
+   "cost_usd": 0.001495,
+   "duration_s": 67.6,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/baseline/traces/ClockStopWatchPausedVerify__s3959502054.jsonl.gz"
+  },
+  {
+   "task": "ClockStopWatchRunning",
+   "half": "held_out",
+   "difficulty": "easy",
+   "app": "clock",
+   "score": 1.0,
+   "status": "done",
+   "answer": "Stopwatch is running - Pause button visible with time counting at 10 seconds.",
+   "steps": 6,
+   "budget": 10,
+   "calls": 7,
+   "cost_usd": 0.000606,
+   "duration_s": 37.77,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/baseline/traces/ClockStopWatchRunning__s3429360255.jsonl.gz"
+  },
+  {
+   "task": "ClockTimerEntry",
+   "half": "dev",
+   "difficulty": "easy",
+   "app": "clock",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 10,
+   "budget": 10,
+   "calls": 11,
+   "cost_usd": 0.001556,
+   "duration_s": 61.2,
+   "approvals": 1,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/baseline/traces/ClockTimerEntry__s1172248264.jsonl.gz"
+  },
+  {
+   "task": "ContactsAddContact",
+   "half": "held_out",
+   "difficulty": "easy",
+   "app": "contacts",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 12,
+   "budget": 12,
+   "calls": 14,
+   "cost_usd": 0.001592,
+   "duration_s": 53.79,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/baseline/traces/ContactsAddContact__s1155463587.jsonl.gz"
+  },
+  {
+   "task": "ContactsNewContactDraft",
+   "half": "dev",
+   "difficulty": "easy",
+   "app": "contacts",
+   "score": 1.0,
+   "status": "done",
+   "answer": "Contact creation screen filled: First Name Grace, Last Name Taylor, Phone 799-802-1530 with Work label. Did not save as instructed.",
+   "steps": 12,
+   "budget": 12,
+   "calls": 13,
+   "cost_usd": 0.001394,
+   "duration_s": 68.48,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/baseline/traces/ContactsNewContactDraft__s3954285476.jsonl.gz"
+  },
+  {
+   "task": "ExpenseAddMultiple",
+   "half": "dev",
+   "difficulty": "medium",
+   "app": "pro expense",
+   "score": 0.0,
+   "status": "step_limit",
+   "answer": null,
+   "steps": 60,
+   "budget": 60,
+   "calls": 63,
+   "cost_usd": 0.006952,
+   "duration_s": 264.17,
+   "approvals": 0,
+   "harness_exception": false,
+   "trace": "eval/results/androidworld/baseline/traces/ExpenseAddMultiple__s3130695708.jsonl.gz"
+  }
+ ]
+}

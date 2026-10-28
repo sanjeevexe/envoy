@@ -1,0 +1,81 @@
+{
+ "task": "ExpenseAddMultiple",
+ "seed": 3130695708,
+ "goal": "Add the following expenses into the pro expense:\nExpense: Social Club Dues\n amount_dollars: $67.41\n category_name: Social\n note: Monthly recurring\n\nExpense: Legal Fees\n amount_dollars: $10.14\n category_name: Others\n note: Monthly recurring\n\nExpense: Stationery\n amount_dollars: $118.93\n category_name: Others\n note: Remember to transfer funds\n",
+ "score": 0.0,
+ "aw_run_time_s": 270.7,
+ "aw_episode_length": 60,
+ "agent": "envoy",
+ "finished": "2026-10-27 23:50:14.345986",
+ "envoy": {
+  "run_id": "aw-baseline-1027-234545-0fe3",
+  "goal": "Add the following expenses into the pro expense:\nExpense: Social Club Dues\n amount_dollars: $67.41\n category_name: Social\n note: Monthly recurring\n\nExpense: Legal Fees\n amount_dollars: $10.14\n category_name: Others\n note: Monthly recurring\n\nExpense: Stationery\n amount_dollars: $118.93\n category_name: Others\n note: Remember to transfer funds\n",
+  "max_steps": 60,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 60 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 57,
+  "iterations": 60,
+  "looks": 3,
+  "screenshots_sent": 5,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 25,
+   "look": 3,
+   "swipe": 2,
+   "scroll": 6,
+   "tap": 12,
+   "type": 11,
+   "launch": 1
+  },
+  "model_calls": 63,
+  "input_tokens": 162223,
+  "cached_tokens": 114714,
+  "output_tokens": 9859,
+  "reasoning_tokens": 6119,
+  "cost_usd": 0.006952,
+  "cost_at_standard_usd": 0.118494,
+  "duration_s": 264.17,
+  "model_s": 142.76,
+  "device_s": 121.41,
+  "connect_s": 0.92,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.arduia.expense",
+   "subgoals": [
+    "Tap the add button to open Expense Entry",
+    "Create Stationery expense for 118.93 with category Others and note",
+    "Save the expense and return to Home",
+    "Confirm Recent list shows Social Club Dues, Legal Fees and Stationery"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Stationery",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-1027-234545-0fe3",
+  "envoy_commit": "999b256c8bfe066a986ade3eec04484a4f831563+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/ExpenseAddMultiple__s3130695708.jsonl.gz",
+  "wall_s": 266.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.9
+  }
+ }
+}
