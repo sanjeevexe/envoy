@@ -105,18 +105,21 @@ class TaskRunner:
         self.loop: asyncio.AbstractEventLoop | None = None  # the API's loop (set at startup)
         self.devices: dict[str, Any] = {}  # task id → raw device (for step screenshots)
         self.phone_asks: dict[str, asyncio.Future] = {}  # task id → your answer to "use your Android phone?"
+        self.on_final: list[Any] = []  # called with (task id, final screen, routine outputs) after a run's last look (api/crossapp.py)
+        self.crossapp: Any = None  # cross-app answers (api/crossapp.py), set by the app
         TraceWriter.listeners.append(self._on_trace)
 
     # ---- starting and stopping -----------------------------------------------------------------
 
     def start(self, goal: str, source: str, *, routine: str | None = None, inputs: dict[str, str] | None = None,
-              app: str | None = None, request: str | None = None, phone: str | None = None) -> dict[str, Any]:
+              app: str | None = None, request: str | None = None, phone: str | None = None, parent: str | None = None) -> dict[str, Any]:
         """`request` is the user's own words when the goal was rephrased (chat): approvals are matched against it.
-        `phone`: "phone", "emulator", a device id, or None (routing decides, including "… on my phone" in the words)."""
+        `phone`: "phone", "emulator", a device id, or None (routing decides, including "… on my phone" in the words).
+        `parent`: the cross-app task this one is a part of."""
         if asks_for_phone(goal) or asks_for_phone(request or ""):
             phone = phone or "phone"
             goal = strip_phone_words(goal)
-        task = self.store.create(goal, source, routine=routine, inputs=inputs or {}, app=app, request=request or goal)
+        task = self.store.create(goal, source, routine=routine, inputs=inputs or {}, app=app, request=request or goal, **({"parent": parent} if parent else {}))
         self.bus.publish("task", task=task)
         coro = self._run(task["id"], goal, routine, inputs or {}, app, phone)
         try:
@@ -244,6 +247,11 @@ class TaskRunner:
                         status, result = "needs_you", "waiting for you timed out"
                     break
                 final = await device.observe()
+                for hook in list(self.on_final):
+                    try:
+                        hook(tid, final, outputs)
+                    except Exception:  # noqa: BLE001 - a listener never breaks a run
+                        pass
                 done = status in ("done", "agent_done", "done_unverified")
                 text = result
                 if routine and outputs:

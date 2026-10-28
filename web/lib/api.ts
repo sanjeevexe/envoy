@@ -7,6 +7,7 @@ export type Task = {
   id: string; goal: string; source: string; status: string; created_at: number; updated_at: number;
   app?: string; device?: string; kind?: string; routine?: string; inputs?: Record<string, string>;
   result?: string; detail?: string; waiting_for?: string | null; model_calls?: number; cost_usd?: number;
+  parent?: string | null; // the cross-app task this one is a part of
 };
 export type Step = {
   seq: number; time: number; kind: string; text?: string; reason?: string; risk?: string | null; status?: string;
