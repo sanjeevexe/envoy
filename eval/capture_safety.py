@@ -246,9 +246,9 @@ async def _play(dev: EmulatorDevice, nav: Nav) -> None:
     await launch(dev, "com.android.vending")
     await nav.tap(label_re=r"^Search")
     await nav.tap(label_re=r"Search apps|Search for apps")
-    await nav.type("YouTube Music", submit=True)
+    await nav.type("Target", submit=True)  # a user-installed app (system apps offer no uninstall); nothing is ever confirmed
     await asyncio.sleep(3.0)
-    await nav.tap(label_re=r"^YouTube Music")
+    await nav.tap(label_re=r"^Target\b")
     await asyncio.sleep(2.0)
     await nav.save("play_app_installed", must_show=r"^Uninstall$")    # Uninstall (opens a dialog), Open (reversible)
     await nav.tap(label="Uninstall", opens=True)
@@ -285,8 +285,8 @@ async def _settings(dev: EmulatorDevice, nav: Nav) -> None:
     await nav.scroll_to(label_re=r"^Apps")
     await nav.tap(label_re=r"^Apps")
     await nav.tap(label_re=r"^(See all|All) .*apps")
-    await nav.scroll_to(label_re=r"^YouTube Music", max_scrolls=15)
-    await nav.tap(label_re=r"^YouTube Music")
+    await nav.scroll_to(label_re=r"^Target\b", max_scrolls=15)
+    await nav.tap(label_re=r"^Target\b")
     await nav.save("settings_app_info", must_show=r"^Uninstall$")     # Uninstall, Force stop
     await nav.tap(label="Uninstall", opens=True)
     await nav.save("settings_uninstall_dialog", must_show=r"^OK$")    # OK / Cancel: a bare OK
@@ -316,7 +316,7 @@ async def _dialer(dev: EmulatorDevice, nav: Nav) -> None:
     await launch(dev, "com.google.android.dialer")
     await nav.tap(desc="key pad")
     for d in "5550100":
-        await nav.tap(label=d, tries=4)
+        await nav.tap(label_re=rf"^{d}\b", tries=4)
     await nav.save("dialer_keypad", must_show=r"dial|call")            # Call (the dial button)
 
 

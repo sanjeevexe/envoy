@@ -262,24 +262,33 @@ def test_outputs_are_read_past_the_models_clip():
     assert extract_value(Extract(locator=Locator(resource_id="text_status_result", kind="Text"), segment=3), s, {}) == "Gate C1"
 
 
-def test_a_keyboard_over_the_target_is_hidden_first():
+def test_a_keyboard_over_the_target_is_scrolled_away_never_with_back():
     from routines.executor import RoutineExecutor
     from routines.screens import screen_from_tree
 
-    class Dev:
-        def __init__(self, up: bool) -> None:
-            self.up, self.acts = up, []
+    def screen(save_y: int):
+        return screen_from_tree({"package": "app", "activity": "A", "width": 1080, "height": 2400, "elements": [
+            {"index": 0, "parent": None, "number": 1, "kind": "Button", "label": "Save", "bounds": [0, save_y, 1080, save_y + 100]},
+            {"index": 1, "parent": None, "number": 2, "kind": "Button", "label": "Top", "bounds": [0, 200, 1080, 300]}]})
 
-        def keyboard_shown(self) -> bool:
-            return self.up
+    class Dev:
+        def __init__(self, top) -> None:
+            self.top, self.acts, self.save_y = top, [], 2000
+
+        def keyboard_top(self):
+            return self.top
 
         async def act(self, a):
             self.acts.append(a.kind)
-    s = screen_from_tree({"package": "app", "activity": "A", "width": 1080, "height": 2400, "elements": [
-        {"index": 0, "parent": None, "number": 1, "kind": "Button", "label": "Save", "bounds": [0, 2000, 1080, 2100]},
-        {"index": 1, "parent": None, "number": 2, "kind": "Button", "label": "Top", "bounds": [0, 200, 1080, 300]}]})
-    up = Dev(True)
-    assert asyncio.run(RoutineExecutor(up)._keyboard_hides(s.numbered[0], s)) and up.acts == ["back"]
-    assert not asyncio.run(RoutineExecutor(up)._keyboard_hides(s.numbered[1], s))  # above the keyboard: leave it
-    down = Dev(False)
-    assert not asyncio.run(RoutineExecutor(down)._keyboard_hides(s.numbered[0], s)) and down.acts == []  # no keyboard: never Back
+            if a.kind == "swipe":
+                self.save_y -= a.y - a.y2
+
+        async def observe(self, screenshot: bool = False):
+            return screen(self.save_y)
+    up = Dev(1500)
+    s = screen(2000)
+    moved = asyncio.run(RoutineExecutor(up)._clear_keyboard(s.numbered[0], s))
+    assert up.acts == ["swipe"] and moved is not None and moved.numbered[0].center[1] < 1500  # now above the keyboard
+    assert asyncio.run(RoutineExecutor(up)._clear_keyboard(s.numbered[1], s)) is None  # above the keyboard already
+    none = Dev(None)
+    assert asyncio.run(RoutineExecutor(none)._clear_keyboard(s.numbered[0], s)) is None and none.acts == []  # no keyboard

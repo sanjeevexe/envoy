@@ -289,6 +289,8 @@ class RoutineExecutor:
                     await asyncio.sleep(self.config.poll_s)
                     screen = await self._observe()
                     ok, outs = self._check(routine.done, screen, ctx.inputs)
+            if not ok and (seen := await self._reveal_checks(ctx, routine.done, None)) is not None:
+                ok, screen = True, seen  # the proof is on the page, past the edge of the screen (a smaller screen, a banner above)
             if not ok:
                 return self._finish(ctx, "failed", "done-check failed: " + "; ".join(o.detail for o in outs if not o.passed))
             missing_out = [n for n in routine.outputs if not out.outputs.get(n)]
@@ -471,7 +473,7 @@ class RoutineExecutor:
         last_body, stable_since = None, start
         popups = 0
         passes = 0
-        tried_relaxed = False
+        tried_relaxed = tried_scroll = False
         while True:
             s = await self._observe()
             now = time.perf_counter()
@@ -520,6 +522,14 @@ class RoutineExecutor:
                                                          f"updated to {new.locator.describe() if new.locator else ''}", check_index=j, check=new))
                     return _Ready("ok", s)
                 tried_relaxed = stable
+            # What the step should show may be past the edge of the screen ("Known traveler number saved" under the Save
+            # button, once a banner pushed the page down): scroll to look before calling it a failure. No model call.
+            if stable and tried_relaxed and not tried_scroll and any(e.kind == "List" for e in s.numbered) and \
+                    all(o.passed or o.check.kind in ("element_present", "text_visible", "screen_changed") for o in outs):  # a change below the fold
+                tried_scroll = True
+                if (seen := await self._reveal_checks(ctx, step.post, before)) is not None:
+                    sr.climb(2, "after-checks held past the edge of the screen (scrolled to see them)")
+                    return _Ready("ok", seen)
             # Only "where the app went" checks failed, the screen changed, and the next step is ready: the checks were
             # over-specific (something optional that didn't show this time). Accept, and patch them to what happened.
             nav_only = all(o.passed or o.check.kind in ("element_present", "element_absent", "text_visible", "screen_like") for o in outs)
@@ -592,14 +602,19 @@ class RoutineExecutor:
                 return action
         return None
 
-    async def _keyboard_hides(self, el: Element, screen: ScreenState) -> bool:
-        """The keyboard is up and the element sits where it would be (the lower part of the screen): hide it (Back only
-        closes the keyboard while it is shown). True if it was hidden."""
-        shown = getattr(self.device, "keyboard_shown", None)
-        if shown is None or el.center[1] < 0.55 * (screen.height or 2400) or not await asyncio.to_thread(shown):
-            return False
-        await self.device.act(Action(kind="back"))
-        return True
+    async def _clear_keyboard(self, el: Element, screen: ScreenState) -> ScreenState | None:
+        """The on-screen keyboard is up and covers the element's centre (the tree still lists it): drag the page up just
+        enough to bring it above the keyboard. Back is never used for this: in some apps it also leaves the screen. Returns
+        the new screen, or None if nothing needed doing."""
+        top_of = getattr(self.device, "keyboard_top", None)
+        top = await asyncio.to_thread(top_of) if top_of is not None else None
+        if top is None or el.center[1] < top:
+            return None
+        w = screen.width or 1080
+        dy = min(int(el.center[1] - top + 0.08 * (screen.height or 2400)), int(0.6 * top))
+        y1 = int(top * 0.85)
+        await self.device.act(Action(kind="swipe", x=w // 2, y=y1, x2=w // 2, y2=max(1, y1 - dy)))
+        return await self._settle_quick()
 
     async def _act(self, ctx: _Ctx, step: Step, screen: ScreenState, el: Element | None, sr: StepRun) -> Literal["ok", "stop"]:
         """Run the step's action through the policy gate. A scroll_until that doesn't find its target returns "ok":
@@ -634,13 +649,13 @@ class RoutineExecutor:
             action = Action(kind="tap_point", x=point[0], y=point[1])
         else:
             assert el is not None
-            if a.kind in ("tap", "long_press") and await self._keyboard_hides(el, screen):
-                # Typing left the keyboard up over the target: a tap would land on a key. With it hidden, find the target again.
-                screen = await self._settle_quick()
+            if a.kind in ("tap", "long_press") and (moved := await self._clear_keyboard(el, screen)) is not None:
+                # Typing left the keyboard up over the target: a tap would land on a key. The page was scrolled to bring it out.
+                screen = moved
                 m = self._target(step, screen, ctx.inputs)
                 if m is not None and m.element is not None:
                     el = m.element
-                sr.rungs.append("hid the on-screen keyboard that covered the target")
+                sr.rungs.append("scrolled the target out from under the on-screen keyboard")
             if a.kind == "type":
                 action = Action(kind="type", element=el.number, text=render_str(a.value, ctx.inputs) or "", submit=a.submit)
             else:
@@ -740,6 +755,23 @@ class RoutineExecutor:
                 if flipped:
                     return None
                 direction, flipped = "up", True
+        return None
+
+    async def _reveal_checks(self, ctx: _Ctx, checks: list[Check], before: ScreenState | None, max_scrolls: int = 4) -> ScreenState | None:
+        """Scroll the largest list down, then up, until the checks hold; the screen where they did, or None."""
+        s = await self._observe()
+        for direction in ("down", "up"):
+            for _ in range(max_scrolls):
+                lists = [e for e in s.numbered if e.kind == "List"]
+                if not lists:
+                    return None
+                before_body = body(s)
+                await self.device.act(Action(kind="scroll", direction=direction, element=max(lists, key=lambda e: e.area).number))
+                s = await self._settle_quick()
+                if self._check(checks, s, ctx.inputs, before=before)[0]:
+                    return s
+                if body(s) == before_body:
+                    break
         return None
 
     async def _read_scrolled(self, ctx: _Ctx, specs: dict[str, Any], missing: list[str], max_scrolls: int = 8) -> list[str]:

@@ -180,12 +180,21 @@ class AndroidDevice:
 
     # ---- act --------------------------------------------------------------------------------
 
-    def keyboard_shown(self) -> bool:
-        """Whether the on-screen keyboard is up (it covers the lower part of the screen while the tree still lists what's under it)."""
+    def keyboard_top(self) -> int | None:
+        """Where the on-screen keyboard starts (screen pixels), or None when none is shown. The tree still lists what's under
+        it. From the input method window's frame and its content inset (a hardware keyboard leaves only a thin strip)."""
         try:
-            return "mInputShown=true" in self.adb.shell("dumpsys input_method | grep mInputShown")
+            if "mInputShown=true" not in self.adb.shell("dumpsys input_method | grep mInputShown"):
+                return None
+            out = self.adb.shell("dumpsys window InputMethod")
         except Exception:  # noqa: BLE001 - unknown means "don't touch it"
-            return False
+            return None
+        frame = re.search(r"\bframe=\[\d+,(\d+)\]\[\d+,(\d+)\]", out)
+        inset = re.search(r"mGivenContentInsets=\[\d+,(\d+)\]", out)
+        if not frame or not inset:
+            return None
+        top = int(frame.group(1)) + int(inset.group(1))
+        return top if top < int(frame.group(2)) else None
 
     def _tap(self, x: int, y: int, hold_s: float = 0.0) -> None:
         """uiautomator2 injects the touch (~150 ms). Subclasses use faster paths when they have one."""
