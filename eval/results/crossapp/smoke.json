@@ -1,0 +1,258 @@
+{
+ "meta": {
+  "date": "2026-10-28 11:50 UTC",
+  "phone": "envoy-real",
+  "calls": 2,
+  "usd": 0.00516,
+  "commit": "053adf0",
+  "declined": [],
+  "pushes": [
+   {
+    "time": 1793188201.4901,
+    "kind": "task",
+    "title": "Done: What's the first place DoorDash shows for a latte?",
+    "path": "/?task=task-1028-074946-21bb"
+   }
+  ]
+ },
+ "earlier_meta": [
+  {
+   "date": "2026-10-28 11:47 UTC",
+   "phone": "envoy-real",
+   "calls": 8,
+   "usd": 0.02769,
+   "commit": "053adf0",
+   "declined": [],
+   "pushes": [
+    {
+     "time": 1793188006.541683,
+     "kind": "task",
+     "title": "Failed: How many calories are in a Caffè Latte at Starbucks?",
+     "path": "/?task=task-1028-074606-10b6"
+    },
+    {
+     "time": 1793188062.86917,
+     "kind": "task",
+     "title": "Done: How many calories are in a Caffè Latte at Starbucks, and what's the first ",
+     "path": "/?task=task-1028-074649-d819"
+    }
+   ]
+  },
+  {
+   "date": "2026-10-28 11:49 UTC",
+   "phone": "envoy-real",
+   "calls": 6,
+   "usd": 0.01745,
+   "commit": "053adf0",
+   "declined": [],
+   "pushes": [
+    {
+     "time": 1793188167.278168,
+     "kind": "task",
+     "title": "Done: How many calories are in a Caffè Latte at Starbucks, and what's the first ",
+     "path": "/?task=task-1028-074842-a64f"
+    }
+   ]
+  }
+ ],
+ "single_app": {
+  "task_id": "task-1028-074606-10b6",
+  "goal": "How many calories are in a Caffè Latte at Starbucks?",
+  "app": "com.starbucks.mobilecard",
+  "routine": "starbucks_get_drink_calories",
+  "status": "failed",
+  "result": "outputs not found: calories",
+  "wall_s": 39.9,
+  "steps": {
+   "steps": 8,
+   "traced": 8,
+   "with_picture": 8,
+   "secure": 0,
+   "in_trace_order": true,
+   "seq_increasing": true,
+   "texts": [
+    "tap_order",
+    "dismiss_location_prompt",
+    "tap_skip",
+    "confirm_skip_to_menu",
+    "tap_search_menu",
+    "select_recent_search_result",
+    "find_open_drink_product",
+    "open_drink_product"
+   ]
+  },
+  "task_pushes": [
+   {
+    "time": 1793188006.541683,
+    "kind": "task",
+    "title": "Failed: How many calories are in a Caffè Latte at Starbucks?",
+    "path": "/?task=task-1028-074606-10b6"
+   }
+  ],
+  "approvals_requested": 0
+ },
+ "r1_chat": {
+  "question": "How many calories are in a Caffè Latte at Starbucks, and what's the first place DoorDash shows for a latte?",
+  "wall_s": 56.24,
+  "parent_id": "task-1028-074649-d819",
+  "status": "done",
+  "answer": "Starbucks couldn't be checked for calories, and DoorDash shows Philz Coffee first for a latte.",
+  "parts": [
+   {
+    "task_id": "task-1028-074649-8c31",
+    "app": "com.starbucks.mobilecard",
+    "routine": "starbucks_get_drink_calories",
+    "status": "failed",
+    "result": "outputs not found: calories",
+    "steps": {
+     "steps": 8,
+     "traced": 8,
+     "with_picture": 8,
+     "secure": 0,
+     "in_trace_order": true,
+     "seq_increasing": true,
+     "texts": [
+      "tap_order",
+      "dismiss_location_prompt",
+      "tap_skip",
+      "confirm_skip_to_menu",
+      "tap_search_menu",
+      "select_recent_search_result",
+      "find_open_drink_product",
+      "open_drink_product"
+     ]
+    }
+   },
+   {
+    "task_id": "task-1028-074649-568e",
+    "app": "com.dd.doordash",
+    "routine": "doordash_search_restaurants",
+    "status": "done",
+    "result": "first restaurant name: Philz Coffee",
+    "steps": {
+     "steps": 2,
+     "traced": 2,
+     "with_picture": 2,
+     "secure": 0,
+     "in_trace_order": true,
+     "seq_increasing": true,
+     "texts": [
+      "open_search",
+      "enter_search_query"
+     ]
+    }
+   }
+  ],
+  "task_pushes": [
+   {
+    "time": 1793188062.86917,
+    "kind": "task",
+    "title": "Done: How many calories are in a Caffè Latte at Starbucks, and what's the first ",
+    "path": "/?task=task-1028-074649-d819"
+   }
+  ],
+  "approvals_requested": 0
+ },
+ "r1_mcp": {
+  "question": "How many calories are in a Caffè Latte at Starbucks, and what's the first place DoorDash shows for a latte?",
+  "http_status": 200,
+  "reply": {
+   "task_id": "task-1028-074842-a64f",
+   "status": "queued",
+   "task_url": "http://127.0.0.1:8713/?task=task-1028-074842-a64f",
+   "parts": [
+    "Caffè Latte calories at Starbucks",
+    "first place DoorDash shows for a latte"
+   ]
+  },
+  "wall_s": 49.7,
+  "parent_id": "task-1028-074842-a64f",
+  "status": "done",
+  "answer": "Starbucks couldn't be checked, while DoorDash shows Philz Coffee first for a latte.",
+  "parts": [
+   {
+    "task_id": "task-1028-074842-61ba",
+    "app": "com.starbucks.mobilecard",
+    "routine": "starbucks_get_drink_calories",
+    "status": "failed",
+    "result": "outputs not found: calories",
+    "steps": {
+     "steps": 8,
+     "traced": 8,
+     "with_picture": 8,
+     "secure": 0,
+     "in_trace_order": true,
+     "seq_increasing": true,
+     "texts": [
+      "tap_order",
+      "dismiss_location_prompt",
+      "tap_skip",
+      "confirm_skip_to_menu",
+      "tap_search_menu",
+      "select_recent_search_result",
+      "find_open_drink_product",
+      "open_drink_product"
+     ]
+    }
+   },
+   {
+    "task_id": "task-1028-074842-39ce",
+    "app": "com.dd.doordash",
+    "routine": "doordash_search_restaurants",
+    "status": "done",
+    "result": "first restaurant name: Philz Coffee",
+    "steps": {
+     "steps": 2,
+     "traced": 2,
+     "with_picture": 2,
+     "secure": 0,
+     "in_trace_order": true,
+     "seq_increasing": true,
+     "texts": [
+      "open_search",
+      "enter_search_query"
+     ]
+    }
+   }
+  ],
+  "task_pushes": [
+   {
+    "time": 1793188167.278168,
+    "kind": "task",
+    "title": "Done: How many calories are in a Caffè Latte at Starbucks, and what's the first ",
+    "path": "/?task=task-1028-074842-a64f"
+   }
+  ],
+  "approvals_requested": 0
+ },
+ "single_app_doordash": {
+  "task_id": "task-1028-074946-21bb",
+  "goal": "What's the first place DoorDash shows for a latte?",
+  "app": "com.dd.doordash",
+  "routine": "doordash_search_restaurants",
+  "status": "done",
+  "result": "first restaurant name: Philz Coffee",
+  "wall_s": 17.4,
+  "steps": {
+   "steps": 2,
+   "traced": 2,
+   "with_picture": 2,
+   "secure": 0,
+   "in_trace_order": true,
+   "seq_increasing": true,
+   "texts": [
+    "open_search",
+    "enter_search_query"
+   ]
+  },
+  "task_pushes": [
+   {
+    "time": 1793188201.4901,
+    "kind": "task",
+    "title": "Done: What's the first place DoorDash shows for a latte?",
+    "path": "/?task=task-1028-074946-21bb"
+   }
+  ],
+  "approvals_requested": 0
+ }
+}
