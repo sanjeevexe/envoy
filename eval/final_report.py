@@ -39,8 +39,8 @@ def _plt():
 def _finish(fig, ax, name: str, note: str = "") -> str:
     ax.grid(axis="x", visible=False)
     ax.tick_params(length=0)
-    if note:
-        fig.text(0.01, 0.01, note, fontsize=9, color=MUTED, ha="left", va="bottom")
+    if note:  # below everything (the saved image grows to include it), so it never sits on an axis label
+        fig.text(0.01, -0.03, note, fontsize=9, color=MUTED, ha="left", va="top", wrap=True)
     CHARTS.mkdir(parents=True, exist_ok=True)
     path = CHARTS / f"{name}.png"
     fig.savefig(path, dpi=200, bbox_inches="tight")
@@ -88,39 +88,69 @@ def chart_repeats(d: dict[str, Any], systems: dict[str, Any] | None) -> str | No
     ns = sorted({r["n"] for r in rows})
     if len(ns) < 2:
         return None
+    from matplotlib.ticker import FixedLocator, FuncFormatter
     plt = _plt()
-    fig, (a1, a2) = plt.subplots(1, 2, figsize=(11, 4.6))
+    fig, (a1, a2, a3) = plt.subplots(1, 3, figsize=(15, 4.9))
     env_cost = [med([r["standard_usd"] for r in rows if r["n"] == n], 5) for n in ns]
     env_s = [med([r["duration_s"] for r in rows if r["n"] == n], 1) for n in ns]
     agent = [r for r in (systems or {}).get("rows", []) if r["system"] == "agent" and r["layout"] == 0 and r["try"] == 1]
     a_cost, a_s = med([r["standard_usd"] for r in agent], 5), med([r["duration_s"] for r in agent], 1)
-    for ax, env, ag, unit, title in ((a1, env_cost, a_cost, "$", "Cost per request"), (a2, env_s, a_s, "s", "Time per request")):
-        ax.plot(ns, env, color=COLOR["routine"], linewidth=2, marker="o", markersize=7, markeredgecolor=SURFACE, markeredgewidth=2, label="Envoy (agent once, then the routine)", zorder=3)
-        if ag is not None:
-            ax.plot(ns, [ag] * len(ns), color=COLOR["agent"], linewidth=2, label="Full agent every time", zorder=2)
+    # Cumulative: the mean over tasks of each task's running total (medians don't add up).
+    tasks = sorted({r["task"] for r in rows})
+    per = {t: {r["n"]: r["standard_usd"] for r in rows if r["task"] == t} for t in tasks}
+    env_cum = [sum(sum(per[t].get(k, 0) for k in ns if k <= n) for t in tasks) / len(tasks) for n in ns]
+    a_mean = sum(r["standard_usd"] for r in agent) / len(agent) if agent else None
+    env_kw = dict(color=COLOR["routine"], linewidth=2, marker="o", markersize=7, markeredgecolor=SURFACE, markeredgewidth=2, zorder=3)
+    ag_kw = dict(color=COLOR["agent"], linewidth=2, zorder=2)
+    money = FuncFormatter(lambda v, _: f"${v:.3f}".rstrip("0").rstrip(".") if v < 0.01 else f"${v:.2f}")
+
+    a1.plot(ns, env_cost, label="Envoy: the agent once, then the routine", **env_kw)
+    if a_cost is not None:
+        a1.plot(ns, [a_cost] * len(ns), label="Full agent every time", **ag_kw)
+    a1.set_yscale("log")
+    a1.yaxis.set_major_locator(FixedLocator([0.001, 0.002, 0.005, 0.01, 0.02, 0.05]))
+    a1.yaxis.set_minor_locator(FixedLocator([]))
+    a1.yaxis.set_major_formatter(money)
+    a1.set_ylim(0.0012, 0.08)
+    a1.set_title("Cost of each request (log scale)")
+    a1.annotate(f"${env_cost[0]:.3f}: the agent's run\n+ compiling the routine", (ns[0], env_cost[0]), textcoords="offset points", xytext=(10, -14), fontsize=9, color=INK2)
+    a1.annotate(f"${env_cost[-1]:.4f}", (ns[-1], env_cost[-1]), textcoords="offset points", xytext=(0, -16), fontsize=9, color=INK2, ha="center")
+    if a_cost is not None:
+        a1.annotate(f"${a_cost:.4f}", (ns[-1], a_cost), textcoords="offset points", xytext=(0, 7), fontsize=9, color=INK2, ha="center")
+
+    a2.plot(ns, env_s, **env_kw)
+    if a_s is not None:
+        a2.plot(ns, [a_s] * len(ns), **ag_kw)
+    a2.set_ylim(0, max(env_s + ([a_s] if a_s else [])) * 1.18)
+    a2.set_title("Seconds for each request")
+    a2.annotate(f"{env_s[0]:.0f} s", (ns[0], env_s[0]), textcoords="offset points", xytext=(10, -4), fontsize=9, color=INK2)
+    a2.annotate(f"{env_s[-1]:.1f} s", (ns[-1], env_s[-1]), textcoords="offset points", xytext=(0, -16), fontsize=9, color=INK2, ha="center")
+    if a_s is not None:
+        a2.annotate(f"{a_s:.1f} s", (ns[-1], a_s), textcoords="offset points", xytext=(0, 7), fontsize=9, color=INK2, ha="center")
+
+    a3.plot(ns, env_cum, **env_kw)
+    if a_mean is not None:
+        a_cum = [a_mean * n for n in ns]
+        a3.plot(ns, a_cum, **ag_kw)
+        even = next((n for n, e, a in zip(ns, env_cum, a_cum) if e <= a), None)
+        if even:
+            a3.annotate(f"even after {even} requests", (even, env_cum[ns.index(even)]), textcoords="offset points", xytext=(-6, 14),
+                        fontsize=9, color=INK2, ha="right")
+    a3.yaxis.set_major_formatter(money)
+    a3.set_ylim(0, max(env_cum + ([a_mean * ns[-1]] if a_mean else [])) * 1.15)
+    a3.set_title("Total cost so far (mean per task)")
+    for ax in (a1, a2, a3):
         ax.set_xticks(ns)
-        ax.set_xlabel("Request number (same task, a new booking each time)")
-        ax.set_title(title)
-        if unit == "$":
-            ax.set_yscale("log")
-            ax.set_ylabel("Median $ per request, standard prices (log)")
-            ax.annotate(f"${env[0]:.3f}\nagent + compile", (ns[0], env[0]), textcoords="offset points", xytext=(10, -4), fontsize=9, color=INK2)
-            ax.annotate(f"${env[-1]:.4f}", (ns[-1], env[-1]), textcoords="offset points", xytext=(-10, 8), fontsize=9, color=INK2, ha="right")
-            if ag is not None:
-                ax.annotate(f"${ag:.4f}", (ns[-1], ag), textcoords="offset points", xytext=(-10, 6), fontsize=9, color=INK2, ha="right")
-        else:
-            ax.set_ylabel("Median seconds per request")
-            ax.set_ylim(0, max(env + ([ag] if ag else [])) * 1.15)
-            ax.annotate(f"{env[-1]:.1f} s", (ns[-1], env[-1]), textcoords="offset points", xytext=(-10, 8), fontsize=9, color=INK2, ha="right")
-            if ag is not None:
-                ax.annotate(f"{ag:.1f} s", (ns[-1], ag), textcoords="offset points", xytext=(-10, 6), fontsize=9, color=INK2, ha="right")
+        ax.set_xlabel("Request number")
         ax.grid(axis="x", visible=False)
         ax.tick_params(length=0)
-    fig.suptitle("First run vs later runs: the same request, ten times", x=0.01, y=1.06, ha="left", fontsize=14, fontweight="bold", color=INK)
-    fig.legend(*a1.get_legend_handles_labels(), loc="lower left", bbox_to_anchor=(0.01, 0.95), ncol=2, handlelength=1.6)
-    fig.tight_layout()
-    return _finish(fig, a2, "cost_and_time_over_repeated_runs",
-                   "Medians over the 10 core tasks. Request 1 includes compiling (Muse Wonder) and verifying the routine; later requests include the matcher's one call.")
+    fig.suptitle("First run vs later runs: the same kind of request, ten times, a new booking each time", x=0.01, y=0.99, ha="left",
+                 fontsize=14, fontweight="bold", color=INK)
+    fig.tight_layout(rect=(0, 0.05, 1, 0.95))
+    fig.legend(*a1.get_legend_handles_labels(), loc="lower left", bbox_to_anchor=(0.01, 0.875), ncol=2, handlelength=1.6)
+    return _finish(fig, a3, "cost_and_time_over_repeated_runs",
+                   "SkyLark's 10 core tasks, standard prices. Request 1: the agent's run, compiling the routine (Muse Wonder) and verifying it. "
+                   "Later requests: the matcher's one call, then the routine. The agent's line: its median on the same tasks (left, middle), its mean added up (right).")
 
 
 def chart_change(d: dict[str, Any]) -> str | None:
@@ -128,29 +158,41 @@ def chart_change(d: dict[str, Any]) -> str | None:
     layouts = sorted({e["layout"] for e in exps})
     if not layouts:
         return None
+    from final_core import saved_by
     plt = _plt()
-    fig, ax = plt.subplots(figsize=(10, 5))
-    series = [("first", "Recovered on first meeting the change", COLOR["routine"]),
-              ("after", "Then ran with no model call", COLOR["agent"])]
-    width = 0.34
-    for i, (key, name, color) in enumerate(series):
-        ys = []
-        for layout in layouts:
-            es = [e for e in exps if e["layout"] == layout]
-            ok = sum(e[key]["passed"] and (key == "first" or e[key]["calls"] == 0) for e in es)
-            ys.append(100 * ok / len(es))
-        xs = [j + (i - 0.5) * (width + 0.02) for j in range(len(layouts))]
-        bars = ax.bar(xs, ys, width=width, color=color, label=name, zorder=3)
-        for b in bars:
-            ax.text(b.get_x() + b.get_width() / 2, b.get_height() + 1.5, f"{b.get_height():.0f}%", ha="center", va="bottom", fontsize=9, color=INK2)
-    ax.set_xticks(range(len(layouts)), [LAYOUTS[x] for x in layouts])
-    ax.set_ylim(0, 112)
-    ax.set_yticks([0, 25, 50, 75, 100], ["0%", "25%", "50%", "75%", "100%"])
-    ax.set_ylabel("Routines (of 10)")
-    ax.set_title("Recovery by type of injected UI change", pad=34)
-    ax.legend(loc="lower left", bbox_to_anchor=(0, 1.0), ncol=2, handlelength=1.2, borderaxespad=0.3)
+    fig, ax = plt.subplots(figsize=(11, 4.6))
+    # What saved each routine on first meeting the change, cheapest first (categorical slots in fixed order; failure is a status).
+    kinds = [("nothing needed", "No change needed", "#2a78d6"), ("relaxed match or scroll", "Relaxed match (no model call)", "#eb6834"),
+             ("local repair", "Local repair (model calls)", "#1baf7a"), ("the agent", "Full agent took over", "#eda100"),
+             ("failed", "Failed", "#d03b3b")]
+    ys = list(range(len(layouts)))[::-1]
+    lefts = [0] * len(layouts)
+    for key, name, color in kinds:
+        vals = [sum(saved_by(e["first"]) == key for e in exps if e["layout"] == layout) for layout in layouts]
+        if not any(vals):
+            continue
+        bars = ax.barh(ys, vals, left=lefts, height=0.56, color=color, label=name, edgecolor=SURFACE, linewidth=2, zorder=3)
+        for b, v in zip(bars, vals):
+            if v:
+                ax.text(b.get_x() + b.get_width() / 2, b.get_y() + b.get_height() / 2, str(v), ha="center", va="center", fontsize=10,
+                        color="white" if color in ("#2a78d6", "#d03b3b") else INK)
+        lefts = [a + v for a, v in zip(lefts, vals)]
+    n = max(lefts)
+    ax.set_yticks(ys, [LAYOUTS[x].replace("\n", " ") for x in layouts])
+    ax.set_xlim(0, n)
+    ax.set_xticks(range(0, n + 1, 2))
+    ax.set_xlabel(f"Routines (of {n}), on first meeting the change")
+    ax.grid(axis="y", visible=False)
+    trials = [e["trial"] for e in exps if e.get("trial")]
+    after_ok = sum(e["after"]["passed"] and e["after"]["calls"] == 0 for e in exps)
+    calls = sum(e["first"]["calls"] for e in exps)
+    ax.set_title(f"How routines got past each injected UI change: {sum(e['first']['passed'] for e in exps)} of {len(exps)} recovered, "
+                 f"{calls} model calls in all", pad=34)
+    ax.legend(loc="lower left", bbox_to_anchor=(0, 1.0), ncol=5, handlelength=1.2, borderaxespad=0.3, fontsize=9.5)
     return _finish(fig, ax, "recovery_by_injected_change",
-                   "Each of the 10 routines, compiled on the original layout, meets each changed layout on a new booking (repair and the agent allowed); its patches go on trial, then the active version runs on another booking.")
+                   f"Each of the {n} routines, compiled on the original layout, meets each changed layout on a new booking. Its patches then went on "
+                   f"trial: {sum(t['passed'] for t in trials)} of {len(trials)} passed, and the active version ran on another booking with no model "
+                   f"call {after_ok} of {len(exps)} times.")
 
 
 def chart_real(d: dict[str, Any]) -> str | None:
