@@ -118,6 +118,7 @@ class AppIndex:
         self.shell, self.pull, self.cache = shell, pull, cache
         self.aapt2 = aapt2 or _find_aapt2()
         self.apps: list[AppEntry] = []
+        self.errors: dict[str, str] = {}  # package → why its label couldn't be read this time (not cached: retried next load)
 
     def _labels(self) -> dict[str, str]:
         return json.loads(self.cache.read_text()) if self.cache.exists() else {}
@@ -126,7 +127,7 @@ class AppIndex:
         paths = [l.split(":", 1)[1].strip() for l in self.shell(f"pm path {package}").splitlines() if l.startswith("package:")]
         base = next((p for p in paths if p.endswith("base.apk")), paths[0] if paths else None)
         if not base or not self.aapt2:
-            return None
+            raise RuntimeError("no APK path" if not base else "aapt2 not found in the Android SDK's build-tools")
         with tempfile.TemporaryDirectory() as d:
             local = os.path.join(d, "app.apk")
             self.pull(base, local)
@@ -142,13 +143,16 @@ class AppIndex:
         apps = []
         for pkg, comp in launchers:
             key = f"{pkg}@{versions.get(pkg, '?')}"
-            if key not in labels:
+            if not labels.get(key):
                 try:
-                    labels[key] = self._label_of(pkg) or ""
-                except Exception:  # noqa: BLE001 - an unreadable APK just has no label; its package words still match
-                    labels[key] = ""
-                changed = True
-            apps.append(AppEntry(labels[key] or pkg.rsplit(".", 1)[-1], pkg, comp))
+                    label = self._label_of(pkg)
+                except Exception as e:  # noqa: BLE001 - an unreadable APK just has no label; its package words still match
+                    self.errors[pkg] = f"{type(e).__name__}: {e}"[:200]
+                    label = None
+                if label:
+                    labels[key] = label
+                    changed = True
+            apps.append(AppEntry(labels.get(key) or pkg.rsplit(".", 1)[-1], pkg, comp))
         if changed:
             self.cache.parent.mkdir(parents=True, exist_ok=True)
             self.cache.write_text(json.dumps(labels, indent=1, sort_keys=True))
@@ -169,6 +173,10 @@ class AppIndex:
 
 
 def _find_aapt2() -> str | None:
-    tools = Path(os.environ.get("ANDROID_HOME", Path.home() / "Library/Android/sdk")) / "build-tools"
-    found = sorted(tools.glob("*/aapt2"))
-    return str(found[-1]) if found else None
+    # ANDROID_HOME may come from a .env file with an unexpanded "~" (no shell to expand it), or be unset (android_env
+    # deletes it from the process environment): expand it, and fall back to the SDK's default place on a Mac.
+    for sdk in (os.environ.get("ANDROID_HOME"), Path.home() / "Library/Android/sdk"):
+        found = sorted((Path(sdk).expanduser() / "build-tools").glob("*/aapt2")) if sdk else []
+        if found:
+            return str(found[-1])
+    return None

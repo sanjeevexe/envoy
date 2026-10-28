@@ -378,6 +378,11 @@ class AndroidDevice:
         async with self._lock:
             return await asyncio.to_thread(lambda: self.apps().listing())
 
+    @property
+    def app_errors(self) -> dict[str, str]:
+        """Apps whose label couldn't be read (package → why); they are listed by their package's last word."""
+        return dict(self._apps.errors) if self._apps else {}
+
     async def launch(self, package: str, fresh: bool = False) -> None:
         """Bring an app to the front; `fresh` force-stops it first (a routine's start on real apps)."""
         if fresh:
