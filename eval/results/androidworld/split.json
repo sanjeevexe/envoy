@@ -1,0 +1,1351 @@
+{
+ "split_seed": 20261027,
+ "task_seed": 30,
+ "androidworld_commit": "55ddaf5edc6f6c25673aed343907d5b9dca66f84",
+ "dev": [
+  "AudioRecorderRecordAudioWithFileName",
+  "BrowserMaze",
+  "BrowserMultiply",
+  "CameraTakePhoto",
+  "ClockStopWatchPausedVerify",
+  "ClockTimerEntry",
+  "ContactsNewContactDraft",
+  "ExpenseAddMultiple",
+  "ExpenseDeleteMultiple2",
+  "ExpenseDeleteSingle",
+  "FilesMoveFile",
+  "MarkorChangeNoteContent",
+  "MarkorCreateNote",
+  "MarkorCreateNoteFromClipboard",
+  "MarkorDeleteAllNotes",
+  "MarkorDeleteNote",
+  "MarkorMergeNotes",
+  "MarkorTranscribeVideo",
+  "NotesIsTodo",
+  "NotesTodoItemCount",
+  "OpenAppTaskEval",
+  "OsmAndFavorite",
+  "OsmAndTrack",
+  "RecipeAddMultipleRecipes",
+  "RecipeAddMultipleRecipesFromMarkor",
+  "RecipeAddMultipleRecipesFromMarkor2",
+  "RecipeAddSingleRecipe",
+  "RecipeDeleteDuplicateRecipes2",
+  "RecipeDeleteSingleRecipe",
+  "RecipeDeleteSingleWithRecipeWithNoise",
+  "RetroCreatePlaylist",
+  "RetroPlayingQueue",
+  "SaveCopyOfReceiptTaskEval",
+  "SimpleCalendarAddOneEventRelativeDay",
+  "SimpleCalendarAnyEventsOnDate",
+  "SimpleCalendarDeleteEvents",
+  "SimpleCalendarDeleteEventsOnRelativeDay",
+  "SimpleCalendarEventsOnDate",
+  "SimpleCalendarFirstEventAfterStartTime",
+  "SimpleCalendarLocationOfEvent",
+  "SimpleCalendarNextEvent",
+  "SimpleCalendarNextMeetingWithPerson",
+  "SimpleSmsResend",
+  "SimpleSmsSend",
+  "SportsTrackerActivityDuration",
+  "SportsTrackerLongestDistanceActivity",
+  "SportsTrackerTotalDurationForCategoryThisWeek",
+  "SystemBluetoothTurnOffVerify",
+  "SystemBluetoothTurnOn",
+  "SystemBluetoothTurnOnVerify",
+  "SystemBrightnessMin",
+  "SystemWifiTurnOffVerify",
+  "SystemWifiTurnOnVerify",
+  "TasksDueNextWeek",
+  "TasksHighPriorityTasks",
+  "TasksIncompleteTasksOnDate",
+  "TurnOnWifiAndOpenApp",
+  "VlcCreateTwoPlaylists"
+ ],
+ "held_out": [
+  "AudioRecorderRecordAudio",
+  "BrowserDraw",
+  "CameraTakeVideo",
+  "ClockStopWatchRunning",
+  "ContactsAddContact",
+  "ExpenseAddMultipleFromGallery",
+  "ExpenseAddMultipleFromMarkor",
+  "ExpenseAddSingle",
+  "ExpenseDeleteDuplicates",
+  "ExpenseDeleteDuplicates2",
+  "ExpenseDeleteMultiple",
+  "FilesDeleteFile",
+  "MarkorAddNoteHeader",
+  "MarkorCreateFolder",
+  "MarkorCreateNoteAndSms",
+  "MarkorDeleteNewestNote",
+  "MarkorEditNote",
+  "MarkorMoveNote",
+  "MarkorTranscribeReceipt",
+  "NotesMeetingAttendeeCount",
+  "NotesRecipeIngredientCount",
+  "OsmAndMarker",
+  "RecipeAddMultipleRecipesFromImage",
+  "RecipeDeleteDuplicateRecipes",
+  "RecipeDeleteDuplicateRecipes3",
+  "RecipeDeleteMultipleRecipes",
+  "RecipeDeleteMultipleRecipesWithConstraint",
+  "RecipeDeleteMultipleRecipesWithNoise",
+  "RetroPlaylistDuration",
+  "RetroSavePlaylist",
+  "SimpleCalendarAddOneEvent",
+  "SimpleCalendarAddOneEventInTwoWeeks",
+  "SimpleCalendarAddOneEventTomorrow",
+  "SimpleCalendarAddRepeatingEvent",
+  "SimpleCalendarDeleteOneEvent",
+  "SimpleCalendarEventOnDateAtTime",
+  "SimpleCalendarEventsInNextWeek",
+  "SimpleCalendarEventsInTimeRange",
+  "SimpleDrawProCreateDrawing",
+  "SimpleSmsReply",
+  "SimpleSmsReplyMostRecent",
+  "SimpleSmsSendClipboardContent",
+  "SimpleSmsSendReceivedAddress",
+  "SportsTrackerActivitiesCountForWeek",
+  "SportsTrackerActivitiesOnDate",
+  "SportsTrackerTotalDistanceForCategoryOverInterval",
+  "SystemBluetoothTurnOff",
+  "SystemBrightnessMax",
+  "SystemBrightnessMaxVerify",
+  "SystemBrightnessMinVerify",
+  "SystemCopyToClipboard",
+  "SystemWifiTurnOff",
+  "SystemWifiTurnOn",
+  "TasksCompletedTasksForDate",
+  "TasksDueOnDate",
+  "TasksHighPriorityTasksDueOnDate",
+  "TurnOffWifiAndTurnOnBluetooth",
+  "VlcCreatePlaylist"
+ ],
+ "tasks": {
+  "AudioRecorderRecordAudio": {
+   "app": "audio recorder",
+   "difficulty": "easy",
+   "complexity": 1.2,
+   "step_budget": 12,
+   "tags": [
+    "requires_setup"
+   ]
+  },
+  "AudioRecorderRecordAudioWithFileName": {
+   "app": "audio recorder",
+   "difficulty": "easy",
+   "complexity": 2,
+   "step_budget": 20,
+   "tags": [
+    "data_entry",
+    "complex_ui_understanding",
+    "parameterized"
+   ]
+  },
+  "BrowserDraw": {
+   "app": "chrome",
+   "difficulty": "easy",
+   "complexity": 2,
+   "step_budget": 20,
+   "tags": [
+    "game_playing",
+    "parameterized"
+   ]
+  },
+  "BrowserMaze": {
+   "app": "chrome",
+   "difficulty": "easy",
+   "complexity": 2,
+   "step_budget": 20,
+   "tags": [
+    "game_playing",
+    "multi_app",
+    "complex_ui_understanding",
+    "memorization",
+    "parameterized"
+   ]
+  },
+  "BrowserMultiply": {
+   "app": "chrome",
+   "difficulty": "hard",
+   "complexity": 2.2,
+   "step_budget": 22,
+   "tags": [
+    "math_counting",
+    "memorization",
+    "screen_reading"
+   ]
+  },
+  "CameraTakePhoto": {
+   "app": "camera",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    ""
+   ]
+  },
+  "CameraTakeVideo": {
+   "app": "camera",
+   "difficulty": "medium",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    ""
+   ]
+  },
+  "ClockStopWatchPausedVerify": {
+   "app": "clock",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "verification"
+   ]
+  },
+  "ClockStopWatchRunning": {
+   "app": "clock",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    ""
+   ]
+  },
+  "ClockTimerEntry": {
+   "app": "clock",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "data_entry",
+    "parameterized"
+   ]
+  },
+  "ContactsAddContact": {
+   "app": "contacts",
+   "difficulty": "easy",
+   "complexity": 1.2,
+   "step_budget": 12,
+   "tags": [
+    "data_entry",
+    "parameterized"
+   ]
+  },
+  "ContactsNewContactDraft": {
+   "app": "contacts",
+   "difficulty": "easy",
+   "complexity": 1.2,
+   "step_budget": 12,
+   "tags": [
+    "screen_reading",
+    "data_entry"
+   ]
+  },
+  "ExpenseAddMultiple": {
+   "app": "pro expense",
+   "difficulty": "medium",
+   "complexity": 6,
+   "step_budget": 60,
+   "tags": [
+    "data_entry",
+    "parameterized"
+   ]
+  },
+  "ExpenseAddMultipleFromGallery": {
+   "app": "multi-app",
+   "difficulty": "hard",
+   "complexity": 6,
+   "step_budget": 60,
+   "tags": [
+    "multi_app",
+    "screen_reading",
+    "data_entry",
+    "information_retrieval",
+    "parameterized"
+   ]
+  },
+  "ExpenseAddMultipleFromMarkor": {
+   "app": "multi-app",
+   "difficulty": "hard",
+   "complexity": 6,
+   "step_budget": 60,
+   "tags": [
+    "transcription",
+    "repetition",
+    "multi_app",
+    "data_entry",
+    "memorization",
+    "parameterized"
+   ]
+  },
+  "ExpenseAddSingle": {
+   "app": "pro expense",
+   "difficulty": "easy",
+   "complexity": 1.2,
+   "step_budget": 12,
+   "tags": [
+    "parameterized",
+    "data_entry",
+    "search"
+   ]
+  },
+  "ExpenseDeleteDuplicates": {
+   "app": "pro expense",
+   "difficulty": "medium",
+   "complexity": 1.2,
+   "step_budget": 12,
+   "tags": [
+    "data_edit",
+    "parameterized"
+   ]
+  },
+  "ExpenseDeleteDuplicates2": {
+   "app": "pro expense",
+   "difficulty": "medium",
+   "complexity": 1.8,
+   "step_budget": 18,
+   "tags": [
+    "data_edit",
+    "requires_setup",
+    "parameterized"
+   ]
+  },
+  "ExpenseDeleteMultiple": {
+   "app": "pro expense",
+   "difficulty": "easy",
+   "complexity": 2,
+   "step_budget": 20,
+   "tags": [
+    "data_edit",
+    "parameterized"
+   ]
+  },
+  "ExpenseDeleteMultiple2": {
+   "app": "pro expense",
+   "difficulty": "hard",
+   "complexity": 3.4,
+   "step_budget": 34,
+   "tags": [
+    "screen_reading",
+    "parameterized"
+   ]
+  },
+  "ExpenseDeleteSingle": {
+   "app": "pro expense",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "screen_reading",
+    "parameterized"
+   ]
+  },
+  "FilesDeleteFile": {
+   "app": "files",
+   "difficulty": "medium",
+   "complexity": 2.2,
+   "step_budget": 22,
+   "tags": [
+    "data_edit",
+    "parameterized"
+   ]
+  },
+  "FilesMoveFile": {
+   "app": "files",
+   "difficulty": "medium",
+   "complexity": 2,
+   "step_budget": 20,
+   "tags": [
+    "search",
+    "screen_reading",
+    "parameterized"
+   ]
+  },
+  "MarkorAddNoteHeader": {
+   "app": "markor",
+   "difficulty": "medium",
+   "complexity": 1.2,
+   "step_budget": 12,
+   "tags": [
+    "data_entry",
+    "parameterized"
+   ]
+  },
+  "MarkorChangeNoteContent": {
+   "app": "markor",
+   "difficulty": "medium",
+   "complexity": 1.2,
+   "step_budget": 12,
+   "tags": [
+    "data_entry",
+    "requires_setup",
+    "parameterized"
+   ]
+  },
+  "MarkorCreateFolder": {
+   "app": "markor",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "data_entry",
+    "parameterized"
+   ]
+  },
+  "MarkorCreateNote": {
+   "app": "markor",
+   "difficulty": "medium",
+   "complexity": 1.6,
+   "step_budget": 16,
+   "tags": [
+    "data_entry",
+    "parameterized"
+   ]
+  },
+  "MarkorCreateNoteAndSms": {
+   "app": "multi-app",
+   "difficulty": "hard",
+   "complexity": 1.8,
+   "step_budget": 18,
+   "tags": [
+    "multi_app",
+    "data_entry",
+    "parameterized"
+   ]
+  },
+  "MarkorCreateNoteFromClipboard": {
+   "app": "multi-app",
+   "difficulty": "medium",
+   "complexity": 1.4,
+   "step_budget": 14,
+   "tags": [
+    "data_entry",
+    "parameterized"
+   ]
+  },
+  "MarkorDeleteAllNotes": {
+   "app": "markor",
+   "difficulty": "easy",
+   "complexity": 1.4,
+   "step_budget": 14,
+   "tags": [
+    "data_edit",
+    "repetition",
+    "parameterized"
+   ]
+  },
+  "MarkorDeleteNewestNote": {
+   "app": "markor",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "data_edit",
+    "parameterized"
+   ]
+  },
+  "MarkorDeleteNote": {
+   "app": "markor",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "data_edit",
+    "requires_setup",
+    "parameterized"
+   ]
+  },
+  "MarkorEditNote": {
+   "app": "markor",
+   "difficulty": "easy",
+   "complexity": 1.2,
+   "step_budget": 12,
+   "tags": [
+    "data_edit",
+    "transcription",
+    "parameterized"
+   ]
+  },
+  "MarkorMergeNotes": {
+   "app": "markor",
+   "difficulty": "hard",
+   "complexity": 7.8,
+   "step_budget": 78,
+   "tags": [
+    "data_edit",
+    "data_entry",
+    "parameterized"
+   ]
+  },
+  "MarkorMoveNote": {
+   "app": "markor",
+   "difficulty": "medium",
+   "complexity": 1.4,
+   "step_budget": 14,
+   "tags": [
+    "parameterized",
+    "complex_ui_understanding"
+   ]
+  },
+  "MarkorTranscribeReceipt": {
+   "app": "multi-app",
+   "difficulty": "medium",
+   "complexity": 1.8,
+   "step_budget": 18,
+   "tags": [
+    "transcription",
+    "data_entry",
+    "multi_app",
+    "screen_reading",
+    "memorization",
+    "parameterized"
+   ]
+  },
+  "MarkorTranscribeVideo": {
+   "app": "multi-app",
+   "difficulty": "hard",
+   "complexity": 2,
+   "step_budget": 20,
+   "tags": [
+    "multi_app",
+    "transcription",
+    "requires_setup",
+    "memorization",
+    "screen_reading",
+    "parameterized"
+   ]
+  },
+  "NotesIsTodo": {
+   "app": "joplin",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "information_retrieval",
+    "parameterized"
+   ]
+  },
+  "NotesMeetingAttendeeCount": {
+   "app": "joplin",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "search",
+    "parameterized"
+   ]
+  },
+  "NotesRecipeIngredientCount": {
+   "app": "joplin",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "search",
+    "parameterized"
+   ]
+  },
+  "NotesTodoItemCount": {
+   "app": "joplin",
+   "difficulty": "medium",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "information_retrieval",
+    "math_counting",
+    "parameterized"
+   ]
+  },
+  "OpenAppTaskEval": {
+   "app": "multi-app",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "parameterized"
+   ]
+  },
+  "OsmAndFavorite": {
+   "app": "osmand",
+   "difficulty": "medium",
+   "complexity": 1.3,
+   "step_budget": 13,
+   "tags": [
+    "search",
+    "complex_ui_understanding",
+    "parameterized"
+   ]
+  },
+  "OsmAndMarker": {
+   "app": "osmand",
+   "difficulty": "hard",
+   "complexity": 2.0,
+   "step_budget": 20,
+   "tags": [
+    "complex_ui_understanding",
+    "search",
+    "parameterized"
+   ]
+  },
+  "OsmAndTrack": {
+   "app": "osmand",
+   "difficulty": "hard",
+   "complexity": 12,
+   "step_budget": 120,
+   "tags": [
+    "complex_ui_understanding",
+    "search",
+    "data_entry",
+    "repetition",
+    "parameterized"
+   ]
+  },
+  "RecipeAddMultipleRecipes": {
+   "app": "broccoli app",
+   "difficulty": "medium",
+   "complexity": 6,
+   "step_budget": 60,
+   "tags": [
+    "data_entry",
+    "parameterized"
+   ]
+  },
+  "RecipeAddMultipleRecipesFromImage": {
+   "app": "multi-app",
+   "difficulty": "hard",
+   "complexity": 6,
+   "step_budget": 60,
+   "tags": [
+    "transcription",
+    "screen_reading",
+    "data_entry",
+    "complex_ui_understanding",
+    "parameterized"
+   ]
+  },
+  "RecipeAddMultipleRecipesFromMarkor": {
+   "app": "multi-app",
+   "difficulty": "hard",
+   "complexity": 6,
+   "step_budget": 60,
+   "tags": [
+    "data_entry",
+    "multi_app",
+    "screen_reading",
+    "memorization",
+    "parameterized"
+   ]
+  },
+  "RecipeAddMultipleRecipesFromMarkor2": {
+   "app": "multi-app",
+   "difficulty": "hard",
+   "complexity": 6,
+   "step_budget": 60,
+   "tags": [
+    "parameterized",
+    "screen_reading",
+    "complex_ui_understanding",
+    "repetition",
+    "multi_app",
+    "data_entry",
+    "information_retrieval"
+   ]
+  },
+  "RecipeAddSingleRecipe": {
+   "app": "broccoli app",
+   "difficulty": "easy",
+   "complexity": 2.4,
+   "step_budget": 24,
+   "tags": [
+    "data_entry",
+    "parameterized"
+   ]
+  },
+  "RecipeDeleteDuplicateRecipes": {
+   "app": "broccoli app",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "search",
+    "data_edit",
+    "screen_reading",
+    "repetition",
+    "parameterized"
+   ]
+  },
+  "RecipeDeleteDuplicateRecipes2": {
+   "app": "broccoli app",
+   "difficulty": "medium",
+   "complexity": 2.4,
+   "step_budget": 24,
+   "tags": [
+    "repetition",
+    "data_edit",
+    "parameterized"
+   ]
+  },
+  "RecipeDeleteDuplicateRecipes3": {
+   "app": "broccoli app",
+   "difficulty": "medium",
+   "complexity": 3.4,
+   "step_budget": 34,
+   "tags": [
+    "data_edit",
+    "parameterized"
+   ]
+  },
+  "RecipeDeleteMultipleRecipes": {
+   "app": "broccoli app",
+   "difficulty": "easy",
+   "complexity": 2.4,
+   "step_budget": 24,
+   "tags": [
+    "data_edit",
+    "parameterized"
+   ]
+  },
+  "RecipeDeleteMultipleRecipesWithConstraint": {
+   "app": "broccoli app",
+   "difficulty": "hard",
+   "complexity": 4,
+   "step_budget": 40,
+   "tags": [
+    "screen_reading",
+    "repetition",
+    "parameterized"
+   ]
+  },
+  "RecipeDeleteMultipleRecipesWithNoise": {
+   "app": "broccoli app",
+   "difficulty": "medium",
+   "complexity": 3.4,
+   "step_budget": 34,
+   "tags": [
+    "parameterized",
+    "search",
+    "complex_ui_understanding",
+    "repetition"
+   ]
+  },
+  "RecipeDeleteSingleRecipe": {
+   "app": "broccoli app",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "data_edit",
+    "search",
+    "parameterized"
+   ]
+  },
+  "RecipeDeleteSingleWithRecipeWithNoise": {
+   "app": "broccoli app",
+   "difficulty": "easy",
+   "complexity": 2,
+   "step_budget": 20,
+   "tags": [
+    "search",
+    "screen_reading",
+    "data_edit",
+    "parameterized"
+   ]
+  },
+  "RetroCreatePlaylist": {
+   "app": "retro music",
+   "difficulty": "medium",
+   "complexity": 2.4,
+   "step_budget": 24,
+   "tags": [
+    "data_entry",
+    "repetition",
+    "parameterized"
+   ]
+  },
+  "RetroPlayingQueue": {
+   "app": "retro music",
+   "difficulty": "easy",
+   "complexity": 3.2,
+   "step_budget": 32,
+   "tags": [
+    "parameterized"
+   ]
+  },
+  "RetroPlaylistDuration": {
+   "app": "retro music",
+   "difficulty": "medium",
+   "complexity": 3,
+   "step_budget": 30,
+   "tags": [
+    "math_counting",
+    "complex_ui_understanding",
+    "repetition",
+    "parameterized"
+   ]
+  },
+  "RetroSavePlaylist": {
+   "app": "retro music",
+   "difficulty": "hard",
+   "complexity": 5,
+   "step_budget": 50,
+   "tags": [
+    "search",
+    "repetition",
+    "parameterized"
+   ]
+  },
+  "SaveCopyOfReceiptTaskEval": {
+   "app": "simple gallery pro",
+   "difficulty": "hard",
+   "complexity": 1.6,
+   "step_budget": 16,
+   "tags": [
+    "parameterized",
+    "complex_ui_understanding"
+   ]
+  },
+  "SimpleCalendarAddOneEvent": {
+   "app": "simple calendar pro",
+   "difficulty": "hard",
+   "complexity": 3.4,
+   "step_budget": 34,
+   "tags": [
+    "data_entry",
+    "complex_ui_understanding",
+    "parameterized"
+   ]
+  },
+  "SimpleCalendarAddOneEventInTwoWeeks": {
+   "app": "simple calendar pro",
+   "difficulty": "medium",
+   "complexity": 3.4,
+   "step_budget": 34,
+   "tags": [
+    "data_entry",
+    "math_counting",
+    "parameterized"
+   ]
+  },
+  "SimpleCalendarAddOneEventRelativeDay": {
+   "app": "simple calendar pro",
+   "difficulty": "easy",
+   "complexity": 3.4,
+   "step_budget": 34,
+   "tags": [
+    "data_entry",
+    "parameterized"
+   ]
+  },
+  "SimpleCalendarAddOneEventTomorrow": {
+   "app": "simple calendar pro",
+   "difficulty": "easy",
+   "complexity": 3.4,
+   "step_budget": 34,
+   "tags": [
+    "data_entry",
+    "parameterized"
+   ]
+  },
+  "SimpleCalendarAddRepeatingEvent": {
+   "app": "simple calendar pro",
+   "difficulty": "easy",
+   "complexity": 3.4,
+   "step_budget": 34,
+   "tags": [
+    "data_entry",
+    "complex_ui_understanding",
+    "parameterized"
+   ]
+  },
+  "SimpleCalendarAnyEventsOnDate": {
+   "app": "simple calendar pro",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "information_retrieval",
+    "parameterized"
+   ]
+  },
+  "SimpleCalendarDeleteEvents": {
+   "app": "simple calendar pro",
+   "difficulty": "easy",
+   "complexity": 1.4,
+   "step_budget": 14,
+   "tags": [
+    "parameterized",
+    "data_edit"
+   ]
+  },
+  "SimpleCalendarDeleteEventsOnRelativeDay": {
+   "app": "simple calendar pro",
+   "difficulty": "medium",
+   "complexity": 1.2,
+   "step_budget": 12,
+   "tags": [
+    "data_edit",
+    "parameterized"
+   ]
+  },
+  "SimpleCalendarDeleteOneEvent": {
+   "app": "simple calendar pro",
+   "difficulty": "easy",
+   "complexity": 1.2,
+   "step_budget": 12,
+   "tags": [
+    "data_edit",
+    "complex_ui_understanding",
+    "parameterized"
+   ]
+  },
+  "SimpleCalendarEventOnDateAtTime": {
+   "app": "simple calendar pro",
+   "difficulty": "medium",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "information_retrieval",
+    "parameterized"
+   ]
+  },
+  "SimpleCalendarEventsInNextWeek": {
+   "app": "simple calendar pro",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "data_entry",
+    "parameterized"
+   ]
+  },
+  "SimpleCalendarEventsInTimeRange": {
+   "app": "simple calendar pro",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "complex_ui_understanding",
+    "screen_reading",
+    "search",
+    "transcription",
+    "information_retrieval",
+    "parameterized"
+   ]
+  },
+  "SimpleCalendarEventsOnDate": {
+   "app": "simple calendar pro",
+   "difficulty": "medium",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "information_retrieval",
+    "parameterized"
+   ]
+  },
+  "SimpleCalendarFirstEventAfterStartTime": {
+   "app": "simple calendar pro",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "parameterized",
+    "screen_reading"
+   ]
+  },
+  "SimpleCalendarLocationOfEvent": {
+   "app": "simple calendar pro",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "search",
+    "parameterized"
+   ]
+  },
+  "SimpleCalendarNextEvent": {
+   "app": "simple calendar pro",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "complex_ui_understanding",
+    "screen_reading",
+    "information_retrieval",
+    "parameterized"
+   ]
+  },
+  "SimpleCalendarNextMeetingWithPerson": {
+   "app": "simple calendar pro",
+   "difficulty": "medium",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "information_retrieval",
+    "parameterized"
+   ]
+  },
+  "SimpleDrawProCreateDrawing": {
+   "app": "simple draw pro",
+   "difficulty": "easy",
+   "complexity": 1.8,
+   "step_budget": 18,
+   "tags": [
+    "data_entry",
+    "parameterized"
+   ]
+  },
+  "SimpleSmsReply": {
+   "app": "simple sms messenger",
+   "difficulty": "easy",
+   "complexity": 1.2,
+   "step_budget": 12,
+   "tags": [
+    "search",
+    "data_entry",
+    "parameterized"
+   ]
+  },
+  "SimpleSmsReplyMostRecent": {
+   "app": "simple sms messenger",
+   "difficulty": "medium",
+   "complexity": 1.2,
+   "step_budget": 12,
+   "tags": [
+    "parameterized"
+   ]
+  },
+  "SimpleSmsResend": {
+   "app": "simple sms messenger",
+   "difficulty": "medium",
+   "complexity": 1.2,
+   "step_budget": 12,
+   "tags": [
+    "parameterized"
+   ]
+  },
+  "SimpleSmsSend": {
+   "app": "simple sms messenger",
+   "difficulty": "medium",
+   "complexity": 1.2,
+   "step_budget": 12,
+   "tags": [
+    "parameterized"
+   ]
+  },
+  "SimpleSmsSendClipboardContent": {
+   "app": "multi-app",
+   "difficulty": "easy",
+   "complexity": 1.2,
+   "step_budget": 12,
+   "tags": [
+    "data_entry",
+    "parameterized"
+   ]
+  },
+  "SimpleSmsSendReceivedAddress": {
+   "app": "simple sms messenger",
+   "difficulty": "medium",
+   "complexity": 1.8,
+   "step_budget": 18,
+   "tags": [
+    "information_retrieval",
+    "parameterized"
+   ]
+  },
+  "SportsTrackerActivitiesCountForWeek": {
+   "app": "open tracks sports tracker",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "search",
+    "requires_setup",
+    "parameterized"
+   ]
+  },
+  "SportsTrackerActivitiesOnDate": {
+   "app": "open tracks sports tracker",
+   "difficulty": "hard",
+   "complexity": 2,
+   "step_budget": 20,
+   "tags": [
+    "search",
+    "complex_ui_understanding",
+    "screen_reading",
+    "information_retrieval",
+    "transcription",
+    "parameterized"
+   ]
+  },
+  "SportsTrackerActivityDuration": {
+   "app": "open tracks sports tracker",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "information_retrieval",
+    "parameterized"
+   ]
+  },
+  "SportsTrackerLongestDistanceActivity": {
+   "app": "open tracks sports tracker",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "parameterized",
+    "screen_reading",
+    "information_retrieval",
+    "math_counting"
+   ]
+  },
+  "SportsTrackerTotalDistanceForCategoryOverInterval": {
+   "app": "open tracks sports tracker",
+   "difficulty": "hard",
+   "complexity": 2,
+   "step_budget": 20,
+   "tags": [
+    "search",
+    "parameterized",
+    "math_counting"
+   ]
+  },
+  "SportsTrackerTotalDurationForCategoryThisWeek": {
+   "app": "open tracks sports tracker",
+   "difficulty": "hard",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "math_counting",
+    "search",
+    "parameterized"
+   ]
+  },
+  "SystemBluetoothTurnOff": {
+   "app": "settings",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    ""
+   ]
+  },
+  "SystemBluetoothTurnOffVerify": {
+   "app": "settings",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "verification"
+   ]
+  },
+  "SystemBluetoothTurnOn": {
+   "app": "settings",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "screen_reading"
+   ]
+  },
+  "SystemBluetoothTurnOnVerify": {
+   "app": "settings",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "verification"
+   ]
+  },
+  "SystemBrightnessMax": {
+   "app": "settings",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    ""
+   ]
+  },
+  "SystemBrightnessMaxVerify": {
+   "app": "settings",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "verification"
+   ]
+  },
+  "SystemBrightnessMin": {
+   "app": "settings",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    ""
+   ]
+  },
+  "SystemBrightnessMinVerify": {
+   "app": "settings",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "verification"
+   ]
+  },
+  "SystemCopyToClipboard": {
+   "app": "clipper",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "data_entry",
+    "parameterized"
+   ]
+  },
+  "SystemWifiTurnOff": {
+   "app": "settings",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "screen_reading"
+   ]
+  },
+  "SystemWifiTurnOffVerify": {
+   "app": "settings",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "verification"
+   ]
+  },
+  "SystemWifiTurnOn": {
+   "app": "settings",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "screen_reading"
+   ]
+  },
+  "SystemWifiTurnOnVerify": {
+   "app": "settings",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "verification"
+   ]
+  },
+  "TasksCompletedTasksForDate": {
+   "app": "tasks",
+   "difficulty": "medium",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "information_retrieval",
+    "search",
+    "parameterized"
+   ]
+  },
+  "TasksDueNextWeek": {
+   "app": "tasks",
+   "difficulty": "medium",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "information_retrieval",
+    "parameterized"
+   ]
+  },
+  "TasksDueOnDate": {
+   "app": "tasks",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "search",
+    "parameterized"
+   ]
+  },
+  "TasksHighPriorityTasks": {
+   "app": "tasks",
+   "difficulty": "medium",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "complex_ui_understanding",
+    "search",
+    "information_retrieval",
+    "transcription",
+    "parameterized"
+   ]
+  },
+  "TasksHighPriorityTasksDueOnDate": {
+   "app": "tasks",
+   "difficulty": "medium",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "information_retrieval",
+    "screen_reading",
+    "parameterized"
+   ]
+  },
+  "TasksIncompleteTasksOnDate": {
+   "app": "tasks",
+   "difficulty": "easy",
+   "complexity": 1,
+   "step_budget": 10,
+   "tags": [
+    "parameterized",
+    "screen_reading",
+    "information_retrieval"
+   ]
+  },
+  "TurnOffWifiAndTurnOnBluetooth": {
+   "app": "settings",
+   "difficulty": "medium",
+   "complexity": 2,
+   "step_budget": 20,
+   "tags": [
+    ""
+   ]
+  },
+  "TurnOnWifiAndOpenApp": {
+   "app": "settings",
+   "difficulty": "easy",
+   "complexity": 2,
+   "step_budget": 20,
+   "tags": [
+    "parameterized"
+   ]
+  },
+  "VlcCreatePlaylist": {
+   "app": "vlc",
+   "difficulty": "medium",
+   "complexity": 2.8,
+   "step_budget": 28,
+   "tags": [
+    "data_edit",
+    "repetition",
+    "parameterized"
+   ]
+  },
+  "VlcCreateTwoPlaylists": {
+   "app": "vlc",
+   "difficulty": "medium",
+   "complexity": 4.8,
+   "step_budget": 48,
+   "tags": [
+    "data_entry",
+    "requires_setup",
+    "parameterized"
+   ]
+  }
+ }
+}

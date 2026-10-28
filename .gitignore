@@ -50,3 +50,6 @@ dist/
 data/*
 # The routine library (YAML versions, index, patch evidence) is part of the record
 !data/routines/
+
+# AndroidWorld (Google, Apache-2.0) and its own Python 3.11 venv: cloned and created by eval/androidworld (see prompts/androidworld-plan.md)
+third_party/
