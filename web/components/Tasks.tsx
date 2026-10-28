@@ -104,6 +104,7 @@ export function TaskDetail({ id, task, liveSteps, back, all, open }: {
         </div>
       </div>
       {t.result && <div className={`mt-3 rounded-lg px-3 py-2 text-sm ${active ? "bg-stone-100 text-stone-700" : "bg-emerald-50 text-emerald-900"}`}>{t.result}</div>}
+      {t.kind === "crossapp" && t.status === "done" && t.detail && <div className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900">{t.detail}</div>}
       {t.kind === "crossapp" && <Parts id={id} all={all} open={open} />}
       {t.status === "failed" && t.detail && <div className="mt-3 rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-900">{t.detail}</div>}
       {(data?.approvals ?? []).length > 0 && (
