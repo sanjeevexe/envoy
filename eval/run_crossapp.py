@@ -169,6 +169,15 @@ async def run_one(ctx: Any, watch: Watch, qid: str, mode: str) -> dict[str, Any]
             "cost": costs_between(t0 - 1, finished + 1)}
 
 
+def idle(run: dict[str, Any]) -> float:
+    """Seconds a phone sat unused between consecutive parts on it (the next part was still being matched)."""
+    total = 0.0
+    for dev in {p.get("device") for p in run.get("timeline") or []}:
+        spans = sorted((p["phone_at"], p["ended_at"]) for p in run["timeline"] if p.get("device") == dev and p.get("phone_at") and p.get("ended_at"))
+        total += sum(max(0.0, b[0] - a[1]) for a, b in zip(spans, spans[1:]))
+    return total
+
+
 def report(runs: list[dict[str, Any]], meta: dict[str, Any]) -> str:
     from api.crossapp import NAMES
     md = ["# Cross-app answers, end to end", "",
@@ -177,17 +186,18 @@ def report(runs: list[dict[str, Any]], meta: dict[str, Any]) -> str:
           "Parallel: through chat (pre-filter → lead → parts on the phones routing picks). Sequential: the same lead and "
           "orchestrator, each part started after the previous one ended. Wall time: from the message to the combined answer "
           "(memory is written after it, as for any task).", "",
-          "| Question | Mode | Wall s | Overlap s | Parts (phone, path, s on phone) | Calls | $ | Approvals | Status |",
-          "| --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
+          "Overlap: seconds two phones were busy at once. Idle: seconds a phone sat unused between two parts that needed it.", "",
+          "| Question | Mode | Wall s | Overlap s | Idle s | Parts (phone, path, s on phone) | Calls | $ | Approvals | Status |",
+          "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
     for r in runs:
         if r.get("error"):
-            md.append(f"| {r['question']} | {r['mode']} | – | – | {r['error']} | – | – | – | error |")
+            md.append(f"| {r['question']} | {r['mode']} | – | – | – | {r['error']} | – | – | – | error |")
             continue
         spans = {p["task_id"]: p for p in r.get("timeline") or []}
         parts = "; ".join(f"{NAMES.get(p['app'], p['app'])} ({p.get('device')}, {p.get('routine') or p.get('kind')}, "
                           f"{(spans.get(p['task_id'], {}).get('ended_at') or 0) - (spans.get(p['task_id'], {}).get('phone_at') or 0):.1f})"
                           for p in r["parts"])
-        md.append(f"| {r['question']} | {r['mode']} | {r['wall_s']} | {r.get('overlap_s')} | {parts} | {r['cost']['calls']} | "
+        md.append(f"| {r['question']} | {r['mode']} | {r['wall_s']} | {r.get('overlap_s')} | {idle(r):.1f} | {parts} | {r['cost']['calls']} | "
                   f"{r['cost']['usd']:.3f} | {r['approvals_requested']} | {r['status']} |")
     md += ["", "## Medians", "", "| Question | Parallel wall s | Sequential wall s | Saved |", "| --- | --- | --- | --- |"]
     for q in dict.fromkeys(r["question"] for r in runs):
@@ -237,6 +247,7 @@ async def main_async(args: argparse.Namespace) -> None:
         await ctx.pool.device(p)
     t_all = time.time()
     runs: list[dict[str, Any]] = []
+    prev = json.loads((OUT / "runs.json").read_text()).get("runs", []) if args.append and (OUT / "runs.json").exists() else []
     order = ["parallel", "sequential"] * args.pairs
     for q in args.questions:
         for mode in order:
@@ -248,7 +259,6 @@ async def main_async(args: argparse.Namespace) -> None:
             meta = {"date": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"), "phones": phones, "calls": spent["calls"], "usd": spent["usd"],
                     "branch": subprocess.run(["git", "branch", "--show-current"], capture_output=True, text=True, cwd=REPO).stdout.strip(),
                     "commit": subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True, cwd=REPO).stdout.strip()}
-            prev = json.loads((OUT / "runs.json").read_text()).get("runs", []) if args.append and (OUT / "runs.json").exists() else []
             (OUT / "runs.json").write_text(json.dumps({"meta": meta, "runs": prev + runs}, indent=1, default=str, ensure_ascii=False))
             (OUT / "report.md").write_text(report(prev + runs, meta))
     if args.serve:
