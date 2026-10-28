@@ -1,0 +1,112 @@
+{
+ "task": "MarkorEditNote",
+ "seed": 240351352,
+ "goal": "Edit note_SiFbv.txt in Markor. Add to the top of the note Hello, World!",
+ "score": 0.0,
+ "aw_run_time_s": 12.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:56:43.187178",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-175632-9af1",
+  "goal": "Edit note_SiFbv.txt in Markor. Add to the top of the note Hello, World!",
+  "max_steps": 12,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "markor_edit_note",
+   "stage": "model confirmed",
+   "inputs": {
+    "note_file_name": "note_SiFbv.txt",
+    "text_to_add": "Hello, World!"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "markor_edit_note",
+     0.778
+    ],
+    [
+     "markor_create_note_2",
+     0.689
+    ],
+    [
+     "markor_create_note",
+     0.489
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "markor_edit_note",
+  "version": 1,
+  "done": true,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 5,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_markor",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "find_open_note_file",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_note_file",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "prepend_text_to_note",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "dismiss_keyboard",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.002855,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 5.85,
+  "routine_duration_s": 2.96,
+  "trace_dir": "data/runs/aw-routines-verify-1028-175632-9af1",
+  "wall_s": 8.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

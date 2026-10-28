@@ -1,0 +1,119 @@
+{
+ "task": "AudioRecorderRecordAudio",
+ "seed": 2842804519,
+ "goal": "Record an audio clip using Audio Recorder app and save it.",
+ "score": 0.0,
+ "aw_run_time_s": 13.8,
+ "aw_episode_length": 12,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:51:44.712010",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-175131-e702",
+  "goal": "Record an audio clip using Audio Recorder app and save it.",
+  "max_steps": 12,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "audio_recorder_record_audio_clip",
+   "stage": "model confirmed",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "audio_recorder_record_clip",
+     0.943
+    ],
+    [
+     "audio_recorder_record_audio_clip",
+     0.886
+    ],
+    [
+     "contacts_open_app",
+     0.257
+    ]
+   ]
+  },
+  "status": "failed",
+  "result": "step save_recording: after-checks failed: no match (best 0.25 < 0.80 or ambiguous, runner-up 0.25); no match (best 0.25 < 0.80 or ambiguous, runner-up 0.25)",
+  "routine": "audio_recorder_record_audio_clip",
+  "version": 1,
+  "done": false,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 5,
+  "rung": 1,
+  "steps": [
+   {
+    "id": "launch_audio_recorder",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_get_started",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_apply_recording_format",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "start_recording",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "stop_recording",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "save_recording",
+    "status": "failed",
+    "rung": 1,
+    "rungs": [
+     "wait and retry: waited 1.6 s"
+    ],
+    "repairs": 0,
+    "detail": "step save_recording: after-checks failed: no match (best 0.25 < 0.80 or ambiguous, runner-up 0.25); no match (best 0.25 < 0.80 or ambiguous, runner-up 0.25)"
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.002554,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 8.13,
+  "routine_duration_s": 5.35,
+  "trace_dir": "data/runs/aw-routines-verify-1028-175131-e702",
+  "wall_s": 11.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}

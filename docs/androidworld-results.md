@@ -1,8 +1,10 @@
 # Envoy on AndroidWorld
 
-*Draft, Oct 28, 2026. Branch `androidworld`. Plan: `prompts/androidworld-plan.md`. Results: `eval/results/androidworld/`.*
+*Oct 28, 2026. Branch `androidworld`. Plan: `prompts/androidworld-plan.md`. Results: `eval/results/androidworld/`.*
 
 AndroidWorld (Google Research; Rawles et al., 2024; Apache-2.0) is a benchmark of 116 parameterized tasks across 20 open-source Android apps, set up, randomized and scored by its own code on a live emulator. This page reports Envoy on it: the headline success rate, its cost and speed, where it fails and why, what general changes fixed, and what routines did across seeds.
+
+**Headline.** Envoy as on `main` solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001). Both runs are seed 30, pass@1, at about $0.04 and 38 s per task (median $0.030). The rest of this page shows how each number was made.
 
 ## Setting
 
@@ -11,13 +13,13 @@ AndroidWorld (Google Research; Rawles et al., 2024; Apache-2.0) is a benchmark o
 | Benchmark | AndroidWorld at commit `55ddaf5` (Oct 23, 2026), all 116 tasks of the `android_world` family |
 | Seed | 30 (AndroidWorld's standard `--task_random_seed`), one instance per task, pass@1 |
 | Scoring | AndroidWorld's own `is_successful`, through its own `suite_utils.run`: a task counts only if the agent ended the episode itself. Information-retrieval answers through its answer channel (`interaction_cache`) |
-| Step budget | AndroidWorld's `int(10 × complexity)` per task (10 to 120; 2,369 in total) |
+| Step budget | AndroidWorld's `int(10 × complexity)` per task (10 to 120; 2,349 in total) |
 | Device | `AndroidWorldAvd`: Pixel 6 profile, 1080×2400, 420 dpi, API 33 Google APIs **arm64-v8a** (r17), 4 GB, on an Apple-silicon Mac, gRPC token required; AndroidWorld's one-time setup, two onboarding steps finished by hand (below) |
-| Agent | Envoy as on `main` at `7da3b13` plus one trace-only commit: plan once, then one decision per step |
-| Model | Muse Spark 1.3, `low` effort for steps and the plan, structured output; Contributor tier (`muse-spark-1.3-contributor`: same model, Meta may train on inputs) |
+| Agent | Baselines: Envoy as on `main` at `7da3b13` plus one trace-only commit: plan once, then one decision per step. Final: the branch after round 3 (backend as `a80b976`), `main`'s agent plus the 13 changes below |
+| Model | Muse Spark 1.3, `low` effort for steps and the plan, structured output. Standard tier (`muse-spark-1.3`) for the headline runs; the Contributor tier (`muse-spark-1.3-contributor`: same model, Meta may train on inputs, about 1/16 the price) for one baseline and the dev rounds |
 | Observation | the accessibility tree from uiautomator2, as a numbered element list; a 540 px screenshot only when the tree is sparse, the last action changed nothing, or the model asks (`look`); SAM 3.1 then grounding to place a `tap_point` |
-| Actions | Envoy's: tap, long press, type (accessibility set-text), scroll, swipe, back, home, launch (by **package name**), tap_point, look, wait, done, fail, hand-off, ask |
-| Memory, routines | off (no notes, no routine library) |
+| Actions | Envoy's: tap, long press, type (accessibility set-text), scroll, swipe, back, home, launch (by package name on `main`; by app name too after fix 1), tap_point, look, wait, done, fail, hand-off, ask |
+| Memory, routines | off: no notes, no routine library. Fix 11's working memory lasts one episode only |
 | Human help | none. Irreversible steps go through Envoy's policy gate and a script approves them (AndroidWorld's apps hold only synthetic data); every approval is counted |
 | Leaderboard label | "Screenshot + A11y tree" (screenshots are available on request), though most steps are text only |
 
@@ -164,4 +166,171 @@ The keyboard line now appears (186 screens), and on the screens I checked it is 
 
 Round 3's episodes record two commits: `a80b976` for the first ones and `70ed7a8` (the plan's decision rule, committed during the run) for the rest. Their `backend/` is identical.
 
-<!-- Improvements, routines, leaderboard comparison and proposals follow once measured. -->
+## Final re-measure: all 116 on the standard tier
+
+The branch after round 3 (backend as `a80b976`: fixes 1–9, 10b, 11 and 4b), run once on all 116 tasks: seed 30, pass@1, the standard tier (the model Envoy uses in the product), stage `final-standard`, Oct 28. It's compared with the standard baseline, task by task. The held-out half was never read and never run between the baseline and this run, so it is the estimate. The dev half is where the fixes were chosen, and it's reported beside held-out for that reason.
+
+| | Standard baseline (`main`) | Final (the branch) | Tasks gained / lost | Paired sign test |
+| --- | ---: | ---: | --- | --- |
+| **Held-out half (58)** | **12 (20.7%)** | **31 (53.4%)** | +20 −1 | p < 0.0001 |
+| Dev half (58) | 9 (15.5%) | 26 (44.8%) | +18 −1 | p = 0.0001 |
+| **All 116** | **21 (18.1%)** | **57 (49.1%)** | +38 −2 | p < 0.0001 |
+| held-out: easy / medium / hard | 8 / 1 / 3 of 30 / 18 / 10 | 19 / 7 / 5 | | |
+| dev: easy / medium / hard | 8 / 1 / 0 of 31 / 18 / 9 | 21 / 5 / 0 | | |
+| only episodes Envoy ended as done | 21 | 57 | | |
+| dones AndroidWorld scored 0 | 2 of 23 | 2 of 59 | | |
+| cost (billed = standard prices): total, median task | $4.49, $0.028 | $4.67, $0.030 | | |
+| cost per solved task | $0.214 | $0.082 | | |
+| Envoy time per task, median (model / device) | 38 s (19 / 19) | 38 s (19 / 18) | | |
+| AndroidWorld time per task, median (setup to score) | 47 s | 46 s | | |
+| steps used of the 2,349 budget; model calls | 2,085; 2,276 | 1,777; 2,018 | | |
+| screenshots sent; `look`s; stuck recoveries | 362; 205; 75 | 201; 87; 23 | | |
+| stopped by Envoy's $0.15 per-run cap | 2 | 4 | | |
+| approvals by the script (tasks) | 33 (16) | 104 (37) | | |
+
+**The held-out gain is as large as the dev gain** (+19 against +17), so these changes did not just fit the half they were chosen on. Against the Contributor baseline, the same run is +23 −1 on held-out. The three Contributor dev rounds (27, 25 and 29 of 58) and this standard-tier run's dev half (26) agree within the noise, so the tier doesn't explain the change.
+
+By app (baseline → final, of n): Simple Calendar Pro 3 → 12 of 17; Settings 10 → 10 of 14; multi-app 1 → 6 of 11; Broccoli 1 → 5 of 10; Markor 1 → 3 of 10; Pro Expense 0 → 3 of 7; Simple SMS 1 → 4 of 5; Joplin 1 → 3 of 4; Clock 1 → 3 of 3; Audio Recorder 0 → 2 of 2; Contacts 1 → 2 of 2; Camera 0 → 1 of 2; VLC 0 → 1 of 2; Simple Draw 0 → 1 of 1; Retro Music 1 → 1 of 4. Still 0: Tasks (6), OpenTracks (6), Chrome (3), OsmAnd (3), Files (2), Clipper, Simple Gallery. By AndroidWorld's own task tags: data entry 3 → 19 of 34, data edit 1 → 9 of 19, search 2 → 8 of 22, information retrieval 2 → 7 of 19, complex UI 1 → 6 of 18; still weak: repetition 2 → 3 of 12, transcription 1 → 2 of 8, math and counting 0 → 1 of 7, memorization 0 → 0 of 6.
+
+**The cost is about the same, per task, and less than half per success.** Each model call costs about 23% more: input tokens per call 2,502 → 2,916, output 206 → 240, measured on the first 49 tasks. Long text is shown in full (fix 8), REMEMBERED is added (11), and every step writes a `0_remember` field. Envoy makes fewer calls (2,018 against 2,276), so the run cost 4% more in total. The per-run cap of $0.15 on `main` stopped 4 long tasks before their step budget, against 2 in the baseline. The script approved 104 irreversible steps in 37 tasks, against 33 in 16, because Envoy now gets to the saving, deleting and sending.
+
+**Each change's mechanism on the held-out half** (`fix_effects.py`; held-out traces were read only for these counts, after the run):
+
+| # | Measure (held-out, 58 episodes) | Standard baseline | Final |
+| --- | --- | ---: | ---: |
+| 1 | Launches that failed | 7 | 1 |
+| 1 | Launches by an app's name that opened it | — | 73 |
+| 1 | Decisions on the home screen or app drawer | 419 (42%) | 59 (7%) |
+| 2 | Home-screen decisions with a ticking timer on screen | 197 | 0 |
+| 3 | Expected results repeating an earlier one word for word | 299 | 36 |
+| 4 | Reasons calling the action a placeholder | 35 | 0 |
+| 4b | Screens shown with the keyboard line | 0 | 159 |
+| 5 | Second dones accepted (scored 1) | 4 (4) | 5 (4) |
+| 8 | Screens with text longer than the old 120-character cut | 9 | 21 |
+| 10b | Back, as a share of all actions | 37% | 5% |
+| 11 | Episodes that kept something for later (steps) | — | 49 (340) |
+
+Every mechanism moved on held-out the way it did on dev. The score gain belongs to the set as a whole. One run can't split it among the changes, and the dev rounds can only roughly (round 1: fixes 1–9, +14; round 2: 10b, about 0; round 3: 11 and 4b, +4 within noise).
+
+**What still fails** (59 tasks, both halves): 51 ran out of steps, 4 hit the cost cap, 2 stopped as `failed`, and 2 said done wrongly.
+- MarkorMergeNotes: the note was created with the wrong content.
+- SystemBluetoothTurnOff: Envoy said done with the switch shown off (`[5] Switch (id: switch_widget) (off)`), and AndroidWorld scored 0. That's likely Bluetooth still changing state after the task's setup; the baseline failed it too.
+
+The failures are concentrated in the tags above and in apps where every screen is new to the model (Tasks, OpenTracks, OsmAnd): long tasks that repeat an action over many items, count or add up what they read, or carry content across apps. In 22 of round 2's 33 dev failures Envoy repeated the same action on the same screen 3 or more times; round 3's memory helped (RecipeAddMultipleRecipesFromMarkor, above) but didn't finish those tasks.
+
+**Two outages during the run.** From 10:49 to 11:12 this Mac couldn't reach Meta's API, and 98 episodes in a row failed in seconds. A second outage from about 11:56 cost one more. All 99 were set aside with the reason (`eval/results/androidworld/final-standard/invalidated/README.md`) and rerun into the same stage. The runner now waits out an outage instead of burning through tasks. None of the 116 counted episodes had an API error.
+
+<!-- ROUTINES -->
+
+## Against the leaderboard
+
+The leaderboard (fetched Oct 27, `eval/results/androidworld/leaderboard-2026-10-27.csv`) is self-reported pass@1 on the same 116 tasks, and it labels each entry's screen representation. Two things make most of it a different contest from this one. First, the top of the board (90–100%) comes from agent systems built on frontier models with screenshots, often several models and many calls per step. Second, AndroidWorld's step budgets were changed on Nov 18, 2024, so entries from before that date ran under different budgets. The fairest comparisons are agents that read the accessibility tree, with one general model, as published:
+
+| Agent | Model | Screen | Seed / runs | Success |
+| --- | --- | --- | --- | ---: |
+| Human (AndroidWorld paper) | — | — | 3 runs | 80.0 |
+| V-Droid (Mar 2025) | Llama 8B, trained verifier | A11y tree | 1 | 59.5 |
+| AndroidGen (Apr 2025) | GPT-4o | A11y tree | 1 | 46.8 |
+| ScaleTrack (Apr 2025) | ScaleTrack-7B, trained | A11y tree | 1 | 44.0 |
+| M3A, paper (May 2024) | GPT-4 Turbo | A11y tree | seed 30 (27.6–33.2 over 3 seeds) | 30.6 |
+| M3A, paper | GPT-4 Turbo | SoM (screenshot + a11y tree) | seed 30 | 25.4 |
+| M3A, paper | Gemini 1.5 Pro | SoM (screenshot + a11y tree) | seed 30 | 22.8 |
+| M3A-Simple, paper (minimal prompt, no guidelines or reflection) | GPT-4 Turbo | A11y tree | seed 30 | 19.8 |
+| M3A, paper | Gemini 1.5 Pro | A11y tree | seed 30 | 19.4 |
+| SeeAct, paper | GPT-4 Turbo | SoM (screenshot + a11y tree) | seed 30 | 15.5 |
+| M3A-Simple, paper | Gemini 1.5 Pro | A11y tree | seed 30 | 14.7 |
+| M3A, paper | Gemma 2 | A11y tree | seed 30 | 9.5 |
+| **Envoy, baseline (`main`)** | Muse Spark 1.3, low effort | A11y tree (+ screenshot on request, 17% of steps) | seed 30 | **18.1** (standard) / 18.5 (Contributor) |
+| **Envoy, with the changes (this branch)** | Muse Spark 1.3, low effort | A11y tree (+ screenshot on request, 11% of steps) | seed 30 | **49.1** (held-out half: 53.4) |
+
+What this says, with the caveats attached:
+- **Envoy as on `main` sits with the paper's 2024 agents on weaker setups** (M3A-Simple with GPT-4 Turbo, 19.8; M3A with Gemini 1.5 Pro on the tree, 19.4): 18%.
+- **With the changes it is at 49%** (53% on the held-out half), above the paper's best agent (M3A with GPT-4 Turbo, 30.6) and between AndroidGen (46.8) and V-Droid (59.5) among tree-only entries. It does that with one general model at low effort, no task-specific training, and about $0.04 and 38 s per task. The held-out 53% is the number to quote. The all-116 figure includes the dev half the fixes were chosen on, though the two halves came out close (45% and 53%).
+- **It is far from the top of the board** (90–100%, frontier models with screenshots, often several models per step) and from people (80%).
+- **Not like for like.** The paper's numbers (its Table 3, seed 30, temperature 0) ran on x86_64 under the budgets of the time, about twice the steps human annotators needed; Envoy's ran on arm64 under the current budgets. Envoy is one model call per step at `low` effort plus one plan call, and answers in one step where M3A takes two. The leaderboard's label for Envoy would be "Screenshot + A11y tree", because screenshots are available, but 89% of the final run's steps carried no screenshot (201 screenshots in 1,777 steps).
+- **Run-to-run noise is about ±4 tasks per half** (two identical baseline runs differed on 23 of 116 tasks), so differences of a few points against neighbours mean nothing.
+
+## What Envoy should change on `main`, ranked
+
+The 13 agent commits below cherry-pick cleanly onto `main` as it is (`d909d1a`, unchanged since it was merged into the branch). On that result `main`'s whole suite passes (159 tests). The backend is then identical to the one measured here, except for the AndroidWorld tests and a two-line trace change (`73c6fab`). Held-out effects are of the set as a whole (31 against 12 of 58, +20 −1). Each change's own evidence is its mechanism, counted on held-out and on dev. None names an app, a task or AndroidWorld.
+
+| Rank | Change (branch commit) | Why first | Held-out evidence (baseline → final) | Risk on `main` |
+| --- | --- | --- | --- | --- |
+| 1 | **Routines: a swipe compiles as a swipe, a launch as a launch** (`8bbed6b`) | A bug on `main` since `ca50dab`: every swipe in a trace compiles as a launch of the app on screen, and every launch is dropped | (A compiler fix: found compiling AndroidWorld runs; offline test.) None of `main`'s 279 committed routines has a swipe or launch, so no committed result changes | None |
+| 2 | **The step's fields are named in the order the model writes them** (10b, `598a6cd`) | Meta's decoder writes keys alphabetically, so on `main` the model writes the action before its reason, and an action begun `{"type"` can only be back, home or look. This affects every step Envoy takes, on every app, on both tiers | Back 37% → 5% of actions; placeholder reasons 35 → 0 | Field names change in the prompt only; code, traces and routines keep theirs |
+| 3 | **Apps open by the names people use; the plan sees the phone's apps** (fix 1, `0c6c830`; 1b, `821d713`) | The largest failure cause on dev (15 of 45): a guessed package that isn't installed, then no way to open the app | Failed launches 7 → 1; decisions on the home screen 42% → 7%; 73 launches by name, all opened the app | Labels come from `aapt2` in the Android SDK's build-tools, cached per app version; without it, names fall back to the package's last word |
+| 4 | **Done as soon as the screen shows it; answers in the goal's format; a second done is accepted** (fix 5, `876d5db`) | The plan's check is written before seeing the app and rejected correct dones; the agent then "verified" until it ran out | Second dones accepted 4 → 5. Across the four runs with the fix, 42 of the 43 accepted second dones were right. Wrong dones overall 2 of 23 → 2 of 59 | A wrong done can get through when the check can't judge it. It's recorded as `done_unverified` |
+| 5 | **The history says what happened, not what the model expected** (fix 3, `7dd3153`) | The model copied its own earlier expectations and acted on them, not on the screen | Echoed expectations 299 → 36 | None found |
+| 6 | **Working memory: what the model keeps from a screen comes back later** (fix 11, `23a845d`) | Read-and-forget loops: tasks re-read the same file or item dozens of times | Used in 49 of 58 held-out episodes (340 steps). On dev, relaunches 101 → 67 and +6 −2 against round 2 (within noise on its own) | About 17% more input and output tokens per call (with fix 8). The kept text is screen content and stays in the run's trace like the screens themselves; secure screens are still never read |
+| 7 | **A screen line that changes by itself is not progress** (fix 2, `11057a0`) | A ticking timer made every back "change the screen", so stuck detection never fired. Real apps have countdowns and clocks too | Timer-chip decisions 197 → 0 (mostly because fix 5 stopped Envoy starting the timer); stuck recoveries 75 → 23 in all | One extra look before acting; a masked line can hide a real one-character change |
+| 8 | **The keyboard line, back explained, placeholders asked again** (fix 4, `cce463b`; 4b, `a80b976`) | Back pressed "to dismiss the keyboard" when none was up closed forms | Keyboard line on 159 held-out screens (0 before 4b); placeholders asked again 0 (the cause is gone after 10b) | 4b reads the navigation bar's keyboard buttons; on a phone with gesture navigation they may not exist, and then the line is simply absent |
+| 9 | **The model knows the phone's date** (fix 7, `e926caa`) | "This Thursday" and "this Monday" went to wrong days | Simple Calendar Pro 3 → 12 of 17 (with the rest) | None |
+| 10 | **Long text is shown at length** (fix 8, `11cbdb9`) | A 12,101-character file was shown as its first 120 characters | Screens with long text 9 → 21 | Tokens: up to 4,000 characters per field and 8,000 per screen. Watch cost on real apps with long pages |
+| 11 | **Stuck recoveries start afresh once the agent moves again** (fix 6, `ba50eb5`) | An early stall ended runs that had recovered | Not separable | None |
+
+**Also for `main`, not code:**
+- **The $0.15 per-run cap** stopped 4 of 116 long tasks (OsmAndTrack, ExpenseAddMultiple, two recipe tasks) before their step budget, at standard prices. It is a product decision; for AndroidWorld-length tasks (up to 120 steps) about $0.30 would let them finish.
+- **Two problems to report to AndroidWorld's maintainers** (a public issue, so only with your OK): app snapshots are deleted when the emulator reboots on API 33, and then each app keeps its state from task to task without an error; a Clock timer started by one task keeps ticking on the home screen in every later one. Also two setup strings that don't match on this image (Contacts' "Don't allow" has a curly apostrophe; OpenTracks shows no "Allow").
+
+## What is left, or uncertain
+
+- **One run per configuration.** Every number is pass@1 on one seed. Two identical baseline runs differed on 23 of 116 tasks, so the final's 57 could plausibly be anywhere from about 50 to 64 in a rerun. The held-out gain (+20 −1) is far outside that; the rank of individual changes is not.
+- **Per-change attribution is by mechanism, not score.** The dev rounds add changes in groups. I didn't run a held-out ablation per change (each would cost a full run), so the ranked list says what each change did to the agent's behaviour, not how many tasks each one is worth.
+- **The dev half was used four times** (three rounds and the final); its 26 is not an estimate. The held-out half was used once.
+- **The setting differs from the official one** in ways that could move the number either way: arm64 instead of x86_64, Envoy's own device layer instead of AndroidWorld's, the forwarder parked during episodes, the one-step answer. All of it is listed under Setting.
+- **The Contributor tier is not the product's tier.** The dev rounds ran on it; the headline doesn't.
+- **Real apps are not AndroidWorld.** These changes were measured on 20 open-source apps with synthetic data. `main`'s real-app and SkyLark suites should be rerun with them before claiming anything there. The biggest risks are fix 5's accepted second done, and the token cost of fixes 8 and 11.
+- **The two failed Bluetooth dones** (SystemBluetoothTurnOff in the final run, and earlier ones) suggest that the emulator's Bluetooth state can lag behind its Settings screen. I didn't chase that further.
+- **Not done:** pass@k or other seeds for the full agent beyond the routines comparison; the AndroidWorld issues are drafted here, not filed.
+
+## Proposed text for other documents
+
+These are drafts for the main chat, which owns these files. Nothing here has been applied.
+
+### Proposed for the design doc's Evaluation section
+
+In "Task sets", the AndroidWorld part of the **Stretch** bullet becomes a measured set:
+
+> - **AndroidWorld (measured Oct 27–28, branch `androidworld`):** Google's 116 tasks over 20 apps, run unmodified through AndroidWorld's own runner and scoring on an API 33 emulator, seed 30, pass@1, with Envoy's whole agent as the agent (one subprocess per task; the answer goes to AndroidWorld's answer channel). The tasks were split 58/58 into a dev half for finding and fixing failures and a held-out half that measures the result; the split was committed before any run. Envoy as on `main` scored 21 of 116 (18%). With 13 general agent changes found on the dev half, it scored 57 (49%), and 31 of 58 (53%) on the held-out half against 12, at about $0.04 and 38 s per task (`docs/androidworld-results.md`). Routines compiled from seed-30 runs were replayed on three other seeds; see that report.
+
+And in "How results are reported", one sentence:
+
+> AndroidWorld results are reported by half (dev and held-out) with a paired test per change set, and failures are explained from step-level trace evidence, not from the score alone.
+
+### Proposed for `docs/meta-feedback.md`
+
+A new entry:
+
+> ## Muse Spark as the agent on Google's AndroidWorld benchmark (Oct 27–28; 116 tasks, both tiers, about 8,000 step calls)
+>
+> **What worked well**
+> - **The Contributor tier is a real saving, with the same quality.** The same agent scored 21.5 of 116 on Contributor and 21 of 116 on standard. Contributor billed $0.30 for the whole run against $4.49. That made it practical to develop fixes in repeated runs (three runs of 58 tasks for $0.63 billed).
+> - **Structured output never failed.** Not one of about 8,000 step calls across five runs ended in a model error or unusable output, sometimes after a sentence of prose (below).
+> - **The model follows a self-written memory well.** Given a field for "what on this screen you will need later", it kept text word for word (recipes, IDs, values to add up) in 45 of 58 episodes and used it on later screens. In the task that re-read a file most, the agent opened the file's app 10 times instead of 40.
+>
+> **What could be better**
+> - **Strict JSON-schema output writes keys in alphabetical order, not the schema's order.** A schema listing `zebra_first, middle, apple_last` came back `apple_last, middle, zebra_first`, 6 times of 6 on both tiers, even when the descriptions said "write this field first". So a model can't be made to reason before it answers by ordering fields, the usual technique. In a discriminated union, a discriminator named `type` sorts after most fields, so an object begun `{"type": …` can only become a variant with no other field. In Envoy's agent that variant was `back`: 42% of all actions in one run, often with reasons like "placeholder" or "schema requires back?". Renaming fields so the alphabet gives the intended order (`1_reason`, `2_expected_result`, `3_action`; `act` for the discriminator) took back from 13% to 8% of actions. Please document the ordering, or keep the schema's property order.
+> - **Prose before structured output, much more often on the standard tier.** 32% of standard-tier step answers (665 of 2,049) came as two message items, against 13% on Contributor (283 of 2,212). The first item was a sentence ("I'll open the app drawer to find the Audio Recorder."), the second the JSON. `output_text` joins them, so a plain `json.loads` fails; we parse the last message item. The sentence often disagreed with the JSON: it said "open the app drawer" while the JSON said back. That is how we found the key-order problem.
+> - **Contributor answered more slowly.** Median model time per task was 37 s on Contributor against 19 s on standard (same agent and tasks, different hours of the same day).
+
+### Proposed for `THIRD_PARTY.md`
+
+A new section after "In use", since none of this ships in Envoy or is imported by it:
+
+> ## Evaluation only: AndroidWorld (Oct 27–29, branch `androidworld`)
+>
+> Used to measure Envoy on Google's public benchmark. These tools run in their own Python 3.11 environment (`third_party/aw-venv`, gitignored). Envoy's backend doesn't import them, and they are not distributed with Envoy.
+>
+> | Component | Version | License | What we use it for |
+> | --- | --- | --- | --- |
+> | [AndroidWorld](https://github.com/google-research/android_world) | commit `55ddaf5` (Oct 23, 2026) | Apache-2.0 | The benchmark: 116 tasks, their setup, step budgets and scoring, run unmodified through its own `suite_utils.run` |
+> | [AndroidEnv](https://github.com/google-deepmind/android_env) | 1.2.3 | Apache-2.0 | AndroidWorld's emulator controller (adb and gRPC) |
+> | AndroidWorld's dependencies: absl-py, dm_env, grpcio-tools, protobuf, immutabledict, jsonschema, NumPy, pandas, OpenCV, pydub, tenacity, termcolor, requests, matplotlib, google-generativeai | as pinned by AndroidWorld | Apache-2.0, BSD-3-Clause, MIT, PSF | Required by AndroidWorld's code; Envoy uses none of them directly |
+> | [thefuzz](https://github.com/seatgeek/thefuzz), [python-Levenshtein](https://github.com/rapidfuzz/python-Levenshtein) | 0.19.0 / 0.27.5 | GPL-2.0 / GPL-2.0-or-later | AndroidWorld's fuzzy matching of answers when scoring. Run as part of the benchmark only; not linked into or shipped with Envoy |
+> | The apps AndroidWorld installs on its test emulator (Markor, Broccoli, Simple Calendar Pro, OsmAnd, VLC, Retro Music, Joplin, OpenTracks, Pro Expense, and others) | as AndroidWorld pins them | each app's own license (several GPL-3.0) | The benchmark's apps, installed by AndroidWorld's setup on the evaluation emulator only |
+>
+> **Android SDK Build-Tools' `aapt2`** (37.0.0; Android SDK License, a tool) is new for Envoy itself, not only the evaluation: `backend/devices/apps.py` runs `aapt2 dump badging` on an app's APK to read the name people know it by, cached per app version. Its last line under "Development tools (not shipped)" would read: "Android SDK command-line tools, platform-tools, build-tools (`aapt2`, which reads app names from APKs) and emulator (Android Software Development Kit License; not open source, used as tools only)".
+
+"What Envoy builds itself" gains a line:
+
+> - **AndroidWorld evaluation** (Oct 27–29; `eval/androidworld/`): the adapter that runs Envoy's whole agent as an AndroidWorld agent through AndroidWorld's own runner and scoring (a subprocess per task, the answer channel, step budgets), the gRPC token interceptor that lets AndroidWorld use a token-protected emulator, the stratified dev/held-out split, the failure taxonomy and its trace digests, per-change effect counts, and the routines-across-seeds experiment. AndroidWorld and AndroidEnv are the benchmark, unmodified.

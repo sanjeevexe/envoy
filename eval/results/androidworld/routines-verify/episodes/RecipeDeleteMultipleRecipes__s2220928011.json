@@ -1,0 +1,107 @@
+{
+ "task": "RecipeDeleteMultipleRecipes",
+ "seed": 2220928011,
+ "goal": "Delete the following recipes from Broccoli app: Zucchini Noodles with Pesto, Garlic Butter Shrimp, Lentil Soup.",
+ "score": 0.0,
+ "aw_run_time_s": 20.7,
+ "aw_episode_length": 24,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:59:06.877770",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-175848-7591",
+  "goal": "Delete the following recipes from Broccoli app: Zucchini Noodles with Pesto, Garlic Butter Shrimp, Lentil Soup.",
+  "max_steps": 24,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "broccoli_delete_recipes_2",
+   "stage": "model confirmed",
+   "inputs": {
+    "recipe_1_name": "Zucchini Noodles with Pesto",
+    "recipe_2_name": "Garlic Butter Shrimp",
+    "recipe_3_name": "Lentil Soup"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "broccoli_delete_recipes_2",
+     0.723
+    ],
+    [
+     "broccoli_delete_recipes",
+     0.573
+    ],
+    [
+     "broccoli_delete_recipe",
+     0.542
+    ]
+   ]
+  },
+  "status": "failed",
+  "result": "step tap_delete_recipe_1: before-checks failed: app in front is PopupWindow:51b096d",
+  "routine": "broccoli_delete_recipes_2",
+  "version": 1,
+  "done": false,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 3,
+  "rung": 1,
+  "steps": [
+   {
+    "id": "launch_broccoli",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_recipe_1",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_more_options_recipe_1",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_delete_recipe_1",
+    "status": "failed",
+    "rung": 1,
+    "rungs": [
+     "wait and retry: waited 5 s"
+    ],
+    "repairs": 0,
+    "detail": "step tap_delete_recipe_1: before-checks failed: app in front is PopupWindow:51b096d"
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.005267,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 13.28,
+  "routine_duration_s": 7.59,
+  "trace_dir": "data/runs/aw-routines-verify-1028-175848-7591",
+  "wall_s": 15.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.6
+  }
+ }
+}

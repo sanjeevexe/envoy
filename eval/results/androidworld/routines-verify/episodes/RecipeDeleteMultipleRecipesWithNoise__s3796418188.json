@@ -1,0 +1,83 @@
+{
+ "task": "RecipeDeleteMultipleRecipesWithNoise",
+ "seed": 3796418188,
+ "goal": "Delete the following recipes from Broccoli app: Chicken Alfredo Pasta, Tomato Basil Bruschetta, Grilled Cheese with Tomato and Basil.",
+ "score": 0.0,
+ "aw_run_time_s": 25.7,
+ "aw_episode_length": 34,
+ "agent": "envoy",
+ "finished": "2026-10-28 18:00:02.111124",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-175939-8b7a",
+  "goal": "Delete the following recipes from Broccoli app: Chicken Alfredo Pasta, Tomato Basil Bruschetta, Grilled Cheese with Tomato and Basil.",
+  "max_steps": 34,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "broccoli_delete_recipes_2",
+   "stage": "model confirmed",
+   "inputs": {
+    "recipe_1_name": "Chicken Alfredo Pasta",
+    "recipe_2_name": "Tomato Basil Bruschetta",
+    "recipe_3_name": "Grilled Cheese with Tomato and Basil"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "broccoli_delete_recipes_2",
+     0.723
+    ],
+    [
+     "broccoli_delete_recipes",
+     0.573
+    ],
+    [
+     "broccoli_delete_recipe",
+     0.542
+    ]
+   ]
+  },
+  "status": "failed",
+  "result": "step launch_broccoli: after-checks failed: no match (best 0.57 < 0.80 or ambiguous, runner-up 0.45)",
+  "routine": "broccoli_delete_recipes_2",
+  "version": 1,
+  "done": false,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 0,
+  "rung": 1,
+  "steps": [
+   {
+    "id": "launch_broccoli",
+    "status": "failed",
+    "rung": 1,
+    "rungs": [
+     "wait and retry: waited 1.6 s"
+    ],
+    "repairs": 0,
+    "detail": "step launch_broccoli: after-checks failed: no match (best 0.57 < 0.80 or ambiguous, runner-up 0.45)"
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.004503,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 17.79,
+  "routine_duration_s": 12.77,
+  "trace_dir": "data/runs/aw-routines-verify-1028-175939-8b7a",
+  "wall_s": 20.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

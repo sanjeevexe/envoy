@@ -1,0 +1,81 @@
+{
+ "task": "RecipeDeleteSingleWithRecipeWithNoise",
+ "seed": 1967173552,
+ "goal": "Delete the following recipes from Broccoli app: Classic Margherita Pizza.",
+ "score": 0.0,
+ "aw_run_time_s": 23.5,
+ "aw_episode_length": 20,
+ "agent": "envoy",
+ "finished": "2026-10-28 18:00:45.224003",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-180024-51ab",
+  "goal": "Delete the following recipes from Broccoli app: Classic Margherita Pizza.",
+  "max_steps": 20,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "broccoli_delete_recipe",
+   "stage": "model confirmed",
+   "inputs": {
+    "recipe_name": "Classic Margherita Pizza"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "broccoli_delete_recipes_2",
+     0.8
+    ],
+    [
+     "broccoli_delete_recipes",
+     0.65
+    ],
+    [
+     "broccoli_delete_recipe",
+     0.6
+    ]
+   ]
+  },
+  "status": "failed",
+  "result": "step launch_broccoli: after-checks failed: no match (best 0.57 < 0.80 or ambiguous, runner-up 0.45)",
+  "routine": "broccoli_delete_recipe",
+  "version": 1,
+  "done": false,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 0,
+  "rung": 1,
+  "steps": [
+   {
+    "id": "launch_broccoli",
+    "status": "failed",
+    "rung": 1,
+    "rungs": [
+     "wait and retry: waited 2.0 s"
+    ],
+    "repairs": 0,
+    "detail": "step launch_broccoli: after-checks failed: no match (best 0.57 < 0.80 or ambiguous, runner-up 0.45)"
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.002006,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 15.98,
+  "routine_duration_s": 13.36,
+  "trace_dir": "data/runs/aw-routines-verify-1028-180024-51ab",
+  "wall_s": 18.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.3
+  }
+ }
+}

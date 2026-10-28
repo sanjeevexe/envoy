@@ -54,10 +54,14 @@ async def run_routine(payload: dict[str, Any]) -> dict[str, Any]:
         m = await RoutineMatcher(store, adapter, data_scope="test_app", contributor=contributor).match(payload["goal"], task_id=payload["run_id"])
         rec["match"] = {"routine": m.routine.routine if m.routine else None, "stage": m.stage, "inputs": m.inputs, "missing": m.missing,
                         "candidates": m.candidates}
-        calls, cost, cost_std = m.model_calls, 0.0, m.cost_usd  # the matcher reports its cost at standard prices
+        # The matcher reports its cost at standard prices: that is the bill on the standard tier. On Contributor its bill
+        # isn't reported (about 1/16 of that) and is left out of cost_usd.
+        calls, cost_std = m.model_calls, m.cost_usd
+        cost = 0.0 if contributor else cost_std
         if m.routine is None or m.missing:
             rec.update(status="no_routine" if m.routine is None else "needs_user", result=m.stage, done=False, answer=None,
-                       model_calls=calls, cost_at_standard_usd=round(cost_std, 6), duration_s=round(time.time() - t0, 2))
+                       model_calls=calls, cost_usd=round(cost, 6), cost_at_standard_usd=round(cost_std, 6),
+                       duration_s=round(time.time() - t0, 2))
             return rec
         ex = RoutineExecutor(device, adapter=adapter, approver=approver,
                              config=ExecConfig(data_scope="test_app", contributor=contributor,

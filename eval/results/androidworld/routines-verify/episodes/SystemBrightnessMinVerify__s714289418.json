@@ -1,0 +1,111 @@
+{
+ "task": "SystemBrightnessMinVerify",
+ "seed": 714289418,
+ "goal": "Turn brightness to the min value.",
+ "score": 1.0,
+ "aw_run_time_s": 15.1,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 18:37:20.942894",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-183707-a779",
+  "goal": "Turn brightness to the min value.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "settings_set_brightness_minimum_2",
+   "stage": "model confirmed",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "settings_set_brightness_minimum_2",
+     0.8
+    ],
+    [
+     "settings_set_brightness_max",
+     0.7
+    ],
+    [
+     "settings_set_brightness_max_2",
+     0.7
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "settings_set_brightness_minimum_2",
+  "version": 1,
+  "done": true,
+  "answer": "0.0",
+  "outputs": {
+   "brightness": "0.0"
+  },
+  "steps_used": 5,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_settings",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "scroll_until_display",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_display",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_brightness_level",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "swipe_brightness_to_minimum",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.002056,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 8.7,
+  "routine_duration_s": 6.12,
+  "trace_dir": "data/runs/aw-routines-verify-1028-183707-a779",
+  "wall_s": 11.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.9
+  }
+ }
+}

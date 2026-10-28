@@ -1,0 +1,76 @@
+{
+ "task": "RecipeAddMultipleRecipesFromImage",
+ "seed": 2293877352,
+ "goal": "Add the recipes from recipes.jpg in Simple Gallery Pro to the Broccoli recipe app.",
+ "score": 0.0,
+ "aw_run_time_s": 13.8,
+ "aw_episode_length": 60,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:58:23.449215",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-175814-aed1",
+  "goal": "Add the recipes from recipes.jpg in Simple Gallery Pro to the Broccoli recipe app.",
+  "max_steps": 60,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "broccoli_add_recipes_from_image",
+   "stage": "model confirmed",
+   "inputs": {
+    "image_filename": "recipes.jpg"
+   },
+   "missing": [
+    "recipe_1_title",
+    "recipe_1_description",
+    "recipe_1_servings",
+    "recipe_1_preparation_time",
+    "recipe_1_ingredients",
+    "recipe_1_directions",
+    "recipe_2_title",
+    "recipe_2_description",
+    "recipe_2_servings",
+    "recipe_2_preparation_time",
+    "recipe_2_ingredients",
+    "recipe_2_directions",
+    "recipe_3_title",
+    "recipe_3_description",
+    "recipe_3_servings",
+    "recipe_3_preparation_time",
+    "recipe_3_ingredients",
+    "recipe_3_directions"
+   ],
+   "candidates": [
+    [
+     "broccoli_add_recipe",
+     0.778
+    ],
+    [
+     "broccoli_add_recipes_from_image",
+     0.756
+    ],
+    [
+     "broccoli_delete_recipe",
+     0.583
+    ]
+   ]
+  },
+  "status": "needs_user",
+  "result": "model confirmed",
+  "done": false,
+  "answer": null,
+  "model_calls": 1,
+  "cost_at_standard_usd": 0.005614,
+  "duration_s": 4.41,
+  "wall_s": 7.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

@@ -1,0 +1,159 @@
+{
+ "task": "SimpleCalendarDeleteEvents",
+ "seed": 1570935667,
+ "goal": "In Simple Calendar Pro, delete all the calendar events on 2023-10-27",
+ "score": 0.0,
+ "aw_run_time_s": 16.7,
+ "aw_episode_length": 14,
+ "agent": "envoy",
+ "finished": "2026-10-28 18:03:51.979970",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-180337-299a",
+  "goal": "In Simple Calendar Pro, delete all the calendar events on 2023-10-27",
+  "max_steps": 14,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "simple_calendar_pro_delete_events_on_dat",
+   "stage": "model confirmed",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "simple_calendar_pro_delete_events_on_dat",
+     0.88
+    ],
+    [
+     "simple_calendar_pro_delete_day_events",
+     0.7
+    ],
+    [
+     "simple_calendar_pro_list_events",
+     0.667
+    ]
+   ]
+  },
+  "status": "failed",
+  "result": "step tap_delete_second_event: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00); no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+  "routine": "simple_calendar_pro_delete_events_on_dat",
+  "version": 1,
+  "done": false,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 6,
+  "rung": 1,
+  "steps": [
+   {
+    "id": "launch_simple_calendar_pro",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "navigate_to_event_date",
+    "status": "done",
+    "rung": 0,
+    "rungs": [
+     "found its picture (match 0.91, next 0.59)"
+    ],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_first_event",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_delete_first_event",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "confirm_delete_first_event",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_second_event",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_delete_second_event",
+    "status": "failed",
+    "rung": 1,
+    "rungs": [
+     "wait and retry: waited 1.5 s"
+    ],
+    "repairs": 0,
+    "detail": "step tap_delete_second_event: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00); no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)"
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.002816,
+  "approvals": [
+   {
+    "step": "tap_delete_first_event",
+    "description": "tap \"Delete\" in com.simplemobiletools.calendar.pro (routine simple_calendar_pro_delete_events_on_dat v1)",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": "confirm_delete_first_event",
+    "description": "tap \"Yes\" in com.simplemobiletools.calendar.pro (routine simple_calendar_pro_delete_events_on_dat v1)",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": "tap_delete_second_event",
+    "description": "tap \"Delete\" in com.simplemobiletools.calendar.pro (routine simple_calendar_pro_delete_events_on_dat v1)",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "duration_s": 9.27,
+  "routine_duration_s": 6.11,
+  "trace_dir": "data/runs/aw-routines-verify-1028-180337-299a",
+  "wall_s": 11.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.1
+  }
+ }
+}

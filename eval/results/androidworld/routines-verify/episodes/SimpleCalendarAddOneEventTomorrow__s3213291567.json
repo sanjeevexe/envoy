@@ -1,0 +1,62 @@
+{
+ "task": "SimpleCalendarAddOneEventTomorrow",
+ "seed": 3213291567,
+ "goal": "In Simple Calendar Pro, create a calendar event for tomorrow at 20h with the title 'Call with the Team' and the description 'We will prepare for team roles.'. The event should last for 30 mins.",
+ "score": 0.0,
+ "aw_run_time_s": 18.5,
+ "aw_episode_length": 34,
+ "agent": "envoy",
+ "finished": "2026-10-28 18:02:53.715090",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-180238-e2f7",
+  "goal": "In Simple Calendar Pro, create a calendar event for tomorrow at 20h with the title 'Call with the Team' and the description 'We will prepare for team roles.'. The event should last for 30 mins.",
+  "max_steps": 34,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "calendar_create_event",
+   "stage": "model confirmed",
+   "inputs": {
+    "event_title": "Call with the Team",
+    "event_description": "We will prepare for team roles.",
+    "event_start_hour": "20",
+    "event_duration_minutes": "30"
+   },
+   "missing": [
+    "event_day"
+   ],
+   "candidates": [
+    [
+     "calendar_create_event",
+     0.756
+    ],
+    [
+     "simple_calendar_create_event",
+     0.756
+    ],
+    [
+     "simple_calendar_pro_create_event",
+     0.756
+    ]
+   ]
+  },
+  "status": "needs_user",
+  "result": "model confirmed",
+  "done": false,
+  "answer": null,
+  "model_calls": 1,
+  "cost_at_standard_usd": 0.012392,
+  "duration_s": 10.38,
+  "wall_s": 13.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.1
+  }
+ }
+}

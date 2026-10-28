@@ -1,0 +1,199 @@
+{
+ "task": "SimpleDrawProCreateDrawing",
+ "seed": 3242452795,
+ "goal": "Create a new drawing in Simple Draw Pro. Name it adipiscing_fair_jelly_final.png. Save it in the Pictures folder within the sdk_gphone_x86_64 storage area.",
+ "score": 0.0,
+ "aw_run_time_s": 47.8,
+ "aw_episode_length": 18,
+ "agent": "envoy",
+ "finished": "2026-10-28 18:32:22.953565",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-183136-2352",
+  "goal": "Create a new drawing in Simple Draw Pro. Name it adipiscing_fair_jelly_final.png. Save it in the Pictures folder within the sdk_gphone_x86_64 storage area.",
+  "max_steps": 18,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "simple_draw_create_drawing",
+   "stage": "model confirmed",
+   "inputs": {
+    "file_name": "adipiscing_fair_jelly_final",
+    "storage_volume_name": "sdk_gphone_x86_64",
+    "destination_folder_name": "Pictures"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "simple_draw_create_drawing",
+     0.78
+    ],
+    [
+     "markor_create_folder",
+     0.53
+    ],
+    [
+     "contacts_create_contact_2",
+     0.46
+    ]
+   ]
+  },
+  "status": "failed",
+  "result": "step find_select_destination_folder_to_verify: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+  "routine": "simple_draw_create_drawing",
+  "version": 1,
+  "done": false,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 8,
+  "rung": 2,
+  "steps": [
+   {
+    "id": "launch_simple_draw_pro",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_save",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_file_name",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_ok",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_show_roots",
+    "status": "done",
+    "rung": 2,
+    "rungs": [
+     "relaxed match: the app skipped ahead to find_select_destination_folder"
+    ],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "select_storage_volume",
+    "status": "skipped",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": "its screen no longer appears"
+   },
+   {
+    "id": "find_select_destination_folder",
+    "status": "done",
+    "rung": 2,
+    "rungs": [
+     "wait and retry: scrolled 8 times without finding {text_has='{{destination_folder_name}}', resource_id='item_root', kind='Button'}",
+     "relaxed match: the app skipped ahead to tap_save_in_folder"
+    ],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "select_destination_folder",
+    "status": "skipped",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": "its screen no longer appears"
+   },
+   {
+    "id": "tap_save_in_folder",
+    "status": "done",
+    "rung": 2,
+    "rungs": [
+     "relaxed match: the app skipped ahead to tap_show_roots_to_verify"
+    ],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "launch_files_to_verify",
+    "status": "skipped",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": "its screen no longer appears"
+   },
+   {
+    "id": "tap_show_roots_to_verify",
+    "status": "done",
+    "rung": 2,
+    "rungs": [
+     "relaxed match: the app skipped ahead to find_select_destination_folder_to_verify"
+    ],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "select_storage_volume_to_verify",
+    "status": "skipped",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": "its screen no longer appears"
+   },
+   {
+    "id": "find_select_destination_folder_to_verify",
+    "status": "failed",
+    "rung": 1,
+    "rungs": [
+     "wait and retry: scrolled 8 times without finding {text_has='{{destination_folder_name}}', resource_id='item_root', kind='Button'}",
+     "wait and retry: waited 5.0 s"
+    ],
+    "repairs": 0,
+    "detail": "step find_select_destination_folder_to_verify: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)"
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 4,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.004051,
+  "approvals": [
+   {
+    "step": "tap_save_in_folder",
+    "description": "tap \"SAVE\" in com.google.android.documentsui (routine simple_draw_create_drawing v1)",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "duration_s": 40.61,
+  "routine_duration_s": 35.62,
+  "trace_dir": "data/runs/aw-routines-verify-1028-183136-2352",
+  "wall_s": 43.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.4
+  }
+ }
+}

@@ -1,0 +1,105 @@
+{
+ "task": "NotesIsTodo",
+ "seed": 2511191301,
+ "goal": "Is the note titled 'To-Do List' in the Joplin app marked as a todo item? Respond with either 'True' if it is a todo or 'False' if not.",
+ "score": 0.0,
+ "aw_run_time_s": 18.4,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:57:02.113252",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-175652-2213",
+  "goal": "Is the note titled 'To-Do List' in the Joplin app marked as a todo item? Respond with either 'True' if it is a todo or 'False' if not.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "joplin_check_note_todo_status",
+   "stage": "model confirmed",
+   "inputs": {
+    "note_title": "To-Do List"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "joplin_check_note_todo_status",
+     0.764
+    ],
+    [
+     "contacts_open_app",
+     0.275
+    ],
+    [
+     "markor_create_note",
+     0.225
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "joplin_check_note_todo_status",
+  "version": 1,
+  "done": true,
+  "answer": "Convert to note",
+  "outputs": {
+   "is_todo": "Convert to note"
+  },
+  "steps_used": 4,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_joplin_app",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "find_tap_note_by_title",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_note_by_title",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_actions_menu",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.001589,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 5.32,
+  "routine_duration_s": 3.33,
+  "trace_dir": "data/runs/aw-routines-verify-1028-175652-2213",
+  "wall_s": 8.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

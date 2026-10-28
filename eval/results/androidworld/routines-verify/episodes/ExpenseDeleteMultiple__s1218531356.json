@@ -1,0 +1,99 @@
+{
+ "task": "ExpenseDeleteMultiple",
+ "seed": 1218531356,
+ "goal": "Delete the following expenses from pro expense: Ride-Sharing, Flight Tickets, Taxi Fare.",
+ "score": 0.0,
+ "aw_run_time_s": 17.0,
+ "aw_episode_length": 20,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:54:25.887677",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-175411-5a2f",
+  "goal": "Delete the following expenses from pro expense: Ride-Sharing, Flight Tickets, Taxi Fare.",
+  "max_steps": 20,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "pro_expense_delete_expenses",
+   "stage": "model confirmed",
+   "inputs": {
+    "first_expense_to_delete": "Ride-Sharing",
+    "second_expense_to_delete": "Flight Tickets",
+    "third_expense_to_delete": "Taxi Fare"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "pro_expense_delete_expense",
+     0.709
+    ],
+    [
+     "pro_expense_delete_expenses",
+     0.625
+    ],
+    [
+     "pro_expense_delete_duplicate_expenses",
+     0.545
+    ]
+   ]
+  },
+  "status": "failed",
+  "result": "step tap_delete_icon_for_first_expense: target not found: no match (best 0.40 < 0.80 or ambiguous, runner-up 0.00)",
+  "routine": "pro_expense_delete_expenses",
+  "version": 1,
+  "done": false,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 2,
+  "rung": 1,
+  "steps": [
+   {
+    "id": "launch_pro_expense",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_more",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_delete_icon_for_first_expense",
+    "status": "failed",
+    "rung": 1,
+    "rungs": [
+     "wait and retry: waited 5 s"
+    ],
+    "repairs": 0,
+    "detail": "step tap_delete_icon_for_first_expense: target not found: no match (best 0.40 < 0.80 or ambiguous, runner-up 0.00)"
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.002402,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 9.58,
+  "routine_duration_s": 7.14,
+  "trace_dir": "data/runs/aw-routines-verify-1028-175411-5a2f",
+  "wall_s": 12.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.3
+  }
+ }
+}

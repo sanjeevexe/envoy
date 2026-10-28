@@ -1,0 +1,105 @@
+{
+ "task": "MarkorCreateFolder",
+ "seed": 3163095783,
+ "goal": "Create a new folder in Markor named folder_20261028_175130.",
+ "score": 1.0,
+ "aw_run_time_s": 13.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:54:55.378002",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-175444-0a93",
+  "goal": "Create a new folder in Markor named folder_20261028_175130.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "markor_create_folder",
+   "stage": "model confirmed",
+   "inputs": {
+    "folder_name": "folder_20261028_175130"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "markor_create_folder",
+     0.92
+    ],
+    [
+     "markor_create_note_2",
+     0.69
+    ],
+    [
+     "markor_create_note",
+     0.64
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "markor_create_folder",
+  "version": 1,
+  "done": true,
+  "answer": "..",
+  "outputs": {
+   "created_folder_name": ".."
+  },
+  "steps_used": 4,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "open_markor",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_create_new_item",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_folder_name",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_folder_button",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.002153,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 5.94,
+  "routine_duration_s": 3.7,
+  "trace_dir": "data/runs/aw-routines-verify-1028-175444-0a93",
+  "wall_s": 8.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}
