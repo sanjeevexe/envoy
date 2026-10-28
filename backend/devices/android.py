@@ -367,6 +367,12 @@ class AndroidDevice:
             self._apps.load()
         return self._apps
 
+    async def local_time(self) -> str:
+        """The phone's own date and time ("Sunday, October 15 2023, 15:34"): goals say "tomorrow" or "this Thursday", and
+        the model can't know today's date otherwise (AndroidWorld's phone lives in October 2023)."""
+        async with self._lock:
+            return (await asyncio.to_thread(self.adb.shell, "date '+%A, %B %d %Y, %H:%M'")).strip()
+
     async def app_listing(self) -> str:
         """Every launchable app by name, for the planner."""
         async with self._lock:

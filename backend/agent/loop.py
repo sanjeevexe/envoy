@@ -198,6 +198,12 @@ class AgentRunner:
             return out
 
         try:
+            today = ""
+            if hasattr(self.device, "local_time"):
+                try:  # the phone's date, for goals that say "tomorrow"
+                    today = await self.device.local_time()  # type: ignore[attr-defined]
+                except Exception as e:  # noqa: BLE001 - the run works without it
+                    trace.step({"step": 0, "kind": "time_unavailable", "error": f"{type(e).__name__}: {e}"[:300]})
             apps = ""
             if self.config.plan and hasattr(self.device, "app_listing"):
                 try:  # the phone's apps by name, so the plan can name the app the goal means
@@ -208,7 +214,7 @@ class AgentRunner:
             async def make_plan(current: ScreenState, tried: str = "", step_no: int = 0) -> Plan | None:
                 t0 = time.perf_counter()
                 notes_text, note_ids = self._notes_for(current.package)
-                res = await asyncio.to_thread(self._call, "plan", [{"type": "input_text", "text": plan_input(goal, current.compact, memory, tried, apps,
+                res = await asyncio.to_thread(self._call, "plan", [{"type": "input_text", "text": plan_input(goal, current.compact, memory, tried, apps, today,
                                                                                                                app_notes=notes_text)}],
                                               PLAN_INSTRUCTIONS, self.config.plan_effort, task_id)
                 account(res)
@@ -296,7 +302,7 @@ class AgentRunner:
                 content = [{"type": "input_text", "text": step_input(goal, screen.compact, plan=plan_text,
                                                                       history="\n".join(history[-HISTORY_STEPS:]),
                                                                       memory=memory, feedback=feedback, visited=visited_text(),
-                                                                      app_notes=notes_text)}]
+                                                                      today=today, app_notes=notes_text)}]
                 if png:
                     content.append(image_part(png))
                 t_model = time.perf_counter()

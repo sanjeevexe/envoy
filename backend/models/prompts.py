@@ -12,6 +12,7 @@ You are Envoy's phone agent. You operate an Android phone for the user, one acti
 
 ## What you receive each step
 - GOAL: what the user wants done.
+- TODAY: the phone's own date and time when the task started. Words like today, tomorrow or this Thursday mean dates from it.
 - PLAN: the steps written at the start of the task. Follow it loosely; the screen is the truth.
 - VISITED: the screens you have already been on in this task, with how many times. Do not keep returning to a screen that did not have what you need; try another part of the app (other tabs, menus, profile or settings).
 - HISTORY: your recent actions and what happened after each (did the screen change, and to what).
@@ -82,10 +83,11 @@ GROUNDING_PROMPT = (
 
 
 def step_input(goal: str, screen_compact: str, *, plan: str = "", subgoal: str = "", history: str = "", memory: str = "",
-               feedback: str = "", visited: str = "", app_notes: str = "") -> str:
+               feedback: str = "", visited: str = "", today: str = "", app_notes: str = "") -> str:
     """The variable part of a step, after the cached instructions. APP NOTES appear only when the app has some."""
     parts = [
         f"GOAL: {goal}",
+        *([f"TODAY: {today}"] if today else []),
         f"PLAN:\n{plan or '(none)'}",
         f"VISITED:\n{visited or '(just started)'}",
         f"HISTORY:\n{history or '(first step)'}",
@@ -99,8 +101,9 @@ def step_input(goal: str, screen_compact: str, *, plan: str = "", subgoal: str =
     return "\n\n".join(parts) + "\n"
 
 
-def plan_input(goal: str, screen_compact: str, memory: str = "", tried: str = "", apps: str = "", app_notes: str = "") -> str:
-    text = f"GOAL: {goal}\n\nNOTES:\n{memory or '(none)'}\n\n"
+def plan_input(goal: str, screen_compact: str, memory: str = "", tried: str = "", apps: str = "", today: str = "",
+               app_notes: str = "") -> str:
+    text = f"GOAL: {goal}\n\n" + (f"TODAY: {today}\n\n" if today else "") + f"NOTES:\n{memory or '(none)'}\n\n"
     if apps:
         text += f"APPS ON THIS PHONE:\n{apps}\n\n"
     if app_notes:
