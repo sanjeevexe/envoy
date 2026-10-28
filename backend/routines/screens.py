@@ -29,9 +29,14 @@ def usable_id(resource_id: str | None) -> bool:
     return bool(rid) and not _OBFUSCATED.search(rid)
 
 
+_ASTRAL = re.compile("[\U00010000-\U0010FFFF]")
+
+
 def fold(s: str | None) -> str:
-    """Accents removed: people type "Caffe Latte" where the app shows "Caffè Latte" (seen on Starbucks)."""
-    return "".join(ch for ch in unicodedata.normalize("NFKD", s or "") if not unicodedata.combining(ch))
+    """Accents removed: people type "Caffe Latte" where the app shows "Caffè Latte" (seen on Starbucks). Emoji written as
+    the XML dump writes them, ".." ("radio 📚 beats" is "radio .. beats" on screen, Phase 0)."""
+    s = _ASTRAL.sub("..", s or "")
+    return "".join(ch for ch in unicodedata.normalize("NFKD", s) if not unicodedata.combining(ch))
 
 
 def norm(s: str | None) -> str:

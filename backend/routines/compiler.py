@@ -372,7 +372,7 @@ def _state_text(near: str | None, final: ScreenState, data_values: list[str]) ->
     return Extract(locator=Locator(text=el.label, kind=el.kind))
 
 
-def _search_result(el: Element, screen: ScreenState, earlier: list["TStep"], examples: dict[str, str]) -> str | None:
+def _search_result(el: Element, screen: ScreenState, earlier: list["TStep"], examples: dict[str, str], skip_ads: bool = False) -> str | None:
     """The input name if `el` is the top row of a list showing results for a value entered earlier in the run (typed, or a
     suggestion tapped), and the row shows more than that value (a row that *is* the value, "Caffè Latte", was chosen by it)."""
     if not el.in_list:
@@ -384,9 +384,18 @@ def _search_result(el: Element, screen: ScreenState, earlier: list["TStep"], exa
     shown = [n for n in typed if contains_value(el.label, examples[n]) and norm(el.label) != norm(examples[n])]
     if not shown:
         return None
-    rows = [e for e in screen.numbered if e.in_list and e.kind == el.kind and e.clickable and e.area > el.area / 3]
+    rows = [e for e in screen.numbered if e.in_list and e.kind == el.kind and e.clickable and e.area > el.area / 3
+            and not (skip_ads and is_ad(e))]
     top = min(rows, key=lambda e: e.bounds[1], default=None)
     return shown[0] if top is not None and top.index == el.index else None
+
+
+_AD = re.compile(r"^\W*(sponsored|ad)\b|\bsponsored ad\b", re.I)
+
+
+def is_ad(e: Element) -> bool:
+    """A result row that is an ad ("Sponsored - …" on YouTube)."""
+    return bool(_AD.search(e.full_label or e.label or ""))
 
 
 def generalize_check(c: Check, examples: dict[str, str], data_values: list[str]) -> Check | None:
@@ -474,13 +483,17 @@ def _extract_for(name: str, near: str, example: str, final: ScreenState, example
                 and not any(v and contains_value(v, words) for v in data_values):
             sig = re.sub(r"\d+(?:\\\.\d+)?", r"\\d+(?:\\.\\d+)?", re.escape(m.group(1).strip()))
             return Extract(pattern=rf"(?P<v>[^,]+?),\s*{sig}(?:,.*)?", first_in_list=True)
-    if steps and el.in_list and norm(label).startswith(norm(example)) and norm(label) != norm(example) \
-            and _search_result(el, final, steps, examples) is not None:
-        # The top result for a term typed in the run ("the first video for lofi hip hop"): read by its place, not by showing
-        # the term (another search's first video doesn't), up to the separator after the value.
-        rest = label[len(" ".join(example.split())):]
+    skip_ads = None
+    if steps and el.in_list and norm(label).startswith(norm(example)) and norm(label) != norm(example):
+        skip_ads = False if _search_result(el, final, steps, examples) is not None else \
+            (True if _search_result(el, final, steps, examples, skip_ads=True) is not None else None)
+    if skip_ads is not None:
+        # The top result for a term entered in the run ("the first video for lofi hip hop"): read by its place, not by
+        # showing the term (another search's first video doesn't), up to the separator after the value; past the ads
+        # above it if the agent passed them.
+        rest = label[len(" ".join(fold(example).split())):] if norm(label).startswith(norm(example)) else ""
         until = next((sep for sep in (" - ", " · ", " • ", " | ", ", ") if rest.startswith(sep)), None)
-        return Extract(locator=Locator(kind=el.kind), first_row=True, until=until)
+        return Extract(locator=Locator(kind=el.kind), first_row=True, until=until, skip_ads=skip_ads)
     loc = None
     card = None
     if usable_id(el.resource_id):
