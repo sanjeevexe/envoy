@@ -55,7 +55,7 @@ def library(tmp_path):
     tasks.update(t1["id"], device="envoy-test")
     shots = []
     for n in ("before", "after"):
-        p = tmp_path / f"repair_04_1_{n}.png"
+        p = tmp_path / f"repair_02_1_{n}.png"
         Image.new("RGB", (4, 8)).save(p)
         shots.append(str(p))
 
@@ -96,7 +96,8 @@ def test_versions_show_what_each_patch_changed_and_its_fate(library):
     assert change["kind"] == "locator" and change["step"] == "tap_change_seat"
     assert change["before"]["text"] == "Change seat" and change["after"]["text"] == "Seats" and change["after"]["alt_texts"] == ["Change seat"]
     assert change["reasons"] == ["Seats is the renamed Change seat"] and "local repair" in change["why"]
-    assert [set(s) for s in v2["shots"]] == [{"label", "before", "after"}] and v2["shots"][0]["label"] == "screen 4"
+    (shot,) = v2["shots"]
+    assert (shot["label"], shot["intent"]) == ("step 2", "Tap Change seat") and shot["before"].endswith("/history/2/repair_02_1_before.png")
 
     assert (v3["status"], v3["trial"]["passed"], v3["trial"]["model_calls"]) == ("rejected", False, 2)
     (check,) = v3["changes"]
@@ -128,7 +129,52 @@ def test_runs_are_measured_against_the_agent_run(library):
     s = d["savings"]
     assert (s["runs"], s["finished"], s["failed"], s["model_calls"]) == (4, 3, 1, 3)
     assert s["saved"] == {"calls": 14, "seconds": 28.5, "usd": 0.028} and s["compile_usd"] == 0.04 and s["net_usd"] == -0.012
-    assert s["paid_back_after"] is None
+    assert s["paid_back_after"] is None and s["compared"] == 3 and s["median_s"] == 2.5
+
+
+def test_without_the_agent_runs_trace_runs_still_count_but_save_nothing(library, tmp_path):
+    store, tasks, _, _ = library
+    d = detail(store, NAME, tasks, tmp_path / "no-traces")
+    s = d["savings"]
+    assert s["source"] is None and (s["runs"], s["finished"], s["compared"], s["median_s"]) == (4, 3, 0, 2.5)
+    assert all(r["saved"] is None for r in d["runs"]) and d["versions"][0]["compiled"]["source"] is None
+
+
+def test_added_and_removed_steps_carry_their_patch(tmp_path):
+    store = RoutineStore(tmp_path / "routines")
+    v1 = store.add(routine())
+    ok = Step(id="confirm_pre_1", intent="Dismiss the seat map tip", optional=True,
+              action=StepAction(kind="tap", target=Locator(text="Got it", kind="Button")), post=[Check(kind="screen_changed")])
+    v2 = store.propose(v1, [Patch("insert_before", "confirm", "before 'confirm', the screen needed tap Got it", steps=[ok],
+                                  evidence={"reasons": ["A tip covers the Confirm button"]}),
+                            Patch("remove", "tap_change_seat", "step 'tap_change_seat': its effect already held without it")], "eval-1")
+    assert v2 is not None
+    listed = detail(store, NAME, None, tmp_path)["versions"][1]["changes"]
+    changes = {(c["step"], c["kind"]): c for c in listed}
+    added = changes[("confirm_pre_1", "inserted")]
+    assert "extra action first" in added["why"] and added["reasons"] == ["A tip covers the Confirm button"]
+    assert added["follows"] == "Tap Change seat"
+    assert changes[("tap_change_seat", "optional")]["why"].startswith("Its screen no longer appeared")
+    moved = [c for c in listed if c["step"] == "open_trips"]  # the removed step's after-checks moved to the step before it
+    assert [(c["what"], (c["after"] or {}).get("text")) for c in moved] == [("After-check 1", "The words “Choose a seat” are on screen"),
+                                                                          ("After-check 2", None)]
+    assert all(c["why"].startswith("Its screen no longer appeared") for c in moved)
+
+
+def test_odd_libraries_still_show(library):
+    store, tasks, runs, _ = library
+    (store.root / NAME / "v1.yaml").write_text("routine: [unclosed")  # a broken old file
+    (store.root / NAME / "history" / "v2" / "patches.json").write_text('{"not": "a list"}')
+    d = detail(store, NAME, tasks, runs)
+    assert d["shown"] == 2 and d["shown_status"] == "active"
+    v1, v2, _ = d["versions"]
+    assert v2["diffable"] is False and v2["changes"] == []  # its parent can't be read: no claim that nothing changed
+    assert v1["compiled"]["source"] is None and d["savings"]["source"] is None
+    idx = json.loads((store.root / NAME / "index.json").read_text())
+    idx["active"] = None  # only a rolled-back trial and a replaced version left: show the one that was active last
+    (store.root / NAME / "index.json").write_text(json.dumps(idx))
+    d = detail(store, NAME, tasks, runs)
+    assert (d["shown"], d["shown_status"]) == (2, "active")
 
 
 @pytest.fixture()
@@ -164,5 +210,5 @@ def test_only_listed_repair_screenshots_are_served(client, library):
     assert r.status_code == 200 and r.headers["content-type"] == "image/png"
     for bad in ("index.json", "patches.json", "..%2Findex.json", "repair_09_1_before.png"):
         assert c.get(f"/api/routines/{NAME}/history/2/{bad}", headers=me).status_code == 404
-    assert evidence_path(store, "../routines", 2, "repair_04_1_before.png") is None
-    assert evidence_path(store, NAME, 3, "repair_04_1_before.png") is None  # listed for v2 only
+    assert evidence_path(store, "../routines", 2, "repair_02_1_before.png") is None
+    assert evidence_path(store, NAME, 3, "repair_02_1_before.png") is None  # listed for v2 only

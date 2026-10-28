@@ -108,6 +108,7 @@ def step_view(s: Step) -> dict[str, Any]:
 def diff(parent: Routine, child: Routine) -> list[dict[str, Any]]:
     """What a version changed against its parent, step by step, with each changed part before and after."""
     old = {s.id: s for s in parent.steps}
+    after = {a.id: b.id for a, b in zip(parent.steps, parent.steps[1:])}  # removing a step moves its checks to the one before
     out: list[dict[str, Any]] = []
     for i, s in enumerate(child.steps):
         base = {"step": s.id, "intent": s.intent}
@@ -118,14 +119,14 @@ def diff(parent: Routine, child: Routine) -> list[dict[str, Any]]:
             continue
         if p.action.model_dump(exclude={"target"}) != s.action.model_dump(exclude={"target"}):
             out.append({**base, "kind": "action", "what": "What it does", "before": action_view(p.action), "after": action_view(s.action)})
-        elif p.action.target != s.action.target:
+        elif locator_view(p.action.target) != locator_view(s.action.target):
             out.append({**base, "kind": "locator", "what": "How its target is found",
                         "before": locator_view(p.action.target), "after": locator_view(s.action.target)})
         for which, a, b in (("Before", p.pre, s.pre), ("After", p.post, s.post)):
             for j in range(max(len(a), len(b))):
                 ca, cb = (a[j] if j < len(a) else None), (b[j] if j < len(b) else None)
                 if ca != cb:
-                    out.append({**base, "kind": "check", "what": f"{which}-check {j + 1}", "index": j, "post": which == "After",
+                    out.append({**base, "kind": "check", "what": f"{which}-check {j + 1}", "index": j, "post": which == "After", "next": after.get(s.id),
                                 "before": check_view(ca) if ca else None, "after": check_view(cb) if cb else None})
         if s.optional and not p.optional:
             out.append({**base, "kind": "optional", "what": "Now optional: skipped when its screen doesn't appear", "before": None, "after": None})
@@ -153,9 +154,16 @@ _COMPATIBLE = {"locator": ("locator",), "check": ("check", "post", "locator", "r
 def _why(change: dict[str, Any], patches: list[dict[str, Any]]) -> None:
     """Attach the patch behind a change: why it was made and its evidence (match score, the model's reason)."""
     hit = None
+    sid = change["step"]
+    m = re.fullmatch(r"(.+?)_(?:(extra|pre)_)?\d+", sid) if change["kind"] == "inserted" else None
+    anchor = {"extra": "insert_after", "pre": "insert_before", None: "replace"}[m.group(2)] if m else None
     for kind in _COMPATIBLE.get(change["kind"], ()):  # in order of preference: the patch of the same kind first
-        mine = [p for p in patches if p.get("kind") == kind
-                and (change["step"] in p.get("description", "") if change["kind"] == "inserted" else p.get("step") == change["step"])]
+        if change["kind"] == "inserted":
+            mine = [p for p in patches if p.get("kind") == kind and ((kind == anchor and p.get("step") == m.group(1)) or sid in p.get("description", ""))]
+        elif change["kind"] == "check" and kind == "remove":
+            mine = [p for p in patches if p.get("kind") == kind and p.get("step") in (sid, change.get("next"))]
+        else:
+            mine = [p for p in patches if p.get("kind") == kind and p.get("step") == sid]
         if kind == "check" and change.get("post"):  # "after-check 1" in a patch is the step's post[1]
             mine = [p for p in mine if f"after-check {change['index']} " in p.get("description", "")]
         if mine:
@@ -163,7 +171,7 @@ def _why(change: dict[str, Any], patches: list[dict[str, Any]]) -> None:
             break
     if hit is None:
         return
-    ev = hit.get("evidence") or {}
+    ev = hit.get("evidence") if isinstance(hit.get("evidence"), dict) else {}
     why = _WHY.get(hit.get("kind", ""), "")
     if hit.get("kind") == "locator" and ev.get("reasons"):
         why = "The element moved or changed; a local repair found it again."
@@ -175,8 +183,9 @@ def _why(change: dict[str, Any], patches: list[dict[str, Any]]) -> None:
         change["reasons"] = [str(r) for r in ev["reasons"]][:3]
 
 
-def _shots(name: str, version: int, rel: list[str]) -> list[dict[str, Any]]:
-    """Before/after screenshots of a repair, paired: history/v2/repair_08_1_before.png → screen 8."""
+def _shots(name: str, version: int, rel: list[str], ran: Routine | None) -> list[dict[str, Any]]:
+    """Before/after screenshots of a repair, paired. repair_08_2_before.png: step 8 of the version that ran, its second
+    repair action."""
     pairs: dict[str, dict[str, Any]] = {}
     for r in rel:
         f = Path(r).name
@@ -184,10 +193,17 @@ def _shots(name: str, version: int, rel: list[str]) -> list[dict[str, Any]]:
         if not m or not _SHOT.fullmatch(f):
             continue
         key = m.group(1)
-        n = re.search(r"_(\d+)", key)
-        pair = pairs.setdefault(key, {"label": f"screen {int(n.group(1))}" if n else key})
+        n = re.fullmatch(r"repair_(\d+)_(\d+)", key)
+        pair = pairs.setdefault(key, {"label": key, "step": int(n.group(1)) if n else None, "action": int(n.group(2)) if n else None})
         pair[m.group(2)] = f"/api/routines/{name}/history/{version}/{f}"
-    return list(pairs.values())
+    out = list(pairs.values())
+    for p in out:
+        if p["step"] is not None:
+            several = sum(1 for q in out if q["step"] == p["step"]) > 1
+            p["label"] = f"step {p['step']}" + (f", action {p['action']}" if several else "")
+            if ran is not None and 0 < p["step"] <= len(ran.steps):
+                p["intent"] = ran.steps[p["step"] - 1].intent
+    return out
 
 
 def _source_run(task_id: str | None, runs_dir: Path) -> dict[str, Any] | None:
@@ -217,10 +233,12 @@ def detail(store: RoutineStore, name: str, tasks: Any = None, runs_dir: Path | N
     for v in entries:
         try:
             loaded[v["version"]] = store.get(name, v["version"])
-        except (OSError, KeyError, ValueError):
+        except Exception:  # noqa: BLE001 - a missing or broken file costs that version's details, not the view
             pass
     active_v = idx.get("active")
-    shown = loaded.get(active_v) or (loaded[max(loaded)] if loaded else None)
+    status = {v["version"]: v.get("status") for v in entries}
+    shown = loaded.get(active_v) or next((loaded[n] for n in sorted(loaded, reverse=True) if status.get(n) in ("active", "retired")), None) \
+        or (loaded[max(loaded)] if loaded else None)
     if shown is None:
         raise KeyError(f"{name} has no readable version")
     runs = idx.get("runs", [])
@@ -236,7 +254,7 @@ def detail(store: RoutineStore, name: str, tasks: Any = None, runs_dir: Path | N
         parent = v.get("parent") if v.get("parent") is not None else (r.parent_version if r else None)
         repaired = bool(v.get("source_task"))
         view: dict[str, Any] = {"version": n, "status": v.get("status"), "created": v.get("created"), "parent": parent,
-                                "notes": v.get("changes") or [], "changes": [], "shots": _shots(name, n, v.get("screenshots") or [])}
+                                "notes": v.get("changes") or [], "changes": [], "shots": _shots(name, n, v.get("screenshots") or [], loaded.get(parent))}
         if repaired:
             view["origin"] = "repaired"
             root[n] = root.get(parent, parent) if parent is not None else n
@@ -246,12 +264,18 @@ def detail(store: RoutineStore, name: str, tasks: Any = None, runs_dir: Path | N
                 patches = json.loads(ev_dir.read_text())
             except (OSError, ValueError):
                 patches = []
-            local = any((p.get("evidence") or {}).get("reasons") for p in patches)
-            rung = src_run.get("rung") if src_run else (4 if local else 2 if patches else None)
+            patches = [p for p in patches if isinstance(p, dict)] if isinstance(patches, list) else []
+            for p in patches:
+                if not isinstance(p.get("evidence"), dict):
+                    p["evidence"] = {}
+            # Patches come from rung 2 (relaxed match) or 4 (local repair, Muse's reasons); the run may have climbed higher later.
+            local = any(p["evidence"].get("reasons") for p in patches)
+            rung = (4 if local else 2) if patches else (src_run.get("rung") if src_run else None)
             view["repair"] = {"task_id": v["source_task"], "rung": rung, "how": RUNG_NAMES.get(rung) if rung is not None else None,
-                              "model_calls": src_run.get("model_calls") if src_run else None,
+                              "model_calls": src_run.get("model_calls") if src_run else None, "run_rung": src_run.get("rung") if src_run else None,
                               "duration_s": src_run.get("duration_s") if src_run else None, "time": src_run.get("time") if src_run else None}
-            if r is not None and parent in loaded:
+            view["diffable"] = r is not None and parent in loaded
+            if view["diffable"]:
                 view["changes"] = diff(loaded[parent], r)
                 for c in view["changes"]:
                     _why(c, patches)
@@ -291,7 +315,7 @@ def detail(store: RoutineStore, name: str, tasks: Any = None, runs_dir: Path | N
     out_runs: list[dict[str, Any]] = []
     for r in runs:
         tid = str(r.get("task_id") or "")
-        src = sources.get(root.get(r.get("version"), -1)) or next((s for s in sources.values() if s), None)
+        src = sources.get(root.get(r.get("version"), -1))  # never another compile's agent run
         calls, secs = r.get("model_calls") or 0, r.get("duration_s")
         usd, estimated = 0.0, False
         if calls:  # runs record calls, not dollars: price them at the agent run's standard cost per call
@@ -318,8 +342,9 @@ def detail(store: RoutineStore, name: str, tasks: Any = None, runs_dir: Path | N
                          "model_calls": calls, "duration_s": secs, "usd": usd, "usd_estimated": estimated, "patches": r.get("patches") or 0,
                          "device": (task or {}).get("device"), "app_task": (task or {}).get("id"), "saved": saved, "event": event})
 
-    # Savings over the runs that finished, and when they paid back the compile.
+    # Savings over the runs that finished and have an agent run to compare with, and when they paid back the compile.
     done = [r for r in out_runs if r["saved"]]
+    finished = [r for r in out_runs if r["ok"] and r["duration_s"] is not None]
     compile_usd = sum(v["compiled"]["usd"] or 0 for v in versions if v.get("compiled"))
     total = {"calls": sum(r["saved"]["calls"] for r in done), "seconds": round(sum(r["saved"]["seconds"] for r in done), 1),
              "usd": round(sum(r["saved"]["usd"] or 0 for r in done), 4)}
@@ -328,17 +353,18 @@ def detail(store: RoutineStore, name: str, tasks: Any = None, runs_dir: Path | N
         acc += r["saved"]["usd"] or 0
         if paid_back is None and compile_usd and acc >= compile_usd:
             paid_back = i
-    src0 = sources.get(root.get(shown.version, -1)) or next((s for s in sources.values() if s), None)
-    savings = {"source": src0, "runs": len(out_runs), "finished": len(done), "failed": sum(1 for r in out_runs if not r["ok"]),
+    src0 = sources.get(root.get(shown.version, -1))
+    savings = {"source": src0, "runs": len(out_runs), "finished": sum(1 for r in out_runs if r["ok"]), "compared": len(done),
+               "failed": sum(1 for r in out_runs if not r["ok"]),
                "model_calls": sum(r["model_calls"] for r in out_runs), "saved": total, "compile_usd": round(compile_usd, 4) or None,
                "net_usd": round(total["usd"] - compile_usd, 4) if compile_usd else None, "paid_back_after": paid_back,
-               "median_s": sorted(r["duration_s"] for r in done)[len(done) // 2] if done else None}
+               "median_s": sorted(r["duration_s"] for r in finished)[len(finished) // 2] if finished else None}
 
     trial = next((v["version"] for v in reversed(versions) if v["status"] == "trial"), None)
     return {"name": name, "app": shown.app, "intent": shown.intent, "description": shown.description, "start": shown.start,
             "inputs": {k: {"type": s.type, "description": s.description, "example": s.example, "from_memory": s.from_memory}
                        for k, s in shown.inputs.items()},
-            "outputs": shown.outputs, "active": active_v, "shown": shown.version, "trial": trial, "needs_recompile": bool(idx.get("needs_recompile")),
+            "outputs": shown.outputs, "active": active_v, "shown": shown.version, "shown_status": status.get(shown.version), "trial": trial, "needs_recompile": bool(idx.get("needs_recompile")),
             "steps": [{**step_view(s), "changed_in": changed.get(s.id, [])} for s in shown.steps],
             "done": [check_view(c) for c in shown.done], "versions": versions, "runs": out_runs, "savings": savings}
 

@@ -610,7 +610,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
             out.append({"name": name, "app": r.app, "intent": r.intent, "active": idx.get("active"), "versions": idx.get("versions", []),
                         "inputs": {k: v.description for k, v in r.inputs.items()}, "outputs": r.outputs, "steps": len(r.steps),
                         "runs": len(runs), "success": round(ok / len(runs), 2) if runs else None,
-                        "recompile": idx.get("recompile", False)})
+                        "recompile": idx.get("needs_recompile", idx.get("recompile", False))})
         return out
 
     @app.get("/api/routines/{name}", dependencies=[Depends(session)])
@@ -623,7 +623,10 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
         """Read only: steps, versions with what each patch changed, runs and their savings (api/routine_view.py)."""
         if name not in routines.names():
             raise HTTPException(404, "no such routine")
-        return routine_view.detail(routines, name, tasks)
+        try:
+            return routine_view.detail(routines, name, tasks)
+        except KeyError as e:  # no version of it can be read
+            raise HTTPException(404, str(e)) from e
 
     @app.get("/api/routines/{name}/history/{version}/{file}", dependencies=[Depends(session)])
     def routine_evidence(name: str, version: int, file: str) -> FileResponse:
