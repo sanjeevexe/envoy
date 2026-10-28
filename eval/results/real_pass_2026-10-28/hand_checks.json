@@ -1,0 +1,32 @@
+{
+ "amazon | same input | {\"first_result_price\": \"$9.99 ( $0.83 /count)\", \"first_result_product\": \"PHILIPS AA Batteries 12 Pack Long Lasting Ultra Alkaline Double A Battery\"}": {
+  "verdict": "right",
+  "note": "PHILIPS AA 12-pack, $9.99 ( $0.83 /count): the first product row below a sponsored brand carousel (KODAK); price and pack size agree (12 × 0.83)",
+  "run": "rp10281716-real",
+  "by": "Claude (read from the screen trees saved with each output)"
+ },
+ "amazon | new input | {\"first_result_price\": \"$9.99 ( $5.00 /count)\", \"first_result_product\": \"XIAWAO USB C Cable 6 Pack, Braided USB A to Type C Cord Fast Charging\"}": {
+  "verdict": "wrong",
+  "note": "the product (XIAWAO 6-pack) and the price ($9.99 ( $5.00 /count), a 2-pack in the row above) come from different rows; XIAWAO shows $8.49",
+  "run": "rp10281716-real",
+  "by": "Claude (read from the screen trees saved with each output)"
+ },
+ "doordash_search | same input | {\"first_restaurant_name\": \"Pizza Zombie\"}": {
+  "verdict": "right",
+  "note": "Pizza Zombie is the first restaurant row on the screen it was read from",
+  "run": "rp10281716-real",
+  "by": "Claude (read from the screen trees saved with each output)"
+ },
+ "doordash_search | new input | {\"first_restaurant_name\": \"MJ Sushi Palo Alto INC\"}": {
+  "verdict": "right",
+  "note": "MJ Sushi Palo Alto INC is the first restaurant row (Sushi Roku next) on the screen it was read from",
+  "run": "rp10281716-real",
+  "by": "Claude (read from the screen trees saved with each output)"
+ },
+ "play_rating | new input | {\"star_rating\": \"4.7 stars in 48 million reviews\"}": {
+  "verdict": "wrong",
+  "note": "the second input is 'Spotify: Learn Languages' (the test set swaps Duolingo for Spotify in the learned example), no such app; Play showed Duolingo and the repair read Duolingo's 4.7",
+  "run": "rp10281716-real",
+  "by": "Claude (read from the screen trees saved with each output)"
+ }
+}

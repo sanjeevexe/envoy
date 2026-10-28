@@ -525,3 +525,32 @@ def test_a_tap_under_the_phone_banner_steps_the_banner_aside():
     calls.clear()
     dev._tap(540, 200)  # no banner showing: nothing to step aside
     assert calls == ["tap 540,200"]
+
+
+def test_a_request_for_an_emulator_that_isnt_running_says_so_plainly_and_names_your_phone():
+    from test_phase6 import FakePool, runner_with
+
+    class Pool(FakePool):
+        def running(self):
+            return {"envoy-test": False, **{pid: True for pid in self.phones}}
+
+    async def scenario():
+        r = runner_with(Pool())
+        task = r.store.create("Check in to my flight", "chat")  # no "on my phone": the emulator
+        return await r._choose_phone(task["id"], "com.skylark.air", None), r.store.get(task["id"])
+    choice, t = asyncio.run(scenario())
+    assert choice is None and t["status"] == "failed" and "isn't running" in t["detail"] and "on my phone" in t["detail"]
+    assert "scripts/" not in t["detail"]  # a phone is connected: the way out is the phone, not a script
+
+
+def test_a_pause_from_the_phone_and_its_resume_are_kept_in_the_task_history():
+    from test_phase6 import FakePool, runner_with
+    r = runner_with(FakePool())
+    task = r.store.create("check me in", "chat")
+    r._set(task["id"], status="running")
+    r._phone_paused(task["id"], True, "you touched the phone")
+    r._phone_paused(task["id"], True, "you touched the phone")  # the watcher says it again: one entry
+    r._phone_paused(task["id"], False, "")
+    notes = [s["text"] for s in r.store.steps(task["id"]) if s["kind"] == "note"]
+    assert notes == ["paused: you touched the phone", "resumed on your phone"]
+    assert r.store.get(task["id"])["status"] == "running"

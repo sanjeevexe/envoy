@@ -1,0 +1,53 @@
+{
+ "name": "google_maps_get_place_address",
+ "intent": "Look up the street address of a place in Google Maps",
+ "description": "Search for a named place in Google Maps, open its details, scroll to reveal its address, and return the street address.",
+ "patterns": [
+  "what is the address of a place",
+  "find the street address for a place in Maps",
+  "look up a place's address"
+ ],
+ "inputs": [
+  {
+   "name": "place_name",
+   "type": "text",
+   "description": "The name of the place to search for",
+   "from_memory": null,
+   "example": "Empire State Building"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "tap_search_field",
+   "intent": "Tap the search field to start a search",
+   "target_fixed_text": "Search here",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "type_place_name",
+   "intent": "Type {{place_name}} into the search field and open the matching place",
+   "target_fixed_text": "Search here",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "scroll_to_address",
+   "intent": "Scroll down to reveal the street address in the place details",
+   "target_fixed_text": null,
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "street_address",
+   "near": "Address",
+   "example": "20 W 34th St., New York, NY 10001"
+  }
+ ],
+ "data_values": [
+  "20 W 34th St., New York, NY 10001",
+  "Closed · Opens 9 AM"
+ ]
+}

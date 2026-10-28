@@ -1,0 +1,66 @@
+routine: doordash_search_restaurants
+app: com.dd.doordash
+version: 1
+status: draft
+intent: Search DoorDash for food and report the first restaurant in the results
+description: Searches DoorDash for a requested food or cuisine and returns the name of the first restaurant shown in the search results.
+patterns: [search DoorDash for food, find restaurants on DoorDash, look up food on DoorDash, what is the first DoorDash restaurant for this food]
+outputs: [first_restaurant_name]
+start: fresh_launch
+inputs:
+  search_query: {type: text, description: The food or cuisine to search for in DoorDash., example: pizza}
+steps:
+- id: open_search
+  intent: Tap 'Search DoorDash' to open search
+  pre:
+  - {app_foreground: com.dd.doordash}
+  - element_present: {resource_id: coordinatorLayout_homepage, kind: List}
+  action:
+    tap:
+      text: Search DoorDash
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.49, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: edit_text, text: Search DoorDash, kind: EditText}
+  - element_present: {resource_id: search_back_button, text: Close search, kind: Button}
+  risk: reversible
+  note: trace step 1
+- id: enter_search_query
+  intent: "Type {{search_query}} into the 'Search DoorDash' field and view the results"
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    type:
+      field:
+        resource_id: edit_text
+        text: Search DoorDash
+        hint: Search DoorDash
+        kind: EditText
+        cls: AutoCompleteTextView
+        in_list: false
+        position: [0.573, 0.079]
+      value: "{{search_query}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: search_query_title
+      text: "{{search_query}}"
+      kind: Button
+  risk: reversible
+  extract:
+    first_restaurant_name:
+      pattern: "(?P<v>[^,]+?),\\s*\\d+(?:\\.\\d+)?\\ mi\\ away(?:,.*)?"
+      first_in_list: true
+  note: trace step 2
+compiled_from:
+  task_id: f7-1028023735-real-doordash_search
+  goal: In the DoorDash app, search for pizza and tell me the name of the first restaurant in the results.
+  compiler: cached
+  compiled_at: "2026-10-28 17:19:22"
+  trace_steps_kept: [1, 2]
+  trace_steps_dropped: 0
+  cost_usd: 0.0

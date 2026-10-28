@@ -1,0 +1,112 @@
+{
+ "time": "2026-10-28T17:29:59",
+ "phone": {
+  "id": "phone-09031FDD4000C6",
+  "serial": "09031FDD4000C6",
+  "model": "Pixel 5",
+  "android": "13",
+  "state": "device",
+  "manufacturer": "Google",
+  "sdk": "33",
+  "skin": "",
+  "sim": "LOADED",
+  "security_patch": "2022-08-05"
+ },
+ "tasks": [
+  {
+   "goal": "Check in to my flight",
+   "source": "chat",
+   "status": "done",
+   "device": "phone-09031FDD4000C6",
+   "kind": "routine",
+   "routine": "skylark_check_in_flight",
+   "result": "seat: 14C; gate: B12; boarding time: 5:30 AM; boarding group: Group 3; flight: SL 482",
+   "approvals": [
+    {
+     "id": "appr-1028-172910-fe92",
+     "status": "approved",
+     "decided_by": "user on iPhone (Home Screen app)",
+     "created_at": 1793222950.62716,
+     "decided_at": 1793222960.6139772,
+     "description": "tap \"Confirm check-in\" in com.skylark.air (routine skylark_check_in_flight v1)",
+     "decided_after_s": 10.0
+    }
+   ],
+   "notes": [
+    "using routine skylark_check_in_flight v1 with trip_city = Chicago",
+    "phone: your Pixel 5 (you asked for your phone (Pixel 5))",
+    "your Pixel 5: allowed by you on iPhone (Home Screen app)",
+    "saving what it saw to memory"
+   ],
+   "memory": "memory updated: 13 same, 2 replaced",
+   "duration_s": 32.4
+  }
+ ],
+ "skylark_on_phone": {
+  "checked_in": {
+   "KX7Q2M": true,
+   "PT4R8Z": false,
+   "0Q8P5W": false,
+   "3J8N0D": false,
+   "MU10UN": false,
+   "U0HVOP": false,
+   "DN7Q4X": false
+  }
+ },
+ "pushes": [
+  {
+   "time": 1793222940.034823,
+   "event": "sent",
+   "push": "p1793222939795-c7be",
+   "kind": "phone",
+   "service": "web.push.apple.com",
+   "status": 201,
+   "send_ms": 238.7,
+   "error": null
+  },
+  {
+   "time": 1793222940.347113,
+   "event": "receipt",
+   "push": "p1793222939795-c7be",
+   "kind": "phone",
+   "delivery_ms": 552,
+   "device_clock_ms": 525
+  },
+  {
+   "time": 1793222950.8450718,
+   "event": "sent",
+   "push": "p1793222950633-a592",
+   "kind": "approval",
+   "service": "web.push.apple.com",
+   "status": 201,
+   "send_ms": 211.1,
+   "error": null
+  },
+  {
+   "time": 1793222951.149926,
+   "event": "receipt",
+   "push": "p1793222950633-a592",
+   "kind": "approval",
+   "delivery_ms": 517,
+   "device_clock_ms": 491
+  },
+  {
+   "time": 1793222962.279569,
+   "event": "sent",
+   "push": "p1793222962061-4366",
+   "kind": "task",
+   "service": "web.push.apple.com",
+   "status": 201,
+   "send_ms": 217.8,
+   "error": null
+  },
+  {
+   "time": 1793222962.546518,
+   "event": "receipt",
+   "push": "p1793222962061-4366",
+   "kind": "task",
+   "delivery_ms": 485,
+   "device_clock_ms": 458
+  }
+ ]
+}

@@ -274,3 +274,18 @@ def test_app_notes_listed_apart_from_memory_and_retired_by_you(api):
         assert all(n["type"] != "App note" for n in c.get("/api/memory/graph", headers=me).json()["nodes"])
         assert c.post(f"/api/app-notes/{nid}/retire", headers=me).json() == {"retired": True}
         assert c.get("/api/app-notes", headers=me).json()["apps"] == []
+
+
+def test_a_takeover_and_its_hand_back_are_kept_in_the_task_history(api):
+    app, ctx, token = api
+    task = ctx.tasks.create("check in", "web")
+    ctx.runner._set(task["id"], status="running")
+    ctx.runner.pool.leases["envoy-test"].task_id = task["id"]
+    me = {"Authorization": f"Bearer {token}", "X-Envoy": "1"}
+    with TestClient(ctx.asgi) as c:
+        assert c.post("/api/devices/envoy-test/takeover", headers=me).status_code == 200
+        assert c.post("/api/devices/envoy-test/takeover", headers=me).status_code == 200  # again: one entry
+        assert c.post("/api/devices/envoy-test/handback", headers=me).status_code == 200
+    notes = [s["text"] for s in ctx.tasks.steps(task["id"]) if s["kind"] == "note"]
+    assert notes[0] == "taken over by you" and notes[1].startswith("handed back by you after") and len(notes) == 2
+    assert ctx.tasks.get(task["id"])["status"] == "running"

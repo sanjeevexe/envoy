@@ -1,0 +1,45 @@
+{
+ "name": "settings_check_bluetooth_status",
+ "intent": "Check whether Bluetooth is turned on in the Settings app",
+ "description": "Open the Settings app, navigate through Connected devices and Connection preferences to the Bluetooth screen, and report whether the Use Bluetooth switch is on or off.",
+ "patterns": [
+  "is Bluetooth on or off",
+  "is Bluetooth turned on",
+  "check Bluetooth status",
+  "is Bluetooth enabled"
+ ],
+ "inputs": [],
+ "steps": [
+  {
+   "step": 1,
+   "id": "open_connected_devices",
+   "intent": "Open Connected devices in Settings",
+   "target_fixed_text": "Connected devices",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "open_connection_preferences",
+   "intent": "Open Connection preferences",
+   "target_fixed_text": "Connection preferences",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "open_bluetooth_settings",
+   "intent": "Open Bluetooth settings to read its on or off state",
+   "target_fixed_text": "Bluetooth",
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "bluetooth_status",
+   "near": "Use Bluetooth",
+   "example": "on"
+  }
+ ],
+ "data_values": [
+  "sdk_gphone64_arm64"
+ ]
+}
