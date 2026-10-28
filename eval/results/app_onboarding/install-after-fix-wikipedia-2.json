@@ -1,0 +1,207 @@
+{
+ "label": "install-after-fix-wikipedia-2",
+ "serial": "emulator-5556",
+ "install_on_demand": true,
+ "device": null,
+ "runs": [
+  {
+   "goal": "In the Wikipedia app, search for Eiffel Tower and tell me the year it opened.",
+   "task_id": "task-1028-185023-f6e7",
+   "time": "2026-10-28T22:51:49+00:00",
+   "status": "failed",
+   "result": "stopped after 25 steps",
+   "detail": "stopped after 25 steps",
+   "app": "org.wikipedia",
+   "kind": "agent",
+   "device": "envoy-real",
+   "model_calls": 27,
+   "cost_usd": 0.0468,
+   "duration_s": 86.0,
+   "steps": [
+    {
+     "t": 1.0,
+     "kind": "note",
+     "text": "Wikipedia isn't on this phone: looking for it in the Play Store"
+    },
+    {
+     "t": 3.5,
+     "kind": "note",
+     "text": "installing Wikipedia from the Play Store (free)"
+    },
+    {
+     "t": 8.9,
+     "kind": "note",
+     "text": "installed Wikipedia in 8 s (finding it 3 s, download and install 5 s)"
+    },
+    {
+     "t": 13.0,
+     "kind": "plan",
+     "text": "Get past welcome and onboarding screens to reach main Wikipedia screen; Search for Eiffel Tower; Open the Eiffel Tower article; Find the year it opened in the article"
+    },
+    {
+     "t": 16.4,
+     "kind": "action",
+     "text": "back",
+     "reason": "UNUSED - placeholder"
+    },
+    {
+     "t": 19.1,
+     "kind": "action",
+     "text": "tap \"Search\"",
+     "reason": "Tap Search tab to start searching for Eiffel Tower"
+    },
+    {
+     "t": 20.7,
+     "kind": "action",
+     "text": "tap \"Close\"",
+     "reason": "Dismiss popup to reach search screen"
+    },
+    {
+     "t": 25.7,
+     "kind": "action",
+     "text": "back",
+     "reason": "Placeholder due to schema, ignore"
+    },
+    {
+     "t": 27.6,
+     "kind": "action",
+     "text": "tap \"Open\"",
+     "reason": "Open installed Wikipedia app to start search"
+    },
+    {
+     "t": 30.2,
+     "kind": "action",
+     "text": "tap \"Forward\"",
+     "reason": "Advance past welcome screen to reach main app"
+    },
+    {
+     "t": 31.5,
+     "kind": "action",
+     "text": "tap \"Forward\"",
+     "reason": "Advance past Data & Privacy onboarding screen"
+    },
+    {
+     "t": 33.0,
+     "kind": "action",
+     "text": "tap \"Forward\"",
+     "reason": "Advance onboarding to reach main screen"
+    },
+    {
+     "t": 34.6,
+     "kind": "action",
+     "text": "tap \"Skip\"",
+     "reason": "Skip personalization to reach main screen"
+    },
+    {
+     "t": 36.5,
+     "kind": "action",
+     "text": "tap \"Search\"",
+     "reason": "Open search to look for Eiffel Tower"
+    },
+    {
+     "t": 38.4,
+     "kind": "action",
+     "text": "tap \"Search Wikipedia\"",
+     "reason": "Open search input to type Eiffel Tower"
+    },
+    {
+     "t": 44.4,
+     "kind": "action",
+     "text": "type \"Search Wikipedia\" \"Eiffel Tower\"",
+     "reason": "Type search query for Eiffel Tower"
+    },
+    {
+     "t": 47.9,
+     "kind": "action",
+     "text": "tap \"Eiffel Tower · Tower in Paris, France\"",
+     "reason": "Open the Eiffel Tower article from search results"
+    },
+    {
+     "t": 50.0,
+     "kind": "action",
+     "text": "tap \"Got it\"",
+     "reason": "Dismiss onboarding tooltip to read article"
+    },
+    {
+     "t": 53.4,
+     "kind": "action",
+     "text": "scroll",
+     "reason": "Scroll article to find opening year"
+    },
+    {
+     "t": 57.4,
+     "kind": "action",
+     "text": "scroll",
+     "reason": "Need to find opening year in infobox at top of article"
+    },
+    {
+     "t": 59.8,
+     "kind": "action",
+     "text": "back",
+     "reason": "Go back to search to reopen article with full infobox handling"
+    },
+    {
+     "t": 62.1,
+     "kind": "action",
+     "text": "tap \"Eiffel Tower · Tower in Paris, France\"",
+     "reason": "Open Eiffel Tower article from search results"
+    },
+    {
+     "t": 65.0,
+     "kind": "action",
+     "text": "back",
+     "reason": "Back action had no effect, try another approach"
+    },
+    {
+     "t": 67.3,
+     "kind": "action",
+     "text": "tap \"Eiffel Tower · Tower in Paris, France\"",
+     "reason": "Open Eiffel Tower article to find opened year"
+    },
+    {
+     "t": 70.2,
+     "kind": "replan",
+     "text": "Remain on the open Eiffel Tower article; Scroll down through Quick facts and early history to locate opened date; Read off the year it opened"
+    },
+    {
+     "t": 73.1,
+     "kind": "action",
+     "text": "scroll",
+     "reason": "Scroll to find opened date in infobox"
+    },
+    {
+     "t": 76.3,
+     "kind": "action",
+     "text": "scroll",
+     "reason": "Scroll down to find opened year in article"
+    },
+    {
+     "t": 80.1,
+     "kind": "action",
+     "text": "scroll",
+     "reason": "Scrolled too far past opening info, need to go back up to find opened year"
+    },
+    {
+     "t": 82.1,
+     "kind": "action",
+     "text": "tap \"Quick facts\"",
+     "reason": "Open Quick facts to find opened year"
+    },
+    {
+     "t": 85.9,
+     "kind": "action",
+     "text": "scroll",
+     "reason": "Scroll to reveal Quick facts opened date"
+    },
+    {
+     "t": 85.9,
+     "kind": "finish",
+     "text": "stopped after 25 steps",
+     "status": "step_limit"
+    }
+   ],
+   "events": [],
+   "installed_after": true
+  }
+ ]
+}

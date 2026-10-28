@@ -64,7 +64,8 @@ TRAVEL = re.compile(r"\b(flight|trip|gate|check(ed)?[ -]?in|boarding|seat|airlin
 BROWSERS = {"com.android.chrome", "org.mozilla.firefox", "com.brave.browser", "com.microsoft.emmx", "com.sec.android.app.sbrowser",
             "com.duckduckgo.mobile.android", "com.opera.browser"}
 FRESH_INSTALL = ("{name} was just installed from the Play Store, so its first-run screens (welcome, onboarding, permissions) may "
-                 "come first: skip or continue past them. Don't sign in or create an account unless the task needs it.")
+                 "come first: get past them with their own Skip, Next, Forward or Continue buttons. Don't press Back on them: in a new app "
+                 "that can close it (seen on Wikipedia). Don't sign in or create an account unless the task needs it.")
 
 
 def app_for(goal: str, learned: dict[str, str] | None = None) -> str | None:
