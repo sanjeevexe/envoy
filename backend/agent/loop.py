@@ -21,7 +21,7 @@ from agent.popups import match_popup
 from agent.trace import TraceWriter, element_record, screen_record
 from agent.vision import Vision, crop
 from devices.types import Action, Device, InvalidElement, ScreenState
-from models.adapter import DataScope, ModelAdapter, image_part
+from models.adapter import DataScope, ModelAdapter, image_part, step_cost_scale
 from models.prompts import PLAN_INSTRUCTIONS, STEP_INSTRUCTIONS, plan_input, step_input
 from models.schemas import Plan, StepOutput, StepOutputListed
 from models.translate import to_device_action
@@ -148,6 +148,7 @@ class AgentRunner:
         names: dict[str, str] = {}  # screen signature -> readable name
         replans = 0
         prev_sig = ""
+        cost_cap = self.config.max_cost_usd * step_cost_scale()  # caps are set for Spark steps; a Wonder step costs ~3x
 
         def account(res) -> None:
             out.model_calls += 1
@@ -191,7 +192,7 @@ class AgentRunner:
                 step += 1
                 if step > self.config.max_steps:
                     return finish("step_limit", f"stopped after {self.config.max_steps} steps")
-                if out.cost_usd >= self.config.max_cost_usd:
+                if out.cost_usd >= cost_cap:
                     return finish("cost_limit", f"stopped at ${out.cost_usd:.3f}")
 
                 t_obs = time.perf_counter()

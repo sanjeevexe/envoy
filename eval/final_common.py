@@ -22,7 +22,7 @@ REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "eval"))
 sys.path.insert(0, str(REPO / "backend"))
 
-from models.adapter import COST_LOG, JOBS  # noqa: E402
+from models.adapter import COST_LOG, JOBS, active_profile, job_config  # noqa: E402
 
 OUT = REPO / "eval" / "results" / "final"
 TAG = "eval-final"
@@ -48,8 +48,8 @@ def code_state() -> dict[str, Any]:
 def models(contributor: bool) -> dict[str, Any]:
     """The models and efforts each job uses, as the adapter will resolve them."""
     jobs = {k: {"model": (j.model + "-contributor") if contributor and j.model.startswith("muse-spark") else j.model, "effort": j.effort}
-            for k, j in JOBS.items() if k in ("step", "plan", "repair", "match", "compile", "extract", "answer", "grounding", "choose")}
-    return {"tier": "contributor" if contributor else "standard", "jobs": jobs}
+            for k, j in ((k, job_config(k)) for k in JOBS) if k in ("step", "plan", "repair", "match", "compile", "extract", "answer", "grounding", "choose")}
+    return {"tier": "contributor" if contributor else "standard", "profile": active_profile(), "jobs": jobs}
 
 
 def run_id() -> str:

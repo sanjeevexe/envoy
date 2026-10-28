@@ -25,7 +25,7 @@ SCHEMA = """
 CREATE TABLE IF NOT EXISTS tasks (
   id TEXT PRIMARY KEY, goal TEXT NOT NULL, source TEXT NOT NULL, status TEXT NOT NULL, created_at REAL, updated_at REAL,
   app TEXT, device TEXT, kind TEXT, routine TEXT, inputs TEXT, result TEXT, detail TEXT, waiting_for TEXT,
-  model_calls INTEGER DEFAULT 0, cost_usd REAL DEFAULT 0, traces TEXT DEFAULT '[]', memory TEXT, request TEXT, parent TEXT
+  model_calls INTEGER DEFAULT 0, cost_usd REAL DEFAULT 0, traces TEXT DEFAULT '[]', memory TEXT, request TEXT, parent TEXT, models TEXT
 );
 CREATE TABLE IF NOT EXISTS steps (
   task_id TEXT, seq INTEGER, time REAL, data TEXT, PRIMARY KEY (task_id, seq)
@@ -60,6 +60,8 @@ class TaskStore:
                 self.db.execute("ALTER TABLE tasks ADD COLUMN request TEXT")
             if "parent" not in columns:  # databases from before cross-app answers (a part's parent task)
                 self.db.execute("ALTER TABLE tasks ADD COLUMN parent TEXT")
+            if "models" not in columns:  # databases from before model profiles (the profile and each job's model)
+                self.db.execute("ALTER TABLE tasks ADD COLUMN models TEXT")
             # A restart ends whatever was running: the runner that owned it is gone.
             self.db.execute("UPDATE tasks SET status='stopped', detail='the server restarted' WHERE status IN (%s)" % ",".join("?" * len(ACTIVE)), ACTIVE)
             self.db.execute("UPDATE approvals SET status='expired', note='the server restarted' WHERE status='pending'")
@@ -81,7 +83,7 @@ class TaskStore:
     def update(self, tid: str, **fields: Any) -> dict[str, Any] | None:
         if not fields:
             return self.get(tid)
-        enc = {k: json.dumps(v) if k in ("inputs", "traces", "memory") and not isinstance(v, str) else v for k, v in fields.items()}
+        enc = {k: json.dumps(v) if k in ("inputs", "traces", "memory", "models") and not isinstance(v, str) else v for k, v in fields.items()}
         enc["updated_at"] = time.time()
         with self.lock:
             self.db.execute(f"UPDATE tasks SET {', '.join(f'{k}=?' for k in enc)} WHERE id=?", (*enc.values(), tid))
@@ -201,7 +203,7 @@ class TaskStore:
 
 def _task(r: sqlite3.Row) -> dict[str, Any]:
     d = dict(r)
-    for k in ("inputs", "traces", "memory"):
+    for k in ("inputs", "traces", "memory", "models"):
         if d.get(k):
             try:
                 d[k] = json.loads(d[k])

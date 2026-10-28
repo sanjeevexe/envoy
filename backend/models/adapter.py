@@ -4,6 +4,8 @@
 - Cost meter: tokens and dollars per call to logs/model_costs.jsonl, with a daily cap.
 - Timeouts and retries: 30 s per call, 2 retries with backoff on 429/5xx (Retry-After honored).
 - Contributor tier (Meta may train on what is sent): only for our own test apps, never real data.
+- Model profiles: `ENVOY_MODEL_PROFILE=spark|hybrid|wonder` moves jobs between Muse Spark and Muse Wonder all at once;
+  `ENVOY_MODEL_<JOB>=<model>` overrides one job. Resolved on every call, and written to the cost log.
 
 API shapes follow dev.meta.ai/docs as read on Oct 26, 2026 (Responses API through the OpenAI SDK):
   reasoning={"effort": ...}; text={"format": {"type": "json_schema", ...}}; usage.input_tokens_details.cached_tokens;
@@ -50,6 +52,7 @@ TOKEN_PRICES: dict[str, dict[str, float]] = {
 SAM_PRICE_PER_IMAGE = 2.50 / 1000
 VOICE_PRICE_PER_HOUR = 0.18
 CONTRIBUTOR_MODELS = {"muse-spark-1.3": "muse-spark-1.3-contributor", "muse-spark-1.2": "muse-spark-1.2-contributor"}
+SPARK, WONDER = "muse-spark-1.3", "muse-wonder-1.0"
 
 
 @dataclass(frozen=True)
@@ -78,6 +81,57 @@ JOBS: dict[str, JobConfig] = {
     "match": JobConfig("match", "muse-spark-1.3", "low", MatchOutput, max_output_tokens=4000),
     "chat": JobConfig("chat", "muse-spark-1.3", "low", ChatRoute, max_output_tokens=2000),
 }
+
+
+# Which jobs run on Wonder. `spark` is each job's own model (compile is on Wonder there too); `hybrid` adds the jobs that
+# act on a task the agent hasn't seen (plan, step, repair); `wonder` is everything, as the upper bound.
+PROFILES: dict[str, dict[str, str]] = {
+    "spark": {},
+    "hybrid": {"plan": WONDER, "step": WONDER, "repair": WONDER, "compile": WONDER},
+    "wonder": {name: WONDER for name in JOBS},
+}
+DEFAULT_PROFILE = "spark"
+WONDER_TIMEOUT_S = 120  # Wonder answers in 10-15 s at medium effort (Phase 2), with a long tail
+WONDER_MIN_OUTPUT_TOKENS = 8000  # its reasoning counts against max_output_tokens
+
+
+def active_profile() -> str:
+    name = (os.environ.get("ENVOY_MODEL_PROFILE") or DEFAULT_PROFILE).strip().lower()
+    if name not in PROFILES:
+        raise ValueError(f"unknown ENVOY_MODEL_PROFILE {name!r} (use one of {', '.join(PROFILES)})")
+    return name
+
+
+def model_for(job: str, profile: str | None = None) -> str:
+    """The model a job runs on: its ENVOY_MODEL_<JOB> override, else the profile's choice, else the job's own model."""
+    override = os.environ.get(f"ENVOY_MODEL_{job.upper()}", "").strip()
+    if override:
+        return override
+    return PROFILES[profile or active_profile()].get(job) or JOBS[job].model
+
+
+def job_config(job: JobConfig | str, profile: str | None = None) -> JobConfig:
+    """A job's config with the profile applied. A config whose model was set by hand (not the job's default) is kept."""
+    cfg = JOBS[job] if isinstance(job, str) else job
+    base = JOBS.get(cfg.name)
+    if base is not None and cfg.model == base.model:
+        cfg = replace(cfg, model=model_for(cfg.name, profile))
+    if cfg.model.startswith("muse-wonder"):
+        cfg = replace(cfg, timeout_s=max(cfg.timeout_s, WONDER_TIMEOUT_S),
+                      max_output_tokens=max(cfg.max_output_tokens or 0, WONDER_MIN_OUTPUT_TOKENS))
+    return cfg
+
+
+def profile_models(profile: str | None = None) -> dict[str, Any]:
+    """What a task record says about its models: the profile and each job's model."""
+    name = profile or active_profile()
+    return {"profile": name, "jobs": {job: model_for(job, name) for job in JOBS}}
+
+
+def step_cost_scale(profile: str | None = None) -> float:
+    """How much an agent step costs against Spark (Wonder ~3x): per-task cost caps were set for Spark steps."""
+    model = model_for("step", profile)
+    return max(1.0, TOKEN_PRICES.get(model, TOKEN_PRICES[SPARK])["input"] / TOKEN_PRICES[SPARK]["input"])
 
 
 class CostCapExceeded(RuntimeError):
@@ -205,6 +259,13 @@ class CostMeter:
             f.write(json.dumps(entry) + "\n")
 
 
+def _profile_or_none() -> str | None:
+    try:
+        return active_profile()
+    except ValueError:
+        return None
+
+
 class ModelAdapter:
     def __init__(self, *, api_key: str | None = None, meter: CostMeter | None = None) -> None:
         self.api_key = api_key if api_key is not None else os.environ.get("META_API_KEY", "")
@@ -232,9 +293,8 @@ class ModelAdapter:
             raise ContributorNotAllowed("Contributor tier is only for our own test apps, never real screens or data")
         if not self.contributor_enabled:
             raise ContributorNotAllowed("META_CONTRIBUTOR_TIER is not true in .env")
-        if job.model not in CONTRIBUTOR_MODELS:
-            raise ContributorNotAllowed(f"{job.model} has no Contributor variant")
-        return CONTRIBUTOR_MODELS[job.model]
+        # A model with no Contributor variant (Wonder) runs on the standard tier: the stricter one, never the other way.
+        return CONTRIBUTOR_MODELS.get(job.model, job.model)
 
     def build_request(
         self,
@@ -246,7 +306,7 @@ class ModelAdapter:
         contributor: bool = False,
         **overrides: Any,
     ) -> dict[str, Any]:
-        cfg = JOBS[job] if isinstance(job, str) else job
+        cfg = job_config(job)
         if overrides:
             cfg = replace(cfg, **{k: v for k, v in overrides.items() if k in JobConfig.__dataclass_fields__})
         if isinstance(content, str):
@@ -290,7 +350,7 @@ class ModelAdapter:
         task_id: str | None = None,
         **overrides: Any,
     ) -> ModelResult:
-        cfg = JOBS[job] if isinstance(job, str) else job
+        cfg = job_config(job)
         if overrides:
             cfg = replace(cfg, **{k: v for k, v in overrides.items() if k in JobConfig.__dataclass_fields__})
         req = self.build_request(cfg, content, instructions=instructions, data_scope=data_scope, contributor=contributor)
@@ -337,6 +397,7 @@ class ModelAdapter:
                 "model": model,
                 "effort": req.get("reasoning", {}).get("effort"),
                 "data_scope": data_scope,
+                "profile": _profile_or_none(),
                 "task_id": task_id,
                 "ok": resp is not None,
                 "error": None if resp is not None else f"{type(last_error).__name__}: {last_error}",

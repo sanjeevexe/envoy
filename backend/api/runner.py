@@ -28,7 +28,7 @@ from agent.trace import TraceWriter
 from memory.bridge import fill_inputs, notes_for, remember_run
 from memory.service import MemoryService
 from memory.store import MemoryStore
-from models.adapter import ModelAdapter
+from models.adapter import ModelAdapter, profile_models
 from policy.approval_rules import ApprovalRules
 from policy.signin import sign_in_reason
 from routines.executor import ExecConfig, RoutineExecutor
@@ -120,7 +120,8 @@ class TaskRunner:
         if asks_for_phone(goal) or asks_for_phone(request or ""):
             phone = phone or "phone"
             goal = strip_phone_words(goal)
-        task = self.store.create(goal, source, routine=routine, inputs=inputs or {}, app=app, request=request or goal, **({"parent": parent} if parent else {}))
+        task = self.store.create(goal, source, routine=routine, inputs=inputs or {}, app=app, request=request or goal, models=profile_models(),
+                                 **({"parent": parent} if parent else {}))
         self.bus.publish("task", task=task)
         coro = self._run(task["id"], goal, routine, inputs or {}, app, phone)
         try:
