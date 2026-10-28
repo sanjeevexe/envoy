@@ -148,6 +148,14 @@ def step(action: dict, reason: str = "Open it") -> dict:
     return {"reason": reason, "action": action, "expected_result": "something", "risk": "read"}
 
 
+def test_the_model_knows_the_phones_date(tmp_path, monkeypatch):
+    monkeypatch.setattr(TraceWriter.__init__, "__defaults__", (tmp_path,))
+    model = Seq(step({"type": "done", "result": "ok"}))
+    asyncio.run(AgentRunner(Phone(), model, ScriptedApprover(True), RunConfig(max_steps=3, data_scope="test_app"))
+                .run("Add an event for tomorrow", task_id="date", memory=""))
+    assert "TODAY: Sunday, October 15 2023, 15:34" in model.plan_prompts[0] and "TODAY: Sunday" in model.prompts[0]
+
+
 def test_a_placeholder_action_is_asked_again_not_carried_out(tmp_path, monkeypatch):
     monkeypatch.setattr(TraceWriter.__init__, "__defaults__", (tmp_path,))
     phone = Phone()
