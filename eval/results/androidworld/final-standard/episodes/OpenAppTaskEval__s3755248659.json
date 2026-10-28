@@ -1,0 +1,83 @@
+{
+ "task": "OpenAppTaskEval",
+ "seed": 3755248659,
+ "goal": "Open the contacts app. Clear any pop-ups that may appear by granting all permissions that are required.",
+ "score": 1.0,
+ "aw_run_time_s": 18.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 11:41:59.667626",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-114142-affa",
+  "goal": "Open the contacts app. Clear any pop-ups that may appear by granting all permissions that are required.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Contacts app opened. No permission pop-ups were blocking; contacts list displayed as 'No contacts yet' with Create contact option.",
+  "done": true,
+  "answer": "Contacts app opened. No permission pop-ups were blocking; contacts list displayed as 'No contacts yet' with Create contact option.",
+  "steps_device": 2,
+  "iterations": 3,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 1,
+   "done": 1
+  },
+  "model_calls": 4,
+  "input_tokens": 8805,
+  "cached_tokens": 7236,
+  "output_tokens": 1522,
+  "reasoning_tokens": 1251,
+  "cost_usd": 0.009515,
+  "cost_at_standard_usd": 0.009515,
+  "duration_s": 12.52,
+  "model_s": 7.78,
+  "device_s": 4.74,
+  "connect_s": 0.85,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Contacts",
+   "subgoals": [
+    "Open the Contacts app",
+    "Grant all required permissions on any pop-ups",
+    "Confirm contacts list is displayed with no blocking dialogs"
+   ],
+   "success_check": {
+    "kind": "app_foreground",
+    "value": "com.google.android.contacts",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "foreground app is com.google.android.contacts"
+  },
+  "trace_dir": "data/runs/aw-final-standard-1028-114142-affa",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/OpenAppTaskEval__s3755248659.jsonl.gz",
+  "wall_s": 15.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

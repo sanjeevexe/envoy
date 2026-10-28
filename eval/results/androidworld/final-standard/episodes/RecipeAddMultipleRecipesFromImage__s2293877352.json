@@ -1,0 +1,88 @@
+{
+ "task": "RecipeAddMultipleRecipesFromImage",
+ "seed": 2293877352,
+ "goal": "Add the recipes from recipes.jpg in Simple Gallery Pro to the Broccoli recipe app.",
+ "score": 1.0,
+ "aw_run_time_s": 162.4,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 11:52:10.383738",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-114932-fd6d",
+  "goal": "Add the recipes from recipes.jpg in Simple Gallery Pro to the Broccoli recipe app.",
+  "max_steps": 60,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Added 3 recipes from recipes.jpg to Broccoli and verified in Recipes list: Eggplant Parmesan (8 servings, 10 mins), Baked Cod with Lemon and Dill (2 servings, 45 mins), Chickpea Vegetable Soup (2 servings, 2 hrs) with their descriptions, ingredients and directions.",
+  "done": true,
+  "answer": "Added 3 recipes from recipes.jpg to Broccoli and verified in Recipes list: Eggplant Parmesan (8 servings, 10 mins), Baked Cod with Lemon and Dill (2 servings, 45 mins), Chickpea Vegetable Soup (2 servings, 2 hrs) with their descriptions, ingredients and directions.",
+  "steps_device": 48,
+  "iterations": 51,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 2,
+   "tap": 10,
+   "look": 2,
+   "type": 18,
+   "scroll": 17,
+   "back": 1,
+   "done": 1
+  },
+  "model_calls": 54,
+  "input_tokens": 174081,
+  "cached_tokens": 118614,
+  "output_tokens": 12385,
+  "reasoning_tokens": 7145,
+  "cost_usd": 0.139762,
+  "cost_at_standard_usd": 0.139762,
+  "duration_s": 153.56,
+  "model_s": 74.58,
+  "device_s": 78.98,
+  "connect_s": 0.87,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Open recipes.jpg in Simple Gallery Pro to read the recipe details",
+    "In Broccoli create a New Recipe for each recipe in the image",
+    "Enter Title, Ingredients and remaining fields from recipes.jpg",
+    "Save each recipe and verify it appears in Recipes list"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Chickpea Vegetable Soup",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Chickpea Vegetable Soup' is visible"
+  },
+  "trace_dir": "data/runs/aw-final-standard-1028-114932-fd6d",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/RecipeAddMultipleRecipesFromImage__s2293877352.jsonl.gz",
+  "wall_s": 156.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

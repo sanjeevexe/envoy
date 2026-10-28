@@ -1,0 +1,87 @@
+{
+ "task": "VlcCreatePlaylist",
+ "seed": 3947792439,
+ "goal": "Create a playlist titled \"Ultimate Fails Series\" with the following files in VLC (located in Internal Memory/VLCVideos), in order: highlight_41_4K_2023_03_30.mp4, scene_68_4K_copy.mp4",
+ "score": 1.0,
+ "aw_run_time_s": 57.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:35:49.388817",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-173455-364c",
+  "goal": "Create a playlist titled \"Ultimate Fails Series\" with the following files in VLC (located in Internal Memory/VLCVideos), in order: highlight_41_4K_2023_03_30.mp4, scene_68_4K_copy.mp4",
+  "max_steps": 28,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Playlist \"Ultimate Fails Series\" created with 2 videos in order: 1) highlight_41_4K_2023_03_30.mp4 (1:21), 2) scene_68_4K_copy.mp4 (1:15)",
+  "done": true,
+  "answer": "Playlist \"Ultimate Fails Series\" created with 2 videos in order: 1) highlight_41_4K_2023_03_30.mp4 (1:21), 2) scene_68_4K_copy.mp4 (1:15)",
+  "steps_device": 17,
+  "iterations": 18,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 14,
+   "back": 1,
+   "type": 1,
+   "done": 1
+  },
+  "model_calls": 20,
+  "input_tokens": 56243,
+  "cached_tokens": 43860,
+  "output_tokens": 3976,
+  "reasoning_tokens": 2384,
+  "cost_usd": 0.038956,
+  "cost_at_standard_usd": 0.038956,
+  "duration_s": 49.22,
+  "model_s": 27.08,
+  "device_s": 22.14,
+  "connect_s": 0.92,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "VLC",
+   "subgoals": [
+    "Navigate up to VLC main screen and open Playlists",
+    "Create new playlist titled Ultimate Fails Series",
+    "Browse to Internal memory / VLCVideos folder",
+    "Add highlight_41_4K_2023_03_30.mp4 then scene_68_4K_copy.mp4 to the playlist in order",
+    "Open Ultimate Fails Series to confirm both videos in correct order"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Ultimate Fails Series",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Ultimate Fails Series' is visible"
+  },
+  "trace_dir": "data/runs/aw-final-standard-1028-173455-364c",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/VlcCreatePlaylist__s3947792439.jsonl.gz",
+  "wall_s": 51.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

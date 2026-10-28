@@ -1,0 +1,63 @@
+{
+ "task": "TasksIncompleteTasksOnDate",
+ "seed": 1760879267,
+ "goal": "What incomplete tasks do I have still have to do by Thursday in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 0.0,
+ "aw_run_time_s": 11.3,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 11:11:31.387320",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-111122-fc13",
+  "goal": "What incomplete tasks do I have still have to do by Thursday in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "error",
+  "result": "APIConnectionError: Connection error.",
+  "done": false,
+  "answer": null,
+  "steps_device": 0,
+  "iterations": 0,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {},
+  "model_calls": 0,
+  "input_tokens": 0,
+  "cached_tokens": 0,
+  "output_tokens": 0,
+  "reasoning_tokens": 0,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.0,
+  "duration_s": 4.64,
+  "model_s": 0.0,
+  "device_s": 4.64,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": null,
+  "check": null,
+  "trace_dir": "data/runs/aw-final-standard-1028-111122-fc13",
+  "envoy_commit": "35618ab3bb8cee2be85486b1f0ea9582a8b040a0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/TasksIncompleteTasksOnDate__s1760879267.jsonl.gz",
+  "wall_s": 7.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

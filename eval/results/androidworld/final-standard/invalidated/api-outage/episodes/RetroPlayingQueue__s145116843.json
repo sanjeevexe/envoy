@@ -1,0 +1,8 @@
+{
+ "task": "RetroPlayingQueue",
+ "seed": 145116843,
+ "goal": "Add the following songs, in order, Through the Storm, Hidden Paths, Forever Young, Whispers of the Past, Heartbeat Away to my playing queue in Retro music.",
+ "score": 0.0,
+ "harness_exception": "Traceback (most recent call last):\n  File \"/Users/sanjeevvarma/Desktop/Envoy-androidworld/third_party/android_world/android_world/suite_utils.py\", line 248, in _run_task\n    task_successful = task.is_successful(env)\n                      ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/sanjeevvarma/Desktop/Envoy-androidworld/third_party/android_world/android_world/task_evals/single/retro_music.py\", line 204, in is_successful\n    queue = _get_playing_queue(env)\n            ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/sanjeevvarma/Desktop/Envoy-androidworld/third_party/android_world/android_world/task_evals/single/retro_music.py\", line 92, in _get_playing_queue\n    result = sqlite_utils.execute_query(\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/sanjeevvarma/Desktop/Envoy-androidworld/third_party/android_world/android_world/task_evals/utils/sqlite_utils.py\", line 43, in execute_query\n    raw_rows = cursor.execute(query).fetchall()\n               ^^^^^^^^^^^^^^^^^^^^^\nsqlite3.OperationalError: no such table: playing_queue\n",
+ "agent": "envoy"
+}

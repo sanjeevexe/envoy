@@ -1,0 +1,91 @@
+{
+ "task": "OsmAndMarker",
+ "seed": 182743914,
+ "goal": "Add a location marker for Planken, Liechtenstein in the OsmAnd maps app.",
+ "score": 0.0,
+ "aw_run_time_s": 63.8,
+ "aw_episode_length": 20,
+ "agent": "envoy",
+ "finished": "2026-10-28 11:43:50.505429",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-114249-a8e1",
+  "goal": "Add a location marker for Planken, Liechtenstein in the OsmAnd maps app.",
+  "max_steps": 20,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 20 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 17,
+  "iterations": 20,
+  "looks": 3,
+  "screenshots_sent": 5,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 12,
+   "type": 4,
+   "look": 3
+  },
+  "model_calls": 22,
+  "input_tokens": 61734,
+  "cached_tokens": 47286,
+  "output_tokens": 5536,
+  "reasoning_tokens": 3972,
+  "cost_usd": 0.048681,
+  "cost_at_standard_usd": 0.048681,
+  "duration_s": 56.88,
+  "model_s": 33.95,
+  "device_s": 22.93,
+  "connect_s": 0.84,
+  "approvals": [
+   {
+    "step": 10,
+    "description": "type \"Type to search all: Planken\" in net.osmand",
+    "reasons": [
+     "rule: target says 'Send'"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "OsmAnd",
+   "subgoals": [
+    "Tap INCREASE SEARCH RADIUS to widen search beyond 5 mi",
+    "Select the Planken, Liechtenstein result",
+    "Show Planken on the map and open its details",
+    "Add a map marker or favorite for Planken"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Planken",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-final-standard-1028-114249-a8e1",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/OsmAndMarker__s182743914.jsonl.gz",
+  "wall_s": 59.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

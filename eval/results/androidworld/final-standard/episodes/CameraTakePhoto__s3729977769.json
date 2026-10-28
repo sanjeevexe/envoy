@@ -1,0 +1,85 @@
+{
+ "task": "CameraTakePhoto",
+ "seed": 3729977769,
+ "goal": "Take one photo.",
+ "score": 1.0,
+ "aw_run_time_s": 24.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 10:37:33.214383",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-103709-b209",
+  "goal": "Take one photo.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done_unverified",
+  "result": "Took one photo, captured Oct 15, 2023 15:34:28 visible in filmstrip",
+  "done": true,
+  "answer": "Took one photo, captured Oct 15, 2023 15:34:28 visible in filmstrip",
+  "steps_device": 3,
+  "iterations": 6,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 1,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "look": 1,
+   "done": 2
+  },
+  "model_calls": 7,
+  "input_tokens": 17144,
+  "cached_tokens": 14103,
+  "output_tokens": 2200,
+  "reasoning_tokens": 1703,
+  "cost_usd": 0.015267,
+  "cost_at_standard_usd": 0.015267,
+  "duration_s": 19.27,
+  "model_s": 12.75,
+  "device_s": 6.52,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Camera",
+   "subgoals": [
+    "Open the Camera app",
+    "Allow permissions if prompted and show viewfinder",
+    "Tap the shutter button to take one photo",
+    "Confirm thumbnail or preview shows the photo was captured"
+   ],
+   "success_check": {
+    "kind": "element_present",
+    "value": "Thumbnail",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": true,
+   "detail": "element 'Thumbnail' not present"
+  },
+  "trace_dir": "data/runs/aw-final-standard-1028-103709-b209",
+  "envoy_commit": "35618ab3bb8cee2be85486b1f0ea9582a8b040a0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/CameraTakePhoto__s3729977769.jsonl.gz",
+  "wall_s": 21.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

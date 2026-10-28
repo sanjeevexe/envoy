@@ -1,0 +1,97 @@
+{
+ "task": "SimpleCalendarAddOneEventRelativeDay",
+ "seed": 3130305423,
+ "goal": "In Simple Calendar Pro, create a calendar event for this Thursday at 5h with the title 'Call with the Team' and the description 'We will celebrate team roles.'. The event should last for 60 mins.",
+ "score": 1.0,
+ "aw_run_time_s": 59.9,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 16:57:18.447858",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-165620-33f0",
+  "goal": "In Simple Calendar Pro, create a calendar event for this Thursday at 5h with the title 'Call with the Team' and the description 'We will celebrate team roles.'. The event should last for 60 mins.",
+  "max_steps": 34,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Event 'Call with the Team' created for Thursday October 19 2023 05:00-06:00 with description 'We will celebrate team roles.'",
+  "done": true,
+  "answer": "Event 'Call with the Team' created for Thursday October 19 2023 05:00-06:00 with description 'We will celebrate team roles.'",
+  "steps_device": 19,
+  "iterations": 20,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 14,
+   "type": 3,
+   "back": 1,
+   "done": 1
+  },
+  "model_calls": 21,
+  "input_tokens": 60381,
+  "cached_tokens": 46661,
+  "output_tokens": 4051,
+  "reasoning_tokens": 2411,
+  "cost_usd": 0.041366,
+  "cost_at_standard_usd": 0.041366,
+  "duration_s": 53.08,
+  "model_s": 26.32,
+  "device_s": 26.76,
+  "connect_s": 0.84,
+  "approvals": [
+   {
+    "step": 15,
+    "description": "tap \"Save\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Open Simple Calendar Pro",
+    "Navigate to Thursday October 19 2023",
+    "Create new event at 5:00 lasting 60 minutes",
+    "Set title 'Call with the Team' and description 'We will celebrate team roles.'",
+    "Save the event"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Call with the Team",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Call with the Team' is visible"
+  },
+  "trace_dir": "data/runs/aw-final-standard-1028-165620-33f0",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/SimpleCalendarAddOneEventRelativeDay__s3130305423.jsonl.gz",
+  "wall_s": 55.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

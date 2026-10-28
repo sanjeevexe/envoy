@@ -1,0 +1,79 @@
+{
+ "task": "SportsTrackerActivityDuration",
+ "seed": 3548294116,
+ "goal": "How long was my skiing activity October 12 2023 in the OpenTracks app? Express your answer in minutes as a single integer.",
+ "score": 0.0,
+ "aw_run_time_s": 45.3,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:16:01.120111",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-171517-bc59",
+  "goal": "How long was my skiing activity October 12 2023 in the OpenTracks app? Express your answer in minutes as a single integer.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 10,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 6,
+   "back": 3
+  },
+  "model_calls": 12,
+  "input_tokens": 33081,
+  "cached_tokens": 23884,
+  "output_tokens": 3034,
+  "reasoning_tokens": 2060,
+  "cost_usd": 0.027973,
+  "cost_at_standard_usd": 0.027973,
+  "duration_s": 36.05,
+  "model_s": 20.97,
+  "device_s": 15.08,
+  "connect_s": 0.9,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "OpenTracks",
+   "subgoals": [
+    "Search track list for Skiing tracks",
+    "Scroll to find Thursday October 12 2023 skiing entry",
+    "Open the October 12 skiing track details to read total time"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "skiing duration on October 12 in minutes",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-final-standard-1028-171517-bc59",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/SportsTrackerActivityDuration__s3548294116.jsonl.gz",
+  "wall_s": 41.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.3
+  }
+ }
+}

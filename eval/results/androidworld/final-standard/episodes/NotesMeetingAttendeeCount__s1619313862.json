@@ -1,0 +1,85 @@
+{
+ "task": "NotesMeetingAttendeeCount",
+ "seed": 1619313862,
+ "goal": "How many attendees were present in the meeting titled 'Employee Performance Evaluation' in the Joplin app? Express your answer as just a single number.",
+ "score": 1.0,
+ "aw_run_time_s": 30.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 11:40:28.009917",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-114004-d68c",
+  "goal": "How many attendees were present in the meeting titled 'Employee Performance Evaluation' in the Joplin app? Express your answer as just a single number.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "25",
+  "done": true,
+  "answer": "25",
+  "steps_device": 5,
+  "iterations": 8,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 3,
+   "type": 1,
+   "look": 2,
+   "done": 1
+  },
+  "model_calls": 9,
+  "input_tokens": 25431,
+  "cached_tokens": 18809,
+  "output_tokens": 1736,
+  "reasoning_tokens": 1139,
+  "cost_usd": 0.018477,
+  "cost_at_standard_usd": 0.018477,
+  "duration_s": 19.68,
+  "model_s": 10.71,
+  "device_s": 8.97,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Joplin",
+   "subgoals": [
+    "Open the Joplin app",
+    "Find the note for meeting titled 'Employee Performance Evaluation'",
+    "Open the meeting details to view attendee list"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "number of attendees present in Employee Performance Evaluation meeting",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: 25"
+  },
+  "trace_dir": "data/runs/aw-final-standard-1028-114004-d68c",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/NotesMeetingAttendeeCount__s1619313862.jsonl.gz",
+  "wall_s": 22.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

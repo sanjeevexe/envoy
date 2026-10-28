@@ -1,0 +1,63 @@
+{
+ "task": "MarkorMergeNotes",
+ "seed": 2594989658,
+ "goal": "Merge the contents of Markor notes tough_frog_2023_08_05.txt, proud_cat_edited.txt and 2023_08_21_friendly_koala.md (in the same order) into a new Markor note named mIObBbo4 and save it. Add a new line between the content of each note.",
+ "score": 0.0,
+ "aw_run_time_s": 11.2,
+ "aw_episode_length": 78,
+ "agent": "envoy",
+ "finished": "2026-10-28 10:53:27.815153",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-105319-3372",
+  "goal": "Merge the contents of Markor notes tough_frog_2023_08_05.txt, proud_cat_edited.txt and 2023_08_21_friendly_koala.md (in the same order) into a new Markor note named mIObBbo4 and save it. Add a new line between the content of each note.",
+  "max_steps": 78,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "error",
+  "result": "APIConnectionError: Connection error.",
+  "done": false,
+  "answer": null,
+  "steps_device": 0,
+  "iterations": 0,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {},
+  "model_calls": 0,
+  "input_tokens": 0,
+  "cached_tokens": 0,
+  "output_tokens": 0,
+  "reasoning_tokens": 0,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.0,
+  "duration_s": 3.89,
+  "model_s": 0.0,
+  "device_s": 3.89,
+  "connect_s": 0.91,
+  "approvals": [],
+  "popups": [],
+  "plan": null,
+  "check": null,
+  "trace_dir": "data/runs/aw-final-standard-1028-105319-3372",
+  "envoy_commit": "35618ab3bb8cee2be85486b1f0ea9582a8b040a0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/MarkorMergeNotes__s2594989658.jsonl.gz",
+  "wall_s": 6.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.9
+  }
+ }
+}

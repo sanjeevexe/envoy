@@ -1,0 +1,88 @@
+{
+ "task": "RetroSavePlaylist",
+ "seed": 1865481993,
+ "goal": "Create a playlist in Retro Music titled \"Blues Break 567\" with the following songs, in order: Chasing Shadows, Lost in the Echo, Twilight Calling. Then export the playlist to the Downloads directory on the device.",
+ "score": 1.0,
+ "aw_run_time_s": 108.4,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 16:53:14.946396",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-165131-b989",
+  "goal": "Create a playlist in Retro Music titled \"Blues Break 567\" with the following songs, in order: Chasing Shadows, Lost in the Echo, Twilight Calling. Then export the playlist to the Downloads directory on the device.",
+  "max_steps": 50,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Created playlist 'Blues Break 567' with 3 songs in order: Chasing Shadows, Lost in the Echo, Twilight Calling (3 Songs • 13:17) and exported via Save as file to Downloads directory.",
+  "done": true,
+  "answer": "Created playlist 'Blues Break 567' with 3 songs in order: Chasing Shadows, Lost in the Echo, Twilight Calling (3 Songs • 13:17) and exported via Save as file to Downloads directory.",
+  "steps_device": 34,
+  "iterations": 37,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "tap": 29,
+   "look": 2,
+   "type": 1,
+   "back": 3,
+   "scroll": 1,
+   "done": 1
+  },
+  "model_calls": 40,
+  "input_tokens": 116285,
+  "cached_tokens": 89000,
+  "output_tokens": 7905,
+  "reasoning_tokens": 4363,
+  "cost_usd": 0.081052,
+  "cost_at_standard_usd": 0.081052,
+  "duration_s": 97.81,
+  "model_s": 46.71,
+  "device_s": 51.1,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Retro Music",
+   "subgoals": [
+    "Go to Playlists tab and create or open playlist Blues Break 567",
+    "From Songs tab add Chasing Shadows to Blues Break 567",
+    "Add Lost in the Echo then Twilight Calling to same playlist in order",
+    "Open Blues Break 567 details and verify 3 songs in correct order",
+    "Use playlist menu to export/save playlist file to Downloads folder"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "Blues Break 567 playlist contents and export file in Downloads",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Blues, Break, 567, 3"
+  },
+  "trace_dir": "data/runs/aw-final-standard-1028-165131-b989",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/RetroSavePlaylist__s1865481993.jsonl.gz",
+  "wall_s": 100.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.5
+  }
+ }
+}

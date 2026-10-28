@@ -1,0 +1,87 @@
+{
+ "task": "MarkorMergeNotes",
+ "seed": 2594989658,
+ "goal": "Merge the contents of Markor notes tough_frog_2023_08_05.txt, proud_cat_edited.txt and 2023_08_21_friendly_koala.md (in the same order) into a new Markor note named mIObBbo4 and save it. Add a new line between the content of each note.",
+ "score": 0.0,
+ "aw_run_time_s": 48.8,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 11:36:22.308853",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-113535-fb04",
+  "goal": "Merge the contents of Markor notes tough_frog_2023_08_05.txt, proud_cat_edited.txt and 2023_08_21_friendly_koala.md (in the same order) into a new Markor note named mIObBbo4 and save it. Add a new line between the content of each note.",
+  "max_steps": 78,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Created Markor note mIObBbo4 with contents:\nm4kMyOGWaENoPj6FqLjd\nfxHXZsqrmnwYjXvte9pg\nf42GOjFWb2aKHogAFQSY\nand saved it.",
+  "done": true,
+  "answer": "Created Markor note mIObBbo4 with contents:\nm4kMyOGWaENoPj6FqLjd\nfxHXZsqrmnwYjXvte9pg\nf42GOjFWb2aKHogAFQSY\nand saved it.",
+  "steps_device": 13,
+  "iterations": 15,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 6,
+   "back": 4,
+   "type": 2,
+   "look": 1,
+   "done": 1
+  },
+  "model_calls": 17,
+  "input_tokens": 50200,
+  "cached_tokens": 36993,
+  "output_tokens": 4326,
+  "reasoning_tokens": 2635,
+  "cost_usd": 0.040443,
+  "cost_at_standard_usd": 0.040443,
+  "duration_s": 42.47,
+  "model_s": 25.42,
+  "device_s": 17.05,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Open tough_frog_2023_08_05.txt and read its contents",
+    "Open proud_cat_edited.txt and read its contents",
+    "Open 2023_08_21_friendly_koala.md and read its contents",
+    "Create a new note named mIObBbo4 with the three contents in order separated by a new line and save it"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "mIObBbo4",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'mIObBbo4' is visible"
+  },
+  "trace_dir": "data/runs/aw-final-standard-1028-113535-fb04",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/MarkorMergeNotes__s2594989658.jsonl.gz",
+  "wall_s": 45.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

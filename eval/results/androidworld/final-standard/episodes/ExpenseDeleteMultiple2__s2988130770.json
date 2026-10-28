@@ -1,0 +1,154 @@
+{
+ "task": "ExpenseDeleteMultiple2",
+ "seed": 2988130770,
+ "goal": "Delete the following expenses from pro expense: Streaming Services, Unexpected Expenses, Pet Supplies.",
+ "score": 0.0,
+ "aw_run_time_s": 124.7,
+ "aw_episode_length": 34,
+ "agent": "envoy",
+ "finished": "2026-10-28 11:25:58.675601",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-112356-3e68",
+  "goal": "Delete the following expenses from pro expense: Streaming Services, Unexpected Expenses, Pet Supplies.",
+  "max_steps": 34,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 34 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 34,
+  "iterations": 34,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 13,
+   "scroll": 20
+  },
+  "model_calls": 36,
+  "input_tokens": 118429,
+  "cached_tokens": 78820,
+  "output_tokens": 8434,
+  "reasoning_tokens": 5218,
+  "cost_usd": 0.097179,
+  "cost_at_standard_usd": 0.097179,
+  "duration_s": 117.67,
+  "model_s": 50.04,
+  "device_s": 67.63,
+  "connect_s": 0.86,
+  "approvals": [
+   {
+    "step": 3,
+    "description": "tap \"\" in com.arduia.expense",
+    "reasons": [
+     "rule: target id 'com.arduia.expense:id/btn_delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 4,
+    "description": "tap \"CONFIRM\" in com.arduia.expense",
+    "reasons": [
+     "rule: target says 'CONFIRM'",
+     "screen: confirming something that can't be taken back",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 6,
+    "description": "tap \"\" in com.arduia.expense",
+    "reasons": [
+     "rule: target id 'com.arduia.expense:id/btn_delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 7,
+    "description": "tap \"CONFIRM\" in com.arduia.expense",
+    "reasons": [
+     "rule: target says 'CONFIRM'",
+     "screen: confirming something that can't be taken back",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 11,
+    "description": "tap \"\" in com.arduia.expense",
+    "reasons": [
+     "rule: target id 'com.arduia.expense:id/imv_delete_icon'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 12,
+    "description": "tap \"\" in com.arduia.expense",
+    "reasons": [
+     "rule: target id 'com.arduia.expense:id/btn_delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 13,
+    "description": "tap \"CONFIRM\" in com.arduia.expense",
+    "reasons": [
+     "rule: target says 'CONFIRM'",
+     "screen: confirming something that can't be taken back",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Pro Expense",
+   "subgoals": [
+    "Open navigation menu or alternate tabs like Home and Totals to find other expense views",
+    "Clear or expand the date filter to show expenses outside Oct 1-15",
+    "Locate Streaming Services, Unexpected Expenses, and Pet Supplies and delete each one",
+    "Verify the three expenses no longer appear in Expense Logs"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "confirmation that Streaming Services, Unexpected Expenses, Pet Supplies are deleted / no longer listed",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-final-standard-1028-112356-3e68",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/ExpenseDeleteMultiple2__s2988130770.jsonl.gz",
+  "wall_s": 120.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

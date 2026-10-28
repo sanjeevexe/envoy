@@ -1,0 +1,82 @@
+{
+ "task": "RecipeDeleteMultipleRecipesWithConstraint",
+ "seed": 3296470235,
+ "goal": "Delete the recipes from Broccoli app that use black garlic in the directions.",
+ "score": 0.0,
+ "aw_run_time_s": 134.0,
+ "aw_episode_length": 40,
+ "agent": "envoy",
+ "finished": "2026-10-28 16:44:07.418326",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-164157-70a7",
+  "goal": "Delete the recipes from Broccoli app that use black garlic in the directions.",
+  "max_steps": 40,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 40 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 40,
+  "iterations": 40,
+  "looks": 0,
+  "screenshots_sent": 5,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 23,
+   "type": 9,
+   "scroll": 5,
+   "back": 2
+  },
+  "model_calls": 43,
+  "input_tokens": 121496,
+  "cached_tokens": 93819,
+  "output_tokens": 10276,
+  "reasoning_tokens": 6997,
+  "cost_usd": 0.092342,
+  "cost_at_standard_usd": 0.092342,
+  "duration_s": 125.63,
+  "model_s": 66.1,
+  "device_s": 59.53,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Go back to main Recipes list from Lemon Garlic Tilapia details",
+    "Check other tabs, menus and search or filter to find recipes",
+    "Open each recipe whose Directions mention black garlic",
+    "Delete each black garlic recipe and confirm deletion"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "confirmation that no recipes with black garlic in directions remain",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-final-standard-1028-164157-70a7",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/RecipeDeleteMultipleRecipesWithConstraint__s3296470235.jsonl.gz",
+  "wall_s": 128.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

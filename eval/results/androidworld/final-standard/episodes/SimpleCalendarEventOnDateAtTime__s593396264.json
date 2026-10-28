@@ -1,0 +1,85 @@
+{
+ "task": "SimpleCalendarEventOnDateAtTime",
+ "seed": 593396264,
+ "goal": "What is on my schedule for October 27 2023 at 8:00pm in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 1.0,
+ "aw_run_time_s": 35.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:02:52.875034",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-170219-df3a",
+  "goal": "What is on my schedule for October 27 2023 at 8:00pm in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Product demo",
+  "done": true,
+  "answer": "Product demo",
+  "steps_device": 3,
+  "iterations": 5,
+  "looks": 1,
+  "screenshots_sent": 2,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "look": 1,
+   "tap_point": 1,
+   "scroll": 1,
+   "done": 1
+  },
+  "model_calls": 10,
+  "input_tokens": 17882,
+  "cached_tokens": 11942,
+  "output_tokens": 1796,
+  "reasoning_tokens": 1323,
+  "cost_usd": 0.031678,
+  "cost_at_standard_usd": 0.031678,
+  "duration_s": 28.43,
+  "model_s": 11.39,
+  "device_s": 17.04,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Open Simple Calendar Pro",
+    "Navigate to October 27, 2023",
+    "View events scheduled at 8:00pm and read titles"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "titles of events on October 27 2023 at 8:00pm",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Product"
+  },
+  "trace_dir": "data/runs/aw-final-standard-1028-170219-df3a",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/SimpleCalendarEventOnDateAtTime__s593396264.jsonl.gz",
+  "wall_s": 31.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

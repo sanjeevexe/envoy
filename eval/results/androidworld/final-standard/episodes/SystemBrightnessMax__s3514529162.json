@@ -1,0 +1,86 @@
+{
+ "task": "SystemBrightnessMax",
+ "seed": 3514529162,
+ "goal": "Turn brightness to the max value.",
+ "score": 1.0,
+ "aw_run_time_s": 58.4,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:21:42.634232",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-172045-de53",
+  "goal": "Turn brightness to the max value.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Brightness turned to max: Brightness level 100% (65535.0)",
+  "done": true,
+  "answer": "Brightness turned to max: Brightness level 100% (65535.0)",
+  "steps_device": 6,
+  "iterations": 7,
+  "looks": 0,
+  "screenshots_sent": 3,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "scroll": 1,
+   "tap": 2,
+   "swipe": 2,
+   "done": 1
+  },
+  "model_calls": 8,
+  "input_tokens": 22148,
+  "cached_tokens": 16648,
+  "output_tokens": 1967,
+  "reasoning_tokens": 1353,
+  "cost_usd": 0.017732,
+  "cost_at_standard_usd": 0.017732,
+  "duration_s": 52.85,
+  "model_s": 11.82,
+  "device_s": 41.03,
+  "connect_s": 0.94,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Settings",
+   "subgoals": [
+    "Open Settings",
+    "Open Display settings",
+    "Drag Brightness level slider to maximum",
+    "Confirm brightness stays at max"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "brightness level showing maximum",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Brightness, Brightness, 65535, 0"
+  },
+  "trace_dir": "data/runs/aw-final-standard-1028-172045-de53",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/SystemBrightnessMax__s3514529162.jsonl.gz",
+  "wall_s": 55.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}
