@@ -1,0 +1,57 @@
+{
+ "name": "skylark_get_flight_seat",
+ "intent": "Get the seat for a SkyLark flight",
+ "description": "Open My Trips in SkyLark Air, select the trip to the requested city, and read the seat shown on the trip details screen.",
+ "patterns": [
+  "What seat do I have on my flight",
+  "What is my seat",
+  "Find my seat assignment",
+  "My seat on my flight"
+ ],
+ "inputs": [
+  {
+   "name": "trip_city",
+   "type": "text",
+   "description": "The destination city of the flight whose seat is being requested.",
+   "from_memory": null,
+   "example": "Denver"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "open_my_trips",
+   "intent": "Tap My Trips",
+   "target_fixed_text": "My Trips",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "select_trip_to_city",
+   "intent": "Tap the trip to {{trip_city}}",
+   "target_fixed_text": null,
+   "choice_input": "trip_city"
+  }
+ ],
+ "outputs": [
+  {
+   "name": "seat",
+   "near": "Seat",
+   "example": "22F"
+  }
+ ],
+ "data_values": [
+  "Sat, Nov 14, 2026",
+  "SL 1190",
+  "ATL",
+  "DEN",
+  "PT4R8Z",
+  "2:45 PM",
+  "4:05 PM",
+  "Delayed 25 min",
+  "A7",
+  "22F",
+  "2:05 PM",
+  "Group 5"
+ ]
+}

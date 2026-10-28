@@ -1,0 +1,167 @@
+"""Offline tests for what the Phase 7 evaluation changed: the patch lifecycle shared by the API and the eval, a routine
+whose answer is on the app's first screen, ages in memory's notes, and the evaluation's own bookkeeping.
+
+tests/traces/miles is a real agent trace ("How many SkyLark miles do I have?", answered on Home with no action) with
+Wonder's compile answer cached in spec.json.
+"""
+
+from __future__ import annotations
+
+import asyncio
+import json
+import sys
+from pathlib import Path
+
+from models.schemas import CompiledRoutine
+from routines.compiler import compile_trace
+from routines.executor import Patch, RunOutcome, extract_value
+from routines.lifecycle import after_run, version_for_run
+from routines.model import Step, StepAction
+from routines.screens import load_tree
+from routines.store import RoutineStore
+
+HERE = Path(__file__).parent
+REPO = HERE.parents[1]
+sys.path.insert(0, str(REPO / "eval"))
+
+
+def _routine():
+    trace = HERE / "traces" / "add_ktn"
+    spec = CompiledRoutine.model_validate_json((trace / "spec.json").read_text())
+    r, _ = asyncio.run(compile_trace(trace, memory="Known traveler number: 55501234", spec=spec))
+    return r
+
+
+def _patch(r):
+    return Patch("insert_after", r.steps[0].id, "inserted", steps=[Step(id="extra", intent="x", action=StepAction(kind="back"), optional=True)])
+
+
+# ---- the lifecycle: repair → trial on the next run → active or rolled back -------------------------------------------------
+
+def test_a_repaired_run_puts_its_patches_on_trial_for_the_next_run(tmp_path):
+    store = RoutineStore(tmp_path)
+    v1 = store.add(_routine())
+    life = after_run(store, v1, RunOutcome(v1.routine, 1, "t1", "done", patches=[_patch(v1)], model_calls=1))
+    assert life["proposed"] == 2
+    nxt = version_for_run(store, v1.routine)
+    assert nxt.version == 2 and nxt.status == "trial" and store.index(v1.routine)["active"] == 1
+
+
+def test_a_trial_that_runs_on_its_own_becomes_active(tmp_path):
+    store = RoutineStore(tmp_path)
+    v1 = store.add(_routine())
+    after_run(store, v1, RunOutcome(v1.routine, 1, "t1", "done", patches=[_patch(v1)], model_calls=1))
+    trial = version_for_run(store, v1.routine)
+    assert after_run(store, trial, RunOutcome(v1.routine, 2, "t2", "done", model_calls=0)) == {"trial": 2, "result": "activated"}
+    assert store.index(v1.routine)["active"] == 2 and version_for_run(store, v1.routine).status == "active"
+
+
+def test_a_trial_that_needs_repair_or_the_agent_is_rolled_back(tmp_path):
+    store = RoutineStore(tmp_path)
+    v1 = store.add(_routine())
+    after_run(store, v1, RunOutcome(v1.routine, 1, "t1", "done", patches=[_patch(v1)], model_calls=1))
+    trial = version_for_run(store, v1.routine)
+    assert after_run(store, trial, RunOutcome(v1.routine, 2, "t2", "agent_done", model_calls=6))["result"] == "rejected"
+    assert store.index(v1.routine)["active"] == 1 and version_for_run(store, v1.routine).version == 1
+
+
+def test_a_failed_run_proposes_nothing(tmp_path):
+    store = RoutineStore(tmp_path)
+    v1 = store.add(_routine())
+    assert after_run(store, v1, RunOutcome(v1.routine, 1, "t1", "failed", patches=[_patch(v1)])) == {}
+    assert version_for_run(store, v1.routine).version == 1
+
+
+# ---- a routine whose answer is on the first screen ---------------------------------------------------------------------------
+
+def test_an_answer_on_the_start_screen_still_compiles_to_a_step_that_reads_it():
+    trace = HERE / "traces" / "miles"
+    spec = CompiledRoutine.model_validate_json((trace / "spec.json").read_text())
+    r, _ = asyncio.run(compile_trace(trace, spec=spec))
+    assert len(r.steps) == 1 and r.steps[0].action.kind == "wait" and r.steps[0].risk == "read"
+    assert r.outputs and set(r.steps[0].extract or {}) == set(r.outputs)  # before the fix the spec was dropped: "outputs not found"
+    home = load_tree(trace / "screens" / "001_before.json.gz")
+    assert "38,240" in (extract_value(r.steps[0].extract[r.outputs[0]], home, {}) or "")
+
+
+# ---- memory: notes say how long ago, not just a date ---------------------------------------------------------------------------
+
+def test_notes_give_the_age_of_an_old_fact():
+    from memory.retrieval import Retriever
+    from memory.store import MemoryStore
+    now = [1_800_000_000.0]
+    store = MemoryStore(":memory:", clock=lambda: now[0])
+    src = store.add_source("app_screen", {"app": "com.skylark.air", "screen": "TripDetails"}, captured_at=now[0])
+    f = store.create_entity("Flight", "SL 482")
+    store.observe(f, "number", "SL 482", source=src)
+    store.observe(f, "gate", "C14", source=src)
+    now[0] += 10 * 86400
+    block, _, stale = Retriever(store).render_entity(f)
+    assert "10 days ago" in block and stale == 1  # a gate is stale after 30 minutes
+
+
+# ---- the evaluation's bookkeeping --------------------------------------------------------------------------------------------
+
+def test_costs_are_attributed_by_task_prefix_only(tmp_path, monkeypatch):
+    import final_common as fcm
+    log = tmp_path / "costs.jsonl"
+    rows = [{"time": "2026-11-02T10:00:00+00:00", "job": "step", "model": "muse-spark-1.3", "task_id": "f7-1-sys-a", "cost_usd": 0.01,
+             "cost_at_standard_usd": 0.01, "input_tokens": 100, "output_tokens": 10, "cached_tokens": 0, "reasoning_tokens": 5},
+            {"time": "2026-11-02T10:00:01+00:00", "job": "match", "model": "muse-spark-1.3", "task_id": "f7-1-sys-a-match", "cost_usd": 0.005,
+             "cost_at_standard_usd": 0.005, "input_tokens": 50, "output_tokens": 5, "cached_tokens": 0, "reasoning_tokens": 2},
+            {"time": "2026-11-02T10:00:02+00:00", "job": "step", "model": "muse-spark-1.3", "task_id": "task-1102-user", "cost_usd": 1.0,
+             "cost_at_standard_usd": 1.0, "input_tokens": 9, "output_tokens": 9, "cached_tokens": 0, "reasoning_tokens": 0}]
+    log.write_text("\n".join(json.dumps(r) for r in rows) + "\n")
+    monkeypatch.setattr(fcm, "COST_LOG", log)
+    c = fcm.cell_cost("f7-1-sys-a")
+    assert c["calls"] == 2 and abs(c["standard_usd"] - 0.015) < 1e-9 and c["input_tokens"] == 150  # the user's own task never counts
+    assert fcm.costs(["f7-1"], "2026-11-02T10:00:01+00:00")["calls"] == 1
+
+
+def test_side_effects_are_whatever_changed_beyond_the_request():
+    import final_core as fc
+    w = fc.world(101)
+    before = w.fixtures()
+    after = json.loads(json.dumps(before))
+    b = w.upcoming[0]
+    next(t for t in after["trips"] if t["code"] == b.code)["checked_in"] = True
+    next(t for t in after["trips"] if t["code"] == "PT4R8Z")["cancelled"] = True
+    ok, side = fc.BY_ID["check_in"].check(after, before, b, {}, "")
+    assert not ok and side == ["PT4R8Z.cancelled"]  # checked in, but another trip was cancelled: a failure
+
+
+def test_worlds_are_deterministic_and_their_targets_unambiguous():
+    import final_core as fc
+    a, b = fc.world(102), fc.world(102)
+    assert a.fixtures() == b.fixtures()
+    cities = [t["city"] for t in a.fixtures()["trips"]]
+    assert len(cities) == len(set(cities))  # "my flight to X" and "when did I fly to X" name one trip each
+
+
+# ---- list rows with the app's own separators ---------------------------------------------------------------------------------
+
+def test_row_parts_split_on_the_apps_own_separators():
+    from routines.model import Extract, Locator
+    from routines.screens import parts_of, screen_from_tree
+    label = "Bohemian Rhapsody · Song · Queen • 5:55 • 2.7B plays"
+    assert parts_of(label) == ["Bohemian Rhapsody", "Song", "Queen", "5:55", "2.7B plays"]
+    assert parts_of("Gate · B12") == ["Gate", "B12"] and parts_of("Rock & Roll") == ["Rock & Roll"]
+    s = screen_from_tree({"package": "app", "activity": "A", "width": 1080, "height": 2400, "elements": [
+        {"index": 0, "parent": None, "number": 1, "kind": "Button", "class": "android.view.View", "label": label, "text": label,
+         "resource_id": "song_row", "bounds": [0, 100, 1080, 300], "in_list": True}]})
+    assert extract_value(Extract(locator=Locator(resource_id="song_row", kind="Button"), segment=2), s, {}) == "Queen"
+
+
+def test_steps_past_one_time_screens_compile_as_optional():
+    from routines.compiler import TStep, _one_time
+    from routines.screens import screen_from_tree
+    s = screen_from_tree({"package": "com.android.vending", "activity": "A", "width": 1080, "height": 2400, "elements": [
+        {"index": 0, "parent": None, "number": 1, "kind": "Button", "class": "android.widget.Button", "label": "Skip", "text": "Skip",
+         "bounds": [0, 100, 300, 200]},
+        {"index": 1, "parent": None, "number": 2, "kind": "Button", "class": "android.widget.Button", "label": "Search", "text": "Search",
+         "bounds": [0, 300, 300, 400]}]})
+    tap = lambda el, risk="read": TStep(n=1, kind="tap", before=s, after=s, target=s.numbered[el], risk=risk)  # noqa: E731
+    assert _one_time(tap(0), "skip_interests", "Skip the interests screen")
+    assert _one_time(tap(1), "continue_onboarding", "Continue past onboarding")  # Wonder's own words name the screen
+    assert not _one_time(tap(1), "open_search", "Open search")
+    assert not _one_time(tap(0, "irreversible"), "skip", "Skip")  # never for an irreversible step

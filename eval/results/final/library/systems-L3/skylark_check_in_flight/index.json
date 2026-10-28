@@ -1,0 +1,80 @@
+{
+ "name": "skylark_check_in_flight",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-27 21:57:10",
+   "parent": null,
+   "changes": [
+    "compiled from f7-1027215614-src-check_in-a1"
+   ],
+   "verification": {
+    "cases": [
+     {
+      "case": "same-inputs",
+      "inputs": {
+       "trip_city": "Denver"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 4.58,
+      "outputs": {
+       "seat": "22F",
+       "gate": "A7",
+       "boarding_time": "2:05 PM",
+       "boarding_group": "Group 5"
+      }
+     },
+     {
+      "case": "second-inputs",
+      "inputs": {
+       "trip_city": "Tampa"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 4.0,
+      "outputs": {
+       "seat": "11E",
+       "gate": "B17",
+       "boarding_time": "6:00 AM",
+       "boarding_group": "Group 5"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "version": 2,
+   "status": "trial",
+   "created": "2026-10-27 22:34:56",
+   "parent": 1,
+   "changes": [
+    "after 'continue_after_hazmat_declaration', an extra screen appeared; inserted continue_after_hazmat_declaration_extra_1 (tap Looks good)"
+   ],
+   "source_task": "f7-1027220657-rou-check_in-L3-s101-t1",
+   "screenshots": [
+    "history/v2/repair_08_1_before.png",
+    "history/v2/repair_08_1_after.png"
+   ]
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-27 22:34:56",
+   "kind": "run",
+   "version": 1,
+   "task_id": "f7-1027220657-rou-check_in-L3-s101-t1",
+   "status": "done",
+   "rung": 4,
+   "model_calls": 1,
+   "duration_s": 9.47,
+   "patches": 1
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

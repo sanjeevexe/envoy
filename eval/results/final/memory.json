@@ -1,0 +1,390 @@
+{
+ "meta": {
+  "suite": "memory",
+  "run_id": "1027220545",
+  "started": "2026-10-28T02:05:45+00:00",
+  "finished": "2026-10-28T02:06:20+00:00",
+  "wall_s": 35.0,
+  "code": {
+   "commit": "ad9a67be7e933625e87f3efda1cdee824be11b73",
+   "short": "ad9a67b",
+   "tags": [],
+   "is_eval_final": false,
+   "dirty": [
+    "ackend/memory/retrieval.py",
+    "backend/models/prompts.py",
+    "backend/routines/compiler.py",
+    "eval/baselines.py",
+    "testapps/skylark/app/src/main/java/com/skylark/air/Screens.kt",
+    "testapps/skylark/app/src/main/java/com/skylark/air/Store.kt",
+    "backend/routines/lifecycle.py",
+    "eval/capture_safety.py",
+    "eval/final_common.py",
+    "eval/final_core.py",
+    "eval/final_memory.py",
+    "eval/final_safety.py",
+    "eval/run_final.py"
+   ],
+   "branch": "main"
+  },
+  "models": {
+   "tier": "standard",
+   "jobs": {
+    "step": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "plan": {
+     "model": "muse-spark-1.3",
+     "effort": "medium"
+    },
+    "repair": {
+     "model": "muse-spark-1.3",
+     "effort": "medium"
+    },
+    "grounding": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "choose": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "extract": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "answer": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "compile": {
+     "model": "muse-wonder-1.0",
+     "effort": "medium"
+    },
+    "match": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    }
+   }
+  },
+  "devices": [],
+  "cost": {
+   "input_tokens": 13206,
+   "cached_tokens": 5400,
+   "output_tokens": 10276,
+   "reasoning_tokens": 9243,
+   "calls": 24,
+   "errors": 0,
+   "billed_usd": 0.0542,
+   "standard_usd": 0.0542,
+   "by_job": {
+    "answer": {
+     "calls": 24,
+     "standard_usd": 0.0542
+    }
+   },
+   "by_model": {
+    "muse-spark-1.3": 24
+   }
+  },
+  "spend_total_this_checkout": {
+   "billed_usd": 9.198,
+   "standard_usd": 9.835
+  },
+  "host": "Sanjeevs-MacBook-Pro"
+ },
+ "stale": {
+  "rows": [
+   {
+    "age": "just now",
+    "question": "What's my gate for my Chicago flight?",
+    "stale": false,
+    "served_value": true,
+    "warned": false,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "Gate C14, from the SkyLark app just now.",
+    "notes_stale_lines": 0
+   },
+   {
+    "age": "just now",
+    "question": "What seat do I have on my Chicago flight?",
+    "stale": false,
+    "served_value": true,
+    "warned": false,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "Seat 14C, from the SkyLark app just now.",
+    "notes_stale_lines": 0
+   },
+   {
+    "age": "just now",
+    "question": "Is my Chicago flight on time?",
+    "stale": false,
+    "served_value": true,
+    "warned": false,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "Yes, on time, from the SkyLark app just now.",
+    "notes_stale_lines": 0
+   },
+   {
+    "age": "just now",
+    "question": "When does boarding start for my Chicago flight?",
+    "stale": false,
+    "served_value": true,
+    "warned": false,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "Boarding starts at 5:30 AM, from the SkyLark app just now.",
+    "notes_stale_lines": 0
+   },
+   {
+    "age": "just now",
+    "question": "How many SkyLark miles do I have?",
+    "stale": false,
+    "served_value": true,
+    "warned": false,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "38,240 miles, from the SkyLark app just now.",
+    "notes_stale_lines": 0
+   },
+   {
+    "age": "just now",
+    "question": "When will my DoorDash order arrive?",
+    "stale": false,
+    "served_value": true,
+    "warned": false,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "Your DoorDash order will arrive at 7:45 PM, from the DoorDash app just now.",
+    "notes_stale_lines": 0
+   },
+   {
+    "age": "45 minutes later",
+    "question": "What's my gate for my Chicago flight?",
+    "stale": true,
+    "served_value": true,
+    "warned": true,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "Gate C14, from the SkyLark app 45 minutes ago, but it may have changed.",
+    "notes_stale_lines": 2
+   },
+   {
+    "age": "45 minutes later",
+    "question": "What seat do I have on my Chicago flight?",
+    "stale": false,
+    "served_value": true,
+    "warned": false,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "Seat 14C, from the SkyLark app 45 minutes ago.",
+    "notes_stale_lines": 4
+   },
+   {
+    "age": "45 minutes later",
+    "question": "Is my Chicago flight on time?",
+    "stale": true,
+    "served_value": true,
+    "warned": true,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "Yes, on time from the SkyLark app 45 minutes ago, but it may have changed.",
+    "notes_stale_lines": 4
+   },
+   {
+    "age": "45 minutes later",
+    "question": "When does boarding start for my Chicago flight?",
+    "stale": false,
+    "served_value": true,
+    "warned": false,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "Boarding starts at 5:30 AM, from the SkyLark app 45 minutes ago.",
+    "notes_stale_lines": 2
+   },
+   {
+    "age": "45 minutes later",
+    "question": "How many SkyLark miles do I have?",
+    "stale": false,
+    "served_value": true,
+    "warned": false,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "You have 38,240 miles, from the SkyLark app 45 minutes ago.",
+    "notes_stale_lines": 0
+   },
+   {
+    "age": "45 minutes later",
+    "question": "When will my DoorDash order arrive?",
+    "stale": true,
+    "served_value": true,
+    "warned": true,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "7:45 PM, from the DoorDash app 45 minutes ago, but it may have changed.",
+    "notes_stale_lines": 2
+   },
+   {
+    "age": "8 hours later",
+    "question": "What's my gate for my Chicago flight?",
+    "stale": true,
+    "served_value": true,
+    "warned": true,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "Gate C14, from the SkyLark app yesterday at 10:05 PM, but it may have changed.",
+    "notes_stale_lines": 3
+   },
+   {
+    "age": "8 hours later",
+    "question": "What seat do I have on my Chicago flight?",
+    "stale": false,
+    "served_value": true,
+    "warned": false,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "Seat 14C, from the SkyLark app yesterday at 10:05 PM.",
+    "notes_stale_lines": 5
+   },
+   {
+    "age": "8 hours later",
+    "question": "Is my Chicago flight on time?",
+    "stale": true,
+    "served_value": true,
+    "warned": true,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "On time, from the SkyLark app yesterday at 10:05 PM but it may have changed.",
+    "notes_stale_lines": 5
+   },
+   {
+    "age": "8 hours later",
+    "question": "When does boarding start for my Chicago flight?",
+    "stale": true,
+    "served_value": true,
+    "warned": true,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "Boarding starts at 5:30 AM, from the SkyLark app yesterday at 10:05 PM, but it may have changed.",
+    "notes_stale_lines": 3
+   },
+   {
+    "age": "8 hours later",
+    "question": "How many SkyLark miles do I have?",
+    "stale": false,
+    "served_value": true,
+    "warned": false,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "You have 38,240 miles, from the SkyLark app 8 hours ago.",
+    "notes_stale_lines": 0
+   },
+   {
+    "age": "8 hours later",
+    "question": "When will my DoorDash order arrive?",
+    "stale": true,
+    "served_value": true,
+    "warned": true,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "7:45 PM, from the DoorDash app 8 hours ago, but it may have changed.",
+    "notes_stale_lines": 2
+   },
+   {
+    "age": "10 days later",
+    "question": "What's my gate for my Chicago flight?",
+    "stale": true,
+    "served_value": true,
+    "warned": true,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "Gate C14, from the SkyLark app 10 days ago, but it may be out of date.",
+    "notes_stale_lines": 3
+   },
+   {
+    "age": "10 days later",
+    "question": "What seat do I have on my Chicago flight?",
+    "stale": false,
+    "served_value": true,
+    "warned": false,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "14C, from the SkyLark app 10 days ago.",
+    "notes_stale_lines": 5
+   },
+   {
+    "age": "10 days later",
+    "question": "Is my Chicago flight on time?",
+    "stale": true,
+    "served_value": true,
+    "warned": true,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "On time, from the SkyLark app 10 days ago, but it may have changed.",
+    "notes_stale_lines": 5
+   },
+   {
+    "age": "10 days later",
+    "question": "When does boarding start for my Chicago flight?",
+    "stale": true,
+    "served_value": true,
+    "warned": true,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "Boarding starts at 5:30 AM, from the SkyLark app 10 days ago, but it may be out of date.",
+    "notes_stale_lines": 3
+   },
+   {
+    "age": "10 days later",
+    "question": "How many SkyLark miles do I have?",
+    "stale": true,
+    "served_value": true,
+    "warned": true,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "38,240 miles, from the SkyLark app 10 days ago, but it may have changed.",
+    "notes_stale_lines": 1
+   },
+   {
+    "age": "10 days later",
+    "question": "When will my DoorDash order arrive?",
+    "stale": true,
+    "served_value": true,
+    "warned": true,
+    "stale_without_warning": false,
+    "warned_when_fresh": false,
+    "replaced_served_as_current": false,
+    "answer": "7:45 PM, from the DoorDash app 10 days ago, but it may have changed.",
+    "notes_stale_lines": 2
+   }
+  ],
+  "questions": 24
+ }
+}

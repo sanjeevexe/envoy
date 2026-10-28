@@ -49,6 +49,8 @@ from routines.screens import norm
 REPO = Path(__file__).resolve().parents[1]
 OUT = REPO / "eval" / "results" / "real_apps"
 PRIVATE_DIR = REPO / "data" / "real_routines"  # routines over personal data stay out of the repo
+SPEC_DIR = OUT / "compiled"  # routines and Wonder's cached answers (the final evaluation keeps its own)
+TASK_PREFIX = "p2-real"  # agent traces are data/runs/<prefix>-<workflow> (the Phase 2 checkpoint's are reused here)
 SERIAL = "emulator-5556"
 
 NO_ACCOUNT = "Don't sign in, create an account or turn on sync; if asked, choose to continue without an account. Don't install anything."
@@ -203,7 +205,7 @@ def step_rows(outcome) -> list[dict]:
 
 
 async def run_one(wf: Workflow, args, device: EmulatorDevice, adapter: ModelAdapter, approver) -> dict:
-    task_id = f"p2-real-{wf.id}"  # the Phase 2 checkpoint's traces are reused
+    task_id = f"{TASK_PREFIX}-{wf.id}"
     expect, expect_second = wf.expect, wf.expect_second
     if wf.truth:
         expect, truth_second = wf.truth()
@@ -233,7 +235,7 @@ async def run_one(wf: Workflow, args, device: EmulatorDevice, adapter: ModelAdap
         "bot check" if row.get("bot_check_at_launch") or re.search(r"bot|human verification|captcha", a["result"] or "", re.I) else a["status"])
 
     # 2. Compile (Muse Wonder, or its cached answer).
-    spec_dir = PRIVATE_DIR if wf.private else OUT / "compiled"
+    spec_dir = PRIVATE_DIR if wf.private else SPEC_DIR
     spec_dir.mkdir(parents=True, exist_ok=True)
     spec_file = spec_dir / f"{wf.id}.spec.json"
     for old in (REPO / "eval/results/phase2/compiled-real" / spec_file.name, PRIVATE_DIR / spec_file.name):

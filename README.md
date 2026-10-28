@@ -5,7 +5,8 @@
 Envoy is a Muse-powered agent that operates Android apps on emulated phones, compiles successful runs into reusable **app routines**, and keeps a shared **memory graph** across web, voice, iPhone and MCP clients. Built solo for the Meta Global AI Developer Hackathon (Oct 26 – Nov 4, 2026, indie track).
 
 - Design: [`docs/technical-design.md`](docs/technical-design.md) (live version: https://claude.ai/artifact/Sf51zMf4SMi5ZZmJabgPR5)
-- Phase results: [`docs/phase-0-findings.md`](docs/phase-0-findings.md) · [`docs/phase-1-results.md`](docs/phase-1-results.md) (agent loop) · [`docs/phase-2-results.md`](docs/phase-2-results.md) (app routines) · [`docs/phase-3-results.md`](docs/phase-3-results.md) (memory graph) · [`docs/phase-4-results.md`](docs/phase-4-results.md) (web app, live view, approvals, MCP) · [`docs/phase-5-results.md`](docs/phase-5-results.md) (iPhone companion, voice, photos) · [`docs/real-app-test-set.md`](docs/real-app-test-set.md)
+- Phase results: [`docs/phase-0-findings.md`](docs/phase-0-findings.md) · [`docs/phase-1-results.md`](docs/phase-1-results.md) (agent loop) · [`docs/phase-2-results.md`](docs/phase-2-results.md) (app routines) · [`docs/phase-3-results.md`](docs/phase-3-results.md) (memory graph) · [`docs/phase-4-results.md`](docs/phase-4-results.md) (web app, live view, approvals, MCP) · [`docs/phase-5-results.md`](docs/phase-5-results.md) (iPhone companion, voice, photos) · [`docs/phase-6-results.md`](docs/phase-6-results.md) (real Android phone, SAM 3.1) · [`docs/real-app-test-set.md`](docs/real-app-test-set.md)
+- The final evaluation: [`eval/results/final/report.md`](eval/results/final/report.md) (how to run it: [Evaluate it](#evaluate-it))
 - Open-source credits: [`THIRD_PARTY.md`](THIRD_PARTY.md) · License: MIT ([`LICENSE`](LICENSE))
 
 ## Layout
@@ -74,3 +75,16 @@ eval/run_phase2.sh                                                              
 ```
 
 How routines work: [`backend/routines/README.md`](backend/routines/README.md). How memory works: [`backend/memory/README.md`](backend/memory/README.md) (`eval/run_memory.py`, `scripts/show_memory.py`; real mail: `scripts/connect_gmail.py` once, then `scripts/ingest_mail.py`). Example routines: [`eval/results/phase2/compiled/`](eval/results/phase2/compiled/); the library with versions and patch evidence: [`data/routines/`](data/routines/) and [`eval/results/phase2/library/`](eval/results/phase2/library/).
+
+## Evaluate it
+
+The final evaluation (the design doc's Evaluation section) is one command per suite and one for all of them. Every suite starts from a known state, scores with code (SkyLark's real state, or the right answer on screen), and writes `eval/results/final/<suite>.json` and `.md` with the commit it ran on, the tier and what it cost.
+
+```bash
+eval/run_final.sh                                                       # every suite, one emulator at a time (about 4.5 hours)
+uv run --project backend python eval/run_final.py systems               # one suite: compile, systems, repeats, change, sizes, real,
+                                                                        # memory, safety, injection, interfaces
+uv run --project backend python eval/run_final.py report                # eval/results/final/report.md and charts/
+```
+
+`compile` must run first (it records and compiles the 10 core routines the SkyLark suites use). `real` needs `envoy-real` signed in to the test Google account; `interfaces --restart-api` restarts the API on the current commit; `sizes --device phone` needs a phone connected. What each suite measures: [`eval/README.md`](eval/README.md).

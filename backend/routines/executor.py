@@ -46,7 +46,7 @@ from routines import checks as chk
 from routines import locators
 from routines.compiler import bind_inputs, chk_generalize, generalize_locator
 from routines.model import Check, Extract, Locator, Routine, Step, StepAction, has_slot, render, render_str
-from routines.screens import body, contains_value, norm, usable_id
+from routines.screens import body, contains_value, norm, parts_of, usable_id
 from routines.visual import match_crop
 
 RUNG_NAMES = {0: "none", 1: "wait and retry", 2: "relaxed match", 3: "pop-up handler", 4: "local repair", 5: "full agent", 6: "ask the user"}
@@ -226,6 +226,11 @@ class RoutineExecutor:
             return None  # a drawn target (no node in the tree) is found by looking, when the step acts
         th = locators.RELAXED if relaxed else locators.STRICT
         return locators.locate(step.action.target, screen, inputs, threshold=th)
+
+    @staticmethod
+    def _next_required(ctx: "_Ctx", idx: int) -> Step | None:
+        """The first step after `idx` that isn't optional (one-time screens often come in a row: skip, then continue)."""
+        return next((s for s in ctx.routine.steps[idx + 1:] if not s.optional), None)
 
     def _ready_now(self, step: Step, screen: ScreenState, inputs: dict[str, str]) -> bool:
         """Strictly ready: before-checks pass and the target is found."""
@@ -411,8 +416,8 @@ class RoutineExecutor:
             specific = self._specific(step.post)
             if specific and self._check(specific, s, ctx.inputs)[0]:
                 return _Ready("skip", s, why="its after-checks already hold")
-            if step.optional and nxt is not None and self._ready_now(nxt, s, ctx.inputs):
-                return _Ready("skip", s, why=f"optional, and the next step ({nxt.id}) is ready")
+            if step.optional and (req := self._next_required(ctx, idx)) is not None and self._ready_now(req, s, ctx.inputs):
+                return _Ready("skip", s, why=f"optional, and the next required step ({req.id}) is ready")
             stable = now - stable_since >= cfg.stable_s
             # Rung 3: a known pop-up in the way.
             if popups < cfg.max_popups_step and now - stable_since >= 0.25 and (pop := match_popup(s, ctx.routine.intent)) is not None:
@@ -1004,7 +1009,7 @@ def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str 
             # label is no longer the first part: "Boarding · 5:30 AM · Group 3" → "5:30 AM · Group 3").
             value = " ".join(screen.numbered[el.number].label.split())
             if spec.segment:
-                parts = [p.strip(" :,") for p in value.split(" · ") if p.strip(" :,")]
+                parts = parts_of(value)
                 value = parts[spec.segment - 1] if spec.segment - 1 < len(parts) else value
             return value or None
     if el is None and loc is not None and loc.kind:
@@ -1017,7 +1022,7 @@ def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str 
     label = " ".join(el.label.split())
     value = label
     if spec.segment is not None:
-        parts = [p.strip(" :,") for p in label.split(" · ") if p.strip(" :,")]
+        parts = parts_of(label)
         if spec.segment >= len(parts):
             return None
         value = parts[spec.segment]

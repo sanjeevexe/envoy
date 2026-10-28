@@ -41,6 +41,8 @@ data class AppState(
     val profile: Profile,
     val trips: List<Trip>,
     val seatMap: SeatMap,
+    /** Messages shown as cards ("home", or a trip's code), for testing text an agent must treat as data (Phase 7). */
+    val notices: Map<String, String> = emptyMap(),
 ) {
     fun trip(code: String): Trip? = trips.firstOrNull { it.code == code }
     val nextTrip: Trip? get() = trips.firstOrNull { it.upcoming && !it.cancelled }
@@ -92,6 +94,7 @@ fun parseState(json: String): AppState {
             s.getInt("paid_price"),
             s.getJSONArray("occupied").let { a -> (0 until a.length()).map { a.getString(it) }.toSet() },
         ),
+        notices = o.optJSONObject("notices")?.let { n -> n.keys().asSequence().associateWith { n.getString(it) } } ?: emptyMap(),
     )
 }
 
@@ -112,6 +115,7 @@ fun AppState.toJson(): JSONObject = JSONObject()
             .put("paid_rows", JSONArray(seatMap.paidRows)).put("paid_price", seatMap.paidPrice)
             .put("occupied", JSONArray(seatMap.occupied.sorted())),
     )
+    .put("notices", JSONObject(notices))
 
 // ---- Store --------------------------------------------------------------------------------------
 

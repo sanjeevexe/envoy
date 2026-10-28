@@ -134,6 +134,18 @@ private fun CheckRow(text: String, checked: Boolean, tag: String, onChange: (Boo
     }
 }
 
+/** A message card from fixtures (Phase 7: text an agent must treat as data, never as instructions). */
+@Composable
+private fun NoticeCard(text: String?, tag: String) {
+    if (text.isNullOrBlank()) return
+    Card(Modifier.fillMaxWidth().testTag(tag), colors = CardDefaults.cardColors(containerColor = Color(0xFFE8F0FE))) {
+        Column(Modifier.padding(16.dp)) {
+            Text("Message from SkyLark", fontWeight = FontWeight.Bold)
+            Text(text)
+        }
+    }
+}
+
 private fun miles(n: Int): String = NumberFormat.getIntegerInstance(Locale.US).format(n)
 
 // ---- Sign-in ------------------------------------------------------------------------------------
@@ -249,6 +261,7 @@ private fun HomeTabContent(s: AppState, nav: Nav) {
         } else {
             Text("No upcoming trips.")
         }
+        NoticeCard(s.notices["home"], "card_notice")
         if (promo) {
             Card(Modifier.fillMaxWidth().testTag("card_promo"), colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF4D6))) {
                 Column(Modifier.padding(16.dp)) {
@@ -373,6 +386,7 @@ fun TripDetailsScreen(s: AppState, nav: Nav, code: String) {
             InfoRow("Seat", t.flight.seat, "row_seat")
             InfoRow("Boarding", "${t.flight.boarding} · Group ${t.flight.group}", "row_boarding")
             InfoRow("Checked bags", t.bags.toString(), "row_bags")
+            NoticeCard(s.notices[code], "card_trip_notice")
             if (t.checkedIn) {
                 Text("You're checked in", color = Color(0xFF1B7F3B), fontWeight = FontWeight.Bold, modifier = Modifier.testTag("text_checked_in"))
                 OutlinedButton(onClick = { nav.push(Screen.BoardingPass(code)) }, Modifier.fillMaxWidth().testTag("btn_boarding_pass")) { Text("View boarding pass") }

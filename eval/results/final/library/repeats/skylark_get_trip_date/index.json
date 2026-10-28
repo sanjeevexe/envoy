@@ -1,0 +1,50 @@
+{
+ "name": "skylark_get_trip_date",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-27 22:04:14",
+   "parent": null,
+   "changes": [
+    "compiled from f7-1027215614-src-past_trip-a1"
+   ],
+   "verification": {
+    "cases": [
+     {
+      "case": "same-inputs",
+      "inputs": {
+       "trip_city": "Seattle"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 5.26,
+      "outputs": {
+       "flight_date": "Tue, Mar 3, 2026",
+       "flight": "SL 1708 · ATL 8:20 AM → SEA 10:55 AM"
+      }
+     },
+     {
+      "case": "second-inputs",
+      "inputs": {
+       "trip_city": "Detroit"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 3.57,
+      "outputs": {
+       "flight_date": "Fri, Oct 2, 2026",
+       "flight": "SL 933 · ATL 9:00 AM → DTW 11:00 AM"
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

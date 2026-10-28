@@ -1,0 +1,95 @@
+routine: skylark_get_departure_gate
+app: com.skylark.air
+version: 2
+status: trial
+intent: Find the departure gate for a SkyLark flight
+description: Open My Trips in SkyLark Air, select the trip matching the requested city, and read the departure gate from the trip details.
+patterns: [what gate does my flight leave from, what gate is my flight, what is my departure gate, find the gate for my flight]
+outputs: [gate]
+start: fresh_launch
+inputs:
+  trip_city: {type: text, description: The destination city of the flight whose gate is requested., example: Denver}
+steps:
+- id: open_my_trips
+  intent: Tap My Trips
+  pre:
+  - {app_foreground: com.skylark.air}
+  - element_present: {resource_id: screen_title, text: SkyLark Air, kind: Text}
+  action:
+    tap:
+      resource_id: nav_trips
+      text: My Trips
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.373, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: screen_title, text: Trips, kind: Text}
+  - element_present: {resource_id: nav_trips, text: Trips, kind: Text}
+  risk: reversible
+  note: trace step 1
+- id: find_open_trip
+  intent: "Scroll to {{trip_city}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: trip_row_*
+        text_has: "{{trip_city}}"
+        kind: Button
+        cls: View
+        parent: list_trips
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: trip_row_*
+      text_has: "{{trip_city}}"
+      kind: Button
+      cls: View
+      parent: list_trips
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: open_trip
+  intent: "Open the trip to {{trip_city}}"
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    tap:
+      resource_id: trip_row_*
+      text_has: "{{trip_city}}"
+      kind: Button
+      cls: View
+      parent: list_trips
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: screen_title
+      text: "Trip to {{trip_city}}"
+      kind: Text
+  - element_present: {resource_id: btn_checkin, text: Check in, kind: Button}
+  risk: reversible
+  extract:
+    gate:
+      near: Gate
+      locator: {resource_id: row_gate, kind: Text}
+      segment: 1
+      first_in_list: false
+      next_element: false
+      expect_digits: false
+  note: trace step 2
+parent_version: 1
+changes:
+- "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}"
+- "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}"
+compiled_from:
+  task_id: f7-1027215614-src-gate-a1
+  goal: What gate does my Denver flight leave from?
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-27 21:59:29"
+  trace_steps_kept: [1, 2]
+  trace_steps_dropped: 0
+  cost_usd: 0.0374
