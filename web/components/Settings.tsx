@@ -94,7 +94,49 @@ export default function Settings() {
           ))}
         </div>
       </section>
+      <Phones />
       {saved && <div className="text-emerald-700">{saved}</div>}
     </div>
+  );
+}
+
+type PhoneInfo = { phone_apps: string[]; apps: string[]; emulator_refused: Record<string, string>;
+  phones: { avd: string; name?: string; android?: string; state?: string }[] };
+
+// Which apps run on your own Android phone instead of an emulator (Phase 6). Envoy still asks each time before using it.
+function Phones() {
+  const [info, setInfo] = useState<PhoneInfo | null>(null);
+  useEffect(() => { api<PhoneInfo>("/api/settings/phones").then(setInfo).catch(() => {}); }, []);
+  if (!info) return null;
+  const toggle = async (app: string, on: boolean) => {
+    const next = on ? [...info.phone_apps, app] : info.phone_apps.filter((a) => a !== app);
+    const r = await post<{ phone_apps: string[] }>("/api/settings/phones", { phone_apps: next });
+    setInfo({ ...info, phone_apps: r.phone_apps });
+  };
+  return (
+    <section>
+      <h2 className="text-base font-semibold">Phones</h2>
+      <p className="mt-1 text-stone-600">
+        Tasks run on an emulator unless you say &ldquo;on my phone&rdquo;, an app below is set to your phone, or the app refuses emulators.
+        Envoy asks before every task on your phone, shows a banner there while it works, and stops the moment you touch the phone.
+      </p>
+      <div className="mt-2 text-xs text-stone-600">
+        {info.phones.length ? info.phones.map((p) => (
+          <div key={p.avd}>📱 {p.name ?? "Android phone"}{p.android ? ` · Android ${p.android}` : ""} · {p.state === "device" ? "connected" : p.state === "unauthorized" ? "allow USB debugging on the phone" : "not connected"}</div>
+        )) : "No Android phone connected (USB, or wireless debugging)."}
+      </div>
+      <div className="mt-2 divide-y divide-stone-100 rounded-xl bg-white shadow-sm">
+        {info.apps.map((app) => (
+          <label key={app} className="flex items-center justify-between gap-3 px-3 py-2">
+            <span className="truncate text-stone-700">{app}{info.emulator_refused[app] ? <span className="ml-1 text-xs text-stone-500">(refuses emulators)</span> : null}</span>
+            <span className="flex items-center gap-2 text-xs text-stone-600">
+              Runs on my phone
+              <input type="checkbox" checked={info.phone_apps.includes(app) || !!info.emulator_refused[app]} disabled={!!info.emulator_refused[app]}
+                     onChange={(e) => toggle(app, e.target.checked)} />
+            </span>
+          </label>
+        ))}
+      </div>
+    </section>
   );
 }

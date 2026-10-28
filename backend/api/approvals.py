@@ -77,7 +77,7 @@ class WebApprover:
         try:
             screen = self._run(device.observe())
             if not screen.secure:  # never keep a picture of a secure (sign-in, payment) screen
-                img = device.grpc.frame(540)
+                img = device.frame(540)
                 SHOTS.mkdir(parents=True, exist_ok=True)
                 buf = io.BytesIO()
                 img.save(buf, format="JPEG", quality=70)

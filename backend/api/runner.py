@@ -3,7 +3,10 @@ the web app, and writes what it learned into memory (design doc, One task, end t
 
 1. **Plan.** A named routine, or the matcher's pick with inputs filled from memory; otherwise the agent with memory's
    notes. Answer-only questions don't come here: chat answers them from memory.
-2. **Phone.** SkyLark runs on envoy-test, real apps on envoy-real; one task per phone at a time.
+2. **Phone.** `api/routing.py` picks it: SkyLark on envoy-test and real apps on envoy-real by default, your Android
+   phone when you ask for it (or the app needs it). The real phone is used only after you say yes; while the task runs
+   there its banner shows, and a touch, Pause or another app coming to the front hands the phone to you. One task per
+   phone at a time.
 3. **Sign-in first.** If the app opens on a sign-in screen, the user is asked to take over; the run waits for hand back.
    A sign-in that appears mid-run (the agent or routine hands off) is handled the same way, then the run goes again.
 4. **Run** through a `GatedDevice` (it waits while the user is in control) with the web approver.
@@ -35,7 +38,9 @@ from routines.store import RoutineStore
 
 from api.approvals import WebApprover
 from api.devices import SKYLARK, DevicePool
+from api.routing import EMULATOR_REFUSED, Choice, asks_for_phone, choose, strip_phone_words
 from api.store import API_DIR, TaskStore
+from testapps.skylark import SkyLark
 
 SHOTS = API_DIR / "shots"
 
@@ -98,16 +103,21 @@ class TaskRunner:
         self.jobs: dict[str, Any] = {}  # asyncio tasks, or concurrent futures when started from another thread
         self.loop: asyncio.AbstractEventLoop | None = None  # the API's loop (set at startup)
         self.devices: dict[str, Any] = {}  # task id → raw device (for step screenshots)
+        self.phone_asks: dict[str, asyncio.Future] = {}  # task id → your answer to "use your Android phone?"
         TraceWriter.listeners.append(self._on_trace)
 
     # ---- starting and stopping -----------------------------------------------------------------
 
     def start(self, goal: str, source: str, *, routine: str | None = None, inputs: dict[str, str] | None = None,
-              app: str | None = None, request: str | None = None) -> dict[str, Any]:
-        """`request` is the user's own words when the goal was rephrased (chat): approvals are matched against it."""
+              app: str | None = None, request: str | None = None, phone: str | None = None) -> dict[str, Any]:
+        """`request` is the user's own words when the goal was rephrased (chat): approvals are matched against it.
+        `phone`: "phone", "emulator", a device id, or None (routing decides, including "… on my phone" in the words)."""
+        if asks_for_phone(goal) or asks_for_phone(request or ""):
+            phone = phone or "phone"
+            goal = strip_phone_words(goal)
         task = self.store.create(goal, source, routine=routine, inputs=inputs or {}, app=app, request=request or goal)
         self.bus.publish("task", task=task)
-        coro = self._run(task["id"], goal, routine, inputs or {}, app)
+        coro = self._run(task["id"], goal, routine, inputs or {}, app, phone)
         try:
             running = asyncio.get_running_loop()
         except RuntimeError:  # MCP tools and approvers call in from worker threads
@@ -157,7 +167,8 @@ class TaskRunner:
             return None, inputs, routine.app, {}, calls
         return routine, filled.inputs, routine.app, filled.sources, calls
 
-    async def _run(self, tid: str, goal: str, routine_name: str | None, inputs: dict[str, str], app: str | None) -> None:
+    async def _run(self, tid: str, goal: str, routine_name: str | None, inputs: dict[str, str], app: str | None,
+                   phone: str | None = None) -> None:
         t0 = time.time()
         calls, cost = 0, 0.0
         avd, done, final, outputs, scope, routine = None, False, None, {}, "real", None
@@ -170,8 +181,14 @@ class TaskRunner:
                 self._step(tid, {"kind": "note", "text": f"using routine {routine.routine} v{routine.version}"
                                  + (f" with {', '.join(f'{k} = {v}' for k, v in inputs.items())}" if inputs else ""),
                                  "sources": sources})
-            avd = self.pool.avd_for(app)
+            choice = await self._choose_phone(tid, app, phone)
+            if choice is None:
+                return
+            avd = choice.device
+            assert avd is not None
             device = await self.pool.device(avd)
+            if choice.real_phone:
+                await self._ensure_app(tid, device, app)
             lease = self.pool.leases[avd]
             if lease.run_lock.locked():
                 self._step(tid, {"kind": "note", "text": f"waiting for {avd}: another task is using it"})
@@ -179,6 +196,7 @@ class TaskRunner:
                 lease.task_id = tid
                 self.devices[tid] = device
                 self._set(tid, device=avd)
+                self.pool.start_watch(avd, device, app)
                 gated = self.pool.gated(avd, device)
                 loop = asyncio.get_running_loop()
                 approver = WebApprover(self.store, self.bus, loop, tid, phone=lambda: device, timeout_s=self.approval_timeout_s,
@@ -238,13 +256,80 @@ class TaskRunner:
         finally:
             if avd:
                 lease = self.pool.leases[avd]
+                self.pool.stop_watch(avd, self.devices.get(tid))
                 if lease.task_id == tid:
                     lease.task_id = None
                 if lease.user_control:
                     self.pool.hand_back(avd, by="task ended")
+            self.phone_asks.pop(tid, None)
             self.approvers.pop(tid, None)
             self.devices.pop(tid, None)
             self.bus.publish("task_finished", task_id=tid, duration_s=round(time.time() - t0, 1))
+
+    # ---- which phone, and asking before your own -----------------------------------------------
+
+    async def _choose_phone(self, tid: str, app: str | None, asked: str | None) -> Choice | None:
+        """The phone for this task (api/routing.py); for your real phone, only after you say yes. None: the task ended."""
+        await asyncio.to_thread(self.pool.refresh_phones)
+        rules = self.store.setting("phone_apps", []) or []
+        choice = choose(app, asked=asked, phone_apps=rules, phones=list(self.pool.phones.values()))
+        if choice.device is None:
+            self._set(tid, status="failed", detail=choice.error or "no phone can run this", waiting_for=None)
+            self._step(tid, {"kind": "error", "text": choice.error or "no phone can run this"})
+            return None
+        if not choice.real_phone:
+            if asked or choice.reason.startswith("set to run"):
+                self._step(tid, {"kind": "note", "text": f"phone: {choice.device} ({choice.reason})"})
+            return choice
+        model = self.pool.phones.get(choice.device, {}).get("model") or "Android phone"
+        self._step(tid, {"kind": "note", "text": f"phone: your {model} ({choice.reason})"})
+        if not await self._ask_for_phone(tid, choice.device, model):
+            if app in EMULATOR_REFUSED:
+                self._set(tid, status="declined", detail="you kept your phone for yourself", waiting_for=None)
+                return None
+            emulator = self.pool.avd_for(app)
+            self._step(tid, {"kind": "note", "text": f"running on the emulator ({emulator}) instead"})
+            return Choice(emulator, "you chose the emulator")
+        return choice
+
+    async def _ask_for_phone(self, tid: str, did: str, model: str) -> bool:
+        """Wait for your answer to "Use your Android phone for this task?". No answer is never a yes."""
+        fut: asyncio.Future = asyncio.get_running_loop().create_future()
+        self.phone_asks[tid] = fut
+        self._set(tid, status="needs_you", waiting_for="phone", detail=f"Envoy wants to use your {model} for this task")
+        self.bus.publish("phone_requested", task_id=tid, device=did, model=model)
+        try:
+            allow, by = await asyncio.wait_for(fut, timeout=self.approval_timeout_s)
+        except asyncio.TimeoutError:
+            allow, by = False, "no answer"
+        finally:
+            self.phone_asks.pop(tid, None)
+        self._step(tid, {"kind": "note", "text": f"your {model}: " + (f"allowed by {by}" if allow else f"not used ({by})")})
+        self._set(tid, status="running", waiting_for=None, detail=None)
+        return allow
+
+    def answer_phone(self, tid: str, allow: bool, by: str) -> bool:
+        """Your answer, from the web app or the iPhone (session only). False if nothing is waiting."""
+        fut = self.phone_asks.get(tid)
+        if fut is None or fut.done():
+            return False
+        loop = self.loop or asyncio.get_event_loop()
+        loop.call_soon_threadsafe(lambda: fut.done() or fut.set_result((allow, by)))
+        return True
+
+    async def _ensure_app(self, tid: str, device: Any, app: str | None) -> None:
+        """The app must be on the phone. SkyLark, our own test app, is installed from its build; real apps come from
+        the Play Store, which needs your Google account on the phone."""
+        if not app:
+            return
+        listed = await asyncio.to_thread(device.adb.shell, f"pm list packages {app}")
+        if f"package:{app}" in listed:
+            return
+        if app == SKYLARK:
+            self._step(tid, {"kind": "note", "text": "installing SkyLark (our test app) on your phone"})
+            await asyncio.to_thread(SkyLark(device.serial).install)
+            return
+        raise RuntimeError(f"{app} isn't installed on your phone (install it from the Play Store)")
 
     async def _wait_for_user(self, tid: str, avd: str, reason: str) -> bool:
         self._set(tid, status="needs_you", waiting_for="takeover", detail=reason)
@@ -303,7 +388,7 @@ class TaskRunner:
         if device is None or getattr(getattr(device, "_last", None), "secure", False):
             return None
         try:
-            img = device.grpc.frame(360, timeout=2)
+            img = device.frame(360, timeout=2)
             folder = SHOTS / tid
             folder.mkdir(parents=True, exist_ok=True)
             name = f"{int(time.time() * 1000)}.jpg"

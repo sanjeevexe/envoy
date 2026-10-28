@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Envoy's banner on a real phone (Phase 6): shows that Envoy is using the phone, with a Pause button.
+     Started and stopped by Envoy over adb; its overlay permission is granted over adb (appops). -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application
+        android:allowBackup="false"
+        android:label="Envoy banner"
+        android:icon="@android:drawable/ic_dialog_info">
+
+        <service
+            android:name=".BannerService"
+            android:exported="true"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Shows that Envoy is operating this phone, with a Pause button" />
+        </service>
+
+        <!-- The Mac reads whether you pressed Pause: adb shell content query - -uri content://ai.envoy.banner/state -->
+        <provider
+            android:name=".StateProvider"
+            android:authorities="ai.envoy.banner"
+            android:exported="true" />
+    </application>
+</manifest>

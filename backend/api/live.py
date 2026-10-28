@@ -2,7 +2,9 @@
 
 On emulators the frames come from the emulator's own gRPC screenshot, scaled by the emulator and sent as JPEG over a
 WebSocket. Unlike scrcpy video and `adb screencap`, this shows secure sign-in screens (Phase 0, A4), which is what lets
-the user sign in from the web app. Real phones get the scrcpy relay in Phase 6.
+the user sign in from the web app. On a real phone (Phase 6) the frames and input go through the phone's scrcpy session
+(`devices/scrcpy.py`), with the same messages; secure screens are black there, so the server says when the window is
+secure (`{"type": "secure", "secure": true}`) and you sign in on the phone itself.
 
 Protocol (`WS /api/live/{avd}`):
 - server → client: one JSON `hello` (device size), then binary frames: 8 bytes big-endian float64 (capture time,
@@ -41,13 +43,16 @@ async def live_view(ws: WebSocket, avd: str, pool: Any, fps: float = 10, width: 
         return
     lease = pool.leases[avd]
     caps = device.capabilities
-    await ws.send_text(json.dumps({"type": "hello", "avd": avd, "width": caps.width, "height": caps.height, "control": lease.state()}))
+    stream = await asyncio.to_thread(lambda: device.stream)  # the emulator's gRPC, or the phone's scrcpy session (started on first use)
+    phone = pool.is_phone(avd)
+    await ws.send_text(json.dumps({"type": "hello", "avd": avd, "width": caps.width, "height": caps.height, "control": lease.state(),
+                                   "kind": "phone" if phone else "emulator"}))
     stop = asyncio.Event()
     stats = {"frames": 0, "skipped": 0, "capture_ms": 0.0, "encode_ms": 0.0, "bytes": 0}
 
     def grab() -> tuple[float, bytes | None, str]:
         ts, t0 = time.time(), time.perf_counter()
-        img = device.grpc.frame(width, timeout=3)
+        img = stream.frame(width, timeout=3)
         t1 = time.perf_counter()
         digest = hashlib.blake2b(img.tobytes(), digest_size=8).hexdigest()
         buf = io.BytesIO()
@@ -57,9 +62,21 @@ async def live_view(ws: WebSocket, avd: str, pool: Any, fps: float = 10, width: 
         return ts, buf.getvalue(), digest
 
     async def send_frames() -> None:
-        last, last_control = "", None
+        last, last_control, secure, checked = "", None, None, 0.0
         while not stop.is_set():
             t0 = time.perf_counter()
+            if phone and time.time() - checked > 1.0:  # a real phone shows secure windows black: say so instead
+                checked = time.time()
+                try:
+                    now_secure = (await asyncio.to_thread(device._foreground))[2]
+                except Exception:  # noqa: BLE001
+                    now_secure = secure
+                if now_secure != secure:
+                    secure = now_secure
+                    await ws.send_text(json.dumps({"type": "secure", "secure": bool(secure)}))
+                if secure:
+                    await asyncio.sleep(0.5)
+                    continue
             try:
                 ts, jpeg, digest = await asyncio.to_thread(grab)
             except Exception as e:  # noqa: BLE001 - a missed frame is fine; keep streaming
@@ -98,17 +115,17 @@ async def live_view(ws: WebSocket, avd: str, pool: Any, fps: float = 10, width: 
             kind = msg.get("type")
             t0 = time.perf_counter()
             if kind == "tap":
-                await asyncio.to_thread(device.grpc.tap, *px(msg["x"], msg["y"]))
+                await asyncio.to_thread(stream.tap, *px(msg["x"], msg["y"]))
             elif kind == "long_press":
                 x, y = px(msg["x"], msg["y"])
-                await asyncio.to_thread(device.grpc.swipe, x, y, x, y, 0.7)
+                await asyncio.to_thread(stream.swipe, x, y, x, y, 0.7)
             elif kind == "swipe":
                 (x1, y1), (x2, y2) = px(msg["x1"], msg["y1"]), px(msg["x2"], msg["y2"])
-                await asyncio.to_thread(device.grpc.swipe, x1, y1, x2, y2, float(msg.get("ms", 300)) / 1000)
+                await asyncio.to_thread(stream.swipe, x1, y1, x2, y2, float(msg.get("ms", 300)) / 1000)
             elif kind == "text" and isinstance(msg.get("text"), str):
-                await asyncio.to_thread(device.grpc.text, msg["text"][:500])
+                await asyncio.to_thread(stream.text, msg["text"][:500])
             elif kind == "key" and msg.get("key") in KEYS:
-                await asyncio.to_thread(device.grpc.key, KEYS[msg["key"]])
+                await asyncio.to_thread(stream.key, KEYS[msg["key"]])
             if msg.get("id") is not None:
                 await ws.send_text(json.dumps({"type": "ack", "id": msg["id"], "ms": round((time.perf_counter() - t0) * 1000, 1)}))
 

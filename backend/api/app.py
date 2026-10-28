@@ -226,7 +226,8 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
             raise HTTPException(400, "goal or routine needed")
         if body.get("routine"):
             goal = goal or routines.get(body["routine"]).intent
-        return runner.start(goal, "web", routine=body.get("routine"), inputs=body.get("inputs") or {})
+        phone = body.get("phone") if body.get("phone") not in (None, "", "auto") else None
+        return runner.start(goal, "web", routine=body.get("routine"), inputs=body.get("inputs") or {}, phone=phone)
 
     @app.get("/api/tasks", dependencies=[Depends(session)])
     def list_tasks(limit: int = 50) -> list[dict[str, Any]]:
@@ -242,6 +243,16 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     @app.post("/api/tasks/{tid}/stop", dependencies=[Depends(session)])
     def stop_task(tid: str) -> dict[str, Any]:
         return {"stopped": runner.stop(tid)}
+
+    @app.post("/api/tasks/{tid}/phone", dependencies=[Depends(session)])
+    def answer_phone(tid: str, request: Request, body: dict[str, Any] = Body(...)) -> dict[str, Any]:
+        """Your answer to "Use your Android phone for this task?". Only your session (the Mac or a paired iPhone) answers;
+        MCP, chat and Shortcuts can't."""
+        me = caller(request)
+        by = "you" if me is None or me.kind == "owner" else f"you on {me.name}"
+        if not runner.answer_phone(tid, bool(body.get("allow")), by):
+            raise HTTPException(409, "this task isn't waiting for your phone")
+        return {"ok": True}
 
     @app.get("/api/shots/{tid}/{name}", dependencies=[Depends(session)])
     def shot(tid: str, name: str) -> FileResponse:
@@ -565,6 +576,22 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
         tasks.set_setting("approval_rules", rules.to_dict())
         bus.publish("settings", approvals=rules.to_dict())
         return rules.to_dict()
+
+    # ---- settings: which apps run on your Android phone ----------------------------------------------
+
+    @app.get("/api/settings/phones", dependencies=[Depends(session)])
+    def get_phone_settings() -> dict[str, Any]:
+        from api.routing import EMULATOR_REFUSED
+        from api.runner import APP_NAMES
+        apps = sorted({r.app for r in routines.active()} | set(APP_NAMES.values()))
+        return {"phone_apps": tasks.setting("phone_apps", []) or [], "apps": apps, "emulator_refused": EMULATOR_REFUSED,
+                "phones": [d for d in pool.status() if d["kind"] == "phone"]}
+
+    @app.post("/api/settings/phones", dependencies=[Depends(session)])
+    def set_phone_settings(body: dict[str, Any] = Body(...)) -> dict[str, Any]:
+        apps = [str(a) for a in body.get("phone_apps") or [] if isinstance(a, str)][:50]
+        tasks.set_setting("phone_apps", apps)
+        return {"phone_apps": apps}
 
     # ---- routines and triggers -----------------------------------------------------------------
 

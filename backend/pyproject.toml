@@ -5,6 +5,7 @@ description = "Envoy backend: device layer, agent runtime, routines, memory, mod
 requires-python = ">=3.13,<3.14"
 dependencies = [
     "adbutils>=2.12.0",
+    "av>=19.0.2",
     "fastapi>=0.162.0",
     "google-api-python-client>=2.201.0",
     "google-auth-oauthlib>=1.5.0",
@@ -12,6 +13,7 @@ dependencies = [
     "grpcio-tools>=1.85.0",
     "httpx>=0.28.1",
     "mcp[cli]>=2.3.0",
+    "numpy>=2.5.4",
     "openai>=3.39.0",
     "pillow>=13.0.0",
     "pydantic>=2.14.1",

@@ -202,6 +202,11 @@ class Pusher:
             tid = ev.get("task_id")
             self.notify("takeover", "Envoy needs you to take over", ev.get("reason") or "The phone needs you",
                         f"/?phone={ev.get('avd')}" + (f"&task={tid}" if tid else ""), tag=f"takeover-{ev.get('avd')}", urgency="high", ttl=1800)
+        elif kind == "phone_requested":
+            tid = ev.get("task_id")
+            task = self.store.get(tid or "") or {}
+            self.notify("phone", f"Use your {ev.get('model') or 'Android phone'}?", task.get("goal") or "Envoy wants to use your phone for a task",
+                        f"/?task={tid}", tag=f"phone-{tid}", urgency="high", ttl=900)
         elif kind == "task_finished":
             task = self.store.get(ev.get("task_id") or "") or {}
             status = task.get("status")

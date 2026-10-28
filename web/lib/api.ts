@@ -17,7 +17,10 @@ export type Approval = {
   id: string; task_id: string; created_at: number; status: string; description: string; reasons: string[];
   app: string; screen: string; screenshot?: string | null; decided_by?: string; note?: string; nonce?: string; goal?: string;
 };
-export type Lease = { avd: string; task_id: string | null; user_control: boolean; since: number; reason: string; running?: boolean };
+export type Lease = {
+  avd: string; task_id: string | null; user_control: boolean; since: number; reason: string; running?: boolean;
+  kind?: "emulator" | "phone"; name?: string; android?: string; state?: string;
+};
 export type EnvoyEvent = { seq: number; time: number; type: string; [k: string]: any };
 
 export class ApiError extends Error {

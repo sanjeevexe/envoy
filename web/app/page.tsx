@@ -10,6 +10,7 @@ import Companion from "@/components/Companion";
 import LivePhone from "@/components/LivePhone";
 import MemoryGraph from "@/components/MemoryGraph";
 import Pair from "@/components/Pair";
+import PhoneAsk from "@/components/PhoneAsk";
 import Routines from "@/components/Routines";
 import Settings from "@/components/Settings";
 import { TaskDetail, TaskList } from "@/components/Tasks";
@@ -67,6 +68,15 @@ export default function Home() {
     registerServiceWorker(route);
   }, [load, route]);
 
+  // Phones come and go (a USB cable): refresh the list now and then.
+  useEffect(() => {
+    if (!authed) return;
+    const id = setInterval(() => {
+      api<Lease[]>("/api/devices").then((ds) => setLeases((m) => ({ ...m, ...Object.fromEntries(ds.map((d) => [d.avd, { ...m[d.avd], ...d }])) }))).catch(() => {});
+    }, 10000);
+    return () => clearInterval(id);
+  }, [authed]);
+
   const connected = useEvents(useCallback((e: EnvoyEvent) => {
     switch (e.type) {
       case "task": setTasks((m) => ({ ...m, [e.task.id]: e.task })); break;
@@ -87,6 +97,8 @@ export default function Home() {
   const taskList = useMemo(() => Object.values(tasks).sort((a, b) => b.created_at - a.created_at), [tasks]);
   const pending = Object.values(approvals).filter((a) => a.status === "pending");
   const needs = taskList.find((t) => t.status === "needs_you" && t.device === avd);
+  const phoneAsk = taskList.find((t) => t.waiting_for === "phone" && t.status === "needs_you");
+  const phones = Object.values(leases).sort((a, b) => (a.kind === "phone" ? 1 : 0) - (b.kind === "phone" ? 1 : 0));
   const go = (t: Tab) => { setTab(t); if (t !== "Tasks") setOpenTask(null); };
   const openTaskTab = (id: string) => { setOpenTask(id); setTab("Tasks"); };
 
@@ -109,9 +121,10 @@ export default function Home() {
   );
   const phoneSwitch = (
     <div className="mb-2 flex gap-1 text-xs">
-      {["envoy-test", "envoy-real"].map((d) => (
-        <button key={d} onClick={() => setAvd(d)} className={`rounded px-2 py-1 ${avd === d ? "bg-stone-800 text-white" : "bg-white"}`}>
-          {d === "envoy-test" ? "Test phone" : "Real-app phone"}{leases[d] && leases[d].running === false ? " (off)" : ""}
+      {phones.map((d) => (
+        <button key={d.avd} onClick={() => setAvd(d.avd)} className={`rounded px-2 py-1 ${avd === d.avd ? "bg-stone-800 text-white" : "bg-white"}`}>
+          {d.kind === "phone" ? `📱 ${d.name ?? "Your phone"}` : d.name ?? d.avd}
+          {d.kind === "phone" && d.state === "unauthorized" ? " (allow USB debugging)" : d.running === false ? " (off)" : ""}
         </button>
       ))}
     </div>
@@ -125,6 +138,7 @@ export default function Home() {
           <span className="text-lg font-semibold">Envoy</span>
           <span className={`text-xs ${connected ? "text-emerald-700" : "text-rose-700"}`}>{connected ? "● live" : "● can't reach your Mac"}</span>
         </header>
+        {phoneAsk && <div className="p-3 pb-0"><PhoneAsk task={phoneAsk} large /></div>}
         {pending.length > 0 && tab !== "Approvals" && (
           <button onClick={() => go("Approvals")} className="bg-rose-600 px-4 py-2 text-left text-sm text-white">
             {pending.length} approval{pending.length > 1 ? "s" : ""} waiting: {pending[0].description}
@@ -186,6 +200,7 @@ export default function Home() {
         </section>
         <aside className="w-[340px] shrink-0 overflow-y-auto border-l border-stone-200 bg-stone-50 p-4">
           {phoneSwitch}
+          {phoneAsk && <div className="mb-2"><PhoneAsk task={phoneAsk} /></div>}
           {pending.length > 0 && tab !== "Approvals" && (
             <button onClick={() => go("Approvals")} className="mb-2 w-full rounded-lg bg-rose-600 px-3 py-2 text-left text-sm text-white">
               {pending.length} approval{pending.length > 1 ? "s" : ""} waiting: {pending[0].description}

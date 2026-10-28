@@ -21,6 +21,8 @@ export default function LivePhone({ avd, lease, needsYou, mobile }: Props) {
   const [control, setControl] = useState<Lease | undefined>(lease);
   const [stats, setStats] = useState<{ fps: number; frame: number; rtt: number; tap: number }>({ fps: 0, frame: 0, rtt: 0, tap: 0 });
   const [error, setError] = useState<string | null>(null);
+  const [secure, setSecure] = useState(false);  // a real phone shows protected screens black: say so instead
+  const [isPhone, setIsPhone] = useState(false);
   const [typed, setTyped] = useState("");
   const [keyboard, setKeyboard] = useState(false);
   const down = useRef<{ x: number; y: number; t: number; timer?: ReturnType<typeof setTimeout>; long?: boolean } | null>(null);
@@ -60,7 +62,8 @@ export default function LivePhone({ avd, lease, needsYou, mobile }: Props) {
       sock.onmessage = async (m) => {
         if (typeof m.data === "string") {
           const msg = JSON.parse(m.data);
-          if (msg.type === "hello") { setSize({ w: msg.width, h: msg.height }); setControl(msg.control); setError(null); }
+          if (msg.type === "hello") { setSize({ w: msg.width, h: msg.height }); setControl(msg.control); setError(null); setIsPhone(msg.kind === "phone"); }
+          else if (msg.type === "secure") setSecure(!!msg.secure);
           else if (msg.type === "control") setControl(msg.control);
           else if (msg.type === "error") setError(msg.error);
           else if (msg.type === "pong") {
@@ -198,6 +201,11 @@ export default function LivePhone({ avd, lease, needsYou, mobile }: Props) {
                 onKeyDown={onKey} onContextMenu={(e) => e.preventDefault()}
                 onPaste={(e) => { const text = e.clipboardData.getData("text"); if (inControl && text) { send({ type: "text", text }); e.preventDefault(); } }}
                 className={`h-full w-full select-none outline-none [-webkit-touch-callout:none] ${inControl ? "cursor-pointer [touch-action:none]" : "cursor-not-allowed [touch-action:pan-y]"}`} />
+        {secure && (
+          <div className="absolute inset-0 flex items-center justify-center bg-stone-900/95 p-4 text-center text-sm text-white">
+            This screen is protected (a sign-in or a payment): your phone won't share it. Use the phone itself, then press Resume on its banner.
+          </div>
+        )}
         {error && <div className="absolute inset-x-2 top-2 rounded bg-rose-600/90 px-2 py-1 text-xs text-white">{error}</div>}
       </div>
       <input ref={kb} aria-label="Type into the phone" autoCapitalize="off" autoCorrect="off" autoComplete="off" spellCheck={false} enterKeyHint="send"
@@ -228,7 +236,7 @@ export default function LivePhone({ avd, lease, needsYou, mobile }: Props) {
         </div>
       )}
       <div className="text-center text-xs text-stone-400">
-        {avd} · {stats.fps} fps · frame {stats.frame} ms · rtt {stats.rtt} ms{stats.tap ? ` · tap ${stats.tap} ms` : ""}
+        {isPhone ? lease?.name ?? "your phone" : avd} · {stats.fps} fps · frame {stats.frame} ms · rtt {stats.rtt} ms{stats.tap ? ` · tap ${stats.tap} ms` : ""}
       </div>
     </div>
   );
