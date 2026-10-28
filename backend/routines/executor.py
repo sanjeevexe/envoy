@@ -537,7 +537,8 @@ class RoutineExecutor:
             # Only "where the app went" checks failed, the screen changed, and the next step is ready: the checks were
             # over-specific (something optional that didn't show this time). Accept, and patch them to what happened.
             nav_only = all(o.passed or o.check.kind in ("element_present", "element_absent", "text_visible", "screen_like") for o in outs)
-            if changed and stable and nav_only and nxt is not None and not nxt.optional and self._ready_now(nxt, s, ctx.inputs):
+            if changed and stable and nav_only and nxt is not None and not nxt.optional and self._ready_now(nxt, s, ctx.inputs) \
+                    and self._reached(ctx, idx, s):  # a next step with nothing to anchor it (a scroll) is "ready" anywhere
                 fresh = chk.derive_post(before, s, step.action.kind, None, None, {k: v for k, v in ctx.inputs.items() if v})
                 fresh = [g for c in fresh if (g := chk_generalize(c, ctx.inputs, [])) is not None] or [Check(kind="screen_changed")]
                 failed = "; ".join(o.detail for o in outs if not o.passed)
@@ -839,10 +840,17 @@ class RoutineExecutor:
         s = screen
         while True:
             fields = await self._field_values(specific, s, ctx.inputs)
-            # The app changed (that's why we're repairing), so its after-checks may only match at the relaxed threshold.
-            # A step whose only after-check is "the screen changed" counts as done only after a repair action changed it.
-            done = (self._check(specific, s, ctx.inputs, before=start, field_text=fields, relaxed=True)[0] if specific
-                    else bool(actions) and body(s) != body(start))
+            # The app changed (that's why we're repairing), so its after-checks may only match at the relaxed threshold. A
+            # relaxed match alone is how a look-alike passes (a results list for the drink's page: its "Add to order" button
+            # is near enough to "Grande Caffè Latte. Add to order"), so it counts only if what comes next is there too. A step
+            # whose only after-check is "the screen changed" counts as done only after a repair action changed it, onto the
+            # next step's screen.
+            if specific:
+                strict = self._check(specific, s, ctx.inputs, before=start, field_text=fields)[0]
+                done = strict or (self._check(specific, s, ctx.inputs, before=start, field_text=fields, relaxed=True)[0]
+                                  and self._reached(ctx, idx, s))
+            else:
+                done = bool(actions) and body(s) != body(start) and self._reached(ctx, idx, s)
             if done:
                 if actions or phase == "after":
                     self._propose(ctx, idx, phase, actions, s)
@@ -906,6 +914,30 @@ class RoutineExecutor:
                         "tree_after": ctx.trace.save_tree(idx + 1, f"repair{len(actions)}_after", after)})
             tried.append(f"{action.kind} on {el.label if el else ''!r} → screen now: {after.compact.splitlines()[1] if len(after.compact.splitlines()) > 1 else ''}")
             s = after
+
+    def _reached(self, ctx: _Ctx, idx: int, s: ScreenState) -> bool:
+        """Whether `s` is the screen step `idx` leads to, judged by what comes next (relaxed, as the app changed): the next
+        required step's before-checks and target, or, after the last step, its outputs and the routine's done-checks.
+        Without any such evidence it is not."""
+        step = ctx.routine.steps[idx]
+        nxt = self._next_required(ctx, idx)
+        if nxt is None:
+            if not step.extract and not ctx.routine.done:
+                return False
+            outputs = all(extract_value(e, s, ctx.inputs) for e in (step.extract or {}).values())
+            return outputs and self._check(ctx.routine.done, s, ctx.inputs, relaxed=True)[0]
+        pre = self._specific(nxt.pre)
+        if pre and not self._check(pre, s, ctx.inputs, relaxed=True)[0]:
+            return False
+        a = nxt.action
+        if a.kind == "scroll_until" and a.target is not None:
+            if locators.locate(a.target, s, ctx.inputs, threshold=locators.RELAXED).ok:
+                return True
+            # Its row may be below the fold: the list it scrolls is the anchor, if the routine names one.
+            return bool(pre) or (a.container is not None and locators.locate(a.container, s, ctx.inputs, threshold=locators.RELAXED,
+                                                                              margin=0.0).ok)
+        m = self._target(nxt, s, ctx.inputs, relaxed=True)
+        return m.ok if m is not None else bool(pre)
 
     async def _settle_after_repair(self, step: Step, inputs: dict[str, str], before: ScreenState) -> ScreenState:
         """After a repair action: until the after-checks pass, or the screen stops changing."""

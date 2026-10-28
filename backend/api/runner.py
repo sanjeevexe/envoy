@@ -230,7 +230,7 @@ class TaskRunner:
                         out = await ex.run(routine, inputs, task_id=trace_id, launch="if_needed", allow_repair=True, allow_agent=True, memory=notes,
                                            request=goal)
                         life = after_run(self.routines, routine, out)  # repairs become a version on trial; a trial is activated or rolled back
-                        if life:
+                        if life and "unchanged" not in life:  # a patch that changed nothing is logged in the library, not shown
                             self._step(tid, {"kind": "note", "text": (f"routine {routine.routine}: patched version v{life['proposed']} on trial for the next run"
                                                                       if "proposed" in life else f"routine {routine.routine} v{life['trial']}: trial {life['result']}")})
                         status, result, outputs = out.status, out.detail, out.outputs

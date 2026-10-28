@@ -36,4 +36,6 @@ def after_run(store: RoutineStore, routine: Routine, outcome: RunOutcome, kind: 
         trial = store.propose(routine, outcome.patches, outcome.task_id)
         if trial is not None:
             return {"proposed": trial.version, "changes": trial.changes}
+        if (store.index(routine.routine).get("patch_attempts") or [{}])[-1].get("source_task") == outcome.task_id:
+            return {"unchanged": routine.version}  # the patches left the routine as it was: logged, no new version
     return {}
