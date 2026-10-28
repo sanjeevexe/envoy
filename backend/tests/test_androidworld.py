@@ -136,6 +136,14 @@ def test_done_answer_reaches_the_record_and_the_digest_keeps_no_trees(tmp_path, 
     assert "B12" in rows[1]["screen"] and not any("tree_before" in r or "screenshot_before" in r for r in rows)
 
 
+def test_a_done_the_check_rejects_is_counted_and_a_second_is_accepted(tmp_path, monkeypatch):
+    done = {"reason": "the gate is on screen", "action": {"type": "done", "result": "Z99"}, "expected_result": "", "risk": "read"}
+    res = _run(tmp_path, monkeypatch, [done], max_steps=10)
+    counts = ee.summarize_trace(Path(res.trace_dir))
+    assert counts["actions"] == {"done": 2} and counts["done_rejected"] == 1  # "Z99" isn't on screen: rejected once
+    assert res.status == "done_unverified" and ee.to_androidworld(res.status, res.result) == {"done": True, "answer": "Z99"}
+
+
 def test_the_tier_is_contributor_unless_the_run_says_standard():
     assert ee.contributor_tier({}) is True and ee.contributor_tier({"tier": "contributor"}) is True
     assert ee.contributor_tier({"tier": "standard"}) is False

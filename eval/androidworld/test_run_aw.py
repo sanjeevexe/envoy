@@ -24,6 +24,10 @@ class FakeEnv:
         self.actions: list[json_action.JSONAction] = []
         self.resets: list[bool] = []
         self.interaction_cache = ""
+        self.automation_ui_hidden = 0
+
+    def hide_automation_ui(self) -> None:
+        self.automation_ui_hidden += 1
 
     def reset(self, go_home: bool = False):
         self.resets.append(go_home)
@@ -91,6 +95,7 @@ def test_each_episode_runs_envoy_once(agent):
         agent.set_max_steps(10)
         agent.step(goal)
     assert [p["goal"] for p in seen] == ["a", "b"] and len({p["run_id"] for p in seen}) == 2
+    assert agent.env.automation_ui_hidden == 2  # pointer location off before every episode, as AndroidWorld's agents do
 
 
 def test_the_noop_agent_never_acts():

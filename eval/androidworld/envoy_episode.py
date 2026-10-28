@@ -83,8 +83,10 @@ def summarize_trace(trace_dir: Path) -> dict[str, Any]:
     steps_file = trace_dir / "steps.jsonl"
     recs = [json.loads(l) for l in steps_file.read_text().splitlines() if l.strip()] if steps_file.exists() else []
     c = {"iterations": 0, "looks": 0, "screenshots_sent": 0, "replans": 0, "stuck_recoveries": 0, "vision_calls": 0,
-         "invalid_elements": 0, "done_rejected": 0, "tap_point_rejected": 0, "model_errors": 0, "model_ms": 0, "actions": {}}
-    for r in recs:
+         "invalid_elements": 0, "done_rejected": 0, "tap_point_rejected": 0, "model_errors": 0, "placeholders_asked_again": 0,
+         "model_ms": 0, "actions": {}}
+    dones = []  # positions of done decisions: one followed by more work was rejected by the success check
+    for i, r in enumerate(recs):
         c["iterations"] = max(c["iterations"], r.get("step", 0) or 0)
         kind = r.get("kind")
         if kind in ("plan", "replan"):
@@ -99,11 +101,15 @@ def summarize_trace(trace_dir: Path) -> dict[str, Any]:
             t = ((r.get("decision") or {}).get("action") or {}).get("type", "?")
             c["actions"][t] = c["actions"].get(t, 0) + 1
             c["looks"] += t == "look"
+            c["placeholders_asked_again"] += bool(r.get("placeholder"))
+            if t == "done":
+                dones.append(i)
             c["screenshots_sent"] += bool(r.get("screenshot_before"))
             c["vision_calls"] += bool(r.get("vision"))
             err = r.get("error") or ""
             c["invalid_elements"] += "not on the current screen" in err
             c["tap_point_rejected"] += err.startswith("tap_point rejected")
+    c["done_rejected"] = sum(any(r.get("kind") in ("action", "popup") for r in recs[i + 1:]) for i in dones)
     return c
 
 
@@ -113,7 +119,7 @@ def write_digest(trace_dir: Path, dest: Path) -> None:
     if not steps_file.exists():
         return
     keep = ("step", "kind", "decision", "error", "risk", "approval", "result", "changed", "handler", "reason", "plan",
-            "tried", "vision", "recovery", "action", "timings_ms", "cost_usd")
+            "tried", "vision", "recovery", "action", "timings_ms", "cost_usd", "placeholder")
     dest.parent.mkdir(parents=True, exist_ok=True)
     with gzip.open(dest, "wt") as f:
         for line in steps_file.read_text().splitlines():
@@ -122,6 +128,8 @@ def write_digest(trace_dir: Path, dest: Path) -> None:
             seen = r.get("screen_before") or (r["screen"] if isinstance(r.get("screen"), dict) else None)
             if seen:
                 d["screen"] = seen.get("compact")
+            if r.get("screenshot_before"):
+                d["shot"] = True  # a screenshot went with this step
             if r.get("screen_after"):
                 d["screen_after_head"] = (r["screen_after"].get("compact") or "").split("\n", 1)[0]
             if r.get("target"):

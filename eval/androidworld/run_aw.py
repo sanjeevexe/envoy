@@ -112,6 +112,9 @@ class EnvoyAgent(base_agent.EnvironmentInteractingAgent):
 
     def reset(self, go_home: bool = False) -> None:
         super().reset(go_home)
+        # As AndroidWorld's own agents do (m3a, t3a, seeact): android_env turns on Developer options' pointer location,
+        # whose crosshair and coordinate bar would otherwise be in every screenshot Envoy takes.
+        self.env.hide_automation_ui()
         self._ran = False
         self.last = None
 
