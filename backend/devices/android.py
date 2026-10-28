@@ -180,6 +180,13 @@ class AndroidDevice:
 
     # ---- act --------------------------------------------------------------------------------
 
+    def keyboard_shown(self) -> bool:
+        """Whether the on-screen keyboard is up (it covers the lower part of the screen while the tree still lists what's under it)."""
+        try:
+            return "mInputShown=true" in self.adb.shell("dumpsys input_method | grep mInputShown")
+        except Exception:  # noqa: BLE001 - unknown means "don't touch it"
+            return False
+
     def _tap(self, x: int, y: int, hold_s: float = 0.0) -> None:
         """uiautomator2 injects the touch (~150 ms). Subclasses use faster paths when they have one."""
         if hold_s:

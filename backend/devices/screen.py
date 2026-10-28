@@ -119,6 +119,13 @@ def _clip(s: str) -> str:
     return s if len(s) <= MAX_LABEL else s[: MAX_LABEL - 1] + "…"
 
 
+def _set_label(e: Element, text: str) -> None:
+    """The model sees at most MAX_LABEL characters; the whole text stays on the element for reading outputs."""
+    e.label = _clip(text)
+    whole = " ".join(text.split())
+    e.full_label = whole if whole != e.label else ""
+
+
 def number_elements(elements: list[Element], width: int, height: int) -> list[Element]:
     """Pick and number the elements that matter, merging child text into interactive parents."""
     children: dict[int, list[int]] = {}
@@ -193,18 +200,18 @@ def number_elements(elements: list[Element], width: int, height: int) -> list[El
                 parts = []
                 descendant_text(e.index, parts)
                 label = " · ".join(dict.fromkeys(parts))  # drop repeats such as "Order · Order"
-            e.label = _clip(label)
+            _set_label(e, label)
             if e.label or e.resource_id or e.editable or e.scrollable or e.checkable:
                 numbered.append(e)
         elif (e.text or e.desc) and e.index not in absorbed and not repeats_ancestor(e):
-            e.label = _clip(e.text or e.desc)
+            _set_label(e, e.text or e.desc)
             numbered.append(e)
         elif _short_id(e.resource_id) and e.index not in absorbed and children.get(e.index) and text_only_group(e.index):
             # A merged row with an ID but no text of its own ("Date" + "Fri, Oct 30"): one line, with its ID.
             parts = []
             descendant_text(e.index, parts)
             if parts:
-                e.label = _clip(" · ".join(dict.fromkeys(parts)))
+                _set_label(e, " · ".join(dict.fromkeys(parts)))
                 numbered.append(e)
 
     # Parents come before children in document order, so absorbed children are already skipped.

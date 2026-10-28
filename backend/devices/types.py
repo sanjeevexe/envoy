@@ -48,6 +48,7 @@ class Element:
     number: int | None = None
     label: str = ""  # text shown to the model (own text, else desc, else merged child text)
     kind: str = ""  # Button, Text, EditText, Image, Switch, CheckBox, List, ...
+    full_label: str = ""  # the label before clipping, when it was clipped: routines read outputs from it
 
     @property
     def center(self) -> tuple[int, int]:
@@ -71,6 +72,7 @@ class Element:
             "desc": self.desc,
             "hint": self.hint,
             "label": self.label,
+            **({"full_label": self.full_label} if self.full_label else {}),
             "bounds": list(self.bounds),
             "clickable": self.clickable,
             "long_clickable": self.long_clickable,
