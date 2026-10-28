@@ -322,6 +322,20 @@ def generalize_locator(loc: Locator, examples: dict[str, str], data_values: list
     return loc.model_copy(update=upd)
 
 
+def _search_result(el: Element, screen: ScreenState, earlier: list["TStep"], examples: dict[str, str]) -> str | None:
+    """The input name if `el` is the top row of a list showing results for a value typed earlier in the run, and the
+    row shows more than that value (a row that *is* the value, "Caffè Latte", was chosen by it)."""
+    if not el.in_list:
+        return None
+    typed = {n for n, v in examples.items() if v and any(t.typed and contains_value(t.typed, v) for t in earlier)}
+    shown = [n for n in typed if contains_value(el.label, examples[n]) and norm(el.label) != norm(examples[n])]
+    if not shown:
+        return None
+    rows = [e for e in screen.numbered if e.in_list and e.kind == el.kind and e.clickable and e.area > el.area / 3]
+    top = min(rows, key=lambda e: e.bounds[1], default=None)
+    return shown[0] if top is not None and top.index == el.index else None
+
+
 def generalize_check(c: Check, examples: dict[str, str], data_values: list[str]) -> Check | None:
     """Template inputs into a check, and drop booking data it can't depend on (None: drop the check)."""
     if c.kind in ("text_visible", "text_absent"):
@@ -495,8 +509,17 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
         target_screen = getattr(s, "before_for_target", s.before)
         loc = None
         if s.target is not None:
-            loc = generalize_locator(locators.build(s.target, target_screen), examples, data_values,
-                                     meta.target_fixed_text if meta else None, meta.choice_input if meta else None)
+            choice = meta.choice_input if meta else None
+            ex = examples
+            if (searched := _search_result(s.target, target_screen, steps[: i - 1], examples)) is not None:
+                # The top row of results for a term typed in this run: "the first result", chosen by its place, not by
+                # showing the term (Gmail: the first row *containing* "DoorDash" was another email). Its slot picks it.
+                choice, ex = None, {k: v for k, v in examples.items() if k != searched}
+                report.warnings.append(f"step {i}: the first result for {{{{{searched}}}}}: chosen by its place in the list")
+            loc = generalize_locator(locators.build(s.target, target_screen), ex, data_values,
+                                     meta.target_fixed_text if meta else None, choice)
+            if searched is not None:  # a result's words are that result's: only its place (and ID, type) say "first"
+                loc = loc.model_copy(update={"text": None, "desc": None, "siblings": [], "text_has": None, "alt_texts": []})
         if s.kind in ("tap", "long_press"):
             action = StepAction(kind=s.kind, target=loc)
         elif s.kind == "type":

@@ -416,9 +416,12 @@ class RoutineExecutor:
             specific = self._specific(step.post)
             if specific and self._check(specific, s, ctx.inputs)[0]:
                 return _Ready("skip", s, why="its after-checks already hold")
-            if step.optional and (req := self._next_required(ctx, idx)) is not None and self._ready_now(req, s, ctx.inputs):
+            req = self._next_required(ctx, idx) if step.optional else None
+            if step.optional and req is not None and self._ready_now(req, s, ctx.inputs):
                 return _Ready("skip", s, why=f"optional, and the next required step ({req.id}) is ready")
             stable = now - stable_since >= cfg.stable_s
+            if step.optional and req is None and stable:  # nothing required after it to tell us its screen was skipped
+                return _Ready("skip", s, why="optional, its screen didn't come, and only optional steps are left")
             # Rung 3: a known pop-up in the way.
             if popups < cfg.max_popups_step and now - stable_since >= 0.25 and (pop := match_popup(s, ctx.routine.intent)) is not None:
                 await self.device.act(Action(kind="tap", element=pop.element.number))

@@ -211,3 +211,24 @@ def test_listed_screens_get_a_step_schema_without_tap_point():
         StepOutputListed.model_validate(point)
     tap = {**point, "action": {"type": "tap", "element": 3}}
     assert StepOutputListed.model_validate(tap).action.type == "tap"
+
+
+def test_the_top_row_after_a_search_is_chosen_by_its_place():
+    from routines.compiler import TStep, _search_result
+    from routines.screens import screen_from_tree
+
+    def rows(labels):
+        els = [{"index": 0, "parent": None, "number": 1, "kind": "EditText", "class": "android.widget.EditText", "label": "Search",
+                "text": "DoorDash", "editable": True, "bounds": [0, 100, 1080, 200]}]
+        for i, lab in enumerate(labels, 1):
+            els.append({"index": i, "parent": None, "number": i + 1, "kind": "Button", "class": "android.view.View", "label": lab, "text": lab,
+                        "resource_id": "conversation_row", "clickable": True, "in_list": True, "bounds": [0, 300 + 200 * i, 1080, 480 + 200 * i]})
+        return screen_from_tree({"package": "app", "activity": "A", "width": 1080, "height": 2400, "elements": els})
+    s = rows(["DoorDash · Hey, you made it · 40% off", "Google · You shared data with DoorDash"])
+    typed = [TStep(n=1, kind="type", before=s, after=s, target=s.numbered[0], typed="DoorDash")]
+    assert _search_result(s.numbered[1], s, typed, {"query": "DoorDash"}) == "query"  # the top result: by its place
+    assert _search_result(s.numbered[2], s, typed, {"query": "DoorDash"}) is None  # a lower row was chosen for a reason
+    assert _search_result(s.numbered[1], s, [], {"query": "DoorDash"}) is None  # nothing typed: an ordinary choice
+    drink = rows(["Caffè Latte", "Iced Caffè Latte"])
+    typed2 = [TStep(n=1, kind="type", before=drink, after=drink, target=drink.numbered[0], typed="Caffè Latte")]
+    assert _search_result(drink.numbered[1], drink, typed2, {"drink": "Caffè Latte"}) is None  # the row *is* the input

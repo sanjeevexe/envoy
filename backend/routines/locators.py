@@ -250,10 +250,11 @@ def locate(loc: Locator, screen: ScreenState, inputs: dict[str, str] | None = No
 def _same_slot(loc: Locator, scored: list, screen: ScreenState, margin: float) -> tuple[Element, dict] | None:
     """Repeated list rows that nothing but their place tells apart ("the first store in the list"): a locator with no
     text to choose a row by (its text was booking data) means the row in the recorded slot, if one is clearly nearest."""
-    if not (loc.in_list and loc.position and loc.resource_id) or loc.text or loc.text_has or loc.desc:
+    if not (loc.in_list and loc.position and (loc.resource_id or loc.kind)) or loc.text or loc.text_has or loc.desc:
         return None
     tied = [(e, det) for sc, e, det in scored if scored[0][0] - sc < margin]
-    if len(tied) < 2 or not all(e.in_list and id_matches(loc.resource_id, short_id(e.resource_id)) for e, _ in tied):
+    same = (lambda e: id_matches(loc.resource_id, short_id(e.resource_id))) if loc.resource_id else (lambda e: e.kind == loc.kind)
+    if len(tied) < 2 or not all(e.in_list and same(e) for e, _ in tied):
         return None
     w, h = screen.width or 1080, screen.height or 2400
 
