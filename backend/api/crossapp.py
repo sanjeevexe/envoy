@@ -257,6 +257,17 @@ def built_answer(values: list[dict[str, Any]]) -> str:
     return "; ".join(bits) + "."
 
 
+def screen_name(final: Any) -> str | None:
+    """The screen a part's answer was read on: its activity when that is a real name ("DashboardActivity"), else its first
+    title-like text in quotes (obfuscated apps name activities "dIu")."""
+    short = (getattr(final, "activity", "") or "").rsplit(".", 1)[-1]
+    if re.fullmatch(r"[A-Z][A-Za-z0-9]{5,}", short):
+        return short
+    title = next((e.label for e in getattr(final, "numbered", []) or [] if not getattr(e, "status_bar", False)
+                  and getattr(e, "kind", "") == "Text" and 3 <= len(e.label or "") <= 40), None)
+    return f'the "{title}" screen' if title else (short or None)
+
+
 def source_line(v: dict[str, Any]) -> str:
     when = time.strftime("%-I:%M %p", time.localtime(v["time"])) if v.get("time") else "time unknown"
     return f"{v['app_name']} · {v.get('screen') or 'its final screen'} · {when}"
@@ -448,7 +459,7 @@ class CrossApp:
     def _on_final(self, tid: str, final: Any, outputs: dict[str, Any]) -> None:
         """The runner's hook, right after a task's last look at its phone: where its answer was read."""
         if tid in self.parent_of and final is not None:
-            self.finals[tid] = {"screen": (getattr(final, "activity", "") or "").rsplit(".", 1)[-1] or None,
+            self.finals[tid] = {"screen": screen_name(final),
                                 "time": getattr(final, "timestamp", None) or time.time(), "outputs": dict(outputs or {})}
 
     def _on_event(self, ev: dict[str, Any]) -> None:

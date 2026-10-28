@@ -506,3 +506,11 @@ def test_the_combined_answer_is_remembered_with_each_part_as_its_source():
                                                                                                     (DD, "MenuItemActivity", True)]
     assert Retriever(mem).where(fact["source"]).startswith("cross-app answer, ")
     assert any(s["kind"] == "memory" for s in r.store.steps(pid))
+
+
+def test_a_screen_is_named_by_its_activity_or_else_its_title():
+    from api.crossapp import screen_name
+    el = lambda label, kind="Text", bar=False: SimpleNamespace(label=label, kind=kind, status_bar=bar)  # noqa: E731
+    assert screen_name(SimpleNamespace(activity="com.dd.DashboardActivity", numbered=[])) == "DashboardActivity"
+    obfuscated = SimpleNamespace(activity="com.starbucks.dIu", numbered=[el("9:41", bar=True), el("Back", "Button"), el("Caffè Latte")])
+    assert screen_name(obfuscated) == 'the "Caffè Latte" screen'
