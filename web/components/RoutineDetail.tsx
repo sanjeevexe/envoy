@@ -302,11 +302,13 @@ function VersionItem({ v, d }: { v: Version; d: Detail }) {
 
 function Versions({ d }: { d: Detail }) {
   const repairs = d.versions.filter((v) => v.origin === "repaired");
+  const noop = repairs.filter((v) => !v.changes.length).length;
   return (
     <div>
       <p className="mb-3 text-sm text-stone-600">
         {repairs.length
-          ? <>A run that needed help leaves a patch; it becomes a new version on trial, and the next run decides it. {plural(repairs.length, "repair")} so far.</>
+          ? <>A run that needed help leaves a patch; it becomes a new version on trial, and the next run decides it. {plural(repairs.length, "repair")} so far
+            {noop > 0 && <>; {noop === repairs.length ? (noop === 1 ? "it" : "all of them") : noop} left the steps as they were</>}.</>
           : <>No repairs yet. When a run needs help, the fix becomes a new version on trial, and the next run decides it.</>}
       </p>
       <ol className="ml-2 border-l-2 border-stone-200" aria-label="Versions, oldest first">{d.versions.map((v) => <VersionItem key={v.version} v={v} d={d} />)}</ol>
