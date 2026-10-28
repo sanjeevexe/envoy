@@ -292,3 +292,18 @@ def test_a_keyboard_over_the_target_is_scrolled_away_never_with_back():
     assert asyncio.run(RoutineExecutor(up)._clear_keyboard(s.numbered[1], s)) is None  # above the keyboard already
     none = Dev(None)
     assert asyncio.run(RoutineExecutor(none)._clear_keyboard(s.numbered[0], s)) is None and none.acts == []  # no keyboard
+
+def test_the_keyboards_own_buttons_are_not_part_of_the_screen():
+    from devices.screen import build_state
+    xml = """<?xml version='1.0' encoding='UTF-8' standalone='yes' ?><hierarchy rotation="0">
+<node index="0" text="" resource-id="" class="android.widget.FrameLayout" package="com.example.app" bounds="[0,0][1080,2400]" clickable="false" enabled="true" visible-to-user="true">
+  <node index="0" text="Save" resource-id="com.example.app:id/save" class="android.widget.Button" package="com.example.app" bounds="[40,1200][1040,1320]" clickable="true" enabled="true" visible-to-user="true" />
+</node>
+<node index="1" text="" resource-id="" class="android.widget.FrameLayout" package="com.google.android.inputmethod.latin" bounds="[0,1500][1080,2400]" clickable="false" enabled="true" visible-to-user="true">
+  <node index="0" text="" content-desc="Delete" resource-id="com.google.android.inputmethod.latin:id/key_pos_del" class="android.widget.FrameLayout" package="com.google.android.inputmethod.latin" bounds="[900,2100][1080,2250]" clickable="true" enabled="true" visible-to-user="true" />
+  <node index="1" text="Clipboard" resource-id="com.google.android.inputmethod.latin:id/clipboard_ui" class="android.widget.TextView" package="com.google.android.inputmethod.latin" bounds="[0,1500][300,1600]" clickable="true" enabled="true" visible-to-user="true" />
+</node>
+<node index="2" text="" content-desc="Back" resource-id="com.android.systemui:id/input_method_nav_back" class="android.widget.ImageView" package="com.android.systemui" bounds="[0,2300][200,2400]" clickable="true" enabled="true" visible-to-user="true" />
+</hierarchy>"""
+    s = build_state(xml, "com.example.app", "com.example.app.Main", 1080, 2400)
+    assert [e.label for e in s.numbered] == ["Save"]  # no keyboard "Delete", "Clipboard" or its Back
