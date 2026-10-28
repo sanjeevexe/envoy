@@ -156,3 +156,12 @@ def test_a_placeholder_action_is_asked_again_not_carried_out(tmp_path, monkeypat
                 .run("Open Gmail", task_id="ph", memory=""))
     assert [a.kind for a in phone.actions][:1] == ["tap"]  # the back was never carried out
     assert "your reason called it a placeholder" in model.prompts[1]
+
+
+def test_a_second_done_is_accepted_when_the_plans_check_disagrees(tmp_path, monkeypatch):
+    monkeypatch.setattr(TraceWriter.__init__, "__defaults__", (tmp_path,))
+    model = Seq(step({"type": "done", "result": "Stopwatch paused"}))  # the plan's check wants "Saved", never on screen
+    res = asyncio.run(AgentRunner(Phone(), model, ScriptedApprover(True), RunConfig(max_steps=5, data_scope="test_app"))
+                      .run("Pause the stopwatch", task_id="dn", memory=""))
+    assert res.status == "done_unverified" and len(model.prompts) == 2
+    assert "answer done again now and it will be accepted" in model.prompts[1]
