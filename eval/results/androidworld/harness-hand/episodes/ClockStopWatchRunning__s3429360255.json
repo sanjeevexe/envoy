@@ -1,0 +1,11 @@
+{
+ "task": "ClockStopWatchRunning",
+ "seed": 3429360255,
+ "goal": "Run the stopwatch.",
+ "score": 0.0,
+ "aw_run_time_s": 42.0,
+ "aw_episode_length": 1,
+ "agent": "hand",
+ "finished": "2026-10-27 21:58:51.863950",
+ "envoy": {}
+}

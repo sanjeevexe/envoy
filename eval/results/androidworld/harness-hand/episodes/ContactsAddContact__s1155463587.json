@@ -1,0 +1,11 @@
+{
+ "task": "ContactsAddContact",
+ "seed": 1155463587,
+ "goal": "Create a new contact for Hugo Pereira. Their number is +13920741751.",
+ "score": 1.0,
+ "aw_run_time_s": 134.8,
+ "aw_episode_length": 1,
+ "agent": "hand",
+ "finished": "2026-10-27 22:01:07.380190",
+ "envoy": {}
+}

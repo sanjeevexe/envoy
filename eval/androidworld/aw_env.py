@@ -95,3 +95,50 @@ def connect(emulator_setup: bool = False, freeze_datetime: bool = True):
 
 def aw_commit() -> str:
     return subprocess.run(["git", "-C", str(AW_DIR), "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
+
+
+# ---- AndroidWorld's accessibility forwarder vs Envoy's uiautomator2 ---------------------------------------------------
+# uiautomator2 runs a UiAutomation session, which suppresses (unbinds) accessibility services. AndroidWorld's forwarder
+# then crashes on its own polling thread (NullPointerException in AccessibilityService.getWindows) and Android shows a
+# "keeps stopping" dialog over the app, a harness artifact official agents never see (they don't start UiAutomation).
+# So while Envoy works, the forwarder is parked (disabled and stopped), and before AndroidWorld scores it is restored
+# with android_env's own setup calls (enable the service, send it the host gRPC port, turn on tree logs).
+
+FORWARDER = "com.google.androidenv.accessibilityforwarder"
+
+
+def adb_shell(*args: str, timeout: float = 30) -> str:
+    out = subprocess.run([ADB, "-s", SERIAL, "shell", *args], capture_output=True, text=True, timeout=timeout)
+    return out.stdout.strip()
+
+
+def crash_dialog() -> str:
+    """The focused window when it is a crash / not-responding dialog, else ""."""
+    focus = adb_shell("dumpsys window | grep mCurrentFocus")
+    return focus if ("Application Error" in focus or "Not Responding" in focus) else ""
+
+
+def park_forwarder() -> None:
+    adb_shell("settings", "put", "secure", "enabled_accessibility_services", "null")
+    adb_shell("am", "force-stop", FORWARDER)
+
+
+def restore_forwarder(env, timeout_s: float = 30) -> float:
+    """Re-enable and reconfigure the forwarder; returns seconds until AndroidWorld reads the screen again."""
+    import time
+
+    t0 = time.time()
+    wrapper = env.controller.env  # android_env's A11yGrpcWrapper
+    wrapper._start_a11y_services()  # noqa: SLF001 - android_env's own setup steps, unchanged
+    time.sleep(1.0)
+    wrapper._configure_grpc()  # noqa: SLF001
+    wrapper._enable_a11y_tree_logs()  # noqa: SLF001
+    while time.time() - t0 < timeout_s:
+        try:
+            if env.get_state(wait_to_stabilize=False).ui_elements:
+                return time.time() - t0
+        except Exception:  # noqa: BLE001 - not ready yet
+            pass
+        time.sleep(1.0)
+    env.controller.refresh_env()  # AndroidWorld's own last resort (reconnects and reinstalls forwarding)
+    return time.time() - t0
