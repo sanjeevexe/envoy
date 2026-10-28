@@ -322,6 +322,18 @@ def generalize_locator(loc: Locator, examples: dict[str, str], data_values: list
     return loc.model_copy(update=upd)
 
 
+def _state_text(near: str | None, final: ScreenState, data_values: list[str]) -> Extract | None:
+    """The short fixed text an inferred answer was read from ("No contacts yet", "Nothing planned"), as an output that
+    reports it whole: on another run it is there or it isn't, and the routine says so rather than inventing a value."""
+    if not near or len(near) > 60 or not _data_free(near, data_values):
+        return None
+    el = next((e for e in final.numbered if norm(e.label) == norm(near)), None) or \
+        next((e for e in final.numbered if norm(near) in norm(e.label) and len(e.label) <= 80 and _data_free(e.label, data_values)), None)
+    if el is None:
+        return None
+    return Extract(locator=Locator(text=el.label, kind=el.kind))
+
+
 def _search_result(el: Element, screen: ScreenState, earlier: list["TStep"], examples: dict[str, str]) -> str | None:
     """The input name if `el` is the top row of a list showing results for a value typed earlier in the run, and the
     row shows more than that value (a row that *is* the value, "Caffè Latte", was chosen by it)."""
@@ -593,12 +605,17 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
     if final is not None:
         for o in spec.outputs:
             ex = _extract_for(o.name, o.near, o.example, final, examples, data_values)
+            state = False
+            if ex is None and (ex := _state_text(o.near, final, data_values)) is not None:
+                # An answer the agent inferred ("0" from "No contacts yet"): the routine reports the words it was read from.
+                state = True
+                report.warnings.append(f"output {o.name!r}: {o.example!r} was inferred from {o.near!r}; the routine reports that text")
             if ex is None:
                 report.warnings.append(f"output {o.name!r}: {o.example!r} is not on the final screen, or nothing anchors it; dropped")
                 continue
             outputs.append(o.name)
             # A value recorded as a number ("190 calories", "$13.49", "2:05 PM") must be one at run time too.
-            extract[o.name] = ex.model_copy(update={"expect_digits": bool(re.match(r"^[$€£]?\d", o.example.strip()))})
+            extract[o.name] = ex.model_copy(update={"expect_digits": not state and bool(re.match(r"^[$€£]?\d", o.example.strip()))})
     # A trailing scroll toward an answer: reveal the first output's element.
     for st in out_steps:
         if st.action.kind == "scroll_until" and st.action.target is None:

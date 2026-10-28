@@ -232,3 +232,14 @@ def test_the_top_row_after_a_search_is_chosen_by_its_place():
     drink = rows(["Caffè Latte", "Iced Caffè Latte"])
     typed2 = [TStep(n=1, kind="type", before=drink, after=drink, target=drink.numbered[0], typed="Caffè Latte")]
     assert _search_result(drink.numbered[1], drink, typed2, {"drink": "Caffè Latte"}) is None  # the row *is* the input
+
+
+def test_an_inferred_answer_is_reported_as_the_words_it_came_from():
+    from routines.compiler import _state_text
+    from routines.screens import screen_from_tree
+    s = screen_from_tree({"package": "app", "activity": "A", "width": 1080, "height": 2400, "elements": [
+        {"index": 0, "parent": None, "number": 1, "kind": "Text", "class": "android.widget.TextView", "label": "No contacts yet",
+         "text": "No contacts yet", "bounds": [0, 500, 1080, 600]}]})
+    ex = _state_text("No contacts yet", s, [])
+    assert ex is not None and extract_value(ex, s, {}) == "No contacts yet"
+    assert _state_text("38,240 miles", s, ["38,240 miles"]) is None  # data is never a state text
