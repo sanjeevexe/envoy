@@ -31,6 +31,8 @@ All of it is Envoy's own code (about 2,300 lines of Python in `eval/` and `backe
 11. **An inferred answer is reported as the words it came from.** Contacts answered "0" from "No contacts yet", which never appears as a value, so the routine learned no output. It now reports the screen text.
 12. **A patch copied one booking into a check.** The repeats suite (10 requests per task) found find_trip failing on requests 4 and 5: on request 2 a relaxed match rewrote a check from that run's row ("Savannah", `trip_row_6PBKDJ`); the trial passed on request 3 and the patch went live. A check bound to an input is no longer rewritten from a run's screen. The fallback agent also gets the user's own request now, not the routine's intent (it had backed out of the app and got stuck on the home screen).
 
+13. **Checks past the edge of the screen.** With a notice card on the trip page, "Known traveler number saved" appeared below the screen's edge: the number was saved, but the Save step's checks failed and the fallback agent took over. After-checks about what is shown, and the routine's final check, now scroll to look before the ladder goes on (no model call). On the same run, pressing Back to close the keyboard (an earlier attempt at this fix) also left the trip page in Compose, so a target under the keyboard is now scrolled out from under it instead.
+14. **Long rows were read from the model's 120-character view.** A status line padded with planted text pushed the gate and departure time past the clip, and the routine lost them. Elements keep their whole text beside the clipped label, and outputs are read from it.
 
 ## Not finished yet
 

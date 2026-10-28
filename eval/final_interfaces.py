@@ -88,7 +88,8 @@ async def cmd_interfaces(args: Any) -> None:
     s = Suite("interfaces", label="Interfaces, end to end")
     s.extra_prefixes = ["task-", "chat", "voice", "eval-", "photo"]  # the API names its own tasks; this run's window only
     head = code_state()["commit"]
-    checks: dict[str, Any] = {}
+    from final_common import load
+    checks: dict[str, Any] = dict((load("interfaces") or {}).get("checks", {}))  # parts not run this time keep their results
     parts = args.parts.split(",")
     for name in ("phase4", "approval_modes", "phase5"):
         if name not in parts:
