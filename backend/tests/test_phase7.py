@@ -278,6 +278,33 @@ def test_a_value_every_row_shares_an_id_for_is_read_in_the_row_the_input_names()
     assert extract_value(ex, menu([("Chips", "$2.30")]), {"menu_item_name": "Chips & Guacamole"}) is None  # not shown: missing
 
 
+def test_a_label_every_result_repeats_is_read_after_the_requested_result():
+    from routines.compiler import _extract_for
+    from routines.screens import screen_from_tree
+
+    def play(apps: list[tuple[str, str]], query: str):
+        els = [{"index": 0, "parent": None, "kind": "List", "class": "androidx.recyclerview.widget.RecyclerView", "scrollable": True,
+                "bounds": [0, 300, 1080, 2400]}]
+        for name, stars in apps:
+            y = 300 + 400 * (len(els) // 2)
+            els += [{"index": len(els), "parent": 0, "kind": "Button", "class": "android.view.View", "clickable": True, "in_list": True,
+                     "label": f"{name} · In-app purchases", "text": f"{name} · In-app purchases", "bounds": [0, y, 1080, y + 150]},
+                    {"index": len(els) + 1, "parent": 0, "kind": "Button", "class": "android.view.View", "clickable": True, "in_list": True,
+                     "label": f"Average rating {stars} stars", "text": f"Average rating {stars} stars", "bounds": [0, y + 160, 400, y + 260]}]
+        els.append({"index": len(els), "parent": None, "kind": "Button", "class": "android.view.View", "clickable": True, "label": query,
+                    "text": query, "bounds": [100, 80, 900, 200]})  # the search box, numbered after the list
+        for n, e in enumerate(els, 1):
+            e["number"] = n
+        return screen_from_tree({"package": "com.android.vending", "activity": "Search", "width": 1080, "height": 2400, "elements": els})
+    trace = play([("Pimsleur | Language Learning", "4.1"), ("Duolingo: Learn Languages", "4.7")], "Duolingo")
+    ex = _extract_for("star_rating", "Average rating", "4.7 stars", trace, {"app_name": "Duolingo"}, ["4.7 stars"])
+    assert ex is not None and ex.card == "{{app_name}}"
+    assert extract_value(ex, trace, {"app_name": "Duolingo"}) == "4.7 stars"  # not the sponsored result above it
+    other = play([("Sponsored Fitness", "3.2"), ("Spotify: Music and Podcasts", "4.4")], "Spotify")
+    assert extract_value(ex, other, {"app_name": "Spotify"}) == "4.4 stars"
+    assert extract_value(ex, other, {"app_name": "Duolingo"}) is None  # not among the results: missing, never another app's
+
+
 def test_a_price_leading_a_result_row_is_read_from_the_first_row_of_that_shape():
     from routines.compiler import _extract_for
     from routines.screens import screen_from_tree

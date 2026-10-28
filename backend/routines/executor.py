@@ -1052,6 +1052,16 @@ def _in_card(loc: Locator, card: str, screen: ScreenState) -> Element | None:
     return None
 
 
+def _after_card(card: str, near: str, screen: ScreenState) -> Element | None:
+    """The first element labelled `near` after the one that shows `card` among other words (a result, not the search box
+    that shows only the term)."""
+    want = norm(card)
+    shown = next((e for e in screen.numbered if want and want in norm(e.full_label or e.label) and norm(e.label) != want), None)
+    if shown is None:
+        return None
+    return next((e for e in screen.numbered if (e.number or 0) > (shown.number or 0) and norm(e.label).startswith(near)), None)
+
+
 def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str | None:
     """The value in an element: the recorded " · " part of its label if there are several ("Gate · B12" → B12),
     with the label in front of it ("Known traveler number: 98765432" → 98765432) and fixed text after it removed.
@@ -1085,8 +1095,15 @@ def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str 
             el = next((e for e in screen.numbered if (not loc.kind or e.kind == loc.kind) and norm(e.label) != norm(loc.text_has)
                        and contains_value(e.label, loc.text_has)), None)
     near = norm(spec.near) if spec.near else ""
+    if el is None and spec.card and loc is None and near:
+        el = _after_card(spec.card, near, screen)
+        if el is None:
+            return None  # the requested result isn't on screen: missing, and the ladder takes over
     if el is None and near:
-        el = next((e for e in screen.numbered if norm(e.label).startswith(near)), None)
+        named = [e for e in screen.numbered if norm(e.label).startswith(near)]
+        if spec.segment:  # the value is part N of a row: a row with that many parts, not a page title that only says the label
+            el = next((e for e in named if len(parts_of(e.full_label or e.label)) > spec.segment), None)
+        el = el or (named[0] if named else None)
         if el is not None and norm(el.label) == near and el.number and el.number < len(screen.numbered):
             # The label stands alone ("Seat", then "22F"): the value is the next element (its parts shift by one, as the
             # label is no longer the first part: "Boarding · 5:30 AM · Group 3" → "5:30 AM · Group 3").

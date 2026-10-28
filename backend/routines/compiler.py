@@ -343,6 +343,11 @@ def _before_typed(c: Check, step: int, typed_at: dict[str, int]) -> bool:
 _ON_OFF = {"on", "off", "enabled", "disabled", "true", "false", "yes", "no", "checked", "unchecked"}
 
 
+def _read_back(ex: Extract, screen: ScreenState, examples: dict[str, str]) -> str:
+    from routines.executor import extract_value  # the executor imports this module
+    return extract_value(ex, screen, examples) or ""
+
+
 def _switch_state(near: str | None, example: str, final: ScreenState) -> Extract | None:
     """An answer that is a switch's state ("Bluetooth is on"): read the on/off state of the switch labelled `near`."""
     if not near or norm(example) not in _ON_OFF:
@@ -498,7 +503,21 @@ def _extract_for(name: str, near: str, example: str, final: ScreenState, example
         loc = Locator(text=el.label, kind=el.kind)
     if loc is None and near_text is None:
         return None  # nothing to find it by on another run (no ID, no label, no input in it, no list shape)
+    if card is None and loc is None and near_text and sum(norm(e.label).startswith(norm(near_text)) for e in final.numbered) > 1:
+        card = _card_before(el, final, examples, near_text)
     return Extract(near=near_text, locator=loc, segment=segment, after=after_text, card=card)
+
+
+def _card_before(el: Element, screen: ScreenState, examples: dict[str, str], near: str) -> str | None:
+    """For a label every result repeats ("Average rating" on each app in Play's results): the input shown between the
+    previous such label and this one (the app's own name, "{{app_name}}"), so the value is read after that app, not the
+    sponsored one above it."""
+    prev = max((e.number or 0 for e in screen.numbered if (e.number or 0) < (el.number or 0) and norm(e.label).startswith(norm(near))), default=0)
+    for name, v in examples.items():
+        if v and any(prev < (e.number or 0) < (el.number or 0) and contains_value(e.label, v) and norm(e.label) != norm(v)
+                     for e in screen.numbered):
+            return "{{" + name + "}}"
+    return None
 
 
 def _card_of(el: Element, screen: ScreenState, examples: dict[str, str], near: str | None, data_values: list[str]) -> str | None:
@@ -686,6 +705,9 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             outputs.append(o.name)
             # A value recorded as a number ("190 calories", "$13.49", "2:05 PM") must be one at run time too.
             extract[o.name] = ex.model_copy(update={"expect_digits": not state and bool(re.match(r"^[$€£]?\d", o.example.strip()))})
+            if not state and not contains_value(got := _read_back(extract[o.name], final, examples), o.example):
+                # Read it back from the screen the agent answered from: a routine that reads something else there is wrong.
+                report.warnings.append(f"output {o.name!r} reads {got!r} on the run's own final screen, not {o.example!r}")
     question = bool(re.search(r"\?\s*$|^(what|how|when|where|which|who|is|are|do|does|did|can)\b", (run.get("goal") or "").strip(), re.I))
     if not extract and final is not None and question and answer:
         # A question answered from what the screen says rather than a value on it ("No events today" from "Nothing planned"),
