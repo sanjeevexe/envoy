@@ -102,7 +102,7 @@ class Device(Protocol):
 
 ### Envoy bridge (on every Android device)
 
-Built only if Phase 1 shows that waiting for the screen to settle, or setting text, is unreliable on real apps. Phase 0 measured a uiautomator2 tree read at 31 ms and a full observation at about 70 ms, so read speed is no longer a reason to build it. If built, it is a small Kotlin accessibility service that:
+Built only if Phase 1 shows that waiting for the screen to settle, or setting text, is unreliable on real apps. Phase 0 measured a uiautomator2 tree read at 31 ms and a full observation at about 70 ms, so read speed is no longer a reason to build it; and on a real phone (Phase 6, a Pixel 5 on Android 13) settling and set-text both held, so it is not built. If built, it is a small Kotlin accessibility service that:
 
 - **Reads the screen** in-process as JSON (bounds, resource ID, text, description, class, clickable, editable, password flag) in roughly tens of milliseconds, against about 31 ms through uiautomator2's server (Phase 0) and 0.5 to 1 second for `uiautomator dump`.
 - **Knows when the screen has settled,** because it receives accessibility events; no fixed sleeps.
@@ -893,11 +893,16 @@ The gate runs drove these changes:
 
 ## Phase 6 results
 
-Phase 6 is built and measured on emulators; its gate (a routine learned on the emulator runs on the real phone) waits for the loaned phone, which arrives Oct 28. Until then an emulator stood in for the phone, through the same code path a real phone uses (no gRPC; Envoy's own scrcpy client, the banner, the touch watcher, routing and asking first). Details are in `docs/phase-6-results.md`.
+Phase 6 was built and measured on emulators, and its gate (a routine learned on the emulator runs on the real phone) passed on a real phone on Oct 28: a Google Pixel 5 on Android 13, through the API, with every decision made on the iPhone. The phone also found six bugs the emulator stand-in couldn't; all are fixed. Details are in `docs/phase-6-results.md`.
 
 | Measure | Result |
 | --- | --- |
-| Gate, on the real phone | Waiting for the phone |
+| Gate, on the real phone | Passed on a Pixel 5 (Android 13): Envoy asked and you allowed it on the iPhone; the banner showed; `skylark_check_in_flight` v1, compiled on `envoy-test`, ran with no model call; you approved the check-in on the iPhone (4.8 s); SkyLark's state confirmed it; memory updated; 27 s end to end |
+| A touch, and a takeover, on the real phone | A touch paused the run before its next action, and Resume on the banner finished it; a takeover and hand back from the iPhone's live view, with an approval pending, finished with one approval |
+| scrcpy on the real phone | Starts in 0.6 s; tap to changed frame 65 ms; a screenshot from the stream 7.8 ms (screencap 358 ms) |
+| Live view of the real phone | On the Mac 9.1 fps, 5 ms per frame after capture; on the iPhone over the tailnet 27 to 39 ms per frame (target 150 ms) |
+| Settling and set-text on the real phone (the bridge question) | Set-text exact in 20 of 20 (accents, CJK, Cyrillic, emoji), the keyboard kept and the clipboard untouched; 0 of 20 taps in SkyLark changed after settling (5 of 30 in Settings changed a secondary line); the bridge is not built |
+| Routines on the real phone | The 6 Phase 2 routines 18 of 18 and all 10 core routines 30 of 30, on bookings they had never seen, with no model calls; the first pass found a typing bug (fixed below), 15 of 18 |
 | Routines on a smaller screen (720 by 1280, 320 dpi) | 18 of 18, no model calls (18 of 18 on the 1080 by 2400 control) |
 | Routines through the real-phone code path (stand-in) | 12 of 12, no model calls |
 | End to end through the API (stand-in) | Asked first, banner shown, the emulator-compiled check-in ran; a touch paused it before the next action; Resume on the phone finished it, with memory updated |
@@ -912,6 +917,13 @@ The runs drove these changes:
 - The touch watcher is checked before every action of the agent's: with only a 0.5 s loop, two routine steps ran after a touch.
 - Routines find targets below the fold and read outputs scrolled out of view without a model call.
 - A routine's picture of a drawn target is used only when the target doesn't depend on an input; otherwise it looks again.
+- The phone's video is converted as BT.601 when its colorspace label can't be (the Pixel's said YCgCo, so every frame failed and screenshots fell back to screencap).
+- A tap under the banner steps the banner aside: on the Pixel it covers the top bar, where many apps put their search box, and a tap on its Pause button paused the run.
+- A field Compose rebuilds while typing is looked up again (a stale node failed the known traveler step on the phone).
+- A run you took over or paused teaches the routine nothing, and pauses and takeovers are kept in the task's history (a takeover had put a wrong second tap on trial).
+- A request for an emulator that isn't running says so and names your phone.
+
+**Who uses which phone.** iPhone users use Envoy's emulators; Android users use an emulator or their own phone. The gate is the second path, not a requirement for everyone. The limits, plainly: you sign in to each app once on the emulator; apps that refuse emulators (Target's bot check, banking apps) need a real Android phone, so they are out of reach for someone with only an iPhone; the emulators run on a Mac today, with a cloud host later.
 
 ## Open questions
 
@@ -923,7 +935,7 @@ These are the answers that could change the design; most can be settled in Phase
 - [ ] **Limits:** maximum output tokens, and the minimum prompt length for caching.
 - [x] **Path into Muse:** Muse builds custom connectors itself when a user asks (reportedly as an MCP client in Meta's cloud), listed connectors go through a review on the Muse Connector Platform, and Meta AI Connectors is a waitlisted preview. Which, if any, can Envoy use during the hackathon? Answered in Phase 0: the custom-connector route works (see Path into Muse).
 - [x] **Real apps:** which shopping and food apps run on the emulator without blocking sign-in? Answered in Phase 0: Target, Starbucks, Chipotle and Amazon; DoorDash runs but its guest mode hangs; Uber Eats won't install.
-- [ ] **Android phone:** the IPaT loan arrives Wednesday, Oct 28; which Android version does it run (Android 15 changes notification access).
+- [x] **Android phone:** the IPaT loan arrives Wednesday, Oct 28; which Android version does it run (Android 15 changes notification access). Answered in Phase 6: a Google Pixel 5 on Android 13, so Android 15's notification limits don't apply to it (they weren't tested).
 - [x] **Sign-in codes on iPhone:** does a Shortcuts message automation forward codes while the phone is locked? Answered in Phase 5: yes, about 2 s after the message, once the shortcut has been run by hand to grant its network permission.
 - [ ] **Official rules:** limits on open-source code, required submission materials, demo video length.
 - [ ] **Apple account:** decided: the iPhone companion is a Home Screen web app, so no paid account is needed.

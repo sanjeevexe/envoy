@@ -53,14 +53,20 @@ uv run --project backend python scripts/make_shortcut.py              # the "Sen
 
 On the Mac, open the **Devices** tab: scan the QR code with the iPhone, add the page to the Home Screen (Share → Add to Home Screen), open Envoy from there and type the 6-digit pairing code, then turn on notifications. Approvals arrive as pushes; the Phone tab is the live phone with touch and the iPhone keyboard; tap the mic in Chat to dictate (Muse Voice Transcribe), check the words, then send; turn on Photos in Devices, then share a screenshot with **Send to Envoy** or pick one in Chat. `eval/run_phase5.py` checks push, photos, voice and the live view with scripts; `eval/run_photos.py` measures screenshot extraction. For Muse (route 2), `scripts/start_muse_test.sh` opens a public tunnel to `/mcp` only.
 
+## Which phone Envoy uses
+
+iPhone users use Envoy's emulators; Android users use an emulator or their own phone. You sign in to each app once on the emulator. Apps that refuse emulators (Target's bot check, banking apps) need a real Android phone, so they are out of reach with only an iPhone. The emulators run on a Mac today (a cloud host later).
+
 ## Use your own Android phone
 
-Plug the phone in by USB (or pair it for wireless debugging) and allow USB debugging on it. Envoy lists it beside the emulators (the phone picker in the app, Settings › Phones). Tasks stay on an emulator unless you say "… on my phone", set the app to run on your phone, or the app refuses emulators; Envoy then asks first ("Use your Android phone?", on the Mac and as a push on the iPhone). While it works there, a banner on the phone says so; touching the phone, pressing Pause on the banner, or another app coming to the front hands the phone to you, and Resume (on the phone or in the app) gives it back. The live view and takeover work on the phone through scrcpy; sign-in screens are black there, so you sign in on the phone itself.
+Tested on a Google Pixel 5 (Android 13) over USB: the Phase 6 gate passed there (`docs/phase-6-results.md`). Plug the phone in by USB (or pair it for wireless debugging) and allow USB debugging on it. Envoy lists it beside the emulators (the phone picker in the app, Settings › Phones). Tasks stay on an emulator unless you say "… on my phone", set the app to run on your phone, or the app refuses emulators; Envoy then asks first ("Use your Android phone?", on the Mac and as a push on the iPhone). While it works there, a banner on the phone says so; touching the phone, pressing Pause on the banner, or another app coming to the front hands the phone to you, and Resume (on the phone or in the app) gives it back. The live view and takeover work on the phone through scrcpy; sign-in screens are black there, so you sign in on the phone itself.
 
 ```bash
 (cd android/banner && ./gradlew :app:assembleDebug)                    # the banner app Envoy installs on your phone
 uv run --project backend python eval/run_phase6.py portability --device phone --no-control   # SkyLark routines on the phone
 uv run --project backend python eval/run_phase6.py stream --device phone                     # scrcpy frames and input
+uv run --project backend python eval/phone_check.py device                                   # reading, settling and set-text on the phone
+uv run --project backend python eval/phone_gate.py prepare                                   # the gate: SkyLark set up on the phone; then ask from the iPhone
 uv run --project backend python eval/run_phase6.py vision                                    # grounding vs SAM 3.1 on drawn targets
 ```
 

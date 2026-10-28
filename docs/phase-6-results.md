@@ -49,8 +49,8 @@ Google Pixel 5 (`redfin`), Android 13 (API 33, security patch Aug 2022), 1080×2
 | Reading the screen | Tree read 157 ms, full observation 245 ms (medians; the emulator: 31 and 70 ms). |
 | **Settling** (the bridge question) | 50 taps, 0.9 to 1.4 s to settled. In SkyLark, 0 of 20 changed after settling. In the phone's Settings, 5 of 30 changed a secondary line after settling (a row's summary recomputed on Apps 4 times, a footer once on Battery); battery levels ticking are counted apart. The expected content was on the settled screen in all 50. |
 | **Set-text** (the bridge question) | **20 of 20 exact** ("Café Ñandú 東京 Привет 😀") in a Compose field (SkyLark, 0.75 s) and an Android view (Settings' search, 0.49 s); Gboard stayed the keyboard; nothing touched the clipboard (no "Copied" preview, contents unchanged); Enter submitted the search. |
-| Portability (`run_phase6.py portability --device phone`) | PORTABILITY_RESULT |
-| All 10 core routines (`run_final.py sizes --device phone`) | SIZES_RESULT |
+| Portability (`run_phase6.py portability --device phone`) | **18 of 18, no model calls** (the 6 Phase 2 routines on 3 bookings each they had never seen; median 9.6 s), after the stale-field fix (finding 6 below). The first pass was 15 of 18: the 3 misses were all add_ktn's typing step (`portability-phone.json`, then `portability-phone-fixed.json`). |
+| All 10 core routines (`run_final.py sizes --device phone`) | **30 of 30, all with no model call** (each of the 10 core routines, compiled on `envoy-test`, on 3 bookings it had never seen; median 6.6 s). The same suite: `envoy-test` 30 of 30, `envoy-small` 30, `envoy-large` 29 (`eval/results/final/sizes.json`). |
 
 **The bridge: not needed.** It was to be built only if settling or setting text proved unreliable on the phone; both held, and you agreed. Reading is slower than on the emulator (157 ms against 31 ms per tree) but it is one read per step.
 
@@ -61,7 +61,7 @@ Google Pixel 5 (`redfin`), Android 13 (API 33, security patch Aug 2022), 1080×2
 3. **A request without "on my phone" failed with a developer's message.** It went, as designed, to the emulator, which wasn't running, and the task said "envoy-test is not running (scripts/start_emulator.sh envoy-test)". It now says the emulator isn't running and that "on my phone" uses your Pixel 5.
 4. **Pauses and takeovers weren't in the task's history.** The status changed and nothing was written, so a pause showed only as a 7 s gap between steps. Each pause, resume, takeover and hand back is now an entry.
 5. **A takeover taught the routine a wrong step.** The check-in's approval was pending while you took over; after the hand back you approved, but the tap didn't take effect (the same screen, the same button: the cause is unknown; it didn't happen again in later runs). The routine's repair tapped again, which asked you a second, identical time, and the repair became version 2 on trial: "an extra screen appeared; a second tap on Confirm check-in". Version 2 was rejected by hand, and now a run you took over or paused teaches the routine nothing (no patch, no trial decided); an approval asked again for a control you already approved says why on the card; and every tap on the phone is logged (point, input path, stream age) in `logs/phone_taps.jsonl` so a lost tap can be traced.
-6. **Back-to-back attempts met a finished check-in.** Not a product bug: SkyLark is reset between evaluation runs, and your retries right after a finished run found Chicago already checked in, so you stopped them. The gate's script now resets SkyLark a few seconds after any run ends.
+6. **Typing failed on a field Compose rebuilt.** The routines' first pass on the phone failed add_ktn's typing step 3 of 3 times: uiautomator2 found the focused known traveler field, but Compose rebuilt the node (the keyboard opening) before it was read (`StaleObjectException`). The set-text measurement had used another field and passed 20 of 20. A stale node is now looked up again; the rerun is in the table above.
 
 ### Who uses which phone
 
@@ -108,6 +108,8 @@ For the design doc (applied in both copies):
 2. **Asking first, the banner and pausing are built** as the design described; pausing is driven by `getevent` (physical input only) and checked before every action.
 3. **Screens with no tree use SAM 3.1 then grounding**, with `tap_point` naming its target; SAM is kept (it measurably beats grounding in combination).
 4. **Routines handle drawn screens** with visual locators (description + picture), and **smaller screens** with scroll-to-reveal and scrolled outputs.
+5. **The Envoy bridge is not built.** On the real phone, settling and set-text held (the design's condition for building it), and you agreed.
+6. **From the real phone:** frames whose colorspace label can't be converted are converted as BT.601; a tap under the banner steps the banner aside; a field Compose rebuilds while typing is looked up again; a run you took over or paused teaches the routine nothing, and pauses and takeovers are kept in the task's history; a request for an emulator that isn't running says so and names your phone.
 
 ## Next
 

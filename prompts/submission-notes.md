@@ -72,5 +72,6 @@ The submission was taken out of Phase 7 on Oct 27; you'll run it as its own step
 - Final numbers and where they live (`eval/results/final/report.md`, the charts):
 - AndroidWorld (from the `androidworld` branch, `docs/androidworld-results.md`):
 - Claims we can make, and claims we can't:
+  - **Which phone (your framing, Oct 28):** iPhone users use Envoy's emulators; Android users use an emulator or their own phone. The real-phone gate shows the second path; it isn't needed by everyone. Say the limits plainly: you sign in to each app once on the emulator; apps that refuse emulators (Target's bot check, banking apps) need a real Android phone, so iPhone-only users can't use them; the emulators run on a Mac today (cloud later).
 - Demo-worthy moments the evaluation found:
-- Phase 6 on the real phone (done, or still open):
+- Phase 6 on the real phone (done, or still open): **done Oct 28** on a Google Pixel 5 (Android 13, IPaT loan), through the API with every decision on the iPhone: asked first, banner, the emulator-compiled check-in routine ran, approved from the iPhone, SkyLark's state confirmed it, memory updated (27 s). Also a touch that pauses a run and a takeover from the iPhone. Live view of the phone on the iPhone over the tailnet 27 to 39 ms per frame. The Envoy bridge isn't built (settling and set-text held on the phone). Details: `docs/phase-6-results.md`. Demo-worthy: the banner on the real phone, "Envoy paused · Resume" after a touch.
