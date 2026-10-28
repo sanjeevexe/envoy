@@ -112,8 +112,8 @@ function Phones() {
   if (!info) return null;
   const toggle = async (app: string, on: boolean) => {
     const next = on ? [...info.phone_apps, app] : info.phone_apps.filter((a) => a !== app);
-    const r = await post<{ phone_apps: string[] }>("/api/settings/phones", { phone_apps: next });
-    setInfo({ ...info, phone_apps: r.phone_apps });
+    const r = await post<{ phone_apps: string[]; learned?: PhoneInfo["learned"] }>("/api/settings/phones", { phone_apps: next });
+    setInfo({ ...info, phone_apps: r.phone_apps, learned: r.learned ?? info.learned });
   };
   return (
     <section>
@@ -129,7 +129,7 @@ function Phones() {
         )) : "No Android phone connected (USB, or wireless debugging)."}
       </div>
       <div className="mt-2 divide-y divide-stone-100 rounded-xl bg-white shadow-sm">
-        {info.apps.map((app) => (
+        {[...info.apps].sort((a, b) => (info.names?.[a] ?? a).localeCompare(info.names?.[b] ?? b)).map((app) => (
           <label key={app} className="flex items-center justify-between gap-3 px-3 py-2">
             <span className="min-w-0 truncate text-stone-700">
               {info.names?.[app] ?? app}
