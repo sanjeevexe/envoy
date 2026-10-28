@@ -1,0 +1,44 @@
+{
+ "name": "settings_get_android_version",
+ "intent": "Get the Android version this phone is running from Settings",
+ "description": "Open Settings, navigate to the About device page, scroll to the Android version entry, and report the version shown.",
+ "patterns": [
+  "What Android version is this phone running?",
+  "Check the Android version in Settings",
+  "Find my phone's Android version"
+ ],
+ "inputs": [],
+ "steps": [
+  {
+   "step": 1,
+   "id": "scroll_to_about_device",
+   "intent": "Scroll down in Settings until the About device entry is visible",
+   "target_fixed_text": "About emulated device",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "open_about_device",
+   "intent": "Tap the About device entry to open the device information page",
+   "target_fixed_text": "About emulated device",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "scroll_to_android_version",
+   "intent": "Scroll down on the About device page to reveal the Android version entry",
+   "target_fixed_text": null,
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "android_version",
+   "near": "Android version",
+   "example": "15"
+  }
+ ],
+ "data_values": [
+  "sdk_gphone64_arm64"
+ ]
+}

@@ -1,9 +1,9 @@
 {
- "time": "2026-10-28T01:02:11",
+ "time": "2026-10-28T03:52:52",
  "summary": {
   "passed": true,
   "steps_ok": "10/10",
-  "duration_s": 119.5
+  "duration_s": 114.8
  },
  "steps": [
   {
@@ -16,34 +16,34 @@
   {
    "step": "live view",
    "ok": true,
-   "t": 5.9,
+   "t": 6.0,
    "device": "1080x2400",
-   "frames": 1,
-   "latency_ms": 45,
+   "frames": 2,
+   "latency_ms": 46,
    "input_refused_without_takeover": true
   },
   {
    "step": "task started",
    "ok": true,
-   "t": 6.0,
-   "task": "task-1028-010018-484a"
+   "t": 6.1,
+   "task": "task-1028-035103-5f47"
   },
   {
    "step": "asked to take over",
    "ok": true,
-   "t": 18.1,
+   "t": 13.3,
    "reason": "sign-in needed: password field on screen"
   },
   {
    "step": "took over, signed in, handed back",
    "ok": true,
-   "t": 20.6,
+   "t": 15.9,
    "status_during_takeover": "taken_over"
   },
   {
    "step": "approval requested and approved by the person",
    "ok": true,
-   "t": 23.5,
+   "t": 18.9,
    "description": "tap \"Confirm check-in\" in com.skylark.air (routine skylark_check_in_flight v1)",
    "screenshot": true,
    "opening_decided_nothing": true,
@@ -52,7 +52,7 @@
   {
    "step": "check-in done in the app",
    "ok": true,
-   "t": 35.9,
+   "t": 28.3,
    "status": "done",
    "result": "seat: 14C; gate: B12; boarding time: 5:30 AM; boarding group: Group 3; flight: SL 482",
    "routine": "skylark_check_in_flight",
@@ -65,15 +65,15 @@
   {
    "step": "memory updated",
    "ok": true,
-   "t": 35.9,
-   "memory_step": "memory updated: 4 new, 11 same",
+   "t": 28.3,
+   "memory_step": "memory updated: 10 same, 4 new, 1 replaced",
    "memory_events": 0,
    "notes_excerpt": "## Flight: SL 482 \u00b7 Fri, Oct 30, 2026  [[Trip Chicago \u00b7 Fri, Oct 30, 2026]]\n- Airline: SkyLark Air \u2014 email from SkyLark Air, 27 days ago (Oct 1)\n- Number: SL 482 \u2014 SkyLark app, just now (also email from SkyLark Air, 27 days ago (Oct 1))\n- Date: Fri, Oct 30, 2026 \u2014 SkyLark app, just now (also email from SkyLark Air, 27 days ago (Oct 1))\n- From: Atlanta (ATL) \u2014 SkyLark app, just now (also email from"
   },
   {
    "step": "MCP: tools, run_task and get_task",
    "ok": true,
-   "t": 104.3,
+   "t": 101.7,
    "tools": [
     "get_task",
     "list_routines",
@@ -89,7 +89,7 @@
   {
    "step": "chat answers from memory",
    "ok": true,
-   "t": 109.5,
+   "t": 104.8,
    "reply": "Gate B12, from the SkyLark app just now."
   }
  ]

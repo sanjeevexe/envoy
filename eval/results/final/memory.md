@@ -1,4 +1,4 @@
-# Memory: extraction, entity matching and stale facts
+# memory
 
 Run 1028003834 on `5c3d716` with uncommitted changes, 2026-10-28 04:38 UTC, 4 min, standard tier. 20 model calls, $0.145 at standard prices ($0.145 billed).
 

@@ -1,0 +1,55 @@
+{
+ "name": "youtube_search_first_video",
+ "intent": "Search YouTube for a requested term and report the first video in the results",
+ "description": "Opens Search in YouTube, runs the requested search, scrolls past any sponsored result, and returns the title of the first real video in the results.",
+ "patterns": [
+  "search YouTube for a topic",
+  "find the first YouTube video for a query",
+  "look up a video on YouTube",
+  "what is the first result on YouTube"
+ ],
+ "inputs": [
+  {
+   "name": "search_query",
+   "type": "text",
+   "description": "The term to search for on YouTube.",
+   "from_memory": null,
+   "example": "lofi hip hop"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "tap_search",
+   "intent": "Tap Search to open search",
+   "target_fixed_text": "Search",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "tap_search_suggestion",
+   "intent": "Tap the {{search_query}} suggestion to run the search",
+   "target_fixed_text": null,
+   "choice_input": "search_query"
+  },
+  {
+   "step": 3,
+   "id": "scroll_to_reveal_first_video",
+   "intent": "Scroll down to reveal the first real video result past the sponsored result",
+   "target_fixed_text": null,
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "first_video_title",
+   "near": "results",
+   "example": "lofi hip hop radio 📚 beats to relax/study to"
+  }
+ ],
+ "data_values": [
+  "Lofi Girl",
+  "18 thousand watching",
+  "Live"
+ ]
+}
