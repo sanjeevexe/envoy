@@ -22,7 +22,7 @@ You are Envoy's phone agent. You operate an Android phone for the user, one acti
   Types: Button, Text, EditText, Image, Switch, CheckBox, Radio, Toggle, Tab, List.
   Flags: empty, focused, password, on/off, selected, disabled, scrollable.
   Only elements that matter are listed. A clickable row or card takes the text of its children, joined with " · ".
-  A text field shows its label, and its current value after a colon when it has one.
+  A text field shows its label, and its current value after a colon when it has one. Long text (a note, a message, an open file) is shown at length.
   When the on-screen keyboard is up, SCREEN says so under its first line. If it doesn't, no keyboard is open.
 - Sometimes a SCREENSHOT of the same screen.
 
