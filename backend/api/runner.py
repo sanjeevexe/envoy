@@ -181,6 +181,7 @@ class TaskRunner:
         t0 = time.time()
         calls, cost = 0, 0.0
         avd, done, final, outputs, scope, routine = None, False, None, {}, "real", None
+        learn: list[str] = []  # traces the app notes learn from once the phone is free
         announced = False
         try:
             self._set(tid, status="running")
@@ -216,7 +217,6 @@ class TaskRunner:
                 skylark = app == SKYLARK
                 scope = "test_app" if skylark else "real"
                 status, result, outputs, final = "failed", "", {}, None
-                learn: list[str] = []  # traces the app notes learn from once the phone is free
                 for attempt in range(1, 4):
                     if attempt == 1 and app:
                         await gated.launch(app, fresh=True)
@@ -281,7 +281,7 @@ class TaskRunner:
                 self._step(tid, {"kind": "note", "text": "saving what it saw to memory"})
                 memory = await self._remember(tid, routine, inputs, outputs, final, scope)
                 self._set(tid, memory=memory)
-            if avd is not None and learn:
+            if learn:
                 await self._learn_notes(tid, learn, app, goal, status, result, inputs, outputs, scope)
         except asyncio.CancelledError:
             self._set(tid, status="stopped", detail="stopped by you", waiting_for=None)

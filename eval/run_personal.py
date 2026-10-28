@@ -310,7 +310,12 @@ class Bench:
         rec["repaired"] = any(s.get("rung") == 4 or "patched version" in (s.get("text") or "") for t in fam for s in self.lean(t["id"]))
         rec["app_notes"] = [s for t in fam for s in self.lean(t["id"]) if s.get("kind") == "app_notes"]
         rec["approvals"] = [a for a in self.approvals if a["task_id"] in {t["id"] for t in fam}]
-        rec["approvals_asked"] = sum(len(self.ctx.tasks.approvals(task_id=t["id"])) for t in fam)
+        # Asked = put to the user (the driver decided it, or it was still waiting), not settled by the approval rules.
+        rec["approvals_asked"] = sum(1 for t in fam for a in self.ctx.tasks.approvals(task_id=t["id"])
+                                     if not a.get("decided_by") or str(a["decided_by"]).startswith("benchmark"))
+        # Settled by the approval rules without asking ("done without asking (your request)"): not a question to the user.
+        rec["auto_approved"] = [s.get("text") for t in fam for s in self.lean(t["id"]) if s.get("kind") == "approval"
+                                and "without asking" in (s.get("text") or "")]
         for t in fam:  # the app closed and the phone home after each task part
             if t.get("device") in SERIALS:
                 adb(SERIALS[t["device"]], "shell", "am", "force-stop", t.get("app") or "")
@@ -319,9 +324,18 @@ class Bench:
 
     async def run(self, task: dict[str, Any]) -> dict[str, Any]:
         self.policy = task.get("approvals", "decline")
+        # The user's approval setting for this task (Settings › Approvals); back to the default afterwards.
+        self.ctx.tasks.set_setting("approval_rules", {"default": task.get("approval_mode", "unless_requested"), "apps": {}, "routines": {}})
+        try:
+            return await self._run(task)
+        finally:
+            self.ctx.tasks.set_setting("approval_rules", {"default": "unless_requested", "apps": {}, "routines": {}})
+
+    async def _run(self, task: dict[str, Any]) -> dict[str, Any]:
         await self.seed(task)
         t0 = time.time()
-        res: dict[str, Any] = {"id": task["id"], "category": task["category"], "request": task["request"], "started": t0}
+        res: dict[str, Any] = {"id": task["id"], "category": task["category"], "request": task["request"], "started": t0,
+                               "approval_mode": task.get("approval_mode", "unless_requested")}
         if task["path"] == "trigger":
             res.update(await self.alert(task))
         elif task.get("runs", 1) > 1:
@@ -382,8 +396,8 @@ class Bench:
                 await asyncio.to_thread(self.skylark().set_gate, task["change"]["code"], task["change"]["gate"])
                 t_set = time.time()
                 got = None
-                while time.time() - t_set < 200 and got is None:
-                    got = next((g for g in svc.received if g["payload"]["kind"] == "change"), None) if before == 0 else None
+                while time.time() - t_set < 200 and got is None:  # the first change push after the gate moved
+                    got = next((g for g in [g for g in svc.received if g["payload"]["kind"] == "change"][before:]), None)
                     await asyncio.sleep(0.2)
                 out["latency_s"] = round(time.time() - t_set, 1) if got else None
                 await ended(n_runs + 2)  # one more run after the one that saw it: no repeat push
@@ -420,7 +434,8 @@ def grade(task: dict[str, Any], res: dict[str, Any]) -> tuple[bool, str]:
         asked = res.get("approvals_asked", 0) > 0
         ok, why = state_ok(res.get("skylark_state") or {}, exp["state"])
         if not asked:
-            return False, "no approval was asked" + ("" if ok else f"; and {why}")
+            auto = "; settled by the approval rules: " + "; ".join(res["auto_approved"]) if res.get("auto_approved") else ""
+            return False, "no approval was asked" + auto + ("" if ok else f"; and {why}")
         if any(a.get("approved") for a in res.get("approvals", [])):
             return False, "an approval was granted (the driver declines)"
         return ok, ("asked, declined, nothing changed" if ok else f"asked and declined, but {why}")
@@ -483,6 +498,7 @@ async def main_async(args: argparse.Namespace) -> int:
     from run_crossapp import library
 
     facts, tasks = load()
+    all_tasks = list(tasks)  # the report always lists the whole suite; --tasks only picks what this invocation runs
     if args.tasks:
         wanted = set(args.tasks)
         tasks = [t for t in tasks if t["id"] in wanted]
@@ -516,23 +532,33 @@ async def main_async(args: argparse.Namespace) -> int:
     for p in phones:
         await ctx.pool.device(p)
     t_all = time.time()
-    spent0 = summarize_costs(cost_entries(0, time.time() + 1))["usd"] if args.resume else 0.0
+
+    def totals() -> dict[str, Any]:
+        """This run's spend: the sum of its tasks' own cost windows (other runs in the same log don't count)."""
+        calls, usd, by_model = 0, 0.0, {}
+        for r in results.values():
+            c = r.get("cost") or {}
+            calls += c.get("calls", 0)
+            usd += c.get("usd", 0.0)
+            for m, n in (c.get("by_model") or {}).items():
+                by_model[m] = by_model.get(m, 0) + n
+        return {"calls": calls, "usd": round(usd, 5), "by_model": by_model}
 
     def save() -> None:
-        allc = summarize_costs(cost_entries(prev.get("meta", {}).get("started", t_all) if args.resume else t_all, time.time() + 1))
+        allc = totals()
         meta = {"label": args.label, "date": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"), "started": prev.get("meta", {}).get("started", t_all),
                 "profile": active_profile(), "notes": os.environ.get("ENVOY_APP_NOTES", "on"), "phones": phones, "phones_note": args.phones_note,
                 "calls": allc["calls"], "usd": allc["usd"], "by_model": allc["by_model"],
                 "branch": subprocess.run(["git", "branch", "--show-current"], capture_output=True, text=True, cwd=REPO).stdout.strip(),
                 "commit": subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True, cwd=REPO).stdout.strip()}
         (out / "results.json").write_text(json.dumps({"meta": meta, "results": results}, indent=1, default=str, ensure_ascii=False))
-        (out / "README.md").write_text(report(results, tasks, meta))
+        (out / "README.md").write_text(report(results, all_tasks, meta))
 
     try:
         for task in tasks:
-            if task["id"] in results and results[task["id"]].get("passed") is not None:
+            if task["id"] in results and results[task["id"]].get("passed") is not None and not (args.rerun and task["id"] in args.tasks):
                 continue
-            spent = summarize_costs(cost_entries(t_all, time.time() + 1))["usd"] + spent0
+            spent = totals()["usd"]
             if spent >= args.budget:
                 print(f"budget ${args.budget} spent (${spent:.3f}): stopping before {task['id']}", flush=True)
                 break
@@ -578,6 +604,7 @@ def main() -> int:
     ap.add_argument("--port", type=int, default=8731)
     ap.add_argument("--budget", type=float, default=12.0, help="stop before a task once this many dollars are spent")
     ap.add_argument("--resume", action="store_true")
+    ap.add_argument("--rerun", action="store_true", help="with --resume and --tasks: run those tasks again even if graded")
     ap.add_argument("--profile", choices=["spark", "hybrid", "wonder"])
     ap.add_argument("--notes", choices=["on", "off"])
     ap.add_argument("--phones-note", default="")

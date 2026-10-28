@@ -178,6 +178,14 @@ class RoutineExecutor:
         self.config = config or ExecConfig()
         self.app_notes = app_notes  # memory's AppNotes: a repair (and the fallback agent) reads the app's notes
 
+    def _app_notes(self, package: str) -> Any:
+        if self.app_notes is None:
+            return None
+        try:
+            return self.app_notes.for_prompt(package)
+        except Exception:  # noqa: BLE001 - notes are a hint; a broken one never stops a repair
+            return None
+
     # ---- observing --------------------------------------------------------------------------
 
     async def _observe(self) -> ScreenState:
@@ -867,7 +875,7 @@ class RoutineExecutor:
             if len([a for a in sr.repairs if a.get("model")]) >= cfg.max_repairs_step or ctx.repairs_run >= cfg.max_repairs_run:
                 return "gave_up"
             remaining = "\n".join(f"- {render_str(x.intent, ctx.inputs)}" for x in ctx.routine.steps[idx + 1:])
-            notes = self.app_notes.for_prompt(s.package or ctx.routine.app) if self.app_notes is not None else None
+            notes = self._app_notes(s.package or ctx.routine.app)
             content = [{"type": "input_text", "text": repair_input(render_str(ctx.routine.intent, ctx.inputs) or "",
                                                                   self._step_text(step, ctx.inputs), remaining, "\n".join(tried), s.compact,
                                                                   app_notes=notes.text if notes else "")}]

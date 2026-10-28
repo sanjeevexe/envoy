@@ -84,6 +84,7 @@ def notes_used(trace_dir: str) -> list[str]:
 
 async def run_task(device: Any, sky: Any, notes: Any, phase: str, pas: str, task: tuple[str, str, str, str], learn: bool) -> dict[str, Any]:
     from agent.loop import AgentRunner, RunConfig
+    from devices.types import Action
     from policy.approvals import ScriptedApprover
     from testapps.skylark import default_fixtures
     tid, app, goal, check = task
@@ -101,10 +102,13 @@ async def run_task(device: Any, sky: Any, notes: Any, phase: str, pas: str, task
            "model_calls": res.model_calls, "cost_usd": round(res.cost_usd, 5), "duration_s": res.duration_s, "trace_dir": res.trace_dir,
            "notes_used": notes_used(res.trace_dir), "approvals": res.approvals}
     if learn:
-        rep = await notes.learn(res.trace_dir, app=app, goal=goal, status=res.status, result=res.result, task_id=run_id, data_scope=scope,
-                                contributor=False)
-        row["learned"] = {"applied": rep.applied, "dropped": rep.dropped, "cost_usd": rep.cost_usd}
-    await device.act(__import__("devices.types", fromlist=["Action"]).Action(kind="home"))
+        try:
+            rep = await notes.learn(res.trace_dir, app=app, goal=goal, status=res.status, result=res.result, task_id=run_id, data_scope=scope,
+                                    contributor=False)
+            row["learned"] = {"proposed": rep.proposed, "applied": rep.applied, "dropped": rep.dropped, "cost_usd": rep.cost_usd}
+        except Exception as e:  # noqa: BLE001 - recorded; the measurement goes on
+            row["learned"] = {"error": f"{type(e).__name__}: {e}"[:300], "applied": [], "dropped": [], "cost_usd": 0.0}
+    await device.act(Action(kind="home"))
     print(f"{pas:7s} {tid:16s} {'OK ' if ok else 'BAD'} {res.status:15s} steps {res.steps:2d} calls {res.model_calls:2d} "
           f"notes {len(row['notes_used'])} ${res.cost_usd:.3f}: {(res.result or '')[:70]}", flush=True)
     return row
@@ -115,6 +119,7 @@ def summary(rows: list[dict[str, Any]], pas: str) -> dict[str, Any]:
     n = len(rs) or 1
     return {"runs": len(rs), "ok": sum(r["ok"] for r in rs), "steps_mean": round(sum(r["steps"] for r in rs) / n, 2),
             "calls_mean": round(sum(r["model_calls"] for r in rs) / n, 2), "cost_usd": round(sum(r["cost_usd"] for r in rs), 4),
+            "note_writing_usd": round(sum((r.get("learned") or {}).get("cost_usd", 0.0) for r in rs), 4),
             "seconds_mean": round(sum(r["duration_s"] for r in rs) / n, 1)}
 
 

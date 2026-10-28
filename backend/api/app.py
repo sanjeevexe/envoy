@@ -227,7 +227,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     def state(request: Request) -> dict[str, Any]:
         me = caller(request)
         return {"profile": ctx.profile, "devices": pool.status(), "tasks": tasks.list(20), "approvals": tasks.approvals("pending"),
-                "routines": len(routines.active()), "memory": {"entities": len(memory.entities())}, "public_url": public,
+                "routines": len(routines.active()), "memory": {"entities": sum(1 for e in memory.entities() if e["type"] not in NOT_ABOUT_YOU)}, "public_url": public,
                 "me": {"kind": me.kind, "name": me.name} if me else None, "push_key": pusher.keys.public_key}
 
     @app.post("/api/tasks", dependencies=[Depends(session)])

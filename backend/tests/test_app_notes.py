@@ -275,8 +275,28 @@ def test_ui_words_from_the_answer_are_not_mistaken_for_run_data():
     assert personal_reason("The Chicago trip is listed first.", set(), names) is not None
 
 
-def test_one_app_entity_per_app():
+def test_notes_make_no_app_entity_in_your_memory():
     store, notes = notes_store()
     notes.add(SKYLARK, "The gate is on the trip detail screen, under Flight.", REF)
-    notes.add(SKYLARK, "Past trips are under Trip history in the Profile tab.", REF)
-    assert len(store.entities("App")) == 1
+    assert store.entities("App") == [] and notes.list(SKYLARK)[0].app == SKYLARK
+
+
+def test_different_facts_on_one_screen_are_not_merged():
+    store, notes = notes_store()
+    notes.apply(SKYLARK, [{"op": "add", "text": "The gate is on the trip detail screen, under Flight."}], REF)
+    rep = notes.apply(SKYLARK, [{"op": "add", "text": "The seat is on the trip detail screen, under Flight."}], REF)
+    assert rep.applied[0]["op"] == "add" and len(notes.list(SKYLARK)) == 2
+
+
+def test_only_identifying_memory_values_are_forbidden():
+    store, notes = notes_store()
+    f = store.create_entity("Flight", "SL 482")
+    for a, v in (("number", "SL 482"), ("status", "On time"), ("airline", "SkyLark Air"), ("to", "ORD")):
+        store.observe(f, a, v, source=None)
+    t = store.create_entity("Trip", "Chicago")
+    store.observe(t, "destination", "Chicago", source=None)
+    store.observe(t, "checked_in", "true", source=None)
+    bad = notes.forbidden()
+    assert {"SL 482", "Chicago", "ORD"} <= bad and not {"On time", "SkyLark Air", "true"} & bad
+    rep = notes.apply(SKYLARK, [{"op": "add", "text": "Flights that are on time show a green label on the trip card."}], REF)
+    assert rep.applied and not rep.dropped

@@ -3,8 +3,8 @@
 "SkyLark: the gate is on the trip detail screen, under Flight." "DoorDash: the first result can be an ad labeled
 Sponsored." A note is about the app, never the user: no names, bookings, orders, addresses or account details.
 
-Notes live in the memory graph as `App note` entities linked `about` → the app's `App` entity, so they use memory's own
-provenance and replacement:
+Notes live in the memory graph as `App note` entities (their `app` fact is the package), so they use memory's own
+provenance and replacement. No `App` entity is made for them: it would be a node in your memory graph with nothing about you.
 - every run that saw a note is a `task_trace` source (task, step, screenshot, outcome) on the note's `text` fact, so
   confirmations = the fact's sources, last confirmed = its `observed_at`, first seen = the entity's creation;
 - an updated note is a new `text` value (the old one stays as history); retiring sets `status` to `retired`.
@@ -39,9 +39,11 @@ MAX_OPS = 3
 PROMPT_TOP = 6
 PROMPT_CHARS = 600
 MAX_TEXT = 160
-DUPLICATE_OVERLAP = 0.6
-# Entity types whose values are the user's own data: never allowed in a note.
-PERSONAL_TYPES = ("Person", "Trip", "Flight", "Reservation", "Order", "Item", "Place", "Account", "Loyalty program", "Subscription", "Event")
+DUPLICATE_OVERLAP = 0.75  # Jaccard on content words: a paraphrase is ~0.8; "the gate is…" vs "the seat is…" on one screen ~0.67
+# Values memory holds that identify the user or their bookings, orders and places: never allowed in a note. (Statuses such
+# as "On time", flags and the airline's own name are left out: a note about the app may well say "on time".)
+PERSONAL_ATTRIBUTES = {"name", "first_name", "last_name", "email", "phone", "username", "known_traveler_number", "confirmation_code",
+                       "member_number", "order_number", "number", "destination", "origin", "from", "to", "address", "city", "title", "location"}
 
 _STOP = {"the", "a", "an", "is", "are", "to", "of", "on", "in", "and", "or", "for", "it", "its", "be", "can", "must", "before", "after",
          "with", "from", "that", "this", "as", "at", "by", "when", "then", "there", "first", "screen", "app", "shows", "show", "tap"}
@@ -97,7 +99,7 @@ def _words(text: str) -> set[str]:
 
 def overlap(a: str, b: str) -> float:
     wa, wb = _words(a), _words(b)
-    return len(wa & wb) / max(1, min(len(wa), len(wb))) if wa and wb else 0.0
+    return len(wa & wb) / len(wa | wb) if wa and wb else 0.0
 
 
 def personal_reason(text: str, forbidden: set[str] | None = None, exact: set[str] | None = None) -> str | None:
@@ -149,13 +151,6 @@ class AppNotes:
 
     # ---- the app and its notes -------------------------------------------------------------------
 
-    def _app_entity(self, app: str, create: bool = True) -> str | None:
-        eid = self.store.find_by_key("App", "package=" + normalize_key_value("package", app))  # the store's key format
-        if eid is None and create:
-            eid = self.store.create_entity("App", name=app)
-            self.store.observe(eid, "package", app, source=None, confidence=1.0, author="envoy")  # registers the key
-        return eid
-
     def _note(self, eid: str) -> AppNote | None:
         e = self.store.entity(eid)
         if e is None or e["type"] != NOTE_TYPE:
@@ -199,8 +194,6 @@ class AppNotes:
         self.store.observe(eid, "app", app, source=src, confidence=1.0, author="envoy")
         self.store.observe(eid, "text", text, source=src, confidence=0.8, author="envoy")
         self.store.observe(eid, "status", "active", source=src, confidence=1.0, author="envoy")
-        if (aid := self._app_entity(app)) is not None:
-            self.store.link(eid, "about", aid, src)
         self.store.commit()
         return eid
 
@@ -259,11 +252,11 @@ class AppNotes:
     def forbidden(self) -> set[str]:
         """Every value memory holds about the user: none may appear in a note."""
         out: set[str] = set()
-        for t in PERSONAL_TYPES:
-            for e in self.store.entities(t):
-                for f in self.store.current_facts(e["id"]):
-                    if len(f["value"] or "") >= 3:
-                        out.add(f["value"])
+        rows = self.store.db.execute("select f.attribute, f.value from facts f join entities e on e.id = f.entity "
+                                     "where e.type != ? and f.retired_at is null and f.conflict = 0", (NOTE_TYPE,)).fetchall()
+        for r in rows:
+            if r["attribute"] in PERSONAL_ATTRIBUTES and len(r["value"] or "") >= 3:
+                out.add(r["value"])
         return out
 
     def apply(self, app: str, ops: list[dict[str, Any]], ref: dict[str, Any], forbidden: set[str] | None = None,
