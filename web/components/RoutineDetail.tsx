@@ -159,9 +159,9 @@ function StepCard({ s, n, bare }: { s: StepV; n?: number; bare?: boolean }) {
   return (
     <div className="min-w-0">
       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-        {n != null && <span className="text-xs tabular-nums text-stone-400">{n}</span>}
-        {!bare && <span className="font-medium [overflow-wrap:anywhere]"><Slots text={s.intent} /></span>}
-        <span className={`rounded-full px-2 py-0.5 text-[11px] ${risk.tone}`} title={risk.tip}>{s.risk}<span className="sr-only">: {risk.tip}</span></span>
+        {n != null && <span className="text-xs tabular-nums text-stone-400">{n}<span className="sr-only">.</span></span>}{" "}
+        {!bare && <span className="font-medium [overflow-wrap:anywhere]"><Slots text={s.intent} /></span>}{" "}
+        <span className={`rounded-full px-2 py-0.5 text-[11px] ${risk.tone}`} title={risk.tip}>{s.risk}</span>{" "}
         {s.optional && <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[11px] text-amber-900 ring-1 ring-amber-200" title="Skipped when its screen doesn't appear">optional</span>}
         {(s.changed_in ?? []).map((c) => (
           <span key={c.version} className="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] text-emerald-800 ring-1 ring-emerald-200">
@@ -228,8 +228,8 @@ function VersionItem({ v, d }: { v: Version; d: Detail }) {
     <li className="relative pb-6 pl-6 last:pb-0">
       <span aria-hidden className={`absolute -left-[9px] top-1 h-4 w-4 rounded-full border-2 border-[#f7f7f5] ${fate.dot}`} />
       <h4 className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-        <span className="text-base font-semibold">v{v.version}</span>
-        <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${fate.tone}`}>{fate.label(v)}</span>
+        <span className="text-base font-semibold">v{v.version}</span>{" "}
+        <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${fate.tone}`}>{fate.label(v)}</span>{" "}
         <span className="text-xs text-stone-500">{when(v.created)}{v.origin === "repaired" && v.parent != null ? ` · from v${v.parent}` : ""}</span>
       </h4>
       <div className="mt-1.5 space-y-2 rounded-xl bg-white p-3 text-sm shadow-sm">
