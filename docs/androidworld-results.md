@@ -113,6 +113,8 @@ Each change is general (no app, task or AndroidWorld knowledge), has its own com
 | 9 | Routines: a swipe compiles as a swipe again, and a launch as a launch | routines | A bug on `main` since `ca50dab`: the compiler turned every swipe into a launch and dropped every launch step |
 | 10 | ~~The step says what should happen before it picks the action~~ (reverted) | B | Reordered the schema's fields. It could not work: see 10b |
 | 10b | The step's fields are named in the order the model should write them; an action's kind comes first | A, B | See below |
+| 11 | What the model keeps from a screen comes back on later steps | D, B | The step gains a first field, `0_remember`: what on this screen the task will need later (text to copy, values to compare or add up, what is still to do), word for word. Kept items come back on every later step as REMEMBERED (data, not instructions), oldest dropped past 6,000 characters. Chosen from round 1 and 2 traces: re-reading loops |
+| 4b | The keyboard counts as open when the navigation bar shows its buttons | B | Fix 4's keyboard line never appeared in round 1 or 2: on this emulator the screen dump leaves out the keyboard's own window. The navigation bar's keyboard buttons (`android:id/input_method_nav_*`) are there while it is up: after 78 of 87 typing steps, against 6 of 138 backs |
 
 **10b: Meta's decoder writes JSON keys in alphabetical order.** I found this while checking fix 10 in the first dev run: the JSON still began with `"action"`. A two-field probe confirmed it, 6 of 6 on both tiers: a schema listing `zebra_first, middle, apple_last` (with descriptions saying "write this first") always came back as `apple_last, middle, zebra_first`. For Envoy that meant:
 - The model wrote `action` before `reason` and `expected_result`, so its reasons were written after the fact. That is where the "placeholder" reasons come from: the action was already out.
@@ -130,27 +132,36 @@ Each round runs the 58 dev tasks once, on the Contributor tier, as the dev work 
 | Standard baseline | `main` | 9/58 | | | $2.33 / $2.33 | 36 s | 1,169 |
 | Round 1 (`4c3c989`) | fixes 1–9 | **27/58** | +16 −2, p = 0.0013 | | $0.20 / $2.74 | 54 s | 1,188 |
 | Round 2 (`598a6cd`) | round 1 + 10b | 25/58 | +15 −3, p = 0.0075 | +2 −4, p = 0.69 | $0.22 / $2.87 | 57 s | 1,149 |
+| Round 3 (`a80b976`) | round 2 + 11, 4b | **29/58** | +17 −1, p = 0.0001 | +6 −2, p = 0.29 | $0.21 / $2.85 | 52 s | 1,118 |
 
-Every success in rounds 1 and 2 ended with Envoy's own done: no task was scored a success after running out of steps.
+Every success in rounds 1–3 ended with Envoy's own done: no task was scored a success after running out of steps.
 
 **What each change did** (`fix_effects.py`, counted from Envoy's full traces of the 58 dev episodes; JSON in each stage's `fix_effects_dev.json`):
 
-| # | Measure | Contributor baseline | Standard baseline | Round 1 | Round 2 |
-| --- | --- | ---: | ---: | ---: | ---: |
-| 1 | Launches that failed | 21 | 13 | 0 | 0 |
-| 1 | Launches by an app's name (all opened it) | — | — | 105 | 101 |
-| 1 | Decisions made on the home screen or app drawer | 539 (50%) | 442 (42%) | 68 (6%) | 60 (6%) |
-| 2 | Home-screen decisions with a ticking timer on screen | 403 | 226 | 0 | 0 |
-| 3 | Expected results that repeat an earlier one word for word | 397 | 337 | 137 | 97 |
-| 4 | Reasons calling the action a placeholder | 69 | 39 | 0 | 0 |
-| 4 | Actions asked again for that | — | — | 3 | 0 |
-| 5 | A second done accepted after the plan's check rejected the first | 1 | 4 | 9 (all 9 scored 1) | 12 (all 12 scored 1) |
-| 10b | Back, as a share of all actions | 42% | 37% | 13% | 8% |
+| # | Measure | Contributor baseline | Standard baseline | Round 1 | Round 2 | Round 3 |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| 1 | Launches that failed | 21 | 13 | 0 | 0 | 0 |
+| 1 | Launches by an app's name (all opened it) | — | — | 105 | 101 | 67 |
+| 1 | Decisions made on the home screen or app drawer | 539 (50%) | 442 (42%) | 68 (6%) | 60 (6%) | 58 (6%) |
+| 2 | Home-screen decisions with a ticking timer on screen | 403 | 226 | 0 | 0 | 0 |
+| 3 | Expected results that repeat an earlier one word for word | 397 | 337 | 137 | 97 | 84 |
+| 4 | Reasons calling the action a placeholder | 69 | 39 | 0 | 0 | 0 |
+| 4 | Actions asked again for that | — | — | 3 | 0 | 0 |
+| 5 | A second done accepted after the plan's check rejected the first | 1 | 4 | 9 (all 9 scored 1) | 12 (all 12 scored 1) | 9 (all 9 scored 1) |
+| 10b | Back, as a share of all actions | 42% | 37% | 13% | 8% | 5% |
+| 4b | Screens shown with the keyboard line | 0 | 0 | 0 | 0 | 186 |
+| 11 | Steps that kept something for later (episodes) | — | — | — | — | 507 (45 of 58) |
 
 Round 1 is the large step, and it is mostly one mechanism removed. In the baselines half of all decisions were made on the home screen, where a wrong package name failed to launch, and the model, writing `{"type": …` first, could only go back. Fix 1 took launch failures to zero; fix 5's second done turned 9 correct answers that the plan's check would have refused into successes. The two tasks round 1 lost (RetroPlayingQueue, TurnOnWifiAndOpenApp) ran out of steps in long in-app navigation. Neither shows a mechanism the fixes introduced.
 
 Round 2 shows that 10b does what it was built to do, without a score change I can measure. Back fell from 13% to 8% of actions, and echoed expectations from 137 to 97. The score moved by two tasks the other way (25 against 27; 2 gained, 4 lost, p = 0.69), inside the noise. In the four losses Envoy repeated a check it had already made, the same way it did when it won them in round 1. In SimpleCalendarNextMeetingWithPerson it opened the same event and went back 4 times in both rounds. Round 1 answered on its last step (`October 27 2023 15:15`); round 2 ran out. I keep 10b because it fixes a real defect in how the step is written, but I don't claim a score effect for it.
 
 **What still fails on dev after round 2** (33 tasks): 30 ran out of steps, 2 stopped with `failed`, 1 answered wrong. In 22 of the 33 Envoy made the same tap or launch on the same screen 3 or more times, led by MarkorMergeNotes (34 times), RecipeAddMultipleRecipesFromMarkor (20) and RetroPlayingQueue (15). Some of that repetition is the task's own (adding several items with the same button). The longest runs are something else: Envoy went back to re-read what it had already read. In RecipeAddMultipleRecipesFromMarkor, round 1 launched Markor 39 times in 60 steps, re-reading recipes.txt each time it reached Broccoli. That points to round 3: a working memory the model writes to itself.
+
+Round 3 adds that memory (11) and the keyboard fix (4b): **29/58**, the best dev score, +6 −2 against round 2 (p = 0.29, so within noise on its own) and +17 −1 against the Contributor baseline. The model kept something in 507 of 995 steps, in 45 of the 58 episodes, without spending steps on it (it is a field of the step, and output tokens fell slightly: 272k against 277k). The clearest effect is on relaunching: launches by name fell from 101 to 67. In RecipeAddMultipleRecipesFromMarkor, rounds 1 and 2 launched Markor 39 and 40 times. Round 3 read recipes.txt once, kept the recipes (`Recipe: Thai Peanut Noodle Salad description: A quick and easy meal…`) and entered the first one complete from memory. It went back once for the second recipe's ingredients, lost count of which recipes it had already added, and ran out of steps entering the third (10 launches). It still failed, but on a later problem. VlcCreateTwoPlaylists, never solved before, was solved.
+
+The keyboard line now appears (186 screens), and on the screens I checked it is right. 169 of the 186 follow a tap or typing. The rest follow scrolls inside a form being filled, where the keyboard stays up, and one screenshot shows it: uiautomator2's own slim input bar ("Clear Text · Done · Switch IME"). Neither loss traces to the round's changes. In SystemBluetoothTurnOn Envoy took wrong turns in Settings and kept nothing. In MarkorCreateNoteFromClipboard its first done came at step 12 of 14; the plan's check rejected it, and the budget ran out before a second. By the rule fixed before the result (`prompts/androidworld-plan.md`), the final set is the branch after round 3.
+
+Round 3's episodes record two commits: `a80b976` for the first ones and `70ed7a8` (the plan's decision rule, committed during the run) for the rest. Their `backend/` is identical.
 
 <!-- Improvements, routines, leaderboard comparison and proposals follow once measured. -->

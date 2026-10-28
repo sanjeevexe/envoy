@@ -1,0 +1,80 @@
+{
+ "task": "OsmAndTrack",
+ "seed": 1249745677,
+ "goal": "Save a track with waypoints Schönberg, Liechtenstein, Triesen, Liechtenstein, Bendern, Liechtenstein in the OsmAnd maps app in the same order as listed.",
+ "score": 0.0,
+ "aw_run_time_s": 530.5,
+ "aw_episode_length": 120,
+ "agent": "envoy",
+ "finished": "2026-10-28 09:39:01.371678",
+ "envoy": {
+  "run_id": "aw-fixes3-dev-1028-093012-a6cf",
+  "goal": "Save a track with waypoints Schönberg, Liechtenstein, Triesen, Liechtenstein, Bendern, Liechtenstein in the OsmAnd maps app in the same order as listed.",
+  "max_steps": 120,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 120 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 101,
+  "iterations": 120,
+  "looks": 19,
+  "screenshots_sent": 41,
+  "replans": 2,
+  "stuck_recoveries": 2,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 90,
+   "look": 19,
+   "type": 5,
+   "back": 5
+  },
+  "model_calls": 123,
+  "input_tokens": 388896,
+  "cached_tokens": 282955,
+  "output_tokens": 27707,
+  "reasoning_tokens": 17677,
+  "cost_usd": 0.016701,
+  "cost_at_standard_usd": 0.292624,
+  "duration_s": 524.33,
+  "model_s": 394.78,
+  "device_s": 129.55,
+  "connect_s": 0.9,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "OsmAnd",
+   "subgoals": [
+    "Open Points list in Plan a route to manage waypoints",
+    "Search and add Schönberg, Liechtenstein as first waypoint",
+    "Add Triesen, Liechtenstein then Bendern, Liechtenstein in order",
+    "Save track via Options menu"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "saved track containing waypoints Schönberg, Triesen, Bendern in order",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-fixes3-dev-1028-093012-a6cf",
+  "envoy_commit": "70ed7a8470867f86dd6a548d0fdce2fa4977073e",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes3-dev/traces/OsmAndTrack__s1249745677.jsonl.gz",
+  "wall_s": 526.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.9
+  }
+ }
+}

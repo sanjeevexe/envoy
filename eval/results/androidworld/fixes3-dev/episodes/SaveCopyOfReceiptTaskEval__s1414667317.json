@@ -1,0 +1,80 @@
+{
+ "task": "SaveCopyOfReceiptTaskEval",
+ "seed": 1414667317,
+ "goal": "In Simple Gallery Pro, copy receipt_2023_01_22_sure_frog.jpg in DCIM and save a copy with the same name in Download",
+ "score": 0.0,
+ "aw_run_time_s": 71.8,
+ "aw_episode_length": 16,
+ "agent": "envoy",
+ "finished": "2026-10-28 10:03:29.781713",
+ "envoy": {
+  "run_id": "aw-fixes3-dev-1028-100220-55ab",
+  "goal": "In Simple Gallery Pro, copy receipt_2023_01_22_sure_frog.jpg in DCIM and save a copy with the same name in Download",
+  "max_steps": 16,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 16 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 15,
+  "iterations": 16,
+  "looks": 1,
+  "screenshots_sent": 2,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 11,
+   "look": 1,
+   "long_press": 1,
+   "type": 2
+  },
+  "model_calls": 17,
+  "input_tokens": 47112,
+  "cached_tokens": 27965,
+  "output_tokens": 3015,
+  "reasoning_tokens": 1809,
+  "cost_usd": 0.002574,
+  "cost_at_standard_usd": 0.040942,
+  "duration_s": 64.87,
+  "model_s": 44.45,
+  "device_s": 20.42,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Gallery",
+   "subgoals": [
+    "Open Gallery app",
+    "Open DCIM folder",
+    "Copy receipt_2023_01_22_sure_frog.jpg",
+    "Go to Download folder and paste copy with same name"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "receipt_2023_01_22_sure_frog.jpg",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-fixes3-dev-1028-100220-55ab",
+  "envoy_commit": "70ed7a8470867f86dd6a548d0fdce2fa4977073e",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes3-dev/traces/SaveCopyOfReceiptTaskEval__s1414667317.jsonl.gz",
+  "wall_s": 67.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

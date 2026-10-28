@@ -1,0 +1,79 @@
+{
+ "task": "MarkorDeleteAllNotes",
+ "seed": 13104511,
+ "goal": "Delete all my notes in Markor.",
+ "score": 0.0,
+ "aw_run_time_s": 77.9,
+ "aw_episode_length": 14,
+ "agent": "envoy",
+ "finished": "2026-10-28 09:21:35.714629",
+ "envoy": {
+  "run_id": "aw-fixes3-dev-1028-092019-3552",
+  "goal": "Delete all my notes in Markor.",
+  "max_steps": 14,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 14 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 13,
+  "iterations": 14,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 6,
+   "back": 5,
+   "long_press": 1,
+   "look": 1
+  },
+  "model_calls": 16,
+  "input_tokens": 44178,
+  "cached_tokens": 32912,
+  "output_tokens": 4545,
+  "reasoning_tokens": 3404,
+  "cost_usd": 0.002101,
+  "cost_at_standard_usd": 0.038336,
+  "duration_s": 71.27,
+  "model_s": 55.11,
+  "device_s": 16.16,
+  "connect_s": 0.91,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Select all note files in /storage/emulated/0/Documents via More options or long-press",
+    "Tap Delete to delete the selected notes",
+    "Confirm deletion and verify Documents folder is empty"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "remaining notes in Documents folder should be empty with no .md files listed",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-fixes3-dev-1028-092019-3552",
+  "envoy_commit": "70ed7a8470867f86dd6a548d0fdce2fa4977073e",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes3-dev/traces/MarkorDeleteAllNotes__s13104511.jsonl.gz",
+  "wall_s": 73.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

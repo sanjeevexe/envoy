@@ -1,0 +1,83 @@
+{
+ "task": "OsmAndFavorite",
+ "seed": 2436087218,
+ "goal": "Add a favorite location marker for 47.1303814, 9.5930117 in the OsmAnd maps app.",
+ "score": 1.0,
+ "aw_run_time_s": 57.8,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 09:30:10.089268",
+ "envoy": {
+  "run_id": "aw-fixes3-dev-1028-092914-1688",
+  "goal": "Add a favorite location marker for 47.1303814, 9.5930117 in the OsmAnd maps app.",
+  "max_steps": 13,
+  "config": {},
+  "status": "done",
+  "result": "Added favorite location marker for 47.1303814, 9.5930117 in OsmAnd maps app. Verified in My Places > FAVORITES as 'Favorite · 47.1303814, 9.5930117'.",
+  "done": true,
+  "answer": "Added favorite location marker for 47.1303814, 9.5930117 in OsmAnd maps app. Verified in My Places > FAVORITES as 'Favorite · 47.1303814, 9.5930117'.",
+  "steps_device": 11,
+  "iterations": 12,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 8,
+   "type": 2,
+   "done": 1
+  },
+  "model_calls": 13,
+  "input_tokens": 36849,
+  "cached_tokens": 28349,
+  "output_tokens": 2407,
+  "reasoning_tokens": 1341,
+  "cost_usd": 0.001388,
+  "cost_at_standard_usd": 0.025107,
+  "duration_s": 51.21,
+  "model_s": 33.25,
+  "device_s": 17.96,
+  "connect_s": 0.91,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "OsmAnd",
+   "subgoals": [
+    "Open the OsmAnd maps app",
+    "Navigate to coordinates 47.1303814, 9.5930117",
+    "Add the location as a favorite marker",
+    "Save and confirm the favorite"
+   ],
+   "success_check": {
+    "kind": "element_present",
+    "value": "Favorites",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "element 'Favorites' present"
+  },
+  "trace_dir": "data/runs/aw-fixes3-dev-1028-092914-1688",
+  "envoy_commit": "70ed7a8470867f86dd6a548d0fdce2fa4977073e",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes3-dev/traces/OsmAndFavorite__s2436087218.jsonl.gz",
+  "wall_s": 53.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

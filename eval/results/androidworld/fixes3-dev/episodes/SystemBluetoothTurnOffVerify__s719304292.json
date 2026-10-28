@@ -1,0 +1,82 @@
+{
+ "task": "SystemBluetoothTurnOffVerify",
+ "seed": 719304292,
+ "goal": "Turn bluetooth off.",
+ "score": 1.0,
+ "aw_run_time_s": 42.4,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 10:17:42.168121",
+ "envoy": {
+  "run_id": "aw-fixes3-dev-1028-101701-b6ff",
+  "goal": "Turn bluetooth off.",
+  "max_steps": 10,
+  "config": {},
+  "status": "done_unverified",
+  "result": "Bluetooth is turned off",
+  "done": true,
+  "answer": "Bluetooth is turned off",
+  "steps_device": 7,
+  "iterations": 9,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 6,
+   "look": 1,
+   "done": 1
+  },
+  "model_calls": 10,
+  "input_tokens": 24930,
+  "cached_tokens": 20970,
+  "output_tokens": 1936,
+  "reasoning_tokens": 1331,
+  "cost_usd": 0.000825,
+  "cost_at_standard_usd": 0.016323,
+  "duration_s": 36.55,
+  "model_s": 25.83,
+  "device_s": 10.72,
+  "connect_s": 0.9,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Settings",
+   "subgoals": [
+    "Open Settings",
+    "Open Bluetooth settings",
+    "Set Bluetooth switch to Off"
+   ],
+   "success_check": {
+    "kind": "field_equals",
+    "value": "Off",
+    "field_hint": "Bluetooth"
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": false,
+   "detail": "field 'Bluetooth' not found"
+  },
+  "trace_dir": "data/runs/aw-fixes3-dev-1028-101701-b6ff",
+  "envoy_commit": "70ed7a8470867f86dd6a548d0fdce2fa4977073e",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes3-dev/traces/SystemBluetoothTurnOffVerify__s719304292.jsonl.gz",
+  "wall_s": 39.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}
