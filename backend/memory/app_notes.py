@@ -150,12 +150,10 @@ class AppNotes:
     # ---- the app and its notes -------------------------------------------------------------------
 
     def _app_entity(self, app: str, create: bool = True) -> str | None:
-        key = normalize_key_value("package", app)
-        eid = self.store.find_by_key("App", key)
+        eid = self.store.find_by_key("App", "package=" + normalize_key_value("package", app))  # the store's key format
         if eid is None and create:
             eid = self.store.create_entity("App", name=app)
-            self.store.observe(eid, "package", app, source=None, confidence=1.0, author="envoy")
-            self.store.add_key(eid, "App", key)
+            self.store.observe(eid, "package", app, source=None, confidence=1.0, author="envoy")  # registers the key
         return eid
 
     def _note(self, eid: str) -> AppNote | None:

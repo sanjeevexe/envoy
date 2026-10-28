@@ -273,3 +273,10 @@ def test_ui_words_from_the_answer_are_not_mistaken_for_run_data():
     assert names == {"Chicago"}
     assert personal_reason("Tapping a trip opens details with the Check in button and the flight status.", set(), names) is None
     assert personal_reason("The Chicago trip is listed first.", set(), names) is not None
+
+
+def test_one_app_entity_per_app():
+    store, notes = notes_store()
+    notes.add(SKYLARK, "The gate is on the trip detail screen, under Flight.", REF)
+    notes.add(SKYLARK, "Past trips are under Trip history in the Profile tab.", REF)
+    assert len(store.entities("App")) == 1
