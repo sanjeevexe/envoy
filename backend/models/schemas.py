@@ -114,9 +114,12 @@ AgentAction = Annotated[
 class StepOutput(_Strict):
     """What the step model returns each step."""
 
+    # Written in this order: what should happen comes before the action. With the action first, the model committed to
+    # one and reasoned only afterwards (AndroidWorld: reason "placeholder", action back, then expected_result "Actually
+    # should scroll. But we need JSON: action scroll").
     reason: str = Field(description="One short sentence: why this action")
-    action: AgentAction
     expected_result: str = Field(description="What the screen should show after the action, checkable by code")
+    action: AgentAction
     risk: Literal["read", "reversible", "irreversible"] = Field(
         description="read: look/scroll/open; reversible: fill a field, add to cart; irreversible: pay, order, submit, send, confirm, cancel, delete"
     )

@@ -210,3 +210,10 @@ def test_stuck_recoveries_start_afresh_after_progress(tmp_path, monkeypatch):
     res = asyncio.run(AgentRunner(Moving(), model, ScriptedApprover(True), RunConfig(max_steps=30, data_scope="test_app"))
                       .run("Open Gmail", task_id="st", memory=""))
     assert res.status != "failed"
+
+
+def test_the_step_says_what_should_happen_before_the_action():
+    from models.schemas import StepOutputListed, strict_json_schema
+
+    for schema in (StepOutput, StepOutputListed):
+        assert list(strict_json_schema(schema)["properties"]) == ["reason", "expected_result", "action", "risk"]
