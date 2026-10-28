@@ -38,6 +38,7 @@ HISTORY_STEPS = 5
 # AndroidWorld such a back left the app or threw away a form: it is asked again instead of carried out.
 _PLACEHOLDER = re.compile(r"placeholder|schema requires|(required by|comply with|satisfy) (the )?schema|incorrect but|"
                           r"wrong action|this is wrong|\bmistake\b|^\W*\w?\W*$|^one short sentence", re.I)
+MAX_REMEMBERED = 6000  # characters of what the model kept from earlier screens (the oldest go first)
 PROGRESS_STEPS = 3  # changed screens in a row after which earlier stuck recoveries no longer count
 
 
@@ -165,6 +166,7 @@ class AgentRunner:
         out = RunResult(task_id=task_id, goal=goal, status="error", result="", trace_dir=str(trace.dir))
         started = time.time()
         history: list[str] = []
+        remembered: list[str] = []  # what the model kept from screens it has left (its own words, from app data)
         feedback = ""
         want_screenshot = self.config.screenshots == "always"
         rejections = 0
@@ -304,7 +306,8 @@ class AgentRunner:
                 content = [{"type": "input_text", "text": step_input(goal, screen.compact, plan=plan_text,
                                                                       history="\n".join(history[-HISTORY_STEPS:]),
                                                                       memory=memory, feedback=feedback, visited=visited_text(),
-                                                                      today=today, app_notes=notes_text)}]
+                                                                      today=today, remembered="\n".join(f"- {r}" for r in remembered),
+                                                                      app_notes=notes_text)}]
                 if png:
                     content.append(image_part(png))
                 t_model = time.perf_counter()
@@ -331,6 +334,11 @@ class AgentRunner:
                     account(res)
                     decision = res.parsed  # type: ignore[assignment]
                 model_ms = (time.perf_counter() - t_model) * 1000
+                keep = decision.remember.strip()
+                if keep and keep not in remembered:
+                    remembered.append(keep)
+                    while sum(map(len, remembered)) > MAX_REMEMBERED and len(remembered) > 1:
+                        remembered.pop(0)
                 feedback, want_screenshot = "", self.config.screenshots == "always"
                 record: dict[str, Any] = {
                     "step": step, "kind": "action", "screen_before": screen_record(screen),
