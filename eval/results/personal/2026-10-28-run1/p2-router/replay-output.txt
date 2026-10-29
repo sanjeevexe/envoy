@@ -1,0 +1,24 @@
+Add a checked bag to my Chicago trip.        fix=off right=task        wrong 1/10  {'task': 9, 'reply': 1}
+      reply: Sorry, I don't have a way to add a checked bag to your Chicago trip in the SkyLark app.
+Add a checked bag to my Chicago trip.        fix=on  right=task        wrong 0/10  {'task': 10}
+Which seat am I in on my Denver flight?      fix=off right=memory|task wrong 0/5  {'memory': 5}
+Which seat am I in on my Denver flight?      fix=on  right=memory|task wrong 0/5  {'memory': 5}
+Turn on Wi-Fi.                               fix=off right=task        wrong 0/5  {'task': 5}
+Turn on Wi-Fi.                               fix=on  right=task        wrong 0/5  {'task': 5}
+What can you do?                             fix=off right=reply       wrong 0/5  {'reply': 5}
+What can you do?                             fix=on  right=reply       wrong 0/5  {'reply': 5}
+cost $0.152
+Add a checked bag to my Chicago trip.        fix=off right=task        wrong 5/30  {'task': 25, 'reply': 5}
+      reply: I can't add a checked bag to your Chicago trip — I don't have a routine for that in the SkyLark app.
+      reply: I can't add a checked bag to your Chicago trip — I don't have that action available in the SkyLark app.
+      reply: I can't add a checked bag to your Chicago trip — I don't have a way to do that in the SkyLark app.
+      reply: I can't add a checked bag to your Chicago trip — I don't have a routine for that in the SkyLark app.
+      reply: I can't add a checked bag to your Chicago trip - I don't have a routine for that in the SkyLark app.
+Add a checked bag to my Chicago trip.        fix=on  right=task        wrong 0/30  {'task': 30}
+Which seat am I in on my Denver flight?      fix=off right=memory|task wrong 0/15  {'memory': 15}
+Which seat am I in on my Denver flight?      fix=on  right=memory|task wrong 0/15  {'memory': 15}
+Turn on Wi-Fi.                               fix=off right=task        wrong 0/15  {'task': 15}
+Turn on Wi-Fi.                               fix=on  right=task        wrong 0/15  {'task': 15}
+What can you do?                             fix=off right=reply       wrong 0/15  {'reply': 15}
+What can you do?                             fix=on  right=reply       wrong 0/15  {'reply': 15}
+cost $0.423
