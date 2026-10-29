@@ -192,6 +192,9 @@ class TaskRunner:
             scope = "test_app" if (app or app_for(goal, self._learned_names())) == SKYLARK else "real"
             m = await RoutineMatcher(self.routines, self.adapter, data_scope=scope).match(goal, notes_for(self.memory, goal), task_id=f"{tid}-match")
             calls += m.model_calls
+            if getattr(m, "ambiguous", None):
+                self._step(tid, {"kind": "note", "text": f"routines {' and '.join(m.ambiguous)} both fit and the request doesn't say "
+                                 "which: the agent does it instead (name what you want back, e.g. the price, to use a routine)"})
             if m.routine:
                 routine, inputs = m.routine, {**m.inputs, **inputs}
         if routine is None:

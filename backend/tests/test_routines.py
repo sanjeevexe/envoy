@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import shutil
 from pathlib import Path
 
 import pytest
@@ -336,3 +337,20 @@ def test_identical_list_rows_are_told_apart_by_their_slot():
     loc = Locator(resource_id="store_list_item", kind="Button", in_list=True, position=(0.5, 0.225))
     assert locators.locate(loc, s).element.label == "Chelsea 23rd and 8th"
     assert not locators.locate(Locator(resource_id="store_list_item", kind="Button", in_list=True), s).ok  # no slot: still ambiguous
+
+
+def test_a_swipe_compiles_as_a_swipe_and_a_launch_as_a_launch(tmp_path):
+    # The swipe branch once took the launch branch's place: swipes compiled as launches, launches were dropped.
+    trace = tmp_path / "t"
+    shutil.copytree(TRACE, trace)
+    recs = [json.loads(line) for line in (trace / "steps.jsonl").read_text().splitlines()]
+    for r in recs:
+        if r.get("kind") == "action" and r["step"] in (1, 2):
+            r["target"] = None
+            r["device_action"].update({"element": None, **({"kind": "launch", "package": "SkyLark"} if r["step"] == 1 else
+                                                          {"kind": "swipe", "x": 540, "y": 1800, "x2": 540, "y2": 600})})
+    (trace / "steps.jsonl").write_text("\n".join(json.dumps(r) for r in recs) + "\n")
+    spec = CompiledRoutine.model_validate_json((trace / "spec.json").read_text())
+    r, report = asyncio.run(compile_trace(trace, memory="Known traveler number: 55501234", spec=spec))
+    assert [(s.action.kind, s.action.package) for s in r.steps[:2]] == [("launch", "com.skylark.air"), ("swipe", None)]
+    assert not any("not supported" in w for w in report.warnings)

@@ -47,6 +47,7 @@ from routines import locators
 from routines.compiler import bind_inputs, chk_generalize, generalize_locator, is_ad
 from routines.model import Check, Extract, Locator, Routine, Step, StepAction, has_slot, render, render_str
 from routines.screens import body, contains_value, norm, parts_of, short_id, usable_id
+from routines import screen_read
 from routines.visual import match_crop
 
 RUNG_NAMES = {0: "none", 1: "wait and retry", 2: "relaxed match", 3: "pop-up handler", 4: "local repair", 5: "full agent", 6: "ask the user"}
@@ -226,7 +227,7 @@ class RoutineExecutor:
         if step.action.kind not in ("tap", "long_press", "type") or step.action.target is None or step.action.target.visual:
             return None  # a drawn target (no node in the tree) is found by looking, when the step acts
         th = locators.RELAXED if relaxed else locators.STRICT
-        return locators.locate(step.action.target, screen, inputs, threshold=th)
+        return list_choice(step.action.target, screen, inputs, th)
 
     @staticmethod
     def _next_required(ctx: "_Ctx", idx: int) -> Step | None:
@@ -293,7 +294,7 @@ class RoutineExecutor:
                 ok, screen = True, seen  # the proof is on the page, past the edge of the screen (a smaller screen, a banner above)
             if not ok:
                 return self._finish(ctx, "failed", "done-check failed: " + "; ".join(o.detail for o in outs if not o.passed))
-            missing_out = [n for n in routine.outputs if not out.outputs.get(n)]
+            missing_out = [n for n in routine.outputs if not out.outputs.get(n) and not self._screen_only(routine, n)]
             if missing_out:  # content can load after the last check passes (search results): keep reading for a while
                 specs = {n: e for st in routine.steps for n, e in (st.extract or {}).items()}
                 deadline = time.perf_counter() + self.config.post_timeout_s
@@ -302,14 +303,15 @@ class RoutineExecutor:
                     screen = await self._observe()
                     read = False
                     for n in missing_out:
-                        if n in specs:
-                            out.outputs[n] = extract_value(specs[n], screen, ctx.inputs)
+                        if n in specs and not specs[n].from_screenshot:
+                            out.outputs[n] = extract_value(specs[n], screen, ctx.inputs, specs)
                             read = read or bool(out.outputs[n])
                     if read:  # evidence, as for outputs read by a step
                         ctx.trace.save_tree(len(out.steps) + 1, "outputs_late", screen)
-                    missing_out = [n for n in routine.outputs if not out.outputs.get(n)]
+                    missing_out = [n for n in routine.outputs if not out.outputs.get(n) and not self._screen_only(routine, n)]
             if missing_out:  # on a shorter screen an output can be scrolled away (Phase 6): look up the list, then down
                 missing_out = await self._read_scrolled(ctx, specs, missing_out)
+            missing_out += [n for n in routine.outputs if not out.outputs.get(n) and self._screen_only(routine, n)]
             if missing_out:
                 return self._finish(ctx, "failed", f"outputs not found: {', '.join(missing_out)}")
             return self._finish(ctx, "done", "all steps and checks passed")
@@ -395,7 +397,7 @@ class RoutineExecutor:
         last_bounds = None
         popups = 0
         tried_relaxed = False
-        tried_reveal = False
+        tried_reveal = tried_search = False
         failed_once = False  # rung 1 counts only when a check actually failed first (not the two-read stillness check)
         while True:
             s = await self._observe()
@@ -460,6 +462,14 @@ class RoutineExecutor:
                     return _Ready("ok", s2, m2.element, relaxed=m2.score < locators.STRICT)
                 deadline = max(deadline, time.perf_counter() + 0.5)
                 continue
+            if tried_reveal and not tried_search and step.action.kind == "tap" and step.action.target is not None \
+                    and (term := self._choice_term(step.action.target, ctx.inputs)) and not [o for o in pre_outs if not o.passed]:
+                # A recent search or suggestion the run tapped ("aa batteries"): a new term isn't there, so search for it.
+                # The step counts as done only if its after-checks then hold (checked at the top of the loop).
+                tried_search = True
+                if await self._search_for(ctx, term, s, sr):
+                    deadline = max(deadline, time.perf_counter() + 0.5)
+                    continue
             if now >= deadline:
                 failed = [o.detail for o in pre_outs if not o.passed]
                 why = ("before-checks failed: " + "; ".join(failed)) if failed else f"target not found: {m.summary() if m else '?'}"
@@ -689,18 +699,23 @@ class RoutineExecutor:
         a = step.action
         assert a.target is not None
         direction = a.direction or "down"
-        flipped = False
+        flipped = searched = False
         for k in range(2 * (a.max_scrolls or 8) + 1):
             s = await self._observe()
-            m = locators.locate(a.target, s, ctx.inputs, threshold=locators.STRICT)
+            m = list_choice(a.target, s, ctx.inputs, locators.STRICT)
             if not m.ok:
-                rm = locators.locate(a.target, s, ctx.inputs, threshold=locators.RELAXED)
+                rm = list_choice(a.target, s, ctx.inputs, locators.RELAXED)
                 if rm.ok:
                     sr.climb(2, f"relaxed match while scrolling: {rm.summary()}")
                     m = rm
             if m.ok:
                 sr.score = round(m.score, 3)
                 return True
+            if not searched and k == 0 and (term := self._choice_term(a.target, ctx.inputs)) and await self._search_for(ctx, term, s, sr):
+                # The list the agent picked from showed the learned item by chance (Play's suggestions showed Duolingo):
+                # another item is found the way a person would, by searching the screen's search box for it.
+                searched = True
+                continue
             if k >= (a.max_scrolls or 8) and flipped:
                 return False
             container = None
@@ -719,6 +734,50 @@ class RoutineExecutor:
                 direction = {"down": "up", "up": "down", "left": "right", "right": "left"}[direction]
                 flipped = True
         return False
+
+    @staticmethod
+    def _choice_term(target: Locator, inputs: dict[str, str]) -> str | None:
+        """The input a list choice names ("{{app_name}}" → "Spotify"), or None for a fixed target."""
+        raw = target.text_has or target.text or target.desc or ""
+        return render_str(raw, inputs) if has_slot(raw) else None
+
+    async def _search_for(self, ctx: _Ctx, term: str, screen: ScreenState, sr: StepRun) -> bool:
+        """Type `term` into the screen's search box and submit: a field, or the bar that opens one ("Search or ask Play",
+        "Search apps & games"; not a one-word "Search" tab). Read-only, so no approval. Whether it worked is judged by the
+        scroll that follows, which must then find the target."""
+        def field_of(s: ScreenState) -> Element | None:
+            return next((e for e in s.numbered if e.editable and not e.password), None)
+        def bar_of(s: ScreenState) -> Element | None:
+            return next((e for e in s.numbered if not e.editable and e.kind != "List" and len((e.label or e.hint).split()) > 1
+                         and re.match(r"search\b", (e.label or e.hint).strip(), re.I) and not e.in_list), None)
+        el = field_of(screen)
+        if el is None:
+            bar = bar_of(screen)
+            if bar is None:
+                return False
+            await self.device.act(Action(kind="tap", element=bar.number))
+            screen = await self._settle_quick()
+            el = field_of(screen)
+            if el is None:
+                return False
+        action = await self._gate(ctx, Action(kind="type", element=el.number, text=term, submit=True), screen, "read", el.label, sr)
+        if action is None or not (await self.device.act(action)).ok:
+            return False
+        after = await self._settle_quick()
+        # Enter can leave the suggestions up (Play): the suggestion that searches for exactly the term runs the search.
+        exact = next((e for e in after.numbered if not e.editable and re.match(r"search\b", e.label, re.I)
+                      and norm(e.label).endswith(norm(f'"{term}"')) and norm(term) in norm(e.label)), None)
+        if exact is not None and field_of(after) is not None:
+            await self.device.act(Action(kind="tap", element=exact.number))
+            await self._settle_quick()
+        deadline = time.perf_counter() + 6.0  # results load after the screen first settles: wait for a row that names it
+        while time.perf_counter() < deadline:
+            shown = await self._observe()
+            if any(e.in_list and contains_value(e.full_label or e.label, term) and norm(e.label) != norm(term) for e in shown.numbered):
+                break
+            await asyncio.sleep(0.3)
+        sr.rungs.append(f"searched for {term!r}: the list didn't show it")
+        return True
 
     async def _visual_point(self, ctx: _Ctx, step: Step, screen: ScreenState, sr: StepRun) -> tuple[int, int] | None:
         """A drawn target: the recorded picture if it is clearly and uniquely on screen (no model call), else Muse Spark's
@@ -798,7 +857,7 @@ class RoutineExecutor:
                 await self.device.act(Action(kind="scroll", direction=direction, element=max(lists, key=lambda e: e.area).number))
                 s = await self._settle_quick()
                 for n in missing:
-                    ctx.out.outputs[n] = ctx.out.outputs.get(n) or extract_value(specs[n], s, ctx.inputs)
+                    ctx.out.outputs[n] = ctx.out.outputs.get(n) or extract_value(specs[n], s, ctx.inputs, specs)
                 if any(ctx.out.outputs.get(n) for n in missing):
                     ctx.trace.save_tree(len(ctx.out.steps) + 1, "outputs_scrolled", s)
                 missing = [n for n in missing if not ctx.out.outputs.get(n)]
@@ -929,7 +988,7 @@ class RoutineExecutor:
         step = ctx.routine.steps[idx]
         nxt = self._next_required(ctx, idx)
         if nxt is None:
-            outputs = all(extract_value(e, s, ctx.inputs) for e in (step.extract or {}).values())
+            outputs = all(e.from_screenshot or extract_value(e, s, ctx.inputs, step.extract) for e in (step.extract or {}).values())
             return outputs and self._check(ctx.routine.done, s, ctx.inputs, relaxed=True)[0]
         pre = self._specific(nxt.pre)
         if pre and not self._check(pre, s, ctx.inputs, relaxed=True)[0]:
@@ -1061,6 +1120,31 @@ class RoutineExecutor:
 
     # ---- outputs ----------------------------------------------------------------------------
 
+    @staticmethod
+    def _screen_only(routine: Routine, name: str) -> bool:
+        return any(st.extract and name in st.extract and st.extract[name].from_screenshot for st in routine.steps)
+
+    async def _read_screenshot(self, ctx: _Ctx, name: str, spec: Extract, max_scrolls: int = 6) -> str | None:
+        """An output the accessibility tree doesn't have (a web page drawn without one): Muse Spark reads it from the
+        screenshot, and the value is kept only if it passes the same check the compiler verified it with on the recorded
+        screen (screen_read.accept). Not found: scroll down and look again, as the agent did."""
+        if self.config.data_scope == "real" and (await self._observe()).secure:
+            return None
+        question = render_str(spec.near, ctx.inputs) or name
+        for k in range(max_scrolls + 1):
+            png = await self.device.screenshot()
+            got = await asyncio.to_thread(screen_read.read, self.adapter, png, question, spec.from_screenshot or "", ctx.inputs,
+                                          data_scope=self.config.data_scope, task_id=ctx.task_id)
+            ctx.out.model_calls += 1
+            ctx.out.cost_usd += got.cost_usd
+            if got.value:
+                ctx.trace.save_png(len(ctx.out.steps) + 1, f"outputs_{name}"[:48], png)  # the evidence: there is no tree
+                return got.value
+            if k < max_scrolls:
+                await self.device.act(Action(kind="scroll", direction="down"))
+                await self._settle_quick()
+        return None
+
     async def _extract(self, ctx: _Ctx, step: Step, screen: ScreenState) -> None:
         if not step.extract:
             return
@@ -1068,17 +1152,70 @@ class RoutineExecutor:
         for name, spec in step.extract.items():
             if ctx.out.outputs.get(name):
                 continue
-            ctx.out.outputs[name] = extract_value(spec, screen, ctx.inputs)
+            if spec.from_screenshot:
+                ctx.out.outputs[name] = await self._read_screenshot(ctx, name, spec)
+                continue
+            ctx.out.outputs[name] = extract_value(spec, screen, ctx.inputs, step.extract)
             read = read or bool(ctx.out.outputs[name])
         if read:  # the screen the answer was read from (its tree, never a screenshot): evidence for checking it
             ctx.trace.save_tree(len(ctx.out.steps) + 1, f"outputs_{step.id}"[:48], screen)
 
 
-def extract_value(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str | None:
-    value = _extract(spec, screen, inputs)
+def extract_value(spec: Extract, screen: ScreenState, inputs: dict[str, str], specs: dict[str, Extract] | None = None) -> str | None:
+    """The output `spec` names on `screen`. `specs` (the routine's other outputs) is needed for a value read in another
+    output's row. A value read from the screenshot (`from_screenshot`) is never in the tree: None here, the step reads it."""
+    if spec.from_screenshot:
+        return None
+    if spec.row_of and spec.pattern:
+        anchor = specs.get(spec.row_of) if specs else None
+        shown = extract_value(anchor, screen, inputs, specs) if anchor is not None and anchor.row_of is None else None
+        value = in_row(shown, spec.pattern, screen) if shown else None
+    else:
+        value = _extract(spec, screen, inputs)
     if value is not None and spec.expect_digits and not any(ch.isdigit() for ch in value):
         return None  # a placeholder while the page loads ("- calories"): not the value yet
     return value
+
+
+def list_choice(loc: Locator, screen: ScreenState, inputs: dict[str, str], threshold: float) -> locators.Match:
+    """A list row named by an input ("{{app_name}}"), never the search box that shows only the input after a search
+    ("Spotify" at the top, while "Spotify: Music and Podcasts …" is the row): the top row of the list that names it."""
+    m = locators.locate(loc, screen, inputs, threshold=threshold)
+    raw = loc.text_has or ""
+    if not (loc.in_list and has_slot(raw)) or (m.element is not None and m.element.in_list):
+        return m
+    term = render_str(raw, inputs) or ""
+    rows = [e for e in screen.numbered if e.in_list and (not loc.kind or e.kind == loc.kind) and norm(e.label) != norm(term)
+            and contains_value(e.full_label or e.label, term)]
+    if not rows:
+        return m if m.element is None or m.element.in_list else locators.Match(None, m.score, m.runner_up, threshold)
+    return locators.Match(min(rows, key=lambda e: e.bounds[1]), max(m.score, threshold), m.runner_up, threshold)
+
+
+def in_row(shown: str, pattern: str, screen: ScreenState) -> str | None:
+    """The first value shaped like `pattern` in the row of the element that shows `shown`: the nearest ancestor that holds
+    one. A search result's price wherever its row puts it ("$9.99 ( $5.00 /count)", "Limited time deal $8.49 …"), never
+    the price of the row above, which a first-match-in-the-list read takes when the first rows differ in shape."""
+    want = norm(shown)
+    holder = next((e for e in screen.numbered if norm(e.full_label or e.label) == want), None) \
+        or next((e for e in screen.numbered if want and want in norm(e.full_label or e.label)), None)
+    if holder is None:
+        return None
+    by_index = {e.index: e for e in screen.elements}
+    def ancestors(e: Element) -> list[int]:
+        out, p = [], e.parent
+        while p is not None and p in by_index and len(out) < 64:
+            out.append(p)
+            p = by_index[p].parent
+        return out
+    shaped = [(e, ancestors(e)) for e in screen.elements if e.index != holder.index
+              and re.fullmatch(pattern, " ".join((e.text or e.desc or "").split()))]
+    for a in ancestors(holder):
+        inside = [e for e, up in shaped if a in up]
+        if inside:
+            e = min(inside, key=lambda x: x.index)
+            return " ".join((e.text or e.desc).split())
+    return None
 
 
 def _in_card(loc: Locator, card: str, screen: ScreenState) -> Element | None:
@@ -1096,12 +1233,27 @@ def _in_card(loc: Locator, card: str, screen: ScreenState) -> Element | None:
     return None
 
 
-def _first_row(spec: Extract, screen: ScreenState) -> str | None:
+def _first_row(spec: Extract, screen: ScreenState, inputs: dict[str, str] | None = None) -> str | None:
     """The top result row: the highest list element of the recorded type among the big clickable ones (not a chip or a
     button inside a row), its text up to `until`."""
     kind = spec.locator.kind if spec.locator else None
+    top_y = -1
+    if spec.below:
+        heading = next((e for e in screen.numbered if norm(e.label) == norm(spec.below)), None)
+        if heading is None:
+            return None  # the results haven't loaded: missing, and the ladder takes over
+        top_y = heading.bounds[3] - 1
     rows = [e for e in screen.numbered if e.in_list and e.clickable and (not kind or e.kind == kind) and (e.full_label or e.label)
-            and not (spec.skip_ads and is_ad(e))]
+            and not (spec.skip_ads and is_ad(e)) and e.bounds[1] >= top_y]
+    if spec.below:  # a row's title, not a control in it or a link with no words ("ref=sr_1_1?…")
+        skip = {norm(x) for x in spec.skip_labels}
+        rows = [e for e in rows if norm(e.label) not in skip and " " in (e.full_label or e.label).strip()]
+        if rows:  # a badge or a subtitle sits near the title: of the top three, the one that says most of the search, then the longest
+            first = sorted(rows, key=lambda e: e.bounds[1])[:3]
+            want = set(norm(" ".join((inputs or {}).values())).split())
+            top = max(first, key=lambda e: (len(want & set(norm(e.full_label or e.label).split())), len((e.full_label or e.label).split())))
+            label = " ".join((top.full_label or top.label).split())
+            return (label.split(spec.until, 1)[0] if spec.until else label).strip() or None
     if not rows:
         return None
     big = max(e.area for e in rows)
@@ -1126,7 +1278,7 @@ def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str 
     Without IDs it falls back to the label (`near`), then to the element that shows one of the routine's inputs."""
     spec = render(spec, inputs)
     if spec.first_row:
-        return _first_row(spec, screen)
+        return _first_row(spec, screen, inputs)
     if spec.pattern:
         for e in screen.numbered:
             label = " ".join(e.label.split())

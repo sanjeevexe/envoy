@@ -1,0 +1,71 @@
+{
+ "name": "chrome_search_wikipedia_article",
+ "intent": "Look up a topic on Wikipedia in Chrome and report when it opened",
+ "description": "Open en.m.wikipedia.org in Chrome, search for the requested topic, open its article, and report the date it opened.",
+ "patterns": [
+  "search Wikipedia and tell me when it opened",
+  "look this up on Wikipedia and tell me the year it opened",
+  "find when it opened on Wikipedia"
+ ],
+ "inputs": [
+  {
+   "name": "article_topic",
+   "type": "text",
+   "description": "",
+   "from_memory": null,
+   "example": "Eiffel Tower"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "go_back",
+   "intent": "Go back to dismiss the current selection and prepare to enter the URL",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "tap_search",
+   "intent": "Tap Search to open the search interface",
+   "target_fixed_text": "Search",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "enter_wikipedia_url",
+   "intent": "Type en.m.wikipedia.org into the address bar",
+   "target_fixed_text": "Search Google or type URL",
+   "choice_input": null
+  },
+  {
+   "step": 4,
+   "id": "tap_search_again",
+   "intent": "Tap Search to open Wikipedia search",
+   "target_fixed_text": "Search",
+   "choice_input": null
+  },
+  {
+   "step": 5,
+   "id": "enter_article_topic",
+   "intent": "Type {{article_topic}} into the search box",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 6,
+   "id": "scroll_article",
+   "intent": "Scroll down the {{article_topic}} article to find when it opened",
+   "target_fixed_text": null,
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "opened_date",
+   "near": "Opened",
+   "example": "15 May 1889"
+  }
+ ],
+ "data_values": []
+}
