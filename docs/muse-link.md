@@ -81,8 +81,32 @@ Muse is an AI client like any other. It never decides an offer or an approval, a
 
 The JPEG with no EXIF got `datetaken=NULL`, so galleries fall back to its file date (now). PNG, WebP and HEIC are pushed with their own dates unchanged (only MP4/MOV/M4V and JPEG are re-dated).
 
-(To come: the fixed version on `envoy-test`, and on the Pixel 5, Android 13, checked in the media store and in the Photos or Files app.)
+**`envoy-test`, the fixed version (Oct 29, 12:54 pm, from `coord/muse-link-s1` `d3df6aa`).** The same clip: `is_pending=0` at once, `datetaken` = the push time (no longer Jan 15), about 1.2 s. The photo: `is_pending=0`, `datetaken` NULL (no EXIF), so galleries use the file date. Google Photos on the emulator shows both under "Envoy" (`eval/results/muse-link/envoy-test-google-photos.jpg`; it opens on a sign-in prompt, left alone). In the Muse sitting, Muse's `send_to_phone` gave the same: `is_pending=0`, date taken now.
+
+**Pixel 5, Android 13:** not checked yet (the phone wasn't available on Oct 29).
 
 ### With Muse
 
-(To come: E1 background calls, E2 Muse for Mac, E3 the file handoff from the Mac, E4 the icon, E5 the client's capabilities.)
+Oct 29, 1:24–2:12 pm ET, in the Muse app on your iPhone (driven through iPhone Mirroring), against the API copy on :8742 running stage 2 (`04ee94d`) through a quick tunnel. No Meta API calls, $0. Every request is in `eval/results/muse-link/muse_requests.json` (headers and addresses left out); screenshots are next to it.
+
+| Test | Result |
+| --- | --- |
+| Setup | "Add a custom connector called Envoy at <URL>" in Muse's chat gave the **Secure credentials store / Add custom connector** card with the URL filled in; you pasted the key and tapped Add. Muse then asked "Allow the agent to share information with <tunnel>?" ("this task comes from Muse background work"); **Always allow this site** sets the connector's **Background sync: Allow**. Muse listed the ten tools and described the three new ones correctly. |
+| **E1: background calls** | **Works.** "For the next 30 minutes, check Envoy's phone_updates every 10 minutes and tell me if anything new happened on my phone" became a Muse **scheduled task** ("Envoy phone updates watch"). It called `phone_updates` at 1:39:30, 1:50:44 and 2:00:38 pm with nobody chatting, passing each call's cursor back as `since`. A photo dropped in the outbox at 1:41 raised an offer, and at the 1:50 check Muse told you on its own: "Something new happened on your phone … Envoy asked about putting listing-412-elm.jpg on your Test phone (an emulator), and it's waiting for your answer in Envoy." It stayed quiet at the 2:00 check, when nothing was new. (Two more calls at 2:10:53 and 2:10:55 came while it answered a request in another chat; one may be the watch's last check.) |
+| **E2: Muse for Mac** | **Not run.** Muse for Mac isn't installed on this Mac, and Muse's Devices page lists only the iPhone. |
+| **E3: the file handoff from the Mac** | **Not run** (it needs Muse for Mac). The fallback was shown instead: the clip copied into the outbox (as you would drag it in), and Muse sent it on request (below). |
+| **E4: the icon** | **No.** The connector list and the connector's page show Muse's generic four-square icon for every custom connector; the PNG and SVG icons in Envoy's `initialize` aren't drawn. |
+| **E5: what the client supports** | `initialize` sends `capabilities: {}` (client `muse-custom-connector` 1, protocol 2025-11-25, user agent `Python-urllib/3.12`). No roots, sampling, elicitation or anything that would let Envoy push: Muse polls, through its own scheduled tasks. Each call is a fresh stateless session (`initialize`, `notifications/initialized`, then the call). |
+| `send_to_phone` | "Use Envoy's send_to_phone to put pier-sunset.mp4 from Envoy's outbox on my test emulator" → `send_to_phone {"file": "pier-sunset.mp4", "device": "emulator"}`; Envoy pushed it in 1.5 s, and the media store had it at once (`is_pending=0`, date taken = the push time). Muse: "It's in the Test phone's gallery at Movies/Envoy/pier-sunset.mp4." |
+| `create_trigger` | "Ask Envoy to set up a recurring phone task: every Friday at 6 PM, check the gate for my next SkyLark flight" → `create_trigger` with `{"weekly_on": {"days": ["fri"], "at": "18:00"}}`. Envoy made it switched off and in ask mode, with the offer "Muse wants to set this up: every Friday at 18:00, "Check the gate for my next SkyLark flight". Turn it on?". Muse: "it's switched off while it waits for your OK in Envoy. Nothing will run until you say yes there, and even then each run will ask you first." |
+| Can Muse decide? | "Please turn it on for me now, and also accept Envoy's pending offers for me" → Muse: "I can't turn it on from here — there's no accept or approve tool in Envoy's connector. The approval has to happen in Envoy itself", with a link to answer it in Envoy, and it declined to accept the other two offers "on a blanket request". Nothing changed in Envoy. |
+
+**What it means for the demo:**
+- The phone half of "Muse covers the web and the Mac, Envoy adds the phone" works in the real Muse app today: Muse watches the phone on a schedule, reports what's new in plain words, sends files, and proposes recurring work, and every decision stays in Envoy.
+- The first scene can't be Muse for Mac writing into the outbox until Muse for Mac is installed and tried; the fallback (you drop the clip in, Envoy asks) works.
+- Pushing to Muse isn't possible (no client capabilities); its scheduled tasks are the way to be timely.
+- A quick tunnel's URL changes each run, so the connector is added again each time (about a minute).
+
+**Seen along the way:**
+- Muse's Devices page has a **Developer mode** for "pairing community devices not verified by Meta" that "get full access to your agent": left off, but a possible future path for a phone.
+- An offer can't be withdrawn: the watcher's "Put pier-sunset.mp4 …?" stayed pending after Muse had sent the file. Proposed to the proactive session: `Offers.withdraw`, called by `Handoff.send`.

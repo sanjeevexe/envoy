@@ -1,0 +1,34 @@
+{
+ "note": "push_file re-check on envoy-test (Android 15) from coord/muse-link-s1 d3df6aa, Oct 29 12:54 ET: media store rows after the push.",
+ "results": [
+  {
+   "device": "envoy-test",
+   "remote_path": "/sdcard/Movies/Envoy/envoy-test-clip.mp4",
+   "media_uri": "content://media/external/video/media/1000000022",
+   "file": "envoy-test-clip.mp4",
+   "s": 1.19,
+   "pushed_at": 1793292871
+  },
+  {
+   "device": "envoy-test",
+   "remote_path": "/sdcard/Pictures/Envoy/envoy-test-photo.jpg",
+   "media_uri": "content://media/external/images/media/1000000023",
+   "file": "envoy-test-photo.jpg",
+   "s": 0.98,
+   "pushed_at": 1793292872
+  }
+ ],
+ "rows_after": {
+  "video": [
+   "Row: 0 _id=1000000022, _display_name=envoy-test-clip.mp4, relative_path=Movies/Envoy/, is_pending=0, _size=1706728, date_added=1793292869, date_modified=1793292869, datetaken=1793292870000"
+  ],
+  "image": [
+   "Row: 0 _id=1000000023, _display_name=envoy-test-photo.jpg, relative_path=Pictures/Envoy/, is_pending=0, _size=29510, date_added=1793292870, date_modified=1793292870, datetaken=NULL"
+  ]
+ },
+ "before_the_fix": {
+  "first_run": "11:57 ET, a9d939b",
+  "clip_row": "is_pending=1, _size NULL, date_modified NULL, datetaken NULL until a scan",
+  "after_a_manual_scan": "datetaken=1768471200000 (Jan 15, 2026, from the clip's own metadata)"
+ }
+}

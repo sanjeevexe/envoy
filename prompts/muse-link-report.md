@@ -24,6 +24,8 @@ Session muse-link, Oct 29. Details and the user's Muse checklist: `docs/muse-lin
 - `envoy-test` re-check (12:54, from a checkout of `d3df6aa`): clip `is_pending=0`, `datetaken` = the push time, and the photo `is_pending=0` (no EXIF date, so galleries use now). Google Photos shows both under "Envoy". About 1 s each.
 - Web: the panel and the setting checked in mock mode at 390×844 and 1440×900 (Send to phone, Yes on the Instagram offer, a bad folder's error).
 
+- The Muse sitting (Oct 29, 1:24–2:12 pm, the iPhone app): **E1 works** (a Muse scheduled task called `phone_updates` every ~10 min with the cursor and told you, unprompted, about the new outbox offer); **E5**: `capabilities: {}`, so no push; **E4**: Muse draws its generic icon, not Envoy's; `send_to_phone` to the emulator and `create_trigger` (made switched off) worked from Muse; asked to accept offers, Muse said there is no accept tool. Details in `docs/muse-link.md`, evidence in `eval/results/muse-link/`.
+
 ## Spend
 
 $0. No Meta API calls.
@@ -31,8 +33,9 @@ $0. No Meta API calls.
 ## Not done or not checked yet
 
 - The push on the Pixel 5 (Android 13): it wasn't available today, so it waits for the next sitting.
-- The Muse tests E1–E5, with the user (the coordinator is batching the user's time).
+- The Muse tests E2 and E3 (Muse for Mac): it isn't installed on this Mac.
 - `heads_up` and the offer lines run against preflight's real `check` in the full suite, but the tests assert their content only with stand-ins.
 - `phone_updates` items are reported again if a finished task is updated later (its `updated_at` moves). Rare; noted, not fixed.
 - Re-dating covers MP4/MOV/M4V and JPEG. PNG, WebP and HEIC keep their own dates (PNG and WebP rarely carry one).
+- Offers can't be withdrawn (proactive's `offers.py`): a handoff offer stays pending after the file was sent another way. Proposed `Offers.withdraw`.
 - Tests that drive `/mcp` append to `logs/mcp.jsonl`, which is linked to the main checkout's logs in every worktree. This was already happening before this work. For the Muse tests, records are filtered by the tunnel's host and the user agent.

@@ -1,0 +1,421 @@
+{
+ "note": "Every request that reached Envoy's MCP server through the Muse test tunnel on Oct 29, 2026 (UTC), from the API copy's own log. Headers (client addresses, the redacted Authorization) are left out. Link previews are the two GETs with no token.",
+ "requests": [
+  {
+   "time": "2026-10-29T17:24:47.404+00:00",
+   "http_method": "GET",
+   "auth": "missing",
+   "status": 401,
+   "ms": 0.3,
+   "user_agent": "facebookexternalhit/1.1"
+  },
+  {
+   "time": "2026-10-29T17:24:47.687+00:00",
+   "http_method": "GET",
+   "auth": "missing",
+   "status": 401,
+   "ms": 0.1,
+   "user_agent": "Mozilla/5.0"
+  },
+  {
+   "time": "2026-10-29T17:38:11.954+00:00",
+   "http_method": "POST",
+   "rpc_method": "initialize",
+   "auth": "ok",
+   "status": 200,
+   "ms": 14.2,
+   "client_info": {
+    "name": "muse-custom-connector",
+    "version": "1"
+   },
+   "client_capabilities": {},
+   "protocol_version": "2025-11-25",
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T17:38:12.788+00:00",
+   "http_method": "POST",
+   "rpc_method": "notifications/initialized",
+   "auth": "ok",
+   "status": 202,
+   "ms": 1.1,
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T17:38:13.351+00:00",
+   "http_method": "POST",
+   "rpc_method": "tools/list",
+   "auth": "ok",
+   "status": 200,
+   "ms": 6.6,
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T17:39:29.205+00:00",
+   "http_method": "POST",
+   "rpc_method": "initialize",
+   "auth": "ok",
+   "status": 200,
+   "ms": 12.0,
+   "client_info": {
+    "name": "muse-custom-connector",
+    "version": "1"
+   },
+   "client_capabilities": {},
+   "protocol_version": "2025-11-25",
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T17:39:29.822+00:00",
+   "http_method": "POST",
+   "rpc_method": "notifications/initialized",
+   "auth": "ok",
+   "status": 202,
+   "ms": 0.8,
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T17:39:30.394+00:00",
+   "http_method": "POST",
+   "rpc_method": "tools/call",
+   "tool": "phone_updates",
+   "arguments": {},
+   "auth": "ok",
+   "status": 200,
+   "ms": 8.6,
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T17:50:43.338+00:00",
+   "http_method": "POST",
+   "rpc_method": "initialize",
+   "auth": "ok",
+   "status": 200,
+   "ms": 5.3,
+   "client_info": {
+    "name": "muse-custom-connector",
+    "version": "1"
+   },
+   "client_capabilities": {},
+   "protocol_version": "2025-11-25",
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T17:50:43.987+00:00",
+   "http_method": "POST",
+   "rpc_method": "notifications/initialized",
+   "auth": "ok",
+   "status": 202,
+   "ms": 1.4,
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T17:50:44.427+00:00",
+   "http_method": "POST",
+   "rpc_method": "tools/call",
+   "tool": "phone_updates",
+   "arguments": {
+    "since": "u1.MTc5MzI5Mjc0Ny4xMzQ3NTQ"
+   },
+   "auth": "ok",
+   "status": 200,
+   "ms": 2.2,
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:00:36.911+00:00",
+   "http_method": "POST",
+   "rpc_method": "initialize",
+   "auth": "ok",
+   "status": 200,
+   "ms": 5.4,
+   "client_info": {
+    "name": "muse-custom-connector",
+    "version": "1"
+   },
+   "client_capabilities": {},
+   "protocol_version": "2025-11-25",
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:00:37.398+00:00",
+   "http_method": "POST",
+   "rpc_method": "notifications/initialized",
+   "auth": "ok",
+   "status": 202,
+   "ms": 1.6,
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:00:38.093+00:00",
+   "http_method": "POST",
+   "rpc_method": "tools/call",
+   "tool": "phone_updates",
+   "arguments": {
+    "since": "u1.MTc5MzI5NTY4Ni4yNTczNjg"
+   },
+   "auth": "ok",
+   "status": 200,
+   "ms": 2.4,
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:08:46.196+00:00",
+   "http_method": "POST",
+   "rpc_method": "initialize",
+   "auth": "ok",
+   "status": 200,
+   "ms": 5.1,
+   "client_info": {
+    "name": "muse-custom-connector",
+    "version": "1"
+   },
+   "client_capabilities": {},
+   "protocol_version": "2025-11-25",
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:08:46.754+00:00",
+   "http_method": "POST",
+   "rpc_method": "notifications/initialized",
+   "auth": "ok",
+   "status": 202,
+   "ms": 1.0,
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:08:47.451+00:00",
+   "http_method": "POST",
+   "rpc_method": "tools/list",
+   "auth": "ok",
+   "status": 200,
+   "ms": 6.6,
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:08:53.029+00:00",
+   "http_method": "POST",
+   "rpc_method": "initialize",
+   "auth": "ok",
+   "status": 200,
+   "ms": 1.7,
+   "client_info": {
+    "name": "muse-custom-connector",
+    "version": "1"
+   },
+   "client_capabilities": {},
+   "protocol_version": "2025-11-25",
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:08:53.576+00:00",
+   "http_method": "POST",
+   "rpc_method": "notifications/initialized",
+   "auth": "ok",
+   "status": 202,
+   "ms": 1.0,
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:08:54.044+00:00",
+   "http_method": "POST",
+   "rpc_method": "tools/call",
+   "tool": "send_to_phone",
+   "arguments": {
+    "device": "emulator",
+    "file": "pier-sunset.mp4"
+   },
+   "auth": "ok",
+   "status": 200,
+   "ms": 1485.2,
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:09:48.611+00:00",
+   "http_method": "POST",
+   "rpc_method": "initialize",
+   "auth": "ok",
+   "status": 200,
+   "ms": 2.5,
+   "client_info": {
+    "name": "muse-custom-connector",
+    "version": "1"
+   },
+   "client_capabilities": {},
+   "protocol_version": "2025-11-25",
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:09:49.103+00:00",
+   "http_method": "POST",
+   "rpc_method": "notifications/initialized",
+   "auth": "ok",
+   "status": 202,
+   "ms": 0.9,
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:09:49.757+00:00",
+   "http_method": "POST",
+   "rpc_method": "tools/list",
+   "auth": "ok",
+   "status": 200,
+   "ms": 2.4,
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:09:53.698+00:00",
+   "http_method": "POST",
+   "rpc_method": "initialize",
+   "auth": "ok",
+   "status": 200,
+   "ms": 4.5,
+   "client_info": {
+    "name": "muse-custom-connector",
+    "version": "1"
+   },
+   "client_capabilities": {},
+   "protocol_version": "2025-11-25",
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:09:54.186+00:00",
+   "http_method": "POST",
+   "rpc_method": "notifications/initialized",
+   "auth": "ok",
+   "status": 202,
+   "ms": 0.8,
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:09:54.579+00:00",
+   "http_method": "POST",
+   "rpc_method": "tools/call",
+   "tool": "create_trigger",
+   "arguments": {
+    "action": {
+     "goal": "Check the gate for my next SkyLark flight"
+    },
+    "kind": "time",
+    "name": "Friday SkyLark gate check",
+    "spec": {
+     "weekly_on": {
+      "at": "18:00",
+      "days": [
+       "fri"
+      ]
+     }
+    }
+   },
+   "auth": "ok",
+   "status": 200,
+   "ms": 6.8,
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:10:52.207+00:00",
+   "http_method": "POST",
+   "rpc_method": "initialize",
+   "auth": "ok",
+   "status": 200,
+   "ms": 1.8,
+   "client_info": {
+    "name": "muse-custom-connector",
+    "version": "1"
+   },
+   "client_capabilities": {},
+   "protocol_version": "2025-11-25",
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:10:52.762+00:00",
+   "http_method": "POST",
+   "rpc_method": "initialize",
+   "auth": "ok",
+   "status": 200,
+   "ms": 1.6,
+   "client_info": {
+    "name": "muse-custom-connector",
+    "version": "1"
+   },
+   "client_capabilities": {},
+   "protocol_version": "2025-11-25",
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:10:52.889+00:00",
+   "http_method": "POST",
+   "rpc_method": "notifications/initialized",
+   "auth": "ok",
+   "status": 202,
+   "ms": 0.9,
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:10:53.205+00:00",
+   "http_method": "POST",
+   "rpc_method": "notifications/initialized",
+   "auth": "ok",
+   "status": 202,
+   "ms": 1.3,
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:10:53.344+00:00",
+   "http_method": "POST",
+   "rpc_method": "tools/call",
+   "tool": "phone_updates",
+   "arguments": {
+    "since": "u1.MTc5MzI5NTY4Ni4yNTczNjg"
+   },
+   "auth": "ok",
+   "status": 200,
+   "ms": 2.1,
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:10:53.799+00:00",
+   "http_method": "POST",
+   "rpc_method": "tools/list",
+   "auth": "ok",
+   "status": 200,
+   "ms": 1.7,
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:10:54.382+00:00",
+   "http_method": "POST",
+   "rpc_method": "initialize",
+   "auth": "ok",
+   "status": 200,
+   "ms": 1.8,
+   "client_info": {
+    "name": "muse-custom-connector",
+    "version": "1"
+   },
+   "client_capabilities": {},
+   "protocol_version": "2025-11-25",
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:10:54.898+00:00",
+   "http_method": "POST",
+   "rpc_method": "notifications/initialized",
+   "auth": "ok",
+   "status": 202,
+   "ms": 1.0,
+   "user_agent": "Python-urllib/3.12"
+  },
+  {
+   "time": "2026-10-29T18:10:55.315+00:00",
+   "http_method": "POST",
+   "rpc_method": "tools/call",
+   "tool": "phone_updates",
+   "arguments": {},
+   "auth": "ok",
+   "status": 200,
+   "ms": 3.9,
+   "user_agent": "Python-urllib/3.12"
+  }
+ ]
+}
