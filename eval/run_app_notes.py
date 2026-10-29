@@ -151,7 +151,7 @@ async def main_async(args: argparse.Namespace) -> int:
     from models.adapter import ModelAdapter, active_profile
     from testapps.skylark import SkyLark
 
-    out = OUT_ROOT / (datetime.now().strftime("%Y-%m-%d") + (f"-{args.label}" if args.label else ""))
+    out = OUT_ROOT / ((args.date or datetime.now().strftime("%Y-%m-%d")) + (f"-{args.label}" if args.label else ""))
     out.mkdir(parents=True, exist_ok=True)
     db = Path(args.scratch) / f"notes-{args.phase}.db"
     if db.exists():
@@ -192,6 +192,7 @@ def main() -> int:
     ap.add_argument("--scratch", default=os.environ.get("TMPDIR", "/tmp"))
     ap.add_argument("--limit", type=int, default=0, help="only the first N tasks of each pass (a smoke test)")
     ap.add_argument("--label", default="", help="a suffix for the results folder")
+    ap.add_argument("--date", default="", help="the results folder's date (default today), so both phases share one folder")
     args = ap.parse_args()
     sys.path.insert(0, str(REPO / "backend"))
     return asyncio.run(main_async(args))

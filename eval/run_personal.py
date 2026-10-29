@@ -530,7 +530,7 @@ async def main_async(args: argparse.Namespace) -> int:
         wanted = set(args.tasks)
         tasks = [t for t in tasks if t["id"] in wanted]
     data = Path(args.data).resolve()
-    out = OUT_ROOT / f"{datetime.now().strftime('%Y-%m-%d')}-{args.label}"
+    out = OUT_ROOT / f"{args.date or datetime.now().strftime('%Y-%m-%d')}-{args.label}"
     out.mkdir(parents=True, exist_ok=True)
     prev = json.loads((out / "results.json").read_text()) if args.resume and (out / "results.json").exists() else {}
     results: dict[str, dict[str, Any]] = prev.get("results", {})
@@ -637,6 +637,7 @@ def main() -> int:
     ap.add_argument("--port", type=int, default=8731)
     ap.add_argument("--budget", type=float, default=12.0, help="stop before a task once this many dollars are spent")
     ap.add_argument("--resume", action="store_true")
+    ap.add_argument("--date", default="", help="the results folder's date (default today): a resume after midnight names the run's first day")
     ap.add_argument("--rerun", action="store_true", help="with --resume and --tasks: run those tasks again even if graded")
     ap.add_argument("--profile", choices=["spark", "hybrid", "wonder"])
     ap.add_argument("--notes", choices=["on", "off"])
