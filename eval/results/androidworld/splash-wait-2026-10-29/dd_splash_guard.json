@@ -1,0 +1,311 @@
+[
+ {
+  "plan": [
+   "Open the DoorDash app and continue without signing in",
+   "Dismiss onboarding or location prompts",
+   "Open the delivery address picker",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 870,
+  "step1": "address",
+  "cost": 0.00462025
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without signing in if prompted",
+   "Open account, profile, or delivery address settings",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 870,
+  "step1": "Account",
+  "cost": 0.0076675
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without signing in if prompted",
+   "Navigate to the account or location area showing the delivery address",
+   "Read the saved delivery address displayed"
+  ],
+  "plan_tokens": 870,
+  "step1": "address",
+  "cost": 0.0072515
+ },
+ {
+  "plan": [
+   "Open the DoorDash app",
+   "Continue without signing in if prompted",
+   "Open the delivery address / location selector",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 870,
+  "step1": "address",
+  "cost": 0.0067397
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without an account if prompted",
+   "Open the delivery location or address picker",
+   "Read the saved delivery address shown"
+  ],
+  "plan_tokens": 870,
+  "step1": "address",
+  "cost": 0.0038052500000000005
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without signing in",
+   "Dismiss onboarding prompts if shown",
+   "Go to account or addresses section",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 870,
+  "step1": "Account",
+  "cost": 0.004066500000000001
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without signing in, dismissing onboarding",
+   "Locate the delivery address display on home or account screen",
+   "Read the saved delivery address shown"
+  ],
+  "plan_tokens": 870,
+  "step1": "done ",
+  "cost": 0.0045681
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without signing in or creating an account",
+   "Navigate to account or delivery address settings",
+   "Read the saved delivery address shown"
+  ],
+  "plan_tokens": 870,
+  "step1": "Account",
+  "cost": 0.004458
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without signing in if prompted",
+   "Open the delivery location / address section",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 870,
+  "step1": "address",
+  "cost": 0.00419075
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without signing in if prompted",
+   "Open the delivery location / address picker",
+   "Read the saved delivery address shown"
+  ],
+  "plan_tokens": 870,
+  "step1": "address",
+  "cost": 0.0045065
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without signing in if prompted",
+   "Dismiss onboarding prompts to reach the main screen",
+   "Open account or delivery address / location area",
+   "Read the saved delivery address shown"
+  ],
+  "plan_tokens": 870,
+  "step1": "address",
+  "cost": 0.00455675
+ },
+ {
+  "plan": [
+   "Continue in DoorDash without signing in",
+   "Open account or address settings",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 870,
+  "step1": "address",
+  "cost": 0.004516
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without an account if prompted",
+   "Open the delivery address or location section",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 870,
+  "step1": "address",
+  "cost": 0.0049808000000000005
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without signing in",
+   "Dismiss onboarding and permission prompts to reach home screen",
+   "Locate delivery address shown at top of home screen",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 870,
+  "step1": "done ",
+  "cost": 0.0045385
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without signing in",
+   "Dismiss login prompts and open the delivery address selector",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 870,
+  "step1": "address",
+  "cost": 0.0043152500000000005
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without signing in if prompted",
+   "Navigate to account or address settings where delivery address is shown",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 870,
+  "step1": "Account",
+  "cost": 0.0047355
+ },
+ {
+  "plan": [
+   "Wait past splash and continue without signing in or creating an account",
+   "Dismiss any login or sync prompts to reach the main screen",
+   "Open the location / delivery address / account area",
+   "Read the saved delivery address shown"
+  ],
+  "plan_tokens": 870,
+  "step1": "address",
+  "cost": 0.00435175
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without signing in if prompted",
+   "Dismiss onboarding to reach the home screen",
+   "Open the delivery address / location selector",
+   "Read the saved delivery address shown"
+  ],
+  "plan_tokens": 870,
+  "step1": "address",
+  "cost": 0.004231250000000001
+ },
+ {
+  "plan": [
+   "Continue past sign-in prompts without creating an account",
+   "Open the delivery location / address selector",
+   "Read the currently saved delivery address"
+  ],
+  "plan_tokens": 870,
+  "step1": "address",
+  "cost": 0.00419925
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without signing in if prompted",
+   "Locate the delivery address selector on the home screen",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 870,
+  "step1": "done ",
+  "cost": 0.00452475
+ },
+ {
+  "plan": [
+   "Open the DoorDash app and continue without an account",
+   "Dismiss any sign-in or onboarding prompts",
+   "Open the delivery location or address selector",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 870,
+  "step1": "address",
+  "cost": 0.00392825
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without signing in if prompted",
+   "Open the delivery address selector or Addresses section",
+   "Read the saved delivery address shown"
+  ],
+  "plan_tokens": 870,
+  "step1": "address",
+  "cost": 0.0039765
+ },
+ {
+  "plan": [
+   "Open the DoorDash app and continue without signing in if prompted",
+   "Locate the delivery address shown on the home screen",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 870,
+  "step1": "done ",
+  "cost": 0.004153250000000001
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without signing in or creating an account",
+   "Navigate to the delivery address selector or saved addresses section",
+   "Read the saved delivery address shown"
+  ],
+  "plan_tokens": 870,
+  "step1": "address",
+  "cost": 0.0039815
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without signing in or creating an account",
+   "Dismiss any prompts and go to account, profile, or address section",
+   "Read the saved delivery address shown on screen"
+  ],
+  "plan_tokens": 870,
+  "step1": "address",
+  "cost": 0.0043715
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without signing in or creating an account",
+   "Open the delivery location / address selector",
+   "Read the currently saved delivery address"
+  ],
+  "plan_tokens": 870,
+  "step1": "address",
+  "cost": 0.00399475
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without signing in if prompted",
+   "Navigate to account, settings, or address section",
+   "Read the saved delivery address shown"
+  ],
+  "plan_tokens": 870,
+  "step1": "address",
+  "cost": 0.004394250000000001
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without signing in",
+   "Dismiss any login or onboarding prompts",
+   "Go to the address or delivery location section",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 870,
+  "step1": "address",
+  "cost": 0.0035475000000000003
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without signing in if prompted",
+   "Open the delivery location / address selector",
+   "Read the currently saved delivery address"
+  ],
+  "plan_tokens": 870,
+  "step1": "address",
+  "cost": 0.0042005
+ },
+ {
+  "plan": [
+   "Open DoorDash and continue without signing in if prompted",
+   "Navigate to account or delivery address settings",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 870,
+  "step1": "address",
+  "cost": 0.004590250000000001
+ }
+]

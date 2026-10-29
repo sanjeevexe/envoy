@@ -1,0 +1,3 @@
+real apps: 171 first screens; is_splash fires on 0; the step-1 replan on 0
+SkyLark: 627 first screens; is_splash fires on 0; the step-1 replan on 0
+AndroidWorld: 118 first screens; is_splash fires on 0; the step-1 replan on 0

@@ -1,0 +1,3 @@
+[abl0] cost $0.138; errors 0; plan tokens [870] (live: main 680, 5fa03bf 864)
+step 1 on the loaded home: {'address': 22, 'Account': 4, 'done ': 4}
+plans' second subgoal: [('open the delivery location / address sel', 3), ('navigate to account or delivery address ', 2), ('dismiss onboarding or location prompts', 1), ('open account, profile, or delivery addre', 1), ('navigate to the account or location area', 1)]
