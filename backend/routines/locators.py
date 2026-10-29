@@ -227,16 +227,7 @@ def locate(loc: Locator, screen: ScreenState, inputs: dict[str, str] | None = No
            margin: float = MARGIN, use_ids: bool = True, role: str = "target") -> Match:
     """The element `loc` describes on `screen`, or a Match with element None (too weak or ambiguous)."""
     rendered: Locator = render(loc, inputs or {})
-    cands = candidates(screen)
-    # A screen that exposes no usable IDs at all (a release with stripped or obfuscated IDs) can't count a missing ID
-    # against any element: text, type and neighbors carry the score there, as on most real apps.
-    use_ids = use_ids and any(usable_id(e.resource_id) for e in cands)
-    scored = []
-    for e in cands:
-        sc, det = score(rendered, e, screen, use_ids=use_ids, role=role)
-        if sc > 0:
-            scored.append((sc, e, det))
-    scored.sort(key=lambda t: -t[0])
+    scored = _ranked(rendered, screen, use_ids, role)
     if not scored:
         return Match(None, 0.0, 0.0, threshold)
     best, e, det = scored[0]
@@ -247,6 +238,26 @@ def locate(loc: Locator, screen: ScreenState, inputs: dict[str, str] | None = No
     if best < threshold or best - runner < margin:
         return Match(None, best, runner, threshold, det)
     return Match(e, best, runner, threshold, det)
+
+
+def _ranked(rendered: Locator, screen: ScreenState, use_ids: bool, role: str) -> list[tuple[float, Element, dict]]:
+    cands = candidates(screen)
+    # A screen that exposes no usable IDs at all (a release with stripped or obfuscated IDs) can't count a missing ID
+    # against any element: text, type and neighbors carry the score there, as on most real apps.
+    use_ids = use_ids and any(usable_id(e.resource_id) for e in cands)
+    scored = []
+    for e in cands:
+        sc, det = score(rendered, e, screen, use_ids=use_ids, role=role)
+        if sc > 0:
+            scored.append((sc, e, det))
+    scored.sort(key=lambda t: -t[0])
+    return scored
+
+
+def all_matching(loc: Locator, screen: ScreenState, inputs: dict[str, str] | None = None, *, threshold: float = STRICT,
+                 role: str = "target") -> list[Element]:
+    """Every element `loc` describes well enough, best first (when the one wanted is told apart by something else)."""
+    return [e for sc, e, _ in _ranked(render(loc, inputs or {}), screen, True, role) if sc >= threshold]
 
 
 def _same_slot(loc: Locator, scored: list, screen: ScreenState, margin: float) -> tuple[Element, dict] | None:

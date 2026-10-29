@@ -16,7 +16,8 @@ from types import SimpleNamespace
 from devices.android import AndroidDevice
 from routines import checks as chk
 from routines.compiler import clean, load_trace
-from routines.model import Check
+from routines.model import Check, Locator
+from routines.screens import load_tree
 
 AW = Path(__file__).parent / "traces" / "androidworld"
 BROCCOLI = "com.flauschcode.broccoli"
@@ -63,3 +64,24 @@ def test_a_trace_recorded_with_the_popup_as_the_app_compiles_with_the_app():
     assert tap_delete.before.package == BROCCOLI  # recorded as "PopupWindow:2096839"
     assert chk.derive_pre(tap_delete.before, tap_delete.target, {}, first=False) == [Check(kind="app_foreground", package=BROCCOLI)]
     assert all("PopupWindow" not in sc.package for s in steps for sc in (s.before, s.after))
+
+
+# ---- 2. a typed field is the one that holds what was typed ---------------------------------------
+
+
+def test_a_typed_field_is_not_mistaken_for_the_empty_one_typing_added():
+    screen = load_tree(AW / "contacts_phone_typed.json.gz")  # "Phone: +13920741751" and a new empty "Phone"
+    check = Check(kind="field_equals", locator=Locator(text="Phone", kind="EditText"), value="+13920741751")
+    out = chk.evaluate(check, screen, {})
+    assert out.passed and out.detail == "field holds '+13920741751'" and out.element is not None and out.element.index == 82
+    # A number that didn't go in is still caught.
+    assert not chk.evaluate(check.model_copy(update={"value": "+19999999999"}), screen, {}).passed
+
+
+def test_a_field_whose_hint_is_the_typed_value_holds_it():
+    screen = load_tree(AW / "markor_extension_typed.json.gz")  # the extension field: text ".md", hint ".md"
+    check = Check(kind="field_equals", locator=Locator(resource_id="new_file_dialog__ext", text="{{ext}}", kind="EditText"),
+                  value="{{ext}}")
+    assert chk.evaluate(check, screen, {"ext": ".md"}).passed
+    empty = Check(kind="field_equals", locator=Locator(resource_id="new_file_dialog__name", kind="EditText"), value="my_note")
+    assert not chk.evaluate(empty, screen, {}).passed  # the name field's hint is "my_note": typed text there is not
