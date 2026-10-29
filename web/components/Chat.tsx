@@ -3,17 +3,19 @@
 // The conversation with Envoy's assistant (Muse Spark): answers from memory with where each fact was seen, or starts a
 // task. Home's greeting sits in front of it; typing or speaking moves into the thread.
 // Phase 5: tap the mic to dictate into the message box (Muse Voice Transcribe), check it, then send; replies to a
-// dictated message are spoken. Screenshots and photos go into memory.
+// dictated message are spoken. Screenshots and photos go into memory. A recurring job asked for here ("every Friday at
+// 6 PM…") comes back with its card, answered in place (components/Offers.tsx).
 import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { ArrowUpIcon, CaretLeftIcon, CaretRightIcon, GraphIcon, ImageSquareIcon, MicrophoneIcon, StopIcon } from "@phosphor-icons/react";
 import Avatar, { type Mood } from "@/components/Avatar";
+import { OfferCard } from "@/components/Offers";
 import { StatusChip } from "@/components/Tasks";
 import { Chip, cx, IconButton } from "@/components/ui";
-import { post, Task } from "@/lib/api";
+import { Offer, post, Task } from "@/lib/api";
 import { metric, uploadPhotos } from "@/lib/device";
 import { speak, Turn, useDictation } from "@/lib/voice";
 
-type Msg = { from: "you" | "envoy"; text: string; task?: Task; memory?: boolean; stale?: boolean; voice?: boolean; photo?: boolean; error?: boolean };
+type Msg = { from: "you" | "envoy"; text: string; task?: Task; memory?: boolean; stale?: boolean; voice?: boolean; photo?: boolean; error?: boolean; offer?: Offer };
 
 const SPOKEN_END: Record<string, string> = { done: "Done.", failed: "That didn't work.", declined: "Declined.", needs_you: "I need you." };
 
@@ -56,7 +58,7 @@ export default function Chat({ tasks, openTask, intro, suggestions = [], onListe
     const t0 = performance.now();
     try {
       const r = await post("/api/chat", { message, source: dictation ? "voice" : "chat" });
-      setMsgs((m) => [...m, { from: "envoy", text: r.reply, task: r.task, memory: r.from_memory, stale: r.stale }]);
+      setMsgs((m) => [...m, { from: "envoy", text: r.reply, task: r.task, memory: r.from_memory, stale: r.stale, offer: r.offer }]);
       if (dictation) {
         const chatMs = Math.round(performance.now() - t0);
         if (r.task?.id) spokenTasks.current[r.task.id] = r.task.status;
@@ -220,6 +222,7 @@ function Reply({ m, task, openTask, mood }: { m: Msg; task?: Task; openTask: (id
             <CaretRightIcon size={18} className="shrink-0 text-muted" />
           </button>
         )}
+        {m.offer && <OfferCard o={m.offer} openTask={openTask} />}
       </div>
     </div>
   );

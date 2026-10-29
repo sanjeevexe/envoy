@@ -620,7 +620,7 @@ export async function handle(path: string, init: RequestInit = {}): Promise<any>
           setup: "asks you every Friday at 6:00 PM" } };
       db.offers.push(o);
       emit("offer", { offer: o, change: "created" });
-      return { kind: "trigger_request", reply: "I can do that: every Friday at 6:00 PM, order your usual from Thai Basil. It's off until you say yes on the card, and each time it runs I'll ask you first.",
+      return { kind: "trigger_request", reply: "I can do that: every Friday at 6:00 PM, order your usual from Thai Basil. It's off until you say yes below, and each time it runs I'll ask you first.",
         spoken: "I've drafted it. Say yes on the card to turn it on.", offer: o, trigger: t, model_calls: 1 };
     }
     if (/gate|seat|flight|board/i.test(msg)) return { kind: "memory", reply: "Your gate for SL 482 is B22. It moved from B14 at 6:12 PM; I saw it in SkyLark.", from_memory: true, stale: false,

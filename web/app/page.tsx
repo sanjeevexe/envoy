@@ -112,7 +112,10 @@ export default function Page() {
         break;
       case "memory": setMemVersion((v) => v + 1); break;
       case "fact_changed": setBriefVersion((v) => v + 1); break;
-      case "offer": setBriefVersion((v) => v + 1); if (e.change === "created") say(e.offer?.title ?? "Envoy has a question"); break;
+      case "offer":  // one you asked for in chat shows in the conversation itself: no toast for it
+        setBriefVersion((v) => v + 1);
+        if (e.change === "created" && !["chat", "voice"].includes(e.offer?.source)) say(e.offer?.title ?? "Envoy has a question");
+        break;
       case "photo": say(e.summary); break;
       case "paired": say(`Paired: ${e.name}`); break;
     }

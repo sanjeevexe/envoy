@@ -147,7 +147,7 @@ class Recurring:
             body="It stays off until you say yes, and each time it runs I'll ask you first.", source=source, key=f"trigger_request:{trig['id']}",
             action={"type": "enable_trigger", "trigger_id": trig["id"], "summary": f"{w[:1].upper()}{w[1:]}, I'll ask you: “{_should_i(goal)}”",
                     "setup": f"asks you {w}"})
-        out.update(reply=f"I can do that: {w}, {what}. It's off until you say yes on the card, and each time it runs I'll ask you first.",
+        out.update(reply=f"I can do that: {w}, {what}. It's off until you say yes below, and each time it runs I'll ask you first.",
                    spoken="I've drafted it. Say yes on the card to turn it on.", offer=offer, trigger=trig)
         return out, 1, cost
 
