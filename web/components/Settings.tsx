@@ -1,8 +1,33 @@
 "use client";
 
-// When Envoy asks before an irreversible step: for everything, per app, or per routine (the most specific wins).
+// Settings: when Envoy asks before an irreversible step (for everything, per app, or per routine: the most specific
+// wins), which apps run on your own Android phone, and this device and the others paired with Envoy.
 import { useEffect, useState } from "react";
+import { CheckCircleIcon, DeviceMobileIcon } from "@phosphor-icons/react";
+import Companion from "@/components/Companion";
+import { Card, cx, Section, Segmented } from "@/components/ui";
 import { api, post } from "@/lib/api";
+
+const SECTIONS = ["Approvals", "Phones", "Devices"] as const;
+export default function SettingsPage({ publicUrl, profile }: { publicUrl?: string; profile?: string }) {
+  const [section, setSection] = useState<(typeof SECTIONS)[number]>("Approvals");
+  return (
+    <div className="mx-auto w-full max-w-[720px] pb-10 md:pt-6">
+      <div className="flex flex-wrap items-center justify-between gap-2 px-4 pt-3">
+        <Segmented options={SECTIONS} value={section} onChange={setSection} label="Settings" />
+        {profile && <span className="text-meta-2 text-muted">{profile === "demo" ? "Demo memory (SkyLark test data)" : "Your memory"}</span>}
+      </div>
+      <div className="ev-fade" key={section}>
+        {section === "Approvals" && <Settings />}
+        {section === "Phones" && <Phones />}
+        {section === "Devices" && <Companion publicUrl={publicUrl} />}
+      </div>
+    </div>
+  );
+}
+
+const select = "h-11 max-w-[55%] shrink-0 rounded-full border border-control bg-surface pl-3 pr-2 text-meta font-semibold outline-none focus:border-sage";
+
 
 type Rules = { default: string; apps: Record<string, string>; routines: Record<string, string> };
 type Info = { rules: Rules; apps: string[]; routines: { name: string; app: string; intent: string; irreversible: boolean }[] };
@@ -13,12 +38,12 @@ const LABEL: Record<string, string> = {
   never: "Never ask (standing approval)",
 };
 
-export default function Settings() {
+function Settings() {
   const [info, setInfo] = useState<Info | null>(null);
   const [rules, setRules] = useState<Rules | null>(null);
   const [saved, setSaved] = useState<string | null>(null);
   useEffect(() => { api<Info>("/api/settings/approvals").then((i) => { setInfo(i); setRules(i.rules); }); }, []);
-  if (!info || !rules) return <p className="p-4 text-sm">Loading…</p>;
+  if (!info || !rules) return <p className="px-6 py-6 text-body text-muted">Loading…</p>;
 
   const save = async (next: Rules) => {
     setRules(next);
@@ -39,63 +64,55 @@ export default function Settings() {
   };
 
   return (
-    <div className="max-w-2xl space-y-6 p-4 text-sm">
-      <section>
-        <h2 className="text-base font-semibold">Approvals</h2>
-        <p className="mt-1 text-stone-600">
-          Before an irreversible step (checking in, sending, cancelling), Envoy can ask you first. With
-          <b> Ask unless I asked for it</b>, &ldquo;check me in&rdquo; is your OK to tap &ldquo;Confirm check-in&rdquo; for that trip: Envoy does it and tells you.
-        </p>
-        <div className="mt-3 flex flex-col gap-2">
+    <div>
+      <Section title="Approvals" intro={<>Before a step that can&rsquo;t be undone (checking in, sending, cancelling), Envoy can ask you first. With <b>Ask unless I asked for it</b>, &ldquo;check me in&rdquo; is your OK to tap &ldquo;Confirm check-in&rdquo; for that trip: Envoy does it and tells you.</>}>
+        <Card className="overflow-hidden" role="radiogroup" aria-label="When to ask">
           {["unless_requested", "always"].map((m) => (
-            <label key={m} className="flex items-center gap-2">
+            <label key={m} className="flex min-h-[56px] cursor-pointer items-center gap-3 border-b border-divider px-4 py-3 last:border-b-0">
               <input type="radio" name="default" checked={rules.default === m} onChange={() => save({ ...rules, default: m })} />
-              {LABEL[m]}{m === "unless_requested" && <span className="text-xs text-stone-500">(default)</span>}
+              <span className="text-row font-semibold">{LABEL[m]}</span>
+              {m === "unless_requested" && <span className="text-meta-2 text-muted">the default</span>}
             </label>
           ))}
-        </div>
-        <ul className="mt-3 list-disc space-y-1 pl-5 text-xs text-stone-600">
+        </Card>
+        <ul className="flex flex-col gap-1.5 px-2 text-meta text-ink-2">
           <li>Anything that costs money (pay, buy, order, subscribe) always asks.</li>
           <li>Envoy still asks when the step isn&rsquo;t what you asked for, or its details differ (another flight, another seat).</li>
           <li>Requests from triggers, emails or other assistants (Muse, Claude, over MCP) ask, unless a routine has a standing approval.</li>
         </ul>
-      </section>
+      </Section>
 
-      <section>
-        <h3 className="font-semibold">Per app</h3>
-        <div className="mt-2 divide-y divide-stone-100 rounded-xl bg-white shadow-sm">
+      <Section title="Per app">
+        <Card className="overflow-hidden">
           {info.apps.map((app) => (
-            <div key={app} className="flex items-center justify-between gap-3 px-3 py-2">
-              <span className="truncate text-stone-700">{app}</span>
-              <select value={rules.apps[app] ?? ""} onChange={(e) => setApp(app, e.target.value)} className="rounded border border-stone-300 px-2 py-1">
+            <label key={app} className="flex min-h-[56px] items-center justify-between gap-3 border-b border-divider px-4 py-2 last:border-b-0">
+              <span className="min-w-0 truncate text-row">{app}</span>
+              <select value={rules.apps[app] ?? ""} onChange={(e) => setApp(app, e.target.value)} className={select} aria-label={`When to ask in ${app}`}>
                 <option value="">Same as above</option>
                 <option value="unless_requested">{LABEL.unless_requested}</option>
                 <option value="always">{LABEL.always}</option>
               </select>
-            </div>
+            </label>
           ))}
-        </div>
-      </section>
+        </Card>
+      </Section>
 
-      <section>
-        <h3 className="font-semibold">Per routine</h3>
-        <p className="mt-1 text-xs text-stone-600">A standing approval lets a routine&rsquo;s own irreversible step run without asking, even when a trigger starts it, e.g. checking in 24 hours before every flight. Never for money.</p>
-        <div className="mt-2 divide-y divide-stone-100 rounded-xl bg-white shadow-sm">
+      <Section title="Per routine" intro="A standing approval lets a routine's own irreversible step run without asking, even when a trigger starts it: checking in 24 hours before every flight, say. Never for money.">
+        <Card className="overflow-hidden">
           {info.routines.filter((r) => r.irreversible).map((r) => (
-            <div key={r.name} className="flex items-center justify-between gap-3 px-3 py-2">
-              <span className="min-w-0"><span className="block truncate text-stone-800">{r.intent}</span><span className="block truncate text-xs text-stone-500">{r.name}</span></span>
-              <select value={rules.routines[r.name] ?? ""} onChange={(e) => setRoutine(r.name, e.target.value)} className="rounded border border-stone-300 px-2 py-1">
+            <label key={r.name} className="flex min-h-[60px] items-center justify-between gap-3 border-b border-divider px-4 py-2 last:border-b-0">
+              <span className="min-w-0"><span className="block truncate text-row font-semibold">{r.intent}</span><span className="block truncate text-meta-2 text-muted">{r.name}</span></span>
+              <select value={rules.routines[r.name] ?? ""} onChange={(e) => setRoutine(r.name, e.target.value)} className={select} aria-label={`When to ask for ${r.intent}`}>
                 <option value="">Same as app</option>
                 <option value="unless_requested">{LABEL.unless_requested}</option>
                 <option value="always">{LABEL.always}</option>
                 <option value="never">{LABEL.never}</option>
               </select>
-            </div>
+            </label>
           ))}
-        </div>
-      </section>
-      <Phones />
-      {saved && <div className="text-emerald-700">{saved}</div>}
+        </Card>
+      </Section>
+      {saved && <p role="status" className="mx-6 mt-4 flex items-center gap-1.5 text-meta font-semibold text-sage-ink"><CheckCircleIcon size={16} weight="fill" />{saved}</p>}
     </div>
   );
 }
@@ -116,43 +133,43 @@ function Phones() {
     setInfo({ ...info, phone_apps: r.phone_apps, learned: r.learned ?? info.learned });
   };
   return (
-    <section>
-      <h2 className="text-base font-semibold">Phones</h2>
-      <p className="mt-1 text-stone-600">
-        Tasks run on an emulator unless you say &ldquo;on my phone&rdquo;, an app below is set to your phone, or the app blocks emulators.
-        When an app shows a bot check on an emulator, Envoy sets it to your phone itself; untick it to undo.
-        Envoy asks before every task on your phone, shows a banner there while it works, and stops the moment you touch the phone.
-      </p>
-      <div className="mt-2 text-xs text-stone-600">
+    <Section title="Phones" intro={<>Tasks run on an emulator unless you say &ldquo;on my phone&rdquo;, an app below is set to your phone, or the app blocks emulators. When an app shows a bot check on an emulator, Envoy sets it to your phone itself; untick it to undo. Envoy asks before every task on your phone, shows a banner there while it works, and stops the moment you touch the phone.</>}>
+      <Card className="overflow-hidden">
         {info.phones.length ? info.phones.map((p) => (
-          <div key={p.avd}>📱 {p.name ?? "Android phone"}{p.android ? ` · Android ${p.android}` : ""} · {p.state === "device" ? "connected" : p.state === "unauthorized" ? "allow USB debugging on the phone" : "not connected"}</div>
-        )) : "No Android phone connected (USB, or wireless debugging)."}
-      </div>
-      <div className="mt-2 divide-y divide-stone-100 rounded-xl bg-white shadow-sm">
+          <div key={p.avd} className="flex min-h-[60px] items-center gap-3 border-b border-divider px-4 py-3 last:border-b-0">
+            <DeviceMobileIcon size={20} className="shrink-0 text-sage-ink" />
+            <span className="min-w-0 flex-1">
+              <span className="block text-row font-semibold">{p.name ?? "Android phone"}{p.android ? ` · Android ${p.android}` : ""}</span>
+              <span className={cx("block text-meta-2", p.state === "device" ? "text-sage-ink" : "text-apricot-ink")}>
+                {p.state === "device" ? "Connected" : p.state === "unauthorized" ? "Allow USB debugging on the phone" : "Not connected"}
+              </span>
+            </span>
+          </div>
+        )) : <p className="px-4 py-4 text-meta text-ink-2">No Android phone connected (USB, or wireless debugging).</p>}
+      </Card>
+      <Card className="overflow-hidden">
         {[...info.apps].sort((a, b) => (info.names?.[a] ?? a).localeCompare(info.names?.[b] ?? b)).map((app) => (
-          <label key={app} className="flex items-center justify-between gap-3 px-3 py-2">
-            <span className="min-w-0 truncate text-stone-700">
-              {info.names?.[app] ?? app}
-              {info.names?.[app] ? <span className="ml-1 text-xs text-stone-400">{app}</span> : null}
-              {info.emulator_refused[app] ? <span className="ml-1 text-xs text-stone-500">(blocks emulators)</span> : null}
+          <label key={app} className="flex min-h-[60px] items-center justify-between gap-3 border-b border-divider px-4 py-2 last:border-b-0">
+            <span className="min-w-0">
+              <span className="block truncate text-row font-semibold">{info.names?.[app] ?? app}</span>
+              <span className="block truncate text-meta-2 text-muted">
+                {info.emulator_refused[app] ? "Blocks emulators" : info.names?.[app] ? app : ""}
+              </span>
               {info.learned?.[app] && info.phone_apps.includes(app) ? (
-                <span className="block truncate text-xs text-amber-700">
-                  Set by Envoy: it {info.learned[app].why ?? "blocked the emulator"}
-                  {info.learned[app].at ? ` (${new Date(info.learned[app].at! * 1000).toLocaleDateString()})` : ""}
+                <span className="block text-meta-2 text-apricot-ink">
+                  Set by Envoy: it {info.learned[app].why ?? "blocked the emulator"}{info.learned[app].at ? ` (${new Date(info.learned[app].at! * 1000).toLocaleDateString()})` : ""}
                 </span>
               ) : null}
             </span>
-            <span className="flex items-center gap-2 text-xs text-stone-600">
-              Runs on my phone
+            <span className="flex shrink-0 items-center gap-2.5 text-meta text-ink-2">
+              On my phone
               <input type="checkbox" checked={info.phone_apps.includes(app) || !!info.emulator_refused[app]} disabled={!!info.emulator_refused[app]}
                      onChange={(e) => toggle(app, e.target.checked)} />
             </span>
           </label>
         ))}
-      </div>
-      <p className="mt-2 text-xs text-stone-500">
-        Always on your phone (known to block emulators): {Object.values(info.emulator_refused).join(", ")}.
-      </p>
-    </section>
+      </Card>
+      <p className="px-2 text-meta-2 text-muted">Always on your phone (known to block emulators): {Object.values(info.emulator_refused).join(", ")}.</p>
+    </Section>
   );
 }

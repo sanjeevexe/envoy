@@ -3,6 +3,8 @@
 // The memory graph: entities and their links. Click one to see its facts, where each was seen, and its history;
 // edit a fact (your edit outranks anything Envoy read) or delete a source (its facts go with it).
 import { useEffect, useRef, useState } from "react";
+import { MagnifyingGlassIcon, PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
+import { Button, Card, Chip, cx, SectionLabel } from "@/components/ui";
 import { api, ago, post } from "@/lib/api";
 
 type Node = { id: string; type: string; name: string; facts: number; stale: boolean; user_edited: boolean };
@@ -11,8 +13,10 @@ type Fact = { id: string; attribute: string; value: string; current: boolean; st
   recorded_at: number; valid_to?: number | null; sources: { id: string; where: string }[] };
 type Entity = { entity: { id: string; type: string; name: string }; facts: Fact[]; links: { relation: string; id: string; type: string; name: string }[] };
 
-const COLORS: Record<string, string> = { Trip: "#2563eb", Flight: "#0891b2", Person: "#7c3aed", Order: "#d97706", Reservation: "#059669",
-  Place: "#65a30d", Note: "#78716c", Hotel: "#db2777" };
+// Node colors from the Sage palette (globals.css): greens for travel, apricots for shopping, inks for people and places.
+const COLORS: Record<string, string> = { Person: "#1F2A24", Trip: "#3E7C5C", Flight: "#2F6A4C", Reservation: "#5F6A63", Order: "#E8945A", Item: "#C2703A",
+  Place: "#7A3B12", "Loyalty program": "#6F8F7C", Note: "#4E5A53", Hotel: "#5F6A63" };
+const FONT = '"Manrope Variable", Manrope, system-ui, sans-serif';
 
 export default function MemoryGraph({ version }: { version: number }) {
   const box = useRef<HTMLDivElement>(null);
@@ -33,19 +37,22 @@ export default function MemoryGraph({ version }: { version: number }) {
     import("cytoscape").then(({ default: cytoscape }) => {
       if (!alive || !box.current) return;
       const elements = [
-        ...graph.nodes.map((n) => ({ data: { id: n.id, label: `${n.type}\n${n.name}`.slice(0, 48), color: COLORS[n.type] ?? "#57534e", stale: n.stale ? 1 : 0 } })),
+        ...graph.nodes.map((n) => ({ data: { id: n.id, label: `${n.type}\n${n.name}`.slice(0, 48), color: COLORS[n.type] ?? "#4E5A53", stale: n.stale ? 1 : 0 } })),
         ...graph.edges.map((e) => ({ data: { id: e.id, source: e.source, target: e.target, label: e.relation } })),
       ];
       if (cy.current) cy.current.destroy();
       cy.current = cytoscape({
         container: box.current, elements, wheelSensitivity: 0.3,
         style: [
-          { selector: "node", style: { "background-color": "data(color)", label: "data(label)", "font-size": 9, "text-wrap": "wrap", "text-max-width": "110px",
-            "text-valign": "bottom", "text-margin-y": 4, width: 22, height: 22, color: "#292524" } },
-          { selector: "node[stale = 1]", style: { "border-width": 2, "border-style": "dashed", "border-color": "#f59e0b" } },
-          { selector: "node:selected", style: { "border-width": 3, "border-color": "#111" } },
-          { selector: "edge", style: { width: 1.5, "line-color": "#d6d3d1", "target-arrow-shape": "triangle", "target-arrow-color": "#d6d3d1",
-            "curve-style": "bezier", label: "data(label)", "font-size": 7, color: "#a8a29e" } },
+          { selector: "node", style: { "background-color": "data(color)", label: "data(label)", "font-family": FONT, "font-size": 10, "font-weight": 600,
+            "text-wrap": "wrap", "text-max-width": "120px", "text-valign": "bottom", "text-margin-y": 5, width: 26, height: 26, color: "#1F2A24",
+            "border-width": 3, "border-color": "#FFFFFF", "text-background-color": "#FFFFFF", "text-background-opacity": 0.85, "text-background-padding": "2px",
+            "text-background-shape": "roundrectangle" } },
+          { selector: "node[stale = 1]", style: { "border-width": 3, "border-style": "dashed", "border-color": "#E8945A" } },
+          { selector: "node:selected", style: { "border-width": 4, "border-color": "#E4EEE7", "overlay-color": "#3E7C5C", "overlay-opacity": 0.12, "overlay-padding": 6 } },
+          { selector: "edge", style: { width: 1.5, "line-color": "#D9D3C7", "target-arrow-shape": "triangle", "target-arrow-color": "#D9D3C7", "arrow-scale": 0.8,
+            "curve-style": "bezier", label: "data(label)", "font-family": FONT, "font-size": 8, color: "#5F6A63", "text-rotation": "autorotate",
+            "text-background-color": "#FFFFFF", "text-background-opacity": 0.85, "text-background-padding": "1px" } },
         ],
         layout: { name: "cose", animate: false, padding: 20, nodeRepulsion: () => 9000 },
       });
@@ -68,67 +75,79 @@ export default function MemoryGraph({ version }: { version: number }) {
   };
 
   const facts = entity?.facts.filter((f) => showHistory || f.current) ?? [];
+  const types = [...new Set(graph.nodes.map((n) => n.type))];
   return (
-    <div className="flex h-full flex-col lg:flex-row">
-      <div className="flex min-h-[360px] flex-1 flex-col">
-        <form className="flex gap-2 p-3" onSubmit={(e) => { e.preventDefault(); if (q) api(`/api/memory/search?q=${encodeURIComponent(q)}`).then((r) => setNotes(r.markdown || "(nothing relevant)")); }}>
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="What does Envoy remember about…" className="min-w-0 flex-1 rounded-md border border-stone-300 px-2 py-1 text-sm" />
-          <button className="rounded-md bg-stone-800 px-3 py-1 text-sm text-white">Search</button>
+    <div className="flex min-h-full flex-col lg:h-full lg:flex-row">
+      <div className="flex min-h-[420px] flex-1 flex-col gap-3 p-4 md:p-6">
+        <form role="search" className="flex h-12 items-center gap-1 rounded-full border border-control bg-surface pl-4 pr-1 focus-within:border-sage"
+              onSubmit={(e) => { e.preventDefault(); if (q) api(`/api/memory/search?q=${encodeURIComponent(q)}`).then((r) => setNotes(r.markdown || "Nothing relevant.")); }}>
+          <MagnifyingGlassIcon size={18} className="shrink-0 text-muted" />
+          <input value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search memory" placeholder="What does Envoy remember about…"
+                 className="min-w-0 flex-1 bg-transparent px-2 text-[16px] outline-none placeholder:text-muted md:text-body" />
+          <Button variant="primary" className="h-10">Search</Button>
         </form>
-        {notes && <pre className="mx-3 mb-2 max-h-48 overflow-auto whitespace-pre-wrap rounded bg-white p-2 text-xs shadow-sm">{notes}</pre>}
-        <div ref={box} className="m-3 flex-1 rounded-xl bg-white shadow-sm" />
-        <div className="px-3 pb-3 text-xs text-stone-500">{graph.nodes.length} entities · {graph.edges.length} links · dashed = may be out of date</div>
+        {notes && <pre className="max-h-48 overflow-auto whitespace-pre-wrap rounded-block border border-line bg-surface p-3 font-sans text-meta text-ink-2">{notes}</pre>}
+        <Card className="relative min-h-[320px] flex-1 overflow-hidden"><div ref={box} className="absolute inset-0" aria-label="Memory graph: select an entity to see its facts" role="img" /></Card>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-meta-2 text-muted">
+          <span>{graph.nodes.length} things · {graph.edges.length} links</span>
+          {types.map((t) => <span key={t} className="flex items-center gap-1.5"><span aria-hidden className="h-2.5 w-2.5 rounded-full" style={{ background: COLORS[t] ?? "#4E5A53" }} />{t}</span>)}
+          <span className="flex items-center gap-1.5"><span aria-hidden className="h-2.5 w-2.5 rounded-full border-2 border-dashed border-apricot" />may be out of date</span>
+        </div>
       </div>
-      <aside className="w-full shrink-0 overflow-y-auto border-t border-stone-200 p-4 lg:w-96 lg:border-l lg:border-t-0">
-        {!entity ? <p className="text-sm text-stone-500">Click an entity to see its facts and where each came from.</p> : (
-          <div className="space-y-3 text-sm">
+      <aside aria-label="Facts" className="w-full shrink-0 overflow-y-auto border-t border-line bg-raised p-4 md:p-6 lg:w-[380px] lg:border-l lg:border-t-0">
+        {!entity ? <p className="text-body text-muted">Select something in the graph to see what Envoy knows about it, and where each fact was seen.</p> : (
+          <div className="flex flex-col gap-4">
             <div>
-              <div className="text-xs uppercase tracking-wide text-stone-500">{entity.entity.type}</div>
-              <h3 className="text-base font-semibold">{entity.entity.name}</h3>
+              <div className="text-meta font-bold text-muted">{entity.entity.type}</div>
+              <h2 className="mt-0.5 text-title font-bold">{entity.entity.name}</h2>
             </div>
-            <label className="flex items-center gap-2 text-xs text-stone-600">
-              <input type="checkbox" checked={showHistory} onChange={(e) => setShowHistory(e.target.checked)} /> Show history
+            <label className="flex min-h-[44px] items-center gap-2.5 text-meta text-ink-2">
+              <input type="checkbox" checked={showHistory} onChange={(e) => setShowHistory(e.target.checked)} /> Show earlier values
             </label>
-            <ul className="space-y-2">
+            <ul className="flex flex-col gap-2">
               {facts.map((f) => (
-                <li key={f.id} className={`rounded-lg bg-white p-2 shadow-sm ${f.current ? "" : "opacity-60"}`}>
-                  <div className="flex items-baseline justify-between gap-2">
-                    <span className="text-xs text-stone-500">{f.attribute.replace(/_/g, " ")}</span>
-                    {f.current && <button onClick={() => setEdit({ attribute: f.attribute, value: f.value })} className="text-xs text-sky-700">Edit</button>}
+                <li key={f.id} className={cx("rounded-block border border-line bg-surface px-4 py-3", !f.current && "opacity-70")}>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-meta text-muted">{f.attribute.replace(/_/g, " ")}</span>
+                    {f.current && <button onClick={() => setEdit({ attribute: f.attribute, value: f.value })} aria-label={`Edit ${f.attribute.replace(/_/g, " ")}`}
+                                          className="-my-2 -mr-2 flex h-11 w-11 items-center justify-center rounded-full text-sage-ink hover:bg-sage-tint/60"><PencilSimpleIcon size={18} /></button>}
                   </div>
-                  <div className={`font-medium ${f.current ? "" : "line-through"}`}>{f.value}
-                    {f.stale && f.current && <span className="ml-2 text-xs font-normal text-amber-700">may have changed</span>}
-                    {f.conflict ? <span className="ml-2 text-xs font-normal text-rose-700">conflicts with your edit</span> : null}
-                    {f.author === "user" && <span className="ml-2 text-xs font-normal text-violet-700">your edit</span>}
-                  </div>
-                  <div className="mt-1 space-y-0.5">
+                  <div className={cx("text-row font-semibold [overflow-wrap:anywhere]", !f.current && "line-through")}>{f.value}</div>
+                  {(f.stale && f.current) || f.conflict || f.author === "user" ? (
+                    <div className="mt-1.5 flex flex-wrap gap-1.5">
+                      {f.stale && f.current && <Chip tone="apricot">May have changed</Chip>}
+                      {f.conflict ? <Chip tone="apricot">Conflicts with your edit</Chip> : null}
+                      {f.author === "user" && <Chip>Your edit</Chip>}
+                    </div>
+                  ) : null}
+                  <div className="mt-1.5 flex flex-col">
                     {f.sources.map((s) => (
-                      <div key={s.id} className="flex items-center justify-between gap-2 text-xs text-stone-500">
-                        <span>{s.where}</span>
-                        <button onClick={() => deleteSource(s.id, s.where)} className="text-rose-600">Delete source</button>
+                      <div key={s.id} className="flex items-center justify-between gap-2 text-meta-2 text-muted">
+                        <span className="min-w-0 [overflow-wrap:anywhere]">Seen in {s.where}</span>
+                        <button onClick={() => deleteSource(s.id, s.where)} aria-label={`Delete the source: ${s.where}`}
+                                className="-mr-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full hover:bg-well"><TrashIcon size={16} /></button>
                       </div>
                     ))}
                   </div>
-                  {!f.current && <div className="text-[11px] text-stone-400">replaced {f.valid_to ? ago(f.valid_to) : ""}</div>}
+                  {!f.current && <div className="text-meta-2 text-muted">replaced {f.valid_to ? ago(f.valid_to) : ""}</div>}
                 </li>
               ))}
             </ul>
             {edit && (
-              <div className="rounded-lg bg-violet-50 p-2">
-                <div className="text-xs text-stone-600">Edit {edit.attribute.replace(/_/g, " ")} (your edit outranks what Envoy reads)</div>
-                <div className="mt-1 flex gap-2">
-                  <input value={edit.value} onChange={(e) => setEdit({ ...edit, value: e.target.value })} className="min-w-0 flex-1 rounded border px-2 py-1" />
-                  <button onClick={saveEdit} className="rounded bg-violet-600 px-3 py-1 text-white">Save</button>
-                  <button onClick={() => setEdit(null)} className="rounded bg-stone-200 px-2 py-1">Cancel</button>
-                </div>
+              <div className="rounded-block border border-sage bg-surface p-4">
+                <label htmlFor="fact-edit" className="text-meta text-ink-2">Edit {edit.attribute.replace(/_/g, " ")}. Your edit outranks what Envoy reads.</label>
+                <input id="fact-edit" value={edit.value} onChange={(e) => setEdit({ ...edit, value: e.target.value })}
+                       className="mt-2 h-11 w-full rounded-full border border-control bg-surface px-4 text-[16px] outline-none focus:border-sage md:text-body" />
+                <div className="mt-3 flex gap-2"><Button variant="primary" onClick={saveEdit}>Save</Button><Button onClick={() => setEdit(null)}>Cancel</Button></div>
               </div>
             )}
             {entity.links.length > 0 && (
               <div>
-                <div className="text-xs uppercase tracking-wide text-stone-500">Linked</div>
-                <ul className="mt-1 space-y-1">
+                <SectionLabel className="mb-1.5">Linked</SectionLabel>
+                <ul>
                   {entity.links.map((l) => (
-                    <li key={l.id + l.relation}><button onClick={() => setSelected(l.id)} className="text-sky-700">{l.relation} → {l.type} {l.name}</button></li>
+                    <li key={l.id + l.relation}><button onClick={() => setSelected(l.id)} className="flex min-h-[44px] items-center gap-1.5 text-left text-row text-sage-ink hover:text-sage-deep">
+                      <span className="text-muted">{l.relation.replace(/_/g, " ")}</span> {l.type} {l.name}</button></li>
                   ))}
                 </ul>
               </div>
