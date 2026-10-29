@@ -2,7 +2,7 @@
 
 Session **proactive** (brief: `prompts/proactive.md`; the shared plan: `prompts/final-features-plan.md`). Worktree branch `claude/determined-tharp-9f937a`; stage 1 is also pinned as `proactive-s1`. Built on main `75f70fa` (preflight-logins' stages 0 and 1 included).
 
-Envoy now asks before it acts when you want it to ("Check in for SL 482?", one tap on Yes), learns what you repeat ("Make this a habit?"), and lets you turn how often it interrupts you up or down. Every offer comes from a rule (a trigger you set up, or a pattern in what you did); an email, a remembered fact or a pattern only fills in typed values, and you see the goal word for word before saying yes.
+Envoy now asks before it acts when you want it to ("Check in for SL 482?", one tap on Yes), learns what you repeat ("Make this a habit?"), sets up recurring jobs you ask for in chat (switched off until you say yes), and lets you turn how often it interrupts you up or down. Every offer comes from a rule (a trigger you set up, or a pattern in what you did); an email, a remembered fact or a pattern only fills in typed values, and you see the goal word for word before saying yes.
 
 ## What shipped
 
@@ -20,13 +20,14 @@ Envoy now asks before it acts when you want it to ("Check in for SL 482?", one t
 | 2 | **Learning from repeats**, deterministic, no model call, after each task finishes done and once a day: the last 60 days of your done tasks grouped by routine and inputs (or normalized goal). Weekly (3+ on one weekday within 90 min of the usual time), daily (3+ days in a row), before every trip (a routine within 48 h before 2+ flights, its inputs read from each trip, your own words kept as the template: "What's my gate for {trip.destination}?"). One offer per pattern with the evidence; Yes creates the trigger in ask mode. Declined or accepted never comes back; trigger-started tasks (also through a trigger's offer), cross-app parts and anything a trigger covers never count; money tasks only ever become habits that ask. | `backend/api/repeats.py` |
 | 2 | **Demo seed:** `scripts/seed_repeats.py --api-dir <dir>` (required) writes three labelled Mondays of `skylark_check_flight_status` at about 8 AM, tasks only, source `seed`; twice adds nothing; refuses `data/api` while the live API runs. Whether it goes onto the demo setup is the coordinator's call. | `scripts/seed_repeats.py` |
 | 2 | **Web:** the habit card shows its evidence and what it sets up; after Yes, "Set up: asks you every Monday at 8:00 AM". | `Offers.tsx`, `mock.ts` |
-| 3 | Chat setting up recurring jobs: **not built** (needs the Meta API, down since Oct 29 02:13). See "Not done". | |
+| 3 | **Chat sets up recurring jobs.** A code pre-filter for schedule words (every, each, daily, weekly, whenever, when … changes, remind me, before my …, on Fridays); every other message takes chat's path byte for byte (a test compares the adapter's calls and the output with and without it). One Muse Spark call (standard tier, structured, its own prompt) drafts the job. Code checks the draft: the goal must be your own words (every word of it in the message, a few small words aside), an email's sender and subject words must be in the message, nothing more often than every 15 minutes, and `scheduler.add` validates the rest. The trigger is created switched off and in ask mode (the same path as MCP `create_trigger`), and a `trigger_request` offer asks "Set this up? Every Friday at 6:00 PM: order your usual from Thai Basil". Once on, each run asks first. | `backend/api/recurring.py`, `chat.py`, one builder line in `app.py` (`runner.recurring`, wired like `runner.crossapp`) |
+| 3 | **Web:** a `trigger_request` offer says it asks each time, and after Yes, "Set up: asks you every Friday at 6:00 PM". Mock chat answers a recurring request with the offer. | `Offers.tsx`, `mock.ts` |
 
 Shared files: `app.py` got only the builder lines (`ctx.offers`, `scheduler.offers`, `scheduler.repeats` and its listener), the router include and the two trigger routes. `api.ts`, `mock.ts` and `page.tsx` got additions only.
 
 ## Evidence
 
-- **Backend tests:** 399 pass on stage 1 (`proactive-s1`) and 416 with stage 2 (`uv run --project backend pytest backend/tests -q`). New: `test_offers.py` (21) and `test_repeats.py` (17). They cover the contract and the brief's list: keys and no nagging, preflight lines (and a check that raises), who decides (token, photos token, MCP bearer, no session, cookie without X-Envoy), source = where you tapped, twice, expired, declined, a failed start staying pending, `enable_trigger`/`create_trigger`, the real `decide()` (an accepted check-in covers "Confirm check-in"; money, "Cancel trip" and a `trigger:` source still ask; "Chicago cancel trip" and "share this" cover nothing), the whole path through `WebApprover` with no person asked, ask-mode keys and expiry, the watcher in ask mode keeping its credit for change alerts, `_made_by` through the offers table, proactivity per level and approvals always pushing, the briefing, every preset against demo values, `add(enabled=False)`; each repeat pattern, the near-misses, declines, money, trigger-started tasks, the event and daily hooks, weekly triggers, and the seed.
+- **Backend tests:** 399 pass on stage 1 (`proactive-s1`), 416 with stage 2, and 472 with stage 3 on main `fb3d926` (27 new in `test_recurring.py`) (`uv run --project backend pytest backend/tests -q`). New: `test_offers.py` (21) and `test_repeats.py` (17). They cover the contract and the brief's list: keys and no nagging, preflight lines (and a check that raises), who decides (token, photos token, MCP bearer, no session, cookie without X-Envoy), source = where you tapped, twice, expired, declined, a failed start staying pending, `enable_trigger`/`create_trigger`, the real `decide()` (an accepted check-in covers "Confirm check-in"; money, "Cancel trip" and a `trigger:` source still ask; "Chicago cancel trip" and "share this" cover nothing), the whole path through `WebApprover` with no person asked, ask-mode keys and expiry, the watcher in ask mode keeping its credit for change alerts, `_made_by` through the offers table, proactivity per level and approvals always pushing, the briefing, every preset against demo values, `add(enabled=False)`; each repeat pattern, the near-misses, declines, money, trigger-started tasks, the event and daily hooks, weekly triggers, and the seed.
 - **Web build:** `npm run build` passes (static export of `/`, `/approve`).
 - **Screens** checked in mock mode in the browser pane, at 390×844 and 1440×900 (`eval/results/offers/screens/`):
 
@@ -39,6 +40,7 @@ Shared files: `app.py` got only the builder lines (`ctx.offers`, `scheduler.offe
 | Triggers: "Ask me first / Just do it" (390) | ![](../eval/results/offers/screens/390-triggers-ask-mode.jpg) |
 | Settings: Proactivity (390) | ![](../eval/results/offers/screens/390-settings-proactivity.jpg) |
 | Home at 1440 | ![](../eval/results/offers/screens/1440-home-offer-pending.png) |
+| Chat: "Every Friday at 6 PM, order my usual from Thai Basil", and its card (390) | ![](../eval/results/offers/screens/390-chat-recurring-reply.jpg) ![](../eval/results/offers/screens/390-activity-chat-offer.jpg) |
 | A habit, then "Set up: asks you every Monday at 8:00 AM" (390) | ![](../eval/results/offers/screens/390-home-habit-pending.jpg) ![](../eval/results/offers/screens/390-home-habit-set-up.jpg) |
 
 ## The device run
@@ -59,14 +61,29 @@ Shared files: `app.py` got only the builder lines (`ctx.offers`, `scheduler.offe
 
 Afterwards SkyLark was put back with `SkyLark.prepare(demo_fixtures(signed_in=True), variant=0)` (the coordinator's call): KX7Q2M not checked in, signed in. envoy-test was claimed through `coord/devices.sh` and released.
 
+## Chat setting up recurring jobs, live
+
+`eval/run_recurring.py` (Oct 29, 13:15, Muse Spark 1.3 standard tier) runs `chat()` with the real model and a runner that only records what it would start; triggers and offers go to a scratch database. Results in `eval/results/recurring/`.
+
+| You said | What happened | The trigger (switched off, asks each time) |
+| --- | --- | --- |
+| Every Friday at 6 PM, order my usual from Thai Basil | "Set this up? Every Friday at 6:00 PM: order your usual from Thai Basil" | `weekly_on {fri, 18:00}`, goal "order my usual from Thai Basil" |
+| check my flight status every weekday morning at 7:30 | "Set this up? Every weekday at 7:30 AM: check your flight status" | `weekly_on {mon–fri, 07:30}` |
+| Whenever SkyLark emails me that check-in is open, check me in for my flight | "Set this up? Whenever an email from “SkyLark” about “check-in is open” arrives: check you in for your flight" | `email`, sender SkyLark, subject "check-in is open" |
+| When my flight's gate changes, look up my boarding time | "Set this up? Whenever your flight's gate changes: look up your boarding time" | `fact_changed` Flight.gate |
+| Check me in 24 hours before every flight | "Set this up? 24 h before every flight: check you in" | `before_fact`, 1440 min |
+| Check me in before my flight to Chicago tomorrow | not recurring: chat went on as before and would start "Check me in for my flight to Chicago tomorrow" (recorded, not run) | none |
+
+Every draft's goal was the user's own words, and every schedule was right. 7 calls, 1.4–5.0 s each.
+
 ## Spend
 
-No model calls in any of this work: everything built is rules and code, and the device run uses the check-in routine (0 model calls). $0.
+Stages 1 and 2 made no model calls (rules and code; the device run used the check-in routine). Stage 3's live check: **7 Muse Spark calls, $0.018** at standard prices, against the $5 budget. Its offline tests use a recorded adapter.
 
 ## Not done, not checked
 
 - **The real iPhone push of an offer** happens after the merge, on the live API (this copy's only push subscription was a fake service that checks VAPID and decrypts).
-- **Stage 3** (chat setting up recurring jobs) needs the Meta API. If billing isn't back by Oct 31 12:00 it stays roadmap: a code pre-filter for schedule words (every other message takes today's chat path unchanged), one structured Muse Spark call drafting `{kind, name, spec, action, ask}`, validation through `scheduler.add`, `ask` forced for irreversible verbs and money, and a `trigger_request` offer "Set this up? Every Friday at 6 PM: order your usual from Thai Basil. I'll ask you each time."
+- **Stage 3 in the app:** a trigger made in chat is always in ask mode (the coordinator's call: the same path as MCP `create_trigger`), not only for irreversible verbs and money; you can switch it to "Just do it" on the Triggers page, and a trigger-started task still asks before any irreversible step. The chat reply says the card is waiting; in the conversation view the card itself shows on Home and in Activity, not inline in the reply, unless Chat.tsx (outside this session's files) renders it.
 - **The email preset** fires only when a "check-in is open" email arrives: the demo inbox has none (the test adds one). The before_fact preset is the demo's path.
 - **Alerts after a restart:** `api/alerts.py` credits a trigger from the `trigger_fired` event (kept in memory). A task started from a trigger's offer has source `web`, so after an API restart its later changes are no longer credited to the trigger. `_made_by` and repeats read the offers table, so they're unaffected. alerts.py isn't this session's file.
 - **Preflight lines** come from `api.preflight.check` (preflight-logins, now in main) through a guarded import. The card draws them compactly inside the offer card rather than with the task view's `BeforeIStart`, which brings its own avatar and card.

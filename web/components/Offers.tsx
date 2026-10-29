@@ -28,7 +28,7 @@ export function outcome(o: Offer): string {
   if (o.status === "pending") return "Waiting for your answer";
   if (o.status === "accepted") {
     const by = o.decided_by && o.decided_by !== "you" ? ` (${o.decided_by})` : "";
-    if (o.action.type === "create_trigger" && o.action.setup) return `Set up: ${o.action.setup}`;
+    if ((o.action.type === "create_trigger" || o.action.type === "enable_trigger") && o.action.setup) return `Set up: ${o.action.setup}`;
     return o.action.type === "task" || o.action.type === "handoff" ? `You said yes${by}: started` : `You said yes${by}: set up`;
   }
   if (o.status === "declined") return o.kind === "repeat" ? "Not now: I won't suggest it again" : o.kind === "trigger" ? "Not now: skipped this time" : "Not now";
@@ -74,7 +74,8 @@ export function OfferCard({ o, openTask, onDecided }: { o: Offer; openTask?: (id
       .finally(() => setBusy(false));
   };
   const pending = cur.status === "pending";
-  const asksEachTime = cur.action.type === "create_trigger" && cur.action.action?.ask;
+  // a habit's trigger, and one asked for in chat or by an assistant, ask each time they run (both are made in ask mode)
+  const asksEachTime = (cur.action.type === "create_trigger" && cur.action.action?.ask) || cur.action.type === "enable_trigger";
   const blocked = cur.preflight.some((l) => l.level === "stop");
   return (
     <Card tone={pending ? "needs" : undefined} className="p-4" aria-label={cur.title}>

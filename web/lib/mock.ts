@@ -235,6 +235,11 @@ function seed(): DB {
     offer({ id: "offer-ck-old", created_at: ago(2 * 86400 + 600), title: "Check in for SL 1213?", status: "accepted", decided_at: ago(2 * 86400 + 300), decided_by: "you on Maya's iPhone",
       task_id: "task-ck", body: "From your trigger “Ask me to check in when check-in opens”, which asks you first.",
       action: { ...checkIn, goal: "Check me in for my flight SL 1213 to Louisville", inputs: { trip_city: "Louisville" } } }),
+    offer({ id: "offer-chat-thai", kind: "trigger_request", created_at: ago(3 * 86400 + 900), title: "Set this up? Every Friday at 6:00 PM: order your usual from Thai Basil",
+      status: "accepted", decided_at: ago(3 * 86400 + 840), decided_by: "you", source: "chat", origin: null,
+      body: "It stays off until you say yes, and each time it runs I'll ask you first.",
+      action: { type: "enable_trigger", trigger_id: "trig-thai", summary: "Every Friday at 6:00 PM, I'll ask you: “Should I order your usual from Thai Basil?”",
+        setup: "asks you every Friday at 6:00 PM" }, result: { trigger_id: "trig-thai" } }),
     offer({ id: "offer-coffee", created_at: earlier(7, 30, 9 * 3600) - 86400, title: "Should I order your morning coffee?", status: "declined", decided_at: earlier(7, 32, 9 * 3600) - 86400,
       decided_by: "you", body: "From your trigger “Morning coffee”, which asks you first.", source: "trigger:Morning coffee", origin: { trigger_id: "trig-coffee" },
       action: { type: "task", goal: "Order my morning coffee", request: "Order my morning coffee", routine: "starbucks_order_usual", inputs: {} } }),
@@ -495,7 +500,11 @@ function answerOffer(id: string, decision: string) {
   if (o.status === "accepted" && decision === "accept") return o;
   if (o.status !== "pending") throw err(409, `already ${o.status}`);
   if (decision === "decline") Object.assign(o, { status: "declined", decided_at: now(), decided_by: "you" });
-  else if (o.action.type === "create_trigger") {  // a habit: the trigger it sets up asks each time
+  else if (o.action.type === "enable_trigger") {  // chat or an assistant asked for it: the yes turns it on
+    const t = db.triggers.find((x) => x.id === o.action.trigger_id);
+    if (t) t.enabled = true;
+    Object.assign(o, { status: "accepted", decided_at: now(), decided_by: "you", result: { trigger_id: o.action.trigger_id } });
+  } else if (o.action.type === "create_trigger") {  // a habit: the trigger it sets up asks each time
     const t = { id: `trig-${++runs}`, kind: o.action.kind, name: o.action.name, spec: o.action.spec, action: o.action.action, enabled: true, last_fired: null,
       next: [{ at: (() => { const d = new Date(); d.setDate(d.getDate() + ((8 - d.getDay()) % 7 || 7)); d.setHours(8, 0, 0, 0); return d.getTime() / 1000; })() }],
       alerts: { on: false, attributes: ["*"] } };
@@ -599,6 +608,21 @@ export async function handle(path: string, init: RequestInit = {}): Promise<any>
   }
   if (p === "/api/chat") {
     const msg = String(body.message ?? "");
+    if (/\b(every|each|daily|weekly|whenever)\b/i.test(msg)) {  // a recurring job: a trigger, switched off, and a card to turn it on
+      const id = `offer-chat-${++runs}`;
+      const t = { id: `trig-${runs}`, kind: "time", name: msg.slice(0, 60), spec: { weekly_on: { days: ["fri"], at: "18:00" } }, action: { goal: msg, ask: true },
+        enabled: false, last_fired: null, next: [], alerts: { on: false, attributes: ["*"] } };
+      db.triggers.push(t);
+      const o = { id, created_at: now(), kind: "trigger_request", title: "Set this up? Every Friday at 6:00 PM: order your usual from Thai Basil", status: "pending",
+        body: "It stays off until you say yes, and each time it runs I'll ask you first.", source: "chat", key: `trigger_request:${t.id}`, expires_at: null,
+        decided_at: null, decided_by: null, task_id: null, preflight: [], origin: null, note: null, result: null,
+        action: { type: "enable_trigger", trigger_id: t.id, summary: "Every Friday at 6:00 PM, I'll ask you: “Should I order your usual from Thai Basil?”",
+          setup: "asks you every Friday at 6:00 PM" } };
+      db.offers.push(o);
+      emit("offer", { offer: o, change: "created" });
+      return { kind: "trigger_request", reply: "I can do that: every Friday at 6:00 PM, order your usual from Thai Basil. It's off until you say yes on the card, and each time it runs I'll ask you first.",
+        spoken: "I've drafted it. Say yes on the card to turn it on.", offer: o, trigger: t, model_calls: 1 };
+    }
     if (/gate|seat|flight|board/i.test(msg)) return { kind: "memory", reply: "Your gate for SL 482 is B22. It moved from B14 at 6:12 PM; I saw it in SkyLark.", from_memory: true, stale: false,
       spoken: "Your gate is B22." };
     return { kind: "task", reply: "On it. I'll do that on the emulator and tell you when it's done.", task: chatTask(msg) };
