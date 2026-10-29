@@ -2,7 +2,7 @@
 
 Oct 29, 2026. Branch `claude/brave-kepler-5457be`. Brief: `prompts/cloud-proof.md`. Full write-up: `docs/cloud.md`.
 
-**Stages 0, 1 and 2 are done. The VM is stopped, and no key is on it.** No product code changed: `scripts/cloud/`, `docs/cloud.md`, `eval/results/cloud/`, a two-line pointer in `docs/phase-0-findings.md`, and this report.
+**Stages 0, 1 and 2 are done (in main at `b3bad38`). Stage 3 (all of Envoy in the cloud, as a second option) is built and measured; see below.** No product code changed: `scripts/cloud/`, `docs/cloud.md`, `eval/results/cloud/`, a two-line pointer in `docs/phase-0-findings.md`, and this report.
 
 ## Results
 
@@ -84,3 +84,69 @@ The $60 stage 3 budget is about 150 VM-hours.
 - Stage 2: this commit.
 - Backend suite: 493 passed. One earlier run stopped at a flaky `test_mcp_link.py::test_at_most_fifty_newest_last_and_a_cursor_pages_forward` (an `IntegrityError` in `api/store.py`). It passed 3/3 alone and in the full rerun; it's not touched by this branch.
 - No web changes, so no web build is needed.
+
+## Stage 3: the cloud copy (Oct 29 evening)
+
+The user asked for the full move as **an alternative, not a replacement**: two complete setups, one picked before the Nov 3 recording. No product code changed. Full write-up: `docs/cloud.md`, "Stage 3".
+
+### Built
+
+- **The cloud copy on the VM:** the API, web app and MCP from main, envoy-test (SkyLark) and envoy-real (Play Store; the user's sign-ins).
+- **Its own data:** `~/envoy-state` holds its `.env` with its own MCP token, its own session token and VAPID keys, and a copy of the demo memory and test inbox.
+- **Started at boot** by systemd. Reached only over the tailnet at `https://envoy-cloud.tailffb391.ts.net:8443` (Tailscale Serve, approved by the user).
+- **Scripts:**
+  - `envoy-setup.sh`, `vm-envoy.sh`, `tailnet.sh`
+  - `login.sh`, `keep-awake.sh`, `key.sh` (now line-based)
+  - `shortcut.sh` (builds "Ask Envoy (cloud)")
+  - `muse-tunnel.sh`, `muse-token.sh`
+  - `fallback.sh` (a machine image to start in another zone)
+  - `live_lag.py`, `voice_check.py`
+- **The switch,** in `docs/cloud.md`: the one-time setup, how to choose the cloud, how to switch back.
+
+### The bars
+
+| Bar (the brief) | Result |
+| --- | --- |
+| Routines pass at the Mac's rate | **SkyLark: yes**, 48/48 with no model call (stage 1), and the interfaces suite's flows passed. **Real apps: nearly**: same-input reruns passed 5 of 6 compiled (Starbucks didn't read its output back); the Mac did 6 of 6 |
+| Agent runs within about 20% of the Mac's time | **SkyLark: yes**: the stage 2 agent run took +13%, and the interfaces suite's phase4 +9% (but approval_modes +62%). **Real apps: not comparable**: a fresh phone's first-run screens made the agent take 2–17× the steps. Per step it was 1.1–1.6× the Mac |
+| The live-view lag on the iPhone is acceptable | **No, by the target**: 290 ms frame lag p50 on the iPhone during the sitting (the Mac copy: 66–115 ms; target under 150 ms), and 147 ms from the Mac at idle. Usable for a sign-in; visibly laggy to watch |
+| No new bot checks on the demo's apps | **Mostly**: no bot check at launch on 7 apps. **Amazon refused to create an account** ("suspicious activity"; signing in to one made on the laptop worked). **Starbucks sign-in failed** ("browser outdated"; cause not established) |
+| A tested rollback to the Mac in minutes | **Yes**: nothing on the Mac changes, so switching back is repointing the iPhone icon, the Siri shortcut's name and Muse's connector |
+
+Also measured:
+- **Voice** works: 3 of 3 heard exactly; the chat reply takes 4.4–4.6 s (Mac 2.6 s).
+- **Pushes** work.
+- **Screenshots and photos into memory don't:** they need Apple's Vision framework for OCR. That's a code change for later, not done.
+
+### Found on the way (all handled from outside, no product code)
+
+1. **The emulator crashed under real apps** with SwiftShader (DoorDash, then Amazon three times: a `RenderThread` segfault). Turning off the host video decoder didn't help; **`-gpu swangle` did**. Now envoy-real uses swangle and envoy-test keeps SwiftShader, set per phone in the systemd service.
+2. **The sitting used the wrong phone.** My instructions said "envoy-real"; the web app says "Real-app phone". With the user's OK the two AVDs were swapped on the VM, so their sign-ins are on the Real-app phone now.
+3. **A zone stockout** on the first restart (n2-standard-8 in us-east1-b). Start the VM well ahead on recording day and keep it awake. `fallback.sh` can start a copy in us-east1-c or d.
+4. **The tailnet path goes through a Tailscale relay** (DERP, Miami), because Google blocks inbound UDP. Opening UDP 41641 would allow a direct path; it wasn't done.
+5. **A brand-new emulator needs a warm-up** (stage 1). The new envoy-real got one before the sitting.
+6. **A `pkill -f` pattern killed its own SSH session** (my mistake; now a PID-based kill). The safety check also blocked one key command that read a token line; the plain `key.sh` path was used instead.
+
+### Spend (stage 3)
+
+- **Meta: $0.615** of the $3 cap: the real-app set $0.37, the interfaces suite $0.10, diagnosing the crashes $0.11, voice and chat $0.03.
+- **Google:** about $0.87 so far (about 2.2 VM-hours).
+- **All stages so far:** Google about $1.14 plus the disk; Meta $0.685.
+
+### Not done (yet)
+
+- **Muse to the cloud copy:** the user starts the tunnel with `muse-tunnel.sh`.
+- **The real-app retries:** a Starbucks sign-in retry (perhaps after updating the phone's web view in the Play Store), DoorDash with an address set, Chipotle, and Gmail (its answer key needs the Mac's Gmail API sign-in).
+- **On the iPhone:** "Ask Envoy (cloud)" (`shortcut.sh`; the user adds it), and the cloud copy's Home Screen icon.
+- **The machine image:** taken when the VM is stopped at the end, without the key.
+
+### Recommendation
+
+**Keep the demo on the Mac and hold the cloud copy as the fallback.** The cloud option works end to end for SkyLark and for read-only real apps. Against the Mac it is:
+- slower: 2–4× on real-app screens, about 2× on SkyLark;
+- laggier on the iPhone;
+- unable to do the Instagram scene (the Pixel 5 is USB) or screenshots into memory.
+
+Pick the cloud only if the Mac setup breaks. For that case:
+- start the VM at least an hour ahead, then `keep-awake.sh on` and `key.sh put 3`;
+- know that what the Mac copy learned (routines, memory, signed-in apps) isn't on the cloud copy.

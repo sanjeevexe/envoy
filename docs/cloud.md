@@ -217,9 +217,10 @@ Google's list prices for `us-east1` (on demand): `n2-standard-8` about **$0.39 a
 | Stage 0: create, toolchain, code, boot, device timings | 19:23–19:39 UTC, 16 min | $0.10 | 13 min of it was the emulator's first-boot work and a hung SSH session (below) |
 | Stage 1: portability ×2, sizes, the restart check, the clip | 19:39–19:59, 20 min | $0.13 | |
 | Stage 2: the key on, compile + verify, 3 replays, the key off | 19:59–20:04, 5 min | $0.04 | |
-| **Total so far** | **41.5 min** | **$0.27** | plus the disk, about $0.17 a day while it exists, and a few MB of egress |
+| Stage 3: the cloud copy, the bars, the user's sitting, the renderer crashes and the real-app set | 20:25–22:40 and on, about 2.2 h so far | about $0.87 | the VM kept awake through the sitting |
+| **Total so far** | **about 2.9 h** | **about $1.14** | plus the disk, about $0.17 a day while it exists, and a few MB of egress |
 
-One emulator-hour on this VM costs about $0.39. Meta: $0 for stage 1 (no key on the VM), **$0.070 for stage 2** (cap $1). The VM is **stopped**; deleting it is the user's call (`scripts/cloud/delete.sh`).
+One emulator-hour on this VM costs about $0.39; with two phones and the API running, the cloud option costs about $0.39 an hour of use and $5 a month standing still. Meta: $0 for stage 1 (no key on the VM), **$0.070 for stage 2** (cap $1), **$0.615 for stage 3** (cap $3: the real-app set $0.37, the interfaces suite $0.10, diagnosing the crashes and `swangle` $0.11, voice and chat $0.03). Deleting the VM is the user's call (`scripts/cloud/delete.sh`).
 
 ## The commands
 
