@@ -39,6 +39,7 @@ _DIGIT = re.compile(r"\d")
 _SLUG = re.compile(r"[^a-z0-9]+")
 _IDENT = re.compile(r"[a-z]+(_[a-z]+)+")
 _DATA_SEGMENT = re.compile(r"^(?=.*\d)[A-Za-z0-9]+$|^[A-Z0-9]{5,}$")
+_POPUP_TITLE = re.compile(r"^PopupWindow:[0-9a-f]+$")
 
 
 class NotCompilable(ValueError):
@@ -143,6 +144,7 @@ def load_trace(trace_dir: Path, *, confirmed: bool = False) -> tuple[dict, list[
 def clean(trace_dir: Path, records: list[dict]) -> tuple[list[TStep], list[tuple[int, str]]]:
     steps: list[TStep] = []
     dropped: list[tuple[int, str]] = []
+    app = ""
     for r in records:
         n = r.get("step", 0)
         k = r.get("kind")
@@ -168,6 +170,13 @@ def clean(trace_dir: Path, records: list[dict]) -> tuple[list[TStep], list[tuple
             continue
         before = load_tree(trace_dir / r["tree_before"])
         after = load_tree(trace_dir / r["tree_after"])
+        for screen in (before, after):
+            # Traces recorded before the device told an app's popup menu from the app: the menu's window was taken for
+            # the app ("PopupWindow:51b096d"), and every check written from it failed. The app is the one before it.
+            if _POPUP_TITLE.match(screen.package) and app:
+                screen.package = app
+            elif screen.package:
+                app = screen.package
         target = None
         if r.get("target") and r["target"].get("index") is not None and r["target"]["index"] < len(before.elements):
             target = before.elements[r["target"]["index"]]
@@ -336,15 +345,27 @@ def generalize_locator(loc: Locator, examples: dict[str, str], data_values: list
                        choice_input: str | None) -> Locator:
     upd: dict[str, Any] = {"resource_id": _glob_id(loc.resource_id, examples, data_values)}
     label = loc.text or ""
-    bound = choice_input if choice_input in examples else next(
-        (n for n, v in examples.items() if v and (contains_value(label, v) or contains_value(loc.desc, v))), None)
-    if bound or loc.in_list:
+
+    def shows(v: str) -> bool:
+        return contains_value(label, v) or contains_value(loc.desc, v)
+
+    bound = choice_input if choice_input in examples else next((n for n, v in examples.items() if v and shows(v)), None)
+    # An element that shows nothing of the input itself (a row's delete icon) is chosen by the row that shows it.
+    row_bound = None
+    if loc.row and (bound is None or not shows(examples[bound])):
+        row_bound = next((n for n in [*([bound] if bound else []), *examples] if examples.get(n)
+                          and any(contains_value(t, examples[n]) for t in loc.row)), None)
+        if row_bound is not None:
+            bound = None
+    if bound or loc.in_list or row_bound:
         upd["resource_id"] = _glob_data_segments(upd["resource_id"])
     if bound:
-        upd.update(text_has="{{" + bound + "}}", siblings=[], position=None, desc=None,
+        upd.update(text_has="{{" + bound + "}}", siblings=[], position=None, desc=None, row=[],
                    parent=loc.parent if _data_free(loc.parent, data_values) else None,
                    text=fixed_text if fixed_text and _data_free(fixed_text, data_values) else None)
     else:
+        upd["row_has"] = "{{" + row_bound + "}}" if row_bound else None
+        upd["row"] = [t for t in loc.row if _data_free(t, data_values) and not any(v and contains_value(t, v) for v in examples.values())]
         text = bind_inputs(label, examples)
         if not _data_free(text, data_values):
             text = fixed_text if fixed_text and _data_free(fixed_text, data_values) else None
@@ -740,7 +761,8 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             loc = generalize_locator(locators.build(s.target, target_screen), ex, data_values,
                                      meta.target_fixed_text if meta else None, choice)
             if searched is not None:  # a result's words are that result's: only its place (and ID, type) say "first"
-                loc = loc.model_copy(update={"text": None, "desc": None, "siblings": [], "text_has": None, "alt_texts": []})
+                loc = loc.model_copy(update={"text": None, "desc": None, "siblings": [], "text_has": None, "alt_texts": [],
+                                             "row": [], "row_has": None})
         if s.kind in ("tap", "long_press"):
             action = StepAction(kind=s.kind, target=loc)
         elif s.kind == "type":
@@ -762,7 +784,9 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             anchor = generalize_locator(locators.build(under, s.before), examples, data_values, None, None) if under is not None else None
             action = StepAction(kind="swipe", target=anchor, vector=(round((x2 - x) / w, 3), round((y2 - y) / h, 3)),
                                 start=(round(x / w, 3), round(y / h, 3)))
-            action = StepAction(kind="launch", package=s.before.package)
+        elif s.kind == "launch":
+            # The app that came up: the model may have named it ("Broccoli") rather than given its package.
+            action = StepAction(kind="launch", package=s.after.package)
         elif s.kind == "tap_point" and s.vision and s.vision.get("box") and s.vision.get("target"):
             # Phase 6: a target drawn on screen (no node in the tree), kept as what it looks like plus its picture.
             v = s.vision
