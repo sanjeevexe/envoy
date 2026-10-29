@@ -100,7 +100,8 @@ tables: `docs/siri.md` › "On the iPhone (stage 2)".
   Envoy's own notifications got through. For the demo: Focus off, or Envoy allowed in it. Not a `push.py` problem.
 - **The 5 s wait just missed the check-in's named line.** Its match took 4.95 s (4.9 s in the stage 1 device check),
   and the step landed 5.01 s after the task began, so Siri said the general line after waiting the full 5 s. The gate's
-  match is about 2.6 s. A 7 s `PREFLIGHT_WAIT_S` would cover it (coordinator's call; not changed).
+  match is about 2.6 s. **Follow-up (coordinator's call, Oct 29): `PREFLIGHT_WAIT_S = 7`**, which covers it; the wait
+  still ends as soon as the step lands. Test updated: `test_siri.py` 26 passed, full suite 520 passed.
 - **SkyLark restored.** The user approved, so KX7Q2M was checked in. Reseeded `demo_fixtures(signed_in=True)`, variant
   0, and `state()` matches it exactly. Before the test SkyLark held other bookings (1DHODZ, DE8GXD, T9LGMX, not in the
   demo inbox), so it now matches the demo memory. envoy-test stopped and released.

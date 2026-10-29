@@ -39,7 +39,7 @@ log = logging.getLogger(__name__)
 MESSAGE_MAX = 400  # characters of dictated text
 SAY_MAX = 200  # about 12 seconds of speech
 PER_MINUTE, PER_DAY = 6, 100  # requests per token
-PREFLIGHT_WAIT_S = 5.0  # how long to wait for the task's own `preflight` step (it comes after the routine match: 2.6–4.9 s on Oct 29)
+PREFLIGHT_WAIT_S = 7.0  # how long to wait for the task's own `preflight` step (it comes after the routine match: check-in 4.9–5.0 s on Oct 29)
 
 SAY_EMPTY = "I didn't catch that."
 SAY_FAILED = "I couldn't do that just now. Try again in a minute."
@@ -124,9 +124,9 @@ def siri_router(ctx: Any, session: Callable[..., None], caller: Callable[..., An
 async def heads_up(ctx: Any, out: dict[str, Any], message: str) -> tuple[dict[str, str] | None, float]:
     """The one Before I start line worth saying for a task, and how long it took to get. The task's own `preflight` step
     names the irreversible step ("Confirming check-in will wait for your OK"), but only once the runner has picked a
-    routine, two to five seconds in; past `PREFLIGHT_WAIT_S`, `preflight.check()` without a routine says the general line.
-    When chat's line is already two sentences ("That may have changed. I'm checking the app.") only a stop line would be
-    said, and that doesn't depend on the routine, so there's no wait."""
+    routine, two to five seconds in (the check-in's match is about 5 s); past `PREFLIGHT_WAIT_S`, `preflight.check()`
+    without a routine says the general line. When chat's line is already two sentences ("That may have changed. I'm
+    checking the app.") only a stop line would be said, and that doesn't depend on the routine, so there's no wait."""
     task = out.get("task") or {}
     tid, t0 = task.get("id"), time.monotonic()
     if len(sentences(spoken_of(out))) < 2 and not out.get("parts"):  # a cross-app task's parts have the steps, not it

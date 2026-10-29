@@ -59,13 +59,13 @@ line ("Chase needs your Android phone, and it isn't connected."), else the first
 for or need your OK ("Confirming check-in will wait for your OK.", "The payment step will need your OK."), else the
 first warning ("Target blocks emulators: I'll ask to use your Pixel 5."). The routine-specific line comes from the
 task's own `preflight` step, which the runner writes once it has matched a routine (one Spark call); `/api/siri`
-waits up to 5 s for it, then falls back to `preflight.check()` without a routine ("Anything that can't be undone will
+waits up to 7 s for it, then falls back to `preflight.check()` without a routine ("Anything that can't be undone will
 wait for your OK."). Measured: the match call is p50 1.7 s, p90 2.9 s over the recorded history, but 2.6–4.9 s on Oct 29,
-when both check-in requests missed a 3 s wait and said the general line. So the wait is 5 s (`PREFLIGHT_WAIT_S`), so the
-demo says the named step; it ends as soon as the step arrives, and only a slow match costs the extra seconds. On the
-iPhone the check-in's match took 4.95 s and its step landed 5.01 s after the task began: just past the wait, so Siri said
-the general line after the full 5 s (see "On the iPhone"). When chat's line is already two sentences ("That may have
-changed. I'm checking the app.") there's no wait, and only a stop line would replace its second sentence.
+when both check-in requests missed a 3 s wait and said the general line. On the iPhone a 5 s wait missed too: the
+check-in's match took 4.95 s and its step landed 5.01 s after the task began, so Siri said the general line after the
+full 5 s (see "On the iPhone"). So the wait is 7 s (`PREFLIGHT_WAIT_S`), so the demo says the named step; it ends as soon
+as the step arrives, and only a slow match costs the extra seconds. When chat's line is already two sentences ("That
+may have changed. I'm checking the app.") there's no wait, and only a stop line would replace its second sentence.
 
 **What the `siri` token can do:** ask Envoy (`POST /api/siri`), and nothing else. It can't read tasks or memory, use
 `/api/chat`, approve or decline, decide an offer, take over, open the live view, the event stream or voice
@@ -116,7 +116,7 @@ was needed.
 **Server side** (`api.siri`'s timing line), 13 requests: plain replies 1.7–3.5 s (median 2.9 s over the 8 in part 1,
 one model call each); memory answers 3.3–6.4 s (two calls: on the phone the first one, "What day is my flight?", took
 about 12 s from the press); tasks 3.9 s (a stale gate: no wait) and 6.8 s (the check-in: 1.7 s of chat, then the full
-5 s wait).
+5 s wait that was then in place).
 
 What it said (part 2, the demo take):
 
@@ -135,8 +135,8 @@ Two things to know from the test:
   the demo, turn Focus off, or add Envoy (the Home Screen app) to the Focus's allowed apps.
 - **The check-in said the general line.** Its routine match took 4.95 s (4.9 s in the stage 1 device check too), so its
   `preflight` step ("Confirming check-in will wait for your OK.") landed 5.01 s after the task began: about a tenth of
-  a second past `PREFLIGHT_WAIT_S`. The gate's match takes about 2.6 s. A 7 s wait would cover the check-in, at the cost
-  of 2 s more silence when the match is slow.
+  a second past the 5 s wait. The gate's match takes about 2.6 s. Since then `PREFLIGHT_WAIT_S` is 7 s, which covers the
+  check-in; it ends as soon as the step lands, so only a slow match waits longer.
 
 ### Which actions
 
@@ -170,13 +170,15 @@ keyboard on the Action Button). The answer's actions are a build option, settled
 About 40 seconds, iPhone in hand, a screen recording with the mic on. Lead with the Action Button: saying "Hey Siri" in
 a video sets off viewers' phones.
 
-Before: Envoy on the tailnet; envoy-test running with SkyLark at `demo_fixtures(signed_in=True)`; Do Not Disturb off
-(or Envoy allowed in the Focus) so the approval banner shows; the first-run prompts already answered.
+Before: Envoy on the tailnet; envoy-test running with SkyLark at `demo_fixtures(signed_in=True)`; the first-run
+prompts already answered; and **turn off Do Not Disturb, or allow Envoy in the Focus**, or the approval banner won't
+show (it didn't on Oct 29).
 
 1. Press and hold the Action Button: "What gate is my flight?" → "That may have changed. I'm checking the app." (about
    7 s), and a few seconds later "Done: … Gate B12" arrives. Ask again for the instant answer: "Gate B12, from the
    SkyLark app just now."
-2. Press and hold: "Check me in for my flight." → "On it: … will wait for your OK." (about 12 s, with the 5 s wait)
+2. Press and hold: "Check me in for my flight." → "On it: … Confirming check-in will wait for your OK." (about 12 s:
+   the answer waits for the routine match, about 5 s)
 3. "Envoy needs your OK" arrives about 10 s after the request. Tap it and approve; "Done: …" follows. (Decline instead
    to keep SkyLark as it was; after an approve, reseed with `scripts/demo_setup.py --signed-in --app-only`.)
 

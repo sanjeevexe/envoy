@@ -234,7 +234,7 @@ def test_an_old_answer_without_a_phone_says_when_once(env, monkeypatch):
 
 def test_a_stale_answer_that_became_a_task_says_so_without_waiting(env, monkeypatch):
     stub_chat(monkeypatch, task_out(env, "Get the gate of my flight", "That may have changed. I'm checking the app.", stale=True))
-    monkeypatch.setattr(siri, "PREFLIGHT_WAIT_S", 5)
+    monkeypatch.setattr(siri, "PREFLIGHT_WAIT_S", 7)
     t0 = time.monotonic()
     code, out = ask(env, "What gate is my flight?")
     assert time.monotonic() - t0 < 2  # two sentences already: no wait for the step
@@ -243,7 +243,7 @@ def test_a_stale_answer_that_became_a_task_says_so_without_waiting(env, monkeypa
 
 def test_a_task_says_its_own_preflight_line_when_it_comes_in_time(env, monkeypatch):
     stub_chat(monkeypatch, task_out(env, "check me in for my flight", "On it: check me in for my flight."))
-    assert siri.PREFLIGHT_WAIT_S == 5  # the routine match took up to 4.9 s on Oct 29: long enough to say the named step
+    assert siri.PREFLIGHT_WAIT_S == 7  # the check-in's match took 4.9–5.0 s on Oct 29 (its step landed at 5.01 s): long enough to say it
     monkeypatch.setattr(siri, "preflight_check", lambda *a, **kw: pytest.fail("the task's own step came in time"))
     add_preflight_later(env, [ROUTINE, CHECKIN_WAITS], after_s=0.3)
     assert ask(env, "Check me in for my flight")[1]["say"] == "On it: check me in for my flight. Confirming check-in will wait for your OK."
