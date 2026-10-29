@@ -2,9 +2,9 @@
 
 ## For the Muse test (you, about 30 minutes)
 
-1. In a terminal: `cd ~/Desktop/Envoy/.claude/worktrees/jolly-khayyam-b99b59 && ENVOY_PORT=8742 scripts/start_muse_test.sh` (it prints a URL and a token, and stays open; Ctrl-C ends it).
+1. In a terminal: `cd ~/Desktop/Envoy/.claude/worktrees/jolly-khayyam-b99b59 && ENVOY_PORT=8742 scripts/start_muse_test.sh` (it prints the URL, the token's last 4 characters and a command that copies the token; it stays open, and Ctrl-C ends it).
 2. In Muse, open the Envoy connector and change its URL to the one the script printed (it ends in `/mcp`).
-3. Paste the token from the script into Muse's secure credentials field for the connector (never into the chat).
+3. Run the script's `Copy:` line in another terminal, then paste the token into Muse's secure credentials field for the connector (never into the chat).
 4. When Muse asks, choose **Always allow this site**.
 5. Open **Muse for Mac**, signed in to the same account.
 

@@ -5,7 +5,8 @@
 #   scripts/start_muse_test.sh mcp      # Phase 0: the MCP stub (Streamable HTTP) at <public URL>/mcp
 #   scripts/start_muse_test.sh rest     # Phase 0: REST fallback, OpenAPI at <public URL>/openapi.json
 #
-# Prints the public URL and the bearer token, then stays in the foreground. Ctrl-C stops the tunnel (and the stub).
+# Prints the public URL and where the bearer token is (never the token itself: a terminal's output gets copied, logged
+# and pasted into chats), then stays in the foreground. Ctrl-C stops the tunnel (and the stub).
 # In api mode the API must already be running; while the tunnel is up the API accepts its host for /mcp and nothing
 # else (the web app, API and approval pages stay on this Mac and your tailnet), and the URL file is removed on exit.
 set -euo pipefail
@@ -78,15 +79,19 @@ else
   done
 fi
 
+ENV_FILE="$REPO/.env"
+[ -L "$ENV_FILE" ] && ENV_FILE="$(readlink "$ENV_FILE")"  # worktrees link the main checkout's .env
+COPY="grep '^MCP_BEARER_TOKEN=' '$ENV_FILE' | cut -d= -f2- | tr -d '\\n' | pbcopy"
 cat <<EOF
 
   Envoy $( [ "$MODE" = api ] && echo "MCP server (the real one)" || echo "$MODE stub") is live.
   URL:    $PUBLIC_URL$SUFFIX
-  Token:  $MCP_BEARER_TOKEN
-  Header: Authorization: Bearer $MCP_BEARER_TOKEN
+  Token:  ends in ${MCP_BEARER_TOKEN: -4}, MCP_BEARER_TOKEN in $ENV_FILE (sent as Authorization: Bearer <token>)
+  Copy:   $COPY
+          then paste it into Muse's secure credentials field (never into a chat)
 $( [ "$MODE" = rest ] && echo "  OpenAPI: $PUBLIC_URL/openapi.json" )
-  Log:    tail -f logs/mcp_stub.jsonl
-  Stop:   Ctrl-C (then rotate the token: scripts/rotate_mcp_token.sh)
+  Log:    tail -f logs/$( [ "$MODE" = api ] && echo mcp.jsonl || echo mcp_stub.jsonl )
+  Stop:   Ctrl-C (then rotate the token in the main checkout: scripts/rotate_mcp_token.sh)
 
 EOF
 wait "${SERVER_PID:-$TUNNEL_PID}"
