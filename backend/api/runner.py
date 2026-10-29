@@ -59,6 +59,7 @@ APP_NAMES = {
     "chipotle": "com.chipotle.ordering", "doordash": "com.dd.doordash", "gmail": "com.google.android.gm", "google maps": "com.google.android.apps.maps",
     "youtube music": "com.google.android.apps.youtube.music", "youtube": "com.google.android.youtube", "play store": "com.android.vending",
     "chrome": "com.android.chrome", "settings": "com.android.settings", "calendar": "com.google.android.calendar", "contacts": "com.google.android.contacts",
+    "instagram": "com.instagram.android",
 }
 TRAVEL = re.compile(r"\b(flight|trip|gate|check(ed)?[ -]?in|boarding|seat|airline|known traveler)\b", re.I)
 # A bot check in a browser is a website's, not the browser's: it doesn't mean the browser blocks emulators.
@@ -126,7 +127,7 @@ class TaskRunner:
         self.devices: dict[str, Any] = {}  # task id → raw device (for step screenshots)
         self.pending_steps: dict[str, asyncio.Task] = {}  # task id → its latest step still taking its picture
         self.phone_asks: dict[str, asyncio.Future] = {}  # task id → your answer to "use your Android phone?"
-        self.phone_allowed: dict[str, str] = {}  # task id → the phone you said yes to when the task moved off an emulator
+        self.phone_allowed: dict[str, str] = {}  # task id → the phone you said yes to (it moved off an emulator, or start's phone_ok)
         self.moved: set[str] = set()  # tasks that moved to your phone (their runs there get their own trace ids)
         self.install_apps = True  # install an app the task names that the emulator doesn't have (api/install.py)
         self.on_final: list[Any] = []  # called with (task id, final screen, routine outputs) after a run's last look (api/crossapp.py)
@@ -137,15 +138,20 @@ class TaskRunner:
     # ---- starting and stopping -----------------------------------------------------------------
 
     def start(self, goal: str, source: str, *, routine: str | None = None, inputs: dict[str, str] | None = None,
-              app: str | None = None, request: str | None = None, phone: str | None = None, parent: str | None = None) -> dict[str, Any]:
+              app: str | None = None, request: str | None = None, phone: str | None = None, parent: str | None = None,
+              phone_ok: str | None = None) -> dict[str, Any]:
         """`request` is the user's own words when the goal was rephrased (chat): approvals are matched against it.
         `phone`: "phone", "emulator", a device id, or None (routing decides, including "… on my phone" in the words).
-        `parent`: the cross-app task this one is a part of."""
+        `parent`: the cross-app task this one is a part of.
+        `phone_ok`: the phone your yes already covers (you accepted an offer that named it), so it isn't asked for again.
+        Any other phone routing picks still asks."""
         if asks_for_phone(goal) or asks_for_phone(request or ""):
             phone = phone or "phone"
             goal = strip_phone_words(goal)
         task = self.store.create(goal, source, routine=routine, inputs=inputs or {}, app=app, request=request or goal, models=profile_models(),
                                  **({"parent": parent} if parent else {}))
+        if phone_ok:
+            self.phone_allowed[task["id"]] = phone_ok  # before the run is scheduled: _choose_phone reads it
         self.bus.publish("task", task=task)
         coro = self._run_task(task["id"], goal, routine, inputs or {}, app, phone)
         try:
@@ -179,10 +185,13 @@ class TaskRunner:
     async def _run_task(self, tid: str, goal: str, routine_name: str | None, inputs: dict[str, str], app: str | None,
                         phone: str | None) -> None:
         """The task where routing puts it; then once more on your phone if it moved there (the app blocks emulators)."""
-        moved = await self._run(tid, goal, routine_name, inputs, app, phone)
-        if moved:
-            task = self.store.get(tid) or {}
-            await self._run(tid, goal, task.get("routine") or routine_name, task.get("inputs") or inputs, task.get("app") or app, moved)
+        try:
+            moved = await self._run(tid, goal, routine_name, inputs, app, phone)
+            if moved:
+                task = self.store.get(tid) or {}
+                await self._run(tid, goal, task.get("routine") or routine_name, task.get("inputs") or inputs, task.get("app") or app, moved)
+        finally:
+            self.phone_allowed.pop(tid, None)  # a yes covers this task only (unused when it ran on an emulator)
 
     async def _plan(self, tid: str, goal: str, routine_name: str | None, inputs: dict[str, str], app: str | None
                     ) -> tuple[Routine | None, dict[str, str], str | None, dict[str, str], int]:
@@ -394,7 +403,7 @@ class TaskRunner:
                 self._step(tid, {"kind": "note", "text": f"phone: {choice.device} ({choice.reason})"})
             return choice
         model = self.pool.phones.get(choice.device, {}).get("model") or "Android phone"
-        if self.phone_allowed.pop(tid, None) == choice.device:  # you said yes when the task moved off the emulator
+        if self.phone_allowed.pop(tid, None) == choice.device:  # you said yes already (the task moved off the emulator, or an offer)
             self._step(tid, {"kind": "note", "text": f"phone: your {model} (you said yes)"})
             return choice
         self._step(tid, {"kind": "note", "text": f"phone: your {model} ({choice.reason})"})
