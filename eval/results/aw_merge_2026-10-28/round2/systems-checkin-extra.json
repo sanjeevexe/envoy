@@ -1,0 +1,311 @@
+{
+ "meta": {
+  "suite": "systems-checkin-extra",
+  "run_id": "1029005416",
+  "started": "2026-10-29T04:54:16+00:00",
+  "finished": "2026-10-29T04:55:36+00:00",
+  "wall_s": 79.9,
+  "code": {
+   "commit": "773536a9875b708fc2de82f3b62b6f176e1a98c5",
+   "short": "773536a",
+   "tags": [],
+   "is_eval_final": false,
+   "dirty": [
+    "val/results/final/compile.json",
+    "android/banner/app/build",
+    "logs",
+    "testapps/skylark/app/build"
+   ],
+   "branch": "aw-merge"
+  },
+  "models": {
+   "tier": "standard",
+   "jobs": {
+    "step": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "plan": {
+     "model": "muse-spark-1.3",
+     "effort": "medium"
+    },
+    "repair": {
+     "model": "muse-spark-1.3",
+     "effort": "medium"
+    },
+    "grounding": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "choose": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "extract": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "answer": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "compile": {
+     "model": "muse-wonder-1.0",
+     "effort": "medium"
+    },
+    "match": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    }
+   }
+  },
+  "devices": [
+   "emulator-5554"
+  ],
+  "cost": {
+   "input_tokens": 103798,
+   "cached_tokens": 85446,
+   "output_tokens": 6738,
+   "reasoning_tokens": 3920,
+   "calls": 38,
+   "errors": 0,
+   "billed_usd": 0.0644,
+   "standard_usd": 0.0644,
+   "by_job": {
+    "plan": {
+     "calls": 3,
+     "standard_usd": 0.0089
+    },
+    "step": {
+     "calls": 35,
+     "standard_usd": 0.0555
+    }
+   },
+   "by_model": {
+    "muse-spark-1.3": 38
+   }
+  },
+  "spend_total_this_checkout": {
+   "billed_usd": 24.504,
+   "standard_usd": 25.398
+  },
+  "host": "Sanjeevs-MacBook-Pro"
+ },
+ "seeds": [
+  101,
+  102,
+  103
+ ],
+ "layouts": [
+  0
+ ],
+ "rows": [
+  {
+   "system": "agent",
+   "task": "check_in",
+   "layout": 0,
+   "seed": 101,
+   "try": 1,
+   "task_id": "f7-1029005136-age-check_in-L0-s101-t1",
+   "passed": true,
+   "status": "done",
+   "answer": "Checked in Maya Patel for flight SL 495 ATL to PIT on Sun, Nov 22, 2026. Seat 20E, Gate A15, Boarding 6:00 AM Group 5.",
+   "steps": 8,
+   "approvals": 2,
+   "interventions": 0,
+   "duration_s": 28.13,
+   "side_effects": [],
+   "calls": 10,
+   "input_tokens": 26660,
+   "cached_tokens": 22122,
+   "output_tokens": 2156,
+   "reasoning_tokens": 1403,
+   "standard_usd": 0.0182,
+   "billed_usd": 0.0182
+  },
+  {
+   "system": "agent",
+   "task": "check_in",
+   "layout": 0,
+   "seed": 102,
+   "try": 1,
+   "task_id": "f7-1029005136-age-check_in-L0-s102-t1",
+   "passed": true,
+   "status": "done",
+   "answer": "Checked in for flight to Memphis: SL 1472 ATL → MEM on Thu Nov 19 2026 for Maya Patel, Seat 13B, Gate B20, Boarding 2:15 PM Group 1",
+   "steps": 8,
+   "approvals": 1,
+   "interventions": 0,
+   "duration_s": 17.32,
+   "side_effects": [],
+   "calls": 10,
+   "input_tokens": 26734,
+   "cached_tokens": 22250,
+   "output_tokens": 1541,
+   "reasoning_tokens": 748,
+   "standard_usd": 0.0155,
+   "billed_usd": 0.0155
+  },
+  {
+   "system": "agent",
+   "task": "check_in",
+   "layout": 0,
+   "seed": 103,
+   "try": 1,
+   "task_id": "f7-1029005136-age-check_in-L0-s103-t1",
+   "passed": true,
+   "status": "done",
+   "answer": "Checked in for flight to Raleigh: Maya Patel, SL 368 ATL→RDU on Mon Dec 7 2026, Seat 20F, Gate E9, Boarding 7:35 AM Group 1. Boarding pass available.",
+   "steps": 12,
+   "approvals": 2,
+   "interventions": 0,
+   "duration_s": 25.37,
+   "side_effects": [],
+   "calls": 15,
+   "input_tokens": 41598,
+   "cached_tokens": 33951,
+   "output_tokens": 2436,
+   "reasoning_tokens": 1237,
+   "standard_usd": 0.025,
+   "billed_usd": 0.025
+  },
+  {
+   "system": "agent",
+   "task": "check_in",
+   "layout": 0,
+   "seed": 101,
+   "try": 1,
+   "task_id": "f7-1029005302-age-check_in-L0-s101-t1",
+   "passed": true,
+   "status": "done",
+   "answer": "Checked in for flight SL 495 ATL→PIT on Sun, Nov 22, 2026 (Maya Patel). Seat 20E, Gate A15, Boarding 6:00 AM Group 5.",
+   "steps": 8,
+   "approvals": 1,
+   "interventions": 0,
+   "duration_s": 19.0,
+   "side_effects": [],
+   "calls": 10,
+   "input_tokens": 26556,
+   "cached_tokens": 22250,
+   "output_tokens": 1761,
+   "reasoning_tokens": 1040,
+   "standard_usd": 0.0162,
+   "billed_usd": 0.0162
+  },
+  {
+   "system": "agent",
+   "task": "check_in",
+   "layout": 0,
+   "seed": 102,
+   "try": 1,
+   "task_id": "f7-1029005302-age-check_in-L0-s102-t1",
+   "passed": true,
+   "status": "done",
+   "answer": "Checked in for flight SL 1472 ATL to MEM on Thu Nov 19 2026. Passenger Maya Patel, Seat 13B, Gate B20, Boarding 2:15 PM Group 1. Boarding pass shown.",
+   "steps": 8,
+   "approvals": 1,
+   "interventions": 0,
+   "duration_s": 18.92,
+   "side_effects": [],
+   "calls": 10,
+   "input_tokens": 26603,
+   "cached_tokens": 22250,
+   "output_tokens": 1718,
+   "reasoning_tokens": 976,
+   "standard_usd": 0.0161,
+   "billed_usd": 0.0161
+  },
+  {
+   "system": "agent",
+   "task": "check_in",
+   "layout": 0,
+   "seed": 103,
+   "try": 1,
+   "task_id": "f7-1029005302-age-check_in-L0-s103-t1",
+   "passed": true,
+   "status": "done",
+   "answer": "Checked in for flight SL 368 ATL to RDU on Mon Dec 7 2026. Passenger Maya Patel, Seat 20F, Gate E9, Boarding 7:35 AM Group 1. Confirmation SN737M.",
+   "steps": 8,
+   "approvals": 1,
+   "interventions": 0,
+   "duration_s": 18.5,
+   "side_effects": [],
+   "calls": 10,
+   "input_tokens": 26507,
+   "cached_tokens": 22250,
+   "output_tokens": 1759,
+   "reasoning_tokens": 1010,
+   "standard_usd": 0.0161,
+   "billed_usd": 0.0161
+  },
+  {
+   "system": "agent",
+   "task": "check_in",
+   "layout": 0,
+   "seed": 101,
+   "try": 1,
+   "task_id": "f7-1029005416-age-check_in-L0-s101-t1",
+   "passed": true,
+   "status": "done",
+   "answer": "Checked in for flight SL 495 ATL to PIT on Sun Nov 22 2026 for Maya Patel. Seat 20E, Gate A15, Boarding 6:00 AM Group 5. Boarding pass available.",
+   "steps": 12,
+   "approvals": 1,
+   "interventions": 0,
+   "duration_s": 27.29,
+   "side_effects": [],
+   "calls": 15,
+   "input_tokens": 41776,
+   "cached_tokens": 33695,
+   "output_tokens": 2490,
+   "reasoning_tokens": 1297,
+   "standard_usd": 0.0257,
+   "billed_usd": 0.0257
+  },
+  {
+   "system": "agent",
+   "task": "check_in",
+   "layout": 0,
+   "seed": 102,
+   "try": 1,
+   "task_id": "f7-1029005416-age-check_in-L0-s102-t1",
+   "passed": true,
+   "status": "done",
+   "answer": "Checked in for flight to Memphis: SL 1472 ATL->MEM on Thu, Nov 19, 2026, Confirmation L26O77, Seat 13B, Gate B20, Boarding 2:15 PM Group 1. Status: You're checked in.",
+   "steps": 11,
+   "approvals": 1,
+   "interventions": 0,
+   "duration_s": 21.66,
+   "side_effects": [],
+   "calls": 13,
+   "input_tokens": 35732,
+   "cached_tokens": 29501,
+   "output_tokens": 2037,
+   "reasoning_tokens": 1091,
+   "standard_usd": 0.0209,
+   "billed_usd": 0.0209
+  },
+  {
+   "system": "agent",
+   "task": "check_in",
+   "layout": 0,
+   "seed": 103,
+   "try": 1,
+   "task_id": "f7-1029005416-age-check_in-L0-s103-t1",
+   "passed": true,
+   "status": "done",
+   "answer": "Checked in for flight to Raleigh: SL 368 ATL → RDU on Mon Dec 7 2026 for Maya Patel, Seat 20F, Gate E9, Boarding 7:35 AM Group 1",
+   "steps": 8,
+   "approvals": 1,
+   "interventions": 0,
+   "duration_s": 19.68,
+   "side_effects": [],
+   "calls": 10,
+   "input_tokens": 26290,
+   "cached_tokens": 22250,
+   "output_tokens": 2211,
+   "reasoning_tokens": 1532,
+   "standard_usd": 0.0178,
+   "billed_usd": 0.0178
+  }
+ ]
+}
