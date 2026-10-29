@@ -155,8 +155,8 @@ export default function Chat({ tasks, openTask, intro, suggestions = [], onListe
             </button>
           )}
           {suggestions.map((s) => (
-            <button key={s} onClick={() => ask(s)} disabled={busy}
-                    className="h-11 shrink-0 whitespace-nowrap rounded-full border border-control bg-surface px-4 text-[14px] font-semibold hover:border-line-strong">
+            <button key={s} onClick={() => ask(s)} disabled={busy} title={s}
+                    className="h-11 max-w-[280px] shrink-0 truncate whitespace-nowrap rounded-full border border-control bg-surface px-4 text-[14px] font-semibold hover:border-line-strong">
               {s}
             </button>
           ))}

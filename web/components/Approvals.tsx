@@ -18,8 +18,8 @@ export const readable = (d: string) => sentence(d.replace(/\s*\(routine [^)]*\)\
 const routineOf = (d: string) => d.match(/\(routine ([^)]*)\)\s*$/)?.[1];
 const verb = (a: Approval, money: boolean) => {
   if (money) return "Approve and pay";
-  const label = a.description.match(/[“"]([^”"]{1,28})[”"]/)?.[1];
-  return label ? `Approve: ${label}` : "Approve";
+  const label = a.description.match(/[“"]([^”"]{1,18})[”"]/)?.[1]; // the action's own words ("Confirm check-in"), when they fit
+  return label ? sentence(label) : "Approve";
 };
 
 // A card for the approval in a list (Activity), opening the sheet.
@@ -126,7 +126,7 @@ export function ApprovalBody({ id, device, onClose, standalone }: { id: string; 
         <button disabled={busy} onClick={() => decide("decline")}
                 className="h-[52px] flex-1 rounded-full border border-line-strong bg-surface text-body font-bold disabled:opacity-50">Decline</button>
         <button disabled={busy} onClick={() => decide("approve")}
-                className="flex h-[52px] flex-[1.6] items-center justify-center gap-2 rounded-full bg-ink px-4 text-body font-bold text-white disabled:opacity-50">
+                className="flex h-[52px] flex-[1.6] items-center justify-center gap-2 whitespace-nowrap rounded-full bg-ink px-4 text-body font-bold text-white disabled:opacity-50">
           {money && <LockIcon size={18} />}{busy ? "One moment…" : verb(a, money)}
         </button>
       </div>

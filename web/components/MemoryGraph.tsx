@@ -14,7 +14,7 @@ type Fact = { id: string; attribute: string; value: string; current: boolean; st
 type Entity = { entity: { id: string; type: string; name: string }; facts: Fact[]; links: { relation: string; id: string; type: string; name: string }[] };
 
 // Node colors from the Sage palette (globals.css): greens for travel, apricots for shopping, inks for people and places.
-const COLORS: Record<string, string> = { Person: "#1F2A24", Trip: "#3E7C5C", Flight: "#2F6A4C", Reservation: "#5F6A63", Order: "#E8945A", Item: "#C2703A",
+const COLORS: Record<string, string> = { Person: "#1F2A24", Trip: "#5E9478", Flight: "#1F4F37", Reservation: "#5F6A63", Order: "#E8945A", Item: "#C2703A",
   Place: "#7A3B12", "Loyalty program": "#6F8F7C", Note: "#4E5A53", Hotel: "#5F6A63" };
 const FONT = '"Manrope Variable", Manrope, system-ui, sans-serif';
 
