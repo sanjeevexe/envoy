@@ -1,0 +1,42 @@
+{
+ "time": "2026-10-29T20:34:45+00:00",
+ "base": "http://127.0.0.1:8745",
+ "avd": "envoy-test",
+ "hello": {
+  "type": "hello",
+  "avd": "envoy-test",
+  "width": 1080,
+  "height": 2400,
+  "control": {
+   "avd": "envoy-test",
+   "task_id": null,
+   "user_control": false,
+   "since": 1793306022.0608501,
+   "reason": ""
+  },
+  "kind": "emulator"
+ },
+ "server_stats": {
+  "type": "stats",
+  "capture_ms": 66.3,
+  "encode_ms": 29.8,
+  "frames": 31,
+  "skipped": 19,
+  "avg_kb": 73.6
+ },
+ "frames": {
+  "n": 55,
+  "capture_to_received_ms_p50": 130.0,
+  "max_ms": 254,
+  "rtt_ms_p50": 16.7,
+  "kb_per_frame": 65.2
+ },
+ "takeover": {
+  "inputs": 10,
+  "ack_ms_p50": 128.7,
+  "ack_ms_max": 295,
+  "input_to_new_frame_ms_p50": 290.8,
+  "input_to_new_frame_ms_max": 391,
+  "frames_seen": 10
+ }
+}

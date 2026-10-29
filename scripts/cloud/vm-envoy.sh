@@ -81,6 +81,7 @@ ln -sfn "$STATE/demo" "$CODE/data/demo"
 ln -sfn "$STATE/api" "$CODE/data/api"  # = ENVOY_API_DIR; scripts that use data/api (start_muse_test.sh) find the same files
 
 echo "== services"
+(umask 077; touch "$STATE/api.log"); chmod 600 "$STATE/api.log"  # systemd appends to it; it holds the sign-in link
 U="$(id -un)"; UID_="$(id -u)"
 sudo tee /etc/systemd/system/envoy-emulators.service >/dev/null <<EOF
 [Unit]
