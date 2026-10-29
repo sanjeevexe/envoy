@@ -8,15 +8,17 @@ import os
 import re
 import shlex
 import ssl
+import struct
 import subprocess
 import threading
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
 
-from api.handoff import HANDOFF_TEMPLATES, Handoff, HandoffError, clean_caption, read_sidecar, without_slots
+from api.handoff import MP4_EPOCH, HANDOFF_TEMPLATES, Handoff, HandoffError, clean_caption, read_sidecar, redate_video, without_slots
 from api.store import TaskStore
 
 JPEG = b"\xff\xd8\xff\xe0\x00\x10JFIF\x00" + b"\x00" * 200
@@ -25,14 +27,15 @@ PUBLIC_IP = "93.184.216.34"
 
 
 class FakeAdb:
-    """One phone's shared storage and media store, as adb sees them. `fuse`: Android 11+, where a write through /sdcard
-    is indexed by the media provider itself; otherwise only the scan broadcast indexes it."""
+    """One phone's shared storage and media store, as adb sees them. A write through /sdcard makes a pending row
+    (hidden from galleries) that the scan broadcast finishes, as on Android 15 (`fuse`); without `fuse` only the scan
+    makes a row; with `scans=False` the scanner never answers."""
 
-    def __init__(self, fuse: bool = True) -> None:
+    def __init__(self, fuse: bool = True, scans: bool = True) -> None:
         self.calls: list[tuple[str, list[str]]] = []
         self.files: dict[str, bytes] = {}
-        self.media: dict[str, int] = {}  # remote path → media store _id
-        self.fuse = fuse
+        self.media: dict[str, list[int]] = {}  # remote path → [media store _id, is_pending]
+        self.fuse, self.scans = fuse, scans
 
     def __call__(self, serial: str, args: list[str], timeout: float) -> subprocess.CompletedProcess:
         self.calls.append((serial, list(args)))
@@ -41,23 +44,21 @@ class FakeAdb:
             local, remote = args[1], args[2]
             self.files[remote] = Path(local).read_bytes()
             if self.fuse:
-                self._index(remote)
+                self.media.setdefault(remote, [1000 + len(self.media), 1])
         elif args[0] == "shell":
             cmd = shlex.split(args[1])
             if cmd[0] == "ls":
                 out = "\n".join(p.rsplit("/", 1)[1] for p in self.files if p.rsplit("/", 1)[0] == cmd[1])
-            elif cmd[:3] == ["am", "broadcast", "-a"]:
-                self._index(cmd[-1].removeprefix("file://"))
+            elif cmd[:3] == ["am", "broadcast", "-a"] and self.scans:
+                path = cmd[-1].removeprefix("file://")
+                if path in self.files:
+                    self.media.setdefault(path, [1000 + len(self.media), 0])[1] = 0
             elif cmd[:2] == ["content", "query"]:
                 where = cmd[cmd.index("--where") + 1]
                 rel, name = re.search(r"relative_path='(.*?)' AND _display_name='(.*?)'", where).groups()
-                path = f"/sdcard/{rel}{name}"
-                out = f"Row: 0 _id={self.media[path]}, date_added=1, date_modified=1" if path in self.media else "No result found."
+                row = self.media.get(f"/sdcard/{rel}{name}")
+                out = f"Row: 0 _id={row[0]}, is_pending={row[1]}" if row else "No result found."
         return subprocess.CompletedProcess(args, 0, out, "")
-
-    def _index(self, remote: str) -> None:
-        if remote in self.files:
-            self.media.setdefault(remote, 1000 + len(self.media))
 
     def shell(self) -> list[str]:
         return [a[1] for _, a in self.calls if a[0] == "shell"]
@@ -239,17 +240,21 @@ def test_a_name_in_the_outbox_is_never_a_path(hand):
 # ---- push_file -------------------------------------------------------------------------------------
 
 
-def test_push_file_copies_into_the_gallery_folders_dates_it_now_and_checks_the_media_store(hand):
+def test_push_file_copies_into_the_gallery_folders_dates_it_now_and_waits_for_the_media_store(hand):
     (hand.box / "Sunset at the pier!.mp4").write_bytes(MP4)
     got = hand.h.push_file("envoy-test", hand.box / "Sunset at the pier!.mp4")
     assert got == {"device": "envoy-test", "remote_path": "/sdcard/Movies/Envoy/Sunset-at-the-pier.mp4",
                    "media_uri": "content://media/external/video/media/1000"}
     assert {s for s, _ in hand.adb.calls} == {"emulator-5554"}  # always adb -s <serial>, from the pool id
     assert hand.adb.calls[0][1] == ["shell", "mkdir -p /sdcard/Movies/Envoy"]
-    assert ["push", str(hand.box / "Sunset at the pier!.mp4"), "/sdcard/Movies/Envoy/Sunset-at-the-pier.mp4"] in [a for _, a in hand.adb.calls]
-    assert "touch /sdcard/Movies/Envoy/Sunset-at-the-pier.mp4" in hand.adb.shell()
-    assert not any(c.startswith("am broadcast") for c in hand.adb.shell())  # Android 11+: indexed by the write itself
-    query = next(c for c in hand.adb.shell() if c.startswith("content query"))
+    [push] = [a for _, a in hand.adb.calls if a[0] == "push"]
+    assert Path(push[1]).name == "Sunset at the pier!.mp4" and Path(push[1]).parent != hand.box  # a copy, not the Mac's file
+    assert push[2] == "/sdcard/Movies/Envoy/Sunset-at-the-pier.mp4" and not Path(push[1]).exists()  # the copy is gone
+    shell = hand.adb.shell()
+    assert "touch /sdcard/Movies/Envoy/Sunset-at-the-pier.mp4" in shell
+    # The row adb's write made is pending (hidden from galleries) until the scanner reads the file.
+    assert "am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file:///sdcard/Movies/Envoy/Sunset-at-the-pier.mp4" in shell
+    query = next(c for c in shell if c.startswith("content query"))
     assert "content://media/external/video/media" in query and "relative_path='Movies/Envoy/'" in query
 
     (hand.box / "photo.JPG").write_bytes(JPEG)
@@ -260,12 +265,66 @@ def test_push_file_copies_into_the_gallery_folders_dates_it_now_and_checks_the_m
     assert hand.h.push_file("envoy-test", hand.box / "Sunset at the pier!.mp4")["remote_path"] == "/sdcard/Movies/Envoy/Sunset-at-the-pier-2.mp4"
 
 
-def test_without_the_media_provider_indexing_writes_the_scan_broadcast_does(hand):
-    hand.h.adb = adb = FakeAdb(fuse=False)
+def test_a_pending_row_is_not_a_file_the_gallery_shows(hand):
+    hand.h.adb = adb = FakeAdb(fuse=True, scans=False)
+    hand.h.index_wait_s = 1
     (hand.box / "clip.mp4").write_bytes(MP4)
-    got = hand.h.push_file("envoy-test", hand.box / "clip.mp4")
-    assert got["media_uri"].endswith("/1000")
-    assert "am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file:///sdcard/Movies/Envoy/clip.mp4" in adb.shell()
+    with pytest.raises(HandoffError, match="gallery hasn't picked it up"):
+        hand.h.push_file("envoy-test", hand.box / "clip.mp4")
+    assert sum(c.startswith("am broadcast") for c in adb.shell()) == 2  # asked, then asked again
+    hand.h.adb = FakeAdb(fuse=False)
+    assert hand.h.push_file("envoy-test", hand.box / "clip.mp4")["media_uri"].endswith("/1000")  # the scan alone is enough
+
+
+def mp4_with_dates(when: int) -> bytes:
+    """A minimal MP4: ftyp, then moov with mvhd (version 0), a track's tkhd (0) and mdhd (1), then mdat."""
+    def box(typ: bytes, body: bytes) -> bytes:
+        return struct.pack(">I", 8 + len(body)) + typ + body
+    t = when + MP4_EPOCH
+    mvhd = box(b"mvhd", b"\0\0\0\0" + struct.pack(">II", t, t) + b"\0" * 88)
+    tkhd = box(b"tkhd", b"\0\0\0\x03" + struct.pack(">II", t, t) + b"\0" * 72)
+    mdhd = box(b"mdhd", b"\x01\0\0\0" + struct.pack(">QQ", t, t) + b"\0" * 12)
+    moov = box(b"moov", mvhd + box(b"trak", tkhd + box(b"mdia", mdhd)))
+    return box(b"ftyp", b"mp42\0\0\0\0mp42isom") + moov + box(b"mdat", b"\0" * 64)
+
+
+def mp4_dates(data: bytes) -> list[int]:
+    """Each header's creation time, as Unix time."""
+    out = []
+    for typ in (b"mvhd", b"tkhd", b"mdhd"):
+        i = data.index(typ) + 4  # the version byte
+        wide = data[i] == 1
+        out.append(struct.unpack(">Q" if wide else ">I", data[i + 4:i + (12 if wide else 8)])[0] - MP4_EPOCH)
+    return out
+
+
+def test_the_copy_on_the_phone_says_it_was_made_now(hand):
+    """The media store's "date taken" comes from the file itself (an MP4's creation time, a JPEG's EXIF), and adb's
+    shell can't change it, so the copy that's pushed carries today's date; the file on the Mac keeps its own."""
+    from PIL import Image
+    jan = 1768471200  # Jan 15, 2026: a clip recorded long before it was edited and sent
+    (hand.box / "clip.mp4").write_bytes(mp4_with_dates(jan))
+    before = time.time()
+    hand.h.push_file("envoy-test", hand.box / "clip.mp4")
+    pushed = hand.adb.files["/sdcard/Movies/Envoy/clip.mp4"]
+    assert all(abs(d - before) < 5 for d in mp4_dates(pushed))
+    assert mp4_dates((hand.box / "clip.mp4").read_bytes()) == [jan, jan, jan]  # the Mac's file is unchanged
+
+    exif = Image.Exif()
+    exif[0x0132] = "2026:01:15 10:00:00"
+    exif.get_ifd(0x8769)[0x9003] = "2026:01:15 10:00:00"
+    exif.get_ifd(0x8769)[0x9004] = "2026:01:15 10:00:00"
+    Image.new("RGB", (64, 64), (62, 124, 92)).save(hand.box / "photo.jpg", exif=exif)
+    hand.h.push_file("envoy-test", hand.box / "photo.jpg")
+    (hand.tmp / "pushed.jpg").write_bytes(hand.adb.files["/sdcard/Pictures/Envoy/photo.jpg"])
+    with Image.open(hand.tmp / "pushed.jpg") as im:
+        got = im.getexif()
+        stamp = time.strftime("%Y:%m:%d", time.localtime())
+        assert got[0x0132].startswith(stamp) and got.get_ifd(0x8769)[0x9003].startswith(stamp) and got.get_ifd(0x8769)[0x9004].startswith(stamp)
+        assert im.size == (64, 64)
+    with Image.open(hand.box / "photo.jpg") as im:
+        assert im.getexif()[0x0132] == "2026:01:15 10:00:00"
+    assert redate_video(hand.tmp / "pushed.jpg", time.time()) == 0  # not an MP4: nothing to change, no error
 
 
 def test_push_file_refuses_what_it_cant_send(hand):

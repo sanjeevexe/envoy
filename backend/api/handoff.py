@@ -12,8 +12,10 @@ Muse's connector supports:
   `app` must be a key of `HANDOFF_TEMPLATES` and the caption is cleaned and capped. Like an email trigger's values, it
   never supplies the goal or the plan: the goal is the template's, and the caption only fills its slot.
 - **`push_file(device, path)`** copies an image to `Pictures/Envoy/` or a video to `Movies/Envoy/` on a phone from the
-  pool (`envoy-test`, `phone-…`; never an adb serial), dates it now, and checks the media store has it, so the gallery
-  shows it as the newest item.
+  pool (`envoy-test`, `phone-…`; never an adb serial) and makes it the gallery's newest item: the copy's own dates (an
+  MP4's creation time, a JPEG's EXIF dates, which the media store reads as "date taken") and its file date are now, and
+  the media scanner is asked for it until its row is no longer pending (Android 15 leaves a file adb wrote pending,
+  which galleries hide, until it is scanned).
 - **Nothing goes to a real phone without the user's yes.** Outbox items wait (status `waiting`) until the user sends one
   from their own session (`POST /api/handoff/{id}/send`). MCP's `send_to_phone` pushes to an emulator at once, and for
   the real phone only records the item and says it waits for the user in Envoy.
@@ -28,8 +30,11 @@ import ipaddress
 import json
 import os
 import re
+import shutil
 import socket
+import struct
 import subprocess
+import tempfile
 import time
 import unicodedata
 from pathlib import Path
@@ -139,6 +144,99 @@ def read_sidecar(media: Path) -> tuple[str | None, str | None, str | None]:
     return None, None, None
 
 
+# ---- dating a copy now, so "the newest video in my gallery" is this one ----------------------------------
+
+MP4_EPOCH = 2082844800  # an MP4's clock counts seconds from 1904; Unix time from 1970
+
+
+def _boxes(f: Any, start: int, end: int) -> Any:
+    """(type, start, header size, end) of each ISO BMFF box (MP4, MOV, M4V, HEIC) between start and end."""
+    pos = start
+    while pos + 8 <= end:
+        f.seek(pos)
+        size, typ = struct.unpack(">I4s", f.read(8))
+        head = 8
+        if size == 1:
+            size, head = struct.unpack(">Q", f.read(8))[0], 16
+        elif size == 0:
+            size = end - pos
+        if size < head:
+            return
+        yield typ, pos, head, min(pos + size, end)
+        pos += size
+
+
+def redate_video(path: Path, now: float) -> int:
+    """Set the movie's, tracks' and media's creation and modification times to now, in place. Returns how many."""
+    t = int(now) + MP4_EPOCH
+    n = 0
+    with path.open("r+b") as f:
+        def walk(start: int, stop: int) -> None:
+            nonlocal n
+            for typ, pos, head, end in _boxes(f, start, stop):
+                if typ in (b"moov", b"trak", b"mdia"):
+                    walk(pos + head, end)
+                elif typ in (b"mvhd", b"tkhd", b"mdhd") and end - pos >= head + 20:
+                    f.seek(pos + head)
+                    version = f.read(1)[0]
+                    f.seek(pos + head + 4)
+                    f.write(struct.pack(">QQ", t, t) if version == 1 else struct.pack(">II", t & 0xFFFFFFFF, t & 0xFFFFFFFF))
+                    n += 1
+        walk(0, f.seek(0, 2))
+    return n
+
+
+def redate_jpeg(path: Path, now: float) -> int:
+    """Set the EXIF DateTime, DateTimeOriginal and DateTimeDigitized to now, in place (the image itself isn't
+    re-encoded). Returns how many."""
+    stamp = time.strftime("%Y:%m:%d %H:%M:%S", time.localtime(now)).encode()
+    n = 0
+    with path.open("r+b") as f:
+        data = f.read(1 << 20)  # the EXIF block comes first, and is at most 64 KB
+        pos = 2
+        while pos + 4 <= len(data) and data[pos] == 0xFF and data[pos + 1] not in (0xDA, 0xD9):
+            length = struct.unpack(">H", data[pos + 2:pos + 4])[0]
+            if data[pos + 1] == 0xE1 and data[pos + 4:pos + 10] == b"Exif\0\0":
+                tiff = pos + 10
+                bo = "<" if data[tiff:tiff + 2] == b"II" else ">"
+                ifds, seen = [struct.unpack(bo + "I", data[tiff + 4:tiff + 8])[0]], set()
+                while ifds:
+                    off = ifds.pop()
+                    if off in seen or tiff + off + 2 > len(data):
+                        continue
+                    seen.add(off)
+                    count = struct.unpack(bo + "H", data[tiff + off:tiff + off + 2])[0]
+                    for i in range(count):
+                        e = tiff + off + 2 + 12 * i
+                        if e + 12 > len(data):
+                            break
+                        tag, typ, cnt, val = struct.unpack(bo + "HHII", data[e:e + 12])
+                        if tag == 0x8769:  # the Exif sub-IFD, where the original and digitized dates are
+                            ifds.append(val)
+                        elif tag in (0x0132, 0x9003, 0x9004) and typ == 2 and cnt == 20 and tiff + val + 19 <= len(data):
+                            f.seek(tiff + val)
+                            f.write(stamp)
+                            n += 1
+                return n
+            pos += 2 + length
+    return n
+
+
+def dated_now(src: Path, kind: str, folder: Path, now: float) -> Path:
+    """A copy of the file in `folder` whose own dates say now; the file on the Mac is left as it is. A file whose
+    structure can't be read is copied unchanged."""
+    copy = folder / src.name
+    shutil.copyfile(src, copy)
+    try:
+        if kind == "video":
+            redate_video(copy, now)
+        elif src.suffix.lower() in (".jpg", ".jpeg"):
+            redate_jpeg(copy, now)
+    except (OSError, struct.error, IndexError, ValueError):
+        shutil.copyfile(src, copy)
+    return copy
+
+
 def safe_name(name: str) -> str:
     """A file name the phone's shell and media store take as it is: letters, digits, dot, dash, underscore."""
     p = Path(name)
@@ -174,6 +272,7 @@ class Handoff:
         self.tasks, self.pool, self.bus, self.adb, self.clock = tasks, pool, bus, adb, clock
         self.settle_s, self.every_s, self.max_bytes = settle_s, every_s, max_bytes
         self.resolve_ip = resolve_ip or _resolve
+        self.index_wait_s = 10.0  # how long the gallery gets to pick a file up
         self._folder: Path | None = None  # the folder the seen list below belongs to
         self._seen: dict[str, float] = {}  # name → mtime when the watcher started on this folder
         self._sizes: dict[str, tuple[int, float, float]] = {}  # name → (size, mtime, since when it has had them)
@@ -414,12 +513,13 @@ class Handoff:
         self._sh(serial, f"mkdir -p {folder}")
         name = self._free_name(serial, folder, safe_name(src.name))
         remote = f"{folder}/{name}"
-        out = self.adb(serial, ["push", str(src), remote], timeout=600)
+        with tempfile.TemporaryDirectory(prefix="envoy-handoff-") as tmp:
+            out = self.adb(serial, ["push", str(dated_now(src, kind, Path(tmp), time.time())), remote], timeout=600)
         if out.returncode != 0:
             raise HandoffError(f"adb push failed: {(out.stderr or out.stdout).strip()[:200]}")
         # adb push keeps the Mac's modified time; the gallery sorts by date, so this copy is dated now.
         self._sh(serial, f"touch {remote}")
-        uri = self._indexed(serial, kind, remote)
+        uri = self._indexed(serial, kind, remote, self.index_wait_s)
         return {"device": device, "remote_path": remote, "media_uri": uri}
 
     def _sh(self, serial: str, cmd: str, timeout: float = 30) -> str:
@@ -436,22 +536,24 @@ class Handoff:
             name, n = f"{stem}-{n}{ext}", n + 1
         return name
 
-    def _indexed(self, serial: str, kind: str, remote: str, wait_s: float = 8) -> str:
-        """The file's media store row, after asking the media scanner for it: on Android 11 and later the write through
-        /sdcard is indexed by the media provider itself, and the scan request covers the rest."""
+    def _indexed(self, serial: str, kind: str, remote: str, wait_s: float = 10) -> str:
+        """The file's media store row once the gallery can see it. A write through /sdcard makes a row that stays
+        pending (hidden from galleries, Android 15) until the media scanner reads the file, so it is always asked."""
         rel, name = remote.removeprefix("/sdcard/").rsplit("/", 1)
         where = f"relative_path='{rel}/' AND _display_name='{name}'"
-        query = f'content query --uri {MEDIA[kind]} --projection _id:date_added:date_modified --where "{where}"'  # safe_name(): no quotes
-        scanned = False
-        deadline = time.monotonic() + wait_s
+        query = f'content query --uri {MEDIA[kind]} --projection _id:is_pending --where "{where}"'  # safe_name(): no quotes
+        scan = f"am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file://{remote}"
+        start = time.monotonic()
+        self.adb(serial, ["shell", scan], timeout=30)
+        asked_again = False
         while True:
-            row = re.search(r"_id=(\d+)", self.adb(serial, ["shell", query], timeout=30).stdout)
+            row = re.search(r"_id=(\d+), is_pending=0", self.adb(serial, ["shell", query], timeout=30).stdout)
             if row:
                 return f"{MEDIA[kind]}/{row.group(1)}"
-            if not scanned:
-                self.adb(serial, ["shell", f"am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file://{remote}"], timeout=30)
-                scanned = True
-            if time.monotonic() > deadline:
+            if not asked_again and time.monotonic() - start > wait_s / 2:
+                self.adb(serial, ["shell", scan], timeout=30)
+                asked_again = True
+            if time.monotonic() - start > wait_s:
                 raise HandoffError(f"{name} was copied to the phone but its gallery hasn't picked it up")
             time.sleep(0.5)
 
