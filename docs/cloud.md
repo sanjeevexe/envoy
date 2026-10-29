@@ -147,7 +147,26 @@ Half the inputs were a 150 ms swipe, which the ack waits for. The tailnet path f
 
 The suite changed the cloud copy's SkyLark and memory; both were put back afterwards (a backup of the memory and the task database, then `demo_setup.py --app-only`).
 
-**Real apps from a data-center address:** TBD, from the user's sign-in sitting and `eval/run_final.py real` on the cloud envoy-real.
+**The iPhone** (the user's sitting, Oct 29 evening: the cloud copy paired as "Envoy Cloud", its live view used for 20–30 minutes while apps installed and signed in; the web app reports its own latency to `/api/metrics`): frame lag p50 **290 ms** (median of 26 sessions; 204–404), round trip 64 ms, a tap acknowledged in 74 ms. The Mac's browser in the same sitting: 230 ms (159–304). The Mac copy's iPhone record is 66–115 ms. Under that load (two emulators, Play Store installs), the cloud copy's live view is about 2.5–4× the Mac copy's and over the 150 ms target: usable for a sign-in, visibly laggy to watch.
+
+**Real apps and sign-ins from a data-center address** (the user signed in on the cloud phone and typed every password; Oct 29):
+
+| App | Result on the cloud phone |
+| --- | --- |
+| Google (Play Store, Gmail; the phone's test account) | **Signed in**, no challenge |
+| Amazon | **Creating an account was refused** ("detected suspicious activity"). An account made on the user's laptop then **signed in** without trouble |
+| Starbucks | **Sign-in failed**: "your browser is outdated, try again". Not established whether it's the image's own web view or the address |
+| DoorDash | **Signed in** with Google; then the emulator crashed (below), so nothing more was tried |
+| Chipotle | Installed, not tried |
+| Target | Not tried: it shows a bot check to emulators on the Mac too |
+
+So one clear bot-style refusal (Amazon's sign-up). Signing in to accounts that already exist worked where the app got that far.
+
+**The emulator crashed under real apps** with SwiftShader, the renderer stage 1 used. The Test phone died while DoorDash drew its screens (a segfault in the emulator's `RenderThread`, in the kernel log). The Real-app phone died about a minute into an Amazon run, three times. Turning off the emulator's host video decoder (`-feature -HardwareDecoder`) didn't help. **Switching to `-gpu swangle`** (ANGLE on SwiftShader) did: the same Amazon run then completed. Now each phone gets its own renderer at boot: envoy-test SwiftShader (SkyLark's measured runs; on `swangle` SkyLark did 18/18 but slower, median 7.3 s, and one run fell to the agent), envoy-real `swangle`.
+
+**A mix-up, and the fix.** The sitting's instructions said "envoy-real", but the web app calls the phones **Test phone** (envoy-test, shown first) and **Real-app phone** (envoy-real), so the sign-ins went onto the Test phone. With the user's OK, the two AVDs were swapped on the VM (both stopped cleanly, their folders renamed): the signed-in phone is now the Real-app phone, which always cold-boots and never loads a snapshot, and the fresh one is the Test phone, with SkyLark reinstalled and seeded. The Real-app phone kept its 10 GB data partition.
+
+**The real-app set on the cloud phone** (`eval/run_final.py real`, read-only, every approval declined): TBD.
 
 ### Choosing the cloud (and back): the switch
 
@@ -159,20 +178,20 @@ One-time setup (the user, once the VM is on the tailnet):
 5. **Real apps:** in the cloud copy's web app, open the live phone `envoy-real`, Take over, and sign in to Google Play and the apps the demo needs. You type every password. Hand back.
 
 **To choose the cloud** (about 5 minutes; the Mac keeps running as it is):
-1. `scripts/cloud/start.sh --vm-only` (if it reports a stockout, run it again; see below), then `scripts/cloud/keep-awake.sh on`.
+1. `scripts/cloud/start.sh --vm-only` (if it reports a stockout, run it again; see below), then `scripts/cloud/keep-awake.sh on` and `scripts/cloud/key.sh put 3` (the Meta key, for the agent and chat; the VM's own cap is $3 a day).
 2. Use the **Envoy Cloud** icon on the iPhone, and `scripts/cloud/login.sh` on the Mac.
 3. Siri: in Shortcuts, rename **Ask Envoy** to **Ask Envoy (Mac)** and **Ask Envoy (cloud)** to **Ask Envoy**, so "Hey Siri, Ask Envoy" goes to the cloud.
 4. Muse: run `scripts/cloud/muse-tunnel.sh` and use the **Envoy Cloud** connector, after updating its URL if the tunnel's address changed (quick tunnels get a new one each time). Turn the Mac's connector off for the session, so Muse doesn't pick the wrong one.
 
 **To switch back to the Mac:**
 1. Use the **Envoy** icon. Rename the shortcuts back. Use the Mac's Muse connector and tunnel (`scripts/start_muse_test.sh`), and turn the cloud one off.
-2. `scripts/cloud/keep-awake.sh off`, then `scripts/cloud/stop.sh`.
+2. `scripts/cloud/key.sh remove`, `scripts/cloud/keep-awake.sh off`, then `scripts/cloud/stop.sh`.
 
 Nothing migrates either way, so switching back takes as long as the steps above. Anything done on the cloud copy (tasks, learned routines, memory) stays there.
 
 **What only the Mac option can do:** the Pixel 5 (USB), and so the Instagram creator scene; the real apps already signed in on the Mac's `envoy-real`; the Mac's memory and routine history.
 
-**A stopped VM may not start on demand.** On Oct 29 the first restart failed with Google's `ZONE_RESOURCE_POOL_EXHAUSTED` (no n2-standard-8 free in us-east1-b), and the retry 17 s later worked. For a recording, start the VM well ahead and keep it awake. Start it well ahead and keep it awake on recording day. TBD: a machine image to start in another zone if a stockout lasts.
+**A stopped VM may not start on demand.** On Oct 29 the first restart failed with Google's `ZONE_RESOURCE_POOL_EXHAUSTED` (no n2-standard-8 free in us-east1-b), and the retry 17 s later worked. For a recording, start the VM well ahead and keep it awake. Start it well ahead and keep it awake on recording day. If a stockout lasts, `scripts/cloud/fallback.sh start us-east1-c` (or `-d`) starts a copy of the VM from its machine image in another zone, with the same tailnet name, so nothing on the iPhone or in Muse changes; then `export ENVOY_GCP_ZONE=us-east1-c` for the other scripts. Never run the copy and the original at once (one Tailscale identity).
 
 ## Cost
 
