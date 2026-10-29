@@ -663,7 +663,13 @@ class RoutineExecutor:
             w, h = screen.width or 1080, screen.height or 2400
             if a.target is not None:
                 m = locators.locate(a.target, screen, ctx.inputs, threshold=locators.RELAXED, margin=0.0)
-                cx, cy = m.element.center if m.element is not None else (int((a.start or (0.5, 0.5))[0] * w), int((a.start or (0.5, 0.5))[1] * h))
+                if m.element is not None and a.grip:  # where the finger went down in the recorded drag, inside the target
+                    x1, y1, x2, y2 = m.element.bounds
+                    cx, cy = int(x1 + a.grip[0] * (x2 - x1)), int(y1 + a.grip[1] * (y2 - y1))
+                elif m.element is not None:
+                    cx, cy = m.element.center
+                else:
+                    cx, cy = int((a.start or (0.5, 0.5))[0] * w), int((a.start or (0.5, 0.5))[1] * h)
             else:
                 cx, cy = int((a.start or (0.5, 0.5))[0] * w), int((a.start or (0.5, 0.5))[1] * h)
             dx, dy = a.vector or (0.0, -0.3)

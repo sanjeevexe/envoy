@@ -1,9 +1,9 @@
 # Routines that run every step but give the wrong answer (Oct 29)
 
 Branch `claude/routine-answers-d04bb1`, built on `aw-merge` (773536a, fast-forwarded from main 8b5e9c2). Not merged and not
-pushed. Tests: `uv run --project backend pytest -q backend/tests` gives 296 passed (283 before, plus 13 new in
-`test_routine_answers.py`), and `npm run build` in `web/` passes. The first 10 new tests fail on 773536a, the last 3 on
-1f1fc11 (Phase 7's real-app pass, below), and all pass here. No device
+pushed. Tests: `uv run --project backend pytest -q backend/tests` gives 298 passed (283 before, plus 15 new in
+`test_routine_answers.py`), and `npm run build` in `web/` passes. The first 10 new tests fail on 773536a, the next 3 on
+1f1fc11 (Phase 7's real-app pass, below), the last 2 on 425f12e (AndroidWorld's replay, below), and all pass here. No device
 time was used. Model spend was $0.56: 11 Muse Wonder compiles, one per AndroidWorld source trace, cached as `spec.json`, so
 every recompile and test since then runs offline.
 
@@ -146,6 +146,24 @@ Two misses came from compiling, and Phase 7's sources and Wonder specs are now f
     it reads that day's heading, and the read-back on the source screen confirms the first one is today.
 
   The cause of the strict miss is not proven, because that run kept no screen.
+
+## AndroidWorld's replay of this library (backlog #10, #11)
+
+AndroidWorld replayed the recompiled library on seed 30 (androidworld e0e68ad). Two routine bugs came out of it:
+- **#10, a drag replayed from the target's centre.** The brightness routine scored 0 with every check passed, reporting
+  51915. The agent had dragged the slider from x 144 to 1007, then from 756 to 1048, past the track's right end
+  (42–1038). The routine started each drag at the slider's centre (540) with the same vector, so the second one ended at
+  832. A drag now records where the finger went down inside its target (`StepAction.grip`, as fractions of the box), and
+  the executor starts there, so it ends where the recorded drag did. A simulated slider reproduces the replay's 51915 on
+  425f12e, and reaches 65535 here from both the minimum and the maximum.
+- **#11, ten identical launcher results.** The launcher listed "Simple Calendar Pro0" … "Pro9". The compiler cut the
+  digits out as data, so the tap's locator fitted all ten alike, and the top row won 0.81 to 0.79, inside the margin.
+  `locators._same_slot` already resolved repeated list rows that only their place tells apart. It now also covers
+  siblings of one kind that the locator's words fit equally, and takes the recorded slot. Words that fit the siblings
+  differently still decide by score.
+
+No cached spec has a drag, and the tie-break works at run time only, so all 76 cached specs compile as they did at
+425f12e. The recompiled brightness and events-on-date YAMLs gain their `grip`.
 
 ## Not done
 

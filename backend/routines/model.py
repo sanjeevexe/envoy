@@ -126,6 +126,8 @@ class StepAction(_Model):
     seconds: float | None = None  # wait
     vector: tuple[float, float] | None = None  # swipe: the drag as fractions of the screen (dx, dy), from the target's centre
     start: tuple[float, float] | None = None  # swipe: where it started on the recorded screen (used only without a target)
+    grip: tuple[float, float] | None = None  # swipe: where the finger went down inside the target, as fractions of its box (a
+    # slider's thumb at 10% of its track): the drag ends where the recorded one did, not at the target's centre plus the vector
 
 
 class Extract(_Model):
@@ -326,7 +328,7 @@ def _action_out(a: StepAction) -> dict[str, Any]:
         return {k: _clean({"target": tgt, "direction": a.direction, "max_scrolls": a.max_scrolls,
                            "container": a.container.model_dump() if a.container else None})}
     if k == "swipe":
-        return {k: _clean({"from": tgt, "vector": list(a.vector or ()), "start": list(a.start or ())})}
+        return {k: _clean({"from": tgt, "vector": list(a.vector or ()), "start": list(a.start or ()), "grip": list(a.grip or ())})}
     if k == "back":
         return {k: True}
     if k == "launch":
@@ -345,7 +347,8 @@ def _action_in(d: dict[str, Any]) -> StepAction:
                           max_scrolls=v.get("max_scrolls"), container=Locator.model_validate(v["container"]) if v.get("container") else None)
     if k == "swipe":
         return StepAction(kind=k, target=Locator.model_validate(v["from"]) if v.get("from") else None,
-                          vector=tuple(v["vector"]) if v.get("vector") else None, start=tuple(v["start"]) if v.get("start") else None)
+                          vector=tuple(v["vector"]) if v.get("vector") else None, start=tuple(v["start"]) if v.get("start") else None,
+                          grip=tuple(v["grip"]) if v.get("grip") else None)
     if k == "back":
         return StepAction(kind=k)
     if k == "launch":

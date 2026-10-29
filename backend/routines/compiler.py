@@ -954,8 +954,14 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             under = min((e for e in s.before.numbered if e.bounds[0] <= x <= e.bounds[2] and e.bounds[1] <= y <= e.bounds[3]),
                         key=lambda e: e.area, default=None)
             anchor = generalize_locator(locators.build(under, s.before), examples, data_values, None, None) if under is not None else None
+            # Where the finger went down inside that element: a slider dragged from its thumb at the left ends at the right
+            # end, where a drag from the element's centre by the same vector stops short (brightness 51915, not the max).
+            grip = None
+            if under is not None and under.bounds[2] > under.bounds[0] and under.bounds[3] > under.bounds[1]:
+                ux1, uy1, ux2, uy2 = under.bounds
+                grip = (round((x - ux1) / (ux2 - ux1), 3), round((y - uy1) / (uy2 - uy1), 3))
             action = StepAction(kind="swipe", target=anchor, vector=(round((x2 - x) / w, 3), round((y2 - y) / h, 3)),
-                                start=(round(x / w, 3), round(y / h, 3)))
+                                start=(round(x / w, 3), round(y / h, 3)), grip=grip)
         elif s.kind == "launch":
             # The app that came up: the model may have named it ("Broccoli") rather than given its package.
             action = StepAction(kind="launch", package=s.after.package)

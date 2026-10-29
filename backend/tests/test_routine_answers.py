@@ -32,7 +32,8 @@ from agent.trace import TraceWriter
 from devices.types import ActionResult
 from models.schemas import CompiledRoutine, InputValue, MatchOutput
 from policy.approvals import ScriptedApprover
-from routines.compiler import NotCompilable, _done_screen, _numeric, compile_trace, degenerate
+from routines import locators
+from routines.compiler import NotCompilable, _done_screen, _numeric, clean, compile_trace, degenerate, load_trace
 from routines.executor import ExecConfig, RoutineExecutor, extract_value
 from routines.matcher import RoutineMatcher, like_example
 from routines.model import Routine, render_str
@@ -325,3 +326,68 @@ def test_a_routine_whose_outputs_are_missing_leaves_the_screen_it_looked_at(tmp_
     out = asyncio.run(ex.run(r, {}, launch="never", allow_agent=False, allow_repair=False))
     assert out.status == "failed" and out.detail.startswith("outputs not found: ")
     assert list(tmp_path.rglob("*outputs_missing*")), "no tree saved for the missing outputs"
+
+
+# ---- AndroidWorld's replay of this library (androidworld e0e68ad), backlog #10 and #11 ----------------------------------
+
+
+def test_a_drag_starts_where_the_recorded_one_did_inside_its_target():
+    """Brightness to the max: the agent dragged the slider from its thumb near the left end (x 144) to x 1007, then from
+    x 756 to x 1048, past the track's right end (42–1038). The routine started both drags at the slider's centre (540) with
+    the same vectors, so the second one ended at x 832: brightness 51915, and every check passed. Started where the
+    recorded drags were, inside the slider, they end where those did, whatever the brightness was before."""
+    r, _ = compiled("brightness_max")
+    swipes = [st for st in r.steps if st.action.kind == "swipe"]
+    d = AW / "brightness_max"
+    rec = next(json.loads(line) for line in (d / "steps.jsonl").read_text().splitlines()
+               if line.strip() and (json.loads(line).get("device_action") or {}).get("kind") == "swipe")
+    with gzip.open(d / rec["tree_before"], "rt") as f:
+        tree = json.load(f)
+
+    class Slider:
+        """The brightness dialog: the value follows the finger to where it lifts on the track (x 42–1038)."""
+
+        def __init__(self, value: float):
+            self.value, self.drags = value, []
+
+        def screen(self):
+            for e in tree["elements"]:
+                if "Display brightness" in (e.get("label") or ""):
+                    e["label"] = e["text"] = f"Display brightness · {self.value:.1f}"
+            return screen_from_tree(tree)
+
+        async def observe(self, screenshot: bool = False):
+            return self.screen()
+
+        async def act(self, a):
+            if a.kind == "swipe":
+                self.drags.append((a.x, a.x2))
+                self.value = float(round(max(0.0, min(1.0, (a.x2 - 42) / (1038 - 42))) * 65535))
+            return ActionResult(ok=True, duration_ms=1.0)
+
+    for start in (0.0, 65535.0):  # at the minimum, as AndroidWorld sets it, and already at the maximum
+        phone = Slider(start)
+        drags = r.model_copy(update={"steps": swipes})
+        ex = RoutineExecutor(phone, adapter=NoModel(), approver=ScriptedApprover(approve=False), config=FAST)
+        out = asyncio.run(ex.run(drags, {}, launch="never", allow_agent=False, allow_repair=False))
+        assert out.status == "done", out.detail
+        assert out.outputs == {"brightness_level": "65535.0"} and phone.drags == [(143, 1005), (756, 1047)], (out.outputs, phone.drags)
+    assert [st.action.grip for st in swipes] == [(0.102, 0.262), (0.717, 0.802)]
+
+
+def test_identical_results_differ_only_by_their_slot():
+    """The launcher's search for "Simple Calendar Pro" lists "Simple Calendar Pro0" … "Pro9": the compiler cut the numbers
+    out as data, so the tap's locator ("Simple Calendar Pro", a Button under search_results_list_view) fits all ten alike,
+    and the recorded top one won 0.81 to 0.79, inside the margin: "target not found". Siblings the locator's words fit
+    equally are told apart by the recorded slot, as repeated list rows already were."""
+    r, _ = compiled("events_on_date")
+    tap = r.steps[r.step_index("tap_simple_calendar_pro_result")].action.target
+    assert tap.text == "Simple Calendar Pro"
+    d = AW / "events_on_date"
+    _, records = load_trace(d, confirmed=True)
+    results = next(s for s in clean(d, records)[0] if s.target is not None and s.target.label == "Simple Calendar Pro0").before
+    m = locators.locate(tap, results, {})
+    assert m.element is not None and m.element.label == "Simple Calendar Pro0", m.summary()
+    # Words that fit the siblings differently still decide by score, never by the slot.
+    other = tap.model_copy(update={"text": "Simple Calendar Pro3"})
+    assert locators.locate(other, results, {}).element.label == "Simple Calendar Pro3"

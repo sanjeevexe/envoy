@@ -27,6 +27,7 @@ steps:
         position: [0.5, 0.514]
       vector: [0.0, -0.4]
       start: [0.5, 0.8]
+      grip: [0.5, 0.811]
   post:
   - {screen_changed: true}
   - element_present: {resource_id: search_container_all_apps, text: Search, kind: Text}
@@ -108,7 +109,7 @@ compiled_from:
   goal: What events do I have October 24 in Simple Calendar Pro? Answer with the titles only. If there are multiple titles, format your answer
     as a comma separated list.
   compiler: cached
-  compiled_at: "2026-10-29 01:25:02"
+  compiled_at: "2026-10-29 02:40:08"
   trace_steps_kept: [2, 3, 4, 5, 7]
   trace_steps_dropped: 4
   cost_usd: 0.0
