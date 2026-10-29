@@ -40,6 +40,7 @@ from routines.screens import load_tree, screen_from_tree
 
 AW = Path(__file__).parent / "traces" / "androidworld"
 NEW = AW / "new_seeds"
+REAL = Path(__file__).parent / "traces" / "real_1f1fc11"  # Phase 7's envoy-real sources from its pass on 1f1fc11
 FAST = ExecConfig(pre_timeout_s=0.6, post_timeout_s=0.6, stable_s=0.2, poll_s=0.01, patch_screenshots=False)
 
 
@@ -53,15 +54,15 @@ class NoModel:
         raise AssertionError("no model call expected")
 
 
-def compiled(task: str) -> tuple[Routine, list[str]]:
-    d = AW / task
+def compiled(task: str, root: Path = AW) -> tuple[Routine, list[str]]:
+    d = root / task
     spec = CompiledRoutine.model_validate_json((d / "spec.json").read_text())
     routine, report = asyncio.run(compile_trace(d, adapter=NoModel(), confirmed=True, spec=spec))
     return routine, report.warnings
 
 
-def final_screen(task: str):
-    d = AW / task
+def final_screen(task: str, root: Path = AW):
+    d = root / task
     return _done_screen(d, [json.loads(line) for line in (d / "steps.jsonl").read_text().splitlines() if line.strip()])
 
 
@@ -70,9 +71,9 @@ def outputs(r: Routine, screen, inputs: dict[str, str]) -> dict[str, str | None]
     return {n: extract_value(e, screen, inputs, ex) for n, e in ex.items()}
 
 
-def edited(task: str, change) -> object:
+def edited(task: str, change, root: Path = AW) -> object:
     """The task's final screen with `change(elements)` applied to its recorded tree: another instance of the same screen."""
-    d = AW / task
+    d = root / task
     rec = next(json.loads(line) for line in reversed((d / "steps.jsonl").read_text().splitlines())
                if line.strip() and json.loads(line).get("decision", {}).get("action", {}).get("type") == "done")
     with gzip.open(d / rec["tree_before"], "rt") as f:
@@ -269,3 +270,58 @@ def test_the_matcher_writes_a_value_the_way_the_example_is_written():
     assert res.inputs["file_extension"] == ".txt" and res.inputs["note_text"] == "Actions speak louder than words."
     assert res.inputs["note_name"] == "fair_ant_XOdi" and res.inputs["recipient_phone_number"] == "+13192815309"
     assert like_example("Wait...", "Hi.") == "Wait..." and like_example("13192815309", "+13192815309") == "13192815309"
+
+
+# ---- Phase 7's real-app pass on 1f1fc11 ----------------------------------------------------------------------------------
+
+
+def test_a_price_with_its_unit_price_is_read_by_that_shape_even_on_the_only_such_row():
+    """Amazon on envoy-real: the first result's price is "$9.99 ( $0.83 /count)", the only row of that shape on the screen.
+    1f1fc11 took the words of a row no other row repeats for the item's own (a note's "individuals were present"), fell
+    back to "the first $x.xx in the list" (a carousel's $6.53), and dropped the output: the same-input rerun answered
+    nothing. Words around another number are the app's."""
+    r, warnings = compiled("amazon", REAL)
+    ex = r.steps[-1].extract["first_result_price"]
+    assert "/count" in ex.pattern and ex.first_in_list
+    assert outputs(r, final_screen("amazon", REAL), {"search_query": "AA batteries"}) == {"first_result_price": "$9.99"}
+    assert not any("dropped" in w for w in warnings)
+
+
+def test_the_days_heading_is_read_by_its_fixed_words_and_the_first_screen_waits_for_the_app():
+    """Google Calendar on envoy-real: "do I have any events today?" was answered from the agenda the app opens to,
+    "Thursday 29 October 2026, Open Day View" then "Nothing planned. Tap to create.". The date had nothing before it to
+    anchor on and was dropped; it leads its element, followed by the app's words. And the strict rerun read nothing
+    straight after launch: the read waits for the app to be in front now, and a miss leaves the screen as evidence."""
+    r, warnings = compiled("calendar_today", REAL)
+    assert r.outputs == ["todays_date", "todays_events_status"]
+    read = r.steps[-1]
+    assert read.id == "read_answer" and [c.describe() for c in read.pre] == ["app com.google.android.calendar in front"]
+    assert outputs(r, final_screen("calendar_today", REAL), {}) == \
+        {"todays_date": "Thursday 29 October 2026", "todays_events_status": "Nothing planned. Tap to create."}
+
+    def next_day(els):  # the same agenda a day later, with an event
+        for e in els:
+            for k in ("text", "desc", "label"):
+                if e.get(k):
+                    e[k] = e[k].replace("Thursday 29 October 2026", "Friday 30 October 2026").replace(
+                        "Nothing planned. Tap to create.", "Standup, 09:00 – 09:15")
+    other = outputs(r, edited("calendar_today", next_day, REAL), {})
+    assert other == {"todays_date": "Friday 30 October 2026", "todays_events_status": None}  # missing, never the wrong words
+
+
+def test_a_routine_whose_outputs_are_missing_leaves_the_screen_it_looked_at(tmp_path):
+    r, _ = compiled("calendar_today", REAL)
+    screen = edited("calendar_today", lambda els: [e.update(text="", desc="", label="") for e in els  # the agenda not drawn yet
+                                                     if "Open Day View" in (e.get("label") or "") or "Nothing planned" in (e.get("label") or "")], REAL)
+
+    class Calendar:
+        async def observe(self, screenshot: bool = False):
+            return screen
+
+        async def act(self, a):
+            return ActionResult(ok=True, duration_ms=1.0)
+
+    ex = RoutineExecutor(Calendar(), adapter=NoModel(), approver=ScriptedApprover(approve=False), config=FAST)
+    out = asyncio.run(ex.run(r, {}, launch="never", allow_agent=False, allow_repair=False))
+    assert out.status == "failed" and out.detail.startswith("outputs not found: ")
+    assert list(tmp_path.rglob("*outputs_missing*")), "no tree saved for the missing outputs"

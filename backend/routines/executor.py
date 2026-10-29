@@ -323,6 +323,9 @@ class RoutineExecutor:
                 missing_out = await self._read_scrolled(ctx, specs, missing_out)
             missing_out += [n for n in routine.outputs if not out.outputs.get(n) and self._screen_only(routine, n)]
             if missing_out:
+                # The screen the outputs weren't on: evidence, as for one they were read from (a strict rerun that read
+                # nothing used to leave no tree at all).
+                ctx.trace.save_tree(len(out.steps) + 1, "outputs_missing", await self._observe())
                 return self._finish(ctx, "failed", f"outputs not found: {', '.join(missing_out)}")
             return self._finish(ctx, "done", "all steps and checks passed")
         except Exception as e:  # noqa: BLE001 - a failed run keeps its trace

@@ -623,9 +623,11 @@ def _extract_for(name: str, near: str, example: str, final: ScreenState, example
         if any(ch.isalpha() for ch in rest) and _data_free(re.sub(r"\d", "", rest), data_values):
             shape = rf"(?P<v>{_shape(example)})\s*{_shape(rest)}"
             shaped = [e for e in final.numbered if e.in_list and re.fullmatch(shape, " ".join(e.label.split()))]
-            if len(shaped) < 2:
-                # Words no other row repeats are this item's own ("25 individuals were present", a note's sentence; another
-                # note says "80 participants attended"): the first list element that starts with a number of that shape.
+            if len(shaped) < 2 and not _DIGIT.search(rest):
+                # Words with no number among them that no other row repeats are this item's own ("25 individuals were
+                # present", a note's sentence; another note says "80 participants attended"): the first list element that
+                # starts with a number of that shape. Words around another number are the app's ("$9.99 ( $0.83 /count)",
+                # even when it is the only such row on screen).
                 shape = rf"(?P<v>{_shape(example)})(?:\s+\D.*)?"
                 shaped = [e for e in final.numbered if e.in_list and re.fullmatch(shape, " ".join(e.label.split()))]
             if shaped and shaped[0].index == el.index:
@@ -706,6 +708,12 @@ def _extract_for(name: str, near: str, example: str, final: ScreenState, example
         # A fixed message that is the answer itself ("Nothing planned. Tap to create."): found by its own words. On a
         # run where the app shows something else, the output is missing and the ladder takes over.
         loc = Locator(text=el.label, kind=el.kind)
+    if loc is None and near_text is None and segment is None and pos == 0 and after_text and not has_slot(after_text) \
+            and sum(ch.isalpha() for ch in after_text) >= 3:
+        # The value leads its element and fixed words follow it ("Thursday 29 October 2026, Open Day View", the day heading a
+        # calendar reads aloud): the first element of that shape. The read-back on the run's own screen confirms it is the
+        # one the agent answered from.
+        return Extract(pattern=rf"(?P<v>.+?)\s*{re.escape(after_text)}")
     if loc is None and near_text is None:
         return None  # nothing to find it by on another run (no ID, no label, no input in it, no list shape)
     if card is None and loc is None and near_text and sum(norm(e.label).startswith(norm(near_text)) for e in final.numbered) > 1:
@@ -1078,7 +1086,10 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
         if not out_steps:
             # The answer is on the screen the app opens to ("How many miles do I have?"): outputs are read by steps, so a
             # routine with none would promise outputs it can never read. One read-only step carries them.
+            # Its before-check waits for the app to be in front: read straight after a fresh launch, a slow app's first screen
+            # (Calendar's agenda) isn't up yet, and the answer was reported missing.
             out_steps.append(Step(id="read_answer", intent="Read the answer on the app's first screen",
+                                  pre=[Check(kind="app_foreground", package=final.package)] if final is not None and final.package else [],
                                   action=StepAction(kind="wait", seconds=0.3), risk="read", note="added: the answer is on the start screen"))
         out_steps[-1].extract = extract
     # After the outputs: an output read in the row an input names (a menu item's price) uses that input.

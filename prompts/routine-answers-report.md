@@ -1,8 +1,9 @@
 # Routines that run every step but give the wrong answer (Oct 29)
 
 Branch `claude/routine-answers-d04bb1`, built on `aw-merge` (773536a, fast-forwarded from main 8b5e9c2). Not merged and not
-pushed. Tests: `uv run --project backend pytest -q backend/tests` gives 293 passed (283 before, plus 10 new in
-`test_routine_answers.py`), and `npm run build` in `web/` passes. Each new test fails on 773536a and passes here. No device
+pushed. Tests: `uv run --project backend pytest -q backend/tests` gives 296 passed (283 before, plus 13 new in
+`test_routine_answers.py`), and `npm run build` in `web/` passes. The first 10 new tests fail on 773536a, the last 3 on
+1f1fc11 (Phase 7's real-app pass, below), and all pass here. No device
 time was used. Model spend was $0.56: 11 Muse Wonder compiles, one per AndroidWorld source trace, cached as `spec.json`, so
 every recompile and test since then runs offline.
 
@@ -44,8 +45,8 @@ in `recompile.json`.
   Wonder's input, which used to be dropped as unused. The number-then-words pattern is not used when the words name an
   input. When a merged label holds several lines, which happens when the ingredient asked about is the recipe's first, the
   read takes the line that names the input.
-- **A pattern keeps fixed words only when other rows repeat them.** Amazon's "$x ( $y /count)" repeats down the results,
-  so it stays. "25 individuals were present" is the note's own sentence, so the pattern becomes the first list line that
+- **A pattern keeps fixed words only when they surround another number or other rows repeat them.** Amazon's
+  "$x ( $y /count)" stays. "25 individuals were present" is the note's own sentence, so the pattern becomes the first list line that
   starts with a number of that shape.
 - **`expect_digits` is set only for a number with at most one word**, judged on the value's first part: "190 calories",
   "$13.49", "2:05 PM · Group 5", "8am open". It is not set for "100 Main St Chicago".
@@ -99,9 +100,11 @@ successes on those tasks, and the 9 question episodes should become answerable.
 ## Nothing else changed
 
 Every cached Wonder spec in `eval/results` (76, 74 with their trace on this Mac) was recompiled offline by `aw-merge`'s
-compiler and by this one (`regression.json`). 70 come out identical, including all 10 of `final/compiled` (SkyLark) and
-13 of the 14 in `final/real_compiled` that have a trace here. The other 4:
+compiler and by this one (`regression.json`). 64 come out identical, including 9 of the 10 in `final/compiled`
+(SkyLark). The other 10:
 - Maps' street address (three copies) no longer has `expect_digits`: an address is not a number.
+- The step that reads an answer on an app's first screen now has an app-in-front before-check: Calendar (two copies),
+  Contacts' count (three) and SkyLark's miles. Every other compiled step already had one.
 - Phase 2's old `compiled-v4/flight_status` is refused. Its output read "SL 1190" for a flight-status question, on its own
   screen. The current `final/compiled/flight_status` is unchanged.
 
@@ -111,16 +114,38 @@ At the coordinator's request, every real-app spec was recompiled again, this tim
 (`eval/run_real_apps.py`'s `WORKFLOWS`). The sets were Phase 7's `final/real_compiled`, `real_apps/compiled`, the Oct 28
 real pass, and Session A's `routine_fixes_2026-10-28/{pass,unseen}`. Chrome's compile-time screenshot read was given the
 same answer for both compilers. The results are in `real_apps.json`:
-- **47 specs:** 42 compile identically, and 2 compile under neither compiler (Target has no compiled source run in
+- **47 specs:** 37 compile identically, and 2 compile under neither compiler (Target has no compiled source run in
   Phase 7, and the real pass's YouTube source ended in an error).
 - **None is newly refused.** No pattern changed, and no plural or yes/no extract appeared.
-- **The 3 that differ are all Maps' `street_address`, which drops `expect_digits`.** Read on every tree of every Maps
-  run in `data/runs` (87 screens, for both Empire State Building and Space Needle), it gives the same value with and
-  without `expect_digits`. It is not a regression on any recorded screen. It would now also accept an address with no
-  street number.
+- **3 differ in Maps' `street_address`, which drops `expect_digits`.** Read on every tree of every Maps run in
+  `data/runs` (87 screens, for both Empire State Building and Space Needle), it gives the same value with and without
+  `expect_digits`. It is not a regression on any recorded screen. It would now also accept an address with no street
+  number.
+- **5 differ only in the first-screen read's app-in-front before-check** (Calendar ×2, Contacts' count ×3).
 - **The only read-back warning in any real-app compile under 773536a** was Amazon's product, which read a search
   suggestion in Phase 7's compile. Session A's row fix already corrects it, and both compilers give the same Amazon
   routine.
+
+## Phase 7's real-app pass on 1f1fc11
+
+Two misses came from compiling, and Phase 7's sources and Wonder specs are now fixtures
+(`backend/tests/traces/real_1f1fc11/`):
+- **Amazon, price dropped.** The first result's price is `$9.99 ( $0.83 /count)`, the only row of that shape on the
+  screen (whole, not in pieces, on every recorded screen). 1f1fc11 took the trailing words for the item's own because no
+  other row repeated them. It fell back to "the first `$x.xx` in the list", whose first match was a carousel's `$6.53`,
+  and dropped the output, so the same-input rerun answered nothing. Now words around another number are kept as the
+  app's, and the extract is again 773536a's `(?P<v>\$\d+\.\d+)\s*\(\ \$\d+\.\d+\ /count\)`. A note's "25 individuals
+  were present" has no other number and still becomes a number-only shape.
+- **Calendar, a rerun that read nothing.** The extract that matters ("Nothing planned. Tap to create.") is the same on
+  773536a and here. The strict rerun read nothing within 5 s of a fresh launch and saved no tree. The next run read it
+  with no repair (rung 0, no patches). Three changes:
+  - the first-screen read waits for the app to be in front (up to 5 s more);
+  - a run with missing outputs saves the screen it looked at (`outputs_missing`);
+  - the agent's date (from the TODAY line) is kept. "Thursday 29 October 2026, Open Day View" has nothing before the
+    value to anchor on, so the first element of that shape (value, then the app's fixed words) is read. On another day
+    it reads that day's heading, and the read-back on the source screen confirms the first one is today.
+
+  The cause of the strict miss is not proven, because that run kept no screen.
 
 ## Not done
 
@@ -140,14 +165,15 @@ same answer for both compilers. The results are in `real_apps.json`:
 ## Files
 
 - `backend/routines/compiler.py`: `degenerate`, `_effect`, `_numeric`, `_opposite`, `_plural`, `_every_rows`,
-  `_part_examples`, `_prior_text`; the outputs block (read-back drop, refusing a question with no readable answer);
-  enabled states in `_layout_key`.
+  `_part_examples`, `_prior_text`; the outputs block (read-back drop, refusing a question with no readable answer); a
+  value read by the fixed words after it; the first-screen read's before-check; enabled states in `_layout_key`.
 - `backend/routines/executor.py`: reads for `every` and `answers`, the merged-label line for an input-anchored extract,
-  and filling `{{_field}}`.
+  filling `{{_field}}`, and the `outputs_missing` tree.
 - `backend/routines/model.py`: `{{name:part}}` slots, `slot_names`, `FIELD`, and `Extract.every` / `Extract.answers`.
 - `backend/routines/dates.py`: `parse_date`, `parse_time`, `formatted`, `parts`.
 - `backend/routines/matcher.py`: `like_example`.
 - `backend/tests/test_routine_answers.py`, and the fixtures in `backend/tests/traces/androidworld/` (13 source traces,
-  trees only, with `spec.json`; `new_seeds/`).
+  trees only, with `spec.json`; `new_seeds/`) and `backend/tests/traces/real_1f1fc11/` (Phase 7's Amazon and Calendar
+  sources with their specs).
 - `eval/results/routine_answers_2026-10-29/`: the recompiled YAMLs, `recompile.json`, `degenerate_scan.json`,
-  `regression.json`.
+  `regression.json`, `real_apps.json`.

@@ -1,0 +1,35 @@
+{
+ "task_id": "f7-1029020238-real-calendar_today",
+ "goal": "In Google Calendar, do I have any events today?",
+ "status": "done",
+ "result": "No - you have no events today (Thursday 29 October 2026). Google Calendar shows \"Nothing planned. Tap to create.\"",
+ "steps": 0,
+ "model_calls": 2,
+ "cost_usd": 0.0052711,
+ "cost_at_standard_usd": 0.0052711,
+ "input_tokens": 4238,
+ "cached_tokens": 2914,
+ "output_tokens": 748,
+ "reasoning_tokens": 590,
+ "duration_s": 5.01,
+ "approvals": [],
+ "popups": [],
+ "plan": {
+  "app": "Calendar",
+  "subgoals": [
+   "Open Today view for Thursday 29 October 2026",
+   "Read events listed for today"
+  ],
+  "success_check": {
+   "kind": "info",
+   "value": "today's events",
+   "field_hint": null
+  }
+ },
+ "check": {
+  "passed": true,
+  "evaluable": true,
+  "detail": "answer visible on screen: Thursday, 29, October, 2026"
+ },
+ "trace_dir": "tests/traces/real_1f1fc11/calendar_today"
+}
