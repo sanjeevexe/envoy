@@ -1,0 +1,71 @@
+{
+ "name": "joplin_lookup_ingredient_quantity",
+ "intent": "Find the quantity of an ingredient in a recipe in the Joplin app",
+ "description": "Search for a named recipe in the Joplin app, open the recipe note, and read the amount and unit listed for a specified ingredient.",
+ "patterns": [
+  "What quantity of an ingredient do I need for a recipe?",
+  "How much of an ingredient is in a recipe?",
+  "Find the amount of an ingredient in a Joplin recipe",
+  "Check an ingredient quantity in a recipe"
+ ],
+ "inputs": [
+  {
+   "name": "recipe_name",
+   "type": "text",
+   "description": "The name of the recipe to look up.",
+   "from_memory": null,
+   "example": "Chicken Alfredo"
+  },
+  {
+   "name": "ingredient_name",
+   "type": "text",
+   "description": "The ingredient whose quantity is needed.",
+   "from_memory": null,
+   "example": "spirulina"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "launch_joplin",
+   "intent": "Launch the Joplin app",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "tap_search",
+   "intent": "Tap Search to find a recipe",
+   "target_fixed_text": "Search",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "type_recipe_name",
+   "intent": "Type {{recipe_name}} into the search field",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 4,
+   "id": "open_recipe",
+   "intent": "Tap the {{recipe_name}} recipe in the search results to open it and read the quantity of {{ingredient_name}}",
+   "target_fixed_text": null,
+   "choice_input": "recipe_name"
+  }
+ ],
+ "outputs": [
+  {
+   "name": "ingredient_quantity",
+   "near": "spirulina",
+   "example": "3/4 cup"
+  }
+ ],
+ "data_values": [
+  "1 cup cooked lentils",
+  "1/2 cup diced onions",
+  "1/4 cup chopped carrots",
+  "1/4 cup chopped celery",
+  "1/4 cup vegetable broth"
+ ]
+}

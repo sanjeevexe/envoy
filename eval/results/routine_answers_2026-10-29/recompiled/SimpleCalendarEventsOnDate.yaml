@@ -1,0 +1,114 @@
+routine: simple_calendar_pro_get_events
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: draft
+intent: Get event titles for a date in Simple Calendar Pro
+description: Opens Simple Calendar Pro, navigates to the requested date, reads the events shown for that day, and returns their titles only.
+patterns: [What events do I have on a date in Simple Calendar Pro, List my Simple Calendar Pro events for a date, Show event titles for a date
+    in Simple Calendar Pro]
+outputs: [event_titles]
+start: fresh_launch
+inputs:
+  event_date: {type: date, description: The calendar date to inspect., example: October 24}
+steps:
+- id: swipe_to_app_search
+  intent: Swipe from Home to open the app search
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action:
+    swipe:
+      from:
+        text: Home
+        kind: Text
+        cls: View
+        parent: drag_layer
+        in_list: false
+        position: [0.5, 0.514]
+      vector: [0.0, -0.4]
+      start: [0.5, 0.8]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: search_container_all_apps, text: Search, kind: Text}
+  - element_present: {resource_id: apps_list_view, kind: List}
+  risk: read
+  note: trace step 2
+- id: search_for_simple_calendar_pro
+  intent: Type 'Simple Calendar Pro' into the app search field
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  action:
+    type:
+      field:
+        resource_id: input
+        text: Search apps, web and more
+        hint: Search apps, web and more
+        kind: EditText
+        cls: EditText
+        parent: typeahead_input
+        in_list: false
+        position: [0.5, 0.095]
+      value: Simple Calendar Pro
+  post:
+  - field_equals:
+      field: {resource_id: input, text: 'Search apps, web and more', kind: EditText}
+      value: Simple Calendar Pro
+  risk: reversible
+  note: trace step 3
+- id: tap_simple_calendar_pro_result
+  intent: Tap the Simple Calendar Pro search result to open the app
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  action:
+    tap:
+      text: Simple Calendar Pro
+      kind: Button
+      cls: LinearLayout
+      parent: search_results_list_view
+      in_list: false
+      position: [0.5, 0.167]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: workspace, kind: List}
+  - element_present: {resource_id: search_container_hotseat, text: Search, kind: Button}
+  risk: reversible
+  note: trace step 4
+- id: launch_simple_calendar_pro
+  intent: Launch Simple Calendar Pro directly
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  action: {launch: com.simplemobiletools.calendar.pro}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: top_toolbar_search_icon, kind: Button}
+  - element_present: {resource_id: top_toolbar_search, text: Search, kind: EditText}
+  risk: read
+  note: trace step 5
+- id: open_event_date
+  intent: "Tap {{event_date}} in the calendar to open that date's event view and read its event titles"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      visual: "the date cell for {{event_date:day}} showing Trivia Niq"
+      region: [0.286, 0.719, 0.43, 0.754]
+      density: 420
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: go_to_today, text: Go to today, kind: Button}
+  risk: reversible
+  extract:
+    event_titles:
+      locator: {resource_id: event_item_holder, kind: Button}
+      segment: 0
+      every: true
+  note: trace step 7
+compiled_from:
+  task_id: aw-baseline-standard-1028-044802-d25b
+  goal: What events do I have October 24 in Simple Calendar Pro? Answer with the titles only. If there are multiple titles, format your answer
+    as a comma separated list.
+  compiler: cached
+  compiled_at: "2026-10-29 01:25:02"
+  trace_steps_kept: [2, 3, 4, 5, 7]
+  trace_steps_dropped: 4
+  cost_usd: 0.0

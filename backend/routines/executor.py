@@ -45,7 +45,7 @@ from policy.signin import sign_in_reason
 from routines import checks as chk
 from routines import locators
 from routines.compiler import bind_inputs, chk_generalize, generalize_locator, is_ad
-from routines.model import Check, Extract, Locator, Routine, Step, StepAction, has_slot, render, render_str
+from routines.model import FIELD, Check, Extract, Locator, Routine, Step, StepAction, has_slot, render, render_str
 from routines.screens import body, contains_value, norm, parts_of, short_id, usable_id
 from routines import screen_read
 from routines.visual import match_crop
@@ -688,6 +688,8 @@ class RoutineExecutor:
                     el = m.element
                 sr.rungs.append("scrolled the target out from under the on-screen keyboard")
             if a.kind == "type":
+                if "{{" + FIELD + "}}" in (a.value or ""):
+                    ctx.inputs[FIELD] = el.text or ""  # what the field holds now: kept around the typed input, and in its after-check
                 action = Action(kind="type", element=el.number, text=render_str(a.value, ctx.inputs) or "", submit=a.submit)
             else:
                 action = Action(kind=a.kind, element=el.number)
@@ -1282,6 +1284,25 @@ def _first_row(spec: Extract, screen: ScreenState, inputs: dict[str, str] | None
     return (label.split(spec.until, 1)[0] if spec.until else label).strip() or None
 
 
+def _every_row(spec: Extract, screen: ScreenState) -> str | None:
+    """Every row the (rendered) locator names, in screen order, joined with ", ": its ID and type, and the text it must
+    show ("20:00", the hour asked about); the recorded part of each row (the title of "Game night · 02:45 - 03:45")."""
+    loc = spec.locator
+    assert loc is not None
+    values: list[str] = []
+    for e in screen.numbered:
+        label = " ".join((e.full_label or e.label).split())
+        if (loc.resource_id and not locators.id_matches(loc.resource_id, short_id(e.resource_id))) or (loc.kind and e.kind != loc.kind) \
+                or (loc.text_has and not contains_value(label, loc.text_has)) or not (loc.resource_id or loc.text_has or e.in_list):
+            continue
+        if spec.segment is not None:
+            parts = parts_of(label)
+            label = parts[spec.segment] if spec.segment < len(parts) else ""
+        if label:
+            values.append(label)
+    return ", ".join(dict.fromkeys(values)) or None
+
+
 def _after_card(card: str, near: str, screen: ScreenState) -> Element | None:
     """The first element labelled `near` after the one that shows `card` among other words (a result, not the search box
     that shows only the term)."""
@@ -1299,6 +1320,13 @@ def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str 
     spec = render(spec, inputs)
     if spec.first_row:
         return _first_row(spec, screen, inputs)
+    if spec.answers and spec.locator is not None:
+        # A yes/no answer: whether the element is on this screen, never its words. (The step's after-checks have
+        # already held, so this is the screen the answer is on.)
+        shown = chk.evaluate(Check(kind="element_present", locator=spec.locator), screen, inputs).passed
+        return spec.answers[0] if shown else spec.answers[1]
+    if spec.every and spec.locator is not None:
+        return _every_row(spec, screen)
     if spec.pattern:
         for e in screen.numbered:
             label = " ".join(e.label.split())
@@ -1363,6 +1391,10 @@ def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str 
         if spec.segment >= len(parts):
             return None
         value = parts[spec.segment]
+    elif loc is not None and loc.text_has and len(parts := parts_of(label)) > 1:
+        # Found by the input it names, inside a label merged from several lines ("Ingredients: · • · 2 teaspoons buckwheat
+        # groats" when the ingredient asked about is the recipe's first): the line that names it.
+        value = next((p for p in parts if contains_value(p, loc.text_has)), value)
     if near and norm(value).startswith(near) and norm(value) != near:
         value = value[len(spec.near or ""):].strip(" ·:,")
     if spec.after and norm(value).endswith(norm(spec.after)):

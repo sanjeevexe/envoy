@@ -1,0 +1,1 @@
+the goal asks to delete, but the run took no irreversible step: on this instance there was nothing to delete, and a routine learned from it would do nothing on any other

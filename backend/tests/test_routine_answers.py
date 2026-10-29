@@ -1,0 +1,271 @@
+"""Routines that run every step and pass their own checks but give the wrong answer (AndroidWorld, Oct 28–29: routines
+verified on seed 30 answered 0/9 on new seeds, and eight more finished every step and check on their own seed yet scored 0).
+
+tests/traces/androidworld/<task> holds the seed-30 runs those routines were compiled from (trees only, no screenshots), each
+with Muse Wonder's compile answer cached in spec.json, so they recompile offline. new_seeds/ holds the screens the full
+agent answered from on three other seeds of the three question tasks (index.json: each one's goal and answer): the screens
+the compiled routines stopped on with "outputs not found".
+
+- Outputs tied to the source run: a pattern holding the example's ingredient and unit, or the note's own wording;
+  expect_digits on an address that happened to start with a number.
+- Outputs dropped or meaningless: a list answer that is no single element; a date picked in a month grid that never became an
+  input; the event at an hour read from the first row; a yes/no answered with the menu item it was inferred from; an output
+  that reads something else on the run's own final screen.
+- Weak verification: a run that had nothing to do (nothing to delete, brightness already at its maximum) taught a routine that
+  does nothing; Markor's edit was saved by leaving the editor, a step the compiler dropped as a back-track, so the routine's
+  done-check passed on unsaved text; and the edit typed the source note's own words back in.
+"""
+
+from __future__ import annotations
+
+import asyncio
+import gzip
+import json
+import shutil
+from pathlib import Path
+from types import SimpleNamespace
+
+import pytest
+
+import routines.executor as executor_mod
+from agent.trace import TraceWriter
+from devices.types import ActionResult
+from models.schemas import CompiledRoutine, InputValue, MatchOutput
+from policy.approvals import ScriptedApprover
+from routines.compiler import NotCompilable, _done_screen, _numeric, compile_trace, degenerate
+from routines.executor import ExecConfig, RoutineExecutor, extract_value
+from routines.matcher import RoutineMatcher, like_example
+from routines.model import Routine, render_str
+from routines.screens import load_tree, screen_from_tree
+
+AW = Path(__file__).parent / "traces" / "androidworld"
+NEW = AW / "new_seeds"
+FAST = ExecConfig(pre_timeout_s=0.6, post_timeout_s=0.6, stable_s=0.2, poll_s=0.01, patch_screenshots=False)
+
+
+@pytest.fixture(autouse=True)
+def traces_in_tmp(tmp_path, monkeypatch):
+    monkeypatch.setattr(executor_mod, "TraceWriter", lambda tid: TraceWriter(tid, root=tmp_path))
+
+
+class NoModel:
+    def call(self, *a, **kw):
+        raise AssertionError("no model call expected")
+
+
+def compiled(task: str) -> tuple[Routine, list[str]]:
+    d = AW / task
+    spec = CompiledRoutine.model_validate_json((d / "spec.json").read_text())
+    routine, report = asyncio.run(compile_trace(d, adapter=NoModel(), confirmed=True, spec=spec))
+    return routine, report.warnings
+
+
+def final_screen(task: str):
+    d = AW / task
+    return _done_screen(d, [json.loads(line) for line in (d / "steps.jsonl").read_text().splitlines() if line.strip()])
+
+
+def outputs(r: Routine, screen, inputs: dict[str, str]) -> dict[str, str | None]:
+    ex = {n: e for st in r.steps for n, e in (st.extract or {}).items()}
+    return {n: extract_value(e, screen, inputs, ex) for n, e in ex.items()}
+
+
+def edited(task: str, change) -> object:
+    """The task's final screen with `change(elements)` applied to its recorded tree: another instance of the same screen."""
+    d = AW / task
+    rec = next(json.loads(line) for line in reversed((d / "steps.jsonl").read_text().splitlines())
+               if line.strip() and json.loads(line).get("decision", {}).get("action", {}).get("type") == "done")
+    with gzip.open(d / rec["tree_before"], "rt") as f:
+        tree = json.load(f)
+    change(tree["elements"])
+    return screen_from_tree(tree)
+
+
+# ---- outputs tied to the source run (backlog #8) ----------------------------------------------------------------------
+
+
+def test_the_ingredient_the_question_names_is_an_input_and_the_answer_is_read_beside_it():
+    """Seed 30: "3/4 cup spirulina". The old extract was the pattern `(\\d+/\\d+ cup)\\s*spirulina`, and the ingredient was
+    dropped as an unused input; new seeds asked for buckwheat groats (2 teaspoons, the recipe's first line, merged into
+    its "Ingredients:" heading), arrowroot powder and almond flour."""
+    r, _ = compiled("ingredient")
+    assert r.inputs["ingredient_name"].example == "spirulina"
+    ex = r.steps[-1].extract["ingredient_quantity"]
+    assert "spirulina" not in ex.model_dump_json() and "cup" not in ex.model_dump_json()
+    assert outputs(r, final_screen("ingredient"), {"recipe_name": "Chicken Alfredo", "ingredient_name": "spirulina"}) == \
+        {"ingredient_quantity": "3/4 cup"}
+    for k, ingredient, answer in ((1, "buckwheat groats", "2 teaspoons"), (2, "arrowroot powder", "1/2 cup"), (3, "almond flour", "1/2 cup")):
+        assert outputs(r, load_tree(NEW / f"ingredient_{k}.json.gz"), {"ingredient_name": ingredient}) == {"ingredient_quantity": answer}
+
+
+def test_a_count_is_read_by_its_shape_not_by_the_notes_own_words():
+    """Seed 30's note said "25 individuals were present"; the others say "80 individuals attended", "45 participants were
+    present", "50 individuals attended"."""
+    r, _ = compiled("attendees")
+    ex = r.steps[-1].extract["attendee_count"]
+    assert "individuals" not in (ex.pattern or "") and "present" not in (ex.pattern or "")
+    assert outputs(r, final_screen("attendees"), {}) == {"attendee_count": "25"}
+    for k, answer in ((1, "80"), (2, "45"), (3, "50")):
+        assert outputs(r, load_tree(NEW / f"attendees_{k}.json.gz"), {}) == {"attendee_count": answer}
+
+
+def test_a_location_is_not_expected_to_be_a_number():
+    """Seed 30's location was "100 Main St Chicago", so the output required digits; the others were "Virtual", "The Coffee
+    Bean" and "Sarah's apartment"."""
+    r, _ = compiled("event_location")
+    assert not r.steps[-1].extract["location"].expect_digits
+    for k, answer in ((1, "Virtual"), (2, "The Coffee Bean"), (3, "Sarah's apartment")):
+        assert outputs(r, load_tree(NEW / f"event_location_{k}.json.gz"), {}) == {"location": answer}
+    # A number with at most a unit still has to be one (a placeholder "- calories" is not the value yet).
+    assert all(_numeric(v) for v in ("190 calories", "$13.49", "2:05 PM", "3/4 cup", "25", "65535.0", "12C"))
+    assert not any(_numeric(v) for v in ("100 Main St Chicago", "Virtual", "Oct 29"))
+
+
+# ---- outputs dropped or meaningless (backlog #1) ----------------------------------------------------------------------
+
+
+def test_a_list_answer_is_every_row_of_the_day_and_the_day_is_an_input():
+    """"Do I have any events October 28?" → "Game night, Product demo, Date night": no single element holds it, so the
+    output was dropped; and the day was tapped in the month grid from a recorded picture of "28", so the date input was
+    dropped too. The routine answered nothing, about October 28 whatever the request."""
+    r, warnings = compiled("any_events_on_date")
+    assert r.outputs == ["event_titles"] and r.inputs["event_date"].example == "October 28"
+    tap = next(st for st in r.steps if st.action.target is not None and st.action.target.visual)
+    assert tap.action.target.visual == "date cell {{event_date:day}} in the {{event_date:month}} month grid"
+    assert tap.action.target.crop is None  # a picture of "28" is never the day another request asks for
+    assert render_str(tap.action.target.visual, {"event_date": "October 24"}) == "date cell 24 in the October month grid"
+    assert outputs(r, final_screen("any_events_on_date"), {}) == {"event_titles": "Game night, Product demo, Date night"}
+    # Another day, recorded by the run that asked about October 24: its one event.
+    assert outputs(r, final_screen("events_on_date"), {}) == {"event_titles": "Trivia Night"}
+    # Compiled from that one-event run, the plural answer still reads every row.
+    r24, _ = compiled("events_on_date")
+    assert outputs(r24, final_screen("any_events_on_date"), {}) == {"event_titles": "Game night, Product demo, Date night"}
+
+
+def test_the_event_at_an_hour_is_the_row_that_shows_that_hour():
+    """"What is on my schedule for October 27 2023 at 8:00pm?" → "Product demo" (20:00 - 20:15), the third of the day's
+    events. The routine read the first row ("Review session for Annual Report") and took no date or time input."""
+    r, _ = compiled("event_at_time")
+    assert set(r.inputs) == {"schedule_date", "schedule_time"}
+    ex = r.steps[-1].extract["event_titles"]
+    assert ex.every and ex.locator.text_has == "{{schedule_time:time24}}"
+    day = final_screen("event_at_time")
+    assert outputs(r, day, {"schedule_time": "8:00pm"}) == {"event_titles": "Product demo"}
+    assert outputs(r, day, {"schedule_time": "10:15 am"}) == {"event_titles": "Meeting with Bob"}
+    assert outputs(r, day, {"schedule_time": "6pm"}) == {"event_titles": None}  # nothing then: missing, not another event
+
+
+def test_a_yes_no_question_is_answered_true_or_false():
+    """"Is the note 'To-Do List' a todo?" was answered "Convert to note" (the menu item the agent inferred True from)."""
+    r, _ = compiled("is_todo")
+    assert outputs(r, final_screen("is_todo"), {"note_title": "To-Do List"}) == {"is_todo": "True"}
+
+    def plain_note(els):  # a note that isn't a to-do: its menu offers the other conversion
+        for e in els:
+            if e.get("text") == "Convert to note" or e.get("label") == "Convert to note":
+                e["text"] = e["label"] = "Convert to todo"
+    assert outputs(r, edited("is_todo", plain_note), {"note_title": "To-Do List"}) == {"is_todo": "False"}
+
+
+def test_an_answer_read_wrong_on_the_runs_own_screen_is_not_kept(tmp_path):
+    """"What is my next upcoming event?" → "Board meeting" (the first after now, 15:34); the routine read the day's first
+    row, "Call with Marketing", even on the screen it was compiled from. A question with no readable answer is left to the
+    agent; on a task that isn't a question, an output that reads wrong is dropped and the routine keeps its steps."""
+    with pytest.raises(NotCompilable, match="Call with Marketing"):
+        compiled("next_event")
+    d = tmp_path / "next_event"
+    shutil.copytree(AW / "next_event", d)
+    run = json.loads((d / "run.json").read_text())
+    (d / "run.json").write_text(json.dumps({**run, "goal": "Show my upcoming events in Simple Calendar Pro as a list."}))
+    spec = CompiledRoutine.model_validate_json((d / "spec.json").read_text())
+    r, report = asyncio.run(compile_trace(d, adapter=NoModel(), confirmed=True, spec=spec))
+    assert r.outputs == [] and r.steps[-1].extract is None
+    assert any("reads 'Call with Marketing'" in w and w.endswith("dropped") for w in report.warnings)
+
+
+# ---- weak verification (backlog #1, #9) -------------------------------------------------------------------------------
+
+
+def test_a_run_with_nothing_to_do_does_not_become_a_routine():
+    """Seed 30's "delete the recipes that use black garlic" had none to delete; "turn brightness to the max" found it at
+    the max. Both runs succeeded, and their routines did nothing on every other instance while passing their own checks.
+    They are refused before the model call."""
+    with pytest.raises(NotCompilable, match="nothing to delete"):
+        asyncio.run(compile_trace(AW / "delete_by_ingredient_none", adapter=NoModel(), confirmed=True))
+    with pytest.raises(NotCompilable, match="changed nothing"):
+        asyncio.run(compile_trace(AW / "brightness_already_max", adapter=NoModel(), confirmed=True))
+    # Runs that did the work still compile: the slider dragged to the max, the note created and sent by SMS.
+    assert compiled("brightness_max")[0].steps and compiled("note_and_sms")[0].steps
+    # A goal's nouns are not verbs: "the following text", "in order"; a question has nothing to change.
+    assert degenerate("Create a new note in Markor named a.txt with the following text: Hi.", "Created", [], []) is None
+    assert degenerate("Create a playlist with the following songs, in order: A, B", "Created", [], []) is None
+    assert degenerate("Is the note titled 'To-Do List' a todo?", "True", [], []) is None
+    assert "nothing to reply" in degenerate("Reply to the most recent text message with: hi", "Replied", [], [])
+    assert "already so" in degenerate("Turn bluetooth off.", "Bluetooth is off", [], [])
+
+
+def test_the_markor_edit_saves_by_leaving_the_editor_and_keeps_the_notes_own_text():
+    """The agent typed "Hello, World!" + the note's text, left the editor (which saves it) and opened the file again. The
+    round trip ended on a screen that looked the same, so it was dropped as a back-track; the routine never left the
+    editor and its done-check passed on unsaved text. And it typed seed 30's note back in, on any note."""
+    r, _ = compiled("markor_edit")
+    ids = [st.id for st in r.steps]
+    assert ids.index("return_to_file_list") < ids.index("reopen_note_file")
+    assert not r.steps[r.step_index("return_to_file_list")].optional
+    typing = next(st for st in r.steps if st.action.kind == "type")
+    assert typing.action.value == "{{text_to_add}}\n{{_field}}"
+    assert "water the plants" not in r.model_dump_json()
+    assert [c.value for c in typing.post if c.kind == "field_equals"] == ["{{text_to_add}}\n{{_field}}"]
+
+    # Run that step on another note: it keeps that note's text under the new line, and its after-check holds.
+    d = AW / "markor_edit"
+    rec = next(json.loads(line) for line in (d / "steps.jsonl").read_text().splitlines()
+               if line.strip() and json.loads(line).get("decision", {}).get("action", {}).get("type") == "type")
+    with gzip.open(d / rec["tree_before"], "rt") as f:
+        tree = json.load(f)
+    editor = next(e for e in tree["elements"] if e.get("editable"))
+    editor["text"] = editor["label"] = "Buy milk."
+
+    class Markor:
+        def __init__(self):
+            self.screen, self.typed = screen_from_tree(tree), None
+
+        async def observe(self, screenshot: bool = False):
+            return self.screen
+
+        async def act(self, a):
+            if a.kind == "type":
+                self.typed = a.text
+                editor["text"] = editor["label"] = a.text
+                self.screen = screen_from_tree(tree)
+            return ActionResult(ok=True, duration_ms=1.0)
+
+    phone = Markor()
+    one = r.model_copy(update={"steps": [typing], "done": [], "outputs": []})
+    ex = RoutineExecutor(phone, adapter=NoModel(), approver=ScriptedApprover(approve=False), config=FAST)
+    out = asyncio.run(ex.run(one, {"note_file_name": "note_x.txt", "text_to_add": "Hi there"}, launch="never", allow_agent=False,
+                             allow_repair=False))
+    assert phone.typed == "Hi there\nBuy milk." and out.status == "done", out.detail
+
+
+def test_the_matcher_writes_a_value_the_way_the_example_is_written():
+    """Note-and-SMS on its own seed scored 0.5: the matcher gave the extension as "txt" (the routine's example is ".txt",
+    typed into a field that keeps the dot) and the text as "Actions speak louder than words.." (the request's own full
+    stop after the text's)."""
+    r, _ = compiled("note_and_sms")
+    request = ("Create a new note in Markor named fair_ant_XOdi.txt with the following text: Actions speak louder than words.. "
+               "Share the entire content of the note with the phone number +13192815309 via SMS using Simple SMS Messenger")
+    given = {"note_name": "fair_ant_XOdi", "file_extension": "txt", "note_text": "Actions speak louder than words..",
+             "recipient_phone_number": "+13192815309"}
+    answer = MatchOutput(routine=r.routine, confident=True,
+                         inputs=[InputValue(name=n, value=v, source="request") for n, v in given.items()])
+
+    class Matcher:
+        def call(self, *a, **kw):
+            return SimpleNamespace(parsed=answer, cost_usd=0.0, cost_at_standard_usd=0.0)
+
+    m = RoutineMatcher(SimpleNamespace(active=lambda: [r]), adapter=Matcher())  # type: ignore[arg-type]
+    res = asyncio.run(m.match(request))
+    assert res.inputs["file_extension"] == ".txt" and res.inputs["note_text"] == "Actions speak louder than words."
+    assert res.inputs["note_name"] == "fair_ant_XOdi" and res.inputs["recipient_phone_number"] == "+13192815309"
+    assert like_example("Wait...", "Hi.") == "Wait..." and like_example("13192815309", "+13192815309") == "13192815309"

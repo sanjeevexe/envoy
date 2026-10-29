@@ -1,0 +1,415 @@
+[
+ {
+  "task": "ClockStopWatchRunning",
+  "source": "baseline-standard",
+  "routine": "clock_start_stopwatch",
+  "verified": true,
+  "refused": null
+ },
+ {
+  "task": "ContactsNewContactDraft",
+  "source": "baseline-standard",
+  "routine": "contacts_create_contact",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "MarkorEditNote",
+  "source": "baseline-standard",
+  "routine": "markor_edit_note",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "NotesRecipeIngredientCount",
+  "source": "baseline-standard",
+  "routine": "joplin_get_ingredient_quantity",
+  "verified": true,
+  "refused": null
+ },
+ {
+  "task": "RecipeDeleteMultipleRecipesWithConstraint",
+  "source": "baseline-standard",
+  "routine": "broccoli_delete_recipes_by_ingredient",
+  "verified": true,
+  "refused": "the goal asks to delete, but the run took no irreversible step: on this instance there was nothing to delete, and a routine learned from it would do nothing on any other"
+ },
+ {
+  "task": "RetroSavePlaylist",
+  "source": "baseline-standard",
+  "routine": "retro_music_create_and_export_playlist",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "SimpleCalendarAddOneEvent",
+  "source": "baseline-standard",
+  "routine": "simple_calendar_pro_create_event",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "SimpleCalendarAnyEventsOnDate",
+  "source": "baseline-standard",
+  "routine": "simple_calendar_pro_list_events_on_date",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "SimpleCalendarEventsOnDate",
+  "source": "baseline-standard",
+  "routine": "simple_calendar_pro_list_events",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "SimpleSmsReplyMostRecent",
+  "source": "baseline-standard",
+  "routine": "simple_sms_messenger_reply_most_recent_m",
+  "verified": true,
+  "refused": null
+ },
+ {
+  "task": "SimpleSmsSendClipboardContent",
+  "source": "baseline-standard",
+  "routine": "simple_sms_messenger_send_clipboard_mess",
+  "verified": true,
+  "refused": null
+ },
+ {
+  "task": "SystemBluetoothTurnOffVerify",
+  "source": "baseline-standard",
+  "routine": "settings_turn_off_bluetooth",
+  "verified": true,
+  "refused": "the run changed nothing (its answer: 'Bluetooth is already turned off'): a routine learned from it would change nothing either"
+ },
+ {
+  "task": "SystemBluetoothTurnOnVerify",
+  "source": "baseline-standard",
+  "routine": "settings_turn_on_bluetooth",
+  "verified": true,
+  "refused": "the run changed nothing (its answer: 'Bluetooth is already turned on - the Bluetooth settings screen shows the switch '): a routine learned from it would change nothing either"
+ },
+ {
+  "task": "SystemBrightnessMaxVerify",
+  "source": "baseline-standard",
+  "routine": "settings_set_brightness_max",
+  "verified": true,
+  "refused": "the run changed nothing (its answer: 'Brightness is already set to maximum (100%) in Display settings.'): a routine learned from it would change nothing either"
+ },
+ {
+  "task": "SystemBrightnessMinVerify",
+  "source": "baseline-standard",
+  "routine": "settings_set_brightness_minimum",
+  "verified": false,
+  "refused": "the run changed nothing (its answer: 'Brightness is already set to minimum value: Brightness level 0%'): a routine learned from it would change nothing either"
+ },
+ {
+  "task": "SystemBrightnessMin",
+  "source": "baseline-standard",
+  "routine": "settings_set_brightness_minimum_2",
+  "verified": true,
+  "refused": null
+ },
+ {
+  "task": "SystemWifiTurnOffVerify",
+  "source": "baseline-standard",
+  "routine": "settings_turn_off_wifi",
+  "verified": false,
+  "refused": "the goal asks to turn something, but the run changed nothing (no switch, slider, typing or irreversible step): it was already so on this instance"
+ },
+ {
+  "task": "SystemWifiTurnOff",
+  "source": "baseline-standard",
+  "routine": "settings_turn_off_wifi_2",
+  "verified": true,
+  "refused": null
+ },
+ {
+  "task": "SystemWifiTurnOnVerify",
+  "source": "baseline-standard",
+  "routine": "settings_turn_on_wifi",
+  "verified": false,
+  "refused": "the run changed nothing (its answer: 'Wi-Fi is already turned on in Settings > Network & internet > Internet'): a routine learned from it would change nothing either"
+ },
+ {
+  "task": "SystemWifiTurnOn",
+  "source": "baseline-standard",
+  "routine": "settings_turn_on_wifi_2",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "TurnOnWifiAndOpenApp",
+  "source": "baseline-standard",
+  "routine": "settings_turn_on_wifi_3",
+  "verified": true,
+  "refused": null
+ },
+ {
+  "task": "AudioRecorderRecordAudioWithFileName",
+  "source": "final-standard",
+  "routine": "audio_recorder_record_clip",
+  "verified": true,
+  "refused": null
+ },
+ {
+  "task": "AudioRecorderRecordAudio",
+  "source": "final-standard",
+  "routine": "audio_recorder_record_audio_clip",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "CameraTakePhoto",
+  "source": "final-standard",
+  "routine": "camera_take_photo",
+  "verified": true,
+  "refused": null
+ },
+ {
+  "task": "ClockStopWatchPausedVerify",
+  "source": "final-standard",
+  "routine": "clock_pause_stopwatch",
+  "verified": true,
+  "refused": null
+ },
+ {
+  "task": "ClockTimerEntry",
+  "source": "final-standard",
+  "routine": "clock_create_timer",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "ContactsAddContact",
+  "source": "final-standard",
+  "routine": "contacts_create_contact_2",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "ExpenseAddMultipleFromGallery",
+  "source": "final-standard",
+  "routine": "pro_expense_add_expenses_from_gallery_im",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "ExpenseDeleteDuplicates",
+  "source": "final-standard",
+  "routine": "pro_expense_delete_duplicate_expenses",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "ExpenseDeleteMultiple",
+  "source": "final-standard",
+  "routine": "pro_expense_delete_expenses",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "ExpenseDeleteSingle",
+  "source": "final-standard",
+  "routine": "pro_expense_delete_expense",
+  "verified": true,
+  "refused": null
+ },
+ {
+  "task": "MarkorCreateFolder",
+  "source": "final-standard",
+  "routine": "markor_create_folder",
+  "verified": true,
+  "refused": null
+ },
+ {
+  "task": "MarkorCreateNoteAndSms",
+  "source": "final-standard",
+  "routine": "markor_create_note_and_send_by_sms",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "MarkorCreateNoteFromClipboard",
+  "source": "final-standard",
+  "routine": "markor_create_note",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "MarkorCreateNote",
+  "source": "final-standard",
+  "routine": "markor_create_note_2",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "NotesIsTodo",
+  "source": "final-standard",
+  "routine": "joplin_check_note_todo_status",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "NotesMeetingAttendeeCount",
+  "source": "final-standard",
+  "routine": "joplin_count_meeting_attendees",
+  "verified": true,
+  "refused": null
+ },
+ {
+  "task": "OpenAppTaskEval",
+  "source": "final-standard",
+  "routine": "contacts_open_app",
+  "verified": true,
+  "refused": null
+ },
+ {
+  "task": "RecipeAddMultipleRecipesFromImage",
+  "source": "final-standard",
+  "routine": "broccoli_add_recipes_from_image",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "RecipeAddSingleRecipe",
+  "source": "final-standard",
+  "routine": "broccoli_add_recipe",
+  "verified": true,
+  "refused": null
+ },
+ {
+  "task": "RecipeDeleteMultipleRecipesWithNoise",
+  "source": "final-standard",
+  "routine": "broccoli_delete_recipes",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "RecipeDeleteMultipleRecipes",
+  "source": "final-standard",
+  "routine": "broccoli_delete_recipes_2",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "RecipeDeleteSingleRecipe",
+  "source": "final-standard",
+  "routine": "broccoli_delete_recipe",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "RecipeDeleteSingleWithRecipeWithNoise",
+  "source": "final-standard",
+  "routine": "broccoli_delete_recipe_2",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "SimpleCalendarAddOneEventInTwoWeeks",
+  "source": "final-standard",
+  "routine": "simple_calendar_create_event",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "SimpleCalendarAddOneEventRelativeDay",
+  "source": "final-standard",
+  "routine": "simple_calendar_pro_create_event_2",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "SimpleCalendarAddOneEventTomorrow",
+  "source": "final-standard",
+  "routine": "calendar_create_event",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "SimpleCalendarAddRepeatingEvent",
+  "source": "final-standard",
+  "routine": "simple_calendar_create_recurring_event",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "SimpleCalendarDeleteEventsOnRelativeDay",
+  "source": "final-standard",
+  "routine": "simple_calendar_pro_delete_day_events",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "SimpleCalendarDeleteEvents",
+  "source": "final-standard",
+  "routine": "simple_calendar_pro_delete_events_on_dat",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "SimpleCalendarEventOnDateAtTime",
+  "source": "final-standard",
+  "routine": "simple_calendar_pro_get_event_titles",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "SimpleCalendarLocationOfEvent",
+  "source": "final-standard",
+  "routine": "simple_calendar_pro_get_event_location",
+  "verified": true,
+  "refused": null
+ },
+ {
+  "task": "SimpleCalendarNextEvent",
+  "source": "final-standard",
+  "routine": "simple_calendar_get_next_event",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "SimpleDrawProCreateDrawing",
+  "source": "final-standard",
+  "routine": "simple_draw_create_drawing",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "SimpleSmsReply",
+  "source": "final-standard",
+  "routine": "simple_sms_messenger_reply_to_conversati",
+  "verified": true,
+  "refused": null
+ },
+ {
+  "task": "SimpleSmsSendReceivedAddress",
+  "source": "final-standard",
+  "routine": "simple_sms_messenger_text_event_address",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "SimpleSmsSend",
+  "source": "final-standard",
+  "routine": "simple_sms_messenger_send_message",
+  "verified": true,
+  "refused": null
+ },
+ {
+  "task": "SystemBrightnessMax",
+  "source": "final-standard",
+  "routine": "settings_set_brightness_max_2",
+  "verified": false,
+  "refused": null
+ },
+ {
+  "task": "VlcCreatePlaylist",
+  "source": "final-standard",
+  "routine": "vlc_create_playlist",
+  "verified": false,
+  "refused": null
+ }
+]

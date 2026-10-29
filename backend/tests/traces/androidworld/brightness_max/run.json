@@ -1,0 +1,37 @@
+{
+ "task_id": "aw-final-standard-1028-172045-de53",
+ "goal": "Turn brightness to the max value.",
+ "status": "done",
+ "result": "Brightness turned to max: Brightness level 100% (65535.0)",
+ "steps": 6,
+ "model_calls": 8,
+ "cost_usd": 0.01773195,
+ "cost_at_standard_usd": 0.01773195,
+ "input_tokens": 22148,
+ "cached_tokens": 16648,
+ "output_tokens": 1967,
+ "reasoning_tokens": 1353,
+ "duration_s": 52.85,
+ "approvals": [],
+ "popups": [],
+ "plan": {
+  "app": "Settings",
+  "subgoals": [
+   "Open Settings",
+   "Open Display settings",
+   "Drag Brightness level slider to maximum",
+   "Confirm brightness stays at max"
+  ],
+  "success_check": {
+   "kind": "info",
+   "value": "brightness level showing maximum",
+   "field_hint": null
+  }
+ },
+ "check": {
+  "passed": true,
+  "evaluable": true,
+  "detail": "answer visible on screen: Brightness, Brightness, 65535, 0"
+ },
+ "trace_dir": "tests/traces/androidworld/brightness_max"
+}

@@ -31,7 +31,8 @@ from pydantic import BaseModel, ConfigDict, Field
 Risk = Literal["read", "reversible", "irreversible"]
 InputType = Literal["text", "code", "date", "phone", "choice"]
 
-_SLOT = re.compile(r"\{\{\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}\}")
+# {{name}}, or {{name:part}} for one part of a date or time input ({{event_date:day}}: routines/dates.py).
+_SLOT = re.compile(r"\{\{\s*([a-zA-Z_][a-zA-Z0-9_]*)(?::([a-z0-9]+))?\s*\}\}")
 
 
 class _Model(BaseModel):
@@ -153,6 +154,10 @@ class Extract(_Model):
     # first match anywhere: a result's price, wherever that row puts it ("$8.49" under "Limited time deal")
     from_screenshot: str | None = None  # not in the tree: read from the screenshot by the model, then accepted only if it
     # matches this shape (a regex) and the answer's anchor (`near`) is on screen; re-read and re-checked on every run
+    every: bool = False  # every element the locator names, in screen order, joined with ", " ("the titles of that day's
+    # events"): a plural answer is all of its rows, not the first one
+    answers: list[str] | None = None  # a yes/no answer: [the answer when the locator's element is on screen, when it isn't]
+    # ("is this note a to-do?": "Convert to note" in its menu → ["True", "False"]), never the element's own words
 
 
 class Step(_Model):
@@ -198,7 +203,7 @@ class Routine(_Model):
         return next(i for i, s in enumerate(self.steps) if s.id == step_id)
 
     def slots(self) -> set[str]:
-        return set(_SLOT.findall(self.model_dump_json()))
+        return {m.group(1) for m in _SLOT.finditer(self.model_dump_json()) if m.group(1) != FIELD}
 
     def missing_inputs(self, inputs: dict[str, str]) -> list[str]:
         return sorted(n for n in self.inputs if not str(inputs.get(n, "")).strip())
@@ -207,10 +212,30 @@ class Routine(_Model):
 # ---- templating -----------------------------------------------------------------------------
 
 
+# A typed value that keeps what the field already held ("{{text_to_add}}\n{{_field}}": a line added to the top of a note): the
+# executor fills it with the field's text just before it types, so the note's own words are never part of the routine.
+FIELD = "_field"
+
+
 def render_str(s: str | None, inputs: dict[str, str]) -> str | None:
     if s is None:
         return None
-    return _SLOT.sub(lambda m: str(inputs.get(m.group(1), m.group(0))), s)
+    return _SLOT.sub(lambda m: _fill(m, inputs), s)
+
+
+def _fill(m: re.Match, inputs: dict[str, str]) -> str:
+    value = inputs.get(m.group(1))
+    if value is None:
+        return m.group(0)
+    if m.group(2):  # a part of a date or time; left unfilled if this run's value has no such part (nothing will match it)
+        from routines.dates import formatted
+        return formatted(str(value), m.group(2)) or m.group(0)
+    return str(value)
+
+
+def slot_names(s: str | None) -> set[str]:
+    """The inputs a string uses, whole or by a part ({{event_date:day}} uses event_date)."""
+    return {m.group(1) for m in _SLOT.finditer(s or "")}
 
 
 def render(obj: Any, inputs: dict[str, str]) -> Any:

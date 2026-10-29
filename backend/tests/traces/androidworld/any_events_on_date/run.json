@@ -1,0 +1,36 @@
+{
+ "task_id": "aw-baseline-standard-1028-044245-e548",
+ "goal": "Do I have any events October 28 in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+ "status": "done",
+ "result": "Game night, Product demo, Date night",
+ "steps": 2,
+ "model_calls": 11,
+ "cost_usd": 0.0316222,
+ "cost_at_standard_usd": 0.0316222,
+ "input_tokens": 18564,
+ "cached_tokens": 11927,
+ "output_tokens": 1634,
+ "reasoning_tokens": 1175,
+ "duration_s": 29.15,
+ "approvals": [],
+ "popups": [],
+ "plan": {
+  "app": "com.simplemobiletools.calendar.pro",
+  "subgoals": [
+   "Open Simple Calendar Pro app",
+   "Navigate to October 28",
+   "Read event titles shown for October 28"
+  ],
+  "success_check": {
+   "kind": "info",
+   "value": "event titles on October 28",
+   "field_hint": null
+  }
+ },
+ "check": {
+  "passed": true,
+  "evaluable": true,
+  "detail": "answer visible on screen: Game, Product, Date"
+ },
+ "trace_dir": "tests/traces/androidworld/any_events_on_date"
+}

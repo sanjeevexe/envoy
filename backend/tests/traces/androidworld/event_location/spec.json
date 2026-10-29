@@ -1,0 +1,56 @@
+{
+ "name": "simple_calendar_pro_get_event_location",
+ "intent": "Find the location of an event in Simple Calendar Pro",
+ "description": "Searches Simple Calendar Pro for a named event, opens the event, and returns its location.",
+ "patterns": [
+  "What is the location of my event",
+  "Where is my event",
+  "Find the location of an event in Simple Calendar Pro",
+  "Get the location for my calendar event"
+ ],
+ "inputs": [
+  {
+   "name": "event_name",
+   "type": "text",
+   "description": "The name of the calendar event to look up",
+   "from_memory": null,
+   "example": "Family reunion"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "launch_simple_calendar_pro",
+   "intent": "Launch Simple Calendar Pro",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "search_event",
+   "intent": "Type {{event_name}} into the Search field",
+   "target_fixed_text": "Search",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "tap_event_result",
+   "intent": "Tap the {{event_name}} event result",
+   "target_fixed_text": null,
+   "choice_input": "event_name"
+  }
+ ],
+ "outputs": [
+  {
+   "name": "location",
+   "near": "Location:",
+   "example": "100 Main St Chicago"
+  }
+ ],
+ "data_values": [
+  "09:45 - 10:15",
+  "October 16 (Mon)",
+  "09:45",
+  "10:15"
+ ]
+}

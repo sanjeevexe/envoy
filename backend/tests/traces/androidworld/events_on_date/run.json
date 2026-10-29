@@ -1,0 +1,36 @@
+{
+ "task_id": "aw-baseline-standard-1028-044802-d25b",
+ "goal": "What events do I have October 24 in Simple Calendar Pro? Answer with the titles only. If there are multiple titles, format your answer as a comma separated list.",
+ "status": "done",
+ "result": "Trivia Night",
+ "steps": 8,
+ "model_calls": 15,
+ "cost_usd": 0.04296695,
+ "cost_at_standard_usd": 0.04296695,
+ "input_tokens": 30173,
+ "cached_tokens": 19547,
+ "output_tokens": 2898,
+ "reasoning_tokens": 2045,
+ "duration_s": 48.76,
+ "approvals": [],
+ "popups": [],
+ "plan": {
+  "app": "com.simplemobiletools.calendar.pro",
+  "subgoals": [
+   "Open Simple Calendar Pro app",
+   "Navigate to October 24 date view",
+   "Read event titles for October 24"
+  ],
+  "success_check": {
+   "kind": "info",
+   "value": "event titles on October 24",
+   "field_hint": null
+  }
+ },
+ "check": {
+  "passed": true,
+  "evaluable": true,
+  "detail": "answer visible on screen: Trivia, Night"
+ },
+ "trace_dir": "tests/traces/androidworld/events_on_date"
+}

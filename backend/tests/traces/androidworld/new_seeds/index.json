@@ -1,0 +1,47 @@
+{
+ "ingredient_1.json.gz": {
+  "goal": "What quantity of buckwheat groats do I need for the recipe 'Lasagna' in the Joplin app? Express your answer in the format <amount> <unit> where both the amount and unit exactly match the format in the recipe.",
+  "answer": "2 teaspoons",
+  "run": "aw-agent-seeds-1028-232555-fae1"
+ },
+ "ingredient_2.json.gz": {
+  "goal": "What quantity of arrowroot powder do I need for the recipe 'Salmon Salad' in the Joplin app? Express your answer in the format <amount> <unit> where both the amount and unit exactly match the format in the recipe.",
+  "answer": "1/2 cup",
+  "run": "aw-agent-seeds-1028-232448-4f1f"
+ },
+ "ingredient_3.json.gz": {
+  "goal": "What quantity of almond flour do I need for the recipe 'Tacos' in the Joplin app? Express your answer in the format <amount> <unit> where both the amount and unit exactly match the format in the recipe.",
+  "answer": "1/2 cup",
+  "run": "aw-agent-seeds-1028-232518-3c0b"
+ },
+ "attendees_1.json.gz": {
+  "goal": "How many attendees were present in the meeting titled 'Quality Assurance Review' in the Joplin app? Express your answer as just a single number.",
+  "answer": "80",
+  "run": "aw-agent-seeds-1028-232313-ee54"
+ },
+ "attendees_2.json.gz": {
+  "goal": "How many attendees were present in the meeting titled 'Client Quarterly Review' in the Joplin app? Express your answer as just a single number.",
+  "answer": "45",
+  "run": "aw-agent-seeds-1028-232420-97c9"
+ },
+ "attendees_3.json.gz": {
+  "goal": "How many attendees were present in the meeting titled 'Project Status Update' in the Joplin app? Express your answer as just a single number.",
+  "answer": "50",
+  "run": "aw-agent-seeds-1028-232345-74fc"
+ },
+ "event_location_1.json.gz": {
+  "goal": "What is the location of my Movie night event in Simple Calendar Pro? Answer with the location only.",
+  "answer": "Virtual",
+  "run": "aw-agent-seeds-1028-233631-4a64"
+ },
+ "event_location_2.json.gz": {
+  "goal": "What is the location of my Sports game event in Simple Calendar Pro? Answer with the location only.",
+  "answer": "The Coffee Bean",
+  "run": "aw-agent-seeds-1028-233552-7412"
+ },
+ "event_location_3.json.gz": {
+  "goal": "What is the location of my Team Offsite event in Simple Calendar Pro? Answer with the location only.",
+  "answer": "Sarah's apartment",
+  "run": "aw-agent-seeds-1028-233610-2fff"
+ }
+}

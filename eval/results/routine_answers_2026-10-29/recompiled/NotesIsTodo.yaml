@@ -1,0 +1,88 @@
+routine: joplin_check_note_todo
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: draft
+intent: Check whether a Joplin note is marked as a todo item
+description: Opens the named note in Joplin, opens its Actions menu, and reports whether it is marked as a todo item. The presence of a 'Convert
+  to note' option indicates it is currently a todo.
+patterns: ['Is this note a todo?', 'Is a Joplin note marked as a todo item?', Check if a note is a todo in Joplin, 'Is the note a todo or a regular
+    note?']
+outputs: [is_todo]
+start: fresh_launch
+inputs:
+  note_title: {type: text, description: Title of the Joplin note to check, example: To-Do List}
+steps:
+- id: launch_joplin
+  intent: Launch the Joplin app
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: net.cozic.joplin}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: fab-content, text: , kind: Text}
+  - element_present: {resource_id: cross-fade-icon-current, text: , kind: Text}
+  risk: read
+  note: trace step 1
+- id: find_open_note
+  intent: "Scroll to {{note_title}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        text_has: "{{note_title}}"
+        kind: Button
+        cls: ViewGroup
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      text_has: "{{note_title}}"
+      kind: Button
+      cls: ViewGroup
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: open_note
+  intent: "Tap the note titled {{note_title}} in the list"
+  pre:
+  - {app_foreground: net.cozic.joplin}
+  action:
+    tap:
+      text_has: "{{note_title}}"
+      kind: Button
+      cls: ViewGroup
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: fab-content, text: , kind: Text}
+  - element_present: {resource_id: cross-fade-icon-current, text: , kind: Text}
+  risk: reversible
+  note: trace step 2
+- id: open_actions_menu
+  intent: Tap the Actions button to inspect the note type
+  pre:
+  - {app_foreground: net.cozic.joplin}
+  action:
+    tap:
+      text: Actions · 
+      kind: Button
+      cls: ViewGroup
+      in_list: false
+      position: [0.933, 0.082]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  extract:
+    is_todo:
+      locator: {text: Convert to note, kind: Button}
+      answers: ['True', 'False']
+  note: trace step 3
+compiled_from:
+  task_id: aw-final-standard-1028-113935-db36
+  goal: Is the note titled 'To-Do List' in the Joplin app marked as a todo item? Respond with either 'True' if it is a todo or 'False' if not.
+  compiler: cached
+  compiled_at: "2026-10-29 01:25:02"
+  trace_steps_kept: [1, 2, 3]
+  trace_steps_dropped: 0
+  cost_usd: 0.0

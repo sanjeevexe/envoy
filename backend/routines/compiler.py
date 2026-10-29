@@ -31,7 +31,7 @@ from models.schemas import CompiledRoutine
 from routines import checks as chk
 from routines import locators
 from routines import screen_read
-from routines.model import Check, Extract, InputSpec, Locator, Routine, Step, StepAction, has_slot, render_str
+from routines.model import FIELD, Check, Extract, InputSpec, Locator, Routine, Step, StepAction, has_slot, render_str, slot_names
 from routines.screens import contains_value, fold, load_tree, norm, parts_of, short_id, usable_id
 from routines.visual import encode as encode_png
 
@@ -81,9 +81,10 @@ def _optional_why(s: "TStep", sid: str, intent: str) -> str | None:
     """Why a step may be skipped at run time, or None: a one-time screen, or closing the keyboard."""
     if s.risk == "irreversible" or s.kind not in ("tap", "back"):
         return None
-    if re.search(r"keyboard", f"{sid} {intent}", re.I):
+    if re.search(r"keyboard", f"{sid} {intent}", re.I) and not (s.kind == "back" and s.before.activity != s.after.activity):
         # The routine moves a target out from under the keyboard itself, so closing it is never needed; done blind it
-        # can hurt (Back with the keyboard already gone leaves the screen; its keys are not part of the screen).
+        # can hurt (Back with the keyboard already gone leaves the screen; its keys are not part of the screen). A Back that
+        # left the screen did more than that, whatever the agent called it: in Markor it leaves the editor, saving the note.
         return "closes the keyboard"
     if s.kind == "back":  # Back that closes an upsell or a tour (Wonder's own words for the step say so)
         return "one-time screen" if _ONE_TIME_INTENT.search(f"{sid} {intent}") else None
@@ -245,9 +246,50 @@ def clean(trace_dir: Path, records: list[dict]) -> tuple[list[TStep], list[tuple
     return out, dropped
 
 
+# ---- 1b: a run with nothing to do -------------------------------------------------------------
+# A run can succeed on an instance where the task asked for nothing: no recipe used that ingredient, so it deleted nothing;
+# brightness was already at its maximum. A routine compiled from it learns "look, do nothing" and passes its own checks on
+# every other instance while doing nothing there either. Verbs are matched where a clause starts ("Delete the …", ", then
+# send …"), so "the following text" or "in order" in a goal isn't taken for one.
+_CLAUSE = r"(?:^|[.;:,!?]\s*|\b(?:and|then|please|also)\s+)"
+_IRREVERSIBLE_GOAL = re.compile(_CLAUSE + r"(delete|remove|erase|send|text|reply|share|forward|pay|buy|purchase|submit|cancel)\b", re.I)
+_STATE_GOAL = re.compile(_CLAUSE + r"(?:(turn|switch|set)\b[^.;!?]*?\b(?:on|off|max(?:imum)?|min(?:imum)?|highest|lowest)\b"
+                         r"|(enable|disable|activate|deactivate|mute|unmute)\b)", re.I)
+_ALREADY = re.compile(r"\balready\b", re.I)
+
+
+def _effect(s: TStep) -> bool:
+    """A step that changes something beyond which screen is shown: typing, a drag (a slider), an irreversible action, or a
+    switch or check box that flips (tapped itself, or through its row: "Use Bluetooth")."""
+    if s.risk == "irreversible" or s.kind in ("type", "swipe", "tap_point", "long_press") or (s.target is not None and s.target.checkable):
+        return True
+    if s.before.activity != s.after.activity:
+        return False  # another screen's switches are other switches (Settings' "Internet" page under "Network & internet")
+    before = {(e.resource_id, e.label, e.bounds): e.checked for e in s.before.numbered if e.checkable}
+    return any(e.checkable and before.get((e.resource_id, e.label, e.bounds), e.checked) != e.checked for e in s.after.numbered)
+
+
+def degenerate(goal: str, answer: str, steps: list[TStep], records: list[dict]) -> str | None:
+    """Why the run can't teach a routine because its instance asked for nothing (None: it can)."""
+    approved = any((r.get("approval") or {}).get("approved") for r in records if r.get("kind") == "action")
+    if (m := _IRREVERSIBLE_GOAL.search(goal or "")) and not approved and not any(s.risk == "irreversible" for s in steps):
+        return (f"the goal asks to {m.group(1).lower()}, but the run took no irreversible step: on this instance there was nothing "
+                f"to {m.group(1).lower()}, and a routine learned from it would do nothing on any other")
+    if any(_effect(s) for s in steps):
+        return None
+    if _ALREADY.search(answer or ""):
+        return f"the run changed nothing (its answer: {answer[:80]!r}): a routine learned from it would change nothing either"
+    if (m := _STATE_GOAL.search(goal or "")) is not None:
+        return (f"the goal asks to {(m.group(1) or m.group(2)).lower()} something, but the run changed nothing (no switch, slider, "
+                f"typing or irreversible step): it was already so on this instance")
+    return None
+
+
 def _layout_key(s: ScreenState) -> str:
-    """Labels, states and positions of the listed elements: a bottom sheet dragged up has the same labels but not the same bounds."""
-    return "\n".join(f"{e.label}|{e.kind}|{e.checked}|{e.bounds}" for e in s.numbered)
+    """Labels, states and positions of the listed elements: a bottom sheet dragged up has the same labels but not the same bounds.
+    Enabled states too: leaving an editor and opening the file again saves it (Markor's Save and Undo go from enabled to
+    disabled), so that round trip is the step that saves the text, not a back-track."""
+    return "\n".join(f"{e.label}|{e.kind}|{e.checked}|{e.enabled}|{e.bounds}" for e in s.numbered)
 
 
 # ---- 3: generalize ----------------------------------------------------------------------------
@@ -343,7 +385,8 @@ def _glob_data_segments(rid: str | None) -> str | None:
 
 def generalize_locator(loc: Locator, examples: dict[str, str], data_values: list[str], fixed_text: str | None,
                        choice_input: str | None) -> Locator:
-    upd: dict[str, Any] = {"resource_id": _glob_id(loc.resource_id, examples, data_values)}
+    upd: dict[str, Any] = {"resource_id": _glob_id(loc.resource_id, examples, data_values),
+                           "hint": None if any(v and contains_value(loc.hint, v) for v in data_values) else loc.hint}
     label = loc.text or ""
 
     def shows(v: str) -> bool:
@@ -386,9 +429,9 @@ def _before_typed(c: Check, step: int, typed_at: dict[str, int]) -> bool:
 _ON_OFF = {"on", "off", "enabled", "disabled", "true", "false", "yes", "no", "checked", "unchecked"}
 
 
-def _read_back(ex: Extract, screen: ScreenState, examples: dict[str, str]) -> str:
+def _read_back(ex: Extract, screen: ScreenState, examples: dict[str, str], specs: dict[str, Extract] | None = None) -> str:
     from routines.executor import extract_value  # the executor imports this module
-    return extract_value(ex, screen, examples) or ""
+    return extract_value(ex, screen, examples, specs) or ""
 
 
 def _switch_state(near: str | None, example: str, final: ScreenState) -> Extract | None:
@@ -473,6 +516,83 @@ def _shape(example: str) -> str:
     return re.sub(r"(\\\d)+|\d+", r"\\d+", re.escape(example.strip()))
 
 
+def _numeric(example: str) -> bool:
+    """A value that is a number, with at most one word ("190 calories", "$13.49", "2:05 PM", "8am open", "3/4 cup"; of
+    "2:05 PM · Group 5", its first part): on another run it is a number too, so a placeholder ("- calories") is not the value
+    yet. An address that starts with one ("100 Main St Chicago") is not: another event's location is "Virtual"."""
+    tokens = (parts_of(example) or [""])[0].split()
+    return bool(tokens) and bool(re.match(r"[$€£]?\d", tokens[0])) and sum(bool(re.search(r"[A-Za-z]", t)) for t in tokens[1:]) <= 1
+
+
+_YES_NO = {"true": "false", "false": "true", "yes": "no", "no": "yes"}
+
+
+def _opposite(example: str) -> str | None:
+    """The other answer to a yes/no question, written like the example ("True" → "False"); None if it isn't one."""
+    e = example.strip()
+    o = _YES_NO.get(e.casefold())
+    if o is None:
+        return None
+    return o.upper() if e.isupper() and len(e) > 1 else o.capitalize() if e[:1].isupper() else o
+
+
+def _plural(name: str, example: str) -> bool:
+    """An output that can hold several values: a list in the example ("Game night, Product demo"), or a plural name
+    ("event_titles"), the question asking for all of them even when the run had one."""
+    last = name.rsplit("_", 1)[-1].casefold()
+    return ", " in example or (len(last) > 3 and last.endswith("s") and not last.endswith(("ss", "us", "is")))
+
+
+def _items(value: str | None) -> list[str]:
+    return [norm(x) for x in (value or "").split(", ") if x.strip()]
+
+
+def _same_answer(got: str | None, example: str, every: bool) -> bool:
+    if every:  # a list answer: the same items, in any order
+        return sorted(_items(got)) == sorted(_items(example))
+    return contains_value(got or "", example)
+
+
+def _part_examples(examples: dict[str, str], names: set[str] | None = None, parts: tuple[str, ...] | None = None) -> dict[str, str]:
+    """The parts of date and time inputs as their own examples, keyed "name:part" so that binding writes {{name:part}}:
+    "October 28" gives event_date:day "28" and event_date:month "October" (routines/dates.py)."""
+    from routines.dates import parts as date_parts
+    out: dict[str, str] = {}
+    for n, v in examples.items():
+        if (names is None or n in names) and ":" not in n:
+            out.update({f"{n}:{p}": f for p, f in date_parts(v).items() if parts is None or p in parts})
+    return out
+
+
+def _every_rows(example: str, final: ScreenState, examples: dict[str, str]) -> Extract | None:
+    """A plural answer read as every row of a list ("Game night, Product demo, Date night": each event's title on the day
+    asked about). Each value must lead a row of the same ID or type. When the list holds other rows too, the input every
+    answer row shows and no other does picks them ("20:00" for "what is on at 8pm": {{schedule_time:time24}})."""
+    items = [x.strip() for x in example.split(", ") if x.strip()]
+    rows: list[Element] = []
+    for item in items:
+        el = next((e for e in final.numbered if e.in_list and e.index not in {r.index for r in rows}
+                   and parts_of(e.full_label or e.label) and norm(parts_of(e.full_label or e.label)[0]) == norm(item)), None)
+        if el is None:
+            return None
+        rows.append(el)
+    rid = short_id(rows[0].resource_id)
+    if any(short_id(e.resource_id) != rid or e.kind != rows[0].kind for e in rows):
+        return None
+    segment = 0 if any(len(parts_of(e.full_label or e.label)) > 1 for e in rows) else None
+    base = Locator(resource_id=rid if usable_id(rid) else None, kind=rows[0].kind)
+    from routines.executor import extract_value  # the executor imports this module
+    ex = Extract(locator=base, segment=segment, every=True)
+    if _same_answer(extract_value(ex, final, examples), example, True):
+        return ex
+    for name, v in sorted(examples.items(), key=lambda kv: -len(kv[1])):
+        if v and all(contains_value(e.full_label or e.label, v) for e in rows):
+            anchored = ex.model_copy(update={"locator": base.model_copy(update={"text_has": "{{" + name + "}}"})})
+            if _same_answer(extract_value(anchored, final, examples), example, True):
+                return anchored
+    return None
+
+
 def _extract_for(name: str, near: str, example: str, final: ScreenState, examples: dict[str, str],
                  data_values: list[str], steps: list["TStep"] | None = None) -> Extract | None:
     """Where an output can be read on the final screen: the element showing the example value
@@ -493,15 +613,22 @@ def _extract_for(name: str, near: str, example: str, final: ScreenState, example
         if first is not None and first.index == el.index:
             return Extract(pattern=_shape(example), first_in_list=True)
     label = " ".join(el.label.split())
+    rest = label[len(" ".join(example.split())):]
     if el.in_list and not usable_id(el.resource_id) and norm(label).startswith(norm(example)) and norm(label) != norm(example) \
-            and len(example) <= 24 and any(ch.isdigit() for ch in example) and letters <= len(example) / 2:
+            and len(example) <= 24 and any(ch.isdigit() for ch in example) and letters <= len(example) / 2 \
+            and not any(v and contains_value(rest, v) for v in examples.values()):
         # A number-like value leading a list element, then fixed words around other numbers ("$16.49 ( $0.82 /count)", a
-        # result's price): the first list element of that whole shape, its leading value.
-        rest = label[len(" ".join(example.split())):]
+        # result's price): the first list element of that whole shape, its leading value. (Words that name an input, "3/4 cup
+        # spirulina" for "how much spirulina", anchor on the input below instead.)
         if any(ch.isalpha() for ch in rest) and _data_free(re.sub(r"\d", "", rest), data_values):
             shape = rf"(?P<v>{_shape(example)})\s*{_shape(rest)}"
-            first = next((e for e in final.numbered if e.in_list and re.fullmatch(shape, " ".join(e.label.split()))), None)
-            if first is not None and first.index == el.index:
+            shaped = [e for e in final.numbered if e.in_list and re.fullmatch(shape, " ".join(e.label.split()))]
+            if len(shaped) < 2:
+                # Words no other row repeats are this item's own ("25 individuals were present", a note's sentence; another
+                # note says "80 participants attended"): the first list element that starts with a number of that shape.
+                shape = rf"(?P<v>{_shape(example)})(?:\s+\D.*)?"
+                shaped = [e for e in final.numbered if e.in_list and re.fullmatch(shape, " ".join(e.label.split()))]
+            if shaped and shaped[0].index == el.index:
                 return Extract(pattern=shape, first_in_list=True)
     if not usable_id(el.resource_id) and norm(el.label) == norm(example) and el.number and el.number > 1:
         # The value is its own element after its label ("Seat", then "22F"; "Today", "10/27", "8am open"): read the
@@ -571,6 +698,7 @@ def _extract_for(name: str, near: str, example: str, final: ScreenState, example
     if near_text is None and segment and not row_input and _data_free(parts[0], data_values):
         near_text = parts[0]  # "Choose a seat · SL 1190": the element is found by its first part (no ID needed)
     after = part[pos + len(example):].strip() if pos >= 0 else ""
+    after = bind_inputs(after, examples) or ""  # "3/4 cup spirulina": the value ends where the ingredient asked about starts
     after_text = after if after and _data_free(after, data_values) and len(after) > 1 else None
     if loc is None and near_text is None and segment is None and norm(part) == norm(example) and len(example) >= 12 \
             and _data_free(example, others := [v for v in data_values if norm(v) != norm(example)]) \
@@ -696,6 +824,8 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
     run, records = load_trace(trace_dir, confirmed=confirmed)
     report = CompileReport(task_id=run["task_id"], goal=run["goal"])
     steps, dropped = clean(trace_dir, records)
+    if (why := degenerate(run.get("goal", ""), run.get("result", ""), steps, records)) is not None:
+        raise NotCompilable(why)  # before the model call: nothing to pay for
     report.dropped = dropped
     report.kept = [s.n for s in steps]
     # The screen the agent answered from (its done step) is the most up to date: content can load after a step settles.
@@ -767,14 +897,23 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
         used_ids.add(sid)
         intent = (meta.intent if meta else s.reason) or s.kind
         target_screen = getattr(s, "before_for_target", s.before)
+        # A date the step picks shows on screen only in parts (the "28" of a month grid under "October" for "October 28"):
+        # for the step whose intent names it, or that Wonder says chose by it, its parts bind as {{event_date:day}}.
+        named = {n for n in examples if n in slot_names(intent) or (meta and meta.choice_input == n)}
+        step_examples = {**examples, **_part_examples(examples, named)}
         loc = None
         if s.target is not None:
             choice = meta.choice_input if meta else None
-            ex = examples
+            def shown(v: str) -> bool:
+                return contains_value(s.target.full_label or s.target.label, v) or contains_value(s.target.desc, v)
+            if choice in examples and not shown(examples[choice]) \
+                    and any(k.startswith(choice + ":") and shown(v) for k, v in step_examples.items()):
+                choice = None  # the target shows only a part of it (a month grid's "28"): bound by that part below
+            ex = step_examples
             if (searched := _search_result(s.target, target_screen, steps[: i - 1], examples)) is not None:
                 # The top row of results for a term typed in this run: "the first result", chosen by its place, not by
                 # showing the term (Gmail: the first row *containing* "DoorDash" was another email). Its slot picks it.
-                choice, ex = None, {k: v for k, v in examples.items() if k != searched}
+                choice, ex = None, {k: v for k, v in step_examples.items() if k != searched and not k.startswith(searched + ":")}
                 report.warnings.append(f"step {i}: the first result for {{{{{searched}}}}}: chosen by its place in the list")
             loc = generalize_locator(locators.build(s.target, target_screen), ex, data_values,
                                      meta.target_fixed_text if meta else None, choice)
@@ -784,7 +923,14 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
         if s.kind in ("tap", "long_press"):
             action = StepAction(kind=s.kind, target=loc)
         elif s.kind == "type":
-            value = bind_inputs(s.typed or "", examples)
+            value = bind_inputs(s.typed or "", step_examples)
+            if (prior := _prior_text(s)) is not None:
+                # The agent typed the field's text back around the input (a line added to the top of a note): the routine
+                # keeps whatever the field holds on its run ({{_field}}), never this note's words.
+                value = bind_inputs(s.typed or "", {**step_examples, FIELD: prior})
+                if loc is not None and norm(loc.hint) == norm(prior):
+                    loc = loc.model_copy(update={"hint": None})
+                report.warnings.append(f"step {i}: typed around the field's own text; kept as {{{{{FIELD}}}}}")
             if not has_slot(value) and s.typed and not _data_free(s.typed, []):
                 report.warnings.append(f"step {i}: typed {s.typed!r} is not an input; kept as a fixed value")
             action = StepAction(kind="type", target=loc, value=value, submit=s.submit)
@@ -810,7 +956,7 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             v = s.vision
             w, h = v.get("size") or [s.before.width or 1080, s.before.height or 2400]
             x1, y1, x2, y2 = v["box"]
-            visual = bind_inputs(v["target"], examples)
+            visual = bind_inputs(v["target"], step_examples)
             # The picture shows the recorded value (seat 10C): keep it only when the target doesn't change with the inputs.
             crop = (s.trace_dir / v["crop"]).read_bytes() if (s.trace_dir and v.get("crop") and not has_slot(visual)
                                                                and (s.trace_dir / v["crop"]).exists()) else None
@@ -828,6 +974,8 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             post = chk.derive_post(s.before, s.after, s.kind, s.target, s.typed, examples, submit=s.submit)
         pre = [g for c in pre if (g := chk_generalize(c, examples, data_values)) is not None and not _before_typed(g, i, typed_at)]
         post = [g for c in post if (g := chk_generalize(c, examples, data_values)) is not None and not _before_typed(g, i, typed_at)]
+        if s.kind == "type" and (prior := _prior_text(s)) is not None:
+            post = [c.model_copy(update={"value": bind_inputs(c.value, {FIELD: prior})}) if c.kind == "field_equals" else c for c in post]
         if not post:
             post = [Check(kind="screen_changed")]
         out_steps.append(Step(id=sid, intent=intent, pre=pre, action=action, post=post,
@@ -860,23 +1008,45 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
                 outputs.append(o.name)
                 extract[o.name] = ex
     elif final is not None:
+        # An hour or a date asked about, as the screen writes it ("8:00pm" is "20:00" in a day's list).
+        out_examples = {**examples, **_part_examples(examples, parts=("time24", "iso"))}
+        stated: set[str] = set()
         for o in spec.outputs:
-            ex = _switch_state(o.near, o.example, final) or _extract_for(o.name, o.near, o.example, final, examples, data_values, steps)
+            ex = _switch_state(o.near, o.example, final)
+            if ex is None and _plural(o.name, o.example):
+                ex = _every_rows(o.example, final, out_examples)
+            ex = ex or _extract_for(o.name, o.near, o.example, final, examples, data_values, steps)
             state = bool(ex and ex.switch)
             if ex is None and (ex := _state_text(o.near, final, data_values)) is not None:
-                # An answer the agent inferred ("0" from "No contacts yet"): the routine reports the words it was read from.
                 state = True
-                report.warnings.append(f"output {o.name!r}: {o.example!r} was inferred from {o.near!r}; the routine reports that text")
+                if (no := _opposite(o.example)) is not None:
+                    # A yes/no question answered from what the screen offers ("Convert to note" in a to-do's menu): the
+                    # answer is whether that is on screen, never its words.
+                    ex = ex.model_copy(update={"answers": [o.example.strip(), no]})
+                    report.warnings.append(f"output {o.name!r}: {o.example.strip()!r} when {o.near!r} is on screen, else {no!r}")
+                else:
+                    # An answer the agent inferred ("0" from "No contacts yet"): the routine reports the words it was read from.
+                    report.warnings.append(f"output {o.name!r}: {o.example!r} was inferred from {o.near!r}; the routine reports that text")
             if ex is None:
                 report.warnings.append(f"output {o.name!r}: {o.example!r} is not on the final screen, or nothing anchors it; dropped")
                 continue
             outputs.append(o.name)
+            if state:
+                stated.add(o.name)
             # A value recorded as a number ("190 calories", "$13.49", "2:05 PM") must be one at run time too.
-            extract[o.name] = ex.model_copy(update={"expect_digits": not state and bool(re.match(r"^[$€£]?\d", o.example.strip()))})
-            if not state and not contains_value(got := _read_back(extract[o.name], final, examples), o.example):
-                # Read it back from the screen the agent answered from: a routine that reads something else there is wrong.
-                report.warnings.append(f"output {o.name!r} reads {got!r} on the run's own final screen, not {o.example!r}")
+            extract[o.name] = ex.model_copy(update={"expect_digits": not state and not ex.every and _numeric(o.example)})
     _rows(extract, spec.outputs, final, examples, report)
+    if final is not None and not shot_only:
+        for o in spec.outputs:
+            if o.name not in extract or o.name in stated or extract[o.name].row_of:
+                continue  # (a value read in another output's row was read back there by _rows)
+            ex = extract[o.name]
+            if not _same_answer(got := _read_back(ex, final, examples, extract), o.example, ex.every):
+                # Read back from the screen the agent answered from, it gives another value: on the next run it would answer
+                # with that one (the first event of the day, not the one at 8pm). No answer is better than a wrong one.
+                del extract[o.name]
+                outputs.remove(o.name)
+                report.warnings.append(f"output {o.name!r} reads {got!r} on the run's own final screen, not {o.example!r}; dropped")
     question = bool(re.search(r"\?\s*$|^(what|how|when|where|which|who|is|are|do|does|did|can)\b", (run.get("goal") or "").strip(), re.I))
     if not extract and final is not None and question and answer:
         # A question answered from what the screen says rather than a value on it ("No events today" from "Nothing planned"),
@@ -888,6 +1058,11 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             outputs.append("answer")
             extract["answer"] = Extract(locator=Locator(text=el.label, kind=el.kind))
             report.warnings.append(f"no output named; the routine reports the screen text the answer quoted: {el.label!r}")
+    if question and answer and not extract:
+        # A question the routine could run every step of and still not answer ("what is my next event?": the first event
+        # after now, which no fixed place on the screen holds): the agent answers it, not a routine.
+        raise NotCompilable(f"the run answered a question ({answer[:60]!r}), but no output can be read back from its own final "
+                            f"screen: {'; '.join(w for w in report.warnings if w.startswith('output')) or 'none was named'}")
     if extract and all(e.from_screenshot for e in extract.values()):
         # Read from the screenshot: the read scrolls until the answer is on screen, so a trailing scroll toward it (which
         # has nothing in the tree to stop at) goes.
@@ -928,11 +1103,20 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
 
 
 def _consumed(step: Step, name: str) -> bool:
-    slot = "{{" + name + "}}"
+    """Whether the step uses the input, whole or by a part ({{event_date:day}})."""
     a = step.action
-    return slot in (a.value or "") or (a.target is not None and slot in a.target.model_dump_json()) \
-        or any(slot in (x.card or "") or (x.locator is not None and slot in x.locator.model_dump_json())
+    return name in slot_names(a.value) or (a.target is not None and name in slot_names(a.target.model_dump_json())) \
+        or any(name in slot_names(x.card) or (x.locator is not None and name in slot_names(x.locator.model_dump_json()))
                for x in (step.extract or {}).values())  # the row an output is read in
+
+
+def _prior_text(s: TStep) -> str | None:
+    """The text a field held before the step typed it back with more around it ("Hello, World!\\n<the note>"), else None."""
+    e = s.target
+    prior = (e.text or "").strip() if e is not None and e.editable else ""
+    if not prior or not s.typed or prior == (e.hint or "").strip() or norm(prior) == norm(s.typed):
+        return None
+    return prior if contains_value(s.typed, prior) else None
 
 
 def _add_witnesses(out_steps: list[Step], steps: list[TStep], examples: dict[str, str], inputs: dict[str, InputSpec],
