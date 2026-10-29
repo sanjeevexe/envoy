@@ -20,6 +20,21 @@ REPO="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")/../.." && pwd)"
 GC=(gcloud --project "$PROJECT" --quiet)
 
 # SSH and scp only through IAP: the VM accepts no other inbound connection.
-vm_ssh() { "${GC[@]}" compute ssh "$VM" --zone "$ZONE" --tunnel-through-iap "$@"; }
-vm_scp() { "${GC[@]}" compute scp --zone "$ZONE" --tunnel-through-iap "$@"; }
+# An IAP tunnel sometimes fails to open ("Failed to lookup instance", "Connection is already closed"): ssh exits 255
+# before the command runs, so vm_ssh and vm_scp retry. vm_ssh_once doesn't, for a call whose stdin is data (key.sh).
+_retry() {
+  local i rc=0
+  for i in 1 2 3 4; do
+    "$@" && return 0 || rc=$?
+    [ "$rc" -eq 255 ] || return "$rc"
+    echo "(IAP connection failed; retry $i)" >&2
+    sleep $((i * 3))
+  done
+  return "$rc"
+}
+# Keepalives: an IAP tunnel can stay open on the Mac after the VM side has closed (seen in stage 0); this ends it.
+SSH_FLAGS=(--ssh-flag=-oServerAliveInterval=15 --ssh-flag=-oServerAliveCountMax=4)
+vm_ssh_once() { "${GC[@]}" compute ssh "$VM" --zone "$ZONE" --tunnel-through-iap "${SSH_FLAGS[@]}" "$@"; }
+vm_ssh() { _retry vm_ssh_once "$@"; }
+vm_scp() { _retry "${GC[@]}" compute scp --zone "$ZONE" --tunnel-through-iap "$@"; }
 vm_status() { "${GC[@]}" compute instances describe "$VM" --zone "$ZONE" --format='value(status)' 2>/dev/null || true; }

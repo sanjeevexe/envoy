@@ -1,0 +1,104 @@
+{
+  "time": "2026-10-29T19:30:21+00:00",
+  "device": {
+    "avd": "envoy-test",
+    "real_phone": false,
+    "has_sim": false,
+    "can_snapshot": true,
+    "width": 1080,
+    "height": 2400,
+    "density": 420
+  },
+  "results": {
+    "tree read (uiautomator2 dump)": {
+      "median_ms": 84.7,
+      "p90_ms": 114.6,
+      "min_ms": 76.4,
+      "max_ms": 369.1,
+      "runs": 20,
+      "note": "raw XML from the uiautomator2 server"
+    },
+    "observe() (dump + focus + parse + compact)": {
+      "median_ms": 140.8,
+      "p90_ms": 147.3,
+      "min_ms": 131.9,
+      "max_ms": 150.0,
+      "runs": 20,
+      "note": "what the agent pays per step without a screenshot"
+    },
+    "gRPC screenshot, raw RGB888": {
+      "median_ms": 32.4,
+      "p90_ms": 34.5,
+      "min_ms": 30.3,
+      "max_ms": 118.0,
+      "runs": 20,
+      "note": "1080x2400 raw frame, 7.8 MB"
+    },
+    "gRPC screenshot, PNG encoded locally": {
+      "median_ms": 82.6,
+      "p90_ms": 85.7,
+      "min_ms": 80.2,
+      "max_ms": 128.7,
+      "runs": 20,
+      "note": "RGB888 + Pillow PNG (level 1)"
+    },
+    "gRPC screenshot, PNG from emulator": {
+      "median_ms": 83.9,
+      "p90_ms": 85.4,
+      "min_ms": 82.6,
+      "max_ms": 90.4,
+      "runs": 20,
+      "note": "emulator encodes PNG"
+    },
+    "adb exec-out screencap -p": {
+      "median_ms": 317.7,
+      "p90_ms": 323.0,
+      "min_ms": 309.8,
+      "max_ms": 326.5,
+      "runs": 20,
+      "note": "fallback path"
+    },
+    "tap via uiautomator2 (call returns)": {
+      "median_ms": 184.9,
+      "p90_ms": 200.4,
+      "min_ms": 179.5,
+      "max_ms": 215.5,
+      "runs": 20,
+      "note": "tap on a non-interactive title; call returns after injection"
+    },
+    "tap via emulator gRPC sendTouch": {
+      "median_ms": 0.9,
+      "p90_ms": 1.0,
+      "min_ms": 0.7,
+      "max_ms": 1.6,
+      "runs": 20,
+      "note": "press + release on the virtual touchscreen (emulators only)"
+    },
+    "tap → next screen settled": {
+      "median_ms": 1821.0,
+      "p90_ms": 1993.5,
+      "min_ms": 1571.8,
+      "max_ms": 2110.4,
+      "runs": 20,
+      "note": "tap Search settings, then wait until the tree is unchanged for 250 ms (includes the 250 ms quiet window)"
+    },
+    "type non-English text (set-text)": {
+      "median_ms": 676.5,
+      "p90_ms": 726.2,
+      "min_ms": 628.3,
+      "max_ms": 837.4,
+      "runs": 20,
+      "note": "text 'Café Ñandú 東京 Привет 😀'; exact via get_text 20/20; exact in XML dump 0/20 (emoji shows as '..')",
+      "correct": 20,
+      "dump_exact": 0
+    },
+    "clipboard after typing": {
+      "empty": true,
+      "note": "set-text must not touch the clipboard"
+    },
+    "adb input text (non-ASCII)": {
+      "returncode": 255,
+      "output": "Exception occurred while executing 'text':\njava.lang.NullPointerException: Attempt to get length of null array\n\tat com.android.server.input.InputShellCommand.sendText(InputShellCommand.java:390)\n\tat com.android.server.input.InputShellCommand.runText(InputShellCommand.java:362)\n\tat com.android.server"
+    }
+  }
+}

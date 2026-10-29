@@ -16,11 +16,11 @@ case "${1:-}" in
   put)
     cap="${2:-1}"
     { key_line; grep -E '^META_API_BASE_URL=' "$ENV_FILE" || true; echo "META_DAILY_COST_CAP_USD=$cap"; } |
-      vm_ssh --command "umask 077 && cat > ~/$REMOTE_DIR/.env && chmod 600 ~/$REMOTE_DIR/.env && echo \"key on the VM (cap \$$cap), \$(stat -c %a ~/$REMOTE_DIR/.env)\""
+      vm_ssh_once --command "umask 077 && cat > ~/$REMOTE_DIR/.env && chmod 600 ~/$REMOTE_DIR/.env && echo \"key on the VM (cap \$$cap), \$(stat -c %a ~/$REMOTE_DIR/.env)\""
     ;;
   remove)
     key_line | sed 's/^META_API_KEY=//' |
-      vm_ssh --command "rm -f ~/$REMOTE_DIR/.env
+      vm_ssh_once --command "rm -f ~/$REMOTE_DIR/.env
         hits=\$(grep -rlF -f /dev/stdin ~/$REMOTE_DIR ~/.bash_history /tmp --exclude-dir=.venv 2>/dev/null | wc -l)
         [ \"\$hits\" = 0 ] && echo 'key removed; no file on the VM holds it' || { echo \"key still in \$hits file(s)\" >&2; exit 1; }"
     ;;
