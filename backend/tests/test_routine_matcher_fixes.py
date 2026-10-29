@@ -289,3 +289,22 @@ def test_the_executor_reads_the_screenshot_and_scrolls_until_the_answer_is_there
     ex2 = RoutineExecutor(Browser(), adapter=Reads(*[wrong] * 7), approver=ScriptedApprover(approve=False), config=FAST)
     out2 = asyncio.run(ex2.run(routine, {"landmark": "Eiffel Tower"}, launch="never", allow_agent=False, allow_repair=False))
     assert out2.status != "done" and not out2.outputs.get("opened")
+
+
+def test_a_badge_above_the_first_result_is_not_its_title():
+    """envoy-real, a later "USB-C cable" search: "Featured from Amazon brands" sits above the first result's title."""
+    ex = compiled("amazon_trace", "amazon.spec.json").steps[-1].extract
+    s = load_tree(FX / "amazon_usbc_featured.json.gz")
+    out = {n: extract_value(e, s, {"search_query": "USB-C cable"}, ex) for n, e in ex.items()}
+    assert out["first_result_product"].startswith("Sponsored Ad - Amazon Official USB- C") and out["first_result_price"] == "$14.99"
+
+
+def test_play_reads_the_rating_after_the_row_that_names_the_app():
+    """Play's search shows sponsored apps' ratings first (Pandora 3.9 above Spotify): the rating is read after the row
+    naming the asked-for app, and the search box that shows only the term is never that row."""
+    r = compiled("play_trace", "play_rating.spec.json")
+    assert r.steps[-1].extract["star_rating"].card == "{{app_name}}"
+    results = build_state((HERE / "screens" / "playstore_search.xml").read_text(), "com.android.vending",
+                          "com.android.vending.AssetBrowserActivity", 1080, 2400)
+    m = executor_mod.list_choice(r.steps[-1].action.target, results, {"app_name": "Wikipedia"}, 0.7)
+    assert m.ok and m.element.in_list and "Wikipedia" in m.element.label

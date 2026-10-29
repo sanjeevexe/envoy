@@ -133,8 +133,10 @@ def test_a_repair_onto_a_look_alike_of_the_drinks_page_does_not_count():
     model.screen = lambda: phone.screens[phone.at]
     out = run(phone, from_step(v1, "open_drink_product"), {"drink_name": "Caffè Latte"}, adapter=model)
     assert out.status == "done" and out.outputs == {"calories": "190 calories"} and phone.at == "product"
-    assert out.model_calls == 1
-    assert [p.kind for p in out.patches] == ["insert_before"]  # the tap that reached its screen, never "the element moved"
+    # Since the routine fixes (Oct 28), the step first searches for the drink when no recent search names it the way
+    # it expects, so it reaches the page with no repair; a repair, if one runs, is still the tap that reached its screen.
+    assert out.model_calls <= 1
+    assert [p.kind for p in out.patches] in ([], ["insert_before"])  # never "the element moved"
 
 
 def _trip_app(after_tap: str) -> tuple[object, Routine]:

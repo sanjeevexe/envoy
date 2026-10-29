@@ -603,6 +603,16 @@ def _rows(extract: dict[str, Extract], outs: list, final: ScreenState | None, ex
             extract[name] = row
             report.warnings.append(f"output {name!r}: the first row under {heading.label!r}")
     for name, ex in list(extract.items()):
+        # A value after a label that every result repeats ("Average rating"): the one after the row that names the input
+        # (a search shows the asked-for app's rating among sponsored apps' ones).
+        if ex.near and ex.locator is None and not ex.card and not ex.next_element and not ex.pattern:
+            for slot, v in examples.items():
+                row = Extract(near=ex.near, card="{{%s}}" % slot, expect_digits=ex.expect_digits)
+                if v and contains_value(extract_value(row, final, examples) or "", example.get(name, "")):
+                    extract[name] = row
+                    report.warnings.append(f"output {name!r}: the {ex.near!r} after the row that names {{{{{slot}}}}}")
+                    break
+    for name, ex in list(extract.items()):
         if not (ex.pattern and ex.first_in_list):
             continue
         core = re.match(r"[$€£]?\d+(?:[.,]\d+)*", example.get(name, "").strip())

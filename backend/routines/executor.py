@@ -227,7 +227,7 @@ class RoutineExecutor:
         if step.action.kind not in ("tap", "long_press", "type") or step.action.target is None or step.action.target.visual:
             return None  # a drawn target (no node in the tree) is found by looking, when the step acts
         th = locators.RELAXED if relaxed else locators.STRICT
-        return locators.locate(step.action.target, screen, inputs, threshold=th)
+        return list_choice(step.action.target, screen, inputs, th)
 
     @staticmethod
     def _next_required(ctx: "_Ctx", idx: int) -> Step | None:
@@ -397,7 +397,7 @@ class RoutineExecutor:
         last_bounds = None
         popups = 0
         tried_relaxed = False
-        tried_reveal = False
+        tried_reveal = tried_search = False
         failed_once = False  # rung 1 counts only when a check actually failed first (not the two-read stillness check)
         while True:
             s = await self._observe()
@@ -462,6 +462,14 @@ class RoutineExecutor:
                     return _Ready("ok", s2, m2.element, relaxed=m2.score < locators.STRICT)
                 deadline = max(deadline, time.perf_counter() + 0.5)
                 continue
+            if tried_reveal and not tried_search and step.action.kind == "tap" and step.action.target is not None \
+                    and (term := self._choice_term(step.action.target, ctx.inputs)) and not [o for o in pre_outs if not o.passed]:
+                # A recent search or suggestion the run tapped ("aa batteries"): a new term isn't there, so search for it.
+                # The step counts as done only if its after-checks then hold (checked at the top of the loop).
+                tried_search = True
+                if await self._search_for(ctx, term, s, sr):
+                    deadline = max(deadline, time.perf_counter() + 0.5)
+                    continue
             if now >= deadline:
                 failed = [o.detail for o in pre_outs if not o.passed]
                 why = ("before-checks failed: " + "; ".join(failed)) if failed else f"target not found: {m.summary() if m else '?'}"
@@ -694,9 +702,9 @@ class RoutineExecutor:
         flipped = searched = False
         for k in range(2 * (a.max_scrolls or 8) + 1):
             s = await self._observe()
-            m = locators.locate(a.target, s, ctx.inputs, threshold=locators.STRICT)
+            m = list_choice(a.target, s, ctx.inputs, locators.STRICT)
             if not m.ok:
-                rm = locators.locate(a.target, s, ctx.inputs, threshold=locators.RELAXED)
+                rm = list_choice(a.target, s, ctx.inputs, locators.RELAXED)
                 if rm.ok:
                     sr.climb(2, f"relaxed match while scrolling: {rm.summary()}")
                     m = rm
@@ -755,7 +763,19 @@ class RoutineExecutor:
         action = await self._gate(ctx, Action(kind="type", element=el.number, text=term, submit=True), screen, "read", el.label, sr)
         if action is None or not (await self.device.act(action)).ok:
             return False
-        await self._settle_quick()
+        after = await self._settle_quick()
+        # Enter can leave the suggestions up (Play): the suggestion that searches for exactly the term runs the search.
+        exact = next((e for e in after.numbered if not e.editable and re.match(r"search\b", e.label, re.I)
+                      and norm(e.label).endswith(norm(f'"{term}"')) and norm(term) in norm(e.label)), None)
+        if exact is not None and field_of(after) is not None:
+            await self.device.act(Action(kind="tap", element=exact.number))
+            await self._settle_quick()
+        deadline = time.perf_counter() + 6.0  # results load after the screen first settles: wait for a row that names it
+        while time.perf_counter() < deadline:
+            shown = await self._observe()
+            if any(e.in_list and contains_value(e.full_label or e.label, term) and norm(e.label) != norm(term) for e in shown.numbered):
+                break
+            await asyncio.sleep(0.3)
         sr.rungs.append(f"searched for {term!r}: the list didn't show it")
         return True
 
@@ -1157,6 +1177,21 @@ def extract_value(spec: Extract, screen: ScreenState, inputs: dict[str, str], sp
     return value
 
 
+def list_choice(loc: Locator, screen: ScreenState, inputs: dict[str, str], threshold: float) -> locators.Match:
+    """A list row named by an input ("{{app_name}}"), never the search box that shows only the input after a search
+    ("Spotify" at the top, while "Spotify: Music and Podcasts …" is the row): the top row of the list that names it."""
+    m = locators.locate(loc, screen, inputs, threshold=threshold)
+    raw = loc.text_has or ""
+    if not (loc.in_list and has_slot(raw)) or (m.element is not None and m.element.in_list):
+        return m
+    term = render_str(raw, inputs) or ""
+    rows = [e for e in screen.numbered if e.in_list and (not loc.kind or e.kind == loc.kind) and norm(e.label) != norm(term)
+            and contains_value(e.full_label or e.label, term)]
+    if not rows:
+        return m if m.element is None or m.element.in_list else locators.Match(None, m.score, m.runner_up, threshold)
+    return locators.Match(min(rows, key=lambda e: e.bounds[1]), max(m.score, threshold), m.runner_up, threshold)
+
+
 def in_row(shown: str, pattern: str, screen: ScreenState) -> str | None:
     """The first value shaped like `pattern` in the row of the element that shows `shown`: the nearest ancestor that holds
     one. A search result's price wherever its row puts it ("$9.99 ( $5.00 /count)", "Limited time deal $8.49 …"), never
@@ -1198,7 +1233,7 @@ def _in_card(loc: Locator, card: str, screen: ScreenState) -> Element | None:
     return None
 
 
-def _first_row(spec: Extract, screen: ScreenState) -> str | None:
+def _first_row(spec: Extract, screen: ScreenState, inputs: dict[str, str] | None = None) -> str | None:
     """The top result row: the highest list element of the recorded type among the big clickable ones (not a chip or a
     button inside a row), its text up to `until`."""
     kind = spec.locator.kind if spec.locator else None
@@ -1213,6 +1248,12 @@ def _first_row(spec: Extract, screen: ScreenState) -> str | None:
     if spec.below:  # a row's title, not a control in it or a link with no words ("ref=sr_1_1?…")
         skip = {norm(x) for x in spec.skip_labels}
         rows = [e for e in rows if norm(e.label) not in skip and " " in (e.full_label or e.label).strip()]
+        if rows:  # a badge or a subtitle sits near the title: of the top three, the one that says most of the search, then the longest
+            first = sorted(rows, key=lambda e: e.bounds[1])[:3]
+            want = set(norm(" ".join((inputs or {}).values())).split())
+            top = max(first, key=lambda e: (len(want & set(norm(e.full_label or e.label).split())), len((e.full_label or e.label).split())))
+            label = " ".join((top.full_label or top.label).split())
+            return (label.split(spec.until, 1)[0] if spec.until else label).strip() or None
     if not rows:
         return None
     big = max(e.area for e in rows)
@@ -1237,7 +1278,7 @@ def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str 
     Without IDs it falls back to the label (`near`), then to the element that shows one of the routine's inputs."""
     spec = render(spec, inputs)
     if spec.first_row:
-        return _first_row(spec, screen)
+        return _first_row(spec, screen, inputs)
     if spec.pattern:
         for e in screen.numbered:
             label = " ".join(e.label.split())
