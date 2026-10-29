@@ -473,6 +473,31 @@ def test_a_public_tunnel_reaches_mcp_only(env):
         assert c.post("/mcp", json=body, headers={**hdr, **tunnel, "Authorization": "Bearer mcp-test-token"}).status_code == 421
 
 
+def test_muse_gets_envoys_icon_with_the_server_info(env):
+    """Muse's connector card shows the server's icon, and through the tunnel it can fetch nothing but /mcp: so the icon
+    comes inside `initialize` as data: URIs, Envoy's mark (web/public/icons/mark.svg and the PNG rendered from it)."""
+    (env.tmp / "mcp_public_url").write_text("https://quiet-river-1234.trycloudflare.com")
+    hdr = {"Accept": "application/json, text/event-stream", "Content-Type": "application/json", "MCP-Protocol-Version": "2025-11-25",
+           "Host": "quiet-river-1234.trycloudflare.com", "Authorization": "Bearer mcp-test-token"}
+    body = {"jsonrpc": "2.0", "id": 1, "method": "initialize",
+            "params": {"protocolVersion": "2025-11-25", "capabilities": {}, "clientInfo": {"name": "muse", "version": "1"}}}
+    with TestClient(env.ctx.asgi) as c:
+        r = c.post("/mcp", json=body, headers=hdr)
+    assert r.status_code == 200
+    info = r.json()["result"]["serverInfo"]
+    assert info["name"] == "envoy" and info["title"] == "Envoy"
+    png, svg = info["icons"]
+    assert png["mimeType"] == "image/png" and png["sizes"] == ["192x192"] and png["src"].startswith("data:image/png;base64,")
+    img = Image.open(io.BytesIO(base64.b64decode(png["src"].split(",", 1)[1]))).convert("RGBA")
+    assert img.size == (192, 192)
+    assert img.getpixel((96, 96))[:3] == (0xF6, 0xF3, 0xEC)  # the cream face
+    assert img.getpixel((96, 12))[:3] == (0x3E, 0x7C, 0x5C)  # on the sage tile
+    assert img.getpixel((0, 0))[3] == 0  # rounded corners
+    assert svg["mimeType"] == "image/svg+xml" and svg["src"].startswith("data:image/svg+xml;base64,")
+    mark = base64.b64decode(svg["src"].split(",", 1)[1]).decode()
+    assert mark == (Path(__file__).resolve().parents[2] / "web" / "public" / "icons" / "mark.svg").read_text() and "<script" not in mark
+
+
 def test_codes_read_from_images_tolerate_ocr_confusions_only():
     """Found on SkyLark's Savannah trip: Spark read 3J8N0D from the screenshot, Vision's text said 3J8NOD, and the code was
     dropped. O/0 and I/l/1 now count as the same glyph in codes that mix letters and digits; nothing else does."""

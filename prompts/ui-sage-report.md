@@ -1,6 +1,6 @@
 # The Sage redesign: report
 
-Branch `claude/great-blackwell-3e6ce6` (the brief's `ui-sage`), rebased on main `34102f9` (wonder-appnotes included). Backend tests: 343 passed (`uv run --project backend pytest backend/tests -q`: main's 338 plus 5 for the briefing). Web build (`npm run build` in the worktree): passes, static export of `/`, `/approve`.
+Branch `claude/great-blackwell-3e6ce6` (the brief's `ui-sage`), rebased on main `34102f9` (wonder-appnotes included). Backend tests: 343 passed at the merge (`uv run --project backend pytest backend/tests -q`: main's 338 plus 5 for the briefing); 344 with the MCP icon test. Web build (`npm run build` in the worktree): passes, static export of `/`, `/approve`.
 
 The app now looks like the approved Sage canvas: cream and sage tokens, Fraunces for Envoy's voice and Manrope for the rest, Phosphor icons, no emoji, and the avatar on every screen showing what Envoy is doing. Everything in the brief is built, dark mode included, except the ring on the approval target (why below).
 
@@ -55,7 +55,7 @@ Phone screens at 390×844 in mock mode (the same fixtures before and after: "bef
 
 ## Which icon Muse reads
 
-None of Envoy's icon files, as far as the logs show. Every one of the 1,087 requests that reached Envoy through the Muse tunnel (`logs/mcp.jsonl`) was to `/mcp`; nothing ever asked for `/favicon.ico`, `/icons/…` or `apple-touch-icon.png`, and the tunnel host answers nothing but `/mcp` anyway (`api/app.py`'s `dispatch` returns 421 for any other path there). The MCP server's `initialize` reply carries no icon either: `build_mcp` (`backend/mcp_server/server.py`) passes a name, title and description but not `icons` or `website_url`, which the SDK's `MCPServer` accepts. So the connector card shows whatever Muse uses by default. To give it Envoy's face, `build_mcp` would pass `icons=[Icon(src="data:image/png;base64,…")]` (a data URI, since the tunnel serves nothing else); that's outside this branch's lane (`mcp_server/`), so it's a follow-up.
+None of Envoy's icon files, as far as the logs show. Every one of the 1,087 requests that reached Envoy through the Muse tunnel (`logs/mcp.jsonl`) was to `/mcp`; nothing ever asked for `/favicon.ico`, `/icons/…` or `apple-touch-icon.png`, and the tunnel host answers nothing but `/mcp` anyway (`api/app.py`'s `dispatch` returns 421 for any other path there). The MCP server's `initialize` reply carries no icon either: `build_mcp` (`backend/mcp_server/server.py`) passes a name, title and description but not `icons` or `website_url`, which the SDK's `MCPServer` accepts. So the connector card showed whatever Muse uses by default. **Fixed after the merge** (with the coordinator's OK): `build_mcp` now sends Envoy's mark in `serverInfo.icons` as data URIs, the 192px PNG rendered from `mark.svg` and the SVG itself (`envoy_icons()`), and `test_muse_gets_envoys_icon_with_the_server_info` initializes through the tunnel as Muse does and decodes them. Whether Muse's card then draws it is for the next Muse session to see.
 
 ## Not done, or not checked
 
