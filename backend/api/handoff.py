@@ -89,6 +89,12 @@ CREATE INDEX IF NOT EXISTS handoffs_name ON handoffs(name, size);
 HANDOFF_TEMPLATES: dict[str, dict[str, Any]] = {
     "gallery": {"label": "the phone's gallery", "package": None, "goal": None, "request": None, "caption_limit": 2200,
                 "device_pref": "emulator", "title": "Put {file} on {device}?"},
+    # creator-workflow: a clip from the Mac posted as a reel from the real phone (the test account). The caption is quoted
+    # so the agent types it as text; it never reaches the request, so Share always waits for the user on the screen.
+    "instagram": {"label": "Instagram", "package": "com.instagram.android",
+                  "goal": "Post the newest video in my phone's gallery to Instagram as a reel with this caption: \"{caption}\"",
+                  "request": "the newest video in my phone's gallery to Instagram as a reel with this caption",
+                  "caption_limit": 2200, "device_pref": "phone", "title": "Put {file} on {device} and post it to Instagram?"},
 }
 
 
