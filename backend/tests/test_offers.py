@@ -132,7 +132,10 @@ def test_only_your_session_decides_and_the_source_is_where_you_tapped():
     assert e.value.status == 409
     o2 = u.offers.make(kind="trigger", title="t", body="", action=CHECK_IN, source="trigger:x", key="d2")
     u.offers.decide(o2["id"], "accept", OWNER)
-    assert u.started[-1][1] == "web"
+    assert u.started[-1][1] == "web" and "phone_ok" not in u.started[-1][2]
+    o3 = u.offers.make(kind="trigger", title="t", body="", action={**CHECK_IN, "phone": "phone-0a1b2c"}, source="trigger:x", key="d3")
+    u.offers.decide(o3["id"], "accept", OWNER)
+    assert u.started[-1][2]["phone"] == "phone-0a1b2c" and u.started[-1][2]["phone_ok"] == "phone-0a1b2c"  # your yes covers the phone it named
 
 
 def test_declined_and_expired_are_final_and_a_failed_start_stays_pending():

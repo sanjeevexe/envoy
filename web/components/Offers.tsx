@@ -88,6 +88,7 @@ export function OfferCard({ o, openTask, onDecided }: { o: Offer; openTask?: (id
         <div className="text-meta-2 font-bold text-muted">What I&rsquo;ll do</div>
         <p className="mt-0.5 text-body [overflow-wrap:anywhere]">{whatIllDo(cur)}</p>
         {asksEachTime && <p className="mt-1 text-meta-2 text-ink-2">It asks you each time before it runs. Nothing happens without your yes.</p>}
+        {cur.action.phone && cur.action.phone !== "emulator" && <p className="mt-1 text-meta-2 text-ink-2">On your Android phone: your yes covers using it.</p>}
       </div>
       {cur.preflight.length > 0 && <Preflight lines={cur.preflight} />}
       {pending ? (

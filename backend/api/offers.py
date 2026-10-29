@@ -263,15 +263,18 @@ class Offers:
 
     def _task(self, offer: dict[str, Any], source: str) -> dict[str, Any]:
         """Start the task: the card's goal verbatim, the template's fixed words as the request, where you tapped as the
-        source."""
+        source. When the offer named your phone (a pool id, which the card showed), your yes covers it: no second "Use your
+        phone?" (`phone_ok`)."""
         if self.runner is None:
             raise RuntimeError("the task runner isn't available")
         a = offer["action"]
         request = fixed_words(a.get("request"))
         if not request:
             raise ValueError("this offer has no request")
+        phone = a.get("phone") or None
+        named = phone if phone and phone not in ("phone", "emulator", "auto") else None
         task = self.runner.start(a["goal"], source, request=request, routine=a.get("routine") or None, inputs=a.get("inputs") or {},
-                                 app=a.get("app") or None, phone=a.get("phone") or None)
+                                 app=a.get("app") or None, phone=phone, **({"phone_ok": named} if named else {}))
         return {"task_id": task["id"]}
 
     def _enable_trigger(self, offer: dict[str, Any], source: str) -> dict[str, Any]:

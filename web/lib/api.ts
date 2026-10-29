@@ -35,7 +35,8 @@ export type OfferLine = { kind: string; text: string; level: "info" | "warn" | "
 export type Offer = {
   id: string; created_at: number; kind: "trigger" | "repeat" | "handoff" | "trigger_request"; title: string; body: string;
   action: { type: string; goal?: string; request?: string; routine?: string | null; inputs?: Record<string, string>; app?: string | null;
-    kind?: string; name?: string; spec?: any; action?: any; trigger_id?: string; file?: string; then?: { goal?: string } | null; summary?: string };
+    kind?: string; name?: string; spec?: any; action?: any; trigger_id?: string; file?: string; then?: { goal?: string } | null; summary?: string;
+    phone?: string | null };
   source: string; status: "pending" | "accepted" | "declined" | "expired"; expires_at: number | null; decided_at: number | null;
   decided_by: string | null; task_id: string | null; preflight: OfferLine[]; origin?: { trigger_id?: string } | null; note?: string | null;
   result?: { task_id?: string; trigger_id?: string } | null;
