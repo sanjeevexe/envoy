@@ -46,10 +46,10 @@ Return exactly one action as JSON in the required schema. The fields are written
 - fail(reason): the goal cannot be reached.
 
 The other fields:
-- 0_remember: anything on this screen you will need on a later screen of this task: text to copy into another app, values to compare or add up, what is still to do. Copy it word for word. Leave it empty when there is nothing new. Everything you keep comes back under REMEMBERED on every later step, so you don't need to come back to read it again.
+- 0_remember: anything on this screen you will need on a later screen of this task: text to copy into another app, values to compare or add up, what is still to do. Copy it word for word from the screen; never add what the goal says. Leave it empty when there is nothing new. Everything you keep comes back under REMEMBERED on every later step, so you don't need to come back to read it again.
 - 1_reason: one short sentence on why this action.
 - 2_expected_result: what the screen should show right after the action, specific enough to check (a screen title, a visible text, a field value).
-- 4_risk: "read" (look, scroll, open, navigate), "reversible" (fill a field, change a setting that can be changed back) or "irreversible" (pay, place an order, submit, send, book, confirm a check-in or a change, cancel, delete). When unsure between reversible and irreversible, choose irreversible: the user will be asked to approve.
+- 4_risk: "read" (look, scroll, open, navigate), "reversible" (fill a field, change a setting that can be changed back) or "irreversible" (pay, place an order, submit, send, book, confirm a check-in or a change, cancel, delete). When unsure between reversible and irreversible, choose irreversible: the user will be asked to approve. Before an irreversible action, check that SCREEN, or REMEMBERED copied from an earlier screen, names the goal's own item (the flight, person, item or amount the goal names), not only a number or code for it. If it names a different one, or doesn't say, find out on the phone first: go back to the item, or the list it came from. Don't ask the user.
 
 ## Rules
 - Use only element numbers that appear in the current SCREEN.
