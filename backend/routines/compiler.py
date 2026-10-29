@@ -323,15 +323,27 @@ def generalize_locator(loc: Locator, examples: dict[str, str], data_values: list
                        choice_input: str | None) -> Locator:
     upd: dict[str, Any] = {"resource_id": _glob_id(loc.resource_id, examples, data_values)}
     label = loc.text or ""
-    bound = choice_input if choice_input in examples else next(
-        (n for n, v in examples.items() if v and (contains_value(label, v) or contains_value(loc.desc, v))), None)
-    if bound or loc.in_list:
+
+    def shows(v: str) -> bool:
+        return contains_value(label, v) or contains_value(loc.desc, v)
+
+    bound = choice_input if choice_input in examples else next((n for n, v in examples.items() if v and shows(v)), None)
+    # An element that shows nothing of the input itself (a row's delete icon) is chosen by the row that shows it.
+    row_bound = None
+    if loc.row and (bound is None or not shows(examples[bound])):
+        row_bound = next((n for n in [*([bound] if bound else []), *examples] if examples.get(n)
+                          and any(contains_value(t, examples[n]) for t in loc.row)), None)
+        if row_bound is not None:
+            bound = None
+    if bound or loc.in_list or row_bound:
         upd["resource_id"] = _glob_data_segments(upd["resource_id"])
     if bound:
-        upd.update(text_has="{{" + bound + "}}", siblings=[], position=None, desc=None,
+        upd.update(text_has="{{" + bound + "}}", siblings=[], position=None, desc=None, row=[],
                    parent=loc.parent if _data_free(loc.parent, data_values) else None,
                    text=fixed_text if fixed_text and _data_free(fixed_text, data_values) else None)
     else:
+        upd["row_has"] = "{{" + row_bound + "}}" if row_bound else None
+        upd["row"] = [t for t in loc.row if _data_free(t, data_values) and not any(v and contains_value(t, v) for v in examples.values())]
         text = bind_inputs(label, examples)
         if not _data_free(text, data_values):
             text = fixed_text if fixed_text and _data_free(fixed_text, data_values) else None
@@ -656,7 +668,8 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             loc = generalize_locator(locators.build(s.target, target_screen), ex, data_values,
                                      meta.target_fixed_text if meta else None, choice)
             if searched is not None:  # a result's words are that result's: only its place (and ID, type) say "first"
-                loc = loc.model_copy(update={"text": None, "desc": None, "siblings": [], "text_has": None, "alt_texts": []})
+                loc = loc.model_copy(update={"text": None, "desc": None, "siblings": [], "text_has": None, "alt_texts": [],
+                                             "row": [], "row_has": None})
         if s.kind in ("tap", "long_press"):
             action = StepAction(kind=s.kind, target=loc)
         elif s.kind == "type":

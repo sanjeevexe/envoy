@@ -55,6 +55,10 @@ class Locator(_Model):
     cls: str | None = None  # Android class, short form
     parent: str | None = None  # parent's label or resource ID
     siblings: list[str] = Field(default_factory=list)
+    # An element repeated row after row with nothing of its own to tell it apart (each expense's delete icon): the texts
+    # of its row ("Public Transit"), and `row_has`, a hard requirement like `text_has` (the row for {{expense_name}}).
+    row: list[str] = Field(default_factory=list)
+    row_has: str | None = None
     in_list: bool | None = None
     position: tuple[float, float] | None = None  # centre as a fraction of the screen (weak tiebreaker only)
     # Phase 6: a target drawn on screen with no accessibility node (a canvas seat map, a map pin). The executor looks
@@ -66,7 +70,7 @@ class Locator(_Model):
 
     def describe(self) -> str:
         bits = []
-        for k in ("visual", "text_has", "text", "desc", "hint", "resource_id", "kind"):
+        for k in ("visual", "text_has", "row_has", "text", "desc", "hint", "resource_id", "kind"):
             v = getattr(self, k)
             if v:
                 bits.append(f"{k}={v!r}")

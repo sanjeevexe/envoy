@@ -10,14 +10,16 @@ recorded as the app "PopupWindow:2096839".
 
 from __future__ import annotations
 
+import dataclasses
 from pathlib import Path
 from types import SimpleNamespace
 
 from devices.android import AndroidDevice
 from routines import checks as chk
-from routines.compiler import clean, load_trace
+from routines import locators
+from routines.compiler import clean, generalize_locator, load_trace
 from routines.model import Check, Locator
-from routines.screens import load_tree
+from routines.screens import load_tree, short_id
 
 AW = Path(__file__).parent / "traces" / "androidworld"
 BROCCOLI = "com.flauschcode.broccoli"
@@ -85,3 +87,36 @@ def test_a_field_whose_hint_is_the_typed_value_holds_it():
     assert chk.evaluate(check, screen, {"ext": ".md"}).passed
     empty = Check(kind="field_equals", locator=Locator(resource_id="new_file_dialog__name", kind="EditText"), value="my_note")
     assert not chk.evaluate(empty, screen, {}).passed  # the name field's hint is "my_note": typed text there is not
+
+
+# ---- 3. identical icons down a list are told apart by their row ----------------------------------
+
+
+def test_identical_row_icons_are_told_apart_by_their_row():
+    screen = load_tree(AW / "expense_duplicates.json.gz")
+    # The routine as compiled: every row's delete icon matches it ("best 1.00 … runner-up 0.98").
+    compiled = Locator(resource_id="imv_delete_icon", text="", kind="Button", cls="ImageView", siblings=["Delete"], in_list=False,
+                       position=(0.899, 0.608))
+    assert not locators.locate(compiled, screen).ok
+    # Now the locator keeps its row's text, less what every row shows ("Delete", "$").
+    books = locators.build(screen.elements[87], screen)
+    assert books.row == ["Books", "2023 Oct 7", "350.4"]
+    assert locators.locate(books, screen).element.index == 87
+    # Two copies of "Public Transit": the same row twice, so the copy in the recorded slot (the second).
+    dup = locators.build(screen.elements[147], screen)
+    assert locators.locate(dup, screen).element.index == 147
+    assert locators.locate(dup.model_copy(update={"position": (0.899, 0.53)}), screen).element.index == 132
+    # One row left: a row that isn't there costs nothing (it was only there to tell twins apart).
+    alone = [e for e in screen.numbered if not (short_id(e.resource_id) == "imv_delete_icon" and e.index != 87)]
+    one = dataclasses.replace(screen, numbered=alone)
+    m = locators.locate(dup, one)
+    assert m.element.index == 87 and "row" not in m.details and m.score >= locators.STRICT
+
+
+def test_a_row_chosen_by_an_input_is_a_hard_requirement():
+    screen = load_tree(AW / "expense_duplicates.json.gz")
+    loc = generalize_locator(locators.build(screen.elements[87], screen), {"expense_name": "Books"}, [], None, None)
+    assert loc.row_has == "{{expense_name}}" and loc.row == [] and loc.text_has is None
+    assert locators.locate(loc, screen, {"expense_name": "Seminars"}).element.index == 117
+    # Not on screen: no other row's icon, even at the relaxed threshold.
+    assert not locators.locate(loc, screen, {"expense_name": "Groceries"}, threshold=locators.RELAXED).ok
