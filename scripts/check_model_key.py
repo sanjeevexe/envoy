@@ -11,6 +11,8 @@ from __future__ import annotations
 import sys
 import time
 
+from pydantic import ValidationError
+
 from models.adapter import JobConfig, ModelAdapter
 from models.schemas import MemoryAnswer
 
@@ -28,6 +30,9 @@ def main() -> int:
             res = adapter.call(cfg, "QUESTION: What is 2 + 2?\n\nNOTES:\n(none)\n", instructions="Answer the question briefly.",
                                data_scope="test_app", task_id=f"keycheck-{time.strftime('%m%d-%H%M%S')}")
             print(f"ok    {cfg.model:16s} {res.latency_ms:6.0f} ms  ${res.cost_at_standard_usd:.5f}")
+        except ValidationError as e:
+            # The model answered, only not in the probe's shape: the key and the account work (seen on Oct 29).
+            print(f"ok    {cfg.model:16s} answered (reply outside the probe's schema: {str(e).splitlines()[0][:80]})")
         except Exception as e:  # noqa: BLE001 - report every failure kind, without the request (it carries no key, but stay terse)
             ok = False
             print(f"FAIL  {cfg.model:16s} {type(e).__name__}: {str(e)[:160]}")
