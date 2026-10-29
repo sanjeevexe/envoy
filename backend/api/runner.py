@@ -2,7 +2,8 @@
 the web app, and writes what it learned into memory (design doc, One task, end to end).
 
 1. **Plan.** A named routine, or the matcher's pick with inputs filled from memory; otherwise the agent with memory's
-   notes. Answer-only questions don't come here: chat answers them from memory.
+   notes. Answer-only questions don't come here: chat answers them from memory. Then **Before I start**: one `preflight`
+   step says what to expect (api/preflight.py: the phone, a sign-in seen before, approvals, the routine's usual time).
 2. **Phone.** `api/routing.py` picks it: SkyLark on envoy-test and real apps on envoy-real by default, your Android
    phone when you ask for it (or the app needs it). The real phone is used only after you say yes; while the task runs
    there its banner shows, and a touch, Pause or another app coming to the front hands the phone to you. One task per
@@ -46,6 +47,7 @@ from routines.store import RoutineStore
 from api.approvals import WebApprover
 from api.devices import SKYLARK, DevicePool
 from api.install import Installer, app_named_in
+from api.preflight import check as preflight_check
 from api.routing import (BLOCKS_EMULATOR, Choice, app_label, app_names as blocking_app_names, asks_for_phone, blocks_emulator, choose,
                          needs_real_phone, strip_phone_words)
 from api.store import API_DIR, TaskStore
@@ -230,6 +232,7 @@ class TaskRunner:
         try:
             self._set(tid, status="running")
             routine, inputs, app, sources, calls = await self._plan(tid, goal, routine_name, inputs, app)
+            await self._preflight(tid, goal, routine, app, phone)
             kind = "routine" if routine else "agent"
             self._set(tid, kind=kind, routine=routine.routine if routine else None, inputs=inputs, app=app)
             if routine:
@@ -374,6 +377,25 @@ class TaskRunner:
             if not announced:  # failures, stops and early returns
                 self.bus.publish("task_finished", task_id=tid, duration_s=round(time.time() - t0, 1))
         return None
+
+    async def _preflight(self, tid: str, goal: str, routine: Routine | None, app: str | None, phone: str | None) -> None:
+        """Before I start (api/preflight.py): what to expect, as one `preflight` step, once per task (a task that moves to
+        your phone runs `_run` again). No model call, no device action; if it fails there is no step and the run goes on."""
+        try:
+            if any(s.get("kind") == "preflight" for s in self.store.steps(tid)):
+                return
+            task = self.store.get(tid) or {}
+            args = dict(request=task.get("request"), source=task.get("source"), app=app, routine=routine, phone=phone,
+                        phone_ok=self.phone_allowed.get(tid))
+            lines = preflight_check(self, goal, **args)
+            if any(ln["kind"] in ("blocked", "device") for ln in lines) and not getattr(self.pool, "phones", None):
+                # About your phone, and none seen yet (a fresh API): look once, so "it isn't connected" is true.
+                await asyncio.to_thread(self.pool.refresh_phones)
+                lines = preflight_check(self, goal, **args)
+        except Exception:  # noqa: BLE001 - a heads-up never breaks the run
+            return
+        self._step(tid, {"kind": "preflight", "text": "before I start: " + (" · ".join(ln["text"] for ln in lines) or "nothing to flag"),
+                         "lines": lines})
 
     # ---- which phone, and asking before your own -----------------------------------------------
 
