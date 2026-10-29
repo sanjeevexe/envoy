@@ -1,0 +1,159 @@
+{
+ "task": "RecipeAddSingleRecipe",
+ "seed": 1067857357,
+ "goal": "Add the following recipes into the Broccoli app:\ntitle|description|servings|preparationTime|ingredients|directions\nChickpea Vegetable Soup|A quick and easy meal, perfect for busy weekdays.|1 serving|2 hrs|as desired|Sauté onions, carrots, and celery, add broth, canned tomatoes, and chickpeas. Simmer with spinach and seasonings. Garnish with fresh herbs for a more vibrant taste.",
+ "score": 1.0,
+ "aw_run_time_s": 19.8,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 22:22:03.988484",
+ "envoy": {
+  "run_id": "aw-routines-seeds-1028-222147-8289",
+  "goal": "Add the following recipes into the Broccoli app:\ntitle|description|servings|preparationTime|ingredients|directions\nChickpea Vegetable Soup|A quick and easy meal, perfect for busy weekdays.|1 serving|2 hrs|as desired|Sauté onions, carrots, and celery, add broth, canned tomatoes, and chickpeas. Simmer with spinach and seasonings. Garnish with fresh herbs for a more vibrant taste.",
+  "max_steps": 24,
+  "config": {
+   "mode": "routine",
+   "library": "verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "b82e5124ea28700f4c8812839c4a7c8aae5bc782",
+  "mode": "routine",
+  "match": {
+   "routine": "broccoli_add_recipe",
+   "stage": "model confirmed",
+   "inputs": {
+    "recipe_title": "Chickpea Vegetable Soup",
+    "recipe_description": "A quick and easy meal, perfect for busy weekdays.",
+    "recipe_servings": "1 serving",
+    "recipe_preparation_time": "2 hrs",
+    "recipe_ingredients": "as desired",
+    "recipe_directions": "Sauté onions, carrots, and celery, add broth, canned tomatoes, and chickpeas. Simmer with spinach and seasonings. Garnish with fresh herbs for a more vibrant taste."
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "broccoli_add_recipe",
+     0.476
+    ],
+    [
+     "broccoli_delete_recipes_by_ingredient",
+     0.269
+    ],
+    [
+     "contacts_open_app",
+     0.21
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "broccoli_add_recipe",
+  "version": 1,
+  "done": true,
+  "answer": "Chickpea Vegetable Soup, 1 serving, 2 hrs",
+  "outputs": {
+   "saved_recipe_title": "Chickpea Vegetable Soup",
+   "saved_recipe_servings": "1 serving",
+   "saved_recipe_preparation_time": "2 hrs"
+  },
+  "steps_used": 10,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "open_broccoli_app",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_new_recipe",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_title",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_description",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_servings",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_preparation_time",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_ingredients",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "scroll_to_directions",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_directions",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "save_recipe",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.003253,
+  "cost_at_standard_usd": 0.003253,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 11.66,
+  "routine_duration_s": 9.06,
+  "trace_dir": "data/runs/aw-routines-seeds-1028-222147-8289",
+  "wall_s": 14.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

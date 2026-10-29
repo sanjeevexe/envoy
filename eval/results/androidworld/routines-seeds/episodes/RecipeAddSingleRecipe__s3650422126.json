@@ -1,0 +1,159 @@
+{
+ "task": "RecipeAddSingleRecipe",
+ "seed": 3650422126,
+ "goal": "Add the following recipes into the Broccoli app:\nRecipe: Turkey and Cheese Panini\n description: An ideal recipe for experimenting with different flavors and ingredients.\n servings: 8 servings\n preparationTime: 10 mins\n ingredients: to preference\n directions: Layer turkey and cheese on bread, grill in a panini press until golden. Garnish with fresh herbs for a more vibrant taste.\n",
+ "score": 1.0,
+ "aw_run_time_s": 19.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 22:22:44.125564",
+ "envoy": {
+  "run_id": "aw-routines-seeds-1028-222226-ea2a",
+  "goal": "Add the following recipes into the Broccoli app:\nRecipe: Turkey and Cheese Panini\n description: An ideal recipe for experimenting with different flavors and ingredients.\n servings: 8 servings\n preparationTime: 10 mins\n ingredients: to preference\n directions: Layer turkey and cheese on bread, grill in a panini press until golden. Garnish with fresh herbs for a more vibrant taste.\n",
+  "max_steps": 24,
+  "config": {
+   "mode": "routine",
+   "library": "verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "b82e5124ea28700f4c8812839c4a7c8aae5bc782",
+  "mode": "routine",
+  "match": {
+   "routine": "broccoli_add_recipe",
+   "stage": "model confirmed",
+   "inputs": {
+    "recipe_title": "Turkey and Cheese Panini",
+    "recipe_description": "An ideal recipe for experimenting with different flavors and ingredients.",
+    "recipe_servings": "8 servings",
+    "recipe_preparation_time": "10 mins",
+    "recipe_ingredients": "to preference",
+    "recipe_directions": "Layer turkey and cheese on bread, grill in a panini press until golden. Garnish with fresh herbs for a more vibrant taste."
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "broccoli_add_recipe",
+     0.697
+    ],
+    [
+     "broccoli_delete_recipes_by_ingredient",
+     0.301
+    ],
+    [
+     "contacts_open_app",
+     0.212
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "broccoli_add_recipe",
+  "version": 1,
+  "done": true,
+  "answer": "Turkey and Cheese Panini, 8 servings, 10 mins",
+  "outputs": {
+   "saved_recipe_title": "Turkey and Cheese Panini",
+   "saved_recipe_servings": "8 servings",
+   "saved_recipe_preparation_time": "10 mins"
+  },
+  "steps_used": 10,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "open_broccoli_app",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_new_recipe",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_title",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_description",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_servings",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_preparation_time",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_ingredients",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "scroll_to_directions",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_directions",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "save_recipe",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.00364,
+  "cost_at_standard_usd": 0.00364,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 11.97,
+  "routine_duration_s": 8.93,
+  "trace_dir": "data/runs/aw-routines-seeds-1028-222226-ea2a",
+  "wall_s": 14.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.7
+  }
+ }
+}

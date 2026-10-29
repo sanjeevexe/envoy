@@ -1,0 +1,148 @@
+{
+ "task": "AudioRecorderRecordAudioWithFileName",
+ "seed": 1099073067,
+ "goal": "Record an audio clip and save it with name \"lecture_copy.m4a\" using Audio Recorder app.",
+ "score": 1.0,
+ "aw_run_time_s": 23.8,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 22:14:08.253623",
+ "envoy": {
+  "run_id": "aw-routines-seeds-1028-221347-ea1f",
+  "goal": "Record an audio clip and save it with name \"lecture_copy.m4a\" using Audio Recorder app.",
+  "max_steps": 20,
+  "config": {
+   "mode": "routine",
+   "library": "verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "b82e5124ea28700f4c8812839c4a7c8aae5bc782",
+  "mode": "routine",
+  "match": {
+   "routine": "audio_recorder_record_clip",
+   "stage": "model confirmed",
+   "inputs": {
+    "recording_file_name": "lecture_copy.m4a"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "audio_recorder_record_clip",
+     0.88
+    ],
+    [
+     "contacts_open_app",
+     0.24
+    ],
+    [
+     "broccoli_add_recipe",
+     0.19
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "audio_recorder_record_clip",
+  "version": 1,
+  "done": true,
+  "answer": "lecture_copy.m4a, 00:06, 0.08 Mb, M4a, 44.1kHz",
+  "outputs": {
+   "saved_file_name": "lecture_copy.m4a",
+   "recording_duration": "00:06",
+   "file_info": "0.08 Mb, M4a, 44.1kHz"
+  },
+  "steps_used": 9,
+  "rung": 1,
+  "steps": [
+   {
+    "id": "launch_audio_recorder",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_get_started",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_apply_recording_format",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_record_button",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "dismiss_notification_shade",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "return_to_audio_recorder",
+    "status": "done",
+    "rung": 1,
+    "rungs": [
+     "wait and retry: after-checks held after 2.1 s"
+    ],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_stop_recording",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recording_file_name",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_save_recording",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.002627,
+  "cost_at_standard_usd": 0.002627,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 16.48,
+  "routine_duration_s": 14.14,
+  "trace_dir": "data/runs/aw-routines-seeds-1028-221347-ea1f",
+  "wall_s": 19.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}

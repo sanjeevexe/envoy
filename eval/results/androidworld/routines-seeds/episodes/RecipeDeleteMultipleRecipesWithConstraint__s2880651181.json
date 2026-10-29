@@ -1,0 +1,224 @@
+{
+ "task": "RecipeDeleteMultipleRecipesWithConstraint",
+ "seed": 2880651181,
+ "goal": "Delete the recipes from Broccoli app that use parsley in the directions.",
+ "score": 0.0,
+ "aw_run_time_s": 27.0,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 22:23:12.164658",
+ "envoy": {
+  "run_id": "aw-routines-seeds-1028-222249-670c",
+  "goal": "Delete the recipes from Broccoli app that use parsley in the directions.",
+  "max_steps": 40,
+  "config": {
+   "mode": "routine",
+   "library": "verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "b82e5124ea28700f4c8812839c4a7c8aae5bc782",
+  "mode": "routine",
+  "match": {
+   "routine": "broccoli_delete_recipes_by_ingredient",
+   "stage": "model confirmed",
+   "inputs": {
+    "ingredient": "parsley"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "broccoli_delete_recipes_by_ingredient",
+     0.8
+    ],
+    [
+     "broccoli_add_recipe",
+     0.35
+    ],
+    [
+     "contacts_open_app",
+     0.25
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "broccoli_delete_recipes_by_ingredient",
+  "version": 1,
+  "done": true,
+  "answer": "No recipes found. · create a new recipe · import a recipe from a website",
+  "outputs": {
+   "matching_recipes_status": "No recipes found. · create a new recipe · import a recipe from a website"
+  },
+  "steps_used": 19,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "navigate_back_1",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "navigate_back_2",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "swipe_to_app_drawer",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_broccoli_app",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_search",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "dismiss_keyboard",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "search_recipes_1",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "clear_query_1",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "search_recipes_2",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "clear_query_2",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "search_recipes_3",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "clear_query_3",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "search_recipes_4",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "broaden_search_to_garlic",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "search_recipes_5",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "clear_query_4",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_navigation_drawer",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "search_recipes_6",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "clear_query_5",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.002408,
+  "cost_at_standard_usd": 0.002408,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 17.97,
+  "routine_duration_s": 15.45,
+  "trace_dir": "data/runs/aw-routines-seeds-1028-222249-670c",
+  "wall_s": 20.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.9
+  }
+ }
+}

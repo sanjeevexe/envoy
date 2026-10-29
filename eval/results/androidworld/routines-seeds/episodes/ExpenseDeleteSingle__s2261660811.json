@@ -1,0 +1,124 @@
+{
+ "task": "ExpenseDeleteSingle",
+ "seed": 2261660811,
+ "goal": "Delete the following expenses from pro expense: Stationery.",
+ "score": 1.0,
+ "aw_run_time_s": 16.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 22:17:05.917106",
+ "envoy": {
+  "run_id": "aw-routines-seeds-1028-221652-58e1",
+  "goal": "Delete the following expenses from pro expense: Stationery.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "b82e5124ea28700f4c8812839c4a7c8aae5bc782",
+  "mode": "routine",
+  "match": {
+   "routine": "pro_expense_delete_expense",
+   "stage": "model confirmed",
+   "inputs": {
+    "expense_name": "Stationery"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "pro_expense_delete_expense",
+     0.8
+    ],
+    [
+     "broccoli_delete_recipes_by_ingredient",
+     0.187
+    ],
+    [
+     "simple_calendar_pro_get_event_location",
+     0.187
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "pro_expense_delete_expense",
+  "version": 1,
+  "done": true,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 4,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_pro_expense",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_expense_entry",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_delete",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "confirm_deletion",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.001825,
+  "cost_at_standard_usd": 0.001825,
+  "approvals": [
+   {
+    "step": "tap_delete",
+    "description": "tap \"\" in com.arduia.expense (routine pro_expense_delete_expense v1)",
+    "reasons": [
+     "rule: target id 'com.arduia.expense:id/btn_delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": "confirm_deletion",
+    "description": "tap \"CONFIRM\" in com.arduia.expense (routine pro_expense_delete_expense v1)",
+    "reasons": [
+     "rule: target says 'CONFIRM'",
+     "screen: confirming something that can't be taken back",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "duration_s": 7.12,
+  "routine_duration_s": 4.61,
+  "trace_dir": "data/runs/aw-routines-seeds-1028-221652-58e1",
+  "wall_s": 10.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

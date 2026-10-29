@@ -1,0 +1,88 @@
+{
+ "task": "OpenAppTaskEval",
+ "seed": 3608958401,
+ "goal": "Open the contacts app. Clear any pop-ups that may appear by granting all permissions that are required.",
+ "score": 1.0,
+ "aw_run_time_s": 17.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 22:21:21.597455",
+ "envoy": {
+  "run_id": "aw-routines-seeds-1028-222108-3403",
+  "goal": "Open the contacts app. Clear any pop-ups that may appear by granting all permissions that are required.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "b82e5124ea28700f4c8812839c4a7c8aae5bc782",
+  "mode": "routine",
+  "match": {
+   "routine": "contacts_open_app",
+   "stage": "model confirmed",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "contacts_open_app",
+     0.775
+    ],
+    [
+     "settings_turn_on_wifi_3",
+     0.25
+    ],
+    [
+     "broccoli_delete_recipes_by_ingredient",
+     0.15
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "contacts_open_app",
+  "version": 1,
+  "done": true,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 2,
+  "rung": 3,
+  "steps": [
+   {
+    "id": "launch_contacts_app",
+    "status": "done",
+    "rung": 3,
+    "rungs": [
+     "pop-up handler: permission prompt: deny"
+    ],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "dismiss_tooltip_overlay",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.003858,
+  "cost_at_standard_usd": 0.003858,
+  "approvals": [],
+  "popups": [
+   "permission prompt: deny"
+  ],
+  "duration_s": 7.44,
+  "routine_duration_s": 3.73,
+  "trace_dir": "data/runs/aw-routines-seeds-1028-222108-3403",
+  "wall_s": 10.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.5
+  }
+ }
+}
