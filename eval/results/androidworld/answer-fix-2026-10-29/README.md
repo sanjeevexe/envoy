@@ -57,12 +57,12 @@ Final and next-to-last steps of runs that ended in an answer, 5 calls each:
 | | fdce597 | + fix | + fix, rule 7 | rule 7 + adapter note |
 | --- | ---: | ---: | ---: | ---: |
 | AndroidWorld, final step: same answer | 29/40 | 31/40 | 31/40 | 30/40 |
-| AndroidWorld, the step before: answers early | 0/35 | 0/35 | 0/35 | 0/35 |
+| AndroidWorld, the step before: answers early, same answer / another answer | 3 / 0 of 35 | 3 / 0 | 1 / 0 | 1 / 0 |
 | Real apps, final step: same answer | 35/50 | 40/50 | 40/50 | (adapter is AndroidWorld only) |
-| Real apps, the step before: answers early | 0/40 | 1/40 | 1/40 | |
+| Real apps, the step before: answers early, same answer / another answer | 1 / 0 of 40 | 0 / 1 | 0 / 1 | |
 
 - AndroidWorld's non-matching final steps are all "not done yet" (a scroll or a look), never a different answer.
-- The one early real-app answer is Play's "4.7", correct, one step sooner.
+- The one early real-app answer that differs is Play's "4.7" for "4.7 stars": correct, one step sooner.
 - NotesIsTodo's "True" stays 5/5 without the format clause.
 
 ## Safety (`safety_label_ab.py`, `irrev_open_ab.py`)
