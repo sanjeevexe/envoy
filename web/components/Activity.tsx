@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { HandIcon } from "@phosphor-icons/react";
 import type { Mood } from "@/components/Avatar";
 import { ApprovalCard } from "@/components/Approvals";
+import { Handoffs } from "@/components/Handoff";
 import { OfferCard, OfferRow, OfferSheet } from "@/components/Offers";
 import PhoneAsk from "@/components/PhoneAsk";
 import { TaskDetail, TaskList } from "@/components/Tasks";
@@ -56,6 +57,7 @@ export default function Activity({ tasks, all, steps, approvals, openTask, setOp
         <SectionLabel id="tasks" className="px-6 pb-2.5 pt-6">Tasks</SectionLabel>
         <Card className="mx-4 overflow-hidden"><TaskList tasks={tasks} open={setOpenTask} /></Card>
       </section>
+      <Handoffs version={version} />
       {past.length > 0 && (
         <section aria-labelledby="offers" className="ev-rise ev-r3">
           <SectionLabel id="offers" className="px-6 pb-2.5 pt-6">Envoy asked</SectionLabel>

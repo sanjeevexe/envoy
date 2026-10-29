@@ -68,7 +68,7 @@ export default function Page() {
     }).catch((e) => setAuthed(e instanceof ApiError && e.status === 401 ? false : true));
   }, []);
 
-  // Where a link (or a notification) points: ?task=…, ?phone=<avd>, ?offer=<id>.
+  // Where a link (or a notification) points: ?task=…, ?phone=<avd>, ?offer=<id>, ?handoff=<id> (a file from the Mac).
   const route = useCallback((href: string) => {
     const u = new URL(href, location.origin);
     if (u.pathname.startsWith("/approve")) { location.href = u.href; return; }
@@ -78,6 +78,7 @@ export default function Page() {
     if (offer) { setAsking(offer); setTab("Home"); }
     else if (phone) { setAvd(phone); setTab(window.matchMedia("(max-width: 767px)").matches ? "Phone" : "Home"); }
     else if (t) { setOpenTask(t); setTab("Activity"); }
+    else if (u.searchParams.get("handoff")) setTab("Activity");
   }, []);
 
   useEffect(() => {
@@ -116,6 +117,7 @@ export default function Page() {
         setBriefVersion((v) => v + 1);
         if (e.change === "created" && !["chat", "voice"].includes(e.offer?.source)) say(e.offer?.title ?? "Envoy has a question");
         break;
+      case "handoff": setBriefVersion((v) => v + 1); break;
       case "photo": say(e.summary); break;
       case "paired": say(`Paired: ${e.name}`); break;
     }

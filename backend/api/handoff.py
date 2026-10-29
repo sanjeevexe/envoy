@@ -594,7 +594,7 @@ class Handoff:
             got = self.push_file(did, path)
         except (HandoffError, OSError, subprocess.TimeoutExpired) as e:
             return self._update(hid, status="failed", device=did, error=str(e)[:300])  # type: ignore[return-value]
-        return self._update(hid, status="sent", device=did, remote_path=got["remote_path"], media_uri=got["media_uri"], error=None)  # type: ignore[return-value]
+        return self._update(hid, status="sent", device=did, remote_path=got["remote_path"], media_uri=got["media_uri"], error=None, note=None)  # type: ignore[return-value]
 
     def add(self, name: str, origin: str, device: str | None = None) -> dict[str, Any]:
         """The item for a file in the outbox: the waiting one if the watcher already has it, else a new one."""

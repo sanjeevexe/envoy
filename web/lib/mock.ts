@@ -5,13 +5,15 @@
 // model. Nothing in this file touches the network. Scenarios (`?mock=<name>`):
 // - `1` / `full`: a task streaming steps, a payment waiting for your OK, a phone ask, an offer ("Check in for SL 482?")
 //   with its "Before I start" lines, a habit Envoy noticed ("Make this a habit?"), a filled memory, routines, triggers
-//   (one asks first, one weekly), past offers in each state
+//   (one asks first, one weekly), past offers in each state, and files from the Mac: one Envoy is asking about
+//   ("Put pier-sunset.mp4 on your Pixel 5 and post it to Instagram?"), one waiting, one on the phone, one posted, one
+//   that didn't go
 // - `quiet`: nothing needs you; a watcher reruns the gate routine every so often (working, thinking, done)
 // - `idle`: nothing running and nothing waiting
 // - `offline`: the event stream never connects, and Home can't load its briefing
 // - `pair`: a device that isn't paired yet (the pairing screen)
 // `?mock=0` turns it off again (it's kept for the tab's session, so /approve links stay in mock mode).
-import type { Approval, EnvoyEvent, Lease, Step, Task } from "@/lib/api";
+import type { Approval, EnvoyEvent, HandoffItem, Lease, Step, Task } from "@/lib/api";
 
 export type Scenario = "full" | "quiet" | "idle" | "offline" | "pair";
 
@@ -100,6 +102,7 @@ type DB = {
   tasks: Record<string, Task>; steps: Record<string, Step[]>; approvals: Record<string, Approval & { nonce: string }>;
   leases: Record<string, Lease>; triggers: any[]; changes: any[]; rules: { default: string; apps: Record<string, string>; routines: Record<string, string> };
   photos: { enabled: boolean; scope: string }; phoneApps: string[]; notes: any[]; offers: any[]; proactivity: string;
+  handoffs: HandoffItem[]; outbox: string;
 };
 let db: DB;
 
@@ -216,7 +219,36 @@ function seed(): DB {
     inputs: { trip_city: "Chicago" }, app: null };
   const offer = (o: any) => ({ source: "trigger:Ask me to check in when check-in opens", expires_at: null, decided_at: null, decided_by: null, task_id: null,
     preflight: [], origin: { trigger_id: "trig-checkin" }, note: null, result: null, kind: "trigger", ...o });
+  // Files from the Mac (api/handoff.py), and the offer the newest one raised.
+  const full = scenario === "full" || scenario === "offline";
+  const file = (h: Partial<HandoffItem> & Pick<HandoffItem, "id" | "name">): HandoffItem => ({ size: 18_400_000, kind: "video", app: null, caption: null,
+    status: "waiting", device: "envoy-test", device_name: "Test phone", remote_path: null, media_uri: null, offer_id: null, task_id: null,
+    created_at: ago(600), updated_at: ago(600), error: null, note: null, origin: "outbox", ...h });
+  const handoffs = full ? [
+    file({ id: "handoff-pier", name: "pier-sunset.mp4", app: "instagram", caption: "Golden hour at the pier 🌅\nShot on the 14th", status: "offered",
+      device: "pixel-5", device_name: "Pixel 5", offer_id: "offer-clip", created_at: ago(240), updated_at: ago(238) }),
+    file({ id: "handoff-listing", name: "listing-412-elm.jpg", kind: "image", size: 2_300_000, created_at: ago(3 * 3600), updated_at: ago(3 * 3600),
+      note: "you said not now" }),
+    file({ id: "handoff-pass", name: "boarding-pass.png", kind: "image", size: 640_000, status: "sent", remote_path: "/sdcard/Pictures/Envoy/boarding-pass.png",
+      media_uri: "content://media/external/images/media/1000000021", created_at: ago(26 * 3600), updated_at: ago(26 * 3600), origin: "mcp" }),
+    file({ id: "handoff-teaser", name: "teaser.mp4", app: "instagram", caption: "New week, new walk", status: "posted", device: "pixel-5", device_name: "Pixel 5",
+      remote_path: "/sdcard/Movies/Envoy/teaser.mp4", task_id: "task-ig-1", created_at: ago(2 * 86400), updated_at: ago(2 * 86400 - 300) }),
+    file({ id: "handoff-big", name: "full-cut-4k.mov", size: 2_100_000_000, status: "failed", error: "full-cut-4k.mov is over 500 MB",
+      created_at: ago(3 * 86400), updated_at: ago(3 * 86400) }),
+  ] : [];
   const offers = [
+    ...(full ? [offer({ id: "offer-clip", kind: "handoff", source: "outbox", origin: null, created_at: ago(238), status: "pending",
+      title: "Put pier-sunset.mp4 on your Pixel 5 and post it to Instagram?", body: "Golden hour at the pier 🌅",
+      action: { type: "handoff", handoff_id: "handoff-pier", file: "pier-sunset.mp4", device: "pixel-5", then: {
+        goal: "Post the newest video in my phone's gallery to Instagram as a reel with this caption: \"Golden hour at the pier 🌅 Shot on the 14th\"",
+        request: "Post the newest video in my phone's gallery to Instagram as a reel with this caption", app: "com.instagram.android",
+        inputs: { caption: "Golden hour at the pier 🌅\nShot on the 14th" } } },
+      preflight: [{ kind: "device", text: "On your Pixel 5 (Instagram is set to your phone)", level: "info" },
+        { kind: "approval", text: "Sharing the reel will wait for your OK", level: "info" }] }),
+      offer({ id: "offer-muse", kind: "trigger_request", source: "mcp", origin: null, created_at: ago(5 * 3600), status: "accepted", decided_at: ago(5 * 3600 - 120),
+        decided_by: "you", title: "Muse wants to set this up: every day at 08:00, \"Check my gate for today's flight\". Turn it on?",
+        body: "Each time it fires, Envoy asks you before it does anything. Asked through Envoy's connector by Muse.",
+        action: { type: "enable_trigger", trigger_id: "trig-gate-am" }, result: { trigger_id: "trig-gate-am" } })] : []),
     ...(scenario === "full" || scenario === "offline" ? [offer({ id: "offer-ck", created_at: ago(1500), title: "Check in for SL 482?", status: "pending",
       body: "From your trigger “Ask me to check in when check-in opens”, which asks you first.", action: checkIn, key: "trig-checkin:flight@1",
       expires_at: todayAt(30, 10) > T ? todayAt(30, 10) : T + 18 * 3600, preflight: [
@@ -248,7 +280,7 @@ function seed(): DB {
       action: { ...checkIn, goal: "Check me in for my flight SL 1585 to Savannah", inputs: { trip_city: "Savannah" } } }),
   ];
   return {
-    tasks, steps, approvals, leases, triggers, changes, offers, proactivity: "important",
+    tasks, steps, approvals, leases, triggers, changes, offers, proactivity: "important", handoffs, outbox: "/Users/maya/Envoy Outbox",
     rules: { default: "unless_requested", apps: { "com.dd.doordash": "always" }, routines: { starbucks_order_usual: "never" } },
     photos: { enabled: true, scope: "screenshots" }, phoneApps: ["com.target.ui"],
     notes: [
@@ -499,6 +531,7 @@ function answerOffer(id: string, decision: string) {
   if (!o) throw err(404, "no such offer");
   if (o.status === "accepted" && decision === "accept") return o;
   if (o.status !== "pending") throw err(409, `already ${o.status}`);
+  if (o.action.type === "handoff") return answerHandoff(o, decision);
   if (decision === "decline") Object.assign(o, { status: "declined", decided_at: now(), decided_by: "you" });
   else if (o.action.type === "enable_trigger") {  // chat or an assistant asked for it: the yes turns it on
     const t = db.triggers.find((x) => x.id === o.action.trigger_id);
@@ -511,6 +544,39 @@ function answerOffer(id: string, decision: string) {
     db.triggers.push(t);
     Object.assign(o, { status: "accepted", decided_at: now(), decided_by: "you", result: { trigger_id: t.id } });
   } else Object.assign(o, { status: "accepted", decided_at: now(), decided_by: "you", task_id: checkInRun(o.action.goal, o.action.inputs?.trip_city ?? "Chicago") });
+  emit("offer", { offer: o, change: o.status });
+  return o;
+}
+
+// A file from the Mac: yes puts it on the phone, then (for a template with a post) starts the post, which waits for your
+// OK on Share like any public post.
+function setHandoff(id: string, patch: Partial<HandoffItem>) {
+  const i = db.handoffs.findIndex((h) => h.id === id);
+  if (i < 0) throw err(404, `no handoff ${id}`);
+  db.handoffs[i] = { ...db.handoffs[i], ...patch, updated_at: now() };
+  emit("handoff", { item: db.handoffs[i] });
+  return db.handoffs[i];
+}
+
+function sendHandoff(id: string) {
+  const h = db.handoffs.find((x) => x.id === id);
+  if (!h) throw err(404, `no handoff ${id}`);
+  if (h.status === "sent" || h.status === "posted") return h;
+  const dir = h.kind === "video" ? "Movies/Envoy" : "Pictures/Envoy";
+  return setHandoff(id, { status: "sent", error: null, note: null, remote_path: `/sdcard/${dir}/${h.name}`, media_uri: `content://media/external/${h.kind === "video" ? "video" : "images"}/media/${1000000030 + runs}` });
+}
+
+function answerHandoff(o: any, decision: string) {
+  const id = o.action.handoff_id;
+  if (decision === "decline") {
+    Object.assign(o, { status: "declined", decided_at: now(), decided_by: "you" });
+    setHandoff(id, { status: "waiting", note: "you said not now" });
+  } else {
+    sendHandoff(id);
+    const t = o.action.then ? chatTask(o.action.then.goal) : null;
+    if (t) setHandoff(id, { task_id: t.id });
+    Object.assign(o, { status: "accepted", decided_at: now(), decided_by: "you", task_id: t?.id ?? null });
+  }
   emit("offer", { offer: o, change: o.status });
   return o;
 }
@@ -655,6 +721,13 @@ export async function handle(path: string, init: RequestInit = {}): Promise<any>
     const o = db.offers.find((x) => x.id === m![1]);
     if (!o) throw err(404, "no such offer");
     return o;
+  }
+  if (p === "/api/handoff") return { outbox: db.outbox, items: db.handoffs.slice().sort((a, b) => b.created_at - a.created_at).slice(0, Number(u.searchParams.get("limit") ?? 50)),
+    templates: { gallery: { label: "the phone's gallery", package: null }, instagram: { label: "Instagram", package: "com.instagram.android" } } };
+  if ((m = p.match(/^\/api\/handoff\/([^/]+)\/send$/))) return sendHandoff(m[1]);
+  if (p === "/api/settings/handoff") {
+    if (method === "POST") { if (!String(body.outbox ?? "").startsWith("/")) throw err(400, "the outbox is a full path to a folder on this Mac"); db.outbox = body.outbox; }
+    return { outbox: db.outbox };
   }
   if (p === "/api/settings/proactivity") {
     if (method === "POST") db.proactivity = body.level;

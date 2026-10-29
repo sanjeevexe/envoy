@@ -41,6 +41,13 @@ export type Offer = {
   decided_by: string | null; task_id: string | null; preflight: OfferLine[]; origin?: { trigger_id?: string } | null; note?: string | null;
   result?: { task_id?: string; trigger_id?: string } | null;
 };
+// A file from the Mac on its way to a phone (backend/api/handoff.py). `device` is a pool id; `device_name` says it plainly.
+export type HandoffItem = {
+  id: string; name: string; size: number; kind: "image" | "video"; app: string | null; caption: string | null;
+  status: "waiting" | "offered" | "sent" | "posted" | "failed"; device: string | null; device_name: string | null; remote_path: string | null;
+  media_uri: string | null; offer_id: string | null; task_id: string | null; created_at: number; updated_at: number; error: string | null;
+  note: string | null; origin: string;
+};
 export type EnvoyEvent = { seq: number; time: number; type: string; [k: string]: any };
 
 export class ApiError extends Error {
