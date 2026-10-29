@@ -117,8 +117,11 @@ async def main() -> int:
     scratch.mkdir(parents=True, exist_ok=True)
     configure(scratch)
 
+    import logging
+
     import httpx
     import uvicorn
+    logging.getLogger("httpx").setLevel(logging.WARNING)
     from api.app import build, session_token
     from api.store import TaskStore
     from memory.store import MemoryStore
@@ -198,7 +201,7 @@ async def main() -> int:
             report["trigger_body"] = body
             t_trigger = time.time()
             trig = (await c.post("/api/triggers", json=body)).json()
-            log("ask-mode trigger created", "id" in trig and trig["action"].get("ask") is True, name=trig.get("name"),
+            log("ask-mode trigger created", "id" in trig and trig["action"].get("ask") is True, trigger=trig.get("name"),
                 minutes_before=body["spec"]["minutes_before"], departs=datetime.fromtimestamp(when).isoformat(timespec="minutes"))
 
             # ---- the offer, not a task ----

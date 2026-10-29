@@ -144,8 +144,10 @@ class Offers:
         if preflight_check is None or self.runner is None:
             return []
         try:
+            phone = action.get("phone") or None
             lines = preflight_check(self.runner, action["goal"], request=action.get("request"), source="web", app=action.get("app"),
-                                    routine=action.get("routine"), inputs=action.get("inputs") or {}, phone=action.get("phone"))
+                                    routine=action.get("routine"), inputs=action.get("inputs") or {}, phone=phone,
+                                    **({"phone_ok": phone} if phone and phone not in ("phone", "emulator", "auto") else {}))
             return [{k: str(x.get(k) or "") for k in ("kind", "text", "level")} for x in (lines or [])][:8]
         except Exception:  # noqa: BLE001 - an offer without the lines is still an offer
             return []

@@ -1,0 +1,310 @@
+{
+  "started": "2026-10-29T12:48:13",
+  "avd": "envoy-test",
+  "serial": "emulator-5554",
+  "commit": "e73ef85",
+  "trigger_body": {
+    "kind": "before_fact",
+    "name": "Ask me to check in when check-in opens",
+    "spec": {
+      "entity_type": "Flight",
+      "date_attr": "date",
+      "time_attr": "depart_time",
+      "minutes_before": 1440
+    },
+    "action": {
+      "goal": "Check me in for my flight {number} to {trip.destination}",
+      "routine": "skylark_check_in_flight",
+      "inputs_from": {
+        "trip_city": "trip.destination"
+      },
+      "ask": true,
+      "offer_title": "Check in for {number}?"
+    }
+  },
+  "offer": {
+    "id": "offer-1029-124816-9e19",
+    "kind": "trigger",
+    "title": "Check in for SL 482?",
+    "body": "From your trigger \u201cAsk me to check in when check-in opens\u201d, which asks you first.",
+    "key": "trig-1029-124814-19ae:flight_8c67dadd1a@1793355000",
+    "expires_at": 1793355000.0,
+    "preflight": [
+      {
+        "kind": "approval",
+        "text": "Confirming check-in will go ahead: you asked for it.",
+        "level": "info"
+      },
+      {
+        "kind": "routine",
+        "text": "Using routine skylark_check_in_flight v1: 3 s when I tested it, no model calls.",
+        "level": "info"
+      }
+    ],
+    "origin": {
+      "trigger_id": "trig-1029-124814-19ae"
+    },
+    "goal": "Check me in for my flight SL 482 to Chicago",
+    "request": "Check me in for my flight to",
+    "inputs": {
+      "trip_city": "Chicago"
+    },
+    "routine": "skylark_check_in_flight"
+  },
+  "push": {
+    "payload": {
+      "id": "p1793292496821-0b39",
+      "kind": "offer",
+      "title": "Check in for SL 482?",
+      "body": "From your trigger \u201cAsk me to check in when check-in opens\u201d, which asks you first.",
+      "url": "/?offer=offer-1029-124816-9e19",
+      "tag": "offer-offer-1029-124816-9e19",
+      "sent_at": 1793292496.8211808
+    },
+    "seconds_after_trigger": 2.13,
+    "seconds_after_offer": 0.155
+  },
+  "task": {
+    "id": "task-1029-124817-38d0",
+    "goal": "Check me in for my flight SL 482 to Chicago",
+    "request": "Check me in for my flight to",
+    "source": "web",
+    "status": "done",
+    "result": "seat: 14C; gate: B12; boarding time: 5:30 AM; boarding group: Group 3; flight: SL 482",
+    "detail": "all steps and checks passed",
+    "routine": "skylark_check_in_flight",
+    "inputs": {
+      "trip_city": "Chicago"
+    },
+    "device": "envoy-test",
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "seconds": 6.1
+  },
+  "steps": [
+    {
+      "seq": 1,
+      "kind": "preflight",
+      "text": "before I start: Confirming check-in will go ahead: you asked for it. \u00b7 Using routine skylark_check_in_flight v1: 3 s when I tested it, no model calls."
+    },
+    {
+      "seq": 2,
+      "kind": "note",
+      "text": "using routine skylark_check_in_flight v1 with trip_city = Chicago"
+    },
+    {
+      "seq": 3,
+      "kind": "routine_step",
+      "text": "tap_check_in",
+      "status": "done",
+      "rung": 0
+    },
+    {
+      "seq": 4,
+      "kind": "routine_step",
+      "text": "select_passenger",
+      "status": "done",
+      "rung": 0
+    },
+    {
+      "seq": 5,
+      "kind": "routine_step",
+      "text": "tap_continue_after_passenger",
+      "status": "done",
+      "rung": 0
+    },
+    {
+      "seq": 6,
+      "kind": "routine_step",
+      "text": "confirm_no_hazardous_materials",
+      "status": "done",
+      "rung": 0
+    },
+    {
+      "seq": 7,
+      "kind": "routine_step",
+      "text": "tap_continue_after_hazmat",
+      "status": "done",
+      "rung": 0
+    },
+    {
+      "seq": 8,
+      "kind": "approval",
+      "text": "Confirm check-in: done without asking (your request)",
+      "reason": "you asked: \"Check me in for my flight to\""
+    },
+    {
+      "seq": 9,
+      "kind": "routine_step",
+      "text": "confirm_check_in",
+      "status": "done",
+      "rung": 0
+    },
+    {
+      "seq": 10,
+      "kind": "finish",
+      "text": "all steps and checks passed",
+      "status": "done"
+    },
+    {
+      "seq": 11,
+      "kind": "note",
+      "text": "saving what it saw to memory"
+    }
+  ],
+  "approvals": [
+    {
+      "description": "tap \"Confirm check-in\" in com.skylark.air (routine skylark_check_in_flight v1)",
+      "status": "approved",
+      "decided_by": "your request",
+      "note": "you asked: \"Check me in for my flight to\""
+    }
+  ],
+  "spend": {
+    "model_calls": 0,
+    "cost_usd": 0.0
+  },
+  "timings_s": {
+    "trigger_to_offer": 2.25,
+    "offer_to_push": 0.155,
+    "yes_to_done": 6.1,
+    "total": 8.3
+  },
+  "ok": true,
+  "steps_log": [
+    {
+      "step": "envoy-test is running",
+      "ok": true,
+      "t": 0.95,
+      "serial": "emulator-5554"
+    },
+    {
+      "step": "SkyLark signed in, the next trip not checked in yet",
+      "ok": true,
+      "t": 1.85,
+      "signed_in": true,
+      "trip": "KX7Q2M",
+      "flight": "SL 482",
+      "checked_in": false
+    },
+    {
+      "step": "API copy up",
+      "ok": true,
+      "t": 2.21,
+      "base": "http://127.0.0.1:8741",
+      "data_dir": "/private/tmp/claude-501/-Users-sanjeevvarma-Desktop-Envoy--claude-worktrees-determined-tharp-9f937a/ff04504a-b74a-4c71-8fc0-f6e5a29c8b5f/scratchpad/offers-run/api",
+      "memory": "/private/tmp/claude-501/-Users-sanjeevvarma-Desktop-Envoy--claude-worktrees-determined-tharp-9f937a/ff04504a-b74a-4c71-8fc0-f6e5a29c8b5f/scratchpad/offers-run/memory.db",
+      "scheduler_every_s": 2
+    },
+    {
+      "step": "the fake push service is the only subscription",
+      "ok": true,
+      "t": 2.25,
+      "subscriptions": [
+        "127.0.0.1:62270"
+      ]
+    },
+    {
+      "step": "proactivity",
+      "ok": true,
+      "t": 2.25,
+      "level": "important"
+    },
+    {
+      "step": "ask-mode trigger created",
+      "ok": true,
+      "t": 2.25,
+      "trigger": "Ask me to check in when check-in opens",
+      "minutes_before": 1440,
+      "departs": "2026-10-30T06:10"
+    },
+    {
+      "step": "the trigger fired an offer",
+      "ok": true,
+      "t": 4.5,
+      "seconds": 2.25
+    },
+    {
+      "step": "the offer",
+      "ok": true,
+      "t": 4.5,
+      "title": "Check in for SL 482?",
+      "goal": "Check me in for my flight SL 482 to Chicago",
+      "request": "Check me in for my flight to",
+      "inputs": {
+        "trip_city": "Chicago"
+      },
+      "expires": 1793355000.0
+    },
+    {
+      "step": "nothing started before the yes",
+      "ok": true,
+      "t": 4.5
+    },
+    {
+      "step": "the offer pushed (fake service, decrypted)",
+      "ok": true,
+      "t": 4.5,
+      "title": "Check in for SL 482?",
+      "url": "/?offer=offer-1029-124816-9e19",
+      "after_offer_s": 0.155
+    },
+    {
+      "step": "you said yes (this copy's session)",
+      "ok": true,
+      "t": 4.52,
+      "decided_by": "you",
+      "task": "task-1029-124817-38d0",
+      "ms": 22
+    },
+    {
+      "step": "the task",
+      "ok": true,
+      "t": 10.56,
+      "status": "done",
+      "source": "web",
+      "device": "envoy-test",
+      "result": "seat: 14C; gate: B12; boarding time: 5:30 AM; boarding group: Group 3; flight: SL 482",
+      "detail": "all steps and checks passed",
+      "seconds": 6.1,
+      "model_calls": 0
+    },
+    {
+      "step": "Confirm check-in went through as your request",
+      "ok": true,
+      "t": 10.56,
+      "approvals": [
+        [
+          "tap \"Confirm check-in\" in com.skylark.air (routine skylark_check_in_flight v1)",
+          "approved",
+          "your request"
+        ]
+      ]
+    },
+    {
+      "step": "no approval waited for a person",
+      "ok": true,
+      "t": 10.56
+    },
+    {
+      "step": "the trigger keeps its credit",
+      "ok": true,
+      "t": 10.56
+    },
+    {
+      "step": "SkyLark: the trip is checked in",
+      "ok": true,
+      "t": 11.46,
+      "trip": "KX7Q2M",
+      "checked_in": true
+    },
+    {
+      "step": "model calls",
+      "ok": true,
+      "t": 11.48,
+      "model_calls": 0,
+      "cost_usd": 0.0,
+      "task_model_calls": 0
+    }
+  ]
+}
