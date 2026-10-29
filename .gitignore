@@ -19,6 +19,7 @@ logs/
 *.log
 *.jsonl
 !backend/tests/traces/**/steps.jsonl
+!eval/results/app-notes/*/traces/**/*.jsonl
 
 # Emulator artifacts
 *.avd/
