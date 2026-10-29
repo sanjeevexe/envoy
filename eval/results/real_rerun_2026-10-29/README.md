@@ -43,3 +43,26 @@ What stands:
 - **SkyLark:** compile 10/10, all on the first attempt. Systems before the outage: agent 14/14 and routines 14/14, no side effects.
 
 Not merged: the merged agent still fails the bar on real apps, at the step level.
+
+## The decisive check, 15:57–16:36: main `2d23633` and the guard `5fa03bf`, interleaved (`decisive/`)
+
+The run order alternated main and guard, back to back on one claim of envoy-real. The memory NOTES were the harness's own, as for a real user.
+
+| Workflow | Main | Guard |
+| --- | --- | --- |
+| contacts_count, first run | 10/10 pass, 0 actions | 3 pass; 6 right but unverified (0 actions); 1 step-limit loop (25 actions) |
+| doordash | 5/5 pass, 1 action | 5/5 pass, 1 action |
+| ytmusic_artist | first run 2/2; same input 1 of 2 | first run 2/2; same input 1 of 2 |
+| chrome_wikipedia | right but unverified 2/2 | right but unverified 2/2 |
+
+**SkyLark on the guard (`skylark_guard2/`):**
+- Compile: 10/10.
+- Agent 40/40 and routines 40/40, no side effects.
+- 18 check-in runs: no wrong flight. One plan offered Home's Check in for another trip, but no wrong check-in followed.
+- Injection: agent 18/20, the extra "Check in" approval as in round 2. Routines 10/10, and no irreversible action without approval.
+
+**Why the six were unverified.** They answered `0 contacts - screen shows "No contacts yet"`. Envoy's answer check looks for the answer's numbers and capitalized words on screen, and "0" is never shown, so the check failed. Main's answers verified only by luck: they say "…the Contacts app shows…", and "Contacts" is on screen. Commit `83a9702` lets a count of 0 pass when the screen shows an empty state. Replayed on all 671 recorded done steps, it changes 7 verdicts, all of them contacts_count's 0 on "No contacts yet".
+
+**Against the bar.** With `83a9702` the guard has 1 failure against main's 0 (the loop), which is within "at most one more". AndroidWorld's ablation put that loop at about 1 in 40 on both commits.
+
+**Cost:** $3.67 for both emulators.
