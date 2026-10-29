@@ -1,0 +1,60 @@
+routine: simple_calendar_pro_get_event_titles
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Look up events at a specific date and time in Simple Calendar Pro
+description: Opens Simple Calendar Pro, navigates to the requested date, and returns the titles of events scheduled at the requested time.
+patterns: ['What is on my schedule on that date at that time?', 'What event do I have at that time?', Show my calendar event titles for that date
+    and time]
+outputs: [event_titles]
+start: fresh_launch
+inputs:
+  schedule_date: {type: date, description: The date to check., example: October 27 2023}
+  schedule_time:
+    type: date
+    description: The time to check on that date.
+    example: "8:00pm"
+steps:
+- id: launch_simple_calendar_pro
+  intent: Launch Simple Calendar Pro
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.simplemobiletools.calendar.pro}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: top_toolbar_search_icon, kind: Button}
+  - element_present: {resource_id: top_toolbar_search, text: Search, kind: EditText}
+  risk: read
+  note: trace step 1
+- id: select_schedule_date
+  intent: "Navigate to {{schedule_date}} and view its events to find those at {{schedule_time}}"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      visual: "the calendar cell for {{schedule_date:day}} in the {{schedule_date:month}} grid"
+      region: [0.714, 0.708, 0.86, 0.792]
+      density: 420
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: go_to_today, text: Go to today, kind: Button}
+  risk: reversible
+  extract:
+    event_titles:
+      locator:
+        resource_id: event_item_holder
+        text_has: "{{schedule_time:time24}}"
+        kind: Button
+      segment: 0
+      every: true
+  note: trace step 3
+compiled_from:
+  task_id: aw-final-standard-1028-170219-df3a
+  goal: "What is on my schedule for October 27 2023 at 8:00pm in Simple Calendar Pro? Answer with the titles only. If there are multiples titles,\
+    \ format your answer in a comma separated list."
+  compiler: cached
+  compiled_at: "2026-10-29 01:25:02"
+  trace_steps_kept: [1, 3]
+  trace_steps_dropped: 2
+  cost_usd: 0.0

@@ -1,0 +1,190 @@
+routine: audio_recorder_record_clip
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Record an audio clip and save it with a given name in Audio Recorder
+description: Starts a new recording in Audio Recorder, stops it, and saves the clip using the requested file name.
+patterns: [Record an audio clip and save it with this name, Record audio using Audio Recorder, Make a new audio recording, Record a clip and name
+    the file]
+outputs: [saved_file_name, recording_duration, file_info]
+start: fresh_launch
+inputs:
+  recording_file_name: {type: text, description: 'The file name to save the recorded audio clip with, including its extension.', example: presentation_fGwr.m4a}
+steps:
+- id: launch_audio_recorder
+  intent: Launch the Audio Recorder app
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.dimowner.audiorecorder}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: pager, kind: List}
+  - element_present: {resource_id: btn_action, text: Get started, kind: Button}
+  risk: read
+  note: trace step 1
+- id: tap_get_started
+  intent: Tap Get started to dismiss the welcome screen and access the recorder
+  optional: true
+  pre:
+  - {app_foreground: com.dimowner.audiorecorder}
+  action:
+    tap:
+      resource_id: btn_action
+      text: Get started
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.5, 0.895]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: setting_title
+      text: "Recording format:"
+      kind: Text
+  - element_present: {resource_id: toolbar, text: Setup, kind: Text}
+  risk: reversible
+  note: "trace step 2 · one-time screen: optional"
+- id: tap_apply_recording_format
+  intent: Tap Apply to confirm the default recording format settings
+  pre:
+  - {app_foreground: com.dimowner.audiorecorder}
+  action:
+    tap:
+      resource_id: btn_apply
+      text: Apply
+      kind: Button
+      cls: Button
+      siblings: [Reset]
+      in_list: false
+      position: [0.748, 0.939]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: btn_import, kind: Button}
+  - element_present: {resource_id: btn_settings, text: Settings, kind: Button}
+  risk: reversible
+  note: trace step 3
+- id: tap_record_button
+  intent: Tap the record button to start a new audio recording
+  pre:
+  - {app_foreground: com.dimowner.audiorecorder}
+  action:
+    tap:
+      resource_id: btn_record
+      text: "Recording: %s"
+      kind: Button
+      cls: ImageButton
+      in_list: false
+      position: [0.5, 0.91]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: tile_label, text: Flashlight, kind: Text}
+  - element_present: {resource_id: toolbar, text: Audio Recorder, kind: Text}
+  risk: reversible
+  note: trace step 4
+- id: dismiss_notification_shade
+  intent: Go back to dismiss the notification shade and access the recorder controls
+  optional: true
+  pre:
+  - {app_foreground: com.dimowner.audiorecorder}
+  action: {back: true}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: workspace, kind: List}
+  - element_present: {resource_id: search_container_hotseat, text: Search, kind: Button}
+  risk: read
+  note: "trace step 5 · one-time screen: optional"
+- id: return_to_audio_recorder
+  intent: Launch Audio Recorder again to return to the ongoing recording
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  action: {launch: com.dimowner.audiorecorder}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: toolbar, text: Audio Recorder, kind: Text}
+  - element_present: {resource_id: txt_name, text: Recording…, kind: Text}
+  risk: read
+  note: trace step 6
+- id: tap_stop_recording
+  intent: Tap the stop button to stop the ongoing recording
+  pre:
+  - {app_foreground: com.dimowner.audiorecorder}
+  action:
+    tap:
+      resource_id: btn_record_stop
+      text: ''
+      kind: Button
+      cls: ImageButton
+      siblings:
+      - Delete
+      - "Recording: %s"
+      in_list: false
+      position: [0.687, 0.91]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: dialog_title, text: New name, kind: Text}
+  - element_present: {resource_id: check_box, text: Don't ask again, kind: CheckBox}
+  risk: reversible
+  note: trace step 7
+- id: enter_recording_file_name
+  intent: "Type {{recording_file_name}} as the name for the recording"
+  pre:
+  - {app_foreground: com.dimowner.audiorecorder}
+  action:
+    type:
+      field:
+        resource_id: input_name
+        hint: Record-1
+        kind: EditText
+        cls: EditText
+        siblings: [New name, Don't ask again]
+        in_list: false
+        position: [0.5, 0.443]
+      value: "{{recording_file_name}}"
+  post:
+  - field_equals:
+      field: {resource_id: input_name, kind: EditText}
+      value: "{{recording_file_name}}"
+  risk: reversible
+  note: trace step 8
+- id: tap_save_recording
+  intent: Tap Save to confirm saving the recording
+  pre:
+  - {app_foreground: com.dimowner.audiorecorder}
+  action:
+    tap:
+      resource_id: dialog_positive_btn
+      text: Save
+      kind: Button
+      cls: Button
+      siblings: [Cancel]
+      in_list: false
+      position: [0.76, 0.551]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: txt_name
+      text: "{{recording_file_name}}"
+      kind: Button
+  - element_present: {resource_id: btn_import, kind: Button}
+  risk: reversible
+  extract:
+    saved_file_name:
+      locator: {resource_id: txt_name, kind: Button}
+    recording_duration:
+      locator: {resource_id: txt_duration, kind: Text}
+      expect_digits: true
+    file_info:
+      locator: {resource_id: txt_record_info, kind: Text}
+      expect_digits: true
+  note: trace step 9
+done:
+- text_visible: "{{recording_file_name}}"
+compiled_from:
+  task_id: aw-final-standard-1028-103230-2024
+  goal: Record an audio clip and save it with name "presentation_fGwr.m4a" using Audio Recorder app.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:39:48"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  trace_steps_dropped: 0
+  cost_usd: 0.0643

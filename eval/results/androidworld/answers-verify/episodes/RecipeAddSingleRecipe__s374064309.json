@@ -1,0 +1,161 @@
+{
+ "task": "RecipeAddSingleRecipe",
+ "seed": 374064309,
+ "goal": "Add the following recipes into the Broccoli app:\nRecipe: Chicken Caesar Salad Wrap\n description: An ideal recipe for experimenting with different flavors and ingredients.\n servings: 3-4 servings\n preparationTime: 2 hrs\n ingredients: as desired\n directions: Toss chopped romaine lettuce with Caesar dressing, grilled chicken strips, and Parmesan cheese. Wrap in a large tortilla. Feel free to substitute with ingredients you have on hand.\n",
+ "score": 1.0,
+ "aw_run_time_s": 19.8,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 01:43:24.928839",
+ "envoy": {
+  "run_id": "aw-answers-verify-1029-014307-57e4",
+  "goal": "Add the following recipes into the Broccoli app:\nRecipe: Chicken Caesar Salad Wrap\n description: An ideal recipe for experimenting with different flavors and ingredients.\n servings: 3-4 servings\n preparationTime: 2 hrs\n ingredients: as desired\n directions: Toss chopped romaine lettuce with Caesar dressing, grilled chicken strips, and Parmesan cheese. Wrap in a large tortilla. Feel free to substitute with ingredients you have on hand.\n",
+  "max_steps": 24,
+  "config": {
+   "mode": "routine",
+   "library": "answers-candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "broccoli_add_recipe",
+   "stage": "model confirmed",
+   "inputs": {
+    "recipe_title": "Chicken Caesar Salad Wrap",
+    "recipe_description": "An ideal recipe for experimenting with different flavors and ingredients.",
+    "recipe_servings": "3-4 servings",
+    "recipe_preparation_time": "2 hrs",
+    "recipe_ingredients": "as desired",
+    "recipe_directions": "Toss chopped romaine lettuce with Caesar dressing, grilled chicken strips, and Parmesan cheese. Wrap in a large tortilla. Feel free to substitute with ingredients you have on hand."
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "broccoli_add_recipe",
+     0.68
+    ],
+    [
+     "contacts_open_app",
+     0.21
+    ],
+    [
+     "simple_calendar_pro_list_events",
+     0.2
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "broccoli_add_recipe",
+  "version": 1,
+  "done": true,
+  "answer": "Chicken Caesar Salad Wrap, 3-4 servings, 2 hrs",
+  "outputs": {
+   "saved_recipe_title": "Chicken Caesar Salad Wrap",
+   "saved_recipe_servings": "3-4 servings",
+   "saved_recipe_preparation_time": "2 hrs"
+  },
+  "steps_used": 10,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "open_broccoli_app",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_new_recipe",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_title",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_description",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_servings",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_preparation_time",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_ingredients",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "scroll_to_directions",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_directions",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "save_recipe",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.003667,
+  "cost_at_standard_usd": 0.003667,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 12.06,
+  "routine_duration_s": 8.89,
+  "trace_dir": "data/runs/aw-answers-verify-1029-014307-57e4",
+  "wall_s": 14.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.5
+  }
+ }
+}

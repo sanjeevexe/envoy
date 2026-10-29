@@ -1,0 +1,90 @@
+routine: pro_expense_delete_expense
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Delete an expense from Pro Expense
+description: Opens Pro Expense, selects the named expense entry from the totals list, taps delete, and confirms the deletion.
+patterns: [Delete an expense from Pro Expense, Remove an expense in Pro Expense, Delete this expense entry]
+start: fresh_launch
+inputs:
+  expense_name: {type: text, description: The name of the expense entry to delete as shown in the list., example: Rental Income}
+steps:
+- id: launch_pro_expense
+  intent: Launch the Pro Expense app
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.arduia.expense}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: tv_expense_in_out_title, text: Totals, kind: Text}
+  - element_present: {resource_id: tv_title, text: Expenses in this Week, kind: Text}
+  risk: read
+  note: trace step 1
+- id: open_expense_entry
+  intent: "Tap the {{expense_name}} expense entry"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: cd_expense
+      text_has: "{{expense_name}}"
+      kind: Button
+      cls: RelativeLayout
+      parent: rv_recent_lists
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: tv_name_value
+      text: "{{expense_name}}"
+      kind: Text
+  - element_present: {resource_id: tv_expense_detail, text: Expense Detail, kind: Text}
+  risk: reversible
+  note: trace step 2
+- id: tap_delete
+  intent: Tap the delete button on the expense detail screen
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: btn_delete
+      text: ''
+      kind: Button
+      cls: ImageView
+      siblings: [Rental Income, Amount]
+      in_list: false
+      position: [0.899, 0.692]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: tv_delete_item, text: Delete Items, kind: Text}
+  - element_present: {resource_id: imv_drop_close, kind: Button}
+  risk: irreversible
+  note: trace step 3
+- id: confirm_deletion
+  intent: Tap CONFIRM to confirm deletion of the expense
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: btn_confirm
+      text: CONFIRM
+      kind: Button
+      cls: Button
+      siblings: [Delete Items]
+      in_list: false
+      position: [0.5, 0.926]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: tv_title, text: Expenses in this Week, kind: Text}
+  - element_present: {resource_id: tv_income_symobol, text: USD, kind: Text}
+  risk: irreversible
+  note: trace step 4
+compiled_from:
+  task_id: aw-final-standard-1028-112602-e5f6
+  goal: "Delete the following expenses from pro expense: Rental Income."
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:42:01"
+  trace_steps_kept: [1, 2, 3, 4]
+  trace_steps_dropped: 5
+  cost_usd: 0.0426

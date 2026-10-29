@@ -1,0 +1,112 @@
+routine: settings_set_brightness_minimum_2
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Set the display brightness to the minimum value in Settings
+description: Opens Settings, navigates to Display and Brightness level, then drags the brightness slider to its leftmost position to set the minimum
+  brightness.
+patterns: [turn brightness to minimum, set brightness to the lowest value, dim the brightness all the way down, turn brightness to min]
+outputs: [brightness]
+start: fresh_launch
+steps:
+- id: launch_settings
+  intent: Launch Settings
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.android.settings}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: settings_homepage_container, kind: List}
+  risk: read
+  note: trace step 1
+- id: scroll_until_display
+  intent: Scroll until the Display settings entry is visible
+  pre:
+  - {app_foreground: com.android.settings}
+  action:
+    scroll_until:
+      target:
+        text: Display · Dark theme, font size, brightness
+        kind: Button
+        cls: LinearLayout
+        parent: recycler_view
+        in_list: true
+        position: [0.5, 0.377]
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      text: Display · Dark theme, font size, brightness
+      kind: Button
+      cls: LinearLayout
+      parent: recycler_view
+      in_list: true
+      position: [0.5, 0.377]
+  risk: read
+  note: trace step 2 (+1 scrolls)
+- id: tap_display
+  intent: Tap the Display settings entry
+  pre:
+  - {app_foreground: com.android.settings}
+  action:
+    tap:
+      text: Display · Dark theme, font size, brightness
+      kind: Button
+      cls: LinearLayout
+      parent: recycler_view
+      in_list: true
+      position: [0.5, 0.377]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: content_parent, kind: List}
+  risk: reversible
+  note: trace step 3
+- id: tap_brightness_level
+  intent: Tap the Brightness level setting
+  pre:
+  - {app_foreground: com.android.settings}
+  action:
+    tap:
+      text: Brightness level
+      kind: Button
+      cls: LinearLayout
+      parent: recycler_view
+      in_list: true
+      position: [0.5, 0.348]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 4
+- id: swipe_brightness_to_minimum
+  intent: Drag the brightness slider to the leftmost position to set the minimum brightness
+  pre:
+  - {app_foreground: com.android.systemui}
+  action:
+    swipe:
+      from:
+        resource_id: brightness_mirror_container
+        kind: Text
+        cls: FrameLayout
+        in_list: false
+        position: [0.5, 0.088]
+      vector: [-0.77, 0.0]
+      start: [0.8, 0.08]
+  post:
+  - {app_foreground: com.android.systemui}
+  risk: reversible
+  extract:
+    brightness:
+      near: Display brightness
+      locator: {resource_id: content, kind: Text}
+      segment: 1
+      expect_digits: true
+  note: trace step 5
+compiled_from:
+  task_id: aw-baseline-standard-1028-050646-87ae
+  goal: Turn brightness to the min value.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 05:45:30"
+  trace_steps_kept: [1, 2, 3, 4, 5]
+  trace_steps_dropped: 0
+  cost_usd: 0.0476

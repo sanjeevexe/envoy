@@ -1,0 +1,105 @@
+{
+ "task": "NotesIsTodo",
+ "seed": 2010807541,
+ "goal": "Is the note titled 'Research Notes' in the Joplin app marked as a todo item? Respond with either 'True' if it is a todo or 'False' if not.",
+ "score": 1.0,
+ "aw_run_time_s": 22.2,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 02:05:44.228873",
+ "envoy": {
+  "run_id": "aw-answers-seeds-1029-020532-b4be",
+  "goal": "Is the note titled 'Research Notes' in the Joplin app marked as a todo item? Respond with either 'True' if it is a todo or 'False' if not.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "answers-verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "joplin_check_note_todo",
+   "stage": "model confirmed",
+   "inputs": {
+    "note_title": "Research Notes"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "joplin_check_note_todo",
+     0.741
+    ],
+    [
+     "contacts_open_app",
+     0.247
+    ],
+    [
+     "markor_create_note_and_send_sms",
+     0.224
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "joplin_check_note_todo",
+  "version": 1,
+  "done": true,
+  "answer": "True",
+  "outputs": {
+   "is_todo": "True"
+  },
+  "steps_used": 4,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_joplin",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "find_open_note",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_note",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_actions_menu",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.001925,
+  "cost_at_standard_usd": 0.001925,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 6.25,
+  "routine_duration_s": 4.2,
+  "trace_dir": "data/runs/aw-answers-seeds-1029-020532-b4be",
+  "wall_s": 9.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

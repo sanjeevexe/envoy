@@ -1,0 +1,22 @@
+{
+ "name": "pro_expense_delete_expense",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-28 17:42:01",
+   "parent": null,
+   "changes": [
+    "compiled from aw-final-standard-1028-112602-e5f6"
+   ],
+   "verification": {
+    "source": "final-standard",
+    "source_seed": 3877511133
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.google.android.apps.nexuslauncher"
+}

@@ -1,0 +1,98 @@
+{
+ "task": "SimpleCalendarLocationOfEvent",
+ "seed": 4034703500,
+ "goal": "What is the location of my Family reunion event in Simple Calendar Pro? Answer with the location only.",
+ "score": 1.0,
+ "aw_run_time_s": 13.0,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 01:44:51.466315",
+ "envoy": {
+  "run_id": "aw-answers-verify-1029-014441-a7a2",
+  "goal": "What is the location of my Family reunion event in Simple Calendar Pro? Answer with the location only.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "answers-candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "simple_calendar_pro_get_event_location",
+   "stage": "model confirmed",
+   "inputs": {
+    "event_name": "Family reunion"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "simple_calendar_pro_get_event_location",
+     0.822
+    ],
+    [
+     "simple_calendar_pro_get_events",
+     0.565
+    ],
+    [
+     "simple_calendar_pro_get_event_titles",
+     0.305
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "simple_calendar_pro_get_event_location",
+  "version": 1,
+  "done": true,
+  "answer": "100 Main St Chicago",
+  "outputs": {
+   "location": "100 Main St Chicago"
+  },
+  "steps_used": 3,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_simple_calendar_pro",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "search_event",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_event_result",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.002423,
+  "cost_at_standard_usd": 0.002423,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 5.14,
+  "routine_duration_s": 2.49,
+  "trace_dir": "data/runs/aw-answers-verify-1029-014441-a7a2",
+  "wall_s": 7.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.5
+  }
+ }
+}

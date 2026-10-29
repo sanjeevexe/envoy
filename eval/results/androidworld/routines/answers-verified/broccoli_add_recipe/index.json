@@ -1,0 +1,22 @@
+{
+ "name": "broccoli_add_recipe",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-28 17:44:35",
+   "parent": null,
+   "changes": [
+    "compiled from aw-final-standard-1028-163643-439d"
+   ],
+   "verification": {
+    "source": "final-standard",
+    "source_seed": 374064309
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.google.android.apps.nexuslauncher"
+}

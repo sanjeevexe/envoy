@@ -1,0 +1,98 @@
+{
+ "task": "SimpleCalendarEventsOnDate",
+ "seed": 1569884782,
+ "goal": "What events do I have October 24 in Simple Calendar Pro? Answer with the titles only. If there are multiple titles, format your answer as a comma separated list.",
+ "score": 0.0,
+ "aw_run_time_s": 20.0,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-29 01:44:37.651873",
+ "envoy": {
+  "run_id": "aw-answers-verify-1029-014419-19b3",
+  "goal": "What events do I have October 24 in Simple Calendar Pro? Answer with the titles only. If there are multiple titles, format your answer as a comma separated list.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "answers-candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "simple_calendar_pro_get_events",
+   "stage": "model confirmed",
+   "inputs": {
+    "event_date": "October 24"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "simple_calendar_pro_get_events",
+     0.626
+    ],
+    [
+     "simple_calendar_pro_list_events",
+     0.526
+    ],
+    [
+     "simple_calendar_pro_get_event_location",
+     0.363
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "failed",
+  "result": "step tap_simple_calendar_pro_result: target not found: no match (best 0.81 < 0.80 or ambiguous, runner-up 0.79)",
+  "routine": "simple_calendar_pro_get_events",
+  "version": 1,
+  "done": false,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 2,
+  "rung": 1,
+  "steps": [
+   {
+    "id": "swipe_to_app_search",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "search_for_simple_calendar_pro",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_simple_calendar_pro_result",
+    "status": "failed",
+    "rung": 1,
+    "rungs": [
+     "wait and retry: waited 5 s"
+    ],
+    "repairs": 0,
+    "detail": "step tap_simple_calendar_pro_result: target not found: no match (best 0.81 < 0.80 or ambiguous, runner-up 0.79)"
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.006964,
+  "cost_at_standard_usd": 0.006964,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 13.39,
+  "routine_duration_s": 7.95,
+  "trace_dir": "data/runs/aw-answers-verify-1029-014419-19b3",
+  "wall_s": 16.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.5
+  }
+ }
+}

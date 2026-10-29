@@ -1,0 +1,117 @@
+{
+ "task": "NotesRecipeIngredientCount",
+ "seed": 4265237062,
+ "goal": "What quantity of spirulina do I need for the recipe 'Chicken Alfredo' in the Joplin app? Express your answer in the format <amount> <unit> where both the amount and unit exactly match the format in the recipe.",
+ "score": 1.0,
+ "aw_run_time_s": 24.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 01:42:47.370465",
+ "envoy": {
+  "run_id": "aw-answers-verify-1029-014230-7ecf",
+  "goal": "What quantity of spirulina do I need for the recipe 'Chicken Alfredo' in the Joplin app? Express your answer in the format <amount> <unit> where both the amount and unit exactly match the format in the recipe.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "answers-candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "joplin_lookup_ingredient_quantity",
+   "stage": "model confirmed",
+   "inputs": {
+    "recipe_name": "Chicken Alfredo",
+    "ingredient_name": "spirulina"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "joplin_lookup_ingredient_quantity",
+     0.583
+    ],
+    [
+     "simple_calendar_pro_get_event_location",
+     0.3
+    ],
+    [
+     "broccoli_add_recipe",
+     0.244
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "joplin_lookup_ingredient_quantity",
+  "version": 1,
+  "done": true,
+  "answer": "3/4 cup",
+  "outputs": {
+   "ingredient_quantity": "3/4 cup"
+  },
+  "steps_used": 5,
+  "rung": 2,
+  "steps": [
+   {
+    "id": "launch_joplin",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_search",
+    "status": "done",
+    "rung": 2,
+    "rungs": [
+     "relaxed match: after-checks failed but the next step (type_recipe_name) is ready"
+    ],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "type_recipe_name",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "find_open_recipe",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_recipe",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 1,
+  "model_calls": 1,
+  "cost_usd": 0.002443,
+  "cost_at_standard_usd": 0.002443,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 12.42,
+  "routine_duration_s": 9.98,
+  "trace_dir": "data/runs/aw-answers-verify-1029-014230-7ecf",
+  "wall_s": 15.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}

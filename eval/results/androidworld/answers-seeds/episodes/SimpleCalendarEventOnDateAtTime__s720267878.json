@@ -1,0 +1,59 @@
+{
+ "task": "SimpleCalendarEventOnDateAtTime",
+ "seed": 720267878,
+ "goal": "What is on my schedule for the Monday after next at 12pm in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 0.0,
+ "aw_run_time_s": 12.6,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-29 02:12:25.782716",
+ "envoy": {
+  "run_id": "aw-answers-seeds-1029-021215-8623",
+  "goal": "What is on my schedule for the Monday after next at 12pm in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "answers-verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "simple_calendar_pro_get_event_titles",
+   "stage": "model confirmed",
+   "inputs": {},
+   "missing": [
+    "schedule_date",
+    "schedule_time"
+   ],
+   "candidates": [
+    [
+     "simple_calendar_pro_get_event_location",
+     0.36
+    ],
+    [
+     "simple_calendar_pro_get_event_titles",
+     0.34
+    ],
+    [
+     "pro_expense_delete_expense",
+     0.24
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "needs_user",
+  "result": "model confirmed",
+  "done": false,
+  "answer": null,
+  "model_calls": 1,
+  "cost_usd": 0.00611,
+  "cost_at_standard_usd": 0.00611,
+  "duration_s": 4.98,
+  "wall_s": 7.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

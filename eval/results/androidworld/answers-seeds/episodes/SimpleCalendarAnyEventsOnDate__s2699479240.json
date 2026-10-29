@@ -1,0 +1,60 @@
+{
+ "task": "SimpleCalendarAnyEventsOnDate",
+ "seed": 2699479240,
+ "goal": "Do I have any events October 21 2023 in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 0.0,
+ "aw_run_time_s": 12.0,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-29 02:12:12.258770",
+ "envoy": {
+  "run_id": "aw-answers-seeds-1029-021201-11bc",
+  "goal": "Do I have any events October 21 2023 in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "answers-verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "simple_calendar_pro_get_event_titles",
+   "stage": "model confirmed",
+   "inputs": {
+    "schedule_date": "October 21 2023"
+   },
+   "missing": [
+    "schedule_time"
+   ],
+   "candidates": [
+    [
+     "simple_calendar_pro_get_event_location",
+     0.363
+    ],
+    [
+     "simple_calendar_pro_get_event_titles",
+     0.277
+    ],
+    [
+     "pro_expense_delete_expense",
+     0.242
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "needs_user",
+  "result": "model confirmed",
+  "done": false,
+  "answer": null,
+  "model_calls": 1,
+  "cost_usd": 0.007303,
+  "cost_at_standard_usd": 0.007303,
+  "duration_s": 5.98,
+  "wall_s": 8.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}

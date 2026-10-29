@@ -1,0 +1,22 @@
+{
+ "task": "SystemBrightnessMaxVerify",
+ "seed": 112283219,
+ "goal": "Turn brightness to the max value.",
+ "score": 0.0,
+ "aw_run_time_s": 6.7,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-29 02:19:50.139319",
+ "envoy": {
+  "run_id": "aw-answers-seeds-1029-021945-4d79",
+  "status": "error",
+  "result": "envoy exited 1: dry/backend/.venv/lib/python3.13/site-packages/openai/_base_client.py\", line 1480, in post\n    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))\n                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/private/tmp/claude-501/-Users-sanjeevvarma-Desktop-Envoy/ac29808f-24a8-4c21-a4dc-a5afb3cedcad/scratchpad/dry/backend/.venv/lib/python3.13/site-packages/openai/_base_client.py\", line 1253, in request\n    raise self._make_status_error_from_response(err.response) from None\nopenai.APIStatusError: Error code: 402 - Billing verification failed. Billing Issue. To use this API key, your team needs to resolve a billing issue first. To resolve this issue, go here: https://dev.meta.ai/billing/?team_id=1130835382809181\n",
+  "done": false,
+  "answer": null,
+  "wall_s": 3.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

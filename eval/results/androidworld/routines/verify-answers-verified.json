@@ -1,0 +1,246 @@
+{
+ "stage": "answers-verify",
+ "library": "answers-candidates",
+ "rows": [
+  {
+   "task": "AudioRecorderRecordAudioWithFileName",
+   "routine": "audio_recorder_record_clip",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "CameraTakePhoto",
+   "routine": "camera_take_photo",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "ClockStopWatchPausedVerify",
+   "routine": "clock_pause_stopwatch",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "ClockStopWatchRunning",
+   "routine": "clock_start_stopwatch",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "ExpenseDeleteSingle",
+   "routine": "pro_expense_delete_expense",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "MarkorCreateFolder",
+   "routine": "markor_create_folder",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "MarkorCreateNoteAndSms",
+   "routine": "markor_create_note_and_send_sms",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "MarkorEditNote",
+   "routine": "markor_edit_note",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "NotesIsTodo",
+   "routine": "joplin_check_note_todo",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "NotesMeetingAttendeeCount",
+   "routine": "joplin_count_meeting_attendees",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "NotesRecipeIngredientCount",
+   "routine": "joplin_lookup_ingredient_quantity",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "OpenAppTaskEval",
+   "routine": "contacts_open_app",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "RecipeAddSingleRecipe",
+   "routine": "broccoli_add_recipe",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipesWithConstraint",
+   "routine": null,
+   "verified": false,
+   "status": "no_routine",
+   "score": 0.0,
+   "detail": "model: no confident match (None)"
+  },
+  {
+   "task": "SimpleCalendarAnyEventsOnDate",
+   "routine": "simple_calendar_pro_get_events",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "step tap_simple_calendar_pro_result: target not found: no match (best 0.81 < 0.80 or ambiguous, runner-up 0.79)"
+  },
+  {
+   "task": "SimpleCalendarEventOnDateAtTime",
+   "routine": "simple_calendar_pro_get_event_titles",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SimpleCalendarEventsOnDate",
+   "routine": "simple_calendar_pro_get_events",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "step tap_simple_calendar_pro_result: target not found: no match (best 0.81 < 0.80 or ambiguous, runner-up 0.79)"
+  },
+  {
+   "task": "SimpleCalendarLocationOfEvent",
+   "routine": "simple_calendar_pro_get_event_location",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SimpleSmsReplyMostRecent",
+   "routine": "simple_sms_messenger_reply_most_recent_m",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SimpleSmsReply",
+   "routine": "simple_sms_messenger_reply_to_conversati",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SimpleSmsSendClipboardContent",
+   "routine": "simple_sms_messenger_send_clipboard_mess",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SimpleSmsSend",
+   "routine": "simple_sms_messenger_send_message",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SystemBluetoothTurnOffVerify",
+   "routine": null,
+   "verified": false,
+   "status": "no_routine",
+   "score": 0.0,
+   "detail": "model: no confident match (None)"
+  },
+  {
+   "task": "SystemBluetoothTurnOnVerify",
+   "routine": null,
+   "verified": false,
+   "status": "no_routine",
+   "score": 0.0,
+   "detail": "model: no confident match (None)"
+  },
+  {
+   "task": "SystemBrightnessMaxVerify",
+   "routine": "settings_set_brightness",
+   "verified": false,
+   "status": "done",
+   "score": 0.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SystemBrightnessMax",
+   "routine": "settings_set_brightness",
+   "verified": false,
+   "status": "done",
+   "score": 0.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SystemBrightnessMinVerify",
+   "routine": "settings_set_brightness_minimum_2",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SystemBrightnessMin",
+   "routine": "settings_set_brightness_minimum_2",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SystemWifiTurnOff",
+   "routine": "settings_turn_off_wifi_2",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "TurnOnWifiAndOpenApp",
+   "routine": "settings_turn_on_wifi_3",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  }
+ ]
+}

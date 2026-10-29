@@ -1,0 +1,129 @@
+{
+ "task": "NotesMeetingAttendeeCount",
+ "seed": 4155412042,
+ "goal": "How many attendees were present in the meeting titled 'Project Status Update' in the Joplin app? Express your answer as just a single number.",
+ "score": 1.0,
+ "aw_run_time_s": 24.9,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 02:07:13.287377",
+ "envoy": {
+  "run_id": "aw-answers-seeds-1029-020656-41c4",
+  "goal": "How many attendees were present in the meeting titled 'Project Status Update' in the Joplin app? Express your answer as just a single number.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "answers-verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "joplin_count_meeting_attendees",
+   "stage": "model confirmed",
+   "inputs": {
+    "meeting_title": "Project Status Update"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "joplin_count_meeting_attendees",
+     0.705
+    ],
+    [
+     "joplin_check_note_todo",
+     0.242
+    ],
+    [
+     "simple_sms_messenger_send_clipboard_mess",
+     0.242
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "joplin_count_meeting_attendees",
+  "version": 1,
+  "done": true,
+  "answer": "50",
+  "outputs": {
+   "attendee_count": "50"
+  },
+  "steps_used": 7,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_joplin",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_search",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_meeting_title",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "find_select_meeting_note",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "select_meeting_note",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "find_open_meeting_note",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_meeting_note",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.002857,
+  "cost_at_standard_usd": 0.002857,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 8.57,
+  "routine_duration_s": 6.3,
+  "trace_dir": "data/runs/aw-answers-seeds-1029-020656-41c4",
+  "wall_s": 11.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.6
+  }
+ }
+}

@@ -1,0 +1,144 @@
+routine: simple_sms_messenger_reply_most_recent_m
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Reply to the most recent text message in Simple SMS Messenger
+description: Opens Simple SMS Messenger, selects the most recent conversation at the top of the inbox, types the provided message, and sends it.
+patterns: [Reply to the most recent text message in Simple SMS Messenger, Reply to my latest SMS, Send a message to the most recent conversation]
+outputs: [sent_message_text]
+start: fresh_launch
+inputs:
+  message_text: {type: text, description: The message text to send as the reply., example: A quick brown fox}
+steps:
+- id: swipe_to_open_search
+  intent: Swipe on the Home screen to open Search
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action:
+    swipe:
+      from:
+        text: Home
+        kind: Text
+        cls: View
+        parent: drag_layer
+        in_list: false
+        position: [0.5, 0.514]
+      vector: [0.0, -0.4]
+      start: [0.5, 0.8]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: search_container_all_apps, text: Search, kind: Text}
+  - element_present: {resource_id: apps_list_view, kind: List}
+  risk: read
+  note: trace step 3
+- id: type_app_search
+  intent: Type "Simple" in the "Search apps, web and more" field to find Simple SMS Messenger
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  action:
+    type:
+      field:
+        resource_id: input
+        text: Search apps, web and more
+        hint: Search apps, web and more
+        kind: EditText
+        cls: EditText
+        parent: typeahead_input
+        in_list: false
+        position: [0.5, 0.095]
+      value: Simple
+  post:
+  - field_equals:
+      field: {resource_id: input, text: 'Search apps, web and more', kind: EditText}
+      value: Simple
+  risk: reversible
+  note: trace step 4
+- id: launch_simple_sms_messenger
+  intent: Launch Simple SMS Messenger
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  action: {launch: com.simplemobiletools.smsmessenger}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: main_coordinator, kind: List}
+  risk: read
+  note: trace step 5
+- id: open_most_recent_conversation
+  intent: Tap the most recent conversation at the top of the inbox list
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    tap:
+      resource_id: conversation_frame
+      kind: Button
+      cls: FrameLayout
+      parent: conversations_list
+      in_list: true
+      position: [0.5, 0.176]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: delete, text: Delete, kind: Button}
+  - element_present: {resource_id: dial_number, text: Dial number, kind: Button}
+  risk: reversible
+  note: trace step 6
+- id: type_reply_message
+  intent: "Type {{message_text}} in the \"Type a message…\" field"
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    type:
+      field:
+        resource_id: thread_type_message
+        text: Type a message…
+        hint: Type a message…
+        kind: EditText
+        cls: EditText
+        parent: message_holder
+        siblings: [Attachment, SMS]
+        in_list: false
+        position: [0.5, 0.948]
+      value: "{{message_text}}"
+  post:
+  - field_equals:
+      field: {resource_id: thread_type_message, text: Type a message…, kind: EditText}
+      value: "{{message_text}}"
+  risk: reversible
+  note: trace step 7
+- id: tap_send_sms
+  intent: Tap "SMS" to send the message
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    tap:
+      resource_id: thread_send_message
+      text: SMS
+      desc: OK
+      kind: Button
+      cls: Button
+      parent: message_holder
+      siblings: [Attachment, A quick brown fox]
+      in_list: false
+      position: [0.931, 0.876]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: thread_message_body
+      text: "{{message_text}}"
+      kind: Button
+  - element_present: {resource_id: thread_type_message, text: Type a message…, kind: EditText}
+  risk: irreversible
+  extract:
+    sent_message_text:
+      locator: {resource_id: thread_message_body, kind: Button}
+  note: trace step 8
+done:
+- text_visible: "{{message_text}}"
+compiled_from:
+  task_id: aw-baseline-standard-1028-045339-4949
+  goal: "Reply to the most recent text message using Simple SMS Messenger with message: A quick brown fox."
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 05:44:16"
+  trace_steps_kept: [3, 4, 5, 6, 7, 8]
+  trace_steps_dropped: 2
+  cost_usd: 0.0509

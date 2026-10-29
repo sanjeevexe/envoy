@@ -1,0 +1,56 @@
+{
+ "task": "OpenAppTaskEval",
+ "seed": 2349914223,
+ "goal": "Open the camera app. Clear any pop-ups that may appear by granting all permissions that are required.",
+ "score": 0.0,
+ "aw_run_time_s": 10.0,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-29 02:09:39.918541",
+ "envoy": {
+  "run_id": "aw-answers-seeds-1029-020931-9603",
+  "goal": "Open the camera app. Clear any pop-ups that may appear by granting all permissions that are required.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "answers-verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": null,
+   "stage": "model: no confident match (None)",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "contacts_open_app",
+     0.63
+    ],
+    [
+     "settings_turn_on_wifi_3",
+     0.25
+    ],
+    [
+     "markor_create_note_and_send_sms",
+     0.125
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "no_routine",
+  "result": "model: no confident match (None)",
+  "done": false,
+  "answer": null,
+  "model_calls": 1,
+  "cost_usd": 0.002963,
+  "cost_at_standard_usd": 0.002963,
+  "duration_s": 3.57,
+  "wall_s": 6.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

@@ -1,0 +1,121 @@
+routine: simple_sms_messenger_reply_to_conversati
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Reply to an SMS conversation in Simple SMS Messenger
+description: Open Simple SMS Messenger, open the conversation for the given phone number, type the given message, and send it.
+patterns: [Reply to a number with a message, Send a text reply in Simple SMS Messenger, Reply to this SMS conversation, Text a reply to a contact]
+start: fresh_launch
+inputs:
+  recipient_phone_number: {type: phone, description: Phone number of the conversation to reply to, example: '+18407874306'}
+  message_text: {type: text, description: Message text to send, example: Yoga class every Tuesday and Thursday at 6 PM.}
+steps:
+- id: launch_simple_sms_messenger
+  intent: Launch Simple SMS Messenger
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: tile_label, text: Flashlight, kind: Text}
+  action: {launch: com.simplemobiletools.smsmessenger}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: main_coordinator, kind: List}
+  risk: read
+  note: trace step 1
+- id: find_open_conversation
+  intent: "Scroll to {{recipient_phone_number}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: conversation_frame
+        text_has: "{{recipient_phone_number}}"
+        kind: Button
+        cls: FrameLayout
+        parent: conversations_list
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: conversation_frame
+      text_has: "{{recipient_phone_number}}"
+      kind: Button
+      cls: FrameLayout
+      parent: conversations_list
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: open_conversation
+  intent: "Tap the conversation with {{recipient_phone_number}}"
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    tap:
+      resource_id: conversation_frame
+      text_has: "{{recipient_phone_number}}"
+      kind: Button
+      cls: FrameLayout
+      parent: conversations_list
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: delete, text: Delete, kind: Button}
+  - element_present: {resource_id: dial_number, text: Dial number, kind: Button}
+  risk: reversible
+  note: trace step 2
+- id: type_message
+  intent: "Type {{message_text}} in the message field"
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    type:
+      field:
+        resource_id: thread_type_message
+        text: Type a message…
+        hint: Type a message…
+        kind: EditText
+        cls: EditText
+        parent: message_holder
+        siblings: [Attachment, SMS]
+        in_list: false
+        position: [0.5, 0.948]
+      value: "{{message_text}}"
+  post:
+  - field_equals:
+      field: {resource_id: thread_type_message, text: Type a message…, kind: EditText}
+      value: "{{message_text}}"
+  risk: reversible
+  note: trace step 3
+- id: send_message
+  intent: Tap SMS to send the message
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    tap:
+      resource_id: thread_send_message
+      text: SMS
+      desc: OK
+      kind: Button
+      cls: Button
+      parent: message_holder
+      siblings: [Attachment]
+      in_list: false
+      position: [0.931, 0.948]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: thread_message_body
+      text: "{{message_text}}"
+      kind: Button
+  - element_present: {resource_id: thread_type_message, text: Type a message…, kind: EditText}
+  risk: irreversible
+  note: trace step 4
+done:
+- text_visible: "{{message_text}}"
+compiled_from:
+  task_id: aw-final-standard-1028-170809-bcf9
+  goal: "Reply to +18407874306 with message: Yoga class every Tuesday and Thursday at 6 PM. in Simple SMS Messenger"
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:49:39"
+  trace_steps_kept: [1, 2, 3, 4]
+  trace_steps_dropped: 0
+  cost_usd: 0.0468

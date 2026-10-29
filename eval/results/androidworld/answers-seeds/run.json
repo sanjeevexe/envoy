@@ -1,0 +1,60 @@
+{
+ "sessions": [
+  {
+   "started": "2026-10-29T01:58:19",
+   "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+   "note": "routine-answers 1f1fc11 recompiled library, verified on seed 30: seeds 1-3, repair allowed, no agent fallback (harness androidworld 19c40cb)",
+   "androidworld_setup_rerun": false,
+   "app_snapshots": 24
+  }
+ ],
+ "stage": "answers-seeds",
+ "agent": "envoy",
+ "seed": 30,
+ "instances": [
+  1,
+  2,
+  3
+ ],
+ "split": null,
+ "tasks": [
+  "AudioRecorderRecordAudioWithFileName",
+  "CameraTakePhoto",
+  "ClockStopWatchPausedVerify",
+  "ClockStopWatchRunning",
+  "ExpenseDeleteSingle",
+  "MarkorCreateFolder",
+  "MarkorCreateNoteAndSms",
+  "MarkorEditNote",
+  "NotesIsTodo",
+  "NotesMeetingAttendeeCount",
+  "NotesRecipeIngredientCount",
+  "OpenAppTaskEval",
+  "RecipeAddSingleRecipe",
+  "RecipeDeleteMultipleRecipesWithConstraint",
+  "SimpleCalendarAnyEventsOnDate",
+  "SimpleCalendarEventOnDateAtTime",
+  "SimpleCalendarEventsOnDate",
+  "SimpleCalendarLocationOfEvent",
+  "SimpleSmsReply",
+  "SimpleSmsReplyMostRecent",
+  "SimpleSmsSend",
+  "SimpleSmsSendClipboardContent",
+  "SystemBluetoothTurnOffVerify",
+  "SystemBluetoothTurnOnVerify",
+  "SystemBrightnessMax",
+  "SystemBrightnessMaxVerify",
+  "SystemBrightnessMin",
+  "SystemBrightnessMinVerify",
+  "SystemWifiTurnOff",
+  "TurnOnWifiAndOpenApp"
+ ],
+ "androidworld_commit": "55ddaf5edc6f6c25673aed343907d5b9dca66f84",
+ "emulator": "AndroidWorldAvd: Pixel 6 1080x2400 420 dpi, API 33 google_apis arm64-v8a r17, 4 GB",
+ "envoy_config": {
+  "mode": "routine",
+  "library": "answers-verified",
+  "tier": "standard"
+ },
+ "tier": "standard"
+}

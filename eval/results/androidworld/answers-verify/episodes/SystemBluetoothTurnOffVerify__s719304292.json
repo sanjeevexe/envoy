@@ -1,0 +1,57 @@
+{
+ "task": "SystemBluetoothTurnOffVerify",
+ "seed": 719304292,
+ "goal": "Turn bluetooth off.",
+ "score": 0.0,
+ "aw_run_time_s": 8.2,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-29 01:47:04.684146",
+ "envoy": {
+  "run_id": "aw-answers-verify-1029-014658-f4f3",
+  "goal": "Turn bluetooth off.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "answers-candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": null,
+   "stage": "model: no confident match (None)",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "settings_turn_off_wifi_2",
+     0.667
+    ],
+    [
+     "settings_turn_on_wifi_3",
+     0.233
+    ],
+    [
+     "settings_set_brightness",
+     0.2
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "no_routine",
+  "result": "model: no confident match (None)",
+  "done": false,
+  "answer": null,
+  "model_calls": 1,
+  "cost_usd": 0.001987,
+  "cost_at_standard_usd": 0.001987,
+  "duration_s": 2.0,
+  "wall_s": 4.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}

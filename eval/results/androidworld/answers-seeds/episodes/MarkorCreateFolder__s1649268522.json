@@ -1,0 +1,105 @@
+{
+ "task": "MarkorCreateFolder",
+ "seed": 1649268522,
+ "goal": "Create a new folder in Markor named folder_20261029_015819.",
+ "score": 1.0,
+ "aw_run_time_s": 12.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 02:02:11.597991",
+ "envoy": {
+  "run_id": "aw-answers-seeds-1029-020201-8398",
+  "goal": "Create a new folder in Markor named folder_20261029_015819.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "answers-verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "markor_create_folder",
+   "stage": "model confirmed",
+   "inputs": {
+    "folder_name": "folder_20261029_015819"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "markor_create_folder",
+     0.92
+    ],
+    [
+     "markor_create_note_and_send_sms",
+     0.44
+    ],
+    [
+     "broccoli_add_recipe",
+     0.38
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "markor_create_folder",
+  "version": 1,
+  "done": true,
+  "answer": "..",
+  "outputs": {
+   "created_folder_name": ".."
+  },
+  "steps_used": 4,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "open_markor",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_create_new_item",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_folder_name",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_folder_button",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.001179,
+  "cost_at_standard_usd": 0.001179,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 4.83,
+  "routine_duration_s": 3.1,
+  "trace_dir": "data/runs/aw-answers-seeds-1029-020201-8398",
+  "wall_s": 7.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

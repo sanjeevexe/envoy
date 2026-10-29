@@ -1,0 +1,291 @@
+routine: markor_create_note_and_send_sms
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Create a note in Markor and share its content via SMS
+description: Create a new text note in Markor with a specified name and content, save it, then send the note's entire content by SMS to a specified
+  phone number using Simple SMS Messenger.
+patterns: [Create a note and text its contents to a phone number, Make a new note in Markor and SMS it to someone, Create a text file and share
+    it by SMS, Write a note and send it as a text message]
+start: fresh_launch
+inputs:
+  note_name: {type: text, description: 'The base file name for the new note, without its extension.', example: fair_ant_XOdi}
+  file_extension: {type: text, description: The file extension for the new note., example: .txt}
+  note_text: {type: text, description: The entire text content to place in the note and send by SMS., example: Actions speak louder than words.}
+  recipient_phone_number: {type: phone, description: The phone number that should receive the SMS., example: '+13192815309'}
+steps:
+- id: launch_markor
+  intent: Launch Markor to create a new note
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: net.gsantner.markor}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: nav_notebook, text: Files, kind: Text}
+  - element_present: {resource_id: navigation_bar_item_labels_group, text: Files, kind: Text}
+  risk: read
+  note: trace step 1
+- id: tap_create_new_file
+  intent: Tap the button to create a new file or folder
+  pre:
+  - {app_foreground: net.gsantner.markor}
+  action:
+    tap:
+      resource_id: fab_add_new_item
+      text: Create a new file or folder
+      kind: Button
+      cls: ImageButton
+      parent: main_content
+      in_list: false
+      position: [0.893, 0.864]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: new_file_dialog__name, text: my_note, kind: EditText}
+  - element_present: {resource_id: new_file_dialog__ext, text: .md, kind: EditText}
+  risk: reversible
+  note: trace step 2
+- id: enter_note_name
+  intent: "Type {{note_name}} as the new file name"
+  pre:
+  - {app_foreground: net.gsantner.markor}
+  action:
+    type:
+      field:
+        resource_id: new_file_dialog__name
+        text: my_note
+        hint: my_note
+        kind: EditText
+        cls: EditText
+        siblings: [.md]
+        in_list: false
+        position: [0.346, 0.365]
+      value: "{{note_name}}"
+  post:
+  - field_equals:
+      field: {resource_id: new_file_dialog__name, text: my_note, kind: EditText}
+      value: "{{note_name}}"
+  risk: reversible
+  note: trace step 3
+- id: set_file_extension
+  intent: "Enter {{file_extension}} as the file extension"
+  pre:
+  - {app_foreground: net.gsantner.markor}
+  action:
+    type:
+      field:
+        resource_id: new_file_dialog__ext
+        text: .md
+        hint: .md
+        kind: EditText
+        cls: EditText
+        siblings: [fair_ant_XOdi]
+        in_list: false
+        position: [0.729, 0.365]
+      value: "{{file_extension}}"
+  post:
+  - field_equals:
+      field: {resource_id: new_file_dialog__ext, text: .md, kind: EditText}
+      value: "{{file_extension}}"
+  risk: reversible
+  note: trace step 4
+- id: confirm_file_creation
+  intent: Tap OK to create the file
+  pre:
+  - {app_foreground: net.gsantner.markor}
+  action:
+    tap:
+      resource_id: button1
+      text: OK
+      kind: Button
+      cls: Button
+      siblings: [FOLDER, CANCEL]
+      in_list: false
+      position: [0.854, 0.598]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: toolbar
+      text: "{{note_name}}"
+      kind: Button
+  - element_present: {resource_id: action_undo, text: Undo, kind: Button}
+  risk: reversible
+  note: trace step 5
+- id: enter_note_content
+  intent: "Type {{note_text}} into the note editor"
+  pre:
+  - {app_foreground: net.gsantner.markor}
+  action:
+    type:
+      field:
+        resource_id: document__fragment__edit__highlighting_editor
+        text: ''
+        kind: EditText
+        cls: EditText
+        parent: document__fragment__edit__content_editor__scrolling_parent
+        in_list: false
+        position: [0.5, 0.483]
+      value: "{{note_text}}"
+  post:
+  - field_equals:
+      field: {resource_id: document__fragment__edit__highlighting_editor, kind: EditText}
+      value: "{{note_text}}"
+  risk: reversible
+  note: trace step 6
+- id: save_note
+  intent: Tap Save to save the note
+  pre:
+  - {app_foreground: net.gsantner.markor}
+  action:
+    tap:
+      resource_id: action_save
+      text: Save
+      kind: Button
+      cls: TextView
+      siblings: [Undo, Redo, View mode]
+      in_list: false
+      position: [0.757, 0.084]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 7
+- id: return_to_file_list
+  intent: Go back to the file list after saving the note
+  pre:
+  - {app_foreground: net.gsantner.markor}
+  action: {back: true}
+  post:
+  - {screen_changed: true}
+  risk: read
+  note: trace step 8
+- id: launch_sms_messenger
+  intent: Launch Simple SMS Messenger to share the note content
+  pre:
+  - {app_foreground: net.gsantner.markor}
+  action: {launch: com.simplemobiletools.smsmessenger}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: main_coordinator, kind: List}
+  risk: read
+  note: trace step 9
+- id: start_new_conversation
+  intent: Tap the option to start a new conversation
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    tap:
+      resource_id: no_conversations_placeholder_*
+      text: Start a conversation
+      kind: Button
+      cls: TextView
+      parent: main_holder
+      siblings: [No stored conversations have been found]
+      in_list: true
+      position: [0.5, 0.199]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: no_contacts_placeholder, text: No contacts found, kind: Text}
+  - element_present: {resource_id: new_conversation_address, text: Add Contact or Number…, kind: EditText}
+  risk: reversible
+  note: trace step 10
+- id: enter_recipient_number
+  intent: "Type {{recipient_phone_number}} as the conversation recipient"
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    type:
+      field:
+        resource_id: new_conversation_address
+        text: Add Contact or Number…
+        hint: Add Contact or Number…
+        kind: EditText
+        cls: EditText
+        parent: new_conversation_holder
+        siblings: [No contacts found]
+        in_list: false
+        position: [0.5, 0.15]
+      value: "{{recipient_phone_number}}"
+  post:
+  - field_equals:
+      field: {resource_id: new_conversation_address, text: Add Contact or Number…, kind: EditText}
+      value: "{{recipient_phone_number}}"
+  risk: reversible
+  note: trace step 11
+- id: confirm_recipient
+  intent: Confirm the recipient to open the conversation
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    tap:
+      resource_id: new_conversation_confirm
+      text: ''
+      kind: Button
+      cls: ImageView
+      parent: new_conversation_holder
+      siblings: [No contacts found]
+      in_list: false
+      position: [0.942, 0.15]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: dial_number, text: Dial number, kind: Button}
+  - element_present: {resource_id: manage_people, text: Add Person, kind: Button}
+  risk: irreversible
+  note: trace step 12
+- id: enter_sms_message
+  intent: "Type {{note_text}} into the SMS message field"
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    type:
+      field:
+        resource_id: thread_type_message
+        text: Type a message…
+        hint: Type a message…
+        kind: EditText
+        cls: EditText
+        parent: message_holder
+        siblings: [Attachment, SMS]
+        in_list: false
+        position: [0.5, 0.876]
+      value: "{{note_text}}"
+  post:
+  - field_equals:
+      field: {resource_id: thread_type_message, text: Type a message…, kind: EditText}
+      value: "{{note_text}}"
+  risk: reversible
+  note: trace step 13
+- id: send_sms
+  intent: Tap SMS to send the message
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    tap:
+      resource_id: thread_send_message
+      text: SMS
+      desc: OK
+      kind: Button
+      cls: Button
+      parent: message_holder
+      siblings: [Attachment, Actions speak louder than words.]
+      in_list: false
+      position: [0.931, 0.876]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: thread_message_body
+      text: "{{note_text}}"
+      kind: Button
+  - element_present: {resource_id: delete, text: Delete, kind: Button}
+  risk: irreversible
+  note: trace step 14
+done:
+- text_visible: "{{note_text}}"
+compiled_from:
+  task_id: aw-final-standard-1028-113141-b3df
+  goal: "Create a new note in Markor named fair_ant_XOdi.txt with the following text: Actions speak louder than words.. Share the entire content\
+    \ of the note with the phone number +13192815309 via SMS using Simple SMS Messenger"
+  compiler: cached
+  compiled_at: "2026-10-29 01:25:02"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+  trace_steps_dropped: 1
+  cost_usd: 0.0

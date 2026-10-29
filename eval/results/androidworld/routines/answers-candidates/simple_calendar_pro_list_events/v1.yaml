@@ -1,0 +1,52 @@
+routine: simple_calendar_pro_list_events
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: List event titles for a date in Simple Calendar Pro
+description: Opens Simple Calendar Pro, selects the requested date, and returns the titles of any events scheduled on that date.
+patterns: [Do I have any events on this date, What events do I have on a date, List my events for a day]
+outputs: [event_titles]
+start: fresh_launch
+inputs:
+  event_date: {type: date, description: The date to check for events, example: October 28}
+steps:
+- id: launch_simple_calendar_pro
+  intent: Launch Simple Calendar Pro
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.simplemobiletools.calendar.pro}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: top_toolbar_search_icon, kind: Button}
+  - element_present: {resource_id: top_toolbar_search, text: Search, kind: EditText}
+  risk: read
+  note: trace step 2
+- id: open_event_date
+  intent: "Open {{event_date}} to view its events"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      visual: "date cell {{event_date:day}} in the {{event_date:month}} month grid"
+      region: [0.855, 0.72, 0.999, 0.835]
+      density: 420
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: go_to_today, text: Go to today, kind: Button}
+  risk: reversible
+  extract:
+    event_titles:
+      locator: {resource_id: event_item_holder, kind: Button}
+      segment: 0
+      every: true
+  note: trace step 5
+compiled_from:
+  task_id: aw-baseline-standard-1028-044245-e548
+  goal: Do I have any events October 28 in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer
+    in a comma separated list.
+  compiler: cached
+  compiled_at: "2026-10-29 01:25:02"
+  trace_steps_kept: [2, 5]
+  trace_steps_dropped: 3
+  cost_usd: 0.0

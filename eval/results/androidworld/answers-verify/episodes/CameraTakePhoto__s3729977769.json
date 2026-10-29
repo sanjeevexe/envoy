@@ -1,0 +1,86 @@
+{
+ "task": "CameraTakePhoto",
+ "seed": 3729977769,
+ "goal": "Take one photo.",
+ "score": 1.0,
+ "aw_run_time_s": 11.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 01:39:54.036343",
+ "envoy": {
+  "run_id": "aw-answers-verify-1029-013944-671d",
+  "goal": "Take one photo.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "answers-candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "camera_take_photo",
+   "stage": "model confirmed",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "camera_take_photo",
+     1.0
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "camera_take_photo",
+  "version": 1,
+  "done": true,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 3,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_camera",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_shutter",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_photo_thumbnail",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.001377,
+  "cost_at_standard_usd": 0.001377,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 5.08,
+  "routine_duration_s": 3.15,
+  "trace_dir": "data/runs/aw-answers-verify-1029-013944-671d",
+  "wall_s": 7.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

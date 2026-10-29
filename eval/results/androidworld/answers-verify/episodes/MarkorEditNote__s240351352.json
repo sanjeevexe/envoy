@@ -1,0 +1,139 @@
+{
+ "task": "MarkorEditNote",
+ "seed": 240351352,
+ "goal": "Edit note_SiFbv.txt in Markor. Add to the top of the note Hello, World!",
+ "score": 1.0,
+ "aw_run_time_s": 14.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 01:41:40.950962",
+ "envoy": {
+  "run_id": "aw-answers-verify-1029-014127-f5d4",
+  "goal": "Edit note_SiFbv.txt in Markor. Add to the top of the note Hello, World!",
+  "max_steps": 12,
+  "config": {
+   "mode": "routine",
+   "library": "answers-candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "markor_edit_note",
+   "stage": "model confirmed",
+   "inputs": {
+    "note_file_name": "note_SiFbv.txt",
+    "text_to_add": "Hello, World!"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "markor_edit_note",
+     0.822
+    ],
+    [
+     "markor_create_folder",
+     0.344
+    ],
+    [
+     "markor_create_note_and_send_sms",
+     0.289
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "markor_edit_note",
+  "version": 1,
+  "done": true,
+  "answer": "Hello, World! Don't forget to water the plants while I'm away.",
+  "outputs": {
+   "updated_note_content": "Hello, World! Don't forget to water the plants while I'm away."
+  },
+  "steps_used": 8,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_markor",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "find_open_note_file",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_note_file",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "prepend_text_to_note",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "dismiss_keyboard",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "return_to_file_list",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "find_reopen_note_file",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "reopen_note_file",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.002504,
+  "cost_at_standard_usd": 0.002504,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 7.5,
+  "routine_duration_s": 4.89,
+  "trace_dir": "data/runs/aw-answers-verify-1029-014127-f5d4",
+  "wall_s": 10.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.6
+  }
+ }
+}
