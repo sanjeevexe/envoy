@@ -7,6 +7,9 @@
     "build": "NEXT_TELEMETRY_DISABLED=1 next build"
   },
   "dependencies": {
+    "@fontsource-variable/fraunces": "^5.3.0",
+    "@fontsource-variable/manrope": "^5.3.0",
+    "@phosphor-icons/react": "^2.1.10",
     "cytoscape": "^3.34.4",
     "next": "16.4.3",
     "react": "19.3.0",

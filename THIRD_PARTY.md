@@ -32,6 +32,10 @@ Licenses for Python packages were read from the installed package metadata (Oct 
 | [React](https://github.com/facebook/react), React DOM | 19.3.0 | MIT | Web app UI |
 | [Tailwind CSS](https://github.com/tailwindlabs/tailwindcss) (with `@tailwindcss/turbopack`) | 4.3.3 | MIT | Web app styling |
 | [Cytoscape.js](https://github.com/cytoscape/cytoscape.js) | 3.34.4 | MIT | Memory graph view |
+| [Phosphor Icons for React](https://github.com/phosphor-icons/react) (`@phosphor-icons/react`) | 2.1.10 | MIT | The web app's icons (regular weight; fill for the active tab), from the Sage redesign |
+| [Fraunces](https://github.com/undercasetype/Fraunces) by Undercase Type, self-hosted with [Fontsource](https://github.com/fontsource/fontsource) (`@fontsource-variable/fraunces`) | 5.3.0 | OFL-1.1 (font), MIT (package) | Envoy's voice in the web app: the greeting, the briefing, its replies, sheet titles |
+| [Manrope](https://github.com/sharanda/manrope) by Mikhail Sharanda, self-hosted with Fontsource (`@fontsource-variable/manrope`) | 5.3.0 | OFL-1.1 (font), MIT (package) | The web app's text |
+| [sharp](https://github.com/lovell/sharp) (already in `web/node_modules` through Next.js) | 0.35.5 | Apache-2.0 | Renders the app icons from `web/public/icons/mark.svg` (`scripts/make_icons.mjs`, build time) |
 | [TypeScript](https://github.com/microsoft/TypeScript) | 5.9.3 | Apache-2.0 | Web app language (build time) |
 | [scrcpy](https://github.com/Genymobile/scrcpy) (its server, `scrcpy-server`, from the Homebrew install) | 5.0.1 | Apache-2.0 | Phase 6: the real phone's screen and input. Envoy pushes the unmodified server to the phone and speaks its protocol itself (`backend/devices/scrcpy.py`: H.264 video socket, binary control messages); Phase 0's secure-screen test |
 | [PyAV](https://github.com/PyAV-Org/PyAV) | 19.0.2 | BSD-3-Clause | Phase 6: decodes the phone's H.264 stream on the Mac (its wheels bundle FFmpeg's libraries, LGPL-2.1+, unmodified) |

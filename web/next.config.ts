@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   output: "export",
   trailingSlash: true,
   images: { unoptimized: true },
+  devIndicators: false, // keeps `next dev` screenshots (mock mode) clean
   turbopack: {
     rules: {
       "*.css": {
