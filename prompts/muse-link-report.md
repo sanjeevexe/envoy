@@ -27,13 +27,14 @@ Session muse-link, Oct 29. Details and the user's Muse checklist: `docs/muse-lin
 - The Muse sitting (Oct 29, 1:24–2:12 pm, the iPhone app): **E1 works** (a Muse scheduled task called `phone_updates` every ~10 min with the cursor and told you, unprompted, about the new outbox offer); **E5**: `capabilities: {}`, so no push; **E4** not possible for a custom connector (Muse draws its own generic icon and doesn't use server icons); `send_to_phone` to the emulator and `create_trigger` (made switched off) worked from Muse; asked to accept offers, Muse said there is no accept tool. Details in `docs/muse-link.md`, evidence in `eval/results/muse-link/`.
 - Muse for Mac (2:43–2:54 pm): **E2 works** (the same Envoy connector; `phone_updates` and `send_to_phone` from the Mac); **E3 works** (it moved the newest video into the outbox and wrote a valid sidecar, about 90 s with two permission prompts). E3 found that the watcher's 6 s wait for a sidecar was too short (it came after 23 s); fixed on `muse-link-late-sidecar`.
 
+- Pixel 5, Android 13 (7:56–7:59 pm): **works.** `send_to_phone` with `device="phone"` raised "Put pixel-check.mp4 on your Pixel 5?"; after your Yes the clip was in the gallery about 6 s later (`is_pending=0`, date taken = the push time). Cleaned up; `eval/results/muse-link/pixel5_push.json`. Before it, `567eb1b`: when the watcher had already asked about the emulator, Muse asking for the real phone withdraws that question and asks about the Pixel instead (579 tests).
+
 ## Spend
 
 $0. No Meta API calls.
 
 ## Not done or not checked yet
 
-- The push on the Pixel 5 (Android 13): it wasn't available today, so it waits for the next sitting.
 - `heads_up` and the offer lines run against preflight's real `check` in the full suite, but the tests assert their content only with stand-ins.
 - `phone_updates` items are reported again if a finished task is updated later (its `updated_at` moves). Rare; noted, not fixed.
 - Re-dating covers MP4/MOV/M4V and JPEG. PNG, WebP and HEIC keep their own dates (PNG and WebP rarely carry one).

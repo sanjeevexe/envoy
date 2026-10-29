@@ -1,0 +1,13 @@
+{
+  "device": "Pixel 5 (redfin), Android 13, USB",
+  "date": "2026-10-29",
+  "from": "send_to_phone over MCP on a local test copy of main 714a974 (:8742), device=\"phone\"",
+  "file": "pixel-check.mp4 (1,706,812 bytes, clip metadata dated 2026-01-15)",
+  "steps": [
+    {"time": "19:56:11", "what": "send_to_phone returned waiting_for_user with offer \"Put pixel-check.mp4 on your Pixel 5?\" (device phone-09031FDD4000C6)"},
+    {"time": "~19:58:20", "what": "the user tapped Yes in Envoy's web app"},
+    {"time": "19:58:26", "what": "phone_updates: \"pixel-check.mp4\" is in the gallery of the Pixel 5 (Movies/Envoy/pixel-check.mp4)"}
+  ],
+  "media_store": {"_display_name": "pixel-check.mp4", "relative_path": "Movies/Envoy/", "is_pending": 0, "datetaken": 1793318305000, "datetaken_local": "19:58:25", "date_added": 1793318304, "_size": 1706812},
+  "cleanup": "row and file removed after the check"
+}
