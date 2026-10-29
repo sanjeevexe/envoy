@@ -284,3 +284,19 @@ def test_an_irreversible_step_must_be_for_the_goals_own_item_and_kept_text_comes
     assert "Copy it word for word from the screen; never add what the goal says." in STEP_INSTRUCTIONS
     assert "names the goal's own item (the flight, person, item or amount the goal names), not only a number or code" in STEP_INSTRUCTIONS
     assert "find out on the phone first: go back to the item, or the list it came from. Don't ask the user." in STEP_INSTRUCTIONS
+
+
+def test_an_answer_is_in_the_phones_words_and_an_empty_screen_answers_too():
+    # Phase 7's real-app pass on aw-merge (Oct 29). "How many contacts do I have?" on a screen saying there are none: 25
+    # steps of switching list filters (main answered at once). DoorDash's saved address: 9 steps of looking, then an answer
+    # with ", USA" that no screen showed. "Any events today?": the answer carried TODAY's date. The question rule had said
+    # "taken from what you read on the phone"; it now asks for the phone's words, adds nothing they don't show, and takes a
+    # screen that says there is none as an answer. The plan's info check stays lenient on purpose: a check requiring every
+    # word on screen would reject 12 of AndroidWorld's 22 correct final-standard episodes whose plan check is "info".
+    from models.prompts import STEP_INSTRUCTIONS
+    done = next(l for l in STEP_INSTRUCTIONS.splitlines() if l.startswith("- done(result)"))
+    assert "in the words the phone shows (SCREEN, or REMEMBERED)" in done
+    assert "Add nothing the phone doesn't show: no date from TODAY, no detail from the goal or from what you know." in done
+    assert "A screen that says there is none" in done and "don't switch filters or settings" in done
+    assert "in the format the goal asks for" in done and "a count or a total you work out from them is fine" in done
+    assert "taken from what you read on the phone" not in done
