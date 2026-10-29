@@ -1,0 +1,2032 @@
+{
+ "before": "routines-seeds (verified 22, cdd130e)",
+ "after": "answers-seeds (answers-verified, 1f1fc11 + harness 19c40cb)",
+ "paired": {
+  "before": {
+   "episodes": 69,
+   "success": 55.0,
+   "median_calls": 1,
+   "median_cost_std": 0.002066,
+   "median_s": 8.27,
+   "total_cost_std": 0.1562
+  },
+  "after": {
+   "episodes": 69,
+   "success": 54.0,
+   "median_calls": 1,
+   "median_cost_std": 0.002105,
+   "median_s": 6.38,
+   "total_cost_std": 0.1616
+  },
+  "agent": {
+   "episodes": 69,
+   "success": 63.0,
+   "median_calls": 6,
+   "median_cost_std": 0.012249,
+   "median_s": 18.97,
+   "total_cost_std": 1.2413
+  }
+ },
+ "after_all": {
+  "episodes": 90,
+  "success": 60.0,
+  "median_calls": 1.0,
+  "median_cost_std": 0.0022890000000000002,
+  "median_s": 6.32,
+  "total_cost_std": 0.2756
+ },
+ "tasks": [
+  {
+   "task": "AudioRecorderRecordAudioWithFileName",
+   "seeds": [
+    92349091,
+    1099073067,
+    3061395711
+   ],
+   "before": 3.0,
+   "before_n": 3,
+   "after": 3.0,
+   "after_n": 3,
+   "agent": 3.0,
+   "agent_n": 3,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "audio_recorder_record_clip",
+   "after_runs": [
+    {
+     "seed": 92349091,
+     "score": 1.0,
+     "status": "done",
+     "routine": "audio_recorder_record_clip",
+     "inputs": {
+      "recording_file_name": "discussion_2023_06_03.m4a"
+     },
+     "answer": "discussion_2023_06_03.m4a, 00:02, 0.03 Mb, M4a, 44.1kHz",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.00241,
+     "s": 9.4
+    },
+    {
+     "seed": 1099073067,
+     "score": 1.0,
+     "status": "done",
+     "routine": "audio_recorder_record_clip",
+     "inputs": {
+      "recording_file_name": "lecture_copy.m4a"
+     },
+     "answer": "lecture_copy.m4a, 00:02, 0.04 Mb, M4a, 44.1kHz",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.002326,
+     "s": 9.88
+    },
+    {
+     "seed": 3061395711,
+     "score": 1.0,
+     "status": "done",
+     "routine": "audio_recorder_record_clip",
+     "inputs": {
+      "recording_file_name": "talk_edited.m4a"
+     },
+     "answer": "talk_edited.m4a, 00:02, 0.03 Mb, M4a, 44.1kHz",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001948,
+     "s": 9.51
+    }
+   ],
+   "before_runs": [
+    "done:audio_recorder_record_clip",
+    "done:audio_recorder_record_clip",
+    "done:audio_recorder_record_clip"
+   ]
+  },
+  {
+   "task": "CameraTakePhoto",
+   "seeds": [
+    332350226,
+    2463937979,
+    4046708894
+   ],
+   "before": 3.0,
+   "before_n": 3,
+   "after": 3.0,
+   "after_n": 3,
+   "agent": 3.0,
+   "agent_n": 3,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "camera_take_photo",
+   "after_runs": [
+    {
+     "seed": 332350226,
+     "score": 1.0,
+     "status": "done",
+     "routine": "camera_take_photo",
+     "inputs": {},
+     "answer": null,
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001449,
+     "s": 5.79
+    },
+    {
+     "seed": 2463937979,
+     "score": 1.0,
+     "status": "done",
+     "routine": "camera_take_photo",
+     "inputs": {},
+     "answer": null,
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001134,
+     "s": 5.67
+    },
+    {
+     "seed": 4046708894,
+     "score": 1.0,
+     "status": "done",
+     "routine": "camera_take_photo",
+     "inputs": {},
+     "answer": null,
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001292,
+     "s": 5.16
+    }
+   ],
+   "before_runs": [
+    "done:camera_take_photo",
+    "done:camera_take_photo",
+    "done:camera_take_photo"
+   ]
+  },
+  {
+   "task": "ClockStopWatchPausedVerify",
+   "seeds": [
+    318062807,
+    629279813,
+    1833061731
+   ],
+   "before": 3.0,
+   "before_n": 3,
+   "after": 3.0,
+   "after_n": 3,
+   "agent": 3.0,
+   "agent_n": 3,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "clock_pause_stopwatch",
+   "after_runs": [
+    {
+     "seed": 318062807,
+     "score": 1.0,
+     "status": "done",
+     "routine": "clock_pause_stopwatch",
+     "inputs": {},
+     "answer": "00",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001143,
+     "s": 3.07
+    },
+    {
+     "seed": 629279813,
+     "score": 1.0,
+     "status": "done",
+     "routine": "clock_pause_stopwatch",
+     "inputs": {},
+     "answer": "00",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001573,
+     "s": 4.08
+    },
+    {
+     "seed": 1833061731,
+     "score": 1.0,
+     "status": "done",
+     "routine": "clock_pause_stopwatch",
+     "inputs": {},
+     "answer": "00",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001208,
+     "s": 3.89
+    }
+   ],
+   "before_runs": [
+    "done:clock_pause_stopwatch",
+    "done:clock_pause_stopwatch",
+    "done:clock_pause_stopwatch"
+   ]
+  },
+  {
+   "task": "ClockStopWatchRunning",
+   "seeds": [
+    982386346,
+    2244129732,
+    2304307552
+   ],
+   "before": 3.0,
+   "before_n": 3,
+   "after": 3.0,
+   "after_n": 3,
+   "agent": 3.0,
+   "agent_n": 3,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "clock_start_stopwatch",
+   "after_runs": [
+    {
+     "seed": 982386346,
+     "score": 1.0,
+     "status": "done",
+     "routine": "clock_start_stopwatch",
+     "inputs": {},
+     "answer": null,
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001237,
+     "s": 4.28
+    },
+    {
+     "seed": 2244129732,
+     "score": 1.0,
+     "status": "done",
+     "routine": "clock_start_stopwatch",
+     "inputs": {},
+     "answer": null,
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001092,
+     "s": 4.26
+    },
+    {
+     "seed": 2304307552,
+     "score": 1.0,
+     "status": "done",
+     "routine": "clock_start_stopwatch",
+     "inputs": {},
+     "answer": null,
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001616,
+     "s": 4.56
+    }
+   ],
+   "before_runs": [
+    "done:clock_start_stopwatch",
+    "done:clock_start_stopwatch",
+    "done:clock_start_stopwatch"
+   ]
+  },
+  {
+   "task": "ExpenseDeleteSingle",
+   "seeds": [
+    2261660811,
+    3230604870,
+    4059515663
+   ],
+   "before": 3.0,
+   "before_n": 3,
+   "after": 3.0,
+   "after_n": 3,
+   "agent": 1.0,
+   "agent_n": 3,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "pro_expense_delete_expense",
+   "after_runs": [
+    {
+     "seed": 2261660811,
+     "score": 1.0,
+     "status": "done",
+     "routine": "pro_expense_delete_expense",
+     "inputs": {
+      "expense_name": "Stationery"
+     },
+     "answer": null,
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.00182,
+     "s": 5.91
+    },
+    {
+     "seed": 3230604870,
+     "score": 1.0,
+     "status": "done",
+     "routine": "pro_expense_delete_expense",
+     "inputs": {
+      "expense_name": "Consulting Fees"
+     },
+     "answer": null,
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001616,
+     "s": 5.99
+    },
+    {
+     "seed": 4059515663,
+     "score": 1.0,
+     "status": "done",
+     "routine": "pro_expense_delete_expense",
+     "inputs": {
+      "expense_name": "Cleaning Services"
+     },
+     "answer": null,
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.002576,
+     "s": 6.31
+    }
+   ],
+   "before_runs": [
+    "done:pro_expense_delete_expense",
+    "done:pro_expense_delete_expense",
+    "done:pro_expense_delete_expense"
+   ]
+  },
+  {
+   "task": "MarkorCreateFolder",
+   "seeds": [
+    1649268522,
+    2214371470,
+    2384214437
+   ],
+   "before": 3.0,
+   "before_n": 3,
+   "after": 3.0,
+   "after_n": 3,
+   "agent": 3.0,
+   "agent_n": 3,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "markor_create_folder",
+   "after_runs": [
+    {
+     "seed": 1649268522,
+     "score": 1.0,
+     "status": "done",
+     "routine": "markor_create_folder",
+     "inputs": {
+      "folder_name": "folder_20261029_015819"
+     },
+     "answer": "..",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001179,
+     "s": 4.83
+    },
+    {
+     "seed": 2214371470,
+     "score": 1.0,
+     "status": "done",
+     "routine": "markor_create_folder",
+     "inputs": {
+      "folder_name": "folder_20261029_015819"
+     },
+     "answer": "..",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.002165,
+     "s": 4.84
+    },
+    {
+     "seed": 2384214437,
+     "score": 1.0,
+     "status": "done",
+     "routine": "markor_create_folder",
+     "inputs": {
+      "folder_name": "folder_20261029_015819"
+     },
+     "answer": ".. /storage/emulated/0/Documents",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.002207,
+     "s": 5.62
+    }
+   ],
+   "before_runs": [
+    "done:markor_create_folder",
+    "done:markor_create_folder",
+    "done:markor_create_folder"
+   ]
+  },
+  {
+   "task": "MarkorCreateNoteAndSms",
+   "seeds": [
+    980236806,
+    3411394365,
+    3564688147
+   ],
+   "before": 0,
+   "before_n": 0,
+   "after": 3.0,
+   "after_n": 3,
+   "agent": 0,
+   "agent_n": 0,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "markor_create_note_and_send_sms",
+   "after_runs": [
+    {
+     "seed": 980236806,
+     "score": 1.0,
+     "status": "done",
+     "routine": "markor_create_note_and_send_sms",
+     "inputs": {
+      "note_name": "cool_bear_2023_07_02",
+      "file_extension": ".md",
+      "note_text": "Inconceivable!",
+      "recipient_phone_number": "+13942032854"
+     },
+     "answer": null,
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.006279,
+     "s": 20.03
+    },
+    {
+     "seed": 3411394365,
+     "score": 1.0,
+     "status": "done",
+     "routine": "markor_create_note_and_send_sms",
+     "inputs": {
+      "note_name": "2023_06_01_fierce_violin",
+      "file_extension": ".txt",
+      "note_text": "Gym membership renewal due on the 20th.",
+      "recipient_phone_number": "+19371228774"
+     },
+     "answer": null,
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.003255,
+     "s": 15.97
+    },
+    {
+     "seed": 3564688147,
+     "score": 1.0,
+     "status": "done",
+     "routine": "markor_create_note_and_send_sms",
+     "inputs": {
+      "note_name": "lively_goat_LEKc",
+      "file_extension": ".md",
+      "note_text": "Ignorance is bliss.",
+      "recipient_phone_number": "+13992866708"
+     },
+     "answer": null,
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.004688,
+     "s": 18.22
+    }
+   ],
+   "before_runs": []
+  },
+  {
+   "task": "MarkorEditNote",
+   "seeds": [
+    194899386,
+    2080389830,
+    3277895563
+   ],
+   "before": 0,
+   "before_n": 0,
+   "after": 0,
+   "after_n": 3,
+   "agent": 0,
+   "agent_n": 0,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "markor_edit_note",
+   "after_runs": [
+    {
+     "seed": 194899386,
+     "score": 0.0,
+     "status": "done",
+     "routine": "markor_edit_note",
+     "inputs": {
+      "note_file_name": "note_QI22W.md",
+      "text_to_add": "Yoga class every Tuesday and Thursday at 6 PM.\nIt's a bird, it's a plane.\nIgnorance is bliss."
+     },
+     "answer": "Yoga class every Tuesday and Thursday at 6 PM. It's a bird, it's a plane. Ignorance is bliss. RCds9YwUSDpxkBcBp1uG",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.006437,
+     "s": 14.66
+    },
+    {
+     "seed": 2080389830,
+     "score": 0.0,
+     "status": "no_routine",
+     "routine": null,
+     "inputs": {},
+     "answer": null,
+     "detail": "model: no confident match (None)",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.005269,
+     "s": 4.88
+    },
+    {
+     "seed": 3277895563,
+     "score": 0.0,
+     "status": "no_routine",
+     "routine": null,
+     "inputs": {},
+     "answer": null,
+     "detail": "model: no confident match (None)",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.007086,
+     "s": 6.7
+    }
+   ],
+   "before_runs": []
+  },
+  {
+   "task": "NotesIsTodo",
+   "seeds": [
+    2010807541,
+    2561353086,
+    3492714222
+   ],
+   "before": 0,
+   "before_n": 0,
+   "after": 3.0,
+   "after_n": 3,
+   "agent": 0,
+   "agent_n": 0,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "joplin_check_note_todo",
+   "after_runs": [
+    {
+     "seed": 2010807541,
+     "score": 1.0,
+     "status": "done",
+     "routine": "joplin_check_note_todo",
+     "inputs": {
+      "note_title": "Research Notes"
+     },
+     "answer": "True",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001925,
+     "s": 6.25
+    },
+    {
+     "seed": 2561353086,
+     "score": 1.0,
+     "status": "done",
+     "routine": "joplin_check_note_todo",
+     "inputs": {
+      "note_title": "Travel Itinerary"
+     },
+     "answer": "True",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.002075,
+     "s": 4.87
+    },
+    {
+     "seed": 3492714222,
+     "score": 1.0,
+     "status": "done",
+     "routine": "joplin_check_note_todo",
+     "inputs": {
+      "note_title": "Budget Spreadsheet"
+     },
+     "answer": "True",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.002524,
+     "s": 5.84
+    }
+   ],
+   "before_runs": []
+  },
+  {
+   "task": "NotesMeetingAttendeeCount",
+   "seeds": [
+    1526838421,
+    3045878884,
+    4155412042
+   ],
+   "before": 0,
+   "before_n": 3,
+   "after": 3.0,
+   "after_n": 3,
+   "agent": 3.0,
+   "agent_n": 3,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "joplin_count_meeting_attendees",
+   "after_runs": [
+    {
+     "seed": 1526838421,
+     "score": 1.0,
+     "status": "done",
+     "routine": "joplin_count_meeting_attendees",
+     "inputs": {
+      "meeting_title": "Quality Assurance Review"
+     },
+     "answer": "80",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.0019,
+     "s": 8.46
+    },
+    {
+     "seed": 3045878884,
+     "score": 1.0,
+     "status": "done",
+     "routine": "joplin_count_meeting_attendees",
+     "inputs": {
+      "meeting_title": "Client Quarterly Review"
+     },
+     "answer": "45",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.002432,
+     "s": 7.86
+    },
+    {
+     "seed": 4155412042,
+     "score": 1.0,
+     "status": "done",
+     "routine": "joplin_count_meeting_attendees",
+     "inputs": {
+      "meeting_title": "Project Status Update"
+     },
+     "answer": "50",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.002857,
+     "s": 8.57
+    }
+   ],
+   "before_runs": [
+    "failed:joplin_count_meeting_attendees",
+    "failed:joplin_count_meeting_attendees",
+    "failed:joplin_count_meeting_attendees"
+   ]
+  },
+  {
+   "task": "NotesRecipeIngredientCount",
+   "seeds": [
+    446925345,
+    2562736834,
+    2709274826
+   ],
+   "before": 0,
+   "before_n": 3,
+   "after": 3.0,
+   "after_n": 3,
+   "agent": 3.0,
+   "agent_n": 3,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "joplin_lookup_ingredient_quantity",
+   "after_runs": [
+    {
+     "seed": 446925345,
+     "score": 1.0,
+     "status": "done",
+     "routine": "joplin_lookup_ingredient_quantity",
+     "inputs": {
+      "recipe_name": "Tacos",
+      "ingredient_name": "almond flour"
+     },
+     "answer": "1/2 cup",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.002516,
+     "s": 12.25
+    },
+    {
+     "seed": 2562736834,
+     "score": 1.0,
+     "status": "done",
+     "routine": "joplin_lookup_ingredient_quantity",
+     "inputs": {
+      "recipe_name": "Lasagna",
+      "ingredient_name": "buckwheat groats"
+     },
+     "answer": "2 teaspoons",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.002749,
+     "s": 12.18
+    },
+    {
+     "seed": 2709274826,
+     "score": 1.0,
+     "status": "done",
+     "routine": "joplin_lookup_ingredient_quantity",
+     "inputs": {
+      "recipe_name": "Salmon Salad",
+      "ingredient_name": "arrowroot powder"
+     },
+     "answer": "1/2 cup",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.002378,
+     "s": 13.84
+    }
+   ],
+   "before_runs": [
+    "failed:joplin_get_ingredient_quantity",
+    "failed:joplin_get_ingredient_quantity",
+    "failed:joplin_get_ingredient_quantity"
+   ]
+  },
+  {
+   "task": "OpenAppTaskEval",
+   "seeds": [
+    1306832883,
+    2349914223,
+    3608958401
+   ],
+   "before": 1.0,
+   "before_n": 3,
+   "after": 1.0,
+   "after_n": 3,
+   "agent": 3.0,
+   "agent_n": 3,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "contacts_open_app",
+   "after_runs": [
+    {
+     "seed": 1306832883,
+     "score": 0.0,
+     "status": "no_routine",
+     "routine": null,
+     "inputs": {},
+     "answer": null,
+     "detail": "model: no confident match (None)",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.002035,
+     "s": 3.01
+    },
+    {
+     "seed": 2349914223,
+     "score": 0.0,
+     "status": "no_routine",
+     "routine": null,
+     "inputs": {},
+     "answer": null,
+     "detail": "model: no confident match (None)",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.002963,
+     "s": 3.57
+    },
+    {
+     "seed": 3608958401,
+     "score": 1.0,
+     "status": "done",
+     "routine": "contacts_open_app",
+     "inputs": {},
+     "answer": null,
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.003648,
+     "s": 7.63
+    }
+   ],
+   "before_runs": [
+    "no_routine:None",
+    "no_routine:None",
+    "done:contacts_open_app"
+   ]
+  },
+  {
+   "task": "RecipeAddSingleRecipe",
+   "seeds": [
+    1067857357,
+    3650422126,
+    3979403281
+   ],
+   "before": 3.0,
+   "before_n": 3,
+   "after": 3.0,
+   "after_n": 3,
+   "agent": 2.0,
+   "agent_n": 3,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "broccoli_add_recipe",
+   "after_runs": [
+    {
+     "seed": 1067857357,
+     "score": 1.0,
+     "status": "done",
+     "routine": "broccoli_add_recipe",
+     "inputs": {
+      "recipe_title": "Chickpea Vegetable Soup",
+      "recipe_description": "A quick and easy meal, perfect for busy weekdays.",
+      "recipe_servings": "1 serving",
+      "recipe_preparation_time": "2 hrs",
+      "recipe_ingredients": "as desired",
+      "recipe_directions": "Saut\u00e9 onions, carrots, and celery, add broth, canned tomatoes, and chickpeas. Simmer with spinach and seasonings. Garnish with fresh herbs for a more vibrant taste."
+     },
+     "answer": "Chickpea Vegetable Soup, 1 serving, 2 hrs",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.003583,
+     "s": 11.89
+    },
+    {
+     "seed": 3650422126,
+     "score": 1.0,
+     "status": "done",
+     "routine": "broccoli_add_recipe",
+     "inputs": {
+      "recipe_title": "Turkey and Cheese Panini",
+      "recipe_description": "An ideal recipe for experimenting with different flavors and ingredients.",
+      "recipe_servings": "8 servings",
+      "recipe_preparation_time": "10 mins",
+      "recipe_ingredients": "to preference",
+      "recipe_directions": "Layer turkey and cheese on bread, grill in a panini press until golden. Garnish with fresh herbs for a more vibrant taste."
+     },
+     "answer": "Turkey and Cheese Panini, 8 servings, 10 mins",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.003238,
+     "s": 12.06
+    },
+    {
+     "seed": 3979403281,
+     "score": 1.0,
+     "status": "done",
+     "routine": "broccoli_add_recipe",
+     "inputs": {
+      "recipe_title": "Caprese Salad Skewers",
+      "recipe_description": "A quick and easy meal, perfect for busy weekdays.",
+      "recipe_servings": "8 servings",
+      "recipe_preparation_time": "2 hrs",
+      "recipe_ingredients": "various amounts",
+      "recipe_directions": "Thread cherry tomatoes, basil leaves, and mozzarella balls onto skewers. Drizzle with balsamic glaze. Feel free to substitute with ingredients you have on hand."
+     },
+     "answer": "Caprese Salad Skewers, 8 servings, 2 hrs",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.004044,
+     "s": 14.84
+    }
+   ],
+   "before_runs": [
+    "done:broccoli_add_recipe",
+    "done:broccoli_add_recipe",
+    "done:broccoli_add_recipe"
+   ]
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipesWithConstraint",
+   "seeds": [
+    2880651181,
+    4123704419,
+    4237822092
+   ],
+   "before": 1.0,
+   "before_n": 3,
+   "after": 0,
+   "after_n": 3,
+   "agent": 0,
+   "agent_n": 3,
+   "verified_seed30": false,
+   "verify_status": "no_routine",
+   "verify_routine": null,
+   "after_runs": [
+    {
+     "seed": 2880651181,
+     "score": 0.0,
+     "status": "no_routine",
+     "routine": null,
+     "inputs": {},
+     "answer": null,
+     "detail": "model: no confident match (None)",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.002222,
+     "s": 2.4
+    },
+    {
+     "seed": 4123704419,
+     "score": 0.0,
+     "status": "no_routine",
+     "routine": null,
+     "inputs": {},
+     "answer": null,
+     "detail": "model: no confident match (None)",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.001936,
+     "s": 2.28
+    },
+    {
+     "seed": 4237822092,
+     "score": 0.0,
+     "status": "no_routine",
+     "routine": null,
+     "inputs": {},
+     "answer": null,
+     "detail": "model: no confident match (None)",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.002371,
+     "s": 2.24
+    }
+   ],
+   "before_runs": [
+    "done:broccoli_delete_recipes_by_ingredient",
+    "done:broccoli_delete_recipes_by_ingredient",
+    "done:broccoli_delete_recipes_by_ingredient"
+   ]
+  },
+  {
+   "task": "SimpleCalendarAnyEventsOnDate",
+   "seeds": [
+    2699479240,
+    2992497418,
+    3772861019
+   ],
+   "before": 0,
+   "before_n": 0,
+   "after": 0,
+   "after_n": 3,
+   "agent": 0,
+   "agent_n": 0,
+   "verified_seed30": false,
+   "verify_status": "failed",
+   "verify_routine": "simple_calendar_pro_get_events",
+   "after_runs": [
+    {
+     "seed": 2699479240,
+     "score": 0.0,
+     "status": "needs_user",
+     "routine": "simple_calendar_pro_get_event_titles",
+     "inputs": {
+      "schedule_date": "October 21 2023"
+     },
+     "answer": null,
+     "detail": "model confirmed",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.007303,
+     "s": 5.98
+    },
+    {
+     "seed": 2992497418,
+     "score": 0.0,
+     "status": "needs_user",
+     "routine": "simple_calendar_pro_get_event_titles",
+     "inputs": {},
+     "answer": null,
+     "detail": "model confirmed",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.008533,
+     "s": 7.54
+    },
+    {
+     "seed": 3772861019,
+     "score": 0.0,
+     "status": "needs_user",
+     "routine": "simple_calendar_pro_get_event_titles",
+     "inputs": {
+      "schedule_date": "October 29 2023"
+     },
+     "answer": null,
+     "detail": "model confirmed",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.007048,
+     "s": 6.33
+    }
+   ],
+   "before_runs": []
+  },
+  {
+   "task": "SimpleCalendarEventOnDateAtTime",
+   "seeds": [
+    15171143,
+    720267878,
+    2069418009
+   ],
+   "before": 0,
+   "before_n": 0,
+   "after": 0,
+   "after_n": 3,
+   "agent": 0,
+   "agent_n": 0,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "simple_calendar_pro_get_event_titles",
+   "after_runs": [
+    {
+     "seed": 15171143,
+     "score": 0.0,
+     "status": "needs_user",
+     "routine": "simple_calendar_pro_get_event_titles",
+     "inputs": {
+      "schedule_time": "21:45"
+     },
+     "answer": null,
+     "detail": "model confirmed",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.006903,
+     "s": 5.65
+    },
+    {
+     "seed": 720267878,
+     "score": 0.0,
+     "status": "needs_user",
+     "routine": "simple_calendar_pro_get_event_titles",
+     "inputs": {},
+     "answer": null,
+     "detail": "model confirmed",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.00611,
+     "s": 4.98
+    },
+    {
+     "seed": 2069418009,
+     "score": 0.0,
+     "status": "needs_user",
+     "routine": "simple_calendar_pro_get_event_titles",
+     "inputs": {},
+     "answer": null,
+     "detail": "model confirmed",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.005416,
+     "s": 4.04
+    }
+   ],
+   "before_runs": []
+  },
+  {
+   "task": "SimpleCalendarEventsOnDate",
+   "seeds": [
+    238752834,
+    2751088944,
+    3598590515
+   ],
+   "before": 0,
+   "before_n": 0,
+   "after": 0,
+   "after_n": 3,
+   "agent": 0,
+   "agent_n": 0,
+   "verified_seed30": false,
+   "verify_status": "failed",
+   "verify_routine": "simple_calendar_pro_get_events",
+   "after_runs": [
+    {
+     "seed": 238752834,
+     "score": 0.0,
+     "status": "needs_user",
+     "routine": "simple_calendar_pro_get_event_titles",
+     "inputs": {
+      "schedule_date": "2023-10-21"
+     },
+     "answer": null,
+     "detail": "model confirmed",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.006929,
+     "s": 6.38
+    },
+    {
+     "seed": 2751088944,
+     "score": 0.0,
+     "status": "needs_user",
+     "routine": "simple_calendar_pro_get_event_titles",
+     "inputs": {
+      "schedule_date": "October 29 2023"
+     },
+     "answer": null,
+     "detail": "model confirmed",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.006104,
+     "s": 6.06
+    },
+    {
+     "seed": 3598590515,
+     "score": 0.0,
+     "status": "no_routine",
+     "routine": null,
+     "inputs": {},
+     "answer": null,
+     "detail": "model: no confident match (simple_calendar_pro_get_event_titles)",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.013868,
+     "s": 11.93
+    }
+   ],
+   "before_runs": []
+  },
+  {
+   "task": "SimpleCalendarLocationOfEvent",
+   "seeds": [
+    507692354,
+    1424966634,
+    3977283519
+   ],
+   "before": 0,
+   "before_n": 3,
+   "after": 3.0,
+   "after_n": 3,
+   "agent": 3.0,
+   "agent_n": 3,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "simple_calendar_pro_get_event_location",
+   "after_runs": [
+    {
+     "seed": 507692354,
+     "score": 1.0,
+     "status": "done",
+     "routine": "simple_calendar_pro_get_event_location",
+     "inputs": {
+      "event_name": "Team Offsite"
+     },
+     "answer": "Sarah's apartment",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.002128,
+     "s": 5.51
+    },
+    {
+     "seed": 1424966634,
+     "score": 1.0,
+     "status": "done",
+     "routine": "simple_calendar_pro_get_event_location",
+     "inputs": {
+      "event_name": "Movie night"
+     },
+     "answer": "Virtual",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.00307,
+     "s": 4.99
+    },
+    {
+     "seed": 3977283519,
+     "score": 1.0,
+     "status": "done",
+     "routine": "simple_calendar_pro_get_event_location",
+     "inputs": {
+      "event_name": "Sports game"
+     },
+     "answer": "The Coffee Bean",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.003219,
+     "s": 6.36
+    }
+   ],
+   "before_runs": [
+    "failed:simple_calendar_pro_get_event_location",
+    "failed:simple_calendar_pro_get_event_location",
+    "failed:simple_calendar_pro_get_event_location"
+   ]
+  },
+  {
+   "task": "SimpleSmsReply",
+   "seeds": [
+    865217362,
+    2036699084,
+    2416437184
+   ],
+   "before": 3.0,
+   "before_n": 3,
+   "after": 3.0,
+   "after_n": 3,
+   "agent": 3.0,
+   "agent_n": 3,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "simple_sms_messenger_reply_to_conversati",
+   "after_runs": [
+    {
+     "seed": 865217362,
+     "score": 1.0,
+     "status": "done",
+     "routine": "simple_sms_messenger_reply_to_conversati",
+     "inputs": {
+      "recipient_phone_number": "+10054823973",
+      "message_text": "Pick up groceries: Milk and Bread and Apples."
+     },
+     "answer": null,
+     "detail": "all steps and checks passed",
+     "repaired": [
+      "launch_simple_sms_messenger"
+     ],
+     "calls": 2,
+     "cost_std": 0.009685,
+     "s": 42.88
+    },
+    {
+     "seed": 2036699084,
+     "score": 1.0,
+     "status": "done",
+     "routine": "simple_sms_messenger_reply_to_conversati",
+     "inputs": {
+      "recipient_phone_number": "+12889290955",
+      "message_text": "Pick up groceries: Milk and Bread and Apples."
+     },
+     "answer": null,
+     "detail": "all steps and checks passed",
+     "repaired": [
+      "launch_simple_sms_messenger"
+     ],
+     "calls": 2,
+     "cost_std": 0.006415,
+     "s": 17.96
+    },
+    {
+     "seed": 2416437184,
+     "score": 1.0,
+     "status": "done",
+     "routine": "simple_sms_messenger_reply_to_conversati",
+     "inputs": {
+      "recipient_phone_number": "+19704943353",
+      "message_text": "Ignorance is bliss."
+     },
+     "answer": null,
+     "detail": "all steps and checks passed",
+     "repaired": [
+      "launch_simple_sms_messenger"
+     ],
+     "calls": 2,
+     "cost_std": 0.008698,
+     "s": 20.98
+    }
+   ],
+   "before_runs": [
+    "done:simple_sms_messenger_reply_to_conversati",
+    "done:simple_sms_messenger_reply_to_conversati",
+    "done:simple_sms_messenger_reply_to_conversati"
+   ]
+  },
+  {
+   "task": "SimpleSmsReplyMostRecent",
+   "seeds": [
+    532855848,
+    1199210676,
+    1879852763
+   ],
+   "before": 3.0,
+   "before_n": 3,
+   "after": 3.0,
+   "after_n": 3,
+   "agent": 3.0,
+   "agent_n": 3,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "simple_sms_messenger_reply_most_recent_m",
+   "after_runs": [
+    {
+     "seed": 532855848,
+     "score": 1.0,
+     "status": "done",
+     "routine": "simple_sms_messenger_reply_most_recent_m",
+     "inputs": {
+      "message_text": "Hello, World!"
+     },
+     "answer": "Book club meets next Tuesday to discuss '1984'.",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.00193,
+     "s": 10.79
+    },
+    {
+     "seed": 1199210676,
+     "score": 1.0,
+     "status": "done",
+     "routine": "simple_sms_messenger_reply_most_recent_m",
+     "inputs": {
+      "message_text": "The library book is due back on the 15th."
+     },
+     "answer": "Beauty is in the eye of the beholder.",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.002713,
+     "s": 12.48
+    },
+    {
+     "seed": 1879852763,
+     "score": 1.0,
+     "status": "done",
+     "routine": "simple_sms_messenger_reply_most_recent_m",
+     "inputs": {
+      "message_text": "Monthly budget meeting pushed to Friday."
+     },
+     "answer": "Lorem Ipsum is simply dummy text.",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.002392,
+     "s": 11.69
+    }
+   ],
+   "before_runs": [
+    "done:simple_sms_messenger_reply_most_recent_m",
+    "done:simple_sms_messenger_reply_most_recent_m",
+    "done:simple_sms_messenger_reply_most_recent_m"
+   ]
+  },
+  {
+   "task": "SimpleSmsSend",
+   "seeds": [
+    2549194941,
+    2690262845,
+    2804997813
+   ],
+   "before": 3.0,
+   "before_n": 3,
+   "after": 3.0,
+   "after_n": 3,
+   "agent": 3.0,
+   "agent_n": 3,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "simple_sms_messenger_send_message",
+   "after_runs": [
+    {
+     "seed": 2549194941,
+     "score": 1.0,
+     "status": "done",
+     "routine": "simple_sms_messenger_send_message",
+     "inputs": {
+      "recipient_phone_number": "+10810241471",
+      "message_text": "May the Force be with you."
+     },
+     "answer": "15:34",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.002409,
+     "s": 6.29
+    },
+    {
+     "seed": 2690262845,
+     "score": 1.0,
+     "status": "done",
+     "routine": "simple_sms_messenger_send_message",
+     "inputs": {
+      "recipient_phone_number": "+11471594382",
+      "message_text": "Yoga class every Tuesday and Thursday at 6 PM."
+     },
+     "answer": "15:34",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.004154,
+     "s": 8.65
+    },
+    {
+     "seed": 2804997813,
+     "score": 1.0,
+     "status": "done",
+     "routine": "simple_sms_messenger_send_message",
+     "inputs": {
+      "recipient_phone_number": "+11814770340",
+      "message_text": "Your dentist appointment is scheduled for 2 PM on Thursday."
+     },
+     "answer": "15:34",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.002672,
+     "s": 6.94
+    }
+   ],
+   "before_runs": [
+    "done:simple_sms_messenger_send_message",
+    "done:simple_sms_messenger_send_message",
+    "done:simple_sms_messenger_send_message"
+   ]
+  },
+  {
+   "task": "SimpleSmsSendClipboardContent",
+   "seeds": [
+    177611652,
+    523683089,
+    4005425627
+   ],
+   "before": 3.0,
+   "before_n": 3,
+   "after": 3.0,
+   "after_n": 3,
+   "agent": 3.0,
+   "agent_n": 3,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "simple_sms_messenger_send_clipboard_mess",
+   "after_runs": [
+    {
+     "seed": 177611652,
+     "score": 1.0,
+     "status": "done",
+     "routine": "simple_sms_messenger_send_clipboard_mess",
+     "inputs": {
+      "recipient_phone_number": "+15177225859"
+     },
+     "answer": "Elementary, my dear Watson., 15:34",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001826,
+     "s": 9.27
+    },
+    {
+     "seed": 523683089,
+     "score": 1.0,
+     "status": "done",
+     "routine": "simple_sms_messenger_send_clipboard_mess",
+     "inputs": {
+      "recipient_phone_number": "+16827023687"
+     },
+     "answer": "Lorem Ipsum is simply dummy text., 15:34",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001941,
+     "s": 9.42
+    },
+    {
+     "seed": 4005425627,
+     "score": 1.0,
+     "status": "done",
+     "routine": "simple_sms_messenger_send_clipboard_mess",
+     "inputs": {
+      "recipient_phone_number": "+11721914184"
+     },
+     "answer": "Elementary, my dear Watson., 15:34",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.002256,
+     "s": 9.33
+    }
+   ],
+   "before_runs": [
+    "done:simple_sms_messenger_send_clipboard_mess",
+    "done:simple_sms_messenger_send_clipboard_mess",
+    "done:simple_sms_messenger_send_clipboard_mess"
+   ]
+  },
+  {
+   "task": "SystemBluetoothTurnOffVerify",
+   "seeds": [
+    1450632036,
+    2468557502,
+    2738584926
+   ],
+   "before": 3.0,
+   "before_n": 3,
+   "after": 0,
+   "after_n": 3,
+   "agent": 3.0,
+   "agent_n": 3,
+   "verified_seed30": false,
+   "verify_status": "no_routine",
+   "verify_routine": null,
+   "after_runs": [
+    {
+     "seed": 1450632036,
+     "score": 0.0,
+     "status": "no_routine",
+     "routine": null,
+     "inputs": {},
+     "answer": null,
+     "detail": "model: no confident match (None)",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.001625,
+     "s": 2.77
+    },
+    {
+     "seed": 2468557502,
+     "score": 0.0,
+     "status": "no_routine",
+     "routine": null,
+     "inputs": {},
+     "answer": null,
+     "detail": "model: no confident match (None)",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.001506,
+     "s": 2.16
+    },
+    {
+     "seed": 2738584926,
+     "score": 0.0,
+     "status": "no_routine",
+     "routine": null,
+     "inputs": {},
+     "answer": null,
+     "detail": "model: no confident match (None)",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.002408,
+     "s": 3.21
+    }
+   ],
+   "before_runs": [
+    "done:settings_turn_off_bluetooth",
+    "done:settings_turn_off_bluetooth",
+    "done:settings_turn_off_bluetooth"
+   ]
+  },
+  {
+   "task": "SystemBluetoothTurnOnVerify",
+   "seeds": [
+    2331832354,
+    3338005320,
+    4002356261
+   ],
+   "before": 3.0,
+   "before_n": 3,
+   "after": 0,
+   "after_n": 3,
+   "agent": 3.0,
+   "agent_n": 3,
+   "verified_seed30": false,
+   "verify_status": "no_routine",
+   "verify_routine": null,
+   "after_runs": [
+    {
+     "seed": 2331832354,
+     "score": 0.0,
+     "status": "no_routine",
+     "routine": null,
+     "inputs": {},
+     "answer": null,
+     "detail": "model: no confident match (None)",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.002345,
+     "s": 2.82
+    },
+    {
+     "seed": 3338005320,
+     "score": 0.0,
+     "status": "no_routine",
+     "routine": null,
+     "inputs": {},
+     "answer": null,
+     "detail": "model: no confident match (None)",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.002212,
+     "s": 2.96
+    },
+    {
+     "seed": 4002356261,
+     "score": 0.0,
+     "status": "no_routine",
+     "routine": null,
+     "inputs": {},
+     "answer": null,
+     "detail": "model: no confident match (None)",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.001362,
+     "s": 2.19
+    }
+   ],
+   "before_runs": [
+    "done:settings_turn_on_bluetooth",
+    "done:settings_turn_on_bluetooth",
+    "done:settings_turn_on_bluetooth"
+   ]
+  },
+  {
+   "task": "SystemBrightnessMax",
+   "seeds": [
+    182522295,
+    484617718,
+    4145931248
+   ],
+   "before": 0,
+   "before_n": 0,
+   "after": 0,
+   "after_n": 3,
+   "agent": 0,
+   "agent_n": 0,
+   "verified_seed30": false,
+   "verify_status": "done",
+   "verify_routine": "settings_set_brightness",
+   "after_runs": [
+    {
+     "seed": 182522295,
+     "score": 0.0,
+     "status": "no_routine",
+     "routine": null,
+     "inputs": {},
+     "answer": null,
+     "detail": "model: no confident match (None)",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.002837,
+     "s": 3.31
+    },
+    {
+     "seed": 484617718,
+     "score": 0.0,
+     "status": "no_routine",
+     "routine": null,
+     "inputs": {},
+     "answer": null,
+     "detail": "model: no confident match (None)",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.00202,
+     "s": 2.5
+    },
+    {
+     "seed": 4145931248,
+     "score": 0.0,
+     "status": "no_routine",
+     "routine": null,
+     "inputs": {},
+     "answer": null,
+     "detail": "model: no confident match (None)",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.001425,
+     "s": 1.72
+    }
+   ],
+   "before_runs": []
+  },
+  {
+   "task": "SystemBrightnessMaxVerify",
+   "seeds": [
+    112283219,
+    411723837,
+    3750735005
+   ],
+   "before": 3.0,
+   "before_n": 3,
+   "after": 0,
+   "after_n": 3,
+   "agent": 3.0,
+   "agent_n": 3,
+   "verified_seed30": false,
+   "verify_status": "done",
+   "verify_routine": "settings_set_brightness",
+   "after_runs": [
+    {
+     "seed": 112283219,
+     "score": 0.0,
+     "status": "no_routine",
+     "routine": null,
+     "inputs": {},
+     "answer": null,
+     "detail": "model: no confident match (None)",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.001582,
+     "s": 2.43
+    },
+    {
+     "seed": 411723837,
+     "score": 0.0,
+     "status": "no_routine",
+     "routine": null,
+     "inputs": {},
+     "answer": null,
+     "detail": "model: no confident match (None)",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.001867,
+     "s": 2.58
+    },
+    {
+     "seed": 3750735005,
+     "score": 0.0,
+     "status": "no_routine",
+     "routine": null,
+     "inputs": {},
+     "answer": null,
+     "detail": "model: no confident match (None)",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.002322,
+     "s": 3.33
+    }
+   ],
+   "before_runs": [
+    "done:settings_set_brightness_max",
+    "done:settings_set_brightness_max",
+    "done:settings_set_brightness_max"
+   ]
+  },
+  {
+   "task": "SystemBrightnessMin",
+   "seeds": [
+    1600796951,
+    2563840600,
+    4117975267
+   ],
+   "before": 3.0,
+   "before_n": 3,
+   "after": 3.0,
+   "after_n": 3,
+   "agent": 3.0,
+   "agent_n": 3,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "settings_set_brightness_minimum_2",
+   "after_runs": [
+    {
+     "seed": 1600796951,
+     "score": 1.0,
+     "status": "done",
+     "routine": "settings_set_brightness_minimum_2",
+     "inputs": {},
+     "answer": "0.0",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001456,
+     "s": 8.25
+    },
+    {
+     "seed": 2563840600,
+     "score": 1.0,
+     "status": "done",
+     "routine": "settings_set_brightness_minimum_2",
+     "inputs": {},
+     "answer": "0.0",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.002105,
+     "s": 8.63
+    },
+    {
+     "seed": 4117975267,
+     "score": 1.0,
+     "status": "done",
+     "routine": "settings_set_brightness_minimum_2",
+     "inputs": {},
+     "answer": "0.0",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001255,
+     "s": 7.89
+    }
+   ],
+   "before_runs": [
+    "done:settings_set_brightness_minimum_2",
+    "done:settings_set_brightness_minimum_2",
+    "done:settings_set_brightness_minimum_2"
+   ]
+  },
+  {
+   "task": "SystemBrightnessMinVerify",
+   "seeds": [
+    2121593197,
+    3267679106,
+    4031643574
+   ],
+   "before": 3.0,
+   "before_n": 3,
+   "after": 3.0,
+   "after_n": 3,
+   "agent": 3.0,
+   "agent_n": 3,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "settings_set_brightness_minimum_2",
+   "after_runs": [
+    {
+     "seed": 2121593197,
+     "score": 1.0,
+     "status": "done",
+     "routine": "settings_set_brightness_minimum_2",
+     "inputs": {},
+     "answer": "0.0",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001438,
+     "s": 8.26
+    },
+    {
+     "seed": 3267679106,
+     "score": 1.0,
+     "status": "done",
+     "routine": "settings_set_brightness_minimum_2",
+     "inputs": {},
+     "answer": "0.0",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001149,
+     "s": 9.01
+    },
+    {
+     "seed": 4031643574,
+     "score": 1.0,
+     "status": "done",
+     "routine": "settings_set_brightness_minimum_2",
+     "inputs": {},
+     "answer": "0.0",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001395,
+     "s": 7.65
+    }
+   ],
+   "before_runs": [
+    "done:settings_set_brightness_minimum_2",
+    "done:settings_set_brightness_minimum_2",
+    "done:settings_set_brightness_minimum_2"
+   ]
+  },
+  {
+   "task": "SystemWifiTurnOff",
+   "seeds": [
+    712190778,
+    3993811731,
+    4094089946
+   ],
+   "before": 3.0,
+   "before_n": 3,
+   "after": 3.0,
+   "after_n": 3,
+   "agent": 3.0,
+   "agent_n": 3,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "settings_turn_off_wifi_2",
+   "after_runs": [
+    {
+     "seed": 712190778,
+     "score": 1.0,
+     "status": "done",
+     "routine": "settings_turn_off_wifi_2",
+     "inputs": {},
+     "answer": "off. This can be used, for example, to improve location-based features and services. You can change this in Wi\u2011Fi scanning settings.",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001193,
+     "s": 6.38
+    },
+    {
+     "seed": 3993811731,
+     "score": 1.0,
+     "status": "done",
+     "routine": "settings_turn_off_wifi_2",
+     "inputs": {},
+     "answer": "off. This can be used, for example, to improve location-based features and services. You can change this in Wi\u2011Fi scanning settings.",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001425,
+     "s": 6.82
+    },
+    {
+     "seed": 4094089946,
+     "score": 1.0,
+     "status": "done",
+     "routine": "settings_turn_off_wifi_2",
+     "inputs": {},
+     "answer": "off. This can be used, for example, to improve location-based features and services. You can change this in Wi\u2011Fi scanning settings.",
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001013,
+     "s": 7.07
+    }
+   ],
+   "before_runs": [
+    "done:settings_turn_off_wifi_2",
+    "done:settings_turn_off_wifi_2",
+    "done:settings_turn_off_wifi_2"
+   ]
+  },
+  {
+   "task": "TurnOnWifiAndOpenApp",
+   "seeds": [
+    144314761,
+    4007373772,
+    4094389260
+   ],
+   "before": 2.0,
+   "before_n": 3,
+   "after": 2.0,
+   "after_n": 3,
+   "agent": 3.0,
+   "agent_n": 3,
+   "verified_seed30": true,
+   "verify_status": "done",
+   "verify_routine": "settings_turn_on_wifi_3",
+   "after_runs": [
+    {
+     "seed": 144314761,
+     "score": 0.0,
+     "status": "no_routine",
+     "routine": null,
+     "inputs": {},
+     "answer": null,
+     "detail": "model: no confident match (None)",
+     "repaired": null,
+     "calls": 1,
+     "cost_std": 0.002857,
+     "s": 3.75
+    },
+    {
+     "seed": 4007373772,
+     "score": 1.0,
+     "status": "done",
+     "routine": "settings_turn_on_wifi_3",
+     "inputs": {},
+     "answer": null,
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001097,
+     "s": 7.47
+    },
+    {
+     "seed": 4094389260,
+     "score": 1.0,
+     "status": "done",
+     "routine": "settings_turn_on_wifi_3",
+     "inputs": {},
+     "answer": null,
+     "detail": "all steps and checks passed",
+     "repaired": [],
+     "calls": 1,
+     "cost_std": 0.001612,
+     "s": 6.83
+    }
+   ],
+   "before_runs": [
+    "no_routine:None",
+    "done:settings_turn_on_wifi_3",
+    "done:settings_turn_on_wifi_3"
+   ]
+  }
+ ]
+}

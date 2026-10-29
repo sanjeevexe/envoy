@@ -1,0 +1,107 @@
+{
+ "task": "SystemWifiTurnOff",
+ "seed": 712190778,
+ "goal": "Turn wifi off.",
+ "score": 1.0,
+ "aw_run_time_s": 12.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 13:32:33.052907",
+ "envoy": {
+  "run_id": "aw-answers-seeds-1029-133222-d929",
+  "goal": "Turn wifi off.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "answers-verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "settings_turn_off_wifi_2",
+   "stage": "model confirmed",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "settings_turn_off_wifi_2",
+     0.867
+    ],
+    [
+     "settings_turn_on_wifi_3",
+     0.333
+    ],
+    [
+     "settings_set_brightness_minimum_2",
+     0.2
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "settings_turn_off_wifi_2",
+  "version": 1,
+  "done": true,
+  "answer": "off. This can be used, for example, to improve location-based features and services. You can change this in Wi‑Fi scanning settings.",
+  "outputs": {
+   "wifi_state": "off. This can be used, for example, to improve location-based features and services. You can change this in Wi‑Fi scanning settings."
+  },
+  "steps_used": 4,
+  "rung": 2,
+  "steps": [
+   {
+    "id": "launch_settings",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_network_and_internet",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_internet",
+    "status": "done",
+    "rung": 2,
+    "rungs": [
+     "relaxed match: relaxed match [4] \"Internet · T-Mobile\" score 0.64 (runner-up 0.47)"
+    ],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "turn_off_wifi",
+    "status": "done",
+    "rung": 1,
+    "rungs": [
+     "wait and retry: ready after 0.5 s"
+    ],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 1,
+  "model_calls": 1,
+  "cost_usd": 0.001193,
+  "cost_at_standard_usd": 0.001193,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 6.38,
+  "routine_duration_s": 4.78,
+  "trace_dir": "data/runs/aw-answers-seeds-1029-133222-d929",
+  "wall_s": 9.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

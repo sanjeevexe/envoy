@@ -1,0 +1,56 @@
+{
+ "task": "SystemBrightnessMaxVerify",
+ "seed": 411723837,
+ "goal": "Turn brightness to the max value.",
+ "score": 0.0,
+ "aw_run_time_s": 7.4,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-29 13:30:39.274395",
+ "envoy": {
+  "run_id": "aw-answers-seeds-1029-133032-2210",
+  "goal": "Turn brightness to the max value.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "answers-verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": null,
+   "stage": "model: no confident match (None)",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "settings_set_brightness_minimum_2",
+     0.6
+    ],
+    [
+     "settings_turn_off_wifi_2",
+     0.3
+    ],
+    [
+     "settings_turn_on_wifi_3",
+     0.2
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "no_routine",
+  "result": "model: no confident match (None)",
+  "done": false,
+  "answer": null,
+  "model_calls": 1,
+  "cost_usd": 0.001867,
+  "cost_at_standard_usd": 0.001867,
+  "duration_s": 2.58,
+  "wall_s": 5.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

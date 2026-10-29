@@ -8,3 +8,6 @@ it 0. They don't measure the routines. Their checkpoints are in `data/androidwor
 (matched by task and seed: three Verify tasks have the same goal on every instance), so a resume reruns them.
 
 Tasks (instances): SimpleCalendarEventsOnDate (1), SimpleCalendarLocationOfEvent (2), SimpleSmsReply (3), SimpleSmsReplyMostRecent (3), SimpleSmsSend (3), SimpleSmsSendClipboardContent (3), SystemBluetoothTurnOffVerify (3), SystemBluetoothTurnOnVerify (3), SystemBrightnessMax (3), SystemBrightnessMaxVerify (3), SystemBrightnessMin (3), SystemBrightnessMinVerify (3), SystemWifiTurnOff (3), TurnOnWifiAndOpenApp (3).
+
+All 39 were rerun into the same stage on Oct 29 from 13:20, with the new key and the same code (1f1fc11, harness
+19c40cb), after the account's billing was fixed. The stage now holds 90 episodes, none with an API error.

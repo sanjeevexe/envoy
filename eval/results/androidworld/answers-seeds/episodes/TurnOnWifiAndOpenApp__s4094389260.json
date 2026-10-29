@@ -1,0 +1,111 @@
+{
+ "task": "TurnOnWifiAndOpenApp",
+ "seed": 4094389260,
+ "goal": "Turn on Wifi, then open the settings app",
+ "score": 1.0,
+ "aw_run_time_s": 16.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 13:33:16.197572",
+ "envoy": {
+  "run_id": "aw-answers-seeds-1029-133304-9651",
+  "goal": "Turn on Wifi, then open the settings app",
+  "max_steps": 20,
+  "config": {
+   "mode": "routine",
+   "library": "answers-verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "settings_turn_on_wifi_3",
+   "stage": "model confirmed",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "settings_turn_on_wifi_3",
+     0.933
+    ],
+    [
+     "contacts_open_app",
+     0.533
+    ],
+    [
+     "settings_turn_off_wifi_2",
+     0.533
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "settings_turn_on_wifi_3",
+  "version": 1,
+  "done": true,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 5,
+  "rung": 2,
+  "steps": [
+   {
+    "id": "launch_settings",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_network_and_internet",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_internet",
+    "status": "done",
+    "rung": 2,
+    "rungs": [
+     "relaxed match: relaxed match [4] \"Internet · T-Mobile\" score 0.64 (runner-up 0.47)"
+    ],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_wifi_switch",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "relaunch_settings",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 1,
+  "model_calls": 1,
+  "cost_usd": 0.001612,
+  "cost_at_standard_usd": 0.001612,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 6.83,
+  "routine_duration_s": 5.02,
+  "trace_dir": "data/runs/aw-answers-seeds-1029-133304-9651",
+  "wall_s": 9.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

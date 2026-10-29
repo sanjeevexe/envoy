@@ -1,0 +1,153 @@
+{
+ "task": "SimpleSmsSendClipboardContent",
+ "seed": 523683089,
+ "goal": "Send a message to +16827023687 with the clipboard content in Simple SMS Messenger",
+ "score": 1.0,
+ "aw_run_time_s": 28.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 13:28:29.935497",
+ "envoy": {
+  "run_id": "aw-answers-seeds-1029-132809-5fd3",
+  "goal": "Send a message to +16827023687 with the clipboard content in Simple SMS Messenger",
+  "max_steps": 12,
+  "config": {
+   "mode": "routine",
+   "library": "answers-verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "simple_sms_messenger_send_clipboard_mess",
+   "stage": "model confirmed",
+   "inputs": {
+    "recipient_phone_number": "+16827023687"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "simple_sms_messenger_send_clipboard_mess",
+     1.0
+    ],
+    [
+     "simple_sms_messenger_send_message",
+     0.766
+    ],
+    [
+     "simple_sms_messenger_reply_to_conversati",
+     0.686
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "simple_sms_messenger_send_clipboard_mess",
+  "version": 1,
+  "done": true,
+  "answer": "Lorem Ipsum is simply dummy text., 15:34",
+  "outputs": {
+   "sent_message_text": "Lorem Ipsum is simply dummy text.",
+   "sent_message_time": "15:34"
+  },
+  "steps_used": 7,
+  "rung": 2,
+  "steps": [
+   {
+    "id": "launch_sms_messenger",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "start_conversation",
+    "status": "done",
+    "rung": 2,
+    "rungs": [
+     "relaxed match: after-checks failed but the next step (enter_recipient_phone_number) is ready"
+    ],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipient_phone_number",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "confirm_recipient",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "long_press_message_field",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "paste_clipboard_content",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "send_message",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 1,
+  "model_calls": 1,
+  "cost_usd": 0.001941,
+  "cost_at_standard_usd": 0.001941,
+  "approvals": [
+   {
+    "step": "confirm_recipient",
+    "description": "tap \"\" in com.simplemobiletools.smsmessenger (routine simple_sms_messenger_send_clipboard_mess v1)",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/new_conversation_confirm'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": "send_message",
+    "description": "tap \"SMS\" in com.simplemobiletools.smsmessenger (routine simple_sms_messenger_send_clipboard_mess v1)",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/thread_send_message'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "duration_s": 9.42,
+  "routine_duration_s": 6.93,
+  "trace_dir": "data/runs/aw-answers-seeds-1029-132809-5fd3",
+  "wall_s": 12.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

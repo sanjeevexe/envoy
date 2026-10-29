@@ -1,0 +1,132 @@
+{
+ "task": "SimpleSmsReplyMostRecent",
+ "seed": 532855848,
+ "goal": "Reply to the most recent text message using Simple SMS Messenger with message: Hello, World!",
+ "score": 1.0,
+ "aw_run_time_s": 40.2,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 13:25:31.685309",
+ "envoy": {
+  "run_id": "aw-answers-seeds-1029-132510-e380",
+  "goal": "Reply to the most recent text message using Simple SMS Messenger with message: Hello, World!",
+  "max_steps": 12,
+  "config": {
+   "mode": "routine",
+   "library": "answers-verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "simple_sms_messenger_reply_most_recent_m",
+   "stage": "model confirmed",
+   "inputs": {
+    "message_text": "Hello, World!"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "simple_sms_messenger_reply_most_recent_m",
+     0.891
+    ],
+    [
+     "simple_sms_messenger_send_message",
+     0.698
+    ],
+    [
+     "simple_sms_messenger_reply_to_conversati",
+     0.682
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "simple_sms_messenger_reply_most_recent_m",
+  "version": 1,
+  "done": true,
+  "answer": "Book club meets next Tuesday to discuss '1984'.",
+  "outputs": {
+   "sent_message_text": "Book club meets next Tuesday to discuss '1984'."
+  },
+  "steps_used": 6,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "swipe_to_open_search",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "type_app_search",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "launch_simple_sms_messenger",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_most_recent_conversation",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "type_reply_message",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_send_sms",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.00193,
+  "cost_at_standard_usd": 0.00193,
+  "approvals": [
+   {
+    "step": "tap_send_sms",
+    "description": "tap \"SMS\" in com.simplemobiletools.smsmessenger (routine simple_sms_messenger_reply_most_recent_m v1)",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/thread_send_message'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "duration_s": 10.79,
+  "routine_duration_s": 8.84,
+  "trace_dir": "data/runs/aw-answers-seeds-1029-132510-e380",
+  "wall_s": 13.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}
