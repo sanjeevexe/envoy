@@ -215,15 +215,15 @@ function ChangeView({ c }: { c: Change }) {
       {(c.reasons ?? []).map((r, i) => <p key={i} className="mt-1 border-l-2 border-sage-track pl-2 text-meta-2 italic text-ink-2">Muse: “{r}”</p>)}
       {c.kind === "locator" && (
         <div className="mt-2 grid gap-2 sm:grid-cols-2">
-          <div><div className="mb-0.5 text-tab font-medium uppercase tracking-wide text-muted">Before</div><Locator loc={c.before} other={c.after} side="before" /></div>
-          <div><div className="mb-0.5 text-tab font-medium uppercase tracking-wide text-muted">After</div><Locator loc={c.after} other={c.before} side="after" /></div>
+          <div><div className="mb-0.5 text-tab font-medium text-muted">Before</div><Locator loc={c.before} other={c.after} side="before" /></div>
+          <div><div className="mb-0.5 text-tab font-medium text-muted">After</div><Locator loc={c.after} other={c.before} side="after" /></div>
         </div>
       )}
       {(c.kind === "check" || c.kind === "action" || c.kind === "risk") && (
         <div className="mt-2 grid gap-1 text-meta-2 sm:grid-cols-2 sm:gap-2">
-          <div><span className="text-tab font-medium uppercase tracking-wide text-muted">Before </span>
+          <div><span className="text-tab font-medium text-muted">Before </span>
             {c.before ? <del className="rounded-sm bg-apricot-tint px-1 text-apricot-ink decoration-apricot"><Slots text={c.kind === "risk" ? c.before : c.before.text ?? c.before.verb} /></del> : <span className="text-muted">none</span>}</div>
-          <div><span className="text-tab font-medium uppercase tracking-wide text-muted">After </span>
+          <div><span className="text-tab font-medium text-muted">After </span>
             {c.after ? <ins className="rounded-sm bg-sage-tint px-1 text-sage-ink no-underline"><Slots text={c.kind === "risk" ? c.after : c.after.text ?? c.after.verb} /></ins> : <span className="text-muted">none</span>}</div>
         </div>
       )}

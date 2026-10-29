@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import {
   BellRingingIcon, BellSlashIcon, ClockIcon, EnvelopeSimpleIcon, EyeIcon, GraphIcon, PauseIcon, PlayIcon, PlusIcon, TrashIcon, type Icon,
 } from "@phosphor-icons/react";
-import { Button, Card, Chip, clock, cx, RowIcon, SectionLabel } from "@/components/ui";
+import { Button, Card, clock, cx, RowIcon, SectionLabel } from "@/components/ui";
 import { ago, api, post } from "@/lib/api";
 
 const KIND: Record<string, Icon> = { time: ClockIcon, before_fact: ClockIcon, watch: EyeIcon, email: EnvelopeSimpleIcon, fact_changed: GraphIcon };
@@ -61,6 +61,7 @@ export default function Triggers() {
         {list.map((t) => (
           <div key={t.id} className={cx("flex items-start gap-3 border-b border-divider py-3 pl-4 pr-3 last:border-b-0", !t.enabled && "opacity-70")}>
             <span className="pt-0.5"><RowIcon icon={KIND[t.kind] ?? ClockIcon} tone={t.enabled ? "sage" : "neutral"} /></span>
+            <div className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-start">
             <div className="min-w-0 flex-1">
               <div className="text-row font-semibold [overflow-wrap:anywhere]">{t.name}{!t.enabled && <span className="font-normal text-muted"> · paused</span>}</div>
               <div className="mt-0.5 text-meta-2 text-muted [overflow-wrap:anywhere]">Runs {t.action.goal ? `“${t.action.goal}”` : `the routine ${t.action.routine}`}</div>
@@ -69,10 +70,9 @@ export default function Triggers() {
                   : t.next.length ? `Next ${t.next.map((n) => `${clock(n.at)}${n.for ? ` (${n.for})` : ""}`).join(", ")}` : "Nothing coming up"}
               </div>
               {t.alerts && (t.kind === "watch" || t.alerts.on) && (
-                <div className="mt-1.5">
-                  {t.alerts.on
-                    ? <Chip tone="apricot" icon={BellRingingIcon}>Tells you when {t.alerts.attributes.map((a) => (a === "*" ? "anything" : a.replace(/_/g, " "))).join(", ")} changes</Chip>
-                    : <Chip tone="neutral" icon={BellSlashIcon}>Quiet: changes show in the task</Chip>}
+                <div className={cx("mt-1 flex items-start gap-1.5 text-meta-2 font-semibold", t.alerts.on ? "text-apricot-ink" : "text-muted")}>
+                  {t.alerts.on ? <BellRingingIcon size={14} className="mt-0.5 shrink-0" /> : <BellSlashIcon size={14} className="mt-0.5 shrink-0" />}
+                  {t.alerts.on ? `Tells you when ${t.alerts.attributes.map((a) => (a === "*" ? "anything" : a.replace(/_/g, " "))).join(", ")} changes` : "Quiet: changes show in the task"}
                 </div>
               )}
             </div>
@@ -90,6 +90,7 @@ export default function Triggers() {
               <button onClick={() => api(`/api/triggers/${t.id}`, { method: "DELETE" }).then(load)} className={control} aria-label={`Delete ${t.name}`} title="Delete">
                 <TrashIcon size={18} />
               </button>
+            </div>
             </div>
           </div>
         ))}

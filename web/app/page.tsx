@@ -176,7 +176,7 @@ export default function Page() {
               <h1 className="truncate text-title font-bold">{tab}</h1>
             </div>
           ) : (
-            <DevicePill lease={leases[avd]} needsYou={!!needs || !!leases[avd]?.user_control} onClick={() => go("Phone")} />
+            <DevicePill lease={leases[avd]} needsYou={!!needs || !!leases[avd]?.user_control} offline={mood === "offline"} onClick={() => go("Phone")} />
           )}
           {tab !== "Settings" && (
             <button onClick={() => go("Settings")} aria-label="Settings" className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-well">
@@ -243,8 +243,8 @@ export default function Page() {
   );
 }
 
-function DevicePill({ lease, needsYou, onClick }: { lease?: Lease; needsYou: boolean; onClick: () => void }) {
-  const off = lease?.running === false || (lease?.kind === "phone" && lease.state !== "device");
+function DevicePill({ lease, needsYou, offline, onClick }: { lease?: Lease; needsYou: boolean; offline: boolean; onClick: () => void }) {
+  const off = offline || lease?.running === false || (lease?.kind === "phone" && lease.state !== "device");
   const name = lease?.name ?? lease?.avd ?? "No phone";
   return (
     <button onClick={onClick} aria-label={`${name}${off ? ", off" : needsYou ? ", needs you" : lease?.task_id ? ", Envoy is using it" : ""}: open the phone`}

@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 import { CheckCircleIcon, DeviceMobileIcon } from "@phosphor-icons/react";
 import Companion from "@/components/Companion";
+import { appName } from "@/components/Tasks";
 import { Card, cx, Section, Segmented } from "@/components/ui";
 import { api, post } from "@/lib/api";
 
@@ -13,10 +14,8 @@ export default function SettingsPage({ publicUrl, profile }: { publicUrl?: strin
   const [section, setSection] = useState<(typeof SECTIONS)[number]>("Approvals");
   return (
     <div className="mx-auto w-full max-w-[720px] pb-10 md:pt-6">
-      <div className="flex flex-wrap items-center justify-between gap-2 px-4 pt-3">
-        <Segmented options={SECTIONS} value={section} onChange={setSection} label="Settings" />
-        {profile && <span className="text-meta-2 text-muted">{profile === "demo" ? "Demo memory (SkyLark test data)" : "Your memory"}</span>}
-      </div>
+      <div className="px-4 pt-3"><Segmented options={SECTIONS} value={section} onChange={setSection} label="Settings" /></div>
+      {profile && <p className="px-6 pt-2 text-meta-2 text-muted">Using {profile === "demo" ? "the demo memory (SkyLark test data)" : "your memory"}</p>}
       <div className="ev-fade" key={section}>
         {section === "Approvals" && <Settings />}
         {section === "Phones" && <Phones />}
@@ -86,8 +85,8 @@ function Settings() {
         <Card className="overflow-hidden">
           {info.apps.map((app) => (
             <label key={app} className="flex min-h-[56px] items-center justify-between gap-3 border-b border-divider px-4 py-2 last:border-b-0">
-              <span className="min-w-0 truncate text-row">{app}</span>
-              <select value={rules.apps[app] ?? ""} onChange={(e) => setApp(app, e.target.value)} className={select} aria-label={`When to ask in ${app}`}>
+              <span className="min-w-0"><span className="block truncate text-row font-semibold">{appName(app)}</span><span className="block truncate text-meta-2 text-muted">{app}</span></span>
+              <select value={rules.apps[app] ?? ""} onChange={(e) => setApp(app, e.target.value)} className={select} aria-label={`When to ask in ${appName(app)}`}>
                 <option value="">Same as above</option>
                 <option value="unless_requested">{LABEL.unless_requested}</option>
                 <option value="always">{LABEL.always}</option>

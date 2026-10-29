@@ -235,7 +235,8 @@ export function TaskDetail({ id, task, liveSteps, back, all, open, review, watch
 
   return (
     <div className="flex min-h-full flex-col">
-      <div className="sticky top-0 z-10 flex min-h-[68px] items-center gap-1 border-b border-line bg-page/95 py-2 pl-1.5 pr-3 backdrop-blur md:pl-4 md:pr-6">
+      <div className="sticky top-0 z-10 border-b border-line bg-page/95 backdrop-blur">
+       <div className="mx-auto flex min-h-[68px] w-full max-w-[740px] items-center gap-1 py-2 pl-1.5 pr-3 md:pl-2">
         <BackButton back={back} />
         <div className="min-w-0 flex-1">
           <h2 className="truncate text-title font-bold">{t.goal}</h2>
@@ -246,6 +247,7 @@ export function TaskDetail({ id, task, liveSteps, back, all, open, review, watch
             <span aria-hidden className="h-2.5 w-2.5 rounded-[2.5px] bg-ink" /> Stop
           </button>
         )}
+       </div>
       </div>
 
       <div className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-4 px-4 pb-8 pt-5">

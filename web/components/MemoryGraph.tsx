@@ -4,7 +4,7 @@
 // edit a fact (your edit outranks anything Envoy read) or delete a source (its facts go with it).
 import { useEffect, useRef, useState } from "react";
 import { MagnifyingGlassIcon, PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
-import { Button, Card, Chip, cx, SectionLabel } from "@/components/ui";
+import { Button, Chip, cx, SectionLabel } from "@/components/ui";
 import { api, ago, post } from "@/lib/api";
 
 type Node = { id: string; type: string; name: string; facts: number; stale: boolean; user_edited: boolean };
@@ -87,7 +87,7 @@ export default function MemoryGraph({ version }: { version: number }) {
           <Button variant="primary" className="h-10">Search</Button>
         </form>
         {notes && <pre className="max-h-48 overflow-auto whitespace-pre-wrap rounded-block border border-line bg-surface p-3 font-sans text-meta text-ink-2">{notes}</pre>}
-        <Card className="relative min-h-[320px] flex-1 overflow-hidden"><div ref={box} className="absolute inset-0" aria-label="Memory graph: select an entity to see its facts" role="img" /></Card>
+        <div ref={box} role="img" aria-label="Memory graph: select something to see its facts" className="min-h-[320px] flex-1 overflow-hidden rounded-card border border-line bg-surface" />
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-meta-2 text-muted">
           <span>{graph.nodes.length} things · {graph.edges.length} links</span>
           {types.map((t) => <span key={t} className="flex items-center gap-1.5"><span aria-hidden className="h-2.5 w-2.5 rounded-full" style={{ background: COLORS[t] ?? "#4E5A53" }} />{t}</span>)}

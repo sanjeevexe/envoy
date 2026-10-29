@@ -219,7 +219,7 @@ export default function LivePhone({ avd, lease, needsYou, mobile }: Props) {
         </div>
       )}
       <div className={`relative mx-auto w-full overflow-hidden rounded-[30px] border-[6px] ${inControl ? "border-sage" : "border-ink"} bg-ink shadow-phone`}
-           style={{ aspectRatio: `${size.w} / ${size.h}`, maxWidth: mobile ? `min(100%, calc((100dvh - ${inControl ? 330 : 250}px) * ${size.w / size.h}))` : 300 }}>
+           style={{ aspectRatio: `${size.w} / ${size.h}`, maxWidth: mobile ? `min(100%, calc((100dvh - ${inControl ? 430 : 350}px) * ${size.w / size.h}))` : 300 }}>
         <canvas ref={canvas} tabIndex={0} aria-label={inControl ? "The phone's screen: tap, swipe, or type" : "The phone's screen, live"}
                 onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={() => { if (down.current?.timer) clearTimeout(down.current.timer); down.current = null; }}
                 onKeyDown={onKey} onContextMenu={(e) => e.preventDefault()}
