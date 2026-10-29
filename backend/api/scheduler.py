@@ -2,7 +2,8 @@
 
 Five kinds of trigger, checked every few seconds:
 
-- **time**: every N minutes, daily at a time, or once at a moment.
+- **time**: every N minutes, daily at a time, weekly on some days at a time (`weekly_on: {"days": ["fri"], "at": "18:00"}`),
+  or once at a moment.
 - **before_fact**: a time derived from memory, e.g. 24 hours before any flight departs. It is computed again on every
   check, so when the departure changes (a delay), the trigger moves with it; each departure fires once.
 - **watch**: rerun a read-only routine every N minutes (for example, the gate) until a moment.
@@ -54,6 +55,7 @@ from memory.types import NOT_ABOUT_YOU, TYPES, normalize_key_value, parse_date
 from api.store import TaskStore
 
 KINDS = ("time", "before_fact", "watch", "email", "fact_changed")
+DAYS = ("mon", "tue", "wed", "thu", "fri", "sat", "sun")  # weekly_on's days, as datetime.weekday() counts them
 CURSORS = {"email": "after_rowid", "fact_changed": "after_seq"}  # kind → its cursor in the memory database
 
 
@@ -91,6 +93,21 @@ def check_ask(kind: str, action: dict[str, Any]) -> None:
         raise ValueError("offer_title is one short line")
 
 
+def check_weekly(spec: dict[str, Any]) -> None:
+    """`weekly_on`: {"days": ["mon", "fri"], "at": "18:00"}, normalized in place (days in week order, lowercase)."""
+    w = spec.get("weekly_on")
+    if w is None:
+        return
+    if not isinstance(w, dict) or not isinstance(w.get("days"), list) or not w["days"]:
+        raise ValueError('weekly_on is {"days": ["fri"], "at": "18:00"}')
+    days = {str(d).strip().lower()[:3] for d in w["days"]}
+    if bad := sorted(days - set(DAYS)):
+        raise ValueError(f"weekly_on: unknown day {bad[0]!r} (mon … sun)")
+    if parse_clock(str(w.get("at") or "")) is None:
+        raise ValueError("weekly_on needs a time (at), e.g. 18:00")
+    spec["weekly_on"] = {"days": [d for d in DAYS if d in days], "at": str(w["at"]).strip()}
+
+
 def parse_clock(s: str | None) -> tuple[int, int] | None:
     m = re.search(r"(\d{1,2}):(\d{2})\s*([AaPp])?\.?[Mm]?", s or "")
     if not m:
@@ -110,6 +127,7 @@ class Scheduler:
         self._scanned: dict[str, int] = {}  # fact_changed trigger → the last memory event seq its check read
         self.memory_db = memory_db_id(memory)
         self.offers: Any = None  # api/offers.py, set by the app: ask-mode triggers raise offers through it
+        self.repeats: Any = None  # api/repeats.py, set by the app: looks for habits once a day
 
     # ---- creating ------------------------------------------------------------------------------
 
@@ -143,6 +161,8 @@ class Scheduler:
             spec["memory_db"] = self.memory_db  # the database that cursor counts in
         check_alert(spec)
         check_ask(kind, action)
+        if kind == "time":
+            check_weekly(spec)
         if enabled:
             return self.store.add_trigger(kind, name, spec, action)
         with self.store.lock:  # switched off before any tick can see it
@@ -169,6 +189,8 @@ class Scheduler:
         started = []
         if self.offers is not None:
             self.offers.sweep()  # a check-in offer nobody answered expires at departure
+        if self.repeats is not None:
+            self.repeats.daily()  # learning from repeats, once a day (and after each task that finishes)
         for trig in self.store.triggers():
             if trig["kind"] in CURSORS:
                 self._rebaseline(trig)
@@ -217,10 +239,11 @@ class Scheduler:
                     out.append((f"t{int(now)}", {}))
             elif spec.get("at") and now >= spec["at"] and "once" not in fired:
                 out.append(("once", {}))
-            elif spec.get("daily_at") and (hm := parse_clock(spec["daily_at"])):
+            elif (spec.get("daily_at") or spec.get("weekly_on")) and (hm := parse_clock(spec.get("daily_at") or spec["weekly_on"].get("at"))):
                 today = datetime.fromtimestamp(now).replace(hour=hm[0], minute=hm[1], second=0, microsecond=0)
                 key = today.strftime("%Y-%m-%d")
-                if now >= today.timestamp() and key not in fired and now - today.timestamp() < 3600:
+                on_day = not spec.get("weekly_on") or DAYS[today.weekday()] in spec["weekly_on"]["days"]
+                if on_day and now >= today.timestamp() and key not in fired and now - today.timestamp() < 3600:
                     out.append((key, {}))
         elif kind == "before_fact":
             for when, eid, values in self.occasions(spec):
@@ -272,6 +295,10 @@ class Scheduler:
         if spec.get("daily_at") and (hm := parse_clock(spec["daily_at"])):
             t = datetime.fromtimestamp(now).replace(hour=hm[0], minute=hm[1], second=0, microsecond=0)
             return [{"at": (t if t.timestamp() > now else t + timedelta(days=1)).timestamp()}]
+        if spec.get("weekly_on") and (hm := parse_clock(spec["weekly_on"].get("at"))):
+            t = datetime.fromtimestamp(now).replace(hour=hm[0], minute=hm[1], second=0, microsecond=0)
+            runs = [t + timedelta(days=i) for i in range(15) if DAYS[(t + timedelta(days=i)).weekday()] in spec["weekly_on"]["days"]]
+            return [{"at": r.timestamp()} for r in runs if r.timestamp() > now][:3]
         return []
 
     # ---- email triggers ------------------------------------------------------------------------

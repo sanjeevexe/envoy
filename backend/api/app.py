@@ -49,6 +49,7 @@ from api.devices import DevicePool
 from api.events import EventBus
 from api.live import live_view
 from api.offers import Offers, offers_router
+from api.repeats import Repeats
 from api.push import Pusher, VapidKeys
 from api.runner import SHOTS, TaskRunner
 from api.scheduler import Scheduler, check_alert, check_ask
@@ -118,6 +119,8 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     ctx.alerts = alerts
     ctx.offers = Offers(tasks, bus, runner, scheduler)  # "Should I…?" with a one-tap yes (api/offers.py)
     scheduler.offers = ctx.offers
+    scheduler.repeats = Repeats(tasks, memory, ctx.offers, scheduler, routines)  # "Make this a habit?" (api/repeats.py)
+    bus.listeners.append(scheduler.repeats.on_event)
 
     from mcp_server.server import build_mcp, mcp_app
     from mcp_stub.common import bearer_token
