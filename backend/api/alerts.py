@@ -1,8 +1,9 @@
 """Change alerts (design doc, Scheduled and event-triggered tasks: a watcher "pushes when something changed").
 
 A task a trigger started (a watcher rerunning the gate routine, say) is quiet when it finishes. It pushes when it changed
-something memory remembered: a new value superseding an old one (memory's `fact_replaced`), not a first sighting and not
-the same value seen again.
+something memory remembered: a new value superseding an old one (memory's `fact_replaced`, a merge's included), or an
+app disagreeing with your own edit (`fact_conflict`: "Gate: SkyLark says C14, your note says B12"); not a first sighting
+and not the same value seen again.
 
 - **Noticing**: memory's own events (`MemoryStore.subscribe`), read-only. A change belongs to the task whose source wrote
   it (the source's `task_id`), so a change some other writer made while the task ran isn't credited to it.
@@ -67,7 +68,8 @@ class ChangeAlerts:
 
     def on_memory(self, ev: dict[str, Any]) -> None:
         try:
-            if ev.get("kind") != "fact_replaced":
+            kind = ev.get("kind")
+            if kind not in ("fact_replaced", "fact_conflict"):
                 return
             row = self.memory.db.execute("select source from facts where id = ?", (ev.get("fact"),)).fetchone()
             sid = row["source"] if row else None
@@ -75,8 +77,9 @@ class ChangeAlerts:
             tid = ((src or {}).get("reference") or {}).get("task_id")
             if not tid:
                 return
-            change = {"task": tid, "entity": ev["entity"], "attribute": ev["attribute"], "old": ev.get("old"),
-                      "new": ev.get("value"), "fact": ev.get("fact"), "source": sid, "seq": ev.get("seq"), "seen_at": self.clock()}
+            conflict = kind == "fact_conflict"  # the app disagrees with your own note: told like a change
+            change = {"task": tid, "entity": ev["entity"], "attribute": ev["attribute"], "old": ev.get("user_value" if conflict else "old"),
+                      "new": ev.get("value"), "conflict": conflict, "fact": ev.get("fact"), "source": sid, "seq": ev.get("seq"), "seen_at": self.clock()}
             with self._lock:
                 first = tid not in self.pending
                 self.pending.setdefault(tid, []).append(change)
@@ -129,7 +132,7 @@ class ChangeAlerts:
         trig = self.trigger_of(task)
         by_key: dict[tuple[str, str], dict[str, Any]] = {}
         for c in changes:  # two writes to one attribute in a run (screen, then outputs) are one change: first old → last new
-            k = (c["entity"], c["attribute"])
+            k = (c["entity"], c["attribute"], c.get("conflict", False))
             by_key[k] = {**c, "old": by_key[k]["old"]} if k in by_key else c
         reports, push = [], []
         for c in by_key.values():
@@ -137,7 +140,11 @@ class ChangeAlerts:
                 continue
             c["entity_label"] = self.entity_label(c["entity"])
             c["where"] = Retriever(self.memory).where(c["source"])
-            c["title"] = f"{label(c['attribute'])} changed: {c['old']} → {c['new']}"
+            if c.get("conflict"):
+                app = c["where"].split(",", 1)[0].removesuffix(" app")
+                c["title"] = f"{label(c['attribute'])}: {app} says {c['new']}, your note says {c['old']}"
+            else:
+                c["title"] = f"{label(c['attribute'])} changed: {c['old']} → {c['new']}"
             c["why_not"] = self.why_not(task, trig, c)
             reports.append(c)
             if c["why_not"] is None:
