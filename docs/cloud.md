@@ -166,7 +166,22 @@ So one clear bot-style refusal (Amazon's sign-up). Signing in to accounts that a
 
 **A mix-up, and the fix.** The sitting's instructions said "envoy-real", but the web app calls the phones **Test phone** (envoy-test, shown first) and **Real-app phone** (envoy-real), so the sign-ins went onto the Test phone. With the user's OK, the two AVDs were swapped on the VM (both stopped cleanly, their folders renamed): the signed-in phone is now the Real-app phone, which always cold-boots and never loads a snapshot, and the fresh one is the Test phone, with SkyLark reinstalled and seeded. The Real-app phone kept its 10 GB data partition.
 
-**The real-app set on the cloud phone** (`eval/run_final.py real`, read-only, every approval declined): TBD.
+**The real-app set on the cloud phone** (`eval/run_final.py real --only …`, read-only, every approval declined, standard tier, after the sign-ins and the swap, `swangle`; $0.37; `eval/results/cloud/stage3/real.json`). Mac: Phase 7's recorded rows (`eval/results/final/real.json`).
+
+| Workflow | Agent, Mac | Agent, cloud | Routine, same input: Mac | cloud | New input: Mac | cloud |
+| --- | --- | --- | --- | --- | --- | --- |
+| amazon (search, first price) | done, 2 steps, 25.6 s | done, 9 steps, 183.1 s | pass, 21.2 s | pass, 66.1 s | fail | pass after a repair, 203.8 s, 0 calls |
+| starbucks (a drink's calories) | done, 8 steps, 32.4 s | done, 14 steps, 90.9 s | pass, 21.4 s | **fail** (the output wasn't read) | pass | **fail** |
+| doordash (the saved address) | done, 1 step, 12.5 s | **failed**: no address is saved on this account (skipped at sign-in) | pass, 9.6 s | – | | |
+| doordash_search (first restaurant) | done, 2 steps, 18.4 s | done, 5 steps, 52.7 s | pass, 16.3 s | pass, 30.5 s | pass after a repair | pass after a repair, 128.2 s, 2 calls |
+| settings_version | done, 4 steps, 15.3 s | done, 14 steps, 76.8 s | pass, 7.9 s | pass, 23.6 s | | |
+| calendar_today | done, 0 steps, 4.4 s | done, 17 steps, 85.8 s | pass, 1.5 s | pass, 4.9 s | | |
+| play_rating | done, 6 steps, 19.6 s | done, 3 steps, 18.1 s | pass, 5.0 s | pass, 21.7 s | fail | pass, 12.3 s |
+
+- **No bot check** at any launch, and the agent got a right answer in 6 of 7 (the seventh had no saved address to find).
+- **The agent took far more steps on the cloud phone** (Calendar 17 against 0, Settings 14 against 4): a fresh phone shows each app's first-run screens, which the Mac's `envoy-real` had cleared long ago. So these agent times are not a like-for-like comparison. Per step it was about 1.1–1.6× the Mac's. The one comparable pair (play_rating, 3 against 6 steps) took 18.1 s against 19.6 s.
+- **Routines, same input, ran 2–4× the Mac's time** (23.6 against 7.9 s, 30.5 against 16.3 s, 66.1 against 21.2 s): real apps draw much more than SkyLark, and every screen is drawn in software.
+- Gmail and Chipotle weren't run: Gmail's answer key needs the Mac's Gmail API sign-in, and Chipotle's first run sets a pickup store (73 s on the Mac).
 
 ### Choosing the cloud (and back): the switch
 

@@ -1,0 +1,1721 @@
+{
+ "meta": {
+  "suite": "real",
+  "run_id": "1029222026",
+  "started": "2026-10-29T22:20:26+00:00",
+  "finished": "2026-10-29T22:36:54+00:00",
+  "wall_s": 988.2,
+  "code": {
+   "commit": "",
+   "short": "",
+   "tags": [],
+   "is_eval_final": false,
+   "dirty": [],
+   "branch": ""
+  },
+  "models": {
+   "tier": "standard",
+   "profile": "spark",
+   "jobs": {
+    "step": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "plan": {
+     "model": "muse-spark-1.3",
+     "effort": "medium"
+    },
+    "repair": {
+     "model": "muse-spark-1.3",
+     "effort": "medium"
+    },
+    "grounding": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "choose": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "extract": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "answer": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "compile": {
+     "model": "muse-wonder-1.0",
+     "effort": "medium"
+    },
+    "match": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    }
+   }
+  },
+  "devices": [
+   "emulator-5556"
+  ],
+  "cost": {
+   "input_tokens": 174763,
+   "cached_tokens": 122142,
+   "output_tokens": 23060,
+   "reasoning_tokens": 16264,
+   "calls": 80,
+   "errors": 0,
+   "billed_usd": 0.3646,
+   "standard_usd": 0.3646,
+   "by_job": {
+    "plan": {
+     "calls": 9,
+     "standard_usd": 0.0206
+    },
+    "step": {
+     "calls": 64,
+     "standard_usd": 0.0972
+    },
+    "compile": {
+     "calls": 5,
+     "standard_usd": 0.2347
+    },
+    "repair": {
+     "calls": 2,
+     "standard_usd": 0.0122
+    }
+   },
+   "by_model": {
+    "muse-spark-1.3": 75,
+    "muse-wonder-1.0": 5
+   }
+  },
+  "spend_total_this_checkout": {
+   "billed_usd": 0.615,
+   "standard_usd": 0.682
+  },
+  "host": "envoy-cloud"
+ },
+ "note": "Cloud envoy-real (Oct 29, after the user's sign-ins and the AVD swap; -gpu swangle), eval/run_final.py real --only. Rows for these 7 workflows only; the Mac's rows are in eval/results/final/real.json.",
+ "workflows": {
+  "amazon": {
+   "app": "com.amazon.mShop.android.shopping",
+   "category": "shopping",
+   "goal": "In the Amazon app, search for AA batteries and tell me the price of the first result.",
+   "graded_by": "shape",
+   "time": "2026-10-29T22:03:28+00:00",
+   "expect": "\\$\\s?\\d+(\\.\\d{2})?",
+   "expect_second": "\\$\\s?\\d+(\\.\\d{2})?",
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "$21.87 for Duracell Coppertop AA Batteries, 24 Count (first result - Sponsored Ad)",
+    "steps": 9,
+    "model_calls": 13,
+    "cost_at_standard_usd": 0.025639999999999996,
+    "duration_s": 183.05,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: 21, 87, Duracell, Coppertop"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "amazon_search_first_result_price",
+    "steps": 4,
+    "inputs": {
+     "search_query": "AA batteries"
+    },
+    "outputs": [
+     "first_result_product",
+     "first_result_price"
+    ],
+    "dropped": [
+     [
+      2,
+      "no visible change (a retry or a dead tap)"
+     ],
+     [
+      9,
+      "look: not a device action"
+     ],
+     [
+      3,
+      "back-track: steps 3–6 returned to the same screen"
+     ],
+     [
+      4,
+      "back-track: steps 3–6 returned to the same screen"
+     ],
+     [
+      5,
+      "back-track: steps 3–6 returned to the same screen"
+     ],
+     [
+      6,
+      "back-track: steps 3–6 returned to the same screen"
+     ]
+    ],
+    "warnings": [
+     "output 'first_result_price': read in the row of 'first_result_product' ('$21.87'), not the list's first match"
+    ],
+    "cost_usd": 0.0542
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "search_query": "AA batteries"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "first_result_product": "Duracell Coppertop AA Batteries, 24 Count, 12-Year Shelf Life, Long-lasting | AA Batteries with Power Boost Ingredients, Long-lasting Alkaline Double AA Battery for Household and Office Devices",
+      "first_result_price": "$21.87"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 66.05,
+     "steps": [
+      {
+       "id": "go_back",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its after-checks already hold",
+       "ms": 534
+      },
+      {
+       "id": "launch_amazon_app",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 15.7 s"
+       ],
+       "score": null,
+       "detail": "",
+       "ms": 16080
+      },
+      {
+       "id": "tap_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 7.0 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 19137
+      },
+      {
+       "id": "type_search_query",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 4.6 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 26172
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "search_query": "USB-C cable"
+     },
+     "repair_allowed": false,
+     "status": "failed",
+     "result": "fail",
+     "detail": "step launch_amazon_app: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00); no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+     "outputs": {},
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 21.9,
+     "steps": [
+      {
+       "id": "go_back",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 13.5 s",
+        "wait and retry: after-checks held after 3.1 s"
+       ],
+       "score": null,
+       "detail": "",
+       "ms": 17956
+      },
+      {
+       "id": "launch_amazon_app",
+       "status": "failed",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: waited 3.2 s"
+       ],
+       "score": null,
+       "detail": "step launch_amazon_app: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00); no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+       "ms": 3603
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "search_query": "USB-C cable"
+     },
+     "repair_allowed": true,
+     "status": "done",
+     "result": "pass after repair",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "first_result_product": "Durable Braided Nylon Extra Long High Speed USB-C Cable for iPhone 17, MacBook Pro/Air, Portable Monitor, USB-C Devices",
+      "first_result_price": "$29.99"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 203.78,
+     "steps": [
+      {
+       "id": "go_back",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its after-checks already hold",
+       "ms": 303
+      },
+      {
+       "id": "launch_amazon_app",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 17.3 s"
+       ],
+       "score": null,
+       "detail": "",
+       "ms": 17677
+      },
+      {
+       "id": "tap_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 6.0 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 13356
+      },
+      {
+       "id": "type_search_query",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 9.6 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 35308
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ],
+   "cost": {
+    "calls": 14,
+    "input_tokens": 34144,
+    "cached_tokens": 20925,
+    "output_tokens": 4333,
+    "reasoning_tokens": 2955,
+    "standard_usd": 0.0799,
+    "billed_usd": 0.0799
+   },
+   "run": {
+    "run_id": "1029220325",
+    "code": "",
+    "dirty": false
+   }
+  },
+  "starbucks": {
+   "app": "com.starbucks.mobilecard",
+   "category": "food",
+   "goal": "In the Starbucks app, how many calories are in a Grande Caffè Latte?",
+   "graded_by": "truth",
+   "time": "2026-10-29T22:20:27+00:00",
+   "expect": "\\b190\\b",
+   "expect_second": "\\b250\\b",
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "Grande Caffè Latte is 190 calories",
+    "steps": 14,
+    "model_calls": 16,
+    "cost_at_standard_usd": 0.020733599999999998,
+    "duration_s": 90.9,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Grande, Caff, Latte, 190"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "starbucks_get_drink_calories",
+    "steps": 12,
+    "inputs": {
+     "drink_name": "Caffè Latte"
+    },
+    "outputs": [
+     "calories"
+    ],
+    "dropped": [
+     [
+      8,
+      "no visible change (a retry or a dead tap)"
+     ],
+     [
+      3,
+      "back-track: steps 3–4 returned to the same screen"
+     ],
+     [
+      4,
+      "back-track: steps 3–4 returned to the same screen"
+     ]
+    ],
+    "warnings": [
+     "output 'calories' reads '' on the run's own final screen, not '190 calories'"
+    ],
+    "cost_usd": 0.0745
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "drink_name": "Caffè Latte"
+     },
+     "repair_allowed": false,
+     "status": "failed",
+     "result": "fail",
+     "detail": "outputs not found: calories",
+     "outputs": {
+      "calories": null
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 59.72,
+     "steps": [
+      {
+       "id": "dismiss_rewards_prompt",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "optional, and the next required step (go_back) is ready",
+       "ms": 1628
+      },
+      {
+       "id": "go_back",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 3.1 s",
+        "wait and retry: after-checks held after 1.6 s"
+       ],
+       "score": null,
+       "detail": "",
+       "ms": 5387
+      },
+      {
+       "id": "launch_starbucks_app",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "",
+       "ms": 1136
+      },
+      {
+       "id": "open_order_section",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 6.1 s",
+        "wait and retry: after-checks held after 3.6 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 10307
+      },
+      {
+       "id": "decline_location_prompt",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2679
+      },
+      {
+       "id": "skip_store_selection",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 1.5 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2061
+      },
+      {
+       "id": "skip_store_selection_again",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its after-checks already hold",
+       "ms": 311
+      },
+      {
+       "id": "confirm_skip_to_menu",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2275
+      },
+      {
+       "id": "open_menu_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 1.9 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 3131
+      },
+      {
+       "id": "search_for_drink",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 3640
+      },
+      {
+       "id": "find_open_drink_details",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 631
+      },
+      {
+       "id": "open_drink_details",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 1.7 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2216
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "same input",
+     "inputs": {
+      "drink_name": "Caffè Latte"
+     },
+     "repair_allowed": true,
+     "status": "failed",
+     "result": "fail",
+     "detail": "outputs not found: calories",
+     "outputs": {
+      "calories": null
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 60.41,
+     "steps": [
+      {
+       "id": "dismiss_rewards_prompt",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "optional, and the next required step (go_back) is ready",
+       "ms": 1397
+      },
+      {
+       "id": "go_back",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 2.4 s"
+       ],
+       "score": null,
+       "detail": "",
+       "ms": 4892
+      },
+      {
+       "id": "launch_starbucks_app",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 2.5 s"
+       ],
+       "score": null,
+       "detail": "",
+       "ms": 2826
+      },
+      {
+       "id": "open_order_section",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 3.6 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 10399
+      },
+      {
+       "id": "decline_location_prompt",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2724
+      },
+      {
+       "id": "skip_store_selection",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1810
+      },
+      {
+       "id": "skip_store_selection_again",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its after-checks already hold",
+       "ms": 248
+      },
+      {
+       "id": "confirm_skip_to_menu",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 2.2 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 3222
+      },
+      {
+       "id": "open_menu_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 2.0 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2498
+      },
+      {
+       "id": "search_for_drink",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 3666
+      },
+      {
+       "id": "find_open_drink_details",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 621
+      },
+      {
+       "id": "open_drink_details",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 1.5 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2034
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "drink_name": "Caramel Macchiato"
+     },
+     "repair_allowed": false,
+     "status": "failed",
+     "result": "fail",
+     "detail": "outputs not found: calories",
+     "outputs": {
+      "calories": null
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 56.27,
+     "steps": [
+      {
+       "id": "dismiss_rewards_prompt",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "optional, and the next required step (go_back) is ready",
+       "ms": 1325
+      },
+      {
+       "id": "go_back",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 2.0 s"
+       ],
+       "score": null,
+       "detail": "",
+       "ms": 4264
+      },
+      {
+       "id": "launch_starbucks_app",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "",
+       "ms": 826
+      },
+      {
+       "id": "open_order_section",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 5.3 s",
+        "wait and retry: after-checks held after 3.8 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 9636
+      },
+      {
+       "id": "decline_location_prompt",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2363
+      },
+      {
+       "id": "skip_store_selection",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1634
+      },
+      {
+       "id": "skip_store_selection_again",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its after-checks already hold",
+       "ms": 400
+      },
+      {
+       "id": "confirm_skip_to_menu",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2141
+      },
+      {
+       "id": "open_menu_search",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2785
+      },
+      {
+       "id": "search_for_drink",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 4125
+      },
+      {
+       "id": "find_open_drink_details",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 639
+      },
+      {
+       "id": "open_drink_details",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1844
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "drink_name": "Caramel Macchiato"
+     },
+     "repair_allowed": true,
+     "status": "failed",
+     "result": "fail",
+     "detail": "outputs not found: calories",
+     "outputs": {
+      "calories": null
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 62.33,
+     "steps": [
+      {
+       "id": "dismiss_rewards_prompt",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "optional, and the next required step (go_back) is ready",
+       "ms": 4742
+      },
+      {
+       "id": "go_back",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 1.8 s"
+       ],
+       "score": null,
+       "detail": "",
+       "ms": 4359
+      },
+      {
+       "id": "launch_starbucks_app",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "",
+       "ms": 1269
+      },
+      {
+       "id": "open_order_section",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 6.2 s",
+        "wait and retry: after-checks held after 4.4 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 11021
+      },
+      {
+       "id": "decline_location_prompt",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2214
+      },
+      {
+       "id": "skip_store_selection",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 1.7 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2157
+      },
+      {
+       "id": "skip_store_selection_again",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its after-checks already hold",
+       "ms": 633
+      },
+      {
+       "id": "confirm_skip_to_menu",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1539
+      },
+      {
+       "id": "open_menu_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 1.9 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 3424
+      },
+      {
+       "id": "search_for_drink",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 3961
+      },
+      {
+       "id": "find_open_drink_details",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 631
+      },
+      {
+       "id": "open_drink_details",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 1.6 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2104
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ],
+   "cost": {
+    "calls": 17,
+    "input_tokens": 36559,
+    "cached_tokens": 27664,
+    "output_tokens": 5131,
+    "reasoning_tokens": 3412,
+    "standard_usd": 0.0952,
+    "billed_usd": 0.0952
+   },
+   "run": {
+    "run_id": "1029222026",
+    "code": "",
+    "dirty": false
+   }
+  },
+  "doordash": {
+   "app": "com.dd.doordash",
+   "category": "food",
+   "goal": "In the DoorDash app, what is my saved delivery address?",
+   "graded_by": "truth",
+   "time": "2026-10-29T22:26:35+00:00",
+   "expect": "Hacker Way",
+   "expect_second": null,
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "failed",
+    "result": "[redacted]",
+    "steps": 6,
+    "model_calls": 6,
+    "cost_at_standard_usd": 0.011294349999999998,
+    "duration_s": 57.03,
+    "popups": [],
+    "check": null
+   },
+   "first_run": "failed",
+   "compile": {
+    "compiled": false,
+    "reason": "run ended 'failed' with check None; only verified runs are compiled"
+   },
+   "cost": {
+    "calls": 6,
+    "input_tokens": 14417,
+    "cached_tokens": 9894,
+    "output_tokens": 978,
+    "reasoning_tokens": 624,
+    "standard_usd": 0.0113,
+    "billed_usd": 0.0113
+   },
+   "run": {
+    "run_id": "1029222026",
+    "code": "",
+    "dirty": false
+   }
+  },
+  "doordash_search": {
+   "app": "com.dd.doordash",
+   "category": "food",
+   "goal": "In the DoorDash app, search for pizza and tell me the name of the first restaurant in the results.",
+   "graded_by": "shape",
+   "time": "2026-10-29T22:27:35+00:00",
+   "expect": "\\w",
+   "expect_second": "\\w",
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "Pizza Zombie",
+    "steps": 5,
+    "model_calls": 8,
+    "cost_at_standard_usd": 0.0153173,
+    "duration_s": 52.68,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Pizza, Zombie"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "doordash_search_first_restaurant",
+    "steps": 5,
+    "inputs": {
+     "search_query": "pizza"
+    },
+    "outputs": [
+     "first_restaurant_name"
+    ],
+    "dropped": [
+     [
+      2,
+      "look: not a device action"
+     ],
+     [
+      3,
+      "no visible change (a retry or a dead tap)"
+     ]
+    ],
+    "warnings": [],
+    "cost_usd": 0.044
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "search_query": "pizza"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "first_restaurant_name": "Pizza Zombie"
+     },
+     "rung": 2,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 30.51,
+     "steps": [
+      {
+       "id": "go_back",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its after-checks already hold",
+       "ms": 335
+      },
+      {
+       "id": "launch_doordash_app",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 6.8 s"
+       ],
+       "score": null,
+       "detail": "",
+       "ms": 7046
+      },
+      {
+       "id": "tap_search_doordash",
+       "status": "done",
+       "rung": 2,
+       "rungs": [
+        "relaxed match: scrolled to reveal the target [38] \"Search DoorDash\" score 1.00 (runner-up 0.43)",
+        "wait and retry: after-checks held after 2.2 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 17848
+      },
+      {
+       "id": "find_tap_recent_search",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.924,
+       "detail": "",
+       "ms": 1193
+      },
+      {
+       "id": "tap_recent_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 3.1 s"
+       ],
+       "score": 0.924,
+       "detail": "",
+       "ms": 3754
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "search_query": "sushi"
+     },
+     "repair_allowed": false,
+     "status": "failed",
+     "result": "fail",
+     "detail": "step go_back: before-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+     "outputs": {},
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 6.67,
+     "steps": [
+      {
+       "id": "go_back",
+       "status": "failed",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: waited 5 s"
+       ],
+       "score": null,
+       "detail": "step go_back: before-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+       "ms": 6462
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "search_query": "sushi"
+     },
+     "repair_allowed": true,
+     "status": "done",
+     "result": "pass after repair",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "first_restaurant_name": "Sushi Roku"
+     },
+     "rung": 4,
+     "model_calls": 2,
+     "cost_usd": 0.0122,
+     "duration_s": 128.18,
+     "steps": [
+      {
+       "id": "go_back",
+       "status": "done",
+       "rung": 4,
+       "rungs": [
+        "wait and retry: waited 5 s",
+        "local repair: 1 repair action(s) satisfied the after-checks"
+       ],
+       "score": null,
+       "detail": "",
+       "ms": 6262
+      },
+      {
+       "id": "launch_doordash_app",
+       "status": "done",
+       "rung": 2,
+       "rungs": [
+        "relaxed match: the app skipped ahead to find_tap_recent_search"
+       ],
+       "score": null,
+       "detail": "",
+       "ms": 3891
+      },
+      {
+       "id": "tap_search_doordash",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its screen no longer appears",
+       "ms": 0
+      },
+      {
+       "id": "find_tap_recent_search",
+       "status": "done",
+       "rung": 2,
+       "rungs": [
+        "relaxed match: after-checks failed but the next step (tap_recent_search) is ready"
+       ],
+       "score": 0.8,
+       "detail": "",
+       "ms": 90332
+      },
+      {
+       "id": "tap_recent_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 3.7 s"
+       ],
+       "score": 0.8,
+       "detail": "",
+       "ms": 6044
+      }
+     ],
+     "patches": [
+      "step 'go_back' replaced by back ",
+      "step 'tap_search_doordash' removed: its screen no longer appears after 'launch_doordash_app'; the app went straight to 'find_tap_recent_search'",
+      "step 'find_tap_recent_search': after-checks failed (no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) but the next step was ready; after-checks rewritten from what happened"
+     ],
+     "popups": []
+    }
+   ],
+   "cost": {
+    "calls": 11,
+    "input_tokens": 24657,
+    "cached_tokens": 14457,
+    "output_tokens": 5284,
+    "reasoning_tokens": 4368,
+    "standard_usd": 0.0715,
+    "billed_usd": 0.0715
+   },
+   "run": {
+    "run_id": "1029222026",
+    "code": "",
+    "dirty": false
+   }
+  },
+  "settings_version": {
+   "app": "com.android.settings",
+   "category": "system",
+   "goal": "In the Settings app, what Android version is this phone running?",
+   "graded_by": "truth",
+   "time": "2026-10-29T22:31:39+00:00",
+   "expect": "\\b15\\b",
+   "expect_second": null,
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "Android version 15 (shown as \"Android version · 15\" in Settings > About emulated device)",
+    "steps": 14,
+    "model_calls": 17,
+    "cost_at_standard_usd": 0.027567550000000003,
+    "duration_s": 76.77,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Android, 15, Android, 15"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "settings_check_android_version",
+    "steps": 3,
+    "inputs": {},
+    "outputs": [
+     "android_version"
+    ],
+    "dropped": [
+     [
+      4,
+      "no visible change (a retry or a dead tap)"
+     ],
+     [
+      1,
+      "back-track: steps 1–9 returned to the same screen"
+     ],
+     [
+      2,
+      "back-track: steps 1–9 returned to the same screen"
+     ],
+     [
+      3,
+      "back-track: steps 1–9 returned to the same screen"
+     ],
+     [
+      5,
+      "back-track: steps 1–9 returned to the same screen"
+     ],
+     [
+      6,
+      "back-track: steps 1–9 returned to the same screen"
+     ],
+     [
+      7,
+      "back-track: steps 1–9 returned to the same screen"
+     ],
+     [
+      8,
+      "back-track: steps 1–9 returned to the same screen"
+     ],
+     [
+      9,
+      "back-track: steps 1–9 returned to the same screen"
+     ]
+    ],
+    "warnings": [],
+    "cost_usd": 0.0355
+   },
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {},
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "android_version": "15"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 23.6,
+     "steps": [
+      {
+       "id": "scroll_to_about_device",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 2.5 s"
+       ],
+       "score": 0.974,
+       "detail": "",
+       "ms": 15671
+      },
+      {
+       "id": "open_about_device",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 2.2 s"
+       ],
+       "score": 0.974,
+       "detail": "",
+       "ms": 2773
+      },
+      {
+       "id": "scroll_down_about_device",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.95,
+       "detail": "",
+       "ms": 4755
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ],
+   "cost": {
+    "calls": 18,
+    "input_tokens": 39535,
+    "cached_tokens": 27777,
+    "output_tokens": 3924,
+    "reasoning_tokens": 2541,
+    "standard_usd": 0.063,
+    "billed_usd": 0.063
+   },
+   "run": {
+    "run_id": "1029222026",
+    "code": "",
+    "dirty": false
+   }
+  },
+  "calendar_today": {
+   "app": "com.google.android.calendar",
+   "category": "google",
+   "goal": "In Google Calendar, do I have any events today?",
+   "graded_by": "truth",
+   "time": "2026-10-29T22:33:39+00:00",
+   "expect": "\\b(no|none|nothing|not any|don't|do not)\\b",
+   "expect_second": null,
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "No - Today Thursday 29 October 2026 shows 'Nothing planned. Tap to create.' so you have no events today.",
+    "steps": 17,
+    "model_calls": 21,
+    "cost_at_standard_usd": 0.03455625,
+    "duration_s": 85.83,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Today, Thursday, 29, October"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "google_calendar_check_todays_events",
+    "steps": 2,
+    "inputs": {},
+    "outputs": [
+     "events_today"
+    ],
+    "dropped": [
+     [
+      2,
+      "look: not a device action"
+     ],
+     [
+      3,
+      "no visible change (a retry or a dead tap)"
+     ],
+     [
+      4,
+      "no visible change (a retry or a dead tap)"
+     ],
+     [
+      5,
+      "no visible change (a retry or a dead tap)"
+     ],
+     [
+      1,
+      "back-track: steps 1–16 returned to the same screen"
+     ],
+     [
+      7,
+      "back-track: steps 1–16 returned to the same screen"
+     ],
+     [
+      8,
+      "back-track: steps 1–16 returned to the same screen"
+     ],
+     [
+      9,
+      "back-track: steps 1–16 returned to the same screen"
+     ],
+     [
+      10,
+      "back-track: steps 1–16 returned to the same screen"
+     ],
+     [
+      11,
+      "back-track: steps 1–16 returned to the same screen"
+     ],
+     [
+      12,
+      "back-track: steps 1–16 returned to the same screen"
+     ],
+     [
+      13,
+      "back-track: steps 1–16 returned to the same screen"
+     ],
+     [
+      14,
+      "back-track: steps 1–16 returned to the same screen"
+     ],
+     [
+      15,
+      "back-track: steps 1–16 returned to the same screen"
+     ],
+     [
+      16,
+      "back-track: steps 1–16 returned to the same screen"
+     ]
+    ],
+    "warnings": [
+     "output 'today_date': 'Thursday 29 October 2026' is not on the final screen, or nothing anchors it; dropped"
+    ],
+    "cost_usd": 0.0408
+   },
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {},
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "events_today": "Nothing planned. Tap to create."
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 4.87,
+     "steps": [
+      {
+       "id": "tap_next_page",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "optional, its screen didn't come, and only optional steps are left",
+       "ms": 4388
+      },
+      {
+       "id": "tap_got_it",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its after-checks already hold",
+       "ms": 195
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ],
+   "cost": {
+    "calls": 22,
+    "input_tokens": 48342,
+    "cached_tokens": 34245,
+    "output_tokens": 4938,
+    "reasoning_tokens": 3235,
+    "standard_usd": 0.0753,
+    "billed_usd": 0.0753
+   },
+   "run": {
+    "run_id": "1029222026",
+    "code": "",
+    "dirty": false
+   }
+  },
+  "play_rating": {
+   "app": "com.android.vending",
+   "category": "store",
+   "goal": "In the Google Play Store app, what is the star rating of the Duolingo app?",
+   "graded_by": "shape",
+   "time": "2026-10-29T22:35:36+00:00",
+   "expect": "\\b[1-5]\\.\\d\\b",
+   "expect_second": "\\b[1-5]\\.\\d\\b",
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "4.7 stars - Average rating 4.7 stars in 48 million reviews",
+    "steps": 3,
+    "model_calls": 5,
+    "cost_at_standard_usd": 0.00827525,
+    "duration_s": 18.09,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: 4, 7, Average, 4"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "play_store_get_app_rating",
+    "steps": 3,
+    "inputs": {
+     "app_name": "Duolingo"
+    },
+    "outputs": [
+     "star_rating"
+    ],
+    "dropped": [],
+    "warnings": [
+     "output 'star_rating': the 'Average rating' after the row that names {{app_name}}"
+    ],
+    "cost_usd": 0.0399
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "app_name": "Duolingo"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "star_rating": "4.7 stars in 48 million reviews"
+     },
+     "rung": 2,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 21.67,
+     "steps": [
+      {
+       "id": "tap_search",
+       "status": "done",
+       "rung": 2,
+       "rungs": [
+        "relaxed match: scrolled to reveal the target [26] \"Search\" score 1.00 (runner-up 0.37)",
+        "wait and retry: after-checks held after 1.5 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 16474
+      },
+      {
+       "id": "tap_search_field",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1974
+      },
+      {
+       "id": "type_app_name",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2774
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "app_name": "Spotify"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "star_rating": "4.3 stars in 34 million reviews"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 12.31,
+     "steps": [
+      {
+       "id": "tap_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 5.1 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 6673
+      },
+      {
+       "id": "tap_search_field",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1964
+      },
+      {
+       "id": "type_app_name",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2761
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ],
+   "cost": {
+    "calls": 6,
+    "input_tokens": 11253,
+    "cached_tokens": 8105,
+    "output_tokens": 2805,
+    "reasoning_tokens": 2084,
+    "standard_usd": 0.0482,
+    "billed_usd": 0.0482
+   },
+   "run": {
+    "run_id": "1029222026",
+    "code": "",
+    "dirty": false
+   }
+  }
+ }
+}
