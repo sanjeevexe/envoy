@@ -8,7 +8,7 @@ import pytest
 
 from agent.checks import answer_tokens, evaluate
 from agent.popups import match_popup
-from devices.screen import build_state
+from devices.screen import PASSWORD_MASK, build_state, parse_hierarchy
 from devices.types import Action, ScreenState
 from models.schemas import PLAN_SCHEMA, STEP_SCHEMA, SuccessCheck, check_strict_subset
 from policy.risk import classify
@@ -116,6 +116,23 @@ def test_sign_in_screen_is_detected_and_others_are_not():
     assert sign_in_reason(screen("skylark_signin")) == "password field on screen"
     for name in ("skylark_home", "skylark_trip", "skylark_trips", "skylark_confirm_checkin"):
         assert sign_in_reason(screen(name)) is None, name
+
+
+def test_a_filled_password_never_leaves_the_dump():
+    """uiautomator2 dumps a filled password field's text as the password itself (Android 15, a saved login filled in):
+    the compact view, the elements and the kept XML all carry a fixed mask instead, and the screen still reads as a sign-in."""
+    xml = (SCREENS / "skylark_signin.xml").read_text()
+    secret = "hunter2x9"
+    filled = xml.replace('<node index="3" text="" resource-id="field_password"', f'<node index="3" text="{secret}" resource-id="field_password"')
+    assert filled != xml
+    s = build_state(filled, "com.skylark.air", "com.skylark.air.MainActivity", 1080, 2400)
+    assert secret not in s.compact and secret not in s.raw_xml
+    assert not any(secret in f"{e.text} {e.label}" for e in s.elements)
+    assert not any(secret in e.text for e in parse_hierarchy(filled, 2400))  # read directly, too
+    field = next(e for e in s.numbered if e.password)
+    assert field.text == PASSWORD_MASK and "empty" not in s.compact.splitlines()[field.number]
+    assert sign_in_reason(s) == "password field on screen"
+    assert build_state(xml, "com.skylark.air", "com.skylark.air.MainActivity", 1080, 2400).raw_xml == xml  # nothing filled: untouched
 
 
 def test_rating_prompt_is_dismissed_without_a_model_call():

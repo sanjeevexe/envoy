@@ -47,12 +47,29 @@ _KEYBOARD_IDS = re.compile(r"^input_method_nav_", re.I)
 _OVERLAY_IDS = re.compile(r"^com\.android\.systemui:id/(clipboard_|screenshot_)", re.I)
 
 
+# What a filled password field's text becomes: the same for every password, so not even its length is kept.
+PASSWORD_MASK = "••••••••"
+
+
+def mask_passwords(xml: str) -> str:
+    """The dump with every filled password field's text replaced by PASSWORD_MASK. uiautomator2 returns the password
+    itself (Android 15, a saved login filled in), so this runs before anything reads, keeps or logs the screen: the
+    compact view, the element tree, traces and model inputs never carry it."""
+    if 'password="true"' not in xml:
+        return xml
+    root = ET.fromstring(xml)
+    filled = [n for n in root.iter() if n.get("password") == "true" and (n.get("text") or "").strip()]
+    for n in filled:
+        n.set("text", PASSWORD_MASK)
+    return ET.tostring(root, encoding="unicode") if filled else xml
+
+
 def parse_hierarchy(xml: str, screen_h: int) -> list[Element]:
     """Flatten the uiautomator2 XML dump into Elements (document order), marking list membership.
 
     `screen_h` must be the device's real height: a dump taken mid-launch can hold only the status bar.
     """
-    root = ET.fromstring(xml)
+    root = ET.fromstring(mask_passwords(xml))
     out: list[Element] = []
 
     def walk(node: ET.Element, parent: int | None, depth: int, in_list: bool, overlay: bool = False) -> None:
@@ -317,6 +334,7 @@ def build_state(
     read_ms: float | None = None,
     secure: bool = False,
 ) -> ScreenState:
+    xml = mask_passwords(xml)
     elements = parse_hierarchy(xml, height)
     package = package or next((e.package for e in elements if e.package), "")
     numbered = number_elements(elements, width, height)
