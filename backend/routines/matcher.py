@@ -4,6 +4,10 @@ Four filters: the app, the intent patterns, similarity of descriptions, then one
 Spark, low effort) that confirms the best candidates and fills the routine's inputs from the request
 and the notes. Values the model returns are kept only if they really appear in the request or the
 notes, so a guessed input can't send a routine to the wrong booking.
+
+Close calls: when the runner-up scores within CLOSE_GAP of the pick and the request says no word that sets the pick
+apart from it ("a Caffè Latte on DoorDash" says neither "price" nor "first restaurant"), no routine runs: the result
+names both (`ambiguous`), and the caller asks the user or hands the request to the agent.
 """
 
 from __future__ import annotations
@@ -21,6 +25,7 @@ from routines.store import RoutineStore
 _STOP = {"the", "a", "an", "my", "me", "to", "for", "on", "of", "in", "and", "is", "what", "whats", "s", "i", "it", "from", "with", "do", "does", "please"}
 SHORTLIST_FLOOR = 0.12
 FALLBACK_K = 5
+CLOSE_GAP = 0.15  # candidates this close on words are told apart only by a word the request says
 
 
 def _words(s: str) -> set[str]:
@@ -40,6 +45,28 @@ class MatchResult:
     candidates: list[tuple[str, float]] = field(default_factory=list)
     model_calls: int = 0
     cost_usd: float = 0.0
+    ambiguous: list[str] = field(default_factory=list)  # the close candidates, when the request doesn't pick one
+
+
+def _what(r: Routine) -> set[str]:
+    """The words that say what a routine does and returns, without its example inputs ("pizza")."""
+    examples = set().union(*(_words(s.example or "") for s in r.inputs.values())) if r.inputs else set()
+    return _words(" ".join([r.intent, r.description, *r.patterns])) - examples
+
+
+def close_call(request: str, chosen: Routine, cands: list[tuple[Routine, float]]) -> Routine | None:
+    """The runner-up when the request names nothing the pick does beyond its app ("a Caffè Latte on DoorDash": no
+    "price", no "restaurant") and the two report different things; else None. Words decide only when they matched at
+    all: below the shortlist floor the request is a paraphrase ("is it on time"), and the model's pick stands."""
+    score = dict((r.routine, sc) for r, sc in cands)
+    req = _words(request)
+    mine = score.get(chosen.routine, 0.0)
+    if mine < SHORTLIST_FLOOR or req & (_what(chosen) - _words(chosen.app.replace(".", " "))):
+        return None
+    for r, sc in cands:
+        if r.routine != chosen.routine and sc >= mine - CLOSE_GAP and {norm(o) for o in r.outputs} != {norm(o) for o in chosen.outputs}:
+            return r
+    return None
 
 
 class RoutineMatcher:
@@ -82,6 +109,10 @@ class RoutineMatcher:
         chosen = next((r for r, _ in cands if r.routine == m.routine), None)
         if chosen is None or not m.confident:
             res.stage = f"model: no confident match ({m.routine})"
+            return res
+        if (other := close_call(request, chosen, cands)) is not None:
+            res.ambiguous = [chosen.routine, other.routine]
+            res.stage = f"close call: {chosen.routine} or {other.routine}; the request says nothing that tells them apart"
             return res
         res.routine, res.stage = chosen, "model confirmed"
         given = {v.name: v for v in m.inputs}

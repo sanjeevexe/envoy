@@ -1,0 +1,51 @@
+{
+ "name": "amazon_search_first_result_price",
+ "intent": "Search for a product on Amazon and report the price of the first result",
+ "description": "Opens Amazon search, runs the requested product search, and reports the price of the first result shown under Results.",
+ "patterns": [
+  "search Amazon and tell me the price of the first result",
+  "look up a product on Amazon and report its first price",
+  "what is the first result price for this on Amazon"
+ ],
+ "inputs": [
+  {
+   "name": "search_query",
+   "type": "text",
+   "description": "Product or product type to search for on Amazon",
+   "from_memory": null,
+   "example": "aa batteries"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "tap_search_box",
+   "intent": "Tap the Search box to open Amazon search",
+   "target_fixed_text": "Search",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "tap_search_suggestion",
+   "intent": "Tap the {{search_query}} suggestion to run the search",
+   "target_fixed_text": null,
+   "choice_input": "search_query"
+  }
+ ],
+ "outputs": [
+  {
+   "name": "first_result_product",
+   "near": "Results",
+   "example": "Energizer MAX AA Batteries (20 Pack), Double A Alkaline Batteries"
+  },
+  {
+   "name": "first_result_price",
+   "near": "Energizer MAX AA Batteries (20 Pack), Double A Alkaline Batteries",
+   "example": "$19.44 ( $0.97 /count)"
+  }
+ ],
+ "data_values": [
+  "Fri, Oct 30",
+  "Delivering to Atlanta 30308 - Update location ⌵"
+ ]
+}

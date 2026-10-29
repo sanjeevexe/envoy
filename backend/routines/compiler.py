@@ -30,7 +30,8 @@ from models.prompts import COMPILE_INSTRUCTIONS, compile_input
 from models.schemas import CompiledRoutine
 from routines import checks as chk
 from routines import locators
-from routines.model import Check, Extract, InputSpec, Locator, Routine, Step, StepAction, has_slot
+from routines import screen_read
+from routines.model import Check, Extract, InputSpec, Locator, Routine, Step, StepAction, has_slot, render_str
 from routines.screens import contains_value, fold, load_tree, norm, parts_of, short_id, usable_id
 from routines.visual import encode as encode_png
 
@@ -109,10 +110,31 @@ class CompileReport:
 # ---- 1 + 2: load and clean up -----------------------------------------------------------------
 
 
+def _app_text(s: ScreenState | None) -> bool:
+    return s is not None and any(e.label.strip() and not e.status_bar for e in s.numbered)
+
+
+def screen_only(trace_dir: Path, run: dict, records: list[dict] | None = None) -> bool:
+    """An unverified run whose answer couldn't be checked only because its last screen has no accessibility tree (a page
+    Chrome draws without one): the screenshot holds the answer. The compiler then reads it from the recorded screenshot
+    and keeps it only if that read passes screen_read.accept, the check every rerun passes too."""
+    check = run.get("check") or {}
+    if run.get("status") != "done_unverified" or "visible on the current screen" not in (check.get("detail") or ""):
+        return False
+    if records is None:
+        records = [json.loads(line) for line in (trace_dir / "steps.jsonl").read_text().splitlines() if line.strip()]
+    return not _app_text(_done_screen(trace_dir, records) or _final_screen(trace_dir, records)) and _last_png(trace_dir) is not None
+
+
+def _last_png(trace_dir: Path) -> Path | None:
+    pngs = sorted((trace_dir / "screens").glob("*_before.png"))
+    return pngs[-1] if pngs else None
+
+
 def load_trace(trace_dir: Path, *, confirmed: bool = False) -> tuple[dict, list[dict]]:
     run = json.loads((trace_dir / "run.json").read_text())
     check = run.get("check") or {}
-    if not confirmed and not (run.get("status") == "done" and check.get("passed")):
+    if not confirmed and not (run.get("status") == "done" and check.get("passed")) and not screen_only(trace_dir, run):
         raise NotCompilable(f"run ended {run.get('status')!r} with check {check.get('detail')!r}; only verified runs are compiled")
     records = [json.loads(line) for line in (trace_dir / "steps.jsonl").read_text().splitlines() if line.strip()]
     return run, records
@@ -534,6 +556,70 @@ def _extract_for(name: str, near: str, example: str, final: ScreenState, example
     return Extract(near=near_text, locator=loc, segment=segment, after=after_text, card=card)
 
 
+def _rows(extract: dict[str, Extract], outs: list, final: ScreenState | None, examples: dict[str, str], report: "CompileReport") -> None:
+    """A value found by its shape as the first one in the list ("the first result's price"), next to an output that names
+    the row ("the first result's product"): read it in that row instead. Results differ in shape (a deal's row says
+    "Limited time deal $8.49"), so the first price in the list can belong to the row above."""
+    if final is None:
+        return
+    from routines.executor import extract_value, in_row  # the executor imports this module
+    example = {o.name: o.example for o in outs}
+    near = {o.name: o.near for o in outs}
+    for name, ex in list(extract.items()):
+        # A result named by its heading ("Results") that reads something else on the run's own screen (a suggestion
+        # above it): the first row under that heading, wherever the list starts.
+        if ex.pattern or ex.switch or contains_value(extract_value(ex, final, examples) or "", example.get(name, "")):
+            continue
+        heading = next((e for e in final.numbered if near.get(name) and norm(e.label) == norm(near[name])), None)
+        shown = next((e for e in final.numbered if e.in_list and e.clickable and contains_value(e.full_label or e.label, example.get(name, ""))
+                      and heading is not None and e.bounds[1] >= heading.bounds[3] - 1), None)
+        if shown is None:
+            continue
+        skip = list(dict.fromkeys(e.label for e in final.numbered if e.in_list and e.clickable and e.label
+                                  and heading.bounds[3] - 1 <= e.bounds[1] < shown.bounds[1]))
+        row = Extract(first_row=True, below=heading.label, skip_labels=skip, locator=Locator(kind=shown.kind))
+        if contains_value(extract_value(row, final, examples) or "", example[name]):
+            extract[name] = row
+            report.warnings.append(f"output {name!r}: the first row under {heading.label!r}")
+    for name, ex in list(extract.items()):
+        if not (ex.pattern and ex.first_in_list):
+            continue
+        core = re.match(r"[$€£]?\d+(?:[.,]\d+)*", example.get(name, "").strip())
+        if core is None:
+            continue
+        shape = _shape(core.group())
+        for anchor, aex in extract.items():
+            if anchor == name or aex.pattern or aex.row_of or not (shown := extract_value(aex, final, examples)):
+                continue
+            got = in_row(shown, shape, final)
+            if got and contains_value(example[name], got):
+                extract[name] = ex.model_copy(update={"pattern": shape, "first_in_list": False, "row_of": anchor})
+                report.warnings.append(f"output {name!r}: read in the row of {anchor!r} ({got!r}), not the list's first match")
+                break
+
+
+async def _screenshot_extract(o: Any, trace_dir: Path, examples: dict[str, str], adapter: ModelAdapter, task_id: str,
+                              report: "CompileReport") -> Extract | None:
+    """An output read from the run's last screenshot (no tree): kept only if the read passes screen_read.accept and
+    gives the agent's answer, the verification each rerun repeats."""
+    png = _last_png(trace_dir)
+    shape = screen_read.shape_of(o.example)
+    question = bind_inputs(f"{o.near}: what does the page say? ({o.name.replace('_', ' ')})", examples) or o.name
+    if png is None:
+        return None
+    got = await asyncio.to_thread(screen_read.read, adapter, png.read_bytes(), render_str(question, examples), shape, examples, task_id=f"{task_id}-compile-read")
+    report.model_calls += 1
+    report.cost_usd += got.cost_usd
+    report.cost_at_standard_usd += got.cost_usd
+    same = got.value and (contains_value(got.value, o.example) or contains_value(o.example, got.value)
+                          or bool(shape and (a := re.search(shape, o.example)) and (b := re.search(shape, got.value)) and a.group() == b.group()))
+    if not same:
+        report.warnings.append(f"output {o.name!r}: the recorded screenshot read {got.value!r} ({got.detail}), not {o.example!r}; dropped")
+        return None
+    report.warnings.append(f"output {o.name!r}: not in the tree; read from the screenshot ({got.value!r}) and checked by shape {shape!r}")
+    return Extract(near=question, from_screenshot=shape or ".+")
+
+
 def _card_before(el: Element, screen: ScreenState, examples: dict[str, str], near: str) -> str | None:
     """For a label every result repeats ("Average rating" on each app in Play's results): the input shown between the
     previous such label and this one (the app's own name, "{{app_name}}"), so the value is read after that app, not the
@@ -602,6 +688,13 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
     for inp in spec.inputs:
         name = _slug(inp.name, "value")
         renames[inp.name] = name
+        if inp.example and not contains_value(run["goal"], inp.example) and not any(s.typed and contains_value(s.typed, inp.example) for s in steps):
+            # Named by the user more briefly than the screen shows it ("Duolingo" for "Duolingo: Learn Languages"): the
+            # input is what the user says, so another app ("Spotify") matches its own listing title too.
+            head = re.split(r"\s*[:|]\s+|\s+[-–—]\s+", inp.example, maxsplit=1)[0]
+            if head != inp.example and len(head) >= 3 and contains_value(run["goal"], head):
+                report.warnings.append(f"input {inp.name!r}: example {inp.example!r} shortened to the user's {head!r}")
+                inp = inp.model_copy(update={"example": head})
         if not inp.example or not contains_value(run_text, inp.example):
             report.warnings.append(f"input {inp.name!r}: example {inp.example!r} is not in the run; dropped")
             continue
@@ -717,7 +810,14 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
     # Outputs: where each value is read on the final screen.
     outputs: list[str] = []
     extract: dict[str, Extract] = {}
-    if final is not None:
+    shot_only = screen_only(trace_dir, run, records) and not _app_text(final)
+    if shot_only:
+        for o in spec.outputs:
+            ex = await _screenshot_extract(o, trace_dir, examples, adapter, run["task_id"], report)
+            if ex is not None:
+                outputs.append(o.name)
+                extract[o.name] = ex
+    elif final is not None:
         for o in spec.outputs:
             ex = _switch_state(o.near, o.example, final) or _extract_for(o.name, o.near, o.example, final, examples, data_values, steps)
             state = bool(ex and ex.switch)
@@ -734,6 +834,7 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             if not state and not contains_value(got := _read_back(extract[o.name], final, examples), o.example):
                 # Read it back from the screen the agent answered from: a routine that reads something else there is wrong.
                 report.warnings.append(f"output {o.name!r} reads {got!r} on the run's own final screen, not {o.example!r}")
+    _rows(extract, spec.outputs, final, examples, report)
     question = bool(re.search(r"\?\s*$|^(what|how|when|where|which|who|is|are|do|does|did|can)\b", (run.get("goal") or "").strip(), re.I))
     if not extract and final is not None and question and answer:
         # A question answered from what the screen says rather than a value on it ("No events today" from "Nothing planned"),

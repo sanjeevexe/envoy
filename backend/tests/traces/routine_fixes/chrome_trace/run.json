@@ -1,0 +1,37 @@
+{
+  "task_id": "f7-1028023735-real-chrome_wikipedia",
+  "goal": "In Chrome, go to en.m.wikipedia.org, search for Eiffel Tower and tell me the year it opened.",
+  "status": "done_unverified",
+  "result": "Eiffel Tower opened 15 May 1889",
+  "steps": 10,
+  "model_calls": 15,
+  "cost_usd": 0.0355514,
+  "cost_at_standard_usd": 0.0355514,
+  "input_tokens": 39424,
+  "cached_tokens": 24991,
+  "output_tokens": 3238,
+  "reasoning_tokens": 2250,
+  "duration_s": 70.56,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+    "app": "com.android.chrome",
+    "subgoals": [
+      "Tap address bar and go to en.m.wikipedia.org",
+      "Search for Eiffel Tower",
+      "Open the Eiffel Tower article",
+      "Read the year it opened"
+    ],
+    "success_check": {
+      "kind": "info",
+      "value": "year Eiffel Tower opened",
+      "field_hint": null
+    }
+  },
+  "check": {
+    "passed": false,
+    "evaluable": true,
+    "detail": "none of ['Eiffel', 'Tower', '15', 'May', '1889'] is visible on the current screen"
+  },
+  "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/data/runs/f7-1028023735-real-chrome_wikipedia"
+}
