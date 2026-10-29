@@ -148,7 +148,7 @@ No product code changed. Everything was handled from outside:
 
 ## The clip
 
-`eval/results/cloud/clip/cloud-clip.mp4`: 40.5 s, 1920×1080, real time. The VM's terminal on the left (the instance's name, zone and machine type from the metadata server; `hostname`, `x86_64`, 8 vCPU; its own `adb devices`), and the cloud emulator on the right while three routines run: check-in, change seat and gate, each PASS with 0 model calls. Made by `scripts/cloud/vm-clip.sh` on the VM (one clock for the recording and the transcript) and `scripts/cloud/make_clip.py` on the Mac. Raw: `emulator.mp4` (re-encoded to 1.5 MB) and `terminal.tsv`. Nothing personal is in frame: the project's ID is stripped, and SkyLark shows its test passenger only. The clip's run was not one of the measured runs (the recorder takes CPU).
+`eval/results/cloud/clip/cloud-clip.mp4`: 40.5 s, 1920×1080, real time. The VM's terminal on the left (the instance's name, zone and machine type from the metadata server; `hostname`, `x86_64`, 8 vCPU; its own `adb devices`), and the cloud emulator on the right while three routines run: check-in, change seat and gate, each PASS with 0 model calls. Made by `scripts/cloud/vm-clip.sh` on the VM (one clock for the recording and the transcript) and `scripts/cloud/make_clip.py` on the Mac. Raw: `emulator.mp4` (re-encoded to 1.5 MB) and `terminal.tsv`. Git ignores `*.mp4`, so the two videos are not in the repo: copies are in `~/Desktop/Envoy/captures/cloud/` (an ignored folder), with `terminal.tsv` tracked here. Nothing personal is in frame: the project's ID is stripped, and SkyLark shows its test passenger only. The clip's run was not one of the measured runs (the recorder takes CPU).
 
 ## Limits, plainly
 
