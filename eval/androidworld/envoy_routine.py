@@ -14,9 +14,11 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import inspect
 import json
 import sys
 import time
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -51,9 +53,14 @@ async def run_routine(payload: dict[str, Any]) -> dict[str, Any]:
     rec: dict[str, Any] = {"run_id": payload["run_id"], "goal": payload["goal"], "max_steps": payload["max_steps"], "config": cfg,
                            "envoy_commit": git_commit(), "mode": "routine"}
     try:
-        m = await RoutineMatcher(store, adapter, data_scope="test_app", contributor=contributor).match(payload["goal"], task_id=payload["run_id"])
+        # A matcher that works out implied dates ("tomorrow") is given the phone's own date: AndroidWorld's phone lives in
+        # October 2023, and the matcher would otherwise use this Mac's.
+        when = {}
+        if "today" in inspect.signature(RoutineMatcher.match).parameters:
+            when["today"] = datetime.strptime(await device.local_time(), "%A, %B %d %Y, %H:%M").date()
+        m = await RoutineMatcher(store, adapter, data_scope="test_app", contributor=contributor).match(payload["goal"], task_id=payload["run_id"], **when)
         rec["match"] = {"routine": m.routine.routine if m.routine else None, "stage": m.stage, "inputs": m.inputs, "missing": m.missing,
-                        "candidates": m.candidates}
+                        "candidates": m.candidates, "today": str(when.get("today", "this Mac's"))}
         # The matcher reports its cost at standard prices: that is the bill on the standard tier. On Contributor its bill
         # isn't reported (about 1/16 of that) and is left out of cost_usd.
         calls, cost_std = m.model_calls, m.cost_usd

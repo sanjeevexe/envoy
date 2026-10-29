@@ -76,7 +76,7 @@ async def cmd_compile(args: argparse.Namespace) -> None:
 
 def cmd_promote(args: argparse.Namespace) -> None:
     """Routines whose same-seed replay AndroidWorld scored 1 (no repair, no agent) go to the verified library."""
-    verified = LIBS / "verified"
+    verified = LIBS / args.into
     rows = []
     for ep in episodes(args.verify):
         e = ep.get("envoy") or {}
@@ -85,9 +85,10 @@ def cmd_promote(args: argparse.Namespace) -> None:
         rows.append({"task": ep["task"], "routine": name, "verified": ok, "status": e.get("status"), "score": ep.get("score"),
                      "detail": e.get("result")})
         if ok and name:
-            shutil.copytree(LIBS / "candidates" / name, verified / name, dirs_exist_ok=True)
+            shutil.copytree(LIBS / args.library / name, verified / name, dirs_exist_ok=True)
         print(f"{'VERIFIED' if ok else 'REJECTED'} {ep['task']}: {name} ({e.get('status')}, score {ep.get('score')})")
-    (LIBS / "verify.json").write_text(json.dumps({"stage": args.verify, "rows": rows}, indent=1))
+    out = LIBS / ("verify.json" if args.into == "verified" else f"verify-{args.into}.json")
+    out.write_text(json.dumps({"stage": args.verify, "library": args.library, "rows": rows}, indent=1))
 
 
 def cmd_report(args: argparse.Namespace) -> None:
@@ -123,7 +124,8 @@ def cmd_report(args: argparse.Namespace) -> None:
                    "median_cost_std": st.median([(e.get("envoy") or {}).get("cost_at_standard_usd") or 0 for e in v]) if v else None,
                    "median_s": st.median([(e.get("envoy") or {}).get("duration_s") or 0 for e in v]) if v else None}
                for k, v in totals.items()}
-    (LIBS / "report.json").write_text(json.dumps({"summary": summary, "tasks": table}, indent=1, default=str))
+    (LIBS / args.out).write_text(json.dumps({"routines": args.routines, "agent": args.agent, "summary": summary, "tasks": table},
+                                            indent=1, default=str))
     print(json.dumps(summary, indent=1))
     for row in table:
         print(f"{row['task']:42} routine {row['routine_success']:g}/{len(row['seeds'])} {row['routine_status']} calls {row['routine_calls']}"
@@ -138,9 +140,12 @@ def main() -> None:
     c.add_argument("--tasks", default="")
     p = sub.add_parser("promote")
     p.add_argument("--verify", required=True)
+    p.add_argument("--library", default="candidates", help="the library the verify stage replayed")
+    p.add_argument("--into", default="verified")
     r = sub.add_parser("report")
     r.add_argument("--routines", default="routines-seeds")
     r.add_argument("--agent", default="agent-seeds")
+    r.add_argument("--out", default="report.json")
     args = ap.parse_args()
     if args.cmd == "report":
         cmd_report(args)
