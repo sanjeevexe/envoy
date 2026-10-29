@@ -1,0 +1,910 @@
+{
+ "meta": {
+  "suite": "compile",
+  "run_id": "1028210913",
+  "started": "2026-10-29T01:09:13+00:00",
+  "finished": "2026-10-29T01:18:58+00:00",
+  "wall_s": 584.8,
+  "code": {
+   "commit": "2ecbbbfbf4bfa36f245a699d7a23d9adfc6b0c61",
+   "short": "2ecbbbf",
+   "tags": [],
+   "is_eval_final": false,
+   "dirty": [
+    "android/banner/app/build",
+    "logs",
+    "testapps/skylark/app/build"
+   ],
+   "branch": "aw-merge"
+  },
+  "models": {
+   "tier": "standard",
+   "jobs": {
+    "step": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "plan": {
+     "model": "muse-spark-1.3",
+     "effort": "medium"
+    },
+    "repair": {
+     "model": "muse-spark-1.3",
+     "effort": "medium"
+    },
+    "grounding": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "choose": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "extract": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "answer": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "compile": {
+     "model": "muse-wonder-1.0",
+     "effort": "medium"
+    },
+    "match": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    }
+   }
+  },
+  "devices": [
+   "emulator-5554"
+  ],
+  "cost": {
+   "input_tokens": 230372,
+   "cached_tokens": 175257,
+   "output_tokens": 39562,
+   "reasoning_tokens": 28558,
+   "calls": 96,
+   "errors": 0,
+   "billed_usd": 0.6809,
+   "standard_usd": 0.6809,
+   "by_job": {
+    "plan": {
+     "calls": 13,
+     "standard_usd": 0.031
+    },
+    "step": {
+     "calls": 72,
+     "standard_usd": 0.1145
+    },
+    "compile": {
+     "calls": 11,
+     "standard_usd": 0.5354
+    }
+   },
+   "by_model": {
+    "muse-spark-1.3": 85,
+    "muse-wonder-1.0": 11
+   }
+  },
+  "spend_total_this_checkout": {
+   "billed_usd": 18.113,
+   "standard_usd": 19.006
+  },
+  "host": "Sanjeevs-MacBook-Pro"
+ },
+ "world": {
+  "compile": 7,
+  "verify": 42
+ },
+ "rows": [
+  {
+   "task": "check_in",
+   "new_in_phase7": false,
+   "attempts": [
+    {
+     "attempt": 1,
+     "stage": "source run",
+     "status": "done_unverified"
+    },
+    {
+     "attempt": 2,
+     "stage": "source run",
+     "status": "done_unverified"
+    },
+    {
+     "attempt": 3,
+     "stage": "source run",
+     "status": "done"
+    }
+   ],
+   "source": {
+    "task_id": "f7-1028210913-src-check_in-a3",
+    "passed": false,
+    "status": "done",
+    "steps": 15,
+    "duration_s": 29.89,
+    "result": "Checked in for flight to Denver: SL 1190 ATL to DEN on Sat, Nov 14, 2026. Passenger Maya Patel, Seat 22F, Gate A7, Boarding 2:05 PM Group 5. Status: You're checked in with boarding pass.",
+    "side_effects": [
+     "KX7Q2M.checked_in"
+    ],
+    "calls": 17,
+    "input_tokens": 45655,
+    "cached_tokens": 36993,
+    "output_tokens": 2468,
+    "reasoning_tokens": 1179,
+    "standard_usd": 0.0269,
+    "billed_usd": 0.0269
+   },
+   "status": "rejected"
+  },
+  {
+   "task": "change_seat",
+   "new_in_phase7": false,
+   "attempts": [
+    {
+     "attempt": 1,
+     "stage": "verify",
+     "passed": true,
+     "cases": [
+      {
+       "case": "same-inputs",
+       "inputs": {
+        "trip_city": "Denver",
+        "desired_seat": "21C"
+       },
+       "passed": true,
+       "status": "done",
+       "detail": "all steps and checks passed",
+       "duration_s": 5.32,
+       "outputs": {
+        "seat": "21C",
+        "confirmation_message": "Seat changed to 21C"
+       }
+      },
+      {
+       "case": "second-inputs",
+       "inputs": {
+        "trip_city": "Tampa",
+        "desired_seat": "23B"
+       },
+       "passed": true,
+       "status": "done",
+       "detail": "all steps and checks passed",
+       "duration_s": 6.66,
+       "outputs": {
+        "seat": "23B",
+        "confirmation_message": "Seat changed to 23B"
+       }
+      }
+     ],
+     "compile_cost_usd": 0.039,
+     "compile_s": 7.4,
+     "verify_s": 12.0,
+     "warnings": []
+    }
+   ],
+   "source": {
+    "task_id": "f7-1028210913-src-change_seat-a1",
+    "passed": true,
+    "status": "done",
+    "steps": 5,
+    "duration_s": 14.11,
+    "result": "Changed seat on Denver flight SL 1190 (PT4R8Z) to 21C. Confirmation shows 'Your seat: 21C' and 'Seat changed to 21C'.",
+    "side_effects": [],
+    "calls": 7,
+    "input_tokens": 23540,
+    "cached_tokens": 14103,
+    "output_tokens": 1325,
+    "reasoning_tokens": 756,
+    "standard_usd": 0.0195,
+    "billed_usd": 0.0195
+   },
+   "status": "added",
+   "routine": "skylark_change_seat",
+   "steps": 7,
+   "inputs": {
+    "trip_city": {
+     "type": "text",
+     "description": "",
+     "from_memory": null,
+     "example": "Denver",
+     "choices": null
+    },
+    "desired_seat": {
+     "type": "text",
+     "description": "",
+     "from_memory": null,
+     "example": "21C",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "seat",
+    "confirmation_message"
+   ],
+   "compile_cost_usd": 0.039,
+   "compile_s": 7.4,
+   "verify_s": 12.0,
+   "dropped": []
+  },
+  {
+   "task": "add_ktn",
+   "new_in_phase7": false,
+   "attempts": [
+    {
+     "attempt": 1,
+     "stage": "verify",
+     "passed": true,
+     "cases": [
+      {
+       "case": "same-inputs",
+       "inputs": {
+        "trip_city": "Denver",
+        "known_traveler_number": "55501234"
+       },
+       "passed": true,
+       "status": "done",
+       "detail": "all steps and checks passed",
+       "duration_s": 3.8,
+       "outputs": {
+        "known_traveler_number": "55501234"
+       }
+      },
+      {
+       "case": "second-inputs",
+       "inputs": {
+        "trip_city": "Tampa",
+        "known_traveler_number": "13561597"
+       },
+       "passed": true,
+       "status": "done",
+       "detail": "all steps and checks passed",
+       "duration_s": 3.75,
+       "outputs": {
+        "known_traveler_number": "13561597"
+       }
+      }
+     ],
+     "compile_cost_usd": 0.071,
+     "compile_s": 16.0,
+     "verify_s": 7.5,
+     "warnings": []
+    }
+   ],
+   "source": {
+    "task_id": "f7-1028210913-src-add_ktn-a1",
+    "passed": true,
+    "status": "done",
+    "steps": 4,
+    "duration_s": 11.84,
+    "result": "Known traveler number 55501234 added to Denver trip PT4R8Z (SL 1190 ATL→DEN Sat Nov 14 2026). Screen shows 'Known traveler number saved'.",
+    "side_effects": [],
+    "calls": 6,
+    "input_tokens": 15005,
+    "cached_tokens": 11814,
+    "output_tokens": 962,
+    "reasoning_tokens": 505,
+    "standard_usd": 0.0098,
+    "billed_usd": 0.0098
+   },
+   "status": "added",
+   "routine": "skylark_add_known_traveler_number",
+   "steps": 5,
+   "inputs": {
+    "trip_city": {
+     "type": "text",
+     "description": "City of the trip to update",
+     "from_memory": null,
+     "example": "Denver",
+     "choices": null
+    },
+    "known_traveler_number": {
+     "type": "text",
+     "description": "User's known traveler number to add",
+     "from_memory": "user.known_traveler_number",
+     "example": "55501234",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "known_traveler_number"
+   ],
+   "compile_cost_usd": 0.071,
+   "compile_s": 16.0,
+   "verify_s": 7.5,
+   "dropped": []
+  },
+  {
+   "task": "gate",
+   "new_in_phase7": false,
+   "attempts": [
+    {
+     "attempt": 1,
+     "stage": "verify",
+     "passed": true,
+     "cases": [
+      {
+       "case": "same-inputs",
+       "inputs": {
+        "trip_city": "Denver"
+       },
+       "passed": true,
+       "status": "done",
+       "detail": "all steps and checks passed",
+       "duration_s": 1.91,
+       "outputs": {
+        "gate": "A7"
+       }
+      },
+      {
+       "case": "second-inputs",
+       "inputs": {
+        "trip_city": "Tampa"
+       },
+       "passed": true,
+       "status": "done",
+       "detail": "all steps and checks passed",
+       "duration_s": 1.89,
+       "outputs": {
+        "gate": "B17"
+       }
+      }
+     ],
+     "compile_cost_usd": 0.0405,
+     "compile_s": 8.6,
+     "verify_s": 3.8,
+     "warnings": []
+    }
+   ],
+   "source": {
+    "task_id": "f7-1028210913-src-gate-a1",
+    "passed": true,
+    "status": "done",
+    "steps": 2,
+    "duration_s": 7.68,
+    "result": "Gate A7",
+    "side_effects": [],
+    "calls": 4,
+    "input_tokens": 9086,
+    "cached_tokens": 7236,
+    "output_tokens": 716,
+    "reasoning_tokens": 428,
+    "standard_usd": 0.0064,
+    "billed_usd": 0.0064
+   },
+   "status": "added",
+   "routine": "skylark_get_departure_gate",
+   "steps": 3,
+   "inputs": {
+    "trip_city": {
+     "type": "text",
+     "description": "The destination city of the flight whose gate is requested.",
+     "from_memory": null,
+     "example": "Denver",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "gate"
+   ],
+   "compile_cost_usd": 0.0405,
+   "compile_s": 8.6,
+   "verify_s": 3.8,
+   "dropped": []
+  },
+  {
+   "task": "seat",
+   "new_in_phase7": true,
+   "attempts": [
+    {
+     "attempt": 1,
+     "stage": "verify",
+     "passed": true,
+     "cases": [
+      {
+       "case": "same-inputs",
+       "inputs": {
+        "trip_city": "Denver"
+       },
+       "passed": true,
+       "status": "done",
+       "detail": "all steps and checks passed",
+       "duration_s": 2.01,
+       "outputs": {
+        "seat": "22F"
+       }
+      },
+      {
+       "case": "second-inputs",
+       "inputs": {
+        "trip_city": "Tampa"
+       },
+       "passed": true,
+       "status": "done",
+       "detail": "all steps and checks passed",
+       "duration_s": 1.93,
+       "outputs": {
+        "seat": "11E"
+       }
+      }
+     ],
+     "compile_cost_usd": 0.0351,
+     "compile_s": 9.2,
+     "verify_s": 3.9,
+     "warnings": []
+    }
+   ],
+   "source": {
+    "task_id": "f7-1028210913-src-seat-a1",
+    "passed": true,
+    "status": "done",
+    "steps": 2,
+    "duration_s": 6.36,
+    "result": "22F",
+    "side_effects": [],
+    "calls": 4,
+    "input_tokens": 9089,
+    "cached_tokens": 7236,
+    "output_tokens": 705,
+    "reasoning_tokens": 442,
+    "standard_usd": 0.0064,
+    "billed_usd": 0.0064
+   },
+   "status": "added",
+   "routine": "skylark_get_seat",
+   "steps": 3,
+   "inputs": {
+    "trip_city": {
+     "type": "text",
+     "description": "Destination city of the flight whose seat is being requested.",
+     "from_memory": null,
+     "example": "Denver",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "seat"
+   ],
+   "compile_cost_usd": 0.0351,
+   "compile_s": 9.2,
+   "verify_s": 3.9,
+   "dropped": []
+  },
+  {
+   "task": "flight_status",
+   "new_in_phase7": false,
+   "attempts": [
+    {
+     "attempt": 1,
+     "stage": "verify",
+     "passed": true,
+     "cases": [
+      {
+       "case": "same-inputs",
+       "inputs": {
+        "flight_number": "SL 1190"
+       },
+       "passed": true,
+       "status": "done",
+       "detail": "all steps and checks passed",
+       "duration_s": 3.3,
+       "outputs": {
+        "flight_status": "Delayed 25 min",
+        "gate": "A7",
+        "departure_time": "2:45 PM",
+        "route": "ATL → DEN",
+        "flight_date": "Sat, Nov 14, 2026"
+       }
+      },
+      {
+       "case": "second-inputs",
+       "inputs": {
+        "flight_number": "SL 291"
+       },
+       "passed": true,
+       "status": "done",
+       "detail": "all steps and checks passed",
+       "duration_s": 2.99,
+       "outputs": {
+        "flight_status": "On time",
+        "gate": "B17",
+        "departure_time": "6:00 AM",
+        "route": "ATL → TPA",
+        "flight_date": "Wed, Nov 25, 2026"
+       }
+      }
+     ],
+     "compile_cost_usd": 0.0504,
+     "compile_s": 16.1,
+     "verify_s": 6.3,
+     "warnings": []
+    }
+   ],
+   "source": {
+    "task_id": "f7-1028210913-src-flight_status-a1",
+    "passed": true,
+    "status": "done",
+    "steps": 3,
+    "duration_s": 10.34,
+    "result": "SL 1190 · ATL → DEN · Sat, Nov 14, 2026 · Delayed 25 min · Gate A7 · Departs 2:45 PM",
+    "side_effects": [],
+    "calls": 5,
+    "input_tokens": 11267,
+    "cached_tokens": 9525,
+    "output_tokens": 875,
+    "reasoning_tokens": 508,
+    "standard_usd": 0.0073,
+    "billed_usd": 0.0073
+   },
+   "status": "added",
+   "routine": "skylark_check_flight_status",
+   "steps": 3,
+   "inputs": {
+    "flight_number": {
+     "type": "text",
+     "description": "The SkyLark flight number to look up",
+     "from_memory": null,
+     "example": "SL 1190",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "flight_status",
+    "gate",
+    "departure_time",
+    "route",
+    "flight_date"
+   ],
+   "compile_cost_usd": 0.0504,
+   "compile_s": 16.1,
+   "verify_s": 6.3,
+   "dropped": []
+  },
+  {
+   "task": "miles",
+   "new_in_phase7": true,
+   "attempts": [
+    {
+     "attempt": 1,
+     "stage": "verify",
+     "passed": true,
+     "cases": [
+      {
+       "case": "same-inputs",
+       "inputs": {},
+       "passed": true,
+       "status": "done",
+       "detail": "all steps and checks passed",
+       "duration_s": 0.91,
+       "outputs": {
+        "miles_balance": "38,240 miles"
+       }
+      },
+      {
+       "case": "second-inputs",
+       "inputs": {},
+       "passed": true,
+       "status": "done",
+       "detail": "all steps and checks passed",
+       "duration_s": 0.87,
+       "outputs": {
+        "miles_balance": "84,654 miles"
+       }
+      }
+     ],
+     "compile_cost_usd": 0.0358,
+     "compile_s": 13.5,
+     "verify_s": 1.8,
+     "warnings": []
+    }
+   ],
+   "source": {
+    "task_id": "f7-1028210913-src-miles-a1",
+    "passed": true,
+    "status": "done",
+    "steps": 0,
+    "duration_s": 3.24,
+    "result": "38,240 miles",
+    "side_effects": [],
+    "calls": 2,
+    "input_tokens": 3517,
+    "cached_tokens": 2658,
+    "output_tokens": 622,
+    "reasoning_tokens": 471,
+    "standard_usd": 0.0041,
+    "billed_usd": 0.0041
+   },
+   "status": "added",
+   "routine": "skylark_check_miles_balance",
+   "steps": 1,
+   "inputs": {},
+   "outputs": [
+    "miles_balance"
+   ],
+   "compile_cost_usd": 0.0358,
+   "compile_s": 13.5,
+   "verify_s": 1.8,
+   "dropped": []
+  },
+  {
+   "task": "find_trip",
+   "new_in_phase7": false,
+   "attempts": [
+    {
+     "attempt": 1,
+     "stage": "verify",
+     "passed": true,
+     "cases": [
+      {
+       "case": "same-inputs",
+       "inputs": {
+        "trip_confirmation_code": "PT4R8Z"
+       },
+       "passed": true,
+       "status": "done",
+       "detail": "all steps and checks passed",
+       "duration_s": 1.98,
+       "outputs": {
+        "destination": "Denver"
+       }
+      },
+      {
+       "case": "second-inputs",
+       "inputs": {
+        "trip_confirmation_code": "RPOIG8"
+       },
+       "passed": true,
+       "status": "done",
+       "detail": "all steps and checks passed",
+       "duration_s": 1.9,
+       "outputs": {
+        "destination": "Tampa"
+       }
+      }
+     ],
+     "compile_cost_usd": 0.0498,
+     "compile_s": 12.9,
+     "verify_s": 3.9,
+     "warnings": []
+    }
+   ],
+   "source": {
+    "task_id": "f7-1028210913-src-find_trip-a1",
+    "passed": true,
+    "status": "done",
+    "steps": 2,
+    "duration_s": 8.36,
+    "result": "Your trip with confirmation code PT4R8Z goes to Denver (DEN) — flight SL 1190 ATL → DEN on Sat, Nov 14, 2026.",
+    "side_effects": [],
+    "calls": 4,
+    "input_tokens": 9191,
+    "cached_tokens": 7236,
+    "output_tokens": 1073,
+    "reasoning_tokens": 723,
+    "standard_usd": 0.0081,
+    "billed_usd": 0.0081
+   },
+   "status": "added",
+   "routine": "skylark_look_up_trip",
+   "steps": 3,
+   "inputs": {
+    "trip_confirmation_code": {
+     "type": "text",
+     "description": "The confirmation code for the trip to look up, as it appears in the trip list row.",
+     "from_memory": null,
+     "example": "PT4R8Z",
+     "choices": null
+    }
+   },
+   "outputs": [
+    "destination"
+   ],
+   "compile_cost_usd": 0.0498,
+   "compile_s": 12.9,
+   "verify_s": 3.9,
+   "dropped": []
+  },
+  {
+   "task": "past_trip",
+   "new_in_phase7": true,
+   "attempts": [
+    {
+     "attempt": 1,
+     "stage": "verify",
+     "passed": false,
+     "cases": [
+      {
+       "case": "same-inputs",
+       "inputs": {},
+       "passed": false,
+       "status": "done",
+       "detail": "all steps and checks passed",
+       "duration_s": 14.54,
+       "outputs": {
+        "trip_date": "Fri, Oct 30, 2026",
+        "flight_number": "SL 482"
+       }
+      },
+      {
+       "case": "second-inputs",
+       "inputs": {},
+       "passed": false,
+       "status": "done",
+       "detail": "all steps and checks passed",
+       "duration_s": 14.36,
+       "outputs": {
+        "trip_date": "Fri, Oct 30, 2026",
+        "flight_number": "SL 482"
+       }
+      }
+     ],
+     "compile_cost_usd": 0.0547,
+     "compile_s": 15.2,
+     "verify_s": 28.9,
+     "warnings": [
+      "output 'trip_date' reads 'Fri, Aug 21, 2026' on the run's own final screen, not 'Tue, Mar 3, 2026'",
+      "output 'flight_number' reads 'SL 761' on the run's own final screen, not 'SL 1708'",
+      "input 'trip_city' is never used or shown; dropped"
+     ]
+    },
+    {
+     "attempt": 2,
+     "stage": "verify",
+     "passed": false,
+     "cases": [
+      {
+       "case": "same-inputs",
+       "inputs": {},
+       "passed": false,
+       "status": "done",
+       "detail": "all steps and checks passed",
+       "duration_s": 15.58,
+       "outputs": {
+        "flight_date": "Fri, Oct 30, 2026",
+        "flight_number": "SL 482"
+       }
+      },
+      {
+       "case": "second-inputs",
+       "inputs": {},
+       "passed": false,
+       "status": "done",
+       "detail": "all steps and checks passed",
+       "duration_s": 14.71,
+       "outputs": {
+        "flight_date": "Fri, Oct 30, 2026",
+        "flight_number": "SL 482"
+       }
+      }
+     ],
+     "compile_cost_usd": 0.0657,
+     "compile_s": 18.0,
+     "verify_s": 30.3,
+     "warnings": [
+      "output 'flight_date' reads 'Fri, Aug 21, 2026' on the run's own final screen, not 'Tue, Mar 3, 2026'",
+      "output 'flight_number' reads 'SL 761' on the run's own final screen, not 'SL 1708'",
+      "input 'trip_city' is never used or shown; dropped"
+     ]
+    },
+    {
+     "attempt": 3,
+     "stage": "verify",
+     "passed": false,
+     "cases": [
+      {
+       "case": "same-inputs",
+       "inputs": {},
+       "passed": false,
+       "status": "done",
+       "detail": "all steps and checks passed",
+       "duration_s": 14.32,
+       "outputs": {
+        "flight_date": "Fri, Oct 30, 2026"
+       }
+      },
+      {
+       "case": "second-inputs",
+       "inputs": {},
+       "passed": false,
+       "status": "done",
+       "detail": "all steps and checks passed",
+       "duration_s": 14.47,
+       "outputs": {
+        "flight_date": "Fri, Oct 30, 2026"
+       }
+      }
+     ],
+     "compile_cost_usd": 0.0567,
+     "compile_s": 16.6,
+     "verify_s": 28.8,
+     "warnings": [
+      "output 'flight_date' reads 'ATL → AUS' on the run's own final screen, not 'Tue, Mar 3, 2026'",
+      "input 'trip_city' is never used or shown; dropped"
+     ]
+    }
+   ],
+   "source": {
+    "task_id": "f7-1028210913-src-past_trip-a3",
+    "passed": true,
+    "status": "done",
+    "steps": 3,
+    "duration_s": 11.47,
+    "result": "Tue, Mar 3, 2026",
+    "side_effects": [],
+    "calls": 5,
+    "input_tokens": 12107,
+    "cached_tokens": 9525,
+    "output_tokens": 933,
+    "reasoning_tokens": 596,
+    "standard_usd": 0.0086,
+    "billed_usd": 0.0086
+   },
+   "status": "rejected"
+  },
+  {
+   "task": "gate_alerts",
+   "new_in_phase7": true,
+   "attempts": [
+    {
+     "attempt": 1,
+     "stage": "verify",
+     "passed": true,
+     "cases": [
+      {
+       "case": "same-inputs",
+       "inputs": {},
+       "passed": true,
+       "status": "done",
+       "detail": "all steps and checks passed",
+       "duration_s": 1.67,
+       "outputs": {}
+      },
+      {
+       "case": "second-inputs",
+       "inputs": {},
+       "passed": true,
+       "status": "done",
+       "detail": "all steps and checks passed",
+       "duration_s": 1.83,
+       "outputs": {}
+      }
+     ],
+     "compile_cost_usd": 0.0369,
+     "compile_s": 11.2,
+     "verify_s": 3.5,
+     "warnings": [
+      "output 'gate_change_alerts': 'on' is not on the final screen, or nothing anchors it; dropped"
+     ]
+    }
+   ],
+   "source": {
+    "task_id": "f7-1028210913-src-gate_alerts-a1",
+    "passed": true,
+    "status": "done",
+    "steps": 2,
+    "duration_s": 8.13,
+    "result": "Gate change alerts are turned on (enabled) in Profile.",
+    "side_effects": [],
+    "calls": 4,
+    "input_tokens": 8758,
+    "cached_tokens": 7236,
+    "output_tokens": 921,
+    "reasoning_tokens": 665,
+    "standard_usd": 0.0069,
+    "billed_usd": 0.0069
+   },
+   "status": "added",
+   "routine": "skylark_turn_on_gate_alerts",
+   "steps": 2,
+   "inputs": {},
+   "outputs": [],
+   "compile_cost_usd": 0.0369,
+   "compile_s": 11.2,
+   "verify_s": 3.5,
+   "dropped": []
+  }
+ ]
+}

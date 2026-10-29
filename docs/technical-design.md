@@ -163,14 +163,14 @@ The agent reads the screen as compact text, chooses one element-based action at 
 
 ### The loop
 
-1. **Plan.** At the start of a task, Muse Spark 1.3 (higher reasoning effort) writes a short plan of subgoals and a **success check** that code can evaluate (for example, the text "You're checked in" is visible), using the request and relevant memory.
+1. **Plan.** At the start of a task, Muse Spark 1.3 (higher reasoning effort) writes a short plan of subgoals and a **success check** that code can evaluate (for example, the text "You're checked in" is visible), using the request and relevant memory. It also gets the phone's date (goals say "tomorrow" or "this Thursday") and its apps by the names people use, and it knows that a button shown with one item (the card for the next trip, the last order) acts on that item only.
 2. **Observe.** Wait until the screen settles, then read the accessibility tree and turn it into a compact list (below).
-3. **Decide.** Muse Spark 1.3 (low reasoning effort) receives the cached system prompt and schemas, the plan with the current subgoal, the last 5 actions and their outcomes, relevant memory notes, and the current screen. It returns one action as JSON, with the expected result and a risk label.
+3. **Decide.** Muse Spark 1.3 (low reasoning effort) receives the cached system prompt and schemas, the plan with the current subgoal, the last 5 actions and their outcomes, relevant memory notes, and the current screen. It also gets what it kept from earlier screens of the task (REMEMBERED: text to copy, values to add up, copied word for word from the screen) and the phone's date. It returns one action as JSON, with the expected result and a risk label. Meta's structured output writes an object's keys in alphabetical order, whatever order the schema lists them in, so the fields are named for the order the model should decide them: what to keep, the reason, the expected result, then the action (its kind first) and the risk. Before an irreversible action the screen, or what it kept, must name the goal's own item (the flight, the person, the amount).
 4. **Check policy.** The policy engine classifies the action's risk; an irreversible action waits for approval (see Safety). From Phase 1 this is a rule-based gate with a yes or no prompt in the terminal; the full approval flow arrives in Phase 4.
 5. **Act** through the device interface.
 6. **Verify.** Compare the new screen with the expected result. No visible change triggers a screenshot and a second try.
 7. **Record** the step: before and after screens, action, reason, timing and cost.
-8. **Finish.** When the model returns `done`, the runtime evaluates the success check in code. If it fails, `done` is rejected and the model is told what is missing. A task whose check cannot be evaluated is marked "done, unverified" and is never compiled into a routine without the user's confirmation. Facts are then extracted for memory (see Shared memory).
+8. **Finish.** When the model returns `done`, the runtime evaluates the success check in code. If it fails, `done` is rejected once and the model is told what is missing; the check was written before the app was seen, so a second `done` is accepted as "done, unverified". A task whose check cannot be evaluated is marked "done, unverified" too, and is never compiled into a routine without the user's confirmation. Facts are then extracted for memory (see Shared memory).
 
 ### How the screen is shown to the model
 
@@ -189,6 +189,8 @@ App: SkyLark Air · Screen: TripDetailsActivity · settled 220 ms
 
 A screen of this size costs a few hundred tokens. A screenshot (about 3,200 tokens at the full 1080 by 2400 resolution, measured in Phase 0, so it is downscaled before sending) is attached only when the tree is sparse (Flutter, games, custom drawing), the last action had no visible effect, the model asks for one with a `look` action, or a repair is in progress.
 
+When the on-screen keyboard is up, the screen says so under its first line (without it, the model pressed back "to close the keyboard" when none was open, and lost forms). An element's own long text (a note, an open file) is shown at length, up to 4,000 characters and 8,000 per screen; rows that merge their children's text stay at 120.
+
 ### Actions
 
 | Action | Notes |
@@ -196,7 +198,7 @@ A screen of this size costs a few hundred tokens. A screenshot (about 3,200 toke
 | `tap(el)`, `long_press(el)` | By element number; the runtime stores the element's full description for routines |
 | `type(el, text, submit?)` | Uses accessibility set-text (through uiautomator2, or the bridge if built), so any language or emoji works; submit is a plain Enter key |
 | `scroll(direction, el?)`, `swipe(...)` | Scrolls a list or the screen |
-| `back`, `home`, `launch(app)` | Navigation |
+| `back`, `home`, `launch(app)` | Navigation; `launch` takes the app's name as people say it ("Simple Calendar Pro") or its package, matched against the phone's own app labels |
 | `tap_point(x, y)` | Only for screens with no usable tree; coordinates come from visual grounding |
 | `look` | Request a screenshot for the next step |
 | `wait(seconds)` | For loading screens |
@@ -216,7 +218,7 @@ For Flutter apps, games and custom-drawn screens:
 
 ### Getting unstuck
 
-- **Stuck detection:** the same screen signature three times, or an action loop, triggers a recovery.
+- **Stuck detection:** the same screen signature three times, or an action loop, triggers a recovery. Lines that change by themselves (a clock, a timer) are masked first, so a ticking screen doesn't count as progress.
 - **Recovery order:** go back one screen, replan the current subgoal, then ask the user.
 - **Pop-ups:** a shared handler library dismisses common interruptions (permission prompts, rating requests, promos) without spending a model call.
 - **Limits:** each task has a step limit and a cost limit; hitting either stops and reports.
@@ -733,7 +735,8 @@ Envoy is measured against two baselines on its own task set and an AndroidWorld 
 
 - **Core set:** 10 SkyLark Air tasks (check in, change seat, find gate, add a traveler number, and others) × 3 systems × 4 layouts (the original plus a moved button, a renamed label and an extra confirmation screen) = 120 runs, roughly 2 to 6 hours on one emulator, run once near the end of the build. Each task has a programmatic success check.
 - **Real apps (5 to 10 tasks):** shopping and food apps chosen once they are confirmed to run on the emulator. Irreversible steps stop at the approval prompt, so no orders are placed.
-- **Stretch:** the shop test app; an AndroidWorld subset (116 tasks over 20 apps with inputs randomized per seed, so routines can be compiled on one seed and replayed on others; it needs its own API 33 emulator and harness, and its leaderboard is near saturated, so model calls, time and cost matter more than success); and MAS-Bench, which tests shortcuts that agents generate for themselves.
+- **AndroidWorld (measured Oct 27–28, branch `androidworld`):** Google's 116 tasks over 20 apps, run unmodified through AndroidWorld's own runner and scoring on an API 33 emulator, seed 30, pass@1, with Envoy's whole agent as the agent. The tasks were split 58/58 into a dev half for finding and fixing failures and a held-out half that measures the result; the split was committed before any run. Envoy as on `main` scored 21 of 116 (18%); with 13 general agent changes found on the dev half, 57 (49%), and 31 of 58 (53%) on the held-out half against 12, at about $0.04 and 38 s per task (`docs/androidworld-results.md`). Routines compiled from seed-30 runs were replayed on three other seeds. Three follow-up changes made for SkyLark were measured offline; the held-out half is re-measured on what merges.
+- **Stretch:** the shop test app, and MAS-Bench, which tests shortcuts that agents generate for themselves.
 
 ### Metrics
 
@@ -747,7 +750,7 @@ Envoy is measured against two baselines on its own task set and an AndroidWorld 
 
 ### How results are reported
 
-An `eval/` runner executes the suites from emulator snapshots and writes a report with charts: success by system, cost per run over repeated runs, and recovery by type of injected change. The same charts go into the submission write-up.
+An `eval/` runner executes the suites from emulator snapshots and writes a report with charts: success by system, cost per run over repeated runs, and recovery by type of injected change. The same charts go into the submission write-up. AndroidWorld results are reported by half (dev and held-out), and failures are explained from step-level trace evidence, not from the score alone. A change to the agent is checked on SkyLark and the real-app set against `main`'s agent run the same day before it merges.
 
 ## Risks and mitigations
 
@@ -928,6 +931,16 @@ The runs drove these changes:
 - A request for an emulator that isn't running says so and names your phone.
 
 **Who uses which phone.** iPhone users use Envoy's emulators; Android users use an emulator or their own phone. The gate is the second path, not a requirement for everyone. The limits, plainly: you sign in to each app once on the emulator; apps that refuse emulators (Target's bot check, banking apps) need a real Android phone, so they are out of reach for someone with only an iPhone; the emulators run on a Mac today, with a cloud host later.
+
+## Phase 7 results
+
+*Draft (Oct 29): the final numbers come from one run of every suite on the `eval-final` tag (Nov 2).* Details in `docs/phase-7-results.md`; report in `eval/results/final/report.md`.
+
+The measurement passes found 31 problems, each fixed and tested: compiler gaps (answers on the first screen, a value whose ID every row shares, a switch's state, a price before its details), safety-gate gaps (a tap at a point skipped the rules; uninstall, erase and call buttons), and grading errors in the suites themselves (a shape-graded price from the wrong menu item, a right answer graded wrong).
+
+AndroidWorld's 13 agent changes were tested on SkyLark and the real apps before merging, with `main`'s agent run the same evening as an A/B. The first round checked in the wrong flight through Home's "Check in" (4 of 11 plans). After three follow-ups and a compiler fix, every SkyLark suite passed: 10 of 10 routines compiled, agent and routines 120 of 120 with no side effects, and the merged agent needs a median 2 steps per task where `main`'s needed 4 ($0.0073 against $0.0090). On real apps it over-checked answers already on screen (contacts_count 25 steps against 0), so the merge waits for that fix and a real-app rerun.
+
+Several sessions shared one Mac, so devices and merges went through one coordinator session with device locks. Two outside failures shaped the evaluation: AndroidWorld's emulator controller restarted the shared adb server (now refused), and the Meta API's billing failed from Oct 29, 02:16 (a new account; every run now checks the key first).
 
 ## Open questions
 

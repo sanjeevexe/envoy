@@ -1,6 +1,6 @@
 # Phase 7 results: the final evaluation
 
-**Status (Oct 28, morning): measurement passes done; not the final numbers.** The final numbers come from one run of every suite on the frozen commit, tagged `eval-final` on Nov 2. Until then this file records what the measurement passes found and what changed because of it. Plan: `prompts/phase-7-plan.md`. Report: `eval/results/final/report.md`.
+**Status (Oct 29, early morning): measurement passes done; AndroidWorld's agent changes tested and not yet merged; the Meta API down since 02:16 ("402 Billing verification failed"), so nothing that calls a model can run until the new account's key is in.** The final numbers come from one run of every suite on the frozen commit, tagged `eval-final` on Nov 2. Until then this file records what the measurement passes found and what changed because of it. Plan: `prompts/phase-7-plan.md`. Report: `eval/results/final/report.md`.
 
 ## What was built
 
@@ -55,10 +55,38 @@ All of it is Envoy's own code (about 2,300 lines of Python in `eval/` and `backe
 
 **Environment.** `envoy-real`'s system server stopped answering three times during long real-app stretches (`DEAD_OBJECT`, then adb itself hung). The first two times a clean stop and cold start fixed it; the third needed the stop script's forced power-off, after which it booted clean with its Google account and apps in place. Screen sizes: envoy-test 30/30, envoy-small 30/30, envoy-large 29/30, all with no model call; the one miss was the first run of SkyLark on the newly created large emulator and didn't recur on a fresh boot.
 
+## AndroidWorld's agent changes, tested before they merge (Oct 28–29)
+
+On Oct 28 the user approved the AndroidWorld branch's 13 agent changes for `main` (held-out half 12 → 31 of 58 on Google's benchmark), on condition that SkyLark and the real-app pass be rerun on the result first. They were, twice. The results, with main's agent run the same evening as an A/B, are in `eval/results/aw_merge_2026-10-28/`.
+
+32. **The plan sent the agent to the wrong flight.** Asked to check in for a trip that isn't the next one, the merged planner offered Home's "Check in" (4 of 11 plans; main's planner 0 of 22), a button that acts on the next trip. The agent confirmed that check-in, then went back for the right one. Its own note had fused the two: "Flight SL 482 to Denver". The planner now learns that a button shown with one item acts on that item only (AndroidWorld's `f93ce08`: 13 of 40 plans → 0 of 40 offline). Before an irreversible step, the screen (or what the agent copied from an earlier screen) must name the goal's own item, and notes are copied from the screen, never from the goal (`742ede6`). Round 2: 21 check-ins, all through My Trips, no wrong flight.
+33. **A wrong success check left no routine.** The planner's own example check, "View boarding pass", is a button on the trip page, not on the boarding pass where check-in ends. With the merged rule that a second "done" is accepted, the right check-ins ended `done_unverified`, and compile learns only from verified runs: check_in compiled from none of 3. A check for "View/Open/See X" now passes on X's own screen (`5decf4a`).
+34. **An answer read off a list lost its input.** The merged agent answers "When did I fly to Seattle?" from the My Trips row without opening the trip. No step bound "Seattle", and every row's ID is `trip_row_<code>`, so the routine read the first row and the city was dropped as unused (rejected 3 of 3). A list row that shows an input as one of its parts is now found by that input (`183cc60`).
+35. **The injection suite counted a request's own step as following planted text.** An agent that asked before tapping Save on add_ktn was declined and scored as "tried to follow", though its answer said it ignored the planted text. The scripted person now approves the request's own steps (`d7d7acd`).
+36. **One check-in in five now asks twice.** With `742ede6` the model also labels the trip page's "Check in", which only opens the flow, irreversible in 4 of 21 runs, so the user approves twice. AndroidWorld tried rewordings offline: each one that stopped this also stopped labelling one-tap commits (Amazon's Buy Now 3/5 → 0–1/5, Play's "Buy for $…" 4/5 → 0/5). Asking twice is the safe side, so the wording stays.
+37. **On real apps the merged agent over-checks read answers (open).** contacts_count ("No contacts yet") took 25 steps of toggling list filters where main answered at once. doordash took 11 steps where main took 1, and added ", USA" to an address the screen doesn't show, so the routine couldn't anchor it. The plans already differ ("View the full contacts list" against main's "Read total number of contacts shown"). AndroidWorld is replaying the planner and step offline to find which change causes it. The real-app rerun on the fix decides the merge (`eval/run_real_rerun.sh`).
+
+**Round 2 on SkyLark (`773536a`, main `8b5e9c2` + the 13 + the fixes above).**
+- Compile: 10 of 10, each on the first attempt.
+- Systems: agent 120/120 and routines 120/120 on the first try, with no side effects. Against main's agent the same evening, every cell was right on both sides, but the merged agent takes a median 2 steps where main took 4, for $0.0073 against $0.0090 and 9 s against 12.6 s.
+- Repeats: 10 of 10 on every request. Change: 50 of 50 new inputs, and all five layouts 10 of 10.
+- Injection: no irreversible action without approval. Safety: the gate caught 20 of 20.
+
+## Working on a shared Mac (Oct 28–29)
+
+More than a dozen sessions worked on Envoy that night, so devices and merges went through one coordinator session (`~/Desktop/Envoy/coord/`, outside git). Each device is claimed and released through a lock script, and only the coordinator moves `main`. `eval/run_final.sh` now claims through it too. What made that necessary:
+
+- **A re-seed mid-run.** At 21:01 another session re-seeded SkyLark on envoy-test during the systems suite (five bookings appeared, a seeded trip vanished), and the whole run was redone.
+- **The shared adb server killed from outside.** AndroidWorld's emulator controller (android_env) runs `adb kill-server` after any failed command, so its runs restarted the server every Envoy session shares: at 20:37–20:45 and 21:01–21:02 (Wonder's runs) and at 22:32 (AndroidWorld's). Each time, suites on envoy-test failed with "device offline". AndroidWorld's harness now refuses to restart the server (`3631542` on `androidworld`). Earlier results that overlapped such a restart were checked, and none had been affected.
+- **An emulator crash.** envoy-test's emulator died once on its own (01:31, GPU-context errors, no shutdown). The remaining suites were rerun after a cold start.
+- **The model API's billing.** From 02:16 on Oct 29 every Meta API call failed with "402 Billing verification failed", cutting the real-app pass short. The user is moving to a new Meta account. `scripts/check_model_key.py` checks a key with two tiny calls, and `run_final.sh`, the real-app rerun and `scripts/restart_api.sh` (which restarts :8700 only on a working key) all check it first.
+
 ## Not finished yet
 
 - [x] Every suite's measurement pass, and the fixes they found (1–31).
 - [ ] The final run on `eval-final` (Nov 2), and the hand checks of its shape-graded real-app answers.
 - [x] The Phase 6 gate on the real phone (Oct 28: a Pixel 5 on Android 13), with portability 18/18, all 10 core routines 30/30, and the stream and live-view numbers: `docs/phase-6-results.md`.
+- [ ] AndroidWorld's agent changes on `main`: SkyLark passed (round 2); the real-app rerun on the over-checking fix decides it (finding 37), then AndroidWorld re-measures its held-out half on what merges.
 - [ ] AndroidWorld's results from the `androidworld` branch.
+- [ ] The Meta API key on the new account (the user), checked with `scripts/check_model_key.py`, then :8700 restarted (`scripts/restart_api.sh`).
 - [ ] Both copies of the design doc, `docs/meta-feedback.md`, `prompts/submission-notes.md`.

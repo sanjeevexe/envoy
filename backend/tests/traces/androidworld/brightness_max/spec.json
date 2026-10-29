@@ -1,0 +1,69 @@
+{
+ "name": "settings_set_brightness",
+ "intent": "Set the device brightness to maximum in Settings",
+ "description": "Opens Settings, navigates to Display and Brightness level, then drags the brightness slider all the way to the right until it reaches the maximum value.",
+ "patterns": [
+  "turn brightness to the max",
+  "set brightness to maximum",
+  "make the screen as bright as possible",
+  "increase brightness to full"
+ ],
+ "inputs": [],
+ "steps": [
+  {
+   "step": 1,
+   "id": "launch_settings",
+   "intent": "Launch the Settings app",
+   "target_fixed_text": "Settings",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "scroll_to_display",
+   "intent": "Scroll until the Display settings item is visible",
+   "target_fixed_text": "Display",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "tap_display",
+   "intent": "Tap the Display settings item",
+   "target_fixed_text": "Display",
+   "choice_input": null
+  },
+  {
+   "step": 4,
+   "id": "tap_brightness_level",
+   "intent": "Tap the Brightness level setting to open the brightness slider",
+   "target_fixed_text": "Brightness level",
+   "choice_input": null
+  },
+  {
+   "step": 5,
+   "id": "swipe_brightness_slider_to_max",
+   "intent": "Swipe the brightness slider to the maximum",
+   "target_fixed_text": "Display brightness",
+   "choice_input": null
+  },
+  {
+   "step": 6,
+   "id": "swipe_brightness_slider_to_full_max",
+   "intent": "Swipe the brightness slider again to ensure it reaches full maximum",
+   "target_fixed_text": "Display brightness",
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "brightness_level",
+   "near": "Display brightness",
+   "example": "65535.0"
+  }
+ ],
+ "data_values": [
+  "0%",
+  "0.0",
+  "63495.0",
+  "65535.0"
+ ]
+}

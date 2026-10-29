@@ -1,0 +1,84 @@
+routine: simple_calendar_pro_get_event_location
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: draft
+intent: Find the location of an event in Simple Calendar Pro
+description: Searches Simple Calendar Pro for a named event, opens the event, and returns its location.
+patterns: [What is the location of my event, Where is my event, Find the location of an event in Simple Calendar Pro, Get the location for my
+    calendar event]
+outputs: [location]
+start: fresh_launch
+inputs:
+  event_name: {type: text, description: The name of the calendar event to look up, example: Family reunion}
+steps:
+- id: launch_simple_calendar_pro
+  intent: Launch Simple Calendar Pro
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.simplemobiletools.calendar.pro}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: top_toolbar_search_icon, kind: Button}
+  - element_present: {resource_id: top_toolbar_search, text: Search, kind: EditText}
+  risk: read
+  note: trace step 1
+- id: search_event
+  intent: "Type {{event_name}} into the Search field"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    type:
+      field:
+        resource_id: top_toolbar_search
+        text: Search
+        hint: Search
+        kind: EditText
+        cls: EditText
+        parent: top_toolbar_holder
+        in_list: false
+        position: [0.358, 0.088]
+      value: "{{event_name}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: top_toolbar_search
+      text: "Search: {{event_name}}"
+      kind: EditText
+  - element_present: {resource_id: event_section_title, text: OCTOBER, kind: Button}
+  risk: reversible
+  note: trace step 2
+- id: tap_event_result
+  intent: "Tap the {{event_name}} event result"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: event_item_holder
+      text_has: "{{event_name}}"
+      kind: Button
+      cls: ViewGroup
+      parent: search_results_list
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: event_title
+      text: "Title: {{event_name}}"
+      kind: EditText
+  - element_present: {resource_id: save, text: Save, kind: Button}
+  risk: reversible
+  extract:
+    location:
+      near: "Location:"
+      locator: {resource_id: event_location, kind: EditText}
+  note: trace step 3
+compiled_from:
+  task_id: aw-final-standard-1028-170550-7bae
+  goal: What is the location of my Family reunion event in Simple Calendar Pro? Answer with the location only.
+  compiler: cached
+  compiled_at: "2026-10-29 01:25:02"
+  trace_steps_kept: [1, 2, 3]
+  trace_steps_dropped: 0
+  cost_usd: 0.0

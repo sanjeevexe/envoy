@@ -1,0 +1,48 @@
+{
+ "name": "simple_calendar_pro_list_events",
+ "intent": "List event titles for a date in Simple Calendar Pro",
+ "description": "Opens Simple Calendar Pro, selects the requested date, and returns the titles of any events scheduled on that date.",
+ "patterns": [
+  "Do I have any events on this date",
+  "What events do I have on a date",
+  "List my events for a day"
+ ],
+ "inputs": [
+  {
+   "name": "event_date",
+   "type": "date",
+   "description": "The date to check for events",
+   "from_memory": null,
+   "example": "October 28"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "launch_simple_calendar_pro",
+   "intent": "Launch Simple Calendar Pro",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "open_event_date",
+   "intent": "Open {{event_date}} to view its events",
+   "target_fixed_text": null,
+   "choice_input": "event_date"
+  }
+ ],
+ "outputs": [
+  {
+   "name": "event_titles",
+   "near": "October 28 (Sat)",
+   "example": "Game night, Product demo, Date night"
+  }
+ ],
+ "data_values": [
+  "Game night · 02:45 - 03:45",
+  "Product demo · 10:30 - 11:30",
+  "Date night · 20:00 - 21:00",
+  "October 28 (Sat)"
+ ]
+}

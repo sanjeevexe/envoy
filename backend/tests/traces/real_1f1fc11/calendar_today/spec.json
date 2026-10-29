@@ -1,0 +1,38 @@
+{
+ "name": "google_calendar_check_todays_events",
+ "intent": "Check for today's events in Google Calendar.",
+ "description": "Opens Google Calendar and reports whether anything is planned for the current day, based on the day entry and status shown on the first screen. No sign-in, account creation, or sync setup is performed.",
+ "patterns": [
+  "Do I have any events today?",
+  "What is on my calendar today?",
+  "Anything planned today?",
+  "Check my calendar for today"
+ ],
+ "inputs": [],
+ "steps": [],
+ "outputs": [
+  {
+   "name": "todays_date",
+   "near": "Open Day View",
+   "example": "Thursday 29 October 2026"
+  },
+  {
+   "name": "todays_events_status",
+   "near": "Thursday 29 October 2026, Open Day View",
+   "example": "Nothing planned. Tap to create."
+  }
+ ],
+ "data_values": [
+  "envoy3955@gmail.com",
+  "Saturday 31 October 2026",
+  "Halloween",
+  "Sunday 01 November 2026",
+  "Daylight Saving Time ends",
+  "Tuesday 03 November 2026",
+  "Election Day",
+  "Wednesday 11 November 2026",
+  "Veterans Day",
+  "Thursday 26 November 2026",
+  "Thanksgiving Day"
+ ]
+}

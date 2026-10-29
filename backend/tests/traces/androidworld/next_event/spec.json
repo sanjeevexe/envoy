@@ -1,0 +1,58 @@
+{
+ "name": "simple_calendar_pro_get_next_event",
+ "intent": "Get the next upcoming event in Simple Calendar Pro",
+ "description": "Opens Simple Calendar Pro, switches to the simple event list view, and returns the title of the next upcoming event.",
+ "patterns": [
+  "What is my next upcoming event",
+  "What's my next calendar event",
+  "Tell me my next event in Simple Calendar Pro",
+  "What event is coming up next"
+ ],
+ "inputs": [],
+ "steps": [
+  {
+   "step": 1,
+   "id": "launch_simple_calendar_pro",
+   "intent": "Launch Simple Calendar Pro",
+   "target_fixed_text": "Simple Calendar Pro",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "tap_change_view",
+   "intent": "Tap Change view to open the view options",
+   "target_fixed_text": "Change view",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "select_simple_event_list",
+   "intent": "Select Simple event list to see upcoming events in list order",
+   "target_fixed_text": "Simple event list",
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "next_event_title",
+   "near": "Board meeting · 22:35 - 22:45",
+   "example": "Board meeting"
+  }
+ ],
+ "data_values": [
+  "15 Sunday",
+  "Call with Marketing · 02:28 - 02:58 · We will organize client feedback. Please bring relevant documents.",
+  "Review session for Project X · 04:01 - 04:31 · We will explore product launch.",
+  "Meeting with Dr. Smith · 08:32 - 09:17 · We will understand product launch.",
+  "Board meeting · 22:35 - 22:45",
+  "Appointment for Annual Report · 22:57 - 23:57 · We will organize marketing strategies. Looking forward to productive di…",
+  "16 Monday",
+  "Meeting with Bob · 07:13 - 08:13 · We will understand product launch.",
+  "17 Tuesday",
+  "Appointment for Project X · 15:30 - 16:00 · We will finalize product launch.",
+  "Meeting with Dr. Smith · 16:00 - 17:00 · We will understand contract details. Remember to confirm attendance.",
+  "Review session for Project X · 16:32 - 16:47 · We will organize marketing strategies. Snacks will be provided.",
+  "18 Wednesday",
+  "Review session for Project X"
+ ]
+}

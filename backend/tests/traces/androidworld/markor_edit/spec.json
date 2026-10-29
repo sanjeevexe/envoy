@@ -1,0 +1,81 @@
+{
+ "name": "markor_edit_note",
+ "intent": "Add text to the top of a note in Markor",
+ "description": "Opens the specified note file in Markor, prepends the requested text to the existing note content, navigates back to save, and reopens the note to verify the edit.",
+ "patterns": [
+  "Edit a note in Markor",
+  "Add text to the top of a note",
+  "Prepend text to my note",
+  "Update a note file in Markor"
+ ],
+ "inputs": [
+  {
+   "name": "note_file_name",
+   "type": "text",
+   "description": "The note file to edit",
+   "from_memory": null,
+   "example": "note_SiFbv.txt"
+  },
+  {
+   "name": "text_to_add",
+   "type": "text",
+   "description": "The text to add to the top of the note",
+   "from_memory": null,
+   "example": "Hello, World!"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "launch_markor",
+   "intent": "Launch Markor",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "open_note_file",
+   "intent": "Tap the file {{note_file_name}} to open the note",
+   "target_fixed_text": "File",
+   "choice_input": "note_file_name"
+  },
+  {
+   "step": 3,
+   "id": "prepend_text_to_note",
+   "intent": "Type {{text_to_add}} at the top of the note, followed by the existing note content",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 4,
+   "id": "dismiss_keyboard",
+   "intent": "Go back to dismiss the keyboard",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 5,
+   "id": "return_to_file_list",
+   "intent": "Go back to return to the file list and save the note",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 6,
+   "id": "reopen_note_file",
+   "intent": "Tap the file {{note_file_name}} to reopen the note and verify the edit",
+   "target_fixed_text": "File",
+   "choice_input": "note_file_name"
+  }
+ ],
+ "outputs": [
+  {
+   "name": "updated_note_content",
+   "near": "note_SiFbv",
+   "example": "Hello, World! Don't forget to water the plants while I'm away."
+  }
+ ],
+ "data_values": [
+  "Don't forget to water the plants while I'm away."
+ ]
+}

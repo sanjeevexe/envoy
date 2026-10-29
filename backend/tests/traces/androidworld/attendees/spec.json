@@ -1,0 +1,66 @@
+{
+ "name": "joplin_count_meeting_attendees",
+ "intent": "Count the attendees present in a Joplin meeting note",
+ "description": "Search Joplin for a meeting note by its title, open the note, and read the number of attendees stated in it.",
+ "patterns": [
+  "How many attendees were present in the meeting",
+  "How many people attended this meeting",
+  "Count the attendees in the meeting note"
+ ],
+ "inputs": [
+  {
+   "name": "meeting_title",
+   "type": "text",
+   "description": "",
+   "from_memory": null,
+   "example": "Employee Performance Evaluation"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "launch_joplin",
+   "intent": "Launch the Joplin app",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "tap_search",
+   "intent": "Tap Search to find a note",
+   "target_fixed_text": "Search",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "enter_meeting_title",
+   "intent": "Type {{meeting_title}} in the search field",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 4,
+   "id": "select_meeting_note",
+   "intent": "Tap the note titled {{meeting_title}} in the search results",
+   "target_fixed_text": null,
+   "choice_input": "meeting_title"
+  },
+  {
+   "step": 5,
+   "id": "open_meeting_note",
+   "intent": "Tap the note titled {{meeting_title}} to open it and view its contents",
+   "target_fixed_text": null,
+   "choice_input": "meeting_title"
+  }
+ ],
+ "outputs": [
+  {
+   "name": "attendee_count",
+   "near": "individuals were present",
+   "example": "25"
+  }
+ ],
+ "data_values": [
+  "25"
+ ]
+}

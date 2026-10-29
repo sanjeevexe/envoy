@@ -628,3 +628,43 @@ def test_a_field_compose_rebuilds_while_typing_is_found_again():
         raise AssertionError("other errors must still raise")
     except RuntimeError as e:
         assert "died" in str(e)
+
+
+def test_an_answer_read_off_a_list_row_is_read_in_the_row_that_shows_the_input():
+    # "When did I fly to Seattle?" answered off My Trips without opening the trip (SkyLark past_trip, aw-merge): every row's
+    # ID is trip_row_<code>, so by ID the routine read the first row, and with no action choosing the row the city was
+    # dropped as unused.
+    from routines.compiler import _consumed, _extract_for
+    from routines.model import Step, StepAction
+    from routines.screens import screen_from_tree
+
+    def trips(rows: list[str]):
+        els = [{"index": 0, "parent": None, "kind": "List", "class": "androidx.recyclerview.widget.RecyclerView", "scrollable": True,
+                "resource_id": "com.skylark.air:id/list_trips", "bounds": [0, 200, 1080, 2200]}]
+        for i, label in enumerate(rows):
+            y = 220 + 200 * i
+            code = label.rsplit(" · ", 1)[-1]
+            els.append({"index": len(els), "parent": 0, "kind": "Button", "class": "android.view.View", "clickable": True, "in_list": True,
+                        "label": label, "text": label, "resource_id": f"com.skylark.air:id/trip_row_{code}", "bounds": [0, y, 1080, y + 180]})
+        for n, e in enumerate(els, 1):
+            e["number"] = n
+        return screen_from_tree({"package": "com.skylark.air", "activity": "MainActivity", "width": 1080, "height": 2400, "elements": els})
+    rows = ["SL 761 · ATL → AUS · HQ3N7V", "Miami · Sun, Jul 19, 2026 · SL 105 · ATL → MIA · ZB5K1R",
+            "Seattle · Tue, Mar 3, 2026 · SL 1708 · ATL → SEA · KS4V9Q", "Orlando · Sat, Feb 14, 2026 · SL 77 · ATL → MCO · WN6G2H"]
+    final = trips(rows)
+    data = ["Tue, Mar 3, 2026", "SL 1708", "KS4V9Q", "HQ3N7V"]
+    ex = _extract_for("flight_date", "", "Tue, Mar 3, 2026", final, {"trip_city": "Seattle"}, data)
+    assert ex is not None and ex.locator is not None and ex.locator.text_has == "{{trip_city}}" and ex.segment == 1
+    assert ex.near is None  # not the city itself as fixed text
+    assert extract_value(ex, final, {"trip_city": "Seattle"}) == "Tue, Mar 3, 2026"  # its own row, not the first one
+    assert extract_value(ex, final, {"trip_city": "Miami"}) == "Sun, Jul 19, 2026"  # another trip: that trip's row
+    assert extract_value(ex, trips(rows[:2]), {"trip_city": "Seattle"}) is None  # not on screen: missing, the ladder takes over
+    flight = _extract_for("flight_number", "", "SL 1708", final, {"trip_city": "Seattle"}, data)
+    assert flight is not None and extract_value(flight, final, {"trip_city": "Orlando"}) == "SL 77"
+    # The input is used: the step that reads the output in its row consumes it, so it isn't dropped.
+    read = Step(id="read", intent="read", action=StepAction(kind="wait", seconds=0.3), extract={"flight_date": ex})
+    assert _consumed(read, "trip_city") and not _consumed(read, "other")
+    # A row whose input is only inside a longer part (a product title containing the search words) keeps the old reads.
+    shop = trips(["USB C Cable 6ft braided · $9.99 · AB1", "USB C Cable 3ft · $7.49 · AB2"])
+    keep = _extract_for("price", "", "$9.99", shop, {"search_query": "USB C Cable"}, ["$9.99"])
+    assert keep is None or keep.locator is None or keep.locator.text_has != "{{search_query}}"

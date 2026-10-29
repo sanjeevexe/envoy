@@ -361,12 +361,15 @@ def _same_slot(loc: Locator, scored: list, screen: ScreenState, margin: float) -
     if loc.row or loc.row_has:
         if len({_twin_key(e) for e, _ in tied}) > 1 or len({tuple(norm(t) for t in row_texts(e, screen)) for e, _ in tied}) > 1:
             return None
-    else:
-        if not (loc.in_list and (loc.resource_id or loc.kind)) or loc.text or loc.text_has or loc.desc:
-            return None
+    elif loc.in_list and (loc.resource_id or loc.kind) and not (loc.text or loc.text_has or loc.desc):
         same = (lambda e: id_matches(loc.resource_id, short_id(e.resource_id))) if loc.resource_id else (lambda e: e.kind == loc.kind)
         if not all(e.in_list and same(e) for e, _ in tied):
             return None
+    elif loc.text_has or len({e.parent for e, _ in tied}) > 1 or len({(e.kind, e.cls) for e, _ in tied}) > 1 \
+            or len({round(det.get("text", -1.0), 3) for _, det in tied}) > 1:
+        # Siblings of one kind that the locator's words fit equally: a launcher's results "Simple Calendar Pro0" … "Pro9",
+        # whose numbers were cut out of the text as data. Anything else that tells them apart means it isn't this case.
+        return None
     w, h = screen.width or 1080, screen.height or 2400
 
     def dist(e: Element) -> float:

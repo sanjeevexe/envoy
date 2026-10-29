@@ -1,0 +1,379 @@
+{
+ "compiled_offline_with_cached_specs": [
+  {
+   "task": "NotesRecipeIngredientCount",
+   "fixture": "backend/tests/traces/androidworld/ingredient",
+   "source_run": "aw-baseline-standard-1028-035923-e4eb",
+   "goal": "What quantity of spirulina do I need for the recipe 'Chicken Alfredo' in the Joplin app? Express your answer in the format <amount> <unit> where both the amount and unit exactly match the format in the recipe.",
+   "answer": "3/4 cup",
+   "routine": "joplin_lookup_ingredient_quantity",
+   "inputs": {
+    "recipe_name": "Chicken Alfredo",
+    "ingredient_name": "spirulina"
+   },
+   "extracts": {
+    "ingredient_quantity": {
+     "locator": {
+      "text_has": "{{ingredient_name}}",
+      "kind": "Text"
+     },
+     "after": "{{ingredient_name}}",
+     "expect_digits": true
+    }
+   },
+   "done_checks": [],
+   "reads_on_source_screen": {
+    "ingredient_quantity": "3/4 cup"
+   },
+   "warnings": []
+  },
+  {
+   "task": "NotesMeetingAttendeeCount",
+   "fixture": "backend/tests/traces/androidworld/attendees",
+   "source_run": "aw-final-standard-1028-114004-d68c",
+   "goal": "How many attendees were present in the meeting titled 'Employee Performance Evaluation' in the Joplin app? Express your answer as just a single number.",
+   "answer": "25",
+   "routine": "joplin_count_meeting_attendees",
+   "inputs": {
+    "meeting_title": "Employee Performance Evaluation"
+   },
+   "extracts": {
+    "attendee_count": {
+     "pattern": "(?P<v>\\d+)(?:\\s+\\D.*)?",
+     "first_in_list": true,
+     "expect_digits": true
+    }
+   },
+   "done_checks": [],
+   "reads_on_source_screen": {
+    "attendee_count": "25"
+   },
+   "warnings": []
+  },
+  {
+   "task": "SimpleCalendarLocationOfEvent",
+   "fixture": "backend/tests/traces/androidworld/event_location",
+   "source_run": "aw-final-standard-1028-170550-7bae",
+   "goal": "What is the location of my Family reunion event in Simple Calendar Pro? Answer with the location only.",
+   "answer": "100 Main St Chicago",
+   "routine": "simple_calendar_pro_get_event_location",
+   "inputs": {
+    "event_name": "Family reunion"
+   },
+   "extracts": {
+    "location": {
+     "near": "Location:",
+     "locator": {
+      "resource_id": "event_location",
+      "kind": "EditText"
+     }
+    }
+   },
+   "done_checks": [],
+   "reads_on_source_screen": {
+    "location": "100 Main St Chicago"
+   },
+   "warnings": []
+  },
+  {
+   "task": "SimpleCalendarAnyEventsOnDate",
+   "fixture": "backend/tests/traces/androidworld/any_events_on_date",
+   "source_run": "aw-baseline-standard-1028-044245-e548",
+   "goal": "Do I have any events October 28 in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+   "answer": "Game night, Product demo, Date night",
+   "routine": "simple_calendar_pro_list_events",
+   "inputs": {
+    "event_date": "October 28"
+   },
+   "extracts": {
+    "event_titles": {
+     "locator": {
+      "resource_id": "event_item_holder",
+      "kind": "Button"
+     },
+     "segment": 0,
+     "every": true
+    }
+   },
+   "done_checks": [],
+   "reads_on_source_screen": {
+    "event_titles": "Game night, Product demo, Date night"
+   },
+   "warnings": []
+  },
+  {
+   "task": "SimpleCalendarEventsOnDate",
+   "fixture": "backend/tests/traces/androidworld/events_on_date",
+   "source_run": "aw-baseline-standard-1028-044802-d25b",
+   "goal": "What events do I have October 24 in Simple Calendar Pro? Answer with the titles only. If there are multiple titles, format your answer as a comma separated list.",
+   "answer": "Trivia Night",
+   "routine": "simple_calendar_pro_get_events",
+   "inputs": {
+    "event_date": "October 24"
+   },
+   "extracts": {
+    "event_titles": {
+     "locator": {
+      "resource_id": "event_item_holder",
+      "kind": "Button"
+     },
+     "segment": 0,
+     "every": true
+    }
+   },
+   "done_checks": [],
+   "reads_on_source_screen": {
+    "event_titles": "Trivia Night"
+   },
+   "warnings": []
+  },
+  {
+   "task": "SimpleCalendarEventOnDateAtTime",
+   "fixture": "backend/tests/traces/androidworld/event_at_time",
+   "source_run": "aw-final-standard-1028-170219-df3a",
+   "goal": "What is on my schedule for October 27 2023 at 8:00pm in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+   "answer": "Product demo",
+   "routine": "simple_calendar_pro_get_event_titles",
+   "inputs": {
+    "schedule_date": "October 27 2023",
+    "schedule_time": "8:00pm"
+   },
+   "extracts": {
+    "event_titles": {
+     "locator": {
+      "resource_id": "event_item_holder",
+      "text_has": "{{schedule_time:time24}}",
+      "kind": "Button"
+     },
+     "segment": 0,
+     "every": true
+    }
+   },
+   "done_checks": [],
+   "reads_on_source_screen": {
+    "event_titles": "Product demo"
+   },
+   "warnings": []
+  },
+  {
+   "task": "SimpleCalendarNextEvent",
+   "fixture": "backend/tests/traces/androidworld/next_event",
+   "source_run": "aw-final-standard-1028-170611-c7a7",
+   "goal": "What is my next upcoming event in Simple Calendar Pro? Answer with the title only. If there are multiples titles, format your answer in a comma separated list.",
+   "answer": "Board meeting",
+   "refused": "the run answered a question ('Board meeting'), but no output can be read back from its own final screen: output 'next_event_title' reads 'Call with Marketing' on the run's own final screen, not 'Board meeting'; dropped"
+  },
+  {
+   "task": "NotesIsTodo",
+   "fixture": "backend/tests/traces/androidworld/is_todo",
+   "source_run": "aw-final-standard-1028-113935-db36",
+   "goal": "Is the note titled 'To-Do List' in the Joplin app marked as a todo item? Respond with either 'True' if it is a todo or 'False' if not.",
+   "answer": "True",
+   "routine": "joplin_check_note_todo",
+   "inputs": {
+    "note_title": "To-Do List"
+   },
+   "extracts": {
+    "is_todo": {
+     "locator": {
+      "text": "Convert to note",
+      "kind": "Button"
+     },
+     "answers": [
+      "True",
+      "False"
+     ]
+    }
+   },
+   "done_checks": [],
+   "reads_on_source_screen": {
+    "is_todo": "True"
+   },
+   "warnings": [
+    "output 'is_todo': 'True' when 'Convert to note' is on screen, else 'False'"
+   ]
+  },
+  {
+   "task": "MarkorEditNote",
+   "fixture": "backend/tests/traces/androidworld/markor_edit",
+   "source_run": "aw-baseline-standard-1028-035139-c0fa",
+   "goal": "Edit note_SiFbv.txt in Markor. Add to the top of the note Hello, World!",
+   "answer": "Edited note_SiFbv.txt in Markor - Hello, World! is now at the top of the note.",
+   "routine": "markor_edit_note",
+   "inputs": {
+    "note_file_name": "note_SiFbv.txt",
+    "text_to_add": "Hello, World!"
+   },
+   "extracts": {
+    "updated_note_content": {
+     "locator": {
+      "resource_id": "document__fragment__edit__highlighting_editor",
+      "kind": "EditText"
+     }
+    }
+   },
+   "done_checks": [
+    "text visible: '{{text_to_add}}'"
+   ],
+   "reads_on_source_screen": {
+    "updated_note_content": "Hello, World! Don't forget to water the plants while I'm away."
+   },
+   "warnings": [
+    "step 3: typed around the field's own text; kept as {{_field}}"
+   ]
+  },
+  {
+   "task": "MarkorCreateNoteAndSms",
+   "fixture": "backend/tests/traces/androidworld/note_and_sms",
+   "source_run": "aw-final-standard-1028-113141-b3df",
+   "goal": "Create a new note in Markor named fair_ant_XOdi.txt with the following text: Actions speak louder than words.. Share the entire content of the note with the phone number +13192815309 via SMS using Simple SMS Messenger",
+   "answer": "Created note fair_ant_XOdi.txt with text 'Actions speak louder than words.' in Markor and sent its content via SMS to +13192815309 using Simple SMS Messenger. The message appears sent in the conversation at 15:34.",
+   "routine": "markor_create_note_and_send_sms",
+   "inputs": {
+    "note_name": "fair_ant_XOdi",
+    "file_extension": ".txt",
+    "note_text": "Actions speak louder than words.",
+    "recipient_phone_number": "+13192815309"
+   },
+   "extracts": {},
+   "done_checks": [
+    "text visible: '{{note_text}}'"
+   ],
+   "reads_on_source_screen": {},
+   "warnings": []
+  },
+  {
+   "task": "SystemBrightnessMaxVerify",
+   "fixture": "backend/tests/traces/androidworld/brightness_already_max",
+   "source_run": "aw-baseline-standard-1028-050600-538b",
+   "goal": "Turn brightness to the max value.",
+   "answer": "Brightness is already set to maximum (100%) in Display settings.",
+   "refused": "the run changed nothing (its answer: 'Brightness is already set to maximum (100%) in Display settings.'): a routine learned from it would change nothing either"
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipesWithConstraint",
+   "fixture": "backend/tests/traces/androidworld/delete_by_ingredient_none",
+   "source_run": "aw-baseline-standard-1028-042250-371f",
+   "goal": "Delete the recipes from Broccoli app that use black garlic in the directions.",
+   "answer": "All recipes using black garlic in directions have been deleted - search for 'black garlic' in ALL RECIPES shows 'No recipes found.'",
+   "refused": "the goal asks to delete, but the run took no irreversible step: on this instance there was nothing to delete, and a routine learned from it would do nothing on any other"
+  },
+  {
+   "task": "SystemBrightnessMax",
+   "fixture": "backend/tests/traces/androidworld/brightness_max",
+   "source_run": "aw-final-standard-1028-172045-de53",
+   "goal": "Turn brightness to the max value.",
+   "answer": "Brightness turned to max: Brightness level 100% (65535.0)",
+   "routine": "settings_set_brightness",
+   "inputs": {},
+   "extracts": {
+    "brightness_level": {
+     "near": "Display brightness",
+     "locator": {
+      "resource_id": "content",
+      "kind": "Text"
+     },
+     "segment": 1,
+     "expect_digits": true
+    }
+   },
+   "done_checks": [],
+   "reads_on_source_screen": {
+    "brightness_level": "65535.0"
+   },
+   "warnings": []
+  }
+ ],
+ "new_seed_reads": [
+  {
+   "task": "NotesRecipeIngredientCount",
+   "screen": "backend/tests/traces/androidworld/new_seeds/ingredient_1.json.gz",
+   "goal": "What quantity of buckwheat groats do I need for the recipe 'Lasagna' in the Joplin app? Express your answer in the format <amount> <unit> where both the amount and unit exactly match the format in the recipe.",
+   "agent_answer": "2 teaspoons",
+   "routine_reads": {
+    "ingredient_quantity": "2 teaspoons"
+   },
+   "same": true
+  },
+  {
+   "task": "NotesRecipeIngredientCount",
+   "screen": "backend/tests/traces/androidworld/new_seeds/ingredient_2.json.gz",
+   "goal": "What quantity of arrowroot powder do I need for the recipe 'Salmon Salad' in the Joplin app? Express your answer in the format <amount> <unit> where both the amount and unit exactly match the format in the recipe.",
+   "agent_answer": "1/2 cup",
+   "routine_reads": {
+    "ingredient_quantity": "1/2 cup"
+   },
+   "same": true
+  },
+  {
+   "task": "NotesRecipeIngredientCount",
+   "screen": "backend/tests/traces/androidworld/new_seeds/ingredient_3.json.gz",
+   "goal": "What quantity of almond flour do I need for the recipe 'Tacos' in the Joplin app? Express your answer in the format <amount> <unit> where both the amount and unit exactly match the format in the recipe.",
+   "agent_answer": "1/2 cup",
+   "routine_reads": {
+    "ingredient_quantity": "1/2 cup"
+   },
+   "same": true
+  },
+  {
+   "task": "NotesMeetingAttendeeCount",
+   "screen": "backend/tests/traces/androidworld/new_seeds/attendees_1.json.gz",
+   "goal": "How many attendees were present in the meeting titled 'Quality Assurance Review' in the Joplin app? Express your answer as just a single number.",
+   "agent_answer": "80",
+   "routine_reads": {
+    "attendee_count": "80"
+   },
+   "same": true
+  },
+  {
+   "task": "NotesMeetingAttendeeCount",
+   "screen": "backend/tests/traces/androidworld/new_seeds/attendees_2.json.gz",
+   "goal": "How many attendees were present in the meeting titled 'Client Quarterly Review' in the Joplin app? Express your answer as just a single number.",
+   "agent_answer": "45",
+   "routine_reads": {
+    "attendee_count": "45"
+   },
+   "same": true
+  },
+  {
+   "task": "NotesMeetingAttendeeCount",
+   "screen": "backend/tests/traces/androidworld/new_seeds/attendees_3.json.gz",
+   "goal": "How many attendees were present in the meeting titled 'Project Status Update' in the Joplin app? Express your answer as just a single number.",
+   "agent_answer": "50",
+   "routine_reads": {
+    "attendee_count": "50"
+   },
+   "same": true
+  },
+  {
+   "task": "SimpleCalendarLocationOfEvent",
+   "screen": "backend/tests/traces/androidworld/new_seeds/event_location_1.json.gz",
+   "goal": "What is the location of my Movie night event in Simple Calendar Pro? Answer with the location only.",
+   "agent_answer": "Virtual",
+   "routine_reads": {
+    "location": "Virtual"
+   },
+   "same": true
+  },
+  {
+   "task": "SimpleCalendarLocationOfEvent",
+   "screen": "backend/tests/traces/androidworld/new_seeds/event_location_2.json.gz",
+   "goal": "What is the location of my Sports game event in Simple Calendar Pro? Answer with the location only.",
+   "agent_answer": "The Coffee Bean",
+   "routine_reads": {
+    "location": "The Coffee Bean"
+   },
+   "same": true
+  },
+  {
+   "task": "SimpleCalendarLocationOfEvent",
+   "screen": "backend/tests/traces/androidworld/new_seeds/event_location_3.json.gz",
+   "goal": "What is the location of my Team Offsite event in Simple Calendar Pro? Answer with the location only.",
+   "agent_answer": "Sarah's apartment",
+   "routine_reads": {
+    "location": "Sarah's apartment"
+   },
+   "same": true
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+ "task_id": "aw-final-standard-1028-170550-7bae",
+ "goal": "What is the location of my Family reunion event in Simple Calendar Pro? Answer with the location only.",
+ "status": "done",
+ "result": "100 Main St Chicago",
+ "steps": 3,
+ "model_calls": 5,
+ "cost_usd": 0.008725,
+ "cost_at_standard_usd": 0.008725,
+ "input_tokens": 12387,
+ "cached_tokens": 9525,
+ "output_tokens": 875,
+ "reasoning_tokens": 531,
+ "duration_s": 11.23,
+ "approvals": [],
+ "popups": [],
+ "plan": {
+  "app": "com.simplemobiletools.calendar.pro",
+  "subgoals": [
+   "Open Simple Calendar Pro",
+   "Locate the Family reunion event",
+   "Open the Family reunion event details to view its location"
+  ],
+  "success_check": {
+   "kind": "info",
+   "value": "location of Family reunion event",
+   "field_hint": null
+  }
+ },
+ "check": {
+  "passed": true,
+  "evaluable": true,
+  "detail": "answer visible on screen: 100, Main, Chicago"
+ },
+ "trace_dir": "tests/traces/androidworld/event_location"
+}

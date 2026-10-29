@@ -1,0 +1,36 @@
+{
+ "task_id": "aw-final-standard-1028-113935-db36",
+ "goal": "Is the note titled 'To-Do List' in the Joplin app marked as a todo item? Respond with either 'True' if it is a todo or 'False' if not.",
+ "status": "done_unverified",
+ "result": "True",
+ "steps": 3,
+ "model_calls": 6,
+ "cost_usd": 0.01336135,
+ "cost_at_standard_usd": 0.01336135,
+ "input_tokens": 15438,
+ "cached_tokens": 11814,
+ "output_tokens": 1661,
+ "reasoning_tokens": 1205,
+ "duration_s": 14.75,
+ "approvals": [],
+ "popups": [],
+ "plan": {
+  "app": "Joplin",
+  "subgoals": [
+   "Open the Joplin app",
+   "Locate the note titled 'To-Do List'",
+   "Check whether the note is marked as a todo item"
+  ],
+  "success_check": {
+   "kind": "info",
+   "value": "whether 'To-Do List' is marked as todo (True/False)",
+   "field_hint": null
+  }
+ },
+ "check": {
+  "passed": false,
+  "evaluable": true,
+  "detail": "none of ['True'] is visible on the current screen"
+ },
+ "trace_dir": "tests/traces/androidworld/is_todo"
+}

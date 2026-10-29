@@ -1,0 +1,38 @@
+{
+ "task_id": "aw-baseline-standard-1028-042250-371f",
+ "goal": "Delete the recipes from Broccoli app that use black garlic in the directions.",
+ "status": "done",
+ "result": "All recipes using black garlic in directions have been deleted - search for 'black garlic' in ALL RECIPES shows 'No recipes found.'",
+ "steps": 29,
+ "model_calls": 33,
+ "cost_usd": 0.0674896,
+ "cost_at_standard_usd": 0.0674896,
+ "input_tokens": 77783,
+ "cached_tokens": 59409,
+ "output_tokens": 8379,
+ "reasoning_tokens": 6124,
+ "duration_s": 90.33,
+ "approvals": [],
+ "popups": [],
+ "plan": {
+  "app": "com.flauschcode.broccoli",
+  "subgoals": [
+   "Open navigation drawer to explore other sections and filters",
+   "Search for black garlic across all recipes",
+   "Open matching recipes to verify black garlic in directions",
+   "Delete each recipe that uses black garlic in directions",
+   "Verify search for black garlic shows no remaining recipes"
+  ],
+  "success_check": {
+   "kind": "info",
+   "value": "confirmation that no recipes using black garlic remain",
+   "field_hint": null
+  }
+ },
+ "check": {
+  "passed": true,
+  "evaluable": true,
+  "detail": "answer visible on screen: All, ALL, RECIPES"
+ },
+ "trace_dir": "tests/traces/androidworld/delete_by_ingredient_none"
+}

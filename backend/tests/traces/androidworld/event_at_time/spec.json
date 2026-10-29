@@ -1,0 +1,56 @@
+{
+ "name": "simple_calendar_pro_get_event_titles",
+ "intent": "Look up events at a specific date and time in Simple Calendar Pro",
+ "description": "Opens Simple Calendar Pro, navigates to the requested date, and returns the titles of events scheduled at the requested time.",
+ "patterns": [
+  "What is on my schedule on that date at that time?",
+  "What event do I have at that time?",
+  "Show my calendar event titles for that date and time"
+ ],
+ "inputs": [
+  {
+   "name": "schedule_date",
+   "type": "date",
+   "description": "The date to check.",
+   "from_memory": null,
+   "example": "October 27 2023"
+  },
+  {
+   "name": "schedule_time",
+   "type": "date",
+   "description": "The time to check on that date.",
+   "from_memory": null,
+   "example": "8:00pm"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "launch_simple_calendar_pro",
+   "intent": "Launch Simple Calendar Pro",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "select_schedule_date",
+   "intent": "Navigate to {{schedule_date}} and view its events to find those at {{schedule_time}}",
+   "target_fixed_text": null,
+   "choice_input": "schedule_date"
+  }
+ ],
+ "outputs": [
+  {
+   "name": "event_titles",
+   "near": "20:00 - 20:15",
+   "example": "Product demo"
+  }
+ ],
+ "data_values": [
+  "Review session for Annual Report",
+  "23:52 (October 26) - 00:52",
+  "Meeting with Bob",
+  "10:15 - 11:00",
+  "20:00 - 20:15"
+ ]
+}

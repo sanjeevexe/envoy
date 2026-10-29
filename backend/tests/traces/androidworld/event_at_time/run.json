@@ -1,0 +1,36 @@
+{
+ "task_id": "aw-final-standard-1028-170219-df3a",
+ "goal": "What is on my schedule for October 27 2023 at 8:00pm in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+ "status": "done",
+ "result": "Product demo",
+ "steps": 3,
+ "model_calls": 10,
+ "cost_usd": 0.031677949999999996,
+ "cost_at_standard_usd": 0.031677949999999996,
+ "input_tokens": 17882,
+ "cached_tokens": 11942,
+ "output_tokens": 1796,
+ "reasoning_tokens": 1323,
+ "duration_s": 28.43,
+ "approvals": [],
+ "popups": [],
+ "plan": {
+  "app": "com.simplemobiletools.calendar.pro",
+  "subgoals": [
+   "Open Simple Calendar Pro",
+   "Navigate to October 27, 2023",
+   "View events scheduled at 8:00pm and read titles"
+  ],
+  "success_check": {
+   "kind": "info",
+   "value": "titles of events on October 27 2023 at 8:00pm",
+   "field_hint": null
+  }
+ },
+ "check": {
+  "passed": true,
+  "evaluable": true,
+  "detail": "answer visible on screen: Product"
+ },
+ "trace_dir": "tests/traces/androidworld/event_at_time"
+}

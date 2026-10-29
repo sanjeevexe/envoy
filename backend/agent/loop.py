@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import io
+import re
 import time
 import uuid
 from dataclasses import dataclass, field
@@ -33,6 +34,12 @@ Status = Literal["done", "done_unverified", "failed", "handoff", "needs_user", "
 
 SCREENSHOT_WIDTH = 540  # a full 1080x2400 frame costs ~3,200 input tokens (Phase 0); half width costs ~4x less
 HISTORY_STEPS = 5
+# The model's own words for an action it doesn't mean ("Placeholder to comply with schema", "Mistake: should swipe up"). On
+# AndroidWorld such a back left the app or threw away a form: it is asked again instead of carried out.
+_PLACEHOLDER = re.compile(r"placeholder|schema requires|(required by|comply with|satisfy) (the )?schema|incorrect but|"
+                          r"wrong action|this is wrong|\bmistake\b|^\W*\w?\W*$|^one short sentence", re.I)
+MAX_REMEMBERED = 6000  # characters of what the model kept from earlier screens (the oldest go first)
+PROGRESS_STEPS = 3  # changed screens in a row after which earlier stuck recoveries no longer count
 
 
 @dataclass
@@ -45,7 +52,7 @@ class RunConfig:
     plan_effort: str = "low"
     plan: bool = True
     screenshots: Literal["auto", "never", "always"] = "auto"
-    max_done_rejections: int = 2
+    max_done_rejections: int = 1  # the plan's check is written before the app is seen; AndroidWorld: 6/6 rejections were wrong
     vision: Literal["hybrid", "grounding", "sam", "step"] = "hybrid"  # how a tap_point's target is found (Phase 6: agent/vision.py)
 
 
@@ -78,6 +85,17 @@ class RunResult:
 def _body(compact: str) -> str:
     """The compact screen without its header line (which carries the settle time)."""
     return compact.split("\n", 1)[1] if "\n" in compact else ""
+
+
+def _volatile(before: ScreenState, now: ScreenState) -> set[int]:
+    """Lines of a screen that changed with no action (a clock, a timer, a progress bar): compared with no action in
+    between, same layout. They must not count as an action's effect, or a no-op looks like progress."""
+    a, b = _body(before.compact).split("\n"), _body(now.compact).split("\n")
+    return {i for i, (x, y) in enumerate(zip(a, b)) if x != y} if len(a) == len(b) else set()
+
+
+def _masked(compact: str, lines: set[int]) -> str:
+    return "\n".join("~" if i in lines else x for i, x in enumerate(_body(compact).split("\n")))
 
 
 def _where(s: ScreenState) -> str:
@@ -148,13 +166,16 @@ class AgentRunner:
         out = RunResult(task_id=task_id, goal=goal, status="error", result="", trace_dir=str(trace.dir))
         started = time.time()
         history: list[str] = []
+        remembered: list[str] = []  # what the model kept from screens it has left (its own words, from app data)
         feedback = ""
         want_screenshot = self.config.screenshots == "always"
         rejections = 0
         no_change_streak = 0
+        progress_streak = 0
         stuck_recoveries = 0
         plan: Plan | None = None
-        last_bodies: list[str] = []
+        last_bodies: list[str] = []  # the last screens' compact forms, for stuck detection
+        volatile: dict[str, set[int]] = {}  # screen signature → lines seen changing on their own
         visits: dict[str, int] = {}  # screen signature -> times seen
         names: dict[str, str] = {}  # screen signature -> readable name
         replans = 0
@@ -179,10 +200,25 @@ class AgentRunner:
             return out
 
         try:
+            today = ""
+            if hasattr(self.device, "local_time"):
+                try:  # the phone's date, for goals that say "tomorrow"
+                    today = await self.device.local_time()  # type: ignore[attr-defined]
+                except Exception as e:  # noqa: BLE001 - the run works without it
+                    trace.step({"step": 0, "kind": "time_unavailable", "error": f"{type(e).__name__}: {e}"[:300]})
+            apps = ""
+            if self.config.plan and hasattr(self.device, "app_listing"):
+                try:  # the phone's apps by name, so the plan can name the app the goal means
+                    apps = await self.device.app_listing()  # type: ignore[attr-defined]
+                except Exception as e:  # noqa: BLE001 - the plan works without it
+                    trace.step({"step": 0, "kind": "apps_unavailable", "error": f"{type(e).__name__}: {e}"[:300]})
+                if errors := getattr(self.device, "app_errors", None):
+                    trace.step({"step": 0, "kind": "apps_unlabeled", "count": len(errors), "errors": dict(list(errors.items())[:5])})
+
             async def make_plan(current: ScreenState, tried: str = "", step_no: int = 0) -> Plan | None:
                 t0 = time.perf_counter()
                 notes_text, note_ids = self._notes_for(current.package)
-                res = await asyncio.to_thread(self._call, "plan", [{"type": "input_text", "text": plan_input(goal, current.compact, memory, tried,
+                res = await asyncio.to_thread(self._call, "plan", [{"type": "input_text", "text": plan_input(goal, current.compact, memory, tried, apps, today,
                                                                                                                app_notes=notes_text)}],
                                               PLAN_INSTRUCTIONS, self.config.plan_effort, task_id)
                 account(res)
@@ -230,9 +266,9 @@ class AgentRunner:
                     continue
 
                 # 3. Stuck detection: the same screen three times with no effect.
-                body = _body(screen.compact)
-                last_bodies = (last_bodies + [body])[-3:]
-                if len(last_bodies) == 3 and len(set(last_bodies)) == 1 and no_change_streak >= 2:
+                last_bodies = (last_bodies + [screen.compact])[-3:]
+                vol = volatile.get(screen.signature, set())
+                if len(last_bodies) == 3 and len({_masked(c, vol) for c in last_bodies}) == 1 and no_change_streak >= 2:
                     stuck_recoveries += 1
                     if stuck_recoveries == 1:
                         feedback = "You are stuck: the last actions did not change the screen. Try a different element, scroll, or go back."
@@ -270,6 +306,7 @@ class AgentRunner:
                 content = [{"type": "input_text", "text": step_input(goal, screen.compact, plan=plan_text,
                                                                       history="\n".join(history[-HISTORY_STEPS:]),
                                                                       memory=memory, feedback=feedback, visited=visited_text(),
+                                                                      today=today, remembered="\n".join(f"- {r}" for r in remembered),
                                                                       app_notes=notes_text)}]
                 if png:
                     content.append(image_part(png))
@@ -283,15 +320,32 @@ class AgentRunner:
                     history.append(f"step {step}: (runtime) the model's reply was not valid JSON; asked again")
                     trace.step({"step": step, "kind": "model_error", "error": str(e)[:300]})
                     res = await asyncio.to_thread(self._call, "step", content, STEP_INSTRUCTIONS, self.config.step_effort, task_id, schema)
-                model_ms = (time.perf_counter() - t_model) * 1000
                 account(res)
                 decision: StepOutput = res.parsed  # type: ignore[assignment]
+                placeholder = None
+                if decision.action.type not in ("done", "fail", "look") and _PLACEHOLDER.search(decision.reason.strip()):
+                    # Asked once more, in the same step: nothing was done on the phone.
+                    placeholder = decision.model_dump()
+                    again = (f"FEEDBACK FROM THE RUNTIME:\nYour answer for this step was {_describe(decision, screen)}, and your reason "
+                             f"called it a placeholder or a mistake ({decision.reason.strip()[:80]!r}). It was not carried out. "
+                             f"Every action you return is carried out on the phone: return the action you actually want.")
+                    content[0] = {"type": "input_text", "text": content[0]["text"] + "\n" + again + "\n"}
+                    res = await asyncio.to_thread(self._call, "step", content, STEP_INSTRUCTIONS, self.config.step_effort, task_id, schema)
+                    account(res)
+                    decision = res.parsed  # type: ignore[assignment]
+                model_ms = (time.perf_counter() - t_model) * 1000
+                keep = decision.remember.strip()
+                if keep and keep not in remembered:
+                    remembered.append(keep)
+                    while sum(map(len, remembered)) > MAX_REMEMBERED and len(remembered) > 1:
+                        remembered.pop(0)
                 feedback, want_screenshot = "", self.config.screenshots == "always"
                 record: dict[str, Any] = {
                     "step": step, "kind": "action", "screen_before": screen_record(screen),
                     "tree_before": trace.save_tree(step, "before", screen),
                     "screenshot_before": trace.save_png(step, "before", png) if png else None,
                     "decision": decision.model_dump(), "usage": res.usage, "cost_usd": res.cost_usd,
+                    **({"placeholder": placeholder} if placeholder else {}),
                     "timings_ms": {"observe": round(observe_ms), "model": round(model_ms)},
                 }
                 if note_ids:
@@ -326,8 +380,10 @@ class AgentRunner:
                     rejections += 1
                     if rejections > self.config.max_done_rejections:
                         return finish("done_unverified", result, chk)
-                    feedback = (f"Your done was rejected: {chk.detail}. If the goal is really done, get to the screen that shows it "
-                                f"(or state the answer exactly as the screen shows it); otherwise keep going.")
+                    feedback = (f"Your done was not confirmed: the plan's check found that {chk.detail}. That check was written before "
+                                f"seeing this app, so it may expect words the app doesn't use. If this screen shows the goal is "
+                                f"done, answer done again now and it will be accepted; do not undo or redo finished work. If "
+                                f"something is still missing, do only that.")
                     history.append(f"step {step}: done rejected by the success check ({chk.detail})")
                     continue
 
@@ -394,13 +450,19 @@ class AgentRunner:
                         trace.step(record)
                         continue
 
+                if hasattr(self.device, "peek"):  # what changed by itself while the model was deciding (no renumbering)
+                    volatile.setdefault(screen.signature, set()).update(_volatile(screen, await self.device.peek()))  # type: ignore[attr-defined]
                 t_act = time.perf_counter()
                 result_ = await self.device.act(action)
                 out.steps += 1
                 act_ms = (time.perf_counter() - t_act) * 1000
                 after = await self.device.wait_until_settled()
-                changed = _body(after.compact) != body
+                vol = volatile.get(screen.signature, set())
+                changed = _masked(after.compact, vol) != _masked(screen.compact, vol) if after.signature == screen.signature else True
                 no_change_streak = 0 if changed else no_change_streak + 1
+                progress_streak = progress_streak + 1 if changed else 0
+                if progress_streak >= PROGRESS_STEPS:  # moving again: a later stuck spell starts its recoveries afresh
+                    stuck_recoveries = 0
                 record.update({
                     "device_action": action.model_dump(), "result": result_.model_dump(),
                     "target": element_record(screen.numbered[action.element - 1], screen) if action.element else None,
@@ -412,10 +474,10 @@ class AgentRunner:
 
                 if not result_.ok:
                     history.append(f"step {step}: {desc} → FAILED: {result_.error}")
-                elif changed:
-                    history.append(f"step {step}: {desc} → screen changed, now {_where(after)} (expected: {decision.expected_result})")
+                elif changed:  # what happened, not the model's own words: echoed prose was copied into later steps
+                    history.append(f"step {step}: {desc} → screen changed, now {_where(after)}")
                 else:
                     want_screenshot = self.config.screenshots != "never"
-                    history.append(f"step {step}: {desc} → NO VISIBLE CHANGE (expected: {decision.expected_result})")
+                    history.append(f"step {step}: {desc} → NO VISIBLE CHANGE")
         except Exception as e:  # noqa: BLE001 - a failed run keeps its trace
             return finish("error", f"{type(e).__name__}: {e}")

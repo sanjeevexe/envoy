@@ -1,0 +1,145 @@
+{
+ "name": "markor_create_note_and_send_sms",
+ "intent": "Create a note in Markor and share its content via SMS",
+ "description": "Create a new text note in Markor with a specified name and content, save it, then send the note's entire content by SMS to a specified phone number using Simple SMS Messenger.",
+ "patterns": [
+  "Create a note and text its contents to a phone number",
+  "Make a new note in Markor and SMS it to someone",
+  "Create a text file and share it by SMS",
+  "Write a note and send it as a text message"
+ ],
+ "inputs": [
+  {
+   "name": "note_name",
+   "type": "text",
+   "description": "The base file name for the new note, without its extension.",
+   "from_memory": null,
+   "example": "fair_ant_XOdi"
+  },
+  {
+   "name": "file_extension",
+   "type": "text",
+   "description": "The file extension for the new note.",
+   "from_memory": null,
+   "example": ".txt"
+  },
+  {
+   "name": "note_text",
+   "type": "text",
+   "description": "The entire text content to place in the note and send by SMS.",
+   "from_memory": null,
+   "example": "Actions speak louder than words."
+  },
+  {
+   "name": "recipient_phone_number",
+   "type": "phone",
+   "description": "The phone number that should receive the SMS.",
+   "from_memory": null,
+   "example": "+13192815309"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "launch_markor",
+   "intent": "Launch Markor to create a new note",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "tap_create_new_file",
+   "intent": "Tap the button to create a new file or folder",
+   "target_fixed_text": "Create a new file or folder",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "enter_note_name",
+   "intent": "Type {{note_name}} as the new file name",
+   "target_fixed_text": "my_note",
+   "choice_input": null
+  },
+  {
+   "step": 4,
+   "id": "set_file_extension",
+   "intent": "Enter {{file_extension}} as the file extension",
+   "target_fixed_text": ".md",
+   "choice_input": null
+  },
+  {
+   "step": 5,
+   "id": "confirm_file_creation",
+   "intent": "Tap OK to create the file",
+   "target_fixed_text": "OK",
+   "choice_input": null
+  },
+  {
+   "step": 6,
+   "id": "enter_note_content",
+   "intent": "Type {{note_text}} into the note editor",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 7,
+   "id": "save_note",
+   "intent": "Tap Save to save the note",
+   "target_fixed_text": "Save",
+   "choice_input": null
+  },
+  {
+   "step": 8,
+   "id": "return_to_file_list",
+   "intent": "Go back to the file list after saving the note",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 9,
+   "id": "launch_sms_messenger",
+   "intent": "Launch Simple SMS Messenger to share the note content",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 10,
+   "id": "start_new_conversation",
+   "intent": "Tap the option to start a new conversation",
+   "target_fixed_text": "Start a conversation",
+   "choice_input": null
+  },
+  {
+   "step": 11,
+   "id": "enter_recipient_number",
+   "intent": "Type {{recipient_phone_number}} as the conversation recipient",
+   "target_fixed_text": "Add Contact or Number…",
+   "choice_input": null
+  },
+  {
+   "step": 12,
+   "id": "confirm_recipient",
+   "intent": "Confirm the recipient to open the conversation",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 13,
+   "id": "enter_sms_message",
+   "intent": "Type {{note_text}} into the SMS message field",
+   "target_fixed_text": "Type a message…",
+   "choice_input": null
+  },
+  {
+   "step": 14,
+   "id": "send_sms",
+   "intent": "Tap SMS to send the message",
+   "target_fixed_text": "SMS",
+   "choice_input": null
+  }
+ ],
+ "outputs": [],
+ "data_values": [
+  "15:34"
+ ]
+}

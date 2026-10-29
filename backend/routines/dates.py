@@ -72,3 +72,84 @@ def facts(request: str, today: date) -> list[str]:
                 line += f" and, lasting {durations[0].group(0).split(None, 1)[-1].removeprefix('for ').strip()}, ends at {end:%H:%M}{later}"
             out.append(line)
     return out
+
+
+# ---- a date or time input as an app shows it -------------------------------------------------------
+# A request names a date or time one way ("October 27 2023", "8:00pm") and an app shows its parts another (a month grid's
+# "27" under "October", a day view's "20:00 - 20:15"). A routine slot can name one part: {{event_date:day}} is the day of
+# the month of whatever date the input holds on this run (routines/model.py renders it with `formatted`).
+
+_MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
+_MONTH = r"(" + "|".join(m[:3] + rf"(?:{m[3:]})?" for m in _MONTHS) + r")\.?"
+_DATE_MDY = re.compile(rf"^(?:\w+,?\s+)??{_MONTH}\s+(\d{{1,2}})(?:st|nd|rd|th)?(?:,?\s+(\d{{4}}))?\b", re.I)
+_DATE_DMY = re.compile(rf"^(?:\w+,?\s+)??(\d{{1,2}})(?:st|nd|rd|th)?\s+(?:of\s+)?{_MONTH}(?:,?\s+(\d{{4}}))?\b", re.I)
+_DATE_ISO = re.compile(r"^(\d{4})-(\d{1,2})-(\d{1,2})\b")
+_DATE_US = re.compile(r"^(\d{1,2})/(\d{1,2})/(\d{4})\b")
+_TIME = re.compile(r"^(\d{1,2})(?::(\d{2}))?\s*(h\b|hrs?\b|o'?clock|[ap]\.?m\.?)?$", re.I)
+
+# The parts a slot can name, most specific first (the compiler binds a longer one before a shorter one inside it).
+DATE_PARTS = ("iso", "month", "mon", "year", "day")
+TIME_PARTS = ("time24",)
+
+
+def parse_date(value: str) -> tuple[int | None, int, int] | None:
+    """(year or None, month, day) of a date written as people and apps write them, else None."""
+    v = " ".join((value or "").split())
+    if m := _DATE_ISO.match(v):
+        y, mo, d = int(m.group(1)), int(m.group(2)), int(m.group(3))
+    elif m := _DATE_US.match(v):
+        mo, d, y = int(m.group(1)), int(m.group(2)), int(m.group(3))
+    elif m := _DATE_MDY.match(v):
+        mo, d, y = _month(m.group(1)), int(m.group(2)), int(m.group(3)) if m.group(3) else None
+    elif m := _DATE_DMY.match(v):
+        d, mo, y = int(m.group(1)), _month(m.group(2)), int(m.group(3)) if m.group(3) else None
+    else:
+        return None
+    if not (1 <= mo <= 12 and 1 <= d <= 31):
+        return None
+    return y, mo, d
+
+
+def _month(s: str) -> int:
+    return next(i for i, m in enumerate(_MONTHS, 1) if m.startswith(s.casefold()[:3]))
+
+
+def parse_time(value: str) -> tuple[int, int] | None:
+    """(hour, minute) of a time ("8:00pm", "8 pm", "20:00", "17h"), else None. A bare number is not a time."""
+    m = _TIME.match(" ".join((value or "").split()))
+    if m is None or not (m.group(2) or m.group(3)):
+        return None
+    hour, minute, suffix = int(m.group(1)), int(m.group(2) or 0), (m.group(3) or "").lower().replace(".", "")
+    if suffix.startswith("pm") and hour < 12:
+        hour += 12
+    elif suffix.startswith("am") and hour == 12:
+        hour = 0
+    return (hour, minute) if hour < 24 and minute < 60 else None
+
+
+def formatted(value: str, part: str) -> str | None:
+    """One part of a date or time input, the way apps show it: day "27", month "October", mon "Oct", year "2023", iso
+    "2023-10-27", time24 "20:00". None when the value isn't a date (or time) or lacks that part."""
+    if part in TIME_PARTS:
+        t = parse_time(value)
+        return f"{t[0]:02d}:{t[1]:02d}" if t else None
+    d = parse_date(value)
+    if d is None:
+        return None
+    y, mo, day = d
+    if part == "day":
+        return str(day)
+    if part == "month":
+        return _MONTHS[mo - 1].capitalize()
+    if part == "mon":
+        return _MONTHS[mo - 1][:3].capitalize()
+    if part == "year":
+        return str(y) if y else None
+    if part == "iso":
+        return f"{y:04d}-{mo:02d}-{day:02d}" if y else None
+    return None
+
+
+def parts(value: str) -> dict[str, str]:
+    """Every part of a date or time input that `formatted` can give, keyed by part name ({} for other values)."""
+    return {p: f for p in (*DATE_PARTS, *TIME_PARTS) if (f := formatted(value, p))}
