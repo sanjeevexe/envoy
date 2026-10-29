@@ -76,9 +76,10 @@ CREATE INDEX IF NOT EXISTS handoffs_name ON handoffs(name, size);
 """
 
 # What a file from the Mac becomes on the phone, by app (lowercase key, as a sidecar's `app` names it).
-# - `goal`: what the agent works from, with typed slots ({caption}); `request`: the same words with every slot left
-#   empty, which is all the approval rules read (contract 1). The caption fills the goal and the routine's inputs, never
-#   the request.
+# - `goal`: what the agent works from, with typed slots ({caption}); `request`: `handoff_request(goal)`, the same words
+#   with every slot left empty and no publishing words, which is all the approval rules read (contract 1). The caption
+#   fills the goal and the routine's inputs, never the request; and since the request never names Share or Post, the
+#   step that publishes always asks.
 # - `title`: the offer's question, with {file} and {device}. `device_pref`: "phone" asks for the real phone the way
 #   "on my phone" does; "emulator" leaves it to routing (the per-app "use my phone" setting, apps that block emulators).
 # - optionally `routine` and `inputs` (routine input → sidecar field).
@@ -258,6 +259,20 @@ def safe_name(name: str) -> str:
 def fill(template: str, values: dict[str, str]) -> str:
     """A template's {slots} filled with typed values, one pass (a value with braces in it fills nothing)."""
     return re.sub(r"\{(\w+)\}", lambda m: values.get(m.group(1), ""), template)
+
+
+# Words that publish or send something for others to see. The task an accepted handoff offer starts has a direct
+# source, and the approval rules (policy/approval_rules.py) let a step through without asking when the request names
+# all of its button's words; so a handoff's request never says these, and Share, Post, Publish or Send is always the
+# user's to approve on the screen itself.
+PUBLISHING = re.compile(r"\b(share|shares|sharing|post|posts|posting|publish|publishes|publishing|send|sends|sending|submit|submits|"
+                        r"upload|uploads|uploading|tweet|tweets|reply|replies)\b", re.I)
+
+
+def handoff_request(goal: str) -> str:
+    """A handoff template's request: its goal with every slot left empty and no publishing words ("Post the newest
+    video … with this caption: {caption}" → "the newest video … with this caption")."""
+    return re.sub(r"\s{2,}", " ", PUBLISHING.sub(" ", without_slots(goal))).strip(" :,")
 
 
 def without_slots(template: str) -> str:
@@ -632,7 +647,7 @@ class Handoff:
         goal = fill(tpl["goal"], values)
         if not values["caption"]:
             goal = re.sub(r"[\s:,]+$", "", goal)  # "… with this caption:" and nothing after it
-        then = {"goal": re.sub(r"\s+", " ", goal).strip(), "request": without_slots(tpl["request"] or tpl["goal"]), "app": tpl["package"],
+        then = {"goal": re.sub(r"\s+", " ", goal).strip(), "request": handoff_request(tpl["request"] or tpl["goal"]), "app": tpl["package"],
                 "inputs": {k: values[v] for k, v in (tpl.get("inputs") or {}).items() if values.get(v)}}
         if tpl.get("routine"):
             then["routine"] = tpl["routine"]
@@ -685,7 +700,7 @@ class Handoff:
         if self.runner is None:
             raise RuntimeError("the task runner isn't available")
         did = sent["device"]
-        task = self.runner.start(then["goal"], source, request=without_slots(then.get("request") or ""), routine=then.get("routine") or None,
+        task = self.runner.start(then["goal"], source, request=handoff_request(then.get("request") or ""), routine=then.get("routine") or None,
                                  inputs=then.get("inputs") or {}, app=then.get("app") or None, phone=did,
                                  **({"phone_ok": did} if did.startswith("phone-") else {}))
         self._update(item["id"], task_id=task["id"])

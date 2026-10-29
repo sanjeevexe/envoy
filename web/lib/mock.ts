@@ -241,7 +241,7 @@ function seed(): DB {
       title: "Put pier-sunset.mp4 on your Pixel 5 and post it to Instagram?", body: "Golden hour at the pier 🌅",
       action: { type: "handoff", handoff_id: "handoff-pier", file: "pier-sunset.mp4", device: "pixel-5", then: {
         goal: "Post the newest video in my phone's gallery to Instagram as a reel with this caption: \"Golden hour at the pier 🌅 Shot on the 14th\"",
-        request: "Post the newest video in my phone's gallery to Instagram as a reel with this caption", app: "com.instagram.android",
+        request: "the newest video in my phone's gallery to Instagram as a reel with this caption", app: "com.instagram.android",
         inputs: { caption: "Golden hour at the pier 🌅\nShot on the 14th" } } },
       preflight: [{ kind: "device", text: "On your Pixel 5 (Instagram is set to your phone)", level: "info" },
         { kind: "approval", text: "Sharing the reel will wait for your OK", level: "info" }] }),

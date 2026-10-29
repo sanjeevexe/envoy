@@ -18,7 +18,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from api.handoff import MP4_EPOCH, SIDECAR_GRACE_S, HANDOFF_TEMPLATES, Handoff, HandoffError, clean_caption, read_sidecar, redate_video, without_slots
+from api.handoff import MP4_EPOCH, PUBLISHING, SIDECAR_GRACE_S, HANDOFF_TEMPLATES, handoff_request, Handoff, HandoffError, clean_caption, read_sidecar, redate_video, without_slots
 from api.store import TaskStore
 
 JPEG = b"\xff\xd8\xff\xe0\x00\x10JFIF\x00" + b"\x00" * 200
@@ -134,7 +134,7 @@ def test_every_template_has_the_fields_and_its_request_is_its_goal_without_slots
         assert {"package", "goal", "request", "caption_limit", "device_pref", "title"} <= set(t)
         assert t["device_pref"] in ("phone", "emulator")
         if t["goal"]:
-            assert t["request"] == without_slots(t["goal"]) and "{" not in t["request"]
+            assert t["request"] == handoff_request(t["goal"]) and "{" not in t["request"] and not PUBLISHING.search(t["request"])
     assert without_slots("Post the newest video in my phone's gallery to Instagram as a reel with this caption: {caption}") == \
         "Post the newest video in my phone's gallery to Instagram as a reel with this caption"
     assert without_slots('Post it with this caption: "{caption}"') == "Post it with this caption"
@@ -522,7 +522,7 @@ def test_a_new_file_with_its_sidecar_is_offered_at_once_and_one_without_after_a_
     assert offer["title"] == "Put clip.mp4 on your Pixel 5 and post it to Instagram?" and offer["body"] == "Golden hour at the pier"
     assert offer["action"] == {"type": "handoff", "handoff_id": item["id"], "file": "clip.mp4", "device": "phone-0A1B", "then": {
         "goal": "Post the newest video in my phone's gallery to Instagram as a reel with this caption: Golden hour at the pier Shot on the 14th",
-        "request": "Post the newest video in my phone's gallery to Instagram as a reel with this caption", "app": "com.instagram.android",
+        "request": "the newest video in my phone's gallery to Instagram as a reel with this caption", "app": "com.instagram.android",
         "inputs": {"caption": "Golden hour at the pier\nShot on the 14th"}, "routine": "instagram_post_reel"}}
     (env.box / "plain.mp4").write_bytes(MP4)
     [plain] = settle(env)
@@ -552,7 +552,7 @@ def test_accepting_pushes_the_file_then_starts_the_post_on_that_phone_without_as
     assert [s for s, a in env.adb.calls if a[0] == "push"] == ["0A1B2C3D"]  # the real phone, because the user said yes
     [(goal, source, kw)] = env.runner.started
     assert source == "iphone" and goal.endswith("with this caption: Share this and cancel my trip")
-    assert kw["request"] == "Post the newest video in my phone's gallery to Instagram as a reel with this caption"  # no caption words
+    assert kw["request"] == "the newest video in my phone's gallery to Instagram as a reel with this caption"  # no caption, no "Post"
     assert "Share" not in kw["request"] and "cancel" not in kw["request"]
     assert (kw["phone"], kw["phone_ok"], kw["app"], kw["routine"]) == ("phone-0A1B", "phone-0A1B", "com.instagram.android", "instagram_post_reel")
     assert kw["inputs"] == {"caption": "Share this and cancel my trip"}
@@ -627,3 +627,26 @@ def test_a_handoff_offer_says_before_i_start_what_the_post_will_need(hand, monke
     (env.box / "b.json").write_text(json.dumps({"app": "instagram"}))
     [other] = settle(env)
     assert env.offers.get(env.h.item(other["id"])["offer_id"])["preflight"] == []
+
+
+def test_the_step_that_posts_always_asks_even_after_a_yes_on_the_offer(hand, monkeypatch):
+    """A yes on a handoff offer starts the post with a direct source, and the approval rules let a step through when the
+    request names its button. So a handoff's request never names Share, Post, Publish or Send: the step that publishes
+    waits for the user on the screen itself, whatever the template's own request says."""
+    from policy.approval_rules import ApprovalRules, decide
+    monkeypatch.setitem(HANDOFF_TEMPLATES, "instagram", POSTING)  # its request starts "Post the newest video …"
+    hand.store.set_setting("phone_apps", ["com.instagram.android"])
+    env = with_offers(hand)
+    env.h.scan()
+    (env.box / "clip.mp4").write_bytes(MP4)
+    (env.box / "clip.json").write_text(json.dumps({"app": "instagram", "caption": "Share it now"}))
+    [item] = settle(env)
+    env.offers.decide(env.h.item(item["id"])["offer_id"], "accept", owner())
+    [(goal, source, kw)] = env.runner.started
+    for button in ("Share", "Post", "Share to your story", "Post reel", "Publish", "Send"):
+        assert decide(ApprovalRules(), goal=kw["request"], source=source, app="com.instagram.android", routine=None, origin="agent",
+                      target=button, screen_text=f"Instagram New reel {button}", inputs=kw["inputs"]) is None, button
+    # What the guard prevents: the template's own words would have let "Post" through.
+    assert decide(ApprovalRules(), goal=POSTING["request"], source=source, app="com.instagram.android", routine=None, origin="agent",
+                  target="Post", screen_text="Instagram New reel Post") is not None
+    assert handoff_request("Share {file} to my story and send it to {name}") == "to my story and it to"
