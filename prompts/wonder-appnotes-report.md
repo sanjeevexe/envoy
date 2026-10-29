@@ -1,7 +1,7 @@
 # Wonder, app notes, personal benchmark: report (Oct 29, 02:50 ET)
 
 Branch `claude/wonder-appnotes` (worktree `.claude/worktrees/wonder-appnotes`), not pushed. Main is merged in (503373b),
-and after the merge **304/304 backend tests pass and `npm run build` passes**. Since 21:15 the **Envoy coordinator** session
+and **338/338 backend tests pass and `npm run build` passes**. Since 21:15 the **Envoy coordinator** session
 does every merge into main and holds the device locks (`~/Desktop/Envoy/coord/devices.sh`), so the branch goes to it
 instead of being merged here. The default profile stays `spark`, as the decision rule says.
 
@@ -71,13 +71,13 @@ The two runs scored the same and cost the same to within a cent per task.
 | 0 | Plan: `prompts/wonder-appnotes-plan.md` | cf93c24 | |
 | 1a | Model profiles (`ENVOY_MODEL_PROFILE=spark\|hybrid\|wonder`, per-job overrides, Wonder's limits, the profile in the cost log and task records). Checked live on Wonder: `low` effort, structured output, images, grounding. | c5cad68 | 9 new in `test_adapter.py` |
 | 1b | AndroidWorld comparison: a report script, the results, and the adb finding (below). In the comparison checkout (`claude/aw-model-compare`): eafd184 (profiles, per-episode cap) and f4f943f (AndroidWorld's adb fix). | 8d2025c, 25073f5, ddf8ee0 | `test_run_aw.py` 8/8 |
-| 2a | App notes: Envoy writes, merges and reads its own notes about each app; they go into the plan, step and repair prompts; a web view to list and retire them; a before/after driver | c03c957, 50fc7f0, b665d5f, c1613a7, 80acbd7 | 25 in `test_app_notes.py`, 1 in `test_api.py` |
+| 2a | App notes: Envoy writes, merges and reads its own notes about each app; they go into the plan, step and repair prompts; a web view to list and retire them; a before/after driver. After the coordinator's review, a note that reads like an instruction or a permission (a planted notice) is dropped in code. | c03c957, 50fc7f0, b665d5f, c1613a7, 80acbd7, d4c0332 | 59 in `test_app_notes.py`, 1 in `test_api.py` |
 | 2b | Before/after runs, each run's step log, and the first-step `back` replays | d62e40d, 5eaf29c, 9ccc800, 77706ea, 01582ef, 0130f6f | |
 | 3a | Benchmark: 20 tasks in six categories and their driver (`--notes-from`, `--date`, never installs an app) | adb1b92, c1613a7, 292fb98, d52963d, fcb366f, 99b7811 | 10 in `test_personal_bench.py` |
 | 3b | Run 2, then run 1 | d4eb4fb, 20c8e81, a18c437 | |
 | Merge | Main merged in. The one conflict was the `models.schemas` import in `models/adapter.py`; both sides' names are kept. | 503373b | **304/304**, web build passes |
 
-The branch adds 45 tests. Before the merge it passed 255/255.
+The branch adds 79 tests. Before the merge it passed 255/255, and 304/304 right after it.
 
 **Devices** (Oct 28, ET; each claimed through `devices.sh` after 21:15):
 
