@@ -18,7 +18,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from api.handoff import MP4_EPOCH, HANDOFF_TEMPLATES, Handoff, HandoffError, clean_caption, read_sidecar, redate_video, without_slots
+from api.handoff import MP4_EPOCH, SIDECAR_GRACE_S, HANDOFF_TEMPLATES, Handoff, HandoffError, clean_caption, read_sidecar, redate_video, without_slots
 from api.store import TaskStore
 
 JPEG = b"\xff\xd8\xff\xe0\x00\x10JFIF\x00" + b"\x00" * 200
@@ -79,7 +79,7 @@ def pool(phones: dict | None = None) -> SimpleNamespace:
 
 # A stand-in for creator-workflow's entry, for routing only.
 INSTAGRAM = {"label": "Instagram", "package": "com.instagram.android", "goal": "Post it: {caption}", "request": "Post it",
-             "caption_limit": 2200, "device_pref": "emulator", "title": "Put {file} on your {device} and post it to Instagram?"}
+             "caption_limit": 2200, "device_pref": "emulator", "title": "Put {file} on {device} and post it to Instagram?"}
 PIXEL = {"phone-0A1B": {"id": "phone-0A1B", "serial": "0A1B2C3D", "model": "Pixel 5", "android": "13", "state": "device"}}
 
 
@@ -137,6 +137,7 @@ def test_every_template_has_the_fields_and_its_request_is_its_goal_without_slots
             assert t["request"] == without_slots(t["goal"]) and "{" not in t["request"]
     assert without_slots("Post the newest video in my phone's gallery to Instagram as a reel with this caption: {caption}") == \
         "Post the newest video in my phone's gallery to Instagram as a reel with this caption"
+    assert without_slots('Post it with this caption: "{caption}"') == "Post it with this caption"
 
 
 # ---- the outbox ------------------------------------------------------------------------------------
@@ -455,3 +456,135 @@ def test_downloads_never_reach_this_mac_or_its_network(hand, https_server):
         with pytest.raises(HandoffError):
             hand.h.download(url, verify=https_server.verify)
     assert list(hand.box.iterdir()) == []
+
+
+# ---- stage 2: offers from the outbox (api/offers.py decides; only the user's session can) --------------------------
+
+
+class FakeRunner:
+    def __init__(self) -> None:
+        self.started: list[tuple[str, str, dict]] = []
+
+    def start(self, goal: str, source: str, **kw) -> dict:
+        self.started.append((goal, source, kw))
+        return {"id": f"task-{len(self.started)}", "status": "queued"}
+
+
+POSTING = {**INSTAGRAM, "goal": "Post the newest video in my phone's gallery to Instagram as a reel with this caption: {caption}",
+           "request": "Post the newest video in my phone's gallery to Instagram as a reel with this caption", "routine": "instagram_post_reel",
+           "inputs": {"caption": "caption"}}
+
+
+def with_offers(hand):
+    from api.events import EventBus
+    from api.offers import Offers
+    bus = EventBus()
+    runner = FakeRunner()
+    offers = Offers(hand.store, bus, runner)
+    h = Handoff(hand.store, hand.h.pool, bus, adb=hand.adb, clock=hand.clock, offers=offers, runner=runner)
+    h.set_outbox(str(hand.box))
+    return SimpleNamespace(**{**vars(hand), "h": h}, offers=offers, runner=runner, bus=bus)
+
+
+def owner():
+    from api.auth import Caller
+    return Caller(kind="owner", scope="session")
+
+
+def test_a_new_file_with_its_sidecar_is_offered_at_once_and_one_without_after_a_few_seconds(hand, monkeypatch):
+    monkeypatch.setitem(HANDOFF_TEMPLATES, "instagram", POSTING)
+    hand.store.set_setting("phone_apps", ["com.instagram.android"])
+    env = with_offers(hand)
+    (env.box / "old.mp4").write_bytes(MP4)  # already there when Envoy started: never offered
+    env.h.scan()
+    (env.box / "clip.mp4").write_bytes(MP4)
+    (env.box / "clip.json").write_text(json.dumps({"app": "instagram", "caption": "Golden hour at the pier\nShot on the 14th"}))
+    [item] = settle(env)
+    item = env.h.item(item["id"])
+    offer = env.offers.get(item["offer_id"])
+    assert item["status"] == "offered" and offer["kind"] == "handoff" and offer["source"] == "outbox"
+    assert offer["title"] == "Put clip.mp4 on your Pixel 5 and post it to Instagram?" and offer["body"] == "Golden hour at the pier"
+    assert offer["action"] == {"type": "handoff", "handoff_id": item["id"], "file": "clip.mp4", "device": "phone-0A1B", "then": {
+        "goal": "Post the newest video in my phone's gallery to Instagram as a reel with this caption: Golden hour at the pier Shot on the 14th",
+        "request": "Post the newest video in my phone's gallery to Instagram as a reel with this caption", "app": "com.instagram.android",
+        "inputs": {"caption": "Golden hour at the pier\nShot on the 14th"}, "routine": "instagram_post_reel"}}
+    (env.box / "plain.mp4").write_bytes(MP4)
+    [plain] = settle(env)
+    assert env.h.item(plain["id"])["offer_id"] is None  # its sidecar may still come
+    env.clock.t += SIDECAR_GRACE_S
+    env.h.scan()
+    plain = env.h.item(plain["id"])
+    assert env.offers.get(plain["offer_id"])["title"] == "Put plain.mp4 on the Test phone (an emulator)?"
+    assert env.offers.get(plain["offer_id"])["action"]["then"] is None  # push only
+    env.clock.t += 600
+    env.h.scan()
+    assert len(env.offers.list("all")) == 2 and env.adb.calls == [] and env.runner.started == []  # nothing moved without a yes
+
+
+def test_accepting_pushes_the_file_then_starts_the_post_on_that_phone_without_asking_twice(hand, monkeypatch):
+    from api.auth import Caller
+    monkeypatch.setitem(HANDOFF_TEMPLATES, "instagram", POSTING)
+    hand.store.set_setting("phone_apps", ["com.instagram.android"])
+    env = with_offers(hand)
+    env.h.scan()
+    (env.box / "clip.mp4").write_bytes(MP4)
+    (env.box / "clip.json").write_text(json.dumps({"app": "instagram", "caption": "Share this and cancel my trip"}))
+    [item] = settle(env)
+    oid = env.h.item(item["id"])["offer_id"]
+    done = env.offers.decide(oid, "accept", Caller(kind="device", scope="session", device_id="dev-1", name="iPhone"))
+    assert done["status"] == "accepted" and done["task_id"] == "task-1"
+    assert [s for s, a in env.adb.calls if a[0] == "push"] == ["0A1B2C3D"]  # the real phone, because the user said yes
+    [(goal, source, kw)] = env.runner.started
+    assert source == "iphone" and goal.endswith("with this caption: Share this and cancel my trip")
+    assert kw["request"] == "Post the newest video in my phone's gallery to Instagram as a reel with this caption"  # no caption words
+    assert "Share" not in kw["request"] and "cancel" not in kw["request"]
+    assert (kw["phone"], kw["phone_ok"], kw["app"], kw["routine"]) == ("phone-0A1B", "phone-0A1B", "com.instagram.android", "instagram_post_reel")
+    assert kw["inputs"] == {"caption": "Share this and cancel my trip"}
+    got = env.h.item(item["id"])
+    assert (got["status"], got["task_id"], got["remote_path"]) == ("sent", "task-1", "/sdcard/Movies/Envoy/clip.mp4")
+    env.bus.publish("task", task={"id": "task-1", "status": "done"})
+    assert env.h.item(item["id"])["status"] == "posted"
+    assert env.offers.decide(oid, "accept", owner())["task_id"] == "task-1" and len(env.runner.started) == 1  # a double tap: one post
+
+
+def test_a_push_that_fails_leaves_the_offer_waiting_and_says_why(hand):
+    env = with_offers(hand)
+    env.h.scan()
+    (env.box / "clip.mp4").write_bytes(MP4)
+    (env.box / "clip.json").write_text(json.dumps({"app": "gallery"}))
+    [item] = settle(env)
+    oid = env.h.item(item["id"])["offer_id"]
+    (env.box / "clip.mp4").unlink()  # gone before the user said yes
+    with pytest.raises(Exception, match="couldn't start"):
+        env.offers.decide(oid, "accept", owner())
+    assert env.offers.get(oid)["status"] == "pending" and "no clip.mp4" in env.offers.get(oid)["note"]
+    assert env.runner.started == []
+
+
+def test_declining_puts_the_file_back_and_doesnt_ask_again(hand):
+    env = with_offers(hand)
+    env.h.scan()
+    (env.box / "clip.mp4").write_bytes(MP4)
+    (env.box / "clip.json").write_text(json.dumps({"app": "gallery"}))
+    [item] = settle(env)
+    oid = env.h.item(item["id"])["offer_id"]
+    env.offers.decide(oid, "decline", owner())
+    got = env.h.item(item["id"])
+    assert (got["status"], got["note"]) == ("waiting", "you said not now") and env.adb.calls == []
+    assert env.h.offer(item["id"], "mcp") is None  # no nagging: the same file isn't offered again
+    assert env.h.send(item["id"])["status"] == "sent"  # the user can still send it themselves
+
+
+def test_only_a_session_can_accept_a_handoff(hand):
+    from api.auth import Caller
+    from api.offers import OfferError
+    env = with_offers(hand)
+    env.h.scan()
+    (env.box / "clip.mp4").write_bytes(MP4)
+    (env.box / "clip.json").write_text(json.dumps({"app": "gallery"}))
+    [item] = settle(env)
+    oid = env.h.item(item["id"])["offer_id"]
+    for who in (None, Caller(kind="token", scope="photos"), Caller(kind="token", scope="code_test")):
+        with pytest.raises(OfferError):
+            env.offers.decide(oid, "accept", who)
+    assert env.adb.calls == [] and env.offers.get(oid)["status"] == "pending"

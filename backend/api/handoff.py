@@ -16,11 +16,16 @@ Muse's connector supports:
   MP4's creation time, a JPEG's EXIF dates, which the media store reads as "date taken") and its file date are now, and
   the media scanner is asked for it until its row is no longer pending (Android 15 leaves a file adb wrote pending,
   which galleries hide, until it is scanned).
-- **Nothing goes to a real phone without the user's yes.** Outbox items wait (status `waiting`) until the user sends one
-  from their own session (`POST /api/handoff/{id}/send`). MCP's `send_to_phone` pushes to an emulator at once, and for
-  the real phone only records the item and says it waits for the user in Envoy.
+- **Nothing goes to a real phone without the user's yes.** A new outbox file raises an offer (contract 1, kind
+  `handoff`): "Put clip.mp4 on your Pixel 5 and post it to Instagram?", or just "Put clip.mp4 on your Pixel 5?" when no
+  sidecar names an app (it waits a few seconds for one). Accepting it, in Envoy's own app, pushes the file and starts
+  the template's task (the goal filled with the caption, the request the template's fixed words), with the phone your yes
+  covered (`phone_ok`, so no second "Use your phone?"). The user can also send a file from their own session
+  (`POST /api/handoff/{id}/send`). MCP's `send_to_phone` pushes to an emulator at once; for the real phone it raises the
+  same offer. Only files that arrive while Envoy runs raise offers.
 
-Statuses: waiting → (offered) → sent → (posted) | failed.
+Statuses: waiting → offered → sent → posted (the task after it finished) | failed. A declined or expired offer puts the
+file back to waiting.
 """
 
 from __future__ import annotations
@@ -54,6 +59,7 @@ MEDIA = {"image": "content://media/external/images/media", "video": "content://m
 CONTENT_TYPES = {"image/jpeg": ".jpg", "image/png": ".png", "image/heic": ".heic", "image/heif": ".heic", "image/webp": ".webp",
                  "video/mp4": ".mp4", "video/quicktime": ".mov", "video/x-m4v": ".m4v"}
 SIDECAR_MAX = 64 * 1024
+SIDECAR_GRACE_S = 6.0  # how long a new file waits for its sidecar before its offer is made without one
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS handoffs (
@@ -74,7 +80,7 @@ CREATE INDEX IF NOT EXISTS handoffs_name ON handoffs(name, size);
 # This one only puts the file in the gallery; creator-workflow adds Instagram's entry.
 HANDOFF_TEMPLATES: dict[str, dict[str, Any]] = {
     "gallery": {"label": "the phone's gallery", "package": None, "goal": None, "request": None, "caption_limit": 2200,
-                "device_pref": "emulator", "title": "Put {file} on your {device}?"},
+                "device_pref": "emulator", "title": "Put {file} on {device}?"},
 }
 
 
@@ -251,7 +257,7 @@ def fill(template: str, values: dict[str, str]) -> str:
 
 def without_slots(template: str) -> str:
     """The template with every slot left empty: the fixed words a person wrote (contract 1's `request`)."""
-    return re.sub(r"\s{2,}", " ", re.sub(r"\{\w+\}", "", template)).strip(" :,")
+    return re.sub(r"\s{2,}", " ", re.sub(r"[\"“]?\{\w+\}[\"”]?", "", template)).strip(" :,")  # a quoted slot goes with its quotes
 
 
 # ---- the handoff record, the outbox, and the phone ----------------------------------------------------
@@ -268,8 +274,11 @@ class Handoff:
 
     def __init__(self, tasks: TaskStore, pool: Any, bus: Any, *, adb: Callable[..., subprocess.CompletedProcess] = _adb,
                  clock: Callable[[], float] = time.time, settle_s: float = SETTLE_S, every_s: float = 3.0, max_bytes: int = MAX_BYTES,
-                 resolve_ip: Callable[[str], list[str]] | None = None) -> None:
+                 resolve_ip: Callable[[str], list[str]] | None = None, offers: Any = None, runner: Any = None) -> None:
+        """`offers` (api/offers.py) and `runner`: with them, new files raise offers and an accepted one starts its task."""
         self.tasks, self.pool, self.bus, self.adb, self.clock = tasks, pool, bus, adb, clock
+        self.offers, self.runner = offers, runner
+        self._fresh: set[str] = set()  # items this watcher recorded that have no offer yet
         self.settle_s, self.every_s, self.max_bytes = settle_s, every_s, max_bytes
         self.resolve_ip = resolve_ip or _resolve
         self.index_wait_s = 10.0  # how long the gallery gets to pick a file up
@@ -280,6 +289,10 @@ class Handoff:
         with tasks.lock:
             tasks.db.executescript(SCHEMA)
             tasks.db.commit()
+        if offers is not None:
+            offers.register("handoff", self.accept)
+        if isinstance(getattr(bus, "listeners", None), list):
+            bus.listeners.append(self.on_event)
 
     # ---- the outbox folder --------------------------------------------------------------------
 
@@ -370,7 +383,9 @@ class Handoff:
                 kind = self._check_file(folder / name)
             except (HandoffError, OSError):
                 continue
-            new.append(self._record(folder / name, kind, origin="outbox"))
+            item = self._record(folder / name, kind, origin="outbox")
+            self._fresh.add(item["id"])
+            new.append(item)
         for name in list(self._sizes):
             if name not in files:
                 self._sizes.pop(name)
@@ -381,6 +396,14 @@ class Handoff:
                 if (app, caption) != (item["app"], item["caption"]) and (app or caption):
                     device = self.default_device(app) if app != item["app"] and item["origin"] == "outbox" else (item["device"], note)
                     self._update(item["id"], app=app, caption=caption, device=device[0], note=note or device[1])
+        # Its offer: at once when a sidecar named the app, else once the sidecar has had its chance.
+        for hid in list(self._fresh):
+            item = self.item(hid)
+            if item is None or item["status"] != "waiting" or item["offer_id"]:
+                self._fresh.discard(hid)
+            elif item["app"] or now - item["created_at"] >= SIDECAR_GRACE_S:
+                self._fresh.discard(hid)
+                self.offer(hid, "outbox")
         return new
 
     def _known(self, name: str, size: int, mtime: float) -> bool:
@@ -584,6 +607,83 @@ class Handoff:
             return self._update(row["id"], **({"device": device} if device else {}))  # type: ignore[return-value]
         self._seen[path.name] = st.st_mtime  # the watcher doesn't record it a second time
         return self._record(path, self._check_file(path), origin=origin, device=device)
+
+    # ---- offers: the user's yes, in Envoy ------------------------------------------------------------
+
+    def where(self, did: str | None) -> str:
+        """The phone as the offer says it: "your Pixel 5", "the Test phone (an emulator)"."""
+        name = self.device_name(did) or "phone"
+        return f"your {name}" if (did or "").startswith("phone-") else f"the {name} (an emulator)"
+
+    def then_for(self, item: dict[str, Any]) -> dict[str, Any] | None:
+        """The task after the push, from the template: the goal filled with the typed caption, the request the template's
+        fixed words, the caption also in the routine's inputs. None for a push-only template."""
+        tpl = HANDOFF_TEMPLATES[item["app"] or "gallery"]
+        if not tpl.get("goal"):
+            return None
+        values = {"caption": item["caption"] or ""}
+        goal = fill(tpl["goal"], values)
+        if not values["caption"]:
+            goal = re.sub(r"[\s:,]+$", "", goal)  # "… with this caption:" and nothing after it
+        then = {"goal": re.sub(r"\s+", " ", goal).strip(), "request": without_slots(tpl["request"] or tpl["goal"]), "app": tpl["package"],
+                "inputs": {k: values[v] for k, v in (tpl.get("inputs") or {}).items() if values.get(v)}}
+        if tpl.get("routine"):
+            then["routine"] = tpl["routine"]
+        return then
+
+    def offer(self, hid: str, source: str) -> dict[str, Any] | None:
+        """"Put clip.mp4 on your Pixel 5 and post it to Instagram?" for a waiting file. None without offers, for a file
+        that isn't waiting, or when an offer for it was already made."""
+        item = self.item(hid)
+        if self.offers is None or item is None or item["status"] != "waiting" or not item["device"]:
+            return None
+        tpl = HANDOFF_TEMPLATES[item["app"] or "gallery"]
+        name = re.sub(r"[\x00-\x1f\x7f\u202a-\u202e\u2066-\u2069]", "", item["name"])[:60]
+        action = {"type": "handoff", "handoff_id": hid, "file": item["name"], "device": item["device"], "then": self.then_for(item)}
+        offer = self.offers.make(kind="handoff", title=fill(tpl["title"], {"file": name, "device": self.where(item["device"])}),
+                                 body=(item["caption"] or "").split("\n", 1)[0][:200], action=action, source=source, key=f"handoff:{hid}")
+        if offer is not None:
+            self._update(hid, status="offered", offer_id=offer["id"])
+        return offer
+
+    def accept(self, offer: dict[str, Any], source: str) -> dict[str, Any]:
+        """The `handoff` action, run by api/offers.py when the user says yes in Envoy (never from MCP): push the file, to
+        the real phone too, then start the template's task on that phone with the user's yes covering it."""
+        a = offer["action"]
+        item = self.item(str(a.get("handoff_id") or ""))
+        if item is None or item["name"] != a.get("file"):
+            raise LookupError("that file is no longer in Envoy's outbox list")
+        did = str(a.get("device") or item["device"] or "")
+        sent = self.send(item["id"], did or None)
+        if sent["status"] not in ("sent", "posted"):
+            raise RuntimeError(sent.get("error") or "the file couldn't be put on the phone")
+        then = a.get("then")
+        if not then:
+            return {"handoff_id": item["id"]}
+        if self.runner is None:
+            raise RuntimeError("the task runner isn't available")
+        did = sent["device"]
+        task = self.runner.start(then["goal"], source, request=without_slots(then.get("request") or ""), routine=then.get("routine") or None,
+                                 inputs=then.get("inputs") or {}, app=then.get("app") or None, phone=did,
+                                 **({"phone_ok": did} if did.startswith("phone-") else {}))
+        self._update(item["id"], task_id=task["id"])
+        return {"task_id": task["id"], "handoff_id": item["id"]}
+
+    def on_event(self, ev: dict[str, Any]) -> None:
+        """A bus listener: the task after a push finishing (posted), and a declined or expired offer (back to waiting)."""
+        if ev.get("type") == "task":
+            t = ev.get("task") or {}
+            if t.get("status") in ("done", "failed", "declined", "stopped"):
+                with self.tasks.lock:
+                    row = self.tasks.db.execute("SELECT id FROM handoffs WHERE task_id=? AND status='sent'", (t.get("id"),)).fetchone()
+                if row:
+                    self._update(row["id"], **({"status": "posted"} if t["status"] == "done" else {"error": f"the task after it: {t['status']}"}))
+        elif ev.get("type") == "offer" and ev.get("change") in ("declined", "expired"):
+            o = ev.get("offer") or {}
+            if (o.get("action") or {}).get("type") == "handoff":
+                item = self.item(str(o["action"].get("handoff_id") or ""))
+                if item and item["status"] == "offered" and item["offer_id"] == o.get("id"):
+                    self._update(item["id"], status="waiting", note="you said not now" if ev["change"] == "declined" else "the offer expired")
 
     # ---- a file from the web --------------------------------------------------------------------
 

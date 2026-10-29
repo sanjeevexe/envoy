@@ -124,7 +124,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     scheduler.repeats = Repeats(tasks, memory, ctx.offers, scheduler, routines)  # "Make this a habit?" (api/repeats.py)
     bus.listeners.append(scheduler.repeats.on_event)
     runner.recurring = Recurring(ctx.offers, scheduler, adapter)  # chat sets up recurring jobs, switched off (api/recurring.py)
-    ctx.handoff = Handoff(tasks, pool, bus)  # type: ignore[attr-defined]  # files from the Mac to the phone (api/handoff.py)
+    ctx.handoff = Handoff(tasks, pool, bus, offers=ctx.offers, runner=runner)  # type: ignore[attr-defined]  # files from the Mac to the phone (api/handoff.py)
 
     from mcp_server.server import build_mcp, mcp_app
     from mcp_stub.common import bearer_token
