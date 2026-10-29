@@ -5,6 +5,7 @@
 #   - envoy-real: the Mac envoy-real's hardware (envoy-real.config.ini: 16 GB data, Play Store), x86_64 image
 #   - Node 24 LTS (pinned, checksum-checked) and the web app built from the pushed commit (web/out)
 #   - Tailscale (Tailscale's apt repository); signing the VM in is the user's step (scripts/cloud/tailnet.sh)
+#   - cloudflared (Cloudflare's apt repository), for Muse; starting a public tunnel is the user's step (muse-tunnel.sh)
 #   - ~/envoy-state (mode 700), what survives a new push: .env (the Mac's settings, a $3 daily cap, the cloud copy's own
 #     MCP token; the Meta key only through key.sh), api/ (ENVOY_API_DIR: its own session token, VAPID keys, tasks),
 #     demo/ (a copy of the Mac's demo memory and test inbox), linked into ~/envoy (.env, data/api, data/demo)
@@ -53,6 +54,16 @@ if ! command -v tailscale >/dev/null; then
   sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq tailscale >/dev/null
 fi
 tailscale version | head -1
+
+echo "== cloudflared (for Muse; starting a tunnel is the user's step: scripts/cloud/muse-tunnel.sh)"
+if ! command -v cloudflared >/dev/null; then
+  curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-main.gpg >/dev/null
+  echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared any main' |
+    sudo tee /etc/apt/sources.list.d/cloudflared.list >/dev/null
+  sudo DEBIAN_FRONTEND=noninteractive apt-get update -q >/dev/null
+  sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq cloudflared >/dev/null
+fi
+cloudflared --version | head -1
 
 echo "== state"
 mkdir -p "$STATE/api" "$STATE/demo" && chmod 700 "$STATE"
