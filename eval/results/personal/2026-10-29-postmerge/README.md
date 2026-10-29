@@ -2,9 +2,9 @@
 
 We wrote these tasks ourselves, for our own product, so this is **not a neutral benchmark**. Several are meant to be hard.
 
-- Date: 2026-10-29 18:46 UTC; branch `claude/wonder-appnotes` at `252dbed`; profile `spark`; app notes off
+- Date: 2026-10-29 18:49 UTC; branch `claude/wonder-appnotes` at `12e1b14`; profile `spark`; app notes off
 - Phones: envoy-test; 
-- Model calls: 4, $0.019 (this checkout's cost log, standard tier for real apps)
+- Model calls: 4, $0.018 (this checkout's cost log, standard tier for real apps)
 
 **Score: 1/1 graded** (19 not run or skipped)
 
@@ -21,7 +21,7 @@ We wrote these tasks ourselves, for our own product, so this is **not a neutral 
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | M1 | memory | not run | | | | | | |
 | M2 | memory | not run | | | | | | |
-| M4 | memory | pass | ok (checked in the app) | task | 0 | 4 | $0.019 | 17.0 |
+| M4 | memory | pass | ok (checked in the app) | task | 0 | 4 | $0.018 | 16.0 |
 | M3 | memory | not run | | | | | | |
 | S1 | single | not run | | | | | | |
 | S2 | single | not run | | | | | | |

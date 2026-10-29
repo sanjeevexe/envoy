@@ -1,7 +1,7 @@
 {
  "meta": {
   "label": "postmerge",
-  "date": "2026-10-29 18:46 UTC",
+  "date": "2026-10-29 18:49 UTC",
   "started": 1793299566.0657449,
   "profile": "spark",
   "notes": "off",
@@ -11,26 +11,26 @@
   ],
   "phones_note": "",
   "calls": 4,
-  "usd": 0.0187,
+  "usd": 0.01755,
   "by_model": {
    "muse-spark-1.3": 4
   },
   "branch": "claude/wonder-appnotes",
-  "commit": "252dbed"
+  "commit": "12e1b14"
  },
  "results": {
   "M4": {
    "id": "M4",
    "category": "memory",
    "request": "What gate does my Chicago flight leave from?",
-   "started": 1793299567.854938,
+   "started": 1793299736.2165399,
    "approval_mode": "unless_requested",
    "route": "task",
-   "reply": "Memory says: Gate B9, from the SkyLark app 3 hours ago, but it may have changed (seen today 11:46 AM, which may be out of date). Checking the app: Find the departure gate for my SkyLark flight to Chicago.",
+   "reply": "Memory says: Gate B9, from the SkyLark app today at 11:48 AM, but it may have changed (seen today 11:48 AM, which may be out of date). Checking the app: Find the departure gate for a SkyLark flight to Chicago.",
    "from_memory": false,
    "stale": true,
-   "notes": "## Flight: SL 482 · Fri, Oct 30, 2026  [[Trip Chicago · Fri, Oct 30, 2026]]\n- Airline: SkyLark Air — email from SkyLark Air, 12 days ago (Oct 17)\n- Number: SL 482 — email from SkyLark Air, 12 days ago (Oct 17)\n- Date: Fri, Oct 30, 2026 — email from SkyLark Air, 12 days ago (Oct 17)\n- From: ATL — email from SkyLark Air, 12 days ago (Oct 17)\n- To: ORD — email from SkyLark Air, 12 days ago (Oct 17)\n- Departs: 6:10 AM — email from SkyLark Air, 12 days ago (Oct 17)\n- Gate: B9 — SkyLark app, today 11:46 AM (may be out of date: re-check before relying on it)\n\n## Trip: Chicago · Fri, Oct 30, 2026  [[Flight SL 482 · Fri, Oct 30, 2026]] [[Person Maya Patel]]  (named in the request)\n- Destination: Chicago — email from SkyLark Air, 12 days ago (Oct 17)\n- Origin: ATL — email from SkyLark Air, 12 days ago (Oct 17)\n- Date: Fri, Oct 30, 2026 — email from SkyLark Air, 12 days ago (Oct 17)\n- Confirmation: KX7Q2M — email from SkyLark Air, 12 days ago (Oct 17)\n- Airline: SkyLark Air — email from SkyLark Air, 12 days ago (Oct 17)\n\n## Person: Maya Patel  [[Trip Denver · Sat, Nov 14, 2026]] [[Trip Chicago · Fri, Oct 30, 2026]]\n- Name: Maya Patel — email from TSA PreCheck, 40 days ago (Sep 19)\n- First name: Maya — email from TSA PreCheck, 40 days ago (Sep 19)\n- Last name: Patel — email from TSA PreCheck, 40 days ago (Sep 19)\n- Email: maya.patel@example.com — email from TSA PreCheck, 40 days ago (Sep 19)\n- Known traveler number: 98765432 — email from TSA PreCheck, 40 days ago (Sep 19)\n\n## Trip: Denver · Sat, Nov 14, 2026  [[Flight SL 1190 · Sat, Nov 14, 2026]] [[Person Maya Patel]]\n- Destination: Denver — email from SkyLark Air, 9 days ago (Oct 20)\n- Origin: ATL — email from SkyLark Air, 9 days ago (Oct 20)\n- Date: Sat, Nov 14, 2026 — email from SkyLark Air, 9 days ago (Oct 20)\n- Confirmation: PT4R8Z — email from SkyLark Air, 9 days ago (Oct 20)\n- Airline: SkyLark Air — email from SkyLark Air, 9 days ago (Oct 20)\n\n## Flight: SL 1190 · Sat, Nov 14, 2026  [[Trip Denver · Sat, Nov 14, 2026]]\n- Airline: SkyLark Air — email from SkyLark Air, 9 days ago (Oct 20)\n- Number: SL 1190 — email from SkyLark Air, 9 days ago (Oct 20)\n- Date: Sat, Nov 14, 2026 — email from SkyLark Air, 9 days ago (Oct 20)\n- From: ATL — email from SkyLark Air, 9 days ago (Oct 20)\n- To: DEN — email from SkyLark Air, 9 days ago (Oct 20)\n- Departs: 2:45 PM — email from SkyLark Air, 9 days ago (Oct 20)",
-   "task_id": "task-1029-144611-1d6c",
+   "notes": "## Flight: SL 482 · Fri, Oct 30, 2026  [[Trip Chicago · Fri, Oct 30, 2026]]\n- Airline: SkyLark Air — email from SkyLark Air, 12 days ago (Oct 17)\n- Number: SL 482 — email from SkyLark Air, 12 days ago (Oct 17)\n- Date: Fri, Oct 30, 2026 — email from SkyLark Air, 12 days ago (Oct 17)\n- From: ATL — email from SkyLark Air, 12 days ago (Oct 17)\n- To: ORD — email from SkyLark Air, 12 days ago (Oct 17)\n- Departs: 6:10 AM — email from SkyLark Air, 12 days ago (Oct 17)\n- Gate: B9 — SkyLark app, today 11:48 AM (may be out of date: re-check before relying on it)\n\n## Trip: Chicago · Fri, Oct 30, 2026  [[Flight SL 482 · Fri, Oct 30, 2026]] [[Person Maya Patel]]  (named in the request)\n- Destination: Chicago — email from SkyLark Air, 12 days ago (Oct 17)\n- Origin: ATL — email from SkyLark Air, 12 days ago (Oct 17)\n- Date: Fri, Oct 30, 2026 — email from SkyLark Air, 12 days ago (Oct 17)\n- Confirmation: KX7Q2M — email from SkyLark Air, 12 days ago (Oct 17)\n- Airline: SkyLark Air — email from SkyLark Air, 12 days ago (Oct 17)\n\n## Person: Maya Patel  [[Trip Denver · Sat, Nov 14, 2026]] [[Trip Chicago · Fri, Oct 30, 2026]]\n- Name: Maya Patel — email from TSA PreCheck, 40 days ago (Sep 19)\n- First name: Maya — email from TSA PreCheck, 40 days ago (Sep 19)\n- Last name: Patel — email from TSA PreCheck, 40 days ago (Sep 19)\n- Email: maya.patel@example.com — email from TSA PreCheck, 40 days ago (Sep 19)\n- Known traveler number: 98765432 — email from TSA PreCheck, 40 days ago (Sep 19)\n\n## Trip: Denver · Sat, Nov 14, 2026  [[Flight SL 1190 · Sat, Nov 14, 2026]] [[Person Maya Patel]]\n- Destination: Denver — email from SkyLark Air, 9 days ago (Oct 20)\n- Origin: ATL — email from SkyLark Air, 9 days ago (Oct 20)\n- Date: Sat, Nov 14, 2026 — email from SkyLark Air, 9 days ago (Oct 20)\n- Confirmation: PT4R8Z — email from SkyLark Air, 9 days ago (Oct 20)\n- Airline: SkyLark Air — email from SkyLark Air, 9 days ago (Oct 20)\n\n## Flight: SL 1190 · Sat, Nov 14, 2026  [[Trip Denver · Sat, Nov 14, 2026]]\n- Airline: SkyLark Air — email from SkyLark Air, 9 days ago (Oct 20)\n- Number: SL 1190 — email from SkyLark Air, 9 days ago (Oct 20)\n- Date: Sat, Nov 14, 2026 — email from SkyLark Air, 9 days ago (Oct 20)\n- From: ATL — email from SkyLark Air, 9 days ago (Oct 20)\n- To: DEN — email from SkyLark Air, 9 days ago (Oct 20)\n- Departs: 2:45 PM — email from SkyLark Air, 9 days ago (Oct 20)",
+   "task_id": "task-1029-144901-0cac",
    "status": "done",
    "answer": "gate: B12",
    "kind": "routine",
@@ -39,59 +39,59 @@
    "steps": [
     {
      "seq": 1,
-     "time": 1793299574.3369,
+     "time": 1793299742.472471,
      "kind": "preflight",
      "text": "before I start: Using routine skylark_get_flight_gate v1: usually 1.7 s, no model calls."
     },
     {
      "seq": 2,
-     "time": 1793299574.3379142,
+     "time": 1793299742.47331,
      "kind": "note",
      "text": "using routine skylark_get_flight_gate v1 with trip_city = Chicago"
     },
     {
      "seq": 3,
-     "time": 1793299577.655931,
+     "time": 1793299745.286368,
      "kind": "routine_step",
      "text": "tap_my_trips",
      "status": "done",
      "rung": 0,
-     "shot": "task-1029-144611-1d6c/1793299577617.jpg"
+     "shot": "task-1029-144901-0cac/1793299745260.jpg"
     },
     {
      "seq": 4,
-     "time": 1793299578.060919,
+     "time": 1793299745.658218,
      "kind": "routine_step",
      "text": "find_tap_trip_row",
      "status": "done",
      "rung": 0,
-     "shot": "task-1029-144611-1d6c/1793299578060.jpg"
+     "shot": "task-1029-144901-0cac/1793299745657.jpg"
     },
     {
      "seq": 5,
-     "time": 1793299578.614476,
+     "time": 1793299746.165898,
      "kind": "routine_step",
      "text": "tap_trip_row",
      "status": "done",
      "rung": 0,
-     "shot": "task-1029-144611-1d6c/1793299578613.jpg"
+     "shot": "task-1029-144901-0cac/1793299746164.jpg"
     },
     {
      "seq": 6,
-     "time": 1793299578.6751769,
+     "time": 1793299746.218996,
      "kind": "finish",
      "text": "all steps and checks passed",
      "status": "done"
     },
     {
      "seq": 7,
-     "time": 1793299578.761487,
+     "time": 1793299746.2926211,
      "kind": "note",
      "text": "saving what it saw to memory"
     },
     {
      "seq": 8,
-     "time": 1793299584.750269,
+     "time": 1793299752.0970051,
      "kind": "memory",
      "text": "memory updated: 8 same, 6 new, 1 replaced",
      "entities": [
@@ -101,7 +101,7 @@
     },
     {
      "seq": 9,
-     "time": 1793299584.751241,
+     "time": 1793299752.097892,
      "kind": "change",
      "text": "Gate changed: B9 → B12"
     }
@@ -111,26 +111,26 @@
    "approvals": [],
    "approvals_asked": 0,
    "auto_approved": [],
-   "wall_s": 17.0,
+   "wall_s": 16.0,
    "cost": {
     "calls": 4,
-    "usd": 0.0187,
+    "usd": 0.01755,
     "by_job": {
      "chat": {
       "calls": 1,
-      "usd": 0.002828
+      "usd": 0.003067
      },
      "answer": {
       "calls": 1,
-      "usd": 0.003834
+      "usd": 0.003182
      },
      "match": {
       "calls": 1,
-      "usd": 0.004094
+      "usd": 0.003363
      },
      "extract": {
       "calls": 1,
-      "usd": 0.00794
+      "usd": 0.007936
      }
     },
     "by_model": {
