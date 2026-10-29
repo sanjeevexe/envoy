@@ -114,6 +114,7 @@ The user asked for the full move as **an alternative, not a replacement**: two c
 | A tested rollback to the Mac in minutes | **Yes**: nothing on the Mac changes, so switching back is repointing the iPhone icon, the Siri shortcut's name and Muse's connector |
 
 Also measured:
+- **Muse to the cloud copy works**: an "Envoy Cloud" connector in Muse for Mac, through a tunnel from the VM. Muse answered "B12" from the cloud copy's memory; the MCP log shows 6 authenticated calls (`eval/results/cloud/stage3/muse-envoy-cloud.jpg`).
 - **Voice** works: 3 of 3 heard exactly; the chat reply takes 4.4–4.6 s (Mac 2.6 s).
 - **Pushes** work.
 - **Screenshots and photos into memory don't:** they need Apple's Vision framework for OCR. That's a code change for later, not done.
@@ -135,7 +136,6 @@ Also measured:
 
 ### Not done (yet)
 
-- **Muse to the cloud copy:** the user starts the tunnel with `muse-tunnel.sh`.
 - **The real-app retries:** a Starbucks sign-in retry (perhaps after updating the phone's web view in the Play Store), DoorDash with an address set, Chipotle, and Gmail (its answer key needs the Mac's Gmail API sign-in).
 - **On the iPhone:** "Ask Envoy (cloud)" (`shortcut.sh`; the user adds it), and the cloud copy's Home Screen icon.
 - **The machine image:** taken when the VM is stopped at the end, without the key.
