@@ -241,3 +241,12 @@ def test_what_the_model_keeps_from_a_screen_comes_back_on_later_steps(tmp_path, 
     later = model.prompts[3]
     assert "REMEMBERED (what you kept from earlier screens of this task):\n- Recipes: Pad Thai, Tofu Bowl\n" in later
     assert later.count("Pad Thai") == 1  # kept once, though the model wrote it twice
+
+
+def test_the_planner_is_told_a_button_with_one_item_acts_on_that_item():
+    # SkyLark's home shows "Next trip · Chicago" with a "Check in" button beside it. Asked to check in for another trip, plans
+    # offered that button 13 times in 40 (main's planner, 3 in 40), and the agent checked in the wrong flight. With this line:
+    # 0 in 40, and for the next trip itself the button is still the plan's route (20 of 20).
+    from models.prompts import PLAN_INSTRUCTIONS
+    assert "acts on that item only; if the goal names a different item, go through the list that holds it" in PLAN_INSTRUCTIONS
+
