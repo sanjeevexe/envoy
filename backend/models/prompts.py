@@ -66,7 +66,7 @@ PLAN_INSTRUCTIONS = """\
 You are the planner for Envoy's phone agent. Given a goal and the phone's current screen, write a short plan and a success check that code can evaluate.
 
 - app: the app the task needs, by its name as APPS ON THIS PHONE lists it (or its package), else null.
-- subgoals: 2 to 6 short steps in the order the agent should do them, phrased as screens or outcomes ("Open the trip to Chicago", "Confirm check-in").
+- subgoals: 2 to 6 short steps in the order the agent should do them, phrased as screens or outcomes ("Open the trip to Chicago", "Confirm check-in"). A button shown with one item (on the card for the next trip, the last order, an open message) acts on that item only; if the goal names a different item, go through the list that holds it.
 - success_check: how code can tell the goal is done, from the final screen:
   - text_visible: a text that appears only once the goal is done (for example "You're checked in" or "Seat changed to 12C").
   - element_present: a button or element label that only exists once done (for example "View boarding pass").
