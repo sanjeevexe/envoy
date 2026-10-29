@@ -53,6 +53,7 @@ from routines.visual import match_crop
 RUNG_NAMES = {0: "none", 1: "wait and retry", 2: "relaxed match", 3: "pop-up handler", 4: "local repair", 5: "full agent", 6: "ask the user"}
 Status = Literal["done", "failed", "declined", "handoff", "needs_user", "agent_done", "agent_failed"]
 SCREENSHOT_WIDTH = 540
+_SEARCH_WORD = re.compile(r"(?<![a-z])search", re.I)  # "Search Amazon", rs_search_src_text; not "research"
 
 
 @dataclass
@@ -744,20 +745,26 @@ class RoutineExecutor:
     async def _search_for(self, ctx: _Ctx, term: str, screen: ScreenState, sr: StepRun) -> bool:
         """Type `term` into the screen's search box and submit: a field, or the bar that opens one ("Search or ask Play",
         "Search apps & games"; not a one-word "Search" tab). Read-only, so no approval. Whether it worked is judged by the
-        scroll that follows, which must then find the target."""
-        def field_of(s: ScreenState) -> Element | None:
-            return next((e for e in s.numbered if e.editable and not e.password), None)
+        scroll that follows, which must then find the target.
+
+        Only a search box is typed into: a field whose label, hint or ID says search ("Search Amazon", "Search Menu",
+        `rs_search_src_text`), or the field a search bar just opened (Play's has no name). Never a form's field or a message
+        box, where Enter could submit or send (SkyLark's My Trips has a confirmation-code field above the list)."""
+        def field_of(s: ScreenState, opened: bool = False) -> Element | None:
+            fields = [e for e in s.numbered if e.editable and not e.password]
+            named = next((e for e in fields if _SEARCH_WORD.search(f"{e.label} {e.hint} {e.resource_id}")), None)
+            return named or (fields[0] if opened and fields else None)
         def bar_of(s: ScreenState) -> Element | None:
             return next((e for e in s.numbered if not e.editable and e.kind != "List" and len((e.label or e.hint).split()) > 1
                          and re.match(r"search\b", (e.label or e.hint).strip(), re.I) and not e.in_list), None)
-        el = field_of(screen)
+        el, opened = field_of(screen), False
         if el is None:
             bar = bar_of(screen)
             if bar is None:
                 return False
             await self.device.act(Action(kind="tap", element=bar.number))
             screen = await self._settle_quick()
-            el = field_of(screen)
+            el, opened = field_of(screen, opened=True), True
             if el is None:
                 return False
         action = await self._gate(ctx, Action(kind="type", element=el.number, text=term, submit=True), screen, "read", el.label, sr)
@@ -767,7 +774,7 @@ class RoutineExecutor:
         # Enter can leave the suggestions up (Play): the suggestion that searches for exactly the term runs the search.
         exact = next((e for e in after.numbered if not e.editable and re.match(r"search\b", e.label, re.I)
                       and norm(e.label).endswith(norm(f'"{term}"')) and norm(term) in norm(e.label)), None)
-        if exact is not None and field_of(after) is not None:
+        if exact is not None and field_of(after, opened) is not None:
             await self.device.act(Action(kind="tap", element=exact.number))
             await self._settle_quick()
         deadline = time.perf_counter() + 6.0  # results load after the screen first settles: wait for a row that names it

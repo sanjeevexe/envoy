@@ -184,6 +184,33 @@ def test_play_searches_for_an_app_its_suggestions_do_not_show():
     assert out.model_calls == 0
 
 
+class Still:
+    """One screen that never changes; records every action."""
+
+    def __init__(self, screen) -> None:
+        self.screen, self.acts = screen, []
+
+    async def observe(self, screenshot: bool = False):
+        return self.screen
+
+    async def act(self, a):
+        self.acts.append(a)
+        return ActionResult(ok=True, duration_ms=1.0)
+
+
+def test_a_list_choice_never_types_into_a_field_that_is_not_a_search_box():
+    """SkyLark's My Trips has a find-a-trip form (confirmation code, last name) above the list. Searching typed the trip's
+    city into the code field and pressed Enter on every past_trip run (~10 s each). On a screen with a message or comment
+    box, Enter could send it."""
+    trips = build_state((HERE / "screens" / "skylark_trips.xml").read_text(), "com.skylark.air",
+                        "com.skylark.air.MainActivity", 1080, 2400)
+    assert [e for e in trips.numbered if e.editable]  # the form's fields are there
+    phone = Still(trips)
+    ex = RoutineExecutor(phone, adapter=NoModel(), approver=ScriptedApprover(approve=False), config=FAST)
+    assert asyncio.run(ex._search_for(None, "Detroit", trips, executor_mod.StepRun("find_trip"))) is False
+    assert phone.acts == []
+
+
 def test_play_does_not_search_when_the_list_shows_the_app():
     r = compiled("play_trace", "play_rating.spec.json")
     find = r.model_copy(update={"steps": [r.steps[r.step_index("find_open_app_listing")]], "outputs": [], "done": []})
