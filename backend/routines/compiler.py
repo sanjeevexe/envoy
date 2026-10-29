@@ -38,6 +38,7 @@ _DIGIT = re.compile(r"\d")
 _SLUG = re.compile(r"[^a-z0-9]+")
 _IDENT = re.compile(r"[a-z]+(_[a-z]+)+")
 _DATA_SEGMENT = re.compile(r"^(?=.*\d)[A-Za-z0-9]+$|^[A-Z0-9]{5,}$")
+_POPUP_TITLE = re.compile(r"^PopupWindow:[0-9a-f]+$")
 
 
 class NotCompilable(ValueError):
@@ -121,6 +122,7 @@ def load_trace(trace_dir: Path, *, confirmed: bool = False) -> tuple[dict, list[
 def clean(trace_dir: Path, records: list[dict]) -> tuple[list[TStep], list[tuple[int, str]]]:
     steps: list[TStep] = []
     dropped: list[tuple[int, str]] = []
+    app = ""
     for r in records:
         n = r.get("step", 0)
         k = r.get("kind")
@@ -146,6 +148,13 @@ def clean(trace_dir: Path, records: list[dict]) -> tuple[list[TStep], list[tuple
             continue
         before = load_tree(trace_dir / r["tree_before"])
         after = load_tree(trace_dir / r["tree_after"])
+        for screen in (before, after):
+            # Traces recorded before the device told an app's popup menu from the app: the menu's window was taken for
+            # the app ("PopupWindow:51b096d"), and every check written from it failed. The app is the one before it.
+            if _POPUP_TITLE.match(screen.package) and app:
+                screen.package = app
+            elif screen.package:
+                app = screen.package
         target = None
         if r.get("target") and r["target"].get("index") is not None and r["target"]["index"] < len(before.elements):
             target = before.elements[r["target"]["index"]]

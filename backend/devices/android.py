@@ -29,6 +29,7 @@ from devices.screen import build_state, content_hash, has_app_content, parse_hie
 from devices.types import Action, ActionResult, Capabilities, ScreenState, StreamHandle
 
 _FOCUS = re.compile(r"mCurrentFocus=Window\{(\S+) \S+ ([^/\s}]+)/?([^\s}]*)\}")
+_FOCUSED_APP = re.compile(r"mFocusedApp=ActivityRecord\{\S+ \S+ ([^/\s}]+)/([^\s}]+)")
 
 
 def _adb_path() -> str:
@@ -117,20 +118,31 @@ class AndroidDevice:
         The emulator's gRPC screenshot still captures secure windows (scrcpy and screencap are black),
         so secure screens must be detected from the window flag, not from black frames.
         """
-        out = self.adb.shell("dumpsys window | grep -E '^  Window #|mCurrentFocus|^      fl='")
+        out = self.adb.shell("dumpsys window | grep -E '^  Window #|mCurrentFocus|mFocusedApp|^    mOwnerUid=|^      fl='")
         m = _FOCUS.search(out)
         if not m:
             return "", "", False
         token, pkg, act = m.group(1), m.group(2), m.group(3)
-        if act.startswith("."):
-            act = pkg + act
         secure = False
+        owner = ""
         lines = out.splitlines()
         for i, line in enumerate(lines):
             if line.startswith("  Window #") and f"Window{{{token} " in line:
-                flags = next((l for l in lines[i + 1 : i + 3] if l.strip().startswith("fl=")), "")
+                block = lines[i + 1 : i + 4]
+                flags = next((l for l in block if l.strip().startswith("fl=")), "")
                 secure = "SECURE" in flags.split()
+                owner = next((w[len("package="):] for l in block if l.strip().startswith("mOwnerUid=")
+                              for w in l.split() if w.startswith("package=")), "")
                 break
+        if not act:
+            # Not an activity's window: an app's own popup menu is titled "PopupWindow:51b096d" (Broccoli's overflow
+            # menu, AndroidWorld). The app is the window's owner, and its activity is still the focused one.
+            pkg = owner
+            app = _FOCUSED_APP.search(out)
+            if app and app.group(1) == pkg:
+                act = app.group(2)
+        if act.startswith("."):
+            act = pkg + act
         return pkg, act, secure
 
     def foreground_package(self) -> str:
