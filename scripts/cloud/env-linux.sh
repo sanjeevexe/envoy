@@ -10,5 +10,7 @@ export PATH="$JAVA_HOME/bin:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME
 # The emulator writes its gRPC token to $XDG_RUNTIME_DIR/avd/running, where backend/devices/emulator_grpc.py reads it.
 # A login session sets it; this keeps the two in step for anything started without one.
 export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
-# No GPU on the VM: SwiftShader renders in software (scripts/start_emulator.sh appends these).
-export EMULATOR_EXTRA_ARGS="${EMULATOR_EXTRA_ARGS:--gpu swiftshader_indirect}"
+# No GPU on the VM: software rendering, through ANGLE on SwiftShader (scripts/start_emulator.sh appends these).
+# Not -gpu swiftshader_indirect: on Oct 29 that renderer crashed the emulator (a segfault in its RenderThread) when
+# DoorDash and Amazon drew their screens; with swangle the same Amazon run completed.
+export EMULATOR_EXTRA_ARGS="${EMULATOR_EXTRA_ARGS:--gpu swangle}"

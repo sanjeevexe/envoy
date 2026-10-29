@@ -105,7 +105,9 @@ RemainAfterExit=yes
 User=$U
 WorkingDirectory=$CODE
 Environment=XDG_RUNTIME_DIR=/run/user/$UID_
-ExecStart=/bin/bash -c 'source ~/env-linux.sh && scripts/start_emulator.sh envoy-test && scripts/start_emulator.sh envoy-real'
+# The renderer per phone (Oct 29): envoy-test keeps SwiftShader (SkyLark 18/18 and 30/30 with no model call, the faster
+# one); envoy-real uses ANGLE on SwiftShader, since plain SwiftShader crashed the emulator under DoorDash and Amazon.
+ExecStart=/bin/bash -c 'source ~/env-linux.sh && EMULATOR_EXTRA_ARGS="-gpu swiftshader_indirect" scripts/start_emulator.sh envoy-test && EMULATOR_EXTRA_ARGS="-gpu swangle" scripts/start_emulator.sh envoy-real'
 ExecStop=/bin/bash -c 'source ~/env-linux.sh && scripts/stop_emulator.sh envoy-real; scripts/stop_emulator.sh envoy-test'
 TimeoutStartSec=900
 TimeoutStopSec=300
