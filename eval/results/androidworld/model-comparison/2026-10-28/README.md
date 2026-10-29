@@ -84,7 +84,7 @@ profile code added: `claude/aw-model-compare`, eafd184), standard tier, the same
 per-episode cap for all (the agent's own cap scales with the step price; the costliest episode was $0.28). No episode
 errored and none was rerun. AndroidWorld's setup after the emulator's boot logged VLC's `INSTALL_FAILED_NO_MATCHING_ABIS` (VLC is installed)
 and skipped dialogs it had dismissed before; an adb SIGTRAP on Markor's `mkdir` came once in the spark and once in the
-hybrid stage, and its retry handled it. Both appear in AndroidWorld's own logs too.
+hybrid stage, and its retry handled it. Both appear in AndroidWorld's own logs too. **Found afterwards:** each of those three first-try failures made android_env's `AdbController` restart the adb server that every session on the Mac shares (`kill-server`, then `start-server`), around 20:38, 20:45 and 21:01; the last overlapped Phase 7's SkyLark suites. AndroidWorld fixed its harness in androidworld 3631542 (cherry-picked onto `claude/aw-model-compare` as f4f943f); our own episodes weren't affected.
 Three hybrid passes and two `wonder` passes are `done_unverified`: Envoy's own success check couldn't confirm them, and
 AndroidWorld's scorer did. `sam-3.1` is the segmentation model the agent uses on drawn screens (OsmAnd); it isn't part of a
 profile. Spend: $4.76 of the $8 share (this checkout's cost log matches the episode records to the cent).
