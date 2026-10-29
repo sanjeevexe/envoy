@@ -1,0 +1,111 @@
+{
+ "id": "C2",
+ "category": "cross",
+ "request": "How many calories are in a Caffè Latte at Starbucks, and what's the first place DoorDash shows for a latte?",
+ "started": 1793234356.68505,
+ "approval_mode": "unless_requested",
+ "route": "task",
+ "reply": "Checking Starbucks and DoorDash at once: Caffè Latte calories at Starbucks; first place DoorDash shows for a latte. You can follow each one here.",
+ "from_memory": false,
+ "stale": null,
+ "notes": null,
+ "task_id": "task-1028-203920-eee6",
+ "status": "done",
+ "answer": "Starbucks lists 190 calories for a Caffè Latte, and DoorDash shows Coupa Cafe first for a latte.",
+ "kind": "crossapp",
+ "parts": [
+  {
+   "id": "task-1028-203920-bbff",
+   "goal": "Search DoorDash for latte and report the first restaurant in the results",
+   "app": "com.dd.doordash",
+   "device": "envoy-real",
+   "kind": "routine",
+   "routine": "doordash_search_restaurants",
+   "status": "done",
+   "result": "first restaurant name: Coupa Cafe",
+   "model_calls": 3
+  },
+  {
+   "id": "task-1028-203920-ef1d",
+   "goal": "Check how many calories are in a Caffè Latte at Starbucks",
+   "app": "com.starbucks.mobilecard",
+   "device": "envoy-real",
+   "kind": "routine",
+   "routine": "starbucks_get_drink_calories",
+   "status": "done",
+   "result": "calories: 190 calories",
+   "model_calls": 1
+  }
+ ],
+ "phone_calls": 2,
+ "steps": [
+  {
+   "seq": 1,
+   "time": 1793234360.517548,
+   "kind": "plan",
+   "text": "2 apps: Starbucks: Check how many calories are in a Caffè Latte at Starbucks; DoorDash: Search DoorDash for latte and report the first restaurant in the results"
+  },
+  {
+   "seq": 2,
+   "time": 1793234401.688637,
+   "kind": "answer",
+   "text": "Starbucks lists 190 calories for a Caffè Latte, and DoorDash shows Coupa Cafe first for a latte.",
+   "sources": {
+    "Caffè Latte calories at Starbucks": "Starbucks · the \"Caffè Latte\" screen · 8:40 PM",
+    "first place DoorDash shows for a latte": "DoorDash · DashboardActivity · 8:39 PM"
+   }
+  },
+  {
+   "seq": 3,
+   "time": 1793234401.6892889,
+   "kind": "timeline",
+   "text": "answered in 41.17 s; one phone (envoy-real): the parts took turns"
+  },
+  {
+   "seq": 4,
+   "time": 1793234402.769391,
+   "kind": "memory",
+   "text": "memory updated: the combined answer, with each app as its source",
+   "entities": [
+    "Note Starbucks lists 190 calories for a Caffè Latte, and DoorDash shows Coupa Cafe first for a latte."
+   ]
+  }
+ ],
+ "repaired": true,
+ "app_notes": [],
+ "approvals": [],
+ "approvals_asked": 0,
+ "auto_approved": [],
+ "wall_s": 46.5,
+ "cost": {
+  "calls": 8,
+  "usd": 0.02344,
+  "by_job": {
+   "lead": {
+    "calls": 1,
+    "usd": 0.004925
+   },
+   "match": {
+    "calls": 2,
+    "usd": 0.00542
+   },
+   "repair": {
+    "calls": 2,
+    "usd": 0.005792
+   },
+   "extract": {
+    "calls": 2,
+    "usd": 0.005114
+   },
+   "combine": {
+    "calls": 1,
+    "usd": 0.002189
+   }
+  },
+  "by_model": {
+   "muse-spark-1.3": 8
+  }
+ },
+ "passed": true,
+ "why": "ok"
+}

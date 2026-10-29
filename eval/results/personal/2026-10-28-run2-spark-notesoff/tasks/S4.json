@@ -1,0 +1,146 @@
+{
+ "id": "S4",
+ "category": "single",
+ "request": "How many calories are in a Caffè Latte at Starbucks?",
+ "started": 1793234328.342263,
+ "approval_mode": "unless_requested",
+ "route": "task",
+ "reply": "On it: Check how many calories are in a Caffè Latte at Starbucks. You can follow it here; anything that costs money, or that you didn't ask for, waits for your OK.",
+ "from_memory": false,
+ "stale": null,
+ "notes": null,
+ "task_id": "task-1028-203850-27cc",
+ "status": "done",
+ "answer": "calories: 190 calories",
+ "kind": "routine",
+ "parts": [],
+ "phone_calls": 0,
+ "steps": [
+  {
+   "seq": 1,
+   "time": 1793234338.6491551,
+   "kind": "note",
+   "text": "using routine starbucks_get_drink_calories v1 with drink_name = Caffè Latte"
+  },
+  {
+   "seq": 2,
+   "time": 1793234344.314198,
+   "kind": "routine_step",
+   "text": "tap_order",
+   "status": "done",
+   "rung": 2,
+   "shot": "task-1028-203850-27cc/1793234344284.jpg"
+  },
+  {
+   "seq": 3,
+   "time": 1793234344.869163,
+   "kind": "routine_step",
+   "text": "dismiss_location_prompt",
+   "status": "done",
+   "rung": 0,
+   "shot": "task-1028-203850-27cc/1793234344868.jpg"
+  },
+  {
+   "seq": 4,
+   "time": 1793234345.622808,
+   "kind": "routine_step",
+   "text": "tap_skip",
+   "status": "done",
+   "rung": 0,
+   "shot": "task-1028-203850-27cc/1793234345621.jpg"
+  },
+  {
+   "seq": 5,
+   "time": 1793234346.595972,
+   "kind": "routine_step",
+   "text": "confirm_skip_to_menu",
+   "status": "done",
+   "rung": 0,
+   "shot": "task-1028-203850-27cc/1793234346594.jpg"
+  },
+  {
+   "seq": 6,
+   "time": 1793234348.293164,
+   "kind": "routine_step",
+   "text": "tap_search_menu",
+   "status": "done",
+   "rung": 0,
+   "shot": "task-1028-203850-27cc/1793234348292.jpg"
+  },
+  {
+   "seq": 7,
+   "time": 1793234349.7129788,
+   "kind": "routine_step",
+   "text": "search_drink_name",
+   "status": "done",
+   "rung": 0,
+   "shot": "task-1028-203850-27cc/1793234349711.jpg"
+  },
+  {
+   "seq": 8,
+   "time": 1793234350.150479,
+   "kind": "routine_step",
+   "text": "find_open_drink_product",
+   "status": "done",
+   "rung": 0,
+   "shot": "task-1028-203850-27cc/1793234350149.jpg"
+  },
+  {
+   "seq": 9,
+   "time": 1793234351.808209,
+   "kind": "routine_step",
+   "text": "open_drink_product",
+   "status": "done",
+   "rung": 0,
+   "shot": "task-1028-203850-27cc/1793234351807.jpg"
+  },
+  {
+   "seq": 10,
+   "time": 1793234353.216665,
+   "kind": "finish",
+   "text": "all steps and checks passed",
+   "status": "done"
+  },
+  {
+   "seq": 11,
+   "time": 1793234353.9626508,
+   "kind": "note",
+   "text": "saving what it saw to memory"
+  },
+  {
+   "seq": 12,
+   "time": 1793234356.5125299,
+   "kind": "memory",
+   "text": "memory updated: nothing new"
+  }
+ ],
+ "repaired": false,
+ "app_notes": [],
+ "approvals": [],
+ "approvals_asked": 0,
+ "auto_approved": [],
+ "wall_s": 28.3,
+ "cost": {
+  "calls": 3,
+  "usd": 0.0082,
+  "by_job": {
+   "chat": {
+    "calls": 1,
+    "usd": 0.002838
+   },
+   "match": {
+    "calls": 1,
+    "usd": 0.002415
+   },
+   "extract": {
+    "calls": 1,
+    "usd": 0.002947
+   }
+  },
+  "by_model": {
+   "muse-spark-1.3": 3
+  }
+ },
+ "passed": true,
+ "why": "ok"
+}

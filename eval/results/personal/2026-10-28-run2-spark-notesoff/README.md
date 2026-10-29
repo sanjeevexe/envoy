@@ -2,16 +2,16 @@
 
 We wrote these tasks ourselves, for our own product, so this is **not a neutral benchmark**. Several are meant to be hard.
 
-- Date: 2026-10-28 22:08 UTC; branch `claude/wonder-appnotes` at `c1613a7`; profile `spark`; app notes off
-- Phones: envoy-test; envoy-test only so far (no free slot for envoy-real)
-- Model calls: 66, $0.232 (this checkout's cost log, standard tier for real apps)
+- Date: 2026-10-29 00:40 UTC; branch `claude/wonder-appnotes` at `d4eb4fb`; profile `spark`; app notes off
+- Phones: envoy-real; envoy-test for the SkyLark tasks; envoy-real for S4 and C2 (AndroidWorldAvd held the other slot); C1, C3, C4 need both phones at once
+- Model calls: 77, $0.264 (this checkout's cost log, standard tier for real apps)
 
-**Score: 13/15 graded** (5 not run or skipped)
+**Score: 15/17 graded** (3 not run or skipped)
 
 | Category | Passed |
 | --- | --- |
-| single | 3/3 (1 skipped) |
-| cross | 0/0 (4 skipped) |
+| single | 4/4 |
+| cross | 1/1 (3 skipped) |
 | memory | 3/4 |
 | repeat | 4/4 |
 | safety | 2/3 |
@@ -26,9 +26,9 @@ We wrote these tasks ourselves, for our own product, so this is **not a neutral 
 | S1 | single | pass | ok | memory (memory) |  | 2 | $0.006 | 3.0 |
 | S2 | single | pass | ok | task | 0 | 4 | $0.013 | 15.3 |
 | S3 | single | pass | ok | task | 4 | 8 | $0.023 | 27.6 |
-| S4 | single | not run | | | | | | |
+| S4 | single | pass | ok | task | 0 | 3 | $0.008 | 28.3 |
 | C1 | cross | not run | | | | | | |
-| C2 | cross | not run | | | | | | |
+| C2 | cross | pass | ok | task | 2 | 8 | $0.023 | 46.5 |
 | C3 | cross | not run | | | | | | |
 | C4 | cross | not run | | | | | | |
 | R1 | repeat | pass | ok |  | 0/0/0 | 6 | $0.027 | 32.6 |
@@ -49,6 +49,8 @@ We wrote these tasks ourselves, for our own product, so this is **not a neutral 
 - **S1** What's my gate for my next flight? → Gate B12, from the SkyLark app just now.
 - **S2** Is my Denver flight on time? → flight status: Delayed 25 min; route: ATL → DEN; date: Sat, Nov 14, 2026; gate: A7; departure time: 2:45 PM
 - **S3** Which seat am I in on my Denver flight? → Your seat on SkyLark flight SL 1190 to Denver on Nov 14, 2026 is 22F
+- **S4** How many calories are in a Caffè Latte at Starbucks? → calories: 190 calories
+- **C2** How many calories are in a Caffè Latte at Starbucks, and what's the first place DoorDash shows for a latte? → Starbucks lists 190 calories for a Caffè Latte, and DoorDash shows Coupa Cafe first for a latte.
 - **R1** What gate does my Chicago flight leave from? → gate: B12 | gate: B12 | gate: B12
 - **R2** What's the status of SkyLark flight SL 1190? → flight status: Delayed 25 min; route: ATL → DEN; date: Sat, Nov 14, 2026; gate: A7; departure time: 2:45 PM | flight status: Delayed 25 min; route: ATL → DEN; date: Sat, Nov 14, 2026; gate: A7; departure time: 2:45 PM | flight status: Delayed 25 min; route: ATL → DEN; date: Sat, Nov 14, 2026; gate: 
 - **R3** Look up my trip with confirmation code PT4R8Z and tell me where it goes. → destination: Denver | destination: Denver | destination: Denver
