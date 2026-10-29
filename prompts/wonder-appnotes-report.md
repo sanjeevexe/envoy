@@ -1,23 +1,23 @@
-# Wonder, app notes, personal benchmark: report (Oct 29, 02:50 ET)
+# Wonder, app notes, personal benchmark: report (Oct 29, 15:20 ET)
 
-Branch `claude/wonder-appnotes` (worktree `.claude/worktrees/wonder-appnotes`), not pushed. Main is merged in (503373b),
-and **338/338 backend tests pass and `npm run build` passes**. Since 21:15 the **Envoy coordinator** session
-does every merge into main and holds the device locks (`~/Desktop/Envoy/coord/devices.sh`), so the branch goes to it
-instead of being merged here. The default profile stays `spark`, as the decision rule says.
+**Done.** The branch's code is in main: the coordinator fast-forwarded main to `claude/wonder-appnotes` at 34102f9 after
+338/338 backend tests and `npm run build` passed. Since then, two branches have gone to the coordinator:
+- **`claude/wonder-appnotes`** (rebased on main 38237e8): results only. That's the Oct 29 runs below and this report.
+- **`claude/router-no-routine`** (896fa65, on `coord/aw-rerun`): one instruction line for chat's router, with a test. The
+  coordinator merges it after the AndroidWorld branch.
 
-**Not finished:** C1, C3 and C4 (the three cross-app tasks that need both phones at once), for both benchmark runs, and M4
-again on the merged code. They were booked for 02:30, but since 02:16 the Meta API has turned down every call with `402
-Billing verification failed`. Commands are below.
+The default profile stays `spark`, as the decision rule says. Every stage has now run.
+- **Billing:** the Meta API's billing failures (02:16–about 13:00) ended with the new account.
+- **The coordinator:** the **Envoy coordinator** session holds the device locks (`~/Desktop/Envoy/coord/devices.sh`) and does
+  every merge into main.
 
 ## Needs you
 
-1. **Meta API billing.** Every Muse call has failed since 02:16:27 ET with `402 Billing verification failed`. Envoy can't
-   call a model until it's fixed in Meta's developer console. Everything that's waiting can resume from the commands below.
-2. **Your call, no rush:**
-   - Whether to rerun AndroidWorld in full under `hybrid` (116 tasks, about $16, about 2–3 hours on AndroidWorldAvd).
-     Spark's full run already exists (`final-standard`, $4.67).
-   - Whether to build the next fix: the re-ask on a contradicting first `back`. It isn't built here because it would change
-     the agent between benchmark runs.
+Nothing is blocking. Two calls are yours, with no rush:
+- Whether to rerun AndroidWorld in full under `hybrid` (116 tasks, about $16, about 2–3 hours on AndroidWorldAvd). Spark's
+  full run already exists (`final-standard`, $4.67).
+- Whether to build the next fix: the re-ask on a contradicting first `back` (below). It isn't built here because it would
+  change the agent between benchmark runs.
 
 ## Headline numbers
 
@@ -53,16 +53,22 @@ judge). Results: `eval/results/personal/2026-10-28-run2-spark-notesoff/` and `�
 | --- | --- | --- |
 | single (4) | 4/4 | 4/4 |
 | memory (4) | 3/4 (M4) | 3/4 (M4) |
-| cross (4) | 1/1, C1, C3, C4 pending | 1/1, C1, C3, C4 pending |
+| cross (4) | 4/4 | 4/4 |
 | repeat (4) | 4/4 | 4/4 |
 | safety (3) | 2/3 (P2) | 2/3 (P2) |
 | proactive (1) | 1/1 | 1/1 |
-| **graded** | **15/17**, $0.26 | **15/17**, $0.26 |
+| **score** | **18/20**, $0.40 | **18/20**, $0.38 |
 
 The two runs scored the same and cost the same to within a cent per task.
-- **M4** failed both times the same way.
-- **P2** failed for a different reason each time (see "Failures that remain").
+- **M4** failed both times the same way. **P2** failed for a different reason each time. See "Failures" below for both.
 - The notes didn't change a result in either direction.
+- **After the runs:** M4 passes on main. It ran twice, once on fb3d926 and once on 38237e8 (chat changed in between), each
+  time with fresh memory. Each time chat saw the 3-hour-old gate, checked SkyLark and answered B12
+  (`eval/results/personal/2026-10-29-postmerge/`).
+- **Run code:** both runs kept one backend throughout. C1, C3 and C4 ran on Oct 29 from a checkout at 55ba723. Its backend
+  matches the code the other 17 tasks ran on (9ccc800 and d4eb4fb) apart from a runner check that changes no result.
+- **C4's DoorDash half:** the first coffee place differed between the runs (Peet's, then Gregorys). DoorDash's list is live,
+  and the grade checks the SkyLark half ("delayed") and that both halves finished.
 
 ## Per step
 
@@ -74,29 +80,33 @@ The two runs scored the same and cost the same to within a cent per task.
 | 2a | App notes: Envoy writes, merges and reads its own notes about each app; they go into the plan, step and repair prompts; a web view to list and retire them; a before/after driver. After the coordinator's review, a note that reads like an instruction or a permission (a planted notice) is dropped in code. | c03c957, 50fc7f0, b665d5f, c1613a7, 80acbd7, d4c0332 | 59 in `test_app_notes.py`, 1 in `test_api.py` |
 | 2b | Before/after runs, each run's step log, and the first-step `back` replays | d62e40d, 5eaf29c, 9ccc800, 77706ea, 01582ef, 0130f6f | |
 | 3a | Benchmark: 20 tasks in six categories and their driver (`--notes-from`, `--date`, never installs an app) | adb1b92, c1613a7, 292fb98, d52963d, fcb366f, 99b7811 | 10 in `test_personal_bench.py` |
-| 3b | Run 2, then run 1 | d4eb4fb, 20c8e81, a18c437 | |
-| Merge | Main merged in. The one conflict was the `models.schemas` import in `models/adapter.py`; both sides' names are kept. | 503373b | **304/304**, web build passes |
+| 3b | Run 2, then run 1 (Oct 28); C1, C3, C4 for both (Oct 29) | d4eb4fb, 20c8e81, a18c437, 64bc6ca | |
+| Merge | Main merged in. The one conflict was the `models.schemas` import in `models/adapter.py`; both sides' names are kept. The coordinator fast-forwarded main to 34102f9. | 503373b | **338/338**, web build passes |
+| After | M4 on main (12e1b14, 9ed9ef5). P2's router replay (54e37a6). The router line on its own branch (`claude/router-no-routine`, 896fa65, with `test_chat_router.py`). | | 515/515 on that branch |
 
-The branch adds 79 tests. Before the merge it passed 255/255, and 304/304 right after it.
+The branch adds 79 tests. Before the merge it passed 255/255, and 304/304 right after the merge.
 
-**Devices** (Oct 28, ET; each claimed through `devices.sh` after 21:15):
+**Devices** (ET; each claimed through `devices.sh` after Oct 28, 21:15):
 
 | When | Device | What |
 | --- | --- | --- |
-| 17:48–18:07 | envoy-test | Run 2: the 15 SkyLark tasks |
+| Oct 28, 17:48–18:07 | envoy-test | Run 2: the 15 SkyLark tasks |
 | 20:38–20:39 | envoy-real | Run 2: S4, C2 (read-only) |
 | 20:40–21:39 | AndroidWorldAvd | 1b: spark, then hybrid, then wonder |
 | 21:59–22:04 | envoy-real | 2b real apps (read-only, every approval declined) |
 | 22:04 | envoy-real | Run 1: S4, C2 |
 | 23:06–23:10 | envoy-test | 2b SkyLark |
 | 23:44–23:50 | envoy-test | Run 1: the 15 SkyLark tasks |
+| Oct 29, 14:45–14:47 | envoy-test | M4 on main fb3d926 |
+| 14:48–14:51 | envoy-test | M4 on main 38237e8 |
+| 15:03–15:10 | envoy-test + envoy-real | C1, C3, C4 for run 1, then run 2 (read-only on envoy-real) |
 
-## Failures that remain
+## Failures
 
-- **M4 (both runs):** memory answered with gate B9, seen 3 hours earlier, without checking the app, which shows B12.
-  - Main already fixes this: Session B's 85a5d32 makes chat check the app when a fact is past its freshness. That fix is now
-    merged here.
-  - The rerun is waiting on billing.
+- **M4 (both runs), fixed on main:** memory answered with gate B9, seen 3 hours earlier, without checking the app, which
+  shows B12.
+  - Session B's 85a5d32 makes chat check the app when a fact is past its freshness.
+  - It passes on main fb3d926 and 38237e8.
 - **P2, run 2: the template-like first `back`** (`eval/results/app-notes/2026-10-28/first-step-back/`).
   - On SkyLark's home screen, Spark's first step returned `back` with a reason like "Placeholder to comply with schema while
     intending to open My Trips". That left the app.
@@ -105,14 +115,21 @@ The branch adds 79 tests. Before the merge it passed 255/255, and 304/304 right 
   - What doesn't fix it: one more instruction (no better) or medium effort (2/10).
   - Putting `action` before `reason` in the schema makes it happen every time (10/10).
   - Re-asking once when the `back` contradicts its own reason fixes it (0/10).
-- **P2, run 1: chat's router refused.** It replied "Sorry, I can't add a checked bag to your Chicago trip — I don't have a
-  routine for that in the SkyLark app" instead of starting a task.
-  - The router sees a list headed "APPS (learned routines)", and nothing in its instructions says a task doesn't need a
-    routine. There is no add-a-bag routine.
-  - In run 2 the same request was routed as a task. It was the only refusal among the 24 requests chat routed across both runs.
-  - A replay to measure how often it happens, with a one-line instruction fix, is ready
-    (`eval/results/personal/2026-10-28-run1/p2-router/`, command below). It hasn't been run because of
-    billing.
+- **P2, run 1: chat's router refused, fix on a branch** (`eval/results/personal/2026-10-28-run1/p2-router/`).
+  - It replied "Sorry, I can't add a checked bag to your Chicago trip — I don't have a routine for that in the SkyLark app"
+    instead of starting a task.
+  - The router sees a list headed "APPS (learned routines)": SkyLark has six there, none for bags, and nothing said a task
+    doesn't need one.
+  - Replayed ($0.57), as is vs with one instruction line ("A task needs no learned routine: …"):
+
+| Request | Right route | As is | With the line |
+| --- | --- | --- | --- |
+| Add a checked bag to my Chicago trip. (no routine) | task | 6/40 replied "can't" | 0/40 |
+| Which seat am I in on my Denver flight? | memory or task | 0/20 wrong | 0/20 wrong |
+| Turn on Wi-Fi. (no routine either) | task | 0/20 wrong | 0/20 wrong |
+| What can you do? | reply | 0/20 wrong | 0/20 wrong |
+
+  The line is on `claude/router-no-routine` (896fa65), queued to merge after AndroidWorld's; Phase 7's Nov 2 eval measures it.
 - **AndroidWorld under Spark:** wrong strategies that run out of steps (5 of hybrid's 6 gains). Under Wonder: a replan after
   the work is done (all three of its losses).
 
@@ -124,16 +141,13 @@ The branch adds 79 tests. Before the merge it passed 255/255, and 304/304 right 
   - It hit about 1 in 6 SkyLark agent runs. It costs a task outright when the agent can't find its way back (run 2's P2).
   - It costs one extra call, and only when it fires.
   - In replay it took the rate from 1–4 in 10 to 0 in 10.
-- **Next after it:** the router line, then (from 1b) finishing instead of replanning once the last irreversible step has
-  succeeded and the screen shows the result.
+- **Next after it:** from 1b, finish instead of replanning once the last irreversible step has succeeded and the screen
+  shows the result.
 
-## Skipped or not run
+## Not run
 
-- **C1, C3, C4, both runs.** They need envoy-test and envoy-real at once, and the Mac allows two emulators. AndroidWorldAvd
-  held the other slot most of the night. The 02:30 window came after the API started turning calls down.
-- **M4 on the merged code:** waiting on billing.
-- **The full 116-task AndroidWorld rerun:** not run; it's your call.
-- **The fixes found tonight:** not built, because they would change the agent and router between benchmark runs.
+- **The full 116-task AndroidWorld rerun:** your call (command below).
+- **The re-ask fix:** not built. It would change the agent between benchmark runs, so it's a decision for after.
 
 ## Incidents
 
@@ -144,50 +158,31 @@ The branch adds 79 tests. Before the merge it passed 255/255, and 304/304 right 
   - Reported to the coordinator and the AndroidWorld session. AndroidWorld fixed its harness in androidworld 3631542 (on the
     comparison branch as f4f943f).
   - Envoy's own device code only uses `adb -s <serial>`. Any future AndroidWorld run needs a checkout with that commit.
+- **My wait loop counted as an emulator** (Oct 29, about 14:47–14:48).
+  - `devices.sh` read every process's command line for `qemu-system`, and my background loop's command line contained one. So
+    for about a minute it counted 2 of 2 emulators and could refuse a claim.
+  - I stopped the loop and told the coordinator, and the coordinator hardened `devices.sh`: it now matches only the emulator
+    binary.
+- **An M4 rerun that didn't count.** The first rerun on 38237e8 reused the earlier run's memory, which already held a fresh
+  B12, so it answered from memory and tested nothing. I discarded it and ran again with fresh memory.
 - **2b's step logs were gitignored** (`*.jsonl`), so the 27 traces the 2b README and the replays read hadn't reached the
   branch. They're committed now (01582ef), with an exception in `.gitignore`. Before adding them I checked them: no
   screenshots, no names or emails, and the only address is the emulator's simulated location.
 
-## Spend: $5.87 of $30
+## Spend: $6.75 in all
 
 | Share | Spent | Budget |
 | --- | --- | --- |
 | AndroidWorld comparison (`~/Desktop/Envoy-aw-compare`) | $4.76 | $8 |
 | App notes: 2b $0.33, first-step replays $0.13 | $0.47 | $6 |
-| Benchmark: run 1 $0.26, run 2 $0.26, smoke runs and checks $0.10 | $0.62 | $12 |
+| Benchmark, Oct 28: run 1 $0.26, run 2 $0.26, smoke runs and checks $0.10 | $0.62 | $12 |
 | Wonder's live checks (1a) | $0.02 | |
+| **Oct 28 total** | **$5.87** | **$30** |
+| Oct 29: C1, C3, C4 for both runs $0.26, M4 on main twice $0.04 (and $0.007 for the discarded rerun), P2's router replay $0.57 | $0.88 | $10 |
 
-Each figure comes from that checkout's cost log, at standard tier. The pending work below costs about $0.55: C1, C3 and C4
-twice ($0.10–0.20), M4 once ($0.03), and the router replay ($0.35).
+Each figure comes from the checkout's cost log, at standard tier.
 
-## Commands for what's left
-
-C1, C3 and C4 go from a checkout at 55ba723, the pre-merge tip. That keeps both runs on one code version: run 1 used 9ccc800
-and run 2 used d4eb4fb, and their backend code differs from 55ba723 only by a runner check that changes no result. Run each
-command from that checkout, with both phones claimed:
-
-```bash
-git worktree add --detach ../Envoy-bench-55ba723 55ba723 && ln -s "$PWD/.env" ../Envoy-bench-55ba723/.env   # from the main checkout
-~/Desktop/Envoy/coord/devices.sh claim envoy-test <owner> 25 "benchmark C1/C3/C4"
-~/Desktop/Envoy/coord/devices.sh claim envoy-real <owner> 25 "benchmark C1/C3/C4"
-scripts/start_emulator.sh envoy-real   # only if it isn't running
-ENVOY_MODEL_PROFILE=spark nice -n 10 uv run --project backend python eval/run_personal.py --label run1 --data $TMPDIR/envoy-personal-run1 --resume --date 2026-10-28 --tasks C1,C3,C4 --profile spark --notes on --budget 12
-ENVOY_MODEL_PROFILE=spark nice -n 10 uv run --project backend python eval/run_personal.py --label run2-spark-notesoff --data $TMPDIR/envoy-personal-run2 --resume --date 2026-10-28 --tasks C1,C3,C4 --profile spark --notes off --budget 12
-# then copy eval/results/personal/2026-10-28-run1 and …-run2-spark-notesoff back to this branch and commit them
-```
-
-M4 on the merged code, from this branch with envoy-test claimed:
-
-```bash
-ENVOY_MODEL_PROFILE=spark nice -n 10 uv run --project backend python eval/run_personal.py --label postmerge --data $TMPDIR/envoy-personal-postmerge --tasks M4 --profile spark --notes off --budget 1
-```
-
-The router replay (no phone; 50 chat calls, about $0.35). It sends P2 and three controls (a lookup, a request with no routine
-either, a question for chat) to chat's router as run 1 did, with and without the one-line fix:
-
-```bash
-nice -n 10 uv run --project backend python eval/results/personal/2026-10-28-run1/p2-router/replay_router.py 10
-```
+## Command for what's left
 
 The full AndroidWorld rerun under hybrid (about $16, 2–3 hours). Use `~/Desktop/Envoy-aw-compare`, which has the profiles
 and the adb fix:
