@@ -120,13 +120,40 @@ The two copies don't share anything: a routine learned, a memory fact or a paire
 
 ### The bars, measured
 
-TBD: live-view lag (from the Mac over the tailnet, and the iPhone), task times against the Mac, real apps' bot checks and sign-ins from a data-center address.
+**The live view and takeover** (`scripts/cloud/live_lag.py`, envoy-test, 720 px at quality 60, the same WebSocket the web app and the iPhone use; screen changes made by the VM's own adb). Results: `eval/results/cloud/live-*.json`.
+
+| | Mac copy (Phase 5, recorded) | Cloud copy, from the Mac over the tailnet | Cloud copy, from the Mac over IAP SSH |
+| --- | --- | --- | --- |
+| Frame: capture → received, p50 (max) | 24 ms (45) from the Mac; 66–115 ms on the iPhone | **147 ms** (294) | 130 ms (254) |
+| Round trip | 0 ms on the Mac; 27–47 ms on the iPhone | 39 ms | 17 ms |
+| The server's capture + JPEG encode per frame | | 64 + 28 ms | 66 + 30 ms |
+| A takeover input → its ack, p50 (max) | 10–241 ms on the iPhone | 143 ms (298) | 129 ms (295) |
+| A takeover input → the first new frame, p50 (max) | | **327 ms** (444) | 291 ms (391) |
+
+Half the inputs were a 150 ms swipe, which the ack waits for. The tailnet path from the Mac goes through Tailscale's relay in Miami (`tailscale ping`: "via DERP(mia)", 36 ms), because Google's firewall blocks the inbound UDP a direct connection needs. Opening UDP 41641 would allow a direct path; it wasn't done, since it is a public port. Two-thirds of the frame lag is the VM drawing and grabbing the screen in software (about 92 ms a frame), not the network. The design's target was under 150 ms: the cloud copy is at the edge of it from the Mac; the iPhone adds its own network. TBD: the iPhone, from the user's sitting.
+
+**Task times, end to end through the API** (the Phase 7 interfaces suite, `eval/run_final.py interfaces`, run on the VM against the cloud copy, standard tier, $0.143 at standard prices):
+
+| Check | Mac (Oct 28, `e18e434`) | Cloud (Oct 29) |
+| --- | --- | --- |
+| phase4: sign-in hand-off and takeover, approval with a screenshot, check-in, memory, MCP, chat, live view | passed, 117 s | **passed, 127 s** |
+| approval_modes: the four approval modes | passed, 50 s | **passed, 81 s** |
+| phase5: pushes (a fake push service), a screenshot into memory, voice, live view over the tailnet | passed, 39 s | **pushes passed; the screenshot failed; voice and the tailnet view not run by the script** (below) |
+
+- **Pushes work** (takeover, approval and Done, VAPID-signed and encrypted, no nonce), and the person's approval decides, not the push.
+- **Screenshots and photos into memory don't work in the cloud copy.** They read text with Apple's Vision framework (`memory/photos.py` compiles `memory/ocr.swift`), which doesn't exist on Linux. The "Send to Envoy" shortcut is a Mac-only feature until it gets another OCR backend. That is a code change, not done here.
+- **Voice works** (`scripts/cloud/voice_check.py`, 3 runs from the Mac over the tailnet; Phase 5's script makes its speech with macOS's `say`, so it was made on the Mac). "What's my gate for my Chicago flight?" was heard exactly 3/3 and answered from memory ("Gate B12"). Mac (one run) against cloud (3 runs): connect 919 ms against 638–858; release → text 89 against 198–247 ms; the chat reply 2.6 s against 4.4–4.6 s.
+- **The model calls themselves** were mixed from the VM (p50 from the logs, small samples): chat 2.3 s (Mac 1.7 s), answer 1.6 s (1.8 s), match 4.1 s (1.6 s). Transcribe 149 ms.
+
+The suite changed the cloud copy's SkyLark and memory; both were put back afterwards (a backup of the memory and the task database, then `demo_setup.py --app-only`).
+
+**Real apps from a data-center address:** TBD, from the user's sign-in sitting and `eval/run_final.py real` on the cloud envoy-real.
 
 ### Choosing the cloud (and back): the switch
 
 One-time setup (the user, once the VM is on the tailnet):
 1. **Sign in on the Mac:** `scripts/cloud/login.sh` opens the cloud copy's sign-in link in the Mac's browser. Its token is never printed.
-2. **The iPhone:** in that browser window, open Settings › Devices, "Pair your iPhone", and make a pairing code, as with the Mac copy. Then on the iPhone, Safari › `https://envoy-cloud.<tailnet>.ts.net:8443`, type the code, Share › Add to Home Screen, and name it **Envoy Cloud**. The Mac's **Envoy** icon stays as it is: one icon per host. Allow notifications from the new icon too.
+2. **The iPhone:** in that browser window, open Settings › Devices › "Pair your iPhone" › "Show a pairing code", as with the Mac copy. Then on the iPhone, Safari › `https://envoy-cloud.<tailnet>.ts.net:8443`, type the code, Share › Add to Home Screen, and name it **Envoy Cloud**. The Mac's **Envoy** icon stays as it is: one icon per host. Allow notifications from the new icon too.
 3. **Siri:** `scripts/cloud/shortcut.sh` builds **Ask Envoy (cloud)**. Open it on the Mac; Shortcuts adds it, and iCloud brings it to the iPhone. It never replaces the Mac's **Ask Envoy**.
 4. **Muse (optional):** `scripts/cloud/muse-tunnel.sh` prints a public `…/mcp` address. In Muse, add a second custom connector, **Envoy Cloud**, at that address. Paste its API key from `scripts/cloud/muse-token.sh`, which puts the cloud copy's MCP token on the clipboard.
 5. **Real apps:** in the cloud copy's web app, open the live phone `envoy-real`, Take over, and sign in to Google Play and the apps the demo needs. You type every password. Hand back.
@@ -145,7 +172,7 @@ Nothing migrates either way, so switching back takes as long as the steps above.
 
 **What only the Mac option can do:** the Pixel 5 (USB), and so the Instagram creator scene; the real apps already signed in on the Mac's `envoy-real`; the Mac's memory and routine history.
 
-**A stopped VM may not start on demand.** On Oct 29 the first restart failed with Google's `ZONE_RESOURCE_POOL_EXHAUSTED` (no n2-standard-8 free in us-east1-b), and the retry 17 s later worked. For a recording, start the VM well ahead and keep it awake. If a stockout lasts, the VM can be recreated in another zone from a snapshot of its disk (about 15 minutes; not scripted).
+**A stopped VM may not start on demand.** On Oct 29 the first restart failed with Google's `ZONE_RESOURCE_POOL_EXHAUSTED` (no n2-standard-8 free in us-east1-b), and the retry 17 s later worked. For a recording, start the VM well ahead and keep it awake. Start it well ahead and keep it awake on recording day. TBD: a machine image to start in another zone if a stockout lasts.
 
 ## Cost
 
