@@ -273,3 +273,14 @@ def test_a_check_for_the_button_that_opens_a_screen_passes_on_that_screen():
     # the rest of the name must be a whole label: "Place order" is not the order
     cart = app_screen(("btn_place", "Place order", "true"), ("screen_title", "Cart", "false"))
     assert not evaluate(SuccessCheck(kind="element_present", value="View order", field_hint=None), cart, "Ordered").passed
+
+
+def test_an_irreversible_step_must_be_for_the_goals_own_item_and_kept_text_comes_from_the_screen():
+    # SkyLark's confirm screen says only "Flight · SL 482 · Fri, Oct 30, 2026". The agent had written "Flight SL 482 to
+    # Pittsburgh" into 0_remember (the goal's city, never on screen), then confirmed the Chicago flight. Replayed offline:
+    # the goal's city written into memory 27/40 → 14/40; wrong-flight confirms with what it really saw 50/50 → 7/50; correct
+    # irreversible steps (SkyLark and AndroidWorld) still go ahead 210/210; AndroidWorld steps still keep text 88/120 (85).
+    from models.prompts import STEP_INSTRUCTIONS
+    assert "Copy it word for word from the screen; never add what the goal says." in STEP_INSTRUCTIONS
+    assert "names the goal's own item (the flight, person, item or amount the goal names), not only a number or code" in STEP_INSTRUCTIONS
+    assert "find out on the phone first: go back to the item, or the list it came from. Don't ask the user." in STEP_INSTRUCTIONS
