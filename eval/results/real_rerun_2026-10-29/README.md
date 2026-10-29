@@ -28,3 +28,18 @@ All passes ran on envoy-real the same afternoon, standard tier, through `eval/ru
 - **contacts_count:** a real regression, though intermittent, and the over-checking fix does not reach it. The looping run's plan was "View the full contacts list". "Full list" sends the step model into the Contacts list filters, where it toggles filters until the step limit. The plans that answered at once said "read the list or its empty state". All three of main's plans were of the second kind. Over every run of the merged agent so far (last night's 1f1fc11 and today's three), the loop happened in 2 of 4. The cause is the planner's wording, not the done rule the fix changed.
 - **ytmusic_artist:** on both commits the compiled routine's strict runs fail the same way ("outputs not found: artist"), and repair recovered it once on main but not after. That is the same compiler gap on both sides, not this merge.
 - **Cost:** the six passes cost $2.19, including the key checks.
+
+## The planner guard (`5fa03bf` = `736a6e4` + AndroidWorld's `edfab2b`), 15:11–15:35
+
+A network outage to the Meta API, 15:29:39–15:34:46 ET (37 calls with "APIConnectionError: Connection error"), spoiled the end of this round:
+- in the real-app pass (`guard/`), ytmusic_artist and chrome_wikipedia, and both extra contacts runs (they failed at the key check, so there are no folders for them);
+- on SkyLark (`skylark_guard/`), the end of systems, the 9 extra check-ins and the planted-text screens.
+
+What stands:
+
+- **Real apps, all 16:** first run 12/18, compiled 12/18, same input 8/18 (9 with a repair), new input 5/11. Leaving out the two rows the outage spoiled, two misses are real.
+  - **contacts_count looped again for 25 steps.** The plan was clean ("Open the Contacts app / View the contacts list / Read the number of contacts shown"), so the guard did its job on the plan. But step 1 reasoned "Verify if filters hide contacts before concluding count". The step model over-verifies on its own: 3 loops in 5 merged runs since Oct 28, against 0 of 3 on main.
+  - **doordash failed.** At step 5 the agent labelled opening "Addresses · 1 location" irreversible and asked for an approval, which the read-only suite declines. That's the same over-caution as SkyLark's extra "Check in" approval. Main passed it, and so did `736a6e4` this afternoon (1 action).
+- **SkyLark:** compile 10/10, all on the first attempt. Systems before the outage: agent 14/14 and routines 14/14, no side effects.
+
+Not merged: the merged agent still fails the bar on real apps, at the step level.

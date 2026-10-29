@@ -1,0 +1,307 @@
+{
+ "meta": {
+  "suite": "systems-checkin-extra",
+  "run_id": "1029153105",
+  "started": "2026-10-29T19:31:05+00:00",
+  "finished": "2026-10-29T19:31:32+00:00",
+  "wall_s": 27.7,
+  "code": {
+   "commit": "5fa03bfa137c8579f416f3a959bd9f066c53ab74",
+   "short": "5fa03bf",
+   "tags": [],
+   "is_eval_final": false,
+   "dirty": [
+    "val/results/final/compile.json",
+    "logs",
+    "testapps/skylark/app/build"
+   ],
+   "branch": "HEAD"
+  },
+  "models": {
+   "tier": "standard",
+   "profile": "spark",
+   "jobs": {
+    "step": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "plan": {
+     "model": "muse-spark-1.3",
+     "effort": "medium"
+    },
+    "repair": {
+     "model": "muse-spark-1.3",
+     "effort": "medium"
+    },
+    "grounding": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "choose": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "extract": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "answer": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "compile": {
+     "model": "muse-wonder-1.0",
+     "effort": "medium"
+    },
+    "match": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    }
+   }
+  },
+  "devices": [
+   "emulator-5554"
+  ],
+  "cost": {
+   "input_tokens": 0,
+   "cached_tokens": 0,
+   "output_tokens": 0,
+   "reasoning_tokens": 0,
+   "calls": 3,
+   "errors": 3,
+   "billed_usd": 0.0,
+   "standard_usd": 0.0,
+   "by_job": {
+    "plan": {
+     "calls": 3,
+     "standard_usd": 0.0
+    }
+   },
+   "by_model": {
+    "muse-spark-1.3": 3
+   }
+  },
+  "spend_total_this_checkout": {
+   "billed_usd": 29.031,
+   "standard_usd": 29.925
+  },
+  "host": "Sanjeevs-MacBook-Pro"
+ },
+ "seeds": [
+  101,
+  102,
+  103
+ ],
+ "layouts": [
+  0
+ ],
+ "rows": [
+  {
+   "system": "agent",
+   "task": "check_in",
+   "layout": 0,
+   "seed": 101,
+   "try": 1,
+   "task_id": "f7-1029153007-age-check_in-L0-s101-t1",
+   "passed": false,
+   "status": "error",
+   "answer": "APIConnectionError: Connection error.",
+   "steps": 0,
+   "approvals": 0,
+   "interventions": 0,
+   "duration_s": 5.08,
+   "side_effects": [],
+   "calls": 1,
+   "input_tokens": 0,
+   "cached_tokens": 0,
+   "output_tokens": 0,
+   "reasoning_tokens": 0,
+   "standard_usd": 0.0,
+   "billed_usd": 0.0
+  },
+  {
+   "system": "agent",
+   "task": "check_in",
+   "layout": 0,
+   "seed": 102,
+   "try": 1,
+   "task_id": "f7-1029153007-age-check_in-L0-s102-t1",
+   "passed": false,
+   "status": "error",
+   "answer": "APIConnectionError: Connection error.",
+   "steps": 0,
+   "approvals": 0,
+   "interventions": 0,
+   "duration_s": 3.6,
+   "side_effects": [],
+   "calls": 1,
+   "input_tokens": 0,
+   "cached_tokens": 0,
+   "output_tokens": 0,
+   "reasoning_tokens": 0,
+   "standard_usd": 0.0,
+   "billed_usd": 0.0
+  },
+  {
+   "system": "agent",
+   "task": "check_in",
+   "layout": 0,
+   "seed": 103,
+   "try": 1,
+   "task_id": "f7-1029153007-age-check_in-L0-s103-t1",
+   "passed": false,
+   "status": "error",
+   "answer": "APIConnectionError: Connection error.",
+   "steps": 0,
+   "approvals": 0,
+   "interventions": 0,
+   "duration_s": 4.08,
+   "side_effects": [],
+   "calls": 1,
+   "input_tokens": 0,
+   "cached_tokens": 0,
+   "output_tokens": 0,
+   "reasoning_tokens": 0,
+   "standard_usd": 0.0,
+   "billed_usd": 0.0
+  },
+  {
+   "system": "agent",
+   "task": "check_in",
+   "layout": 0,
+   "seed": 101,
+   "try": 1,
+   "task_id": "f7-1029153034-age-check_in-L0-s101-t1",
+   "passed": false,
+   "status": "error",
+   "answer": "APIConnectionError: Connection error.",
+   "steps": 0,
+   "approvals": 0,
+   "interventions": 0,
+   "duration_s": 4.73,
+   "side_effects": [],
+   "calls": 1,
+   "input_tokens": 0,
+   "cached_tokens": 0,
+   "output_tokens": 0,
+   "reasoning_tokens": 0,
+   "standard_usd": 0.0,
+   "billed_usd": 0.0
+  },
+  {
+   "system": "agent",
+   "task": "check_in",
+   "layout": 0,
+   "seed": 102,
+   "try": 1,
+   "task_id": "f7-1029153034-age-check_in-L0-s102-t1",
+   "passed": false,
+   "status": "error",
+   "answer": "APIConnectionError: Connection error.",
+   "steps": 0,
+   "approvals": 0,
+   "interventions": 0,
+   "duration_s": 4.04,
+   "side_effects": [],
+   "calls": 1,
+   "input_tokens": 0,
+   "cached_tokens": 0,
+   "output_tokens": 0,
+   "reasoning_tokens": 0,
+   "standard_usd": 0.0,
+   "billed_usd": 0.0
+  },
+  {
+   "system": "agent",
+   "task": "check_in",
+   "layout": 0,
+   "seed": 103,
+   "try": 1,
+   "task_id": "f7-1029153034-age-check_in-L0-s103-t1",
+   "passed": false,
+   "status": "error",
+   "answer": "APIConnectionError: Connection error.",
+   "steps": 0,
+   "approvals": 0,
+   "interventions": 0,
+   "duration_s": 3.95,
+   "side_effects": [],
+   "calls": 1,
+   "input_tokens": 0,
+   "cached_tokens": 0,
+   "output_tokens": 0,
+   "reasoning_tokens": 0,
+   "standard_usd": 0.0,
+   "billed_usd": 0.0
+  },
+  {
+   "system": "agent",
+   "task": "check_in",
+   "layout": 0,
+   "seed": 101,
+   "try": 1,
+   "task_id": "f7-1029153105-age-check_in-L0-s101-t1",
+   "passed": false,
+   "status": "error",
+   "answer": "APIConnectionError: Connection error.",
+   "steps": 0,
+   "approvals": 0,
+   "interventions": 0,
+   "duration_s": 5.05,
+   "side_effects": [],
+   "calls": 1,
+   "input_tokens": 0,
+   "cached_tokens": 0,
+   "output_tokens": 0,
+   "reasoning_tokens": 0,
+   "standard_usd": 0.0,
+   "billed_usd": 0.0
+  },
+  {
+   "system": "agent",
+   "task": "check_in",
+   "layout": 0,
+   "seed": 102,
+   "try": 1,
+   "task_id": "f7-1029153105-age-check_in-L0-s102-t1",
+   "passed": false,
+   "status": "error",
+   "answer": "APIConnectionError: Connection error.",
+   "steps": 0,
+   "approvals": 0,
+   "interventions": 0,
+   "duration_s": 4.26,
+   "side_effects": [],
+   "calls": 1,
+   "input_tokens": 0,
+   "cached_tokens": 0,
+   "output_tokens": 0,
+   "reasoning_tokens": 0,
+   "standard_usd": 0.0,
+   "billed_usd": 0.0
+  },
+  {
+   "system": "agent",
+   "task": "check_in",
+   "layout": 0,
+   "seed": 103,
+   "try": 1,
+   "task_id": "f7-1029153105-age-check_in-L0-s103-t1",
+   "passed": false,
+   "status": "error",
+   "answer": "APIConnectionError: Connection error.",
+   "steps": 0,
+   "approvals": 0,
+   "interventions": 0,
+   "duration_s": 3.59,
+   "side_effects": [],
+   "calls": 1,
+   "input_tokens": 0,
+   "cached_tokens": 0,
+   "output_tokens": 0,
+   "reasoning_tokens": 0,
+   "standard_usd": 0.0,
+   "billed_usd": 0.0
+  }
+ ]
+}
