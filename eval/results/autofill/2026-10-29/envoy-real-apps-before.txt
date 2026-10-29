@@ -1,0 +1,9 @@
+com.amazon.mShop.android.shopping
+com.chipotle.ordering
+com.dd.doordash
+com.github.uiautomator
+com.google.android.contactkeys
+com.google.android.safetycore
+com.google.android.verifier
+com.starbucks.mobilecard
+com.target.ui

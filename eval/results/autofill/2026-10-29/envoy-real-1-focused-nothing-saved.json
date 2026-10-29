@@ -1,0 +1,233 @@
+{
+ "label": "envoy-real-1-focused-nothing-saved",
+ "time": "2026-10-29 12:52:46",
+ "package": "org.wikipedia",
+ "activity": "org.wikipedia.login.LoginActivity",
+ "secure": false,
+ "has_password_field": true,
+ "fields": [
+  {
+   "resource_id": "",
+   "hint": "Username",
+   "password": false,
+   "focused": true,
+   "chars": 0,
+   "masked": false,
+   "package": "org.wikipedia",
+   "bounds": "[42,338][1038,484]"
+  },
+  {
+   "resource_id": "",
+   "hint": "Password",
+   "password": true,
+   "focused": false,
+   "chars": 0,
+   "masked": false,
+   "package": "org.wikipedia",
+   "bounds": "[42,505][1038,651]"
+  }
+ ],
+ "windows": [
+  "ScreenDecorOverlayBottom",
+  "ScreenDecorOverlay",
+  "EdgeBackGestureHandler0",
+  "Taskbar",
+  "NotificationShade",
+  "StatusBar",
+  "ShellDropTarget",
+  "InputMethod",
+  "org.wikipedia/org.wikipedia.login.LoginActivity",
+  "org.wikipedia/org.wikipedia.DefaultIcon",
+  "com.android.vending/com.google.android.finsky.transparentmainactivity.TransparentMainActivityPrivate",
+  "com.android.vending/com.google.android.finsky.activities.MainActivityPrivate",
+  "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+  "com.android.systemui.wallpapers.ImageWallpaper"
+ ],
+ "other_packages": [
+  "com.android.systemui",
+  "com.github.uiautomator"
+ ],
+ "not_the_app": [
+  {
+   "package": "com.github.uiautomator",
+   "label": "",
+   "resource_id": "android:id/content",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    0,
+    2165,
+    1080,
+    2274
+   ]
+  },
+  {
+   "package": "com.github.uiautomator",
+   "label": "",
+   "resource_id": "android:id/parentPanel",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    0,
+    2165,
+    1080,
+    2274
+   ]
+  },
+  {
+   "package": "com.github.uiautomator",
+   "label": "",
+   "resource_id": "android:id/inputArea",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    0,
+    2165,
+    1080,
+    2274
+   ]
+  },
+  {
+   "package": "com.github.uiautomator",
+   "label": "",
+   "resource_id": "com.github.uiautomator:id/keyboard",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    0,
+    2165,
+    1080,
+    2274
+   ]
+  },
+  {
+   "package": "com.github.uiautomator",
+   "label": "",
+   "resource_id": "android:id/navigationBarBackground",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    0,
+    2274,
+    1080,
+    2400
+   ]
+  },
+  {
+   "package": "com.github.uiautomator",
+   "label": "",
+   "resource_id": "android:id/input_method_navigation_bar_view",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    0,
+    2274,
+    1080,
+    2400
+   ]
+  },
+  {
+   "package": "com.github.uiautomator",
+   "label": "",
+   "resource_id": "android:id/input_method_nav_inflater",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    0,
+    2274,
+    1080,
+    2400
+   ]
+  },
+  {
+   "package": "com.github.uiautomator",
+   "label": "",
+   "resource_id": "android:id/input_method_nav_horizontal",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    50,
+    2274,
+    1030,
+    2400
+   ]
+  },
+  {
+   "package": "com.github.uiautomator",
+   "label": "",
+   "resource_id": "android:id/input_method_nav_buttons",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    71,
+    2274,
+    1009,
+    2400
+   ]
+  },
+  {
+   "package": "com.github.uiautomator",
+   "label": "",
+   "resource_id": "android:id/input_method_nav_ends_group",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    71,
+    2274,
+    1009,
+    2400
+   ]
+  },
+  {
+   "package": "com.github.uiautomator",
+   "label": "",
+   "resource_id": "android:id/input_method_nav_back",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    71,
+    2274,
+    254,
+    2400
+   ]
+  },
+  {
+   "package": "com.github.uiautomator",
+   "label": "",
+   "resource_id": "android:id/input_method_nav_ime_switcher",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    826,
+    2274,
+    1009,
+    2400
+   ]
+  },
+  {
+   "package": "com.github.uiautomator",
+   "label": "",
+   "resource_id": "android:id/input_method_nav_center_group",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    445,
+    2274,
+    634,
+    2400
+   ]
+  }
+ ],
+ "password_text_unmasked": false,
+ "numbered": [
+  "1: Button 'Navigate up'",
+  "2: Text 'Log in'",
+  "5: Toggle 'Show password'",
+  "6: Button 'Log in'",
+  "7: Text \"Don't have an account?\"",
+  "8: Button 'Join Wikipedia'",
+  "9: Button 'Forgot your password?'",
+  "10: Text '\u2022'",
+  "11: Button 'Privacy policy'"
+ ]
+}

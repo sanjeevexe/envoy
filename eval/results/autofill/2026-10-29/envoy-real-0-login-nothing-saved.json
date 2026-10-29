@@ -1,0 +1,62 @@
+{
+ "label": "envoy-real-0-login-nothing-saved",
+ "time": "2026-10-29 12:52:34",
+ "package": "org.wikipedia",
+ "activity": "org.wikipedia.login.LoginActivity",
+ "secure": false,
+ "has_password_field": true,
+ "fields": [
+  {
+   "resource_id": "",
+   "hint": "Username",
+   "password": false,
+   "focused": false,
+   "chars": 0,
+   "masked": false,
+   "package": "org.wikipedia",
+   "bounds": "[42,338][1038,484]"
+  },
+  {
+   "resource_id": "",
+   "hint": "Password",
+   "password": true,
+   "focused": false,
+   "chars": 0,
+   "masked": false,
+   "package": "org.wikipedia",
+   "bounds": "[42,505][1038,651]"
+  }
+ ],
+ "windows": [
+  "ScreenDecorOverlayBottom",
+  "ScreenDecorOverlay",
+  "EdgeBackGestureHandler0",
+  "Taskbar",
+  "NotificationShade",
+  "StatusBar",
+  "ShellDropTarget",
+  "InputMethod",
+  "org.wikipedia/org.wikipedia.login.LoginActivity",
+  "org.wikipedia/org.wikipedia.DefaultIcon",
+  "com.android.vending/com.google.android.finsky.transparentmainactivity.TransparentMainActivityPrivate",
+  "com.android.vending/com.google.android.finsky.activities.MainActivityPrivate",
+  "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+  "com.android.systemui.wallpapers.ImageWallpaper"
+ ],
+ "other_packages": [
+  "com.android.systemui"
+ ],
+ "not_the_app": [],
+ "password_text_unmasked": false,
+ "numbered": [
+  "1: Button 'Navigate up'",
+  "2: Text 'Log in'",
+  "5: Toggle 'Show password'",
+  "6: Button 'Log in'",
+  "7: Text \"Don't have an account?\"",
+  "8: Button 'Join Wikipedia'",
+  "9: Button 'Forgot your password?'",
+  "10: Text '\u2022'",
+  "11: Button 'Privacy policy'"
+ ]
+}

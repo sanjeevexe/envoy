@@ -1,0 +1,185 @@
+{
+ "label": "envoy-real-3-focused-saved",
+ "time": "2026-10-29 13:04:55",
+ "package": "android",
+ "activity": "",
+ "secure": false,
+ "has_password_field": false,
+ "fields": [],
+ "windows": [
+  "ScreenDecorOverlayBottom",
+  "ScreenDecorOverlay",
+  "EdgeBackGestureHandler0",
+  "Taskbar",
+  "NotificationShade",
+  "StatusBar",
+  "android",
+  "ShellDropTarget",
+  "InputMethod",
+  "org.wikipedia/org.wikipedia.login.LoginActivity",
+  "org.wikipedia/org.wikipedia.DefaultIcon",
+  "com.android.vending/com.google.android.finsky.transparentmainactivity.TransparentMainActivityPrivate",
+  "com.android.vending/com.google.android.finsky.activities.MainActivityPrivate",
+  "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+  "com.android.systemui.wallpapers.ImageWallpaper"
+ ],
+ "other_packages": [
+  "com.android.systemui",
+  "com.google.android.gms"
+ ],
+ "not_the_app": [
+  {
+   "package": "com.google.android.gms",
+   "label": "",
+   "resource_id": "com.google.android.gms:id/title",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    210,
+    1528,
+    870,
+    1661
+   ]
+  },
+  {
+   "package": "com.google.android.gms",
+   "label": "Wikipedia \u00b7 Envoytest \u00b7 \u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022",
+   "resource_id": "android:id/content",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    63,
+    1724,
+    1017,
+    1902
+   ]
+  },
+  {
+   "package": "com.google.android.gms",
+   "label": "",
+   "resource_id": "android:id/icon1",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    105,
+    1771,
+    189,
+    1855
+   ]
+  },
+  {
+   "package": "com.google.android.gms",
+   "label": "Envoytest",
+   "resource_id": "android:id/primary",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    189,
+    1745,
+    392,
+    1817
+   ]
+  },
+  {
+   "package": "com.google.android.gms",
+   "label": "",
+   "resource_id": "android:id/text1",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    189,
+    1745,
+    392,
+    1817
+   ]
+  },
+  {
+   "package": "com.google.android.gms",
+   "label": "",
+   "resource_id": "android:id/text2",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    189,
+    1817,
+    319,
+    1881
+   ]
+  },
+  {
+   "package": "com.google.android.gms",
+   "label": "Wikipedia \u00b7 envoytest \u00b7 \u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022",
+   "resource_id": "android:id/content",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    63,
+    1902,
+    1017,
+    2080
+   ]
+  },
+  {
+   "package": "com.google.android.gms",
+   "label": "",
+   "resource_id": "android:id/icon1",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    105,
+    1949,
+    189,
+    2033
+   ]
+  },
+  {
+   "package": "com.google.android.gms",
+   "label": "envoytest",
+   "resource_id": "android:id/primary",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    189,
+    1923,
+    391,
+    1995
+   ]
+  },
+  {
+   "package": "com.google.android.gms",
+   "label": "",
+   "resource_id": "android:id/text1",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    189,
+    1923,
+    391,
+    1995
+   ]
+  },
+  {
+   "package": "com.google.android.gms",
+   "label": "",
+   "resource_id": "android:id/text2",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    189,
+    1995,
+    319,
+    2059
+   ]
+  }
+ ],
+ "password_text_unmasked": false,
+ "numbered": [
+  "1: Text 'Use your saved password for Wikipedia?'",
+  "2: Text 'Wikipedia \u00b7 Envoytest \u00b7 \u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022'",
+  "3: Text 'Wikipedia \u00b7 Envoytest \u00b7 \u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022'",
+  "4: Text 'Envoytest'",
+  "5: Text 'Wikipedia \u00b7 envoytest \u00b7 \u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022'",
+  "6: Text 'envoytest'",
+  "7: Button 'No thanks'"
+ ]
+}

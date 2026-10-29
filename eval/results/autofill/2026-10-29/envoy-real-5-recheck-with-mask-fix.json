@@ -1,0 +1,14 @@
+{
+ "time": "2026-10-29, after the saved-login tap, password field filled (8 chars)",
+ "code": "main beeeb5b (devices/screen.py mask_passwords)",
+ "raw uiautomator2 dump holds the password in plain text": true,
+ "after Envoy's screen layer (build_state)": {
+  "password field text": "••••••••",
+  "password field label": "Password: ••••••••",
+  "password in compact": false,
+  "password in tree_json": false,
+  "password in raw_xml": false,
+  "password in any element's text, label or description": false
+ },
+ "compact lines": ["[3] EditText \"Username: Envoytest\" (focused)", "[4] EditText \"Password: ••••••••\" (password)"]
+}
