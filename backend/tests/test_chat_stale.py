@@ -62,7 +62,7 @@ def ask(age_s: float, up: bool):
 def test_an_old_gate_is_checked_in_the_app_first():
     out, runner = ask(3 * 3600, up=True)
     assert out["kind"] == "task" and runner.started == [GOAL]
-    assert "may have changed" in out["reply"] and "B9" in out["reply"]
+    assert "may be out of date" in out["reply"] and "B9" in out["reply"]
 
 
 def test_with_no_phone_memory_answers_and_says_how_old():
