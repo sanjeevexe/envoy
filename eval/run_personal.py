@@ -4,6 +4,7 @@
   META_DAILY_COST_CAP_USD=12 uv run --project backend python eval/run_personal.py --label run1 --budget 12
   ... --tasks M1,S1 --resume                   # some tasks; --resume keeps graded tasks from an earlier run of this label
   ... --profile spark --notes off --label run2  # the before/after pair
+  ... --notes-from $TMPDIR/notes-real.db,$TMPDIR/notes-skylark.db   # run 1 starts with the notes Envoy wrote in 2b's warm-ups
 
 An API copy runs in this process on 127.0.0.1:8731 (or --port) with everything in --data: its own tasks, session token,
 memory (the benchmark's seeded test data, never data/memory.db) and a routine library (SkyLark's routines and the
@@ -221,6 +222,26 @@ def summarize_costs(entries: list[dict[str, Any]]) -> dict[str, Any]:
 
 def phone_calls(entries: list[dict[str, Any]], task_id: str) -> int:
     return sum(1 for e in entries if e["job"] in PHONE_JOBS and str(e.get("task_id") or "").startswith(task_id))
+
+
+def copy_notes(src: Path, dst: Any) -> dict[str, int]:
+    """App notes Envoy wrote in earlier tasks (step 2b's warm-ups, a scratch database) into the benchmark's memory, each
+    with its sightings so it keeps its rank. A note already here is skipped, so a resumed run doesn't copy it twice.
+    Returns the notes added per app."""
+    from memory.app_notes import AppNotes
+    from memory.store import MemoryStore
+    notes = AppNotes(dst)
+    have = {(n.app, n.text) for n in notes.list(include_retired=True)}
+    added: dict[str, int] = {}
+    for n in AppNotes(MemoryStore(src)).list():
+        if (n.app, n.text) in have:
+            continue
+        refs = [{k: v for k, v in s.items() if k not in ("source", "observed_at", "app")} for s in n.sources] or [{}]
+        nid = notes.add(n.app, n.text, refs[0])
+        for ref in refs[1:]:
+            notes.confirm(nid, ref)
+        added[n.app] = added.get(n.app, 0) + 1
+    return added
 
 
 # ---- the driver ----------------------------------------------------------------------------------------------
@@ -464,6 +485,9 @@ def report(results: dict[str, dict[str, Any]], tasks: list[dict[str, Any]], meta
              "We wrote these tasks ourselves, for our own product, so this is **not a neutral benchmark**. Several are meant to be hard.", "",
              f"- Date: {meta['date']}; branch `{meta['branch']}` at `{meta['commit']}`; profile `{meta['profile']}`; app notes {meta['notes']}",
              f"- Phones: {', '.join(meta['phones']) or 'none'}; {meta.get('phones_note', '')}",
+             *([f"- App notes at the start: {sum(meta['notes_seeded'].values())}, written by Envoy itself in step 2b's warm-up tasks "
+                f"(different tasks in the same apps): " + ", ".join(f"{a} {n}" for a, n in sorted(meta['notes_seeded'].items()))]
+               if meta.get("notes_seeded") else []),
              f"- Model calls: {meta['calls']}, ${meta['usd']:.3f} (this checkout's cost log, standard tier for real apps)", ""]
     graded = [results[t["id"]] for t in tasks if t["id"] in results and results[t["id"]].get("passed") is not None]
     lines += [f"**Score: {sum(1 for r in graded if r['passed'])}/{len(graded)} graded** "
@@ -529,6 +553,12 @@ async def main_async(args: argparse.Namespace) -> int:
     while not server.started:
         await asyncio.sleep(0.1)
     print(f"API copy on http://127.0.0.1:{args.port}; results in {out}", flush=True)
+    seeded: dict[str, int] = dict(prev.get("meta", {}).get("notes_seeded") or {})
+    for src in args.notes_from:
+        for app_name, n in copy_notes(Path(src).expanduser(), ctx.memory).items():
+            seeded[app_name] = seeded.get(app_name, 0) + n
+    if args.notes_from:
+        print(f"app notes copied in: {seeded}", flush=True)
     bench = Bench(ctx, out, facts)
     decider = asyncio.create_task(bench.decide_approvals())
     phones = [p for p in SERIALS if phone_up(p)]
@@ -550,7 +580,7 @@ async def main_async(args: argparse.Namespace) -> int:
     def save() -> None:
         allc = totals()
         meta = {"label": args.label, "date": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"), "started": prev.get("meta", {}).get("started", t_all),
-                "profile": active_profile(), "notes": os.environ.get("ENVOY_APP_NOTES", "on"), "phones": phones, "phones_note": args.phones_note,
+                "profile": active_profile(), "notes": os.environ.get("ENVOY_APP_NOTES", "on"), "notes_seeded": seeded, "phones": phones, "phones_note": args.phones_note,
                 "calls": allc["calls"], "usd": allc["usd"], "by_model": allc["by_model"],
                 "branch": subprocess.run(["git", "branch", "--show-current"], capture_output=True, text=True, cwd=REPO).stdout.strip(),
                 "commit": subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True, cwd=REPO).stdout.strip()}
@@ -611,8 +641,10 @@ def main() -> int:
     ap.add_argument("--profile", choices=["spark", "hybrid", "wonder"])
     ap.add_argument("--notes", choices=["on", "off"])
     ap.add_argument("--phones-note", default="")
+    ap.add_argument("--notes-from", default="", help="comma-separated scratch databases whose app notes the run starts with (2b's)")
     args = ap.parse_args()
     args.tasks = [t.strip() for t in args.tasks.split(",") if t.strip()]
+    args.notes_from = [p.strip() for p in args.notes_from.split(",") if p.strip()]
     if args.profile:
         os.environ["ENVOY_MODEL_PROFILE"] = args.profile
     if args.notes:

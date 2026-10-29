@@ -105,3 +105,20 @@ def test_phone_calls_count_only_phone_work_of_that_task():
     entries = [{"job": "step", "task_id": "task-1-r1"}, {"job": "match", "task_id": "task-1-match"}, {"job": "extract", "task_id": "task-1"},
                {"job": "repair", "task_id": "task-1-r1"}, {"job": "step", "task_id": "task-2-r1"}]
     assert rp.phone_calls(entries, "task-1") == 2
+
+
+def test_notes_from_an_earlier_scratch_database_keep_their_rank_and_copy_once(tmp_path):
+    from memory.app_notes import AppNotes
+    src_db = tmp_path / "notes-real.db"
+    src = AppNotes(MemoryStore(src_db))
+    a = src.add("com.dd.doordash", "Search results load below the search bar after a short wait", {"task": "warmup-1", "step": 3})
+    src.confirm(a, {"task": "warmup-2", "step": 2})
+    src.confirm(a, {"task": "warmup-3", "step": 4})
+    src.add("com.starbucks.mobilecard", "Calories are listed under Nutrition on a drink's page", {"task": "warmup-1", "step": 5})
+    gone = src.add("com.dd.doordash", "A promo sheet covers the home screen", {"task": "warmup-1", "step": 1})
+    src.retire(gone, "not seen again")
+    dst = MemoryStore(":memory:")
+    assert rp.copy_notes(src_db, dst) == {"com.dd.doordash": 1, "com.starbucks.mobilecard": 1}
+    copied = AppNotes(dst).list("com.dd.doordash")
+    assert [n.confirmations for n in copied] == [3] and copied[0].sources[0]["task"] == "warmup-1"
+    assert rp.copy_notes(src_db, dst) == {}  # a resumed run doesn't copy them twice

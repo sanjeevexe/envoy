@@ -125,6 +125,10 @@ user's own words asked for runs without asking ("Check me in" is the permission 
 the mode to "always ask", and P2 tests the rule that holds in every mode: money is always asked about.
 | P4 | proactive | SkyLark | A watched gate changes once → exactly one alert |
 
+Run 1 (notes on) starts with the notes Envoy wrote itself in 2b's warm-up tasks (`--notes-from`, different tasks in the
+same apps), as notes build up in use; starting from an empty store, almost no note would be written before the run ends,
+and the pair would compare nothing. Run 2 (notes off) reads none. The report says which notes run 1 started with.
+
 Grading is in code (normalized answer match, a citation present, SkyLark state, approvals asked, push counts, phone-work
 model calls per run). The driver runs each task through chat on an API copy (port 8731, its own data folder and memory),
 seeds memory and SkyLark per task, is resumable, marks tasks whose phone isn't available as skipped, and stops at the
