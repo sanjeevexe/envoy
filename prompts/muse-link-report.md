@@ -6,8 +6,8 @@ Session muse-link, Oct 29. Details and the user's Muse checklist: `docs/muse-lin
 
 | Stage | Branch | Tip | State |
 | --- | --- | --- | --- |
-| 1: `push_file`, the outbox, MCP `send_to_phone` and `phone_updates`, `heads_up` | `claude/jolly-khayyam-b99b59` = the coordinator's `coord/muse-link-s1` | `d3df6aa` (on main `b91243f`) | Staged by the coordinator (428 tests, web build). The `envoy-test` re-check passed, and that re-check is what merges it |
-| 2: handoff offers, MCP `create_trigger`, the web panel, offer "Before I start" lines, download pinning | `muse-link-s2-rebased` | `1d2d6c7` (on `d3df6aa`) | 437 tests, web build passes. Replayed with no conflicts after dropping the dev-only merge of proactive's branch |
+| 1: `push_file`, the outbox, MCP `send_to_phone` and `phone_updates`, `heads_up` | `coord/muse-link-s1` | `fb3d926` | **In main** (fast-forward; 445 tests, web build). The `envoy-test` re-check passed first |
+| 2: handoff offers, MCP `create_trigger`, the web panel, offer "Before I start" lines, download pinning | `muse-link-s2-main` | on main `fb3d926` | 455 tests, web build. Rebased over proactive's stage 2 (Repeats, weekly triggers): `app.py` keeps both builder lines; weekly triggers are described in `create_trigger`'s offer |
 
 ## What was built
 
