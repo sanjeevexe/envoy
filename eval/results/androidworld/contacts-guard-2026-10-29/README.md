@@ -69,4 +69,24 @@ Plan, then step 1 (each variant's own plan), opening filters:
 - **The minimal "…, even when the plan says to view the full or complete list"** didn't help under a full plan (9/30
   against 7/30).
 
-Cost at standard prices: $8.88 for all of this.
+## Where "the full list" comes from (`plan_attr.py`, 40 plans each)
+
+The planner alone, on the loop run's first screen, counting plans that ask for a full list or for filters:
+
+| Planner | Full/filter plans |
+| --- | ---: |
+| `main` `53ab459`'s own prompt, schema and inputs | 1/40 |
+| `736a6e4` | 7/40 |
+| `736a6e4` without the APPS input | 9/40 |
+| `736a6e4` without the TODAY input | 5/40 |
+| `736a6e4` without either input | 4/40 |
+| `736a6e4` without f93ce08's line | 6/40 |
+| `main`'s prompt text, `736a6e4`'s inputs | 4/40 |
+| `main`'s prompt text and inputs, `736a6e4`'s schema and adapter | 3/40 |
+
+- No single change from the 13 or the follow-ups explains it. Removing any one leaves 4 to 9 in 40, against `main`'s 1.
+- The rise is spread across the planner's inputs, prompt and schema, as the wrong-route rise f93ce08 fixed was.
+- So the targeted line is the fix, not reverting one change. In all runs, `736a6e4` makes such a plan 40 times in 160.
+- This attribution cost $0.72.
+
+Cost at standard prices: $8.88 for the replays above, plus $0.72 for this attribution.

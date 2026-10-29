@@ -1,0 +1,2978 @@
+[
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.00251025
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0017563499999999998
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 1018,
+  "cost": 0.00236575
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the Contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.002387
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the contact count or empty state"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0017606
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 1018,
+  "cost": 0.002914
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Determine the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0024235999999999997
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0018625999999999998
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0017350999999999998
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to determine total count"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.00210485
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "Read the contacts list to determine count"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0018371
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "Read the contact count or empty state"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0019816
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.00196885
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0022706
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "Read the contacts list to determine the count"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0017563499999999998
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.00270835
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open Contacts and show the full contact list",
+   "Read the displayed contact count"
+  ],
+  "full": true,
+  "tokens": 1018,
+  "cost": 0.00247035
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0016160999999999999
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0017691
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0017946
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0017266
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to read the contact count"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0021473499999999997
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": true,
+  "tokens": 1018,
+  "cost": 0.0021898499999999997
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open Contacts app",
+   "Read number of contacts from contacts list"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0024873499999999997
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app to the Contacts tab",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0017946
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to determine the total count"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0019390999999999998
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0019050999999999998
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open Contacts app to the contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.00205385
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to read the total count"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.00218135
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.00201135
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0025171
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open Contacts app to the Contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0018498499999999999
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0019943499999999998
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to determine the count"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.00233435
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 1018,
+  "cost": 0.00207085
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.00215585
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 1018,
+  "cost": 0.0026106
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.00235135
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 1018,
+  "cost": 0.0020751
+ },
+ {
+  "cond": "aw (736a6e4)",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to count contacts"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.00198585
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open Contacts list in Contacts app",
+   "Read empty state or count contacts shown"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.003046
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open Contacts app to the Contacts list",
+   "View the full contacts list",
+   "Read the number of contacts"
+  ],
+  "full": true,
+  "tokens": 923,
+  "cost": 0.00251365
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 923,
+  "cost": 0.00224165
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to read the contact count"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.0024159
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.00201215
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open Contacts list",
+   "Read number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.0021014000000000002
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 923,
+  "cost": 0.0022884
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.00255615
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.0017614
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.00270065
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "Read the contacts count shown on screen"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.00240315
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to read the count"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.00213115
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Count the contacts or note the empty state"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.00208865
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to count contacts"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.0026964000000000003
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.0022926500000000002
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open Contacts and view contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.0024329
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "Look at the contacts list to determine the total count"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.00191015
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to determine the count"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.00248815
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.0026284
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.00211415
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the number of contacts"
+  ],
+  "full": true,
+  "tokens": 923,
+  "cost": 0.00343165
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.0022119
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "Stay on the Contacts tab to show the full list",
+   "Read the total number of contacts shown"
+  ],
+  "full": true,
+  "tokens": 923,
+  "cost": 0.0022501500000000002
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "Show the Contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.0024924
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.0023351500000000002
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.0024201500000000003
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 923,
+  "cost": 0.0021226500000000002
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.0024074
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "Stay on the Contacts tab to show all contacts",
+   "Read the contact count or empty state"
+  ],
+  "full": true,
+  "tokens": 923,
+  "cost": 0.0022544
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.00223315
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.0024924
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to determine the total count"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.0018166500000000002
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.0022884
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the Contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.0019016500000000002
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open Contacts app to the Contacts list",
+   "Read the contacts count or empty state"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.0023776500000000002
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open Contacts app to Contacts tab",
+   "Read number of contacts from list or empty state"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.0019441500000000002
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open Contacts app to the Contacts tab",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.00230965
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 923,
+  "cost": 0.0020376500000000002
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Open the Contacts app",
+   "View the full Contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": true,
+  "tokens": 923,
+  "cost": 0.0022799
+ },
+ {
+  "cond": "aw, no APPS input",
+  "plan": [
+   "Show the Contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 923,
+  "cost": 0.0030576500000000003
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the Contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.00256975
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the main contacts list",
+   "Read the contact count or empty state"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.0019269
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.0021096500000000002
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.0021139
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open Contacts list",
+   "Read contact count or list"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.0017399000000000002
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 1001,
+  "cost": 0.0021946500000000002
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the Contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.00243265
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open Contacts and view the contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.0017229
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.00203315
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "View Contacts list in Contacts app",
+   "Read number of contacts from list or empty state"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.0022924
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open Contacts and show the full contacts list",
+   "Read the contact count from the list"
+  ],
+  "full": true,
+  "tokens": 1001,
+  "cost": 0.00264515
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Confirm Contacts list is shown",
+   "Read the number of contacts from the list or empty state"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.00233065
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open Contacts list",
+   "Read total number of contacts from list or empty state"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.0020671500000000002
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.0015954
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.00222865
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.00231365
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open Contacts app to the Contacts list",
+   "Read the displayed contacts count or empty state"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.0021096500000000002
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the Contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.0020246500000000002
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.00201615
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open Contacts to the contacts list",
+   "Read the displayed contact count or empty state"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.0018589000000000001
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 1001,
+  "cost": 0.0022329
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app contact list",
+   "Read the total contact count or empty state"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.0018079
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read how many contacts are shown"
+  ],
+  "full": true,
+  "tokens": 1001,
+  "cost": 0.00233065
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.0021819
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.00207565
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.0022414
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open Contacts app to the Contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.0019609000000000002
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.00254315
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.0022584000000000003
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.0021521500000000002
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to count entries"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.00196515
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.0020799
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.00210115
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.00197365
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to determine the count"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.0025474
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open Contacts to the main Contacts list",
+   "Check the list status to determine number of contacts"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.00238165
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts list",
+   "Read the contacts count or empty state"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.0021904
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.0028321500000000003
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": true,
+  "tokens": 1001,
+  "cost": 0.0021224
+ },
+ {
+  "cond": "aw, no TODAY input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1001,
+  "cost": 0.00211815
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "View Contacts list",
+   "Read total number of contacts"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.002995
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to determine the count"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0027176500000000003
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open Contacts list view",
+   "Read total contacts count from screen"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0028494
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 906,
+  "cost": 0.0024626500000000003
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open Contacts app to the Contacts tab",
+   "Read the contacts list or empty state to determine total count"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.00270915
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open the Contacts list",
+   "Read the total number of contacts from the list or empty state"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0021184
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the contact count"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.00224165
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0020334
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Stay on the Contacts list in the Contacts app",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0022119
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.00236065
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open Contacts app to the main Contacts list",
+   "Read the displayed contact count or empty state"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0020674
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0016594000000000001
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0019824
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "View Contacts list",
+   "Read total number of contacts from empty state or list count"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0022799
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open Contacts app to the Contacts list",
+   "Read the contacts list or empty state to determine count"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0020844
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0021524
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0024669
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the number of contacts"
+  ],
+  "full": true,
+  "tokens": 906,
+  "cost": 0.0019059
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "View Contacts list",
+   "Read total number of contacts"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0018931500000000001
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open Contacts list",
+   "Read total number of contacts"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.00253065
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open Contacts app to Contacts tab",
+   "Read contacts list status to get count"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0022501500000000002
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.00251365
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open Contacts list",
+   "Read number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0027049
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open the Contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0021439000000000002
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the number of contacts"
+  ],
+  "full": true,
+  "tokens": 906,
+  "cost": 0.0021014000000000002
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": true,
+  "tokens": 906,
+  "cost": 0.0028069
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open Contacts app to the Contacts list",
+   "Read the contact count from the list or empty state"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0020249
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0018719000000000001
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open Contacts list tab",
+   "Read contact count or empty state"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0020249
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open the Contacts list in the Contacts app",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0024754
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "View the Contacts list",
+   "Determine the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0021184
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open Contacts app",
+   "View contacts list",
+   "Read number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0021226500000000002
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open the Contacts app",
+   "Stay on the Contacts tab",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.00319365
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.00230965
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0021779
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0023054
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open Contacts list",
+   "Read number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0020376500000000002
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open Contacts app to the Contacts tab",
+   "Read the total number of contacts from the list"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.00256465
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.0022501500000000002
+ },
+ {
+  "cond": "aw, neither input",
+  "plan": [
+   "Open Contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 906,
+  "cost": 0.00227565
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.00273985
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.00215115
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 973,
+  "cost": 0.00210865
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.00232965
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.00171765
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.0017304
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.0022319
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open Contacts and show main contacts list",
+   "Read the contact count or empty state"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.0019089
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to check count"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.0019344000000000002
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.0021554
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open Contacts app to contacts list",
+   "Read number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.0020364000000000003
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.0018069000000000002
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the contact count"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.00215965
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.00172615
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.00202365
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.0020151500000000003
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.00193865
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.0020789000000000003
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.0025719000000000002
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.00176865
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.0018281500000000002
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.0017984000000000001
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.0021426500000000003
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 973,
+  "cost": 0.00243165
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the number of contacts"
+  ],
+  "full": true,
+  "tokens": 973,
+  "cost": 0.00220215
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.0021639000000000003
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.0019514
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.002861
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.00215965
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Count the contacts shown"
+  ],
+  "full": true,
+  "tokens": 973,
+  "cost": 0.00198115
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 973,
+  "cost": 0.00193015
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.0018494000000000002
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to determine total count"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.00192165
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.0020789000000000003
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.0026994000000000002
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.00211715
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": true,
+  "tokens": 973,
+  "cost": 0.00232115
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.00196415
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "Go to the Contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.00236365
+ },
+ {
+  "cond": "aw, no f93ce08 line",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the contact count or empty state"
+  ],
+  "full": false,
+  "tokens": 973,
+  "cost": 0.00258465
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.00258865
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.00291165
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.0020079
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.00153615
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.00253915
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.0022374
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.0020249
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open Contacts app to contacts list",
+   "Read number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.00251365
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "Show the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 974,
+  "cost": 0.00315115
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.0021184
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.00209715
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the main contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.00196115
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.0022544
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.0018549
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.0023139000000000002
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.0020929
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.0024074
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the number of contacts"
+  ],
+  "full": true,
+  "tokens": 974,
+  "cost": 0.00213115
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.00235215
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.00224165
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open Contacts app",
+   "View contacts list",
+   "Read number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.0021184
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to see the total count"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.00249665
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.00153615
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.00227565
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.00226715
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.0023776500000000002
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open Contacts app",
+   "View contacts list to determine count"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.0022799
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open Contacts app",
+   "View contacts list",
+   "Read number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.0020759
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.00230115
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the Contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.00251365
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.0021524
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the number of contacts"
+  ],
+  "full": true,
+  "tokens": 974,
+  "cost": 0.0019144000000000001
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.0030959
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.00210565
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open Contacts app to Contacts tab",
+   "View contacts list or empty state",
+   "Read total number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.00287065
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 974,
+  "cost": 0.0024669
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.00264965
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.0023564000000000002
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.0022714000000000002
+ },
+ {
+  "cond": "main's prompt, aw inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to determine the count"
+  ],
+  "full": false,
+  "tokens": 974,
+  "cost": 0.00217365
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts list",
+   "Read contact count or empty state"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0021840500000000003
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts list",
+   "Read contact count or empty state"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0022892
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Stay on the Contacts list tab",
+   "Read the number of contacts from the list or empty state"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0025739499999999998
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "View Contacts list",
+   "Read number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.00208095
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts list",
+   "Read contact count or empty state"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0020257
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts app",
+   "View full contacts list",
+   "Count total contacts"
+  ],
+  "full": true,
+  "tokens": 862,
+  "cost": 0.0030924499999999996
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0023147
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "View Contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.00219995
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts app to Contacts tab",
+   "Read contacts list count"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.00202145
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0025272
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts app",
+   "View contacts list",
+   "Read number of contacts"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.00163045
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts to the main Contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0019364500000000002
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Confirm Contacts tab is selected in Contacts app",
+   "Read contacts list or empty state to determine count"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.00256545
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts app to the Contacts list",
+   "Read the contact list status or count"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0023019499999999997
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts list",
+   "Read contact count from empty state"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0033006999999999997
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to determine the count"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0022297
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts tab to view contact list",
+   "Read empty state or contact list to determine total count"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.00280345
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Stay in Contacts app on Contacts tab",
+   "Read contact list count or empty state"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0020937
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "View Contacts list in Contacts app",
+   "Read displayed contact count"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0023572
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts app",
+   "View contacts list",
+   "Read total number of contacts"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.00232745
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts list",
+   "Read contact count or empty state"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.00191945
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts list",
+   "Read contact count from list or empty state"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0027397
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0023912
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts list",
+   "Read number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0020002
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts app",
+   "View Contacts list",
+   "Read contact count or empty state"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0025272
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts app to Contacts list",
+   "Check contacts list for count or empty state",
+   "Read number of contacts"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0026631999999999997
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "View Contacts list in Contacts app",
+   "Read contact count or empty state to determine total"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0018812
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 862,
+  "cost": 0.0029267
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "View Contacts list in Contacts app",
+   "Check list contents or empty state message",
+   "Report total number of contacts"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.00263345
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts app",
+   "View contacts list",
+   "Read number of contacts"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0018217
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts app to the Contacts tab",
+   "Read the contacts list to determine total count"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0025017
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts list",
+   "Read total contacts count from screen"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.00216595
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts tab to show full contact list",
+   "Read total number of contacts from list or empty state"
+  ],
+  "full": true,
+  "tokens": 862,
+  "cost": 0.0017197
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the contacts count"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0022042
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "View Contacts list",
+   "Read contacts count or empty state"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0019747000000000002
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to determine total count"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0020427
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts tab in Contacts app",
+   "Read displayed contact count or list status"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0019662
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts app",
+   "View contacts list",
+   "Read number of contacts"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0020087
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts app to the Contacts list",
+   "Read the contact count or empty state"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.0028842
+ },
+ {
+  "cond": "main's prompt and inputs",
+  "plan": [
+   "Open Contacts list in Contacts app",
+   "Read contact count or empty state message"
+  ],
+  "full": false,
+  "tokens": 862,
+  "cost": 0.00207245
+ }
+]
