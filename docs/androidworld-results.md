@@ -220,7 +220,26 @@ The failures are concentrated in the tags above and in apps where every screen i
 
 **Two outages during the run.** From 10:49 to 11:12 this Mac couldn't reach Meta's API, and 98 episodes in a row failed in seconds. A second outage from about 11:56 cost one more. All 99 were set aside with the reason (`eval/results/androidworld/final-standard/invalidated/README.md`) and rerun into the same stage. The runner now waits out an outage instead of burning through tasks. None of the 116 counted episodes had an API error.
 
-<!-- ROUTINES -->
+## Routines across seeds
+
+AndroidWorld randomizes each task's parameters by seed, so a routine compiled from a seed-30 run can be replayed on other instances of the same task: other names, dates, amounts, files. That is the question Envoy's routines are built for. The library is separate from Envoy's own (`eval/results/androidworld/routines/`, never `data/routines/`), and every replay is scored by AndroidWorld.
+
+**Compiling.** Every solved seed-30 run was compiled with Envoy's own compiler (`compile_trace`, Muse Wonder), as `main` compiles any run: 21 from the standard baseline and 38 more from the final run. All 59 compiled, for $3.41, in a median of 15.6 s each. They have a median of 6 steps (at most 37). The compiler dropped 147 of the runs' 649 steps (looks, dead taps, back-tracks). 36 routines take inputs and 42 return outputs. 25 carry compiler warnings, mostly an input the run never used, or an output not on the run's final screen.
+
+**Same-seed replay, no repair, no agent** (stage `routines-verify`). Each routine's own task on seed 30, through AndroidWorld's runner. The request is matched against all 59 routines the way Envoy matches any request. Only a routine that does the task on its own is kept. ROUTINES_VERIFY_RESULT When a routine passed, it took a median of 7.9 s with the match (4.7 s for the steps), 1 model call and $0.0025, against the agent's 22 s, 9 calls and $0.015 on the same tasks.
+
+Why the others failed, on the very screens they were compiled from. Four of these are general problems in `main`'s routine path, not AndroidWorld quirks:
+- **Popup menus read as another app.** When an app's own popup menu has focus, `dumpsys window` reports `PopupWindow:51b096d`, and Envoy's focus parser (`backend/devices/android.py:32`) takes that as the package. Every "app in front" check on a step taken from a menu fails: "before-checks failed: app in front is PopupWindow:30f4ef5" (Broccoli twice, Retro Music).
+- **A typed field is found again by its empty-state label.** Contacts adds a new empty "Phone" row once a number is typed. The after-check `field_equals {text: Phone}` finds the new empty field and reports "field holds ''" for a step that worked. The agent's own trace shows both fields: `[12] EditText "Phone: +13920741751"` and `[17] EditText "Phone" (empty)`.
+- **Identical buttons in a list.** Per-row delete icons tie: "no match (best 1.00 … runner-up 0.98)". The locator needs to anchor them to their row's text.
+- **Inputs the matcher can't fill.** "Tomorrow" or "in two weeks" needs the phone's date, which the matcher doesn't have (5 calendar tasks stop as `needs_user` with `event_day` missing). Expenses that are in a picture on the phone are asked of the user.
+- **Eight routines finished every step and check, and AndroidWorld still scored 0.**
+  - Two questions came back with no answer. The compiler had dropped the output as "not on the final screen", and the routine had no date input, so it answered nothing (SimpleCalendarAnyEventsOnDate, SimpleCalendarEventsOnDate).
+  - One answered with the screen's text instead of what it means: `Convert to note` for "is this note a to-do?", where AndroidWorld wants True.
+  - Two named the wrong event (SimpleCalendarEventOnDateAtTime, SimpleCalendarNextEvent). These routines take no date or time input, so they read whatever the calendar showed.
+  - Three passed their own checks without the task being done: the Markor edit, maximum brightness (it reported `0.0`), and the note-and-SMS task. Their checks were too weak to notice.
+
+ROUTINES_SEEDS
 
 ## Against the leaderboard
 
