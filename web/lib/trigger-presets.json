@@ -1,0 +1,45 @@
+[
+  {
+    "label": "Ask me to check in when check-in opens",
+    "body": {
+      "kind": "before_fact", "name": "Ask me to check in when check-in opens",
+      "spec": { "entity_type": "Flight", "date_attr": "date", "time_attr": "depart_time", "minutes_before": 1440 },
+      "action": { "goal": "Check me in for my flight {number} to {trip.destination}", "routine": "skylark_check_in_flight",
+                  "inputs_from": { "trip_city": "trip.destination" }, "ask": true, "offer_title": "Check in for {number}?" }
+    }
+  },
+  {
+    "label": "When SkyLark emails that check-in is open, ask me",
+    "body": {
+      "kind": "email", "name": "SkyLark check-in is open",
+      "spec": { "sender_contains": "reservations@skylark", "subject_contains": "check-in" },
+      "action": { "goal": "Check me in for my flight {flight.number} to {trip.destination}", "routine": "skylark_check_in_flight",
+                  "inputs_from": { "trip_city": "Trip.destination" }, "ask": true, "offer_title": "Check in for {flight.number}?" }
+    }
+  },
+  {
+    "label": "Watch my gate every minute and tell me when it changes",
+    "body": { "kind": "watch", "name": "Watch my gate (alerts)", "spec": { "every_minutes": 1, "alert": true },
+              "action": { "routine": "skylark_get_flight_gate", "inputs_from": {} } }
+  },
+  {
+    "label": "When my flight's departure time changes, look up its gate",
+    "body": { "kind": "fact_changed", "name": "Departure changed: look up the gate", "spec": { "entity_type": "Flight", "attribute": "depart_time" },
+              "action": { "routine": "skylark_get_flight_gate", "inputs_from": { "trip_city": "trip.destination" },
+                          "goal": "My flight {flight.number} now leaves at {change.new}: what's its gate?" } }
+  },
+  {
+    "label": "Check in 24 h before every flight",
+    "body": { "kind": "before_fact", "name": "Check in 24 h before every flight", "spec": { "entity_type": "Flight", "minutes_before": 1440 },
+              "action": { "goal": "Check me in for my flight to {trip.destination}" } }
+  },
+  {
+    "label": "Watch my gate every 10 minutes",
+    "body": { "kind": "watch", "name": "Watch my gate", "spec": { "every_minutes": 10 }, "action": { "routine": "skylark_get_flight_gate", "inputs_from": {} } }
+  },
+  {
+    "label": "New SkyLark booking email: look up its gate",
+    "body": { "kind": "email", "name": "New SkyLark booking", "spec": { "sender_contains": "skylark" },
+              "action": { "routine": "skylark_get_flight_gate", "inputs_from": { "trip_city": "Trip.destination" } } }
+  }
+]

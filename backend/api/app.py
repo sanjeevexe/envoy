@@ -48,9 +48,10 @@ from api.crossapp import CrossApp
 from api.devices import DevicePool
 from api.events import EventBus
 from api.live import live_view
+from api.offers import Offers, offers_router
 from api.push import Pusher, VapidKeys
 from api.runner import SHOTS, TaskRunner
-from api.scheduler import Scheduler, check_alert
+from api.scheduler import Scheduler, check_alert, check_ask
 from api.store import API_DIR, REPO, TaskStore, new_id
 from api.voice import voice_session
 
@@ -85,6 +86,7 @@ class Ctx:
     pusher: Any = None
     public: str = ""
     alerts: Any = None
+    offers: Any = None
 
 
 def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, memory: MemoryStore | None = None,
@@ -114,6 +116,8 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     memory.subscribe(alerts.on_memory)
     bus.listeners.append(alerts.on_event)
     ctx.alerts = alerts
+    ctx.offers = Offers(tasks, bus, runner, scheduler)  # "Should I…?" with a one-tap yes (api/offers.py)
+    scheduler.offers = ctx.offers
 
     from mcp_server.server import build_mcp, mcp_app
     from mcp_stub.common import bearer_token
@@ -234,7 +238,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     @app.get("/api/briefing", dependencies=[Depends(session)])
     def briefing() -> dict[str, Any]:
         """Home's briefing: read only, no model call (api/briefing.py)."""
-        return build_briefing(tasks, memory, routines, scheduler, alerts)
+        return build_briefing(tasks, memory, routines, scheduler, alerts, offers=ctx.offers)
 
     @app.post("/api/tasks", dependencies=[Depends(session)])
     async def create_task(body: dict[str, Any] = Body(...)) -> dict[str, Any]:
@@ -701,6 +705,15 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
         trig = tasks.trigger(tid)
         if trig is None:
             raise HTTPException(404, "no such trigger")
+        action = None
+        if "ask" in body or "offer_title" in body:  # ask mode: "Ask me first" or "Just do it"
+            action = {**trig["action"], **{k: body[k] for k in ("ask", "offer_title") if k in body}}
+            if action.get("offer_title") in ("", None):
+                action.pop("offer_title", None)
+            try:
+                check_ask(trig["kind"], action)
+            except ValueError as e:
+                raise HTTPException(400, str(e)) from e
         spec = None
         if "alert" in body or "alert_on" in body:  # only the fields given: turning alerts off doesn't pause the trigger
             spec = {**trig["spec"], **{k: body[k] for k in ("alert", "alert_on") if k in body}}
@@ -714,6 +727,8 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
             tasks.update_trigger(tid, enabled=1 if body.get("enabled") else 0)
         if spec is not None:
             tasks.update_trigger(tid, spec=spec)
+        if action is not None:
+            tasks.update_trigger(tid, action=action)
         return tasks.trigger(tid) or {}
 
     @app.get("/api/alerts", dependencies=[Depends(session)])
@@ -725,6 +740,8 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     def delete_trigger(tid: str) -> dict[str, Any]:
         tasks.delete_trigger(tid)
         return {"deleted": tid}
+
+    app.include_router(offers_router(ctx, session, caller))
 
     # ---- the web app ---------------------------------------------------------------------------
 

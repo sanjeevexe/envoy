@@ -26,6 +26,15 @@ supply typed values: `{trip.destination}` in a goal template, `{change.old}` and
 to `Trip.destination`. They never
 supply the goal or the plan, and values are cut to one short line. Triggered tasks go through the same policy as any
 other: an irreversible step still needs your approval.
+
+**Ask mode** (`action.ask`): a firing raises an offer (api/offers.py, kind `trigger`) instead of starting the task: "Check in
+for SL 482?" with the filled goal on the card, and the task starts only on your yes. Its key is the trigger and the
+occasion (`2026-10-31`, `<flight>@<departure>`, `mail<row>`, `chg<seq>`), never the values, so one "Not now" doesn't
+block the next Friday. The offer's request is the goal's template with every slot left empty: values never put words
+into what the approval rules read. A check-in offer expires at departure.
+
+A trigger can be created switched off (`add(..., enabled=False)`): an AI client's `create_trigger` does that, so nothing
+fires before you say yes.
 """
 
 from __future__ import annotations
@@ -73,6 +82,15 @@ def _clean(v: Any) -> str:
     return re.sub(r"[\r\n\t{}<>]", " ", str(v or "")).strip()[:80]
 
 
+def check_ask(kind: str, action: dict[str, Any]) -> None:
+    """Ask mode's settings: `ask` on or off, `offer_title` a short template ("Check in for {number}?")."""
+    if "ask" in action and not isinstance(action["ask"], bool):
+        raise ValueError("ask is on or off (true or false)")
+    title = action.get("offer_title")
+    if title is not None and not (isinstance(title, str) and 0 < len(title.strip()) <= 120 and "\n" not in title):
+        raise ValueError("offer_title is one short line")
+
+
 def parse_clock(s: str | None) -> tuple[int, int] | None:
     m = re.search(r"(\d{1,2}):(\d{2})\s*([AaPp])?\.?[Mm]?", s or "")
     if not m:
@@ -91,10 +109,12 @@ class Scheduler:
         self._task: asyncio.Task | None = None
         self._scanned: dict[str, int] = {}  # fact_changed trigger → the last memory event seq its check read
         self.memory_db = memory_db_id(memory)
+        self.offers: Any = None  # api/offers.py, set by the app: ask-mode triggers raise offers through it
 
     # ---- creating ------------------------------------------------------------------------------
 
-    def add(self, kind: str, name: str, spec: dict[str, Any], action: dict[str, Any]) -> dict[str, Any]:
+    def add(self, kind: str, name: str, spec: dict[str, Any], action: dict[str, Any], enabled: bool = True) -> dict[str, Any]:
+        """A new trigger. `enabled=False` creates it switched off: nothing fires until it's turned on."""
         if kind not in KINDS:
             raise ValueError(f"unknown trigger kind {kind!r}")
         if not (action.get("goal") or action.get("routine")):
@@ -122,7 +142,13 @@ class Scheduler:
         if kind in CURSORS:
             spec["memory_db"] = self.memory_db  # the database that cursor counts in
         check_alert(spec)
-        return self.store.add_trigger(kind, name, spec, action)
+        check_ask(kind, action)
+        if enabled:
+            return self.store.add_trigger(kind, name, spec, action)
+        with self.store.lock:  # switched off before any tick can see it
+            trig = self.store.add_trigger(kind, name, spec, action)
+            self.store.update_trigger(trig["id"], enabled=0)
+        return self.store.trigger(trig["id"]) or trig
 
     # ---- the loop ------------------------------------------------------------------------------
 
@@ -141,6 +167,8 @@ class Scheduler:
         """Fire every trigger that is due; returns what was started."""
         now = self.clock()
         started = []
+        if self.offers is not None:
+            self.offers.sweep()  # a check-in offer nobody answered expires at departure
         for trig in self.store.triggers():
             if trig["kind"] in CURSORS:
                 self._rebaseline(trig)
@@ -149,11 +177,12 @@ class Scheduler:
                     self._advance(trig["id"], last)  # paused: what changes meanwhile isn't replayed on resume
                 continue
             for key, values in self.due(trig, now):
-                task = self._fire(trig, values)
+                task = self._fire(trig, values, key)
                 fired = (trig["fired"] + [key])[-200:]
                 self.store.update_trigger(trig["id"], last_fired=now, fired=fired)
                 trig["fired"] = fired
-                started.append(task)
+                if task is not None:
+                    started.append(task)
             if (upto := self._scanned.pop(trig["id"], None)) is not None and upto > trig["spec"].get("after_seq", 0):
                 self._advance(trig["id"], upto)  # keeps each check short
         return started
@@ -182,7 +211,8 @@ class Scheduler:
             if spec.get("until") and now > spec["until"]:
                 return []
             if spec.get("every_minutes"):
-                last = trig["last_fired"] or trig["created_at"] - spec["every_minutes"] * 60 * (0 if spec.get("wait_first") else 1)
+                created = min(trig["created_at"], now)  # the store stamps real time; a test's clock may be behind it
+                last = trig["last_fired"] or created - spec["every_minutes"] * 60 * (0 if spec.get("wait_first") else 1)
                 if now - last >= spec["every_minutes"] * 60:
                     out.append((f"t{int(now)}", {}))
             elif spec.get("at") and now >= spec["at"] and "once" not in fired:
@@ -313,25 +343,82 @@ class Scheduler:
         src = self.memory.source(row[0]) if row and row[0] else None
         tid = ((src or {}).get("reference") or {}).get("task_id")
         task = self.store.get(tid) if tid else None
-        return bool(task and task.get("source") == f"trigger:{trig['name']}")
+        if task and task.get("source") == f"trigger:{trig['name']}":
+            return True
+        # a task started from this trigger's offer (you said yes, so its source is where you tapped)
+        return bool(task and self.offers is not None and self.offers.trigger_of(task["id"]) == trig["id"])
 
     # ---- firing --------------------------------------------------------------------------------
 
-    def _fire(self, trig: dict[str, Any], values: dict[str, str]) -> dict[str, Any]:
+    def _fire(self, trig: dict[str, Any], values: dict[str, str], key: str = "") -> dict[str, Any] | None:
         action = trig["action"]
         src = f"trigger:{trig['name']}"
         lower = {k.lower(): _clean(v) for k, v in values.items()}
+        if action.get("ask"):
+            return self._ask(trig, lower, key)
         if action.get("routine"):
-            inputs = dict(action.get("inputs") or {})
-            for name, path in (action.get("inputs_from") or {}).items():  # input → "Trip.destination" / "trip.destination"
-                if (v := lower.get(path.lower())) is not None:
-                    inputs[name] = v
+            inputs = self._inputs(action, lower)
             goal = action.get("goal") or f"run routine {action['routine']}"
             task = self.start_task(_fill(goal, lower), src, routine=action["routine"], inputs=inputs)
         else:
             task = self.start_task(_fill(action["goal"], lower), src)
         self.bus.publish("trigger_fired", trigger=trig["id"], name=trig["name"], task_id=task["id"])
         return task
+
+    def _inputs(self, action: dict[str, Any], lower: dict[str, str]) -> dict[str, str]:
+        inputs = dict(action.get("inputs") or {})
+        for name, path in (action.get("inputs_from") or {}).items():  # input → "Trip.destination" / "trip.destination"
+            if (v := lower.get(path.lower())) is not None:
+                inputs[name] = v
+        return inputs
+
+    def goal_template(self, action: dict[str, Any]) -> str:
+        """What an ask-mode trigger's card says it will do: your goal, else the routine's own intent."""
+        if action.get("goal"):
+            return str(action["goal"])
+        try:
+            return self.routines.get(action["routine"]).intent if self.routines is not None else f"run routine {action['routine']}"
+        except Exception:  # noqa: BLE001 - a routine that can't be read: its name
+            return f"run routine {action['routine']}"
+
+    def _ask(self, trig: dict[str, Any], lower: dict[str, str], key: str) -> dict[str, Any] | None:
+        """Ask mode: an offer instead of the task. Nothing starts until you say yes."""
+        action = trig["action"]
+        if self.offers is None:  # never start it silently instead
+            self.bus.publish("trigger_error", trigger=trig["id"], error="ask mode needs offers, which aren't set up here")
+            return None
+        template = self.goal_template(action)
+        goal, request = _fill(template, lower), _fill(template, {})  # the request: every slot left empty
+        title = _fill(action["offer_title"], lower) if action.get("offer_title") else _should_i(goal)
+        when = None
+        if trig["kind"] == "before_fact" and "@" in key:
+            when = float(key.rsplit("@", 1)[1])  # the departure: a check-in offer is no use after it
+        elif trig["spec"].get("every_minutes"):
+            when = self.clock() + trig["spec"]["every_minutes"] * 60  # the next one replaces it
+        elif trig["kind"] == "time" and (trig["spec"].get("daily_at") or trig["spec"].get("weekly_on")):
+            when = self.clock() + 86400
+        offer = self.offers.make(
+            kind="trigger", title=title, body=f"From your trigger “{trig['name']}”, which asks you first.",
+            action={"type": "task", "goal": goal, "request": request, "routine": action.get("routine"),
+                    "inputs": self._inputs(action, lower) if action.get("routine") else {}, "app": action.get("app"), "phone": action.get("phone")},
+            source=f"trigger:{trig['name']}", key=f"{trig['id']}:{key}", expires_at=when, origin={"trigger_id": trig["id"]})
+        self.bus.publish("trigger_fired", trigger=trig["id"], name=trig["name"], offer_id=(offer or {}).get("id"))
+        return offer
+
+
+def _to_you(goal: str) -> str:
+    """'Check me in for my flight' as Envoy says it back: 'check you in for your flight'."""
+    swap = {"me": "you", "my": "your", "mine": "yours", "i": "you", "i'm": "you're", "myself": "yourself"}
+    out = re.sub(r"\b(me|my|mine|I|I'm|myself)\b", lambda m: swap[m.group(1).lower()], goal.rstrip(".?! "))
+    return out[:1].lower() + out[1:]
+
+
+def _should_i(goal: str) -> str:
+    """An ask-mode offer's title when the trigger has none: "Should I check you in for your flight to Chicago?"."""
+    said = _to_you(goal)
+    if goal.rstrip().endswith("?") or re.match(r"(?i)(what|when|where|which|who|how|is|are|does|do|did|has|have|can)\b", goal.strip()):
+        return f"Should I look this up: {said}?"
+    return f"Should I {said}?"
 
 
 def _fill(template: str, values: dict[str, str]) -> str:

@@ -1,10 +1,12 @@
 """Home's briefing (`GET /api/briefing`): what needs you, what happened today and what's next, in a few sentences.
 
 Read only and deterministic: no model call, nothing written. Everything comes from what the stores already hold:
-- **needs you**: pending approvals, tasks asking to use your Android phone, tasks waiting on you (a sign-in, a takeover);
+- **needs you**: pending approvals, offers waiting for your yes ("Should I check you in for SL 482?", api/offers.py), tasks
+  asking to use your Android phone, tasks waiting on you (a sign-in, a takeover);
 - **today**: remembered facts that changed in the last day (the change alerts), tasks and routine runs that finished
   since midnight;
-- **next**: triggers due in the next day (not watchers: their reruns every few minutes aren't news);
+- **next**: triggers due in the next day (not watchers: their reruns every few minutes aren't news), marked when they
+  will ask you first;
 - **suggestions**: your routines, the ones you run most first.
 
 Your name appears only when memory has it: memory is one user's, so with exactly one person in it, that person's name
@@ -58,7 +60,7 @@ def _count(n: int, one: str, many: str) -> str:
     return f"One {one}" if n == 1 else f"{n} {many}"
 
 
-def build_briefing(tasks: Any, memory: Any, routines: Any, scheduler: Any, alerts: Any, now: float | None = None) -> dict[str, Any]:
+def build_briefing(tasks: Any, memory: Any, routines: Any, scheduler: Any, alerts: Any, now: float | None = None, offers: Any = None) -> dict[str, Any]:
     now = time.time() if now is None else now
     midnight = datetime.fromtimestamp(now).replace(hour=0, minute=0, second=0, microsecond=0).timestamp()
     recent = tasks.list(200)
@@ -71,6 +73,12 @@ def build_briefing(tasks: Any, memory: Any, routines: Any, scheduler: Any, alert
         t = tasks.get(a["task_id"]) or {}
         needs.append({"kind": "approval", "id": a["id"], "task_id": a["task_id"], "title": a["description"], "detail": t.get("goal") or "",
                       "app": a.get("app") or t.get("app"), "time": a["created_at"], "money": bool(MONEY.search(a["description"] or ""))})
+    asking = [o for o in (offers.pending() if offers is not None else []) if o["expires_at"] is None or o["expires_at"] > now]
+    for o in asking:
+        a = o.get("action") or {}
+        needs.append({"kind": "offer", "id": o["id"], "offer_id": o["id"], "task_id": None, "title": o["title"], "detail": o.get("body") or "",
+                      "goal": a.get("goal") or "", "action": a.get("type"), "offer_kind": o["kind"], "preflight": o.get("preflight") or [],
+                      "app": a.get("app"), "time": o["created_at"], "expires_at": o.get("expires_at")})
     phone_asks = [t for t in recent if t["status"] == "needs_you" and t.get("waiting_for") == "phone"]
     for t in phone_asks:
         needs.append({"kind": "phone", "id": t["id"], "task_id": t["id"], "title": t.get("detail") or "Use your Android phone for this task?",
@@ -112,7 +120,8 @@ def build_briefing(tasks: Any, memory: Any, routines: Any, scheduler: Any, alert
                 continue
             for r in runs[:1]:
                 if now <= r["at"] <= now + DAY:
-                    upcoming.append({"id": trig["id"], "name": trig["name"], "kind": trig["kind"], "at": r["at"], "for": r.get("for")})
+                    upcoming.append({"id": trig["id"], "name": trig["name"], "kind": trig["kind"], "at": r["at"], "for": r.get("for"),
+                                     "ask": bool((trig.get("action") or {}).get("ask"))})
     upcoming.sort(key=lambda x: x["at"])
 
     # ---- suggestions: your routines, most used first ----
@@ -138,11 +147,13 @@ def build_briefing(tasks: Any, memory: Any, routines: Any, scheduler: Any, alert
                     + (f", and {more} more {'thing' if more == 1 else 'things'} I remember changed today." if more else "."))
     if upcoming:
         u = upcoming[0]
-        said.append(f"Next up at {_clock(u['at'], now)}: {u['name']}.")
+        said.append(f"Next up at {_clock(u['at'], now)}: {u['name']}" + (", and I'll ask you first." if u["ask"] else "."))
     approvals = [n for n in needs if n["kind"] == "approval"]
     if approvals:
         money = all(n["money"] for n in approvals)
         said.append(f"{_count(len(approvals), 'payment is' if money else 'action is', 'payments are' if money else 'actions are')} waiting for your OK.")
+    if asking:
+        said.append(f"I have a question for you: {asking[0]['title']}" if len(asking) == 1 else f"I have {len(asking)} questions for you.")
     if phone_asks:
         said.append(f"{_count(len(phone_asks), 'task asks', 'tasks ask')} to use your Android phone.")
     if stuck:

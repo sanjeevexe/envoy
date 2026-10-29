@@ -8,7 +8,11 @@ tap on "Turn on notifications"; each device's subscription is stored here. Envoy
 - Envoy needs you to **take over** the phone (a sign-in, a bot check);
 - a task is **done, failed or declined** (tasks started by a trigger push only when they fail);
 - a task a trigger started **changed a remembered fact** it watches ("Gate changed: B12 → C14"; api/alerts.py decides,
-  and sends through `notify` with kind `change`).
+  and sends through `notify` with kind `change`);
+- Envoy **offers** to do something ("Should I check you in for SL 482?", api/offers.py), when the proactivity setting
+  says so: `off` never, `important` (the default) for triggers, files from the Mac and trigger requests, `all` always.
+  Approvals and takeovers aren't proactivity: they push whatever the setting. The push opens the offer; only a tap on
+  its Yes in the app (your session, a POST) says yes.
 
 A push carries a title, a line of text and the page to open; tapping it opens that page. It never carries an approval's
 nonce, so it can't decide anything: the approval page still needs your session and a POST.
@@ -210,6 +214,15 @@ class Pusher:
             body = task.get("goal") or "Envoy wants to use your phone for a task"
             self.notify("phone", f"Use your {ev.get('model') or 'Android phone'}?", f"{ev['reason']}: {body}" if ev.get("reason") else body,
                         f"/?task={tid}", tag=f"phone-{tid}", urgency="high", ttl=900)
+        elif kind == "offer" and ev.get("change") == "created":
+            from api.offers import pushes
+            offer = ev.get("offer") or {}
+            if offer.get("status") != "pending" or not pushes(offer.get("kind") or "", self.store.setting("proactivity")):
+                return
+            goal = (offer.get("action") or {}).get("goal")
+            ttl = int(max(60, min(86400, offer["expires_at"] - time.time()))) if offer.get("expires_at") else 6 * 3600
+            self.notify("offer", offer.get("title") or "Envoy has a question", (offer.get("body") or goal or "Open Envoy to answer")[:180],
+                        f"/?offer={offer.get('id')}", tag=f"offer-{offer.get('id')}", urgency="normal", ttl=ttl)
         elif kind == "task_finished":
             task = self.store.get(ev.get("task_id") or "") or {}
             if task.get("parent"):
