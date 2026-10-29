@@ -34,6 +34,10 @@ Status = Literal["done", "done_unverified", "failed", "handoff", "needs_user", "
 
 SCREENSHOT_WIDTH = 540  # a full 1080x2400 frame costs ~3,200 input tokens (Phase 0); half width costs ~4x less
 HISTORY_STEPS = 5
+SPLASH_READS = 4  # a first screen with nothing to act on (an app still drawing: a logo, a spinner) is read again up to
+SPLASH_WAIT_S = 1.5  # this many times, this far apart, before the plan is made on it
+SPLASH_MAX = 2  # a plan made on a screen this sparse is made again at step 1 if that step finds the app drawn (at least
+DRAWN_MIN = 10  # this many elements): a splash with something clickable on it isn't caught by is_splash
 # The model's own words for an action it doesn't mean ("Placeholder to comply with schema", "Mistake: should swipe up"). On
 # AndroidWorld such a back left the app or threw away a form: it is asked again instead of carried out.
 _PLACEHOLDER = re.compile(r"placeholder|schema requires|(required by|comply with|satisfy) (the )?schema|incorrect but|"
@@ -92,6 +96,15 @@ def _volatile(before: ScreenState, now: ScreenState) -> set[int]:
     between, same layout. They must not count as an action's effect, or a no-op looks like progress."""
     a, b = _body(before.compact).split("\n"), _body(now.compact).split("\n")
     return {i for i, (x, y) in enumerate(zip(a, b)) if x != y} if len(a) == len(b) else set()
+
+
+def is_splash(screen: ScreenState) -> bool:
+    """Something is drawn but nothing can be acted on yet: an app still showing its logo or a spinner. A plan made on it
+    guesses the route; on Oct 29 DoorDash's loading view gave "Open Account or profile", and the run went round by its
+    Account screen. An empty tree is not one: wait_until_settled already waits for content, and a screen that never
+    shows any (Target's bot check) would only be slower."""
+    return bool(screen.numbered) and not screen.secure and not any(e.clickable or e.editable or e.checkable or e.scrollable
+                                                                    for e in screen.numbered)
 
 
 def _masked(compact: str, lines: set[int]) -> str:
@@ -217,10 +230,18 @@ class AgentRunner:
                 return " · ".join(f"{names[k]} ×{n}" for k, n in visits.items())
 
             screen = await self.device.wait_until_settled()
+            if self.config.plan and is_splash(screen):
+                t_splash, reads = time.perf_counter(), 0
+                while reads < SPLASH_READS and is_splash(screen):
+                    await asyncio.sleep(SPLASH_WAIT_S)
+                    screen, reads = await self.device.wait_until_settled(), reads + 1
+                trace.step({"step": 0, "kind": "splash_wait", "reads": reads, "drawn": not is_splash(screen),
+                            "waited_ms": round((time.perf_counter() - t_splash) * 1000)})
             if self.config.plan:
                 plan = await make_plan(screen)
                 out.plan = plan.model_dump() if plan else None
             plan_text = "\n".join(f"{i}. {s}" for i, s in enumerate(plan.subgoals, 1)) if plan else ""
+            planned_on = len(screen.numbered)
 
             step = 0
             while True:
@@ -233,6 +254,11 @@ class AgentRunner:
                 t_obs = time.perf_counter()
                 screen = await self.device.wait_until_settled()
                 observe_ms = (time.perf_counter() - t_obs) * 1000
+                if step == 1 and plan is not None and 0 < planned_on <= SPLASH_MAX and len(screen.numbered) >= DRAWN_MIN:
+                    # The plan was made on a splash that the app has since replaced with its own screen: plan on that one.
+                    plan = await make_plan(screen, step_no=1) or plan
+                    out.plan = plan.model_dump()
+                    plan_text = "\n".join(f"{i}. {s}" for i, s in enumerate(plan.subgoals, 1))
 
                 # 1. Sign-in screens belong to the user.
                 if (why := sign_in_reason(screen)) is not None:

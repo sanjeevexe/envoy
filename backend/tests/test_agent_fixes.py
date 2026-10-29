@@ -314,3 +314,59 @@ def test_the_planner_reads_a_questions_answer_where_the_app_shows_it():
     from models.prompts import PLAN_INSTRUCTIONS
     assert 'For a question, read the answer where the app shows it, an empty state ("none yet") included' in PLAN_INSTRUCTIONS
     assert 'plan no step that changes filters or settings, and no "full" or "complete" list unless the goal asks for one' in PLAN_INSTRUCTIONS
+
+
+class Launching(Phone):
+    """An app that shows a logo for its first `splash` reads, then its home screen with a button."""
+
+    def __init__(self, splash: int) -> None:
+        super().__init__()
+        self.splash, self.reads = splash, 0
+
+    def _read(self):
+        self.reads += 1
+        if self.reads <= self.splash:
+            return app_screen(("logo", "DoorDash", "false"))
+        return app_screen(("toolbar", "1 Hacker Way", "true"), ("account", "Account", "true"))
+
+
+def test_the_plan_waits_until_the_app_has_drawn_more_than_a_splash(tmp_path, monkeypatch):
+    # Oct 29: every DoorDash run planned on its loading view (680-864 input tokens against ~1,550 for its home), and one
+    # plan's guess ("Open Account or profile") sent the run round by the Account screen. Replayed on the loaded home, plan
+    # then step 1 tapped the address 28/30 (Account 2/30 on the loading view, main as well).
+    import agent.loop as loop
+    monkeypatch.setattr(TraceWriter.__init__, "__defaults__", (tmp_path,))
+    monkeypatch.setattr(loop, "SPLASH_WAIT_S", 0)
+    assert loop.is_splash(app_screen(("logo", "DoorDash", "false"))) and not loop.is_splash(Launching(0)._read())
+    assert not loop.is_splash(app_screen())  # an empty tree (a bot check's web view) is not waited on again
+    for splash, reads_before_plan in ((2, 3), (0, 1), (99, 1 + loop.SPLASH_READS)):
+        phone, model = Launching(splash), Seq(step({"type": "done", "result": "1 Hacker Way"}))
+        asyncio.run(AgentRunner(phone, model, ScriptedApprover(True), RunConfig(max_steps=2, data_scope="test_app"))
+                    .run("What is my saved delivery address?", task_id=f"splash{splash}", memory=""))
+        drawn = splash < 1 + loop.SPLASH_READS
+        assert ("1 Hacker Way" in model.plan_prompts[0]) == drawn  # the plan saw the home, unless it never came
+        assert phone.reads == reads_before_plan + len(model.prompts)  # the step reads once more; a drawn app isn't re-read
+
+
+class ClickableSplash(Launching):
+    """A splash whose logo is clickable (so is_splash can't tell), then a fully drawn home on the next read."""
+
+    def _read(self):
+        self.reads += 1
+        if self.reads == 1:
+            return app_screen(("logo", "DoorDash", "true"))
+        return app_screen(*[("toolbar", "1 Hacker Way", "true")] + [(f"store{i}", f"Store {i}", "true") for i in range(12)])
+
+
+def test_a_plan_made_on_a_sparse_splash_is_made_again_once_the_app_is_drawn(tmp_path, monkeypatch):
+    import agent.loop as loop
+    monkeypatch.setattr(TraceWriter.__init__, "__defaults__", (tmp_path,))
+    phone, model = ClickableSplash(1), Seq(step({"type": "done", "result": "1 Hacker Way"}))
+    asyncio.run(AgentRunner(phone, model, ScriptedApprover(True), RunConfig(max_steps=2, data_scope="test_app"))
+                .run("What is my saved delivery address?", task_id="clicksplash", memory=""))
+    assert len(model.plan_prompts) == 2 and "1 Hacker Way" not in model.plan_prompts[0] and "1 Hacker Way" in model.plan_prompts[1]
+    # a sparse screen that stays (a two-button dialog) is planned once
+    phone, model = Launching(0), Seq(step({"type": "done", "result": "1 Hacker Way"}))
+    asyncio.run(AgentRunner(phone, model, ScriptedApprover(True), RunConfig(max_steps=2, data_scope="test_app"))
+                .run("What is my saved delivery address?", task_id="dialog", memory=""))
+    assert len(model.plan_prompts) == 1
