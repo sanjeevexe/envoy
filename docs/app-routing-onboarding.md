@@ -140,7 +140,7 @@ throwaway memory. Unit tests make no model calls.
 
 ## Merge
 
-Waiting for your OK. On your OK, in `~/Desktop/Envoy-app-routing`: `git merge main` (main had moved to `3719818`, already
+Waiting for your OK. On your OK, in `~/Desktop/Envoy-app-routing`: `git merge main` (main had moved to `6b90832`, already
 merged), run `uv run --project backend pytest backend/tests -q` and `npm run build` in `web/`, tell the active sessions,
 then in `~/Desktop/Envoy`: `git merge --ff-only app-routing`. No push.
 
