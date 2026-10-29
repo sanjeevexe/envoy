@@ -78,7 +78,7 @@ def build_briefing(tasks: Any, memory: Any, routines: Any, scheduler: Any, alert
         a = o.get("action") or {}
         needs.append({"kind": "offer", "id": o["id"], "offer_id": o["id"], "task_id": None, "title": o["title"], "detail": o.get("body") or "",
                       "goal": a.get("goal") or "", "action": a.get("type"), "offer_kind": o["kind"], "preflight": o.get("preflight") or [],
-                      "app": a.get("app"), "time": o["created_at"], "expires_at": o.get("expires_at")})
+                      "app": a.get("app"), "time": o["created_at"], "expires_at": o.get("expires_at"), "offer": o})
     phone_asks = [t for t in recent if t["status"] == "needs_you" and t.get("waiting_for") == "phone"]
     for t in phone_asks:
         needs.append({"kind": "phone", "id": t["id"], "task_id": t["id"], "title": t.get("detail") or "Use your Android phone for this task?",

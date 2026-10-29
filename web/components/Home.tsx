@@ -2,7 +2,8 @@
 
 // Home: Envoy's greeting. The avatar, a short briefing in Envoy's words (GET /api/briefing: built from what the stores
 // hold, no model call), what needs your OK, what happened today, what's next, your routines as suggestions, and the
-// composer. Typing or speaking moves into the conversation (components/Chat.tsx).
+// composer. Typing or speaking moves into the conversation (components/Chat.tsx). An offer ("Should I check you in?")
+// is a card with Yes and Not now; once answered it stays, saying what happened, until Home reloads.
 import { useEffect, useState } from "react";
 import { ClockIcon, GraphIcon, HandIcon, LockIcon, RepeatIcon } from "@phosphor-icons/react";
 import Avatar, { type Mood } from "@/components/Avatar";
@@ -10,14 +11,16 @@ import { readable } from "@/components/Approvals";
 import Chat from "@/components/Chat";
 import PhoneAsk from "@/components/PhoneAsk";
 import { appName } from "@/components/Tasks";
+import { OfferCard } from "@/components/Offers";
 import { appIcon, Button, Card, clock, Row, RowIcon, SectionLabel } from "@/components/ui";
-import { ago, api, Lease, Task } from "@/lib/api";
+import { ago, api, Lease, Offer, Task } from "@/lib/api";
 
-type Need = { kind: "approval" | "phone" | "task"; id: string; task_id: string; title: string; detail: string; app?: string; time: number; status?: string; device?: string };
+type Need = { kind: "approval" | "phone" | "task" | "offer"; id: string; task_id: string; title: string; detail: string; app?: string; time: number;
+  status?: string; device?: string; offer?: Offer };
 type Today = { kind: "change" | "task" | "routine"; id: string; task_id?: string; title: string; time: number; app?: string; source?: string;
   label?: string; old?: string; new?: string; entity?: string; result?: string; status?: string; routine?: string; seconds?: number };
 export type Briefing = { time: number; name: string | null; text: string; needs: Need[]; today: Today[];
-  upcoming: { id: string; name: string; kind: string; at: number; for?: string }[]; suggestions: { label: string; routine: string; app: string }[] };
+  upcoming: { id: string; name: string; kind: string; at: number; for?: string; ask?: boolean }[]; suggestions: { label: string; routine: string; app: string }[] };
 
 const greeting = (name: string | null) => {
   const h = new Date().getHours();
@@ -31,6 +34,7 @@ export default function Home({ tasks, openTask, review, mood, connected, version
 }) {
   const [b, setB] = useState<Briefing | null>(null);
   const [failed, setFailed] = useState(false);
+  const [answered, setAnswered] = useState<Offer[]>([]); // offers you just answered: they stay, saying what happened
   useEffect(() => {
     api<Briefing>("/api/briefing").then((x) => { setB(x); setFailed(false); }).catch(() => setFailed(true));
   }, [version, connected]);
@@ -50,9 +54,14 @@ export default function Home({ tasks, openTask, review, mood, connected, version
         )}
       </div>
 
-      {b && b.needs.length > 0 && (
+      {b && (b.needs.length > 0 || answered.length > 0) && (
         <section aria-label="Needs your OK" className="ev-rise ev-r2 mt-5 flex flex-col gap-3 px-4">
-          {b.needs.map((n) => <NeedCard key={n.id} n={n} task={tasks[n.task_id]} review={review} goPhone={goPhone} openTask={openTask} />)}
+          {b.needs.filter((n) => n.kind === "approval").map((n) => <NeedCard key={n.id} n={n} task={tasks[n.task_id]} review={review} goPhone={goPhone} openTask={openTask} />)}
+          {answered.filter((o) => !b.needs.some((n) => n.id === o.id)).map((o) => <OfferCard key={o.id} o={o} openTask={openTask} />)}
+          {b.needs.filter((n) => n.kind === "offer" && n.offer).map((n) => (
+            <OfferCard key={n.id} o={n.offer!} openTask={openTask} onDecided={(o) => setAnswered((xs) => [o, ...xs.filter((x) => x.id !== o.id)])} />
+          ))}
+          {b.needs.filter((n) => n.kind !== "approval" && n.kind !== "offer").map((n) => <NeedCard key={n.id} n={n} task={tasks[n.task_id]} review={review} goPhone={goPhone} openTask={openTask} />)}
         </section>
       )}
 
@@ -70,7 +79,7 @@ export default function Home({ tasks, openTask, review, mood, connected, version
           <SectionLabel id="next" className="px-6 pb-2.5 pt-6">Coming up</SectionLabel>
           <Card className="mx-4 overflow-hidden">
             {b.upcoming.map((u) => (
-              <Row key={u.id} icon={ClockIcon} title={u.name} meta={`${clock(u.at)}${u.for ? ` · for ${u.for}` : ""}`} />
+              <Row key={u.id} icon={ClockIcon} title={u.name} meta={`${clock(u.at)}${u.for ? ` · for ${u.for}` : ""}${u.ask ? " · will ask you first" : ""}`} />
             ))}
           </Card>
         </section>

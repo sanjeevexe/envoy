@@ -3,12 +3,15 @@
 // Tasks that start on their own: at a time, before a flight (moving if it's delayed), on a watch, on new email, or when
 // a remembered fact changes. What a trigger runs is fixed here by you; memory, emails and changes only fill in typed
 // values. A watcher pushes when its run changed a fact it watches ("Gate changed: B12 → C14"); otherwise it's quiet.
+// Each trigger can ask you first ("Check in for SL 482?", a card with Yes) or just do it. The presets are in
+// lib/trigger-presets.json, which a backend test renders against the demo's values.
 import { useEffect, useState } from "react";
 import {
-  BellRingingIcon, BellSlashIcon, ClockIcon, EnvelopeSimpleIcon, EyeIcon, GraphIcon, PauseIcon, PlayIcon, PlusIcon, TrashIcon, type Icon,
+  BellRingingIcon, BellSlashIcon, ChatCircleDotsIcon, ClockIcon, EnvelopeSimpleIcon, EyeIcon, GraphIcon, PauseIcon, PlayIcon, PlusIcon, TrashIcon, type Icon,
 } from "@phosphor-icons/react";
-import { Button, Card, clock, cx, RowIcon, SectionLabel } from "@/components/ui";
+import { Button, Card, clock, cx, RowIcon, SectionLabel, Segmented } from "@/components/ui";
 import { ago, api, post } from "@/lib/api";
+import PRESETS from "@/lib/trigger-presets.json";
 
 const KIND: Record<string, Icon> = { time: ClockIcon, before_fact: ClockIcon, watch: EyeIcon, email: EnvelopeSimpleIcon, fact_changed: GraphIcon };
 
@@ -21,19 +24,7 @@ type Change = {
   pushed: number; why_not: string | null;
 };
 
-const PRESETS = [
-  { label: "Watch my gate every minute and tell me when it changes", body: { kind: "watch", name: "Watch my gate (alerts)",
-    spec: { every_minutes: 1, alert: true }, action: { routine: "skylark_get_flight_gate", inputs_from: {} } } },
-  { label: "When my flight's departure time changes, look up its gate", body: { kind: "fact_changed", name: "Departure changed: look up the gate",
-    spec: { entity_type: "Flight", attribute: "depart_time" },
-    action: { routine: "skylark_get_flight_gate", inputs_from: { trip_city: "trip.destination" }, goal: "My flight {flight.number} now leaves at {change.new}: what's its gate?" } } },
-  { label: "Check in 24 h before every flight", body: { kind: "before_fact", name: "Check in 24 h before every flight",
-    spec: { entity_type: "Flight", minutes_before: 1440 }, action: { goal: "Check me in for my flight to {trip.destination}" } } },
-  { label: "Watch my gate every 10 minutes", body: { kind: "watch", name: "Watch my gate", spec: { every_minutes: 10 },
-    action: { routine: "skylark_get_flight_gate", inputs_from: {} } } },
-  { label: "New SkyLark booking email: look up its gate", body: { kind: "email", name: "New SkyLark booking",
-    spec: { sender_contains: "skylark" }, action: { routine: "skylark_get_flight_gate", inputs_from: { trip_city: "Trip.destination" } } } },
-];
+const ASK = ["Ask me first", "Just do it"] as const;
 
 export default function Triggers() {
   const [list, setList] = useState<Trig[]>([]);
@@ -64,7 +55,7 @@ export default function Triggers() {
             <div className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-start">
             <div className="min-w-0 flex-1">
               <div className="text-row font-semibold [overflow-wrap:anywhere]">{t.name}{!t.enabled && <span className="font-normal text-muted"> · paused</span>}</div>
-              <div className="mt-0.5 text-meta-2 text-muted [overflow-wrap:anywhere]">Runs {t.action.goal ? `“${t.action.goal}”` : `the routine ${t.action.routine}`}</div>
+              <div className="mt-0.5 text-meta-2 text-muted [overflow-wrap:anywhere]">{t.action.ask ? "Asks, then runs" : "Runs"} {t.action.goal ? `“${t.action.goal}”` : `the routine ${t.action.routine}`}</div>
               <div className="text-meta-2 text-muted">
                 {t.kind === "fact_changed" ? `When ${t.spec.entity_type.toLowerCase()} ${(t.spec.attributes ?? [t.spec.attribute]).join(" or ").replace(/_/g, " ")} changes`
                   : t.next.length ? `Next ${t.next.map((n) => `${clock(n.at)}${n.for ? ` (${n.for})` : ""}`).join(", ")}` : "Nothing coming up"}
@@ -75,6 +66,16 @@ export default function Triggers() {
                   {t.alerts.on ? `Tells you when ${t.alerts.attributes.map((a) => (a === "*" ? "anything" : a.replace(/_/g, " "))).join(", ")} changes` : "Quiet: changes show in the task"}
                 </div>
               )}
+              {t.action.ask && (
+                <div className="mt-1 flex items-start gap-1.5 text-meta-2 font-semibold text-sage-ink">
+                  <ChatCircleDotsIcon size={14} className="mt-0.5 shrink-0" />
+                  <span className="[overflow-wrap:anywhere]">Asks you first{t.action.offer_title ? `: “${t.action.offer_title}”` : ""}. Nothing runs until you say yes.</span>
+                </div>
+              )}
+              <div className="mt-2">
+                <Segmented options={ASK} value={t.action.ask ? ASK[0] : ASK[1]} label={`When ${t.name} fires`}
+                           onChange={(v) => post(`/api/triggers/${t.id}`, { ask: v === ASK[0] }).then(load).catch((e) => setErr(e.message))} />
+              </div>
             </div>
             <div className="flex shrink-0 gap-1.5">
               {t.kind === "watch" && t.alerts && (

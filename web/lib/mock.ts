@@ -3,7 +3,8 @@
 // Mock mode (`?mock=1`, or NEXT_PUBLIC_ENVOY_MOCK=1): the API and the event stream are answered here, in the page, from
 // fixtures that cover every state, so each screen can be designed, checked and captured without a Mac, a phone or a
 // model. Nothing in this file touches the network. Scenarios (`?mock=<name>`):
-// - `1` / `full`: a task streaming steps, a payment waiting for your OK, a phone ask, a filled memory, routines, triggers
+// - `1` / `full`: a task streaming steps, a payment waiting for your OK, a phone ask, an offer ("Check in for SL 482?")
+//   with its "Before I start" lines, a filled memory, routines, triggers (one asks first), past offers in each state
 // - `quiet`: nothing needs you; a watcher reruns the gate routine every so often (working, thinking, done)
 // - `idle`: nothing running and nothing waiting
 // - `offline`: the event stream never connects, and Home can't load its briefing
@@ -97,7 +98,7 @@ function qr(): string {
 type DB = {
   tasks: Record<string, Task>; steps: Record<string, Step[]>; approvals: Record<string, Approval & { nonce: string }>;
   leases: Record<string, Lease>; triggers: any[]; changes: any[]; rules: { default: string; apps: Record<string, string>; routines: Record<string, string> };
-  photos: { enabled: boolean; scope: string }; phoneApps: string[]; notes: any[];
+  photos: { enabled: boolean; scope: string }; phoneApps: string[]; notes: any[]; offers: any[]; proactivity: string;
 };
 let db: DB;
 
@@ -192,9 +193,10 @@ function seed(): DB {
   const triggers = [
     { id: "trig-gate", kind: "watch", name: "Watch my gate", spec: { every_minutes: 10, alert: true }, action: { routine: "skylark_get_flight_gate", inputs_from: {} },
       enabled: true, last_fired: ago(420), next: [{ at: ago(420) + 600 }], alerts: { on: true, attributes: ["gate"] } },
-    { id: "trig-checkin", kind: "before_fact", name: "Check in 24 h before every flight", spec: { entity_type: "Flight", minutes_before: 1440 },
-      action: { goal: "Check me in for my flight to {trip.destination}" }, enabled: true, last_fired: null,
-      next: [{ at: todayAt(21) > T ? todayAt(21) : todayAt(33), for: "SL 482" }], alerts: { on: false, attributes: ["*"] } },
+    { id: "trig-checkin", kind: "before_fact", name: "Ask me to check in when check-in opens", spec: { entity_type: "Flight", date_attr: "date", time_attr: "depart_time", minutes_before: 1440 },
+      action: { goal: "Check me in for my flight {number} to {trip.destination}", routine: "skylark_check_in_flight", inputs_from: { trip_city: "trip.destination" },
+        ask: true, offer_title: "Check in for {number}?" }, enabled: true, last_fired: ago(1500),
+      next: [{ at: todayAt(21) > T ? todayAt(21) : todayAt(33), for: "SL 1190" }], alerts: { on: false, attributes: ["*"] } },
     { id: "trig-coffee", kind: "time", name: "Morning coffee", spec: { daily_at: "7:30" }, action: { routine: "starbucks_order_usual", inputs_from: {} },
       enabled: true, last_fired: earlier(7, 30, 9 * 3600), next: [{ at: todayAt(31, 30) > T + 86400 ? todayAt(7, 30) : todayAt(31, 30) }], alerts: { on: false, attributes: ["*"] } },
     { id: "trig-dep", kind: "fact_changed", name: "Departure changed: look up the gate", spec: { entity_type: "Flight", attributes: ["depart_time"] },
@@ -207,8 +209,32 @@ function seed(): DB {
     { id: 38, time: ago(86400 + 2000), task_id: "task-gate-0", entity_label: "Flight SL 482", attribute: "boarding_group", old: "3", new: "Group 3",
       title: "Boarding group changed: 3 → Group 3", pushed: 0, why_not: "you started this task", source: "SkyLark" },
   ];
+  // Offers: one waiting (with its "Before I start" lines), and one of each answer in the history.
+  const checkIn = { type: "task", goal: "Check me in for my flight SL 482 to Chicago", request: "Check me in for my flight to", routine: "skylark_check_in_flight",
+    inputs: { trip_city: "Chicago" }, app: null };
+  const offer = (o: any) => ({ source: "trigger:Ask me to check in when check-in opens", expires_at: null, decided_at: null, decided_by: null, task_id: null,
+    preflight: [], origin: { trigger_id: "trig-checkin" }, note: null, result: null, kind: "trigger", ...o });
+  const offers = [
+    ...(scenario === "full" || scenario === "offline" ? [offer({ id: "offer-ck", created_at: ago(1500), title: "Check in for SL 482?", status: "pending",
+      body: "From your trigger “Ask me to check in when check-in opens”, which asks you first.", action: checkIn, key: "trig-checkin:flight@1",
+      expires_at: todayAt(30, 10) > T ? todayAt(30, 10) : T + 18 * 3600, preflight: [
+        { kind: "device", text: "On the Pixel 8 emulator, where SkyLark runs", level: "info" },
+        { kind: "routine", text: "From your routine: check-in took 21 s the last 4 times, no model calls", level: "info" },
+        { kind: "approval", text: "Confirming check-in will go ahead: you asked for it", level: "info" },
+        { kind: "signin", text: "SkyLark signed you out 2 days ago: you may need to sign in", level: "warn" },
+      ] })] : []),
+    offer({ id: "offer-ck-old", created_at: ago(2 * 86400 + 600), title: "Check in for SL 1213?", status: "accepted", decided_at: ago(2 * 86400 + 300), decided_by: "you on Maya's iPhone",
+      task_id: "task-ck", body: "From your trigger “Ask me to check in when check-in opens”, which asks you first.",
+      action: { ...checkIn, goal: "Check me in for my flight SL 1213 to Louisville", inputs: { trip_city: "Louisville" } } }),
+    offer({ id: "offer-coffee", created_at: earlier(7, 30, 9 * 3600) - 86400, title: "Should I order your morning coffee?", status: "declined", decided_at: earlier(7, 32, 9 * 3600) - 86400,
+      decided_by: "you", body: "From your trigger “Morning coffee”, which asks you first.", source: "trigger:Morning coffee", origin: { trigger_id: "trig-coffee" },
+      action: { type: "task", goal: "Order my morning coffee", request: "Order my morning coffee", routine: "starbucks_order_usual", inputs: {} } }),
+    offer({ id: "offer-seat", created_at: ago(3 * 86400), title: "Check in for SL 1585?", status: "expired", decided_at: ago(3 * 86400 - 7200), decided_by: "time",
+      body: "From your trigger “Ask me to check in when check-in opens”, which asks you first.",
+      action: { ...checkIn, goal: "Check me in for my flight SL 1585 to Savannah", inputs: { trip_city: "Savannah" } } }),
+  ];
   return {
-    tasks, steps, approvals, leases, triggers, changes,
+    tasks, steps, approvals, leases, triggers, changes, offers, proactivity: "important",
     rules: { default: "unless_requested", apps: { "com.dd.doordash": "always" }, routines: { starbucks_order_usual: "never" } },
     photos: { enabled: true, scope: "screenshots" }, phoneApps: ["com.target.ui"],
     notes: [
@@ -362,17 +388,21 @@ function briefing() {
     routine: t.routine, seconds: Math.round((t.updated_at - t.created_at) * 10) / 10, time: t.updated_at }));
   today.sort((a, b) => b.time - a.time);
   const upcoming = db.triggers.filter((t) => t.enabled && t.kind !== "watch" && t.next[0] && t.next[0].at >= now() && t.next[0].at <= now() + 86400)
-    .map((t) => ({ id: t.id, name: t.name, kind: t.kind, at: t.next[0].at, for: t.next[0].for })).sort((a, b) => a.at - b.at);
+    .map((t) => ({ id: t.id, name: t.name, kind: t.kind, at: t.next[0].at, for: t.next[0].for, ask: !!t.action.ask })).sort((a, b) => a.at - b.at);
+  const asking = db.offers.filter((o) => o.status === "pending" && (!o.expires_at || o.expires_at > now()));
+  asking.forEach((o) => needs.push({ kind: "offer", id: o.id, offer_id: o.id, task_id: null, title: o.title, detail: o.body, goal: o.action.goal ?? "",
+    action: o.action.type, offer_kind: o.kind, preflight: o.preflight, time: o.created_at, expires_at: o.expires_at, offer: o }));
   const said: string[] = [];
   const c = today.find((x) => x.kind === "change");
   if (c) said.push(`Your ${c.label.toLowerCase()} for flight SL 482 changed to ${c.new}.`);
   if (upcoming[0]) {
     const at = new Date(upcoming[0].at * 1000);
     const tomorrow = at.getDate() !== new Date().getDate() ? " tomorrow" : "";
-    said.push(`Next up at ${at.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })}${tomorrow}: ${upcoming[0].name}.`);
+    said.push(`Next up at ${at.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })}${tomorrow}: ${upcoming[0].name}${upcoming[0].ask ? ", and I'll ask you first." : "."}`);
   }
   const ap = needs.filter((n) => n.kind === "approval");
   if (ap.length) said.push(ap.length === 1 ? (ap[0].money ? "One payment is waiting for your OK." : "One action is waiting for your OK.") : `${ap.length} actions are waiting for your OK.`);
+  if (asking.length) said.push(asking.length === 1 ? `I have a question for you: ${asking[0].title}` : `I have ${asking.length} questions for you.`);
   if (asks.length) said.push(asks.length === 1 ? "One task asks to use your Android phone." : `${asks.length} tasks ask to use your Android phone.`);
   const done = finished.filter((t) => t.status === "done");
   if (done.length && said.length < 3) said.push(done.length > 1 ? `I finished ${done.length} tasks today.` : "I finished one task today.");
@@ -447,6 +477,38 @@ function chatTask(goal: string) {
   let at = 0;
   for (const [ms, fn] of script) { at += ms; later(at, fn); }
   return db.tasks[id];
+}
+
+// Your answer to an offer. Yes starts the check-in from its routine, with "Confirm check-in" done because you asked.
+function answerOffer(id: string, decision: string) {
+  const o = db.offers.find((x) => x.id === id);
+  if (!o) throw err(404, "no such offer");
+  if (o.status === "accepted" && decision === "accept") return o;
+  if (o.status !== "pending") throw err(409, `already ${o.status}`);
+  if (decision === "decline") Object.assign(o, { status: "declined", decided_at: now(), decided_by: "you" });
+  else Object.assign(o, { status: "accepted", decided_at: now(), decided_by: "you", task_id: checkInRun(o.action.goal, o.action.inputs?.trip_city ?? "Chicago") });
+  emit("offer", { offer: o, change: o.status });
+  return o;
+}
+
+function checkInRun(goal: string, city: string) {
+  const id = `task-offer-${++runs}`;
+  db.tasks[id] = task({ id, goal, source: "web", request: "Check me in for my flight to", status: "queued", app: "com.skylark.air", device: "envoy-test", kind: "routine",
+    routine: "skylark_check_in_flight", inputs: { trip_city: city }, created_at: now(), updated_at: now() });
+  db.steps[id] = [];
+  emit("task", { task: db.tasks[id] });
+  const script: [number, () => void][] = [
+    [900, () => { setTask(id, { status: "running" }); addStep(id, { kind: "note", text: `using routine skylark_check_in_flight v1 with trip_city = ${city}` }); }],
+    [1300, () => addStep(id, { kind: "routine_step", text: "tap_check_in", status: "done", rung: 0, shot: "sl-1" })],
+    [1200, () => addStep(id, { kind: "routine_step", text: "select_passenger", status: "done", rung: 0, shot: "sl-2" })],
+    [1200, () => addStep(id, { kind: "approval", text: "Confirm check-in: done without asking (your request)", reason: `you asked: "Check me in for my flight to"` })],
+    [900, () => addStep(id, { kind: "routine_step", text: "confirm_check_in", status: "done", rung: 0, shot: "sl-2", risk: "irreversible" })],
+    [900, () => { addStep(id, { kind: "finish", text: "all steps and checks passed", status: "done" });
+      setTask(id, { status: "done", result: "You're checked in: seat 14C, group 3, boarding 5:30 AM", model_calls: 0 }); }],
+  ];
+  let at = 0;
+  for (const [ms, fn] of script) { at += ms; later(at, fn); }
+  return id;
 }
 
 function approve(id: string, approved: boolean) {
@@ -541,9 +603,24 @@ export async function handle(path: string, init: RequestInit = {}): Promise<any>
     const t = db.triggers[i];
     if ("enabled" in body) t.enabled = body.enabled;
     if ("alert" in body) t.alerts = { ...t.alerts, on: body.alert };
+    if ("ask" in body) t.action = { ...t.action, ask: body.ask };
     return t;
   }
   if (p === "/api/alerts") return db.changes;
+  if (p === "/api/offers") {
+    const st = u.searchParams.get("status") ?? "pending";
+    return db.offers.filter((o) => st === "all" || o.status === st).sort((a, b) => b.created_at - a.created_at).slice(0, Number(u.searchParams.get("limit") ?? 50));
+  }
+  if ((m = p.match(/^\/api\/offers\/([^/]+)$/))) {
+    if (method === "POST") return answerOffer(m[1], body.decision);
+    const o = db.offers.find((x) => x.id === m![1]);
+    if (!o) throw err(404, "no such offer");
+    return o;
+  }
+  if (p === "/api/settings/proactivity") {
+    if (method === "POST") db.proactivity = body.level;
+    return { level: db.proactivity, levels: ["off", "important", "all"] };
+  }
   if ((m = p.match(/^\/api\/app-notes\/([^/]+)\/retire$/))) { db.notes = db.notes.filter((n) => n.id !== m![1]); return { retired: m[1] }; }
   if (p === "/api/app-notes") {
     const by: Record<string, any[]> = {};

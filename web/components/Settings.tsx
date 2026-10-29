@@ -1,7 +1,8 @@
 "use client";
 
-// Settings: when Envoy asks before an irreversible step (for everything, per app, or per routine: the most specific
-// wins), which apps run on your own Android phone, and this device and the others paired with Envoy.
+// Settings: how proactive Envoy is (which of its offers notify you), when Envoy asks before an irreversible step (for
+// everything, per app, or per routine: the most specific wins), which apps run on your own Android phone, and this
+// device and the others paired with Envoy.
 import { useEffect, useState } from "react";
 import { CheckCircleIcon, DeviceMobileIcon } from "@phosphor-icons/react";
 import Companion from "@/components/Companion";
@@ -17,7 +18,7 @@ export default function SettingsPage({ publicUrl, profile }: { publicUrl?: strin
       <div className="px-4 pt-3"><Segmented options={SECTIONS} value={section} onChange={setSection} label="Settings" /></div>
       {profile && <p className="px-6 pt-2 text-meta-2 text-muted">Using {profile === "demo" ? "the demo memory (SkyLark test data)" : "your memory"}</p>}
       <div className="ev-fade" key={section}>
-        {section === "Approvals" && <Settings />}
+        {section === "Approvals" && <><Proactivity /><Settings /></>}
         {section === "Phones" && <Phones />}
         {section === "Devices" && <Companion publicUrl={publicUrl} />}
       </div>
@@ -27,6 +28,42 @@ export default function SettingsPage({ publicUrl, profile }: { publicUrl?: strin
 
 const select = "h-11 max-w-[55%] shrink-0 rounded-full border border-control bg-surface pl-3 pr-2 text-meta font-semibold outline-none focus:border-sage";
 
+
+// Proactivity: offers always wait in the app; this decides which ones also notify you. Approvals and takeovers aren't
+// offers: they always notify.
+const LEVELS: { level: string; label: string; detail: string }[] = [
+  { level: "off", label: "Off", detail: "Questions wait in the app. No notifications for them." },
+  { level: "important", label: "Important only", detail: "When a trigger asks first, a file arrives from your Mac, or an assistant wants to set something up." },
+  { level: "all", label: "Everything", detail: "Also when I notice something you do often and could make a habit." },
+];
+
+function Proactivity() {
+  const [level, setLevel] = useState<string | null>(null);
+  const [saved, setSaved] = useState(false);
+  useEffect(() => { api<{ level: string }>("/api/settings/proactivity").then((r) => setLevel(r.level)).catch(() => {}); }, []);
+  if (!level) return null;
+  const save = (next: string) => {
+    setLevel(next);
+    post<{ level: string }>("/api/settings/proactivity", { level: next }).then((r) => { setLevel(r.level); setSaved(true); setTimeout(() => setSaved(false), 2500); }).catch(() => {});
+  };
+  return (
+    <Section title="Proactivity" intro={<>Envoy can ask &ldquo;Should I&hellip;?&rdquo; when a trigger set to ask fires, or when it notices a habit. Nothing starts until you tap Yes. Choose which questions notify you.</>}>
+      <Card className="overflow-hidden" role="radiogroup" aria-label="Which questions notify you">
+        {LEVELS.map((l) => (
+          <label key={l.level} className="flex min-h-[60px] cursor-pointer items-start gap-3 border-b border-divider px-4 py-3 last:border-b-0">
+            <input type="radio" name="proactivity" className="mt-1" checked={level === l.level} onChange={() => save(l.level)} />
+            <span className="min-w-0">
+              <span className="block text-row font-semibold">{l.label}{l.level === "important" && <span className="font-normal text-muted"> · the default</span>}</span>
+              <span className="mt-0.5 block text-meta-2 text-muted">{l.detail}</span>
+            </span>
+          </label>
+        ))}
+      </Card>
+      <p className="px-2 text-meta-2 text-muted">Approvals and &ldquo;take over the phone&rdquo; always notify you, whatever this says.</p>
+      {saved && <p role="status" className="flex items-center gap-1.5 px-2 text-meta font-semibold text-sage-ink"><CheckCircleIcon size={16} weight="fill" />Saved</p>}
+    </Section>
+  );
+}
 
 type Rules = { default: string; apps: Record<string, string>; routines: Record<string, string> };
 type Info = { rules: Rules; apps: string[]; routines: { name: string; app: string; intent: string; irreversible: boolean }[] };

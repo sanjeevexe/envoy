@@ -3,13 +3,15 @@
 // Envoy's web app. On a phone (the iPhone's Home Screen app): five tabs, Home, Activity, Phone, Memory and Routines,
 // with Settings from the header; the live phone is its own tab (streamed only while it's open). On a wider screen: a
 // sidebar with the same places, the content at a readable width, and the live phone on the right.
-// Links (and notifications) open the right place: ?task=…, ?phone=<avd>; /approve/?id=… is its own page.
+// Links (and notifications) open the right place: ?task=…, ?phone=<avd>, ?offer=<id> (the offer's card in a sheet);
+// /approve/?id=… is its own page.
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   CaretLeftIcon, DeviceMobileIcon, GraphIcon, HouseIcon, PulseIcon, RepeatIcon, SlidersHorizontalIcon, type Icon,
 } from "@phosphor-icons/react";
 import Activity from "@/components/Activity";
 import { ApprovalSheet } from "@/components/Approvals";
+import { OfferSheet } from "@/components/Offers";
 import Avatar, { MOOD_LABEL, Wordmark } from "@/components/Avatar";
 import Home from "@/components/Home";
 import LivePhone, { PhoneSwitch } from "@/components/LivePhone";
@@ -42,6 +44,7 @@ export default function Page() {
   const [avd, setAvd] = useState("envoy-test");
   const [openTask, setOpenTask] = useState<string | null>(null);
   const [reviewing, setReviewing] = useState<string | null>(null); // the approval in the sheet
+  const [asking, setAsking] = useState<string | null>(null); // the offer in the sheet (a push opened it)
   const [memVersion, setMemVersion] = useState(0);
   const [briefVersion, setBriefVersion] = useState(0);
   const [toast, setToast] = useState<{ text: string; key: number } | null>(null);
@@ -65,13 +68,15 @@ export default function Page() {
     }).catch((e) => setAuthed(e instanceof ApiError && e.status === 401 ? false : true));
   }, []);
 
-  // Where a link (or a notification) points: ?task=…, ?phone=<avd>.
+  // Where a link (or a notification) points: ?task=…, ?phone=<avd>, ?offer=<id>.
   const route = useCallback((href: string) => {
     const u = new URL(href, location.origin);
     if (u.pathname.startsWith("/approve")) { location.href = u.href; return; }
     const t = u.searchParams.get("task");
     const phone = u.searchParams.get("phone");
-    if (phone) { setAvd(phone); setTab(window.matchMedia("(max-width: 767px)").matches ? "Phone" : "Home"); }
+    const offer = u.searchParams.get("offer");
+    if (offer) { setAsking(offer); setTab("Home"); }
+    else if (phone) { setAvd(phone); setTab(window.matchMedia("(max-width: 767px)").matches ? "Phone" : "Home"); }
     else if (t) { setOpenTask(t); setTab("Activity"); }
   }, []);
 
@@ -107,6 +112,7 @@ export default function Page() {
         break;
       case "memory": setMemVersion((v) => v + 1); break;
       case "fact_changed": setBriefVersion((v) => v + 1); break;
+      case "offer": setBriefVersion((v) => v + 1); if (e.change === "created") say(e.offer?.title ?? "Envoy has a question"); break;
       case "photo": say(e.summary); break;
       case "paired": say(`Paired: ${e.name}`); break;
     }
@@ -131,7 +137,8 @@ export default function Page() {
   if (authed === false) return <Pair onPaired={load} />;
 
   const reviewed = reviewing ? tasks[approvals[reviewing]?.task_id ?? ""]?.device : undefined;
-  const sheet = reviewing && <ApprovalSheet id={reviewing} onClose={() => setReviewing(null)} device={reviewed ? leases[reviewed]?.name ?? reviewed : undefined} />;
+  const sheet = (reviewing && <ApprovalSheet id={reviewing} onClose={() => setReviewing(null)} device={reviewed ? leases[reviewed]?.name ?? reviewed : undefined} />)
+    || (asking && <OfferSheet id={asking} onClose={() => setAsking(null)} openTask={openTaskTab} />);
   const phoneView = (
     <div className="flex flex-col gap-3">
       <PhoneSwitch phones={phones} avd={avd} onChange={setAvd} />
@@ -145,7 +152,7 @@ export default function Page() {
               onListening={setListening} goPhone={() => go("Phone")} device={leases[avd]} />
       </div>
       {tab === "Activity" && <Activity tasks={taskList} all={tasks} steps={steps} approvals={Object.values(approvals)} openTask={openTask} setOpenTask={setOpenTask}
-                                       review={setReviewing} watch={watch} leases={leases} mood={mood} goPhone={() => go("Phone")} />}
+                                       review={setReviewing} watch={watch} leases={leases} mood={mood} goPhone={() => go("Phone")} version={briefVersion} />}
       {tab === "Phone" && <div className="mx-auto w-full max-w-[520px] p-4 md:pt-8">{phoneView}</div>}
       {tab === "Memory" && <MemoryGraph version={memVersion} />}
       {tab === "Routines" && <RoutinesTab openTask={openTaskTab} />}
