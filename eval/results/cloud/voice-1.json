@@ -1,0 +1,17 @@
+{
+ "base": "https://envoy-cloud.tailffb391.ts.net:8443",
+ "said": "What's my gate for my Chicago flight?",
+ "heard": "What's my gate for my Chicago flight?",
+ "ok": true,
+ "error": null,
+ "partials": 6,
+ "connect_ms": 858,
+ "ready_ms": 910,
+ "audio_ms": 2638,
+ "release_to_text_ms": 198,
+ "chat_ms": 4574,
+ "release_to_reply_ms": 4772,
+ "cost_usd": 0.0001,
+ "reply": "Gate B12, from the SkyLark app 8 minutes ago.",
+ "reply_kind": "memory"
+}
