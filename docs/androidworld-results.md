@@ -271,7 +271,10 @@ What this says, with the caveats attached:
 
 ## What Envoy should change on `main`, ranked
 
-The 13 agent commits below cherry-pick cleanly onto `main` as it is (`d909d1a`, unchanged since it was merged into the branch). On that result `main`'s whole suite passes (159 tests). The backend is then identical to the one measured here, except for the AndroidWorld tests and a two-line trace change (`73c6fab`). Held-out effects are of the set as a whole (31 against 12 of 58, +20 −1). Each change's own evidence is its mechanism, counted on held-out and on dev. None names an app, a task or AndroidWorld.
+The 13 agent commits below cherry-pick cleanly onto `main` as it is on Oct 28 (`3719818`, after Phases 6 and 7). On that result `main`'s whole suite passes (234 tests). Main's commits since the branch was measured touch only routine repair, the phone and the task history, so the agent is still the one measured here. The only differences are the AndroidWorld tests and a two-line trace change (`73c6fab`). Against branches still waiting to merge:
+- `app-routing`: applies cleanly.
+- `claude/repair-fixes` and `claude/overnight-integration`: already in `main`.
+- `claude/wonder-appnotes` (model profiles, app notes): 4 small conflicts, in `plan_input`/`step_input` (`backend/models/prompts.py`) and their two calls (`backend/agent/loop.py`). Both sides add keyword arguments (`apps`, `today`, `remembered` here, `app_notes` there), so each is resolved by keeping both. Held-out effects are of the set as a whole (31 against 12 of 58, +20 −1). Each change's own evidence is its mechanism, counted on held-out and on dev. None names an app, a task or AndroidWorld.
 
 | Rank | Change (branch commit) | Why first | Held-out evidence (baseline → final) | Risk on `main` |
 | --- | --- | --- | --- | --- |
