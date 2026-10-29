@@ -36,6 +36,7 @@ def _norm(s: str) -> str:
 
 
 _STOP = {"the", "your", "you", "is", "at", "on", "in", "to", "for", "and", "my", "a", "an", "of", "it", "from", "gate", "seat", "flight"}
+_OPENS = re.compile(r"^(?:view|open|see|show|go to) (.+)$")  # a button named for the screen it opens (normalized text)
 
 
 def answer_tokens(result: str) -> list[str]:
@@ -76,6 +77,11 @@ def evaluate(check: SuccessCheck | None, screen: ScreenState, result: str, field
         return CheckResult(ok, True, f"{check.value!r} {'is' if ok else 'is not'} visible")
     if check.kind == "element_present":
         ok = any(value in _norm(e.label) or value == _norm(e.resource_id) for e in screen.numbered)
+        if not ok and (m := _OPENS.match(value)):
+            # "View boarding pass" names the button that opens the boarding pass: being on it shows the same thing. The plan
+            # writes the check before seeing the app, and SkyLark's check-in ends on the boarding pass, where no such button is.
+            if any(_norm(e.label) == m.group(1) for e in screen.numbered):
+                return CheckResult(True, True, f"element {check.value!r}: its screen {m.group(1)!r} is open")
         return CheckResult(ok, True, f"element {check.value!r} {'present' if ok else 'not present'}")
     if check.kind == "app_foreground":
         ok = screen.package == check.value
