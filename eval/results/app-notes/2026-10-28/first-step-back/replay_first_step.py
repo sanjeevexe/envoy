@@ -10,10 +10,8 @@ import re
 import sys
 from pathlib import Path
 
-REPO = Path("/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes")
+REPO = Path(__file__).resolve().parents[5]
 sys.path.insert(0, str(REPO / "backend"))
-from memory.app_notes import AppNotes  # noqa: E402
-from memory.store import MemoryStore  # noqa: E402
 from models.adapter import ModelAdapter  # noqa: E402
 from models.prompts import STEP_INSTRUCTIONS, step_input  # noqa: E402
 from models.schemas import StepOutputListed  # noqa: E402
@@ -21,7 +19,7 @@ from models.schemas import StepOutputListed  # noqa: E402
 N = int(sys.argv[1]) if len(sys.argv) > 1 else 10
 D = REPO / "eval/results/app-notes/2026-10-28/traces/skylark"
 GOALS = {"denver_lands": "What time does my Denver flight land?", "bags_boston": "How many checked bags were on my Boston trip?"}
-NOTES = AppNotes(MemoryStore(Path("/var/folders/3n/_xh_hqdn1zn8_w6bc5jr65t40000gn/T/notes-skylark.db"))).for_prompt("com.skylark.air").text
+NOTES = Path(__file__).with_name("skylark-notes.txt").read_text()
 FIX = ("\n- Every action must move toward the GOAL from the current SCREEN. There is no test of the format: never return a "
        "placeholder, template or trial action, and never leave the app the goal needs on the first step.")
 BAD = re.compile(r"(?i)\b(test|testing|template|placeholder|schema|format)\b|why this action|actually tap")

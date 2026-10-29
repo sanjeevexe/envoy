@@ -1,0 +1,7 @@
+Learned by Envoy from earlier runs in com.skylark.air (about the app, not the user; may be out of date):
+- The flight date is on the trip detail screen in the Date row. (seen 2×)
+- Seat assignment is on the trip detail screen in the Seat row. (seen 2×)
+- The gate is on the trip detail screen in the Gate row.
+- Departure and arrival times appear at the top of the trip detail screen.
+- The upcoming trip appears on the home screen as Next trip; tapping it opens trip details.
+- Past trips are listed under My Trips; tap an entry to open its details.

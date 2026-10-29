@@ -1,6 +1,10 @@
-"""Three candidate fixes for the template-like first `back`, on bags_boston's warm first step (notes on)."""
+"""Three candidate fixes for the template-like first `back`, on bags_boston's warm first step (notes on).
+
+  uv run --project backend python eval/results/app-notes/2026-10-28/first-step-back/replay_fixes.py [N]
+"""
 import concurrent.futures as cf, sys
-sys.path.insert(0, "/private/tmp/claude-501/-Users-sanjeevvarma-Desktop-Envoy/00162ac0-c405-47a1-87b7-50b0092e9381/scratchpad")
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 import replay_first_step as R
 from pydantic import Field
 from models.schemas import AgentActionListed, _Strict
