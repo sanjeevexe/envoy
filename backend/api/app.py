@@ -42,6 +42,7 @@ from routines.store import RoutineStore
 
 from api import routine_view
 from api.alerts import ChangeAlerts
+from api.autofill import signin_router
 from api.auth import Auth, Caller, allowed_hosts, public_url, tunnel_hosts
 from api.briefing import build_briefing
 from api.chat import chat
@@ -754,6 +755,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     app.include_router(offers_router(ctx, session, caller))
     app.include_router(handoff_router(ctx, session, caller))
     app.include_router(siri_router(ctx, session, caller, csrf))
+    app.include_router(signin_router(tasks, session))  # saved logins, off by default (api/autofill.py)
 
     # ---- the web app ---------------------------------------------------------------------------
 

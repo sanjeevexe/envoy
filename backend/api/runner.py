@@ -12,6 +12,8 @@ the web app, and writes what it learned into memory (design doc, One task, end t
    **The app.** On an emulator, an app the task names that isn't installed is installed from the Play Store first
    (`api/install.py`): free apps only; a paid one asks you, and Envoy never pays.
 3. **Sign-in first.** If the app opens on a sign-in screen, the user is asked to take over; the run waits for hand back.
+   With saved logins on for that kind of phone (off by default), the phone's password manager fills it first and Envoy
+   presses the app's sign-in button after your yes (api/autofill.py); anything else is handed to you as before.
    A sign-in that appears mid-run (the agent or routine hands off) is handled the same way, then the run goes again.
 4. **Run** through a `GatedDevice` (it waits while the user is in control) with the web approver.
 5. **Remember.** A routine's outputs and final screen, or the agent's final screen, are written to memory.
@@ -35,6 +37,7 @@ from memory.service import MemoryService
 from memory.store import MemoryStore
 from models.adapter import ModelAdapter, profile_models
 from policy.approval_rules import ApprovalRules
+from policy.approvals import ApprovalRequest
 from policy.botcheck import bot_check_reason, is_bot_check_handoff
 from policy.signin import sign_in_reason
 from routines.executor import ExecConfig, RoutineExecutor
@@ -44,6 +47,7 @@ from routines.model import Routine
 from routines.screens import norm
 from routines.store import RoutineStore
 
+from api import autofill
 from api.approvals import WebApprover
 from api.devices import SKYLARK, DevicePool
 from api.install import Installer, app_named_in
@@ -280,7 +284,9 @@ class TaskRunner:
                                 status, result = "needs_you", reason
                                 break
                             screen = await gated.wait_until_settled()
-                        if (why := sign_in_reason(screen)) is not None and not await self._wait_for_user(tid, avd, f"sign-in needed: {why}"):
+                        if (why := sign_in_reason(screen)) is not None \
+                                and not await self._saved_login(tid, gated, approver, app, goal, choice.real_phone) \
+                                and not await self._wait_for_user(tid, avd, f"sign-in needed: {why}"):
                             status, result = "needs_you", "waiting for you to sign in timed out"
                             break
                     trace_id = f"{tid}-r{attempt}" + ("-phone" if tid in self.moved else "")
@@ -325,7 +331,8 @@ class TaskRunner:
                                 moved, reason = await self._bot_check(tid, avd, app, screen, bot)
                                 if moved:
                                     break
-                        if await self._wait_for_user(tid, avd, reason):
+                        if (reason.startswith("sign-in needed") and await self._saved_login(tid, gated, approver, app, goal, choice.real_phone)) \
+                                or await self._wait_for_user(tid, avd, reason):
                             continue
                         status, result = "needs_you", reason if bot else "waiting for you timed out"
                     break
@@ -587,6 +594,27 @@ class TaskRunner:
             if paused != (task.get("status") == "taken_over"):  # a change, kept in the task's history (Pixel 5: it wasn't)
                 self._step(tid, {"kind": "note", "text": (why if why.startswith("paused") else f"paused: {why}") if paused else "resumed on your phone"})
             self._set(tid, status="taken_over" if paused else "running", detail=why or None)
+
+    async def _saved_login(self, tid: str, device: Any, approver: Any, app: str | None, goal: str, real_phone: bool) -> bool:
+        """A sign-in screen, before it is handed to you: with saved logins on for this kind of phone (Settings › Phones),
+        the phone's password manager fills it and, after your yes, Envoy presses the app's sign-in button
+        (api/autofill.py). False: it is handed to you as before."""
+        if not autofill.enabled(self.store, real_phone):
+            return False
+
+        async def ask(description: str, screen: Any) -> bool:
+            # No button named (target ""), so the request's words never approve it: every sign-in asks you.
+            req = ApprovalRequest(task_id=tid, goal=goal, app=app or "", description=description, screen=screen.compact,
+                                  reasons=["Envoy signs in as you here, so it asks every time",
+                                           "your phone's password manager filled the password: Envoy never saw it"],
+                                  origin="signin", target="")
+            return (await asyncio.to_thread(approver.request, req)).approved
+
+        try:
+            return await autofill.sign_in(device, app=app, name=self._name(app), ask=ask, step=lambda d: self._step(tid, d))
+        except Exception as e:  # noqa: BLE001 - anything unexpected: hand it to you as before
+            self._step(tid, {"kind": "note", "text": f"saved login: {type(e).__name__}: {e}"[:200]})
+            return False
 
     async def _wait_for_user(self, tid: str, avd: str, reason: str) -> bool:
         self._set(tid, status="needs_you", waiting_for="takeover", detail=reason)

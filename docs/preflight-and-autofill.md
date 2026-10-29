@@ -127,3 +127,29 @@ Two things a feature would have to handle:
 **Still open: the Pixel 5** (Android 13, Gboard), where the suggestion may come inline in the keyboard strip instead. It's checked at the next sitting with the same steps.
 
 **The build decision** stays as agreed: the feature is built only if it's clean, off by default, and the Pixel doesn't differ.
+
+## Saved logins: the feature (built Oct 29, held until the Pixel check)
+
+The coordinator asked for it to be built now on a branch and held: no branch-ready until the Pixel 5 check. If that check doesn't happen by the Nov 1 cut, the coordinator decides whether the emulator path merges alone.
+
+- **The setting:** `signin.autofill` (`GET/POST /api/settings/signin`, `{"autofill": {"emulator": bool, "phone": bool}}`). Both are **off by default**, and they switch separately. Settings › Phones has the row "Use saved logins from your phone's password manager" (`web/components/SavedLogins.tsx`).
+- **Where it runs:** `runner._saved_login`, in the runner's two sign-in branches: the app opening on a sign-in screen, and an agent or routine handing off with "sign-in needed". It runs only when the setting is on for that kind of phone; otherwise, or when it returns False, the phone is handed to you exactly as before.
+- **What it does** (`api/autofill.py`, only taps):
+  1. Taps the username field.
+  2. Waits up to 4 s for a saved-login row: a row outside the app with an account name beside a password shown as dots. Android's autofill dialog, with Google's rows in it, is what envoy-real showed.
+  3. Taps that row. One account saved under two spellings counts as one; two different accounts are yours to choose.
+  4. Checks that both fields filled, without reading the password: each field must no longer show its hint. A filled password reads as dots, and an empty one as its hint (main `53ab459`).
+  5. Asks you through the normal approval, "Sign in to Wikipedia as Envoytest with your saved login?".
+  6. On your yes, taps the app's own Sign in / Log in button and waits up to 20 s for the sign-in screen to go.
+- **Every sign-in asks.** The approval names no button (`target=""`), so `approval_rules.decide()` has nothing to match the request's words against. "Sign in to Wikipedia as Envoytest with my saved login" in the request doesn't approve it. A test proves this: with a named target, it fails.
+- **It never** types (no `type` action exists in the module), reads a field's value, photographs a screen or stores anything. A secure sign-in screen works the same way, again without a picture.
+- **When anything doesn't match,** it says why in one step and hands the phone to you: no saved login offered, two accounts, fields that don't fill, a no, no sign-in button, or the sign-in still there afterwards.
+- **Tests** (`backend/tests/test_autofill.py`, 12): five screens recorded from this experiment (`tests/screens/autofill_*.xml`; the throwaway username, and a made-up stand-in for the password). They cover the screens as read; a sign-in with taps only; a password never typed, read or photographed in any outcome; a no that leaves Log in unpressed; no saved login; a sign-in that fails afterwards; a secure screen; two accounts; the setting (off by default, per kind); and in the runner, that the sign-in asks even when the request's words name it, and that with the setting off for that kind the phone is handed over as before.
+- **Not measured:** the Pixel 5's inline suggestions in Gboard. The finder skips the keyboard's window on purpose until the Pixel check shows what they look like.
+
+**A live run of the finished feature** is yours to do, or to OK, on the throwaway account:
+1. Start envoy-real (`scripts/start_emulator.sh envoy-real --window`) and install Wikipedia.
+2. Turn on Settings › Phones › Use saved logins › On the emulators.
+3. Ask Envoy, from the web app: "In the Wikipedia app, open my watchlist".
+4. The sign-in screen should bring up the approval "Sign in to Wikipedia as Envoytest with your saved login?". Say yes, and the task goes on signed in.
+5. Uninstall Wikipedia afterwards, and turn the setting off again.

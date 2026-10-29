@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { CheckCircleIcon, DeviceMobileIcon } from "@phosphor-icons/react";
 import Companion from "@/components/Companion";
 import { Outbox } from "@/components/Handoff";
+import SavedLogins from "@/components/SavedLogins";
 import { appName } from "@/components/Tasks";
 import { Card, cx, Section, Segmented } from "@/components/ui";
 import { api, post } from "@/lib/api";
@@ -20,7 +21,7 @@ export default function SettingsPage({ publicUrl, profile }: { publicUrl?: strin
       {profile && <p className="px-6 pt-2 text-meta-2 text-muted">Using {profile === "demo" ? "the demo memory (SkyLark test data)" : "your memory"}</p>}
       <div className="ev-fade" key={section}>
         {section === "Approvals" && <><Proactivity /><Settings /></>}
-        {section === "Phones" && <><Phones /><Outbox /></>}
+        {section === "Phones" && <><Phones /><SavedLogins /><Outbox /></>}
         {section === "Devices" && <Companion publicUrl={publicUrl} />}
       </div>
     </div>

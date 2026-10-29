@@ -6,9 +6,9 @@ Branch `claude/bold-payne-71c942`, on main `beeeb5b`. Model spend: **$0**: nothi
 | --- | --- | --- |
 | 0: `runner.start(..., phone_ok=)` and Instagram in `APP_NAMES` | **In main** (`823fbb8`, merged at `ce747cb`) | `823fbb8` |
 | 1: Before I start | **In main** (`96b1699`) | `862b597`, `96b1699` |
-| 2: saved logins (autofill) | Experiment done on envoy-real: steps 2, 3 and 5 work (3 after the coordinator's password-mask fix `beeeb5b`, which this experiment led to); the Pixel 5 check is open; no feature code yet | `d08518b`, `7b44f3f`, `d8d269d` |
+| 2: saved logins (autofill) | Experiment done on envoy-real (steps 2, 3 and 5 work; 3 after the coordinator's password-mask fix `beeeb5b`, which this experiment led to). **Feature built and held**, off by default per phone kind; no branch-ready until the Pixel 5 check | `d08518b`, `7b44f3f`, `d8d269d`, `2404066`, and the feature commit |
 
-Tests: 446 backend tests pass on main `beeeb5b` plus this branch (`uv run --project backend pytest backend/tests -q`), 23 of them in the new `backend/tests/test_preflight.py` (5 for stage 0, 18 for stage 1). `npm run build` in `web/` passes.
+Tests: 486 backend tests pass on main `53ab459` plus this branch (12 of them in `backend/tests/test_autofill.py`) (`uv run --project backend pytest backend/tests -q`), 23 of them in the new `backend/tests/test_preflight.py` (5 for stage 0, 18 for stage 1). `npm run build` in `web/` passes.
 
 ## Stage 0: the two runner changes others build on
 
@@ -65,12 +65,22 @@ The full write-up is in `docs/preflight-and-autofill.md`. The readings, redacted
 - **Cleanup:**
   - Wikipedia was uninstalled. envoy-real's third-party apps before and after are the same 9: Amazon, Chipotle, DoorDash, Starbucks, Target, `com.github.uiautomator`, and Google's `contactkeys`, `safetycore` and `verifier`.
   - envoy-real was stopped with `stop_emulator.sh` and released. Nothing else was signed in or out.
-- **Decision:** the feature is built only if the Pixel 5 (Gboard, Android 13) doesn't differ. That check is the next sitting's.
+- **The feature: built and held** (the coordinator's call, Oct 29):
+  - `backend/api/autofill.py` and two hooks in `runner.py`'s sign-in branches.
+  - `signin.autofill` is off by default, per phone kind; the Settings › Phones row is `web/components/SavedLogins.tsx`, plus one line in `Settings.tsx`.
+  - It only taps. Every sign-in asks you through the normal approval, and the request's words can't approve it (a mutation check shows the test catches a named target).
+  - 12 tests on the recorded screens. Details and the steps for a live run are in `docs/preflight-and-autofill.md`.
+  - It goes to the coordinator after the Pixel 5 check, or at the Nov 1 cut for the coordinator to decide on the emulator path alone.
+- **Also found and fixed:** `mask_passwords()` (`beeeb5b`) at first masked an *empty* password field too, because Material forms report its hint as its text. The coordinator fixed that in `53ab459`, and `autofill.filled()` now checks both fields.
+
+| Saved logins setting, 390 light | 1440 dark |
+| --- | --- |
+| ![](preflight-logins-report/saved-logins-setting-390-light.jpg) | ![](preflight-logins-report/saved-logins-setting-1440-dark.jpg) |
 - **Device time:** envoy-real 12:36–12:42 (step 1) and 12:48–13:30 (steps 2–5).
 
 ## Not done or not checked
 
-- Stage 2 on the Pixel 5 (same steps, about 15 minutes, the next sitting), then the build decision. If it's built: the `signin.autofill` setting (off by default), the runner's sign-in branch, tests on the recorded screens, and a live run on the throwaway account by the user. The throwaway login stays in envoy3955's Google Password Manager until then.
+- Stage 2 on the Pixel 5 (same steps, about 15 minutes, the next sitting). If Gboard offers the login inline, the finder needs that shape added (it skips the keyboard now). Then a live run of the feature on the throwaway account, by the user or with their OK (steps in the doc). The throwaway login stays in envoy3955's Google Password Manager until then.
 - Using the card's lines on an offer's card and in MCP's `heads_up` is for proactive and muse-link, through their guarded imports.
 - I haven't seen the card live on the iPhone (:8443). It's checked in mock mode at 390 and 1440 only. The live API restarts on the new build only after the coordinator merges.
 - `memory/retrieval.py` names apps for memory answers from its own short list, so Instagram would show there as "android app". That's memory's lane, not changed here.
