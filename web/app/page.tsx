@@ -109,7 +109,7 @@ export default function Home() {
     <>
       {tab === "Chat" && <Chat tasks={tasks} openTask={openTaskTab} compact={mobile} />}
       {tab === "Tasks" && (openTask
-        ? <TaskDetail id={openTask} task={tasks[openTask]} liveSteps={steps[openTask] ?? []} back={() => setOpenTask(null)} />
+        ? <TaskDetail id={openTask} task={tasks[openTask]} liveSteps={steps[openTask] ?? []} back={() => setOpenTask(null)} all={tasks} open={setOpenTask} />
         : <TaskList tasks={taskList} open={setOpenTask} />)}
       {tab === "Approvals" && <Approvals approvals={Object.values(approvals)} />}
       {tab === "Memory" && <MemoryGraph version={memVersion} />}

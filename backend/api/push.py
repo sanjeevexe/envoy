@@ -6,7 +6,9 @@ tap on "Turn on notifications"; each device's subscription is stored here. Envoy
 - an approval is **asked** (one that your own request already gave, or a standing approval, doesn't ask, so it
   doesn't push either);
 - Envoy needs you to **take over** the phone (a sign-in, a bot check);
-- a task is **done, failed or declined** (tasks started by a trigger push only when they fail).
+- a task is **done, failed or declined** (tasks started by a trigger push only when they fail);
+- a task a trigger started **changed a remembered fact** it watches ("Gate changed: B12 → C14"; api/alerts.py decides,
+  and sends through `notify` with kind `change`).
 
 A push carries a title, a line of text and the page to open; tapping it opens that page. It never carries an approval's
 nonce, so it can't decide anything: the approval page still needs your session and a POST.
@@ -129,11 +131,11 @@ class Pusher:
     # ---- sending -------------------------------------------------------------------------------
 
     def notify(self, kind: str, title: str, body: str, path: str, *, tag: str | None = None, urgency: str = "normal",
-               ttl: int = 3600) -> list[Any]:
-        """Push to every subscription, in worker threads; returns the futures."""
+               ttl: int = 3600, push_id: str | None = None) -> list[Any]:
+        """Push to every subscription, in worker threads; returns the futures. `push_id`: the caller's own id for it."""
         with self.store.lock:
             subs = [dict(r) for r in self.store.db.execute("SELECT * FROM push_subs").fetchall()]
-        pid = f"p{int(time.time() * 1000)}-{secrets.token_hex(2)}"
+        pid = push_id or f"p{int(time.time() * 1000)}-{secrets.token_hex(2)}"
         payload = {"id": pid, "kind": kind, "title": title[:80], "body": body[:180], "url": path, "tag": tag or pid, "sent_at": time.time()}
         with self._lock:
             self.sent[pid] = {"kind": kind, "sent_at": payload["sent_at"], "receipts": []}
@@ -205,10 +207,13 @@ class Pusher:
         elif kind == "phone_requested":
             tid = ev.get("task_id")
             task = self.store.get(tid or "") or {}
-            self.notify("phone", f"Use your {ev.get('model') or 'Android phone'}?", task.get("goal") or "Envoy wants to use your phone for a task",
+            body = task.get("goal") or "Envoy wants to use your phone for a task"
+            self.notify("phone", f"Use your {ev.get('model') or 'Android phone'}?", f"{ev['reason']}: {body}" if ev.get("reason") else body,
                         f"/?task={tid}", tag=f"phone-{tid}", urgency="high", ttl=900)
         elif kind == "task_finished":
             task = self.store.get(ev.get("task_id") or "") or {}
+            if task.get("parent"):
+                return  # a part of a cross-app question (api/crossapp.py): only its parent's answer pushes
             status = task.get("status")
             if status not in FINAL:
                 return

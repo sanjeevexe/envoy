@@ -1,0 +1,171 @@
+# Cross-app answers: report
+
+Worker `crossapp`, branch `claude/cross-app-answers-522e1d`, Oct 28 2026. Plan: `prompts/crossapp-plan.md`.
+Granted `envoy-real` only (AndroidWorld held the other slot), so parts ran back to back on one phone there; two phones
+at once are shown offline with fake phones.
+
+## What it does
+
+Ask chat a question that needs two apps ("How many calories are in a Caffè Latte at Starbucks, and what's the first
+place DoorDash shows for a latte?"):
+
+1. **Pre-filter, in code.** Only a message that names two or more apps, or one app plus a comparison or a second
+   question, goes further. Every other message takes today's chat path, byte for byte (tested).
+2. **Lead step.** One Muse Spark call (standard tier, structured output) splits it into one part per app: the app, a
+   goal that stands on its own, and typed inputs for that app's routines. Code keeps only known apps, and inputs that
+   belong to that app's routines and whose values appear in the request. If the lead says it's one app, chat goes on
+   as before.
+3. **Parts are ordinary tasks** (`runner.start(..., parent=…)`): the matcher, the routine with repair and the agent
+   behind it, sign-in hand-offs, the approval gate, on the phone `routing.py` picks. Parts on different phones run at
+   the same time; parts on the same phone wait for its lease, like any two tasks.
+4. **Combine.** One more call writes the answer. Each cited value must appear in its part's result, and each number in a
+   result or the request (or be the difference of two result numbers); otherwise the answer is built in code. Each
+   value's source (app · screen · time) comes from the part's own final screen, added in code, never by the model.
+5. **Memory.** Each part writes its facts like any task. The combined answer becomes a Note whose source
+   (`cross-app answer`) lists each part's task, app, screen and time.
+6. **Web app.** The task list nests parts under their parent; the parent's view has a card per part (app, phone, its
+   own live status, its result) and the answer with its sources. The parent waits on you when a part does (an
+   approval, a sign-in), saying which app.
+
+## Files
+
+| File | Change |
+| --- | --- |
+| `backend/api/crossapp.py` | new: pre-filter, lead, checks, parent task, combine, sources, memory |
+| `backend/api/runner.py` | `start(parent=)`, `on_final` hook (final screen + outputs), `crossapp` slot; step screenshots taken in a thread, steps kept in order |
+| `backend/api/push.py` | a part doesn't push "Done"; its parent's answer does (+2) |
+| `backend/mcp_server/server.py` | `run_task` asks the lead first, as chat does (+12/−2) |
+| `backend/api/store.py` | `parent` column and its migration (+5/−2) |
+| `backend/api/chat.py` | ask the lead first when the pre-filter fires (+19/−2) |
+| `backend/api/app.py` | wire `CrossApp` in `build()` (+2) |
+| `web/components/Tasks.tsx`, `web/lib/api.ts`, `web/app/page.tsx` | parts under their parent, part cards with live status |
+| `backend/tests/test_crossapp.py` | 27 offline tests |
+| `eval/run_crossapp.py`, `eval/smoke_crossapp.py`, `eval/results/crossapp/` | end to end, the device check of the follow-ups, and their evidence |
+
+Not touched: `backend/agent/`, `backend/routines/`, `backend/policy/`, `backend/memory/`, `backend/models/`, existing
+`eval/` files.
+
+## Evidence
+
+### Offline: two phones at once (`backend/tests/test_crossapp.py`, 27 tests; `eval/results/crossapp/offline.txt`)
+
+A real `TaskRunner` (its routing, per-phone lease, statuses, approvals) with fake phones whose routine work takes 0.5 s:
+
+| Case | Result |
+| --- | --- |
+| SkyLark part (envoy-test) + Starbucks part (envoy-real) | both phones busy at once for > 0.4 s of 0.5 s; answer in < 0.85 s |
+| Starbucks + DoorDash (both envoy-real) | no overlap; the second part shows "waiting for envoy-real"; ≥ 0.95 s |
+| `sequential=True` on two phones | no overlap (the baseline) |
+| One-app requests (3) | same model calls, same task started, same reply as a runner without cross-app answers |
+| Lead says one app / lead call fails | today's path, same task (+1 call when the lead ran) |
+| Split checks | unknown apps, inputs not in the request, inputs not of that app's routines: dropped; > 4 parts trimmed |
+| Combine | only whole numbers from the results or the request (not the 45 of $5.45), codes like B22 from a result, a cite from every part that answered and found in the answer; else the answer is built from the parts; a difference of two prices is allowed |
+| Partial / all failed / declined / stop | named in the answer / parent failed with no combine call / declined part named / running parts stopped, a part that already answered kept |
+| Live status | parent `waiting_approval` with "Starbucks: …" while a part waits; each answer shows as it comes in |
+| Memory | a Note with the answer; source `cross-app answer` with each part's task, app, screen and time |
+| Pushes | one "Done" push per cross-app question (the parent's answer), not one per part too; a task on its own still pushes |
+| Screenshots | each traced step's screenshot (0.15 s, blocking, as a gRPC call is) is taken in a thread: two parts on two phones still overlap (> 0.4 s, wall < 0.85 s) and each part's steps keep their order with their pictures; taken on the event loop as before, the same test took 1.18 s |
+| MCP | `run_task` with a cross-app question asks the lead and starts the parent (its reply lists the parts); a one-app goal starts its task with no lead call, and a failing lead falls back to that |
+
+Full backend suite: 165 passed (138 before this work + 27 new) with `main` d909d1a merged in; the web build passes.
+
+An independent review of the diff found, and I fixed: the combine check accepted pieces of numbers ("$5" against
+$5.45), codes (gate B23) and uncited names; stopping the parent also stopped parts that had already answered (losing
+their memory write); a parent that crashed left its parts running; overlap was summed per pair (three phones could
+report more than the wall time); the eval's cost column used billed rather than standard prices. Each has a test.
+
+### End to end on envoy-real (`eval/results/crossapp/report.md`, `runs.json`)
+
+Granted envoy-real only, so parts took turns on one phone. API copy on :8713 with its own data, token and routine
+library (SkyLark + Phase 7's `real_compiled`); standard tier; every approval declined; apps closed after each part.
+
+| Question | Path | Runs | Answer | Wall s, parallel / sequential |
+| --- | --- | --- | --- | --- |
+| R1 Caffè Latte calories at Starbucks + DoorDash's first latte place | 2 routines, 0 calls on the phone | 2 + 2 | 190 calories · McDonald's | 31.2, 36.9 / 31.6, 31.2 |
+| R3 Caffè Mocha calories at Starbucks + Space Needle's address in Maps | 2 routines (1 self-repair for the new drink) | 2 + 2 | 370 calories · 400 Broad St, Seattle, WA 98109 | 59.8, 43.0 / 37.3, 36.5 |
+| R2 "What's a Caffè Latte at Starbucks vs on DoorDash?" (price) | the agent in both apps (no price routine) | 1 + 1 | DoorDash $5.75 (Starbucks for DoorDash); Starbucks as a guest shows no price | 172.1 / 187.0 (failed) |
+
+- **Every run** went through chat's pre-filter and lead, split into the right two apps, asked for **no approval**, and
+  gave one answer whose values each carry app · screen · time (e.g. `Starbucks · the "Caffè Latte" screen · 5:27 AM`;
+  Starbucks names its activities `dIu`, so the screen is named by its title).
+- **Cost per question** with routines: 6–8 calls, $0.015–0.028 (lead 1, matcher 2, combine 1, memory extraction 2–3).
+  The lead adds ~2–3 s before the parts start and the combine ~2 s at the end.
+- **One phone can't be faster in parallel, and wasn't.** What the orchestrator changes there: the phone is never idle
+  between parts (0.0 s, against 1.9–2.3 s in sequential mode while the next part is matched). The slower parallel runs
+  come from the apps, not the orchestration: R3's first parallel run repaired the Starbucks routine for a new drink
+  (+1 repair call, +19 s), and in the other two Starbucks happened to run second (its part takes 18–20 s after another
+  app, 11–13 s first). Parts on one phone take the phone in the order they're ready, so that order varies.
+- **R2 is the pitch's price comparison**, and the agent's limits show: DoorDash found the price in 1 of 2 runs; the
+  Starbucks app as a guest needs a store before it shows prices, and its agent stopped at the 25-step limit both times.
+  The answer says which app couldn't be checked (`ui_parent_partial.jpg`).
+- **Two fixes found by the real runs** (`r2_before_fix.json`): first, the lead rewrote the price question to fit the
+  learned routines (calories at Starbucks, the first DoorDash restaurant); then it kept the words but read "What's a
+  Caffè Latte" literally (Starbucks returned its description). The lead now keeps the user's question whether or not a
+  routine answers it, and reads a bare comparison across shopping or delivery apps as a price; the combine says when a
+  result answers something else.
+- **A device failure** (`device_failure.json`): envoy-real's system server died mid-run (`DeadSystemRuntimeException`,
+  the hang Phase 7 also saw). Both parts failed on the device and the parent reported each app's reason. The clean stop
+  hung on `adb emu kill`; ending envoy-real's qemu process (SIGTERM) recovered it, and it cold-booted with its account
+  and apps.
+- **Web app**: `ui_list_queued.jpg` (live: Starbucks running, DoorDash "waiting for a phone"),
+  `ui_parent_live.jpg` (the parent with a card per part and the real-app phone live beside it),
+  `ui_parent_partial.jpg` (a partial answer: DoorDash's price, Starbucks named as missing).
+- **Spend**: $0.59 in 244 standard-tier calls in this worktree today (the 10 kept runs: 174 calls, $0.42; the rest are
+  the first R1 pair, the pre-fix R2 runs and the device-failure runs).
+
+### Device check of the follow-ups (053adf0) on envoy-real (`eval/results/crossapp/smoke.json`, `eval/smoke_crossapp.py`)
+
+One run of each on a cold-booted envoy-real (07:46–07:50): a single-app Starbucks task, R1 through chat, R1 through
+MCP `run_task` over HTTP (the API copy's own bearer token), and a single-app DoorDash task. Every task's step list
+matched its run's trace step for step, and every step has its picture (8/8 for each Starbucks part, 2/2 for each
+DoorDash part). Pushes Envoy decided to send: exactly one per question (each cross-app parent's "Done", none from its
+parts) and one per single-app task. The copy has no push subscription, so nothing was delivered. MCP returned 200 with
+`parts` and the parent answered. No approvals were asked; $0.05 in 16 standard-tier calls. The Starbucks part
+failed every time ("outputs not found: calories"), and the cause is the app's state, not this change. Last night's runs
+left five recent searches in the Starbucks app. The routine's `select_recent_search_result` locator (`in_list: false`)
+no longer matches that longer list (it waited 5 s and skipped). Its repair then tapped a recent search, which opens a
+results list, not the drink (`smoke_starbucks_results_list.jpg`), and the repair's after-checks accepted it. DoorDash
+answered each time (Philz Coffee), and the cross-app answers named Starbucks as not checked.
+
+### Two phones at once (3719818): T1 and T2 on envoy-test and envoy-real (`eval/results/crossapp/report.md`, `runs.json`)
+
+Oct 28, 20:31–20:35 EDT, one parallel/sequential pair per question, with SkyLark seeded on envoy-test by
+`run_crossapp.py`. The parts truly overlapped. In both parallel runs the SkyLark part and the Maps part reached their
+phones within 0.4 s (T1) and 0.1 s (T2) of each other, and the SkyLark part (4.1 s, 4.6 s on envoy-test) ran entirely
+inside the Maps part on envoy-real (overlap 3.8 s and 4.5 s). In the sequential runs the Maps part started only after
+the SkyLark part ended (overlap 0). All four answers were right and agreed: gate A7 (the seeded Denver trip, via the
+`skylark_get_flight_gate` routine), the Space Needle at 400 Broad St, Seattle, WA 98109 (the Maps routine), and the
+drive from 1 Hacker Way to SFO at 31 min (17 mi) via US-101 N (an agent run: there's no directions routine). T1:
+22.6 s parallel vs 30.4 s sequential (7.8 s, 26% saved), 6 calls each, $0.023 and $0.020. T2: 98.3 s parallel vs 60.7 s
+sequential, because the Maps agent took 90.7 s in the parallel run (two replans, eight Backs before it set the start)
+against 47.8 s in the sequential one. Overlapping saved the 4.6 s SkyLark part, and agent variance cost 43 s. T2 took
+32 and 18 calls, $0.091 and $0.057. No approvals were asked; 62 calls, $0.190 in all. Both emulators were stopped
+afterwards. With one run per mode these are single samples: the routine-only question (T1) shows the expected saving,
+and the agent question (T2) is dominated by the agent's own run time.
+
+## Not done
+
+- **The Starbucks calories routine on envoy-real**: fixed on Oct 28 (074390a; `eval/results/repair/`). The routine now types
+  the drink instead of tapping a recent search, and a repair counts only on the screen the step was meant to reach.
+  It returned 190 and 250 calories on envoy-real with the recent searches left in place, with no model calls.
+
+- **Two real phones at once**: done on Oct 28 (T1, T2 above).
+- **MCP**: when the lead says one app, its call's cost isn't added to the task MCP starts (chat adds it to its reply);
+  the cost log has it.
+- **Matcher precision** (not my files): for "a Caffè Latte on DoorDash" without the word price, the matcher chose the
+  first-restaurant routine. The lead's price rule avoids that wording now.
+- **The lead may add an app the user didn't name** (needed: "how long is the drive" names no app). A same-app comparison
+  that fires the pre-filter ("is the Starbucks latte cheaper than the mocha?") relies on the lead saying one app.
+- The parent's `cost_usd` doesn't include matcher calls (the runner doesn't count their cost); the cost log is the
+  reference, and the eval reports from it.
+- The design doc's "Several phones at once" still calls this a stretch goal; suggested text: "Built: a lead step (one Muse
+  Spark call) splits a request that needs several apps into one task per app; each runs through the matcher, routine and
+  agent on the phone routing picks, at the same time on different phones; one answer cites each app's screen and time."
+
+## Merging
+
+From the main checkout: `git merge claude/cross-app-answers-522e1d` (main d909d1a is already merged in; no conflicts).
+Shared files touched, all additively: `backend/api/runner.py`, `store.py`, `chat.py`, `app.py`, `push.py`,
+`backend/mcp_server/server.py`, `web/components/Tasks.tsx`, `web/lib/api.ts`, `web/app/page.tsx`. In `push.py` the change is
+two lines in `on_event`'s `task_finished` branch; the alerts branch changes its docstring and `notify`, not that branch. After merging: `uv run --project backend pytest backend/tests -q` and
+`npm run build` in `web/`. The `parent` column is added to existing task databases on the API's next start.

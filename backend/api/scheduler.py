@@ -1,15 +1,29 @@
 """Scheduled and event-triggered tasks (design doc, Scheduled and event-triggered tasks).
 
-Four kinds of trigger, checked every few seconds:
+Five kinds of trigger, checked every few seconds:
 
 - **time**: every N minutes, daily at a time, or once at a moment.
 - **before_fact**: a time derived from memory, e.g. 24 hours before any flight departs. It is computed again on every
   check, so when the departure changes (a delay), the trigger moves with it; each departure fires once.
 - **watch**: rerun a read-only routine every N minutes (for example, the gate) until a moment.
 - **email**: a new email from a sender (and subject) starts a routine.
+- **fact_changed**: a remembered fact changes (memory's `fact_replaced`: a new value superseding an old one, not a first
+  sighting and not your own edit), e.g. a flight's departure time. Each change fires once; several changes to the same
+  fact between two checks fire once, from the first old value to the last new one (none if it went back). Changes made
+  while the trigger is paused are skipped, not replayed. A change made by a task this same trigger started doesn't fire
+  it again.
 
-What a trigger runs is fixed when you create it: a goal written by you, or a routine. Memory and emails only supply
-typed values: `{trip.destination}` in a goal template, or a routine input mapped to `Trip.destination`. They never
+Email and fact-changed triggers read memory from a cursor (an email's row, an event's seq) that counts rows in one memory
+database, while the triggers live with the tasks, which both profiles share. So each cursor names its database
+(`spec.memory_db`). After a restart on the other profile, or on a rebuilt database, the trigger starts again from the end of
+that database's log: nothing from before is replayed, and nothing new waits for the count to catch up.
+
+A watcher's run pushes when it changed a remembered fact it watches (`spec.alert`, on by default for watchers;
+`spec.alert_on`, by default what its routine reads); the sending is in api/alerts.py.
+
+What a trigger runs is fixed when you create it: a goal written by you, or a routine. Memory, emails and changes only
+supply typed values: `{trip.destination}` in a goal template, `{change.old}` and `{change.new}`, or a routine input mapped
+to `Trip.destination`. They never
 supply the goal or the plan, and values are cut to one short line. Triggered tasks go through the same policy as any
 other: an irreversible step still needs your approval.
 """
@@ -17,18 +31,41 @@ other: an irreversible step still needs your approval.
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import json
 import re
 import time
 from datetime import datetime, timedelta
+from pathlib import Path
 from typing import Any, Callable
 
 from memory.store import MemoryStore
-from memory.types import parse_date
+from memory.types import TYPES, normalize_key_value, parse_date
 
 from api.store import TaskStore
 
-KINDS = ("time", "before_fact", "watch", "email")
+KINDS = ("time", "before_fact", "watch", "email", "fact_changed")
+CURSORS = {"email": "after_rowid", "fact_changed": "after_seq"}  # kind → its cursor in the memory database
+
+
+def memory_db_id(memory: MemoryStore) -> str:
+    """Which memory database a cursor counts in: its file and that file's inode, hashed. scripts/demo_setup.py deletes
+    and rebuilds the demo database at the same path, which starts its log over."""
+    if not isinstance(memory.path, Path):
+        return f"mem-{id(memory.db):x}"  # an in-memory database is a new one every time
+    try:
+        ino = memory.path.stat().st_ino
+    except OSError:
+        ino = 0
+    return hashlib.sha256(f"{memory.path.resolve()}#{ino}".encode()).hexdigest()[:12]
+
+
+def check_alert(spec: dict[str, Any]) -> None:
+    """A trigger's alert settings (api/alerts.py): `alert` on or off, `alert_on` a list of attributes."""
+    if "alert" in spec and not isinstance(spec["alert"], bool):
+        raise ValueError("alert is on or off (true or false)")
+    if spec.get("alert_on") is not None and not (isinstance(spec["alert_on"], list) and all(isinstance(a, str) for a in spec["alert_on"])):
+        raise ValueError("alert_on is a list of attributes")
 
 
 def _clean(v: Any) -> str:
@@ -52,6 +89,8 @@ class Scheduler:
         self.store, self.memory, self.start_task, self.bus, self.routines = store, memory, start, bus, routines
         self.clock, self.every_s = clock, every_s
         self._task: asyncio.Task | None = None
+        self._scanned: dict[str, int] = {}  # fact_changed trigger → the last memory event seq its check read
+        self.memory_db = memory_db_id(memory)
 
     # ---- creating ------------------------------------------------------------------------------
 
@@ -69,6 +108,20 @@ class Scheduler:
                     raise ValueError("a watcher may only rerun a read-only routine")
         if kind == "email":
             spec.setdefault("after_rowid", self._last_email_rowid())  # only mail that arrives from now on
+        if kind == "fact_changed":
+            type_ = spec.get("entity_type")
+            if type_ not in TYPES:
+                raise ValueError(f"unknown entity type {type_!r}")
+            attrs = spec.get("attributes") or ([spec["attribute"]] if spec.get("attribute") else [])
+            if not attrs or not all(isinstance(a, str) for a in attrs):
+                raise ValueError("a fact-changed trigger names the attribute it watches")
+            if bad := [a for a in attrs if a not in TYPES[type_].attributes]:
+                raise ValueError(f"{type_} has no attribute {bad[0]!r}")
+            spec["attributes"] = attrs
+            spec.setdefault("after_seq", self._last_event_seq())  # only changes from now on
+        if kind in CURSORS:
+            spec["memory_db"] = self.memory_db  # the database that cursor counts in
+        check_alert(spec)
         return self.store.add_trigger(kind, name, spec, action)
 
     # ---- the loop ------------------------------------------------------------------------------
@@ -89,7 +142,11 @@ class Scheduler:
         now = self.clock()
         started = []
         for trig in self.store.triggers():
+            if trig["kind"] in CURSORS:
+                self._rebaseline(trig)
             if not trig["enabled"]:
+                if trig["kind"] == "fact_changed" and (last := self._last_event_seq()) > trig["spec"].get("after_seq", 0):
+                    self._advance(trig["id"], last)  # paused: what changes meanwhile isn't replayed on resume
                 continue
             for key, values in self.due(trig, now):
                 task = self._fire(trig, values)
@@ -97,7 +154,25 @@ class Scheduler:
                 self.store.update_trigger(trig["id"], last_fired=now, fired=fired)
                 trig["fired"] = fired
                 started.append(task)
+            if (upto := self._scanned.pop(trig["id"], None)) is not None and upto > trig["spec"].get("after_seq", 0):
+                self._advance(trig["id"], upto)  # keeps each check short
         return started
+
+    def _rebaseline(self, trig: dict[str, Any]) -> None:
+        """A cursor taken in another memory database (the other profile, or this one before a rebuild) means nothing here:
+        start from the end of this one's log. Its fired keys go too, since they are row numbers in that other log."""
+        field = CURSORS[trig["kind"]]
+        end = self._last_event_seq() if trig["kind"] == "fact_changed" else self._last_email_rowid()
+        if trig["spec"].get("memory_db") == self.memory_db and trig["spec"].get(field, 0) <= end:
+            return  # the same database (past its end only if its log started over)
+        cur = self.store.trigger(trig["id"]) or trig
+        trig["spec"], trig["fired"] = {**cur["spec"], field: end, "memory_db": self.memory_db}, []
+        self.store.update_trigger(trig["id"], spec=trig["spec"], fired=[])
+
+    def _advance(self, tid: str, seq: int) -> None:
+        cur = self.store.trigger(tid)  # read again: an alert setting saved during this tick stays
+        if cur is not None:
+            self.store.update_trigger(tid, spec={**cur["spec"], "after_seq": seq})
 
     def due(self, trig: dict[str, Any], now: float) -> list[tuple[str, dict[str, str]]]:
         """(a key that fires once, the values it brings) for each occasion that is due now."""
@@ -126,6 +201,9 @@ class Scheduler:
         elif kind == "email":
             for rowid, values in self._new_emails(spec, fired):
                 out.append((f"mail{rowid}", values))
+        elif kind == "fact_changed":
+            for seq, values in self._changes(trig, fired):
+                out.append((f"chg{seq}", values))
         return out
 
     def occasions(self, spec: dict[str, Any]) -> list[tuple[float, str, dict[str, str]]]:
@@ -193,6 +271,49 @@ class Scheduler:
                     values.setdefault(f"{e.get('type', '')}.{k}", v)
             out.append((int(r[0]), values))
         return out
+
+    # ---- fact-changed triggers ---------------------------------------------------------------
+
+    def _last_event_seq(self) -> int:
+        row = self.memory.db.execute("select max(seq) from events").fetchone()
+        return int(row[0] or 0)
+
+    def _changes(self, trig: dict[str, Any], fired: set[str]) -> list[tuple[int, dict[str, str]]]:
+        """Memory's changes since the last check that match: (seq, typed values for the action)."""
+        spec = trig["spec"]
+        attrs = set(spec.get("attributes") or [spec.get("attribute")])
+        events = self.memory.events(spec.get("after_seq", 0), kind="fact_replaced")  # read-only: memory's own log
+        net: dict[tuple[str, str], dict[str, Any]] = {}  # (entity, attribute) → first old, last new, last seq
+        for ev in events:
+            if f"chg{ev['seq']}" in fired or ev.get("attribute") not in attrs:
+                continue
+            eid = self.memory.resolve(ev["entity"])
+            e = self.memory.entity(eid) or {}
+            if e.get("type") != spec.get("entity_type") or self._made_by(trig, ev):
+                continue
+            k = (eid, ev["attribute"])
+            net[k] = {"type": e["type"], "old": net[k]["old"] if k in net else ev.get("old") or "", "new": ev.get("value") or "", "seq": int(ev["seq"])}
+        out = []
+        for (eid, attr), ch in net.items():
+            if normalize_key_value(attr, ch["old"]) == normalize_key_value(attr, ch["new"]):
+                continue  # it went back within one check: nothing changed
+            values = self.values(eid)
+            type_ = ch["type"].lower()
+            for f in self.memory.current_facts(eid):
+                values[f"{type_}.{f['attribute']}"] = f["value"]
+            values.update({"change.attribute": attr, "change.old": ch["old"], "change.new": ch["new"]})
+            out.append((ch["seq"], values))
+        if events:
+            self._scanned[trig["id"]] = int(events[-1]["seq"])
+        return out
+
+    def _made_by(self, trig: dict[str, Any], ev: dict[str, Any]) -> bool:
+        """The change came from a task this trigger started (so "when the gate changes, read the gate" can't feed itself)."""
+        row = self.memory.db.execute("select source from facts where id = ?", (ev.get("fact"),)).fetchone()
+        src = self.memory.source(row[0]) if row and row[0] else None
+        tid = ((src or {}).get("reference") or {}).get("task_id")
+        task = self.store.get(tid) if tid else None
+        return bool(task and task.get("source") == f"trigger:{trig['name']}")
 
     # ---- firing --------------------------------------------------------------------------------
 

@@ -1,0 +1,148 @@
+{
+ "time": "2026-10-28T21:05:39+00:00",
+ "phone": {
+  "id": "phone-09031FDD4000C6",
+  "model": "Pixel 5",
+  "android": "13",
+  "size": [
+   1080,
+   2340
+  ],
+  "density": 440
+ },
+ "settling": {
+  "settings_battery": {
+   "tap_to_settled_ms": {
+    "p50": 1188.2,
+    "p90": 1369.5,
+    "max": 1388.3,
+    "n": 10
+   },
+   "runs": 10,
+   "premature": 1,
+   "live_values_changed": 0,
+   "expected_missing": 0,
+   "notes": [
+    "changed after settling: +[] -['Text|Battery usage data is approximate and can change based on usage.']"
+   ]
+  },
+  "skylark_home_to_trips": {
+   "tap_to_settled_ms": {
+    "p50": 981.3,
+    "p90": 1146.6,
+    "max": 1318.7,
+    "n": 10
+   },
+   "runs": 10,
+   "premature": 0,
+   "live_values_changed": 0,
+   "expected_missing": 0,
+   "notes": []
+  },
+  "skylark_trips_to_home": {
+   "tap_to_settled_ms": {
+    "p50": 895.1,
+    "p90": 972.8,
+    "max": 974.0,
+    "n": 10
+   },
+   "runs": 10,
+   "premature": 0,
+   "live_values_changed": 0,
+   "expected_missing": 0,
+   "notes": []
+  },
+  "settings_apps": {
+   "tap_to_settled_ms": {
+    "p50": 1046.0,
+    "p90": 1347.3,
+    "max": 1370.3,
+    "n": 10
+   },
+   "runs": 10,
+   "premature": 4,
+   "live_values_changed": 0,
+   "expected_missing": 0,
+   "notes": [
+    "changed after settling: +['Button|Special app access'] -['Button|Special app access · 1 app can use unrestricted data']",
+    "changed after settling: +['Button|Special app access'] -['Button|Special app access · 1 app can use unrestricted data']",
+    "changed after settling: +['Button|Special app access'] -['Button|Special app access · 1 app can use unrestricted data']",
+    "changed after settling: +['Button|Special app access'] -['Button|Special app access · 1 app can use unrestricted data']"
+   ]
+  },
+  "settings_network": {
+   "tap_to_settled_ms": {
+    "p50": 1372.3,
+    "p90": 1392.5,
+    "max": 1407.6,
+    "n": 10
+   },
+   "runs": 10,
+   "premature": 0,
+   "live_values_changed": 0,
+   "expected_missing": 0,
+   "notes": []
+  }
+ },
+ "tree_read_ms": {
+  "p50": 157.4,
+  "p90": 178.7,
+  "max": 190.5,
+  "n": 10
+ },
+ "observe_ms": {
+  "p50": 245.3,
+  "p90": 255.8,
+  "max": 268.1,
+  "n": 10
+ },
+ "screenshot_ms": {
+  "scrcpy_frame": {
+   "p50": 7.1,
+   "p90": 774.4,
+   "max": 994.8,
+   "n": 10
+  },
+  "adb_screencap": {
+   "p50": 331.5,
+   "p90": 331.7,
+   "max": 331.7,
+   "n": 3
+  }
+ },
+ "typing": {
+  "skylark_last_name": {
+   "type_ms": {
+    "p50": 753.1,
+    "p90": 813.1,
+    "max": 946.5,
+    "n": 10
+   },
+   "exact_via_get_text": 10,
+   "shown_in_dump": 10,
+   "clipboard_preview_shown": 0,
+   "runs": 10,
+   "keyboard_unchanged": true
+  },
+  "settings_search": {
+   "type_ms": {
+    "p50": 485.5,
+    "p90": 498.2,
+    "max": 503.5,
+    "n": 10
+   },
+   "exact_via_get_text": 10,
+   "shown_in_dump": 10,
+   "clipboard_preview_shown": 0,
+   "runs": 10,
+   "keyboard_unchanged": true
+  },
+  "settings_search_submit": {
+   "results_shown": 4
+  },
+  "clipboard": {
+   "unchanged": true,
+   "readable": true
+  }
+ }
+}

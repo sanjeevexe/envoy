@@ -1,29 +1,38 @@
 """Phase 6 offline tests: the real-phone device layer, routing between phones, asking before using your phone, pausing
-when you touch it, and screens with no accessibility tree (grounding, SAM 3.1, routines that replay drawn targets)."""
+when you touch it, and screens with no accessibility tree (grounding, SAM 3.1, routines that replay drawn targets).
+Also apps that block emulators (a bot check sets "use my phone" for the app) and installing a missing app from the Play
+Store, on real Play Store screens captured from envoy-real (tests/screens/playstore_*.xml)."""
 
 from __future__ import annotations
 
 import asyncio
 import base64
 import io
+import json
 import struct
 import time
+from pathlib import Path
 from types import SimpleNamespace
 
 import numpy as np
 import pytest
 from PIL import Image, ImageDraw
 
+import api.runner as runner_mod
 from agent.vision import Vision, mark, parse_sam
 from api.devices import DevicePool, Lease
 from api.events import EventBus
-from api.routing import Choice, asks_for_phone, choose, strip_phone_words
-from api.runner import TaskRunner
+from api.install import Installer, app_named_in, card_listing, card_title, guess_installed, pick_result, read_listing
+from api.routing import BLOCKS_EMULATOR, EMULATOR_REFUSED, Choice, app_names, asks_for_phone, blocks_emulator, choose, strip_phone_words
+from api.runner import FRESH_INSTALL, TaskRunner, app_for
 from api.store import TaskStore
 from devices import phone as phone_mod
 from devices.phone import is_physical_input, phone_id
 from devices.scrcpy import DOWN, MSG_TOUCH, UP, key_msg, text_msg, touch_msg
+from devices.screen import build_state
 from memory.store import MemoryStore
+from policy.approvals import ApprovalDecision
+from policy.botcheck import bot_check_reason, is_bot_check_handoff
 from routines.visual import match_crop, ncc
 
 # ---- the scrcpy control protocol -----------------------------------------------------------------
@@ -438,3 +447,468 @@ def test_asking_for_your_phone_is_pushed_to_the_iphone(tmp_path):
     pusher.notify = lambda kind, title, body, path, **kw: sent.append((kind, title, body, path, kw.get("urgency")))  # type: ignore[method-assign]
     pusher.on_event({"type": "phone_requested", "task_id": task["id"], "device": "phone-R5CT", "model": "Galaxy S22"})
     assert sent == [("phone", "Use your Galaxy S22?", "Check me in for my flight", f"/?task={task['id']}", "high")]
+
+
+# ---- apps that block emulators: the starting list, and Envoy setting "use my phone" after a bot check ----------------
+
+SHOP = "com.example.shop"
+
+
+def test_apps_known_to_block_emulators_are_data_and_go_to_your_phone():
+    data = json.loads((Path(runner_mod.__file__).with_name("emulator_blocked.json")).read_text())["apps"]
+    assert data == BLOCKS_EMULATOR and {"com.target.ui", "com.ubercab.eats", "com.chase.sig.android", "com.infonow.bofa"} <= set(data)
+    assert EMULATOR_REFUSED["com.target.ui"] == "Target" and app_names()["bank of america"] == "com.infonow.bofa"
+    assert app_for("What's my balance in Bank of America?") == "com.infonow.bofa"
+    c = choose("com.target.ui", phones=[PHONE])
+    assert c.real_phone and c.reason.startswith("Target blocks emulators")
+    # No phone: said plainly, and nothing runs on an emulator.
+    none = choose("com.chase.sig.android")
+    assert none.device is None and none.error.startswith("Chase blocks emulators; it needs a real Android phone. Connect")
+    # Asking for the emulator still wins: you may want to try it there.
+    assert choose("com.target.ui", asked="emulator").device == "envoy-real"
+
+
+def test_a_learned_block_counts_only_while_the_app_is_set_to_your_phone():
+    learned = {SHOP: {"name": "Shop", "why": "showed a bot check (HSBlockActivity) on the emulator"}}
+    c = choose(SHOP, phone_apps=[SHOP], learned=learned)
+    assert c.device is None and c.error.startswith("Shop blocks emulators; it needs a real Android phone")  # no emulator fallback
+    assert choose(SHOP, phone_apps=[SHOP], learned=learned, phones=[PHONE]).real_phone
+    assert choose(SHOP, phone_apps=[], learned=learned).device == "envoy-real"  # unticked in Settings: undone
+    assert blocks_emulator(SHOP, [], learned) is None
+    assert choose(SHOP, phone_apps=[SHOP]).device == "envoy-real"  # a plain setting still falls back to the emulator
+
+
+def test_an_app_envoy_does_not_know_yet_goes_to_the_real_app_emulator():
+    assert choose(None, named="Wikipedia").device == "envoy-real"  # today it went to SkyLark's envoy-test
+    assert choose(None).device == "envoy-test"
+    assert app_for("In the Expedia app, check my flight to Denver") is None  # an app to install, not SkyLark for "flight"
+    assert app_for("check my flight to Denver") == "com.skylark.air"
+    assert app_for("In the Wikipedia app, look up Paris", {"wikipedia": "org.wikipedia"}) == "org.wikipedia"
+
+
+def test_bot_checks_are_recognized_on_screen_and_in_hand_offs():
+    def scr(activity, *labels):
+        return SimpleNamespace(activity=activity, package=activity.rsplit(".", 1)[0], numbered=[SimpleNamespace(label=x) for x in labels])
+    assert bot_check_reason(scr("com.target.ui.HSBlockActivity")) == "bot check (HSBlockActivity)"  # Target: an empty tree
+    assert bot_check_reason(scr("com.shop.Main", "Press & Hold", "to confirm you are a human")) == "bot check (press & hold)"
+    reviews = scr("com.google.android.apps.maps.Place", *[f"review {i}" for i in range(20)], "I saw unusual traffic here")
+    assert bot_check_reason(reviews) is None and bot_check_reason(None) is None
+    assert is_bot_check_handoff("bot check (CAPTCHA): press and hold") and is_bot_check_handoff("Human verification needed")
+    assert not is_bot_check_handoff("sign-in needed: password field on screen") and not is_bot_check_handoff(None)
+
+
+def page(activity: str, package: str, *labels: str) -> SimpleNamespace:
+    """A screen as the runner reads it (bot checks, sign-ins, approvals)."""
+    els = [SimpleNamespace(label=x, kind="Text", editable=False, visible=True, status_bar=False, package=package) for x in labels]
+    return SimpleNamespace(package=package, activity=activity, numbered=els, elements=els, secure=False, has_password_field=False,
+                           compact="\n".join(labels), signature=activity)
+
+
+class AppPhone:
+    """An emulator or phone with apps on it: `front` says what an app shows when it opens."""
+
+    def __init__(self, front: dict[str, SimpleNamespace], packages: set[str]) -> None:
+        self.front, self.packages = front, set(packages)
+        self.screen = page("launcher.Home", "com.google.android.apps.nexuslauncher")
+        self.adb = SimpleNamespace(shell=lambda cmd: "\n".join(f"package:{p}" for p in sorted(self.packages)
+                                                                if p == str(cmd).split()[-1]))
+
+    async def launch(self, app, fresh=False):
+        self.screen = self.front.get(app) or page(f"{app}.Main", app, "Home")
+
+    async def wait_until_settled(self):
+        return self.screen
+
+    async def observe(self, screenshot=False):
+        return self.screen
+
+    def frame(self, width, timeout=5):
+        return Image.new("RGB", (width, width * 2))
+
+
+class RoutePool:
+    """envoy-real, and your phone when `phones` has it; nobody takes over (a hand-off times out)."""
+
+    def __init__(self, emulator: AppPhone, phone: AppPhone | None = None) -> None:
+        self.devs = {"envoy-real": emulator, **({PHONE["id"]: phone} if phone else {})}
+        self.phones = {PHONE["id"]: PHONE} if phone else {}
+        self.leases = {d: Lease(d) for d in self.devs}
+        self.takeovers: list[str] = []
+
+    def refresh_phones(self):
+        return list(self.phones.values())
+
+    def running(self):
+        return {d: True for d in self.devs}
+
+    async def device(self, did):
+        return self.devs[did]
+
+    def gated(self, did, device):
+        return device
+
+    def start_watch(self, *a, **k):
+        pass
+
+    def stop_watch(self, *a, **k):
+        pass
+
+    def hand_back(self, *a, **k):
+        pass
+
+    def request_takeover(self, avd, reason):
+        self.takeovers.append(reason)
+
+    async def wait_for_hand_back(self, avd, timeout_s):
+        await asyncio.sleep(min(timeout_s, 0.05))
+        return False
+
+    @staticmethod
+    def avd_for(app):
+        return "envoy-real"
+
+
+class FakeAgent:
+    runs: list[dict] = []
+
+    def __init__(self, device, **kw):
+        self.device = device
+
+    async def run(self, goal, *, task_id, memory=""):
+        FakeAgent.runs.append({"task_id": task_id, "memory": memory, "device": self.device})
+        return SimpleNamespace(status="done", result="1889", model_calls=1, cost_at_standard_usd=0.001)
+
+
+async def _no_match(*a, **k):
+    return SimpleNamespace(routine=None, inputs={}, model_calls=0)
+
+
+def route_runner(monkeypatch, pool) -> TaskRunner:
+    monkeypatch.setattr(runner_mod, "AgentRunner", FakeAgent)
+    monkeypatch.setattr(runner_mod, "RoutineMatcher", lambda *a, **k: SimpleNamespace(match=_no_match))
+    FakeAgent.runs = []
+    r = TaskRunner(TaskStore(":memory:"), EventBus(), pool, MemoryStore(":memory:"), SimpleNamespace(), adapter=SimpleNamespace(),
+                   takeover_timeout_s=0.05, approval_timeout_s=2)
+
+    async def no_memory(*a, **k):
+        return None
+    r._remember = no_memory  # type: ignore[method-assign]
+    return r
+
+
+async def finish(r: TaskRunner, goal: str, *, answer_phone: bool | None = None, **kw) -> dict:
+    """Start a task and wait for it, answering "use your phone?" the way you would."""
+    r.loop = asyncio.get_running_loop()
+    task = r.start(goal, "web", **kw)
+    job = r.jobs[task["id"]]
+    while not job.done():
+        await asyncio.sleep(0.01)
+        t = r.store.get(task["id"])
+        if answer_phone is not None and t["waiting_for"] == "phone":
+            r.answer_phone(task["id"], answer_phone, "you")
+    await job
+    return r.store.get(task["id"]) | {"steps": [s.get("text") or "" for s in r.store.steps(task["id"])]}
+
+
+BLOCKED = page("com.example.shop.HSBlockActivity", SHOP)
+
+
+def test_a_bot_check_on_the_emulator_sets_the_app_to_your_phone_and_says_so_plainly(monkeypatch):
+    pool = RoutePool(AppPhone({SHOP: BLOCKED}, {SHOP}))
+    r = route_runner(monkeypatch, pool)
+
+    async def scenario():
+        first = await finish(r, "find a lamp", app=SHOP)
+        second = await finish(r, "find a desk", app=SHOP)
+        return first, second
+    first, second = asyncio.run(scenario())
+    assert first["status"] == "needs_you" and first["result"].startswith("Shop blocks emulators; it needs a real Android phone")
+    assert any("from now on it runs on your Android phone" in s for s in first["steps"])
+    assert pool.takeovers and "it needs a real Android phone" in pool.takeovers[0]  # you can still try clearing it there
+    assert r.store.setting("phone_apps") == [SHOP]  # Settings › Phones, set by Envoy
+    learned = r.store.setting("phone_apps_learned")[SHOP]
+    assert learned["why"] == "showed a bot check (HSBlockActivity) on the emulator" and learned["task"] == first["id"]
+    # The next task doesn't try the emulator again: with no phone connected it says so and doesn't run.
+    assert second["status"] == "failed" and second["detail"].startswith("Shop blocks emulators; it needs a real Android phone")
+    assert FakeAgent.runs == []
+
+
+def test_after_a_bot_check_the_task_moves_to_your_phone_when_you_say_yes(monkeypatch):
+    phone = AppPhone({}, {SHOP})
+    pool = RoutePool(AppPhone({SHOP: BLOCKED}, {SHOP}), phone)
+    r = route_runner(monkeypatch, pool)
+    asked: list[dict] = []
+    r.bus.listeners.append(lambda ev: asked.append(ev) if ev["type"] == "phone_requested" else None)
+
+    async def scenario():
+        moved = await finish(r, "find a lamp", app=SHOP, answer_phone=True)
+        later = await finish(r, "find a desk", app=SHOP, answer_phone=True)
+        return moved, later
+    moved, later = asyncio.run(scenario())
+    assert moved["status"] == "done" and moved["device"] == PHONE["id"] and moved["result"] == "1889"
+    assert "moving this task to your Galaxy S22" in moved["steps"] and "phone: your Galaxy S22 (you said yes)" in moved["steps"]
+    assert [a["reason"] for a in asked] == ["Shop blocks emulators", "Shop blocks emulators"]  # one ask per task, never two
+    assert FakeAgent.runs[0]["device"] is phone and FakeAgent.runs[0]["task_id"].endswith("-r1-phone")  # its own trace
+    # The next task goes straight to your phone, still asking first; no answer would mean no.
+    assert later["device"] == PHONE["id"] and any("Shop blocks emulators" in s for s in later["steps"])
+
+
+def test_a_hand_off_for_a_bot_check_learns_but_a_websites_check_in_a_browser_does_not(monkeypatch):
+    chrome = "com.android.chrome"
+
+    class HandsOff(FakeAgent):
+        async def run(self, goal, *, task_id, memory=""):
+            return SimpleNamespace(status="handoff", result="bot check (CAPTCHA): the user must solve it", model_calls=2, cost_at_standard_usd=0.002)
+
+    pool = RoutePool(AppPhone({SHOP: page("com.example.shop.Main", SHOP, "Deals"), chrome: page("com.android.chrome.Main", chrome, "x")}, {SHOP, chrome}))
+    r = route_runner(monkeypatch, pool)
+    monkeypatch.setattr(runner_mod, "AgentRunner", HandsOff)
+
+    async def scenario():
+        return await finish(r, "find a lamp", app=SHOP), await finish(r, "search the web in Chrome", app=chrome)
+    shop, web = asyncio.run(scenario())
+    assert "it needs a real Android phone" in shop["result"] and r.store.setting("phone_apps") == [SHOP]
+    assert web["status"] == "needs_you" and chrome not in r.store.setting("phone_apps")  # Chrome itself doesn't block emulators
+
+
+def test_settings_show_what_envoy_set_and_unticking_undoes_it(tmp_path, monkeypatch):
+    from fastapi.testclient import TestClient
+    monkeypatch.setenv("MCP_BEARER_TOKEN", "mcp-test-token")
+    monkeypatch.setenv("ENVOY_ALLOWED_HOSTS", "testserver")
+    monkeypatch.setattr("api.app.API_DIR", tmp_path)
+    monkeypatch.setattr("api.push.LOG", tmp_path / "push.jsonl")
+    monkeypatch.setattr("api.app.LOGS", tmp_path)
+    monkeypatch.setattr("api.devices.discover", lambda: [])  # never looks at a real phone
+    monkeypatch.setattr(DevicePool, "running", lambda self: {})
+    from api.app import build, session_token
+    from routines.store import RoutineStore
+    tasks = TaskStore(":memory:")
+    tasks.set_setting("phone_apps", [SHOP])
+    tasks.set_setting("phone_apps_learned", {SHOP: {"name": "Shop", "why": "showed a bot check (press & hold) on the emulator"}})
+    app, ctx = build("demo", memory=MemoryStore(":memory:"), tasks=tasks, routines=RoutineStore(tmp_path / "routines"),
+                     adapter=SimpleNamespace(api_key="k", calls=[]))
+    me = {"Authorization": f"Bearer {session_token()}"}
+    with TestClient(ctx.asgi) as c:
+        got = c.get("/api/settings/phones", headers=me).json()
+        assert SHOP in got["apps"] and got["learned"][SHOP]["why"].startswith("showed a bot check") and got["names"][SHOP] == "Shop"
+        assert got["emulator_refused"]["com.target.ui"] == "Target"
+        assert c.post("/api/settings/phones", json={"phone_apps": []}, headers=me).json() == {"phone_apps": [], "learned": {}}
+        assert tasks.setting("phone_apps_learned") == {}
+        # Only your own session answers "use your phone?": not MCP's token.
+        t = tasks.create("find a lamp", "web")
+        assert c.post(f"/api/tasks/{t['id']}/phone", json={"allow": True}, headers={"Authorization": "Bearer mcp-test-token"}).status_code == 401
+
+
+# ---- installing an app the emulator doesn't have, from the Play Store -------------------------------------------------
+
+STORE_SCREENS = Path(__file__).parent / "screens"
+WIKI = "org.wikipedia"
+
+
+def store_page(name: str):
+    return build_state((STORE_SCREENS / f"playstore_{name}.xml").read_text(), "com.android.vending",
+                       "com.android.vending.AssetBrowserActivity", 1080, 2400)
+
+
+def test_play_store_pages_are_read_without_a_model():
+    free, paid, have, busy, nope, search = (read_listing(store_page(n)) for n in ("free", "paid", "installed", "installing", "incompatible", "search"))
+    assert (free.state, free.title, free.button.label) == ("free", "Wikipedia", "Install")
+    assert (paid.state, paid.price, paid.button) == ("paid", "$6.99", None)  # the price button is never a target
+    assert (have.state, busy.state) == ("installed", "installing")
+    assert nope.state == "incompatible" and nope.detail == "Your device isn't compatible with this version."
+    card = pick_result(store_page("search"), "wikipedia")
+    assert card.label.startswith("Wikipedia Wikimedia Foundation") and card.in_list  # not the search box that repeats it
+    assert pick_result(store_page("search"), "Spotify") is None
+    assert guess_installed("Wikipedia", {WIKI, "com.android.chrome"}) == WIKI and guess_installed("Maps", {"a.maps", "b.maps"}) is None
+    assert guess_installed("Messages", {"com.google.android.apps.messaging"}) == "com.google.android.apps.messaging"  # not a search
+
+
+def test_the_app_a_request_names():
+    assert app_named_in("In the Wikipedia app, search for Eiffel Tower") == "Wikipedia"
+    assert app_named_in("In AccuWeather, what's tomorrow's high?") == "AccuWeather"
+    assert app_named_in("install Duolingo") == "Duolingo" and app_named_in("Download Spotify and play some jazz") == "Spotify"
+    assert app_named_in("in the Google Translate app, translate hello") == "Google Translate"
+    for g in ("in my banking app, check my balance", "how do I install a ceiling fan?", "In general, what is x", "what's on my calendar"):
+        assert app_named_in(g) is None, g
+
+
+class PlayPhone:
+    """envoy-real with the Play Store: real captured pages; Install makes the package appear a few looks later."""
+
+    def __init__(self, *, packages=(), account=True, paid=False, incompatible=False, after=2, search="search", installs=None):
+        self.packages, self.account, self.after = set(packages) | {"com.android.vending"}, account, after
+        self.details = "paid" if paid else "incompatible" if incompatible else "free"
+        self.search = search
+        self.installs = installs or {}  # an Install button's bounds → the package it installs (search results)
+        self.screen, self.taps, self.opened, self.target, self.looks = page("launcher.Home", "launcher"), [], [], None, 0
+        self.adb = SimpleNamespace(shell=self.shell)
+
+    def shell(self, cmd):
+        c = cmd if isinstance(cmd, str) else " ".join(cmd)
+        if c.startswith("pm list packages"):
+            want = c[len("pm list packages"):].strip()
+            return "\n".join(f"package:{p}" for p in sorted(self.packages) if not want or p == want)
+        if c.startswith("dumpsys account"):
+            return "2" if self.account else "0"
+        if c.startswith("cmd package query-activities"):
+            return "\n".join(f"  {p}/.Main" for p in sorted(self.packages))
+        if c.startswith("am start"):
+            uri = cmd[cmd.index("-d") + 1]
+            self.opened.append(uri)
+            self.screen = store_page(self.search if "search?" in uri else self.details)
+        return ""
+
+    async def wait_until_settled(self):
+        if self.target and self.target not in self.packages:
+            self.looks += 1
+            if self.looks >= self.after:
+                self.packages.add(self.target)
+                self.screen = store_page("installed")
+        return self.screen
+
+    observe = wait_until_settled
+
+    async def act(self, a):
+        if a.kind == "tap_point":  # a result's name: its page opens
+            self.taps.append(f"point {a.x},{a.y}")
+            self.screen = store_page(self.details)
+            return SimpleNamespace(ok=True)
+        e = self.screen.element(a.element)
+        label = e.label
+        self.taps.append(label)
+        if label == "Install":
+            self.target = self.installs.get(e.bounds, WIKI)
+            self.screen = store_page("installing")
+        elif label.startswith("Wikipedia"):
+            self.screen = store_page("free")
+        return SimpleNamespace(ok=True)
+
+    async def launch(self, app, fresh=False):
+        self.screen = page(f"{app}.Main", app, "Search Wikipedia")
+
+    def frame(self, width, timeout=5):
+        return Image.new("RGB", (width, width * 2))
+
+
+def installer(dev, *, approve=False, handed_back=False, also=None):
+    steps, asked, hand_offs = [], [], []
+
+    class Approver:
+        def request(self, req):
+            asked.append(req)
+            return ApprovalDecision(approve, by="you")
+
+    async def hand_off(why):
+        hand_offs.append(why)
+        if also:
+            also()
+        return handed_back
+    inst = Installer(dev, step=steps.append, approver=Approver(), hand_off=hand_off, task_id="t1", goal="g", poll_s=0, wait_s=0, timeout_s=5)
+    return inst, SimpleNamespace(steps=steps, asked=asked, hand_offs=hand_offs)
+
+
+def test_a_free_app_is_installed_by_its_package_or_by_the_name_the_request_gives():
+    dev = PlayPhone()
+    inst, log = installer(dev)
+    got = asyncio.run(inst.ensure(WIKI, "Wikipedia"))
+    assert (got.status, got.package, got.title) == ("installed", WIKI, "Wikipedia") and dev.taps == ["Install"]
+    assert dev.opened == [f"market://details?id={WIKI}"] and any(s["text"].startswith("installed Wikipedia in") for s in log.steps)
+    dev = PlayPhone()
+    got = asyncio.run(installer(dev)[0].ensure(None, "Wikipedia"))  # by name: the result's own Install, then what arrived
+    assert (got.status, got.package, got.title) == ("installed", WIKI, "Wikipedia") and dev.taps == ["Install"]
+    assert dev.opened == ["market://search?q=Wikipedia&c=apps"]
+    # Already there: nothing opens.
+    dev = PlayPhone(packages={WIKI})
+    assert asyncio.run(installer(dev)[0].ensure(WIKI)).status == "already" and asyncio.run(installer(dev)[0].ensure(None, "Wikipedia")).package == WIKI
+    assert dev.opened == []
+
+
+def test_a_sponsored_look_alike_is_never_installed():
+    """envoy-real, Oct 28: searching "Google Translate" showed a sponsored translator first, with its own Install button.
+    The first build tapped it. Only the result that is the app counts, and only its own button."""
+    ads = store_page("search_ads")
+    assert read_listing(ads).state == "unknown"  # a results page is not an app's page: no Install to take from it
+    for q in ("Google Translate", "Translate"):
+        card = pick_result(ads, q)
+        assert card_title(ads, card) == "Google Translate" and card_listing(ads, card).button.bounds == (831, 1033, 1017, 1159)
+    ad, real = (831, 405, 1017, 531), (831, 1033, 1017, 1159)
+    translate, look_alike = "com.google.android.apps.translate", "com.newgeneration.translator"
+    dev = PlayPhone(search="search_ads", installs={ad: look_alike, real: translate})
+    got = asyncio.run(installer(dev)[0].ensure(None, "Google Translate"))
+    assert (got.status, got.package, got.title) == ("installed", translate, "Google Translate") and look_alike not in dev.packages
+    assert dev.opened == ["market://search?q=Google%20Translate&c=apps"]
+
+
+def test_a_result_without_its_own_button_is_opened_by_its_name():
+    dev = PlayPhone()
+    bare = store_page("search")
+    bare.numbered[2].label = ""  # the Wikipedia result's Install, as for a result the Play Store shows collapsed
+    real_open = PlayPhone.shell
+
+    def shell(self, cmd):
+        out = real_open(self, cmd)
+        if "search?" in " ".join(cmd if isinstance(cmd, list) else [cmd]):
+            self.screen = bare
+        return out
+    dev.shell = shell.__get__(dev)  # type: ignore[method-assign]
+    dev.adb = SimpleNamespace(shell=dev.shell)
+    got = asyncio.run(installer(dev)[0].ensure(None, "Wikipedia"))
+    x1, y1, x2, y2 = bare.numbered[1].bounds
+    assert dev.taps == [f"point {x1 + (x2 - x1) // 4},{y1 + 60}", "Install"]  # its name, never its middle (a question box)
+    assert (got.status, got.package, got.title) == ("installed", WIKI, "Wikipedia")
+
+
+def test_a_paid_app_asks_first_and_envoy_never_pays():
+    dev = PlayPhone(paid=True)
+    inst, log = installer(dev)
+    got = asyncio.run(inst.ensure("com.mojang.minecraftpe"))
+    assert got.status == "declined" and "$6.99" in got.detail and dev.taps == []  # the price is never tapped
+    assert log.asked[0].description == "Minecraft: Dream it, Build it! costs $6.99 on the Play Store: buy it yourself?" and log.asked[0].origin == "install"
+    # A yes hands the phone to you to buy it; Envoy carries on once it's there.
+    dev = PlayPhone(paid=True)
+    inst, log = installer(dev, approve=True, handed_back=True, also=lambda: dev.packages.add("com.mojang.minecraftpe"))
+    got = asyncio.run(inst.ensure("com.mojang.minecraftpe"))
+    assert got.status == "bought" and log.hand_offs == ["buy Minecraft: Dream it, Build it! ($6.99) in the Play Store yourself"]
+    assert dev.taps == []
+
+
+def test_an_app_the_emulator_cant_have_or_no_google_account_stops_and_says_why():
+    got = asyncio.run(installer(PlayPhone(incompatible=True))[0].ensure("com.ubercab.eats"))
+    assert got.status == "incompatible" and "isn't compatible" in got.detail
+    dev = PlayPhone(account=False)
+    inst, log = installer(dev)
+    got = asyncio.run(inst.ensure(WIKI))
+    assert got.status == "no_account" and log.hand_offs[0] == "sign-in needed: the Play Store has no Google account on this phone" and dev.opened == []
+
+
+def test_a_task_naming_an_app_the_emulator_lacks_installs_it_and_carries_on(monkeypatch):
+    dev = PlayPhone()
+    r = route_runner(monkeypatch, RoutePool(AppPhone({}, set())))
+    r.pool.devs["envoy-real"] = dev
+    real_init = Installer.__init__
+    monkeypatch.setattr(Installer, "__init__", lambda self, *a, **k: real_init(self, *a, **{**k, "poll_s": 0, "wait_s": 0}))
+    goal = "In the Wikipedia app, search for Eiffel Tower and tell me the year it opened."
+
+    async def scenario():
+        return await finish(r, goal), await finish(r, goal)
+    first, second = asyncio.run(scenario())
+    assert first["status"] == "done" and first["app"] == WIKI and first["device"] == "envoy-real"
+    assert "Wikipedia isn't on this phone: looking for it in the Play Store" in first["steps"]
+    assert FRESH_INSTALL.format(name="Wikipedia") in FakeAgent.runs[0]["memory"]  # the agent knows to expect first-run screens
+    assert r.store.setting("apps_installed")[WIKI]["names"] == ["wikipedia"]
+    # The next request that names it goes straight to it: no search, no install.
+    assert second["status"] == "done" and second["app"] == WIKI and len(dev.opened) == 1
+    assert FRESH_INSTALL.format(name="Wikipedia") not in FakeAgent.runs[1]["memory"]
+
+
+def test_a_paid_app_ends_the_task_declined_when_you_say_no(monkeypatch):
+    dev = PlayPhone(paid=True)
+    r = route_runner(monkeypatch, RoutePool(dev))
+    r.approval_timeout_s = 0.3  # no answer is a no
+
+    async def scenario():
+        return await finish(r, "how many worlds can I make?", app="com.mojang.minecraftpe")
+    task = asyncio.run(scenario())
+    assert task["status"] == "declined" and "costs $6.99; Envoy installs only free apps (no answer)" in task["detail"]
+    assert FakeAgent.runs == [] and dev.taps == []
+    assert r.store.approvals(task_id=task["id"])[0]["status"] == "expired"

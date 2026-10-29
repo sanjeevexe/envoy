@@ -481,3 +481,150 @@ def test_emoji_match_the_dump_and_ads_are_skipped_only_when_the_agent_skipped_th
     ex = _extract_for("first_video_title", "", "lofi hip hop radio 📚 beats to relax/study to", trace, {"search_query": "lofi hip hop"}, [], picked)
     assert ex is not None and ex.first_row and ex.skip_ads  # the agent passed the ad, so the routine does too
     assert extract_value(ex, trace, {}) == "lofi hip hop radio .. beats to relax/study to"
+
+
+def test_frames_tagged_with_a_colorspace_ffmpeg_cannot_convert_still_convert():
+    import av
+    from devices.scrcpy import ScrcpyStream
+    # The Pixel 5's encoder tags its video YCgCo (colorspace 8); every conversion failed, so screenshots quietly fell
+    # back to adb screencap and the live view had no frames.
+    f = av.VideoFrame(64, 128, "yuv420p")
+    f.colorspace = 8
+    s = ScrcpyStream("phone", (1080, 2340))
+    s._frame = f
+    assert s.image().size == (64, 128) and s.frame(32).size == (32, 64)
+    assert s._src_colorspace in (None, "ITU601")  # overridden only where the tag can't be converted
+
+
+def test_a_tap_under_the_phone_banner_steps_the_banner_aside():
+    from devices.phone import BANNER_PACKAGE, Banner, PhoneDevice
+    from routines.screens import screen_from_tree
+    calls: list[str] = []
+
+    class Recorder(Banner):
+        def _svc(self, action, *extra):
+            calls.append(action)
+    dev = PhoneDevice.__new__(PhoneDevice)
+    dev.banner = Recorder("phone")
+    dev.banner.ready = True
+    dev._tap_now = lambda x, y, hold_s=0.0: calls.append(f"tap {x},{y}")  # type: ignore[method-assign]
+    s = screen_from_tree({"package": "com.google.android.gm", "activity": "A", "width": 1080, "height": 2340, "elements": [
+        {"index": 0, "parent": None, "number": 1, "kind": "EditText", "class": "android.widget.EditText", "label": "Search in mail",
+         "text": "", "bounds": [40, 150, 1040, 270]},
+        {"index": 1, "parent": None, "kind": "", "class": "android.widget.LinearLayout", "bounds": [208, 141, 872, 243]}]})
+    s.elements[1].package = BANNER_PACKAGE  # the pill, as the Pixel 5 put it: over the app's search box
+    dev._last = s
+    dev.banner.show("Envoy is using this phone")
+    calls.clear()
+    dev._tap(540, 200)  # Gmail's search box, under the pill
+    assert calls == ["HIDE", "tap 540,200", "SHOW"] and dev.banner.visible
+    calls.clear()
+    dev._tap(540, 1200)  # elsewhere: the banner stays
+    assert calls == ["tap 540,1200"]
+    dev.banner.hide()
+    calls.clear()
+    dev._tap(540, 200)  # no banner showing: nothing to step aside
+    assert calls == ["tap 540,200"]
+
+
+def test_a_request_for_an_emulator_that_isnt_running_says_so_plainly_and_names_your_phone():
+    from test_phase6 import FakePool, runner_with
+
+    class Pool(FakePool):
+        def running(self):
+            return {"envoy-test": False, **{pid: True for pid in self.phones}}
+
+    async def scenario():
+        r = runner_with(Pool())
+        task = r.store.create("Check in to my flight", "chat")  # no "on my phone": the emulator
+        return await r._choose_phone(task["id"], "com.skylark.air", None), r.store.get(task["id"])
+    choice, t = asyncio.run(scenario())
+    assert choice is None and t["status"] == "failed" and "isn't running" in t["detail"] and "on my phone" in t["detail"]
+    assert "scripts/" not in t["detail"]  # a phone is connected: the way out is the phone, not a script
+
+
+def test_a_pause_from_the_phone_and_its_resume_are_kept_in_the_task_history():
+    from test_phase6 import FakePool, runner_with
+    r = runner_with(FakePool())
+    task = r.store.create("check me in", "chat")
+    r._set(task["id"], status="running")
+    r._phone_paused(task["id"], True, "you touched the phone")
+    r._phone_paused(task["id"], True, "you touched the phone")  # the watcher says it again: one entry
+    r._phone_paused(task["id"], False, "")
+    notes = [s["text"] for s in r.store.steps(task["id"]) if s["kind"] == "note"]
+    assert notes == ["paused: you touched the phone", "resumed on your phone"]
+    assert r.store.get(task["id"])["status"] == "running"
+
+
+def test_a_run_the_person_took_over_or_paused_teaches_the_routine_nothing(tmp_path):
+    store = RoutineStore(tmp_path)
+    v1 = store.add(_routine())
+    held = RunOutcome(v1.routine, 1, "t1", "done", patches=[_patch(v1)], model_calls=1)
+    assert after_run(store, v1, held, held=True) == {"held": 1}  # no patch on trial
+    assert version_for_run(store, v1.routine).version == 1
+    after_run(store, v1, RunOutcome(v1.routine, 1, "t2", "done", patches=[_patch(v1)], model_calls=1))
+    trial = version_for_run(store, v1.routine)
+    assert after_run(store, trial, RunOutcome(v1.routine, 2, "t3", "done", model_calls=0), held=True) == {"held": 2}
+    assert version_for_run(store, v1.routine).status == "trial"  # still on trial: a held run doesn't decide it
+
+
+def test_asking_again_for_a_control_already_approved_in_the_run_says_why():
+    from devices.types import Action
+    from policy.approvals import ApprovalDecision
+    from routines.executor import RoutineExecutor, StepRun, _Ctx
+    from routines.screens import screen_from_tree
+    asked = []
+
+    class Person:
+        def request(self, req):
+            asked.append(req)
+            return ApprovalDecision(True, by="user")
+    s = screen_from_tree({"package": "com.skylark.air", "activity": "A", "width": 1080, "height": 2340, "elements": [
+        {"index": 0, "parent": None, "number": 1, "kind": "Button", "class": "android.view.View", "clickable": True,
+         "label": "Confirm check-in", "text": "Confirm check-in", "resource_id": "btn_confirm_checkin", "bounds": [44, 851, 1036, 983]}]})
+    ex = RoutineExecutor(SimpleDevice(s), approver=Person())
+    r = _routine()
+    ctx = _Ctx(r, {}, "t1", RunOutcome(r.routine, 1, "t1", "running"), None, True, False, "")  # type: ignore[arg-type]
+    tap = Action(kind="tap", element=1)
+    asyncio.run(ex._gate(ctx, tap, s, "irreversible", "Confirm check-in", StepRun("confirm_check_in")))
+    assert not any("approved this a moment ago" in x for x in asked[0].reasons)
+    asyncio.run(ex._gate(ctx, tap, s, "irreversible", "Confirm check-in", StepRun("confirm_check_in")))  # the repair, after a lost tap
+    assert any("approved this a moment ago" in x for x in asked[1].reasons)
+
+
+class SimpleDevice:
+    def __init__(self, screen):
+        self.screen = screen
+
+    async def observe(self, screenshot=False):
+        return self.screen
+
+
+def test_a_field_compose_rebuilds_while_typing_is_found_again():
+    from devices.android import AndroidDevice
+    calls = {"info": 0}
+
+    class Node:
+        exists = True
+
+        @property
+        def info(self):
+            calls["info"] += 1
+            if calls["info"] == 1:  # what the Pixel 5 said while the keyboard opened over the known traveler field
+                raise RuntimeError("Unknown RPC error: -32001 androidx.test.uiautomator.StaleObjectException")
+            return {"bounds": {"left": 0, "top": 0, "right": 100, "bottom": 100}}
+
+    dev = AndroidDevice.__new__(AndroidDevice)
+    dev.u2 = lambda **sel: Node()  # type: ignore[assignment]
+    assert dev._focused_field((0, 0, 100, 100), timeout_s=2) is not None and calls["info"] == 2
+
+    class Broken(Node):
+        @property
+        def info(self):
+            raise RuntimeError("the server died")
+    dev.u2 = lambda **sel: Broken()  # type: ignore[assignment]
+    try:
+        dev._focused_field((0, 0, 100, 100), timeout_s=0.3)
+        raise AssertionError("other errors must still raise")
+    except RuntimeError as e:
+        assert "died" in str(e)

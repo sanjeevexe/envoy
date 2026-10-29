@@ -41,6 +41,7 @@ from devices.types import ScreenState
 from models.adapter import ModelAdapter
 from models.schemas import CompiledRoutine
 from policy.approvals import ScriptedApprover
+from policy.botcheck import bot_check_reason
 from routines.compiler import NotCompilable, compile_trace
 from routines.executor import ExecConfig, RoutineExecutor
 from routines.model import dump_yaml
@@ -155,17 +156,9 @@ WORKFLOWS = [
              memory=NO_ACCOUNT),
 ]
 
-BOT_CHECK = re.compile(r"press (&|and) hold|verify (that )?you('re| are) (a )?human|not a robot|captcha|are you a robot|unusual traffic", re.I)
-
-
 def bot_check(screen: ScreenState | None) -> bool:
-    """A bot check on screen: a known blocking activity, or a short screen that is mostly the challenge's words (a place
-    page whose reviews mention 'unusual traffic' is not one)."""
-    if screen is None:
-        return False
-    if re.search(r"(HSBlock|captcha|challenge)", screen.activity or "", re.I):
-        return True
-    return len(screen.numbered) <= 15 and any(BOT_CHECK.search(e.label or "") for e in screen.numbered)
+    """A bot check on screen (policy/botcheck.py, which the task runner uses too)."""
+    return bot_check_reason(screen) is not None
 
 
 def now() -> str:

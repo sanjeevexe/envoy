@@ -19,7 +19,10 @@ export default function PhoneAsk({ task, large }: { task: Task; large?: boolean 
       <div className="mt-1 text-xs text-amber-900/70">While it works, a banner on the phone says so; touch the phone or press Pause there to take it back.</div>
       <div className="mt-3 flex gap-2">
         <button disabled={busy} onClick={() => answer(true)} className="h-10 rounded-lg bg-stone-900 px-4 font-medium text-white disabled:opacity-50">Use my phone</button>
-        <button disabled={busy} onClick={() => answer(false)} className="h-10 rounded-lg bg-white px-4 font-medium ring-1 ring-stone-300 disabled:opacity-50">Use an emulator</button>
+        <button disabled={busy} onClick={() => answer(false)} className="h-10 rounded-lg bg-white px-4 font-medium ring-1 ring-stone-300 disabled:opacity-50">
+          {/* an app that blocks emulators has no emulator to fall back to */}
+          {(task.detail ?? "").includes("blocks emulators") ? "Not my phone" : "Use an emulator"}
+        </button>
       </div>
       {error && <div className="mt-2 text-rose-700">{error}</div>}
     </div>

@@ -1,0 +1,24 @@
+{
+ "time": "2026-10-28T21:07:23+00:00",
+ "url": "ws://127.0.0.1:8700/api/live/phone-09031FDD4000C6",
+ "hello": {
+  "type": "hello",
+  "avd": "phone-09031FDD4000C6",
+  "width": 1080,
+  "height": 2340,
+  "control": {
+   "avd": "phone-09031FDD4000C6",
+   "task_id": null,
+   "user_control": false,
+   "since": 0.0,
+   "reason": ""
+  },
+  "kind": "phone"
+ },
+ "frames": 82,
+ "fps": 9.1,
+ "frame_ms_p50": 5,
+ "frame_ms_max": 108,
+ "rtt_ms_p50": 0,
+ "kb_per_frame": 29.6
+}

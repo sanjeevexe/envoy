@@ -1,0 +1,270 @@
+{
+ "note": "envoy-real's system server died mid-run (DeadSystemRuntimeException; the hang Phase 7 also saw on long real-app stretches). Both parts failed on the device; the parent reported each app's reason. envoy-real was restarted and R2 rerun.",
+ "runs": [
+  {
+   "question": "R2",
+   "mode": "parallel",
+   "message": "What's a Caffè Latte at Starbucks vs on DoorDash?",
+   "parent_id": "task-1028-054019-a8c0",
+   "started": 1793180414.8352058,
+   "wall_s": 210.38,
+   "with_memory_s": 210.38,
+   "overlap_s": 0.0,
+   "status": "failed",
+   "answer": "Starbucks: couldn't check (UiAutomationNotConnectedError: android.os.DeadSystemRuntimeException); DoorDash: couldn't check (RuntimeError: RuntimeError: com.dd.doordash has no launcher activity (is it installed?)).",
+   "values": [
+    {
+     "label": "Caffè Latte price at Starbucks",
+     "app_name": "Starbucks",
+     "status": "failed",
+     "result": "",
+     "screen": null,
+     "time": 1793180625.069679,
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "why": "UiAutomationNotConnectedError: android.os.DeadSystemRuntimeException"
+    },
+    {
+     "label": "Caffè Latte price on DoorDash",
+     "app_name": "DoorDash",
+     "status": "failed",
+     "result": "",
+     "screen": null,
+     "time": 1793180625.161355,
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "why": "RuntimeError: RuntimeError: com.dd.doordash has no launcher activity (is it installed?)"
+    }
+   ],
+   "sources": {},
+   "timeline": [
+    {
+     "task_id": "task-1028-054019-9de0",
+     "app": "Starbucks",
+     "device": "envoy-real",
+     "queued_at": 1793180419.436459,
+     "phone_at": 1793180422.605831,
+     "ended_at": 1793180625.069679,
+     "status": "failed"
+    },
+    {
+     "task_id": "task-1028-054019-d358",
+     "app": "DoorDash",
+     "device": "envoy-real",
+     "queued_at": 1793180419.4373949,
+     "phone_at": 1793180625.076134,
+     "ended_at": 1793180625.161355,
+     "status": "failed"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-054019-9de0",
+     "goal": "Find the price of a Caffè Latte in the Starbucks app",
+     "app": "com.starbucks.mobilecard",
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "inputs": {},
+     "status": "failed",
+     "result": null,
+     "detail": "UiAutomationNotConnectedError: android.os.DeadSystemRuntimeException",
+     "model_calls": 0,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793180579.3741062,
+       "kind": "finish",
+       "text": "UiAutomationNotConnectedError: android.os.DeadSystemRuntimeException",
+       "status": "error"
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-054019-d358",
+     "goal": "Find the price of a Caffè Latte on DoorDash",
+     "app": "com.dd.doordash",
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "inputs": {},
+     "status": "failed",
+     "result": null,
+     "detail": "RuntimeError: RuntimeError: com.dd.doordash has no launcher activity (is it installed?)",
+     "model_calls": 0,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793180424.213336,
+       "kind": "note",
+       "text": "waiting for envoy-real: another task is using it"
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793180419.43506,
+     "kind": "plan",
+     "text": "2 apps: Starbucks: Find the price of a Caffè Latte in the Starbucks app; DoorDash: Find the price of a Caffè Latte on DoorDash"
+    },
+    {
+     "seq": 2,
+     "time": 1793180625.166219,
+     "kind": "answer",
+     "text": "Starbucks: couldn't check (UiAutomationNotConnectedError: android.os.DeadSystemRuntimeException); DoorDash: couldn't check (RuntimeError: RuntimeError: com.dd.doordash has no launcher activity (is it installed?))."
+    },
+    {
+     "seq": 3,
+     "time": 1793180625.166875,
+     "kind": "timeline",
+     "text": "answered in 205.73 s; one phone (envoy-real): the parts took turns"
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "lead": {
+      "calls": 1,
+      "usd": 0.004745
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.007311
+     }
+    },
+    "calls": 3,
+    "usd": 0.01206
+   }
+  },
+  {
+   "question": "R2",
+   "mode": "sequential",
+   "message": "What's a Caffè Latte at Starbucks vs on DoorDash?",
+   "parent_id": "task-1028-054348-8bf5",
+   "started": 1793180625.337384,
+   "wall_s": 135.84,
+   "with_memory_s": 135.84,
+   "overlap_s": 0.0,
+   "status": "failed",
+   "answer": "Starbucks: couldn't check (UiAutomationNotConnectedError: android.os.DeadSystemRuntimeException); DoorDash: couldn't check (RuntimeError: RuntimeError: com.dd.doordash has no launcher activity (is it installed?)).",
+   "values": [
+    {
+     "label": "Caffè Latte price at Starbucks",
+     "app_name": "Starbucks",
+     "status": "failed",
+     "result": "",
+     "screen": null,
+     "time": 1793180758.154562,
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "why": "UiAutomationNotConnectedError: android.os.DeadSystemRuntimeException"
+    },
+    {
+     "label": "Caffè Latte price on DoorDash",
+     "app_name": "DoorDash",
+     "status": "failed",
+     "result": "",
+     "screen": null,
+     "time": 1793180761.131028,
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "why": "RuntimeError: RuntimeError: com.dd.doordash has no launcher activity (is it installed?)"
+    }
+   ],
+   "sources": {},
+   "timeline": [
+    {
+     "task_id": "task-1028-054348-ad03",
+     "app": "Starbucks",
+     "device": "envoy-real",
+     "queued_at": 1793180628.398688,
+     "phone_at": 1793180634.032371,
+     "ended_at": 1793180758.154562,
+     "status": "failed"
+    },
+    {
+     "task_id": "task-1028-054558-815e",
+     "app": "DoorDash",
+     "device": "envoy-real",
+     "queued_at": 1793180758.160832,
+     "phone_at": 1793180761.065708,
+     "ended_at": 1793180761.131028,
+     "status": "failed"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-054348-ad03",
+     "goal": "Find the price of a Caffè Latte at Starbucks",
+     "app": "com.starbucks.mobilecard",
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "inputs": {},
+     "status": "failed",
+     "result": null,
+     "detail": "UiAutomationNotConnectedError: android.os.DeadSystemRuntimeException",
+     "model_calls": 0,
+     "steps": []
+    },
+    {
+     "task_id": "task-1028-054558-815e",
+     "goal": "Find the price of a Caffè Latte on DoorDash",
+     "app": "com.dd.doordash",
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "inputs": {},
+     "status": "failed",
+     "result": null,
+     "detail": "RuntimeError: RuntimeError: com.dd.doordash has no launcher activity (is it installed?)",
+     "model_calls": 0,
+     "steps": []
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793180628.397737,
+     "kind": "plan",
+     "text": "2 apps: Starbucks: Find the price of a Caffè Latte at Starbucks; DoorDash: Find the price of a Caffè Latte on DoorDash"
+    },
+    {
+     "seq": 2,
+     "time": 1793180761.135467,
+     "kind": "answer",
+     "text": "Starbucks: couldn't check (UiAutomationNotConnectedError: android.os.DeadSystemRuntimeException); DoorDash: couldn't check (RuntimeError: RuntimeError: com.dd.doordash has no launcher activity (is it installed?))."
+    },
+    {
+     "seq": 3,
+     "time": 1793180761.136291,
+     "kind": "timeline",
+     "text": "answered in 132.74 s; one phone (envoy-real): the parts took turns"
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "lead": {
+      "calls": 1,
+      "usd": 0.002995
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.005296
+     }
+    },
+    "calls": 3,
+    "usd": 0.00829
+   }
+  }
+ ]
+}

@@ -1,0 +1,4767 @@
+{
+ "meta": {
+  "date": "2026-10-29 00:34 UTC",
+  "phones": [
+   "envoy-real",
+   "envoy-test"
+  ],
+  "calls": 62,
+  "usd": 0.19035,
+  "branch": "main",
+  "commit": "3719818"
+ },
+ "earlier_meta": [
+  {
+   "date": "2026-10-28 09:24–09:56 UTC",
+   "phones": [
+    "envoy-real"
+   ],
+   "calls": 174,
+   "usd": 0.417,
+   "branch": "claude/cross-app-answers-522e1d",
+   "commit": "deb931d",
+   "runs": "the first 10 rows (R1–R3)"
+  }
+ ],
+ "runs": [
+  {
+   "question": "R1",
+   "mode": "parallel",
+   "message": "How many calories are in a Caffè Latte at Starbucks, and what's the first place DoorDash shows for a latte?",
+   "parent_id": "task-1028-052707-3685",
+   "started": 1793179623.496161,
+   "wall_s": 31.17,
+   "with_memory_s": 31.17,
+   "overlap_s": 0.0,
+   "status": "done",
+   "answer": "A Caffè Latte has 190 calories according to Starbucks, and the first place for a latte on DoorDash is McDonald's.",
+   "values": [
+    {
+     "label": "Caffè Latte calories at Starbucks",
+     "app_name": "Starbucks",
+     "status": "done",
+     "result": "calories: 190 calories",
+     "screen": "the \"Caffè Latte\" screen",
+     "time": 1793179640.666902,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "starbucks_get_drink_calories",
+     "why": null
+    },
+    {
+     "label": "first place DoorDash shows for a latte",
+     "app_name": "DoorDash",
+     "status": "done",
+     "result": "first restaurant name: McDonald's",
+     "screen": "DashboardActivity",
+     "time": 1793179652.541787,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "doordash_search_restaurants",
+     "why": null
+    }
+   ],
+   "sources": {
+    "Caffè Latte calories at Starbucks": "Starbucks · the \"Caffè Latte\" screen · 5:27 AM",
+    "first place DoorDash shows for a latte": "DoorDash · DashboardActivity · 5:27 AM"
+   },
+   "timeline": [
+    {
+     "task_id": "task-1028-052707-9bcc",
+     "app": "Starbucks",
+     "device": "envoy-real",
+     "queued_at": 1793179627.1059358,
+     "phone_at": 1793179628.964702,
+     "ended_at": 1793179640.667656,
+     "status": "done"
+    },
+    {
+     "task_id": "task-1028-052707-a4fc",
+     "app": "DoorDash",
+     "device": "envoy-real",
+     "queued_at": 1793179627.1067991,
+     "phone_at": 1793179640.679012,
+     "ended_at": 1793179652.542861,
+     "status": "done"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-052707-9bcc",
+     "goal": "Check how many calories are in a Caffè Latte at Starbucks",
+     "app": "com.starbucks.mobilecard",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "starbucks_get_drink_calories",
+     "inputs": {
+      "drink_name": "Caffè Latte"
+     },
+     "status": "done",
+     "result": "calories: 190 calories",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793179628.94114,
+       "kind": "note",
+       "text": "using routine starbucks_get_drink_calories v1 with drink_name = Caffè Latte"
+      },
+      {
+       "seq": 2,
+       "time": 1793179632.431911,
+       "kind": "routine_step",
+       "text": "tap_order",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 3,
+       "time": 1793179633.0635252,
+       "kind": "routine_step",
+       "text": "dismiss_location_prompt",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793179633.751269,
+       "kind": "routine_step",
+       "text": "tap_skip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793179636.2254562,
+       "kind": "routine_step",
+       "text": "confirm_skip_to_menu",
+       "status": "done",
+       "rung": 2
+      },
+      {
+       "seq": 6,
+       "time": 1793179636.7167659,
+       "kind": "routine_step",
+       "text": "tap_search_menu",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 7,
+       "time": 1793179637.450921,
+       "kind": "routine_step",
+       "text": "select_recent_search_result",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 8,
+       "time": 1793179637.784343,
+       "kind": "routine_step",
+       "text": "find_open_drink_product",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 9,
+       "time": 1793179640.481195,
+       "kind": "routine_step",
+       "text": "open_drink_product",
+       "status": "done",
+       "rung": 2
+      },
+      {
+       "seq": 10,
+       "time": 1793179640.561156,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 11,
+       "time": 1793179640.5651221,
+       "kind": "note",
+       "text": "routine starbucks_get_drink_calories: patched version v2 on trial for the next run"
+      },
+      {
+       "seq": 12,
+       "time": 1793179640.6734579,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 13,
+       "time": 1793179644.29366,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-052707-a4fc",
+     "goal": "Search DoorDash for latte and report the first restaurant in the results",
+     "app": "com.dd.doordash",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "doordash_search_restaurants",
+     "inputs": {
+      "search_query": "latte"
+     },
+     "status": "done",
+     "result": "first restaurant name: McDonald's",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793179629.586159,
+       "kind": "note",
+       "text": "using routine doordash_search_restaurants v1 with search_query = latte"
+      },
+      {
+       "seq": 2,
+       "time": 1793179629.606482,
+       "kind": "note",
+       "text": "waiting for envoy-real: another task is using it"
+      },
+      {
+       "seq": 3,
+       "time": 1793179646.597246,
+       "kind": "routine_step",
+       "text": "open_search",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793179651.9530041,
+       "kind": "routine_step",
+       "text": "enter_search_query",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 5,
+       "time": 1793179652.2311769,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 6,
+       "time": 1793179652.543374,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 7,
+       "time": 1793179654.120168,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793179627.105223,
+     "kind": "plan",
+     "text": "2 apps: Starbucks: Check how many calories are in a Caffè Latte at Starbucks; DoorDash: Search DoorDash for latte and report the first restaurant in the results"
+    },
+    {
+     "seq": 2,
+     "time": 1793179654.604548,
+     "kind": "answer",
+     "text": "A Caffè Latte has 190 calories according to Starbucks, and the first place for a latte on DoorDash is McDonald's.",
+     "sources": {
+      "Caffè Latte calories at Starbucks": "Starbucks · the \"Caffè Latte\" screen · 5:27 AM",
+      "first place DoorDash shows for a latte": "DoorDash · DashboardActivity · 5:27 AM"
+     }
+    },
+    {
+     "seq": 3,
+     "time": 1793179654.60623,
+     "kind": "timeline",
+     "text": "answered in 27.5 s; phones busy at the same time for 0.0 s"
+    },
+    {
+     "seq": 4,
+     "time": 1793179654.608864,
+     "kind": "memory",
+     "text": "memory updated: the combined answer, with each app as its source",
+     "entities": [
+      "Note A Caffè Latte has 190 calories according to Starbucks, and the first place for a latte on DoorDash is McDonald's."
+     ]
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "lead": {
+      "calls": 1,
+      "usd": 0.003477
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.003715
+     },
+     "extract": {
+      "calls": 2,
+      "usd": 0.004769
+     },
+     "combine": {
+      "calls": 1,
+      "usd": 0.002668
+     }
+    },
+    "calls": 6,
+    "usd": 0.01463
+   }
+  },
+  {
+   "question": "R1",
+   "mode": "sequential",
+   "message": "How many calories are in a Caffè Latte at Starbucks, and what's the first place DoorDash shows for a latte?",
+   "parent_id": "task-1028-052737-7e31",
+   "started": 1793179654.882565,
+   "wall_s": 31.55,
+   "with_memory_s": 31.55,
+   "overlap_s": 0.0,
+   "status": "done",
+   "answer": "A Caffè Latte at Starbucks has 190 calories, and DoorDash's first place for a latte is McDonald's.",
+   "values": [
+    {
+     "label": "Caffè Latte calories at Starbucks",
+     "app_name": "Starbucks",
+     "status": "done",
+     "result": "calories: 190 calories",
+     "screen": "the \"Caffè Latte\" screen",
+     "time": 1793179670.366785,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "starbucks_get_drink_calories",
+     "why": null
+    },
+    {
+     "label": "first place for latte on DoorDash",
+     "app_name": "DoorDash",
+     "status": "done",
+     "result": "first restaurant name: McDonald's",
+     "screen": "DashboardActivity",
+     "time": 1793179684.369867,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "doordash_search_restaurants",
+     "why": null
+    }
+   ],
+   "sources": {
+    "Caffè Latte calories at Starbucks": "Starbucks · the \"Caffè Latte\" screen · 5:27 AM",
+    "first place for latte on DoorDash": "DoorDash · DashboardActivity · 5:28 AM"
+   },
+   "timeline": [
+    {
+     "task_id": "task-1028-052737-3094",
+     "app": "Starbucks",
+     "device": "envoy-real",
+     "queued_at": 1793179657.4204822,
+     "phone_at": 1793179659.6334069,
+     "ended_at": 1793179670.367512,
+     "status": "done"
+    },
+    {
+     "task_id": "task-1028-052750-44e0",
+     "app": "DoorDash",
+     "device": "envoy-real",
+     "queued_at": 1793179670.384198,
+     "phone_at": 1793179672.67251,
+     "ended_at": 1793179684.3708532,
+     "status": "done"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-052737-3094",
+     "goal": "Check how many calories are in a Caffè Latte at Starbucks",
+     "app": "com.starbucks.mobilecard",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "starbucks_get_drink_calories",
+     "inputs": {
+      "drink_name": "Caffè Latte"
+     },
+     "status": "done",
+     "result": "calories: 190 calories",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793179659.616287,
+       "kind": "note",
+       "text": "using routine starbucks_get_drink_calories v2 with drink_name = Caffè Latte"
+      },
+      {
+       "seq": 2,
+       "time": 1793179662.987825,
+       "kind": "routine_step",
+       "text": "tap_order",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 3,
+       "time": 1793179663.561653,
+       "kind": "routine_step",
+       "text": "dismiss_location_prompt",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793179664.2492201,
+       "kind": "routine_step",
+       "text": "tap_skip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793179665.2141068,
+       "kind": "routine_step",
+       "text": "confirm_skip_to_menu",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 6,
+       "time": 1793179666.2996101,
+       "kind": "routine_step",
+       "text": "tap_search_menu",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 7,
+       "time": 1793179667.034789,
+       "kind": "routine_step",
+       "text": "select_recent_search_result",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 8,
+       "time": 1793179667.382922,
+       "kind": "routine_step",
+       "text": "find_open_drink_product",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 9,
+       "time": 1793179670.152586,
+       "kind": "routine_step",
+       "text": "open_drink_product",
+       "status": "done",
+       "rung": 2
+      },
+      {
+       "seq": 10,
+       "time": 1793179670.262399,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 11,
+       "time": 1793179670.2800431,
+       "kind": "note",
+       "text": "routine starbucks_get_drink_calories v2: trial activated"
+      },
+      {
+       "seq": 12,
+       "time": 1793179670.375296,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 13,
+       "time": 1793179673.629992,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-052750-44e0",
+     "goal": "Search DoorDash for latte and report the first restaurant in the results",
+     "app": "com.dd.doordash",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "doordash_search_restaurants",
+     "inputs": {
+      "search_query": "latte"
+     },
+     "status": "done",
+     "result": "first restaurant name: McDonald's",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793179672.647383,
+       "kind": "note",
+       "text": "using routine doordash_search_restaurants v1 with search_query = latte"
+      },
+      {
+       "seq": 2,
+       "time": 1793179678.931168,
+       "kind": "routine_step",
+       "text": "open_search",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 3,
+       "time": 1793179683.698739,
+       "kind": "routine_step",
+       "text": "enter_search_query",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 4,
+       "time": 1793179684.036923,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 5,
+       "time": 1793179684.377426,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 6,
+       "time": 1793179686.259016,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793179657.419497,
+     "kind": "plan",
+     "text": "2 apps: Starbucks: Check how many calories are in a Caffè Latte at Starbucks; DoorDash: Search DoorDash for latte and report the first restaurant in the results"
+    },
+    {
+     "seq": 2,
+     "time": 1793179686.395493,
+     "kind": "answer",
+     "text": "A Caffè Latte at Starbucks has 190 calories, and DoorDash's first place for a latte is McDonald's.",
+     "sources": {
+      "Caffè Latte calories at Starbucks": "Starbucks · the \"Caffè Latte\" screen · 5:27 AM",
+      "first place for latte on DoorDash": "DoorDash · DashboardActivity · 5:28 AM"
+     }
+    },
+    {
+     "seq": 3,
+     "time": 1793179686.396157,
+     "kind": "timeline",
+     "text": "answered in 28.98 s; phones busy at the same time for 0.0 s"
+    },
+    {
+     "seq": 4,
+     "time": 1793179686.399891,
+     "kind": "memory",
+     "text": "memory updated: the combined answer, with each app as its source",
+     "entities": [
+      "Note A Caffè Latte at Starbucks has 190 calories, and DoorDash's first place for a latte is McDonald's."
+     ]
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "extract": {
+      "calls": 3,
+      "usd": 0.006844
+     },
+     "combine": {
+      "calls": 2,
+      "usd": 0.004692999999999999
+     },
+     "lead": {
+      "calls": 1,
+      "usd": 0.002661
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.0052049999999999996
+     }
+    },
+    "calls": 8,
+    "usd": 0.0194
+   }
+  },
+  {
+   "question": "R1",
+   "mode": "parallel",
+   "message": "How many calories are in a Caffè Latte at Starbucks, and what's the first place DoorDash shows for a latte?",
+   "parent_id": "task-1028-052809-0602",
+   "started": 1793179686.5897632,
+   "wall_s": 36.9,
+   "with_memory_s": 38.38,
+   "overlap_s": 0.0,
+   "status": "done",
+   "answer": "Starbucks lists a Caffè Latte at 190 calories, and DoorDash shows McDonald's first for a latte.",
+   "values": [
+    {
+     "label": "Caffè Latte calories at Starbucks",
+     "app_name": "Starbucks",
+     "status": "done",
+     "result": "calories: 190 calories",
+     "screen": "the \"Caffè Latte\" screen",
+     "time": 1793179721.7768042,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "starbucks_get_drink_calories",
+     "why": null
+    },
+    {
+     "label": "first place for latte on DoorDash",
+     "app_name": "DoorDash",
+     "status": "done",
+     "result": "first restaurant name: McDonald's",
+     "screen": "DashboardActivity",
+     "time": 1793179703.850569,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "doordash_search_restaurants",
+     "why": null
+    }
+   ],
+   "sources": {
+    "Caffè Latte calories at Starbucks": "Starbucks · the \"Caffè Latte\" screen · 5:28 AM",
+    "first place for latte on DoorDash": "DoorDash · DashboardActivity · 5:28 AM"
+   },
+   "timeline": [
+    {
+     "task_id": "task-1028-052809-c5fb",
+     "app": "Starbucks",
+     "device": "envoy-real",
+     "queued_at": 1793179689.748319,
+     "phone_at": 1793179703.8625972,
+     "ended_at": 1793179721.777762,
+     "status": "done"
+    },
+    {
+     "task_id": "task-1028-052809-fed3",
+     "app": "DoorDash",
+     "device": "envoy-real",
+     "queued_at": 1793179689.7492108,
+     "phone_at": 1793179691.996507,
+     "ended_at": 1793179703.851346,
+     "status": "done"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-052809-c5fb",
+     "goal": "Check how many calories are in a Caffè Latte at Starbucks",
+     "app": "com.starbucks.mobilecard",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "starbucks_get_drink_calories",
+     "inputs": {
+      "drink_name": "Caffè Latte"
+     },
+     "status": "done",
+     "result": "calories: 190 calories",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793179692.325918,
+       "kind": "note",
+       "text": "using routine starbucks_get_drink_calories v2 with drink_name = Caffè Latte"
+      },
+      {
+       "seq": 2,
+       "time": 1793179692.346171,
+       "kind": "note",
+       "text": "waiting for envoy-real: another task is using it"
+      },
+      {
+       "seq": 3,
+       "time": 1793179711.646603,
+       "kind": "routine_step",
+       "text": "tap_order",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793179712.305093,
+       "kind": "routine_step",
+       "text": "dismiss_location_prompt",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793179712.987453,
+       "kind": "routine_step",
+       "text": "tap_skip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 6,
+       "time": 1793179715.501162,
+       "kind": "routine_step",
+       "text": "confirm_skip_to_menu",
+       "status": "done",
+       "rung": 2
+      },
+      {
+       "seq": 7,
+       "time": 1793179716.279972,
+       "kind": "routine_step",
+       "text": "tap_search_menu",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 8,
+       "time": 1793179717.1517398,
+       "kind": "routine_step",
+       "text": "select_recent_search_result",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 9,
+       "time": 1793179717.5146198,
+       "kind": "routine_step",
+       "text": "find_open_drink_product",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 10,
+       "time": 1793179720.169064,
+       "kind": "routine_step",
+       "text": "open_drink_product",
+       "status": "done",
+       "rung": 2
+      },
+      {
+       "seq": 11,
+       "time": 1793179720.940542,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 12,
+       "time": 1793179720.945227,
+       "kind": "note",
+       "text": "routine starbucks_get_drink_calories: patched version v3 on trial for the next run"
+      },
+      {
+       "seq": 13,
+       "time": 1793179721.784291,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 14,
+       "time": 1793179724.9643798,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-052809-fed3",
+     "goal": "Search DoorDash for latte and report the first restaurant in the results",
+     "app": "com.dd.doordash",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "doordash_search_restaurants",
+     "inputs": {
+      "search_query": "latte"
+     },
+     "status": "done",
+     "result": "first restaurant name: McDonald's",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793179691.980976,
+       "kind": "note",
+       "text": "using routine doordash_search_restaurants v1 with search_query = latte"
+      },
+      {
+       "seq": 2,
+       "time": 1793179697.157794,
+       "kind": "routine_step",
+       "text": "open_search",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 3,
+       "time": 1793179702.93556,
+       "kind": "routine_step",
+       "text": "enter_search_query",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 4,
+       "time": 1793179703.359551,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 5,
+       "time": 1793179703.851823,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 6,
+       "time": 1793179706.397995,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793179689.74749,
+     "kind": "plan",
+     "text": "2 apps: Starbucks: Check how many calories are in a Caffè Latte at Starbucks; DoorDash: Search DoorDash for latte and report the first restaurant in the results"
+    },
+    {
+     "seq": 2,
+     "time": 1793179723.4413419,
+     "kind": "answer",
+     "text": "Starbucks lists a Caffè Latte at 190 calories, and DoorDash shows McDonald's first for a latte.",
+     "sources": {
+      "Caffè Latte calories at Starbucks": "Starbucks · the \"Caffè Latte\" screen · 5:28 AM",
+      "first place for latte on DoorDash": "DoorDash · DashboardActivity · 5:28 AM"
+     }
+    },
+    {
+     "seq": 3,
+     "time": 1793179723.442505,
+     "kind": "timeline",
+     "text": "answered in 33.7 s; phones busy at the same time for 0.0 s"
+    },
+    {
+     "seq": 4,
+     "time": 1793179724.972907,
+     "kind": "memory",
+     "text": "memory updated: the combined answer, with each app as its source",
+     "entities": [
+      "Note Starbucks lists a Caffè Latte at 190 calories, and DoorDash shows McDonald's first for a latte."
+     ]
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "extract": {
+      "calls": 3,
+      "usd": 0.007086
+     },
+     "combine": {
+      "calls": 2,
+      "usd": 0.0040420000000000005
+     },
+     "lead": {
+      "calls": 1,
+      "usd": 0.00343
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.005515
+     }
+    },
+    "calls": 8,
+    "usd": 0.02007
+   }
+  },
+  {
+   "question": "R1",
+   "mode": "sequential",
+   "message": "How many calories are in a Caffè Latte at Starbucks, and what's the first place DoorDash shows for a latte?",
+   "parent_id": "task-1028-052848-f6e2",
+   "started": 1793179725.1356878,
+   "wall_s": 31.15,
+   "with_memory_s": 32.5,
+   "overlap_s": 0.0,
+   "status": "done",
+   "answer": "Starbucks shows 190 calories for a Caffè Latte, and DoorDash shows McDonald's as the first place for a latte.",
+   "values": [
+    {
+     "label": "Caffè Latte calories at Starbucks",
+     "app_name": "Starbucks",
+     "status": "done",
+     "result": "calories: 190 calories",
+     "screen": "the \"Caffè Latte\" screen",
+     "time": 1793179742.861362,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "starbucks_get_drink_calories",
+     "why": null
+    },
+    {
+     "label": "first place for latte on DoorDash",
+     "app_name": "DoorDash",
+     "status": "done",
+     "result": "first restaurant name: McDonald's",
+     "screen": "DashboardActivity",
+     "time": 1793179754.0217211,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "doordash_search_restaurants",
+     "why": null
+    }
+   ],
+   "sources": {
+    "Caffè Latte calories at Starbucks": "Starbucks · the \"Caffè Latte\" screen · 5:29 AM",
+    "first place for latte on DoorDash": "DoorDash · DashboardActivity · 5:29 AM"
+   },
+   "timeline": [
+    {
+     "task_id": "task-1028-052848-0269",
+     "app": "Starbucks",
+     "device": "envoy-real",
+     "queued_at": 1793179728.4093409,
+     "phone_at": 1793179731.261292,
+     "ended_at": 1793179742.862558,
+     "status": "done"
+    },
+    {
+     "task_id": "task-1028-052902-400b",
+     "app": "DoorDash",
+     "device": "envoy-real",
+     "queued_at": 1793179742.878382,
+     "phone_at": 1793179745.1843672,
+     "ended_at": 1793179754.022763,
+     "status": "done"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-052848-0269",
+     "goal": "Check how many calories are in a Caffè Latte at Starbucks",
+     "app": "com.starbucks.mobilecard",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "starbucks_get_drink_calories",
+     "inputs": {
+      "drink_name": "Caffè Latte"
+     },
+     "status": "done",
+     "result": "calories: 190 calories",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793179731.238902,
+       "kind": "note",
+       "text": "using routine starbucks_get_drink_calories v3 with drink_name = Caffè Latte"
+      },
+      {
+       "seq": 2,
+       "time": 1793179735.1687481,
+       "kind": "routine_step",
+       "text": "tap_order",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 3,
+       "time": 1793179735.813858,
+       "kind": "routine_step",
+       "text": "dismiss_location_prompt",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793179736.4921222,
+       "kind": "routine_step",
+       "text": "tap_skip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793179737.404434,
+       "kind": "routine_step",
+       "text": "confirm_skip_to_menu",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 6,
+       "time": 1793179739.00716,
+       "kind": "routine_step",
+       "text": "tap_search_menu",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 7,
+       "time": 1793179739.698417,
+       "kind": "routine_step",
+       "text": "select_recent_search_result",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 8,
+       "time": 1793179740.043351,
+       "kind": "routine_step",
+       "text": "find_open_drink_product",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 9,
+       "time": 1793179742.643992,
+       "kind": "routine_step",
+       "text": "open_drink_product",
+       "status": "done",
+       "rung": 2
+      },
+      {
+       "seq": 10,
+       "time": 1793179742.7458282,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 11,
+       "time": 1793179742.767394,
+       "kind": "note",
+       "text": "routine starbucks_get_drink_calories v3: trial activated"
+      },
+      {
+       "seq": 12,
+       "time": 1793179742.870414,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 13,
+       "time": 1793179746.861347,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-052902-400b",
+     "goal": "Search DoorDash for latte and report the first restaurant in the results",
+     "app": "com.dd.doordash",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "doordash_search_restaurants",
+     "inputs": {
+      "search_query": "latte"
+     },
+     "status": "done",
+     "result": "first restaurant name: McDonald's",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793179745.160919,
+       "kind": "note",
+       "text": "using routine doordash_search_restaurants v1 with search_query = latte"
+      },
+      {
+       "seq": 2,
+       "time": 1793179751.367536,
+       "kind": "routine_step",
+       "text": "open_search",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 3,
+       "time": 1793179753.842937,
+       "kind": "routine_step",
+       "text": "enter_search_query",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793179753.934597,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 5,
+       "time": 1793179754.029273,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 6,
+       "time": 1793179756.70766,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793179728.408135,
+     "kind": "plan",
+     "text": "2 apps: Starbucks: Check how many calories are in a Caffè Latte at Starbucks; DoorDash: Search DoorDash for latte and report the first restaurant in the results"
+    },
+    {
+     "seq": 2,
+     "time": 1793179756.230552,
+     "kind": "answer",
+     "text": "Starbucks shows 190 calories for a Caffè Latte, and DoorDash shows McDonald's as the first place for a latte.",
+     "sources": {
+      "Caffè Latte calories at Starbucks": "Starbucks · the \"Caffè Latte\" screen · 5:29 AM",
+      "first place for latte on DoorDash": "DoorDash · DashboardActivity · 5:29 AM"
+     }
+    },
+    {
+     "seq": 3,
+     "time": 1793179756.2311308,
+     "kind": "timeline",
+     "text": "answered in 27.82 s; phones busy at the same time for 0.0 s"
+    },
+    {
+     "seq": 4,
+     "time": 1793179757.632904,
+     "kind": "memory",
+     "text": "memory updated: the combined answer, with each app as its source",
+     "entities": [
+      "Note Starbucks shows 190 calories for a Caffè Latte, and DoorDash shows McDonald's as the first place for a latte."
+     ]
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "extract": {
+      "calls": 3,
+      "usd": 0.009323000000000001
+     },
+     "lead": {
+      "calls": 1,
+      "usd": 0.002886
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.004427
+     },
+     "combine": {
+      "calls": 1,
+      "usd": 0.002327
+     }
+    },
+    "calls": 7,
+    "usd": 0.01896
+   }
+  },
+  {
+   "question": "R3",
+   "mode": "parallel",
+   "message": "How many calories are in a Caffè Mocha at Starbucks, and what's the address of the Space Needle in Google Maps?",
+   "parent_id": "task-1028-052919-c440",
+   "started": 1793179757.752586,
+   "wall_s": 59.84,
+   "with_memory_s": 62.8,
+   "overlap_s": 0.0,
+   "status": "done",
+   "answer": "According to Starbucks, a Caffè Mocha has 370 calories, and according to Google Maps, the Space Needle is at 400 Broad St, Seattle, WA 98109.",
+   "values": [
+    {
+     "label": "Caffè Mocha calories at Starbucks",
+     "app_name": "Starbucks",
+     "status": "done",
+     "result": "calories: 370 calories",
+     "screen": "the \"Caffè Mocha\" screen",
+     "time": 1793179793.477162,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "starbucks_get_drink_calories",
+     "why": null
+    },
+    {
+     "label": "Space Needle address",
+     "app_name": "Google Maps",
+     "status": "done",
+     "result": "street address: 400 Broad St, Seattle, WA 98109",
+     "screen": "MapsActivity",
+     "time": 1793179815.614281,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "google_maps_get_place_address",
+     "why": null
+    }
+   ],
+   "sources": {
+    "Caffè Mocha calories at Starbucks": "Starbucks · the \"Caffè Mocha\" screen · 5:29 AM",
+    "Space Needle address": "Google Maps · MapsActivity · 5:30 AM"
+   },
+   "timeline": [
+    {
+     "task_id": "task-1028-052919-50eb",
+     "app": "Starbucks",
+     "device": "envoy-real",
+     "queued_at": 1793179759.708089,
+     "phone_at": 1793179762.4468858,
+     "ended_at": 1793179793.478216,
+     "status": "done"
+    },
+    {
+     "task_id": "task-1028-052919-7be2",
+     "app": "Google Maps",
+     "device": "envoy-real",
+     "queued_at": 1793179759.708926,
+     "phone_at": 1793179793.488894,
+     "ended_at": 1793179815.6155672,
+     "status": "done"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-052919-50eb",
+     "goal": "Check how many calories are in a Caffè Mocha at Starbucks",
+     "app": "com.starbucks.mobilecard",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "starbucks_get_drink_calories",
+     "inputs": {
+      "drink_name": "Caffè Mocha"
+     },
+     "status": "done",
+     "result": "calories: 370 calories",
+     "detail": "all steps and checks passed",
+     "model_calls": 2,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793179761.241327,
+       "kind": "note",
+       "text": "using routine starbucks_get_drink_calories v3 with drink_name = Caffè Mocha"
+      },
+      {
+       "seq": 2,
+       "time": 1793179765.402634,
+       "kind": "routine_step",
+       "text": "tap_order",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 3,
+       "time": 1793179766.009872,
+       "kind": "routine_step",
+       "text": "dismiss_location_prompt",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793179766.70682,
+       "kind": "routine_step",
+       "text": "tap_skip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793179767.8826098,
+       "kind": "routine_step",
+       "text": "confirm_skip_to_menu",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 6,
+       "time": 1793179769.9633138,
+       "kind": "routine_step",
+       "text": "tap_search_menu",
+       "status": "done",
+       "rung": 2
+      },
+      {
+       "seq": 7,
+       "time": 1793179789.4337401,
+       "kind": "routine_step",
+       "text": "find_open_drink_product",
+       "status": "done",
+       "rung": 4
+      },
+      {
+       "seq": 8,
+       "time": 1793179793.3081589,
+       "kind": "routine_step",
+       "text": "open_drink_product",
+       "status": "done",
+       "rung": 2
+      },
+      {
+       "seq": 9,
+       "time": 1793179793.394163,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 10,
+       "time": 1793179793.4012392,
+       "kind": "note",
+       "text": "routine starbucks_get_drink_calories: patched version v4 on trial for the next run"
+      },
+      {
+       "seq": 11,
+       "time": 1793179793.485332,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 12,
+       "time": 1793179797.381906,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-052919-7be2",
+     "goal": "Look up the street address of the Space Needle in Google Maps",
+     "app": "com.google.android.apps.maps",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "google_maps_get_place_address",
+     "inputs": {
+      "place_name": "Space Needle"
+     },
+     "status": "done",
+     "result": "street address: 400 Broad St, Seattle, WA 98109",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793179762.441055,
+       "kind": "note",
+       "text": "using routine google_maps_get_place_address v1 with place_name = Space Needle"
+      },
+      {
+       "seq": 2,
+       "time": 1793179762.455504,
+       "kind": "note",
+       "text": "waiting for envoy-real: another task is using it"
+      },
+      {
+       "seq": 3,
+       "time": 1793179799.190374,
+       "kind": "routine_step",
+       "text": "tap_search_field",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793179805.767491,
+       "kind": "routine_step",
+       "text": "type_place_name",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 5,
+       "time": 1793179815.1925602,
+       "kind": "routine_step",
+       "text": "scroll_to_address",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 6,
+       "time": 1793179815.424886,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 7,
+       "time": 1793179815.6229792,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 8,
+       "time": 1793179820.5343108,
+       "kind": "memory",
+       "text": "memory updated: 2 new",
+       "entities": [
+        "Place Space Needle"
+       ]
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793179759.7070148,
+     "kind": "plan",
+     "text": "2 apps: Starbucks: Check how many calories are in a Caffè Mocha at Starbucks; Google Maps: Look up the street address of the Space Needle in Google Maps"
+    },
+    {
+     "seq": 2,
+     "time": 1793179817.52067,
+     "kind": "answer",
+     "text": "According to Starbucks, a Caffè Mocha has 370 calories, and according to Google Maps, the Space Needle is at 400 Broad St, Seattle, WA 98109.",
+     "sources": {
+      "Caffè Mocha calories at Starbucks": "Starbucks · the \"Caffè Mocha\" screen · 5:29 AM",
+      "Space Needle address": "Google Maps · MapsActivity · 5:30 AM"
+     }
+    },
+    {
+     "seq": 3,
+     "time": 1793179817.521997,
+     "kind": "timeline",
+     "text": "answered in 57.82 s; phones busy at the same time for 0.0 s"
+    },
+    {
+     "seq": 4,
+     "time": 1793179820.547402,
+     "kind": "memory",
+     "text": "memory updated: the combined answer, with each app as its source",
+     "entities": [
+      "Note According to Starbucks, a Caffè Mocha has 370 calories, and according to Google Maps, the Space Needle is at 400 Broad St, Seattle, WA 98109."
+     ]
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "lead": {
+      "calls": 1,
+      "usd": 0.003209
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.005053
+     },
+     "repair": {
+      "calls": 1,
+      "usd": 0.008601
+     },
+     "extract": {
+      "calls": 2,
+      "usd": 0.008458
+     },
+     "combine": {
+      "calls": 1,
+      "usd": 0.002191
+     }
+    },
+    "calls": 7,
+    "usd": 0.02751
+   }
+  },
+  {
+   "question": "R3",
+   "mode": "sequential",
+   "message": "How many calories are in a Caffè Mocha at Starbucks, and what's the address of the Space Needle in Google Maps?",
+   "parent_id": "task-1028-053023-db26",
+   "started": 1793179820.693563,
+   "wall_s": 37.33,
+   "with_memory_s": 38.95,
+   "overlap_s": 0.0,
+   "status": "done",
+   "answer": "Starbucks lists the Caffè Mocha at 370 calories, and Google Maps lists the Space Needle at 400 Broad St, Seattle, WA 98109.",
+   "values": [
+    {
+     "label": "Caffè Mocha calories at Starbucks",
+     "app_name": "Starbucks",
+     "status": "done",
+     "result": "calories: 370 calories",
+     "screen": "the \"Caffè Mocha\" screen",
+     "time": 1793179837.4330502,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "starbucks_get_drink_calories",
+     "why": null
+    },
+    {
+     "label": "Space Needle address",
+     "app_name": "Google Maps",
+     "status": "done",
+     "result": "street address: 400 Broad St, Seattle, WA 98109",
+     "screen": "MapsActivity",
+     "time": 1793179855.39069,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "google_maps_get_place_address",
+     "why": null
+    }
+   ],
+   "sources": {
+    "Caffè Mocha calories at Starbucks": "Starbucks · the \"Caffè Mocha\" screen · 5:30 AM",
+    "Space Needle address": "Google Maps · MapsActivity · 5:30 AM"
+   },
+   "timeline": [
+    {
+     "task_id": "task-1028-053023-b427",
+     "app": "Starbucks",
+     "device": "envoy-real",
+     "queued_at": 1793179823.318465,
+     "phone_at": 1793179825.404532,
+     "ended_at": 1793179837.434062,
+     "status": "done"
+    },
+    {
+     "task_id": "task-1028-053037-625b",
+     "app": "Google Maps",
+     "device": "envoy-real",
+     "queued_at": 1793179837.443815,
+     "phone_at": 1793179839.587988,
+     "ended_at": 1793179855.391746,
+     "status": "done"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-053023-b427",
+     "goal": "Check how many calories are in a Caffè Mocha at Starbucks",
+     "app": "com.starbucks.mobilecard",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "starbucks_get_drink_calories",
+     "inputs": {
+      "drink_name": "Caffè Mocha"
+     },
+     "status": "done",
+     "result": "calories: 370 calories",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793179825.380254,
+       "kind": "note",
+       "text": "using routine starbucks_get_drink_calories v4 with drink_name = Caffè Mocha"
+      },
+      {
+       "seq": 2,
+       "time": 1793179828.085966,
+       "kind": "routine_step",
+       "text": "tap_order",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 3,
+       "time": 1793179828.643689,
+       "kind": "routine_step",
+       "text": "dismiss_location_prompt",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793179829.347784,
+       "kind": "routine_step",
+       "text": "tap_skip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793179831.453602,
+       "kind": "routine_step",
+       "text": "confirm_skip_to_menu",
+       "status": "done",
+       "rung": 2
+      },
+      {
+       "seq": 6,
+       "time": 1793179832.225923,
+       "kind": "routine_step",
+       "text": "tap_search_menu",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 7,
+       "time": 1793179832.911359,
+       "kind": "routine_step",
+       "text": "select_recent_search_result",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 8,
+       "time": 1793179833.256992,
+       "kind": "routine_step",
+       "text": "find_open_drink_product",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 9,
+       "time": 1793179834.4462872,
+       "kind": "routine_step",
+       "text": "find_open_drink_product_extra_1",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 10,
+       "time": 1793179837.2509599,
+       "kind": "routine_step",
+       "text": "open_drink_product",
+       "status": "done",
+       "rung": 2
+      },
+      {
+       "seq": 11,
+       "time": 1793179837.3341818,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 12,
+       "time": 1793179837.353878,
+       "kind": "note",
+       "text": "routine starbucks_get_drink_calories v4: trial activated"
+      },
+      {
+       "seq": 13,
+       "time": 1793179837.438946,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 14,
+       "time": 1793179841.1968021,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-053037-625b",
+     "goal": "Look up the street address of the Space Needle in Google Maps",
+     "app": "com.google.android.apps.maps",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "google_maps_get_place_address",
+     "inputs": {
+      "place_name": "Space Needle"
+     },
+     "status": "done",
+     "result": "street address: 400 Broad St, Seattle, WA 98109",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793179839.570144,
+       "kind": "note",
+       "text": "using routine google_maps_get_place_address v1 with place_name = Space Needle"
+      },
+      {
+       "seq": 2,
+       "time": 1793179844.41578,
+       "kind": "routine_step",
+       "text": "tap_search_field",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 3,
+       "time": 1793179847.252726,
+       "kind": "routine_step",
+       "text": "type_place_name",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 4,
+       "time": 1793179855.065645,
+       "kind": "routine_step",
+       "text": "scroll_to_address",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793179855.215977,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 6,
+       "time": 1793179855.3987021,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 7,
+       "time": 1793179859.64064,
+       "kind": "memory",
+       "text": "memory updated: 2 same",
+       "entities": [
+        "Place Space Needle"
+       ]
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793179823.317672,
+     "kind": "plan",
+     "text": "2 apps: Starbucks: Check how many calories are in a Caffè Mocha at Starbucks; Google Maps: Look up the street address of the Space Needle in Google Maps"
+    },
+    {
+     "seq": 2,
+     "time": 1793179857.9614248,
+     "kind": "answer",
+     "text": "Starbucks lists the Caffè Mocha at 370 calories, and Google Maps lists the Space Needle at 400 Broad St, Seattle, WA 98109.",
+     "sources": {
+      "Caffè Mocha calories at Starbucks": "Starbucks · the \"Caffè Mocha\" screen · 5:30 AM",
+      "Space Needle address": "Google Maps · MapsActivity · 5:30 AM"
+     }
+    },
+    {
+     "seq": 3,
+     "time": 1793179857.961855,
+     "kind": "timeline",
+     "text": "answered in 34.64 s; phones busy at the same time for 0.0 s"
+    },
+    {
+     "seq": 4,
+     "time": 1793179859.647773,
+     "kind": "memory",
+     "text": "memory updated: the combined answer, with each app as its source",
+     "entities": [
+      "Note Starbucks lists the Caffè Mocha at 370 calories, and Google Maps lists the Space Needle at 400 Broad St, Seattle, WA 98109."
+     ]
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "extract": {
+      "calls": 3,
+      "usd": 0.0134
+     },
+     "lead": {
+      "calls": 1,
+      "usd": 0.002704
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.0051730000000000005
+     },
+     "combine": {
+      "calls": 1,
+      "usd": 0.002743
+     }
+    },
+    "calls": 7,
+    "usd": 0.02402
+   }
+  },
+  {
+   "question": "R3",
+   "mode": "parallel",
+   "message": "How many calories are in a Caffè Mocha at Starbucks, and what's the address of the Space Needle in Google Maps?",
+   "parent_id": "task-1028-053102-ce2b",
+   "started": 1793179859.773482,
+   "wall_s": 42.96,
+   "with_memory_s": 42.96,
+   "overlap_s": 0.0,
+   "status": "done",
+   "answer": "Starbucks lists a Caffè Mocha at 370 calories, and Google Maps lists the Space Needle at 400 Broad St, Seattle, WA 98109.",
+   "values": [
+    {
+     "label": "Caffè Mocha calories at Starbucks",
+     "app_name": "Starbucks",
+     "status": "done",
+     "result": "calories: 370 calories",
+     "screen": "the \"Caffè Mocha\" screen",
+     "time": 1793179900.432512,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "starbucks_get_drink_calories",
+     "why": null
+    },
+    {
+     "label": "Space Needle address",
+     "app_name": "Google Maps",
+     "status": "done",
+     "result": "street address: 400 Broad St, Seattle, WA 98109",
+     "screen": "MapsActivity",
+     "time": 1793179880.918488,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "google_maps_get_place_address",
+     "why": null
+    }
+   ],
+   "sources": {
+    "Caffè Mocha calories at Starbucks": "Starbucks · the \"Caffè Mocha\" screen · 5:31 AM",
+    "Space Needle address": "Google Maps · MapsActivity · 5:31 AM"
+   },
+   "timeline": [
+    {
+     "task_id": "task-1028-053102-b414",
+     "app": "Starbucks",
+     "device": "envoy-real",
+     "queued_at": 1793179862.838039,
+     "phone_at": 1793179880.929924,
+     "ended_at": 1793179900.433558,
+     "status": "done"
+    },
+    {
+     "task_id": "task-1028-053102-8714",
+     "app": "Google Maps",
+     "device": "envoy-real",
+     "queued_at": 1793179862.838848,
+     "phone_at": 1793179864.7728589,
+     "ended_at": 1793179880.9195259,
+     "status": "done"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-053102-b414",
+     "goal": "Check how many calories are in a Caffè Mocha at Starbucks",
+     "app": "com.starbucks.mobilecard",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "starbucks_get_drink_calories",
+     "inputs": {
+      "drink_name": "Caffè Mocha"
+     },
+     "status": "done",
+     "result": "calories: 370 calories",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793179865.047283,
+       "kind": "note",
+       "text": "using routine starbucks_get_drink_calories v4 with drink_name = Caffè Mocha"
+      },
+      {
+       "seq": 2,
+       "time": 1793179865.065481,
+       "kind": "note",
+       "text": "waiting for envoy-real: another task is using it"
+      },
+      {
+       "seq": 3,
+       "time": 1793179885.159782,
+       "kind": "routine_step",
+       "text": "tap_order",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793179885.777337,
+       "kind": "routine_step",
+       "text": "dismiss_location_prompt",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793179887.6791549,
+       "kind": "routine_step",
+       "text": "tap_skip",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 6,
+       "time": 1793179888.561227,
+       "kind": "routine_step",
+       "text": "confirm_skip_to_menu",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 7,
+       "time": 1793179890.70944,
+       "kind": "routine_step",
+       "text": "tap_search_menu",
+       "status": "done",
+       "rung": 2
+      },
+      {
+       "seq": 8,
+       "time": 1793179890.800172,
+       "kind": "routine_step",
+       "text": "select_recent_search_result",
+       "status": "skipped",
+       "rung": 0,
+       "detail": "optional, and the next required step (find_open_drink_product) is ready"
+      },
+      {
+       "seq": 9,
+       "time": 1793179893.662902,
+       "kind": "routine_step",
+       "text": "find_open_drink_product",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 10,
+       "time": 1793179897.203805,
+       "kind": "routine_step",
+       "text": "find_open_drink_product_extra_1",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 11,
+       "time": 1793179900.2669692,
+       "kind": "routine_step",
+       "text": "open_drink_product",
+       "status": "done",
+       "rung": 2
+      },
+      {
+       "seq": 12,
+       "time": 1793179900.346873,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 13,
+       "time": 1793179900.4394271,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 14,
+       "time": 1793179902.716062,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-053102-8714",
+     "goal": "Look up the street address of the Space Needle in Google Maps",
+     "app": "com.google.android.apps.maps",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "google_maps_get_place_address",
+     "inputs": {
+      "place_name": "Space Needle"
+     },
+     "status": "done",
+     "result": "street address: 400 Broad St, Seattle, WA 98109",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793179864.7587662,
+       "kind": "note",
+       "text": "using routine google_maps_get_place_address v1 with place_name = Space Needle"
+      },
+      {
+       "seq": 2,
+       "time": 1793179868.2390668,
+       "kind": "routine_step",
+       "text": "tap_search_field",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 3,
+       "time": 1793179873.159301,
+       "kind": "routine_step",
+       "text": "type_place_name",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 4,
+       "time": 1793179880.654337,
+       "kind": "routine_step",
+       "text": "scroll_to_address",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793179880.786668,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 6,
+       "time": 1793179880.925153,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 7,
+       "time": 1793179886.466126,
+       "kind": "memory",
+       "text": "memory updated: 2 same",
+       "entities": [
+        "Place Space Needle"
+       ]
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793179862.837086,
+     "kind": "plan",
+     "text": "2 apps: Starbucks: Check how many calories are in a Caffè Mocha at Starbucks; Google Maps: Look up the street address of the Space Needle in Google Maps"
+    },
+    {
+     "seq": 2,
+     "time": 1793179902.649513,
+     "kind": "answer",
+     "text": "Starbucks lists a Caffè Mocha at 370 calories, and Google Maps lists the Space Needle at 400 Broad St, Seattle, WA 98109.",
+     "sources": {
+      "Caffè Mocha calories at Starbucks": "Starbucks · the \"Caffè Mocha\" screen · 5:31 AM",
+      "Space Needle address": "Google Maps · MapsActivity · 5:31 AM"
+     }
+    },
+    {
+     "seq": 3,
+     "time": 1793179902.6503801,
+     "kind": "timeline",
+     "text": "answered in 39.81 s; phones busy at the same time for 0.0 s"
+    },
+    {
+     "seq": 4,
+     "time": 1793179902.7268648,
+     "kind": "memory",
+     "text": "memory updated: the combined answer, with each app as its source",
+     "entities": [
+      "Note Starbucks lists a Caffè Mocha at 370 calories, and Google Maps lists the Space Needle at 400 Broad St, Seattle, WA 98109."
+     ]
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "extract": {
+      "calls": 3,
+      "usd": 0.012804
+     },
+     "lead": {
+      "calls": 1,
+      "usd": 0.003444
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.005089
+     },
+     "combine": {
+      "calls": 1,
+      "usd": 0.00233
+     }
+    },
+    "calls": 7,
+    "usd": 0.02367
+   }
+  },
+  {
+   "question": "R3",
+   "mode": "sequential",
+   "message": "How many calories are in a Caffè Mocha at Starbucks, and what's the address of the Space Needle in Google Maps?",
+   "parent_id": "task-1028-053145-09d6",
+   "started": 1793179902.882845,
+   "wall_s": 36.54,
+   "with_memory_s": 41.05,
+   "overlap_s": 0.0,
+   "status": "done",
+   "answer": "A Caffè Mocha has 370 calories per Starbucks, and the Space Needle is at 400 Broad St, Seattle, WA 98109 per Google Maps.",
+   "values": [
+    {
+     "label": "Caffè Mocha calories at Starbucks",
+     "app_name": "Starbucks",
+     "status": "done",
+     "result": "calories: 370 calories",
+     "screen": "the \"Caffè Mocha\" screen",
+     "time": 1793179920.8155751,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "starbucks_get_drink_calories",
+     "why": null
+    },
+    {
+     "label": "Space Needle address",
+     "app_name": "Google Maps",
+     "status": "done",
+     "result": "street address: 400 Broad St, Seattle, WA 98109",
+     "screen": "MapsActivity",
+     "time": 1793179937.1631129,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "google_maps_get_place_address",
+     "why": null
+    }
+   ],
+   "sources": {
+    "Caffè Mocha calories at Starbucks": "Starbucks · the \"Caffè Mocha\" screen · 5:32 AM",
+    "Space Needle address": "Google Maps · MapsActivity · 5:32 AM"
+   },
+   "timeline": [
+    {
+     "task_id": "task-1028-053145-4d46",
+     "app": "Starbucks",
+     "device": "envoy-real",
+     "queued_at": 1793179905.5386748,
+     "phone_at": 1793179907.302936,
+     "ended_at": 1793179920.816724,
+     "status": "done"
+    },
+    {
+     "task_id": "task-1028-053200-1811",
+     "app": "Google Maps",
+     "device": "envoy-real",
+     "queued_at": 1793179920.830472,
+     "phone_at": 1793179922.7332668,
+     "ended_at": 1793179937.164217,
+     "status": "done"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-053145-4d46",
+     "goal": "Check how many calories are in a Caffè Mocha at Starbucks",
+     "app": "com.starbucks.mobilecard",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "starbucks_get_drink_calories",
+     "inputs": {
+      "drink_name": "Caffè Mocha"
+     },
+     "status": "done",
+     "result": "calories: 370 calories",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793179907.2862542,
+       "kind": "note",
+       "text": "using routine starbucks_get_drink_calories v4 with drink_name = Caffè Mocha"
+      },
+      {
+       "seq": 2,
+       "time": 1793179910.359931,
+       "kind": "routine_step",
+       "text": "tap_order",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 3,
+       "time": 1793179910.949975,
+       "kind": "routine_step",
+       "text": "dismiss_location_prompt",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793179911.633488,
+       "kind": "routine_step",
+       "text": "tap_skip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793179912.539546,
+       "kind": "routine_step",
+       "text": "confirm_skip_to_menu",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 6,
+       "time": 1793179914.203611,
+       "kind": "routine_step",
+       "text": "tap_search_menu",
+       "status": "done",
+       "rung": 2
+      },
+      {
+       "seq": 7,
+       "time": 1793179914.286388,
+       "kind": "routine_step",
+       "text": "select_recent_search_result",
+       "status": "skipped",
+       "rung": 0,
+       "detail": "optional, and the next required step (find_open_drink_product) is ready"
+      },
+      {
+       "seq": 8,
+       "time": 1793179917.0123782,
+       "kind": "routine_step",
+       "text": "find_open_drink_product",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 9,
+       "time": 1793179917.901449,
+       "kind": "routine_step",
+       "text": "find_open_drink_product_extra_1",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 10,
+       "time": 1793179920.6345222,
+       "kind": "routine_step",
+       "text": "open_drink_product",
+       "status": "done",
+       "rung": 2
+      },
+      {
+       "seq": 11,
+       "time": 1793179920.719012,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 12,
+       "time": 1793179920.817445,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 13,
+       "time": 1793179923.5265348,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-053200-1811",
+     "goal": "Look up the street address of the Space Needle in Google Maps",
+     "app": "com.google.android.apps.maps",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "google_maps_get_place_address",
+     "inputs": {
+      "place_name": "Space Needle"
+     },
+     "status": "done",
+     "result": "street address: 400 Broad St, Seattle, WA 98109",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793179922.718674,
+       "kind": "note",
+       "text": "using routine google_maps_get_place_address v1 with place_name = Space Needle"
+      },
+      {
+       "seq": 2,
+       "time": 1793179927.774102,
+       "kind": "routine_step",
+       "text": "tap_search_field",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 3,
+       "time": 1793179930.52853,
+       "kind": "routine_step",
+       "text": "type_place_name",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 4,
+       "time": 1793179936.877186,
+       "kind": "routine_step",
+       "text": "scroll_to_address",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793179937.0254452,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 6,
+       "time": 1793179937.169724,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 7,
+       "time": 1793179942.3939068,
+       "kind": "memory",
+       "text": "memory updated: 2 same",
+       "entities": [
+        "Place Space Needle"
+       ]
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793179905.537728,
+     "kind": "plan",
+     "text": "2 apps: Starbucks: Check how many calories are in a Caffè Mocha at Starbucks; Google Maps: Look up the street address of the Space Needle in Google Maps"
+    },
+    {
+     "seq": 2,
+     "time": 1793179939.409288,
+     "kind": "answer",
+     "text": "A Caffè Mocha has 370 calories per Starbucks, and the Space Needle is at 400 Broad St, Seattle, WA 98109 per Google Maps.",
+     "sources": {
+      "Caffè Mocha calories at Starbucks": "Starbucks · the \"Caffè Mocha\" screen · 5:32 AM",
+      "Space Needle address": "Google Maps · MapsActivity · 5:32 AM"
+     }
+    },
+    {
+     "seq": 3,
+     "time": 1793179939.410235,
+     "kind": "timeline",
+     "text": "answered in 33.87 s; phones busy at the same time for 0.0 s"
+    },
+    {
+     "seq": 4,
+     "time": 1793179943.9323058,
+     "kind": "memory",
+     "text": "memory updated: the combined answer, with each app as its source",
+     "entities": [
+      "Note A Caffè Mocha has 370 calories per Starbucks, and the Space Needle is at 400 Broad St, Seattle, WA 98109 per Google Maps."
+     ]
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "combine": {
+      "calls": 2,
+      "usd": 0.004516
+     },
+     "extract": {
+      "calls": 3,
+      "usd": 0.009729
+     },
+     "lead": {
+      "calls": 1,
+      "usd": 0.003049
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.0052
+     }
+    },
+    "calls": 8,
+    "usd": 0.02249
+   }
+  },
+  {
+   "question": "R2",
+   "mode": "parallel",
+   "message": "What's a Caffè Latte at Starbucks vs on DoorDash?",
+   "parent_id": "task-1028-055101-ad0d",
+   "started": 1793181058.085483,
+   "wall_s": 172.05,
+   "with_memory_s": 172.05,
+   "overlap_s": 0.0,
+   "status": "done",
+   "answer": "Starbucks couldn't be checked, while DoorDash lists Caffè Latte at Starbucks on DoorDash is $5.75.",
+   "values": [
+    {
+     "label": "Caffè Latte price at Starbucks",
+     "app_name": "Starbucks",
+     "status": "failed",
+     "result": "",
+     "screen": "the \"Choose a café\" screen",
+     "time": 1793181225.783531,
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "why": "stopped after 25 steps"
+    },
+    {
+     "label": "Caffè Latte price on DoorDash",
+     "app_name": "DoorDash",
+     "status": "done",
+     "result": "Caffè Latte at Starbucks on DoorDash is $5.75 (base price shown as 'Make 1 required selection · $5.75'; Tall +$0.10, Grande +$0.80, Venti +$1.40)",
+     "screen": "StoreItemActivity",
+     "time": 1793181147.747415,
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "why": null
+    }
+   ],
+   "sources": {
+    "Caffè Latte price on DoorDash": "DoorDash · StoreItemActivity · 5:52 AM"
+   },
+   "timeline": [
+    {
+     "task_id": "task-1028-055101-dd46",
+     "app": "Starbucks",
+     "device": "envoy-real",
+     "queued_at": 1793181061.519014,
+     "phone_at": 1793181147.7586691,
+     "ended_at": 1793181225.784357,
+     "status": "failed"
+    },
+    {
+     "task_id": "task-1028-055101-633d",
+     "app": "DoorDash",
+     "device": "envoy-real",
+     "queued_at": 1793181061.51984,
+     "phone_at": 1793181064.850142,
+     "ended_at": 1793181147.748348,
+     "status": "done"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-055101-dd46",
+     "goal": "Find the price of a Caffè Latte at Starbucks",
+     "app": "com.starbucks.mobilecard",
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "inputs": {},
+     "status": "failed",
+     "result": "stopped after 25 steps",
+     "detail": "stopped after 25 steps",
+     "model_calls": 28,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793181065.39678,
+       "kind": "note",
+       "text": "waiting for envoy-real: another task is using it"
+      },
+      {
+       "seq": 2,
+       "time": 1793181154.7558038,
+       "kind": "plan",
+       "text": "Tap Order to open the order menu; Navigate to hot coffees or search for Caffè Latte; Open the Caffè Latte product details; Read the price of the Caffè Latte"
+      },
+      {
+       "seq": 3,
+       "time": 1793181158.988918,
+       "kind": "action",
+       "text": "tap \"Order\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 4,
+       "time": 1793181161.354953,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 5,
+       "time": 1793181163.478166,
+       "kind": "action",
+       "text": "tap \"Skip\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 6,
+       "time": 1793181166.033801,
+       "kind": "action",
+       "text": "tap \"Yes\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 7,
+       "time": 1793181168.037086,
+       "kind": "action",
+       "text": "tap \"Search Menu\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 8,
+       "time": 1793181170.004607,
+       "kind": "action",
+       "text": "tap \"Caffe Latte\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 9,
+       "time": 1793181172.339871,
+       "kind": "action",
+       "text": "tap \"Caffè Latte\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 10,
+       "time": 1793181176.404943,
+       "kind": "action",
+       "text": "scroll",
+       "risk": "read"
+      },
+      {
+       "seq": 11,
+       "time": 1793181178.3602052,
+       "kind": "action",
+       "text": "look"
+      },
+      {
+       "seq": 12,
+       "time": 1793181180.870241,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 13,
+       "time": 1793181183.364131,
+       "kind": "action",
+       "text": "tap \"Caffè Latte\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 14,
+       "time": 1793181186.528272,
+       "kind": "action",
+       "text": "tap \"Caffè Latte\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 15,
+       "time": 1793181190.2396622,
+       "kind": "action",
+       "text": "scroll",
+       "risk": "read"
+      },
+      {
+       "seq": 16,
+       "time": 1793181191.989653,
+       "kind": "action",
+       "text": "look"
+      },
+      {
+       "seq": 17,
+       "time": 1793181195.0723698,
+       "kind": "action",
+       "text": "tap \"For item availability · Choose a café\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 18,
+       "time": 1793181199.201361,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 19,
+       "time": 1793181204.886076,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 20,
+       "time": 1793181207.547822,
+       "kind": "action",
+       "text": "tap \"Caffè Latte\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 21,
+       "time": 1793181210.067903,
+       "kind": "action",
+       "text": "tap \"Caffè Latte\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 22,
+       "time": 1793181213.858851,
+       "kind": "replan",
+       "text": "Tap Choose a café to enable availability and pricing; Search for and select a café manually; Return to Caffè Latte details to reveal price"
+      },
+      {
+       "seq": 23,
+       "time": 1793181215.095405,
+       "kind": "action",
+       "text": "tap \"For item availability · Choose a café\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 24,
+       "time": 1793181217.321687,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 25,
+       "time": 1793181219.19739,
+       "kind": "action",
+       "text": "tap \"For item availability · Choose a café\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 26,
+       "time": 1793181220.778551,
+       "kind": "action",
+       "text": "tap \"Search\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 27,
+       "time": 1793181223.1541288,
+       "kind": "action",
+       "text": "type \"Enter a location\" \"Seattle\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 28,
+       "time": 1793181225.719983,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 29,
+       "time": 1793181225.7206368,
+       "kind": "finish",
+       "text": "stopped after 25 steps",
+       "status": "step_limit"
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-055101-633d",
+     "goal": "Find the price of a Caffè Latte on DoorDash",
+     "app": "com.dd.doordash",
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "inputs": {},
+     "status": "done",
+     "result": "Caffè Latte at Starbucks on DoorDash is $5.75 (base price shown as 'Make 1 required selection · $5.75'; Tall +$0.10, Grande +$0.80, Venti +$1.40)",
+     "detail": "Caffè Latte at Starbucks on DoorDash is $5.75 (base price shown as 'Make 1 required selection · $5.75'; Tall +$0.10, Grande +$0.80, Venti +$1.40)",
+     "model_calls": 26,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793181075.315516,
+       "kind": "plan",
+       "text": "Tap Search and search for Caffè Latte; Open a coffee store result that offers it; Open the Caffè Latte item to view its price"
+      },
+      {
+       "seq": 2,
+       "time": 1793181078.466221,
+       "kind": "action",
+       "text": "tap \"Search DoorDash\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 3,
+       "time": 1793181082.319319,
+       "kind": "action",
+       "text": "tap \"caffè latte\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 4,
+       "time": 1793181085.967577,
+       "kind": "action",
+       "text": "scroll",
+       "risk": "read"
+      },
+      {
+       "seq": 5,
+       "time": 1793181089.440096,
+       "kind": "action",
+       "text": "scroll",
+       "risk": "read"
+      },
+      {
+       "seq": 6,
+       "time": 1793181091.652735,
+       "kind": "action",
+       "text": "look"
+      },
+      {
+       "seq": 7,
+       "time": 1793181095.073875,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 8,
+       "time": 1793181097.3198662,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 9,
+       "time": 1793181101.656093,
+       "kind": "action",
+       "text": "launch",
+       "risk": "read"
+      },
+      {
+       "seq": 10,
+       "time": 1793181104.880944,
+       "kind": "action",
+       "text": "tap \"Search DoorDash\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 11,
+       "time": 1793181107.906667,
+       "kind": "action",
+       "text": "tap \"caffè latte\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 12,
+       "time": 1793181111.564686,
+       "kind": "replan",
+       "text": "Scroll results and filter to Restaurants to find a coffee seller; Open a store that sells Caffè Latte; Search store menu for Caffè Latte; Open Caffè Latte item to view its price"
+      },
+      {
+       "seq": 13,
+       "time": 1793181112.915767,
+       "kind": "action",
+       "text": "tap \"Restaurant\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 14,
+       "time": 1793181117.0303402,
+       "kind": "action",
+       "text": "scroll",
+       "risk": "read"
+      },
+      {
+       "seq": 15,
+       "time": 1793181120.1922188,
+       "kind": "action",
+       "text": "scroll",
+       "risk": "read"
+      },
+      {
+       "seq": 16,
+       "time": 1793181122.214072,
+       "kind": "action",
+       "text": "look"
+      },
+      {
+       "seq": 17,
+       "time": 1793181125.459061,
+       "kind": "action",
+       "text": "scroll",
+       "risk": "read"
+      },
+      {
+       "seq": 18,
+       "time": 1793181129.4129689,
+       "kind": "action",
+       "text": "tap \"Starbucks, 0.4 mi away, Estimated time of arrival Closed · Starbucks · 4.6\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 19,
+       "time": 1793181131.788842,
+       "kind": "action",
+       "text": "tap \"Browse menu\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 20,
+       "time": 1793181133.947223,
+       "kind": "action",
+       "text": "tap \"Search this menu\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 21,
+       "time": 1793181136.3222752,
+       "kind": "action",
+       "text": "type \"Search Starbucks\" \"Caffe Latte\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 22,
+       "time": 1793181138.715429,
+       "kind": "action",
+       "text": "tap \"Clear Text\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 23,
+       "time": 1793181141.7824352,
+       "kind": "action",
+       "text": "type \"Search Starbucks\" \"Latte\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 24,
+       "time": 1793181144.6874812,
+       "kind": "action",
+       "text": "tap \"Caffè Latte · Our dark, rich espresso balanced with steamed milk and a light layer of foam. A perfect milk-forward warm…\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 25,
+       "time": 1793181147.677799,
+       "kind": "action",
+       "text": "done"
+      },
+      {
+       "seq": 26,
+       "time": 1793181147.6786718,
+       "kind": "finish",
+       "text": "Caffè Latte at Starbucks on DoorDash is $5.75 (base price shown as 'Make 1 required selection · $5.75'; Tall +$0.10, Grande +$0.80, Venti +$1.40)",
+       "status": "done"
+      },
+      {
+       "seq": 27,
+       "time": 1793181147.75457,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 28,
+       "time": 1793181150.382106,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793181061.5182028,
+     "kind": "plan",
+     "text": "2 apps: Starbucks: Find the price of a Caffè Latte at Starbucks; DoorDash: Find the price of a Caffè Latte on DoorDash"
+    },
+    {
+     "seq": 2,
+     "time": 1793181230.042263,
+     "kind": "answer",
+     "text": "Starbucks couldn't be checked, while DoorDash lists Caffè Latte at Starbucks on DoorDash is $5.75.",
+     "sources": {
+      "Caffè Latte price on DoorDash": "DoorDash · StoreItemActivity · 5:52 AM"
+     }
+    },
+    {
+     "seq": 3,
+     "time": 1793181230.043403,
+     "kind": "timeline",
+     "text": "answered in 168.53 s; one phone (envoy-real): the parts took turns"
+    },
+    {
+     "seq": 4,
+     "time": 1793181230.0476391,
+     "kind": "memory",
+     "text": "memory updated: the combined answer, with each app as its source",
+     "entities": [
+      "Note DoorDash: Caffè Latte at Starbucks on DoorDash is $5.75 (base price shown as 'Make 1 required selection · $5.75'; Tall +$0.10, Grande +$0.80, Venti +$1.40)."
+     ]
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "lead": {
+      "calls": 1,
+      "usd": 0.003501
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.005482
+     },
+     "plan": {
+      "calls": 4,
+      "usd": 0.012830000000000001
+     },
+     "step": {
+      "calls": 48,
+      "usd": 0.08406899999999998
+     },
+     "extract": {
+      "calls": 1,
+      "usd": 0.003297
+     },
+     "combine": {
+      "calls": 1,
+      "usd": 0.004281
+     }
+    },
+    "calls": 57,
+    "usd": 0.11346
+   }
+  },
+  {
+   "question": "R2",
+   "mode": "sequential",
+   "message": "What's a Caffè Latte at Starbucks vs on DoorDash?",
+   "parent_id": "task-1028-055352-fa4b",
+   "started": 1793181230.285376,
+   "wall_s": 186.97,
+   "with_memory_s": 186.97,
+   "overlap_s": 0.0,
+   "status": "failed",
+   "answer": "Starbucks: couldn't check (stopped after 25 steps); DoorDash: couldn't check (stopped after 25 steps).",
+   "values": [
+    {
+     "label": "Caffè Latte price at Starbucks",
+     "app_name": "Starbucks",
+     "status": "failed",
+     "result": "",
+     "screen": "the \"Caffè Latte\" screen",
+     "time": 1793181318.9440691,
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "why": "stopped after 25 steps"
+    },
+    {
+     "label": "Caffè Latte price on DoorDash",
+     "app_name": "DoorDash",
+     "status": "failed",
+     "result": "",
+     "screen": "StoreActivity",
+     "time": 1793181417.211532,
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "why": "stopped after 25 steps"
+    }
+   ],
+   "sources": {},
+   "timeline": [
+    {
+     "task_id": "task-1028-055352-7f4f",
+     "app": "Starbucks",
+     "device": "envoy-real",
+     "queued_at": 1793181232.4773319,
+     "phone_at": 1793181235.693883,
+     "ended_at": 1793181318.94492,
+     "status": "failed"
+    },
+    {
+     "task_id": "task-1028-055518-736d",
+     "app": "DoorDash",
+     "device": "envoy-real",
+     "queued_at": 1793181318.952513,
+     "phone_at": 1793181322.8622599,
+     "ended_at": 1793181417.212357,
+     "status": "failed"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-055352-7f4f",
+     "goal": "What is the price of a Caffè Latte at Starbucks?",
+     "app": "com.starbucks.mobilecard",
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "inputs": {},
+     "status": "failed",
+     "result": "stopped after 25 steps",
+     "detail": "stopped after 25 steps",
+     "model_calls": 28,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793181240.9957068,
+       "kind": "plan",
+       "text": "Open Order menu in Starbucks app; Find Caffè Latte in menu; Open Caffè Latte details to read price"
+      },
+      {
+       "seq": 2,
+       "time": 1793181244.864057,
+       "kind": "action",
+       "text": "tap \"Order\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 3,
+       "time": 1793181246.674475,
+       "kind": "action",
+       "text": "tap \"No, thanks\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 4,
+       "time": 1793181249.657902,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 5,
+       "time": 1793181252.587345,
+       "kind": "action",
+       "text": "tap \"Skip\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 6,
+       "time": 1793181255.4874501,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 7,
+       "time": 1793181258.388889,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 8,
+       "time": 1793181261.63634,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 9,
+       "time": 1793181264.791929,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 10,
+       "time": 1793181269.447117,
+       "kind": "action",
+       "text": "tap \"Skip\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 11,
+       "time": 1793181272.234936,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 12,
+       "time": 1793181276.1166499,
+       "kind": "replan",
+       "text": "Tap Skip to bypass cafe selection and access menu; Open drinks menu from Home or Order; Find Caffe Latte and read its price"
+      },
+      {
+       "seq": 13,
+       "time": 1793181278.061932,
+       "kind": "action",
+       "text": "tap \"Skip\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 14,
+       "time": 1793181281.398738,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 15,
+       "time": 1793181285.7050009,
+       "kind": "replan",
+       "text": "Tap Skip to continue without selecting a café; Open the Order menu; Find Caffè Latte in the menu; Read the displayed price"
+      },
+      {
+       "seq": 16,
+       "time": 1793181287.585233,
+       "kind": "action",
+       "text": "tap \"Skip\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 17,
+       "time": 1793181290.183785,
+       "kind": "action",
+       "text": "tap \"Yes\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 18,
+       "time": 1793181292.259729,
+       "kind": "action",
+       "text": "tap \"Search Menu\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 19,
+       "time": 1793181294.529658,
+       "kind": "action",
+       "text": "tap \"Caffè Latte\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 20,
+       "time": 1793181297.000075,
+       "kind": "action",
+       "text": "tap \"Caffè Latte\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 21,
+       "time": 1793181301.7919738,
+       "kind": "action",
+       "text": "scroll",
+       "risk": "read"
+      },
+      {
+       "seq": 22,
+       "time": 1793181304.4825752,
+       "kind": "action",
+       "text": "tap \"For item availability · Choose a café\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 23,
+       "time": 1793181306.905099,
+       "kind": "action",
+       "text": "tap \"Search\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 24,
+       "time": 1793181310.971829,
+       "kind": "action",
+       "text": "type \"Enter a location\" \"New York\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 25,
+       "time": 1793181313.65891,
+       "kind": "action",
+       "text": "tap \"New York · NY, USA\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 26,
+       "time": 1793181315.925277,
+       "kind": "action",
+       "text": "tap \"Park Row at Beekman St. 38 Park Row, New York. Open 5:00 AM-8:00 PM. In café available.\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 27,
+       "time": 1793181318.8539462,
+       "kind": "action",
+       "text": "tap \"Order here Park Row at Beekman St\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 28,
+       "time": 1793181318.8546,
+       "kind": "finish",
+       "text": "stopped after 25 steps",
+       "status": "step_limit"
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-055518-736d",
+     "goal": "What is the price of a Caffè Latte on DoorDash?",
+     "app": "com.dd.doordash",
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "inputs": {},
+     "status": "failed",
+     "result": "stopped after 25 steps",
+     "detail": "stopped after 25 steps",
+     "model_calls": 29,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793181331.31373,
+       "kind": "plan",
+       "text": "Search DoorDash for Starbucks; Open the Starbucks store; Find Caffè Latte menu item; Read the price of Caffè Latte"
+      },
+      {
+       "seq": 2,
+       "time": 1793181334.08772,
+       "kind": "action",
+       "text": "tap \"Search DoorDash\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 3,
+       "time": 1793181337.778603,
+       "kind": "action",
+       "text": "tap \"caffè latte\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 4,
+       "time": 1793181340.918596,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 5,
+       "time": 1793181343.4817421,
+       "kind": "action",
+       "text": "tap \"Search DoorDash\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 6,
+       "time": 1793181347.021158,
+       "kind": "action",
+       "text": "type \"Search DoorDash\" \"Starbucks\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 7,
+       "time": 1793181350.575967,
+       "kind": "action",
+       "text": "tap \"Starbucks, 0.4 mi away, Estimated time of arrival Closed · Starbucks · 4.6\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 8,
+       "time": 1793181353.06714,
+       "kind": "action",
+       "text": "tap \"Browse menu\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 9,
+       "time": 1793181355.829113,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 10,
+       "time": 1793181359.8868968,
+       "kind": "action",
+       "text": "tap \"Starbucks, 0.4 mi away, Estimated time of arrival Closed · Starbucks · 4.6\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 11,
+       "time": 1793181362.840828,
+       "kind": "action",
+       "text": "tap \"Browse menu\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 12,
+       "time": 1793181366.016374,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 13,
+       "time": 1793181368.7909791,
+       "kind": "replan",
+       "text": "Open the Starbucks store page from search results; Browse or search the menu for Caffè Latte; Open the Caffè Latte item details; Read the base price of the Caffè Latte"
+      },
+      {
+       "seq": 14,
+       "time": 1793181372.42435,
+       "kind": "action",
+       "text": "tap \"Starbucks, 0.4 mi away, Estimated time of arrival Closed · Starbucks · 4.6\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 15,
+       "time": 1793181375.513532,
+       "kind": "action",
+       "text": "tap \"Browse menu\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 16,
+       "time": 1793181377.494539,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 17,
+       "time": 1793181381.549967,
+       "kind": "action",
+       "text": "tap \"Starbucks, 0.4 mi away, Estimated time of arrival Closed · Starbucks · 4.6\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 18,
+       "time": 1793181384.440835,
+       "kind": "action",
+       "text": "tap \"Browse menu\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 19,
+       "time": 1793181386.957345,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 20,
+       "time": 1793181391.461071,
+       "kind": "action",
+       "text": "tap \"Starbucks, 0.4 mi away, Estimated time of arrival Closed · Starbucks · 4.6\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 21,
+       "time": 1793181394.222181,
+       "kind": "action",
+       "text": "tap \"Browse menu\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 22,
+       "time": 1793181396.58597,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 23,
+       "time": 1793181402.047764,
+       "kind": "replan",
+       "text": "Scroll search results to find an open Starbucks location; Open the Starbucks store page; Find Caffè Latte in the store menu; Open Caffè Latte details to read the price"
+      },
+      {
+       "seq": 24,
+       "time": 1793181405.197572,
+       "kind": "action",
+       "text": "scroll",
+       "risk": "read"
+      },
+      {
+       "seq": 25,
+       "time": 1793181408.8696032,
+       "kind": "action",
+       "text": "tap \"Search DoorDash\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 26,
+       "time": 1793181412.078143,
+       "kind": "action",
+       "text": "tap \"Starbucks · 4.6 · •\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 27,
+       "time": 1793181414.54655,
+       "kind": "action",
+       "text": "tap \"Browse menu\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 28,
+       "time": 1793181417.139194,
+       "kind": "action",
+       "text": "tap \"Search this menu\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 29,
+       "time": 1793181417.1398132,
+       "kind": "finish",
+       "text": "stopped after 25 steps",
+       "status": "step_limit"
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793181232.476505,
+     "kind": "plan",
+     "text": "2 apps: Starbucks: What is the price of a Caffè Latte at Starbucks?; DoorDash: What is the price of a Caffè Latte on DoorDash?"
+    },
+    {
+     "seq": 2,
+     "time": 1793181417.219157,
+     "kind": "answer",
+     "text": "Starbucks: couldn't check (stopped after 25 steps); DoorDash: couldn't check (stopped after 25 steps)."
+    },
+    {
+     "seq": 3,
+     "time": 1793181417.2199,
+     "kind": "timeline",
+     "text": "answered in 184.74 s; one phone (envoy-real): the parts took turns"
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "combine": {
+      "calls": 1,
+      "usd": 0.004281
+     },
+     "lead": {
+      "calls": 1,
+      "usd": 0.002948
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.0064010000000000004
+     },
+     "plan": {
+      "calls": 6,
+      "usd": 0.021838999999999997
+     },
+     "step": {
+      "calls": 49,
+      "usd": 0.09741499999999999
+     }
+    },
+    "calls": 59,
+    "usd": 0.13288
+   }
+  },
+  {
+   "question": "T1",
+   "mode": "parallel",
+   "message": "What's my gate for my Denver flight, and what's the address of the Space Needle?",
+   "parent_id": "task-1028-203124-c3f7",
+   "started": 1793233881.440782,
+   "wall_s": 22.62,
+   "with_memory_s": 23.77,
+   "overlap_s": 3.8,
+   "status": "done",
+   "answer": "Your Denver flight gate from SkyLark is A7, and the Space Needle address from Google Maps is 400 Broad St, Seattle, WA 98109.",
+   "values": [
+    {
+     "label": "Denver flight gate",
+     "app_name": "SkyLark",
+     "status": "done",
+     "result": "gate: A7",
+     "screen": "MainActivity",
+     "time": 1793233890.25181,
+     "device": "envoy-test",
+     "kind": "routine",
+     "routine": "skylark_get_flight_gate",
+     "why": null
+    },
+    {
+     "label": "Space Needle address",
+     "app_name": "Google Maps",
+     "status": "done",
+     "result": "street address: 400 Broad St, Seattle, WA 98109",
+     "screen": "MapsActivity",
+     "time": 1793233901.028973,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "google_maps_get_place_address",
+     "why": null
+    }
+   ],
+   "sources": {
+    "Denver flight gate": "SkyLark · MainActivity · 8:31 PM",
+    "Space Needle address": "Google Maps · MapsActivity · 8:31 PM"
+   },
+   "timeline": [
+    {
+     "task_id": "task-1028-203124-b148",
+     "app": "SkyLark",
+     "device": "envoy-test",
+     "queued_at": 1793233884.3213282,
+     "phone_at": 1793233886.1254451,
+     "ended_at": 1793233890.252627,
+     "status": "done"
+    },
+    {
+     "task_id": "task-1028-203124-91a9",
+     "app": "Google Maps",
+     "device": "envoy-real",
+     "queued_at": 1793233884.321981,
+     "phone_at": 1793233886.454117,
+     "ended_at": 1793233901.029923,
+     "status": "done"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-203124-b148",
+     "goal": "What's my gate for my Denver flight?",
+     "app": "com.skylark.air",
+     "device": "envoy-test",
+     "kind": "routine",
+     "routine": "skylark_get_flight_gate",
+     "inputs": {
+      "trip_city": "Denver"
+     },
+     "status": "done",
+     "result": "gate: A7",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793233885.9993038,
+       "kind": "note",
+       "text": "using routine skylark_get_flight_gate v1 with trip_city = Denver"
+      },
+      {
+       "seq": 2,
+       "time": 1793233888.887434,
+       "kind": "routine_step",
+       "text": "tap_my_trips",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 3,
+       "time": 1793233889.439269,
+       "kind": "routine_step",
+       "text": "find_tap_trip_row",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793233890.102575,
+       "kind": "routine_step",
+       "text": "tap_trip_row",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793233890.172559,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 6,
+       "time": 1793233890.278451,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 7,
+       "time": 1793233897.3282712,
+       "kind": "memory",
+       "text": "memory updated: 14 new, 2 same",
+       "entities": [
+        "Flight SL 1190 · Sat, Nov 14, 2026",
+        "Trip Denver"
+       ]
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-203124-91a9",
+     "goal": "What's the address of the Space Needle?",
+     "app": "com.google.android.apps.maps",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "google_maps_get_place_address",
+     "inputs": {
+      "place_name": "Space Needle"
+     },
+     "status": "done",
+     "result": "street address: 400 Broad St, Seattle, WA 98109",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793233886.3290792,
+       "kind": "note",
+       "text": "using routine google_maps_get_place_address v1 with place_name = Space Needle"
+      },
+      {
+       "seq": 2,
+       "time": 1793233891.4408052,
+       "kind": "routine_step",
+       "text": "tap_search_field",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 3,
+       "time": 1793233894.146301,
+       "kind": "routine_step",
+       "text": "type_place_name",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 4,
+       "time": 1793233900.816055,
+       "kind": "routine_step",
+       "text": "scroll_to_address",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793233900.918546,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 6,
+       "time": 1793233901.0303931,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 7,
+       "time": 1793233905.197428,
+       "kind": "memory",
+       "text": "memory updated: 2 new",
+       "entities": [
+        "Place Space Needle"
+       ]
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793233884.320606,
+     "kind": "plan",
+     "text": "2 apps: SkyLark: What's my gate for my Denver flight?; Google Maps: What's the address of the Space Needle?"
+    },
+    {
+     "seq": 2,
+     "time": 1793233903.999543,
+     "kind": "answer",
+     "text": "Your Denver flight gate from SkyLark is A7, and the Space Needle address from Google Maps is 400 Broad St, Seattle, WA 98109.",
+     "sources": {
+      "Denver flight gate": "SkyLark · MainActivity · 8:31 PM",
+      "Space Needle address": "Google Maps · MapsActivity · 8:31 PM"
+     }
+    },
+    {
+     "seq": 3,
+     "time": 1793233904.000074,
+     "kind": "timeline",
+     "text": "answered in 19.68 s; 2 phones, busy at the same time for 3.8 s"
+    },
+    {
+     "seq": 4,
+     "time": 1793233905.206482,
+     "kind": "memory",
+     "text": "memory updated: the combined answer, with each app as its source",
+     "entities": [
+      "Note Your Denver flight gate from SkyLark is A7, and the Space Needle address from Google Maps is 400 Broad St, Seattle, WA 98109."
+     ]
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "lead": {
+      "calls": 1,
+      "usd": 0.003805
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.004036
+     },
+     "extract": {
+      "calls": 2,
+      "usd": 0.012126999999999999
+     },
+     "combine": {
+      "calls": 1,
+      "usd": 0.002828
+     }
+    },
+    "calls": 6,
+    "usd": 0.0228
+   }
+  },
+  {
+   "question": "T1",
+   "mode": "sequential",
+   "message": "What's my gate for my Denver flight, and what's the address of the Space Needle?",
+   "parent_id": "task-1028-203147-8283",
+   "started": 1793233905.40539,
+   "wall_s": 30.39,
+   "with_memory_s": 31.83,
+   "overlap_s": 0.0,
+   "status": "done",
+   "answer": "Your Denver flight gate from SkyLark is A7 and the Space Needle address from Google Maps is 400 Broad St, Seattle, WA 98109.",
+   "values": [
+    {
+     "label": "Gate for Denver flight",
+     "app_name": "SkyLark",
+     "status": "done",
+     "result": "gate: A7",
+     "screen": "MainActivity",
+     "time": 1793233913.294477,
+     "device": "envoy-test",
+     "kind": "routine",
+     "routine": "skylark_get_flight_gate",
+     "why": null
+    },
+    {
+     "label": "Address of Space Needle",
+     "app_name": "Google Maps",
+     "status": "done",
+     "result": "street address: 400 Broad St, Seattle, WA 98109",
+     "screen": "MapsActivity",
+     "time": 1793233933.787951,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "google_maps_get_place_address",
+     "why": null
+    }
+   ],
+   "sources": {
+    "Gate for Denver flight": "SkyLark · MainActivity · 8:31 PM",
+    "Address of Space Needle": "Google Maps · MapsActivity · 8:32 PM"
+   },
+   "timeline": [
+    {
+     "task_id": "task-1028-203147-c664",
+     "app": "SkyLark",
+     "device": "envoy-test",
+     "queued_at": 1793233907.933662,
+     "phone_at": 1793233909.753988,
+     "ended_at": 1793233913.295349,
+     "status": "done"
+    },
+    {
+     "task_id": "task-1028-203154-2da9",
+     "app": "Google Maps",
+     "device": "envoy-real",
+     "queued_at": 1793233914.858369,
+     "phone_at": 1793233917.087744,
+     "ended_at": 1793233933.788506,
+     "status": "done"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-203147-c664",
+     "goal": "Find the departure gate for my flight to Denver",
+     "app": "com.skylark.air",
+     "device": "envoy-test",
+     "kind": "routine",
+     "routine": "skylark_get_flight_gate",
+     "inputs": {
+      "trip_city": "Denver"
+     },
+     "status": "done",
+     "result": "gate: A7",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793233909.654015,
+       "kind": "note",
+       "text": "using routine skylark_get_flight_gate v1 with trip_city = Denver"
+      },
+      {
+       "seq": 2,
+       "time": 1793233912.314752,
+       "kind": "routine_step",
+       "text": "tap_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 3,
+       "time": 1793233912.682237,
+       "kind": "routine_step",
+       "text": "find_tap_trip_row",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793233913.181005,
+       "kind": "routine_step",
+       "text": "tap_trip_row",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793233913.227733,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 6,
+       "time": 1793233914.835387,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 7,
+       "time": 1793233918.214004,
+       "kind": "memory",
+       "text": "memory updated: 15 same",
+       "entities": [
+        "Flight SL 1190 · Sat, Nov 14, 2026",
+        "Trip Denver"
+       ]
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-203154-2da9",
+     "goal": "Look up the street address of the Space Needle",
+     "app": "com.google.android.apps.maps",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "google_maps_get_place_address",
+     "inputs": {
+      "place_name": "Space Needle"
+     },
+     "status": "done",
+     "result": "street address: 400 Broad St, Seattle, WA 98109",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793233916.971927,
+       "kind": "note",
+       "text": "using routine google_maps_get_place_address v1 with place_name = Space Needle"
+      },
+      {
+       "seq": 2,
+       "time": 1793233921.237588,
+       "kind": "routine_step",
+       "text": "tap_search_field",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 3,
+       "time": 1793233927.0074282,
+       "kind": "routine_step",
+       "text": "type_place_name",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 4,
+       "time": 1793233933.5746639,
+       "kind": "routine_step",
+       "text": "scroll_to_address",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793233933.6613388,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 6,
+       "time": 1793233933.793133,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 7,
+       "time": 1793233937.229286,
+       "kind": "memory",
+       "text": "memory updated: 2 same",
+       "entities": [
+        "Place Space Needle"
+       ]
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793233907.9329228,
+     "kind": "plan",
+     "text": "2 apps: SkyLark: Find the departure gate for my flight to Denver; Google Maps: Look up the street address of the Space Needle"
+    },
+    {
+     "seq": 2,
+     "time": 1793233935.732233,
+     "kind": "answer",
+     "text": "Your Denver flight gate from SkyLark is A7 and the Space Needle address from Google Maps is 400 Broad St, Seattle, WA 98109.",
+     "sources": {
+      "Gate for Denver flight": "SkyLark · MainActivity · 8:31 PM",
+      "Address of Space Needle": "Google Maps · MapsActivity · 8:32 PM"
+     }
+    },
+    {
+     "seq": 3,
+     "time": 1793233935.7332082,
+     "kind": "timeline",
+     "text": "answered in 27.8 s; 2 phones, busy at the same time for 0.0 s"
+    },
+    {
+     "seq": 4,
+     "time": 1793233937.235212,
+     "kind": "memory",
+     "text": "memory updated: the combined answer, with each app as its source",
+     "entities": [
+      "Note Your Denver flight gate from SkyLark is A7 and the Space Needle address from Google Maps is 400 Broad St, Seattle, WA 98109."
+     ]
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "lead": {
+      "calls": 1,
+      "usd": 0.002936
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.004364
+     },
+     "extract": {
+      "calls": 2,
+      "usd": 0.009178
+     },
+     "combine": {
+      "calls": 1,
+      "usd": 0.003089
+     }
+    },
+    "calls": 6,
+    "usd": 0.01957
+   }
+  },
+  {
+   "question": "T2",
+   "mode": "parallel",
+   "message": "What's my gate for my Denver flight, and how long is the drive from 1 Hacker Way to SFO?",
+   "parent_id": "task-1028-203220-baac",
+   "started": 1793233937.400314,
+   "wall_s": 98.34,
+   "with_memory_s": 98.78,
+   "overlap_s": 4.48,
+   "status": "done",
+   "answer": "Your Denver flight gate is A7 per SkyLark, and the drive is 31 min (17 mi) per Google Maps.",
+   "values": [
+    {
+     "label": "gate for Denver flight",
+     "app_name": "SkyLark",
+     "status": "done",
+     "result": "gate: A7",
+     "screen": "MainActivity",
+     "time": 1793233947.001586,
+     "device": "envoy-test",
+     "kind": "routine",
+     "routine": "skylark_get_flight_gate",
+     "why": null
+    },
+    {
+     "label": "drive from 1 Hacker Way to SFO",
+     "app_name": "Google Maps",
+     "status": "done",
+     "result": "31 min (17 mi) - Fastest route via US-101 N, despite 11-min delay slowdown on US-101 N. Driving mode from 1 Hacker Wy to San Francisco International Airport.",
+     "screen": "MapsActivity",
+     "time": 1793234033.242383,
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "why": null
+    }
+   ],
+   "sources": {
+    "gate for Denver flight": "SkyLark · MainActivity · 8:32 PM",
+    "drive from 1 Hacker Way to SFO": "Google Maps · MapsActivity · 8:33 PM"
+   },
+   "timeline": [
+    {
+     "task_id": "task-1028-203220-1cfd",
+     "app": "SkyLark",
+     "device": "envoy-test",
+     "queued_at": 1793233940.743297,
+     "phone_at": 1793233942.415261,
+     "ended_at": 1793233947.002613,
+     "status": "done"
+    },
+    {
+     "task_id": "task-1028-203220-327e",
+     "app": "Google Maps",
+     "device": "envoy-real",
+     "queued_at": 1793233940.7442088,
+     "phone_at": 1793233942.518979,
+     "ended_at": 1793234033.2436101,
+     "status": "done"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-203220-1cfd",
+     "goal": "What's my gate for my Denver flight?",
+     "app": "com.skylark.air",
+     "device": "envoy-test",
+     "kind": "routine",
+     "routine": "skylark_get_flight_gate",
+     "inputs": {
+      "trip_city": "Denver"
+     },
+     "status": "done",
+     "result": "gate: A7",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793233942.312315,
+       "kind": "note",
+       "text": "using routine skylark_get_flight_gate v1 with trip_city = Denver"
+      },
+      {
+       "seq": 2,
+       "time": 1793233945.785629,
+       "kind": "routine_step",
+       "text": "tap_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 3,
+       "time": 1793233946.3282812,
+       "kind": "routine_step",
+       "text": "find_tap_trip_row",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793233946.8427908,
+       "kind": "routine_step",
+       "text": "tap_trip_row",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793233946.9143722,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 6,
+       "time": 1793233947.0046349,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 7,
+       "time": 1793233953.1297889,
+       "kind": "memory",
+       "text": "memory updated: 15 same, 1 replaced",
+       "entities": [
+        "Flight SL 1190 · Sat, Nov 14, 2026",
+        "Trip Denver"
+       ]
+      },
+      {
+       "seq": 8,
+       "time": 1793233953.130752,
+       "kind": "change",
+       "text": "Boarding group changed: Group 5 → 5"
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-203220-327e",
+     "goal": "How long is the drive from 1 Hacker Way to SFO?",
+     "app": "com.google.android.apps.maps",
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "inputs": {},
+     "status": "done",
+     "result": "31 min (17 mi) - Fastest route via US-101 N, despite 11-min delay slowdown on US-101 N. Driving mode from 1 Hacker Wy to San Francisco International Airport.",
+     "detail": "31 min (17 mi) - Fastest route via US-101 N, despite 11-min delay slowdown on US-101 N. Driving mode from 1 Hacker Wy to San Francisco International Airport.",
+     "model_calls": 27,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793233949.8539982,
+       "kind": "plan",
+       "text": "Open Directions in Google Maps; Set origin to 1 Hacker Way; Set destination to SFO; Show driving route and read travel time"
+      },
+      {
+       "seq": 2,
+       "time": 1793233951.747384,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 3,
+       "time": 1793233954.733597,
+       "kind": "action",
+       "text": "launch",
+       "risk": "read"
+      },
+      {
+       "seq": 4,
+       "time": 1793233958.323366,
+       "kind": "action",
+       "text": "scroll",
+       "risk": "read"
+      },
+      {
+       "seq": 5,
+       "time": 1793233961.69955,
+       "kind": "action",
+       "text": "tap \"Cancel\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 6,
+       "time": 1793233963.7035809,
+       "kind": "action",
+       "text": "tap \"Directions\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 7,
+       "time": 1793233965.723107,
+       "kind": "action",
+       "text": "tap \"Choose start location\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 8,
+       "time": 1793233971.010701,
+       "kind": "action",
+       "text": "type \"Choose start location\" \"1 Hacker Way\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 9,
+       "time": 1793233974.858269,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 10,
+       "time": 1793233978.731389,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 11,
+       "time": 1793233980.724214,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 12,
+       "time": 1793233982.6102242,
+       "kind": "action",
+       "text": "tap \"Directions\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 13,
+       "time": 1793233984.919447,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 14,
+       "time": 1793233988.0118709,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 15,
+       "time": 1793233990.582892,
+       "kind": "action",
+       "text": "tap \"Directions\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 16,
+       "time": 1793233992.890163,
+       "kind": "replan",
+       "text": "Tap Choose start location and set it to 1 Hacker Way; Tap Choose destination and set it to SFO; Read the driving time for the route from 1 Hacker Way to SFO"
+      },
+      {
+       "seq": 17,
+       "time": 1793233995.130698,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 18,
+       "time": 1793233997.140859,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 19,
+       "time": 1793233999.59396,
+       "kind": "action",
+       "text": "tap \"Directions\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 20,
+       "time": 1793234002.006155,
+       "kind": "replan",
+       "text": "Tap Choose start location and set it to 1 Hacker Way; Tap Choose destination and set it to SFO; View the driving route duration"
+      },
+      {
+       "seq": 21,
+       "time": 1793234003.860094,
+       "kind": "action",
+       "text": "tap \"Choose start location\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 22,
+       "time": 1793234011.022336,
+       "kind": "action",
+       "text": "type \"Choose start location\" \"1 Hacker Way\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 23,
+       "time": 1793234014.646337,
+       "kind": "action",
+       "text": "tap \"Choose destination\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 24,
+       "time": 1793234021.8820338,
+       "kind": "action",
+       "text": "type \"Choose destination\" \"SFO\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 25,
+       "time": 1793234029.641767,
+       "kind": "action",
+       "text": "tap \"Directions to San Francisco International Airport\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 26,
+       "time": 1793234032.624748,
+       "kind": "action",
+       "text": "done"
+      },
+      {
+       "seq": 27,
+       "time": 1793234032.625231,
+       "kind": "finish",
+       "text": "31 min (17 mi) - Fastest route via US-101 N, despite 11-min delay slowdown on US-101 N. Driving mode from 1 Hacker Wy to San Francisco International Airport.",
+       "status": "done"
+      },
+      {
+       "seq": 28,
+       "time": 1793234033.250817,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 29,
+       "time": 1793234036.1734211,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793233940.742323,
+     "kind": "plan",
+     "text": "2 apps: SkyLark: What's my gate for my Denver flight?; Google Maps: How long is the drive from 1 Hacker Way to SFO?"
+    },
+    {
+     "seq": 2,
+     "time": 1793234035.658106,
+     "kind": "answer",
+     "text": "Your Denver flight gate is A7 per SkyLark, and the drive is 31 min (17 mi) per Google Maps.",
+     "sources": {
+      "gate for Denver flight": "SkyLark · MainActivity · 8:32 PM",
+      "drive from 1 Hacker Way to SFO": "Google Maps · MapsActivity · 8:33 PM"
+     }
+    },
+    {
+     "seq": 3,
+     "time": 1793234035.6586812,
+     "kind": "timeline",
+     "text": "answered in 94.92 s; 2 phones, busy at the same time for 4.48 s"
+    },
+    {
+     "seq": 4,
+     "time": 1793234036.181464,
+     "kind": "memory",
+     "text": "memory updated: the combined answer, with each app as its source",
+     "entities": [
+      "Note Your Denver flight gate is A7 per SkyLark, and the drive is 31 min (17 mi) per Google Maps."
+     ]
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "lead": {
+      "calls": 1,
+      "usd": 0.004394
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.005361
+     },
+     "plan": {
+      "calls": 3,
+      "usd": 0.009224
+     },
+     "step": {
+      "calls": 23,
+      "usd": 0.057308
+     },
+     "extract": {
+      "calls": 2,
+      "usd": 0.010867
+     },
+     "combine": {
+      "calls": 1,
+      "usd": 0.003509
+     }
+    },
+    "calls": 32,
+    "usd": 0.09066
+   }
+  },
+  {
+   "question": "T2",
+   "mode": "sequential",
+   "message": "What's my gate for my Denver flight, and how long is the drive from 1 Hacker Way to SFO?",
+   "parent_id": "task-1028-203359-c6dd",
+   "started": 1793234036.347137,
+   "wall_s": 60.72,
+   "with_memory_s": 60.72,
+   "overlap_s": 0.0,
+   "status": "done",
+   "answer": "Your Denver flight gate is A7 according to SkyLark, and the drive is 31 min (17 mi) via US-101 N according to Google Maps.",
+   "values": [
+    {
+     "label": "Gate for Denver flight",
+     "app_name": "SkyLark",
+     "status": "done",
+     "result": "gate: A7",
+     "screen": "MainActivity",
+     "time": 1793234044.318491,
+     "device": "envoy-test",
+     "kind": "routine",
+     "routine": "skylark_get_flight_gate",
+     "why": null
+    },
+    {
+     "label": "Drive from 1 Hacker Way to SFO",
+     "app_name": "Google Maps",
+     "status": "done",
+     "result": "31 min (17 mi) via US-101 N - Fastest route, despite slowdown on US-101 N causing 11-min delay",
+     "screen": "MapsActivity",
+     "time": 1793234093.8962739,
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "why": null
+    }
+   ],
+   "sources": {
+    "Gate for Denver flight": "SkyLark · MainActivity · 8:34 PM",
+    "Drive from 1 Hacker Way to SFO": "Google Maps · MapsActivity · 8:34 PM"
+   },
+   "timeline": [
+    {
+     "task_id": "task-1028-203359-8f2e",
+     "app": "SkyLark",
+     "device": "envoy-test",
+     "queued_at": 1793234039.248984,
+     "phone_at": 1793234040.887537,
+     "ended_at": 1793234044.319344,
+     "status": "done"
+    },
+    {
+     "task_id": "task-1028-203404-0212",
+     "app": "Google Maps",
+     "device": "envoy-real",
+     "queued_at": 1793234044.3381708,
+     "phone_at": 1793234046.134629,
+     "ended_at": 1793234093.8991811,
+     "status": "done"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-203359-8f2e",
+     "goal": "Find the departure gate for my Denver flight",
+     "app": "com.skylark.air",
+     "device": "envoy-test",
+     "kind": "routine",
+     "routine": "skylark_get_flight_gate",
+     "inputs": {
+      "trip_city": "Denver"
+     },
+     "status": "done",
+     "result": "gate: A7",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793234040.741997,
+       "kind": "note",
+       "text": "using routine skylark_get_flight_gate v1 with trip_city = Denver"
+      },
+      {
+       "seq": 2,
+       "time": 1793234043.3101408,
+       "kind": "routine_step",
+       "text": "tap_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 3,
+       "time": 1793234043.685058,
+       "kind": "routine_step",
+       "text": "find_tap_trip_row",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793234044.2000341,
+       "kind": "routine_step",
+       "text": "tap_trip_row",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793234044.2508318,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 6,
+       "time": 1793234044.3250072,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 7,
+       "time": 1793234051.6314251,
+       "kind": "memory",
+       "text": "memory updated: 15 same, 1 replaced",
+       "entities": [
+        "Flight SL 1190 · Sat, Nov 14, 2026",
+        "Trip Denver"
+       ]
+      },
+      {
+       "seq": 8,
+       "time": 1793234051.632283,
+       "kind": "change",
+       "text": "Boarding group changed: 5 → Group 5"
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-203404-0212",
+     "goal": "How long is the drive from 1 Hacker Way to SFO?",
+     "app": "com.google.android.apps.maps",
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "inputs": {},
+     "status": "done",
+     "result": "31 min (17 mi) via US-101 N - Fastest route, despite slowdown on US-101 N causing 11-min delay",
+     "detail": "31 min (17 mi) via US-101 N - Fastest route, despite slowdown on US-101 N causing 11-min delay",
+     "model_calls": 13,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793234051.583926,
+       "kind": "plan",
+       "text": "Tap Directions in Google Maps; Set origin to 1 Hacker Way and destination to SFO; Select driving mode and view estimated travel time"
+      },
+      {
+       "seq": 2,
+       "time": 1793234053.507595,
+       "kind": "action",
+       "text": "tap \"Directions\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 3,
+       "time": 1793234055.142997,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 4,
+       "time": 1793234057.486274,
+       "kind": "action",
+       "text": "tap \"Choose start location\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 5,
+       "time": 1793234064.096378,
+       "kind": "action",
+       "text": "type \"Choose start location\" \"1 Hacker Way\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 6,
+       "time": 1793234066.768571,
+       "kind": "action",
+       "text": "tap \"Choose destination\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 7,
+       "time": 1793234075.773844,
+       "kind": "action",
+       "text": "type \"Choose destination\" \"SFO\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 8,
+       "time": 1793234078.577622,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 9,
+       "time": 1793234080.384854,
+       "kind": "action",
+       "text": "look"
+      },
+      {
+       "seq": 10,
+       "time": 1793234084.870962,
+       "kind": "action",
+       "text": "tap \"Show list\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 11,
+       "time": 1793234089.393735,
+       "kind": "action",
+       "text": "tap \"Directions to San Francisco International Airport\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 12,
+       "time": 1793234093.0896928,
+       "kind": "action",
+       "text": "done"
+      },
+      {
+       "seq": 13,
+       "time": 1793234093.090302,
+       "kind": "finish",
+       "text": "31 min (17 mi) via US-101 N - Fastest route, despite slowdown on US-101 N causing 11-min delay",
+       "status": "done"
+      },
+      {
+       "seq": 14,
+       "time": 1793234093.8997,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 15,
+       "time": 1793234096.011708,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793234039.24795,
+     "kind": "plan",
+     "text": "2 apps: SkyLark: Find the departure gate for my Denver flight; Google Maps: How long is the drive from 1 Hacker Way to SFO?"
+    },
+    {
+     "seq": 2,
+     "time": 1793234096.98981,
+     "kind": "answer",
+     "text": "Your Denver flight gate is A7 according to SkyLark, and the drive is 31 min (17 mi) via US-101 N according to Google Maps.",
+     "sources": {
+      "Gate for Denver flight": "SkyLark · MainActivity · 8:34 PM",
+      "Drive from 1 Hacker Way to SFO": "Google Maps · MapsActivity · 8:34 PM"
+     }
+    },
+    {
+     "seq": 3,
+     "time": 1793234096.990548,
+     "kind": "timeline",
+     "text": "answered in 57.74 s; 2 phones, busy at the same time for 0.0 s"
+    },
+    {
+     "seq": 4,
+     "time": 1793234096.992574,
+     "kind": "memory",
+     "text": "memory updated: the combined answer, with each app as its source",
+     "entities": [
+      "Note Your Denver flight gate is A7 according to SkyLark, and the drive is 31 min (17 mi) via US-101 N according to Google Maps."
+     ]
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "lead": {
+      "calls": 1,
+      "usd": 0.004068
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.005701
+     },
+     "plan": {
+      "calls": 1,
+      "usd": 0.003748
+     },
+     "extract": {
+      "calls": 2,
+      "usd": 0.012109
+     },
+     "step": {
+      "calls": 11,
+      "usd": 0.027219
+     },
+     "combine": {
+      "calls": 1,
+      "usd": 0.004476
+     }
+    },
+    "calls": 18,
+    "usd": 0.05732
+   }
+  }
+ ]
+}

@@ -37,14 +37,17 @@ from models.adapter import ModelAdapter
 from routines.model import dump_yaml
 from routines.store import RoutineStore
 
+from api import routine_view
+from api.alerts import ChangeAlerts
 from api.auth import Auth, Caller, allowed_hosts, public_url, tunnel_hosts
 from api.chat import chat
+from api.crossapp import CrossApp
 from api.devices import DevicePool
 from api.events import EventBus
 from api.live import live_view
 from api.push import Pusher, VapidKeys
 from api.runner import SHOTS, TaskRunner
-from api.scheduler import Scheduler
+from api.scheduler import Scheduler, check_alert
 from api.store import API_DIR, REPO, TaskStore, new_id
 from api.voice import voice_session
 
@@ -78,6 +81,7 @@ class Ctx:
     auth: Any = None
     pusher: Any = None
     public: str = ""
+    alerts: Any = None
 
 
 def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, memory: MemoryStore | None = None,
@@ -92,6 +96,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     adapter = adapter or ModelAdapter()
     pool = DevicePool(bus)
     runner = TaskRunner(tasks, bus, pool, memory, routines, adapter)
+    runner.crossapp = CrossApp(runner, routines, memory, adapter)
     scheduler = Scheduler(tasks, memory, runner.start, bus, routines, every_s=scheduler_every_s)
     ctx = Ctx(tasks, bus, pool, memory, routines, adapter, runner, scheduler, profile)
     memory.subscribe(lambda ev: bus.publish("memory", event=ev))
@@ -102,6 +107,10 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     pusher = Pusher(tasks, VapidKeys(API_DIR), public)
     bus.listeners.append(pusher.on_event)
     ctx.auth, ctx.pusher, ctx.public = auth, pusher, public
+    alerts = ChangeAlerts(tasks, memory, pusher, bus, routines)  # a watcher's run pushes when it changed a remembered fact
+    memory.subscribe(alerts.on_memory)
+    bus.listeners.append(alerts.on_event)
+    ctx.alerts = alerts
 
     from mcp_server.server import build_mcp, mcp_app
     from mcp_stub.common import bearer_token
@@ -314,8 +323,11 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     def take_over(avd: str) -> dict[str, Any]:
         if avd not in pool.leases:
             raise HTTPException(404)
+        was = pool.leases[avd].user_control
         lease = pool.take_over(avd)
         if lease.task_id:
+            if not was:  # kept in the task's history, not only its status
+                runner._step(lease.task_id, {"kind": "note", "text": "taken over by you"})
             runner._set(lease.task_id, status="taken_over")
         return lease.state()
 
@@ -323,8 +335,11 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     def hand_back(avd: str) -> dict[str, Any]:
         if avd not in pool.leases:
             raise HTTPException(404)
+        held = time.time() - pool.leases[avd].since if pool.leases[avd].user_control else None
         lease = pool.hand_back(avd)
         if lease.task_id:
+            if held is not None:
+                runner._step(lease.task_id, {"kind": "note", "text": f"handed back by you after {held:.0f} s"})
             runner._set(lease.task_id, status="running", waiting_for=None)
         return lease.state()
 
@@ -583,15 +598,23 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     def get_phone_settings() -> dict[str, Any]:
         from api.routing import EMULATOR_REFUSED
         from api.runner import APP_NAMES
-        apps = sorted({r.app for r in routines.active()} | set(APP_NAMES.values()))
+        learned = tasks.setting("phone_apps_learned", {}) or {}
+        installed = tasks.setting("apps_installed", {}) or {}
+        apps = sorted({r.app for r in routines.active()} | set(APP_NAMES.values()) | set(learned) | set(installed))
+        names = {**{p: n.title() for n, p in APP_NAMES.items()}, **{p: a.get("name") for p, a in installed.items()},
+                 **EMULATOR_REFUSED, **{p: a.get("name") for p, a in learned.items()}}
         return {"phone_apps": tasks.setting("phone_apps", []) or [], "apps": apps, "emulator_refused": EMULATOR_REFUSED,
+                "learned": learned, "names": {p: n for p, n in names.items() if n},
                 "phones": [d for d in pool.status() if d["kind"] == "phone"]}
 
     @app.post("/api/settings/phones", dependencies=[Depends(session)])
     def set_phone_settings(body: dict[str, Any] = Body(...)) -> dict[str, Any]:
         apps = [str(a) for a in body.get("phone_apps") or [] if isinstance(a, str)][:50]
         tasks.set_setting("phone_apps", apps)
-        return {"phone_apps": apps}
+        # An app Envoy set to your phone (it blocked the emulator) that you untick goes back to the emulator for good.
+        learned = {p: a for p, a in (tasks.setting("phone_apps_learned", {}) or {}).items() if p in apps}
+        tasks.set_setting("phone_apps_learned", learned)
+        return {"phone_apps": apps, "learned": learned}
 
     # ---- routines and triggers -----------------------------------------------------------------
 
@@ -609,7 +632,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
             out.append({"name": name, "app": r.app, "intent": r.intent, "active": idx.get("active"), "versions": idx.get("versions", []),
                         "inputs": {k: v.description for k, v in r.inputs.items()}, "outputs": r.outputs, "steps": len(r.steps),
                         "runs": len(runs), "success": round(ok / len(runs), 2) if runs else None,
-                        "recompile": idx.get("recompile", False)})
+                        "recompile": idx.get("needs_recompile", idx.get("recompile", False))})
         return out
 
     @app.get("/api/routines/{name}", dependencies=[Depends(session)])
@@ -617,9 +640,26 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
         r = routines.get(name, version)
         return {"index": routines.index(name), "yaml": dump_yaml(r)}
 
+    @app.get("/api/routines/{name}/detail", dependencies=[Depends(session)])
+    def routine_detail(name: str) -> dict[str, Any]:
+        """Read only: steps, versions with what each patch changed, runs and their savings (api/routine_view.py)."""
+        if name not in routines.names():
+            raise HTTPException(404, "no such routine")
+        try:
+            return routine_view.detail(routines, name, tasks)
+        except KeyError as e:  # no version of it can be read
+            raise HTTPException(404, str(e)) from e
+
+    @app.get("/api/routines/{name}/history/{version}/{file}", dependencies=[Depends(session)])
+    def routine_evidence(name: str, version: int, file: str) -> FileResponse:
+        path = routine_view.evidence_path(routines, name, version, file)
+        if path is None:
+            raise HTTPException(404, "no such screenshot")
+        return FileResponse(path, media_type="image/png")
+
     @app.get("/api/triggers", dependencies=[Depends(session)])
     def list_triggers() -> list[dict[str, Any]]:
-        return [{**t, "next": scheduler.next_runs(t)} for t in tasks.triggers()]
+        return [{**t, "next": scheduler.next_runs(t), "alerts": dict(zip(("on", "attributes"), alerts.settings(t)))} for t in tasks.triggers()]
 
     @app.post("/api/triggers", dependencies=[Depends(session)])
     def add_trigger(body: dict[str, Any] = Body(...)) -> dict[str, Any]:
@@ -630,8 +670,28 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
 
     @app.post("/api/triggers/{tid}", dependencies=[Depends(session)])
     def toggle_trigger(tid: str, body: dict[str, Any] = Body(...)) -> dict[str, Any]:
-        tasks.update_trigger(tid, enabled=1 if body.get("enabled") else 0)
+        trig = tasks.trigger(tid)
+        if trig is None:
+            raise HTTPException(404, "no such trigger")
+        spec = None
+        if "alert" in body or "alert_on" in body:  # only the fields given: turning alerts off doesn't pause the trigger
+            spec = {**trig["spec"], **{k: body[k] for k in ("alert", "alert_on") if k in body}}
+            if spec.get("alert_on") == []:
+                spec["alert_on"] = None  # back to the default
+            try:
+                check_alert(spec)
+            except ValueError as e:
+                raise HTTPException(400, str(e)) from e
+        if "enabled" in body:
+            tasks.update_trigger(tid, enabled=1 if body.get("enabled") else 0)
+        if spec is not None:
+            tasks.update_trigger(tid, spec=spec)
         return tasks.trigger(tid) or {}
+
+    @app.get("/api/alerts", dependencies=[Depends(session)])
+    def list_alerts(limit: int = 30) -> list[dict[str, Any]]:
+        """Recent changes to remembered facts, newest first: what changed, from which task, and whether it pushed."""
+        return alerts.recent(min(limit, 200))
 
     @app.delete("/api/triggers/{tid}", dependencies=[Depends(session)])
     def delete_trigger(tid: str) -> dict[str, Any]:

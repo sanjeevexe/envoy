@@ -7,11 +7,14 @@ export type Task = {
   id: string; goal: string; source: string; status: string; created_at: number; updated_at: number;
   app?: string; device?: string; kind?: string; routine?: string; inputs?: Record<string, string>;
   result?: string; detail?: string; waiting_for?: string | null; model_calls?: number; cost_usd?: number;
+  parent?: string | null; // the cross-app task this one is a part of
 };
 export type Step = {
   seq: number; time: number; kind: string; text?: string; reason?: string; risk?: string | null; status?: string;
   rung?: number; detail?: string; shot?: string; approval?: { approved: boolean; by: string }; error?: string;
   entities?: string[]; sources?: Record<string, string>;
+  // a "change" step: a remembered fact changed during this task (api/alerts.py)
+  entity_label?: string; old?: string; new?: string; source?: string; pushed?: boolean; why_not?: string | null; alerted_for?: string;
 };
 export type Approval = {
   id: string; task_id: string; created_at: number; status: string; description: string; reasons: string[];
