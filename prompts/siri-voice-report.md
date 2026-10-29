@@ -55,10 +55,67 @@ Docs: `docs/siri.md`.
 | Mac check (3 requests, 6 for the 429 check) | 11 Spark | $0.024 |
 | Device check (2 requests, 2 tasks) | 6 Spark | $0.028 |
 | **Stage 1 total** | 17 | **$0.052** |
+| Stage 2, the iPhone (live API, 17:11–17:25: 13 chat, 4 answer, 2 match, 2 memory extract, 2 key checks) | 23 Spark | $0.081 |
+| **Total** | 40 | **$0.133** of $2 |
 
 ## Stage 2: the real iPhone
 
-_Pending._
+Oct 29, 17:03–17:25, against the live API (:8700 at `059bb7f`, the coordinator's choice), over Tailscale. Details and
+tables: `docs/siri.md` › "On the iPhone (stage 2)".
+
+### Setup (me, through iPhone Mirroring, phone locked)
+
+- `make_shortcut.py --siri` made the real **Ask Envoy** (its token is "Ask Envoy" in Devices; never printed); imported
+  on the Mac with one Add Shortcut click; on the iPhone within seconds.
+- **Ask Envoy (test)** deleted on the iPhone (Shortcuts › select › Delete; "deleted from all of your iCloud devices"),
+  so it's gone from the Mac too.
+- Settings › Action Button › Shortcut › **Ask Envoy** (it was "Open ChatGPT"; still on Ask Envoy, the user's call).
+- Control Center can't be opened through Mirroring: the user added the control on the phone.
+- envoy-test claimed (`devices.sh`), started as emulator-5554 for the SkyLark requests (routing sends SkyLark and
+  no-app requests there; phase7's real-app pass had envoy-real); nothing for real apps was asked.
+
+### Results (the user, phone in hand, two screen recordings with the mic)
+
+| Check | Result |
+| --- | --- |
+| Action Button | Works: listens at once, speaks, then the notification. Press to answer about 6.5–7 s (a plain reply) |
+| "Hey Siri, Ask Envoy" | Works: Siri asks "What's the text?", shows and speaks the answer, then "Done."; about 16 s in all |
+| "Hey Siri, Envoy" | **Not recognized** (four tries): Siri needs the whole name |
+| Control Center | Works, about 7 s |
+| Locked phone | **Answers without Face ID or passcode** (Action Button and "Hey Siri, Ask Envoy") |
+| Tailscale off | iOS alert "A server with the specified host name could not be found."; nothing spoken |
+| One build everywhere | Yes: the default `speak+notify`; no `--reply` variant needed, so no extra tokens |
+| First run | Three one-time prompts: speech recognition, "send 1 text item to …ts.net" (Always Allow), notifications |
+| Gate | "That may have changed. I'm checking the app." (task on envoy-test, Gate B12 in 8.3 s), then twice "Gate B12, from the SkyLark app just now." |
+| Check-in | "On it: Check me in for my flight. Anything that can't be undone will wait for your OK." in 6.8 s; the routine asked at Confirm check-in 10 s after the request; **the user approved it** in the iPhone app 80 s later |
+| Server timings | 13 requests: plain replies 1.7–3.5 s (median 2.9 s), memory answers 3.3–6.4 s, tasks 3.9 s and 6.8 s |
+
+### Findings
+
+- **Locked phone (for the user to decide):** memory answers are spoken, and tasks start, with the phone locked. Anything
+  irreversible still waits for an OK in Envoy (needs the session). Options: keep it; refuse memory answers for source
+  `siri`; or turn off "Allow Siri When Locked" on the phone. Not changed.
+- **The approval push was sent and shown, but Do Not Disturb hid it.** `logs/push.jsonl`: "approval" sent 17:23:42
+  (201), receipt 0.7 s later. The recording shows Do Not Disturb on; the user found the approval in the app. Ask
+  Envoy's own notifications got through. For the demo: Focus off, or Envoy allowed in it. Not a `push.py` problem.
+- **The 5 s wait just missed the check-in's named line.** Its match took 4.95 s (4.9 s in the stage 1 device check),
+  and the step landed 5.01 s after the task began, so Siri said the general line after waiting the full 5 s. The gate's
+  match is about 2.6 s. A 7 s `PREFLIGHT_WAIT_S` would cover it (coordinator's call; not changed).
+- **SkyLark restored.** The user approved, so KX7Q2M was checked in. Reseeded `demo_fixtures(signed_in=True)`, variant
+  0, and `state()` matches it exactly. Before the test SkyLark held other bookings (1DHODZ, DE8GXD, T9LGMX, not in the
+  demo inbox), so it now matches the demo memory. envoy-test stopped and released.
+- Inside Siri a "Done." shows after the answer (Siri's own, after a shortcut with no output). Harmless.
+
+### Demo shot
+
+In `docs/siri.md` › "The demo shot": Action Button, "What gate is my flight?" twice (the phone check, then the instant
+answer), "Check me in for my flight.", then the approval on the phone. Focus off first. The Oct 29 take is the user's
+part 2 recording (`RPReplay_Final1793309109.MP4`, not in the repo).
+
+### Cleanup
+
+"Ask Envoy (test)" deleted; my API copy on :8746 stopped (its tokens lived only in its scratch API dir); envoy-test
+stopped and released. The only `siri` token on the live API is the real one, "Ask Envoy" (made 15:45).
 
 ## Not done / not checked / notes for the coordinator
 

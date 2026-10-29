@@ -19,11 +19,15 @@ on the device). A native app later would call the same endpoint.
    ```bash
    uv run --project backend python scripts/make_shortcut.py --siri
    ```
-3. Open `data/api/shortcut/Ask Envoy.shortcut` and choose **Add Shortcut**. iCloud brings it to the iPhone. There,
-   optionally: Settings › Action Button › Shortcut › **Ask Envoy**; Control Center › edit › add a control › Shortcuts ›
-   **Ask Envoy**.
+3. Open `data/api/shortcut/Ask Envoy.shortcut` and choose **Add Shortcut**. iCloud brings it to the iPhone within
+   seconds. There, optionally: Settings › Action Button › **Shortcut** › **Ask Envoy**; Control Center › **+** › **Add a
+   Control** › search "Shortcut" › **Shortcut** › **Ask Envoy** (iPhone Mirroring can't open Control Center: do this one
+   on the phone).
 
-The token appears in Settings › Devices as **Ask Envoy (Siri)**: "Siri shortcut: can ask Envoy and start tasks; can't
+The first run asks three things, once each: speech recognition (**Allow**), "Allow "Ask Envoy" to send 1 text item to
+"…ts.net"?" (**Always Allow**; Allow Once would ask every time), and notifications (**Allow**).
+
+The token appears in Settings › Devices under the shortcut's name, **Ask Envoy**: "Siri shortcut: can ask Envoy and start tasks; can't
 approve anything". Remove it there and the shortcut stops working at once ("Envoy doesn't recognize this shortcut any
 more. Set up Ask Envoy again.").
 
@@ -44,7 +48,7 @@ shows `say`.
 | a question whose answer may be stale, with a phone free | starts the task that checks | "That may have changed. I'm checking the app." (the answer comes as "Done: …") |
 | an old answer and no phone free | answers from memory | the answer with when it was seen ("…yesterday at 5:50 PM, but it may have changed.") |
 | a task | starts it, source `siri` | "On it: …" plus one Before I start line (below) |
-| | e.g. on envoy-test (Oct 29): "Check me in for my flight" | "On it: Check me in for my flight. Anything that can't be undone will wait for your OK." in 4.9 s; the run asked at Confirm check-in |
+| | e.g. from the iPhone (Oct 29, live API): "Check me in for my flight" | "On it: Check me in for my flight. Anything that can't be undone will wait for your OK." in 6.8 s; the run asked at Confirm check-in and waited for the tap in Envoy |
 | something recurring ("every Friday at 6 PM, …") | drafts the trigger **switched off**, with an offer in Envoy | "I've drafted it. Say yes in Envoy to turn it on." |
 | a recurring request it couldn't set up | nothing | chat's reason ("I couldn't tell exactly what to do each time.") |
 | anything else | chat's reply | the reply |
@@ -58,8 +62,10 @@ task's own `preflight` step, which the runner writes once it has matched a routi
 waits up to 5 s for it, then falls back to `preflight.check()` without a routine ("Anything that can't be undone will
 wait for your OK."). Measured: the match call is p50 1.7 s, p90 2.9 s over the recorded history, but 2.6–4.9 s on Oct 29,
 when both check-in requests missed a 3 s wait and said the general line. So the wait is 5 s (`PREFLIGHT_WAIT_S`), so the
-demo says the named step; it ends as soon as the step arrives, and only a slow match costs the extra seconds. When chat's line is already two sentences ("That may have changed. I'm
-checking the app.") there's no wait, and only a stop line would replace its second sentence.
+demo says the named step; it ends as soon as the step arrives, and only a slow match costs the extra seconds. On the
+iPhone the check-in's match took 4.95 s and its step landed 5.01 s after the task began: just past the wait, so Siri said
+the general line after the full 5 s (see "On the iPhone"). When chat's line is already two sentences ("That may have
+changed. I'm checking the app.") there's no wait, and only a stop line would replace its second sentence.
 
 **What the `siri` token can do:** ask Envoy (`POST /api/siri`), and nothing else. It can't read tasks or memory, use
 `/api/chat`, approve or decline, decide an offer, take over, open the live view, the event stream or voice
@@ -86,13 +92,51 @@ you said: `api.siri` logs the kind of answer and the timings only.
   turns it on, and each firing asks you first.
 - **The token** is narrow, stored hashed, named, revocable in Devices, and lives only in the signed shortcut file and
   the shortcut. The script never prints it.
-- **Answers from memory are spoken.** Whether that should need an unlocked phone depends on what iOS does when locked
-  (stage 2, below).
+- **Answers from memory are spoken, even on a locked phone.** On the iPhone (Oct 29) the Action Button and "Hey Siri,
+  Ask Envoy" ran and answered with the screen locked, with no Face ID or passcode. So anyone holding your phone, or
+  whom Siri answers, can hear what Envoy remembers (a gate, a booking date) and start a task. A task still can't finish anything irreversible: that waits for your OK in Envoy, which needs
+  your session. If memory answers should need an unlocked phone, it's a policy choice (refuse memory answers for source
+  `siri`, or turn off "Allow Siri When Locked"); it isn't changed here.
 
 ## On the iPhone (stage 2)
 
-_To be filled in after the iPhone test: which actions listen and answer once from Siri, the Action Button and Control
-Center; the locked phone; Envoy unreachable; timings; the screen recording._
+Tested Oct 29 on the user's iPhone (iOS 18.7) against the live API (:8700 at `059bb7f`, over Tailscale), with two
+screen recordings (mic on). One shortcut, the default `speak+notify` build, works on every surface; no second build
+was needed.
+
+| Surface | Result | Press to answer (phone) |
+| --- | --- | --- |
+| Action Button (press and hold) | Listens at once ("Now listening…"), speaks the answer, then the notification keeps the text | about 6.5–7 s with a three-word question: about 3.5 s after you stop talking |
+| "Hey Siri, Ask Envoy" | Siri runs it, asks "What's the text?", shows and speaks the answer, then shows "Done." | about 16 s (Siri's own steps); the answer comes about 2 s after you finish |
+| "Hey Siri, Envoy" | **Not recognized** ("I didn't get that. Could you try again?", four tries): Siri needs the shortcut's whole name | |
+| Control Center button | Same as the Action Button | about 7 s |
+| Locked phone (screen dark) | Action Button and "Hey Siri, Ask Envoy" both ran and answered **without Face ID or a passcode** (see the safety model) | |
+| Tailscale off | iOS's own alert: "A server with the specified host name could not be found." Nothing is spoken | |
+
+**Server side** (`api.siri`'s timing line), 13 requests: plain replies 1.7–3.5 s (median 2.9 s over the 8 in part 1,
+one model call each); memory answers 3.3–6.4 s (two calls: on the phone the first one, "What day is my flight?", took
+about 12 s from the press); tasks 3.9 s (a stale gate: no wait) and 6.8 s (the check-in: 1.7 s of chat, then the full
+5 s wait).
+
+What it said (part 2, the demo take):
+
+| You said | Siri said | Then |
+| --- | --- | --- |
+| "What day is my flight?" | "Fri, Oct 30, 2026, from the SkyLark app yesterday at 5:50 PM." | |
+| "What gate is my flight?" | "That may have changed. I'm checking the app." | a task on envoy-test read Gate B12 in 8.3 s and "Done: …" was pushed |
+| "What gate is my flight?" (twice) | "Gate B12, from the SkyLark app just now." | |
+| "Check me in for my flight." | "On it: Check me in for my flight. Anything that can't be undone will wait for your OK." | the routine ran 5 steps on envoy-test and asked at Confirm check-in 10 s after the request; you decided on the iPhone app 80 s later |
+
+Two things to know from the test:
+
+- **The approval was pushed, but Do Not Disturb hid it.** Envoy sent "Envoy needs your OK" at once, and the iPhone app's
+  service worker reported showing it 0.7 s later (`logs/push.jsonl`). The phone was in Do Not Disturb, so no banner
+  appeared; it was waiting in the Envoy app. Ask Envoy's own notifications did show (Shortcuts was allowed through). For
+  the demo, turn Focus off, or add Envoy (the Home Screen app) to the Focus's allowed apps.
+- **The check-in said the general line.** Its routine match took 4.95 s (4.9 s in the stage 1 device check too), so its
+  `preflight` step ("Confirming check-in will wait for your OK.") landed 5.01 s after the task began: about a tenth of
+  a second past `PREFLIGHT_WAIT_S`. The gate's match takes about 2.6 s. A 7 s wait would cover the check-in, at the cost
+  of 2 s more silence when the match is slow.
 
 ### Which actions
 
@@ -101,7 +145,7 @@ keyboard on the Action Button). The answer's actions are a build option, settled
 
 | `--reply` | Actions | Expected |
 | --- | --- | --- |
-| `speak+notify` (default) | Speak Text, Show Notification | spoken once everywhere; the notification keeps the text |
+| `speak+notify` (default) | Speak Text, Show Notification | **checked on the iPhone:** spoken once on the Action Button, Control Center and in Siri (Siri shows the text as it speaks, then "Done."); the notification keeps the text |
 | `show` | Show Result | Siri reads it aloud; elsewhere it's shown, not spoken |
 | `speak+show` | Speak Text, Show Result | may be spoken twice inside Siri |
 | `output` | Stop and Output (if nowhere to output: Respond) | Siri speaks it; `shortcuts run` prints it (the Mac check) |
@@ -112,11 +156,30 @@ keyboard on the Action Button). The answer's actions are a build option, settled
 - **"That's a lot of requests."** More than 6 a minute (or 100 a day) from this shortcut.
 - **"I couldn't do that just now."** A model error or the day's cost cap. Try again in a minute; the API log says
   which (never what you said).
-- **An error from Shortcuts itself, with no spoken line:** Envoy couldn't be reached at all (Tailscale off on the
-  phone, the Mac asleep, the API stopped). Stage 2 records exactly what appears.
+- **"A server with the specified host name could not be found."** (an iOS alert, nothing spoken): Envoy couldn't be
+  reached. Turn Tailscale on in the iPhone; check the Mac is awake and the API is running.
+- **"I didn't get that. Could you try again?"** from Siri: say the whole name, "Hey Siri, **Ask** Envoy". "Hey Siri,
+  Envoy" isn't recognized.
+- **No "Envoy needs your OK" banner:** a Focus (Do Not Disturb) is on. The approval is still waiting in Envoy; allow
+  Envoy in the Focus, or turn it off.
+- **It asks "Allow … to send 1 text item" every time:** you chose Allow Once; run it and choose Always Allow.
 - **On the Mac, Dictate Text says to enable Dictation:** expected; the Mac check passes text in with `--input-path`.
 
 ## The demo shot
 
-_To be filled in after the iPhone test (who presses what, the phrases, the timings and the fallback). Lead with the
-Action Button: saying "Hey Siri" in a video sets off viewers' phones._
+About 40 seconds, iPhone in hand, a screen recording with the mic on. Lead with the Action Button: saying "Hey Siri" in
+a video sets off viewers' phones.
+
+Before: Envoy on the tailnet; envoy-test running with SkyLark at `demo_fixtures(signed_in=True)`; Do Not Disturb off
+(or Envoy allowed in the Focus) so the approval banner shows; the first-run prompts already answered.
+
+1. Press and hold the Action Button: "What gate is my flight?" → "That may have changed. I'm checking the app." (about
+   7 s), and a few seconds later "Done: … Gate B12" arrives. Ask again for the instant answer: "Gate B12, from the
+   SkyLark app just now."
+2. Press and hold: "Check me in for my flight." → "On it: … will wait for your OK." (about 12 s, with the 5 s wait)
+3. "Envoy needs your OK" arrives about 10 s after the request. Tap it and approve; "Done: …" follows. (Decline instead
+   to keep SkyLark as it was; after an approve, reseed with `scripts/demo_setup.py --signed-in --app-only`.)
+
+Fallback: the Control Center button does the same as the Action Button. The Oct 29 take is the part 2 recording
+(the user's `RPReplay_Final1793309109.MP4`, 3 min 45 s; not in the repo): steps 1 and 2 with the approval opened from
+the app because of Do Not Disturb.
