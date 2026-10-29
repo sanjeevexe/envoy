@@ -55,10 +55,10 @@ line ("Chase needs your Android phone, and it isn't connected."), else the first
 for or need your OK ("Confirming check-in will wait for your OK.", "The payment step will need your OK."), else the
 first warning ("Target blocks emulators: I'll ask to use your Pixel 5."). The routine-specific line comes from the
 task's own `preflight` step, which the runner writes once it has matched a routine (one Spark call); `/api/siri`
-waits up to 3 s for it, then falls back to `preflight.check()` without a routine ("Anything that can't be undone will
+waits up to 5 s for it, then falls back to `preflight.check()` without a routine ("Anything that can't be undone will
 wait for your OK."). Measured: the match call is p50 1.7 s, p90 2.9 s over the recorded history, but 2.6–4.9 s on Oct 29,
-when both check-in requests missed the wait and said the general line; a slow match costs at most the 3 s.
-`PREFLIGHT_WAIT_S` sets it. When chat's line is already two sentences ("That may have changed. I'm
+when both check-in requests missed a 3 s wait and said the general line. So the wait is 5 s (`PREFLIGHT_WAIT_S`), so the
+demo says the named step; it ends as soon as the step arrives, and only a slow match costs the extra seconds. When chat's line is already two sentences ("That may have changed. I'm
 checking the app.") there's no wait, and only a stop line would replace its second sentence.
 
 **What the `siri` token can do:** ask Envoy (`POST /api/siri`), and nothing else. It can't read tasks or memory, use
