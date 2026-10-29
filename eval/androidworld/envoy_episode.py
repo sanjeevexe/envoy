@@ -37,7 +37,20 @@ AGENT_ENDED = {"done", "done_unverified", "failed", "handoff", "needs_user"}
 ANSWERED = {"done", "done_unverified"}
 RUNCONFIG_KEYS = {"plan", "screenshots", "vision", "step_effort", "plan_effort", "max_done_rejections"}  # agent overrides
 ROUTINE_KEYS = {"mode", "library", "allow_repair"}  # the routines experiment (envoy_routine.py)
-CONFIG_KEYS = RUNCONFIG_KEYS | ROUTINE_KEYS | {"tier"}  # tier: "contributor" (default) or "standard"
+CONFIG_KEYS = RUNCONFIG_KEYS | ROUTINE_KEYS | {"tier", "answer_format"}  # tier: "contributor" (default) or "standard"
+
+# AndroidWorld's checker compares the answer text, so the benchmark needs answers in the exact form its goals ask for
+# ("True", a bare number). That is the benchmark's need, not Envoy's (coord rule 7), so it is added here, to this
+# process's copy of the step instructions, and never written into Envoy's own prompt. Off with {"answer_format": false}.
+ANSWER_FORMAT = ("\n## AndroidWorld\nThis task comes from the AndroidWorld benchmark, whose checker compares your answer's text. "
+                 "When the goal says how to answer (just a number, True or False, a comma-separated list, <amount> <unit>), "
+                 "answer in exactly that form.\n")
+
+
+def adapt_step_instructions(loop_module: Any) -> None:
+    """Append ANSWER_FORMAT to the agent loop's step instructions, once (the loop reads them at each call)."""
+    if not loop_module.STEP_INSTRUCTIONS.endswith(ANSWER_FORMAT):
+        loop_module.STEP_INSTRUCTIONS += ANSWER_FORMAT
 
 
 def contributor_tier(config: dict[str, Any]) -> bool:
@@ -138,6 +151,7 @@ def write_digest(trace_dir: Path, dest: Path) -> None:
 
 
 async def run_episode(payload: dict[str, Any]) -> dict[str, Any]:
+    from agent import loop
     from agent.loop import AgentRunner, RunConfig
     from devices import emulator
     from models.adapter import JOBS, ModelAdapter
@@ -151,6 +165,8 @@ async def run_episode(payload: dict[str, Any]) -> dict[str, Any]:
     cfg = RunConfig(max_steps=payload["max_steps"], data_scope="test_app", contributor=contributor_tier(payload["config"]),
                     **{k: v for k, v in payload["config"].items() if k in RUNCONFIG_KEYS})
     adapter = ModelAdapter()
+    if payload["config"].get("answer_format", True):
+        adapt_step_instructions(loop)
     runner = AgentRunner(device, adapter, approver, cfg)
     try:
         res = await runner.run(payload["goal"], task_id=payload["run_id"], memory="")
@@ -191,6 +207,7 @@ async def run_episode(payload: dict[str, Any]) -> dict[str, Any]:
         "check": res.check,
         "trace_dir": str(trace_dir.relative_to(REPO)) if trace_dir.is_relative_to(REPO) else str(trace_dir),
         "envoy_commit": git_commit(),
+        "answer_format": loop.STEP_INSTRUCTIONS.endswith(ANSWER_FORMAT),
         "model": adapter.resolve_model(JOBS["step"], "test_app", cfg.contributor),
         "effort": {"step": cfg.step_effort, "plan": cfg.plan_effort},
     }

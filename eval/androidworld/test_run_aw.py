@@ -166,3 +166,16 @@ def test_android_env_never_restarts_the_shared_adb_server(monkeypatch):
     assert any(cmd[-1] == "devices" for cmd in calls)  # it waited and looked instead
     with pytest.raises(RuntimeError, match="refused"):
         ctl.execute_command(["kill-server"], device_specific=False)
+
+
+def test_the_answer_format_benchmark_note_is_added_by_the_adapter_once():
+    # coord rule 7: what only AndroidWorld's checker needs lives in the adapter, appended to this process's step
+    # instructions; Envoy's own prompt never says it.
+    import types
+    import envoy_episode as ee
+    loop = types.SimpleNamespace(STEP_INSTRUCTIONS="You are Envoy's phone agent.\n")
+    ee.adapt_step_instructions(loop)
+    ee.adapt_step_instructions(loop)
+    assert loop.STEP_INSTRUCTIONS.count("AndroidWorld benchmark") == 1
+    assert loop.STEP_INSTRUCTIONS.endswith(ee.ANSWER_FORMAT)
+    assert ee.make_payload("Is it a todo? Respond with True or False.", 10, "r1", {"answer_format": False})["config"] == {"answer_format": False}
