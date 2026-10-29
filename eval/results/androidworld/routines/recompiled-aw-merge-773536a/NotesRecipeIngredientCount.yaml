@@ -1,0 +1,110 @@
+routine: joplin_get_ingredient_quantity
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: draft
+intent: Find the quantity of an ingredient in a Joplin recipe.
+description: Search the Joplin app for a named recipe, open the matching note, and return the amount and unit listed for the requested ingredient.
+patterns: [What quantity of an ingredient do I need for a recipe, How much of an ingredient is in a recipe, Find the ingredient amount in a Joplin
+    recipe]
+outputs: [ingredient_quantity]
+start: fresh_launch
+inputs:
+  recipe_name: {type: text, description: '', example: Chicken Alfredo}
+steps:
+- id: launch_joplin
+  intent: "Launch the Joplin app to find the {{recipe_name}} recipe."
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: net.cozic.joplin}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: fab-content, text: , kind: Text}
+  - element_present: {resource_id: cross-fade-icon-current, text: , kind: Text}
+  risk: read
+  note: trace step 2
+- id: tap_search
+  intent: Tap Search to look for the recipe.
+  pre:
+  - {app_foreground: net.cozic.joplin}
+  action:
+    tap:
+      text: Search
+      kind: Button
+      cls: Button
+      siblings: [Sidebar, All notes, Sort notes by]
+      in_list: false
+      position: [0.818, 0.082]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: input_method_nav_ime_switcher, text: Switch input method, kind: Button}
+  risk: reversible
+  note: trace step 5
+- id: type_recipe_name
+  intent: "Type {{recipe_name}} into the search field."
+  pre:
+  - {app_foreground: net.cozic.joplin}
+  action:
+    type:
+      field:
+        text: ''
+        kind: EditText
+        cls: EditText
+        siblings: [Clear]
+        in_list: false
+        position: [0.445, 0.133]
+      value: "{{recipe_name}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      text: "{{recipe_name}}"
+      kind: EditText
+  risk: reversible
+  note: trace step 6
+- id: find_tap_recipe_result
+  intent: "Scroll to {{recipe_name}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        text_has: "{{recipe_name}}"
+        kind: Button
+        cls: ViewGroup
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      text_has: "{{recipe_name}}"
+      kind: Button
+      cls: ViewGroup
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: tap_recipe_result
+  intent: "Tap the {{recipe_name}} result to open the recipe and read the quantity of {{ingredient_name}}."
+  pre:
+  - {app_foreground: net.cozic.joplin}
+  action:
+    tap:
+      text_has: "{{recipe_name}}"
+      kind: Button
+      cls: ViewGroup
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: fab-content, text: , kind: Text}
+  - element_present: {resource_id: cross-fade-icon-current, text: , kind: Text}
+  risk: reversible
+  extract:
+    ingredient_quantity: {pattern: '(?P<v>\d+/\d+\ cup)\s*spirulina', first_in_list: true, expect_digits: true}
+  note: trace step 7
+compiled_from:
+  task_id: aw-baseline-standard-1028-035923-e4eb
+  goal: What quantity of spirulina do I need for the recipe 'Chicken Alfredo' in the Joplin app? Express your answer in the format <amount> <unit>
+    where both the amount and unit exactly match the format in the recipe.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-29 00:03:33"
+  trace_steps_kept: [2, 5, 6, 7]
+  trace_steps_dropped: 3
+  cost_usd: 0.0493

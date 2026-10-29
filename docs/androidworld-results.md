@@ -279,9 +279,12 @@ Why the others failed, on the very screens they were compiled from. Four of thes
 - **Same structure, new parameters** (17 tasks, 51 instances): the routines did **51 of 51**, the agent 48. This covers messages, files, folders, recordings, photos, stopwatches, expenses, recipes, and Bluetooth, Wi-Fi and brightness.
 - **The answer sits somewhere else** (NotesMeetingAttendeeCount, NotesRecipeIngredientCount, SimpleCalendarLocationOfEvent): 0 of 9.
   - The matcher filled the inputs right ('Quality Assurance Review', 'Lasagna', 'Movie night'), and the routine opened the right note or event.
-  - Then it stopped with "outputs not found": each output's locator was tied to where the value sat on seed 30's screen.
+  - Then it stopped with "outputs not found". Each output's extraction was tied to seed 30's own answer:
+    - a pattern with the example's ingredient and unit (`\d+/\d+ cup` + "spirulina"), where the ingredient isn't even an input;
+    - the source note's wording ("individuals were present");
+    - `expect_digits` on a location, because seed 30's was "100 Main St Chicago". The new seeds' were "Virtual", "The Coffee Bean" and "Sarah's apartment".
   - The agent did all 9.
-  - This is the same gap Phase 7 found in SkyLark's past_trip and fixed in the compiler (`183cc60`: read the answer in the row that shows the input).
+  - Recompiling the three sources with `aw-merge`'s compiler (773536a, with Phase 7's row fix) gives the same extracts (`routines/recompiled-aw-merge-773536a/`). This gap is separate from past_trip's, and is in the coordinator's backlog.
 - **A different app** (OpenAppTaskEval's "Open the camera app" twice, TurnOnWifiAndOpenApp's "…then open the clock app" once):
   - The routines were compiled from runs that opened Contacts and Settings, and don't take the app as an input.
   - The matcher correctly declined all three (`no_routine`) rather than open the wrong app.
@@ -298,7 +301,7 @@ Why the others failed, on the very screens they were compiled from. Four of thes
 - it cost a sixth as much and took 40% of the time.
 
 Its failures are all of one kind: something the run never showed as an input (which app, where the answer is, how many items) is baked into the routine. Each is a general fix for `main`'s compiler or matcher, not an AndroidWorld quirk:
-- outputs anchored to the input's row;
+- extractions that keep only what holds for any instance (no example values in patterns, an entity the goal names as an input);
 - the app as an input when the goal names one;
 - a routine verified on more than one instance, or flagged when its source run did nothing irreversible for a goal that asks for it.
 
