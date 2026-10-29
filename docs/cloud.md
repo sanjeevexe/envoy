@@ -1,6 +1,6 @@
 # Envoy in the cloud: the proof
 
-Oct 29, 2026. **The same SkyLark routines, compiled on the Mac, ran unchanged on an Android emulator on a Google Cloud server: 48 of 48 with no model calls, at about half the Mac's speed.** That is on an emulator past its first boot; the very first run on a brand-new one passed 9 of 18 (below).
+Oct 29, 2026. **The same SkyLark routines, compiled on the Mac, ran unchanged on an Android emulator on a Google Cloud server: 48 of 48 with no model calls, at about half the Mac's speed.** That is on an emulator past its first boot; the very first run on a brand-new one passed 9 of 18 (below). Stage 2 then ran the whole learn-then-replay loop there: one agent run, a routine compiled from it on the VM, and that routine replayed 3 of 3 on bookings it had never seen, for $0.07 of Meta credit.
 
 Today Envoy runs on the user's Mac: the API, the web app, the emulators and the Pixel 5's USB connection. Only the model calls go to Meta. The design always said "a cloud host later" (`docs/technical-design.md`, "Later, in the cloud"). This is the first step: the same code and the same routines on a Google Cloud server, measured against the numbers the Mac already recorded. Nothing was re-measured on the Mac.
 
@@ -82,7 +82,23 @@ So a new cloud emulator needs a warm-up before it's used. A restarted one doesn'
 
 ## Stage 2: the agent in the cloud
 
-TBD (next commit).
+The whole learn-then-replay loop, on the VM: `eval/run_final.py compile --tasks check_in` (the Phase 7 compile suite, standard tier), then `eval/run_final.py sizes --device envoy-test --tasks check_in` to replay what it learned. The Meta key was on the VM only for these two commands. Results: `eval/results/cloud/stage2/`.
+
+1. **The agent** checked in for the Denver flight ("Check me in for my flight to Denver."), and SkyLark's state check confirmed it.
+2. **Muse Wonder compiled the run** into `skylark_check_in_flight` (9 steps, input `trip_city`; outputs seat, gate, boarding time and group). It was verified by replay on the same booking and on one it had never seen (Tampa), and became version 2 in the VM's own library.
+3. **That routine replayed 3 of 3** on three more bookings it had never seen, with no model calls.
+
+| | Mac (Phase 7 compile suite, standard tier) | Cloud |
+| --- | --- | --- |
+| Agent run on the Denver booking | 10 actions, 12 calls, 22.3 s, $0.023 | 8 actions, 10 calls, 25.3 s, $0.019 |
+| Compile (Muse Wonder) | $0.049, 12.3 s | $0.051, 17.4 s |
+| Verify: same booking, then a new one | 4.6 s and 4.0 s, both pass | 9.6 s and 9.4 s, both pass |
+| Replays on unseen bookings | (the Mac-compiled routine: 4.3 s median, sizes) | **3 of 3**, 0 calls, 9.2–9.4 s |
+| Meta spend | | **$0.070** (11 calls: 1 plan, 9 steps, 1 compile) |
+
+The agent run took 3 s longer on the VM, with fewer steps. Its time is mostly model calls, which cost the same from either place, so software rendering matters less there than for a routine. Phase 1 recorded check-in at 6–9 actions and about 15 s. This is one run each, so it is no comparison of the agent's skill. It shows the loop works end to end in the cloud.
+
+The learned routine lives only in the VM's copy (`eval/results/final/library/compiled/` there). The YAML is in `eval/results/cloud/stage2/check_in-routine.yaml` for reference; nothing was copied into the Mac's `data/routines/`.
 
 ## Cost
 
@@ -92,10 +108,10 @@ Google's list prices for `us-east1` (on demand): `n2-standard-8` about **$0.39 a
 | --- | --- | --- | --- |
 | Stage 0: create, toolchain, code, boot, device timings | 19:23–19:39 UTC, 16 min | $0.10 | 13 min of it was the emulator's first-boot work and a hung SSH session (below) |
 | Stage 1: portability ×2, sizes, the restart check, the clip | 19:39–19:59, 20 min | $0.13 | |
-| Stage 2 | 19:59–20:04, 5 min | $0.04 | |
+| Stage 2: the key on, compile + verify, 3 replays, the key off | 19:59–20:04, 5 min | $0.04 | |
 | **Total so far** | **41.5 min** | **$0.27** | plus the disk, about $0.17 a day while it exists, and a few MB of egress |
 
-One emulator-hour on this VM costs about $0.39. Meta: $0 for stage 1 (no key on the VM). The VM is **stopped**; deleting it is the user's call (`scripts/cloud/delete.sh`).
+One emulator-hour on this VM costs about $0.39. Meta: $0 for stage 1 (no key on the VM), **$0.070 for stage 2** (cap $1). The VM is **stopped**; deleting it is the user's call (`scripts/cloud/delete.sh`).
 
 ## The commands
 
@@ -161,3 +177,7 @@ No product code changed. Everything was handled from outside:
 ## For the write-up
 
 > SkyLark routines compiled on a Mac ran unchanged on an Android emulator on a Google Cloud N2 server: once the new emulator had finished its first-boot setup, 48 of 48 runs on bookings they had never seen passed, with no model calls, at a median of 5.5 s (3.1 s on the Mac).
+
+And for stage 2:
+
+> Envoy then learned the check-in in the cloud too: one agent run, compiled there into a routine that replayed 3 of 3 on new bookings with no model calls, for 7 cents.
