@@ -64,7 +64,9 @@ MEDIA = {"image": "content://media/external/images/media", "video": "content://m
 CONTENT_TYPES = {"image/jpeg": ".jpg", "image/png": ".png", "image/heic": ".heic", "image/heif": ".heic", "image/webp": ".webp",
                  "video/mp4": ".mp4", "video/quicktime": ".mov", "video/x-m4v": ".m4v"}
 SIDECAR_MAX = 64 * 1024
-SIDECAR_GRACE_S = 6.0  # how long a new file waits for its sidecar before its offer is made without one
+# How long a new file waits for its sidecar before its offer is made without one. Muse for Mac wrote one 23 s after
+# moving the video (a permission prompt between, Oct 29); a sidecar that comes later still replaces the offer (scan).
+SIDECAR_GRACE_S = 30.0
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS handoffs (
@@ -411,13 +413,15 @@ class Handoff:
         for name in list(self._sizes):
             if name not in files:
                 self._sizes.pop(name)
-        # A sidecar written after its video still counts while the item waits.
-        for item in self.items(status="waiting"):
+        # A sidecar written after its video still counts while the file waits, and replaces an offer made without it.
+        for item in self.items(status="waiting") + self.items(status="offered"):
             if item["name"] in files and item["origin"] in ("outbox", "mcp", "url"):
                 app, caption, note = read_sidecar(folder / item["name"])
                 if (app, caption) != (item["app"], item["caption"]) and (app or caption):
                     device = self.default_device(app) if app != item["app"] and item["origin"] == "outbox" else (item["device"], note)
                     self._update(item["id"], app=app, caption=caption, device=device[0], note=note or device[1])
+                    if item["status"] == "offered" and item["offer_id"] and self.offers is not None:
+                        self.reoffer(item, "A caption file for it arrived from your Mac: asking again with it")
         # Its offer: at once when a sidecar named the app, else once the sidecar has had its chance.
         for hid in list(self._fresh):
             item = self.item(hid)
@@ -554,6 +558,10 @@ class Handoff:
             raise HandoffError(f"{src.name} isn't a file")
         kind = self._check_file(src)
         serial = self.serial(device)
+        state = self.adb(serial, ["get-state"], timeout=10)
+        if state.returncode != 0 or state.stdout.strip() != "device":  # said plainly, not as adb's "device 'emulator-5554' not found"
+            raise HandoffError(f"the {self.device_name(device)} ({device}) isn't running" if not device.startswith("phone-")
+                               else "the user's Android phone isn't connected")
         folder = f"/sdcard/{DIRS[kind]}"
         self._sh(serial, f"mkdir -p {folder}")
         name = self._free_name(serial, folder, safe_name(src.name))
@@ -692,6 +700,15 @@ class Handoff:
         except Exception:  # noqa: BLE001 - an offer without the lines is still an offer
             return None
         return [{k: str(x.get(k) or "") for k in ("kind", "text", "level")} for x in lines or []][:8] or None
+
+    def reoffer(self, item: dict[str, Any], why: str) -> dict[str, Any] | None:
+        """Withdraw the file's pending offer and ask again with what's now known (its sidecar). Nothing happens if the
+        offer was answered meanwhile."""
+        withdrawn = self.offers.withdraw(item["offer_id"], why)
+        if (withdrawn or {}).get("status") != "withdrawn":
+            return None
+        self._update(item["id"], status="waiting", offer_id=None)
+        return self.offer(item["id"], "outbox" if item["origin"] == "outbox" else "mcp")
 
     def accept(self, offer: dict[str, Any], source: str) -> dict[str, Any]:
         """The `handoff` action, run by api/offers.py when the user says yes in Envoy (never from MCP): push the file, to

@@ -31,15 +31,18 @@ class FakeAdb:
     (hidden from galleries) that the scan broadcast finishes, as on Android 15 (`fuse`); without `fuse` only the scan
     makes a row; with `scans=False` the scanner never answers."""
 
-    def __init__(self, fuse: bool = True, scans: bool = True) -> None:
+    def __init__(self, fuse: bool = True, scans: bool = True, running: bool = True) -> None:
         self.calls: list[tuple[str, list[str]]] = []
         self.files: dict[str, bytes] = {}
         self.media: dict[str, list[int]] = {}  # remote path → [media store _id, is_pending]
-        self.fuse, self.scans = fuse, scans
+        self.fuse, self.scans, self.running = fuse, scans, running
 
     def __call__(self, serial: str, args: list[str], timeout: float) -> subprocess.CompletedProcess:
         self.calls.append((serial, list(args)))
         out = ""
+        if args[0] == "get-state":
+            return subprocess.CompletedProcess(args, 0 if self.running else 1, "device\n" if self.running else "",
+                                               "" if self.running else f"error: device '{serial}' not found")
         if args[0] == "push":
             local, remote = args[1], args[2]
             self.files[remote] = Path(local).read_bytes()
@@ -247,7 +250,7 @@ def test_push_file_copies_into_the_gallery_folders_dates_it_now_and_waits_for_th
     assert got == {"device": "envoy-test", "remote_path": "/sdcard/Movies/Envoy/Sunset-at-the-pier.mp4",
                    "media_uri": "content://media/external/video/media/1000"}
     assert {s for s, _ in hand.adb.calls} == {"emulator-5554"}  # always adb -s <serial>, from the pool id
-    assert hand.adb.calls[0][1] == ["shell", "mkdir -p /sdcard/Movies/Envoy"]
+    assert [a for _, a in hand.adb.calls[:2]] == [["get-state"], ["shell", "mkdir -p /sdcard/Movies/Envoy"]]  # is it running, then the folder
     [push] = [a for _, a in hand.adb.calls if a[0] == "push"]
     assert Path(push[1]).name == "Sunset at the pier!.mp4" and Path(push[1]).parent != hand.box  # a copy, not the Mac's file
     assert push[2] == "/sdcard/Movies/Envoy/Sunset-at-the-pier.mp4" and not Path(push[1]).exists()  # the copy is gone
@@ -650,3 +653,54 @@ def test_the_step_that_posts_always_asks_even_after_a_yes_on_the_offer(hand, mon
     assert decide(ApprovalRules(), goal=POSTING["request"], source=source, app="com.instagram.android", routine=None, origin="agent",
                   target="Post", screen_text="Instagram New reel Post") is not None
     assert handoff_request("Share {file} to my story and send it to {name}") == "to my story and it to"
+
+
+def test_a_sidecar_that_comes_after_the_offer_replaces_it(hand, monkeypatch):
+    """Muse for Mac moved the video, then (after a permission prompt) wrote its sidecar 23 s later. A sidecar that comes
+    after the offer was made withdraws it and asks again with the app's template."""
+    monkeypatch.setitem(HANDOFF_TEMPLATES, "instagram", POSTING)
+    hand.store.set_setting("phone_apps", ["com.instagram.android"])
+    env = with_offers(hand)
+    env.h.scan()
+    (env.box / "pier-sunset.mp4").write_bytes(MP4)
+    [item] = settle(env)
+    env.clock.t += 5
+    env.h.scan()
+    assert env.h.item(item["id"])["offer_id"] is None  # 7 s in: still waiting for a sidecar (the old wait was 6 s)
+    env.clock.t += SIDECAR_GRACE_S
+    env.h.scan()
+    first = env.h.item(item["id"])["offer_id"]
+    assert env.offers.get(first)["title"] == "Put pier-sunset.mp4 on the Test phone (an emulator)?"  # push only
+    (env.box / "pier-sunset.json").write_text(json.dumps({"app": "instagram", "caption": "Golden hour at the pier"}))
+    env.h.scan()
+    got = env.h.item(item["id"])
+    old, new = env.offers.get(first), env.offers.get(got["offer_id"])
+    assert (old["status"], old["note"]) == ("withdrawn", "A caption file for it arrived from your Mac: asking again with it")
+    assert new["status"] == "pending" and new["title"] == "Put pier-sunset.mp4 on your Pixel 5 and post it to Instagram?"
+    assert new["action"]["device"] == "phone-0A1B" and new["action"]["then"]["inputs"] == {"caption": "Golden hour at the pier"}
+    assert [o["status"] for o in env.offers.list("all")].count("pending") == 1 and env.adb.calls == []
+    env.h.scan()
+    assert env.h.item(item["id"])["offer_id"] == got["offer_id"]  # once: the same sidecar asks nothing more
+
+
+def test_a_sidecar_after_the_answer_changes_nothing(hand):
+    env = with_offers(hand)
+    env.h.scan()
+    (env.box / "clip.mp4").write_bytes(MP4)
+    [item] = settle(env)
+    env.clock.t += SIDECAR_GRACE_S
+    env.h.scan()
+    oid = env.h.item(item["id"])["offer_id"]
+    env.offers.decide(oid, "decline", owner())
+    (env.box / "clip.json").write_text(json.dumps({"app": "gallery", "caption": "late"}))
+    env.h.scan()
+    assert env.offers.get(oid)["status"] == "declined" and len(env.offers.list("all")) == 1  # declined stays declined; no new ask
+
+
+def test_a_stopped_emulator_is_said_plainly(hand):
+    hand.h.adb = FakeAdb(running=False)
+    (hand.box / "clip.mp4").write_bytes(MP4)
+    with pytest.raises(HandoffError) as e:
+        hand.h.push_file("envoy-test", hand.box / "clip.mp4")
+    assert str(e.value) == "the Test phone (envoy-test) isn't running" and "emulator-5554" not in str(e.value)
+    assert [a[0] for _, a in hand.h.adb.calls] == ["get-state"]  # nothing else was tried
