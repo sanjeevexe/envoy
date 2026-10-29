@@ -57,10 +57,9 @@ export default function Home({ tasks, openTask, review, mood, connected, version
       {b && (b.needs.length > 0 || answered.length > 0) && (
         <section aria-label="Needs your OK" className="ev-rise ev-r2 mt-5 flex flex-col gap-3 px-4">
           {b.needs.filter((n) => n.kind === "approval").map((n) => <NeedCard key={n.id} n={n} task={tasks[n.task_id]} review={review} goPhone={goPhone} openTask={openTask} />)}
-          {answered.filter((o) => !b.needs.some((n) => n.id === o.id)).map((o) => <OfferCard key={o.id} o={o} openTask={openTask} />)}
-          {b.needs.filter((n) => n.kind === "offer" && n.offer).map((n) => (
-            <OfferCard key={n.id} o={n.offer!} openTask={openTask} onDecided={(o) => setAnswered((xs) => [o, ...xs.filter((x) => x.id !== o.id)])} />
-          ))}
+          {[...answered.filter((o) => !b.needs.some((n) => n.id === o.id)), ...b.needs.filter((n) => n.kind === "offer" && n.offer).map((n) => n.offer!)]
+            .sort((x, y) => y.created_at - x.created_at)  // the briefing's order, so an answered card stays where it was
+            .map((o) => <OfferCard key={o.id} o={o} openTask={openTask} onDecided={(d) => setAnswered((xs) => [d, ...xs.filter((x) => x.id !== d.id)])} />)}
           {b.needs.filter((n) => n.kind !== "approval" && n.kind !== "offer").map((n) => <NeedCard key={n.id} n={n} task={tasks[n.task_id]} review={review} goPhone={goPhone} openTask={openTask} />)}
         </section>
       )}
