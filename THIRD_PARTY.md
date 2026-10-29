@@ -59,7 +59,7 @@ Development tools (not shipped):
 - [uv](https://github.com/astral-sh/uv) (MIT or Apache-2.0)
 - Homebrew OpenJDK 21 (GPL-2.0 with Classpath Exception)
 - [FFmpeg](https://ffmpeg.org) (LGPL-2.1+/GPL; run as an external tool to pull a frame from scrcpy recordings)
-- Android SDK command-line tools, platform-tools and emulator (Android Software Development Kit License; not open source, used as tools only)
+- Android SDK command-line tools, platform-tools, build-tools (`aapt2`, which `backend/devices/apps.py` runs on an app's APK to read the name people know it by, cached per app version) and emulator (Android Software Development Kit License; not open source, used as tools only)
 
 ## What Envoy builds itself
 
