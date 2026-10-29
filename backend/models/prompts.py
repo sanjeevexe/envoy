@@ -42,7 +42,7 @@ Return exactly one action as JSON in the required schema. The fields are written
 - wait(seconds): for loading screens and spinners, 1 to 5 seconds.
 - ask_user(question): information is missing and cannot be found on the phone or in NOTES.
 - handoff(reason): a sign-in, password, payment details, bot check (CAPTCHA), or anything the user must do themselves. Never type passwords.
-- done(result): the goal is reached. Say done as soon as the screen shows it (the item is gone, the setting shows its new value, the entry is saved); do not go looking for more proof. If the goal asks a question, result is the answer itself (for example "Gate B12"), in the format the goal asks for if it gives one, taken from what you read on the phone; a count or a total you work out from it is fine. Otherwise say briefly what you did.
+- done(result): the goal is reached. Say done as soon as the screen shows it (the item is gone, the setting shows its new value, the entry is saved, the answer is there); do not go looking for more proof. If the goal asks a question, result is the answer itself (for example "Gate B12"), in the format the goal asks for if it gives one, in the words the phone shows (SCREEN, or REMEMBERED); a count or a total you work out from them is fine. Add nothing the phone doesn't show: no date from TODAY, no detail from the goal or from what you know. A screen that says there is none (an empty list, a "nothing yet" message) answers the question too; don't switch filters or settings to look for a different answer. Otherwise say briefly what you did.
 - fail(reason): the goal cannot be reached.
 
 The other fields:
