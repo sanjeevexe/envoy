@@ -1,4 +1,4 @@
-# Wonder, app notes, personal benchmark: interim report (Oct 28, 22:15 ET)
+# Wonder, app notes, personal benchmark: interim report (Oct 29, 00:30 ET)
 
 Branch `claude/wonder-appnotes` (worktree `.claude/worktrees/wonder-appnotes`), not merged, not pushed. Since 21:15 the
 **Envoy coordinator** session holds the device locks (`~/Desktop/Envoy/coord/devices.sh`) and does every merge into main,
@@ -29,33 +29,43 @@ were a replan after the work was done. A full 116-task rerun: about $4.70 under 
 the notes Envoy wrote in 2b's warm-ups (`--notes-from`), results folders take `--date` (a resume after midnight), 2b keeps
 each run's step log with the note ids it saw, and the benchmark's runner never installs an app.
 
-**2b on real apps** (spark, envoy-real, read-only; `eval/results/app-notes/2026-10-28/`): 3/3 before and after; steps 5.3 →
-5.7, calls 7.3 → 7.7, $0.039 → $0.038. These read tasks were already easy for Spark; the notes were read (2–3 per call) and
-didn't change the outcome. Envoy wrote 5 notes, none personal ("To browse without choosing a store, tap Skip then Yes on the
-skip confirmation dialog").
+**2b, app notes before/after** (spark; `eval/results/app-notes/2026-10-28/`): **no measurable effect.** SkyLark 6/6 → 6/6,
+steps 2.8 → 3.0; real apps (read-only) 3/3 → 3/3, steps 5.3 → 5.7; calls and cost level. The tasks were already easy (1–7
+steps). Envoy wrote 13 notes (8 SkyLark, 5 Starbucks/DoorDash), none personal, none dropped, for $0.04. The step changes
+between passes come from a Spark quirk, not the notes (below).
 
-**3b, the before pass** (run 2: spark, notes off): 15/17 graded; S4 and C2 passed on envoy-real. M4 failed (memory's old
-gate served as "may have changed" instead of re-checking) and P2 failed (the agent left the app before the paid step).
-**Run 1** (spark, notes on): S4 and C2 pass.
+**3b, the benchmark** (17 of 20 graded in both runs; C1, C3, C4 wait for two free phones):
+
+| | Run 2: spark, notes off | Run 1: spark, notes on (2b's 13 notes) |
+| --- | --- | --- |
+| graded | 15/17 | 15/17 |
+| failed | M4 (memory's old gate), P2 (agent left the app) | M4 (same), P2 (chat's router said "no routine for that") |
+
+Same score, same costs within a cent per task. M4 is fixed in main already (Session B's 85a5d32: chat checks the app when
+a fact is past its freshness); it gets re-run after the merge.
+
+**Found: a template-like first `back`** (`eval/results/app-notes/2026-10-28/first-step-back/`). In 6 of 35 SkyLark agent
+runs, Spark's first step returned `back` with a reason like "Placeholder to comply with schema while intending to open My
+Trips", leaving the app (it caused run 2's P2 failure). Replayed 110 times ($0.13): 10–40% of the time on the same prompt,
+with or without notes; an extra instruction or medium effort doesn't fix it; putting `action` before `reason` in the schema
+makes it 10/10; re-asking once when the `back` contradicts its reason fixes 10/10. That re-ask is the proposed next fix.
+
+**Merge rehearsed:** main (with Session B and app-routing) merged into a throwaway branch: one import-line conflict
+(`models/adapter.py`), and one real bug found and fixed on this branch (80acbd7: the runner read `trace_dir` from results that
+main's new phone tests fake without one). After that: 304/304 backend tests, `npm run build` passes.
 
 ## Still to run (booked with the coordinator)
 
 | When | Device | What |
 | --- | --- | --- |
-| ~00:05 | envoy-test (25 min) | 2b on SkyLark: 6 tasks cold, 6 warm-up, the 6 again warm |
-| ~01:20 | envoy-test (20 min) | run 1's SkyLark and memory tasks, starting with 2b's SkyLark notes too |
-| after Phase 7's real-app pass | both phones (20 min) | C1, C3, C4 for run 1 and for run 2 |
+| ~02:30 | both phones (20 min) | C1, C3, C4 for run 1 and for run 2; then M4 again on the merged code |
 
 Then: merge main, full suite and `npm run build`, hand the branch to the coordinator, final report.
 
-Spend so far: **$5.34 of $30** ($4.76 comparison, $0.58 here).
+Spend so far: **$5.87 of $30** ($4.76 comparison, $1.11 here: benchmark, 2b $0.34, probes $0.13).
 
 ```bash
-# 2b on SkyLark (envoy-test claimed through devices.sh):
-ENVOY_MODEL_PROFILE=spark META_DAILY_COST_CAP_USD=6 nice -n 10 uv run --project backend python eval/run_app_notes.py --phase skylark --date 2026-10-28
-# run 1, the envoy-test tasks:
-ENVOY_MODEL_PROFILE=spark nice -n 10 uv run --project backend python eval/run_personal.py --label run1 --data $TMPDIR/envoy-personal-run1 --resume --date 2026-10-28 --profile spark --notes on --notes-from $TMPDIR/notes-skylark.db --budget 12
-# C1, C3, C4 with both phones, for each run:
-... --label run1 --data $TMPDIR/envoy-personal-run1 --resume --date 2026-10-28 --tasks C1,C3,C4 --profile spark --notes on
-... --label run2-spark-notesoff --data $TMPDIR/envoy-personal-run2 --resume --date 2026-10-28 --tasks C1,C3,C4 --profile spark --notes off
+# C1, C3, C4 with both phones (envoy-test and envoy-real claimed through devices.sh), for each run:
+ENVOY_MODEL_PROFILE=spark nice -n 10 uv run --project backend python eval/run_personal.py --label run1 --data $TMPDIR/envoy-personal-run1 --resume --date 2026-10-28 --tasks C1,C3,C4 --profile spark --notes on --budget 12
+ENVOY_MODEL_PROFILE=spark nice -n 10 uv run --project backend python eval/run_personal.py --label run2-spark-notesoff --data $TMPDIR/envoy-personal-run2 --resume --date 2026-10-28 --tasks C1,C3,C4 --profile spark --notes off --budget 12
 ```
