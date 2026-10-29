@@ -421,3 +421,18 @@ def test_an_offer_already_accepted_is_left_as_it_is(env):
         other = call(c, "send_to_phone", file="clip.mp4", device="envoy-real")  # another phone gets its own copy
     assert other["status"] == "sent" and [s for s, _ in pushes(env.adb)] == ["emulator-5554", "emulator-5556"]
     assert env.ctx.offers.get(item["offer_id"])["status"] == "accepted"
+
+
+def test_asking_for_the_real_phone_replaces_the_watchers_emulator_offer(env):
+    """The watcher asked "Put clip.mp4 on the Test phone (an emulator)?"; then Muse asks for it on the Pixel. The emulator
+    offer is withdrawn and the user is asked about the Pixel instead; nothing moves before their yes."""
+    item = watched_offer(env)
+    first = item["offer_id"]
+    with TestClient(env.ctx.asgi) as c:
+        out = call(c, "send_to_phone", file="clip.mp4", device="phone")
+        again = call(c, "send_to_phone", file="clip.mp4", device="phone")
+    old, new = env.ctx.offers.get(first), env.ctx.offers.get(out["offer_id"])
+    assert (old["status"], old["note"]) == ("withdrawn", "Muse asked for it on your Pixel 5")
+    assert new["status"] == "pending" and new["title"] == "Put clip.mp4 on your Pixel 5?" and new["action"]["device"] == "phone-0A1B"
+    assert again["offer_id"] == out["offer_id"]  # asking twice asks once
+    assert pushes(env.adb) == []

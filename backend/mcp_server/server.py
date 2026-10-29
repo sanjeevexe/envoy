@@ -328,7 +328,12 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> MCPServer:
         except HandoffError as e:
             return {"error": str(e)}
         if did.startswith("phone-"):  # the real phone: only the user's yes in Envoy sends it
-            offer = {"id": item["offer_id"]} if item["offer_id"] else h.offer(item["id"], "mcp")  # one offer per file
+            pending = ctx.offers.get(item["offer_id"]) if item["offer_id"] and getattr(ctx, "offers", None) is not None else None
+            if pending and pending["status"] == "pending" and (pending["action"] or {}).get("device") != did:
+                # The watcher had asked about another phone (an emulator): ask again about this one.
+                offer = h.reoffer(item, f"{CLIENT} asked for it on your {item['device_name']}")
+            else:
+                offer = {"id": item["offer_id"]} if item["offer_id"] else h.offer(item["id"], "mcp")  # one offer per file
             return {"handoff_id": item["id"], "status": "waiting_for_user", "device": did, "device_name": item["device_name"],
                     "text": f"Waiting for the user's OK in Envoy before {item['name']} goes to their {item['device_name']}.",
                     **({"offer_id": offer["id"], "url": f"{base}/?offer={offer['id']}"} if offer and offer.get("id")
