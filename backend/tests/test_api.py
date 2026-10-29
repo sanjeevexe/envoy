@@ -142,8 +142,9 @@ def test_takeover_pauses_the_agent_until_hand_back():
     assert asyncio.run(scenario()) == ["takeover", "takeover_requested", "hand_back"]
 
 
-def test_scheduler_time_and_flight_triggers_move_with_the_fact():
+def test_scheduler_time_and_flight_triggers_move_with_the_fact(monkeypatch):
     now = [datetime(2026, 10, 28, 9, 0).timestamp()]
+    monkeypatch.setattr(time, "time", lambda: now[0])  # the store stamps a trigger's created_at by the wall clock
     store, mem = TaskStore(":memory:"), MemoryStore(":memory:", clock=lambda: now[0])
     started: list[tuple] = []
     sched = Scheduler(store, mem, lambda goal, src, **kw: started.append((goal, src, kw)) or {"id": f"t{len(started)}"},
