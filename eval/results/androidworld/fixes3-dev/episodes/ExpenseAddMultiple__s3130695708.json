@@ -1,0 +1,81 @@
+{
+ "task": "ExpenseAddMultiple",
+ "seed": 3130695708,
+ "goal": "Add the following expenses into the pro expense:\nExpense: Social Club Dues\n amount_dollars: $67.41\n category_name: Social\n note: Monthly recurring\n\nExpense: Legal Fees\n amount_dollars: $10.14\n category_name: Others\n note: Monthly recurring\n\nExpense: Stationery\n amount_dollars: $118.93\n category_name: Others\n note: Remember to transfer funds\n",
+ "score": 0.0,
+ "aw_run_time_s": 303.0,
+ "aw_episode_length": 60,
+ "agent": "envoy",
+ "finished": "2026-10-28 09:11:11.589307",
+ "envoy": {
+  "run_id": "aw-fixes3-dev-1028-090610-b9f2",
+  "goal": "Add the following expenses into the pro expense:\nExpense: Social Club Dues\n amount_dollars: $67.41\n category_name: Social\n note: Monthly recurring\n\nExpense: Legal Fees\n amount_dollars: $10.14\n category_name: Others\n note: Monthly recurring\n\nExpense: Stationery\n amount_dollars: $118.93\n category_name: Others\n note: Remember to transfer funds\n",
+  "max_steps": 60,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 60 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 60,
+  "iterations": 60,
+  "looks": 0,
+  "screenshots_sent": 19,
+  "replans": 2,
+  "stuck_recoveries": 4,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 8,
+   "type": 12,
+   "scroll": 18,
+   "swipe": 16,
+   "back": 4
+  },
+  "model_calls": 62,
+  "input_tokens": 203106,
+  "cached_tokens": 143853,
+  "output_tokens": 15420,
+  "reasoning_tokens": 9516,
+  "cost_usd": 0.009297,
+  "cost_at_standard_usd": 0.161179,
+  "duration_s": 293.33,
+  "model_s": 194.71,
+  "device_s": 98.62,
+  "connect_s": 0.92,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Pro Expense",
+   "subgoals": [
+    "Select Others category for Legal Fees and tap SAVE",
+    "Add Social Club Dues $67.41 with Social category and Monthly recurring note",
+    "Add Stationery $118.93 with Others category and Remember to transfer funds note",
+    "Open expense list to verify all three expenses are present"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Stationery",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-fixes3-dev-1028-090610-b9f2",
+  "envoy_commit": "70ed7a8470867f86dd6a548d0fdce2fa4977073e",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes3-dev/traces/ExpenseAddMultiple__s3130695708.jsonl.gz",
+  "wall_s": 297.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.8
+  }
+ }
+}

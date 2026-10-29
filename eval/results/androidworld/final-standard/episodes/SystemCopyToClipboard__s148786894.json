@@ -1,0 +1,81 @@
+{
+ "task": "SystemCopyToClipboard",
+ "seed": 148786894,
+ "goal": "Copy the following text to the clipboard: Tracking #: 5K672F4C",
+ "score": 0.0,
+ "aw_run_time_s": 59.2,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:25:27.214159",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-172431-c457",
+  "goal": "Copy the following text to the clipboard: Tracking #: 5K672F4C",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 10,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 4,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 7,
+   "tap": 1,
+   "type": 1,
+   "long_press": 1
+  },
+  "model_calls": 12,
+  "input_tokens": 32951,
+  "cached_tokens": 24268,
+  "output_tokens": 5371,
+  "reasoning_tokens": 4313,
+  "cost_usd": 0.037321,
+  "cost_at_standard_usd": 0.037321,
+  "duration_s": 50.75,
+  "model_s": 34.4,
+  "device_s": 16.35,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Clipper",
+   "subgoals": [
+    "Open Clipper menu or other tabs beyond Main",
+    "Find clipboard edit or new clip entry",
+    "Enter text Tracking #: 5K672F4C",
+    "Save it to set system clipboard"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "5K672F4C",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-final-standard-1028-172431-c457",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/SystemCopyToClipboard__s148786894.jsonl.gz",
+  "wall_s": 53.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

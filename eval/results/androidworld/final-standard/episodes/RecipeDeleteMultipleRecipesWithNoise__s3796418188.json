@@ -1,0 +1,145 @@
+{
+ "task": "RecipeDeleteMultipleRecipesWithNoise",
+ "seed": 3796418188,
+ "goal": "Delete the following recipes from Broccoli app: Chicken Alfredo Pasta, Tomato Basil Bruschetta, Grilled Cheese with Tomato and Basil.",
+ "score": 1.0,
+ "aw_run_time_s": 84.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 16:45:32.867753",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-164411-35b6",
+  "goal": "Delete the following recipes from Broccoli app: Chicken Alfredo Pasta, Tomato Basil Bruschetta, Grilled Cheese with Tomato and Basil.",
+  "max_steps": 34,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Deleted Chicken Alfredo Pasta, Tomato Basil Bruschetta, and Grilled Cheese with Tomato and Basil from Broccoli app. Verified each search returns 'No recipes found.'",
+  "done": true,
+  "answer": "Deleted Chicken Alfredo Pasta, Tomato Basil Bruschetta, and Grilled Cheese with Tomato and Basil from Broccoli app. Verified each search returns 'No recipes found.'",
+  "steps_device": 25,
+  "iterations": 26,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 17,
+   "type": 6,
+   "long_press": 1,
+   "done": 1
+  },
+  "model_calls": 28,
+  "input_tokens": 76617,
+  "cached_tokens": 60508,
+  "output_tokens": 4411,
+  "reasoning_tokens": 2008,
+  "cost_usd": 0.047959,
+  "cost_at_standard_usd": 0.047959,
+  "duration_s": 76.62,
+  "model_s": 31.89,
+  "device_s": 44.73,
+  "connect_s": 0.87,
+  "approvals": [
+   {
+    "step": 6,
+    "description": "tap \"Delete\" in PopupWindow:abd7c71",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 7,
+    "description": "tap \"DELETE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'DELETE'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 12,
+    "description": "tap \"Delete\" in PopupWindow:fbf36a9",
+    "reasons": [
+     "rule: target says 'Delete'"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 13,
+    "description": "tap \"DELETE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'DELETE'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 18,
+    "description": "tap \"Delete\" in PopupWindow:5023c7",
+    "reasons": [
+     "rule: target says 'Delete'"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 19,
+    "description": "tap \"DELETE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'DELETE'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Search for Chicken Alfredo Pasta and open its details",
+    "Delete Chicken Alfredo Pasta and confirm deletion",
+    "Search for Tomato Basil Bruschetta and open and delete it",
+    "Search for Grilled Cheese with Tomato and Basil and open and delete it"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "whether Chicken Alfredo Pasta, Tomato Basil Bruschetta, and Grilled Cheese with Tomato and Basil are absent from Recipes list",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Tomato, Basil, Grilled, Cheese"
+  },
+  "trace_dir": "data/runs/aw-final-standard-1028-164411-35b6",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/RecipeDeleteMultipleRecipesWithNoise__s3796418188.jsonl.gz",
+  "wall_s": 79.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}

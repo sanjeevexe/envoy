@@ -1,0 +1,33 @@
+[abl0] cost $1.313; errors 0
+== contacts s1, clean plan (5fa03bf run) (live input 2748 tokens)
+   cur                    {'answers': 23, 'opens filters': 7}  tokens [2748]
+   notes_off              {'answers': 30}  tokens [2725]
+   no742                  {'answers': 27, 'opens filters': 3}  tokens [2655]
+   no_done                {'answers': 28, 'opens filters': 2}  tokens [2639]
+   no_today               {'answers': 30}  tokens [2703]
+   no_look                {'answers': 29, 'opens filters': 1}  tokens [2719]
+   no742+no_done          {'answers': 28, 'opens filters': 2}  tokens [2546]
+== contacts s1, full-list plan (736a6e4 run) (live input 2747 tokens)
+   cur                    {'opens filters': 15, 'answers': 15}  tokens [2747]
+   notes_off              {'answers': 29, 'opens filters': 1}  tokens [2724]
+   no742                  {'opens filters': 18, 'answers': 12}  tokens [2654]
+   no_done                {'answers': 28, 'opens filters': 2}  tokens [2638]
+   no_today               {'answers': 22, 'opens filters': 8}  tokens [2702]
+   no_look                {'answers': 16, 'opens filters': 14}  tokens [2718]
+   no742+no_done          {'answers': 22, 'opens filters': 8}  tokens [2545]
+== contacts s1, main's plan (main run) (live input 2119 tokens)
+   cur                    {'answers': 29, 'opens filters': 1}  tokens [2746]
+   notes_off              {'answers': 30}  tokens [2723]
+   no742                  {'answers': 30}  tokens [2653]
+   no_done                {'answers': 30}  tokens [2637]
+   no_today               {'answers': 29, 'opens filters': 1}  tokens [2701]
+   no_look                {'answers': 30}  tokens [2717]
+   no742+no_done          {'answers': 30}  tokens [2544]
+== doordash s5, Addresses (5fa03bf run) (live input 2969 tokens)
+   cur                    {'taps Addresses': 30}  tokens [2986]
+   notes_off              {'taps Addresses': 30}  tokens [2963]
+   no742                  {'taps Addresses': 30}  tokens [2893]
+   no_done                {'taps Addresses': 30}  tokens [2877]
+   no_today               {'taps Addresses': 30}  tokens [2941]
+   no_look                {'taps Addresses': 30}  tokens [2957]
+   no742+no_done          {'taps Addresses': 30}  tokens [2784]

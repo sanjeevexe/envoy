@@ -1,0 +1,80 @@
+{
+ "task": "TurnOnWifiAndOpenApp",
+ "seed": 1310213687,
+ "goal": "Turn on Wifi, then open the settings app",
+ "score": 1.0,
+ "aw_run_time_s": 38.4,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 03:15:47.782703",
+ "envoy": {
+  "run_id": "aw-baseline-1028-031511-6c28",
+  "goal": "Turn on Wifi, then open the settings app",
+  "max_steps": 20,
+  "config": {},
+  "status": "done",
+  "result": "Wi-Fi turned on and Settings app is open on main screen",
+  "done": true,
+  "answer": "Wi-Fi turned on and Settings app is open on main screen",
+  "steps_device": 5,
+  "iterations": 6,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "tap": 4,
+   "launch": 1,
+   "done": 1
+  },
+  "model_calls": 7,
+  "input_tokens": 14873,
+  "cached_tokens": 11927,
+  "output_tokens": 1980,
+  "reasoning_tokens": 1562,
+  "cost_usd": 0.000714,
+  "cost_at_standard_usd": 0.013887,
+  "duration_s": 31.29,
+  "model_s": 21.57,
+  "device_s": 9.72,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.android.settings",
+   "subgoals": [
+    "Open the Settings app",
+    "Turn on Wi-Fi",
+    "Return to Settings main screen"
+   ],
+   "success_check": {
+    "kind": "app_foreground",
+    "value": "com.android.settings",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "foreground app is com.android.settings"
+  },
+  "trace_dir": "data/runs/aw-baseline-1028-031511-6c28",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/TurnOnWifiAndOpenApp__s1310213687.jsonl.gz",
+  "wall_s": 33.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

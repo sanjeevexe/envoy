@@ -1,0 +1,81 @@
+{
+ "task": "BrowserMultiply",
+ "seed": 1325351943,
+ "goal": "Open the file task.html in Downloads in the file manager; when prompted open it with Chrome. Then click the button 5 times, remember the numbers displayed, and enter their product in the form.",
+ "score": 0.0,
+ "aw_run_time_s": 78.7,
+ "aw_episode_length": 22,
+ "agent": "envoy",
+ "finished": "2026-10-28 10:37:06.940273",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-103550-8cb1",
+  "goal": "Open the file task.html in Downloads in the file manager; when prompted open it with Chrome. Then click the button 5 times, remember the numbers displayed, and enter their product in the form.",
+  "max_steps": 22,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 22 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 19,
+  "iterations": 22,
+  "looks": 3,
+  "screenshots_sent": 7,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 15,
+   "look": 3,
+   "scroll": 3
+  },
+  "model_calls": 23,
+  "input_tokens": 69619,
+  "cached_tokens": 51495,
+  "output_tokens": 8067,
+  "reasoning_tokens": 6069,
+  "cost_usd": 0.064664,
+  "cost_at_standard_usd": 0.064664,
+  "duration_s": 71.25,
+  "model_s": 46.74,
+  "device_s": 24.51,
+  "connect_s": 0.89,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Chrome",
+   "subgoals": [
+    "Open Files app and open Downloads folder",
+    "Open task.html file with Chrome",
+    "Click the button 5 times and remember numbers shown",
+    "Enter product of the 5 numbers in the form and submit"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "confirmation or result shown after entering product",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-final-standard-1028-103550-8cb1",
+  "envoy_commit": "35618ab3bb8cee2be85486b1f0ea9582a8b040a0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/BrowserMultiply__s1325351943.jsonl.gz",
+  "wall_s": 73.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

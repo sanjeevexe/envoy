@@ -1,0 +1,80 @@
+{
+ "task": "RecipeAddMultipleRecipesFromMarkor",
+ "seed": 4162951690,
+ "goal": "Add the recipes from recipes.txt in Markor to the Broccoli recipe app.",
+ "score": 0.0,
+ "aw_run_time_s": 337.7,
+ "aw_episode_length": 60,
+ "agent": "envoy",
+ "finished": "2026-10-28 01:33:19.889968",
+ "envoy": {
+  "run_id": "aw-baseline-1028-012745-34ba",
+  "goal": "Add the recipes from recipes.txt in Markor to the Broccoli recipe app.",
+  "max_steps": 60,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 60 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 47,
+  "iterations": 60,
+  "looks": 13,
+  "screenshots_sent": 12,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 9,
+   "launch": 10,
+   "tap": 14,
+   "look": 13,
+   "home": 11,
+   "swipe": 3
+  },
+  "model_calls": 63,
+  "input_tokens": 160978,
+  "cached_tokens": 112109,
+  "output_tokens": 16185,
+  "reasoning_tokens": 12294,
+  "cost_usd": 0.008348,
+  "cost_at_standard_usd": 0.146689,
+  "duration_s": 329.87,
+  "model_s": 195.76,
+  "device_s": 134.11,
+  "connect_s": 0.96,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.flauschcode.broccoli",
+   "subgoals": [
+    "Read and copy recipe text from recipes.txt in Markor",
+    "Open the Broccoli recipe app",
+    "Use Add or Import to create new recipe entry",
+    "Enter Thai Peanut Noodle Salad details and save"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Thai Peanut Noodle Salad",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-1028-012745-34ba",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/RecipeAddMultipleRecipesFromMarkor__s4162951690.jsonl.gz",
+  "wall_s": 332.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

@@ -1,0 +1,85 @@
+{
+ "task": "RetroSavePlaylist",
+ "seed": 1865481993,
+ "goal": "Create a playlist in Retro Music titled \"Blues Break 567\" with the following songs, in order: Chasing Shadows, Lost in the Echo, Twilight Calling. Then export the playlist to the Downloads directory on the device.",
+ "score": 0.0,
+ "aw_run_time_s": 134.8,
+ "aw_episode_length": 50,
+ "agent": "envoy",
+ "finished": "2026-10-29 14:35:38.144326",
+ "envoy": {
+  "run_id": "aw-held-out-fdce597-fix-1029-143328-0fd4",
+  "goal": "Create a playlist in Retro Music titled \"Blues Break 567\" with the following songs, in order: Chasing Shadows, Lost in the Echo, Twilight Calling. Then export the playlist to the Downloads directory on the device.",
+  "max_steps": 50,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 50 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 48,
+  "iterations": 50,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 38,
+   "look": 2,
+   "type": 1,
+   "back": 7,
+   "scroll": 1
+  },
+  "model_calls": 53,
+  "input_tokens": 160372,
+  "cached_tokens": 129125,
+  "output_tokens": 9179,
+  "reasoning_tokens": 5358,
+  "cost_usd": 0.097438,
+  "cost_at_standard_usd": 0.097438,
+  "duration_s": 120.77,
+  "model_s": 57.58,
+  "device_s": 63.19,
+  "connect_s": 0.87,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Retro Music",
+   "subgoals": [
+    "Go back from Blues Break 567 detail to main library and open Songs",
+    "Add Chasing Shadows, Lost in the Echo, Twilight Calling to Blues Break 567 in order",
+    "Open Blues Break 567 and verify order shows 3 songs",
+    "Use More options to export Blues Break 567 to Downloads directory",
+    "Confirm playlist shows 3 songs and export succeeded"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "confirmation that Blues Break 567 playlist with 3 songs was exported to Downloads",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-held-out-fdce597-fix-1029-143328-0fd4",
+  "envoy_commit": "736a6e4b11c23f4c8919997b559e4df0e4eb40e4",
+  "answer_format": true,
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/held-out-fdce597-fix/traces/RetroSavePlaylist__s1865481993.jsonl.gz",
+  "wall_s": 123.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.3
+  }
+ }
+}

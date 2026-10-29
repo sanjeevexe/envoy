@@ -1,0 +1,22 @@
+{
+ "name": "simple_calendar_get_next_event",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-28 17:49:08",
+   "parent": null,
+   "changes": [
+    "compiled from aw-final-standard-1028-170611-c7a7"
+   ],
+   "verification": {
+    "source": "final-standard",
+    "source_seed": 20352009
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.google.android.apps.nexuslauncher"
+}

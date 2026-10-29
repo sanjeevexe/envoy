@@ -1,0 +1,305 @@
+routine: pro_expense_delete_expenses
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Delete expenses from Pro Expense
+description: Deletes three specified expenses from Pro Expense by opening each expense from Expense Logs, confirming its deletion, and returning
+  to the Expense Logs list.
+patterns: [Delete these expenses from Pro Expense, Remove expenses from Pro Expense, Delete expense entries in Pro Expense, Clear these expenses
+    from my expense logs]
+outputs: [expense_logs_status]
+start: fresh_launch
+inputs:
+  first_expense_to_delete: {type: text, description: The first expense deleted in the run., example: Taxi Fare}
+  second_expense_to_delete: {type: text, description: The second expense deleted in the run., example: Ride-Sharing}
+  third_expense_to_delete: {type: text, description: The third expense deleted in the run., example: Flight Tickets}
+steps:
+- id: launch_pro_expense
+  intent: Launch Pro Expense
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.arduia.expense}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: rv_home, kind: List}
+  - element_present: {resource_id: fb_main_add, kind: Button}
+  risk: read
+  note: trace step 1
+- id: tap_more
+  intent: Tap MORE to open the full Expense Logs list
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: btn_more_logs
+      text: MORE
+      kind: Button
+      cls: Button
+      siblings: [Recent]
+      in_list: true
+      position: [0.5, 0.96]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: tv_name
+      text: "{{first_expense_to_delete}}"
+      kind: Text
+  - element_present: {resource_id: tv_undo, text: Delete, kind: Text}
+  risk: reversible
+  note: trace step 2
+- id: tap_delete_icon_for_first_expense
+  intent: "Tap the delete icon for {{first_expense_to_delete}}"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: imv_delete_icon
+      text_has: "{{first_expense_to_delete}}"
+      kind: Button
+      cls: ImageView
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: tv_name_value
+      text: "{{first_expense_to_delete}}"
+      kind: Text
+  - element_present: {resource_id: tv_expense_detail, text: Expense Detail, kind: Text}
+  risk: irreversible
+  note: trace step 3
+- id: tap_delete_for_first_expense
+  intent: "Tap the delete button on the detail screen for {{first_expense_to_delete}}"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: btn_delete
+      text: ''
+      kind: Button
+      cls: ImageView
+      siblings: [Taxi Fare, Amount]
+      in_list: false
+      position: [0.899, 0.692]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: tv_delete_item, text: Delete Items, kind: Text}
+  - element_present: {resource_id: imv_drop_close, kind: Button}
+  risk: irreversible
+  note: trace step 4
+- id: confirm_deletion_of_first_expense
+  intent: "Tap CONFIRM to delete {{first_expense_to_delete}}"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: btn_confirm
+      text: CONFIRM
+      kind: Button
+      cls: Button
+      siblings: [Delete Items]
+      in_list: false
+      position: [0.5, 0.926]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: tv_name
+      text: "{{second_expense_to_delete}}"
+      kind: Text
+  - element_present: {resource_id: tv_undo, text: Delete, kind: Text}
+  risk: irreversible
+  note: trace step 6
+- id: tap_delete_for_second_expense
+  intent: "Tap Delete for {{second_expense_to_delete}}"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: tv_undo
+      text: Delete
+      text_has: "{{second_expense_to_delete}}"
+      kind: Text
+      cls: TextView
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: tv_name_value
+      text: "{{second_expense_to_delete}}"
+      kind: Text
+  - element_present: {resource_id: tv_expense_detail, text: Expense Detail, kind: Text}
+  risk: irreversible
+  note: trace step 7
+- id: tap_delete_button_for_second_expense
+  intent: "Tap the delete button on the detail screen for {{second_expense_to_delete}}"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: btn_delete
+      text: ''
+      kind: Button
+      cls: ImageView
+      siblings: [Ride-Sharing, Amount]
+      in_list: false
+      position: [0.899, 0.692]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: tv_delete_item, text: Delete Items, kind: Text}
+  - element_present: {resource_id: imv_drop_close, kind: Button}
+  risk: irreversible
+  note: trace step 8
+- id: confirm_deletion_of_second_expense
+  intent: "Tap CONFIRM to delete {{second_expense_to_delete}}"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: btn_confirm
+      text: CONFIRM
+      kind: Button
+      cls: Button
+      siblings: [Delete Items]
+      in_list: false
+      position: [0.5, 0.926]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: tv_name
+      text: "{{third_expense_to_delete}}"
+      kind: Text
+  - element_present: {resource_id: tv_undo, text: Delete, kind: Text}
+  risk: irreversible
+  note: trace step 9
+- id: open_third_expense
+  intent: "Tap {{third_expense_to_delete}} to open its detail screen"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: tv_name
+      text_has: "{{third_expense_to_delete}}"
+      kind: Text
+      cls: TextView
+      parent: cd_expense
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: tv_name_value
+      text: "{{third_expense_to_delete}}"
+      kind: Text
+  - element_present: {resource_id: tv_expense_detail, text: Expense Detail, kind: Text}
+  risk: reversible
+  note: trace step 11
+- id: tap_delete_for_third_expense
+  intent: "Tap the delete button on the detail screen for {{third_expense_to_delete}}"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: btn_delete
+      text: ''
+      kind: Button
+      cls: ImageView
+      siblings: [Flight Tickets, Amount]
+      in_list: false
+      position: [0.899, 0.692]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: tv_delete_item, text: Delete Items, kind: Text}
+  - element_present: {resource_id: imv_drop_close, kind: Button}
+  risk: irreversible
+  note: trace step 12
+- id: close_delete_items_dialog
+  intent: Tap the close button to close the Delete Items dialog and return to Expense Logs
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: imv_drop_close
+      text: ''
+      kind: Button
+      cls: ImageView
+      siblings: [Delete Items, CONFIRM]
+      in_list: false
+      position: [0.919, 0.765]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: tv_name
+      text: "{{third_expense_to_delete}}"
+      kind: Text
+  - element_present: {resource_id: tv_undo, text: Delete, kind: Text}
+  risk: irreversible
+  note: trace step 13
+- id: tap_delete_again_for_third_expense
+  intent: "Tap Delete for {{third_expense_to_delete}}"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: tv_undo
+      text: Delete
+      text_has: "{{third_expense_to_delete}}"
+      kind: Text
+      cls: TextView
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: tv_name_value
+      text: "{{third_expense_to_delete}}"
+      kind: Text
+  - element_present: {resource_id: tv_expense_detail, text: Expense Detail, kind: Text}
+  risk: irreversible
+  note: trace step 14
+- id: tap_delete_button_again_for_third_expens
+  intent: "Tap the delete button on the detail screen for {{third_expense_to_delete}}"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: btn_delete
+      text: ''
+      kind: Button
+      cls: ImageView
+      siblings: [Flight Tickets, Amount]
+      in_list: false
+      position: [0.899, 0.692]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: tv_delete_item, text: Delete Items, kind: Text}
+  - element_present: {resource_id: imv_drop_close, kind: Button}
+  risk: irreversible
+  note: trace step 15
+- id: confirm_deletion_of_third_expense
+  intent: "Tap CONFIRM to delete {{third_expense_to_delete}}"
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: btn_confirm
+      text: CONFIRM
+      kind: Button
+      cls: Button
+      siblings: [Delete Items]
+      in_list: false
+      position: [0.5, 0.926]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: layout_no_data, kind: Text}
+  - element_present: {resource_id: filter, text: Filter, kind: Button}
+  risk: irreversible
+  extract:
+    expense_logs_status:
+      locator: {resource_id: layout_no_data, kind: Text}
+  note: trace step 16
+compiled_from:
+  task_id: aw-final-standard-1028-112300-347c
+  goal: "Delete the following expenses from pro expense: Ride-Sharing, Flight Tickets, Taxi Fare."
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:41:50"
+  trace_steps_kept: [1, 2, 3, 4, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16]
+  trace_steps_dropped: 2
+  cost_usd: 0.0804

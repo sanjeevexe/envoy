@@ -1,0 +1,97 @@
+{
+ "task": "SimpleCalendarLocationOfEvent",
+ "seed": 4034703500,
+ "goal": "What is the location of my Family reunion event in Simple Calendar Pro? Answer with the location only.",
+ "score": 1.0,
+ "aw_run_time_s": 13.1,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 18:31:18.452017",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-183107-29a5",
+  "goal": "What is the location of my Family reunion event in Simple Calendar Pro? Answer with the location only.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "simple_calendar_pro_get_event_location",
+   "stage": "model confirmed",
+   "inputs": {
+    "event_title": "Family reunion"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "simple_calendar_pro_get_event_location",
+     0.822
+    ],
+    [
+     "simple_calendar_create_event",
+     0.658
+    ],
+    [
+     "simple_calendar_pro_create_event",
+     0.658
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "simple_calendar_pro_get_event_location",
+  "version": 1,
+  "done": true,
+  "answer": "100 Main St Chicago",
+  "outputs": {
+   "location": "100 Main St Chicago"
+  },
+  "steps_used": 3,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_simple_calendar_pro",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "search_event",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_event",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.002785,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 6.33,
+  "routine_duration_s": 3.15,
+  "trace_dir": "data/runs/aw-routines-verify-1028-183107-29a5",
+  "wall_s": 9.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

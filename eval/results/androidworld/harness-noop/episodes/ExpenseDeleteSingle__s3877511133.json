@@ -1,0 +1,11 @@
+{
+ "task": "ExpenseDeleteSingle",
+ "seed": 3877511133,
+ "goal": "Delete the following expenses from pro expense: Rental Income.",
+ "score": 0.0,
+ "aw_run_time_s": 2.6,
+ "aw_episode_length": 1,
+ "agent": "noop",
+ "finished": "2026-10-27 21:56:24.250334",
+ "envoy": {}
+}

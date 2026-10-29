@@ -1,0 +1,81 @@
+{
+ "task": "ExpenseAddMultipleFromMarkor",
+ "seed": 3053860270,
+ "goal": "Go through the transactions in my_expenses.txt in Markor. Log the reimbursable transactions in the pro expense.",
+ "score": 0.0,
+ "aw_run_time_s": 55.1,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 10:46:52.291148",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-104600-3644",
+  "goal": "Go through the transactions in my_expenses.txt in Markor. Log the reimbursable transactions in the pro expense.",
+  "max_steps": 60,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "failed",
+  "result": "stuck on the same screen after two recoveries",
+  "done": true,
+  "answer": null,
+  "steps_device": 12,
+  "iterations": 13,
+  "looks": 0,
+  "screenshots_sent": 5,
+  "replans": 1,
+  "stuck_recoveries": 3,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 3,
+   "scroll": 6,
+   "type": 1
+  },
+  "model_calls": 13,
+  "input_tokens": 47931,
+  "cached_tokens": 26557,
+  "output_tokens": 5833,
+  "reasoning_tokens": 4359,
+  "cost_usd": 0.055491,
+  "cost_at_standard_usd": 0.055491,
+  "duration_s": 47.02,
+  "model_s": 26.8,
+  "device_s": 20.23,
+  "connect_s": 0.87,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Pro Expense",
+   "subgoals": [
+    "Review my_expenses.txt in Markor to find all reimbursable transactions",
+    "Open the Pro Expense app",
+    "Add each reimbursable transaction from the file as an expense",
+    "Verify reimbursable expenses are logged"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "reimbursable transactions logged in Pro Expense",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-final-standard-1028-104600-3644",
+  "envoy_commit": "35618ab3bb8cee2be85486b1f0ea9582a8b040a0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/ExpenseAddMultipleFromMarkor__s3053860270.jsonl.gz",
+  "wall_s": 49.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

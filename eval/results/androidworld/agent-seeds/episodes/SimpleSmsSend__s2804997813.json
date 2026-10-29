@@ -1,0 +1,104 @@
+{
+ "task": "SimpleSmsSend",
+ "seed": 2804997813,
+ "goal": "Send a text message using Simple SMS Messenger to +11814770340 with message: Your dentist appointment is scheduled for 2 PM on Thursday.",
+ "score": 1.0,
+ "aw_run_time_s": 35.8,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 23:42:22.652574",
+ "envoy": {
+  "run_id": "aw-agent-seeds-1028-234154-86f4",
+  "goal": "Send a text message using Simple SMS Messenger to +11814770340 with message: Your dentist appointment is scheduled for 2 PM on Thursday.",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Sent text message using Simple SMS Messenger to +11814770340 with message: Your dentist appointment is scheduled for 2 PM on Thursday.",
+  "done": true,
+  "answer": "Sent text message using Simple SMS Messenger to +11814770340 with message: Your dentist appointment is scheduled for 2 PM on Thursday.",
+  "steps_device": 6,
+  "iterations": 7,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "tap": 4,
+   "type": 2,
+   "done": 1
+  },
+  "model_calls": 8,
+  "input_tokens": 20367,
+  "cached_tokens": 17416,
+  "output_tokens": 1171,
+  "reasoning_tokens": 586,
+  "cost_usd": 0.011278,
+  "cost_at_standard_usd": 0.011278,
+  "duration_s": 17.68,
+  "model_s": 8.41,
+  "device_s": 9.27,
+  "connect_s": 0.91,
+  "approvals": [
+   {
+    "step": 4,
+    "description": "tap \"\" in com.simplemobiletools.smsmessenger",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/new_conversation_confirm'"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 6,
+    "description": "tap \"SMS\" in com.simplemobiletools.smsmessenger",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/thread_send_message'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "SMS Messenger",
+   "subgoals": [
+    "Open SMS Messenger",
+    "Start a new conversation",
+    "Enter recipient +11814770340",
+    "Type message 'Your dentist appointment is scheduled for 2 PM on Thursday.' and send"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Your dentist appointment is scheduled for 2 PM on Thursday.",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Your dentist appointment is scheduled for 2 PM on Thursday.' is visible"
+  },
+  "trace_dir": "data/runs/aw-agent-seeds-1028-234154-86f4",
+  "envoy_commit": "cdd130ecae3cf0891ddc6106da4ad6d1be97fde0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/agent-seeds/traces/SimpleSmsSend__s2804997813.jsonl.gz",
+  "wall_s": 20.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}

@@ -1,0 +1,63 @@
+{
+ "task": "SimpleCalendarAddRepeatingEvent",
+ "seed": 3074931795,
+ "goal": "In Simple Calendar Pro, create a recurring calendar event titled 'Review session for Budget Planning' starting on 2023-10-15 at 14h. The event recurs weekly, forever, and lasts for 60 minutes each occurrence. The event description should be 'We will understand business objectives. Remember to confirm attendance.'.",
+ "score": 0.0,
+ "aw_run_time_s": 11.2,
+ "aw_episode_length": 34,
+ "agent": "envoy",
+ "finished": "2026-10-28 11:01:18.621873",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-110109-49e1",
+  "goal": "In Simple Calendar Pro, create a recurring calendar event titled 'Review session for Budget Planning' starting on 2023-10-15 at 14h. The event recurs weekly, forever, and lasts for 60 minutes each occurrence. The event description should be 'We will understand business objectives. Remember to confirm attendance.'.",
+  "max_steps": 34,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "error",
+  "result": "APIConnectionError: Connection error.",
+  "done": false,
+  "answer": null,
+  "steps_device": 0,
+  "iterations": 0,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {},
+  "model_calls": 0,
+  "input_tokens": 0,
+  "cached_tokens": 0,
+  "output_tokens": 0,
+  "reasoning_tokens": 0,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.0,
+  "duration_s": 4.31,
+  "model_s": 0.0,
+  "device_s": 4.31,
+  "connect_s": 0.92,
+  "approvals": [],
+  "popups": [],
+  "plan": null,
+  "check": null,
+  "trace_dir": "data/runs/aw-final-standard-1028-110109-49e1",
+  "envoy_commit": "35618ab3bb8cee2be85486b1f0ea9582a8b040a0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/SimpleCalendarAddRepeatingEvent__s3074931795.jsonl.gz",
+  "wall_s": 6.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

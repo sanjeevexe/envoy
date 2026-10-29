@@ -1,0 +1,55 @@
+{
+ "task": "OpenAppTaskEval",
+ "seed": 2349914223,
+ "goal": "Open the camera app. Clear any pop-ups that may appear by granting all permissions that are required.",
+ "score": 0.0,
+ "aw_run_time_s": 9.9,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 22:21:32.930945",
+ "envoy": {
+  "run_id": "aw-routines-seeds-1028-222125-29f0",
+  "goal": "Open the camera app. Clear any pop-ups that may appear by granting all permissions that are required.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "b82e5124ea28700f4c8812839c4a7c8aae5bc782",
+  "mode": "routine",
+  "match": {
+   "routine": null,
+   "stage": "model: no confident match (None)",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "contacts_open_app",
+     0.63
+    ],
+    [
+     "settings_turn_on_wifi_3",
+     0.25
+    ],
+    [
+     "broccoli_delete_recipes_by_ingredient",
+     0.15
+    ]
+   ]
+  },
+  "status": "no_routine",
+  "result": "model: no confident match (None)",
+  "done": false,
+  "answer": null,
+  "model_calls": 1,
+  "cost_usd": 0.002272,
+  "cost_at_standard_usd": 0.002272,
+  "duration_s": 2.4,
+  "wall_s": 5.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.9
+  }
+ }
+}

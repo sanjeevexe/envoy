@@ -1,0 +1,75 @@
+{
+ "task": "TurnOffWifiAndTurnOnBluetooth",
+ "seed": 717787153,
+ "goal": "Turn off WiFi, then enable bluetooth",
+ "score": 0.5,
+ "aw_run_time_s": 81.1,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 03:15:08.576148",
+ "envoy": {
+  "run_id": "aw-baseline-1028-031348-5158",
+  "goal": "Turn off WiFi, then enable bluetooth",
+  "max_steps": 20,
+  "config": {},
+  "status": "failed",
+  "result": "stuck on the same screen after two recoveries",
+  "done": true,
+  "answer": null,
+  "steps_device": 18,
+  "iterations": 19,
+  "looks": 0,
+  "screenshots_sent": 5,
+  "replans": 0,
+  "stuck_recoveries": 3,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 11,
+   "tap": 6
+  },
+  "model_calls": 18,
+  "input_tokens": 44496,
+  "cached_tokens": 32882,
+  "output_tokens": 2947,
+  "reasoning_tokens": 1992,
+  "cost_usd": 0.001817,
+  "cost_at_standard_usd": 0.031975,
+  "duration_s": 75.34,
+  "model_s": 44.45,
+  "device_s": 30.89,
+  "connect_s": 0.87,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.android.settings",
+   "subgoals": [
+    "Open Settings",
+    "Turn off Wi-Fi",
+    "Turn on Bluetooth"
+   ],
+   "success_check": {
+    "kind": "field_equals",
+    "value": "On",
+    "field_hint": "Bluetooth"
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-1028-031348-5158",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/TurnOffWifiAndTurnOnBluetooth__s717787153.jsonl.gz",
+  "wall_s": 77.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

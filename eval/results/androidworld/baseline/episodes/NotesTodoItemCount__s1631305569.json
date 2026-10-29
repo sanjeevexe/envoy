@@ -1,0 +1,76 @@
+{
+ "task": "NotesTodoItemCount",
+ "seed": 1631305569,
+ "goal": "How many to-dos do I have in the 'Ideas' folder in the Joplin app? Express your answer as just a single number.",
+ "score": 0.0,
+ "aw_run_time_s": 59.0,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 01:05:17.366515",
+ "envoy": {
+  "run_id": "aw-baseline-1028-010425-6e13",
+  "goal": "How many to-dos do I have in the 'Ideas' folder in the Joplin app? Express your answer as just a single number.",
+  "max_steps": 10,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 5,
+  "iterations": 10,
+  "looks": 5,
+  "screenshots_sent": 5,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "look": 5,
+   "back": 4,
+   "launch": 1
+  },
+  "model_calls": 12,
+  "input_tokens": 29371,
+  "cached_tokens": 20044,
+  "output_tokens": 2006,
+  "reasoning_tokens": 1276,
+  "cost_usd": 0.001374,
+  "cost_at_standard_usd": 0.023191,
+  "duration_s": 45.85,
+  "model_s": 25.87,
+  "device_s": 19.98,
+  "connect_s": 0.94,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "net.cozic.joplin",
+   "subgoals": [
+    "Open the Joplin app from the app drawer or search",
+    "Navigate to the notebooks list and open the 'Ideas' folder",
+    "Count the to-dos shown in the Ideas folder"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "number of to-dos in Ideas folder",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-1028-010425-6e13",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/NotesTodoItemCount__s1631305569.jsonl.gz",
+  "wall_s": 48.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.7
+  }
+ }
+}

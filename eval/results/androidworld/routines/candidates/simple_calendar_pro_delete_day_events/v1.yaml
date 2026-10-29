@@ -1,0 +1,163 @@
+routine: simple_calendar_pro_delete_day_events
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Delete all events scheduled for a day in Simple Calendar Pro
+description: Opens Simple Calendar Pro, opens the requested weekday, and deletes each event listed for that day, confirming each deletion until
+  the day is empty.
+patterns: [delete all events scheduled for that day, clear all my events for that day, remove every event on that weekday]
+start: fresh_launch
+steps:
+- id: open_simple_calendar_pro
+  intent: Launch Simple Calendar Pro
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.simplemobiletools.calendar.pro}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: top_toolbar_search_icon, kind: Button}
+  - element_present: {resource_id: top_toolbar_search, text: Search, kind: EditText}
+  risk: read
+  note: trace step 1
+- id: open_weekday
+  intent: "Tap {{weekday}} in the calendar to view its events"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      visual: date cell 16 in October calendar
+      crop: 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
+      region: [0.142, 0.578, 0.287, 0.7]
+      density: 420
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: go_to_today, text: Go to today, kind: Button}
+  risk: reversible
+  note: trace step 3
+- id: open_first_event
+  intent: "Tap the first event listed for {{weekday}} to open it"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: event_item_holder
+      kind: Button
+      cls: ViewGroup
+      parent: day_events
+      in_list: true
+      position: [0.5, 0.228]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: event_title
+      text: "Title: Review session for Budget Planning"
+      kind: EditText
+  - element_present: {resource_id: save, text: Save, kind: Button}
+  risk: reversible
+  note: trace step 4
+- id: delete_first_event
+  intent: Tap Delete to delete the open event
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: delete
+      text: Delete
+      kind: Button
+      cls: Button
+      siblings: [Save, Duplicate event, More options]
+      in_list: false
+      position: [0.726, 0.088]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: customPanel, text: 'Are you sure you want to proceed with the deletion?', kind: Text}
+  - element_present: {resource_id: custom, text: 'Are you sure you want to proceed with the deletion?', kind: Text}
+  risk: irreversible
+  note: trace step 5
+- id: confirm_first_deletion
+  intent: Tap Yes to confirm deletion of the event
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: button1
+      text: 'Yes'
+      kind: Button
+      cls: Button
+      siblings: ['No']
+      in_list: false
+      position: [0.78, 0.549]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: top_toolbar_search_icon, kind: Button}
+  - element_present: {resource_id: top_toolbar_search, text: Search, kind: EditText}
+  risk: irreversible
+  note: trace step 6
+- id: open_next_event
+  intent: "Tap the next remaining event listed for {{weekday}} to open it"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: event_item_holder
+      kind: Button
+      cls: ViewGroup
+      parent: day_events
+      in_list: true
+      position: [0.5, 0.228]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: event_title
+      text: "Title: Review session for Project X"
+      kind: EditText
+  - element_present: {resource_id: save, text: Save, kind: Button}
+  risk: reversible
+  note: trace step 7
+- id: delete_next_event
+  intent: Tap Delete to delete the open event
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: delete
+      text: Delete
+      kind: Button
+      cls: Button
+      siblings: [Save, Duplicate event, More options]
+      in_list: false
+      position: [0.726, 0.088]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: customPanel, text: 'Are you sure you want to proceed with the deletion?', kind: Text}
+  - element_present: {resource_id: custom, text: 'Are you sure you want to proceed with the deletion?', kind: Text}
+  risk: irreversible
+  note: trace step 8
+- id: confirm_next_deletion
+  intent: Tap Yes to confirm deletion of the event
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: button1
+      text: 'Yes'
+      kind: Button
+      cls: Button
+      siblings: ['No']
+      in_list: false
+      position: [0.78, 0.549]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: top_toolbar_search_icon, kind: Button}
+  - element_present: {resource_id: top_toolbar_search, text: Search, kind: EditText}
+  risk: irreversible
+  note: trace step 9
+compiled_from:
+  task_id: aw-final-standard-1028-170038-101a
+  goal: In Simple Calendar Pro, delete all events scheduled for this Monday.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:48:05"
+  trace_steps_kept: [1, 3, 4, 5, 6, 7, 8, 9]
+  trace_steps_dropped: 2
+  cost_usd: 0.0673

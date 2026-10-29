@@ -1,0 +1,89 @@
+{
+ "task": "SimpleCalendarEventOnDateAtTime",
+ "seed": 593396264,
+ "goal": "What is on my schedule for October 27 2023 at 8:00pm in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 0.0,
+ "aw_run_time_s": 11.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 18:04:21.306192",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-180412-e062",
+  "goal": "What is on my schedule for October 27 2023 at 8:00pm in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "simple_calendar_pro_get_event_titles",
+   "stage": "model confirmed",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "simple_calendar_pro_list_events_on_date",
+     0.584
+    ],
+    [
+     "simple_calendar_pro_get_event_titles",
+     0.544
+    ],
+    [
+     "simple_calendar_get_next_event",
+     0.522
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "simple_calendar_pro_get_event_titles",
+  "version": 1,
+  "done": true,
+  "answer": "Review session for Annual Report",
+  "outputs": {
+   "event_title": "Review session for Annual Report"
+  },
+  "steps_used": 2,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "open_simple_calendar_pro",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "navigate_to_schedule_date",
+    "status": "done",
+    "rung": 0,
+    "rungs": [
+     "found its picture (match 0.92, next 0.77)"
+    ],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.002512,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 4.5,
+  "routine_duration_s": 1.48,
+  "trace_dir": "data/runs/aw-routines-verify-1028-180412-e062",
+  "wall_s": 7.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

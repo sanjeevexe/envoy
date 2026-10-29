@@ -1,0 +1,85 @@
+{
+ "task": "OpenAppTaskEval",
+ "seed": 3755248659,
+ "goal": "Open the contacts app. Clear any pop-ups that may appear by granting all permissions that are required.",
+ "score": 1.0,
+ "aw_run_time_s": 12.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:58:08.343102",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-175757-cdd9",
+  "goal": "Open the contacts app. Clear any pop-ups that may appear by granting all permissions that are required.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "contacts_open_app",
+   "stage": "model confirmed",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "contacts_open_app",
+     0.775
+    ],
+    [
+     "simple_calendar_pro_delete_day_events",
+     0.41
+    ],
+    [
+     "simple_calendar_pro_delete_events_on_dat",
+     0.35
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "contacts_open_app",
+  "version": 1,
+  "done": true,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 2,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_contacts_app",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "dismiss_tooltip_overlay",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.003524,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 6.26,
+  "routine_duration_s": 2.51,
+  "trace_dir": "data/runs/aw-routines-verify-1028-175757-cdd9",
+  "wall_s": 9.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

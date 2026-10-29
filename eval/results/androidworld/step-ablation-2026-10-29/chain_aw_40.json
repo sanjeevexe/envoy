@@ -1,0 +1,912 @@
+[
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2748,
+  "cost": 0.0040653
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open Contacts app to the Contacts list",
+   "Read the contact count or empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2745,
+  "cost": 0.00368015
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "View the Contacts list",
+   "Read the number of contacts from the count or empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2746,
+  "cost": 0.0038769
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts shown on the contacts list"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2745,
+  "cost": 0.0054099000000000005
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "Read the number of contacts shown including empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2748,
+  "cost": 0.004553649999999999
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open Contacts list in Contacts app",
+   "Read number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2742,
+  "cost": 0.0038973999999999996
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2749,
+  "cost": 0.0046838999999999995
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2748,
+  "cost": 0.00361905
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open Contacts app to contacts list",
+   "Read displayed contact count or empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2744,
+  "cost": 0.0042016499999999995
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Show the Contacts list",
+   "Read the contact count or empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2742,
+  "cost": 0.00345115
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2748,
+  "cost": 0.0051023
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "Read the contacts list or empty state to determine count"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2749,
+  "cost": 0.0038764
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "View the Contacts list",
+   "Read the number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2748,
+  "cost": 0.00374765
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2748,
+  "cost": 0.0044563
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2748,
+  "cost": 0.0042523
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2741,
+  "cost": 0.0038026499999999994
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2748,
+  "cost": 0.00296455
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2748,
+  "cost": 0.00347455
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "View the Contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2749,
+  "cost": 0.0039529
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open Contacts app to the Contacts tab",
+   "Read the contact count or empty state shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2746,
+  "cost": 0.0036941499999999998
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "kind": "opens filters",
+  "plan_tokens": 1089,
+  "step_tokens": 2748,
+  "cost": 0.00346605
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2749,
+  "cost": 0.0042238
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app to the Contacts tab",
+   "Read the contacts list count or empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2747,
+  "cost": 0.00410765
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts from the contacts list"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2744,
+  "cost": 0.00529815
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2746,
+  "cost": 0.003923650000000001
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2748,
+  "cost": 0.0037253
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "Read the number of contacts shown including empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2748,
+  "cost": 0.0040228
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2748,
+  "cost": 0.00419705
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to read the count"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2743,
+  "cost": 0.004638150000000001
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "Show the Contacts list",
+   "Read how many contacts are shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2748,
+  "cost": 0.0044659
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "Read the contacts list to determine the count"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2743,
+  "cost": 0.00403465
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open Contacts to the Contacts list",
+   "Read the displayed number of contacts"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2743,
+  "cost": 0.0042089
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2748,
+  "cost": 0.0037380499999999997
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "View the main contacts list",
+   "Read the contact count or empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2750,
+  "cost": 0.0042389
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts shown on the main list"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2745,
+  "cost": 0.0040754
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open Contacts and show the contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2745,
+  "cost": 0.0038671499999999998
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "View the Contacts list in the Contacts app",
+   "Read the contacts count or empty state showing number of contacts"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2750,
+  "cost": 0.0039159
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "View the Contacts list",
+   "Read the number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2748,
+  "cost": 0.00393355
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to read the count"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2743,
+  "cost": 0.0033493
+ },
+ {
+  "variant": "5fa03bf",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "Read the contact count shown including empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2747,
+  "cost": 0.0043754
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "kind": "opens filters",
+  "plan_tokens": 1089,
+  "step_tokens": 2719,
+  "cost": 0.00388455
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to read the count or empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2717,
+  "cost": 0.0044314
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app to the Contacts tab",
+   "Read the contacts list count or empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2718,
+  "cost": 0.00409745
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app",
+   "View the Contacts list",
+   "Read the number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2719,
+  "cost": 0.0038644
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2719,
+  "cost": 0.0031535499999999998
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open Contacts to the contacts list",
+   "Read the displayed contact count or empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2716,
+  "cost": 0.0037846999999999998
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open Contacts to the Contacts tab",
+   "Read the number of contacts shown on screen"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2716,
+  "cost": 0.0046687
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app",
+   "View the Contacts tab list",
+   "Read the number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2720,
+  "cost": 0.0041589
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open Contacts to the main contacts list",
+   "Read how many contacts are shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2715,
+  "cost": 0.00414045
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app",
+   "Read the contact count shown on the Contacts screen"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2715,
+  "cost": 0.0038217
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open Contacts to the contacts list",
+   "Read the number of contacts shown, including empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2718,
+  "cost": 0.0042414
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open Contacts to the main contacts list",
+   "Read the contact count or empty state shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2717,
+  "cost": 0.0038449
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open Contacts app to the Contacts list",
+   "Read the number of contacts shown including empty state"
+  ],
+  "kind": "opens filters",
+  "plan_tokens": 1089,
+  "step_tokens": 2718,
+  "cost": 0.00445445
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2713,
+  "cost": 0.0035811999999999997
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "View the contacts list empty state or count",
+   "Read how many contacts are shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2727,
+  "cost": 0.00436315
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "Read the number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2716,
+  "cost": 0.00451995
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2719,
+  "cost": 0.0037952999999999997
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open Contacts and stay on the Contacts tab",
+   "Read the total from the contacts list or empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2720,
+  "cost": 0.0042062
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app",
+   "Read the total number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2713,
+  "cost": 0.00435415
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2720,
+  "cost": 0.0045414
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open Contacts app to the Contacts list",
+   "Read the displayed contacts count or empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2717,
+  "cost": 0.0033943999999999997
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts from the contacts list"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2715,
+  "cost": 0.0037191499999999996
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app",
+   "Read the contacts count or empty state shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2714,
+  "cost": 0.00361165
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts from the list or empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2724,
+  "cost": 0.00428715
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2719,
+  "cost": 0.0037570499999999996
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open Contacts app to Contacts tab",
+   "Read number of contacts shown including empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2716,
+  "cost": 0.00369545
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open Contacts to the main contacts list",
+   "Read the number of contacts shown including empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2718,
+  "cost": 0.00399065
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2719,
+  "cost": 0.0039823
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2720,
+  "cost": 0.004344799999999999
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open Contacts to the main contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "kind": "opens filters",
+  "plan_tokens": 1089,
+  "step_tokens": 2716,
+  "cost": 0.00473615
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts shown in the contacts list"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2716,
+  "cost": 0.0045024
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts list",
+   "Read the contact count or empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2713,
+  "cost": 0.0033766499999999997
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app",
+   "Read the contact count from the contacts list or empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2717,
+  "cost": 0.0034963999999999998
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app to the main contacts list",
+   "Read the number of contacts shown including empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2720,
+  "cost": 0.0046397
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open Contacts tab",
+   "Read displayed contacts count"
+  ],
+  "kind": "opens filters",
+  "plan_tokens": 1089,
+  "step_tokens": 2709,
+  "cost": 0.0039757
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app to the Contacts tab",
+   "Read the contact count or empty state shown"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2718,
+  "cost": 0.00399915
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts from the list empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2723,
+  "cost": 0.00344865
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts app to the Contacts tab",
+   "Read the contacts list empty state or count to determine number of contacts"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2723,
+  "cost": 0.00417115
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open Contacts list",
+   "Read total number of contacts shown"
+  ],
+  "kind": "opens filters",
+  "plan_tokens": 1089,
+  "step_tokens": 2711,
+  "cost": 0.0039016999999999997
+ },
+ {
+  "variant": "A",
+  "plan": [
+   "Open the Contacts list",
+   "Read the displayed contact count or empty state"
+  ],
+  "kind": "answers",
+  "plan_tokens": 1089,
+  "step_tokens": 2714,
+  "cost": 0.0035096499999999996
+ }
+]

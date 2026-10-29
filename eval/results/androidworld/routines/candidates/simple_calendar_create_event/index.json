@@ -1,0 +1,22 @@
+{
+ "name": "simple_calendar_create_event",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-28 17:46:06",
+   "parent": null,
+   "changes": [
+    "compiled from aw-final-standard-1028-165519-7323"
+   ],
+   "verification": {
+    "source": "final-standard",
+    "source_seed": 870939640
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.google.android.apps.nexuslauncher"
+}

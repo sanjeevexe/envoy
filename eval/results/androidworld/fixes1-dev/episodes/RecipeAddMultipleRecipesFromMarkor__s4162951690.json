@@ -1,0 +1,78 @@
+{
+ "task": "RecipeAddMultipleRecipesFromMarkor",
+ "seed": 4162951690,
+ "goal": "Add the recipes from recipes.txt in Markor to the Broccoli recipe app.",
+ "score": 0.0,
+ "aw_run_time_s": 243.4,
+ "aw_episode_length": 60,
+ "agent": "envoy",
+ "finished": "2026-10-28 06:29:56.340757",
+ "envoy": {
+  "run_id": "aw-fixes1-dev-1028-062556-be1c",
+  "goal": "Add the recipes from recipes.txt in Markor to the Broccoli recipe app.",
+  "max_steps": 60,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 60 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 59,
+  "iterations": 60,
+  "looks": 1,
+  "screenshots_sent": 0,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 39,
+   "tap": 20,
+   "look": 1
+  },
+  "model_calls": 63,
+  "input_tokens": 165973,
+  "cached_tokens": 124653,
+  "output_tokens": 12333,
+  "reasoning_tokens": 8051,
+  "cost_usd": 0.006848,
+  "cost_at_standard_usd": 0.122763,
+  "duration_s": 234.74,
+  "model_s": 155.49,
+  "device_s": 79.25,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Open recipes.txt in Markor to read recipe names and details",
+    "Open Broccoli app to main Recipes list",
+    "Use Broccoli menu, tabs or Add button to create/import the recipes from the file",
+    "Verify the new recipes from recipes.txt appear in Broccoli"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "recipe names shown in Broccoli matching recipes.txt",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-fixes1-dev-1028-062556-be1c",
+  "envoy_commit": "821d713df93e6bb5536df7e6f89b6684779d58da",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes1-dev/traces/RecipeAddMultipleRecipesFromMarkor__s4162951690.jsonl.gz",
+  "wall_s": 237.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.6
+  }
+ }
+}

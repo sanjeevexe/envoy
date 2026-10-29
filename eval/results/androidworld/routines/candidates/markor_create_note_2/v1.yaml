@@ -1,0 +1,159 @@
+routine: markor_create_note_2
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Create a new note in Markor
+description: Launches Markor, creates a new file with the requested name and extension, enters the requested text in the editor, and saves the
+  note.
+patterns: [create a new note in Markor, make a new note in Markor with some text, create a new Markor file with this text, add a note in Markor]
+start: fresh_launch
+inputs:
+  note_name: {type: text, description: 'Base name for the new note file, without its extension', example: 2023_01_26_wise_yacht}
+  note_extension: {type: text, description: 'File extension for the new note, including the leading dot', example: .md}
+  note_content: {type: text, description: Text content to enter into the new note, example: Ignorance is bliss.}
+steps:
+- id: launch_markor
+  intent: Launch the Markor app
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: net.gsantner.markor}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: nav_notebook, text: Files, kind: Text}
+  - element_present: {resource_id: navigation_bar_item_labels_group, text: Files, kind: Text}
+  risk: read
+  note: trace step 1
+- id: tap_create_new_file
+  intent: Tap the 'Create a new file or folder' button
+  pre:
+  - {app_foreground: net.gsantner.markor}
+  action:
+    tap:
+      resource_id: fab_add_new_item
+      text: Create a new file or folder
+      kind: Button
+      cls: ImageButton
+      parent: main_content
+      in_list: false
+      position: [0.893, 0.864]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: new_file_dialog__name, text: my_note, kind: EditText}
+  risk: reversible
+  note: trace step 2
+- id: enter_note_name
+  intent: "Type {{note_name}} into the file name field"
+  pre:
+  - {app_foreground: net.gsantner.markor}
+  action:
+    type:
+      field:
+        resource_id: new_file_dialog__name
+        text: my_note
+        hint: my_note
+        kind: EditText
+        cls: EditText
+        siblings: [.md]
+        in_list: false
+        position: [0.346, 0.365]
+      value: "{{note_name}}"
+  post:
+  - field_equals:
+      field: {resource_id: new_file_dialog__name, text: my_note, kind: EditText}
+      value: "{{note_name}}"
+  risk: reversible
+  note: trace step 3
+- id: enter_note_extension
+  intent: "Type {{note_extension}} into the file extension field"
+  pre:
+  - {app_foreground: net.gsantner.markor}
+  action:
+    type:
+      field:
+        resource_id: new_file_dialog__ext
+        text_has: "{{note_extension}}"
+        hint: .md
+        kind: EditText
+        cls: EditText
+        in_list: false
+      value: "{{note_extension}}"
+  post:
+  - field_equals:
+      field:
+        resource_id: new_file_dialog__ext
+        text: "{{note_extension}}"
+        kind: EditText
+      value: "{{note_extension}}"
+  risk: reversible
+  note: trace step 4
+- id: confirm_file_creation
+  intent: Tap the 'OK' button to create the file
+  pre:
+  - {app_foreground: net.gsantner.markor}
+  action:
+    tap:
+      resource_id: button1
+      text: OK
+      kind: Button
+      cls: Button
+      siblings: [FOLDER, CANCEL]
+      in_list: false
+      position: [0.854, 0.598]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: toolbar
+      text: "{{note_name}}"
+      kind: Button
+  - element_present: {resource_id: action_undo, text: Undo, kind: Button}
+  risk: reversible
+  note: trace step 5
+- id: enter_note_content
+  intent: "Type {{note_content}} into the editor"
+  pre:
+  - {app_foreground: net.gsantner.markor}
+  action:
+    type:
+      field:
+        resource_id: document__fragment__edit__highlighting_editor
+        text: ''
+        kind: EditText
+        cls: EditText
+        parent: document__fragment__edit__content_editor__scrolling_parent
+        in_list: false
+        position: [0.5, 0.483]
+      value: "{{note_content}}"
+  post:
+  - field_equals:
+      field: {resource_id: document__fragment__edit__highlighting_editor, kind: EditText}
+      value: "{{note_content}}"
+  risk: reversible
+  note: trace step 6
+- id: save_note
+  intent: Tap the 'Save' button to save the note
+  pre:
+  - {app_foreground: net.gsantner.markor}
+  action:
+    tap:
+      resource_id: action_save
+      text: Save
+      kind: Button
+      cls: TextView
+      siblings: [Undo, Redo, View mode]
+      in_list: false
+      position: [0.757, 0.084]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 7
+done:
+- {text_visible: Ignorance is bliss}
+compiled_from:
+  task_id: aw-final-standard-1028-113104-1c17
+  goal: "Create a new note in Markor named 2023_01_26_wise_yacht.md with the following text: Ignorance is bliss."
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:43:18"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6, 7]
+  trace_steps_dropped: 0
+  cost_usd: 0.0608

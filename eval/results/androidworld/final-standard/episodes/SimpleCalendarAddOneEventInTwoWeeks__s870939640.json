@@ -1,0 +1,97 @@
+{
+ "task": "SimpleCalendarAddOneEventInTwoWeeks",
+ "seed": 870939640,
+ "goal": "In Simple Calendar Pro, create a calendar event in two weeks from today at 17h with the title 'Meeting with the Team' and the description 'We will prepare for annual budget.'. The event should last for 30 mins.",
+ "score": 1.0,
+ "aw_run_time_s": 60.9,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 16:56:17.220122",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-165519-7323",
+  "goal": "In Simple Calendar Pro, create a calendar event in two weeks from today at 17h with the title 'Meeting with the Team' and the description 'We will prepare for annual budget.'. The event should last for 30 mins.",
+  "max_steps": 34,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Created event 'Meeting with the Team' on October 29, 2023 (Sunday) 17:00-17:30 with description 'We will prepare for annual budget.'",
+  "done": true,
+  "answer": "Created event 'Meeting with the Team' on October 29, 2023 (Sunday) 17:00-17:30 with description 'We will prepare for annual budget.'",
+  "steps_device": 18,
+  "iterations": 20,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 14,
+   "type": 2,
+   "look": 1,
+   "tap_point": 1,
+   "done": 1
+  },
+  "model_calls": 25,
+  "input_tokens": 62237,
+  "cached_tokens": 41330,
+  "output_tokens": 3448,
+  "reasoning_tokens": 1698,
+  "cost_usd": 0.060397,
+  "cost_at_standard_usd": 0.060397,
+  "duration_s": 52.4,
+  "model_s": 21.61,
+  "device_s": 30.79,
+  "connect_s": 0.89,
+  "approvals": [
+   {
+    "step": 16,
+    "description": "tap \"Save\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Open Simple Calendar Pro",
+    "Create a new event",
+    "Set title to 'Meeting with the Team', date to Oct 29 2023 at 17:00 for 30 mins, and description",
+    "Save the event"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Meeting with the Team",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Meeting with the Team' is visible"
+  },
+  "trace_dir": "data/runs/aw-final-standard-1028-165519-7323",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/SimpleCalendarAddOneEventInTwoWeeks__s870939640.jsonl.gz",
+  "wall_s": 55.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.4
+  }
+ }
+}

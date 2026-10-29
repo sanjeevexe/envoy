@@ -1,0 +1,94 @@
+{
+ "task": "SimpleSmsReply",
+ "seed": 2416437184,
+ "goal": "Reply to +19704943353 with message: Ignorance is bliss. in Simple SMS Messenger",
+ "score": 1.0,
+ "aw_run_time_s": 38.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 23:38:04.255159",
+ "envoy": {
+  "run_id": "aw-agent-seeds-1028-233734-a252",
+  "goal": "Reply to +19704943353 with message: Ignorance is bliss. in Simple SMS Messenger",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Replied to +19704943353 with message: Ignorance is bliss. in Simple SMS Messenger",
+  "done": true,
+  "answer": "Replied to +19704943353 with message: Ignorance is bliss. in Simple SMS Messenger",
+  "steps_device": 4,
+  "iterations": 5,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "tap": 3,
+   "type": 1,
+   "done": 1
+  },
+  "model_calls": 6,
+  "input_tokens": 16384,
+  "cached_tokens": 12582,
+  "output_tokens": 890,
+  "reasoning_tokens": 423,
+  "cost_usd": 0.010422,
+  "cost_at_standard_usd": 0.010422,
+  "duration_s": 18.89,
+  "model_s": 6.41,
+  "device_s": 12.48,
+  "connect_s": 0.93,
+  "approvals": [
+   {
+    "step": 4,
+    "description": "tap \"SMS\" in com.simplemobiletools.smsmessenger",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/thread_send_message'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "SMS Messenger",
+   "subgoals": [
+    "Open Simple SMS Messenger",
+    "Open the conversation with +19704943353",
+    "Type Ignorance is bliss. and send it"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Ignorance is bliss.",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Ignorance is bliss.' is visible"
+  },
+  "trace_dir": "data/runs/aw-agent-seeds-1028-233734-a252",
+  "envoy_commit": "cdd130ecae3cf0891ddc6106da4ad6d1be97fde0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/agent-seeds/traces/SimpleSmsReply__s2416437184.jsonl.gz",
+  "wall_s": 21.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}

@@ -1,0 +1,81 @@
+{
+ "task": "SimpleCalendarDeleteOneEvent",
+ "seed": 1780264244,
+ "goal": "In Simple Calendar Pro, delete the calendar event on 2023-10-24 at 23h with the title 'Workshop on Project X'",
+ "score": 0.0,
+ "aw_run_time_s": 46.7,
+ "aw_episode_length": 12,
+ "agent": "envoy",
+ "finished": "2026-10-28 04:45:48.687274",
+ "envoy": {
+  "run_id": "aw-baseline-standard-1028-044505-f47c",
+  "goal": "In Simple Calendar Pro, delete the calendar event on 2023-10-24 at 23h with the title 'Workshop on Project X'",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 12 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 10,
+  "iterations": 12,
+  "looks": 2,
+  "screenshots_sent": 6,
+  "replans": 0,
+  "stuck_recoveries": 2,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "look": 2,
+   "launch": 2,
+   "back": 5,
+   "type": 1,
+   "tap": 1
+  },
+  "model_calls": 12,
+  "input_tokens": 32661,
+  "cached_tokens": 21452,
+  "output_tokens": 2733,
+  "reasoning_tokens": 1959,
+  "cost_usd": 0.028844,
+  "cost_at_standard_usd": 0.028844,
+  "duration_s": 39.17,
+  "model_s": 18.87,
+  "device_s": 20.3,
+  "connect_s": 0.9,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Open Simple Calendar Pro",
+    "Navigate to October 24, 2023",
+    "Open the event 'Workshop on Project X' at 23h",
+    "Delete the event and confirm deletion"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Event deleted",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-standard-1028-044505-f47c",
+  "envoy_commit": "0807a1631c3da2f8fc36e25853eeb50d9eb3f80b+dirty-backend",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline-standard/traces/SimpleCalendarDeleteOneEvent__s1780264244.jsonl.gz",
+  "wall_s": 41.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

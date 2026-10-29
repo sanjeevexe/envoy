@@ -1,0 +1,73 @@
+routine: simple_calendar_get_next_event
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Get the next upcoming event from Simple Calendar Pro
+description: Opens Simple Calendar Pro, switches to the simple event list view, and returns the title of the next upcoming event, or a comma-separated
+  list if there are multiple titles.
+patterns: ['What is my next upcoming event?', 'What''s next on my calendar?', Show my next upcoming event]
+outputs: [next_event_title]
+start: fresh_launch
+steps:
+- id: launch_simple_calendar_pro
+  intent: Launch Simple Calendar Pro
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.simplemobiletools.calendar.pro}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: top_toolbar_search_icon, kind: Button}
+  - element_present: {resource_id: top_toolbar_search, text: Search, kind: EditText}
+  risk: read
+  note: trace step 1
+- id: tap_change_view
+  intent: Tap Change view to open the view options
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: change_view
+      text: Change view
+      kind: Button
+      cls: Button
+      siblings: [Settings, More options]
+      in_list: false
+      position: [0.677, 0.088]
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: top_toolbar_search_icon, kind: Button}
+  risk: reversible
+  note: trace step 2
+- id: select_simple_event_list
+  intent: Select Simple event list to show upcoming events in list order
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      text: Simple event list
+      kind: Radio
+      cls: RadioButton
+      parent: dialog_radio_group
+      siblings: [Daily view, Weekly view, Monthly view]
+      in_list: false
+      position: [0.5, 0.634]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: top_toolbar_search_icon, kind: Button}
+  - element_present: {resource_id: top_toolbar_search, text: Search, kind: EditText}
+  risk: reversible
+  extract:
+    next_event_title:
+      locator: {resource_id: event_item_holder, kind: Button}
+      segment: 0
+  note: trace step 3
+compiled_from:
+  task_id: aw-final-standard-1028-170611-c7a7
+  goal: What is my next upcoming event in Simple Calendar Pro? Answer with the title only. If there are multiples titles, format your answer in
+    a comma separated list.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:49:08"
+  trace_steps_kept: [1, 2, 3]
+  trace_steps_dropped: 0
+  cost_usd: 0.0619

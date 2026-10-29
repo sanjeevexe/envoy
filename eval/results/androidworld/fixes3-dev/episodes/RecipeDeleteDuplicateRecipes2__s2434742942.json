@@ -1,0 +1,100 @@
+{
+ "task": "RecipeDeleteDuplicateRecipes2",
+ "seed": 2434742942,
+ "goal": "Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains",
+ "score": 0.0,
+ "aw_run_time_s": 157.4,
+ "aw_episode_length": 24,
+ "agent": "envoy",
+ "finished": "2026-10-28 09:56:20.647507",
+ "envoy": {
+  "run_id": "aw-fixes3-dev-1028-095345-d202",
+  "goal": "Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains",
+  "max_steps": 24,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 24 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 24,
+  "iterations": 24,
+  "looks": 0,
+  "screenshots_sent": 1,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "scroll": 8,
+   "tap": 14,
+   "back": 1
+  },
+  "model_calls": 27,
+  "input_tokens": 76367,
+  "cached_tokens": 51352,
+  "output_tokens": 9336,
+  "reasoning_tokens": 6950,
+  "cost_usd": 0.004471,
+  "cost_at_standard_usd": 0.07865,
+  "duration_s": 147.66,
+  "model_s": 108.07,
+  "device_s": 39.59,
+  "connect_s": 0.88,
+  "approvals": [
+   {
+    "step": 14,
+    "description": "tap \"Delete\" in PopupWindow:40e5702",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 15,
+    "description": "tap \"DELETE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'DELETE'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Open navigation drawer to explore other tabs and menus",
+    "Open a suspected duplicate recipe to inspect details and options",
+    "Delete extra copies using recipe options menu keeping one of each",
+    "Return to Recipes list and verify no exact duplicates remain"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "recipe list with no exact duplicate entries",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-fixes3-dev-1028-095345-d202",
+  "envoy_commit": "70ed7a8470867f86dd6a548d0fdce2fa4977073e",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes3-dev/traces/RecipeDeleteDuplicateRecipes2__s2434742942.jsonl.gz",
+  "wall_s": 153.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

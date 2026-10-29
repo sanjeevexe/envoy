@@ -1,0 +1,98 @@
+routine: markor_create_folder
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Create a new folder in Markor
+description: Opens Markor, starts creating a new item, enters the requested folder name, and creates it as a folder in the current directory.
+patterns: [Create a new folder in Markor, Make a folder in Markor, Add a new Markor folder]
+outputs: [created_folder_name]
+start: fresh_launch
+inputs:
+  folder_name: {type: text, description: The name to give the new folder., example: folder_20261028_112141}
+steps:
+- id: open_markor
+  intent: Launch Markor
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: net.gsantner.markor}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: nav_notebook, text: Files, kind: Text}
+  - element_present: {resource_id: navigation_bar_item_labels_group, text: Files, kind: Text}
+  risk: read
+  note: trace step 1
+- id: tap_create_new_item
+  intent: Tap "Create a new file or folder"
+  pre:
+  - {app_foreground: net.gsantner.markor}
+  action:
+    tap:
+      resource_id: fab_add_new_item
+      text: Create a new file or folder
+      kind: Button
+      cls: ImageButton
+      parent: main_content
+      in_list: false
+      position: [0.893, 0.864]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: new_file_dialog__name, text: my_note, kind: EditText}
+  - element_present: {resource_id: new_file_dialog__ext, text: .md, kind: EditText}
+  risk: reversible
+  note: trace step 2
+- id: enter_folder_name
+  intent: "Type {{folder_name}} into the name field"
+  pre:
+  - {app_foreground: net.gsantner.markor}
+  action:
+    type:
+      field:
+        resource_id: new_file_dialog__name
+        text: my_note
+        hint: my_note
+        kind: EditText
+        cls: EditText
+        siblings: [.md]
+        in_list: false
+        position: [0.346, 0.365]
+      value: "{{folder_name}}"
+  post:
+  - field_equals:
+      field: {resource_id: new_file_dialog__name, text: my_note, kind: EditText}
+      value: "{{folder_name}}"
+  risk: reversible
+  note: trace step 3
+- id: tap_folder_button
+  intent: Tap "FOLDER" to create the folder
+  pre:
+  - {app_foreground: net.gsantner.markor}
+  action:
+    tap:
+      resource_id: button3
+      text: FOLDER
+      kind: Button
+      cls: Button
+      siblings: [CANCEL, OK]
+      in_list: false
+      position: [0.159, 0.598]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: nav_notebook, text: Files, kind: Text}
+  - element_present: {resource_id: navigation_bar_item_labels_group, text: Files, kind: Text}
+  risk: reversible
+  extract:
+    created_folder_name:
+      near: Folder
+      locator: {resource_id: opoc_filesystem_item__root, kind: Button}
+  note: trace step 4
+done:
+- text_visible: "{{folder_name}}"
+compiled_from:
+  task_id: aw-final-standard-1028-113044-604f
+  goal: Create a new folder in Markor named folder_20261028_112141.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:42:19"
+  trace_steps_kept: [1, 2, 3, 4]
+  trace_steps_dropped: 0
+  cost_usd: 0.0561

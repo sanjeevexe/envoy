@@ -1,0 +1,76 @@
+{
+ "task": "SportsTrackerTotalDistanceForCategoryOverInterval",
+ "seed": 547216539,
+ "goal": "What was the total distance covered for kayaking activities in the OpenTracks app from October 09 2023 to October 10 2023? Express your answer as a single number in meters rounded to the nearest integer.",
+ "score": 0.0,
+ "aw_run_time_s": 54.8,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 02:56:17.746512",
+ "envoy": {
+  "run_id": "aw-baseline-1028-025526-fee3",
+  "goal": "What was the total distance covered for kayaking activities in the OpenTracks app from October 09 2023 to October 10 2023? Express your answer as a single number in meters rounded to the nearest integer.",
+  "max_steps": 20,
+  "config": {},
+  "status": "failed",
+  "result": "stuck on the same screen after two recoveries",
+  "done": true,
+  "answer": null,
+  "steps_device": 6,
+  "iterations": 9,
+  "looks": 2,
+  "screenshots_sent": 6,
+  "replans": 0,
+  "stuck_recoveries": 3,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "look": 2,
+   "back": 5
+  },
+  "model_calls": 8,
+  "input_tokens": 21707,
+  "cached_tokens": 13335,
+  "output_tokens": 1476,
+  "reasoning_tokens": 994,
+  "cost_usd": 0.001159,
+  "cost_at_standard_usd": 0.018738,
+  "duration_s": 42.9,
+  "model_s": 23.2,
+  "device_s": 19.7,
+  "connect_s": 1.0,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "de.dennisguse.opentracks",
+   "subgoals": [
+    "Open the OpenTracks app",
+    "Show kayaking tracks from Oct 09 2023 to Oct 10 2023",
+    "Read distance for each kayaking track in range",
+    "Sum distances and convert to meters rounded to integer"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "total kayaking distance in meters from Oct 09 2023 to Oct 10 2023",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-1028-025526-fee3",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/SportsTrackerTotalDistanceForCategoryOverInterval__s547216539.jsonl.gz",
+  "wall_s": 49.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

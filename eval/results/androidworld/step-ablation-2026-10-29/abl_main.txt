@@ -1,0 +1,9 @@
+[main53] cost $0.192; errors 0
+== contacts s1, clean plan (5fa03bf run) (live input 2748 tokens)
+   main                   {'answers': 26, 'opens filters': 3, 'look ': 1}  tokens [2121]
+== contacts s1, full-list plan (736a6e4 run) (live input 2747 tokens)
+   main                   {'answers': 19, 'opens filters': 9, 'look ': 1, 'back ': 1}  tokens [2120]
+== contacts s1, main's plan (main run) (live input 2119 tokens)
+   main                   {'answers': 30}  tokens [2119]
+== doordash s5, Addresses (5fa03bf run) (live input 2969 tokens)
+   main                   {'taps Addresses': 28, 'back ': 2}  tokens [2335]

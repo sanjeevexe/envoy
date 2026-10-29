@@ -1,0 +1,83 @@
+{
+ "task": "ExpenseDeleteDuplicates2",
+ "seed": 124863876,
+ "goal": "Delete all but one of any expenses in pro expense that are exact duplicates, ensuring at least one instance of each unique expense remains.",
+ "score": 0.0,
+ "aw_run_time_s": 87.3,
+ "aw_episode_length": 18,
+ "agent": "envoy",
+ "finished": "2026-10-28 10:49:56.328923",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-104832-0810",
+  "goal": "Delete all but one of any expenses in pro expense that are exact duplicates, ensuring at least one instance of each unique expense remains.",
+  "max_steps": 18,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "error",
+  "result": "APIConnectionError: Connection error.",
+  "done": false,
+  "answer": null,
+  "steps_device": 12,
+  "iterations": 14,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "look": 2,
+   "tap_point": 1,
+   "tap": 1,
+   "scroll": 9
+  },
+  "model_calls": 18,
+  "input_tokens": 49900,
+  "cached_tokens": 33055,
+  "output_tokens": 4115,
+  "reasoning_tokens": 2985,
+  "cost_usd": 0.051107,
+  "cost_at_standard_usd": 0.051107,
+  "duration_s": 79.05,
+  "model_s": 25.25,
+  "device_s": 53.8,
+  "connect_s": 0.9,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Pro Expense",
+   "subgoals": [
+    "Open the Pro Expense app",
+    "Open the full expenses list",
+    "Identify groups of exact duplicate expenses",
+    "Delete extra copies keeping one instance of each unique expense",
+    "Verify no exact duplicates remain"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "expenses list with no exact duplicates",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-final-standard-1028-104832-0810",
+  "envoy_commit": "35618ab3bb8cee2be85486b1f0ea9582a8b040a0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/ExpenseDeleteDuplicates2__s124863876.jsonl.gz",
+  "wall_s": 81.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

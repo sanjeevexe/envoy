@@ -1,0 +1,22 @@
+{
+ "name": "camera_take_photo",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-28 17:40:09",
+   "parent": null,
+   "changes": [
+    "compiled from aw-final-standard-1028-103709-b209"
+   ],
+   "verification": {
+    "source": "final-standard",
+    "source_seed": 3729977769
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.google.android.apps.nexuslauncher"
+}

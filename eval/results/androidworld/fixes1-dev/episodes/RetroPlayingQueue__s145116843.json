@@ -1,0 +1,78 @@
+{
+ "task": "RetroPlayingQueue",
+ "seed": 145116843,
+ "goal": "Add the following songs, in order, Through the Storm, Hidden Paths, Forever Young, Whispers of the Past, Heartbeat Away to my playing queue in Retro music.",
+ "score": 0.0,
+ "aw_run_time_s": 156.2,
+ "aw_episode_length": 32,
+ "agent": "envoy",
+ "finished": "2026-10-28 06:42:04.395802",
+ "envoy": {
+  "run_id": "aw-fixes1-dev-1028-063933-b919",
+  "goal": "Add the following songs, in order, Through the Storm, Hidden Paths, Forever Young, Whispers of the Past, Heartbeat Away to my playing queue in Retro music.",
+  "max_steps": 32,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 32 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 32,
+  "iterations": 32,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 1,
+  "actions": {
+   "launch": 1,
+   "tap": 30,
+   "back": 1
+  },
+  "model_calls": 36,
+  "input_tokens": 91216,
+  "cached_tokens": 73316,
+  "output_tokens": 8780,
+  "reasoning_tokens": 6570,
+  "cost_usd": 0.003693,
+  "cost_at_standard_usd": 0.070687,
+  "duration_s": 145.41,
+  "model_s": 99.25,
+  "device_s": 46.16,
+  "connect_s": 0.91,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Retro Music",
+   "subgoals": [
+    "Open menu for Through the Storm and add it to playing queue",
+    "Add Hidden Paths, Forever Young, Whispers of the Past, Heartbeat Away in order to the queue",
+    "Open the playing queue screen",
+    "Verify the 5 songs appear in correct order"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "playing queue order showing Through the Storm, Hidden Paths, Forever Young, Whispers of the Past, Heartbeat Away",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-fixes1-dev-1028-063933-b919",
+  "envoy_commit": "821d713df93e6bb5536df7e6f89b6684779d58da",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes1-dev/traces/RetroPlayingQueue__s145116843.jsonl.gz",
+  "wall_s": 147.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

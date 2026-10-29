@@ -1,0 +1,107 @@
+{
+ "task": "SimpleCalendarDeleteOneEvent",
+ "seed": 1780264244,
+ "goal": "In Simple Calendar Pro, delete the calendar event on 2023-10-24 at 23h with the title 'Workshop on Project X'",
+ "score": 1.0,
+ "aw_run_time_s": 36.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 14:40:12.326376",
+ "envoy": {
+  "run_id": "aw-held-out-fdce597-fix-1029-143938-21f6",
+  "goal": "In Simple Calendar Pro, delete the calendar event on 2023-10-24 at 23h with the title 'Workshop on Project X'",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done_unverified",
+  "result": "Deleted event 'Workshop on Project X' on 2023-10-24 at 23h",
+  "done": true,
+  "answer": "Deleted event 'Workshop on Project X' on 2023-10-24 at 23h",
+  "steps_device": 5,
+  "iterations": 8,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 1,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "look": 1,
+   "tap_point": 1,
+   "tap": 3,
+   "done": 2
+  },
+  "model_calls": 13,
+  "input_tokens": 27445,
+  "cached_tokens": 20857,
+  "output_tokens": 2306,
+  "reasoning_tokens": 1687,
+  "cost_usd": 0.034666,
+  "cost_at_standard_usd": 0.034666,
+  "duration_s": 29.78,
+  "model_s": 14.75,
+  "device_s": 15.03,
+  "connect_s": 0.85,
+  "approvals": [
+   {
+    "step": 5,
+    "description": "tap \"Delete\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 6,
+    "description": "tap \"Yes\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Open Simple Calendar Pro",
+    "Navigate to October 24, 2023",
+    "Open the 'Workshop on Project X' event at 23h",
+    "Delete the event and confirm deletion"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Event deleted",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": true,
+   "detail": "'Event deleted' is not visible"
+  },
+  "trace_dir": "data/runs/aw-held-out-fdce597-fix-1029-143938-21f6",
+  "envoy_commit": "736a6e4b11c23f4c8919997b559e4df0e4eb40e4",
+  "answer_format": true,
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/held-out-fdce597-fix/traces/SimpleCalendarDeleteOneEvent__s1780264244.jsonl.gz",
+  "wall_s": 32.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

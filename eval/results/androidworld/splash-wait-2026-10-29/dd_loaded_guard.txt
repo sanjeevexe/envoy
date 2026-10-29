@@ -1,0 +1,3 @@
+[abl0] cost $0.150; errors 0; plan tokens [1702] (live: main 680, 5fa03bf 864)
+step 1 on the loaded home: {'address': 27, 'done ': 3}
+plans' second subgoal: [('read the saved delivery address shown', 11), ('read the saved delivery address shown in', 2), ('open the address selector to confirm the', 2), ('tap address header to confirm saved deli', 2), ('read the saved delivery address displaye', 1)]

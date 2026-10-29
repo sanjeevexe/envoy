@@ -1,0 +1,98 @@
+{
+ "task": "ExpenseAddSingle",
+ "seed": 2452300024,
+ "goal": "Add the following expenses into the pro expense:\nExpense: Therapy Sessions\n amount_dollars: $307.01\n category_name: Health Care\n note: I may repeat this\n",
+ "score": 1.0,
+ "aw_run_time_s": 39.4,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 13:43:37.401167",
+ "envoy": {
+  "run_id": "aw-held-out-fdce597-fix-1029-134300-1a1d",
+  "goal": "Add the following expenses into the pro expense:\nExpense: Therapy Sessions\n amount_dollars: $307.01\n category_name: Health Care\n note: I may repeat this\n",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Added expense Therapy Sessions $307.01 Health Care with note I may repeat this",
+  "done": true,
+  "answer": "Added expense Therapy Sessions $307.01 Health Care with note I may repeat this",
+  "steps_device": 10,
+  "iterations": 11,
+  "looks": 0,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 3,
+   "type": 3,
+   "scroll": 2,
+   "swipe": 1,
+   "done": 1
+  },
+  "model_calls": 12,
+  "input_tokens": 35428,
+  "cached_tokens": 28492,
+  "output_tokens": 1949,
+  "reasoning_tokens": 1006,
+  "cost_usd": 0.021227,
+  "cost_at_standard_usd": 0.021227,
+  "duration_s": 32.02,
+  "model_s": 15.84,
+  "device_s": 16.18,
+  "connect_s": 0.86,
+  "approvals": [
+   {
+    "step": 10,
+    "description": "tap \"SAVE\" in com.arduia.expense",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Pro Expense",
+   "subgoals": [
+    "Open the Pro Expense app",
+    "Start adding a new expense",
+    "Enter Therapy Sessions with $307.01, Health Care category, and note",
+    "Save the expense"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Therapy Sessions",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Therapy Sessions' is visible"
+  },
+  "trace_dir": "data/runs/aw-held-out-fdce597-fix-1029-134300-1a1d",
+  "envoy_commit": "3cbb3d944a29b380fa67decc155d7b76c29099a1",
+  "answer_format": true,
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/held-out-fdce597-fix/traces/ExpenseAddSingle__s2452300024.jsonl.gz",
+  "wall_s": 34.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.3
+  }
+ }
+}

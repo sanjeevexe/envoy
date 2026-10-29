@@ -1,0 +1,104 @@
+{
+ "task": "RecipeDeleteSingleWithRecipeWithNoise",
+ "seed": 1967173552,
+ "goal": "Delete the following recipes from Broccoli app: Classic Margherita Pizza.",
+ "score": 1.0,
+ "aw_run_time_s": 47.0,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 08:17:32.910298",
+ "envoy": {
+  "run_id": "aw-fixes2-dev-1028-081649-6332",
+  "goal": "Delete the following recipes from Broccoli app: Classic Margherita Pizza.",
+  "max_steps": 20,
+  "config": {},
+  "status": "done",
+  "result": "Deleted Classic Margherita Pizza from Broccoli app. Verified by searching for it - No recipes found.",
+  "done": true,
+  "answer": "Deleted Classic Margherita Pizza from Broccoli app. Verified by searching for it - No recipes found.",
+  "steps_device": 9,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 6,
+   "type": 2,
+   "done": 1
+  },
+  "model_calls": 11,
+  "input_tokens": 26247,
+  "cached_tokens": 21979,
+  "output_tokens": 1718,
+  "reasoning_tokens": 952,
+  "cost_usd": 0.000814,
+  "cost_at_standard_usd": 0.015933,
+  "duration_s": 39.29,
+  "model_s": 26.41,
+  "device_s": 12.88,
+  "connect_s": 0.88,
+  "approvals": [
+   {
+    "step": 6,
+    "description": "tap \"Delete\" in PopupWindow:98d1fc4",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 7,
+    "description": "tap \"DELETE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'DELETE'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Open the Broccoli app",
+    "Find the Classic Margherita Pizza recipe",
+    "Delete the Classic Margherita Pizza recipe",
+    "Confirm deletion and verify it is removed"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "confirmation that Classic Margherita Pizza is deleted and no longer listed",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Classic, Margherita, Pizza"
+  },
+  "trace_dir": "data/runs/aw-fixes2-dev-1028-081649-6332",
+  "envoy_commit": "598a6cde6830a440bb68512465aa1e6692600144",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes2-dev/traces/RecipeDeleteSingleWithRecipeWithNoise__s1967173552.jsonl.gz",
+  "wall_s": 41.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

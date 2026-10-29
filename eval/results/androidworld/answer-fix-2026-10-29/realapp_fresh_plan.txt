@@ -1,0 +1,50 @@
+== contacts_count s1
+   main         {'done': 8}
+   cur          {'done': 7, 'tap filters': 1}
+   no742        {'done': 8}
+   nof93        {'done': 7, 'tap filters': 1}
+   open         {'done': 8}
+   fix          {'done': 8}
+   fix_plan     {'done': 8}
+   fix_scope    {'done': 6, 'tap filters': 2}
+   fix_noformat {'done': 8}
+== doordash s1
+   main         {'tap the address': 8}
+   cur          {'tap the address': 7, 'tap Account': 1}
+   no742        {'tap the address': 8}
+   nof93        {'tap the address': 8}
+   open         {'tap the address': 8}
+   fix          {'tap the address': 8}
+   fix_plan     {'done': 5, 'tap the address': 3}
+   fix_scope    {'tap the address': 5, 'done': 2, 'tap Account': 1}
+   fix_noformat {'tap the address': 6, 'tap Account': 1, 'done': 1}
+== doordash s2 (1f1fc11 path: Account)
+   main         {'tap [2] Button "Back" (id: toolbar': 3, 'back ': 3, 'scroll ': 2}
+   cur          {'tap [2] Button "Back" (id: toolbar': 4, 'tap [15] Button "Profile"': 2, 'tap [14] Button "Settings"': 2}
+   no742        {'tap [15] Button "Profile"': 3, 'tap [2] Button "Back" (id: toolbar': 2, 'back ': 1, 'tap [14] Button "Settings"': 1, 'look ': 1}
+   nof93        {'scroll [1] List (id: coordinator) (sc': 3, 'tap [2] Button "Back" (id: toolbar': 2, 'tap [14] Button "Settings"': 2, 'scroll [11] List (scrollable)': 1}
+   open         {'tap [2] Button "Back" (id: toolbar': 3, 'scroll ': 2, 'tap [15] Button "Profile"': 2, 'back ': 1}
+   fix          {'tap [2] Button "Back" (id: toolbar': 3, 'tap [15] Button "Profile"': 2, 'tap [14] Button "Settings"': 1, 'scroll [1] List (id: coordinator) (sc': 1, 'scroll ': 1}
+   fix_plan     {'back ': 3, 'tap [14] Button "Settings"': 2, 'tap [15] Button "Profile"': 1, 'tap [2] Button "Back" (id: toolbar': 1, 'scroll ': 1}
+   fix_scope    {'tap [2] Button "Back" (id: toolbar': 3, 'tap [14] Button "Settings"': 2, 'tap [15] Button "Profile"': 1, 'scroll ': 1, 'scroll [1] List (id: coordinator) (sc': 1}
+   fix_noformat {'scroll ': 3, 'tap [15] Button "Profile"': 2, 'tap [14] Button "Settings"': 1, 'back ': 1, 'scroll [11] List (scrollable)': 1}
+== calendar_today s1
+   main         {'done': 4, 'back ': 2, 'done (+for)': 2}
+   cur          {'done': 8}
+   no742        {'done': 8}
+   nof93        {'done': 6, 'done (+for)': 1, 'tap [11] Text "Thursday 29 October': 1}
+   open         {'done': 6, 'tap [5] Button "Jump to Today" (id': 1, 'done (+for,that)': 1}
+   fix          {'done': 6, 'done (+for)': 2}
+   fix_plan     {'done': 7, 'tap [11] Text "Thursday 29 October': 1}
+   fix_scope    {'done': 7, 'done (+for)': 1}
+   fix_noformat {'done': 8}
+== doordash s2 (main path: saved addresses)
+   main         {'done': 8}
+   cur          {'done': 8}
+   no742        {'done': 8}
+   nof93        {'done': 8}
+   open         {'done': 8}
+   fix          {'done': 8}
+   fix_plan     {'done': 8}
+   fix_scope    {'done': 8}
+   fix_noformat {'done': 8}

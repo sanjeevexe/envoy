@@ -1,0 +1,79 @@
+{
+ "task": "SimpleCalendarAddOneEventInTwoWeeks",
+ "seed": 870939640,
+ "goal": "In Simple Calendar Pro, create a calendar event in two weeks from today at 17h with the title 'Meeting with the Team' and the description 'We will prepare for annual budget.'. The event should last for 30 mins.",
+ "score": 0.0,
+ "aw_run_time_s": 176.9,
+ "aw_episode_length": 34,
+ "agent": "envoy",
+ "finished": "2026-10-28 02:14:29.001472",
+ "envoy": {
+  "run_id": "aw-baseline-1028-021135-13f6",
+  "goal": "In Simple Calendar Pro, create a calendar event in two weeks from today at 17h with the title 'Meeting with the Team' and the description 'We will prepare for annual budget.'. The event should last for 30 mins.",
+  "max_steps": 34,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 34 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 29,
+  "iterations": 34,
+  "looks": 5,
+  "screenshots_sent": 5,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "launch": 7,
+   "look": 5,
+   "back": 11,
+   "tap": 9,
+   "type": 2
+  },
+  "model_calls": 37,
+  "input_tokens": 96059,
+  "cached_tokens": 70101,
+  "output_tokens": 7294,
+  "reasoning_tokens": 4965,
+  "cost_usd": 0.004195,
+  "cost_at_standard_usd": 0.073962,
+  "duration_s": 167.96,
+  "model_s": 92.12,
+  "device_s": 75.84,
+  "connect_s": 1.02,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Tap New Event to open the event creation form",
+    "Set title to Meeting with the Team and date to two weeks from today with start 17:00 for 30 mins",
+    "Add description We will prepare for annual budget.",
+    "Save the event and verify it appears"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Meeting with the Team",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-1028-021135-13f6",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/SimpleCalendarAddOneEventInTwoWeeks__s870939640.jsonl.gz",
+  "wall_s": 170.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.5
+  }
+ }
+}

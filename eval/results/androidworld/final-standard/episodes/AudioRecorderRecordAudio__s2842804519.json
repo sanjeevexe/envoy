@@ -1,0 +1,84 @@
+{
+ "task": "AudioRecorderRecordAudio",
+ "seed": 2842804519,
+ "goal": "Record an audio clip using Audio Recorder app and save it.",
+ "score": 1.0,
+ "aw_run_time_s": 28.1,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 10:32:27.018738",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-103200-a286",
+  "goal": "Record an audio clip using Audio Recorder app and save it.",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done_unverified",
+  "result": "Recorded and saved audio clip Record-1 (00:02, M4a) in Audio Recorder app; it appears under Today in Records list.",
+  "done": true,
+  "answer": "Recorded and saved audio clip Record-1 (00:02, M4a) in Audio Recorder app; it appears under Today in Records list.",
+  "steps_device": 7,
+  "iterations": 9,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 1,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 6,
+   "done": 2
+  },
+  "model_calls": 10,
+  "input_tokens": 25110,
+  "cached_tokens": 16023,
+  "output_tokens": 1646,
+  "reasoning_tokens": 931,
+  "cost_usd": 0.020758,
+  "cost_at_standard_usd": 0.020758,
+  "duration_s": 22.19,
+  "model_s": 12.06,
+  "device_s": 10.13,
+  "connect_s": 0.9,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Audio Recorder",
+   "subgoals": [
+    "Open the Audio Recorder app",
+    "Start a new audio recording",
+    "Stop the recording",
+    "Save the clip and confirm it appears in recordings"
+   ],
+   "success_check": {
+    "kind": "element_present",
+    "value": "Play",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": true,
+   "detail": "element 'Play' not present"
+  },
+  "trace_dir": "data/runs/aw-final-standard-1028-103200-a286",
+  "envoy_commit": "35618ab3bb8cee2be85486b1f0ea9582a8b040a0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/AudioRecorderRecordAudio__s2842804519.jsonl.gz",
+  "wall_s": 24.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

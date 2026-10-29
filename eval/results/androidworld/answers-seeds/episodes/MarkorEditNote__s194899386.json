@@ -1,0 +1,142 @@
+{
+ "task": "MarkorEditNote",
+ "seed": 194899386,
+ "goal": "Edit note_QI22W.md in Markor. Replace the text with Yoga class every Tuesday and Thursday at 6 PM.\nIt's a bird, it's a plane.\nIgnorance is bliss.",
+ "score": 0.0,
+ "aw_run_time_s": 22.1,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 02:05:07.500065",
+ "envoy": {
+  "run_id": "aw-answers-seeds-1029-020448-bbd4",
+  "goal": "Edit note_QI22W.md in Markor. Replace the text with Yoga class every Tuesday and Thursday at 6 PM.\nIt's a bird, it's a plane.\nIgnorance is bliss.",
+  "max_steps": 12,
+  "config": {
+   "mode": "routine",
+   "library": "answers-verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "markor_edit_note",
+   "stage": "model confirmed",
+   "inputs": {
+    "note_file_name": "note_QI22W.md",
+    "text_to_add": "Yoga class every Tuesday and Thursday at 6 PM.\nIt's a bird, it's a plane.\nIgnorance is bliss."
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "markor_edit_note",
+     0.694
+    ],
+    [
+     "markor_create_note_and_send_sms",
+     0.271
+    ],
+    [
+     "joplin_check_note_todo",
+     0.224
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "markor_edit_note",
+  "version": 1,
+  "done": true,
+  "answer": "Yoga class every Tuesday and Thursday at 6 PM. It's a bird, it's a plane. Ignorance is bliss. RCds9YwUSDpxkBcBp1uG",
+  "outputs": {
+   "updated_note_content": "Yoga class every Tuesday and Thursday at 6 PM. It's a bird, it's a plane. Ignorance is bliss. RCds9YwUSDpxkBcBp1uG"
+  },
+  "steps_used": 8,
+  "rung": 2,
+  "steps": [
+   {
+    "id": "launch_markor",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "find_open_note_file",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_note_file",
+    "status": "done",
+    "rung": 2,
+    "rungs": [
+     "relaxed match: after-checks held at the relaxed threshold"
+    ],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "prepend_text_to_note",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "dismiss_keyboard",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "return_to_file_list",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "find_reopen_note_file",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "reopen_note_file",
+    "status": "done",
+    "rung": 2,
+    "rungs": [
+     "relaxed match: after-checks held at the relaxed threshold"
+    ],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 2,
+  "model_calls": 1,
+  "cost_usd": 0.006437,
+  "cost_at_standard_usd": 0.006437,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 14.66,
+  "routine_duration_s": 8.66,
+  "trace_dir": "data/runs/aw-answers-seeds-1029-020448-bbd4",
+  "wall_s": 17.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

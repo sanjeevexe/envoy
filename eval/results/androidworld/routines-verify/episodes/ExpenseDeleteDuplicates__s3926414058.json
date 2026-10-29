@@ -1,0 +1,103 @@
+{
+ "task": "ExpenseDeleteDuplicates",
+ "seed": 3926414058,
+ "goal": "Delete all but one of any expenses in pro expense that are exact duplicates, ensuring at least one instance of each unique expense remains.",
+ "score": 0.0,
+ "aw_run_time_s": 21.9,
+ "aw_episode_length": 12,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:54:07.785201",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-175349-13cc",
+  "goal": "Delete all but one of any expenses in pro expense that are exact duplicates, ensuring at least one instance of each unique expense remains.",
+  "max_steps": 12,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "pro_expense_delete_duplicate_expenses",
+   "stage": "model confirmed",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "pro_expense_delete_expense",
+     0.663
+    ],
+    [
+     "pro_expense_delete_duplicate_expenses",
+     0.632
+    ],
+    [
+     "pro_expense_delete_expenses",
+     0.585
+    ]
+   ]
+  },
+  "status": "failed",
+  "result": "step tap_delete_icon_for_duplicate: target not found: no match (best 1.00 < 0.80 or ambiguous, runner-up 0.98)",
+  "routine": "pro_expense_delete_duplicate_expenses",
+  "version": 1,
+  "done": false,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 3,
+  "rung": 1,
+  "steps": [
+   {
+    "id": "launch_pro_expense",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "scroll_to_more_button",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_more_button",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_delete_icon_for_duplicate",
+    "status": "failed",
+    "rung": 1,
+    "rungs": [
+     "wait and retry: waited 5 s"
+    ],
+    "repairs": 0,
+    "detail": "step tap_delete_icon_for_duplicate: target not found: no match (best 1.00 < 0.80 or ambiguous, runner-up 0.98)"
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.002225,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 12.33,
+  "routine_duration_s": 9.67,
+  "trace_dir": "data/runs/aw-routines-verify-1028-175349-13cc",
+  "wall_s": 15.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.6
+  }
+ }
+}

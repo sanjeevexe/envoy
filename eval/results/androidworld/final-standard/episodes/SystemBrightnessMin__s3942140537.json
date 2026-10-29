@@ -1,0 +1,87 @@
+{
+ "task": "SystemBrightnessMin",
+ "seed": 3942140537,
+ "goal": "Turn brightness to the min value.",
+ "score": 1.0,
+ "aw_run_time_s": 69.1,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:23:26.632418",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-172218-4f0c",
+  "goal": "Turn brightness to the min value.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Brightness turned to minimum value (0%)",
+  "done": true,
+  "answer": "Brightness turned to minimum value (0%)",
+  "steps_device": 6,
+  "iterations": 8,
+  "looks": 1,
+  "screenshots_sent": 4,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "scroll": 1,
+   "tap": 2,
+   "look": 1,
+   "swipe": 2,
+   "done": 1
+  },
+  "model_calls": 9,
+  "input_tokens": 25578,
+  "cached_tokens": 19065,
+  "output_tokens": 1742,
+  "reasoning_tokens": 1099,
+  "cost_usd": 0.018405,
+  "cost_at_standard_usd": 0.018405,
+  "duration_s": 60.24,
+  "model_s": 13.75,
+  "device_s": 46.49,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Settings",
+   "subgoals": [
+    "Open the Settings app",
+    "Open Display settings",
+    "Open Brightness level setting",
+    "Set brightness slider to minimum value"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "brightness at minimum",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Brightness, 0"
+  },
+  "trace_dir": "data/runs/aw-final-standard-1028-172218-4f0c",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/SystemBrightnessMin__s3942140537.jsonl.gz",
+  "wall_s": 66.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.9
+  }
+ }
+}

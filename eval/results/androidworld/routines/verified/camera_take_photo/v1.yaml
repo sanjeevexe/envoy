@@ -1,0 +1,66 @@
+routine: camera_take_photo
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Take a photo with the Camera app
+description: Launches the Camera app, captures one photo using the shutter, and opens the thumbnail to confirm the photo was taken.
+patterns: [take a photo, take one photo, capture a photo, snap a picture]
+start: fresh_launch
+steps:
+- id: launch_camera
+  intent: Launch the Camera app
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.android.camera2}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: mode_options_toggle, text: Options, kind: Button}
+  - element_present: {resource_id: shutter_button, text: Shutter, kind: Button}
+  risk: read
+  note: trace step 1
+- id: tap_shutter
+  intent: Tap the Shutter button to capture a photo
+  pre:
+  - {app_foreground: com.android.camera2}
+  action:
+    tap:
+      resource_id: shutter_button
+      text: Shutter
+      kind: Button
+      cls: ImageView
+      parent: bottombar_capture
+      in_list: false
+      position: [0.5, 0.908]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: rounded_thumbnail_view, kind: Button}
+  risk: reversible
+  note: trace step 2
+- id: tap_photo_thumbnail
+  intent: Tap the photo thumbnail to confirm the photo was captured
+  pre:
+  - {app_foreground: com.android.camera2}
+  action:
+    tap:
+      resource_id: rounded_thumbnail_view
+      text: ''
+      kind: Button
+      cls: View
+      parent: sticky_bottom_capture_layout
+      in_list: false
+      position: [0.912, 0.737]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: filmstrip_view, kind: List}
+  - element_present: {resource_id: filmstrip_bottom_control_share, text: Share, kind: Button}
+  risk: reversible
+  note: trace step 4
+compiled_from:
+  task_id: aw-final-standard-1028-103709-b209
+  goal: Take one photo.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:40:09"
+  trace_steps_kept: [1, 2, 4]
+  trace_steps_dropped: 1
+  cost_usd: 0.0394

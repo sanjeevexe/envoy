@@ -1,0 +1,143 @@
+{
+ "task": "SimpleSmsSend",
+ "seed": 4209246460,
+ "goal": "Send a text message using Simple SMS Messenger to +16597910719 with message: Beauty is in the eye of the beholder.",
+ "score": 1.0,
+ "aw_run_time_s": 26.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 18:34:07.982493",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-183349-da4f",
+  "goal": "Send a text message using Simple SMS Messenger to +16597910719 with message: Beauty is in the eye of the beholder.",
+  "max_steps": 12,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "simple_sms_messenger_send_message",
+   "stage": "model confirmed",
+   "inputs": {
+    "recipient_phone_number": "+16597910719",
+    "message_text": "Beauty is in the eye of the beholder."
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "simple_sms_messenger_send_message",
+     0.88
+    ],
+    [
+     "simple_sms_messenger_reply_to_conversati",
+     0.7
+    ],
+    [
+     "simple_sms_messenger_reply_most_recent_m",
+     0.575
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "simple_sms_messenger_send_message",
+  "version": 1,
+  "done": true,
+  "answer": "15:34",
+  "outputs": {
+   "sent_time": "15:34"
+  },
+  "steps_used": 6,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_simple_sms_messenger",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "start_conversation",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipient_phone_number",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "confirm_recipient",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "type_message",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "send_message",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.002883,
+  "approvals": [
+   {
+    "step": "confirm_recipient",
+    "description": "tap \"\" in com.simplemobiletools.smsmessenger (routine simple_sms_messenger_send_message v1)",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/new_conversation_confirm'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": "send_message",
+    "description": "tap \"SMS\" in com.simplemobiletools.smsmessenger (routine simple_sms_messenger_send_message v1)",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/thread_send_message'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "duration_s": 7.11,
+  "routine_duration_s": 4.36,
+  "trace_dir": "data/runs/aw-routines-verify-1028-183349-da4f",
+  "wall_s": 10.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.3
+  }
+ }
+}

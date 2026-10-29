@@ -1,0 +1,141 @@
+routine: contacts_create_contact_2
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Create a new contact
+description: Create a new contact in Google Contacts by entering the person's first name, last name, and phone number, then saving the contact.
+patterns: [Create a new contact, Add a contact, Add someone to my contacts, Save a new contact with a phone number]
+outputs: [contact_name, phone_number]
+start: fresh_launch
+inputs:
+  first_name: {type: text, description: The contact's first name, example: Hugo}
+  last_name: {type: text, description: The contact's last name, example: Pereira}
+  phone_number: {type: text, description: The contact's phone number, example: '+13920741751'}
+steps:
+- id: launch_contacts_app
+  intent: Launch the Contacts app
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.google.android.contacts}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: empty_view, text: No contacts yet, kind: Text}
+  - element_present: {resource_id: contacts, text: Contacts, kind: Text}
+  risk: read
+  note: trace step 1
+- id: tap_create_contact
+  intent: Tap Create contact to start a new contact
+  pre:
+  - {app_foreground: com.google.android.contacts}
+  action:
+    tap:
+      resource_id: floating_action_button
+      text: Create contact
+      kind: Button
+      cls: ImageButton
+      parent: root
+      in_list: false
+      position: [0.874, 0.838]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: toolbar_button, text: Save, kind: Button}
+  - element_present: {resource_id: contact_editor_scroller, kind: List}
+  risk: reversible
+  note: trace step 2
+- id: enter_first_name
+  intent: "Type {{first_name}} into the First name field"
+  pre:
+  - {app_foreground: com.google.android.contacts}
+  action:
+    type:
+      field:
+        text: First name
+        hint: First name
+        kind: EditText
+        cls: EditText
+        in_list: true
+        position: [0.495, 0.389]
+      value: "{{first_name}}"
+  post:
+  - field_equals:
+      field: {text: First name, kind: EditText}
+      value: "{{first_name}}"
+  risk: reversible
+  note: trace step 3
+- id: enter_last_name
+  intent: "Type {{last_name}} into the Last name field"
+  pre:
+  - {app_foreground: com.google.android.contacts}
+  action:
+    type:
+      field:
+        text: Last name
+        hint: Last name
+        kind: EditText
+        cls: EditText
+        in_list: true
+        position: [0.495, 0.466]
+      value: "{{last_name}}"
+  post:
+  - field_equals:
+      field: {text: Last name, kind: EditText}
+      value: "{{last_name}}"
+  risk: reversible
+  note: trace step 4
+- id: enter_phone_number
+  intent: "Type {{phone_number}} into the Phone field"
+  pre:
+  - {app_foreground: com.google.android.contacts}
+  action:
+    type:
+      field:
+        text: Phone
+        hint: Phone
+        kind: EditText
+        cls: EditText
+        in_list: true
+        position: [0.495, 0.637]
+      value: "{{phone_number}}"
+  post:
+  - field_equals:
+      field: {text: Phone, kind: EditText}
+      value: "{{phone_number}}"
+  risk: reversible
+  note: trace step 5
+- id: tap_save
+  intent: Tap Save to save the new contact
+  pre:
+  - {app_foreground: com.google.android.contacts}
+  action:
+    tap:
+      resource_id: toolbar_button
+      text: Save
+      kind: Button
+      cls: Button
+      parent: menu_save
+      in_list: false
+      position: [0.776, 0.088]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: root, kind: List}
+  - element_present:
+      resource_id: large_title_container
+      text: "{{first_name}} {{last_name}}"
+      kind: Button
+  risk: reversible
+  extract:
+    contact_name:
+      locator: {resource_id: large_title_container, kind: Button}
+    phone_number: {near: Call Mobile}
+  note: trace step 6
+done:
+- text_visible: "{{first_name}} {{last_name}}"
+compiled_from:
+  task_id: aw-final-standard-1028-103937-2990
+  goal: Create a new contact for Hugo Pereira. Their number is +13920741751.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:40:47"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6]
+  trace_steps_dropped: 0
+  cost_usd: 0.0513

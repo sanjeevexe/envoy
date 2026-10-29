@@ -1,0 +1,2863 @@
+[
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app to the Contacts tab",
+   "View the full contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": true,
+  "tokens": 1018,
+  "cost": 0.00258935
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open Contacts app to the Contacts list",
+   "Read the contacts list status and count"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.002268
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list to count entries"
+  ],
+  "full": true,
+  "tokens": 1018,
+  "cost": 0.00259785
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.00205385
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.00212775
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View all contacts",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 1018,
+  "cost": 0.002506
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 1018,
+  "cost": 0.00190085
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open Contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.00241085
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.00226635
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the Contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0018881
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the Contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0023385999999999997
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list and read the count"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.00230035
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.00289175
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0019475999999999999
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Count the contacts shown"
+  ],
+  "full": true,
+  "tokens": 1018,
+  "cost": 0.0027381
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 1018,
+  "cost": 0.0018031
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 1018,
+  "cost": 0.00226635
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 1018,
+  "cost": 0.0018838499999999998
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to determine the count"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0020496
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.00193485
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to determine the count"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0019221
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 1018,
+  "cost": 0.00207085
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0018498499999999999
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to see the total count"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0023556
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0021091
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the displayed contact count"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0018371
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to see total count"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.0021601
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "tokens": 1018,
+  "cost": 0.00152685
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the All contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": true,
+  "tokens": 1018,
+  "cost": 0.00202835
+ },
+ {
+  "mode": "plan",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "tokens": 1018,
+  "cost": 0.0019178499999999998
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts from the list or empty state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0031791
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Stay on the Contacts list view",
+   "Read the number of contacts shown including empty state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0023986
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "Read the contacts count from the list or empty state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.00188435
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "Read the contact list empty state or count"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.00200335
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "Read the number of contacts shown, including the empty state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.00235185
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.00203735
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "Read the number of contacts shown, including the empty state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0016548499999999998
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0020926
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "Read the contact count from the list or empty state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.00217335
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts shown on the main list"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0021053499999999998
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0018333499999999999
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "View Contacts list",
+   "Read number of contacts from list or empty state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0021053499999999998
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app to the contacts list",
+   "Read the number of contacts shown including empty state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0020586
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "View the Contacts list",
+   "Read the contacts count or empty state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0018673499999999998
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open Contacts list in Contacts app",
+   "Read number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.00207135
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0019990999999999997
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open Contacts to the Contacts list",
+   "Read how many contacts are shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.00262125
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open Contacts list view",
+   "Read number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0018885999999999998
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "View the Contacts list",
+   "Read the number of contacts shown including empty state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.00222435
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0017781
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "Read the contacts list to determine the number of contacts"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0019990999999999997
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts from the empty state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.00188435
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the displayed number of contacts"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.00189285
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.00168035
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0018758499999999999
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts shown in the list"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.00240025
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open Contacts to the main contacts list",
+   "Read the number of contacts from the list or empty state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.003466
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "Read the contacts count from the contacts list"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0020671
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0024751
+ },
+ {
+  "mode": "plan",
+  "variant": "p_only",
+  "plan": [
+   "Open Contacts list view",
+   "Read the contact count or empty state shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0023731
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "Read the total number of contacts shown including empty state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0018716
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts shown on the contacts list"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0020671
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.00173135
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open Contacts to the main contacts list",
+   "Read the number of contacts shown including empty state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0021903499999999998
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts shown on the contacts list"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.00235185
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0021861
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open Contacts list",
+   "Read displayed contact count"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0019183499999999999
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open Contacts to the contacts list",
+   "Read how many contacts are shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0022456
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts shown on the Contacts screen"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0018291
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open Contacts list view",
+   "Read number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.00215635
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open Contacts to the main Contacts list",
+   "Read the number of contacts from the list or empty state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0019736
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "Read the contacts list to determine count"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.00207135
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open Contacts contacts list",
+   "Read number of contacts from the list empty state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0020076
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Stay on Contacts tab in Contacts app",
+   "Read number of contacts from list state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0026961
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0021776
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.00221585
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0021946
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open Contacts to the Contacts list",
+   "Read the displayed contacts count or empty state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0022201
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open Contacts and stay on the Contacts tab",
+   "Read the number of contacts from the list or empty state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.00250485
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts from the contacts list"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0019523499999999998
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "Read the contacts list count"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0014508499999999998
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open Contacts app to the Contacts tab",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0018333499999999999
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "View the Contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0015401
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts from the list or empty state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0024453499999999998
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open Contacts to the main contacts list",
+   "Read the contact count from the list or empty state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.00196085
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list and read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.00246235
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts from the list or empty state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0019098499999999998
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0018801
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "View the main contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.00228385
+ },
+ {
+  "mode": "plan",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "Read the contacts count from the list or empty state"
+  ],
+  "full": false,
+  "tokens": 1066,
+  "cost": 0.0019651
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Screen already shows full contacts list state",
+  "tokens": 2724,
+  "cost": 0.00186405
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Screen shows contacts list is empty",
+  "tokens": 2724,
+  "cost": 0.0014167000000000001
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list with no contacts",
+  "tokens": 2724,
+  "cost": 0.00201595
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Contacts list is visible showing count",
+  "tokens": 2724,
+  "cost": 0.0015654500000000001
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Screen shows contacts list is empty",
+  "tokens": 2724,
+  "cost": 0.0019607
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "opens filters",
+  "reason": "Check list filters to ensure no contacts are hidden",
+  "tokens": 2724,
+  "cost": 0.0014847
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "opens filters",
+  "reason": "Check list filters to confirm count is not filtered",
+  "tokens": 2724,
+  "cost": 0.00449725
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Contacts list shows empty state",
+  "tokens": 2724,
+  "cost": 0.00244095
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list",
+  "tokens": 2724,
+  "cost": 0.0015952
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Screen already shows full contacts list as empty",
+  "tokens": 2724,
+  "cost": 0.0016079500000000001
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "opens filters",
+  "reason": "Check list filters to confirm no hidden contacts",
+  "tokens": 2724,
+  "cost": 0.00187995
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "opens filters",
+  "reason": "Check list filters to confirm count is complete",
+  "tokens": 2724,
+  "cost": 0.00183745
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Screen clearly shows empty contacts list",
+  "tokens": 2724,
+  "cost": 0.00187145
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list with 'No contacts yet'",
+  "tokens": 2724,
+  "cost": 0.00199045
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Screen shows contact count directly",
+  "tokens": 2724,
+  "cost": 0.0017652
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "opens filters",
+  "reason": "Verify no list filter is hiding contacts",
+  "tokens": 2724,
+  "cost": 0.0020723
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Screen shows contact list is empty",
+  "tokens": 2724,
+  "cost": 0.0022242
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Screen shows contact count status",
+  "tokens": 2724,
+  "cost": 0.0016037
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2724,
+  "cost": 0.0012297
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list with No contacts yet",
+  "tokens": 2724,
+  "cost": 0.0013742000000000001
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2724,
+  "cost": 0.00136145
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Screen already shows contacts list state",
+  "tokens": 2724,
+  "cost": 0.0019607
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "opens filters",
+  "reason": "Verify no hidden filter causing empty list",
+  "tokens": 2724,
+  "cost": 0.00155695
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Screen already shows contacts list status",
+  "tokens": 2724,
+  "cost": 0.0019267
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Screen already shows contacts list is empty",
+  "tokens": 2724,
+  "cost": 0.00239845
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Screen already shows contacts count as empty",
+  "tokens": 2724,
+  "cost": 0.00190545
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Screen already shows contacts list status",
+  "tokens": 2724,
+  "cost": 0.00237295
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Screen already shows contacts list status",
+  "tokens": 2724,
+  "cost": 0.0019692
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "answers",
+  "reason": "Contacts list shows empty, answer is zero",
+  "tokens": 2724,
+  "cost": 0.00133595
+ },
+ {
+  "mode": "step",
+  "variant": "cur",
+  "kind": "opens filters",
+  "reason": "Check filters to confirm count is complete",
+  "tokens": 2724,
+  "cost": 0.0016929500000000001
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "opens filters",
+  "reason": "Check list filters to confirm no contacts are hidden",
+  "tokens": 2724,
+  "cost": 0.00191395
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "answers",
+  "reason": "Screen shows contacts list is empty",
+  "tokens": 2724,
+  "cost": 0.0017227
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list with No contacts yet",
+  "tokens": 2724,
+  "cost": 0.0020839499999999998
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list",
+  "tokens": 2724,
+  "cost": 0.0014507
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "opens filters",
+  "reason": "Verify no filters hide contacts by showing list filters",
+  "tokens": 2724,
+  "cost": 0.0018247
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list",
+  "tokens": 2724,
+  "cost": 0.00156285
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "answers",
+  "reason": "Screen already shows full contacts list as empty",
+  "tokens": 2724,
+  "cost": 0.0023261999999999996
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list",
+  "tokens": 2724,
+  "cost": 0.0016632
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "opens filters",
+  "reason": "Check list filters to confirm no contacts are hidden",
+  "tokens": 2724,
+  "cost": 0.00183745
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "answers",
+  "reason": "Screen shows contact list status",
+  "tokens": 2724,
+  "cost": 0.0016632
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "answers",
+  "reason": "Screen shows contact count status",
+  "tokens": 2724,
+  "cost": 0.0014762
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list",
+  "tokens": 2724,
+  "cost": 0.0015357
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "answers",
+  "reason": "Screen already shows contacts count status",
+  "tokens": 2724,
+  "cost": 0.00203295
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "answers",
+  "reason": "Screen shows contact count directly",
+  "tokens": 2724,
+  "cost": 0.00130195
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "opens filters",
+  "reason": "Verify no filters are hiding contacts before counting",
+  "tokens": 2724,
+  "cost": 0.0016292000000000001
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "answers",
+  "reason": "Contacts list is visible showing empty state",
+  "tokens": 2724,
+  "cost": 0.0019947
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "opens filters",
+  "reason": "Check filters to ensure full list is shown",
+  "tokens": 2724,
+  "cost": 0.0015102
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list",
+  "tokens": 2724,
+  "cost": 0.00170995
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "answers",
+  "reason": "Screen already shows full contacts list as empty",
+  "tokens": 2724,
+  "cost": 0.00267895
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "opens filters",
+  "reason": "Verify filters to confirm full list is shown",
+  "tokens": 2724,
+  "cost": 0.0020202
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list with no contacts to count",
+  "tokens": 2724,
+  "cost": 0.00167595
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "answers",
+  "reason": "Screen shows no contacts exist",
+  "tokens": 2724,
+  "cost": 0.004374
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list",
+  "tokens": 2724,
+  "cost": 0.0014677
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list, count is visible",
+  "tokens": 2724,
+  "cost": 0.00187145
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "answers",
+  "reason": "Screen shows contacts list is empty",
+  "tokens": 2724,
+  "cost": 0.0017822
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "opens filters",
+  "reason": "Check list filters to confirm full list is shown",
+  "tokens": 2724,
+  "cost": 0.0019522
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list with no contacts to count",
+  "tokens": 2724,
+  "cost": 0.0023899499999999996
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "answers",
+  "reason": "Screen already shows full contacts list as empty",
+  "tokens": 2724,
+  "cost": 0.00179495
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "opens filters",
+  "reason": "Check list filters to confirm no hidden contacts",
+  "tokens": 2724,
+  "cost": 0.004255
+ },
+ {
+  "mode": "step",
+  "variant": "p_only",
+  "kind": "answers",
+  "reason": "Contacts list is visible and shows empty state",
+  "tokens": 2724,
+  "cost": 0.0015782
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "opens filters",
+  "reason": "Verify no hidden filters before counting",
+  "tokens": 2737,
+  "cost": 0.00207155
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "opens filters",
+  "reason": "Check filters to confirm full list is shown",
+  "tokens": 2737,
+  "cost": 0.0023721999999999997
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "answers",
+  "reason": "Screen already shows contact count state",
+  "tokens": 2737,
+  "cost": 0.0023041999999999997
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list, count is determined",
+  "tokens": 2737,
+  "cost": 0.00172195
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "answers",
+  "reason": "Screen already shows full contacts list with count",
+  "tokens": 2737,
+  "cost": 0.0017729500000000001
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "answers",
+  "reason": "Contacts list is visible and shows empty state",
+  "tokens": 2737,
+  "cost": 0.0019642
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "answers",
+  "reason": "Contacts list already shows empty state",
+  "tokens": 2737,
+  "cost": 0.00227445
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "opens filters",
+  "reason": "Need to verify no hidden filters before counting contacts",
+  "tokens": 2737,
+  "cost": 0.0014457
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "opens filters",
+  "reason": "Need to reveal filters to ensure full list is shown",
+  "tokens": 2737,
+  "cost": 0.0025115
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list, count is visible",
+  "tokens": 2737,
+  "cost": 0.0015817000000000001
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "answers",
+  "reason": "Screen already shows full contacts list as empty",
+  "tokens": 2737,
+  "cost": 0.0028057
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "answers",
+  "reason": "Screen shows contact count status",
+  "tokens": 2737,
+  "cost": 0.0015052
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "answers",
+  "reason": "Screen already shows empty contacts list",
+  "tokens": 2737,
+  "cost": 0.0029173000000000003
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "opens filters",
+  "reason": "Check list filters to confirm no contacts are hidden",
+  "tokens": 2737,
+  "cost": 0.0020800500000000004
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "opens filters",
+  "reason": "Verify no filters hide contacts before counting",
+  "tokens": 2737,
+  "cost": 0.00158595
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "answers",
+  "reason": "Screen shows contacts list status",
+  "tokens": 2737,
+  "cost": 0.0046325
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "answers",
+  "reason": "Screen shows contacts list status",
+  "tokens": 2737,
+  "cost": 0.0011397
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "opens filters",
+  "reason": "Verify no hidden filters before counting contacts",
+  "tokens": 2737,
+  "cost": 0.0015052
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list so count is known",
+  "tokens": 2737,
+  "cost": 0.0029671999999999997
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "answers",
+  "reason": "Contacts list shows empty state",
+  "tokens": 2737,
+  "cost": 0.0018537
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "answers",
+  "reason": "Contacts list is visible showing no contacts",
+  "tokens": 2737,
+  "cost": 0.0022107
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "answers",
+  "reason": "Screen shows empty contacts state",
+  "tokens": 2737,
+  "cost": 0.00155195
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list with 'No contacts yet'",
+  "tokens": 2737,
+  "cost": 0.00161145
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "answers",
+  "reason": "Screen already shows empty contacts list",
+  "tokens": 2737,
+  "cost": 0.0024402
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "answers",
+  "reason": "Screen already shows full contacts list as empty",
+  "tokens": 2737,
+  "cost": 0.00170495
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list with 'No contacts yet'",
+  "tokens": 2737,
+  "cost": 0.0021427
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "answers",
+  "reason": "Screen already shows full contacts list state",
+  "tokens": 2737,
+  "cost": 0.00267395
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "opens filters",
+  "reason": "Check list filters to confirm full list is shown",
+  "tokens": 2737,
+  "cost": 0.0016879500000000001
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "opens filters",
+  "reason": "Check list filters to confirm full contacts list is shown",
+  "tokens": 2737,
+  "cost": 0.0018962
+ },
+ {
+  "mode": "step",
+  "variant": "p_smin",
+  "kind": "answers",
+  "reason": "Contacts list is visible and shows empty state",
+  "tokens": 2737,
+  "cost": 0.0021905500000000003
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list is visible showing empty state",
+  "cost": 0.0049651999999999995
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list already shows the count",
+  "cost": 0.0049349
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "kind": "answers",
+  "reason": "Screen shows contacts list status",
+  "cost": 0.0038779
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open Contacts app to Contacts tab",
+   "Read contact count from list or empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows empty state with no contacts",
+  "cost": 0.00651885
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen already shows contact count status",
+  "cost": 0.0034973
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open Contacts app to the Contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen already shows contact count status",
+  "cost": 0.00418315
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "kind": "answers",
+  "reason": "Screen shows contacts list is empty with 'No contacts yet'",
+  "cost": 0.00481935
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the displayed number of contacts"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list shows empty state",
+  "cost": 0.004030199999999999
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "cost": 0.0050823
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": true,
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "cost": 0.0032658999999999995
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open Contacts and stay on the Contacts tab",
+   "Check the contact list for the total number of contacts"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen already shows contact count state",
+  "cost": 0.0043199
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": true,
+  "kind": "answers",
+  "reason": "Contacts list is visible and shows empty state",
+  "cost": 0.00406805
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contacts list is empty",
+  "cost": 0.0035494
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": true,
+  "kind": "opens filters",
+  "reason": "Check list filters to confirm count is not filtered",
+  "cost": 0.0040564
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contact count state",
+  "cost": 0.00444355
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the Contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list",
+  "cost": 0.0040764
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open Contacts to the main contact list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list shows empty state with no contacts",
+  "cost": 0.0037454
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list shows empty state, count is known",
+  "cost": 0.0034973
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": true,
+  "kind": "answers",
+  "reason": "Screen already shows contacts list status",
+  "cost": 0.0036473
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open Contacts list",
+   "Read number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contact count state",
+  "cost": 0.0037719
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Count the contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contact count state",
+  "cost": 0.0042014
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the Contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contact count, goal is answerable",
+  "cost": 0.0041074
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open Contacts app",
+   "View contacts list",
+   "Read number of contacts"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list already shows empty state",
+  "cost": 0.0045984
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen already shows contacts list is empty",
+  "cost": 0.00356215
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list is visible and shows empty state",
+  "cost": 0.00404555
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list shows count",
+  "cost": 0.0038371499999999997
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to determine the count"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "cost": 0.00625285
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contact count state",
+  "cost": 0.0035536499999999998
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app to the Contacts tab",
+   "Read the contacts list status to determine count"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list shows empty status",
+  "cost": 0.0048918
+ },
+ {
+  "mode": "chain",
+  "variant": "cur",
+  "plan": [
+   "Open Contacts app to Contacts list",
+   "Check contacts list count"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contacts list is empty",
+  "cost": 0.0039104
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts from the contacts list"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Count is visible on screen",
+  "cost": 0.004359399999999999
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open Contacts app to Contacts tab",
+   "Read displayed contact count or empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contact count state",
+  "cost": 0.004314149999999999
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open Contacts app to Contacts tab",
+   "Read contact count from list or empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contact count state",
+  "cost": 0.00404765
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "Read the displayed contact count including empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows empty state with no contacts",
+  "cost": 0.00369665
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open Contacts app to the Contacts list",
+   "Read the number of contacts shown including empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows empty state with zero contacts",
+  "cost": 0.0033149
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Verify Contacts list is displayed",
+   "Read the number of contacts from the screen"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen already shows contact count as empty",
+  "cost": 0.0029499
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open Contacts app to the Contacts list",
+   "Read the number of contacts shown or empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows empty state with zero contacts",
+  "cost": 0.0039609
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "Read the displayed contacts count or empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen already shows contacts count state",
+  "cost": 0.006856849999999999
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "cost": 0.0037114
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contact count",
+  "cost": 0.0040101500000000005
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Stay in Contacts on the main contacts list",
+   "Read the displayed contact count or empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows empty state with count",
+  "cost": 0.0042074
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts shown including empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts app shows empty state with count",
+  "cost": 0.0035619
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "View Contacts list",
+   "Read contact count or empty-state message"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contact count state",
+  "cost": 0.0036388999999999996
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to read the count"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contact count state",
+  "cost": 0.0036711499999999998
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "cost": 0.0031578
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "cost": 0.0033702999999999997
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open Contacts app to the Contacts list",
+   "Read the displayed contact count or empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contact count state",
+  "cost": 0.0038193999999999997
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app to the contacts list",
+   "Read the displayed contacts count or empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list shows empty state with count readable",
+  "cost": 0.00439865
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen already shows contact count status",
+  "cost": 0.0036346499999999997
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen already shows contact count, so answer the goal",
+  "cost": 0.0038928
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "Read the number of contacts shown including empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list shows empty state with zero contacts",
+  "cost": 0.0042724
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "Read the contacts count or empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contact count state",
+  "cost": 0.0037259
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "Read the contact count from the contacts list"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contact list is empty",
+  "cost": 0.0037306500000000003
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open Contacts to the main contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen already shows contacts list is empty",
+  "cost": 0.004879400000000001
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contact count status",
+  "cost": 0.0038059
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "Read the displayed contact count"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts app already open showing count",
+  "cost": 0.0038458999999999998
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list already shows the count",
+  "cost": 0.0034255500000000003
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts screen shows the total",
+  "cost": 0.0038897999999999997
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to see count or empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contact count state",
+  "cost": 0.00338465
+ },
+ {
+  "mode": "chain",
+  "variant": "p_only",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contact count directly",
+  "cost": 0.00329805
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open Contacts list",
+   "Read displayed contact count or empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contact list state",
+  "cost": 0.00393785
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "Read the contacts list count or empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contact count state",
+  "cost": 0.0036788999999999997
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts from the list or empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list shows empty state with count",
+  "cost": 0.00486415
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to read the count"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "cost": 0.00400615
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to read the total count"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list shows the total count",
+  "cost": 0.00397765
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open Contacts to the main contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contact count state",
+  "cost": 0.0037621499999999997
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open Contacts to the main contacts list",
+   "Read the displayed contact count or empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Main contacts list shows empty state",
+  "cost": 0.0032959
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "cost": 0.00405915
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "Read the displayed contact count"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contact count is visible as No contacts yet",
+  "cost": 0.00369215
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to read the count"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen already shows contact count state",
+  "cost": 0.00436205
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open Contacts to show the contact list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list is visible showing no contacts",
+  "cost": 0.004015899999999999
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "Read the contacts list to determine the count"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list",
+  "cost": 0.00302015
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open Contacts app to the Contacts list",
+   "Read the displayed contact count or empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contact list state",
+  "cost": 0.00355515
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "Read the displayed contact count or empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen already shows contact count state",
+  "cost": 0.0042484
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts shown in the list"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "cost": 0.0051039
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen already shows contacts list status",
+  "cost": 0.0036458000000000003
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open Contacts and view the contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list shows empty state with total visible",
+  "cost": 0.00378765
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open Contacts to the main Contacts list",
+   "Read the contact count from the list / empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows empty contacts state",
+  "cost": 0.0032899
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts from the list or empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list shows empty state with count",
+  "cost": 0.0040314
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts shown on the main list"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen already shows contact count status",
+  "cost": 0.0036091499999999998
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to read the count or empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list shows empty state with count",
+  "cost": 0.0044774
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "Read the displayed contacts count including empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows empty contacts state with count zero",
+  "cost": 0.0031228999999999996
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "cost": 0.00360755
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open Contacts to the main contacts list",
+   "Read the displayed contact count or empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows empty contacts state with count",
+  "cost": 0.0034903
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list already shows empty state",
+  "cost": 0.0038838
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "View the Contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows contact count",
+  "cost": 0.00358315
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open Contacts to the Contacts tab",
+   "Read the number of contacts shown including empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows empty state with no contacts to count",
+  "cost": 0.0038313999999999996
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Screen shows Contacts list is empty",
+  "cost": 0.00375715
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app",
+   "View the Contacts list",
+   "Read the number of contacts shown"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts, answering count",
+  "cost": 0.0035013
+ },
+ {
+  "mode": "chain",
+  "variant": "p_smin",
+  "plan": [
+   "Open the Contacts app to the Contacts list",
+   "Read the displayed contacts count or empty state"
+  ],
+  "full": false,
+  "kind": "answers",
+  "reason": "Contacts list shows empty state with count zero",
+  "cost": 0.0042704
+ }
+]

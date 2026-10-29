@@ -1,0 +1,84 @@
+{
+ "task": "SystemBrightnessMin",
+ "seed": 3942140537,
+ "goal": "Turn brightness to the min value.",
+ "score": 1.0,
+ "aw_run_time_s": 80.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 10:20:49.368865",
+ "envoy": {
+  "run_id": "aw-fixes3-dev-1028-101929-b132",
+  "goal": "Turn brightness to the min value.",
+  "max_steps": 10,
+  "config": {},
+  "status": "done_unverified",
+  "result": "Brightness turned to minimum (0%)",
+  "done": true,
+  "answer": "Brightness turned to minimum (0%)",
+  "steps_device": 6,
+  "iterations": 8,
+  "looks": 1,
+  "screenshots_sent": 4,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "scroll": 1,
+   "tap": 2,
+   "look": 1,
+   "swipe": 2,
+   "done": 1
+  },
+  "model_calls": 9,
+  "input_tokens": 25612,
+  "cached_tokens": 19065,
+  "output_tokens": 2549,
+  "reasoning_tokens": 1871,
+  "cost_usd": 0.001203,
+  "cost_at_standard_usd": 0.021877,
+  "duration_s": 74.82,
+  "model_s": 29.54,
+  "device_s": 45.28,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Settings",
+   "subgoals": [
+    "Open Settings app",
+    "Open Display settings",
+    "Set Brightness level to minimum"
+   ],
+   "success_check": {
+    "kind": "field_equals",
+    "value": "0",
+    "field_hint": "Brightness level"
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": false,
+   "detail": "field 'Brightness level' not found"
+  },
+  "trace_dir": "data/runs/aw-fixes3-dev-1028-101929-b132",
+  "envoy_commit": "70ed7a8470867f86dd6a548d0fdce2fa4977073e",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes3-dev/traces/SystemBrightnessMin__s3942140537.jsonl.gz",
+  "wall_s": 77.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.5
+  }
+ }
+}

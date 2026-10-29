@@ -1,0 +1,97 @@
+{
+ "task": "SimpleCalendarLocationOfEvent",
+ "seed": 507692354,
+ "goal": "What is the location of my Team Offsite event in Simple Calendar Pro? Answer with the location only.",
+ "score": 1.0,
+ "aw_run_time_s": 15.9,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 13:21:23.985738",
+ "envoy": {
+  "run_id": "aw-answers-seeds-1029-132110-379d",
+  "goal": "What is the location of my Team Offsite event in Simple Calendar Pro? Answer with the location only.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "answers-verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "simple_calendar_pro_get_event_location",
+   "stage": "model confirmed",
+   "inputs": {
+    "event_name": "Team Offsite"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "simple_calendar_pro_get_event_location",
+     0.822
+    ],
+    [
+     "simple_calendar_pro_get_event_titles",
+     0.305
+    ],
+    [
+     "pro_expense_delete_expense",
+     0.244
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "simple_calendar_pro_get_event_location",
+  "version": 1,
+  "done": true,
+  "answer": "Sarah's apartment",
+  "outputs": {
+   "location": "Sarah's apartment"
+  },
+  "steps_used": 3,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_simple_calendar_pro",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "search_event",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_event_result",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.002128,
+  "cost_at_standard_usd": 0.002128,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 5.51,
+  "routine_duration_s": 3.36,
+  "trace_dir": "data/runs/aw-answers-seeds-1029-132110-379d",
+  "wall_s": 8.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

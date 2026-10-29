@@ -1,0 +1,22 @@
+{
+ "name": "simple_calendar_pro_get_events",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-29 01:33:14",
+   "parent": null,
+   "changes": [
+    "compiled from aw-baseline-standard-1028-044802-d25b"
+   ],
+   "verification": {
+    "source": "routine-answers 1f1fc11 recompile",
+    "task": "SimpleCalendarEventsOnDate"
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.google.android.apps.nexuslauncher"
+}

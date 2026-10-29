@@ -1,0 +1,441 @@
+routine: calendar_create_event
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Create an event in Simple Calendar Pro
+description: Creates a new event in Simple Calendar Pro with a specified title, description, date, start time, and duration, saves it, and verifies
+  it by searching for its title.
+patterns: [create a calendar event, add a new event, schedule an event for tomorrow, create an event with a title and description, schedule a
+    timed calendar event]
+outputs: [created_event, event_time_range]
+start: fresh_launch
+inputs:
+  event_title: {type: text, description: Title of the calendar event, example: Call with the Team}
+  event_description: {type: text, description: Description of the calendar event, example: We will prepare for team roles.}
+  event_day: {type: text, description: 'Day of the month on which the event occurs, as shown in the date picker', example: '16'}
+  event_start_hour: {type: text, description: 'Hour at which the event starts, in 24-hour format', example: '20'}
+  event_duration_minutes: {type: text, description: 'Duration of the event in minutes, used to set the ending minute when the event starts on
+      the hour', example: '30'}
+steps:
+- id: launch_simple_calendar_pro
+  intent: Launch Simple Calendar Pro
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.simplemobiletools.calendar.pro}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: top_toolbar_search_icon, kind: Button}
+  - element_present: {resource_id: top_toolbar_search, text: Search, kind: EditText}
+  risk: read
+  note: trace step 1
+- id: tap_new_event
+  intent: Tap New Event to begin creating an event
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: calendar_fab
+      text: New Event
+      kind: Button
+      cls: ImageButton
+      parent: main_holder
+      in_list: false
+      position: [0.893, 0.926]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: fab_extended_overlay, kind: Button}
+  - element_present: {resource_id: fab_task_label, text: Task, kind: Button}
+  risk: reversible
+  note: trace step 2
+- id: select_event_type
+  intent: Tap Event to create a calendar event
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: fab_event_label
+      text: Event
+      kind: Button
+      cls: TextView
+      parent: main_holder
+      siblings: [Task, New Event]
+      in_list: false
+      position: [0.752, 0.926]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: save, text: Save, kind: Button}
+  - element_present: {resource_id: event_nested_scrollview, kind: List}
+  risk: reversible
+  note: trace step 3
+- id: enter_event_title
+  intent: "Enter {{event_title}} as the event title"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    type:
+      field:
+        resource_id: event_title
+        text: Title
+        hint: Title
+        kind: EditText
+        cls: EditText
+        parent: event_holder
+        siblings: [Location, Description]
+        in_list: true
+        position: [0.5, 0.165]
+      value: "{{event_title}}"
+  post:
+  - field_equals:
+      field: {resource_id: event_title, text: Title, kind: EditText}
+      value: "{{event_title}}"
+  risk: reversible
+  note: trace step 4
+- id: enter_event_description
+  intent: "Enter {{event_description}} as the event description"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    type:
+      field:
+        resource_id: event_description
+        text: Description
+        hint: Description
+        kind: EditText
+        cls: EditText
+        parent: event_holder
+        siblings: [Call with the Team, Location]
+        in_list: true
+        position: [0.5, 0.297]
+      value: "{{event_description}}"
+  post:
+  - field_equals:
+      field: {resource_id: event_description, text: Description, kind: EditText}
+      value: "{{event_description}}"
+  risk: reversible
+  note: trace step 5
+- id: tap_start_date
+  intent: Tap the start date field to open the date picker
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: event_start_date
+      kind: Button
+      cls: TextView
+      parent: event_holder
+      siblings: [Call with the Team, Location, We will prepare for team roles.]
+      in_list: true
+      position: [0.324, 0.453]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: day_picker_view_pager, kind: List}
+  - element_present: {resource_id: prev, text: Previous month, kind: Button}
+  risk: reversible
+  note: trace step 6
+- id: find_select_event_day
+  intent: "Scroll to {{event_day}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        text_has: "{{event_day}}"
+        kind: Button
+        cls: View
+        parent: month_view
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      text_has: "{{event_day}}"
+      kind: Button
+      cls: View
+      parent: month_view
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: select_event_day
+  intent: "Select day {{event_day}} in the date picker"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      text_has: "{{event_day}}"
+      kind: Button
+      cls: View
+      parent: month_view
+      in_list: true
+  post:
+  - element_present:
+      resource_id: date_picker_header_date
+      text: "Mon, Oct {{event_day}}"
+      kind: Button
+  risk: reversible
+  note: trace step 7
+- id: confirm_start_date
+  intent: Tap OK to confirm the selected start date
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: button1
+      text: OK
+      kind: Button
+      cls: Button
+      siblings: [Cancel]
+      in_list: false
+      position: [0.781, 0.749]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: event_title
+      text: "Title: {{event_title}}"
+      kind: EditText
+  - element_present:
+      resource_id: event_description
+      text: "Description: {{event_description}}"
+      kind: EditText
+  risk: reversible
+  note: trace step 8
+- id: tap_start_time
+  intent: Tap the start time field to open the time picker
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: event_start_time
+      text_has: "{{event_day}}"
+      kind: Button
+      cls: TextView
+      parent: event_holder
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: header_title, text: Select time, kind: Text}
+  - element_present:
+      resource_id: material_hour_tv
+      text: "{{event_day}}"
+      kind: Toggle
+  risk: reversible
+  note: trace step 9
+- id: select_start_hour
+  intent: "Select start hour {{event_start_hour}} in the time picker"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      text_has: "{{event_start_hour}}"
+      kind: Button
+      cls: TextView
+      parent: material_clock_face
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: material_hour_tv
+      text: "{{event_start_hour}}"
+      kind: Toggle
+  - element_present:
+      text: "{{event_duration_minutes}}"
+      kind: Button
+  risk: reversible
+  note: trace step 10
+- id: confirm_start_time
+  intent: Tap OK to confirm the start time
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: material_timepicker_ok_button
+      text: OK
+      kind: Button
+      cls: Button
+      siblings: [Select time, Switch to text input mode for the time input., Cancel]
+      in_list: false
+      position: [0.772, 0.759]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: event_title
+      text: "Title: {{event_title}}"
+      kind: EditText
+  - element_present:
+      resource_id: event_description
+      text: "Description: {{event_description}}"
+      kind: EditText
+  risk: reversible
+  note: trace step 11
+- id: tap_end_time
+  intent: Tap the end time field to open the time picker
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: event_end_time
+      text_has: "{{event_start_hour}}"
+      kind: Button
+      cls: TextView
+      parent: event_holder
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: header_title, text: Select time, kind: Text}
+  - element_present:
+      resource_id: material_hour_tv
+      text: "{{event_start_hour}}"
+      kind: Toggle
+  risk: reversible
+  note: trace step 12
+- id: switch_to_minute_selection
+  intent: Tap the minute display to switch to minute selection
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: material_minute_tv
+      kind: Toggle
+      cls: View
+      parent: material_clock_display
+      siblings:
+      - ":"
+      in_list: false
+      position: [0.646, 0.341]
+  post:
+  - {screen_changed: true}
+  - toggle_is:
+      target: {resource_id: material_minute_tv, kind: Toggle}
+      value: 'on'
+  - element_present:
+      text: "{{event_duration_minutes}}"
+      kind: Button
+  risk: reversible
+  note: trace step 13
+- id: select_end_minute
+  intent: "Select minute {{event_duration_minutes}} to set the event duration to {{event_duration_minutes}} minutes"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      text_has: "{{event_duration_minutes}}"
+      kind: Button
+      cls: TextView
+      parent: material_clock_face
+      in_list: false
+  post:
+  - element_present:
+      resource_id: material_minute_tv
+      text: "{{event_duration_minutes}}"
+      kind: Toggle
+  risk: reversible
+  note: trace step 14
+- id: confirm_end_time
+  intent: Tap OK to confirm the end time
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: material_timepicker_ok_button
+      text: OK
+      kind: Button
+      cls: Button
+      siblings: [Select time, Switch to text input mode for the time input., Cancel]
+      in_list: false
+      position: [0.772, 0.759]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: event_title
+      text: "Title: {{event_title}}"
+      kind: EditText
+  - element_present:
+      resource_id: event_description
+      text: "Description: {{event_description}}"
+      kind: EditText
+  risk: reversible
+  note: trace step 15
+- id: save_event
+  intent: Tap Save to save the event
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: save
+      text: Save
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.941, 0.088]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: title_template, text: Disclaimer, kind: Text}
+  - element_present: {resource_id: topPanel, text: Disclaimer, kind: Text}
+  risk: reversible
+  note: trace step 16
+- id: dismiss_disclaimer
+  intent: Tap OK to dismiss the disclaimer and finish saving
+  optional: true
+  pre:
+  - {app_foreground: Disclaimer}
+  action:
+    tap:
+      resource_id: button1
+      text: OK
+      kind: Button
+      cls: Button
+      siblings: [Settings]
+      in_list: false
+      position: [0.78, 0.63]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: top_toolbar_search_icon, kind: Button}
+  - element_present: {resource_id: top_toolbar_search, text: Search, kind: EditText}
+  risk: reversible
+  note: "trace step 17 · one-time screen: optional"
+- id: search_for_created_event
+  intent: "Type {{event_title}} in Search to verify the saved event appears"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    type:
+      field:
+        resource_id: top_toolbar_search
+        text: Search
+        hint: Search
+        kind: EditText
+        cls: EditText
+        parent: top_toolbar_holder
+        in_list: false
+        position: [0.358, 0.088]
+      value: "{{event_title}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: event_section_title
+      text: "{{event_day}} Monday"
+      kind: Button
+  - element_present:
+      resource_id: top_toolbar_search
+      text: "Search: {{event_title}}"
+      kind: EditText
+  risk: reversible
+  extract:
+    created_event:
+      locator: {resource_id: event_item_holder, kind: Button}
+    event_time_range:
+      near: Call with the Team
+      locator: {resource_id: event_item_holder, kind: Button}
+      segment: 1
+      expect_digits: true
+  note: trace step 18
+done:
+- text_visible: "{{event_title}}"
+compiled_from:
+  task_id: aw-final-standard-1028-165722-cc9f
+  goal: In Simple Calendar Pro, create a calendar event for tomorrow at 20h with the title 'Call with the Team' and the description 'We will prepare
+    for team roles.'. The event should last for 30 mins.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:46:58"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+  trace_steps_dropped: 0
+  cost_usd: 0.0876

@@ -1,0 +1,83 @@
+{
+ "task": "ClockStopWatchPausedVerify",
+ "seed": 629279813,
+ "goal": "Pause the stopwatch.",
+ "score": 1.0,
+ "aw_run_time_s": 9.9,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 02:00:15.317594",
+ "envoy": {
+  "run_id": "aw-answers-seeds-1029-020006-6e34",
+  "goal": "Pause the stopwatch.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "answers-verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "clock_pause_stopwatch",
+   "stage": "model confirmed",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "clock_pause_stopwatch",
+     1.0
+    ],
+    [
+     "clock_start_stopwatch",
+     0.5
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "clock_pause_stopwatch",
+  "version": 1,
+  "done": true,
+  "answer": "00",
+  "outputs": {
+   "elapsed_time": "00"
+  },
+  "steps_used": 2,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_clock",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_stopwatch_tab",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.001573,
+  "cost_at_standard_usd": 0.001573,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 4.08,
+  "routine_duration_s": 1.8,
+  "trace_dir": "data/runs/aw-answers-seeds-1029-020006-6e34",
+  "wall_s": 6.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

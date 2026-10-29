@@ -1,0 +1,132 @@
+{
+ "task": "SimpleSmsReplyMostRecent",
+ "seed": 1879852763,
+ "goal": "Reply to the most recent text message using Simple SMS Messenger with message: Monthly budget meeting pushed to Friday.",
+ "score": 1.0,
+ "aw_run_time_s": 41.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 13:26:13.853120",
+ "envoy": {
+  "run_id": "aw-answers-seeds-1029-132551-eb9a",
+  "goal": "Reply to the most recent text message using Simple SMS Messenger with message: Monthly budget meeting pushed to Friday.",
+  "max_steps": 12,
+  "config": {
+   "mode": "routine",
+   "library": "answers-verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "simple_sms_messenger_reply_most_recent_m",
+   "stage": "model confirmed",
+   "inputs": {
+    "message_text": "Monthly budget meeting pushed to Friday."
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "simple_sms_messenger_reply_most_recent_m",
+     0.829
+    ],
+    [
+     "simple_sms_messenger_send_message",
+     0.651
+    ],
+    [
+     "simple_sms_messenger_reply_to_conversati",
+     0.643
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "simple_sms_messenger_reply_most_recent_m",
+  "version": 1,
+  "done": true,
+  "answer": "Lorem Ipsum is simply dummy text.",
+  "outputs": {
+   "sent_message_text": "Lorem Ipsum is simply dummy text."
+  },
+  "steps_used": 6,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "swipe_to_open_search",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "type_app_search",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "launch_simple_sms_messenger",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_most_recent_conversation",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "type_reply_message",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_send_sms",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.002392,
+  "cost_at_standard_usd": 0.002392,
+  "approvals": [
+   {
+    "step": "tap_send_sms",
+    "description": "tap \"SMS\" in com.simplemobiletools.smsmessenger (routine simple_sms_messenger_reply_most_recent_m v1)",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/thread_send_message'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "duration_s": 11.69,
+  "routine_duration_s": 9.39,
+  "trace_dir": "data/runs/aw-answers-seeds-1029-132551-eb9a",
+  "wall_s": 14.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

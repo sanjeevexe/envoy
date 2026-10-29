@@ -1,0 +1,143 @@
+{
+ "task": "SimpleSmsSend",
+ "seed": 2804997813,
+ "goal": "Send a text message using Simple SMS Messenger to +11814770340 with message: Your dentist appointment is scheduled for 2 PM on Thursday.",
+ "score": 1.0,
+ "aw_run_time_s": 24.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 13:27:07.112156",
+ "envoy": {
+  "run_id": "aw-answers-seeds-1029-132648-0b2d",
+  "goal": "Send a text message using Simple SMS Messenger to +11814770340 with message: Your dentist appointment is scheduled for 2 PM on Thursday.",
+  "max_steps": 12,
+  "config": {
+   "mode": "routine",
+   "library": "answers-verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "simple_sms_messenger_send_message",
+   "stage": "model confirmed",
+   "inputs": {
+    "recipient_phone_number": "+11814770340",
+    "message_text": "Your dentist appointment is scheduled for 2 PM on Thursday."
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "simple_sms_messenger_send_message",
+     0.815
+    ],
+    [
+     "simple_sms_messenger_reply_to_conversati",
+     0.654
+    ],
+    [
+     "simple_sms_messenger_reply_most_recent_m",
+     0.529
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "simple_sms_messenger_send_message",
+  "version": 1,
+  "done": true,
+  "answer": "15:34",
+  "outputs": {
+   "sent_time": "15:34"
+  },
+  "steps_used": 6,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_simple_sms_messenger",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "start_conversation",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipient_phone_number",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "confirm_recipient",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "type_message",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "send_message",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.002672,
+  "cost_at_standard_usd": 0.002672,
+  "approvals": [
+   {
+    "step": "confirm_recipient",
+    "description": "tap \"\" in com.simplemobiletools.smsmessenger (routine simple_sms_messenger_send_message v1)",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/new_conversation_confirm'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": "send_message",
+    "description": "tap \"SMS\" in com.simplemobiletools.smsmessenger (routine simple_sms_messenger_send_message v1)",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/thread_send_message'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "duration_s": 6.94,
+  "routine_duration_s": 3.95,
+  "trace_dir": "data/runs/aw-answers-seeds-1029-132648-0b2d",
+  "wall_s": 9.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

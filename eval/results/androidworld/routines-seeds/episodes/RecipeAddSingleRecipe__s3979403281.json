@@ -1,0 +1,159 @@
+{
+ "task": "RecipeAddSingleRecipe",
+ "seed": 3979403281,
+ "goal": "Add the following recipes into the Broccoli app:\ntitle|description|servings|preparationTime|ingredients|directions\nCaprese Salad Skewers|A quick and easy meal, perfect for busy weekdays.|8 servings|2 hrs|various amounts|Thread cherry tomatoes, basil leaves, and mozzarella balls onto skewers. Drizzle with balsamic glaze. Feel free to substitute with ingredients you have on hand.",
+ "score": 1.0,
+ "aw_run_time_s": 18.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 22:22:23.450867",
+ "envoy": {
+  "run_id": "aw-routines-seeds-1028-222206-fe46",
+  "goal": "Add the following recipes into the Broccoli app:\ntitle|description|servings|preparationTime|ingredients|directions\nCaprese Salad Skewers|A quick and easy meal, perfect for busy weekdays.|8 servings|2 hrs|various amounts|Thread cherry tomatoes, basil leaves, and mozzarella balls onto skewers. Drizzle with balsamic glaze. Feel free to substitute with ingredients you have on hand.",
+  "max_steps": 24,
+  "config": {
+   "mode": "routine",
+   "library": "verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "b82e5124ea28700f4c8812839c4a7c8aae5bc782",
+  "mode": "routine",
+  "match": {
+   "routine": "broccoli_add_recipe",
+   "stage": "model confirmed",
+   "inputs": {
+    "recipe_title": "Caprese Salad Skewers",
+    "recipe_description": "A quick and easy meal, perfect for busy weekdays.",
+    "recipe_servings": "8 servings",
+    "recipe_preparation_time": "2 hrs",
+    "recipe_ingredients": "various amounts",
+    "recipe_directions": "Thread cherry tomatoes, basil leaves, and mozzarella balls onto skewers. Drizzle with balsamic glaze. Feel free to substitute with ingredients you have on hand."
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "broccoli_add_recipe",
+     0.478
+    ],
+    [
+     "broccoli_delete_recipes_by_ingredient",
+     0.269
+    ],
+    [
+     "contacts_open_app",
+     0.21
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "broccoli_add_recipe",
+  "version": 1,
+  "done": true,
+  "answer": "Caprese Salad Skewers, 8 servings, 2 hrs",
+  "outputs": {
+   "saved_recipe_title": "Caprese Salad Skewers",
+   "saved_recipe_servings": "8 servings",
+   "saved_recipe_preparation_time": "2 hrs"
+  },
+  "steps_used": 10,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "open_broccoli_app",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_new_recipe",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_title",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_description",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_servings",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_preparation_time",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_ingredients",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "scroll_to_directions",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipe_directions",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "save_recipe",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.003477,
+  "cost_at_standard_usd": 0.003477,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 11.61,
+  "routine_duration_s": 8.46,
+  "trace_dir": "data/runs/aw-routines-seeds-1028-222206-fe46",
+  "wall_s": 14.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

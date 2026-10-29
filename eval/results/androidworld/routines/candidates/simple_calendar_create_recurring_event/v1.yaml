@@ -1,0 +1,394 @@
+routine: simple_calendar_create_recurring_event
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Create a recurring calendar event in Simple Calendar Pro
+description: Creates a weekly recurring event that repeats forever in Simple Calendar Pro using a supplied title, description, start date, start
+  time, and end time.
+patterns: [Create a recurring calendar event, Add a weekly event that repeats forever, Schedule a recurring event with a title and description,
+  Create a repeating calendar appointment]
+outputs: [event_title, event_start_time, event_end_time, repetition]
+start: fresh_launch
+inputs:
+  event_title: {type: text, description: Title of the calendar event, example: Review session for Budget Planning}
+  event_description: {type: text, description: Description of the calendar event, example: We will understand business objectives. Remember to
+      confirm attendance.}
+  event_start_time:
+    type: text
+    description: Start time of each event occurrence
+    example: "14:00"
+  event_end_time:
+    type: text
+    description: End time of each event occurrence
+    example: "15:00"
+  recurrence_frequency: {type: text, description: How often the event repeats, example: Weekly}
+steps:
+- id: launch_app
+  intent: Launch Simple Calendar Pro
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.simplemobiletools.calendar.pro}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: top_toolbar_search_icon, kind: Button}
+  - element_present: {resource_id: top_toolbar_search, text: Search, kind: EditText}
+  risk: read
+  note: trace step 1
+- id: tap_new_event
+  intent: Tap New Event to start creating an event
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: calendar_fab
+      text: New Event
+      kind: Button
+      cls: ImageButton
+      parent: main_holder
+      in_list: false
+      position: [0.893, 0.926]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: fab_extended_overlay, kind: Button}
+  - element_present: {resource_id: fab_task_label, text: Task, kind: Button}
+  risk: reversible
+  note: trace step 2
+- id: tap_event
+  intent: Tap Event to open the event creation form
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: fab_event_label
+      text: Event
+      kind: Button
+      cls: TextView
+      parent: main_holder
+      siblings: [Task, New Event]
+      in_list: false
+      position: [0.752, 0.926]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: save, text: Save, kind: Button}
+  - element_present: {resource_id: event_nested_scrollview, kind: List}
+  risk: reversible
+  note: trace step 3
+- id: enter_event_title
+  intent: "Enter {{event_title}} as the event title"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    type:
+      field:
+        resource_id: event_title
+        text: Title
+        hint: Title
+        kind: EditText
+        cls: EditText
+        parent: event_holder
+        siblings: [Location, Description]
+        in_list: true
+        position: [0.5, 0.165]
+      value: "{{event_title}}"
+  post:
+  - field_equals:
+      field: {resource_id: event_title, text: Title, kind: EditText}
+      value: "{{event_title}}"
+  risk: reversible
+  note: trace step 4
+- id: enter_event_description
+  intent: "Enter {{event_description}} as the event description"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    type:
+      field:
+        resource_id: event_description
+        text: Description
+        hint: Description
+        kind: EditText
+        cls: EditText
+        parent: event_holder
+        siblings: [Review session for Budget Planning, Location]
+        in_list: true
+        position: [0.5, 0.297]
+      value: "{{event_description}}"
+  post:
+  - field_equals:
+      field: {resource_id: event_description, text: Description, kind: EditText}
+      value: "{{event_description}}"
+  risk: reversible
+  note: trace step 5
+- id: tap_start_time
+  intent: "Tap the start time field to set {{event_start_time}}"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: event_start_time
+      kind: Button
+      cls: TextView
+      parent: event_holder
+      siblings: [Review session for Budget Planning, Location, We will understand business objectives. Remember to confirm attendance.]
+      in_list: true
+      position: [0.89, 0.475]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: header_title, text: Select time, kind: Text}
+  - element_present: {resource_id: material_timepicker_mode_button, text: Switch to text input mode for the time input., kind: Button}
+  risk: reversible
+  note: trace step 6
+- id: select_start_hour
+  intent: "Select the hour for {{event_start_time}}"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      text_has: "{{event_start_time}}"
+      kind: Button
+      cls: TextView
+      parent: material_clock_face
+      in_list: false
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 7
+- id: confirm_start_time
+  intent: Confirm the selected start time
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: material_timepicker_ok_button
+      text: OK
+      kind: Button
+      cls: Button
+      siblings: [Select time, Switch to text input mode for the time input., Cancel]
+      in_list: false
+      position: [0.772, 0.759]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: event_title
+      text: "Title: {{event_title}}"
+      kind: EditText
+  - element_present:
+      resource_id: event_start_time
+      text: "{{event_start_time}}"
+      kind: Button
+  risk: reversible
+  note: trace step 8
+- id: tap_end_time
+  intent: "Tap the end time field to set {{event_end_time}}"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: event_end_time
+      text_has: "{{event_start_time}}"
+      kind: Button
+      cls: TextView
+      parent: event_holder
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: header_title, text: Select time, kind: Text}
+  - element_present: {resource_id: material_timepicker_mode_button, text: Switch to text input mode for the time input., kind: Button}
+  risk: reversible
+  note: trace step 9
+- id: select_end_hour
+  intent: "Select the hour for {{event_end_time}}"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      text_has: "{{event_end_time}}"
+      kind: Button
+      cls: TextView
+      parent: material_clock_face
+      in_list: false
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 10
+- id: confirm_end_time
+  intent: Confirm the selected end time
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: material_timepicker_ok_button
+      text: OK
+      kind: Button
+      cls: Button
+      siblings: [Select time, Switch to text input mode for the time input., Cancel]
+      in_list: false
+      position: [0.772, 0.759]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: event_title
+      text: "Title: {{event_title}}"
+      kind: EditText
+  - element_present:
+      resource_id: event_start_time
+      text: "{{event_start_time}}"
+      kind: Button
+  risk: reversible
+  note: trace step 11
+- id: tap_repetition_setting
+  intent: Tap No repetition to change the recurrence setting
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: event_repetition
+      text: No repetition
+      kind: Button
+      cls: TextView
+      parent: event_holder
+      siblings: [Review session for Budget Planning, Location, We will understand business objectives. Remember to confirm attendance.]
+      in_list: false
+      position: [0.574, 0.749]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      text: "{{recurrence_frequency}}"
+      kind: Radio
+  risk: reversible
+  note: trace step 12
+- id: select_recurrence_frequency
+  intent: "Select {{recurrence_frequency}} repetition, repeating forever"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      text_has: "{{recurrence_frequency}}"
+      kind: Radio
+      cls: RadioButton
+      parent: dialog_radio_group
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: save, text: Save, kind: Button}
+  - element_present: {resource_id: event_nested_scrollview, kind: List}
+  risk: reversible
+  note: trace step 13
+- id: save_event
+  intent: "Save the event starting on {{event_start_date}}"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: save
+      text: Save
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.941, 0.088]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: title_template, text: Disclaimer, kind: Text}
+  - element_present: {resource_id: topPanel, text: Disclaimer, kind: Text}
+  risk: reversible
+  note: trace step 14
+- id: dismiss_disclaimer
+  intent: Tap OK to dismiss the disclaimer and finish saving the event
+  optional: true
+  pre:
+  - {app_foreground: Disclaimer}
+  action:
+    tap:
+      resource_id: button1
+      text: OK
+      kind: Button
+      cls: Button
+      siblings: [Settings]
+      in_list: false
+      position: [0.78, 0.63]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: top_toolbar_search_icon, kind: Button}
+  - element_present: {resource_id: top_toolbar_search, text: Search, kind: EditText}
+  risk: reversible
+  note: "trace step 15 · one-time screen: optional"
+- id: verify_calendar_view
+  intent: "Tap in the calendar view for {{event_start_date}} to verify the created event"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      visual: the Review event on October 15
+      crop: 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
+      region: [0.0, 0.61, 0.142, 0.625]
+      density: 420
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 17
+- id: find_open_created_event
+  intent: "Scroll to {{event_title}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: event_item_holder
+        text_has: "{{event_title}}"
+        kind: Button
+        cls: ViewGroup
+        parent: day_events
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: event_item_holder
+      text_has: "{{event_title}}"
+      kind: Button
+      cls: ViewGroup
+      parent: day_events
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: open_created_event
+  intent: "Tap the event showing {{event_title}} from {{event_start_time}} to {{event_end_time}} to verify its details"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: event_item_holder
+      text_has: "{{event_title}}"
+      kind: Button
+      cls: ViewGroup
+      parent: day_events
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: save, text: Save, kind: Button}
+  - element_present: {resource_id: delete, text: Delete, kind: Button}
+  risk: irreversible
+  extract:
+    event_title:
+      near: Title
+      locator: {resource_id: event_title, kind: EditText}
+    event_start_time:
+      locator: {resource_id: event_start_time, kind: Button}
+      expect_digits: true
+    event_end_time:
+      locator: {resource_id: event_end_time, kind: Button}
+      expect_digits: true
+    repetition:
+      locator: {resource_id: event_repetition, kind: Button}
+  note: trace step 18
+done:
+- text_visible: "{{event_title}}"
+compiled_from:
+  task_id: aw-final-standard-1028-165814-3267
+  goal: In Simple Calendar Pro, create a recurring calendar event titled 'Review session for Budget Planning' starting on 2023-10-15 at 14h. The
+    event recurs weekly, forever, and lasts for 60 minutes each occurrence. The event description should be 'We will understand business objectives.
+    Remember to confirm attendance.'.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:47:36"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18]
+  trace_steps_dropped: 1
+  cost_usd: 0.1151

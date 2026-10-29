@@ -1,0 +1,70 @@
+{
+ "task": "ExpenseAddMultipleFromGallery",
+ "seed": 1284149777,
+ "goal": "Add the expenses from expenses.jpg in Simple Gallery Pro to pro expense.",
+ "score": 0.0,
+ "aw_run_time_s": 15.0,
+ "aw_episode_length": 60,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:53:43.617545",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-175334-2904",
+  "goal": "Add the expenses from expenses.jpg in Simple Gallery Pro to pro expense.",
+  "max_steps": 60,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "pro_expense_add_expenses_from_gallery_im",
+   "stage": "model confirmed",
+   "inputs": {
+    "expense_image_filename": "expenses.jpg"
+   },
+   "missing": [
+    "expense_1_name",
+    "expense_1_amount",
+    "expense_1_category",
+    "expense_1_note",
+    "expense_2_name",
+    "expense_2_amount",
+    "expense_2_category",
+    "expense_2_note",
+    "expense_3_name",
+    "expense_3_amount",
+    "expense_3_category",
+    "expense_3_note"
+   ],
+   "candidates": [
+    [
+     "pro_expense_add_expenses_from_gallery_im",
+     0.743
+    ],
+    [
+     "pro_expense_delete_expenses",
+     0.621
+    ],
+    [
+     "pro_expense_delete_expense",
+     0.514
+    ]
+   ]
+  },
+  "status": "needs_user",
+  "result": "model confirmed",
+  "done": false,
+  "answer": null,
+  "model_calls": 1,
+  "cost_at_standard_usd": 0.004475,
+  "duration_s": 3.91,
+  "wall_s": 6.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.6
+  }
+ }
+}

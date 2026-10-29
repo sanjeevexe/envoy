@@ -1,0 +1,86 @@
+{
+ "task": "SystemBrightnessMin",
+ "seed": 2563840600,
+ "goal": "Turn brightness to the min value.",
+ "score": 1.0,
+ "aw_run_time_s": 63.0,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 23:52:39.639947",
+ "envoy": {
+  "run_id": "aw-agent-seeds-1028-235138-33af",
+  "goal": "Turn brightness to the min value.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done_unverified",
+  "result": "Brightness set to minimum (0% / 0.0)",
+  "done": true,
+  "answer": "Brightness set to minimum (0% / 0.0)",
+  "steps_device": 6,
+  "iterations": 8,
+  "looks": 1,
+  "screenshots_sent": 4,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "scroll": 1,
+   "tap": 2,
+   "look": 1,
+   "swipe": 2,
+   "done": 1
+  },
+  "model_calls": 9,
+  "input_tokens": 26321,
+  "cached_tokens": 20089,
+  "output_tokens": 1984,
+  "reasoning_tokens": 1329,
+  "cost_usd": 0.019235,
+  "cost_at_standard_usd": 0.019235,
+  "duration_s": 56.48,
+  "model_s": 11.19,
+  "device_s": 45.29,
+  "connect_s": 0.91,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Settings",
+   "subgoals": [
+    "Open the Settings app",
+    "Open Display settings",
+    "Set Brightness level slider to minimum"
+   ],
+   "success_check": {
+    "kind": "field_equals",
+    "value": "0",
+    "field_hint": "Brightness level"
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": false,
+   "detail": "field 'Brightness level' not found"
+  },
+  "trace_dir": "data/runs/aw-agent-seeds-1028-235138-33af",
+  "envoy_commit": "cdd130ecae3cf0891ddc6106da4ad6d1be97fde0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/agent-seeds/traces/SystemBrightnessMin__s2563840600.jsonl.gz",
+  "wall_s": 59.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

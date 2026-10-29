@@ -1,0 +1,22 @@
+{
+ "name": "settings_set_brightness_minimum_2",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-28 05:45:30",
+   "parent": null,
+   "changes": [
+    "compiled from aw-baseline-standard-1028-050646-87ae"
+   ],
+   "verification": {
+    "source": "baseline-standard",
+    "source_seed": 3942140537
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.google.android.apps.nexuslauncher"
+}

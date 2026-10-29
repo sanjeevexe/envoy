@@ -1,0 +1,7202 @@
+[
+ [
+  "open  35-age-check_in-L0-s101-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.00426075
+ ],
+ [
+  "open  35-age-check_in-L0-s101-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "reversible",
+  "tap",
+  0.0013731
+ ],
+ [
+  "open  35-age-check_in-L0-s101-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.00111165
+ ],
+ [
+  "open  35-age-check_in-L0-s101-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0039165
+ ],
+ [
+  "open  35-age-check_in-L0-s101-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.00477925
+ ],
+ [
+  "open  35-age-check_in-L0-s101-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.00436825
+ ],
+ [
+  "open  35-age-check_in-L0-s101-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.00214935
+ ],
+ [
+  "open  35-age-check_in-L0-s101-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "reversible",
+  "tap",
+  0.0007638499999999999
+ ],
+ [
+  "open  35-age-check_in-L0-s101-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.00411325
+ ],
+ [
+  "open  35-age-check_in-L0-s101-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0010018499999999999
+ ],
+ [
+  "open  35-age-check_in-L0-s101-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.00414425
+ ],
+ [
+  "open  35-age-check_in-L0-s101-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "reversible",
+  "tap",
+  0.00162265
+ ],
+ [
+  "open  35-age-check_in-L0-s101-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.00507925
+ ],
+ [
+  "open  35-age-check_in-L0-s101-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.00137285
+ ],
+ [
+  "open  35-age-check_in-L0-s101-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0009180999999999999
+ ],
+ [
+  "open  35-age-check_in-L0-s101-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0022838000000000003
+ ],
+ [
+  "open  35-age-check_in-L0-s101-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0008380999999999999
+ ],
+ [
+  "open  35-age-check_in-L0-s101-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0013480999999999999
+ ],
+ [
+  "open  35-age-check_in-L0-s101-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00176035
+ ],
+ [
+  "open  35-age-check_in-L0-s101-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0009443499999999999
+ ],
+ [
+  "commit 35-age-check_in-L0-s101-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0025890500000000003
+ ],
+ [
+  "commit 35-age-check_in-L0-s101-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00232555
+ ],
+ [
+  "commit 35-age-check_in-L0-s101-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0016683
+ ],
+ [
+  "commit 35-age-check_in-L0-s101-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00130965
+ ],
+ [
+  "commit 35-age-check_in-L0-s101-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0013394000000000001
+ ],
+ [
+  "commit 35-age-check_in-L0-s101-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00199365
+ ],
+ [
+  "commit 35-age-check_in-L0-s101-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00107235
+ ],
+ [
+  "commit 35-age-check_in-L0-s101-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00125085
+ ],
+ [
+  "commit 35-age-check_in-L0-s101-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0009023499999999999
+ ],
+ [
+  "commit 35-age-check_in-L0-s101-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0011488499999999999
+ ],
+ [
+  "commit 35-age-check_in-L0-s101-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0018323
+ ],
+ [
+  "commit 35-age-check_in-L0-s101-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0009375999999999999
+ ],
+ [
+  "commit 35-age-check_in-L0-s101-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0012946
+ ],
+ [
+  "commit 35-age-check_in-L0-s101-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0011671
+ ],
+ [
+  "commit 35-age-check_in-L0-s101-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0015665999999999998
+ ],
+ [
+  "commit 35-age-check_in-L0-s101-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0023670500000000003
+ ],
+ [
+  "commit 35-age-check_in-L0-s101-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00114715
+ ],
+ [
+  "commit 35-age-check_in-L0-s101-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0014064000000000001
+ ],
+ [
+  "commit 35-age-check_in-L0-s101-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0011004
+ ],
+ [
+  "commit 35-age-check_in-L0-s101-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0023839
+ ],
+ [
+  "open  35-age-check_in-L0-s102-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.00175085
+ ],
+ [
+  "open  35-age-check_in-L0-s102-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "reversible",
+  "tap",
+  0.00087315
+ ],
+ [
+  "open  35-age-check_in-L0-s102-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00082215
+ ],
+ [
+  "open  35-age-check_in-L0-s102-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00086465
+ ],
+ [
+  "open  35-age-check_in-L0-s102-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "reversible",
+  "tap",
+  0.00082215
+ ],
+ [
+  "open  35-age-check_in-L0-s102-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0018918
+ ],
+ [
+  "open  35-age-check_in-L0-s102-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0013478
+ ],
+ [
+  "open  35-age-check_in-L0-s102-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0008738499999999999
+ ],
+ [
+  "open  35-age-check_in-L0-s102-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00231885
+ ],
+ [
+  "open  35-age-check_in-L0-s102-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00399375
+ ],
+ [
+  "open  35-age-check_in-L0-s102-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.004012
+ ],
+ [
+  "open  35-age-check_in-L0-s102-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0008921
+ ],
+ [
+  "open  35-age-check_in-L0-s102-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0020736
+ ],
+ [
+  "open  35-age-check_in-L0-s102-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0010068499999999999
+ ],
+ [
+  "open  35-age-check_in-L0-s102-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0008623499999999999
+ ],
+ [
+  "open  35-age-check_in-L0-s102-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0020920500000000002
+ ],
+ [
+  "open  35-age-check_in-L0-s102-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0007780999999999999
+ ],
+ [
+  "open  35-age-check_in-L0-s102-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0015006
+ ],
+ [
+  "open  35-age-check_in-L0-s102-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0007865999999999999
+ ],
+ [
+  "open  35-age-check_in-L0-s102-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0008121
+ ],
+ [
+  "commit 35-age-check_in-L0-s102-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00240505
+ ],
+ [
+  "commit 35-age-check_in-L0-s102-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0014444000000000002
+ ],
+ [
+  "commit 35-age-check_in-L0-s102-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00139765
+ ],
+ [
+  "commit 35-age-check_in-L0-s102-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0013296500000000001
+ ],
+ [
+  "commit 35-age-check_in-L0-s102-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0012234000000000001
+ ],
+ [
+  "commit 35-age-check_in-L0-s102-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00157055
+ ],
+ [
+  "commit 35-age-check_in-L0-s102-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0010371
+ ],
+ [
+  "commit 35-age-check_in-L0-s102-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0013686
+ ],
+ [
+  "commit 35-age-check_in-L0-s102-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00129635
+ ],
+ [
+  "commit 35-age-check_in-L0-s102-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0011901
+ ],
+ [
+  "commit 35-age-check_in-L0-s102-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00136985
+ ],
+ [
+  "commit 35-age-check_in-L0-s102-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00172055
+ ],
+ [
+  "commit 35-age-check_in-L0-s102-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0016843499999999998
+ ],
+ [
+  "commit 35-age-check_in-L0-s102-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0015186
+ ],
+ [
+  "commit 35-age-check_in-L0-s102-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0014505999999999998
+ ],
+ [
+  "commit 35-age-check_in-L0-s102-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0025500500000000003
+ ],
+ [
+  "commit 35-age-check_in-L0-s102-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0014046
+ ],
+ [
+  "commit 35-age-check_in-L0-s102-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00124735
+ ],
+ [
+  "commit 35-age-check_in-L0-s102-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0009498499999999999
+ ],
+ [
+  "commit 35-age-check_in-L0-s102-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0010390999999999998
+ ],
+ [
+  "open  35-age-check_in-L0-s103-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0013775999999999999
+ ],
+ [
+  "open  35-age-check_in-L0-s103-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0011204000000000001
+ ],
+ [
+  "open  35-age-check_in-L0-s103-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00251015
+ ],
+ [
+  "open  35-age-check_in-L0-s103-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0008229
+ ],
+ [
+  "open  35-age-check_in-L0-s103-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0022934
+ ],
+ [
+  "open  35-age-check_in-L0-s103-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.00134855
+ ],
+ [
+  "open  35-age-check_in-L0-s103-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0011041
+ ],
+ [
+  "open  35-age-check_in-L0-s103-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0007853499999999999
+ ],
+ [
+  "open  35-age-check_in-L0-s103-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0009595999999999999
+ ],
+ [
+  "open  35-age-check_in-L0-s103-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0009681
+ ],
+ [
+  "open  35-age-check_in-L0-s103-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0013540499999999999
+ ],
+ [
+  "open  35-age-check_in-L0-s103-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0008078499999999999
+ ],
+ [
+  "open  35-age-check_in-L0-s103-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0007653499999999999
+ ],
+ [
+  "open  35-age-check_in-L0-s103-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "reversible",
+  "tap",
+  0.0007568499999999999
+ ],
+ [
+  "open  35-age-check_in-L0-s103-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0026608499999999998
+ ],
+ [
+  "open  35-age-check_in-L0-s103-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0019460999999999999
+ ],
+ [
+  "open  35-age-check_in-L0-s103-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.00250435
+ ],
+ [
+  "open  35-age-check_in-L0-s103-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0009573499999999999
+ ],
+ [
+  "open  35-age-check_in-L0-s103-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.00115285
+ ],
+ [
+  "open  35-age-check_in-L0-s103-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0009191
+ ],
+ [
+  "commit 35-age-check_in-L0-s103-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0018260499999999999
+ ],
+ [
+  "commit 35-age-check_in-L0-s103-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0018244000000000001
+ ],
+ [
+  "commit 35-age-check_in-L0-s103-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0010679
+ ],
+ [
+  "commit 35-age-check_in-L0-s103-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0014334
+ ],
+ [
+  "commit 35-age-check_in-L0-s103-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0025044
+ ],
+ [
+  "commit 35-age-check_in-L0-s103-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0012646500000000002
+ ],
+ [
+  "commit 35-age-check_in-L0-s103-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0016828
+ ],
+ [
+  "commit 35-age-check_in-L0-s103-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0019149000000000002
+ ],
+ [
+  "commit 35-age-check_in-L0-s103-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0034916500000000002
+ ],
+ [
+  "commit 35-age-check_in-L0-s103-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0021656500000000003
+ ],
+ [
+  "commit 35-age-check_in-L0-s103-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0023045500000000003
+ ],
+ [
+  "commit 35-age-check_in-L0-s103-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0019177999999999999
+ ],
+ [
+  "commit 35-age-check_in-L0-s103-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00220035
+ ],
+ [
+  "commit 35-age-check_in-L0-s103-t1 s8",
+  "commit",
+  "fix_scope",
+  false,
+  "read",
+  "tap",
+  0.00366235
+ ],
+ [
+  "commit 35-age-check_in-L0-s103-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0015883499999999999
+ ],
+ [
+  "commit 35-age-check_in-L0-s103-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0021948000000000002
+ ],
+ [
+  "commit 35-age-check_in-L0-s103-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0037784
+ ],
+ [
+  "commit 35-age-check_in-L0-s103-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00139415
+ ],
+ [
+  "commit 35-age-check_in-L0-s103-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0016364
+ ],
+ [
+  "commit 35-age-check_in-L0-s103-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0017384000000000002
+ ],
+ [
+  "open  35-age-check_in-L1-s101-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0019565999999999997
+ ],
+ [
+  "open  35-age-check_in-L1-s101-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0019161500000000001
+ ],
+ [
+  "open  35-age-check_in-L1-s101-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0019289
+ ],
+ [
+  "open  35-age-check_in-L1-s101-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0014996500000000002
+ ],
+ [
+  "open  35-age-check_in-L1-s101-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0013849
+ ],
+ [
+  "open  35-age-check_in-L1-s101-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.00170655
+ ],
+ [
+  "open  35-age-check_in-L1-s101-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0009011
+ ],
+ [
+  "open  35-age-check_in-L1-s101-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00192535
+ ],
+ [
+  "open  35-age-check_in-L1-s101-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.00163635
+ ],
+ [
+  "open  35-age-check_in-L1-s101-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00188285
+ ],
+ [
+  "open  35-age-check_in-L1-s101-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.00233255
+ ],
+ [
+  "open  35-age-check_in-L1-s101-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0011063499999999999
+ ],
+ [
+  "open  35-age-check_in-L1-s101-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0019053499999999999
+ ],
+ [
+  "open  35-age-check_in-L1-s101-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0016971
+ ],
+ [
+  "open  35-age-check_in-L1-s101-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0015355999999999998
+ ],
+ [
+  "open  35-age-check_in-L1-s101-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.00206185
+ ],
+ [
+  "open  35-age-check_in-L1-s101-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.00107735
+ ],
+ [
+  "open  35-age-check_in-L1-s101-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0010475999999999999
+ ],
+ [
+  "open  35-age-check_in-L1-s101-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0010561
+ ],
+ [
+  "open  35-age-check_in-L1-s101-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0013621
+ ],
+ [
+  "commit 35-age-check_in-L1-s101-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00180455
+ ],
+ [
+  "commit 35-age-check_in-L1-s101-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00098265
+ ],
+ [
+  "commit 35-age-check_in-L1-s101-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0015309000000000002
+ ],
+ [
+  "commit 35-age-check_in-L1-s101-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0017094
+ ],
+ [
+  "commit 35-age-check_in-L1-s101-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0011144
+ ],
+ [
+  "commit 35-age-check_in-L1-s101-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0019418
+ ],
+ [
+  "commit 35-age-check_in-L1-s101-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0015364
+ ],
+ [
+  "commit 35-age-check_in-L1-s101-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0013834000000000001
+ ],
+ [
+  "commit 35-age-check_in-L1-s101-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0014599
+ ],
+ [
+  "commit 35-age-check_in-L1-s101-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00180415
+ ],
+ [
+  "commit 35-age-check_in-L1-s101-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00202805
+ ],
+ [
+  "commit 35-age-check_in-L1-s101-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0020153
+ ],
+ [
+  "commit 35-age-check_in-L1-s101-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0012396
+ ],
+ [
+  "commit 35-age-check_in-L1-s101-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00116735
+ ],
+ [
+  "commit 35-age-check_in-L1-s101-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0015540999999999999
+ ],
+ [
+  "commit 35-age-check_in-L1-s101-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00190555
+ ],
+ [
+  "commit 35-age-check_in-L1-s101-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0013344000000000001
+ ],
+ [
+  "commit 35-age-check_in-L1-s101-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00199055
+ ],
+ [
+  "commit 35-age-check_in-L1-s101-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0015044000000000001
+ ],
+ [
+  "commit 35-age-check_in-L1-s101-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0014109
+ ],
+ [
+  "open  35-age-check_in-L1-s102-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0027066
+ ],
+ [
+  "open  35-age-check_in-L1-s102-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0012466500000000002
+ ],
+ [
+  "open  35-age-check_in-L1-s102-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00141665
+ ],
+ [
+  "open  35-age-check_in-L1-s102-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00094915
+ ],
+ [
+  "open  35-age-check_in-L1-s102-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0009236499999999999
+ ],
+ [
+  "open  35-age-check_in-L1-s102-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0015683
+ ],
+ [
+  "open  35-age-check_in-L1-s102-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0020825500000000003
+ ],
+ [
+  "open  35-age-check_in-L1-s102-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0010475999999999999
+ ],
+ [
+  "open  35-age-check_in-L1-s102-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.00091585
+ ],
+ [
+  "open  35-age-check_in-L1-s102-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.00107735
+ ],
+ [
+  "open  35-age-check_in-L1-s102-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.00137405
+ ],
+ [
+  "open  35-age-check_in-L1-s102-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0008830999999999999
+ ],
+ [
+  "open  35-age-check_in-L1-s102-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0014186
+ ],
+ [
+  "open  35-age-check_in-L1-s102-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0009085999999999999
+ ],
+ [
+  "open  35-age-check_in-L1-s102-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0009383499999999999
+ ],
+ [
+  "open  35-age-check_in-L1-s102-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0014088
+ ],
+ [
+  "open  35-age-check_in-L1-s102-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0013131
+ ],
+ [
+  "open  35-age-check_in-L1-s102-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0010538499999999998
+ ],
+ [
+  "open  35-age-check_in-L1-s102-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0009730999999999999
+ ],
+ [
+  "open  35-age-check_in-L1-s102-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0011856
+ ],
+ [
+  "commit 35-age-check_in-L1-s102-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0022508000000000003
+ ],
+ [
+  "commit 35-age-check_in-L1-s102-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0012079
+ ],
+ [
+  "commit 35-age-check_in-L1-s102-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0013949000000000001
+ ],
+ [
+  "commit 35-age-check_in-L1-s102-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0018539000000000001
+ ],
+ [
+  "commit 35-age-check_in-L1-s102-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00157765
+ ],
+ [
+  "commit 35-age-check_in-L1-s102-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0017973
+ ],
+ [
+  "commit 35-age-check_in-L1-s102-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0011624
+ ],
+ [
+  "commit 35-age-check_in-L1-s102-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0014514
+ ],
+ [
+  "commit 35-age-check_in-L1-s102-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00167665
+ ],
+ [
+  "commit 35-age-check_in-L1-s102-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00143865
+ ],
+ [
+  "commit 35-age-check_in-L1-s102-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0019175499999999999
+ ],
+ [
+  "commit 35-age-check_in-L1-s102-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0017793499999999999
+ ],
+ [
+  "commit 35-age-check_in-L1-s102-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0014265999999999999
+ ],
+ [
+  "commit 35-age-check_in-L1-s102-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0014393499999999998
+ ],
+ [
+  "commit 35-age-check_in-L1-s102-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0012311
+ ],
+ [
+  "commit 35-age-check_in-L1-s102-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0021180500000000002
+ ],
+ [
+  "commit 35-age-check_in-L1-s102-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00141515
+ ],
+ [
+  "commit 35-age-check_in-L1-s102-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00199055
+ ],
+ [
+  "commit 35-age-check_in-L1-s102-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0016234
+ ],
+ [
+  "commit 35-age-check_in-L1-s102-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00104965
+ ],
+ [
+  "open  35-age-check_in-L1-s103-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0021221
+ ],
+ [
+  "open  35-age-check_in-L1-s103-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.00101915
+ ],
+ [
+  "open  35-age-check_in-L1-s103-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0010319
+ ],
+ [
+  "open  35-age-check_in-L1-s103-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.00098515
+ ],
+ [
+  "open  35-age-check_in-L1-s103-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.00214965
+ ],
+ [
+  "open  35-age-check_in-L1-s103-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.00154055
+ ],
+ [
+  "open  35-age-check_in-L1-s103-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0010835999999999999
+ ],
+ [
+  "open  35-age-check_in-L1-s103-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0009306
+ ],
+ [
+  "open  35-age-check_in-L1-s103-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0016786
+ ],
+ [
+  "open  35-age-check_in-L1-s103-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0019378499999999999
+ ],
+ [
+  "open  35-age-check_in-L1-s103-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0016267999999999999
+ ],
+ [
+  "open  35-age-check_in-L1-s103-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0010635999999999998
+ ],
+ [
+  "open  35-age-check_in-L1-s103-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0010933499999999999
+ ],
+ [
+  "open  35-age-check_in-L1-s103-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0016373499999999999
+ ],
+ [
+  "open  35-age-check_in-L1-s103-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0009488499999999999
+ ],
+ [
+  "open  35-age-check_in-L1-s103-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.00155955
+ ],
+ [
+  "open  35-age-check_in-L1-s103-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.00114935
+ ],
+ [
+  "open  35-age-check_in-L1-s103-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0016721
+ ],
+ [
+  "open  35-age-check_in-L1-s103-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.00096235
+ ],
+ [
+  "open  35-age-check_in-L1-s103-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0009070999999999999
+ ],
+ [
+  "commit 35-age-check_in-L1-s103-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00243805
+ ],
+ [
+  "commit 35-age-check_in-L1-s103-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0015991500000000001
+ ],
+ [
+  "commit 35-age-check_in-L1-s103-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0012889000000000002
+ ],
+ [
+  "commit 35-age-check_in-L1-s103-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0016416500000000001
+ ],
+ [
+  "commit 35-age-check_in-L1-s103-t1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00146315
+ ],
+ [
+  "commit 35-age-check_in-L1-s103-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0020908000000000003
+ ],
+ [
+  "commit 35-age-check_in-L1-s103-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0014425999999999998
+ ],
+ [
+  "commit 35-age-check_in-L1-s103-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00143835
+ ],
+ [
+  "commit 35-age-check_in-L1-s103-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0011281
+ ],
+ [
+  "commit 35-age-check_in-L1-s103-t1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0014850999999999998
+ ],
+ [
+  "commit 35-age-check_in-L1-s103-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0019603
+ ],
+ [
+  "commit 35-age-check_in-L1-s103-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0013631
+ ],
+ [
+  "commit 35-age-check_in-L1-s103-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0015458499999999999
+ ],
+ [
+  "commit 35-age-check_in-L1-s103-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0015076
+ ],
+ [
+  "commit 35-age-check_in-L1-s103-t1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00122285
+ ],
+ [
+  "commit 35-age-check_in-L1-s103-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00197805
+ ],
+ [
+  "commit 35-age-check_in-L1-s103-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0012023499999999998
+ ],
+ [
+  "commit 35-age-check_in-L1-s103-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0011981
+ ],
+ [
+  "commit 35-age-check_in-L1-s103-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00130435
+ ],
+ [
+  "commit 35-age-check_in-L1-s103-t1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0010833499999999999
+ ],
+ [
+  "open  35-age-check_in-L3-s101-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.00139435
+ ],
+ [
+  "open  35-age-check_in-L3-s101-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0009034
+ ],
+ [
+  "open  35-age-check_in-L3-s101-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.00178315
+ ],
+ [
+  "open  35-age-check_in-L3-s101-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0008183999999999999
+ ],
+ [
+  "open  35-age-check_in-L3-s101-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0008354
+ ],
+ [
+  "open  35-age-check_in-L3-s101-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0018327999999999999
+ ],
+ [
+  "open  35-age-check_in-L3-s101-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0008360999999999999
+ ],
+ [
+  "open  35-age-check_in-L3-s101-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0017923499999999998
+ ],
+ [
+  "open  35-age-check_in-L3-s101-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0022753499999999998
+ ],
+ [
+  "open  35-age-check_in-L3-s101-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0008020999999999999
+ ],
+ [
+  "open  35-age-check_in-L3-s101-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.00134955
+ ],
+ [
+  "open  35-age-check_in-L3-s101-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0007991
+ ],
+ [
+  "open  35-age-check_in-L3-s101-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0007820999999999999
+ ],
+ [
+  "open  35-age-check_in-L3-s101-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0008755999999999999
+ ],
+ [
+  "open  35-age-check_in-L3-s101-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0007948499999999999
+ ],
+ [
+  "open  35-age-check_in-L3-s101-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00231985
+ ],
+ [
+  "open  35-age-check_in-L3-s101-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0014841
+ ],
+ [
+  "open  35-age-check_in-L3-s101-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0010718499999999998
+ ],
+ [
+  "open  35-age-check_in-L3-s101-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.00426825
+ ],
+ [
+  "open  35-age-check_in-L3-s101-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0010336
+ ],
+ [
+  "commit 35-age-check_in-L3-s101-t1 s9",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.004386
+ ],
+ [
+  "commit 35-age-check_in-L3-s101-t1 s9",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00102865
+ ],
+ [
+  "commit 35-age-check_in-L3-s101-t1 s9",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0013729
+ ],
+ [
+  "commit 35-age-check_in-L3-s101-t1 s9",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0009394
+ ],
+ [
+  "commit 35-age-check_in-L3-s101-t1 s9",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0012794000000000002
+ ],
+ [
+  "commit 35-age-check_in-L3-s101-t1 s9",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00238155
+ ],
+ [
+  "commit 35-age-check_in-L3-s101-t1 s9",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00137785
+ ],
+ [
+  "commit 35-age-check_in-L3-s101-t1 s9",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0011908499999999998
+ ],
+ [
+  "commit 35-age-check_in-L3-s101-t1 s9",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0011866
+ ],
+ [
+  "commit 35-age-check_in-L3-s101-t1 s9",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0011568499999999998
+ ],
+ [
+  "commit 35-age-check_in-L3-s101-t1 s9",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00213465
+ ],
+ [
+  "commit 35-age-check_in-L3-s101-t1 s9",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0019859
+ ],
+ [
+  "commit 35-age-check_in-L3-s101-t1 s9",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0016086
+ ],
+ [
+  "commit 35-age-check_in-L3-s101-t1 s9",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0015278499999999999
+ ],
+ [
+  "commit 35-age-check_in-L3-s101-t1 s9",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00149385
+ ],
+ [
+  "commit 35-age-check_in-L3-s101-t1 s9",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0015435499999999999
+ ],
+ [
+  "commit 35-age-check_in-L3-s101-t1 s9",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00134585
+ ],
+ [
+  "commit 35-age-check_in-L3-s101-t1 s9",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00149885
+ ],
+ [
+  "commit 35-age-check_in-L3-s101-t1 s9",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00124385
+ ],
+ [
+  "commit 35-age-check_in-L3-s101-t1 s9",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00130335
+ ],
+ [
+  "open  35-age-check_in-L3-s102-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "reversible",
+  "tap",
+  0.00144235
+ ],
+ [
+  "open  35-age-check_in-L3-s102-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0009513999999999999
+ ],
+ [
+  "open  35-age-check_in-L3-s102-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0008664
+ ],
+ [
+  "open  35-age-check_in-L3-s102-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.00089615
+ ],
+ [
+  "open  35-age-check_in-L3-s102-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0008918999999999999
+ ],
+ [
+  "open  35-age-check_in-L3-s102-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "reversible",
+  "tap",
+  0.00159605
+ ],
+ [
+  "open  35-age-check_in-L3-s102-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0014812999999999998
+ ],
+ [
+  "open  35-age-check_in-L3-s102-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.00529175
+ ],
+ [
+  "open  35-age-check_in-L3-s102-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0009436
+ ],
+ [
+  "open  35-age-check_in-L3-s102-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0009818499999999998
+ ],
+ [
+  "open  35-age-check_in-L3-s102-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.00437075
+ ],
+ [
+  "open  35-age-check_in-L3-s102-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0009448499999999999
+ ],
+ [
+  "open  35-age-check_in-L3-s102-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0020796
+ ],
+ [
+  "open  35-age-check_in-L3-s102-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0009108499999999999
+ ],
+ [
+  "open  35-age-check_in-L3-s102-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0008555999999999999
+ ],
+ [
+  "open  35-age-check_in-L3-s102-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "reversible",
+  "tap",
+  0.0030118000000000002
+ ],
+ [
+  "open  35-age-check_in-L3-s102-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0027738000000000003
+ ],
+ [
+  "open  35-age-check_in-L3-s102-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.00191885
+ ],
+ [
+  "open  35-age-check_in-L3-s102-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00176585
+ ],
+ [
+  "open  35-age-check_in-L3-s102-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00224185
+ ],
+ [
+  "commit 35-age-check_in-L3-s102-t1 s9",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0023048
+ ],
+ [
+  "commit 35-age-check_in-L3-s102-t1 s9",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0028828
+ ],
+ [
+  "commit 35-age-check_in-L3-s102-t1 s9",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0015566500000000001
+ ],
+ [
+  "commit 35-age-check_in-L3-s102-t1 s9",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00161615
+ ],
+ [
+  "commit 35-age-check_in-L3-s102-t1 s9",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0013994
+ ],
+ [
+  "commit 35-age-check_in-L3-s102-t1 s9",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0017848
+ ],
+ [
+  "commit 35-age-check_in-L3-s102-t1 s9",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0011706
+ ],
+ [
+  "commit 35-age-check_in-L3-s102-t1 s9",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0014341
+ ],
+ [
+  "commit 35-age-check_in-L3-s102-t1 s9",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0011960999999999999
+ ],
+ [
+  "commit 35-age-check_in-L3-s102-t1 s9",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0014510999999999999
+ ],
+ [
+  "commit 35-age-check_in-L3-s102-t1 s9",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0016520999999999999
+ ],
+ [
+  "commit 35-age-check_in-L3-s102-t1 s9",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0020793
+ ],
+ [
+  "commit 35-age-check_in-L3-s102-t1 s9",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0019325999999999998
+ ],
+ [
+  "commit 35-age-check_in-L3-s102-t1 s9",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00139285
+ ],
+ [
+  "commit 35-age-check_in-L3-s102-t1 s9",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0014395999999999999
+ ],
+ [
+  "commit 35-age-check_in-L3-s102-t1 s9",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0019483
+ ],
+ [
+  "commit 35-age-check_in-L3-s102-t1 s9",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0013085999999999998
+ ],
+ [
+  "commit 35-age-check_in-L3-s102-t1 s9",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0013383499999999999
+ ],
+ [
+  "commit 35-age-check_in-L3-s102-t1 s9",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00172935
+ ],
+ [
+  "commit 35-age-check_in-L3-s102-t1 s9",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0012151
+ ],
+ [
+  "open  35-age-check_in-L3-s103-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0016340999999999999
+ ],
+ [
+  "open  35-age-check_in-L3-s103-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0016765999999999999
+ ],
+ [
+  "open  35-age-check_in-L3-s103-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0011431500000000001
+ ],
+ [
+  "open  35-age-check_in-L3-s103-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.00120265
+ ],
+ [
+  "open  35-age-check_in-L3-s103-t1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0011516500000000002
+ ],
+ [
+  "open  35-age-check_in-L3-s103-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0015668
+ ],
+ [
+  "open  35-age-check_in-L3-s103-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0018133
+ ],
+ [
+  "open  35-age-check_in-L3-s103-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0010928499999999998
+ ],
+ [
+  "open  35-age-check_in-L3-s103-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0011140999999999998
+ ],
+ [
+  "open  35-age-check_in-L3-s103-t1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.00218935
+ ],
+ [
+  "open  35-age-check_in-L3-s103-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0021928000000000004
+ ],
+ [
+  "open  35-age-check_in-L3-s103-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0010898499999999998
+ ],
+ [
+  "open  35-age-check_in-L3-s103-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0018165999999999998
+ ],
+ [
+  "open  35-age-check_in-L3-s103-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0011748499999999999
+ ],
+ [
+  "open  35-age-check_in-L3-s103-t1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.00216935
+ ],
+ [
+  "open  35-age-check_in-L3-s103-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.00237685
+ ],
+ [
+  "open  35-age-check_in-L3-s103-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00191085
+ ],
+ [
+  "open  35-age-check_in-L3-s103-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "reversible",
+  "tap",
+  0.0007803499999999999
+ ],
+ [
+  "open  35-age-check_in-L3-s103-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "reversible",
+  "tap",
+  0.0010141
+ ],
+ [
+  "open  35-age-check_in-L3-s103-t1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0009290999999999999
+ ],
+ [
+  "commit 35-age-check_in-L3-s103-t1 s9",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00173555
+ ],
+ [
+  "commit 35-age-check_in-L3-s103-t1 s9",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0014916500000000002
+ ],
+ [
+  "commit 35-age-check_in-L3-s103-t1 s9",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0012706500000000001
+ ],
+ [
+  "commit 35-age-check_in-L3-s103-t1 s9",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0019124
+ ],
+ [
+  "commit 35-age-check_in-L3-s103-t1 s9",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00142365
+ ],
+ [
+  "commit 35-age-check_in-L3-s103-t1 s9",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0019578
+ ],
+ [
+  "commit 35-age-check_in-L3-s103-t1 s9",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0013690999999999998
+ ],
+ [
+  "commit 35-age-check_in-L3-s103-t1 s9",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0013861
+ ],
+ [
+  "commit 35-age-check_in-L3-s103-t1 s9",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00132235
+ ],
+ [
+  "commit 35-age-check_in-L3-s103-t1 s9",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0016411
+ ],
+ [
+  "commit 35-age-check_in-L3-s103-t1 s9",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0016998
+ ],
+ [
+  "commit 35-age-check_in-L3-s103-t1 s9",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0013660999999999999
+ ],
+ [
+  "commit 35-age-check_in-L3-s103-t1 s9",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00132785
+ ],
+ [
+  "commit 35-age-check_in-L3-s103-t1 s9",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00148935
+ ],
+ [
+  "commit 35-age-check_in-L3-s103-t1 s9",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0014935999999999999
+ ],
+ [
+  "commit 35-age-check_in-L3-s103-t1 s9",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0017813
+ ],
+ [
+  "commit 35-age-check_in-L3-s103-t1 s9",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0011373499999999999
+ ],
+ [
+  "commit 35-age-check_in-L3-s103-t1 s9",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0011075999999999998
+ ],
+ [
+  "commit 35-age-check_in-L3-s103-t1 s9",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00129035
+ ],
+ [
+  "commit 35-age-check_in-L3-s103-t1 s9",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0015581
+ ],
+ [
+  "open  e_notice-check_in-agent-r0 s3",
+  "opener",
+  "cur",
+  true,
+  "reversible",
+  "tap",
+  0.0014250999999999999
+ ],
+ [
+  "open  e_notice-check_in-agent-r0 s3",
+  "opener",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0010234
+ ],
+ [
+  "open  e_notice-check_in-agent-r0 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0008746499999999999
+ ],
+ [
+  "open  e_notice-check_in-agent-r0 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0012019
+ ],
+ [
+  "open  e_notice-check_in-agent-r0 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0008449
+ ],
+ [
+  "open  e_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.00176155
+ ],
+ [
+  "open  e_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix",
+  true,
+  "reversible",
+  "tap",
+  0.00143005
+ ],
+ [
+  "open  e_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0009178499999999999
+ ],
+ [
+  "open  e_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0016700999999999999
+ ],
+ [
+  "open  e_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0017465999999999998
+ ],
+ [
+  "open  e_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.00146105
+ ],
+ [
+  "open  e_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0010381
+ ],
+ [
+  "open  e_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0008383499999999999
+ ],
+ [
+  "open  e_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.00099135
+ ],
+ [
+  "open  e_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.00085535
+ ],
+ [
+  "open  e_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0018023499999999999
+ ],
+ [
+  "open  e_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0008008499999999999
+ ],
+ [
+  "open  e_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0008135999999999999
+ ],
+ [
+  "open  e_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0008433499999999999
+ ],
+ [
+  "open  e_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0007498499999999999
+ ],
+ [
+  "commit e_notice-check_in-agent-r0 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0020878000000000003
+ ],
+ [
+  "commit e_notice-check_in-agent-r0 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0012999
+ ],
+ [
+  "commit e_notice-check_in-agent-r0 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00117665
+ ],
+ [
+  "commit e_notice-check_in-agent-r0 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0012744000000000002
+ ],
+ [
+  "commit e_notice-check_in-agent-r0 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0012829
+ ],
+ [
+  "commit e_notice-check_in-agent-r0 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00178305
+ ],
+ [
+  "commit e_notice-check_in-agent-r0 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0011305999999999998
+ ],
+ [
+  "commit e_notice-check_in-agent-r0 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0012240999999999999
+ ],
+ [
+  "commit e_notice-check_in-agent-r0 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0011093499999999998
+ ],
+ [
+  "commit e_notice-check_in-agent-r0 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0011943499999999998
+ ],
+ [
+  "commit e_notice-check_in-agent-r0 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0017843
+ ],
+ [
+  "commit e_notice-check_in-agent-r0 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0015143499999999998
+ ],
+ [
+  "commit e_notice-check_in-agent-r0 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0011956
+ ],
+ [
+  "commit e_notice-check_in-agent-r0 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00133585
+ ],
+ [
+  "commit e_notice-check_in-agent-r0 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0013953499999999998
+ ],
+ [
+  "commit e_notice-check_in-agent-r0 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00204855
+ ],
+ [
+  "commit e_notice-check_in-agent-r0 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0014434
+ ],
+ [
+  "commit e_notice-check_in-agent-r0 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0016006500000000001
+ ],
+ [
+  "commit e_notice-check_in-agent-r0 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0012224
+ ],
+ [
+  "commit e_notice-check_in-agent-r0 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0012819
+ ],
+ [
+  "open  e_notice-check_in-agent-r1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0016748499999999999
+ ],
+ [
+  "open  e_notice-check_in-agent-r1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0010436500000000001
+ ],
+ [
+  "open  e_notice-check_in-agent-r1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.00111165
+ ],
+ [
+  "open  e_notice-check_in-agent-r1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.00096715
+ ],
+ [
+  "open  e_notice-check_in-agent-r1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0009969
+ ],
+ [
+  "open  e_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix",
+  true,
+  "reversible",
+  "tap",
+  0.00158205
+ ],
+ [
+  "open  e_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.00167555
+ ],
+ [
+  "open  e_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00205585
+ ],
+ [
+  "open  e_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0015416
+ ],
+ [
+  "open  e_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0012058499999999998
+ ],
+ [
+  "open  e_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0014728
+ ],
+ [
+  "open  e_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0008925999999999999
+ ],
+ [
+  "open  e_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0021421
+ ],
+ [
+  "open  e_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0010243499999999998
+ ],
+ [
+  "open  e_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.00096485
+ ],
+ [
+  "open  e_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0024213000000000004
+ ],
+ [
+  "open  e_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0017135999999999998
+ ],
+ [
+  "open  e_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "reversible",
+  "tap",
+  0.0007488499999999999
+ ],
+ [
+  "open  e_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0016030999999999999
+ ],
+ [
+  "open  e_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0009358499999999999
+ ],
+ [
+  "open  p_notice-check_in-agent-r0 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.00277935
+ ],
+ [
+  "open  p_notice-check_in-agent-r0 s3",
+  "opener",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00312935
+ ],
+ [
+  "open  p_notice-check_in-agent-r0 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.00099585
+ ],
+ [
+  "open  p_notice-check_in-agent-r0 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0010765999999999998
+ ],
+ [
+  "open  p_notice-check_in-agent-r0 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0011615999999999998
+ ],
+ [
+  "open  p_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix",
+  true,
+  "reversible",
+  "tap",
+  0.0018832999999999999
+ ],
+ [
+  "open  p_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.00204685
+ ],
+ [
+  "open  p_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0013796
+ ],
+ [
+  "open  p_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.00218285
+ ],
+ [
+  "open  p_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0013031
+ ],
+ [
+  "open  p_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.00191855
+ ],
+ [
+  "open  p_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0013341
+ ],
+ [
+  "open  p_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0021118499999999998
+ ],
+ [
+  "open  p_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0014785999999999998
+ ],
+ [
+  "open  p_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0013170999999999999
+ ],
+ [
+  "open  p_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "reversible",
+  "tap",
+  0.0027523
+ ],
+ [
+  "open  p_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0012626
+ ],
+ [
+  "open  p_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.00164935
+ ],
+ [
+  "open  p_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "reversible",
+  "tap",
+  0.0013858499999999999
+ ],
+ [
+  "open  p_notice-check_in-agent-r0 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "reversible",
+  "tap",
+  0.0012541
+ ],
+ [
+  "open  p_notice-check_in-agent-r1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.00196585
+ ],
+ [
+  "open  p_notice-check_in-agent-r1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0011598499999999998
+ ],
+ [
+  "open  p_notice-check_in-agent-r1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0024518499999999998
+ ],
+ [
+  "open  p_notice-check_in-agent-r1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0012660999999999998
+ ],
+ [
+  "open  p_notice-check_in-agent-r1 s3",
+  "opener",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0018610999999999999
+ ],
+ [
+  "open  p_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.00214285
+ ],
+ [
+  "open  p_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0017837999999999999
+ ],
+ [
+  "open  p_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0023426
+ ],
+ [
+  "open  p_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0017305999999999999
+ ],
+ [
+  "open  p_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0011186
+ ],
+ [
+  "open  p_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0018360499999999999
+ ],
+ [
+  "open  p_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0013705999999999998
+ ],
+ [
+  "open  p_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0014811
+ ],
+ [
+  "open  p_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0020421
+ ],
+ [
+  "open  p_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0012940999999999999
+ ],
+ [
+  "open  p_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0027845500000000002
+ ],
+ [
+  "open  p_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0023808
+ ],
+ [
+  "open  p_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.00113335
+ ],
+ [
+  "open  p_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0016603499999999999
+ ],
+ [
+  "open  p_notice-check_in-agent-r1 s3",
+  "opener",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0012651
+ ],
+ [
+  "commit p_notice-check_in-agent-r1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0019543
+ ],
+ [
+  "commit p_notice-check_in-agent-r1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0009709
+ ],
+ [
+  "commit p_notice-check_in-agent-r1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0010389000000000002
+ ],
+ [
+  "commit p_notice-check_in-agent-r1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0013024
+ ],
+ [
+  "commit p_notice-check_in-agent-r1 s8",
+  "commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00091565
+ ],
+ [
+  "commit p_notice-check_in-agent-r1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0016963
+ ],
+ [
+  "commit p_notice-check_in-agent-r1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0019938
+ ],
+ [
+  "commit p_notice-check_in-agent-r1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0014306
+ ],
+ [
+  "commit p_notice-check_in-agent-r1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0016261
+ ],
+ [
+  "commit p_notice-check_in-agent-r1 s8",
+  "commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0011160999999999999
+ ],
+ [
+  "commit p_notice-check_in-agent-r1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0018717999999999999
+ ],
+ [
+  "commit p_notice-check_in-agent-r1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0016316
+ ],
+ [
+  "commit p_notice-check_in-agent-r1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00102385
+ ],
+ [
+  "commit p_notice-check_in-agent-r1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0013851
+ ],
+ [
+  "commit p_notice-check_in-agent-r1 s8",
+  "commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0012448499999999998
+ ],
+ [
+  "commit p_notice-check_in-agent-r1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0017323
+ ],
+ [
+  "commit p_notice-check_in-agent-r1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0015309000000000002
+ ],
+ [
+  "commit p_notice-check_in-agent-r1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0014289
+ ],
+ [
+  "commit p_notice-check_in-agent-r1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00162015
+ ],
+ [
+  "commit p_notice-check_in-agent-r1 s8",
+  "commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0012546500000000002
+ ],
+ [
+  "WRONG 57-age-check_in-L0-s101-t1 s6",
+  "wrong",
+  "cur",
+  false,
+  "read",
+  "tap",
+  0.00236085
+ ],
+ [
+  "WRONG 57-age-check_in-L0-s101-t1 s6",
+  "wrong",
+  "cur",
+  false,
+  "read",
+  "tap",
+  0.0028984
+ ],
+ [
+  "WRONG 57-age-check_in-L0-s101-t1 s6",
+  "wrong",
+  "cur",
+  false,
+  "read",
+  "tap",
+  0.00418615
+ ],
+ [
+  "WRONG 57-age-check_in-L0-s101-t1 s6",
+  "wrong",
+  "cur",
+  false,
+  "read",
+  "tap",
+  0.0021419
+ ],
+ [
+  "WRONG 57-age-check_in-L0-s101-t1 s6",
+  "wrong",
+  "cur",
+  false,
+  "read",
+  "tap",
+  0.0035571500000000002
+ ],
+ [
+  "WRONG 57-age-check_in-L0-s101-t1 s6",
+  "wrong",
+  "fix",
+  false,
+  "read",
+  "tap",
+  0.0026845500000000004
+ ],
+ [
+  "WRONG 57-age-check_in-L0-s101-t1 s6",
+  "wrong",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00132715
+ ],
+ [
+  "WRONG 57-age-check_in-L0-s101-t1 s6",
+  "wrong",
+  "fix",
+  false,
+  "read",
+  "tap",
+  0.0025129
+ ],
+ [
+  "WRONG 57-age-check_in-L0-s101-t1 s6",
+  "wrong",
+  "fix",
+  false,
+  "read",
+  "tap",
+  0.00262765
+ ],
+ [
+  "WRONG 57-age-check_in-L0-s101-t1 s6",
+  "wrong",
+  "fix",
+  false,
+  "read",
+  "tap",
+  0.0021899000000000003
+ ],
+ [
+  "WRONG 57-age-check_in-L0-s101-t1 s6",
+  "wrong",
+  "fix_scope",
+  false,
+  "read",
+  "tap",
+  0.0030300500000000003
+ ],
+ [
+  "WRONG 57-age-check_in-L0-s101-t1 s6",
+  "wrong",
+  "fix_scope",
+  false,
+  "read",
+  "tap",
+  0.00221665
+ ],
+ [
+  "WRONG 57-age-check_in-L0-s101-t1 s6",
+  "wrong",
+  "fix_scope",
+  false,
+  "read",
+  "tap",
+  0.0027436500000000003
+ ],
+ [
+  "WRONG 57-age-check_in-L0-s101-t1 s6",
+  "wrong",
+  "fix_scope",
+  false,
+  "read",
+  "tap",
+  0.0020806500000000003
+ ],
+ [
+  "WRONG 57-age-check_in-L0-s101-t1 s6",
+  "wrong",
+  "fix_scope",
+  false,
+  "read",
+  "tap",
+  0.0027139
+ ],
+ [
+  "WRONG 57-age-check_in-L0-s101-t1 s6",
+  "wrong",
+  "fix_noformat",
+  false,
+  "read",
+  "tap",
+  0.0027635999999999997
+ ],
+ [
+  "WRONG 57-age-check_in-L0-s101-t1 s6",
+  "wrong",
+  "fix_noformat",
+  false,
+  "read",
+  "tap",
+  0.00215365
+ ],
+ [
+  "WRONG 57-age-check_in-L0-s101-t1 s6",
+  "wrong",
+  "fix_noformat",
+  false,
+  "read",
+  "tap",
+  0.00305465
+ ],
+ [
+  "WRONG 57-age-check_in-L0-s101-t1 s6",
+  "wrong",
+  "fix_noformat",
+  false,
+  "read",
+  "tap",
+  0.0019624
+ ],
+ [
+  "WRONG 57-age-check_in-L0-s101-t1 s6",
+  "wrong",
+  "fix_noformat",
+  false,
+  "read",
+  "tap",
+  0.0021834000000000003
+ ],
+ [
+  "WRONG 1028210913-src-check_in-a3 s6",
+  "wrong",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0015208499999999998
+ ],
+ [
+  "WRONG 1028210913-src-check_in-a3 s6",
+  "wrong",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00216465
+ ],
+ [
+  "WRONG 1028210913-src-check_in-a3 s6",
+  "wrong",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00104265
+ ],
+ [
+  "WRONG 1028210913-src-check_in-a3 s6",
+  "wrong",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0014421500000000001
+ ],
+ [
+  "WRONG 1028210913-src-check_in-a3 s6",
+  "wrong",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00147615
+ ],
+ [
+  "WRONG 1028210913-src-check_in-a3 s6",
+  "wrong",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00226105
+ ],
+ [
+  "WRONG 1028210913-src-check_in-a3 s6",
+  "wrong",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00128615
+ ],
+ [
+  "WRONG 1028210913-src-check_in-a3 s6",
+  "wrong",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0015539
+ ],
+ [
+  "WRONG 1028210913-src-check_in-a3 s6",
+  "wrong",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0011884
+ ],
+ [
+  "WRONG 1028210913-src-check_in-a3 s6",
+  "wrong",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00145615
+ ],
+ [
+  "WRONG 1028210913-src-check_in-a3 s6",
+  "wrong",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00191805
+ ],
+ [
+  "WRONG 1028210913-src-check_in-a3 s6",
+  "wrong",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0020753
+ ],
+ [
+  "WRONG 1028210913-src-check_in-a3 s6",
+  "wrong",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0011806
+ ],
+ [
+  "WRONG 1028210913-src-check_in-a3 s6",
+  "wrong",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0018478499999999998
+ ],
+ [
+  "WRONG 1028210913-src-check_in-a3 s6",
+  "wrong",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0012273499999999999
+ ],
+ [
+  "WRONG 1028210913-src-check_in-a3 s6",
+  "wrong",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00195335
+ ],
+ [
+  "WRONG 1028210913-src-check_in-a3 s6",
+  "wrong",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0015601500000000002
+ ],
+ [
+  "WRONG 1028210913-src-check_in-a3 s6",
+  "wrong",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0016026500000000002
+ ],
+ [
+  "WRONG 1028210913-src-check_in-a3 s6",
+  "wrong",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0015049
+ ],
+ [
+  "WRONG 1028210913-src-check_in-a3 s6",
+  "wrong",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0013519
+ ],
+ [
+  "WRONG -check_in-L0-s101-t1-agent s6",
+  "wrong",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0019206
+ ],
+ [
+  "WRONG -check_in-L0-s101-t1-agent s6",
+  "wrong",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0015274000000000002
+ ],
+ [
+  "WRONG -check_in-L0-s101-t1-agent s6",
+  "wrong",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0014934000000000002
+ ],
+ [
+  "WRONG -check_in-L0-s101-t1-agent s6",
+  "wrong",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0017909
+ ],
+ [
+  "WRONG -check_in-L0-s101-t1-agent s6",
+  "wrong",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0013829
+ ],
+ [
+  "WRONG -check_in-L0-s101-t1-agent s6",
+  "wrong",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00168755
+ ],
+ [
+  "WRONG -check_in-L0-s101-t1-agent s6",
+  "wrong",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00142185
+ ],
+ [
+  "WRONG -check_in-L0-s101-t1-agent s6",
+  "wrong",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00104785
+ ],
+ [
+  "WRONG -check_in-L0-s101-t1-agent s6",
+  "wrong",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0013155999999999999
+ ],
+ [
+  "WRONG -check_in-L0-s101-t1-agent s6",
+  "wrong",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0010605999999999999
+ ],
+ [
+  "WRONG -check_in-L0-s101-t1-agent s6",
+  "wrong",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0022923
+ ],
+ [
+  "WRONG -check_in-L0-s101-t1-agent s6",
+  "wrong",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0021478
+ ],
+ [
+  "WRONG -check_in-L0-s101-t1-agent s6",
+  "wrong",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00139335
+ ],
+ [
+  "WRONG -check_in-L0-s101-t1-agent s6",
+  "wrong",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00116385
+ ],
+ [
+  "WRONG -check_in-L0-s101-t1-agent s6",
+  "wrong",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0017545999999999998
+ ],
+ [
+  "WRONG -check_in-L0-s101-t1-agent s6",
+  "wrong",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00208055
+ ],
+ [
+  "WRONG -check_in-L0-s101-t1-agent s6",
+  "wrong",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0013819000000000001
+ ],
+ [
+  "WRONG -check_in-L0-s101-t1-agent s6",
+  "wrong",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00189615
+ ],
+ [
+  "WRONG -check_in-L0-s101-t1-agent s6",
+  "wrong",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0015179000000000002
+ ],
+ [
+  "WRONG -check_in-L0-s101-t1-agent s6",
+  "wrong",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00142015
+ ],
+ [
+  "WRONG -check_in-L0-s101-t2-agent s6",
+  "wrong",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0018556
+ ],
+ [
+  "WRONG -check_in-L0-s101-t2-agent s6",
+  "wrong",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0015325999999999998
+ ],
+ [
+  "WRONG -check_in-L0-s101-t2-agent s6",
+  "wrong",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0013476500000000001
+ ],
+ [
+  "WRONG -check_in-L0-s101-t2-agent s6",
+  "wrong",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0019724
+ ],
+ [
+  "WRONG -check_in-L0-s101-t2-agent s6",
+  "wrong",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00157715
+ ],
+ [
+  "WRONG -check_in-L0-s101-t2-agent s6",
+  "wrong",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00212405
+ ],
+ [
+  "WRONG -check_in-L0-s101-t2-agent s6",
+  "wrong",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0014588499999999998
+ ],
+ [
+  "WRONG -check_in-L0-s101-t2-agent s6",
+  "wrong",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00101685
+ ],
+ [
+  "WRONG -check_in-L0-s101-t2-agent s6",
+  "wrong",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0017648499999999999
+ ],
+ [
+  "WRONG -check_in-L0-s101-t2-agent s6",
+  "wrong",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0015013499999999998
+ ],
+ [
+  "WRONG -check_in-L0-s101-t2-agent s6",
+  "wrong",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00229105
+ ],
+ [
+  "WRONG -check_in-L0-s101-t2-agent s6",
+  "wrong",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0010436
+ ],
+ [
+  "WRONG -check_in-L0-s101-t2-agent s6",
+  "wrong",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0015876
+ ],
+ [
+  "WRONG -check_in-L0-s101-t2-agent s6",
+  "wrong",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0014345999999999999
+ ],
+ [
+  "WRONG -check_in-L0-s101-t2-agent s6",
+  "wrong",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0018510999999999998
+ ],
+ [
+  "WRONG -check_in-L0-s101-t2-agent s6",
+  "wrong",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0020198
+ ],
+ [
+  "WRONG -check_in-L0-s101-t2-agent s6",
+  "wrong",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00152515
+ ],
+ [
+  "WRONG -check_in-L0-s101-t2-agent s6",
+  "wrong",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0013849
+ ],
+ [
+  "WRONG -check_in-L0-s101-t2-agent s6",
+  "wrong",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00144015
+ ],
+ [
+  "WRONG -check_in-L0-s101-t2-agent s6",
+  "wrong",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00213715
+ ],
+ [
+  "WRONG -check_in-L0-s102-t1-agent s6",
+  "wrong",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0017125999999999999
+ ],
+ [
+  "WRONG -check_in-L0-s102-t1-agent s6",
+  "wrong",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00215035
+ ],
+ [
+  "WRONG -check_in-L0-s102-t1-agent s6",
+  "wrong",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0018591500000000002
+ ],
+ [
+  "WRONG -check_in-L0-s102-t1-agent s6",
+  "wrong",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0009113999999999999
+ ],
+ [
+  "WRONG -check_in-L0-s102-t1-agent s6",
+  "wrong",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0010516500000000001
+ ],
+ [
+  "WRONG -check_in-L0-s102-t1-agent s6",
+  "wrong",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0015305499999999999
+ ],
+ [
+  "WRONG -check_in-L0-s102-t1-agent s6",
+  "wrong",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00206015
+ ],
+ [
+  "WRONG -check_in-L0-s102-t1-agent s6",
+  "wrong",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0011294
+ ],
+ [
+  "WRONG -check_in-L0-s102-t1-agent s6",
+  "wrong",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0011719
+ ],
+ [
+  "WRONG -check_in-L0-s102-t1-agent s6",
+  "wrong",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0016011500000000002
+ ],
+ [
+  "WRONG -check_in-L0-s102-t1-agent s6",
+  "wrong",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0019142999999999999
+ ],
+ [
+  "WRONG -check_in-L0-s102-t1-agent s6",
+  "wrong",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0022458
+ ],
+ [
+  "WRONG -check_in-L0-s102-t1-agent s6",
+  "wrong",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0023164
+ ],
+ [
+  "WRONG -check_in-L0-s102-t1-agent s6",
+  "wrong",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0015854
+ ],
+ [
+  "WRONG -check_in-L0-s102-t1-agent s6",
+  "wrong",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0016959000000000002
+ ],
+ [
+  "WRONG -check_in-L0-s102-t1-agent s6",
+  "wrong",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00157135
+ ],
+ [
+  "WRONG -check_in-L0-s102-t1-agent s6",
+  "wrong",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0010379
+ ],
+ [
+  "WRONG -check_in-L0-s102-t1-agent s6",
+  "wrong",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00168815
+ ],
+ [
+  "WRONG -check_in-L0-s102-t1-agent s6",
+  "wrong",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0014799000000000001
+ ],
+ [
+  "WRONG -check_in-L0-s102-t1-agent s6",
+  "wrong",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0012971500000000002
+ ],
+ [
+  "WRONG 230219-live-agent-check_in s6",
+  "wrong",
+  "cur",
+  false,
+  "read",
+  "tap",
+  0.0032521
+ ],
+ [
+  "WRONG 230219-live-agent-check_in s6",
+  "wrong",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00139265
+ ],
+ [
+  "WRONG 230219-live-agent-check_in s6",
+  "wrong",
+  "cur",
+  false,
+  "read",
+  "tap",
+  0.00173265
+ ],
+ [
+  "WRONG 230219-live-agent-check_in s6",
+  "wrong",
+  "cur",
+  false,
+  "read",
+  "tap",
+  0.0016094000000000002
+ ],
+ [
+  "WRONG 230219-live-agent-check_in s6",
+  "wrong",
+  "cur",
+  false,
+  "read",
+  "tap",
+  0.0023744
+ ],
+ [
+  "WRONG 230219-live-agent-check_in s6",
+  "wrong",
+  "fix",
+  false,
+  "read",
+  "tap",
+  0.0027513000000000004
+ ],
+ [
+  "WRONG 230219-live-agent-check_in s6",
+  "wrong",
+  "fix",
+  false,
+  "read",
+  "tap",
+  0.00195915
+ ],
+ [
+  "WRONG 230219-live-agent-check_in s6",
+  "wrong",
+  "fix",
+  false,
+  "read",
+  "tap",
+  0.00246065
+ ],
+ [
+  "WRONG 230219-live-agent-check_in s6",
+  "wrong",
+  "fix",
+  false,
+  "read",
+  "tap",
+  0.0030514
+ ],
+ [
+  "WRONG 230219-live-agent-check_in s6",
+  "wrong",
+  "fix",
+  false,
+  "read",
+  "tap",
+  0.0020186500000000003
+ ],
+ [
+  "WRONG 230219-live-agent-check_in s6",
+  "wrong",
+  "fix_scope",
+  false,
+  "read",
+  "tap",
+  0.0029098
+ ],
+ [
+  "WRONG 230219-live-agent-check_in s6",
+  "wrong",
+  "fix_scope",
+  false,
+  "read",
+  "tap",
+  0.0025044
+ ],
+ [
+  "WRONG 230219-live-agent-check_in s6",
+  "wrong",
+  "fix_scope",
+  false,
+  "read",
+  "tap",
+  0.0016501500000000002
+ ],
+ [
+  "WRONG 230219-live-agent-check_in s6",
+  "wrong",
+  "fix_scope",
+  false,
+  "read",
+  "tap",
+  0.0020836500000000003
+ ],
+ [
+  "WRONG 230219-live-agent-check_in s6",
+  "wrong",
+  "fix_scope",
+  false,
+  "read",
+  "tap",
+  0.0023174000000000003
+ ],
+ [
+  "WRONG 230219-live-agent-check_in s6",
+  "wrong",
+  "fix_noformat",
+  false,
+  "read",
+  "tap",
+  0.0027448000000000004
+ ],
+ [
+  "WRONG 230219-live-agent-check_in s6",
+  "wrong",
+  "fix_noformat",
+  false,
+  "read",
+  "tap",
+  0.0029514000000000003
+ ],
+ [
+  "WRONG 230219-live-agent-check_in s6",
+  "wrong",
+  "fix_noformat",
+  false,
+  "read",
+  "tap",
+  0.0022501500000000002
+ ],
+ [
+  "WRONG 230219-live-agent-check_in s6",
+  "wrong",
+  "fix_noformat",
+  false,
+  "read",
+  "tap",
+  0.0020929
+ ],
+ [
+  "WRONG 230219-live-agent-check_in s6",
+  "wrong",
+  "fix_noformat",
+  false,
+  "read",
+  "tap",
+  0.0037164
+ ],
+ [
+  "AW SimpleCalendarAddOneEventRelat s15",
+  "aw_commit",
+  "cur",
+  true,
+  "reversible",
+  "tap",
+  0.00166535
+ ],
+ [
+  "AW SimpleCalendarAddOneEventRelat s15",
+  "aw_commit",
+  "cur",
+  true,
+  "reversible",
+  "tap",
+  0.0009485999999999999
+ ],
+ [
+  "AW SimpleCalendarAddOneEventRelat s15",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00100385
+ ],
+ [
+  "AW SimpleCalendarAddOneEventRelat s15",
+  "aw_commit",
+  "cur",
+  true,
+  "reversible",
+  "tap",
+  0.0009740999999999999
+ ],
+ [
+  "AW SimpleCalendarAddOneEventRelat s15",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0009826
+ ],
+ [
+  "AW SimpleCalendarAddOneEventRelat s15",
+  "aw_commit",
+  "fix",
+  true,
+  "reversible",
+  "tap",
+  0.00175585
+ ],
+ [
+  "AW SimpleCalendarAddOneEventRelat s15",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00091955
+ ],
+ [
+  "AW SimpleCalendarAddOneEventRelat s15",
+  "aw_commit",
+  "fix",
+  true,
+  "reversible",
+  "tap",
+  0.0009237999999999999
+ ],
+ [
+  "AW SimpleCalendarAddOneEventRelat s15",
+  "aw_commit",
+  "fix",
+  true,
+  "reversible",
+  "tap",
+  0.00091105
+ ],
+ [
+  "AW SimpleCalendarAddOneEventRelat s15",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0008813
+ ],
+ [
+  "AW SimpleCalendarAddOneEventRelat s15",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0016757999999999999
+ ],
+ [
+  "AW SimpleCalendarAddOneEventRelat s15",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0009632999999999999
+ ],
+ [
+  "AW SimpleCalendarAddOneEventRelat s15",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00096755
+ ],
+ [
+  "AW SimpleCalendarAddOneEventRelat s15",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "reversible",
+  "tap",
+  0.00093355
+ ],
+ [
+  "AW SimpleCalendarAddOneEventRelat s15",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00095055
+ ],
+ [
+  "AW SimpleCalendarAddOneEventRelat s15",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "reversible",
+  "tap",
+  0.00174085
+ ],
+ [
+  "AW SimpleCalendarAddOneEventRelat s15",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "reversible",
+  "tap",
+  0.00173235
+ ],
+ [
+  "AW SimpleCalendarAddOneEventRelat s15",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "reversible",
+  "tap",
+  0.00110005
+ ],
+ [
+  "AW SimpleCalendarAddOneEventRelat s15",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "reversible",
+  "tap",
+  0.0008960499999999999
+ ],
+ [
+  "AW SimpleCalendarAddOneEventRelat s15",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "reversible",
+  "tap",
+  0.0009215499999999999
+ ],
+ [
+  "AW MarkorCreateNoteAndSms s14",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0017528499999999998
+ ],
+ [
+  "AW MarkorCreateNoteAndSms s14",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0015764000000000002
+ ],
+ [
+  "AW MarkorCreateNoteAndSms s14",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00118965
+ ],
+ [
+  "AW MarkorCreateNoteAndSms s14",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0012874000000000002
+ ],
+ [
+  "AW MarkorCreateNoteAndSms s14",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00090915
+ ],
+ [
+  "AW MarkorCreateNoteAndSms s14",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0014906
+ ],
+ [
+  "AW MarkorCreateNoteAndSms s14",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0007993499999999999
+ ],
+ [
+  "AW MarkorCreateNoteAndSms s14",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00113935
+ ],
+ [
+  "AW MarkorCreateNoteAndSms s14",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0008546
+ ],
+ [
+  "AW MarkorCreateNoteAndSms s14",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00131785
+ ],
+ [
+  "AW MarkorCreateNoteAndSms s14",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0012511
+ ],
+ [
+  "AW MarkorCreateNoteAndSms s14",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0010343499999999999
+ ],
+ [
+  "AW MarkorCreateNoteAndSms s14",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0014487999999999999
+ ],
+ [
+  "AW MarkorCreateNoteAndSms s14",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0008515999999999999
+ ],
+ [
+  "AW MarkorCreateNoteAndSms s14",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0019481
+ ],
+ [
+  "AW MarkorCreateNoteAndSms s14",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0015095999999999998
+ ],
+ [
+  "AW MarkorCreateNoteAndSms s14",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0013155999999999999
+ ],
+ [
+  "AW MarkorCreateNoteAndSms s14",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0017448499999999998
+ ],
+ [
+  "AW MarkorCreateNoteAndSms s14",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0008353499999999999
+ ],
+ [
+  "AW MarkorCreateNoteAndSms s14",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0012391
+ ],
+ [
+  "AW SimpleCalendarAddRepeatingEven s18",
+  "aw_commit",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0025271
+ ],
+ [
+  "AW SimpleCalendarAddRepeatingEven s18",
+  "aw_commit",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0013576500000000002
+ ],
+ [
+  "AW SimpleCalendarAddRepeatingEven s18",
+  "aw_commit",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.00133215
+ ],
+ [
+  "AW SimpleCalendarAddRepeatingEven s18",
+  "aw_commit",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0010261500000000002
+ ],
+ [
+  "AW SimpleCalendarAddRepeatingEven s18",
+  "aw_commit",
+  "cur",
+  true,
+  "read",
+  "tap",
+  0.0011239000000000002
+ ],
+ [
+  "AW SimpleCalendarAddRepeatingEven s18",
+  "aw_commit",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0022898000000000003
+ ],
+ [
+  "AW SimpleCalendarAddRepeatingEven s18",
+  "aw_commit",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.00102315
+ ],
+ [
+  "AW SimpleCalendarAddRepeatingEven s18",
+  "aw_commit",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.00132915
+ ],
+ [
+  "AW SimpleCalendarAddRepeatingEven s18",
+  "aw_commit",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0013886500000000002
+ ],
+ [
+  "AW SimpleCalendarAddRepeatingEven s18",
+  "aw_commit",
+  "fix",
+  true,
+  "read",
+  "tap",
+  0.0010019
+ ],
+ [
+  "AW SimpleCalendarAddRepeatingEven s18",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0022655500000000003
+ ],
+ [
+  "AW SimpleCalendarAddRepeatingEven s18",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0012964
+ ],
+ [
+  "AW SimpleCalendarAddRepeatingEven s18",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0025418000000000003
+ ],
+ [
+  "AW SimpleCalendarAddRepeatingEven s18",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.00492425
+ ],
+ [
+  "AW SimpleCalendarAddRepeatingEven s18",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "read",
+  "tap",
+  0.0050645
+ ],
+ [
+  "AW SimpleCalendarAddRepeatingEven s18",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.00507375
+ ],
+ [
+  "AW SimpleCalendarAddRepeatingEven s18",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0013694
+ ],
+ [
+  "AW SimpleCalendarAddRepeatingEven s18",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0024836
+ ],
+ [
+  "AW SimpleCalendarAddRepeatingEven s18",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0012589
+ ],
+ [
+  "AW SimpleCalendarAddRepeatingEven s18",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "read",
+  "tap",
+  0.0013099000000000001
+ ],
+ [
+  "AW ExpenseDeleteDuplicates s7",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0014870999999999999
+ ],
+ [
+  "AW ExpenseDeleteDuplicates s7",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00105565
+ ],
+ [
+  "AW ExpenseDeleteDuplicates s7",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00088565
+ ],
+ [
+  "AW ExpenseDeleteDuplicates s7",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0010896500000000002
+ ],
+ [
+  "AW ExpenseDeleteDuplicates s7",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0012299000000000001
+ ],
+ [
+  "AW ExpenseDeleteDuplicates s7",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0019473499999999998
+ ],
+ [
+  "AW ExpenseDeleteDuplicates s7",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00110735
+ ],
+ [
+  "AW ExpenseDeleteDuplicates s7",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00485625
+ ],
+ [
+  "AW ExpenseDeleteDuplicates s7",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00156635
+ ],
+ [
+  "AW ExpenseDeleteDuplicates s7",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00122635
+ ],
+ [
+  "AW ExpenseDeleteDuplicates s7",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0043815
+ ],
+ [
+  "AW ExpenseDeleteDuplicates s7",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00107885
+ ],
+ [
+  "AW ExpenseDeleteDuplicates s7",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0011978499999999999
+ ],
+ [
+  "AW ExpenseDeleteDuplicates s7",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0011086
+ ],
+ [
+  "AW ExpenseDeleteDuplicates s7",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0014826
+ ],
+ [
+  "AW ExpenseDeleteDuplicates s7",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.004429
+ ],
+ [
+  "AW ExpenseDeleteDuplicates s7",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0008883499999999999
+ ],
+ [
+  "AW ExpenseDeleteDuplicates s7",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0008543499999999999
+ ],
+ [
+  "AW ExpenseDeleteDuplicates s7",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0009393499999999999
+ ],
+ [
+  "AW ExpenseDeleteDuplicates s7",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0007650999999999999
+ ],
+ [
+  "AW ExpenseDeleteMultiple s16",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0023185500000000004
+ ],
+ [
+  "AW ExpenseDeleteMultiple s16",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00112045
+ ],
+ [
+  "AW ExpenseDeleteMultiple s16",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0009759500000000001
+ ],
+ [
+  "AW ExpenseDeleteMultiple s16",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00144345
+ ],
+ [
+  "AW ExpenseDeleteMultiple s16",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0012777
+ ],
+ [
+  "AW ExpenseDeleteMultiple s16",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0021794
+ ],
+ [
+  "AW ExpenseDeleteMultiple s16",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0019643
+ ],
+ [
+  "AW ExpenseDeleteMultiple s16",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0015563
+ ],
+ [
+  "AW ExpenseDeleteMultiple s16",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0011679000000000001
+ ],
+ [
+  "AW ExpenseDeleteMultiple s16",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0010234
+ ],
+ [
+  "AW ExpenseDeleteMultiple s16",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00155755
+ ],
+ [
+  "AW ExpenseDeleteMultiple s16",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0017259
+ ],
+ [
+  "AW ExpenseDeleteMultiple s16",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0018109
+ ],
+ [
+  "AW ExpenseDeleteMultiple s16",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0010799000000000002
+ ],
+ [
+  "AW ExpenseDeleteMultiple s16",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0012074000000000002
+ ],
+ [
+  "AW ExpenseDeleteMultiple s16",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0016736
+ ],
+ [
+  "AW ExpenseDeleteMultiple s16",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00108915
+ ],
+ [
+  "AW ExpenseDeleteMultiple s16",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00120815
+ ],
+ [
+  "AW ExpenseDeleteMultiple s16",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00099565
+ ],
+ [
+  "AW ExpenseDeleteMultiple s16",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0011401500000000001
+ ],
+ [
+  "AW ExpenseDeleteSingle s4",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0013625999999999998
+ ],
+ [
+  "AW ExpenseDeleteSingle s4",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00141675
+ ],
+ [
+  "AW ExpenseDeleteSingle s4",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00094925
+ ],
+ [
+  "AW ExpenseDeleteSingle s4",
+  "aw_commit",
+  "cur",
+  false,
+  "read",
+  "back",
+  0.00293825
+ ],
+ [
+  "AW ExpenseDeleteSingle s4",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.002305
+ ],
+ [
+  "AW ExpenseDeleteSingle s4",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00187755
+ ],
+ [
+  "AW ExpenseDeleteSingle s4",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00134945
+ ],
+ [
+  "AW ExpenseDeleteSingle s4",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00174895
+ ],
+ [
+  "AW ExpenseDeleteSingle s4",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0015704500000000001
+ ],
+ [
+  "AW ExpenseDeleteSingle s4",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0008054500000000001
+ ],
+ [
+  "AW ExpenseDeleteSingle s4",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0019340499999999999
+ ],
+ [
+  "AW ExpenseDeleteSingle s4",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0024132
+ ],
+ [
+  "AW ExpenseDeleteSingle s4",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00133795
+ ],
+ [
+  "AW ExpenseDeleteSingle s4",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00145695
+ ],
+ [
+  "AW ExpenseDeleteSingle s4",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0018692000000000001
+ ],
+ [
+  "AW ExpenseDeleteSingle s4",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0020076
+ ],
+ [
+  "AW ExpenseDeleteSingle s4",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0014152000000000001
+ ],
+ [
+  "AW ExpenseDeleteSingle s4",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0028177
+ ],
+ [
+  "AW ExpenseDeleteSingle s4",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0015257
+ ],
+ [
+  "AW ExpenseDeleteSingle s4",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00175095
+ ],
+ [
+  "AW RecipeDeleteMultipleRecipesWit s19",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.00148285
+ ],
+ [
+  "AW RecipeDeleteMultipleRecipesWit s19",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0008170999999999999
+ ],
+ [
+  "AW RecipeDeleteMultipleRecipesWit s19",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0008425999999999999
+ ],
+ [
+  "AW RecipeDeleteMultipleRecipesWit s19",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0007746
+ ],
+ [
+  "AW RecipeDeleteMultipleRecipesWit s19",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0007193499999999999
+ ],
+ [
+  "AW RecipeDeleteMultipleRecipesWit s19",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0014112999999999999
+ ],
+ [
+  "AW RecipeDeleteMultipleRecipesWit s19",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0009415999999999999
+ ],
+ [
+  "AW RecipeDeleteMultipleRecipesWit s19",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0008778499999999999
+ ],
+ [
+  "AW RecipeDeleteMultipleRecipesWit s19",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0008650999999999999
+ ],
+ [
+  "AW RecipeDeleteMultipleRecipesWit s19",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0008565999999999999
+ ],
+ [
+  "AW RecipeDeleteMultipleRecipesWit s19",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0014422999999999999
+ ],
+ [
+  "AW RecipeDeleteMultipleRecipesWit s19",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0014422999999999999
+ ],
+ [
+  "AW RecipeDeleteMultipleRecipesWit s19",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0041095
+ ],
+ [
+  "AW RecipeDeleteMultipleRecipesWit s19",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00412225
+ ],
+ [
+  "AW RecipeDeleteMultipleRecipesWit s19",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0009555999999999999
+ ],
+ [
+  "AW RecipeDeleteMultipleRecipesWit s19",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0015455999999999998
+ ],
+ [
+  "AW RecipeDeleteMultipleRecipesWit s19",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0016093499999999998
+ ],
+ [
+  "AW RecipeDeleteMultipleRecipesWit s19",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0008713499999999999
+ ],
+ [
+  "AW RecipeDeleteMultipleRecipesWit s19",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0008458499999999999
+ ],
+ [
+  "AW RecipeDeleteMultipleRecipesWit s19",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0008670999999999999
+ ],
+ [
+  "AW SimpleCalendarAddOneEventInTwo s16",
+  "aw_commit",
+  "cur",
+  true,
+  "reversible",
+  "tap",
+  0.0017888499999999998
+ ],
+ [
+  "AW SimpleCalendarAddOneEventInTwo s16",
+  "aw_commit",
+  "cur",
+  true,
+  "reversible",
+  "tap",
+  0.0018100999999999998
+ ],
+ [
+  "AW SimpleCalendarAddOneEventInTwo s16",
+  "aw_commit",
+  "cur",
+  true,
+  "reversible",
+  "tap",
+  0.0009993
+ ],
+ [
+  "AW SimpleCalendarAddOneEventInTwo s16",
+  "aw_commit",
+  "cur",
+  true,
+  "reversible",
+  "tap",
+  0.0009228
+ ],
+ [
+  "AW SimpleCalendarAddOneEventInTwo s16",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0007698
+ ],
+ [
+  "AW SimpleCalendarAddOneEventInTwo s16",
+  "aw_commit",
+  "fix",
+  true,
+  "reversible",
+  "tap",
+  0.0020621
+ ],
+ [
+  "AW SimpleCalendarAddOneEventInTwo s16",
+  "aw_commit",
+  "fix",
+  true,
+  "reversible",
+  "tap",
+  0.00109405
+ ],
+ [
+  "AW SimpleCalendarAddOneEventInTwo s16",
+  "aw_commit",
+  "fix",
+  true,
+  "reversible",
+  "tap",
+  0.0011450499999999999
+ ],
+ [
+  "AW SimpleCalendarAddOneEventInTwo s16",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00192705
+ ],
+ [
+  "AW SimpleCalendarAddOneEventInTwo s16",
+  "aw_commit",
+  "fix",
+  true,
+  "reversible",
+  "tap",
+  0.00100905
+ ],
+ [
+  "AW SimpleCalendarAddOneEventInTwo s16",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "reversible",
+  "tap",
+  0.0017228
+ ],
+ [
+  "AW SimpleCalendarAddOneEventInTwo s16",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "reversible",
+  "tap",
+  0.001048
+ ],
+ [
+  "AW SimpleCalendarAddOneEventInTwo s16",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00093325
+ ],
+ [
+  "AW SimpleCalendarAddOneEventInTwo s16",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0010055
+ ],
+ [
+  "AW SimpleCalendarAddOneEventInTwo s16",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "reversible",
+  "tap",
+  0.000963
+ ],
+ [
+  "AW SimpleCalendarAddOneEventInTwo s16",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "reversible",
+  "tap",
+  0.0018430999999999999
+ ],
+ [
+  "AW SimpleCalendarAddOneEventInTwo s16",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "reversible",
+  "tap",
+  0.0011003
+ ],
+ [
+  "AW SimpleCalendarAddOneEventInTwo s16",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "reversible",
+  "tap",
+  0.0009983
+ ],
+ [
+  "AW SimpleCalendarAddOneEventInTwo s16",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "reversible",
+  "tap",
+  0.00433125
+ ],
+ [
+  "AW SimpleCalendarAddOneEventInTwo s16",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "reversible",
+  "tap",
+  0.0044205
+ ],
+ [
+  "AW ExpenseAddMultipleFromGallery s36",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0020051
+ ],
+ [
+  "AW ExpenseAddMultipleFromGallery s36",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0020433499999999998
+ ],
+ [
+  "AW ExpenseAddMultipleFromGallery s36",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0020136
+ ],
+ [
+  "AW ExpenseAddMultipleFromGallery s36",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0009084500000000001
+ ],
+ [
+  "AW ExpenseAddMultipleFromGallery s36",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0009892
+ ],
+ [
+  "AW ExpenseAddMultipleFromGallery s36",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0026843
+ ],
+ [
+  "AW ExpenseAddMultipleFromGallery s36",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0009777
+ ],
+ [
+  "AW ExpenseAddMultipleFromGallery s36",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0009904500000000001
+ ],
+ [
+  "AW ExpenseAddMultipleFromGallery s36",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0009352000000000001
+ ],
+ [
+  "AW ExpenseAddMultipleFromGallery s36",
+  "aw_commit",
+  "fix",
+  true,
+  "reversible",
+  "tap",
+  0.0010627
+ ],
+ [
+  "AW ExpenseAddMultipleFromGallery s36",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0022674
+ ],
+ [
+  "AW ExpenseAddMultipleFromGallery s36",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0011064500000000001
+ ],
+ [
+  "AW ExpenseAddMultipleFromGallery s36",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00235665
+ ],
+ [
+  "AW ExpenseAddMultipleFromGallery s36",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00096195
+ ],
+ [
+  "AW ExpenseAddMultipleFromGallery s36",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0009789500000000001
+ ],
+ [
+  "AW ExpenseAddMultipleFromGallery s36",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00259705
+ ],
+ [
+  "AW ExpenseAddMultipleFromGallery s36",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0009882
+ ],
+ [
+  "AW ExpenseAddMultipleFromGallery s36",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0010987
+ ],
+ [
+  "AW ExpenseAddMultipleFromGallery s36",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0009542
+ ],
+ [
+  "AW ExpenseAddMultipleFromGallery s36",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.00095845
+ ],
+ [
+  "AW RecipeDeleteSingleWithRecipeWi s7",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0013426
+ ],
+ [
+  "AW RecipeDeleteSingleWithRecipeWi s7",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0010137
+ ],
+ [
+  "AW RecipeDeleteSingleWithRecipeWi s7",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0008352
+ ],
+ [
+  "AW RecipeDeleteSingleWithRecipeWi s7",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0008947
+ ],
+ [
+  "AW RecipeDeleteSingleWithRecipeWi s7",
+  "aw_commit",
+  "cur",
+  true,
+  "irreversible",
+  "tap",
+  0.0010902000000000002
+ ],
+ [
+  "AW RecipeDeleteSingleWithRecipeWi s7",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0016370999999999998
+ ],
+ [
+  "AW RecipeDeleteSingleWithRecipeWi s7",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0014033499999999998
+ ],
+ [
+  "AW RecipeDeleteSingleWithRecipeWi s7",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00169015
+ ],
+ [
+  "AW RecipeDeleteSingleWithRecipeWi s7",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.0008189
+ ],
+ [
+  "AW RecipeDeleteSingleWithRecipeWi s7",
+  "aw_commit",
+  "fix",
+  true,
+  "irreversible",
+  "tap",
+  0.00109515
+ ],
+ [
+  "AW RecipeDeleteSingleWithRecipeWi s7",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.0018418
+ ],
+ [
+  "AW RecipeDeleteSingleWithRecipeWi s7",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00127655
+ ],
+ [
+  "AW RecipeDeleteSingleWithRecipeWi s7",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00086265
+ ],
+ [
+  "AW RecipeDeleteSingleWithRecipeWi s7",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00082865
+ ],
+ [
+  "AW RecipeDeleteSingleWithRecipeWi s7",
+  "aw_commit",
+  "fix_scope",
+  true,
+  "irreversible",
+  "tap",
+  0.00086265
+ ],
+ [
+  "AW RecipeDeleteSingleWithRecipeWi s7",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0012565999999999999
+ ],
+ [
+  "AW RecipeDeleteSingleWithRecipeWi s7",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0008719
+ ],
+ [
+  "AW RecipeDeleteSingleWithRecipeWi s7",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0008634
+ ],
+ [
+  "AW RecipeDeleteSingleWithRecipeWi s7",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0015349
+ ],
+ [
+  "AW RecipeDeleteSingleWithRecipeWi s7",
+  "aw_commit",
+  "fix_noformat",
+  true,
+  "irreversible",
+  "tap",
+  0.0007953999999999999
+ ]
+]

@@ -1,0 +1,3242 @@
+[
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list clearly shows no contacts yet",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.011370100000000001
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.00463175
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet, count is 0",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.00232525
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet so count is zero",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.00212125
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Screen shows no contacts list is empty",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.004398
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "opens filters",
+  "reason": "Check if filters hide any contacts",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.0037583499999999997
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.001675
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Screen shows 'No contacts yet' so count is 0",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.002304
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet indicating zero contacts",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.00185775
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet, meaning zero contacts",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.0019555
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet so count is 0",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.00216375
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet indicating zero contacts",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.0022445
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.00202775
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "opens filters",
+  "reason": "Check if filters hide contacts",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.0018875
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Screen shows contacts list is empty with 'No contacts yet'",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.00235925
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts yet",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.00277575
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.0024485
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.0017515
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "look ",
+  "reason": "Verify visual state before concluding count",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.0018535
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet so count is zero",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.002134
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "opens filters",
+  "reason": "Check if filters hide any contacts before counting",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.002542
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.00218075
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.00231675
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet, count is zero",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.001777
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.0023125
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.00229125
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list already shows empty state with zero contacts",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.001488
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "back ",
+  "reason": "Already in Contacts app showing empty list; verify count",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.002117
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list already shows No contacts yet, count is 0",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.002355
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2665,
+  "live_tokens": 2748,
+  "cost": 0.00219775
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list clearly shows no contacts yet",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.004101100000000001
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.00206875
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "opens filters",
+  "reason": "Check if any filter hides contacts before counting",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.001597
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts yet, count is zero",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.001852
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet, count is 0",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.00405225
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.0017245
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts app shows No contacts yet",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.0020985
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list is visible and shows no contacts yet.",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.0013505
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.0015715
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts, count is zero",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.00141425
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows 'No contacts yet' so count is 0",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.0014185
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts yet",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.00139725
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet, count is 0",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.0011975
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.00178825
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.0021495
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.00135475
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.00185625
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.00155025
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows 'No contacts yet' so count is 0",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.00217075
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet so count is zero",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.0020135
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "opens filters",
+  "reason": "Check filters to confirm no contacts are hidden",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.0015205
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.00158
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts yet",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.00117625
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.0019625
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.001818
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.00545175
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.0014185
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet, so count is 0",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.00173725
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet indicating zero contacts",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.00164375
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet, count is zero",
+  "tokens": 2572,
+  "live_tokens": 2748,
+  "cost": 0.001546
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows 'No contacts yet' indicating zero contacts",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.007362100000000001
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows empty with No contacts yet",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.003892
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet, count determined",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.0011945
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts, count is 0",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.001118
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet so count is zero",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.001985
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.00128375
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet, count is 0",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.0015345
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.00194675
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.0013135
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "look ",
+  "reason": "Verify visual state before answering count",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.00183625
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.0025375
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet so count is 0",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.002002
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Screen shows no contacts, so count is zero",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.00221875
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.00165775
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet, count is zero",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.00209125
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet indicating zero contacts",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.001424
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.0017895
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.001764
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts, count is zero",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.00137725
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.00122425
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet, count is 0",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.00221025
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list clearly shows no contacts",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.00147075
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list is visible and shows no contacts",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.00131775
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list clearly shows no contacts",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.0014835
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts yet",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.0019425
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.0013305
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts yet",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.00251625
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Screen shows No contacts yet so count is 0",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.00126675
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.001254
+ },
+ {
+  "case": "contacts s1, clean plan (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet, count is 0",
+  "tokens": 2556,
+  "live_tokens": 2748,
+  "cost": 0.0016365
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "back ",
+  "reason": "No keyboard open; checking navigation state before counting contacts",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.0024633000000000003
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet so count is zero",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.002103
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet, count is 0",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.00224325
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "opens filters",
+  "reason": "Check filters to confirm full contacts list is shown",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.00502575
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet so count is zero",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.0013295
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet, count is 0",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.00222625
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "opens filters",
+  "reason": "Check filters before counting contacts",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.0017035
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.001661
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Screen shows No contacts yet so count is zero",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.001236
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Screen clearly shows No contacts yet with empty list",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.00237925
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.00205625
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts yet",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.001236
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "back ",
+  "reason": "Check screen state; need to verify account list before counting",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.002188
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "look ",
+  "reason": "Verify empty state visually before counting",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.0018225
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet so count is zero",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.00254925
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "opens filters",
+  "reason": "Check if filters hide contacts before counting",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.00169075
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet, count is 0",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.003021
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Screen clearly shows no contacts",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.00152075
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "back ",
+  "reason": "Verify empty contacts state before answering",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.00187775
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet, count is 0",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.00220925
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet so count is zero",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.00322075
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "opens filters",
+  "reason": "Verify no filters are hiding contacts before counting",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.0017205
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.001712
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet so count is zero",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.0023155
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "look ",
+  "reason": "Verify no contacts visually before counting",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.001423
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "look ",
+  "reason": "Verify empty contacts screen visually before counting",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.00163975
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts yet",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.00214975
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "opens filters",
+  "reason": "Check if contacts are filtered hiding some contacts",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.001576
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "back ",
+  "reason": "No action needed, already in Contacts - need to verify count",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.00136775
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows 'No contacts yet' indicating zero contacts",
+  "tokens": 2664,
+  "live_tokens": 2747,
+  "cost": 0.002562
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet so count is 0",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.0043166
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "look ",
+  "reason": "Verify visual empty state before concluding count",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.0037556
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "opens filters",
+  "reason": "Verify filters aren't hiding contacts before counting",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.0018805
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.0015065
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list clearly shows no contacts",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.002433
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "opens filters",
+  "reason": "Check filters to ensure no contacts are hidden",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.0015745
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "opens filters",
+  "reason": "Verify no hidden filters before counting contacts",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.00185925
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.001906
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.0018465
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows empty with No contacts yet",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.001617
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list with No contacts yet",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.002501
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet indicating zero contacts",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.0026795
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.0016085
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.002127
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet, count is 0",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.00180825
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "opens filters",
+  "reason": "Verify no filter is hiding contacts before counting",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.0019655
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "look ",
+  "reason": "Need screenshot to confirm empty state before counting",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.0017105
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts yet so count is zero",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.0021695
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "opens filters",
+  "reason": "Verify no filters hide contacts before counting",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.001413
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "opens filters",
+  "reason": "Verify no filters hide contacts",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.001345
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "opens filters",
+  "reason": "Verify the empty list is unfiltered before counting",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.002076
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "look ",
+  "reason": "Verify empty contacts list visually before counting",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.00134075
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "opens filters",
+  "reason": "Check filters to confirm no hidden contacts before counting",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.00143425
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "back ",
+  "reason": "Need to ensure Contacts app is open before counting",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.00144275
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "opens filters",
+  "reason": "Check filters to ensure full list is visible before counting",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.001736
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "opens filters",
+  "reason": "Verify no filter is hiding contacts before counting",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.001753
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "opens filters",
+  "reason": "Check filters to ensure full contacts list is visible",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.00174025
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Screen shows No contacts yet, count is 0",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.0016085
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Screen shows No contacts yet, count is zero",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.0025095
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no742",
+  "kind": "opens filters",
+  "reason": "Verify full contacts list is shown before counting",
+  "tokens": 2571,
+  "live_tokens": 2747,
+  "cost": 0.00188475
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.00307985
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Screen shows No contacts yet so count is zero",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.0017075
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet, so count is 0",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.00243
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet so count is 0",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.00308875
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "look ",
+  "reason": "Verify contacts list state visually before counting",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.001529
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list clearly shows no contacts",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.00197525
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list is visible and shows empty state",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.0016565
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "back ",
+  "reason": "Need correct opening action; backing out to retry proper exploration",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.00148225
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet, count is 0",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.002906
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list is visible and shows no contacts",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.00200925
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "back ",
+  "reason": "Need to verify screen state before counting",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.00141
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Screen shows No contacts yet so count is zero",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.00187325
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "look ",
+  "reason": "Need visual confirmation of contact count before concluding",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.0014355
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "look ",
+  "reason": "Verify empty contacts list visually before counting",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.00189025
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "back ",
+  "reason": "Goal completed with current screen showing count; no further action needed but schema requires an action - will finalize next step",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.0014185
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "back ",
+  "reason": "Check current state before counting contacts",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.0018265
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "opens filters",
+  "reason": "Verify no filters hide contacts before counting",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.0016565
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet, count is 0",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.00174575
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "opens filters",
+  "reason": "Verify no filters hide contacts before counting",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.00144825
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "opens filters",
+  "reason": "Check filters to ensure full list is visible",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.001682
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "opens filters",
+  "reason": "Verify no filters are hiding contacts before counting",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.00217075
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.00147375
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "look ",
+  "reason": "Verify empty contacts visually before counting",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.00192425
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts yet",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.001716
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.00160975
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Screen clearly shows no contacts exist",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.00139725
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts yet",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.001733
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "opens filters",
+  "reason": "Verify filters aren't hiding contacts before counting",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.001393
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "back ",
+  "reason": "Need to follow schema but first need to look correctly - tapping filter toggle to verify list",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.00190725
+ },
+ {
+  "case": "contacts s1, full-list plan (736a6e4 run)",
+  "variant": "no10b+no_done",
+  "kind": "opens filters",
+  "reason": "Verify no filter is hiding contacts before counting",
+  "tokens": 2555,
+  "live_tokens": 2747,
+  "cost": 0.00143125
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.00178835
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows empty state with no contacts",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.00184675
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Screen shows empty contacts list with no contacts",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.0016385
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Screen shows No contacts yet on Contacts tab",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.00155775
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.00163
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.00123475
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Screen shows empty state with no contacts",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.00202525
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Screen shows empty state with no contacts",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.001358
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Screen clearly shows no contacts yet",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.001392
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Screen shows no contacts, count is zero",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.002276
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Screen shows No contacts yet, count is 0",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.00157475
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Screen shows no contacts, answering count",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.001273
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts tab shows No contacts yet",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.001749
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet so count is 0",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.00981975
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Screen shows No contacts yet so count is zero",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.00182975
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Screen shows No contacts yet on Contacts tab",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.001885
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Screen clearly shows empty contacts list",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.00242475
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Screen shows contact count state",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.001426
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.00180425
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts tab shows empty state with no contacts",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.0038995
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows empty state with no contacts",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.001647
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Screen already shows empty contacts state",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.003177
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts tab shows empty state with zero contacts",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.00120075
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows empty state with no contacts",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.00172775
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows empty state with no contacts",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.00126025
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contact list shows empty state with zero contacts",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.00187225
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts tab shows No contacts yet so count is zero",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.001698
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows empty state with zero contacts",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.00156625
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet, count is zero",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.00146425
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b",
+  "kind": "answers",
+  "reason": "Contacts tab shows No contacts yet, count is 0",
+  "tokens": 2663,
+  "live_tokens": 2119,
+  "cost": 0.00180425
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts tab shows No contacts yet, count is 0",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.0018724000000000002
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows empty state with zero contacts",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.0013735
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.00132675
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts tab shows No contacts yet so count is 0",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.001433
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows 'No contacts yet' so count is 0",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.001756
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts tab shows empty state with no contacts",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.0015775
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts tab shows No contacts yet, count is 0",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.0015435
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Screen shows no contacts, count is zero",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.001042
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Screen shows No contacts yet so count is zero",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.0013225
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contact list shows empty state with zero contacts",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.00120775
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contact list shows empty state with no contacts",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.0013565
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows empty state with no contacts",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.00230425
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Screen shows empty state with no contacts",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.00193875
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Screen shows no contacts state",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.00142025
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows empty state with no contacts",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.00181125
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows 'No contacts yet' so count is 0",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.00116525
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list is visible and shows empty state",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.002572
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Screen shows No contacts yet so count is zero",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.00169225
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts tab shows No contacts yet indicating zero contacts",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.0015435
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Screen shows No contacts yet, count is 0",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.00128425
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Screen shows No contacts yet so count is 0",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.001263
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Screen shows empty state with zero contacts",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.0014585
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Screen shows No contacts yet, so count is 0",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.00121625
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows empty state with zero contacts",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.00149675
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contact list shows empty state with zero contacts",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.00109725
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows No contacts yet, so count is 0",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.00142875
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Screen shows empty state with zero contacts",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.00138625
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Screen shows empty contact list",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.00088475
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Contacts list shows empty state with zero contacts",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.0016455
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no742",
+  "kind": "answers",
+  "reason": "Screen shows empty contact list with No contacts yet",
+  "tokens": 2570,
+  "live_tokens": 2119,
+  "cost": 0.00162
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Screen shows empty state with no contacts",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.00196715
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Screen shows no contacts, count is zero",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.00094125
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Screen shows No contacts yet so count is zero",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.001566
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts yet",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.001294
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Screen shows empty state with zero contacts",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.00115375
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contact list shows No contacts yet, count is 0",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.00128975
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows empty state with zero contacts",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.0011325
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contact list shows empty state with no contacts",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.00112825
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contact list shows No contacts yet, count is 0",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.001141
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Screen clearly shows empty state with no contacts",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.00224175
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows empty state with zero contacts",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.0011665
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Screen shows No contacts yet so count is 0",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.00101775
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts yet",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.0012345
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contact list shows empty state with zero contacts",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.0011665
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contact list shows empty state with zero contacts",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.001464
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Screen shows No contacts yet so count is 0",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.001736
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts state",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.00122175
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows no contacts",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.00105175
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows empty state with zero contacts",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.00156175
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Screen clearly shows empty contact list",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.00109
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Screen shows empty state with no contacts",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.0010985
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Screen clearly shows empty contacts state",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.0009795
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts tab shows empty state with zero contacts",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.001328
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Screen clearly shows no contacts",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.001039
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts tab shows empty state with zero contacts",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.001294
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contact list shows empty state with zero contacts",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.00135775
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Contacts list shows empty state with zero contacts",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.0013195
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Screen shows empty contact list with zero contacts",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.0011835
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Screen shows empty contact list with no contacts",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.00118775
+ },
+ {
+  "case": "contacts s1, main's plan (main run)",
+  "variant": "no10b+no_done",
+  "kind": "answers",
+  "reason": "Screen shows No contacts yet so count is 0",
+  "tokens": 2554,
+  "live_tokens": 2119,
+  "cost": 0.00130675
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.0013786
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.0009684
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.0009769
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.00081115
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "back ",
+  "reason": "Accidentally tapped Settings; need to go back and find correct address entry",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.00084515
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.00390075
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "back ",
+  "reason": "AccountActivity screen already shows Addresses option, no navigation needed yet - correction, need to tap Addresses",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.0009259
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.00084515
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.00094715
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.0038965
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.00084515
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.0008664
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.00079415
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.0008409
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.00079415
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.0009513999999999999
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.0008239
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "back ",
+  "reason": "Mistake, need correct action",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.00084515
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.0012829
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.00081115
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.00088765
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.0009513999999999999
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.0009684
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Account shows Addresses with 1 location, matches goal",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.00088765
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.00083665
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.0008493999999999999
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.0008154
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.00088765
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.0008706499999999999
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2903,
+  "live_tokens": 2969,
+  "cost": 0.00086215
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.0015434000000000001
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.0006778999999999999
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to see saved delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.00074165
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.0007459
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.0007119
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.00078415
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.00074165
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.0008139
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.0007161499999999999
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.0006991499999999999
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.0007586499999999999
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.0007459
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.0009159
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.0006948999999999999
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.0006991499999999999
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.00069065
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.00074165
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.00080965
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.00072465
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.00075015
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.0007714
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.00075015
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.0010306500000000001
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to see saved delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.00075015
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.0008011499999999999
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.0007373999999999999
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.0007373999999999999
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.00075015
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.0007459
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no742",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2810,
+  "live_tokens": 2969,
+  "cost": 0.00073315
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.00142565
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.0009007
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.00082845
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.00082845
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.00087095
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.0008454500000000001
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.0008072
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.0009474500000000001
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.0008667000000000001
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.0008624500000000001
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.0008752
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.0008412000000000001
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.0008029500000000001
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.00095595
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.0009007
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.00082845
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.00082845
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.00087095
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.0009432
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.0008199500000000001
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.0008582
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.0008327
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.0008199500000000001
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.0008582
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.00083695
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.0011472000000000001
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.0008412000000000001
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open saved addresses to read delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.00087095
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.0008029500000000001
+ },
+ {
+  "case": "doordash s5, Addresses (5fa03bf run)",
+  "variant": "no10b+no_done",
+  "kind": "taps Addresses",
+  "reason": "Open Addresses to read saved delivery address",
+  "tokens": 2794,
+  "live_tokens": 2969,
+  "cost": 0.0008752
+ }
+]

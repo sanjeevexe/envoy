@@ -1,0 +1,10 @@
+cost $0.730; errors 0; live plan tokens 1014, live step tokens 2747
+plan  cur      'full'/filter plans 11/30  tokens [1018]
+plan  p_only   'full'/filter plans 0/30  tokens [1066]
+plan  p_smin   'full'/filter plans 0/30  tokens [1066]
+step  cur      {'answers': 23, 'opens filters': 7}  tokens [2724]
+step  p_only   {'opens filters': 8, 'answers': 22}  tokens [2724]
+step  p_smin   {'opens filters': 9, 'answers': 21}  tokens [2737]
+chain cur      {'answers': 29, 'opens filters': 1}  'full' plans 7/30
+chain p_only   {'answers': 30}  'full' plans 0/30
+chain p_smin   {'answers': 30}  'full' plans 0/30

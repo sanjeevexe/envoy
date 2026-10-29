@@ -1,0 +1,111 @@
+routine: simple_calendar_pro_list_events
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: List the events on a given date in Simple Calendar Pro
+description: Open Simple Calendar Pro, navigate to the requested date, and return the titles of the events scheduled for that day.
+patterns: [What events do I have on a date in Simple Calendar Pro, List my events for a day, What do I have scheduled that day]
+outputs: [event_titles]
+start: fresh_launch
+steps:
+- id: swipe_open_app_search
+  intent: Swipe up from the Home screen to open the app search
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action:
+    swipe:
+      from:
+        text: Home
+        kind: Text
+        cls: View
+        parent: drag_layer
+        in_list: false
+        position: [0.5, 0.514]
+      vector: [0.0, -0.4]
+      start: [0.5, 0.8]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: search_container_all_apps, text: Search, kind: Text}
+  - element_present: {resource_id: apps_list_view, kind: List}
+  risk: read
+  note: trace step 2
+- id: search_simple_calendar_pro
+  intent: Type "Simple Calendar Pro" into the search field
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  action:
+    type:
+      field:
+        resource_id: input
+        text: Search apps, web and more
+        hint: Search apps, web and more
+        kind: EditText
+        cls: EditText
+        parent: typeahead_input
+        in_list: false
+        position: [0.5, 0.095]
+      value: Simple Calendar Pro
+  post:
+  - field_equals:
+      field: {resource_id: input, text: 'Search apps, web and more', kind: EditText}
+      value: Simple Calendar Pro
+  risk: reversible
+  note: trace step 3
+- id: tap_simple_calendar_pro_result
+  intent: Tap the Simple Calendar Pro search result to open it
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  action:
+    tap:
+      text: Simple Calendar Pro
+      kind: Button
+      cls: LinearLayout
+      parent: search_results_list_view
+      in_list: false
+      position: [0.5, 0.167]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: workspace, kind: List}
+  - element_present: {resource_id: search_container_hotseat, text: Search, kind: Button}
+  risk: reversible
+  note: trace step 4
+- id: launch_simple_calendar_pro
+  intent: Launch Simple Calendar Pro directly
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  action: {launch: com.simplemobiletools.calendar.pro}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: top_toolbar_search_icon, kind: Button}
+  - element_present: {resource_id: top_toolbar_search, text: Search, kind: EditText}
+  risk: read
+  note: trace step 5
+- id: tap_target_date
+  intent: "Tap {{target_date}} in the calendar to view that day's events"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      visual: the date cell for 24 showing Trivia Niq
+      crop: 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
+      region: [0.286, 0.719, 0.43, 0.754]
+      density: 420
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: go_to_today, text: Go to today, kind: Button}
+  risk: reversible
+  extract:
+    event_titles:
+      locator: {resource_id: event_item_holder, kind: Button}
+      segment: 0
+  note: trace step 7
+compiled_from:
+  task_id: aw-baseline-standard-1028-044802-d25b
+  goal: What events do I have October 24 in Simple Calendar Pro? Answer with the titles only. If there are multiple titles, format your answer
+    as a comma separated list.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 05:44:03"
+  trace_steps_kept: [2, 3, 4, 5, 7]
+  trace_steps_dropped: 4
+  cost_usd: 0.0627

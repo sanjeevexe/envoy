@@ -1,0 +1,117 @@
+{
+ "task": "VlcCreatePlaylist",
+ "seed": 3947792439,
+ "goal": "Create a playlist titled \"Ultimate Fails Series\" with the following files in VLC (located in Internal Memory/VLCVideos), in order: highlight_41_4K_2023_03_30.mp4, scene_68_4K_copy.mp4",
+ "score": 0.0,
+ "aw_run_time_s": 21.1,
+ "aw_episode_length": 28,
+ "agent": "envoy",
+ "finished": "2026-10-28 22:11:06.570135",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-221049-9b86",
+  "goal": "Create a playlist titled \"Ultimate Fails Series\" with the following files in VLC (located in Internal Memory/VLCVideos), in order: highlight_41_4K_2023_03_30.mp4, scene_68_4K_copy.mp4",
+  "max_steps": 28,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "1b5ff870808fa09e05c6728f393dedd3bef5408f",
+  "mode": "routine",
+  "match": {
+   "routine": "vlc_create_playlist",
+   "stage": "model confirmed",
+   "inputs": {
+    "playlist_title": "Ultimate Fails Series",
+    "storage_folder_name": "Internal Memory",
+    "video_folder_name": "VLCVideos",
+    "first_video_filename": "highlight_41_4K_2023_03_30.mp4",
+    "second_video_filename": "scene_68_4K_copy.mp4"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "vlc_create_playlist",
+     0.741
+    ],
+    [
+     "clock_create_timer",
+     0.324
+    ],
+    [
+     "retro_music_create_and_export_playlist",
+     0.294
+    ]
+   ]
+  },
+  "status": "failed",
+  "result": "step open_more_actions_for_first_video: target not found: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+  "routine": "vlc_create_playlist",
+  "version": 1,
+  "done": false,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 4,
+  "rung": 1,
+  "steps": [
+   {
+    "id": "launch_vlc",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_browse",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_storage_folder",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_video_folder",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_more_actions_for_first_video",
+    "status": "failed",
+    "rung": 1,
+    "rungs": [
+     "wait and retry: waited 5 s"
+    ],
+    "repairs": 0,
+    "detail": "step open_more_actions_for_first_video: target not found: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)"
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.00421,
+  "cost_at_standard_usd": 0.00421,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 12.99,
+  "routine_duration_s": 9.68,
+  "trace_dir": "data/runs/aw-routines-verify-1028-221049-9b86",
+  "wall_s": 15.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

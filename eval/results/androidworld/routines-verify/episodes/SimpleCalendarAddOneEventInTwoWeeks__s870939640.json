@@ -1,0 +1,62 @@
+{
+ "task": "SimpleCalendarAddOneEventInTwoWeeks",
+ "seed": 870939640,
+ "goal": "In Simple Calendar Pro, create a calendar event in two weeks from today at 17h with the title 'Meeting with the Team' and the description 'We will prepare for annual budget.'. The event should last for 30 mins.",
+ "score": 0.0,
+ "aw_run_time_s": 20.1,
+ "aw_episode_length": 34,
+ "agent": "envoy",
+ "finished": "2026-10-28 18:02:12.641495",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-180154-52c2",
+  "goal": "In Simple Calendar Pro, create a calendar event in two weeks from today at 17h with the title 'Meeting with the Team' and the description 'We will prepare for annual budget.'. The event should last for 30 mins.",
+  "max_steps": 34,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "simple_calendar_pro_create_event",
+   "stage": "model confirmed",
+   "inputs": {
+    "event_title": "Meeting with the Team",
+    "event_description": "We will prepare for annual budget.",
+    "event_start_time": "17h"
+   },
+   "missing": [
+    "event_date",
+    "event_end_time"
+   ],
+   "candidates": [
+    [
+     "calendar_create_event",
+     0.733
+    ],
+    [
+     "simple_calendar_create_event",
+     0.733
+    ],
+    [
+     "simple_calendar_pro_create_event",
+     0.733
+    ]
+   ]
+  },
+  "status": "needs_user",
+  "result": "model confirmed",
+  "done": false,
+  "answer": null,
+  "model_calls": 1,
+  "cost_at_standard_usd": 0.013853,
+  "duration_s": 12.62,
+  "wall_s": 15.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.4
+  }
+ }
+}

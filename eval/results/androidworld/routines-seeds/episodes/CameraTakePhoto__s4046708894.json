@@ -1,0 +1,84 @@
+{
+ "task": "CameraTakePhoto",
+ "seed": 4046708894,
+ "goal": "Take one photo.",
+ "score": 1.0,
+ "aw_run_time_s": 12.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 22:14:22.394440",
+ "envoy": {
+  "run_id": "aw-routines-seeds-1028-221410-bc72",
+  "goal": "Take one photo.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "b82e5124ea28700f4c8812839c4a7c8aae5bc782",
+  "mode": "routine",
+  "match": {
+   "routine": "camera_take_photo",
+   "stage": "model confirmed",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "camera_take_photo",
+     1.0
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "camera_take_photo",
+  "version": 1,
+  "done": true,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 3,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_camera",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_shutter",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_photo_thumbnail",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.001886,
+  "cost_at_standard_usd": 0.001886,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 7.33,
+  "routine_duration_s": 5.05,
+  "trace_dir": "data/runs/aw-routines-seeds-1028-221410-bc72",
+  "wall_s": 9.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

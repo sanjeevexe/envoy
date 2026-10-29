@@ -1,0 +1,77 @@
+{
+ "task": "SystemWifiTurnOff",
+ "seed": 2760691905,
+ "goal": "Turn wifi off.",
+ "score": 0.0,
+ "aw_run_time_s": 83.9,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 03:07:52.999830",
+ "envoy": {
+  "run_id": "aw-baseline-1028-030630-d99a",
+  "goal": "Turn wifi off.",
+  "max_steps": 10,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 10,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 4,
+  "replans": 1,
+  "stuck_recoveries": 2,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 6,
+   "launch": 1,
+   "swipe": 1,
+   "tap": 1
+  },
+  "model_calls": 11,
+  "input_tokens": 25435,
+  "cached_tokens": 18139,
+  "output_tokens": 2537,
+  "reasoning_tokens": 1900,
+  "cost_usd": 0.001273,
+  "cost_at_standard_usd": 0.022623,
+  "duration_s": 77.14,
+  "model_s": 34.27,
+  "device_s": 42.87,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": null,
+   "subgoals": [
+    "Swipe down from top to open Quick Settings",
+    "Tap the Wi-Fi tile to turn it off",
+    "Verify Wi-Fi shows as Off"
+   ],
+   "success_check": {
+    "kind": "field_equals",
+    "value": "Off",
+    "field_hint": "Wi-Fi"
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-1028-030630-d99a",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/SystemWifiTurnOff__s2760691905.jsonl.gz",
+  "wall_s": 79.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

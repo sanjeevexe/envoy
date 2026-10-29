@@ -1,0 +1,11 @@
+{
+ "task": "SimpleCalendarNextEvent",
+ "seed": 20352009,
+ "goal": "What is my next upcoming event in Simple Calendar Pro? Answer with the title only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 1.0,
+ "aw_run_time_s": 118.1,
+ "aw_episode_length": 1,
+ "agent": "hand",
+ "finished": "2026-10-27 22:04:20.454149",
+ "envoy": {}
+}

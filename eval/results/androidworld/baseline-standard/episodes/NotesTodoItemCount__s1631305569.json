@@ -1,0 +1,79 @@
+{
+ "task": "NotesTodoItemCount",
+ "seed": 1631305569,
+ "goal": "How many to-dos do I have in the 'Ideas' folder in the Joplin app? Express your answer as just a single number.",
+ "score": 0.0,
+ "aw_run_time_s": 45.5,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 04:00:35.893536",
+ "envoy": {
+  "run_id": "aw-baseline-standard-1028-035957-1d80",
+  "goal": "How many to-dos do I have in the 'Ideas' folder in the Joplin app? Express your answer as just a single number.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 8,
+  "iterations": 10,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "look": 2,
+   "launch": 4,
+   "back": 4
+  },
+  "model_calls": 13,
+  "input_tokens": 29896,
+  "cached_tokens": 20669,
+  "output_tokens": 2636,
+  "reasoning_tokens": 1753,
+  "cost_usd": 0.025837,
+  "cost_at_standard_usd": 0.025837,
+  "duration_s": 30.64,
+  "model_s": 17.08,
+  "device_s": 13.56,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "net.cozic.joplin",
+   "subgoals": [
+    "Open the Joplin app",
+    "Navigate to the notebooks/folders list",
+    "Open the Ideas folder",
+    "Count the to-dos shown in the Ideas folder"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "number of to-dos in Ideas folder",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-standard-1028-035957-1d80",
+  "envoy_commit": "0807a1631c3da2f8fc36e25853eeb50d9eb3f80b+dirty-backend",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline-standard/traces/NotesTodoItemCount__s1631305569.jsonl.gz",
+  "wall_s": 33.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

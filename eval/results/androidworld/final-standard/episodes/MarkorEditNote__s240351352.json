@@ -1,0 +1,85 @@
+{
+ "task": "MarkorEditNote",
+ "seed": 240351352,
+ "goal": "Edit note_SiFbv.txt in Markor. Add to the top of the note Hello, World!",
+ "score": 1.0,
+ "aw_run_time_s": 19.9,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 11:35:32.986909",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-113515-5539",
+  "goal": "Edit note_SiFbv.txt in Markor. Add to the top of the note Hello, World!",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Edited note_SiFbv.txt in Markor by adding Hello, World! to the top and saved.",
+  "done": true,
+  "answer": "Edited note_SiFbv.txt in Markor by adding Hello, World! to the top and saved.",
+  "steps_device": 4,
+  "iterations": 5,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "type": 1,
+   "done": 1
+  },
+  "model_calls": 6,
+  "input_tokens": 15005,
+  "cached_tokens": 11814,
+  "output_tokens": 1123,
+  "reasoning_tokens": 670,
+  "cost_usd": 0.010534,
+  "cost_at_standard_usd": 0.010534,
+  "duration_s": 13.42,
+  "model_s": 7.74,
+  "device_s": 5.68,
+  "connect_s": 0.85,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Open the Markor app",
+    "Find and open note_SiFbv.txt",
+    "Add Hello, World! to the top of the note",
+    "Save the edited note"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Hello, World!",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Hello, World!' is visible"
+  },
+  "trace_dir": "data/runs/aw-final-standard-1028-113515-5539",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/MarkorEditNote__s240351352.jsonl.gz",
+  "wall_s": 15.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

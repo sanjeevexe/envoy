@@ -1,0 +1,88 @@
+{
+ "task": "ClockStopWatchRunning",
+ "seed": 2244129732,
+ "goal": "Run the stopwatch.",
+ "score": 1.0,
+ "aw_run_time_s": 13.2,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 22:16:12.298066",
+ "envoy": {
+  "run_id": "aw-routines-seeds-1028-221559-eda8",
+  "goal": "Run the stopwatch.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "b82e5124ea28700f4c8812839c4a7c8aae5bc782",
+  "mode": "routine",
+  "match": {
+   "routine": "clock_start_stopwatch",
+   "stage": "model confirmed",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "clock_start_stopwatch",
+     1.0
+    ],
+    [
+     "clock_pause_stopwatch",
+     0.5
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "clock_start_stopwatch",
+  "version": 1,
+  "done": true,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 3,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "open_clock_app",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_stopwatch_tab",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_start_button",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.000968,
+  "cost_at_standard_usd": 0.000968,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 6.33,
+  "routine_duration_s": 4.18,
+  "trace_dir": "data/runs/aw-routines-seeds-1028-221559-eda8",
+  "wall_s": 9.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.7
+  }
+ }
+}

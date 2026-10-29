@@ -1,0 +1,64 @@
+routine: settings_turn_on_wifi
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Turn on Wi-Fi in Settings
+description: Opens Settings, navigates through Network & internet to the Internet screen, and confirms that the Wi-Fi switch is on.
+patterns: [Turn wifi on, Turn on Wi-Fi, Enable Wi-Fi, Switch wifi on]
+outputs: [wifi_status]
+start: fresh_launch
+steps:
+- id: launch_settings
+  intent: Launch the Settings app
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.android.settings}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: settings_homepage_c*tainer, kind: List}
+  risk: read
+  note: trace step 3
+- id: open_network_and_internet
+  intent: Tap Network & internet to open network settings
+  pre:
+  - {app_foreground: com.android.settings}
+  action:
+    tap:
+      text: Network & internet · Mobile, Wi‑Fi, hotspot
+      kind: Button
+      cls: LinearLayout
+      parent: recycler_view
+      in_list: true
+      position: [0.5, 0.369]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: c*tent_parent, kind: List}
+  risk: reversible
+  note: trace step 8
+- id: open_internet
+  intent: Tap Internet to open the Wi-Fi settings and confirm Wi-Fi is on
+  pre:
+  - {app_foreground: com.android.settings}
+  action:
+    tap:
+      text: Internet · Networks available
+      kind: Button
+      cls: LinearLayout
+      parent: recycler_view
+      in_list: true
+      position: [0.5, 0.292]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  extract:
+    wifi_status: {near: Wi‑Fi turns back, segment: 1, after: automatically}
+  note: trace step 9
+compiled_from:
+  task_id: aw-baseline-standard-1028-051041-081d
+  goal: Turn wifi on.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 05:46:04"
+  trace_steps_kept: [3, 8, 9]
+  trace_steps_dropped: 6
+  cost_usd: 0.0361

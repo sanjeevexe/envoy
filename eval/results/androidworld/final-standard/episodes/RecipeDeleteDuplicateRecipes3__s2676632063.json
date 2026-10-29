@@ -1,0 +1,209 @@
+{
+ "task": "RecipeDeleteDuplicateRecipes3",
+ "seed": 2676632063,
+ "goal": "Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains",
+ "score": 0.0,
+ "aw_run_time_s": 101.7,
+ "aw_episode_length": 34,
+ "agent": "envoy",
+ "finished": "2026-10-28 16:41:08.027013",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-163928-59e7",
+  "goal": "Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains",
+  "max_steps": 34,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 34 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 34,
+  "iterations": 34,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "scroll": 3,
+   "tap": 29,
+   "back": 1
+  },
+  "model_calls": 37,
+  "input_tokens": 100082,
+  "cached_tokens": 80341,
+  "output_tokens": 8197,
+  "reasoning_tokens": 5574,
+  "cost_usd": 0.071565,
+  "cost_at_standard_usd": 0.071565,
+  "duration_s": 94.56,
+  "model_s": 45.98,
+  "device_s": 48.58,
+  "connect_s": 0.94,
+  "approvals": [
+   {
+    "step": 7,
+    "description": "tap \"Delete\" in PopupWindow:df6ffbc",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 8,
+    "description": "tap \"DELETE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'DELETE'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 11,
+    "description": "tap \"Delete\" in PopupWindow:393ca1e",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 12,
+    "description": "tap \"DELETE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'DELETE'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 15,
+    "description": "tap \"Delete\" in PopupWindow:930e24f",
+    "reasons": [
+     "rule: target says 'Delete'"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 16,
+    "description": "tap \"DELETE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'DELETE'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 22,
+    "description": "tap \"Delete\" in PopupWindow:9c41e4f",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 23,
+    "description": "tap \"DELETE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'DELETE'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 26,
+    "description": "tap \"Delete\" in PopupWindow:befda87",
+    "reasons": [
+     "rule: target says 'Delete'"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 27,
+    "description": "tap \"DELETE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'DELETE'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 30,
+    "description": "tap \"Delete\" in PopupWindow:6797c00",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 31,
+    "description": "tap \"DELETE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'DELETE'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 34,
+    "description": "tap \"Delete\" in PopupWindow:8554762",
+    "reasons": [
+     "rule: target says 'Delete'"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Open navigation drawer to check other tabs or settings for recipe management",
+    "Open a duplicate Butternut Squash Soup entry from the Recipes list",
+    "Delete the duplicate using recipe menu and confirm deletion",
+    "Repeat for remaining duplicates and verify only one instance remains"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "number of Butternut Squash Soup entries remaining in Recipes list",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-final-standard-1028-163928-59e7",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/RecipeDeleteDuplicateRecipes3__s2676632063.jsonl.gz",
+  "wall_s": 97.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

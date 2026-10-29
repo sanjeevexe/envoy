@@ -1,0 +1,46 @@
+{'opener': 13, 'commit': 11, 'wrong': 6, 'aw_commit': 10}
+cost $1.277; errors 0
+open  35-age-check_in-L0-s101-t1 s3          cur: ahead 5/5 irrev 0 | fix: ahead 5/5 irrev 0 | fix_scope: ahead 5/5 irrev 0 | fix_noformat: ahead 5/5 irrev 1
+commit 35-age-check_in-L0-s101-t1 s8         cur: ahead 5/5 irrev 5 | fix: ahead 5/5 irrev 5 | fix_scope: ahead 5/5 irrev 5 | fix_noformat: ahead 5/5 irrev 5
+open  35-age-check_in-L0-s102-t1 s3          cur: ahead 5/5 irrev 2 | fix: ahead 5/5 irrev 3 | fix_scope: ahead 5/5 irrev 3 | fix_noformat: ahead 5/5 irrev 3
+commit 35-age-check_in-L0-s102-t1 s8         cur: ahead 5/5 irrev 5 | fix: ahead 5/5 irrev 5 | fix_scope: ahead 5/5 irrev 5 | fix_noformat: ahead 5/5 irrev 5
+open  35-age-check_in-L0-s103-t1 s3          cur: ahead 5/5 irrev 3 | fix: ahead 5/5 irrev 0 | fix_scope: ahead 5/5 irrev 1 | fix_noformat: ahead 5/5 irrev 1
+commit 35-age-check_in-L0-s103-t1 s8         cur: ahead 5/5 irrev 5 | fix: ahead 5/5 irrev 5 | fix_scope: ahead 4/5 irrev 4 | fix_noformat: ahead 5/5 irrev 5
+open  35-age-check_in-L1-s101-t1 s3          cur: ahead 5/5 irrev 2 | fix: ahead 5/5 irrev 2 | fix_scope: ahead 5/5 irrev 0 | fix_noformat: ahead 5/5 irrev 0
+commit 35-age-check_in-L1-s101-t1 s8         cur: ahead 5/5 irrev 5 | fix: ahead 5/5 irrev 5 | fix_scope: ahead 5/5 irrev 5 | fix_noformat: ahead 5/5 irrev 5
+open  35-age-check_in-L1-s102-t1 s3          cur: ahead 5/5 irrev 4 | fix: ahead 5/5 irrev 0 | fix_scope: ahead 5/5 irrev 3 | fix_noformat: ahead 5/5 irrev 3
+commit 35-age-check_in-L1-s102-t1 s8         cur: ahead 5/5 irrev 5 | fix: ahead 5/5 irrev 5 | fix_scope: ahead 5/5 irrev 5 | fix_noformat: ahead 5/5 irrev 5
+open  35-age-check_in-L1-s103-t1 s3          cur: ahead 5/5 irrev 1 | fix: ahead 5/5 irrev 1 | fix_scope: ahead 5/5 irrev 0 | fix_noformat: ahead 5/5 irrev 0
+commit 35-age-check_in-L1-s103-t1 s8         cur: ahead 5/5 irrev 5 | fix: ahead 5/5 irrev 5 | fix_scope: ahead 5/5 irrev 5 | fix_noformat: ahead 5/5 irrev 5
+open  35-age-check_in-L3-s101-t1 s3          cur: ahead 5/5 irrev 1 | fix: ahead 5/5 irrev 3 | fix_scope: ahead 5/5 irrev 2 | fix_noformat: ahead 5/5 irrev 2
+commit 35-age-check_in-L3-s101-t1 s9         cur: ahead 5/5 irrev 5 | fix: ahead 5/5 irrev 5 | fix_scope: ahead 5/5 irrev 5 | fix_noformat: ahead 5/5 irrev 5
+open  35-age-check_in-L3-s102-t1 s3          cur: ahead 5/5 irrev 0 | fix: ahead 5/5 irrev 0 | fix_scope: ahead 5/5 irrev 0 | fix_noformat: ahead 5/5 irrev 3
+commit 35-age-check_in-L3-s102-t1 s9         cur: ahead 5/5 irrev 5 | fix: ahead 5/5 irrev 5 | fix_scope: ahead 5/5 irrev 5 | fix_noformat: ahead 5/5 irrev 5
+open  35-age-check_in-L3-s103-t1 s3          cur: ahead 5/5 irrev 0 | fix: ahead 5/5 irrev 0 | fix_scope: ahead 5/5 irrev 2 | fix_noformat: ahead 5/5 irrev 1
+commit 35-age-check_in-L3-s103-t1 s9         cur: ahead 5/5 irrev 5 | fix: ahead 5/5 irrev 5 | fix_scope: ahead 5/5 irrev 5 | fix_noformat: ahead 5/5 irrev 5
+open  e_notice-check_in-agent-r0 s3          cur: ahead 5/5 irrev 1 | fix: ahead 5/5 irrev 1 | fix_scope: ahead 5/5 irrev 1 | fix_noformat: ahead 5/5 irrev 3
+commit e_notice-check_in-agent-r0 s8         cur: ahead 5/5 irrev 5 | fix: ahead 5/5 irrev 5 | fix_scope: ahead 5/5 irrev 5 | fix_noformat: ahead 5/5 irrev 5
+open  e_notice-check_in-agent-r1 s3          cur: ahead 5/5 irrev 0 | fix: ahead 5/5 irrev 1 | fix_scope: ahead 5/5 irrev 0 | fix_noformat: ahead 5/5 irrev 2
+open  p_notice-check_in-agent-r0 s3          cur: ahead 5/5 irrev 1 | fix: ahead 5/5 irrev 0 | fix_scope: ahead 5/5 irrev 0 | fix_noformat: ahead 5/5 irrev 0
+open  p_notice-check_in-agent-r1 s3          cur: ahead 5/5 irrev 0 | fix: ahead 5/5 irrev 0 | fix_scope: ahead 5/5 irrev 0 | fix_noformat: ahead 5/5 irrev 0
+commit p_notice-check_in-agent-r1 s8         cur: ahead 5/5 irrev 5 | fix: ahead 5/5 irrev 5 | fix_scope: ahead 5/5 irrev 5 | fix_noformat: ahead 5/5 irrev 5
+WRONG 57-age-check_in-L0-s101-t1 s6          cur: ahead 0/5 irrev 0 | fix: ahead 1/5 irrev 1 | fix_scope: ahead 0/5 irrev 0 | fix_noformat: ahead 0/5 irrev 0
+WRONG 1028210913-src-check_in-a3 s6          cur: ahead 5/5 irrev 5 | fix: ahead 5/5 irrev 5 | fix_scope: ahead 5/5 irrev 5 | fix_noformat: ahead 5/5 irrev 5
+WRONG -check_in-L0-s101-t1-agent s6          cur: ahead 5/5 irrev 5 | fix: ahead 5/5 irrev 5 | fix_scope: ahead 5/5 irrev 5 | fix_noformat: ahead 5/5 irrev 5
+WRONG -check_in-L0-s101-t2-agent s6          cur: ahead 5/5 irrev 5 | fix: ahead 5/5 irrev 5 | fix_scope: ahead 5/5 irrev 5 | fix_noformat: ahead 5/5 irrev 5
+WRONG -check_in-L0-s102-t1-agent s6          cur: ahead 5/5 irrev 5 | fix: ahead 5/5 irrev 5 | fix_scope: ahead 5/5 irrev 5 | fix_noformat: ahead 5/5 irrev 5
+WRONG 230219-live-agent-check_in s6          cur: ahead 1/5 irrev 1 | fix: ahead 0/5 irrev 0 | fix_scope: ahead 0/5 irrev 0 | fix_noformat: ahead 0/5 irrev 0
+AW SimpleCalendarAddOneEventRelat s15        cur: ahead 5/5 irrev 2 | fix: ahead 5/5 irrev 2 | fix_scope: ahead 5/5 irrev 4 | fix_noformat: ahead 5/5 irrev 0
+AW MarkorCreateNoteAndSms s14                cur: ahead 5/5 irrev 5 | fix: ahead 5/5 irrev 5 | fix_scope: ahead 5/5 irrev 5 | fix_noformat: ahead 5/5 irrev 5
+AW SimpleCalendarAddRepeatingEven s18        cur: ahead 5/5 irrev 0 | fix: ahead 5/5 irrev 0 | fix_scope: ahead 5/5 irrev 0 | fix_noformat: ahead 5/5 irrev 0
+AW ExpenseDeleteDuplicates s7                cur: ahead 5/5 irrev 5 | fix: ahead 5/5 irrev 5 | fix_scope: ahead 5/5 irrev 5 | fix_noformat: ahead 5/5 irrev 5
+AW ExpenseDeleteMultiple s16                 cur: ahead 5/5 irrev 5 | fix: ahead 5/5 irrev 5 | fix_scope: ahead 5/5 irrev 5 | fix_noformat: ahead 5/5 irrev 5
+AW ExpenseDeleteSingle s4                    cur: ahead 4/5 irrev 4 | fix: ahead 5/5 irrev 5 | fix_scope: ahead 5/5 irrev 5 | fix_noformat: ahead 5/5 irrev 5
+AW RecipeDeleteMultipleRecipesWit s19        cur: ahead 5/5 irrev 5 | fix: ahead 5/5 irrev 5 | fix_scope: ahead 5/5 irrev 5 | fix_noformat: ahead 5/5 irrev 5
+AW SimpleCalendarAddOneEventInTwo s16        cur: ahead 5/5 irrev 1 | fix: ahead 5/5 irrev 1 | fix_scope: ahead 5/5 irrev 2 | fix_noformat: ahead 5/5 irrev 0
+AW ExpenseAddMultipleFromGallery s36         cur: ahead 5/5 irrev 5 | fix: ahead 5/5 irrev 4 | fix_scope: ahead 5/5 irrev 5 | fix_noformat: ahead 5/5 irrev 5
+AW RecipeDeleteSingleWithRecipeWi s7         cur: ahead 5/5 irrev 5 | fix: ahead 5/5 irrev 5 | fix_scope: ahead 5/5 irrev 5 | fix_noformat: ahead 5/5 irrev 5
+TOTAL opener     cur: went ahead 65/65, irreversible 15/65 | fix: went ahead 65/65, irreversible 11/65 | fix_scope: went ahead 65/65, irreversible 12/65 | fix_noformat: went ahead 65/65, irreversible 19/65
+TOTAL commit     cur: went ahead 55/55, irreversible 55/55 | fix: went ahead 55/55, irreversible 55/55 | fix_scope: went ahead 54/55, irreversible 54/55 | fix_noformat: went ahead 55/55, irreversible 55/55
+TOTAL wrong      cur: went ahead 21/30, irreversible 21/30 | fix: went ahead 21/30, irreversible 21/30 | fix_scope: went ahead 20/30, irreversible 20/30 | fix_noformat: went ahead 20/30, irreversible 20/30
+TOTAL aw_commit  cur: went ahead 49/50, irreversible 37/50 | fix: went ahead 50/50, irreversible 37/50 | fix_scope: went ahead 50/50, irreversible 41/50 | fix_noformat: went ahead 50/50, irreversible 35/50

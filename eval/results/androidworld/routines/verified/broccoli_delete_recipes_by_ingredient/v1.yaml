@@ -1,0 +1,413 @@
+routine: broccoli_delete_recipes_by_ingredient
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Delete recipes in Broccoli that use a specified ingredient in the directions
+description: Opens Broccoli, searches all recipes for the specified ingredient, and clears and repeats the search to inspect the recipe list until
+  no recipes matching that ingredient remain.
+patterns: [delete recipes that use an ingredient in the directions, remove recipes containing an ingredient, delete recipes with this ingredient
+    in Broccoli]
+outputs: [matching_recipes_status]
+start: fresh_launch
+inputs:
+  ingredient: {type: text, description: Ingredient to search for in recipe directions, example: black garlic}
+steps:
+- id: navigate_back_1
+  intent: Navigate back while looking for the Broccoli app
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {back: true}
+  post:
+  - {screen_changed: true}
+  risk: read
+  note: trace step 1
+- id: navigate_back_2
+  intent: Navigate back again while looking for the Broccoli app
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  action: {back: true}
+  post:
+  - {screen_changed: true}
+  risk: read
+  note: trace step 2
+- id: swipe_to_app_drawer
+  intent: Swipe to open the app drawer and search for the Broccoli app
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  action:
+    swipe:
+      from:
+        text: Home
+        kind: Text
+        cls: View
+        parent: drag_layer
+        in_list: false
+        position: [0.5, 0.514]
+      vector: [0.0, -0.4]
+      start: [0.5, 0.8]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: search_container_all_apps, text: Search, kind: Text}
+  - element_present: {resource_id: apps_list_view, kind: List}
+  risk: read
+  note: trace step 3
+- id: open_broccoli_app
+  intent: Tap the Broccoli app icon to open it
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  action:
+    tap:
+      resource_id: icon
+      text: Broccoli
+      kind: Button
+      cls: TextView
+      parent: apps_list_view
+      siblings: [AndroidWorld, ATX, Audio Recorder]
+      in_list: true
+      position: [0.835, 0.339]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: spinner, text: Categories, kind: List}
+  - element_present: {resource_id: action_search, text: Search, kind: Button}
+  risk: reversible
+  note: trace step 4
+- id: open_search
+  intent: Open search in the recipe list
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    tap:
+      resource_id: action_search
+      text: Search
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.941, 0.145]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: search_src_text, text: Search in ALL RECIPES, kind: EditText}
+  - element_present: {resource_id: input_method_nav_ime_switcher, text: Switch input method, kind: Button}
+  risk: reversible
+  note: trace step 8
+- id: dismiss_keyboard
+  intent: Go back to dismiss the keyboard and use the search field cleanly
+  optional: true
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action: {back: true}
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: input_method_nav_ime_switcher, text: Switch input method, kind: Button}
+  risk: read
+  note: "trace step 9 · closes the keyboard: optional"
+- id: search_recipes_1
+  intent: "Type {{ingredient}} into the all-recipes search field to filter recipes"
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    type:
+      field:
+        resource_id: search_src_text
+        text: Search in ALL RECIPES
+        hint: Search in ALL RECIPES
+        kind: EditText
+        cls: AutoCompleteTextView
+        parent: search_plate
+        in_list: false
+        position: [0.568, 0.145]
+      value: "{{ingredient}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: search_src_text
+      text: "Search in ALL RECIPES: {{ingredient}}"
+      kind: EditText
+  - element_present: {resource_id: recycler_view, text: Recipes, kind: Text}
+  risk: reversible
+  note: trace step 10
+- id: clear_query_1
+  intent: Clear the search query to show all recipes
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    tap:
+      resource_id: search_close_btn
+      text: Clear query
+      kind: Button
+      cls: ImageView
+      parent: search_plate
+      siblings: [black garlic]
+      in_list: false
+      position: [0.932, 0.145]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: search_src_text, text: Search in ALL RECIPES, kind: EditText}
+  - element_present: {resource_id: recycler_view, text: Recipes, kind: List}
+  risk: reversible
+  note: trace step 11
+- id: search_recipes_2
+  intent: "Type {{ingredient}} into the all-recipes search field again to find matching recipes"
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    type:
+      field:
+        resource_id: search_src_text
+        text: Search in ALL RECIPES
+        hint: Search in ALL RECIPES
+        kind: EditText
+        cls: AutoCompleteTextView
+        parent: search_plate
+        in_list: false
+        position: [0.568, 0.145]
+      value: "{{ingredient}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: search_src_text
+      text: "Search in ALL RECIPES: {{ingredient}}"
+      kind: EditText
+  - element_present: {resource_id: recycler_view, text: Recipes, kind: Text}
+  risk: reversible
+  note: trace step 12
+- id: clear_query_2
+  intent: Clear the search query to show all recipes for inspection
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    tap:
+      resource_id: search_close_btn
+      text: Clear query
+      kind: Button
+      cls: ImageView
+      parent: search_plate
+      siblings: [black garlic]
+      in_list: false
+      position: [0.932, 0.145]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: search_src_text, text: Search in ALL RECIPES, kind: EditText}
+  - element_present: {resource_id: recycler_view, text: Recipes, kind: List}
+  risk: reversible
+  note: trace step 13
+- id: search_recipes_3
+  intent: "Type {{ingredient}} into the all-recipes search field to find matching recipes"
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    type:
+      field:
+        resource_id: search_src_text
+        text: Search in ALL RECIPES
+        hint: Search in ALL RECIPES
+        kind: EditText
+        cls: AutoCompleteTextView
+        parent: search_plate
+        in_list: false
+        position: [0.568, 0.145]
+      value: "{{ingredient}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: search_src_text
+      text: "Search in ALL RECIPES: {{ingredient}}"
+      kind: EditText
+  - element_present: {resource_id: recycler_view, text: Recipes, kind: Text}
+  risk: reversible
+  note: trace step 19
+- id: clear_query_3
+  intent: Clear the search query to show all recipes
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    tap:
+      resource_id: search_close_btn
+      text: Clear query
+      kind: Button
+      cls: ImageView
+      parent: search_plate
+      siblings: [black garlic]
+      in_list: false
+      position: [0.932, 0.145]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: search_src_text, text: Search in ALL RECIPES, kind: EditText}
+  - element_present: {resource_id: recycler_view, text: Recipes, kind: List}
+  risk: reversible
+  note: trace step 20
+- id: search_recipes_4
+  intent: "Type {{ingredient}} into the all-recipes search field to find matching recipes"
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    type:
+      field:
+        resource_id: search_src_text
+        text: Search in ALL RECIPES
+        hint: Search in ALL RECIPES
+        kind: EditText
+        cls: AutoCompleteTextView
+        parent: search_plate
+        in_list: false
+        position: [0.568, 0.145]
+      value: "{{ingredient}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: search_src_text
+      text: "Search in ALL RECIPES: {{ingredient}}"
+      kind: EditText
+  - element_present: {resource_id: recycler_view, text: Recipes, kind: Text}
+  risk: reversible
+  note: trace step 21
+- id: broaden_search_to_garlic
+  intent: Broaden the search by typing garlic into the search field
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    type:
+      field:
+        resource_id: search_src_text
+        text: Search in ALL RECIPES
+        text_has: "{{ingredient}}"
+        hint: Search in ALL RECIPES
+        kind: EditText
+        cls: AutoCompleteTextView
+        parent: search_plate
+        in_list: false
+      value: garlic
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: search_src_text
+      text: "Search in ALL RECIPES: garlic"
+      kind: EditText
+  risk: reversible
+  note: trace step 24
+- id: search_recipes_5
+  intent: "Type {{ingredient}} into the search field to search specifically for that ingredient"
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    type:
+      field:
+        resource_id: search_src_text
+        text: "Search in ALL RECIPES: garlic"
+        hint: Search in ALL RECIPES
+        kind: EditText
+        cls: AutoCompleteTextView
+        parent: search_plate
+        siblings: [Clear query]
+        in_list: false
+        position: [0.519, 0.145]
+      value: "{{ingredient}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: search_src_text
+      text: "Search in ALL RECIPES: {{ingredient}}"
+      kind: EditText
+  risk: reversible
+  note: trace step 25
+- id: clear_query_4
+  intent: Clear the search query to show all recipes for manual inspection
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    tap:
+      resource_id: search_close_btn
+      text: Clear query
+      kind: Button
+      cls: ImageView
+      parent: search_plate
+      siblings: [black garlic]
+      in_list: false
+      position: [0.932, 0.145]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: search_src_text, text: Search in ALL RECIPES, kind: EditText}
+  - element_present: {resource_id: recycler_view, text: Recipes, kind: List}
+  risk: reversible
+  note: trace step 26
+- id: open_navigation_drawer
+  intent: Open the navigation drawer to explore recipe sections
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    tap:
+      text: Open navigation drawer
+      kind: Button
+      cls: ImageButton
+      parent: toolbar
+      siblings: [Recipes]
+      in_list: false
+      position: [0.068, 0.084]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: navigation_header_container, text: Broccoli, kind: Text}
+  - element_present: {resource_id: nav_recipes, text: Recipes, kind: Button}
+  risk: reversible
+  note: trace step 27
+- id: search_recipes_6
+  intent: "Type {{ingredient}} into the all-recipes search field to search across all recipes"
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    type:
+      field:
+        resource_id: search_src_text
+        text: Search in ALL RECIPES
+        hint: Search in ALL RECIPES
+        kind: EditText
+        cls: AutoCompleteTextView
+        parent: search_plate
+        in_list: false
+        position: [0.568, 0.145]
+      value: "{{ingredient}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: search_src_text
+      text: "Search in ALL RECIPES: {{ingredient}}"
+      kind: EditText
+  - element_present: {resource_id: recycler_view, text: Recipes, kind: Text}
+  risk: reversible
+  note: trace step 28
+- id: clear_query_5
+  intent: Clear the search query to show all recipes
+  pre:
+  - {app_foreground: com.flauschcode.broccoli}
+  action:
+    tap:
+      resource_id: search_close_btn
+      text: Clear query
+      kind: Button
+      cls: ImageView
+      parent: search_plate
+      siblings: [black garlic]
+      in_list: false
+      position: [0.932, 0.145]
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: navigation_header_container, text: Broccoli, kind: Text}
+  risk: reversible
+  extract:
+    matching_recipes_status:
+      locator: {resource_id: recipes_empty, kind: Text}
+  note: trace step 29
+compiled_from:
+  task_id: aw-baseline-standard-1028-042250-371f
+  goal: Delete the recipes from Broccoli app that use black garlic in the directions.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 05:42:36"
+  trace_steps_kept: [1, 2, 3, 4, 8, 9, 10, 11, 12, 13, 19, 20, 21, 24, 25, 26, 27, 28, 29]
+  trace_steps_dropped: 10
+  cost_usd: 0.0618

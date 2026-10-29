@@ -1,0 +1,57 @@
+{
+ "task": "RecipeDeleteMultipleRecipesWithConstraint",
+ "seed": 3296470235,
+ "goal": "Delete the recipes from Broccoli app that use black garlic in the directions.",
+ "score": 0.0,
+ "aw_run_time_s": 9.6,
+ "aw_episode_length": 40,
+ "agent": "envoy",
+ "finished": "2026-10-29 01:43:35.639311",
+ "envoy": {
+  "run_id": "aw-answers-verify-1029-014328-42fa",
+  "goal": "Delete the recipes from Broccoli app that use black garlic in the directions.",
+  "max_steps": 40,
+  "config": {
+   "mode": "routine",
+   "library": "answers-candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": null,
+   "stage": "model: no confident match (None)",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "broccoli_add_recipe",
+     0.333
+    ],
+    [
+     "contacts_open_app",
+     0.244
+    ],
+    [
+     "pro_expense_delete_expense",
+     0.244
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "no_routine",
+  "result": "model: no confident match (None)",
+  "done": false,
+  "answer": null,
+  "model_calls": 1,
+  "cost_usd": 0.002228,
+  "cost_at_standard_usd": 0.002228,
+  "duration_s": 2.75,
+  "wall_s": 5.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

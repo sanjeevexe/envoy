@@ -1,0 +1,47 @@
+routine: contacts_open_app
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Open the Contacts app and clear any blocking pop-ups
+description: Opens the Contacts app and dismisses a tooltip overlay if it appears, leaving the contacts list visible.
+patterns: [open contacts, open the contacts app, launch contacts, show my contacts, open contacts and clear pop-ups]
+start: fresh_launch
+steps:
+- id: launch_contacts_app
+  intent: Launch the Contacts app
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.google.android.contacts}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: empty_view, text: No contacts yet, kind: Text}
+  - element_present: {resource_id: contacts, text: Contacts, kind: Text}
+  risk: read
+  note: trace step 1
+- id: dismiss_tooltip_overlay
+  intent: Tap the tooltip overlay to dismiss it and reveal the contacts screen
+  optional: true
+  pre:
+  - {app_foreground: com.google.android.contacts}
+  action:
+    tap:
+      resource_id: og_tooltip_scrim_view
+      text: ''
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.5, 0.5]
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: og_tooltip_scrim_view, kind: Button}
+  risk: reversible
+  note: "trace step 2 · one-time screen: optional"
+compiled_from:
+  task_id: aw-final-standard-1028-114142-affa
+  goal: Open the contacts app. Clear any pop-ups that may appear by granting all permissions that are required.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:43:58"
+  trace_steps_kept: [1, 2]
+  trace_steps_dropped: 0
+  cost_usd: 0.0396

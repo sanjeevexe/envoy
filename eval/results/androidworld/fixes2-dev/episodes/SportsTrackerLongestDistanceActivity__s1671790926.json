@@ -1,0 +1,80 @@
+{
+ "task": "SportsTrackerLongestDistanceActivity",
+ "seed": 1671790926,
+ "goal": "What was the longest distance covered in a mountain biking activity in the OpenTracks app this week? Assume the week starts from Monday. Express your answer as a single number in meters rounded to the nearest integer.",
+ "score": 0.0,
+ "aw_run_time_s": 68.4,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 08:37:02.221838",
+ "envoy": {
+  "run_id": "aw-fixes2-dev-1028-083556-67a6",
+  "goal": "What was the longest distance covered in a mountain biking activity in the OpenTracks app this week? Assume the week starts from Monday. Express your answer as a single number in meters rounded to the nearest integer.",
+  "max_steps": 10,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 10,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 5,
+   "scroll": 2,
+   "back": 1,
+   "type": 1
+  },
+  "model_calls": 12,
+  "input_tokens": 30779,
+  "cached_tokens": 22235,
+  "output_tokens": 2801,
+  "reasoning_tokens": 1903,
+  "cost_usd": 0.001459,
+  "cost_at_standard_usd": 0.02592,
+  "duration_s": 61.12,
+  "model_s": 44.88,
+  "device_s": 16.24,
+  "connect_s": 0.89,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "OpenTracks",
+   "subgoals": [
+    "Filter the track list to mountain biking activities",
+    "Locate tracks dated Monday Oct 9 through Sunday Oct 15",
+    "Open mountain biking tracks from this week to check distances",
+    "Determine longest distance converted to meters rounded"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "longest mountain biking distance in meters for this week",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-fixes2-dev-1028-083556-67a6",
+  "envoy_commit": "598a6cde6830a440bb68512465aa1e6692600144",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes2-dev/traces/SportsTrackerLongestDistanceActivity__s1671790926.jsonl.gz",
+  "wall_s": 63.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.3
+  }
+ }
+}

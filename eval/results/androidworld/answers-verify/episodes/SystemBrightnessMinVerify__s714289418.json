@@ -1,0 +1,112 @@
+{
+ "task": "SystemBrightnessMinVerify",
+ "seed": 714289418,
+ "goal": "Turn brightness to the min value.",
+ "score": 1.0,
+ "aw_run_time_s": 13.9,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 01:48:14.074862",
+ "envoy": {
+  "run_id": "aw-answers-verify-1029-014800-7aee",
+  "goal": "Turn brightness to the min value.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "answers-candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "settings_set_brightness_minimum_2",
+   "stage": "model confirmed",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "settings_set_brightness_minimum_2",
+     0.8
+    ],
+    [
+     "settings_set_brightness",
+     0.6
+    ],
+    [
+     "settings_turn_off_wifi_2",
+     0.3
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "settings_set_brightness_minimum_2",
+  "version": 1,
+  "done": true,
+  "answer": "0.0",
+  "outputs": {
+   "brightness": "0.0"
+  },
+  "steps_used": 5,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_settings",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "scroll_until_display",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_display",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_brightness_level",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "swipe_brightness_to_minimum",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.001546,
+  "cost_at_standard_usd": 0.001546,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 8.5,
+  "routine_duration_s": 6.73,
+  "trace_dir": "data/runs/aw-answers-verify-1029-014800-7aee",
+  "wall_s": 11.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

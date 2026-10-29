@@ -1,0 +1,85 @@
+{
+ "task": "RetroPlayingQueue",
+ "seed": 145116843,
+ "goal": "Add the following songs, in order, Through the Storm, Hidden Paths, Forever Young, Whispers of the Past, Heartbeat Away to my playing queue in Retro music.",
+ "score": 1.0,
+ "aw_run_time_s": 175.2,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 02:00:28.517705",
+ "envoy": {
+  "run_id": "aw-baseline-1028-015739-d34d",
+  "goal": "Add the following songs, in order, Through the Storm, Hidden Paths, Forever Young, Whispers of the Past, Heartbeat Away to my playing queue in Retro music.",
+  "max_steps": 32,
+  "config": {},
+  "status": "done",
+  "result": "Verified playing queue contains in order: Through the Storm, Hidden Paths, Forever Young, Whispers of the Past, Heartbeat Away",
+  "done": true,
+  "answer": "Verified playing queue contains in order: Through the Storm, Hidden Paths, Forever Young, Whispers of the Past, Heartbeat Away",
+  "steps_device": 29,
+  "iterations": 30,
+  "looks": 0,
+  "screenshots_sent": 1,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "swipe": 1,
+   "type": 1,
+   "back": 1,
+   "tap": 24,
+   "long_press": 1,
+   "scroll": 1,
+   "done": 1
+  },
+  "model_calls": 32,
+  "input_tokens": 81124,
+  "cached_tokens": 61856,
+  "output_tokens": 7876,
+  "reasoning_tokens": 5689,
+  "cost_usd": 0.003626,
+  "cost_at_standard_usd": 0.066836,
+  "duration_s": 164.22,
+  "model_s": 93.16,
+  "device_s": 71.06,
+  "connect_s": 0.95,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "code.name.monkey.retromusic",
+   "subgoals": [
+    "Open the menu for Through the Storm and add it to the playing queue",
+    "Add Hidden Paths, then Forever Young, then Whispers of the Past, then Heartbeat Away to the queue in order",
+    "Scroll the Songs list to find Whispers of the Past if not visible",
+    "Open the playing queue to verify the 5 songs in order"
+   ],
+   "success_check": {
+    "kind": "element_present",
+    "value": "Playing queue",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "element 'Playing queue' present"
+  },
+  "trace_dir": "data/runs/aw-baseline-1028-015739-d34d",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/RetroPlayingQueue__s145116843.jsonl.gz",
+  "wall_s": 166.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

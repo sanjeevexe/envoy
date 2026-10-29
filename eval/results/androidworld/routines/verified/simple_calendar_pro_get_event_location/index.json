@@ -1,0 +1,22 @@
+{
+ "name": "simple_calendar_pro_get_event_location",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-28 17:48:49",
+   "parent": null,
+   "changes": [
+    "compiled from aw-final-standard-1028-170550-7bae"
+   ],
+   "verification": {
+    "source": "final-standard",
+    "source_seed": 4034703500
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.google.android.apps.nexuslauncher"
+}

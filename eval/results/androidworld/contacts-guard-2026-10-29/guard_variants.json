@@ -1,0 +1,47 @@
+{
+ "guard": [
+  [
+   "don't switch filters or settings to look for a different answer.",
+   "don't switch filters or settings to look for a different answer. A list answers as the app shows it (scroll it if it goes on), even when the plan says the full or complete list: don't open its filters, sorting or settings to check it.",
+   "step"
+  ],
+  [
+   "phrased as screens or outcomes (\"Open the trip to Chicago\", \"Confirm check-in\").",
+   "phrased as screens or outcomes (\"Open the trip to Chicago\", \"Confirm check-in\"). For a question, read the answer where the app shows it, an empty state (\"none yet\") included; plan no step that changes filters or settings, and no \"full\" or \"complete\" list unless the goal asks for one.",
+   "plan"
+  ]
+ ],
+ "s_only": [
+  [
+   "don't switch filters or settings to look for a different answer.",
+   "don't switch filters or settings to look for a different answer. A list answers as the app shows it (scroll it if it goes on), even when the plan says the full or complete list: don't open its filters, sorting or settings to check it.",
+   "step"
+  ]
+ ],
+ "p_only": [
+  [
+   "phrased as screens or outcomes (\"Open the trip to Chicago\", \"Confirm check-in\").",
+   "phrased as screens or outcomes (\"Open the trip to Chicago\", \"Confirm check-in\"). For a question, read the answer where the app shows it, an empty state (\"none yet\") included; plan no step that changes filters or settings, and no \"full\" or \"complete\" list unless the goal asks for one.",
+   "plan"
+  ]
+ ],
+ "p_smin": [
+  [
+   "don't switch filters or settings to look for a different answer.",
+   "don't switch filters or settings to look for a different answer, even when the plan says to view the full or complete list.",
+   "step"
+  ],
+  [
+   "phrased as screens or outcomes (\"Open the trip to Chicago\", \"Confirm check-in\").",
+   "phrased as screens or outcomes (\"Open the trip to Chicago\", \"Confirm check-in\"). For a question, read the answer where the app shows it, an empty state (\"none yet\") included; plan no step that changes filters or settings, and no \"full\" or \"complete\" list unless the goal asks for one.",
+   "plan"
+  ]
+ ],
+ "s_min": [
+  [
+   "don't switch filters or settings to look for a different answer.",
+   "don't switch filters or settings to look for a different answer, even when the plan says to view the full or complete list.",
+   "step"
+  ]
+ ]
+}

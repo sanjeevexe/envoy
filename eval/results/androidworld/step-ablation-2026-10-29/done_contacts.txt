@@ -1,0 +1,21 @@
+[abl0] cost $0.803; errors 0
+== contacts s1, clean plan (5fa03bf run) (live input 2748 tokens)
+   cur                    {'answers': 25, 'opens filters': 5}  tokens [2748]
+   A1                     {'answers': 29, 'opens filters': 1}  tokens [2639]
+   A2                     {'answers': 28, 'opens filters': 2}  tokens [2707]
+   A3                     {'answers': 28, 'opens filters': 2}  tokens [2719]
+== contacts s1, full-list plan (736a6e4 run) (live input 2747 tokens)
+   cur                    {'answers': 16, 'opens filters': 14}  tokens [2747]
+   A1                     {'answers': 19, 'opens filters': 11}  tokens [2638]
+   A2                     {'opens filters': 18, 'answers': 11, 'tap [4] Button "envoy3955@gmail.': 1}  tokens [2706]
+   A3                     {'opens filters': 17, 'answers': 13}  tokens [2718]
+== contacts s1, main's plan (main run) (live input 2119 tokens)
+   cur                    {'answers': 30}  tokens [2746]
+   A1                     {'answers': 29, 'opens filters': 1}  tokens [2637]
+   A2                     {'answers': 29, 'opens filters': 1}  tokens [2705]
+   A3                     {'answers': 30}  tokens [2717]
+== doordash s5, Addresses (5fa03bf run) (live input 2969 tokens)
+   cur                    {'taps Addresses': 30}  tokens [2986]
+   A1                     {'taps Addresses': 30}  tokens [2877]
+   A2                     {'taps Addresses': 30}  tokens [2945]
+   A3                     {'taps Addresses': 30}  tokens [2957]

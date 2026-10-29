@@ -1,0 +1,78 @@
+{
+ "task": "NotesRecipeIngredientCount",
+ "seed": 4265237062,
+ "goal": "What quantity of spirulina do I need for the recipe 'Chicken Alfredo' in the Joplin app? Express your answer in the format <amount> <unit> where both the amount and unit exactly match the format in the recipe.",
+ "score": 0.0,
+ "aw_run_time_s": 61.6,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 01:04:16.665523",
+ "envoy": {
+  "run_id": "aw-baseline-1028-010322-c79a",
+  "goal": "What quantity of spirulina do I need for the recipe 'Chicken Alfredo' in the Joplin app? Express your answer in the format <amount> <unit> where both the amount and unit exactly match the format in the recipe.",
+  "max_steps": 10,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 4,
+  "iterations": 10,
+  "looks": 6,
+  "screenshots_sent": 6,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "look": 6,
+   "launch": 2,
+   "back": 2
+  },
+  "model_calls": 12,
+  "input_tokens": 31127,
+  "cached_tokens": 20172,
+  "output_tokens": 2254,
+  "reasoning_tokens": 1528,
+  "cost_usd": 0.001587,
+  "cost_at_standard_usd": 0.026299,
+  "duration_s": 49.22,
+  "model_s": 31.67,
+  "device_s": 17.55,
+  "connect_s": 0.94,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "net.cozic.joplin",
+   "subgoals": [
+    "Open the Joplin app",
+    "Open search or All notes instead of Home",
+    "Search for Chicken Alfredo",
+    "Open the Chicken Alfredo recipe note",
+    "Read the spirulina amount and unit"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "spirulina quantity for Chicken Alfredo",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-1028-010322-c79a",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/NotesRecipeIngredientCount__s4265237062.jsonl.gz",
+  "wall_s": 51.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

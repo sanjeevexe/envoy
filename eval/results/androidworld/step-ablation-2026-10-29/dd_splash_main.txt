@@ -1,0 +1,3 @@
+[main53] cost $0.135; errors 0; plan tokens [659] (live: main 680, 5fa03bf 864)
+step 1 on the loaded home: {'Account': 2, 'address': 23, 'done ': 4, 'back ': 1}
+plans' second subgoal: [('dismiss onboarding and permission prompt', 3), ('dismiss any login or sync prompts', 3), ('open delivery location or address select', 2), ('dismiss onboarding or account prompts', 2), ('dismiss onboarding prompts', 2)]

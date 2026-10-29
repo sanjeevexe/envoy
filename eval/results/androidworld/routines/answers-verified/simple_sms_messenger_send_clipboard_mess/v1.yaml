@@ -1,0 +1,165 @@
+routine: simple_sms_messenger_send_clipboard_mess
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Send the clipboard content as an SMS message
+description: Starts a new Simple SMS Messenger conversation with the given phone number, pastes the current clipboard content into the message
+  field, and sends it.
+patterns: [send clipboard content by sms, text the clipboard to a number, send a message with the clipboard content, paste clipboard into sms
+    and send]
+outputs: [sent_message_text, sent_message_time]
+start: fresh_launch
+inputs:
+  recipient_phone_number: {type: phone, description: Phone number to send the SMS to., example: '+15459061746'}
+steps:
+- id: launch_sms_messenger
+  intent: Launch Simple SMS Messenger
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.simplemobiletools.smsmessenger}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: main_coordinator, kind: List}
+  risk: read
+  note: trace step 4
+- id: start_conversation
+  intent: Tap Start a conversation
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    tap:
+      resource_id: no_conversations_placeholder_*
+      text: Start a conversation
+      kind: Button
+      cls: TextView
+      parent: main_holder
+      siblings: [No stored conversations have been found]
+      in_list: true
+      position: [0.5, 0.199]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: no_contacts_placeholder, text: No contacts found, kind: Text}
+  - element_present: {resource_id: input_method_nav_ime_switcher, text: Switch input method, kind: Button}
+  risk: reversible
+  note: trace step 5
+- id: enter_recipient_phone_number
+  intent: "Type {{recipient_phone_number}} into the Add Contact or Number field"
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    type:
+      field:
+        resource_id: new_conversation_address
+        text: Add Contact or Number…
+        hint: Add Contact or Number…
+        kind: EditText
+        cls: EditText
+        parent: new_conversation_holder
+        siblings: [No contacts found]
+        in_list: false
+        position: [0.5, 0.15]
+      value: "{{recipient_phone_number}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: new_conversation_address
+      text: "Add Contact or Number…: {{recipient_phone_number}}"
+      kind: EditText
+  - element_present: {resource_id: new_conversation_confirm, kind: Button}
+  risk: reversible
+  note: trace step 6
+- id: confirm_recipient
+  intent: "Confirm {{recipient_phone_number}} to proceed to message composition"
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    tap:
+      resource_id: new_conversation_confirm
+      text: ''
+      kind: Button
+      cls: ImageView
+      parent: new_conversation_holder
+      siblings: [No contacts found]
+      in_list: false
+      position: [0.942, 0.15]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: dial_number, text: Dial number, kind: Button}
+  - element_present: {resource_id: manage_people, text: Add Person, kind: Button}
+  risk: irreversible
+  note: trace step 7
+- id: long_press_message_field
+  intent: Long-press the Type a message field to open the paste option
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    long_press:
+      resource_id: thread_type_message
+      text: Type a message…
+      hint: Type a message…
+      kind: EditText
+      cls: EditText
+      parent: message_holder
+      siblings: [Attachment, SMS]
+      in_list: false
+      position: [0.5, 0.876]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: overflow, text: More options, kind: Button}
+  risk: reversible
+  note: trace step 8
+- id: paste_clipboard_content
+  intent: Tap Paste to insert the clipboard content into the message field
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    tap:
+      text: Paste
+      kind: Button
+      cls: LinearLayout
+      in_list: false
+      position: [0.116, 0.829]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: thread_type_message, kind: EditText}
+  risk: reversible
+  note: trace step 9
+- id: send_message
+  intent: "Tap SMS to send the clipboard message to {{recipient_phone_number}}"
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    tap:
+      resource_id: thread_send_message
+      text: SMS
+      desc: OK
+      kind: Button
+      cls: Button
+      parent: message_holder
+      siblings: [Attachment]
+      in_list: false
+      position: [0.931, 0.876]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: delete, text: Delete, kind: Button}
+  - element_present: {resource_id: thread_message_holder, kind: Button}
+  risk: irreversible
+  extract:
+    sent_message_text:
+      locator: {resource_id: thread_message_body, kind: Button}
+    sent_message_time:
+      locator: {resource_id: thread_date_time_holder, kind: Button}
+      expect_digits: true
+  note: trace step 10
+done:
+- text_visible: "{{recipient_phone_number}}"
+compiled_from:
+  task_id: aw-baseline-standard-1028-045644-6048
+  goal: Send a message to +15459061746 with the clipboard content in Simple SMS Messenger
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 05:44:35"
+  trace_steps_kept: [4, 5, 6, 7, 8, 9, 10]
+  trace_steps_dropped: 3
+  cost_usd: 0.0607

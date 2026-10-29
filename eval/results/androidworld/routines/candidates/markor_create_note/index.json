@@ -1,0 +1,22 @@
+{
+ "name": "markor_create_note",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-28 17:43:00",
+   "parent": null,
+   "changes": [
+    "compiled from aw-final-standard-1028-113237-1052"
+   ],
+   "verification": {
+    "source": "final-standard",
+    "source_seed": 1852838440
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.google.android.apps.nexuslauncher"
+}

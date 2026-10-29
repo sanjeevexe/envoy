@@ -1,0 +1,85 @@
+{
+ "task": "SportsTrackerActivityDuration",
+ "seed": 3548294116,
+ "goal": "How long was my skiing activity October 12 2023 in the OpenTracks app? Express your answer in minutes as a single integer.",
+ "score": 1.0,
+ "aw_run_time_s": 56.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 10:15:02.609420",
+ "envoy": {
+  "run_id": "aw-fixes3-dev-1028-101407-7f00",
+  "goal": "How long was my skiing activity October 12 2023 in the OpenTracks app? Express your answer in minutes as a single integer.",
+  "max_steps": 10,
+  "config": {},
+  "status": "done_unverified",
+  "result": "135",
+  "done": true,
+  "answer": "135",
+  "steps_device": 7,
+  "iterations": 10,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 1,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 4,
+   "back": 1,
+   "type": 1,
+   "look": 1,
+   "done": 2
+  },
+  "model_calls": 11,
+  "input_tokens": 32153,
+  "cached_tokens": 23259,
+  "output_tokens": 2835,
+  "reasoning_tokens": 2066,
+  "cost_usd": 0.001503,
+  "cost_at_standard_usd": 0.026655,
+  "duration_s": 48.36,
+  "model_s": 36.48,
+  "device_s": 11.88,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "OpenTracks",
+   "subgoals": [
+    "Open the OpenTracks app",
+    "Find the list of recorded activities",
+    "Open the skiing activity from October 12 2023",
+    "Read its duration and convert to minutes"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "duration in minutes of skiing activity October 12 2023",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": true,
+   "detail": "none of ['135'] is visible on the current screen"
+  },
+  "trace_dir": "data/runs/aw-fixes3-dev-1028-101407-7f00",
+  "envoy_commit": "70ed7a8470867f86dd6a548d0fdce2fa4977073e",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes3-dev/traces/SportsTrackerActivityDuration__s3548294116.jsonl.gz",
+  "wall_s": 53.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}

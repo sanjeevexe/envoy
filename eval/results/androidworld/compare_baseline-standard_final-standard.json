@@ -1,0 +1,74 @@
+{
+ "before": "baseline-standard",
+ "after": "final-standard",
+ "by_half": {
+  "dev": {
+   "n": 58,
+   "before": 9.0,
+   "after": 26.0,
+   "gained": 18,
+   "lost": 1,
+   "p_paired": 0.0001
+  },
+  "held_out": {
+   "n": 58,
+   "before": 12.0,
+   "after": 31.0,
+   "gained": 20,
+   "lost": 1,
+   "p_paired": 0.0
+  },
+  "all": {
+   "n": 116,
+   "before": 21.0,
+   "after": 57.0,
+   "gained": 38,
+   "lost": 2,
+   "p_paired": 0.0
+  }
+ },
+ "gained": [
+  "AudioRecorderRecordAudio",
+  "AudioRecorderRecordAudioWithFileName",
+  "CameraTakePhoto",
+  "ClockStopWatchPausedVerify",
+  "ClockTimerEntry",
+  "ContactsAddContact",
+  "ExpenseAddMultipleFromGallery",
+  "ExpenseDeleteDuplicates",
+  "ExpenseDeleteMultiple",
+  "ExpenseDeleteSingle",
+  "MarkorCreateFolder",
+  "MarkorCreateNote",
+  "MarkorCreateNoteAndSms",
+  "MarkorCreateNoteFromClipboard",
+  "NotesIsTodo",
+  "NotesMeetingAttendeeCount",
+  "OpenAppTaskEval",
+  "RecipeAddMultipleRecipesFromImage",
+  "RecipeAddSingleRecipe",
+  "RecipeDeleteMultipleRecipes",
+  "RecipeDeleteMultipleRecipesWithNoise",
+  "RecipeDeleteSingleRecipe",
+  "RecipeDeleteSingleWithRecipeWithNoise",
+  "SimpleCalendarAddOneEventInTwoWeeks",
+  "SimpleCalendarAddOneEventRelativeDay",
+  "SimpleCalendarAddOneEventTomorrow",
+  "SimpleCalendarAddRepeatingEvent",
+  "SimpleCalendarDeleteEvents",
+  "SimpleCalendarDeleteEventsOnRelativeDay",
+  "SimpleCalendarEventOnDateAtTime",
+  "SimpleCalendarLocationOfEvent",
+  "SimpleCalendarNextEvent",
+  "SimpleDrawProCreateDrawing",
+  "SimpleSmsReply",
+  "SimpleSmsSend",
+  "SimpleSmsSendReceivedAddress",
+  "SystemBrightnessMax",
+  "VlcCreatePlaylist"
+ ],
+ "lost": [
+  "RecipeDeleteMultipleRecipesWithConstraint",
+  "SystemBluetoothTurnOnVerify"
+ ]
+}

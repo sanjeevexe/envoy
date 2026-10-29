@@ -1,0 +1,83 @@
+{
+ "task": "CameraTakePhoto",
+ "seed": 3729977769,
+ "goal": "Take one photo.",
+ "score": 1.0,
+ "aw_run_time_s": 42.8,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 05:43:12.818060",
+ "envoy": {
+  "run_id": "aw-fixes1-dev-1028-054232-5e7a",
+  "goal": "Take one photo.",
+  "max_steps": 10,
+  "config": {},
+  "status": "done_unverified",
+  "result": "Took one photo in Camera app, thumbnail preview is visible",
+  "done": true,
+  "answer": "Took one photo in Camera app, thumbnail preview is visible",
+  "steps_device": 2,
+  "iterations": 5,
+  "looks": 1,
+  "screenshots_sent": 2,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 1,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 1,
+   "look": 1,
+   "done": 2
+  },
+  "model_calls": 6,
+  "input_tokens": 14171,
+  "cached_tokens": 10918,
+  "output_tokens": 2185,
+  "reasoning_tokens": 1828,
+  "cost_usd": 0.000784,
+  "cost_at_standard_usd": 0.01499,
+  "duration_s": 33.84,
+  "model_s": 25.13,
+  "device_s": 8.71,
+  "connect_s": 2.3,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Camera",
+   "subgoals": [
+    "Open the Camera app",
+    "Ensure Photo mode is selected",
+    "Tap shutter to take one photo",
+    "Confirm thumbnail preview appears"
+   ],
+   "success_check": {
+    "kind": "element_present",
+    "value": "Thumbnail",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": true,
+   "detail": "element 'Thumbnail' not present"
+  },
+  "trace_dir": "data/runs/aw-fixes1-dev-1028-054232-5e7a",
+  "envoy_commit": "821d713df93e6bb5536df7e6f89b6684779d58da",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes1-dev/traces/CameraTakePhoto__s3729977769.jsonl.gz",
+  "wall_s": 38.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}

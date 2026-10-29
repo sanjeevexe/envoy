@@ -1,0 +1,18 @@
+33 cases: Counter({'final': 18, 'before': 15})
+cost $2.257; errors 0
+before scored 1 A1         {'tap': 47, 'scroll': 17, 'look': 7, 'type': 3, 'same answer': 1}
+before scored 1 A1_aw      {'tap': 49, 'scroll': 15, 'look': 8, 'type': 2, 'same answer': 1}
+before scored 1 A2         {'tap': 46, 'scroll': 14, 'look': 8, 'same answer': 3, 'type': 3, 'done, other answer': 1}
+before scored 1 A2_aw      {'tap': 47, 'scroll': 16, 'look': 7, 'same answer': 2, 'type': 2, 'done, other answer': 1}
+before scored 1 A3         {'tap': 49, 'scroll': 15, 'look': 7, 'same answer': 3, 'done, other answer': 1}
+before scored 1 A3_aw      {'tap': 44, 'scroll': 15, 'look': 9, 'type': 5, 'same answer': 1, 'done, other answer': 1}
+before scored 1 cur        {'tap': 47, 'scroll': 16, 'look': 7, 'same answer': 2, 'type': 2, 'done, other answer': 1}
+before scored 1 cur_aw     {'tap': 46, 'scroll': 19, 'look': 6, 'type': 4}
+final  scored 1 A1         {'same answer': 54, 'done, other answer': 23, 'scroll': 6, 'tap': 4, 'look': 3}
+final  scored 1 A1_aw      {'same answer': 65, 'done, other answer': 10, 'scroll': 7, 'tap': 5, 'look': 3}
+final  scored 1 A2         {'same answer': 51, 'done, other answer': 26, 'scroll': 9, 'tap': 4}
+final  scored 1 A2_aw      {'same answer': 67, 'done, other answer': 15, 'scroll': 7, 'tap': 1}
+final  scored 1 A3         {'same answer': 62, 'done, other answer': 21, 'scroll': 6, 'tap': 1}
+final  scored 1 A3_aw      {'same answer': 66, 'done, other answer': 16, 'scroll': 5, 'look': 2, 'tap': 1}
+final  scored 1 cur        {'same answer': 71, 'done, other answer': 13, 'scroll': 5, 'tap': 1}
+final  scored 1 cur_aw     {'same answer': 68, 'done, other answer': 12, 'scroll': 6, 'tap': 3, 'look': 1}

@@ -1,0 +1,62 @@
+{
+ "task": "SimpleCalendarAddRepeatingEvent",
+ "seed": 3074931795,
+ "goal": "In Simple Calendar Pro, create a recurring calendar event titled 'Review session for Budget Planning' starting on 2023-10-15 at 14h. The event recurs weekly, forever, and lasts for 60 minutes each occurrence. The event description should be 'We will understand business objectives. Remember to confirm attendance.'.",
+ "score": 0.0,
+ "aw_run_time_s": 26.3,
+ "aw_episode_length": 34,
+ "agent": "envoy",
+ "finished": "2026-10-28 18:03:21.032259",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-180258-a6b8",
+  "goal": "In Simple Calendar Pro, create a recurring calendar event titled 'Review session for Budget Planning' starting on 2023-10-15 at 14h. The event recurs weekly, forever, and lasts for 60 minutes each occurrence. The event description should be 'We will understand business objectives. Remember to confirm attendance.'.",
+  "max_steps": 34,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "simple_calendar_create_recurring_event",
+   "stage": "model confirmed",
+   "inputs": {
+    "event_title": "Review session for Budget Planning",
+    "event_description": "We will understand business objectives. Remember to confirm attendance.",
+    "event_start_time": "2023-10-15 at 14h",
+    "recurrence_frequency": "weekly"
+   },
+   "missing": [
+    "event_end_time"
+   ],
+   "candidates": [
+    [
+     "simple_calendar_create_recurring_event",
+     0.716
+    ],
+    [
+     "calendar_create_event",
+     0.677
+    ],
+    [
+     "simple_calendar_create_event",
+     0.677
+    ]
+   ]
+  },
+  "status": "needs_user",
+  "result": "model confirmed",
+  "done": false,
+  "answer": null,
+  "model_calls": 1,
+  "cost_at_standard_usd": 0.009175,
+  "duration_s": 18.37,
+  "wall_s": 20.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

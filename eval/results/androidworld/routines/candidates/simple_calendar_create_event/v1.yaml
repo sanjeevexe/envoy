@@ -1,0 +1,463 @@
+routine: simple_calendar_create_event
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Create an event in Simple Calendar Pro
+description: Creates a new event in Simple Calendar Pro with a supplied title, description, date, start time and end time, then verifies the saved
+  event on the selected day.
+patterns: [Create a calendar event, Add a new event to my calendar, Schedule an event, Create an event in Simple Calendar Pro, Add a meeting to
+    my calendar]
+outputs: [event_date, event_time]
+start: fresh_launch
+inputs:
+  event_title: {type: text, description: Title of the calendar event., example: Meeting with the Team}
+  event_description: {type: text, description: Description of the calendar event., example: We will prepare for annual budget.}
+  event_date: {type: date, description: 'Date on which the event starts, selected in the date picker.', example: October 29}
+  event_start_time:
+    type: text
+    description: Time at which the event starts.
+    example: "17:00"
+  event_end_time:
+    type: text
+    description: Time at which the event ends.
+    example: "17:30"
+steps:
+- id: launch_simple_calendar_pro
+  intent: Launch Simple Calendar Pro
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.simplemobiletools.calendar.pro}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: top_toolbar_search_icon, kind: Button}
+  - element_present: {resource_id: top_toolbar_search, text: Search, kind: EditText}
+  risk: read
+  note: trace step 1
+- id: tap_new_event
+  intent: Tap New Event to start creating an event
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: calendar_fab
+      text: New Event
+      kind: Button
+      cls: ImageButton
+      parent: main_holder
+      in_list: false
+      position: [0.893, 0.926]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: fab_extended_overlay, kind: Button}
+  - element_present: {resource_id: fab_task_label, text: Task, kind: Button}
+  risk: reversible
+  note: trace step 2
+- id: tap_event
+  intent: Tap Event to create a new event
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: fab_event_label
+      text: Event
+      kind: Button
+      cls: TextView
+      parent: main_holder
+      siblings: [Task, New Event]
+      in_list: false
+      position: [0.752, 0.926]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: save, text: Save, kind: Button}
+  - element_present: {resource_id: event_nested_scrollview, kind: List}
+  risk: reversible
+  note: trace step 3
+- id: find_enter_event_title
+  intent: "Scroll to {{event_title}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: event_title
+        text: Title
+        text_has: "{{event_title}}"
+        hint: Title
+        kind: EditText
+        cls: EditText
+        parent: event_holder
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: event_title
+      text: Title
+      text_has: "{{event_title}}"
+      hint: Title
+      kind: EditText
+      cls: EditText
+      parent: event_holder
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: enter_event_title
+  intent: "Enter {{event_title}} as the event title"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    type:
+      field:
+        resource_id: event_title
+        text: Title
+        text_has: "{{event_title}}"
+        hint: Title
+        kind: EditText
+        cls: EditText
+        parent: event_holder
+        in_list: true
+      value: "{{event_title}}"
+  post:
+  - field_equals:
+      field: {resource_id: event_title, text: Title, kind: EditText}
+      value: "{{event_title}}"
+  risk: reversible
+  note: trace step 4
+- id: find_enter_event_description
+  intent: "Scroll to {{event_description}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: event_description
+        text: Description
+        text_has: "{{event_description}}"
+        hint: Description
+        kind: EditText
+        cls: EditText
+        parent: event_holder
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: event_description
+      text: Description
+      text_has: "{{event_description}}"
+      hint: Description
+      kind: EditText
+      cls: EditText
+      parent: event_holder
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: enter_event_description
+  intent: "Enter {{event_description}} as the event description"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    type:
+      field:
+        resource_id: event_description
+        text: Description
+        text_has: "{{event_description}}"
+        hint: Description
+        kind: EditText
+        cls: EditText
+        parent: event_holder
+        in_list: true
+      value: "{{event_description}}"
+  post:
+  - field_equals:
+      field: {resource_id: event_description, text: Description, kind: EditText}
+      value: "{{event_description}}"
+  risk: reversible
+  note: trace step 5
+- id: open_start_date_picker
+  intent: Tap the start date field to open the date picker
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: event_start_date
+      kind: Button
+      cls: TextView
+      parent: event_holder
+      siblings: [Meeting with the Team, Location, We will prepare for annual budget.]
+      in_list: true
+      position: [0.324, 0.453]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: day_picker_view_pager, kind: List}
+  - element_present: {resource_id: prev, text: Previous month, kind: Button}
+  risk: reversible
+  note: trace step 6
+- id: find_select_event_date
+  intent: "Scroll to {{event_date}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        text_has: "{{event_date}}"
+        kind: Button
+        cls: View
+        parent: month_view
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      text_has: "{{event_date}}"
+      kind: Button
+      cls: View
+      parent: month_view
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: select_event_date
+  intent: "Select the day for {{event_date}} in the date picker"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      text_has: "{{event_date}}"
+      kind: Button
+      cls: View
+      parent: month_view
+      in_list: true
+  post:
+  - element_present: {resource_id: date_picker_header_date, kind: Button}
+  risk: reversible
+  note: trace step 7
+- id: confirm_start_date
+  intent: Tap OK to confirm the selected start date
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: button1
+      text: OK
+      kind: Button
+      cls: Button
+      siblings: [Cancel]
+      in_list: false
+      position: [0.781, 0.749]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: event_title
+      text: "Title: {{event_title}}"
+      kind: EditText
+  - element_present:
+      resource_id: event_description
+      text: "Description: {{event_description}}"
+      kind: EditText
+  risk: reversible
+  note: trace step 8
+- id: open_start_time_picker
+  intent: Tap the start time field to open the time picker
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: event_start_time
+      kind: Button
+      cls: TextView
+      parent: event_holder
+      siblings: [Meeting with the Team, Location, We will prepare for annual budget.]
+      in_list: false
+      position: [0.89, 0.453]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: header_title, text: Select time, kind: Text}
+  - element_present: {resource_id: material_timepicker_mode_button, text: Switch to text input mode for the time input., kind: Button}
+  risk: reversible
+  note: trace step 9
+- id: select_start_time_hour
+  intent: "Select the hour of {{event_start_time}} as the start time"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      text_has: "{{event_start_time}}"
+      kind: Button
+      cls: TextView
+      parent: material_clock_face
+      in_list: false
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 10
+- id: confirm_start_time
+  intent: Tap OK to confirm the start time
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: material_timepicker_ok_button
+      text: OK
+      kind: Button
+      cls: Button
+      siblings: [Select time, Switch to text input mode for the time input., Cancel]
+      in_list: false
+      position: [0.772, 0.759]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: event_title
+      text: "Title: {{event_title}}"
+      kind: EditText
+  - element_present:
+      resource_id: event_description
+      text: "Description: {{event_description}}"
+      kind: EditText
+  risk: reversible
+  note: trace step 11
+- id: open_end_time_picker
+  intent: Tap the end time field to open the time picker
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: event_end_time
+      text_has: "{{event_start_time}}"
+      kind: Button
+      cls: TextView
+      parent: event_holder
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: header_title, text: Select time, kind: Text}
+  - element_present: {resource_id: material_timepicker_mode_button, text: Switch to text input mode for the time input., kind: Button}
+  risk: reversible
+  note: trace step 12
+- id: switch_to_end_time_minutes
+  intent: Tap the minutes field to switch to minute selection for the end time
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: material_minute_tv
+      kind: Toggle
+      cls: View
+      parent: material_clock_display
+      siblings:
+      - ":"
+      in_list: false
+      position: [0.646, 0.341]
+  post:
+  - {screen_changed: true}
+  - toggle_is:
+      target: {resource_id: material_minute_tv, kind: Toggle}
+      value: 'on'
+  risk: reversible
+  note: trace step 13
+- id: select_end_time_minutes
+  intent: "Select the minutes of {{event_end_time}} as the end time"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      text_has: "{{event_end_time}}"
+      kind: Button
+      cls: TextView
+      parent: material_clock_face
+      in_list: false
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 14
+- id: confirm_end_time
+  intent: Tap OK to confirm the end time
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: material_timepicker_ok_button
+      text: OK
+      kind: Button
+      cls: Button
+      siblings: [Select time, Switch to text input mode for the time input., Cancel]
+      in_list: false
+      position: [0.772, 0.759]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: event_title
+      text: "Title: {{event_title}}"
+      kind: EditText
+  - element_present:
+      resource_id: event_description
+      text: "Description: {{event_description}}"
+      kind: EditText
+  risk: reversible
+  note: trace step 15
+- id: save_event
+  intent: Tap Save to save the event
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      resource_id: save
+      text: Save
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.941, 0.088]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: title_template, text: Disclaimer, kind: Text}
+  - element_present: {resource_id: topPanel, text: Disclaimer, kind: Text}
+  risk: irreversible
+  note: trace step 16
+- id: dismiss_disclaimer
+  intent: Tap OK to dismiss the disclaimer and finish saving
+  optional: true
+  pre:
+  - {app_foreground: Disclaimer}
+  action:
+    tap:
+      resource_id: button1
+      text: OK
+      kind: Button
+      cls: Button
+      siblings: [Settings]
+      in_list: false
+      position: [0.78, 0.63]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: top_toolbar_search_icon, kind: Button}
+  - element_present: {resource_id: top_toolbar_search, text: Search, kind: EditText}
+  risk: reversible
+  note: "trace step 17 · one-time screen: optional"
+- id: verify_saved_event
+  intent: "Tap on {{event_date}} to check the saved event details"
+  pre:
+  - {app_foreground: com.simplemobiletools.calendar.pro}
+  action:
+    tap:
+      visual: calendar day 29 with Meeting label
+      crop: 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
+      region: [0.0, 0.842, 0.143, 0.882]
+      density: 420
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: go_to_today, text: Go to today, kind: Button}
+  risk: reversible
+  extract:
+    event_date:
+      locator: {resource_id: top_value, kind: Button}
+    event_time:
+      near: Meeting with the Team
+      locator: {resource_id: event_item_holder, kind: Button}
+      segment: 1
+      expect_digits: true
+  note: trace step 19
+done:
+- text_visible: "{{event_title}}"
+compiled_from:
+  task_id: aw-final-standard-1028-165519-7323
+  goal: In Simple Calendar Pro, create a calendar event in two weeks from today at 17h with the title 'Meeting with the Team' and the description
+    'We will prepare for annual budget.'. The event should last for 30 mins.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:46:06"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19]
+  trace_steps_dropped: 1
+  cost_usd: 0.0939

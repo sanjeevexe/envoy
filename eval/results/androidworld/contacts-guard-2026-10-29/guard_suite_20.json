@@ -1,0 +1,4325 @@
+[
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to see all trips",
+  "offers": false,
+  "cost": 0.00359875
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find the Denver flight",
+  "offers": false,
+  "cost": 0.003009
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find all trips",
+  "offers": false,
+  "cost": 0.003807
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find the Denver trip",
+  "offers": false,
+  "cost": 0.00254575
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.003348
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0033735
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00335215
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.00302065
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0031651500000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00314815
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips from the bottom navigation",
+  "offers": false,
+  "cost": 0.00270615
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find the Denver flight",
+  "offers": false,
+  "cost": 0.0022896500000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.00238315
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find all trips",
+  "offers": false,
+  "cost": 0.00217065
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0020644
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to see all trips",
+  "offers": false,
+  "cost": 0.00302065
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find the Denver flight instead of the Chicago next-trip card",
+  "offers": false,
+  "cost": 0.0029739000000000002
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00326715
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find the Denver flight",
+  "offers": false,
+  "cost": 0.00244265
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00257865
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0035195
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find all trips",
+  "offers": false,
+  "cost": 0.0023320999999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00345835
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find the Denver flight",
+  "offers": false,
+  "cost": 0.0024681
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find flights",
+  "offers": false,
+  "cost": 0.00227685
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open Check in or My Trips to find flights",
+  "offers": true,
+  "cost": 0.0033095999999999998
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.00193685
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00291435
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.0022683499999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find flights",
+  "offers": false,
+  "cost": 0.0025531
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0028845999999999998
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00326285
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0030545999999999998
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00310985
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0023108499999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0028676
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00186035
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find the Denver trip",
+  "offers": false,
+  "cost": 0.0026381
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find all trips",
+  "offers": false,
+  "cost": 0.0023406
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0020176
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.0024639
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.0026775
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list (not Home check-in for Chicago)",
+  "offers": false,
+  "cost": 0.00328415
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.0017159
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find the Pittsburgh flight",
+  "offers": false,
+  "cost": 0.00304835
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0022471500000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00341175
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips or Check in to find flights",
+  "offers": false,
+  "cost": 0.0039685
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00284215
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips or Check in list to find flight to Pittsburgh",
+  "offers": false,
+  "cost": 0.0029526500000000002
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0028039000000000002
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.00211115
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0021579
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips from bottom navigation",
+  "offers": false,
+  "cost": 0.0028889000000000002
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to see all trips",
+  "offers": false,
+  "cost": 0.004826899999999999
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0033139000000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0023279
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list instead of using Home check-in for Chicago",
+  "offers": false,
+  "cost": 0.0025404
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to see all trips",
+  "offers": false,
+  "cost": 0.00291865
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find the flight to Pittsburgh",
+  "offers": false,
+  "cost": 0.0018944
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find the flight to Pittsburgh",
+  "offers": false,
+  "cost": 0.00311575
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find the Pittsburgh flight",
+  "offers": false,
+  "cost": 0.00274175
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips or Check in to find the Pittsburgh flight",
+  "offers": false,
+  "cost": 0.0021153499999999998
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0027401
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00288885
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips or Check in to find flights",
+  "offers": false,
+  "cost": 0.0021366
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0023406
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00221735
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find flights",
+  "offers": false,
+  "cost": 0.0029270999999999998
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0021833499999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00291435
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00271885
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0035731
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0023661
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.0031991
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find trips list",
+  "offers": false,
+  "cost": 0.00305885
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0030631
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0027911
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.0027570999999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00341585
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the trip to Chicago on Oct 30 (SL 482)",
+  "offers": false,
+  "cost": 0.00314075
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the trip to Chicago on Fri, Oct 30 SL 482",
+  "offers": false,
+  "cost": 0.0027954
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip SL 482 from Home",
+  "offers": false,
+  "cost": 0.0026594
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip on Oct 30 SL 482",
+  "offers": false,
+  "cost": 0.0035476500000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip from Next trip or tap Check in",
+  "offers": true,
+  "cost": 0.00294415
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open check-in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.0027019
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip via Next trip card or Check in",
+  "offers": true,
+  "cost": 0.0024129
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip for Fri, Oct 30 SL 482",
+  "offers": false,
+  "cost": 0.0026169
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open check-in for the Chicago trip SL 482 on Oct 30",
+  "offers": true,
+  "cost": 0.0027359
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open check-in for the Chicago trip on Oct 30 (SL 482)",
+  "offers": true,
+  "cost": 0.0037814000000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open check-in for the Chicago trip SL 482 on Oct 30",
+  "offers": true,
+  "cost": 0.0028124
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open check-in for the Chicago trip on Oct 30 SL 482",
+  "offers": true,
+  "cost": 0.0029144
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the trip to Chicago (SL 482 on Oct 30)",
+  "offers": false,
+  "cost": 0.003229
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Tap Check in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.0030674
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Start check-in for the Chicago trip SL 482",
+  "offers": true,
+  "cost": 0.0028039000000000002
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open check-in for the Chicago trip on Oct 30 (SL 482)",
+  "offers": true,
+  "cost": 0.00352215
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip from Next trip card or My Trips",
+  "offers": false,
+  "cost": 0.0034085
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open check-in for the Chicago trip via Check in",
+  "offers": true,
+  "cost": 0.00366775
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip SL 482 or tap Check in from Home",
+  "offers": true,
+  "cost": 0.0034765
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open check-in for the Chicago trip SL 482 on Oct 30",
+  "offers": true,
+  "cost": 0.0033416
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip SL 482 on Oct 30",
+  "offers": true,
+  "cost": 0.0027715
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.00318375
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.0021408499999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip SL 482 on Oct 30",
+  "offers": true,
+  "cost": 0.00205585
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Tap Check in and open the trip to Chicago on Oct 30 SL 482",
+  "offers": true,
+  "cost": 0.0024341
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open the Chicago trip check-in from Home",
+  "offers": true,
+  "cost": 0.0024808499999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.0031226
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open the Chicago trip from Home or My Trips",
+  "offers": false,
+  "cost": 0.00347535
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.0031736
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Oct 30 SL 482",
+  "offers": true,
+  "cost": 0.00337335
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Oct 30 (SL 482)",
+  "offers": true,
+  "cost": 0.0032161
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Fri, Oct 30 SL 482",
+  "offers": true,
+  "cost": 0.0023406
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Oct 30 SL 482",
+  "offers": true,
+  "cost": 0.00312685
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Oct 30 (SL 482)",
+  "offers": true,
+  "cost": 0.00257435
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip SL 482 on Oct 30",
+  "offers": true,
+  "cost": 0.00250635
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open the Chicago trip or tap Check in from Home",
+  "offers": true,
+  "cost": 0.0029483499999999998
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Tap Check in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.0034031
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Oct 30, flight SL 482",
+  "offers": true,
+  "cost": 0.0026720999999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Fri, Oct 30 SL 482",
+  "offers": true,
+  "cost": 0.00238735
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.00293985
+ },
+ {
+  "kind": "aw",
+  "task": "NotesIsTodo",
+  "variant": "cur",
+  "plan": [
+   "Open the Joplin app",
+   "Find and open the note titled 'To-Do List'",
+   "Check whether the note is marked as a todo item"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00324505
+ },
+ {
+  "kind": "aw",
+  "task": "NotesIsTodo",
+  "variant": "cur",
+  "plan": [
+   "Open the Joplin app",
+   "Locate the note titled 'To-Do List'",
+   "Check whether the note is marked as a todo item"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0029105
+ },
+ {
+  "kind": "aw",
+  "task": "NotesIsTodo",
+  "variant": "cur",
+  "plan": [
+   "Open the Joplin app",
+   "Locate the note titled 'To-Do List' in the notes list",
+   "Open the note to check its type/status indicator for todo"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0026539500000000004
+ },
+ {
+  "kind": "aw",
+  "task": "NotesIsTodo",
+  "variant": "cur",
+  "plan": [
+   "Open the Joplin app",
+   "Locate the note titled 'To-Do List'",
+   "Check whether it is marked as a todo item"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0029427000000000004
+ },
+ {
+  "kind": "aw",
+  "task": "NotesIsTodo",
+  "variant": "cur",
+  "plan": [
+   "Open the Joplin app",
+   "Locate the note titled 'To-Do List'",
+   "Check whether the note is marked as a todo item"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0055899
+ },
+ {
+  "kind": "aw",
+  "task": "NotesIsTodo",
+  "variant": "guard",
+  "plan": [
+   "Open the Joplin app",
+   "Find the note titled 'To-Do List'",
+   "Check whether the note is marked as a todo item"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0029773
+ },
+ {
+  "kind": "aw",
+  "task": "NotesIsTodo",
+  "variant": "guard",
+  "plan": [
+   "Open the Joplin app",
+   "Open the note titled 'To-Do List'",
+   "Check whether the note is marked as a todo item"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0039293
+ },
+ {
+  "kind": "aw",
+  "task": "NotesIsTodo",
+  "variant": "guard",
+  "plan": [
+   "Open the Joplin app",
+   "Find the note titled 'To-Do List'",
+   "Check whether it is marked as a todo item"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0032889
+ },
+ {
+  "kind": "aw",
+  "task": "NotesIsTodo",
+  "variant": "guard",
+  "plan": [
+   "Open the Joplin app",
+   "Find the note titled 'To-Do List'",
+   "Check whether the note is marked as a todo item"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0037572000000000005
+ },
+ {
+  "kind": "aw",
+  "task": "NotesIsTodo",
+  "variant": "guard",
+  "plan": [
+   "Open the Joplin app",
+   "Locate the note titled 'To-Do List'",
+   "Check whether the note is marked as a todo item"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0029161499999999997
+ },
+ {
+  "kind": "aw",
+  "task": "NotesMeetingAttendeeCount",
+  "variant": "cur",
+  "plan": [
+   "Open the Joplin app",
+   "Find and open the note titled 'Employee Performance Evaluation'",
+   "Read the attendee list and count attendees present"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0032442
+ },
+ {
+  "kind": "aw",
+  "task": "NotesMeetingAttendeeCount",
+  "variant": "cur",
+  "plan": [
+   "Open the Joplin app",
+   "Find the note titled 'Employee Performance Evaluation'",
+   "Read the meeting details to count attendees present"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00325895
+ },
+ {
+  "kind": "aw",
+  "task": "NotesMeetingAttendeeCount",
+  "variant": "cur",
+  "plan": [
+   "Open the Joplin app",
+   "Find and open the note titled 'Employee Performance Evaluation'",
+   "Count the attendees marked as present"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00385395
+ },
+ {
+  "kind": "aw",
+  "task": "NotesMeetingAttendeeCount",
+  "variant": "cur",
+  "plan": [
+   "Open the Joplin app",
+   "Find the note titled 'Employee Performance Evaluation'",
+   "Read the attendee list to count attendees present"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00299245
+ },
+ {
+  "kind": "aw",
+  "task": "NotesMeetingAttendeeCount",
+  "variant": "cur",
+  "plan": [
+   "Open the Joplin app",
+   "Find the note titled 'Employee Performance Evaluation'",
+   "Open the note to view meeting details",
+   "Count the attendees present"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0028117000000000003
+ },
+ {
+  "kind": "aw",
+  "task": "NotesMeetingAttendeeCount",
+  "variant": "guard",
+  "plan": [
+   "Open the Joplin app",
+   "Find the note titled 'Employee Performance Evaluation'",
+   "Open the meeting note",
+   "Read how many attendees were present"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00357055
+ },
+ {
+  "kind": "aw",
+  "task": "NotesMeetingAttendeeCount",
+  "variant": "guard",
+  "plan": [
+   "Open the Joplin app",
+   "Find the note titled 'Employee Performance Evaluation'",
+   "Read the attendee list to count those marked present"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0027873999999999998
+ },
+ {
+  "kind": "aw",
+  "task": "NotesMeetingAttendeeCount",
+  "variant": "guard",
+  "plan": [
+   "Open the Joplin app",
+   "Locate the note titled 'Employee Performance Evaluation'",
+   "Open the note to view meeting details",
+   "Read the list of attendees marked present"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00287265
+ },
+ {
+  "kind": "aw",
+  "task": "NotesMeetingAttendeeCount",
+  "variant": "guard",
+  "plan": [
+   "Open the Joplin app",
+   "Find the note titled Employee Performance Evaluation",
+   "Open the note and read the attendees present"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0030174
+ },
+ {
+  "kind": "aw",
+  "task": "NotesMeetingAttendeeCount",
+  "variant": "guard",
+  "plan": [
+   "Open the Joplin app",
+   "Find the note titled Employee Performance Evaluation",
+   "Open the note to view meeting details",
+   "Read the number of attendees present"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00292115
+ },
+ {
+  "kind": "aw",
+  "task": "NotesRecipeIngredientCount",
+  "variant": "cur",
+  "plan": [
+   "Open the Joplin app",
+   "Find and open the recipe 'Chicken Alfredo'",
+   "Locate the spirulina quantity in the recipe"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0029741
+ },
+ {
+  "kind": "aw",
+  "task": "NotesRecipeIngredientCount",
+  "variant": "cur",
+  "plan": [
+   "Open the Joplin app",
+   "Find and open the 'Chicken Alfredo' recipe",
+   "Read the spirulina quantity in the recipe"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0035262
+ },
+ {
+  "kind": "aw",
+  "task": "NotesRecipeIngredientCount",
+  "variant": "cur",
+  "plan": [
+   "Open the Joplin app",
+   "Find the recipe 'Chicken Alfredo'",
+   "Open the recipe to read the spirulina quantity"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0028777000000000004
+ },
+ {
+  "kind": "aw",
+  "task": "NotesRecipeIngredientCount",
+  "variant": "cur",
+  "plan": [
+   "Open the Joplin app",
+   "Find the recipe 'Chicken Alfredo'",
+   "Open the recipe to view ingredients",
+   "Read the quantity of spirulina"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00281295
+ },
+ {
+  "kind": "aw",
+  "task": "NotesRecipeIngredientCount",
+  "variant": "cur",
+  "plan": [
+   "Open the Joplin app",
+   "Find the recipe 'Chicken Alfredo'",
+   "Open the Chicken Alfredo recipe to view ingredients"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00293595
+ },
+ {
+  "kind": "aw",
+  "task": "NotesRecipeIngredientCount",
+  "variant": "guard",
+  "plan": [
+   "Open the Joplin app",
+   "Find the recipe 'Chicken Alfredo'",
+   "Open the Chicken Alfredo recipe",
+   "Read the quantity of spirulina"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0037970499999999997
+ },
+ {
+  "kind": "aw",
+  "task": "NotesRecipeIngredientCount",
+  "variant": "guard",
+  "plan": [
+   "Open the Joplin app",
+   "Find and open the recipe 'Chicken Alfredo'",
+   "Read the spirulina quantity from the recipe"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0028808999999999996
+ },
+ {
+  "kind": "aw",
+  "task": "NotesRecipeIngredientCount",
+  "variant": "guard",
+  "plan": [
+   "Open the Joplin app",
+   "Open the recipe 'Chicken Alfredo'",
+   "Read the spirulina quantity"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0027854
+ },
+ {
+  "kind": "aw",
+  "task": "NotesRecipeIngredientCount",
+  "variant": "guard",
+  "plan": [
+   "Open the Joplin app",
+   "Find the recipe 'Chicken Alfredo'",
+   "Open the 'Chicken Alfredo' recipe",
+   "Read the quantity of spirulina"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0028119
+ },
+ {
+  "kind": "aw",
+  "task": "NotesRecipeIngredientCount",
+  "variant": "guard",
+  "plan": [
+   "Open the Joplin app",
+   "Find and open the recipe 'Chicken Alfredo'",
+   "Read the quantity of spirulina in the recipe"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0030904
+ },
+ {
+  "kind": "aw",
+  "task": "NotesTodoItemCount",
+  "variant": "cur",
+  "plan": [
+   "Open the Joplin app",
+   "Navigate to notebooks and open the 'Ideas' folder",
+   "Count the to-dos shown in the Ideas folder"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0035497999999999997
+ },
+ {
+  "kind": "aw",
+  "task": "NotesTodoItemCount",
+  "variant": "cur",
+  "plan": [
+   "Open the Joplin app",
+   "Navigate to the 'Ideas' folder",
+   "Count the to-dos shown in the folder"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0033397
+ },
+ {
+  "kind": "aw",
+  "task": "NotesTodoItemCount",
+  "variant": "cur",
+  "plan": [
+   "Open the Joplin app",
+   "Open the 'Ideas' folder",
+   "Count the to-dos shown in Ideas"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00295895
+ },
+ {
+  "kind": "aw",
+  "task": "NotesTodoItemCount",
+  "variant": "cur",
+  "plan": [
+   "Open the Joplin app",
+   "Open the 'Ideas' folder",
+   "Count the to-dos in Ideas and report the number"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0029675
+ },
+ {
+  "kind": "aw",
+  "task": "NotesTodoItemCount",
+  "variant": "cur",
+  "plan": [
+   "Open the Joplin app",
+   "Navigate to the 'Ideas' folder",
+   "Count the to-dos in the folder"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00307495
+ },
+ {
+  "kind": "aw",
+  "task": "NotesTodoItemCount",
+  "variant": "guard",
+  "plan": [
+   "Open the Joplin app",
+   "Open the 'Ideas' folder",
+   "Read the number of to-dos in Ideas"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00324855
+ },
+ {
+  "kind": "aw",
+  "task": "NotesTodoItemCount",
+  "variant": "guard",
+  "plan": [
+   "Open the Joplin app",
+   "Navigate to the Ideas folder",
+   "Read the number of to-dos in Ideas folder"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0030118999999999996
+ },
+ {
+  "kind": "aw",
+  "task": "NotesTodoItemCount",
+  "variant": "guard",
+  "plan": [
+   "Open the Joplin app",
+   "Open the 'Ideas' folder",
+   "Read the number of to-dos shown in Ideas"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0033033999999999997
+ },
+ {
+  "kind": "aw",
+  "task": "NotesTodoItemCount",
+  "variant": "guard",
+  "plan": [
+   "Open the Joplin app",
+   "Find and open the 'Ideas' folder",
+   "Read the number of to-dos shown in Ideas"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0030679
+ },
+ {
+  "kind": "aw",
+  "task": "NotesTodoItemCount",
+  "variant": "guard",
+  "plan": [
+   "Open the Joplin app",
+   "Navigate to the 'Ideas' folder",
+   "Count the to-dos shown in Ideas"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0031363999999999997
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarAnyEventsOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro",
+   "Navigate to October 28, 2023",
+   "Read event titles for that day"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00424385
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarAnyEventsOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Simple Calendar Pro app",
+   "Navigate to October 2023",
+   "Open the day view for October 28",
+   "Read the titles of events on October 28"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0060094499999999995
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarAnyEventsOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro",
+   "Go to October 28, 2023",
+   "Read titles of events on October 28"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0042872
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarAnyEventsOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro calendar app",
+   "Navigate to October 28, 2023 day view",
+   "Read the event titles for October 28"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00371845
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarAnyEventsOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Calendar app (Simple Calendar Pro)",
+   "Navigate to October 28, 2023",
+   "Read the event titles for October 28"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0033061999999999996
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarAnyEventsOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro Calendar app",
+   "Navigate to October 28, 2023 day view",
+   "Read the event titles shown for October 28"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.005342550000000001
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarAnyEventsOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro from the app list",
+   "Navigate to October 28, 2023",
+   "Read the event titles shown for that day"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0040944
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarAnyEventsOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro",
+   "Navigate to October 28, 2023",
+   "Read the event titles shown for that day"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00390665
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarAnyEventsOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open the app drawer and launch Simple Calendar Pro",
+   "Navigate to October 28, 2023",
+   "Read the event titles shown for that day"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0027824
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarAnyEventsOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro from the app list",
+   "Navigate to October 28, 2023",
+   "Read the event titles shown for that day"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0031838
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventOnDateAtTime",
+  "variant": "cur",
+  "plan": [
+   "Open the Calendar app for Simple Calendar Pro",
+   "Navigate to October 27, 2023",
+   "Find events at 8:00pm",
+   "Read the event titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00473505
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventOnDateAtTime",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro from app list",
+   "Navigate to October 27, 2023",
+   "Find events at 8:00pm",
+   "Read the event titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00407025
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventOnDateAtTime",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro from the app list",
+   "Navigate to October 27, 2023",
+   "View events at 8:00pm and read titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0043847
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventOnDateAtTime",
+  "variant": "cur",
+  "plan": [
+   "Open the Calendar app",
+   "Navigate to October 27, 2023",
+   "Find events at 8:00pm and read their titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0046572
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventOnDateAtTime",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro from app list",
+   "Navigate to October 27, 2023",
+   "Find events scheduled at 8:00pm",
+   "Read the event titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0040242
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventOnDateAtTime",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro from the app list",
+   "Navigate to October 27, 2023",
+   "Locate events at 8:00pm",
+   "Read the event titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00407455
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventOnDateAtTime",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro from the app list",
+   "Navigate to October 27, 2023",
+   "Read the titles of events at 8:00pm"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00492215
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventOnDateAtTime",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro",
+   "Navigate to October 27, 2023",
+   "View events at 8:00pm",
+   "Read the event titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0040084
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventOnDateAtTime",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro",
+   "Navigate to October 27, 2023",
+   "Find events at 8:00pm and read their titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.005564400000000001
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventOnDateAtTime",
+  "variant": "guard",
+  "plan": [
+   "Open the Calendar app (Simple Calendar Pro)",
+   "Navigate to October 27, 2023",
+   "Locate events scheduled at 8:00pm",
+   "Read the titles of those events"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0041404
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsInNextWeek",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro from the Calendar apps",
+   "Navigate to the week starting Monday Oct 16 through Sunday Oct 22",
+   "Read the event titles shown for that week"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0051398
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsInNextWeek",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro from the app list",
+   "Navigate to the week starting Monday Oct 16",
+   "Read the titles of events in that week"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0046581
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsInNextWeek",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro Calendar app",
+   "Navigate to week starting Monday Oct 16 2023",
+   "Read event titles for Oct 16 to Oct 22",
+   "Answer with titles only as comma separated list"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00506495
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsInNextWeek",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro from the app list",
+   "Navigate to the week starting Monday Oct 16, 2023",
+   "Read the titles of events in Oct 16-22"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00432945
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsInNextWeek",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro from the app list",
+   "Navigate to the week of Monday Oct 16 to Sunday Oct 22",
+   "Read the event titles shown for that week"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0036384499999999997
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsInNextWeek",
+  "variant": "guard",
+  "plan": [
+   "Open the Calendar app for Simple Calendar Pro",
+   "Navigate to the week starting Monday Oct 16 to Sunday Oct 22",
+   "Read the titles of events shown for that week"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0044125499999999995
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsInNextWeek",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro from the app list",
+   "Navigate to the week of Monday Oct 16 to Sunday Oct 22",
+   "Read the event titles shown for that week"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0041036499999999995
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsInNextWeek",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro",
+   "Navigate to the week starting Monday Oct 16 2023",
+   "Read the event titles shown for that week"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0052479
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsInNextWeek",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro from the app list",
+   "Navigate to the week starting Monday Oct 16, 2023",
+   "Read the titles of events from Oct 16 to Oct 22"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0044614
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsInNextWeek",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro",
+   "Navigate to the week of Monday Oct 16 to Sunday Oct 22",
+   "Read the event titles shown for that week"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00429415
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsInTimeRange",
+  "variant": "cur",
+  "plan": [
+   "Find and open Simple Calendar Pro from app drawer or search",
+   "Navigate to Friday October 20, 2023",
+   "View events scheduled between 4:15pm and 8pm",
+   "Read the titles of events in that time range"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0049861
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsInTimeRange",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro from the app list",
+   "Navigate to Friday October 20, 2023",
+   "View events scheduled between 4:15pm and 8pm",
+   "Read the titles of events in that time range"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0052782
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsInTimeRange",
+  "variant": "cur",
+  "plan": [
+   "Open app drawer and launch Simple Calendar Pro",
+   "Navigate to Friday October 20, 2023",
+   "Open the day view for Friday to see events",
+   "Identify events between 4:15pm and 8pm"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00416345
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsInTimeRange",
+  "variant": "cur",
+  "plan": [
+   "Open the Calendar app that holds Friday events",
+   "Navigate to Friday October 20, 2023",
+   "Check events scheduled between 4:15pm and 8pm",
+   "Report only the matching event titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0045731999999999995
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsInTimeRange",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro app",
+   "Navigate to Friday calendar view",
+   "Locate events between 4:15pm and 8pm",
+   "Read the event titles for answer"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0049444499999999995
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsInTimeRange",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro from the Calendar app",
+   "Navigate to Friday view",
+   "Locate events between 4:15pm and 8pm on Friday",
+   "Read the titles of those events"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00487655
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsInTimeRange",
+  "variant": "guard",
+  "plan": [
+   "Open the Calendar app for Simple Calendar Pro",
+   "Navigate to Friday, October 20 2023",
+   "Look at events between 4:15pm and 8pm",
+   "Read the titles of events in that time range"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00477865
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsInTimeRange",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro",
+   "Go to Friday October 20, 2023",
+   "View events between 4:15pm and 8pm",
+   "Read the event titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00508065
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsInTimeRange",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro app",
+   "Navigate to Friday October 20, 2023",
+   "Check events scheduled between 4:15pm and 8pm",
+   "Read the event titles only"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.003932649999999999
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsInTimeRange",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro",
+   "Navigate to Friday, October 20 2023",
+   "View events for that day between 4:15pm and 8pm",
+   "Read the event titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00365215
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Simple Calendar Pro app",
+   "Navigate to the October 24, 2023 day view",
+   "Read the event titles shown for October 24"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0036631
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro calendar app",
+   "Navigate to October 24, 2023",
+   "Read the titles of events on October 24"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0038872
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro",
+   "Navigate to October 24, 2023",
+   "Read the event titles for October 24"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00426595
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro app",
+   "Navigate to October 24, 2023",
+   "Read the event titles shown for that day"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0029752000000000003
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Simple Calendar Pro Calendar app",
+   "Navigate to October 24, 2023",
+   "Read the titles of events shown for that day"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0047512000000000006
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro",
+   "Navigate to October 24, 2023",
+   "Read the event titles shown for that date"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0046818
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro from the app list",
+   "Navigate to the October 24, 2023 day view",
+   "Read the event titles shown for October 24"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.004192899999999999
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro from the app list",
+   "Navigate to October 24, 2023",
+   "Read the event titles shown for that day"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0036354
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro",
+   "Navigate to October 24, 2023",
+   "Read the event titles shown for that day"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0040458
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarEventsOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro",
+   "Navigate to October 24, 2023",
+   "Read the event titles shown for that day"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0040469
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarFirstEventAfterStartTime",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro from the app list",
+   "Navigate to October 29, 2023",
+   "Find events after 5:20pm and read the first event title(s)"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00503855
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarFirstEventAfterStartTime",
+  "variant": "cur",
+  "plan": [
+   "Open the app drawer and open Simple Calendar Pro",
+   "Navigate to October 29 2023",
+   "Find events after 5:20pm and identify the first one"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0036414999999999998
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarFirstEventAfterStartTime",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro Calendar app",
+   "Navigate to October 29 2023",
+   "Find events after 5:20pm",
+   "Read first event title after that time"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0036817000000000004
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarFirstEventAfterStartTime",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro from the app list",
+   "Navigate to October 29 2023 day view",
+   "Find events after 5:20pm and identify the first one",
+   "Read off the event title(s)"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00378945
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarFirstEventAfterStartTime",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro from the app list",
+   "Navigate to October 29, 2023 day view",
+   "Find events after 5:20pm on that day",
+   "Read the title(s) of the first event after 5:20pm"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.005512199999999999
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarFirstEventAfterStartTime",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro from the app list",
+   "Navigate to October 29, 2023",
+   "Find the first event starting after 5:20pm",
+   "Read the title(s) of that event"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0049223
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarFirstEventAfterStartTime",
+  "variant": "guard",
+  "plan": [
+   "Open the Simple Calendar Pro Calendar app",
+   "Navigate to October 29, 2023 day view",
+   "Look at events after 5:20pm in time order",
+   "Read the title of the first event after 5:20pm"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0061763
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarFirstEventAfterStartTime",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro",
+   "Navigate to October 29 2023",
+   "Find first event after 5:20pm and read its title"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0038109
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarFirstEventAfterStartTime",
+  "variant": "guard",
+  "plan": [
+   "Open the Calendar app for Simple Calendar Pro",
+   "Navigate to October 29, 2023",
+   "Locate events after 5:20pm and identify the first one",
+   "Read its title or titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0042564
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarFirstEventAfterStartTime",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro from the Calendar app",
+   "Navigate to October 29, 2023",
+   "Find the first event after 5:20pm and read its title"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00386515
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarLocationOfEvent",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro",
+   "Find the Family reunion event",
+   "Open Family reunion event details to view its location"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00498535
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarLocationOfEvent",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro (listed as Calendar)",
+   "Find the Family reunion event",
+   "Open the event details to view its location"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0049163
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarLocationOfEvent",
+  "variant": "cur",
+  "plan": [
+   "Open the Calendar app for Simple Calendar Pro",
+   "Find the Family reunion event",
+   "Open the event details to read its location"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0037847
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarLocationOfEvent",
+  "variant": "cur",
+  "plan": [
+   "Open the Calendar app (Simple Calendar Pro)",
+   "Find the Family reunion event",
+   "Open the event details to view its location"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00434995
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarLocationOfEvent",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro",
+   "Find the Family reunion event",
+   "Open its details to view the location"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0035702
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarLocationOfEvent",
+  "variant": "guard",
+  "plan": [
+   "Open the Calendar app containing the Family reunion event",
+   "Find and open the Family reunion event",
+   "Read the location shown on the event details"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00408955
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarLocationOfEvent",
+  "variant": "guard",
+  "plan": [
+   "Open the Calendar app for Simple Calendar Pro",
+   "Find the Family reunion event",
+   "Open its details to view the location"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0044994
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarLocationOfEvent",
+  "variant": "guard",
+  "plan": [
+   "Open the Simple Calendar Pro Calendar app",
+   "Find the Family reunion event",
+   "Open its details to read the location"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0041964
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarLocationOfEvent",
+  "variant": "guard",
+  "plan": [
+   "Open the Calendar app that is Simple Calendar Pro",
+   "Find the Family reunion event",
+   "Open the event details to view its location"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0038218999999999996
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarLocationOfEvent",
+  "variant": "guard",
+  "plan": [
+   "Open the Calendar app for Simple Calendar Pro",
+   "Find the Family reunion event",
+   "Open the event details to view its location"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0038674
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarNextEvent",
+  "variant": "cur",
+  "plan": [
+   "Open the app list and open Simple Calendar Pro",
+   "Switch to agenda or upcoming events view",
+   "Find the next event after Oct 15 2023 15:34 and read its title"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00396135
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarNextEvent",
+  "variant": "cur",
+  "plan": [
+   "Open the Simple Calendar Pro (Calendar) app",
+   "Navigate to agenda or upcoming events view",
+   "Identify the next event after Oct 15 2023 and read its title"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00395045
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarNextEvent",
+  "variant": "cur",
+  "plan": [
+   "Open the app drawer and launch Simple Calendar Pro",
+   "Switch to agenda or upcoming events view",
+   "Find the next event after Oct 15 2023 15:34",
+   "Read the title of the next upcoming event"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00371345
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarNextEvent",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro from the app list",
+   "Switch to agenda or upcoming events view",
+   "Locate the next event after Oct 15, 2023 15:34 and read its title"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0041552
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarNextEvent",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro from the app list",
+   "Switch to agenda or upcoming events view",
+   "Locate the next event after Oct 15, 2023 15:34",
+   "Read the title of the next upcoming event"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00394295
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarNextEvent",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro from the Calendar apps",
+   "Navigate to the upcoming events or agenda view",
+   "Read the title of the next event after Oct 15, 2023 15:34"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00570155
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarNextEvent",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro from the app list",
+   "Go to agenda or upcoming events view showing dates after Oct 15, 2023",
+   "Read the title of the next upcoming event"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00531065
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarNextEvent",
+  "variant": "guard",
+  "plan": [
+   "Open the Calendar app for Simple Calendar Pro",
+   "Go to the upcoming or agenda view showing future events",
+   "Read the title of the next upcoming event after Oct 15 2023"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0033514
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarNextEvent",
+  "variant": "guard",
+  "plan": [
+   "Open the Calendar app for Simple Calendar Pro",
+   "Switch to agenda or upcoming events view from today onward",
+   "Read the title of the next upcoming event on or after Oct 15 2023"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0039841500000000005
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarNextEvent",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro from the Calendar apps",
+   "Navigate to the upcoming events agenda starting Oct 15, 2023",
+   "Read the title of the next upcoming event after now"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0036944
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarNextMeetingWithPerson",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro (Calendar)",
+   "Find events containing Ava",
+   "Open the next meeting with Ava after Oct 15 2023",
+   "Read its date and time"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0045731
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarNextMeetingWithPerson",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro",
+   "Find upcoming events and locate meetings with Ava",
+   "Open the next meeting with Ava after Oct 15 2023",
+   "Read its date and time"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00554295
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarNextMeetingWithPerson",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro",
+   "Find upcoming events containing Ava",
+   "Open the next meeting with Ava after Oct 15 2023",
+   "Read its date and start time"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0043462
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarNextMeetingWithPerson",
+  "variant": "cur",
+  "plan": [
+   "Open Simple Calendar Pro",
+   "Search or browse for events with Ava",
+   "Identify the next meeting with Ava after Oct 15 2023",
+   "Read its month day year and time"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0050171999999999994
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarNextMeetingWithPerson",
+  "variant": "cur",
+  "plan": [
+   "Open the app drawer and launch Simple Calendar Pro",
+   "Search or browse events for meetings with Ava",
+   "Identify the next meeting with Ava after Oct 15, 2023"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0044907
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarNextMeetingWithPerson",
+  "variant": "guard",
+  "plan": [
+   "Open the Calendar app that is Simple Calendar Pro",
+   "Go to agenda or search to find events with Ava",
+   "Identify the next meeting with Ava after Oct 15 2023",
+   "Read its month, day, year and start time"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00347055
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarNextMeetingWithPerson",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro from the app list",
+   "Navigate to upcoming events after Oct 15 2023",
+   "Locate the next meeting with Ava and read its date and time"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0034259
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarNextMeetingWithPerson",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro from the app list",
+   "Find events containing Ava",
+   "Open the next meeting with Ava on or after Oct 15 2023",
+   "Read its month, day, year and time in 24-hour format"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00414765
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarNextMeetingWithPerson",
+  "variant": "guard",
+  "plan": [
+   "Open Simple Calendar Pro from the app drawer",
+   "Go to agenda or search view to find events containing Ava",
+   "Identify the next meeting with Ava after Oct 15 2023",
+   "Read its month, day, year and time in 24-hour format"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00482965
+ },
+ {
+  "kind": "aw",
+  "task": "SimpleCalendarNextMeetingWithPerson",
+  "variant": "guard",
+  "plan": [
+   "Open the Calendar app (Simple Calendar Pro)",
+   "Find events with Ava",
+   "Open the next meeting with Ava after Oct 15, 2023",
+   "Read its date and start time"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00461665
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivitiesCountForWeek",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Go to the track/activity list or history",
+   "Identify running activities dated Monday Oct 9 to Sunday Oct 15",
+   "Count the running activities for that week"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0035623499999999997
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivitiesCountForWeek",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track list or history showing recorded activities",
+   "Identify Running activities dated Monday Oct 9 to Sunday Oct 15 2023",
+   "Count the matching Running activities"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00292145
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivitiesCountForWeek",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track list or history showing recorded activities",
+   "Identify Running activities dated Monday Oct 9 to Sunday Oct 15",
+   "Count the matching Running activities"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0026882
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivitiesCountForWeek",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track history or track list",
+   "Identify Running activities dated Monday Oct 9 to Sunday Oct 15",
+   "Count the Running activities for that week"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00316845
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivitiesCountForWeek",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track/activity list",
+   "Show Running activities for Monday Oct 9 to Sunday Oct 15",
+   "Count the matching running activities"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0027002
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivitiesCountForWeek",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "View the list of recorded tracks or activities",
+   "Identify Running activities dated Monday Oct 9 through Sunday Oct 15 and count them"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0042313
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivitiesCountForWeek",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track/activity list showing dates and activity types",
+   "Identify Running activities dated Monday Oct 9 through Sunday Oct 15",
+   "Count the matching Running activities"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00274665
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivitiesCountForWeek",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track list showing recorded activities",
+   "Identify running activities dated Monday Oct 9 through Sunday Oct 15",
+   "Count the running activities this week"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00361965
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivitiesCountForWeek",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "View the list of recorded tracks or activity history",
+   "Count the running activities dated Monday Oct 9 to Sunday Oct 15"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0034209
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivitiesCountForWeek",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Go to the recorded tracks activity list",
+   "Identify running activities dated Monday Oct 9 to Sunday Oct 15",
+   "Read the count as a single integer"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00409265
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivitiesOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track list or history",
+   "Find activities dated October 01",
+   "Read the activity type(s)"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00304085
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivitiesOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track list / history",
+   "Find tracks dated October 01",
+   "Read the activity type(s) for those tracks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0026617000000000004
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivitiesOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track list or history",
+   "Find tracks dated October 01",
+   "Read the activity type for those tracks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00266345
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivitiesOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the recorded tracks/history list",
+   "Locate entries dated October 01",
+   "Read the activity type for October 01 entries"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00267445
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivitiesOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Go to the track or activity history list",
+   "Find entries dated October 01",
+   "Read the activity type(s) for October 01"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00271645
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivitiesOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Go to the track list / history showing recorded tracks",
+   "Find tracks dated October 01",
+   "Read the activity type for those tracks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00313105
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivitiesOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Find the activities recorded on October 01",
+   "Read the activity type(s) shown"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0022699
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivitiesOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track list or history",
+   "Find tracks dated October 01",
+   "Read the activity type for those tracks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00296715
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivitiesOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track list or records history",
+   "Find tracks dated October 01",
+   "Read the activity type for October 01 entries"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0026394
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivitiesOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Locate activities recorded on October 01",
+   "Read the activity type for those activities"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00259165
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivityDuration",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Find the skiing activity from October 12 2023 in the track list",
+   "Open the activity details to read its duration"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0033730999999999995
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivityDuration",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Find the skiing activity from October 12 2023 in the track list",
+   "Open the activity details to view its duration",
+   "Read the duration and express it as minutes"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0035722
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivityDuration",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Find the track list and locate the skiing activity from October 12 2023",
+   "Open the October 12 2023 skiing activity details",
+   "Read the duration of the activity"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0028691999999999997
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivityDuration",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track list or history",
+   "Open the skiing activity from October 12 2023",
+   "Read its duration"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0029677
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivityDuration",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Find the track list and locate the skiing activity from October 12 2023",
+   "Open the details for that skiing activity",
+   "Read the duration of the activity"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00310645
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivityDuration",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Find the track list and locate the skiing activity from October 12 2023",
+   "Open the details for that skiing activity",
+   "Read its duration and express in minutes"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0033875499999999996
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivityDuration",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Find the skiing activity from October 12 2023",
+   "Read its duration and convert to minutes as a single integer"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0026454
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivityDuration",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Find the skiing activity from October 12 2023 in the track list",
+   "Open the details for that October 12 2023 skiing activity",
+   "Read its duration"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0036676499999999997
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivityDuration",
+  "variant": "guard",
+  "plan": [
+   "Open OpenTracks",
+   "Go to the track list with past activities",
+   "Open the skiing activity dated October 12 2023",
+   "Read its duration"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0027231499999999997
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerActivityDuration",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Locate the skiing activity from October 12 2023",
+   "Read its duration and convert to minutes"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0028401499999999996
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerLongestDistanceActivity",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track list and show mountain biking activities",
+   "Find activities from this week starting Monday Oct 9",
+   "Identify the longest distance in meters rounded to nearest integer"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0037180499999999997
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerLongestDistanceActivity",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Show mountain biking activities list",
+   "Filter to activities this week starting Monday Oct 9",
+   "Identify the longest distance covered"
+  ],
+  "filters": true,
+  "step1": "launch",
+  "cost": 0.0029083499999999997
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerLongestDistanceActivity",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track/activity list",
+   "Show mountain biking activities for Mon Oct 9 to Sun Oct 15",
+   "Identify the longest distance and convert to meters rounded"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0036190500000000004
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerLongestDistanceActivity",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the recorded tracks list",
+   "Find mountain biking activities dated Monday Oct 9 to Sunday Oct 15",
+   "Identify the longest distance and convert to meters rounded to nearest integer"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00350695
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerLongestDistanceActivity",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the activity/track list history",
+   "Filter or identify mountain biking activities from Monday Oct 9 to Sunday Oct 15",
+   "Find the longest distance among those activities in meters rounded to nearest integer"
+  ],
+  "filters": true,
+  "step1": "launch",
+  "cost": 0.00337595
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerLongestDistanceActivity",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the activity history or list",
+   "Find mountain biking activities dated Monday Oct 9 to Sunday Oct 15",
+   "Identify the longest distance among them and read its distance in meters"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0033163
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerLongestDistanceActivity",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Show mountain biking activities",
+   "Focus on this week from Monday Oct 9 to Sunday Oct 15",
+   "Identify the longest distance covered in meters rounded to nearest integer"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0034086499999999996
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerLongestDistanceActivity",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track list showing recorded activities",
+   "Find mountain biking activities dated Monday Oct 9 to Sunday Oct 15",
+   "Read distances and determine the longest distance in meters rounded to nearest integer"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0034064
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerLongestDistanceActivity",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track/activity list",
+   "Find mountain biking activities dated Monday Oct 9 to Sunday Oct 15",
+   "Read distances and identify the longest distance in meters"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0028719
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerLongestDistanceActivity",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the list of recorded tracks",
+   "Find mountain biking activities dated Monday Oct 9 to Sunday Oct 15",
+   "Identify the longest distance among those activities in meters"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0029198999999999996
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerTotalDistanceForCategoryOverInterval",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track list with activities and dates",
+   "Find kayaking activities dated Oct 09 2023 to Oct 10 2023",
+   "Sum their distances in meters rounded to nearest integer"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0031957999999999995
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerTotalDistanceForCategoryOverInterval",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Show track list filtered to kayaking activities",
+   "Show activities from October 09 2023 to October 10 2023",
+   "Read distance for each kayaking activity and sum to total meters rounded"
+  ],
+  "filters": true,
+  "step1": "launch",
+  "cost": 0.00303625
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerTotalDistanceForCategoryOverInterval",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Find kayaking activities recorded from October 09 2023 to October 10 2023",
+   "Read the distance for each matching kayaking activity and sum to total meters rounded to nearest integer"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00296395
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerTotalDistanceForCategoryOverInterval",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Show the list of kayaking activities",
+   "Open the kayaking activities dated Oct 09 2023 to Oct 10 2023 to view their distances",
+   "Add the distances together in meters rounded to nearest integer"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0029077
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerTotalDistanceForCategoryOverInterval",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track list showing recorded activities",
+   "Find kayaking activities dated Oct 09 2023 to Oct 10 2023",
+   "Read distances for those kayaking tracks and sum to total meters"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0036434500000000003
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerTotalDistanceForCategoryOverInterval",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Locate kayaking activities dated Oct 09 2023 to Oct 10 2023",
+   "Read the distance for each matching kayaking activity",
+   "Add the distances and round to nearest integer meters"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0044193
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerTotalDistanceForCategoryOverInterval",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Show the track list filtered to kayaking activities around Oct 09 2023 to Oct 10 2023",
+   "Open each kayaking track in that date range to read its distance",
+   "Add the distances and round total to nearest meter"
+  ],
+  "filters": true,
+  "step1": "launch",
+  "cost": 0.00253765
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerTotalDistanceForCategoryOverInterval",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Go to the track list showing activities with dates and sport types",
+   "Find kayaking activities dated October 09 2023 to October 10 2023",
+   "Read the distance for each matching kayaking activity and sum to total meters rounded to nearest integer"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0028261499999999995
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerTotalDistanceForCategoryOverInterval",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track list with kayaking activities",
+   "Locate kayaking tracks dated October 09 2023 to October 10 2023",
+   "Read the distance for each track and sum to total meters rounded"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0033194
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerTotalDistanceForCategoryOverInterval",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track list showing recorded activities",
+   "Find kayaking activities dated October 09 2023 to October 10 2023",
+   "Read the distances and total them in meters rounded to nearest integer"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00393015
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerTotalDurationForCategoryThisWeek",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track list or history",
+   "Find running activities dated Monday Oct 9 to Sunday Oct 15",
+   "Add up durations and convert to total minutes"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00343685
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerTotalDurationForCategoryThisWeek",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Show running activities for this week starting Monday Oct 9",
+   "Sum the durations of the running activities",
+   "Report the total duration in minutes as a single integer"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0025567
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerTotalDurationForCategoryThisWeek",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track list or statistics view",
+   "Find running activities dated Monday Oct 9 to Sunday Oct 15",
+   "Sum their durations and convert to minutes"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0028147
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerTotalDurationForCategoryThisWeek",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track list or statistics for activities",
+   "Filter to Running activities for this week Mon Oct 9 to Sun Oct 15",
+   "Add up durations and report total in minutes"
+  ],
+  "filters": true,
+  "step1": "launch",
+  "cost": 0.0029867
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerTotalDurationForCategoryThisWeek",
+  "variant": "cur",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open track list or statistics/history",
+   "Filter to Running activities for Monday Oct 9 to Sunday Oct 15",
+   "Add up durations and report total in minutes as single integer"
+  ],
+  "filters": true,
+  "step1": "launch",
+  "cost": 0.0028749500000000002
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerTotalDurationForCategoryThisWeek",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Navigate to the tracks list showing activities",
+   "Identify running activities dated Monday Oct 9 to Sunday Oct 15",
+   "Sum their durations and express total in minutes"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0044728
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerTotalDurationForCategoryThisWeek",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the list of recorded activities/tracks",
+   "Identify running activities dated Monday Oct 9 to Sunday Oct 15",
+   "Add up their durations and express total in minutes"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0035258999999999998
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerTotalDurationForCategoryThisWeek",
+  "variant": "guard",
+  "plan": [
+   "Open OpenTracks",
+   "Show running activities for this week Mon Oct 9 to Sun Oct 15",
+   "Read total duration of running activities in minutes"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0042163999999999995
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerTotalDurationForCategoryThisWeek",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track list or statistics view showing dates and activity types",
+   "Find running activities dated Monday Oct 9 through Sunday Oct 15",
+   "Add their durations together as minutes"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0026728999999999998
+ },
+ {
+  "kind": "aw",
+  "task": "SportsTrackerTotalDurationForCategoryThisWeek",
+  "variant": "guard",
+  "plan": [
+   "Open the OpenTracks app",
+   "Open the track list or statistics view showing activities",
+   "Show running activities dated Monday Oct 9 to Sunday Oct 15",
+   "Add up the running durations and convert to total minutes"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0035113999999999996
+ },
+ {
+  "kind": "aw",
+  "task": "TasksCompletedTasksForDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "Navigate to tasks for October 16 2023",
+   "Show completed tasks for that date"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0031136
+ },
+ {
+  "kind": "aw",
+  "task": "TasksCompletedTasksForDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "Navigate to October 16 2023",
+   "Show completed tasks for that date",
+   "Read the completed task titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0026902000000000002
+ },
+ {
+  "kind": "aw",
+  "task": "TasksCompletedTasksForDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "Navigate to October 16 2023",
+   "Show completed tasks for that date",
+   "Read the titles of completed tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0026914499999999997
+ },
+ {
+  "kind": "aw",
+  "task": "TasksCompletedTasksForDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "Navigate to October 16 2023",
+   "Show completed tasks for that date",
+   "Read the completed task titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0024978500000000002
+ },
+ {
+  "kind": "aw",
+  "task": "TasksCompletedTasksForDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "Navigate to tasks for October 16 2023",
+   "Show completed tasks for that date",
+   "Read the titles of completed tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0032847
+ },
+ {
+  "kind": "aw",
+  "task": "TasksCompletedTasksForDate",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "Navigate to tasks for October 16 2023",
+   "Read the titles of completed tasks for that date"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0042200499999999995
+ },
+ {
+  "kind": "aw",
+  "task": "TasksCompletedTasksForDate",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "Navigate to tasks for October 16 2023",
+   "Show completed tasks for that date",
+   "Read the completed task titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0028434
+ },
+ {
+  "kind": "aw",
+  "task": "TasksCompletedTasksForDate",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "Navigate to tasks for October 16 2023",
+   "Show completed tasks for that date",
+   "Read the titles of completed tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00282765
+ },
+ {
+  "kind": "aw",
+  "task": "TasksCompletedTasksForDate",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "Navigate to October 16, 2023",
+   "Show completed tasks for that date",
+   "Read the titles of the completed tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00373715
+ },
+ {
+  "kind": "aw",
+  "task": "TasksCompletedTasksForDate",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "Navigate to October 16, 2023",
+   "View completed tasks for that date",
+   "Read the completed task titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0031184
+ },
+ {
+  "kind": "aw",
+  "task": "TasksDueNextWeek",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "View all task lists with due dates",
+   "Identify tasks due Oct 16 to Oct 22 for next week starting Monday",
+   "Count the matching tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00382985
+ },
+ {
+  "kind": "aw",
+  "task": "TasksDueNextWeek",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "View task lists with due dates",
+   "Identify tasks due Mon Oct 16 to Sun Oct 22",
+   "Count matching tasks as a single integer"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00313845
+ },
+ {
+  "kind": "aw",
+  "task": "TasksDueNextWeek",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "View the task list with due dates",
+   "Count tasks due Oct 16 to Oct 22 as next week"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0033451999999999996
+ },
+ {
+  "kind": "aw",
+  "task": "TasksDueNextWeek",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "View all tasks with their due dates",
+   "Count tasks due Mon Oct 16 through Sun Oct 22"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0031866999999999998
+ },
+ {
+  "kind": "aw",
+  "task": "TasksDueNextWeek",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "View tasks with their due dates",
+   "Identify tasks due Monday Oct 16 to Sunday Oct 22",
+   "Count the matching tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0035937
+ },
+ {
+  "kind": "aw",
+  "task": "TasksDueNextWeek",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "View the task lists to see due dates",
+   "Count tasks due Mon Oct 16 through Sun Oct 22"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0033530499999999998
+ },
+ {
+  "kind": "aw",
+  "task": "TasksDueNextWeek",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "View tasks with their due dates",
+   "Count tasks due Oct 16 to Oct 22"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0040519
+ },
+ {
+  "kind": "aw",
+  "task": "TasksDueNextWeek",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "View tasks with their due dates",
+   "Count tasks due Monday Oct 16 to Sunday Oct 22"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0026689
+ },
+ {
+  "kind": "aw",
+  "task": "TasksDueNextWeek",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "View tasks showing their due dates",
+   "Count tasks due Mon Oct 16 to Sun Oct 22"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00397365
+ },
+ {
+  "kind": "aw",
+  "task": "TasksDueNextWeek",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "View tasks with their due dates",
+   "Identify tasks due Mon Oct 16 through Sun Oct 22",
+   "Report the count as a single integer"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00274515
+ },
+ {
+  "kind": "aw",
+  "task": "TasksDueOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "Show tasks with due dates including October 24, 2023",
+   "Read off the titles due on October 24, 2023"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0034273
+ },
+ {
+  "kind": "aw",
+  "task": "TasksDueOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "Locate tasks due October 24, 2023",
+   "Read off the titles of those tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.003169
+ },
+ {
+  "kind": "aw",
+  "task": "TasksDueOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "Navigate to task lists showing due dates",
+   "Locate tasks due October 24 2023",
+   "Read off the titles only"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0026927
+ },
+ {
+  "kind": "aw",
+  "task": "TasksDueOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "Navigate to tasks due October 24, 2023",
+   "Read the titles of tasks due that date"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00315395
+ },
+ {
+  "kind": "aw",
+  "task": "TasksDueOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "Locate tasks due October 24, 2023",
+   "Read the titles of the matching tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0028497
+ },
+ {
+  "kind": "aw",
+  "task": "TasksDueOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "View the task list showing due dates",
+   "Identify tasks due October 24 2023 and read their titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00434455
+ },
+ {
+  "kind": "aw",
+  "task": "TasksDueOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "Find tasks due October 24, 2023",
+   "Read the titles of the matching tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0030513999999999997
+ },
+ {
+  "kind": "aw",
+  "task": "TasksDueOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "Show tasks due October 24 2023",
+   "Read the titles of tasks due that date"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0026093999999999996
+ },
+ {
+  "kind": "aw",
+  "task": "TasksDueOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "Find tasks due October 24, 2023",
+   "Read the titles of tasks due that date"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0035371499999999993
+ },
+ {
+  "kind": "aw",
+  "task": "TasksDueOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "Find tasks due October 24, 2023",
+   "Read the titles of the matching tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0024893
+ },
+ {
+  "kind": "aw",
+  "task": "TasksHighPriorityTasksDueOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "Navigate to the list showing tasks by due date",
+   "Find tasks due October 18 2023 marked high priority",
+   "Read their titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00376985
+ },
+ {
+  "kind": "aw",
+  "task": "TasksHighPriorityTasksDueOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "Navigate to tasks due October 18, 2023",
+   "Identify high priority tasks due that date",
+   "Read off the title(s)"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0032272
+ },
+ {
+  "kind": "aw",
+  "task": "TasksHighPriorityTasksDueOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "Find the list of tasks due October 18 2023",
+   "Identify tasks marked high priority",
+   "Read the titles of matching tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00304445
+ },
+ {
+  "kind": "aw",
+  "task": "TasksHighPriorityTasksDueOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "Find tasks due October 18 2023",
+   "Identify those with high priority",
+   "Read their titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0030539499999999997
+ },
+ {
+  "kind": "aw",
+  "task": "TasksHighPriorityTasksDueOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "Find tasks due October 18, 2023",
+   "Identify high-priority tasks and read their titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0031631999999999997
+ },
+ {
+  "kind": "aw",
+  "task": "TasksHighPriorityTasksDueOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "Locate tasks due October 18, 2023",
+   "Identify high-priority tasks due that date and read their titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0038633
+ },
+ {
+  "kind": "aw",
+  "task": "TasksHighPriorityTasksDueOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "Find tasks due October 18 2023",
+   "Identify the high priority tasks among them and note the titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00333215
+ },
+ {
+  "kind": "aw",
+  "task": "TasksHighPriorityTasksDueOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "Locate tasks due October 18 2023",
+   "Read titles of high priority tasks due that date"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0033466499999999996
+ },
+ {
+  "kind": "aw",
+  "task": "TasksHighPriorityTasksDueOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "Find tasks due October 18, 2023",
+   "Identify high-priority tasks and read their titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0036539
+ },
+ {
+  "kind": "aw",
+  "task": "TasksHighPriorityTasksDueOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "Find tasks due October 18, 2023",
+   "Identify those marked high priority and read their titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0035264
+ },
+ {
+  "kind": "aw",
+  "task": "TasksHighPriorityTasks",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "Find the list showing high priority tasks",
+   "Read the titles of the high priority tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0028466
+ },
+ {
+  "kind": "aw",
+  "task": "TasksHighPriorityTasks",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "Show high priority tasks",
+   "Read the titles of high priority tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00277195
+ },
+ {
+  "kind": "aw",
+  "task": "TasksHighPriorityTasks",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "View the task lists to find tasks",
+   "Identify tasks marked high priority"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00295595
+ },
+ {
+  "kind": "aw",
+  "task": "TasksHighPriorityTasks",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "View task lists to find high priority tasks",
+   "Read the titles of high priority tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0030872
+ },
+ {
+  "kind": "aw",
+  "task": "TasksHighPriorityTasks",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "Show the task list with high priority tasks",
+   "Read the titles of high priority tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0027217
+ },
+ {
+  "kind": "aw",
+  "task": "TasksHighPriorityTasks",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "Locate the high priority tasks",
+   "Read the titles of high priority tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00326555
+ },
+ {
+  "kind": "aw",
+  "task": "TasksHighPriorityTasks",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "Locate the high priority tasks",
+   "Read the titles of the high priority tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0031589
+ },
+ {
+  "kind": "aw",
+  "task": "TasksHighPriorityTasks",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "Locate the high priority tasks",
+   "Read the titles of the high priority tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0037698000000000002
+ },
+ {
+  "kind": "aw",
+  "task": "TasksHighPriorityTasks",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "Find the view showing high priority tasks",
+   "Read the titles of the high priority tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00382015
+ },
+ {
+  "kind": "aw",
+  "task": "TasksHighPriorityTasks",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "View the task list showing priorities",
+   "Read the titles of high priority tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0037071499999999998
+ },
+ {
+  "kind": "aw",
+  "task": "TasksIncompleteTasksOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "View task list with due dates up to Thursday",
+   "Identify incomplete tasks due by Thursday"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0029933499999999997
+ },
+ {
+  "kind": "aw",
+  "task": "TasksIncompleteTasksOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "Show incomplete tasks with due dates",
+   "Find tasks due by Thursday Oct 19",
+   "Read the titles of those tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00308245
+ },
+ {
+  "kind": "aw",
+  "task": "TasksIncompleteTasksOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "Show the incomplete task list",
+   "Find tasks due by Thursday Oct 19"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00307845
+ },
+ {
+  "kind": "aw",
+  "task": "TasksIncompleteTasksOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "View the task list with due dates",
+   "Identify incomplete tasks due by Thursday"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0029637
+ },
+ {
+  "kind": "aw",
+  "task": "TasksIncompleteTasksOnDate",
+  "variant": "cur",
+  "plan": [
+   "Open the Tasks app",
+   "View task lists for tasks due by Thursday Oct 19",
+   "Identify incomplete tasks due by Thursday and read their titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0031267
+ },
+ {
+  "kind": "aw",
+  "task": "TasksIncompleteTasksOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "Show incomplete tasks with due dates",
+   "Find tasks due by Thursday Oct 19",
+   "Read the titles to answer"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0036373
+ },
+ {
+  "kind": "aw",
+  "task": "TasksIncompleteTasksOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "Locate tasks due by Thursday",
+   "Read titles of incomplete tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0029024
+ },
+ {
+  "kind": "aw",
+  "task": "TasksIncompleteTasksOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "View the task lists to find incomplete tasks",
+   "Identify tasks due by Thursday October 19",
+   "Read the titles of those incomplete tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0024463999999999996
+ },
+ {
+  "kind": "aw",
+  "task": "TasksIncompleteTasksOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "View the task list with due dates",
+   "Identify incomplete tasks due by Thursday",
+   "Read off their titles"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.00260465
+ },
+ {
+  "kind": "aw",
+  "task": "TasksIncompleteTasksOnDate",
+  "variant": "guard",
+  "plan": [
+   "Open the Tasks app",
+   "Show incomplete tasks due by Thursday",
+   "Read the titles of those tasks"
+  ],
+  "filters": false,
+  "step1": "launch",
+  "cost": 0.0031939
+ }
+]

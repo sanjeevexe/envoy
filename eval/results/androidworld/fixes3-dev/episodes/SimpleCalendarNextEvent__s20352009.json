@@ -1,0 +1,82 @@
+{
+ "task": "SimpleCalendarNextEvent",
+ "seed": 20352009,
+ "goal": "What is my next upcoming event in Simple Calendar Pro? Answer with the title only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 1.0,
+ "aw_run_time_s": 22.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 10:10:57.307997",
+ "envoy": {
+  "run_id": "aw-fixes3-dev-1028-101037-0e82",
+  "goal": "What is my next upcoming event in Simple Calendar Pro? Answer with the title only. If there are multiples titles, format your answer in a comma separated list.",
+  "max_steps": 10,
+  "config": {},
+  "status": "done",
+  "result": "Board meeting",
+  "done": true,
+  "answer": "Board meeting",
+  "steps_device": 3,
+  "iterations": 4,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "done": 1
+  },
+  "model_calls": 5,
+  "input_tokens": 12046,
+  "cached_tokens": 9525,
+  "output_tokens": 936,
+  "reasoning_tokens": 582,
+  "cost_usd": 0.000458,
+  "cost_at_standard_usd": 0.008558,
+  "duration_s": 15.52,
+  "model_s": 10.15,
+  "device_s": 5.37,
+  "connect_s": 0.91,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Open Simple Calendar Pro",
+    "Go to upcoming events or agenda view",
+    "Find the next event after Oct 15 2023 15:34",
+    "Read the title of the next upcoming event"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "next upcoming event title(s)",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Board"
+  },
+  "trace_dir": "data/runs/aw-fixes3-dev-1028-101037-0e82",
+  "envoy_commit": "70ed7a8470867f86dd6a548d0fdce2fa4977073e",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes3-dev/traces/SimpleCalendarNextEvent__s20352009.jsonl.gz",
+  "wall_s": 18.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

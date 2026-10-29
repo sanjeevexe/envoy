@@ -1,0 +1,105 @@
+{
+ "task": "RecipeDeleteSingleRecipe",
+ "seed": 4252496861,
+ "goal": "Delete the following recipes from Broccoli app: Thai Peanut Noodle Salad.",
+ "score": 0.0,
+ "aw_run_time_s": 17.8,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 18:00:20.747882",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-180005-28da",
+  "goal": "Delete the following recipes from Broccoli app: Thai Peanut Noodle Salad.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "broccoli_delete_recipe",
+   "stage": "model confirmed",
+   "inputs": {
+    "recipe_name": "Thai Peanut Noodle Salad"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "broccoli_delete_recipes_2",
+     0.778
+    ],
+    [
+     "broccoli_delete_recipes",
+     0.628
+    ],
+    [
+     "broccoli_delete_recipe",
+     0.583
+    ]
+   ]
+  },
+  "status": "failed",
+  "result": "step tap_delete: before-checks failed: app in front is PopupWindow:30f4ef5",
+  "routine": "broccoli_delete_recipe",
+  "version": 1,
+  "done": false,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 3,
+  "rung": 1,
+  "steps": [
+   {
+    "id": "launch_broccoli",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_recipe_details",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_more_options",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_delete",
+    "status": "failed",
+    "rung": 1,
+    "rungs": [
+     "wait and retry: waited 5 s"
+    ],
+    "repairs": 0,
+    "detail": "step tap_delete: before-checks failed: app in front is PopupWindow:30f4ef5"
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.002003,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 10.09,
+  "routine_duration_s": 7.4,
+  "trace_dir": "data/runs/aw-routines-verify-1028-180005-28da",
+  "wall_s": 12.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.6
+  }
+ }
+}

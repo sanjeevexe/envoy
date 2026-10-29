@@ -1,0 +1,1195 @@
+{
+ "summary": {
+  "routine": {
+   "episodes": 69,
+   "success": 55.0,
+   "median_calls": 1,
+   "median_cost_std": 0.002066,
+   "median_s": 8.27
+  },
+  "agent": {
+   "episodes": 69,
+   "success": 63.0,
+   "median_calls": 6,
+   "median_cost_std": 0.012249,
+   "median_s": 18.97
+  }
+ },
+ "tasks": [
+  {
+   "task": "AudioRecorderRecordAudioWithFileName",
+   "seeds": [
+    92349091,
+    1099073067,
+    3061395711
+   ],
+   "routine_success": 3.0,
+   "agent_success": 3.0,
+   "routine_calls": [
+    1,
+    1,
+    1
+   ],
+   "agent_calls": [
+    12,
+    14,
+    10
+   ],
+   "routine_cost_std": [
+    0.002515,
+    0.002627,
+    0.002848
+   ],
+   "agent_cost_std": [
+    0.017384,
+    0.020732,
+    0.017742
+   ],
+   "routine_s": [
+    17.15,
+    16.48,
+    14.41
+   ],
+   "agent_s": [
+    25.73,
+    32.59,
+    27.04
+   ],
+   "routine_status": [
+    "done",
+    "done",
+    "done"
+   ],
+   "repaired_steps": [],
+   "match": [
+    "audio_recorder_record_clip",
+    "audio_recorder_record_clip",
+    "audio_recorder_record_clip"
+   ]
+  },
+  {
+   "task": "CameraTakePhoto",
+   "seeds": [
+    332350226,
+    2463937979,
+    4046708894
+   ],
+   "routine_success": 3.0,
+   "agent_success": 3.0,
+   "routine_calls": [
+    1,
+    1,
+    1
+   ],
+   "agent_calls": [
+    5,
+    7,
+    6
+   ],
+   "routine_cost_std": [
+    0.001324,
+    0.001953,
+    0.001886
+   ],
+   "agent_cost_std": [
+    0.010461,
+    0.016429,
+    0.016361
+   ],
+   "routine_s": [
+    8.36,
+    7.86,
+    7.33
+   ],
+   "agent_s": [
+    15.75,
+    19.07,
+    20.84
+   ],
+   "routine_status": [
+    "done",
+    "done",
+    "done"
+   ],
+   "repaired_steps": [],
+   "match": [
+    "camera_take_photo",
+    "camera_take_photo",
+    "camera_take_photo"
+   ]
+  },
+  {
+   "task": "ClockStopWatchPausedVerify",
+   "seeds": [
+    318062807,
+    629279813,
+    1833061731
+   ],
+   "routine_success": 3.0,
+   "agent_success": 3.0,
+   "routine_calls": [
+    1,
+    1,
+    1
+   ],
+   "agent_calls": [
+    5,
+    6,
+    6
+   ],
+   "routine_cost_std": [
+    0.001355,
+    0.001368,
+    0.001457
+   ],
+   "agent_cost_std": [
+    0.009813,
+    0.012769,
+    0.01352
+   ],
+   "routine_s": [
+    5.7,
+    3.9,
+    3.59
+   ],
+   "agent_s": [
+    12.25,
+    13.89,
+    13.89
+   ],
+   "routine_status": [
+    "done",
+    "done",
+    "done"
+   ],
+   "repaired_steps": [],
+   "match": [
+    "clock_pause_stopwatch",
+    "clock_pause_stopwatch",
+    "clock_pause_stopwatch"
+   ]
+  },
+  {
+   "task": "ClockStopWatchRunning",
+   "seeds": [
+    982386346,
+    2244129732,
+    2304307552
+   ],
+   "routine_success": 3.0,
+   "agent_success": 3.0,
+   "routine_calls": [
+    1,
+    1,
+    1
+   ],
+   "agent_calls": [
+    5,
+    5,
+    5
+   ],
+   "routine_cost_std": [
+    0.001504,
+    0.000968,
+    0.001168
+   ],
+   "agent_cost_std": [
+    0.008125,
+    0.007483,
+    0.007568
+   ],
+   "routine_s": [
+    6.86,
+    6.33,
+    4.92
+   ],
+   "agent_s": [
+    21.66,
+    21.85,
+    19.6
+   ],
+   "routine_status": [
+    "done",
+    "done",
+    "done"
+   ],
+   "repaired_steps": [],
+   "match": [
+    "clock_start_stopwatch",
+    "clock_start_stopwatch",
+    "clock_start_stopwatch"
+   ]
+  },
+  {
+   "task": "ExpenseDeleteSingle",
+   "seeds": [
+    2261660811,
+    3230604870,
+    4059515663
+   ],
+   "routine_success": 3.0,
+   "agent_success": 1.0,
+   "routine_calls": [
+    1,
+    1,
+    1
+   ],
+   "agent_calls": [
+    17,
+    17,
+    6
+   ],
+   "routine_cost_std": [
+    0.001825,
+    0.002309,
+    0.002275
+   ],
+   "agent_cost_std": [
+    0.037512,
+    0.040134,
+    0.009986
+   ],
+   "routine_s": [
+    7.12,
+    7.52,
+    8.32
+   ],
+   "agent_s": [
+    35.12,
+    41.96,
+    13.91
+   ],
+   "routine_status": [
+    "done",
+    "done",
+    "done"
+   ],
+   "repaired_steps": [],
+   "match": [
+    "pro_expense_delete_expense",
+    "pro_expense_delete_expense",
+    "pro_expense_delete_expense"
+   ]
+  },
+  {
+   "task": "MarkorCreateFolder",
+   "seeds": [
+    1649268522,
+    2214371470,
+    2384214437
+   ],
+   "routine_success": 3.0,
+   "agent_success": 3.0,
+   "routine_calls": [
+    1,
+    1,
+    1
+   ],
+   "agent_calls": [
+    6,
+    6,
+    6
+   ],
+   "routine_cost_std": [
+    0.001897,
+    0.002106,
+    0.001587
+   ],
+   "agent_cost_std": [
+    0.011112,
+    0.011478,
+    0.009206
+   ],
+   "routine_s": [
+    7.2,
+    7.14,
+    4.91
+   ],
+   "agent_s": [
+    13.69,
+    13.54,
+    13.05
+   ],
+   "routine_status": [
+    "done",
+    "done",
+    "done"
+   ],
+   "repaired_steps": [],
+   "match": [
+    "markor_create_folder",
+    "markor_create_folder",
+    "markor_create_folder"
+   ]
+  },
+  {
+   "task": "NotesMeetingAttendeeCount",
+   "seeds": [
+    1526838421,
+    3045878884,
+    4155412042
+   ],
+   "routine_success": 0.0,
+   "agent_success": 3.0,
+   "routine_calls": [
+    1,
+    1,
+    1
+   ],
+   "agent_calls": [
+    7,
+    6,
+    7
+   ],
+   "routine_cost_std": [
+    0.002721,
+    0.002874,
+    0.002615
+   ],
+   "agent_cost_std": [
+    0.012443,
+    0.009728,
+    0.01317
+   ],
+   "routine_s": [
+    15.2,
+    15.83,
+    15.41
+   ],
+   "agent_s": [
+    17.83,
+    13.41,
+    20.4
+   ],
+   "routine_status": [
+    "failed",
+    "failed",
+    "failed"
+   ],
+   "repaired_steps": [],
+   "match": [
+    "joplin_count_meeting_attendees",
+    "joplin_count_meeting_attendees",
+    "joplin_count_meeting_attendees"
+   ]
+  },
+  {
+   "task": "NotesRecipeIngredientCount",
+   "seeds": [
+    446925345,
+    2562736834,
+    2709274826
+   ],
+   "routine_success": 0.0,
+   "agent_success": 3.0,
+   "routine_calls": [
+    1,
+    1,
+    1
+   ],
+   "agent_calls": [
+    9,
+    7,
+    6
+   ],
+   "routine_cost_std": [
+    0.004455,
+    0.003605,
+    0.003871
+   ],
+   "agent_cost_std": [
+    0.017381,
+    0.012589,
+    0.010459
+   ],
+   "routine_s": [
+    22.31,
+    21.17,
+    20.38
+   ],
+   "agent_s": [
+    22.84,
+    16.91,
+    15.66
+   ],
+   "routine_status": [
+    "failed",
+    "failed",
+    "failed"
+   ],
+   "repaired_steps": [],
+   "match": [
+    "joplin_get_ingredient_quantity",
+    "joplin_get_ingredient_quantity",
+    "joplin_get_ingredient_quantity"
+   ]
+  },
+  {
+   "task": "OpenAppTaskEval",
+   "seeds": [
+    1306832883,
+    2349914223,
+    3608958401
+   ],
+   "routine_success": 1.0,
+   "agent_success": 3.0,
+   "routine_calls": [
+    1,
+    1,
+    1
+   ],
+   "agent_calls": [
+    4,
+    4,
+    5
+   ],
+   "routine_cost_std": [
+    0.001948,
+    0.002272,
+    0.003858
+   ],
+   "agent_cost_std": [
+    0.009474,
+    0.008813,
+    0.010489
+   ],
+   "routine_s": [
+    2.36,
+    2.4,
+    7.44
+   ],
+   "agent_s": [
+    10.8,
+    10.95,
+    15.93
+   ],
+   "routine_status": [
+    "no_routine",
+    "no_routine",
+    "done"
+   ],
+   "repaired_steps": [],
+   "match": [
+    null,
+    null,
+    "contacts_open_app"
+   ]
+  },
+  {
+   "task": "RecipeAddSingleRecipe",
+   "seeds": [
+    1067857357,
+    3650422126,
+    3979403281
+   ],
+   "routine_success": 3.0,
+   "agent_success": 2.0,
+   "routine_calls": [
+    1,
+    1,
+    1
+   ],
+   "agent_calls": [
+    12,
+    12,
+    12
+   ],
+   "routine_cost_std": [
+    0.003253,
+    0.00364,
+    0.003477
+   ],
+   "agent_cost_std": [
+    0.0206,
+    0.022129,
+    0.022934
+   ],
+   "routine_s": [
+    11.66,
+    11.97,
+    11.61
+   ],
+   "agent_s": [
+    32.1,
+    28.08,
+    28.91
+   ],
+   "routine_status": [
+    "done",
+    "done",
+    "done"
+   ],
+   "repaired_steps": [],
+   "match": [
+    "broccoli_add_recipe",
+    "broccoli_add_recipe",
+    "broccoli_add_recipe"
+   ]
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipesWithConstraint",
+   "seeds": [
+    2880651181,
+    4123704419,
+    4237822092
+   ],
+   "routine_success": 1.0,
+   "agent_success": 0.0,
+   "routine_calls": [
+    1,
+    1,
+    1
+   ],
+   "agent_calls": [
+    43,
+    43,
+    43
+   ],
+   "routine_cost_std": [
+    0.002408,
+    0.002173,
+    0.0022
+   ],
+   "agent_cost_std": [
+    0.088322,
+    0.098485,
+    0.110581
+   ],
+   "routine_s": [
+    17.97,
+    17.35,
+    17.27
+   ],
+   "agent_s": [
+    118.37,
+    122.12,
+    125.87
+   ],
+   "routine_status": [
+    "done",
+    "done",
+    "done"
+   ],
+   "repaired_steps": [],
+   "match": [
+    "broccoli_delete_recipes_by_ingredient",
+    "broccoli_delete_recipes_by_ingredient",
+    "broccoli_delete_recipes_by_ingredient"
+   ]
+  },
+  {
+   "task": "SimpleCalendarLocationOfEvent",
+   "seeds": [
+    507692354,
+    1424966634,
+    3977283519
+   ],
+   "routine_success": 0.0,
+   "agent_success": 3.0,
+   "routine_calls": [
+    1,
+    1,
+    1
+   ],
+   "agent_calls": [
+    5,
+    5,
+    5
+   ],
+   "routine_cost_std": [
+    0.002063,
+    0.001922,
+    0.002143
+   ],
+   "agent_cost_std": [
+    0.009226,
+    0.00772,
+    0.008295
+   ],
+   "routine_s": [
+    9.87,
+    10.23,
+    9.79
+   ],
+   "agent_s": [
+    11.4,
+    11.05,
+    11.63
+   ],
+   "routine_status": [
+    "failed",
+    "failed",
+    "failed"
+   ],
+   "repaired_steps": [],
+   "match": [
+    "simple_calendar_pro_get_event_location",
+    "simple_calendar_pro_get_event_location",
+    "simple_calendar_pro_get_event_location"
+   ]
+  },
+  {
+   "task": "SimpleSmsReply",
+   "seeds": [
+    865217362,
+    2036699084,
+    2416437184
+   ],
+   "routine_success": 3.0,
+   "agent_success": 3.0,
+   "routine_calls": [
+    1,
+    1,
+    2
+   ],
+   "agent_calls": [
+    6,
+    6,
+    6
+   ],
+   "routine_cost_std": [
+    0.003048,
+    0.002066,
+    0.008299
+   ],
+   "agent_cost_std": [
+    0.008992,
+    0.011226,
+    0.010422
+   ],
+   "routine_s": [
+    10.2,
+    9.27,
+    19.81
+   ],
+   "agent_s": [
+    18.17,
+    19.18,
+    18.89
+   ],
+   "routine_status": [
+    "done",
+    "done",
+    "done"
+   ],
+   "repaired_steps": [
+    "launch_simple_sms_messenger"
+   ],
+   "match": [
+    "simple_sms_messenger_reply_to_conversati",
+    "simple_sms_messenger_reply_to_conversati",
+    "simple_sms_messenger_reply_to_conversati"
+   ]
+  },
+  {
+   "task": "SimpleSmsReplyMostRecent",
+   "seeds": [
+    532855848,
+    1199210676,
+    1879852763
+   ],
+   "routine_success": 3.0,
+   "agent_success": 3.0,
+   "routine_calls": [
+    1,
+    1,
+    1
+   ],
+   "agent_calls": [
+    6,
+    6,
+    6
+   ],
+   "routine_cost_std": [
+    0.002493,
+    0.00227,
+    0.002161
+   ],
+   "agent_cost_std": [
+    0.009801,
+    0.009204,
+    0.008956
+   ],
+   "routine_s": [
+    11.8,
+    12.29,
+    12.14
+   ],
+   "agent_s": [
+    17.79,
+    18.97,
+    19.88
+   ],
+   "routine_status": [
+    "done",
+    "done",
+    "done"
+   ],
+   "repaired_steps": [],
+   "match": [
+    "simple_sms_messenger_reply_most_recent_m",
+    "simple_sms_messenger_reply_most_recent_m",
+    "simple_sms_messenger_reply_most_recent_m"
+   ]
+  },
+  {
+   "task": "SimpleSmsSend",
+   "seeds": [
+    2549194941,
+    2690262845,
+    2804997813
+   ],
+   "routine_success": 3.0,
+   "agent_success": 3.0,
+   "routine_calls": [
+    1,
+    1,
+    1
+   ],
+   "agent_calls": [
+    8,
+    8,
+    8
+   ],
+   "routine_cost_std": [
+    0.002646,
+    0.002859,
+    0.003181
+   ],
+   "agent_cost_std": [
+    0.012249,
+    0.012887,
+    0.011278
+   ],
+   "routine_s": [
+    7.13,
+    6.63,
+    7.48
+   ],
+   "agent_s": [
+    16.98,
+    18.93,
+    17.68
+   ],
+   "routine_status": [
+    "done",
+    "done",
+    "done"
+   ],
+   "repaired_steps": [],
+   "match": [
+    "simple_sms_messenger_send_message",
+    "simple_sms_messenger_send_message",
+    "simple_sms_messenger_send_message"
+   ]
+  },
+  {
+   "task": "SimpleSmsSendClipboardContent",
+   "seeds": [
+    177611652,
+    523683089,
+    4005425627
+   ],
+   "routine_success": 3.0,
+   "agent_success": 3.0,
+   "routine_calls": [
+    1,
+    1,
+    1
+   ],
+   "agent_calls": [
+    9,
+    9,
+    9
+   ],
+   "routine_cost_std": [
+    0.002059,
+    0.00262,
+    0.002867
+   ],
+   "agent_cost_std": [
+    0.016835,
+    0.01627,
+    0.015208
+   ],
+   "routine_s": [
+    10.56,
+    8.98,
+    9.76
+   ],
+   "agent_s": [
+    23.49,
+    25.03,
+    22.87
+   ],
+   "routine_status": [
+    "done",
+    "done",
+    "done"
+   ],
+   "repaired_steps": [],
+   "match": [
+    "simple_sms_messenger_send_clipboard_mess",
+    "simple_sms_messenger_send_clipboard_mess",
+    "simple_sms_messenger_send_clipboard_mess"
+   ]
+  },
+  {
+   "task": "SystemBluetoothTurnOffVerify",
+   "seeds": [
+    1450632036,
+    2468557502,
+    2738584926
+   ],
+   "routine_success": 3.0,
+   "agent_success": 3.0,
+   "routine_calls": [
+    1,
+    1,
+    1
+   ],
+   "agent_calls": [
+    7,
+    6,
+    7
+   ],
+   "routine_cost_std": [
+    0.001274,
+    0.00121,
+    0.00121
+   ],
+   "agent_cost_std": [
+    0.011867,
+    0.009321,
+    0.012249
+   ],
+   "routine_s": [
+    6.15,
+    7.14,
+    7.1
+   ],
+   "agent_s": [
+    14.81,
+    12.09,
+    17.64
+   ],
+   "routine_status": [
+    "done",
+    "done",
+    "done"
+   ],
+   "repaired_steps": [],
+   "match": [
+    "settings_turn_off_bluetooth",
+    "settings_turn_off_bluetooth",
+    "settings_turn_off_bluetooth"
+   ]
+  },
+  {
+   "task": "SystemBluetoothTurnOnVerify",
+   "seeds": [
+    2331832354,
+    3338005320,
+    4002356261
+   ],
+   "routine_success": 3.0,
+   "agent_success": 3.0,
+   "routine_calls": [
+    1,
+    1,
+    1
+   ],
+   "agent_calls": [
+    6,
+    6,
+    6
+   ],
+   "routine_cost_std": [
+    0.001932,
+    0.00114,
+    0.000958
+   ],
+   "agent_cost_std": [
+    0.008932,
+    0.009108,
+    0.009253
+   ],
+   "routine_s": [
+    5.85,
+    5.49,
+    5.31
+   ],
+   "agent_s": [
+    13.7,
+    12.25,
+    14.35
+   ],
+   "routine_status": [
+    "done",
+    "done",
+    "done"
+   ],
+   "repaired_steps": [],
+   "match": [
+    "settings_turn_on_bluetooth",
+    "settings_turn_on_bluetooth",
+    "settings_turn_on_bluetooth"
+   ]
+  },
+  {
+   "task": "SystemBrightnessMaxVerify",
+   "seeds": [
+    112283219,
+    411723837,
+    3750735005
+   ],
+   "routine_success": 3.0,
+   "agent_success": 3.0,
+   "routine_calls": [
+    1,
+    1,
+    1
+   ],
+   "agent_calls": [
+    6,
+    6,
+    6
+   ],
+   "routine_cost_std": [
+    0.002289,
+    0.002029,
+    0.002037
+   ],
+   "agent_cost_std": [
+    0.011585,
+    0.013827,
+    0.014211
+   ],
+   "routine_s": [
+    6.87,
+    7.18,
+    7.24
+   ],
+   "agent_s": [
+    25.89,
+    28.15,
+    26.77
+   ],
+   "routine_status": [
+    "done",
+    "done",
+    "done"
+   ],
+   "repaired_steps": [],
+   "match": [
+    "settings_set_brightness_max",
+    "settings_set_brightness_max",
+    "settings_set_brightness_max"
+   ]
+  },
+  {
+   "task": "SystemBrightnessMin",
+   "seeds": [
+    1600796951,
+    2563840600,
+    4117975267
+   ],
+   "routine_success": 3.0,
+   "agent_success": 3.0,
+   "routine_calls": [
+    1,
+    1,
+    1
+   ],
+   "agent_calls": [
+    9,
+    9,
+    12
+   ],
+   "routine_cost_std": [
+    0.001354,
+    0.00182,
+    0.00182
+   ],
+   "agent_cost_std": [
+    0.021246,
+    0.019235,
+    0.030321
+   ],
+   "routine_s": [
+    8.27,
+    8.71,
+    8.93
+   ],
+   "agent_s": [
+    58.92,
+    56.48,
+    58.7
+   ],
+   "routine_status": [
+    "done",
+    "done",
+    "done"
+   ],
+   "repaired_steps": [],
+   "match": [
+    "settings_set_brightness_minimum_2",
+    "settings_set_brightness_minimum_2",
+    "settings_set_brightness_minimum_2"
+   ]
+  },
+  {
+   "task": "SystemBrightnessMinVerify",
+   "seeds": [
+    2121593197,
+    3267679106,
+    4031643574
+   ],
+   "routine_success": 3.0,
+   "agent_success": 3.0,
+   "routine_calls": [
+    1,
+    1,
+    1
+   ],
+   "agent_calls": [
+    6,
+    6,
+    6
+   ],
+   "routine_cost_std": [
+    0.001599,
+    0.002122,
+    0.001986
+   ],
+   "agent_cost_std": [
+    0.011333,
+    0.019316,
+    0.015492
+   ],
+   "routine_s": [
+    8.99,
+    8.97,
+    9.33
+   ],
+   "agent_s": [
+    27.22,
+    26.01,
+    26.39
+   ],
+   "routine_status": [
+    "done",
+    "done",
+    "done"
+   ],
+   "repaired_steps": [],
+   "match": [
+    "settings_set_brightness_minimum_2",
+    "settings_set_brightness_minimum_2",
+    "settings_set_brightness_minimum_2"
+   ]
+  },
+  {
+   "task": "SystemWifiTurnOff",
+   "seeds": [
+    712190778,
+    3993811731,
+    4094089946
+   ],
+   "routine_success": 3.0,
+   "agent_success": 3.0,
+   "routine_calls": [
+    1,
+    1,
+    1
+   ],
+   "agent_calls": [
+    6,
+    6,
+    6
+   ],
+   "routine_cost_std": [
+    0.001444,
+    0.001571,
+    0.00166
+   ],
+   "agent_cost_std": [
+    0.011054,
+    0.010561,
+    0.009351
+   ],
+   "routine_s": [
+    6.53,
+    7.06,
+    6.38
+   ],
+   "agent_s": [
+    14.87,
+    14.69,
+    14.75
+   ],
+   "routine_status": [
+    "done",
+    "done",
+    "done"
+   ],
+   "repaired_steps": [],
+   "match": [
+    "settings_turn_off_wifi_2",
+    "settings_turn_off_wifi_2",
+    "settings_turn_off_wifi_2"
+   ]
+  },
+  {
+   "task": "TurnOnWifiAndOpenApp",
+   "seeds": [
+    144314761,
+    4007373772,
+    4094389260
+   ],
+   "routine_success": 2.0,
+   "agent_success": 3.0,
+   "routine_calls": [
+    1,
+    1,
+    1
+   ],
+   "agent_calls": [
+    7,
+    22,
+    9
+   ],
+   "routine_cost_std": [
+    0.002368,
+    0.001385,
+    0.00196
+   ],
+   "agent_cost_std": [
+    0.014016,
+    0.045399,
+    0.019617
+   ],
+   "routine_s": [
+    2.6,
+    7.91,
+    7.62
+   ],
+   "agent_s": [
+    18.48,
+    109.55,
+    26.78
+   ],
+   "routine_status": [
+    "no_routine",
+    "done",
+    "done"
+   ],
+   "repaired_steps": [],
+   "match": [
+    null,
+    "settings_turn_on_wifi_3",
+    "settings_turn_on_wifi_3"
+   ]
+  }
+ ]
+}

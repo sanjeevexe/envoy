@@ -1,0 +1,81 @@
+{
+ "task": "SaveCopyOfReceiptTaskEval",
+ "seed": 1414667317,
+ "goal": "In Simple Gallery Pro, copy receipt_2023_01_22_sure_frog.jpg in DCIM and save a copy with the same name in Download",
+ "score": 0.0,
+ "aw_run_time_s": 126.0,
+ "aw_episode_length": 16,
+ "agent": "envoy",
+ "finished": "2026-10-28 06:44:12.023496",
+ "envoy": {
+  "run_id": "aw-fixes1-dev-1028-064208-277a",
+  "goal": "In Simple Gallery Pro, copy receipt_2023_01_22_sure_frog.jpg in DCIM and save a copy with the same name in Download",
+  "max_steps": 16,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 16 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 15,
+  "iterations": 16,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 8,
+   "look": 1,
+   "long_press": 1,
+   "type": 2,
+   "back": 3
+  },
+  "model_calls": 17,
+  "input_tokens": 42833,
+  "cached_tokens": 32784,
+  "output_tokens": 2306,
+  "reasoning_tokens": 1249,
+  "cost_usd": 0.001532,
+  "cost_at_standard_usd": 0.027279,
+  "duration_s": 115.63,
+  "model_s": 92.33,
+  "device_s": 23.3,
+  "connect_s": 0.87,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Gallery",
+   "subgoals": [
+    "Open Gallery (Simple Gallery Pro)",
+    "Open DCIM folder and locate receipt_2023_01_22_sure_frog.jpg",
+    "Copy receipt_2023_01_22_sure_frog.jpg",
+    "Paste a copy with the same name in the Download folder"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "receipt_2023_01_22_sure_frog.jpg",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-fixes1-dev-1028-064208-277a",
+  "envoy_commit": "821d713df93e6bb5536df7e6f89b6684779d58da",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes1-dev/traces/SaveCopyOfReceiptTaskEval__s1414667317.jsonl.gz",
+  "wall_s": 121.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

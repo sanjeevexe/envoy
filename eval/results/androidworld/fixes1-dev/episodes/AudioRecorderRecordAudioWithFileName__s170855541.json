@@ -1,0 +1,84 @@
+{
+ "task": "AudioRecorderRecordAudioWithFileName",
+ "seed": 170855541,
+ "goal": "Record an audio clip and save it with name \"presentation_fGwr.m4a\" using Audio Recorder app.",
+ "score": 1.0,
+ "aw_run_time_s": 38.8,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 07:14:27.292591",
+ "envoy": {
+  "run_id": "aw-fixes1-dev-1028-071350-2bd9",
+  "goal": "Record an audio clip and save it with name \"presentation_fGwr.m4a\" using Audio Recorder app.",
+  "max_steps": 20,
+  "config": {},
+  "status": "done",
+  "result": "Recorded audio clip and saved as presentation_fGwr.m4a (8s, 0.1 Mb, M4a) in Audio Recorder.",
+  "done": true,
+  "answer": "Recorded audio clip and saved as presentation_fGwr.m4a (8s, 0.1 Mb, M4a) in Audio Recorder.",
+  "steps_device": 8,
+  "iterations": 9,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 5,
+   "wait": 1,
+   "type": 1,
+   "done": 1
+  },
+  "model_calls": 10,
+  "input_tokens": 23115,
+  "cached_tokens": 16520,
+  "output_tokens": 1395,
+  "reasoning_tokens": 726,
+  "cost_usd": 0.000972,
+  "cost_at_standard_usd": 0.01665,
+  "duration_s": 32.26,
+  "model_s": 18.91,
+  "device_s": 13.35,
+  "connect_s": 0.9,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Audio Recorder",
+   "subgoals": [
+    "Open the Audio Recorder app",
+    "Start a new audio recording",
+    "Stop the recording",
+    "Save the clip as presentation_fGwr.m4a"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "presentation_fGwr.m4a",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'presentation_fGwr.m4a' is visible"
+  },
+  "trace_dir": "data/runs/aw-fixes1-dev-1028-071350-2bd9",
+  "envoy_commit": "821d713df93e6bb5536df7e6f89b6684779d58da",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes1-dev/traces/AudioRecorderRecordAudioWithFileName__s170855541.jsonl.gz",
+  "wall_s": 34.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}

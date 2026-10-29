@@ -1,0 +1,93 @@
+{
+ "task": "SimpleCalendarEventOnDateAtTime",
+ "seed": 593396264,
+ "goal": "What is on my schedule for October 27 2023 at 8:00pm in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 1.0,
+ "aw_run_time_s": 19.0,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 01:44:16.516555",
+ "envoy": {
+  "run_id": "aw-answers-verify-1029-014358-5950",
+  "goal": "What is on my schedule for October 27 2023 at 8:00pm in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "answers-candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "simple_calendar_pro_get_event_titles",
+   "stage": "model confirmed",
+   "inputs": {
+    "schedule_date": "October 27 2023",
+    "schedule_time": "8:00pm"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "simple_calendar_pro_get_events",
+     0.511
+    ],
+    [
+     "simple_calendar_pro_get_event_location",
+     0.367
+    ],
+    [
+     "simple_calendar_pro_get_event_titles",
+     0.351
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "simple_calendar_pro_get_event_titles",
+  "version": 1,
+  "done": true,
+  "answer": "Product demo",
+  "outputs": {
+   "event_titles": "Product demo"
+  },
+  "steps_used": 2,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_simple_calendar_pro",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "select_schedule_date",
+    "status": "done",
+    "rung": 0,
+    "rungs": [
+     "looked for 'the calendar cell for 27 in the October grid' (sam→grounding, 8.9 s)"
+    ],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 5,
+  "cost_usd": 0.018744,
+  "cost_at_standard_usd": 0.018744,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 12.94,
+  "routine_duration_s": 10.22,
+  "trace_dir": "data/runs/aw-answers-verify-1029-014358-5950",
+  "wall_s": 15.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}

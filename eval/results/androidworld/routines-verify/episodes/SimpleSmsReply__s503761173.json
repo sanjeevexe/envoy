@@ -1,0 +1,123 @@
+{
+ "task": "SimpleSmsReply",
+ "seed": 503761173,
+ "goal": "Reply to +18407874306 with message: Yoga class every Tuesday and Thursday at 6 PM. in Simple SMS Messenger",
+ "score": 1.0,
+ "aw_run_time_s": 29.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 18:32:54.122164",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-183231-99cd",
+  "goal": "Reply to +18407874306 with message: Yoga class every Tuesday and Thursday at 6 PM. in Simple SMS Messenger",
+  "max_steps": 12,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "simple_sms_messenger_reply_to_conversati",
+   "stage": "model confirmed",
+   "inputs": {
+    "recipient_phone_number": "+18407874306",
+    "message_text": "Yoga class every Tuesday and Thursday at 6 PM."
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "simple_sms_messenger_reply_most_recent_m",
+     0.6
+    ],
+    [
+     "simple_sms_messenger_reply_to_conversati",
+     0.567
+    ],
+    [
+     "simple_sms_messenger_send_message",
+     0.493
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "simple_sms_messenger_reply_to_conversati",
+  "version": 1,
+  "done": true,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 5,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_simple_sms_messenger",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "find_open_conversation",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_conversation",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "type_message",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "send_message",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.003133,
+  "approvals": [
+   {
+    "step": "send_message",
+    "description": "tap \"SMS\" in com.simplemobiletools.smsmessenger (routine simple_sms_messenger_reply_to_conversati v1)",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/thread_send_message'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "duration_s": 11.28,
+  "routine_duration_s": 8.07,
+  "trace_dir": "data/runs/aw-routines-verify-1028-183231-99cd",
+  "wall_s": 14.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

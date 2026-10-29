@@ -1,0 +1,148 @@
+routine: simple_sms_messenger_send_message
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Send a text message using Simple SMS Messenger
+description: Start a new conversation in Simple SMS Messenger, enter a recipient phone number and message text, and send the message.
+patterns: [Send a text message, Send an SMS using Simple SMS Messenger, Text a message to a number, Send a message to a phone number]
+outputs: [sent_time]
+start: fresh_launch
+inputs:
+  recipient_phone_number: {type: phone, description: The phone number to send the text message to., example: '+16597910719'}
+  message_text: {type: text, description: The text to include in the message., example: Beauty is in the eye of the beholder}
+steps:
+- id: launch_simple_sms_messenger
+  intent: Launch Simple SMS Messenger
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.simplemobiletools.smsmessenger}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: main_coordinator, kind: List}
+  risk: read
+  note: trace step 1
+- id: start_conversation
+  intent: Tap Start a conversation
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    tap:
+      resource_id: no_conversations_placeholder_*
+      text: Start a conversation
+      kind: Button
+      cls: TextView
+      parent: main_holder
+      siblings: [No stored conversations have been found]
+      in_list: true
+      position: [0.5, 0.199]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: no_contacts_placeholder, text: No contacts found, kind: Text}
+  - element_present: {resource_id: new_conversation_address, text: Add Contact or Number…, kind: EditText}
+  risk: reversible
+  note: trace step 2
+- id: enter_recipient_phone_number
+  intent: "Type {{recipient_phone_number}} into the Add Contact or Number field"
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    type:
+      field:
+        resource_id: new_conversation_address
+        text: Add Contact or Number…
+        hint: Add Contact or Number…
+        kind: EditText
+        cls: EditText
+        parent: new_conversation_holder
+        siblings: [No contacts found]
+        in_list: false
+        position: [0.5, 0.15]
+      value: "{{recipient_phone_number}}"
+  post:
+  - field_equals:
+      field: {resource_id: new_conversation_address, text: Add Contact or Number…, kind: EditText}
+      value: "{{recipient_phone_number}}"
+  risk: reversible
+  note: trace step 3
+- id: confirm_recipient
+  intent: "Tap the confirm button to open the conversation with {{recipient_phone_number}}"
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    tap:
+      resource_id: new_conversation_confirm
+      text: ''
+      kind: Button
+      cls: ImageView
+      parent: new_conversation_holder
+      siblings: [No contacts found]
+      in_list: false
+      position: [0.942, 0.15]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: dial_number, text: Dial number, kind: Button}
+  - element_present: {resource_id: manage_people, text: Add Person, kind: Button}
+  risk: irreversible
+  note: trace step 4
+- id: type_message
+  intent: "Type {{message_text}} into the Type a message field"
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    type:
+      field:
+        resource_id: thread_type_message
+        text: Type a message…
+        hint: Type a message…
+        kind: EditText
+        cls: EditText
+        parent: message_holder
+        siblings: [Attachment, SMS]
+        in_list: false
+        position: [0.5, 0.876]
+      value: "{{message_text}}"
+  post:
+  - field_equals:
+      field: {resource_id: thread_type_message, text: Type a message…, kind: EditText}
+      value: "{{message_text}}"
+  risk: reversible
+  note: trace step 5
+- id: send_message
+  intent: Tap SMS to send the message
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    tap:
+      resource_id: thread_send_message
+      text: SMS
+      desc: OK
+      kind: Button
+      cls: Button
+      parent: message_holder
+      siblings: [Attachment, Beauty is in the eye of the beholder]
+      in_list: false
+      position: [0.931, 0.876]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: thread_message_body
+      text: "{{message_text}}"
+      kind: Button
+  - element_present: {resource_id: delete, text: Delete, kind: Button}
+  risk: irreversible
+  extract:
+    sent_time:
+      locator: {resource_id: thread_date_time_holder, kind: Button}
+      expect_digits: true
+  note: trace step 6
+done:
+- text_visible: "{{message_text}}"
+compiled_from:
+  task_id: aw-final-standard-1028-171046-2810
+  goal: "Send a text message using Simple SMS Messenger to +16597910719 with message: Beauty is in the eye of the beholder."
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:50:17"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6]
+  trace_steps_dropped: 0
+  cost_usd: 0.0537

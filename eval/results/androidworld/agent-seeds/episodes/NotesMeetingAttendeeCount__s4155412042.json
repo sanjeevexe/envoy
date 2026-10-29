@@ -1,0 +1,85 @@
+{
+ "task": "NotesMeetingAttendeeCount",
+ "seed": 4155412042,
+ "goal": "How many attendees were present in the meeting titled 'Project Status Update' in the Joplin app? Express your answer as just a single number.",
+ "score": 1.0,
+ "aw_run_time_s": 33.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 23:24:10.897806",
+ "envoy": {
+  "run_id": "aw-agent-seeds-1028-232345-74fc",
+  "goal": "How many attendees were present in the meeting titled 'Project Status Update' in the Joplin app? Express your answer as just a single number.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "50",
+  "done": true,
+  "answer": "50",
+  "steps_device": 5,
+  "iterations": 6,
+  "looks": 0,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "type": 1,
+   "scroll": 1,
+   "done": 1
+  },
+  "model_calls": 7,
+  "input_tokens": 19553,
+  "cached_tokens": 14999,
+  "output_tokens": 1230,
+  "reasoning_tokens": 756,
+  "cost_usd": 0.01317,
+  "cost_at_standard_usd": 0.01317,
+  "duration_s": 20.4,
+  "model_s": 10.17,
+  "device_s": 10.23,
+  "connect_s": 0.9,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Joplin",
+   "subgoals": [
+    "Open the Joplin app",
+    "Find and open the note titled Project Status Update",
+    "Read the attendee list to count those marked present"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "number of attendees present in Project Status Update",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: 50"
+  },
+  "trace_dir": "data/runs/aw-agent-seeds-1028-232345-74fc",
+  "envoy_commit": "cdd130ecae3cf0891ddc6106da4ad6d1be97fde0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/agent-seeds/traces/NotesMeetingAttendeeCount__s4155412042.jsonl.gz",
+  "wall_s": 23.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

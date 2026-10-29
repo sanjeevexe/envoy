@@ -1,0 +1,105 @@
+{
+ "task": "MarkorCreateNoteAndSms",
+ "seed": 3221046986,
+ "goal": "Create a new note in Markor named fair_ant_XOdi.txt with the following text: Actions speak louder than words.. Share the entire content of the note with the phone number +13192815309 via SMS using Simple SMS Messenger",
+ "score": 0.5,
+ "aw_run_time_s": 58.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 13:50:26.370983",
+ "envoy": {
+  "run_id": "aw-held-out-fdce597-fix-1029-134938-0b00",
+  "goal": "Create a new note in Markor named fair_ant_XOdi.txt with the following text: Actions speak louder than words.. Share the entire content of the note with the phone number +13192815309 via SMS using Simple SMS Messenger",
+  "max_steps": 18,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Created note fair_ant_XOdi.txt with text \"Actions speak louder than words..\" in Markor and sent it via SMS to +13192815309, confirmed shown as sent",
+  "done": true,
+  "answer": "Created note fair_ant_XOdi.txt with text \"Actions speak louder than words..\" in Markor and sent it via SMS to +13192815309, confirmed shown as sent",
+  "steps_device": 13,
+  "iterations": 14,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 2,
+   "tap": 6,
+   "type": 5,
+   "done": 1
+  },
+  "model_calls": 15,
+  "input_tokens": 43666,
+  "cached_tokens": 36127,
+  "output_tokens": 2641,
+  "reasoning_tokens": 1404,
+  "cost_usd": 0.026067,
+  "cost_at_standard_usd": 0.026067,
+  "duration_s": 35.74,
+  "model_s": 18.15,
+  "device_s": 17.59,
+  "connect_s": 0.88,
+  "approvals": [
+   {
+    "step": 11,
+    "description": "tap \"\" in com.simplemobiletools.smsmessenger",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/new_conversation_confirm'"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 13,
+    "description": "tap \"SMS\" in com.simplemobiletools.smsmessenger",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/thread_send_message'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "SMS Messenger",
+   "subgoals": [
+    "Open Markor and create note fair_ant_XOdi.txt with text Actions speak louder than words.",
+    "Open SMS Messenger and start conversation with +13192815309",
+    "Send the note content via SMS and confirm it is shown as sent"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Actions speak louder than words.",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Actions speak louder than words.' is visible"
+  },
+  "trace_dir": "data/runs/aw-held-out-fdce597-fix-1029-134938-0b00",
+  "envoy_commit": "3cbb3d944a29b380fa67decc155d7b76c29099a1",
+  "answer_format": true,
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/held-out-fdce597-fix/traces/MarkorCreateNoteAndSms__s3221046986.jsonl.gz",
+  "wall_s": 39.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.4
+  }
+ }
+}

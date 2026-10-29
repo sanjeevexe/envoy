@@ -1,0 +1,103 @@
+{
+ "task": "FilesDeleteFile",
+ "seed": 1206130099,
+ "goal": "Delete the file q2a8_fancy_banana.mp3 from the Android filesystem located in the Notifications folder within the sdk_gphone_x86_64 storage area.",
+ "score": 0.0,
+ "aw_run_time_s": 85.4,
+ "aw_episode_length": 22,
+ "agent": "envoy",
+ "finished": "2026-10-28 03:43:34.662940",
+ "envoy": {
+  "run_id": "aw-baseline-standard-1028-034212-7bf4",
+  "goal": "Delete the file q2a8_fancy_banana.mp3 from the Android filesystem located in the Notifications folder within the sdk_gphone_x86_64 storage area.",
+  "max_steps": 22,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 22 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 21,
+  "iterations": 22,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "launch": 2,
+   "look": 1,
+   "tap": 9,
+   "type": 1,
+   "back": 4,
+   "scroll": 3,
+   "long_press": 1,
+   "wait": 1
+  },
+  "model_calls": 25,
+  "input_tokens": 61534,
+  "cached_tokens": 45449,
+  "output_tokens": 6577,
+  "reasoning_tokens": 4829,
+  "cost_usd": 0.054876,
+  "cost_at_standard_usd": 0.054876,
+  "duration_s": 76.87,
+  "model_s": 38.96,
+  "device_s": 37.91,
+  "connect_s": 0.89,
+  "approvals": [
+   {
+    "step": 18,
+    "description": "tap \"Delete\" in com.google.android.documentsui",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 19,
+    "description": "tap \"OK\" in com.google.android.documentsui",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "com.google.android.documentsui",
+   "subgoals": [
+    "Use Search in Files to find q2a8_fancy_banana.mp3 in sdk_gphone_x86_64 storage",
+    "Scroll the Files in Notifications list to locate the exact q2a8_fancy_banana.mp3 entry",
+    "Open options for q2a8_fancy_banana.mp3, select Delete and confirm"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Deleting 1 item.",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-standard-1028-034212-7bf4",
+  "envoy_commit": "0807a1631c3da2f8fc36e25853eeb50d9eb3f80b+dirty-backend",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline-standard/traces/FilesDeleteFile__s1206130099.jsonl.gz",
+  "wall_s": 79.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

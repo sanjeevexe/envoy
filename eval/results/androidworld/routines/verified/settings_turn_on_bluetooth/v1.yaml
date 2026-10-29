@@ -1,0 +1,84 @@
+routine: settings_turn_on_bluetooth
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Turn on Bluetooth in Settings
+description: Open Settings, navigate through Connected devices and Connection preferences to the Bluetooth screen, and confirm that Bluetooth
+  is turned on.
+patterns: [turn bluetooth on, enable bluetooth, turn on bluetooth, switch bluetooth on]
+outputs: [bluetooth_enabled]
+start: fresh_launch
+steps:
+- id: launch_settings
+  intent: Launch the Settings app
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.android.settings}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: settings_homepage_c*tainer, kind: List}
+  risk: read
+  note: trace step 2
+- id: open_connected_devices
+  intent: Tap Connected devices to access Bluetooth settings
+  pre:
+  - {app_foreground: com.android.settings}
+  action:
+    tap:
+      text: Connected devices · Bluetooth, pairing
+      kind: Button
+      cls: LinearLayout
+      parent: recycler_view
+      in_list: true
+      position: [0.5, 0.465]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: c*tent_parent, kind: List}
+  risk: reversible
+  note: trace step 3
+- id: open_connection_preferences
+  intent: Tap Connection preferences
+  pre:
+  - {app_foreground: com.android.settings}
+  action:
+    tap:
+      text: Connection preferences · Bluetooth, Android Auto
+      kind: Button
+      cls: LinearLayout
+      parent: recycler_view
+      in_list: true
+      position: [0.5, 0.477]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 6
+- id: open_bluetooth
+  intent: Tap Bluetooth to open the Bluetooth settings and confirm it is turned on
+  pre:
+  - {app_foreground: com.android.settings}
+  action:
+    tap:
+      text: Bluetooth
+      kind: Button
+      cls: LinearLayout
+      parent: recycler_view
+      in_list: true
+      position: [0.5, 0.328]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  extract:
+    bluetooth_enabled:
+      near: When Bluetooth is turned
+      locator: {resource_id: title, kind: Text}
+      after: ', your device can communicate with other nearby Bluetooth devices.'
+  note: trace step 7
+compiled_from:
+  task_id: aw-baseline-standard-1028-050446-2401
+  goal: Turn bluetooth on.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 05:44:55"
+  trace_steps_kept: [2, 3, 6, 7]
+  trace_steps_dropped: 3
+  cost_usd: 0.0376

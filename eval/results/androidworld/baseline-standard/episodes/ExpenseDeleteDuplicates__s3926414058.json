@@ -1,0 +1,112 @@
+{
+ "task": "ExpenseDeleteDuplicates",
+ "seed": 3926414058,
+ "goal": "Delete all but one of any expenses in pro expense that are exact duplicates, ensuring at least one instance of each unique expense remains.",
+ "score": 0.0,
+ "aw_run_time_s": 50.0,
+ "aw_episode_length": 12,
+ "agent": "envoy",
+ "finished": "2026-10-28 03:37:39.165686",
+ "envoy": {
+  "run_id": "aw-baseline-standard-1028-033652-83d3",
+  "goal": "Delete all but one of any expenses in pro expense that are exact duplicates, ensuring at least one instance of each unique expense remains.",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 12 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 11,
+  "iterations": 12,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 3,
+   "tap": 6,
+   "type": 1,
+   "look": 1,
+   "tap_point": 1
+  },
+  "model_calls": 16,
+  "input_tokens": 32701,
+  "cached_tokens": 23357,
+  "output_tokens": 3138,
+  "reasoning_tokens": 2317,
+  "cost_usd": 0.036369,
+  "cost_at_standard_usd": 0.036369,
+  "duration_s": 41.93,
+  "model_s": 18.92,
+  "device_s": 23.01,
+  "connect_s": 0.88,
+  "approvals": [
+   {
+    "step": 8,
+    "description": "tap \"\" in com.arduia.expense",
+    "reasons": [
+     "rule: target id 'com.arduia.expense:id/imv_delete_icon'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 10,
+    "description": "tap \"Delete\" in com.arduia.expense",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 12,
+    "description": "tap \"\" in com.arduia.expense",
+    "reasons": [
+     "rule: target id 'com.arduia.expense:id/imv_delete_icon'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": null,
+   "subgoals": [
+    "Open the Pro Expense app",
+    "Open the expense list or history",
+    "Identify expenses that are exact duplicates",
+    "Delete duplicate copies keeping one instance of each unique expense"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "remaining expenses showing no exact duplicates",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-standard-1028-033652-83d3",
+  "envoy_commit": "0807a1631c3da2f8fc36e25853eeb50d9eb3f80b+dirty-backend",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline-standard/traces/ExpenseDeleteDuplicates__s3926414058.jsonl.gz",
+  "wall_s": 44.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.9
+  }
+ }
+}

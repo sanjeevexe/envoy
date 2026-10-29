@@ -1,0 +1,125 @@
+{
+ "task": "SimpleCalendarDeleteEventsOnRelativeDay",
+ "seed": 3185280973,
+ "goal": "In Simple Calendar Pro, delete all events scheduled for this Monday.",
+ "score": 1.0,
+ "aw_run_time_s": 44.9,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:01:19.968482",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-170038-101a",
+  "goal": "In Simple Calendar Pro, delete all events scheduled for this Monday.",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Deleted all events scheduled for Monday, October 16, 2023 in Simple Calendar Pro. Verified October 16 (Mon) view shows no events.",
+  "done": true,
+  "answer": "Deleted all events scheduled for Monday, October 16, 2023 in Simple Calendar Pro. Verified October 16 (Mon) view shows no events.",
+  "steps_device": 8,
+  "iterations": 11,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "look": 2,
+   "tap_point": 1,
+   "tap": 6,
+   "done": 1
+  },
+  "model_calls": 16,
+  "input_tokens": 35490,
+  "cached_tokens": 25676,
+  "output_tokens": 2823,
+  "reasoning_tokens": 1956,
+  "cost_usd": 0.042003,
+  "cost_at_standard_usd": 0.042003,
+  "duration_s": 36.68,
+  "model_s": 18.95,
+  "device_s": 17.73,
+  "connect_s": 0.95,
+  "approvals": [
+   {
+    "step": 5,
+    "description": "tap \"Delete\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 6,
+    "description": "tap \"Yes\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 8,
+    "description": "tap \"Delete\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 9,
+    "description": "tap \"Yes\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Open Simple Calendar Pro",
+    "Navigate to Monday, October 16, 2023",
+    "Delete every event scheduled for that Monday",
+    "Confirm deletions and verify Monday shows no events"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "Monday October 16 has no events remaining",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: October, 16, October, 16"
+  },
+  "trace_dir": "data/runs/aw-final-standard-1028-170038-101a",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/SimpleCalendarDeleteEventsOnRelativeDay__s3185280973.jsonl.gz",
+  "wall_s": 39.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

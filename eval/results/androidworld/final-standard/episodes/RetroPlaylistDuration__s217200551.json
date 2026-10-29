@@ -1,0 +1,80 @@
+{
+ "task": "RetroPlaylistDuration",
+ "seed": 217200551,
+ "goal": "Create a playlist in Retro Music titled \"Reggae Rhythms 51\" with a duration between 45 and 50 minutes using the provided songs.",
+ "score": 0.0,
+ "aw_run_time_s": 94.2,
+ "aw_episode_length": 30,
+ "agent": "envoy",
+ "finished": "2026-10-28 16:51:24.586591",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-164954-79bb",
+  "goal": "Create a playlist in Retro Music titled \"Reggae Rhythms 51\" with a duration between 45 and 50 minutes using the provided songs.",
+  "max_steps": 30,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 30 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 30,
+  "iterations": 30,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "tap": 25,
+   "type": 1,
+   "back": 4
+  },
+  "model_calls": 32,
+  "input_tokens": 89015,
+  "cached_tokens": 70816,
+  "output_tokens": 7105,
+  "reasoning_tokens": 4152,
+  "cost_usd": 0.063567,
+  "cost_at_standard_usd": 0.063567,
+  "duration_s": 84.98,
+  "model_s": 43.57,
+  "device_s": 41.41,
+  "connect_s": 0.91,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Retro Music",
+   "subgoals": [
+    "Open Reggae Rhythms 51 playlist details from Playlists",
+    "Find Add songs option or browse Songs library via Search or menu",
+    "Add the provided songs to Reggae Rhythms 51 until total is 45-50 minutes",
+    "Save and verify playlist shows songs and 45-50 minute duration"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "song count and total duration for Reggae Rhythms 51 playlist showing between 45 and 50 minutes",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-final-standard-1028-164954-79bb",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/RetroPlaylistDuration__s217200551.jsonl.gz",
+  "wall_s": 87.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

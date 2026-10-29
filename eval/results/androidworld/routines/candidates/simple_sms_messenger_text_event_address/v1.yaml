@@ -1,0 +1,228 @@
+routine: simple_sms_messenger_text_event_address
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Text an event address received from one contact to another contact in Simple SMS Messenger
+description: Open Simple SMS Messenger, read the event address from a source contact's conversation, then start or open a conversation with the
+  recipient contact and send that address as an SMS.
+patterns: [Text the address of the event to him, Send the event address I just received to a contact, Forward the address from that message, Text
+    the event address to my contact]
+outputs: [recipient, sent_message]
+start: fresh_launch
+inputs:
+  recipient_name: {type: text, description: '', example: Gabriel Ibrahim}
+  source_contact_name: {type: text, description: '', example: Oscar Mohamed}
+steps:
+- id: launch_simple_sms_messenger
+  intent: Launch Simple SMS Messenger
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.simplemobiletools.smsmessenger}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: main_coordinator, kind: List}
+  risk: read
+  note: trace step 1
+- id: search_recipient_conversation
+  intent: "Type {{recipient_name}} in the Search field to find the recipient conversation"
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    type:
+      field:
+        resource_id: top_toolbar_search
+        text: Search
+        hint: Search
+        kind: EditText
+        cls: EditText
+        parent: top_toolbar_holder
+        in_list: true
+        position: [0.358, 0.088]
+      value: "{{recipient_name}}"
+  post:
+  - field_equals:
+      field: {resource_id: top_toolbar_search, text: Search, kind: EditText}
+      value: "{{recipient_name}}"
+  risk: reversible
+  note: trace step 4
+- id: clear_search_filter
+  intent: Tap Back to clear the search filter and show all conversations
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    tap:
+      resource_id: top_toolbar_search_icon
+      text: Back
+      kind: Button
+      cls: ImageView
+      parent: top_toolbar_holder
+      siblings: [Gabriel Ibrahim]
+      in_list: true
+      position: [0.087, 0.088]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 5
+- id: scroll_to_source_conversation
+  intent: "Scroll until the conversation from {{source_contact_name}} is visible"
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    scroll_until:
+      target:
+        resource_id: conversation_frame
+        text_has: "{{source_contact_name}}"
+        kind: Button
+        cls: FrameLayout
+        parent: conversations_list
+        in_list: true
+      direction: down
+      max_scrolls: 8
+      container: {resource_id: main_coordinator, kind: List}
+  post:
+  - element_present:
+      resource_id: conversation_frame
+      text_has: "{{source_contact_name}}"
+      kind: Button
+      cls: FrameLayout
+      parent: conversations_list
+      in_list: true
+  risk: read
+  note: trace step 6 (+1 scrolls)
+- id: open_source_conversation
+  intent: "Open the conversation from {{source_contact_name}} to read the event address"
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    tap:
+      resource_id: conversation_frame
+      text_has: "{{source_contact_name}}"
+      kind: Button
+      cls: FrameLayout
+      parent: conversations_list
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: delete, text: Delete, kind: Button}
+  - element_present: {resource_id: dial_number, text: Dial number, kind: Button}
+  risk: reversible
+  note: trace step 7
+- id: back_to_conversation_list
+  intent: Tap Back to return to the conversation list
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    tap:
+      text: Back
+      kind: Button
+      cls: ImageButton
+      parent: thread_toolbar
+      siblings: [Oscar Mohamed]
+      in_list: false
+      position: [0.068, 0.088]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: main_coordinator, kind: List}
+  risk: reversible
+  note: trace step 8
+- id: start_new_conversation
+  intent: Tap the new conversation button to start a new message
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    tap:
+      resource_id: conversations_fab
+      text: ''
+      kind: Button
+      cls: ImageButton
+      parent: main_coordinator
+      in_list: true
+      position: [0.893, 0.926]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: suggested_contact_holder
+      text: "{{source_contact_name}}"
+      kind: Button
+  - element_present: {resource_id: suggestions_label, text: SUGGESTIONS, kind: Text}
+  risk: reversible
+  note: trace step 10
+- id: select_recipient_contact
+  intent: "Select the contact {{recipient_name}} to open the conversation"
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    tap:
+      resource_id: item_contact_frame
+      text_has: "{{recipient_name}}"
+      kind: Button
+      cls: ViewGroup
+      parent: contacts_list
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: dial_number, text: Dial number, kind: Button}
+  - element_present: {resource_id: manage_people, text: Add Person, kind: Button}
+  risk: reversible
+  note: trace step 11
+- id: type_event_address
+  intent: "Type the event address read from {{source_contact_name}}'s message in the message field"
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    type:
+      field:
+        resource_id: thread_type_message
+        text: Type a message…
+        hint: Type a message…
+        kind: EditText
+        cls: EditText
+        parent: message_holder
+        siblings: [Attachment, SMS]
+        in_list: false
+        position: [0.5, 0.876]
+      value: 789 E Oak St, Phoenix AZ 85006
+  post:
+  - field_equals:
+      field: {resource_id: thread_type_message, text: Type a message…, kind: EditText}
+      value: 789 E Oak St, Phoenix AZ 85006
+  risk: reversible
+  note: trace step 12
+- id: send_message
+  intent: "Tap SMS to send the message to {{recipient_name}}"
+  pre:
+  - {app_foreground: com.simplemobiletools.smsmessenger}
+  action:
+    tap:
+      resource_id: thread_send_message
+      text: SMS
+      desc: OK
+      kind: Button
+      cls: Button
+      parent: message_holder
+      siblings: [Attachment]
+      in_list: false
+      position: [0.931, 0.876]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: delete, text: Delete, kind: Button}
+  - element_present: {resource_id: thread_message_holder, kind: Button}
+  risk: irreversible
+  extract:
+    recipient:
+      locator:
+        text_has: "{{recipient_name}}"
+        kind: Text
+    sent_message:
+      locator: {resource_id: thread_message_body, kind: Button}
+      expect_digits: true
+  note: trace step 13
+compiled_from:
+  task_id: aw-final-standard-1028-171217-fa7c
+  goal: Text the address of the event to Gabriel Ibrahim that Oscar Mohamed just sent me in Simple SMS Messenger
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:50:00"
+  trace_steps_kept: [1, 4, 5, 6, 7, 8, 10, 11, 12, 13]
+  trace_steps_dropped: 3
+  cost_usd: 0.0633

@@ -1,0 +1,128 @@
+{
+ "task": "SimpleSmsReply",
+ "seed": 865217362,
+ "goal": "Reply to +10054823973 with message: Pick up groceries: Milk and Bread and Apples. in Simple SMS Messenger",
+ "score": 1.0,
+ "aw_run_time_s": 66.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 13:22:43.558751",
+ "envoy": {
+  "run_id": "aw-answers-seeds-1029-132145-ca6f",
+  "goal": "Reply to +10054823973 with message: Pick up groceries: Milk and Bread and Apples. in Simple SMS Messenger",
+  "max_steps": 12,
+  "config": {
+   "mode": "routine",
+   "library": "answers-verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "simple_sms_messenger_reply_to_conversati",
+   "stage": "model confirmed",
+   "inputs": {
+    "recipient_phone_number": "+10054823973",
+    "message_text": "Pick up groceries: Milk and Bread and Apples."
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "simple_sms_messenger_reply_most_recent_m",
+     0.582
+    ],
+    [
+     "simple_sms_messenger_reply_to_conversati",
+     0.582
+    ],
+    [
+     "simple_sms_messenger_send_message",
+     0.505
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "simple_sms_messenger_reply_to_conversati",
+  "version": 1,
+  "done": true,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 6,
+  "rung": 4,
+  "steps": [
+   {
+    "id": "launch_simple_sms_messenger",
+    "status": "done",
+    "rung": 4,
+    "rungs": [
+     "wait and retry: waited 5 s",
+     "local repair: 1 repair action(s) satisfied the after-checks"
+    ],
+    "repairs": 1,
+    "detail": ""
+   },
+   {
+    "id": "find_open_conversation",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_conversation",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "type_message",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "send_message",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [
+   "launch_simple_sms_messenger"
+  ],
+  "patches": 1,
+  "model_calls": 2,
+  "cost_usd": 0.009685,
+  "cost_at_standard_usd": 0.009685,
+  "approvals": [
+   {
+    "step": "send_message",
+    "description": "tap \"SMS\" in com.simplemobiletools.smsmessenger (routine simple_sms_messenger_reply_to_conversati v1)",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/thread_send_message'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "duration_s": 42.88,
+  "routine_duration_s": 39.69,
+  "trace_dir": "data/runs/aw-answers-seeds-1029-132145-ca6f",
+  "wall_s": 46.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

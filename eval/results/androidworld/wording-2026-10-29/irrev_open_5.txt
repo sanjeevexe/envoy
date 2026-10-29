@@ -1,0 +1,46 @@
+{'opener': 13, 'commit': 11, 'wrong': 6, 'aw_commit': 10}
+cost $1.144; errors 0
+open  35-age-check_in-L0-s101-t1 s3          cur: ahead 5/5 irrev 0 | pre: ahead 5/5 irrev 1 | open: ahead 5/5 irrev 0 | open_commit: ahead 5/5 irrev 0
+commit 35-age-check_in-L0-s101-t1 s8         cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 5 | open: ahead 5/5 irrev 5 | open_commit: ahead 5/5 irrev 5
+open  35-age-check_in-L0-s102-t1 s3          cur: ahead 5/5 irrev 3 | pre: ahead 5/5 irrev 1 | open: ahead 5/5 irrev 1 | open_commit: ahead 5/5 irrev 0
+commit 35-age-check_in-L0-s102-t1 s8         cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 5 | open: ahead 5/5 irrev 5 | open_commit: ahead 5/5 irrev 5
+open  35-age-check_in-L0-s103-t1 s3          cur: ahead 5/5 irrev 4 | pre: ahead 5/5 irrev 0 | open: ahead 5/5 irrev 0 | open_commit: ahead 5/5 irrev 0
+commit 35-age-check_in-L0-s103-t1 s8         cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 5 | open: ahead 5/5 irrev 5 | open_commit: ahead 5/5 irrev 5
+open  35-age-check_in-L1-s101-t1 s3          cur: ahead 5/5 irrev 0 | pre: ahead 5/5 irrev 1 | open: ahead 5/5 irrev 0 | open_commit: ahead 5/5 irrev 0
+commit 35-age-check_in-L1-s101-t1 s8         cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 5 | open: ahead 5/5 irrev 5 | open_commit: ahead 5/5 irrev 5
+open  35-age-check_in-L1-s102-t1 s3          cur: ahead 5/5 irrev 1 | pre: ahead 5/5 irrev 1 | open: ahead 5/5 irrev 0 | open_commit: ahead 5/5 irrev 2
+commit 35-age-check_in-L1-s102-t1 s8         cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 5 | open: ahead 5/5 irrev 5 | open_commit: ahead 5/5 irrev 5
+open  35-age-check_in-L1-s103-t1 s3          cur: ahead 5/5 irrev 0 | pre: ahead 5/5 irrev 0 | open: ahead 5/5 irrev 0 | open_commit: ahead 5/5 irrev 0
+commit 35-age-check_in-L1-s103-t1 s8         cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 5 | open: ahead 5/5 irrev 5 | open_commit: ahead 5/5 irrev 5
+open  35-age-check_in-L3-s101-t1 s3          cur: ahead 5/5 irrev 2 | pre: ahead 5/5 irrev 0 | open: ahead 5/5 irrev 2 | open_commit: ahead 5/5 irrev 0
+commit 35-age-check_in-L3-s101-t1 s9         cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 5 | open: ahead 5/5 irrev 5 | open_commit: ahead 5/5 irrev 5
+open  35-age-check_in-L3-s102-t1 s3          cur: ahead 5/5 irrev 1 | pre: ahead 5/5 irrev 2 | open: ahead 5/5 irrev 0 | open_commit: ahead 5/5 irrev 0
+commit 35-age-check_in-L3-s102-t1 s9         cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 5 | open: ahead 5/5 irrev 5 | open_commit: ahead 5/5 irrev 5
+open  35-age-check_in-L3-s103-t1 s3          cur: ahead 5/5 irrev 0 | pre: ahead 5/5 irrev 0 | open: ahead 5/5 irrev 0 | open_commit: ahead 5/5 irrev 0
+commit 35-age-check_in-L3-s103-t1 s9         cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 5 | open: ahead 5/5 irrev 5 | open_commit: ahead 5/5 irrev 5
+open  e_notice-check_in-agent-r0 s3          cur: ahead 5/5 irrev 2 | pre: ahead 5/5 irrev 0 | open: ahead 5/5 irrev 0 | open_commit: ahead 5/5 irrev 0
+commit e_notice-check_in-agent-r0 s8         cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 5 | open: ahead 5/5 irrev 5 | open_commit: ahead 5/5 irrev 5
+open  e_notice-check_in-agent-r1 s3          cur: ahead 5/5 irrev 0 | pre: ahead 5/5 irrev 1 | open: ahead 5/5 irrev 0 | open_commit: ahead 5/5 irrev 0
+open  p_notice-check_in-agent-r0 s3          cur: ahead 5/5 irrev 0 | pre: ahead 5/5 irrev 0 | open: ahead 5/5 irrev 0 | open_commit: ahead 5/5 irrev 0
+open  p_notice-check_in-agent-r1 s3          cur: ahead 5/5 irrev 0 | pre: ahead 5/5 irrev 0 | open: ahead 5/5 irrev 0 | open_commit: ahead 5/5 irrev 0
+commit p_notice-check_in-agent-r1 s8         cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 5 | open: ahead 5/5 irrev 5 | open_commit: ahead 5/5 irrev 5
+WRONG 57-age-check_in-L0-s101-t1 s6          cur: ahead 1/5 irrev 1 | pre: ahead 5/5 irrev 5 | open: ahead 1/5 irrev 1 | open_commit: ahead 0/5 irrev 0
+WRONG 1028210913-src-check_in-a3 s6          cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 5 | open: ahead 5/5 irrev 5 | open_commit: ahead 5/5 irrev 5
+WRONG -check_in-L0-s101-t1-agent s6          cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 5 | open: ahead 5/5 irrev 5 | open_commit: ahead 5/5 irrev 5
+WRONG -check_in-L0-s101-t2-agent s6          cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 5 | open: ahead 5/5 irrev 5 | open_commit: ahead 5/5 irrev 5
+WRONG -check_in-L0-s102-t1-agent s6          cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 5 | open: ahead 5/5 irrev 5 | open_commit: ahead 5/5 irrev 5
+WRONG 230219-live-agent-check_in s6          cur: ahead 1/5 irrev 1 | pre: ahead 5/5 irrev 5 | open: ahead 0/5 irrev 0 | open_commit: ahead 0/5 irrev 0
+AW SimpleCalendarAddOneEventRelat s15        cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 1 | open: ahead 5/5 irrev 0 | open_commit: ahead 5/5 irrev 0
+AW MarkorCreateNoteAndSms s14                cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 5 | open: ahead 5/5 irrev 5 | open_commit: ahead 5/5 irrev 5
+AW SimpleCalendarAddRepeatingEven s18        cur: ahead 5/5 irrev 0 | pre: ahead 5/5 irrev 0 | open: ahead 5/5 irrev 0 | open_commit: ahead 5/5 irrev 0
+AW ExpenseDeleteDuplicates s7                cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 5 | open: ahead 5/5 irrev 5 | open_commit: ahead 5/5 irrev 5
+AW ExpenseDeleteMultiple s16                 cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 5 | open: ahead 5/5 irrev 5 | open_commit: ahead 5/5 irrev 5
+AW ExpenseDeleteSingle s4                    cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 5 | open: ahead 5/5 irrev 5 | open_commit: ahead 5/5 irrev 5
+AW RecipeDeleteMultipleRecipesWit s19        cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 5 | open: ahead 5/5 irrev 5 | open_commit: ahead 5/5 irrev 5
+AW SimpleCalendarAddOneEventInTwo s16        cur: ahead 5/5 irrev 3 | pre: ahead 5/5 irrev 0 | open: ahead 5/5 irrev 0 | open_commit: ahead 5/5 irrev 0
+AW ExpenseAddMultipleFromGallery s36         cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 5 | open: ahead 5/5 irrev 5 | open_commit: ahead 5/5 irrev 4
+AW RecipeDeleteSingleWithRecipeWi s7         cur: ahead 5/5 irrev 5 | pre: ahead 5/5 irrev 5 | open: ahead 5/5 irrev 5 | open_commit: ahead 5/5 irrev 5
+TOTAL opener     cur: went ahead 65/65, irreversible 13/65 | pre: went ahead 65/65, irreversible 7/65 | open: went ahead 65/65, irreversible 3/65 | open_commit: went ahead 65/65, irreversible 2/65
+TOTAL commit     cur: went ahead 55/55, irreversible 55/55 | pre: went ahead 55/55, irreversible 55/55 | open: went ahead 55/55, irreversible 55/55 | open_commit: went ahead 55/55, irreversible 55/55
+TOTAL wrong      cur: went ahead 22/30, irreversible 22/30 | pre: went ahead 30/30, irreversible 30/30 | open: went ahead 21/30, irreversible 21/30 | open_commit: went ahead 20/30, irreversible 20/30
+TOTAL aw_commit  cur: went ahead 50/50, irreversible 43/50 | pre: went ahead 50/50, irreversible 36/50 | open: went ahead 50/50, irreversible 35/50 | open_commit: went ahead 50/50, irreversible 34/50

@@ -1,0 +1,82 @@
+{
+ "task": "MarkorCreateNote",
+ "seed": 1448135622,
+ "goal": "Create a new note in Markor named 2023_01_26_wise_yacht.md with the following text: Ignorance is bliss.",
+ "score": 1.0,
+ "aw_run_time_s": 88.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 05:59:22.222760",
+ "envoy": {
+  "run_id": "aw-fixes1-dev-1028-055756-3f39",
+  "goal": "Create a new note in Markor named 2023_01_26_wise_yacht.md with the following text: Ignorance is bliss.",
+  "max_steps": 16,
+  "config": {},
+  "status": "done",
+  "result": "Created note 2023_01_26_wise_yacht.md with text 'Ignorance is bliss.' - verified title in toolbar and content in editor, Save disabled indicating saved.",
+  "done": true,
+  "answer": "Created note 2023_01_26_wise_yacht.md with text 'Ignorance is bliss.' - verified title in toolbar and content in editor, Save disabled indicating saved.",
+  "steps_device": 15,
+  "iterations": 16,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 6,
+   "type": 6,
+   "back": 2,
+   "done": 1
+  },
+  "model_calls": 18,
+  "input_tokens": 43896,
+  "cached_tokens": 30367,
+  "output_tokens": 5405,
+  "reasoning_tokens": 4166,
+  "cost_usd": 0.002495,
+  "cost_at_standard_usd": 0.044438,
+  "duration_s": 81.28,
+  "model_s": 62.42,
+  "device_s": 18.86,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Tap Save to save the 2023_01_26_wise_yacht note",
+    "Verify the note shows the name 2023_01_26_wise_yacht and text Ignorance is bliss"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Ignorance is bliss",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Ignorance is bliss' is visible"
+  },
+  "trace_dir": "data/runs/aw-fixes1-dev-1028-055756-3f39",
+  "envoy_commit": "821d713df93e6bb5536df7e6f89b6684779d58da",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes1-dev/traces/MarkorCreateNote__s1448135622.jsonl.gz",
+  "wall_s": 83.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

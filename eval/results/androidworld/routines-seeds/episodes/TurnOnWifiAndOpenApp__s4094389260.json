@@ -1,0 +1,108 @@
+{
+ "task": "TurnOnWifiAndOpenApp",
+ "seed": 4094389260,
+ "goal": "Turn on Wifi, then open the settings app",
+ "score": 1.0,
+ "aw_run_time_s": 15.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 23:13:33.534485",
+ "envoy": {
+  "run_id": "aw-routines-seeds-1028-231320-e942",
+  "goal": "Turn on Wifi, then open the settings app",
+  "max_steps": 20,
+  "config": {
+   "mode": "routine",
+   "library": "verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "cdd130ecae3cf0891ddc6106da4ad6d1be97fde0",
+  "mode": "routine",
+  "match": {
+   "routine": "settings_turn_on_wifi_3",
+   "stage": "model confirmed",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "settings_turn_on_wifi_3",
+     0.933
+    ],
+    [
+     "contacts_open_app",
+     0.533
+    ],
+    [
+     "settings_turn_off_wifi_2",
+     0.533
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "settings_turn_on_wifi_3",
+  "version": 1,
+  "done": true,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 5,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_settings",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_network_and_internet",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_internet",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_wifi_switch",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "relaunch_settings",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.00196,
+  "cost_at_standard_usd": 0.00196,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 7.62,
+  "routine_duration_s": 5.54,
+  "trace_dir": "data/runs/aw-routines-seeds-1028-231320-e942",
+  "wall_s": 10.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

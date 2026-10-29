@@ -1,0 +1,136 @@
+{
+ "task": "RetroSavePlaylist",
+ "seed": 1865481993,
+ "goal": "Create a playlist in Retro Music titled \"Blues Break 567\" with the following songs, in order: Chasing Shadows, Lost in the Echo, Twilight Calling. Then export the playlist to the Downloads directory on the device.",
+ "score": 0.0,
+ "aw_run_time_s": 29.8,
+ "aw_episode_length": 50,
+ "agent": "envoy",
+ "finished": "2026-10-28 18:01:15.870471",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-180051-047e",
+  "goal": "Create a playlist in Retro Music titled \"Blues Break 567\" with the following songs, in order: Chasing Shadows, Lost in the Echo, Twilight Calling. Then export the playlist to the Downloads directory on the device.",
+  "max_steps": 50,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "retro_music_create_and_export_playlist",
+   "stage": "model confirmed",
+   "inputs": {
+    "playlist_name": "Blues Break 567",
+    "first_song": "Chasing Shadows",
+    "second_song": "Lost in the Echo",
+    "third_song": "Twilight Calling"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "retro_music_create_and_export_playlist",
+     0.905
+    ],
+    [
+     "vlc_create_playlist",
+     0.457
+    ],
+    [
+     "clock_create_timer",
+     0.319
+    ]
+   ]
+  },
+  "status": "failed",
+  "result": "step start_new_playlist: before-checks failed: app in front is PopupWindow:2eab5eb",
+  "routine": "retro_music_create_and_export_playlist",
+  "version": 1,
+  "done": false,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 6,
+  "rung": 2,
+  "steps": [
+   {
+    "id": "go_back_to_app_list",
+    "status": "done",
+    "rung": 2,
+    "rungs": [
+     "relaxed match: after-checks held past the edge of the screen (scrolled to see them)"
+    ],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "go_back_to_app_drawer_first",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "go_back_to_app_drawer_second",
+    "status": "done",
+    "rung": 2,
+    "rungs": [
+     "relaxed match: after-checks held past the edge of the screen (scrolled to see them)"
+    ],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "launch_retro_music",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_playlists_tab",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_playlists_more_options",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "start_new_playlist",
+    "status": "failed",
+    "rung": 1,
+    "rungs": [
+     "wait and retry: waited 5 s"
+    ],
+    "repairs": 0,
+    "detail": "step start_new_playlist: before-checks failed: app in front is PopupWindow:2eab5eb"
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.003472,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 19.26,
+  "routine_duration_s": 16.33,
+  "trace_dir": "data/runs/aw-routines-verify-1028-180051-047e",
+  "wall_s": 21.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}

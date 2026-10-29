@@ -1,0 +1,128 @@
+{
+ "task": "NotesMeetingAttendeeCount",
+ "seed": 1526838421,
+ "goal": "How many attendees were present in the meeting titled 'Quality Assurance Review' in the Joplin app? Express your answer as just a single number.",
+ "score": 0.0,
+ "aw_run_time_s": 27.5,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 22:18:15.210382",
+ "envoy": {
+  "run_id": "aw-routines-seeds-1028-221755-59e8",
+  "goal": "How many attendees were present in the meeting titled 'Quality Assurance Review' in the Joplin app? Express your answer as just a single number.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "b82e5124ea28700f4c8812839c4a7c8aae5bc782",
+  "mode": "routine",
+  "match": {
+   "routine": "joplin_count_meeting_attendees",
+   "stage": "model confirmed",
+   "inputs": {
+    "meeting_title": "Quality Assurance Review"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "joplin_count_meeting_attendees",
+     0.747
+    ],
+    [
+     "simple_sms_messenger_send_clipboard_mess",
+     0.242
+    ],
+    [
+     "contacts_open_app",
+     0.221
+    ]
+   ]
+  },
+  "status": "failed",
+  "result": "outputs not found: attendee_count",
+  "routine": "joplin_count_meeting_attendees",
+  "version": 1,
+  "done": false,
+  "answer": null,
+  "outputs": {
+   "attendee_count": null
+  },
+  "steps_used": 7,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_joplin",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_search",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_meeting_title",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "find_select_search_result",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "select_search_result",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "find_open_meeting_note",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_meeting_note",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.002721,
+  "cost_at_standard_usd": 0.002721,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 15.2,
+  "routine_duration_s": 12.72,
+  "trace_dir": "data/runs/aw-routines-seeds-1028-221755-59e8",
+  "wall_s": 17.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

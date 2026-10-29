@@ -1,0 +1,11 @@
+{
+ "task": "TasksHighPriorityTasks",
+ "seed": 521701125,
+ "goal": "What are my high priority tasks in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 0.0,
+ "aw_run_time_s": 1.2,
+ "aw_episode_length": 1,
+ "agent": "noop",
+ "finished": "2026-10-27 21:56:33.838790",
+ "envoy": {}
+}

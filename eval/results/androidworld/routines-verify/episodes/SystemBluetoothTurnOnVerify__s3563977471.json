@@ -1,0 +1,103 @@
+{
+ "task": "SystemBluetoothTurnOnVerify",
+ "seed": 3563977471,
+ "goal": "Turn bluetooth on.",
+ "score": 1.0,
+ "aw_run_time_s": 12.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 18:35:52.512032",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-183541-0a95",
+  "goal": "Turn bluetooth on.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "settings_turn_on_bluetooth",
+   "stage": "model confirmed",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "settings_turn_on_bluetooth",
+     1.0
+    ],
+    [
+     "settings_turn_off_bluetooth",
+     0.8
+    ],
+    [
+     "settings_turn_on_wifi",
+     0.5
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "settings_turn_on_bluetooth",
+  "version": 1,
+  "done": true,
+  "answer": "on",
+  "outputs": {
+   "bluetooth_enabled": "on"
+  },
+  "steps_used": 4,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_settings",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_connected_devices",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_connection_preferences",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_bluetooth",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.001631,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 5.37,
+  "routine_duration_s": 3.05,
+  "trace_dir": "data/runs/aw-routines-verify-1028-183541-0a95",
+  "wall_s": 8.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.8
+  }
+ }
+}

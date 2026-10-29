@@ -1,0 +1,96 @@
+{
+ "task": "SimpleDrawProCreateDrawing",
+ "seed": 3242452795,
+ "goal": "Create a new drawing in Simple Draw Pro. Name it adipiscing_fair_jelly_final.png. Save it in the Pictures folder within the sdk_gphone_x86_64 storage area.",
+ "score": 1.0,
+ "aw_run_time_s": 46.0,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:08:00.627300",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-170718-baae",
+  "goal": "Create a new drawing in Simple Draw Pro. Name it adipiscing_fair_jelly_final.png. Save it in the Pictures folder within the sdk_gphone_x86_64 storage area.",
+  "max_steps": 18,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Created adipiscing_fair_jelly_final.png in Pictures folder on sdk_gphone64_arm64 storage (13.29 kB, 15:34) via Simple Draw Pro.",
+  "done": true,
+  "answer": "Created adipiscing_fair_jelly_final.png in Pictures folder on sdk_gphone64_arm64 storage (13.29 kB, 15:34) via Simple Draw Pro.",
+  "steps_device": 13,
+  "iterations": 15,
+  "looks": 1,
+  "screenshots_sent": 2,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 2,
+   "look": 1,
+   "tap": 10,
+   "type": 1,
+   "done": 1
+  },
+  "model_calls": 16,
+  "input_tokens": 44884,
+  "cached_tokens": 34832,
+  "output_tokens": 3012,
+  "reasoning_tokens": 1701,
+  "cost_usd": 0.030591,
+  "cost_at_standard_usd": 0.030591,
+  "duration_s": 37.92,
+  "model_s": 17.0,
+  "device_s": 20.92,
+  "connect_s": 0.87,
+  "approvals": [
+   {
+    "step": 10,
+    "description": "tap \"SAVE\" in com.google.android.documentsui",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Draw",
+   "subgoals": [
+    "Open the Draw app",
+    "Create a new drawing",
+    "Set the name to adipiscing_fair_jelly_final.png",
+    "Save it in the Pictures folder in sdk_gphone_x86_64 storage"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "adipiscing_fair_jelly_final.png",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'adipiscing_fair_jelly_final.png' is visible"
+  },
+  "trace_dir": "data/runs/aw-final-standard-1028-170718-baae",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/SimpleDrawProCreateDrawing__s3242452795.jsonl.gz",
+  "wall_s": 40.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

@@ -1,0 +1,2 @@
+cost $0.092; errors 0; live plan tokens: loop run 1014
+main                         full/filter plans  1/40  tokens [855]

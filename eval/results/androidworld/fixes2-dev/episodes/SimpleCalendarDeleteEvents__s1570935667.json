@@ -1,0 +1,142 @@
+{
+ "task": "SimpleCalendarDeleteEvents",
+ "seed": 1570935667,
+ "goal": "In Simple Calendar Pro, delete all the calendar events on 2023-10-27",
+ "score": 1.0,
+ "aw_run_time_s": 109.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 08:27:17.379603",
+ "envoy": {
+  "run_id": "aw-fixes2-dev-1028-082531-42cf",
+  "goal": "In Simple Calendar Pro, delete all the calendar events on 2023-10-27",
+  "max_steps": 14,
+  "config": {},
+  "status": "done",
+  "result": "All calendar events on 2023-10-27 have been deleted. Verified October 27 (Fri) day view shows no events.",
+  "done": true,
+  "answer": "All calendar events on 2023-10-27 have been deleted. Verified October 27 (Fri) day view shows no events.",
+  "steps_device": 11,
+  "iterations": 14,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "look": 2,
+   "tap_point": 1,
+   "tap": 9,
+   "done": 1
+  },
+  "model_calls": 20,
+  "input_tokens": 43721,
+  "cached_tokens": 26301,
+  "output_tokens": 3571,
+  "reasoning_tokens": 2434,
+  "cost_usd": 0.00812,
+  "cost_at_standard_usd": 0.056067,
+  "duration_s": 98.42,
+  "model_s": 68.54,
+  "device_s": 29.88,
+  "connect_s": 0.89,
+  "approvals": [
+   {
+    "step": 5,
+    "description": "tap \"Delete\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 6,
+    "description": "tap \"Yes\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 8,
+    "description": "tap \"Delete\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 9,
+    "description": "tap \"Yes\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 11,
+    "description": "tap \"Delete\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 12,
+    "description": "tap \"Yes\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Navigate to October 27 2023 day view",
+    "Open each event listed for October 27",
+    "Delete each event and confirm deletion",
+    "Verify no events remain on October 27"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "no events remain on 2023-10-27",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: October, 27, Fri"
+  },
+  "trace_dir": "data/runs/aw-fixes2-dev-1028-082531-42cf",
+  "envoy_commit": "598a6cde6830a440bb68512465aa1e6692600144",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes2-dev/traces/SimpleCalendarDeleteEvents__s1570935667.jsonl.gz",
+  "wall_s": 103.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

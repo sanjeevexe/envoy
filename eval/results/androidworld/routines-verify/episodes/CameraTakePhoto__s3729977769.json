@@ -1,0 +1,93 @@
+{
+ "task": "CameraTakePhoto",
+ "seed": 3729977769,
+ "goal": "Take one photo.",
+ "score": 1.0,
+ "aw_run_time_s": 12.8,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:52:16.719464",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-175205-bd3e",
+  "goal": "Take one photo.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "camera_take_photo",
+   "stage": "model confirmed",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "camera_take_photo",
+     1.0
+    ],
+    [
+     "broccoli_add_recipes_from_image",
+     0.367
+    ],
+    [
+     "pro_expense_delete_duplicate_expenses",
+     0.233
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "camera_take_photo",
+  "version": 1,
+  "done": true,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 3,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_camera",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_shutter",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_photo_thumbnail",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.002305,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 5.92,
+  "routine_duration_s": 3.4,
+  "trace_dir": "data/runs/aw-routines-verify-1028-175205-bd3e",
+  "wall_s": 8.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

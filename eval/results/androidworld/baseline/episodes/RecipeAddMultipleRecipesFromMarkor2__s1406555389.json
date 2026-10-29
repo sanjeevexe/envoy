@@ -1,0 +1,80 @@
+{
+ "task": "RecipeAddMultipleRecipesFromMarkor2",
+ "seed": 1406555389,
+ "goal": "Add the recipes from recipes.txt in Markor that take 10 mins to prepare into the Broccoli recipe app.",
+ "score": 0.0,
+ "aw_run_time_s": 207.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 01:36:48.706336",
+ "envoy": {
+  "run_id": "aw-baseline-1028-013325-9776",
+  "goal": "Add the recipes from recipes.txt in Markor that take 10 mins to prepare into the Broccoli recipe app.",
+  "max_steps": 60,
+  "config": {},
+  "status": "failed",
+  "result": "stuck on the same screen after two recoveries",
+  "done": true,
+  "answer": null,
+  "steps_device": 35,
+  "iterations": 41,
+  "looks": 5,
+  "screenshots_sent": 10,
+  "replans": 2,
+  "stuck_recoveries": 3,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "back": 26,
+   "look": 5,
+   "swipe": 3,
+   "launch": 1,
+   "tap": 2,
+   "scroll": 2
+  },
+  "model_calls": 42,
+  "input_tokens": 106316,
+  "cached_tokens": 76825,
+  "output_tokens": 8094,
+  "reasoning_tokens": 5569,
+  "cost_usd": 0.004722,
+  "cost_at_standard_usd": 0.082787,
+  "duration_s": 197.49,
+  "model_s": 109.26,
+  "device_s": 88.23,
+  "connect_s": 1.21,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": null,
+   "subgoals": [
+    "Open Markor and open recipes.txt to identify recipes with 10 mins prep time",
+    "Open the Broccoli recipe app",
+    "Explore other tabs, menus or settings beyond Home and Search to find Add or Create recipe",
+    "Add the 10-min recipes and verify they appear in the recipe list"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "10-min recipes from recipes.txt visible in Broccoli",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-1028-013325-9776",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/RecipeAddMultipleRecipesFromMarkor2__s1406555389.jsonl.gz",
+  "wall_s": 200.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.1
+  }
+ }
+}

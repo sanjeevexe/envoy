@@ -1,0 +1,102 @@
+{
+ "task": "RecipeDeleteSingleRecipe",
+ "seed": 4252496861,
+ "goal": "Delete the following recipes from Broccoli app: Thai Peanut Noodle Salad.",
+ "score": 1.0,
+ "aw_run_time_s": 35.9,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 06:36:49.453992",
+ "envoy": {
+  "run_id": "aw-fixes1-dev-1028-063616-a48c",
+  "goal": "Delete the following recipes from Broccoli app: Thai Peanut Noodle Salad.",
+  "max_steps": 10,
+  "config": {},
+  "status": "done",
+  "result": "Deleted Thai Peanut Noodle Salad from Broccoli app - Recipes list is now empty.",
+  "done": true,
+  "answer": "Deleted Thai Peanut Noodle Salad from Broccoli app - Recipes list is now empty.",
+  "steps_device": 5,
+  "iterations": 6,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 4,
+   "done": 1
+  },
+  "model_calls": 7,
+  "input_tokens": 15306,
+  "cached_tokens": 12695,
+  "output_tokens": 1812,
+  "reasoning_tokens": 1371,
+  "cost_usd": 0.000649,
+  "cost_at_standard_usd": 0.012869,
+  "duration_s": 28.13,
+  "model_s": 20.84,
+  "device_s": 7.29,
+  "connect_s": 0.89,
+  "approvals": [
+   {
+    "step": 4,
+    "description": "tap \"Delete\" in PopupWindow:2096839",
+    "reasons": [
+     "rule: target says 'Delete'"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 5,
+    "description": "tap \"DELETE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'DELETE'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Open the Broccoli app",
+    "Find the Thai Peanut Noodle Salad recipe",
+    "Delete Thai Peanut Noodle Salad",
+    "Confirm deletion if prompted"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "Thai Peanut Noodle Salad is deleted / not listed",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Recipes"
+  },
+  "trace_dir": "data/runs/aw-fixes1-dev-1028-063616-a48c",
+  "envoy_commit": "821d713df93e6bb5536df7e6f89b6684779d58da",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes1-dev/traces/RecipeDeleteSingleRecipe__s4252496861.jsonl.gz",
+  "wall_s": 30.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

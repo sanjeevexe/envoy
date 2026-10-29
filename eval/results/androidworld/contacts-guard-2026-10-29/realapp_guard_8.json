@@ -1,0 +1,1563 @@
+[
+ {
+  "case": "contacts_count s1",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to read the total count"
+  ],
+  "plan_tokens": 1018,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "0 contacts - screen shows \"No contacts yet\"",
+  "remember": "",
+  "step_tokens": 2721,
+  "reason": "Contacts list shows empty state with count",
+  "risk": "read",
+  "screen_text": "App: com.google.android.contacts \u00b7 Screen: PeopleActivity \u00b7 settled 116 ms\n[1] EditText \"Search contacts\" (id: open_search_bar) (empty)\n[2] Button \"Search\"\n[3] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[4] Button \"envoy3955@gmail.com\"\n[5] Button \"View labels\"\n[6] Toggle \"Show list filters\" (off)\n[7] Text \"No contacts yet\" (id: swipe_refresh)\n[8] Text \"No contacts yet\" (id: empty_view)\n[9] Button \"Create contact\" (id: floating_action_button)\n[10] Text \"Contacts\" (id: contacts) (selected)\n[11] Text \"Contacts\" (id: navigation_bar_item_labels_group) (selected)\n[12] Button \"Highlights\" (id: highlights)\n[13] Text \"Highlights\" (id: navigation_bar_item_labels_group)\n[14] Button \"Organize\" (id: nav_organize)\n[15] Text \"Organize\" (id: navigation_bar_item_labels_group)",
+  "cost": 0.0047700500000000005
+ },
+ {
+  "case": "contacts_count s1",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the total number of contacts"
+  ],
+  "plan_tokens": 1018,
+  "action": "tap",
+  "element": 6,
+  "element_line": "[6] Toggle \"Show list filters\" (off)",
+  "result": null,
+  "remember": "Contacts shows 'No contacts yet' for envoy3955@gmail.com",
+  "step_tokens": 2726,
+  "reason": "Check filters and accounts to confirm total count",
+  "risk": "read",
+  "screen_text": "App: com.google.android.contacts \u00b7 Screen: PeopleActivity \u00b7 settled 116 ms\n[1] EditText \"Search contacts\" (id: open_search_bar) (empty)\n[2] Button \"Search\"\n[3] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[4] Button \"envoy3955@gmail.com\"\n[5] Button \"View labels\"\n[6] Toggle \"Show list filters\" (off)\n[7] Text \"No contacts yet\" (id: swipe_refresh)\n[8] Text \"No contacts yet\" (id: empty_view)\n[9] Button \"Create contact\" (id: floating_action_button)\n[10] Text \"Contacts\" (id: contacts) (selected)\n[11] Text \"Contacts\" (id: navigation_bar_item_labels_group) (selected)\n[12] Button \"Highlights\" (id: highlights)\n[13] Text \"Highlights\" (id: navigation_bar_item_labels_group)\n[14] Button \"Organize\" (id: nav_organize)\n[15] Text \"Organize\" (id: navigation_bar_item_labels_group)",
+  "cost": 0.00349965
+ },
+ {
+  "case": "contacts_count s1",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read the number of contacts"
+  ],
+  "plan_tokens": 1018,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "0 - No contacts yet",
+  "remember": "",
+  "step_tokens": 2724,
+  "reason": "Screen already shows contacts list status",
+  "risk": "read",
+  "screen_text": "App: com.google.android.contacts \u00b7 Screen: PeopleActivity \u00b7 settled 116 ms\n[1] EditText \"Search contacts\" (id: open_search_bar) (empty)\n[2] Button \"Search\"\n[3] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[4] Button \"envoy3955@gmail.com\"\n[5] Button \"View labels\"\n[6] Toggle \"Show list filters\" (off)\n[7] Text \"No contacts yet\" (id: swipe_refresh)\n[8] Text \"No contacts yet\" (id: empty_view)\n[9] Button \"Create contact\" (id: floating_action_button)\n[10] Text \"Contacts\" (id: contacts) (selected)\n[11] Text \"Contacts\" (id: navigation_bar_item_labels_group) (selected)\n[12] Button \"Highlights\" (id: highlights)\n[13] Text \"Highlights\" (id: navigation_bar_item_labels_group)\n[14] Button \"Organize\" (id: nav_organize)\n[15] Text \"Organize\" (id: navigation_bar_item_labels_group)",
+  "cost": 0.0038711500000000003
+ },
+ {
+  "case": "contacts_count s1",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the number of contacts shown"
+  ],
+  "plan_tokens": 1018,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "0 - No contacts yet",
+  "remember": "",
+  "step_tokens": 2726,
+  "reason": "Screen shows contacts list state",
+  "risk": "read",
+  "screen_text": "App: com.google.android.contacts \u00b7 Screen: PeopleActivity \u00b7 settled 116 ms\n[1] EditText \"Search contacts\" (id: open_search_bar) (empty)\n[2] Button \"Search\"\n[3] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[4] Button \"envoy3955@gmail.com\"\n[5] Button \"View labels\"\n[6] Toggle \"Show list filters\" (off)\n[7] Text \"No contacts yet\" (id: swipe_refresh)\n[8] Text \"No contacts yet\" (id: empty_view)\n[9] Button \"Create contact\" (id: floating_action_button)\n[10] Text \"Contacts\" (id: contacts) (selected)\n[11] Text \"Contacts\" (id: navigation_bar_item_labels_group) (selected)\n[12] Button \"Highlights\" (id: highlights)\n[13] Text \"Highlights\" (id: navigation_bar_item_labels_group)\n[14] Button \"Organize\" (id: nav_organize)\n[15] Text \"Organize\" (id: navigation_bar_item_labels_group)",
+  "cost": 0.0054637999999999996
+ },
+ {
+  "case": "contacts_count s1",
+  "variant": "cur",
+  "plan": [
+   "Open Contacts list",
+   "Read total number of contacts"
+  ],
+  "plan_tokens": 1018,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "0 contacts - screen shows \"No contacts yet\"",
+  "remember": "",
+  "step_tokens": 2716,
+  "reason": "Screen shows contact count directly",
+  "risk": "read",
+  "screen_text": "App: com.google.android.contacts \u00b7 Screen: PeopleActivity \u00b7 settled 116 ms\n[1] EditText \"Search contacts\" (id: open_search_bar) (empty)\n[2] Button \"Search\"\n[3] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[4] Button \"envoy3955@gmail.com\"\n[5] Button \"View labels\"\n[6] Toggle \"Show list filters\" (off)\n[7] Text \"No contacts yet\" (id: swipe_refresh)\n[8] Text \"No contacts yet\" (id: empty_view)\n[9] Button \"Create contact\" (id: floating_action_button)\n[10] Text \"Contacts\" (id: contacts) (selected)\n[11] Text \"Contacts\" (id: navigation_bar_item_labels_group) (selected)\n[12] Button \"Highlights\" (id: highlights)\n[13] Text \"Highlights\" (id: navigation_bar_item_labels_group)\n[14] Button \"Organize\" (id: nav_organize)\n[15] Text \"Organize\" (id: navigation_bar_item_labels_group)",
+  "cost": 0.0053162999999999995
+ },
+ {
+  "case": "contacts_count s1",
+  "variant": "cur",
+  "plan": [
+   "Open Contacts app to All contacts list",
+   "Read total number of contacts shown"
+  ],
+  "plan_tokens": 1018,
+  "action": "tap",
+  "element": 6,
+  "element_line": "[6] Toggle \"Show list filters\" (off)",
+  "result": null,
+  "remember": "Contacts shows 'No contacts yet' for account envoy3955@gmail.com",
+  "step_tokens": 2721,
+  "reason": "Check if filters hide contacts before concluding count is zero",
+  "risk": "read",
+  "screen_text": "App: com.google.android.contacts \u00b7 Screen: PeopleActivity \u00b7 settled 116 ms\n[1] EditText \"Search contacts\" (id: open_search_bar) (empty)\n[2] Button \"Search\"\n[3] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[4] Button \"envoy3955@gmail.com\"\n[5] Button \"View labels\"\n[6] Toggle \"Show list filters\" (off)\n[7] Text \"No contacts yet\" (id: swipe_refresh)\n[8] Text \"No contacts yet\" (id: empty_view)\n[9] Button \"Create contact\" (id: floating_action_button)\n[10] Text \"Contacts\" (id: contacts) (selected)\n[11] Text \"Contacts\" (id: navigation_bar_item_labels_group) (selected)\n[12] Button \"Highlights\" (id: highlights)\n[13] Text \"Highlights\" (id: navigation_bar_item_labels_group)\n[14] Button \"Organize\" (id: nav_organize)\n[15] Text \"Organize\" (id: navigation_bar_item_labels_group)",
+  "cost": 0.0039184
+ },
+ {
+  "case": "contacts_count s1",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app",
+   "View the full contacts list",
+   "Read the number of contacts shown"
+  ],
+  "plan_tokens": 1018,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "0 contacts - the Contacts app shows \"No contacts yet\"",
+  "remember": "",
+  "step_tokens": 2726,
+  "reason": "Contacts list shows no contacts",
+  "risk": "read",
+  "screen_text": "App: com.google.android.contacts \u00b7 Screen: PeopleActivity \u00b7 settled 116 ms\n[1] EditText \"Search contacts\" (id: open_search_bar) (empty)\n[2] Button \"Search\"\n[3] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[4] Button \"envoy3955@gmail.com\"\n[5] Button \"View labels\"\n[6] Toggle \"Show list filters\" (off)\n[7] Text \"No contacts yet\" (id: swipe_refresh)\n[8] Text \"No contacts yet\" (id: empty_view)\n[9] Button \"Create contact\" (id: floating_action_button)\n[10] Text \"Contacts\" (id: contacts) (selected)\n[11] Text \"Contacts\" (id: navigation_bar_item_labels_group) (selected)\n[12] Button \"Highlights\" (id: highlights)\n[13] Text \"Highlights\" (id: navigation_bar_item_labels_group)\n[14] Button \"Organize\" (id: nav_organize)\n[15] Text \"Organize\" (id: navigation_bar_item_labels_group)",
+  "cost": 0.0036812999999999998
+ },
+ {
+  "case": "contacts_count s1",
+  "variant": "cur",
+  "plan": [
+   "Open the Contacts app to the main Contacts list",
+   "Read the total number of contacts shown"
+  ],
+  "plan_tokens": 1018,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "0 contacts - the Contacts app shows \"No contacts yet\"",
+  "remember": "",
+  "step_tokens": 2724,
+  "reason": "Screen shows empty contacts list, count is visible",
+  "risk": "read",
+  "screen_text": "App: com.google.android.contacts \u00b7 Screen: PeopleActivity \u00b7 settled 116 ms\n[1] EditText \"Search contacts\" (id: open_search_bar) (empty)\n[2] Button \"Search\"\n[3] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[4] Button \"envoy3955@gmail.com\"\n[5] Button \"View labels\"\n[6] Toggle \"Show list filters\" (off)\n[7] Text \"No contacts yet\" (id: swipe_refresh)\n[8] Text \"No contacts yet\" (id: empty_view)\n[9] Button \"Create contact\" (id: floating_action_button)\n[10] Text \"Contacts\" (id: contacts) (selected)\n[11] Text \"Contacts\" (id: navigation_bar_item_labels_group) (selected)\n[12] Button \"Highlights\" (id: highlights)\n[13] Text \"Highlights\" (id: navigation_bar_item_labels_group)\n[14] Button \"Organize\" (id: nav_organize)\n[15] Text \"Organize\" (id: navigation_bar_item_labels_group)",
+  "cost": 0.004024150000000001
+ },
+ {
+  "case": "contacts_count s1",
+  "variant": "guard",
+  "plan": [
+   "View Contacts list",
+   "Read number of contacts shown"
+  ],
+  "plan_tokens": 1066,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "0",
+  "remember": "",
+  "step_tokens": 2755,
+  "reason": "Screen shows contact count state",
+  "risk": "read",
+  "screen_text": "App: com.google.android.contacts \u00b7 Screen: PeopleActivity \u00b7 settled 116 ms\n[1] EditText \"Search contacts\" (id: open_search_bar) (empty)\n[2] Button \"Search\"\n[3] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[4] Button \"envoy3955@gmail.com\"\n[5] Button \"View labels\"\n[6] Toggle \"Show list filters\" (off)\n[7] Text \"No contacts yet\" (id: swipe_refresh)\n[8] Text \"No contacts yet\" (id: empty_view)\n[9] Button \"Create contact\" (id: floating_action_button)\n[10] Text \"Contacts\" (id: contacts) (selected)\n[11] Text \"Contacts\" (id: navigation_bar_item_labels_group) (selected)\n[12] Button \"Highlights\" (id: highlights)\n[13] Text \"Highlights\" (id: navigation_bar_item_labels_group)\n[14] Button \"Organize\" (id: nav_organize)\n[15] Text \"Organize\" (id: navigation_bar_item_labels_group)",
+  "cost": 0.0074176
+ },
+ {
+  "case": "contacts_count s1",
+  "variant": "guard",
+  "plan": [
+   "Open the Contacts app",
+   "Read the number of contacts shown on screen"
+  ],
+  "plan_tokens": 1066,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "0 - No contacts yet",
+  "remember": "",
+  "step_tokens": 2759,
+  "reason": "Screen shows contact count state",
+  "risk": "read",
+  "screen_text": "App: com.google.android.contacts \u00b7 Screen: PeopleActivity \u00b7 settled 116 ms\n[1] EditText \"Search contacts\" (id: open_search_bar) (empty)\n[2] Button \"Search\"\n[3] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[4] Button \"envoy3955@gmail.com\"\n[5] Button \"View labels\"\n[6] Toggle \"Show list filters\" (off)\n[7] Text \"No contacts yet\" (id: swipe_refresh)\n[8] Text \"No contacts yet\" (id: empty_view)\n[9] Button \"Create contact\" (id: floating_action_button)\n[10] Text \"Contacts\" (id: contacts) (selected)\n[11] Text \"Contacts\" (id: navigation_bar_item_labels_group) (selected)\n[12] Button \"Highlights\" (id: highlights)\n[13] Text \"Highlights\" (id: navigation_bar_item_labels_group)\n[14] Button \"Organize\" (id: nav_organize)\n[15] Text \"Organize\" (id: navigation_bar_item_labels_group)",
+  "cost": 0.00371565
+ },
+ {
+  "case": "contacts_count s1",
+  "variant": "guard",
+  "plan": [
+   "Open Contacts to the Contacts tab",
+   "Read how many contacts are listed"
+  ],
+  "plan_tokens": 1066,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "0",
+  "remember": "",
+  "step_tokens": 2759,
+  "reason": "Contacts tab shows no contacts listed",
+  "risk": "read",
+  "screen_text": "App: com.google.android.contacts \u00b7 Screen: PeopleActivity \u00b7 settled 116 ms\n[1] EditText \"Search contacts\" (id: open_search_bar) (empty)\n[2] Button \"Search\"\n[3] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[4] Button \"envoy3955@gmail.com\"\n[5] Button \"View labels\"\n[6] Toggle \"Show list filters\" (off)\n[7] Text \"No contacts yet\" (id: swipe_refresh)\n[8] Text \"No contacts yet\" (id: empty_view)\n[9] Button \"Create contact\" (id: floating_action_button)\n[10] Text \"Contacts\" (id: contacts) (selected)\n[11] Text \"Contacts\" (id: navigation_bar_item_labels_group) (selected)\n[12] Button \"Highlights\" (id: highlights)\n[13] Text \"Highlights\" (id: navigation_bar_item_labels_group)\n[14] Button \"Organize\" (id: nav_organize)\n[15] Text \"Organize\" (id: navigation_bar_item_labels_group)",
+  "cost": 0.004302149999999999
+ },
+ {
+  "case": "contacts_count s1",
+  "variant": "guard",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list",
+   "Read how many contacts are shown"
+  ],
+  "plan_tokens": 1066,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "0 contacts - screen shows \"No contacts yet\"",
+  "remember": "",
+  "step_tokens": 2764,
+  "reason": "Screen shows contact count directly",
+  "risk": "read",
+  "screen_text": "App: com.google.android.contacts \u00b7 Screen: PeopleActivity \u00b7 settled 116 ms\n[1] EditText \"Search contacts\" (id: open_search_bar) (empty)\n[2] Button \"Search\"\n[3] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[4] Button \"envoy3955@gmail.com\"\n[5] Button \"View labels\"\n[6] Toggle \"Show list filters\" (off)\n[7] Text \"No contacts yet\" (id: swipe_refresh)\n[8] Text \"No contacts yet\" (id: empty_view)\n[9] Button \"Create contact\" (id: floating_action_button)\n[10] Text \"Contacts\" (id: contacts) (selected)\n[11] Text \"Contacts\" (id: navigation_bar_item_labels_group) (selected)\n[12] Button \"Highlights\" (id: highlights)\n[13] Text \"Highlights\" (id: navigation_bar_item_labels_group)\n[14] Button \"Organize\" (id: nav_organize)\n[15] Text \"Organize\" (id: navigation_bar_item_labels_group)",
+  "cost": 0.0040024
+ },
+ {
+  "case": "contacts_count s1",
+  "variant": "guard",
+  "plan": [
+   "Open the Contacts app to the Contacts tab",
+   "Read the number of contacts shown"
+  ],
+  "plan_tokens": 1066,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "0 - No contacts yet",
+  "remember": "No contacts yet",
+  "step_tokens": 2761,
+  "reason": "Screen shows contact count state",
+  "risk": "read",
+  "screen_text": "App: com.google.android.contacts \u00b7 Screen: PeopleActivity \u00b7 settled 116 ms\n[1] EditText \"Search contacts\" (id: open_search_bar) (empty)\n[2] Button \"Search\"\n[3] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[4] Button \"envoy3955@gmail.com\"\n[5] Button \"View labels\"\n[6] Toggle \"Show list filters\" (off)\n[7] Text \"No contacts yet\" (id: swipe_refresh)\n[8] Text \"No contacts yet\" (id: empty_view)\n[9] Button \"Create contact\" (id: floating_action_button)\n[10] Text \"Contacts\" (id: contacts) (selected)\n[11] Text \"Contacts\" (id: navigation_bar_item_labels_group) (selected)\n[12] Button \"Highlights\" (id: highlights)\n[13] Text \"Highlights\" (id: navigation_bar_item_labels_group)\n[14] Button \"Organize\" (id: nav_organize)\n[15] Text \"Organize\" (id: navigation_bar_item_labels_group)",
+  "cost": 0.0039349
+ },
+ {
+  "case": "contacts_count s1",
+  "variant": "guard",
+  "plan": [
+   "Open the Contacts app",
+   "Stay on the Contacts tab",
+   "Read how many contacts are shown"
+  ],
+  "plan_tokens": 1066,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "You have 0 contacts - the Contacts app shows \"No contacts yet\"",
+  "remember": "",
+  "step_tokens": 2765,
+  "reason": "Screen shows contact count directly",
+  "risk": "read",
+  "screen_text": "App: com.google.android.contacts \u00b7 Screen: PeopleActivity \u00b7 settled 116 ms\n[1] EditText \"Search contacts\" (id: open_search_bar) (empty)\n[2] Button \"Search\"\n[3] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[4] Button \"envoy3955@gmail.com\"\n[5] Button \"View labels\"\n[6] Toggle \"Show list filters\" (off)\n[7] Text \"No contacts yet\" (id: swipe_refresh)\n[8] Text \"No contacts yet\" (id: empty_view)\n[9] Button \"Create contact\" (id: floating_action_button)\n[10] Text \"Contacts\" (id: contacts) (selected)\n[11] Text \"Contacts\" (id: navigation_bar_item_labels_group) (selected)\n[12] Button \"Highlights\" (id: highlights)\n[13] Text \"Highlights\" (id: navigation_bar_item_labels_group)\n[14] Button \"Organize\" (id: nav_organize)\n[15] Text \"Organize\" (id: navigation_bar_item_labels_group)",
+  "cost": 0.00371465
+ },
+ {
+  "case": "contacts_count s1",
+  "variant": "guard",
+  "plan": [
+   "Open the Contacts app",
+   "View the Contacts list",
+   "Read the number of contacts shown"
+  ],
+  "plan_tokens": 1066,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "0 contacts - Contacts app shows \"No contacts yet\"",
+  "remember": "",
+  "step_tokens": 2764,
+  "reason": "Screen shows contact count state",
+  "risk": "read",
+  "screen_text": "App: com.google.android.contacts \u00b7 Screen: PeopleActivity \u00b7 settled 116 ms\n[1] EditText \"Search contacts\" (id: open_search_bar) (empty)\n[2] Button \"Search\"\n[3] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[4] Button \"envoy3955@gmail.com\"\n[5] Button \"View labels\"\n[6] Toggle \"Show list filters\" (off)\n[7] Text \"No contacts yet\" (id: swipe_refresh)\n[8] Text \"No contacts yet\" (id: empty_view)\n[9] Button \"Create contact\" (id: floating_action_button)\n[10] Text \"Contacts\" (id: contacts) (selected)\n[11] Text \"Contacts\" (id: navigation_bar_item_labels_group) (selected)\n[12] Button \"Highlights\" (id: highlights)\n[13] Text \"Highlights\" (id: navigation_bar_item_labels_group)\n[14] Button \"Organize\" (id: nav_organize)\n[15] Text \"Organize\" (id: navigation_bar_item_labels_group)",
+  "cost": 0.0039684
+ },
+ {
+  "case": "contacts_count s1",
+  "variant": "guard",
+  "plan": [
+   "Open the Contacts app",
+   "View the contacts list to see the count"
+  ],
+  "plan_tokens": 1066,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "0",
+  "remember": "",
+  "step_tokens": 2759,
+  "reason": "Screen already shows contact count",
+  "risk": "read",
+  "screen_text": "App: com.google.android.contacts \u00b7 Screen: PeopleActivity \u00b7 settled 116 ms\n[1] EditText \"Search contacts\" (id: open_search_bar) (empty)\n[2] Button \"Search\"\n[3] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[4] Button \"envoy3955@gmail.com\"\n[5] Button \"View labels\"\n[6] Toggle \"Show list filters\" (off)\n[7] Text \"No contacts yet\" (id: swipe_refresh)\n[8] Text \"No contacts yet\" (id: empty_view)\n[9] Button \"Create contact\" (id: floating_action_button)\n[10] Text \"Contacts\" (id: contacts) (selected)\n[11] Text \"Contacts\" (id: navigation_bar_item_labels_group) (selected)\n[12] Button \"Highlights\" (id: highlights)\n[13] Text \"Highlights\" (id: navigation_bar_item_labels_group)\n[14] Button \"Organize\" (id: nav_organize)\n[15] Text \"Organize\" (id: navigation_bar_item_labels_group)",
+  "cost": 0.0036774
+ },
+ {
+  "case": "doordash s1",
+  "variant": "cur",
+  "plan": [
+   "Tap the current address header to open saved addresses",
+   "Identify the selected saved delivery address"
+  ],
+  "plan_tokens": 1550,
+  "action": "tap",
+  "element": 5,
+  "element_line": "[5] Button \"1 Hacker Way\" (id: toolbar)",
+  "result": null,
+  "remember": "Current header shows 1 Hacker Way",
+  "step_tokens": 3261,
+  "reason": "Open address selector to see saved delivery address",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 1622 ms\n[1] Button \"40% off your first order, up to $10\"\n[2] Button \"Search DoorDash\"\n[3] List (id: coordinatorLayout_homepage) (scrollable)\n[4] Text \"DoorDash\" (id: collapsing_toolbar_dashboard)\n[5] Button \"1 Hacker Way\" (id: toolbar)\n[6] Text \"1 Hacker Way\" (id: address_container)\n[7] Button \"Account\" (id: item_toolbar_account)\n[8] Button \"Notification Hub\"\n[9] Button \"No open carts\"\n[10] List (id: verticals_recycler) (scrollable)\n[11] Button \"Late Night\"\n[12] Button \"Deals\"\n[13] Button \"Alcohol\"\n[14] Button \"Convenience\"\n[15] Button \"Grocery\"\n[16] List (id: recyclerView) (scrollable)\n[17] Text \"What are you in the mood for?\"\n[18] Button \"Icon Image \u00b7 Fast Food\" (id: ChipComponentComposable)\n[19] Button \"Icon Image \u00b7 Burgers\" (id: ChipComponentComposable)\n[20] Button \"Icon Image \u00b7 Desserts\" (id: ChipComponentComposable)\n[21] Button \"Icon Image \u00b7 Healthy\" (id: ChipComponentComposable)\n[22] Button \"Icon Image \u00b7 Chicken\" (id: ChipComponentComposable)\n[23] Button \"Icon Image \u00b7 Deals\" (id: ChipComponentComposable)\n[24] Button \"Icon Image \u00b7 Comfort Food\" (id: ChipComponentComposable)\n[25] Button \"Icon Image \u00b7 Mexican\" (id: ChipComponentComposable)\n[26] Button \"Under $2 delivery fee\"\n[27] List (scrollable)\n[28] Button \"Wingstop, 2.5 mi away, Estimated time of arrival 29 min, Deal available, Buy 1, get 1 free \u00b7 Wingstop \u00b7 4.4\"\n[29] Text \"4.4 \u00b7 (20k+)\" (id: sd_ratings)\n[30] Text \"\u2022\" (id: sd_subtitle_separator)\n[31] Text \"2.5 mi \u2022 Fast 29 min\" (id: sd_subtitle)\n[32] CheckBox \"Removed from favorites. Double tap to add to favorites\" (id: sd_save_icon) (off)\n[33] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[34] Text \"Buy 1, get 1 free\" (id: badge_container)\n[35] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[36] Button \"Curry Pizza House, 5.2 mi away, Estimated time of arrival 41 min, Lower fees, Deal available, Buy 1, get 1 free \u00b7 Curry\u2026\"\n[37] Text \"4.7 \u00b7 (1k+)\" (id: sd_ratings)\n[38] Text \"\u2022\" (id: sd_subtitle_separator)\n[39] Text \"5.2 mi \u2022 41 min\" (id: sd_subtitle)\n[40] Text \"Lower fees\" (id: sd_pricing_info)\n[41] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[42] Text \"Buy 1, get 1 free\" (id: badge_container)\n[43] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[44] Text \"Save with DashPass\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0057450999999999995
+ },
+ {
+  "case": "doordash s1",
+  "variant": "cur",
+  "plan": [
+   "Confirm delivery address shown at top of DoorDash home",
+   "Tap address to view saved addresses",
+   "Read saved delivery address"
+  ],
+  "plan_tokens": 1550,
+  "action": "tap",
+  "element": 5,
+  "element_line": "[5] Button \"1 Hacker Way\" (id: toolbar)",
+  "result": null,
+  "remember": "Top shows 1 Hacker Way",
+  "step_tokens": 3269,
+  "reason": "Need to open address selector to confirm saved address",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 1622 ms\n[1] Button \"40% off your first order, up to $10\"\n[2] Button \"Search DoorDash\"\n[3] List (id: coordinatorLayout_homepage) (scrollable)\n[4] Text \"DoorDash\" (id: collapsing_toolbar_dashboard)\n[5] Button \"1 Hacker Way\" (id: toolbar)\n[6] Text \"1 Hacker Way\" (id: address_container)\n[7] Button \"Account\" (id: item_toolbar_account)\n[8] Button \"Notification Hub\"\n[9] Button \"No open carts\"\n[10] List (id: verticals_recycler) (scrollable)\n[11] Button \"Late Night\"\n[12] Button \"Deals\"\n[13] Button \"Alcohol\"\n[14] Button \"Convenience\"\n[15] Button \"Grocery\"\n[16] List (id: recyclerView) (scrollable)\n[17] Text \"What are you in the mood for?\"\n[18] Button \"Icon Image \u00b7 Fast Food\" (id: ChipComponentComposable)\n[19] Button \"Icon Image \u00b7 Burgers\" (id: ChipComponentComposable)\n[20] Button \"Icon Image \u00b7 Desserts\" (id: ChipComponentComposable)\n[21] Button \"Icon Image \u00b7 Healthy\" (id: ChipComponentComposable)\n[22] Button \"Icon Image \u00b7 Chicken\" (id: ChipComponentComposable)\n[23] Button \"Icon Image \u00b7 Deals\" (id: ChipComponentComposable)\n[24] Button \"Icon Image \u00b7 Comfort Food\" (id: ChipComponentComposable)\n[25] Button \"Icon Image \u00b7 Mexican\" (id: ChipComponentComposable)\n[26] Button \"Under $2 delivery fee\"\n[27] List (scrollable)\n[28] Button \"Wingstop, 2.5 mi away, Estimated time of arrival 29 min, Deal available, Buy 1, get 1 free \u00b7 Wingstop \u00b7 4.4\"\n[29] Text \"4.4 \u00b7 (20k+)\" (id: sd_ratings)\n[30] Text \"\u2022\" (id: sd_subtitle_separator)\n[31] Text \"2.5 mi \u2022 Fast 29 min\" (id: sd_subtitle)\n[32] CheckBox \"Removed from favorites. Double tap to add to favorites\" (id: sd_save_icon) (off)\n[33] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[34] Text \"Buy 1, get 1 free\" (id: badge_container)\n[35] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[36] Button \"Curry Pizza House, 5.2 mi away, Estimated time of arrival 41 min, Lower fees, Deal available, Buy 1, get 1 free \u00b7 Curry\u2026\"\n[37] Text \"4.7 \u00b7 (1k+)\" (id: sd_ratings)\n[38] Text \"\u2022\" (id: sd_subtitle_separator)\n[39] Text \"5.2 mi \u2022 41 min\" (id: sd_subtitle)\n[40] Text \"Lower fees\" (id: sd_pricing_info)\n[41] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[42] Text \"Buy 1, get 1 free\" (id: badge_container)\n[43] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[44] Text \"Save with DashPass\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.00368095
+ },
+ {
+  "case": "doordash s1",
+  "variant": "cur",
+  "plan": [
+   "Tap the current address '1 Hacker Way' to open address options",
+   "Read the saved delivery address shown"
+  ],
+  "plan_tokens": 1550,
+  "action": "tap",
+  "element": 5,
+  "element_line": "[5] Button \"1 Hacker Way\" (id: toolbar)",
+  "result": null,
+  "remember": "Current toolbar shows 1 Hacker Way",
+  "step_tokens": 3265,
+  "reason": "Open address options to read saved delivery address",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 1622 ms\n[1] Button \"40% off your first order, up to $10\"\n[2] Button \"Search DoorDash\"\n[3] List (id: coordinatorLayout_homepage) (scrollable)\n[4] Text \"DoorDash\" (id: collapsing_toolbar_dashboard)\n[5] Button \"1 Hacker Way\" (id: toolbar)\n[6] Text \"1 Hacker Way\" (id: address_container)\n[7] Button \"Account\" (id: item_toolbar_account)\n[8] Button \"Notification Hub\"\n[9] Button \"No open carts\"\n[10] List (id: verticals_recycler) (scrollable)\n[11] Button \"Late Night\"\n[12] Button \"Deals\"\n[13] Button \"Alcohol\"\n[14] Button \"Convenience\"\n[15] Button \"Grocery\"\n[16] List (id: recyclerView) (scrollable)\n[17] Text \"What are you in the mood for?\"\n[18] Button \"Icon Image \u00b7 Fast Food\" (id: ChipComponentComposable)\n[19] Button \"Icon Image \u00b7 Burgers\" (id: ChipComponentComposable)\n[20] Button \"Icon Image \u00b7 Desserts\" (id: ChipComponentComposable)\n[21] Button \"Icon Image \u00b7 Healthy\" (id: ChipComponentComposable)\n[22] Button \"Icon Image \u00b7 Chicken\" (id: ChipComponentComposable)\n[23] Button \"Icon Image \u00b7 Deals\" (id: ChipComponentComposable)\n[24] Button \"Icon Image \u00b7 Comfort Food\" (id: ChipComponentComposable)\n[25] Button \"Icon Image \u00b7 Mexican\" (id: ChipComponentComposable)\n[26] Button \"Under $2 delivery fee\"\n[27] List (scrollable)\n[28] Button \"Wingstop, 2.5 mi away, Estimated time of arrival 29 min, Deal available, Buy 1, get 1 free \u00b7 Wingstop \u00b7 4.4\"\n[29] Text \"4.4 \u00b7 (20k+)\" (id: sd_ratings)\n[30] Text \"\u2022\" (id: sd_subtitle_separator)\n[31] Text \"2.5 mi \u2022 Fast 29 min\" (id: sd_subtitle)\n[32] CheckBox \"Removed from favorites. Double tap to add to favorites\" (id: sd_save_icon) (off)\n[33] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[34] Text \"Buy 1, get 1 free\" (id: badge_container)\n[35] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[36] Button \"Curry Pizza House, 5.2 mi away, Estimated time of arrival 41 min, Lower fees, Deal available, Buy 1, get 1 free \u00b7 Curry\u2026\"\n[37] Text \"4.7 \u00b7 (1k+)\" (id: sd_ratings)\n[38] Text \"\u2022\" (id: sd_subtitle_separator)\n[39] Text \"5.2 mi \u2022 41 min\" (id: sd_subtitle)\n[40] Text \"Lower fees\" (id: sd_pricing_info)\n[41] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[42] Text \"Buy 1, get 1 free\" (id: badge_container)\n[43] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[44] Text \"Save with DashPass\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0047087
+ },
+ {
+  "case": "doordash s1",
+  "variant": "cur",
+  "plan": [
+   "Tap the delivery address button in the toolbar to open saved addresses",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 1550,
+  "action": "tap",
+  "element": 5,
+  "element_line": "[5] Button \"1 Hacker Way\" (id: toolbar)",
+  "result": null,
+  "remember": "1 Hacker Way shown as current delivery address",
+  "step_tokens": 3263,
+  "reason": "Open saved addresses to read delivery address",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 1622 ms\n[1] Button \"40% off your first order, up to $10\"\n[2] Button \"Search DoorDash\"\n[3] List (id: coordinatorLayout_homepage) (scrollable)\n[4] Text \"DoorDash\" (id: collapsing_toolbar_dashboard)\n[5] Button \"1 Hacker Way\" (id: toolbar)\n[6] Text \"1 Hacker Way\" (id: address_container)\n[7] Button \"Account\" (id: item_toolbar_account)\n[8] Button \"Notification Hub\"\n[9] Button \"No open carts\"\n[10] List (id: verticals_recycler) (scrollable)\n[11] Button \"Late Night\"\n[12] Button \"Deals\"\n[13] Button \"Alcohol\"\n[14] Button \"Convenience\"\n[15] Button \"Grocery\"\n[16] List (id: recyclerView) (scrollable)\n[17] Text \"What are you in the mood for?\"\n[18] Button \"Icon Image \u00b7 Fast Food\" (id: ChipComponentComposable)\n[19] Button \"Icon Image \u00b7 Burgers\" (id: ChipComponentComposable)\n[20] Button \"Icon Image \u00b7 Desserts\" (id: ChipComponentComposable)\n[21] Button \"Icon Image \u00b7 Healthy\" (id: ChipComponentComposable)\n[22] Button \"Icon Image \u00b7 Chicken\" (id: ChipComponentComposable)\n[23] Button \"Icon Image \u00b7 Deals\" (id: ChipComponentComposable)\n[24] Button \"Icon Image \u00b7 Comfort Food\" (id: ChipComponentComposable)\n[25] Button \"Icon Image \u00b7 Mexican\" (id: ChipComponentComposable)\n[26] Button \"Under $2 delivery fee\"\n[27] List (scrollable)\n[28] Button \"Wingstop, 2.5 mi away, Estimated time of arrival 29 min, Deal available, Buy 1, get 1 free \u00b7 Wingstop \u00b7 4.4\"\n[29] Text \"4.4 \u00b7 (20k+)\" (id: sd_ratings)\n[30] Text \"\u2022\" (id: sd_subtitle_separator)\n[31] Text \"2.5 mi \u2022 Fast 29 min\" (id: sd_subtitle)\n[32] CheckBox \"Removed from favorites. Double tap to add to favorites\" (id: sd_save_icon) (off)\n[33] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[34] Text \"Buy 1, get 1 free\" (id: badge_container)\n[35] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[36] Button \"Curry Pizza House, 5.2 mi away, Estimated time of arrival 41 min, Lower fees, Deal available, Buy 1, get 1 free \u00b7 Curry\u2026\"\n[37] Text \"4.7 \u00b7 (1k+)\" (id: sd_ratings)\n[38] Text \"\u2022\" (id: sd_subtitle_separator)\n[39] Text \"5.2 mi \u2022 41 min\" (id: sd_subtitle)\n[40] Text \"Lower fees\" (id: sd_pricing_info)\n[41] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[42] Text \"Buy 1, get 1 free\" (id: badge_container)\n[43] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[44] Text \"Save with DashPass\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.004667950000000001
+ },
+ {
+  "case": "doordash s1",
+  "variant": "cur",
+  "plan": [
+   "Stay on DoorDash home screen",
+   "Tap the delivery address button at the top to open addresses",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 1550,
+  "action": "tap",
+  "element": 5,
+  "element_line": "[5] Button \"1 Hacker Way\" (id: toolbar)",
+  "result": null,
+  "remember": "Top bar shows 1 Hacker Way",
+  "step_tokens": 3271,
+  "reason": "Open address selector to read saved delivery address",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 1622 ms\n[1] Button \"40% off your first order, up to $10\"\n[2] Button \"Search DoorDash\"\n[3] List (id: coordinatorLayout_homepage) (scrollable)\n[4] Text \"DoorDash\" (id: collapsing_toolbar_dashboard)\n[5] Button \"1 Hacker Way\" (id: toolbar)\n[6] Text \"1 Hacker Way\" (id: address_container)\n[7] Button \"Account\" (id: item_toolbar_account)\n[8] Button \"Notification Hub\"\n[9] Button \"No open carts\"\n[10] List (id: verticals_recycler) (scrollable)\n[11] Button \"Late Night\"\n[12] Button \"Deals\"\n[13] Button \"Alcohol\"\n[14] Button \"Convenience\"\n[15] Button \"Grocery\"\n[16] List (id: recyclerView) (scrollable)\n[17] Text \"What are you in the mood for?\"\n[18] Button \"Icon Image \u00b7 Fast Food\" (id: ChipComponentComposable)\n[19] Button \"Icon Image \u00b7 Burgers\" (id: ChipComponentComposable)\n[20] Button \"Icon Image \u00b7 Desserts\" (id: ChipComponentComposable)\n[21] Button \"Icon Image \u00b7 Healthy\" (id: ChipComponentComposable)\n[22] Button \"Icon Image \u00b7 Chicken\" (id: ChipComponentComposable)\n[23] Button \"Icon Image \u00b7 Deals\" (id: ChipComponentComposable)\n[24] Button \"Icon Image \u00b7 Comfort Food\" (id: ChipComponentComposable)\n[25] Button \"Icon Image \u00b7 Mexican\" (id: ChipComponentComposable)\n[26] Button \"Under $2 delivery fee\"\n[27] List (scrollable)\n[28] Button \"Wingstop, 2.5 mi away, Estimated time of arrival 29 min, Deal available, Buy 1, get 1 free \u00b7 Wingstop \u00b7 4.4\"\n[29] Text \"4.4 \u00b7 (20k+)\" (id: sd_ratings)\n[30] Text \"\u2022\" (id: sd_subtitle_separator)\n[31] Text \"2.5 mi \u2022 Fast 29 min\" (id: sd_subtitle)\n[32] CheckBox \"Removed from favorites. Double tap to add to favorites\" (id: sd_save_icon) (off)\n[33] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[34] Text \"Buy 1, get 1 free\" (id: badge_container)\n[35] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[36] Button \"Curry Pizza House, 5.2 mi away, Estimated time of arrival 41 min, Lower fees, Deal available, Buy 1, get 1 free \u00b7 Curry\u2026\"\n[37] Text \"4.7 \u00b7 (1k+)\" (id: sd_ratings)\n[38] Text \"\u2022\" (id: sd_subtitle_separator)\n[39] Text \"5.2 mi \u2022 41 min\" (id: sd_subtitle)\n[40] Text \"Lower fees\" (id: sd_pricing_info)\n[41] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[42] Text \"Buy 1, get 1 free\" (id: badge_container)\n[43] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[44] Text \"Save with DashPass\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0052219499999999995
+ },
+ {
+  "case": "doordash s1",
+  "variant": "cur",
+  "plan": [
+   "Tap the delivery address button showing 1 Hacker Way",
+   "Open the saved addresses list",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 1550,
+  "action": "tap",
+  "element": 5,
+  "element_line": "[5] Button \"1 Hacker Way\" (id: toolbar)",
+  "result": null,
+  "remember": "",
+  "step_tokens": 3269,
+  "reason": "Tap delivery address to open saved addresses",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 1622 ms\n[1] Button \"40% off your first order, up to $10\"\n[2] Button \"Search DoorDash\"\n[3] List (id: coordinatorLayout_homepage) (scrollable)\n[4] Text \"DoorDash\" (id: collapsing_toolbar_dashboard)\n[5] Button \"1 Hacker Way\" (id: toolbar)\n[6] Text \"1 Hacker Way\" (id: address_container)\n[7] Button \"Account\" (id: item_toolbar_account)\n[8] Button \"Notification Hub\"\n[9] Button \"No open carts\"\n[10] List (id: verticals_recycler) (scrollable)\n[11] Button \"Late Night\"\n[12] Button \"Deals\"\n[13] Button \"Alcohol\"\n[14] Button \"Convenience\"\n[15] Button \"Grocery\"\n[16] List (id: recyclerView) (scrollable)\n[17] Text \"What are you in the mood for?\"\n[18] Button \"Icon Image \u00b7 Fast Food\" (id: ChipComponentComposable)\n[19] Button \"Icon Image \u00b7 Burgers\" (id: ChipComponentComposable)\n[20] Button \"Icon Image \u00b7 Desserts\" (id: ChipComponentComposable)\n[21] Button \"Icon Image \u00b7 Healthy\" (id: ChipComponentComposable)\n[22] Button \"Icon Image \u00b7 Chicken\" (id: ChipComponentComposable)\n[23] Button \"Icon Image \u00b7 Deals\" (id: ChipComponentComposable)\n[24] Button \"Icon Image \u00b7 Comfort Food\" (id: ChipComponentComposable)\n[25] Button \"Icon Image \u00b7 Mexican\" (id: ChipComponentComposable)\n[26] Button \"Under $2 delivery fee\"\n[27] List (scrollable)\n[28] Button \"Wingstop, 2.5 mi away, Estimated time of arrival 29 min, Deal available, Buy 1, get 1 free \u00b7 Wingstop \u00b7 4.4\"\n[29] Text \"4.4 \u00b7 (20k+)\" (id: sd_ratings)\n[30] Text \"\u2022\" (id: sd_subtitle_separator)\n[31] Text \"2.5 mi \u2022 Fast 29 min\" (id: sd_subtitle)\n[32] CheckBox \"Removed from favorites. Double tap to add to favorites\" (id: sd_save_icon) (off)\n[33] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[34] Text \"Buy 1, get 1 free\" (id: badge_container)\n[35] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[36] Button \"Curry Pizza House, 5.2 mi away, Estimated time of arrival 41 min, Lower fees, Deal available, Buy 1, get 1 free \u00b7 Curry\u2026\"\n[37] Text \"4.7 \u00b7 (1k+)\" (id: sd_ratings)\n[38] Text \"\u2022\" (id: sd_subtitle_separator)\n[39] Text \"5.2 mi \u2022 41 min\" (id: sd_subtitle)\n[40] Text \"Lower fees\" (id: sd_pricing_info)\n[41] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[42] Text \"Buy 1, get 1 free\" (id: badge_container)\n[43] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[44] Text \"Save with DashPass\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.004892199999999999
+ },
+ {
+  "case": "doordash s1",
+  "variant": "cur",
+  "plan": [
+   "Open the Account section",
+   "Open Addresses or saved delivery addresses",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 1550,
+  "action": "tap",
+  "element": 7,
+  "element_line": "[7] Button \"Account\" (id: item_toolbar_account)",
+  "result": null,
+  "remember": "Toolbar shows '1 Hacker Way' but need Account saved address to confirm",
+  "step_tokens": 3264,
+  "reason": "Open Account section to find saved addresses",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 1622 ms\n[1] Button \"40% off your first order, up to $10\"\n[2] Button \"Search DoorDash\"\n[3] List (id: coordinatorLayout_homepage) (scrollable)\n[4] Text \"DoorDash\" (id: collapsing_toolbar_dashboard)\n[5] Button \"1 Hacker Way\" (id: toolbar)\n[6] Text \"1 Hacker Way\" (id: address_container)\n[7] Button \"Account\" (id: item_toolbar_account)\n[8] Button \"Notification Hub\"\n[9] Button \"No open carts\"\n[10] List (id: verticals_recycler) (scrollable)\n[11] Button \"Late Night\"\n[12] Button \"Deals\"\n[13] Button \"Alcohol\"\n[14] Button \"Convenience\"\n[15] Button \"Grocery\"\n[16] List (id: recyclerView) (scrollable)\n[17] Text \"What are you in the mood for?\"\n[18] Button \"Icon Image \u00b7 Fast Food\" (id: ChipComponentComposable)\n[19] Button \"Icon Image \u00b7 Burgers\" (id: ChipComponentComposable)\n[20] Button \"Icon Image \u00b7 Desserts\" (id: ChipComponentComposable)\n[21] Button \"Icon Image \u00b7 Healthy\" (id: ChipComponentComposable)\n[22] Button \"Icon Image \u00b7 Chicken\" (id: ChipComponentComposable)\n[23] Button \"Icon Image \u00b7 Deals\" (id: ChipComponentComposable)\n[24] Button \"Icon Image \u00b7 Comfort Food\" (id: ChipComponentComposable)\n[25] Button \"Icon Image \u00b7 Mexican\" (id: ChipComponentComposable)\n[26] Button \"Under $2 delivery fee\"\n[27] List (scrollable)\n[28] Button \"Wingstop, 2.5 mi away, Estimated time of arrival 29 min, Deal available, Buy 1, get 1 free \u00b7 Wingstop \u00b7 4.4\"\n[29] Text \"4.4 \u00b7 (20k+)\" (id: sd_ratings)\n[30] Text \"\u2022\" (id: sd_subtitle_separator)\n[31] Text \"2.5 mi \u2022 Fast 29 min\" (id: sd_subtitle)\n[32] CheckBox \"Removed from favorites. Double tap to add to favorites\" (id: sd_save_icon) (off)\n[33] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[34] Text \"Buy 1, get 1 free\" (id: badge_container)\n[35] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[36] Button \"Curry Pizza House, 5.2 mi away, Estimated time of arrival 41 min, Lower fees, Deal available, Buy 1, get 1 free \u00b7 Curry\u2026\"\n[37] Text \"4.7 \u00b7 (1k+)\" (id: sd_ratings)\n[38] Text \"\u2022\" (id: sd_subtitle_separator)\n[39] Text \"5.2 mi \u2022 41 min\" (id: sd_subtitle)\n[40] Text \"Lower fees\" (id: sd_pricing_info)\n[41] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[42] Text \"Buy 1, get 1 free\" (id: badge_container)\n[43] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[44] Text \"Save with DashPass\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0038022000000000004
+ },
+ {
+  "case": "doordash s1",
+  "variant": "cur",
+  "plan": [
+   "Tap the delivery address header showing 1 Hacker Way to open address details",
+   "Read and confirm the saved delivery address"
+  ],
+  "plan_tokens": 1550,
+  "action": "tap",
+  "element": 5,
+  "element_line": "[5] Button \"1 Hacker Way\" (id: toolbar)",
+  "result": null,
+  "remember": "Saved delivery address shown as 1 Hacker Way",
+  "step_tokens": 3267,
+  "reason": "Tap delivery address header to open address details",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 1622 ms\n[1] Button \"40% off your first order, up to $10\"\n[2] Button \"Search DoorDash\"\n[3] List (id: coordinatorLayout_homepage) (scrollable)\n[4] Text \"DoorDash\" (id: collapsing_toolbar_dashboard)\n[5] Button \"1 Hacker Way\" (id: toolbar)\n[6] Text \"1 Hacker Way\" (id: address_container)\n[7] Button \"Account\" (id: item_toolbar_account)\n[8] Button \"Notification Hub\"\n[9] Button \"No open carts\"\n[10] List (id: verticals_recycler) (scrollable)\n[11] Button \"Late Night\"\n[12] Button \"Deals\"\n[13] Button \"Alcohol\"\n[14] Button \"Convenience\"\n[15] Button \"Grocery\"\n[16] List (id: recyclerView) (scrollable)\n[17] Text \"What are you in the mood for?\"\n[18] Button \"Icon Image \u00b7 Fast Food\" (id: ChipComponentComposable)\n[19] Button \"Icon Image \u00b7 Burgers\" (id: ChipComponentComposable)\n[20] Button \"Icon Image \u00b7 Desserts\" (id: ChipComponentComposable)\n[21] Button \"Icon Image \u00b7 Healthy\" (id: ChipComponentComposable)\n[22] Button \"Icon Image \u00b7 Chicken\" (id: ChipComponentComposable)\n[23] Button \"Icon Image \u00b7 Deals\" (id: ChipComponentComposable)\n[24] Button \"Icon Image \u00b7 Comfort Food\" (id: ChipComponentComposable)\n[25] Button \"Icon Image \u00b7 Mexican\" (id: ChipComponentComposable)\n[26] Button \"Under $2 delivery fee\"\n[27] List (scrollable)\n[28] Button \"Wingstop, 2.5 mi away, Estimated time of arrival 29 min, Deal available, Buy 1, get 1 free \u00b7 Wingstop \u00b7 4.4\"\n[29] Text \"4.4 \u00b7 (20k+)\" (id: sd_ratings)\n[30] Text \"\u2022\" (id: sd_subtitle_separator)\n[31] Text \"2.5 mi \u2022 Fast 29 min\" (id: sd_subtitle)\n[32] CheckBox \"Removed from favorites. Double tap to add to favorites\" (id: sd_save_icon) (off)\n[33] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[34] Text \"Buy 1, get 1 free\" (id: badge_container)\n[35] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[36] Button \"Curry Pizza House, 5.2 mi away, Estimated time of arrival 41 min, Lower fees, Deal available, Buy 1, get 1 free \u00b7 Curry\u2026\"\n[37] Text \"4.7 \u00b7 (1k+)\" (id: sd_ratings)\n[38] Text \"\u2022\" (id: sd_subtitle_separator)\n[39] Text \"5.2 mi \u2022 41 min\" (id: sd_subtitle)\n[40] Text \"Lower fees\" (id: sd_pricing_info)\n[41] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[42] Text \"Buy 1, get 1 free\" (id: badge_container)\n[43] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[44] Text \"Save with DashPass\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.00451995
+ },
+ {
+  "case": "doordash s1",
+  "variant": "guard",
+  "plan": [
+   "Confirm DoorDash home screen is open",
+   "Read the saved delivery address shown in the header"
+  ],
+  "plan_tokens": 1598,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "1 Hacker Way",
+  "remember": "",
+  "step_tokens": 3301,
+  "reason": "Saved address is visible in header",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 1622 ms\n[1] Button \"40% off your first order, up to $10\"\n[2] Button \"Search DoorDash\"\n[3] List (id: coordinatorLayout_homepage) (scrollable)\n[4] Text \"DoorDash\" (id: collapsing_toolbar_dashboard)\n[5] Button \"1 Hacker Way\" (id: toolbar)\n[6] Text \"1 Hacker Way\" (id: address_container)\n[7] Button \"Account\" (id: item_toolbar_account)\n[8] Button \"Notification Hub\"\n[9] Button \"No open carts\"\n[10] List (id: verticals_recycler) (scrollable)\n[11] Button \"Late Night\"\n[12] Button \"Deals\"\n[13] Button \"Alcohol\"\n[14] Button \"Convenience\"\n[15] Button \"Grocery\"\n[16] List (id: recyclerView) (scrollable)\n[17] Text \"What are you in the mood for?\"\n[18] Button \"Icon Image \u00b7 Fast Food\" (id: ChipComponentComposable)\n[19] Button \"Icon Image \u00b7 Burgers\" (id: ChipComponentComposable)\n[20] Button \"Icon Image \u00b7 Desserts\" (id: ChipComponentComposable)\n[21] Button \"Icon Image \u00b7 Healthy\" (id: ChipComponentComposable)\n[22] Button \"Icon Image \u00b7 Chicken\" (id: ChipComponentComposable)\n[23] Button \"Icon Image \u00b7 Deals\" (id: ChipComponentComposable)\n[24] Button \"Icon Image \u00b7 Comfort Food\" (id: ChipComponentComposable)\n[25] Button \"Icon Image \u00b7 Mexican\" (id: ChipComponentComposable)\n[26] Button \"Under $2 delivery fee\"\n[27] List (scrollable)\n[28] Button \"Wingstop, 2.5 mi away, Estimated time of arrival 29 min, Deal available, Buy 1, get 1 free \u00b7 Wingstop \u00b7 4.4\"\n[29] Text \"4.4 \u00b7 (20k+)\" (id: sd_ratings)\n[30] Text \"\u2022\" (id: sd_subtitle_separator)\n[31] Text \"2.5 mi \u2022 Fast 29 min\" (id: sd_subtitle)\n[32] CheckBox \"Removed from favorites. Double tap to add to favorites\" (id: sd_save_icon) (off)\n[33] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[34] Text \"Buy 1, get 1 free\" (id: badge_container)\n[35] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[36] Button \"Curry Pizza House, 5.2 mi away, Estimated time of arrival 41 min, Lower fees, Deal available, Buy 1, get 1 free \u00b7 Curry\u2026\"\n[37] Text \"4.7 \u00b7 (1k+)\" (id: sd_ratings)\n[38] Text \"\u2022\" (id: sd_subtitle_separator)\n[39] Text \"5.2 mi \u2022 41 min\" (id: sd_subtitle)\n[40] Text \"Lower fees\" (id: sd_pricing_info)\n[41] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[42] Text \"Buy 1, get 1 free\" (id: badge_container)\n[43] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[44] Text \"Save with DashPass\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0065643
+ },
+ {
+  "case": "doordash s1",
+  "variant": "guard",
+  "plan": [
+   "Tap the current address button to open delivery addresses",
+   "Read the saved delivery address shown"
+  ],
+  "plan_tokens": 1598,
+  "action": "tap",
+  "element": 5,
+  "element_line": "[5] Button \"1 Hacker Way\" (id: toolbar)",
+  "result": null,
+  "remember": "1 Hacker Way",
+  "step_tokens": 3300,
+  "reason": "Open delivery addresses to read saved address",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 1622 ms\n[1] Button \"40% off your first order, up to $10\"\n[2] Button \"Search DoorDash\"\n[3] List (id: coordinatorLayout_homepage) (scrollable)\n[4] Text \"DoorDash\" (id: collapsing_toolbar_dashboard)\n[5] Button \"1 Hacker Way\" (id: toolbar)\n[6] Text \"1 Hacker Way\" (id: address_container)\n[7] Button \"Account\" (id: item_toolbar_account)\n[8] Button \"Notification Hub\"\n[9] Button \"No open carts\"\n[10] List (id: verticals_recycler) (scrollable)\n[11] Button \"Late Night\"\n[12] Button \"Deals\"\n[13] Button \"Alcohol\"\n[14] Button \"Convenience\"\n[15] Button \"Grocery\"\n[16] List (id: recyclerView) (scrollable)\n[17] Text \"What are you in the mood for?\"\n[18] Button \"Icon Image \u00b7 Fast Food\" (id: ChipComponentComposable)\n[19] Button \"Icon Image \u00b7 Burgers\" (id: ChipComponentComposable)\n[20] Button \"Icon Image \u00b7 Desserts\" (id: ChipComponentComposable)\n[21] Button \"Icon Image \u00b7 Healthy\" (id: ChipComponentComposable)\n[22] Button \"Icon Image \u00b7 Chicken\" (id: ChipComponentComposable)\n[23] Button \"Icon Image \u00b7 Deals\" (id: ChipComponentComposable)\n[24] Button \"Icon Image \u00b7 Comfort Food\" (id: ChipComponentComposable)\n[25] Button \"Icon Image \u00b7 Mexican\" (id: ChipComponentComposable)\n[26] Button \"Under $2 delivery fee\"\n[27] List (scrollable)\n[28] Button \"Wingstop, 2.5 mi away, Estimated time of arrival 29 min, Deal available, Buy 1, get 1 free \u00b7 Wingstop \u00b7 4.4\"\n[29] Text \"4.4 \u00b7 (20k+)\" (id: sd_ratings)\n[30] Text \"\u2022\" (id: sd_subtitle_separator)\n[31] Text \"2.5 mi \u2022 Fast 29 min\" (id: sd_subtitle)\n[32] CheckBox \"Removed from favorites. Double tap to add to favorites\" (id: sd_save_icon) (off)\n[33] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[34] Text \"Buy 1, get 1 free\" (id: badge_container)\n[35] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[36] Button \"Curry Pizza House, 5.2 mi away, Estimated time of arrival 41 min, Lower fees, Deal available, Buy 1, get 1 free \u00b7 Curry\u2026\"\n[37] Text \"4.7 \u00b7 (1k+)\" (id: sd_ratings)\n[38] Text \"\u2022\" (id: sd_subtitle_separator)\n[39] Text \"5.2 mi \u2022 41 min\" (id: sd_subtitle)\n[40] Text \"Lower fees\" (id: sd_pricing_info)\n[41] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[42] Text \"Buy 1, get 1 free\" (id: badge_container)\n[43] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[44] Text \"Save with DashPass\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0045022
+ },
+ {
+  "case": "doordash s1",
+  "variant": "guard",
+  "plan": [
+   "Tap the delivery address button showing 1 Hacker Way to view saved addresses",
+   "Read the saved delivery address shown"
+  ],
+  "plan_tokens": 1598,
+  "action": "tap",
+  "element": 5,
+  "element_line": "[5] Button \"1 Hacker Way\" (id: toolbar)",
+  "result": null,
+  "remember": "Delivery address shown as 1 Hacker Way",
+  "step_tokens": 3305,
+  "reason": "Need to view saved addresses",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 1622 ms\n[1] Button \"40% off your first order, up to $10\"\n[2] Button \"Search DoorDash\"\n[3] List (id: coordinatorLayout_homepage) (scrollable)\n[4] Text \"DoorDash\" (id: collapsing_toolbar_dashboard)\n[5] Button \"1 Hacker Way\" (id: toolbar)\n[6] Text \"1 Hacker Way\" (id: address_container)\n[7] Button \"Account\" (id: item_toolbar_account)\n[8] Button \"Notification Hub\"\n[9] Button \"No open carts\"\n[10] List (id: verticals_recycler) (scrollable)\n[11] Button \"Late Night\"\n[12] Button \"Deals\"\n[13] Button \"Alcohol\"\n[14] Button \"Convenience\"\n[15] Button \"Grocery\"\n[16] List (id: recyclerView) (scrollable)\n[17] Text \"What are you in the mood for?\"\n[18] Button \"Icon Image \u00b7 Fast Food\" (id: ChipComponentComposable)\n[19] Button \"Icon Image \u00b7 Burgers\" (id: ChipComponentComposable)\n[20] Button \"Icon Image \u00b7 Desserts\" (id: ChipComponentComposable)\n[21] Button \"Icon Image \u00b7 Healthy\" (id: ChipComponentComposable)\n[22] Button \"Icon Image \u00b7 Chicken\" (id: ChipComponentComposable)\n[23] Button \"Icon Image \u00b7 Deals\" (id: ChipComponentComposable)\n[24] Button \"Icon Image \u00b7 Comfort Food\" (id: ChipComponentComposable)\n[25] Button \"Icon Image \u00b7 Mexican\" (id: ChipComponentComposable)\n[26] Button \"Under $2 delivery fee\"\n[27] List (scrollable)\n[28] Button \"Wingstop, 2.5 mi away, Estimated time of arrival 29 min, Deal available, Buy 1, get 1 free \u00b7 Wingstop \u00b7 4.4\"\n[29] Text \"4.4 \u00b7 (20k+)\" (id: sd_ratings)\n[30] Text \"\u2022\" (id: sd_subtitle_separator)\n[31] Text \"2.5 mi \u2022 Fast 29 min\" (id: sd_subtitle)\n[32] CheckBox \"Removed from favorites. Double tap to add to favorites\" (id: sd_save_icon) (off)\n[33] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[34] Text \"Buy 1, get 1 free\" (id: badge_container)\n[35] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[36] Button \"Curry Pizza House, 5.2 mi away, Estimated time of arrival 41 min, Lower fees, Deal available, Buy 1, get 1 free \u00b7 Curry\u2026\"\n[37] Text \"4.7 \u00b7 (1k+)\" (id: sd_ratings)\n[38] Text \"\u2022\" (id: sd_subtitle_separator)\n[39] Text \"5.2 mi \u2022 41 min\" (id: sd_subtitle)\n[40] Text \"Lower fees\" (id: sd_pricing_info)\n[41] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[42] Text \"Buy 1, get 1 free\" (id: badge_container)\n[43] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[44] Text \"Save with DashPass\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.005094950000000001
+ },
+ {
+  "case": "doordash s1",
+  "variant": "guard",
+  "plan": [
+   "Tap the delivery address header to view saved addresses",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 1598,
+  "action": "tap",
+  "element": 5,
+  "element_line": "[5] Button \"1 Hacker Way\" (id: toolbar)",
+  "result": null,
+  "remember": "Header shows 1 Hacker Way",
+  "step_tokens": 3299,
+  "reason": "Need to view saved addresses to confirm delivery address",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 1622 ms\n[1] Button \"40% off your first order, up to $10\"\n[2] Button \"Search DoorDash\"\n[3] List (id: coordinatorLayout_homepage) (scrollable)\n[4] Text \"DoorDash\" (id: collapsing_toolbar_dashboard)\n[5] Button \"1 Hacker Way\" (id: toolbar)\n[6] Text \"1 Hacker Way\" (id: address_container)\n[7] Button \"Account\" (id: item_toolbar_account)\n[8] Button \"Notification Hub\"\n[9] Button \"No open carts\"\n[10] List (id: verticals_recycler) (scrollable)\n[11] Button \"Late Night\"\n[12] Button \"Deals\"\n[13] Button \"Alcohol\"\n[14] Button \"Convenience\"\n[15] Button \"Grocery\"\n[16] List (id: recyclerView) (scrollable)\n[17] Text \"What are you in the mood for?\"\n[18] Button \"Icon Image \u00b7 Fast Food\" (id: ChipComponentComposable)\n[19] Button \"Icon Image \u00b7 Burgers\" (id: ChipComponentComposable)\n[20] Button \"Icon Image \u00b7 Desserts\" (id: ChipComponentComposable)\n[21] Button \"Icon Image \u00b7 Healthy\" (id: ChipComponentComposable)\n[22] Button \"Icon Image \u00b7 Chicken\" (id: ChipComponentComposable)\n[23] Button \"Icon Image \u00b7 Deals\" (id: ChipComponentComposable)\n[24] Button \"Icon Image \u00b7 Comfort Food\" (id: ChipComponentComposable)\n[25] Button \"Icon Image \u00b7 Mexican\" (id: ChipComponentComposable)\n[26] Button \"Under $2 delivery fee\"\n[27] List (scrollable)\n[28] Button \"Wingstop, 2.5 mi away, Estimated time of arrival 29 min, Deal available, Buy 1, get 1 free \u00b7 Wingstop \u00b7 4.4\"\n[29] Text \"4.4 \u00b7 (20k+)\" (id: sd_ratings)\n[30] Text \"\u2022\" (id: sd_subtitle_separator)\n[31] Text \"2.5 mi \u2022 Fast 29 min\" (id: sd_subtitle)\n[32] CheckBox \"Removed from favorites. Double tap to add to favorites\" (id: sd_save_icon) (off)\n[33] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[34] Text \"Buy 1, get 1 free\" (id: badge_container)\n[35] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[36] Button \"Curry Pizza House, 5.2 mi away, Estimated time of arrival 41 min, Lower fees, Deal available, Buy 1, get 1 free \u00b7 Curry\u2026\"\n[37] Text \"4.7 \u00b7 (1k+)\" (id: sd_ratings)\n[38] Text \"\u2022\" (id: sd_subtitle_separator)\n[39] Text \"5.2 mi \u2022 41 min\" (id: sd_subtitle)\n[40] Text \"Lower fees\" (id: sd_pricing_info)\n[41] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[42] Text \"Buy 1, get 1 free\" (id: badge_container)\n[43] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[44] Text \"Save with DashPass\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.00457745
+ },
+ {
+  "case": "doordash s1",
+  "variant": "guard",
+  "plan": [
+   "Check the delivery address shown at the top of the DoorDash home screen",
+   "Tap the address header to confirm the saved delivery address"
+  ],
+  "plan_tokens": 1598,
+  "action": "tap",
+  "element": 5,
+  "element_line": "[5] Button \"1 Hacker Way\" (id: toolbar)",
+  "result": null,
+  "remember": "Top address shows 1 Hacker Way",
+  "step_tokens": 3309,
+  "reason": "Need to confirm saved delivery address by opening header",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 1622 ms\n[1] Button \"40% off your first order, up to $10\"\n[2] Button \"Search DoorDash\"\n[3] List (id: coordinatorLayout_homepage) (scrollable)\n[4] Text \"DoorDash\" (id: collapsing_toolbar_dashboard)\n[5] Button \"1 Hacker Way\" (id: toolbar)\n[6] Text \"1 Hacker Way\" (id: address_container)\n[7] Button \"Account\" (id: item_toolbar_account)\n[8] Button \"Notification Hub\"\n[9] Button \"No open carts\"\n[10] List (id: verticals_recycler) (scrollable)\n[11] Button \"Late Night\"\n[12] Button \"Deals\"\n[13] Button \"Alcohol\"\n[14] Button \"Convenience\"\n[15] Button \"Grocery\"\n[16] List (id: recyclerView) (scrollable)\n[17] Text \"What are you in the mood for?\"\n[18] Button \"Icon Image \u00b7 Fast Food\" (id: ChipComponentComposable)\n[19] Button \"Icon Image \u00b7 Burgers\" (id: ChipComponentComposable)\n[20] Button \"Icon Image \u00b7 Desserts\" (id: ChipComponentComposable)\n[21] Button \"Icon Image \u00b7 Healthy\" (id: ChipComponentComposable)\n[22] Button \"Icon Image \u00b7 Chicken\" (id: ChipComponentComposable)\n[23] Button \"Icon Image \u00b7 Deals\" (id: ChipComponentComposable)\n[24] Button \"Icon Image \u00b7 Comfort Food\" (id: ChipComponentComposable)\n[25] Button \"Icon Image \u00b7 Mexican\" (id: ChipComponentComposable)\n[26] Button \"Under $2 delivery fee\"\n[27] List (scrollable)\n[28] Button \"Wingstop, 2.5 mi away, Estimated time of arrival 29 min, Deal available, Buy 1, get 1 free \u00b7 Wingstop \u00b7 4.4\"\n[29] Text \"4.4 \u00b7 (20k+)\" (id: sd_ratings)\n[30] Text \"\u2022\" (id: sd_subtitle_separator)\n[31] Text \"2.5 mi \u2022 Fast 29 min\" (id: sd_subtitle)\n[32] CheckBox \"Removed from favorites. Double tap to add to favorites\" (id: sd_save_icon) (off)\n[33] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[34] Text \"Buy 1, get 1 free\" (id: badge_container)\n[35] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[36] Button \"Curry Pizza House, 5.2 mi away, Estimated time of arrival 41 min, Lower fees, Deal available, Buy 1, get 1 free \u00b7 Curry\u2026\"\n[37] Text \"4.7 \u00b7 (1k+)\" (id: sd_ratings)\n[38] Text \"\u2022\" (id: sd_subtitle_separator)\n[39] Text \"5.2 mi \u2022 41 min\" (id: sd_subtitle)\n[40] Text \"Lower fees\" (id: sd_pricing_info)\n[41] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[42] Text \"Buy 1, get 1 free\" (id: badge_container)\n[43] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[44] Text \"Save with DashPass\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0082134
+ },
+ {
+  "case": "doordash s1",
+  "variant": "guard",
+  "plan": [
+   "Confirm DoorDash home is open showing current location",
+   "Tap the address button to view saved addresses",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 1598,
+  "action": "tap",
+  "element": 5,
+  "element_line": "[5] Button \"1 Hacker Way\" (id: toolbar)",
+  "result": null,
+  "remember": "Current displayed address: 1 Hacker Way",
+  "step_tokens": 3310,
+  "reason": "Need to open address selector to see saved addresses",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 1622 ms\n[1] Button \"40% off your first order, up to $10\"\n[2] Button \"Search DoorDash\"\n[3] List (id: coordinatorLayout_homepage) (scrollable)\n[4] Text \"DoorDash\" (id: collapsing_toolbar_dashboard)\n[5] Button \"1 Hacker Way\" (id: toolbar)\n[6] Text \"1 Hacker Way\" (id: address_container)\n[7] Button \"Account\" (id: item_toolbar_account)\n[8] Button \"Notification Hub\"\n[9] Button \"No open carts\"\n[10] List (id: verticals_recycler) (scrollable)\n[11] Button \"Late Night\"\n[12] Button \"Deals\"\n[13] Button \"Alcohol\"\n[14] Button \"Convenience\"\n[15] Button \"Grocery\"\n[16] List (id: recyclerView) (scrollable)\n[17] Text \"What are you in the mood for?\"\n[18] Button \"Icon Image \u00b7 Fast Food\" (id: ChipComponentComposable)\n[19] Button \"Icon Image \u00b7 Burgers\" (id: ChipComponentComposable)\n[20] Button \"Icon Image \u00b7 Desserts\" (id: ChipComponentComposable)\n[21] Button \"Icon Image \u00b7 Healthy\" (id: ChipComponentComposable)\n[22] Button \"Icon Image \u00b7 Chicken\" (id: ChipComponentComposable)\n[23] Button \"Icon Image \u00b7 Deals\" (id: ChipComponentComposable)\n[24] Button \"Icon Image \u00b7 Comfort Food\" (id: ChipComponentComposable)\n[25] Button \"Icon Image \u00b7 Mexican\" (id: ChipComponentComposable)\n[26] Button \"Under $2 delivery fee\"\n[27] List (scrollable)\n[28] Button \"Wingstop, 2.5 mi away, Estimated time of arrival 29 min, Deal available, Buy 1, get 1 free \u00b7 Wingstop \u00b7 4.4\"\n[29] Text \"4.4 \u00b7 (20k+)\" (id: sd_ratings)\n[30] Text \"\u2022\" (id: sd_subtitle_separator)\n[31] Text \"2.5 mi \u2022 Fast 29 min\" (id: sd_subtitle)\n[32] CheckBox \"Removed from favorites. Double tap to add to favorites\" (id: sd_save_icon) (off)\n[33] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[34] Text \"Buy 1, get 1 free\" (id: badge_container)\n[35] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[36] Button \"Curry Pizza House, 5.2 mi away, Estimated time of arrival 41 min, Lower fees, Deal available, Buy 1, get 1 free \u00b7 Curry\u2026\"\n[37] Text \"4.7 \u00b7 (1k+)\" (id: sd_ratings)\n[38] Text \"\u2022\" (id: sd_subtitle_separator)\n[39] Text \"5.2 mi \u2022 41 min\" (id: sd_subtitle)\n[40] Text \"Lower fees\" (id: sd_pricing_info)\n[41] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[42] Text \"Buy 1, get 1 free\" (id: badge_container)\n[43] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[44] Text \"Save with DashPass\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0049737
+ },
+ {
+  "case": "doordash s1",
+  "variant": "guard",
+  "plan": [
+   "Open the delivery address selector from the home toolbar",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 1598,
+  "action": "tap",
+  "element": 5,
+  "element_line": "[5] Button \"1 Hacker Way\" (id: toolbar)",
+  "result": null,
+  "remember": "Toolbar shows address '1 Hacker Way'",
+  "step_tokens": 3299,
+  "reason": "Open delivery address selector to read saved address",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 1622 ms\n[1] Button \"40% off your first order, up to $10\"\n[2] Button \"Search DoorDash\"\n[3] List (id: coordinatorLayout_homepage) (scrollable)\n[4] Text \"DoorDash\" (id: collapsing_toolbar_dashboard)\n[5] Button \"1 Hacker Way\" (id: toolbar)\n[6] Text \"1 Hacker Way\" (id: address_container)\n[7] Button \"Account\" (id: item_toolbar_account)\n[8] Button \"Notification Hub\"\n[9] Button \"No open carts\"\n[10] List (id: verticals_recycler) (scrollable)\n[11] Button \"Late Night\"\n[12] Button \"Deals\"\n[13] Button \"Alcohol\"\n[14] Button \"Convenience\"\n[15] Button \"Grocery\"\n[16] List (id: recyclerView) (scrollable)\n[17] Text \"What are you in the mood for?\"\n[18] Button \"Icon Image \u00b7 Fast Food\" (id: ChipComponentComposable)\n[19] Button \"Icon Image \u00b7 Burgers\" (id: ChipComponentComposable)\n[20] Button \"Icon Image \u00b7 Desserts\" (id: ChipComponentComposable)\n[21] Button \"Icon Image \u00b7 Healthy\" (id: ChipComponentComposable)\n[22] Button \"Icon Image \u00b7 Chicken\" (id: ChipComponentComposable)\n[23] Button \"Icon Image \u00b7 Deals\" (id: ChipComponentComposable)\n[24] Button \"Icon Image \u00b7 Comfort Food\" (id: ChipComponentComposable)\n[25] Button \"Icon Image \u00b7 Mexican\" (id: ChipComponentComposable)\n[26] Button \"Under $2 delivery fee\"\n[27] List (scrollable)\n[28] Button \"Wingstop, 2.5 mi away, Estimated time of arrival 29 min, Deal available, Buy 1, get 1 free \u00b7 Wingstop \u00b7 4.4\"\n[29] Text \"4.4 \u00b7 (20k+)\" (id: sd_ratings)\n[30] Text \"\u2022\" (id: sd_subtitle_separator)\n[31] Text \"2.5 mi \u2022 Fast 29 min\" (id: sd_subtitle)\n[32] CheckBox \"Removed from favorites. Double tap to add to favorites\" (id: sd_save_icon) (off)\n[33] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[34] Text \"Buy 1, get 1 free\" (id: badge_container)\n[35] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[36] Button \"Curry Pizza House, 5.2 mi away, Estimated time of arrival 41 min, Lower fees, Deal available, Buy 1, get 1 free \u00b7 Curry\u2026\"\n[37] Text \"4.7 \u00b7 (1k+)\" (id: sd_ratings)\n[38] Text \"\u2022\" (id: sd_subtitle_separator)\n[39] Text \"5.2 mi \u2022 41 min\" (id: sd_subtitle)\n[40] Text \"Lower fees\" (id: sd_pricing_info)\n[41] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[42] Text \"Buy 1, get 1 free\" (id: badge_container)\n[43] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[44] Text \"Save with DashPass\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.00417795
+ },
+ {
+  "case": "doordash s1",
+  "variant": "guard",
+  "plan": [
+   "Tap the delivery address button showing 1 Hacker Way",
+   "Open the saved addresses list",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 1598,
+  "action": "tap",
+  "element": 5,
+  "element_line": "[5] Button \"1 Hacker Way\" (id: toolbar)",
+  "result": null,
+  "remember": "Displayed address: 1 Hacker Way",
+  "step_tokens": 3308,
+  "reason": "Tap delivery address to open saved addresses",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 1622 ms\n[1] Button \"40% off your first order, up to $10\"\n[2] Button \"Search DoorDash\"\n[3] List (id: coordinatorLayout_homepage) (scrollable)\n[4] Text \"DoorDash\" (id: collapsing_toolbar_dashboard)\n[5] Button \"1 Hacker Way\" (id: toolbar)\n[6] Text \"1 Hacker Way\" (id: address_container)\n[7] Button \"Account\" (id: item_toolbar_account)\n[8] Button \"Notification Hub\"\n[9] Button \"No open carts\"\n[10] List (id: verticals_recycler) (scrollable)\n[11] Button \"Late Night\"\n[12] Button \"Deals\"\n[13] Button \"Alcohol\"\n[14] Button \"Convenience\"\n[15] Button \"Grocery\"\n[16] List (id: recyclerView) (scrollable)\n[17] Text \"What are you in the mood for?\"\n[18] Button \"Icon Image \u00b7 Fast Food\" (id: ChipComponentComposable)\n[19] Button \"Icon Image \u00b7 Burgers\" (id: ChipComponentComposable)\n[20] Button \"Icon Image \u00b7 Desserts\" (id: ChipComponentComposable)\n[21] Button \"Icon Image \u00b7 Healthy\" (id: ChipComponentComposable)\n[22] Button \"Icon Image \u00b7 Chicken\" (id: ChipComponentComposable)\n[23] Button \"Icon Image \u00b7 Deals\" (id: ChipComponentComposable)\n[24] Button \"Icon Image \u00b7 Comfort Food\" (id: ChipComponentComposable)\n[25] Button \"Icon Image \u00b7 Mexican\" (id: ChipComponentComposable)\n[26] Button \"Under $2 delivery fee\"\n[27] List (scrollable)\n[28] Button \"Wingstop, 2.5 mi away, Estimated time of arrival 29 min, Deal available, Buy 1, get 1 free \u00b7 Wingstop \u00b7 4.4\"\n[29] Text \"4.4 \u00b7 (20k+)\" (id: sd_ratings)\n[30] Text \"\u2022\" (id: sd_subtitle_separator)\n[31] Text \"2.5 mi \u2022 Fast 29 min\" (id: sd_subtitle)\n[32] CheckBox \"Removed from favorites. Double tap to add to favorites\" (id: sd_save_icon) (off)\n[33] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[34] Text \"Buy 1, get 1 free\" (id: badge_container)\n[35] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[36] Button \"Curry Pizza House, 5.2 mi away, Estimated time of arrival 41 min, Lower fees, Deal available, Buy 1, get 1 free \u00b7 Curry\u2026\"\n[37] Text \"4.7 \u00b7 (1k+)\" (id: sd_ratings)\n[38] Text \"\u2022\" (id: sd_subtitle_separator)\n[39] Text \"5.2 mi \u2022 41 min\" (id: sd_subtitle)\n[40] Text \"Lower fees\" (id: sd_pricing_info)\n[41] Button \"Buy 1, get 1 free\" (id: bottom_badge_one)\n[42] Text \"Buy 1, get 1 free\" (id: badge_container)\n[43] Text \"Buy 1, get 1 free\" (id: tagView_adBadge)\n[44] Text \"Save with DashPass\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0067969
+ },
+ {
+  "case": "doordash s2 (1f1fc11 path: Account)",
+  "variant": "cur",
+  "plan": [
+   "Verify DoorDash home is open with address shown",
+   "Tap the address header '1 Hacker Way' to open address details",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 1550,
+  "action": "back",
+  "element": null,
+  "element_line": "",
+  "result": null,
+  "remember": "Account screen shows Customer since Oct '26, no address yet",
+  "step_tokens": 2778,
+  "reason": "Return to home to find address header",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 34 ms\n[1] List (id: coordinator) (scrollable)\n[2] Button \"Back\" (id: toolbar_dash_back_nav)\n[3] Button \"Notification Hub\"\n[4] Button \"No open carts\"\n[5] Button \"E\"\n[6] Text \"DOORDASH\"\n[7] Button \"envoy V\"\n[8] Text \"Customer since Oct '26\"\n[9] Button \"\ufffd Try DashPass for free\"\n[10] Button \"Get $0 delivery fee and more\"\n[11] List (scrollable)\n[12] Button \"Orders\"\n[13] Button \"Try DashPass\"\n[14] Button \"Settings\"\n[15] Button \"Profile\"\n[16] Text \"Play trivia to win $3 off\"\n[17] Text \"Live now - get a perfect score on Thursdays to win!\"\n[18] Button \"Play Now\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0047077
+ },
+ {
+  "case": "doordash s2 (1f1fc11 path: Account)",
+  "variant": "cur",
+  "plan": [
+   "Tap the delivery address button showing 1 Hacker Way",
+   "View the saved addresses list",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 1550,
+  "action": "tap",
+  "element": 15,
+  "element_line": "[15] Button \"Profile\"",
+  "result": null,
+  "remember": "",
+  "step_tokens": 2771,
+  "reason": "Account screen shows Profile and Settings; address likely stored there",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 34 ms\n[1] List (id: coordinator) (scrollable)\n[2] Button \"Back\" (id: toolbar_dash_back_nav)\n[3] Button \"Notification Hub\"\n[4] Button \"No open carts\"\n[5] Button \"E\"\n[6] Text \"DOORDASH\"\n[7] Button \"envoy V\"\n[8] Text \"Customer since Oct '26\"\n[9] Button \"\ufffd Try DashPass for free\"\n[10] Button \"Get $0 delivery fee and more\"\n[11] List (scrollable)\n[12] Button \"Orders\"\n[13] Button \"Try DashPass\"\n[14] Button \"Settings\"\n[15] Button \"Profile\"\n[16] Text \"Play trivia to win $3 off\"\n[17] Text \"Live now - get a perfect score on Thursdays to win!\"\n[18] Button \"Play Now\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.00421925
+ },
+ {
+  "case": "doordash s2 (1f1fc11 path: Account)",
+  "variant": "cur",
+  "plan": [
+   "Check current delivery address shown at top of home",
+   "Open address selector to view saved addresses",
+   "Read saved delivery address"
+  ],
+  "plan_tokens": 1550,
+  "action": "tap",
+  "element": 2,
+  "element_line": "[2] Button \"Back\" (id: toolbar_dash_back_nav)",
+  "result": null,
+  "remember": "",
+  "step_tokens": 2771,
+  "reason": "Return to home to see delivery address header",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 34 ms\n[1] List (id: coordinator) (scrollable)\n[2] Button \"Back\" (id: toolbar_dash_back_nav)\n[3] Button \"Notification Hub\"\n[4] Button \"No open carts\"\n[5] Button \"E\"\n[6] Text \"DOORDASH\"\n[7] Button \"envoy V\"\n[8] Text \"Customer since Oct '26\"\n[9] Button \"\ufffd Try DashPass for free\"\n[10] Button \"Get $0 delivery fee and more\"\n[11] List (scrollable)\n[12] Button \"Orders\"\n[13] Button \"Try DashPass\"\n[14] Button \"Settings\"\n[15] Button \"Profile\"\n[16] Text \"Play trivia to win $3 off\"\n[17] Text \"Live now - get a perfect score on Thursdays to win!\"\n[18] Button \"Play Now\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.00401895
+ },
+ {
+  "case": "doordash s2 (1f1fc11 path: Account)",
+  "variant": "cur",
+  "plan": [
+   "Check delivery address shown on DoorDash home screen",
+   "Open address selector to confirm saved delivery address"
+  ],
+  "plan_tokens": 1550,
+  "action": "tap",
+  "element": 14,
+  "element_line": "[14] Button \"Settings\"",
+  "result": null,
+  "remember": "",
+  "step_tokens": 2765,
+  "reason": "Check Settings for saved address",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 34 ms\n[1] List (id: coordinator) (scrollable)\n[2] Button \"Back\" (id: toolbar_dash_back_nav)\n[3] Button \"Notification Hub\"\n[4] Button \"No open carts\"\n[5] Button \"E\"\n[6] Text \"DOORDASH\"\n[7] Button \"envoy V\"\n[8] Text \"Customer since Oct '26\"\n[9] Button \"\ufffd Try DashPass for free\"\n[10] Button \"Get $0 delivery fee and more\"\n[11] List (scrollable)\n[12] Button \"Orders\"\n[13] Button \"Try DashPass\"\n[14] Button \"Settings\"\n[15] Button \"Profile\"\n[16] Text \"Play trivia to win $3 off\"\n[17] Text \"Live now - get a perfect score on Thursdays to win!\"\n[18] Button \"Play Now\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0050693
+ },
+ {
+  "case": "doordash s2 (1f1fc11 path: Account)",
+  "variant": "cur",
+  "plan": [
+   "Tap the delivery address button showing 1 Hacker Way",
+   "Open the saved addresses list",
+   "Read the current saved delivery address"
+  ],
+  "plan_tokens": 1550,
+  "action": "scroll",
+  "element": 1,
+  "element_line": "[1] List (id: coordinator) (scrollable)",
+  "result": null,
+  "remember": "Account screen shows envoy V, Customer since Oct '26",
+  "step_tokens": 2772,
+  "reason": "Saved addresses likely further down Account list",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 34 ms\n[1] List (id: coordinator) (scrollable)\n[2] Button \"Back\" (id: toolbar_dash_back_nav)\n[3] Button \"Notification Hub\"\n[4] Button \"No open carts\"\n[5] Button \"E\"\n[6] Text \"DOORDASH\"\n[7] Button \"envoy V\"\n[8] Text \"Customer since Oct '26\"\n[9] Button \"\ufffd Try DashPass for free\"\n[10] Button \"Get $0 delivery fee and more\"\n[11] List (scrollable)\n[12] Button \"Orders\"\n[13] Button \"Try DashPass\"\n[14] Button \"Settings\"\n[15] Button \"Profile\"\n[16] Text \"Play trivia to win $3 off\"\n[17] Text \"Live now - get a perfect score on Thursdays to win!\"\n[18] Button \"Play Now\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0037737
+ },
+ {
+  "case": "doordash s2 (1f1fc11 path: Account)",
+  "variant": "cur",
+  "plan": [
+   "Tap the current address button '1 Hacker Way' to view saved addresses",
+   "Read and confirm the saved delivery address"
+  ],
+  "plan_tokens": 1550,
+  "action": "scroll",
+  "element": null,
+  "element_line": "",
+  "result": null,
+  "remember": "",
+  "step_tokens": 2769,
+  "reason": "Need to find saved addresses option",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 34 ms\n[1] List (id: coordinator) (scrollable)\n[2] Button \"Back\" (id: toolbar_dash_back_nav)\n[3] Button \"Notification Hub\"\n[4] Button \"No open carts\"\n[5] Button \"E\"\n[6] Text \"DOORDASH\"\n[7] Button \"envoy V\"\n[8] Text \"Customer since Oct '26\"\n[9] Button \"\ufffd Try DashPass for free\"\n[10] Button \"Get $0 delivery fee and more\"\n[11] List (scrollable)\n[12] Button \"Orders\"\n[13] Button \"Try DashPass\"\n[14] Button \"Settings\"\n[15] Button \"Profile\"\n[16] Text \"Play trivia to win $3 off\"\n[17] Text \"Live now - get a perfect score on Thursdays to win!\"\n[18] Button \"Play Now\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.00442445
+ },
+ {
+  "case": "doordash s2 (1f1fc11 path: Account)",
+  "variant": "cur",
+  "plan": [
+   "Confirm DoorDash home screen shows current delivery location",
+   "Tap the address button to open saved addresses",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 1550,
+  "action": "scroll",
+  "element": null,
+  "element_line": "",
+  "result": null,
+  "remember": "",
+  "step_tokens": 2773,
+  "reason": "Need to find addresses section in account",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 34 ms\n[1] List (id: coordinator) (scrollable)\n[2] Button \"Back\" (id: toolbar_dash_back_nav)\n[3] Button \"Notification Hub\"\n[4] Button \"No open carts\"\n[5] Button \"E\"\n[6] Text \"DOORDASH\"\n[7] Button \"envoy V\"\n[8] Text \"Customer since Oct '26\"\n[9] Button \"\ufffd Try DashPass for free\"\n[10] Button \"Get $0 delivery fee and more\"\n[11] List (scrollable)\n[12] Button \"Orders\"\n[13] Button \"Try DashPass\"\n[14] Button \"Settings\"\n[15] Button \"Profile\"\n[16] Text \"Play trivia to win $3 off\"\n[17] Text \"Live now - get a perfect score on Thursdays to win!\"\n[18] Button \"Play Now\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0043657
+ },
+ {
+  "case": "doordash s2 (1f1fc11 path: Account)",
+  "variant": "cur",
+  "plan": [
+   "Confirm DoorDash home screen is open with address shown",
+   "Tap the address header to open saved addresses",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 1550,
+  "action": "tap",
+  "element": 14,
+  "element_line": "[14] Button \"Settings\"",
+  "result": null,
+  "remember": "",
+  "step_tokens": 2774,
+  "reason": "Need to find saved addresses from account area",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 34 ms\n[1] List (id: coordinator) (scrollable)\n[2] Button \"Back\" (id: toolbar_dash_back_nav)\n[3] Button \"Notification Hub\"\n[4] Button \"No open carts\"\n[5] Button \"E\"\n[6] Text \"DOORDASH\"\n[7] Button \"envoy V\"\n[8] Text \"Customer since Oct '26\"\n[9] Button \"\ufffd Try DashPass for free\"\n[10] Button \"Get $0 delivery fee and more\"\n[11] List (scrollable)\n[12] Button \"Orders\"\n[13] Button \"Try DashPass\"\n[14] Button \"Settings\"\n[15] Button \"Profile\"\n[16] Text \"Play trivia to win $3 off\"\n[17] Text \"Live now - get a perfect score on Thursdays to win!\"\n[18] Button \"Play Now\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.00416295
+ },
+ {
+  "case": "doordash s2 (1f1fc11 path: Account)",
+  "variant": "guard",
+  "plan": [
+   "Confirm DoorDash dashboard is open",
+   "Read saved delivery address shown in header"
+  ],
+  "plan_tokens": 1598,
+  "action": "tap",
+  "element": 15,
+  "element_line": "[15] Button \"Profile\"",
+  "result": null,
+  "remember": "",
+  "step_tokens": 2800,
+  "reason": "Dashboard account view is open, need to find saved delivery address",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 34 ms\n[1] List (id: coordinator) (scrollable)\n[2] Button \"Back\" (id: toolbar_dash_back_nav)\n[3] Button \"Notification Hub\"\n[4] Button \"No open carts\"\n[5] Button \"E\"\n[6] Text \"DOORDASH\"\n[7] Button \"envoy V\"\n[8] Text \"Customer since Oct '26\"\n[9] Button \"\ufffd Try DashPass for free\"\n[10] Button \"Get $0 delivery fee and more\"\n[11] List (scrollable)\n[12] Button \"Orders\"\n[13] Button \"Try DashPass\"\n[14] Button \"Settings\"\n[15] Button \"Profile\"\n[16] Text \"Play trivia to win $3 off\"\n[17] Text \"Live now - get a perfect score on Thursdays to win!\"\n[18] Button \"Play Now\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0057394
+ },
+ {
+  "case": "doordash s2 (1f1fc11 path: Account)",
+  "variant": "guard",
+  "plan": [
+   "Confirm DoorDash home is open with address header visible",
+   "Tap the address header showing 1 Hacker Way to view saved addresses",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 1598,
+  "action": "scroll",
+  "element": 1,
+  "element_line": "[1] List (id: coordinator) (scrollable)",
+  "result": null,
+  "remember": "",
+  "step_tokens": 2818,
+  "reason": "Need to find saved addresses section",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 34 ms\n[1] List (id: coordinator) (scrollable)\n[2] Button \"Back\" (id: toolbar_dash_back_nav)\n[3] Button \"Notification Hub\"\n[4] Button \"No open carts\"\n[5] Button \"E\"\n[6] Text \"DOORDASH\"\n[7] Button \"envoy V\"\n[8] Text \"Customer since Oct '26\"\n[9] Button \"\ufffd Try DashPass for free\"\n[10] Button \"Get $0 delivery fee and more\"\n[11] List (scrollable)\n[12] Button \"Orders\"\n[13] Button \"Try DashPass\"\n[14] Button \"Settings\"\n[15] Button \"Profile\"\n[16] Text \"Play trivia to win $3 off\"\n[17] Text \"Live now - get a perfect score on Thursdays to win!\"\n[18] Button \"Play Now\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0040952
+ },
+ {
+  "case": "doordash s2 (1f1fc11 path: Account)",
+  "variant": "guard",
+  "plan": [
+   "Check delivery address shown on DoorDash home screen",
+   "Open address selector to confirm saved delivery address"
+  ],
+  "plan_tokens": 1598,
+  "action": "tap",
+  "element": 2,
+  "element_line": "[2] Button \"Back\" (id: toolbar_dash_back_nav)",
+  "result": null,
+  "remember": "",
+  "step_tokens": 2804,
+  "reason": "Need home screen to see delivery address",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 34 ms\n[1] List (id: coordinator) (scrollable)\n[2] Button \"Back\" (id: toolbar_dash_back_nav)\n[3] Button \"Notification Hub\"\n[4] Button \"No open carts\"\n[5] Button \"E\"\n[6] Text \"DOORDASH\"\n[7] Button \"envoy V\"\n[8] Text \"Customer since Oct '26\"\n[9] Button \"\ufffd Try DashPass for free\"\n[10] Button \"Get $0 delivery fee and more\"\n[11] List (scrollable)\n[12] Button \"Orders\"\n[13] Button \"Try DashPass\"\n[14] Button \"Settings\"\n[15] Button \"Profile\"\n[16] Text \"Play trivia to win $3 off\"\n[17] Text \"Live now - get a perfect score on Thursdays to win!\"\n[18] Button \"Play Now\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.00405645
+ },
+ {
+  "case": "doordash s2 (1f1fc11 path: Account)",
+  "variant": "guard",
+  "plan": [
+   "Tap the 1 Hacker Way address header to open saved addresses",
+   "Read the saved delivery address shown"
+  ],
+  "plan_tokens": 1598,
+  "action": "tap",
+  "element": 15,
+  "element_line": "[15] Button \"Profile\"",
+  "result": null,
+  "remember": "",
+  "step_tokens": 2805,
+  "reason": "Need to find saved delivery address, check Profile first",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 34 ms\n[1] List (id: coordinator) (scrollable)\n[2] Button \"Back\" (id: toolbar_dash_back_nav)\n[3] Button \"Notification Hub\"\n[4] Button \"No open carts\"\n[5] Button \"E\"\n[6] Text \"DOORDASH\"\n[7] Button \"envoy V\"\n[8] Text \"Customer since Oct '26\"\n[9] Button \"\ufffd Try DashPass for free\"\n[10] Button \"Get $0 delivery fee and more\"\n[11] List (scrollable)\n[12] Button \"Orders\"\n[13] Button \"Try DashPass\"\n[14] Button \"Settings\"\n[15] Button \"Profile\"\n[16] Text \"Play trivia to win $3 off\"\n[17] Text \"Live now - get a perfect score on Thursdays to win!\"\n[18] Button \"Play Now\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0046272
+ },
+ {
+  "case": "doordash s2 (1f1fc11 path: Account)",
+  "variant": "guard",
+  "plan": [
+   "View delivery address shown in DoorDash home header",
+   "Open address selector to confirm saved delivery address"
+  ],
+  "plan_tokens": 1598,
+  "action": "scroll",
+  "element": 1,
+  "element_line": "[1] List (id: coordinator) (scrollable)",
+  "result": null,
+  "remember": "",
+  "step_tokens": 2804,
+  "reason": "Need to find addresses section or return to home header",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 34 ms\n[1] List (id: coordinator) (scrollable)\n[2] Button \"Back\" (id: toolbar_dash_back_nav)\n[3] Button \"Notification Hub\"\n[4] Button \"No open carts\"\n[5] Button \"E\"\n[6] Text \"DOORDASH\"\n[7] Button \"envoy V\"\n[8] Text \"Customer since Oct '26\"\n[9] Button \"\ufffd Try DashPass for free\"\n[10] Button \"Get $0 delivery fee and more\"\n[11] List (scrollable)\n[12] Button \"Orders\"\n[13] Button \"Try DashPass\"\n[14] Button \"Settings\"\n[15] Button \"Profile\"\n[16] Text \"Play trivia to win $3 off\"\n[17] Text \"Live now - get a perfect score on Thursdays to win!\"\n[18] Button \"Play Now\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.00536545
+ },
+ {
+  "case": "doordash s2 (1f1fc11 path: Account)",
+  "variant": "guard",
+  "plan": [
+   "View current delivery address on DoorDash home",
+   "Open address selector to show saved addresses",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 1598,
+  "action": "tap",
+  "element": 2,
+  "element_line": "[2] Button \"Back\" (id: toolbar_dash_back_nav)",
+  "result": null,
+  "remember": "",
+  "step_tokens": 2810,
+  "reason": "On Account page, need to return to home to see delivery address",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 34 ms\n[1] List (id: coordinator) (scrollable)\n[2] Button \"Back\" (id: toolbar_dash_back_nav)\n[3] Button \"Notification Hub\"\n[4] Button \"No open carts\"\n[5] Button \"E\"\n[6] Text \"DOORDASH\"\n[7] Button \"envoy V\"\n[8] Text \"Customer since Oct '26\"\n[9] Button \"\ufffd Try DashPass for free\"\n[10] Button \"Get $0 delivery fee and more\"\n[11] List (scrollable)\n[12] Button \"Orders\"\n[13] Button \"Try DashPass\"\n[14] Button \"Settings\"\n[15] Button \"Profile\"\n[16] Text \"Play trivia to win $3 off\"\n[17] Text \"Live now - get a perfect score on Thursdays to win!\"\n[18] Button \"Play Now\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0046547
+ },
+ {
+  "case": "doordash s2 (1f1fc11 path: Account)",
+  "variant": "guard",
+  "plan": [
+   "Tap the current address '1 Hacker Way' to view address details",
+   "Read the saved delivery address shown"
+  ],
+  "plan_tokens": 1598,
+  "action": "tap",
+  "element": 14,
+  "element_line": "[14] Button \"Settings\"",
+  "result": null,
+  "remember": "",
+  "step_tokens": 2806,
+  "reason": "Check Settings for saved address options",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 34 ms\n[1] List (id: coordinator) (scrollable)\n[2] Button \"Back\" (id: toolbar_dash_back_nav)\n[3] Button \"Notification Hub\"\n[4] Button \"No open carts\"\n[5] Button \"E\"\n[6] Text \"DOORDASH\"\n[7] Button \"envoy V\"\n[8] Text \"Customer since Oct '26\"\n[9] Button \"\ufffd Try DashPass for free\"\n[10] Button \"Get $0 delivery fee and more\"\n[11] List (scrollable)\n[12] Button \"Orders\"\n[13] Button \"Try DashPass\"\n[14] Button \"Settings\"\n[15] Button \"Profile\"\n[16] Text \"Play trivia to win $3 off\"\n[17] Text \"Live now - get a perfect score on Thursdays to win!\"\n[18] Button \"Play Now\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.00386345
+ },
+ {
+  "case": "doordash s2 (1f1fc11 path: Account)",
+  "variant": "guard",
+  "plan": [
+   "Open the delivery address selector at 1 Hacker Way",
+   "Read the saved delivery address shown"
+  ],
+  "plan_tokens": 1598,
+  "action": "tap",
+  "element": 2,
+  "element_line": "[2] Button \"Back\" (id: toolbar_dash_back_nav)",
+  "result": null,
+  "remember": "",
+  "step_tokens": 2803,
+  "reason": "Need to return to main screen to find address selector",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: DashboardActivity \u00b7 settled 34 ms\n[1] List (id: coordinator) (scrollable)\n[2] Button \"Back\" (id: toolbar_dash_back_nav)\n[3] Button \"Notification Hub\"\n[4] Button \"No open carts\"\n[5] Button \"E\"\n[6] Text \"DOORDASH\"\n[7] Button \"envoy V\"\n[8] Text \"Customer since Oct '26\"\n[9] Button \"\ufffd Try DashPass for free\"\n[10] Button \"Get $0 delivery fee and more\"\n[11] List (scrollable)\n[12] Button \"Orders\"\n[13] Button \"Try DashPass\"\n[14] Button \"Settings\"\n[15] Button \"Profile\"\n[16] Text \"Play trivia to win $3 off\"\n[17] Text \"Live now - get a perfect score on Thursdays to win!\"\n[18] Button \"Play Now\"\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0043017
+ },
+ {
+  "case": "calendar_today s1",
+  "variant": "cur",
+  "plan": [
+   "Open Google Calendar",
+   "Jump to today Thursday 29 October 2026",
+   "Read events listed for today"
+  ],
+  "plan_tokens": 1286,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "No - you have no events today (Thursday 29 October 2026). Calendar shows \"Nothing planned. Tap to create.\"",
+  "remember": "",
+  "step_tokens": 2995,
+  "reason": "Today is visible with no events planned",
+  "risk": "read",
+  "screen_text": "App: com.google.android.calendar \u00b7 Screen: AllInOneCalendarActivity \u00b7 settled 65 ms\n[1] Button \"Show Calendar List and Settings drawer\"\n[2] Button \"October\" (id: date_picker_button)\n[3] Text \"October\" (id: date_picker_content)\n[4] Button \"Search\" (id: action_search)\n[5] Button \"Jump to Today\" (id: action_today)\n[6] Button \"Open Tasks\" (id: action_tasks)\n[7] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[8] Text \"Add birthdays \u00b7 Be reminded about birthdays of the people you care about\" (id: banner_text)\n[9] Button \"Not now\" (id: secondary_button)\n[10] Button \"Add a birthday\" (id: primary_button)\n[11] Text \"Thursday 29 October 2026, Open Day View\"\n[12] Text \"Nothing planned. Tap to create.\"\n[13] Text \"Saturday 31 October 2026, Open Day View\"\n[14] Text \"Halloween, All day: , envoy3955@gmail.com, Holidays in United States\"\n[15] Text \"November 2026\"\n[16] Text \"Nov 1 \u2013 7\"\n[17] Text \"Sunday 01 November 2026, Open Day View\"\n[18] Text \"Daylight Saving Time ends, All day: , envoy3955@gmail.com, Holidays in United States\"\n[19] Text \"Tuesday 03 November 2026, Open Day View\"\n[20] Text \"Election Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[21] Text \"Nov 8 \u2013 14\"\n[22] Text \"Wednesday 11 November 2026, Open Day View\"\n[23] Text \"Veterans Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[24] Text \"Nov 15 \u2013 21\"\n[25] Text \"Nov 22 \u2013 28\"\n[26] Text \"Thursday 26 November 2026, Open Day View\"\n[27] Text \"Thanksgiving Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[28] List (scrollable)\n[29] Toggle \"Creation menu\" (off)\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.00523135
+ },
+ {
+  "case": "calendar_today s1",
+  "variant": "cur",
+  "plan": [
+   "Open Google Calendar to Today's view",
+   "Read events for Thursday 29 October 2026"
+  ],
+  "plan_tokens": 1286,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "No - you have no events today (Thursday 29 October 2026). Google Calendar shows \"Nothing planned.\"",
+  "remember": "",
+  "step_tokens": 2990,
+  "reason": "Today's date is already shown with no events",
+  "risk": "read",
+  "screen_text": "App: com.google.android.calendar \u00b7 Screen: AllInOneCalendarActivity \u00b7 settled 65 ms\n[1] Button \"Show Calendar List and Settings drawer\"\n[2] Button \"October\" (id: date_picker_button)\n[3] Text \"October\" (id: date_picker_content)\n[4] Button \"Search\" (id: action_search)\n[5] Button \"Jump to Today\" (id: action_today)\n[6] Button \"Open Tasks\" (id: action_tasks)\n[7] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[8] Text \"Add birthdays \u00b7 Be reminded about birthdays of the people you care about\" (id: banner_text)\n[9] Button \"Not now\" (id: secondary_button)\n[10] Button \"Add a birthday\" (id: primary_button)\n[11] Text \"Thursday 29 October 2026, Open Day View\"\n[12] Text \"Nothing planned. Tap to create.\"\n[13] Text \"Saturday 31 October 2026, Open Day View\"\n[14] Text \"Halloween, All day: , envoy3955@gmail.com, Holidays in United States\"\n[15] Text \"November 2026\"\n[16] Text \"Nov 1 \u2013 7\"\n[17] Text \"Sunday 01 November 2026, Open Day View\"\n[18] Text \"Daylight Saving Time ends, All day: , envoy3955@gmail.com, Holidays in United States\"\n[19] Text \"Tuesday 03 November 2026, Open Day View\"\n[20] Text \"Election Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[21] Text \"Nov 8 \u2013 14\"\n[22] Text \"Wednesday 11 November 2026, Open Day View\"\n[23] Text \"Veterans Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[24] Text \"Nov 15 \u2013 21\"\n[25] Text \"Nov 22 \u2013 28\"\n[26] Text \"Thursday 26 November 2026, Open Day View\"\n[27] Text \"Thanksgiving Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[28] List (scrollable)\n[29] Toggle \"Creation menu\" (off)\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.00446955
+ },
+ {
+  "case": "calendar_today s1",
+  "variant": "cur",
+  "plan": [
+   "Open Google Calendar",
+   "Navigate to today, Thursday 29 October 2026",
+   "Read events listed for today"
+  ],
+  "plan_tokens": 1286,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "No - you have no events today, Thursday 29 October 2026. Calendar shows \"Nothing planned.\"",
+  "remember": "Thursday 29 October 2026 shows Nothing planned",
+  "step_tokens": 2996,
+  "reason": "Today's events are already visible on screen",
+  "risk": "read",
+  "screen_text": "App: com.google.android.calendar \u00b7 Screen: AllInOneCalendarActivity \u00b7 settled 65 ms\n[1] Button \"Show Calendar List and Settings drawer\"\n[2] Button \"October\" (id: date_picker_button)\n[3] Text \"October\" (id: date_picker_content)\n[4] Button \"Search\" (id: action_search)\n[5] Button \"Jump to Today\" (id: action_today)\n[6] Button \"Open Tasks\" (id: action_tasks)\n[7] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[8] Text \"Add birthdays \u00b7 Be reminded about birthdays of the people you care about\" (id: banner_text)\n[9] Button \"Not now\" (id: secondary_button)\n[10] Button \"Add a birthday\" (id: primary_button)\n[11] Text \"Thursday 29 October 2026, Open Day View\"\n[12] Text \"Nothing planned. Tap to create.\"\n[13] Text \"Saturday 31 October 2026, Open Day View\"\n[14] Text \"Halloween, All day: , envoy3955@gmail.com, Holidays in United States\"\n[15] Text \"November 2026\"\n[16] Text \"Nov 1 \u2013 7\"\n[17] Text \"Sunday 01 November 2026, Open Day View\"\n[18] Text \"Daylight Saving Time ends, All day: , envoy3955@gmail.com, Holidays in United States\"\n[19] Text \"Tuesday 03 November 2026, Open Day View\"\n[20] Text \"Election Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[21] Text \"Nov 8 \u2013 14\"\n[22] Text \"Wednesday 11 November 2026, Open Day View\"\n[23] Text \"Veterans Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[24] Text \"Nov 15 \u2013 21\"\n[25] Text \"Nov 22 \u2013 28\"\n[26] Text \"Thursday 26 November 2026, Open Day View\"\n[27] Text \"Thanksgiving Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[28] List (scrollable)\n[29] Toggle \"Creation menu\" (off)\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.004370799999999999
+ },
+ {
+  "case": "calendar_today s1",
+  "variant": "cur",
+  "plan": [
+   "Open Google Calendar",
+   "Navigate to today, Thursday October 29 2026",
+   "Read events listed for today"
+  ],
+  "plan_tokens": 1286,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "No - you have no events today, Thursday October 29 2026. Google Calendar shows \"Nothing planned. Tap to create.\"",
+  "remember": "",
+  "step_tokens": 2996,
+  "reason": "Today's view already shows no events",
+  "risk": "read",
+  "screen_text": "App: com.google.android.calendar \u00b7 Screen: AllInOneCalendarActivity \u00b7 settled 65 ms\n[1] Button \"Show Calendar List and Settings drawer\"\n[2] Button \"October\" (id: date_picker_button)\n[3] Text \"October\" (id: date_picker_content)\n[4] Button \"Search\" (id: action_search)\n[5] Button \"Jump to Today\" (id: action_today)\n[6] Button \"Open Tasks\" (id: action_tasks)\n[7] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[8] Text \"Add birthdays \u00b7 Be reminded about birthdays of the people you care about\" (id: banner_text)\n[9] Button \"Not now\" (id: secondary_button)\n[10] Button \"Add a birthday\" (id: primary_button)\n[11] Text \"Thursday 29 October 2026, Open Day View\"\n[12] Text \"Nothing planned. Tap to create.\"\n[13] Text \"Saturday 31 October 2026, Open Day View\"\n[14] Text \"Halloween, All day: , envoy3955@gmail.com, Holidays in United States\"\n[15] Text \"November 2026\"\n[16] Text \"Nov 1 \u2013 7\"\n[17] Text \"Sunday 01 November 2026, Open Day View\"\n[18] Text \"Daylight Saving Time ends, All day: , envoy3955@gmail.com, Holidays in United States\"\n[19] Text \"Tuesday 03 November 2026, Open Day View\"\n[20] Text \"Election Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[21] Text \"Nov 8 \u2013 14\"\n[22] Text \"Wednesday 11 November 2026, Open Day View\"\n[23] Text \"Veterans Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[24] Text \"Nov 15 \u2013 21\"\n[25] Text \"Nov 22 \u2013 28\"\n[26] Text \"Thursday 26 November 2026, Open Day View\"\n[27] Text \"Thanksgiving Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[28] List (scrollable)\n[29] Toggle \"Creation menu\" (off)\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.004766050000000001
+ },
+ {
+  "case": "calendar_today s1",
+  "variant": "cur",
+  "plan": [
+   "Open Google Calendar to today's date",
+   "Read events listed for Thursday 29 October 2026"
+  ],
+  "plan_tokens": 1286,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "No \u2013 Thursday 29 October 2026 shows \"Nothing planned. Tap to create.\"",
+  "remember": "",
+  "step_tokens": 2991,
+  "reason": "Today's date shows Nothing planned",
+  "risk": "read",
+  "screen_text": "App: com.google.android.calendar \u00b7 Screen: AllInOneCalendarActivity \u00b7 settled 65 ms\n[1] Button \"Show Calendar List and Settings drawer\"\n[2] Button \"October\" (id: date_picker_button)\n[3] Text \"October\" (id: date_picker_content)\n[4] Button \"Search\" (id: action_search)\n[5] Button \"Jump to Today\" (id: action_today)\n[6] Button \"Open Tasks\" (id: action_tasks)\n[7] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[8] Text \"Add birthdays \u00b7 Be reminded about birthdays of the people you care about\" (id: banner_text)\n[9] Button \"Not now\" (id: secondary_button)\n[10] Button \"Add a birthday\" (id: primary_button)\n[11] Text \"Thursday 29 October 2026, Open Day View\"\n[12] Text \"Nothing planned. Tap to create.\"\n[13] Text \"Saturday 31 October 2026, Open Day View\"\n[14] Text \"Halloween, All day: , envoy3955@gmail.com, Holidays in United States\"\n[15] Text \"November 2026\"\n[16] Text \"Nov 1 \u2013 7\"\n[17] Text \"Sunday 01 November 2026, Open Day View\"\n[18] Text \"Daylight Saving Time ends, All day: , envoy3955@gmail.com, Holidays in United States\"\n[19] Text \"Tuesday 03 November 2026, Open Day View\"\n[20] Text \"Election Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[21] Text \"Nov 8 \u2013 14\"\n[22] Text \"Wednesday 11 November 2026, Open Day View\"\n[23] Text \"Veterans Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[24] Text \"Nov 15 \u2013 21\"\n[25] Text \"Nov 22 \u2013 28\"\n[26] Text \"Thursday 26 November 2026, Open Day View\"\n[27] Text \"Thanksgiving Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[28] List (scrollable)\n[29] Toggle \"Creation menu\" (off)\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0043390500000000005
+ },
+ {
+  "case": "calendar_today s1",
+  "variant": "cur",
+  "plan": [
+   "Open Google Calendar",
+   "Jump to today, Thursday 29 October 2026",
+   "Read events listed for today"
+  ],
+  "plan_tokens": 1286,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "No - Thursday 29 October 2026 shows \"Nothing planned. Tap to create.\"",
+  "remember": "",
+  "step_tokens": 2996,
+  "reason": "Today's events are already visible on screen",
+  "risk": "read",
+  "screen_text": "App: com.google.android.calendar \u00b7 Screen: AllInOneCalendarActivity \u00b7 settled 65 ms\n[1] Button \"Show Calendar List and Settings drawer\"\n[2] Button \"October\" (id: date_picker_button)\n[3] Text \"October\" (id: date_picker_content)\n[4] Button \"Search\" (id: action_search)\n[5] Button \"Jump to Today\" (id: action_today)\n[6] Button \"Open Tasks\" (id: action_tasks)\n[7] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[8] Text \"Add birthdays \u00b7 Be reminded about birthdays of the people you care about\" (id: banner_text)\n[9] Button \"Not now\" (id: secondary_button)\n[10] Button \"Add a birthday\" (id: primary_button)\n[11] Text \"Thursday 29 October 2026, Open Day View\"\n[12] Text \"Nothing planned. Tap to create.\"\n[13] Text \"Saturday 31 October 2026, Open Day View\"\n[14] Text \"Halloween, All day: , envoy3955@gmail.com, Holidays in United States\"\n[15] Text \"November 2026\"\n[16] Text \"Nov 1 \u2013 7\"\n[17] Text \"Sunday 01 November 2026, Open Day View\"\n[18] Text \"Daylight Saving Time ends, All day: , envoy3955@gmail.com, Holidays in United States\"\n[19] Text \"Tuesday 03 November 2026, Open Day View\"\n[20] Text \"Election Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[21] Text \"Nov 8 \u2013 14\"\n[22] Text \"Wednesday 11 November 2026, Open Day View\"\n[23] Text \"Veterans Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[24] Text \"Nov 15 \u2013 21\"\n[25] Text \"Nov 22 \u2013 28\"\n[26] Text \"Thursday 26 November 2026, Open Day View\"\n[27] Text \"Thanksgiving Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[28] List (scrollable)\n[29] Toggle \"Creation menu\" (off)\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.00451105
+ },
+ {
+  "case": "calendar_today s1",
+  "variant": "cur",
+  "plan": [
+   "Open Google Calendar",
+   "Jump to Today - Thursday 29 October 2026",
+   "Read events listed for today"
+  ],
+  "plan_tokens": 1286,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "No - you have no events today (Thursday 29 October 2026). Google Calendar shows \"Nothing planned. Tap to create.\"",
+  "remember": "",
+  "step_tokens": 2996,
+  "reason": "Today's entry shows no events",
+  "risk": "read",
+  "screen_text": "App: com.google.android.calendar \u00b7 Screen: AllInOneCalendarActivity \u00b7 settled 65 ms\n[1] Button \"Show Calendar List and Settings drawer\"\n[2] Button \"October\" (id: date_picker_button)\n[3] Text \"October\" (id: date_picker_content)\n[4] Button \"Search\" (id: action_search)\n[5] Button \"Jump to Today\" (id: action_today)\n[6] Button \"Open Tasks\" (id: action_tasks)\n[7] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[8] Text \"Add birthdays \u00b7 Be reminded about birthdays of the people you care about\" (id: banner_text)\n[9] Button \"Not now\" (id: secondary_button)\n[10] Button \"Add a birthday\" (id: primary_button)\n[11] Text \"Thursday 29 October 2026, Open Day View\"\n[12] Text \"Nothing planned. Tap to create.\"\n[13] Text \"Saturday 31 October 2026, Open Day View\"\n[14] Text \"Halloween, All day: , envoy3955@gmail.com, Holidays in United States\"\n[15] Text \"November 2026\"\n[16] Text \"Nov 1 \u2013 7\"\n[17] Text \"Sunday 01 November 2026, Open Day View\"\n[18] Text \"Daylight Saving Time ends, All day: , envoy3955@gmail.com, Holidays in United States\"\n[19] Text \"Tuesday 03 November 2026, Open Day View\"\n[20] Text \"Election Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[21] Text \"Nov 8 \u2013 14\"\n[22] Text \"Wednesday 11 November 2026, Open Day View\"\n[23] Text \"Veterans Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[24] Text \"Nov 15 \u2013 21\"\n[25] Text \"Nov 22 \u2013 28\"\n[26] Text \"Thursday 26 November 2026, Open Day View\"\n[27] Text \"Thanksgiving Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[28] List (scrollable)\n[29] Toggle \"Creation menu\" (off)\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0046853
+ },
+ {
+  "case": "calendar_today s1",
+  "variant": "cur",
+  "plan": [
+   "Open Google Calendar",
+   "Navigate to Today - Thursday 29 October 2026",
+   "Read events listed for today"
+  ],
+  "plan_tokens": 1286,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "No - you have no events today (Thursday 29 October 2026). Calendar shows \"Nothing planned. Tap to create.\"",
+  "remember": "Thursday 29 October 2026 Nothing planned. Tap to create.",
+  "step_tokens": 2996,
+  "reason": "Today's events already visible on screen",
+  "risk": "read",
+  "screen_text": "App: com.google.android.calendar \u00b7 Screen: AllInOneCalendarActivity \u00b7 settled 65 ms\n[1] Button \"Show Calendar List and Settings drawer\"\n[2] Button \"October\" (id: date_picker_button)\n[3] Text \"October\" (id: date_picker_content)\n[4] Button \"Search\" (id: action_search)\n[5] Button \"Jump to Today\" (id: action_today)\n[6] Button \"Open Tasks\" (id: action_tasks)\n[7] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[8] Text \"Add birthdays \u00b7 Be reminded about birthdays of the people you care about\" (id: banner_text)\n[9] Button \"Not now\" (id: secondary_button)\n[10] Button \"Add a birthday\" (id: primary_button)\n[11] Text \"Thursday 29 October 2026, Open Day View\"\n[12] Text \"Nothing planned. Tap to create.\"\n[13] Text \"Saturday 31 October 2026, Open Day View\"\n[14] Text \"Halloween, All day: , envoy3955@gmail.com, Holidays in United States\"\n[15] Text \"November 2026\"\n[16] Text \"Nov 1 \u2013 7\"\n[17] Text \"Sunday 01 November 2026, Open Day View\"\n[18] Text \"Daylight Saving Time ends, All day: , envoy3955@gmail.com, Holidays in United States\"\n[19] Text \"Tuesday 03 November 2026, Open Day View\"\n[20] Text \"Election Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[21] Text \"Nov 8 \u2013 14\"\n[22] Text \"Wednesday 11 November 2026, Open Day View\"\n[23] Text \"Veterans Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[24] Text \"Nov 15 \u2013 21\"\n[25] Text \"Nov 22 \u2013 28\"\n[26] Text \"Thursday 26 November 2026, Open Day View\"\n[27] Text \"Thanksgiving Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[28] List (scrollable)\n[29] Toggle \"Creation menu\" (off)\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0040988
+ },
+ {
+  "case": "calendar_today s1",
+  "variant": "guard",
+  "plan": [
+   "Open Google Calendar",
+   "Go to today, Thursday 29 October 2026",
+   "Read whether any events are listed for today"
+  ],
+  "plan_tokens": 1334,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "No - Thursday 29 October 2026 shows \"Nothing planned. Tap to create.\"",
+  "remember": "",
+  "step_tokens": 3038,
+  "reason": "Today's date is visible with no events listed",
+  "risk": "read",
+  "screen_text": "App: com.google.android.calendar \u00b7 Screen: AllInOneCalendarActivity \u00b7 settled 65 ms\n[1] Button \"Show Calendar List and Settings drawer\"\n[2] Button \"October\" (id: date_picker_button)\n[3] Text \"October\" (id: date_picker_content)\n[4] Button \"Search\" (id: action_search)\n[5] Button \"Jump to Today\" (id: action_today)\n[6] Button \"Open Tasks\" (id: action_tasks)\n[7] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[8] Text \"Add birthdays \u00b7 Be reminded about birthdays of the people you care about\" (id: banner_text)\n[9] Button \"Not now\" (id: secondary_button)\n[10] Button \"Add a birthday\" (id: primary_button)\n[11] Text \"Thursday 29 October 2026, Open Day View\"\n[12] Text \"Nothing planned. Tap to create.\"\n[13] Text \"Saturday 31 October 2026, Open Day View\"\n[14] Text \"Halloween, All day: , envoy3955@gmail.com, Holidays in United States\"\n[15] Text \"November 2026\"\n[16] Text \"Nov 1 \u2013 7\"\n[17] Text \"Sunday 01 November 2026, Open Day View\"\n[18] Text \"Daylight Saving Time ends, All day: , envoy3955@gmail.com, Holidays in United States\"\n[19] Text \"Tuesday 03 November 2026, Open Day View\"\n[20] Text \"Election Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[21] Text \"Nov 8 \u2013 14\"\n[22] Text \"Wednesday 11 November 2026, Open Day View\"\n[23] Text \"Veterans Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[24] Text \"Nov 15 \u2013 21\"\n[25] Text \"Nov 22 \u2013 28\"\n[26] Text \"Thursday 26 November 2026, Open Day View\"\n[27] Text \"Thanksgiving Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[28] List (scrollable)\n[29] Toggle \"Creation menu\" (off)\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.00520855
+ },
+ {
+  "case": "calendar_today s1",
+  "variant": "guard",
+  "plan": [
+   "Open Google Calendar",
+   "Go to Today, Thursday 29 October 2026",
+   "Read events listed for today"
+  ],
+  "plan_tokens": 1334,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "No - you have no events today, Thursday 29 October 2026. Google Calendar shows \"Nothing planned. Tap to create.\"",
+  "remember": "",
+  "step_tokens": 3035,
+  "reason": "Today's events are already visible showing nothing planned",
+  "risk": "read",
+  "screen_text": "App: com.google.android.calendar \u00b7 Screen: AllInOneCalendarActivity \u00b7 settled 65 ms\n[1] Button \"Show Calendar List and Settings drawer\"\n[2] Button \"October\" (id: date_picker_button)\n[3] Text \"October\" (id: date_picker_content)\n[4] Button \"Search\" (id: action_search)\n[5] Button \"Jump to Today\" (id: action_today)\n[6] Button \"Open Tasks\" (id: action_tasks)\n[7] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[8] Text \"Add birthdays \u00b7 Be reminded about birthdays of the people you care about\" (id: banner_text)\n[9] Button \"Not now\" (id: secondary_button)\n[10] Button \"Add a birthday\" (id: primary_button)\n[11] Text \"Thursday 29 October 2026, Open Day View\"\n[12] Text \"Nothing planned. Tap to create.\"\n[13] Text \"Saturday 31 October 2026, Open Day View\"\n[14] Text \"Halloween, All day: , envoy3955@gmail.com, Holidays in United States\"\n[15] Text \"November 2026\"\n[16] Text \"Nov 1 \u2013 7\"\n[17] Text \"Sunday 01 November 2026, Open Day View\"\n[18] Text \"Daylight Saving Time ends, All day: , envoy3955@gmail.com, Holidays in United States\"\n[19] Text \"Tuesday 03 November 2026, Open Day View\"\n[20] Text \"Election Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[21] Text \"Nov 8 \u2013 14\"\n[22] Text \"Wednesday 11 November 2026, Open Day View\"\n[23] Text \"Veterans Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[24] Text \"Nov 15 \u2013 21\"\n[25] Text \"Nov 22 \u2013 28\"\n[26] Text \"Thursday 26 November 2026, Open Day View\"\n[27] Text \"Thanksgiving Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[28] List (scrollable)\n[29] Toggle \"Creation menu\" (off)\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0043733
+ },
+ {
+  "case": "calendar_today s1",
+  "variant": "guard",
+  "plan": [
+   "Open Google Calendar",
+   "Navigate to Today - Thursday 29 October 2026",
+   "Read events shown for today"
+  ],
+  "plan_tokens": 1334,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "No \u2014 Nothing planned. Tap to create.",
+  "remember": "",
+  "step_tokens": 3035,
+  "reason": "Today's events are already visible on screen",
+  "risk": "read",
+  "screen_text": "App: com.google.android.calendar \u00b7 Screen: AllInOneCalendarActivity \u00b7 settled 65 ms\n[1] Button \"Show Calendar List and Settings drawer\"\n[2] Button \"October\" (id: date_picker_button)\n[3] Text \"October\" (id: date_picker_content)\n[4] Button \"Search\" (id: action_search)\n[5] Button \"Jump to Today\" (id: action_today)\n[6] Button \"Open Tasks\" (id: action_tasks)\n[7] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[8] Text \"Add birthdays \u00b7 Be reminded about birthdays of the people you care about\" (id: banner_text)\n[9] Button \"Not now\" (id: secondary_button)\n[10] Button \"Add a birthday\" (id: primary_button)\n[11] Text \"Thursday 29 October 2026, Open Day View\"\n[12] Text \"Nothing planned. Tap to create.\"\n[13] Text \"Saturday 31 October 2026, Open Day View\"\n[14] Text \"Halloween, All day: , envoy3955@gmail.com, Holidays in United States\"\n[15] Text \"November 2026\"\n[16] Text \"Nov 1 \u2013 7\"\n[17] Text \"Sunday 01 November 2026, Open Day View\"\n[18] Text \"Daylight Saving Time ends, All day: , envoy3955@gmail.com, Holidays in United States\"\n[19] Text \"Tuesday 03 November 2026, Open Day View\"\n[20] Text \"Election Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[21] Text \"Nov 8 \u2013 14\"\n[22] Text \"Wednesday 11 November 2026, Open Day View\"\n[23] Text \"Veterans Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[24] Text \"Nov 15 \u2013 21\"\n[25] Text \"Nov 22 \u2013 28\"\n[26] Text \"Thursday 26 November 2026, Open Day View\"\n[27] Text \"Thanksgiving Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[28] List (scrollable)\n[29] Toggle \"Creation menu\" (off)\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0045645500000000006
+ },
+ {
+  "case": "calendar_today s1",
+  "variant": "guard",
+  "plan": [
+   "Open Google Calendar",
+   "Navigate to today Thursday 29 October 2026",
+   "Read the events shown for today"
+  ],
+  "plan_tokens": 1334,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "No - you have no events today (Thursday 29 October 2026). Google Calendar shows \"Nothing planned. Tap to create.\"",
+  "remember": "",
+  "step_tokens": 3035,
+  "reason": "Today's events already visible on screen",
+  "risk": "read",
+  "screen_text": "App: com.google.android.calendar \u00b7 Screen: AllInOneCalendarActivity \u00b7 settled 65 ms\n[1] Button \"Show Calendar List and Settings drawer\"\n[2] Button \"October\" (id: date_picker_button)\n[3] Text \"October\" (id: date_picker_content)\n[4] Button \"Search\" (id: action_search)\n[5] Button \"Jump to Today\" (id: action_today)\n[6] Button \"Open Tasks\" (id: action_tasks)\n[7] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[8] Text \"Add birthdays \u00b7 Be reminded about birthdays of the people you care about\" (id: banner_text)\n[9] Button \"Not now\" (id: secondary_button)\n[10] Button \"Add a birthday\" (id: primary_button)\n[11] Text \"Thursday 29 October 2026, Open Day View\"\n[12] Text \"Nothing planned. Tap to create.\"\n[13] Text \"Saturday 31 October 2026, Open Day View\"\n[14] Text \"Halloween, All day: , envoy3955@gmail.com, Holidays in United States\"\n[15] Text \"November 2026\"\n[16] Text \"Nov 1 \u2013 7\"\n[17] Text \"Sunday 01 November 2026, Open Day View\"\n[18] Text \"Daylight Saving Time ends, All day: , envoy3955@gmail.com, Holidays in United States\"\n[19] Text \"Tuesday 03 November 2026, Open Day View\"\n[20] Text \"Election Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[21] Text \"Nov 8 \u2013 14\"\n[22] Text \"Wednesday 11 November 2026, Open Day View\"\n[23] Text \"Veterans Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[24] Text \"Nov 15 \u2013 21\"\n[25] Text \"Nov 22 \u2013 28\"\n[26] Text \"Thursday 26 November 2026, Open Day View\"\n[27] Text \"Thanksgiving Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[28] List (scrollable)\n[29] Toggle \"Creation menu\" (off)\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.00423305
+ },
+ {
+  "case": "calendar_today s1",
+  "variant": "guard",
+  "plan": [
+   "Show today Thursday 29 October 2026 in Calendar",
+   "Read events listed for today"
+  ],
+  "plan_tokens": 1334,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "No \u2014 Thursday 29 October 2026 shows \"Nothing planned. Tap to create.\" in Google Calendar.",
+  "remember": "",
+  "step_tokens": 3029,
+  "reason": "Today's date is already shown with no events",
+  "risk": "read",
+  "screen_text": "App: com.google.android.calendar \u00b7 Screen: AllInOneCalendarActivity \u00b7 settled 65 ms\n[1] Button \"Show Calendar List and Settings drawer\"\n[2] Button \"October\" (id: date_picker_button)\n[3] Text \"October\" (id: date_picker_content)\n[4] Button \"Search\" (id: action_search)\n[5] Button \"Jump to Today\" (id: action_today)\n[6] Button \"Open Tasks\" (id: action_tasks)\n[7] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[8] Text \"Add birthdays \u00b7 Be reminded about birthdays of the people you care about\" (id: banner_text)\n[9] Button \"Not now\" (id: secondary_button)\n[10] Button \"Add a birthday\" (id: primary_button)\n[11] Text \"Thursday 29 October 2026, Open Day View\"\n[12] Text \"Nothing planned. Tap to create.\"\n[13] Text \"Saturday 31 October 2026, Open Day View\"\n[14] Text \"Halloween, All day: , envoy3955@gmail.com, Holidays in United States\"\n[15] Text \"November 2026\"\n[16] Text \"Nov 1 \u2013 7\"\n[17] Text \"Sunday 01 November 2026, Open Day View\"\n[18] Text \"Daylight Saving Time ends, All day: , envoy3955@gmail.com, Holidays in United States\"\n[19] Text \"Tuesday 03 November 2026, Open Day View\"\n[20] Text \"Election Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[21] Text \"Nov 8 \u2013 14\"\n[22] Text \"Wednesday 11 November 2026, Open Day View\"\n[23] Text \"Veterans Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[24] Text \"Nov 15 \u2013 21\"\n[25] Text \"Nov 22 \u2013 28\"\n[26] Text \"Thursday 26 November 2026, Open Day View\"\n[27] Text \"Thanksgiving Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[28] List (scrollable)\n[29] Toggle \"Creation menu\" (off)\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0043913
+ },
+ {
+  "case": "calendar_today s1",
+  "variant": "guard",
+  "plan": [
+   "Show Calendar on today's date Thursday 29 October 2026",
+   "Read events listed for today or empty state"
+  ],
+  "plan_tokens": 1334,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "No \u2014 you have no events today. Google Calendar shows 'Thursday 29 October 2026' with 'Nothing planned. Tap to create.'",
+  "remember": "",
+  "step_tokens": 3033,
+  "reason": "Today's date already shown with empty state",
+  "risk": "read",
+  "screen_text": "App: com.google.android.calendar \u00b7 Screen: AllInOneCalendarActivity \u00b7 settled 65 ms\n[1] Button \"Show Calendar List and Settings drawer\"\n[2] Button \"October\" (id: date_picker_button)\n[3] Text \"October\" (id: date_picker_content)\n[4] Button \"Search\" (id: action_search)\n[5] Button \"Jump to Today\" (id: action_today)\n[6] Button \"Open Tasks\" (id: action_tasks)\n[7] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[8] Text \"Add birthdays \u00b7 Be reminded about birthdays of the people you care about\" (id: banner_text)\n[9] Button \"Not now\" (id: secondary_button)\n[10] Button \"Add a birthday\" (id: primary_button)\n[11] Text \"Thursday 29 October 2026, Open Day View\"\n[12] Text \"Nothing planned. Tap to create.\"\n[13] Text \"Saturday 31 October 2026, Open Day View\"\n[14] Text \"Halloween, All day: , envoy3955@gmail.com, Holidays in United States\"\n[15] Text \"November 2026\"\n[16] Text \"Nov 1 \u2013 7\"\n[17] Text \"Sunday 01 November 2026, Open Day View\"\n[18] Text \"Daylight Saving Time ends, All day: , envoy3955@gmail.com, Holidays in United States\"\n[19] Text \"Tuesday 03 November 2026, Open Day View\"\n[20] Text \"Election Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[21] Text \"Nov 8 \u2013 14\"\n[22] Text \"Wednesday 11 November 2026, Open Day View\"\n[23] Text \"Veterans Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[24] Text \"Nov 15 \u2013 21\"\n[25] Text \"Nov 22 \u2013 28\"\n[26] Text \"Thursday 26 November 2026, Open Day View\"\n[27] Text \"Thanksgiving Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[28] List (scrollable)\n[29] Toggle \"Creation menu\" (off)\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0048722999999999995
+ },
+ {
+  "case": "calendar_today s1",
+  "variant": "guard",
+  "plan": [
+   "Go to Today in Google Calendar",
+   "Read events listed for Thursday 29 October 2026"
+  ],
+  "plan_tokens": 1334,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "No - you have no events today (Thursday 29 October 2026 - Nothing planned. Tap to create.)",
+  "remember": "Thursday 29 October 2026 shows Nothing planned",
+  "step_tokens": 3030,
+  "reason": "Today's events are already visible on screen",
+  "risk": "read",
+  "screen_text": "App: com.google.android.calendar \u00b7 Screen: AllInOneCalendarActivity \u00b7 settled 65 ms\n[1] Button \"Show Calendar List and Settings drawer\"\n[2] Button \"October\" (id: date_picker_button)\n[3] Text \"October\" (id: date_picker_content)\n[4] Button \"Search\" (id: action_search)\n[5] Button \"Jump to Today\" (id: action_today)\n[6] Button \"Open Tasks\" (id: action_tasks)\n[7] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[8] Text \"Add birthdays \u00b7 Be reminded about birthdays of the people you care about\" (id: banner_text)\n[9] Button \"Not now\" (id: secondary_button)\n[10] Button \"Add a birthday\" (id: primary_button)\n[11] Text \"Thursday 29 October 2026, Open Day View\"\n[12] Text \"Nothing planned. Tap to create.\"\n[13] Text \"Saturday 31 October 2026, Open Day View\"\n[14] Text \"Halloween, All day: , envoy3955@gmail.com, Holidays in United States\"\n[15] Text \"November 2026\"\n[16] Text \"Nov 1 \u2013 7\"\n[17] Text \"Sunday 01 November 2026, Open Day View\"\n[18] Text \"Daylight Saving Time ends, All day: , envoy3955@gmail.com, Holidays in United States\"\n[19] Text \"Tuesday 03 November 2026, Open Day View\"\n[20] Text \"Election Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[21] Text \"Nov 8 \u2013 14\"\n[22] Text \"Wednesday 11 November 2026, Open Day View\"\n[23] Text \"Veterans Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[24] Text \"Nov 15 \u2013 21\"\n[25] Text \"Nov 22 \u2013 28\"\n[26] Text \"Thursday 26 November 2026, Open Day View\"\n[27] Text \"Thanksgiving Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[28] List (scrollable)\n[29] Toggle \"Creation menu\" (off)\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.0047282999999999995
+ },
+ {
+  "case": "calendar_today s1",
+  "variant": "guard",
+  "plan": [
+   "Open Google Calendar",
+   "Go to today, Thursday 29 October 2026",
+   "Read events listed for today"
+  ],
+  "plan_tokens": 1334,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "No - you have no events today, Thursday 29 October 2026. Calendar shows \"Nothing planned. Tap to create.\"",
+  "remember": "",
+  "step_tokens": 3035,
+  "reason": "Today's date is already shown with no events",
+  "risk": "read",
+  "screen_text": "App: com.google.android.calendar \u00b7 Screen: AllInOneCalendarActivity \u00b7 settled 65 ms\n[1] Button \"Show Calendar List and Settings drawer\"\n[2] Button \"October\" (id: date_picker_button)\n[3] Text \"October\" (id: date_picker_content)\n[4] Button \"Search\" (id: action_search)\n[5] Button \"Jump to Today\" (id: action_today)\n[6] Button \"Open Tasks\" (id: action_tasks)\n[7] Button \"Signed in as envoy envoy3955@gmail.com Account and settings.\" (id: selected_account_disc)\n[8] Text \"Add birthdays \u00b7 Be reminded about birthdays of the people you care about\" (id: banner_text)\n[9] Button \"Not now\" (id: secondary_button)\n[10] Button \"Add a birthday\" (id: primary_button)\n[11] Text \"Thursday 29 October 2026, Open Day View\"\n[12] Text \"Nothing planned. Tap to create.\"\n[13] Text \"Saturday 31 October 2026, Open Day View\"\n[14] Text \"Halloween, All day: , envoy3955@gmail.com, Holidays in United States\"\n[15] Text \"November 2026\"\n[16] Text \"Nov 1 \u2013 7\"\n[17] Text \"Sunday 01 November 2026, Open Day View\"\n[18] Text \"Daylight Saving Time ends, All day: , envoy3955@gmail.com, Holidays in United States\"\n[19] Text \"Tuesday 03 November 2026, Open Day View\"\n[20] Text \"Election Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[21] Text \"Nov 8 \u2013 14\"\n[22] Text \"Wednesday 11 November 2026, Open Day View\"\n[23] Text \"Veterans Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[24] Text \"Nov 15 \u2013 21\"\n[25] Text \"Nov 22 \u2013 28\"\n[26] Text \"Thursday 26 November 2026, Open Day View\"\n[27] Text \"Thanksgiving Day, All day: , envoy3955@gmail.com, Holidays in United States\"\n[28] List (scrollable)\n[29] Toggle \"Creation menu\" (off)\n(screen has a scrollable list; scroll to see more)",
+  "cost": 0.00841325
+ },
+ {
+  "case": "doordash s2 (main path: saved addresses)",
+  "variant": "cur",
+  "plan": [
+   "Tap the current delivery address button to open saved addresses",
+   "Read the saved delivery address shown"
+  ],
+  "plan_tokens": 1550,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "1 Hacker Way \u00b7 Menlo Park, CA 94025, USA",
+  "remember": "Saved address: 1 Hacker Way \u00b7 Menlo Park, CA 94025, USA",
+  "step_tokens": 2670,
+  "reason": "Saved address is visible on screen",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: AddressActivity \u00b7 settled 73 ms\n[1] Button \"Back\"\n[2] Text \"Search an Address\" (id: container_navBar_titles)\n[3] EditText \"Search for an address\" (id: edit_text) (empty)\n[4] Text \"Nearby addresses\" (id: textView_address_header)\n[5] Button \"Use current location \u00b7 Enable Location Services\"\n[6] Text \"Saved addresses\" (id: textView_address_header)\n[7] Button \"1 Hacker Way \u00b7 Menlo Park, CA 94025, USA\"\n[8] Button \"Edit Address\" (id: address_edit_button)",
+  "cost": 0.0038465
+ },
+ {
+  "case": "doordash s2 (main path: saved addresses)",
+  "variant": "cur",
+  "plan": [
+   "Confirm DoorDash home screen is open with address displayed",
+   "Tap the address button to view saved delivery addresses",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 1550,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "1 Hacker Way \u00b7 Menlo Park, CA 94025, USA",
+  "remember": "1 Hacker Way \u00b7 Menlo Park, CA 94025, USA",
+  "step_tokens": 2681,
+  "reason": "Saved address is visible on screen",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: AddressActivity \u00b7 settled 73 ms\n[1] Button \"Back\"\n[2] Text \"Search an Address\" (id: container_navBar_titles)\n[3] EditText \"Search for an address\" (id: edit_text) (empty)\n[4] Text \"Nearby addresses\" (id: textView_address_header)\n[5] Button \"Use current location \u00b7 Enable Location Services\"\n[6] Text \"Saved addresses\" (id: textView_address_header)\n[7] Button \"1 Hacker Way \u00b7 Menlo Park, CA 94025, USA\"\n[8] Button \"Edit Address\" (id: address_edit_button)",
+  "cost": 0.0042082000000000005
+ },
+ {
+  "case": "doordash s2 (main path: saved addresses)",
+  "variant": "cur",
+  "plan": [
+   "Confirm DoorDash dashboard is open",
+   "Read saved delivery address shown in header"
+  ],
+  "plan_tokens": 1550,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "1 Hacker Way \u00b7 Menlo Park, CA 94025, USA",
+  "remember": "",
+  "step_tokens": 2667,
+  "reason": "Saved address is visible on screen",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: AddressActivity \u00b7 settled 73 ms\n[1] Button \"Back\"\n[2] Text \"Search an Address\" (id: container_navBar_titles)\n[3] EditText \"Search for an address\" (id: edit_text) (empty)\n[4] Text \"Nearby addresses\" (id: textView_address_header)\n[5] Button \"Use current location \u00b7 Enable Location Services\"\n[6] Text \"Saved addresses\" (id: textView_address_header)\n[7] Button \"1 Hacker Way \u00b7 Menlo Park, CA 94025, USA\"\n[8] Button \"Edit Address\" (id: address_edit_button)",
+  "cost": 0.005193700000000001
+ },
+ {
+  "case": "doordash s2 (main path: saved addresses)",
+  "variant": "cur",
+  "plan": [
+   "Check the delivery address shown on the DoorDash home screen",
+   "Open the address selector to confirm saved addresses",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 1550,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "1 Hacker Way \u00b7 Menlo Park, CA 94025, USA",
+  "remember": "Saved address is 1 Hacker Way \u00b7 Menlo Park, CA 94025, USA",
+  "step_tokens": 2681,
+  "reason": "Saved address is visible on screen",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: AddressActivity \u00b7 settled 73 ms\n[1] Button \"Back\"\n[2] Text \"Search an Address\" (id: container_navBar_titles)\n[3] EditText \"Search for an address\" (id: edit_text) (empty)\n[4] Text \"Nearby addresses\" (id: textView_address_header)\n[5] Button \"Use current location \u00b7 Enable Location Services\"\n[6] Text \"Saved addresses\" (id: textView_address_header)\n[7] Button \"1 Hacker Way \u00b7 Menlo Park, CA 94025, USA\"\n[8] Button \"Edit Address\" (id: address_edit_button)",
+  "cost": 0.008303000000000001
+ },
+ {
+  "case": "doordash s2 (main path: saved addresses)",
+  "variant": "cur",
+  "plan": [
+   "Check delivery address shown on home screen",
+   "Tap address header to open saved addresses",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 1550,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "1 Hacker Way, Menlo Park, CA 94025, USA",
+  "remember": "",
+  "step_tokens": 2676,
+  "reason": "Saved address is visible on screen",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: AddressActivity \u00b7 settled 73 ms\n[1] Button \"Back\"\n[2] Text \"Search an Address\" (id: container_navBar_titles)\n[3] EditText \"Search for an address\" (id: edit_text) (empty)\n[4] Text \"Nearby addresses\" (id: textView_address_header)\n[5] Button \"Use current location \u00b7 Enable Location Services\"\n[6] Text \"Saved addresses\" (id: textView_address_header)\n[7] Button \"1 Hacker Way \u00b7 Menlo Park, CA 94025, USA\"\n[8] Button \"Edit Address\" (id: address_edit_button)",
+  "cost": 0.0063719
+ },
+ {
+  "case": "doordash s2 (main path: saved addresses)",
+  "variant": "cur",
+  "plan": [
+   "Open DoorDash to the home dashboard",
+   "Read the saved delivery address shown in the header"
+  ],
+  "plan_tokens": 1550,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "1 Hacker Way, Menlo Park, CA 94025, USA",
+  "remember": "",
+  "step_tokens": 2670,
+  "reason": "Saved address is visible on screen",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: AddressActivity \u00b7 settled 73 ms\n[1] Button \"Back\"\n[2] Text \"Search an Address\" (id: container_navBar_titles)\n[3] EditText \"Search for an address\" (id: edit_text) (empty)\n[4] Text \"Nearby addresses\" (id: textView_address_header)\n[5] Button \"Use current location \u00b7 Enable Location Services\"\n[6] Text \"Saved addresses\" (id: textView_address_header)\n[7] Button \"1 Hacker Way \u00b7 Menlo Park, CA 94025, USA\"\n[8] Button \"Edit Address\" (id: address_edit_button)",
+  "cost": 0.0063091499999999995
+ },
+ {
+  "case": "doordash s2 (main path: saved addresses)",
+  "variant": "cur",
+  "plan": [
+   "Check delivery address shown on DoorDash home screen",
+   "Tap address header to view saved addresses",
+   "Read saved delivery address"
+  ],
+  "plan_tokens": 1550,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "1 Hacker Way \u00b7 Menlo Park, CA 94025, USA",
+  "remember": "Saved address: 1 Hacker Way \u00b7 Menlo Park, CA 94025, USA",
+  "step_tokens": 2677,
+  "reason": "Saved address is visible, goal reached",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: AddressActivity \u00b7 settled 73 ms\n[1] Button \"Back\"\n[2] Text \"Search an Address\" (id: container_navBar_titles)\n[3] EditText \"Search for an address\" (id: edit_text) (empty)\n[4] Text \"Nearby addresses\" (id: textView_address_header)\n[5] Button \"Use current location \u00b7 Enable Location Services\"\n[6] Text \"Saved addresses\" (id: textView_address_header)\n[7] Button \"1 Hacker Way \u00b7 Menlo Park, CA 94025, USA\"\n[8] Button \"Edit Address\" (id: address_edit_button)",
+  "cost": 0.0035535000000000002
+ },
+ {
+  "case": "doordash s2 (main path: saved addresses)",
+  "variant": "cur",
+  "plan": [
+   "Tap the '1 Hacker Way' delivery address button",
+   "Open the saved addresses list",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 1550,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "1 Hacker Way \u00b7 Menlo Park, CA 94025, USA",
+  "remember": "",
+  "step_tokens": 2677,
+  "reason": "Saved address is visible on screen",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: AddressActivity \u00b7 settled 73 ms\n[1] Button \"Back\"\n[2] Text \"Search an Address\" (id: container_navBar_titles)\n[3] EditText \"Search for an address\" (id: edit_text) (empty)\n[4] Text \"Nearby addresses\" (id: textView_address_header)\n[5] Button \"Use current location \u00b7 Enable Location Services\"\n[6] Text \"Saved addresses\" (id: textView_address_header)\n[7] Button \"1 Hacker Way \u00b7 Menlo Park, CA 94025, USA\"\n[8] Button \"Edit Address\" (id: address_edit_button)",
+  "cost": 0.00785075
+ },
+ {
+  "case": "doordash s2 (main path: saved addresses)",
+  "variant": "guard",
+  "plan": [
+   "Note delivery address shown in DoorDash header",
+   "Open Account section",
+   "Open saved addresses to read saved delivery address"
+  ],
+  "plan_tokens": 1598,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "1 Hacker Way, Menlo Park, CA 94025, USA",
+  "remember": "",
+  "step_tokens": 2715,
+  "reason": "Saved address is visible on screen",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: AddressActivity \u00b7 settled 73 ms\n[1] Button \"Back\"\n[2] Text \"Search an Address\" (id: container_navBar_titles)\n[3] EditText \"Search for an address\" (id: edit_text) (empty)\n[4] Text \"Nearby addresses\" (id: textView_address_header)\n[5] Button \"Use current location \u00b7 Enable Location Services\"\n[6] Text \"Saved addresses\" (id: textView_address_header)\n[7] Button \"1 Hacker Way \u00b7 Menlo Park, CA 94025, USA\"\n[8] Button \"Edit Address\" (id: address_edit_button)",
+  "cost": 0.0074225
+ },
+ {
+  "case": "doordash s2 (main path: saved addresses)",
+  "variant": "guard",
+  "plan": [
+   "Note the delivery address shown on the home header",
+   "Tap the address header to view saved addresses",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 1598,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "1 Hacker Way \u00b7 Menlo Park, CA 94025, USA",
+  "remember": "Saved address: 1 Hacker Way \u00b7 Menlo Park, CA 94025, USA",
+  "step_tokens": 2718,
+  "reason": "Saved address is visible under Saved addresses",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: AddressActivity \u00b7 settled 73 ms\n[1] Button \"Back\"\n[2] Text \"Search an Address\" (id: container_navBar_titles)\n[3] EditText \"Search for an address\" (id: edit_text) (empty)\n[4] Text \"Nearby addresses\" (id: textView_address_header)\n[5] Button \"Use current location \u00b7 Enable Location Services\"\n[6] Text \"Saved addresses\" (id: textView_address_header)\n[7] Button \"1 Hacker Way \u00b7 Menlo Park, CA 94025, USA\"\n[8] Button \"Edit Address\" (id: address_edit_button)",
+  "cost": 0.0047629000000000005
+ },
+ {
+  "case": "doordash s2 (main path: saved addresses)",
+  "variant": "guard",
+  "plan": [
+   "Tap the current address button at the top to open saved addresses",
+   "Read the saved delivery address shown"
+  ],
+  "plan_tokens": 1598,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "1 Hacker Way, Menlo Park, CA 94025, USA",
+  "remember": "",
+  "step_tokens": 2711,
+  "reason": "Saved address is visible on screen",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: AddressActivity \u00b7 settled 73 ms\n[1] Button \"Back\"\n[2] Text \"Search an Address\" (id: container_navBar_titles)\n[3] EditText \"Search for an address\" (id: edit_text) (empty)\n[4] Text \"Nearby addresses\" (id: textView_address_header)\n[5] Button \"Use current location \u00b7 Enable Location Services\"\n[6] Text \"Saved addresses\" (id: textView_address_header)\n[7] Button \"1 Hacker Way \u00b7 Menlo Park, CA 94025, USA\"\n[8] Button \"Edit Address\" (id: address_edit_button)",
+  "cost": 0.00440345
+ },
+ {
+  "case": "doordash s2 (main path: saved addresses)",
+  "variant": "guard",
+  "plan": [
+   "Tap the delivery address header showing 1 Hacker Way",
+   "Open the saved addresses list",
+   "Read the saved delivery address"
+  ],
+  "plan_tokens": 1598,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "1 Hacker Way, Menlo Park, CA 94025, USA",
+  "remember": "",
+  "step_tokens": 2716,
+  "reason": "Saved address is visible on screen",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: AddressActivity \u00b7 settled 73 ms\n[1] Button \"Back\"\n[2] Text \"Search an Address\" (id: container_navBar_titles)\n[3] EditText \"Search for an address\" (id: edit_text) (empty)\n[4] Text \"Nearby addresses\" (id: textView_address_header)\n[5] Button \"Use current location \u00b7 Enable Location Services\"\n[6] Text \"Saved addresses\" (id: textView_address_header)\n[7] Button \"1 Hacker Way \u00b7 Menlo Park, CA 94025, USA\"\n[8] Button \"Edit Address\" (id: address_edit_button)",
+  "cost": 0.00414195
+ },
+ {
+  "case": "doordash s2 (main path: saved addresses)",
+  "variant": "guard",
+  "plan": [
+   "Check delivery address shown at top of DoorDash home",
+   "Open address selector to confirm saved delivery address"
+  ],
+  "plan_tokens": 1598,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "1 Hacker Way, Menlo Park, CA 94025, USA",
+  "remember": "Saved address is 1 Hacker Way \u00b7 Menlo Park, CA 94025, USA",
+  "step_tokens": 2711,
+  "reason": "Saved address is visible on screen",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: AddressActivity \u00b7 settled 73 ms\n[1] Button \"Back\"\n[2] Text \"Search an Address\" (id: container_navBar_titles)\n[3] EditText \"Search for an address\" (id: edit_text) (empty)\n[4] Text \"Nearby addresses\" (id: textView_address_header)\n[5] Button \"Use current location \u00b7 Enable Location Services\"\n[6] Text \"Saved addresses\" (id: textView_address_header)\n[7] Button \"1 Hacker Way \u00b7 Menlo Park, CA 94025, USA\"\n[8] Button \"Edit Address\" (id: address_edit_button)",
+  "cost": 0.005989400000000001
+ },
+ {
+  "case": "doordash s2 (main path: saved addresses)",
+  "variant": "guard",
+  "plan": [
+   "Tap the current address header showing 1 Hacker Way to open delivery address options",
+   "Read the saved delivery address shown"
+  ],
+  "plan_tokens": 1598,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "1 Hacker Way \u00b7 Menlo Park, CA 94025, USA",
+  "remember": "Saved delivery address: 1 Hacker Way \u00b7 Menlo Park, CA 94025, USA",
+  "step_tokens": 2714,
+  "reason": "Saved address is visible on screen",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: AddressActivity \u00b7 settled 73 ms\n[1] Button \"Back\"\n[2] Text \"Search an Address\" (id: container_navBar_titles)\n[3] EditText \"Search for an address\" (id: edit_text) (empty)\n[4] Text \"Nearby addresses\" (id: textView_address_header)\n[5] Button \"Use current location \u00b7 Enable Location Services\"\n[6] Text \"Saved addresses\" (id: textView_address_header)\n[7] Button \"1 Hacker Way \u00b7 Menlo Park, CA 94025, USA\"\n[8] Button \"Edit Address\" (id: address_edit_button)",
+  "cost": 0.0040417000000000005
+ },
+ {
+  "case": "doordash s2 (main path: saved addresses)",
+  "variant": "guard",
+  "plan": [
+   "Tap Account to open account settings",
+   "Open Addresses or saved delivery addresses",
+   "Read the saved delivery address shown"
+  ],
+  "plan_tokens": 1598,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "1 Hacker Way, Menlo Park, CA 94025, USA",
+  "remember": "Saved address: 1 Hacker Way \u00b7 Menlo Park, CA 94025, USA",
+  "step_tokens": 2714,
+  "reason": "Saved address is visible on screen",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: AddressActivity \u00b7 settled 73 ms\n[1] Button \"Back\"\n[2] Text \"Search an Address\" (id: container_navBar_titles)\n[3] EditText \"Search for an address\" (id: edit_text) (empty)\n[4] Text \"Nearby addresses\" (id: textView_address_header)\n[5] Button \"Use current location \u00b7 Enable Location Services\"\n[6] Text \"Saved addresses\" (id: textView_address_header)\n[7] Button \"1 Hacker Way \u00b7 Menlo Park, CA 94025, USA\"\n[8] Button \"Edit Address\" (id: address_edit_button)",
+  "cost": 0.0036591999999999996
+ },
+ {
+  "case": "doordash s2 (main path: saved addresses)",
+  "variant": "guard",
+  "plan": [
+   "Tap the current address button to open delivery address options",
+   "Read the saved delivery address shown"
+  ],
+  "plan_tokens": 1598,
+  "action": "done",
+  "element": null,
+  "element_line": "",
+  "result": "1 Hacker Way \u00b7 Menlo Park, CA 94025, USA",
+  "remember": "",
+  "step_tokens": 2709,
+  "reason": "Saved address is visible on screen",
+  "risk": "read",
+  "screen_text": "App: com.dd.doordash \u00b7 Screen: AddressActivity \u00b7 settled 73 ms\n[1] Button \"Back\"\n[2] Text \"Search an Address\" (id: container_navBar_titles)\n[3] EditText \"Search for an address\" (id: edit_text) (empty)\n[4] Text \"Nearby addresses\" (id: textView_address_header)\n[5] Button \"Use current location \u00b7 Enable Location Services\"\n[6] Text \"Saved addresses\" (id: textView_address_header)\n[7] Button \"1 Hacker Way \u00b7 Menlo Park, CA 94025, USA\"\n[8] Button \"Edit Address\" (id: address_edit_button)",
+  "cost": 0.0041332
+ }
+]

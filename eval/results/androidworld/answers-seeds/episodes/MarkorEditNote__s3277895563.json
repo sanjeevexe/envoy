@@ -1,0 +1,56 @@
+{
+ "task": "MarkorEditNote",
+ "seed": 3277895563,
+ "goal": "Edit note_znEqH.txt in Markor. Replace the text with The library book is due back on the 15th.\nBetter late than never.\nThe pen is mightier than the sword.",
+ "score": 0.0,
+ "aw_run_time_s": 13.4,
+ "aw_episode_length": 12,
+ "agent": "envoy",
+ "finished": "2026-10-29 02:05:21.605981",
+ "envoy": {
+  "run_id": "aw-answers-seeds-1029-020510-d745",
+  "goal": "Edit note_znEqH.txt in Markor. Replace the text with The library book is due back on the 15th.\nBetter late than never.\nThe pen is mightier than the sword.",
+  "max_steps": 12,
+  "config": {
+   "mode": "routine",
+   "library": "answers-verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": null,
+   "stage": "model: no confident match (None)",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "markor_edit_note",
+     0.711
+    ],
+    [
+     "markor_create_note_and_send_sms",
+     0.267
+    ],
+    [
+     "joplin_check_note_todo",
+     0.222
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "no_routine",
+  "result": "model: no confident match (None)",
+  "done": false,
+  "answer": null,
+  "model_calls": 1,
+  "cost_usd": 0.007086,
+  "cost_at_standard_usd": 0.007086,
+  "duration_s": 6.7,
+  "wall_s": 9.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}

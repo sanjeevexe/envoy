@@ -1,0 +1,103 @@
+{
+ "task": "SystemWifiTurnOffVerify",
+ "seed": 3450940548,
+ "goal": "Turn wifi off.",
+ "score": 0.0,
+ "aw_run_time_s": 15.0,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 18:37:51.309905",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-183738-9bae",
+  "goal": "Turn wifi off.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "settings_turn_off_wifi_2",
+   "stage": "model confirmed",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "settings_turn_off_wifi",
+     0.867
+    ],
+    [
+     "settings_turn_off_wifi_2",
+     0.867
+    ],
+    [
+     "settings_turn_on_wifi",
+     0.733
+    ]
+   ]
+  },
+  "status": "failed",
+  "result": "step turn_off_wifi: after-checks failed: toggle is on",
+  "routine": "settings_turn_off_wifi_2",
+  "version": 1,
+  "done": false,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 3,
+  "rung": 1,
+  "steps": [
+   {
+    "id": "launch_settings",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_network_and_internet",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_internet",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "turn_off_wifi",
+    "status": "failed",
+    "rung": 1,
+    "rungs": [
+     "wait and retry: waited 1.5 s"
+    ],
+    "repairs": 0,
+    "detail": "step turn_off_wifi: after-checks failed: toggle is on"
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.002653,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 7.94,
+  "routine_duration_s": 4.5,
+  "trace_dir": "data/runs/aw-routines-verify-1028-183738-9bae",
+  "wall_s": 10.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.4
+  }
+ }
+}

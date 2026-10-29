@@ -1,0 +1,22 @@
+{
+ "name": "simple_sms_messenger_reply_to_conversati",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-28 17:49:39",
+   "parent": null,
+   "changes": [
+    "compiled from aw-final-standard-1028-170809-bcf9"
+   ],
+   "verification": {
+    "source": "final-standard",
+    "source_seed": 503761173
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.google.android.apps.nexuslauncher"
+}

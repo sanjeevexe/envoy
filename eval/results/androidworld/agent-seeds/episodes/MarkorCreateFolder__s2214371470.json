@@ -1,0 +1,85 @@
+{
+ "task": "MarkorCreateFolder",
+ "seed": 2214371470,
+ "goal": "Create a new folder in Markor named folder_20261028_231424.",
+ "score": 1.0,
+ "aw_run_time_s": 19.1,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 23:22:19.176746",
+ "envoy": {
+  "run_id": "aw-agent-seeds-1028-232201-fa2b",
+  "goal": "Create a new folder in Markor named folder_20261028_231424.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Folder folder_20261028_231424 created in /storage/emulated/0/Documents and shown in Markor files list.",
+  "done": true,
+  "answer": "Folder folder_20261028_231424 created in /storage/emulated/0/Documents and shown in Markor files list.",
+  "steps_device": 4,
+  "iterations": 5,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "type": 1,
+   "done": 1
+  },
+  "model_calls": 6,
+  "input_tokens": 16627,
+  "cached_tokens": 12582,
+  "output_tokens": 1067,
+  "reasoning_tokens": 608,
+  "cost_usd": 0.011478,
+  "cost_at_standard_usd": 0.011478,
+  "duration_s": 13.54,
+  "model_s": 6.41,
+  "device_s": 7.13,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Open the Markor app",
+    "Open the file browser / New item dialog",
+    "Create a new folder named folder_20261028_231424",
+    "Confirm the folder is shown in the list"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "folder_20261028_231424",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'folder_20261028_231424' is visible"
+  },
+  "trace_dir": "data/runs/aw-agent-seeds-1028-232201-fa2b",
+  "envoy_commit": "cdd130ecae3cf0891ddc6106da4ad6d1be97fde0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/agent-seeds/traces/MarkorCreateFolder__s2214371470.jsonl.gz",
+  "wall_s": 16.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

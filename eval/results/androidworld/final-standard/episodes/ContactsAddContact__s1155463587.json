@@ -1,0 +1,85 @@
+{
+ "task": "ContactsAddContact",
+ "seed": 1155463587,
+ "goal": "Create a new contact for Hugo Pereira. Their number is +13920741751.",
+ "score": 1.0,
+ "aw_run_time_s": 27.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 10:40:03.208204",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-103937-2990",
+  "goal": "Create a new contact for Hugo Pereira. Their number is +13920741751.",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Created contact Hugo Pereira with number +13920741751",
+  "done": true,
+  "answer": "Created contact Hugo Pereira with number +13920741751",
+  "steps_device": 6,
+  "iterations": 7,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "type": 3,
+   "done": 1
+  },
+  "model_calls": 8,
+  "input_tokens": 20016,
+  "cached_tokens": 16392,
+  "output_tokens": 1622,
+  "reasoning_tokens": 1044,
+  "cost_usd": 0.013882,
+  "cost_at_standard_usd": 0.013882,
+  "duration_s": 20.6,
+  "model_s": 10.22,
+  "device_s": 10.38,
+  "connect_s": 0.92,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Contacts",
+   "subgoals": [
+    "Open the Contacts app",
+    "Start creating a new contact",
+    "Enter name Hugo Pereira and number +13920741751",
+    "Save the contact"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Hugo Pereira",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Hugo Pereira' is visible"
+  },
+  "trace_dir": "data/runs/aw-final-standard-1028-103937-2990",
+  "envoy_commit": "35618ab3bb8cee2be85486b1f0ea9582a8b040a0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/ContactsAddContact__s1155463587.jsonl.gz",
+  "wall_s": 23.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.9
+  }
+ }
+}

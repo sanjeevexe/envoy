@@ -1,0 +1,86 @@
+{
+ "task": "MarkorEditNote",
+ "seed": 240351352,
+ "goal": "Edit note_SiFbv.txt in Markor. Add to the top of the note Hello, World!",
+ "score": 1.0,
+ "aw_run_time_s": 19.2,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 13:51:34.748405",
+ "envoy": {
+  "run_id": "aw-held-out-fdce597-fix-1029-135116-8fb9",
+  "goal": "Edit note_SiFbv.txt in Markor. Add to the top of the note Hello, World!",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Edited note_SiFbv.txt in Markor, added Hello, World! to top",
+  "done": true,
+  "answer": "Edited note_SiFbv.txt in Markor, added Hello, World! to top",
+  "steps_device": 4,
+  "iterations": 5,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "type": 1,
+   "done": 1
+  },
+  "model_calls": 6,
+  "input_tokens": 16056,
+  "cached_tokens": 13222,
+  "output_tokens": 995,
+  "reasoning_tokens": 561,
+  "cost_usd": 0.009755,
+  "cost_at_standard_usd": 0.009755,
+  "duration_s": 13.19,
+  "model_s": 7.49,
+  "device_s": 5.7,
+  "connect_s": 0.85,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Open Markor",
+    "Locate and open note_SiFbv.txt",
+    "Add Hello, World! to the top of the note",
+    "Save the changes"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Hello, World!",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Hello, World!' is visible"
+  },
+  "trace_dir": "data/runs/aw-held-out-fdce597-fix-1029-135116-8fb9",
+  "envoy_commit": "3cbb3d944a29b380fa67decc155d7b76c29099a1",
+  "answer_format": true,
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/held-out-fdce597-fix/traces/MarkorEditNote__s240351352.jsonl.gz",
+  "wall_s": 15.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.4
+  }
+ }
+}

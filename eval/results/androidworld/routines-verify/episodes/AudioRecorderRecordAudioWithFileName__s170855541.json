@@ -1,0 +1,147 @@
+{
+ "task": "AudioRecorderRecordAudioWithFileName",
+ "seed": 170855541,
+ "goal": "Record an audio clip and save it with name \"presentation_fGwr.m4a\" using Audio Recorder app.",
+ "score": 1.0,
+ "aw_run_time_s": 17.1,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:52:02.360627",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-175148-d93b",
+  "goal": "Record an audio clip and save it with name \"presentation_fGwr.m4a\" using Audio Recorder app.",
+  "max_steps": 20,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "audio_recorder_record_clip",
+   "stage": "model confirmed",
+   "inputs": {
+    "recording_file_name": "presentation_fGwr.m4a"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "audio_recorder_record_clip",
+     0.88
+    ],
+    [
+     "audio_recorder_record_audio_clip",
+     0.84
+    ],
+    [
+     "contacts_open_app",
+     0.24
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "audio_recorder_record_clip",
+  "version": 1,
+  "done": true,
+  "answer": "presentation_fGwr.m4a, 00:02, 0.03 Mb, M4a, 44.1kHz",
+  "outputs": {
+   "saved_file_name": "presentation_fGwr.m4a",
+   "recording_duration": "00:02",
+   "file_info": "0.03 Mb, M4a, 44.1kHz"
+  },
+  "steps_used": 9,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_audio_recorder",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_get_started",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_apply_recording_format",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_record_button",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "dismiss_notification_shade",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "return_to_audio_recorder",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_stop_recording",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recording_file_name",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_save_recording",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.002759,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 9.77,
+  "routine_duration_s": 7.44,
+  "trace_dir": "data/runs/aw-routines-verify-1028-175148-d93b",
+  "wall_s": 12.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

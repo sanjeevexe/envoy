@@ -1,0 +1,33 @@
+{
+ "sessions": [
+  {
+   "started": "2026-10-28T05:40:08",
+   "envoy_commit": "821d713df93e6bb5536df7e6f89b6684779d58da",
+   "note": "round 1: main merged (d909d1a) + the ten fixes (0c6c830..af85ab0) + the app-label fix (821d713) + harness parity (dca9191); dev half, Contributor tier, seed 30; compare with the Contributor baseline's dev half",
+   "androidworld_setup_rerun": false,
+   "app_snapshots": 24
+  },
+  {
+   "started": "2026-10-28T07:13:48",
+   "envoy_commit": "821d713df93e6bb5536df7e6f89b6684779d58da",
+   "note": "the two dev tasks the first attempt ran with the app-label bug (aborted/fixes1-dev-no-labels), rerun with the fix",
+   "androidworld_setup_rerun": false,
+   "app_snapshots": 24
+  }
+ ],
+ "stage": "fixes1-dev",
+ "agent": "envoy",
+ "seed": 30,
+ "instances": [
+  0
+ ],
+ "split": null,
+ "tasks": [
+  "AudioRecorderRecordAudioWithFileName",
+  "BrowserMaze"
+ ],
+ "androidworld_commit": "55ddaf5edc6f6c25673aed343907d5b9dca66f84",
+ "emulator": "AndroidWorldAvd: Pixel 6 1080x2400 420 dpi, API 33 google_apis arm64-v8a r17, 4 GB",
+ "envoy_config": {},
+ "tier": "contributor"
+}

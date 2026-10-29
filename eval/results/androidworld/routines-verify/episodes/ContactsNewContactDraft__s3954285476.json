@@ -1,0 +1,84 @@
+{
+ "task": "ContactsNewContactDraft",
+ "seed": 3954285476,
+ "goal": "Go to the new contact screen and enter the following details: First Name: Grace, Last Name: Taylor, Phone: 799-802-1530, Phone Label: Work. Do NOT hit save.",
+ "score": 0.0,
+ "aw_run_time_s": 14.3,
+ "aw_episode_length": 12,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:53:28.250786",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-175315-b82a",
+  "goal": "Go to the new contact screen and enter the following details: First Name: Grace, Last Name: Taylor, Phone: 799-802-1530, Phone Label: Work. Do NOT hit save.",
+  "max_steps": 12,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "contacts_create_contact",
+   "stage": "model confirmed",
+   "inputs": {
+    "first_name": "Grace",
+    "last_name": "Taylor",
+    "phone_number": "799-802-1530",
+    "phone_label": "Work"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "contacts_create_contact",
+     0.8
+    ],
+    [
+     "contacts_create_contact_2",
+     0.613
+    ],
+    [
+     "simple_draw_create_drawing",
+     0.344
+    ]
+   ]
+  },
+  "status": "failed",
+  "result": "step launch_contacts: before-checks failed: no match (best 0.25 < 0.80 or ambiguous, runner-up 0.00)",
+  "routine": "contacts_create_contact",
+  "version": 1,
+  "done": false,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 0,
+  "rung": 1,
+  "steps": [
+   {
+    "id": "launch_contacts",
+    "status": "failed",
+    "rung": 1,
+    "rungs": [
+     "wait and retry: waited 5 s"
+    ],
+    "repairs": 0,
+    "detail": "step launch_contacts: before-checks failed: no match (best 0.25 < 0.80 or ambiguous, runner-up 0.00)"
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.002569,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 8.05,
+  "routine_duration_s": 5.17,
+  "trace_dir": "data/runs/aw-routines-verify-1028-175315-b82a",
+  "wall_s": 10.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

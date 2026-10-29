@@ -1,0 +1,84 @@
+{
+ "task": "SimpleCalendarLocationOfEvent",
+ "seed": 4034703500,
+ "goal": "What is the location of my Family reunion event in Simple Calendar Pro? Answer with the location only.",
+ "score": 1.0,
+ "aw_run_time_s": 18.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:06:05.765625",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-170550-7bae",
+  "goal": "What is the location of my Family reunion event in Simple Calendar Pro? Answer with the location only.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "100 Main St Chicago",
+  "done": true,
+  "answer": "100 Main St Chicago",
+  "steps_device": 3,
+  "iterations": 4,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "type": 1,
+   "tap": 1,
+   "done": 1
+  },
+  "model_calls": 5,
+  "input_tokens": 12387,
+  "cached_tokens": 9525,
+  "output_tokens": 875,
+  "reasoning_tokens": 531,
+  "cost_usd": 0.008725,
+  "cost_at_standard_usd": 0.008725,
+  "duration_s": 11.23,
+  "model_s": 5.04,
+  "device_s": 6.19,
+  "connect_s": 0.87,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Open Simple Calendar Pro",
+    "Locate the Family reunion event",
+    "Open the Family reunion event details to view its location"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "location of Family reunion event",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: 100, Main, Chicago"
+  },
+  "trace_dir": "data/runs/aw-final-standard-1028-170550-7bae",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/SimpleCalendarLocationOfEvent__s4034703500.jsonl.gz",
+  "wall_s": 13.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

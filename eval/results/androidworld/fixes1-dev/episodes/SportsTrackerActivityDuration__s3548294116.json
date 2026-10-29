@@ -1,0 +1,78 @@
+{
+ "task": "SportsTrackerActivityDuration",
+ "seed": 3548294116,
+ "goal": "How long was my skiing activity October 12 2023 in the OpenTracks app? Express your answer in minutes as a single integer.",
+ "score": 0.0,
+ "aw_run_time_s": 54.1,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 06:56:45.315493",
+ "envoy": {
+  "run_id": "aw-fixes1-dev-1028-065552-da48",
+  "goal": "How long was my skiing activity October 12 2023 in the OpenTracks app? Express your answer in minutes as a single integer.",
+  "max_steps": 10,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 10,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 4,
+   "scroll": 4,
+   "type": 1
+  },
+  "model_calls": 11,
+  "input_tokens": 29240,
+  "cached_tokens": 20955,
+  "output_tokens": 2658,
+  "reasoning_tokens": 1848,
+  "cost_usd": 0.001402,
+  "cost_at_standard_usd": 0.024796,
+  "duration_s": 48.47,
+  "model_s": 30.19,
+  "device_s": 18.28,
+  "connect_s": 0.9,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "OpenTracks",
+   "subgoals": [
+    "Open the OpenTracks app",
+    "Find the skiing activity from October 12 2023",
+    "Open its details to read the duration"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "skiing activity duration on Oct 12 2023 in minutes",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-fixes1-dev-1028-065552-da48",
+  "envoy_commit": "821d713df93e6bb5536df7e6f89b6684779d58da",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes1-dev/traces/SportsTrackerActivityDuration__s3548294116.jsonl.gz",
+  "wall_s": 51.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

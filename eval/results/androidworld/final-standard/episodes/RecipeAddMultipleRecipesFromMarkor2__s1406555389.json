@@ -1,0 +1,81 @@
+{
+ "task": "RecipeAddMultipleRecipesFromMarkor2",
+ "seed": 1406555389,
+ "goal": "Add the recipes from recipes.txt in Markor that take 10 mins to prepare into the Broccoli recipe app.",
+ "score": 0.0,
+ "aw_run_time_s": 152.6,
+ "aw_episode_length": 60,
+ "agent": "envoy",
+ "finished": "2026-10-28 16:36:39.695645",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-163411-49de",
+  "goal": "Add the recipes from recipes.txt in Markor that take 10 mins to prepare into the Broccoli recipe app.",
+  "max_steps": 60,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "cost_limit",
+  "result": "stopped at $0.150",
+  "done": false,
+  "answer": null,
+  "steps_device": 40,
+  "iterations": 40,
+  "looks": 0,
+  "screenshots_sent": 7,
+  "replans": 2,
+  "stuck_recoveries": 2,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 21,
+   "scroll": 9,
+   "type": 9
+  },
+  "model_calls": 43,
+  "input_tokens": 152268,
+  "cached_tokens": 84422,
+  "output_tokens": 12474,
+  "reasoning_tokens": 7870,
+  "cost_usd": 0.150485,
+  "cost_at_standard_usd": 0.150485,
+  "duration_s": 143.88,
+  "model_s": 69.88,
+  "device_s": 74.0,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Scroll through recipes.txt in Markor to identify all recipes with 10 mins preparationTime",
+    "Open Broccoli app and go to recipe list / add section",
+    "Add each 10-min recipe from recipes.txt as new recipe in Broccoli",
+    "Save entries and verify they appear in Broccoli"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Beef Stir Fry",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-final-standard-1028-163411-49de",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/RecipeAddMultipleRecipesFromMarkor2__s1406555389.jsonl.gz",
+  "wall_s": 146.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

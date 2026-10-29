@@ -1,0 +1,251 @@
+routine: retro_music_create_and_export_playlist
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Create a playlist in Retro Music and export it to Downloads
+description: Creates a named playlist in Retro Music containing the requested songs in the specified order, then exports the playlist to the Downloads
+  directory and verifies the exported file in Files. Only works when first_song is the one already shown on 'Chasing Shadows'. Only works when
+  second_song is the one already shown on 'Lost in the Echo'. Only works when third_song is the one already shown on 'Twilight Calling'.
+patterns: [Create a playlist in Retro Music and export it to Downloads, Make a new playlist with these songs in order and export it, Build a playlist
+    and save the exported file to Downloads]
+outputs: [exported_playlist_file]
+start: fresh_launch
+inputs:
+  playlist_name: {type: text, description: Title of the new playlist., example: Blues Break 567}
+  first_song: {type: text, description: Title of the first song in the playlist., example: Chasing Shadows}
+  second_song: {type: text, description: Title of the second song in the playlist., example: Lost in the Echo}
+  third_song: {type: text, description: Title of the third song in the playlist., example: Twilight Calling}
+steps:
+- id: go_back_to_app_list
+  intent: Go back to reach the app list
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {back: true}
+  post:
+  - {screen_changed: true}
+  risk: read
+  note: trace step 1
+- id: go_back_to_app_drawer_first
+  intent: Go back to open the app drawer
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  action: {back: true}
+  post:
+  - {screen_changed: true}
+  risk: read
+  note: trace step 2
+- id: go_back_to_app_drawer_second
+  intent: Go back to open the app drawer
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  action: {back: true}
+  post:
+  - {screen_changed: true}
+  risk: read
+  note: trace step 3
+- id: launch_retro_music
+  intent: Launch Retro Music
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  action: {launch: code.name.monkey.retromusic}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: action_home, text: For you, kind: Text}
+  - element_present: {resource_id: navigation_bar_item_labels_group, text: For you, kind: Text}
+  risk: read
+  note: trace step 4
+- id: open_playlists_tab
+  intent: Tap Playlists
+  pre:
+  - {app_foreground: code.name.monkey.retromusic}
+  action:
+    tap:
+      resource_id: action_playlist
+      text: Playlists
+      kind: Button
+      cls: FrameLayout
+      siblings: [For you, Songs, Albums]
+      in_list: false
+      position: [0.9, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: action_playlist, text: Playlists, kind: Text}
+  - element_present: {resource_id: navigation_bar_item_labels_group, text: Playlists, kind: Text}
+  risk: reversible
+  note: trace step 13
+- id: open_playlists_more_options
+  intent: Tap More options in Playlists
+  pre:
+  - {app_foreground: code.name.monkey.retromusic}
+  action:
+    tap:
+      text: More options
+      kind: Button
+      cls: ImageView
+      in_list: true
+      position: [0.951, 0.088]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: content, text: Grid size, kind: Text}
+  risk: reversible
+  note: trace step 14
+- id: start_new_playlist
+  intent: Tap New playlist
+  pre:
+  - app_foreground: "PopupWindow:94eff8d"
+  action:
+    tap:
+      text: New playlist
+      kind: Button
+      cls: LinearLayout
+      in_list: false
+      position: [0.752, 0.204]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: title_template, text: New playlist, kind: Text}
+  - element_present: {resource_id: topPanel, text: New playlist, kind: Text}
+  risk: reversible
+  note: trace step 15
+- id: enter_playlist_name
+  intent: "Type {{playlist_name}} into the Playlist name field"
+  pre:
+  - {app_foreground: code.name.monkey.retromusic}
+  action:
+    type:
+      field:
+        resource_id: actionNewPlaylist
+        text: Playlist name
+        hint: Playlist name
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.5, 0.502]
+      value: "{{playlist_name}}"
+  post:
+  - field_equals:
+      field: {resource_id: actionNewPlaylist, text: Playlist name, kind: EditText}
+      value: "{{playlist_name}}"
+  risk: reversible
+  note: trace step 16
+- id: confirm_playlist_creation
+  intent: "Tap Create to create the playlist named {{playlist_name}} containing {{first_song}}, {{second_song}}, and {{third_song}} in order"
+  pre:
+  - {app_foreground: code.name.monkey.retromusic}
+  action:
+    tap:
+      resource_id: button1
+      text: Create
+      kind: Button
+      cls: Button
+      siblings: [Cancel]
+      in_list: false
+      position: [0.776, 0.554]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: action_playlist, text: Playlists, kind: Text}
+  - element_present: {resource_id: navigation_bar_item_labels_group, text: Playlists, kind: Text}
+  risk: reversible
+  note: trace step 17
+- id: open_songs_tab
+  intent: "Tap Songs to locate {{first_song}}, {{second_song}}, and {{third_song}}"
+  pre:
+  - {app_foreground: code.name.monkey.retromusic}
+  action:
+    tap:
+      resource_id: action_song
+      text: Songs
+      kind: Button
+      cls: FrameLayout
+      siblings: [For you, Albums, Artists]
+      in_list: false
+      position: [0.3, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: action_song, text: Songs, kind: Text}
+  - element_present: {resource_id: navigation_bar_item_labels_group, text: Songs, kind: Text}
+  risk: reversible
+  note: trace step 18
+- id: scroll_to_third_song
+  intent: "Scroll down in Songs to locate {{third_song}}"
+  pre:
+  - {app_foreground: code.name.monkey.retromusic}
+  - element_present:
+      text_has: "{{first_song}}"
+      kind: Button
+  - element_present:
+      text_has: "{{second_song}}"
+      kind: Button
+  action:
+    scroll_until:
+      target: {resource_id: item_root, kind: Button}
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present: {resource_id: item_root, kind: Button}
+  risk: read
+  note: trace step 27 (+1 scrolls)
+- id: return_to_playlists
+  intent: Tap Playlists to verify and export the playlist
+  pre:
+  - {app_foreground: code.name.monkey.retromusic}
+  - element_present:
+      text_has: "{{third_song}}"
+      kind: Button
+  action:
+    tap:
+      resource_id: action_playlist
+      text: Playlists
+      kind: Button
+      cls: FrameLayout
+      siblings: [For you, Songs, Albums]
+      in_list: false
+      position: [0.9, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: action_playlist, text: Playlists, kind: Text}
+  - element_present: {resource_id: navigation_bar_item_labels_group, text: Playlists, kind: Text}
+  risk: reversible
+  note: trace step 31
+- id: open_created_playlist
+  intent: "Tap the playlist {{playlist_name}} to open its details and verify its contents"
+  pre:
+  - {app_foreground: code.name.monkey.retromusic}
+  action:
+    tap:
+      kind: Button
+      cls: ViewGroup
+      parent: recycler_view
+      in_list: true
+      position: [0.25, 0.274]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: container, kind: List}
+  risk: reversible
+  note: trace step 32
+- id: verify_export_in_downloads
+  intent: "Launch Files and verify the exported playlist for {{playlist_name}} is present in Downloads"
+  pre:
+  - {app_foreground: code.name.monkey.retromusic}
+  action: {launch: com.google.android.documentsui}
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: container, kind: List}
+  risk: read
+  extract:
+    exported_playlist_file:
+      locator: {resource_id: item_root, kind: Button}
+      segment: 0
+      card: "{{playlist_name}}"
+  note: trace step 44
+done:
+- {text_visible: Download}
+compiled_from:
+  task_id: aw-baseline-standard-1028-043230-919a
+  goal: "Create a playlist in Retro Music titled \"Blues Break 567\" with the following songs, in order: Chasing Shadows, Lost in the Echo, Twilight\
+    \ Calling. Then export the playlist to the Downloads directory on the device."
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 05:43:03"
+  trace_steps_kept: [1, 2, 3, 4, 13, 14, 15, 16, 17, 18, 27, 31, 32, 44]
+  trace_steps_dropped: 29
+  cost_usd: 0.0738

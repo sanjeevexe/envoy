@@ -1,0 +1,85 @@
+{
+ "task": "SimpleCalendarLocationOfEvent",
+ "seed": 507692354,
+ "goal": "What is the location of my Team Offsite event in Simple Calendar Pro? Answer with the location only.",
+ "score": 1.0,
+ "aw_run_time_s": 17.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 23:36:26.361530",
+ "envoy": {
+  "run_id": "aw-agent-seeds-1028-233610-2fff",
+  "goal": "What is the location of my Team Offsite event in Simple Calendar Pro? Answer with the location only.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Sarah's apartment",
+  "done": true,
+  "answer": "Sarah's apartment",
+  "steps_device": 3,
+  "iterations": 4,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "type": 1,
+   "tap": 1,
+   "done": 1
+  },
+  "model_calls": 5,
+  "input_tokens": 12841,
+  "cached_tokens": 10165,
+  "output_tokens": 1025,
+  "reasoning_tokens": 685,
+  "cost_usd": 0.009226,
+  "cost_at_standard_usd": 0.009226,
+  "duration_s": 11.4,
+  "model_s": 5.66,
+  "device_s": 5.75,
+  "connect_s": 0.91,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Open Simple Calendar Pro",
+    "Locate the Team Offsite event",
+    "Open the Team Offsite event details",
+    "Read the location of the event"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "location of Team Offsite event",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Sarah"
+  },
+  "trace_dir": "data/runs/aw-agent-seeds-1028-233610-2fff",
+  "envoy_commit": "cdd130ecae3cf0891ddc6106da4ad6d1be97fde0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/agent-seeds/traces/SimpleCalendarLocationOfEvent__s507692354.jsonl.gz",
+  "wall_s": 14.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

@@ -1,0 +1,82 @@
+{
+ "task": "ClockStopWatchPausedVerify",
+ "seed": 3959502054,
+ "goal": "Pause the stopwatch.",
+ "score": 1.0,
+ "aw_run_time_s": 67.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 05:44:21.553314",
+ "envoy": {
+  "run_id": "aw-fixes1-dev-1028-054315-63fe",
+  "goal": "Pause the stopwatch.",
+  "max_steps": 10,
+  "config": {},
+  "status": "done_unverified",
+  "result": "Stopwatch paused at 12:41, showing Start and Reset",
+  "done": true,
+  "answer": "Stopwatch paused at 12:41, showing Start and Reset",
+  "steps_device": 4,
+  "iterations": 8,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 1,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 3,
+   "look": 2,
+   "done": 2
+  },
+  "model_calls": 9,
+  "input_tokens": 22494,
+  "cached_tokens": 17017,
+  "output_tokens": 3331,
+  "reasoning_tokens": 2772,
+  "cost_usd": 0.001248,
+  "cost_at_standard_usd": 0.023556,
+  "duration_s": 60.58,
+  "model_s": 42.19,
+  "device_s": 18.39,
+  "connect_s": 1.14,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Clock",
+   "subgoals": [
+    "Open the Clock app",
+    "Open the Stopwatch tab",
+    "Tap Pause to pause the running stopwatch"
+   ],
+   "success_check": {
+    "kind": "element_present",
+    "value": "Resume",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": true,
+   "detail": "element 'Resume' not present"
+  },
+  "trace_dir": "data/runs/aw-fixes1-dev-1028-054315-63fe",
+  "envoy_commit": "821d713df93e6bb5536df7e6f89b6684779d58da",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes1-dev/traces/ClockStopWatchPausedVerify__s3959502054.jsonl.gz",
+  "wall_s": 63.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

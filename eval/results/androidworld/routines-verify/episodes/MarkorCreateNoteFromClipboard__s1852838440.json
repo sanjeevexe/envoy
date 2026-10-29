@@ -1,0 +1,130 @@
+{
+ "task": "MarkorCreateNoteFromClipboard",
+ "seed": 1852838440,
+ "goal": "Create a note in Markor named 2023_09_08_active_umbrella.txt. Perform a paste operation in the note and save the note.",
+ "score": 0.0,
+ "aw_run_time_s": 34.4,
+ "aw_episode_length": 14,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:56:29.075759",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-175600-be21",
+  "goal": "Create a note in Markor named 2023_09_08_active_umbrella.txt. Perform a paste operation in the note and save the note.",
+  "max_steps": 14,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "markor_create_note",
+   "stage": "model confirmed",
+   "inputs": {
+    "note_name": "2023_09_08_active_umbrella",
+    "file_extension": "txt"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "markor_create_note",
+     0.782
+    ],
+    [
+     "markor_create_note_2",
+     0.559
+    ],
+    [
+     "markor_edit_note",
+     0.509
+    ]
+   ]
+  },
+  "status": "failed",
+  "result": "step tap_paste: after-checks failed: no match (best 0.25 < 0.80 or ambiguous, runner-up 0.00)",
+  "routine": "markor_create_note",
+  "version": 1,
+  "done": false,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 6,
+  "rung": 1,
+  "steps": [
+   {
+    "id": "launch_markor",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_create_new_file",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_note_name",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_file_extension",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "confirm_file_creation",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "long_press_editor",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_paste",
+    "status": "failed",
+    "rung": 1,
+    "rungs": [
+     "wait and retry: waited 3.7 s"
+    ],
+    "repairs": 0,
+    "detail": "step tap_paste: after-checks failed: no match (best 0.25 < 0.80 or ambiguous, runner-up 0.00)"
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.003847,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 24.22,
+  "routine_duration_s": 18.17,
+  "trace_dir": "data/runs/aw-routines-verify-1028-175600-be21",
+  "wall_s": 27.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

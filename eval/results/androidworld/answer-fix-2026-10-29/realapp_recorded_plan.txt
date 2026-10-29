@@ -1,0 +1,40 @@
+== contacts_count s1
+   main         {'done': 10}
+   cur          {'done': 10}
+   no742        {'done': 8, 'tap filters': 2}
+   open         {'done': 9, 'tap filters': 1}
+   fix          {'done': 10}
+   fix_scope    {'done': 10}
+   fix_noformat {'done': 10}
+== doordash s1
+   main         {'tap Account': 9, 'back ': 1}
+   cur          {'tap Account': 10}
+   no742        {'tap Account': 10}
+   open         {'tap Account': 10}
+   fix          {'tap Account': 10}
+   fix_scope    {'tap Account': 10}
+   fix_noformat {'tap Account': 10}
+== doordash s2 (1f1fc11 path: Account)
+   main         {'tap [15] Button "Profile"': 5, 'scroll ': 3, 'scroll [11] List (scrollable)': 1, 'tap [14] Button "Settings"': 1}
+   cur          {'tap [15] Button "Profile"': 6, 'tap [14] Button "Settings"': 2, 'scroll ': 2}
+   no742        {'tap [15] Button "Profile"': 7, 'scroll ': 1, 'tap [14] Button "Settings"': 1, 'scroll [1] List (id: coordinator) (sc': 1}
+   open         {'tap [15] Button "Profile"': 6, 'scroll ': 2, 'scroll [1] List (id: coordinator) (sc': 1, 'tap [14] Button "Settings"': 1}
+   fix          {'tap [15] Button "Profile"': 5, 'scroll ': 2, 'tap [14] Button "Settings"': 2, 'scroll [1] List (id: coordinator) (sc': 1}
+   fix_scope    {'tap [15] Button "Profile"': 5, 'scroll ': 2, 'scroll [1] List (id: coordinator) (sc': 1, 'scroll [11] List (scrollable)': 1, 'tap [14] Button "Settings"': 1}
+   fix_noformat {'tap [15] Button "Profile"': 6, 'scroll [11] List (scrollable)': 2, 'scroll ': 1, 'tap [14] Button "Settings"': 1}
+== calendar_today s1
+   main         {'done': 5, 'tap [11] Text "Thursday 29 October': 3, 'tap [5] Button "Jump to Today" (id': 2}
+   cur          {'tap [11] Text "Thursday 29 October': 6, 'done': 4}
+   no742        {'done': 6, 'tap [11] Text "Thursday 29 October': 4}
+   open         {'tap [11] Text "Thursday 29 October': 8, 'done': 2}
+   fix          {'done': 8, 'done (+for)': 2}
+   fix_scope    {'done': 5, 'done (+for)': 3, 'tap [11] Text "Thursday 29 October': 2}
+   fix_noformat {'done': 9, 'tap [11] Text "Thursday 29 October': 1}
+== doordash s2 (main path: saved addresses)
+   main         {'done': 10}
+   cur          {'done': 10}
+   no742        {'done': 10}
+   open         {'done': 10}
+   fix          {'done': 10}
+   fix_scope    {'done': 10}
+   fix_noformat {'done': 10}

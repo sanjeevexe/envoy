@@ -1,0 +1,82 @@
+{
+ "task": "MarkorAddNoteHeader",
+ "seed": 274419806,
+ "goal": "Update the Markor note 2023_08_10_neat_wolf.txt by adding the following text, along with a new blank line before the existing content: \"RnI8sP34yDzJQbvkfplR\", and rename it to busy_wolf_2023_07_23.txt.",
+ "score": 0.0,
+ "aw_run_time_s": 42.9,
+ "aw_episode_length": 12,
+ "agent": "envoy",
+ "finished": "2026-10-28 11:30:00.765228",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-112920-3c16",
+  "goal": "Update the Markor note 2023_08_10_neat_wolf.txt by adding the following text, along with a new blank line before the existing content: \"RnI8sP34yDzJQbvkfplR\", and rename it to busy_wolf_2023_07_23.txt.",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 12 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 12,
+  "iterations": 12,
+  "looks": 0,
+  "screenshots_sent": 2,
+  "replans": 1,
+  "stuck_recoveries": 1,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 7,
+   "type": 2,
+   "scroll": 1,
+   "back": 1
+  },
+  "model_calls": 14,
+  "input_tokens": 39253,
+  "cached_tokens": 29870,
+  "output_tokens": 3650,
+  "reasoning_tokens": 2509,
+  "cost_usd": 0.031722,
+  "cost_at_standard_usd": 0.031722,
+  "duration_s": 35.88,
+  "model_s": 22.0,
+  "device_s": 13.88,
+  "connect_s": 0.85,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Fix note text to code line, then blank line, then existing content",
+    "Save the note",
+    "Open More options menu to access Rename",
+    "Rename file to busy_wolf_2023_07_23.txt and confirm"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "busy_wolf_2023_07_23",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-final-standard-1028-112920-3c16",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/MarkorAddNoteHeader__s274419806.jsonl.gz",
+  "wall_s": 38.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

@@ -1,0 +1,95 @@
+{
+ "task": "SimpleCalendarNextEvent",
+ "seed": 20352009,
+ "goal": "What is my next upcoming event in Simple Calendar Pro? Answer with the title only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 0.0,
+ "aw_run_time_s": 13.0,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 18:05:11.908533",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-180501-8002",
+  "goal": "What is my next upcoming event in Simple Calendar Pro? Answer with the title only. If there are multiples titles, format your answer in a comma separated list.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "simple_calendar_get_next_event",
+   "stage": "model confirmed",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "simple_calendar_get_next_event",
+     0.895
+    ],
+    [
+     "simple_calendar_pro_list_events_on_date",
+     0.662
+    ],
+    [
+     "simple_calendar_create_event",
+     0.585
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "simple_calendar_get_next_event",
+  "version": 1,
+  "done": true,
+  "answer": "Call with Marketing",
+  "outputs": {
+   "next_event_title": "Call with Marketing"
+  },
+  "steps_used": 3,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_simple_calendar_pro",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_change_view",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "select_simple_event_list",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.001914,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 5.07,
+  "routine_duration_s": 2.84,
+  "trace_dir": "data/runs/aw-routines-verify-1028-180501-8002",
+  "wall_s": 7.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.5
+  }
+ }
+}

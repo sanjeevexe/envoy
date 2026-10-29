@@ -1,0 +1,106 @@
+{
+ "task": "SystemWifiTurnOnVerify",
+ "seed": 3890145330,
+ "goal": "Turn wifi on.",
+ "score": 0.0,
+ "aw_run_time_s": 13.3,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 22:10:27.924105",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-221015-4f3f",
+  "goal": "Turn wifi on.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "1b5ff870808fa09e05c6728f393dedd3bef5408f",
+  "mode": "routine",
+  "match": {
+   "routine": "settings_turn_on_wifi_2",
+   "stage": "model confirmed",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "settings_turn_on_wifi",
+     0.8
+    ],
+    [
+     "settings_turn_on_wifi_2",
+     0.8
+    ],
+    [
+     "settings_turn_off_wifi",
+     0.6
+    ]
+   ]
+  },
+  "status": "failed",
+  "result": "step turn_on_wifi_switch: after-checks failed: toggle is off",
+  "routine": "settings_turn_on_wifi_2",
+  "version": 1,
+  "done": false,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 3,
+  "rung": 2,
+  "steps": [
+   {
+    "id": "launch_settings",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_network_and_internet",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_internet_settings",
+    "status": "done",
+    "rung": 2,
+    "rungs": [
+     "relaxed match: relaxed match [4] \"Internet · T-Mobile\" score 0.64 (runner-up 0.47)"
+    ],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "turn_on_wifi_switch",
+    "status": "failed",
+    "rung": 1,
+    "rungs": [
+     "wait and retry: ready after 0.5 s",
+     "wait and retry: waited 1.5 s"
+    ],
+    "repairs": 0,
+    "detail": "step turn_on_wifi_switch: after-checks failed: toggle is off"
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 1,
+  "model_calls": 1,
+  "cost_usd": 0.002334,
+  "cost_at_standard_usd": 0.002334,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 8.46,
+  "routine_duration_s": 5.5,
+  "trace_dir": "data/runs/aw-routines-verify-1028-221015-4f3f",
+  "wall_s": 11.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

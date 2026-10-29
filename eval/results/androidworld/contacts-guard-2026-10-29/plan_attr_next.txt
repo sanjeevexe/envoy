@@ -1,0 +1,8 @@
+cost $0.624; errors 0; live plan tokens: loop run 1014
+aw (736a6e4)                 full/filter plans  7/40  tokens [1018]
+aw, no APPS input            full/filter plans  9/40  tokens [923]
+aw, no TODAY input           full/filter plans  5/40  tokens [1001]
+aw, neither input            full/filter plans  4/40  tokens [906]
+aw, no f93ce08 line          full/filter plans  6/40  tokens [973]
+main's prompt, aw inputs     full/filter plans  4/40  tokens [974]
+main's prompt and inputs     full/filter plans  3/40  tokens [862]

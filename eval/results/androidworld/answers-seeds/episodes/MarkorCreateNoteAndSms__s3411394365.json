@@ -1,0 +1,207 @@
+{
+ "task": "MarkorCreateNoteAndSms",
+ "seed": 3411394365,
+ "goal": "Create a new note in Markor named 2023_06_01_fierce_violin.txt with the following text: Gym membership renewal due on the 20th.. Share the entire content of the note with the phone number +19371228774 via SMS using Simple SMS Messenger",
+ "score": 1.0,
+ "aw_run_time_s": 36.8,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 02:03:00.743650",
+ "envoy": {
+  "run_id": "aw-answers-seeds-1029-020232-a04f",
+  "goal": "Create a new note in Markor named 2023_06_01_fierce_violin.txt with the following text: Gym membership renewal due on the 20th.. Share the entire content of the note with the phone number +19371228774 via SMS using Simple SMS Messenger",
+  "max_steps": 18,
+  "config": {
+   "mode": "routine",
+   "library": "answers-verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "markor_create_note_and_send_sms",
+   "stage": "model confirmed",
+   "inputs": {
+    "note_name": "2023_06_01_fierce_violin",
+    "file_extension": ".txt",
+    "note_text": "Gym membership renewal due on the 20th.",
+    "recipient_phone_number": "+19371228774"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "markor_create_note_and_send_sms",
+     0.679
+    ],
+    [
+     "simple_sms_messenger_send_message",
+     0.613
+    ],
+    [
+     "simple_sms_messenger_send_clipboard_mess",
+     0.517
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "markor_create_note_and_send_sms",
+  "version": 1,
+  "done": true,
+  "answer": null,
+  "outputs": {},
+  "steps_used": 14,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_markor",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_create_new_file",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_note_name",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "set_file_extension",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "confirm_file_creation",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_note_content",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "save_note",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "return_to_file_list",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "launch_sms_messenger",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "start_new_conversation",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_recipient_number",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "confirm_recipient",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "enter_sms_message",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "send_sms",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.003255,
+  "cost_at_standard_usd": 0.003255,
+  "approvals": [
+   {
+    "step": "confirm_recipient",
+    "description": "tap \"\" in com.simplemobiletools.smsmessenger (routine markor_create_note_and_send_sms v1)",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/new_conversation_confirm'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": "send_sms",
+    "description": "tap \"SMS\" in com.simplemobiletools.smsmessenger (routine markor_create_note_and_send_sms v1)",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/thread_send_message'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "duration_s": 15.97,
+  "routine_duration_s": 13.29,
+  "trace_dir": "data/runs/aw-answers-seeds-1029-020232-a04f",
+  "wall_s": 18.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.7
+  }
+ }
+}

@@ -1,0 +1,76 @@
+{
+ "task": "TasksIncompleteTasksOnDate",
+ "seed": 1760879267,
+ "goal": "What incomplete tasks do I have still have to do by Thursday in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 0.0,
+ "aw_run_time_s": 36.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 03:13:46.751767",
+ "envoy": {
+  "run_id": "aw-baseline-1028-031311-4789",
+  "goal": "What incomplete tasks do I have still have to do by Thursday in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+  "max_steps": 10,
+  "config": {},
+  "status": "failed",
+  "result": "stuck on the same screen after two recoveries",
+  "done": true,
+  "answer": null,
+  "steps_device": 6,
+  "iterations": 8,
+  "looks": 1,
+  "screenshots_sent": 5,
+  "replans": 0,
+  "stuck_recoveries": 3,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "look": 1,
+   "back": 5
+  },
+  "model_calls": 7,
+  "input_tokens": 18433,
+  "cached_tokens": 11927,
+  "output_tokens": 903,
+  "reasoning_tokens": 498,
+  "cost_usd": 0.000855,
+  "cost_at_standard_usd": 0.013759,
+  "duration_s": 27.45,
+  "model_s": 13.8,
+  "device_s": 13.65,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.google.android.apps.tasks",
+   "subgoals": [
+    "Open the Tasks app",
+    "View the task list",
+    "Identify incomplete tasks due by Thursday",
+    "Return the titles as a comma separated list"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "incomplete task titles due by Thursday",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-1028-031311-4789",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/TasksIncompleteTasksOnDate__s1760879267.jsonl.gz",
+  "wall_s": 30.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

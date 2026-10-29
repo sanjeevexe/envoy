@@ -1,0 +1,77 @@
+{
+ "task": "OsmAndFavorite",
+ "seed": 2436087218,
+ "goal": "Add a favorite location marker for 47.1303814, 9.5930117 in the OsmAnd maps app.",
+ "score": 0.0,
+ "aw_run_time_s": 59.2,
+ "aw_episode_length": 13,
+ "agent": "envoy",
+ "finished": "2026-10-28 01:06:54.405652",
+ "envoy": {
+  "run_id": "aw-baseline-1028-010556-e9c7",
+  "goal": "Add a favorite location marker for 47.1303814, 9.5930117 in the OsmAnd maps app.",
+  "max_steps": 13,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 13 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 12,
+  "iterations": 13,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "launch": 1,
+   "back": 11,
+   "look": 1
+  },
+  "model_calls": 14,
+  "input_tokens": 31918,
+  "cached_tokens": 25262,
+  "output_tokens": 2168,
+  "reasoning_tokens": 1340,
+  "cost_usd": 0.00115,
+  "cost_at_standard_usd": 0.021323,
+  "duration_s": 53.43,
+  "model_s": 29.1,
+  "device_s": 24.33,
+  "connect_s": 0.97,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "net.osmand.plus",
+   "subgoals": [
+    "Open the OsmAnd maps app",
+    "Navigate to coordinates 47.1303814, 9.5930117",
+    "Add a favorite marker at that location",
+    "Save and confirm the favorite"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Favorite",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-1028-010556-e9c7",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/OsmAndFavorite__s2436087218.jsonl.gz",
+  "wall_s": 56.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.1
+  }
+ }
+}

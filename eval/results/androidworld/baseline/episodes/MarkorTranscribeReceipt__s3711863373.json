@@ -1,0 +1,78 @@
+{
+ "task": "MarkorTranscribeReceipt",
+ "seed": 3711863373,
+ "goal": "Create a file in Markor, called receipt.md with the transactions from the receipt.png. Use Simple Gallery to view the receipt. Please enter transactions in csv format including the header \"Date, Item, Amount\".",
+ "score": 0.0,
+ "aw_run_time_s": 93.2,
+ "aw_episode_length": 18,
+ "agent": "envoy",
+ "finished": "2026-10-28 00:59:28.801839",
+ "envoy": {
+  "run_id": "aw-baseline-1028-005757-c797",
+  "goal": "Create a file in Markor, called receipt.md with the transactions from the receipt.png. Use Simple Gallery to view the receipt. Please enter transactions in csv format including the header \"Date, Item, Amount\".",
+  "max_steps": 18,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 18 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 10,
+  "iterations": 18,
+  "looks": 8,
+  "screenshots_sent": 8,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "actions": {
+   "look": 8,
+   "back": 5,
+   "swipe": 2,
+   "tap": 3
+  },
+  "model_calls": 20,
+  "input_tokens": 51122,
+  "cached_tokens": 35796,
+  "output_tokens": 4332,
+  "reasoning_tokens": 3048,
+  "cost_usd": 0.002471,
+  "cost_at_standard_usd": 0.042938,
+  "duration_s": 86.5,
+  "model_s": 53.5,
+  "device_s": 33.0,
+  "connect_s": 0.92,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "net.gsantner.markor",
+   "subgoals": [
+    "Open app drawer and launch Simple Gallery to view receipt.png",
+    "Read and note transaction details from the receipt image",
+    "Open Markor and create a new file named receipt.md",
+    "Enter transactions in CSV format with header Date, Item, Amount and save"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Date, Item, Amount",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-baseline-1028-005757-c797",
+  "envoy_commit": "01b758d5741528920f861919783e5e378eb93a52+dirty-backend",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/baseline/traces/MarkorTranscribeReceipt__s3711863373.jsonl.gz",
+  "wall_s": 89.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

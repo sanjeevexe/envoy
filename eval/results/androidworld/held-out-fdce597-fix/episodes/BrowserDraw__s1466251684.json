@@ -1,0 +1,84 @@
+{
+ "task": "BrowserDraw",
+ "seed": 1466251684,
+ "goal": "Open the file task.html in Downloads in the file manager; when prompted open it with Chrome. Then create a drawing using the three colors shown at the top and hit submit.",
+ "score": 0.0,
+ "aw_run_time_s": 98.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 13:36:47.415125",
+ "envoy": {
+  "run_id": "aw-held-out-fdce597-fix-1029-133512-05c2",
+  "goal": "Open the file task.html in Downloads in the file manager; when prompted open it with Chrome. Then create a drawing using the three colors shown at the top and hit submit.",
+  "max_steps": 20,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "failed",
+  "result": "stuck on the same screen after two recoveries",
+  "done": true,
+  "answer": null,
+  "steps_device": 17,
+  "iterations": 19,
+  "looks": 2,
+  "screenshots_sent": 8,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 4,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 9,
+   "scroll": 1,
+   "look": 2,
+   "wait": 1,
+   "tap_point": 4
+  },
+  "model_calls": 36,
+  "input_tokens": 62221,
+  "cached_tokens": 47572,
+  "output_tokens": 7162,
+  "reasoning_tokens": 5640,
+  "cost_usd": 0.107837,
+  "cost_at_standard_usd": 0.107837,
+  "duration_s": 90.13,
+  "model_s": 41.86,
+  "device_s": 48.27,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Chrome",
+   "subgoals": [
+    "Tap Just once to open task.html with Chrome",
+    "Complete Chrome welcome setup if asked to reveal the task page",
+    "Create a drawing using the three colors shown at the top",
+    "Tap Submit to finish"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "submission confirmation after drawing",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-held-out-fdce597-fix-1029-133512-05c2",
+  "envoy_commit": "3cbb3d944a29b380fa67decc155d7b76c29099a1",
+  "answer_format": true,
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/held-out-fdce597-fix/traces/BrowserDraw__s1466251684.jsonl.gz",
+  "wall_s": 92.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

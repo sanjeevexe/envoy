@@ -1,0 +1,84 @@
+{
+ "task": "SystemBrightnessMinVerify",
+ "seed": 2121593197,
+ "goal": "Turn brightness to the min value.",
+ "score": 1.0,
+ "aw_run_time_s": 32.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 23:53:12.625449",
+ "envoy": {
+  "run_id": "aw-agent-seeds-1028-235240-e45b",
+  "goal": "Turn brightness to the min value.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done_unverified",
+  "result": "Brightness is set to minimum (0%)",
+  "done": true,
+  "answer": "Brightness is set to minimum (0%)",
+  "steps_device": 4,
+  "iterations": 5,
+  "looks": 0,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "scroll": 1,
+   "tap": 2,
+   "done": 1
+  },
+  "model_calls": 6,
+  "input_tokens": 15572,
+  "cached_tokens": 12454,
+  "output_tokens": 1310,
+  "reasoning_tokens": 932,
+  "cost_usd": 0.011333,
+  "cost_at_standard_usd": 0.011333,
+  "duration_s": 27.22,
+  "model_s": 9.1,
+  "device_s": 18.12,
+  "connect_s": 0.91,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Settings",
+   "subgoals": [
+    "Open Settings",
+    "Open Display / Brightness settings",
+    "Set Brightness slider to minimum"
+   ],
+   "success_check": {
+    "kind": "field_equals",
+    "value": "0",
+    "field_hint": "Brightness"
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": false,
+   "detail": "field 'Brightness' not found"
+  },
+  "trace_dir": "data/runs/aw-agent-seeds-1028-235240-e45b",
+  "envoy_commit": "cdd130ecae3cf0891ddc6106da4ad6d1be97fde0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/agent-seeds/traces/SystemBrightnessMinVerify__s2121593197.jsonl.gz",
+  "wall_s": 29.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}

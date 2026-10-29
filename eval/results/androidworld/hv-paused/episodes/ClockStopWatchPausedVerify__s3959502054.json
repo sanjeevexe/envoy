@@ -1,0 +1,11 @@
+{
+ "task": "ClockStopWatchPausedVerify",
+ "seed": 3959502054,
+ "goal": "Pause the stopwatch.",
+ "score": 1.0,
+ "aw_run_time_s": 10.6,
+ "aw_episode_length": 1,
+ "agent": "hand",
+ "finished": "2026-10-27 23:39:35.236423",
+ "envoy": {}
+}

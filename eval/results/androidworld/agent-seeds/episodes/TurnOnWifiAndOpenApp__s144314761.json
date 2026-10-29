@@ -1,0 +1,82 @@
+{
+ "task": "TurnOnWifiAndOpenApp",
+ "seed": 144314761,
+ "goal": "Turn on Wifi, then open the clock app",
+ "score": 1.0,
+ "aw_run_time_s": 25.9,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 23:56:26.068286",
+ "envoy": {
+  "run_id": "aw-agent-seeds-1028-235602-84e2",
+  "goal": "Turn on Wifi, then open the clock app",
+  "max_steps": 20,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Wi-Fi turned on and Clock app opened",
+  "done": true,
+  "answer": "Wi-Fi turned on and Clock app opened",
+  "steps_device": 5,
+  "iterations": 6,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 2,
+   "tap": 3,
+   "done": 1
+  },
+  "model_calls": 7,
+  "input_tokens": 17450,
+  "cached_tokens": 14359,
+  "output_tokens": 1882,
+  "reasoning_tokens": 1434,
+  "cost_usd": 0.014016,
+  "cost_at_standard_usd": 0.014016,
+  "duration_s": 18.48,
+  "model_s": 9.89,
+  "device_s": 8.59,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Clock",
+   "subgoals": [
+    "Open Settings and turn Wi-Fi on",
+    "Open the Clock app"
+   ],
+   "success_check": {
+    "kind": "app_foreground",
+    "value": "com.google.android.deskclock",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "foreground app is com.google.android.deskclock"
+  },
+  "trace_dir": "data/runs/aw-agent-seeds-1028-235602-84e2",
+  "envoy_commit": "cdd130ecae3cf0891ddc6106da4ad6d1be97fde0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/agent-seeds/traces/TurnOnWifiAndOpenApp__s144314761.jsonl.gz",
+  "wall_s": 21.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.4
+  }
+ }
+}

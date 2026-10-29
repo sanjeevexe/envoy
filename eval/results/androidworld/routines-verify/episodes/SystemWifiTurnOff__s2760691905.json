@@ -1,0 +1,105 @@
+{
+ "task": "SystemWifiTurnOff",
+ "seed": 2760691905,
+ "goal": "Turn wifi off.",
+ "score": 1.0,
+ "aw_run_time_s": 14.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 18:37:35.888849",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-183723-77f6",
+  "goal": "Turn wifi off.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "settings_turn_off_wifi_2",
+   "stage": "model confirmed",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "settings_turn_off_wifi",
+     0.867
+    ],
+    [
+     "settings_turn_off_wifi_2",
+     0.867
+    ],
+    [
+     "settings_turn_on_wifi",
+     0.733
+    ]
+   ]
+  },
+  "status": "done",
+  "result": "all steps and checks passed",
+  "routine": "settings_turn_off_wifi_2",
+  "version": 1,
+  "done": true,
+  "answer": "off. This can be used, for example, to improve location-based features and services. You can change this in Wi‑Fi scanning settings.",
+  "outputs": {
+   "wifi_state": "off. This can be used, for example, to improve location-based features and services. You can change this in Wi‑Fi scanning settings."
+  },
+  "steps_used": 4,
+  "rung": 1,
+  "steps": [
+   {
+    "id": "launch_settings",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_network_and_internet",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_internet",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "turn_off_wifi",
+    "status": "done",
+    "rung": 1,
+    "rungs": [
+     "wait and retry: ready after 0.5 s"
+    ],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.003971,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 7.58,
+  "routine_duration_s": 3.36,
+  "trace_dir": "data/runs/aw-routines-verify-1028-183723-77f6",
+  "wall_s": 10.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.3
+  }
+ }
+}

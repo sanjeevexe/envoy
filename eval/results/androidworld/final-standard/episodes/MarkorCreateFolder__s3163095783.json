@@ -1,0 +1,85 @@
+{
+ "task": "MarkorCreateFolder",
+ "seed": 3163095783,
+ "goal": "Create a new folder in Markor named folder_20261028_112141.",
+ "score": 1.0,
+ "aw_run_time_s": 19.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 11:31:02.303873",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-113044-604f",
+  "goal": "Create a new folder in Markor named folder_20261028_112141.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Created folder folder_20261028_112141 in /storage/emulated/0/Documents - confirmed visible in Markor file list.",
+  "done": true,
+  "answer": "Created folder folder_20261028_112141 in /storage/emulated/0/Documents - confirmed visible in Markor file list.",
+  "steps_device": 4,
+  "iterations": 5,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "type": 1,
+   "done": 1
+  },
+  "model_calls": 6,
+  "input_tokens": 16057,
+  "cached_tokens": 11814,
+  "output_tokens": 974,
+  "reasoning_tokens": 526,
+  "cost_usd": 0.011215,
+  "cost_at_standard_usd": 0.011215,
+  "duration_s": 12.85,
+  "model_s": 6.33,
+  "device_s": 6.51,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Open Markor",
+    "Go to file browser list",
+    "Create new folder named folder_20261028_112141",
+    "Confirm folder appears in list"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "folder_20261028_112141",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'folder_20261028_112141' is visible"
+  },
+  "trace_dir": "data/runs/aw-final-standard-1028-113044-604f",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/MarkorCreateFolder__s3163095783.jsonl.gz",
+  "wall_s": 15.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

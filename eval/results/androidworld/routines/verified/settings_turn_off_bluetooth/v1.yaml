@@ -1,0 +1,107 @@
+routine: settings_turn_off_bluetooth
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Turn Bluetooth off in Settings
+description: Open Settings, navigate through Connected devices and Connection preferences to the Bluetooth page, and confirm that Bluetooth is
+  turned off.
+patterns: [turn bluetooth off, turn off bluetooth, disable bluetooth, switch bluetooth off]
+outputs: [bluetooth_state]
+start: fresh_launch
+steps:
+- id: launch_settings
+  intent: Launch Settings
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.android.settings}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: settings_homepage_container, kind: List}
+  risk: read
+  note: trace step 2
+- id: open_connected_devices
+  intent: Tap Connected devices
+  pre:
+  - {app_foreground: com.android.settings}
+  action:
+    tap:
+      text: Connected devices · Bluetooth, pairing
+      kind: Button
+      cls: LinearLayout
+      parent: recycler_view
+      in_list: true
+      position: [0.5, 0.465]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: content_parent, kind: List}
+  risk: reversible
+  note: trace step 3
+- id: open_connection_preferences
+  intent: Tap Connection preferences
+  pre:
+  - {app_foreground: com.android.settings}
+  action:
+    tap:
+      text: Connection preferences · Bluetooth, Android Auto
+      kind: Button
+      cls: LinearLayout
+      parent: recycler_view
+      in_list: true
+      position: [0.5, 0.52]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 4
+- id: go_back
+  intent: Go back
+  pre:
+  - {app_foreground: com.android.settings}
+  action: {back: true}
+  post:
+  - {screen_changed: true}
+  risk: read
+  note: trace step 5
+- id: open_connection_preferences_again
+  intent: Tap Connection preferences
+  pre:
+  - {app_foreground: com.android.settings}
+  action:
+    tap:
+      text: Connection preferences · Bluetooth, Android Auto
+      kind: Button
+      cls: LinearLayout
+      parent: recycler_view
+      in_list: true
+      position: [0.5, 0.52]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 6
+- id: open_bluetooth
+  intent: Tap Bluetooth
+  pre:
+  - {app_foreground: com.android.settings}
+  action:
+    tap:
+      text: Bluetooth
+      kind: Button
+      cls: LinearLayout
+      parent: recycler_view
+      in_list: true
+      position: [0.5, 0.328]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  extract:
+    bluetooth_state:
+      locator: {text: Use Bluetooth, kind: Button}
+  note: trace step 7
+compiled_from:
+  task_id: aw-baseline-standard-1028-050339-5abd
+  goal: Turn bluetooth off.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 05:44:44"
+  trace_steps_kept: [2, 3, 4, 5, 6, 7]
+  trace_steps_dropped: 1
+  cost_usd: 0.0387

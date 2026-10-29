@@ -1,0 +1,91 @@
+routine: settings_turn_on_wifi_3
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Turn on Wi-Fi and open the Settings app
+description: Turns on Wi-Fi in Android Settings via Network & internet > Internet, then opens the Settings app again and leaves it on the main
+  Settings screen.
+patterns: ['turn on wifi, then open the settings app', enable wifi and open settings, switch wifi on and go to settings]
+start: fresh_launch
+steps:
+- id: launch_settings
+  intent: Launch the Settings app
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.android.settings}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: settings_homepage_container, kind: List}
+  risk: read
+  note: trace step 1
+- id: tap_network_and_internet
+  intent: Tap Network & internet to access Wi-Fi controls
+  pre:
+  - {app_foreground: com.android.settings}
+  action:
+    tap:
+      text: Network & internet · Mobile, Wi‑Fi, hotspot
+      kind: Button
+      cls: LinearLayout
+      parent: recycler_view
+      in_list: true
+      position: [0.5, 0.369]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: content_parent, kind: List}
+  risk: reversible
+  note: trace step 6
+- id: tap_internet
+  intent: Tap Internet to open the Wi-Fi controls
+  pre:
+  - {app_foreground: com.android.settings}
+  action:
+    tap:
+      text: Internet · Networks available
+      kind: Button
+      cls: LinearLayout
+      parent: recycler_view
+      in_list: true
+      position: [0.5, 0.292]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 7
+- id: tap_wifi_switch
+  intent: Tap the Wi-Fi switch to turn on Wi-Fi
+  pre:
+  - {app_foreground: com.android.settings}
+  action:
+    tap:
+      resource_id: switch_widget
+      text: ''
+      kind: Switch
+      cls: Switch
+      parent: widget_frame
+      in_list: true
+      position: [0.894, 0.37]
+  post:
+  - toggle_is:
+      target: {resource_id: switch_widget, kind: Switch}
+      value: 'on'
+  risk: reversible
+  note: trace step 8
+- id: relaunch_settings
+  intent: Launch the Settings app
+  pre:
+  - {app_foreground: com.android.settings}
+  action: {launch: com.android.settings}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: settings_homepage_container, kind: List}
+  risk: read
+  note: trace step 9
+compiled_from:
+  task_id: aw-baseline-standard-1028-051619-d88d
+  goal: Turn on Wifi, then open the settings app
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 05:46:29"
+  trace_steps_kept: [1, 6, 7, 8, 9]
+  trace_steps_dropped: 4
+  cost_usd: 0.0309

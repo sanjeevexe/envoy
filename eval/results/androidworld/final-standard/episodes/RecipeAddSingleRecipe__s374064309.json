@@ -1,0 +1,86 @@
+{
+ "task": "RecipeAddSingleRecipe",
+ "seed": 374064309,
+ "goal": "Add the following recipes into the Broccoli app:\nRecipe: Chicken Caesar Salad Wrap\n description: An ideal recipe for experimenting with different flavors and ingredients.\n servings: 3-4 servings\n preparationTime: 2 hrs\n ingredients: as desired\n directions: Toss chopped romaine lettuce with Caesar dressing, grilled chicken strips, and Parmesan cheese. Wrap in a large tortilla. Feel free to substitute with ingredients you have on hand.\n",
+ "score": 1.0,
+ "aw_run_time_s": 34.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 16:37:15.559380",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-163643-439d",
+  "goal": "Add the following recipes into the Broccoli app:\nRecipe: Chicken Caesar Salad Wrap\n description: An ideal recipe for experimenting with different flavors and ingredients.\n servings: 3-4 servings\n preparationTime: 2 hrs\n ingredients: as desired\n directions: Toss chopped romaine lettuce with Caesar dressing, grilled chicken strips, and Parmesan cheese. Wrap in a large tortilla. Feel free to substitute with ingredients you have on hand.\n",
+  "max_steps": 24,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Added Chicken Caesar Salad Wrap to Broccoli app with description, 3-4 servings, 2 hrs preparation time, ingredients 'as desired', and directions.",
+  "done": true,
+  "answer": "Added Chicken Caesar Salad Wrap to Broccoli app with description, 3-4 servings, 2 hrs preparation time, ingredients 'as desired', and directions.",
+  "steps_device": 10,
+  "iterations": 11,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "type": 6,
+   "scroll": 1,
+   "done": 1
+  },
+  "model_calls": 12,
+  "input_tokens": 33931,
+  "cached_tokens": 26572,
+  "output_tokens": 1693,
+  "reasoning_tokens": 678,
+  "cost_usd": 0.02038,
+  "cost_at_standard_usd": 0.02038,
+  "duration_s": 26.9,
+  "model_s": 11.86,
+  "device_s": 15.04,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Open the Broccoli app",
+    "Create a new recipe",
+    "Enter Chicken Caesar Salad Wrap details with description, servings, preparation time, ingredients and directions",
+    "Save the recipe"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Chicken Caesar Salad Wrap",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Chicken Caesar Salad Wrap' is visible"
+  },
+  "trace_dir": "data/runs/aw-final-standard-1028-163643-439d",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/RecipeAddSingleRecipe__s374064309.jsonl.gz",
+  "wall_s": 29.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

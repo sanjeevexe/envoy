@@ -1,0 +1,12 @@
+33 cases: Counter({'final': 18, 'before': 15})
+cost $1.382; errors 0
+before scored 1 cur        {'tap': 46, 'scroll': 16, 'look': 6, 'same answer': 4, 'type': 3}
+before scored 1 fix        {'tap': 48, 'scroll': 16, 'look': 6, 'same answer': 3, 'type': 1, 'done, other answer': 1}
+before scored 1 fix_noformat {'tap': 47, 'scroll': 17, 'look': 7, 'type': 2, 'same answer': 1, 'done, other answer': 1}
+before scored 1 fix_noformat_adapter {'tap': 46, 'scroll': 18, 'look': 6, 'type': 3, 'same answer': 2}
+before scored 1 fix_scope  {'tap': 45, 'scroll': 16, 'look': 7, 'done, other answer': 3, 'same answer': 2, 'type': 2}
+final  scored 1 cur        {'same answer': 64, 'done, other answer': 14, 'scroll': 9, 'look': 2, 'tap': 1}
+final  scored 1 fix        {'same answer': 71, 'done, other answer': 8, 'scroll': 7, 'tap': 3, 'look': 1}
+final  scored 1 fix_noformat {'same answer': 71, 'done, other answer': 10, 'scroll': 8, 'look': 1}
+final  scored 1 fix_noformat_adapter {'same answer': 64, 'done, other answer': 13, 'scroll': 8, 'tap': 4, 'look': 1}
+final  scored 1 fix_scope  {'same answer': 71, 'done, other answer': 12, 'scroll': 4, 'look': 2, 'tap': 1}

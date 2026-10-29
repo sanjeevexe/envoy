@@ -1,0 +1,86 @@
+{
+ "task": "MarkorCreateNoteFromClipboard",
+ "seed": 1852838440,
+ "goal": "Create a note in Markor named 2023_09_08_active_umbrella.txt. Perform a paste operation in the note and save the note.",
+ "score": 1.0,
+ "aw_run_time_s": 33.1,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 11:33:05.369825",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-113237-1052",
+  "goal": "Create a note in Markor named 2023_09_08_active_umbrella.txt. Perform a paste operation in the note and save the note.",
+  "max_steps": 14,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done_unverified",
+  "result": "Created note 2023_09_08_active_umbrella.txt in Markor, pasted content ILRmaKdNIH and saved",
+  "done": true,
+  "answer": "Created note 2023_09_08_active_umbrella.txt in Markor, pasted content ILRmaKdNIH and saved",
+  "steps_device": 8,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 1,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 4,
+   "type": 2,
+   "long_press": 1,
+   "done": 2
+  },
+  "model_calls": 11,
+  "input_tokens": 29179,
+  "cached_tokens": 23259,
+  "output_tokens": 2031,
+  "reasoning_tokens": 1137,
+  "cost_usd": 0.019521,
+  "cost_at_standard_usd": 0.019521,
+  "duration_s": 23.66,
+  "model_s": 12.26,
+  "device_s": 11.4,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Open the Markor app",
+    "Create a new file named 2023_09_08_active_umbrella.txt",
+    "Paste clipboard content into the note",
+    "Save the note"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "2023_09_08_active_umbrella.txt",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": true,
+   "detail": "'2023_09_08_active_umbrella.txt' is not visible"
+  },
+  "trace_dir": "data/runs/aw-final-standard-1028-113237-1052",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/MarkorCreateNoteFromClipboard__s1852838440.jsonl.gz",
+  "wall_s": 26.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}

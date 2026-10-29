@@ -1,0 +1,60 @@
+{
+ "task": "SimpleCalendarEventOnDateAtTime",
+ "seed": 15171143,
+ "goal": "What is on my schedule for the Thursday after next at 21:45 in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 0.0,
+ "aw_run_time_s": 12.7,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-29 02:12:39.234229",
+ "envoy": {
+  "run_id": "aw-answers-seeds-1029-021228-8be6",
+  "goal": "What is on my schedule for the Thursday after next at 21:45 in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "answers-verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "1f1fc11f82eb638b4be9eb8eb1d72e3e6ea0a84a",
+  "mode": "routine",
+  "match": {
+   "routine": "simple_calendar_pro_get_event_titles",
+   "stage": "model confirmed",
+   "inputs": {
+    "schedule_time": "21:45"
+   },
+   "missing": [
+    "schedule_date"
+   ],
+   "candidates": [
+    [
+     "simple_calendar_pro_get_event_location",
+     0.36
+    ],
+    [
+     "simple_calendar_pro_get_event_titles",
+     0.34
+    ],
+    [
+     "pro_expense_delete_expense",
+     0.24
+    ]
+   ],
+   "today": "2023-10-15"
+  },
+  "status": "needs_user",
+  "result": "model confirmed",
+  "done": false,
+  "answer": null,
+  "model_calls": 1,
+  "cost_usd": 0.006903,
+  "cost_at_standard_usd": 0.006903,
+  "duration_s": 5.65,
+  "wall_s": 8.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

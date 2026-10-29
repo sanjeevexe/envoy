@@ -1,0 +1,149 @@
+{
+ "task": "RecipeDeleteDuplicateRecipes2",
+ "seed": 2434742942,
+ "goal": "Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains",
+ "score": 0.0,
+ "aw_run_time_s": 132.2,
+ "aw_episode_length": 24,
+ "agent": "envoy",
+ "finished": "2026-10-28 06:36:12.406600",
+ "envoy": {
+  "run_id": "aw-fixes1-dev-1028-063403-2263",
+  "goal": "Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains",
+  "max_steps": 24,
+  "config": {},
+  "status": "step_limit",
+  "result": "stopped after 24 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 22,
+  "iterations": 24,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "look": 2,
+   "launch": 1,
+   "tap": 17,
+   "back": 4
+  },
+  "model_calls": 27,
+  "input_tokens": 65725,
+  "cached_tokens": 52843,
+  "output_tokens": 7179,
+  "reasoning_tokens": 5430,
+  "cost_usd": 0.00283,
+  "cost_at_standard_usd": 0.05454,
+  "duration_s": 124.43,
+  "model_s": 90.81,
+  "device_s": 33.62,
+  "connect_s": 0.9,
+  "approvals": [
+   {
+    "step": 10,
+    "description": "tap \"Delete\" in PopupWindow:b093cfc",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 11,
+    "description": "tap \"DELETE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'DELETE'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 14,
+    "description": "tap \"Delete\" in PopupWindow:4be0158",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 15,
+    "description": "tap \"DELETE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'DELETE'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 18,
+    "description": "tap \"Delete\" in PopupWindow:938d4e",
+    "reasons": [
+     "rule: target says 'Delete'"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 23,
+    "description": "tap \"Delete\" in PopupWindow:c5a6293",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 24,
+    "description": "tap \"DELETE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'DELETE'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Open a Caprese Salad Skewers entry to check for exact duplicate details",
+    "Delete duplicate Caprese Salad Skewers entries keeping one instance",
+    "Delete duplicate Pan-Seared Salmon entries keeping one instance",
+    "Return to Recipes list to verify only one of each recipe remains"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "recipe list contents showing only one entry per unique recipe",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-fixes1-dev-1028-063403-2263",
+  "envoy_commit": "821d713df93e6bb5536df7e6f89b6684779d58da",
+  "model": "muse-spark-1.3-contributor",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/fixes1-dev/traces/RecipeDeleteDuplicateRecipes2__s2434742942.jsonl.gz",
+  "wall_s": 126.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

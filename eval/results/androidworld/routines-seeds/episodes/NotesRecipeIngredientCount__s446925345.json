@@ -1,0 +1,114 @@
+{
+ "task": "NotesRecipeIngredientCount",
+ "seed": 446925345,
+ "goal": "What quantity of almond flour do I need for the recipe 'Tacos' in the Joplin app? Express your answer in the format <amount> <unit> where both the amount and unit exactly match the format in the recipe.",
+ "score": 0.0,
+ "aw_run_time_s": 34.4,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 22:20:26.613215",
+ "envoy": {
+  "run_id": "aw-routines-seeds-1028-221959-ae92",
+  "goal": "What quantity of almond flour do I need for the recipe 'Tacos' in the Joplin app? Express your answer in the format <amount> <unit> where both the amount and unit exactly match the format in the recipe.",
+  "max_steps": 10,
+  "config": {
+   "mode": "routine",
+   "library": "verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "b82e5124ea28700f4c8812839c4a7c8aae5bc782",
+  "mode": "routine",
+  "match": {
+   "routine": "joplin_get_ingredient_quantity",
+   "stage": "model confirmed",
+   "inputs": {
+    "recipe_name": "Tacos"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "joplin_get_ingredient_quantity",
+     0.511
+    ],
+    [
+     "simple_calendar_pro_get_event_location",
+     0.3
+    ],
+    [
+     "broccoli_add_recipe",
+     0.244
+    ]
+   ]
+  },
+  "status": "failed",
+  "result": "outputs not found: ingredient_quantity",
+  "routine": "joplin_get_ingredient_quantity",
+  "version": 1,
+  "done": false,
+  "answer": null,
+  "outputs": {
+   "ingredient_quantity": null
+  },
+  "steps_used": 5,
+  "rung": 2,
+  "steps": [
+   {
+    "id": "launch_joplin",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_search",
+    "status": "done",
+    "rung": 2,
+    "rungs": [
+     "relaxed match: after-checks failed but the next step (type_recipe_name) is ready"
+    ],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "type_recipe_name",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "find_tap_recipe_result",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "tap_recipe_result",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 1,
+  "model_calls": 1,
+  "cost_usd": 0.004455,
+  "cost_at_standard_usd": 0.004455,
+  "approvals": [],
+  "popups": [],
+  "duration_s": 22.31,
+  "routine_duration_s": 18.11,
+  "trace_dir": "data/runs/aw-routines-seeds-1028-221959-ae92",
+  "wall_s": 24.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

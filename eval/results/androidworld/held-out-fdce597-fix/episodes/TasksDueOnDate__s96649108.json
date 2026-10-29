@@ -1,0 +1,84 @@
+{
+ "task": "TasksDueOnDate",
+ "seed": 96649108,
+ "goal": "What tasks do I have due October 24 2023 in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 1.0,
+ "aw_run_time_s": 33.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 14:55:53.488582",
+ "envoy": {
+  "run_id": "aw-held-out-fdce597-fix-1029-145521-9cce",
+  "goal": "What tasks do I have due October 24 2023 in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Follow up on support tickets, Draft marketing email, Research market trends",
+  "done": true,
+  "answer": "Follow up on support tickets, Draft marketing email, Research market trends",
+  "steps_device": 7,
+  "iterations": 8,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "scroll": 6,
+   "done": 1
+  },
+  "model_calls": 9,
+  "input_tokens": 26915,
+  "cached_tokens": 20104,
+  "output_tokens": 1981,
+  "reasoning_tokens": 1228,
+  "cost_usd": 0.019949,
+  "cost_at_standard_usd": 0.019949,
+  "duration_s": 27.45,
+  "model_s": 11.2,
+  "device_s": 16.25,
+  "connect_s": 0.84,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Tasks",
+   "subgoals": [
+    "Open the Tasks app",
+    "Show all task lists including tasks due Oct 24 2023",
+    "Identify tasks with due date October 24 2023 and read their titles"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "task titles due October 24 2023",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Follow, Draft, Research"
+  },
+  "trace_dir": "data/runs/aw-held-out-fdce597-fix-1029-145521-9cce",
+  "envoy_commit": "736a6e4b11c23f4c8919997b559e4df0e4eb40e4",
+  "answer_format": true,
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/held-out-fdce597-fix/traces/TasksDueOnDate__s96649108.jsonl.gz",
+  "wall_s": 29.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.3
+  }
+ }
+}

@@ -1,0 +1,166 @@
+{
+ "task": "SimpleSmsSendReceivedAddress",
+ "seed": 25708979,
+ "goal": "Text the address of the event to Gabriel Ibrahim that Oscar Mohamed just sent me in Simple SMS Messenger",
+ "score": 0.0,
+ "aw_run_time_s": 46.5,
+ "aw_episode_length": 18,
+ "agent": "envoy",
+ "finished": "2026-10-28 18:35:25.468555",
+ "envoy": {
+  "run_id": "aw-routines-verify-1028-183459-02ec",
+  "goal": "Text the address of the event to Gabriel Ibrahim that Oscar Mohamed just sent me in Simple SMS Messenger",
+  "max_steps": 18,
+  "config": {
+   "mode": "routine",
+   "library": "candidates",
+   "allow_repair": false,
+   "tier": "standard"
+  },
+  "envoy_commit": "be1d7528eae3978569d926d3e0bb4c2abbc5919d",
+  "mode": "routine",
+  "match": {
+   "routine": "simple_sms_messenger_text_event_address",
+   "stage": "model confirmed",
+   "inputs": {
+    "recipient_name": "Gabriel Ibrahim",
+    "source_contact_name": "Oscar Mohamed"
+   },
+   "missing": [],
+   "candidates": [
+    [
+     "simple_sms_messenger_text_event_address",
+     0.665
+    ],
+    [
+     "simple_sms_messenger_reply_to_conversati",
+     0.492
+    ],
+    [
+     "simple_sms_messenger_send_message",
+     0.483
+    ]
+   ]
+  },
+  "status": "failed",
+  "result": "outputs not found: recipient",
+  "routine": "simple_sms_messenger_text_event_address",
+  "version": 1,
+  "done": false,
+  "answer": null,
+  "outputs": {
+   "recipient": null,
+   "sent_message": "789 E Oak St, Phoenix AZ 85006"
+  },
+  "steps_used": 10,
+  "rung": 0,
+  "steps": [
+   {
+    "id": "launch_simple_sms_messenger",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "search_recipient_conversation",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "clear_search_filter",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "scroll_to_source_conversation",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "open_source_conversation",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "back_to_conversation_list",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "start_new_conversation",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "select_recipient_contact",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "type_event_address",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   },
+   {
+    "id": "send_message",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "repairs": 0,
+    "detail": ""
+   }
+  ],
+  "repaired_steps": [],
+  "patches": 0,
+  "model_calls": 1,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.002546,
+  "approvals": [
+   {
+    "step": "send_message",
+    "description": "tap \"SMS\" in com.simplemobiletools.smsmessenger (routine simple_sms_messenger_text_event_address v1)",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/thread_send_message'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "duration_s": 14.74,
+  "routine_duration_s": 11.98,
+  "trace_dir": "data/runs/aw-routines-verify-1028-183459-02ec",
+  "wall_s": 17.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

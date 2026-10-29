@@ -1,0 +1,141 @@
+routine: pro_expense_delete_duplicate_expenses
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Delete duplicate expenses in Pro Expense while keeping one copy of each unique expense
+description: Opens the full expense list in Pro Expense, deletes one copy of each exact duplicate expense, and confirms the deletion so that only
+  one instance of each unique expense remains.
+patterns: [Delete duplicate expenses, 'Remove duplicate expenses, keep one of each', Deduplicate my expenses, Delete extra copies of the same
+    expense]
+outputs: [kept_expense_name, kept_expense_amount]
+start: fresh_launch
+steps:
+- id: launch_pro_expense
+  intent: Launch Pro Expense to view expenses
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.arduia.expense}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: rv_home, kind: List}
+  - element_present: {resource_id: fb_main_add, kind: Button}
+  risk: read
+  note: trace step 1
+- id: scroll_to_more_button
+  intent: Scroll until the MORE button is visible in the expense list
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    scroll_until:
+      target:
+        resource_id: btn_more_logs
+        text: MORE
+        kind: Button
+        cls: Button
+        siblings: [Recent]
+        in_list: true
+        position: [0.5, 0.93]
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: btn_more_logs
+      text: MORE
+      kind: Button
+      cls: Button
+      siblings: [Recent]
+      in_list: true
+      position: [0.5, 0.93]
+  risk: read
+  note: trace step 2 (+1 scrolls)
+- id: tap_more_button
+  intent: Tap MORE to view the full expense list and identify exact duplicates
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: btn_more_logs
+      text: MORE
+      kind: Button
+      cls: Button
+      siblings: [Recent]
+      in_list: true
+      position: [0.5, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: tv_name, kind: Text}
+  - element_present: {resource_id: tv_undo, text: Delete, kind: Text}
+  risk: reversible
+  note: trace step 3
+- id: tap_delete_icon_for_duplicate
+  intent: Tap the delete icon for one copy of an exact duplicate expense, leaving one instance
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: imv_delete_icon
+      text: ''
+      kind: Button
+      cls: ImageView
+      siblings: [Delete]
+      in_list: false
+      position: [0.899, 0.608]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: tv_expense_detail, text: Expense Detail, kind: Text}
+  - element_present: {resource_id: tv_name_value, kind: Text}
+  risk: irreversible
+  note: trace step 5
+- id: tap_delete_button
+  intent: Tap the delete button to delete that one duplicate instance
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: btn_delete
+      text: ''
+      kind: Button
+      cls: ImageView
+      siblings: [Amount]
+      in_list: false
+      position: [0.899, 0.692]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: tv_delete_item, text: Delete Items, kind: Text}
+  - element_present: {resource_id: imv_drop_close, kind: Button}
+  risk: irreversible
+  note: trace step 6
+- id: confirm_deletion
+  intent: Confirm deletion of the duplicate expense
+  pre:
+  - {app_foreground: com.arduia.expense}
+  action:
+    tap:
+      resource_id: btn_confirm
+      text: CONFIRM
+      kind: Button
+      cls: Button
+      siblings: [Delete Items]
+      in_list: false
+      position: [0.5, 0.926]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: tv_name, kind: Text}
+  - element_present: {resource_id: tv_undo, text: Delete, kind: Text}
+  risk: irreversible
+  extract:
+    kept_expense_name:
+      locator: {resource_id: tv_name, kind: Text}
+    kept_expense_amount:
+      locator: {resource_id: linear_amount, kind: Text}
+      expect_digits: true
+  note: trace step 7
+compiled_from:
+  task_id: aw-final-standard-1028-104751-fdbb
+  goal: Delete all but one of any expenses in pro expense that are exact duplicates, ensuring at least one instance of each unique expense remains.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 17:41:26"
+  trace_steps_kept: [1, 2, 3, 5, 6, 7]
+  trace_steps_dropped: 2
+  cost_usd: 0.0692

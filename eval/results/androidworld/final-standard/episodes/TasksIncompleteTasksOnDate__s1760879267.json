@@ -1,0 +1,79 @@
+{
+ "task": "TasksIncompleteTasksOnDate",
+ "seed": 1760879267,
+ "goal": "What incomplete tasks do I have still have to do by Thursday in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 0.0,
+ "aw_run_time_s": 59.0,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 17:31:42.818777",
+ "envoy": {
+  "run_id": "aw-final-standard-1028-173046-9929",
+  "goal": "What incomplete tasks do I have still have to do by Thursday in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 10,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "scroll": 9
+  },
+  "model_calls": 11,
+  "input_tokens": 33519,
+  "cached_tokens": 23259,
+  "output_tokens": 4787,
+  "reasoning_tokens": 3202,
+  "cost_usd": 0.036659,
+  "cost_at_standard_usd": 0.036659,
+  "duration_s": 50.92,
+  "model_s": 25.71,
+  "device_s": 25.21,
+  "connect_s": 0.87,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Tasks",
+   "subgoals": [
+    "Open the Tasks app",
+    "Show task lists with due dates",
+    "Identify incomplete tasks due by Thursday",
+    "Read off the task titles"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "incomplete task titles due by Thursday",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-final-standard-1028-173046-9929",
+  "envoy_commit": "1c2a6808cade251ed31aa9188388233b60e04984",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/final-standard/traces/TasksIncompleteTasksOnDate__s1760879267.jsonl.gz",
+  "wall_s": 53.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

@@ -1,0 +1,105 @@
+{
+ "task": "SimpleSmsSendClipboardContent",
+ "seed": 4005425627,
+ "goal": "Send a message to +11721914184 with the clipboard content in Simple SMS Messenger",
+ "score": 1.0,
+ "aw_run_time_s": 41.9,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 23:43:40.552159",
+ "envoy": {
+  "run_id": "aw-agent-seeds-1028-234307-972c",
+  "goal": "Send a message to +11721914184 with the clipboard content in Simple SMS Messenger",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Message 'Elementary, my dear Watson.' sent to +11721914184 in Simple SMS Messenger",
+  "done": true,
+  "answer": "Message 'Elementary, my dear Watson.' sent to +11721914184 in Simple SMS Messenger",
+  "steps_device": 7,
+  "iterations": 8,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "tap": 5,
+   "type": 1,
+   "long_press": 1,
+   "done": 1
+  },
+  "model_calls": 9,
+  "input_tokens": 23095,
+  "cached_tokens": 19833,
+  "output_tokens": 1919,
+  "reasoning_tokens": 1312,
+  "cost_usd": 0.015208,
+  "cost_at_standard_usd": 0.015208,
+  "duration_s": 22.87,
+  "model_s": 11.65,
+  "device_s": 11.22,
+  "connect_s": 0.91,
+  "approvals": [
+   {
+    "step": 4,
+    "description": "tap \"\" in com.simplemobiletools.smsmessenger",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/new_conversation_confirm'"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 7,
+    "description": "tap \"SMS\" in com.simplemobiletools.smsmessenger",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/thread_send_message'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "SMS Messenger",
+   "subgoals": [
+    "Open SMS Messenger",
+    "Start a new conversation",
+    "Set recipient to +11721914184",
+    "Paste clipboard content into message field and send"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "+11721914184",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'+11721914184' is visible"
+  },
+  "trace_dir": "data/runs/aw-agent-seeds-1028-234307-972c",
+  "envoy_commit": "cdd130ecae3cf0891ddc6106da4ad6d1be97fde0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/agent-seeds/traces/SimpleSmsSendClipboardContent__s4005425627.jsonl.gz",
+  "wall_s": 25.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}

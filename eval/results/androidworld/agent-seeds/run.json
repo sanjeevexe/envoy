@@ -1,0 +1,51 @@
+{
+ "sessions": [
+  {
+   "started": "2026-10-28T23:14:24",
+   "envoy_commit": "cdd130ecae3cf0891ddc6106da4ad6d1be97fde0",
+   "note": "the full agent on the same seeds as routines-seeds",
+   "androidworld_setup_rerun": false,
+   "app_snapshots": 24
+  }
+ ],
+ "stage": "agent-seeds",
+ "agent": "envoy",
+ "seed": 30,
+ "instances": [
+  1,
+  2,
+  3
+ ],
+ "split": null,
+ "tasks": [
+  "AudioRecorderRecordAudioWithFileName",
+  "CameraTakePhoto",
+  "ClockStopWatchPausedVerify",
+  "ClockStopWatchRunning",
+  "ExpenseDeleteSingle",
+  "MarkorCreateFolder",
+  "NotesMeetingAttendeeCount",
+  "NotesRecipeIngredientCount",
+  "OpenAppTaskEval",
+  "RecipeAddSingleRecipe",
+  "RecipeDeleteMultipleRecipesWithConstraint",
+  "SimpleCalendarLocationOfEvent",
+  "SimpleSmsReply",
+  "SimpleSmsReplyMostRecent",
+  "SimpleSmsSend",
+  "SimpleSmsSendClipboardContent",
+  "SystemBluetoothTurnOffVerify",
+  "SystemBluetoothTurnOnVerify",
+  "SystemBrightnessMaxVerify",
+  "SystemBrightnessMin",
+  "SystemBrightnessMinVerify",
+  "SystemWifiTurnOff",
+  "TurnOnWifiAndOpenApp"
+ ],
+ "androidworld_commit": "55ddaf5edc6f6c25673aed343907d5b9dca66f84",
+ "emulator": "AndroidWorldAvd: Pixel 6 1080x2400 420 dpi, API 33 google_apis arm64-v8a r17, 4 GB",
+ "envoy_config": {
+  "tier": "standard"
+ },
+ "tier": "standard"
+}

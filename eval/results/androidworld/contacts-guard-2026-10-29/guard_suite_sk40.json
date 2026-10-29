@@ -1,0 +1,1922 @@
+[
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open check-in or My Trips to see all trips",
+  "offers": true,
+  "cost": 0.0034201500000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to see all trips",
+  "offers": false,
+  "cost": 0.00366775
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0029739000000000002
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.00323315
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.00272
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Go to My Trips to see all trips",
+  "offers": false,
+  "cost": 0.0029654
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find the Denver trip (ignore the Chicago preview)",
+  "offers": false,
+  "cost": 0.0028889000000000002
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to see all trips",
+  "offers": false,
+  "cost": 0.0026594
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to see all trips",
+  "offers": false,
+  "cost": 0.0029229
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find all trips",
+  "offers": false,
+  "cost": 0.0036539000000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips or Check in to list trips eligible for check-in",
+  "offers": false,
+  "cost": 0.0033649
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find all trips",
+  "offers": false,
+  "cost": 0.00257865
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list instead of the Chicago next-trip card",
+  "offers": false,
+  "cost": 0.00324165
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips or Check in to see all trips",
+  "offers": false,
+  "cost": 0.0036794
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.0027359
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open Check in or My Trips to see all eligible flights",
+  "offers": true,
+  "cost": 0.00272315
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0025871500000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips from bottom navigation",
+  "offers": false,
+  "cost": 0.0036029
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to see all upcoming trips",
+  "offers": false,
+  "cost": 0.0032076500000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find the Denver flight",
+  "offers": false,
+  "cost": 0.0021834000000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open the My Trips list",
+  "offers": false,
+  "cost": 0.00244265
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00307165
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to see all trips",
+  "offers": false,
+  "cost": 0.00347115
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open check-in or My Trips to find flights",
+  "offers": true,
+  "cost": 0.00236615
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips or Check in to see all trips",
+  "offers": false,
+  "cost": 0.0026764000000000002
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find the Denver flight",
+  "offers": false,
+  "cost": 0.0026509000000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0020771500000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.0031269
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find the trip to Denver",
+  "offers": false,
+  "cost": 0.00307165
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.0018689000000000002
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0027869
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find all trips",
+  "offers": false,
+  "cost": 0.0030249
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0026934000000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0025064
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00268065
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to list all trips",
+  "offers": false,
+  "cost": 0.0032076500000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to see all trips",
+  "offers": false,
+  "cost": 0.00442315
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open the trips or check-in list to find flights beyond the Chicago next trip",
+  "offers": true,
+  "cost": 0.00288465
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find all upcoming flights",
+  "offers": false,
+  "cost": 0.00223015
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0040109
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00367785
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.0025361
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.0018263499999999998
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0038875999999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0025233499999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0028633499999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0021281
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0024256
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.0029016
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find trips",
+  "offers": false,
+  "cost": 0.00315235
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0034881
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0025616
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0027783499999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find the Denver flight",
+  "offers": false,
+  "cost": 0.0024808499999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00258285
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0026891
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00279535
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0031651
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to see all trips",
+  "offers": false,
+  "cost": 0.0027826
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0020940999999999998
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips from the bottom navigation",
+  "offers": false,
+  "cost": 0.0022726
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0028591
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0028506
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0020601
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find the flight to Denver",
+  "offers": false,
+  "cost": 0.0029356
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0027783499999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0021791
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find flights",
+  "offers": false,
+  "cost": 0.00281235
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0030545999999999998
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0023151
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0022131
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0026083499999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.0020176
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.00261685
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0027358499999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find the Denver flight",
+  "offers": false,
+  "cost": 0.00168185
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00292285
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find flights",
+  "offers": false,
+  "cost": 0.00302485
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.00228535
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0026891
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to see all upcoming flights",
+  "offers": false,
+  "cost": 0.00423725
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.003995
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.0027104
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.0032289000000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find flights",
+  "offers": false,
+  "cost": 0.00204315
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0037814000000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find all trips",
+  "offers": false,
+  "cost": 0.0028719
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0028974
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find the flight to Pittsburgh",
+  "offers": false,
+  "cost": 0.0026594
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find all trips",
+  "offers": false,
+  "cost": 0.0033479
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find all flights",
+  "offers": false,
+  "cost": 0.0032076500000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.0021239
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.0023746500000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0034201500000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to see all trips",
+  "offers": false,
+  "cost": 0.0031269
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to see all trips",
+  "offers": false,
+  "cost": 0.00383665
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find trips including Pittsburgh",
+  "offers": false,
+  "cost": 0.00263815
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0023279
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find all trips",
+  "offers": false,
+  "cost": 0.0024639
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open Check in or My Trips to list flights",
+  "offers": true,
+  "cost": 0.00213665
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to see all trips",
+  "offers": false,
+  "cost": 0.00342865
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.0032459
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0024214
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to see all upcoming trips",
+  "offers": false,
+  "cost": 0.00347965
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find the Pittsburgh flight",
+  "offers": false,
+  "cost": 0.0030376500000000002
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to see all trips",
+  "offers": false,
+  "cost": 0.0033054
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.0021494
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find the Pittsburgh trip",
+  "offers": false,
+  "cost": 0.00387915
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00281665
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find trips beyond the Chicago next trip",
+  "offers": false,
+  "cost": 0.0024171500000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00313115
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to list all trips",
+  "offers": false,
+  "cost": 0.0024469
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.00244265
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.0021621500000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.00226415
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find the flight to Pittsburgh",
+  "offers": false,
+  "cost": 0.0030249
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.0028549
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0026679
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0027826500000000002
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "cur",
+  "first": "Open My Trips to find the Pittsburgh trip",
+  "offers": false,
+  "cost": 0.0025574
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find flights",
+  "offers": false,
+  "cost": 0.0027715
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00304185
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0024936
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00330535
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open the My Trips list",
+  "offers": false,
+  "cost": 0.00246385
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find the Pittsburgh flight",
+  "offers": false,
+  "cost": 0.0029526
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0027316
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0024086
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find the Pittsburgh flight",
+  "offers": false,
+  "cost": 0.0021366
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0035136
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00264235
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find flights",
+  "offers": false,
+  "cost": 0.0034286
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0030461
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0028506
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00289735
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find all trips",
+  "offers": false,
+  "cost": 0.0029611
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0032245999999999998
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips or Check in to find flights",
+  "offers": false,
+  "cost": 0.0025531
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0033308499999999998
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.00247235
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open Check in or My Trips to see available trips",
+  "offers": true,
+  "cost": 0.0027486
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00203885
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open Check in or My Trips to find trips",
+  "offers": true,
+  "cost": 0.00288035
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00274435
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find all trips",
+  "offers": false,
+  "cost": 0.0025956
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.00270185
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find the flight to Pittsburgh",
+  "offers": false,
+  "cost": 0.00212385
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find the flight to Pittsburgh",
+  "offers": false,
+  "cost": 0.0030376
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0022895999999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0024511
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find the flight to Pittsburgh",
+  "offers": false,
+  "cost": 0.0024170999999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Go to Check in or My Trips to find trips",
+  "offers": true,
+  "cost": 0.0033350999999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00245535
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00230235
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips from the bottom navigation",
+  "offers": false,
+  "cost": 0.0031311
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to see all trips",
+  "offers": false,
+  "cost": 0.00298235
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips list",
+  "offers": false,
+  "cost": 0.00227685
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.00197085
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips",
+  "offers": false,
+  "cost": 0.0027783499999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "other",
+  "variant": "guard",
+  "first": "Open My Trips to find the trip to Pittsburgh",
+  "offers": false,
+  "cost": 0.00370485
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open check-in for the Chicago trip on Oct 30 via Next trip card",
+  "offers": true,
+  "cost": 0.00346375
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open check-in for the Chicago trip on Fri, Oct 30, 2026 SL 482",
+  "offers": true,
+  "cost": 0.00297815
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open check-in for the Chicago trip SL 482",
+  "offers": true,
+  "cost": 0.0028464000000000002
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip SL 482 on Oct 30",
+  "offers": false,
+  "cost": 0.00318215
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip on Oct 30 (SL 482)",
+  "offers": false,
+  "cost": 0.00376865
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip on Fri, Oct 30, 2026 SL 482 via Check in",
+  "offers": true,
+  "cost": 0.00305465
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open check-in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.00353915
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open check-in for the Chicago trip via Next trip card or Check in button",
+  "offers": true,
+  "cost": 0.00336915
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip check-in from Home",
+  "offers": true,
+  "cost": 0.00377715
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open check-in for the Chicago trip on Fri, Oct 30, SL 482 from Home",
+  "offers": true,
+  "cost": 0.00454215
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Tap Check in for the Chicago trip on Oct 30 SL 482",
+  "offers": true,
+  "cost": 0.0038706500000000002
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip via Next trip or Check in",
+  "offers": true,
+  "cost": 0.0025489
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip check-in from Home",
+  "offers": true,
+  "cost": 0.0027529
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Tap Check in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.0035774
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open check-in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.0038409
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip or tap Check in from Home",
+  "offers": true,
+  "cost": 0.0028464000000000002
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip check-in from Home",
+  "offers": true,
+  "cost": 0.0027614000000000002
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the next trip to Chicago on Fri, Oct 30 SL 482",
+  "offers": false,
+  "cost": 0.0029101500000000002
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open check-in for the Chicago trip on Fri, Oct 30 SL 482",
+  "offers": true,
+  "cost": 0.0025871500000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the next trip to Chicago",
+  "offers": false,
+  "cost": 0.0032034
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip from the Next trip card",
+  "offers": false,
+  "cost": 0.0024809000000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip from Next trip or Check in",
+  "offers": true,
+  "cost": 0.0027359
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip SL 482 on Oct 30 via Next trip card or Check in",
+  "offers": true,
+  "cost": 0.00373465
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip check-in from Home",
+  "offers": true,
+  "cost": 0.0033776500000000003
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip from Next trip or tap Check in",
+  "offers": true,
+  "cost": 0.0029229
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip via Next trip card or Check in",
+  "offers": true,
+  "cost": 0.00232365
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Tap Check in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.00275715
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Tap Check in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.0027614000000000002
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Tap Check in for the Chicago trip SL 482",
+  "offers": true,
+  "cost": 0.0034754
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open check-in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.0027699
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip SL 482 via Check in",
+  "offers": true,
+  "cost": 0.00293565
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Tap Check in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.00347115
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open check-in for the Chicago trip SL 482 on Oct 30",
+  "offers": true,
+  "cost": 0.00330115
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open check-in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.0048184
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip using Next trip card or Check in button",
+  "offers": true,
+  "cost": 0.0031949
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip from Next trip card or Check in button",
+  "offers": true,
+  "cost": 0.00297815
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open the Chicago trip on Fri, Oct 30, 2026 SL 482",
+  "offers": false,
+  "cost": 0.0027444
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open check-in for the Chicago trip SL 482 on Oct 30",
+  "offers": true,
+  "cost": 0.00309715
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Tap Check in for the Chicago trip SL 482 on Oct 30",
+  "offers": true,
+  "cost": 0.0025489
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "cur",
+  "first": "Open check-in for the Chicago trip on Oct 30 SL 482",
+  "offers": true,
+  "cost": 0.0024979
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open the Chicago trip check-in from Home",
+  "offers": true,
+  "cost": 0.00306475
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open the Chicago trip check-in from Home",
+  "offers": true,
+  "cost": 0.00380425
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Oct 30, SL 482",
+  "offers": true,
+  "cost": 0.00298235
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open the Chicago trip check-in from Home",
+  "offers": true,
+  "cost": 0.00259985
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Tap Check in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.0019496
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Tap Check in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.0030631
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open the Chicago trip check-in from Home",
+  "offers": true,
+  "cost": 0.0033011
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open the trip to Chicago Fri, Oct 30 SL 482",
+  "offers": false,
+  "cost": 0.00258285
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Fri, Oct 30 SL 482",
+  "offers": true,
+  "cost": 0.0023108499999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open the Chicago trip check-in from Home",
+  "offers": true,
+  "cost": 0.0031226
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip SL 482",
+  "offers": true,
+  "cost": 0.00315235
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.0030631
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Next trip to Chicago on Oct 30",
+  "offers": true,
+  "cost": 0.0020728499999999998
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.0032458499999999998
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.00264235
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip SL 482 on Oct 30",
+  "offers": true,
+  "cost": 0.00278685
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Fri, Oct 30 SL 482",
+  "offers": true,
+  "cost": 0.00272735
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip SL 482 on Oct 30",
+  "offers": true,
+  "cost": 0.00305035
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.0019665999999999998
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open the Chicago trip via Next trip card",
+  "offers": false,
+  "cost": 0.00268485
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open the Chicago trip check-in from the Next trip card or Check in button",
+  "offers": true,
+  "cost": 0.00401085
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open the Chicago trip via Next trip or Check in",
+  "offers": true,
+  "cost": 0.00271035
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip SL 482 from Home",
+  "offers": true,
+  "cost": 0.0028208499999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open the Chicago trip for Fri, Oct 30 SL 482",
+  "offers": false,
+  "cost": 0.00291435
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open the Chicago trip for Fri, Oct 30 SL 482",
+  "offers": false,
+  "cost": 0.0030206
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Oct 30 (SL 482)",
+  "offers": true,
+  "cost": 0.0028208499999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open the Chicago trip check-in from Home",
+  "offers": true,
+  "cost": 0.0029483499999999998
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip SL 482",
+  "offers": true,
+  "cost": 0.0026295999999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.00223435
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Oct 30 (SL 482)",
+  "offers": true,
+  "cost": 0.0017583499999999999
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip SL 482 on Oct 30",
+  "offers": true,
+  "cost": 0.0024383499999999997
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open the Chicago trip on Fri, Oct 30, 2026 Flight SL 482",
+  "offers": false,
+  "cost": 0.0020856
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip SL 482 on Oct 30",
+  "offers": true,
+  "cost": 0.0023236
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.0023406
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open the Chicago trip check-in from Home",
+  "offers": true,
+  "cost": 0.00278685
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.0026126
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open the Chicago trip check-in from Home",
+  "offers": true,
+  "cost": 0.0024511
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open the Chicago trip via Next trip or Check in",
+  "offers": true,
+  "cost": 0.00261685
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Oct 30 (SL 482)",
+  "offers": true,
+  "cost": 0.00266785
+ },
+ {
+  "kind": "skylark",
+  "which": "next",
+  "variant": "guard",
+  "first": "Open check-in for the Chicago trip on Oct 30",
+  "offers": true,
+  "cost": 0.00271885
+ }
+]
