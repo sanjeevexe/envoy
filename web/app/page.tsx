@@ -1,35 +1,37 @@
 "use client";
 
-// Envoy's web app: chat, tasks, approvals, memory, routines and triggers, with the live phone beside them.
-// Phase 5: on a phone (the iPhone's Home Screen app) the same app gets bottom tabs, with the live phone as its own tab
-// (streamed only while it's open), and a notification's link opens the right tab.
+// Envoy's web app. On a phone (the iPhone's Home Screen app): five tabs, Home, Activity, Phone, Memory and Routines,
+// with Settings from the header; the live phone is its own tab (streamed only while it's open). On a wider screen: a
+// sidebar with the same places, the content at a readable width, and the live phone on the right.
+// Links (and notifications) open the right place: ?task=…, ?phone=<avd>; /approve/?id=… is its own page.
 import { useCallback, useEffect, useMemo, useState } from "react";
-import Approvals from "@/components/Approvals";
-import Chat from "@/components/Chat";
-import Companion from "@/components/Companion";
-import LivePhone from "@/components/LivePhone";
-import AppNotes from "@/components/AppNotes";
+import {
+  CaretLeftIcon, DeviceMobileIcon, GraphIcon, HouseIcon, PulseIcon, RepeatIcon, SlidersHorizontalIcon, type Icon,
+} from "@phosphor-icons/react";
+import Activity from "@/components/Activity";
+import { ApprovalSheet } from "@/components/Approvals";
+import Avatar, { MOOD_LABEL, Wordmark } from "@/components/Avatar";
+import Home from "@/components/Home";
+import LivePhone, { PhoneSwitch } from "@/components/LivePhone";
 import MemoryGraph from "@/components/MemoryGraph";
 import Pair from "@/components/Pair";
-import PhoneAsk from "@/components/PhoneAsk";
-import Routines from "@/components/Routines";
-import Settings from "@/components/Settings";
-import { TaskDetail, TaskList } from "@/components/Tasks";
-import Triggers from "@/components/Triggers";
+import RoutinesTab from "@/components/Routines";
+import SettingsPage from "@/components/Settings";
+import { cx } from "@/components/ui";
 import { api, ApiError, Approval, EnvoyEvent, Lease, Step, Task, useEvents } from "@/lib/api";
 import { registerServiceWorker, useMedia } from "@/lib/device";
+import { useMood } from "@/lib/mood";
 
-const TABS = ["Chat", "Tasks", "Approvals", "Memory", "Routines", "Triggers", "Devices", "Settings"] as const;
-type Tab = (typeof TABS)[number] | "Phone" | "More";
-const MOBILE_TABS: { tab: Tab; label: string; icon: string }[] = [
-  { tab: "Chat", label: "Chat", icon: "💬" }, { tab: "Phone", label: "Phone", icon: "📱" }, { tab: "Approvals", label: "Approvals", icon: "✅" },
-  { tab: "Memory", label: "Memory", icon: "🧠" }, { tab: "More", label: "More", icon: "☰" },
+type Tab = "Home" | "Activity" | "Phone" | "Memory" | "Routines" | "Settings";
+const NAV: { tab: Tab; icon: Icon }[] = [
+  { tab: "Home", icon: HouseIcon }, { tab: "Activity", icon: PulseIcon }, { tab: "Phone", icon: DeviceMobileIcon },
+  { tab: "Memory", icon: GraphIcon }, { tab: "Routines", icon: RepeatIcon },
 ];
-const MORE: Tab[] = ["Tasks", "Routines", "Triggers", "Devices", "Settings"];
 
-export default function Home() {
+export default function Page() {
   const mobile = useMedia("(max-width: 767px)");
-  const [tab, setTab] = useState<Tab>("Chat");
+  const [tab, setTab] = useState<Tab>("Home");
+  const [back, setBack] = useState<Tab>("Home"); // where Settings goes back to
   const [authed, setAuthed] = useState<boolean | null>(null);
   const [profile, setProfile] = useState("");
   const [publicUrl, setPublicUrl] = useState<string>();
@@ -39,8 +41,18 @@ export default function Home() {
   const [leases, setLeases] = useState<Record<string, Lease>>({});
   const [avd, setAvd] = useState("envoy-test");
   const [openTask, setOpenTask] = useState<string | null>(null);
+  const [reviewing, setReviewing] = useState<string | null>(null); // the approval in the sheet
   const [memVersion, setMemVersion] = useState(0);
-  const [toast, setToast] = useState<string | null>(null);
+  const [briefVersion, setBriefVersion] = useState(0);
+  const [toast, setToast] = useState<{ text: string; key: number } | null>(null);
+  const [listening, setListening] = useState(false);
+  const [lastStepAt, setLastStepAt] = useState(0);
+
+  const say = useCallback((text: string) => {
+    const key = Date.now();
+    setToast({ text, key });
+    setTimeout(() => setToast((t) => (t?.key === key ? null : t)), 5000);
+  }, []);
 
   const load = useCallback(() => {
     api("/api/state").then((s) => {
@@ -59,8 +71,8 @@ export default function Home() {
     if (u.pathname.startsWith("/approve")) { location.href = u.href; return; }
     const t = u.searchParams.get("task");
     const phone = u.searchParams.get("phone");
-    if (phone) { setAvd(phone); setTab(window.matchMedia("(max-width: 767px)").matches ? "Phone" : "Chat"); }
-    else if (t) { setOpenTask(t); setTab("Tasks"); }
+    if (phone) { setAvd(phone); setTab(window.matchMedia("(max-width: 767px)").matches ? "Phone" : "Home"); }
+    else if (t) { setOpenTask(t); setTab("Activity"); }
   }, []);
 
   useEffect(() => {
@@ -80,137 +92,167 @@ export default function Home() {
 
   const connected = useEvents(useCallback((e: EnvoyEvent) => {
     switch (e.type) {
-      case "task": setTasks((m) => ({ ...m, [e.task.id]: e.task })); break;
-      case "step": setSteps((m) => ({ ...m, [e.task_id]: [...(m[e.task_id] ?? []), e.step] })); break;
+      case "task": setTasks((m) => ({ ...m, [e.task.id]: e.task })); if (["done", "failed", "declined"].includes(e.task.status)) setBriefVersion((v) => v + 1); break;
+      case "step": setSteps((m) => ({ ...m, [e.task_id]: [...(m[e.task_id] ?? []), e.step] })); setLastStepAt(Date.now()); break;
       case "approval_requested":
-      case "approval_decided": setApprovals((m) => ({ ...m, [e.approval.id]: e.approval })); if (e.type === "approval_requested") setTab((t) => t === "Chat" || t === "Phone" ? t : "Approvals"); break;
+      case "approval_decided":
+        setApprovals((m) => ({ ...m, [e.approval.id]: e.approval }));
+        setBriefVersion((v) => v + 1);
+        if (e.type === "approval_requested") setTab((t) => (t === "Home" || t === "Phone" ? t : "Activity"));
+        break;
       case "takeover": case "hand_back": case "takeover_requested":
         setLeases((m) => ({ ...m, [e.avd]: { ...(m[e.avd] ?? { avd: e.avd, task_id: null, since: 0, reason: "" }), task_id: e.task_id,
           user_control: e.type === "takeover" ? true : e.type === "hand_back" ? false : !!m[e.avd]?.user_control, reason: e.reason ?? "" } }));
         if (e.type === "takeover_requested") setAvd(e.avd);
         break;
       case "memory": setMemVersion((v) => v + 1); break;
-      case "photo": setToast(e.summary); setTimeout(() => setToast(null), 5000); break;
-      case "paired": setToast(`Paired: ${e.name}`); setTimeout(() => setToast(null), 5000); break;
+      case "fact_changed": setBriefVersion((v) => v + 1); break;
+      case "photo": say(e.summary); break;
+      case "paired": say(`Paired: ${e.name}`); break;
     }
-  }, []));
+  }, [say]));
 
+  const mood = useMood({ connected, tasks, approvals, lastStepAt, listening });
   const taskList = useMemo(() => Object.values(tasks).sort((a, b) => b.created_at - a.created_at), [tasks]);
   const pending = Object.values(approvals).filter((a) => a.status === "pending");
-  const needs = taskList.find((t) => t.status === "needs_you" && t.device === avd);
-  const phoneAsk = taskList.find((t) => t.waiting_for === "phone" && t.status === "needs_you");
+  const needs = taskList.find((t) => t.status === "needs_you" && t.device === avd && t.waiting_for !== "phone");
+  const waitingOnYou = pending.length + taskList.filter((t) => t.status === "needs_you").length;
   const phones = Object.values(leases).sort((a, b) => (a.kind === "phone" ? 1 : 0) - (b.kind === "phone" ? 1 : 0));
-  const go = (t: Tab) => { setTab(t); if (t !== "Tasks") setOpenTask(null); };
-  const openTaskTab = (id: string) => { setOpenTask(id); setTab("Tasks"); };
 
-  if (authed === null) return <main className="h-[100dvh]" />;
+  const go = (t: Tab) => {
+    if (t === "Settings") setBack(tab === "Settings" ? back : tab);
+    setTab(t);
+    if (t !== "Activity") setOpenTask(null);
+  };
+  const openTaskTab = (id: string) => { setOpenTask(id); setTab("Activity"); };
+  const watch = (device?: string) => { if (device) setAvd(device); if (mobile) setTab("Phone"); };
+
+  if (authed === null) return <main className="h-[100dvh] bg-page" />;
   if (authed === false) return <Pair onPaired={load} />;
 
-  const content = (
-    <>
-      {tab === "Chat" && <Chat tasks={tasks} openTask={openTaskTab} compact={mobile} />}
-      {tab === "Tasks" && (openTask
-        ? <TaskDetail id={openTask} task={tasks[openTask]} liveSteps={steps[openTask] ?? []} back={() => setOpenTask(null)} all={tasks} open={setOpenTask} />
-        : <TaskList tasks={taskList} open={setOpenTask} />)}
-      {tab === "Approvals" && <Approvals approvals={Object.values(approvals)} />}
-      {tab === "Memory" && <MemoryGraph version={memVersion} />}
-      {tab === "Routines" && <><Routines openTask={openTaskTab} /><AppNotes openTask={openTaskTab} /></>}
-      {tab === "Triggers" && <Triggers />}
-      {tab === "Devices" && <Companion publicUrl={publicUrl} />}
-      {tab === "Settings" && <Settings />}
-    </>
-  );
-  const phoneSwitch = (
-    <div className="mb-2 flex gap-1 text-xs">
-      {phones.map((d) => (
-        <button key={d.avd} onClick={() => setAvd(d.avd)} className={`rounded px-2 py-1 ${avd === d.avd ? "bg-stone-800 text-white" : "bg-white"}`}>
-          {d.kind === "phone" ? `📱 ${d.name ?? "Your phone"}` : d.name ?? d.avd}
-          {d.kind === "phone" && d.state === "unauthorized" ? " (allow USB debugging)" : d.running === false ? " (off)" : ""}
-        </button>
-      ))}
+  const reviewed = reviewing ? tasks[approvals[reviewing]?.task_id ?? ""]?.device : undefined;
+  const sheet = reviewing && <ApprovalSheet id={reviewing} onClose={() => setReviewing(null)} device={reviewed ? leases[reviewed]?.name ?? reviewed : undefined} />;
+  const phoneView = (
+    <div className="flex flex-col gap-3">
+      <PhoneSwitch phones={phones} avd={avd} onChange={setAvd} />
+      <LivePhone key={avd} avd={avd} lease={leases[avd]} needsYou={needs ? needs.detail ?? "Envoy needs you" : null} mobile={mobile} />
     </div>
   );
-  const toastEl = toast && <div className="pointer-events-none fixed inset-x-4 top-16 z-20 mx-auto max-w-md rounded-xl bg-stone-900/95 px-4 py-3 text-sm text-white shadow-lg">{toast}</div>;
+  const content = (
+    <>
+      <div hidden={tab !== "Home"} className="h-full">
+        <Home tasks={tasks} openTask={openTaskTab} review={setReviewing} mood={mood} connected={connected} version={briefVersion} compact={mobile}
+              onListening={setListening} goPhone={() => go("Phone")} device={leases[avd]} />
+      </div>
+      {tab === "Activity" && <Activity tasks={taskList} all={tasks} steps={steps} approvals={Object.values(approvals)} openTask={openTask} setOpenTask={setOpenTask}
+                                       review={setReviewing} watch={watch} leases={leases} mood={mood} goPhone={() => go("Phone")} />}
+      {tab === "Phone" && <div className="mx-auto w-full max-w-[520px] p-4 md:pt-8">{phoneView}</div>}
+      {tab === "Memory" && <MemoryGraph version={memVersion} />}
+      {tab === "Routines" && <RoutinesTab openTask={openTaskTab} />}
+      {tab === "Settings" && <SettingsPage publicUrl={publicUrl} profile={profile} />}
+    </>
+  );
+  const toastEl = toast && (
+    <div role="status" key={toast.key} className="ev-toast pointer-events-none fixed inset-x-4 top-[max(64px,calc(env(safe-area-inset-top)+56px))] z-50 mx-auto flex max-w-md items-center gap-3 rounded-card bg-ink px-4 py-3 text-meta text-white shadow-toast md:top-6">
+      <Avatar mood="done" size={32} /><span className="min-w-0 flex-1">{toast.text}</span>
+    </div>
+  );
+  const status = <span className="sr-only" role="status">{MOOD_LABEL[mood]}</span>;
 
   if (mobile) {
+    const titled = tab !== "Home";
     return (
-      <main className="flex h-[100dvh] flex-col">
-        <header className="flex items-center justify-between border-b border-stone-200 bg-white px-4 pb-2 pt-[max(0.5rem,env(safe-area-inset-top))]">
-          <span className="text-lg font-semibold">Envoy</span>
-          <span className={`text-xs ${connected ? "text-emerald-700" : "text-rose-700"}`}>{connected ? "● live" : "● can't reach your Mac"}</span>
+      <main className="flex h-[100dvh] flex-col bg-page">
+        {tab === "Activity" && openTask ? <div className="h-[env(safe-area-inset-top)] shrink-0" /> : (  /* a task brings its own header */
+        <header className="flex h-[calc(56px+env(safe-area-inset-top))] shrink-0 items-center justify-between gap-2 pl-4 pr-3 pt-[env(safe-area-inset-top)]">
+          {tab === "Settings" ? (
+            <div className="flex items-center gap-1">
+              <button onClick={() => go(back)} aria-label={`Back to ${back}`} className="-ml-2 flex h-11 w-11 items-center justify-center rounded-full hover:bg-well"><CaretLeftIcon size={22} /></button>
+              <h1 className="text-title font-bold">Settings</h1>
+            </div>
+          ) : titled ? (
+            <div className="flex min-w-0 items-center gap-2.5">
+              <Avatar mood={mood} size={30} />
+              <h1 className="truncate text-title font-bold">{tab}</h1>
+            </div>
+          ) : (
+            <DevicePill lease={leases[avd]} needsYou={!!needs || !!leases[avd]?.user_control} onClick={() => go("Phone")} />
+          )}
+          {tab !== "Settings" && (
+            <button onClick={() => go("Settings")} aria-label="Settings" className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-well">
+              <SlidersHorizontalIcon size={22} />
+            </button>
+          )}
         </header>
-        {phoneAsk && <div className="p-3 pb-0"><PhoneAsk task={phoneAsk} large /></div>}
-        {pending.length > 0 && tab !== "Approvals" && (
-          <button onClick={() => go("Approvals")} className="bg-rose-600 px-4 py-2 text-left text-sm text-white">
-            {pending.length} approval{pending.length > 1 ? "s" : ""} waiting: {pending[0].description}
-          </button>
         )}
-        {needs && tab !== "Phone" && (
-          <button onClick={() => go("Phone")} className="bg-amber-500 px-4 py-2 text-left text-sm text-amber-950">Envoy needs you on the phone: {needs.detail ?? "take over"}</button>
-        )}
-        <div className="min-h-0 flex-1 overflow-y-auto">
-          {tab === "Phone" ? (
-            <div className="p-3">{phoneSwitch}<LivePhone key={avd} avd={avd} lease={leases[avd]} needsYou={needs ? needs.detail ?? "Envoy needs you" : null} mobile /></div>
-          ) : tab === "More" ? (
-            <ul className="divide-y divide-stone-200 bg-white">
-              {MORE.map((t) => (
-                <li key={t}><button onClick={() => go(t)} className="flex w-full items-center justify-between px-4 py-4 text-left text-base">{t}<span className="text-stone-400">›</span></button></li>
-              ))}
-              {profile && <li className="px-4 py-3 text-xs text-stone-500">{profile === "demo" ? "Demo memory (SkyLark test data)" : "Your memory"}</li>}
-            </ul>
-          ) : content}
-        </div>
-        <nav className="grid grid-cols-5 border-t border-stone-200 bg-white pb-[env(safe-area-inset-bottom)]">
-          {MOBILE_TABS.map(({ tab: t, label, icon }) => {
-            const active = tab === t || (t === "More" && MORE.includes(tab));
+        <div key={tab === "Home" ? "home" : tab} className="ev-fade min-h-0 flex-1 overflow-y-auto">{content}</div>
+        <nav aria-label="Envoy" className="grid shrink-0 grid-cols-5 border-t border-line bg-raised px-1 pb-[max(8px,env(safe-area-inset-bottom))] pt-1.5">
+          {NAV.map(({ tab: t, icon: I }) => {
+            const active = tab === t;
+            const dot = (t === "Activity" && waitingOnYou > 0) || (t === "Phone" && (!!needs || !!leases[avd]?.user_control));
             return (
-              <button key={t} onClick={() => go(t)} className={`relative flex flex-col items-center gap-0.5 py-2 text-[11px] ${active ? "font-semibold text-stone-900" : "text-stone-500"}`}>
-                <span className="text-xl leading-none">{icon}</span>{label}
-                {t === "Approvals" && pending.length > 0 && <span className="absolute right-4 top-1 rounded-full bg-rose-600 px-1.5 text-[10px] text-white">{pending.length}</span>}
-                {t === "Phone" && (needs || leases[avd]?.user_control) && <span className="absolute right-5 top-1 h-2 w-2 rounded-full bg-amber-500" />}
+              <button key={t} onClick={() => go(t)} aria-current={active ? "page" : undefined}
+                      aria-label={dot ? `${t}, needs you` : t}
+                      className={cx("flex h-[52px] flex-col items-center justify-center gap-1 text-tab", active ? "font-bold text-sage-ink" : "font-semibold text-muted")}>
+                <span className={cx("relative flex h-7 w-[52px] items-center justify-center rounded-full transition-colors", active && "bg-sage-tint")}>
+                  <I size={22} weight={active ? "fill" : "regular"} />
+                  {dot && <span className="absolute right-[11px] top-px h-[9px] w-[9px] rounded-full border-2 border-raised bg-apricot" />}
+                </span>
+                {t}
               </button>
             );
           })}
         </nav>
-        {toastEl}
+        {status}{sheet}{toastEl}
       </main>
     );
   }
 
   return (
-    <main className="flex h-screen flex-col">
-      <header className="flex items-center justify-between border-b border-stone-200 bg-white px-4 py-2">
-        <div className="flex items-center gap-3">
-          <span className="text-lg font-semibold">Envoy</span>
-          {profile && <span className="rounded bg-stone-100 px-2 py-0.5 text-xs text-stone-600">{profile === "demo" ? "demo (SkyLark test data)" : "your memory"}</span>}
+    <main className="flex h-screen bg-page">
+      <nav aria-label="Envoy" className="flex w-[232px] shrink-0 flex-col border-r border-line bg-raised px-3 pb-4 pt-5">
+        <div className="mb-6 flex items-center gap-2.5 px-2">
+          <Avatar mood={mood} size={40} label />
+          <Wordmark size={26} />
         </div>
-        <span className={`text-xs ${connected ? "text-emerald-700" : "text-rose-700"}`}>{connected ? "● live" : "● reconnecting"}</span>
-      </header>
-      <div className="flex min-h-0 flex-1 flex-row">
-        <section className="flex min-h-0 min-w-0 flex-1 flex-col">
-          <nav className="flex gap-1 overflow-x-auto border-b border-stone-200 bg-white px-2">
-            {TABS.map((t) => (
-              <button key={t} onClick={() => go(t)}
-                      className={`whitespace-nowrap px-3 py-2 text-sm ${tab === t ? "border-b-2 border-stone-800 font-medium" : "text-stone-500"}`}>
-                {t}{t === "Approvals" && pending.length > 0 && <span className="ml-1 rounded-full bg-rose-600 px-1.5 text-xs text-white">{pending.length}</span>}
-                {t === "Tasks" && taskList.some((x) => x.status === "needs_you") && <span className="ml-1 text-amber-600">●</span>}
-              </button>
-            ))}
-          </nav>
-          <div className="min-h-0 flex-1 overflow-y-auto">{content}</div>
-        </section>
-        <aside className="w-[340px] shrink-0 overflow-y-auto border-l border-stone-200 bg-stone-50 p-4">
-          {phoneSwitch}
-          {phoneAsk && <div className="mb-2"><PhoneAsk task={phoneAsk} /></div>}
-          {pending.length > 0 && tab !== "Approvals" && (
-            <button onClick={() => go("Approvals")} className="mb-2 w-full rounded-lg bg-rose-600 px-3 py-2 text-left text-sm text-white">
-              {pending.length} approval{pending.length > 1 ? "s" : ""} waiting: {pending[0].description}
+        {NAV.map(({ tab: t, icon: I }) => {
+          const active = tab === t;
+          const count = t === "Activity" ? waitingOnYou : 0;
+          return (
+            <button key={t} onClick={() => go(t)} aria-current={active ? "page" : undefined}
+                    className={cx("mb-1 flex h-11 items-center gap-3 rounded-full px-3 text-[14px] transition-colors", active ? "bg-sage-tint font-bold text-sage-ink" : "font-semibold text-ink-2 hover:bg-well")}>
+              <I size={20} weight={active ? "fill" : "regular"} />
+              <span className="flex-1 text-left">{t}</span>
+              {count > 0 && <span className="rounded-full bg-apricot-tint px-2 py-0.5 text-meta-2 font-bold text-apricot-ink">{count}<span className="sr-only"> waiting on you</span></span>}
             </button>
-          )}
-          <LivePhone key={avd} avd={avd} lease={leases[avd]} needsYou={needs ? needs.detail ?? "Envoy needs you" : null} />
-        </aside>
-      </div>
-      {toastEl}
+          );
+        })}
+        <div className="flex-1" />
+        {profile && <p className="mb-2 px-3 text-meta-2 text-muted">{profile === "demo" ? "Demo memory (SkyLark test data)" : "Your memory"}</p>}
+        <button onClick={() => go("Settings")} aria-current={tab === "Settings" ? "page" : undefined}
+                className={cx("flex h-11 items-center gap-3 rounded-full px-3 text-[14px] transition-colors", tab === "Settings" ? "bg-sage-tint font-bold text-sage-ink" : "font-semibold text-ink-2 hover:bg-well")}>
+          <SlidersHorizontalIcon size={20} weight={tab === "Settings" ? "fill" : "regular"} /> Settings
+        </button>
+      </nav>
+      <section key={tab === "Home" ? "home" : tab} className="ev-fade min-w-0 flex-1 overflow-y-auto">{content}</section>
+      {tab !== "Phone" && (
+        <aside aria-label="Live phone" className="w-[360px] shrink-0 overflow-y-auto border-l border-line bg-raised p-5">{phoneView}</aside>
+      )}
+      {status}{sheet}{toastEl}
     </main>
   );
 }
+
+function DevicePill({ lease, needsYou, onClick }: { lease?: Lease; needsYou: boolean; onClick: () => void }) {
+  const off = lease?.running === false || (lease?.kind === "phone" && lease.state !== "device");
+  const name = lease?.name ?? lease?.avd ?? "No phone";
+  return (
+    <button onClick={onClick} aria-label={`${name}${off ? ", off" : needsYou ? ", needs you" : lease?.task_id ? ", Envoy is using it" : ""}: open the phone`}
+            className="flex h-11 min-w-0 items-center gap-2 rounded-full border border-control bg-surface pl-3 pr-4 text-meta font-semibold">
+      <DeviceMobileIcon size={18} className="shrink-0" />
+      <span className="truncate">{name}</span>
+      <span aria-hidden className={cx("h-2 w-2 shrink-0 rounded-full", off ? "bg-line-strong" : needsYou ? "bg-apricot" : "bg-sage")} />
+    </button>
+  );
+}
+
