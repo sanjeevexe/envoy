@@ -97,7 +97,7 @@ function qr(): string {
 type DB = {
   tasks: Record<string, Task>; steps: Record<string, Step[]>; approvals: Record<string, Approval & { nonce: string }>;
   leases: Record<string, Lease>; triggers: any[]; changes: any[]; rules: { default: string; apps: Record<string, string>; routines: Record<string, string> };
-  photos: { enabled: boolean; scope: string }; phoneApps: string[];
+  photos: { enabled: boolean; scope: string }; phoneApps: string[]; notes: any[];
 };
 let db: DB;
 
@@ -182,6 +182,14 @@ function seed(): DB {
     tasks, steps, approvals, leases, triggers, changes,
     rules: { default: "unless_requested", apps: { "com.dd.doordash": "always" }, routines: { starbucks_order_usual: "never" } },
     photos: { enabled: true, scope: "screenshots" }, phoneApps: ["com.target.ui"],
+    notes: [
+      { id: "note-1", app: "com.skylark.air", text: "A SkyLark Miles promo can cover the trip list; Not now closes it.", status: "active", confirmations: 4,
+        first_seen: ago(5 * 86400), last_confirmed: ago(7200), sources: [{ task_id: "task-amz", step: 2, kind: "routine" }] },
+      { id: "note-2", app: "com.skylark.air", text: "The gate shows on the trip's details, not on the trip list.", status: "active", confirmations: 7,
+        first_seen: ago(6 * 86400), last_confirmed: ago(3600), sources: [{ task_id: "task-amz", step: 3, kind: "agent" }] },
+      { id: "note-3", app: "com.dd.doordash", text: "Reorder lives under Orders, not on the restaurant's page.", status: "active", confirmations: 2,
+        first_seen: ago(8 * 86400), last_confirmed: ago(140), sources: [{ task_id: "task-dd", step: 2, kind: "agent" }] },
+    ],
   };
 }
 
@@ -501,6 +509,12 @@ export async function handle(path: string, init: RequestInit = {}): Promise<any>
     return t;
   }
   if (p === "/api/alerts") return db.changes;
+  if ((m = p.match(/^\/api\/app-notes\/([^/]+)\/retire$/))) { db.notes = db.notes.filter((n) => n.id !== m![1]); return { retired: m[1] }; }
+  if (p === "/api/app-notes") {
+    const by: Record<string, any[]> = {};
+    db.notes.forEach((n) => (by[n.app] ??= []).push(n));
+    return { apps: Object.entries(by).map(([app, notes]) => ({ app, notes })) };
+  }
   if (p === "/api/settings/approvals") {
     if (method === "POST") db.rules = body;
     return { rules: db.rules, apps: ["com.skylark.air", "com.dd.doordash", "com.starbucks.mobilecard", "com.amazon.mShop.android.shopping"],

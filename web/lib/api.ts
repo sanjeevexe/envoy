@@ -124,15 +124,3 @@ export const ago = (t: number) => {
   if (s < 86400) return `${Math.round(s / 3600)} h ago`;
   return new Date(t * 1000).toLocaleDateString();
 };
-
-export const STATUS: Record<string, { label: string; tone: string }> = {
-  queued: { label: "Queued", tone: "bg-stone-200 text-stone-700" },
-  running: { label: "Running", tone: "bg-sky-100 text-sky-800" },
-  needs_you: { label: "Needs you", tone: "bg-amber-100 text-amber-900" },
-  taken_over: { label: "You're in control", tone: "bg-violet-100 text-violet-800" },
-  waiting_approval: { label: "Waiting for approval", tone: "bg-amber-100 text-amber-900" },
-  done: { label: "Done", tone: "bg-emerald-100 text-emerald-800" },
-  failed: { label: "Failed", tone: "bg-rose-100 text-rose-800" },
-  declined: { label: "Declined", tone: "bg-stone-200 text-stone-700" },
-  stopped: { label: "Stopped", tone: "bg-stone-200 text-stone-700" },
-};

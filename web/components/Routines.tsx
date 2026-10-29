@@ -4,6 +4,7 @@
 // and how its runs have gone; selecting one opens its detail. Triggers start tasks on their own.
 import { useEffect, useRef, useState } from "react";
 import { PlayIcon } from "@phosphor-icons/react";
+import AppNotes from "@/components/AppNotes";
 import RoutineDetail from "@/components/RoutineDetail";
 import Triggers from "@/components/Triggers";
 import { appIcon, Card, Chip, RowIcon, Segmented } from "@/components/ui";
@@ -76,6 +77,7 @@ function Routines({ openTask, open, setOpen }: { openTask: (id: string) => void;
           );
         })}
       </Card>
+      <AppNotes openTask={openTask} />
     </div>
   );
 }
