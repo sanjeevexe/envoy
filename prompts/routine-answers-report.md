@@ -105,6 +105,23 @@ compiler and by this one (`regression.json`). 70 come out identical, including a
 - Phase 2's old `compiled-v4/flight_status` is refused. Its output read "SL 1190" for a flight-status question, on its own
   screen. The current `final/compiled/flight_status` is unchanged.
 
+### Real-app routines, compiled as the real-app eval compiles them
+
+At the coordinator's request, every real-app spec was recompiled again, this time with each workflow's own memory
+(`eval/run_real_apps.py`'s `WORKFLOWS`). The sets were Phase 7's `final/real_compiled`, `real_apps/compiled`, the Oct 28
+real pass, and Session A's `routine_fixes_2026-10-28/{pass,unseen}`. Chrome's compile-time screenshot read was given the
+same answer for both compilers. The results are in `real_apps.json`:
+- **47 specs:** 42 compile identically, and 2 compile under neither compiler (Target has no compiled source run in
+  Phase 7, and the real pass's YouTube source ended in an error).
+- **None is newly refused.** No pattern changed, and no plural or yes/no extract appeared.
+- **The 3 that differ are all Maps' `street_address`, which drops `expect_digits`.** Read on every tree of every Maps
+  run in `data/runs` (87 screens, for both Empire State Building and Space Needle), it gives the same value with and
+  without `expect_digits`. It is not a regression on any recorded screen. It would now also accept an address with no
+  street number.
+- **The only read-back warning in any real-app compile under 773536a** was Amazon's product, which read a search
+  suggestion in Phase 7's compile. Session A's row fix already corrects it, and both compilers give the same Amazon
+  routine.
+
 ## Not done
 
 - **Not run on a device.** The new-seed reads are offline, on the screens the agent answered from. A replay would also
