@@ -1,0 +1,444 @@
+{
+ "time": "2026-10-29T19:54:32+00:00",
+ "k": 1,
+ "devices": {
+  "envoy-test": {
+   "size": [
+    1080,
+    2400
+   ],
+   "density": 420,
+   "model": "sdk_gphone64_x86_64",
+   "android": "15",
+   "real_phone": false,
+   "summary": {
+    "runs": 6,
+    "passed": 6,
+    "success": 1.0,
+    "no_model_calls": 6,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "median_s": 6.5,
+    "repairs": 0,
+    "agent_fallbacks": 0
+   },
+   "rows": [
+    {
+     "kind": "port-envoy-test",
+     "family": "check_in",
+     "booking": "GYZ21D",
+     "city": "Tucson",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "seat": "11B",
+      "gate": "B1",
+      "boarding_time": "12:40 PM"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 10.36,
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 2234
+      },
+      {
+       "id": "find_select_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 935
+      },
+      {
+       "id": "select_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 1218
+      },
+      {
+       "id": "start_check_in",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 854
+      },
+      {
+       "id": "select_passenger",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1357
+      },
+      {
+       "id": "continue_after_passenger",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 765
+      },
+      {
+       "id": "confirm_no_hazardous_materials",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 981
+      },
+      {
+       "id": "continue_after_hazmat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 972
+      },
+      {
+       "id": "confirm_check_in",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 906
+      }
+     ],
+     "patches": [],
+     "approvals": 1,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-check_in-v0-GYZ21D",
+     "routine": "skylark_air_check_in_flight",
+     "version": 1,
+     "device": "envoy-test"
+    },
+    {
+     "kind": "port-envoy-test",
+     "family": "change_seat",
+     "booking": "GYZ21D",
+     "city": "Tucson",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "seat": "10C"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 8.94,
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1680
+      },
+      {
+       "id": "find_open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 733
+      },
+      {
+       "id": "open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 1122
+      },
+      {
+       "id": "open_change_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1223
+      },
+      {
+       "id": "find_select_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.872,
+       "ms": 1016
+      },
+      {
+       "id": "select_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.872,
+       "ms": 1695
+      },
+      {
+       "id": "confirm_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1220
+      }
+     ],
+     "patches": [],
+     "approvals": 1,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-change_seat-v0-GYZ21D",
+     "routine": "skylark_change_seat",
+     "version": 1,
+     "device": "envoy-test"
+    },
+    {
+     "kind": "port-envoy-test",
+     "family": "add_ktn",
+     "booking": "GYZ21D",
+     "city": "Tucson",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "known_traveler_number": "31740181",
+      "confirmation_code": "GYZ21D"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 7.87,
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1659
+      },
+      {
+       "id": "find_open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 677
+      },
+      {
+       "id": "open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 1115
+      },
+      {
+       "id": "enter_known_traveler_number",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 2817
+      },
+      {
+       "id": "save_known_traveler_number",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1334
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-add_ktn-v0-GYZ21D",
+     "routine": "skylark_add_known_traveler_number",
+     "version": 1,
+     "device": "envoy-test"
+    },
+    {
+     "kind": "port-envoy-test",
+     "family": "gate",
+     "booking": "GYZ21D",
+     "city": "Tucson",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "gate": "B1"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 3.62,
+     "steps": [
+      {
+       "id": "tap_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1628
+      },
+      {
+       "id": "find_tap_trip_row",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 711
+      },
+      {
+       "id": "tap_trip_row",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 1135
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-gate-v0-GYZ21D",
+     "routine": "skylark_get_flight_gate",
+     "version": 1,
+     "device": "envoy-test"
+    },
+    {
+     "kind": "port-envoy-test",
+     "family": "flight_status",
+     "booking": "GYZ21D",
+     "city": "Tucson",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "flight_status": "On time",
+      "route": "ATL → TUS",
+      "date": "Thu, Nov 19, 2026",
+      "gate": "B1",
+      "departure_time": "2:15 PM"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 5.16,
+     "steps": [
+      {
+       "id": "tap_flight_status",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1503
+      },
+      {
+       "id": "enter_flight_number",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 2200
+      },
+      {
+       "id": "tap_search",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1087
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-flight_status-v0-GYZ21D",
+     "routine": "skylark_check_flight_status",
+     "version": 1,
+     "device": "envoy-test"
+    },
+    {
+     "kind": "port-envoy-test",
+     "family": "find_trip",
+     "booking": "GYZ21D",
+     "city": "Tucson",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "destination": "Tucson"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 3.62,
+     "steps": [
+      {
+       "id": "tap_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1656
+      },
+      {
+       "id": "find_tap_trip_by_confirmation_code",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 684
+      },
+      {
+       "id": "tap_trip_by_confirmation_code",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 1138
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-find_trip-v0-GYZ21D",
+     "routine": "skylark_lookup_trip_destination",
+     "version": 1,
+     "device": "envoy-test"
+    }
+   ]
+  }
+ }
+}

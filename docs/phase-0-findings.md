@@ -136,6 +136,8 @@ Stubs are generated from the emulator's own `emulator_controller.proto` (`script
 | Snapshot restore: emulator load only | 1,377 ms | 1,573 ms | |
 | Snapshot save | 1.4 s | | Single run |
 
+On a Google Cloud `n2-standard-8` VM (Oct 29: x86_64 image, SwiftShader, no GPU) the same script measured a tree read at 85 ms, a raw gRPC screenshot at 32 ms and a gRPC tap at 0.9 ms; boots took 32–33 s. Side by side: `docs/cloud.md`.
+
 **What the spike changed in the code**
 - **Typing**
   - uiautomator2 3.7.1's `send_keys` puts the text on the clipboard and pastes it, so Gboard showed a "Clipboard" chip and kept the text in its history. That would leak anything the agent types.

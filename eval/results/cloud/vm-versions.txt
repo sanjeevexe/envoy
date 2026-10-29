@@ -1,0 +1,10 @@
+kernel: 7.0.0-1014-gcp
+cpu: Intel(R) Xeon(R) CPU @ 2.80GHz x 8
+java: openjdk version "21.0.12.1" 2026-08-18
+cmdline-tools/latest: 23.0
+platform-tools: 37.0.1
+emulator: 37.2.12
+system-images/android-35/google_apis_playstore/x86_64: 9
+uv: uv 0.13.5 (x86_64-unknown-linux-gnu)
+python: /home/sanjeevvarma/.local/share/uv/python/cpython-3.13-linux-x86_64-gnu/bin/python3.13
+accel: accel: 0 KVM (version 12) is installed and usable. accel 

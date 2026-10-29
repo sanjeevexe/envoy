@@ -1,0 +1,1285 @@
+{
+ "time": "2026-10-29T19:44:03+00:00",
+ "k": 3,
+ "devices": {
+  "envoy-test": {
+   "size": [
+    1080,
+    2400
+   ],
+   "density": 420,
+   "model": "sdk_gphone64_x86_64",
+   "android": "15",
+   "real_phone": false,
+   "summary": {
+    "runs": 18,
+    "passed": 18,
+    "success": 1.0,
+    "no_model_calls": 18,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "median_s": 6.2,
+    "repairs": 0,
+    "agent_fallbacks": 0
+   },
+   "rows": [
+    {
+     "kind": "port-envoy-test",
+     "family": "check_in",
+     "booking": "GYZ21D",
+     "city": "Tucson",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "seat": "11B",
+      "gate": "B1",
+      "boarding_time": "12:40 PM"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 9.42,
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1658
+      },
+      {
+       "id": "find_select_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 696
+      },
+      {
+       "id": "select_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 1099
+      },
+      {
+       "id": "start_check_in",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 825
+      },
+      {
+       "id": "select_passenger",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1302
+      },
+      {
+       "id": "continue_after_passenger",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 795
+      },
+      {
+       "id": "confirm_no_hazardous_materials",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1010
+      },
+      {
+       "id": "continue_after_hazmat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 962
+      },
+      {
+       "id": "confirm_check_in",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 912
+      }
+     ],
+     "patches": [],
+     "approvals": 1,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-check_in-v0-GYZ21D",
+     "routine": "skylark_air_check_in_flight",
+     "version": 1,
+     "device": "envoy-test"
+    },
+    {
+     "kind": "port-envoy-test",
+     "family": "change_seat",
+     "booking": "GYZ21D",
+     "city": "Tucson",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "seat": "10C"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 8.87,
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1636
+      },
+      {
+       "id": "find_open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 716
+      },
+      {
+       "id": "open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 1106
+      },
+      {
+       "id": "open_change_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1225
+      },
+      {
+       "id": "find_select_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.872,
+       "ms": 1006
+      },
+      {
+       "id": "select_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.872,
+       "ms": 1669
+      },
+      {
+       "id": "confirm_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1260
+      }
+     ],
+     "patches": [],
+     "approvals": 1,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-change_seat-v0-GYZ21D",
+     "routine": "skylark_change_seat",
+     "version": 1,
+     "device": "envoy-test"
+    },
+    {
+     "kind": "port-envoy-test",
+     "family": "add_ktn",
+     "booking": "GYZ21D",
+     "city": "Tucson",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "known_traveler_number": "31740181",
+      "confirmation_code": "GYZ21D"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 7.02,
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1648
+      },
+      {
+       "id": "find_open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 715
+      },
+      {
+       "id": "open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 1106
+      },
+      {
+       "id": "enter_known_traveler_number",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 2017
+      },
+      {
+       "id": "save_known_traveler_number",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1131
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-add_ktn-v0-GYZ21D",
+     "routine": "skylark_add_known_traveler_number",
+     "version": 1,
+     "device": "envoy-test"
+    },
+    {
+     "kind": "port-envoy-test",
+     "family": "gate",
+     "booking": "GYZ21D",
+     "city": "Tucson",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "gate": "B1"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 3.69,
+     "steps": [
+      {
+       "id": "tap_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1639
+      },
+      {
+       "id": "find_tap_trip_row",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 725
+      },
+      {
+       "id": "tap_trip_row",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 1173
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-gate-v0-GYZ21D",
+     "routine": "skylark_get_flight_gate",
+     "version": 1,
+     "device": "envoy-test"
+    },
+    {
+     "kind": "port-envoy-test",
+     "family": "flight_status",
+     "booking": "GYZ21D",
+     "city": "Tucson",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "flight_status": "On time",
+      "route": "ATL → TUS",
+      "date": "Thu, Nov 19, 2026",
+      "gate": "B1",
+      "departure_time": "2:15 PM"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 5.32,
+     "steps": [
+      {
+       "id": "tap_flight_status",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1552
+      },
+      {
+       "id": "enter_flight_number",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 2223
+      },
+      {
+       "id": "tap_search",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1251
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-flight_status-v0-GYZ21D",
+     "routine": "skylark_check_flight_status",
+     "version": 1,
+     "device": "envoy-test"
+    },
+    {
+     "kind": "port-envoy-test",
+     "family": "find_trip",
+     "booking": "GYZ21D",
+     "city": "Tucson",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "destination": "Tucson"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 3.69,
+     "steps": [
+      {
+       "id": "tap_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1675
+      },
+      {
+       "id": "find_tap_trip_by_confirmation_code",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 747
+      },
+      {
+       "id": "tap_trip_by_confirmation_code",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 1130
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-find_trip-v0-GYZ21D",
+     "routine": "skylark_lookup_trip_destination",
+     "version": 1,
+     "device": "envoy-test"
+    },
+    {
+     "kind": "port-envoy-test",
+     "family": "check_in",
+     "booking": "OP2CYP",
+     "city": "Portland",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "seat": "10C",
+      "gate": "E9",
+      "boarding_time": "6:00 AM"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 9.28,
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1589
+      },
+      {
+       "id": "find_select_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 679
+      },
+      {
+       "id": "select_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 1098
+      },
+      {
+       "id": "start_check_in",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 839
+      },
+      {
+       "id": "select_passenger",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1328
+      },
+      {
+       "id": "continue_after_passenger",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 782
+      },
+      {
+       "id": "confirm_no_hazardous_materials",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 996
+      },
+      {
+       "id": "continue_after_hazmat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 924
+      },
+      {
+       "id": "confirm_check_in",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 894
+      }
+     ],
+     "patches": [],
+     "approvals": 1,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-check_in-v0-OP2CYP",
+     "routine": "skylark_air_check_in_flight",
+     "version": 1,
+     "device": "envoy-test"
+    },
+    {
+     "kind": "port-envoy-test",
+     "family": "change_seat",
+     "booking": "OP2CYP",
+     "city": "Portland",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "seat": "11A"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 8.85,
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1667
+      },
+      {
+       "id": "find_open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 719
+      },
+      {
+       "id": "open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 1073
+      },
+      {
+       "id": "open_change_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1203
+      },
+      {
+       "id": "find_select_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.872,
+       "ms": 995
+      },
+      {
+       "id": "select_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.872,
+       "ms": 1694
+      },
+      {
+       "id": "confirm_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1237
+      }
+     ],
+     "patches": [],
+     "approvals": 1,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-change_seat-v0-OP2CYP",
+     "routine": "skylark_change_seat",
+     "version": 1,
+     "device": "envoy-test"
+    },
+    {
+     "kind": "port-envoy-test",
+     "family": "add_ktn",
+     "booking": "OP2CYP",
+     "city": "Portland",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "known_traveler_number": "81246978",
+      "confirmation_code": "OP2CYP"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 7.17,
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1627
+      },
+      {
+       "id": "find_open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 729
+      },
+      {
+       "id": "open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 1155
+      },
+      {
+       "id": "enter_known_traveler_number",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 2133
+      },
+      {
+       "id": "save_known_traveler_number",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1182
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-add_ktn-v0-OP2CYP",
+     "routine": "skylark_add_known_traveler_number",
+     "version": 1,
+     "device": "envoy-test"
+    },
+    {
+     "kind": "port-envoy-test",
+     "family": "gate",
+     "booking": "OP2CYP",
+     "city": "Portland",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "gate": "E9"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 3.56,
+     "steps": [
+      {
+       "id": "tap_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1652
+      },
+      {
+       "id": "find_tap_trip_row",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 689
+      },
+      {
+       "id": "tap_trip_row",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 1075
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-gate-v0-OP2CYP",
+     "routine": "skylark_get_flight_gate",
+     "version": 1,
+     "device": "envoy-test"
+    },
+    {
+     "kind": "port-envoy-test",
+     "family": "flight_status",
+     "booking": "OP2CYP",
+     "city": "Portland",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "flight_status": "On time",
+      "route": "ATL → PDX",
+      "date": "Wed, Nov 25, 2026",
+      "gate": "E9",
+      "departure_time": "7:35 AM"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 5.27,
+     "steps": [
+      {
+       "id": "tap_flight_status",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1322
+      },
+      {
+       "id": "enter_flight_number",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 2382
+      },
+      {
+       "id": "tap_search",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1279
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-flight_status-v0-OP2CYP",
+     "routine": "skylark_check_flight_status",
+     "version": 1,
+     "device": "envoy-test"
+    },
+    {
+     "kind": "port-envoy-test",
+     "family": "find_trip",
+     "booking": "OP2CYP",
+     "city": "Portland",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "destination": "Portland"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 3.62,
+     "steps": [
+      {
+       "id": "tap_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1654
+      },
+      {
+       "id": "find_tap_trip_by_confirmation_code",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 713
+      },
+      {
+       "id": "tap_trip_by_confirmation_code",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 1109
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-find_trip-v0-OP2CYP",
+     "routine": "skylark_lookup_trip_destination",
+     "version": 1,
+     "device": "envoy-test"
+    },
+    {
+     "kind": "port-envoy-test",
+     "family": "check_in",
+     "booking": "EYLE5W",
+     "city": "Richmond",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "seat": "18C",
+      "gate": "A19",
+      "boarding_time": "12:40 PM"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 9.36,
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1552
+      },
+      {
+       "id": "find_select_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 731
+      },
+      {
+       "id": "select_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 1108
+      },
+      {
+       "id": "start_check_in",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 807
+      },
+      {
+       "id": "select_passenger",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1196
+      },
+      {
+       "id": "continue_after_passenger",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 892
+      },
+      {
+       "id": "confirm_no_hazardous_materials",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1113
+      },
+      {
+       "id": "continue_after_hazmat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 886
+      },
+      {
+       "id": "confirm_check_in",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 917
+      }
+     ],
+     "patches": [],
+     "approvals": 1,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-check_in-v0-EYLE5W",
+     "routine": "skylark_air_check_in_flight",
+     "version": 1,
+     "device": "envoy-test"
+    },
+    {
+     "kind": "port-envoy-test",
+     "family": "change_seat",
+     "booking": "EYLE5W",
+     "city": "Richmond",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "seat": "23C"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 11.98,
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1603
+      },
+      {
+       "id": "find_open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 678
+      },
+      {
+       "id": "open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 1116
+      },
+      {
+       "id": "open_change_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1191
+      },
+      {
+       "id": "find_select_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.872,
+       "ms": 4158
+      },
+      {
+       "id": "select_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.872,
+       "ms": 1710
+      },
+      {
+       "id": "confirm_seat",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1275
+      }
+     ],
+     "patches": [],
+     "approvals": 1,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-change_seat-v0-EYLE5W",
+     "routine": "skylark_change_seat",
+     "version": 1,
+     "device": "envoy-test"
+    },
+    {
+     "kind": "port-envoy-test",
+     "family": "add_ktn",
+     "booking": "EYLE5W",
+     "city": "Richmond",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "known_traveler_number": "47874773",
+      "confirmation_code": "EYLE5W"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 7.34,
+     "steps": [
+      {
+       "id": "open_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1650
+      },
+      {
+       "id": "find_open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 724
+      },
+      {
+       "id": "open_trip",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 1179
+      },
+      {
+       "id": "enter_known_traveler_number",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 2259
+      },
+      {
+       "id": "save_known_traveler_number",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1132
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-add_ktn-v0-EYLE5W",
+     "routine": "skylark_add_known_traveler_number",
+     "version": 1,
+     "device": "envoy-test"
+    },
+    {
+     "kind": "port-envoy-test",
+     "family": "gate",
+     "booking": "EYLE5W",
+     "city": "Richmond",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "gate": "A19"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 3.54,
+     "steps": [
+      {
+       "id": "tap_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1548
+      },
+      {
+       "id": "find_tap_trip_row",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 760
+      },
+      {
+       "id": "tap_trip_row",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.982,
+       "ms": 1090
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-gate-v0-EYLE5W",
+     "routine": "skylark_get_flight_gate",
+     "version": 1,
+     "device": "envoy-test"
+    },
+    {
+     "kind": "port-envoy-test",
+     "family": "flight_status",
+     "booking": "EYLE5W",
+     "city": "Richmond",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "flight_status": "On time",
+      "route": "ATL → RIC",
+      "date": "Wed, Nov 25, 2026",
+      "gate": "A19",
+      "departure_time": "2:15 PM"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 5.33,
+     "steps": [
+      {
+       "id": "tap_flight_status",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1616
+      },
+      {
+       "id": "enter_flight_number",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 2324
+      },
+      {
+       "id": "tap_search",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1109
+      }
+     ],
+     "patches": [],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-flight_status-v0-EYLE5W",
+     "routine": "skylark_check_flight_status",
+     "version": 1,
+     "device": "envoy-test"
+    },
+    {
+     "kind": "port-envoy-test",
+     "family": "find_trip",
+     "booking": "EYLE5W",
+     "city": "Richmond",
+     "variant": 0,
+     "passed": true,
+     "status": "done",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "destination": "Richmond"
+     },
+     "rung": 2,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "billed_usd": 0.0,
+     "duration_s": 5.48,
+     "steps": [
+      {
+       "id": "tap_my_trips",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "ms": 1640
+      },
+      {
+       "id": "find_tap_trip_by_confirmation_code",
+       "status": "done",
+       "rung": 2,
+       "rungs": [
+        "relaxed match: relaxed match while scrolling: [11] \"Richmond · Wed, Nov 25, 2026\" score 0.65 (runner-up 0.00)",
+        "relaxed match: after-checks held at the relaxed threshold"
+       ],
+       "score": 0.647,
+       "ms": 1642
+      },
+      {
+       "id": "tap_trip_by_confirmation_code",
+       "status": "done",
+       "rung": 2,
+       "rungs": [
+        "relaxed match: relaxed match [11] \"Richmond · Wed, Nov 25, 2026\" score 0.65 (runner-up 0.00)"
+       ],
+       "score": 0.647,
+       "ms": 2047
+      }
+     ],
+     "patches": [
+      {
+       "kind": "locator",
+       "step": "tap_trip_by_confirmation_code",
+       "description": "step 'tap_trip_by_confirmation_code': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}"
+      }
+     ],
+     "approvals": 0,
+     "popups": [],
+     "agent": null,
+     "task_id": "p2-port-envoy-test-find_trip-v0-EYLE5W",
+     "routine": "skylark_lookup_trip_destination",
+     "version": 1,
+     "device": "envoy-test"
+    }
+   ]
+  }
+ }
+}

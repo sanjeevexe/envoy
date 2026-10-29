@@ -1,0 +1,11 @@
+0.0	$ curl metadata.google.internal …/instance/{name,zone,machine-type}
+0.0	instance envoy-cloud · zone us-east1-b · n2-standard-8
+0.0	$ hostname -s; uname -m; nproc
+0.0	envoy-cloud · x86_64 · 8 vCPU
+0.0	$ adb devices    # the VM's own adb server and emulator
+0.0	emulator-5554	device
+0.0	$ uv run python eval/run_phase6.py portability --device envoy-test --families check_in,change_seat,gate --k 1
+1.5	== envoy-test: 1080x2400 @ 420 dpi (sdk_gphone64_x86_64, Android 15)
+17.1	PASS port-envoy-test check_in       v0 Tucson       done        rung=0 calls=0 $0.0000   9.7s  'seat: 11B · gate: B1 ·
+32.9	PASS port-envoy-test change_seat    v0 Tucson       done        rung=0 calls=0 $0.0000   9.1s  'seat: 10C' all steps and
+42.5	PASS port-envoy-test gate           v0 Tucson       done        rung=0 calls=0 $0.0000   3.7s  'gate: B1' all steps and 

@@ -16,7 +16,7 @@ case "${1:-}" in
   put)
     cap="${2:-1}"
     { key_line; grep -E '^META_API_BASE_URL=' "$ENV_FILE" || true; echo "META_DAILY_COST_CAP_USD=$cap"; } |
-      vm_ssh_once --command "umask 077 && cat > ~/$REMOTE_DIR/.env && chmod 600 ~/$REMOTE_DIR/.env && echo \"key on the VM (cap \$$cap), \$(stat -c %a ~/$REMOTE_DIR/.env)\""
+      vm_ssh_once --command "umask 077 && cat > ~/$REMOTE_DIR/.env && chmod 600 ~/$REMOTE_DIR/.env && echo \"key on the VM (daily cap $cap USD), \$(stat -c %a ~/$REMOTE_DIR/.env)\""
     ;;
   remove)
     key_line | sed 's/^META_API_KEY=//' |

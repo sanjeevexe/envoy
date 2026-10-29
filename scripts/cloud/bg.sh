@@ -9,6 +9,7 @@ source "$(dirname "$0")/config.sh"
 NAME="${1:?usage: $0 <name> <command> [args...]}"; shift
 [ $# -gt 0 ] || { echo "usage: $0 <name> <command> [args...]" >&2; exit 2; }
 CMD="$(printf '%q ' "$@")"
-vm_ssh --command "cd ~/$REMOTE_DIR && mkdir -p logs && rm -f logs/cloud-$NAME.rc &&
+# Only the setsid line is backgrounded: an `&` on a whole `a && b && c` list would keep the SSH session open.
+vm_ssh --command "cd ~/$REMOTE_DIR || exit 1; mkdir -p logs; rm -f logs/cloud-$NAME.rc
   setsid nohup bash -c 'source ~/env-linux.sh && $CMD; echo \$? > logs/cloud-$NAME.rc' > logs/cloud-$NAME.log 2>&1 < /dev/null &
   echo started $NAME"
