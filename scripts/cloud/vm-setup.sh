@@ -5,7 +5,8 @@
 # android-35 google_apis_playstore x86_64, uv 0.13.5 with Python 3.13, and an AVD named envoy-test with the Mac
 # envoy-test's hardware (envoy-test.config.ini: 1080x2400, 420 dpi, 4 GB, Play Store), but an x86_64 image.
 # The SDK lives in ~/android-sdk, linked as ~/Library/Android/sdk so scripts/env.sh's Mac path works unchanged.
-# Also installs envoy-idle-stop: the VM powers itself off after ~45 idle minutes (no SSH session and no Envoy run).
+# Also installs envoy-idle-stop: the VM powers itself off after ~45 idle minutes (no SSH session, no Envoy run, no
+# client on the API, no keep-awake).
 set -euo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 SDK="$HOME/android-sdk"
@@ -51,7 +52,8 @@ fi
 uv python install 3.13 >/dev/null
 
 echo "== AVD envoy-test"
-avdmanager create avd -n envoy-test -k "$IMAGE" -d pixel_6 --force </dev/null >/dev/null
+# Only when missing: a re-run must not wipe an AVD that is past its first boot (a new one needs a warm-up; docs/cloud.md).
+[ -f "$HOME/.android/avd/envoy-test.avd/config.ini" ] || avdmanager create avd -n envoy-test -k "$IMAGE" -d pixel_6 </dev/null >/dev/null
 python3 - "$HOME/.android/avd/envoy-test.avd/config.ini" "$HERE/envoy-test.config.ini" <<'EOF'
 import sys
 path, profile = sys.argv[1], sys.argv[2]
@@ -67,9 +69,13 @@ EOF
 echo "== idle stop"
 sudo tee /usr/local/bin/envoy-idle-stop >/dev/null <<'EOF'
 #!/usr/bin/env bash
-# Power off after 3 idle checks in a row (~45 min): no SSH session and no Envoy run. A stopped VM costs only its disk.
+# Power off after 3 idle checks in a row (~45 min). Busy: an SSH session, an Envoy run (eval/ or a script), a client
+# connected to the API on :8700 (the web app, the iPhone, Muse), or /etc/envoy-keep-awake (a demo day:
+# scripts/cloud/keep-awake.sh on). A stopped VM costs only its disk.
 STATE=/run/envoy-idle
-if pgrep -f 'sshd(-session)?: [a-z_][a-z0-9_-]*@' >/dev/null || pgrep -f 'eval/|scripts/(run_task|compile_routine|measure_device)|-m api' >/dev/null; then
+if [ -e /etc/envoy-keep-awake ] || pgrep -f 'sshd(-session)?: [a-z_][a-z0-9_-]*@' >/dev/null ||
+   pgrep -f 'eval/|scripts/(run_task|compile_routine|measure_device)' >/dev/null ||
+   [ -n "$(ss -Htn state established '( sport = :8700 )' 2>/dev/null)" ]; then
   echo 0 >"$STATE"; exit 0
 fi
 n=$(( $(cat "$STATE" 2>/dev/null || echo 0) + 1 )); echo "$n" >"$STATE"

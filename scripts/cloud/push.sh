@@ -8,6 +8,7 @@
 # (not tracked), so it is copied on its own to the same path, where backend/testapps/skylark.py installs it from.
 # On the VM the code lands in ~/envoy, with the commit in ~/envoy/.cloud-commit and the APK's sha256 in
 # ~/envoy/.cloud-apk-sha256. An older ~/envoy from another commit is kept as ~/envoy.<old short commit>.
+# With the cloud copy installed (envoy-setup.sh), its state is relinked, the web app rebuilt and the API restarted.
 source "$(dirname "$0")/config.sh"
 
 COMMIT="$(git -C "$REPO" rev-parse "${1:-main}^{commit}")"
@@ -34,5 +35,11 @@ vm_ssh --command "set -euo pipefail
   mkdir -p ~/$REMOTE_DIR/\$(dirname $APK_REL) && mv ~/app-debug.apk ~/$REMOTE_DIR/$APK_REL
   echo \"$APK_SHA  $APK_REL\" > ~/$REMOTE_DIR/.cloud-apk-sha256
   cd ~/$REMOTE_DIR && sha256sum -c .cloud-apk-sha256
-  source ~/env-linux.sh && uv sync --project backend --locked -q && echo 'uv sync done'"
+  source ~/env-linux.sh && uv sync --project backend --locked -q && echo 'uv sync done'
+  if [ -d ~/envoy-state ]; then  # the cloud copy (envoy-setup.sh): relink its state, rebuild the web app, restart the API
+    ln -sfn ~/envoy-state/.env ~/$REMOTE_DIR/.env && mkdir -p ~/$REMOTE_DIR/data
+    ln -sfn ~/envoy-state/demo ~/$REMOTE_DIR/data/demo && ln -sfn ~/envoy-state/api ~/$REMOTE_DIR/data/api
+    (cd ~/$REMOTE_DIR/web && npm ci --no-audit --no-fund --loglevel=error && npm run build >/dev/null && echo 'web/out built')
+    ! systemctl is-active -q envoy-api || sudo systemctl restart envoy-api
+  fi"
 echo "next: scripts/cloud/start.sh"

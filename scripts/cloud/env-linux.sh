@@ -6,7 +6,7 @@
 export JAVA_HOME="/usr/lib/jvm/java-21-openjdk-amd64"
 export ANDROID_HOME="$HOME/Library/Android/sdk"
 export ANDROID_SDK_ROOT="$ANDROID_HOME"
-export PATH="$JAVA_HOME/bin:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$HOME/.local/bin:$PATH"
+export PATH="$JAVA_HOME/bin:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$HOME/.local/bin:$HOME/node/bin:$PATH"
 # The emulator writes its gRPC token to $XDG_RUNTIME_DIR/avd/running, where backend/devices/emulator_grpc.py reads it.
 # A login session sets it; this keeps the two in step for anything started without one.
 export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
