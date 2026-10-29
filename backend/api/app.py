@@ -47,6 +47,7 @@ from api.chat import chat
 from api.crossapp import CrossApp
 from api.devices import DevicePool
 from api.events import EventBus
+from api.handoff import Handoff, handoff_router
 from api.live import live_view
 from api.offers import Offers, offers_router
 from api.repeats import Repeats
@@ -121,6 +122,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     scheduler.offers = ctx.offers
     scheduler.repeats = Repeats(tasks, memory, ctx.offers, scheduler, routines)  # "Make this a habit?" (api/repeats.py)
     bus.listeners.append(scheduler.repeats.on_event)
+    ctx.handoff = Handoff(tasks, pool, bus)  # type: ignore[attr-defined]  # files from the Mac to the phone (api/handoff.py)
 
     from mcp_server.server import build_mcp, mcp_app
     from mcp_stub.common import bearer_token
@@ -133,6 +135,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
         bus.bind(asyncio.get_running_loop())
         runner.loop = asyncio.get_running_loop()
         scheduler.run_in_background()
+        ctx.handoff.run_in_background()  # type: ignore[attr-defined]
         async with mcp_inner.router.lifespan_context(mcp_inner):
             yield
 
@@ -745,6 +748,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
         return {"deleted": tid}
 
     app.include_router(offers_router(ctx, session, caller))
+    app.include_router(handoff_router(ctx, session, caller))
 
     # ---- the web app ---------------------------------------------------------------------------
 
