@@ -74,4 +74,25 @@ In the Wikipedia app, look up Paris
 
 ## Saved logins (experiment)
 
-Not run yet. It needs `envoy-real` and the Pixel 5, and the user saves one throwaway login in the phone's password manager. This section records the result, whatever it is.
+Muse uses stored credentials without seeing them. On Android the equivalent is the phone's own password manager: Envoy taps the saved-login suggestion, the manager fills the fields, and Envoy never sees, reads or types a password. The experiment finds out whether that works cleanly, before any feature code. The user saves one throwaway login and makes every sign-in tap; Envoy only observes and records.
+
+### Step 1: is an autofill service active? (Oct 29, read-only)
+
+**envoy-real** (cold boot, claimed and released through `coord/devices.sh`, about 5 minutes; nothing signed in or out):
+
+| Setting | Value |
+| --- | --- |
+| Android | 15 (SDK 35), Google Play services 26.41.31 |
+| `secure autofill_service` | `com.google.android.gms/.autofill.service.AutofillService`: **Google's** |
+| `secure credential_service` (and `_primary`) | Google Password Manager (`…credman.service.PasswordAndPasskeyService`) |
+| Augmented autofill | `com.google.android.as` (Android System Intelligence), enabled |
+| A Google account | present (the Play Store's) |
+| The keyboard | **`com.github.uiautomator/.AdbKeyboard`**, the keyboard Envoy's device layer types with (Gboard is installed, not active) |
+
+So autofill is on, and it is Google's. The keyboard is what decides where a suggestion appears. AdbKeyboard doesn't show inline suggestions, so on envoy-real a saved login would be offered as the autofill **dropdown**: a small window of its own under the focused field. Whether Envoy's screen reading (the uiautomator dump) sees that window is exactly what step 2 has to find out.
+
+**The Pixel 5** (Android 13) isn't connected yet. Its keyboard is the user's (Gboard), so a saved login would most likely be offered **inline, in the keyboard's suggestion strip**, which is a different window and a different thing to find. envoy-real's result therefore doesn't settle the Pixel; both are worth one look.
+
+### Steps 2–5
+
+Not run yet: they need the user's throwaway saved login (see the session's report for when).
