@@ -548,6 +548,7 @@ async def main_async(args: argparse.Namespace) -> int:
         token.chmod(0o600)
     routines = library(data / "routines") if not (data / "routines").exists() else __import__("routines.store", fromlist=["RoutineStore"]).RoutineStore(data / "routines")
     app, ctx = build("demo", memory=MemoryStore(data / "memory.db"), routines=routines, tasks=TaskStore(data / "api" / "envoy.db"), scheduler_every_s=5)
+    ctx.runner.install_apps = False  # a benchmark task never installs an app (app routing can, from the Play Store)
     server = uvicorn.Server(uvicorn.Config(app, host="127.0.0.1", port=args.port, log_level="warning"))
     serving = asyncio.create_task(server.serve())
     while not server.started:
