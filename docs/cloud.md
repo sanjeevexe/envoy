@@ -151,18 +151,18 @@ The suite changed the cloud copy's SkyLark and memory; both were put back afterw
 
 **Real apps and sign-ins from a data-center address** (the user signed in on the cloud phone and typed every password; Oct 29):
 
-| App | Result on the cloud phone |
+| App | Result on the cloud phone (two sittings, Oct 29 evening) |
 | --- | --- |
 | Google (Play Store, Gmail; the phone's test account) | **Signed in**, no challenge |
-| Amazon | **Creating an account was refused** ("detected suspicious activity"). An account made on the user's laptop then **signed in** without trouble |
-| Starbucks | **Sign-in failed**: "your browser is outdated, try again". Not established whether it's the image's own web view or the address |
-| DoorDash | **Signed in** with Google; then the emulator crashed (below), so nothing more was tried |
-| Chipotle | Installed, not tried |
+| Amazon | **Creating an account was refused** ("detected suspicious activity"). An account made on the user's laptop **signed in** |
+| Starbucks | First "your browser is outdated, try again". The image's WebView and Chrome were version 124 (May 2024) and had never been updated; after updating both to 156 in the Play Store, **sign-in worked, and so did creating an account on the emulator** |
+| DoorDash | **Signed in** with Google; after the renderer fix (below) it worked |
+| Chipotle | **Creating an account was refused**, as with Amazon. An account made on the laptop **would not sign in**, even with the browser updated: no error, the login page just stays. The likeliest cause is a silent block of the address or of emulators; not established |
 | Target | Not tried: it shows a bot check to emulators on the Mac too |
 
-So one clear bot-style refusal (Amazon's sign-up). Signing in to accounts that already exist worked where the app got that far.
+So: two apps refused to create accounts from the cloud phone (Amazon, Chipotle), and one silently refused to sign in (Chipotle). Every other sign-in worked, once the phone's browser was current. **A new cloud phone needs Android System WebView and Chrome updated in the Play Store first**; until then, web-based sign-ins (Starbucks) fail as "outdated browser".
 
-**The emulator crashed under real apps** with SwiftShader, the renderer stage 1 used. The Test phone died while DoorDash drew its screens (a segfault in the emulator's `RenderThread`, in the kernel log). The Real-app phone died about a minute into an Amazon run, three times. Turning off the emulator's host video decoder (`-feature -HardwareDecoder`) didn't help. **Switching to `-gpu swangle`** (ANGLE on SwiftShader) did: the same Amazon run then completed. Now each phone gets its own renderer at boot: envoy-test SwiftShader (SkyLark's measured runs; on `swangle` SkyLark did 18/18 but slower, median 7.3 s, and one run fell to the agent), envoy-real `swangle`.
+**The emulator crashed under real apps** with SwiftShader, the renderer stage 1 used. The Test phone died while DoorDash drew its screens (a segfault in the emulator's `RenderThread`, in the kernel log). The Real-app phone died about a minute into an Amazon run, three times. Turning off the emulator's host video decoder (`-feature -HardwareDecoder`) didn't help. **Switching to `-gpu swangle`** (ANGLE on SwiftShader) did: the same Amazon run then completed. Later the Test phone also died on plain SwiftShader, and once on `swangle` while apps played video ("h264 no frame" in its log). So both phones now start with `-gpu swangle -feature -HardwareDecoder` (`scripts/cloud/env-linux.sh`), only through systemd; that setup came through the browser updates and the user's last sitting. On `swangle`, SkyLark did 18/18 but slower (median 7.3 s against 6.2 s), and one run fell to the agent.
 
 **A mix-up, and the fix.** The sitting's instructions said "envoy-real", but the web app calls the phones **Test phone** (envoy-test, shown first) and **Real-app phone** (envoy-real), so the sign-ins went onto the Test phone. With the user's OK, the two AVDs were swapped on the VM (both stopped cleanly, their folders renamed): the signed-in phone is now the Real-app phone, which always cold-boots and never loads a snapshot, and the fresh one is the Test phone, with SkyLark reinstalled and seeded. The Real-app phone kept its 10 GB data partition.
 

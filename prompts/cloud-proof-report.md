@@ -110,7 +110,7 @@ The user asked for the full move as **an alternative, not a replacement**: two c
 | Routines pass at the Mac's rate | **SkyLark: yes**, 48/48 with no model call (stage 1), and the interfaces suite's flows passed. **Real apps: nearly**: same-input reruns passed 5 of 6 compiled (Starbucks didn't read its output back); the Mac did 6 of 6 |
 | Agent runs within about 20% of the Mac's time | **SkyLark: yes**: the stage 2 agent run took +13%, and the interfaces suite's phase4 +9% (but approval_modes +62%). **Real apps: not comparable**: a fresh phone's first-run screens made the agent take 2–17× the steps. Per step it was 1.1–1.6× the Mac |
 | The live-view lag on the iPhone is acceptable | **No, by the target**: 290 ms frame lag p50 on the iPhone during the sitting (the Mac copy: 66–115 ms; target under 150 ms), and 147 ms from the Mac at idle. Usable for a sign-in; visibly laggy to watch |
-| No new bot checks on the demo's apps | **Mostly**: no bot check at launch on 7 apps. **Amazon refused to create an account** ("suspicious activity"; signing in to one made on the laptop worked). **Starbucks sign-in failed** ("browser outdated"; cause not established) |
+| No new bot checks on the demo's apps | **Mostly**: no bot check at launch on 7 apps. **Amazon and Chipotle refused to create accounts** from the cloud phone; Amazon then signed in with a laptop-made account, **Chipotle silently would not sign in**. Starbucks's "browser outdated" was the image's old WebView (124): after updating it in the Play Store, sign-in and even sign-up worked. Google and DoorDash signed in |
 | A tested rollback to the Mac in minutes | **Yes**: nothing on the Mac changes, so switching back is repointing the iPhone icon, the Siri shortcut's name and Muse's connector |
 
 Also measured:
@@ -121,7 +121,8 @@ Also measured:
 
 ### Found on the way (all handled from outside, no product code)
 
-1. **The emulator crashed under real apps** with SwiftShader (DoorDash, then Amazon three times: a `RenderThread` segfault). Turning off the host video decoder didn't help; **`-gpu swangle` did**. Now envoy-real uses swangle and envoy-test keeps SwiftShader, set per phone in the systemd service.
+1. **The emulator crashed under real apps** with SwiftShader (DoorDash, then Amazon three times: a `RenderThread` segfault), and once more on `swangle` while apps played video. Both phones now start with `-gpu swangle -feature -HardwareDecoder`, only through systemd, and the API restarts with them (it kept stale per-launch gRPC tokens otherwise).
+1. **A new cloud phone's browser is old** (WebView and Chrome 124, May 2024). Web-based sign-ins fail as "outdated browser" until both are updated in the Play Store.
 2. **The sitting used the wrong phone.** My instructions said "envoy-real"; the web app says "Real-app phone". With the user's OK the two AVDs were swapped on the VM, so their sign-ins are on the Real-app phone now.
 3. **A zone stockout** on the first restart (n2-standard-8 in us-east1-b). Start the VM well ahead on recording day and keep it awake. `fallback.sh` can start a copy in us-east1-c or d.
 4. **The tailnet path goes through a Tailscale relay** (DERP, Miami), because Google blocks inbound UDP. Opening UDP 41641 would allow a direct path; it wasn't done.
