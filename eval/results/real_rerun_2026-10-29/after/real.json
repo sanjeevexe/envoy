@@ -1,0 +1,2630 @@
+{
+ "meta": {
+  "suite": "real",
+  "run_id": "1029142430",
+  "started": "2026-10-29T18:24:30+00:00",
+  "finished": "2026-10-29T18:42:52+00:00",
+  "wall_s": 1101.0,
+  "code": {
+   "commit": "736a6e4b11c23f4c8919997b559e4df0e4eb40e4",
+   "short": "736a6e4",
+   "tags": [],
+   "is_eval_final": false,
+   "dirty": [
+    "logs"
+   ],
+   "branch": "HEAD"
+  },
+  "models": {
+   "tier": "standard",
+   "profile": "spark",
+   "jobs": {
+    "step": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "plan": {
+     "model": "muse-spark-1.3",
+     "effort": "medium"
+    },
+    "repair": {
+     "model": "muse-spark-1.3",
+     "effort": "medium"
+    },
+    "grounding": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "choose": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "extract": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "answer": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    },
+    "compile": {
+     "model": "muse-wonder-1.0",
+     "effort": "medium"
+    },
+    "match": {
+     "model": "muse-spark-1.3",
+     "effort": "low"
+    }
+   }
+  },
+  "devices": [
+   "emulator-5556"
+  ],
+  "cost": {
+   "input_tokens": 335620,
+   "cached_tokens": 236655,
+   "output_tokens": 63379,
+   "reasoning_tokens": 49716,
+   "calls": 129,
+   "errors": 0,
+   "billed_usd": 0.9868,
+   "standard_usd": 0.9868,
+   "by_job": {
+    "plan": {
+     "calls": 18,
+     "standard_usd": 0.0469
+    },
+    "step": {
+     "calls": 90,
+     "standard_usd": 0.184
+    },
+    "compile": {
+     "calls": 15,
+     "standard_usd": 0.7163
+    },
+    "repair": {
+     "calls": 4,
+     "standard_usd": 0.0293
+    },
+    "screen_read": {
+     "calls": 2,
+     "standard_usd": 0.0103
+    }
+   },
+   "by_model": {
+    "muse-spark-1.3": 114,
+    "muse-wonder-1.0": 15
+   }
+  },
+  "spend_total_this_checkout": {
+   "billed_usd": 27.292,
+   "standard_usd": 28.186
+  },
+  "host": "Sanjeevs-MacBook-Pro"
+ },
+ "workflows": {
+  "amazon": {
+   "app": "com.amazon.mShop.android.shopping",
+   "category": "shopping",
+   "goal": "In the Amazon app, search for AA batteries and tell me the price of the first result.",
+   "graded_by": "shape",
+   "time": "2026-10-29T18:24:34+00:00",
+   "expect": "\\$\\s?\\d+(\\.\\d{2})?",
+   "expect_second": "\\$\\s?\\d+(\\.\\d{2})?",
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "The first result for \"AA batteries\" is the PHILIPS Rechargeable AA Lithium Battery 4 Pack, 1.5V 3600mWh priced at $23.99 (Typical: $29.99, -20% Limited time deal).",
+    "steps": 2,
+    "model_calls": 4,
+    "cost_at_standard_usd": 0.01130845,
+    "duration_s": 57.29,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: PHILIPS, Rechargeable, Lithium, Battery"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "amazon_search_first_result_price",
+    "steps": 2,
+    "inputs": {
+     "search_query": "AA batteries"
+    },
+    "outputs": [
+     "first_result_price"
+    ],
+    "dropped": [],
+    "warnings": [],
+    "cost_usd": 0.0571
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "search_query": "AA batteries"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "first_result_price": "$21.75"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 8.03,
+     "steps": [
+      {
+       "id": "tap_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 2.8 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 3419
+      },
+      {
+       "id": "enter_search_query",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2974
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "search_query": "USB-C cable"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "first_result_price": "$12.99"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 6.92,
+     "steps": [
+      {
+       "id": "tap_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 2.9 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 3556
+      },
+      {
+       "id": "enter_search_query",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2237
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ],
+   "cost": {
+    "calls": 5,
+    "input_tokens": 13394,
+    "cached_tokens": 7748,
+    "output_tokens": 3775,
+    "reasoning_tokens": 3071,
+    "standard_usd": 0.0684,
+    "billed_usd": 0.0684
+   },
+   "run": {
+    "run_id": "1029142430",
+    "code": "736a6e4",
+    "dirty": true
+   }
+  },
+  "target": {
+   "app": "com.target.ui",
+   "category": "shopping",
+   "goal": "In the Target app, what are today's hours for my Target store?",
+   "graded_by": "shape",
+   "time": "2026-10-28T06:39:27+00:00",
+   "expect": "\\d{1,2}(:\\d\\d)?\\s*(am|pm)",
+   "expect_second": null,
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "handoff",
+    "result": "Bot verification requires human press-and-hold",
+    "steps": 0,
+    "model_calls": 2,
+    "cost_at_standard_usd": 0.0059308,
+    "duration_s": 10.1,
+    "popups": [],
+    "check": null
+   },
+   "first_run": "bot check",
+   "compile": {
+    "compiled": false,
+    "reason": "run ended 'handoff' with check None; only verified runs are compiled"
+   },
+   "cost": {
+    "calls": 2,
+    "input_tokens": 3482,
+    "cached_tokens": 497,
+    "output_tokens": 500,
+    "reasoning_tokens": 360,
+    "standard_usd": 0.0059,
+    "billed_usd": 0.0059
+   },
+   "run": {
+    "run_id": "1028023735",
+    "code": "524b93a"
+   }
+  },
+  "target_search": {
+   "app": "com.target.ui",
+   "category": "shopping",
+   "goal": "In the Target app, search for paper towels and tell me the price of the first result.",
+   "graded_by": "shape",
+   "time": "2026-10-28T06:39:41+00:00",
+   "expect": "\\$\\s?\\d+(\\.\\d{2})?",
+   "expect_second": "\\$\\s?\\d+(\\.\\d{2})?",
+   "bot_check_at_launch": true,
+   "agent": {
+    "status": "handoff",
+    "result": "Bot verification press-and-hold requires user to complete",
+    "steps": 0,
+    "model_calls": 2,
+    "cost_at_standard_usd": 0.0047273,
+    "duration_s": 8.6,
+    "popups": [],
+    "check": null
+   },
+   "first_run": "bot check",
+   "compile": {
+    "compiled": false,
+    "reason": "run ended 'handoff' with check None; only verified runs are compiled"
+   },
+   "cost": {
+    "calls": 2,
+    "input_tokens": 3485,
+    "cached_tokens": 2402,
+    "output_tokens": 709,
+    "reasoning_tokens": 575,
+    "standard_usd": 0.0047,
+    "billed_usd": 0.0047
+   },
+   "run": {
+    "run_id": "1028023735",
+    "code": "524b93a"
+   }
+  },
+  "starbucks": {
+   "app": "com.starbucks.mobilecard",
+   "category": "food",
+   "goal": "In the Starbucks app, how many calories are in a Grande Caffè Latte?",
+   "graded_by": "truth",
+   "time": "2026-10-29T18:26:25+00:00",
+   "expect": "\\b190\\b",
+   "expect_second": "\\b250\\b",
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "190 calories",
+    "steps": 7,
+    "model_calls": 9,
+    "cost_at_standard_usd": 0.01270945,
+    "duration_s": 21.54,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: 190"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "starbucks_get_drink_calories",
+    "steps": 8,
+    "inputs": {
+     "drink_name": "Caffè Latte"
+    },
+    "outputs": [
+     "calories"
+    ],
+    "dropped": [],
+    "warnings": [],
+    "cost_usd": 0.0719
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "drink_name": "Caffè Latte"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "calories": "190 calories"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 9.72,
+     "steps": [
+      {
+       "id": "tap_order",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.9 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 3130
+      },
+      {
+       "id": "dismiss_location_prompt",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 607
+      },
+      {
+       "id": "skip_cafe_selection",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 687
+      },
+      {
+       "id": "confirm_skip_to_menu",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 810
+      },
+      {
+       "id": "open_search_menu",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1223
+      },
+      {
+       "id": "select_drink_from_suggestions",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 861
+      },
+      {
+       "id": "find_open_drink_details",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 391
+      },
+      {
+       "id": "open_drink_details",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 824
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "drink_name": "Caramel Macchiato"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "calories": "250 calories"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 9.31,
+     "steps": [
+      {
+       "id": "tap_order",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 2.1 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 3028
+      },
+      {
+       "id": "dismiss_location_prompt",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 612
+      },
+      {
+       "id": "skip_cafe_selection",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 663
+      },
+      {
+       "id": "confirm_skip_to_menu",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 709
+      },
+      {
+       "id": "open_search_menu",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1163
+      },
+      {
+       "id": "select_drink_from_suggestions",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 887
+      },
+      {
+       "id": "find_open_drink_details",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 330
+      },
+      {
+       "id": "open_drink_details",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 802
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ],
+   "cost": {
+    "calls": 10,
+    "input_tokens": 24904,
+    "cached_tokens": 19833,
+    "output_tokens": 4507,
+    "reasoning_tokens": 3475,
+    "standard_usd": 0.0846,
+    "billed_usd": 0.0846
+   },
+   "run": {
+    "run_id": "1029142430",
+    "code": "736a6e4",
+    "dirty": true
+   }
+  },
+  "chipotle": {
+   "app": "com.chipotle.ordering",
+   "category": "food",
+   "goal": "In the Chipotle app, find the price of Chips & Guacamole.",
+   "graded_by": "shape",
+   "time": "2026-10-29T18:27:41+00:00",
+   "expect": "\\$\\s?\\d+(\\.\\d{2})?",
+   "expect_second": "\\$\\s?\\d+(\\.\\d{2})?",
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "$5.25",
+    "steps": 10,
+    "model_calls": 13,
+    "cost_at_standard_usd": 0.024641049999999998,
+    "duration_s": 29.69,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: 5, 25"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "chipotle_find_menu_item_price",
+    "steps": 10,
+    "inputs": {
+     "preferred_zip_code": "10001",
+     "menu_item": "Chips & Guacamole"
+    },
+    "outputs": [
+     "price"
+    ],
+    "dropped": [
+     [
+      6,
+      "look: not a device action"
+     ]
+    ],
+    "warnings": [
+     "step 7: the first result for {{preferred_zip_code}}: chosen by its place in the list"
+    ],
+    "cost_usd": 0.0784
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "preferred_zip_code": "10001",
+      "menu_item": "Chips & Guacamole"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "price": "$5.25"
+     },
+     "rung": 2,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 12.01,
+     "steps": [
+      {
+       "id": "open_menu_tab",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.4 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1915
+      },
+      {
+       "id": "open_find_a_chipotle",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 920
+      },
+      {
+       "id": "dismiss_location_notice",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 473
+      },
+      {
+       "id": "focus_location_search",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 455
+      },
+      {
+       "id": "enter_preferred_zip_code",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1515
+      },
+      {
+       "id": "expand_location_results",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 957
+      },
+      {
+       "id": "select_pickup_location",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 941
+      },
+      {
+       "id": "confirm_pickup_location",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 892
+      },
+      {
+       "id": "scroll_to_menu_category",
+       "status": "done",
+       "rung": 2,
+       "rungs": [
+        "relaxed match: relaxed match while scrolling: [7] \"DIGITAL ONLY · QUESADILLA\" score 0.66 (runner-up 0.65)",
+        "relaxed match: after-checks held past the edge of the screen (scrolled to see them)"
+       ],
+       "score": 0.658,
+       "detail": "",
+       "ms": 3020
+      },
+      {
+       "id": "open_menu_category",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 743
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "preferred_zip_code": "10001",
+      "menu_item": "Chips & Queso Blanco"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "price": "$5.25"
+     },
+     "rung": 2,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 22.61,
+     "steps": [
+      {
+       "id": "open_menu_tab",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.4 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1922
+      },
+      {
+       "id": "open_find_a_chipotle",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 883
+      },
+      {
+       "id": "dismiss_location_notice",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 528
+      },
+      {
+       "id": "focus_location_search",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 396
+      },
+      {
+       "id": "enter_preferred_zip_code",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1531
+      },
+      {
+       "id": "expand_location_results",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 992
+      },
+      {
+       "id": "select_pickup_location",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 872
+      },
+      {
+       "id": "confirm_pickup_location",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 818
+      },
+      {
+       "id": "scroll_to_menu_category",
+       "status": "done",
+       "rung": 2,
+       "rungs": [
+        "relaxed match: relaxed match while scrolling: [7] \"DIGITAL ONLY · QUESADILLA\" score 0.66 (runner-up 0.65)",
+        "relaxed match: after-checks held past the edge of the screen (scrolled to see them)"
+       ],
+       "score": 0.658,
+       "detail": "",
+       "ms": 2812
+      },
+      {
+       "id": "open_menu_category",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.999,
+       "detail": "",
+       "ms": 754
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ],
+   "cost": {
+    "calls": 14,
+    "input_tokens": 42070,
+    "cached_tokens": 30897,
+    "output_tokens": 5475,
+    "reasoning_tokens": 3613,
+    "standard_usd": 0.103,
+    "billed_usd": 0.103
+   },
+   "run": {
+    "run_id": "1029142430",
+    "code": "736a6e4",
+    "dirty": true
+   }
+  },
+  "doordash": {
+   "app": "com.dd.doordash",
+   "category": "food",
+   "goal": "In the DoorDash app, what is my saved delivery address?",
+   "graded_by": "truth",
+   "time": "2026-10-29T18:29:19+00:00",
+   "expect": "Hacker Way",
+   "expect_second": null,
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "[redacted]",
+    "steps": 1,
+    "model_calls": 3,
+    "cost_at_standard_usd": 0.0091136,
+    "duration_s": 8.6,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: 1, Hacker, Way, Menlo"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "doordash_get_saved_delivery_address",
+    "steps": 1,
+    "inputs": {},
+    "outputs": [
+     "saved_delivery_address"
+    ],
+    "dropped": [],
+    "warnings": [],
+    "cost_usd": 0.0343
+   },
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {},
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "saved_delivery_address": "[redacted]"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 5.61,
+     "steps": [
+      {
+       "id": "open_address_selector",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 4.5 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 5077
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ],
+   "cost": {
+    "calls": 4,
+    "input_tokens": 7599,
+    "cached_tokens": 3414,
+    "output_tokens": 2552,
+    "reasoning_tokens": 2067,
+    "standard_usd": 0.0434,
+    "billed_usd": 0.0434
+   },
+   "run": {
+    "run_id": "1029142430",
+    "code": "736a6e4",
+    "dirty": true
+   }
+  },
+  "doordash_search": {
+   "app": "com.dd.doordash",
+   "category": "food",
+   "goal": "In the DoorDash app, search for pizza and tell me the name of the first restaurant in the results.",
+   "graded_by": "shape",
+   "time": "2026-10-29T18:29:52+00:00",
+   "expect": "\\w",
+   "expect_second": "\\w",
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "Pizza Zombie",
+    "steps": 2,
+    "model_calls": 4,
+    "cost_at_standard_usd": 0.00833595,
+    "duration_s": 14.77,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Pizza, Zombie"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "doordash_search_restaurant",
+    "steps": 3,
+    "inputs": {
+     "search_query": "pizza"
+    },
+    "outputs": [
+     "first_restaurant_name"
+    ],
+    "dropped": [],
+    "warnings": [],
+    "cost_usd": 0.0592
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "search_query": "pizza"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "first_restaurant_name": "Pizza Zombie"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 8.98,
+     "steps": [
+      {
+       "id": "open_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 4.8 s",
+        "wait and retry: after-checks held after 1.7 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 6529
+      },
+      {
+       "id": "find_select_search_suggestion",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 388
+      },
+      {
+       "id": "select_search_suggestion",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1048
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "search_query": "sushi"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "first_restaurant_name": "Sushi Roku"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 8.27,
+     "steps": [
+      {
+       "id": "open_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 4.5 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 5254
+      },
+      {
+       "id": "find_select_search_suggestion",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1223
+      },
+      {
+       "id": "select_search_suggestion",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 720
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ],
+   "cost": {
+    "calls": 5,
+    "input_tokens": 12168,
+    "cached_tokens": 8248,
+    "output_tokens": 3562,
+    "reasoning_tokens": 2970,
+    "standard_usd": 0.0675,
+    "billed_usd": 0.0675
+   },
+   "run": {
+    "run_id": "1029142430",
+    "code": "736a6e4",
+    "dirty": true
+   }
+  },
+  "settings_version": {
+   "app": "com.android.settings",
+   "category": "system",
+   "goal": "In the Settings app, what Android version is this phone running?",
+   "graded_by": "truth",
+   "time": "2026-10-29T18:30:53+00:00",
+   "expect": "\\b15\\b",
+   "expect_second": null,
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "15",
+    "steps": 4,
+    "model_calls": 6,
+    "cost_at_standard_usd": 0.0094383,
+    "duration_s": 15.46,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: 15"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "settings_get_android_version",
+    "steps": 3,
+    "inputs": {},
+    "outputs": [
+     "android_version"
+    ],
+    "dropped": [],
+    "warnings": [],
+    "cost_usd": 0.0417
+   },
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {},
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "android_version": "15"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 7.89,
+     "steps": [
+      {
+       "id": "scroll_to_about_device_entry",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 0.9 s"
+       ],
+       "score": 0.971,
+       "detail": "",
+       "ms": 5099
+      },
+      {
+       "id": "tap_about_device_entry",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.971,
+       "detail": "",
+       "ms": 715
+      },
+      {
+       "id": "scroll_to_android_version",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.95,
+       "detail": "",
+       "ms": 1911
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ],
+   "cost": {
+    "calls": 7,
+    "input_tokens": 16544,
+    "cached_tokens": 13082,
+    "output_tokens": 2890,
+    "reasoning_tokens": 2199,
+    "standard_usd": 0.0511,
+    "billed_usd": 0.0511
+   },
+   "run": {
+    "run_id": "1029142430",
+    "code": "736a6e4",
+    "dirty": true
+   }
+  },
+  "settings_bluetooth": {
+   "app": "com.android.settings",
+   "category": "system",
+   "goal": "In the Settings app, is Bluetooth turned on or off?",
+   "graded_by": "truth",
+   "time": "2026-10-29T18:31:36+00:00",
+   "expect": "^(?!.*\\boff\\b).*\\b(on|enabled)\\b",
+   "expect_second": null,
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "Bluetooth is turned on",
+    "steps": 3,
+    "model_calls": 5,
+    "cost_at_standard_usd": 0.008491,
+    "duration_s": 11.14,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Bluetooth"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "settings_check_bluetooth_status",
+    "steps": 3,
+    "inputs": {},
+    "outputs": [
+     "bluetooth_status"
+    ],
+    "dropped": [],
+    "warnings": [],
+    "cost_usd": 0.0363
+   },
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {},
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "bluetooth_status": "on"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 3.24,
+     "steps": [
+      {
+       "id": "open_connected_devices",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.2 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1693
+      },
+      {
+       "id": "open_connection_preferences",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.991,
+       "detail": "",
+       "ms": 676
+      },
+      {
+       "id": "open_bluetooth",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.991,
+       "detail": "",
+       "ms": 668
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ],
+   "cost": {
+    "calls": 6,
+    "input_tokens": 12930,
+    "cached_tokens": 10665,
+    "output_tokens": 2818,
+    "reasoning_tokens": 2228,
+    "standard_usd": 0.0447,
+    "billed_usd": 0.0447
+   },
+   "run": {
+    "run_id": "1029142430",
+    "code": "736a6e4",
+    "dirty": true
+   }
+  },
+  "gmail_newest": {
+   "app": "com.google.android.gm",
+   "category": "google",
+   "goal": "In the Gmail app, what is the subject of the newest email in my inbox?",
+   "graded_by": "truth",
+   "time": "2026-10-29T18:32:06+00:00",
+   "expect": "You.*shared.*some.*Google",
+   "expect_second": null,
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "You shared some Google Account data with Meta",
+    "steps": 1,
+    "model_calls": 3,
+    "cost_at_standard_usd": 0.00643515,
+    "duration_s": 6.7,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Google, Account, Meta"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "gmail_get_newest_subject",
+    "steps": 1,
+    "inputs": {},
+    "outputs": [
+     "email_subject"
+    ],
+    "dropped": [],
+    "warnings": [],
+    "cost_usd": 0.037
+   },
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {},
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "email_subject": "You shared some Google Account data with Meta"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 2.62,
+     "steps": [
+      {
+       "id": "open_newest_email",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.8 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2392
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ],
+   "cost": {
+    "calls": 4,
+    "input_tokens": 8795,
+    "cached_tokens": 5831,
+    "output_tokens": 2378,
+    "reasoning_tokens": 1920,
+    "standard_usd": 0.0434,
+    "billed_usd": 0.0434
+   },
+   "run": {
+    "run_id": "1029142430",
+    "code": "736a6e4",
+    "dirty": true
+   }
+  },
+  "gmail_search": {
+   "app": "com.google.android.gm",
+   "category": "google",
+   "goal": "In the Gmail app, search my mail for DoorDash and tell me the subject of the first result.",
+   "graded_by": "truth",
+   "time": "2026-10-29T18:32:39+00:00",
+   "expect": "Hey.*you.*made.*Here",
+   "expect_second": "Security.*alert",
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "Hey, you made it .. Here’s 40% off",
+    "steps": 3,
+    "model_calls": 5,
+    "cost_at_standard_usd": 0.00977,
+    "duration_s": 12.63,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Hey, Here, 40"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "gmail_search_email",
+    "steps": 3,
+    "inputs": {
+     "search_query": "DoorDash"
+    },
+    "outputs": [
+     "email_subject"
+    ],
+    "dropped": [],
+    "warnings": [
+     "step 3: the first result for {{search_query}}: chosen by its place in the list"
+    ],
+    "cost_usd": 0.0497
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "search_query": "DoorDash"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "email_subject": "Hey, you made it .. Here’s 40% off"
+     },
+     "rung": 2,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 5.53,
+     "steps": [
+      {
+       "id": "tap_search_in_mail",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its after-checks already hold",
+       "ms": 366
+      },
+      {
+       "id": "type_search_query",
+       "status": "done",
+       "rung": 2,
+       "rungs": [
+        "relaxed match: relaxed match [3] \"Search in mail\" score 0.65 (runner-up 0.00)"
+       ],
+       "score": 0.645,
+       "detail": "",
+       "ms": 3639
+      },
+      {
+       "id": "open_first_search_result",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 0.6 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1299
+      }
+     ],
+     "patches": [
+      "step 'type_search_query': target found only by relaxed match; locator updated to {text='Search in mail', hint='Search in mail', resource_id='open_search_view_edit_text', kind='EditText'}"
+     ],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "search_query": "Security alert"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "email_subject": "Security alert"
+     },
+     "rung": 2,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 5.75,
+     "steps": [
+      {
+       "id": "tap_search_in_mail",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its after-checks already hold",
+       "ms": 488
+      },
+      {
+       "id": "type_search_query",
+       "status": "done",
+       "rung": 2,
+       "rungs": [
+        "relaxed match: relaxed match [3] \"Search in mail\" score 0.65 (runner-up 0.00)"
+       ],
+       "score": 0.645,
+       "detail": "",
+       "ms": 3760
+      },
+      {
+       "id": "open_first_search_result",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 0.4 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1261
+      }
+     ],
+     "patches": [
+      "step 'type_search_query': target found only by relaxed match; locator updated to {text='Search in mail', hint='Search in mail', resource_id='open_search_view_edit_text', kind='EditText'}"
+     ],
+     "popups": []
+    }
+   ],
+   "cost": {
+    "calls": 6,
+    "input_tokens": 14950,
+    "cached_tokens": 10665,
+    "output_tokens": 3239,
+    "reasoning_tokens": 2502,
+    "standard_usd": 0.0595,
+    "billed_usd": 0.0595
+   },
+   "run": {
+    "run_id": "1029142430",
+    "code": "736a6e4",
+    "dirty": true
+   }
+  },
+  "calendar_today": {
+   "app": "com.google.android.calendar",
+   "category": "google",
+   "goal": "In Google Calendar, do I have any events today?",
+   "graded_by": "truth",
+   "time": "2026-10-29T18:33:24+00:00",
+   "expect": "\\b(no|none|nothing|not any|don't|do not)\\b",
+   "expect_second": null,
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "No - you have no events today. Thursday 29 October 2026 shows \"Nothing planned. Tap to create.\"",
+    "steps": 0,
+    "model_calls": 2,
+    "cost_at_standard_usd": 0.0055451,
+    "duration_s": 7.29,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Thursday, 29, October, 2026"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "google_calendar_check_todays_events",
+    "steps": 1,
+    "inputs": {},
+    "outputs": [
+     "todays_events"
+    ],
+    "dropped": [],
+    "warnings": [],
+    "cost_usd": 0.042
+   },
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {},
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "todays_events": "Nothing planned. Tap to create."
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 0.82,
+     "steps": [
+      {
+       "id": "read_answer",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "",
+       "ms": 649
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ],
+   "cost": {
+    "calls": 3,
+    "input_tokens": 5478,
+    "cached_tokens": 3414,
+    "output_tokens": 2755,
+    "reasoning_tokens": 2419,
+    "standard_usd": 0.0476,
+    "billed_usd": 0.0476
+   },
+   "run": {
+    "run_id": "1029142430",
+    "code": "736a6e4",
+    "dirty": true
+   }
+  },
+  "contacts_count": {
+   "app": "com.google.android.contacts",
+   "category": "google",
+   "goal": "In the Contacts app, how many contacts do I have?",
+   "graded_by": "truth",
+   "time": "2026-10-29T18:33:58+00:00",
+   "expect": "\\b(no|none|zero|0)\\b",
+   "expect_second": null,
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "step_limit",
+    "result": "stopped after 25 steps",
+    "steps": 25,
+    "model_calls": 28,
+    "cost_at_standard_usd": 0.0683411,
+    "duration_s": 74.76,
+    "popups": [],
+    "check": null
+   },
+   "first_run": "step_limit",
+   "compile": {
+    "compiled": false,
+    "reason": "run ended 'step_limit' with check None; only verified runs are compiled"
+   },
+   "cost": {
+    "calls": 28,
+    "input_tokens": 86207,
+    "cached_tokens": 63324,
+    "output_tokens": 7115,
+    "reasoning_tokens": 4974,
+    "standard_usd": 0.0683,
+    "billed_usd": 0.0683
+   },
+   "run": {
+    "run_id": "1029142430",
+    "code": "736a6e4",
+    "dirty": true
+   }
+  },
+  "maps_address": {
+   "app": "com.google.android.apps.maps",
+   "category": "maps",
+   "goal": "In Google Maps, search for the Empire State Building and tell me its street address.",
+   "graded_by": "truth",
+   "time": "2026-10-29T18:35:15+00:00",
+   "expect": "350\\s+(5th|fifth)\\s+ave|20\\s+w(est)?\\.?\\s+34th",
+   "expect_second": "400\\s+broad\\s+st",
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "20 W 34th St., New York, NY 10001",
+    "steps": 2,
+    "model_calls": 4,
+    "cost_at_standard_usd": 0.007649949999999999,
+    "duration_s": 11.62,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: 20, 34th, New, York"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "google_maps_get_place_address",
+    "steps": 2,
+    "inputs": {
+     "place_name": "Empire State Building"
+    },
+    "outputs": [
+     "street_address"
+    ],
+    "dropped": [],
+    "warnings": [],
+    "cost_usd": 0.0397
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "place_name": "Empire State Building"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "street_address": "20 W 34th St., New York, NY 10001"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 6.42,
+     "steps": [
+      {
+       "id": "tap_search_box",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 2.0 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2883
+      },
+      {
+       "id": "tap_place_result",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 2.1 s"
+       ],
+       "score": 0.973,
+       "detail": "",
+       "ms": 2459
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "place_name": "Space Needle"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "wrong",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "street_address": "Space Needle, Broad Street, Seattle, WA"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 5.79,
+     "steps": [
+      {
+       "id": "tap_search_box",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 2.2 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2936
+      },
+      {
+       "id": "tap_place_result",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: after-checks held after 2.0 s"
+       ],
+       "score": 0.973,
+       "detail": "",
+       "ms": 2337
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ],
+   "cost": {
+    "calls": 5,
+    "input_tokens": 11076,
+    "cached_tokens": 8248,
+    "output_tokens": 2727,
+    "reasoning_tokens": 2106,
+    "standard_usd": 0.0473,
+    "billed_usd": 0.0473
+   },
+   "run": {
+    "run_id": "1029142430",
+    "code": "736a6e4",
+    "dirty": true
+   }
+  },
+  "play_rating": {
+   "app": "com.android.vending",
+   "category": "store",
+   "goal": "In the Google Play Store app, what is the star rating of the Duolingo app?",
+   "graded_by": "shape",
+   "time": "2026-10-29T18:35:57+00:00",
+   "expect": "\\b[1-5]\\.\\d\\b",
+   "expect_second": "\\b[1-5]\\.\\d\\b",
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "4.7 stars (Average rating 4.7 stars in 48 million reviews)",
+    "steps": 1,
+    "model_calls": 3,
+    "cost_at_standard_usd": 0.0060853999999999995,
+    "duration_s": 6.86,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: 4, 7, Average, 4"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "google_play_get_app_rating",
+    "steps": 2,
+    "inputs": {
+     "app_name": "Duolingo"
+    },
+    "outputs": [
+     "star_rating"
+    ],
+    "dropped": [],
+    "warnings": [
+     "input 'app_name': example 'Duolingo: Learn Languages' shortened to the user's 'Duolingo'",
+     "output 'star_rating': the 'Average rating' after the row that names {{app_name}}"
+    ],
+    "cost_usd": 0.0555
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "app_name": "Duolingo"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "star_rating": "4.7 stars in 48 million reviews"
+     },
+     "rung": 0,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 2.93,
+     "steps": [
+      {
+       "id": "find_open_app_listing",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.967,
+       "detail": "",
+       "ms": 1849
+      },
+      {
+       "id": "open_app_listing",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.967,
+       "detail": "",
+       "ms": 813
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "app_name": "Spotify"
+     },
+     "repair_allowed": false,
+     "status": "failed",
+     "result": "fail",
+     "detail": "step find_open_app_listing: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+     "outputs": {},
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 62.81,
+     "steps": [
+      {
+       "id": "find_open_app_listing",
+       "status": "failed",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: scrolled 8 times without finding {text_has='{{app_name}}', kind='Button'}",
+        "wait and retry: waited 2.4 s"
+       ],
+       "score": null,
+       "detail": "step find_open_app_listing: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+       "ms": 62721
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "app_name": "Spotify"
+     },
+     "repair_allowed": true,
+     "status": "failed",
+     "result": "fail",
+     "detail": "step find_open_app_listing: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+     "outputs": {},
+     "rung": 1,
+     "model_calls": 2,
+     "cost_usd": 0.0118,
+     "duration_s": 62.77,
+     "steps": [
+      {
+       "id": "find_open_app_listing",
+       "status": "failed",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: scrolled 8 times without finding {text_has='{{app_name}}', kind='Button'}",
+        "wait and retry: waited 2.0 s"
+       ],
+       "score": null,
+       "detail": "step find_open_app_listing: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+       "ms": 47348
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ],
+   "cost": {
+    "calls": 6,
+    "input_tokens": 11416,
+    "cached_tokens": 7224,
+    "output_tokens": 5548,
+    "reasoning_tokens": 4831,
+    "standard_usd": 0.0734,
+    "billed_usd": 0.0734
+   },
+   "run": {
+    "run_id": "1029142430",
+    "code": "736a6e4",
+    "dirty": true
+   }
+  },
+  "youtube_search": {
+   "app": "com.google.android.youtube",
+   "category": "media",
+   "goal": "In the YouTube app, search for lofi hip hop and tell me the title of the first video in the results.",
+   "graded_by": "shape",
+   "time": "2026-10-29T18:38:40+00:00",
+   "expect": "\\w",
+   "expect_second": "\\w",
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "lofi hip hop radio 📻 beats to relax/study to",
+    "steps": 2,
+    "model_calls": 5,
+    "cost_at_standard_usd": 0.01073475,
+    "duration_s": 10.75,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "the answer's words are on screen: lofi, radio, beats, relax"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "youtube_search_first_video",
+    "steps": 3,
+    "inputs": {
+     "search_query": "lofi hip hop"
+    },
+    "outputs": [
+     "first_video_title"
+    ],
+    "dropped": [
+     [
+      3,
+      "look: not a device action"
+     ]
+    ],
+    "warnings": [],
+    "cost_usd": 0.0386
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "search_query": "lofi hip hop"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "first_video_title": "lofi hip hop radio .. beats to relax/study to"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 5.78,
+     "steps": [
+      {
+       "id": "tap_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.3 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1983
+      },
+      {
+       "id": "find_tap_search_suggestion",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 351
+      },
+      {
+       "id": "tap_search_suggestion",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 469
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "search_query": "pasta carbonara recipe"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "first_video_title": "Authentic Carbonara Pasta, 5.2 million views, Chef Jack Ovens, 3 years ago"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 5.98,
+     "steps": [
+      {
+       "id": "tap_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 2.1 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2804
+      },
+      {
+       "id": "find_tap_search_suggestion",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 427
+      },
+      {
+       "id": "tap_search_suggestion",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 486
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ],
+   "cost": {
+    "calls": 6,
+    "input_tokens": 14775,
+    "cached_tokens": 10165,
+    "output_tokens": 2842,
+    "reasoning_tokens": 2066,
+    "standard_usd": 0.0493,
+    "billed_usd": 0.0493
+   },
+   "run": {
+    "run_id": "1029142430",
+    "code": "736a6e4",
+    "dirty": true
+   }
+  },
+  "ytmusic_artist": {
+   "app": "com.google.android.apps.youtube.music",
+   "category": "media",
+   "goal": "In the YouTube Music app, search for the song Bohemian Rhapsody and tell me the artist of the first song result.",
+   "graded_by": "truth",
+   "time": "2026-10-29T18:39:19+00:00",
+   "expect": "^\\W*queen\\W*$",
+   "expect_second": "^\\W*ed sheeran\\W*$",
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done",
+    "result": "Queen",
+    "steps": 3,
+    "model_calls": 6,
+    "cost_at_standard_usd": 0.014909799999999999,
+    "duration_s": 14.4,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Queen"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "youtube_music_find_song_artist",
+    "steps": 3,
+    "inputs": {
+     "song_title": "bohemian rhapsody"
+    },
+    "outputs": [
+     "artist"
+    ],
+    "dropped": [
+     [
+      3,
+      "look: not a device action"
+     ]
+    ],
+    "warnings": [],
+    "cost_usd": 0.0321
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "song_title": "bohemian rhapsody"
+     },
+     "repair_allowed": false,
+     "status": "failed",
+     "result": "fail",
+     "detail": "outputs not found: artist",
+     "outputs": {
+      "artist": null
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 12.75,
+     "steps": [
+      {
+       "id": "open_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.7 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2319
+      },
+      {
+       "id": "select_search_suggestion",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 894
+      },
+      {
+       "id": "filter_to_songs",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its after-checks already hold",
+       "ms": 94
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "same input",
+     "inputs": {
+      "song_title": "bohemian rhapsody"
+     },
+     "repair_allowed": true,
+     "status": "failed",
+     "result": "fail",
+     "detail": "outputs not found: artist",
+     "outputs": {
+      "artist": null
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 14.07,
+     "steps": [
+      {
+       "id": "open_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.6 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2239
+      },
+      {
+       "id": "select_search_suggestion",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 800
+      },
+      {
+       "id": "filter_to_songs",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its after-checks already hold",
+       "ms": 117
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "song_title": "Shape of You"
+     },
+     "repair_allowed": false,
+     "status": "failed",
+     "result": "fail",
+     "detail": "outputs not found: artist",
+     "outputs": {
+      "artist": null
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 15.1,
+     "steps": [
+      {
+       "id": "open_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.8 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2426
+      },
+      {
+       "id": "select_search_suggestion",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 933
+      },
+      {
+       "id": "filter_to_songs",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its after-checks already hold",
+       "ms": 160
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "song_title": "Shape of You"
+     },
+     "repair_allowed": true,
+     "status": "failed",
+     "result": "fail",
+     "detail": "outputs not found: artist",
+     "outputs": {
+      "artist": null
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 14.49,
+     "steps": [
+      {
+       "id": "open_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.6 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2194
+      },
+      {
+       "id": "select_search_suggestion",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 780
+      },
+      {
+       "id": "filter_to_songs",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its after-checks already hold",
+       "ms": 67
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ],
+   "cost": {
+    "calls": 7,
+    "input_tokens": 20313,
+    "cached_tokens": 13082,
+    "output_tokens": 2695,
+    "reasoning_tokens": 1935,
+    "standard_usd": 0.047,
+    "billed_usd": 0.047
+   },
+   "run": {
+    "run_id": "1029142430",
+    "code": "736a6e4",
+    "dirty": true
+   }
+  },
+  "chrome_wikipedia": {
+   "app": "com.android.chrome",
+   "category": "web",
+   "goal": "In Chrome, go to en.m.wikipedia.org, search for Eiffel Tower and tell me the year it opened.",
+   "graded_by": "truth",
+   "time": "2026-10-29T18:40:44+00:00",
+   "expect": "\\b1889\\b",
+   "expect_second": "\\b1886\\b",
+   "bot_check_at_launch": false,
+   "agent": {
+    "status": "done_unverified",
+    "result": "1889",
+    "steps": 5,
+    "model_calls": 8,
+    "cost_at_standard_usd": 0.01735085,
+    "duration_s": 36.98,
+    "popups": [],
+    "check": {
+     "passed": false,
+     "evaluable": true,
+     "detail": "none of ['1889'] is visible on the current screen"
+    }
+   },
+   "first_run": "right, unverified",
+   "compile": {
+    "compiled": true,
+    "routine": "chrome_search_wikipedia_article",
+    "steps": 3,
+    "inputs": {
+     "search_query": "Eiffel Tower"
+    },
+    "outputs": [
+     "year_opened"
+    ],
+    "dropped": [],
+    "warnings": [
+     "output 'year_opened': not in the tree; read from the screenshot ('15 May 1889') and checked by shape '\\\\b(1\\\\d|20)\\\\d{2}\\\\b'"
+    ],
+    "cost_usd": 0.0474
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "search_query": "Eiffel Tower"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass after repair",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "year_opened": "1889"
+     },
+     "rung": 2,
+     "model_calls": 1,
+     "cost_usd": 0.0,
+     "duration_s": 9.62,
+     "steps": [
+      {
+       "id": "navigate_to_mobile_wikipedia",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.5 s"
+       ],
+       "score": 0.989,
+       "detail": "",
+       "ms": 3343
+      },
+      {
+       "id": "tap_search_button",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its after-checks already hold",
+       "ms": 96
+      },
+      {
+       "id": "enter_search_query",
+       "status": "done",
+       "rung": 2,
+       "rungs": [
+        "relaxed match: after-checks held at the relaxed threshold"
+       ],
+       "score": 0.91,
+       "detail": "",
+       "ms": 3153
+      }
+     ],
+     "patches": [
+      "step 'enter_search_query': after-check 1 matched only relaxed; updated to {text='Search Google or type URL: google.com/search?q=Eiffel+Tower&oq=Eiffel+Tower&gs_lcrp=EgZjaHJvbWUyDwgAEEUYORjjAhixAxiABDIQCAEQLhivARjHARixAxiABDIQCAIQLhivARjHARixAxiABDIKCAMQABixAxiABDIKCAQQABixAxiABDIKCAUQABixAxiABDIHCAYQABiABDIHCAcQABiABDINCAgQABiDARixAxiABDIHCAkQABiABDINCAoQABiDARixAxiABDIGCAsQRRg8MgYIDBBFGDwyDQgNEC4YrwEYxwEYgAQyCggOEAAYsQMYgATSAQc1OTZqMGo0qAIBsAIB&client=ms-unknown&sourceid=chrome-mobile&source=chrome.ob&ie=UTF-8', resource_id='url_bar', kind='EditText'}"
+     ],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "search_query": "Statue of Liberty"
+     },
+     "repair_allowed": false,
+     "status": "failed",
+     "result": "fail",
+     "detail": "step enter_search_query: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+     "outputs": {},
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 20.39,
+     "steps": [
+      {
+       "id": "navigate_to_mobile_wikipedia",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 2.7 s"
+       ],
+       "score": 0.852,
+       "detail": "",
+       "ms": 3985
+      },
+      {
+       "id": "tap_search_button",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its after-checks already hold",
+       "ms": 100
+      },
+      {
+       "id": "enter_search_query",
+       "status": "failed",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: waited 3.5 s"
+       ],
+       "score": 0.91,
+       "detail": "step enter_search_query: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+       "ms": 16184
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "search_query": "Statue of Liberty"
+     },
+     "repair_allowed": true,
+     "status": "failed",
+     "result": "fail",
+     "detail": "step enter_search_query: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+     "outputs": {},
+     "rung": 1,
+     "model_calls": 2,
+     "cost_usd": 0.0175,
+     "duration_s": 38.09,
+     "steps": [
+      {
+       "id": "navigate_to_mobile_wikipedia",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 3.0 s"
+       ],
+       "score": 0.817,
+       "detail": "",
+       "ms": 4355
+      },
+      {
+       "id": "tap_search_button",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its after-checks already hold",
+       "ms": 290
+      },
+      {
+       "id": "enter_search_query",
+       "status": "failed",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: waited 3.0 s"
+       ],
+       "score": 0.91,
+       "detail": "step enter_search_query: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+       "ms": 16246
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ],
+   "cost": {
+    "calls": 13,
+    "input_tokens": 33001,
+    "cached_tokens": 20815,
+    "output_tokens": 8501,
+    "reasoning_tokens": 7340,
+    "standard_usd": 0.0882,
+    "billed_usd": 0.0882
+   },
+   "run": {
+    "run_id": "1029142430",
+    "code": "736a6e4",
+    "dirty": true
+   }
+  }
+ },
+ "stages": {
+  "n": 18,
+  "first_run": 14,
+  "compiled": 15,
+  "same_input": 13,
+  "same_input_with_repair": 14,
+  "n_second": 11,
+  "new_input": 6,
+  "bot_checks": [
+   "target",
+   "target_search"
+  ],
+  "by_hand": {
+   "right": 2,
+   "wrong": 0,
+   "unchecked": 12
+  }
+ }
+}

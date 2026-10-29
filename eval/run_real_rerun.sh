@@ -5,6 +5,8 @@
 #
 #   eval/run_real_rerun.sh <commit> [label]      # e.g. eval/run_real_rerun.sh 425f12e aw-final
 #   PREPARE_ONLY=1 eval/run_real_rerun.sh <commit> # step 1 only, and the backend environment built (no API, no device)
+#   HELD=1 eval/run_real_rerun.sh <commit> <label> # envoy-real already claimed by the caller (passes back to back)
+#   WORKFLOWS=contacts_count eval/run_real_rerun.sh <commit> <label>   # only some workflows (repeats of one)
 #
 # What it does, in order (stops at the first failure):
 #  1. A worktree of <commit> at ~/Desktop/Envoy-realrun (detached; reused if it exists and is clean), with .env, logs and
@@ -19,7 +21,7 @@ MAIN=/Users/sanjeevvarma/Desktop/Envoy
 WT=/Users/sanjeevvarma/Desktop/Envoy-realrun
 COORD=$MAIN/coord/devices.sh
 OUT_NAME="real_rerun_$(date +%Y-%m-%d)${LABEL:+_$LABEL}"
-ONLY=amazon,starbucks,chipotle,doordash,doordash_search,settings_version,settings_bluetooth,gmail_newest,gmail_search,calendar_today,contacts_count,maps_address,play_rating,youtube_search,ytmusic_artist,chrome_wikipedia
+ONLY=${WORKFLOWS:-amazon,starbucks,chipotle,doordash,doordash_search,settings_version,settings_bluetooth,gmail_newest,gmail_search,calendar_today,contacts_count,maps_address,play_rating,youtube_search,ytmusic_artist,chrome_wikipedia}
 HERE=$(cd "$(dirname "$0")/.." && pwd)
 
 # 1. The worktree.
@@ -47,13 +49,15 @@ uv run --project backend python "$HERE/scripts/check_model_key.py" || { echo "th
 # 3. The device and the pass.
 source scripts/env.sh >/dev/null
 export GRPC_VERBOSITY=ERROR
-"$COORD" claim envoy-real phase7 90 "real-app rerun on $(git rev-parse --short HEAD)${LABEL:+ ($LABEL)}" || { echo "envoy-real claim refused: ask the coordinator"; exit 4; }
-release() { scripts/stop_emulator.sh envoy-real >/dev/null 2>&1; "$COORD" release envoy-real phase7; }
-trap release EXIT
+if [ -z "${HELD:-}" ]; then  # HELD=1: the caller holds envoy-real across several passes, and stops and releases it after
+  "$COORD" claim envoy-real phase7 90 "real-app rerun on $(git rev-parse --short HEAD)${LABEL:+ ($LABEL)}" || { echo "envoy-real claim refused: ask the coordinator"; exit 4; }
+  release() { scripts/stop_emulator.sh envoy-real >/dev/null 2>&1; "$COORD" release envoy-real phase7; }
+  trap release EXIT
+fi
 pgrep -f "qemu-system.*-avd envoy-real( |$)" >/dev/null || scripts/start_emulator.sh envoy-real || { echo "envoy-real did not start"; exit 5; }
 adb devices | grep -q "^emulator-5556" || { echo "envoy-real is not on adb"; exit 5; }
 mkdir -p logs/real_rerun
-echo "== $(date '+%H:%M') real-app pass, 16 workflows"
+echo "== $(date '+%H:%M') real-app pass: $ONLY"
 uv run --project backend python eval/run_final.py real --only "$ONLY" > "logs/real_rerun/$OUT_NAME.log" 2>&1
 echo "   exit $? ($(date '+%H:%M'))"
 grep -E "^(saved|error|Traceback)" "logs/real_rerun/$OUT_NAME.log" | tail -3
