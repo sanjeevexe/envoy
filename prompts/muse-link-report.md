@@ -6,10 +6,8 @@ Session muse-link, Oct 29. Details and the user's Muse checklist: `docs/muse-lin
 
 | Stage | Branch | Tip | State |
 | --- | --- | --- | --- |
-| 1: `push_file`, the outbox, MCP `send_to_phone` and `phone_updates`, `heads_up` | `claude/jolly-khayyam-b99b59` | `30a05d4` (on main `ce747cb`) | Sent as "branch ready". 389 backend tests, web build passes |
-| 2: handoff offers, MCP `create_trigger`, the web panel | `muse-link-s2` | `3bd4860` | Built on stage 1 plus a dev-only merge of proactive's `5cf36dc` (commit `8c99122`), so it runs against the real `Offers`. 417 tests, web build passes. To be rebased onto main once proactive's stage 1 is in, dropping that merge |
-
-Merging stage 1 after proactive's stage 1 gives one small conflict in `backend/api/app.py`: both add a line after `ctx.alerts = alerts`, and both add an `include_router` before the web mount. Keep both, offers first (resolved that way in `8c99122`).
+| 1: `push_file`, the outbox, MCP `send_to_phone` and `phone_updates`, `heads_up` | `claude/jolly-khayyam-b99b59` = the coordinator's `coord/muse-link-s1` | `d3df6aa` (on main `b91243f`) | Staged by the coordinator (428 tests, web build). The `envoy-test` re-check passed, and that re-check is what merges it |
+| 2: handoff offers, MCP `create_trigger`, the web panel, offer "Before I start" lines, download pinning | `muse-link-s2-rebased` | `1d2d6c7` (on `d3df6aa`) | 437 tests, web build passes. Replayed with no conflicts after dropping the dev-only merge of proactive's branch |
 
 ## What was built
 
@@ -22,7 +20,8 @@ Merging stage 1 after proactive's stage 1 gives one small conflict in `backend/a
 ## Evidence
 
 - Tests: see the table above. They cover sidecars, the 2-second rule, files already there at start, ignored files, names that aren't paths, the adb commands with a fake that keeps a media store, downloads against a local HTTPS server, the MCP tools in process (cursors, restarts, no secrets), and, in stage 2, the offers with the real `Offers` class, `phone_ok`, captions never in a request, and `create_trigger` staying off.
-- `envoy-test` (Android 15), first run: found that adb's write leaves the media row pending (hidden from galleries), and that the clip's date taken comes from its own metadata. Both fixed in `30a05d4` and checked offline with `ffprobe` and `ffmpeg`. Not yet re-run on a device.
+- `envoy-test` (Android 15), first run (11:57, `a9d939b`): found that adb's write leaves the media row pending (hidden from galleries), and that the clip's date taken comes from its own metadata (Jan 15). Both fixed in `30a05d4`.
+- `envoy-test` re-check (12:54, from a checkout of `d3df6aa`): clip `is_pending=0`, `datetaken` = the push time, and the photo `is_pending=0` (no EXIF date, so galleries use now). Google Photos shows both under "Envoy". About 1 s each.
 - Web: the panel and the setting checked in mock mode at 390×844 and 1440×900 (Send to phone, Yes on the Instagram offer, a bad folder's error).
 
 ## Spend
@@ -31,9 +30,9 @@ $0. No Meta API calls.
 
 ## Not done or not checked yet
 
-- The fixed `push_file` on `envoy-test` and on the Pixel 5 (Android 13), checked in the media store and in Photos or Files. Waiting for a device slot from the coordinator.
+- The push on the Pixel 5 (Android 13): it wasn't available today, so it waits for the next sitting.
 - The Muse tests E1–E5, with the user (the coordinator is batching the user's time).
-- `heads_up` with the real preflight check: tested with stand-ins only, because preflight's stage 1 isn't in main.
+- `heads_up` and the offer lines run against preflight's real `check` in the full suite, but the tests assert their content only with stand-ins.
 - `phone_updates` items are reported again if a finished task is updated later (its `updated_at` moves). Rare; noted, not fixed.
 - Re-dating covers MP4/MOV/M4V and JPEG. PNG, WebP and HEIC keep their own dates (PNG and WebP rarely carry one).
 - Tests that drive `/mcp` append to `logs/mcp.jsonl`, which is linked to the main checkout's logs in every worktree. This was already happening before this work. For the Muse tests, records are filtered by the tunnel's host and the user agent.
