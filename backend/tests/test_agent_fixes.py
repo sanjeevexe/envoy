@@ -314,3 +314,22 @@ def test_the_planner_reads_a_questions_answer_where_the_app_shows_it():
     from models.prompts import PLAN_INSTRUCTIONS
     assert 'For a question, read the answer where the app shows it, an empty state ("none yet") included' in PLAN_INSTRUCTIONS
     assert 'plan no step that changes filters or settings, and no "full" or "complete" list unless the goal asks for one' in PLAN_INSTRUCTIONS
+
+
+def test_a_count_of_nothing_is_verified_by_the_apps_empty_state():
+    # Contacts says "No contacts yet"; the right answer is 0, a number the screen never shows. It passed only when the
+    # answer happened to capitalize a word on screen ("…the Contacts app shows…"), and "0 contacts - screen shows …"
+    # ended done_unverified (6 of 10 runs on Oct 29), so no routine compiled.
+    from agent.checks import answer_on_screen
+    from routines.screens import screen_from_tree
+
+    def screen(*labels: str):
+        els = [{"index": i, "parent": None, "kind": "Text", "class": "android.widget.TextView", "label": l, "text": l,
+                "bounds": [0, 100 * i, 1080, 100 * i + 90], "number": i + 1} for i, l in enumerate(labels)]
+        return screen_from_tree({"package": "com.google.android.contacts", "activity": "PeopleActivity", "width": 1080,
+                                 "height": 2400, "elements": els})
+    empty = screen("Search contacts", "No contacts yet", "Create contact")
+    assert answer_on_screen('0 contacts - screen shows "No contacts yet"', empty).passed
+    assert answer_on_screen("0", empty).passed
+    assert not answer_on_screen("5 contacts", empty).passed  # a count the empty screen contradicts
+    assert not answer_on_screen("0", screen("Search contacts", "Ann Lee", "Bo Chan")).passed  # no empty state shown
