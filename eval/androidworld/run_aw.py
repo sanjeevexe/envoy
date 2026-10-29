@@ -237,6 +237,10 @@ def main() -> None:
     ckpt = WORK / args.stage / "checkpoint"
     ckpt.mkdir(parents=True, exist_ok=True)
 
+    from android_env.components.adb_controller import AdbController
+    if not getattr(AdbController, "_envoy_safe", False):
+        sys.exit("STOP: android_env could restart the shared adb server (aw_env's guard is not loaded)")
+    print("adb guard: AdbController._envoy_safe = True (android_env will not kill or restart the adb server)", flush=True)
     env = aw_env.connect()
     reset_by_setup = aw_env.ensure_setup(env)  # Android deletes AndroidWorld's app snapshots on every boot (aw_env)
     suite = build_suite(tasks, args.seed, instances)
