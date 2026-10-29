@@ -298,5 +298,8 @@ def test_an_answer_is_in_the_phones_words_and_an_empty_screen_answers_too():
     assert "in the words the phone shows (SCREEN, or REMEMBERED)" in done
     assert "Add nothing the phone doesn't show: no date from TODAY, no detail from the goal or from what you know." in done
     assert "A screen that says there is none" in done and "don't switch filters or settings" in done
-    assert "in the format the goal asks for" in done and "a count or a total you work out from them is fine" in done
+    assert "a count or a total you work out from them is fine" in done
+    # rule 7: the exact answer form AndroidWorld's checker needs ("True", a bare number) is the benchmark adapter's
+    # (eval/androidworld/envoy_episode.py, ANSWER_FORMAT), not Envoy's own instructions
+    assert "format the goal asks for" not in STEP_INSTRUCTIONS and "AndroidWorld" not in STEP_INSTRUCTIONS
     assert "taken from what you read on the phone" not in done
