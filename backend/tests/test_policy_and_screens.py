@@ -135,6 +135,19 @@ def test_a_filled_password_never_leaves_the_dump():
     assert build_state(xml, "com.skylark.air", "com.skylark.air.MainActivity", 1080, 2400).raw_xml == xml  # nothing filled: untouched
 
 
+def test_an_empty_password_field_showing_its_hint_still_reads_empty():
+    """Android reports an empty field's text as its hint: that isn't a password, so it isn't masked and still reads empty."""
+    xml = (SCREENS / "skylark_signin.xml").read_text()
+    hinted = xml.replace('<node index="3" text="" resource-id="field_password"', '<node index="3" text="Password" resource-id="field_password"')
+    hinted = hinted.replace('password="true" selected="false" visible-to-user="true" bounds="[42,801][1038,969]" drawing-order="3" hint=""',
+                            'password="true" selected="false" visible-to-user="true" bounds="[42,801][1038,969]" drawing-order="3" hint="Password"')
+    assert hinted.count('hint="Password"') == 1
+    s = build_state(hinted, "com.skylark.air", "com.skylark.air.MainActivity", 1080, 2400)
+    field = next(e for e in s.numbered if e.password)
+    assert field.text == "Password" and PASSWORD_MASK not in s.compact
+    assert "empty" in s.compact.splitlines()[field.number]
+
+
 def test_rating_prompt_is_dismissed_without_a_model_call():
     pop = match_popup(screen("skylark_rating"), "check me in")
     assert pop is not None and pop.element.label == "Not now"

@@ -58,7 +58,8 @@ def mask_passwords(xml: str) -> str:
     if 'password="true"' not in xml:
         return xml
     root = ET.fromstring(xml)
-    filled = [n for n in root.iter() if n.get("password") == "true" and (n.get("text") or "").strip()]
+    # An empty field reports its hint as its text ("Password" / "Password"): that one stays as it is, so it still reads empty.
+    filled = [n for n in root.iter() if n.get("password") == "true" and (n.get("text") or "").strip() and n.get("text") != n.get("hint")]
     for n in filled:
         n.set("text", PASSWORD_MASK)
     return ET.tostring(root, encoding="unicode") if filled else xml
