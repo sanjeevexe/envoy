@@ -539,7 +539,15 @@ def _extract_for(name: str, near: str, example: str, final: ScreenState, example
         return Extract(locator=Locator(kind=el.kind), first_row=True, until=until, skip_ads=skip_ads)
     loc = None
     card = None
-    if usable_id(el.resource_id):
+    row_input = next((n for n, v in examples.items() if v and el.in_list
+                      and any(norm(p) == norm(v) and not contains_value(p, example) for p in parts_of(el.label))), None)
+    if row_input:
+        # A list row that shows one of the inputs as a part of its own ("Seattle · Tue, Mar 3, 2026 · SL 1708 · …" for "When
+        # did I fly to Seattle?", answered off the list): read in the row that shows {{input}}. By its ID (trip_row_<code>,
+        # which every row shares) the routine would read whichever row comes first, and with no action choosing the row the
+        # input was dropped as unused.
+        loc = Locator(text_has="{{" + row_input + "}}", kind=el.kind)
+    elif usable_id(el.resource_id):
         loc = Locator(resource_id=_glob_id(short_id(el.resource_id), examples, data_values), kind=el.kind)
         card = _card_of(el, final, examples, near, data_values)
     else:
@@ -560,7 +568,7 @@ def _extract_for(name: str, near: str, example: str, final: ScreenState, example
     elif pos > 0:
         prefix = part[:pos].strip(" ·:,")  # "Departs 2:45 PM" → near "Departs"
         near_text = prefix if prefix and _data_free(prefix, data_values) else None
-    if near_text is None and segment and _data_free(parts[0], data_values):
+    if near_text is None and segment and not row_input and _data_free(parts[0], data_values):
         near_text = parts[0]  # "Choose a seat · SL 1190": the element is found by its first part (no ID needed)
     after = part[pos + len(example):].strip() if pos >= 0 else ""
     after_text = after if after and _data_free(after, data_values) and len(after) > 1 else None
@@ -923,7 +931,8 @@ def _consumed(step: Step, name: str) -> bool:
     slot = "{{" + name + "}}"
     a = step.action
     return slot in (a.value or "") or (a.target is not None and slot in a.target.model_dump_json()) \
-        or any(slot in (x.card or "") for x in (step.extract or {}).values())  # the row an output is read in
+        or any(slot in (x.card or "") or (x.locator is not None and slot in x.locator.model_dump_json())
+               for x in (step.extract or {}).values())  # the row an output is read in
 
 
 def _add_witnesses(out_steps: list[Step], steps: list[TStep], examples: dict[str, str], inputs: dict[str, InputSpec],
