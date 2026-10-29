@@ -1,0 +1,103 @@
+{
+ "task": "NotesMeetingAttendeeCount",
+ "seed": 1619313862,
+ "goal": "How many attendees were present in the meeting titled 'Employee Performance Evaluation' in the Joplin app? Express your answer as just a single number.",
+ "score": 1.0,
+ "aw_run_time_s": 29.9,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 20:48:02.383327",
+ "envoy": {
+  "run_id": "aw-cmp-spark-1028-204740-7d79",
+  "goal": "How many attendees were present in the meeting titled 'Employee Performance Evaluation' in the Joplin app? Express your answer as just a single number.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "done",
+  "result": "25",
+  "done": true,
+  "answer": "25",
+  "steps_device": 5,
+  "iterations": 6,
+  "looks": 0,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "type": 1,
+   "scroll": 1,
+   "done": 1
+  },
+  "model_calls": 7,
+  "input_tokens": 18971,
+  "cached_tokens": 14103,
+  "output_tokens": 1082,
+  "reasoning_tokens": 599,
+  "cost_usd": 0.012799,
+  "cost_at_standard_usd": 0.012799,
+  "duration_s": 17.54,
+  "model_s": 8.43,
+  "device_s": 9.11,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Joplin",
+   "subgoals": [
+    "Open the Joplin app",
+    "Search for the note titled 'Employee Performance Evaluation'",
+    "Open the note to view meeting details",
+    "Count the attendees marked present"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "number of attendees present in Employee Performance Evaluation meeting",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: 25"
+  },
+  "trace_dir": "data/runs/aw-cmp-spark-1028-204740-7d79",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-spark-1.3",
+  "models": {
+   "profile": "spark",
+   "jobs": {
+    "step": "muse-spark-1.3",
+    "plan": "muse-spark-1.3",
+    "repair": "muse-spark-1.3",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "chat": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-spark/traces/NotesMeetingAttendeeCount__s1619313862.jsonl.gz",
+  "wall_s": 20.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

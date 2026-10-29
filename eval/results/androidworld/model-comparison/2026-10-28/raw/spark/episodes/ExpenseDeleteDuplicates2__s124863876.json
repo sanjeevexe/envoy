@@ -1,0 +1,131 @@
+{
+ "task": "ExpenseDeleteDuplicates2",
+ "seed": 124863876,
+ "goal": "Delete all but one of any expenses in pro expense that are exact duplicates, ensuring at least one instance of each unique expense remains.",
+ "score": 0.0,
+ "aw_run_time_s": 74.2,
+ "aw_episode_length": 18,
+ "agent": "envoy",
+ "finished": "2026-10-28 20:43:04.313245",
+ "envoy": {
+  "run_id": "aw-cmp-spark-1028-204153-1ad2",
+  "goal": "Delete all but one of any expenses in pro expense that are exact duplicates, ensuring at least one instance of each unique expense remains.",
+  "max_steps": 18,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "step_limit",
+  "result": "stopped after 18 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 17,
+  "iterations": 18,
+  "looks": 1,
+  "screenshots_sent": 2,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "look": 1,
+   "tap": 5,
+   "tap_point": 1,
+   "scroll": 10
+  },
+  "model_calls": 23,
+  "input_tokens": 64340,
+  "cached_tokens": 40035,
+  "output_tokens": 5025,
+  "reasoning_tokens": 3386,
+  "cost_usd": 0.065726,
+  "cost_at_standard_usd": 0.065726,
+  "duration_s": 66.7,
+  "model_s": 27.54,
+  "device_s": 39.16,
+  "connect_s": 0.87,
+  "approvals": [
+   {
+    "step": 11,
+    "description": "tap \"\" in com.arduia.expense",
+    "reasons": [
+     "rule: target id 'com.arduia.expense:id/imv_delete_icon'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 12,
+    "description": "tap \"\" in com.arduia.expense",
+    "reasons": [
+     "rule: target id 'com.arduia.expense:id/btn_delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 13,
+    "description": "tap \"CONFIRM\" in com.arduia.expense",
+    "reasons": [
+     "rule: target says 'CONFIRM'",
+     "screen: confirming something that can't be taken back",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Pro Expense",
+   "subgoals": [
+    "Open navigation drawer or menu to reach unexplored tabs and settings",
+    "Check Settings, profile and data management sections for duplicate handling",
+    "Return to Expense Logs and identify groups of exact duplicates",
+    "Delete extra copies keeping one instance of each unique expense"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "expense list showing no exact duplicates",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-cmp-spark-1028-204153-1ad2",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-spark-1.3",
+  "models": {
+   "profile": "spark",
+   "jobs": {
+    "step": "muse-spark-1.3",
+    "plan": "muse-spark-1.3",
+    "repair": "muse-spark-1.3",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "chat": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-spark/traces/ExpenseDeleteDuplicates2__s124863876.jsonl.gz",
+  "wall_s": 69.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

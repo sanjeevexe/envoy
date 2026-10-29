@@ -1,0 +1,103 @@
+{
+ "task": "RetroCreatePlaylist",
+ "seed": 916405052,
+ "goal": "Create a playlist in Retro Music titled \"Hip Hop Bangers 270\" with the following songs, in order: Golden Days, Dreamer's Awake, Hidden Paths",
+ "score": 1.0,
+ "aw_run_time_s": 88.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 21:32:18.506248",
+ "envoy": {
+  "run_id": "aw-cmp-wonder-1028-213054-988a",
+  "goal": "Create a playlist in Retro Music titled \"Hip Hop Bangers 270\" with the following songs, in order: Golden Days, Dreamer's Awake, Hidden Paths",
+  "max_steps": 24,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "done",
+  "result": "Created playlist 'Hip Hop Bangers 270' with Golden Days, Dreamer's Awake, and Hidden Paths in order. Playlist screen confirms 3 songs in that order.",
+  "done": true,
+  "answer": "Created playlist 'Hip Hop Bangers 270' with Golden Days, Dreamer's Awake, and Hidden Paths in order. Playlist screen confirms 3 songs in that order.",
+  "steps_device": 18,
+  "iterations": 19,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 16,
+   "type": 1,
+   "done": 1
+  },
+  "model_calls": 21,
+  "input_tokens": 42062,
+  "cached_tokens": 29188,
+  "output_tokens": 4180,
+  "reasoning_tokens": 1722,
+  "cost_usd": 0.140934,
+  "cost_at_standard_usd": 0.140934,
+  "duration_s": 78.61,
+  "model_s": 52.18,
+  "device_s": 26.43,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Retro Music",
+   "subgoals": [
+    "Use the overflow menu next to \"Golden Days\" in the Songs list and choose \"Add to playlist\"",
+    "In the Add to playlist dialog, create a new playlist named \"Hip Hop Bangers 270\" if it is not already listed, otherwise select it",
+    "Use the overflow menus for \"Dreamer's Awake\" and then \"Hidden Paths\", in that order, choosing \"Add to playlist\" and selecting \"Hip Hop Bangers 270\" each time",
+    "Open the Playlists tab and open \"Hip Hop Bangers 270\"",
+    "Verify the playlist shows Golden Days, Dreamer's Awake, and Hidden Paths in that order and stay on that playlist screen"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Hip Hop Bangers 270",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Hip Hop Bangers 270' is visible"
+  },
+  "trace_dir": "data/runs/aw-cmp-wonder-1028-213054-988a",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "wonder",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-wonder-1.0",
+    "choose": "muse-wonder-1.0",
+    "extract": "muse-wonder-1.0",
+    "same_entity": "muse-wonder-1.0",
+    "answer": "muse-wonder-1.0",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-wonder-1.0",
+    "chat": "muse-wonder-1.0"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-wonder/traces/RetroCreatePlaylist__s916405052.jsonl.gz",
+  "wall_s": 81.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.3
+  }
+ }
+}

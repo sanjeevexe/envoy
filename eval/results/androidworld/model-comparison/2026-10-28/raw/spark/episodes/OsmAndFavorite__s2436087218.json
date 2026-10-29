@@ -1,0 +1,102 @@
+{
+ "task": "OsmAndFavorite",
+ "seed": 2436087218,
+ "goal": "Add a favorite location marker for 47.1303814, 9.5930117 in the OsmAnd maps app.",
+ "score": 1.0,
+ "aw_run_time_s": 27.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 20:49:19.211777",
+ "envoy": {
+  "run_id": "aw-cmp-spark-1028-204852-4605",
+  "goal": "Add a favorite location marker for 47.1303814, 9.5930117 in the OsmAnd maps app.",
+  "max_steps": 13,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "done",
+  "result": "Added favorite location marker for 47.1303814, 9.5930117 in OsmAnd maps app. The location is saved in Favorites as '47.1303814, 9.5930117'.",
+  "done": true,
+  "answer": "Added favorite location marker for 47.1303814, 9.5930117 in OsmAnd maps app. The location is saved in Favorites as '47.1303814, 9.5930117'.",
+  "steps_device": 7,
+  "iterations": 8,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 4,
+   "type": 2,
+   "done": 1
+  },
+  "model_calls": 9,
+  "input_tokens": 24689,
+  "cached_tokens": 18681,
+  "output_tokens": 1801,
+  "reasoning_tokens": 1069,
+  "cost_usd": 0.017966,
+  "cost_at_standard_usd": 0.017966,
+  "duration_s": 21.41,
+  "model_s": 9.15,
+  "device_s": 12.26,
+  "connect_s": 0.85,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "OsmAnd",
+   "subgoals": [
+    "Open the OsmAnd maps app",
+    "Search for coordinates 47.1303814, 9.5930117",
+    "Open the location details for the coordinates",
+    "Add the location to Favorites and save it"
+   ],
+   "success_check": {
+    "kind": "element_present",
+    "value": "Favorites",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "element 'Favorites' present"
+  },
+  "trace_dir": "data/runs/aw-cmp-spark-1028-204852-4605",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-spark-1.3",
+  "models": {
+   "profile": "spark",
+   "jobs": {
+    "step": "muse-spark-1.3",
+    "plan": "muse-spark-1.3",
+    "repair": "muse-spark-1.3",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "chat": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-spark/traces/OsmAndFavorite__s2436087218.jsonl.gz",
+  "wall_s": 24.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.5
+  }
+ }
+}

@@ -1,0 +1,115 @@
+{
+ "task": "SimpleSmsResend",
+ "seed": 4246161322,
+ "goal": "Resend the message I just sent to Noa Mohammed in Simple SMS Messenger",
+ "score": 1.0,
+ "aw_run_time_s": 70.9,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 21:36:14.344861",
+ "envoy": {
+  "run_id": "aw-cmp-wonder-1028-213528-359d",
+  "goal": "Resend the message I just sent to Noa Mohammed in Simple SMS Messenger",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "done",
+  "result": "Resent 'Inconceivable!' to Noa Mohammed; the message appears again at the bottom of the conversation.",
+  "done": true,
+  "answer": "Resent 'Inconceivable!' to Noa Mohammed; the message appears again at the bottom of the conversation.",
+  "steps_device": 4,
+  "iterations": 6,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "look": 1,
+   "type": 1,
+   "done": 1
+  },
+  "model_calls": 7,
+  "input_tokens": 12842,
+  "cached_tokens": 8492,
+  "output_tokens": 1831,
+  "reasoning_tokens": 1028,
+  "cost_usd": 0.055718,
+  "cost_at_standard_usd": 0.055718,
+  "duration_s": 39.94,
+  "model_s": 28.85,
+  "device_s": 11.09,
+  "connect_s": 0.93,
+  "approvals": [
+   {
+    "step": 5,
+    "description": "tap \"SMS\" in com.simplemobiletools.smsmessenger",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/thread_send_message'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "SMS Messenger",
+   "subgoals": [
+    "Open SMS Messenger",
+    "Open the conversation with Noa Mohammed",
+    "Identify the most recent message you sent in that conversation",
+    "Send the same message again to Noa Mohammed",
+    "Verify the resent message appears at the bottom of the conversation"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "the last two sent messages in the Noa Mohammed conversation are identical duplicates",
+    "field_hint": "conversation with Noa Mohammed"
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Inconceivable, Noa, Mohammed"
+  },
+  "trace_dir": "data/runs/aw-cmp-wonder-1028-213528-359d",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "wonder",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-wonder-1.0",
+    "choose": "muse-wonder-1.0",
+    "extract": "muse-wonder-1.0",
+    "same_entity": "muse-wonder-1.0",
+    "answer": "muse-wonder-1.0",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-wonder-1.0",
+    "chat": "muse-wonder-1.0"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-wonder/traces/SimpleSmsResend__s4246161322.jsonl.gz",
+  "wall_s": 43.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

@@ -93,6 +93,8 @@ def markdown(doc: dict[str, Any], date: str) -> str:
             r = doc["profiles"][p].get(t)
             cells.append("—" if r is None else f"{'**pass**' if r['pass'] else 'fail'} ({r['status']}, {r['steps']} steps, ${r['cost_usd'] or 0:.3f})")
         lines.append(f"| {t} | " + " | ".join(cells) + " |")
+    lines += ["", "Files: `comparison.json` (every number above), `traces/<profile>.md` (each episode's plan and actions with the agent's "
+              "reasons), `raw/<profile>/` (AndroidWorld's episode records and Envoy's traces, copied from the comparison checkout)."]
     return "\n".join(lines) + "\n"
 
 

@@ -1,0 +1,102 @@
+{
+ "task": "SportsTrackerActivityDuration",
+ "seed": 3548294116,
+ "goal": "How long was my skiing activity October 12 2023 in the OpenTracks app? Express your answer in minutes as a single integer.",
+ "score": 1.0,
+ "aw_run_time_s": 34.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 21:16:20.332611",
+ "envoy": {
+  "run_id": "aw-cmp-hybrid-1028-211547-b22f",
+  "goal": "How long was my skiing activity October 12 2023 in the OpenTracks app? Express your answer in minutes as a single integer.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "done_unverified",
+  "result": "135",
+  "done": true,
+  "answer": "135",
+  "steps_device": 5,
+  "iterations": 7,
+  "looks": 0,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 1,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 3,
+   "scroll": 1,
+   "done": 2
+  },
+  "model_calls": 8,
+  "input_tokens": 15941,
+  "cached_tokens": 9888,
+  "output_tokens": 1752,
+  "reasoning_tokens": 877,
+  "cost_usd": 0.06123,
+  "cost_at_standard_usd": 0.06123,
+  "duration_s": 27.5,
+  "model_s": 18.09,
+  "device_s": 9.41,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "OpenTracks",
+   "subgoals": [
+    "Open the OpenTracks app",
+    "Find the skiing activity recorded on October 12, 2023",
+    "Open that activity's details",
+    "Read its total duration and convert it to minutes as a single integer"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "duration of the skiing activity on October 12 2023 in minutes as a single integer",
+    "field_hint": ""
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": true,
+   "detail": "none of ['135'] is visible on the current screen"
+  },
+  "trace_dir": "data/runs/aw-cmp-hybrid-1028-211547-b22f",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "chat": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-hybrid/traces/SportsTrackerActivityDuration__s3548294116.jsonl.gz",
+  "wall_s": 30.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.5
+  }
+ }
+}

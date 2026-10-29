@@ -1,0 +1,111 @@
+{
+ "task": "MarkorMoveNote",
+ "seed": 3101311337,
+ "goal": "In Markor, move the note shy_king_copy.md from StudyGuides to MeetingMinutes.",
+ "score": 0.0,
+ "aw_run_time_s": 67.6,
+ "aw_episode_length": 14,
+ "agent": "envoy",
+ "finished": "2026-10-28 21:27:12.443916",
+ "envoy": {
+  "run_id": "aw-cmp-wonder-1028-212607-0557",
+  "goal": "In Markor, move the note shy_king_copy.md from StudyGuides to MeetingMinutes.",
+  "max_steps": 14,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "step_limit",
+  "result": "stopped after 14 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 14,
+  "iterations": 14,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 9,
+   "scroll": 1,
+   "long_press": 1,
+   "type": 1,
+   "back": 1
+  },
+  "model_calls": 16,
+  "input_tokens": 34447,
+  "cached_tokens": 20544,
+  "output_tokens": 3716,
+  "reasoning_tokens": 2010,
+  "cost_usd": 0.134041,
+  "cost_at_standard_usd": 0.134041,
+  "duration_s": 59.64,
+  "model_s": 39.98,
+  "device_s": 19.66,
+  "connect_s": 0.85,
+  "approvals": [
+   {
+    "step": 9,
+    "description": "tap \"SELECT THIS FOLDER\" in net.gsantner.markor",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Back out of the current Move destination dialog to the main Files browser",
+    "Use Search in Files to locate shy_king_copy.md instead of browsing StudyGuides manually",
+    "Long-press or open the options for shy_king_copy.md and choose Move",
+    "In the destination picker, navigate up to Documents and then into MeetingMinutes",
+    "Confirm the move, then open MeetingMinutes to verify the file is listed there"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "shy_king_copy.md",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-cmp-wonder-1028-212607-0557",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "wonder",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-wonder-1.0",
+    "choose": "muse-wonder-1.0",
+    "extract": "muse-wonder-1.0",
+    "same_entity": "muse-wonder-1.0",
+    "answer": "muse-wonder-1.0",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-wonder-1.0",
+    "chat": "muse-wonder-1.0"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-wonder/traces/MarkorMoveNote__s3101311337.jsonl.gz",
+  "wall_s": 62.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.1
+  }
+ }
+}

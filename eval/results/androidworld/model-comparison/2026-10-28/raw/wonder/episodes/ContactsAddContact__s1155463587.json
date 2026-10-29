@@ -1,0 +1,103 @@
+{
+ "task": "ContactsAddContact",
+ "seed": 1155463587,
+ "goal": "Create a new contact for Hugo Pereira. Their number is +13920741751.",
+ "score": 1.0,
+ "aw_run_time_s": 33.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 21:17:45.649848",
+ "envoy": {
+  "run_id": "aw-cmp-wonder-1028-211713-7f90",
+  "goal": "Create a new contact for Hugo Pereira. Their number is +13920741751.",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "done",
+  "result": "Created new contact for Hugo Pereira with number +13920741751.",
+  "done": true,
+  "answer": "Created new contact for Hugo Pereira with number +13920741751.",
+  "steps_device": 6,
+  "iterations": 7,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "type": 3,
+   "done": 1
+  },
+  "model_calls": 8,
+  "input_tokens": 13702,
+  "cached_tokens": 9888,
+  "output_tokens": 1218,
+  "reasoning_tokens": 429,
+  "cost_usd": 0.041594,
+  "cost_at_standard_usd": 0.041594,
+  "duration_s": 26.25,
+  "model_s": 13.71,
+  "device_s": 12.54,
+  "connect_s": 0.85,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Contacts",
+   "subgoals": [
+    "Open Contacts",
+    "Tap create new contact",
+    "Enter first name Hugo and last name Pereira",
+    "Enter phone number +13920741751",
+    "Save the contact"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Hugo Pereira",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Hugo Pereira' is visible"
+  },
+  "trace_dir": "data/runs/aw-cmp-wonder-1028-211713-7f90",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "wonder",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-wonder-1.0",
+    "choose": "muse-wonder-1.0",
+    "extract": "muse-wonder-1.0",
+    "same_entity": "muse-wonder-1.0",
+    "answer": "muse-wonder-1.0",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-wonder-1.0",
+    "chat": "muse-wonder-1.0"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-wonder/traces/ContactsAddContact__s1155463587.jsonl.gz",
+  "wall_s": 28.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.5
+  }
+ }
+}

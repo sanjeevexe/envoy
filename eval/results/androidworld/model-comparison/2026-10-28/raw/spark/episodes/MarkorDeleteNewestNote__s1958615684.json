@@ -1,0 +1,124 @@
+{
+ "task": "MarkorDeleteNewestNote",
+ "seed": 1958615684,
+ "goal": "Delete the newest note in Markor.",
+ "score": 1.0,
+ "aw_run_time_s": 36.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 20:46:45.569277",
+ "envoy": {
+  "run_id": "aw-cmp-spark-1028-204611-8b2f",
+  "goal": "Delete the newest note in Markor.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "done",
+  "result": "Deleted the newest note final_friendly_king.md (10/15/2023, 15:34) in Markor. File list now shows only .app folder and fine_jelly_final.md.",
+  "done": true,
+  "answer": "Deleted the newest note final_friendly_king.md (10/15/2023, 15:34) in Markor. File list now shows only .app folder and fine_jelly_final.md.",
+  "steps_device": 8,
+  "iterations": 10,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 6,
+   "long_press": 1,
+   "look": 1,
+   "done": 1
+  },
+  "model_calls": 11,
+  "input_tokens": 32202,
+  "cached_tokens": 23259,
+  "output_tokens": 4249,
+  "reasoning_tokens": 3267,
+  "cost_usd": 0.032726,
+  "cost_at_standard_usd": 0.032726,
+  "duration_s": 29.73,
+  "model_s": 18.81,
+  "device_s": 10.92,
+  "connect_s": 0.86,
+  "approvals": [
+   {
+    "step": 8,
+    "description": "tap \"Delete\" in net.gsantner.markor",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 9,
+    "description": "tap \"OK\" in net.gsantner.markor",
+    "reasons": [
+     "screen: confirming something that can't be taken back",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Open the Markor app",
+    "Open the notes file list",
+    "Identify the newest note by modified date",
+    "Delete the newest note and confirm deletion"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "confirmation that the newest note was deleted",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: 10, 15, 2023, 15:34"
+  },
+  "trace_dir": "data/runs/aw-cmp-spark-1028-204611-8b2f",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-spark-1.3",
+  "models": {
+   "profile": "spark",
+   "jobs": {
+    "step": "muse-spark-1.3",
+    "plan": "muse-spark-1.3",
+    "repair": "muse-spark-1.3",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "chat": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-spark/traces/MarkorDeleteNewestNote__s1958615684.jsonl.gz",
+  "wall_s": 32.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.1
+  }
+ }
+}

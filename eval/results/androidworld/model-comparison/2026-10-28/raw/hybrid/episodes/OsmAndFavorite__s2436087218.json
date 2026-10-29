@@ -1,0 +1,113 @@
+{
+ "task": "OsmAndFavorite",
+ "seed": 2436087218,
+ "goal": "Add a favorite location marker for 47.1303814, 9.5930117 in the OsmAnd maps app.",
+ "score": 1.0,
+ "aw_run_time_s": 38.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 21:09:12.928511",
+ "envoy": {
+  "run_id": "aw-cmp-hybrid-1028-210834-4a1b",
+  "goal": "Add a favorite location marker for 47.1303814, 9.5930117 in the OsmAnd maps app.",
+  "max_steps": 13,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "done",
+  "result": "Added favorite location marker for 47.1303814, 9.5930117 in OsmAnd. Verified on map: marker shows '47.1303814, 9.5930117 · Favorites' with Edit Favorite option.",
+  "done": true,
+  "answer": "Added favorite location marker for 47.1303814, 9.5930117 in OsmAnd. Verified on map: marker shows '47.1303814, 9.5930117 · Favorites' with Edit Favorite option.",
+  "steps_device": 7,
+  "iterations": 8,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 4,
+   "type": 2,
+   "done": 1
+  },
+  "model_calls": 9,
+  "input_tokens": 17795,
+  "cached_tokens": 11924,
+  "output_tokens": 2122,
+  "reasoning_tokens": 1045,
+  "cost_usd": 0.068309,
+  "cost_at_standard_usd": 0.068309,
+  "duration_s": 32.22,
+  "model_s": 19.67,
+  "device_s": 12.55,
+  "connect_s": 0.86,
+  "approvals": [
+   {
+    "step": 7,
+    "description": "tap \"Save\" in net.osmand",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "OsmAnd",
+   "subgoals": [
+    "Open OsmAnd and dismiss any first-run prompts",
+    "Search for coordinates 47.1303814, 9.5930117 and open the result on the map",
+    "Open the location's context menu and tap Add to favorites",
+    "Confirm the favorite name and tap Save",
+    "Tap the saved marker again to verify it is a favorite"
+   ],
+   "success_check": {
+    "kind": "element_present",
+    "value": "Edit favorite",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "element 'Edit favorite' present"
+  },
+  "trace_dir": "data/runs/aw-cmp-hybrid-1028-210834-4a1b",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "chat": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-hybrid/traces/OsmAndFavorite__s2436087218.jsonl.gz",
+  "wall_s": 35.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

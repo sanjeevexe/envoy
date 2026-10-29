@@ -1,0 +1,161 @@
+{
+ "task": "SimpleCalendarDeleteEvents",
+ "seed": 1570935667,
+ "goal": "In Simple Calendar Pro, delete all the calendar events on 2023-10-27",
+ "score": 1.0,
+ "aw_run_time_s": 51.8,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 20:52:06.065889",
+ "envoy": {
+  "run_id": "aw-cmp-spark-1028-205116-ba10",
+  "goal": "In Simple Calendar Pro, delete all the calendar events on 2023-10-27",
+  "max_steps": 14,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "done",
+  "result": "All calendar events on 2023-10-27 have been deleted. October 27 (Fri) day view now shows no events.",
+  "done": true,
+  "answer": "All calendar events on 2023-10-27 have been deleted. October 27 (Fri) day view now shows no events.",
+  "steps_device": 11,
+  "iterations": 14,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "look": 2,
+   "tap_point": 1,
+   "tap": 9,
+   "done": 1
+  },
+  "model_calls": 20,
+  "input_tokens": 46473,
+  "cached_tokens": 33168,
+  "output_tokens": 3674,
+  "reasoning_tokens": 2440,
+  "cost_usd": 0.051884,
+  "cost_at_standard_usd": 0.051884,
+  "duration_s": 44.61,
+  "model_s": 19.58,
+  "device_s": 25.03,
+  "connect_s": 0.9,
+  "approvals": [
+   {
+    "step": 5,
+    "description": "tap \"Delete\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 6,
+    "description": "tap \"Yes\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 8,
+    "description": "tap \"Delete\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 9,
+    "description": "tap \"Yes\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 11,
+    "description": "tap \"Delete\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 12,
+    "description": "tap \"Yes\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Navigate to the day view for October 27, 2023",
+    "Open each event listed for October 27",
+    "Delete the opened event and confirm deletion",
+    "Repeat until no events remain on October 27"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "events on 2023-10-27 - confirm none remain",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: October, 27, Fri"
+  },
+  "trace_dir": "data/runs/aw-cmp-spark-1028-205116-ba10",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-spark-1.3",
+  "models": {
+   "profile": "spark",
+   "jobs": {
+    "step": "muse-spark-1.3",
+    "plan": "muse-spark-1.3",
+    "repair": "muse-spark-1.3",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "chat": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-spark/traces/SimpleCalendarDeleteEvents__s1570935667.jsonl.gz",
+  "wall_s": 47.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

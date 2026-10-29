@@ -1,0 +1,103 @@
+{
+ "task": "NotesMeetingAttendeeCount",
+ "seed": 1619313862,
+ "goal": "How many attendees were present in the meeting titled 'Employee Performance Evaluation' in the Joplin app? Express your answer as just a single number.",
+ "score": 1.0,
+ "aw_run_time_s": 36.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 21:27:50.702083",
+ "envoy": {
+  "run_id": "aw-cmp-wonder-1028-212720-f737",
+  "goal": "How many attendees were present in the meeting titled 'Employee Performance Evaluation' in the Joplin app? Express your answer as just a single number.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "done",
+  "result": "25",
+  "done": true,
+  "answer": "25",
+  "steps_device": 5,
+  "iterations": 6,
+  "looks": 0,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "type": 1,
+   "scroll": 1,
+   "done": 1
+  },
+  "model_calls": 7,
+  "input_tokens": 13384,
+  "cached_tokens": 8492,
+  "output_tokens": 1332,
+  "reasoning_tokens": 654,
+  "cost_usd": 0.047906,
+  "cost_at_standard_usd": 0.047906,
+  "duration_s": 25.66,
+  "model_s": 15.17,
+  "device_s": 10.49,
+  "connect_s": 0.88,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Joplin",
+   "subgoals": [
+    "Open Joplin",
+    "Search for the note titled 'Employee Performance Evaluation'",
+    "Open that meeting note",
+    "Read the attendees list and count how many attendees were present"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "number of attendees present in the 'Employee Performance Evaluation' meeting",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: 25"
+  },
+  "trace_dir": "data/runs/aw-cmp-wonder-1028-212720-f737",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "wonder",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-wonder-1.0",
+    "choose": "muse-wonder-1.0",
+    "extract": "muse-wonder-1.0",
+    "same_entity": "muse-wonder-1.0",
+    "answer": "muse-wonder-1.0",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-wonder-1.0",
+    "chat": "muse-wonder-1.0"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-wonder/traces/NotesMeetingAttendeeCount__s1619313862.jsonl.gz",
+  "wall_s": 28.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

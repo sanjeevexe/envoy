@@ -1,0 +1,115 @@
+{
+ "task": "MarkorMoveNote",
+ "seed": 3101311337,
+ "goal": "In Markor, move the note shy_king_copy.md from StudyGuides to MeetingMinutes.",
+ "score": 1.0,
+ "aw_run_time_s": 62.2,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 21:06:47.613320",
+ "envoy": {
+  "run_id": "aw-cmp-hybrid-1028-210547-450c",
+  "goal": "In Markor, move the note shy_king_copy.md from StudyGuides to MeetingMinutes.",
+  "max_steps": 14,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "done",
+  "result": "Moved shy_king_copy.md from StudyGuides to MeetingMinutes; verified the file is now listed in MeetingMinutes.",
+  "done": true,
+  "answer": "Moved shy_king_copy.md from StudyGuides to MeetingMinutes; verified the file is now listed in MeetingMinutes.",
+  "steps_device": 12,
+  "iterations": 13,
+  "looks": 0,
+  "screenshots_sent": 1,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 8,
+   "scroll": 1,
+   "long_press": 1,
+   "back": 1,
+   "done": 1
+  },
+  "model_calls": 15,
+  "input_tokens": 35017,
+  "cached_tokens": 19532,
+  "output_tokens": 3752,
+  "reasoning_tokens": 2012,
+  "cost_usd": 0.140886,
+  "cost_at_standard_usd": 0.140886,
+  "duration_s": 55.21,
+  "model_s": 39.34,
+  "device_s": 15.87,
+  "connect_s": 0.9,
+  "approvals": [
+   {
+    "step": 9,
+    "description": "tap \"SELECT THIS FOLDER\" in net.gsantner.markor",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Use the Search button at the top to search for shy_king_copy instead of scrolling the StudyGuides list",
+    "Long-press the exact file shy_king_copy.md to open selection or its file menu",
+    "Choose Move or Cut from the file menu",
+    "In the destination picker, go up to the parent folder and open MeetingMinutes",
+    "Confirm the move, then open MeetingMinutes to verify the file is there"
+   ],
+   "success_check": {
+    "kind": "element_present",
+    "value": "File shy_king_copy.md",
+    "field_hint": ""
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "element 'File shy_king_copy.md' present"
+  },
+  "trace_dir": "data/runs/aw-cmp-hybrid-1028-210547-450c",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "chat": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-hybrid/traces/MarkorMoveNote__s3101311337.jsonl.gz",
+  "wall_s": 57.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

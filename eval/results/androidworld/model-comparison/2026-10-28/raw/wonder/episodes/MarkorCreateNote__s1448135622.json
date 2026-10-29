@@ -1,0 +1,99 @@
+{
+ "task": "MarkorCreateNote",
+ "seed": 1448135622,
+ "goal": "Create a new note in Markor named 2023_01_26_wise_yacht.md with the following text: Ignorance is bliss.",
+ "score": 0.0,
+ "aw_run_time_s": 87.6,
+ "aw_episode_length": 16,
+ "agent": "envoy",
+ "finished": "2026-10-28 21:24:58.124240",
+ "envoy": {
+  "run_id": "aw-cmp-wonder-1028-212332-1181",
+  "goal": "Create a new note in Markor named 2023_01_26_wise_yacht.md with the following text: Ignorance is bliss.",
+  "max_steps": 16,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "step_limit",
+  "result": "stopped after 16 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 16,
+  "iterations": 16,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 6,
+   "type": 5,
+   "back": 3,
+   "long_press": 1
+  },
+  "model_calls": 18,
+  "input_tokens": 35736,
+  "cached_tokens": 23208,
+  "output_tokens": 4212,
+  "reasoning_tokens": 1872,
+  "cost_usd": 0.138994,
+  "cost_at_standard_usd": 0.138994,
+  "duration_s": 80.18,
+  "model_s": 56.8,
+  "device_s": 23.38,
+  "connect_s": 0.85,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Verify the editor text is 'Ignorance is bliss.' and rename the file to 2023_01_26_wise_yacht.md if the .md extension is missing",
+    "Save the document using Save or Back",
+    "Return to the Documents file list in Markor",
+    "Confirm 2023_01_26_wise_yacht.md appears in the file list"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "2023_01_26_wise_yacht.md",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-cmp-wonder-1028-212332-1181",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "wonder",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-wonder-1.0",
+    "choose": "muse-wonder-1.0",
+    "extract": "muse-wonder-1.0",
+    "same_entity": "muse-wonder-1.0",
+    "answer": "muse-wonder-1.0",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-wonder-1.0",
+    "chat": "muse-wonder-1.0"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-wonder/traces/MarkorCreateNote__s1448135622.jsonl.gz",
+  "wall_s": 82.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.7
+  }
+ }
+}

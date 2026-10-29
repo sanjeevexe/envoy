@@ -1,0 +1,114 @@
+{
+ "task": "SimpleSmsSendReceivedAddress",
+ "seed": 25708979,
+ "goal": "Text the address of the event to Gabriel Ibrahim that Oscar Mohamed just sent me in Simple SMS Messenger",
+ "score": 1.0,
+ "aw_run_time_s": 81.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 21:37:36.543907",
+ "envoy": {
+  "run_id": "aw-cmp-wonder-1028-213634-b5f7",
+  "goal": "Text the address of the event to Gabriel Ibrahim that Oscar Mohamed just sent me in Simple SMS Messenger",
+  "max_steps": 18,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "done",
+  "result": "Texted '789 E Oak St, Phoenix AZ 85006' to Gabriel Ibrahim",
+  "done": true,
+  "answer": "Texted '789 E Oak St, Phoenix AZ 85006' to Gabriel Ibrahim",
+  "steps_device": 9,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "tap": 6,
+   "scroll": 2,
+   "type": 1,
+   "done": 1
+  },
+  "model_calls": 11,
+  "input_tokens": 20656,
+  "cached_tokens": 14588,
+  "output_tokens": 2223,
+  "reasoning_tokens": 1033,
+  "cost_usd": 0.07165,
+  "cost_at_standard_usd": 0.07165,
+  "duration_s": 50.54,
+  "model_s": 35.43,
+  "device_s": 15.11,
+  "connect_s": 0.86,
+  "approvals": [
+   {
+    "step": 9,
+    "description": "tap \"SMS\" in com.simplemobiletools.smsmessenger",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/thread_send_message'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "SMS Messenger",
+   "subgoals": [
+    "Open SMS Messenger",
+    "Open the conversation with Oscar Mohamed and note the event address he just sent",
+    "Return to the conversation list and open the conversation with Gabriel Ibrahim",
+    "Type the event address from Oscar Mohamed into the message field",
+    "Tap Send and confirm the address message appears in Gabriel Ibrahim's thread"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "sent message containing the event address in the Gabriel Ibrahim conversation",
+    "field_hint": "Gabriel Ibrahim"
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: 789, Oak, St, Phoenix"
+  },
+  "trace_dir": "data/runs/aw-cmp-wonder-1028-213634-b5f7",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "wonder",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-wonder-1.0",
+    "choose": "muse-wonder-1.0",
+    "extract": "muse-wonder-1.0",
+    "same_entity": "muse-wonder-1.0",
+    "answer": "muse-wonder-1.0",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-wonder-1.0",
+    "chat": "muse-wonder-1.0"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-wonder/traces/SimpleSmsSendReceivedAddress__s25708979.jsonl.gz",
+  "wall_s": 53.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.3
+  }
+ }
+}

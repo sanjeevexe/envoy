@@ -1,0 +1,987 @@
+{
+ "tasks": [
+  "ContactsAddContact",
+  "ExpenseAddSingle",
+  "ExpenseDeleteDuplicates2",
+  "ExpenseDeleteSingle",
+  "FilesDeleteFile",
+  "MarkorAddNoteHeader",
+  "MarkorCreateNote",
+  "MarkorDeleteNewestNote",
+  "MarkorMoveNote",
+  "NotesMeetingAttendeeCount",
+  "NotesTodoItemCount",
+  "OsmAndFavorite",
+  "RecipeDeleteDuplicateRecipes",
+  "RetroCreatePlaylist",
+  "SimpleCalendarDeleteEvents",
+  "SimpleCalendarEventsInNextWeek",
+  "SimpleSmsResend",
+  "SimpleSmsSendReceivedAddress",
+  "SportsTrackerActivityDuration",
+  "SystemBluetoothTurnOn"
+ ],
+ "profiles": {
+  "spark": {
+   "ContactsAddContact": {
+    "pass": true,
+    "status": "done",
+    "steps": 7,
+    "max_steps": 12,
+    "model_calls": 8,
+    "by_model": {
+     "muse-spark-1.3": 8
+    },
+    "cost_usd": 0.01886,
+    "wall_s": 45.5,
+    "result": "Created contact for Hugo Pereira with number +13920741751",
+    "run_id": "aw-cmp-spark-1028-204025-ff5a",
+    "profile": "spark"
+   },
+   "ExpenseAddSingle": {
+    "pass": true,
+    "status": "done",
+    "steps": 9,
+    "max_steps": 12,
+    "model_calls": 11,
+    "by_model": {
+     "muse-spark-1.3": 11
+    },
+    "cost_usd": 0.02275,
+    "wall_s": 27.2,
+    "result": "Added expense Therapy Sessions $307.01 in Health Care with note 'I may repeat this'. Verified in Totals as 'Therapy Sessions \u00b7 Today 3:34 PM \u00b7 307.01'.",
+    "run_id": "aw-cmp-spark-1028-204120-c716",
+    "profile": "spark"
+   },
+   "ExpenseDeleteDuplicates2": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 17,
+    "max_steps": 18,
+    "model_calls": 23,
+    "by_model": {
+     "muse-spark-1.3": 21,
+     "sam-3.1": 2
+    },
+    "cost_usd": 0.065726,
+    "wall_s": 69.2,
+    "result": "stopped after 18 steps",
+    "run_id": "aw-cmp-spark-1028-204153-1ad2",
+    "profile": "spark"
+   },
+   "ExpenseDeleteSingle": {
+    "pass": true,
+    "status": "done",
+    "steps": 4,
+    "max_steps": 10,
+    "model_calls": 6,
+    "by_model": {
+     "muse-spark-1.3": 6
+    },
+    "cost_usd": 0.010964,
+    "wall_s": 17.8,
+    "result": "Deleted Rental Income expense (2023 Oct 9, 240.71 USD) from Pro Expense. Confirmed with 'Item Deleted' message and income total now 0.",
+    "run_id": "aw-cmp-spark-1028-204307-018d",
+    "profile": "spark"
+   },
+   "FilesDeleteFile": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 22,
+    "max_steps": 22,
+    "model_calls": 25,
+    "by_model": {
+     "muse-spark-1.3": 25
+    },
+    "cost_usd": 0.053204,
+    "wall_s": 71.7,
+    "result": "stopped after 22 steps",
+    "run_id": "aw-cmp-spark-1028-204332-ff18",
+    "profile": "spark"
+   },
+   "MarkorAddNoteHeader": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 11,
+    "max_steps": 12,
+    "model_calls": 14,
+    "by_model": {
+     "muse-spark-1.3": 14
+    },
+    "cost_usd": 0.029978,
+    "wall_s": 33.4,
+    "result": "stopped after 12 steps",
+    "run_id": "aw-cmp-spark-1028-204454-d839",
+    "profile": "spark"
+   },
+   "MarkorCreateNote": {
+    "pass": true,
+    "status": "done",
+    "steps": 11,
+    "max_steps": 16,
+    "model_calls": 13,
+    "by_model": {
+     "muse-spark-1.3": 13
+    },
+    "cost_usd": 0.024742,
+    "wall_s": 32.1,
+    "result": "Created note 2023_01_26_wise_yacht.md with text Ignorance is bliss.",
+    "run_id": "aw-cmp-spark-1028-204533-a117",
+    "profile": "spark"
+   },
+   "MarkorDeleteNewestNote": {
+    "pass": true,
+    "status": "done",
+    "steps": 8,
+    "max_steps": 10,
+    "model_calls": 11,
+    "by_model": {
+     "muse-spark-1.3": 11
+    },
+    "cost_usd": 0.032726,
+    "wall_s": 32.3,
+    "result": "Deleted the newest note final_friendly_king.md (10/15/2023, 15:34) in Markor. File list now shows only .app folder and fine_jelly_final.md.",
+    "run_id": "aw-cmp-spark-1028-204611-8b2f",
+    "profile": "spark"
+   },
+   "MarkorMoveNote": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 13,
+    "max_steps": 14,
+    "model_calls": 15,
+    "by_model": {
+     "muse-spark-1.3": 15
+    },
+    "cost_usd": 0.037238,
+    "wall_s": 40.1,
+    "result": "stopped after 14 steps",
+    "run_id": "aw-cmp-spark-1028-204648-504f",
+    "profile": "spark"
+   },
+   "NotesMeetingAttendeeCount": {
+    "pass": true,
+    "status": "done",
+    "steps": 5,
+    "max_steps": 10,
+    "model_calls": 7,
+    "by_model": {
+     "muse-spark-1.3": 7
+    },
+    "cost_usd": 0.012799,
+    "wall_s": 20.1,
+    "result": "25",
+    "run_id": "aw-cmp-spark-1028-204740-7d79",
+    "profile": "spark"
+   },
+   "NotesTodoItemCount": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 9,
+    "max_steps": 10,
+    "model_calls": 12,
+    "by_model": {
+     "muse-spark-1.3": 12
+    },
+    "cost_usd": 0.022395,
+    "wall_s": 35.0,
+    "result": "stopped after 10 steps",
+    "run_id": "aw-cmp-spark-1028-204812-f315",
+    "profile": "spark"
+   },
+   "OsmAndFavorite": {
+    "pass": true,
+    "status": "done",
+    "steps": 7,
+    "max_steps": 13,
+    "model_calls": 9,
+    "by_model": {
+     "muse-spark-1.3": 9
+    },
+    "cost_usd": 0.017966,
+    "wall_s": 24.0,
+    "result": "Added favorite location marker for 47.1303814, 9.5930117 in OsmAnd maps app. The location is saved in Favorites as '47.1303814, 9.5930117'.",
+    "run_id": "aw-cmp-spark-1028-204852-4605",
+    "profile": "spark"
+   },
+   "RecipeDeleteDuplicateRecipes": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 10,
+    "max_steps": 10,
+    "model_calls": 11,
+    "by_model": {
+     "muse-spark-1.3": 11
+    },
+    "cost_usd": 0.025499,
+    "wall_s": 39.2,
+    "result": "stopped after 10 steps",
+    "run_id": "aw-cmp-spark-1028-204923-ebe0",
+    "profile": "spark"
+   },
+   "RetroCreatePlaylist": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 23,
+    "max_steps": 24,
+    "model_calls": 26,
+    "by_model": {
+     "muse-spark-1.3": 26
+    },
+    "cost_usd": 0.043558,
+    "wall_s": 59.3,
+    "result": "stopped after 24 steps",
+    "run_id": "aw-cmp-spark-1028-205010-a92d",
+    "profile": "spark"
+   },
+   "SimpleCalendarDeleteEvents": {
+    "pass": true,
+    "status": "done",
+    "steps": 11,
+    "max_steps": 14,
+    "model_calls": 20,
+    "by_model": {
+     "muse-spark-1.3": 18,
+     "sam-3.1": 2
+    },
+    "cost_usd": 0.051884,
+    "wall_s": 47.4,
+    "result": "All calendar events on 2023-10-27 have been deleted. October 27 (Fri) day view now shows no events.",
+    "run_id": "aw-cmp-spark-1028-205116-ba10",
+    "profile": "spark"
+   },
+   "SimpleCalendarEventsInNextWeek": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 8,
+    "max_steps": 10,
+    "model_calls": 12,
+    "by_model": {
+     "muse-spark-1.3": 12
+    },
+    "cost_usd": 0.032269,
+    "wall_s": 41.4,
+    "result": "stopped after 10 steps",
+    "run_id": "aw-cmp-spark-1028-205211-ae9f",
+    "profile": "spark"
+   },
+   "SimpleSmsResend": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 10,
+    "max_steps": 12,
+    "model_calls": 13,
+    "by_model": {
+     "muse-spark-1.3": 13
+    },
+    "cost_usd": 0.029819,
+    "wall_s": 42.3,
+    "result": "stopped after 12 steps",
+    "run_id": "aw-cmp-spark-1028-205320-90da",
+    "profile": "spark"
+   },
+   "SimpleSmsSendReceivedAddress": {
+    "pass": true,
+    "status": "done",
+    "steps": 10,
+    "max_steps": 18,
+    "model_calls": 13,
+    "by_model": {
+     "muse-spark-1.3": 13
+    },
+    "cost_usd": 0.024166,
+    "wall_s": 35.8,
+    "result": "Sent the address 789 E Oak St, Phoenix AZ 85006 to Gabriel Ibrahim in Simple SMS Messenger",
+    "run_id": "aw-cmp-spark-1028-205427-f339",
+    "profile": "spark"
+   },
+   "SportsTrackerActivityDuration": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 10,
+    "max_steps": 10,
+    "model_calls": 11,
+    "by_model": {
+     "muse-spark-1.3": 11
+    },
+    "cost_usd": 0.02545,
+    "wall_s": 34.5,
+    "result": "stopped after 10 steps",
+    "run_id": "aw-cmp-spark-1028-205516-85d9",
+    "profile": "spark"
+   },
+   "SystemBluetoothTurnOn": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 10,
+    "max_steps": 10,
+    "model_calls": 12,
+    "by_model": {
+     "muse-spark-1.3": 12
+    },
+    "cost_usd": 0.02122,
+    "wall_s": 32.1,
+    "result": "stopped after 10 steps",
+    "run_id": "aw-cmp-spark-1028-205554-4d62",
+    "profile": "spark"
+   }
+  },
+  "hybrid": {
+   "ContactsAddContact": {
+    "pass": true,
+    "status": "done",
+    "steps": 8,
+    "max_steps": 12,
+    "model_calls": 10,
+    "by_model": {
+     "muse-wonder-1.0": 10
+    },
+    "cost_usd": 0.058662,
+    "wall_s": 35.0,
+    "result": "Created new contact Hugo Pereira with number +13920741751. Contact page shows Hugo Pereira, Mobile +1 392-074-1751, Added Oct 15, 2023.",
+    "run_id": "aw-cmp-hybrid-1028-205648-8bd7",
+    "profile": "hybrid"
+   },
+   "ExpenseAddSingle": {
+    "pass": true,
+    "status": "done",
+    "steps": 10,
+    "max_steps": 12,
+    "model_calls": 13,
+    "by_model": {
+     "muse-wonder-1.0": 13
+    },
+    "cost_usd": 0.087801,
+    "wall_s": 44.9,
+    "result": "Added expense 'Therapy Sessions' for $307.01 in Health Care category with note 'I may repeat this'. It now appears in Recent expenses and weekly outcome is 307.",
+    "run_id": "aw-cmp-hybrid-1028-205729-2174",
+    "profile": "hybrid"
+   },
+   "ExpenseDeleteDuplicates2": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 17,
+    "max_steps": 18,
+    "model_calls": 24,
+    "by_model": {
+     "muse-wonder-1.0": 21,
+     "sam-3.1": 2,
+     "muse-spark-1.3": 1
+    },
+    "cost_usd": 0.281775,
+    "wall_s": 120.4,
+    "result": "stopped after 18 steps",
+    "run_id": "aw-cmp-hybrid-1028-205821-bdd5",
+    "profile": "hybrid"
+   },
+   "ExpenseDeleteSingle": {
+    "pass": true,
+    "status": "done",
+    "steps": 7,
+    "max_steps": 10,
+    "model_calls": 13,
+    "by_model": {
+     "muse-wonder-1.0": 10,
+     "sam-3.1": 2,
+     "muse-spark-1.3": 1
+    },
+    "cost_usd": 0.078919,
+    "wall_s": 48.5,
+    "result": "Deleted the Rental Income expense (2023 Oct 9, 240.71 USD) from Pro Expense. Verified Expense Logs shows no expense logs and Totals income is 0 with no remainin",
+    "run_id": "aw-cmp-hybrid-1028-210026-f0ce",
+    "profile": "hybrid"
+   },
+   "FilesDeleteFile": {
+    "pass": true,
+    "status": "done_unverified",
+    "steps": 11,
+    "max_steps": 22,
+    "model_calls": 15,
+    "by_model": {
+     "muse-wonder-1.0": 15
+    },
+    "cost_usd": 0.119725,
+    "wall_s": 61.9,
+    "result": "Deleted q2a8_fancy_banana.mp3 from Notifications folder in sdk_gphone_x86_64 storage; file no longer appears in the list.",
+    "run_id": "aw-cmp-hybrid-1028-210123-346e",
+    "profile": "hybrid"
+   },
+   "MarkorAddNoteHeader": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 11,
+    "max_steps": 12,
+    "model_calls": 13,
+    "by_model": {
+     "muse-wonder-1.0": 13
+    },
+    "cost_usd": 0.106247,
+    "wall_s": 46.4,
+    "result": "stopped after 12 steps",
+    "run_id": "aw-cmp-hybrid-1028-210236-752e",
+    "profile": "hybrid"
+   },
+   "MarkorCreateNote": {
+    "pass": true,
+    "status": "done",
+    "steps": 15,
+    "max_steps": 16,
+    "model_calls": 18,
+    "by_model": {
+     "muse-wonder-1.0": 18
+    },
+    "cost_usd": 0.154234,
+    "wall_s": 74.2,
+    "result": "Created note 2023_01_26_wise_yacht.md in Markor containing 'Ignorance is bliss.' and left it open in the editor.",
+    "run_id": "aw-cmp-hybrid-1028-210327-80bf",
+    "profile": "hybrid"
+   },
+   "MarkorDeleteNewestNote": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 9,
+    "max_steps": 10,
+    "model_calls": 12,
+    "by_model": {
+     "muse-wonder-1.0": 12
+    },
+    "cost_usd": 0.125339,
+    "wall_s": 56.3,
+    "result": "stopped after 10 steps",
+    "run_id": "aw-cmp-hybrid-1028-210446-6291",
+    "profile": "hybrid"
+   },
+   "MarkorMoveNote": {
+    "pass": true,
+    "status": "done",
+    "steps": 12,
+    "max_steps": 14,
+    "model_calls": 15,
+    "by_model": {
+     "muse-wonder-1.0": 15
+    },
+    "cost_usd": 0.140886,
+    "wall_s": 57.8,
+    "result": "Moved shy_king_copy.md from StudyGuides to MeetingMinutes; verified the file is now listed in MeetingMinutes.",
+    "run_id": "aw-cmp-hybrid-1028-210547-450c",
+    "profile": "hybrid"
+   },
+   "NotesMeetingAttendeeCount": {
+    "pass": true,
+    "status": "done",
+    "steps": 6,
+    "max_steps": 10,
+    "model_calls": 8,
+    "by_model": {
+     "muse-wonder-1.0": 8
+    },
+    "cost_usd": 0.057582,
+    "wall_s": 37.0,
+    "result": "25",
+    "run_id": "aw-cmp-hybrid-1028-210656-aa54",
+    "profile": "hybrid"
+   },
+   "NotesTodoItemCount": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 9,
+    "max_steps": 10,
+    "model_calls": 12,
+    "by_model": {
+     "muse-wonder-1.0": 12
+    },
+    "cost_usd": 0.084086,
+    "wall_s": 46.6,
+    "result": "stopped after 10 steps",
+    "run_id": "aw-cmp-hybrid-1028-210743-e2d4",
+    "profile": "hybrid"
+   },
+   "OsmAndFavorite": {
+    "pass": true,
+    "status": "done",
+    "steps": 7,
+    "max_steps": 13,
+    "model_calls": 9,
+    "by_model": {
+     "muse-wonder-1.0": 9
+    },
+    "cost_usd": 0.068309,
+    "wall_s": 35.7,
+    "result": "Added favorite location marker for 47.1303814, 9.5930117 in OsmAnd. Verified on map: marker shows '47.1303814, 9.5930117 \u00b7 Favorites' with Edit Favorite option.",
+    "run_id": "aw-cmp-hybrid-1028-210834-4a1b",
+    "profile": "hybrid"
+   },
+   "RecipeDeleteDuplicateRecipes": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 10,
+    "max_steps": 10,
+    "model_calls": 12,
+    "by_model": {
+     "muse-wonder-1.0": 12
+    },
+    "cost_usd": 0.099143,
+    "wall_s": 51.8,
+    "result": "stopped after 10 steps",
+    "run_id": "aw-cmp-hybrid-1028-210916-8ad3",
+    "profile": "hybrid"
+   },
+   "RetroCreatePlaylist": {
+    "pass": true,
+    "status": "done",
+    "steps": 18,
+    "max_steps": 24,
+    "model_calls": 21,
+    "by_model": {
+     "muse-wonder-1.0": 21
+    },
+    "cost_usd": 0.131748,
+    "wall_s": 68.7,
+    "result": "Created playlist \"Hip Hop Bangers 270\" with songs in order: 1 Golden Days, 2 Dreamer's Awake, 3 Hidden Paths (3 Songs \u2022 12:29).",
+    "run_id": "aw-cmp-hybrid-1028-211016-2254",
+    "profile": "hybrid"
+   },
+   "SimpleCalendarDeleteEvents": {
+    "pass": true,
+    "status": "done",
+    "steps": 12,
+    "max_steps": 14,
+    "model_calls": 20,
+    "by_model": {
+     "muse-wonder-1.0": 16,
+     "sam-3.1": 2,
+     "muse-spark-1.3": 2
+    },
+    "cost_usd": 0.157016,
+    "wall_s": 66.1,
+    "result": "All calendar events on 2023-10-27 were deleted (Review session for Project X, Catch up on Project X, and Call with the Team). The October 27 view now shows an e",
+    "run_id": "aw-cmp-hybrid-1028-211132-3970",
+    "profile": "hybrid"
+   },
+   "SimpleCalendarEventsInNextWeek": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 7,
+    "max_steps": 10,
+    "model_calls": 11,
+    "by_model": {
+     "muse-wonder-1.0": 11
+    },
+    "cost_usd": 0.111045,
+    "wall_s": 44.9,
+    "result": "stopped after 10 steps",
+    "run_id": "aw-cmp-hybrid-1028-211247-051d",
+    "profile": "hybrid"
+   },
+   "SimpleSmsResend": {
+    "pass": true,
+    "status": "done",
+    "steps": 4,
+    "max_steps": 12,
+    "model_calls": 6,
+    "by_model": {
+     "muse-wonder-1.0": 6
+    },
+    "cost_usd": 0.046167,
+    "wall_s": 31.6,
+    "result": "Resent 'Inconceivable!' to Noa Mohammed; the message now appears twice as sent in the conversation.",
+    "run_id": "aw-cmp-hybrid-1028-211400-15a8",
+    "profile": "hybrid"
+   },
+   "SimpleSmsSendReceivedAddress": {
+    "pass": true,
+    "status": "done",
+    "steps": 9,
+    "max_steps": 18,
+    "model_calls": 11,
+    "by_model": {
+     "muse-wonder-1.0": 11
+    },
+    "cost_usd": 0.071296,
+    "wall_s": 40.6,
+    "result": "Texted the event address '789 E Oak St, Phoenix AZ 85006' from Oscar Mohamed to Gabriel Ibrahim in Simple SMS Messenger; the sent message appears in the Gabriel",
+    "run_id": "aw-cmp-hybrid-1028-211456-3ecd",
+    "profile": "hybrid"
+   },
+   "SportsTrackerActivityDuration": {
+    "pass": true,
+    "status": "done_unverified",
+    "steps": 5,
+    "max_steps": 10,
+    "model_calls": 8,
+    "by_model": {
+     "muse-wonder-1.0": 8
+    },
+    "cost_usd": 0.06123,
+    "wall_s": 30.2,
+    "result": "135",
+    "run_id": "aw-cmp-hybrid-1028-211547-b22f",
+    "profile": "hybrid"
+   },
+   "SystemBluetoothTurnOn": {
+    "pass": true,
+    "status": "done_unverified",
+    "steps": 6,
+    "max_steps": 10,
+    "model_calls": 8,
+    "by_model": {
+     "muse-wonder-1.0": 8
+    },
+    "cost_usd": 0.044126,
+    "wall_s": 28.3,
+    "result": "Bluetooth is turned on (Use Bluetooth switch is On).",
+    "run_id": "aw-cmp-hybrid-1028-211622-249a",
+    "profile": "hybrid"
+   }
+  },
+  "wonder": {
+   "ContactsAddContact": {
+    "pass": true,
+    "status": "done",
+    "steps": 6,
+    "max_steps": 12,
+    "model_calls": 8,
+    "by_model": {
+     "muse-wonder-1.0": 8
+    },
+    "cost_usd": 0.041594,
+    "wall_s": 28.9,
+    "result": "Created new contact for Hugo Pereira with number +13920741751.",
+    "run_id": "aw-cmp-wonder-1028-211713-7f90",
+    "profile": "wonder"
+   },
+   "ExpenseAddSingle": {
+    "pass": true,
+    "status": "done",
+    "steps": 10,
+    "max_steps": 12,
+    "model_calls": 13,
+    "by_model": {
+     "muse-wonder-1.0": 13
+    },
+    "cost_usd": 0.092111,
+    "wall_s": 49.8,
+    "result": "Added expense 'Therapy Sessions' for $307.01 (Health Care, note: 'I may repeat this'). It appears in the Home list as 'Therapy Sessions \u00b7 Today 3:34 PM \u00b7 307.01",
+    "run_id": "aw-cmp-wonder-1028-211749-5450",
+    "profile": "wonder"
+   },
+   "ExpenseDeleteDuplicates2": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 18,
+    "max_steps": 18,
+    "model_calls": 21,
+    "by_model": {
+     "muse-wonder-1.0": 21
+    },
+    "cost_usd": 0.259703,
+    "wall_s": 111.7,
+    "result": "stopped after 18 steps",
+    "run_id": "aw-cmp-wonder-1028-211849-8f90",
+    "profile": "wonder"
+   },
+   "ExpenseDeleteSingle": {
+    "pass": true,
+    "status": "done",
+    "steps": 4,
+    "max_steps": 10,
+    "model_calls": 6,
+    "by_model": {
+     "muse-wonder-1.0": 6
+    },
+    "cost_usd": 0.040195,
+    "wall_s": 24.8,
+    "result": "Deleted the Rental Income expense (2023 Oct 9, 240.71 USD) from Pro Expense and verified it no longer appears in the expense list; totals now show 0.",
+    "run_id": "aw-cmp-wonder-1028-212046-fb7a",
+    "profile": "wonder"
+   },
+   "FilesDeleteFile": {
+    "pass": true,
+    "status": "done",
+    "steps": 10,
+    "max_steps": 22,
+    "model_calls": 13,
+    "by_model": {
+     "muse-wonder-1.0": 13
+    },
+    "cost_usd": 0.116311,
+    "wall_s": 60.4,
+    "result": "Deleted q2a8_fancy_banana.mp3 from the Notifications folder; the Files app showed 'Deleting 1 item.' and the file no longer appears in the list.",
+    "run_id": "aw-cmp-wonder-1028-212117-f580",
+    "profile": "wonder"
+   },
+   "MarkorAddNoteHeader": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 11,
+    "max_steps": 12,
+    "model_calls": 14,
+    "by_model": {
+     "muse-wonder-1.0": 14
+    },
+    "cost_usd": 0.127396,
+    "wall_s": 60.0,
+    "result": "stopped after 12 steps",
+    "run_id": "aw-cmp-wonder-1028-212224-e629",
+    "profile": "wonder"
+   },
+   "MarkorCreateNote": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 16,
+    "max_steps": 16,
+    "model_calls": 18,
+    "by_model": {
+     "muse-wonder-1.0": 18
+    },
+    "cost_usd": 0.138994,
+    "wall_s": 82.7,
+    "result": "stopped after 16 steps",
+    "run_id": "aw-cmp-wonder-1028-212332-1181",
+    "profile": "wonder"
+   },
+   "MarkorDeleteNewestNote": {
+    "pass": true,
+    "status": "done",
+    "steps": 7,
+    "max_steps": 10,
+    "model_calls": 11,
+    "by_model": {
+     "muse-wonder-1.0": 11
+    },
+    "cost_usd": 0.12469,
+    "wall_s": 60.0,
+    "result": "Deleted the newest note, final_friendly_king.md, in Markor. The Files list now shows only the .app folder and fine_jelly_final.md (10/15/2023, 15:17); final_fri",
+    "run_id": "aw-cmp-wonder-1028-212501-4fbf",
+    "profile": "wonder"
+   },
+   "MarkorMoveNote": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 14,
+    "max_steps": 14,
+    "model_calls": 16,
+    "by_model": {
+     "muse-wonder-1.0": 16
+    },
+    "cost_usd": 0.134041,
+    "wall_s": 62.2,
+    "result": "stopped after 14 steps",
+    "run_id": "aw-cmp-wonder-1028-212607-0557",
+    "profile": "wonder"
+   },
+   "NotesMeetingAttendeeCount": {
+    "pass": true,
+    "status": "done",
+    "steps": 5,
+    "max_steps": 10,
+    "model_calls": 7,
+    "by_model": {
+     "muse-wonder-1.0": 7
+    },
+    "cost_usd": 0.047906,
+    "wall_s": 28.3,
+    "result": "25",
+    "run_id": "aw-cmp-wonder-1028-212720-f737",
+    "profile": "wonder"
+   },
+   "NotesTodoItemCount": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 8,
+    "max_steps": 10,
+    "model_calls": 12,
+    "by_model": {
+     "muse-wonder-1.0": 12
+    },
+    "cost_usd": 0.089331,
+    "wall_s": 58.0,
+    "result": "stopped after 10 steps",
+    "run_id": "aw-cmp-wonder-1028-212800-4f97",
+    "profile": "wonder"
+   },
+   "OsmAndFavorite": {
+    "pass": true,
+    "status": "done",
+    "steps": 7,
+    "max_steps": 13,
+    "model_calls": 9,
+    "by_model": {
+     "muse-wonder-1.0": 9
+    },
+    "cost_usd": 0.068723,
+    "wall_s": 39.6,
+    "result": "Added favorite location marker for 47.1303814, 9.5930117 in OsmAnd. The map now shows '47.1303814, 9.5930117 \u00b7 Favorites' with an Edit Favorite option.",
+    "run_id": "aw-cmp-wonder-1028-212903-f064",
+    "profile": "wonder"
+   },
+   "RecipeDeleteDuplicateRecipes": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 10,
+    "max_steps": 10,
+    "model_calls": 12,
+    "by_model": {
+     "muse-wonder-1.0": 12
+    },
+    "cost_usd": 0.10227,
+    "wall_s": 51.6,
+    "result": "stopped after 10 steps",
+    "run_id": "aw-cmp-wonder-1028-212955-f163",
+    "profile": "wonder"
+   },
+   "RetroCreatePlaylist": {
+    "pass": true,
+    "status": "done",
+    "steps": 18,
+    "max_steps": 24,
+    "model_calls": 21,
+    "by_model": {
+     "muse-wonder-1.0": 21
+    },
+    "cost_usd": 0.140934,
+    "wall_s": 81.3,
+    "result": "Created playlist 'Hip Hop Bangers 270' with Golden Days, Dreamer's Awake, and Hidden Paths in order. Playlist screen confirms 3 songs in that order.",
+    "run_id": "aw-cmp-wonder-1028-213054-988a",
+    "profile": "wonder"
+   },
+   "SimpleCalendarDeleteEvents": {
+    "pass": true,
+    "status": "done",
+    "steps": 12,
+    "max_steps": 14,
+    "model_calls": 20,
+    "by_model": {
+     "muse-wonder-1.0": 18,
+     "sam-3.1": 2
+    },
+    "cost_usd": 0.18072,
+    "wall_s": 74.7,
+    "result": "Deleted all events on 2023-10-27 (Review session for Project X, Catch up on Project X, and Call with the Team). The October 27 day view is now empty.",
+    "run_id": "aw-cmp-wonder-1028-213224-f9cf",
+    "profile": "wonder"
+   },
+   "SimpleCalendarEventsInNextWeek": {
+    "pass": false,
+    "status": "step_limit",
+    "steps": 8,
+    "max_steps": 10,
+    "model_calls": 15,
+    "by_model": {
+     "muse-wonder-1.0": 13,
+     "sam-3.1": 2
+    },
+    "cost_usd": 0.125252,
+    "wall_s": 76.8,
+    "result": "stopped after 10 steps",
+    "run_id": "aw-cmp-wonder-1028-213343-a6f3",
+    "profile": "wonder"
+   },
+   "SimpleSmsResend": {
+    "pass": true,
+    "status": "done",
+    "steps": 4,
+    "max_steps": 12,
+    "model_calls": 7,
+    "by_model": {
+     "muse-wonder-1.0": 7
+    },
+    "cost_usd": 0.055718,
+    "wall_s": 43.1,
+    "result": "Resent 'Inconceivable!' to Noa Mohammed; the message appears again at the bottom of the conversation.",
+    "run_id": "aw-cmp-wonder-1028-213528-359d",
+    "profile": "wonder"
+   },
+   "SimpleSmsSendReceivedAddress": {
+    "pass": true,
+    "status": "done",
+    "steps": 9,
+    "max_steps": 18,
+    "model_calls": 11,
+    "by_model": {
+     "muse-wonder-1.0": 11
+    },
+    "cost_usd": 0.07165,
+    "wall_s": 53.2,
+    "result": "Texted '789 E Oak St, Phoenix AZ 85006' to Gabriel Ibrahim",
+    "run_id": "aw-cmp-wonder-1028-213634-b5f7",
+    "profile": "wonder"
+   },
+   "SportsTrackerActivityDuration": {
+    "pass": true,
+    "status": "done_unverified",
+    "steps": 7,
+    "max_steps": 10,
+    "model_calls": 10,
+    "by_model": {
+     "muse-wonder-1.0": 10
+    },
+    "cost_usd": 0.079452,
+    "wall_s": 50.8,
+    "result": "135",
+    "run_id": "aw-cmp-wonder-1028-213738-ce15",
+    "profile": "wonder"
+   },
+   "SystemBluetoothTurnOn": {
+    "pass": true,
+    "status": "done_unverified",
+    "steps": 5,
+    "max_steps": 10,
+    "model_calls": 7,
+    "by_model": {
+     "muse-wonder-1.0": 7
+    },
+    "cost_usd": 0.034622,
+    "wall_s": 33.4,
+    "result": "Bluetooth is turned on",
+    "run_id": "aw-cmp-wonder-1028-213833-fbcb",
+    "profile": "wonder"
+   }
+  }
+ },
+ "summary": {
+  "spark": {
+   "tasks": 20,
+   "passed": 9,
+   "steps_mean": 10.8,
+   "wall_s_mean": 39.0,
+   "calls": 272,
+   "calls_by_model": {
+    "muse-spark-1.3": 268,
+    "sam-3.1": 4
+   },
+   "cost_usd": 0.6032,
+   "cost_per_task": 0.0302,
+   "full_suite_estimate_usd": 3.5
+  },
+  "hybrid": {
+   "tasks": 20,
+   "passed": 14,
+   "steps_mean": 9.7,
+   "wall_s_mean": 51.3,
+   "calls": 259,
+   "calls_by_model": {
+    "muse-wonder-1.0": 249,
+    "sam-3.1": 6,
+    "muse-spark-1.3": 4
+   },
+   "cost_usd": 2.0853,
+   "cost_per_task": 0.1043,
+   "full_suite_estimate_usd": 12.09
+  },
+  "wonder": {
+   "tasks": 20,
+   "passed": 13,
+   "steps_mean": 9.4,
+   "wall_s_mean": 56.6,
+   "calls": 251,
+   "calls_by_model": {
+    "muse-wonder-1.0": 247,
+    "sam-3.1": 4
+   },
+   "cost_usd": 2.0716,
+   "cost_per_task": 0.1036,
+   "full_suite_estimate_usd": 12.02
+  }
+ }
+}

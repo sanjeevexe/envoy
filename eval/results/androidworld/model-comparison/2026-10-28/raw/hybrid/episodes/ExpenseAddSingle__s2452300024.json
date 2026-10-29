@@ -1,0 +1,113 @@
+{
+ "task": "ExpenseAddSingle",
+ "seed": 2452300024,
+ "goal": "Add the following expenses into the pro expense:\nExpense: Therapy Sessions\n amount_dollars: $307.01\n category_name: Health Care\n note: I may repeat this\n",
+ "score": 1.0,
+ "aw_run_time_s": 50.2,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 20:58:17.198986",
+ "envoy": {
+  "run_id": "aw-cmp-hybrid-1028-205729-2174",
+  "goal": "Add the following expenses into the pro expense:\nExpense: Therapy Sessions\n amount_dollars: $307.01\n category_name: Health Care\n note: I may repeat this\n",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "done",
+  "result": "Added expense 'Therapy Sessions' for $307.01 in Health Care category with note 'I may repeat this'. It now appears in Recent expenses and weekly outcome is 307.01 USD.",
+  "done": true,
+  "answer": "Added expense 'Therapy Sessions' for $307.01 in Health Care category with note 'I may repeat this'. It now appears in Recent expenses and weekly outcome is 307.01 USD.",
+  "steps_device": 10,
+  "iterations": 11,
+  "looks": 0,
+  "screenshots_sent": 1,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 4,
+   "type": 3,
+   "scroll": 1,
+   "swipe": 1,
+   "done": 1
+  },
+  "model_calls": 13,
+  "input_tokens": 24537,
+  "cached_tokens": 15844,
+  "output_tokens": 2493,
+  "reasoning_tokens": 1067,
+  "cost_usd": 0.087801,
+  "cost_at_standard_usd": 0.087801,
+  "duration_s": 42.25,
+  "model_s": 26.96,
+  "device_s": 15.29,
+  "connect_s": 0.86,
+  "approvals": [
+   {
+    "step": 10,
+    "description": "tap \"SAVE\" in com.arduia.expense",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Pro Expense",
+   "subgoals": [
+    "Verify name 'Therapy Sessions', amount 307.01, note 'I may repeat this', and 'Health Care' category are entered on Expense Entry",
+    "Tap SAVE",
+    "Confirm return to the expense list/home screen"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Therapy Sessions",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Therapy Sessions' is visible"
+  },
+  "trace_dir": "data/runs/aw-cmp-hybrid-1028-205729-2174",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "chat": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-hybrid/traces/ExpenseAddSingle__s2452300024.jsonl.gz",
+  "wall_s": 44.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.5
+  }
+ }
+}

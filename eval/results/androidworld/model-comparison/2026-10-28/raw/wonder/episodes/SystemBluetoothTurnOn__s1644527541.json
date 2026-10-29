@@ -1,0 +1,101 @@
+{
+ "task": "SystemBluetoothTurnOn",
+ "seed": 1644527541,
+ "goal": "Turn bluetooth on.",
+ "score": 1.0,
+ "aw_run_time_s": 37.0,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 21:39:09.204477",
+ "envoy": {
+  "run_id": "aw-cmp-wonder-1028-213833-fbcb",
+  "goal": "Turn bluetooth on.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "done_unverified",
+  "result": "Bluetooth is turned on",
+  "done": true,
+  "answer": "Bluetooth is turned on",
+  "steps_device": 5,
+  "iterations": 6,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 4,
+   "done": 1
+  },
+  "model_calls": 7,
+  "input_tokens": 10983,
+  "cached_tokens": 8492,
+  "output_tokens": 1148,
+  "reasoning_tokens": 585,
+  "cost_usd": 0.034622,
+  "cost_at_standard_usd": 0.034622,
+  "duration_s": 30.84,
+  "model_s": 22.83,
+  "device_s": 8.01,
+  "connect_s": 0.85,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Settings",
+   "subgoals": [
+    "Open Settings",
+    "Navigate to Connected devices and open Bluetooth",
+    "Turn on the Bluetooth switch",
+    "Confirm Bluetooth is shown as On"
+   ],
+   "success_check": {
+    "kind": "field_equals",
+    "value": "On",
+    "field_hint": "Bluetooth"
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": false,
+   "detail": "field 'Bluetooth' not found"
+  },
+  "trace_dir": "data/runs/aw-cmp-wonder-1028-213833-fbcb",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "wonder",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-wonder-1.0",
+    "choose": "muse-wonder-1.0",
+    "extract": "muse-wonder-1.0",
+    "same_entity": "muse-wonder-1.0",
+    "answer": "muse-wonder-1.0",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-wonder-1.0",
+    "chat": "muse-wonder-1.0"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-wonder/traces/SystemBluetoothTurnOn__s1644527541.jsonl.gz",
+  "wall_s": 33.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

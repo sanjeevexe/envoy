@@ -1,0 +1,104 @@
+{
+ "task": "ContactsAddContact",
+ "seed": 1155463587,
+ "goal": "Create a new contact for Hugo Pereira. Their number is +13920741751.",
+ "score": 1.0,
+ "aw_run_time_s": 50.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 20:41:14.199941",
+ "envoy": {
+  "run_id": "aw-cmp-spark-1028-204025-ff5a",
+  "goal": "Create a new contact for Hugo Pereira. Their number is +13920741751.",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "done",
+  "result": "Created contact for Hugo Pereira with number +13920741751",
+  "done": true,
+  "answer": "Created contact for Hugo Pereira with number +13920741751",
+  "steps_device": 7,
+  "iterations": 8,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "type": 3,
+   "done": 1
+  },
+  "model_calls": 8,
+  "input_tokens": 20070,
+  "cached_tokens": 11445,
+  "output_tokens": 1497,
+  "reasoning_tokens": 939,
+  "cost_usd": 0.01886,
+  "cost_at_standard_usd": 0.01886,
+  "duration_s": 40.3,
+  "model_s": 10.03,
+  "device_s": 30.27,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [
+   "permission prompt: deny"
+  ],
+  "plan": {
+   "app": "Contacts",
+   "subgoals": [
+    "Open the Contacts app",
+    "Start creating a new contact",
+    "Enter name Hugo Pereira and number +13920741751",
+    "Save the contact"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Hugo Pereira",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Hugo Pereira' is visible"
+  },
+  "trace_dir": "data/runs/aw-cmp-spark-1028-204025-ff5a",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-spark-1.3",
+  "models": {
+   "profile": "spark",
+   "jobs": {
+    "step": "muse-spark-1.3",
+    "plan": "muse-spark-1.3",
+    "repair": "muse-spark-1.3",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "chat": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-spark/traces/ContactsAddContact__s1155463587.jsonl.gz",
+  "wall_s": 45.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

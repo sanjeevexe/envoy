@@ -1,0 +1,98 @@
+{
+ "task": "NotesTodoItemCount",
+ "seed": 1631305569,
+ "goal": "How many to-dos do I have in the 'Ideas' folder in the Joplin app? Express your answer as just a single number.",
+ "score": 0.0,
+ "aw_run_time_s": 46.0,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 20:48:50.044691",
+ "envoy": {
+  "run_id": "aw-cmp-spark-1028-204812-f315",
+  "goal": "How many to-dos do I have in the 'Ideas' folder in the Joplin app? Express your answer as just a single number.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 9,
+  "iterations": 10,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 5,
+   "back": 2,
+   "look": 1,
+   "swipe": 1
+  },
+  "model_calls": 12,
+  "input_tokens": 30900,
+  "cached_tokens": 23884,
+  "output_tokens": 2363,
+  "reasoning_tokens": 1595,
+  "cost_usd": 0.022395,
+  "cost_at_standard_usd": 0.022395,
+  "duration_s": 32.41,
+  "model_s": 15.44,
+  "device_s": 16.97,
+  "connect_s": 0.85,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Joplin",
+   "subgoals": [
+    "Open the notebooks/folders navigation menu",
+    "Open the 'Ideas' folder",
+    "Count the to-dos shown in Ideas"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "number of to-dos in Ideas folder",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-cmp-spark-1028-204812-f315",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-spark-1.3",
+  "models": {
+   "profile": "spark",
+   "jobs": {
+    "step": "muse-spark-1.3",
+    "plan": "muse-spark-1.3",
+    "repair": "muse-spark-1.3",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "chat": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-spark/traces/NotesTodoItemCount__s1631305569.jsonl.gz",
+  "wall_s": 35.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.5
+  }
+ }
+}

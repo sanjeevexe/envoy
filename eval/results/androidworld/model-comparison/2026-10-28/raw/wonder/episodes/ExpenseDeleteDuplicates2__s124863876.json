@@ -1,0 +1,121 @@
+{
+ "task": "ExpenseDeleteDuplicates2",
+ "seed": 124863876,
+ "goal": "Delete all but one of any expenses in pro expense that are exact duplicates, ensuring at least one instance of each unique expense remains.",
+ "score": 0.0,
+ "aw_run_time_s": 118.3,
+ "aw_episode_length": 18,
+ "agent": "envoy",
+ "finished": "2026-10-28 21:20:43.514188",
+ "envoy": {
+  "run_id": "aw-cmp-wonder-1028-211849-8f90",
+  "goal": "Delete all but one of any expenses in pro expense that are exact duplicates, ensuring at least one instance of each unique expense remains.",
+  "max_steps": 18,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "step_limit",
+  "result": "stopped after 18 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 18,
+  "iterations": 18,
+  "looks": 0,
+  "screenshots_sent": 2,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "scroll": 9,
+   "tap": 7,
+   "back": 1
+  },
+  "model_calls": 21,
+  "input_tokens": 55939,
+  "cached_tokens": 26756,
+  "output_tokens": 6881,
+  "reasoning_tokens": 3713,
+  "cost_usd": 0.259703,
+  "cost_at_standard_usd": 0.259703,
+  "duration_s": 109.09,
+  "model_s": 69.48,
+  "device_s": 39.61,
+  "connect_s": 0.88,
+  "approvals": [
+   {
+    "step": 15,
+    "description": "tap \"\" in com.arduia.expense",
+    "reasons": [
+     "rule: target id 'com.arduia.expense:id/btn_delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 16,
+    "description": "tap \"CONFIRM\" in com.arduia.expense",
+    "reasons": [
+     "rule: target says 'CONFIRM'",
+     "screen: confirming something that can't be taken back",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Pro Expense",
+   "subgoals": [
+    "Scroll to the top of Expense Logs and note each expense's name, date, and amount in order",
+    "Tap any suspected duplicate to open Expense Detail and confirm all fields exactly match the earlier entry",
+    "Return to the list and tap the Delete icon for the duplicate copy only, keeping the first instance",
+    "Continue scrolling through the entire list, deleting each later exact duplicate the same way",
+    "Scroll back to the top and rescan the full list to verify no duplicates remain"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "no exact duplicate expenses remain - each unique name/date/amount combination appears only once",
+    "field_hint": ""
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-cmp-wonder-1028-211849-8f90",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "wonder",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-wonder-1.0",
+    "choose": "muse-wonder-1.0",
+    "extract": "muse-wonder-1.0",
+    "same_entity": "muse-wonder-1.0",
+    "answer": "muse-wonder-1.0",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-wonder-1.0",
+    "chat": "muse-wonder-1.0"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-wonder/traces/ExpenseDeleteDuplicates2__s124863876.jsonl.gz",
+  "wall_s": 111.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.3
+  }
+ }
+}

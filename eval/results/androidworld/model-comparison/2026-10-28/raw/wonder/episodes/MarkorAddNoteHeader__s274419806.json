@@ -1,0 +1,100 @@
+{
+ "task": "MarkorAddNoteHeader",
+ "seed": 274419806,
+ "goal": "Update the Markor note 2023_08_10_neat_wolf.txt by adding the following text, along with a new blank line before the existing content: \"RnI8sP34yDzJQbvkfplR\", and rename it to busy_wolf_2023_07_23.txt.",
+ "score": 0.0,
+ "aw_run_time_s": 67.9,
+ "aw_episode_length": 12,
+ "agent": "envoy",
+ "finished": "2026-10-28 21:23:30.015170",
+ "envoy": {
+  "run_id": "aw-cmp-wonder-1028-212224-e629",
+  "goal": "Update the Markor note 2023_08_10_neat_wolf.txt by adding the following text, along with a new blank line before the existing content: \"RnI8sP34yDzJQbvkfplR\", and rename it to busy_wolf_2023_07_23.txt.",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "step_limit",
+  "result": "stopped after 12 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 11,
+  "iterations": 12,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 6,
+   "type": 1,
+   "back": 3,
+   "look": 1
+  },
+  "model_calls": 14,
+  "input_tokens": 28174,
+  "cached_tokens": 15100,
+  "output_tokens": 3604,
+  "reasoning_tokens": 1974,
+  "cost_usd": 0.127396,
+  "cost_at_standard_usd": 0.127396,
+  "duration_s": 57.36,
+  "model_s": 43.45,
+  "device_s": 13.91,
+  "connect_s": 0.84,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "In the open editor, place the cursor right after \"RnI8sP34yDzJQbvkfplR\" and insert two line breaks so it is separated by one blank line from \"Weekend plans: Hiking trip to Blue Mountain.\"",
+    "Tap Save, then press Back to return to the Documents file list",
+    "Long-press 2023_08_10_neat_wolf.txt in the file list to open the file context menu and choose Rename",
+    "Replace the filename with busy_wolf_2023_07_23.txt and confirm the rename",
+    "Open or verify the renamed file shows the added text followed by a blank line before the old content"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "busy_wolf_2023_07_23.txt",
+    "field_hint": "text_visible"
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-cmp-wonder-1028-212224-e629",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "wonder",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-wonder-1.0",
+    "choose": "muse-wonder-1.0",
+    "extract": "muse-wonder-1.0",
+    "same_entity": "muse-wonder-1.0",
+    "answer": "muse-wonder-1.0",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-wonder-1.0",
+    "chat": "muse-wonder-1.0"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-wonder/traces/MarkorAddNoteHeader__s274419806.jsonl.gz",
+  "wall_s": 60.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.4
+  }
+ }
+}

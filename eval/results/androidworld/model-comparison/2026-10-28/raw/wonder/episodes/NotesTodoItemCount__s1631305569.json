@@ -1,0 +1,99 @@
+{
+ "task": "NotesTodoItemCount",
+ "seed": 1631305569,
+ "goal": "How many to-dos do I have in the 'Ideas' folder in the Joplin app? Express your answer as just a single number.",
+ "score": 0.0,
+ "aw_run_time_s": 68.0,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 21:29:00.621244",
+ "envoy": {
+  "run_id": "aw-cmp-wonder-1028-212800-4f97",
+  "goal": "How many to-dos do I have in the 'Ideas' folder in the Joplin app? Express your answer as just a single number.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 8,
+  "iterations": 10,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 4,
+   "back": 3,
+   "look": 2
+  },
+  "model_calls": 12,
+  "input_tokens": 22570,
+  "cached_tokens": 14576,
+  "output_tokens": 2722,
+  "reasoning_tokens": 1639,
+  "cost_usd": 0.089331,
+  "cost_at_standard_usd": 0.089331,
+  "duration_s": 52.49,
+  "model_s": 36.53,
+  "device_s": 15.96,
+  "connect_s": 0.84,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Joplin",
+   "subgoals": [
+    "Open the notebook sidebar/menu from the All notes screen (not the note list itself)",
+    "Find the 'Ideas' notebook in the sidebar notebook list",
+    "Open the 'Ideas' notebook and view its item list",
+    "Count only the to-do items (items with checkboxes) shown in Ideas",
+    "Report the count as a single number"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "number of to-do items in the Ideas folder in Joplin",
+    "field_hint": ""
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-cmp-wonder-1028-212800-4f97",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "wonder",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-wonder-1.0",
+    "choose": "muse-wonder-1.0",
+    "extract": "muse-wonder-1.0",
+    "same_entity": "muse-wonder-1.0",
+    "answer": "muse-wonder-1.0",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-wonder-1.0",
+    "chat": "muse-wonder-1.0"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-wonder/traces/NotesTodoItemCount__s1631305569.jsonl.gz",
+  "wall_s": 58.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.1
+  }
+ }
+}

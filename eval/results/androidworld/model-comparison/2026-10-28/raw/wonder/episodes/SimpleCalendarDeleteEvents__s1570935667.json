@@ -1,0 +1,163 @@
+{
+ "task": "SimpleCalendarDeleteEvents",
+ "seed": 1570935667,
+ "goal": "In Simple Calendar Pro, delete all the calendar events on 2023-10-27",
+ "score": 1.0,
+ "aw_run_time_s": 80.8,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 21:33:41.217765",
+ "envoy": {
+  "run_id": "aw-cmp-wonder-1028-213224-f9cf",
+  "goal": "In Simple Calendar Pro, delete all the calendar events on 2023-10-27",
+  "max_steps": 14,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "done",
+  "result": "Deleted all events on 2023-10-27 (Review session for Project X, Catch up on Project X, and Call with the Team). The October 27 day view is now empty.",
+  "done": true,
+  "answer": "Deleted all events on 2023-10-27 (Review session for Project X, Catch up on Project X, and Call with the Team). The October 27 day view is now empty.",
+  "steps_device": 12,
+  "iterations": 14,
+  "looks": 1,
+  "screenshots_sent": 2,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "look": 1,
+   "tap_point": 1,
+   "tap": 9,
+   "scroll": 1,
+   "done": 1
+  },
+  "model_calls": 20,
+  "input_tokens": 35758,
+  "cached_tokens": 20800,
+  "output_tokens": 3741,
+  "reasoning_tokens": 1768,
+  "cost_usd": 0.18072,
+  "cost_at_standard_usd": 0.18072,
+  "duration_s": 72.1,
+  "model_s": 41.87,
+  "device_s": 30.23,
+  "connect_s": 0.84,
+  "approvals": [
+   {
+    "step": 5,
+    "description": "tap \"Delete\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 6,
+    "description": "tap \"Yes\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 8,
+    "description": "tap \"Delete\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 9,
+    "description": "tap \"Yes\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 11,
+    "description": "tap \"Delete\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 12,
+    "description": "tap \"Yes\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Use 'Change view' to switch to a daily/list view instead of the month view",
+    "Navigate to October 27 (Fri) 2023 and scroll the event list for that day to see all remaining events",
+    "Open each remaining event for October 27, use its menu to Delete, and confirm 'Are you sure you want to proceed with the deletion?'",
+    "Repeat opening and deleting until no event titles remain under October 27",
+    "Return to the October 27 day view to verify the day is empty"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "number of calendar events listed for October 27, which should be 0",
+    "field_hint": ""
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: October, 27"
+  },
+  "trace_dir": "data/runs/aw-cmp-wonder-1028-213224-f9cf",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "wonder",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-wonder-1.0",
+    "choose": "muse-wonder-1.0",
+    "extract": "muse-wonder-1.0",
+    "same_entity": "muse-wonder-1.0",
+    "answer": "muse-wonder-1.0",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-wonder-1.0",
+    "chat": "muse-wonder-1.0"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-wonder/traces/SimpleCalendarDeleteEvents__s1570935667.jsonl.gz",
+  "wall_s": 74.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

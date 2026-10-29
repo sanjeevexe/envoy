@@ -1,0 +1,120 @@
+{
+ "task": "FilesDeleteFile",
+ "seed": 1206130099,
+ "goal": "Delete the file q2a8_fancy_banana.mp3 from the Android filesystem located in the Notifications folder within the sdk_gphone_x86_64 storage area.",
+ "score": 0.0,
+ "aw_run_time_s": 77.1,
+ "aw_episode_length": 22,
+ "agent": "envoy",
+ "finished": "2026-10-28 20:44:45.475396",
+ "envoy": {
+  "run_id": "aw-cmp-spark-1028-204332-ff18",
+  "goal": "Delete the file q2a8_fancy_banana.mp3 from the Android filesystem located in the Notifications folder within the sdk_gphone_x86_64 storage area.",
+  "max_steps": 22,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "step_limit",
+  "result": "stopped after 22 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 22,
+  "iterations": 22,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 11,
+   "scroll": 7,
+   "long_press": 1,
+   "wait": 1,
+   "type": 1
+  },
+  "model_calls": 25,
+  "input_tokens": 68781,
+  "cached_tokens": 52233,
+  "output_tokens": 5808,
+  "reasoning_tokens": 3932,
+  "cost_usd": 0.053204,
+  "cost_at_standard_usd": 0.053204,
+  "duration_s": 69.24,
+  "model_s": 31.87,
+  "device_s": 37.37,
+  "connect_s": 0.85,
+  "approvals": [
+   {
+    "step": 8,
+    "description": "tap \"Delete\" in com.google.android.documentsui",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 9,
+    "description": "tap \"OK\" in com.google.android.documentsui",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Files",
+   "subgoals": [
+    "Clear the current search to list all files in Notifications",
+    "Locate q2a8_fancy_banana.mp3 in sdk_gphone_x86_64 Notifications folder",
+    "Select the file and delete it",
+    "Confirm deletion and verify it is no longer listed"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "confirmation that q2a8_fancy_banana.mp3 is deleted or no longer listed in Notifications",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-cmp-spark-1028-204332-ff18",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-spark-1.3",
+  "models": {
+   "profile": "spark",
+   "jobs": {
+    "step": "muse-spark-1.3",
+    "plan": "muse-spark-1.3",
+    "repair": "muse-spark-1.3",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "chat": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-spark/traces/FilesDeleteFile__s1206130099.jsonl.gz",
+  "wall_s": 71.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

@@ -1,0 +1,126 @@
+{
+ "task": "MarkorDeleteNewestNote",
+ "seed": 1958615684,
+ "goal": "Delete the newest note in Markor.",
+ "score": 1.0,
+ "aw_run_time_s": 64.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 21:26:04.285994",
+ "envoy": {
+  "run_id": "aw-cmp-wonder-1028-212501-4fbf",
+  "goal": "Delete the newest note in Markor.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "done",
+  "result": "Deleted the newest note, final_friendly_king.md, in Markor. The Files list now shows only the .app folder and fine_jelly_final.md (10/15/2023, 15:17); final_friendly_king.md is no longer shown.",
+  "done": true,
+  "answer": "Deleted the newest note, final_friendly_king.md, in Markor. The Files list now shows only the .app folder and fine_jelly_final.md (10/15/2023, 15:17); final_friendly_king.md is no longer shown.",
+  "steps_device": 7,
+  "iterations": 9,
+  "looks": 1,
+  "screenshots_sent": 2,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 4,
+   "look": 1,
+   "long_press": 1,
+   "scroll": 1,
+   "done": 1
+  },
+  "model_calls": 11,
+  "input_tokens": 22387,
+  "cached_tokens": 13052,
+  "output_tokens": 4237,
+  "reasoning_tokens": 2814,
+  "cost_usd": 0.12469,
+  "cost_at_standard_usd": 0.12469,
+  "duration_s": 57.22,
+  "model_s": 46.04,
+  "device_s": 11.18,
+  "connect_s": 0.91,
+  "approvals": [
+   {
+    "step": 6,
+    "description": "tap \"Delete\" in net.gsantner.markor",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 7,
+    "description": "tap \"OK\" in net.gsantner.markor",
+    "reasons": [
+     "screen: confirming something that can't be taken back",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Tap 'Sort by' and sort the Files list by date with newest first",
+    "Scroll the Files list and identify the newest note file by timestamp, ignoring folders such as .app",
+    "Long-press that newest file, or open it and use More options, then choose Delete",
+    "On the Confirm Delete dialog, confirm deletion",
+    "Return to the Files list and verify that the deleted file's name is no longer shown"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "newest note filename absent from the Markor Files list",
+    "field_hint": ""
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Markor, Files, 10, 15"
+  },
+  "trace_dir": "data/runs/aw-cmp-wonder-1028-212501-4fbf",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "wonder",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-wonder-1.0",
+    "choose": "muse-wonder-1.0",
+    "extract": "muse-wonder-1.0",
+    "same_entity": "muse-wonder-1.0",
+    "answer": "muse-wonder-1.0",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-wonder-1.0",
+    "chat": "muse-wonder-1.0"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-wonder/traces/MarkorDeleteNewestNote__s1958615684.jsonl.gz",
+  "wall_s": 60.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

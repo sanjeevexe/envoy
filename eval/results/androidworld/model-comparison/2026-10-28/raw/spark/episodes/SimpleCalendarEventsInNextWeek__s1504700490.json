@@ -1,0 +1,98 @@
+{
+ "task": "SimpleCalendarEventsInNextWeek",
+ "seed": 1504700490,
+ "goal": "What events do I have in the next week in Simple Calendar Pro? Assume the week starts from Monday. Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 0.0,
+ "aw_run_time_s": 46.9,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 20:52:54.453139",
+ "envoy": {
+  "run_id": "aw-cmp-spark-1028-205211-ae9f",
+  "goal": "What events do I have in the next week in Simple Calendar Pro? Assume the week starts from Monday. Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 8,
+  "iterations": 10,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "look": 2,
+   "tap": 3,
+   "swipe": 4
+  },
+  "model_calls": 12,
+  "input_tokens": 34023,
+  "cached_tokens": 24140,
+  "output_tokens": 3834,
+  "reasoning_tokens": 2825,
+  "cost_usd": 0.032269,
+  "cost_at_standard_usd": 0.032269,
+  "duration_s": 38.84,
+  "model_s": 20.94,
+  "device_s": 17.9,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Use Change view to switch to list or agenda view",
+    "Navigate to the week Mon Oct 16 to Sun Oct 22",
+    "Scroll to reveal all events in that range",
+    "Read the titles of events in that week"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "titles of events from Mon Oct 16 to Sun Oct 22",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-cmp-spark-1028-205211-ae9f",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-spark-1.3",
+  "models": {
+   "profile": "spark",
+   "jobs": {
+    "step": "muse-spark-1.3",
+    "plan": "muse-spark-1.3",
+    "repair": "muse-spark-1.3",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "chat": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-spark/traces/SimpleCalendarEventsInNextWeek__s1504700490.jsonl.gz",
+  "wall_s": 41.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

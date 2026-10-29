@@ -1,0 +1,99 @@
+{
+ "task": "RecipeDeleteDuplicateRecipes",
+ "seed": 536113126,
+ "goal": "Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains",
+ "score": 0.0,
+ "aw_run_time_s": 56.8,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 21:10:10.395762",
+ "envoy": {
+  "run_id": "aw-cmp-hybrid-1028-210916-8ad3",
+  "goal": "Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 10,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 1,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "scroll": 7,
+   "tap": 1,
+   "back": 1
+  },
+  "model_calls": 12,
+  "input_tokens": 22503,
+  "cached_tokens": 14576,
+  "output_tokens": 3226,
+  "reasoning_tokens": 1745,
+  "cost_usd": 0.099143,
+  "cost_at_standard_usd": 0.099143,
+  "duration_s": 49.19,
+  "model_s": 30.38,
+  "device_s": 18.81,
+  "connect_s": 0.85,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Scroll the Recipes list from top to bottom and note every title that appears more than once",
+    "Open an extra copy of a duplicated recipe, such as the second Chicken Alfredo Pasta",
+    "Use the menu on the recipe detail or edit screen to delete that extra copy and confirm deletion",
+    "Return to the Recipes list and repeat for every other duplicated title, deleting only copies beyond the first",
+    "Scroll through the full Recipes list again to verify each unique recipe appears exactly once"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "recipe titles visible while scrolling the full Recipes list: no title appears more than once, and at least one copy of each unique recipe remains",
+    "field_hint": ""
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-cmp-hybrid-1028-210916-8ad3",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "chat": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-hybrid/traces/RecipeDeleteDuplicateRecipes__s536113126.jsonl.gz",
+  "wall_s": 51.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

@@ -1,0 +1,97 @@
+{
+ "task": "RecipeDeleteDuplicateRecipes",
+ "seed": 536113126,
+ "goal": "Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains",
+ "score": 0.0,
+ "aw_run_time_s": 44.3,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-28 20:50:04.280459",
+ "envoy": {
+  "run_id": "aw-cmp-spark-1028-204923-ebe0",
+  "goal": "Delete all but one of any recipes in the Broccoli app that are exact duplicates, ensuring at least one instance of each unique recipe remains",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 10,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 3,
+  "replans": 0,
+  "stuck_recoveries": 1,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "scroll": 9
+  },
+  "model_calls": 11,
+  "input_tokens": 31406,
+  "cached_tokens": 23515,
+  "output_tokens": 2849,
+  "reasoning_tokens": 1948,
+  "cost_usd": 0.025499,
+  "cost_at_standard_usd": 0.025499,
+  "duration_s": 36.59,
+  "model_s": 14.82,
+  "device_s": 21.77,
+  "connect_s": 0.85,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Open the Broccoli app",
+    "View the full recipes list",
+    "Identify recipes that are exact duplicates",
+    "Delete duplicate copies keeping one instance of each recipe",
+    "Verify only unique recipes remain"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "remaining unique recipes with no exact duplicates",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-cmp-spark-1028-204923-ebe0",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-spark-1.3",
+  "models": {
+   "profile": "spark",
+   "jobs": {
+    "step": "muse-spark-1.3",
+    "plan": "muse-spark-1.3",
+    "repair": "muse-spark-1.3",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "chat": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-spark/traces/RecipeDeleteDuplicateRecipes__s536113126.jsonl.gz",
+  "wall_s": 39.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

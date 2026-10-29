@@ -1,0 +1,123 @@
+{
+ "task": "ExpenseDeleteSingle",
+ "seed": 3877511133,
+ "goal": "Delete the following expenses from pro expense: Rental Income.",
+ "score": 1.0,
+ "aw_run_time_s": 29.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 21:21:14.093777",
+ "envoy": {
+  "run_id": "aw-cmp-wonder-1028-212046-fb7a",
+  "goal": "Delete the following expenses from pro expense: Rental Income.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard",
+   "max_cost_usd": 0.6
+  },
+  "status": "done",
+  "result": "Deleted the Rental Income expense (2023 Oct 9, 240.71 USD) from Pro Expense and verified it no longer appears in the expense list; totals now show 0.",
+  "done": true,
+  "answer": "Deleted the Rental Income expense (2023 Oct 9, 240.71 USD) from Pro Expense and verified it no longer appears in the expense list; totals now show 0.",
+  "steps_device": 4,
+  "iterations": 5,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 3,
+   "done": 1
+  },
+  "model_calls": 6,
+  "input_tokens": 9565,
+  "cached_tokens": 7096,
+  "output_tokens": 1445,
+  "reasoning_tokens": 777,
+  "cost_usd": 0.040195,
+  "cost_at_standard_usd": 0.040195,
+  "duration_s": 22.2,
+  "model_s": 15.45,
+  "device_s": 6.75,
+  "connect_s": 0.87,
+  "approvals": [
+   {
+    "step": 3,
+    "description": "tap \"\" in com.arduia.expense",
+    "reasons": [
+     "rule: target id 'com.arduia.expense:id/btn_delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 4,
+    "description": "tap \"CONFIRM\" in com.arduia.expense",
+    "reasons": [
+     "rule: target says 'CONFIRM'",
+     "screen: confirming something that can't be taken back",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Pro Expense",
+   "subgoals": [
+    "Open Pro Expense and view the expense list",
+    "Locate the expense(s) labeled Rental Income",
+    "Open each Rental Income expense and delete it, confirming deletion if prompted",
+    "Return to the expense list and verify Rental Income is no longer shown"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "no expenses with name or category Rental Income remain in the Pro Expense list",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Deleted, Income, Oct, USD"
+  },
+  "trace_dir": "data/runs/aw-cmp-wonder-1028-212046-fb7a",
+  "envoy_commit": "eafd1844f61bd515653c46cd92f6f54833789b40",
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "wonder",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-wonder-1.0",
+    "choose": "muse-wonder-1.0",
+    "extract": "muse-wonder-1.0",
+    "same_entity": "muse-wonder-1.0",
+    "answer": "muse-wonder-1.0",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-wonder-1.0",
+    "chat": "muse-wonder-1.0"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/cmp-wonder/traces/ExpenseDeleteSingle__s3877511133.jsonl.gz",
+  "wall_s": 24.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.3
+  }
+ }
+}
