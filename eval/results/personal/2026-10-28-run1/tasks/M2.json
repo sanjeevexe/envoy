@@ -1,0 +1,34 @@
+{
+ "id": "M2",
+ "category": "memory",
+ "request": "What's the confirmation code for my Denver trip?",
+ "started": 1793245483.201636,
+ "approval_mode": "unless_requested",
+ "route": "memory",
+ "reply": "PT4R8Z, from the SkyLark Air email 9 days ago.",
+ "from_memory": true,
+ "stale": false,
+ "notes": "## Trip: Denver · Sat, Nov 14, 2026  [[Flight SL 1190 · Sat, Nov 14, 2026]] [[Person Maya Patel]]  (named in the request)\n- Destination: Denver — email from SkyLark Air, 9 days ago (Oct 19) (also email from SkyLark Air, 9 days ago (Oct 19))\n- Origin: ATL — email from SkyLark Air, 9 days ago (Oct 19) (also email from SkyLark Air, 9 days ago (Oct 19))\n- Date: Sat, Nov 14, 2026 — email from SkyLark Air, 9 days ago (Oct 19) (also email from SkyLark Air, 9 days ago (Oct 19))\n- Confirmation: PT4R8Z — email from SkyLark Air, 9 days ago (Oct 19) (also email from SkyLark Air, 9 days ago (Oct 19))\n- Airline: SkyLark Air — email from SkyLark Air, 9 days ago (Oct 19) (also email from SkyLark Air, 9 days ago (Oct 19))\n\n## Trip: Chicago · Fri, Oct 30, 2026  [[Flight SL 482 · Fri, Oct 30, 2026]] [[Person Maya Patel]]\n- Destination: Chicago — email from SkyLark Air, 12 days ago (Oct 16) (also email from SkyLark Air, 12 days ago (Oct 16))\n- Origin: ATL — email from SkyLark Air, 12 days ago (Oct 16) (also email from SkyLark Air, 12 days ago (Oct 16))\n- Date: Fri, Oct 30, 2026 — email from SkyLark Air, 12 days ago (Oct 16) (also email from SkyLark Air, 12 days ago (Oct 16))\n- Confirmation: KX7Q2M — email from SkyLark Air, 12 days ago (Oct 16) (also email from SkyLark Air, 12 days ago (Oct 16))\n- Airline: SkyLark Air — email from SkyLark Air, 12 days ago (Oct 16) (also email from SkyLark Air, 12 days ago (Oct 16))\n\n## Flight: SL 1190 · Sat, Nov 14, 2026  [[Trip Denver · Sat, Nov 14, 2026]]\n- Airline: SkyLark Air — email from SkyLark Air, 9 days ago (Oct 19) (also email from SkyLark Air, 9 days ago (Oct 19))\n- Number: SL 1190 — email from SkyLark Air, 9 days ago (Oct 19) (also email from SkyLark Air, 9 days ago (Oct 19))\n- Date: Sat, Nov 14, 2026 — email from SkyLark Air, 9 days ago (Oct 19) (also email from SkyLark Air, 9 days ago (Oct 19))\n- From: ATL — email from SkyLark Air, 9 days ago (Oct 19) (also email from SkyLark Air, 9 days ago (Oct 19))\n- To: DEN — email from SkyLark Air, 9 days ago (Oct 19) (also email from SkyLark Air, 9 days ago (Oct 19))\n- Departs: 2:45 PM — email from SkyLark Air, 9 days ago (Oct 19) (also email from SkyLark Air, 9 days ago (Oct 19))\n\n## Person: Maya Patel  [[Trip Denver · Sat, Nov 14, 2026]] [[Trip Chicago · Fri, Oct 30, 2026]]\n- Name: Maya Patel — email from TSA PreCheck, 40 days ago (Sep 18) (also email from TSA PreCheck, 40 days ago (Sep 18))\n- First name: Maya — email from TSA PreCheck, 40 days ago (Sep 18) (also email from TSA PreCheck, 40 days ago (Sep 18))\n- Last name: Patel — email from TSA PreCheck, 40 days ago (Sep 18) (also email from TSA PreCheck, 40 days ago (Sep 18))\n- Email: maya.patel@example.com — email from TSA PreCheck, 40 days ago (Sep 18) (also email from TSA PreCheck, 40 days ago (Sep 18))\n- Known traveler number: 98765432 — email from TSA PreCheck, 40 days ago (Sep 18) (also email from TSA PreCheck, 40 days ago (Sep 18))\n\n## Note: A Caffè Latte at Starbucks has 190 calories, and the first place DoorDash shows for a latte is Coupa Cafe.\n- Body: A Caffè Latte at Starbucks has 190 calories, and the first place DoorDash shows for a latte is Coupa Cafe. — cross-app answer, today 10:05 PM",
+ "status": "answered",
+ "answer": "PT4R8Z, from the SkyLark Air email 9 days ago.",
+ "wall_s": 3.9,
+ "cost": {
+  "calls": 2,
+  "usd": 0.00673,
+  "by_job": {
+   "chat": {
+    "calls": 1,
+    "usd": 0.003846
+   },
+   "answer": {
+    "calls": 1,
+    "usd": 0.00288
+   }
+  },
+  "by_model": {
+   "muse-spark-1.3": 2
+  }
+ },
+ "passed": true,
+ "why": "ok (from memory, cited)"
+}
