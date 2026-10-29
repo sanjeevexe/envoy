@@ -291,6 +291,35 @@ The 13 agent commits below cherry-pick cleanly onto `main` as it is on Oct 28 (`
 | 10 | **Long text is shown at length** (fix 8, `11cbdb9`) | A 12,101-character file was shown as its first 120 characters | Screens with long text 9 → 21 | Tokens: up to 4,000 characters per field and 8,000 per screen. Watch cost on real apps with long pages |
 | 11 | **Stuck recoveries start afresh once the agent moves again** (fix 6, `ba50eb5`) | An early stall ended runs that had recovered | Not separable | None |
 
+**What the merge test on SkyLark found, and three follow-ups (Oct 28).** Before merging, Phase 7 ran `main`'s SkyLark suites on `main` plus the 13 (`aw-merge`). It found two regressions:
+- **A wrong-flight check-in.** SkyLark's home shows "Next trip · Chicago" with a "Check in" button that acts on that trip. Asked to check in for another trip, 4 of 11 merged plans offered that button as the route. Each time the agent confirmed the Chicago check-in before noticing, then checked in the right trip too.
+- **check_in no longer compiled.** Correct dones were rejected and ended `done_unverified`, and compile learns only from verified runs.
+
+Measured offline, from the runs' own inputs, each fix in its own commit on this branch:
+- **`f93ce08`, a planner line:** "A button shown with one item (on the card for the next trip, the last order, an open message) acts on that item only; if the goal names a different item, go through the list that holds it."
+  - Measured on the planner alone, 40 plans per condition, input rebuilt to the token from the run. Plans offering the wrong route: `main` 3/40, the 13 13/40, with the line 0/40.
+  - No single new input explains the rise: TODAY alone 9, the app list alone 4, neither 8.
+  - For the next trip itself, the button stays the route (20/20).
+- **`5decf4a`, the check fix.** The plan's check was element_present "View boarding pass", the planner prompt's own example (on `main` too), but check-in ends on the boarding pass itself, where that button isn't. A check named for the button that opens a screen ("View/Open/See/Show/Go to X") now also passes when X is a label on screen.
+  - It touches 1 of 28 AndroidWorld element checks, on a task that failed anyway.
+  - Fix 5 itself is unchanged. Replaying the step after a rejection with `main`'s wording ("get to the screen that shows it"), the agent left 4 of AndroidWorld's 6 correct answers and still didn't satisfy SkyLark's check.
+- **`742ede6`, a second guard.** In 4 of the 5 wrong runs, `0_remember` had fused the goal's city with the flight number ("Flight SL 482 to Pittsburgh"), and the confirm screen showed only the number. Two sentences in the step prompt:
+  - memory is copied from the screen and never adds what the goal says;
+  - before an irreversible action, SCREEN or REMEMBERED must name the goal's own item, or the agent goes back on the phone to find out.
+
+  Single-step replays of `742ede6` (before → after):
+
+  | What | Before | After |
+  | --- | ---: | ---: |
+  | Goal's city written into memory | 27/40 | 14/40 |
+  | Wrong-flight confirms, with what the agent really saw kept: went ahead | 50/50 | 7/50 |
+  | Correct irreversible steps (22 SkyLark, 20 AndroidWorld): went ahead | 210/210 | 210/210 |
+  | AndroidWorld steps that keep text: still keep something | 85/120 | 88/120 |
+
+  A stricter wording cut fusion to 10/40, but also cut AndroidWorld's kept text to 57/120, so it wasn't used.
+
+These are offline measurements. Phase 7's second SkyLark round tests all three. After it, AndroidWorld's held-out half is to be re-run with them, so that the number quoted describes the agent that reaches `main`. Until then, 31 of 58 is the 13 without the three.
+
 **Also for `main`, not code:**
 - **The $0.15 per-run cap** stopped 4 of 116 long tasks (OsmAndTrack, ExpenseAddMultiple, two recipe tasks) before their step budget, at standard prices. It is a product decision; for AndroidWorld-length tasks (up to 120 steps) about $0.30 would let them finish.
 - **Two problems to report to AndroidWorld's maintainers** (a public issue, so only with your OK): app snapshots are deleted when the emulator reboots on API 33, and then each app keeps its state from task to task without an error; a Clock timer started by one task keeps ticking on the home screen in every later one. Also two setup strings that don't match on this image (Contacts' "Don't allow" has a curly apostrophe; OpenTracks shows no "Allow").
