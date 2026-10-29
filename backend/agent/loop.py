@@ -45,7 +45,7 @@ PROGRESS_STEPS = 3  # changed screens in a row after which earlier stuck recover
 @dataclass
 class RunConfig:
     max_steps: int = 25
-    max_cost_usd: float = 0.15
+    max_cost_usd: float = 0.30  # per task (the user's cap, Oct 29); runner.py passes the same
     data_scope: DataScope = "real"
     contributor: bool = False
     step_effort: str = "low"

@@ -291,7 +291,7 @@ class TaskRunner:
                     if routine:
                         ex = RoutineExecutor(gated, adapter=self.adapter, approver=approver,
                                              config=ExecConfig(data_scope=scope, contributor=skylark,
-                                                               agent=RunConfig(data_scope=scope, contributor=skylark, max_cost_usd=0.25)),
+                                                               agent=RunConfig(data_scope=scope, contributor=skylark, max_cost_usd=0.30)),
                                              app_notes=self.app_notes)
                         out = await ex.run(routine, inputs, task_id=trace_id, launch="if_needed", allow_repair=True, allow_agent=True, memory=notes,
                                            request=goal)
@@ -309,7 +309,7 @@ class TaskRunner:
                             learn += [d for d in (getattr(out, "trace_dir", None), (getattr(out, "agent", None) or {}).get("trace_dir")) if d]
                     else:
                         res = await AgentRunner(gated, adapter=self.adapter, approver=approver,
-                                                config=RunConfig(data_scope=scope, contributor=skylark, max_cost_usd=0.25),
+                                                config=RunConfig(data_scope=scope, contributor=skylark, max_cost_usd=0.30),
                                                 app_notes=self.app_notes).run(goal, task_id=trace_id, memory=notes)
                         status, result = res.status, res.result
                         calls += res.model_calls
