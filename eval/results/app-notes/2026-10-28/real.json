@@ -1,0 +1,459 @@
+{
+ "phase": "real",
+ "date": "2026-10-29T02:03:49+00:00",
+ "profile": "spark",
+ "commit": "25073f5",
+ "wall_s": 232.9,
+ "rows": [
+  {
+   "pass": "cold",
+   "task": "sb_mocha",
+   "app": "com.starbucks.mobilecard",
+   "goal": "How many calories are in a Caffè Mocha at Starbucks?",
+   "status": "done",
+   "result": "370 calories (Grande, 16 fl oz Caffè Mocha as shown on Starbucks page)",
+   "ok": true,
+   "steps": 7,
+   "model_calls": 9,
+   "cost_usd": 0.01892,
+   "duration_s": 27.53,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-real-cold-sb_mocha-215956",
+   "notes_used": [],
+   "approvals": []
+  },
+  {
+   "pass": "cold",
+   "task": "dd_pizza",
+   "app": "com.dd.doordash",
+   "goal": "What's the first restaurant DoorDash shows when you search for pizza?",
+   "status": "done",
+   "result": "Pizza Zombie",
+   "ok": true,
+   "steps": 2,
+   "model_calls": 4,
+   "cost_usd": 0.00778,
+   "duration_s": 16.73,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-real-cold-dd_pizza-220024",
+   "notes_used": [],
+   "approvals": []
+  },
+  {
+   "pass": "cold",
+   "task": "sb_flat_white",
+   "app": "com.starbucks.mobilecard",
+   "goal": "How many calories are in a Flat White at Starbucks?",
+   "status": "done",
+   "result": "170 calories for a Tall (12 fl oz) Flat White at Starbucks",
+   "ok": true,
+   "steps": 7,
+   "model_calls": 9,
+   "cost_usd": 0.01249,
+   "duration_s": 25.49,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-real-cold-sb_flat_white-220041",
+   "notes_used": [],
+   "approvals": []
+  },
+  {
+   "pass": "warmup",
+   "task": "sb_americano",
+   "app": "com.starbucks.mobilecard",
+   "goal": "How many calories are in a Caffè Americano at Starbucks?",
+   "status": "done",
+   "result": "Caffè Americano has 15 calories (Grande, 16 fl oz selected) at Starbucks.",
+   "ok": true,
+   "steps": 13,
+   "model_calls": 16,
+   "cost_usd": 0.02279,
+   "duration_s": 49.2,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-real-warmup-sb_americano-220107",
+   "notes_used": [],
+   "approvals": [],
+   "learned": {
+    "proposed": [
+     {
+      "op": "add",
+      "note_id": "",
+      "text": "To browse without choosing a store, tap Skip then Yes on the skip confirmation dialog.",
+      "step": 10,
+      "reason": "Run looped on Back until Yes was tapped to dismiss cafe selection"
+     },
+     {
+      "op": "add",
+      "note_id": "",
+      "text": "Use Search Menu in Order to find a drink by name.",
+      "step": 11,
+      "reason": "Search led directly to the drink detail screen"
+     },
+     {
+      "op": "add",
+      "note_id": "",
+      "text": "The drink detail screen shows calories for the selected size.",
+      "step": 14,
+      "reason": "Calories were visible on detail screen for the selected size"
+     }
+    ],
+    "applied": [
+     {
+      "op": "add",
+      "note": "app_37e7866655",
+      "text": "To browse without choosing a store, tap Skip then Yes on the skip confirmation dialog."
+     },
+     {
+      "op": "add",
+      "note": "app_d600e546a0",
+      "text": "Use Search Menu in Order to find a drink by name."
+     },
+     {
+      "op": "add",
+      "note": "app_e26fbc9e23",
+      "text": "The drink detail screen shows calories for the selected size."
+     }
+    ],
+    "dropped": [],
+    "cost_usd": 0.00499875
+   }
+  },
+  {
+   "pass": "warmup",
+   "task": "dd_sushi",
+   "app": "com.dd.doordash",
+   "goal": "What's the first restaurant DoorDash shows when you search for sushi?",
+   "status": "done",
+   "result": "Fuki Sushi - 4.7 stars (10k+ ratings), 6.9 mi away, 59 min",
+   "ok": true,
+   "steps": 2,
+   "model_calls": 4,
+   "cost_usd": 0.00882,
+   "duration_s": 14.7,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-real-warmup-dd_sushi-220200",
+   "notes_used": [],
+   "approvals": [],
+   "learned": {
+    "proposed": [
+     {
+      "op": "add",
+      "note_id": "",
+      "text": "Tapping a recent search term below the search bar runs that query.",
+      "step": 2,
+      "reason": "Helps reuse a prior query without typing it again"
+     },
+     {
+      "op": "add",
+      "note_id": "",
+      "text": "The first restaurant result can be a Sponsored listing.",
+      "step": 3,
+      "reason": "Warns that the top result may be an ad"
+     }
+    ],
+    "applied": [
+     {
+      "op": "add",
+      "note": "app_c689a9aac1",
+      "text": "Tapping a recent search term below the search bar runs that query."
+     },
+     {
+      "op": "add",
+      "note": "app_0918b592c1",
+      "text": "The first restaurant result can be a Sponsored listing."
+     }
+    ],
+    "dropped": [],
+    "cost_usd": 0.0048055500000000004
+   }
+  },
+  {
+   "pass": "warmup",
+   "task": "sb_latte",
+   "app": "com.starbucks.mobilecard",
+   "goal": "How many calories are in a Caffè Latte at Starbucks?",
+   "status": "done",
+   "result": "Grande Caffè Latte is 190 calories as shown on Starbucks menu detail screen.",
+   "ok": true,
+   "steps": 7,
+   "model_calls": 9,
+   "cost_usd": 0.01405,
+   "duration_s": 27.14,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-real-warmup-sb_latte-220218",
+   "notes_used": [
+    "app_e26fbc9e23",
+    "app_d600e546a0",
+    "app_37e7866655"
+   ],
+   "approvals": [],
+   "learned": {
+    "proposed": [
+     {
+      "op": "confirm",
+      "note_id": "app_37e7866655",
+      "text": "",
+      "step": 4,
+      "reason": "Run skipped store selection with Skip then Yes to browse menu"
+     },
+     {
+      "op": "confirm",
+      "note_id": "app_d600e546a0",
+      "text": "",
+      "step": 5,
+      "reason": "Run used Search Menu in Order to find the drink"
+     },
+     {
+      "op": "confirm",
+      "note_id": "app_e26fbc9e23",
+      "text": "",
+      "step": 8,
+      "reason": "Run showed calories on drink detail for selected size"
+     }
+    ],
+    "applied": [
+     {
+      "op": "confirm",
+      "note": "app_37e7866655"
+     },
+     {
+      "op": "confirm",
+      "note": "app_d600e546a0"
+     },
+     {
+      "op": "confirm",
+      "note": "app_e26fbc9e23"
+     }
+    ],
+    "dropped": [],
+    "cost_usd": 0.0029433000000000003
+   }
+  },
+  {
+   "pass": "warm",
+   "task": "sb_mocha",
+   "app": "com.starbucks.mobilecard",
+   "goal": "How many calories are in a Caffè Mocha at Starbucks?",
+   "status": "done",
+   "result": "Grande Caffè Mocha (16 fl oz) is 370 calories at Starbucks.",
+   "ok": true,
+   "steps": 7,
+   "model_calls": 9,
+   "cost_usd": 0.01354,
+   "duration_s": 21.97,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-real-warm-sb_mocha-220248",
+   "notes_used": [
+    "app_e26fbc9e23",
+    "app_d600e546a0",
+    "app_37e7866655"
+   ],
+   "approvals": []
+  },
+  {
+   "pass": "warm",
+   "task": "dd_pizza",
+   "app": "com.dd.doordash",
+   "goal": "What's the first restaurant DoorDash shows when you search for pizza?",
+   "status": "done",
+   "result": "Pizza Zombie - 3.1 mi away, 43 min, Lower fees, 50% off on $15+",
+   "ok": true,
+   "steps": 3,
+   "model_calls": 5,
+   "cost_usd": 0.0082,
+   "duration_s": 14.29,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-real-warm-dd_pizza-220310",
+   "notes_used": [
+    "app_0918b592c1",
+    "app_c689a9aac1"
+   ],
+   "approvals": []
+  },
+  {
+   "pass": "warm",
+   "task": "sb_flat_white",
+   "app": "com.starbucks.mobilecard",
+   "goal": "How many calories are in a Flat White at Starbucks?",
+   "status": "done",
+   "result": "A Tall (12 fl oz) Flat White at Starbucks is 170 calories.",
+   "ok": true,
+   "steps": 7,
+   "model_calls": 9,
+   "cost_usd": 0.01644,
+   "duration_s": 24.17,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-real-warm-sb_flat_white-220325",
+   "notes_used": [
+    "app_e26fbc9e23",
+    "app_d600e546a0",
+    "app_37e7866655"
+   ],
+   "approvals": []
+  }
+ ],
+ "summary": {
+  "cold": {
+   "runs": 3,
+   "ok": 3,
+   "steps_mean": 5.33,
+   "calls_mean": 7.33,
+   "cost_usd": 0.0392,
+   "note_writing_usd": 0.0,
+   "seconds_mean": 23.2
+  },
+  "warmup": {
+   "runs": 3,
+   "ok": 3,
+   "steps_mean": 7.33,
+   "calls_mean": 9.67,
+   "cost_usd": 0.0457,
+   "note_writing_usd": 0.0127,
+   "seconds_mean": 30.3
+  },
+  "warm": {
+   "runs": 3,
+   "ok": 3,
+   "steps_mean": 5.67,
+   "calls_mean": 7.67,
+   "cost_usd": 0.0382,
+   "note_writing_usd": 0.0,
+   "seconds_mean": 20.1
+  }
+ },
+ "notes": [
+  {
+   "id": "app_e26fbc9e23",
+   "app": "com.starbucks.mobilecard",
+   "text": "The drink detail screen shows calories for the selected size.",
+   "status": "active",
+   "confirmations": 2,
+   "first_seen": 1793239319.6961658,
+   "last_confirmed": 1793239368.035825,
+   "sources": [
+    {
+     "source": "src_376f7aa02e",
+     "observed_at": 1793239368.035825,
+     "task_id": "notes-real-warmup-sb_latte-220218",
+     "trace": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-real-warmup-sb_latte-220218",
+     "outcome": "done",
+     "kind": "agent",
+     "screenshot": null,
+     "step": 8,
+     "app": "com.starbucks.mobilecard"
+    },
+    {
+     "source": "src_2ae971218a",
+     "observed_at": 1793239319.696621,
+     "task_id": "notes-real-warmup-sb_americano-220107",
+     "trace": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-real-warmup-sb_americano-220107",
+     "outcome": "done",
+     "kind": "agent",
+     "screenshot": null,
+     "step": 14,
+     "app": "com.starbucks.mobilecard"
+    }
+   ]
+  },
+  {
+   "id": "app_d600e546a0",
+   "app": "com.starbucks.mobilecard",
+   "text": "Use Search Menu in Order to find a drink by name.",
+   "status": "active",
+   "confirmations": 2,
+   "first_seen": 1793239319.694465,
+   "last_confirmed": 1793239368.034867,
+   "sources": [
+    {
+     "source": "src_1307e937f9",
+     "observed_at": 1793239368.034867,
+     "task_id": "notes-real-warmup-sb_latte-220218",
+     "trace": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-real-warmup-sb_latte-220218",
+     "outcome": "done",
+     "kind": "agent",
+     "screenshot": null,
+     "step": 5,
+     "app": "com.starbucks.mobilecard"
+    },
+    {
+     "source": "src_0010b0dae9",
+     "observed_at": 1793239319.694944,
+     "task_id": "notes-real-warmup-sb_americano-220107",
+     "trace": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-real-warmup-sb_americano-220107",
+     "outcome": "done",
+     "kind": "agent",
+     "screenshot": null,
+     "step": 11,
+     "app": "com.starbucks.mobilecard"
+    }
+   ]
+  },
+  {
+   "id": "app_37e7866655",
+   "app": "com.starbucks.mobilecard",
+   "text": "To browse without choosing a store, tap Skip then Yes on the skip confirmation dialog.",
+   "status": "active",
+   "confirmations": 2,
+   "first_seen": 1793239319.691208,
+   "last_confirmed": 1793239368.0336819,
+   "sources": [
+    {
+     "source": "src_7650216583",
+     "observed_at": 1793239368.0336819,
+     "task_id": "notes-real-warmup-sb_latte-220218",
+     "trace": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-real-warmup-sb_latte-220218",
+     "outcome": "done",
+     "kind": "agent",
+     "screenshot": null,
+     "step": 4,
+     "app": "com.starbucks.mobilecard"
+    },
+    {
+     "source": "src_7dbf939793",
+     "observed_at": 1793239319.693137,
+     "task_id": "notes-real-warmup-sb_americano-220107",
+     "trace": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-real-warmup-sb_americano-220107",
+     "outcome": "done",
+     "kind": "agent",
+     "screenshot": null,
+     "step": 10,
+     "app": "com.starbucks.mobilecard"
+    }
+   ]
+  },
+  {
+   "id": "app_0918b592c1",
+   "app": "com.dd.doordash",
+   "text": "The first restaurant result can be a Sponsored listing.",
+   "status": "active",
+   "confirmations": 1,
+   "first_seen": 1793239338.5347252,
+   "last_confirmed": 1793239338.53541,
+   "sources": [
+    {
+     "source": "src_fb2a7d4c97",
+     "observed_at": 1793239338.53541,
+     "task_id": "notes-real-warmup-dd_sushi-220200",
+     "trace": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-real-warmup-dd_sushi-220200",
+     "outcome": "done",
+     "kind": "agent",
+     "screenshot": null,
+     "step": 3,
+     "app": "com.dd.doordash"
+    }
+   ]
+  },
+  {
+   "id": "app_c689a9aac1",
+   "app": "com.dd.doordash",
+   "text": "Tapping a recent search term below the search bar runs that query.",
+   "status": "active",
+   "confirmations": 1,
+   "first_seen": 1793239338.531337,
+   "last_confirmed": 1793239338.532368,
+   "sources": [
+    {
+     "source": "src_bb7f2edf10",
+     "observed_at": 1793239338.532368,
+     "task_id": "notes-real-warmup-dd_sushi-220200",
+     "trace": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-real-warmup-dd_sushi-220200",
+     "outcome": "done",
+     "kind": "agent",
+     "screenshot": null,
+     "step": 2,
+     "app": "com.dd.doordash"
+    }
+   ]
+  }
+ ]
+}
