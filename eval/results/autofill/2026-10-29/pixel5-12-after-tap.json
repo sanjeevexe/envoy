@@ -1,0 +1,46 @@
+{
+ "label": "pixel5-12-after-tap",
+ "time": "2026-10-29 19:48:15",
+ "package": "com.google.android.gms",
+ "activity": "com.google.android.gms.autofill.ui.AutofillDialogActivity",
+ "secure": false,
+ "has_password_field": false,
+ "fields": [],
+ "windows": [
+  "ScreenDecorOverlayBottom",
+  "ScreenDecorOverlay",
+  "SecondaryHomeHandle0",
+  "EdgeBackGestureHandler0",
+  "NavigationBar0",
+  "NotificationShade",
+  "StatusBar",
+  "ShellDropTarget",
+  "com.google.android.gms/com.google.android.gms.autofill.ui.AutofillDialogActivity",
+  "InputMethod",
+  "com.google.android.gms/com.google.android.gms.autofill.ui.AutofillDialogActivity",
+  "org.wikipedia/org.wikipedia.login.LoginActivity",
+  "org.wikipedia/org.wikipedia.DefaultIcon",
+  "com.android.vending/com.google.android.finsky.transparentmainactivity.TransparentMainActivityPrivate",
+  "PopupWindow:5c6444b",
+  "PopupWindow:a6fd462",
+  "com.android.vending/com.google.android.finsky.activities.MainActivityPrivate",
+  "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+  "com.skylark.air/com.skylark.air.MainActivity",
+  "com.instagram.android/com.instagram.mainactivity.InstagramMainActivity",
+  "com.google.android.apps.nexuslauncher/com.android.quickstep.RecentsActivity",
+  "com.breel.wallpapers20.stack.wallpaper.StackWallpaper"
+ ],
+ "other_packages": [
+  "com.android.systemui"
+ ],
+ "not_the_app": [],
+ "password_text_unmasked": false,
+ "numbered": [
+  "1: Text 'Autofill with Google'",
+  "2: Text 'With a single tap, fill in passwords, addresses, credit card'",
+  "3: Text 'To fill in passwords across apps, Autofill with Google can s'",
+  "4: Text 'You can manage your Autofill preferences in Settings.'",
+  "5: Button 'envoy \u00b7 envoy3955@gmail.com'",
+  "6: Button 'Continue'"
+ ]
+}

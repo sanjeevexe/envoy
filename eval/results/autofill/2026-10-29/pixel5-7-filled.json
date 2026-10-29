@@ -1,0 +1,1552 @@
+{
+ "label": "pixel5-7-filled",
+ "time": "2026-10-29 19:46:14",
+ "package": "org.wikipedia",
+ "activity": "org.wikipedia.login.LoginActivity",
+ "secure": false,
+ "has_password_field": true,
+ "fields": [
+  {
+   "resource_id": "",
+   "hint": "Username",
+   "password": false,
+   "focused": true,
+   "chars": 0,
+   "masked": false,
+   "package": "org.wikipedia",
+   "bounds": "[44,356][1036,509]"
+  },
+  {
+   "resource_id": "",
+   "hint": "Password",
+   "password": true,
+   "focused": false,
+   "chars": 0,
+   "masked": false,
+   "package": "org.wikipedia",
+   "bounds": "[44,531][1036,684]"
+  }
+ ],
+ "windows": [
+  "ScreenDecorOverlayBottom",
+  "ScreenDecorOverlay",
+  "SecondaryHomeHandle0",
+  "EdgeBackGestureHandler0",
+  "NavigationBar0",
+  "NotificationShade",
+  "StatusBar",
+  "ShellDropTarget",
+  "InputMethod",
+  "org.wikipedia/org.wikipedia.login.LoginActivity",
+  "org.wikipedia/org.wikipedia.DefaultIcon",
+  "com.android.vending/com.google.android.finsky.transparentmainactivity.TransparentMainActivityPrivate",
+  "PopupWindow:5c6444b",
+  "PopupWindow:a6fd462",
+  "com.android.vending/com.google.android.finsky.activities.MainActivityPrivate",
+  "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+  "com.skylark.air/com.skylark.air.MainActivity",
+  "com.instagram.android/com.instagram.mainactivity.InstagramMainActivity",
+  "com.google.android.apps.nexuslauncher/com.android.quickstep.RecentsActivity",
+  "com.breel.wallpapers20.stack.wallpaper.StackWallpaper"
+ ],
+ "other_packages": [
+  "com.android.systemui",
+  "com.google.android.inputmethod.latin"
+ ],
+ "not_the_app": [
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "android:id/content",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    0,
+    1103,
+    1080,
+    2340
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "android:id/parentPanel",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    0,
+    1103,
+    1080,
+    2340
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "android:id/inputArea",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    0,
+    1103,
+    1080,
+    2340
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    0,
+    1364,
+    1080,
+    2208
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/keyboard_holder",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    0,
+    1364,
+    1080,
+    2208
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/keyboard_header_view_holder",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    0,
+    1364,
+    1080,
+    1485
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    0,
+    1364,
+    1080,
+    1485
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    0,
+    1364,
+    1080,
+    1485
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    6,
+    1364,
+    1074,
+    1485
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    6,
+    1364,
+    1074,
+    1485
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_proactive_suggestions",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    105,
+    1364,
+    975,
+    1485
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    105,
+    1364,
+    975,
+    1485
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    162,
+    1364,
+    918,
+    1485
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    162,
+    1364,
+    918,
+    1485
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_header_access_points_menu",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    6,
+    1364,
+    134,
+    1485
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    23,
+    1377,
+    117,
+    1471
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    23,
+    1377,
+    117,
+    1471
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_header_action",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    975,
+    1364,
+    1074,
+    1485
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_header_action_holder",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    975,
+    1364,
+    1074,
+    1485
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_header_action_surface",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    975,
+    1364,
+    1074,
+    1485
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    0,
+    1485,
+    1080,
+    2208
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/input_area",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    6,
+    1507,
+    1074,
+    2012
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_0_0",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    6,
+    1507,
+    112,
+    1675
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    12,
+    1507,
+    106,
+    1648
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    88,
+    1507,
+    106,
+    1548
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_0_1",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    112,
+    1507,
+    218,
+    1675
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    118,
+    1507,
+    212,
+    1648
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    190,
+    1507,
+    212,
+    1548
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_0_2",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    218,
+    1507,
+    325,
+    1675
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    224,
+    1507,
+    319,
+    1648
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    297,
+    1507,
+    319,
+    1548
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_0_3",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    325,
+    1507,
+    432,
+    1675
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    331,
+    1507,
+    426,
+    1648
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    402,
+    1507,
+    426,
+    1548
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_0_4",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    432,
+    1507,
+    539,
+    1675
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    438,
+    1507,
+    533,
+    1648
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    510,
+    1507,
+    533,
+    1548
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_0_5",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    539,
+    1507,
+    646,
+    1675
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    545,
+    1507,
+    640,
+    1648
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    618,
+    1507,
+    640,
+    1548
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_0_6",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    646,
+    1507,
+    753,
+    1675
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    652,
+    1507,
+    747,
+    1648
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    725,
+    1507,
+    747,
+    1548
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_0_7",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    753,
+    1507,
+    860,
+    1675
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    759,
+    1507,
+    854,
+    1648
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    832,
+    1507,
+    854,
+    1548
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_0_8",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    860,
+    1507,
+    967,
+    1675
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    866,
+    1507,
+    961,
+    1648
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    939,
+    1507,
+    961,
+    1548
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_0_9",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    967,
+    1507,
+    1074,
+    1675
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    973,
+    1507,
+    1068,
+    1648
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    1043,
+    1507,
+    1068,
+    1548
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_1_0",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    6,
+    1675,
+    166,
+    1843
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/host",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    60,
+    1675,
+    166,
+    1843
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    66,
+    1675,
+    160,
+    1816
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_1_1",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    166,
+    1675,
+    272,
+    1843
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    172,
+    1675,
+    266,
+    1816
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_1_2",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    272,
+    1675,
+    378,
+    1843
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    278,
+    1675,
+    372,
+    1816
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_1_3",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    378,
+    1675,
+    485,
+    1843
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    384,
+    1675,
+    479,
+    1816
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_1_4",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    485,
+    1675,
+    592,
+    1843
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    491,
+    1675,
+    586,
+    1816
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_1_5",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    592,
+    1675,
+    699,
+    1843
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    598,
+    1675,
+    693,
+    1816
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_1_6",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    699,
+    1675,
+    806,
+    1843
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    705,
+    1675,
+    800,
+    1816
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_1_7",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    806,
+    1675,
+    913,
+    1843
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    812,
+    1675,
+    907,
+    1816
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_1_8",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    913,
+    1675,
+    1074,
+    1843
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/host",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    913,
+    1675,
+    1020,
+    1843
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    919,
+    1675,
+    1014,
+    1816
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_shift",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    6,
+    1843,
+    166,
+    2012
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    47,
+    1875,
+    124,
+    1952
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_2_1",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    166,
+    1843,
+    272,
+    2012
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    172,
+    1843,
+    266,
+    1985
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_2_2",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    272,
+    1843,
+    378,
+    2012
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    278,
+    1843,
+    372,
+    1985
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_2_3",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    378,
+    1843,
+    485,
+    2012
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    384,
+    1843,
+    479,
+    1985
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_2_4",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    485,
+    1843,
+    592,
+    2012
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    491,
+    1843,
+    586,
+    1985
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_2_5",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    592,
+    1843,
+    699,
+    2012
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    598,
+    1843,
+    693,
+    1985
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_2_6",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    699,
+    1843,
+    806,
+    2012
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    705,
+    1843,
+    800,
+    1985
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_2_7",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    806,
+    1843,
+    913,
+    2012
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    812,
+    1843,
+    907,
+    1985
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_del",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    913,
+    1843,
+    1074,
+    2012
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    955,
+    1875,
+    1032,
+    1952
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    6,
+    2012,
+    1074,
+    2181
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_switch_to_symbol",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    6,
+    2012,
+    166,
+    2181
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    43,
+    2053,
+    128,
+    2112
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_bottom_symbol_1",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    166,
+    2012,
+    272,
+    2181
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    214,
+    2062,
+    224,
+    2137
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_switch_to_next_language",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    272,
+    2012,
+    378,
+    2181
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    292,
+    2050,
+    358,
+    2116
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_space",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    378,
+    2012,
+    806,
+    2181
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    384,
+    2012,
+    800,
+    2154
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_bottom_symbol_2",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    806,
+    2012,
+    913,
+    2181
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    855,
+    2062,
+    863,
+    2137
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/key_pos_ime_action",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    913,
+    2012,
+    1074,
+    2181
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    960,
+    2050,
+    1026,
+    2116
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    0,
+    2181,
+    1080,
+    2208
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    127,
+    1103,
+    841,
+    1347
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    841,
+    1153,
+    902,
+    1214
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "android:id/navigationBarBackground",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    0,
+    2208,
+    1080,
+    2340
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "android:id/input_method_navigation_bar_view",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    0,
+    2208,
+    1080,
+    2340
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "android:id/input_method_nav_inflater",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    0,
+    2208,
+    1080,
+    2340
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "android:id/input_method_nav_horizontal",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    50,
+    2208,
+    1030,
+    2340
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "android:id/input_method_nav_buttons",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    72,
+    2208,
+    1008,
+    2340
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "android:id/input_method_nav_ends_group",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    72,
+    2208,
+    1008,
+    2340
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "android:id/input_method_nav_back",
+   "chrome": true,
+   "clickable": true,
+   "bounds": [
+    72,
+    2208,
+    264,
+    2340
+   ]
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "label": "",
+   "resource_id": "android:id/input_method_nav_center_group",
+   "chrome": true,
+   "clickable": false,
+   "bounds": [
+    441,
+    2208,
+    639,
+    2340
+   ]
+  }
+ ],
+ "password_text_unmasked": false,
+ "numbered": [
+  "1: Button 'Navigate up'",
+  "2: Text 'Log in'",
+  "5: Toggle 'Show password'",
+  "6: Button 'Log in'",
+  "7: Text \"Don't have an account?\"",
+  "8: Button 'Join Wikipedia'",
+  "9: Button 'Forgot your password?'",
+  "10: Text '\u2022'",
+  "11: Button 'Privacy policy'"
+ ]
+}

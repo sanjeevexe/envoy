@@ -15,9 +15,9 @@ to you:
 4. On your yes it taps the app's own sign-in button and waits for the screen to leave sign-in.
 
 Anything that doesn't match ends here and the phone is handed to you exactly as before: no saved login offered, two
-different saved accounts, fields that don't fill, a no (or no answer), no sign-in button, or a sign-in screen still there
-afterwards. Envoy never types into a password field, never reads a field's value (a filled password reads as dots:
-devices/screen.py masks it), takes no screenshot of a secure window, and keeps nothing.
+different saved accounts, fields that don't fill, a no (or no answer), no sign-in button, or a sign-in screen or a
+captcha there afterwards. Envoy never types into a password field, never reads a field's value (a filled password reads
+as dots: devices/screen.py masks it), takes no screenshot of a secure window, and keeps nothing.
 """
 
 from __future__ import annotations
@@ -30,6 +30,7 @@ from typing import Any, Awaitable, Callable
 from fastapi import APIRouter, Body, Depends
 
 from devices.types import Action, Element, ScreenState
+from policy.botcheck import bot_check_reason
 from policy.signin import sign_in_reason
 
 KEY = "signin.autofill"
@@ -202,6 +203,11 @@ async def sign_in(device: Any, *, app: str | None, name: str, ask: Callable[[str
         return False
     await device.act(Action(kind="tap", element=button.number))
     screen = await _until(device, lambda s: sign_in_reason(s) is None, wait_s)
+    if sign_in_reason(screen) is None:
+        screen = await device.wait_until_settled()  # a captcha can cover the form a moment later
+    if bot_check_reason(screen) is not None:  # Wikipedia's hCaptcha on the Pixel 5 hides the form: not signed in
+        note(f"{name} asked you to prove you're human after {button.label}: that's yours to do")
+        return False
     if sign_in_reason(screen) is not None:
         note(f"{name} still shows its sign-in after {button.label}")
         return False

@@ -1,0 +1,92 @@
+{
+ "label": "pixel5-4-createaccount",
+ "time": "2026-10-29 19:42:28",
+ "package": "org.wikipedia",
+ "activity": "org.wikipedia.createaccount.CreateAccountActivity",
+ "secure": false,
+ "has_password_field": true,
+ "fields": [
+  {
+   "resource_id": "",
+   "hint": "Username",
+   "password": false,
+   "focused": false,
+   "chars": 0,
+   "masked": false,
+   "package": "org.wikipedia",
+   "bounds": "[44,356][1036,509]"
+  },
+  {
+   "resource_id": "",
+   "hint": "Password",
+   "password": true,
+   "focused": false,
+   "chars": 0,
+   "masked": false,
+   "package": "org.wikipedia",
+   "bounds": "[44,531][1036,684]"
+  },
+  {
+   "resource_id": "",
+   "hint": "Repeat password",
+   "password": true,
+   "focused": false,
+   "chars": 0,
+   "masked": false,
+   "package": "org.wikipedia",
+   "bounds": "[44,706][1036,859]"
+  },
+  {
+   "resource_id": "",
+   "hint": "Email (Optional)",
+   "password": false,
+   "focused": false,
+   "chars": 0,
+   "masked": false,
+   "package": "org.wikipedia",
+   "bounds": "[44,881][1036,1034]"
+  }
+ ],
+ "windows": [
+  "ScreenDecorOverlayBottom",
+  "ScreenDecorOverlay",
+  "SecondaryHomeHandle0",
+  "EdgeBackGestureHandler0",
+  "NavigationBar0",
+  "NotificationShade",
+  "StatusBar",
+  "ShellDropTarget",
+  "InputMethod",
+  "org.wikipedia/org.wikipedia.createaccount.CreateAccountActivity",
+  "org.wikipedia/org.wikipedia.login.LoginActivity",
+  "org.wikipedia/org.wikipedia.DefaultIcon",
+  "com.android.vending/com.google.android.finsky.transparentmainactivity.TransparentMainActivityPrivate",
+  "PopupWindow:5c6444b",
+  "PopupWindow:a6fd462",
+  "com.android.vending/com.google.android.finsky.activities.MainActivityPrivate",
+  "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+  "com.skylark.air/com.skylark.air.MainActivity",
+  "com.instagram.android/com.instagram.mainactivity.InstagramMainActivity",
+  "com.google.android.apps.nexuslauncher/com.android.quickstep.RecentsActivity",
+  "com.breel.wallpapers20.stack.wallpaper.StackWallpaper"
+ ],
+ "other_packages": [
+  "com.android.systemui"
+ ],
+ "not_the_app": [],
+ "password_text_unmasked": false,
+ "numbered": [
+  "1: Button 'Navigate up'",
+  "2: Text 'Create an account'",
+  "5: Toggle 'Show password'",
+  "7: Toggle 'Show password'",
+  "9: Text 'Recommended since email is needed for account recovery.'",
+  "10: Button 'Next'",
+  "11: Text 'Already have an account?'",
+  "12: Button 'Log in'",
+  "13: Text 'This site is protected by hCaptcha and its Privacy Policy an'",
+  "14: Button 'Forgot your password?'",
+  "15: Text '\u2022'",
+  "16: Button 'Privacy policy'"
+ ]
+}

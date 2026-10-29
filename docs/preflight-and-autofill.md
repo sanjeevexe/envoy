@@ -91,7 +91,7 @@ Muse uses stored credentials without seeing them. On Android the equivalent is t
 
 So autofill is on, and it is Google's. The keyboard is what decides where a suggestion appears. AdbKeyboard doesn't show inline suggestions, so on envoy-real a saved login would be offered as the autofill **dropdown**: a small window of its own under the focused field. Whether Envoy's screen reading (the uiautomator dump) sees that window is exactly what step 2 has to find out.
 
-**The Pixel 5** (Android 13) isn't connected yet. Its keyboard is the user's (Gboard), so a saved login would most likely be offered **inline, in the keyboard's suggestion strip**, which is a different window and a different thing to find. envoy-real's result therefore doesn't settle the Pixel; both are worth one look.
+**The Pixel 5** (Android 13) has the user's keyboard (Gboard), so a saved login might come **inline, in the keyboard's strip**, instead. It doesn't: it comes as the same sheet, at first (see "The Pixel 5" below).
 
 ### Steps 2–5 (envoy-real, Oct 29, 12:48–13:30, with the user)
 
@@ -114,7 +114,7 @@ So autofill is on, and it is Google's. The keyboard is what decides where a sugg
 - Wikipedia was uninstalled, which also ended the throwaway session. Nothing else was signed in or out.
 - envoy-real's third-party apps match the list taken before the test: Amazon, Chipotle, DoorDash, Starbucks, Target, `com.github.uiautomator`, and Google's `contactkeys`, `safetycore` and `verifier`. That's 9 packages, before and after (`envoy-real-apps-before.txt` and `-after.txt`).
 - envoy-real was stopped with `scripts/stop_emulator.sh` and released.
-- The throwaway login stays in envoy3955's Password Manager for the Pixel check. Delete it at passwords.google.com once that's done.
+- The throwaway login stays in envoy3955's Password Manager for a live run of the finished feature. Delete it at passwords.google.com once that's done, or now if there won't be one.
 
 ### What it means
 
@@ -124,28 +124,66 @@ Two things a feature would have to handle:
 - **The sheet.** It is a system-owned sheet with unclickable list rows. The feature finds it by its title and taps a row's bounds. The label a row shows is the saved username, which may repeat in different capitals.
 - **Its first appearance.** The sheet appears on focusing the username field. Before that, the screen looks exactly like any sign-in.
 
-**Still open: the Pixel 5** (Android 13, Gboard), where the suggestion may come inline in the keyboard strip instead. It's checked at the next sitting with the same steps.
+### The Pixel 5 (Oct 29, 19:38–19:55, with the user)
 
-**The build decision** stays as agreed: the feature is built only if it's clean, off by default, and the Pixel doesn't differ.
+**Step 1, read-only:**
 
-## Saved logins: the feature (built Oct 29, held until the Pixel check)
+| | Pixel 5 |
+| --- | --- |
+| Android | 13 (SDK 33) |
+| Autofill service | `com.google.android.gms/.autofill.service.AutofillService` (Google), as on envoy-real |
+| Credential Manager | not set (Android 13 predates it) |
+| Keyboard | Gboard 11.7, with inline suggestions enabled |
+| Google account | envoy3955@gmail.com, the same account as envoy-real, so the throwaway login was already there |
+| Third-party apps | `ai.envoy.banner`, Instagram (signed in to the test account) and SkyLark: the same 3 before and after |
 
-The coordinator asked for it to be built now on a branch and held: no branch-ready until the Pixel 5 check. If that check doesn't happen by the Nov 1 cut, the coordinator decides whether the emulator path merges alone.
+**Steps 2–5** (Wikipedia installed by the user from its Play Store page for the test, and uninstalled afterwards). The readings are `pixel5-*.json` and `pixel5-*.xml` in `eval/results/autofill/2026-10-29/`.
+
+| Step | Result |
+| --- | --- |
+| **2. The suggestion** | **The same sheet as envoy-real,** not a keyboard strip: *"Use your saved password for Wikipedia?"*, owned by Google Play services, with the login as "Envoytest" and "envoytest" and the password as `••••••••`. The held feature's finder (`autofill.suggestions`) found it on the live screen as it does on the recorded one. |
+| **The sheet shows once** | When the sheet closes without a pick (here it closed by itself while the user was answering a question), the login moves to **Gboard's strip**: chips "Envoytest ···" above the keys, and a tip "Autofill suggestions are now above your keyboard". **The chips aren't in the accessibility tree:** Gboard draws them in a surface, with no text Envoy can read. Tapping the already-focused field again doesn't bring the sheet back. The feature's own code, run live, said "your phone's password manager offered no saved login for Wikipedia" and handed the phone back, which is correct. Opening the login screen again brings the sheet back. |
+| **3. The fill** | The feature's code tapped Username and then the row ("Envoytest"). The first time on this phone, Google showed its one-time **"Autofill with Google"** screen (the account, and Continue) before filling. That's a consent screen, so the user accepted it. The feature waited 4 s, said "the saved login didn't fill the fields" and handed the phone back, which is correct. After Continue, both fields filled (9 and 8 characters). **Masking holds on the Pixel:** the raw uiautomator dump has the password in plain text, as on envoy-real, but after Envoy's screen layer (`beeeb5b`) it reads only `••••••••`. The feature's readers saw both fields filled and found the Log in button. The probe saved only the length. |
+| **4. Secure windows** | Not exercised: no window was marked secure. |
+| **5. Log in** | The user pressed Log in. **Wikipedia showed an hCaptcha** ("Move the correct piece to complete the pattern") over the form. **It's a gap in the held feature:** with the captcha up, the password field isn't on screen, so `sign_in_reason()` reads "not a sign-in", and the feature would have said "Signed in". Fixed in the branch: after the button, the feature waits for the screen to settle and checks `policy/botcheck.bot_check_reason()`, which names this screen ("captcha"). A captcha now ends in "Wikipedia asked you to prove you're human after Log in: that's yours to do" and the hand-off. The test uses this recorded screen. The captcha wasn't solved, since it wasn't needed for the test. |
+
+**Cleanup:**
+- Wikipedia was uninstalled. The third-party apps match the list taken before (`pixel5-apps-before.txt` and `-after.txt`).
+- Instagram is still signed in, and nothing was signed out. The "Autofill with Google" consent the user gave stays on the phone, as a Google setting.
+- The Pixel was released at 19:55.
+
+### The decision
+
+**The Pixel doesn't differ in shape:** it shows the same sheet, the finder reads it, and the password stays masked. So the feature is clean on both kinds of phone, and **the branch is ready, off by default for both.** What the Pixel added:
+- **One fix:** a captcha after the button.
+- **Two hand-offs, both correct as built:**
+  - the sheet already dismissed, leaving only Gboard chips Envoy can't see;
+  - Google's one-time consent screen.
+
+On a real phone the feature therefore signs in only when the sheet is fresh and nothing else asks. Everything else goes to you, as before.
+
+## Saved logins: the feature (built Oct 29; ready after the Pixel check)
+
+The coordinator asked for it to be built on a branch and held until the Pixel 5 check. That check is done (above): it's ready, off by default for both kinds of phone.
 
 - **The setting:** `signin.autofill` (`GET/POST /api/settings/signin`, `{"autofill": {"emulator": bool, "phone": bool}}`). Both are **off by default**, and they switch separately. Settings › Phones has the row "Use saved logins from your phone's password manager" (`web/components/SavedLogins.tsx`).
 - **Where it runs:** `runner._saved_login`, in the runner's two sign-in branches: the app opening on a sign-in screen, and an agent or routine handing off with "sign-in needed". It runs only when the setting is on for that kind of phone; otherwise, or when it returns False, the phone is handed to you exactly as before.
 - **What it does** (`api/autofill.py`, only taps):
   1. Taps the username field.
-  2. Waits up to 4 s for a saved-login row: a row outside the app with an account name beside a password shown as dots. Android's autofill dialog, with Google's rows in it, is what envoy-real showed.
+  2. Waits up to 4 s for a saved-login row: a row outside the app with an account name beside a password shown as dots. Android's autofill dialog, with Google's rows in it, is what envoy-real and the Pixel 5 showed. Gboard's chips can't be read (they aren't in the tree), so they don't count.
   3. Taps that row. One account saved under two spellings counts as one; two different accounts are yours to choose.
   4. Checks that both fields filled, without reading the password: each field must no longer show its hint. A filled password reads as dots, and an empty one as its hint (main `53ab459`).
   5. Asks you through the normal approval, "Sign in to Wikipedia as Envoytest with your saved login?".
-  6. On your yes, taps the app's own Sign in / Log in button and waits up to 20 s for the sign-in screen to go.
+  6. On your yes, taps the app's own Sign in / Log in button and waits up to 20 s for the sign-in screen to go. A captcha in its place (`bot_check_reason`) isn't a sign-in: it's yours.
 - **Every sign-in asks.** The approval names no button (`target=""`), so `approval_rules.decide()` has nothing to match the request's words against. "Sign in to Wikipedia as Envoytest with my saved login" in the request doesn't approve it. A test proves this: with a named target, it fails.
 - **It never** types (no `type` action exists in the module), reads a field's value, photographs a screen or stores anything. A secure sign-in screen works the same way, again without a picture.
-- **When anything doesn't match,** it says why in one step and hands the phone to you: no saved login offered, two accounts, fields that don't fill, a no, no sign-in button, or the sign-in still there afterwards.
-- **Tests** (`backend/tests/test_autofill.py`, 12): five screens recorded from this experiment (`tests/screens/autofill_*.xml`; the throwaway username, and a made-up stand-in for the password). They cover the screens as read; a sign-in with taps only; a password never typed, read or photographed in any outcome; a no that leaves Log in unpressed; no saved login; a sign-in that fails afterwards; a secure screen; two accounts; the setting (off by default, per kind); and in the runner, that the sign-in asks even when the request's words name it, and that with the setting off for that kind the phone is handed over as before.
-- **Not measured:** the Pixel 5's inline suggestions in Gboard. The finder skips the keyboard's window on purpose until the Pixel check shows what they look like.
+- **When anything doesn't match,** it says why in one step and hands the phone to you: no saved login offered, two accounts, fields that don't fill, a no, no sign-in button, or a sign-in or a captcha still there afterwards.
+- **Tests** (`backend/tests/test_autofill.py`, 13): six screens recorded from this experiment (`tests/screens/autofill_*.xml`; the throwaway username, and a made-up stand-in for the password). They cover the screens as read; a sign-in with taps only; a password never typed, read or photographed in any outcome; a no that leaves Log in unpressed; no saved login; a sign-in that fails afterwards; a captcha after Log in (the Pixel's hCaptcha); a secure screen; two accounts; the setting (off by default, per kind); and in the runner, that the sign-in asks even when the request's words name it, and that with the setting off for that kind the phone is handed over as before.
+- **Not run end to end:**
+  - The whole feature through the runner, with an approval and the button, hasn't run on a device: its parts have.
+  - On the Pixel, the feature's code tapped the field and the row, and was handed back at the consent screen and the Gboard chips.
+  - The readers recognised the filled form and its button.
+  - The user pressed Log in on both devices.
 
 **A live run of the finished feature** is yours to do, or to OK, on the throwaway account:
 1. Start envoy-real (`scripts/start_emulator.sh envoy-real --window`) and install Wikipedia.

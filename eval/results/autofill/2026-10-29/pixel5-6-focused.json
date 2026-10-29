@@ -1,0 +1,190 @@
+{
+ "label": "pixel5-6-focused",
+ "time": "2026-10-29 19:43:12",
+ "package": "android",
+ "activity": "",
+ "secure": false,
+ "has_password_field": false,
+ "fields": [],
+ "windows": [
+  "ScreenDecorOverlayBottom",
+  "ScreenDecorOverlay",
+  "SecondaryHomeHandle0",
+  "EdgeBackGestureHandler0",
+  "NavigationBar0",
+  "NotificationShade",
+  "StatusBar",
+  "android",
+  "ShellDropTarget",
+  "InputMethod",
+  "org.wikipedia/org.wikipedia.login.LoginActivity",
+  "org.wikipedia/org.wikipedia.DefaultIcon",
+  "com.android.vending/com.google.android.finsky.transparentmainactivity.TransparentMainActivityPrivate",
+  "PopupWindow:5c6444b",
+  "PopupWindow:a6fd462",
+  "com.android.vending/com.google.android.finsky.activities.MainActivityPrivate",
+  "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+  "com.skylark.air/com.skylark.air.MainActivity",
+  "com.instagram.android/com.instagram.mainactivity.InstagramMainActivity",
+  "com.google.android.apps.nexuslauncher/com.android.quickstep.RecentsActivity",
+  "com.breel.wallpapers20.stack.wallpaper.StackWallpaper"
+ ],
+ "other_packages": [
+  "com.android.systemui",
+  "com.google.android.gms"
+ ],
+ "not_the_app": [
+  {
+   "package": "com.google.android.gms",
+   "label": "",
+   "resource_id": "com.google.android.gms:id/title",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    220,
+    1518,
+    860,
+    1656
+   ]
+  },
+  {
+   "package": "com.google.android.gms",
+   "label": "Wikipedia \u00b7 Envoytest \u00b7 \u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022",
+   "resource_id": "android:id/content",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    66,
+    1722,
+    1014,
+    1863
+   ]
+  },
+  {
+   "package": "com.google.android.gms",
+   "label": "",
+   "resource_id": "android:id/icon1",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    110,
+    1748,
+    198,
+    1836
+   ]
+  },
+  {
+   "package": "com.google.android.gms",
+   "label": "Envoytest",
+   "resource_id": "android:id/primary",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    198,
+    1722,
+    412,
+    1797
+   ]
+  },
+  {
+   "package": "com.google.android.gms",
+   "label": "",
+   "resource_id": "android:id/text1",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    198,
+    1722,
+    412,
+    1797
+   ]
+  },
+  {
+   "package": "com.google.android.gms",
+   "label": "",
+   "resource_id": "android:id/text2",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    198,
+    1797,
+    330,
+    1863
+   ]
+  },
+  {
+   "package": "com.google.android.gms",
+   "label": "Wikipedia \u00b7 envoytest \u00b7 \u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022",
+   "resource_id": "android:id/content",
+   "chrome": false,
+   "clickable": true,
+   "bounds": [
+    66,
+    1863,
+    1014,
+    2004
+   ]
+  },
+  {
+   "package": "com.google.android.gms",
+   "label": "",
+   "resource_id": "android:id/icon1",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    110,
+    1889,
+    198,
+    1977
+   ]
+  },
+  {
+   "package": "com.google.android.gms",
+   "label": "envoytest",
+   "resource_id": "android:id/primary",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    198,
+    1863,
+    411,
+    1938
+   ]
+  },
+  {
+   "package": "com.google.android.gms",
+   "label": "",
+   "resource_id": "android:id/text1",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    198,
+    1863,
+    411,
+    1938
+   ]
+  },
+  {
+   "package": "com.google.android.gms",
+   "label": "",
+   "resource_id": "android:id/text2",
+   "chrome": false,
+   "clickable": false,
+   "bounds": [
+    198,
+    1938,
+    330,
+    2004
+   ]
+  }
+ ],
+ "password_text_unmasked": false,
+ "numbered": [
+  "1: Text 'Use your saved password for Wikipedia?'",
+  "2: Text 'Wikipedia \u00b7 Envoytest \u00b7 \u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022'",
+  "3: Text 'Envoytest'",
+  "4: Button 'Wikipedia \u00b7 envoytest \u00b7 \u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022'",
+  "5: Text 'envoytest'",
+  "6: Button 'No thanks'"
+ ]
+}

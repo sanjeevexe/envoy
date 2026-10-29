@@ -1,0 +1,44 @@
+{
+ "label": "pixel5-3-more",
+ "time": "2026-10-29 19:42:15",
+ "package": "org.wikipedia",
+ "activity": "org.wikipedia.DefaultIcon",
+ "secure": false,
+ "has_password_field": false,
+ "fields": [],
+ "windows": [
+  "ScreenDecorOverlayBottom",
+  "ScreenDecorOverlay",
+  "SecondaryHomeHandle0",
+  "EdgeBackGestureHandler0",
+  "NavigationBar0",
+  "NotificationShade",
+  "StatusBar",
+  "ShellDropTarget",
+  "InputMethod",
+  "org.wikipedia/org.wikipedia.DefaultIcon",
+  "org.wikipedia/org.wikipedia.DefaultIcon",
+  "com.android.vending/com.google.android.finsky.transparentmainactivity.TransparentMainActivityPrivate",
+  "PopupWindow:5c6444b",
+  "PopupWindow:a6fd462",
+  "com.android.vending/com.google.android.finsky.activities.MainActivityPrivate",
+  "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+  "com.skylark.air/com.skylark.air.MainActivity",
+  "com.instagram.android/com.instagram.mainactivity.InstagramMainActivity",
+  "com.google.android.apps.nexuslauncher/com.android.quickstep.RecentsActivity",
+  "com.breel.wallpapers20.stack.wallpaper.StackWallpaper"
+ ],
+ "other_packages": [
+  "com.android.systemui"
+ ],
+ "not_the_app": [],
+ "password_text_unmasked": false,
+ "numbered": [
+  "1: Button ''",
+  "2: Button 'Log in / join Wikipedia'",
+  "3: Button 'Games'",
+  "4: Button 'Places'",
+  "5: Button 'Settings'",
+  "6: Button 'Donate'"
+ ]
+}

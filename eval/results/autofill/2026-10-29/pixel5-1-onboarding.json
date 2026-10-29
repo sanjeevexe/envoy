@@ -1,0 +1,44 @@
+{
+ "label": "pixel5-1-onboarding",
+ "time": "2026-10-29 19:41:35",
+ "package": "org.wikipedia",
+ "activity": "org.wikipedia.feed.personalization.PersonalizationActivity",
+ "secure": false,
+ "has_password_field": false,
+ "fields": [],
+ "windows": [
+  "ScreenDecorOverlayBottom",
+  "ScreenDecorOverlay",
+  "SecondaryHomeHandle0",
+  "EdgeBackGestureHandler0",
+  "NavigationBar0",
+  "NotificationShade",
+  "StatusBar",
+  "ShellDropTarget",
+  "InputMethod",
+  "org.wikipedia/org.wikipedia.feed.personalization.PersonalizationActivity",
+  "org.wikipedia/org.wikipedia.DefaultIcon",
+  "com.android.vending/com.google.android.finsky.transparentmainactivity.TransparentMainActivityPrivate",
+  "PopupWindow:5c6444b",
+  "PopupWindow:a6fd462",
+  "com.android.vending/com.google.android.finsky.activities.MainActivityPrivate",
+  "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+  "com.skylark.air/com.skylark.air.MainActivity",
+  "com.instagram.android/com.instagram.mainactivity.InstagramMainActivity",
+  "com.google.android.apps.nexuslauncher/com.android.quickstep.RecentsActivity",
+  "com.breel.wallpapers20.stack.wallpaper.StackWallpaper"
+ ],
+ "other_packages": [
+  "com.android.systemui"
+ ],
+ "not_the_app": [],
+ "password_text_unmasked": false,
+ "numbered": [
+  "1: List ''",
+  "2: Image 'Follow your curiosity'",
+  "3: Text 'Follow your curiosity'",
+  "4: Text 'Select topics that interest you, and we will personalize you'",
+  "5: Button 'Skip'",
+  "6: Button 'Next'"
+ ]
+}

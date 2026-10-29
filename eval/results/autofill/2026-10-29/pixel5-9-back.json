@@ -1,0 +1,68 @@
+{
+ "label": "pixel5-9-back",
+ "time": "2026-10-29 19:47:18",
+ "package": "org.wikipedia",
+ "activity": "org.wikipedia.login.LoginActivity",
+ "secure": false,
+ "has_password_field": true,
+ "fields": [
+  {
+   "resource_id": "",
+   "hint": "Username",
+   "password": false,
+   "focused": true,
+   "chars": 0,
+   "masked": false,
+   "package": "org.wikipedia",
+   "bounds": "[44,356][1036,509]"
+  },
+  {
+   "resource_id": "",
+   "hint": "Password",
+   "password": true,
+   "focused": false,
+   "chars": 0,
+   "masked": false,
+   "package": "org.wikipedia",
+   "bounds": "[44,531][1036,684]"
+  }
+ ],
+ "windows": [
+  "ScreenDecorOverlayBottom",
+  "ScreenDecorOverlay",
+  "SecondaryHomeHandle0",
+  "EdgeBackGestureHandler0",
+  "NavigationBar0",
+  "NotificationShade",
+  "StatusBar",
+  "ShellDropTarget",
+  "InputMethod",
+  "org.wikipedia/org.wikipedia.login.LoginActivity",
+  "org.wikipedia/org.wikipedia.DefaultIcon",
+  "com.android.vending/com.google.android.finsky.transparentmainactivity.TransparentMainActivityPrivate",
+  "PopupWindow:5c6444b",
+  "PopupWindow:a6fd462",
+  "com.android.vending/com.google.android.finsky.activities.MainActivityPrivate",
+  "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+  "com.skylark.air/com.skylark.air.MainActivity",
+  "com.instagram.android/com.instagram.mainactivity.InstagramMainActivity",
+  "com.google.android.apps.nexuslauncher/com.android.quickstep.RecentsActivity",
+  "com.breel.wallpapers20.stack.wallpaper.StackWallpaper"
+ ],
+ "other_packages": [
+  "com.android.systemui"
+ ],
+ "not_the_app": [],
+ "password_text_unmasked": false,
+ "numbered": [
+  "1: Button 'Navigate up'",
+  "2: Text 'Log in'",
+  "5: Toggle 'Show password'",
+  "6: Button 'Log in'",
+  "7: Text \"Don't have an account?\"",
+  "8: Button 'Join Wikipedia'",
+  "9: Button 'Forgot your password?'",
+  "10: Text '\u2022'",
+  "11: Button 'Privacy policy'"
+ ]
+}

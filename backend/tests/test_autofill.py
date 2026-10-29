@@ -1,6 +1,7 @@
 """Saved logins through the phone's password manager (api/autofill.py), on screens recorded from Wikipedia's login on
-envoy-real during the experiment of Oct 29 (tests/screens/autofill_*.xml, a throwaway account; the password in them is a
-made-up stand-in). Off by default per phone kind; only taps, never types; every sign-in asks you first."""
+envoy-real and the Pixel 5 during the experiment of Oct 29 (tests/screens/autofill_*.xml, a throwaway account; the
+password in them is a made-up stand-in). Off by default per phone kind; only taps, never types; every sign-in asks you
+first."""
 
 from __future__ import annotations
 
@@ -18,6 +19,7 @@ from api.store import TaskStore
 from devices.screen import build_state
 from devices.types import Action, ActionResult
 from policy.approval_rules import ApprovalRules, decide
+from policy.botcheck import bot_check_reason
 from policy.signin import sign_in_reason
 
 SCREENS = Path(__file__).parent / "screens"
@@ -32,10 +34,12 @@ def recorded(name: str, *, secure: bool = False):
 
 class LoginPhone:
     """Wikipedia's login as recorded: tapping Username brings up the saved-login sheet (or nothing, with no saved login),
-    tapping a saved account fills the form, and Log in signs in (or doesn't, when `fails`)."""
+    tapping a saved account fills the form, and Log in signs in (or doesn't, when `fails`; or brings up the hCaptcha the
+    Pixel 5 met, when `captcha`)."""
 
-    def __init__(self, *, saved: bool = True, fails: bool = False, secure: bool = False, start: str = "login") -> None:
-        self.saved, self.fails, self.secure = saved, fails, secure
+    def __init__(self, *, saved: bool = True, fails: bool = False, captcha: bool = False, secure: bool = False,
+                 start: str = "login") -> None:
+        self.saved, self.fails, self.captcha, self.secure = saved, fails, captcha, secure
         self.state = start
         self.actions: list[Action] = []
         self.screenshots = 0
@@ -67,7 +71,7 @@ class LoginPhone:
             elif self.state == "suggestion" and el.package == "com.google.android.gms" and label.casefold() == "envoytest":
                 self.state = "filled"
             elif self.state == "filled" and label == "Log in":
-                self.state = "filled" if self.fails else "signed_in"
+                self.state = "filled" if self.fails else "captcha" if self.captcha else "signed_in"
         return ActionResult(ok=True, duration_ms=1.0)
 
 
@@ -128,7 +132,8 @@ def test_a_saved_login_signs_in_after_your_yes_with_taps_only():
 
 
 def test_a_password_is_never_typed_or_read_whatever_happens():
-    for phone, answer in ((LoginPhone(), True), (LoginPhone(), False), (LoginPhone(saved=False), True), (LoginPhone(fails=True), True)):
+    for phone, answer in ((LoginPhone(), True), (LoginPhone(), False), (LoginPhone(saved=False), True), (LoginPhone(fails=True), True),
+                          (LoginPhone(captcha=True), True)):
         _, asked, steps = run(phone, answer)
         assert "type" not in kinds(phone) and all(a.text is None for a in phone.actions)
         assert not any(STAND_IN in s for s in [*asked, *steps])
@@ -154,6 +159,16 @@ def test_a_sign_in_that_fails_afterwards_hands_it_to_you():
     phone = LoginPhone(fails=True)
     ok, asked, steps = run(phone)
     assert not ok and len(asked) == 1 and steps == ["saved login: Wikipedia still shows its sign-in after Log in"]
+
+
+def test_a_captcha_after_log_in_is_not_a_sign_in_and_hands_it_to_you():
+    captcha = recorded("captcha")  # the hCaptcha over Wikipedia's form on the Pixel 5: no password field shows
+    assert sign_in_reason(captcha) is None and bot_check_reason(captcha) is not None
+    phone = LoginPhone(captcha=True)
+    ok, asked, steps = run(phone)
+    assert not ok and len(asked) == 1 and phone.state == "captcha"
+    assert steps == ["saved login: Wikipedia asked you to prove you're human after Log in: that's yours to do"]
+    assert kinds(phone) == ["tap", "tap", "tap"]  # nothing tapped on the captcha
 
 
 def test_a_secure_sign_in_screen_works_the_same_and_is_never_photographed():

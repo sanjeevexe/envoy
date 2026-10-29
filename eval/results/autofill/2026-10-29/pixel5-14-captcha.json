@@ -1,0 +1,44 @@
+{
+ "label": "pixel5-14-captcha",
+ "time": "2026-10-29 19:54:50",
+ "package": "org.wikipedia",
+ "activity": "org.wikipedia.login.LoginActivity",
+ "secure": false,
+ "has_password_field": false,
+ "fields": [],
+ "windows": [
+  "ScreenDecorOverlayBottom",
+  "ScreenDecorOverlay",
+  "SecondaryHomeHandle0",
+  "EdgeBackGestureHandler0",
+  "NavigationBar0",
+  "NotificationShade",
+  "StatusBar",
+  "ShellDropTarget",
+  "InputMethod",
+  "org.wikipedia/org.wikipedia.login.LoginActivity",
+  "org.wikipedia/org.wikipedia.login.LoginActivity",
+  "org.wikipedia/org.wikipedia.DefaultIcon",
+  "com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity",
+  "com.skylark.air/com.skylark.air.MainActivity",
+  "com.instagram.android/com.instagram.mainactivity.InstagramMainActivity",
+  "com.google.android.apps.nexuslauncher/com.android.quickstep.RecentsActivity",
+  "com.breel.wallpapers20.stack.wallpaper.StackWallpaper"
+ ],
+ "other_packages": [
+  "com.android.systemui"
+ ],
+ "not_the_app": [],
+ "password_text_unmasked": false,
+ "numbered": [
+  "1: List 'hCaptcha Android'",
+  "2: Button 'hCaptcha'",
+  "3: Button 'Move the correct piece to complete the pattern'",
+  "4: Button \"Image-based CAPTCHA challenge. Please use the 'Accessibility\"",
+  "5: Button 'Skip Challenge'",
+  "6: Button 'English'",
+  "7: Button 'About hCaptcha & Accessibility Options'",
+  "8: Button 'Refresh Challenge.'",
+  "9: Button 'hCaptcha logo, opens new window with more information'"
+ ]
+}
