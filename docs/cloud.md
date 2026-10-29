@@ -130,7 +130,7 @@ The two copies don't share anything: a routine learned, a memory fact or a paire
 | A takeover input → its ack, p50 (max) | 10–241 ms on the iPhone | 143 ms (298) | 129 ms (295) |
 | A takeover input → the first new frame, p50 (max) | | **327 ms** (444) | 291 ms (391) |
 
-Half the inputs were a 150 ms swipe, which the ack waits for. The tailnet path from the Mac goes through Tailscale's relay in Miami (`tailscale ping`: "via DERP(mia)", 36 ms), because Google's firewall blocks the inbound UDP a direct connection needs. Opening UDP 41641 would allow a direct path; it wasn't done, since it is a public port. Two-thirds of the frame lag is the VM drawing and grabbing the screen in software (about 92 ms a frame), not the network. The design's target was under 150 ms: the cloud copy is at the edge of it from the Mac; the iPhone adds its own network. TBD: the iPhone, from the user's sitting.
+Half the inputs were a 150 ms swipe, which the ack waits for. The tailnet path from the Mac goes through Tailscale's relay in Miami (`tailscale ping`: "via DERP(mia)", 36 ms), because Google's firewall blocks the inbound UDP a direct connection needs. Opening UDP 41641 would allow a direct path; it wasn't done, since it is a public port. Two-thirds of the frame lag is the VM drawing and grabbing the screen in software (about 92 ms a frame), not the network. The design's target was under 150 ms: the cloud copy is at the edge of it from the Mac; the iPhone adds its own network. The iPhone, from the user's sitting: 290 ms (below).
 
 **Task times, end to end through the API** (the Phase 7 interfaces suite, `eval/run_final.py interfaces`, run on the VM against the cloud copy, standard tier, $0.143 at standard prices):
 
