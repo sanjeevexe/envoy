@@ -242,9 +242,7 @@ class TaskRunner:
                         calls += out.model_calls
                         cost += out.cost_at_standard_usd
                         if out.model_calls:  # a repair or the fallback agent: what broke and what worked is worth a note
-                            learn.append(out.trace_dir)
-                            if out.agent and out.agent.get("trace_dir"):
-                                learn.append(out.agent["trace_dir"])
+                            learn += [d for d in (getattr(out, "trace_dir", None), (getattr(out, "agent", None) or {}).get("trace_dir")) if d]
                     else:
                         res = await AgentRunner(gated, adapter=self.adapter, approver=approver,
                                                 config=RunConfig(data_scope=scope, contributor=skylark, max_cost_usd=0.25),
@@ -252,7 +250,8 @@ class TaskRunner:
                         status, result = res.status, res.result
                         calls += res.model_calls
                         cost += res.cost_at_standard_usd
-                        learn.append(res.trace_dir)
+                        if getattr(res, "trace_dir", None):
+                            learn.append(res.trace_dir)
                     if status == "handoff":
                         if await self._wait_for_user(tid, avd, result or "the agent needs you"):
                             continue
