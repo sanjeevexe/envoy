@@ -250,3 +250,26 @@ def test_the_planner_is_told_a_button_with_one_item_acts_on_that_item():
     from models.prompts import PLAN_INSTRUCTIONS
     assert "acts on that item only; if the goal names a different item, go through the list that holds it" in PLAN_INSTRUCTIONS
 
+
+def app_screen(*nodes: tuple[str, str, str]):
+    """A one-app screen from (resource id, text, clickable) rows."""
+    inner = "".join(f'<node index="{i}" text="{t}" resource-id="com.example.app:id/{r}" class="android.widget.TextView" '
+                    f'package="com.example.app" clickable="{c}" {ATTRS} bounds="[0,{200 + 100 * i}][1080,{300 + 100 * i}]" />'
+                    for i, (r, t, c) in enumerate(nodes))
+    xml = (f'<?xml version="1.0" encoding="UTF-8"?><hierarchy rotation="0"><node index="0" text="" resource-id="" '
+           f'class="android.widget.FrameLayout" package="com.example.app" clickable="false" {ATTRS} bounds="[0,0][1080,2400]">'
+           f"{inner}</node></hierarchy>")
+    return build_state(xml, "com.example.app", "com.example.app.MainActivity", 1080, 2400)
+
+
+def test_a_check_for_the_button_that_opens_a_screen_passes_on_that_screen():
+    from agent.checks import evaluate
+    view_pass = SuccessCheck(kind="element_present", value="View boarding pass", field_hint=None)
+    boarding_pass = app_screen(("text_checked_in", "You're checked in", "false"), ("btn_done", "Done", "true"),
+                               ("screen_title", "Boarding pass", "false"))
+    assert evaluate(view_pass, boarding_pass, "Checked in").passed
+    confirm = app_screen(("btn_confirm_checkin", "Confirm check-in", "true"), ("screen_title", "Check in · SL 1190", "false"))
+    assert not evaluate(view_pass, confirm, "Checked in").passed
+    # the rest of the name must be a whole label: "Place order" is not the order
+    cart = app_screen(("btn_place", "Place order", "true"), ("screen_title", "Cart", "false"))
+    assert not evaluate(SuccessCheck(kind="element_present", value="View order", field_hint=None), cart, "Ordered").passed
