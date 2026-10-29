@@ -348,3 +348,23 @@ def test_run_task_passes_on_the_before_i_start_lines_when_there_are_any(env, mon
         monkeypatch.setattr("mcp_server.server.preflight_check", lambda *a, **k: [])
         assert "heads_up" not in call(c, "run_task", goal="check me in for my flight")
     assert len(started) == 4 and all(s[1] == "mcp" for s in started)
+
+
+def test_a_weekly_request_says_its_days_and_a_habit_and_a_request_both_make_ask_mode_triggers(env):
+    """Repeats proposes habits through an offer whose action is `create_trigger` (api/repeats.py); MCP's create_trigger
+    makes the trigger switched off and asks to turn it on. Both kinds of trigger ask the user before each run."""
+    from api.auth import Caller
+    with TestClient(env.ctx.asgi) as c:
+        out = call(c, "create_trigger", kind="time", name="Friday dinner", spec={"weekly_on": {"days": ["FRI", "mon"], "at": "18:00"}},
+                   action={"goal": "Reorder my usual from Thai Basil"})
+        two = call(c, "create_trigger", kind="time", name="Every day", spec={"weekly_on": {"days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"], "at": "7:30"}},
+                   action={"goal": "Check my gate"})
+        habit = env.ctx.offers.make(kind="repeat", title="Make this a habit?", body="", source="repeats", key="habit-1",
+                                    action={"type": "create_trigger", "kind": "time", "name": "Morning coffee", "spec": {"daily_at": "07:30"},
+                                            "action": {"goal": "Order my morning coffee", "ask": True}})
+        made = env.ctx.offers.decide(habit["id"], "accept", Caller(kind="owner", scope="session"))
+    assert env.ctx.offers.get(out["offer_id"])["title"].startswith("Muse wants to set this up: every Monday and Friday at 18:00, ")
+    assert env.ctx.offers.get(two["offer_id"])["title"].startswith("Muse wants to set this up: every day at 7:30, ")
+    by_id = {t["id"]: t for t in env.ctx.tasks.triggers()}
+    assert by_id[made["result"]["trigger_id"]]["action"]["ask"] is True and by_id[made["result"]["trigger_id"]]["enabled"] is True
+    assert by_id[out["trigger_id"]]["action"]["ask"] is True and by_id[out["trigger_id"]]["enabled"] is False

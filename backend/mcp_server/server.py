@@ -123,6 +123,7 @@ def _since(cursor: str | None) -> float | None:
         return None
 
 
+DAY_NAMES = {"mon": "Monday", "tue": "Tuesday", "wed": "Wednesday", "thu": "Thursday", "fri": "Friday", "sat": "Saturday", "sun": "Sunday"}
 CLIENT = os.environ.get("ENVOY_MCP_CLIENT_NAME", "Muse")  # who holds the connector's token (a stateless call doesn't say)
 
 
@@ -141,6 +142,10 @@ def trigger_when(trig: dict[str, Any]) -> str:
     if kind == "fact_changed":
         attrs = " or ".join(_line(a, 30).replace("_", " ") for a in spec.get("attributes") or [])
         return f"when a {_line(spec.get('entity_type') or 'fact', 30).lower()}'s {attrs or 'details'} change"
+    if isinstance(spec.get("weekly_on"), dict):
+        days = [DAY_NAMES.get(d, d) for d in spec["weekly_on"].get("days") or []]
+        on = "day" if len(days) == 7 else " and ".join(", ".join(days[:-1]).split(", ") + days[-1:]) if len(days) > 1 else "".join(days)
+        return f"every {on} at {_line(spec['weekly_on'].get('at'), 10)}"
     if every:
         return "every hour" if every == 60 else f"every {every} minutes" + (" for a while" if kind == "watch" and spec.get("until") else "")
     if spec.get("daily_at"):
@@ -340,7 +345,7 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> MCPServer:
     def create_trigger(kind: str, name: str, spec: dict[str, Any], action: dict[str, Any]) -> dict:
         """Propose a recurring or event-triggered phone task. It is created switched off, and Envoy asks the user
         "Turn it on?"; nothing runs until they say yes in Envoy, and even then each run asks them first.
-        kind: "time" (spec {"daily_at": "08:00"} or {"every_minutes": 60}), "before_fact" ({"entity_type": "Flight",
+        kind: "time" (spec {"daily_at": "08:00"}, {"weekly_on": {"days": ["fri"], "at": "18:00"}} or {"every_minutes": 60}), "before_fact" ({"entity_type": "Flight",
         "minutes_before": 1440}), "watch" ({"every_minutes": 15, "until": <unix time>}, a read-only routine),
         "email" ({"sender_contains": "...", "subject_contains": "..."}), or "fact_changed" ({"entity_type": "Flight",
         "attributes": ["gate"]}). action: {"goal": "..."} or {"routine": "<name>", "inputs": {...}}."""
