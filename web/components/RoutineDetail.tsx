@@ -4,7 +4,7 @@
 // timeline (what each repair changed, the run that made it, how its trial went) and its runs against the agent run it
 // was learned from.
 import { KeyboardEvent, ReactNode, useEffect, useRef, useState } from "react";
-import { api } from "@/lib/api";
+import { api, media } from "@/lib/api";
 
 type Loc = {
   visual?: string; text_has?: string; text?: string; alt_texts?: string[]; desc?: string; hint?: string; resource_id?: string;
@@ -278,11 +278,11 @@ function VersionItem({ v, d }: { v: Version; d: Detail }) {
                 {v.shots.map((s) => (
                   <figure key={s.before ?? s.after} className="flex flex-wrap items-center gap-2">
                     {s.before && <a href={s.before} target="_blank" rel="noreferrer" className={`rounded text-center text-[11px] text-stone-500 ${focusRing}`}>
-                      <img src={s.before} alt={`The screen the routine didn't expect (${s.label}), before the repair`} className="h-44 w-auto rounded-md border border-stone-200 sm:h-56" />
+                      <img src={media(s.before)} alt={`The screen the routine didn't expect (${s.label}), before the repair`} className="h-44 w-auto rounded-md border border-stone-200 sm:h-56" />
                       <span aria-hidden className="mt-0.5 block">What it found</span></a>}
                     {s.before && s.after && <span aria-hidden className="pb-4 text-stone-400">→</span>}
                     {s.after && <a href={s.after} target="_blank" rel="noreferrer" className={`rounded text-center text-[11px] text-stone-500 ${focusRing}`}>
-                      <img src={s.after} alt={`The screen after the repair's action (${s.label})`} className="h-44 w-auto rounded-md border border-stone-200 sm:h-56" />
+                      <img src={media(s.after)} alt={`The screen after the repair's action (${s.label})`} className="h-44 w-auto rounded-md border border-stone-200 sm:h-56" />
                       <span aria-hidden className="mt-0.5 block">After the fix</span></a>}
                     <figcaption className="w-full text-xs text-stone-500">The repair at {s.label}{s.intent && <> (“<Slots text={s.intent} />”)</>}. Select a picture to open it full size.</figcaption>
                   </figure>

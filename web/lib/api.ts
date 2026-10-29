@@ -30,7 +30,40 @@ export class ApiError extends Error {
   constructor(public status: number, message: string) { super(message); }
 }
 
+// Mock mode (lib/mock.ts): `?mock=1` (or another scenario), kept for the tab's session; `?mock=0` ends it. The fixtures
+// load only then, in their own chunk.
+let scenario: string | null | undefined;
+let mockLib: typeof import("@/lib/mock") | null = null;
+export function mockMode(): string | null {
+  if (scenario !== undefined) return scenario;
+  if (typeof window === "undefined") return null;
+  const asked = new URLSearchParams(location.search).get("mock");
+  let kept: string | null = null;
+  try {
+    if (asked === "0") sessionStorage.removeItem("envoy-mock");
+    else if (asked) sessionStorage.setItem("envoy-mock", asked);
+    kept = sessionStorage.getItem("envoy-mock");
+  } catch {}
+  const env = process.env.NEXT_PUBLIC_ENVOY_MOCK;
+  scenario = asked === "0" ? null : asked || kept || (env && env !== "0" ? env : null);
+  return scenario;
+}
+async function mock() {
+  if (!mockLib) {
+    mockLib = await import("@/lib/mock");
+    mockLib.start(mockMode());
+  }
+  return mockLib;
+}
+export const loadMock = mock;
+
+// Where an <img> for an API path points: the API itself, or a placeholder picture in mock mode.
+export const media = (path: string): string => (mockLib ? mockLib.media(path) : path);
+
 export async function api<T = any>(path: string, init: RequestInit = {}): Promise<T> {
+  if (mockMode()) {
+    try { return await (await mock()).handle(path, init); } catch (e: any) { throw new ApiError(e.status ?? 500, e.message); }
+  }
   const headers: Record<string, string> = { ...(init.headers as Record<string, string>) };
   if (init.method && init.method !== "GET") {
     headers["X-Envoy"] = "1";
@@ -53,6 +86,12 @@ export function useEvents(onEvent: (e: EnvoyEvent) => void): boolean {
   const handler = useRef(onEvent);
   handler.current = onEvent;
   useEffect(() => {
+    if (mockMode()) {
+      let off = () => {};
+      let gone = false;
+      mock().then((m) => { if (!gone) off = m.subscribe((e) => handler.current(e), setConnected); });
+      return () => { gone = true; off(); };
+    }
     let ws: WebSocket | null = null;
     let last = 0;
     let stop = false;

@@ -1,0 +1,539 @@
+"use client";
+
+// Mock mode (`?mock=1`, or NEXT_PUBLIC_ENVOY_MOCK=1): the API and the event stream are answered here, in the page, from
+// fixtures that cover every state, so each screen can be designed, checked and captured without a Mac, a phone or a
+// model. Nothing in this file touches the network. Scenarios (`?mock=<name>`):
+// - `1` / `full`: a task streaming steps, a payment waiting for your OK, a phone ask, a filled memory, routines, triggers
+// - `quiet`: nothing needs you; a watcher reruns the gate routine every so often (working, thinking, done)
+// - `idle`: nothing running and nothing waiting
+// - `offline`: the event stream never connects, and Home can't load its briefing
+// - `pair`: a device that isn't paired yet (the pairing screen)
+// `?mock=0` turns it off again (it's kept for the tab's session, so /approve links stay in mock mode).
+import type { Approval, EnvoyEvent, Lease, Step, Task } from "@/lib/api";
+
+export type Scenario = "full" | "quiet" | "idle" | "offline" | "pair";
+
+const T = Date.now() / 1000;
+const now = () => Date.now() / 1000;
+const ago = (s: number) => T - s;
+const midnight = new Date(new Date().setHours(0, 0, 0, 0)).getTime() / 1000;
+const todayAt = (h: number, m = 0) => midnight + h * 3600 + m * 60;
+const fmtDay = (t: number) => new Date(t * 1000).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+
+let scenario: Scenario = "full";
+const listeners = new Set<(e: EnvoyEvent) => void>();
+let seq = 1000;
+const emit = (type: string, body: Record<string, unknown>) => {
+  const e = { seq: ++seq, time: now(), type, ...body } as EnvoyEvent;
+  listeners.forEach((fn) => fn(e));
+};
+
+// ---- the phone screens (placeholders: an app's header, a few rows, the button Envoy is about to press) ----------------
+
+const APP_LOOK: Record<string, { name: string; color: string }> = {
+  "com.dd.doordash": { name: "DoorDash", color: "#E8573A" },
+  "com.skylark.air": { name: "SkyLark", color: "#2F5DA8" },
+  "com.amazon.mShop.android.shopping": { name: "Amazon", color: "#232F3E" },
+  "com.starbucks.mobilecard": { name: "Starbucks", color: "#1E6B4F" },
+  "com.target.ui": { name: "Target", color: "#C4262E" },
+};
+
+function screen(app: string, title: string, rows: string[], button?: string): string {
+  const look = APP_LOOK[app] ?? { name: "App", color: "#4E5A53" };
+  const row = (t: string, i: number) =>
+    `<rect x="24" y="${236 + i * 92}" width="492" height="76" rx="14" fill="#F4F2EE"/>` +
+    `<rect x="40" y="${252 + i * 92}" width="44" height="44" rx="10" fill="#E2DED6"/>` +
+    `<text x="100" y="${280 + i * 92}" font-family="system-ui,sans-serif" font-size="22" fill="#2A2A2A">${t}</text>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="540" height="1200" viewBox="0 0 540 1200">
+<rect width="540" height="1200" fill="#FFFFFF"/>
+<rect width="540" height="44" fill="#F6F6F6"/><text x="24" y="30" font-family="system-ui,sans-serif" font-size="18" fill="#555">7:41</text>
+<rect y="44" width="540" height="120" fill="${look.color}"/>
+<text x="24" y="118" font-family="system-ui,sans-serif" font-weight="700" font-size="34" fill="#FFFFFF">${look.name}</text>
+<text x="24" y="210" font-family="system-ui,sans-serif" font-weight="700" font-size="28" fill="#1A1A1A">${title}</text>
+${rows.map(row).join("")}
+${button ? `<rect x="24" y="1060" width="492" height="84" rx="42" fill="${look.color}"/><text x="270" y="1112" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="700" font-size="28" fill="#FFFFFF">${button}</text>` : ""}
+</svg>`;
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+
+const SHOTS: Record<string, string> = {
+  "dd-1": screen("com.dd.doordash", "Your recent orders", ["Thai Basil · Oct 21", "Sushi Zen · Oct 14", "Taqueria Sol · Oct 9"]),
+  "dd-2": screen("com.dd.doordash", "Thai Basil", ["Pad thai · $13.50", "Spring rolls · $6.00", "Green curry · $14.25"]),
+  "dd-3": screen("com.dd.doordash", "Pad thai", ["Spice: medium", "No peanuts", "Quantity: 1"], "Add to cart"),
+  "dd-4": screen("com.dd.doordash", "Checkout", ["Pad thai, medium, no peanuts", "Subtotal $13.50 · fees $1.92", "Tip $3.00 · total $18.42"], "Place order"),
+  "sl-1": screen("com.skylark.air", "Your trips", ["Chicago · Fri, Oct 30", "Denver · Nov 12"]),
+  "sl-2": screen("com.skylark.air", "Chicago · SL 482", ["Departs 6:05 AM", "Gate B22 (was B14)", "Seat 14C · Group 3"]),
+  "amz-1": screen("com.amazon.mShop.android.shopping", "Your orders", ["AirPods Pro · arriving Thursday", "Phone case · delivered"]),
+  "sb-1": screen("com.starbucks.mobilecard", "Order", ["Grande oat latte", "Pick up at 5th & Pine"], "Checkout"),
+  "tgt-1": screen("com.target.ui", "AirPods Pro", ["$189.99 · in stock nearby"]),
+};
+export const liveFrame = (avd: string): string => (avd === "pixel-5" ? SHOTS["dd-4"] : SHOTS["sl-2"]);
+
+// What an <img> shows for an API path in mock mode.
+export function media(path: string): string {
+  const key = (path.split("?")[0].split("/").pop() ?? "").replace(/\.\w+$/, "");
+  if (SHOTS[key]) return SHOTS[key];
+  if (path.includes("/api/pair/qr")) return qr();
+  if (path.includes("/history/")) return key === "before" ? SHOTS["sl-1"] : SHOTS["sl-2"];
+  return path.includes("/api/approvals/") ? SHOTS["dd-4"] : SHOTS["sl-2"];
+}
+
+function qr(): string {
+  let cells = "";
+  const finder = (x: number, y: number) => `<path d="M${x} ${y}h7v7h-7zM${x + 1} ${y + 1}v5h5v-5zM${x + 2} ${y + 2}h3v3h-3z" fill-rule="evenodd"/>`;
+  for (let y = 0; y < 21; y++) for (let x = 0; x < 21; x++) {
+    const inFinder = (x < 8 && y < 8) || (x > 12 && y < 8) || (x < 8 && y > 12);
+    if (!inFinder && (x * 7 + y * 13 + x * y) % 5 < 2) cells += `<rect x="${x}" y="${y}" width="1" height="1"/>`;
+  }
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 23 23"><rect x="-1" y="-1" width="23" height="23" fill="#fff"/><g fill="#1F2A24">${finder(0, 0)}${finder(14, 0)}${finder(0, 14)}${cells}</g></svg>`;
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+
+// ---- the fixtures -----------------------------------------------------------------------------------------------------
+
+type DB = {
+  tasks: Record<string, Task>; steps: Record<string, Step[]>; approvals: Record<string, Approval & { nonce: string }>;
+  leases: Record<string, Lease>; triggers: any[]; changes: any[]; rules: { default: string; apps: Record<string, string>; routines: Record<string, string> };
+  photos: { enabled: boolean; scope: string }; phoneApps: string[];
+};
+let db: DB;
+
+const task = (t: Partial<Task> & Pick<Task, "id" | "goal">): Task => ({
+  source: "chat", status: "done", created_at: ago(3600), updated_at: ago(3590), model_calls: 0, cost_usd: 0, ...t,
+});
+const step = (n: number, s: Omit<Step, "seq" | "time"> & { time?: number }): Step => ({ seq: n, time: s.time ?? ago(100 - n * 10), ...s });
+
+function seed(): DB {
+  const tasks: Record<string, Task> = {};
+  const steps: Record<string, Step[]> = {};
+  const approvals: DB["approvals"] = {};
+  const add = (t: Task, s: Step[] = []) => { tasks[t.id] = t; steps[t.id] = s; };
+
+  if (scenario === "full" || scenario === "offline") {
+    add(task({ id: "task-dd", goal: "Get my usual from Thai Basil on DoorDash", status: "waiting_approval", app: "com.dd.doordash", device: "pixel-5",
+      kind: "routine", routine: "doordash_reorder_usual", inputs: { restaurant: "Thai Basil" }, created_at: ago(140), updated_at: ago(30),
+      model_calls: 1, cost_usd: 0.002, waiting_for: "approval" }), [
+      step(1, { kind: "note", text: "using routine doordash_reorder_usual v3 with restaurant = Thai Basil", time: ago(138),
+        sources: { usual_order: "Order Thai Basil usual (items): DoorDash app, Oct 21" } }),
+      step(2, { kind: "routine_step", text: "open_recent_orders", status: "done", rung: 0, shot: "dd-1", time: ago(120) }),
+      step(3, { kind: "routine_step", text: "find_thai_basil", status: "done", rung: 0, shot: "dd-2", time: ago(96) }),
+      step(4, { kind: "routine_step", text: "add_pad_thai_medium_no_peanuts", status: "done", rung: 2, detail: "relaxed match: the button now says Add", shot: "dd-3", time: ago(70) }),
+      step(5, { kind: "routine_step", text: "go_to_checkout", status: "running", rung: 0, shot: "dd-4", risk: "irreversible", time: ago(32) }),
+    ]);
+    approvals["appr-dd"] = { id: "appr-dd", task_id: "task-dd", created_at: ago(30), status: "pending", description: "Pay $18.42 at DoorDash",
+      reasons: ["Costs money: payments always come to you", "Order: Pad thai, medium, no peanuts", "From: Thai Basil", "Total: $18.42 with tip"],
+      app: "com.dd.doordash", screen: "Checkout", screenshot: "dd-4.jpg", nonce: "mock-nonce" };
+    add(task({ id: "task-tgt", goal: "Check the price of AirPods Pro at Target", status: "needs_you", app: "com.target.ui", waiting_for: "phone",
+      detail: "Target blocks emulators: use your Android phone for this task?", created_at: ago(400), updated_at: ago(380) }));
+  }
+  // the task that streams (full: on load; quiet: a watcher every so often)
+  add(task({ id: "task-amz", goal: "When does my Amazon package arrive?", app: "com.amazon.mShop.android.shopping", device: "envoy-test", kind: "agent",
+    result: "Your AirPods Pro arrive Thursday", created_at: todayAt(17, 29), updated_at: todayAt(17, 30), model_calls: 6, cost_usd: 0.011 }), [
+    step(1, { kind: "plan", text: "Open Your Orders; Read the delivery date of the newest order", time: todayAt(17, 29) }),
+    step(2, { kind: "action", text: 'tap "Your Orders"', reason: "The orders list has the delivery dates", risk: "read", shot: "amz-1", time: todayAt(17, 29) + 20 }),
+    step(3, { kind: "memory", text: "memory updated: 3 same, 1 replaced", entities: ["Order AirPods Pro"], time: todayAt(17, 30) }),
+    step(4, { kind: "finish", text: "Your AirPods Pro arrive Thursday", status: "done", time: todayAt(17, 30) }),
+  ]);
+  add(task({ id: "task-sb", goal: "Order my morning coffee", source: "trigger:Morning coffee", app: "com.starbucks.mobilecard", device: "envoy-test",
+    kind: "routine", routine: "starbucks_order_usual", result: "Ordered a grande oat latte for pickup at 5th & Pine", created_at: todayAt(7, 30), updated_at: todayAt(7, 30) + 9 }), [
+    step(1, { kind: "note", text: "using routine starbucks_order_usual v2", time: todayAt(7, 30) }),
+    step(2, { kind: "routine_step", text: "open_order", status: "done", rung: 0, shot: "sb-1", time: todayAt(7, 30) + 3 }),
+    step(3, { kind: "approval", text: "Checkout: done without asking (standing approval)", reason: "you set routine starbucks_order_usual to run without asking", time: todayAt(7, 30) + 7 }),
+    step(4, { kind: "finish", text: "all steps and checks passed", status: "done", time: todayAt(7, 30) + 9 }),
+  ]);
+  add(task({ id: "task-cmp", goal: "Is AirPods Pro cheaper at Amazon or Target?", kind: "crossapp", result: "Amazon: $179.99 · Target: $189.99",
+    detail: "Amazon is $10 cheaper", created_at: ago(86400 + 4000), updated_at: ago(86400 + 3900), model_calls: 4, cost_usd: 0.009 }));
+  add(task({ id: "task-cmp-a", goal: "Price of AirPods Pro at Amazon", parent: "task-cmp", app: "com.amazon.mShop.android.shopping", device: "envoy-test",
+    result: "$179.99", created_at: ago(86400 + 3990), updated_at: ago(86400 + 3950) }));
+  add(task({ id: "task-cmp-t", goal: "Price of AirPods Pro at Target", parent: "task-cmp", app: "com.target.ui", device: "pixel-5",
+    result: "$189.99", created_at: ago(86400 + 3990), updated_at: ago(86400 + 3920) }));
+  add(task({ id: "task-ck", goal: "Check me in for my flight", app: "com.skylark.air", device: "envoy-test", kind: "routine", routine: "skylark_check_in_flight",
+    status: "declined", detail: "you declined Confirm check-in", created_at: ago(2 * 86400), updated_at: ago(2 * 86400 - 40) }));
+  add(task({ id: "task-old", goal: "What's my seat on the Chicago flight?", status: "failed", detail: "envoy-test is not running",
+    created_at: ago(3 * 86400), updated_at: ago(3 * 86400 - 5) }));
+
+  const leases: Record<string, Lease> = {
+    "envoy-test": { avd: "envoy-test", task_id: null, user_control: false, since: 0, reason: "", running: true, kind: "emulator", name: "Pixel 8 emulator" },
+    "pixel-5": { avd: "pixel-5", task_id: scenario === "full" || scenario === "offline" ? "task-dd" : null, user_control: false, since: ago(140), reason: "",
+      running: true, kind: "phone", name: "Pixel 5", android: "13", state: "device" },
+  };
+  const triggers = [
+    { id: "trig-gate", kind: "watch", name: "Watch my gate", spec: { every_minutes: 10, alert: true }, action: { routine: "skylark_get_flight_gate", inputs_from: {} },
+      enabled: true, last_fired: ago(420), next: [{ at: ago(420) + 600 }], alerts: { on: true, attributes: ["gate"] } },
+    { id: "trig-checkin", kind: "before_fact", name: "Check in 24 h before every flight", spec: { entity_type: "Flight", minutes_before: 1440 },
+      action: { goal: "Check me in for my flight to {trip.destination}" }, enabled: true, last_fired: null,
+      next: [{ at: todayAt(21) > T ? todayAt(21) : todayAt(33), for: "SL 482" }], alerts: { on: false, attributes: ["*"] } },
+    { id: "trig-coffee", kind: "time", name: "Morning coffee", spec: { daily_at: "7:30" }, action: { routine: "starbucks_order_usual", inputs_from: {} },
+      enabled: true, last_fired: todayAt(7, 30), next: [{ at: todayAt(31, 30) }], alerts: { on: false, attributes: ["*"] } },
+    { id: "trig-dep", kind: "fact_changed", name: "Departure changed: look up the gate", spec: { entity_type: "Flight", attributes: ["depart_time"] },
+      action: { routine: "skylark_get_flight_gate", inputs_from: { trip_city: "trip.destination" } }, enabled: false, last_fired: null, next: [],
+      alerts: { on: false, attributes: ["*"] } },
+  ];
+  const changes = [
+    { id: 41, time: todayAt(18, 12) > T ? ago(1800) : todayAt(18, 12), task_id: "task-gate-0", entity_label: "Flight SL 482", attribute: "gate", old: "B14", new: "B22",
+      title: "Gate changed: B14 → B22", pushed: 1, why_not: null, source: "SkyLark" },
+    { id: 38, time: ago(86400 + 2000), task_id: "task-gate-0", entity_label: "Flight SL 482", attribute: "boarding_group", old: "3", new: "Group 3",
+      title: "Boarding group changed: 3 → Group 3", pushed: 0, why_not: "you started this task", source: "SkyLark" },
+  ];
+  return {
+    tasks, steps, approvals, leases, triggers, changes,
+    rules: { default: "unless_requested", apps: { "com.dd.doordash": "always" }, routines: { starbucks_order_usual: "never" } },
+    photos: { enabled: true, scope: "screenshots" }, phoneApps: ["com.target.ui"],
+  };
+}
+
+// ---- memory -------------------------------------------------------------------------------------------------------------
+
+type MemNode = { id: string; type: string; name: string; facts: number; stale: boolean; user_edited: boolean };
+const NODES: MemNode[] = [
+  { id: "person-maya", type: "Person", name: "Maya Patel", facts: 4, stale: false, user_edited: false },
+  { id: "trip-chi", type: "Trip", name: "Chicago · Fri, Oct 30", facts: 5, stale: false, user_edited: false },
+  { id: "flight-482", type: "Flight", name: "SL 482 · Fri, Oct 30", facts: 7, stale: false, user_edited: false },
+  { id: "trip-den", type: "Trip", name: "Denver · Nov 12", facts: 3, stale: true, user_edited: false },
+  { id: "flight-910", type: "Flight", name: "SL 910 · Nov 12", facts: 4, stale: true, user_edited: false },
+  { id: "res-hotel", type: "Reservation", name: "The Drake, Chicago", facts: 4, stale: false, user_edited: false },
+  { id: "order-airpods", type: "Order", name: "AirPods Pro", facts: 3, stale: false, user_edited: false },
+  { id: "order-dd", type: "Order", name: "Thai Basil usual", facts: 3, stale: false, user_edited: true },
+  { id: "place-thai", type: "Place", name: "Thai Basil", facts: 2, stale: false, user_edited: false },
+  { id: "loyalty-sb", type: "Loyalty program", name: "Starbucks Rewards", facts: 2, stale: false, user_edited: false },
+  { id: "loyalty-sl", type: "Loyalty program", name: "SkyLark Miles", facts: 2, stale: false, user_edited: false },
+];
+const EDGES = [
+  ["trip-chi", "includes", "flight-482"], ["trip-chi", "stays_at", "res-hotel"], ["trip-den", "includes", "flight-910"],
+  ["person-maya", "travels_on", "trip-chi"], ["person-maya", "travels_on", "trip-den"], ["person-maya", "ordered", "order-airpods"],
+  ["person-maya", "ordered", "order-dd"], ["order-dd", "from", "place-thai"], ["person-maya", "member_of", "loyalty-sb"], ["person-maya", "member_of", "loyalty-sl"],
+].map(([source, relation, target], i) => ({ id: `edge-${i}`, source, target, relation }));
+
+const src = (id: string, where: string) => ({ id, where });
+const fact = (attribute: string, value: string, sources: { id: string; where: string }[], extra: Record<string, unknown> = {}) => ({
+  id: `fact-${attribute}-${value}`.replace(/\W+/g, "-"), attribute, value, current: true, stale: false, conflict: 0, recorded_at: ago(3600), sources, ...extra,
+});
+const ENTITY: Record<string, { facts: any[] }> = {
+  "flight-482": { facts: [
+    fact("number", "SL 482", [src("s-email", "email from SkyLark Air, Oct 12")]),
+    fact("date", "Fri, Oct 30, 2026", [src("s-email", "email from SkyLark Air, Oct 12")]),
+    fact("depart_time", "6:05 AM", [src("s-sl", "SkyLark app, 1 h ago")]),
+    fact("gate", "B22", [src("s-sl", "SkyLark app, 1 h ago")]),
+    fact("gate", "B14", [src("s-sl-old", "SkyLark app, yesterday")], { current: false, valid_to: ago(3600) }),
+    fact("seat", "14C", [src("s-sl", "SkyLark app, 1 h ago")]),
+    fact("boarding_group", "Group 3", [src("s-sl", "SkyLark app, 1 h ago")]),
+    fact("terminal", "B", [src("s-email", "email from SkyLark Air, Oct 12")], { stale: true }),
+  ] },
+  "order-dd": { facts: [
+    fact("items", "Pad thai, medium spice, no peanuts", [src("s-dd", `DoorDash app, ${fmtDay(ago(8 * 86400))}`)], { author: "user" }),
+    fact("restaurant", "Thai Basil", [src("s-dd", `DoorDash app, ${fmtDay(ago(8 * 86400))}`)]),
+    fact("total", "$18.42", [src("s-dd", `DoorDash app, ${fmtDay(ago(8 * 86400))}`)]),
+  ] },
+};
+const entityOf = (id: string) => {
+  const n = NODES.find((x) => x.id === id) ?? NODES[0];
+  const facts = ENTITY[id]?.facts ?? [
+    fact("name", n.name.split(" · ")[0], [src("s-gen", "email from SkyLark Air, Oct 12")]),
+    ...(n.type === "Trip" ? [fact("destination", n.name.split(" · ")[0], [src("s-gen", "email from SkyLark Air, Oct 12")])] : []),
+  ];
+  const links = EDGES.filter((e) => e.source === id || e.target === id).map((e) => {
+    const other = NODES.find((x) => x.id === (e.source === id ? e.target : e.source))!;
+    return { relation: e.relation, id: other.id, type: other.type, name: other.name };
+  });
+  return { entity: { id: n.id, type: n.type, name: n.name }, facts, links };
+};
+
+// ---- routines -----------------------------------------------------------------------------------------------------------
+
+const ROUTINES = [
+  { name: "skylark_get_flight_gate", app: "com.skylark.air", intent: "Look up my flight's gate", active: 3, steps: 4, runs: 23, success: 0.96, recompile: false,
+    inputs: { trip_city: "The trip's destination city" }, outputs: ["gate", "terminal", "boarding_time"],
+    versions: [{ version: 1, status: "retired" }, { version: 2, status: "retired", source_task: "task-1021" }, { version: 3, status: "active", source_task: "task-1026" }] },
+  { name: "doordash_reorder_usual", app: "com.dd.doordash", intent: "Reorder my usual on DoorDash", active: 3, steps: 6, runs: 9, success: 0.89, recompile: false,
+    inputs: { restaurant: "Which restaurant" }, outputs: ["total"], versions: [{ version: 1, status: "retired" }, { version: 2, status: "retired", source_task: "t" }, { version: 3, status: "active" }] },
+  { name: "skylark_check_in_flight", app: "com.skylark.air", intent: "Check me in for my flight", active: 1, steps: 7, runs: 6, success: 0.67, recompile: false,
+    inputs: { trip_city: "The trip's destination city" }, outputs: ["seat", "gate", "boarding_group"], versions: [{ version: 1, status: "active" }, { version: 2, status: "trial", source_task: "t" }] },
+  { name: "starbucks_order_usual", app: "com.starbucks.mobilecard", intent: "Order my morning coffee", active: 2, steps: 5, runs: 14, success: 1, recompile: false,
+    inputs: {}, outputs: ["pickup_time"], versions: [{ version: 1, status: "retired" }, { version: 2, status: "active" }] },
+  { name: "amazon_track_package", app: "com.amazon.mShop.android.shopping", intent: "Track my Amazon package", active: 1, steps: 3, runs: 2, success: 0.5, recompile: true,
+    inputs: {}, outputs: ["delivery_eta"], versions: [{ version: 1, status: "active" }] },
+];
+
+function routineDetail(name: string) {
+  const r = ROUTINES.find((x) => x.name === name) ?? ROUTINES[0];
+  const loc = (text: string, extra: Record<string, unknown> = {}) => ({ text, kind: "button", ...extra });
+  const stepsByName: Record<string, any[]> = {
+    skylark_get_flight_gate: [
+      { id: "open_trips", intent: "Open My trips", risk: "read", optional: false, action: { kind: "tap", verb: "Tap", target: loc("My trips") }, pre: [], post: [{ kind: "text", text: "Your trips", locator: null }], outputs: [] },
+      { id: "dismiss_promo", intent: "Close the miles promo if it shows", risk: "read", optional: true, action: { kind: "tap", verb: "Tap", target: loc("Not now", { desc: "Close" }) }, pre: [], post: [], outputs: [], changed_in: [{ version: 3, kind: "inserted" }] },
+      { id: "open_trip", intent: "Open the trip to {{trip_city}}", risk: "read", optional: false, action: { kind: "tap", verb: "Tap", target: loc("{{trip_city}}", { in_list: true }) }, pre: [{ kind: "text", text: "Your trips", locator: null }], post: [{ kind: "text", text: "Gate", locator: null }], outputs: [], changed_in: [{ version: 2, kind: "locator" }] },
+      { id: "read_gate", intent: "Read the gate, terminal and boarding time", risk: "read", optional: false, action: { kind: "read", verb: "Read", target: null }, pre: [], post: [], outputs: ["gate", "terminal", "boarding_time"] },
+    ],
+  };
+  const steps = stepsByName[name] ?? [
+    { id: "open", intent: `Open ${r.intent.toLowerCase()}`, risk: "read", optional: false, action: { kind: "tap", verb: "Tap", target: loc("Orders") }, pre: [], post: [], outputs: [] },
+    { id: "act", intent: "Do the step that matters", risk: name.includes("check_in") || name.includes("order") || name.includes("reorder") ? "irreversible" : "reversible",
+      optional: false, action: { kind: "tap", verb: "Tap", target: loc(name.includes("check_in") ? "Confirm check-in" : "Place order") }, pre: [], post: [], outputs: r.outputs },
+  ];
+  const versions = r.versions.map((v, i) => ({
+    version: v.version, status: v.status, created: new Date((ago((r.versions.length - i) * 2 * 86400)) * 1000).toISOString().slice(0, 16).replace("T", " "),
+    parent: i ? v.version - 1 : null, origin: i ? "repaired" : "compiled", notes: i ? ["relaxed match on 'Chicago' row", "inserted optional step dismiss_promo"] : [],
+    changes: i && name === "skylark_get_flight_gate" ? (v.version === 2
+      ? [{ step: "open_trip", intent: "Open the trip to {{trip_city}}", kind: "locator", what: "how the trip row is found", before: loc("{{trip_city}} · SL 482"), after: loc("{{trip_city}}", { in_list: true }),
+        why: "The trip row's label changed after an app update.", score: 0.64 }]
+      : [{ step: "dismiss_promo", intent: "Close the miles promo if it shows", kind: "inserted", what: "a new step", before: null, after: steps[1], follows: "Open My trips",
+        reasons: ["A SkyLark Miles promo covered the trip list; closing it with Not now shows the list again."] }]) : [],
+    shots: i && name === "skylark_get_flight_gate" && v.version === 3 ? [{ label: "step 2", intent: "Close the miles promo if it shows", before: `/api/routines/${name}/history/3/before.png`, after: `/api/routines/${name}/history/3/after.png` }] : [],
+    replaced_by: v.status === "retired" ? v.version + 1 : null,
+    repair: i ? { task_id: `task-repair-${v.version}`, rung: v.version === 2 ? 2 : 4, how: v.version === 2 ? "relaxed match" : "local repair", model_calls: v.version === 2 ? 0 : 1, run_rung: null, duration_s: 14.2, time: null } : undefined,
+    compiled: i ? undefined : { task_id: "task-1019-agent", goal: r.intent, compiler: "Muse Spark", usd: 0.021, source: { task_id: "task-1019-agent", steps: 9, model_calls: 11, duration_s: 74, usd: 0.034 },
+      verification: [{ case: "same-inputs", passed: true, duration_s: 8.1, inputs: {} }, { case: "other-inputs", passed: true, duration_s: 7.6, inputs: {} }] },
+    trial: v.status === "active" && i ? { passed: true, task_id: "task-trial", status: "done", model_calls: 0, duration_s: 7.9 } : undefined,
+  }));
+  const runs = Array.from({ length: Math.min(r.runs, 6) }, (_, i) => ({
+    time: new Date((ago((6 - i) * 43200)) * 1000).toISOString().slice(0, 16).replace("T", " "), kind: "run", version: r.active, task_id: `task-run-${i}`,
+    status: i === 2 && r.success < 1 ? "agent_done" : "done", ok: true, rung: i === 2 ? 2 : 0, how: i === 2 ? "relaxed match" : "clean replay", model_calls: i === 2 ? 1 : 0,
+    duration_s: 7 + (i % 3), usd: i === 2 ? 0.003 : 0, usd_estimated: i === 2, patches: 0, device: i % 2 ? "pixel-5" : "envoy-test", app_task: i === 5 ? "task-amz" : null,
+    saved: { calls: 11, seconds: 66, usd: 0.034 }, event: null,
+  }));
+  return {
+    name: r.name, app: APP_LOOK[r.app]?.name ?? r.app, intent: r.intent, description: `Learned from one agent run. Replays ${r.intent.toLowerCase()} with no model calls while the app looks as expected.`,
+    inputs: Object.fromEntries(Object.entries(r.inputs).map(([k, d]) => [k, { type: "string", description: d, example: k === "trip_city" ? "Chicago" : "Thai Basil" }])),
+    outputs: r.outputs, active: r.active, shown: r.active, shown_status: "active", trial: r.versions.find((v) => v.status === "trial")?.version ?? null,
+    needs_recompile: r.recompile, steps, done: [{ kind: "text", text: "Gate", locator: null }], versions, runs,
+    savings: { source: { task_id: "task-1019-agent", steps: 9, model_calls: 11, duration_s: 74, usd: 0.034 }, runs: r.runs, finished: r.runs - 1, compared: r.runs - 1, failed: 1,
+      model_calls: 2, saved: { calls: 11 * (r.runs - 1) - 2, seconds: 66 * (r.runs - 1), usd: 0.034 * (r.runs - 1) }, compile_usd: 0.021, net_usd: 0.034 * (r.runs - 1) - 0.021,
+      paid_back_after: 1, median_s: 8.2 },
+  };
+}
+
+// ---- the briefing (the same rules as backend/api/briefing.py) -----------------------------------------------------------
+
+function briefing() {
+  const all = Object.values(db.tasks);
+  const pending = Object.values(db.approvals).filter((a) => a.status === "pending");
+  const waiting = new Set(pending.map((a) => a.task_id));
+  const needs: any[] = pending.map((a) => ({ kind: "approval", id: a.id, task_id: a.task_id, title: a.description, detail: db.tasks[a.task_id]?.goal ?? "",
+    app: a.app, time: a.created_at, money: /\$|\bpay/i.test(a.description) }));
+  const asks = all.filter((t) => t.status === "needs_you" && t.waiting_for === "phone");
+  asks.forEach((t) => needs.push({ kind: "phone", id: t.id, task_id: t.id, title: t.detail ?? "Use your Android phone for this task?", detail: t.goal, app: t.app, time: t.updated_at }));
+  const stuck = all.filter((t) => ["needs_you", "waiting_approval"].includes(t.status) && t.waiting_for !== "phone" && !waiting.has(t.id));
+  stuck.forEach((t) => needs.push({ kind: "task", id: t.id, task_id: t.id, title: t.goal, detail: t.detail ?? "", status: t.status, app: t.app, device: t.device, time: t.updated_at }));
+  const changes = db.changes.filter((c) => c.time >= now() - 86400);
+  const today: any[] = changes.map((c) => ({ kind: "change", id: `change-${c.id}`, task_id: c.task_id, title: `${c.attribute === "gate" ? "Gate" : c.attribute} changed to ${c.new}`,
+    label: c.attribute === "gate" ? "Gate" : c.attribute.replace(/_/g, " "), attribute: c.attribute, old: c.old, new: c.new, entity: c.entity_label, source: c.source, time: c.time }));
+  const finished = all.filter((t) => ["done", "failed", "declined"].includes(t.status) && t.updated_at >= midnight && !t.parent);
+  finished.forEach((t) => today.push({ kind: t.routine ? "routine" : "task", id: t.id, task_id: t.id, title: t.goal, result: t.result ?? "", status: t.status, app: t.app,
+    routine: t.routine, seconds: Math.round((t.updated_at - t.created_at) * 10) / 10, time: t.updated_at }));
+  today.sort((a, b) => b.time - a.time);
+  const upcoming = db.triggers.filter((t) => t.enabled && t.next[0] && t.next[0].at >= now() && t.next[0].at <= now() + 86400)
+    .map((t) => ({ id: t.id, name: t.name, kind: t.kind, at: t.next[0].at, for: t.next[0].for })).sort((a, b) => a.at - b.at);
+  const said: string[] = [];
+  const c = today.find((x) => x.kind === "change");
+  if (c) said.push(`Your ${c.label.toLowerCase()} for flight SL 482 changed to ${c.new}.`);
+  if (upcoming[0]) {
+    const at = new Date(upcoming[0].at * 1000);
+    const tomorrow = at.getDate() !== new Date().getDate() ? " tomorrow" : "";
+    said.push(`Next up at ${at.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })}${tomorrow}: ${upcoming[0].name}.`);
+  }
+  const ap = needs.filter((n) => n.kind === "approval");
+  if (ap.length) said.push(ap.length === 1 ? (ap[0].money ? "One payment is waiting for your OK." : "One action is waiting for your OK.") : `${ap.length} actions are waiting for your OK.`);
+  if (asks.length) said.push(asks.length === 1 ? "One task asks to use your Android phone." : `${asks.length} tasks ask to use your Android phone.`);
+  const done = finished.filter((t) => t.status === "done");
+  if (done.length && said.length < 3) said.push(done.length > 1 ? `I finished ${done.length} tasks today.` : "I finished one task today.");
+  if (!said.length) said.push("All quiet. Nothing needs you right now.");
+  return { time: now(), name: "Maya", text: said.slice(0, 3).join(" "), needs, today: today.slice(0, 8), upcoming,
+    suggestions: [...ROUTINES].sort((a, b) => b.runs - a.runs).slice(0, 4).map((r) => ({ label: r.intent, routine: r.name, app: r.app })) };
+}
+
+// ---- the running task --------------------------------------------------------------------------------------------------
+
+const timers = new Set<ReturnType<typeof setTimeout>>();
+const later = (ms: number, fn: () => void) => { const t = setTimeout(() => { timers.delete(t); fn(); }, ms); timers.add(t); };
+
+function setTask(id: string, patch: Partial<Task>) {
+  db.tasks[id] = { ...db.tasks[id], ...patch, updated_at: now() };
+  emit("task", { task: db.tasks[id] });
+}
+function addStep(id: string, s: Omit<Step, "seq" | "time">) {
+  const list = (db.steps[id] ??= []);
+  const st = { ...s, seq: list.length + 1, time: now() } as Step;
+  list.push(st);
+  emit("step", { task_id: id, step: st });
+}
+
+let runs = 0;
+// A watcher's run of the gate routine: plan, a few steps a second or so apart, a pause (thinking), then done.
+function gateRun(source = "trigger:Watch my gate") {
+  const id = `task-gate-${++runs}`;
+  db.tasks[id] = task({ id, goal: "What's my gate for SL 482?", source, status: "queued", app: "com.skylark.air", device: "envoy-test", kind: "routine",
+    routine: "skylark_get_flight_gate", created_at: now(), updated_at: now() });
+  db.steps[id] = [];
+  emit("task", { task: db.tasks[id] });
+  db.leases["envoy-test"] = { ...db.leases["envoy-test"], task_id: id };
+  const script: [number, () => void][] = [
+    [1200, () => { setTask(id, { status: "running" }); addStep(id, { kind: "note", text: "using routine skylark_get_flight_gate v3 with trip_city = Chicago",
+      sources: { trip_city: "Trip Chicago · Fri, Oct 30 (destination): email from SkyLark Air, Oct 12" } }); }],
+    [1400, () => addStep(id, { kind: "routine_step", text: "open_trips", status: "done", rung: 0, shot: "sl-1" })],
+    [1300, () => addStep(id, { kind: "routine_step", text: "dismiss_promo", status: "skipped", rung: 0, detail: "its screen didn't appear" })],
+    [1500, () => addStep(id, { kind: "routine_step", text: "open_trip", status: "done", rung: 0, shot: "sl-2" })],
+    [3200, () => addStep(id, { kind: "routine_step", text: "read_gate", status: "done", rung: 0, shot: "sl-2" })],
+    [1400, () => addStep(id, { kind: "memory", text: "memory updated: 6 same", entities: ["Flight SL 482 · Fri, Oct 30, 2026"] })],
+    [800, () => { addStep(id, { kind: "finish", text: "all steps and checks passed", status: "done" });
+      setTask(id, { status: "done", result: "gate: B22; terminal: B; boarding time: 5:30 AM", model_calls: 0 });
+      db.leases["envoy-test"] = { ...db.leases["envoy-test"], task_id: null };
+      for (const old of Object.keys(db.tasks)) if (old.startsWith("task-gate-") && old !== id && +old.split("-")[2] < runs - 1) { delete db.tasks[old]; delete db.steps[old]; }
+      if (scenario === "quiet") later(14000, () => gateRun());
+    }],
+  ];
+  let at = 0;
+  for (const [ms, fn] of script) { at += ms; later(at, fn); }
+  return db.tasks[id];
+}
+
+// A task you started from chat, which ends with a payment waiting for your OK (unless there is one already).
+function chatTask(goal: string) {
+  const id = `task-chat-${++runs}`;
+  db.tasks[id] = task({ id, goal, source: "chat", status: "queued", created_at: now(), updated_at: now(), app: "com.starbucks.mobilecard", device: "envoy-test" });
+  db.steps[id] = [];
+  emit("task", { task: db.tasks[id] });
+  const script: [number, () => void][] = [
+    [900, () => { setTask(id, { status: "running", kind: "agent" }); addStep(id, { kind: "plan", text: "Open Starbucks; Find your usual; Check out" }); }],
+    [1600, () => addStep(id, { kind: "action", text: 'tap "Order"', reason: "The order tab has your favorites", risk: "read", shot: "sb-1" })],
+    [1500, () => addStep(id, { kind: "action", text: 'tap "Grande oat latte"', reason: "That's your usual", risk: "reversible", shot: "sb-1" })],
+    [1500, () => { addStep(id, { kind: "finish", text: "Added your usual to the cart", status: "done" }); setTask(id, { status: "done", result: "Your usual is in the cart: a grande oat latte", model_calls: 3, cost_usd: 0.006 }); }],
+  ];
+  let at = 0;
+  for (const [ms, fn] of script) { at += ms; later(at, fn); }
+  return db.tasks[id];
+}
+
+function approve(id: string, approved: boolean) {
+  const a = db.approvals[id];
+  if (!a || a.status !== "pending") throw Object.assign(new Error("already decided"), { status: 409 });
+  db.approvals[id] = { ...a, status: approved ? "approved" : "declined", decided_by: "you" };
+  emit("approval_decided", { approval: db.approvals[id], task_id: a.task_id });
+  const t = a.task_id;
+  if (approved) {
+    setTask(t, { status: "running", waiting_for: null });
+    later(1400, () => addStep(t, { kind: "routine_step", text: "place_order", status: "done", rung: 0, shot: "dd-4", risk: "irreversible", approval: { approved: true, by: "you" } }));
+    later(2600, () => { addStep(t, { kind: "finish", text: "all steps and checks passed", status: "done" }); setTask(t, { status: "done", result: "Ordered: arrives in about 35 min" });
+      db.leases["pixel-5"] = { ...db.leases["pixel-5"], task_id: null }; });
+  } else {
+    later(600, () => { setTask(t, { status: "declined", detail: "you declined the payment", waiting_for: null }); db.leases["pixel-5"] = { ...db.leases["pixel-5"], task_id: null }; });
+  }
+  return db.approvals[id];
+}
+
+// ---- the API ----------------------------------------------------------------------------------------------------------
+
+const err = (status: number, message: string) => Object.assign(new Error(message), { status });
+
+export function start(s: string | null): void {
+  scenario = (s === "1" || !s ? "full" : s) as Scenario;
+  if (!["full", "quiet", "idle", "offline", "pair"].includes(scenario)) scenario = "full";
+  db = seed();
+}
+
+export async function handle(path: string, init: RequestInit = {}): Promise<any> {
+  await new Promise((r) => setTimeout(r, 120)); // a little latency, so loading states show
+  const u = new URL(path, "http://mock");
+  const p = u.pathname.replace(/\/$/, "");
+  const method = (init.method ?? "GET").toUpperCase();
+  const body = typeof init.body === "string" ? JSON.parse(init.body || "{}") : {};
+  if (scenario === "pair" && !["/api/pair"].includes(p)) throw err(401, "Not signed in");
+  if (scenario === "offline" && p === "/api/briefing") throw err(503, "Can't reach your Mac");
+  const pub = (a: any) => { const { nonce, ...rest } = a; return rest; };
+  let m: RegExpMatchArray | null;
+
+  if (p === "/api/state") return { profile: "demo", devices: Object.values(db.leases), tasks: Object.values(db.tasks).sort((a, b) => b.created_at - a.created_at).slice(0, 20),
+    approvals: Object.values(db.approvals).filter((a) => a.status === "pending").map(pub), routines: ROUTINES.length, memory: { entities: NODES.length },
+    public_url: "https://envoy-mac.tail1234.ts.net:8443", me: { kind: "owner", name: "Mac" }, push_key: "mock" };
+  if (p === "/api/briefing") return briefing();
+  if (p === "/api/tasks" && method === "POST") return body.routine ? gateRun("web") : chatTask(body.goal ?? "A task");
+  if (p === "/api/tasks") return Object.values(db.tasks).sort((a, b) => b.created_at - a.created_at);
+  if ((m = p.match(/^\/api\/tasks\/([^/]+)\/stop$/))) { setTask(m[1], { status: "stopped", detail: "stopped by you" }); return { stopped: true }; }
+  if ((m = p.match(/^\/api\/tasks\/([^/]+)\/phone$/))) {
+    setTask(m[1], { status: body.allow ? "running" : "failed", waiting_for: null, device: body.allow ? "pixel-5" : undefined,
+      detail: body.allow ? undefined : "you said no: Target blocks emulators" });
+    if (body.allow) later(2500, () => { addStep(m![1], { kind: "action", text: 'tap "Search"', reason: "Find AirPods Pro", risk: "read", shot: "tgt-1" });
+      setTask(m![1], { status: "done", result: "AirPods Pro: $189.99 at Target, in stock nearby" }); });
+    return { ok: true };
+  }
+  if ((m = p.match(/^\/api\/tasks\/([^/]+)$/))) {
+    const t = db.tasks[m[1]];
+    if (!t) throw err(404, "Not Found");
+    return { task: t, steps: db.steps[m[1]] ?? [], approvals: Object.values(db.approvals).filter((a) => a.task_id === t.id).map(pub) };
+  }
+  if (p === "/api/approvals") return Object.values(db.approvals).filter((a) => !u.searchParams.get("status") || a.status === u.searchParams.get("status")).map(pub);
+  if ((m = p.match(/^\/api\/approvals\/([^/]+)$/))) {
+    const a = db.approvals[m[1]];
+    if (!a) throw err(404, "Not Found");
+    if (method === "POST") return pub(approve(a.id, body.decision === "approve"));
+    return { ...a, goal: db.tasks[a.task_id]?.goal, task_status: db.tasks[a.task_id]?.status };
+  }
+  if (p === "/api/devices") return Object.values(db.leases);
+  if ((m = p.match(/^\/api\/devices\/([^/]+)\/(takeover|handback)$/))) {
+    const l = { ...db.leases[m[1]], user_control: m[2] === "takeover" };
+    db.leases[m[1]] = l;
+    emit(m[2] === "takeover" ? "takeover" : "hand_back", { avd: m[1], task_id: l.task_id });
+    return l;
+  }
+  if (p === "/api/chat") {
+    const msg = String(body.message ?? "");
+    if (/gate|seat|flight|board/i.test(msg)) return { kind: "memory", reply: "Your gate for SL 482 is B22. It moved from B14 at 6:12 PM; I saw it in SkyLark.", from_memory: true, stale: false,
+      spoken: "Your gate is B22." };
+    return { kind: "task", reply: "On it. I'll do that on the emulator and tell you when it's done.", task: chatTask(msg) };
+  }
+  if (p === "/api/memory/graph") return { nodes: NODES, edges: EDGES };
+  if ((m = p.match(/^\/api\/memory\/entity\/([^/]+)(\/fact)?$/))) return m[2] ? { ok: true } : entityOf(m[1]);
+  if (p.startsWith("/api/memory/source/")) return { deleted: 1 };
+  if (p === "/api/memory/search") return { markdown: "**Flight SL 482** (Fri, Oct 30, 2026): gate B22 (SkyLark app, 1 h ago; was B14), departs 6:05 AM, seat 14C, group 3." };
+  if (p === "/api/routines") return ROUTINES;
+  if ((m = p.match(/^\/api\/routines\/([^/]+)\/detail$/))) return routineDetail(decodeURIComponent(m[1]));
+  if ((m = p.match(/^\/api\/routines\/([^/]+)$/))) return { index: {}, yaml: `routine: ${m[1]}\nversion: 3\napp: com.skylark.air\nsteps:\n  - id: open_trips\n    action: tap\n    target: {text: My trips}\n` };
+  if (p === "/api/triggers" && method === "POST") { const t = { id: `trig-${++runs}`, enabled: true, last_fired: null, next: [], alerts: { on: false, attributes: ["*"] }, ...body }; db.triggers.push(t); return t; }
+  if (p === "/api/triggers") return db.triggers;
+  if ((m = p.match(/^\/api\/triggers\/([^/]+)$/))) {
+    const i = db.triggers.findIndex((t) => t.id === m![1]);
+    if (method === "DELETE") { db.triggers.splice(i, 1); return { deleted: m[1] }; }
+    const t = db.triggers[i];
+    if ("enabled" in body) t.enabled = body.enabled;
+    if ("alert" in body) t.alerts = { ...t.alerts, on: body.alert };
+    return t;
+  }
+  if (p === "/api/alerts") return db.changes;
+  if (p === "/api/settings/approvals") {
+    if (method === "POST") db.rules = body;
+    return { rules: db.rules, apps: ["com.skylark.air", "com.dd.doordash", "com.starbucks.mobilecard", "com.amazon.mShop.android.shopping"],
+      routines: ROUTINES.map((r) => ({ name: r.name, app: r.app, intent: r.intent, irreversible: !/gate|track/.test(r.name) })) };
+  }
+  if (p === "/api/settings/phones") {
+    if (method === "POST") db.phoneApps = body.phone_apps;
+    return { phone_apps: db.phoneApps, apps: Object.keys(APP_LOOK), emulator_refused: { "com.target.ui": "Target" }, learned: {},
+      names: Object.fromEntries(Object.entries(APP_LOOK).map(([k, v]) => [k, v.name])), phones: [{ avd: "pixel-5", name: "Pixel 5", android: "13", state: "device" }] };
+  }
+  if (p === "/api/settings/photos") { if (method === "POST") db.photos = body; return db.photos; }
+  if (p === "/api/paired") return { devices: [
+    { id: "dev-1", name: "Maya's iPhone (Home Screen app)", scope: "session", created_at: ago(5 * 86400), last_seen: ago(60) },
+    { id: "dev-2", name: "Send to Envoy (Shortcut)", scope: "photos", created_at: ago(4 * 86400), last_seen: ago(2 * 86400) },
+  ], push: [{ id: "push-1", device_id: "dev-1", service: "Apple", last_ok: ago(1800), failures: 0 }], me: { kind: "owner", device_id: null, name: "Mac" } };
+  if (p === "/api/pair/start") return { code: "482917", expires_in: 300 };
+  if (p === "/api/pair") { scenario = "full"; db = seed(); return { ok: true }; }
+  if (p === "/api/tokens") return { token: "envoy_photos_mock_token_not_real", upload_url: "https://envoy-mac.tail1234.ts.net:8443/api/photos" };
+  if (p === "/api/push/test") return { sent: 1, results: [{ status: 201, service: "Apple" }] };
+  if (p.startsWith("/api/push") || p === "/api/metrics") return { ok: true };
+  throw err(404, `mock: no fixture for ${method} ${p}`);
+}
+
+export const photos = async (n: number) => {
+  await new Promise((r) => setTimeout(r, 900));
+  return { results: [], summary: n === 1 ? "I read the boarding pass: SL 482, seat 14C, group 3." : `I read ${n} images and saved what they say.` };
+};
+
+// The event stream: replays what the fixtures do, and what you do (approving, stopping, starting a task).
+export function subscribe(onEvent: (e: EnvoyEvent) => void, setConnected: (on: boolean) => void): () => void {
+  listeners.add(onEvent);
+  if (scenario !== "offline") {
+    const t = setTimeout(() => setConnected(true), 250);
+    timers.add(t);
+    if (scenario === "full") later(2500, () => gateRun());
+    if (scenario === "quiet") later(1500, () => gateRun());
+  }
+  return () => { listeners.delete(onEvent); timers.forEach(clearTimeout); timers.clear(); };
+}

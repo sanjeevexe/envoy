@@ -3,7 +3,7 @@
 // The iPhone companion's settings (Phase 5): pair a device with a short code, push notifications on this device,
 // photos and screenshots, and the "Send to Envoy" Shortcut's token.
 import { useCallback, useEffect, useState } from "react";
-import { ago, api, post } from "@/lib/api";
+import { ago, api, media, post } from "@/lib/api";
 import { disablePush, enablePush, isIOS, isStandalone, pushState, PushState } from "@/lib/device";
 
 type Device = { id: string; name: string; scope: string; created_at: number; last_seen?: number | null; user_agent?: string };
@@ -99,7 +99,7 @@ export default function Companion({ publicUrl }: { publicUrl?: string }) {
             </p>
           )}
           <div className="flex flex-wrap items-start gap-4">
-            {publicUrl?.startsWith("https://") && <img src="/api/pair/qr" alt="QR code for Envoy's address" className="h-40 w-40 rounded-lg bg-white p-1 shadow-sm" />}
+            {publicUrl?.startsWith("https://") && <img src={media("/api/pair/qr")} alt="QR code for Envoy's address" className="h-40 w-40 rounded-lg bg-white p-1 shadow-sm" />}
             <div className="space-y-2">
               <button onClick={() => copy("link", publicUrl ?? "")} className="block rounded-lg bg-stone-200 px-3 py-2">{copied === "link" ? "Copied" : "Copy link"}</button>
               {code && left > 0 ? (

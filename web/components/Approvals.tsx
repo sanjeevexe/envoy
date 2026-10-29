@@ -2,7 +2,7 @@
 
 // Pending irreversible actions. Only you can approve, here or on the approval page; Envoy and outside assistants can't.
 import { useState } from "react";
-import { api, ago, Approval, post } from "@/lib/api";
+import { api, ago, Approval, media, post } from "@/lib/api";
 
 export function ApprovalCard({ a, onDone, large }: { a: Approval; onDone?: () => void; large?: boolean }) {
   const [busy, setBusy] = useState(false);
@@ -26,7 +26,7 @@ export function ApprovalCard({ a, onDone, large }: { a: Approval; onDone?: () =>
       <div className="space-y-3 rounded-2xl bg-white p-4 shadow-sm">
         <div className="text-lg font-semibold">{a.description}</div>
         {a.goal && <div className="text-sm text-stone-600">Task: {a.goal}</div>}
-        {a.screenshot && <img src={`/api/approvals/${a.id}/shot`} alt="The screen this approval is for" className="mx-auto max-h-[45dvh] rounded-lg border border-stone-200" />}
+        {a.screenshot && <img src={media(`/api/approvals/${a.id}/shot`)} alt="The screen this approval is for" className="mx-auto max-h-[45dvh] rounded-lg border border-stone-200" />}
         <ul className="list-disc pl-5 text-xs text-stone-500">{a.reasons.map((r) => <li key={r}>{r}</li>)}</ul>
         <div className="text-xs text-stone-400">{a.app} · {ago(a.created_at)}</div>
         {a.status === "pending" && !msg ? (
@@ -42,7 +42,7 @@ export function ApprovalCard({ a, onDone, large }: { a: Approval; onDone?: () =>
   }
   return (
     <div className="flex gap-3 rounded-xl bg-white p-3 shadow-sm">
-      {a.screenshot ? <img src={`/api/approvals/${a.id}/shot`} alt="The screen this approval is for" className="w-28 shrink-0 rounded border border-stone-200" />
+      {a.screenshot ? <img src={media(`/api/approvals/${a.id}/shot`)} alt="The screen this approval is for" className="w-28 shrink-0 rounded border border-stone-200" />
                     : <div className="w-28 shrink-0 rounded bg-stone-100" />}
       <div className="min-w-0 flex-1 text-sm">
         <div className="font-semibold">{a.description}</div>

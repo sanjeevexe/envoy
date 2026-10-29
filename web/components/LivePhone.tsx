@@ -5,7 +5,7 @@
 // Phase 5: touch (tap, swipe, long press; the page doesn't scroll while you're in control), typing with the iPhone's
 // keyboard, and latency measured against the Mac's clock (ping/pong), reported back so it can be compared over the tailnet.
 import { useEffect, useRef, useState } from "react";
-import { Lease, post } from "@/lib/api";
+import { Lease, loadMock, mockMode, post } from "@/lib/api";
 import { isStandalone, metric } from "@/lib/device";
 
 type Props = { avd: string; lease?: Lease; needsYou?: string | null; mobile?: boolean };
@@ -34,6 +34,22 @@ export default function LivePhone({ avd, lease, needsYou, mobile }: Props) {
   useEffect(() => setControl(lease), [lease]);
 
   useEffect(() => {
+    if (mockMode()) {  // mock mode: a still picture of the phone, and no socket
+      let gone = false;
+      loadMock().then((m) => {
+        const img = new Image();
+        img.onload = () => {
+          const c = canvas.current;
+          if (gone || !c) return;
+          c.width = img.width; c.height = img.height;
+          c.getContext("2d")?.drawImage(img, 0, 0);
+          setSize({ w: img.width, h: img.height });
+          setIsPhone(avd === "pixel-5");
+        };
+        img.src = m.liveFrame(avd);
+      });
+      return () => { gone = true; };
+    }
     let stop = false;
     let frames = 0;
     let retry: ReturnType<typeof setTimeout>;

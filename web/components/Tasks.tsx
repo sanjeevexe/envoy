@@ -2,7 +2,7 @@
 
 // Tasks as they happen: each step with its screenshot, what was done, why, and its risk.
 import { useEffect, useState } from "react";
-import { api, ago, Approval, post, STATUS, Step, Task } from "@/lib/api";
+import { api, ago, Approval, media, post, STATUS, Step, Task } from "@/lib/api";
 
 export function StatusBadge({ status }: { status: string }) {
   const s = STATUS[status] ?? { label: status, tone: "bg-stone-200" };
@@ -122,7 +122,7 @@ export function TaskDetail({ id, task, liveSteps, back, all, open }: {
       <ol className="mt-4 space-y-2">
         {steps.map((s) => (
           <li key={s.seq} className={`flex gap-3 rounded-lg p-2 shadow-sm ${s.kind === "change" ? "bg-amber-50" : "bg-white"}`}>
-            {s.shot ? <img src={`/api/shots/${s.shot}`} alt="" className="h-28 w-[52px] shrink-0 rounded object-cover object-top" />
+            {s.shot ? <img src={media(`/api/shots/${s.shot}`)} alt="" className="h-28 w-[52px] shrink-0 rounded object-cover object-top" />
                     : (s.kind === "action" || s.kind === "routine_step") ? <div className="h-28 w-[52px] shrink-0 rounded bg-stone-100" title="No picture: secure screen or none taken" /> : null}
             <div className="min-w-0 text-sm">
               <div className="font-medium">

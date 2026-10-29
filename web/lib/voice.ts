@@ -6,12 +6,14 @@
 // is never sent on its own. If the relay fails, the browser's own speech recognition is the fallback. Replies to a
 // dictated message are spoken with the device's built-in speech.
 import { useCallback, useRef, useState } from "react";
+import { mockMode } from "@/lib/api";
 import { metric } from "@/lib/device";
 
 export type VoiceState = "idle" | "starting" | "listening" | "finishing";
 export type Turn = { text: string; source: "muse" | "browser"; audio_ms?: number; connect_ms?: number; finalize_ms?: number; stop_to_text_ms: number; cost_usd?: number };
 
 const MAX_LISTEN_MS = 120_000; // a forgotten open microphone stops itself
+const MOCK_WORDS = "What's my gate for tomorrow's flight?";
 
 let unlocked = false;
 // iOS speaks only after a first utterance started from a tap; an empty one unlocks it.
@@ -79,6 +81,11 @@ export function useDictation(onText: (t: Turn) => void, onError: (msg: string) =
     const s = r.current;
     clearTimeout(s.timer);
     s.stopped = performance.now();
+    if (mockMode()) {  // mock mode: the words below, after a moment
+      setState("finishing");
+      s.timer = setTimeout(() => { setState("idle"); setPartial(""); if (!s.cancelled) onText({ text: MOCK_WORDS, source: "muse", stop_to_text_ms: 600 }); }, 600);
+      return;
+    }
     if (s.recog) { setState("finishing"); s.recog.stop(); return; }
     if (!s.node) { s.cancelled = true; s.ws?.close(); setState("idle"); return; }
     setState("finishing");
@@ -100,6 +107,14 @@ export function useDictation(onText: (t: Turn) => void, onError: (msg: string) =
     s.recog = undefined;
     setPartial("");
     setState("starting");
+    if (mockMode()) {
+      const words = MOCK_WORDS.split(" ");
+      s.timer = setTimeout(() => {
+        setState("listening");
+        words.forEach((_, i) => { s.timer = setTimeout(() => setPartial(words.slice(0, i + 1).join(" ")), 450 * (i + 1)); });
+      }, 350);
+      return;
+    }
     const pressed = performance.now();
     const proto = location.protocol === "https:" ? "wss" : "ws";
     const ws = new WebSocket(`${proto}://${location.host}/api/voice`);

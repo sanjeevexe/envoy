@@ -3,7 +3,7 @@
 // The iPhone companion's plumbing (Phase 5): the service worker, push notifications, photo uploads, and what kind of
 // screen and app this is.
 import { useEffect, useState } from "react";
-import { api, ApiError, post } from "@/lib/api";
+import { api, ApiError, loadMock, mockMode, post } from "@/lib/api";
 
 export const isIOS = () => typeof navigator !== "undefined" && /iPhone|iPad|iPod/.test(navigator.userAgent);
 export const isStandalone = () =>
@@ -71,6 +71,7 @@ export type PhotoResult = { photo_id: string; summary?: string; error?: string; 
 
 // Only the images you pick are sent; Envoy reads them on your Mac and deletes them once their facts are saved.
 export async function uploadPhotos(files: File[]): Promise<{ results: PhotoResult[]; summary: string }> {
+  if (mockMode()) return (await loadMock()).photos(files.length);
   const form = new FormData();
   files.slice(0, 10).forEach((f) => form.append("file", f, f.name));
   const r = await fetch("/api/photos", { method: "POST", body: form, credentials: "same-origin", headers: { "X-Envoy": "1" } });
