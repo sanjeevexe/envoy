@@ -1,0 +1,17 @@
+[abl10b] cost $0.602; errors 0
+== contacts s1, clean plan (5fa03bf run) (live input 2748 tokens)
+   no10b                  {'answers': 25, 'opens filters': 3, 'look ': 1, 'back ': 1}  tokens [2665]
+   no10b+no742            {'answers': 28, 'opens filters': 2}  tokens [2572]
+   no10b+no_done          {'answers': 29, 'look ': 1}  tokens [2556]
+== contacts s1, full-list plan (736a6e4 run) (live input 2747 tokens)
+   no10b                  {'answers': 18, 'opens filters': 5, 'back ': 4, 'look ': 3}  tokens [2664]
+   no10b+no742            {'answers': 14, 'opens filters': 12, 'look ': 3, 'back ': 1}  tokens [2571]
+   no10b+no_done          {'answers': 15, 'opens filters': 6, 'back ': 5, 'look ': 4}  tokens [2555]
+== contacts s1, main's plan (main run) (live input 2119 tokens)
+   no10b                  {'answers': 30}  tokens [2663]
+   no10b+no742            {'answers': 30}  tokens [2570]
+   no10b+no_done          {'answers': 30}  tokens [2554]
+== doordash s5, Addresses (5fa03bf run) (live input 2969 tokens)
+   no10b                  {'taps Addresses': 27, 'back ': 3}  tokens [2903]
+   no10b+no742            {'taps Addresses': 30}  tokens [2810]
+   no10b+no_done          {'taps Addresses': 30}  tokens [2794]

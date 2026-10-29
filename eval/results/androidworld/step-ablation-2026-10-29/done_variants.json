@@ -1,0 +1,66 @@
+{
+ "A1": [
+  [
+   "- done(result): the goal is reached. Say done as soon as the screen shows it (the item is gone, the setting shows its new value, the entry is saved, the answer is there); do not go looking for more proof. If the goal asks a question, result is the answer itself (for example \"Gate B12\"), in the words the phone shows (SCREEN, or REMEMBERED); a count or a total you work out from them is fine. Add nothing the phone doesn't show: no date from TODAY, no detail from the goal or from what you know. A screen that says there is none (an empty list, a \"nothing yet\" message) answers the question too; don't switch filters or settings to look for a different answer. Otherwise say briefly what you did.",
+   "- done(result): the goal is reached. If the goal asks a question, result must state the answer exactly as the screen shows it (for example \"Gate B12\"), and that answer must be visible on the current screen. Otherwise say briefly what you did.",
+   "step"
+  ]
+ ],
+ "A1_aw": [
+  [
+   "- done(result): the goal is reached. Say done as soon as the screen shows it (the item is gone, the setting shows its new value, the entry is saved, the answer is there); do not go looking for more proof. If the goal asks a question, result is the answer itself (for example \"Gate B12\"), in the words the phone shows (SCREEN, or REMEMBERED); a count or a total you work out from them is fine. Add nothing the phone doesn't show: no date from TODAY, no detail from the goal or from what you know. A screen that says there is none (an empty list, a \"nothing yet\" message) answers the question too; don't switch filters or settings to look for a different answer. Otherwise say briefly what you did.",
+   "- done(result): the goal is reached. If the goal asks a question, result must state the answer exactly as the screen shows it (for example \"Gate B12\"), and that answer must be visible on the current screen. Otherwise say briefly what you did.",
+   "step"
+  ],
+  [
+   "",
+   "\n## AndroidWorld\nThis task comes from the AndroidWorld benchmark, whose checker compares your answer's text. When the goal says how to answer (just a number, True or False, a comma-separated list, <amount> <unit>), answer in exactly that form.\n",
+   "append"
+  ]
+ ],
+ "A2": [
+  [
+   "- done(result): the goal is reached. Say done as soon as the screen shows it (the item is gone, the setting shows its new value, the entry is saved, the answer is there); do not go looking for more proof. If the goal asks a question, result is the answer itself (for example \"Gate B12\"), in the words the phone shows (SCREEN, or REMEMBERED); a count or a total you work out from them is fine. Add nothing the phone doesn't show: no date from TODAY, no detail from the goal or from what you know. A screen that says there is none (an empty list, a \"nothing yet\" message) answers the question too; don't switch filters or settings to look for a different answer. Otherwise say briefly what you did.",
+   "- done(result): the goal is reached. Say done as soon as the screen shows it (the item is gone, the setting shows its new value, the entry is saved); do not go looking for more proof. If the goal asks a question, result must state the answer exactly as the screen shows it (for example \"Gate B12\"), and that answer must be visible on the current screen; a count you work out from it is fine, and a screen that says there is none (an empty list, a \"nothing yet\" message) answers it. Otherwise say briefly what you did.",
+   "step"
+  ]
+ ],
+ "A2_aw": [
+  [
+   "- done(result): the goal is reached. Say done as soon as the screen shows it (the item is gone, the setting shows its new value, the entry is saved, the answer is there); do not go looking for more proof. If the goal asks a question, result is the answer itself (for example \"Gate B12\"), in the words the phone shows (SCREEN, or REMEMBERED); a count or a total you work out from them is fine. Add nothing the phone doesn't show: no date from TODAY, no detail from the goal or from what you know. A screen that says there is none (an empty list, a \"nothing yet\" message) answers the question too; don't switch filters or settings to look for a different answer. Otherwise say briefly what you did.",
+   "- done(result): the goal is reached. Say done as soon as the screen shows it (the item is gone, the setting shows its new value, the entry is saved); do not go looking for more proof. If the goal asks a question, result must state the answer exactly as the screen shows it (for example \"Gate B12\"), and that answer must be visible on the current screen; a count you work out from it is fine, and a screen that says there is none (an empty list, a \"nothing yet\" message) answers it. Otherwise say briefly what you did.",
+   "step"
+  ],
+  [
+   "",
+   "\n## AndroidWorld\nThis task comes from the AndroidWorld benchmark, whose checker compares your answer's text. When the goal says how to answer (just a number, True or False, a comma-separated list, <amount> <unit>), answer in exactly that form.\n",
+   "append"
+  ]
+ ],
+ "A3": [
+  [
+   "- done(result): the goal is reached. Say done as soon as the screen shows it (the item is gone, the setting shows its new value, the entry is saved, the answer is there); do not go looking for more proof. If the goal asks a question, result is the answer itself (for example \"Gate B12\"), in the words the phone shows (SCREEN, or REMEMBERED); a count or a total you work out from them is fine. Add nothing the phone doesn't show: no date from TODAY, no detail from the goal or from what you know. A screen that says there is none (an empty list, a \"nothing yet\" message) answers the question too; don't switch filters or settings to look for a different answer. Otherwise say briefly what you did.",
+   "- done(result): the goal is reached. Say done as soon as the screen shows it (the item is gone, the setting shows its new value, the entry is saved); do not go looking for more proof. If the goal asks a question, result must state the answer exactly as the screen shows it (for example \"Gate B12\"), and that answer must be visible on the current screen; a count you work out from it is fine, and a screen that says there is none (an empty list, a \"nothing yet\" message) answers it; don't switch filters or settings to look for a different answer. Otherwise say briefly what you did.",
+   "step"
+  ]
+ ],
+ "A3_aw": [
+  [
+   "- done(result): the goal is reached. Say done as soon as the screen shows it (the item is gone, the setting shows its new value, the entry is saved, the answer is there); do not go looking for more proof. If the goal asks a question, result is the answer itself (for example \"Gate B12\"), in the words the phone shows (SCREEN, or REMEMBERED); a count or a total you work out from them is fine. Add nothing the phone doesn't show: no date from TODAY, no detail from the goal or from what you know. A screen that says there is none (an empty list, a \"nothing yet\" message) answers the question too; don't switch filters or settings to look for a different answer. Otherwise say briefly what you did.",
+   "- done(result): the goal is reached. Say done as soon as the screen shows it (the item is gone, the setting shows its new value, the entry is saved); do not go looking for more proof. If the goal asks a question, result must state the answer exactly as the screen shows it (for example \"Gate B12\"), and that answer must be visible on the current screen; a count you work out from it is fine, and a screen that says there is none (an empty list, a \"nothing yet\" message) answers it; don't switch filters or settings to look for a different answer. Otherwise say briefly what you did.",
+   "step"
+  ],
+  [
+   "",
+   "\n## AndroidWorld\nThis task comes from the AndroidWorld benchmark, whose checker compares your answer's text. When the goal says how to answer (just a number, True or False, a comma-separated list, <amount> <unit>), answer in exactly that form.\n",
+   "append"
+  ]
+ ],
+ "cur_aw": [
+  [
+   "",
+   "\n## AndroidWorld\nThis task comes from the AndroidWorld benchmark, whose checker compares your answer's text. When the goal says how to answer (just a number, True or False, a comma-separated list, <amount> <unit>), answer in exactly that form.\n",
+   "append"
+  ]
+ ]
+}

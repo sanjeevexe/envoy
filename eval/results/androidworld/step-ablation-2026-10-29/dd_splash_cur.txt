@@ -1,0 +1,3 @@
+[abl0] cost $0.125; errors 0; plan tokens [822] (live: main 680, 5fa03bf 864)
+step 1 on the loaded home: {'address': 28, 'Account': 2}
+plans' second subgoal: [('continue without signing in if prompted', 4), ('dismiss onboarding or login prompts', 2), ('dismiss onboarding or location prompts', 1), ('dismiss onboarding prompts to reach the ', 1), ('dismiss onboarding and go to home screen', 1)]

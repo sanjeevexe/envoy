@@ -1,0 +1,3 @@
+[abl0] cost $0.323; errors 0; live plan 1062, live step 2748
+  5fa03bf  {'answers': 39, 'opens filters': 1}  plan tokens [1089]  step tokens [2741, 2742, 2743]
+  A        {'answers': 35, 'opens filters': 5}  plan tokens [1089]  step tokens [2709, 2711, 2713]
