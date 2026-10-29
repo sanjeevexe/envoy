@@ -108,7 +108,7 @@ export default function Triggers() {
       <details className="mx-4 mt-1 rounded-block border border-line bg-surface px-4">
         <summary className="flex min-h-[44px] cursor-pointer items-center text-meta font-semibold text-ink-2">Write one yourself (JSON)</summary>
         <textarea value={json} onChange={(e) => setJson(e.target.value)} rows={6} aria-label="Trigger as JSON"
-                  placeholder='{"kind": "time", "name": "Sunday coupons", "spec": {"daily_at": "9:00"}, "action": {"goal": "..."}}'
+                  placeholder='{"kind": "time", "name": "Sunday coupons", "spec": {"weekly_on": {"days": ["sun"], "at": "9:00"}}, "action": {"goal": "...", "ask": true}}'
                   className="w-full rounded-sm border border-control bg-raised p-3 font-mono text-meta-2 outline-none focus:border-sage" />
         <Button variant="primary" className="mb-4 mt-2" onClick={() => { try { add(JSON.parse(json)); } catch { setErr("That isn't valid JSON"); } }}>Add</Button>
       </details>

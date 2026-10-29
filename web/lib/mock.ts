@@ -4,7 +4,8 @@
 // fixtures that cover every state, so each screen can be designed, checked and captured without a Mac, a phone or a
 // model. Nothing in this file touches the network. Scenarios (`?mock=<name>`):
 // - `1` / `full`: a task streaming steps, a payment waiting for your OK, a phone ask, an offer ("Check in for SL 482?")
-//   with its "Before I start" lines, a filled memory, routines, triggers (one asks first), past offers in each state
+//   with its "Before I start" lines, a habit Envoy noticed ("Make this a habit?"), a filled memory, routines, triggers
+//   (one asks first, one weekly), past offers in each state
 // - `quiet`: nothing needs you; a watcher reruns the gate routine every so often (working, thinking, done)
 // - `idle`: nothing running and nothing waiting
 // - `offline`: the event stream never connects, and Home can't load its briefing
@@ -209,7 +210,8 @@ function seed(): DB {
     { id: 38, time: ago(86400 + 2000), task_id: "task-gate-0", entity_label: "Flight SL 482", attribute: "boarding_group", old: "3", new: "Group 3",
       title: "Boarding group changed: 3 → Group 3", pushed: 0, why_not: "you started this task", source: "SkyLark" },
   ];
-  // Offers: one waiting (with its "Before I start" lines), and one of each answer in the history.
+  // Offers: one waiting (with its "Before I start" lines), a habit, and one of each answer in the history.
+  const lastMondays = [3, 2, 1].map((w) => { const d = new Date(T * 1000); d.setDate(d.getDate() - ((d.getDay() + 6) % 7 || 7) - (w - 1) * 7); d.setHours(8, 0, 0, 0); return d.getTime() / 1000; });
   const checkIn = { type: "task", goal: "Check me in for my flight SL 482 to Chicago", request: "Check me in for my flight to", routine: "skylark_check_in_flight",
     inputs: { trip_city: "Chicago" }, app: null };
   const offer = (o: any) => ({ source: "trigger:Ask me to check in when check-in opens", expires_at: null, decided_at: null, decided_by: null, task_id: null,
@@ -223,6 +225,13 @@ function seed(): DB {
         { kind: "approval", text: "Confirming check-in will go ahead: you asked for it", level: "info" },
         { kind: "signin", text: "SkyLark signed you out 2 days ago: you may need to sign in", level: "warn" },
       ] })] : []),
+    ...(scenario === "full" || scenario === "offline" ? [offer({ id: "offer-habit", kind: "repeat", created_at: ago(5400), title: "Make this a habit?", status: "pending",
+      source: "repeats", origin: null, key: "repeat:mock",
+      body: `You asked me to check the status of your flight SL 1190 on your last 3 Mondays (${lastMondays.map(fmtDay).join(", ").replace(/, ([^,]*)$/, " and $1")}), around 8:00 AM.`,
+      action: { type: "create_trigger", kind: "time", name: "Every Monday at 8:00 AM: check the status of your flight SL 1190",
+        spec: { weekly_on: { days: ["mon"], at: "08:00" } }, pattern: "weekly", evidence: lastMondays.map(fmtDay),
+        action: { goal: "Check the status of my flight SL 1190", routine: "skylark_check_flight_status", inputs: { flight_number: "SL 1190" }, ask: true },
+        summary: "Every Monday at 8:00 AM, I'll ask you: “Should I check the status of your flight SL 1190?”", setup: "asks you every Monday at 8:00 AM" } })] : []),
     offer({ id: "offer-ck-old", created_at: ago(2 * 86400 + 600), title: "Check in for SL 1213?", status: "accepted", decided_at: ago(2 * 86400 + 300), decided_by: "you on Maya's iPhone",
       task_id: "task-ck", body: "From your trigger “Ask me to check in when check-in opens”, which asks you first.",
       action: { ...checkIn, goal: "Check me in for my flight SL 1213 to Louisville", inputs: { trip_city: "Louisville" } } }),
@@ -486,7 +495,13 @@ function answerOffer(id: string, decision: string) {
   if (o.status === "accepted" && decision === "accept") return o;
   if (o.status !== "pending") throw err(409, `already ${o.status}`);
   if (decision === "decline") Object.assign(o, { status: "declined", decided_at: now(), decided_by: "you" });
-  else Object.assign(o, { status: "accepted", decided_at: now(), decided_by: "you", task_id: checkInRun(o.action.goal, o.action.inputs?.trip_city ?? "Chicago") });
+  else if (o.action.type === "create_trigger") {  // a habit: the trigger it sets up asks each time
+    const t = { id: `trig-${++runs}`, kind: o.action.kind, name: o.action.name, spec: o.action.spec, action: o.action.action, enabled: true, last_fired: null,
+      next: [{ at: (() => { const d = new Date(); d.setDate(d.getDate() + ((8 - d.getDay()) % 7 || 7)); d.setHours(8, 0, 0, 0); return d.getTime() / 1000; })() }],
+      alerts: { on: false, attributes: ["*"] } };
+    db.triggers.push(t);
+    Object.assign(o, { status: "accepted", decided_at: now(), decided_by: "you", result: { trigger_id: t.id } });
+  } else Object.assign(o, { status: "accepted", decided_at: now(), decided_by: "you", task_id: checkInRun(o.action.goal, o.action.inputs?.trip_city ?? "Chicago") });
   emit("offer", { offer: o, change: o.status });
   return o;
 }

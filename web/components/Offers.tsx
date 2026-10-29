@@ -28,6 +28,7 @@ export function outcome(o: Offer): string {
   if (o.status === "pending") return "Waiting for your answer";
   if (o.status === "accepted") {
     const by = o.decided_by && o.decided_by !== "you" ? ` (${o.decided_by})` : "";
+    if (o.action.type === "create_trigger" && o.action.setup) return `Set up: ${o.action.setup}`;
     return o.action.type === "task" || o.action.type === "handoff" ? `You said yes${by}: started` : `You said yes${by}: set up`;
   }
   if (o.status === "declined") return o.kind === "repeat" ? "Not now: I won't suggest it again" : o.kind === "trigger" ? "Not now: skipped this time" : "Not now";
