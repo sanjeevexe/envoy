@@ -1,0 +1,83 @@
+{
+ "task": "RecipeAddMultipleRecipesFromImage",
+ "seed": 2293877352,
+ "goal": "Add the recipes from recipes.jpg in Simple Gallery Pro to the Broccoli recipe app.",
+ "score": 0.0,
+ "aw_run_time_s": 166.1,
+ "aw_episode_length": 60,
+ "agent": "envoy",
+ "finished": "2026-10-29 13:58:21.539996",
+ "envoy": {
+  "run_id": "aw-held-out-fdce597-fix-1029-135539-8adf",
+  "goal": "Add the recipes from recipes.jpg in Simple Gallery Pro to the Broccoli recipe app.",
+  "max_steps": 60,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "cost_limit",
+  "result": "stopped at $0.152",
+  "done": false,
+  "answer": null,
+  "steps_device": 50,
+  "iterations": 57,
+  "looks": 7,
+  "screenshots_sent": 7,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 12,
+   "tap": 11,
+   "look": 7,
+   "scroll": 9,
+   "type": 18
+  },
+  "model_calls": 60,
+  "input_tokens": 207358,
+  "cached_tokens": 147324,
+  "output_tokens": 12897,
+  "reasoning_tokens": 7444,
+  "cost_usd": 0.151953,
+  "cost_at_standard_usd": 0.151953,
+  "duration_s": 156.89,
+  "model_s": 77.25,
+  "device_s": 79.64,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Open recipes.jpg in Simple Gallery Pro to read the recipe details",
+    "Enter the recipe title, ingredients and instructions into the New Recipe form in Broccoli",
+    "Tap SAVE to add the recipe",
+    "Repeat for each remaining recipe in the image and verify all appear in Recipes"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Baked Cod with Lemon and Dill",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-held-out-fdce597-fix-1029-135539-8adf",
+  "envoy_commit": "3cbb3d944a29b380fa67decc155d7b76c29099a1",
+  "answer_format": true,
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/held-out-fdce597-fix/traces/RecipeAddMultipleRecipesFromImage__s2293877352.jsonl.gz",
+  "wall_s": 159.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

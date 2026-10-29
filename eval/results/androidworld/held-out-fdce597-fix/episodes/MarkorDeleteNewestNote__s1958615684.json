@@ -1,0 +1,102 @@
+{
+ "task": "MarkorDeleteNewestNote",
+ "seed": 1958615684,
+ "goal": "Delete the newest note in Markor.",
+ "score": 0.0,
+ "aw_run_time_s": 46.3,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-29 13:51:15.028541",
+ "envoy": {
+  "run_id": "aw-held-out-fdce597-fix-1029-135029-b4db",
+  "goal": "Delete the newest note in Markor.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 10,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 8,
+   "long_press": 1
+  },
+  "model_calls": 12,
+  "input_tokens": 33472,
+  "cached_tokens": 26060,
+  "output_tokens": 4772,
+  "reasoning_tokens": 3878,
+  "cost_usd": 0.033455,
+  "cost_at_standard_usd": 0.033455,
+  "duration_s": 40.4,
+  "model_s": 27.79,
+  "device_s": 12.61,
+  "connect_s": 0.87,
+  "approvals": [
+   {
+    "step": 7,
+    "description": "tap \"Delete\" in net.gsantner.markor",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 8,
+    "description": "tap \"OK\" in net.gsantner.markor",
+    "reasons": [
+     "screen: confirming something that can't be taken back",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Open To-Do tab and check for notes",
+    "Open QuickNote tab and check for notes",
+    "Return to Files and sort by date to identify newest note",
+    "Delete the newest note and confirm deletion"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Deleted",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-held-out-fdce597-fix-1029-135029-b4db",
+  "envoy_commit": "3cbb3d944a29b380fa67decc155d7b76c29099a1",
+  "answer_format": true,
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/held-out-fdce597-fix/traces/MarkorDeleteNewestNote__s1958615684.jsonl.gz",
+  "wall_s": 43.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

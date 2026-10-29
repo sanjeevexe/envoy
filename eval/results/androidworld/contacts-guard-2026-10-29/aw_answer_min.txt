@@ -1,0 +1,6 @@
+33 cases: Counter({'final': 18, 'before': 15})
+cost $0.624; errors 0
+before scored 1 cur        {'tap': 44, 'scroll': 14, 'look': 10, 'type': 4, 'done, other answer': 2, 'same answer': 1}
+before scored 1 p_smin     {'tap': 46, 'scroll': 13, 'look': 8, 'same answer': 4, 'type': 3, 'done, other answer': 1}
+final  scored 1 cur        {'same answer': 73, 'done, other answer': 12, 'scroll': 4, 'tap': 1}
+final  scored 1 p_smin     {'same answer': 66, 'done, other answer': 13, 'scroll': 9, 'look': 1, 'tap': 1}

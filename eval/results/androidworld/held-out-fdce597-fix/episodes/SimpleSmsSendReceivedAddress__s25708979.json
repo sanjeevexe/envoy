@@ -1,0 +1,99 @@
+{
+ "task": "SimpleSmsSendReceivedAddress",
+ "seed": 25708979,
+ "goal": "Text the address of the event to Gabriel Ibrahim that Oscar Mohamed just sent me in Simple SMS Messenger",
+ "score": 1.0,
+ "aw_run_time_s": 80.2,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 14:47:16.266530",
+ "envoy": {
+  "run_id": "aw-held-out-fdce597-fix-1029-144616-0a03",
+  "goal": "Text the address of the event to Gabriel Ibrahim that Oscar Mohamed just sent me in Simple SMS Messenger",
+  "max_steps": 18,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Sent 789 E Oak St, Phoenix AZ 85006 to Gabriel Ibrahim",
+  "done": true,
+  "answer": "Sent 789 E Oak St, Phoenix AZ 85006 to Gabriel Ibrahim",
+  "steps_device": 14,
+  "iterations": 15,
+  "looks": 0,
+  "screenshots_sent": 2,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 6,
+   "back": 3,
+   "scroll": 3,
+   "type": 1,
+   "done": 1
+  },
+  "model_calls": 17,
+  "input_tokens": 48524,
+  "cached_tokens": 39169,
+  "output_tokens": 3873,
+  "reasoning_tokens": 2619,
+  "cost_usd": 0.034029,
+  "cost_at_standard_usd": 0.034029,
+  "duration_s": 45.57,
+  "model_s": 24.29,
+  "device_s": 21.28,
+  "connect_s": 0.87,
+  "approvals": [
+   {
+    "step": 14,
+    "description": "tap \"SMS\" in com.simplemobiletools.smsmessenger",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/thread_send_message'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "SMS Messenger",
+   "subgoals": [
+    "Open the Oscar Mohamed conversation to read the event address",
+    "Go back to the conversation list",
+    "Find and open the conversation with Gabriel Ibrahim",
+    "Send the event address to Gabriel Ibrahim"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "789 E Oak St, Phoenix AZ 85006",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'789 E Oak St, Phoenix AZ 85006' is visible"
+  },
+  "trace_dir": "data/runs/aw-held-out-fdce597-fix-1029-144616-0a03",
+  "envoy_commit": "736a6e4b11c23f4c8919997b559e4df0e4eb40e4",
+  "answer_format": true,
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/held-out-fdce597-fix/traces/SimpleSmsSendReceivedAddress__s25708979.jsonl.gz",
+  "wall_s": 48.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

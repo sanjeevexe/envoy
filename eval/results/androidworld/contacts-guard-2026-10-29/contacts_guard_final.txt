@@ -1,0 +1,7 @@
+cost $0.486; errors 0; live plan tokens 1014, live step tokens 2747
+plan  cur      'full'/filter plans 8/30  tokens [1018]
+plan  both     'full'/filter plans 0/30  tokens [1066]
+step  cur      {'answers': 22, 'opens filters': 8}  tokens [2724]
+step  both     {'answers': 27, 'opens filters': 3}  tokens [2763]
+chain cur      {'answers': 30}  'full' plans 4/30
+chain both     {'answers': 30}  'full' plans 0/30

@@ -1,0 +1,6 @@
+33 cases: Counter({'final': 18, 'before': 15})
+cost $0.542; errors 0
+before scored 1 cur        {'tap': 49, 'scroll': 15, 'look': 7, 'same answer': 3, 'done, other answer': 1}
+before scored 1 guard      {'tap': 45, 'scroll': 16, 'look': 7, 'same answer': 4, 'type': 2, 'done, other answer': 1}
+final  scored 1 cur        {'same answer': 74, 'done, other answer': 10, 'scroll': 6}
+final  scored 1 guard      {'same answer': 63, 'done, other answer': 13, 'scroll': 10, 'tap': 4}

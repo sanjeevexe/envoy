@@ -1,0 +1,7 @@
+cost $0.686; errors 0; AW question tasks 25
+skylark cur     other first subgoal offers Home's Check in: 5/80
+skylark cur     next  first subgoal offers Home's Check in: 34/40
+aw      cur     plans with a filter/settings/sort step 0/0; step 1 done (premature) 0/0; step 1 actions {}
+skylark guard   other first subgoal offers Home's Check in: 3/80
+skylark guard   next  first subgoal offers Home's Check in: 35/40
+aw      guard   plans with a filter/settings/sort step 0/0; step 1 done (premature) 0/0; step 1 actions {}

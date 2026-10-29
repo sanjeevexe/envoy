@@ -1,0 +1,82 @@
+{
+ "task": "ExpenseAddMultipleFromMarkor",
+ "seed": 3053860270,
+ "goal": "Go through the transactions in my_expenses.txt in Markor. Log the reimbursable transactions in the pro expense.",
+ "score": 0.0,
+ "aw_run_time_s": 152.4,
+ "aw_episode_length": 60,
+ "agent": "envoy",
+ "finished": "2026-10-29 13:42:56.671878",
+ "envoy": {
+  "run_id": "aw-held-out-fdce597-fix-1029-134027-7b69",
+  "goal": "Go through the transactions in my_expenses.txt in Markor. Log the reimbursable transactions in the pro expense.",
+  "max_steps": 60,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "cost_limit",
+  "result": "stopped at $0.152",
+  "done": false,
+  "answer": null,
+  "steps_device": 34,
+  "iterations": 34,
+  "looks": 0,
+  "screenshots_sent": 11,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 2,
+   "tap": 11,
+   "scroll": 12,
+   "type": 7
+  },
+  "model_calls": 35,
+  "input_tokens": 144640,
+  "cached_tokens": 84083,
+  "output_tokens": 14977,
+  "reasoning_tokens": 11124,
+  "cost_usd": 0.151961,
+  "cost_at_standard_usd": 0.151961,
+  "duration_s": 143.8,
+  "model_s": 89.32,
+  "device_s": 54.48,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Pro Expense",
+   "subgoals": [
+    "Scroll through my_expenses.txt in Markor to identify all transactions marked Reimbursable",
+    "Open the Pro Expense app",
+    "Log each reimbursable transaction with name, amount and category in Pro Expense",
+    "Save entries and verify they appear in Pro Expense"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "293.82",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-held-out-fdce597-fix-1029-134027-7b69",
+  "envoy_commit": "3cbb3d944a29b380fa67decc155d7b76c29099a1",
+  "answer_format": true,
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/held-out-fdce597-fix/traces/ExpenseAddMultipleFromMarkor__s3053860270.jsonl.gz",
+  "wall_s": 146.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

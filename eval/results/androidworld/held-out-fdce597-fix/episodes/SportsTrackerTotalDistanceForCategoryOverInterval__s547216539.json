@@ -1,0 +1,82 @@
+{
+ "task": "SportsTrackerTotalDistanceForCategoryOverInterval",
+ "seed": 547216539,
+ "goal": "What was the total distance covered for kayaking activities in the OpenTracks app from October 09 2023 to October 10 2023? Express your answer as a single number in meters rounded to the nearest integer.",
+ "score": 0.0,
+ "aw_run_time_s": 79.2,
+ "aw_episode_length": 20,
+ "agent": "envoy",
+ "finished": "2026-10-29 14:50:26.135758",
+ "envoy": {
+  "run_id": "aw-held-out-fdce597-fix-1029-144909-f05f",
+  "goal": "What was the total distance covered for kayaking activities in the OpenTracks app from October 09 2023 to October 10 2023? Express your answer as a single number in meters rounded to the nearest integer.",
+  "max_steps": 20,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 20 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 20,
+  "iterations": 20,
+  "looks": 0,
+  "screenshots_sent": 2,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 8,
+   "scroll": 5,
+   "back": 5,
+   "type": 1
+  },
+  "model_calls": 22,
+  "input_tokens": 70727,
+  "cached_tokens": 52150,
+  "output_tokens": 6797,
+  "reasoning_tokens": 4778,
+  "cost_usd": 0.059931,
+  "cost_at_standard_usd": 0.059931,
+  "duration_s": 72.3,
+  "model_s": 41.61,
+  "device_s": 30.69,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "OpenTracks",
+   "subgoals": [
+    "Tap Search in track list and find Kayaking tracks",
+    "Scroll and open Kayaking tracks dated Oct 09 to Oct 10 2023",
+    "Read distance for each matching track and sum in meters rounded"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "total kayaking distance in meters Oct 09-10 2023",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-held-out-fdce597-fix-1029-144909-f05f",
+  "envoy_commit": "736a6e4b11c23f4c8919997b559e4df0e4eb40e4",
+  "answer_format": true,
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/held-out-fdce597-fix/traces/SportsTrackerTotalDistanceForCategoryOverInterval__s547216539.jsonl.gz",
+  "wall_s": 74.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}

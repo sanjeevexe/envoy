@@ -1,0 +1,85 @@
+{
+ "task": "SimpleCalendarEventOnDateAtTime",
+ "seed": 593396264,
+ "goal": "What is on my schedule for October 27 2023 at 8:00pm in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 0.0,
+ "aw_run_time_s": 47.2,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-10-29 14:41:00.623138",
+ "envoy": {
+  "run_id": "aw-held-out-fdce597-fix-1029-144015-b735",
+  "goal": "What is on my schedule for October 27 2023 at 8:00pm in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 8,
+  "iterations": 10,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "back": 1,
+   "look": 2,
+   "tap_point": 1,
+   "type": 2,
+   "scroll": 1
+  },
+  "model_calls": 15,
+  "input_tokens": 33764,
+  "cached_tokens": 26075,
+  "output_tokens": 2298,
+  "reasoning_tokens": 1583,
+  "cost_usd": 0.039647,
+  "cost_at_standard_usd": 0.039647,
+  "duration_s": 41.08,
+  "model_s": 14.84,
+  "device_s": 26.24,
+  "connect_s": 0.84,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Open Simple Calendar Pro",
+    "Navigate to October 27 2023",
+    "Open the schedule for 8:00pm",
+    "Read the event titles"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "event titles for October 27 2023 at 8:00pm",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-held-out-fdce597-fix-1029-144015-b735",
+  "envoy_commit": "736a6e4b11c23f4c8919997b559e4df0e4eb40e4",
+  "answer_format": true,
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/held-out-fdce597-fix/traces/SimpleCalendarEventOnDateAtTime__s593396264.jsonl.gz",
+  "wall_s": 43.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

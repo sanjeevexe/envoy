@@ -1,0 +1,88 @@
+{
+ "task": "SimpleCalendarAddOneEventInTwoWeeks",
+ "seed": 870939640,
+ "goal": "In Simple Calendar Pro, create a calendar event in two weeks from today at 17h with the title 'Meeting with the Team' and the description 'We will prepare for annual budget.'. The event should last for 30 mins.",
+ "score": 1.0,
+ "aw_run_time_s": 62.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-29 14:37:45.033669",
+ "envoy": {
+  "run_id": "aw-held-out-fdce597-fix-1029-143644-ebe9",
+  "goal": "In Simple Calendar Pro, create a calendar event in two weeks from today at 17h with the title 'Meeting with the Team' and the description 'We will prepare for annual budget.'. The event should last for 30 mins.",
+  "max_steps": 34,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Created event 'Meeting with the Team' on October 29, 2023 at 17:00-17:30 with description 'We will prepare for annual budget.'",
+  "done": true,
+  "answer": "Created event 'Meeting with the Team' on October 29, 2023 at 17:00-17:30 with description 'We will prepare for annual budget.'",
+  "steps_device": 18,
+  "iterations": 21,
+  "looks": 2,
+  "screenshots_sent": 2,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "look": 2,
+   "tap": 14,
+   "type": 2,
+   "tap_point": 1,
+   "done": 1
+  },
+  "model_calls": 26,
+  "input_tokens": 69653,
+  "cached_tokens": 54070,
+  "output_tokens": 3506,
+  "reasoning_tokens": 1813,
+  "cost_usd": 0.056257,
+  "cost_at_standard_usd": 0.056257,
+  "duration_s": 55.2,
+  "model_s": 22.37,
+  "device_s": 32.83,
+  "connect_s": 0.87,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Open Simple Calendar Pro",
+    "Go to October 29, 2023",
+    "Create event 'Meeting with the Team' at 17:00 for 30 minutes with description 'We will prepare for annual budget.'",
+    "Save the event"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Meeting with the Team",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Meeting with the Team' is visible"
+  },
+  "trace_dir": "data/runs/aw-held-out-fdce597-fix-1029-143644-ebe9",
+  "envoy_commit": "736a6e4b11c23f4c8919997b559e4df0e4eb40e4",
+  "answer_format": true,
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/held-out-fdce597-fix/traces/SimpleCalendarAddOneEventInTwoWeeks__s870939640.jsonl.gz",
+  "wall_s": 57.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}
