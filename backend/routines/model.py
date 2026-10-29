@@ -55,6 +55,10 @@ class Locator(_Model):
     cls: str | None = None  # Android class, short form
     parent: str | None = None  # parent's label or resource ID
     siblings: list[str] = Field(default_factory=list)
+    # An element repeated row after row with nothing of its own to tell it apart (each expense's delete icon): the texts
+    # of its row ("Public Transit"), and `row_has`, a hard requirement like `text_has` (the row for {{expense_name}}).
+    row: list[str] = Field(default_factory=list)
+    row_has: str | None = None
     in_list: bool | None = None
     position: tuple[float, float] | None = None  # centre as a fraction of the screen (weak tiebreaker only)
     # Phase 6: a target drawn on screen with no accessibility node (a canvas seat map, a map pin). The executor looks
@@ -66,7 +70,7 @@ class Locator(_Model):
 
     def describe(self) -> str:
         bits = []
-        for k in ("visual", "text_has", "text", "desc", "hint", "resource_id", "kind"):
+        for k in ("visual", "text_has", "row_has", "text", "desc", "hint", "resource_id", "kind"):
             v = getattr(self, k)
             if v:
                 bits.append(f"{k}={v!r}")
@@ -141,6 +145,14 @@ class Extract(_Model):
     first_row: bool = False  # the top result row of the locator's type, by its place ("the first video" for a search)
     until: str | None = None  # with first_row: the value ends where this separator starts ("<title> - <channel> - …")
     skip_ads: bool = False  # with first_row: the top row that isn't an ad ("Sponsored - …"), as the agent chose
+    below: str | None = None  # with first_row: the first row under the heading with this label ("Results"), not the
+    # suggestions and ads above it
+    skip_labels: list[str] = Field(default_factory=list)  # with below: controls in a row above its title ("View Sponsored
+    # information or leave ad feedback"), as recorded between the heading and the row the agent read
+    row_of: str | None = None  # with pattern: read in the row (nearest ancestor) of this other output's element, not the
+    # first match anywhere: a result's price, wherever that row puts it ("$8.49" under "Limited time deal")
+    from_screenshot: str | None = None  # not in the tree: read from the screenshot by the model, then accepted only if it
+    # matches this shape (a regex) and the answer's anchor (`near`) is on screen; re-read and re-checked on every run
 
 
 class Step(_Model):

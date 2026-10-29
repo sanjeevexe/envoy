@@ -505,3 +505,38 @@ def test_email_trigger_after_a_profile_switch_neither_replays_nor_stays_silent(t
     assert on_demo.tick() == [] and store.trigger(trig["id"])["fired"] == []
     assert mail(demo, "Booked on demo") < real_cursor  # below real's cursor, and it still fires
     assert len(on_demo.tick()) == 1 and len(started) == 2
+
+
+def _merge_run(env, source: str, gate: str, *, keep_new: bool = False) -> dict:
+    """A run that read the flight onto a fresh entity (a first sighting there), which memory then merged into the known one."""
+    ctx = env.ctx
+    task = ctx.tasks.create("run routine skylark_get_flight_gate", source)
+    src = ctx.memory.add_source("app_screen", {"app": "com.skylark.air", "screen": "TripDetailsActivity", "task_id": task["id"]})
+    other = ctx.memory.create_entity("Flight")
+    ctx.memory.observe(other, "gate", gate, source=src)
+    ctx.memory.merge(other, env.flight, "same natural key") if keep_new else ctx.memory.merge(env.flight, other, "same natural key")
+    ctx.runner._step(task["id"], {"kind": "memory", "text": "memory updated", "entities": ["Flight SL 482"]})
+    return task
+
+
+def test_a_change_through_a_merge_pushes_once(env):
+    watcher(env)
+    run(env, "trigger:watch gate", {"gate": "B9"})
+    merged = _merge_run(env, "trigger:watch gate", "B12")
+    got = env.svc.wait(1)
+    assert len(got) == 1 and got[0]["payload"]["title"] == "Gate changed: B9 → B12"
+    assert changes(env, merged)[0]["pushed"] is True
+    again = _merge_run(env, "trigger:watch gate", "B12", keep_new=True)  # the same value through another merge: quiet
+    assert quiet(env.svc, 1) and changes(env, again) == []
+
+
+def test_the_app_disagreeing_with_your_note_alerts(env):
+    watcher(env)
+    run(env, "trigger:watch gate", {"gate": "B9"})
+    env.ctx.memory.user_edit(env.flight, "gate", "B12")
+    task = run(env, "trigger:watch gate", {"gate": "C14"})
+    got = env.svc.wait(1)
+    assert got[0]["payload"]["title"] == "Gate: SkyLark says C14, your note says B12"
+    assert changes(env, task)[0]["pushed"] is True
+    run(env, "trigger:watch gate", {"gate": "C14"})  # seen again: told once
+    assert quiet(env.svc, 1)

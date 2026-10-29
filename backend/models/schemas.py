@@ -294,10 +294,17 @@ class MatchOutput(_Strict):
     inputs: list["InputValue"] = Field(description="A value for every input the routine needs, from the request or the notes")
 
 
+class ScreenReadOutput(_Strict):
+    found: bool = Field(description="True only if the answer is written on this screenshot")
+    page_title: str = Field(description="The page or screen title as written on the screenshot, or empty")
+    quote: str = Field(description="The line of text on the screenshot that holds the answer, copied exactly, or empty")
+    value: str = Field(description="The answer as written in that line (a date, a number, a name), or empty")
+
+
 class InputValue(_Strict):
     name: str
-    value: str | None = Field(description="The value, or null if neither the request nor the notes give it")
-    source: Literal["request", "notes", "missing"]
+    value: str | None = Field(description="The value, or null if neither the request, the notes nor the dates and times give it")
+    source: Literal["request", "notes", "computed", "missing"]
 
 
 MatchOutput.model_rebuild()

@@ -1,0 +1,515 @@
+{
+ "label": "install",
+ "serial": "emulator-5556",
+ "install_on_demand": true,
+ "device": null,
+ "runs": [
+  {
+   "goal": "In the Wikipedia app, search for Eiffel Tower and tell me the year it opened.",
+   "task_id": "task-1028-183104-8c20",
+   "time": "2026-10-28T22:32:26+00:00",
+   "status": "done",
+   "result": "1889 (Opening: 15 May 1889)",
+   "detail": "1889 (Opening: 15 May 1889)",
+   "app": "org.wikipedia",
+   "kind": "agent",
+   "device": "envoy-real",
+   "model_calls": 20,
+   "cost_usd": 0.0351,
+   "duration_s": 81.7,
+   "steps": [
+    {
+     "t": 1.0,
+     "kind": "note",
+     "text": "Wikipedia isn't on this phone: looking for it in the Play Store"
+    },
+    {
+     "t": 4.9,
+     "kind": "note",
+     "text": "installing Can users search for articles using voice commands? from the Play Store (free)"
+    },
+    {
+     "t": 23.0,
+     "kind": "note",
+     "text": "installed Can users search for articles using voice commands? in 22 s (finding it 4 s, download and install 18 s)"
+    },
+    {
+     "t": 27.4,
+     "kind": "plan",
+     "text": "Dismiss first-run onboarding and continue past welcome screens; Search for Eiffel Tower; Open the Eiffel Tower article; Read the year it opened from the article"
+    },
+    {
+     "t": 29.4,
+     "kind": "action",
+     "text": "tap \"Forward\"",
+     "reason": "Advance past welcome onboarding"
+    },
+    {
+     "t": 32.7,
+     "kind": "action",
+     "text": "tap \"Forward\"",
+     "reason": "Continue past Data & Privacy onboarding screen"
+    },
+    {
+     "t": 35.9,
+     "kind": "action",
+     "text": "back",
+     "reason": "Advance past onboarding language screen"
+    },
+    {
+     "t": 38.3,
+     "kind": "action",
+     "text": "tap \"Search\"",
+     "reason": "Open search tab to search for Eiffel Tower"
+    },
+    {
+     "t": 40.2,
+     "kind": "action",
+     "text": "back",
+     "reason": "Dismiss search widget promo popup"
+    },
+    {
+     "t": 43.6,
+     "kind": "action",
+     "text": "back",
+     "reason": "Dismiss onboarding tooltip to access search field"
+    },
+    {
+     "t": 45.7,
+     "kind": "action",
+     "text": "launch",
+     "reason": "Open Wikipedia app to search for Eiffel Tower"
+    },
+    {
+     "t": 48.9,
+     "kind": "action",
+     "text": "back",
+     "reason": "Back action previously progressed onboarding, try again"
+    },
+    {
+     "t": 50.9,
+     "kind": "action",
+     "text": "tap \"Search\"",
+     "reason": "Open Search tab to search for Eiffel Tower"
+    },
+    {
+     "t": 53.3,
+     "kind": "action",
+     "text": "tap \"Search Wikipedia\"",
+     "reason": "Open search input to type Eiffel Tower"
+    },
+    {
+     "t": 55.1,
+     "kind": "action",
+     "text": "type \"Search Wikipedia\" \"Eiffel Tower\"",
+     "reason": "Type query into Wikipedia search field"
+    },
+    {
+     "t": 58.3,
+     "kind": "action",
+     "text": "tap \"Eiffel Tower · Tower in Paris, France\"",
+     "reason": "Open the Eiffel Tower article from suggestions"
+    },
+    {
+     "t": 61.9,
+     "kind": "action",
+     "text": "scroll",
+     "reason": "Scroll article to find opening year"
+    },
+    {
+     "t": 65.2,
+     "kind": "action",
+     "text": "scroll",
+     "reason": "Need to find explicit opening year further in article"
+    },
+    {
+     "t": 68.9,
+     "kind": "action",
+     "text": "scroll",
+     "reason": "Need to find opening year, likely in top infobox"
+    },
+    {
+     "t": 71.6,
+     "kind": "action",
+     "text": "tap \"Quick facts\"",
+     "reason": "Expand Quick facts to find opened year"
+    },
+    {
+     "t": 75.1,
+     "kind": "action",
+     "text": "scroll",
+     "reason": "Scroll infobox to find opened year"
+    },
+    {
+     "t": 78.3,
+     "kind": "action",
+     "text": "scroll",
+     "reason": "Scrolling infobox to find opened year"
+    },
+    {
+     "t": 79.7,
+     "kind": "action",
+     "text": "done",
+     "reason": "Opening date 15 May 1889 visible in infobox shows year 1889"
+    },
+    {
+     "t": 79.7,
+     "kind": "finish",
+     "text": "1889 (Opening: 15 May 1889)",
+     "status": "done"
+    },
+    {
+     "t": 79.8,
+     "kind": "note",
+     "text": "saving what it saw to memory"
+    },
+    {
+     "t": 81.7,
+     "kind": "memory",
+     "text": "memory updated: nothing new"
+    }
+   ],
+   "events": [],
+   "installed_after": true
+  },
+  {
+   "goal": "In the Google Translate app, translate 'good morning' into Spanish.",
+   "task_id": "task-1028-183226-d891",
+   "time": "2026-10-28T22:34:10+00:00",
+   "status": "failed",
+   "result": "stopped after 25 steps",
+   "detail": "stopped after 25 steps",
+   "app": "com.newgeneration.translator.speech.translate.languages.text.voice.translation",
+   "kind": "agent",
+   "device": "envoy-real",
+   "model_calls": 27,
+   "cost_usd": 0.0616,
+   "duration_s": 104.3,
+   "steps": [
+    {
+     "t": 0.1,
+     "kind": "note",
+     "text": "Google Translate isn't on this phone: looking for it in the Play Store"
+    },
+    {
+     "t": 4.0,
+     "kind": "note",
+     "text": "installing Sponsored from the Play Store (free)"
+    },
+    {
+     "t": 9.8,
+     "kind": "note",
+     "text": "installed Sponsored in 10 s (finding it 4 s, download and install 6 s)"
+    },
+    {
+     "t": 17.5,
+     "kind": "plan",
+     "text": "Exit the current sponsored translator and open Google Translate; Skip onboarding and permissions without signing in; Set source to English and target to Spanish; Enter 'good morning' and show Spanish translation"
+    },
+    {
+     "t": 21.3,
+     "kind": "action",
+     "text": "launch",
+     "reason": "Exit sponsored app and open Google Translate per plan"
+    },
+    {
+     "t": 28.0,
+     "kind": "action",
+     "text": "type \"Translate text\" \"good morning\"",
+     "reason": "Source and target already English to Spanish, so enter text to translate"
+    },
+    {
+     "t": 31.7,
+     "kind": "action",
+     "text": "look",
+     "reason": "Need to verify language selectors and translation area visually"
+    },
+    {
+     "t": 35.3,
+     "kind": "action",
+     "text": "back",
+     "reason": "Translation failed with connection error, go back to set languages properly"
+    },
+    {
+     "t": 37.5,
+     "kind": "action",
+     "text": "tap \"Translate text\"",
+     "reason": "Open text field to enter 'good morning'"
+    },
+    {
+     "t": 40.2,
+     "kind": "action",
+     "text": "type \"Translate text\" \"good morning\"",
+     "reason": "Enter 'good morning' to translate"
+    },
+    {
+     "t": 42.1,
+     "kind": "action",
+     "text": "tap \"Try again\"",
+     "reason": "Retry translation after connection error"
+    },
+    {
+     "t": 44.9,
+     "kind": "action",
+     "text": "back",
+     "reason": "Dismiss keyboard/error to retry translation"
+    },
+    {
+     "t": 47.9,
+     "kind": "action",
+     "text": "scroll",
+     "reason": "Need to see target language to set it to Spanish"
+    },
+    {
+     "t": 49.8,
+     "kind": "action",
+     "text": "back",
+     "reason": "Need to set target language to Spanish on main screen"
+    },
+    {
+     "t": 56.2,
+     "kind": "action",
+     "text": "type \"Translate text\" \"good morning\"",
+     "reason": "Enter phrase to translate with correct languages set"
+    },
+    {
+     "t": 58.4,
+     "kind": "action",
+     "text": "look",
+     "reason": "Need visual layout to find Spanish target selector"
+    },
+    {
+     "t": 63.4,
+     "kind": "action",
+     "text": "back",
+     "reason": "Detail view shows connection error; need main view to set Spanish target"
+    },
+    {
+     "t": 64.8,
+     "kind": "action",
+     "text": "tap \"Close tooltip\"",
+     "reason": "Dismiss blocking tooltip before entering text"
+    },
+    {
+     "t": 65.8,
+     "kind": "action",
+     "text": "look",
+     "reason": "Need visual confirmation before typing"
+    },
+    {
+     "t": 67.6,
+     "kind": "action",
+     "text": "look",
+     "reason": "Need visual to confirm input area state before typing"
+    },
+    {
+     "t": 74.2,
+     "kind": "action",
+     "text": "type \"Translate text\" \"good morning\"",
+     "reason": "Source English and target Spanish already set, so enter phrase to translate"
+    },
+    {
+     "t": 79.5,
+     "kind": "replan",
+     "text": "Set source language to English and target language to Spanish; Enter 'good morning' in the translate input field; Tap Try again to retry translation; View Spanish translation result"
+    },
+    {
+     "t": 81.0,
+     "kind": "action",
+     "text": "look",
+     "reason": "Need to see target language selector not in element list"
+    },
+    {
+     "t": 82.3,
+     "kind": "action",
+     "text": "tap \"Try again\"",
+     "reason": "Plan step 3 says tap Try again to retry translation"
+    },
+    {
+     "t": 84.7,
+     "kind": "action",
+     "text": "tap \"Try again\"",
+     "reason": "Retry translation after connection error"
+    },
+    {
+     "t": 90.0,
+     "kind": "action",
+     "text": "wait",
+     "reason": "Give network a moment before retrying translation"
+    },
+    {
+     "t": 93.1,
+     "kind": "action",
+     "text": "back",
+     "reason": "Retry loop failing, go back to main screen to try offline approach"
+    },
+    {
+     "t": 94.4,
+     "kind": "action",
+     "text": "look",
+     "reason": "Need visual to see target language and layout"
+    },
+    {
+     "t": 97.2,
+     "kind": "action",
+     "text": "back",
+     "reason": "Error persists, go back to check target language is Spanish"
+    },
+    {
+     "t": 104.0,
+     "kind": "action",
+     "text": "type \"Translate text\" \"good morning\"",
+     "reason": "Enter source text to translate"
+    },
+    {
+     "t": 104.0,
+     "kind": "finish",
+     "text": "stopped after 25 steps",
+     "status": "step_limit"
+    }
+   ],
+   "events": [],
+   "installed_after": true
+  },
+  {
+   "goal": "In the Wikipedia app, search for Statue of Liberty and tell me the year it was dedicated.",
+   "task_id": "task-1028-183410-18da",
+   "time": "2026-10-28T22:34:34+00:00",
+   "status": "done",
+   "result": "1886 - The Statue of Liberty was dedicated on October 28, 1886.",
+   "detail": "1886 - The Statue of Liberty was dedicated on October 28, 1886.",
+   "app": "org.wikipedia",
+   "kind": "agent",
+   "device": "envoy-real",
+   "model_calls": 8,
+   "cost_usd": 0.0127,
+   "duration_s": 24.2,
+   "steps": [
+    {
+     "t": 5.0,
+     "kind": "plan",
+     "text": "Open search in the Wikipedia app; Search for Statue of Liberty; Open the Statue of Liberty article; Find the year it was dedicated"
+    },
+    {
+     "t": 8.1,
+     "kind": "action",
+     "text": "back",
+     "reason": "Current article lacks search; go back to find search"
+    },
+    {
+     "t": 11.6,
+     "kind": "action",
+     "text": "back",
+     "reason": "Back action had no effect, need forward onboarding"
+    },
+    {
+     "t": 13.8,
+     "kind": "action",
+     "text": "tap \"Search\"",
+     "reason": "Open search in Wikipedia app"
+    },
+    {
+     "t": 15.8,
+     "kind": "action",
+     "text": "tap \"Search Wikipedia\"",
+     "reason": "Open Wikipedia search input"
+    },
+    {
+     "t": 18.3,
+     "kind": "action",
+     "text": "type \"Search Wikipedia\" \"Statue of Liberty\"",
+     "reason": "Type search query to find article"
+    },
+    {
+     "t": 20.8,
+     "kind": "action",
+     "text": "tap \"Statue of Liberty · Colossal sculpture in New York Harbor\"",
+     "reason": "Open the main Statue of Liberty article from search results"
+    },
+    {
+     "t": 22.4,
+     "kind": "action",
+     "text": "done",
+     "reason": "Dedication date visible in article as October 28, 1886"
+    },
+    {
+     "t": 22.4,
+     "kind": "finish",
+     "text": "1886 - The Statue of Liberty was dedicated on October 28, 1886.",
+     "status": "done"
+    },
+    {
+     "t": 22.5,
+     "kind": "note",
+     "text": "saving what it saw to memory"
+    },
+    {
+     "t": 24.2,
+     "kind": "memory",
+     "text": "memory updated: nothing new"
+    }
+   ],
+   "events": [],
+   "installed_after": true
+  },
+  {
+   "goal": "In the Minecraft app, how many worlds can I create?",
+   "task_id": "task-1028-183437-3bd5",
+   "time": "2026-10-28T22:34:43+00:00",
+   "status": "declined",
+   "result": "New! costs $6.99; Envoy installs only free apps (you said no)",
+   "detail": "New! costs $6.99; Envoy installs only free apps (you said no)",
+   "app": null,
+   "kind": "agent",
+   "device": "envoy-real",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 5.7,
+   "steps": [
+    {
+     "t": 0.1,
+     "kind": "note",
+     "text": "Minecraft isn't on this phone: looking for it in the Play Store"
+    },
+    {
+     "t": 4.5,
+     "kind": "note",
+     "text": "New! isn't free ($6.99): asking you"
+    }
+   ],
+   "events": [
+    {
+     "t": 4.6,
+     "type": "approval_requested",
+     "task_id": "task-1028-183437-3bd5",
+     "reason": null,
+     "approval": "New! costs $6.99 on the Play Store: buy it yourself?"
+    }
+   ],
+   "installed_after": null
+  },
+  {
+   "goal": "What's the price of AirPods Pro at Target?",
+   "task_id": "task-1028-183443-092e",
+   "time": "2026-10-28T22:34:43+00:00",
+   "status": "failed",
+   "result": null,
+   "detail": "Target blocks emulators; it needs a real Android phone. Connect your Android phone (USB, or wireless debugging) and ask again.",
+   "app": "com.target.ui",
+   "kind": "agent",
+   "device": null,
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "duration_s": 0.0,
+   "steps": [
+    {
+     "t": 0.0,
+     "kind": "error",
+     "text": "Target blocks emulators; it needs a real Android phone. Connect your Android phone (USB, or wireless debugging) and ask again."
+    }
+   ],
+   "events": [],
+   "installed_after": true
+  }
+ ]
+}

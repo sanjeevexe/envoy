@@ -1,6 +1,6 @@
 # Cross-app answers, end to end
 
-2026-10-28 09:24–09:56 UTC, branch `claude/cross-app-answers-522e1d` at `deb931d`, phones: envoy-real. Standard tier (`muse-spark-1.3`); every approval declined; read-only questions. 174 model calls, $0.417 at standard prices.
+2026-10-29 00:34 UTC, branch `main` at `3719818`, phones: envoy-real, envoy-test. Standard tier (`muse-spark-1.3`); every approval declined; read-only questions. 62 model calls, $0.190 at standard prices.
 
 Parallel: through chat (pre-filter → lead → parts on the phones routing picks). Sequential: the same lead and orchestrator, each part started after the previous one ended. Wall time: from the message to the combined answer (memory is written after it, as for any task).
 
@@ -18,6 +18,10 @@ Overlap: seconds two phones were busy at once. Idle: seconds a phone sat unused 
 | R3 | sequential | 36.54 | 0.0 | 1.9 | Starbucks (envoy-real, starbucks_get_drink_calories, 13.5); Google Maps (envoy-real, google_maps_get_place_address, 14.4) | 8 | 0.022 | 0 | done |
 | R2 | parallel | 172.05 | 0.0 | 0.0 | Starbucks (envoy-real, agent, 78.0); DoorDash (envoy-real, agent, 82.9) | 57 | 0.113 | 0 | done |
 | R2 | sequential | 186.97 | 0.0 | 3.9 | Starbucks (envoy-real, agent, 83.3); DoorDash (envoy-real, agent, 94.4) | 59 | 0.133 | 0 | failed |
+| T1 | parallel | 22.62 | 3.8 | 0.0 | SkyLark (envoy-test, skylark_get_flight_gate, 4.1); Google Maps (envoy-real, google_maps_get_place_address, 14.6) | 6 | 0.023 | 0 | done |
+| T1 | sequential | 30.39 | 0.0 | 0.0 | SkyLark (envoy-test, skylark_get_flight_gate, 3.5); Google Maps (envoy-real, google_maps_get_place_address, 16.7) | 6 | 0.020 | 0 | done |
+| T2 | parallel | 98.34 | 4.48 | 0.0 | SkyLark (envoy-test, skylark_get_flight_gate, 4.6); Google Maps (envoy-real, agent, 90.7) | 32 | 0.091 | 0 | done |
+| T2 | sequential | 60.72 | 0.0 | 0.0 | SkyLark (envoy-test, skylark_get_flight_gate, 3.4); Google Maps (envoy-real, agent, 47.8) | 18 | 0.057 | 0 | done |
 
 ## Medians
 
@@ -26,6 +30,8 @@ Overlap: seconds two phones were busy at once. Idle: seconds a phone sat unused 
 | R1 | 34.0 (n=2) | 31.4 (n=2) | -2.7 s (-9%) |
 | R3 | 51.4 (n=2) | 36.9 (n=2) | -14.5 s (-39%) |
 | R2 | 172.1 (n=1) | 187.0 (n=1) | 14.9 s (8%) |
+| T1 | 22.6 (n=1) | 30.4 (n=1) | 7.8 s (26%) |
+| T2 | 98.3 (n=1) | 60.7 (n=1) | -37.6 s (-62%) |
 
 ## Answers
 
@@ -56,3 +62,15 @@ Overlap: seconds two phones were busy at once. Idle: seconds a phone sat unused 
 - **R2 parallel** (What's a Caffè Latte at Starbucks vs on DoorDash?): Starbucks couldn't be checked, while DoorDash lists Caffè Latte at Starbucks on DoorDash is $5.75.
   - Caffè Latte price on DoorDash: DoorDash · StoreItemActivity · 5:52 AM
 - **R2 sequential** (What's a Caffè Latte at Starbucks vs on DoorDash?): Starbucks: couldn't check (stopped after 25 steps); DoorDash: couldn't check (stopped after 25 steps).
+- **T1 parallel** (What's my gate for my Denver flight, and what's the address of the Space Needle?): Your Denver flight gate from SkyLark is A7, and the Space Needle address from Google Maps is 400 Broad St, Seattle, WA 98109.
+  - Denver flight gate: SkyLark · MainActivity · 8:31 PM
+  - Space Needle address: Google Maps · MapsActivity · 8:31 PM
+- **T1 sequential** (What's my gate for my Denver flight, and what's the address of the Space Needle?): Your Denver flight gate from SkyLark is A7 and the Space Needle address from Google Maps is 400 Broad St, Seattle, WA 98109.
+  - Gate for Denver flight: SkyLark · MainActivity · 8:31 PM
+  - Address of Space Needle: Google Maps · MapsActivity · 8:32 PM
+- **T2 parallel** (What's my gate for my Denver flight, and how long is the drive from 1 Hacker Way to SFO?): Your Denver flight gate is A7 per SkyLark, and the drive is 31 min (17 mi) per Google Maps.
+  - gate for Denver flight: SkyLark · MainActivity · 8:32 PM
+  - drive from 1 Hacker Way to SFO: Google Maps · MapsActivity · 8:33 PM
+- **T2 sequential** (What's my gate for my Denver flight, and how long is the drive from 1 Hacker Way to SFO?): Your Denver flight gate is A7 according to SkyLark, and the drive is 31 min (17 mi) via US-101 N according to Google Maps.
+  - Gate for Denver flight: SkyLark · MainActivity · 8:34 PM
+  - Drive from 1 Hacker Way to SFO: Google Maps · MapsActivity · 8:34 PM

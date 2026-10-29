@@ -127,15 +127,29 @@ no longer matches that longer list (it waited 5 s and skipped). Its repair then 
 results list, not the drink (`smoke_starbucks_results_list.jpg`), and the repair's after-checks accepted it. DoorDash
 answered each time (Philz Coffee), and the cross-app answers named Starbucks as not checked.
 
+### Two phones at once (3719818): T1 and T2 on envoy-test and envoy-real (`eval/results/crossapp/report.md`, `runs.json`)
+
+Oct 28, 20:31–20:35 EDT, one parallel/sequential pair per question, with SkyLark seeded on envoy-test by
+`run_crossapp.py`. The parts truly overlapped. In both parallel runs the SkyLark part and the Maps part reached their
+phones within 0.4 s (T1) and 0.1 s (T2) of each other, and the SkyLark part (4.1 s, 4.6 s on envoy-test) ran entirely
+inside the Maps part on envoy-real (overlap 3.8 s and 4.5 s). In the sequential runs the Maps part started only after
+the SkyLark part ended (overlap 0). All four answers were right and agreed: gate A7 (the seeded Denver trip, via the
+`skylark_get_flight_gate` routine), the Space Needle at 400 Broad St, Seattle, WA 98109 (the Maps routine), and the
+drive from 1 Hacker Way to SFO at 31 min (17 mi) via US-101 N (an agent run: there's no directions routine). T1:
+22.6 s parallel vs 30.4 s sequential (7.8 s, 26% saved), 6 calls each, $0.023 and $0.020. T2: 98.3 s parallel vs 60.7 s
+sequential, because the Maps agent took 90.7 s in the parallel run (two replans, eight Backs before it set the start)
+against 47.8 s in the sequential one. Overlapping saved the 4.6 s SkyLark part, and agent variance cost 43 s. T2 took
+32 and 18 calls, $0.091 and $0.057. No approvals were asked; 62 calls, $0.190 in all. Both emulators were stopped
+afterwards. With one run per mode these are single samples: the routine-only question (T1) shows the expected saving,
+and the agent question (T2) is dominated by the agent's own run time.
+
 ## Not done
 
-- **The Starbucks calories routine on envoy-real now** (not my files): it fails while the app shows a longer
-  recent-search list (above). Its step would need a locator that also finds the entry in a list. The repair would need
-  to check that the drink's page opened. Clearing the app's search history would hide the problem rather than fix it,
-  so I left it.
+- **The Starbucks calories routine on envoy-real**: fixed on Oct 28 (074390a; `eval/results/repair/`). The routine now types
+  the drink instead of tapping a recent search, and a repair counts only on the screen the step was meant to reach.
+  It returned 190 and 250 calories on envoy-real with the recent searches left in place, with no model calls.
 
-- **Two real phones at once.** Not granted (AndroidWorld held the second slot); proven offline only. `eval/run_crossapp.py
-  --questions T1,T2` is ready: it seeds SkyLark on envoy-test the way the routine suites do (untested on a device).
+- **Two real phones at once**: done on Oct 28 (T1, T2 above).
 - **MCP**: when the lead says one app, its call's cost isn't added to the task MCP starts (chat adds it to its reply);
   the cost log has it.
 - **Matcher precision** (not my files): for "a Caffè Latte on DoorDash" without the word price, the matcher chose the

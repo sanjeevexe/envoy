@@ -29,6 +29,7 @@ from devices.screen import build_state, content_hash, has_app_content, parse_hie
 from devices.types import Action, ActionResult, Capabilities, ScreenState, StreamHandle
 
 _FOCUS = re.compile(r"mCurrentFocus=Window\{(\S+) \S+ ([^/\s}]+)/?([^\s}]*)\}")
+_FOCUSED_APP = re.compile(r"mFocusedApp=ActivityRecord\{\S+ \S+ ([^/\s}]+)/([^\s}]+)")
 
 
 def _adb_path() -> str:
@@ -38,6 +39,12 @@ def _adb_path() -> str:
 
 def adb(serial: str, *args: str, timeout: float = 30, check: bool = False) -> subprocess.CompletedProcess:
     return subprocess.run([_adb_path(), "-s", serial, *args], capture_output=True, text=True, timeout=timeout, check=check)
+
+
+def _stale(e: Exception) -> bool:
+    """uiautomator2's node went stale between finding it and using it: Compose rebuilt it (the Pixel 5, typing a known
+    traveler number while the keyboard opened). Looking it up again finds the new one."""
+    return "StaleObjectException" in str(e)
 
 
 class AndroidDevice:
@@ -111,20 +118,31 @@ class AndroidDevice:
         The emulator's gRPC screenshot still captures secure windows (scrcpy and screencap are black),
         so secure screens must be detected from the window flag, not from black frames.
         """
-        out = self.adb.shell("dumpsys window | grep -E '^  Window #|mCurrentFocus|^      fl='")
+        out = self.adb.shell("dumpsys window | grep -E '^  Window #|mCurrentFocus|mFocusedApp|^    mOwnerUid=|^      fl='")
         m = _FOCUS.search(out)
         if not m:
             return "", "", False
         token, pkg, act = m.group(1), m.group(2), m.group(3)
-        if act.startswith("."):
-            act = pkg + act
         secure = False
+        owner = ""
         lines = out.splitlines()
         for i, line in enumerate(lines):
             if line.startswith("  Window #") and f"Window{{{token} " in line:
-                flags = next((l for l in lines[i + 1 : i + 3] if l.strip().startswith("fl=")), "")
+                block = lines[i + 1 : i + 4]
+                flags = next((l for l in block if l.strip().startswith("fl=")), "")
                 secure = "SECURE" in flags.split()
+                owner = next((w[len("package="):] for l in block if l.strip().startswith("mOwnerUid=")
+                              for w in l.split() if w.startswith("package=")), "")
                 break
+        if not act:
+            # Not an activity's window: an app's own popup menu is titled "PopupWindow:51b096d" (Broccoli's overflow
+            # menu, AndroidWorld). The app is the window's owner, and its activity is still the focused one.
+            pkg = owner
+            app = _FOCUSED_APP.search(out)
+            if app and app.group(1) == pkg:
+                act = app.group(2)
+        if act.startswith("."):
+            act = pkg + act
         return pkg, act, secure
 
     def foreground_package(self) -> str:
@@ -212,11 +230,15 @@ class AndroidDevice:
         cx, cy = (x1 + x2) // 2, (y1 + y2) // 2
         deadline = time.time() + timeout_s
         while time.time() < deadline:
-            node = self.u2(focused=True)
-            if node.exists:
-                b = node.info.get("bounds", {})
-                if b.get("left", -1) <= cx <= b.get("right", -1) and b.get("top", -1) <= cy <= b.get("bottom", -1):
-                    return node
+            try:
+                node = self.u2(focused=True)
+                if node.exists:
+                    b = node.info.get("bounds", {})
+                    if b.get("left", -1) <= cx <= b.get("right", -1) and b.get("top", -1) <= cy <= b.get("bottom", -1):
+                        return node
+            except Exception as e:  # noqa: BLE001
+                if not _stale(e):
+                    raise
             time.sleep(0.1)
         return None
 
@@ -239,11 +261,17 @@ class AndroidDevice:
         def norm(v: str) -> str:
             return "".join(v.split()).casefold()
 
-        for _ in range(2):
-            node.set_text(text)
-            time.sleep(0.15)
-            if norm(node.get_text() or "") == norm(text):
-                return
+        for _ in range(3):
+            try:
+                node.set_text(text)
+                time.sleep(0.15)
+                if norm(node.get_text() or "") == norm(text):
+                    return
+            except Exception as e:  # noqa: BLE001
+                if not _stale(e):
+                    raise
+                time.sleep(0.15)
+                node = self._focused_field(el.bounds) or node
         # Fields may reformat input (upper-casing a code, dropping symbols); the next observation shows the result.
 
     def _act_sync(self, a: Action) -> ActionResult:

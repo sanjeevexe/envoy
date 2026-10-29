@@ -1,14 +1,28 @@
 {
  "meta": {
-  "date": "2026-10-28 09:24–09:56 UTC",
+  "date": "2026-10-29 00:34 UTC",
   "phones": [
-   "envoy-real"
+   "envoy-real",
+   "envoy-test"
   ],
-  "calls": 174,
-  "usd": 0.417,
-  "branch": "claude/cross-app-answers-522e1d",
-  "commit": "deb931d"
+  "calls": 62,
+  "usd": 0.19035,
+  "branch": "main",
+  "commit": "3719818"
  },
+ "earlier_meta": [
+  {
+   "date": "2026-10-28 09:24–09:56 UTC",
+   "phones": [
+    "envoy-real"
+   ],
+   "calls": 174,
+   "usd": 0.417,
+   "branch": "claude/cross-app-answers-522e1d",
+   "commit": "deb931d",
+   "runs": "the first 10 rows (R1–R3)"
+  }
+ ],
  "runs": [
   {
    "question": "R1",
@@ -3490,6 +3504,1263 @@
     },
     "calls": 59,
     "usd": 0.13288
+   }
+  },
+  {
+   "question": "T1",
+   "mode": "parallel",
+   "message": "What's my gate for my Denver flight, and what's the address of the Space Needle?",
+   "parent_id": "task-1028-203124-c3f7",
+   "started": 1793233881.440782,
+   "wall_s": 22.62,
+   "with_memory_s": 23.77,
+   "overlap_s": 3.8,
+   "status": "done",
+   "answer": "Your Denver flight gate from SkyLark is A7, and the Space Needle address from Google Maps is 400 Broad St, Seattle, WA 98109.",
+   "values": [
+    {
+     "label": "Denver flight gate",
+     "app_name": "SkyLark",
+     "status": "done",
+     "result": "gate: A7",
+     "screen": "MainActivity",
+     "time": 1793233890.25181,
+     "device": "envoy-test",
+     "kind": "routine",
+     "routine": "skylark_get_flight_gate",
+     "why": null
+    },
+    {
+     "label": "Space Needle address",
+     "app_name": "Google Maps",
+     "status": "done",
+     "result": "street address: 400 Broad St, Seattle, WA 98109",
+     "screen": "MapsActivity",
+     "time": 1793233901.028973,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "google_maps_get_place_address",
+     "why": null
+    }
+   ],
+   "sources": {
+    "Denver flight gate": "SkyLark · MainActivity · 8:31 PM",
+    "Space Needle address": "Google Maps · MapsActivity · 8:31 PM"
+   },
+   "timeline": [
+    {
+     "task_id": "task-1028-203124-b148",
+     "app": "SkyLark",
+     "device": "envoy-test",
+     "queued_at": 1793233884.3213282,
+     "phone_at": 1793233886.1254451,
+     "ended_at": 1793233890.252627,
+     "status": "done"
+    },
+    {
+     "task_id": "task-1028-203124-91a9",
+     "app": "Google Maps",
+     "device": "envoy-real",
+     "queued_at": 1793233884.321981,
+     "phone_at": 1793233886.454117,
+     "ended_at": 1793233901.029923,
+     "status": "done"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-203124-b148",
+     "goal": "What's my gate for my Denver flight?",
+     "app": "com.skylark.air",
+     "device": "envoy-test",
+     "kind": "routine",
+     "routine": "skylark_get_flight_gate",
+     "inputs": {
+      "trip_city": "Denver"
+     },
+     "status": "done",
+     "result": "gate: A7",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793233885.9993038,
+       "kind": "note",
+       "text": "using routine skylark_get_flight_gate v1 with trip_city = Denver"
+      },
+      {
+       "seq": 2,
+       "time": 1793233888.887434,
+       "kind": "routine_step",
+       "text": "tap_my_trips",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 3,
+       "time": 1793233889.439269,
+       "kind": "routine_step",
+       "text": "find_tap_trip_row",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793233890.102575,
+       "kind": "routine_step",
+       "text": "tap_trip_row",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793233890.172559,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 6,
+       "time": 1793233890.278451,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 7,
+       "time": 1793233897.3282712,
+       "kind": "memory",
+       "text": "memory updated: 14 new, 2 same",
+       "entities": [
+        "Flight SL 1190 · Sat, Nov 14, 2026",
+        "Trip Denver"
+       ]
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-203124-91a9",
+     "goal": "What's the address of the Space Needle?",
+     "app": "com.google.android.apps.maps",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "google_maps_get_place_address",
+     "inputs": {
+      "place_name": "Space Needle"
+     },
+     "status": "done",
+     "result": "street address: 400 Broad St, Seattle, WA 98109",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793233886.3290792,
+       "kind": "note",
+       "text": "using routine google_maps_get_place_address v1 with place_name = Space Needle"
+      },
+      {
+       "seq": 2,
+       "time": 1793233891.4408052,
+       "kind": "routine_step",
+       "text": "tap_search_field",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 3,
+       "time": 1793233894.146301,
+       "kind": "routine_step",
+       "text": "type_place_name",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 4,
+       "time": 1793233900.816055,
+       "kind": "routine_step",
+       "text": "scroll_to_address",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793233900.918546,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 6,
+       "time": 1793233901.0303931,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 7,
+       "time": 1793233905.197428,
+       "kind": "memory",
+       "text": "memory updated: 2 new",
+       "entities": [
+        "Place Space Needle"
+       ]
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793233884.320606,
+     "kind": "plan",
+     "text": "2 apps: SkyLark: What's my gate for my Denver flight?; Google Maps: What's the address of the Space Needle?"
+    },
+    {
+     "seq": 2,
+     "time": 1793233903.999543,
+     "kind": "answer",
+     "text": "Your Denver flight gate from SkyLark is A7, and the Space Needle address from Google Maps is 400 Broad St, Seattle, WA 98109.",
+     "sources": {
+      "Denver flight gate": "SkyLark · MainActivity · 8:31 PM",
+      "Space Needle address": "Google Maps · MapsActivity · 8:31 PM"
+     }
+    },
+    {
+     "seq": 3,
+     "time": 1793233904.000074,
+     "kind": "timeline",
+     "text": "answered in 19.68 s; 2 phones, busy at the same time for 3.8 s"
+    },
+    {
+     "seq": 4,
+     "time": 1793233905.206482,
+     "kind": "memory",
+     "text": "memory updated: the combined answer, with each app as its source",
+     "entities": [
+      "Note Your Denver flight gate from SkyLark is A7, and the Space Needle address from Google Maps is 400 Broad St, Seattle, WA 98109."
+     ]
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "lead": {
+      "calls": 1,
+      "usd": 0.003805
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.004036
+     },
+     "extract": {
+      "calls": 2,
+      "usd": 0.012126999999999999
+     },
+     "combine": {
+      "calls": 1,
+      "usd": 0.002828
+     }
+    },
+    "calls": 6,
+    "usd": 0.0228
+   }
+  },
+  {
+   "question": "T1",
+   "mode": "sequential",
+   "message": "What's my gate for my Denver flight, and what's the address of the Space Needle?",
+   "parent_id": "task-1028-203147-8283",
+   "started": 1793233905.40539,
+   "wall_s": 30.39,
+   "with_memory_s": 31.83,
+   "overlap_s": 0.0,
+   "status": "done",
+   "answer": "Your Denver flight gate from SkyLark is A7 and the Space Needle address from Google Maps is 400 Broad St, Seattle, WA 98109.",
+   "values": [
+    {
+     "label": "Gate for Denver flight",
+     "app_name": "SkyLark",
+     "status": "done",
+     "result": "gate: A7",
+     "screen": "MainActivity",
+     "time": 1793233913.294477,
+     "device": "envoy-test",
+     "kind": "routine",
+     "routine": "skylark_get_flight_gate",
+     "why": null
+    },
+    {
+     "label": "Address of Space Needle",
+     "app_name": "Google Maps",
+     "status": "done",
+     "result": "street address: 400 Broad St, Seattle, WA 98109",
+     "screen": "MapsActivity",
+     "time": 1793233933.787951,
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "google_maps_get_place_address",
+     "why": null
+    }
+   ],
+   "sources": {
+    "Gate for Denver flight": "SkyLark · MainActivity · 8:31 PM",
+    "Address of Space Needle": "Google Maps · MapsActivity · 8:32 PM"
+   },
+   "timeline": [
+    {
+     "task_id": "task-1028-203147-c664",
+     "app": "SkyLark",
+     "device": "envoy-test",
+     "queued_at": 1793233907.933662,
+     "phone_at": 1793233909.753988,
+     "ended_at": 1793233913.295349,
+     "status": "done"
+    },
+    {
+     "task_id": "task-1028-203154-2da9",
+     "app": "Google Maps",
+     "device": "envoy-real",
+     "queued_at": 1793233914.858369,
+     "phone_at": 1793233917.087744,
+     "ended_at": 1793233933.788506,
+     "status": "done"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-203147-c664",
+     "goal": "Find the departure gate for my flight to Denver",
+     "app": "com.skylark.air",
+     "device": "envoy-test",
+     "kind": "routine",
+     "routine": "skylark_get_flight_gate",
+     "inputs": {
+      "trip_city": "Denver"
+     },
+     "status": "done",
+     "result": "gate: A7",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793233909.654015,
+       "kind": "note",
+       "text": "using routine skylark_get_flight_gate v1 with trip_city = Denver"
+      },
+      {
+       "seq": 2,
+       "time": 1793233912.314752,
+       "kind": "routine_step",
+       "text": "tap_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 3,
+       "time": 1793233912.682237,
+       "kind": "routine_step",
+       "text": "find_tap_trip_row",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793233913.181005,
+       "kind": "routine_step",
+       "text": "tap_trip_row",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793233913.227733,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 6,
+       "time": 1793233914.835387,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 7,
+       "time": 1793233918.214004,
+       "kind": "memory",
+       "text": "memory updated: 15 same",
+       "entities": [
+        "Flight SL 1190 · Sat, Nov 14, 2026",
+        "Trip Denver"
+       ]
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-203154-2da9",
+     "goal": "Look up the street address of the Space Needle",
+     "app": "com.google.android.apps.maps",
+     "device": "envoy-real",
+     "kind": "routine",
+     "routine": "google_maps_get_place_address",
+     "inputs": {
+      "place_name": "Space Needle"
+     },
+     "status": "done",
+     "result": "street address: 400 Broad St, Seattle, WA 98109",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793233916.971927,
+       "kind": "note",
+       "text": "using routine google_maps_get_place_address v1 with place_name = Space Needle"
+      },
+      {
+       "seq": 2,
+       "time": 1793233921.237588,
+       "kind": "routine_step",
+       "text": "tap_search_field",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 3,
+       "time": 1793233927.0074282,
+       "kind": "routine_step",
+       "text": "type_place_name",
+       "status": "done",
+       "rung": 1
+      },
+      {
+       "seq": 4,
+       "time": 1793233933.5746639,
+       "kind": "routine_step",
+       "text": "scroll_to_address",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793233933.6613388,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 6,
+       "time": 1793233933.793133,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 7,
+       "time": 1793233937.229286,
+       "kind": "memory",
+       "text": "memory updated: 2 same",
+       "entities": [
+        "Place Space Needle"
+       ]
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793233907.9329228,
+     "kind": "plan",
+     "text": "2 apps: SkyLark: Find the departure gate for my flight to Denver; Google Maps: Look up the street address of the Space Needle"
+    },
+    {
+     "seq": 2,
+     "time": 1793233935.732233,
+     "kind": "answer",
+     "text": "Your Denver flight gate from SkyLark is A7 and the Space Needle address from Google Maps is 400 Broad St, Seattle, WA 98109.",
+     "sources": {
+      "Gate for Denver flight": "SkyLark · MainActivity · 8:31 PM",
+      "Address of Space Needle": "Google Maps · MapsActivity · 8:32 PM"
+     }
+    },
+    {
+     "seq": 3,
+     "time": 1793233935.7332082,
+     "kind": "timeline",
+     "text": "answered in 27.8 s; 2 phones, busy at the same time for 0.0 s"
+    },
+    {
+     "seq": 4,
+     "time": 1793233937.235212,
+     "kind": "memory",
+     "text": "memory updated: the combined answer, with each app as its source",
+     "entities": [
+      "Note Your Denver flight gate from SkyLark is A7 and the Space Needle address from Google Maps is 400 Broad St, Seattle, WA 98109."
+     ]
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "lead": {
+      "calls": 1,
+      "usd": 0.002936
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.004364
+     },
+     "extract": {
+      "calls": 2,
+      "usd": 0.009178
+     },
+     "combine": {
+      "calls": 1,
+      "usd": 0.003089
+     }
+    },
+    "calls": 6,
+    "usd": 0.01957
+   }
+  },
+  {
+   "question": "T2",
+   "mode": "parallel",
+   "message": "What's my gate for my Denver flight, and how long is the drive from 1 Hacker Way to SFO?",
+   "parent_id": "task-1028-203220-baac",
+   "started": 1793233937.400314,
+   "wall_s": 98.34,
+   "with_memory_s": 98.78,
+   "overlap_s": 4.48,
+   "status": "done",
+   "answer": "Your Denver flight gate is A7 per SkyLark, and the drive is 31 min (17 mi) per Google Maps.",
+   "values": [
+    {
+     "label": "gate for Denver flight",
+     "app_name": "SkyLark",
+     "status": "done",
+     "result": "gate: A7",
+     "screen": "MainActivity",
+     "time": 1793233947.001586,
+     "device": "envoy-test",
+     "kind": "routine",
+     "routine": "skylark_get_flight_gate",
+     "why": null
+    },
+    {
+     "label": "drive from 1 Hacker Way to SFO",
+     "app_name": "Google Maps",
+     "status": "done",
+     "result": "31 min (17 mi) - Fastest route via US-101 N, despite 11-min delay slowdown on US-101 N. Driving mode from 1 Hacker Wy to San Francisco International Airport.",
+     "screen": "MapsActivity",
+     "time": 1793234033.242383,
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "why": null
+    }
+   ],
+   "sources": {
+    "gate for Denver flight": "SkyLark · MainActivity · 8:32 PM",
+    "drive from 1 Hacker Way to SFO": "Google Maps · MapsActivity · 8:33 PM"
+   },
+   "timeline": [
+    {
+     "task_id": "task-1028-203220-1cfd",
+     "app": "SkyLark",
+     "device": "envoy-test",
+     "queued_at": 1793233940.743297,
+     "phone_at": 1793233942.415261,
+     "ended_at": 1793233947.002613,
+     "status": "done"
+    },
+    {
+     "task_id": "task-1028-203220-327e",
+     "app": "Google Maps",
+     "device": "envoy-real",
+     "queued_at": 1793233940.7442088,
+     "phone_at": 1793233942.518979,
+     "ended_at": 1793234033.2436101,
+     "status": "done"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-203220-1cfd",
+     "goal": "What's my gate for my Denver flight?",
+     "app": "com.skylark.air",
+     "device": "envoy-test",
+     "kind": "routine",
+     "routine": "skylark_get_flight_gate",
+     "inputs": {
+      "trip_city": "Denver"
+     },
+     "status": "done",
+     "result": "gate: A7",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793233942.312315,
+       "kind": "note",
+       "text": "using routine skylark_get_flight_gate v1 with trip_city = Denver"
+      },
+      {
+       "seq": 2,
+       "time": 1793233945.785629,
+       "kind": "routine_step",
+       "text": "tap_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 3,
+       "time": 1793233946.3282812,
+       "kind": "routine_step",
+       "text": "find_tap_trip_row",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793233946.8427908,
+       "kind": "routine_step",
+       "text": "tap_trip_row",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793233946.9143722,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 6,
+       "time": 1793233947.0046349,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 7,
+       "time": 1793233953.1297889,
+       "kind": "memory",
+       "text": "memory updated: 15 same, 1 replaced",
+       "entities": [
+        "Flight SL 1190 · Sat, Nov 14, 2026",
+        "Trip Denver"
+       ]
+      },
+      {
+       "seq": 8,
+       "time": 1793233953.130752,
+       "kind": "change",
+       "text": "Boarding group changed: Group 5 → 5"
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-203220-327e",
+     "goal": "How long is the drive from 1 Hacker Way to SFO?",
+     "app": "com.google.android.apps.maps",
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "inputs": {},
+     "status": "done",
+     "result": "31 min (17 mi) - Fastest route via US-101 N, despite 11-min delay slowdown on US-101 N. Driving mode from 1 Hacker Wy to San Francisco International Airport.",
+     "detail": "31 min (17 mi) - Fastest route via US-101 N, despite 11-min delay slowdown on US-101 N. Driving mode from 1 Hacker Wy to San Francisco International Airport.",
+     "model_calls": 27,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793233949.8539982,
+       "kind": "plan",
+       "text": "Open Directions in Google Maps; Set origin to 1 Hacker Way; Set destination to SFO; Show driving route and read travel time"
+      },
+      {
+       "seq": 2,
+       "time": 1793233951.747384,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 3,
+       "time": 1793233954.733597,
+       "kind": "action",
+       "text": "launch",
+       "risk": "read"
+      },
+      {
+       "seq": 4,
+       "time": 1793233958.323366,
+       "kind": "action",
+       "text": "scroll",
+       "risk": "read"
+      },
+      {
+       "seq": 5,
+       "time": 1793233961.69955,
+       "kind": "action",
+       "text": "tap \"Cancel\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 6,
+       "time": 1793233963.7035809,
+       "kind": "action",
+       "text": "tap \"Directions\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 7,
+       "time": 1793233965.723107,
+       "kind": "action",
+       "text": "tap \"Choose start location\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 8,
+       "time": 1793233971.010701,
+       "kind": "action",
+       "text": "type \"Choose start location\" \"1 Hacker Way\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 9,
+       "time": 1793233974.858269,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 10,
+       "time": 1793233978.731389,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 11,
+       "time": 1793233980.724214,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 12,
+       "time": 1793233982.6102242,
+       "kind": "action",
+       "text": "tap \"Directions\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 13,
+       "time": 1793233984.919447,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 14,
+       "time": 1793233988.0118709,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 15,
+       "time": 1793233990.582892,
+       "kind": "action",
+       "text": "tap \"Directions\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 16,
+       "time": 1793233992.890163,
+       "kind": "replan",
+       "text": "Tap Choose start location and set it to 1 Hacker Way; Tap Choose destination and set it to SFO; Read the driving time for the route from 1 Hacker Way to SFO"
+      },
+      {
+       "seq": 17,
+       "time": 1793233995.130698,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 18,
+       "time": 1793233997.140859,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 19,
+       "time": 1793233999.59396,
+       "kind": "action",
+       "text": "tap \"Directions\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 20,
+       "time": 1793234002.006155,
+       "kind": "replan",
+       "text": "Tap Choose start location and set it to 1 Hacker Way; Tap Choose destination and set it to SFO; View the driving route duration"
+      },
+      {
+       "seq": 21,
+       "time": 1793234003.860094,
+       "kind": "action",
+       "text": "tap \"Choose start location\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 22,
+       "time": 1793234011.022336,
+       "kind": "action",
+       "text": "type \"Choose start location\" \"1 Hacker Way\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 23,
+       "time": 1793234014.646337,
+       "kind": "action",
+       "text": "tap \"Choose destination\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 24,
+       "time": 1793234021.8820338,
+       "kind": "action",
+       "text": "type \"Choose destination\" \"SFO\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 25,
+       "time": 1793234029.641767,
+       "kind": "action",
+       "text": "tap \"Directions to San Francisco International Airport\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 26,
+       "time": 1793234032.624748,
+       "kind": "action",
+       "text": "done"
+      },
+      {
+       "seq": 27,
+       "time": 1793234032.625231,
+       "kind": "finish",
+       "text": "31 min (17 mi) - Fastest route via US-101 N, despite 11-min delay slowdown on US-101 N. Driving mode from 1 Hacker Wy to San Francisco International Airport.",
+       "status": "done"
+      },
+      {
+       "seq": 28,
+       "time": 1793234033.250817,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 29,
+       "time": 1793234036.1734211,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793233940.742323,
+     "kind": "plan",
+     "text": "2 apps: SkyLark: What's my gate for my Denver flight?; Google Maps: How long is the drive from 1 Hacker Way to SFO?"
+    },
+    {
+     "seq": 2,
+     "time": 1793234035.658106,
+     "kind": "answer",
+     "text": "Your Denver flight gate is A7 per SkyLark, and the drive is 31 min (17 mi) per Google Maps.",
+     "sources": {
+      "gate for Denver flight": "SkyLark · MainActivity · 8:32 PM",
+      "drive from 1 Hacker Way to SFO": "Google Maps · MapsActivity · 8:33 PM"
+     }
+    },
+    {
+     "seq": 3,
+     "time": 1793234035.6586812,
+     "kind": "timeline",
+     "text": "answered in 94.92 s; 2 phones, busy at the same time for 4.48 s"
+    },
+    {
+     "seq": 4,
+     "time": 1793234036.181464,
+     "kind": "memory",
+     "text": "memory updated: the combined answer, with each app as its source",
+     "entities": [
+      "Note Your Denver flight gate is A7 per SkyLark, and the drive is 31 min (17 mi) per Google Maps."
+     ]
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "lead": {
+      "calls": 1,
+      "usd": 0.004394
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.005361
+     },
+     "plan": {
+      "calls": 3,
+      "usd": 0.009224
+     },
+     "step": {
+      "calls": 23,
+      "usd": 0.057308
+     },
+     "extract": {
+      "calls": 2,
+      "usd": 0.010867
+     },
+     "combine": {
+      "calls": 1,
+      "usd": 0.003509
+     }
+    },
+    "calls": 32,
+    "usd": 0.09066
+   }
+  },
+  {
+   "question": "T2",
+   "mode": "sequential",
+   "message": "What's my gate for my Denver flight, and how long is the drive from 1 Hacker Way to SFO?",
+   "parent_id": "task-1028-203359-c6dd",
+   "started": 1793234036.347137,
+   "wall_s": 60.72,
+   "with_memory_s": 60.72,
+   "overlap_s": 0.0,
+   "status": "done",
+   "answer": "Your Denver flight gate is A7 according to SkyLark, and the drive is 31 min (17 mi) via US-101 N according to Google Maps.",
+   "values": [
+    {
+     "label": "Gate for Denver flight",
+     "app_name": "SkyLark",
+     "status": "done",
+     "result": "gate: A7",
+     "screen": "MainActivity",
+     "time": 1793234044.318491,
+     "device": "envoy-test",
+     "kind": "routine",
+     "routine": "skylark_get_flight_gate",
+     "why": null
+    },
+    {
+     "label": "Drive from 1 Hacker Way to SFO",
+     "app_name": "Google Maps",
+     "status": "done",
+     "result": "31 min (17 mi) via US-101 N - Fastest route, despite slowdown on US-101 N causing 11-min delay",
+     "screen": "MapsActivity",
+     "time": 1793234093.8962739,
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "why": null
+    }
+   ],
+   "sources": {
+    "Gate for Denver flight": "SkyLark · MainActivity · 8:34 PM",
+    "Drive from 1 Hacker Way to SFO": "Google Maps · MapsActivity · 8:34 PM"
+   },
+   "timeline": [
+    {
+     "task_id": "task-1028-203359-8f2e",
+     "app": "SkyLark",
+     "device": "envoy-test",
+     "queued_at": 1793234039.248984,
+     "phone_at": 1793234040.887537,
+     "ended_at": 1793234044.319344,
+     "status": "done"
+    },
+    {
+     "task_id": "task-1028-203404-0212",
+     "app": "Google Maps",
+     "device": "envoy-real",
+     "queued_at": 1793234044.3381708,
+     "phone_at": 1793234046.134629,
+     "ended_at": 1793234093.8991811,
+     "status": "done"
+    }
+   ],
+   "parts": [
+    {
+     "task_id": "task-1028-203359-8f2e",
+     "goal": "Find the departure gate for my Denver flight",
+     "app": "com.skylark.air",
+     "device": "envoy-test",
+     "kind": "routine",
+     "routine": "skylark_get_flight_gate",
+     "inputs": {
+      "trip_city": "Denver"
+     },
+     "status": "done",
+     "result": "gate: A7",
+     "detail": "all steps and checks passed",
+     "model_calls": 1,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793234040.741997,
+       "kind": "note",
+       "text": "using routine skylark_get_flight_gate v1 with trip_city = Denver"
+      },
+      {
+       "seq": 2,
+       "time": 1793234043.3101408,
+       "kind": "routine_step",
+       "text": "tap_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 3,
+       "time": 1793234043.685058,
+       "kind": "routine_step",
+       "text": "find_tap_trip_row",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 4,
+       "time": 1793234044.2000341,
+       "kind": "routine_step",
+       "text": "tap_trip_row",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "seq": 5,
+       "time": 1793234044.2508318,
+       "kind": "finish",
+       "text": "all steps and checks passed",
+       "status": "done"
+      },
+      {
+       "seq": 6,
+       "time": 1793234044.3250072,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 7,
+       "time": 1793234051.6314251,
+       "kind": "memory",
+       "text": "memory updated: 15 same, 1 replaced",
+       "entities": [
+        "Flight SL 1190 · Sat, Nov 14, 2026",
+        "Trip Denver"
+       ]
+      },
+      {
+       "seq": 8,
+       "time": 1793234051.632283,
+       "kind": "change",
+       "text": "Boarding group changed: 5 → Group 5"
+      }
+     ]
+    },
+    {
+     "task_id": "task-1028-203404-0212",
+     "goal": "How long is the drive from 1 Hacker Way to SFO?",
+     "app": "com.google.android.apps.maps",
+     "device": "envoy-real",
+     "kind": "agent",
+     "routine": null,
+     "inputs": {},
+     "status": "done",
+     "result": "31 min (17 mi) via US-101 N - Fastest route, despite slowdown on US-101 N causing 11-min delay",
+     "detail": "31 min (17 mi) via US-101 N - Fastest route, despite slowdown on US-101 N causing 11-min delay",
+     "model_calls": 13,
+     "steps": [
+      {
+       "seq": 1,
+       "time": 1793234051.583926,
+       "kind": "plan",
+       "text": "Tap Directions in Google Maps; Set origin to 1 Hacker Way and destination to SFO; Select driving mode and view estimated travel time"
+      },
+      {
+       "seq": 2,
+       "time": 1793234053.507595,
+       "kind": "action",
+       "text": "tap \"Directions\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 3,
+       "time": 1793234055.142997,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 4,
+       "time": 1793234057.486274,
+       "kind": "action",
+       "text": "tap \"Choose start location\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 5,
+       "time": 1793234064.096378,
+       "kind": "action",
+       "text": "type \"Choose start location\" \"1 Hacker Way\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 6,
+       "time": 1793234066.768571,
+       "kind": "action",
+       "text": "tap \"Choose destination\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 7,
+       "time": 1793234075.773844,
+       "kind": "action",
+       "text": "type \"Choose destination\" \"SFO\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 8,
+       "time": 1793234078.577622,
+       "kind": "action",
+       "text": "back",
+       "risk": "read"
+      },
+      {
+       "seq": 9,
+       "time": 1793234080.384854,
+       "kind": "action",
+       "text": "look"
+      },
+      {
+       "seq": 10,
+       "time": 1793234084.870962,
+       "kind": "action",
+       "text": "tap \"Show list\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 11,
+       "time": 1793234089.393735,
+       "kind": "action",
+       "text": "tap \"Directions to San Francisco International Airport\"",
+       "risk": "reversible"
+      },
+      {
+       "seq": 12,
+       "time": 1793234093.0896928,
+       "kind": "action",
+       "text": "done"
+      },
+      {
+       "seq": 13,
+       "time": 1793234093.090302,
+       "kind": "finish",
+       "text": "31 min (17 mi) via US-101 N - Fastest route, despite slowdown on US-101 N causing 11-min delay",
+       "status": "done"
+      },
+      {
+       "seq": 14,
+       "time": 1793234093.8997,
+       "kind": "note",
+       "text": "saving what it saw to memory"
+      },
+      {
+       "seq": 15,
+       "time": 1793234096.011708,
+       "kind": "memory",
+       "text": "memory updated: nothing new"
+      }
+     ]
+    }
+   ],
+   "parent_steps": [
+    {
+     "seq": 1,
+     "time": 1793234039.24795,
+     "kind": "plan",
+     "text": "2 apps: SkyLark: Find the departure gate for my Denver flight; Google Maps: How long is the drive from 1 Hacker Way to SFO?"
+    },
+    {
+     "seq": 2,
+     "time": 1793234096.98981,
+     "kind": "answer",
+     "text": "Your Denver flight gate is A7 according to SkyLark, and the drive is 31 min (17 mi) via US-101 N according to Google Maps.",
+     "sources": {
+      "Gate for Denver flight": "SkyLark · MainActivity · 8:34 PM",
+      "Drive from 1 Hacker Way to SFO": "Google Maps · MapsActivity · 8:34 PM"
+     }
+    },
+    {
+     "seq": 3,
+     "time": 1793234096.990548,
+     "kind": "timeline",
+     "text": "answered in 57.74 s; 2 phones, busy at the same time for 0.0 s"
+    },
+    {
+     "seq": 4,
+     "time": 1793234096.992574,
+     "kind": "memory",
+     "text": "memory updated: the combined answer, with each app as its source",
+     "entities": [
+      "Note Your Denver flight gate is A7 according to SkyLark, and the drive is 31 min (17 mi) via US-101 N according to Google Maps."
+     ]
+    }
+   ],
+   "approvals": [],
+   "approvals_requested": 0,
+   "cost": {
+    "by_job": {
+     "lead": {
+      "calls": 1,
+      "usd": 0.004068
+     },
+     "match": {
+      "calls": 2,
+      "usd": 0.005701
+     },
+     "plan": {
+      "calls": 1,
+      "usd": 0.003748
+     },
+     "extract": {
+      "calls": 2,
+      "usd": 0.012109
+     },
+     "step": {
+      "calls": 11,
+      "usd": 0.027219
+     },
+     "combine": {
+      "calls": 1,
+      "usd": 0.004476
+     }
+    },
+    "calls": 18,
+    "usd": 0.05732
    }
   }
  ]

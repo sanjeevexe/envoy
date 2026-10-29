@@ -40,6 +40,7 @@ WEIGHTS = {
     "cls": 0.5,
     "parent": 1.0,
     "siblings": 1.0,
+    "row": 3.0,  # for an element with no text of its own, its row's text is what it is (the delete icon of "Public Transit")
     "position": 0.75,
 }
 
@@ -94,9 +95,93 @@ def build(e: Element, screen: ScreenState) -> Locator:
         cls=e.cls.rsplit(".", 1)[-1] or None,
         parent=plabel or None,
         siblings=[s for s in _siblings_of(e, screen) if s != label][:3],
+        row=_row_for_locator(e, screen),
         in_list=e.in_list,
         position=(round((x1 + x2) / 2 / w, 3), round((y1 + y2) / 2 / h, 3)),
     )
+
+
+# ---- rows -------------------------------------------------------------------------------------
+# Identical elements repeated row after row (a delete icon on every expense, an "Add" button on every menu item) are told
+# apart by the row they sit in. A row is the element's highest ancestor that holds none of its twins; with no twins on
+# the screen (one row left), the nearest ancestor that shows some text besides the element and its siblings.
+
+
+@dataclass
+class _Rows:
+    screen: ScreenState
+    texts: dict[int, list[str]]  # every visible text under each node (own text or description), in tree order
+    twins: dict[tuple, list[Element]]
+
+
+_rows_cache: _Rows | None = None  # the last screen's: locate polls one screen many times
+
+
+def _twin_key(e: Element) -> tuple:
+    return (short_id(e.resource_id) if usable_id(e.resource_id) else "", e.kind, e.cls.rsplit(".", 1)[-1], norm(e.label or e.text or e.desc))
+
+
+def _ancestors(e: Element, screen: ScreenState) -> list[int]:
+    out: list[int] = []
+    p = e.parent
+    while p is not None and 0 <= p < len(screen.elements) and len(out) < 64:
+        out.append(p)
+        p = screen.elements[p].parent
+    return out
+
+
+def _rows(screen: ScreenState) -> _Rows:
+    global _rows_cache
+    if _rows_cache is not None and _rows_cache.screen is screen:
+        return _rows_cache
+    texts: dict[int, list[str]] = {}
+    for x in screen.elements:
+        t = (x.text or x.desc or "").strip()
+        if t and x.visible and not x.status_bar:
+            for a in [x.index, *_ancestors(x, screen)]:
+                texts.setdefault(a, []).append(t)
+    twins: dict[tuple, list[Element]] = {}
+    for e in candidates(screen):
+        twins.setdefault(_twin_key(e), []).append(e)
+    _rows_cache = _Rows(screen, texts, twins)
+    return _rows_cache
+
+
+def _twins_of(e: Element, screen: ScreenState) -> list[Element]:
+    return [o for o in _rows(screen).twins.get(_twin_key(e), []) if o.index != e.index]
+
+
+def row_of(e: Element, screen: ScreenState) -> int | None:
+    """Index of the row node `e` sits in, or None when there is none to find."""
+    rows = _rows(screen)
+    anc = _ancestors(e, screen)
+    twins = _twins_of(e, screen)
+    if twins:
+        theirs = {a for o in twins for a in _ancestors(o, screen)}
+        row = None
+        for a in anc:
+            if a in theirs:
+                break
+            row = a
+        return row
+    own = {norm(e.label or e.text or e.desc), *(norm(t) for t in _siblings_of(e, screen))}
+    return next((a for a in anc[:6] if any(norm(t) not in own for t in rows.texts.get(a, []))), None)
+
+
+def row_texts(e: Element, screen: ScreenState) -> list[str]:
+    row = row_of(e, screen)
+    return list(dict.fromkeys(_rows(screen).texts.get(row, []))) if row is not None else []
+
+
+def _row_for_locator(e: Element, screen: ScreenState) -> list[str]:
+    """What tells `e`'s row apart from its twins' rows: its texts, less those every row shows ("Delete", "$") and the
+    element's own label. Empty for an element that has no twins (it needs no row)."""
+    twins = _twins_of(e, screen)
+    if not twins:
+        return []
+    common = set.intersection(*({norm(t) for t in row_texts(o, screen)} for o in twins))
+    own = norm(e.label or e.text or e.desc)
+    return [t for t in row_texts(e, screen) if norm(t) not in common and norm(t) != own][:4]
 
 
 def from_record(rec: dict, screen: ScreenState) -> Locator:
@@ -160,6 +245,9 @@ def score(loc: Locator, e: Element, screen: ScreenState, *, use_ids: bool = True
         return 0.0, {"text_has": 0.0}
     if not _kind_compatible(loc, e):
         return 0.0, {"kind": 0.0}
+    row = row_texts(e, screen) if (loc.row or loc.row_has) else []
+    if loc.row_has and not any(contains_value(t, loc.row_has) for t in row):
+        return 0.0, {"row_has": 0.0}
     got: dict[str, float] = {}
     total = 0.0
     weight = 0.0
@@ -195,6 +283,9 @@ def score(loc: Locator, e: Element, screen: ScreenState, *, use_ids: bool = True
         sibs = [norm(s) for s in _siblings_of(e, screen)]
         hit = sum(1 for s in loc.siblings if norm(s) in sibs)
         add("siblings", hit / len(loc.siblings))
+    if loc.row and _twins_of(e, screen):  # alone on the screen (one row left), it needs no row to be told apart
+        mine = {norm(t) for t in row}
+        add("row", sum(1 for t in loc.row if norm(t) in mine) / len(loc.row))
     if loc.position:
         w, h = screen.width or 1080, screen.height or 2400
         x1, y1, x2, y2 = e.bounds
@@ -227,16 +318,7 @@ def locate(loc: Locator, screen: ScreenState, inputs: dict[str, str] | None = No
            margin: float = MARGIN, use_ids: bool = True, role: str = "target") -> Match:
     """The element `loc` describes on `screen`, or a Match with element None (too weak or ambiguous)."""
     rendered: Locator = render(loc, inputs or {})
-    cands = candidates(screen)
-    # A screen that exposes no usable IDs at all (a release with stripped or obfuscated IDs) can't count a missing ID
-    # against any element: text, type and neighbors carry the score there, as on most real apps.
-    use_ids = use_ids and any(usable_id(e.resource_id) for e in cands)
-    scored = []
-    for e in cands:
-        sc, det = score(rendered, e, screen, use_ids=use_ids, role=role)
-        if sc > 0:
-            scored.append((sc, e, det))
-    scored.sort(key=lambda t: -t[0])
+    scored = _ranked(rendered, screen, use_ids, role)
     if not scored:
         return Match(None, 0.0, 0.0, threshold)
     best, e, det = scored[0]
@@ -249,15 +331,42 @@ def locate(loc: Locator, screen: ScreenState, inputs: dict[str, str] | None = No
     return Match(e, best, runner, threshold, det)
 
 
+def _ranked(rendered: Locator, screen: ScreenState, use_ids: bool, role: str) -> list[tuple[float, Element, dict]]:
+    cands = candidates(screen)
+    # A screen that exposes no usable IDs at all (a release with stripped or obfuscated IDs) can't count a missing ID
+    # against any element: text, type and neighbors carry the score there, as on most real apps.
+    use_ids = use_ids and any(usable_id(e.resource_id) for e in cands)
+    scored = []
+    for e in cands:
+        sc, det = score(rendered, e, screen, use_ids=use_ids, role=role)
+        if sc > 0:
+            scored.append((sc, e, det))
+    scored.sort(key=lambda t: -t[0])
+    return scored
+
+
+def all_matching(loc: Locator, screen: ScreenState, inputs: dict[str, str] | None = None, *, threshold: float = STRICT,
+                 role: str = "target") -> list[Element]:
+    """Every element `loc` describes well enough, best first (when the one wanted is told apart by something else)."""
+    return [e for sc, e, _ in _ranked(render(loc, inputs or {}), screen, True, role) if sc >= threshold]
+
+
 def _same_slot(loc: Locator, scored: list, screen: ScreenState, margin: float) -> tuple[Element, dict] | None:
     """Repeated list rows that nothing but their place tells apart ("the first store in the list"): a locator with no
-    text to choose a row by (its text was booking data) means the row in the recorded slot, if one is clearly nearest."""
-    if not (loc.in_list and loc.position and (loc.resource_id or loc.kind)) or loc.text or loc.text_has or loc.desc:
-        return None
+    text to choose a row by (its text was booking data) means the row in the recorded slot, if one is clearly nearest.
+    So do twins in rows that show exactly the same ("delete one copy of each duplicate expense")."""
     tied = [(e, det) for sc, e, det in scored if scored[0][0] - sc < margin]
-    same = (lambda e: id_matches(loc.resource_id, short_id(e.resource_id))) if loc.resource_id else (lambda e: e.kind == loc.kind)
-    if len(tied) < 2 or not all(e.in_list and same(e) for e, _ in tied):
+    if not loc.position or len(tied) < 2:
         return None
+    if loc.row or loc.row_has:
+        if len({_twin_key(e) for e, _ in tied}) > 1 or len({tuple(norm(t) for t in row_texts(e, screen)) for e, _ in tied}) > 1:
+            return None
+    else:
+        if not (loc.in_list and (loc.resource_id or loc.kind)) or loc.text or loc.text_has or loc.desc:
+            return None
+        same = (lambda e: id_matches(loc.resource_id, short_id(e.resource_id))) if loc.resource_id else (lambda e: e.kind == loc.kind)
+        if not all(e.in_list and same(e) for e, _ in tied):
+            return None
     w, h = screen.width or 1080, screen.height or 2400
 
     def dist(e: Element) -> float:
@@ -275,7 +384,7 @@ def updated(loc: Locator, e: Element, screen: ScreenState) -> Locator:
     label, neighbors and position are this run's booking data, so its old fixed text stays. An ID the new screen
     doesn't show (a build without IDs) is kept rather than dropped: such screens ignore IDs anyway."""
     fresh = build(e, screen)
-    upd: dict = {"text_has": loc.text_has}
+    upd: dict = {"text_has": loc.text_has, "row_has": loc.row_has, "row": loc.row}  # the row it was chosen by stays
     if not fresh.resource_id and loc.resource_id:
         upd["resource_id"] = loc.resource_id
     if loc.resource_id and "{{" in loc.resource_id:

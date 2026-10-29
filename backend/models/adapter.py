@@ -28,8 +28,8 @@ from typing import Any, Literal
 from dotenv import load_dotenv
 from pydantic import BaseModel
 
-from models.schemas import (AppNoteOutput, ChatRoute, ChooseOutput, CompiledRoutine, ExtractionOutput, GroundingResult, MatchOutput, MemoryAnswer, Plan, SameEntityOutput,
-                            StepOutput, strict_json_schema)
+from models.schemas import (AppNoteOutput, ChatRoute, ChooseOutput, CompiledRoutine, ExtractionOutput, GroundingResult, MatchOutput, MemoryAnswer, Plan,
+                            SameEntityOutput, ScreenReadOutput, StepOutput, strict_json_schema)
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 load_dotenv(REPO_ROOT / ".env")
@@ -79,6 +79,7 @@ JOBS: dict[str, JobConfig] = {
     "answer": JobConfig("answer", "muse-spark-1.3", "low", MemoryAnswer, max_output_tokens=2000),
     "compile": JobConfig("compile", "muse-wonder-1.0", "medium", CompiledRoutine, max_output_tokens=32000, timeout_s=120),
     "match": JobConfig("match", "muse-spark-1.3", "low", MatchOutput, max_output_tokens=4000),
+    "screen_read": JobConfig("screen_read", "muse-spark-1.3", "low", ScreenReadOutput, max_output_tokens=2000),
     "chat": JobConfig("chat", "muse-spark-1.3", "low", ChatRoute, max_output_tokens=2000),
     "app_note": JobConfig("app_note", "muse-spark-1.3", "low", AppNoteOutput, max_output_tokens=3000),
 }

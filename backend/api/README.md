@@ -14,7 +14,8 @@ uv run --project backend python -m api [--profile demo|real]   # http://127.0.0.
 | `store.py` | Tasks, steps, approvals and triggers in SQLite (`data/api/envoy.db`; `ENVOY_API_DIR` moves it) |
 | `runner.py` | Runs a task: routine (matcher + memory) or agent, the phone (asking first before your own), phone lease, sign-in hand-off, web approvals, memory write-back after Done |
 | `devices.py` | Phone leases and takeover: the agent's next call to the phone waits while you are in control. Lists the emulators and any connected Android phone; while a task uses your phone, `watch()` hands it to you on a touch, Pause on its banner, or another app coming to the front |
-| `routing.py` | Which phone runs a task (the design's table): an emulator by default, your phone when you ask ("… on my phone"), when the app is set to it (Settings › Phones) or refuses emulators |
+| `routing.py` | Which phone runs a task (the design's table): an emulator by default, your phone when you ask ("… on my phone"), when the app is set to it (Settings › Phones) or blocks emulators: the starting list `emulator_blocked.json`, or an app Envoy saw show a bot check on an emulator (the runner sets it to your phone) |
+| `install.py` | An app the task names that the emulator doesn't have: its Play Store page read in code, free apps installed, a paid one asked about through approvals (Envoy never pays), sign-ins handed to you |
 | `approvals.py` | Web approvals: only your session decides, by POST with the approval's nonce; bound to the app's own screen; no answer is never an approval |
 | `live.py` | `WS /api/live/{id}`: emulator gRPC frames, or a real phone's scrcpy frames, as JPEG (emulators show secure sign-in screens; a phone shows them black, so the page says to use the phone); your taps, swipes and typing only during a takeover, never logged |
 | `events.py` | `WS /api/events`: task, step, approval, takeover and memory events |

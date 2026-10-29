@@ -1,0 +1,21 @@
+{
+  "about": "Apps known to block emulators: tasks for them go to your Android phone (asking first), and with no phone connected Envoy says so instead of trying. Read by api/routing.py. Apps Envoy finds blocking on its own (a bot check on an emulator, or the Play Store saying the emulator isn't compatible) are added to your settings instead, where you can undo them. Package ids checked on play.google.com, Oct 28, 2026.",
+  "apps": {
+    "com.target.ui": {"name": "Target", "names": ["target"], "why": "a press-and-hold bot check (HUMAN Security) on most launches on envoy-real (Oct 27, 2026)"},
+    "com.ubercab.eats": {"name": "Uber Eats", "names": ["uber eats"], "why": "the Play Store won't install it on an emulator: \"your device isn't compatible\" (Phase 0)"},
+    "com.chase.sig.android": {"name": "Chase", "names": ["chase", "chase mobile"], "why": "banking app: device integrity checks"},
+    "com.infonow.bofa": {"name": "Bank of America", "names": ["bank of america", "bofa"], "why": "banking app: device integrity checks"},
+    "com.wf.wellsfargomobile": {"name": "Wells Fargo", "names": ["wells fargo"], "why": "banking app: device integrity checks"},
+    "com.konylabs.capitalone": {"name": "Capital One", "names": ["capital one"], "why": "banking app: device integrity checks"},
+    "com.citi.citimobile": {"name": "Citi Mobile", "names": ["citi", "citibank", "citi mobile"], "why": "banking app: device integrity checks"},
+    "com.usbank.mobilebanking": {"name": "U.S. Bank", "names": ["u.s. bank", "us bank"], "why": "banking app: device integrity checks"},
+    "com.pnc.ecommerce.mobile": {"name": "PNC Mobile", "names": ["pnc", "pnc mobile"], "why": "banking app: device integrity checks"},
+    "com.ally.MobileBanking": {"name": "Ally", "names": ["ally", "ally bank"], "why": "banking app: device integrity checks"},
+    "com.discoverfinancial.mobile": {"name": "Discover", "names": ["discover card", "discover mobile"], "why": "card app: device integrity checks"},
+    "com.americanexpress.android.acctsvcs.us": {"name": "Amex", "names": ["amex", "american express"], "why": "card app: device integrity checks"},
+    "com.paypal.android.p2pmobile": {"name": "PayPal", "names": ["paypal"], "why": "payments app: device integrity checks"},
+    "com.venmo": {"name": "Venmo", "names": ["venmo"], "why": "payments app: device integrity checks"},
+    "com.squareup.cash": {"name": "Cash App", "names": ["cash app"], "why": "payments app: device integrity checks"},
+    "com.google.android.apps.walletnfcrel": {"name": "Google Wallet", "names": ["google wallet"], "why": "won't hold cards on a device that fails Play Integrity, as emulators do"}
+  }
+}

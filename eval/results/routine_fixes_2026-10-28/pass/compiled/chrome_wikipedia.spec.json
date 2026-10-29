@@ -1,0 +1,72 @@
+{
+ "name": "chrome_search_wikipedia_opened_date",
+ "intent": "Search Wikipedia in Chrome for an article and report when it opened",
+ "description": "Using Chrome, navigate to the mobile Wikipedia site, search for a requested topic, open its article, and find the date or year it opened.",
+ "patterns": [
+  "search Wikipedia and tell me when it opened",
+  "look up a place on Wikipedia and find its opening year",
+  "when did it open according to Wikipedia",
+  "find the opening date on Wikipedia"
+ ],
+ "inputs": [
+  {
+   "name": "article_topic",
+   "type": "text",
+   "description": "The topic or article to search for on Wikipedia.",
+   "from_memory": null,
+   "example": "Eiffel Tower"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "go_back",
+   "intent": "Go back to dismiss the current selection and prepare to enter a URL",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "open_search",
+   "intent": "Tap Search to open the search or address field",
+   "target_fixed_text": "Search",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "enter_wikipedia_url",
+   "intent": "Type en.m.wikipedia.org into the address bar to go to mobile Wikipedia",
+   "target_fixed_text": "Search Google or type URL",
+   "choice_input": null
+  },
+  {
+   "step": 4,
+   "id": "open_wikipedia_search",
+   "intent": "Tap Search to open the Wikipedia search box",
+   "target_fixed_text": "Search",
+   "choice_input": null
+  },
+  {
+   "step": 5,
+   "id": "search_for_article_topic",
+   "intent": "Type {{article_topic}} into the search box to search for the article",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 6,
+   "id": "scroll_to_opened_information",
+   "intent": "Scroll down the {{article_topic}} article to find when it opened",
+   "target_fixed_text": null,
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "opened_date",
+   "near": "Opened",
+   "example": "15 May 1889"
+  }
+ ],
+ "data_values": []
+}

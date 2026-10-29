@@ -6,7 +6,10 @@ the web app, and writes what it learned into memory (design doc, One task, end t
 2. **Phone.** `api/routing.py` picks it: SkyLark on envoy-test and real apps on envoy-real by default, your Android
    phone when you ask for it (or the app needs it). The real phone is used only after you say yes; while the task runs
    there its banner shows, and a touch, Pause or another app coming to the front hands the phone to you. One task per
-   phone at a time.
+   phone at a time. An app that shows a bot check on an emulator blocks emulators: from then on it runs on your phone
+   (set in Settings › Phones, where you can undo it), and this task moves there too if you say yes.
+   **The app.** On an emulator, an app the task names that isn't installed is installed from the Play Store first
+   (`api/install.py`): free apps only; a paid one asks you, and Envoy never pays.
 3. **Sign-in first.** If the app opens on a sign-in screen, the user is asked to take over; the run waits for hand back.
    A sign-in that appears mid-run (the agent or routine hands off) is handled the same way, then the run goes again.
 4. **Run** through a `GatedDevice` (it waits while the user is in control) with the web approver.
@@ -31,16 +34,20 @@ from memory.service import MemoryService
 from memory.store import MemoryStore
 from models.adapter import ModelAdapter, profile_models
 from policy.approval_rules import ApprovalRules
+from policy.botcheck import bot_check_reason, is_bot_check_handoff
 from policy.signin import sign_in_reason
 from routines.executor import ExecConfig, RoutineExecutor
 from routines.lifecycle import after_run, version_for_run
 from routines.matcher import RoutineMatcher
 from routines.model import Routine
+from routines.screens import norm
 from routines.store import RoutineStore
 
 from api.approvals import WebApprover
 from api.devices import SKYLARK, DevicePool
-from api.routing import EMULATOR_REFUSED, Choice, asks_for_phone, choose, strip_phone_words
+from api.install import Installer, app_named_in
+from api.routing import (BLOCKS_EMULATOR, Choice, app_label, app_names as blocking_app_names, asks_for_phone, blocks_emulator, choose,
+                         needs_real_phone, strip_phone_words)
 from api.store import API_DIR, TaskStore
 from testapps.skylark import SkyLark
 
@@ -54,13 +61,25 @@ APP_NAMES = {
     "chrome": "com.android.chrome", "settings": "com.android.settings", "calendar": "com.google.android.calendar", "contacts": "com.google.android.contacts",
 }
 TRAVEL = re.compile(r"\b(flight|trip|gate|check(ed)?[ -]?in|boarding|seat|airline|known traveler)\b", re.I)
+# A bot check in a browser is a website's, not the browser's: it doesn't mean the browser blocks emulators.
+BROWSERS = {"com.android.chrome", "org.mozilla.firefox", "com.brave.browser", "com.microsoft.emmx", "com.sec.android.app.sbrowser",
+            "com.duckduckgo.mobile.android", "com.opera.browser"}
+FRESH_INSTALL = ("{name} was just installed from the Play Store, so its first-run screens (welcome, onboarding, permissions) may "
+                 "come first: get past them with their own Skip, Next, Forward or Continue buttons. Don't press Back on them: in a new app "
+                 "that can close it (seen on Wikipedia). Don't sign in or create an account unless the task needs it.")
 
 
-def app_for(goal: str) -> str | None:
+def app_for(goal: str, learned: dict[str, str] | None = None) -> str | None:
+    """The app a goal is about: one Envoy knows by name (APP_NAMES, the apps that block emulators), one it installed
+    before when the goal names it as an app (`learned`: name → package), else SkyLark for travel words."""
     g = goal.lower()
-    for name, pkg in APP_NAMES.items():
+    for name, pkg in {**APP_NAMES, **blocking_app_names()}.items():
         if re.search(rf"\b{re.escape(name)}\b", g):
             return pkg
+    if (named := app_named_in(goal)) is not None:
+        # Only as an app ("in the Weather app"), so an installed Weather app doesn't take every question about the weather;
+        # one Envoy doesn't know yet is an app to install, not SkyLark because of travel words ("in the Expedia app, my flight").
+        return (learned or {}).get(norm(named))
     return SKYLARK if TRAVEL.search(goal) else None  # the demo's airline is SkyLark
 
 
@@ -107,6 +126,9 @@ class TaskRunner:
         self.devices: dict[str, Any] = {}  # task id → raw device (for step screenshots)
         self.pending_steps: dict[str, asyncio.Task] = {}  # task id → its latest step still taking its picture
         self.phone_asks: dict[str, asyncio.Future] = {}  # task id → your answer to "use your Android phone?"
+        self.phone_allowed: dict[str, str] = {}  # task id → the phone you said yes to when the task moved off an emulator
+        self.moved: set[str] = set()  # tasks that moved to your phone (their runs there get their own trace ids)
+        self.install_apps = True  # install an app the task names that the emulator doesn't have (api/install.py)
         self.on_final: list[Any] = []  # called with (task id, final screen, routine outputs) after a run's last look (api/crossapp.py)
         self.crossapp: Any = None  # cross-app answers (api/crossapp.py), set by the app
         self.app_notes = AppNotes(memory, self.adapter)  # what Envoy has learned about each app (memory/app_notes.py)
@@ -125,7 +147,7 @@ class TaskRunner:
         task = self.store.create(goal, source, routine=routine, inputs=inputs or {}, app=app, request=request or goal, models=profile_models(),
                                  **({"parent": parent} if parent else {}))
         self.bus.publish("task", task=task)
-        coro = self._run(task["id"], goal, routine, inputs or {}, app, phone)
+        coro = self._run_task(task["id"], goal, routine, inputs or {}, app, phone)
         try:
             running = asyncio.get_running_loop()
         except RuntimeError:  # MCP tools and approvers call in from worker threads
@@ -154,6 +176,14 @@ class TaskRunner:
 
     # ---- the run -------------------------------------------------------------------------------
 
+    async def _run_task(self, tid: str, goal: str, routine_name: str | None, inputs: dict[str, str], app: str | None,
+                        phone: str | None) -> None:
+        """The task where routing puts it; then once more on your phone if it moved there (the app blocks emulators)."""
+        moved = await self._run(tid, goal, routine_name, inputs, app, phone)
+        if moved:
+            task = self.store.get(tid) or {}
+            await self._run(tid, goal, task.get("routine") or routine_name, task.get("inputs") or inputs, task.get("app") or app, moved)
+
     async def _plan(self, tid: str, goal: str, routine_name: str | None, inputs: dict[str, str], app: str | None
                     ) -> tuple[Routine | None, dict[str, str], str | None, dict[str, str], int]:
         """(routine or None for the agent, inputs, app, where each input came from, model calls)."""
@@ -162,13 +192,16 @@ class TaskRunner:
         if routine_name:
             routine = self.routines.get(routine_name)
         else:
-            scope = "test_app" if (app or app_for(goal)) == SKYLARK else "real"
+            scope = "test_app" if (app or app_for(goal, self._learned_names())) == SKYLARK else "real"
             m = await RoutineMatcher(self.routines, self.adapter, data_scope=scope).match(goal, notes_for(self.memory, goal), task_id=f"{tid}-match")
             calls += m.model_calls
+            if getattr(m, "ambiguous", None):
+                self._step(tid, {"kind": "note", "text": f"routines {' and '.join(m.ambiguous)} both fit and the request doesn't say "
+                                 "which: the agent does it instead (name what you want back, e.g. the price, to use a routine)"})
             if m.routine:
                 routine, inputs = m.routine, {**m.inputs, **inputs}
         if routine is None:
-            return None, inputs, app or app_for(goal), {}, calls
+            return None, inputs, app or app_for(goal, self._learned_names()), {}, calls
         routine = version_for_run(self.routines, routine.routine)  # a patched version on trial is decided by this run
         filled = fill_inputs(self.memory, routine, goal, inputs)
         if filled.missing:
@@ -177,7 +210,9 @@ class TaskRunner:
         return routine, filled.inputs, routine.app, filled.sources, calls
 
     async def _run(self, tid: str, goal: str, routine_name: str | None, inputs: dict[str, str], app: str | None,
-                   phone: str | None = None) -> None:
+                   phone: str | None = None) -> str | None:
+        """One run of the task. Returns your phone's id when the task should move there (the emulator can't run the app
+        and you said yes), else None."""
         t0 = time.time()
         calls, cost = 0, 0.0
         avd, done, final, outputs, scope, routine = None, False, None, {}, "real", None
@@ -192,9 +227,10 @@ class TaskRunner:
                 self._step(tid, {"kind": "note", "text": f"using routine {routine.routine} v{routine.version}"
                                  + (f" with {', '.join(f'{k} = {v}' for k, v in inputs.items())}" if inputs else ""),
                                  "sources": sources})
-            choice = await self._choose_phone(tid, app, phone)
+            named = None if app else app_named_in(goal)  # an app Envoy doesn't know yet ("in the Wikipedia app")
+            choice = await self._choose_phone(tid, app, phone, named=named)
             if choice is None:
-                return
+                return None
             avd = choice.device
             assert avd is not None
             device = await self.pool.device(avd)
@@ -217,16 +253,29 @@ class TaskRunner:
                 skylark = app == SKYLARK
                 scope = "test_app" if skylark else "real"
                 status, result, outputs, final = "failed", "", {}, None
-                for attempt in range(1, 4):
+                moved, installed, end = None, None, None
+                if not choice.real_phone and (app or named):
+                    app, installed, moved, end = await self._install_missing(tid, avd, gated, approver, app, named, goal)
+                    if end is not None:
+                        status, result = end
+                for attempt in range(1, 1 if end or moved else 4):  # nothing to run when the app can't be had here
                     if attempt == 1 and app:
                         await gated.launch(app, fresh=True)
                         screen = await gated.wait_until_settled()
+                        if not choice.real_phone and (bot := bot_check_reason(screen)) is not None:
+                            moved, reason = await self._bot_check(tid, avd, app, screen, bot)
+                            if moved or not await self._wait_for_user(tid, avd, reason):
+                                status, result = "needs_you", reason
+                                break
+                            screen = await gated.wait_until_settled()
                         if (why := sign_in_reason(screen)) is not None and not await self._wait_for_user(tid, avd, f"sign-in needed: {why}"):
                             status, result = "needs_you", "waiting for you to sign in timed out"
                             break
-                    trace_id = f"{tid}-r{attempt}"
+                    trace_id = f"{tid}-r{attempt}" + ("-phone" if tid in self.moved else "")
                     self.trace_task[trace_id] = tid
                     notes = notes_for(self.memory, goal)
+                    if installed:
+                        notes = f"{notes}\n{FRESH_INSTALL.format(name=installed)}".strip()
                     if routine:
                         ex = RoutineExecutor(gated, adapter=self.adapter, approver=approver,
                                              config=ExecConfig(data_scope=scope, contributor=skylark,
@@ -234,8 +283,11 @@ class TaskRunner:
                                              app_notes=self.app_notes)
                         out = await ex.run(routine, inputs, task_id=trace_id, launch="if_needed", allow_repair=True, allow_agent=True, memory=notes,
                                            request=goal)
-                        life = after_run(self.routines, routine, out)  # repairs become a version on trial; a trial is activated or rolled back
-                        if life and "unchanged" not in life:  # a patch that changed nothing is logged in the library, not shown
+                        held = any(s.get("kind") == "note" and (s.get("text") or "").startswith(("taken over", "paused:")) for s in self.store.steps(tid))
+                        life = after_run(self.routines, routine, out, held=held) or {}  # repairs become a version on trial; a trial is activated or rolled back
+                        if "held" in life:
+                            self._step(tid, {"kind": "note", "text": f"routine {routine.routine}: nothing learned from this run (you took over or paused it)"})
+                        elif life and "unchanged" not in life:  # a patch that changed nothing is logged in the library, not shown
                             self._step(tid, {"kind": "note", "text": (f"routine {routine.routine}: patched version v{life['proposed']} on trial for the next run"
                                                                       if "proposed" in life else f"routine {routine.routine} v{life['trial']}: trial {life['result']}")})
                         status, result, outputs = out.status, out.detail, out.outputs
@@ -253,11 +305,23 @@ class TaskRunner:
                         if getattr(res, "trace_dir", None):
                             learn.append(res.trace_dir)
                     if status == "handoff":
-                        if await self._wait_for_user(tid, avd, result or "the agent needs you"):
+                        reason, bot = result or "the agent needs you", None
+                        if not choice.real_phone:  # a bot check the agent (or routine) stopped at: the app may block emulators
+                            screen = await device.observe()
+                            bot = bot_check_reason(screen) or (result if is_bot_check_handoff(result) else None)
+                            if bot is not None:
+                                moved, reason = await self._bot_check(tid, avd, app, screen, bot)
+                                if moved:
+                                    break
+                        if await self._wait_for_user(tid, avd, reason):
                             continue
-                        status, result = "needs_you", "waiting for you timed out"
+                        status, result = "needs_you", reason if bot else "waiting for you timed out"
                     break
                 await self._steps_written(tid)
+                if moved:
+                    self._step(tid, {"kind": "note", "text": f"moving this task to your {self.pool.phones.get(moved, {}).get('model') or 'phone'}"})
+                    announced = True  # its run on your phone says when it's finished
+                    return moved
                 final = await device.observe()
                 for hook in list(self.on_final):
                     try:
@@ -300,14 +364,16 @@ class TaskRunner:
             self.devices.pop(tid, None)
             if not announced:  # failures, stops and early returns
                 self.bus.publish("task_finished", task_id=tid, duration_s=round(time.time() - t0, 1))
+        return None
 
     # ---- which phone, and asking before your own -----------------------------------------------
 
-    async def _choose_phone(self, tid: str, app: str | None, asked: str | None) -> Choice | None:
+    async def _choose_phone(self, tid: str, app: str | None, asked: str | None, named: str | None = None) -> Choice | None:
         """The phone for this task (api/routing.py); for your real phone, only after you say yes. None: the task ended."""
         await asyncio.to_thread(self.pool.refresh_phones)
         rules = self.store.setting("phone_apps", []) or []
-        choice = choose(app, asked=asked, phone_apps=rules, phones=list(self.pool.phones.values()))
+        learned = self._learned()
+        choice = choose(app, asked=asked, phone_apps=rules, phones=list(self.pool.phones.values()), learned=learned, named=named)
         if choice.device is None:
             self._set(tid, status="failed", detail=choice.error or "no phone can run this", waiting_for=None)
             self._step(tid, {"kind": "error", "text": choice.error or "no phone can run this"})
@@ -328,22 +394,28 @@ class TaskRunner:
                 self._step(tid, {"kind": "note", "text": f"phone: {choice.device} ({choice.reason})"})
             return choice
         model = self.pool.phones.get(choice.device, {}).get("model") or "Android phone"
+        if self.phone_allowed.pop(tid, None) == choice.device:  # you said yes when the task moved off the emulator
+            self._step(tid, {"kind": "note", "text": f"phone: your {model} (you said yes)"})
+            return choice
         self._step(tid, {"kind": "note", "text": f"phone: your {model} ({choice.reason})"})
-        if not await self._ask_for_phone(tid, choice.device, model):
-            if app in EMULATOR_REFUSED:
-                self._set(tid, status="declined", detail="you kept your phone for yourself", waiting_for=None)
+        blocked = blocks_emulator(app, rules, learned)
+        if not await self._ask_for_phone(tid, choice.device, model, why=f"{app_label(app, learned)} blocks emulators" if blocked else None):
+            if blocked is not None:
+                self._set(tid, status="declined", detail=f"you kept your phone for yourself ({app_label(app, learned)} blocks emulators)",
+                          waiting_for=None)
                 return None
             emulator = self.pool.avd_for(app)
             self._step(tid, {"kind": "note", "text": f"running on the emulator ({emulator}) instead"})
             return Choice(emulator, "you chose the emulator")
         return choice
 
-    async def _ask_for_phone(self, tid: str, did: str, model: str) -> bool:
-        """Wait for your answer to "Use your Android phone for this task?". No answer is never a yes."""
+    async def _ask_for_phone(self, tid: str, did: str, model: str, why: str | None = None) -> bool:
+        """Wait for your answer to "Use your Android phone for this task?". No answer is never a yes. `why`: said with it
+        ("Target blocks emulators")."""
         fut: asyncio.Future = asyncio.get_running_loop().create_future()
         self.phone_asks[tid] = fut
-        self._set(tid, status="needs_you", waiting_for="phone", detail=f"Envoy wants to use your {model} for this task")
-        self.bus.publish("phone_requested", task_id=tid, device=did, model=model)
+        self._set(tid, status="needs_you", waiting_for="phone", detail=(f"{why}: " if why else "") + f"Envoy wants to use your {model} for this task")
+        self.bus.publish("phone_requested", task_id=tid, device=did, model=model, reason=why)
         try:
             allow, by = await asyncio.wait_for(fut, timeout=self.approval_timeout_s)
         except asyncio.TimeoutError:
@@ -377,12 +449,112 @@ class TaskRunner:
             return
         raise RuntimeError(f"{app} isn't installed on your phone (install it from the Play Store)")
 
+    # ---- apps that block emulators, and apps the emulator doesn't have yet ------------------------
+
+    def _learned(self) -> dict[str, Any]:
+        """Apps Envoy found blocking emulators: package → {name, why, at, task, device} (Settings › Phones shows them)."""
+        return self.store.setting("phone_apps_learned", {}) or {}
+
+    def _learned_names(self) -> dict[str, str]:
+        """Apps Envoy installed (or found) by the name a request gave: that name → package."""
+        return {n: pkg for pkg, a in (self.store.setting("apps_installed", {}) or {}).items() for n in a.get("names", [])}
+
+    def _name(self, app: str | None) -> str:
+        """The app's name, for what the task says."""
+        if app in BLOCKS_EMULATOR or app in self._learned():
+            return app_label(app, self._learned())
+        if (got := (self.store.setting("apps_installed", {}) or {}).get(app or "")) is not None:
+            return got.get("name") or app or "the app"
+        name = next((n for n, p in APP_NAMES.items() if p == app), None) or (app or "the app").rsplit(".", 1)[-1]
+        return name[:1].upper() + name[1:]
+
+    def _learn_blocked(self, tid: str, avd: str, app: str, name: str, why: str) -> None:
+        """From now on `app` runs on your phone: it is set to your phone in Settings › Phones (where unticking it undoes
+        this), and why is kept beside it. Apps on the starting list (api/emulator_blocked.json) are there already."""
+        if app in BLOCKS_EMULATOR:
+            return
+        rules = list(self.store.setting("phone_apps", []) or [])
+        if app not in rules:
+            rules.append(app)
+            self.store.set_setting("phone_apps", rules)
+        learned = {**self._learned(), app: {"name": name, "why": why, "at": round(time.time()), "task": tid, "device": avd}}
+        self.store.set_setting("phone_apps_learned", learned)
+        self.bus.publish("settings", phone_apps=rules, phone_apps_learned=learned)
+        self._step(tid, {"kind": "note", "text": f"{name} {why}, so it blocks emulators: from now on it runs on your Android phone "
+                                                  "(Settings › Phones; untick it there to undo)"})
+
+    async def _offer_phone(self, tid: str, name: str) -> str | None:
+        """Ask to move this task to your phone, when one is connected. Its id if you said yes."""
+        await asyncio.to_thread(self.pool.refresh_phones)
+        phone = next((p for p in self.pool.phones.values() if p.get("state") == "device"), None)
+        if phone is None or not await self._ask_for_phone(tid, phone["id"], phone.get("model") or "Android phone", why=f"{name} blocks emulators"):
+            return None
+        self.phone_allowed[tid] = phone["id"]
+        self.moved.add(tid)
+        return phone["id"]
+
+    async def _bot_check(self, tid: str, avd: str, app: str | None, screen: Any, bot: str) -> tuple[str | None, str]:
+        """A bot check on an emulator. Envoy never tries to get past one. When the app itself shows it, the app blocks
+        emulators: it is set to your phone from now on, and this task moves there if your phone is connected and you say
+        yes. Returns (the phone to move to, or None; what the hand-off here says)."""
+        name = self._name(app)
+        if not app or screen.package != app or app in BROWSERS:
+            return None, f"{bot}: clear it yourself"  # a website's check, or no app to route: an ordinary hand-off
+        self._learn_blocked(tid, avd, app, name, f"showed a {bot} on the emulator")
+        moved = await self._offer_phone(tid, name)
+        if moved:
+            return moved, ""
+        return None, f"{needs_real_phone(app, self._learned(), name=name)} You can also try clearing the {bot} on {avd} yourself"
+
+    async def _install_missing(self, tid: str, avd: str, gated: Any, approver: Any, app: str | None, named: str | None,
+                               goal: str) -> tuple[str | None, str | None, str | None, tuple[str, str] | None]:
+        """On an emulator: the app, installed from the Play Store if it isn't there yet (api/install.py). Returns (the
+        app's package, its name if it was installed just now, your phone's id if the task moves there, and (status,
+        what to say) when the task ends here)."""
+        if app == SKYLARK or not self.install_apps or getattr(gated, "adb", None) is None:  # a phone without adb can't be asked
+            return app, None, None, None
+        inst = Installer(gated, step=lambda d: self._step(tid, d), approver=approver, task_id=tid, goal=goal,
+                         hand_off=lambda why: self._wait_for_user(tid, avd, why))
+        got = await inst.ensure(app, named if not app else self._name(app))
+        name = got.title or named or self._name(app)
+        if got.ok and got.package:
+            if not app or got.status != "already":
+                self._remember_app(got.package, name, named)
+            if got.package != app:
+                self._set(tid, app=got.package)
+            if got.status == "already" and not app:
+                self._step(tid, {"kind": "note", "text": f"{named} is already on {avd} ({got.package})"})
+            return got.package, (name if got.status != "already" else None), None, None
+        if got.status == "incompatible":
+            if app:
+                self._learn_blocked(tid, avd, app, name, "can't be installed on an emulator (the Play Store says it isn't compatible)")
+                if (moved := await self._offer_phone(tid, name)) is not None:
+                    return app, None, moved, None
+            return app, None, None, ("failed", needs_real_phone(app, self._learned(), name=name))
+        if got.status == "declined":
+            return app, None, None, ("declined", got.detail)
+        if got.status == "no_account":
+            return app, None, None, ("needs_you", f"Envoy can't install apps on {avd}: its Play Store has no Google account signed in. "
+                                                  "Sign in there (take over in the live view), then ask again.")
+        return app, None, None, ("failed", f"Couldn't install {name}: {got.detail or got.status}")
+
+    def _remember_app(self, package: str, title: str, named: str | None) -> None:
+        """The next request that names this app goes straight to it: what you called it, and its short Play Store name."""
+        apps = dict(self.store.setting("apps_installed", {}) or {})
+        entry = dict(apps.get(package) or {"name": title, "names": [], "at": round(time.time())})
+        short = re.split(r"\s*[:–—]\s+|\s+-\s+", title or "")[0]
+        for n in (named, short):
+            if n and len(norm(n)) >= 3 and norm(n) not in entry["names"]:
+                entry["names"].append(norm(n))
+        apps[package] = entry
+        self.store.set_setting("apps_installed", apps)
+
     def _phone_paused(self, tid: str, paused: bool, why: str) -> None:
         """Your real phone paused or resumed the task (a touch, Pause, Resume): the task says so while it is running."""
         task = self.store.get(tid) or {}
         if task.get("status") in ("running", "taken_over", "needs_you", "waiting_approval"):
             if paused != (task.get("status") == "taken_over"):  # a change, kept in the task's history (Pixel 5: it wasn't)
-                self._step(tid, {"kind": "note", "text": f"paused: {why}" if paused else "resumed on your phone"})
+                self._step(tid, {"kind": "note", "text": (why if why.startswith("paused") else f"paused: {why}") if paused else "resumed on your phone"})
             self._set(tid, status="taken_over" if paused else "running", detail=why or None)
 
     async def _wait_for_user(self, tid: str, avd: str, reason: str) -> bool:

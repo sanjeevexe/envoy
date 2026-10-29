@@ -1,0 +1,197 @@
+{
+ "label": "today-on-envoy-real",
+ "serial": "emulator-5556",
+ "install_on_demand": false,
+ "device": "envoy-real",
+ "runs": [
+  {
+   "goal": "In the Wikipedia app, search for Eiffel Tower and tell me the year it opened.",
+   "task_id": "task-1028-181156-f1f0",
+   "time": "2026-10-28T22:13:03+00:00",
+   "status": "failed",
+   "result": "stopped after 25 steps",
+   "detail": "stopped after 25 steps",
+   "app": null,
+   "kind": "agent",
+   "device": "envoy-real",
+   "model_calls": 27,
+   "cost_usd": 0.0507,
+   "duration_s": 67.2,
+   "steps": [
+    {
+     "t": 0.0,
+     "kind": "note",
+     "text": "phone: envoy-real (you picked it)"
+    },
+    {
+     "t": 4.0,
+     "kind": "plan",
+     "text": "Open the Wikipedia app; Search for Eiffel Tower; Open the Eiffel Tower article; Read the year it opened"
+    },
+    {
+     "t": 5.6,
+     "kind": "action",
+     "text": "launch",
+     "reason": "Open Wikipedia app to start search"
+    },
+    {
+     "t": 9.6,
+     "kind": "action",
+     "text": "tap \"Play Store\"",
+     "reason": "Wikipedia not installed, need Play Store to install it"
+    },
+    {
+     "t": 12.2,
+     "kind": "action",
+     "text": "back",
+     "reason": "Wikipedia launch failed, need to navigate to find it"
+    },
+    {
+     "t": 15.3,
+     "kind": "action",
+     "text": "back",
+     "reason": "Open Play Store to install Wikipedia app"
+    },
+    {
+     "t": 18.8,
+     "kind": "action",
+     "text": "launch",
+     "reason": "Wikipedia app not installed, need to install it from Play Store"
+    },
+    {
+     "t": 21.6,
+     "kind": "action",
+     "text": "tap \"Search\"",
+     "reason": "Need to search Play Store for Wikipedia app since direct launch failed"
+    },
+    {
+     "t": 23.3,
+     "kind": "action",
+     "text": "launch",
+     "reason": "Open Wikipedia app directly to search"
+    },
+    {
+     "t": 26.5,
+     "kind": "action",
+     "text": "home",
+     "reason": "Return to home to find Wikipedia app"
+    },
+    {
+     "t": 28.4,
+     "kind": "replan",
+     "text": "Open the Wikipedia app; Search for Eiffel Tower; Open the Eiffel Tower article; Find the year it opened"
+    },
+    {
+     "t": 30.1,
+     "kind": "action",
+     "text": "launch",
+     "reason": "Open Play Store to install Wikipedia app"
+    },
+    {
+     "t": 32.8,
+     "kind": "action",
+     "text": "back",
+     "reason": "Going in circles in Play Store, need to reset navigation"
+    },
+    {
+     "t": 35.4,
+     "kind": "action",
+     "text": "back",
+     "reason": "Play Store navigation stuck, go back to Home"
+    },
+    {
+     "t": 36.7,
+     "kind": "action",
+     "text": "look",
+     "reason": "Need visual to find Wikipedia app icon or drawer access"
+    },
+    {
+     "t": 39.4,
+     "kind": "action",
+     "text": "launch",
+     "reason": "Open Wikipedia app directly by package name"
+    },
+    {
+     "t": 41.8,
+     "kind": "action",
+     "text": "tap \"Play Store\"",
+     "reason": "Open Play Store to find Wikipedia app"
+    },
+    {
+     "t": 43.8,
+     "kind": "action",
+     "text": "tap \"Search\"",
+     "reason": "Need to search Play Store for Wikipedia to install/open it"
+    },
+    {
+     "t": 46.7,
+     "kind": "action",
+     "text": "tap \"Search or ask Play\"",
+     "reason": "Need to search Play Store for Wikipedia app"
+    },
+    {
+     "t": 47.7,
+     "kind": "action",
+     "text": "look",
+     "reason": "Need visual confirmation of Play Store screen"
+    },
+    {
+     "t": 49.2,
+     "kind": "action",
+     "text": "look",
+     "reason": "Need visual to confirm input focus before typing"
+    },
+    {
+     "t": 51.5,
+     "kind": "action",
+     "text": "launch",
+     "reason": "Open Wikipedia app to search for Eiffel Tower"
+    },
+    {
+     "t": 54.5,
+     "kind": "action",
+     "text": "type \"Search apps & games\" \"Wikipedia\"",
+     "reason": "Need to find/install Wikipedia app since launch failed"
+    },
+    {
+     "t": 57.0,
+     "kind": "action",
+     "text": "tap \"Install\"",
+     "reason": "Wikipedia app not installed, need to install it to proceed"
+    },
+    {
+     "t": 61.9,
+     "kind": "action",
+     "text": "wait",
+     "reason": "Waiting for Wikipedia app download to finish"
+    },
+    {
+     "t": 63.7,
+     "kind": "action",
+     "text": "tap \"Open\"",
+     "reason": "Open installed Wikipedia app"
+    },
+    {
+     "t": 65.4,
+     "kind": "action",
+     "text": "tap \"Forward\"",
+     "reason": "Advance past initial onboarding"
+    },
+    {
+     "t": 67.2,
+     "kind": "action",
+     "text": "tap \"Forward\"",
+     "reason": "Advance past Data & Privacy onboarding"
+    },
+    {
+     "t": 67.2,
+     "kind": "finish",
+     "text": "stopped after 25 steps",
+     "status": "step_limit"
+    }
+   ],
+   "events": [],
+   "installed_after": null
+  }
+ ]
+}

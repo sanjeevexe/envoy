@@ -1,0 +1,85 @@
+{
+ "what": "the web app's own live-view metrics from the iPhone (Home Screen app) over the tailnet, watching the Pixel 5; one row per 20 s window while the view was open",
+ "windows": [
+  {
+   "time": 1793223271.991541,
+   "device": "iPhone (Home Screen app)",
+   "kind": "live",
+   "avd": "phone-09031FDD4000C6",
+   "width": 720,
+   "quality": 60,
+   "frames": 91,
+   "frame_ms_p50": 28,
+   "rtt_ms_p50": 16,
+   "kb_per_frame": 32,
+   "standalone": true
+  },
+  {
+   "time": 1793223292.067476,
+   "device": "iPhone (Home Screen app)",
+   "kind": "live",
+   "avd": "phone-09031FDD4000C6",
+   "width": 720,
+   "quality": 60,
+   "frames": 10,
+   "frame_ms_p50": 29,
+   "rtt_ms_p50": 11,
+   "kb_per_frame": 32,
+   "standalone": true
+  },
+  {
+   "time": 1793223408.439561,
+   "device": "iPhone (Home Screen app)",
+   "kind": "live",
+   "avd": "phone-09031FDD4000C6",
+   "width": 720,
+   "quality": 60,
+   "frames": 41,
+   "frame_ms_p50": 39,
+   "rtt_ms_p50": 12,
+   "kb_per_frame": 48,
+   "standalone": true
+  },
+  {
+   "time": 1793224211.110946,
+   "device": "iPhone (Home Screen app)",
+   "kind": "live",
+   "avd": "phone-09031FDD4000C6",
+   "width": 720,
+   "quality": 60,
+   "frames": 41,
+   "frame_ms_p50": 29,
+   "rtt_ms_p50": 12,
+   "kb_per_frame": 33,
+   "standalone": true
+  },
+  {
+   "time": 1793224231.1121469,
+   "device": "iPhone (Home Screen app)",
+   "kind": "live",
+   "avd": "phone-09031FDD4000C6",
+   "width": 720,
+   "quality": 60,
+   "frames": 23,
+   "frame_ms_p50": 27,
+   "rtt_ms_p50": 12,
+   "kb_per_frame": 32,
+   "standalone": true
+  }
+ ],
+ "frame_ms_p50_of_windows": [
+  28,
+  29,
+  39,
+  29,
+  27
+ ],
+ "rtt_ms_p50_of_windows": [
+  16,
+  11,
+  12,
+  12,
+  12
+ ],
+ "via": "tailnet (Tailscale), :8443"
+}

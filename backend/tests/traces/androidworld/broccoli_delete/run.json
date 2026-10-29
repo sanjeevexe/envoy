@@ -1,0 +1,57 @@
+{
+ "task_id": "aw-final-standard-1028-164537-fb4d",
+ "goal": "Delete the following recipes from Broccoli app: Thai Peanut Noodle Salad.",
+ "status": "done",
+ "result": "Deleted Thai Peanut Noodle Salad from Broccoli app. Recipes list now shows 'No recipes found.'",
+ "steps": 5,
+ "model_calls": 7,
+ "cost_usd": 0.0101872,
+ "cost_at_standard_usd": 0.0101872,
+ "input_tokens": 16630,
+ "cached_tokens": 14103,
+ "output_tokens": 1156,
+ "reasoning_tokens": 688,
+ "duration_s": 20.39,
+ "approvals": [
+  {
+   "step": 4,
+   "description": "tap \"Delete\" in PopupWindow:2096839",
+   "reasons": [
+    "rule: target says 'Delete'"
+   ],
+   "approved": true,
+   "by": "eval-policy"
+  },
+  {
+   "step": 5,
+   "description": "tap \"DELETE\" in com.flauschcode.broccoli",
+   "reasons": [
+    "rule: target says 'DELETE'",
+    "model: labeled irreversible"
+   ],
+   "approved": true,
+   "by": "eval-policy"
+  }
+ ],
+ "popups": [],
+ "plan": {
+  "app": "Broccoli",
+  "subgoals": [
+   "Open the Broccoli app",
+   "Find the recipe Thai Peanut Noodle Salad",
+   "Open its details or options menu",
+   "Delete the recipe and confirm deletion"
+  ],
+  "success_check": {
+   "kind": "info",
+   "value": "Thai Peanut Noodle Salad is no longer listed",
+   "field_hint": null
+  }
+ },
+ "check": {
+  "passed": true,
+  "evaluable": true,
+  "detail": "answer visible on screen: Recipes"
+ },
+ "trace_dir": "tests/traces/androidworld/broccoli_delete"
+}

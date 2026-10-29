@@ -76,9 +76,23 @@ def evaluate(check: Check, screen: ScreenState, inputs: dict[str, str], *, befor
         return CheckOutcome(check, False, f"element not found: {m.summary()}")
     e = m.element
     if k == "field_equals":
-        tree_value = e.text if not (e.hint and e.text == e.hint) else ""
-        value = (field_text or {}).get(e.index, tree_value)
+        def held(f: Element) -> str:
+            # An empty field shows its hint as its text. When the hint is the expected value (Markor's ".md" extension
+            # field), the field shows the value either way, so what it shows is what it holds.
+            empty = bool(f.hint) and f.text == f.hint and _norm_value(f.text) != _norm_value(c.value)
+            return (field_text or {}).get(f.index, "" if empty else f.text)
+
+        value = held(e)
         ok = _norm_value(value) == _norm_value(c.value)
+        if not ok:
+            # Typing can add a field the locator describes as well: Contacts adds an empty "Phone" row once a number is
+            # typed, and the new empty row matches the recorded label ("Phone") better than the filled one ("Phone:
+            # +13920741751"). The field typed into is the one, among those the locator describes, that holds the value.
+            th = locators.RELAXED if used_relaxed else locators.STRICT
+            typed_into = next((f for f in locators.all_matching(c.locator, screen, threshold=th, role="check")
+                               if _norm_value(held(f)) == _norm_value(c.value)), None)
+            if typed_into is not None:
+                return CheckOutcome(check, True, f"field holds {held(typed_into)!r}", used_relaxed, typed_into)
         return CheckOutcome(check, ok, f"field holds {value!r}", used_relaxed, e)
     if k == "toggle_is":
         state = "on" if e.checked else "off"

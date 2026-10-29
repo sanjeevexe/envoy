@@ -2,7 +2,9 @@
 
 One Spark call reads the message and decides: a question memory can answer, a task for a phone app, or a plain reply.
 Memory questions are answered from memory's notes only (with where and when each fact was seen, and a warning when
-it may be out of date); if memory doesn't have it, the matching task is started instead. The assistant has no way to
+it may be out of date); if memory doesn't have it, the matching task is started instead. Past a fact's freshness window
+(a gate seen more than 30 min ago) the app is checked first; memory answers alone only when no phone can run that
+check, and then says how old the answer is. The assistant has no way to
 approve anything: approvals come only from the user's approval screen.
 """
 
@@ -43,7 +45,16 @@ async def chat(message: str, *, adapter: Any, memory: Any, runner: Any, routines
     if route.kind == "memory":
         ans = await Retriever(memory).answer(message, adapter, data_scope="real", task_id="chat-answer")
         out["model_calls"] += 1
+        stale_since = Retriever(memory).stale_since(ans.notes, ans.answer) if ans.found else None
+        if stale_since is not None and route.goal and phone_ready(runner, route.goal):
+            task = runner.start(route.goal, source, request=message)
+            ago = Retriever(memory).ago(stale_since)
+            out.update(kind="task", reply=f"Memory says: {ans.answer.rstrip('.')} (seen {ago}, which may be out of date). Checking the app: {route.goal}.",
+                       spoken="That may have changed. I'm checking the app.", task=task, stale=True, notes=ans.notes.markdown)
+            return out
         if ans.found and ans.supported:
+            if stale_since is not None:
+                ans.answer = f"{ans.answer} (from {Retriever(memory).ago(stale_since)}; no phone is free to check it now)"
             out.update(reply=ans.answer, spoken=ans.answer, stale=ans.stale, notes=ans.notes.markdown, from_memory=True)
             return out
         if route.goal:
@@ -60,3 +71,16 @@ async def chat(message: str, *, adapter: Any, memory: Any, runner: Any, routines
     out["reply"] = route.reply or "I can answer from what I remember, or do things in your phone apps."
     out["spoken"] = out["reply"]
     return out
+
+
+def phone_ready(runner: Any, goal: str) -> bool:
+    """A phone that could run the check now: the app's emulator is up, or your Android phone is connected."""
+    pool = getattr(runner, "pool", None)
+    if pool is None:
+        return False
+    try:
+        from api.runner import app_for
+        running = pool.running()
+        return bool(running.get(pool.avd_for(app_for(goal)))) or any(p.get("state") == "device" for p in pool.phones.values())
+    except Exception:  # noqa: BLE001 - no way to tell: answer from memory, saying how old it is
+        return False

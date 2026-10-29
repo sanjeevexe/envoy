@@ -226,6 +226,13 @@ class Retriever:
             lines.append(line)
         return "\n".join(lines), len(facts), stale_n
 
+    def stale_since(self, notes: Notes, answer: str) -> float | None:
+        """When the oldest out-of-date fact the answer uses was last seen (None: the answer uses nothing past its freshness)."""
+        said = norm(answer)
+        seen = [f["observed_at"] or 0 for eid in notes.entities if (e := self.store.entity(eid))
+                for f in self.store.current_facts(eid) if self.store.is_stale(f, e["type"]) and norm(f["value"]) in said]
+        return min(seen) if seen else None
+
     # ---- answers --------------------------------------------------------------------------------
 
     async def answer(self, question: str, adapter: ModelAdapter, *, data_scope: DataScope = "real", task_id: str | None = None) -> Answer:

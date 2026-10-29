@@ -322,6 +322,8 @@ class MemoryStore:
         if keep == other:
             return 0
         changes: dict[str, Any] = {"facts_moved": [], "edges_moved": [], "keys_moved": [], "fact_updates": []}
+        before = {**self._current_raw(other), **self._current_raw(keep)}  # what each attribute read before: keep's, else other's
+        conflicts_before = {r["id"] for r in self.db.execute("select id from facts where entity in (?, ?) and conflict = 1", (keep, other))}
         for f in self.db.execute("select * from facts where entity = ?", (other,)).fetchall():
             changes["facts_moved"].append(f["id"])
         self.db.execute("update facts set entity = ? where entity = ?", (keep, other))
@@ -337,9 +339,26 @@ class MemoryStore:
         for a in attrs:
             changes["fact_updates"] += self._rechain(keep, a)
         seq = self._event("merged", {"keep": keep, "other": other, "reason": reason, "changes": changes})
+        # A value that changed through the merge is a change like any other (alerts read `fact_replaced`).
+        for a, cur in self._current_raw(keep).items():
+            old = before.get(a)
+            if old is not None and old["id"] != cur["id"] and not _same(a, old["value"], cur["value"]):
+                self._event("fact_replaced", {"entity": keep, "fact": cur["id"], "attribute": a, "value": cur["value"], "old": old["value"],
+                                              "old_fact": old["id"], "merge_seq": seq})
+        for r in self.db.execute("select * from facts where entity = ? and conflict = 1 and retired_at is null", (keep,)).fetchall():
+            user = self._current_raw(keep).get(r["attribute"])
+            if r["id"] not in conflicts_before and user is not None:
+                self._event("fact_conflict", {"entity": keep, "fact": r["id"], "attribute": r["attribute"], "value": r["value"],
+                                              "user_value": user["value"], "merge_seq": seq})
         self._after_change(keep)
         self._reindex(other)
         return seq
+
+    def _current_raw(self, eid: str) -> dict[str, dict]:
+        """Current fact per attribute of exactly this entity row (no merge resolution)."""
+        rows = self.db.execute("select * from facts where entity = ? and valid_to is null and retired_at is null and conflict = 0 "
+                               "order by valid_from", (eid,)).fetchall()
+        return {r["attribute"]: dict(r) for r in rows}
 
     def _rechain(self, eid: str, attribute: str) -> list[dict]:
         """Put an attribute's facts back in time order after a merge: one current value, the rest history,
