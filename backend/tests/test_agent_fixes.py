@@ -303,3 +303,14 @@ def test_an_answer_is_in_the_phones_words_and_an_empty_screen_answers_too():
     # (eval/androidworld/envoy_episode.py, ANSWER_FORMAT), not Envoy's own instructions
     assert "format the goal asks for" not in STEP_INSTRUCTIONS and "AndroidWorld" not in STEP_INSTRUCTIONS
     assert "taken from what you read on the phone" not in done
+
+
+def test_the_planner_reads_a_questions_answer_where_the_app_shows_it():
+    # Phase 7's real-app rerun on coord/aw-rerun (Oct 29): "how many contacts do I have?" on "No contacts yet" looped 25
+    # steps in the filters whenever the plan said "View the full contacts list" (main's plans: "Read contact list or empty
+    # state"). Replayed on the run's own first screen: plans asking for a full list or filters 33/120 -> 0/150 with this
+    # line; plan then step, filter loops 3/90 -> 1/60. SkyLark check-in plans offering Home's button for another trip 5/80
+    # -> 3/80; AndroidWorld question plans with a filter/settings step 5/125 -> 1/125, no premature answer either way.
+    from models.prompts import PLAN_INSTRUCTIONS
+    assert 'For a question, read the answer where the app shows it, an empty state ("none yet") included' in PLAN_INSTRUCTIONS
+    assert 'plan no step that changes filters or settings, and no "full" or "complete" list unless the goal asks for one' in PLAN_INSTRUCTIONS
