@@ -471,6 +471,10 @@ Replayed on the loop run's own first screen, `736a6e4`'s prompts, 30 per cell:
   - Both lists are what a rerun of the same agent moves by (Baseline: about four tasks per half).
 - **Which commit each episode ran on:** 23 on `fdce597` + `b630d3f` + `9a573f8`, after which the run was paused for Phase 7's rerun. The other 35 ran on `736a6e4`. The only agent-side difference between them is `main`'s password mask and its Share/Post/Publish rule, and none of the 23 episodes touched either.
 - **The answer-format note** was in the adapter for all 58.
+- **Stuck recoveries weren't recorded in this run.** The merged loop these 58 episodes ran on didn't write the trace record for a stuck recovery: it was a two-line, trace-only change on this branch (`73c6fab`) that wasn't among the commits taken to `main`. So their `stuck_recoveries` read 0, meaning "not recorded", not "none".
+  - Iterations are unaffected: all 24 step-limit episodes reached their full budget.
+  - The step budget is the loop's own `max_steps`, so scores are unaffected too.
+  - The record is back in `main`'s loop with the harness commit, and `test_androidworlds_step_budget_is_envoys_max_steps` checks it.
 
 
 ## What Envoy should change on `main`, ranked
