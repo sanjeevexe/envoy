@@ -1,0 +1,774 @@
+{
+ "phase": "skylark",
+ "date": "2026-10-29T03:09:59+00:00",
+ "profile": "spark",
+ "commit": "ddf8ee0",
+ "wall_s": 227.1,
+ "rows": [
+  {
+   "pass": "cold",
+   "task": "boarding_denver",
+   "app": "com.skylark.air",
+   "goal": "What time does boarding start for my Denver flight?",
+   "status": "done",
+   "result": "Boarding starts at 2:05 PM · Group 5 for flight SL 1190 ATL → DEN on Sat, Nov 14, 2026",
+   "ok": true,
+   "steps": 2,
+   "model_calls": 4,
+   "cost_usd": 0.00892,
+   "duration_s": 8.36,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-cold-boarding_denver-230614",
+   "notes_used": [],
+   "approvals": [],
+   "trace": "traces/skylark/notes-skylark-cold-boarding_denver-230614.jsonl"
+  },
+  {
+   "pass": "cold",
+   "task": "group_chicago",
+   "app": "com.skylark.air",
+   "goal": "Which boarding group am I in on my Chicago flight?",
+   "status": "done",
+   "result": "Group 3",
+   "ok": true,
+   "steps": 4,
+   "model_calls": 6,
+   "cost_usd": 0.01184,
+   "duration_s": 13.88,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-cold-group_chicago-230624",
+   "notes_used": [],
+   "approvals": [],
+   "trace": "traces/skylark/notes-skylark-cold-group_chicago-230624.jsonl"
+  },
+  {
+   "pass": "cold",
+   "task": "bags_boston",
+   "app": "com.skylark.air",
+   "goal": "How many checked bags were on my Boston trip?",
+   "status": "done",
+   "result": "1 checked bag on the Boston trip (SL 220 ATL → BOS on Sat, Sep 12, 2026)",
+   "ok": true,
+   "steps": 2,
+   "model_calls": 4,
+   "cost_usd": 0.00601,
+   "duration_s": 7.28,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-cold-bags_boston-230643",
+   "notes_used": [],
+   "approvals": [],
+   "trace": "traces/skylark/notes-skylark-cold-bags_boston-230643.jsonl"
+  },
+  {
+   "pass": "cold",
+   "task": "rewards_number",
+   "app": "com.skylark.air",
+   "goal": "What's my SkyLark rewards number?",
+   "status": "done",
+   "result": "Your SkyLark rewards number is SR 4471 0923",
+   "ok": true,
+   "steps": 1,
+   "model_calls": 3,
+   "cost_usd": 0.00434,
+   "duration_s": 4.94,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-cold-rewards_number-230652",
+   "notes_used": [],
+   "approvals": [],
+   "trace": "traces/skylark/notes-skylark-cold-rewards_number-230652.jsonl"
+  },
+  {
+   "pass": "cold",
+   "task": "miami_date",
+   "app": "com.skylark.air",
+   "goal": "When did I fly to Miami?",
+   "status": "done",
+   "result": "Sun, Jul 19, 2026 - Miami trip SL 105 ATL → MIA",
+   "ok": true,
+   "steps": 2,
+   "model_calls": 5,
+   "cost_usd": 0.00913,
+   "duration_s": 9.52,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-cold-miami_date-230700",
+   "notes_used": [],
+   "approvals": [],
+   "trace": "traces/skylark/notes-skylark-cold-miami_date-230700.jsonl"
+  },
+  {
+   "pass": "cold",
+   "task": "denver_lands",
+   "app": "com.skylark.air",
+   "goal": "What time does my Denver flight land?",
+   "status": "done",
+   "result": "Your Denver flight SL 1190 lands at 4:05 PM (ATL 2:45 PM → DEN 4:05 PM on Sat, Nov 14, 2026)",
+   "ok": true,
+   "steps": 6,
+   "model_calls": 8,
+   "cost_usd": 0.01572,
+   "duration_s": 20.15,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-cold-denver_lands-230711",
+   "notes_used": [],
+   "approvals": [],
+   "trace": "traces/skylark/notes-skylark-cold-denver_lands-230711.jsonl"
+  },
+  {
+   "pass": "warmup",
+   "task": "seat_denver",
+   "app": "com.skylark.air",
+   "goal": "What seat do I have on my Denver flight?",
+   "status": "done",
+   "result": "Seat 22F on SL 1190 ATL → DEN, Sat Nov 14 2026",
+   "ok": true,
+   "steps": 2,
+   "model_calls": 4,
+   "cost_usd": 0.00612,
+   "duration_s": 7.28,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-warmup-seat_denver-230736",
+   "notes_used": [],
+   "approvals": [],
+   "learned": {
+    "proposed": [
+     {
+      "op": "add",
+      "note_id": "",
+      "text": "Seat assignment is on the trip detail screen in the Seat row.",
+      "step": 3,
+      "reason": "This run found the seat in the Seat row on the trip detail screen"
+     }
+    ],
+    "applied": [
+     {
+      "op": "add",
+      "note": "app_150d11ebcb",
+      "text": "Seat assignment is on the trip detail screen in the Seat row."
+     }
+    ],
+    "dropped": [],
+    "cost_usd": 0.00469175
+   },
+   "trace": "traces/skylark/notes-skylark-warmup-seat_denver-230736.jsonl"
+  },
+  {
+   "pass": "warmup",
+   "task": "miles",
+   "app": "com.skylark.air",
+   "goal": "How many SkyLark miles do I have?",
+   "status": "done",
+   "result": "You have 38,240 SkyLark miles.",
+   "ok": true,
+   "steps": 0,
+   "model_calls": 2,
+   "cost_usd": 0.00471,
+   "duration_s": 4.15,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-warmup-miles-230748",
+   "notes_used": [
+    "app_150d11ebcb"
+   ],
+   "approvals": [],
+   "learned": {
+    "proposed": [
+     {
+      "op": "add",
+      "note_id": "",
+      "text": "The rewards miles balance is shown on the Home screen.",
+      "step": 1,
+      "reason": "Balance was visible directly on Home without navigating"
+     }
+    ],
+    "applied": [
+     {
+      "op": "add",
+      "note": "app_99afd6cff2",
+      "text": "The rewards miles balance is shown on the Home screen."
+     }
+    ],
+    "dropped": [],
+    "cost_usd": 0.0027790500000000004
+   },
+   "trace": "traces/skylark/notes-skylark-warmup-miles-230748.jsonl"
+  },
+  {
+   "pass": "warmup",
+   "task": "tier",
+   "app": "com.skylark.air",
+   "goal": "What's my SkyLark status tier?",
+   "status": "done",
+   "result": "Silver",
+   "ok": true,
+   "steps": 1,
+   "model_calls": 3,
+   "cost_usd": 0.00562,
+   "duration_s": 5.56,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-warmup-tier-230757",
+   "notes_used": [
+    "app_99afd6cff2",
+    "app_150d11ebcb"
+   ],
+   "approvals": [],
+   "learned": {
+    "proposed": [
+     {
+      "op": "add",
+      "note_id": "",
+      "text": "The status tier is shown on the Profile screen in the Status row.",
+      "step": 2,
+      "reason": "Profile screen showed the tier location for future lookups."
+     }
+    ],
+    "applied": [
+     {
+      "op": "add",
+      "note": "app_e9d32b4819",
+      "text": "The status tier is shown on the Profile screen in the Status row."
+     }
+    ],
+    "dropped": [],
+    "cost_usd": 0.0042608
+   },
+   "trace": "traces/skylark/notes-skylark-warmup-tier-230757.jsonl"
+  },
+  {
+   "pass": "warmup",
+   "task": "austin_date",
+   "app": "com.skylark.air",
+   "goal": "When did I fly to Austin?",
+   "status": "done",
+   "result": "You flew to Austin on Fri, Aug 21, 2026 - SL 761 ATL 5:50 PM → AUS 7:05 PM",
+   "ok": true,
+   "steps": 2,
+   "model_calls": 4,
+   "cost_usd": 0.00697,
+   "duration_s": 7.27,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-warmup-austin_date-230807",
+   "notes_used": [
+    "app_e9d32b4819",
+    "app_99afd6cff2",
+    "app_150d11ebcb"
+   ],
+   "approvals": [],
+   "learned": {
+    "proposed": [
+     {
+      "op": "add",
+      "note_id": "",
+      "text": "Past trips are listed under My Trips; tap an entry to open its details.",
+      "step": 2,
+      "reason": "My Trips list was used to find the past trip"
+     },
+     {
+      "op": "add",
+      "note_id": "",
+      "text": "The flight date is on the trip detail screen in the Date row.",
+      "step": 3,
+      "reason": "Trip detail Date row showed when the flight occurred"
+     },
+     {
+      "op": "confirm",
+      "note_id": "app_150d11ebcb",
+      "text": "",
+      "step": 0,
+      "reason": "Last screen still shows Seat row on trip detail"
+     }
+    ],
+    "applied": [
+     {
+      "op": "add",
+      "note": "app_08cdfef45e",
+      "text": "Past trips are listed under My Trips; tap an entry to open its details."
+     },
+     {
+      "op": "add",
+      "note": "app_d78cdfa56b",
+      "text": "The flight date is on the trip detail screen in the Date row."
+     },
+     {
+      "op": "confirm",
+      "note": "app_150d11ebcb"
+     }
+    ],
+    "dropped": [],
+    "cost_usd": 0.0053398000000000004
+   },
+   "trace": "traces/skylark/notes-skylark-warmup-austin_date-230807.jsonl"
+  },
+  {
+   "pass": "warmup",
+   "task": "chicago_departs",
+   "app": "com.skylark.air",
+   "goal": "What time does my Chicago flight depart?",
+   "status": "done",
+   "result": "Your Chicago flight SL 482 departs ATL at 6:10 AM (arrives ORD 7:25 AM)",
+   "ok": true,
+   "steps": 1,
+   "model_calls": 3,
+   "cost_usd": 0.00691,
+   "duration_s": 6.79,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-warmup-chicago_departs-230821",
+   "notes_used": [
+    "app_150d11ebcb",
+    "app_d78cdfa56b",
+    "app_08cdfef45e",
+    "app_e9d32b4819",
+    "app_99afd6cff2"
+   ],
+   "approvals": [],
+   "learned": {
+    "proposed": [
+     {
+      "op": "add",
+      "note_id": "",
+      "text": "The upcoming trip appears on the home screen as Next trip; tapping it opens trip details.",
+      "step": 1,
+      "reason": "Tapping the Next trip preview was the entry point to details in this run"
+     },
+     {
+      "op": "add",
+      "note_id": "",
+      "text": "Departure and arrival times appear at the top of the trip detail screen.",
+      "step": 2,
+      "reason": "Departure time was visible at the top of the details screen"
+     },
+     {
+      "op": "confirm",
+      "note_id": "app_d78cdfa56b",
+      "text": "",
+      "step": 2,
+      "reason": "Date row was visible on the trip detail screen in this run"
+     }
+    ],
+    "applied": [
+     {
+      "op": "add",
+      "note": "app_6b38716cf4",
+      "text": "The upcoming trip appears on the home screen as Next trip; tapping it opens trip details."
+     },
+     {
+      "op": "add",
+      "note": "app_5efeda74dc",
+      "text": "Departure and arrival times appear at the top of the trip detail screen."
+     },
+     {
+      "op": "confirm",
+      "note": "app_d78cdfa56b"
+     }
+    ],
+    "dropped": [],
+    "cost_usd": 0.00747805
+   },
+   "trace": "traces/skylark/notes-skylark-warmup-chicago_departs-230821.jsonl"
+  },
+  {
+   "pass": "warmup",
+   "task": "gate_denver",
+   "app": "com.skylark.air",
+   "goal": "What gate does my Denver flight leave from?",
+   "status": "done",
+   "result": "Gate A7",
+   "ok": true,
+   "steps": 2,
+   "model_calls": 4,
+   "cost_usd": 0.00727,
+   "duration_s": 7.98,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-warmup-gate_denver-230835",
+   "notes_used": [
+    "app_d78cdfa56b",
+    "app_150d11ebcb",
+    "app_5efeda74dc",
+    "app_6b38716cf4",
+    "app_08cdfef45e",
+    "app_e9d32b4819"
+   ],
+   "approvals": [],
+   "learned": {
+    "proposed": [
+     {
+      "op": "add",
+      "note_id": "",
+      "text": "The gate is on the trip detail screen in the Gate row.",
+      "step": 3,
+      "reason": "Gate lookup needed this location and it was visible on trip details"
+     }
+    ],
+    "applied": [
+     {
+      "op": "add",
+      "note": "app_8f4f283207",
+      "text": "The gate is on the trip detail screen in the Gate row."
+     }
+    ],
+    "dropped": [],
+    "cost_usd": 0.004163050000000001
+   },
+   "trace": "traces/skylark/notes-skylark-warmup-gate_denver-230835.jsonl"
+  },
+  {
+   "pass": "warm",
+   "task": "boarding_denver",
+   "app": "com.skylark.air",
+   "goal": "What time does boarding start for my Denver flight?",
+   "status": "done",
+   "result": "Boarding starts at 2:05 PM · Group 5 for Denver flight SL 1190",
+   "ok": true,
+   "steps": 4,
+   "model_calls": 6,
+   "cost_usd": 0.01088,
+   "duration_s": 11.77,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-warm-boarding_denver-230850",
+   "notes_used": [
+    "app_d78cdfa56b",
+    "app_150d11ebcb",
+    "app_8f4f283207",
+    "app_5efeda74dc",
+    "app_6b38716cf4",
+    "app_08cdfef45e"
+   ],
+   "approvals": [],
+   "trace": "traces/skylark/notes-skylark-warm-boarding_denver-230850.jsonl"
+  },
+  {
+   "pass": "warm",
+   "task": "group_chicago",
+   "app": "com.skylark.air",
+   "goal": "Which boarding group am I in on my Chicago flight?",
+   "status": "done",
+   "result": "Group 3 (Boarding 5:30 AM)",
+   "ok": true,
+   "steps": 1,
+   "model_calls": 3,
+   "cost_usd": 0.00509,
+   "duration_s": 5.19,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-warm-group_chicago-230904",
+   "notes_used": [
+    "app_d78cdfa56b",
+    "app_150d11ebcb",
+    "app_8f4f283207",
+    "app_5efeda74dc",
+    "app_6b38716cf4",
+    "app_08cdfef45e"
+   ],
+   "approvals": [],
+   "trace": "traces/skylark/notes-skylark-warm-group_chicago-230904.jsonl"
+  },
+  {
+   "pass": "warm",
+   "task": "bags_boston",
+   "app": "com.skylark.air",
+   "goal": "How many checked bags were on my Boston trip?",
+   "status": "done",
+   "result": "1",
+   "ok": true,
+   "steps": 5,
+   "model_calls": 7,
+   "cost_usd": 0.01048,
+   "duration_s": 13.86,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-warm-bags_boston-230911",
+   "notes_used": [
+    "app_d78cdfa56b",
+    "app_150d11ebcb",
+    "app_8f4f283207",
+    "app_5efeda74dc",
+    "app_6b38716cf4",
+    "app_08cdfef45e"
+   ],
+   "approvals": [],
+   "trace": "traces/skylark/notes-skylark-warm-bags_boston-230911.jsonl"
+  },
+  {
+   "pass": "warm",
+   "task": "rewards_number",
+   "app": "com.skylark.air",
+   "goal": "What's my SkyLark rewards number?",
+   "status": "done",
+   "result": "SR 4471 0923",
+   "ok": true,
+   "steps": 3,
+   "model_calls": 5,
+   "cost_usd": 0.00884,
+   "duration_s": 9.89,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-warm-rewards_number-230927",
+   "notes_used": [
+    "app_d78cdfa56b",
+    "app_150d11ebcb",
+    "app_8f4f283207",
+    "app_5efeda74dc",
+    "app_6b38716cf4",
+    "app_08cdfef45e"
+   ],
+   "approvals": [],
+   "trace": "traces/skylark/notes-skylark-warm-rewards_number-230927.jsonl"
+  },
+  {
+   "pass": "warm",
+   "task": "miami_date",
+   "app": "com.skylark.air",
+   "goal": "When did I fly to Miami?",
+   "status": "done",
+   "result": "Sun, Jul 19, 2026 - Flight SL 105 ATL 9:15 AM → MIA 11:00 AM",
+   "ok": true,
+   "steps": 3,
+   "model_calls": 5,
+   "cost_usd": 0.00886,
+   "duration_s": 9.63,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-warm-miami_date-230940",
+   "notes_used": [
+    "app_d78cdfa56b",
+    "app_150d11ebcb",
+    "app_8f4f283207",
+    "app_5efeda74dc",
+    "app_6b38716cf4",
+    "app_08cdfef45e"
+   ],
+   "approvals": [],
+   "trace": "traces/skylark/notes-skylark-warm-miami_date-230940.jsonl"
+  },
+  {
+   "pass": "warm",
+   "task": "denver_lands",
+   "app": "com.skylark.air",
+   "goal": "What time does my Denver flight land?",
+   "status": "done",
+   "result": "Your Denver flight SL 1190 lands at 4:05 PM (ATL 2:45 PM → DEN 4:05 PM)",
+   "ok": true,
+   "steps": 2,
+   "model_calls": 4,
+   "cost_usd": 0.00738,
+   "duration_s": 7.71,
+   "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-warm-denver_lands-230951",
+   "notes_used": [
+    "app_d78cdfa56b",
+    "app_150d11ebcb",
+    "app_8f4f283207",
+    "app_5efeda74dc",
+    "app_6b38716cf4",
+    "app_08cdfef45e"
+   ],
+   "approvals": [],
+   "trace": "traces/skylark/notes-skylark-warm-denver_lands-230951.jsonl"
+  }
+ ],
+ "summary": {
+  "cold": {
+   "runs": 6,
+   "ok": 6,
+   "steps_mean": 2.83,
+   "calls_mean": 5.0,
+   "cost_usd": 0.056,
+   "note_writing_usd": 0.0,
+   "seconds_mean": 10.7
+  },
+  "warmup": {
+   "runs": 6,
+   "ok": 6,
+   "steps_mean": 1.33,
+   "calls_mean": 3.33,
+   "cost_usd": 0.0376,
+   "note_writing_usd": 0.0287,
+   "seconds_mean": 6.5
+  },
+  "warm": {
+   "runs": 6,
+   "ok": 6,
+   "steps_mean": 3.0,
+   "calls_mean": 5.0,
+   "cost_usd": 0.0515,
+   "note_writing_usd": 0.0,
+   "seconds_mean": 9.7
+  }
+ },
+ "notes": [
+  {
+   "id": "app_d78cdfa56b",
+   "app": "com.skylark.air",
+   "text": "The flight date is on the trip detail screen in the Date row.",
+   "status": "active",
+   "confirmations": 2,
+   "first_seen": 1793243299.044648,
+   "last_confirmed": 1793243313.227647,
+   "sources": [
+    {
+     "source": "src_1d5e45f4fd",
+     "observed_at": 1793243313.227647,
+     "task_id": "notes-skylark-warmup-chicago_departs-230821",
+     "trace": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-warmup-chicago_departs-230821",
+     "outcome": "done",
+     "kind": "agent",
+     "screenshot": null,
+     "step": 2,
+     "app": "com.skylark.air"
+    },
+    {
+     "source": "src_381ceb6406",
+     "observed_at": 1793243299.045399,
+     "task_id": "notes-skylark-warmup-austin_date-230807",
+     "trace": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-warmup-austin_date-230807",
+     "outcome": "done",
+     "kind": "agent",
+     "screenshot": null,
+     "step": 3,
+     "app": "com.skylark.air"
+    }
+   ]
+  },
+  {
+   "id": "app_150d11ebcb",
+   "app": "com.skylark.air",
+   "text": "Seat assignment is on the trip detail screen in the Seat row.",
+   "status": "active",
+   "confirmations": 2,
+   "first_seen": 1793243267.013298,
+   "last_confirmed": 1793243299.047414,
+   "sources": [
+    {
+     "source": "src_2c4e8b4ff9",
+     "observed_at": 1793243299.047414,
+     "task_id": "notes-skylark-warmup-austin_date-230807",
+     "trace": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-warmup-austin_date-230807",
+     "outcome": "done",
+     "kind": "agent",
+     "screenshot": null,
+     "step": null,
+     "app": "com.skylark.air"
+    },
+    {
+     "source": "src_adaa3df798",
+     "observed_at": 1793243267.016615,
+     "task_id": "notes-skylark-warmup-seat_denver-230736",
+     "trace": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-warmup-seat_denver-230736",
+     "outcome": "done",
+     "kind": "agent",
+     "screenshot": null,
+     "step": 3,
+     "app": "com.skylark.air"
+    }
+   ]
+  },
+  {
+   "id": "app_8f4f283207",
+   "app": "com.skylark.air",
+   "text": "The gate is on the trip detail screen in the Gate row.",
+   "status": "active",
+   "confirmations": 1,
+   "first_seen": 1793243328.666816,
+   "last_confirmed": 1793243328.6678941,
+   "sources": [
+    {
+     "source": "src_9c50510717",
+     "observed_at": 1793243328.6678941,
+     "task_id": "notes-skylark-warmup-gate_denver-230835",
+     "trace": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-warmup-gate_denver-230835",
+     "outcome": "done",
+     "kind": "agent",
+     "screenshot": null,
+     "step": 3,
+     "app": "com.skylark.air"
+    }
+   ]
+  },
+  {
+   "id": "app_5efeda74dc",
+   "app": "com.skylark.air",
+   "text": "Departure and arrival times appear at the top of the trip detail screen.",
+   "status": "active",
+   "confirmations": 1,
+   "first_seen": 1793243313.225343,
+   "last_confirmed": 1793243313.226024,
+   "sources": [
+    {
+     "source": "src_e648f961c7",
+     "observed_at": 1793243313.226024,
+     "task_id": "notes-skylark-warmup-chicago_departs-230821",
+     "trace": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-warmup-chicago_departs-230821",
+     "outcome": "done",
+     "kind": "agent",
+     "screenshot": null,
+     "step": 2,
+     "app": "com.skylark.air"
+    }
+   ]
+  },
+  {
+   "id": "app_6b38716cf4",
+   "app": "com.skylark.air",
+   "text": "The upcoming trip appears on the home screen as Next trip; tapping it opens trip details.",
+   "status": "active",
+   "confirmations": 1,
+   "first_seen": 1793243313.2228491,
+   "last_confirmed": 1793243313.2235231,
+   "sources": [
+    {
+     "source": "src_ea3e46f01e",
+     "observed_at": 1793243313.2235231,
+     "task_id": "notes-skylark-warmup-chicago_departs-230821",
+     "trace": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-warmup-chicago_departs-230821",
+     "outcome": "done",
+     "kind": "agent",
+     "screenshot": null,
+     "step": 1,
+     "app": "com.skylark.air"
+    }
+   ]
+  },
+  {
+   "id": "app_08cdfef45e",
+   "app": "com.skylark.air",
+   "text": "Past trips are listed under My Trips; tap an entry to open its details.",
+   "status": "active",
+   "confirmations": 1,
+   "first_seen": 1793243299.040757,
+   "last_confirmed": 1793243299.042764,
+   "sources": [
+    {
+     "source": "src_6841380ca3",
+     "observed_at": 1793243299.042764,
+     "task_id": "notes-skylark-warmup-austin_date-230807",
+     "trace": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-warmup-austin_date-230807",
+     "outcome": "done",
+     "kind": "agent",
+     "screenshot": null,
+     "step": 2,
+     "app": "com.skylark.air"
+    }
+   ]
+  },
+  {
+   "id": "app_e9d32b4819",
+   "app": "com.skylark.air",
+   "text": "The status tier is shown on the Profile screen in the Status row.",
+   "status": "active",
+   "confirmations": 1,
+   "first_seen": 1793243285.974875,
+   "last_confirmed": 1793243285.976594,
+   "sources": [
+    {
+     "source": "src_ee31cc7c82",
+     "observed_at": 1793243285.976594,
+     "task_id": "notes-skylark-warmup-tier-230757",
+     "trace": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-warmup-tier-230757",
+     "outcome": "done",
+     "kind": "agent",
+     "screenshot": null,
+     "step": 2,
+     "app": "com.skylark.air"
+    }
+   ]
+  },
+  {
+   "id": "app_99afd6cff2",
+   "app": "com.skylark.air",
+   "text": "The rewards miles balance is shown on the Home screen.",
+   "status": "active",
+   "confirmations": 1,
+   "first_seen": 1793243275.149027,
+   "last_confirmed": 1793243275.150242,
+   "sources": [
+    {
+     "source": "src_e8e2e544f9",
+     "observed_at": 1793243275.150242,
+     "task_id": "notes-skylark-warmup-miles-230748",
+     "trace": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-skylark-warmup-miles-230748",
+     "outcome": "done",
+     "kind": "agent",
+     "screenshot": null,
+     "step": 1,
+     "app": "com.skylark.air"
+    }
+   ]
+  }
+ ]
+}

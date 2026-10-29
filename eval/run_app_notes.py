@@ -192,9 +192,11 @@ async def main_async(args: argparse.Namespace) -> int:
            "notes": [n.to_json() for n in notes.list(include_retired=False)]}
     (out / f"{args.phase}.json").write_text(json.dumps(doc, indent=1, default=str, ensure_ascii=False))
     parts = [markdown(p, json.loads((out / f"{p}.json").read_text())) for p in ("skylark", "real") if (out / f"{p}.json").exists()]
-    (out / "README.md").write_text("# App notes: before and after\n\nSame tasks, same agent and profile; the only difference is the notes Envoy "
-                                   "wrote itself during a warm-up on other tasks in the same app. Small samples (6 and 3 tasks), one run each: "
-                                   "read the per-task rows, not just the totals.\n\n" + "\n".join(parts))
+    readme = out / "README.md"
+    reading = readme.read_text().split("## Reading", 1)[1] if readme.exists() and "## Reading" in readme.read_text() else ""
+    readme.write_text("# App notes: before and after\n\nSame tasks, same agent and profile; the only difference is the notes Envoy "
+                      "wrote itself during a warm-up on other tasks in the same app. Small samples (6 and 3 tasks), one run each: "
+                      "read the per-task rows, not just the totals.\n\n" + "\n".join(parts) + (f"\n## Reading{reading}" if reading else ""))
     print(json.dumps(doc["summary"]), flush=True)
     return 0
 
