@@ -71,6 +71,40 @@ def test_model_label_alone_can_force_approval():
     assert v.irreversible and v.reasons == ["model: labeled irreversible"]
 
 
+def _buttons(*labels: str) -> ScreenState:
+    """A screen of plain buttons, one per label, stacked down the page."""
+    def node(i: int, label: str) -> str:
+        top = 200 + i * 150
+        return (f'<node index="{i}" text="{label}" resource-id="" class="android.widget.Button" package="com.example.app" '
+                'content-desc="" checkable="false" checked="false" clickable="true" enabled="true" focusable="true" '
+                'focused="false" scrollable="false" long-clickable="false" password="false" selected="false" '
+                f'visible-to-user="true" bounds="[40,{top}][1040,{top + 120}]" drawing-order="{i}" hint="" display-id="0" />')
+    xml = ("<?xml version='1.0' encoding='UTF-8' standalone='yes' ?><hierarchy rotation=\"0\">"
+           '<node index="0" text="" resource-id="" class="android.widget.FrameLayout" package="com.example.app" content-desc="" '
+           'checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" '
+           'scrollable="false" long-clickable="false" password="false" selected="false" visible-to-user="true" '
+           'bounds="[0,0][1080,2400]" drawing-order="0" hint="" display-id="0">'
+           + "".join(node(i, label) for i, label in enumerate(labels)) + "</node></hierarchy>")
+    return build_state(xml, "com.example.app", "com.example.app.MainActivity", 1080, 2400)
+
+
+@pytest.mark.parametrize("label", ["Share", "Post", "Publish", "Share now", "Post reel", "Share to your story"])
+def test_a_button_that_publishes_is_irreversible_by_rule(label):
+    """A public post can't be taken back, so the rules flag it without the model's label (Instagram's last screen is
+    "Share")."""
+    s = _buttons("Next", label)
+    target = next(e for e in s.numbered if e.label == label)
+    v = classify(Action(kind="tap", element=target.number), s, model_risk="reversible")
+    assert v.irreversible and f"rule: target publishes {label!r}" in v.reasons
+
+
+@pytest.mark.parametrize("label", ["Share your feedback", "Posts", "Post office hours", "Shared with you", "Republish settings"])
+def test_publishing_words_inside_other_labels_are_not_flagged(label):
+    s = _buttons(label)
+    v = classify(Action(kind="tap", element=s.numbered[0].number), s, model_risk="reversible")
+    assert not v.irreversible, v.reasons
+
+
 def test_navigation_is_read():
     s = screen("skylark_trips")
     assert classify(Action(kind="scroll", direction="down"), s, model_risk="read").level == "read"

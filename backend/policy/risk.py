@@ -1,7 +1,7 @@
 """Risk classification: every action is labeled read / reversible / irreversible before it runs.
 
 Three independent signals vote (design doc, Safety). Any one saying "irreversible" pauses the run:
-  1. rules: the target's text or resource ID matches an irreversible verb (pay, place order, confirm, …)
+  1. rules: the target's text or resource ID matches an irreversible verb (pay, place order, confirm, share/post/publish, …)
   2. screen context: the screen looks like a payment or final-confirmation step
   3. model judgment: the risk label the step model returned with the action
 Signals 1 and 2 don't depend on the model, so a screen that tricks the model can't skip the gate.
@@ -52,6 +52,10 @@ _DESTRUCTIVE = re.compile(
 # A button that places a phone call (the dialer's dial button, "Call store"): it reaches a person outside the phone.
 _CALL = re.compile(r"^(call|dial|voice call|video call|call now|place (a )?call|call (the )?(store|restaurant|driver|support|us|back)|"
                    r"call \+?[\d\s().-]{5,})$", re.I)
+# A button whose whole label publishes something for others to see ("Share" on Instagram's last screen, "Post", "Publish"):
+# a public post can't be taken back. Whole labels only, so "Share your feedback" or a "Posts" tab don't count; a Share that
+# only opens a share sheet (YouTube) is asked about too, which errs on the safe side.
+_PUBLISH = re.compile(r"^(share|post|publish)( (now|it|post|reel|story|to (your )?(feed|story)))?$", re.I)
 # Labels that are safe whatever the screen says (dismissing, going back, declining).
 _SAFE = re.compile(r"^(back|navigate up|close|cancel|keep\b.*|not now|no,? thanks|don.?t allow|deny|dismiss|later|maybe later|skip|done)$", re.I)
 # Screen text that means money or a final step is involved.
@@ -121,6 +125,8 @@ def classify(action: Action, screen: ScreenState, model_risk: Risk | None) -> Ri
                 reasons.append(f"rule: target is a price {target.label!r}")
             elif any(_CALL.match(x.strip()) for x in (target.label, target.desc) if x) and not target.editable:
                 reasons.append(f"rule: target places a call {target.label or target.desc!r}")
+            elif any(_PUBLISH.match(x.strip()) for x in (target.label, target.desc) if x) and not target.editable:
+                reasons.append(f"rule: target publishes {target.label or target.desc!r}")
             if checkout and target.kind == "Button" and not _SAFE.match(target.label.strip()):
                 reasons.append("screen: payment or final-confirmation step")
             elif destructive and target.kind == "Button" and not _SAFE.match(target.label.strip()):
