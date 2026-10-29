@@ -233,8 +233,7 @@ class Scheduler:
             if spec.get("until") and now > spec["until"]:
                 return []
             if spec.get("every_minutes"):
-                created = min(trig["created_at"], now)  # the store stamps real time; a test's clock may be behind it
-                last = trig["last_fired"] or created - spec["every_minutes"] * 60 * (0 if spec.get("wait_first") else 1)
+                last = trig["last_fired"] or trig["created_at"] - spec["every_minutes"] * 60 * (0 if spec.get("wait_first") else 1)
                 if now - last >= spec["every_minutes"] * 60:
                     out.append((f"t{int(now)}", {}))
             elif spec.get("at") and now >= spec["at"] and "once" not in fired:
