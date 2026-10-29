@@ -238,7 +238,7 @@ function VersionItem({ v, d }: { v: Version; d: Detail }) {
   const src = v.compiled?.source;
   return (
     <li className="relative pb-6 pl-6 last:pb-0">
-      <span aria-hidden className={`absolute -left-[9px] top-1 h-4 w-4 rounded-full border-2 border-[#f7f7f5] ${fate.dot}`} />
+      <span aria-hidden className={`absolute -left-[9px] top-1 h-4 w-4 rounded-full border-2 border-page ${fate.dot}`} />
       <h4 className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
         <span className="text-title font-semibold">v{v.version}</span>{" "}
         <span className={`rounded-full px-2 py-0.5 text-meta-2 font-medium ${fate.tone}`}>{fate.label(v)}</span>{" "}
@@ -522,7 +522,7 @@ export default function RoutineDetail({ name, back, openTask }: { name: string; 
         if ((e.target as HTMLDetailsElement).open && yaml === null) api(`/api/routines/${encodeURIComponent(name)}?version=${d.shown}`).then((r) => setYaml(r.yaml)).catch(() => setYaml("(couldn't load it)"));
       }}>
         <summary className="flex min-h-[44px] cursor-pointer items-center rounded-sm font-semibold text-ink-2 hover:text-ink">The routine file (YAML, v{d.shown})</summary>
-        <pre className="mt-2 max-h-[50vh] overflow-auto rounded-block bg-ink p-4 font-mono text-meta-2 text-white">{yaml ?? "Loading…"}</pre>
+        <pre className="mt-2 max-h-[50vh] overflow-auto rounded-block bg-ink p-4 font-mono text-meta-2 text-on-ink">{yaml ?? "Loading…"}</pre>
       </details>
     </div>
   );

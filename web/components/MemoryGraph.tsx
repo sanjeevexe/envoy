@@ -13,9 +13,15 @@ type Fact = { id: string; attribute: string; value: string; current: boolean; st
   recorded_at: number; valid_to?: number | null; sources: { id: string; where: string }[] };
 type Entity = { entity: { id: string; type: string; name: string }; facts: Fact[]; links: { relation: string; id: string; type: string; name: string }[] };
 
-// Node colors from the Sage palette (globals.css): greens for travel, apricots for shopping, inks for people and places.
-const COLORS: Record<string, string> = { Person: "#1F2A24", Trip: "#5E9478", Flight: "#1F4F37", Reservation: "#5F6A63", Order: "#E8945A", Item: "#C2703A",
+// Node colors from the Sage palette (globals.css): greens for travel, apricots for shopping, inks for people and places;
+// lighter ones in dark mode, so every node stands out from its card.
+const LIGHT: Record<string, string> = { Person: "#1F2A24", Trip: "#5E9478", Flight: "#1F4F37", Reservation: "#5F6A63", Order: "#E8945A", Item: "#C2703A",
   Place: "#7A3B12", "Loyalty program": "#6F8F7C", Note: "#4E5A53", Hotel: "#5F6A63" };
+const DARK: Record<string, string> = { Person: "#ECEEE9", Trip: "#5E9478", Flight: "#B5DEC6", Reservation: "#98A39C", Order: "#E8945A", Item: "#F2B68A",
+  Place: "#C98A5A", "Loyalty program": "#8FB39E", Note: "#C2CAC4", Hotel: "#98A39C" };
+const isDark = () => typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches;
+const colorOf = (type: string) => (isDark() ? DARK : LIGHT)[type] ?? (isDark() ? "#C2CAC4" : "#4E5A53");
+const token = (name: string) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 const FONT = '"Manrope Variable", Manrope, system-ui, sans-serif';
 
 export default function MemoryGraph({ version }: { version: number }) {
@@ -37,22 +43,23 @@ export default function MemoryGraph({ version }: { version: number }) {
     import("cytoscape").then(({ default: cytoscape }) => {
       if (!alive || !box.current) return;
       const elements = [
-        ...graph.nodes.map((n) => ({ data: { id: n.id, label: `${n.type}\n${n.name}`.slice(0, 48), color: COLORS[n.type] ?? "#4E5A53", stale: n.stale ? 1 : 0 } })),
+        ...graph.nodes.map((n) => ({ data: { id: n.id, label: `${n.type}\n${n.name}`.slice(0, 48), color: colorOf(n.type), stale: n.stale ? 1 : 0 } })),
         ...graph.edges.map((e) => ({ data: { id: e.id, source: e.source, target: e.target, label: e.relation } })),
       ];
       if (cy.current) cy.current.destroy();
+      const [ink, surface, line, muted, tint] = ["--ink", "--surface", "--line-strong", "--muted", "--sage-tint"].map(token);
       cy.current = cytoscape({
         container: box.current, elements, wheelSensitivity: 0.3,
         style: [
           { selector: "node", style: { "background-color": "data(color)", label: "data(label)", "font-family": FONT, "font-size": 10, "font-weight": 600,
-            "text-wrap": "wrap", "text-max-width": "120px", "text-valign": "bottom", "text-margin-y": 5, width: 26, height: 26, color: "#1F2A24",
-            "border-width": 3, "border-color": "#FFFFFF", "text-background-color": "#FFFFFF", "text-background-opacity": 0.85, "text-background-padding": "2px",
+            "text-wrap": "wrap", "text-max-width": "120px", "text-valign": "bottom", "text-margin-y": 5, width: 26, height: 26, color: ink,
+            "border-width": 3, "border-color": surface, "text-background-color": surface, "text-background-opacity": 0.85, "text-background-padding": "2px",
             "text-background-shape": "roundrectangle" } },
           { selector: "node[stale = 1]", style: { "border-width": 3, "border-style": "dashed", "border-color": "#E8945A" } },
-          { selector: "node:selected", style: { "border-width": 4, "border-color": "#E4EEE7", "overlay-color": "#3E7C5C", "overlay-opacity": 0.12, "overlay-padding": 6 } },
-          { selector: "edge", style: { width: 1.5, "line-color": "#D9D3C7", "target-arrow-shape": "triangle", "target-arrow-color": "#D9D3C7", "arrow-scale": 0.8,
-            "curve-style": "bezier", label: "data(label)", "font-family": FONT, "font-size": 8, color: "#5F6A63", "text-rotation": "autorotate",
-            "text-background-color": "#FFFFFF", "text-background-opacity": 0.85, "text-background-padding": "1px" } },
+          { selector: "node:selected", style: { "border-width": 4, "border-color": tint, "overlay-color": "#3E7C5C", "overlay-opacity": 0.12, "overlay-padding": 6 } },
+          { selector: "edge", style: { width: 1.5, "line-color": line, "target-arrow-shape": "triangle", "target-arrow-color": line, "arrow-scale": 0.8,
+            "curve-style": "bezier", label: "data(label)", "font-family": FONT, "font-size": 8, color: muted, "text-rotation": "autorotate",
+            "text-background-color": surface, "text-background-opacity": 0.85, "text-background-padding": "1px" } },
         ],
         layout: { name: "cose", animate: false, padding: 20, nodeRepulsion: () => 9000 },
       });
@@ -90,7 +97,7 @@ export default function MemoryGraph({ version }: { version: number }) {
         <div ref={box} role="img" aria-label="Memory graph: select something to see its facts" className="min-h-[320px] flex-1 overflow-hidden rounded-card border border-line bg-surface" />
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-meta-2 text-muted">
           <span>{graph.nodes.length} things · {graph.edges.length} links</span>
-          {types.map((t) => <span key={t} className="flex items-center gap-1.5"><span aria-hidden className="h-2.5 w-2.5 rounded-full" style={{ background: COLORS[t] ?? "#4E5A53" }} />{t}</span>)}
+          {types.map((t) => <span key={t} className="flex items-center gap-1.5"><span aria-hidden className="h-2.5 w-2.5 rounded-full" style={{ background: colorOf(t) }} />{t}</span>)}
           <span className="flex items-center gap-1.5"><span aria-hidden className="h-2.5 w-2.5 rounded-full border-2 border-dashed border-apricot" />may be out of date</span>
         </div>
       </div>

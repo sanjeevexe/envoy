@@ -29,6 +29,38 @@
   --phone-line: #c9d6cd;
   --scrim: rgba(31, 42, 36, 0.45);
   --face: #f6f3ec;          /* the avatar's eyes, on sage */
+  --on-ink: #ffffff;        /* text on an ink fill (your bubbles, the primary button) */
+  color-scheme: light dark;
+}
+
+/* Dark: the same tokens, mapped to a deep green-black. Sage and apricot keep their fills (white text on sage
+   still reads 4.9:1); text colors keep 4.5:1 or more on their backgrounds. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #121815;
+    --surface: #1a221e;
+    --raised: #161d19;
+    --well: #222b26;
+    --ink: #eceee9;
+    --ink-2: #c2cac4;
+    --muted: #98a39c;
+    --sage-ink: #8fcba8;
+    --sage-deep: #b5dec6;
+    --sage-tint: #1f3529;
+    --sage-track: #2c4a39;
+    --apricot-tint: #3a2719;
+    --apricot-ink: #f2b68a;
+    --apricot-line: #4d3423;
+    --brick: #e8826f;
+    --line: #29322d;
+    --control: #36423b;
+    --divider: #222a25;
+    --line-strong: #4a564f;
+    --offline: #5d6862;
+    --phone-line: #3c4c42;
+    --scrim: rgba(0, 0, 0, 0.6);
+    --on-ink: #121815;
+  }
 }
 
 @theme {
@@ -55,6 +87,7 @@
   --color-divider: var(--divider);
   --color-line-strong: var(--line-strong);
   --color-scrim: var(--scrim);
+  --color-on-ink: var(--on-ink);
   --color-white: #ffffff;
 
   --font-*: initial;

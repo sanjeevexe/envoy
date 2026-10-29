@@ -75,7 +75,7 @@ export function ApprovalBody({ id, device, onClose, standalone }: { id: string; 
         </h2>
         <p className="text-body text-ink-2">{readable(a.description)}{a.note ? ` · ${a.note}` : ""}</p>
         {onClose && <Button size="lg" onClick={onClose} className="mt-2 w-full">Close</Button>}
-        {standalone && <a href="/" className="mt-2 flex h-[52px] w-full items-center justify-center rounded-full bg-ink text-body font-bold text-white hover:text-white">Open Envoy</a>}
+        {standalone && <a href="/" className="mt-2 flex h-[52px] w-full items-center justify-center rounded-full bg-ink text-body font-bold text-on-ink hover:text-on-ink">Open Envoy</a>}
       </div>
     );
   }
@@ -126,7 +126,7 @@ export function ApprovalBody({ id, device, onClose, standalone }: { id: string; 
         <button disabled={busy} onClick={() => decide("decline")}
                 className="h-[52px] flex-1 rounded-full border border-line-strong bg-surface text-body font-bold disabled:opacity-50">Decline</button>
         <button disabled={busy} onClick={() => decide("approve")}
-                className="flex h-[52px] flex-[1.6] items-center justify-center gap-2 whitespace-nowrap rounded-full bg-ink px-4 text-body font-bold text-white disabled:opacity-50">
+                className="flex h-[52px] flex-[1.6] items-center justify-center gap-2 whitespace-nowrap rounded-full bg-ink px-4 text-body font-bold text-on-ink disabled:opacity-50">
           {money && <LockIcon size={18} />}{busy ? "One moment…" : verb(a, money)}
         </button>
       </div>

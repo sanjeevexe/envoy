@@ -14,8 +14,11 @@ export const metadata: Metadata = {
   icons: { icon: [{ url: "/icons/favicon.svg", type: "image/svg+xml" }, { url: "/icons/favicon-64.png", sizes: "64x64" }], apple: "/icons/apple-touch-icon.png" },
 };
 
-// Cream, like the app's own header, so the iOS status bar runs straight into it.
-export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover", themeColor: "#F6F3EC" };
+// The page's own color, so the iOS status bar runs straight into the app's header (cream, or deep green in dark mode).
+export const viewport: Viewport = {
+  width: "device-width", initialScale: 1, viewportFit: "cover",
+  themeColor: [{ media: "(prefers-color-scheme: light)", color: "#F6F3EC" }, { media: "(prefers-color-scheme: dark)", color: "#121815" }],
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

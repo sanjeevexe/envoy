@@ -50,7 +50,7 @@ export default function Pair({ onPaired }: { onPaired: () => void }) {
         <input id="code" value={code} onChange={(e) => { const v = e.target.value.replace(/\D/g, "").slice(0, 6); setCode(v); if (v.length === 6) submit(undefined, v); }} inputMode="numeric" autoComplete="one-time-code"
                pattern="[0-9]{6}" placeholder="000000" autoFocus
                className="h-16 w-full rounded-card border border-control bg-surface px-4 text-center font-mono text-[30px] font-semibold tracking-[0.4em] outline-none placeholder:text-line-strong focus:border-sage" />
-        <button disabled={code.length !== 6 || busy} className="h-[52px] w-full rounded-full bg-ink text-body font-bold text-white disabled:opacity-40">
+        <button disabled={code.length !== 6 || busy} className="h-[52px] w-full rounded-full bg-ink text-body font-bold text-on-ink disabled:opacity-40">
           {busy ? "Pairing…" : "Pair"}
         </button>
         {error && <p role="alert" className="text-meta text-apricot-ink">{error}</p>}

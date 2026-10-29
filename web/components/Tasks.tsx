@@ -252,7 +252,7 @@ export function TaskDetail({ id, task, liveSteps, back, all, open, review, watch
 
       <div className="mx-auto flex w-full max-w-[680px] flex-1 flex-col gap-4 px-4 pb-8 pt-5">
         {fromYou ? (
-          <div className="ev-rise max-w-[78%] self-end rounded-[20px_20px_6px_20px] bg-ink px-4 py-3 text-body text-white [overflow-wrap:anywhere]">{t.request ?? t.goal}</div>
+          <div className="ev-rise max-w-[78%] self-end rounded-[20px_20px_6px_20px] bg-ink px-4 py-3 text-body text-on-ink [overflow-wrap:anywhere]">{t.request ?? t.goal}</div>
         ) : <p className="ev-rise text-meta text-muted">Started by {source(t)}</p>}
         {t.parent && <button onClick={() => open?.(t.parent!)} className="flex h-11 items-center gap-1 self-start text-meta font-bold text-sage-ink">Part of a question across apps <ArrowUpRightIcon size={14} /></button>}
 

@@ -153,7 +153,7 @@ export default function Page() {
     </>
   );
   const toastEl = toast && (
-    <div role="status" key={toast.key} className="ev-toast pointer-events-none fixed inset-x-4 top-[max(64px,calc(env(safe-area-inset-top)+56px))] z-50 mx-auto flex max-w-md items-center gap-3 rounded-card bg-ink px-4 py-3 text-meta text-white shadow-toast md:top-6">
+    <div role="status" key={toast.key} className="ev-toast pointer-events-none fixed inset-x-4 top-[max(64px,calc(env(safe-area-inset-top)+56px))] z-50 mx-auto flex max-w-md items-center gap-3 rounded-card bg-ink px-4 py-3 text-meta text-on-ink shadow-toast md:top-6">
       <Avatar mood="done" size={32} /><span className="min-w-0 flex-1">{toast.text}</span>
     </div>
   );

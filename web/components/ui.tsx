@@ -11,8 +11,8 @@ export const cx = (...c: (string | false | null | undefined)[]) => c.filter(Bool
 
 type Variant = "primary" | "sage" | "secondary" | "ghost";
 const VARIANT: Record<Variant, string> = {
-  primary: "bg-ink text-white hover:bg-ink/90",
-  sage: "bg-sage text-white hover:bg-sage-ink",
+  primary: "bg-ink text-on-ink hover:bg-ink/90",
+  sage: "bg-sage text-white hover:bg-sage/90",
   secondary: "border border-control bg-surface text-ink hover:border-line-strong",
   ghost: "bg-transparent text-sage-ink hover:bg-sage-tint/60",
 };
@@ -32,7 +32,7 @@ export function IconButton({ label, variant = "plain", className, children, ...r
   return (
     <button {...rest} aria-label={label} title={label}
             className={cx("inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors disabled:opacity-50",
-              variant === "sage" ? "bg-sage text-white hover:bg-sage-ink" : variant === "ink" ? "bg-ink text-white hover:bg-ink/90" : variant === "surface" ? "border border-control bg-surface text-ink" : "text-ink hover:bg-well", className)}>
+              variant === "sage" ? "bg-sage text-white hover:bg-sage/90" : variant === "ink" ? "bg-ink text-on-ink hover:bg-ink/90" : variant === "surface" ? "border border-control bg-surface text-ink" : "text-ink hover:bg-well", className)}>
       {children}
     </button>
   );

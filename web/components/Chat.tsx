@@ -129,7 +129,7 @@ export default function Chat({ tasks, openTask, intro, suggestions = [], onListe
               <CaretLeftIcon size={18} /> Home
             </button>
             {msgs.map((m, i) => m.from === "you" ? (
-              <div key={i} className="ev-rise max-w-[78%] self-end rounded-[20px_20px_6px_20px] bg-ink px-4 py-3 text-body text-white [overflow-wrap:anywhere]">
+              <div key={i} className="ev-rise max-w-[78%] self-end rounded-[20px_20px_6px_20px] bg-ink px-4 py-3 text-body text-on-ink [overflow-wrap:anywhere]">
                 {m.voice && <MicrophoneIcon size={15} className="mr-1.5 inline -translate-y-px opacity-75" aria-label="Dictated" />}
                 {m.photo && <ImageSquareIcon size={15} className="mr-1.5 inline -translate-y-px opacity-75" aria-hidden />}
                 {m.text}

@@ -199,7 +199,7 @@ export default function LivePhone({ avd, lease, needsYou, mobile }: Props) {
   return (
     <div className="flex flex-col gap-3">
       {inControl ? (
-        <div className="rounded-block bg-ink px-4 py-3 text-white">
+        <div className="rounded-block bg-ink px-4 py-3 text-on-ink">
           <div className="text-body font-bold">You&rsquo;re in control. Envoy is paused.</div>
           <div className="mt-0.5 text-meta opacity-85">What you type goes straight to the phone and is never logged or shown to a model.</div>
           <button onClick={handBack} className="mt-3 h-11 rounded-full bg-surface px-5 text-[14px] font-bold text-ink">Hand back</button>
@@ -226,7 +226,7 @@ export default function LivePhone({ avd, lease, needsYou, mobile }: Props) {
                 onPaste={(e) => { const text = e.clipboardData.getData("text"); if (inControl && text) { send({ type: "text", text }); e.preventDefault(); } }}
                 className={`h-full w-full select-none outline-none [-webkit-touch-callout:none] ${inControl ? "cursor-pointer [touch-action:none]" : "cursor-not-allowed [touch-action:pan-y]"}`} />
         {secure && (
-          <div className="absolute inset-0 flex items-center justify-center bg-ink/95 p-5 text-center text-meta text-white">
+          <div className="absolute inset-0 flex items-center justify-center bg-ink/95 p-5 text-center text-meta text-on-ink">
             This screen is protected (a sign-in or a payment): your phone won&rsquo;t share it. Use the phone itself, then press Resume on its banner.
           </div>
         )}
@@ -240,7 +240,7 @@ export default function LivePhone({ avd, lease, needsYou, mobile }: Props) {
           <div className="flex justify-center gap-2">
             {mobile && (
               <button onClick={() => (keyboard ? kb.current?.blur() : openKeyboard())} aria-pressed={keyboard}
-                      className={`flex h-11 items-center gap-1.5 rounded-full px-4 text-meta font-bold ${keyboard ? "bg-ink text-white" : "border border-control bg-surface"}`}>
+                      className={`flex h-11 items-center gap-1.5 rounded-full px-4 text-meta font-bold ${keyboard ? "bg-ink text-on-ink" : "border border-control bg-surface"}`}>
                 <KeyboardIcon size={18} /> Keyboard
               </button>
             )}
@@ -253,7 +253,7 @@ export default function LivePhone({ avd, lease, needsYou, mobile }: Props) {
             <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); if (typed) send({ type: "text", text: typed }); setTyped(""); }}>
               <input value={typed} onChange={(e) => setTyped(e.target.value)} placeholder="Type into the phone" autoComplete="off" aria-label="Type into the phone"
                      className="h-11 min-w-0 flex-1 rounded-full border border-control bg-surface px-4 text-meta outline-none focus:border-sage" />
-              <button className="h-11 rounded-full bg-ink px-4 text-meta font-bold text-white">Send</button>
+              <button className="h-11 rounded-full bg-ink px-4 text-meta font-bold text-on-ink">Send</button>
             </form>
           )}
           <p className="text-center text-meta-2 text-muted">
@@ -278,7 +278,7 @@ export function PhoneSwitch({ phones, avd, onChange }: { phones: Lease[]; avd: s
         const note = d.kind === "phone" && d.state === "unauthorized" ? "allow USB debugging" : d.running === false ? "off" : "";
         return (
           <button key={d.avd} onClick={() => onChange(d.avd)} aria-pressed={on}
-                  className={`flex h-11 shrink-0 items-center gap-2 rounded-full px-4 text-meta font-semibold transition-colors ${on ? "bg-ink text-white" : "border border-control bg-surface text-ink"}`}>
+                  className={`flex h-11 shrink-0 items-center gap-2 rounded-full px-4 text-meta font-semibold transition-colors ${on ? "bg-ink text-on-ink" : "border border-control bg-surface text-ink"}`}>
             <DeviceMobileIcon size={16} />{d.name ?? (d.kind === "phone" ? "Your phone" : d.avd)}{note && <span className={on ? "opacity-80" : "text-muted"}>· {note}</span>}
           </button>
         );
