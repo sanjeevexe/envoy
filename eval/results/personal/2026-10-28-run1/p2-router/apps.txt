@@ -1,0 +1,17 @@
+com.amazon.mShop.android.shopping: Search for a product on Amazon and report the price of the first result
+com.android.settings: Check whether Bluetooth is turned on in the Settings app
+com.android.settings: Get the Android version this phone is running from Settings
+com.android.vending: Get the star rating of an app in the Google Play Store
+com.chipotle.ordering: Find the price of a menu item in the Chipotle app.
+com.dd.doordash: Search DoorDash for food and report the first restaurant in the results
+com.google.android.apps.maps: Look up the street address of a place in Google Maps
+com.google.android.apps.youtube.music: Find the artist of a song in YouTube Music
+com.google.android.calendar: Check Google Calendar for events scheduled today.
+com.google.android.contacts: Count the contacts in the Contacts app
+com.skylark.air: Add a known traveler number to a SkyLark flight trip
+com.skylark.air: Change a seat on a SkyLark flight
+com.skylark.air: Check in for a SkyLark flight
+com.skylark.air: Check the status of a SkyLark flight
+com.skylark.air: Find the departure gate for a SkyLark flight to a given city
+com.skylark.air: Look up a SkyLark trip by confirmation code and tell where it goes
+com.starbucks.mobilecard: Check how many calories are in a Starbucks drink
