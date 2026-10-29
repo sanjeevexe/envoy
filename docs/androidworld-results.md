@@ -1,6 +1,6 @@
 # Envoy on AndroidWorld
 
-*Oct 28, 2026. Branch `androidworld`. Plan: `prompts/androidworld-plan.md`. Results: `eval/results/androidworld/`.*
+*Oct 28–29, 2026. Branch `androidworld`. Plan: `prompts/androidworld-plan.md`. Results: `eval/results/androidworld/`.*
 
 AndroidWorld (Google Research; Rawles et al., 2024; Apache-2.0) is a benchmark of 116 parameterized tasks across 20 open-source Android apps, set up, randomized and scored by its own code on a live emulator. This page reports Envoy on it: the headline success rate, its cost and speed, where it fails and why, what general changes fixed, and what routines did across seeds.
 
@@ -11,7 +11,18 @@ AndroidWorld (Google Research; Rawles et al., 2024; Apache-2.0) is a benchmark o
 - on the 51 instances whose structure doesn't change with the seed, they did all 51 (the agent 48);
 - with the agent run where a routine failed, 67 of 69.
 
-**Pending.** Three follow-up fixes, from Phase 7's merge test on SkyLark, are measured offline only. AndroidWorld's held-out half is to be re-run with them.
+**Re-measured on what merges (Oct 29).**
+- **The tree:** `coord/aw-rerun` (`736a6e4`). It is `main` with the 13, Phase 7's three SkyLark follow-ups and the answer fix (below).
+- **Held-out half:** 30.5 of 58 against `main`'s 12 (+21 −2, p = 0.0001). Against Oct 28's 31: +5 −6, so unchanged within noise.
+- **Cost and time:** $2.44 for the 58 tasks, a median of $0.034 and 41 s.
+
+**Real apps, side by side.**
+- **The problem:** Phase 7's real-app pass found two read-only questions turning into searches on the 13: contacts went from 1 step to 25, DoorDash from 2 to 11.
+- **The answer fix,** measured offline before and after, kept AndroidWorld's answers and the safety probe level.
+- **Phase 7's same-day rerun of that fix against `main`:** 13 of 18 same-input workflows passed, against 9. Chipotle went from the step limit to a pass, and there were far fewer actions.
+- **Contacts still looped once in 3,** each time the plan asked for "the full contacts list". A planner line removes those plans in replays (33/120 → 0/90). Phase 7 checks it live before it merges.
+
+**Routines:** a compiler fix from another session reads answers by their place on the screen. On new seeds, the three question routines now do 9 of 9 (0 before).
 
 The rest of this page shows how each number was made.
 
@@ -421,6 +432,45 @@ Replayed on `fdce597`, the branch that merges (5–10 calls per case):
 No answer changed on AndroidWorld, and none came early with a different value. The safety probe gave the unchanged prompt 80, 82 and 84 across rounds, so 82 is within its noise.
 
 **An earlier wording, kept out.** Phase 7 asked whether the risk wording could stop labelling SkyLark's "Check in" (which only opens the flow) irreversible. The wording that did so also made the model call Amazon's Buy Now and Play's "Buy for $…" "read". The safety probe fell to 73–75 of 100. The current wording stays (`wording-2026-10-29/`).
+
+**Phase 7's same-day real-app rerun of the fix** (Oct 29 afternoon, envoy-real, `main` `53ab459` against `coord/aw-rerun` `736a6e4`, Phase 7's numbers):
+- **Same-input workflows passed:** 9 of 18 on `main`, 13 of 18 with the fix.
+- **Better with the fix:** chipotle went from the step limit to a pass; settings_bluetooth, gmail_search, maps_address and play_rating also improved. There were far fewer actions: DoorDash took 1 against 13, and the plan-before-load detour didn't recur.
+- **contacts_count still looped once:** on `736a6e4` its 3 runs were a 25-step filter loop, a right answer left unverified, and a pass. `main` answered all 3 with no action.
+- **The loop's plan** said "View the full contacts list" every time. Every quick answer's plan, and all of `main`'s, read the list or its empty state.
+
+**A planner line for it** (`edfab2b`, `contacts-guard-2026-10-29/`): "For a question, read the answer where the app shows it, an empty state ("none yet") included; plan no step that changes filters or settings, and no "full" or "complete" list unless the goal asks for one."
+
+Replayed on the loop run's own first screen, `736a6e4`'s prompts, 30 per cell:
+
+| | Current | With the line |
+| --- | ---: | ---: |
+| Plans asking for a full list or filters | 33/120 | 0/90 |
+| Plan, then step 1: opens the filters | 3/90 | 0/30 |
+| Real apps, fresh plans: contacts answers at once | 13/16 | 8/8 |
+| SkyLark: another trip's check-in planned through Home's button | 5/120 | 4/120 |
+| AndroidWorld question plans with a filter or settings step | 5/125 | 1/125 |
+| AndroidWorld question tasks answered prematurely at step 1 | 0/125 | 0/125 |
+
+- The step prompt is untouched, so the safety probe and the answer steps don't move.
+- Step-side clauses were tried too. One added scrolls before answers; the other didn't help. Neither is used.
+- Phase 7 runs contacts 3 more times on it, and a SkyLark check, before it's merged.
+
+**AndroidWorld and real apps, side by side:**
+
+| | `main` | `main` + the 13 (Oct 28) | `coord/aw-rerun`: + 3 follow-ups + the answer fix (Oct 29) |
+| --- | ---: | ---: | ---: |
+| AndroidWorld held-out half (58 tasks, seed 30, pass@1) | 12 | 31 | 30.5 |
+| Real-app same-input workflows (Phase 7, Oct 29 afternoon) | 9/18 | | 13/18 |
+| Real-app steps on the 9 workflows besides contacts and DoorDash (Phase 7, Oct 28–29) | 64 | 49 | |
+| contacts_count | answers at once (3/3) | 25-step loop | 1 loop in 3 (the planner line is next) |
+
+- **The held-out re-run** paired with Oct 28's: +5 −6.
+  - Gained: ExpenseAddSingle, SimpleCalendarDeleteOneEvent, SystemBluetoothTurnOff, TasksDueOnDate, TurnOffWifiAndTurnOnBluetooth.
+  - Lost: ExpenseDeleteMultiple, MarkorCreateNoteAndSms, RecipeAddMultipleRecipesFromImage, RecipeDeleteMultipleRecipes, RetroSavePlaylist, SimpleCalendarEventOnDateAtTime.
+  - Both lists are what a rerun of the same agent moves by (Baseline: about four tasks per half).
+- **Which commit each episode ran on:** 23 on `fdce597` + `b630d3f` + `9a573f8`, after which the run was paused for Phase 7's rerun. The other 35 ran on `736a6e4`. The only agent-side difference between them is `main`'s password mask and its Share/Post/Publish rule, and none of the 23 episodes touched either.
+- **The answer-format note** was in the adapter for all 58.
 
 
 ## What Envoy should change on `main`, ranked
