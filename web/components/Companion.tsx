@@ -122,7 +122,7 @@ export default function Companion({ publicUrl }: { publicUrl?: string }) {
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-row font-semibold">{d.name}{paired.me?.device_id === d.id ? " (this device)" : ""}</span>
                   <span className="block text-meta-2 text-muted">
-                    {d.scope === "session" ? "Signed in" : d.scope === "photos" ? "Shortcut: can only send images" : "Sign-in code test"}
+                    {d.scope === "session" ? "Signed in" : d.scope === "photos" ? "Shortcut: can only send images" : d.scope === "siri" ? "Siri shortcut: can ask Envoy and start tasks; can't approve anything" : "Sign-in code test"}
                     {" · paired "}{ago(d.created_at)}{d.last_seen ? ` · seen ${ago(d.last_seen)}` : ""}
                   </span>
                   {subs.length > 0 && <span className="mt-1 block"><Chip icon={BellRingingIcon}>Notifications on ({subs[0].service})</Chip></span>}

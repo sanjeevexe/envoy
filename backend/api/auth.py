@@ -5,8 +5,10 @@ Three kinds of credential, all checked here:
 - **A paired device** (your iPhone's Home Screen app): its own session token, given in exchange for a short pairing code
   shown on the Mac. A Home Screen app keeps its own cookies, apart from Safari, so the code is typed inside the installed
   app; nobody types the long token. Device sessions are stored hashed, named, revocable, and act as you.
-- **Device tokens with a scope** (the "Send to Envoy" Shortcut): `photos` can only upload images; `code_test` can only
-  report that a code message arrived. Neither is a session: they can't read, approve, take over or start tasks.
+- **Device tokens with a scope** (Shortcuts): `photos` can only upload images; `code_test` can only report that a code
+  message arrived; `siri` ("Ask Envoy", api/siri.py) can only ask what a chat message can (a question, a task, a recurring
+  job drafted switched off), as a non-direct source whose irreversible steps wait for your OK. None is a session: they
+  can't read, approve, decide offers or take over, and only `siri` can start tasks.
 
 Pairing codes are 6 digits, single use, valid for 5 minutes, and dead after 5 wrong tries (a guess has a 5 in a million
 chance). New devices are paired only from the Mac's own session.
@@ -33,7 +35,7 @@ from api.store import TaskStore
 
 CODE_TTL_S = 300
 CODE_TRIES = 5
-SCOPES = {"session", "photos", "code_test"}
+SCOPES = {"session", "photos", "code_test", "siri"}
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS device_tokens (
@@ -50,7 +52,7 @@ def _hash(token: str) -> str:
 @dataclass
 class Caller:
     kind: str  # owner | device | token
-    scope: str  # session | photos | code_test
+    scope: str  # session | photos | code_test | siri
     device_id: str | None = None
     name: str = ""
 

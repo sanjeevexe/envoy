@@ -5,7 +5,8 @@ Kinds of caller (api/auth.py):
 - **You**, through the web app: a session (cookie, or the same token as a bearer header for scripts). Only a session can
   approve, take over or edit memory. The login link with the session token is printed when the server starts.
 - **Your paired devices** (the iPhone's Home Screen app, Phase 5): their own session, from a pairing code shown on the Mac.
-- **Device tokens with a scope** (the "Send to Envoy" Shortcut): can upload images, nothing else.
+- **Device tokens with a scope** (Shortcuts): "Send to Envoy" can upload images, nothing else; "Ask Envoy" (Siri) can
+  only ask what a chat message can, and its irreversible steps wait for your OK (api/siri.py).
 - **AI clients**, through `/mcp` with the MCP bearer token. They can start and follow tasks and use memory, never approve.
 
 The API answers only to the names it is served on (127.0.0.1, localhost, its Tailscale Serve name), and WebSockets
@@ -55,6 +56,7 @@ from api.repeats import Repeats
 from api.push import Pusher, VapidKeys
 from api.runner import SHOTS, TaskRunner
 from api.scheduler import Scheduler, check_alert, check_ask
+from api.siri import siri_router
 from api.store import API_DIR, REPO, TaskStore, new_id
 from api.voice import voice_session
 
@@ -751,6 +753,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
 
     app.include_router(offers_router(ctx, session, caller))
     app.include_router(handoff_router(ctx, session, caller))
+    app.include_router(siri_router(ctx, session, caller, csrf))
 
     # ---- the web app ---------------------------------------------------------------------------
 

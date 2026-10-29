@@ -40,7 +40,7 @@ export function StatusChip({ status }: { status: string }) {
   return <Chip tone={s.tone} className="shrink-0">{s.label}</Chip>;
 }
 
-const source = (t: Task) => t.source.startsWith("trigger:") ? `your trigger “${t.source.slice(8)}”` : t.source === "voice" ? "your voice" : t.source === "mcp" ? "an assistant" : t.source;
+const source = (t: Task) => t.source.startsWith("trigger:") ? `your trigger “${t.source.slice(8)}”` : t.source === "voice" ? "your voice" : t.source === "mcp" ? "an assistant" : t.source === "siri" ? "Siri" : t.source;
 
 export function TaskList({ tasks, open }: { tasks: Task[]; open: (id: string) => void }) {
   if (!tasks.length) return <p className="px-4 py-6 text-body text-muted">No tasks yet. Ask Envoy something on Home.</p>;

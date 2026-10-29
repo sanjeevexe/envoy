@@ -177,6 +177,17 @@ function seed(): DB {
     step(3, { kind: "routine_step", text: "open_trips", status: "done", rung: 0, shot: "sl-1", time: ago(2 * 86400 - 6) }),
     step(4, { kind: "routine_step", text: "confirm_check_in", status: "failed", rung: 0, detail: "you declined it", risk: "irreversible", time: ago(2 * 86400 - 40) }),
   ]);
+  add(task({ id: "task-siri", goal: "Check me in for my flight", source: "siri", request: "Check me in for my flight", app: "com.skylark.air",
+    device: "envoy-test", kind: "routine", routine: "skylark_check_in_flight", status: "declined", detail: "you declined Confirm check-in",
+    created_at: ago(26 * 60), updated_at: ago(25 * 60), model_calls: 2, cost_usd: 0.003 }), [
+    step(1, { kind: "preflight", time: ago(26 * 60 - 3), lines: [
+      { kind: "approval", text: "Confirming check-in will wait for your OK.", level: "info" },
+      { kind: "routine", text: "Using routine skylark_check_in_flight v1: usually 9 s, no model calls.", level: "info" },
+    ] }),
+    step(2, { kind: "note", text: "using routine skylark_check_in_flight v1 with trip_city = Chicago", time: ago(26 * 60 - 4) }),
+    step(3, { kind: "routine_step", text: "open_trips", status: "done", rung: 0, shot: "sl-1", time: ago(26 * 60 - 9) }),
+    step(4, { kind: "routine_step", text: "confirm_check_in", status: "failed", rung: 0, detail: "you declined it", risk: "irreversible", time: ago(25 * 60) }),
+  ]);
   add(task({ id: "task-chase", goal: "What's my checking balance in Chase?", app: "com.chase.sig.android", status: "failed",
     detail: "Chase blocks emulators; it needs a real Android phone. Connect your Android phone (USB, or wireless debugging) and ask again.",
     created_at: ago(2 * 86400 + 600), updated_at: ago(2 * 86400 + 598) }), [
@@ -756,6 +767,7 @@ export async function handle(path: string, init: RequestInit = {}): Promise<any>
   if (p === "/api/paired") return { devices: [
     { id: "dev-1", name: "Maya's iPhone (Home Screen app)", scope: "session", created_at: ago(5 * 86400), last_seen: ago(60) },
     { id: "dev-2", name: "Send to Envoy (Shortcut)", scope: "photos", created_at: ago(4 * 86400), last_seen: ago(2 * 86400) },
+    { id: "dev-3", name: "Ask Envoy (Siri)", scope: "siri", created_at: ago(2 * 86400), last_seen: ago(26 * 60) },
   ], push: [{ id: "push-1", device_id: "dev-1", service: "Apple", last_ok: ago(1800), failures: 0 }], me: { kind: "owner", device_id: null, name: "Mac" } };
   if (p === "/api/pair/start") return { code: "482917", expires_in: 300 };
   if (p === "/api/pair") { scenario = "full"; db = seed(); return { ok: true }; }
