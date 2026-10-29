@@ -4,7 +4,16 @@
 
 AndroidWorld (Google Research; Rawles et al., 2024; Apache-2.0) is a benchmark of 116 parameterized tasks across 20 open-source Android apps, set up, randomized and scored by its own code on a live emulator. This page reports Envoy on it: the headline success rate, its cost and speed, where it fails and why, what general changes fixed, and what routines did across seeds.
 
-**Headline.** Envoy as on `main` solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001). Both runs are seed 30, pass@1, at about $0.04 and 38 s per task (median $0.030). The rest of this page shows how each number was made.
+**Headline.** Envoy as on `main` solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001). Both runs are seed 30, pass@1, at about $0.04 and 38 s per task (median $0.030).
+
+**Routines.** Envoy compiled 59 routines from its solved runs, and 22 did their own seed-30 task on their own. On three new seeds of their 23 tasks:
+- they did 55 of 69 instances, against the full agent's 63, at 1 model call against 6, $0.002 against $0.012, and 8 s against 19 s;
+- on the 51 instances whose structure doesn't change with the seed, they did all 51 (the agent 48);
+- with the agent run where a routine failed, 67 of 69.
+
+**Pending.** Three follow-up fixes, from Phase 7's merge test on SkyLark, are measured offline only. AndroidWorld's held-out half is to be re-run with them.
+
+The rest of this page shows how each number was made.
 
 ## Setting
 
@@ -239,7 +248,65 @@ Why the others failed, on the very screens they were compiled from. Four of thes
   - Two named the wrong event (SimpleCalendarEventOnDateAtTime, SimpleCalendarNextEvent). These routines take no date or time input, so they read whatever the calendar showed.
   - Three passed their own checks without the task being done: the Markor edit, maximum brightness (it reported `0.0`), and the note-and-SMS task, which ran all 14 steps including the send, yet AndroidWorld gave it 0.5, half of its two-part check. Their checks were too weak to notice.
 
-ROUTINES_SEEDS
+**Across seeds** (stages `routines-seeds` and `agent-seeds`, Oct 28, 22:13–23:58, standard tier). The 22 verified routines ran on instances 1–3 of their 23 tasks: three new seeds each, so 69 episodes with new names, dates, numbers, messages and files. Repair was allowed and the agent fallback was off, so the routine is measured alone. The full agent ran on the same 69 instances, from the same commit. Envoy's backend is the same in every episode; the commits recorded (`e9594f0`, `b82e512`, `cdd130e`) differ only in the report and the harness. It is the branch with `main` merged in and the three SkyLark follow-ups, so the agent here is not exactly `final-standard`'s.
+
+| | Routine | Full agent | Routine, then the agent where it failed |
+| --- | ---: | ---: | ---: |
+| **Success** | **55/69 (80%)** | **63/69 (91%)** | **67/69 (97%)** |
+| Model calls, median | 1 | 6 | 1 |
+| Cost at standard prices, median (total) | $0.0021 ($0.16) | $0.0122 ($1.24) | $0.0022 ($0.49) |
+| Envoy time, median | 8.3 s | 19.0 s | 8.7 s |
+| AndroidWorld time, setup to score, median | 16.3 s | 33.0 s | |
+| Approvals by the script | 24 | 31 | |
+
+- **Where both did the task (51 instances):**
+
+  | | Routine | Agent |
+  | --- | ---: | ---: |
+  | Time | 7.5 s | 19.1 s |
+  | Model calls | 1 | 6 |
+  | Cost | $0.0020 | $0.0116 |
+
+  That's about 2.5 times faster and 6 times cheaper.
+- **Where only one did it:**
+  - The routine alone: 4 instances (ExpenseDeleteSingle twice, RecipeAddSingleRecipe once, and RecipeDeleteMultipleRecipesWithConstraint once, explained below).
+  - The agent alone: 12.
+- **The last column is computed, not run.** It pairs each routine episode with the agent's own episode on the same instance. In Envoy the fallback would start wherever the routine stopped, not from a fresh setup.
+
+**Repairs and versions.** One local repair in 69 episodes: SimpleSmsReply's launch step, one extra model call, and the episode then succeeded. No routine needed a new version.
+
+**Where the structure changes with the seed**, so that a routine compiled on seed 30 can't follow, and where it doesn't:
+- **Same structure, new parameters** (17 tasks, 51 instances): the routines did **51 of 51**, the agent 48. This covers messages, files, folders, recordings, photos, stopwatches, expenses, recipes, and Bluetooth, Wi-Fi and brightness.
+- **The answer sits somewhere else** (NotesMeetingAttendeeCount, NotesRecipeIngredientCount, SimpleCalendarLocationOfEvent): 0 of 9.
+  - The matcher filled the inputs right ('Quality Assurance Review', 'Lasagna', 'Movie night'), and the routine opened the right note or event.
+  - Then it stopped with "outputs not found": each output's locator was tied to where the value sat on seed 30's screen.
+  - The agent did all 9.
+  - This is the same gap Phase 7 found in SkyLark's past_trip and fixed in the compiler (`183cc60`: read the answer in the row that shows the input).
+- **A different app** (OpenAppTaskEval's "Open the camera app" twice, TurnOnWifiAndOpenApp's "…then open the clock app" once):
+  - The routines were compiled from runs that opened Contacts and Settings, and don't take the app as an input.
+  - The matcher correctly declined all three (`no_routine`) rather than open the wrong app.
+  - The agent did all 3.
+- **A different amount of work** (RecipeDeleteMultipleRecipesWithConstraint): AndroidWorld creates up to 3 recipes with the ingredient in their directions, and fewer, down to none, when it can't generate them (`recipe.py`, `generate_random_params`).
+  - Seed 30's instance ("black garlic") had none. The source run, `main`'s own agent, searched, found nothing, and was scored right.
+  - The routine learned "search, delete nothing". It was right on instance 2 and wrong on instances 1 and 3 (parsley, herbs), where it passed all its own checks and deleted nothing.
+  - The agent failed all three as well (43 calls each, out of steps).
+  - A routine verified on one instance can be verified on a degenerate one.
+
+**What this says about routines.** On tasks whose shape doesn't change, a compiled routine replaces the agent:
+- it did at least as well (51/51 against 48/51);
+- it took one model call instead of six;
+- it cost a sixth as much and took 40% of the time.
+
+Its failures are all of one kind: something the run never showed as an input (which app, where the answer is, how many items) is baked into the routine. Each is a general fix for `main`'s compiler or matcher, not an AndroidWorld quirk:
+- outputs anchored to the input's row;
+- the app as an input when the goal names one;
+- a routine verified on more than one instance, or flagged when its source run did nothing irreversible for a goal that asks for it.
+
+**An incident during this stage.** At 22:32 the emulator stalled (AndroidWorld couldn't read the screen, and `dumpsys` timed out). android_env, AndroidWorld's emulator library, then restarted the adb server that every session on this Mac shares (`adb kill-server`). That crashed Phase 7's SkyLark runs on envoy-test.
+- The next 26 routine episodes failed at once on adb. They're set aside with a README (`routines-seeds/invalidated/`) and were rerun after the fix.
+- The agent stage hadn't started.
+- The fix (`3631542`) replaces android_env's restart with a wait, refuses any adb command that would kill or restart the server, and the runner won't start without it (`cdd130e`).
+- The logs show the same restart had fired, unseen, on every AndroidWorld setup since Oct 27 (its VLC APK always fails to install on arm64), and on two failed commands in `final-standard`.
 
 ## Against the leaderboard
 
@@ -291,9 +358,26 @@ The 13 agent commits below cherry-pick cleanly onto `main` as it is on Oct 28 (`
 | 10 | **Long text is shown at length** (fix 8, `11cbdb9`) | A 12,101-character file was shown as its first 120 characters | Screens with long text 9 → 21 | Tokens: up to 4,000 characters per field and 8,000 per screen. Watch cost on real apps with long pages |
 | 11 | **Stuck recoveries start afresh once the agent moves again** (fix 6, `ba50eb5`) | An early stall ended runs that had recovered | Not separable | None |
 
-**What the merge test on SkyLark found, and three follow-ups (Oct 28).** Before merging, Phase 7 ran `main`'s SkyLark suites on `main` plus the 13 (`aw-merge`). It found two regressions:
-- **A wrong-flight check-in.** SkyLark's home shows "Next trip · Chicago" with a "Check in" button that acts on that trip. Asked to check in for another trip, 4 of 11 merged plans offered that button as the route. Each time the agent confirmed the Chicago check-in before noticing, then checked in the right trip too.
-- **check_in no longer compiled.** Correct dones were rejected and ended `done_unverified`, and compile learns only from verified runs.
+**What the merge test on SkyLark found, and three follow-ups (Oct 28).** Before merging, Phase 7 ran `main`'s SkyLark suites on `main` plus the 13 (`aw-merge`), against `main` (`e0789e1`) the same evening.
+
+The SkyLark round 1 results below are Phase 7's (the 13 against `main`):
+
+| | `main` + the 13 | `main` |
+| --- | ---: | ---: |
+| Full agent, first try | 120/120 | 119/119 |
+| Side effects | 0 | 0 |
+| Median steps | 2 | 4 |
+| Median calls | 4 | 6 |
+| Median cost | $0.0074 | $0.0090 |
+| Median time | 8.8 s | 12.6 s |
+| Compile | 8/10 | |
+
+- The extra tokens per call are more than paid back by fewer steps.
+- Injection: no irreversible step without approval, and the planted texts were ignored. Safety gate: 20/20.
+
+It found two regressions:
+- **A wrong-flight check-in.** SkyLark's home shows "Next trip · Chicago" with a "Check in" button that acts on that trip. Asked to check in for another trip, 4 of 11 merged plans offered that button as the route. Each time the agent confirmed the Chicago check-in before noticing, then checked in the right trip too. Round 1 put the count at 1 of 3 compile source runs and 3 of 15 runs where a routine fell back to the agent, against 0 on `main`. In the agent arm's 120 runs there were none.
+- **check_in no longer compiled.** Correct dones were rejected and ended `done_unverified`, and compile learns only from verified runs. The other routine that stopped compiling, past_trip, read its answer off a list row without opening the trip; Phase 7 fixed it in the compiler (`183cc60`).
 
 Measured offline, from the runs' own inputs, each fix in its own commit on this branch:
 - **`f93ce08`, a planner line:** "A button shown with one item (on the card for the next trip, the last order, an open message) acts on that item only; if the goal names a different item, go through the list that holds it."
@@ -333,7 +417,9 @@ These are offline measurements. Phase 7's second SkyLark round tests all three. 
 - **The Contributor tier is not the product's tier.** The dev rounds ran on it; the headline doesn't.
 - **Real apps are not AndroidWorld.** These changes were measured on 20 open-source apps with synthetic data. `main`'s real-app and SkyLark suites should be rerun with them before claiming anything there. The biggest risks are fix 5's accepted second done, and the token cost of fixes 8 and 11.
 - **The two failed Bluetooth dones** (SystemBluetoothTurnOff in the final run, and earlier ones) suggest that the emulator's Bluetooth state can lag behind its Settings screen. I didn't chase that further.
-- **Not done:** pass@k or other seeds for the full agent beyond the routines comparison; the AndroidWorld issues are drafted here, not filed.
+- **The three SkyLark follow-ups are measured offline only** (single-step and planner-only replays, rebuilt from traces). Phase 7's second SkyLark round and a re-run of AndroidWorld's held-out half test them live. Until then, the 31 of 58 is the 13 changes without them.
+- **Routines across seeds are one pass on three seeds, from routines verified on a single instance.** RecipeDeleteMultipleRecipesWithConstraint shows how a degenerate instance can pass verification. The routine-bug fixes waiting on another branch (popup focus, twin fields, row-anchored icons, dates for the matcher) weren't in this run. The 5 PopupWindow routines and the 2 Pro Expense routines they'd recompile weren't among the verified 22 anyway.
+- **Not done:** pass@k or other seeds for the full agent beyond the routines comparison. The AndroidWorld issues are drafted here, not filed. Neither is the android_env behaviour of restarting the adb server on failure, which is worth raising with its maintainers (with your OK).
 
 ## Proposed text for other documents
 

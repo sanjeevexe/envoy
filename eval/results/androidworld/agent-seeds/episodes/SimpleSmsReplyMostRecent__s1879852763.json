@@ -1,0 +1,94 @@
+{
+ "task": "SimpleSmsReplyMostRecent",
+ "seed": 1879852763,
+ "goal": "Reply to the most recent text message using Simple SMS Messenger with message: Monthly budget meeting pushed to Friday.",
+ "score": 1.0,
+ "aw_run_time_s": 49.0,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 23:41:06.776780",
+ "envoy": {
+  "run_id": "aw-agent-seeds-1028-234035-617b",
+  "goal": "Reply to the most recent text message using Simple SMS Messenger with message: Monthly budget meeting pushed to Friday.",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Replied to most recent conversation (+18097973956) with message: Monthly budget meeting pushed to Friday.",
+  "done": true,
+  "answer": "Replied to most recent conversation (+18097973956) with message: Monthly budget meeting pushed to Friday.",
+  "steps_device": 4,
+  "iterations": 5,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "tap": 3,
+   "type": 1,
+   "done": 1
+  },
+  "model_calls": 6,
+  "input_tokens": 15136,
+  "cached_tokens": 12582,
+  "output_tokens": 912,
+  "reasoning_tokens": 486,
+  "cost_usd": 0.008956,
+  "cost_at_standard_usd": 0.008956,
+  "duration_s": 19.88,
+  "model_s": 7.05,
+  "device_s": 12.83,
+  "connect_s": 0.92,
+  "approvals": [
+   {
+    "step": 4,
+    "description": "tap \"SMS\" in com.simplemobiletools.smsmessenger",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/thread_send_message'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "SMS Messenger",
+   "subgoals": [
+    "Open the SMS Messenger app",
+    "Open the most recent conversation",
+    "Type 'Monthly budget meeting pushed to Friday.' and send it"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Monthly budget meeting pushed to Friday.",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Monthly budget meeting pushed to Friday.' is visible"
+  },
+  "trace_dir": "data/runs/aw-agent-seeds-1028-234035-617b",
+  "envoy_commit": "cdd130ecae3cf0891ddc6106da4ad6d1be97fde0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/agent-seeds/traces/SimpleSmsReplyMostRecent__s1879852763.jsonl.gz",
+  "wall_s": 22.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.3
+  }
+ }
+}

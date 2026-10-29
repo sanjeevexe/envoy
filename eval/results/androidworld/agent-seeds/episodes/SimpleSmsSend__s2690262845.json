@@ -1,0 +1,104 @@
+{
+ "task": "SimpleSmsSend",
+ "seed": 2690262845,
+ "goal": "Send a text message using Simple SMS Messenger to +11471594382 with message: Yoga class every Tuesday and Thursday at 6 PM.",
+ "score": 1.0,
+ "aw_run_time_s": 39.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 23:41:46.459898",
+ "envoy": {
+  "run_id": "aw-agent-seeds-1028-234115-705e",
+  "goal": "Send a text message using Simple SMS Messenger to +11471594382 with message: Yoga class every Tuesday and Thursday at 6 PM.",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Sent text message using Simple SMS Messenger to +11471594382 with message: Yoga class every Tuesday and Thursday at 6 PM. Message is shown in thread at 15:34.",
+  "done": true,
+  "answer": "Sent text message using Simple SMS Messenger to +11471594382 with message: Yoga class every Tuesday and Thursday at 6 PM. Message is shown in thread at 15:34.",
+  "steps_device": 6,
+  "iterations": 7,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "tap": 4,
+   "type": 2,
+   "done": 1
+  },
+  "model_calls": 8,
+  "input_tokens": 20383,
+  "cached_tokens": 17416,
+  "output_tokens": 1545,
+  "reasoning_tokens": 934,
+  "cost_usd": 0.012887,
+  "cost_at_standard_usd": 0.012887,
+  "duration_s": 18.93,
+  "model_s": 9.75,
+  "device_s": 9.18,
+  "connect_s": 0.91,
+  "approvals": [
+   {
+    "step": 4,
+    "description": "tap \"\" in com.simplemobiletools.smsmessenger",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/new_conversation_confirm'"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 6,
+    "description": "tap \"SMS\" in com.simplemobiletools.smsmessenger",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/thread_send_message'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "SMS Messenger",
+   "subgoals": [
+    "Open SMS Messenger",
+    "Start new conversation to +11471594382",
+    "Type message Yoga class every Tuesday and Thursday at 6 PM",
+    "Send the message"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Yoga class every Tuesday and Thursday at 6 PM",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Yoga class every Tuesday and Thursday at 6 PM' is visible"
+  },
+  "trace_dir": "data/runs/aw-agent-seeds-1028-234115-705e",
+  "envoy_commit": "cdd130ecae3cf0891ddc6106da4ad6d1be97fde0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/agent-seeds/traces/SimpleSmsSend__s2690262845.jsonl.gz",
+  "wall_s": 22.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

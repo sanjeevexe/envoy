@@ -1,0 +1,106 @@
+{
+ "task": "ExpenseDeleteSingle",
+ "seed": 4059515663,
+ "goal": "Delete the following expenses from pro expense: Cleaning Services.",
+ "score": 1.0,
+ "aw_run_time_s": 20.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 23:21:12.373376",
+ "envoy": {
+  "run_id": "aw-agent-seeds-1028-232053-8e57",
+  "goal": "Delete the following expenses from pro expense: Cleaning Services.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Deleted Cleaning Services expense (2023 Oct 8, 498.11 USD) from Pro Expense - confirmed by 'Item Deleted' message",
+  "done": true,
+  "answer": "Deleted Cleaning Services expense (2023 Oct 8, 498.11 USD) from Pro Expense - confirmed by 'Item Deleted' message",
+  "steps_device": 4,
+  "iterations": 5,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 3,
+   "done": 1
+  },
+  "model_calls": 6,
+  "input_tokens": 14535,
+  "cached_tokens": 12454,
+  "output_tokens": 1298,
+  "reasoning_tokens": 866,
+  "cost_usd": 0.009986,
+  "cost_at_standard_usd": 0.009986,
+  "duration_s": 13.91,
+  "model_s": 7.2,
+  "device_s": 6.71,
+  "connect_s": 0.87,
+  "approvals": [
+   {
+    "step": 3,
+    "description": "tap \"\" in com.arduia.expense",
+    "reasons": [
+     "rule: target id 'com.arduia.expense:id/btn_delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 4,
+    "description": "tap \"CONFIRM\" in com.arduia.expense",
+    "reasons": [
+     "rule: target says 'CONFIRM'",
+     "screen: confirming something that can't be taken back",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Pro Expense",
+   "subgoals": [
+    "Open the Pro Expense app",
+    "Find the Cleaning Services expense",
+    "Delete the Cleaning Services expense",
+    "Confirm deletion if prompted"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "Cleaning Services is no longer listed in expenses",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Deleted, Oct, USD, Expense"
+  },
+  "trace_dir": "data/runs/aw-agent-seeds-1028-232053-8e57",
+  "envoy_commit": "cdd130ecae3cf0891ddc6106da4ad6d1be97fde0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/agent-seeds/traces/ExpenseDeleteSingle__s4059515663.jsonl.gz",
+  "wall_s": 16.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.9
+  }
+ }
+}

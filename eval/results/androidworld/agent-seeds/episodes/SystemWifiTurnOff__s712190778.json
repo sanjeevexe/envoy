@@ -1,0 +1,83 @@
+{
+ "task": "SystemWifiTurnOff",
+ "seed": 712190778,
+ "goal": "Turn wifi off.",
+ "score": 1.0,
+ "aw_run_time_s": 23.4,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 23:54:41.872183",
+ "envoy": {
+  "run_id": "aw-agent-seeds-1028-235420-d1eb",
+  "goal": "Turn wifi off.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done_unverified",
+  "result": "Wi-Fi is turned off. Internet settings show the Wi-Fi switch is Off and only mobile (T-Mobile Connected) remains.",
+  "done": true,
+  "answer": "Wi-Fi is turned off. Internet settings show the Wi-Fi switch is Off and only mobile (T-Mobile Connected) remains.",
+  "steps_device": 4,
+  "iterations": 5,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 3,
+   "done": 1
+  },
+  "model_calls": 6,
+  "input_tokens": 14575,
+  "cached_tokens": 11814,
+  "output_tokens": 1372,
+  "reasoning_tokens": 998,
+  "cost_usd": 0.011054,
+  "cost_at_standard_usd": 0.011054,
+  "duration_s": 14.87,
+  "model_s": 7.12,
+  "device_s": 7.75,
+  "connect_s": 0.89,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Settings",
+   "subgoals": [
+    "Open the Settings app",
+    "Open Network / Wi-Fi settings",
+    "Turn the Wi-Fi switch off"
+   ],
+   "success_check": {
+    "kind": "field_equals",
+    "value": "Off",
+    "field_hint": "Wi-Fi"
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": false,
+   "detail": "field 'Wi-Fi' not found"
+  },
+  "trace_dir": "data/runs/aw-agent-seeds-1028-235420-d1eb",
+  "envoy_commit": "cdd130ecae3cf0891ddc6106da4ad6d1be97fde0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/agent-seeds/traces/SystemWifiTurnOff__s712190778.jsonl.gz",
+  "wall_s": 20.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

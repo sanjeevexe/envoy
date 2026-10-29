@@ -6,6 +6,13 @@
    "note": "routines across seeds: verified library, repair allowed, no agent fallback",
    "androidworld_setup_rerun": false,
    "app_snapshots": 24
+  },
+  {
+   "started": "2026-10-28T23:06:41",
+   "envoy_commit": "cdd130ecae3cf0891ddc6106da4ad6d1be97fde0",
+   "note": "routines across seeds: verified library, repair allowed, no agent fallback",
+   "androidworld_setup_rerun": false,
+   "app_snapshots": 24
   }
  ],
  "stage": "routines-seeds",

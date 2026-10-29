@@ -1,0 +1,86 @@
+{
+ "task": "RecipeAddSingleRecipe",
+ "seed": 1067857357,
+ "goal": "Add the following recipes into the Broccoli app:\ntitle|description|servings|preparationTime|ingredients|directions\nChickpea Vegetable Soup|A quick and easy meal, perfect for busy weekdays.|1 serving|2 hrs|as desired|Sauté onions, carrots, and celery, add broth, canned tomatoes, and chickpeas. Simmer with spinach and seasonings. Garnish with fresh herbs for a more vibrant taste.",
+ "score": 1.0,
+ "aw_run_time_s": 40.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 23:28:05.135775",
+ "envoy": {
+  "run_id": "aw-agent-seeds-1028-232727-a41f",
+  "goal": "Add the following recipes into the Broccoli app:\ntitle|description|servings|preparationTime|ingredients|directions\nChickpea Vegetable Soup|A quick and easy meal, perfect for busy weekdays.|1 serving|2 hrs|as desired|Sauté onions, carrots, and celery, add broth, canned tomatoes, and chickpeas. Simmer with spinach and seasonings. Garnish with fresh herbs for a more vibrant taste.",
+  "max_steps": 24,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Added recipe Chickpea Vegetable Soup (1 serving, 2 hrs) to Broccoli app.",
+  "done": true,
+  "answer": "Added recipe Chickpea Vegetable Soup (1 serving, 2 hrs) to Broccoli app.",
+  "steps_device": 10,
+  "iterations": 11,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "type": 6,
+   "scroll": 1,
+   "done": 1
+  },
+  "model_calls": 12,
+  "input_tokens": 34796,
+  "cached_tokens": 27084,
+  "output_tokens": 1623,
+  "reasoning_tokens": 660,
+  "cost_usd": 0.0206,
+  "cost_at_standard_usd": 0.0206,
+  "duration_s": 32.1,
+  "model_s": 15.49,
+  "device_s": 16.61,
+  "connect_s": 0.89,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Open the Broccoli app",
+    "Start adding a new recipe",
+    "Enter title, description, servings, preparation time, ingredients, and directions",
+    "Save the recipe"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Chickpea Vegetable Soup",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Chickpea Vegetable Soup' is visible"
+  },
+  "trace_dir": "data/runs/aw-agent-seeds-1028-232727-a41f",
+  "envoy_commit": "cdd130ecae3cf0891ddc6106da4ad6d1be97fde0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/agent-seeds/traces/RecipeAddSingleRecipe__s1067857357.jsonl.gz",
+  "wall_s": 34.7,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

@@ -1,0 +1,55 @@
+{
+ "task": "TurnOnWifiAndOpenApp",
+ "seed": 144314761,
+ "goal": "Turn on Wifi, then open the clock app",
+ "score": 0.0,
+ "aw_run_time_s": 10.4,
+ "aw_episode_length": 20,
+ "agent": "envoy",
+ "finished": "2026-10-28 23:13:46.034223",
+ "envoy": {
+  "run_id": "aw-routines-seeds-1028-231338-0912",
+  "goal": "Turn on Wifi, then open the clock app",
+  "max_steps": 20,
+  "config": {
+   "mode": "routine",
+   "library": "verified",
+   "tier": "standard"
+  },
+  "envoy_commit": "cdd130ecae3cf0891ddc6106da4ad6d1be97fde0",
+  "mode": "routine",
+  "match": {
+   "routine": null,
+   "stage": "model: no confident match (None)",
+   "inputs": {},
+   "missing": [],
+   "candidates": [
+    [
+     "settings_turn_on_wifi_3",
+     0.767
+    ],
+    [
+     "contacts_open_app",
+     0.533
+    ],
+    [
+     "settings_turn_off_wifi_2",
+     0.467
+    ]
+   ]
+  },
+  "status": "no_routine",
+  "result": "model: no confident match (None)",
+  "done": false,
+  "answer": null,
+  "model_calls": 1,
+  "cost_usd": 0.002368,
+  "cost_at_standard_usd": 0.002368,
+  "duration_s": 2.6,
+  "wall_s": 5.3,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

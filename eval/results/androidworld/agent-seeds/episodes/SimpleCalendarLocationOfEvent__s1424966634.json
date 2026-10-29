@@ -1,0 +1,84 @@
+{
+ "task": "SimpleCalendarLocationOfEvent",
+ "seed": 1424966634,
+ "goal": "What is the location of my Movie night event in Simple Calendar Pro? Answer with the location only.",
+ "score": 1.0,
+ "aw_run_time_s": 19.8,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-10-28 23:36:47.239342",
+ "envoy": {
+  "run_id": "aw-agent-seeds-1028-233631-4a64",
+  "goal": "What is the location of my Movie night event in Simple Calendar Pro? Answer with the location only.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Virtual",
+  "done": true,
+  "answer": "Virtual",
+  "steps_device": 3,
+  "iterations": 4,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "type": 1,
+   "tap": 1,
+   "done": 1
+  },
+  "model_calls": 5,
+  "input_tokens": 12758,
+  "cached_tokens": 10165,
+  "output_tokens": 695,
+  "reasoning_tokens": 397,
+  "cost_usd": 0.00772,
+  "cost_at_standard_usd": 0.00772,
+  "duration_s": 11.05,
+  "model_s": 5.04,
+  "device_s": 6.01,
+  "connect_s": 0.89,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "com.simplemobiletools.calendar.pro",
+   "subgoals": [
+    "Open Simple Calendar Pro app",
+    "Find the Movie night event",
+    "Open Movie night event details to view location"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "location of Movie night event",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Virtual"
+  },
+  "trace_dir": "data/runs/aw-agent-seeds-1028-233631-4a64",
+  "envoy_commit": "cdd130ecae3cf0891ddc6106da4ad6d1be97fde0",
+  "model": "muse-spark-1.3",
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/agent-seeds/traces/SimpleCalendarLocationOfEvent__s1424966634.jsonl.gz",
+  "wall_s": 13.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}
