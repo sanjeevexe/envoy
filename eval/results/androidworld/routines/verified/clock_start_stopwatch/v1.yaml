@@ -1,0 +1,69 @@
+routine: clock_start_stopwatch
+app: com.google.android.apps.nexuslauncher
+version: 1
+status: active
+intent: Run the stopwatch in the Clock app
+description: Open the Clock app, switch to the Stopwatch tab, and start the stopwatch.
+patterns: [run the stopwatch, start the stopwatch, start stopwatch]
+start: fresh_launch
+steps:
+- id: open_clock_app
+  intent: Open the Clock app
+  pre:
+  - {app_foreground: com.google.android.apps.nexuslauncher}
+  - element_present: {resource_id: workspace, kind: List}
+  action: {launch: com.google.android.deskclock}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: action_bar_title, text: Clock, kind: Text}
+  - element_present: {resource_id: navigation_bar_item_labels_group, text: Alarm, kind: Text}
+  risk: read
+  note: trace step 1
+- id: tap_stopwatch_tab
+  intent: Tap the Stopwatch tab
+  pre:
+  - {app_foreground: com.google.android.deskclock}
+  action:
+    tap:
+      resource_id: tab_menu_stopwatch
+      text: Stopwatch
+      kind: Button
+      cls: FrameLayout
+      siblings: [Alarm, Clock, Timer]
+      in_list: false
+      position: [0.7, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: action_bar_title, text: Stopwatch, kind: Text}
+  - element_present: {resource_id: tab_menu_stopwatch, text: Stopwatch, kind: Text}
+  risk: reversible
+  note: trace step 2
+- id: tap_start_button
+  intent: Tap Start to run the stopwatch
+  pre:
+  - {app_foreground: com.google.android.deskclock}
+  action:
+    tap:
+      resource_id: fab
+      text: Start
+      kind: Button
+      cls: Button
+      parent: fab_container
+      in_list: false
+      position: [0.5, 0.816]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: left_button, text: Reset, kind: Button}
+  - element_present: {resource_id: fab, text: Pause, kind: Button}
+  risk: reversible
+  note: trace step 3
+done:
+- element_present: {text: Pause}
+compiled_from:
+  task_id: aw-baseline-standard-1028-032626-aded
+  goal: Run the stopwatch.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-28 05:41:42"
+  trace_steps_kept: [1, 2, 3]
+  trace_steps_dropped: 0
+  cost_usd: 0.0385

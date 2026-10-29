@@ -1,0 +1,477 @@
+{
+ "stage": "routines-verify",
+ "rows": [
+  {
+   "task": "AudioRecorderRecordAudioWithFileName",
+   "routine": "audio_recorder_record_clip",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "AudioRecorderRecordAudio",
+   "routine": "audio_recorder_record_audio_clip",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "step save_recording: after-checks failed: no match (best 0.25 < 0.80 or ambiguous, runner-up 0.25); no match (best 0.25 < 0.80 or ambiguous, runner-up 0.25)"
+  },
+  {
+   "task": "CameraTakePhoto",
+   "routine": "camera_take_photo",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "ClockStopWatchPausedVerify",
+   "routine": "clock_pause_stopwatch",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "ClockStopWatchRunning",
+   "routine": "clock_start_stopwatch",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "ClockTimerEntry",
+   "routine": "clock_create_timer",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "step enter_minutes_first_digit: target not found: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)"
+  },
+  {
+   "task": "ContactsAddContact",
+   "routine": "contacts_create_contact_2",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "step enter_phone_number: after-checks failed: field holds ''"
+  },
+  {
+   "task": "ContactsNewContactDraft",
+   "routine": "contacts_create_contact",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "step launch_contacts: before-checks failed: no match (best 0.25 < 0.80 or ambiguous, runner-up 0.00)"
+  },
+  {
+   "task": "ExpenseAddMultipleFromGallery",
+   "routine": "pro_expense_add_expenses_from_gallery_im",
+   "verified": false,
+   "status": "needs_user",
+   "score": 0.0,
+   "detail": "model confirmed"
+  },
+  {
+   "task": "ExpenseDeleteDuplicates",
+   "routine": "pro_expense_delete_duplicate_expenses",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "step tap_delete_icon_for_duplicate: target not found: no match (best 1.00 < 0.80 or ambiguous, runner-up 0.98)"
+  },
+  {
+   "task": "ExpenseDeleteMultiple",
+   "routine": "pro_expense_delete_expenses",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "step tap_delete_icon_for_first_expense: target not found: no match (best 0.40 < 0.80 or ambiguous, runner-up 0.00)"
+  },
+  {
+   "task": "ExpenseDeleteSingle",
+   "routine": "pro_expense_delete_expense",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "MarkorCreateFolder",
+   "routine": "markor_create_folder",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "MarkorCreateNoteAndSms",
+   "routine": "markor_create_note_and_send_by_sms",
+   "verified": false,
+   "status": "done",
+   "score": 0.5,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "MarkorCreateNoteFromClipboard",
+   "routine": "markor_create_note",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "step tap_paste: after-checks failed: no match (best 0.25 < 0.80 or ambiguous, runner-up 0.00)"
+  },
+  {
+   "task": "MarkorCreateNote",
+   "routine": "markor_create_note_2",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "step enter_note_extension: after-checks failed: field holds ''"
+  },
+  {
+   "task": "MarkorEditNote",
+   "routine": "markor_edit_note",
+   "verified": false,
+   "status": "done",
+   "score": 0.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "NotesIsTodo",
+   "routine": "joplin_check_note_todo_status",
+   "verified": false,
+   "status": "done",
+   "score": 0.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "NotesMeetingAttendeeCount",
+   "routine": "joplin_count_meeting_attendees",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "NotesRecipeIngredientCount",
+   "routine": "joplin_get_ingredient_quantity",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "OpenAppTaskEval",
+   "routine": "contacts_open_app",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "RecipeAddMultipleRecipesFromImage",
+   "routine": "broccoli_add_recipes_from_image",
+   "verified": false,
+   "status": "needs_user",
+   "score": 0.0,
+   "detail": "model confirmed"
+  },
+  {
+   "task": "RecipeAddSingleRecipe",
+   "routine": "broccoli_add_recipe",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipesWithConstraint",
+   "routine": "broccoli_delete_recipes_by_ingredient",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipesWithNoise",
+   "routine": "broccoli_delete_recipes_2",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "step launch_broccoli: after-checks failed: no match (best 0.57 < 0.80 or ambiguous, runner-up 0.45)"
+  },
+  {
+   "task": "RecipeDeleteMultipleRecipes",
+   "routine": "broccoli_delete_recipes_2",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "step tap_delete_recipe_1: before-checks failed: app in front is PopupWindow:51b096d"
+  },
+  {
+   "task": "RecipeDeleteSingleRecipe",
+   "routine": "broccoli_delete_recipe",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "step tap_delete: before-checks failed: app in front is PopupWindow:30f4ef5"
+  },
+  {
+   "task": "RecipeDeleteSingleWithRecipeWithNoise",
+   "routine": "broccoli_delete_recipe",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "step launch_broccoli: after-checks failed: no match (best 0.57 < 0.80 or ambiguous, runner-up 0.45)"
+  },
+  {
+   "task": "RetroSavePlaylist",
+   "routine": "retro_music_create_and_export_playlist",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "step start_new_playlist: before-checks failed: app in front is PopupWindow:2eab5eb"
+  },
+  {
+   "task": "SimpleCalendarAddOneEventInTwoWeeks",
+   "routine": "simple_calendar_pro_create_event",
+   "verified": false,
+   "status": "needs_user",
+   "score": 0.0,
+   "detail": "model confirmed"
+  },
+  {
+   "task": "SimpleCalendarAddOneEventRelativeDay",
+   "routine": "calendar_create_event",
+   "verified": false,
+   "status": "needs_user",
+   "score": 0.0,
+   "detail": "model confirmed"
+  },
+  {
+   "task": "SimpleCalendarAddOneEventTomorrow",
+   "routine": "calendar_create_event",
+   "verified": false,
+   "status": "needs_user",
+   "score": 0.0,
+   "detail": "model confirmed"
+  },
+  {
+   "task": "SimpleCalendarAddOneEvent",
+   "routine": "calendar_create_event",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "step tap_start_time: target not found: no match (best 0.53 < 0.80 or ambiguous, runner-up 0.53)"
+  },
+  {
+   "task": "SimpleCalendarAddRepeatingEvent",
+   "routine": "simple_calendar_create_recurring_event",
+   "verified": false,
+   "status": "needs_user",
+   "score": 0.0,
+   "detail": "model confirmed"
+  },
+  {
+   "task": "SimpleCalendarAnyEventsOnDate",
+   "routine": "simple_calendar_pro_list_events_on_date",
+   "verified": false,
+   "status": "done",
+   "score": 0.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SimpleCalendarDeleteEventsOnRelativeDay",
+   "routine": "simple_calendar_pro_delete_day_events",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "step delete_first_event: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00); no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)"
+  },
+  {
+   "task": "SimpleCalendarDeleteEvents",
+   "routine": "simple_calendar_pro_delete_events_on_dat",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "step tap_delete_second_event: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00); no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)"
+  },
+  {
+   "task": "SimpleCalendarEventOnDateAtTime",
+   "routine": "simple_calendar_pro_get_event_titles",
+   "verified": false,
+   "status": "done",
+   "score": 0.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SimpleCalendarEventsOnDate",
+   "routine": "simple_calendar_pro_list_events_on_date",
+   "verified": false,
+   "status": "done",
+   "score": 0.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SimpleCalendarLocationOfEvent",
+   "routine": "simple_calendar_pro_get_event_location",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SimpleCalendarNextEvent",
+   "routine": "simple_calendar_get_next_event",
+   "verified": false,
+   "status": "done",
+   "score": 0.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SimpleDrawProCreateDrawing",
+   "routine": "simple_draw_create_drawing",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "step find_select_destination_folder_to_verify: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)"
+  },
+  {
+   "task": "SimpleSmsReplyMostRecent",
+   "routine": "simple_sms_messenger_reply_most_recent_m",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SimpleSmsReply",
+   "routine": "simple_sms_messenger_reply_to_conversati",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SimpleSmsSendClipboardContent",
+   "routine": "simple_sms_messenger_send_clipboard_mess",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SimpleSmsSendReceivedAddress",
+   "routine": "simple_sms_messenger_text_event_address",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "outputs not found: recipient"
+  },
+  {
+   "task": "SimpleSmsSend",
+   "routine": "simple_sms_messenger_send_message",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SystemBluetoothTurnOffVerify",
+   "routine": "settings_turn_off_bluetooth",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SystemBluetoothTurnOnVerify",
+   "routine": "settings_turn_on_bluetooth",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SystemBrightnessMaxVerify",
+   "routine": "settings_set_brightness_max",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SystemBrightnessMax",
+   "routine": "settings_set_brightness_max",
+   "verified": false,
+   "status": "done",
+   "score": 0.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SystemBrightnessMinVerify",
+   "routine": "settings_set_brightness_minimum_2",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SystemBrightnessMin",
+   "routine": "settings_set_brightness_minimum_2",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SystemWifiTurnOffVerify",
+   "routine": "settings_turn_off_wifi_2",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "step turn_off_wifi: after-checks failed: toggle is on"
+  },
+  {
+   "task": "SystemWifiTurnOff",
+   "routine": "settings_turn_off_wifi_2",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "SystemWifiTurnOnVerify",
+   "routine": "settings_turn_on_wifi_2",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "step turn_on_wifi_switch: after-checks failed: toggle is off"
+  },
+  {
+   "task": "SystemWifiTurnOn",
+   "routine": "settings_turn_on_wifi_2",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "outputs not found: wifi_status"
+  },
+  {
+   "task": "TurnOnWifiAndOpenApp",
+   "routine": "settings_turn_on_wifi_3",
+   "verified": true,
+   "status": "done",
+   "score": 1.0,
+   "detail": "all steps and checks passed"
+  },
+  {
+   "task": "VlcCreatePlaylist",
+   "routine": "vlc_create_playlist",
+   "verified": false,
+   "status": "failed",
+   "score": 0.0,
+   "detail": "step open_more_actions_for_first_video: target not found: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)"
+  }
+ ]
+}

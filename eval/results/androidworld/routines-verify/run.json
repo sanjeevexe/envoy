@@ -13,6 +13,13 @@
    "note": "routines-verify resumed after the 18:04 overlap (2 replays set aside); the remaining 20",
    "androidworld_setup_rerun": false,
    "app_snapshots": 24
+  },
+  {
+   "started": "2026-10-28T22:09:52",
+   "envoy_commit": "1b5ff870808fa09e05c6728f393dedd3bef5408f",
+   "note": "",
+   "androidworld_setup_rerun": true,
+   "app_snapshots": 24
   }
  ],
  "stage": "routines-verify",
