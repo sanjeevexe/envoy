@@ -296,8 +296,8 @@ class MatchOutput(_Strict):
 
 class InputValue(_Strict):
     name: str
-    value: str | None = Field(description="The value, or null if neither the request nor the notes give it")
-    source: Literal["request", "notes", "missing"]
+    value: str | None = Field(description="The value, or null if neither the request, the notes nor the dates and times give it")
+    source: Literal["request", "notes", "computed", "missing"]
 
 
 MatchOutput.model_rebuild()

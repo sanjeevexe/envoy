@@ -293,7 +293,7 @@ steps:
 
 ### Running a routine
 
-A request is matched to a routine in four filters: the app, the intent pattern, similarity of descriptions, and a final model confirmation that also fills the inputs from the request and memory. The executor then runs each step: wait for its before-checks (up to 5 seconds), find the element, act, wait for its after-checks. No model call is made while checks pass.
+A request is matched to a routine in four filters: the app, the intent pattern, similarity of descriptions, and a final model confirmation that also fills the inputs from the request and memory. A date or time the request only implies ("tomorrow", an end time from a start and a duration) is worked out in code from the phone's date, so the model never computes one. The executor then runs each step: wait for its before-checks (up to 5 seconds), find the element, act, wait for its after-checks. No model call is made while checks pass.
 
 **When a check fails, the fallback ladder climbs one rung at a time:**
 

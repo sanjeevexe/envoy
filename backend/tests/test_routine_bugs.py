@@ -10,15 +10,20 @@ recorded as the app "PopupWindow:2096839".
 
 from __future__ import annotations
 
+import asyncio
 import dataclasses
+from datetime import date
 from pathlib import Path
 from types import SimpleNamespace
 
 from devices.android import AndroidDevice
+from models.schemas import InputValue, MatchOutput
 from routines import checks as chk
 from routines import locators
 from routines.compiler import clean, generalize_locator, load_trace
-from routines.model import Check, Locator
+from routines.dates import facts
+from routines.matcher import RoutineMatcher
+from routines.model import Check, InputSpec, Locator, Routine
 from routines.screens import load_tree, short_id
 
 AW = Path(__file__).parent / "traces" / "androidworld"
@@ -120,3 +125,50 @@ def test_a_row_chosen_by_an_input_is_a_hard_requirement():
     assert locators.locate(loc, screen, {"expense_name": "Seminars"}).element.index == 117
     # Not on screen: no other row's icon, even at the relaxed threshold.
     assert not locators.locate(loc, screen, {"expense_name": "Groceries"}, threshold=locators.RELAXED).ok
+
+
+# ---- 4. dates and times a request implies --------------------------------------------------------
+
+TODAY = date(2023, 10, 15)  # AndroidWorld's phone date, a Sunday
+
+
+def test_relative_dates_and_end_times_are_worked_out_from_the_phones_date():
+    two_weeks = facts("create a calendar event in two weeks from today at 17h with the title 'Meeting with the Team'. "
+                      "The event should last for 30 mins.", TODAY)
+    assert two_weeks[0].startswith("'today' is Sunday, October 15, 2023")
+    assert any("'in two weeks' is Sunday, October 29, 2023 (2023-10-29" in f for f in two_weeks)
+    assert any("ends at 17:30" in f for f in two_weeks)
+    assert any("'this thursday' is Thursday, October 19" in f for f in facts("an event for this Thursday at 5h", TODAY))
+    assert any("day 16 of the month" in f for f in facts("an event for tomorrow at 20h", TODAY))
+    assert any("ends at 01:00 the next day" in f for f in facts("a table at 11 pm for two hours", TODAY))
+    assert facts("Check in for my flight", TODAY) == [facts("", TODAY)[0]]  # nothing implied: only today
+
+
+class _Adapter:
+    def __init__(self, inputs: list[InputValue]) -> None:
+        self.inputs, self.content = inputs, ""
+
+    def call(self, job, content, **kw):
+        self.content = content
+        out = MatchOutput(routine="calendar_create_event", confident=True, inputs=self.inputs)
+        return SimpleNamespace(parsed=out, cost_usd=0.0, cost_at_standard_usd=0.0)
+
+
+def test_the_matcher_keeps_a_computed_date_only_if_code_worked_it_out():
+    routine = Routine(routine="calendar_create_event", app="com.simplemobiletools.calendar.pro", intent="Create a calendar event",
+                      patterns=["create a calendar event"], status="active",
+                      inputs={"event_title": InputSpec(description="Title", example="Call with the Team"),
+                              "event_day": InputSpec(description="Day of the month", example="16")}, steps=[])
+    store = SimpleNamespace(active=lambda: [routine])
+    request = "In Simple Calendar Pro, create a calendar event for tomorrow at 20h with the title 'Call with the Team'."
+    good = _Adapter([InputValue(name="event_title", value="Call with the Team", source="request"),
+                     InputValue(name="event_day", value="16", source="computed")])
+    res = asyncio.run(RoutineMatcher(store, good).match(request, today=TODAY))  # type: ignore[arg-type]
+    assert res.inputs == {"event_title": "Call with the Team", "event_day": "16"} and not res.missing
+    assert "DATES AND TIMES:" in good.content and "'tomorrow' is Monday, October 16, 2023" in good.content
+    assert "written like '16'" in good.content and "written like 'Call" not in good.content
+    # A day the model worked out itself is not kept (17 is in no fact, and "5" can't hide inside "2023-10-15").
+    for wrong in ("17", "5"):
+        bad = _Adapter([InputValue(name="event_title", value="Call with the Team", source="request"),
+                        InputValue(name="event_day", value=wrong, source="computed")])
+        assert asyncio.run(RoutineMatcher(store, bad).match(request, today=TODAY)).missing == ["event_day"]  # type: ignore[arg-type]
