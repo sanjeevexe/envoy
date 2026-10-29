@@ -19,7 +19,8 @@
    "duration_s": 27.53,
    "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-real-cold-sb_mocha-215956",
    "notes_used": [],
-   "approvals": []
+   "approvals": [],
+   "trace": "traces/real/notes-real-cold-sb_mocha-215956.jsonl"
   },
   {
    "pass": "cold",
@@ -35,7 +36,8 @@
    "duration_s": 16.73,
    "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-real-cold-dd_pizza-220024",
    "notes_used": [],
-   "approvals": []
+   "approvals": [],
+   "trace": "traces/real/notes-real-cold-dd_pizza-220024.jsonl"
   },
   {
    "pass": "cold",
@@ -51,7 +53,8 @@
    "duration_s": 25.49,
    "trace_dir": "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/wonder-appnotes/data/runs/notes-real-cold-sb_flat_white-220041",
    "notes_used": [],
-   "approvals": []
+   "approvals": [],
+   "trace": "traces/real/notes-real-cold-sb_flat_white-220041.jsonl"
   },
   {
    "pass": "warmup",
@@ -111,7 +114,8 @@
     ],
     "dropped": [],
     "cost_usd": 0.00499875
-   }
+   },
+   "trace": "traces/real/notes-real-warmup-sb_americano-220107.jsonl"
   },
   {
    "pass": "warmup",
@@ -159,7 +163,8 @@
     ],
     "dropped": [],
     "cost_usd": 0.0048055500000000004
-   }
+   },
+   "trace": "traces/real/notes-real-warmup-dd_sushi-220200.jsonl"
   },
   {
    "pass": "warmup",
@@ -220,7 +225,8 @@
     ],
     "dropped": [],
     "cost_usd": 0.0029433000000000003
-   }
+   },
+   "trace": "traces/real/notes-real-warmup-sb_latte-220218.jsonl"
   },
   {
    "pass": "warm",
@@ -240,7 +246,8 @@
     "app_d600e546a0",
     "app_37e7866655"
    ],
-   "approvals": []
+   "approvals": [],
+   "trace": "traces/real/notes-real-warm-sb_mocha-220248.jsonl"
   },
   {
    "pass": "warm",
@@ -259,7 +266,8 @@
     "app_0918b592c1",
     "app_c689a9aac1"
    ],
-   "approvals": []
+   "approvals": [],
+   "trace": "traces/real/notes-real-warm-dd_pizza-220310.jsonl"
   },
   {
    "pass": "warm",
@@ -279,7 +287,8 @@
     "app_d600e546a0",
     "app_37e7866655"
    ],
-   "approvals": []
+   "approvals": [],
+   "trace": "traces/real/notes-real-warm-sb_flat_white-220325.jsonl"
   }
  ],
  "summary": {

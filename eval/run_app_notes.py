@@ -19,6 +19,7 @@ import asyncio
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import time
@@ -114,6 +115,17 @@ async def run_task(device: Any, sky: Any, notes: Any, phase: str, pas: str, task
     return row
 
 
+def keep_traces(rows: list[dict[str, Any]], out: Path, phase: str) -> None:
+    """Each run's step log (with the note ids every call saw, no screenshots) next to the results: data/runs isn't kept."""
+    d = out / "traces" / phase
+    d.mkdir(parents=True, exist_ok=True)
+    for r in rows:
+        src = Path(r.get("trace_dir") or "") / "steps.jsonl"
+        if r.get("trace_dir") and src.exists():
+            shutil.copy(src, d / f"{Path(r['trace_dir']).name}.jsonl")
+            r["trace"] = f"traces/{phase}/{Path(r['trace_dir']).name}.jsonl"
+
+
 def summary(rows: list[dict[str, Any]], pas: str) -> dict[str, Any]:
     rs = [r for r in rows if r["pass"] == pas]
     n = len(rs) or 1
@@ -173,6 +185,7 @@ async def main_async(args: argparse.Namespace) -> int:
         rows.append(await run_task(device, sky, notes, args.phase, "warm", t, learn=False))
     if sky is not None:
         await asyncio.to_thread(sky.reset)
+    keep_traces(rows, out, args.phase)
     doc = {"phase": args.phase, "date": datetime.now(timezone.utc).isoformat(timespec="seconds"), "profile": active_profile(),
            "commit": subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True, cwd=REPO).stdout.strip(),
            "wall_s": round(time.time() - t0, 1), "rows": rows, "summary": {p: summary(rows, p) for p in ("cold", "warmup", "warm")},
