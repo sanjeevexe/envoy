@@ -140,3 +140,29 @@ def test_envoys_subprocess_never_sees_androidworlds_python(monkeypatch):
 
 if __name__ == "__main__":
     sys.exit(pytest.main(["-q", __file__]))
+
+
+def test_android_env_never_restarts_the_shared_adb_server(monkeypatch):
+    # android_env answers a failed adb command with `adb kill-server` + `start-server`; on Oct 28 that took down Phase 7's
+    # SkyLark suites, which share the server. aw_env replaces the restart with a wait, and refuses server commands.
+    import subprocess
+    from android_env.components import adb_controller, config_classes
+    calls: list[list[str]] = []
+
+    def check_output(cmd, **kw):
+        calls.append(cmd)
+        if cmd[-1] == "whoami":  # the device command fails every time
+            raise subprocess.CalledProcessError(1, cmd)
+        return b""
+
+    monkeypatch.setattr(adb_controller.subprocess, "check_output", check_output)
+    monkeypatch.setattr(adb_controller.time, "sleep", lambda s: None)
+    monkeypatch.setattr(aw_env.time, "sleep", lambda s: None)
+    monkeypatch.setenv("ANDROID_HOME", "/tmp")  # AdbController deletes it; monkeypatch puts it back
+    ctl = adb_controller.AdbController(config_classes.AdbControllerConfig(adb_path="adb", device_name=aw_env.SERIAL))
+    with pytest.raises(Exception):
+        ctl.execute_command(["shell", "whoami"])
+    assert calls and not any(c in cmd for cmd in calls for c in ("kill-server", "start-server"))
+    assert any(cmd[-1] == "devices" for cmd in calls)  # it waited and looked instead
+    with pytest.raises(RuntimeError, match="refused"):
+        ctl.execute_command(["kill-server"], device_specific=False)

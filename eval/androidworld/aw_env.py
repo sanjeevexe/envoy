@@ -6,15 +6,24 @@ console 5560 and gRPC 8560 (eval/androidworld/emulator.sh).
 
 The emulator runs with -grpc-use-token, which binds gRPC to 127.0.0.1 and requires the per-launch token as
 "authorization: Bearer <token>" metadata. android_env opens its channel with grpc.secure_channel(local credentials)
-and no token, so `connect()` wraps that one channel with an interceptor that adds the token. Nothing in AndroidWorld or
-android_env is modified; the plain, unauthenticated gRPC port is never opened.
+and no token, so `connect()` wraps that one channel with an interceptor that adds the token. The plain, unauthenticated
+gRPC port is never opened.
+
+One change to android_env's behaviour (`never_restart_the_adb_server`, applied on import): when an adb command fails,
+android_env's AdbController restarts the adb server (`adb kill-server`, then `start-server`). The server on port 5037 is
+shared by every session on this Mac. On Oct 28 at 22:32 a stalled AndroidWorld emulator made it do so, and Phase 7's
+SkyLark suites on envoy-test crashed. A second adb server on its own port would not help: it scans the same emulator
+ports and would take envoy-test's connection too. So the restart is replaced by a wait and an `adb devices`, and an adb
+command that would kill or start a server raises instead. AndroidWorld's tasks and scoring are untouched.
 """
 
 from __future__ import annotations
 
+import logging
 import os
 import platform
 import subprocess
+import time
 from pathlib import Path
 
 import grpc
@@ -24,6 +33,31 @@ GRPC_PORT = 8560
 SERIAL = f"emulator-{CONSOLE_PORT}"
 ADB = str(Path(os.environ.get("ANDROID_HOME", Path.home() / "Library/Android/sdk")) / "platform-tools" / "adb")
 AW_DIR = Path(__file__).resolve().parents[2] / "third_party" / "android_world"
+SERVER_COMMANDS = {"kill-server", "start-server", "reconnect"}  # commands that act on the shared server, not on our device
+
+
+def never_restart_the_adb_server() -> None:
+    """Make android_env's AdbController leave the shared adb server alone (see the module docstring)."""
+    from android_env.components import adb_controller
+
+    ctl = adb_controller.AdbController
+    if getattr(ctl, "_envoy_safe", False):
+        return
+    original = ctl.execute_command
+
+    def execute_command(self, args, timeout=None, device_specific=True):
+        if args and args[0] in SERVER_COMMANDS:
+            raise RuntimeError(f"refused: `adb {args[0]}` would act on the adb server every session on this Mac shares")
+        return original(self, args, timeout=timeout, device_specific=device_specific)
+
+    def _restart_server(self, timeout=None):
+        logging.warning("adb command failed: waiting instead of restarting the shared adb server")
+        time.sleep(5.0)
+        original(self, ["devices"], timeout=timeout, device_specific=False)
+
+    ctl.execute_command = execute_command
+    ctl._restart_server = _restart_server
+    ctl._envoy_safe = True
 
 
 def grpc_token(port: int = GRPC_PORT) -> str:
@@ -224,3 +258,9 @@ def ensure_setup(env, log=print) -> bool:
         raise RuntimeError(f"AndroidWorld setup left {n} app snapshots (expected {EXPECTED_SNAPSHOTS})")
     log(f"AndroidWorld setup done: {n} app snapshots")
     return True
+
+
+try:  # in AndroidWorld's venv, before any AdbController exists
+    never_restart_the_adb_server()
+except ImportError:  # imported without android_env (Envoy's backend tests)
+    pass
