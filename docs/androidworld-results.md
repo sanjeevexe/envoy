@@ -271,6 +271,8 @@ What this says, with the caveats attached:
 
 ## What Envoy should change on `main`, ranked
 
+**Approved for `main` (Oct 28, the user: "All 13").** The merge, and the SkyLark and real-app reruns on the result before it, are the main chat's: this branch never commits to `main`.
+
 The 13 agent commits below cherry-pick cleanly onto `main` as it is on Oct 28 (`3719818`, after Phases 6 and 7). On that result `main`'s whole suite passes (234 tests). Main's commits since the branch was measured touch only routine repair, the phone and the task history, so the agent is still the one measured here. The only differences are the AndroidWorld tests and a two-line trace change (`73c6fab`). Against branches still waiting to merge:
 - `app-routing`: applies cleanly.
 - `claude/repair-fixes` and `claude/overnight-integration`: already in `main`.
