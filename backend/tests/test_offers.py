@@ -162,6 +162,35 @@ def test_declined_and_expired_are_final_and_a_failed_start_stays_pending():
     assert e.value.status == 409 and got["status"] == "pending" and "no event loop" in got["note"]  # pending, and says why
 
 
+def test_envoy_can_withdraw_a_question_it_no_longer_needs(phase5_env):  # noqa: F811
+    env = phase5_env
+    offers, events = env.ctx.offers, []
+    env.ctx.bus.listeners.append(events.append)
+    o = offers.make(kind="handoff", title="Send trip-recap.mp4 to your Pixel 5?", body="", source="handoff", key="handoff:trip-recap.mp4",
+                    action={"type": "task", "goal": "Show the newest video in my gallery", "request": "Show the newest video in my gallery"})
+    w = offers.withdraw(o["id"], "Muse already sent it to your phone")
+    assert w["status"] == "withdrawn" and w["note"] == "Muse already sent it to your phone" and w["decided_by"] == "envoy"
+    assert [e["change"] for e in events if e["type"] == "offer"] == ["created", "withdrawn"]  # the card updates
+    with pytest.raises(OfferError) as e:
+        offers.decide(o["id"], "accept", OWNER)
+    assert e.value.status == 409 and "withdrawn" in str(e.value)
+    assert offers.withdraw(o["id"], "again")["note"] == "Muse already sent it to your phone"  # a no-op the second time
+    assert [e["change"] for e in events if e["type"] == "offer"] == ["created", "withdrawn"]
+    env.ctx.runner.start = starter(env.ctx.tasks, [])
+    a = offers.make(kind="trigger", title="t", body="", action=CHECK_IN, source="x", key="w-answered")
+    offers.decide(a["id"], "accept", OWNER)
+    assert offers.withdraw(a["id"], "too late")["status"] == "accepted"  # an answered offer is left as it is
+    assert offers.withdraw("offer-nope", "x") is None
+    assert offers.make(kind="handoff", title="again", body="", source="handoff", key="handoff:trip-recap.mp4",
+                       action={"type": "task", "goal": "Show it", "request": "Show it"}) is not None  # withdrawn doesn't block the key
+    noon = datetime.now().replace(hour=12, minute=0, second=0, microsecond=0).timestamp()
+    b = build_briefing(env.ctx.tasks, env.ctx.memory, env.ctx.routines, env.ctx.scheduler, env.ctx.alerts, now=noon, offers=offers)
+    assert o["id"] not in {n["id"] for n in b["needs"]}
+    with TestClient(env.ctx.asgi) as c:
+        got = c.get("/api/offers?status=withdrawn", headers=me(env.token)).json()
+        assert [x["id"] for x in got] == [o["id"]]
+
+
 def test_enable_and_create_trigger_actions():
     u = unit()
     off = u.sched.add("time", "Sunday coupons", {"daily_at": "9:00"}, {"goal": "Clip my coupons", "ask": True}, enabled=False)

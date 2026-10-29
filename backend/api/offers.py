@@ -22,7 +22,8 @@ token, never MCP, never a trigger, never a model. The task an accepted offer sta
 (`web`, or `iphone` for a paired iPhone), so the approval rules treat its request as your own words: you saw the goal and
 said yes. Money still always asks, and so does a button the request doesn't name.
 
-A key stops nagging: `make()` returns None when an offer with the same key is pending or was declined. An offer a trigger
+A key stops nagging: `make()` returns None when an offer with the same key is pending or was declined. Envoy can take a
+question back once it's no longer needed (`withdraw()`: Muse already sent that file); the card then says so. An offer a trigger
 raised keeps the trigger's credit: accepting it publishes `trigger_fired` with the task, so change alerts (api/alerts.py)
 and the scheduler's self-feed guard still count the task as the trigger's.
 
@@ -49,7 +50,7 @@ except ImportError:  # pragma: no cover - depends on what's merged
     preflight_check = None
 
 KINDS = ("trigger", "repeat", "handoff", "trigger_request")
-STATUSES = ("pending", "accepted", "declined", "expired")
+STATUSES = ("pending", "accepted", "declined", "expired", "withdrawn")
 LEVELS = ("off", "important", "all")
 DEFAULT_LEVEL = "important"
 IMPORTANT = {"trigger", "handoff", "trigger_request"}  # what pushes at `important`; `repeat` waits in the app
@@ -261,6 +262,22 @@ class Offers:
             self.bus.publish("offer", offer=o, change="expired")
         return out
 
+    def withdraw(self, oid: str, why: str) -> dict[str, Any] | None:
+        """Envoy takes back a question it no longer needs (Muse already sent that file to the phone): a pending offer
+        becomes `withdrawn`, with the reason, and its card updates. An offer already answered or expired is left as it is.
+        Envoy's own code calls this; it decides nothing for you, and no route or MCP tool reaches it. None: no such offer."""
+        with self._deciding:  # never in the middle of your yes
+            offer = self.get(oid)
+            if offer is None or offer["status"] != "pending":
+                return offer
+            with self.tasks.lock:
+                self.tasks.db.execute("UPDATE offers SET status='withdrawn', decided_at=?, decided_by='envoy', note=? WHERE id=? AND status='pending'",
+                                      (self.clock(), re.sub(r"\s+", " ", str(why or "")).strip()[:300] or None, oid))
+                self.tasks.db.commit()
+            out = self.get(oid) or offer
+        self.bus.publish("offer", offer=out, change="withdrawn")
+        return out
+
     # ---- the built-in actions --------------------------------------------------------------------
 
     def _task(self, offer: dict[str, Any], source: str) -> dict[str, Any]:
@@ -328,7 +345,7 @@ def offers_router(ctx: Any, session: Callable[..., None], caller: Callable[..., 
     @r.get("/api/offers", dependencies=[Depends(session)])
     def list_offers(status: str = "pending", limit: int = 50) -> list[dict[str, Any]]:
         if status not in (*STATUSES, "all"):
-            raise HTTPException(400, "status is pending, accepted, declined, expired or all")
+            raise HTTPException(400, "status is pending, accepted, declined, expired, withdrawn or all")
         return offers.list(status, min(limit, 200))
 
     @r.get("/api/offers/{oid}", dependencies=[Depends(session)])

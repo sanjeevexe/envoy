@@ -32,6 +32,7 @@ export function outcome(o: Offer): string {
     return o.action.type === "task" || o.action.type === "handoff" ? `You said yes${by}: started` : `You said yes${by}: set up`;
   }
   if (o.status === "declined") return o.kind === "repeat" ? "Not now: I won't suggest it again" : o.kind === "trigger" ? "Not now: skipped this time" : "Not now";
+  if (o.status === "withdrawn") return `No longer needed${o.note ? `: ${o.note}` : ""}`;  // Envoy took the question back
   return "Expired: no answer in time";
 }
 
