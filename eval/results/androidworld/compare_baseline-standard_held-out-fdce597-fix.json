@@ -1,0 +1,57 @@
+{
+ "before": "baseline-standard",
+ "after": "held-out-fdce597-fix",
+ "by_half": {
+  "dev": {
+   "n": 0,
+   "before": 0,
+   "after": 0,
+   "gained": 0,
+   "lost": 0,
+   "p_paired": 1.0
+  },
+  "held_out": {
+   "n": 58,
+   "before": 12.0,
+   "after": 30.5,
+   "gained": 21,
+   "lost": 2,
+   "p_paired": 0.0001
+  },
+  "all": {
+   "n": 58,
+   "before": 12.0,
+   "after": 30.5,
+   "gained": 21,
+   "lost": 2,
+   "p_paired": 0.0001
+  }
+ },
+ "gained": [
+  "AudioRecorderRecordAudio",
+  "ContactsAddContact",
+  "ExpenseAddMultipleFromGallery",
+  "ExpenseAddSingle",
+  "ExpenseDeleteDuplicates",
+  "MarkorCreateFolder",
+  "MarkorCreateNoteAndSms",
+  "NotesMeetingAttendeeCount",
+  "RecipeDeleteMultipleRecipesWithNoise",
+  "SimpleCalendarAddOneEventInTwoWeeks",
+  "SimpleCalendarAddOneEventTomorrow",
+  "SimpleCalendarAddRepeatingEvent",
+  "SimpleCalendarDeleteOneEvent",
+  "SimpleDrawProCreateDrawing",
+  "SimpleSmsReply",
+  "SimpleSmsSendReceivedAddress",
+  "SystemBluetoothTurnOff",
+  "SystemBrightnessMax",
+  "TasksDueOnDate",
+  "TurnOffWifiAndTurnOnBluetooth",
+  "VlcCreatePlaylist"
+ ],
+ "lost": [
+  "RecipeDeleteMultipleRecipesWithConstraint",
+  "RetroSavePlaylist"
+ ]
+}
