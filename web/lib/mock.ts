@@ -526,7 +526,9 @@ export async function handle(path: string, init: RequestInit = {}): Promise<any>
 
 export const photos = async (n: number) => {
   await new Promise((r) => setTimeout(r, 900));
-  return { results: [], summary: n === 1 ? "I read the boarding pass: SL 482, seat 14C, group 3." : `I read ${n} images and saved what they say.` };
+  const summary = n === 1 ? "I read the boarding pass: SL 482, seat 14C, group 3." : `I read ${n} images and saved what they say.`;
+  emit("photo", { summary }); // the API tells every open app (a toast), as for a Shortcut upload
+  return { results: [], summary };
 };
 
 // The event stream: replays what the fixtures do, and what you do (approving, stopping, starting a task).
