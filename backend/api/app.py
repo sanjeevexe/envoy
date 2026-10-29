@@ -42,6 +42,7 @@ from routines.store import RoutineStore
 from api import routine_view
 from api.alerts import ChangeAlerts
 from api.auth import Auth, Caller, allowed_hosts, public_url, tunnel_hosts
+from api.briefing import build_briefing
 from api.chat import chat
 from api.crossapp import CrossApp
 from api.devices import DevicePool
@@ -229,6 +230,11 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
         return {"profile": ctx.profile, "devices": pool.status(), "tasks": tasks.list(20), "approvals": tasks.approvals("pending"),
                 "routines": len(routines.active()), "memory": {"entities": sum(1 for e in memory.entities() if e["type"] not in NOT_ABOUT_YOU)}, "public_url": public,
                 "me": {"kind": me.kind, "name": me.name} if me else None, "push_key": pusher.keys.public_key}
+
+    @app.get("/api/briefing", dependencies=[Depends(session)])
+    def briefing() -> dict[str, Any]:
+        """Home's briefing: read only, no model call (api/briefing.py)."""
+        return build_briefing(tasks, memory, routines, scheduler, alerts)
 
     @app.post("/api/tasks", dependencies=[Depends(session)])
     async def create_task(body: dict[str, Any] = Body(...)) -> dict[str, Any]:

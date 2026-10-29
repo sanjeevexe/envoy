@@ -18,6 +18,9 @@ const now = () => Date.now() / 1000;
 const ago = (s: number) => T - s;
 const midnight = new Date(new Date().setHours(0, 0, 0, 0)).getTime() / 1000;
 const todayAt = (h: number, m = 0) => midnight + h * 3600 + m * 60;
+// "Today" in the fixtures: since midnight, or the last 18 hours when it's early in the morning, so Home always has a day.
+const dayStart = Math.min(midnight, T - 18 * 3600);
+const earlier = (h: number, m: number, fallback: number) => (todayAt(h, m) < T - 600 ? todayAt(h, m) : ago(fallback));
 const fmtDay = (t: number) => new Date(t * 1000).toLocaleDateString(undefined, { month: "short", day: "numeric" });
 
 let scenario: Scenario = "full";
@@ -121,25 +124,25 @@ function seed(): DB {
       step(5, { kind: "routine_step", text: "go_to_checkout", status: "running", rung: 0, shot: "dd-4", risk: "irreversible", time: ago(32) }),
     ]);
     approvals["appr-dd"] = { id: "appr-dd", task_id: "task-dd", created_at: ago(30), status: "pending", description: "Pay $18.42 at DoorDash",
-      reasons: ["Costs money: payments always come to you", "Order: Pad thai, medium, no peanuts", "From: Thai Basil", "Total: $18.42 with tip"],
+      reasons: ["Order: Pad thai, medium, no peanuts", "From: Thai Basil", "Total: $18.42 with tip", "rule: it costs money"],
       app: "com.dd.doordash", screen: "Checkout", screenshot: "dd-4.jpg", nonce: "mock-nonce" };
     add(task({ id: "task-tgt", goal: "Check the price of AirPods Pro at Target", status: "needs_you", app: "com.target.ui", waiting_for: "phone",
       detail: "Target blocks emulators: use your Android phone for this task?", created_at: ago(400), updated_at: ago(380) }));
   }
   // the task that streams (full: on load; quiet: a watcher every so often)
   add(task({ id: "task-amz", goal: "When does my Amazon package arrive?", app: "com.amazon.mShop.android.shopping", device: "envoy-test", kind: "agent",
-    result: "Your AirPods Pro arrive Thursday", created_at: todayAt(17, 29), updated_at: todayAt(17, 30), model_calls: 6, cost_usd: 0.011 }), [
-    step(1, { kind: "plan", text: "Open Your Orders; Read the delivery date of the newest order", time: todayAt(17, 29) }),
-    step(2, { kind: "action", text: 'tap "Your Orders"', reason: "The orders list has the delivery dates", risk: "read", shot: "amz-1", time: todayAt(17, 29) + 20 }),
-    step(3, { kind: "memory", text: "memory updated: 3 same, 1 replaced", entities: ["Order AirPods Pro"], time: todayAt(17, 30) }),
-    step(4, { kind: "finish", text: "Your AirPods Pro arrive Thursday", status: "done", time: todayAt(17, 30) }),
+    result: "Your AirPods Pro arrive Thursday", created_at: earlier(17, 29, 3 * 3600 + 60), updated_at: earlier(17, 30, 3 * 3600), model_calls: 6, cost_usd: 0.011 }), [
+    step(1, { kind: "plan", text: "Open Your Orders; Read the delivery date of the newest order", time: earlier(17, 29, 3 * 3600 + 60) }),
+    step(2, { kind: "action", text: 'tap "Your Orders"', reason: "The orders list has the delivery dates", risk: "read", shot: "amz-1", time: earlier(17, 29, 3 * 3600 + 40) }),
+    step(3, { kind: "memory", text: "memory updated: 3 same, 1 replaced", entities: ["Order AirPods Pro"], time: earlier(17, 30, 3 * 3600) }),
+    step(4, { kind: "finish", text: "Your AirPods Pro arrive Thursday", status: "done", time: earlier(17, 30, 3 * 3600) }),
   ]);
   add(task({ id: "task-sb", goal: "Order my morning coffee", source: "trigger:Morning coffee", app: "com.starbucks.mobilecard", device: "envoy-test",
-    kind: "routine", routine: "starbucks_order_usual", result: "Ordered a grande oat latte for pickup at 5th & Pine", created_at: todayAt(7, 30), updated_at: todayAt(7, 30) + 9 }), [
-    step(1, { kind: "note", text: "using routine starbucks_order_usual v2", time: todayAt(7, 30) }),
-    step(2, { kind: "routine_step", text: "open_order", status: "done", rung: 0, shot: "sb-1", time: todayAt(7, 30) + 3 }),
-    step(3, { kind: "approval", text: "Checkout: done without asking (standing approval)", reason: "you set routine starbucks_order_usual to run without asking", time: todayAt(7, 30) + 7 }),
-    step(4, { kind: "finish", text: "all steps and checks passed", status: "done", time: todayAt(7, 30) + 9 }),
+    kind: "routine", routine: "starbucks_order_usual", result: "Ordered a grande oat latte for pickup at 5th & Pine", created_at: earlier(7, 30, 9 * 3600), updated_at: earlier(7, 30, 9 * 3600) + 9 }), [
+    step(1, { kind: "note", text: "using routine starbucks_order_usual v2", time: earlier(7, 30, 9 * 3600) }),
+    step(2, { kind: "routine_step", text: "open_order", status: "done", rung: 0, shot: "sb-1", time: earlier(7, 30, 9 * 3600) + 3 }),
+    step(3, { kind: "approval", text: "Checkout: done without asking (standing approval)", reason: "you set routine starbucks_order_usual to run without asking", time: earlier(7, 30, 9 * 3600) + 7 }),
+    step(4, { kind: "finish", text: "all steps and checks passed", status: "done", time: earlier(7, 30, 9 * 3600) + 9 }),
   ]);
   add(task({ id: "task-cmp", goal: "Is AirPods Pro cheaper at Amazon or Target?", kind: "crossapp", result: "Amazon: $179.99 · Target: $189.99",
     detail: "Amazon is $10 cheaper", created_at: ago(86400 + 4000), updated_at: ago(86400 + 3900), model_calls: 4, cost_usd: 0.009 }));
@@ -164,7 +167,7 @@ function seed(): DB {
       action: { goal: "Check me in for my flight to {trip.destination}" }, enabled: true, last_fired: null,
       next: [{ at: todayAt(21) > T ? todayAt(21) : todayAt(33), for: "SL 482" }], alerts: { on: false, attributes: ["*"] } },
     { id: "trig-coffee", kind: "time", name: "Morning coffee", spec: { daily_at: "7:30" }, action: { routine: "starbucks_order_usual", inputs_from: {} },
-      enabled: true, last_fired: todayAt(7, 30), next: [{ at: todayAt(31, 30) }], alerts: { on: false, attributes: ["*"] } },
+      enabled: true, last_fired: earlier(7, 30, 9 * 3600), next: [{ at: todayAt(31, 30) > T + 86400 ? todayAt(7, 30) : todayAt(31, 30) }], alerts: { on: false, attributes: ["*"] } },
     { id: "trig-dep", kind: "fact_changed", name: "Departure changed: look up the gate", spec: { entity_type: "Flight", attributes: ["depart_time"] },
       action: { routine: "skylark_get_flight_gate", inputs_from: { trip_city: "trip.destination" } }, enabled: false, last_fired: null, next: [],
       alerts: { on: false, attributes: ["*"] } },
@@ -317,11 +320,11 @@ function briefing() {
   const changes = db.changes.filter((c) => c.time >= now() - 86400);
   const today: any[] = changes.map((c) => ({ kind: "change", id: `change-${c.id}`, task_id: c.task_id, title: `${c.attribute === "gate" ? "Gate" : c.attribute} changed to ${c.new}`,
     label: c.attribute === "gate" ? "Gate" : c.attribute.replace(/_/g, " "), attribute: c.attribute, old: c.old, new: c.new, entity: c.entity_label, source: c.source, time: c.time }));
-  const finished = all.filter((t) => ["done", "failed", "declined"].includes(t.status) && t.updated_at >= midnight && !t.parent);
+  const finished = all.filter((t) => ["done", "failed", "declined"].includes(t.status) && t.updated_at >= dayStart && !t.parent);
   finished.forEach((t) => today.push({ kind: t.routine ? "routine" : "task", id: t.id, task_id: t.id, title: t.goal, result: t.result ?? "", status: t.status, app: t.app,
     routine: t.routine, seconds: Math.round((t.updated_at - t.created_at) * 10) / 10, time: t.updated_at }));
   today.sort((a, b) => b.time - a.time);
-  const upcoming = db.triggers.filter((t) => t.enabled && t.next[0] && t.next[0].at >= now() && t.next[0].at <= now() + 86400)
+  const upcoming = db.triggers.filter((t) => t.enabled && t.kind !== "watch" && t.next[0] && t.next[0].at >= now() && t.next[0].at <= now() + 86400)
     .map((t) => ({ id: t.id, name: t.name, kind: t.kind, at: t.next[0].at, for: t.next[0].for })).sort((a, b) => a.at - b.at);
   const said: string[] = [];
   const c = today.find((x) => x.kind === "change");
