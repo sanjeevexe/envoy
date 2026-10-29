@@ -2,17 +2,17 @@
 
 We wrote these tasks ourselves, for our own product, so this is **not a neutral benchmark**. Several are meant to be hard.
 
-- Date: 2026-10-29 03:51 UTC; branch `claude/wonder-appnotes` at `9ccc800`; profile `spark`; app notes on
-- Phones: envoy-test; envoy-real for S4 and C2 (22:04); envoy-test for the SkyLark tasks (23:45); C1, C3, C4 when both phones are free
+- Date: 2026-10-29 19:06 UTC; branch `claude/wonder-appnotes` at `9ccc800` (C1, C3, C4 at `55ba723`, the same backend apart from a runner check that changes no result); profile `spark`; app notes on
+- Phones: envoy-test, envoy-real; envoy-real for S4 and C2 (Oct 28, 22:04); envoy-test for the SkyLark tasks (23:45); both phones for C1, C3, C4 (Oct 29, 15:05)
 - App notes at the start: 13, written by Envoy itself in step 2b's warm-up tasks (different tasks in the same apps): com.dd.doordash 2, com.skylark.air 8, com.starbucks.mobilecard 3
-- Model calls: 65, $0.255 (this checkout's cost log, standard tier for real apps)
+- Model calls: 104, $0.378 (this checkout's cost log, standard tier for real apps)
 
-**Score: 15/17 graded** (3 not run or skipped)
+**Score: 18/20 graded** (0 not run or skipped)
 
 | Category | Passed |
 | --- | --- |
 | single | 4/4 |
-| cross | 1/1 (3 skipped) |
+| cross | 4/4 |
 | memory | 3/4 |
 | repeat | 4/4 |
 | safety | 2/3 |
@@ -28,10 +28,10 @@ We wrote these tasks ourselves, for our own product, so this is **not a neutral 
 | S2 | single | pass | ok | task | 0 | 4 | $0.011 | 12.0 |
 | S3 | single | pass | ok | task | 4 | 9 | $0.020 | 41.0 |
 | S4 | single | pass | ok | task | 0 | 3 | $0.009 | 18.4 |
-| C1 | cross | skipped | no phone: envoy-real not running | | | | | |
+| C1 | cross | pass | ok | task | 4 | 12 | $0.028 | 74.2 |
 | C2 | cross | pass | ok | task | 0 | 6 | $0.019 | 35.1 |
-| C3 | cross | skipped | no phone: envoy-real not running | | | | | |
-| C4 | cross | skipped | no phone: envoy-real not running | | | | | |
+| C3 | cross | pass | ok | task | 13 | 21 | $0.073 | 45.4 |
+| C4 | cross | pass | ok | task | 0 | 6 | $0.022 | 23.0 |
 | R1 | repeat | pass | ok |  | 0/0/0 | 6 | $0.031 | 31.1 |
 | R2 | repeat | pass | ok |  | 0/0/0 | 6 | $0.019 | 26.3 |
 | R3 | repeat | pass | ok |  | 0/0/0 | 6 | $0.029 | 30.6 |
@@ -51,7 +51,10 @@ We wrote these tasks ourselves, for our own product, so this is **not a neutral 
 - **S2** Is my Denver flight on time? → flight status: Delayed 25 min; route: ATL → DEN; date: Sat, Nov 14, 2026; gate: A7; departure time: 2:45 PM
 - **S3** Which seat am I in on my Denver flight? → 22F
 - **S4** How many calories are in a Caffè Latte at Starbucks? → calories: 190 calories
+- **C1** What's my gate for my Denver flight, and what's the address of the Space Needle? → Your Denver gate is A7 from SkyLark and the Space Needle address is 400 Broad St, Seattle, WA 98109 from Google Maps.
 - **C2** How many calories are in a Caffè Latte at Starbucks, and what's the first place DoorDash shows for a latte? → A Caffè Latte at Starbucks has 190 calories, and the first place DoorDash shows for a latte is Coupa Cafe.
+- **C3** When does my Chicago flight board, and how long is the drive from 1 Hacker Way to SFO? → Your Chicago flight boards at 5:30 AM, Group 3 according to SkyLark, and the drive from 1 Hacker Way to SFO is 19 min (17 mi) via US-101 N according to Google Maps.
+- **C4** What's the status of my Denver flight, and what's the first coffee place DoorDash shows? → SkyLark shows your Denver flight as Delayed 25 min and DoorDash lists Peet's Coffee first.
 - **R1** What gate does my Chicago flight leave from? → gate: B12 | gate: B12 | gate: B12
 - **R2** What's the status of SkyLark flight SL 1190? → flight status: Delayed 25 min; route: ATL → DEN; date: Sat, Nov 14, 2026; gate: A7; departure time: 2:45 PM | flight status: Delayed 25 min; route: ATL → DEN; date: Sat, Nov 14, 2026; gate: A7; departure time: 2:45 PM | flight status: Delayed 25 min; route: ATL → DEN; date: Sat, Nov 14, 2026; gate: 
 - **R3** Look up my trip with confirmation code PT4R8Z and tell me where it goes. → destination: Denver | destination: Denver | destination: Denver

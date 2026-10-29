@@ -2,16 +2,16 @@
 
 We wrote these tasks ourselves, for our own product, so this is **not a neutral benchmark**. Several are meant to be hard.
 
-- Date: 2026-10-29 00:40 UTC; branch `claude/wonder-appnotes` at `d4eb4fb`; profile `spark`; app notes off
-- Phones: envoy-real; envoy-test for the SkyLark tasks; envoy-real for S4 and C2 (AndroidWorldAvd held the other slot); C1, C3, C4 need both phones at once
-- Model calls: 77, $0.264 (this checkout's cost log, standard tier for real apps)
+- Date: 2026-10-29 19:10 UTC; branch `claude/wonder-appnotes` at `d4eb4fb` (C1, C3, C4 at `55ba723`, the same backend apart from a runner check that changes no result); profile `spark`; app notes off
+- Phones: envoy-test, envoy-real; envoy-test for the SkyLark tasks (Oct 28, 17:48); envoy-real for S4 and C2 (20:38; AndroidWorldAvd held the other slot); both phones for C1, C3, C4 (Oct 29, 15:08)
+- Model calls: 123, $0.400 (this checkout's cost log, standard tier for real apps)
 
-**Score: 15/17 graded** (3 not run or skipped)
+**Score: 18/20 graded** (0 not run or skipped)
 
 | Category | Passed |
 | --- | --- |
 | single | 4/4 |
-| cross | 1/1 (3 skipped) |
+| cross | 4/4 |
 | memory | 3/4 |
 | repeat | 4/4 |
 | safety | 2/3 |
@@ -27,10 +27,10 @@ We wrote these tasks ourselves, for our own product, so this is **not a neutral 
 | S2 | single | pass | ok | task | 0 | 4 | $0.013 | 15.3 |
 | S3 | single | pass | ok | task | 4 | 8 | $0.023 | 27.6 |
 | S4 | single | pass | ok | task | 0 | 3 | $0.008 | 28.3 |
-| C1 | cross | not run | | | | | | |
+| C1 | cross | pass | ok | task | 4 | 10 | $0.023 | 93.7 |
 | C2 | cross | pass | ok | task | 2 | 8 | $0.023 | 46.5 |
-| C3 | cross | not run | | | | | | |
-| C4 | cross | not run | | | | | | |
+| C3 | cross | pass | ok | task | 24 | 30 | $0.092 | 64.8 |
+| C4 | cross | pass | ok | task | 0 | 6 | $0.022 | 24.9 |
 | R1 | repeat | pass | ok |  | 0/0/0 | 6 | $0.027 | 32.6 |
 | R2 | repeat | pass | ok |  | 0/0/0 | 6 | $0.018 | 30.6 |
 | R3 | repeat | pass | ok |  | 0/0/0 | 6 | $0.030 | 33.9 |
@@ -50,7 +50,10 @@ We wrote these tasks ourselves, for our own product, so this is **not a neutral 
 - **S2** Is my Denver flight on time? → flight status: Delayed 25 min; route: ATL → DEN; date: Sat, Nov 14, 2026; gate: A7; departure time: 2:45 PM
 - **S3** Which seat am I in on my Denver flight? → Your seat on SkyLark flight SL 1190 to Denver on Nov 14, 2026 is 22F
 - **S4** How many calories are in a Caffè Latte at Starbucks? → calories: 190 calories
+- **C1** What's my gate for my Denver flight, and what's the address of the Space Needle? → Your Denver flight gate from SkyLark is A7, and the Space Needle address from Google Maps is 400 Broad St, Seattle, WA 98109.
 - **C2** How many calories are in a Caffè Latte at Starbucks, and what's the first place DoorDash shows for a latte? → Starbucks lists 190 calories for a Caffè Latte, and DoorDash shows Coupa Cafe first for a latte.
+- **C3** When does my Chicago flight board, and how long is the drive from 1 Hacker Way to SFO? → Per SkyLark your Chicago flight boards at 5:30 AM (Group 3), and per Google Maps the drive is 19 min (17 mi) via US-101 N.
+- **C4** What's the status of my Denver flight, and what's the first coffee place DoorDash shows? → SkyLark shows Delayed 25 min for your Denver flight, and DoorDash shows Gregorys Coffee as the first coffee place.
 - **R1** What gate does my Chicago flight leave from? → gate: B12 | gate: B12 | gate: B12
 - **R2** What's the status of SkyLark flight SL 1190? → flight status: Delayed 25 min; route: ATL → DEN; date: Sat, Nov 14, 2026; gate: A7; departure time: 2:45 PM | flight status: Delayed 25 min; route: ATL → DEN; date: Sat, Nov 14, 2026; gate: A7; departure time: 2:45 PM | flight status: Delayed 25 min; route: ATL → DEN; date: Sat, Nov 14, 2026; gate: 
 - **R3** Look up my trip with confirmation code PT4R8Z and tell me where it goes. → destination: Denver | destination: Denver | destination: Denver
