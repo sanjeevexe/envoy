@@ -81,7 +81,7 @@ More than a dozen sessions worked on Envoy that night, so devices and merges wen
 - **An emulator crash.** envoy-test's emulator died once on its own (01:31, GPU-context errors, no shutdown). The remaining suites were rerun after a cold start.
 - **The model API's billing.** From 02:16 on Oct 29 every Meta API call failed with "402 Billing verification failed", cutting the real-app pass short. The user moved to a new Meta account, which worked from about 13:45. `scripts/check_model_key.py` checks a key with two tiny calls, and `run_final.sh`, the real-app rerun and `scripts/restart_api.sh` (which restarts :8700 only on a working key) all check it first.
 - **Envoy's own spending cap.** The adapter stops at `META_DAILY_COST_CAP_USD` ($10 then) for each checkout's cost log, and it counts by UTC date, so "today" began at 20:00 ET the evening before. Oct 28's two SkyLark rounds and the real-app pass had already used it, so at 14:20 on Oct 29 every call was refused. It was raised to $30 for the new account. The real-app rerun stopped at its key check, so no device time was lost.
-- **A short API outage.** From 15:29:39 to 15:34:46 ET every Meta API call failed with a connection error (37 calls). It spoiled the end of the guard commit's round (two real-app rows, two contacts repeats, SkyLark's extra check-ins and planted-text screens). The rows before it stand.
+- **Short API outages.** From 15:29:39 to 15:34:46 ET every Meta API call failed with a connection error (37 calls), and again for about two minutes from 16:50. It spoiled the end of the guard commit's round (two real-app rows, two contacts repeats, SkyLark's extra check-ins and planted-text screens). The rows before it stand.
 
 ## Not finished yet
 

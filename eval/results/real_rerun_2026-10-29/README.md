@@ -70,3 +70,27 @@ The run order alternated main and guard, back to back on one claim of envoy-real
 ## The confirm runs on `83a9702` (the guard plus the empty-state check), 16:38–16:42 (`confirm_83a9702/`)
 
 contacts_count five times: 5 of 5 passed, each answered in 0 actions, verified, compiled to a 1-step routine and rerun right with no model call. It cost about $0.20. Against main's 10/10 that is within the bar ("at most one more failure"), and the right answers now verify and compile.
+
+## AndroidWorld's #14, the splash wait (`f11758c`), against main `059bb7f`, 16:58–17:57 (`splash/`)
+
+Both commits got all 16 workflows, then doordash, gmail_newest and chipotle twice more each (three in all), interleaved on one claim of envoy-real. A first attempt at 16:50 hit a short Meta API outage (16:50–16:52); every pass stopped at its key check and no device time was spent.
+
+| Stage | main `059bb7f` | `f11758c` |
+| --- | --- | --- |
+| 1. First run right | 15/18 | 15/18 |
+| 2. Compiled | 16/18 | 16/18 |
+| 3. Same input, no model call | 12/18 (14 with a repair) | 10/18 (12 with a repair) |
+| 4. New input | 6/11 | 6/11 |
+
+**The splash rule never fired.** No trace from either commit has the rule's record (`splash_wait`), DoorDash's three included. The re-plans that do appear (contacts_count and gmail_newest on `f11758c`, at steps 6–13) are the older stuck recovery, which lists the screens visited; #14's re-plan happens only at step 1. So `f11758c` ran the same agent code path as main on every workflow here, and the row differences below are run-to-run variance, not the change.
+- Better on `f11758c`: doordash_search, play_rating and chrome_wikipedia reruns.
+- Worse: chipotle's reruns, gmail_search's and ytmusic_artist's same input, and contacts_count (20 actions once, through two stuck re-plans: the filter loop at its known rate).
+- DoorDash passed 3/3 on both commits (0–5 actions).
+
+## Session C: run-to-run variance of gmail_newest and chipotle, on the same code
+
+Three runs of each on both commits. Both commits ran the same agent path, as above, so that's six runs per workflow.
+
+- **gmail_newest:** 6/6 right, but the route varies: 2, 1, 0 actions on main and 13, 2, 1 on `f11758c`. The 13-action run went into Gmail's search ("Search in mail" ×7), needed two stuck re-plans, and still answered right.
+- **chipotle:** 6/6 right first runs, but in 9, 9, 9 actions on main and 12, 9, 11 on `f11758c`. The routine follows the route. The three 9-action runs compiled to a 9-step routine that reran right, but the 11- and 12-action runs compiled extra steps that failed on rerun: "scroll_to_chips_and_sides" failed its after-check, and "select_pickup_location" couldn't find its target. So same input passed 4/6.
+- **What varies is the agent's route, not its answer,** and a longer route compiles into a more fragile routine. An agent change that only shortens routes wouldn't touch the compile side. A compile-side fix would be to drop steps that the run didn't need, measured against these traces.
