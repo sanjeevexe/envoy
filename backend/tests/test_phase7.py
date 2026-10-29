@@ -668,3 +668,22 @@ def test_an_answer_read_off_a_list_row_is_read_in_the_row_that_shows_the_input()
     shop = trips(["USB C Cable 6ft braided · $9.99 · AB1", "USB C Cable 3ft · $7.49 · AB2"])
     keep = _extract_for("price", "", "$9.99", shop, {"search_query": "USB C Cable"}, ["$9.99"])
     assert keep is None or keep.locator is None or keep.locator.text_has != "{{search_query}}"
+
+
+def test_a_trailing_scroll_with_no_output_to_reveal_is_dropped_so_the_routine_loads():
+    # Phase 7's youtube_search routine had lost its output, so its trailing scroll got an empty target, which was saved as
+    # no target and made the routine unloadable (backlog #17).
+    from routines.compiler import CompileReport, _aim_trailing_scrolls
+    from routines.model import Extract, Locator, Routine, Step, StepAction, dump_yaml, load_yaml
+
+    def steps():
+        return [Step(id="search", intent="search", action=StepAction(kind="tap", target=Locator(text="Search"))),
+                Step(id="reveal", intent="scroll to the answer", action=StepAction(kind="scroll_until", direction="down", max_scrolls=8))]
+    rep = CompileReport(task_id="t", goal="g")
+    kept = _aim_trailing_scrolls(steps(), {}, rep)
+    assert [s.id for s in kept] == ["search"] and any("dropped" in w for w in rep.warnings)
+    r = Routine(routine="r", app="a", version=1, status="draft", intent="i", steps=kept)
+    assert load_yaml(dump_yaml(r)).steps[0].id == "search"  # round-trips
+    aimed = _aim_trailing_scrolls(steps(), {"title": Extract(locator=Locator(kind="Button"))}, CompileReport(task_id="t", goal="g"))
+    assert aimed[1].action.target == Locator(kind="Button") and load_yaml(dump_yaml(Routine(
+        routine="r", app="a", version=1, status="draft", intent="i", steps=aimed))).steps[1].action.target is not None

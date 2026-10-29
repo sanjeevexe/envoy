@@ -1082,12 +1082,7 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
         # has nothing in the tree to stop at) goes.
         while out_steps and out_steps[-1].action.kind == "scroll_until":
             out_steps.pop()
-    # A trailing scroll toward an answer: reveal the first output's element.
-    for st in out_steps:
-        if st.action.kind == "scroll_until" and st.action.target is None:
-            first = next(iter(extract.values()), None)
-            st.action.target = first.locator if first and first.locator else Locator(text=first.near if first else None)
-            st.post = [Check(kind="element_present", locator=st.action.target)]
+    out_steps = _aim_trailing_scrolls(out_steps, extract, report)
     if extract:
         if not out_steps:
             # The answer is on the screen the app opens to ("How many miles do I have?"): outputs are read by steps, so a
@@ -1117,6 +1112,24 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
                        "trace_steps_kept": report.kept, "trace_steps_dropped": len(dropped), "cost_usd": round(report.cost_at_standard_usd, 4)},
     )
     return routine, report
+
+
+def _aim_trailing_scrolls(out_steps: list[Step], extract: dict[str, Extract], report: CompileReport) -> list[Step]:
+    """A trailing scroll toward an answer reveals the first output's element. With no output left to reveal (every one was
+    dropped), it has nothing to stop at: an empty target was saved as no target at all, and the routine could not be
+    loaded back (Phase 7's youtube_search, backlog #17). Such a scroll is dropped."""
+    first = next(iter(extract.values()), None)
+    reveal = first.locator if first and first.locator else (Locator(text=first.near) if first and first.near else None)
+    kept: list[Step] = []
+    for st in out_steps:
+        if st.action.kind == "scroll_until" and st.action.target is None:
+            if reveal is None:
+                report.warnings.append(f"step {st.id!r}: a trailing scroll with no output to reveal; dropped")
+                continue
+            st.action.target = reveal
+            st.post = [Check(kind="element_present", locator=reveal)]
+        kept.append(st)
+    return kept
 
 
 def _consumed(step: Step, name: str) -> bool:
