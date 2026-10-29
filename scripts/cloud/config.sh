@@ -16,7 +16,7 @@ SUBNET_RANGE="${ENVOY_GCP_SUBNET_RANGE:-10.80.0.0/24}"
 LABELS="envoy=cloud-proof"
 REMOTE_DIR="envoy"                               # the code's folder in the VM user's home
 
-REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")/../.." && pwd)"
 GC=(gcloud --project "$PROJECT" --quiet)
 
 # SSH and scp only through IAP: the VM accepts no other inbound connection.

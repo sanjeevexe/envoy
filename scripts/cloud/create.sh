@@ -17,7 +17,7 @@ echo "project $PROJECT, zone $ZONE, $MACHINE, ${DISK_GB} GB"
 "${GC[@]}" services enable compute.googleapis.com iap.googleapis.com
 
 quota() {  # quota <json from describe> <metric>: "usage/limit"
-  python3 -c 'import json,sys; q={x["metric"]: x for x in json.load(sys.stdin)["quotas"]}; m=q.get(sys.argv[1]); print(f"{m[\"usage\"]:g}/{m[\"limit\"]:g}" if m else "none")' "$2" <<<"$1"
+  python3 -c 'import json,sys; q={x["metric"]: x for x in json.load(sys.stdin)["quotas"]}; m=q.get(sys.argv[1]); print("%g/%g" % (m["usage"], m["limit"]) if m else "none")' "$2" <<<"$1"
 }
 REG_JSON="$("${GC[@]}" compute regions describe "$REGION" --format=json)"
 PRJ_JSON="$("${GC[@]}" compute project-info describe --format=json)"
