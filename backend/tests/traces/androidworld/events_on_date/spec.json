@@ -1,0 +1,66 @@
+{
+ "name": "simple_calendar_pro_get_events",
+ "intent": "Get event titles for a date in Simple Calendar Pro",
+ "description": "Opens Simple Calendar Pro, navigates to the requested date, reads the events shown for that day, and returns their titles only.",
+ "patterns": [
+  "What events do I have on a date in Simple Calendar Pro",
+  "List my Simple Calendar Pro events for a date",
+  "Show event titles for a date in Simple Calendar Pro"
+ ],
+ "inputs": [
+  {
+   "name": "event_date",
+   "type": "date",
+   "description": "The calendar date to inspect.",
+   "from_memory": null,
+   "example": "October 24"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "swipe_to_app_search",
+   "intent": "Swipe from Home to open the app search",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "search_for_simple_calendar_pro",
+   "intent": "Type 'Simple Calendar Pro' into the app search field",
+   "target_fixed_text": "Search apps, web and more",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "tap_simple_calendar_pro_result",
+   "intent": "Tap the Simple Calendar Pro search result to open the app",
+   "target_fixed_text": "Simple Calendar Pro",
+   "choice_input": null
+  },
+  {
+   "step": 4,
+   "id": "launch_simple_calendar_pro",
+   "intent": "Launch Simple Calendar Pro directly",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 5,
+   "id": "open_event_date",
+   "intent": "Tap {{event_date}} in the calendar to open that date's event view and read its event titles",
+   "target_fixed_text": null,
+   "choice_input": "event_date"
+  }
+ ],
+ "outputs": [
+  {
+   "name": "event_titles",
+   "near": "October 24 (Tue)",
+   "example": "Trivia Night"
+  }
+ ],
+ "data_values": [
+  "11:00 - 11:25"
+ ]
+}

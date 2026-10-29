@@ -1,0 +1,63 @@
+{
+ "name": "amazon_search_first_result_price",
+ "intent": "Search Amazon for a product and get the price of the first result",
+ "description": "Search Amazon for a product and report the price shown for the first result.",
+ "patterns": [
+  "search Amazon for a product and tell me the first price",
+  "look up something on Amazon and tell me the price of the first result",
+  "what is the price of the first Amazon result for this",
+  "find a product on Amazon and report its first-result price"
+ ],
+ "inputs": [
+  {
+   "name": "search_query",
+   "type": "text",
+   "description": "The product or search term to look up on Amazon.",
+   "from_memory": null,
+   "example": "AA batteries"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "tap_search",
+   "intent": "Tap the Search button to start a search",
+   "target_fixed_text": "Search",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "type_search_query",
+   "intent": "Type {{search_query}} into the search field",
+   "target_fixed_text": "Search Amazon",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "submit_search_query",
+   "intent": "Type {{search_query}} to submit the search and show the results",
+   "target_fixed_text": "Search Amazon",
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "first_result_price",
+   "near": "Sponsored Ad - PHILIPS AA Batteries 12 Pack Long Lasting Ultra Alkaline Double A Battery",
+   "example": "$9.99"
+  }
+ ],
+ "data_values": [
+  "Eveready 2032 Batteries (10 Pack), 3V Lithium Coin Batteries for Watches, AirTags, Key Fobs, and Other Small Electronics",
+  "$6.53",
+  "Eveready Super Heavy Duty AA Battery",
+  "$9.47",
+  "EVEREADY Super Heavy Duty 1209 6 Volt Spring Lantern Battery",
+  "$5.18",
+  "PHILIPS AA Batteries 12 Pack Long Lasting Ultra Alkaline Double A Battery",
+  "$9.99",
+  "Tomorrow, Oct 30",
+  "Tue, Nov 3",
+  "Atlanta 30332"
+ ]
+}

@@ -134,10 +134,25 @@ class RoutineMatcher:
             # A computed value must be a whole word of a fact: the facts are full of digits ("5" is not in "2023-10-15").
             loose = v is not None and v.source != "computed" and norm(value) in norm(source_text)
             if value and (contains_value(source_text, value) or loose):
-                res.inputs[name] = value
+                res.inputs[name] = like_example(value, chosen.inputs[name].example)
             else:
                 res.missing.append(name)
         return res
+
+
+_PREFIX = re.compile(r"^[^\w\s]{1,2}(?=\w)")
+
+
+def like_example(value: str, example: str | None) -> str:
+    """A value written the way the routine's example is, where the request writes it otherwise: the example's fixed lead
+    character ("txt" for an extension recorded as ".txt", typed into a field that wants the dot), and never the request's
+    own full stop ("…louder than words.. Share the note": the text ends "words.", the sentence adds the second)."""
+    if value.endswith("..") and not value.endswith("...") and not (example or "").endswith(".."):
+        value = value[:-1]
+    lead = _PREFIX.match((example or "").strip())
+    if lead and not value.startswith(lead.group()) and any(ch.isalpha() for ch in value) and " " not in value.strip():
+        value = lead.group() + value
+    return value
 
 
 def _describe(s: InputSpec) -> str:

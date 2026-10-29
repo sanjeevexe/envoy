@@ -1,0 +1,234 @@
+{
+ "what": "real-app routines: every cached Wonder spec recompiled offline from its source trace with the workflow's own memory (eval/run_real_apps.py WORKFLOWS), by aw-merge 773536a's compiler and by this branch's; Chrome's compile-time screenshot read answered identically for both",
+ "identical": 37,
+ "differs": 8,
+ "newly_refused": 0,
+ "rows": [
+  {
+   "spec": "eval/results/final/real_compiled/amazon",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/calendar_today",
+   "result": "differs",
+   "diff": [
+    "+  pre:",
+    "+  - {app_foreground: com.google.android.calendar}"
+   ],
+   "why": "the answer-on-the-first-screen step waits for the app to be in front (before-check app_foreground)"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/chipotle",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/contacts_count",
+   "result": "differs",
+   "diff": [
+    "+  pre:",
+    "+  - {app_foreground: com.google.android.contacts}"
+   ],
+   "why": "the answer-on-the-first-screen step waits for the app to be in front (before-check app_foreground)"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/doordash_search",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/gmail_newest",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/gmail_search",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/maps_address",
+   "result": "differs",
+   "diff": [
+    "-      expect_digits: true"
+   ],
+   "why": "street_address is an address, not a number with at most a unit: no expect_digits (same reads on all 87 recorded Maps screens)"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/play_rating",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/settings_bluetooth",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/settings_version",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/starbucks",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/target",
+   "result": "no source run on this Mac (never compiled, or the trace is elsewhere)"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/youtube_search",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/ytmusic_artist",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/amazon",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/calendar_today",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/chipotle",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/contacts_count",
+   "result": "differs",
+   "diff": [
+    "+  pre:",
+    "+  - {app_foreground: com.google.android.contacts}"
+   ],
+   "why": "the answer-on-the-first-screen step waits for the app to be in front (before-check app_foreground)"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/doordash_search",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/gmail_search",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/maps_address",
+   "result": "differs",
+   "diff": [
+    "-    street_address: {near: Address, expect_digits: true}",
+    "+    street_address: {near: Address}"
+   ],
+   "why": "street_address is an address, not a number with at most a unit: no expect_digits (same reads on all 87 recorded Maps screens)"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/play_rating",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/settings_bluetooth",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/starbucks",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/target",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/ytmusic_artist",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/amazon",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/calendar_today",
+   "result": "differs",
+   "diff": [
+    "+  pre:",
+    "+  - {app_foreground: com.google.android.calendar}"
+   ],
+   "why": "the answer-on-the-first-screen step waits for the app to be in front (before-check app_foreground)"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/chipotle",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/contacts_count",
+   "result": "differs",
+   "diff": [
+    "+  pre:",
+    "+  - {app_foreground: com.google.android.contacts}"
+   ],
+   "why": "the answer-on-the-first-screen step waits for the app to be in front (before-check app_foreground)"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/doordash_search",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/gmail_newest",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/gmail_search",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/maps_address",
+   "result": "differs",
+   "diff": [
+    "-      expect_digits: true"
+   ],
+   "why": "street_address is an address, not a number with at most a unit: no expect_digits (same reads on all 87 recorded Maps screens)"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/play_rating",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/settings_bluetooth",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/settings_version",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/starbucks",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/youtube_search",
+   "result": "refused by both: run ended 'error' with check None; only verified runs are compiled"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/ytmusic_artist",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/routine_fixes_2026-10-28/pass/compiled/amazon",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/routine_fixes_2026-10-28/pass/compiled/chrome_wikipedia",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/routine_fixes_2026-10-28/pass/compiled/play_rating",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/routine_fixes_2026-10-28/unseen/compiled/amazon",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/routine_fixes_2026-10-28/unseen/compiled/chrome_wikipedia",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/routine_fixes_2026-10-28/unseen/compiled/play_rating",
+   "result": "identical"
+  }
+ ]
+}

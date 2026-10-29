@@ -1,0 +1,54 @@
+{
+ "name": "joplin_check_note_todo",
+ "intent": "Check whether a Joplin note is marked as a todo item",
+ "description": "Opens the named note in Joplin, opens its Actions menu, and reports whether it is marked as a todo item. The presence of a 'Convert to note' option indicates it is currently a todo.",
+ "patterns": [
+  "Is this note a todo?",
+  "Is a Joplin note marked as a todo item?",
+  "Check if a note is a todo in Joplin",
+  "Is the note a todo or a regular note?"
+ ],
+ "inputs": [
+  {
+   "name": "note_title",
+   "type": "text",
+   "description": "Title of the Joplin note to check",
+   "from_memory": null,
+   "example": "To-Do List"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "launch_joplin",
+   "intent": "Launch the Joplin app",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "open_note",
+   "intent": "Tap the note titled {{note_title}} in the list",
+   "target_fixed_text": null,
+   "choice_input": "note_title"
+  },
+  {
+   "step": 3,
+   "id": "open_actions_menu",
+   "intent": "Tap the Actions button to inspect the note type",
+   "target_fixed_text": "Actions",
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "is_todo",
+   "near": "Convert to note",
+   "example": "True"
+  }
+ ],
+ "data_values": [
+  "Finance",
+  "Call mom to wish her a happy birthday."
+ ]
+}

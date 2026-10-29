@@ -19,6 +19,12 @@ from devices.types import Element, ScreenState
 
 _BOUNDS = re.compile(r"\[(-?\d+),(-?\d+)\]\[(-?\d+),(-?\d+)\]")
 MAX_LABEL = 120  # long enough for most answers (a flight status line); the model taps "…" text to expand it otherwise
+# An element's own long text (a note's body, a message, an open file) is shown at length, up to MAX_TEXT, within MAX_TEXT_SCREEN
+# for the whole screen. Clipped to MAX_LABEL the model could not read a file it had opened (AndroidWorld: Markor's recipes.txt,
+# 12,101 characters in one EditText, showed as its first 120; scrolling it changes nothing in the tree, so it could not page).
+# Rows that merge their children's text stay at MAX_LABEL.
+MAX_TEXT = 4000
+MAX_TEXT_SCREEN = 8000
 MAX_MERGED_PARTS = 3
 
 
@@ -142,14 +148,14 @@ def _on_screen(e: Element, width: int, height: int) -> bool:
     return e.visible and not e.status_bar and x2 > x1 and y2 > y1 and x2 > 0 and y2 > 0 and x1 < width and y1 < height
 
 
-def _clip(s: str) -> str:
+def _clip(s: str, cap: int = MAX_LABEL) -> str:
     s = " ".join(s.split())
-    return s if len(s) <= MAX_LABEL else s[: MAX_LABEL - 1] + "…"
+    return s if len(s) <= cap else s[: cap - 1] + "…"
 
 
-def _set_label(e: Element, text: str) -> None:
-    """The model sees at most MAX_LABEL characters; the whole text stays on the element for reading outputs."""
-    e.label = _clip(text)
+def _set_label(e: Element, text: str, cap: int = MAX_LABEL) -> None:
+    """The model sees at most `cap` characters; the whole text stays on the element for reading outputs."""
+    e.label = _clip(text, cap)
     whole = " ".join(text.split())
     e.full_label = whole if whole != e.label else ""
 
@@ -206,6 +212,18 @@ def number_elements(elements: list[Element], width: int, height: int) -> list[El
             stack.extend(children.get(c, []))
         return True
 
+    room = MAX_TEXT_SCREEN
+
+    def text_cap(text: str) -> int:
+        """How much of an element's own text to show: long text at length while the screen's budget lasts."""
+        nonlocal room
+        n = len(" ".join(text.split()))
+        if n <= MAX_LABEL or room <= MAX_LABEL:
+            return MAX_LABEL
+        cap = min(MAX_TEXT, room)
+        room -= min(n, cap)
+        return cap
+
     numbered: list[Element] = []
     for e in elements:
         if not _on_screen(e, width, height):
@@ -228,11 +246,11 @@ def number_elements(elements: list[Element], width: int, height: int) -> list[El
                 parts = []
                 descendant_text(e.index, parts)
                 label = " · ".join(dict.fromkeys(parts))  # drop repeats such as "Order · Order"
-            _set_label(e, label)
+            _set_label(e, label, text_cap(label) if e.editable and e.text else MAX_LABEL)
             if e.label or e.resource_id or e.editable or e.scrollable or e.checkable:
                 numbered.append(e)
         elif (e.text or e.desc) and e.index not in absorbed and not repeats_ancestor(e):
-            _set_label(e, e.text or e.desc)
+            _set_label(e, e.text or e.desc, text_cap(e.text or e.desc))
             numbered.append(e)
         elif _short_id(e.resource_id) and e.index not in absorbed and children.get(e.index) and text_only_group(e.index):
             # A merged row with an ID but no text of its own ("Date" + "Fri, Oct 30"): one line, with its ID.
@@ -276,12 +294,14 @@ def format_line(e: Element) -> str:
 
 
 def format_compact(
-    package: str, activity: str, numbered: list[Element], settle_ms: float | None, secure: bool = False
+    package: str, activity: str, numbered: list[Element], settle_ms: float | None, secure: bool = False, keyboard: bool = False
 ) -> str:
     header = f"App: {package} · Screen: {activity.rsplit('.', 1)[-1] or '?'}"
     if settle_ms is not None:
         header += f" · settled {settle_ms:.0f} ms"
     lines = [header]
+    if keyboard:  # its keys are not listed; without this line the model pressed back "to close the keyboard" when none was up
+        lines.append("(the on-screen keyboard is open over the bottom of the screen)")
     if secure:
         lines.append("(secure screen: the app marked it private; sign-in and payment here are for the user)")
     lines += [format_line(e) for e in numbered]
@@ -324,6 +344,15 @@ def content_hash(elements: list[Element]) -> str:
     return h.hexdigest()
 
 
+def keyboard_open(elements: list[Element]) -> bool:
+    """The on-screen keyboard's own window is in the tree (its keys are dropped from the screen, not from the tree), or
+    the system's keyboard buttons are in the navigation bar. Some dumps leave the keyboard's window out (AndroidWorld's
+    emulator: no key in any tree), but the navigation bar's input_method_nav_* buttons appear exactly while it is up
+    (after 78 of 87 typing steps; after 6 of 138 backs)."""
+    return any(e.visible and (_KEYBOARD_PACKAGES.search(e.package) or _KEYBOARD_IDS.search(e.resource_id.split("/")[-1]))
+               for e in elements)
+
+
 def build_state(
     xml: str,
     package: str,
@@ -345,7 +374,7 @@ def build_state(
         elements=elements,
         numbered=numbered,
         signature=signature(package, activity, elements, width, height),
-        compact=format_compact(package, activity, numbered, settle_ms, secure),
+        compact=format_compact(package, activity, numbered, settle_ms, secure, keyboard_open(elements)),
         timestamp=time.time(),
         settle_ms=settle_ms,
         read_ms=read_ms,

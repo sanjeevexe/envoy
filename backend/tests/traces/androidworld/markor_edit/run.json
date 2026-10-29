@@ -1,0 +1,37 @@
+{
+ "task_id": "aw-baseline-standard-1028-035139-c0fa",
+ "goal": "Edit note_SiFbv.txt in Markor. Add to the top of the note Hello, World!",
+ "status": "done",
+ "result": "Edited note_SiFbv.txt in Markor - Hello, World! is now at the top of the note.",
+ "steps": 7,
+ "model_calls": 13,
+ "cost_usd": 0.031694,
+ "cost_at_standard_usd": 0.031694,
+ "input_tokens": 25412,
+ "cached_tokens": 17642,
+ "output_tokens": 2356,
+ "reasoning_tokens": 1641,
+ "duration_s": 29.1,
+ "approvals": [],
+ "popups": [],
+ "plan": {
+  "app": "net.gsantner.markor",
+  "subgoals": [
+   "Open the Markor app",
+   "Locate and open note_SiFbv.txt",
+   "Add Hello, World! to the top of the note",
+   "Save the changes"
+  ],
+  "success_check": {
+   "kind": "text_visible",
+   "value": "Hello, World!",
+   "field_hint": null
+  }
+ },
+ "check": {
+  "passed": true,
+  "evaluable": true,
+  "detail": "'Hello, World!' is visible"
+ },
+ "trace_dir": "tests/traces/androidworld/markor_edit"
+}

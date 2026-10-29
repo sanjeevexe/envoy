@@ -1,0 +1,37 @@
+{
+ "task_id": "aw-final-standard-1028-170611-c7a7",
+ "goal": "What is my next upcoming event in Simple Calendar Pro? Answer with the title only. If there are multiples titles, format your answer in a comma separated list.",
+ "status": "done",
+ "result": "Board meeting",
+ "steps": 3,
+ "model_calls": 5,
+ "cost_usd": 0.00917075,
+ "cost_at_standard_usd": 0.00917075,
+ "input_tokens": 12050,
+ "cached_tokens": 9525,
+ "output_tokens": 1079,
+ "reasoning_tokens": 749,
+ "duration_s": 12.15,
+ "approvals": [],
+ "popups": [],
+ "plan": {
+  "app": "com.simplemobiletools.calendar.pro",
+  "subgoals": [
+   "Open Simple Calendar Pro app",
+   "Switch to list or upcoming events view",
+   "Find first event on or after Oct 15 2023 15:34",
+   "Read the title of next upcoming event"
+  ],
+  "success_check": {
+   "kind": "info",
+   "value": "next upcoming event title",
+   "field_hint": null
+  }
+ },
+ "check": {
+  "passed": true,
+  "evaluable": true,
+  "detail": "answer visible on screen: Board"
+ },
+ "trace_dir": "tests/traces/androidworld/next_event"
+}

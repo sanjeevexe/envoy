@@ -1,0 +1,37 @@
+{
+ "task_id": "aw-baseline-standard-1028-035923-e4eb",
+ "goal": "What quantity of spirulina do I need for the recipe 'Chicken Alfredo' in the Joplin app? Express your answer in the format <amount> <unit> where both the amount and unit exactly match the format in the recipe.",
+ "status": "done",
+ "result": "3/4 cup",
+ "steps": 6,
+ "model_calls": 9,
+ "cost_usd": 0.017349499999999997,
+ "cost_at_standard_usd": 0.017349499999999997,
+ "input_tokens": 22530,
+ "cached_tokens": 15865,
+ "output_tokens": 1562,
+ "reasoning_tokens": 977,
+ "duration_s": 21.15,
+ "approvals": [],
+ "popups": [],
+ "plan": {
+  "app": "net.cozic.joplin",
+  "subgoals": [
+   "Open the Joplin app",
+   "Find the 'Chicken Alfredo' recipe",
+   "Open the recipe to view ingredients",
+   "Read the spirulina amount and unit"
+  ],
+  "success_check": {
+   "kind": "info",
+   "value": "spirulina quantity for Chicken Alfredo",
+   "field_hint": null
+  }
+ },
+ "check": {
+  "passed": true,
+  "evaluable": true,
+  "detail": "answer visible on screen: 3, 4"
+ },
+ "trace_dir": "tests/traces/androidworld/ingredient"
+}

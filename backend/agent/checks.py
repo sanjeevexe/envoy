@@ -36,6 +36,10 @@ def _norm(s: str) -> str:
 
 
 _STOP = {"the", "your", "you", "is", "at", "on", "in", "to", "for", "and", "my", "a", "an", "of", "it", "from", "gate", "seat", "flight"}
+_OPENS = re.compile(r"^(?:view|open|see|show|go to) (.+)$")  # a button named for the screen it opens (normalized text)
+# An app saying there is nothing to count (normalized text): "No contacts yet", "No results", "Nothing planned", "No events".
+_EMPTY_STATE = re.compile(r"\bno (?:\w+ ){0,3}(?:yet|found)\b|\bno results\b|\bnothing (?:planned|here|yet|to show|found)\b|"
+                          r"\bno (?:contacts|events|messages|emails|items|notes|alarms|files|orders|trips)\b")
 
 
 def answer_tokens(result: str) -> list[str]:
@@ -61,6 +65,11 @@ def answer_on_screen(result: str, screen: ScreenState) -> CheckResult:
     found = [t for t in tokens if _norm(t) in text]
     if found:
         return CheckResult(True, True, f"answer visible on screen: {', '.join(found[:4])}")
+    empty = _EMPTY_STATE.search(text)
+    if empty and all(t == "0" for t in tokens if re.search(r"\d", t)) and any(re.search(r"\d", t) for t in tokens):
+        # A count of nothing read from an empty state ("0" from "No contacts yet"): the screen never shows the number. The
+        # answer used to pass only when it happened to capitalize a word the screen has ("…the Contacts app shows…").
+        return CheckResult(True, True, f"a count of 0, and the screen shows an empty state: {empty.group(0)!r}")
     return CheckResult(False, True, f"none of {tokens[:5]} is visible on the current screen")
 
 
@@ -76,6 +85,11 @@ def evaluate(check: SuccessCheck | None, screen: ScreenState, result: str, field
         return CheckResult(ok, True, f"{check.value!r} {'is' if ok else 'is not'} visible")
     if check.kind == "element_present":
         ok = any(value in _norm(e.label) or value == _norm(e.resource_id) for e in screen.numbered)
+        if not ok and (m := _OPENS.match(value)):
+            # "View boarding pass" names the button that opens the boarding pass: being on it shows the same thing. The plan
+            # writes the check before seeing the app, and SkyLark's check-in ends on the boarding pass, where no such button is.
+            if any(_norm(e.label) == m.group(1) for e in screen.numbered):
+                return CheckResult(True, True, f"element {check.value!r}: its screen {m.group(1)!r} is open")
         return CheckResult(ok, True, f"element {check.value!r} {'present' if ok else 'not present'}")
     if check.kind == "app_foreground":
         ok = screen.package == check.value

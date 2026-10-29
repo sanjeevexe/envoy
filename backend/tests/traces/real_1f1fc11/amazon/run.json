@@ -1,0 +1,36 @@
+{
+ "task_id": "f7-1029020238-real-amazon",
+ "goal": "In the Amazon app, search for AA batteries and tell me the price of the first result.",
+ "status": "done",
+ "result": "$9.99",
+ "steps": 3,
+ "model_calls": 5,
+ "cost_usd": 0.011714249999999999,
+ "cost_at_standard_usd": 0.011714249999999999,
+ "input_tokens": 14285,
+ "cached_tokens": 9540,
+ "output_tokens": 1024,
+ "reasoning_tokens": 699,
+ "duration_s": 52.76,
+ "approvals": [],
+ "popups": [],
+ "plan": {
+  "app": "Amazon Shopping",
+  "subgoals": [
+   "Tap the Search Amazon bar",
+   "Search for AA batteries",
+   "Read the price of the first result in the results list"
+  ],
+  "success_check": {
+   "kind": "info",
+   "value": "price of first AA batteries result",
+   "field_hint": null
+  }
+ },
+ "check": {
+  "passed": true,
+  "evaluable": true,
+  "detail": "answer visible on screen: 9, 99"
+ },
+ "trace_dir": "tests/traces/real_1f1fc11/amazon"
+}

@@ -1,0 +1,36 @@
+{
+ "task_id": "aw-baseline-standard-1028-050600-538b",
+ "goal": "Turn brightness to the max value.",
+ "status": "done_unverified",
+ "result": "Brightness is already set to maximum (100%) in Display settings.",
+ "steps": 8,
+ "model_calls": 9,
+ "cost_usd": 0.018168,
+ "cost_at_standard_usd": 0.018168,
+ "input_tokens": 22379,
+ "cached_tokens": 15865,
+ "output_tokens": 1799,
+ "reasoning_tokens": 1303,
+ "duration_s": 39.97,
+ "approvals": [],
+ "popups": [],
+ "plan": {
+  "app": "com.android.settings",
+  "subgoals": [
+   "Open Settings",
+   "Open Display settings",
+   "Set Brightness to maximum"
+  ],
+  "success_check": {
+   "kind": "field_equals",
+   "value": "100%",
+   "field_hint": "Brightness"
+  }
+ },
+ "check": {
+  "passed": false,
+  "evaluable": false,
+  "detail": "field 'Brightness' not found"
+ },
+ "trace_dir": "tests/traces/androidworld/brightness_already_max"
+}

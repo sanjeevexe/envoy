@@ -25,6 +25,7 @@ import adbutils
 import uiautomator2 as u2
 from PIL import Image
 
+from devices.apps import AppIndex, looks_like_package
 from devices.screen import build_state, content_hash, has_app_content, parse_hierarchy
 from devices.types import Action, ActionResult, Capabilities, ScreenState, StreamHandle
 
@@ -60,7 +61,8 @@ class AndroidDevice:
         self.model = ""  # "Pixel 8" on a real phone
         self.android = ""  # Android release, e.g. "15"
         self.stream: Any = None  # frames and input for the live view (set by subclasses)
-        self._launchers: dict[str, str] = {}  # package → its launcher activity
+        self._launchers: dict[str, str] = {}  # package or app name → its launcher activity
+        self._apps: AppIndex | None = None
 
     # ---- connection -------------------------------------------------------------------------
 
@@ -171,6 +173,19 @@ class AndroidDevice:
     async def observe(self, screenshot: bool = False) -> ScreenState:
         async with self._lock:
             return await asyncio.to_thread(self._observe_sync, screenshot)
+
+    def _peek_sync(self) -> ScreenState:
+        last = self._last
+        try:
+            return self._observe_sync(False)
+        finally:
+            self._last = last  # element numbers keep referring to the screen the agent decided on
+
+    async def peek(self) -> ScreenState:
+        """A fresh read that doesn't change what element numbers refer to (the agent's next action still targets the
+        screen it decided on). Used to see what changes on its own, such as a clock."""
+        async with self._lock:
+            return await asyncio.to_thread(self._peek_sync)
 
     def _settle_sync(self, timeout_s: float, quiet_ms: float = 250, poll_ms: float = 60) -> ScreenState:
         """Poll the tree until nothing visible has changed for `quiet_ms` and app content is present.
@@ -328,20 +343,45 @@ class AndroidDevice:
         async with self._lock:
             return await asyncio.to_thread(self._act_sync, action)
 
-    def _launch(self, package: str) -> None:
-        """Start the app's launcher activity with `am start`. uiautomator2's app_start without an activity runs
-        `monkey … 1`, which took ~11 s on a fresh device and injects one random event (it opened the app drawer in
-        Phase 6): never acceptable on someone's real phone."""
-        comp = self._launchers.get(package)
-        if comp is None:
-            out = self.adb.shell(f"cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.LAUNCHER {package}")
+    def _launch(self, app: str) -> None:
+        """Start an app by its package or by the name people use ("Simple Calendar Pro"), through its launcher activity
+        with `am start`. uiautomator2's app_start without an activity runs `monkey … 1`, which took ~11 s on a fresh device
+        and injects one random event (it opened the app drawer in Phase 6): never acceptable on someone's real phone."""
+        comp = self._launchers.get(app)
+        if comp is None and looks_like_package(app):
+            out = self.adb.shell(f"cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.LAUNCHER {app}")
             last = out.strip().splitlines()[-1].strip() if out.strip() else ""
-            comp = last if "/" in last else ""
-            if comp:
-                self._launchers[package] = comp
-        if not comp:
-            raise RuntimeError(f"{package} has no launcher activity (is it installed?)")
+            comp = last if "/" in last else None
+        if comp is None:  # a name, or a guessed package that isn't installed: find the app by its label and words
+            entry = self.apps().resolve(app)
+            if entry is None:
+                raise RuntimeError(f"no app on this phone matches {app!r}. Apps: {self.apps().listing()}")
+            comp = entry.activity
+        self._launchers[app] = comp
         self.adb.shell(["am", "start", "-n", comp])  # an argument list: a launcher like ".Shell$HomeActivity" must not meet the shell
+
+    def apps(self) -> AppIndex:
+        """The phone's launchable apps by label (devices/apps.py), read once per connection."""
+        if self._apps is None:
+            self._apps = AppIndex(lambda cmd: self.adb.shell(cmd), lambda remote, local: self.adb.sync.pull(remote, local))
+            self._apps.load()
+        return self._apps
+
+    async def local_time(self) -> str:
+        """The phone's own date and time ("Sunday, October 15 2023, 15:34"): goals say "tomorrow" or "this Thursday", and
+        the model can't know today's date otherwise (AndroidWorld's phone lives in October 2023)."""
+        async with self._lock:
+            return (await asyncio.to_thread(self.adb.shell, "date '+%A, %B %d %Y, %H:%M'")).strip()
+
+    async def app_listing(self) -> str:
+        """Every launchable app by name, for the planner."""
+        async with self._lock:
+            return await asyncio.to_thread(lambda: self.apps().listing())
+
+    @property
+    def app_errors(self) -> dict[str, str]:
+        """Apps whose label couldn't be read (package → why); they are listed by their package's last word."""
+        return dict(self._apps.errors) if self._apps else {}
 
     async def launch(self, package: str, fresh: bool = False) -> None:
         """Bring an app to the front; `fresh` force-stops it first (a routine's start on real apps)."""

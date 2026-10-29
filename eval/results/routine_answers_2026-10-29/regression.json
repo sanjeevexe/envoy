@@ -1,0 +1,358 @@
+{
+ "what": "every cached Wonder spec in eval/results recompiled offline from its source trace (~/Desktop/Envoy/data/runs), memory empty, by aw-merge 773536a's compiler and by this branch's; compiled_at removed",
+ "identical": 64,
+ "differs": 10,
+ "rows": [
+  {
+   "spec": "eval/results/final/compiled/add_ktn.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/compiled/change_seat.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/compiled/check_in.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/compiled/find_trip.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/compiled/flight_status.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/compiled/gate.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/compiled/gate_alerts.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/compiled/miles.spec.json",
+   "result": "differs",
+   "diff": [
+    "+  pre:",
+    "+  - {app_foreground: com.skylark.air}"
+   ],
+   "why": "the answer-on-the-first-screen step waits for the app to be in front (before-check app_foreground)"
+  },
+  {
+   "spec": "eval/results/final/compiled/past_trip.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/compiled/seat.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/amazon.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/calendar_today.spec.json",
+   "result": "differs",
+   "diff": [
+    "+  pre:",
+    "+  - {app_foreground: com.google.android.calendar}"
+   ],
+   "why": "the answer-on-the-first-screen step waits for the app to be in front (before-check app_foreground)"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/chipotle.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/contacts_count.spec.json",
+   "result": "differs",
+   "diff": [
+    "+  pre:",
+    "+  - {app_foreground: com.google.android.contacts}"
+   ],
+   "why": "the answer-on-the-first-screen step waits for the app to be in front (before-check app_foreground)"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/doordash_search.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/gmail_newest.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/gmail_search.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/maps_address.spec.json",
+   "result": "differs",
+   "diff": [
+    "-      expect_digits: true"
+   ],
+   "why": "street_address is an address, not a number with at most a unit: no expect_digits (same reads on all 87 recorded Maps screens)"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/play_rating.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/settings_bluetooth.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/settings_version.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/starbucks.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/target.spec.json",
+   "result": "no source run on this Mac (never compiled, or the trace is elsewhere)"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/youtube_search.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/final/real_compiled/ytmusic_artist.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/phase2/compiled-real/amazon.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/phase2/compiled-real/chipotle.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/phase2/compiled-real/doordash_search.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/phase2/compiled-real/starbucks.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/phase2/compiled-real/target.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/phase2/compiled-v3/check_in.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/phase2/compiled-v4/add_ktn.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/phase2/compiled-v4/change_seat.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/phase2/compiled-v4/check_in.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/phase2/compiled-v4/find_trip.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/phase2/compiled-v4/flight_status.spec.json",
+   "result": "differs",
+   "diff": [
+    "ERROR NotCompilable: the run answered a question ('SL 1190 · ATL → DEN · Sat, Nov 14, 2026 · Delayed 25 min · G'), but no output can be read back from its own final screen: output 'flight_status_summary' reads 'SL 1190' on the run's own final screen, not 'SL 1190 · ATL → DEN · Sat, Nov 14, 2026 · Delayed 25 min · Gate A7 · Departs 2:45 PM'; dropped"
+   ],
+   "why": "refused: its only output read 'SL 1190' on its own final screen, not the status the agent answered"
+  },
+  {
+   "spec": "eval/results/phase2/compiled-v4/gate.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/phase2/compiled/add_ktn.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/phase2/compiled/change_seat.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/phase2/compiled/check_in.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/phase2/compiled/check_in_next.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/phase2/compiled/find_trip.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/phase2/compiled/flight_status.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/phase2/compiled/gate.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/amazon.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/calendar_today.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/chipotle.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/contacts_count.spec.json",
+   "result": "differs",
+   "diff": [
+    "+  pre:",
+    "+  - {app_foreground: com.google.android.contacts}"
+   ],
+   "why": "the answer-on-the-first-screen step waits for the app to be in front (before-check app_foreground)"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/doordash_search.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/gmail_search.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/maps_address.spec.json",
+   "result": "differs",
+   "diff": [
+    "-    street_address: {near: Address, expect_digits: true}",
+    "+    street_address: {near: Address}"
+   ],
+   "why": "street_address is an address, not a number with at most a unit: no expect_digits (same reads on all 87 recorded Maps screens)"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/play_rating.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/settings_bluetooth.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/starbucks.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/target.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_apps/compiled/ytmusic_artist.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/amazon.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/calendar_today.spec.json",
+   "result": "differs",
+   "diff": [
+    "+  pre:",
+    "+  - {app_foreground: com.google.android.calendar}"
+   ],
+   "why": "the answer-on-the-first-screen step waits for the app to be in front (before-check app_foreground)"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/chipotle.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/contacts_count.spec.json",
+   "result": "differs",
+   "diff": [
+    "+  pre:",
+    "+  - {app_foreground: com.google.android.contacts}"
+   ],
+   "why": "the answer-on-the-first-screen step waits for the app to be in front (before-check app_foreground)"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/doordash_search.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/gmail_newest.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/gmail_search.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/maps_address.spec.json",
+   "result": "differs",
+   "diff": [
+    "-      expect_digits: true"
+   ],
+   "why": "street_address is an address, not a number with at most a unit: no expect_digits (same reads on all 87 recorded Maps screens)"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/play_rating.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/settings_bluetooth.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/settings_version.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/starbucks.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/youtube_search.spec.json",
+   "result": "no source run on this Mac (never compiled, or the trace is elsewhere)"
+  },
+  {
+   "spec": "eval/results/real_pass_2026-10-28/compiled/ytmusic_artist.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/routine_fixes_2026-10-28/pass/compiled/amazon.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/routine_fixes_2026-10-28/pass/compiled/chrome_wikipedia.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/routine_fixes_2026-10-28/pass/compiled/play_rating.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/routine_fixes_2026-10-28/unseen/compiled/amazon.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/routine_fixes_2026-10-28/unseen/compiled/chrome_wikipedia.spec.json",
+   "result": "identical"
+  },
+  {
+   "spec": "eval/results/routine_fixes_2026-10-28/unseen/compiled/play_rating.spec.json",
+   "result": "identical"
+  }
+ ]
+}
