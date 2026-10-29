@@ -66,3 +66,7 @@ The run order alternated main and guard, back to back on one claim of envoy-real
 **Against the bar.** With `83a9702` the guard has 1 failure against main's 0 (the loop), which is within "at most one more". AndroidWorld's ablation put that loop at about 1 in 40 on both commits.
 
 **Cost:** $3.67 for both emulators.
+
+## The confirm runs on `83a9702` (the guard plus the empty-state check), 16:38–16:42 (`confirm_83a9702/`)
+
+contacts_count five times: 5 of 5 passed, each answered in 0 actions, verified, compiled to a 1-step routine and rerun right with no model call. It cost about $0.20. Against main's 10/10 that is within the bar ("at most one more failure"), and the right answers now verify and compile.
