@@ -4,13 +4,13 @@
 // things from, every step as it streams in (the picture it took, what it did and why, its risk), and what it cost.
 import { useEffect, useRef, useState } from "react";
 import {
-  ArrowUpRightIcon, CaretDownIcon, CaretLeftIcon, DeviceMobileIcon, GraphIcon, HandIcon, InfoIcon, ListChecksIcon, LockIcon,
-  RepeatIcon, RobotIcon, ShieldCheckIcon, WarningCircleIcon, type Icon,
+  ArrowUpRightIcon, CaretDownIcon, CaretLeftIcon, DeviceMobileIcon, DownloadSimpleIcon, GraphIcon, HandIcon, InfoIcon, KeyIcon,
+  LightbulbIcon, ListChecksIcon, LockIcon, ProhibitIcon, RepeatIcon, RobotIcon, ShieldCheckIcon, WarningCircleIcon, type Icon,
 } from "@phosphor-icons/react";
 import Avatar, { type Mood } from "@/components/Avatar";
 import { appIcon, Card, Chip, cx, Done, RowIcon, sentence, Spinner, words } from "@/components/ui";
 import { rememberedFrom } from "@/components/Chat";
-import { api, ago, Approval, media, post, Step, Task } from "@/lib/api";
+import { api, ago, Approval, media, post, PreflightLine, Step, Task } from "@/lib/api";
 
 // Cross-app answers: a part is shown under its parent task, by the app it asks.
 const APPS: Record<string, string> = {
@@ -18,6 +18,7 @@ const APPS: Record<string, string> = {
   "com.chipotle.ordering": "Chipotle", "com.dd.doordash": "DoorDash", "com.google.android.gm": "Gmail", "com.google.android.apps.maps": "Google Maps",
   "com.google.android.apps.youtube.music": "YouTube Music", "com.google.android.youtube": "YouTube", "com.android.vending": "Play Store",
   "com.android.chrome": "Chrome", "com.android.settings": "Settings", "com.google.android.calendar": "Calendar", "com.google.android.contacts": "Contacts",
+  "com.instagram.android": "Instagram",
 };
 export const appName = (pkg?: string | null) => (pkg ? APPS[pkg] ?? pkg.split(".").pop() ?? pkg : "an app");
 
@@ -147,9 +148,43 @@ function line(s: Step): Line | null {
     case "popup": return { s, icon: InfoIcon, tone: "neutral", text: sentence(text), quiet: true };
     case "error": return { s, icon: WarningCircleIcon, tone: "apricot", text: sentence(s.error ?? text) };
     case "finish": return null;
+    case "preflight": return null; // shown as the Before I start card
     case "note": return text.startsWith("using routine") ? null : { s, icon: InfoIcon, tone: "neutral", text: sentence(text), quiet: true };
   }
   return { s, icon: InfoIcon, tone: "neutral", text: sentence(text || s.kind), quiet: true };
+}
+
+// Before I start (api/preflight.py): what to expect, said before the task runs. Warnings in apricot, a stop in brick.
+// Also for an offer's card, before its Yes.
+const PREFLIGHT_ICON: Record<PreflightLine["kind"], Icon> = {
+  device: DeviceMobileIcon, blocked: ProhibitIcon, install: DownloadSimpleIcon, signin: KeyIcon, approval: ShieldCheckIcon,
+  routine: RepeatIcon, app_note: LightbulbIcon,
+};
+
+export function BeforeIStart({ lines, className }: { lines: PreflightLine[]; className?: string }) {
+  if (!lines.length) return null;
+  return (
+    <section aria-label="Before I start" className={cx("flex items-start gap-2.5", className)}>
+      <Avatar mood="thinking" size={36} />
+      <Card className="min-w-0 flex-1 px-4 pb-3 pt-2.5">
+        <h3 className="text-meta font-bold text-muted">Before I start</h3>
+        <ul className="mt-1.5 flex flex-col gap-2">
+          {lines.map((l, i) => {
+            const I = PREFLIGHT_ICON[l.kind] ?? InfoIcon;
+            return (
+              <li key={i} className="flex items-start gap-2.5">
+                {l.level === "stop"
+                  ? <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brick text-white"><I size={13} /></span>
+                  : <RowIcon icon={I} tone={l.level === "warn" ? "apricot" : "neutral"} size={24} />}
+                <span className={cx("min-w-0 pt-0.5 text-row [overflow-wrap:anywhere]",
+                  l.level === "stop" ? "font-semibold text-brick" : l.level === "warn" ? "text-apricot-ink" : "text-ink-2")}>{l.text}</span>
+              </li>
+            );
+          })}
+        </ul>
+      </Card>
+    </section>
+  );
 }
 
 const RISK: Record<string, string> = { read: "Only reads", reversible: "Can be undone", irreversible: "Can't be undone" };
@@ -224,6 +259,7 @@ export function TaskDetail({ id, task, liveSteps, back, all, open, review, watch
   const decided = (data?.approvals ?? []).filter((a) => a.status !== "pending");
   const remembered = steps.flatMap((s) => Object.values(s.sources ?? {})).map(rememberedFrom);
   const routineNote = steps.find((s) => s.kind === "note" && s.text?.startsWith("using routine"))?.text?.match(/ v(\d+)/)?.[1];
+  const preflight = steps.find((s) => s.kind === "preflight")?.lines ?? [];
   const lastStepAt = steps.length ? steps[steps.length - 1].time : 0;
   const elapsed = (active ? now : t.updated_at) - t.created_at;
   const device = deviceName?.(t.device) ?? t.device;
@@ -255,6 +291,7 @@ export function TaskDetail({ id, task, liveSteps, back, all, open, review, watch
           <div className="ev-rise max-w-[78%] self-end rounded-[20px_20px_6px_20px] bg-ink px-4 py-3 text-body text-on-ink [overflow-wrap:anywhere]">{t.request ?? t.goal}</div>
         ) : <p className="ev-rise text-meta text-muted">Started by {source(t)}</p>}
         {t.parent && <button onClick={() => open?.(t.parent!)} className="flex h-11 items-center gap-1 self-start text-meta font-bold text-sage-ink">Part of a question across apps <ArrowUpRightIcon size={14} /></button>}
+        <BeforeIStart lines={preflight} className="ev-rise ev-r2" />
 
         <div className="ev-rise ev-r2 flex items-start gap-2.5">
           <Avatar mood={taskMood(t, now - lastStepAt < 1.5)} size={44} />

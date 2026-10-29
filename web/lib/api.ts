@@ -16,6 +16,11 @@ export type Step = {
   entities?: string[]; sources?: Record<string, string>;
   // a "change" step: a remembered fact changed during this task (api/alerts.py)
   entity_label?: string; old?: string; new?: string; source?: string; pushed?: boolean; why_not?: string | null; alerted_for?: string;
+  lines?: PreflightLine[]; // a "preflight" step: Before I start (api/preflight.py)
+};
+// What to expect before a task starts (api/preflight.py): in the task view, on an offer's card, in MCP's heads_up.
+export type PreflightLine = {
+  kind: "device" | "blocked" | "install" | "signin" | "approval" | "routine" | "app_note"; text: string; level: "info" | "warn" | "stop";
 };
 export type Approval = {
   id: string; task_id: string; created_at: number; status: string; description: string; reasons: string[];

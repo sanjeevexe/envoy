@@ -1,4 +1,4 @@
-"""Before I start: what to expect from a task, said before Envoy starts it (design doc, Tasks › Before I start).
+"""Before I start: what to expect from a task, said before Envoy starts it (docs/preflight-and-autofill.md).
 
     "Target blocks emulators: I'll ask to use your Pixel 5."
     "DoorDash asked you to sign in on envoy-real last time (Oct 27)."

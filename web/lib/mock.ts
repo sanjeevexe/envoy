@@ -116,18 +116,30 @@ function seed(): DB {
     add(task({ id: "task-dd", goal: "Get my usual from Thai Basil on DoorDash", status: "waiting_approval", app: "com.dd.doordash", device: "pixel-5",
       kind: "routine", routine: "doordash_reorder_usual", inputs: { restaurant: "Thai Basil" }, created_at: ago(140), updated_at: ago(30),
       model_calls: 1, cost_usd: 0.002, waiting_for: "approval" }), [
-      step(1, { kind: "note", text: "using routine doordash_reorder_usual v3 with restaurant = Thai Basil", time: ago(138),
+      step(1, { kind: "preflight", time: ago(139), lines: [
+        { kind: "device", text: "DoorDash is set to run on your phone: I'll ask before using your Pixel 5.", level: "warn" },
+        { kind: "signin", text: "DoorDash asked you to sign in on your Pixel 5 last time (Oct 27).", level: "warn" },
+        { kind: "approval", text: "The payment step will need your OK.", level: "info" },
+        { kind: "routine", text: "Using routine doordash_reorder_usual v3: usually 41 s, about 1 model call.", level: "info" },
+        { kind: "app_note", text: "From earlier runs: A pop-up offering DashPass can appear before checkout", level: "info" },
+      ] }),
+      step(2, { kind: "note", text: "using routine doordash_reorder_usual v3 with restaurant = Thai Basil", time: ago(138),
         sources: { usual_order: "Order Thai Basil usual (items): DoorDash app, Oct 21" } }),
-      step(2, { kind: "routine_step", text: "open_recent_orders", status: "done", rung: 0, shot: "dd-1", time: ago(120) }),
-      step(3, { kind: "routine_step", text: "find_thai_basil", status: "done", rung: 0, shot: "dd-2", time: ago(96) }),
-      step(4, { kind: "routine_step", text: "add_pad_thai_medium_no_peanuts", status: "done", rung: 2, detail: "relaxed match: the button now says Add", shot: "dd-3", time: ago(70) }),
-      step(5, { kind: "routine_step", text: "go_to_checkout", status: "running", rung: 0, shot: "dd-4", risk: "irreversible", time: ago(32) }),
+      step(3, { kind: "routine_step", text: "open_recent_orders", status: "done", rung: 0, shot: "dd-1", time: ago(120) }),
+      step(4, { kind: "routine_step", text: "find_thai_basil", status: "done", rung: 0, shot: "dd-2", time: ago(96) }),
+      step(5, { kind: "routine_step", text: "add_pad_thai_medium_no_peanuts", status: "done", rung: 2, detail: "relaxed match: the button now says Add", shot: "dd-3", time: ago(70) }),
+      step(6, { kind: "routine_step", text: "go_to_checkout", status: "running", rung: 0, shot: "dd-4", risk: "irreversible", time: ago(32) }),
     ]);
     approvals["appr-dd"] = { id: "appr-dd", task_id: "task-dd", created_at: ago(30), status: "pending", description: "Pay $18.42 at DoorDash",
       reasons: ["Order: Pad thai, medium, no peanuts", "From: Thai Basil", "Total: $18.42 with tip", "rule: it costs money"],
       app: "com.dd.doordash", screen: "Checkout", screenshot: "dd-4.jpg", nonce: "mock-nonce" };
     add(task({ id: "task-tgt", goal: "Check the price of AirPods Pro at Target", status: "needs_you", app: "com.target.ui", waiting_for: "phone",
-      detail: "Target blocks emulators: use your Android phone for this task?", created_at: ago(400), updated_at: ago(380) }));
+      detail: "Target blocks emulators: use your Android phone for this task?", created_at: ago(400), updated_at: ago(380) }), [
+      step(1, { kind: "preflight", time: ago(399), lines: [
+        { kind: "device", text: "Target blocks emulators: I'll ask to use your Pixel 5.", level: "warn" },
+        { kind: "app_note", text: "From earlier runs: A store must be chosen before prices show", level: "info" },
+      ] }),
+    ]);
   }
   // the task that streams (full: on load; quiet: a watcher every so often)
   add(task({ id: "task-amz", goal: "When does my Amazon package arrive?", app: "com.amazon.mShop.android.shopping", device: "envoy-test", kind: "agent",
@@ -151,7 +163,24 @@ function seed(): DB {
   add(task({ id: "task-cmp-t", goal: "Price of AirPods Pro at Target", parent: "task-cmp", app: "com.target.ui", device: "pixel-5",
     result: "$189.99", created_at: ago(86400 + 3990), updated_at: ago(86400 + 3920) }));
   add(task({ id: "task-ck", goal: "Check me in for my flight", app: "com.skylark.air", device: "envoy-test", kind: "routine", routine: "skylark_check_in_flight",
-    status: "declined", detail: "you declined Confirm check-in", created_at: ago(2 * 86400), updated_at: ago(2 * 86400 - 40) }));
+    status: "declined", detail: "you declined Confirm check-in", created_at: ago(2 * 86400), updated_at: ago(2 * 86400 - 40) }), [
+    step(1, { kind: "preflight", time: ago(2 * 86400), lines: [
+      { kind: "approval", text: "Confirming check-in will need your OK.", level: "info" },
+      { kind: "routine", text: "Using routine skylark_check_in_flight v1: usually 9 s, no model calls.", level: "info" },
+    ] }),
+    step(2, { kind: "note", text: "using routine skylark_check_in_flight v1 with trip_city = Chicago", time: ago(2 * 86400 - 1) }),
+    step(3, { kind: "routine_step", text: "open_trips", status: "done", rung: 0, shot: "sl-1", time: ago(2 * 86400 - 6) }),
+    step(4, { kind: "routine_step", text: "confirm_check_in", status: "failed", rung: 0, detail: "you declined it", risk: "irreversible", time: ago(2 * 86400 - 40) }),
+  ]);
+  add(task({ id: "task-chase", goal: "What's my checking balance in Chase?", app: "com.chase.sig.android", status: "failed",
+    detail: "Chase blocks emulators; it needs a real Android phone. Connect your Android phone (USB, or wireless debugging) and ask again.",
+    created_at: ago(2 * 86400 + 600), updated_at: ago(2 * 86400 + 598) }), [
+    step(1, { kind: "preflight", time: ago(2 * 86400 + 599), lines: [
+      { kind: "blocked", text: "Chase needs your Android phone, and it isn't connected.", level: "stop" },
+      { kind: "signin", text: "Chase asked you to sign in on your Pixel 5 last time (Oct 24).", level: "warn" },
+    ] }),
+    step(2, { kind: "error", text: "Chase blocks emulators; it needs a real Android phone. Connect your Android phone (USB, or wireless debugging) and ask again.", time: ago(2 * 86400 + 598) }),
+  ]);
   add(task({ id: "task-old", goal: "What's my seat on the Chicago flight?", status: "failed", detail: "envoy-test is not running",
     created_at: ago(3 * 86400), updated_at: ago(3 * 86400 - 5) }));
 
@@ -378,7 +407,9 @@ function gateRun(source = "trigger:Watch my gate") {
   emit("task", { task: db.tasks[id] });
   db.leases["envoy-test"] = { ...db.leases["envoy-test"], task_id: id };
   const script: [number, () => void][] = [
-    [1200, () => { setTask(id, { status: "running" }); addStep(id, { kind: "note", text: "using routine skylark_get_flight_gate v3 with trip_city = Chicago",
+    [1000, () => { setTask(id, { status: "running" });
+      addStep(id, { kind: "preflight", lines: [{ kind: "routine", text: "Using routine skylark_get_flight_gate v3: usually 7 s, no model calls.", level: "info" }] }); }],
+    [200, () => { addStep(id, { kind: "note", text: "using routine skylark_get_flight_gate v3 with trip_city = Chicago",
       sources: { trip_city: "Trip Chicago · Fri, Oct 30 (destination): email from SkyLark Air, Oct 12" } }); }],
     [1400, () => addStep(id, { kind: "routine_step", text: "open_trips", status: "done", rung: 0, shot: "sl-1" })],
     [1300, () => addStep(id, { kind: "routine_step", text: "dismiss_promo", status: "skipped", rung: 0, detail: "its screen didn't appear" })],
@@ -404,7 +435,11 @@ function chatTask(goal: string) {
   db.steps[id] = [];
   emit("task", { task: db.tasks[id] });
   const script: [number, () => void][] = [
-    [900, () => { setTask(id, { status: "running", kind: "agent" }); addStep(id, { kind: "plan", text: "Open Starbucks; Find your usual; Check out" }); }],
+    [700, () => { setTask(id, { status: "running", kind: "agent" }); addStep(id, { kind: "preflight", lines: [
+      { kind: "approval", text: "Any payment will need your OK.", level: "info" },
+      { kind: "app_note", text: "From earlier runs: A Rewards pop-up can appear before the menu", level: "info" },
+    ] }); }],
+    [200, () => addStep(id, { kind: "plan", text: "Open Starbucks; Find your usual; Check out" })],
     [1600, () => addStep(id, { kind: "action", text: 'tap "Order"', reason: "The order tab has your favorites", risk: "read", shot: "sb-1" })],
     [1500, () => addStep(id, { kind: "action", text: 'tap "Grande oat latte"', reason: "That's your usual", risk: "reversible", shot: "sb-1" })],
     [1500, () => { addStep(id, { kind: "finish", text: "Added your usual to the cart", status: "done" }); setTask(id, { status: "done", result: "Your usual is in the cart: a grande oat latte", model_calls: 3, cost_usd: 0.006 }); }],
