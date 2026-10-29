@@ -1,0 +1,883 @@
+{
+ "meta": {
+  "date": "2026-10-28 21:59 EDT",
+  "commit": "808bb4f",
+  "minutes": 1.0,
+  "prefix": "rp10282158-real",
+  "calls": 13,
+  "usd": 0.0721
+ },
+ "workflows": {
+  "amazon": {
+   "app": "com.amazon.mShop.android.shopping",
+   "category": "shopping",
+   "goal": "In the Amazon app, search for AA batteries and tell me the price of the first result.",
+   "graded_by": "shape",
+   "time": "2026-10-29T01:53:40+00:00",
+   "expect": "\\$\\s?\\d+(\\.\\d{2})?",
+   "expect_second": "\\$\\s?\\d+(\\.\\d{2})?",
+   "agent": {
+    "status": "done",
+    "result": "$19.44 ($0.97/count) for Energizer MAX AA Batteries (20 Pack) - first result for 'aa batteries'",
+    "steps": 2,
+    "model_calls": 4,
+    "cost_at_standard_usd": 0.010375700000000002,
+    "duration_s": 25.59,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: 19, 44, 0, 97"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "amazon_search_first_result_price",
+    "steps": 2,
+    "inputs": {
+     "search_query": "aa batteries"
+    },
+    "outputs": [
+     "first_result_product",
+     "first_result_price"
+    ],
+    "dropped": [],
+    "warnings": [
+     "output 'first_result_product' reads 'Search for rechargable aa batteries' on the run's own final screen, not 'Energizer MAX AA Batteries (20 Pack), Double A Alkaline Batteries'",
+     "output 'first_result_product': the first row under 'Results'",
+     "output 'first_result_price': read in the row of 'first_result_product' ('$19.44'), not the list's first match"
+    ],
+    "cost_usd": 0.0
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "search_query": "aa batteries"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "first_result_product": "Sponsored Ad - PHILIPS AA Batteries 12 Pack Long Lasting Ultra Alkaline Double A Battery",
+      "first_result_price": "$9.99"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 7.08,
+     "steps": [
+      {
+       "id": "tap_search_box",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 3.5 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 4444
+      },
+      {
+       "id": "tap_search_suggestion",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1407
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "search_query": "wireless mouse"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "first_result_product": "Sponsored Ad - wegear USB Wireless Mouse for Laptop PC Mac, 2.4GHz Cordless Mouse-Black",
+      "first_result_price": "$9.99"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 10.14,
+     "steps": [
+      {
+       "id": "tap_search_box",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 5.5 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 6177
+      },
+      {
+       "id": "tap_search_suggestion",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.1 s",
+        "wait and retry: after-checks held after 1.6 s"
+       ],
+       "score": 0.873,
+       "detail": "",
+       "ms": 2772
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ],
+   "source_trace": "f7-1028030222-real-amazon",
+   "cost": {
+    "calls": 0,
+    "input_tokens": 0,
+    "cached_tokens": 0,
+    "output_tokens": 0,
+    "reasoning_tokens": 0,
+    "standard_usd": 0.0,
+    "billed_usd": 0.0
+   }
+  },
+  "play_rating": {
+   "app": "com.android.vending",
+   "category": "store",
+   "goal": "In the Google Play Store app, what is the star rating of the Duolingo app?",
+   "graded_by": "shape",
+   "time": "2026-10-29T01:53:57+00:00",
+   "expect": "\\b[1-5]\\.\\d\\b",
+   "expect_second": "\\b[1-5]\\.\\d\\b",
+   "agent": {
+    "status": "done",
+    "result": "Duolingo app star rating is 4.7 stars (Average rating 4.7 stars in 48 million reviews)",
+    "steps": 6,
+    "model_calls": 8,
+    "cost_at_standard_usd": 0.01427825,
+    "duration_s": 19.56,
+    "popups": [],
+    "check": {
+     "passed": true,
+     "evaluable": true,
+     "detail": "answer visible on screen: Duolingo, 4, 7, Average"
+    }
+   },
+   "first_run": "pass",
+   "compile": {
+    "compiled": true,
+    "routine": "play_store_get_app_rating",
+    "steps": 3,
+    "inputs": {
+     "app_name": "Duolingo"
+    },
+    "outputs": [
+     "star_rating"
+    ],
+    "dropped": [
+     [
+      2,
+      "no visible change (a retry or a dead tap)"
+     ],
+     [
+      3,
+      "no visible change (a retry or a dead tap)"
+     ],
+     [
+      1,
+      "back-track: steps 1–4 returned to the same screen"
+     ],
+     [
+      4,
+      "back-track: steps 1–4 returned to the same screen"
+     ]
+    ],
+    "warnings": [
+     "input 'app_name': example 'Duolingo: Learn Languages' shortened to the user's 'Duolingo'",
+     "output 'star_rating': the 'Average rating' after the row that names {{app_name}}"
+    ],
+    "cost_usd": 0.0
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "app_name": "Duolingo"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "star_rating": "4.7 stars in 48 million reviews"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 4.44,
+     "steps": [
+      {
+       "id": "tap_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.8 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2505
+      },
+      {
+       "id": "find_open_app_listing",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.967,
+       "detail": "",
+       "ms": 645
+      },
+      {
+       "id": "open_app_listing",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.967,
+       "detail": "",
+       "ms": 914
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "app_name": "Pinterest"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "star_rating": "4.2 stars in 10 million reviews"
+     },
+     "rung": 1,
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "duration_s": 5.5,
+     "steps": [
+      {
+       "id": "tap_search",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.5 s"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2000
+      },
+      {
+       "id": "find_open_app_listing",
+       "status": "done",
+       "rung": 0,
+       "rungs": [
+        "searched for 'Pinterest': the list didn't show it"
+       ],
+       "score": 1.0,
+       "detail": "",
+       "ms": 2777
+      },
+      {
+       "id": "open_app_listing",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 465
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ],
+   "source_trace": "f7-1028030222-real-play_rating",
+   "cost": {
+    "calls": 0,
+    "input_tokens": 0,
+    "cached_tokens": 0,
+    "output_tokens": 0,
+    "reasoning_tokens": 0,
+    "standard_usd": 0.0,
+    "billed_usd": 0.0
+   }
+  },
+  "chrome_wikipedia": {
+   "app": "com.android.chrome",
+   "category": "web",
+   "goal": "In Chrome, go to en.m.wikipedia.org, search for Eiffel Tower and tell me the year it opened.",
+   "graded_by": "truth",
+   "time": "2026-10-29T01:58:11+00:00",
+   "expect": "\\b1889\\b",
+   "expect_second": "\\b1937\\b",
+   "agent": {
+    "status": "done_unverified",
+    "result": "Eiffel Tower opened 15 May 1889",
+    "steps": 10,
+    "model_calls": 15,
+    "cost_at_standard_usd": 0.0355514,
+    "duration_s": 70.56,
+    "popups": [],
+    "check": {
+     "passed": false,
+     "evaluable": true,
+     "detail": "none of ['Eiffel', 'Tower', '15', 'May', '1889'] is visible on the current screen"
+    }
+   },
+   "first_run": "right, unverified",
+   "compile": {
+    "compiled": true,
+    "routine": "chrome_search_wikipedia_article",
+    "steps": 5,
+    "inputs": {
+     "article_topic": "Eiffel Tower"
+    },
+    "outputs": [
+     "opened_date"
+    ],
+    "dropped": [
+     [
+      2,
+      "no visible change (a retry or a dead tap)"
+     ],
+     [
+      3,
+      "no visible change (a retry or a dead tap)"
+     ],
+     [
+      10,
+      "scroll with no new content (end of list)"
+     ]
+    ],
+    "warnings": [
+     "output 'opened_date': not in the tree; read from the screenshot ('15 May 1889') and checked by shape '\\\\b(1\\\\d|20)\\\\d{2}\\\\b'"
+    ],
+    "cost_usd": 0.0023
+   },
+   "second_input_bound": true,
+   "routine_runs": [
+    {
+     "case": "same input",
+     "inputs": {
+      "article_topic": "Eiffel Tower"
+     },
+     "repair_allowed": false,
+     "status": "failed",
+     "result": "fail",
+     "detail": "outputs not found: opened_date",
+     "outputs": {
+      "opened_date": null
+     },
+     "rung": 0,
+     "model_calls": 7,
+     "cost_usd": 0.0,
+     "duration_s": 23.63,
+     "steps": [
+      {
+       "id": "go_back",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its after-checks already hold",
+       "ms": 1444
+      },
+      {
+       "id": "tap_search",
+       "status": "skipped",
+       "rung": 0,
+       "rungs": [],
+       "score": null,
+       "detail": "its after-checks already hold",
+       "ms": 63
+      },
+      {
+       "id": "enter_wikipedia_url",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 0.925,
+       "detail": "",
+       "ms": 2037
+      },
+      {
+       "id": "tap_search_again",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 532
+      },
+      {
+       "id": "enter_article_topic",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 899
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "same input",
+     "inputs": {
+      "article_topic": "Eiffel Tower"
+     },
+     "repair_allowed": true,
+     "status": "done",
+     "result": "pass after repair",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "opened_date": "15 May 1889"
+     },
+     "rung": 1,
+     "model_calls": 3,
+     "cost_usd": 0.0,
+     "duration_s": 15.54,
+     "steps": [
+      {
+       "id": "go_back",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 1.0 s"
+       ],
+       "score": null,
+       "detail": "",
+       "ms": 1658
+      },
+      {
+       "id": "tap_search",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 695
+      },
+      {
+       "id": "enter_wikipedia_url",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1909
+      },
+      {
+       "id": "tap_search_again",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 507
+      },
+      {
+       "id": "enter_article_topic",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1255
+      }
+     ],
+     "patches": [],
+     "popups": []
+    },
+    {
+     "case": "new input",
+     "inputs": {
+      "article_topic": "Golden Gate Bridge"
+     },
+     "repair_allowed": false,
+     "status": "done",
+     "result": "pass after repair",
+     "detail": "all steps and checks passed",
+     "outputs": {
+      "opened_date": "May 27, 1937; 89 years ago"
+     },
+     "rung": 1,
+     "model_calls": 3,
+     "cost_usd": 0.0,
+     "duration_s": 18.37,
+     "steps": [
+      {
+       "id": "go_back",
+       "status": "done",
+       "rung": 1,
+       "rungs": [
+        "wait and retry: ready after 0.9 s"
+       ],
+       "score": null,
+       "detail": "",
+       "ms": 1367
+      },
+      {
+       "id": "tap_search",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 499
+      },
+      {
+       "id": "enter_wikipedia_url",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 3504
+      },
+      {
+       "id": "tap_search_again",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 1342
+      },
+      {
+       "id": "enter_article_topic",
+       "status": "done",
+       "rung": 0,
+       "rungs": [],
+       "score": 1.0,
+       "detail": "",
+       "ms": 3903
+      }
+     ],
+     "patches": [],
+     "popups": []
+    }
+   ],
+   "source_trace": "f7-1028023735-real-chrome_wikipedia",
+   "cost": {
+    "calls": 13,
+    "input_tokens": 44707,
+    "cached_tokens": 1469,
+    "output_tokens": 4188,
+    "reasoning_tokens": 3843,
+    "standard_usd": 0.0721,
+    "billed_usd": 0.0721
+   }
+  }
+ },
+ "compare": [
+  {
+   "workflow": "amazon",
+   "same input": {
+    "before": "pass",
+    "now": "pass"
+   },
+   "new input": {
+    "before": "fail",
+    "now": "pass"
+   },
+   "compiled": {
+    "before": true,
+    "now": true
+   }
+  },
+  {
+   "workflow": "target",
+   "same input": {
+    "before": "–",
+    "now": "skipped"
+   },
+   "new input": {
+    "before": "–",
+    "now": "skipped"
+   },
+   "compiled": {
+    "before": false,
+    "now": false
+   }
+  },
+  {
+   "workflow": "target_search",
+   "same input": {
+    "before": "–",
+    "now": "skipped"
+   },
+   "new input": {
+    "before": "–",
+    "now": "skipped"
+   },
+   "compiled": {
+    "before": false,
+    "now": false
+   }
+  },
+  {
+   "workflow": "starbucks",
+   "same input": {
+    "before": "pass",
+    "now": "skipped"
+   },
+   "new input": {
+    "before": "pass",
+    "now": "skipped"
+   },
+   "compiled": {
+    "before": true,
+    "now": false
+   }
+  },
+  {
+   "workflow": "chipotle",
+   "same input": {
+    "before": "pass after repair",
+    "now": "skipped"
+   },
+   "new input": {
+    "before": "pass after repair",
+    "now": "skipped"
+   },
+   "compiled": {
+    "before": true,
+    "now": false
+   }
+  },
+  {
+   "workflow": "doordash",
+   "same input": {
+    "before": "pass",
+    "now": "skipped"
+   },
+   "new input": {
+    "before": "–",
+    "now": "skipped"
+   },
+   "compiled": {
+    "before": true,
+    "now": false
+   }
+  },
+  {
+   "workflow": "doordash_search",
+   "same input": {
+    "before": "pass",
+    "now": "skipped"
+   },
+   "new input": {
+    "before": "pass after repair",
+    "now": "skipped"
+   },
+   "compiled": {
+    "before": true,
+    "now": false
+   }
+  },
+  {
+   "workflow": "settings_version",
+   "same input": {
+    "before": "pass",
+    "now": "skipped"
+   },
+   "new input": {
+    "before": "–",
+    "now": "skipped"
+   },
+   "compiled": {
+    "before": true,
+    "now": false
+   }
+  },
+  {
+   "workflow": "settings_bluetooth",
+   "same input": {
+    "before": "pass",
+    "now": "skipped"
+   },
+   "new input": {
+    "before": "–",
+    "now": "skipped"
+   },
+   "compiled": {
+    "before": true,
+    "now": false
+   }
+  },
+  {
+   "workflow": "gmail_newest",
+   "same input": {
+    "before": "pass",
+    "now": "skipped"
+   },
+   "new input": {
+    "before": "–",
+    "now": "skipped"
+   },
+   "compiled": {
+    "before": true,
+    "now": false
+   }
+  },
+  {
+   "workflow": "gmail_search",
+   "same input": {
+    "before": "pass",
+    "now": "skipped"
+   },
+   "new input": {
+    "before": "pass",
+    "now": "skipped"
+   },
+   "compiled": {
+    "before": true,
+    "now": false
+   }
+  },
+  {
+   "workflow": "calendar_today",
+   "same input": {
+    "before": "pass",
+    "now": "skipped"
+   },
+   "new input": {
+    "before": "–",
+    "now": "skipped"
+   },
+   "compiled": {
+    "before": true,
+    "now": false
+   }
+  },
+  {
+   "workflow": "contacts_count",
+   "same input": {
+    "before": "pass",
+    "now": "skipped"
+   },
+   "new input": {
+    "before": "–",
+    "now": "skipped"
+   },
+   "compiled": {
+    "before": true,
+    "now": false
+   }
+  },
+  {
+   "workflow": "maps_address",
+   "same input": {
+    "before": "pass",
+    "now": "skipped"
+   },
+   "new input": {
+    "before": "pass",
+    "now": "skipped"
+   },
+   "compiled": {
+    "before": true,
+    "now": false
+   }
+  },
+  {
+   "workflow": "play_rating",
+   "same input": {
+    "before": "pass",
+    "now": "pass"
+   },
+   "new input": {
+    "before": "fail",
+    "now": "pass"
+   },
+   "compiled": {
+    "before": true,
+    "now": true
+   }
+  },
+  {
+   "workflow": "youtube_search",
+   "same input": {
+    "before": "–",
+    "now": "skipped"
+   },
+   "new input": {
+    "before": "–",
+    "now": "skipped"
+   },
+   "compiled": {
+    "before": false,
+    "now": false
+   }
+  },
+  {
+   "workflow": "ytmusic_artist",
+   "same input": {
+    "before": "pass",
+    "now": "skipped"
+   },
+   "new input": {
+    "before": "pass",
+    "now": "skipped"
+   },
+   "compiled": {
+    "before": true,
+    "now": false
+   }
+  },
+  {
+   "workflow": "chrome_wikipedia",
+   "same input": {
+    "before": "–",
+    "now": "pass after repair"
+   },
+   "new input": {
+    "before": "–",
+    "now": "pass after repair"
+   },
+   "compiled": {
+    "before": false,
+    "now": true
+   }
+  }
+ ],
+ "stages": {
+  "n": 3,
+  "first_run": 2,
+  "compiled": 3,
+  "same_input": 2,
+  "same_input_with_repair": 3,
+  "n_second": 3,
+  "new_input": 2,
+  "bot_checks": [],
+  "by_hand": {
+   "right": 3,
+   "wrong": 0,
+   "unchecked": 3
+  }
+ }
+}

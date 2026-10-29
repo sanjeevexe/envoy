@@ -880,6 +880,11 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             outputs.append("answer")
             extract["answer"] = Extract(locator=Locator(text=el.label, kind=el.kind))
             report.warnings.append(f"no output named; the routine reports the screen text the answer quoted: {el.label!r}")
+    if extract and all(e.from_screenshot for e in extract.values()):
+        # Read from the screenshot: the read scrolls until the answer is on screen, so a trailing scroll toward it (which
+        # has nothing in the tree to stop at) goes.
+        while out_steps and out_steps[-1].action.kind == "scroll_until":
+            out_steps.pop()
     # A trailing scroll toward an answer: reveal the first output's element.
     for st in out_steps:
         if st.action.kind == "scroll_until" and st.action.target is None:

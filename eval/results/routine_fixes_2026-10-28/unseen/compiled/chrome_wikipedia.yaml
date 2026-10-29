@@ -1,0 +1,125 @@
+routine: chrome_search_wikipedia_article
+app: com.android.chrome
+version: 1
+status: draft
+intent: Look up a topic on Wikipedia in Chrome and report when it opened
+description: Open en.m.wikipedia.org in Chrome, search for the requested topic, open its article, and report the date it opened.
+patterns: [search Wikipedia and tell me when it opened, look this up on Wikipedia and tell me the year it opened, find when it opened on Wikipedia]
+outputs: [opened_date]
+start: fresh_launch
+inputs:
+  article_topic: {type: text, description: '', example: Eiffel Tower}
+steps:
+- id: go_back
+  intent: Go back to dismiss the current selection and prepare to enter the URL
+  optional: true
+  pre:
+  - {app_foreground: com.android.chrome}
+  - element_present: {resource_id: location_bar_status_icon_view, text: Connection is secure, kind: Text}
+  action: {back: true}
+  post:
+  - element_present:
+      resource_id: url_bar
+      text: "Search Google or type URL: en.wikipedia.org/wiki/Main_Page#"
+      kind: EditText
+  risk: read
+  note: "trace step 1 · one-time screen: optional"
+- id: tap_search
+  intent: Tap Search to open the search interface
+  pre:
+  - {app_foreground: com.android.chrome}
+  action:
+    tap:
+      resource_id: searchIcon
+      text: Search
+      kind: Button
+      cls: Button
+      in_list: true
+      position: [0.83, 0.143]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: url_bar
+      text: "Search Google or type URL: en.wikipedia.org/wiki/Main_Page#/search"
+      kind: EditText
+  risk: reversible
+  note: trace step 4
+- id: enter_wikipedia_url
+  intent: Type en.m.wikipedia.org into the address bar
+  pre:
+  - {app_foreground: com.android.chrome}
+  action:
+    type:
+      field:
+        resource_id: url_bar
+        text: "Search Google or type URL: en.wikipedia.org/wiki/Main_Page#/search"
+        hint: Search Google or type URL
+        kind: EditText
+        cls: EditText
+        parent: location_bar
+        in_list: false
+        position: [0.418, 0.084]
+      value: en.m.wikipedia.org
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: url_bar
+      text: "Search Google or type URL: en.wikipedia.org/wiki/Main_Page"
+      kind: EditText
+  risk: reversible
+  note: trace step 5
+- id: tap_search_again
+  intent: Tap Search to open Wikipedia search
+  pre:
+  - {app_foreground: com.android.chrome}
+  action:
+    tap:
+      resource_id: searchIcon
+      text: Search
+      kind: Button
+      cls: Button
+      in_list: true
+      position: [0.83, 0.143]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: url_bar
+      text: "Search Google or type URL: en.wikipedia.org/wiki/Main_Page#/search"
+      kind: EditText
+  risk: reversible
+  note: trace step 6
+- id: enter_article_topic
+  intent: "Type {{article_topic}} into the search box"
+  pre:
+  - {app_foreground: com.android.chrome}
+  action:
+    type:
+      field:
+        text: ''
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.538, 0.146]
+      value: "{{article_topic}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: url_bar
+      text: "Search Google or type URL: en.wikipedia.org/wiki/Eiffel_Tower"
+      kind: EditText
+  risk: reversible
+  extract:
+    opened_date:
+      near: "Opened: what does the page say? (opened date)"
+      from_screenshot: \b(1\d|20)\d{2}\b
+  note: trace step 7
+compiled_from:
+  task_id: f7-1028023735-real-chrome_wikipedia
+  goal: In Chrome, go to en.m.wikipedia.org, search for Eiffel Tower and tell me the year it opened.
+  compiler: cached
+  compiled_at: "2026-10-28 21:58:14"
+  trace_steps_kept: [1, 4, 5, 6, 7, 8]
+  trace_steps_dropped: 3
+  cost_usd: 0.0023

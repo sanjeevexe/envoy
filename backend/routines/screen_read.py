@@ -2,8 +2,8 @@
 
 Muse Spark (low effort) reads the screenshot and must quote the line the answer is in. The value is kept only if it has
 the recorded shape (a regex from the run's answer: "15 May 1889" → a day, a month, a year), it is in the quoted line, and
-the page names one of the routine's inputs ("Eiffel Tower" in the title or the line), so an answer read from the wrong
-page is refused. The compiler runs the same check on the run's recorded final screenshot before keeping the output, and
+a page whose title is in view names one of the routine's inputs ("Eiffel Tower"), so an answer read from the wrong page
+is refused (scrolled past its title, the page was reached by the routine's own steps, which searched for the input). The compiler runs the same check on the run's recorded final screenshot before keeping the output, and
 the executor on every rerun: one verification, applied the same way each time.
 """
 
@@ -45,7 +45,7 @@ def accept(got: ScreenReadOutput, shape: str, inputs: dict[str, str]) -> tuple[s
     if not contains_value(got.quote, value) and norm(value) not in norm(got.quote):
         return None, f"{value!r} is not in the quoted line {got.quote!r}"
     named = [v for v in inputs.values() if v]
-    if named and not any(contains_value(got.page_title + " " + got.quote, v) for v in named):
+    if named and got.page_title.strip() and not any(contains_value(got.page_title + " " + got.quote, v) for v in named):
         return None, f"the page ({got.page_title!r}) names none of the inputs"
     return value, "read from the screenshot"
 

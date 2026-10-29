@@ -1,0 +1,127 @@
+routine: chrome_search_wikipedia_opened_date
+app: com.android.chrome
+version: 1
+status: draft
+intent: Search Wikipedia in Chrome for an article and report when it opened
+description: Using Chrome, navigate to the mobile Wikipedia site, search for a requested topic, open its article, and find the date or year it
+  opened.
+patterns: [search Wikipedia and tell me when it opened, look up a place on Wikipedia and find its opening year, when did it open according to
+    Wikipedia, find the opening date on Wikipedia]
+outputs: [opened_date]
+start: fresh_launch
+inputs:
+  article_topic: {type: text, description: The topic or article to search for on Wikipedia., example: Eiffel Tower}
+steps:
+- id: go_back
+  intent: Go back to dismiss the current selection and prepare to enter a URL
+  optional: true
+  pre:
+  - {app_foreground: com.android.chrome}
+  - element_present: {resource_id: location_bar_status_icon_view, text: Connection is secure, kind: Text}
+  action: {back: true}
+  post:
+  - element_present:
+      resource_id: url_bar
+      text: "Search Google or type URL: en.wikipedia.org/wiki/Main_Page#"
+      kind: EditText
+  risk: read
+  note: "trace step 1 · one-time screen: optional"
+- id: open_search
+  intent: Tap Search to open the search or address field
+  pre:
+  - {app_foreground: com.android.chrome}
+  action:
+    tap:
+      resource_id: searchIcon
+      text: Search
+      kind: Button
+      cls: Button
+      in_list: true
+      position: [0.83, 0.143]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: url_bar
+      text: "Search Google or type URL: en.wikipedia.org/wiki/Main_Page#/search"
+      kind: EditText
+  risk: reversible
+  note: trace step 4
+- id: enter_wikipedia_url
+  intent: Type en.m.wikipedia.org into the address bar to go to mobile Wikipedia
+  pre:
+  - {app_foreground: com.android.chrome}
+  action:
+    type:
+      field:
+        resource_id: url_bar
+        text: "Search Google or type URL: en.wikipedia.org/wiki/Main_Page#/search"
+        hint: Search Google or type URL
+        kind: EditText
+        cls: EditText
+        parent: location_bar
+        in_list: false
+        position: [0.418, 0.084]
+      value: en.m.wikipedia.org
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: url_bar
+      text: "Search Google or type URL: en.wikipedia.org/wiki/Main_Page"
+      kind: EditText
+  risk: reversible
+  note: trace step 5
+- id: open_wikipedia_search
+  intent: Tap Search to open the Wikipedia search box
+  pre:
+  - {app_foreground: com.android.chrome}
+  action:
+    tap:
+      resource_id: searchIcon
+      text: Search
+      kind: Button
+      cls: Button
+      in_list: true
+      position: [0.83, 0.143]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: url_bar
+      text: "Search Google or type URL: en.wikipedia.org/wiki/Main_Page#/search"
+      kind: EditText
+  risk: reversible
+  note: trace step 6
+- id: search_for_article_topic
+  intent: "Type {{article_topic}} into the search box to search for the article"
+  pre:
+  - {app_foreground: com.android.chrome}
+  action:
+    type:
+      field:
+        text: ''
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.538, 0.146]
+      value: "{{article_topic}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: url_bar
+      text: "Search Google or type URL: en.wikipedia.org/wiki/Eiffel_Tower"
+      kind: EditText
+  risk: reversible
+  extract:
+    opened_date:
+      near: "Opened: what does the page say? (opened date)"
+      from_screenshot: \b(1\d|20)\d{2}\b
+  note: trace step 7
+compiled_from:
+  task_id: f7-1028023735-real-chrome_wikipedia
+  goal: In Chrome, go to en.m.wikipedia.org, search for Eiffel Tower and tell me the year it opened.
+  compiler: cached
+  compiled_at: "2026-10-28 21:56:47"
+  trace_steps_kept: [1, 4, 5, 6, 7, 8]
+  trace_steps_dropped: 3
+  cost_usd: 0.0033

@@ -1,0 +1,67 @@
+routine: amazon_search_first_result_price
+app: com.amazon.mShop.android.shopping
+version: 1
+status: draft
+intent: Search for a product on Amazon and report the price of the first result
+description: Opens Amazon search, runs the requested product search, and reports the price of the first result shown under Results.
+patterns: [search Amazon and tell me the price of the first result, look up a product on Amazon and report its first price, what is the first
+    result price for this on Amazon]
+outputs: [first_result_product, first_result_price]
+start: fresh_launch
+inputs:
+  search_query: {type: text, description: Product or product type to search for on Amazon, example: aa batteries}
+steps:
+- id: tap_search_box
+  intent: Tap the Search box to open Amazon search
+  pre:
+  - {app_foreground: com.amazon.mShop.android.shopping}
+  - element_present: {resource_id: chrome_search_hint_view, text: Search Amazon, kind: Text}
+  action:
+    tap:
+      resource_id: chrome_search_box
+      text: Search
+      kind: Button
+      cls: ImageButton
+      in_list: false
+      position: [0.5, 0.086]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: rs_search_entry_bar, text: Search Amazon, kind: Button}
+  - element_present: {resource_id: rs_search_src_text, text: Search Amazon, kind: EditText}
+  risk: reversible
+  note: trace step 1
+- id: tap_search_suggestion
+  intent: "Tap the {{search_query}} suggestion to run the search"
+  pre:
+  - {app_foreground: com.amazon.mShop.android.shopping}
+  action:
+    tap:
+      text_has: "{{search_query}}"
+      kind: Button
+      cls: Button
+      parent: aa batteries delete
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: chrome_search_hint_view
+      text: "{{search_query}}"
+      kind: Text
+  - element_present: {resource_id: chrome_search_box, text: Search, kind: Button}
+  risk: reversible
+  extract:
+    first_result_product:
+      locator: {kind: Button}
+      first_row: true
+      below: Results
+      skip_labels: [View Sponsored information or leave ad feedback]
+    first_result_price: {pattern: \$\d+\.\d+, expect_digits: true, row_of: first_result_product}
+  note: trace step 2
+compiled_from:
+  task_id: f7-1028030222-real-amazon
+  goal: In the Amazon app, search for AA batteries and tell me the price of the first result.
+  compiler: cached
+  compiled_at: "2026-10-28 21:53:40"
+  trace_steps_kept: [1, 2]
+  trace_steps_dropped: 0
+  cost_usd: 0.0
