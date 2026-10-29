@@ -93,6 +93,37 @@ So autofill is on, and it is Google's. The keyboard is what decides where a sugg
 
 **The Pixel 5** (Android 13) isn't connected yet. Its keyboard is the user's (Gboard), so a saved login would most likely be offered **inline, in the keyboard's suggestion strip**, which is a different window and a different thing to find. envoy-real's result therefore doesn't settle the Pixel; both are worth one look.
 
-### Steps 2–5
+### Steps 2–5 (envoy-real, Oct 29, 12:48–13:30, with the user)
 
-Not run yet: they need the user's throwaway saved login (see the session's report for when).
+**The setup:**
+- **The app:** Wikipedia, installed free from its Play Store page for the test and uninstalled afterwards. Its login uses ordinary Android fields.
+  - SkyLark was ruled out: its sign-in is Jetpack Compose fields that don't take part in Android autofill, so it would say nothing about real apps.
+- **The account:** a throwaway Wikipedia account the user made on the web.
+- **Saving it:** the user signed in once in envoy-real's window and tapped Save on Google's prompt. Google wanted a **captcha-style check** before it would save the password. Then the user logged out in the app.
+- **The saved login:** it lives in Google Password Manager for envoy3955@gmail.com, envoy-real's Google account.
+- **Readings:** taken with `eval/autofill_probe.py` and saved under `eval/results/autofill/2026-10-29/`. Every text field is reduced to its length and whether it's masked, and the password text is scrubbed everywhere. A check against the live field found the password in none of the 12 files saved up to step 3. The later files hold only yes/no values, or a screen with no password field.
+
+| Step | Result |
+| --- | --- |
+| **2. Does the suggestion appear where Envoy can find it?** | **Yes.** On focusing Username, Google Play services showed a sheet, *"Use your saved password for Wikipedia?"*, listing the saved login twice ("Envoytest" and "envoytest": Wikipedia capitalizes the name, and both were saved) with a *No thanks* button. It isn't the dropdown step 1 expected; it's a sheet in its own window, owned by the system. Envoy's ordinary screen reading lists it as numbered elements, with the password shown only as `••••••••`. The rows aren't marked clickable (they're list items), so a tap has to land on the row's bounds. With nothing saved (the baseline), focusing the field showed no sheet at all. |
+| **3. Does tapping it fill both fields, with the password masked in everything Envoy reads?** | **It fills both** (one tap on "Envoytest", made by Envoy with the user's OK): Username 9 characters, Password 8. **Masking: it failed at first, and is fixed in main.** uiautomator2's dump carries a filled password field's text in plain text (letters and digits, not bullets). Envoy's screen layer put it in the field's label (`Password: <text>`), and an agent stopping at a sign-in screen wrote that screen's text and tree to its trace on disk. That was a gap in existing code, not only in this feature. The coordinator fixed it (`beeeb5b`, `devices/screen.py` `mask_passwords()`) and scanned 8,517 past run files: none held a password. Re-checked on envoy-real with the field still filled: after the screen layer the field reads `••••••••`, and the password is in none of the compact text, the tree, the stored XML or any element. Only the raw `u2.dump_hierarchy()` still has it, so code must read screens through `build_state`. |
+| **4. Secure windows (`FLAG_SECURE`)?** | **Not exercised.** Neither Wikipedia's login screen nor Google's sheet is marked secure. Envoy reads a secure window's tree as usual (the flag stops pictures, not the accessibility tree) and takes no screenshot there. Its fields are masked the same way since `beeeb5b`. |
+| **5. Does pressing the app's sign-in button complete it?** | **Yes.** The user pressed Log in on the filled form, and it signed in. Then Wikipedia asked to allow notifications and opened its home page, with no password field left on screen. |
+
+**Cleanup:**
+- Wikipedia was uninstalled, which also ended the throwaway session. Nothing else was signed in or out.
+- envoy-real's third-party apps match the list taken before the test: Amazon, Chipotle, DoorDash, Starbucks, Target, `com.github.uiautomator`, and Google's `contactkeys`, `safetycore` and `verifier`. That's 9 packages, before and after (`envoy-real-apps-before.txt` and `-after.txt`).
+- envoy-real was stopped with `scripts/stop_emulator.sh` and released.
+- The throwaway login stays in envoy3955's Password Manager for the Pixel check. Delete it at passwords.google.com once that's done.
+
+### What it means
+
+On envoy-real, steps 2, 3 (with `beeeb5b`) and 5 work: Envoy can find the saved-login sheet, one tap fills both fields without Envoy ever seeing the password, and the app's own button signs in.
+
+Two things a feature would have to handle:
+- **The sheet.** It is a system-owned sheet with unclickable list rows. The feature finds it by its title and taps a row's bounds. The label a row shows is the saved username, which may repeat in different capitals.
+- **Its first appearance.** The sheet appears on focusing the username field. Before that, the screen looks exactly like any sign-in.
+
+**Still open: the Pixel 5** (Android 13, Gboard), where the suggestion may come inline in the keyboard strip instead. It's checked at the next sitting with the same steps.
+
+**The build decision** stays as agreed: the feature is built only if it's clean, off by default, and the Pixel doesn't differ.

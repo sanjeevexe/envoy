@@ -1,14 +1,14 @@
 # preflight-logins: report
 
-Branch `claude/bold-payne-71c942`, on main `ce747cb`. Model spend: **$0**: nothing in this work calls the Meta API.
+Branch `claude/bold-payne-71c942`, on main `beeeb5b`. Model spend: **$0**: nothing in this work calls the Meta API.
 
 | Stage | State | Commits |
 | --- | --- | --- |
 | 0: `runner.start(..., phone_ok=)` and Instagram in `APP_NAMES` | **In main** (`823fbb8`, merged at `ce747cb`) | `823fbb8` |
-| 1: Before I start | Branch ready, sent to the coordinator | `862b597`, `96b1699` |
-| 2: saved logins (autofill) | Experiment step 1 done; steps 2–5 wait for the user | `d08518b`, `7b44f3f` |
+| 1: Before I start | **In main** (`96b1699`) | `862b597`, `96b1699` |
+| 2: saved logins (autofill) | Experiment done on envoy-real: steps 2, 3 and 5 work (3 after the coordinator's password-mask fix `beeeb5b`, which this experiment led to); the Pixel 5 check is open; no feature code yet | `d08518b`, `7b44f3f`, `d8d269d` |
 
-Tests: 378 backend tests pass (`uv run --project backend pytest backend/tests -q`), 23 of them in the new `backend/tests/test_preflight.py` (5 for stage 0, 18 for stage 1). `npm run build` in `web/` passes.
+Tests: 446 backend tests pass on main `beeeb5b` plus this branch (`uv run --project backend pytest backend/tests -q`), 23 of them in the new `backend/tests/test_preflight.py` (5 for stage 0, 18 for stage 1). `npm run build` in `web/` passes.
 
 ## Stage 0: the two runner changes others build on
 
@@ -52,23 +52,25 @@ Screenshots (mock mode):
 - `phone_ok=` is an optional extra keyword. With it, the device line says "I'll use your Pixel 5 (you said yes)" rather than promising an ask.
 - `routine=` also takes a Routine object.
 
-## Stage 2: saved logins, the experiment so far
+## Stage 2: saved logins, the experiment
 
-**Step 1 (envoy-real, Oct 29, read-only):**
-- Google's autofill service is active (Android 15, Play services 26.41), with Google Password Manager as the credential provider and a Google account present.
-- Its keyboard is uiautomator2's **AdbKeyboard**, the one Envoy types with. So a saved login there would be offered as the autofill **dropdown** window, while the Pixel 5's Gboard would likely offer it **inline** in the keyboard strip. Both are worth one look.
-- Claimed, cold-booted, stopped with `scripts/stop_emulator.sh` and released, in about 6 minutes.
+The full write-up is in `docs/preflight-and-autofill.md`. The readings, redacted, are in `eval/results/autofill/2026-10-29/`.
 
-**Ready for steps 2–5:**
-- `eval/autofill_probe.py` reads the sign-in screen the way Envoy does and saves redacted dumps: every field reduced to its length and whether it's masked, and password text scrubbed everywhere else. It also saves the window list.
-- It taps the username field, and one element by its exact label only when you say so.
-- It refuses text fields and sign-in buttons, never types and takes no screenshots.
-
-**Waiting on:** the coordinator is batching everything that needs you. For this test you'll be asked to save one throwaway login, in an app that isn't signed in on the device, and to make the sign-in taps.
+- **Step 1** (read-only): envoy-real has Google's autofill and Google Password Manager. Its keyboard is the one Envoy types with (AdbKeyboard).
+- **The setup:** a throwaway Wikipedia account, saved by the user signing in once in envoy-real's window and tapping Save. Google wanted a captcha-style check before it saved the password.
+- **Step 2 works.** Focusing Username brings up Google's *"Use your saved password for Wikipedia?"* sheet. Envoy's ordinary screen reading lists it as numbered elements, with the password only as dots.
+- **Step 3 works, after a fix.** One tap on the saved login (by Envoy, with the user's OK) filled both fields. But uiautomator2's dump held the **filled password in plain text**, and Envoy's screen layer put it in the field's label, and from there into the trace an agent writes at a sign-in screen. That was a gap in existing code. I reported it; the coordinator fixed it in main (`beeeb5b`, `mask_passwords()`) and found no past trace holding a password. Re-checked on the device with the field filled: Envoy now reads only `••••••••`.
+- **Step 4 wasn't exercised:** neither window was marked secure.
+- **Step 5 works.** The user pressed Log in, and it signed in.
+- **Cleanup:**
+  - Wikipedia was uninstalled. envoy-real's third-party apps before and after are the same 9: Amazon, Chipotle, DoorDash, Starbucks, Target, `com.github.uiautomator`, and Google's `contactkeys`, `safetycore` and `verifier`.
+  - envoy-real was stopped with `stop_emulator.sh` and released. Nothing else was signed in or out.
+- **Decision:** the feature is built only if the Pixel 5 (Gboard, Android 13) doesn't differ. That check is the next sitting's.
+- **Device time:** envoy-real 12:36–12:42 (step 1) and 12:48–13:30 (steps 2–5).
 
 ## Not done or not checked
 
-- Stage 2, steps 2–5, and whether to build the feature at all (only if those steps all work on at least one device).
+- Stage 2 on the Pixel 5 (same steps, about 15 minutes, the next sitting), then the build decision. If it's built: the `signin.autofill` setting (off by default), the runner's sign-in branch, tests on the recorded screens, and a live run on the throwaway account by the user. The throwaway login stays in envoy3955's Google Password Manager until then.
 - Using the card's lines on an offer's card and in MCP's `heads_up` is for proactive and muse-link, through their guarded imports.
 - I haven't seen the card live on the iPhone (:8443). It's checked in mock mode at 390 and 1440 only. The live API restarts on the new build only after the coordinator merges.
 - `memory/retrieval.py` names apps for memory answers from its own short list, so Instagram would show there as "android app". That's memory's lane, not changed here.

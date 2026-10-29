@@ -7,4 +7,3 @@ com.google.android.safetycore
 com.google.android.verifier
 com.starbucks.mobilecard
 com.target.ui
-org.wikipedia
