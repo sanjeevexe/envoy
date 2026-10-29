@@ -383,7 +383,8 @@ def https_server(tmp_path):
     now = dt.datetime.now(dt.timezone.utc)
     cert = (x509.CertificateBuilder().subject_name(name).issuer_name(name).public_key(key.public_key()).serial_number(1)
             .not_valid_before(now - dt.timedelta(days=1)).not_valid_after(now + dt.timedelta(days=1))
-            .add_extension(x509.SubjectAlternativeName([x509.DNSName("localhost")]), critical=False).sign(key, hashes.SHA256()))
+            .add_extension(x509.SubjectAlternativeName([x509.DNSName("localhost"), x509.DNSName("clips.envoy-test.invalid")]), critical=False)
+            .sign(key, hashes.SHA256()))
     (tmp_path / "cert.pem").write_bytes(cert.public_bytes(serialization.Encoding.PEM))
     (tmp_path / "key.pem").write_bytes(key.private_bytes(serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8, serialization.NoEncryption()))
     routes = {
@@ -427,12 +428,13 @@ def https_server(tmp_path):
     srv.socket = ctx.wrap_socket(srv.socket, server_side=True)
     threading.Thread(target=srv.serve_forever, daemon=True).start()
     client = ssl.create_default_context(cafile=str(tmp_path / "cert.pem"))
-    yield SimpleNamespace(url=f"https://localhost:{srv.server_address[1]}", verify=client)
+    yield SimpleNamespace(url=f"https://localhost:{srv.server_address[1]}", port=srv.server_address[1], verify=client)
     srv.shutdown()
 
 
 def test_downloads_are_https_public_media_and_capped(hand, https_server):
     s = https_server
+    hand.h.resolve_ip, hand.h.public_ip = (lambda host: ["127.0.0.1"]), (lambda ip: True)  # the test server is on this Mac
     got = hand.h.download(f"{s.url}/clip.mp4", verify=s.verify)
     assert got == hand.box / "clip.mp4" and got.read_bytes() == MP4
     assert hand.h.download(f"{s.url}/clip.mp4", verify=s.verify).name == "clip-2.mp4"  # never over another file
@@ -446,6 +448,20 @@ def test_downloads_are_https_public_media_and_capped(hand, https_server):
     with pytest.raises(HandoffError, match="download failed"):
         hand.h.download(f"{s.url}/clip.mp4")  # its certificate isn't trusted
     assert sorted(p.name for p in hand.box.iterdir()) == ["clip-2.mp4", "clip-3.mp4", "clip.mp4", "photo.jpg"]  # nothing left half-written
+
+
+def test_a_download_connects_to_the_address_it_checked(hand, https_server):
+    """DNS rebinding: the name is resolved once, checked, and that address is the one connected to; the name stays in SNI,
+    the certificate check and the Host header. `.invalid` names never resolve in real DNS, so this download can only
+    work through the checked address."""
+    asked = []
+    hand.h.resolve_ip = lambda host: asked.append(host) or ["127.0.0.1"]
+    hand.h.public_ip = lambda ip: True
+    got = hand.h.download(f"https://clips.envoy-test.invalid:{https_server.port}/clip.mp4", verify=https_server.verify)
+    assert got.read_bytes() == MP4 and asked == ["clips.envoy-test.invalid"]
+    hand.h.public_ip = lambda ip: ip.is_global  # the same address, now checked as it really is: refused before connecting
+    with pytest.raises(HandoffError, match="inside this network"):
+        hand.h.download(f"https://clips.envoy-test.invalid:{https_server.port}/clip.mp4", verify=https_server.verify)
 
 
 def test_downloads_never_reach_this_mac_or_its_network(hand, https_server):
@@ -588,3 +604,26 @@ def test_only_a_session_can_accept_a_handoff(hand):
         with pytest.raises(OfferError):
             env.offers.decide(oid, "accept", who)
     assert env.adb.calls == [] and env.offers.get(oid)["status"] == "pending"
+
+
+def test_a_handoff_offer_says_before_i_start_what_the_post_will_need(hand, monkeypatch):
+    monkeypatch.setitem(HANDOFF_TEMPLATES, "instagram", POSTING)
+    hand.store.set_setting("phone_apps", ["com.instagram.android"])
+    env = with_offers(hand)
+    seen = []
+    monkeypatch.setattr("api.handoff.preflight_check", lambda runner, goal, **kw: seen.append((goal, kw)) or [
+        {"kind": "device", "text": "I'll use your Pixel 5 (you said yes)", "level": "info", "extra": "dropped"}])
+    env.h.scan()
+    (env.box / "clip.mp4").write_bytes(MP4)
+    (env.box / "clip.json").write_text(json.dumps({"app": "instagram", "caption": "Golden hour"}))
+    [item] = settle(env)
+    offer = env.offers.get(env.h.item(item["id"])["offer_id"])
+    assert offer["preflight"] == [{"kind": "device", "text": "I'll use your Pixel 5 (you said yes)", "level": "info"}]
+    [(goal, kw)] = seen
+    assert goal.endswith("with this caption: Golden hour") and kw["source"] == "web" and kw["phone"] == kw["phone_ok"] == "phone-0A1B"
+    assert "Golden" not in kw["request"]
+    monkeypatch.setattr("api.handoff.preflight_check", lambda *a, **k: 1 / 0)  # a failing check: the offer comes without lines
+    (env.box / "b.mp4").write_bytes(MP4)
+    (env.box / "b.json").write_text(json.dumps({"app": "instagram"}))
+    [other] = settle(env)
+    assert env.offers.get(env.h.item(other["id"])["offer_id"])["preflight"] == []

@@ -49,6 +49,11 @@ from urllib.parse import unquote, urljoin, urlsplit
 from api.routing import TEST_EMULATOR, choose
 from api.store import TaskStore, new_id
 
+try:  # contract 2: the "Before I start" lines on a handoff offer's card
+    from api.preflight import check as preflight_check
+except ImportError:  # pragma: no cover - depends on what's merged
+    preflight_check = None
+
 MAX_BYTES = 500 * 1024 * 1024
 SETTLE_S = 2.0  # a file counts once its size has held this long
 IMAGES = {".jpg", ".jpeg", ".png", ".heic", ".webp"}
@@ -274,13 +279,15 @@ class Handoff:
 
     def __init__(self, tasks: TaskStore, pool: Any, bus: Any, *, adb: Callable[..., subprocess.CompletedProcess] = _adb,
                  clock: Callable[[], float] = time.time, settle_s: float = SETTLE_S, every_s: float = 3.0, max_bytes: int = MAX_BYTES,
-                 resolve_ip: Callable[[str], list[str]] | None = None, offers: Any = None, runner: Any = None) -> None:
+                 resolve_ip: Callable[[str], list[str]] | None = None, offers: Any = None, runner: Any = None,
+                 public_ip: Callable[[Any], bool] | None = None) -> None:
         """`offers` (api/offers.py) and `runner`: with them, new files raise offers and an accepted one starts its task."""
         self.tasks, self.pool, self.bus, self.adb, self.clock = tasks, pool, bus, adb, clock
         self.offers, self.runner = offers, runner
         self._fresh: set[str] = set()  # items this watcher recorded that have no offer yet
         self.settle_s, self.every_s, self.max_bytes = settle_s, every_s, max_bytes
         self.resolve_ip = resolve_ip or _resolve
+        self.public_ip = public_ip or (lambda ip: ip.is_global and not ip.is_multicast)  # where a download may connect
         self.index_wait_s = 10.0  # how long the gallery gets to pick a file up
         self._folder: Path | None = None  # the folder the seen list below belongs to
         self._seen: dict[str, float] = {}  # name → mtime when the watcher started on this folder
@@ -638,13 +645,28 @@ class Handoff:
         if self.offers is None or item is None or item["status"] != "waiting" or not item["device"]:
             return None
         tpl = HANDOFF_TEMPLATES[item["app"] or "gallery"]
+        then = self.then_for(item)
         name = re.sub(r"[\x00-\x1f\x7f\u202a-\u202e\u2066-\u2069]", "", item["name"])[:60]
-        action = {"type": "handoff", "handoff_id": hid, "file": item["name"], "device": item["device"], "then": self.then_for(item)}
+        action = {"type": "handoff", "handoff_id": hid, "file": item["name"], "device": item["device"], "then": then}
         offer = self.offers.make(kind="handoff", title=fill(tpl["title"], {"file": name, "device": self.where(item["device"])}),
-                                 body=(item["caption"] or "").split("\n", 1)[0][:200], action=action, source=source, key=f"handoff:{hid}")
+                                 body=(item["caption"] or "").split("\n", 1)[0][:200], action=action, source=source, key=f"handoff:{hid}",
+                                 preflight=self.heads_up(then, item["device"]) if then else None)
         if offer is not None:
             self._update(hid, status="offered", offer_id=offer["id"])
         return offer
+
+    def heads_up(self, then: dict[str, Any], did: str) -> list[dict[str, str]] | None:
+        """The "Before I start" lines for the task after the push, as it will run once the user says yes: from Envoy's own
+        app, on that phone, which the yes covers."""
+        if preflight_check is None or self.runner is None:
+            return None
+        try:
+            lines = preflight_check(self.runner, then["goal"], request=then["request"], source="web", app=then.get("app"),
+                                    routine=then.get("routine"), inputs=then.get("inputs") or {}, phone=did,
+                                    phone_ok=did if did.startswith("phone-") else None)
+        except Exception:  # noqa: BLE001 - an offer without the lines is still an offer
+            return None
+        return [{k: str(x.get(k) or "") for k in ("kind", "text", "level")} for x in lines or []][:8] or None
 
     def accept(self, offer: dict[str, Any], source: str) -> dict[str, Any]:
         """The `handoff` action, run by api/offers.py when the user says yes in Envoy (never from MCP): push the file, to
@@ -700,8 +722,13 @@ class Handoff:
         folder = self.outbox()
         with httpx.Client(follow_redirects=False, timeout=httpx.Timeout(30, read=120), verify=verify) as client:
             for _ in range(max_redirects + 1):
-                self._check_url(url)
-                with client.stream("GET", url, headers={"Accept": "image/*, video/*"}) as r:
+                ip = self._check_url(url)
+                # Connect to the address just checked, so a name that resolves differently a moment later (DNS rebinding)
+                # can't send the request elsewhere; the name still goes in SNI, the certificate check and the Host header.
+                u = urlsplit(url)
+                pinned = u._replace(netloc=(f"[{ip}]" if ":" in ip else ip) + (f":{u.port}" if u.port else "")).geturl()
+                with client.stream("GET", pinned, headers={"Accept": "image/*, video/*", "Host": u.netloc},
+                                   extensions={"sni_hostname": u.hostname}) as r:
                     if r.status_code in (301, 302, 303, 307, 308) and r.headers.get("location"):
                         url = urljoin(url, r.headers["location"])
                         continue
@@ -738,7 +765,8 @@ class Handoff:
                     return dest
         raise HandoffError("too many redirects")
 
-    def _check_url(self, url: str) -> None:
+    def _check_url(self, url: str) -> str:
+        """The address to connect to: https, no credentials, and every address the name resolves to is public."""
         u = urlsplit(url)
         if u.scheme != "https" or not u.hostname:
             raise HandoffError("only https URLs (redirects included)")
@@ -748,10 +776,12 @@ class Handoff:
             addrs = self.resolve_ip(u.hostname)
         except OSError as e:
             raise HandoffError(f"can't find {u.hostname}") from e
+        if not addrs:
+            raise HandoffError(f"can't find {u.hostname}")
         for a in addrs:
-            ip = ipaddress.ip_address(a)
-            if not ip.is_global or ip.is_multicast:
+            if not self.public_ip(ipaddress.ip_address(a)):
                 raise HandoffError("that URL points inside this network, not to the web")
+        return addrs[0]
 
 
 def _resolve(host: str) -> list[str]:
