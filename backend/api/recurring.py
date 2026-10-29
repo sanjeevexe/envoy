@@ -129,27 +129,41 @@ class Recurring:
         d: Draft | None = res.parsed
         if d is None or not d.recurring:
             return None, 1, cost
+        try:
+            return self.set_up(d, message, source, cost), 1, cost
+        except Exception as e:  # noqa: BLE001 - the call was made, so it's counted; and nothing else starts in its place
+            return {"kind": "trigger_request", "model_calls": 1, "cost_usd": round(cost, 5), "reply": "I couldn't set that up just now. Nothing was changed.",
+                    "spoken": "I couldn't set that up just now.", "draft_rejected": f"{type(e).__name__}: {e}"[:200]}, 1, cost
+
+    def set_up(self, d: Draft, message: str, source: str, cost: float) -> dict[str, Any]:
+        """The checked draft as a trigger, switched off, and its offer; or a reply saying why not."""
         out = {"kind": "trigger_request", "model_calls": 1, "cost_usd": round(cost, 5)}
         goal = re.sub(r"\s+", " ", d.goal or "").strip().rstrip(".")
         if not own_words(goal, message):
             why = "I couldn't tell exactly what to do each time"
             out.update(reply=f"{why}. Try it like this: “Every Friday at 6 PM, order my usual from Thai Basil.”", spoken=f"{why}.", draft_rejected="goal")
-            return out, 1, cost
+            return out
         try:
             kind, spec = self.spec(d, message)
             trig = self.scheduler.add(kind, _name(d.name, goal), spec, {"goal": goal, "ask": True}, enabled=False)
         except (ValueError, KeyError) as e:
             out.update(reply=f"I couldn't set that up: {e}.", spoken="I couldn't set that up.", draft_rejected=str(e)[:200])
-            return out, 1, cost
+            return out
         w, what = when(trig["kind"], trig["spec"]), _to_you(goal)
-        offer = self.offers.make(
-            kind="trigger_request", title=f"Set this up? {w[:1].upper()}{w[1:]}: {what}",
-            body="It stays off until you say yes, and each time it runs I'll ask you first.", source=source, key=f"trigger_request:{trig['id']}",
-            action={"type": "enable_trigger", "trigger_id": trig["id"], "summary": f"{w[:1].upper()}{w[1:]}, I'll ask you: “{_should_i(goal)}”",
-                    "setup": f"asks you {w}"})
+        try:
+            offer = self.offers.make(
+                kind="trigger_request", title=f"Set this up? {w[:1].upper()}{w[1:]}: {what}",
+                body="It stays off until you say yes, and each time it runs I'll ask you first.", source=source, key=f"trigger_request:{trig['id']}",
+                action={"type": "enable_trigger", "trigger_id": trig["id"], "summary": f"{w[:1].upper()}{w[1:]}, I'll ask you: “{_should_i(goal)}”",
+                        "setup": f"asks you {w}"})
+            if offer is None:
+                raise RuntimeError("the offer wasn't made")
+        except Exception:
+            self.scheduler.store.delete_trigger(trig["id"])  # no switched-off trigger left behind without its card
+            raise
         out.update(reply=f"I can do that: {w}, {what}. It's off until you say yes below, and each time it runs I'll ask you first.",
                    spoken="I've drafted it. Say yes on the card to turn it on.", offer=offer, trigger=trig)
-        return out, 1, cost
+        return out
 
     def spec(self, d: Draft, message: str) -> tuple[str, dict[str, Any]]:
         """The draft as a trigger spec; scheduler.add validates the rest."""

@@ -157,6 +157,18 @@ def test_off_until_your_yes_then_it_asks_each_time():
     assert asked["action"]["request"] == "Order my usual from Thai Basil"  # your own words, the whole request
 
 
+def test_a_failure_after_the_call_counts_it_and_starts_nothing_else():
+    u, adapter, runner = setup(draft(days=["fri"], time_of_day="18:00", goal="Order my usual from Thai Basil"))
+    u.offers.make = lambda **kw: (_ for _ in ()).throw(RuntimeError("database is locked"))
+    out = say("Every Friday at 6 PM, order my usual from Thai Basil", adapter, runner)
+    assert adapter.jobs == ["recurring"] and runner.started == []  # not ordered now in its place
+    assert out["model_calls"] == 1 and out["cost_usd"] == pytest.approx(0.0012) and "couldn't set that up" in out["reply"]
+    assert u.store.triggers() == []  # no switched-off trigger left without its card
+    u2, broken, runner2 = setup(RuntimeError("timeout"))  # the call itself failed: chat as before, nothing counted for it
+    out = say("Every Friday at 6 PM, order my usual from Thai Basil", broken, runner2)
+    assert broken.jobs == ["recurring", "chat"] and out["model_calls"] == 1
+
+
 # ---- drafts that are refused ----------------------------------------------------------------------------
 
 
