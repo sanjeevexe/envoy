@@ -1,0 +1,172 @@
+{
+  "time": "2026-10-29T13:15:49",
+  "model": "muse-spark-1.3 (standard tier)",
+  "rows": [
+    {
+      "message": "Every Friday at 6 PM, order my usual from Thai Basil",
+      "pre_filter": true,
+      "kind": "trigger_request",
+      "reply": "I can do that: every Friday at 6:00 PM, order your usual from Thai Basil. It's off until you say yes on the card, and each time it runs I'll ask you first.",
+      "ms": 1901,
+      "model_calls": 1,
+      "cost_usd": 0.0025,
+      "trigger": {
+        "kind": "time",
+        "name": "order my usual from Thai Basil",
+        "spec": {
+          "weekly_on": {
+            "days": [
+              "fri"
+            ],
+            "at": "18:00"
+          }
+        },
+        "action": {
+          "goal": "order my usual from Thai Basil",
+          "ask": true
+        },
+        "enabled": false
+      },
+      "offer": "Set this up? Every Friday at 6:00 PM: order your usual from Thai Basil",
+      "started": [],
+      "rejected": null
+    },
+    {
+      "message": "check my flight status every weekday morning at 7:30",
+      "pre_filter": true,
+      "kind": "trigger_request",
+      "reply": "I can do that: every weekday at 7:30 AM, check your flight status. It's off until you say yes on the card, and each time it runs I'll ask you first.",
+      "ms": 1435,
+      "model_calls": 1,
+      "cost_usd": 0.0021,
+      "trigger": {
+        "kind": "time",
+        "name": "check my flight status",
+        "spec": {
+          "weekly_on": {
+            "days": [
+              "mon",
+              "tue",
+              "wed",
+              "thu",
+              "fri"
+            ],
+            "at": "07:30"
+          }
+        },
+        "action": {
+          "goal": "check my flight status",
+          "ask": true
+        },
+        "enabled": false
+      },
+      "offer": "Set this up? Every weekday at 7:30 AM: check your flight status",
+      "started": [],
+      "rejected": null
+    },
+    {
+      "message": "Whenever SkyLark emails me that check-in is open, check me in for my flight",
+      "pre_filter": true,
+      "kind": "trigger_request",
+      "reply": "I can do that: whenever an email from \u201cSkyLark\u201d about \u201ccheck-in is open\u201d arrives, check you in for your flight. It's off until you say yes on the card, and each time it runs I'll ask you first.",
+      "ms": 3890,
+      "model_calls": 1,
+      "cost_usd": 0.00409,
+      "trigger": {
+        "kind": "email",
+        "name": "check me in for my flight",
+        "spec": {
+          "sender_contains": "SkyLark",
+          "subject_contains": "check-in is open",
+          "after_rowid": 0,
+          "memory_db": "mem-10b4a1030"
+        },
+        "action": {
+          "goal": "check me in for my flight",
+          "ask": true
+        },
+        "enabled": false
+      },
+      "offer": "Set this up? Whenever an email from \u201cSkyLark\u201d about \u201ccheck-in is open\u201d arrives: check you in for your flight",
+      "started": [],
+      "rejected": null
+    },
+    {
+      "message": "When my flight's gate changes, look up my boarding time",
+      "pre_filter": true,
+      "kind": "trigger_request",
+      "reply": "I can do that: whenever your flight's gate changes, look up your boarding time. It's off until you say yes on the card, and each time it runs I'll ask you first.",
+      "ms": 1918,
+      "model_calls": 1,
+      "cost_usd": 0.00224,
+      "trigger": {
+        "kind": "fact_changed",
+        "name": "look up my boarding time",
+        "spec": {
+          "entity_type": "Flight",
+          "attributes": [
+            "gate"
+          ],
+          "after_seq": 0,
+          "memory_db": "mem-10b4a1030"
+        },
+        "action": {
+          "goal": "look up my boarding time",
+          "ask": true
+        },
+        "enabled": false
+      },
+      "offer": "Set this up? Whenever your flight's gate changes: look up your boarding time",
+      "started": [],
+      "rejected": null
+    },
+    {
+      "message": "Check me in 24 hours before every flight",
+      "pre_filter": true,
+      "kind": "trigger_request",
+      "reply": "I can do that: 24 h before every flight, check you in. It's off until you say yes on the card, and each time it runs I'll ask you first.",
+      "ms": 1884,
+      "model_calls": 1,
+      "cost_usd": 0.00206,
+      "trigger": {
+        "kind": "before_fact",
+        "name": "Check me in",
+        "spec": {
+          "entity_type": "Flight",
+          "date_attr": "date",
+          "time_attr": "depart_time",
+          "minutes_before": 1440
+        },
+        "action": {
+          "goal": "Check me in",
+          "ask": true
+        },
+        "enabled": false
+      },
+      "offer": "Set this up? 24 h before every flight: check you in",
+      "started": [],
+      "rejected": null
+    },
+    {
+      "message": "Check me in before my flight to Chicago tomorrow",
+      "pre_filter": true,
+      "kind": "task",
+      "reply": "On it: Check me in for my flight to Chicago tomorrow. You can follow it here; anything that costs money, or that you didn't ask for, waits for your OK.",
+      "ms": 5004,
+      "model_calls": 2,
+      "cost_usd": 0.0051,
+      "trigger": null,
+      "offer": null,
+      "started": [
+        {
+          "goal": "Check me in for my flight to Chicago tomorrow",
+          "source": "chat",
+          "request": "Check me in before my flight to Chicago tomorrow"
+        }
+      ],
+      "rejected": null
+    }
+  ],
+  "model_calls": 7,
+  "cost_usd": 0.01809
+}

@@ -6,6 +6,9 @@ it may be out of date); if memory doesn't have it, the matching task is started 
 (a gate seen more than 30 min ago) the app is checked first; memory answers alone only when no phone can run that
 check, and then says how old the answer is. The assistant has no way to
 approve anything: approvals come only from the user's approval screen.
+
+A message with schedule words ("every Friday at 6 PM, order my usual") may set up a recurring job (api/recurring.py): a
+trigger created switched off, and a card asking you to turn it on. Every other message goes on exactly as before.
 """
 
 from __future__ import annotations
@@ -17,24 +20,34 @@ from memory.retrieval import Retriever
 from models.prompts import CHAT_INSTRUCTIONS
 
 from api.crossapp import lead, may_span_apps
+from api.recurring import may_schedule
 
 
 async def chat(message: str, *, adapter: Any, memory: Any, runner: Any, routines: Any, source: str = "chat") -> dict[str, Any]:
     """`source` is "chat" (typed) or "voice" (spoken): either way your own words, which the approval rules honor.
     `spoken` is the short line a voice reply reads aloud.
-    A request that needs two or more apps becomes a cross-app task first (api/crossapp.py); the rest is unchanged."""
+    A request that needs two or more apps becomes a cross-app task first (api/crossapp.py); one that asks for something
+    again and again may set up a recurring job (api/recurring.py); the rest is unchanged."""
     lead_calls, lead_cost = 0, 0.0
+    recurring = getattr(runner, "recurring", None)
+    if recurring is not None and may_schedule(message):
+        try:
+            got, lead_calls, lead_cost = await recurring.propose(message, source)
+        except Exception:  # noqa: BLE001 - setting up a recurring job is an extra step: chat goes on as before
+            got = None
+        if got is not None:
+            return got
     cross = getattr(runner, "crossapp", None)
     if cross is not None and may_span_apps(message):
         try:
-            split, lead_cost = await lead(message, adapter, routines)
-            lead_calls = 1
+            split, cost = await lead(message, adapter, routines)
+            lead_calls, lead_cost = lead_calls + 1, lead_cost + cost
         except Exception:  # noqa: BLE001 - the lead is an extra step: chat goes on as before
             split = None
         if split is not None:
             task = cross.start(message, split, source)
             names = " and ".join(dict.fromkeys(p.name for p in split.parts))
-            return {"kind": "task", "model_calls": 1, "cost_usd": round(lead_cost, 5), "task": task, "parts": [p.label for p in split.parts],
+            return {"kind": "task", "model_calls": lead_calls, "cost_usd": round(lead_cost, 5), "task": task, "parts": [p.label for p in split.parts],
                     "reply": f"Checking {names} at once: " + "; ".join(p.label for p in split.parts) + ". You can follow each one here.",
                     "spoken": f"Checking {names}."}
     apps = sorted({f"{r.app}: {r.intent}" for r in routines.active()})

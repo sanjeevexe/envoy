@@ -50,6 +50,7 @@ from api.events import EventBus
 from api.handoff import Handoff, handoff_router
 from api.live import live_view
 from api.offers import Offers, offers_router
+from api.recurring import Recurring
 from api.repeats import Repeats
 from api.push import Pusher, VapidKeys
 from api.runner import SHOTS, TaskRunner
@@ -122,6 +123,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     scheduler.offers = ctx.offers
     scheduler.repeats = Repeats(tasks, memory, ctx.offers, scheduler, routines)  # "Make this a habit?" (api/repeats.py)
     bus.listeners.append(scheduler.repeats.on_event)
+    runner.recurring = Recurring(ctx.offers, scheduler, adapter)  # chat sets up recurring jobs, switched off (api/recurring.py)
     ctx.handoff = Handoff(tasks, pool, bus)  # type: ignore[attr-defined]  # files from the Mac to the phone (api/handoff.py)
 
     from mcp_server.server import build_mcp, mcp_app
