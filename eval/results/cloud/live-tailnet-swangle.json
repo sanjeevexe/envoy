@@ -1,0 +1,42 @@
+{
+ "time": "2026-10-29T23:17:08+00:00",
+ "base": "https://envoy-cloud.tailffb391.ts.net:8443",
+ "avd": "envoy-test",
+ "hello": {
+  "type": "hello",
+  "avd": "envoy-test",
+  "width": 1080,
+  "height": 2400,
+  "control": {
+   "avd": "envoy-test",
+   "task_id": null,
+   "user_control": false,
+   "since": 0.0,
+   "reason": ""
+  },
+  "kind": "emulator"
+ },
+ "server_stats": {
+  "type": "stats",
+  "capture_ms": 67.9,
+  "encode_ms": 26.6,
+  "frames": 25,
+  "skipped": 25,
+  "avg_kb": 83.7
+ },
+ "frames": {
+  "n": 48,
+  "capture_to_received_ms_p50": 150.5,
+  "max_ms": 317,
+  "rtt_ms_p50": 39.4,
+  "kb_per_frame": 85.2
+ },
+ "takeover": {
+  "inputs": 4,
+  "ack_ms_p50": 178.9,
+  "ack_ms_max": 303,
+  "input_to_new_frame_ms_p50": 350.7,
+  "input_to_new_frame_ms_max": 612,
+  "frames_seen": 4
+ }
+}

@@ -105,9 +105,9 @@ RemainAfterExit=yes
 User=$U
 WorkingDirectory=$CODE
 Environment=XDG_RUNTIME_DIR=/run/user/$UID_
-# The renderer per phone (Oct 29): envoy-test keeps SwiftShader (SkyLark 18/18 and 30/30 with no model call, the faster
-# one); envoy-real uses ANGLE on SwiftShader, since plain SwiftShader crashed the emulator under DoorDash and Amazon.
-ExecStart=/bin/bash -c 'source ~/env-linux.sh && EMULATOR_EXTRA_ARGS="-gpu swiftshader_indirect" scripts/start_emulator.sh envoy-test && EMULATOR_EXTRA_ARGS="-gpu swangle" scripts/start_emulator.sh envoy-real'
+# Both phones render with ANGLE on SwiftShader (env-linux.sh's -gpu swangle): plain SwiftShader crashed the emulator
+# under DoorDash and Amazon, and envoy-test died on it again later (Oct 29), though it was a little faster on SkyLark.
+ExecStart=/bin/bash -c 'source ~/env-linux.sh && scripts/start_emulator.sh envoy-test && scripts/start_emulator.sh envoy-real'
 ExecStop=/bin/bash -c 'source ~/env-linux.sh && scripts/stop_emulator.sh envoy-real; scripts/stop_emulator.sh envoy-test'
 TimeoutStartSec=900
 TimeoutStopSec=300
@@ -119,6 +119,9 @@ sudo tee /etc/systemd/system/envoy-api.service >/dev/null <<EOF
 Description=Envoy cloud copy: API, web app and MCP on 127.0.0.1:8700
 After=envoy-emulators.service tailscaled.service
 Wants=envoy-emulators.service
+# Restarting the phones restarts the API: it keeps each emulator's per-launch gRPC token from when it connected, so
+# after an emulator restart its calls fail (UNAUTHENTICATED) until the API restarts (seen Oct 29).
+PartOf=envoy-emulators.service
 [Service]
 User=$U
 WorkingDirectory=$CODE
