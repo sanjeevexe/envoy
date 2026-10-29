@@ -602,31 +602,41 @@ class Handoff:
                 raise HandoffError(f"{name} was copied to the phone but its gallery hasn't picked it up")
             time.sleep(0.5)
 
-    def send(self, hid: str, device: str | None = None) -> dict[str, Any]:
+    def send(self, hid: str, device: str | None = None, *, withdraw_why: str | None = None) -> dict[str, Any]:
         """Push an item from the outbox to its phone (or the one given). Callers decide whether they may: the user's own
-        session for any phone; MCP only for an emulator."""
+        session for any phone; MCP only for an emulator. `withdraw_why`: once the file is on the phone, its offer, if
+        still pending, is withdrawn with that reason ("Muse already sent it to your phone"), so nobody is asked about a
+        file that has already gone. Accepting the offer itself passes none: that yes is the offer's answer (and
+        withdrawing from inside it would wait on the decision's own lock)."""
         item = self.item(hid)
         if item is None:
             raise HandoffError(f"no handoff {hid}")
-        if item["status"] in ("sent", "posted"):
-            return item
-        did = self.pick(device or item["device"], item["app"])
-        try:
-            path = self.outbox_file(item["name"])
-            got = self.push_file(did, path)
-        except (HandoffError, OSError, subprocess.TimeoutExpired) as e:
-            return self._update(hid, status="failed", device=did, error=str(e)[:300])  # type: ignore[return-value]
-        return self._update(hid, status="sent", device=did, remote_path=got["remote_path"], media_uri=got["media_uri"], error=None, note=None)  # type: ignore[return-value]
+        if item["status"] not in ("sent", "posted"):
+            did = self.pick(device or item["device"], item["app"])
+            try:
+                path = self.outbox_file(item["name"])
+                got = self.push_file(did, path)
+            except (HandoffError, OSError, subprocess.TimeoutExpired) as e:
+                return self._update(hid, status="failed", device=did, error=str(e)[:300])  # type: ignore[return-value]
+            item = self._update(hid, status="sent", device=did, remote_path=got["remote_path"], media_uri=got["media_uri"], error=None, note=None)  # type: ignore[assignment]
+        if withdraw_why and item["offer_id"] and self.offers is not None:
+            self.offers.withdraw(item["offer_id"], withdraw_why)  # a no-op once the offer was answered
+        return item
 
     def add(self, name: str, origin: str, device: str | None = None) -> dict[str, Any]:
-        """The item for a file in the outbox: the waiting one if the watcher already has it, else a new one."""
+        """The item for a file in the outbox: the waiting one if the watcher already has it, the one already on that
+        phone (asking again doesn't put a second copy in its gallery), else a new one."""
         path = self.outbox_file(name)
         st = path.stat()
         with self.tasks.lock:
             row = self.tasks.db.execute("SELECT id FROM handoffs WHERE name=? AND size=? AND mtime=? AND status IN ('waiting','offered') "
                                         "ORDER BY created_at DESC LIMIT 1", (path.name, st.st_size, st.st_mtime)).fetchone()
+            done = self.tasks.db.execute("SELECT id FROM handoffs WHERE name=? AND size=? AND mtime=? AND status IN ('sent','posted') AND device=? "
+                                         "ORDER BY created_at DESC LIMIT 1", (path.name, st.st_size, st.st_mtime, device)).fetchone() if device else None
         if row:
             return self._update(row["id"], **({"device": device} if device else {}))  # type: ignore[return-value]
+        if done:
+            return self.item(done["id"])  # type: ignore[return-value]
         self._seen[path.name] = st.st_mtime  # the watcher doesn't record it a second time
         return self._record(path, self._check_file(path), origin=origin, device=device)
 
@@ -829,7 +839,7 @@ def handoff_router(ctx: Any, session: Callable[..., None], caller: Callable[...,
     async def send(hid: str, body: dict[str, Any] = Body(default={})) -> dict[str, Any]:
         """Your yes: push this file to its phone (the real phone too)."""
         try:
-            return await asyncio.to_thread(h.send, hid, body.get("device") or None)
+            return await asyncio.to_thread(lambda: h.send(hid, body.get("device") or None, withdraw_why="Sent to your phone"))
         except HandoffError as e:
             raise HTTPException(404 if str(e).startswith("no handoff") else 400, str(e)) from e
 

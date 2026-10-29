@@ -333,7 +333,7 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> MCPServer:
                     "text": f"Waiting for the user's OK in Envoy before {item['name']} goes to their {item['device_name']}.",
                     **({"offer_id": offer["id"], "url": f"{base}/?offer={offer['id']}"} if offer and offer.get("id")
                        else {"url": f"{base}/?handoff={item['id']}"})}
-        item = h.send(item["id"], did)
+        item = h.send(item["id"], did, withdraw_why=f"{CLIENT} already sent it to your phone")
         if item["status"] != "sent":
             return {"handoff_id": item["id"], "status": "failed", "error": item["error"]}
         return {"handoff_id": item["id"], "status": "sent", "device": did, "device_name": item["device_name"],

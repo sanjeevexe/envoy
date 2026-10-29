@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import time
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -368,3 +369,55 @@ def test_a_weekly_request_says_its_days_and_a_habit_and_a_request_both_make_ask_
     by_id = {t["id"]: t for t in env.ctx.tasks.triggers()}
     assert by_id[made["result"]["trigger_id"]]["action"]["ask"] is True and by_id[made["result"]["trigger_id"]]["enabled"] is True
     assert by_id[out["trigger_id"]]["action"]["ask"] is True and by_id[out["trigger_id"]]["enabled"] is False
+
+
+# ---- a question Envoy no longer needs is taken back ---------------------------------------------------------
+
+
+def watched_offer(env, name: str = "clip.mp4") -> dict:
+    """A file the watcher found, with the offer it raised (a sidecar names the app, so the offer comes at once)."""
+    h = env.ctx.handoff
+    h.scan()
+    (env.box / name).write_bytes(MP4)
+    (env.box / (Path(name).stem + ".json")).write_text(json.dumps({"app": "gallery"}))
+    h.scan()
+    h.clock = lambda: time.time() + 5
+    [item] = h.scan()
+    item = h.item(item["id"])
+    assert item["status"] == "offered" and env.ctx.offers.get(item["offer_id"])["status"] == "pending"
+    return item
+
+
+def test_muse_sending_the_file_withdraws_the_watchers_offer_and_a_later_yes_is_refused(env):
+    item = watched_offer(env)
+    with TestClient(env.ctx.asgi) as c:
+        out = call(c, "send_to_phone", file="clip.mp4", device="emulator")
+        assert out["status"] == "sent" and len(pushes(env.adb)) == 1
+        offer = env.ctx.offers.get(item["offer_id"])
+        assert (offer["status"], offer["note"]) == ("withdrawn", "Muse already sent it to your phone")
+        late = c.post(f"/api/offers/{item['offer_id']}", json={"decision": "accept"}, headers=me(env.token))
+        assert late.status_code == 409
+        ups = call(c, "phone_updates")["items"]
+    assert len(pushes(env.adb)) == 1  # the late yes pushed nothing more
+    assert env.ctx.handoff.item(item["id"])["status"] == "sent"
+    assert not any(u["type"] == "offer" for u in ups)  # no longer listed as waiting for you
+
+
+def test_sending_from_envoy_withdraws_the_offer_too(env):
+    item = watched_offer(env)
+    with TestClient(env.ctx.asgi) as c:
+        assert c.post(f"/api/handoff/{item['id']}/send", json={}, headers=me(env.token)).json()["status"] == "sent"
+    offer = env.ctx.offers.get(item["offer_id"])
+    assert (offer["status"], offer["note"]) == ("withdrawn", "Sent to your phone")
+
+
+def test_an_offer_already_accepted_is_left_as_it_is(env):
+    item = watched_offer(env)
+    with TestClient(env.ctx.asgi) as c:
+        assert c.post(f"/api/offers/{item['offer_id']}", json={"decision": "accept"}, headers=me(env.token)).json()["status"] == "accepted"
+        assert len(pushes(env.adb)) == 1  # the yes pushed it
+        out = call(c, "send_to_phone", file="clip.mp4", device="emulator")  # Muse asks again afterwards
+        assert out["status"] == "sent" and len(pushes(env.adb)) == 1  # already there: not pushed twice
+        other = call(c, "send_to_phone", file="clip.mp4", device="envoy-real")  # another phone gets its own copy
+    assert other["status"] == "sent" and [s for s, _ in pushes(env.adb)] == ["emulator-5554", "emulator-5556"]
+    assert env.ctx.offers.get(item["offer_id"])["status"] == "accepted"

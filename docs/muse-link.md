@@ -109,4 +109,4 @@ Oct 29, 1:24–2:12 pm ET, in the Muse app on your iPhone (driven through iPhone
 
 **Seen along the way:**
 - Muse's Devices page has a **Developer mode** for "pairing community devices not verified by Meta" that "get full access to your agent": left off, but a possible future path for a phone.
-- An offer can't be withdrawn: the watcher's "Put pier-sunset.mp4 …?" stayed pending after Muse had sent the file. Proposed to the proactive session: `Offers.withdraw`, called by `Handoff.send`.
+- The watcher's "Put pier-sunset.mp4 …?" stayed pending after Muse had sent the file. Fixed since: when Muse's `send_to_phone` or your own Send puts a file on the phone, its pending offer is withdrawn ("Muse already sent it to your phone", "Sent to your phone"; proactive's `Offers.withdraw`), so a late yes gets "already withdrawn". Asking again for a file already on that phone doesn't put a second copy there.

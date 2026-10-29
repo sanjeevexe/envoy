@@ -37,5 +37,4 @@ $0. No Meta API calls.
 - `heads_up` and the offer lines run against preflight's real `check` in the full suite, but the tests assert their content only with stand-ins.
 - `phone_updates` items are reported again if a finished task is updated later (its `updated_at` moves). Rare; noted, not fixed.
 - Re-dating covers MP4/MOV/M4V and JPEG. PNG, WebP and HEIC keep their own dates (PNG and WebP rarely carry one).
-- Offers can't be withdrawn (proactive's `offers.py`): a handoff offer stays pending after the file was sent another way. Proposed `Offers.withdraw`.
 - Tests that drive `/mcp` append to `logs/mcp.jsonl`, which is linked to the main checkout's logs in every worktree. This was already happening before this work. For the Muse tests, records are filtered by the tunnel's host and the user agent.
