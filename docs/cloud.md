@@ -100,6 +100,53 @@ The agent run took 3 s longer on the VM, with fewer steps. Its time is mostly mo
 
 The learned routine lives only in the VM's copy (`eval/results/final/library/compiled/` there). The YAML is in `eval/results/cloud/stage2/check_in-routine.yaml` for reference; nothing was copied into the Mac's `data/routines/`.
 
+## Stage 3: Envoy in the cloud, as a second option
+
+At the user's request (Oct 29), the cloud copy is a full **alternative** to the Mac setup, not a replacement. Before the Nov 3 recording the user picks whichever works better. Nothing on the Mac changes when the cloud is chosen.
+
+### What the cloud copy is
+
+| | Mac (as today) | Cloud copy |
+| --- | --- | --- |
+| Where | this Mac | VM `envoy-cloud`, us-east1-b |
+| API, web app, MCP | `127.0.0.1:8700`; tailnet `https://<mac>.<tailnet>.ts.net:8443` | the VM's `127.0.0.1:8700`; tailnet `https://envoy-cloud.<tailnet>.ts.net:8443` only |
+| Code | the main checkout | `git archive` of main (`scripts/cloud/push.sh`), the web app built on the VM |
+| Data | `data/api`, `data/demo/memory.db` | its own: `~/envoy-state` (`.env` with its own MCP token, the API's own session token and VAPID keys, a copy of the demo memory and test inbox taken Oct 29) |
+| Phones | envoy-test, envoy-real (signed in), the Pixel 5 over USB | envoy-test, envoy-real (new: sign-ins are the user's step), **no Pixel 5** |
+| Starts | when you start it | `scripts/cloud/start.sh --vm-only`: systemd starts both emulators and the API at boot |
+| Costs | nothing extra | about $0.39 an hour while running; the disk about $5 a month |
+
+The two copies don't share anything: a routine learned, a memory fact or a paired device on one is not on the other.
+
+### The bars, measured
+
+TBD: live-view lag (from the Mac over the tailnet, and the iPhone), task times against the Mac, real apps' bot checks and sign-ins from a data-center address.
+
+### Choosing the cloud (and back): the switch
+
+One-time setup (the user, once the VM is on the tailnet):
+1. **Sign in on the Mac:** `scripts/cloud/login.sh` opens the cloud copy's sign-in link in the Mac's browser. Its token is never printed.
+2. **The iPhone:** in that browser window, open Settings › Devices, "Pair your iPhone", and make a pairing code, as with the Mac copy. Then on the iPhone, Safari › `https://envoy-cloud.<tailnet>.ts.net:8443`, type the code, Share › Add to Home Screen, and name it **Envoy Cloud**. The Mac's **Envoy** icon stays as it is: one icon per host. Allow notifications from the new icon too.
+3. **Siri:** `scripts/cloud/shortcut.sh` builds **Ask Envoy (cloud)**. Open it on the Mac; Shortcuts adds it, and iCloud brings it to the iPhone. It never replaces the Mac's **Ask Envoy**.
+4. **Muse (optional):** `scripts/cloud/muse-tunnel.sh` prints a public `…/mcp` address. In Muse, add a second custom connector, **Envoy Cloud**, at that address. Paste its API key from `scripts/cloud/muse-token.sh`, which puts the cloud copy's MCP token on the clipboard.
+5. **Real apps:** in the cloud copy's web app, open the live phone `envoy-real`, Take over, and sign in to Google Play and the apps the demo needs. You type every password. Hand back.
+
+**To choose the cloud** (about 5 minutes; the Mac keeps running as it is):
+1. `scripts/cloud/start.sh --vm-only` (if it reports a stockout, run it again; see below), then `scripts/cloud/keep-awake.sh on`.
+2. Use the **Envoy Cloud** icon on the iPhone, and `scripts/cloud/login.sh` on the Mac.
+3. Siri: in Shortcuts, rename **Ask Envoy** to **Ask Envoy (Mac)** and **Ask Envoy (cloud)** to **Ask Envoy**, so "Hey Siri, Ask Envoy" goes to the cloud.
+4. Muse: run `scripts/cloud/muse-tunnel.sh` and use the **Envoy Cloud** connector, after updating its URL if the tunnel's address changed (quick tunnels get a new one each time). Turn the Mac's connector off for the session, so Muse doesn't pick the wrong one.
+
+**To switch back to the Mac:**
+1. Use the **Envoy** icon. Rename the shortcuts back. Use the Mac's Muse connector and tunnel (`scripts/start_muse_test.sh`), and turn the cloud one off.
+2. `scripts/cloud/keep-awake.sh off`, then `scripts/cloud/stop.sh`.
+
+Nothing migrates either way, so switching back takes as long as the steps above. Anything done on the cloud copy (tasks, learned routines, memory) stays there.
+
+**What only the Mac option can do:** the Pixel 5 (USB), and so the Instagram creator scene; the real apps already signed in on the Mac's `envoy-real`; the Mac's memory and routine history.
+
+**A stopped VM may not start on demand.** On Oct 29 the first restart failed with Google's `ZONE_RESOURCE_POOL_EXHAUSTED` (no n2-standard-8 free in us-east1-b), and the retry 17 s later worked. For a recording, start the VM well ahead and keep it awake. If a stockout lasts, the VM can be recreated in another zone from a snapshot of its disk (about 15 minutes; not scripted).
+
 ## Cost
 
 Google's list prices for `us-east1` (on demand): `n2-standard-8` about **$0.39 an hour** (8 vCPU × $0.0316 + 32 GB × $0.0042), the ephemeral public IPv4 $0.005 an hour while running, the 50 GB balanced disk about **$5 a month** whether running or not. IAP SSH is free.
