@@ -416,8 +416,9 @@ def run_flow(args: argparse.Namespace) -> int:
         failures.append(f"a publishing step went through without asking: {[s.get('text') for s in auto]}")
     if not posting and task["status"] == "done":
         failures.append("a rehearsal ended done")
-    if [a for a in approvals if not is_share(a)]:
-        failures.append(f"asked about something before Share: {[a.get('description') for a in approvals if not is_share(a)]}")
+    asked_you = [a for a in approvals if not is_share(a) and (a.get("decided_by") == "user" or a["status"] in ("pending", "expired"))]
+    if asked_you:  # one the request covered ("approved", by "your request") never reached the user
+        failures.append(f"asked about something before Share: {[a.get('description') for a in asked_you]}")
     failures += [f"offer check failed: {k}" for k, v in checks.items() if not v]
     if posting and not (task["status"] == "done" and any(a["status"] == "approved" for a in approvals if is_share(a))):
         failures.append(f"not posted: the task ended {task['status']}")
@@ -450,40 +451,19 @@ def run_flow(args: argparse.Namespace) -> int:
     return 0
 
 
-def discard_draft(max_steps: int = 10) -> list[str]:
-    """After a rehearsal: leave Instagram's composer so the next run starts clean. Instagram 453 has no plain discard: its
-    "Start over" leaves the composer open (the next Create then asks "Keep editing your draft?", which costs a routine a
-    model repair), so the rehearsal is kept as a private draft with Save draft (on the caption screen or the "Save
-    draft?" dialog), never posted. Taps only that, a Discard button, or Back; anything the rules call irreversible is
-    never touched; a permission dialog is dismissed with Back, never answered."""
-    done: list[str] = []
+def discard_draft() -> list[str]:
+    """After a rehearsal: leave Instagram's composer without posting or saving (scripts/instagram_take.py's
+    `leave_composer`): the caption screen goes Back to the editor, its Cancel asks "Save draft?" and gets Start over, the
+    gallery goes Back to Home; anything that publishes is never touched, a permission dialog is dismissed with Back.
+    Instagram still offers the half-made reel back after its next restart ("Keep editing your draft?"), so run
+    scripts/instagram_take.py before the next take or rehearsal: it clears that (keeping it as one private draft)."""
+    sys.path.insert(0, str(REPO / "scripts"))
+    from instagram_take import leave_composer
     try:
         dev = connect()
     except SystemExit as e:
         return [f"no phone: {e}"]
-    for _ in range(max_steps):
-        state, _ = observe(dev)
-        if state.package == "com.google.android.permissioncontroller":
-            dev._act_sync(Action(kind="back"))
-            done.append("back (a permission dialog, not answered)")
-            time.sleep(1.2)
-            continue
-        if state.package != IG:
-            done.append(f"left Instagram ({state.package})")
-            break
-        btn = next((e for e in state.numbered
-                    if re.fullmatch(r"discard( reel| post| edits| video)?|save draft", (e.label or e.desc or "").strip(), re.I)), None)
-        if btn is not None and not classify(Action(kind="tap", element=btn.number), state, None).irreversible:
-            dev._act_sync(Action(kind="tap", element=btn.number))
-            done.append(f"tapped {btn.label or btn.desc!r}")
-        elif any(e.desc == "Home" and "tab" in e.resource_id for e in state.numbered):
-            done.append("back on Instagram's home")
-            break
-        else:
-            dev._act_sync(Action(kind="back"))
-            done.append("back")
-        time.sleep(1.2)
-    return done
+    return leave_composer(dev)
 
 
 def main() -> int:
