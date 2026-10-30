@@ -74,12 +74,17 @@ def retire_notes(app: str) -> int:
     return len(notes)
 
 
-def reset(app: str, clear: bool = False) -> None:
+def reset(app: str, clear: bool = False, launch: bool = False) -> None:
     """Fresh launch: the app force-stopped (or its data cleared, for a task that leaves something behind, like an alarm)
-    and the home screen in front (envoy-real is never restored to a snapshot)."""
+    and the home screen in front (envoy-real is never restored to a snapshot). `launch`: the app opened fresh instead,
+    for a real phone, whose watcher pauses a task when another app (the home screen) is in front before Envoy's first
+    action (task-1030-155330-0eb0)."""
     adb("shell", "pm", "clear", app) if clear else adb("shell", "am", "force-stop", app)
     adb("shell", "input", "keyevent", "KEYCODE_HOME")
     time.sleep(1.0)
+    if launch:
+        adb("shell", "monkey", "-p", app, "-c", "android.intent.category.LAUNCHER", "1")
+        time.sleep(5.0)
 
 
 PRICE = re.compile(r"\$\s?\d[\d,]*(?:\.\d{2})?")
@@ -94,8 +99,8 @@ def redact(rec: dict) -> dict:
 
 
 def run_one(goal: str, app: str, kind: str, timeout_s: float, clear: bool = False, allow_phone: bool = False,
-            private: bool = False) -> dict:
-    reset(app, clear)
+            private: bool = False, launch: bool = False) -> dict:
+    reset(app, clear, launch)
     retired = retire_notes(app) if kind == "first" else 0
     t0 = time.time()
     tid = api("POST", "/api/tasks", {"goal": goal, "phone": DEVICE})["id"]
@@ -205,6 +210,7 @@ def main() -> int:
     r.add_argument("--clear", action="store_true", help="clear the app's data before each run (a task that leaves state)")
     r.add_argument("--serial", default=SERIAL, help="adb serial of the device (default envoy-real)")
     r.add_argument("--device", default=DEVICE, help="the API's device id (default envoy-real; a phone is phone-<serial>)")
+    r.add_argument("--launch-first", action="store_true", help="open the app before the task (a real phone's watcher)")
     r.add_argument("--private", action="store_true", help="an app signed in with the user's own account: keep numbers only")
     r.add_argument("--allow-phone", action="store_true", help="answer yes to \"use your Android phone?\" (the user asked for this phone)")
     s = sub.add_parser("save")
@@ -217,7 +223,7 @@ def main() -> int:
     if args.cmd == "run":
         globals().update(SERIAL=args.serial, DEVICE=args.device)  # adb() and run_one() read these
         for goal in args.goal:
-            run_one(goal, args.app, args.kind, args.timeout_s, args.clear, args.allow_phone, args.private)
+            run_one(goal, args.app, args.kind, args.timeout_s, args.clear, args.allow_phone, args.private, args.launch_first)
     elif args.cmd == "save":
         asyncio.run(save(args.task_id, args.by, args.note))
     else:

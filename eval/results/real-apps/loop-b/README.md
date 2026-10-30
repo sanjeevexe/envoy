@@ -9,10 +9,10 @@ each first run is cold. Routines saved from a successful first run are in `data/
 
 | app | package | signed in | outcome |
 | --- | --- | --- | --- |
-| Uber | com.ubercab | — | **skipped**: Play Store says "available only for your other devices" on envoy-real; its Install button targets the Pixel 5 (not tapped) |
-| Lyft | me.lyft.android | user (pending) | installed Oct 30 13:40; opens to "Get started", no emulator block; location ask answered "Don't allow" |
-| Spotify | com.spotify.music | user (pending) | installed Oct 30 13:40; opens to its login (a secure screen), no block |
-| CapCut | com.lemon.lvoverseas | user (pending) | installed Oct 30 13:41; opens to its Terms screen (the user's to accept) |
+| Uber | com.ubercab | user (real account), on the Pixel 5 | not installable on envoy-real ("available only for your other devices"); installed on the Pixel 5 Oct 30 14:59 at the user's request, signed in by the user; runs are numbers only (`--private`) |
+| Lyft | me.lyft.android | user (real account) | installed Oct 30 13:40; opens to "Get started", no emulator block; location ask answered "Don't allow" |
+| Spotify | com.spotify.music | — | **skipped**: sign-in fails on the emulator (Google sign-in errored; the emailed code was rejected), Oct 30 ~15:30 |
+| CapCut | com.lemon.lvoverseas | user | installed Oct 30 13:41; terms accepted and signed in by the user |
 | Clock | com.google.android.deskclock | no | preinstalled; routine `clock_set_alarm` v5 (hand-fixed) 5/5 |
 | Google Maps | com.google.android.apps.maps | no (phone's Google account) | preinstalled; `maps_get_driving_time` v6 awaiting replays (not in this branch yet) |
 | Google Calendar | com.google.android.calendar | phone's Google account | preinstalled; first runs only, no readable output for a routine |
