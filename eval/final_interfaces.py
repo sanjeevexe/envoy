@@ -15,6 +15,7 @@ as they were; this run's copies go to eval/results/final/interfaces/.
 
 from __future__ import annotations
 
+import contextlib
 import json
 import os
 import signal
@@ -39,15 +40,39 @@ def api_commit() -> str | None:
         return None
 
 
-def stop_api() -> None:
-    pids = subprocess.run(["lsof", "-t", "-iTCP:8700", "-sTCP:LISTEN"], capture_output=True, text=True).stdout.split()
+def _alive(pid: int) -> bool:
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+    return True
+
+
+def stop_api(port: int = 8700, grace_s: float = 10) -> None:
+    """SIGTERM, wait for the port to free, then for the processes to exit. A freed port isn't a stopped API: one with a
+    phone's live view open (a scrcpy session) lets go of the port but can ignore SIGTERM and keep that session on the
+    phone, so whatever is still running after grace_s gets SIGKILL."""
+    listening = lambda: subprocess.run(["lsof", "-t", f"-iTCP:{port}", "-sTCP:LISTEN"], capture_output=True, text=True).stdout.split()  # noqa: E731
+    pids = [int(p) for p in listening()]
     for p in pids:
-        os.kill(int(p), signal.SIGTERM)
+        with contextlib.suppress(ProcessLookupError):
+            os.kill(p, signal.SIGTERM)
     for _ in range(60):
-        if not subprocess.run(["lsof", "-t", "-iTCP:8700", "-sTCP:LISTEN"], capture_output=True, text=True).stdout.strip():
-            return
+        if not listening():
+            break
         time.sleep(0.5)
-    raise RuntimeError("the API on :8700 didn't stop")
+    else:
+        raise RuntimeError(f"the API on :{port} didn't stop")
+    deadline = time.time() + grace_s
+    while (left := [p for p in pids if _alive(p)]) and time.time() < deadline:
+        time.sleep(0.25)
+    if left:
+        print(f"still running {grace_s:g} s after SIGTERM: {' '.join(map(str, left))}; stopping it hard (SIGKILL)", flush=True)
+        for p in left:
+            with contextlib.suppress(ProcessLookupError):
+                os.kill(p, signal.SIGKILL)
 
 
 def start_api() -> None:

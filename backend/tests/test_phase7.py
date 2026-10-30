@@ -240,6 +240,50 @@ def test_worlds_are_deterministic_and_their_targets_unambiguous():
     assert len(cities) == len(set(cities))  # "my flight to X" and "when did I fly to X" name one trip each
 
 
+# A stand-in for the API: it listens on a port; on SIGTERM it lets go of the port and, if stubborn, keeps running (as the API
+# did on Oct 30 with the Pixel's live view open).
+API_STANDIN = """
+import signal, socket, sys, time
+s = socket.socket(); s.bind(("127.0.0.1", 0)); s.listen()
+open(sys.argv[1], "w").write(str(s.getsockname()[1]))
+def term(*_):
+    s.close()
+    if sys.argv[2] == "exits":
+        sys.exit(0)
+signal.signal(signal.SIGTERM, term)
+while True:
+    time.sleep(0.05)
+"""
+
+
+def test_stopping_the_api_waits_for_it_to_exit_and_kills_one_that_frees_its_port_but_ignores_sigterm(tmp_path, capsys):
+    import os
+    import subprocess
+    import time
+    import final_interfaces as fi
+    (tmp_path / "api.py").write_text(API_STANDIN)
+    for mode, killed in (("stays", True), ("exits", False)):
+        portfile = tmp_path / f"port-{mode}"
+        # Started through sh so it isn't this process's child: when it exits, nothing here keeps it as a zombie.
+        pid = int(subprocess.run(["sh", "-c", f'"{sys.executable}" "{tmp_path / "api.py"}" "{portfile}" {mode} >/dev/null 2>&1 & echo $!'],
+                                 capture_output=True, text=True, check=True).stdout)
+        try:
+            for _ in range(100):
+                if portfile.exists() and portfile.read_text():
+                    break
+                time.sleep(0.05)
+            fi.stop_api(int(portfile.read_text()), grace_s=1)
+            out = capsys.readouterr().out
+            for _ in range(40):
+                if not fi._alive(pid):
+                    break
+                time.sleep(0.05)
+            assert not fi._alive(pid) and ("SIGKILL" in out) == killed and (str(pid) in out) == killed, (mode, out)
+        finally:
+            if fi._alive(pid):
+                os.kill(pid, 9)
+
+
 # ---- list rows with the app's own separators ---------------------------------------------------------------------------------
 
 def test_row_parts_split_on_the_apps_own_separators():

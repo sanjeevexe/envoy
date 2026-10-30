@@ -28,6 +28,16 @@ for _ in $(seq 1 20); do lsof -nP -iTCP:8700 -sTCP:LISTEN >/dev/null 2>&1 || bre
 if lsof -nP -iTCP:8700 -sTCP:LISTEN >/dev/null 2>&1; then
   echo ":8700 is still taken after 20 s; stopping it hard"; kill -KILL $(lsof -nP -t -iTCP:8700 -sTCP:LISTEN) 2>/dev/null; sleep 1
 fi
+# A freed port isn't a stopped API: one with a phone's live view open (a scrcpy session) lets go of :8700 but can ignore
+# SIGTERM and keep that session on the phone. Give the old processes 10 s to exit, then stop them hard.
+left=""
+for _ in $(seq 1 10); do
+  left=""; for p in $ours; do kill -0 "$p" 2>/dev/null && left="$left $p"; done
+  [ -z "$left" ] && break; sleep 1
+done
+if [ -n "$left" ]; then
+  echo "still running 10 s after SIGTERM:$left; stopping it hard (SIGKILL)"; kill -KILL $left 2>/dev/null; sleep 1
+fi
 
 nohup uv run --project backend python -m api --profile "$PROFILE" >> logs/api.out 2>&1 &
 for _ in $(seq 1 60); do
