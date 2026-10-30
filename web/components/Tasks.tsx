@@ -157,7 +157,7 @@ function line(s: Step): Line | null {
 // Before I start (api/preflight.py): what to expect, said before the task runs. Warnings in apricot, a stop in brick.
 // Also for an offer's card, before its Yes.
 const PREFLIGHT_ICON: Record<PreflightLine["kind"], Icon> = {
-  device: DeviceMobileIcon, blocked: ProhibitIcon, install: DownloadSimpleIcon, signin: KeyIcon, approval: ShieldCheckIcon,
+  device: DeviceMobileIcon, blocked: ProhibitIcon, memory: GraphIcon, install: DownloadSimpleIcon, signin: KeyIcon, approval: ShieldCheckIcon,
   routine: RepeatIcon, app_note: LightbulbIcon,
 };
 

@@ -20,7 +20,7 @@ export type Step = {
 };
 // What to expect before a task starts (api/preflight.py): in the task view, on an offer's card, in MCP's heads_up.
 export type PreflightLine = {
-  kind: "device" | "blocked" | "install" | "signin" | "approval" | "routine" | "app_note"; text: string; level: "info" | "warn" | "stop";
+  kind: "device" | "blocked" | "memory" | "install" | "signin" | "approval" | "routine" | "app_note"; text: string; level: "info" | "warn" | "stop";
 };
 export type Approval = {
   id: string; task_id: string; created_at: number; status: string; description: string; reasons: string[];
