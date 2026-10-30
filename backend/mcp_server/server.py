@@ -220,16 +220,18 @@ def _has_table(db: Any, name: str) -> bool:
 
 def _handoff_text(ctx: Any, h: dict[str, Any]) -> str:
     name = f'"{_line(h["name"], 80)}"'
-    where = ctx.handoff.device_name(h["device"]) if getattr(ctx, "handoff", None) is not None else h["device"]
+    handoff = getattr(ctx, "handoff", None)
     real = (h["device"] or "").startswith("phone-")
+    their, the = (handoff.ref(h["device"], "their"), handoff.ref(h["device"], "the")) if handoff is not None and h["device"] else (
+        "their phone", "the phone")
     if h["status"] == "waiting":
-        return f"{name} is in Envoy's outbox, waiting for the user's OK in Envoy" + (f" before it goes to their {where}" if real and where else "")
+        return f"{name} is in Envoy's outbox, waiting for the user's OK in Envoy" + (f" before it goes to {their}" if real and h["device"] else "")
     if h["status"] == "offered":
-        return f"Envoy asked the user whether to put {name} on their {where or 'phone'}"
+        return f"Envoy asked the user whether to put {name} on {their}"
     if h["status"] == "sent":
-        return f"{name} is in the gallery of the {where or 'phone'}" + (f" ({h['remote_path'].removeprefix('/sdcard/')})" if h["remote_path"] else "")
+        return f"{name} is in the gallery of {the}" + (f" ({h['remote_path'].removeprefix('/sdcard/')})" if h["remote_path"] else "")
     if h["status"] == "posted":
-        return f"{name} was posted from the {where or 'phone'}"
+        return f"{name} was posted from {the}"
     return f"{name} couldn't be put on the phone: {_line(h['error'], 160)}"
 
 
@@ -331,11 +333,11 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> MCPServer:
             pending = ctx.offers.get(item["offer_id"]) if item["offer_id"] and getattr(ctx, "offers", None) is not None else None
             if pending and pending["status"] == "pending" and (pending["action"] or {}).get("device") != did:
                 # The watcher had asked about another phone (an emulator): ask again about this one.
-                offer = h.reoffer(item, f"{CLIENT} asked for it on your {item['device_name']}")
+                offer = h.reoffer(item, f"{CLIENT} asked for it on {h.ref(did)}")
             else:
                 offer = {"id": item["offer_id"]} if item["offer_id"] else h.offer(item["id"], "mcp")  # one offer per file
             return {"handoff_id": item["id"], "status": "waiting_for_user", "device": did, "device_name": item["device_name"],
-                    "text": f"Waiting for the user's OK in Envoy before {item['name']} goes to their {item['device_name']}.",
+                    "text": f"Waiting for the user's OK in Envoy before {item['name']} goes to {h.ref(did, 'their')}.",
                     **({"offer_id": offer["id"], "url": f"{base}/?offer={offer['id']}"} if offer and offer.get("id")
                        else {"url": f"{base}/?handoff={item['id']}"})}
         item = h.send(item["id"], did, withdraw_why=f"{CLIENT} already sent it to your phone")
@@ -343,7 +345,7 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> MCPServer:
             return {"handoff_id": item["id"], "status": "failed", "error": item["error"]}
         return {"handoff_id": item["id"], "status": "sent", "device": did, "device_name": item["device_name"],
                 "remote_path": item["remote_path"], "media_uri": item["media_uri"],
-                "text": f"{item['name']} is in the {item['device_name']}'s gallery ({item['remote_path'].removeprefix('/sdcard/')})."}
+                "text": f"{item['name']} is in the gallery of {h.ref(did, 'the')} ({item['remote_path'].removeprefix('/sdcard/')})."}
 
     @server.tool(annotations=ToolAnnotations(title="Ask the user to set up a recurring phone task", readOnlyHint=False, destructiveHint=False,
                                              openWorldHint=False))

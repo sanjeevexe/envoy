@@ -101,7 +101,7 @@ function qr(): string {
 type DB = {
   tasks: Record<string, Task>; steps: Record<string, Step[]>; approvals: Record<string, Approval & { nonce: string }>;
   leases: Record<string, Lease>; triggers: any[]; changes: any[]; rules: { default: string; apps: Record<string, string>; routines: Record<string, string> };
-  photos: { enabled: boolean; scope: string }; phoneApps: string[]; signin: { emulator: boolean; phone: boolean }; notes: any[]; offers: any[]; proactivity: string;
+  photos: { enabled: boolean; scope: string }; phoneApps: string[]; phoneName?: string; signin: { emulator: boolean; phone: boolean }; notes: any[]; offers: any[]; proactivity: string;
   handoffs: HandoffItem[]; outbox: string;
 };
 let db: DB;
@@ -761,8 +761,10 @@ export async function handle(path: string, init: RequestInit = {}): Promise<any>
   if (p === "/api/settings/phones") {
     if (method === "POST") db.phoneApps = body.phone_apps;
     return { phone_apps: db.phoneApps, apps: Object.keys(APP_LOOK), emulator_refused: { "com.target.ui": "Target" }, learned: {},
-      names: Object.fromEntries(Object.entries(APP_LOOK).map(([k, v]) => [k, v.name])), phones: [{ avd: "pixel-5", name: "Pixel 5", android: "13", state: "device" }] };
+      names: Object.fromEntries(Object.entries(APP_LOOK).map(([k, v]) => [k, v.name])),
+      phones: [{ avd: "pixel-5", name: db.phoneName || "Pixel 5", model: "Pixel 5", android: "13", state: "device" }] };
   }
+  if (p === "/api/settings/phones/name") { db.phoneName = String(body.name ?? "").trim(); return { id: body.id, name: db.phoneName || null }; }
   if (p === "/api/settings/signin") { if (method === "POST") db.signin = { ...db.signin, ...body.autofill }; return { autofill: db.signin }; }
   if (p === "/api/settings/photos") { if (method === "POST") db.photos = body; return db.photos; }
   if (p === "/api/paired") return { devices: [

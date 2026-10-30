@@ -9,7 +9,7 @@ import Companion from "@/components/Companion";
 import { Outbox } from "@/components/Handoff";
 import SavedLogins from "@/components/SavedLogins";
 import { appName } from "@/components/Tasks";
-import { Card, cx, Section, Segmented } from "@/components/ui";
+import { Button, Card, cx, Section, Segmented } from "@/components/ui";
 import { api, post } from "@/lib/api";
 
 const SECTIONS = ["Approvals", "Phones", "Devices"] as const;
@@ -157,7 +157,29 @@ function Settings() {
 
 type PhoneInfo = { phone_apps: string[]; apps: string[]; emulator_refused: Record<string, string>;
   learned?: Record<string, { name?: string; why?: string; at?: number }>; names?: Record<string, string>;
-  phones: { avd: string; name?: string; android?: string; state?: string }[] };
+  phones: { avd: string; name?: string; model?: string; android?: string; state?: string }[] };
+
+// What Envoy calls a phone in its offers, "Before I start" and its notes, word for word ("Envoy's phone"). Empty: "your Pixel 5".
+function PhoneName({ phone, onSaved }: { phone: PhoneInfo["phones"][number]; onSaved: (name: string | null) => void }) {
+  const current = phone.model && phone.name !== phone.model ? phone.name ?? "" : "";
+  const [draft, setDraft] = useState(current);
+  const [saved, setSaved] = useState<string | null>(null);
+  const save = async () => {
+    try {
+      const r = await post<{ name: string | null }>("/api/settings/phones/name", { id: phone.avd, name: draft.trim() });
+      onSaved(r.name); setDraft(r.name ?? ""); setSaved(r.name ? `Offers now say \u201c${r.name}\u201d` : `Offers now say \u201cyour ${phone.model ?? "phone"}\u201d`);
+    } catch (e: any) { setSaved(e.message); }
+  };
+  return (
+    <span className="mt-2 flex items-center gap-2">
+      <input value={draft} onChange={(e) => { setDraft(e.target.value); setSaved(null); }} maxLength={40} spellCheck={false}
+             placeholder={`your ${phone.model ?? "phone"}`} aria-label="What Envoy calls this phone"
+             className="h-9 min-w-0 flex-1 rounded-full border border-control bg-surface px-3 text-meta outline-none focus:border-sage" />
+      <Button onClick={save} disabled={draft.trim() === current}>Save</Button>
+      {saved && <span role="status" className="text-meta-2 text-sage-ink">{saved}</span>}
+    </span>
+  );
+}
 
 // Which apps run on your own Android phone instead of an emulator (Phase 6). Envoy still asks each time before using it.
 // Apps that block emulators always do: the starting list, and apps Envoy found itself (a bot check), which you can untick.
@@ -180,7 +202,9 @@ function Phones() {
               <span className="block text-row font-semibold">{p.name ?? "Android phone"}{p.android ? ` · Android ${p.android}` : ""}</span>
               <span className={cx("block text-meta-2", p.state === "device" ? "text-sage-ink" : "text-apricot-ink")}>
                 {p.state === "device" ? "Connected" : p.state === "unauthorized" ? "Allow USB debugging on the phone" : "Not connected"}
+                {p.model && p.name !== p.model ? <span className="text-muted"> · {p.model}</span> : null}
               </span>
+              <PhoneName phone={p} onSaved={(name) => setInfo({ ...info, phones: info.phones.map((x) => x.avd === p.avd ? { ...x, name: name ?? x.model } : x) })} />
             </span>
           </div>
         )) : <p className="px-4 py-4 text-meta text-ink-2">No Android phone connected (USB, or wireless debugging).</p>}

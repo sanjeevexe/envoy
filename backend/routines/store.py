@@ -159,6 +159,22 @@ class RoutineStore:
         self._write_index(r.routine, idx)
         return r
 
+    def switch(self, name: str, on: bool) -> int | None:
+        """Switch a routine off (no version is active, so the matcher skips it and an offer that names it runs the agent;
+        its versions and runs stay) or back on (the version that was active). Returns the active version afterwards."""
+        idx = self.index(name)
+        if not idx["versions"]:
+            raise KeyError(f"no routine {name}")
+        if on:
+            off = idx.pop("off", None)
+            if idx.get("active") is None and off:
+                idx["active"] = off["version"]
+        elif idx.get("active") is not None:
+            idx["off"] = {"version": idx["active"], "since": time.strftime("%Y-%m-%d %H:%M:%S")}
+            idx["active"] = None
+        self._write_index(name, idx)
+        return idx.get("active")
+
     def propose(self, base: Routine, patches: list[Patch], source_task: str) -> Routine | None:
         """Apply candidate patches to `base` as a new version on trial. None if nothing applied, or if the patched routine
         runs exactly like `base` (a relaxed match that rewrote a locator to what it already was): that attempt is logged

@@ -50,7 +50,7 @@ from routines.store import RoutineStore
 
 from api import autofill
 from api.approvals import WebApprover
-from api.devices import SKYLARK, DevicePool
+from api.devices import SKYLARK, DevicePool, phone_ref
 from api.install import Installer, app_named_in
 from api.preflight import check as preflight_check
 from api.routing import (BLOCKS_EMULATOR, Choice, app_label, app_names as blocking_app_names, asks_for_phone, blocks_emulator, choose,
@@ -222,7 +222,10 @@ class TaskRunner:
         calls = 0
         routine: Routine | None = None
         if routine_name:
-            routine = self.routines.get(routine_name)
+            try:
+                routine = self.routines.get(routine_name)
+            except KeyError:  # named by an offer's template, but switched off (no active version) or not in this library
+                self._step(tid, {"kind": "note", "text": f"routine {routine_name} isn't active: the agent does it instead"})
         else:
             scope = "test_app" if (app or app_for(goal, self._learned_names())) == SKYLARK else "real"
             m = await RoutineMatcher(self.routines, self.adapter, data_scope=scope).match(goal, notes_for(self.memory, goal), task_id=f"{tid}-match")
@@ -357,7 +360,7 @@ class TaskRunner:
                     break
                 await self._steps_written(tid)
                 if moved:
-                    self._step(tid, {"kind": "note", "text": f"moving this task to your {self.pool.phones.get(moved, {}).get('model') or 'phone'}"})
+                    self._step(tid, {"kind": "note", "text": f"moving this task to {phone_ref(self.pool.phones.get(moved))}"})
                     announced = True  # its run on your phone says when it's finished
                     return moved
                 final = await device.observe()
@@ -442,7 +445,7 @@ class TaskRunner:
                 # phone you have connected as the other way: it is used only when you ask for it.
                 phone = next((p for p in self.pool.phones.values() if p.get("state") == "device"), None)
                 why = f"The emulator for this app ({choice.device}) isn't running right now. " + (
-                    f"Ask again with \"on my phone\" to use your {phone.get('model') or 'Android phone'}, or start the emulator and ask again."
+                    f"Ask again with \"on my phone\" to use {phone_ref(phone)}, or start the emulator and ask again."
                     if phone else f"Start it (scripts/start_emulator.sh {choice.device}) and ask again.")
                 self._set(tid, status="failed", detail=why, waiting_for=None)
                 self._step(tid, {"kind": "error", "text": why})
@@ -450,13 +453,13 @@ class TaskRunner:
             if asked or choice.reason.startswith("set to run"):
                 self._step(tid, {"kind": "note", "text": f"phone: {choice.device} ({choice.reason})"})
             return choice
-        model = self.pool.phones.get(choice.device, {}).get("model") or "Android phone"
+        ref = phone_ref(self.pool.phones.get(choice.device))  # "your Pixel 5", or the name you gave it in Settings › Phones
         if self.phone_allowed.pop(tid, None) == choice.device:  # you said yes already (the task moved off the emulator, or an offer)
-            self._step(tid, {"kind": "note", "text": f"phone: your {model} (you said yes)"})
+            self._step(tid, {"kind": "note", "text": f"phone: {ref} (you said yes)"})
             return choice
-        self._step(tid, {"kind": "note", "text": f"phone: your {model} ({choice.reason})"})
+        self._step(tid, {"kind": "note", "text": f"phone: {ref} ({choice.reason})"})
         blocked = blocks_emulator(app, rules, learned)
-        if not await self._ask_for_phone(tid, choice.device, model, why=f"{app_label(app, learned)} blocks emulators" if blocked else None):
+        if not await self._ask_for_phone(tid, choice.device, ref, why=f"{app_label(app, learned)} blocks emulators" if blocked else None):
             if blocked is not None:
                 self._set(tid, status="declined", detail=f"you kept your phone for yourself ({app_label(app, learned)} blocks emulators)",
                           waiting_for=None)
@@ -466,20 +469,21 @@ class TaskRunner:
             return Choice(emulator, "you chose the emulator")
         return choice
 
-    async def _ask_for_phone(self, tid: str, did: str, model: str, why: str | None = None) -> bool:
+    async def _ask_for_phone(self, tid: str, did: str, ref: str, why: str | None = None) -> bool:
         """Wait for your answer to "Use your Android phone for this task?". No answer is never a yes. `why`: said with it
         ("Target blocks emulators")."""
         fut: asyncio.Future = asyncio.get_running_loop().create_future()
         self.phone_asks[tid] = fut
-        self._set(tid, status="needs_you", waiting_for="phone", detail=(f"{why}: " if why else "") + f"Envoy wants to use your {model} for this task")
-        self.bus.publish("phone_requested", task_id=tid, device=did, model=model, reason=why)
+        self._set(tid, status="needs_you", waiting_for="phone", detail=(f"{why}: " if why else "") + f"Envoy wants to use {ref} for this task")
+        model = (self.pool.phones.get(did) or {}).get("model") or "Android phone"
+        self.bus.publish("phone_requested", task_id=tid, device=did, model=model, ref=ref, reason=why)
         try:
             allow, by = await asyncio.wait_for(fut, timeout=self.approval_timeout_s)
         except asyncio.TimeoutError:
             allow, by = False, "no answer"
         finally:
             self.phone_asks.pop(tid, None)
-        self._step(tid, {"kind": "note", "text": f"your {model}: " + (f"allowed by {by}" if allow else f"not used ({by})")})
+        self._step(tid, {"kind": "note", "text": f"{ref}: " + (f"allowed by {by}" if allow else f"not used ({by})")})
         self._set(tid, status="running", waiting_for=None, detail=None)
         return allow
 

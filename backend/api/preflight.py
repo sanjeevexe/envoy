@@ -23,6 +23,7 @@ import statistics
 import time
 from typing import Any
 
+from api.devices import phone_ref
 from api.install import app_named_in
 from api.routing import SKYLARK, asks_for_phone, blocks_emulator, choose
 from policy.approval_rules import DIRECT_SOURCES, ApprovalRules, involves_money, names_action
@@ -130,18 +131,18 @@ def _device(lines: list[dict[str, str]], *, runner: Any, app: str | None, phone:
         if choice.reason.startswith("set to run"):  # set to your phone, which isn't connected: the emulator instead
             _line(lines, "device", f"{label} is set to run on your phone, which isn't connected: I'll use {choice.device} instead.")
         return
-    model = next((p.get("model") for p in phones if p.get("id") == choice.device), None) or "Android phone"
+    ref = phone_ref(next((p for p in phones if p.get("id") == choice.device), None))  # "your Pixel 5", or the name you gave it
     if phone_ok and phone_ok == choice.device:
-        _line(lines, "device", f"{label} blocks emulators, so I'll use your {model} (you said yes)." if blocked
-              else f"I'll use your {model} (you said yes).")
+        _line(lines, "device", f"{label} blocks emulators, so I'll use {ref} (you said yes)." if blocked
+              else f"I'll use {ref} (you said yes).")
     elif blocked:
-        _line(lines, "device", f"{label} blocks emulators: I'll ask to use your {model}.", "warn")
+        _line(lines, "device", f"{label} blocks emulators: I'll ask to use {ref}.", "warn")
     elif phone == "phone":
-        _line(lines, "device", f"You asked for your phone: I'll check with you before using your {model}.", "warn")
+        _line(lines, "device", f"You asked for your phone: I'll check with you before using {ref}.", "warn")
     elif choice.reason.startswith("set to run"):
-        _line(lines, "device", f"{label} is set to run on your phone: I'll ask before using your {model}.", "warn")
+        _line(lines, "device", f"{label} is set to run on your phone: I'll ask before using {ref}.", "warn")
     else:
-        _line(lines, "device", f"I'll ask before using your {model}.", "warn")
+        _line(lines, "device", f"I'll ask before using {ref}.", "warn")
 
 
 # ---- sign-ins and installs, from the task history ------------------------------------------------
@@ -164,8 +165,8 @@ def _history(store: Any, app: str, device: str, limit: int = 1) -> list[dict[str
 
 def _where(device: str, phones: list[dict[str, Any]]) -> str:
     if device.startswith("phone-"):
-        model = next((p.get("model") for p in phones if p.get("id") == device), None)
-        return f"your {model}" if model else "your phone"
+        p = next((p for p in phones if p.get("id") == device), None)
+        return phone_ref(p) if p else "your phone"
     return device
 
 

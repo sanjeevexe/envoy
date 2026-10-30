@@ -32,6 +32,13 @@ NAMES = {"envoy-test": "Test phone", "envoy-real": "Real-app phone", "envoy-smal
 BENIGN_FRONT = {"ai.envoy.banner", "com.android.systemui"}
 
 
+def phone_ref(phone: dict[str, Any] | None, whose: str = "your") -> str:
+    """A real phone as Envoy's lines name it: the name you gave it in Settings › Phones, word for word ("Envoy's phone"),
+    else `whose` and its model ("your Pixel 5", "their Pixel 5", "the Pixel 5")."""
+    name = str((phone or {}).get("name") or "").strip()
+    return name or f"{whose} {(phone or {}).get('model') or 'Android phone'}"
+
+
 @dataclass
 class Lease:
     avd: str
@@ -84,8 +91,9 @@ class DevicePool:
         self.leases = {avd: Lease(avd) for avd in AVDS if avd not in ("envoy-small", "envoy-large")}  # evaluation-only screen sizes
         self._devices: dict[str, Any] = {}
         self._connect_lock = asyncio.Lock()
-        self.phones: dict[str, dict[str, Any]] = {}  # id → {id, serial, model, android, state}, from the last discovery
+        self.phones: dict[str, dict[str, Any]] = {}  # id → {id, serial, model, android, state, name?}, from the last discovery
         self._watchers: dict[str, asyncio.Task] = {}
+        self.names: Any = lambda: {}  # id → the name you gave the phone (Settings › Phones); the API reads its setting
 
     @staticmethod
     def avd_for(app: str | None) -> str:
@@ -95,6 +103,10 @@ class DevicePool:
     def refresh_phones(self) -> list[dict[str, Any]]:
         """Connected Android phones (adb); each gets a lease the first time it is seen, and keeps it."""
         found = discover()
+        names = self.names() or {}
+        for p in found:
+            if names.get(p["id"]):
+                p["name"] = names[p["id"]]
         self.phones = {p["id"]: p for p in found}
         for p in found:
             self.leases.setdefault(p["id"], Lease(p["id"]))
@@ -139,8 +151,8 @@ class DevicePool:
             row = {**lease.state(), "running": run.get(did, False), "connected": did in self._devices,
                    "kind": "phone" if self.is_phone(did) else "emulator", "name": NAMES.get(did, did)}
             if self.is_phone(did):
-                row.update(name=(p or {}).get("model") or "Android phone", android=(p or {}).get("android", ""),
-                           state=(p or {}).get("state", "disconnected"))
+                row.update(name=(p or {}).get("name") or (p or {}).get("model") or "Android phone", model=(p or {}).get("model") or "",
+                           android=(p or {}).get("android", ""), state=(p or {}).get("state", "disconnected"))
             out.append(row)
         return out
 

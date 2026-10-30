@@ -497,9 +497,17 @@ class Handoff:
         if not did:
             return None
         if did.startswith("phone-"):
-            return (getattr(self.pool, "phones", {}).get(did) or {}).get("model") or "Android phone"
+            p = getattr(self.pool, "phones", {}).get(did) or {}
+            return p.get("name") or p.get("model") or "Android phone"
         from api.devices import NAMES
         return NAMES.get(did, did)
+
+    def ref(self, did: str | None, whose: str = "your") -> str:
+        """The phone in a sentence: "your Pixel 5" (or the name you gave it, "Envoy's phone"), "the Test phone"."""
+        if (did or "").startswith("phone-"):
+            from api.devices import phone_ref
+            return phone_ref(getattr(self.pool, "phones", {}).get(did), whose)
+        return f"the {self.device_name(did) or 'phone'}"
 
     def default_device(self, app: str | None) -> tuple[str | None, str | None]:
         """The phone routing picks for the template's app (the per-app "use my phone" setting, apps that block
@@ -659,9 +667,8 @@ class Handoff:
     # ---- offers: the user's yes, in Envoy ------------------------------------------------------------
 
     def where(self, did: str | None) -> str:
-        """The phone as the offer says it: "your Pixel 5", "the Test phone (an emulator)"."""
-        name = self.device_name(did) or "phone"
-        return f"your {name}" if (did or "").startswith("phone-") else f"the {name} (an emulator)"
+        """The phone as the offer says it: "your Pixel 5" (or its name, "Envoy's phone"), "the Test phone (an emulator)"."""
+        return self.ref(did) if (did or "").startswith("phone-") else f"{self.ref(did)} (an emulator)"
 
     def then_for(self, item: dict[str, Any]) -> dict[str, Any] | None:
         """The task after the push, from the template: the goal filled with the typed caption, the request the template's

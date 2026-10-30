@@ -22,6 +22,7 @@ import asyncio
 import hmac
 import json
 import os
+import re
 import secrets
 import time
 from contextlib import asynccontextmanager
@@ -107,6 +108,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     routines = routines or RoutineStore()
     adapter = adapter or ModelAdapter()
     pool = DevicePool(bus)
+    pool.names = lambda: tasks.setting("phone_names", {}) or {}  # the names you gave your phones (Settings › Phones)
     runner = TaskRunner(tasks, bus, pool, memory, routines, adapter)
     runner.crossapp = CrossApp(runner, routines, memory, adapter)
     scheduler = Scheduler(tasks, memory, runner.start, bus, routines, every_s=scheduler_every_s)
@@ -668,6 +670,24 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
         learned = {p: a for p, a in (tasks.setting("phone_apps_learned", {}) or {}).items() if p in apps}
         tasks.set_setting("phone_apps_learned", learned)
         return {"phone_apps": apps, "learned": learned}
+
+    @app.post("/api/settings/phones/name", dependencies=[Depends(session)])
+    def set_phone_name(body: dict[str, Any] = Body(...)) -> dict[str, Any]:
+        """What Envoy calls a phone in offers, "Before I start" and its notes, word for word ("Envoy's phone"). An empty
+        name goes back to "your <model>"."""
+        did = str(body.get("id") or "")
+        if not did.startswith("phone-"):
+            raise HTTPException(400, "give a real phone's id (Settings › Phones)")
+        name = re.sub(r"[\x00-\x1f\x7f\u202a-\u202e\u2066-\u2069]", "", str(body.get("name") or "")).strip()[:40]
+        names = {k: v for k, v in (tasks.setting("phone_names", {}) or {}).items() if k != did}
+        if name:
+            names[did] = name
+        tasks.set_setting("phone_names", names)
+        if did in pool.phones:  # the next discovery reads the setting; the phone already seen takes the name now
+            pool.phones[did].pop("name", None)
+            if name:
+                pool.phones[did]["name"] = name
+        return {"id": did, "name": name or None, "names": names}
 
     # ---- routines and triggers -----------------------------------------------------------------
 

@@ -212,7 +212,7 @@ class Pusher:
             tid = ev.get("task_id")
             task = self.store.get(tid or "") or {}
             body = task.get("goal") or "Envoy wants to use your phone for a task"
-            self.notify("phone", f"Use your {ev.get('model') or 'Android phone'}?", f"{ev['reason']}: {body}" if ev.get("reason") else body,
+            self.notify("phone", f"Use {ev.get('ref') or 'your ' + (ev.get('model') or 'Android phone')}?", f"{ev['reason']}: {body}" if ev.get("reason") else body,
                         f"/?task={tid}", tag=f"phone-{tid}", urgency="high", ttl=900)
         elif kind == "offer" and ev.get("change") == "created":
             from api.offers import pushes
