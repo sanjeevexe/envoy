@@ -120,7 +120,7 @@ class Retriever:
         return parse_date(cur.get("date") or cur.get("start_date"))
 
     def next_upcoming(self, type_: str) -> str | None:
-        today = datetime.fromtimestamp(self._now()).date()
+        today = self.store.world_date or datetime.fromtimestamp(self._now()).date()
         best = None
         for e in self.store.entities(type_):
             cur = {f["attribute"]: f["value"] for f in self.store.current_facts(e["id"])}

@@ -100,6 +100,56 @@ def test_notes_give_the_age_of_an_old_fact():
     assert "10 days ago" in block and stale == 1  # a gate is stale after 30 minutes
 
 
+# ---- the demo world's date: SkyLark's bookings don't move with the calendar ----------------------------------------------------
+
+def test_after_the_chicago_flight_the_demo_profiles_flight_is_still_sl_482_and_the_real_profiles_is_the_next_one(tmp_path, monkeypatch):
+    from datetime import date, datetime
+    import api.app as appmod
+    from api.store import TaskStore
+    from memory.bridge import fill_inputs
+    from memory.retrieval import Retriever
+    from routines.model import InputSpec, Routine
+    monkeypatch.setenv("MCP_BEARER_TOKEN", "mcp-test-token")
+    monkeypatch.setattr("api.app.API_DIR", tmp_path)
+    monkeypatch.setattr("api.push.LOG", tmp_path / "push.jsonl")
+    monkeypatch.setattr("api.app.LOGS", tmp_path)
+    monkeypatch.setattr("api.app.PROFILES", {"demo": tmp_path / "demo" / "memory.db", "real": tmp_path / "memory.db"})
+    nov2 = datetime(2026, 11, 2, 9, 0).timestamp()  # the final evaluation's day: SL 482 left on Oct 30
+    check_in = Routine(routine="checkin", app="com.skylark.air", intent="check in", inputs={"trip_city": InputSpec(from_memory="trip.city")}, steps=[])
+    got = {}
+    for profile in ("demo", "real"):
+        _, ctx = appmod.build(profile, tasks=TaskStore(":memory:"), routines=RoutineStore(tmp_path / profile / "routines"), adapter=object())
+        m = ctx.memory
+        m.clock = lambda: nov2
+        src = m.add_source("email", {"from": "SkyLark Air <trips@skylark.example>"}, captured_at=nov2 - 5 * 86400)
+        for city, number, day in (("Chicago", "SL 482", "Fri, Oct 30, 2026"), ("Denver", "SL 1190", "Sat, Nov 14, 2026")):
+            trip, flight = m.create_entity("Trip", city), m.create_entity("Flight", number)
+            m.observe(trip, "destination", city, source=src)
+            m.observe(trip, "start_date", day, source=src)
+            m.observe(flight, "number", number, source=src)
+            m.observe(flight, "date", day, source=src)
+            m.link(trip, "has_flight", flight, source=src)
+        r = Retriever(m)
+        flight = r.link_mentions("Check me in for my flight")[0][0]
+        got[profile] = (m.world_date, m.current(flight, "number")["value"], fill_inputs(m, check_in, "Check me in for my flight").inputs["trip_city"],
+                        "SL 482" in r.notes("What's my gate?").markdown.split("\n", 1)[0], r.ago(nov2 - 3 * 86400))
+    assert got["demo"] == (date(2026, 10, 29), "SL 482", "Chicago", True, "3 days ago (Oct 30)")  # ages stay on the real clock
+    assert got["real"] == (None, "SL 1190", "Denver", False, "3 days ago (Oct 30)")
+    # Named trips are found by name on any date, in both profiles.
+    assert fill_inputs(m, check_in, "Check me in for my Chicago trip").inputs["trip_city"] == "Chicago"
+
+
+def test_the_stale_suites_clock_starts_on_oct_28_whatever_day_it_runs(tmp_path, monkeypatch):
+    from datetime import datetime
+    import final_memory as fm
+    monkeypatch.setattr(fm, "WORK", tmp_path)
+    clock = fm.Clock()
+    store, ids = fm.stale_world(clock)
+    assert clock() == datetime(2026, 10, 28, 9, 0).timestamp() and store.clock is clock
+    assert all(f["observed_at"] <= clock() for f in store.current_facts(ids["flight"]))  # the ages are measured from Oct 28 09:00
+    assert "clock starts at 2026-10-28 09:00" in fm.memory_md({"stale": {"rows": [], "questions": 0, "clock_start": "2026-10-28 09:00"}})
+
+
 # ---- the evaluation's bookkeeping --------------------------------------------------------------------------------------------
 
 def test_costs_are_attributed_by_task_prefix_only(tmp_path, monkeypatch):

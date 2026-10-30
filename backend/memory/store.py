@@ -22,6 +22,7 @@ import sqlite3
 import time
 import uuid
 from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
 from typing import Any, Callable, Iterable
 
@@ -67,7 +68,7 @@ class FactResult:
 
 
 class MemoryStore:
-    def __init__(self, path: Path | str = DB_PATH, clock: Callable[[], float] = time.time) -> None:
+    def __init__(self, path: Path | str = DB_PATH, clock: Callable[[], float] = time.time, world_date: date | None = None) -> None:
         self.path = Path(path) if str(path) != ":memory:" else path
         if isinstance(self.path, Path):
             self.path.parent.mkdir(parents=True, exist_ok=True)
@@ -76,6 +77,9 @@ class MemoryStore:
         self.db.row_factory = sqlite3.Row
         self.db.executescript(SCHEMA)
         self.clock = clock
+        # A test world's fixed "today" for which trip or flight is next (Retriever.next_upcoming), and nothing else: the demo
+        # profile's SkyLark bookings don't move with the calendar (api/app.py WORLD_DATES). None: the real date, from the clock.
+        self.world_date = world_date
         self._listeners: list[Callable[[dict], None]] = []
 
     # ---- events -----------------------------------------------------------------------------

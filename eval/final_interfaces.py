@@ -112,6 +112,13 @@ async def cmd_interfaces(args: Any) -> None:
     for k, v in checks.items():
         on = f" (on `{str(v['api_commit'])[:7]}`)" if v.get("api_commit") and str(v["api_commit"]) != head else ""
         md.append(f"| {k} | {v['result']}{on}{' — ' + v['why'] if v.get('why') else ''} | {v.get('seconds', '–')} s | {what[k]} |")
+    from api.app import WORLD_DATES
+    world = WORLD_DATES.get("demo")
     md += ["", "The Muse route (the Muse app on the iPhone through a public tunnel to `/mcp`) needs you to start the tunnel; it isn't scripted here."]
-    s.save({"checks": checks}, "\n".join(md) + "\n")
+    if world:
+        md += ["", f"The demo profile's world date is pinned to {world:%b} {world.day}, {world.year} for \"my flight\" and \"my trip\" "
+               "(`WORLD_DATES` in `backend/api/app.py`): SkyLark has no clock and its bookings are fixed, with Chicago SL 482 (Oct 30, "
+               "6:10 AM) first, so on the real calendar \"my flight\" would have moved to the Denver trip from Oct 31 while the app still "
+               "shows Chicago. Every other clock in these checks is real."]
+    s.save({"checks": checks, "world_date": world.isoformat() if world else None}, "\n".join(md) + "\n")
 

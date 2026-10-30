@@ -15,7 +15,7 @@ from __future__ import annotations
 
 import re
 import shutil
-import time
+from datetime import datetime
 from typing import Any
 
 from final_common import REPO, Suite, load, pct
@@ -164,9 +164,14 @@ async def photos_suite(s: Suite) -> dict[str, Any]:
 
 # ---- stale facts -------------------------------------------------------------------------------------------------------
 
+# The stale world's clock starts when Oct 28's run first measured these ages. Its flight is SL 482 (Oct 30, 6:10 AM): on the
+# real clock a later run would ask about a flight that had already left at every age, so its answers wouldn't be comparable.
+STALE_START = datetime(2026, 10, 28, 9, 0)
+
+
 class Clock:
     def __init__(self) -> None:
-        self.t = time.time()
+        self.t = STALE_START.timestamp()
 
     def __call__(self) -> float:
         return self.t
@@ -242,7 +247,7 @@ async def stale_suite(s: Suite) -> dict[str, Any]:
                          "replaced_served_as_current": old_as_current, "answer": text, "notes_stale_lines": a.notes.stale})
             print(f"{'ok ' if served and warned == stale and not old_as_current else 'NOTE'} {age_name:17s} stale={stale!s:5s} warned={warned!s:5s} "
                   f"{q[:40]:40s} {text[:80]!r}", flush=True)
-    return {"rows": rows, "questions": len(rows)}
+    return {"rows": rows, "questions": len(rows), "clock_start": f"{STALE_START:%Y-%m-%d %H:%M}"}
 
 
 def memory_md(out: dict[str, Any]) -> str:
@@ -285,7 +290,9 @@ def memory_md(out: dict[str, Any]) -> str:
         md += ["", "## Stale facts", "",
                f"{len(rs)} answers from memory at four ages. **Stale facts served without a warning: {sum(r['stale_without_warning'] for r in st)} of {len(st)}.** "
                f"Replaced values served as current: {sum(r['replaced_served_as_current'] for r in rs)}. The right value given: "
-               f"{sum(r['served_value'] for r in rs)} of {len(rs)}. Fresh facts given a warning anyway: {sum(r['warned_when_fresh'] for r in fr)} of {len(fr)}.", "",
+               f"{sum(r['served_value'] for r in rs)} of {len(rs)}. Fresh facts given a warning anyway: {sum(r['warned_when_fresh'] for r in fr)} of {len(fr)}."
+               + (f" The memory's clock starts at {out['stale']['clock_start']} (when these ages were first measured, before its flight on "
+                  "Oct 30) and moves forward by each age, whatever day the run is on." if out["stale"].get("clock_start") else ""), "",
                "| Age | Question | Stale | Warned | Answer |", "| --- | --- | --- | --- | --- |"]
         for r in rs:
             md.append(f"| {r['age']} | {r['question']} | {'yes' if r['stale'] else ''} | {'yes' if r['warned'] else ''} | {r['answer'][:110].replace('|', '/')} |")

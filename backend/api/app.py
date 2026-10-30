@@ -27,6 +27,7 @@ import secrets
 import time
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
+from datetime import date
 from typing import Any
 
 from fastapi import Body, Depends, FastAPI, HTTPException, Query, Request, WebSocket, WebSocketDisconnect
@@ -65,6 +66,10 @@ from api.voice import voice_session
 
 PORT = int(os.environ.get("ENVOY_PORT", "8700"))
 PROFILES = {"demo": REPO / "data" / "demo" / "memory.db", "real": REPO / "data" / "memory.db"}
+# The demo world's date, for "my flight" and "my trip" only. SkyLark has no clock and its bookings are fixed (Chicago SL 482 on
+# Oct 30, 2026 6:10 AM, then Denver on Nov 14), so on the real calendar its next trip would move to Denver from Oct 31 while
+# the app still shows Chicago first. Fact ages, freshness, the scheduler and every other clock stay real; so does the real profile.
+WORLD_DATES = {"demo": date(2026, 10, 29)}
 WEB_OUT = REPO / "web" / "out"
 LOGS = REPO / "logs"
 COOKIE = "envoy_session"
@@ -104,7 +109,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     tasks = tasks or TaskStore()
     if memory is None:
         PROFILES[profile].parent.mkdir(parents=True, exist_ok=True)
-        memory = MemoryStore(PROFILES[profile])
+        memory = MemoryStore(PROFILES[profile], world_date=WORLD_DATES.get(profile))
     routines = routines or RoutineStore()
     adapter = adapter or ModelAdapter()
     pool = DevicePool(bus)
