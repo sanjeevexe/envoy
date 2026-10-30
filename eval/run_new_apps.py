@@ -204,7 +204,7 @@ def main() -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
     r = sub.add_parser("run")
     r.add_argument("--app", required=True, help="the app's package (force-stopped first; its notes retired before a first run)")
-    r.add_argument("--kind", choices=["first", "replay"], required=True)
+    r.add_argument("--kind", choices=["first", "replay", "check"], required=True)
     r.add_argument("--goal", action="append", required=True)
     r.add_argument("--timeout-s", type=float, default=300)
     r.add_argument("--clear", action="store_true", help="clear the app's data before each run (a task that leaves state)")
