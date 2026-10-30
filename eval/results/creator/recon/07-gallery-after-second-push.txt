@@ -1,0 +1,17 @@
+# com.instagram.android/com.instagram.modal.ModalActivity secure=False 2026-10-29T20:00:47
+App: com.instagram.android · Screen: ModalActivity
+[1] Button "Back to Home" (id: gallery_cancel_button)
+[2] Text "New reel" (id: gallery_title_container)
+[3] Button "Camera settings" (id: gallery_settings_gear)
+[4] Button "Drafts" (id: gallery_destination_item)
+[5] Button "Templates" (id: gallery_destination_item)
+[6] Button "Recents"
+[7] Button "Select multiple, activate to select multiple photos in your gallery · Select"
+[8] Button (id: gallery_menu_multi_select_button)
+[9] Button "Open camera"
+[10] Image "Camera" (id: gallery_grid_camera_item_icon)
+[11] Button "0:06"
+[12] Button "Unselected Video thumbnail created on October 29, 2026 7:59 PM" (id: gallery_grid_item_thumbnail)
+[13] Text "No recent photos or videos" (id: gallery_empty)
+[14] Button "REEL" (id: cam_dest_clips) (selected)
+[15] Button "TEMPLATES" (id: cam_dest_template)

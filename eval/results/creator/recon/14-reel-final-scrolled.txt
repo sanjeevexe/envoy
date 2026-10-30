@@ -1,0 +1,30 @@
+# com.instagram.android/com.instagram.modal.ModalActivity secure=False 2026-10-29T20:02:57
+App: com.instagram.android · Screen: ModalActivity
+[1] Text "Add to your story to help reach followers."
+[2] List (id: scroll_view) (scrollable)
+[3] Button "Add location · People you share this content with can see the location you tag and view this content on the map. · Your…" (id: content_view)
+[4] Button "Edit cover"
+[5] EditText "Write a caption and add hashtags…" (id: caption_input_text_view) (empty)
+[6] Button "Hashtags"
+[7] Text "Hashtags" (id: button_layout)
+[8] Button "Poll"
+[9] Text "Poll" (id: button_layout)
+[10] Button "Prompt"
+[11] Text "Prompt" (id: button_layout)
+[12] Button "Tag people"
+[13] Button "Add location"
+[14] Button "Rename audio · Original Audio"
+[15] Button "Audience · Everyone"
+[16] Button "Facebook"
+[17] Toggle (off)
+[18] Text "New"
+[19] Toggle (off)
+[20] Button "More options"
+[21] Button (id: share_button_container)
+[22] Button "Save draft" (id: save_draft_button)
+[23] Button "Next" (id: share_button)
+[24] Button (id: action_bar)
+[25] Button (id: action_bar_new_title_container)
+[26] Button "Back" (id: action_bar_button_back)
+[27] Button "New reel" (id: action_bar_title)
+(screen has a scrollable list; scroll to see more)

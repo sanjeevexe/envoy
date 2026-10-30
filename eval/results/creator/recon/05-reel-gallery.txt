@@ -1,0 +1,7 @@
+# com.google.android.permissioncontroller/com.android.permissioncontroller.permission.ui.GrantPermissionsActivity secure=False 2026-10-29T20:00:05
+App: com.google.android.permissioncontroller · Screen: GrantPermissionsActivity
+[1] Button (id: grant_singleton)
+[2] Button "Allow Instagram to access photos and videos on this device?" (id: grant_dialog)
+[3] Text "Allow Instagram to access photos and videos on this device?" (id: content_container)
+[4] Button "Allow" (id: permission_allow_button)
+[5] Button "Don’t allow" (id: permission_deny_button)

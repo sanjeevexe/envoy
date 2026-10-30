@@ -1,0 +1,31 @@
+# com.instagram.android/com.instagram.modal.ModalActivity secure=False 2026-10-29T20:01:46
+App: com.instagram.android · Screen: ModalActivity
+[1] List (id: scroll_view) (scrollable)
+[2] Button "Add location · People you share this content with can see the location you tag and view this content on the map. · Your…" (id: content_view)
+[3] Button "Edit cover"
+[4] EditText "Write a caption and add hashtags…" (id: caption_input_text_view) (empty)
+[5] Button "Hashtags"
+[6] Text "Hashtags" (id: button_layout)
+[7] Button "Poll"
+[8] Text "Poll" (id: button_layout)
+[9] Button "Prompt"
+[10] Text "Prompt" (id: button_layout)
+[11] Button "Tag people"
+[12] Button "Add location"
+[13] Button "Rename audio · Original Audio"
+[14] Button "Audience · Everyone"
+[15] Button "Facebook"
+[16] Toggle (off)
+[17] Toggle (off)
+[18] Button (id: share_button_container)
+[19] Button "Save draft" (id: save_draft_button)
+[20] Button "Next" (id: share_button)
+[21] Button "Dismiss" (id: background_dimmer)
+[22] Button "Others can now download and share your reels · Because your account is public, anyone can download your reels, original…" (id: layout_container_bottom_sheet)
+[23] Button "Continue" (id: clips_download_privacy_nux_button)
+[24] Button "Manage settings" (id: clips_download_privacy_nux_link)
+[25] Button (id: action_bar)
+[26] Button (id: action_bar_new_title_container)
+[27] Button "Back" (id: action_bar_button_back)
+[28] Button "New reel" (id: action_bar_title)
+(screen has a scrollable list; scroll to see more)

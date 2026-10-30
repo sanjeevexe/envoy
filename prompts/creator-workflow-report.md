@@ -24,7 +24,27 @@ the Pixel 5.
 
 ## Stage 0 findings
 
-*(waiting for the Pixel 5)*
+Oct 29 19:59–20:03 on the Pixel 5 (Android 13), Instagram 453.0.0.57.79 (installed Oct 29 19:35), no model calls.
+Screens: `eval/results/creator/recon/01-…16-*` (masked dumps, screenshots, compact text).
+
+- **The account** is the test account: envoy3955, "envoy test", 0 posts, 0 followers, 0 following (`03-profile`).
+- **The gallery order**: a clip pushed with `push_file` is first in Recents and is preselected on Home's Create (`09`).
+  A second push while the gallery is open doesn't show until the gallery is reopened (`07`).
+- **The flow** (Home): Create (top left, "Create a post, story, reel or live video.") → New post with the newest video
+  selected → REEL tab → tap the first thumbnail → reel editor → Next (`clips_right_action_button`) → New reel (caption,
+  Tag people, Add location, Audience, Facebook and Your story toggles, More options) → Save draft | **Next**. From the
+  profile, Create New → "Create new reel" goes straight to the reel gallery.
+- **First-run screens**: a "Brand survey" pop-up on opening (close_button); Android's "Allow Instagram to access photos
+  and videos on this device?" on the first reel (the user tapped Allow; READ_MEDIA_VIDEO/IMAGES granted); "Others can now
+  download and share your reels" on the last screen (went away by itself); a "Add to your story" tooltip.
+- **Traps**: the editor's "Captions" button is auto-subtitles, not the post caption; the caption field is
+  `caption_input_text_view` ("Write a caption and add hashtags…"), and while typing the top bar shows OK.
+- **Captions** type as plain ASCII through the ADB keyboard (`15`, `16`). No secure screens on the way.
+- **The Share gate: DOES NOT MATCH.** The last button is `Button content-desc="Next" id=share_button`, not "Share", and
+  it stays "Next" with a caption typed. `policy/risk.py` calls it reversible (`_PUBLISH` needs a whole publishing label,
+  `_IRREVERSIBLE_ID` has no `share`); `run_creator.py gate` on `13-reel-final-recheck.xml` → exit 1. Not tapped: it may
+  post at once or open one more screen. Stopped and sent to the coordinator with the dump (notes folder,
+  `creator-workflow-share-gate.md`); the rule is unchanged.
 
 ## The posts
 

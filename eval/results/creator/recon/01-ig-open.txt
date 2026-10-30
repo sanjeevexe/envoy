@@ -1,0 +1,8 @@
+# com.instagram.android/com.instagram.mainactivity.InstagramMainActivity secure=False 2026-10-29T19:59:24
+App: com.instagram.android · Screen: InstagramMainActivity
+[1] Text "Brand survey" (id: alertTitle)
+[2] Button (id: close_button)
+[3] Text "How easy is Instagram to use? · Very easy · Easy" (id: surveyFlipper)
+[4] Text "Very easy · Easy · Neither easy nor difficult" (id: multiQuestionSurveyList)
+[5] Text "Difficult" (id: text)
+[6] Text "Very difficult" (id: text)

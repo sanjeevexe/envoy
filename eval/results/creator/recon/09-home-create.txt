@@ -1,0 +1,17 @@
+# com.instagram.android/com.instagram.mainactivity.InstagramMainActivity secure=False 2026-10-29T20:01:16
+App: com.instagram.android · Screen: InstagramMainActivity
+[1] Button "Cancel" (id: action_bar_cancel)
+[2] Text "New post" (id: new_post_title)
+[3] Button "Next" (id: next_button_textview)
+[4] Button "Video preview thumbnail" (id: video_preview_view)
+[5] Button "Recents" (id: gallery_folder_menu_tv)
+[6] Toggle "Select multiple button" (id: multi_select_slide_button_alt) (off)
+[7] Button (id: gallery_picker_grid_item_container)
+[8] Button "0:06"
+[9] Button "Selected Video thumbnail created on October 29, 2026 8 PM" (id: gallery_grid_item_thumbnail)
+[10] Button "0:06"
+[11] Button "Unselected Video thumbnail created on October 29, 2026 7:59 PM" (id: gallery_grid_item_thumbnail)
+[12] Button "POST" (id: cam_dest_feed) (selected)
+[13] Button "STORY" (id: cam_dest_story)
+[14] Button "REEL" (id: cam_dest_clips)
+[15] Button "LIVE" (id: cam_dest_live)
