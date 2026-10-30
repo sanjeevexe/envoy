@@ -1,0 +1,34 @@
+{
+ "id": "M2",
+ "category": "memory",
+ "request": "What's the confirmation code for my Denver trip?",
+ "started": 1793334035.0368671,
+ "approval_mode": "unless_requested",
+ "route": "memory",
+ "reply": "Your Denver trip confirmation is PT4R8Z, from email from SkyLark Air 9 days ago.",
+ "from_memory": true,
+ "stale": false,
+ "notes": "## Trip: Denver · Sat, Nov 14, 2026  [[Flight SL 1190 · Sat, Nov 14, 2026]] [[Person Maya Patel]]  (named in the request)\n- Destination: Denver — email from SkyLark Air, 9 days ago (Oct 21) (also email from SkyLark Air, 9 days ago (Oct 21))\n- Origin: ATL — email from SkyLark Air, 9 days ago (Oct 21) (also email from SkyLark Air, 9 days ago (Oct 21))\n- Date: Sat, Nov 14, 2026 — email from SkyLark Air, 9 days ago (Oct 21) (also email from SkyLark Air, 9 days ago (Oct 21))\n- Confirmation: PT4R8Z — email from SkyLark Air, 9 days ago (Oct 21) (also email from SkyLark Air, 9 days ago (Oct 21))\n- Airline: SkyLark Air — email from SkyLark Air, 9 days ago (Oct 21) (also email from SkyLark Air, 9 days ago (Oct 21))\n\n## Trip: Chicago · Fri, Oct 30, 2026  [[Flight SL 482 · Fri, Oct 30, 2026]] [[Person Maya Patel]]\n- Destination: Chicago — email from SkyLark Air, 12 days ago (Oct 18) (also email from SkyLark Air, 12 days ago (Oct 18))\n- Origin: ATL — email from SkyLark Air, 12 days ago (Oct 18) (also email from SkyLark Air, 12 days ago (Oct 18))\n- Date: Fri, Oct 30, 2026 — email from SkyLark Air, 12 days ago (Oct 18) (also email from SkyLark Air, 12 days ago (Oct 18))\n- Confirmation: KX7Q2M — email from SkyLark Air, 12 days ago (Oct 18) (also email from SkyLark Air, 12 days ago (Oct 18))\n- Airline: SkyLark Air — email from SkyLark Air, 12 days ago (Oct 18) (also email from SkyLark Air, 12 days ago (Oct 18))\n\n## Flight: SL 1190 · Sat, Nov 14, 2026  [[Trip Denver · Sat, Nov 14, 2026]]\n- Airline: SkyLark Air — email from SkyLark Air, 9 days ago (Oct 21) (also email from SkyLark Air, 9 days ago (Oct 21))\n- Number: SL 1190 — email from SkyLark Air, 9 days ago (Oct 21) (also email from SkyLark Air, 9 days ago (Oct 21))\n- Date: Sat, Nov 14, 2026 — email from SkyLark Air, 9 days ago (Oct 21) (also email from SkyLark Air, 9 days ago (Oct 21))\n- From: ATL — email from SkyLark Air, 9 days ago (Oct 21) (also email from SkyLark Air, 9 days ago (Oct 21))\n- To: DEN — email from SkyLark Air, 9 days ago (Oct 21) (also email from SkyLark Air, 9 days ago (Oct 21))\n- Departs: 2:45 PM — email from SkyLark Air, 9 days ago (Oct 21) (also email from SkyLark Air, 9 days ago (Oct 21))\n\n## Person: Maya Patel  [[Trip Chicago · Fri, Oct 30, 2026]] [[Trip Denver · Sat, Nov 14, 2026]]\n- Name: Maya Patel — email from TSA PreCheck, 40 days ago (Sep 20) (also email from TSA PreCheck, 40 days ago (Sep 20))\n- First name: Maya — email from TSA PreCheck, 40 days ago (Sep 20) (also email from TSA PreCheck, 40 days ago (Sep 20))\n- Last name: Patel — email from TSA PreCheck, 40 days ago (Sep 20) (also email from TSA PreCheck, 40 days ago (Sep 20))\n- Email: maya.patel@example.com — email from TSA PreCheck, 40 days ago (Sep 20) (also email from TSA PreCheck, 40 days ago (Sep 20))\n- Known traveler number: 98765432 — email from TSA PreCheck, 40 days ago (Sep 20) (also email from TSA PreCheck, 40 days ago (Sep 20))",
+ "status": "answered",
+ "answer": "Your Denver trip confirmation is PT4R8Z, from email from SkyLark Air 9 days ago.",
+ "wall_s": 5.0,
+ "cost": {
+  "calls": 2,
+  "usd": 0.00693,
+  "by_job": {
+   "chat": {
+    "calls": 1,
+    "usd": 0.003633
+   },
+   "answer": {
+    "calls": 1,
+    "usd": 0.003297
+   }
+  },
+  "by_model": {
+   "muse-spark-1.3": 2
+  }
+ },
+ "passed": true,
+ "why": "ok (from memory, cited)"
+}
