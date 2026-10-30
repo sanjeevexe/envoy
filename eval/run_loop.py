@@ -296,6 +296,7 @@ def run_once(api: Copy, t: Task, mode: str, n: int) -> dict[str, Any]:
     print(f"  [{mode} {n}] {tid}: {t.goal}", flush=True)
     decided: dict[str, str] = {}
     handoff_since = None
+    handed: str | None = None
     end = None
     while time.time() - t0 < 900:
         got = api.get(f"/api/tasks/{tid}")
@@ -310,7 +311,8 @@ def run_once(api: Copy, t: Task, mode: str, n: int) -> dict[str, Any]:
             break
         if task["status"] in ("needs_you", "taken_over") or task.get("waiting_for") == "takeover":
             handoff_since = handoff_since or time.time()
-            if time.time() - handoff_since > 3:  # a sign-in or a bot check: this loop never clears one
+            if time.time() - handoff_since > 3:  # a sign-in, a bot check or the ask to use your phone: this loop never answers one
+                handed = task.get("detail") or task.get("waiting_for") or task["status"]
                 api.post(f"/api/tasks/{tid}/stop")
                 end = time.time()
                 task = {**task, "status": "needs_you"}
@@ -324,7 +326,7 @@ def run_once(api: Copy, t: Task, mode: str, n: int) -> dict[str, Any]:
     final = got["task"] if got["task"]["status"] in ENDED else task
     ok, why = t.grade(final, prep) if t.grade else (final["status"] == "done", "")
     steps = got["steps"]
-    handoff = final["status"] == "needs_you" or any("bot check" in (s.get("text") or "").lower() for s in steps)
+    handoff = bool(handed) or final["status"] == "needs_you" or any("bot check" in (s.get("text") or "").lower() for s in steps)
     cleanup = t.after() if t.after else None
     cost = spent(tid)
     row = {"time": datetime.now(timezone.utc).isoformat(timespec="seconds"), "task": t.key, "mode": mode, "n": n, "task_id": tid,
@@ -332,7 +334,7 @@ def run_once(api: Copy, t: Task, mode: str, n: int) -> dict[str, Any]:
            "answer": (final.get("result") or "")[:300], "goal": final.get("goal"), "prep": prep, "cleanup": cleanup,
            "detail": (final.get("detail") or "")[:300], "grade": why, "routine": final.get("routine"),
            "kind": final.get("kind"), "seconds": secs, "calls": cost["calls"], "usd": cost["usd"], "jobs": cost["jobs"],
-           "approvals": decided, "commit": main_commit()}
+           "approvals": decided, "handed_off": handed, "commit": main_commit()}
     note = next((s.get("text") for s in steps if (s.get("text") or "").startswith("using routine")), None)
     if note:
         row["routine_note"] = note[:200]
@@ -398,6 +400,9 @@ def cmd_cycle(args: argparse.Namespace) -> int:
     args.mode, args.n = "first", args.first
     api = Copy(args.api, Path(args.api_dir))
     print(f"routines off: {switch(t.routines, False)}")
+    if t.tell:
+        said = api.post("/api/chat", {"message": t.tell, "source": "chat"})
+        print(f"told: {str(said.get('reply'))[:160]!r}")
     firsts = []
     for i in range(1, args.first + 1):
         firsts.append(run_once(api, t, "first", i))
