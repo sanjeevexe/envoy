@@ -204,19 +204,19 @@ for _k, _w, _r in [("amazon", "amazon", "amazon_search_price"), ("starbucks", "s
                    ("settings", "settings_bluetooth", "settings_bluetooth_state"), ("calendar", "calendar_today", "calendar_events_today"),
                    ("contacts", "contacts_count", "contacts_count")]:
     TASKS[_k] = _real(_k, _w, _r)
-# Gmail with the suite's second search term: "...search my mail for DoorDash..." routes to DoorDash (app_for takes the first
-# app name in APP_NAMES that the goal mentions, and "doordash" comes before "gmail"), so the first term can't measure Gmail.
-TASKS["gmail"].goal = TASKS["gmail"].goal.replace("DoorDash", "Security alert")
+# Gmail: the suite's own goal ("...search my mail for DoorDash...") and its second term as a new input for the same routine.
+# Before main b1f3c9a the first routed to DoorDash (app_for took the first APP_NAMES hit; those rows are marked spoiled).
 _gmail_truth = next(w for w in rr.WORKFLOWS if w.id == "gmail_search").truth
 
 
-def _gmail_grade(task: dict[str, Any], prep: dict[str, Any]) -> tuple[bool, str]:
+def _gmail_second(task: dict[str, Any], prep: dict[str, Any]) -> tuple[bool, str]:
     expect = _gmail_truth()[1]  # the subject of the newest "Security alert" message, from the Gmail API
     text = task.get("result") or ""
     return task["status"] == "done" and (rr.right(text, expect, {}, True) or rr.right(text, rr.in_sentence(expect), {}, True)), f"expect /{expect}/"
 
 
-TASKS["gmail"].grade = _gmail_grade
+TASKS["gmail_security"] = Task("gmail_security", TASKS["gmail"].goal.replace("DoorDash", "Security alert"), "envoy-real",
+                               routines=["gmail_search_subject"], grade=_gmail_second)
 
 
 # ---- the API copy ---------------------------------------------------------------------------------------------------
