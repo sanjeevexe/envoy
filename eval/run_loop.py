@@ -98,9 +98,18 @@ def _real_grade(wf_id: str) -> Callable[[dict[str, Any], dict[str, Any]], tuple[
     return grade
 
 
+def _chrome_blank() -> dict[str, Any]:
+    """Chrome reopens its last tab on a fresh launch, so a run after a run would start on the article it found (Oct 30: the
+    second first run did, and its trace compiled into a routine that only read the start screen). A blank page first."""
+    rr.adb("shell", "am", "start", "-a", "android.intent.action.VIEW", "-d", "about:blank", "-p", "com.android.chrome")
+    time.sleep(2)
+    return {"chrome": "about:blank first"}
+
+
 def _real(key: str, wf_id: str, routine: str, device: str = "envoy-real") -> Task:
     wf = next(w for w in rr.WORKFLOWS if w.id == wf_id)
-    return Task(key, wf.goal, device, routines=[routine], workflow=wf_id, grade=_real_grade(wf_id))
+    return Task(key, wf.goal, device, routines=[routine], workflow=wf_id, grade=_real_grade(wf_id),
+                prep=_chrome_blank if wf.app == "com.android.chrome" else None)
 
 
 # ---- DoorDash "order my usual" (envoy-real; the demo's opener, routine doordash_order_meal) ---------------------------
@@ -350,7 +359,9 @@ def cmd_compile(args: argparse.Namespace) -> int:
     t = TASKS[args.task]
     trace = RUNS / f"{args.task_id}-r1"
     t0 = time.time()
-    routine, report = asyncio.run(compile_trace(trace, memory=args.memory))
+    # A run the grader found right against ground truth (eval/run_real_apps.py: adb, the Gmail API, a published fact) is
+    # confirmed even when the agent's own end check couldn't see the answer on its last screen (Chrome: "1889" scrolled away).
+    routine, report = asyncio.run(compile_trace(trace, memory=args.memory, confirmed=getattr(args, "confirmed", False)))
     routine.routine = t.routines[0] if t.routines else routine.routine
     added = RoutineStore().add(routine, verification={"by": OWNER, "from": trace.name, "checked": "replays in runs.jsonl"})
     OUT.mkdir(parents=True, exist_ok=True)
@@ -386,7 +397,8 @@ def cmd_cycle(args: argparse.Namespace) -> int:
         return 1
     if t.workflow:  # SkyLark, Instagram and DoorDash replay the library's own routine
         try:
-            cmd_compile(argparse.Namespace(task=t.key, task_id=good["task_id"], memory=""))
+            wf = next(w for w in rr.WORKFLOWS if w.id == t.workflow)
+            cmd_compile(argparse.Namespace(task=t.key, task_id=good["task_id"], memory="", confirmed=wf.graded_by == "truth"))
         except Exception as e:  # noqa: BLE001 - recorded, and the replays are skipped
             with RUNS_FILE.open("a") as f:
                 f.write(json.dumps({"time": datetime.now(timezone.utc).isoformat(timespec="seconds"), "task": t.key, "mode": "compile",
@@ -411,7 +423,7 @@ def alone_ok(r: dict[str, Any]) -> bool:
 
 
 def _stats(rs: list[dict[str, Any]]) -> tuple[str, str]:
-    counted = [r for r in rs if not r.get("skipped")]
+    counted = [r for r in rs if not r.get("skipped") and not r.get("spoiled")]
     ok = [r for r in counted if r["ok"]]
     med = lambda xs: sorted(xs)[len(xs) // 2] if xs else None  # noqa: E731
     s, usd = med([r["seconds"] for r in ok]), med([r["usd"] for r in ok])
@@ -420,7 +432,8 @@ def _stats(rs: list[dict[str, Any]]) -> tuple[str, str]:
 
 def cmd_row(args: argparse.Namespace) -> int:
     rs = rows_for(args.task)
-    first, rep = [r for r in rs if r["mode"] == "first"], [r for r in rs if r["mode"] == "replay"]
+    first = [r for r in rs if r["mode"] == "first" and not r.get("spoiled")]
+    rep = [r for r in rs if r["mode"] == "replay" and not r.get("spoiled")]
     (f, fs), (p, ps) = _stats(first), _stats(rep)
     skipped = sum(r.get("skipped", False) for r in rs if r["mode"] in ("first", "replay"))
     alone = [r for r in rep if alone_ok(r)]
@@ -460,6 +473,7 @@ def main() -> int:
     p.add_argument("task", choices=sorted(TASKS))
     p.add_argument("task_id")
     p.add_argument("--memory", default="")
+    p.add_argument("--confirmed", action="store_true", help="the grader found it right against ground truth")
     p = sub.add_parser("row")
     p.add_argument("task", choices=sorted(TASKS))
     sub.add_parser("spend")

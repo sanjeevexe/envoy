@@ -1,0 +1,61 @@
+routine: play_app_rating
+app: com.android.vending
+version: 1
+status: active
+intent: Get the star rating of an app in the Google Play Store
+description: Open an app's page in the Google Play Store and report the average star rating shown there.
+patterns: ['What is the star rating of an app?', Check an app's rating in the Play Store, 'How many stars does an app have on Google Play?']
+outputs: [star_rating]
+start: fresh_launch
+inputs:
+  app_name: {type: text, description: 'The app whose star rating is requested, as shown in its Play Store listing.', example: Duolingo}
+steps:
+- id: find_tap_app_listing
+  intent: "Scroll to {{app_name}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        text_has: "{{app_name}}"
+        kind: Button
+        cls: View
+        parent: Halloween suits are here
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      text_has: "{{app_name}}"
+      kind: Button
+      cls: View
+      parent: Halloween suits are here
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: tap_app_listing
+  intent: "Tap the {{app_name}} app listing to open its app page"
+  pre:
+  - {app_foreground: com.android.vending}
+  action:
+    tap:
+      text_has: "{{app_name}}"
+      kind: Button
+      cls: View
+      parent: Halloween suits are here
+      in_list: true
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  extract:
+    star_rating:
+      near: Average rating
+      expect_digits: true
+      card: "{{app_name}}"
+  note: trace step 1
+compiled_from:
+  task_id: task-1030-164750-2034-r1
+  goal: In the Google Play Store app, what is the star rating of the Duolingo app?
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-30 16:50:23"
+  trace_steps_kept: [1]
+  trace_steps_dropped: 0
+  cost_usd: 0.0598

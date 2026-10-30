@@ -1,0 +1,90 @@
+{
+ "name": "play_app_rating",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-30 16:50:23",
+   "parent": null,
+   "changes": [
+    "compiled from task-1030-164750-2034-r1"
+   ],
+   "verification": {
+    "by": "loop-a",
+    "from": "task-1030-164750-2034-r1",
+    "checked": "replays in runs.jsonl"
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-30 16:51:50",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-165023-d273-r1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 76.98,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 16:52:28",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-165203-5309-r1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 17.75,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 16:53:03",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-165241-2a0e-r1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 17.41,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 16:53:42",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-165315-0b11-r1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 22.36,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 16:54:17",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-165354-dab9-r1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 17.37,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 16:54:52",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-165430-76e4-r1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 16.97,
+   "patches": 0
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.android.vending"
+}

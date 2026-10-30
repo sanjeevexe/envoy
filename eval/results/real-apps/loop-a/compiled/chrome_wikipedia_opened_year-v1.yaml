@@ -1,0 +1,29 @@
+routine: chrome_wikipedia_opened_year
+app: com.android.chrome
+version: 1
+status: active
+intent: Look up a topic on Wikipedia in Chrome and report the year it opened.
+description: Search Wikipedia in Chrome for a given topic, scroll through its article, and return the year it opened.
+patterns: [search Wikipedia and tell me the year it opened, look up when a place opened on Wikipedia, find the opening year on Wikipedia]
+outputs: [opening_year]
+start: fresh_launch
+steps:
+- id: read_answer
+  intent: Read the answer on the app's first screen
+  pre:
+  - {app_foreground: com.android.chrome}
+  action: {wait: 0.3}
+  risk: read
+  extract:
+    opening_year:
+      near: "Opened: what does the page say? (opening year)"
+      from_screenshot: \b(1\d|20)\d{2}\b
+  note: "added: the answer is on the start screen"
+compiled_from:
+  task_id: task-1030-164430-de3b-r1
+  goal: In Chrome, go to en.m.wikipedia.org, search for Eiffel Tower and tell me the year it opened.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-30 16:57:49"
+  trace_steps_kept: [1]
+  trace_steps_dropped: 0
+  cost_usd: 0.0488
