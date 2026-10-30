@@ -1,0 +1,39 @@
+# com.instagram.android/com.instagram.mainactivity.InstagramMainActivity secure=False 2026-10-29T20:09:07
+App: com.instagram.android · Screen: InstagramMainActivity
+[1] List (id: swipeable_tab_view_pager) (scrollable)
+[2] List (id: swipeable_nav_view_pager_inner_recycler_view) (scrollable)
+[3] List (id: list) (scrollable)
+[4] List "reels tray container" (scrollable)
+[5] Button "Your story" (id: outer_container)
+[6] Button "envoy3955's story, 0 of 13, Unseen."
+[7] Text "envoy3955's story, 0 of 13, Unseen." (id: avatar_container)
+[8] Text "Your story" (id: title_container)
+[9] Button "alysaxliu" (id: outer_container)
+[10] Button "alysaxliu's story, 1 of 13, Unseen."
+[11] Button "alysaxliu's story, 1 of 13, Unseen." (id: avatar_image_view)
+[12] Text "alysaxliu" (id: title_container)
+[13] Button "50cent" (id: outer_container)
+[14] Button "50cent's story, 2 of 13, Unseen."
+[15] Button "50cent's story, 2 of 13, Unseen." (id: avatar_image_view)
+[16] Text "50cent" (id: title_container)
+[17] Button "wasted" (id: outer_container)
+[18] Button "wasted's story, 3 of 13, Unseen."
+[19] Button "wasted's story, 3 of 13, Unseen." (id: avatar_image_view)
+[20] Text "wasted" (id: title_container)
+[21] Button (id: media_group)
+[22] Text "instagram posted a video October 1" (id: row_feed_profile_header)
+[23] Button "Profile picture of instagram"
+[24] Button "instagram" (id: row_feed_photo_profile_name)
+[25] Button "Suggested for you"
+[26] Button "Follow" (id: inline_follow_button)
+[27] Button "More actions for this post" (id: media_option_button)
+[28] Button (id: action_bar)
+[29] Button "Create a post, story, reel or live video." (id: action_bar_left_button)
+[30] Button "Instagram Home Feed"
+[31] Button "Notifications, Unread Notifications" (id: news_tab)
+[32] Button "Home" (id: feed_tab) (selected)
+[33] Button "Reels" (id: clips_tab)
+[34] Button "Message" (id: direct_tab)
+[35] Button "Search and explore" (id: search_tab)
+[36] Button "Profile" (id: profile_tab)
+(screen has a scrollable list; scroll to see more)

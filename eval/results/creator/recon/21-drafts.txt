@@ -1,0 +1,10 @@
+# com.instagram.android/com.instagram.modal.TransparentModalActivity secure=False 2026-10-29T20:08:41
+App: com.instagram.android · Screen: TransparentModalActivity
+[1] Button "No drafts yet · When you save a Reels draft, you'll find it here."
+[2] Text "No drafts yet · When you save a Reels draft, you'll find it here." (id: empty_drafts)
+[3] Button (id: action_bar)
+[4] Button (id: action_bar_new_title_container)
+[5] Button "Back" (id: action_bar_button_back)
+[6] Button "Reels drafts" (id: action_bar_title)
+[7] Button "Info"
+[8] Button "Edits"

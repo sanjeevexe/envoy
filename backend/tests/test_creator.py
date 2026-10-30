@@ -3,21 +3,27 @@
 The post a creator's clip turns into is public and can't be taken back. Two things keep it the user's to approve:
 - the request an accepted offer passes to the approvals never names Share or Post (the caption, which comes from a
   sidecar, is only in the goal and the routine's inputs), so `approval_rules.decide` can't auto-approve it;
-- `policy/risk.py`'s `_PUBLISH` rule flags Instagram's actual Share button as irreversible, whatever the model says.
+- `policy/risk.py` flags Instagram's actual publishing button as irreversible, whatever the model says: on Instagram 453
+  it is labelled only "Next" (id share_button), caught by its id (recorded on the Pixel 5 in stage 0).
 """
 
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import pytest
 
 from api.handoff import HANDOFF_TEMPLATES, PUBLISHING, Handoff, handoff_request
 from api.store import TaskStore
+from devices.screen import build_state
+from devices.types import Action
 from policy.approval_rules import ApprovalRules, decide
+from policy.risk import classify
 from test_handoff import MP4, PIXEL, Clock, FakeAdb, owner, pool, settle, with_offers
 
 IG = HANDOFF_TEMPLATES["instagram"]
+SCREENS = Path(__file__).parent / "screens"
 
 
 @pytest.fixture()
@@ -56,6 +62,25 @@ def test_a_caption_is_typed_text_and_share_still_waits_for_the_user(hand, captio
     [(goal, source, kw)] = env.runner.started
     assert source == "web" and goal == f'{IG["goal"].split("{")[0]}{caption}"'
     assert kw["request"] == IG["request"] and (kw["phone"], kw["phone_ok"], kw["app"]) == ("phone-0A1B", "phone-0A1B", "com.instagram.android")
-    for button in ("Share", "Post", "Share to Facebook", "Share now", "Post reel", "Publish"):
+    for button in ("Next", "Share", "Post", "Share to Facebook", "Share now", "Post reel", "Publish"):
         assert decide(ApprovalRules(), goal=kw["request"], source=source, app=IG["package"], routine=None, origin="agent",
                       target=button, screen_text=f"New reel {caption} {button}", inputs=kw["inputs"]) is None, button
+
+
+def test_on_instagrams_recorded_last_screen_next_publishes_and_always_asks():
+    """The reel's last screen as recorded in stage 0, with a caption typed: its Next (id share_button) is irreversible by
+    rule even when the model calls it reversible, and the accepted offer's request doesn't approve it. Save draft, Back
+    and the caption field stay ordinary steps."""
+    s = build_state((SCREENS / "instagram_reel_final_captioned.xml").read_text(), IG["package"], "com.instagram.modal.ModalActivity", 1080, 2340)
+    by_id = {e.resource_id.split("/")[-1]: e for e in s.numbered}
+    nxt, caption = by_id["share_button"], by_id["caption_input_text_view"]
+    assert (nxt.label or nxt.desc) == "Next" and "Envoy recon, not posted" in caption.text
+    v = classify(Action(kind="tap", element=nxt.number), s, model_risk="reversible")
+    assert v.irreversible and any("share_button" in r for r in v.reasons), v.reasons
+    screen_text = " ".join(" ".join(x for x in (e.label, e.text, e.desc) if x) for e in s.numbered)
+    assert decide(ApprovalRules(), goal=IG["request"], source="web", app=IG["package"], routine=None, origin="agent",
+                  target="Next", screen_text=screen_text) is None
+    for label in ("Save draft", "Back"):
+        e = next(e for e in s.numbered if (e.label or e.desc) == label)
+        assert not classify(Action(kind="tap", element=e.number), s, model_risk="reversible").irreversible, label
+    assert not classify(Action(kind="type", element=caption.number, value="Golden hour"), s, model_risk="reversible").irreversible

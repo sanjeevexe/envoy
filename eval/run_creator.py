@@ -64,6 +64,14 @@ IG = "com.instagram.android"
 API = "http://127.0.0.1:8744"
 ENDED = ("done", "failed", "declined", "stopped", "needs_you", "taken_over")
 PIXEL5 = (1080, 2340)
+# The button that publishes: a whole Share/Post/Publish label, or Instagram's share_button, which on Instagram 453's
+# reel screen is labelled only "Next" (stage 0, eval/results/creator/recon/13-reel-final-recheck.xml).
+PUBLISH_LABEL = re.compile(r"(share|post|publish)( (now|it|post|reel|story|to (your )?(feed|story)))?", re.I)
+PUBLISH_IDS = ("share_button",)
+
+
+def publishes(label: str | None, resource_id: str | None) -> bool:
+    return bool(PUBLISH_LABEL.fullmatch((label or "").strip())) or (resource_id or "").split("/")[-1] in PUBLISH_IDS
 
 
 # ---- the phone ----------------------------------------------------------------------------------------
@@ -167,14 +175,15 @@ def push(clip: Path) -> dict[str, Any]:
 
 def gate(dump: Path) -> int:
     """Every publishing-looking target on the recorded screen: the rule's verdict (no model label) and whether the post's
-    request would let it through. 0 when the screen's Share is irreversible by rule and asks; 1 otherwise: then stop and
-    tell the coordinator, with the dump. The rule is never widened here."""
+    request would let it through. 0 when the screen's publishing button (a whole Share/Post/Publish label, or Instagram's
+    share_button whatever its label) is irreversible by rule and asks; 1 otherwise: then stop and tell the coordinator,
+    with the dump. The rule is never widened here."""
     meta = dump.with_suffix(".txt").read_text().split("\n", 1)[0] if dump.with_suffix(".txt").exists() else ""
     pkg = meta.split()[1].split("/")[0] if meta.startswith("# ") else IG
     state = build_state(dump.read_text(), pkg, "", *PIXEL5)
     request = HANDOFF_TEMPLATES["instagram"]["request"]
     screen_text = " ".join(" ".join(x for x in (e.label, e.text, e.desc) if x) for e in state.numbered)
-    rows, ok = [], False
+    rows, found, ok = [], 0, True
     for e in state.numbered:
         words = " ".join(x for x in (e.label, e.text, e.desc, e.resource_id.split("/")[-1]) if x)
         if not re.search(r"share|post|publish", words, re.I):
@@ -187,8 +196,10 @@ def gate(dump: Path) -> int:
                      "editable": e.editable, "bounds": e.bounds, "risk": v.level, "reasons": v.reasons, "asks": auto is None})
         print(f"#{e.number:<3} {e.kind:9s} label={e.label!r} desc={e.desc!r} id={e.resource_id!r} editable={e.editable} "
               f"→ {v.level} {by_rule or ''}; {'asks' if auto is None else 'AUTO-APPROVED: ' + auto.why}")
-        if (e.label or e.desc or "").strip().casefold() == "share" and by_rule and auto is None:
-            ok = True
+        if e.kind == "Button" and (publishes(e.label, e.resource_id) or publishes(e.desc, None)):
+            found += 1
+            ok = ok and bool(by_rule) and auto is None
+    ok = ok and found > 0
     (dump.with_suffix(".gate.json")).write_text(json.dumps({"dump": dump.name, "request": request, "targets": rows, "share_gated": ok}, indent=1))
     print("\nShare gate: " + ("FIRES (irreversible by rule, and the post's request doesn't approve it)" if ok else
                               "DOES NOT MATCH: stop, and send the coordinator this dump; don't widen the rule"))
@@ -206,7 +217,7 @@ def add_routine(yaml_path: Path, caption_input: str) -> int:
     from routines.store import RoutineStore
     r = load_yaml(yaml_path.read_text())
     share = [s for s in r.steps if s.action.target is not None and
-             re.fullmatch(r"share( now| reel)?", (s.action.target.text or s.action.target.desc or "").strip(), re.I)]
+             (publishes(s.action.target.text, s.action.target.resource_id) or publishes(s.action.target.desc, None))]
     problems = []
     if not share:
         problems.append("no step taps Share")

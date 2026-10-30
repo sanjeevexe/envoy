@@ -34,8 +34,10 @@
     1080,
     2274
    ],
-   "risk": "reversible",
-   "reasons": [],
+   "risk": "irreversible",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/share_button_container'"
+   ],
    "asks": true
   },
   {
@@ -52,10 +54,12 @@
     1036,
     2219
    ],
-   "risk": "reversible",
-   "reasons": [],
+   "risk": "irreversible",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/share_button'"
+   ],
    "asks": true
   }
  ],
- "share_gated": false
+ "share_gated": true
 }

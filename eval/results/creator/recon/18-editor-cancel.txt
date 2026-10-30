@@ -1,0 +1,6 @@
+# com.instagram.android/com.instagram.mainactivity.InstagramMainActivity secure=False 2026-10-29T20:08:09
+App: com.instagram.android · Screen: InstagramMainActivity
+[1] Text "Save draft? · If you go back now, you will lose this draft." (id: igds_alert_dialog_text_container)
+[2] Button "Start over" (id: igds_alert_dialog_primary_button)
+[3] Button "Save draft" (id: igds_alert_dialog_secondary_button)
+[4] Button "Keep editing" (id: igds_alert_dialog_cancel_button)

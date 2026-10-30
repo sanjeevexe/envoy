@@ -42,9 +42,16 @@ Screens: `eval/results/creator/recon/01-…16-*` (masked dumps, screenshots, com
 - **Captions** type as plain ASCII through the ADB keyboard (`15`, `16`). No secure screens on the way.
 - **The Share gate: DOES NOT MATCH.** The last button is `Button content-desc="Next" id=share_button`, not "Share", and
   it stays "Next" with a caption typed. `policy/risk.py` calls it reversible (`_PUBLISH` needs a whole publishing label,
-  `_IRREVERSIBLE_ID` has no `share`); `run_creator.py gate` on `13-reel-final-recheck.xml` → exit 1. Not tapped: it may
-  post at once or open one more screen. Stopped and sent to the coordinator with the dump (notes folder,
-  `creator-workflow-share-gate.md`); the rule is unchanged.
+  `_IRREVERSIBLE_ID` had no `share`); `run_creator.py gate` on `13-reel-final-recheck.xml` → exit 1. Not tapped: it may
+  post at once or open one more screen. Stopped and sent the coordinator the dump (notes folder,
+  `creator-workflow-share-gate.md`); the coordinator added `share` to `_IRREVERSIBLE_ID` (main `cf3487d`, with a test on
+  this screen). **On cf3487d the gate fires**: `gate` on `13` and on `16` (caption typed) → Next (`share_button`) and its
+  container are irreversible by rule and the post's request doesn't approve them; Save draft and Back stay ordinary.
+  `test_creator.py` has the captioned screen as `tests/screens/instagram_reel_final_captioned.xml`. If a screen with a
+  real "Share" follows Next, `_PUBLISH` asks again; the first real post records it.
+- **Leaving without posting**: Back → editor → Cancel → "Save draft?" → Start over (discards; opens the camera, whose
+  permission dialog was dismissed with Back, not answered) → Drafts shows "No drafts yet".
+- Not done: the optional emulator-block check on envoy-real (Instagram isn't one of its apps; not needed for the demo).
 
 ## The posts
 
