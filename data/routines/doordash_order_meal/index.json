@@ -1,6 +1,6 @@
 {
  "name": "doordash_order_meal",
- "active": 3,
+ "active": 4,
  "versions": [
   {
    "version": 1,
@@ -35,7 +35,7 @@
   },
   {
    "version": 3,
-   "status": "active",
+   "status": "retired",
    "created": "2026-10-30 03:52:23",
    "parent": 2,
    "changes": [
@@ -44,6 +44,20 @@
    "verification": {
     "by": "doordash-usual",
     "how": "offline on task-1030-032305-b761-r1's screens: 23/23 with no inputs",
+    "checked": "2026-10-30"
+   }
+  },
+  {
+   "version": 4,
+   "status": "active",
+   "created": "2026-10-30 10:45:40",
+   "parent": 3,
+   "changes": [
+    "the usual's choices are exact (text_has on the meal, cheese variant, sandwich, side and drink rows and their page titles), and opening the meal checks its page title. On the open store's breakfast menu (Oct 30 10:36 ET, task-1030-103630-835b) v3 scored 'Chick-fil-A Chick-n-Minis® Meal' 0.835 against 'Chick-fil-A® Deluxe Meal' and opened it"
+   ],
+   "verification": {
+    "by": "doordash-usual",
+    "how": "offline: on task-1030-032305-b761-r1's screens 23/23; on the open store's breakfast menu (6 screens, Oct 30 10:43 ET) the meal target matches nothing (v3 tapped 'Chick-fil-A Chick-n-Minis® Meal' at 0.83); on run 8's Chick-n-Minis page tap_meal_item's after-check fails (v3's passed). Not yet run live: the Deluxe Meal is on the store's All Day menu (10:30 AM-9:30 PM store time), not breakfast",
     "checked": "2026-10-30"
    }
   }
@@ -136,6 +150,17 @@
    "model_calls": 0,
    "duration_s": 24.28,
    "patches": 0
+  },
+  {
+   "time": "2026-10-30 10:39:36",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1030-103630-835b-r1",
+   "status": "needs_user",
+   "rung": 6,
+   "model_calls": 28,
+   "duration_s": 180.53,
+   "patches": 1
   }
  ],
  "needs_recompile": false,
