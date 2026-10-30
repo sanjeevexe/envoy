@@ -57,9 +57,30 @@ Screens: `eval/results/creator/recon/01-…16-*` (masked dumps, screenshots, com
 
 *(stage 1: first run vs routine — steps, seconds, model calls, cost)*
 
+### Rehearsals (declined at the publishing step; nothing posted)
+
+Every run is a row in `eval/results/creator/runs/runs.md`, with its JSON beside it.
+
+| when | ran as | offer | publishing step asked | ended | model calls | cost |
+| --- | --- | --- | --- | --- | --- | --- |
+| Oct 29 20:11 | agent (standard tier) | 5.1 s after the clip; title and goal as built | 121.8 s: `tap "Next"`, reasons `rule: target id …share_button` and `model: labeled irreversible` | declined → failed at 125.9 s; draft discarded by the script | 14 (plan 1, step 9, sam 2, match 1, choose 1) | $0.0599 |
+
+What the agent did (trace `data/runs/task-1029-201109-7e4b-r1`): look → `tap_point` on Home's top-left Create (the
+element was in the tree; it tapped the spot) → "Keep editing your draft?" → Start new video → the newest video (8:11 PM,
+the pushed clip) → Next → typed the caption → OK → **Next (asked; declined)**. No other approval was asked, and nothing
+publishing went through without asking.
+
+Found on the way:
+- "Keep editing your draft?" came from stage 0's manual exit (Start over leaves the composer open in camera mode); the
+  agent's "Start new video" saved it as a draft. Instagram now holds one test draft ("Draft video 1029", 8:12 PM). The
+  rehearsal's own cleanup left nothing open (Home's Create afterwards went straight to the gallery).
+- Home's Create now opens the camera first, and Android asks "Allow Instagram to take pictures and record video?" until
+  it's answered. It's dismissed with Back here, never answered: it's the user's to answer (Don't allow is enough: the
+  post uses the gallery).
+
 ## Spend
 
-$0.00 so far (no model calls).
+$0.0599 Meta (one rehearsal, 14 calls, standard tier). Stage 0 made no model calls.
 
 ## Not done or not checked
 

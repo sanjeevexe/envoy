@@ -1,0 +1,17 @@
+# com.instagram.android/com.instagram.modal.TransparentModalActivity secure=False 2026-10-29T20:14:18
+App: com.instagram.android · Screen: TransparentModalActivity
+[1] Button "Draft video 1029" (id: gallery_drafts_list_item_container)
+[2] Text "Created today, 8:12 PM" (id: draft_list_item_second_row_text)
+[3] Text "0:06" (id: draft_list_item_third_row_text1)
+[4] Button "Edit" (id: edit_launcher)
+[5] Text "390.8 KB" (id: draft_list_item_third_row_text2)
+[6] Button "More options" (id: overflow_launcher)
+[7] Button (id: action_bar)
+[8] Button (id: action_bar_new_title_container)
+[9] Button "Back" (id: action_bar_button_back)
+[10] Button "Reels drafts" (id: action_bar_title)
+[11] Button "Info"
+[12] Button "Edits"
+[13] Button (id: snackbar_container)
+[14] Button "If you uninstall the Instagram app, all your drafts will be lost." (id: snackbar_message)
+[15] Button "OK" (id: snackbar_text_button)

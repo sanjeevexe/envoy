@@ -1,0 +1,22 @@
+# com.instagram.android/com.instagram.android.activity.MainTabActivity secure=False 2026-10-29T20:15:01
+App: com.instagram.android · Screen: MainTabActivity
+[1] Button "Back to Home" (id: gallery_cancel_button)
+[2] Text "New reel" (id: gallery_title_container)
+[3] Button "Camera settings" (id: gallery_settings_gear)
+[4] Button "Drafts · 1" (id: gallery_destination_item)
+[5] Button "Templates" (id: gallery_destination_item)
+[6] Button "Recents"
+[7] Button "Select multiple, activate to select multiple photos in your gallery · Select"
+[8] Button (id: gallery_menu_multi_select_button)
+[9] Button "Open camera"
+[10] Image "Camera" (id: gallery_grid_camera_item_icon)
+[11] Button "0:06"
+[12] Button "Unselected Video thumbnail created on October 29, 2026 8:11 PM" (id: gallery_grid_item_thumbnail)
+[13] Button "0:06"
+[14] Button "Unselected Video thumbnail created on October 29, 2026 8 PM" (id: gallery_grid_item_thumbnail)
+[15] Button "0:06"
+[16] Button "Unselected Video thumbnail created on October 29, 2026 7:59 PM" (id: gallery_grid_item_thumbnail)
+[17] Button "POST" (id: cam_dest_feed)
+[18] Button "STORY" (id: cam_dest_story)
+[19] Button "REEL" (id: cam_dest_clips) (selected)
+[20] Button "LIVE" (id: cam_dest_live)

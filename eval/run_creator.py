@@ -265,7 +265,7 @@ class Copy:
 
 def is_share(approval: dict[str, Any]) -> bool:
     text = f"{approval.get('description') or ''} {approval.get('reasons') or ''}"
-    return bool(re.search(r"publishes|\bshare\b", text, re.I))
+    return bool(re.search(r"publishes|\bshare\b|share_button", text, re.I))  # Instagram 453's Next is share_button
 
 
 def spent(task_id: str, since: float) -> dict[str, Any]:
@@ -410,9 +410,10 @@ def run_flow(args: argparse.Namespace) -> int:
     return 0
 
 
-def discard_draft(max_steps: int = 8) -> list[str]:
+def discard_draft(max_steps: int = 10) -> list[str]:
     """After a rehearsal: back out of Instagram's composer and discard the draft, so the next run starts clean. Taps only
-    a Discard button or Back; anything the rules call irreversible is never touched."""
+    a Discard button (Instagram 453: "Start over" on "Save draft?") or Back; anything the rules call irreversible is never
+    touched. Start over opens the camera, whose permission dialog is dismissed with Back, never answered."""
     done: list[str] = []
     try:
         dev = connect()
@@ -420,10 +421,16 @@ def discard_draft(max_steps: int = 8) -> list[str]:
         return [f"no phone: {e}"]
     for _ in range(max_steps):
         state, _ = observe(dev)
+        if state.package == "com.google.android.permissioncontroller":
+            dev._act_sync(Action(kind="back"))
+            done.append("back (a permission dialog, not answered)")
+            time.sleep(1.2)
+            continue
         if state.package != IG:
             done.append(f"left Instagram ({state.package})")
             break
-        btn = next((e for e in state.numbered if re.fullmatch(r"discard( reel| post| edits| video)?", (e.label or e.desc or "").strip(), re.I)), None)
+        btn = next((e for e in state.numbered
+                    if re.fullmatch(r"discard( reel| post| edits| video)?|start over", (e.label or e.desc or "").strip(), re.I)), None)
         if btn is not None and not classify(Action(kind="tap", element=btn.number), state, None).irreversible:
             dev._act_sync(Action(kind="tap", element=btn.number))
             done.append(f"tapped {btn.label or btn.desc!r}")

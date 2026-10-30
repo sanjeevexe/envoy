@@ -1,0 +1,83 @@
+{
+ "mode": "rehearse",
+ "time": "2026-10-29T20:11:02",
+ "clip": "test-clip-3-201102.mp4",
+ "caption": "Envoy rehearsal 20:11",
+ "offer": {
+  "title": "Put test-clip-3-201102.mp4 on your Pixel 5 and post it to Instagram?",
+  "goal": "Post the newest video in my phone's gallery to Instagram as a reel with this caption: \"Envoy rehearsal 20:11\"",
+  "request": "the newest video in my phone's gallery to Instagram as a reel with this caption",
+  "device": "phone-09031FDD4000C6",
+  "preflight": [
+   {
+    "kind": "device",
+    "text": "I'll use your Pixel 5 (you said yes).",
+    "level": "info"
+   }
+  ],
+  "request_is_the_templates": true,
+  "caption_not_in_request": true,
+  "real_phone": true
+ },
+ "task": {
+  "id": "task-1029-201109-7e4b",
+  "status": "failed",
+  "routine": null,
+  "model_calls": 14,
+  "cost_usd": 0.0556,
+  "traces": [],
+  "detail": "User declined approval to share the reel to Instagram, so posting cannot be completed. The reel draft with caption 'Envoy rehearsal 20:11' using newest video Oct 29 2026 8:11 PM remains ready on New reel screen.",
+  "source": "web",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 13,
+ "approvals": [
+  {
+   "description": "tap \"Next\" in com.instagram.android",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/share_button'",
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "auto_approved": [],
+ "handoff": {
+  "status": "sent",
+  "remote_path": "/sdcard/Movies/Envoy/test-clip-3-201102.mp4",
+  "error": "the task after it: failed"
+ },
+ "marks_s": {
+  "outbox": 0.0,
+  "offer": 5.1,
+  "accepted": 6.7,
+  "running": 6.7,
+  "waiting_approval": 121.8,
+  "share_asked": 121.8,
+  "failed": 125.9,
+  "end": 125.9
+ },
+ "spent": {
+  "model_calls": 14,
+  "cost_usd": 0.0599,
+  "cost_at_standard_usd": 0.0599,
+  "jobs": {
+   "match": 1,
+   "plan": 1,
+   "step": 9,
+   "sam": 2,
+   "choose": 1
+  }
+ },
+ "ok": true,
+ "failures": [],
+ "cleanup": [
+  "back",
+  "back",
+  "tapped 'Start over'",
+  "back (a permission dialog, not answered)",
+  "back",
+  "back on Instagram's home"
+ ]
+}
