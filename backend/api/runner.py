@@ -548,7 +548,7 @@ class TaskRunner:
         """Ask to move this task to your phone, when one is connected. Its id if you said yes."""
         await asyncio.to_thread(self.pool.refresh_phones)
         phone = next((p for p in self.pool.phones.values() if p.get("state") == "device"), None)
-        if phone is None or not await self._ask_for_phone(tid, phone["id"], phone.get("model") or "Android phone", why=f"{name} blocks emulators"):
+        if phone is None or not await self._ask_for_phone(tid, phone["id"], phone_ref(phone), why=f"{name} blocks emulators"):
             return None
         self.phone_allowed[tid] = phone["id"]
         self.moved.add(tid)
