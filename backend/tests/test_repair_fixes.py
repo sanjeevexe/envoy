@@ -1,6 +1,7 @@
 """Routine repair fixes (Oct 28): a routine that doesn't depend on an app's recent searches, repairs that count only on the
 screen the step was meant to reach, no new version for a patch that changes nothing, and checks bound to an input are
-never rewritten with one run's value.
+never rewritten with one run's value. And (Oct 30) a repair action only the model calls irreversible, or a degenerate
+repair answer, is a failed attempt: it neither runs nor asks.
 
 tests/traces/starbucks_search holds Starbucks screens recorded on envoy-real: the menu, the search screen with the five
 recent searches that broke the compiled routine ("Caffè Latte" and "Caffe Latte" among them), the Results list for a
@@ -259,3 +260,117 @@ def test_a_relaxed_check_bound_to_an_input_is_not_patched_with_the_runs_value():
     out = run(Phone(), r, {"trip_city": "Omaha"})
     assert out.status == "done" and out.steps[0].rung == 2  # both checks held only at the relaxed threshold
     assert not [p for p in out.patches if "Omaha" in p.description or (p.check and "Omaha" in p.check.describe())]
+
+
+# ---- e. a repair action only the model calls irreversible, and a degenerate answer ------------------------------------------
+# Loops A and B (Oct 30): Wonder's repairs labeled six harmless taps irreversible (a Maps suggestion, "Show list", "Navigate
+# up", Home, a gallery thumbnail, an Uber destination), with no rule or screen signal and a compiled step that wasn't; each
+# ask was declined and ended the run. Now such an action doesn't run and doesn't ask: a failed attempt, and the ladder goes on.
+
+def _places_app(row: str = "Palo Alto · CA", extra: str | None = None) -> tuple[object, Routine]:
+    """A start-location list (the step wants "Current location", which is gone); tapping `row` opens the route."""
+    def screen(name: str, els: list[tuple[str, str, bool]]):
+        return screen_from_tree({"package": "app", "activity": name, "signature": name, "elements": [
+            {"index": i, "number": i + 1, "kind": k, "label": t, "text": t, "clickable": k == "Button", "in_list": lst,
+             "bounds": [0, 200 * i, 1080, 200 * i + 150]} for i, (k, t, lst) in enumerate(els)]})
+    screens = {"places": screen("places", [("Text", "Choose start location", False), ("Button", row, True), ("Button", "Sunnyvale · CA", True)]
+                                + ([("Text", extra, False)] if extra else [])),
+               "route": screen("route", [("Text", "Directions from Palo Alto", False)])}
+
+    class Phone:
+        at = "places"
+
+        def __init__(self) -> None:
+            self.acts: list[tuple[str, str]] = []
+
+        async def observe(self, screenshot: bool = False):
+            return screens[self.at]
+
+        async def act(self, a):
+            label = screens[self.at].numbered[a.element - 1].label
+            self.acts.append((a.kind, label))
+            self.at = "route" if (self.at, label) == ("places", row) else self.at
+            return ActionResult(ok=True, duration_ms=1.0)
+
+    r = Routine(routine="route", app="app", intent="Directions from Palo Alto", steps=[
+        Step(id="select_start", intent="Pick the start location",
+             action=StepAction(kind="tap", target=Locator(text="Current location", kind="Button")),
+             post=[Check(kind="element_present", locator=Locator(text="Directions from Palo Alto", kind="Text"))])])
+    return Phone(), r
+
+
+class Answers:
+    """Repair answers in order, (label, risk, reason) each: a tap on the element with that label; then give up."""
+
+    def __init__(self, phone, answers: list[tuple[str, str, str]]) -> None:
+        self.phone, self.answers, self.prompts = phone, list(answers), []
+
+    def call(self, job, content, **kw):
+        self.prompts.append(content[0]["text"])
+        label, risk, reason = self.answers.pop(0) if self.answers else (None, "read", "nothing to try")
+        el = next((e for e in asyncio.run(self.phone.observe()).numbered if e.label == label), None)
+        action = Tap(type="tap", element=el.number) if el is not None else Fail(type="fail", reason="nothing to try")
+        out = StepOutput(reason=reason, action=action, expected_result="", risk=risk)
+        return SimpleNamespace(parsed=out, cost_usd=0.0, cost_at_standard_usd=0.0)
+
+
+def _run_places(phone, r: Routine, model: Answers, allow_agent: bool = False) -> tuple[RunOutcome, ScriptedApprover]:
+    approver = ScriptedApprover(approve=False)
+    ex = RoutineExecutor(phone, adapter=model, approver=approver, config=FAST)
+    return asyncio.run(ex.run(r, {}, launch="never", allow_agent=allow_agent)), approver
+
+
+def test_a_repair_tap_only_the_model_calls_irreversible_is_not_run_or_asked_and_the_ladder_goes_on(monkeypatch):
+    from agent.loop import RunResult
+    goals = []
+
+    class Agent:
+        def __init__(self, device, **kw) -> None:
+            pass
+
+        async def run(self, goal, task_id, memory=""):
+            goals.append(goal)
+            return RunResult(task_id=task_id, goal=goal, status="done", result="Palo Alto is the start")
+    monkeypatch.setattr(executor_mod, "AgentRunner", Agent)
+    phone, r = _places_app()
+    model = Answers(phone, [("Palo Alto · CA", "irreversible", "Pick Palo Alto as the start")])
+    out, approver = _run_places(phone, r, model, allow_agent=True)
+    assert approver.requests == [] and phone.acts == []  # nothing asked, nothing tapped
+    first = out.steps[0].repairs[0]
+    assert first["not_run"] == "labeled irreversible by the model alone" and "action" not in first
+    assert len(model.prompts) == 2 and "'Palo Alto · CA': not run" in model.prompts[1]  # a failed attempt: the repair tried again
+    assert len(goals) == 1 and out.status == "agent_done"  # then the agent, which acts through its own gate
+    # Without the agent the run fails; it isn't "declined", which would say a person turned something down.
+    phone, r = _places_app()
+    out, approver = _run_places(phone, r, Answers(phone, [("Palo Alto · CA", "irreversible", "Pick Palo Alto as the start")]))
+    assert approver.requests == [] and out.status == "failed" and "repair gave up" in out.steps[0].detail
+
+
+def test_a_repair_the_model_calls_irreversible_still_asks_when_the_compiled_step_is_irreversible():
+    phone, r = _places_app()
+    r.steps[0].risk = "irreversible"
+    out, approver = _run_places(phone, r, Answers(phone, [("Palo Alto · CA", "irreversible", "Pick Palo Alto as the start")]))
+    assert [q.reasons for q in approver.requests] == [["model: labeled irreversible"]]
+    assert out.status == "declined" and phone.acts == []
+
+
+@pytest.mark.parametrize("row, extra, reason", [
+    ("Place order", None, "rule: target says 'Place order'"),
+    ("Palo Alto · CA", "Order total $23.46", "screen: payment or final-confirmation step"),
+])
+def test_a_repair_the_model_calls_irreversible_still_asks_when_a_code_signal_agrees(row, extra, reason):
+    phone, r = _places_app(row, extra)
+    out, approver = _run_places(phone, r, Answers(phone, [(row, "irreversible", "Tap it")]))
+    assert len(approver.requests) == 1 and reason in approver.requests[0].reasons and "model: labeled irreversible" in approver.requests[0].reasons
+    assert out.status == "declined" and phone.acts == []
+
+
+@pytest.mark.parametrize("reason", ["", "   ", "Original sources of the paper: " + "Antun, et al. (2020) Table II. " * 40],
+                         ids=["empty", "blank", "off_topic_text"])
+def test_a_degenerate_repair_answer_is_a_failed_attempt(reason):
+    phone, r = _places_app()
+    model = Answers(phone, [("Palo Alto · CA", "reversible", reason), ("Palo Alto · CA", "reversible", "Pick Palo Alto as the start")])
+    out, _ = _run_places(phone, r, model)
+    first = out.steps[0].repairs[0]
+    assert first["not_run"] == "degenerate answer" and "action" not in first and "unusable answer" in model.prompts[1]
+    assert out.status == "done" and phone.acts == [("tap", "Palo Alto · CA")]  # only the second answer's tap ran

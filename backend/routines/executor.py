@@ -990,6 +990,13 @@ class RoutineExecutor:
             if notes and notes.ids:
                 rec["app_notes"] = notes.ids
             sr.repairs.append(rec)
+            if not d.reason.strip() or len(d.reason) > 1000:
+                # A degenerate answer (an empty reason, or the prompt or off-topic text echoed into it: Wonder 3 of 75 repair
+                # decisions in loops A and B, Spark 0 of 127): nothing in it is acted on. A failed attempt, like an invalid element.
+                tried.append(f"unusable answer (its reason was {f'{len(d.reason)} characters' if d.reason.strip() else 'empty'}): ignored")
+                rec["not_run"] = "degenerate answer"
+                s = await self._observe()
+                continue
             kind = d.action.type
             if kind in ("done", "fail", "handoff", "ask_user", "look"):
                 tried.append(f"model returned {kind}: {getattr(d.action, 'result', None) or getattr(d.action, 'reason', '')}")
@@ -1008,7 +1015,18 @@ class RoutineExecutor:
             if action is None:
                 continue
             el = s.numbered[action.element - 1] if action.element else None
-            gated = await self._gate(ctx, action, s, d.risk, el.label if el else action.kind, sr, origin="repair")
+            label = el.label if el else action.kind
+            if d.risk == "irreversible" and step.risk != "irreversible" and not classify(action, s, None).reasons:
+                # Only the model calls it irreversible: the step it repairs isn't, and no rule or screen signal says so. On
+                # Wonder that was a harmless tap every time (a Maps suggestion, "Show list", "Navigate up", Home, a gallery
+                # thumbnail, an Uber destination; loops A and B, Oct 30), and the ask, declined, ended the run. It doesn't run
+                # without a person, so here it doesn't run: a failed attempt, and the ladder goes on (the agent, if allowed,
+                # acts through its own gate).
+                tried.append(f"{action.kind} on {label!r}: not run (labeled irreversible, and this step isn't)")
+                rec["not_run"] = "labeled irreversible by the model alone"
+                s = await self._observe()
+                continue
+            gated = await self._gate(ctx, action, s, d.risk, label, sr, origin="repair")
             if gated is None:
                 sr.status, sr.detail = "declined", "the user declined a repair action"
                 ctx.out.status = "declined"
