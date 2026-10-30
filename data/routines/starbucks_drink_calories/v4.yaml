@@ -1,0 +1,192 @@
+routine: starbucks_drink_calories
+app: com.starbucks.mobilecard
+version: 4
+status: active
+intent: Look up how many calories are in a Starbucks drink
+description: Opens the Starbucks menu without choosing a café, searches for the requested drink, opens its detail page, and reads the calorie
+  count shown for the requested size.
+patterns: [how many calories are in a drink, how many calories in a Starbucks drink, what is the calorie count for a drink, check the calories
+    for a Starbucks drink]
+outputs: [calories]
+start: fresh_launch
+inputs:
+  drink_name: {type: text, description: 'The drink''s name as the Starbucks menu lists it, without its size (Tall, Grande, Venti) or milk, e.g.
+      Caffè Latte for ''a Grande Caffè Latte''', example: Caffè Latte}
+steps:
+- id: tap_order
+  intent: Tap Order to open the menu
+  pre:
+  - {app_foreground: com.starbucks.mobilecard}
+  action:
+    tap:
+      text: Order
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.373, 0.93]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 1
+- id: dismiss_location_prompt
+  intent: Tap No, thanks to dismiss the location prompt and proceed to the menu
+  optional: true
+  pre:
+  - {app_foreground: com.starbucks.mobilecard}
+  action:
+    tap:
+      resource_id: button2
+      text: No, thanks
+      kind: Button
+      cls: Button
+      siblings: [Share location]
+      in_list: false
+      position: [0.313, 0.63]
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: button2, text: 'No, thanks', kind: Button}
+  risk: reversible
+  note: "trace step 2 · one-time screen: optional"
+- id: tap_skip_cafe_selection
+  intent: Tap Skip to skip café selection and access menu browsing
+  optional: true
+  pre:
+  - {app_foreground: com.starbucks.mobilecard}
+  action:
+    tap:
+      text: Skip
+      kind: Button
+      cls: View
+      siblings: [Search]
+      in_list: false
+      position: [0.923, 0.084]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: "trace step 3 · one-time screen: optional"
+- id: dismiss_location_prompt_after_skip
+  intent: Tap No, thanks to dismiss the location prompt and proceed to the menu
+  optional: true
+  pre:
+  - {app_foreground: com.starbucks.mobilecard}
+  action:
+    tap:
+      resource_id: button2
+      text: No, thanks
+      kind: Button
+      cls: Button
+      siblings: [Share location]
+      in_list: false
+      position: [0.313, 0.63]
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: button2, text: 'No, thanks', kind: Button}
+  risk: reversible
+  note: "loop A: the prompt can come after Skip instead; optional"
+- id: confirm_skip_to_menu
+  intent: Tap Yes to confirm skipping to the menu without a café
+  pre:
+  - {app_foreground: com.starbucks.mobilecard}
+  action:
+    tap:
+      resource_id: button1
+      text: 'Yes'
+      kind: Button
+      cls: Button
+      siblings: [Choose a café]
+      in_list: false
+      position: [0.737, 0.581]
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: button2, text: Choose a café, kind: Button}
+  risk: reversible
+  note: trace step 4
+- id: tap_search_menu
+  intent: "Tap Search Menu to find {{drink_name}}"
+  pre:
+  - {app_foreground: com.starbucks.mobilecard}
+  action:
+    tap:
+      text: Search Menu
+      kind: Button
+      cls: Button
+      in_list: true
+      position: [0.941, 0.08]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      text: "{{drink_name}}"
+      kind: Button
+  risk: reversible
+  note: trace step 5
+- id: tap_recent_drink_search
+  intent: "Tap {{drink_name}} from the recent searches"
+  pre:
+  - {app_foreground: com.starbucks.mobilecard}
+  action:
+    tap:
+      text_has: "{{drink_name}}"
+      kind: Button
+      cls: LinearLayout
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present:
+      text: "Search Menu: {{drink_name}}"
+      kind: EditText
+  risk: reversible
+  note: trace step 6
+- id: find_tap_drink_result
+  intent: "Scroll to {{drink_name}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        text_has: "{{drink_name}}"
+        kind: Button
+        cls: RelativeLayout
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      text_has: "{{drink_name}}"
+      kind: Button
+      cls: RelativeLayout
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: tap_drink_result
+  intent: "Tap the {{drink_name}} result to open its details and view the calories for the {{drink_size}} size"
+  pre:
+  - {app_foreground: com.starbucks.mobilecard}
+  action:
+    tap:
+      text_has: "{{drink_name}}"
+      kind: Button
+      cls: RelativeLayout
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      text: "{{drink_size}} {{drink_name}}. Add to order"
+      kind: Button
+  risk: reversible
+  extract:
+    calories:
+      near: "{{drink_name}}"
+      next_element: true
+      expect_digits: true
+  note: trace step 7
+parent_version: 3
+changes:
+- "the location prompt is optional wherever it comes: tap_order and tap_skip_cafe_selection no longer require it (or the café dialog) in their\
+  \ after-checks, dismiss_location_prompt checks it is gone, and an optional copy follows Skip (loop A, Oct 30: on b1f3c9a 2 of 4 replays fell\
+  \ back to the agent at tap_order)"
+compiled_from:
+  task_id: task-1030-155711-51c2-r1
+  goal: In the Starbucks app, how many calories are in a Grande Caffè Latte?
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-30 16:00:58"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6, 7]
+  trace_steps_dropped: 0
+  cost_usd: 0.0806

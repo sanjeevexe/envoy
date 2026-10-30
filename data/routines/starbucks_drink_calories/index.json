@@ -1,6 +1,6 @@
 {
  "name": "starbucks_drink_calories",
- "active": 3,
+ "active": 4,
  "versions": [
   {
    "version": 1,
@@ -40,7 +40,7 @@
   },
   {
    "version": 3,
-   "status": "active",
+   "status": "retired",
    "created": "2026-10-30 17:02:19",
    "parent": 1,
    "changes": [
@@ -57,6 +57,19 @@
     "status": "done",
     "model_calls": 0,
     "duration_s": 9.7
+   }
+  },
+  {
+   "version": 4,
+   "status": "active",
+   "created": "2026-10-30 19:05:12",
+   "parent": 3,
+   "changes": [
+    "the location prompt is optional wherever it comes: tap_order and tap_skip_cafe_selection no longer require it (or the café dialog) in their after-checks, dismiss_location_prompt checks it is gone, and an optional copy follows Skip (loop A, Oct 30: on b1f3c9a 2 of 4 replays fell back to the agent at tap_order)"
+   ],
+   "verification": {
+    "by": "loop-a",
+    "how": "hand fix; replays in eval/results/real-apps/loop-a/runs.jsonl"
    }
   }
  ],
@@ -126,6 +139,72 @@
    "model_calls": 0,
    "duration_s": 9.7,
    "patches": 1
+  },
+  {
+   "time": "2026-10-30 19:15:38",
+   "kind": "run",
+   "version": 4,
+   "task_id": "task-1030-191440-4526-r1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 46.9,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 19:16:55",
+   "kind": "run",
+   "version": 4,
+   "task_id": "task-1030-191553-2dc1-r1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 52.94,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 19:18:14",
+   "kind": "run",
+   "version": 4,
+   "task_id": "task-1030-191712-f4a6-r1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 49.3,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 19:19:29",
+   "kind": "run",
+   "version": 4,
+   "task_id": "task-1030-191830-a8d4-r1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 44.96,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 19:20:42",
+   "kind": "run",
+   "version": 4,
+   "task_id": "task-1030-191945-fe81-r1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 40.95,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 19:23:01",
+   "kind": "run",
+   "version": 4,
+   "task_id": "task-1030-192058-2a1b-r1",
+   "status": "agent_done",
+   "rung": 5,
+   "model_calls": 10,
+   "duration_s": 111.29,
+   "patches": 0
   }
  ],
  "needs_recompile": false,
