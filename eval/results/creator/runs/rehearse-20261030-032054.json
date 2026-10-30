@@ -1,0 +1,78 @@
+{
+ "mode": "rehearse",
+ "time": "2026-10-30T03:20:54",
+ "clip": "rehearse-1-032054.mp4",
+ "caption": "Envoy rehearsal 03:20 agent",
+ "offer": {
+  "title": "Put rehearse-1-032054.mp4 on Envoy's phone and post it to Instagram?",
+  "goal": "Post the newest video in my phone's gallery to Instagram as a reel with this caption: \"Envoy rehearsal 03:20 agent\"",
+  "request": "the newest video in my phone's gallery to Instagram as a reel with this caption",
+  "device": "phone-09031FDD4000C6",
+  "preflight": [
+   {
+    "kind": "device",
+    "text": "I'll use Envoy's phone (you said yes).",
+    "level": "info"
+   }
+  ],
+  "request_is_the_templates": true,
+  "caption_not_in_request": true,
+  "real_phone": true
+ },
+ "task": {
+  "id": "task-1030-032101-3206",
+  "status": "failed",
+  "routine": null,
+  "model_calls": 10,
+  "cost_usd": 0.1318,
+  "traces": [],
+  "detail": "User declined approval for tapping Share to post the reel. The reel was prepared with the newest video (Oct 30, 2026 3:20 AM) and caption \"Envoy rehearsal 03:20 agent\", but posting was not approved, so it was not shared.",
+  "source": "web",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 14,
+ "approvals": [
+  {
+   "description": "tap \"Share\" in com.instagram.android",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/share_button'",
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "auto_approved": [],
+ "handoff": {
+  "status": "sent",
+  "remote_path": "/sdcard/Movies/Envoy/rehearse-1-032054.mp4",
+  "error": "the task after it: failed"
+ },
+ "marks_s": {
+  "outbox": 0.0,
+  "offer": 5.1,
+  "accepted": 7.3,
+  "running": 7.3,
+  "waiting_approval": 112.3,
+  "share_asked": 112.3,
+  "failed": 116.3,
+  "end": 116.3
+ },
+ "spent": {
+  "model_calls": 10,
+  "cost_usd": 0.1318,
+  "cost_at_standard_usd": 0.1318,
+  "jobs": {
+   "plan": 1,
+   "step": 9
+  }
+ },
+ "ok": true,
+ "failures": [],
+ "cleanup": [
+  "back (caption)",
+  "editor_cancel",
+  "start_over",
+  "gallery_home"
+ ]
+}

@@ -1,0 +1,92 @@
+{
+ "mode": "rehearse",
+ "time": "2026-10-30T03:37:18",
+ "clip": "rehearse-3-033718.mp4",
+ "caption": "Envoy rehearsal 03:37 on 2",
+ "offer": {
+  "title": "Put rehearse-3-033718.mp4 on Envoy's phone and post it to Instagram?",
+  "goal": "Post the newest video in my phone's gallery to Instagram as a reel with this caption: \"Envoy rehearsal 03:37 on 2\"",
+  "request": "the newest video in my phone's gallery to Instagram as a reel with this caption",
+  "device": "phone-09031FDD4000C6",
+  "preflight": [
+   {
+    "kind": "device",
+    "text": "I'll use Envoy's phone (you said yes).",
+    "level": "info"
+   },
+   {
+    "kind": "approval",
+    "text": "Sharing will need your OK.",
+    "level": "info"
+   },
+   {
+    "kind": "routine",
+    "text": "Using routine instagram_post_reel v2.",
+    "level": "info"
+   },
+   {
+    "kind": "app_note",
+    "text": "From earlier runs: If a keep-editing draft dialog appears when creating, tap Start new video to start a new reel.",
+    "level": "info"
+   }
+  ],
+  "request_is_the_templates": true,
+  "caption_not_in_request": true,
+  "real_phone": true
+ },
+ "task": {
+  "id": "task-1030-033725-a843",
+  "status": "declined",
+  "routine": "instagram_post_reel",
+  "model_calls": 2,
+  "cost_usd": 0.0271,
+  "traces": [],
+  "detail": "the user declined the approval",
+  "source": "web",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 11,
+ "approvals": [
+  {
+   "description": "tap \"Share\" in com.instagram.android (routine instagram_post_reel v2)",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/share_button'",
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "auto_approved": [],
+ "handoff": {
+  "status": "sent",
+  "remote_path": "/sdcard/Movies/Envoy/rehearse-3-033718.mp4",
+  "error": "the task after it: declined"
+ },
+ "marks_s": {
+  "outbox": 0.0,
+  "offer": 4.6,
+  "accepted": 6.3,
+  "running": 6.4,
+  "waiting_approval": 59.8,
+  "share_asked": 59.8,
+  "declined": 60.8,
+  "end": 60.8
+ },
+ "spent": {
+  "model_calls": 2,
+  "cost_usd": 0.0271,
+  "cost_at_standard_usd": 0.0271,
+  "jobs": {
+   "repair": 2
+  }
+ },
+ "ok": true,
+ "failures": [],
+ "cleanup": [
+  "back (caption)",
+  "editor_cancel",
+  "start_over",
+  "gallery_home"
+ ]
+}

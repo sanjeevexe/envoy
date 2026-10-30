@@ -1,0 +1,83 @@
+{
+ "mode": "rehearse",
+ "time": "2026-10-30T03:55:46",
+ "clip": "rehearse-3-035546.mp4",
+ "caption": "Envoy rehearsal 03:55 off 2",
+ "offer": {
+  "title": "Put rehearse-3-035546.mp4 on Envoy's phone and post it to Instagram?",
+  "goal": "Post the newest video in my phone's gallery to Instagram as a reel with this caption: \"Envoy rehearsal 03:55 off 2\"",
+  "request": "the newest video in my phone's gallery to Instagram as a reel with this caption",
+  "device": "phone-09031FDD4000C6",
+  "preflight": [
+   {
+    "kind": "device",
+    "text": "I'll use Envoy's phone (you said yes).",
+    "level": "info"
+   },
+   {
+    "kind": "app_note",
+    "text": "From earlier runs: If a keep-editing draft dialog appears when creating, tap Start new video to start a new reel.",
+    "level": "info"
+   }
+  ],
+  "request_is_the_templates": true,
+  "caption_not_in_request": true,
+  "real_phone": true
+ },
+ "task": {
+  "id": "task-1030-035554-862b",
+  "status": "failed",
+  "routine": null,
+  "model_calls": 9,
+  "cost_usd": 0.1148,
+  "traces": [],
+  "detail": "User declined the Share approval to post the reel, so the reel was not posted. Caption and newest video were prepared but not shared.",
+  "source": "web",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 13,
+ "approvals": [
+  {
+   "description": "tap \"Share\" in com.instagram.android",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/share_button'",
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "auto_approved": [],
+ "handoff": {
+  "status": "sent",
+  "remote_path": "/sdcard/Movies/Envoy/rehearse-3-035546.mp4",
+  "error": "the task after it: failed"
+ },
+ "marks_s": {
+  "outbox": 0.0,
+  "offer": 6.1,
+  "accepted": 8.5,
+  "running": 8.5,
+  "waiting_approval": 58.1,
+  "share_asked": 58.1,
+  "failed": 61.1,
+  "end": 61.1
+ },
+ "spent": {
+  "model_calls": 9,
+  "cost_usd": 0.1148,
+  "cost_at_standard_usd": 0.1148,
+  "jobs": {
+   "plan": 1,
+   "step": 8
+  }
+ },
+ "ok": true,
+ "failures": [],
+ "cleanup": [
+  "back (caption)",
+  "editor_cancel",
+  "start_over",
+  "gallery_home"
+ ]
+}

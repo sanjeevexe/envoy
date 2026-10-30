@@ -1,0 +1,83 @@
+{
+ "mode": "rehearse",
+ "time": "2026-10-30T03:53:58",
+ "clip": "rehearse-2-035358.mp4",
+ "caption": "Envoy rehearsal 03:53 off 1",
+ "offer": {
+  "title": "Put rehearse-2-035358.mp4 on Envoy's phone and post it to Instagram?",
+  "goal": "Post the newest video in my phone's gallery to Instagram as a reel with this caption: \"Envoy rehearsal 03:53 off 1\"",
+  "request": "the newest video in my phone's gallery to Instagram as a reel with this caption",
+  "device": "phone-09031FDD4000C6",
+  "preflight": [
+   {
+    "kind": "device",
+    "text": "I'll use Envoy's phone (you said yes).",
+    "level": "info"
+   },
+   {
+    "kind": "app_note",
+    "text": "From earlier runs: If a keep-editing draft dialog appears when creating, tap Start new video to start a new reel.",
+    "level": "info"
+   }
+  ],
+  "request_is_the_templates": true,
+  "caption_not_in_request": true,
+  "real_phone": true
+ },
+ "task": {
+  "id": "task-1030-035405-2aef",
+  "status": "failed",
+  "routine": null,
+  "model_calls": 9,
+  "cost_usd": 0.1217,
+  "traces": [],
+  "detail": "User declined the Share action, so the reel was not posted. The caption 'Envoy rehearsal 03:53 off 1' was entered for the newest video (Oct 30, 2026 3:54 AM) and remains on the New reel screen.",
+  "source": "web",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 13,
+ "approvals": [
+  {
+   "description": "tap \"Share\" in com.instagram.android",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/share_button'",
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "auto_approved": [],
+ "handoff": {
+  "status": "sent",
+  "remote_path": "/sdcard/Movies/Envoy/rehearse-2-035358.mp4",
+  "error": "the task after it: failed"
+ },
+ "marks_s": {
+  "outbox": 0.0,
+  "offer": 5.6,
+  "accepted": 7.5,
+  "running": 7.5,
+  "waiting_approval": 53.9,
+  "share_asked": 53.9,
+  "failed": 58.0,
+  "end": 58.0
+ },
+ "spent": {
+  "model_calls": 9,
+  "cost_usd": 0.1217,
+  "cost_at_standard_usd": 0.1217,
+  "jobs": {
+   "plan": 1,
+   "step": 8
+  }
+ },
+ "ok": true,
+ "failures": [],
+ "cleanup": [
+  "back (caption)",
+  "editor_cancel",
+  "start_over",
+  "gallery_home"
+ ]
+}
