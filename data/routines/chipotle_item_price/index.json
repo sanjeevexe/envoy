@@ -1,0 +1,90 @@
+{
+ "name": "chipotle_item_price",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-30 16:40:22",
+   "parent": 1,
+   "changes": [
+    "named chipotle_item_price (was loop_chipotle v2 in loop A's copy; same steps)",
+    "the pickup location and menu category are the first run's values, not inputs: the request names only the item, so the runner sent every replay to the agent (needs location_search, menu_category; loop A, Oct 30)"
+   ],
+   "verification": {
+    "by": "loop-a",
+    "renamed_from": "loop_chipotle v2"
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-30 17:03:15",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-170258-5a06-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 13.03,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 17:03:45",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-170328-c193-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 13.09,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 17:04:55",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-170358-1790-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 44.29,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 17:06:05",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-170507-ca19-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 44.82,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 17:07:16",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-170618-732d-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 46.37,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 17:08:20",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-170728-b04a-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 39.73,
+   "patches": 0
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.chipotle.ordering"
+}
