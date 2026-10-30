@@ -77,6 +77,8 @@ class GatedDevice:
             await self._lease.agent_turn.wait()
             if self._lease.guard is not None and self._lease.guard():  # you touched the phone a moment ago
                 await self._lease.agent_turn.wait()
+            if name in ("act", "launch"):  # and when it starts: a fresh launch shows the home screen before the app
+                self._lease.last_agent_call = time.time()
             try:
                 return await attr(*args, **kwargs)
             finally:

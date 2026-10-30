@@ -334,6 +334,19 @@ def test_an_app_envoy_has_no_name_for_already_in_front_is_not_a_change(monkeypat
     assert _watch(monkeypatch, "com.ubercab", None, nothing) == (False, "")
 
 
+def test_the_home_screen_during_envoys_own_fresh_launch_is_not_a_change(monkeypatch):
+    """A fresh launch force-stops the app in front, so the home screen shows until it starts again. The time of Envoy's
+    last action was set only when the launch returned, so a check in between paused the task."""
+    async def relaunch(dev, gated):
+        async def slow_launch(package, fresh=False):
+            dev.front = LAUNCHER  # force-stopped: the home screen for a moment
+            await asyncio.sleep(0.1)  # a few of the watcher's checks
+            dev.front = package
+        dev.launch = slow_launch
+        await gated.launch("com.ubercab", fresh=True)
+    assert _watch(monkeypatch, "com.ubercab", "com.ubercab", relaunch) == (False, "")
+
+
 def test_another_app_coming_to_the_front_on_its_own_still_pauses(monkeypatch):
     async def a_call(dev, gated):
         dev.front = "com.android.dialer"  # not something Envoy did
