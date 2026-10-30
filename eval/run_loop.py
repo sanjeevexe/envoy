@@ -189,7 +189,7 @@ def _dd_clear() -> str:
 TASKS: dict[str, Task] = {
     "doordash_usual": Task("doordash_usual", "Hey Envoy, I've had such a long day. Order me my usual from Chick-fil-A.", "envoy-real",
                            routines=["doordash_order_meal"], chat=True, tell=USUAL, hand_off_ok=True, grade=_dd_grade,
-                           after=_dd_clear),
+                           prep=lambda: {"before": _dd_clear()}, after=_dd_clear),
     "skylark_checkin": Task("skylark_checkin", "Check me in for my flight", "envoy-test",
                             routines=["skylark_check_in_flight", "skylark_air_check_in_flight"], approve=True,
                             prep=_skylark_prep, grade=_skylark_grade),
