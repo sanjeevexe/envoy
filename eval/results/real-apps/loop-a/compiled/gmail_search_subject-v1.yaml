@@ -1,0 +1,83 @@
+routine: gmail_search_subject
+app: com.google.android.gm
+version: 1
+status: active
+intent: Search Gmail for a term and report the subject of the first result
+description: Searches Gmail using the requested term, opens the first matching message, and returns its subject line.
+patterns: [search my mail for, find an email about, tell me the subject of the first result for, search Gmail for]
+outputs: [email_subject]
+start: fresh_launch
+inputs:
+  search_query: {type: text, description: The term to search for in Gmail., example: DoorDash}
+steps:
+- id: tap_search_in_mail
+  intent: Tap the 'Search in mail' field to start a search
+  pre:
+  - {app_foreground: com.google.android.gm}
+  - element_present: {resource_id: compose_button, text: Compose, kind: Button}
+  action:
+    tap:
+      resource_id: open_search
+      text: Search in mail
+      hint: Search in mail
+      kind: EditText
+      cls: EditText
+      parent: toolbar_wrapped_around_search_bar
+      siblings: [Open navigation drawer]
+      in_list: true
+      position: [0.496, 0.088]
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: compose_button, text: Compose, kind: Button}
+  risk: reversible
+  note: trace step 1
+- id: type_search_query
+  intent: "Type {{search_query}} into the 'Search in mail' field"
+  pre:
+  - {app_foreground: com.google.android.gm}
+  action:
+    type:
+      field:
+        resource_id: open_search_view_edit_text
+        text: Search in mail
+        hint: Search in mail
+        kind: EditText
+        cls: EditText
+        parent: open_search_view_text_container
+        in_list: true
+        position: [0.519, 0.088]
+      value: "{{search_query}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 2
+- id: open_first_search_result
+  intent: Tap the first search result to open it and read its subject
+  pre:
+  - {app_foreground: com.google.android.gm}
+  action:
+    tap:
+      kind: Button
+      cls: FrameLayout
+      parent: thread_list_view
+      in_list: true
+      position: [0.5, 0.289]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: item_pager, kind: List}
+  - element_present: {resource_id: archive, text: Archive, kind: Button}
+  risk: reversible
+  extract:
+    email_subject:
+      locator: {resource_id: subject_and_folder_view, kind: Button}
+      after: Inbox
+  note: trace step 3
+compiled_from:
+  task_id: task-1030-180655-0535-r1
+  goal: In the Gmail app, search my mail for DoorDash and tell me the subject of the first result.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-30 18:10:31"
+  trace_steps_kept: [1, 2, 3]
+  trace_steps_dropped: 0
+  cost_usd: 0.0592
