@@ -33,8 +33,10 @@ _IRREVERSIBLE = re.compile(
     r")\b",
     re.IGNORECASE,
 )
-# Resource-ID fragments that mean the same, for buttons without readable text.
-_IRREVERSIBLE_ID = re.compile(r"(^|[_-])(pay|purchase|checkout|confirm|submit|send|delete|place[_-]order|buy|book|cancel[_-](trip|order|booking))([_-]|$)", re.I)
+# Resource-ID fragments that mean the same, for buttons without readable text. `share` is Instagram's publish button
+# (id share_button, labelled only "Next" on a reel's last screen, Instagram 453); a share icon that only opens a share
+# sheet is asked about too, which errs on the safe side.
+_IRREVERSIBLE_ID = re.compile(r"(^|[_-])(pay|purchase|checkout|confirm|submit|send|delete|place[_-]order|buy|book|share|cancel[_-](trip|order|booking))([_-]|$)", re.I)
 # A label that says nothing about what it does ("Submit", "OK"): web forms label every button that way (Amazon's Add to Cart
 # and Buy Now are both "Submit"), so an ID that plainly names a reversible action speaks for it instead.
 _GENERIC = re.compile(r"^(submit|ok|okay|continue|go|done)$", re.I)

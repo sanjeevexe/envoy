@@ -105,6 +105,18 @@ def test_publishing_words_inside_other_labels_are_not_flagged(label):
     assert not v.irreversible, v.reasons
 
 
+def test_instagrams_publish_button_labelled_next_is_irreversible_by_its_id():
+    """Instagram 453's reel screen publishes with a button labelled only "Next" (id share_button): the rules flag it by
+    its id, so posting always asks. Recorded on the Pixel 5 by creator-workflow, Oct 29."""
+    xml = (SCREENS / "instagram_reel_final.xml").read_text()
+    s = build_state(xml, "com.instagram.android", "com.instagram.modal.ModalActivity", 1080, 2340)
+    nxt = next(e for e in s.numbered if e.resource_id.endswith(("share_button", "share_button_container")))
+    v = classify(Action(kind="tap", element=nxt.number), s, model_risk="reversible")
+    assert v.irreversible and any("share_button" in r for r in v.reasons), v.reasons
+    draft = next(e for e in s.numbered if e.label == "Save draft")
+    assert not classify(Action(kind="tap", element=draft.number), s, model_risk="reversible").irreversible
+
+
 def test_navigation_is_read():
     s = screen("skylark_trips")
     assert classify(Action(kind="scroll", direction="down"), s, model_risk="read").level == "read"
