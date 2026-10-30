@@ -20,6 +20,7 @@ import argparse
 import asyncio
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -81,7 +82,19 @@ def reset(app: str, clear: bool = False) -> None:
     time.sleep(1.0)
 
 
-def run_one(goal: str, app: str, kind: str, timeout_s: float, clear: bool = False, allow_phone: bool = False) -> dict:
+PRICE = re.compile(r"\$\s?\d[\d,]*(?:\.\d{2})?")
+
+
+def redact(rec: dict) -> dict:
+    """A run in an app signed in with the user's own account (Uber, Lyft): numbers only. The answer keeps its prices,
+    and the screen's words (addresses, names, approval descriptions, hand-off reasons) are dropped."""
+    prices = PRICE.findall(rec.get("result") or "")
+    return {**rec, "result": " ".join(prices) or ("(answer redacted)" if rec.get("result") else None), "detail": None,
+            "declined": len(rec["declined"]), "handoff": (rec["handoff"] or "").split(":")[0] or None, "private": True}
+
+
+def run_one(goal: str, app: str, kind: str, timeout_s: float, clear: bool = False, allow_phone: bool = False,
+            private: bool = False) -> dict:
     reset(app, clear)
     retired = retire_notes(app) if kind == "first" else 0
     t0 = time.time()
@@ -136,13 +149,17 @@ def run_one(goal: str, app: str, kind: str, timeout_s: float, clear: bool = Fals
            "cost_usd": cost, "cost_at_standard_usd": task.get("cost_usd"), "calls_logged": calls_logged,
            "declined": declined, "handoff": handoff, "notes_retired": retired, "cleared": clear, "device": rec_device,
            "main": subprocess.run(["git", "-C", str(REPO), "rev-parse", "--short", "HEAD"], capture_output=True, text=True).stdout.strip()}
+    if private:
+        rec = redact(rec)
     runs = json.loads(RUNS_FILE.read_text()) if RUNS_FILE.exists() else []
     runs.append(rec)
     OUT.mkdir(parents=True, exist_ok=True)
     RUNS_FILE.write_text(json.dumps(runs, indent=1, ensure_ascii=False))
     print(f"{rec['status']:9s} {rec['ran'] or '-':8s} {rec['duration_s']:6.1f}s calls={rec['model_calls']}/{calls_logged} "
           f"${cost:.4f} {tid} {(rec['result'] or rec['detail'] or '')[:160]}" + (f" | HANDOFF {handoff}" if handoff else "")
-          + (f" | declined {len(declined)}" if declined else ""), flush=True)
+          + (f" | declined {len(declined)}" if declined else ""), flush=True) if not private else print(
+        f"{rec['status']:9s} {rec['ran'] or '-':8s} {rec['duration_s']:6.1f}s calls={rec['model_calls']}/{calls_logged} ${cost:.4f} {tid} "
+        f"{rec['result'] or ''} | handoff {rec['handoff']} | declined {rec['declined']}", flush=True)
     return rec
 
 
@@ -188,6 +205,7 @@ def main() -> int:
     r.add_argument("--clear", action="store_true", help="clear the app's data before each run (a task that leaves state)")
     r.add_argument("--serial", default=SERIAL, help="adb serial of the device (default envoy-real)")
     r.add_argument("--device", default=DEVICE, help="the API's device id (default envoy-real; a phone is phone-<serial>)")
+    r.add_argument("--private", action="store_true", help="an app signed in with the user's own account: keep numbers only")
     r.add_argument("--allow-phone", action="store_true", help="answer yes to \"use your Android phone?\" (the user asked for this phone)")
     s = sub.add_parser("save")
     s.add_argument("task_id")
@@ -199,7 +217,7 @@ def main() -> int:
     if args.cmd == "run":
         globals().update(SERIAL=args.serial, DEVICE=args.device)  # adb() and run_one() read these
         for goal in args.goal:
-            run_one(goal, args.app, args.kind, args.timeout_s, args.clear, args.allow_phone)
+            run_one(goal, args.app, args.kind, args.timeout_s, args.clear, args.allow_phone, args.private)
     elif args.cmd == "save":
         asyncio.run(save(args.task_id, args.by, args.note))
     else:
