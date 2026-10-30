@@ -165,6 +165,66 @@ def test_ride_words_on_a_text_that_is_not_a_button_are_not_flagged(label):
     assert not v.irreversible, v.reasons
 
 
+_CHIPS = ("Show saved passwords and password options", "Show saved payment methods", "Show saved addresses")
+
+
+def _chrome_with_keyboard(button: str, *page_text: str, package: str = "com.android.chrome",
+                          accessory: str = "com.android.chrome:id/keyboard_accessory") -> ScreenState:
+    """Chrome with a text field focused, as loop B saved it on Oct 30 (task-1030-143603-a850, Google Flights): the page (a
+    field, a button, any text), and Chrome's keyboard accessory bar with its three "Show saved …" chips."""
+    attrs = ('checkable="false" checked="false" enabled="true" focused="false" scrollable="false" long-clickable="false" '
+             'password="false" selected="false" visible-to-user="true" hint="" display-id="0"')
+
+    def node(cls: str, bounds: str, *, text: str = "", desc: str = "", rid: str = "", clickable: bool = False, kids: str = "") -> str:
+        return (f'<node index="0" text={quoteattr(text)} resource-id="{rid}" class="{cls}" package="{package}" '
+                f'content-desc={quoteattr(desc)} clickable="{str(clickable).lower()}" focusable="{str(clickable).lower()}" {attrs} '
+                f'bounds="{bounds}"' + (f">{kids}</node>" if kids else " />"))
+
+    page = (node("android.widget.EditText", "[40,300][1040,420]", text="JFK", clickable=True)
+            + node("android.widget.Button", "[40,480][1040,640]", text=button, clickable=True)
+            + "".join(node("android.widget.TextView", f"[40,{700 + i * 100}][1040,{780 + i * 100}]", text=t) for i, t in enumerate(page_text)))
+    chips = "".join(node("android.widget.ImageButton", f"[{702 + i * 126},2018][{828 + i * 126},2144]", desc=c, clickable=True)
+                    for i, c in enumerate(_CHIPS))
+    bar = node("android.widget.LinearLayout", "[0,1976][1080,2165]", rid=accessory,
+               desc="Alternative filling options available above the keyboard",
+               kids=node("android.widget.LinearLayout", "[0,1997][1080,2165]", rid="com.android.chrome:id/accessory_bar_contents",
+                         kids=node("androidx.recyclerview.widget.RecyclerView", "[0,1997][1080,2165]",
+                                   rid="com.android.chrome:id/bar_items_view",
+                                   kids=node("android.widget.LinearLayout", "[702,1997][1080,2165]", kids=chips))))
+    root = node("android.widget.FrameLayout", "[0,0][1080,2400]", rid="android:id/content",
+                kids=node("android.view.ViewGroup", "[0,0][1080,2400]", rid="com.android.chrome:id/coordinator",
+                          kids=node("android.webkit.WebView", "[0,280][1080,1976]", kids=page) + bar))
+    xml = "<?xml version='1.0' encoding='UTF-8' standalone='yes' ?><hierarchy rotation=\"0\">" + root + "</hierarchy>"
+    return build_state(xml, package, "com.google.android.apps.chrome.Main", 1080, 2400)
+
+
+def test_chromes_show_saved_payment_methods_chip_does_not_make_a_page_a_checkout():
+    """Chrome shows "Show saved payment methods" above the keyboard whenever a field has focus: every Chrome step with the
+    keyboard up used to ask as a payment step (loop B, Google Flights: the JFK suggestion and a typed URL, both declined)."""
+    s = _chrome_with_keyboard("John F. Kennedy International Airport (JFK)")
+    assert {e.label for e in s.numbered} >= set(_CHIPS)
+    jfk = next(e for e in s.numbered if e.label.startswith("John F. Kennedy"))
+    v = classify(Action(kind="tap", element=jfk.number), s, model_risk="read")
+    assert not v.irreversible, v.reasons
+
+
+@pytest.mark.parametrize("page", ["Order total $12.40", "Payment method · Visa ending in 4242"])
+def test_a_checkout_page_in_chrome_still_asks_with_the_keyboard_up(page):
+    s = _chrome_with_keyboard("Continue", "Your order", page)
+    btn = next(e for e in s.numbered if e.label == "Continue")
+    v = classify(Action(kind="tap", element=btn.number), s, model_risk="read")
+    assert v.irreversible and "screen: payment or final-confirmation step" in v.reasons
+
+
+@pytest.mark.parametrize("where", [dict(package="com.example.browser"), dict(accessory="com.example:id/page_footer")])
+def test_show_saved_payment_methods_anywhere_else_still_counts(where):
+    """Only Chrome's own accessory bar is left out: the same words in another app, or outside the bar, still count."""
+    s = _chrome_with_keyboard("John F. Kennedy International Airport (JFK)", **where)
+    jfk = next(e for e in s.numbered if e.label.startswith("John F. Kennedy"))
+    v = classify(Action(kind="tap", element=jfk.number), s, model_risk="read")
+    assert "screen: payment or final-confirmation step" in v.reasons
+
+
 def test_instagrams_publish_button_labelled_next_is_irreversible_by_its_id():
     """Instagram 453's reel screen publishes with a button labelled only "Next" (id share_button): the rules flag it by
     its id, so posting always asks. Recorded on the Pixel 5 by creator-workflow, Oct 29."""

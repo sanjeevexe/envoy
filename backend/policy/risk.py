@@ -76,6 +76,14 @@ _CHECKOUT = re.compile(
     r"total due|billing address|this can.?t be undone|cannot be undone)",
     re.IGNORECASE,
 )
+# Chrome's keyboard accessory bar: while any text field has focus it shows its own chips "Show saved passwords and password
+# options", "Show saved payment methods" and "Show saved addresses" (ImageButtons under com.android.chrome:id/keyboard_accessory,
+# loop B, Oct 30). They are Chrome's, not the page's, so they don't make a page a checkout: "payment method" made every Chrome
+# step with the keyboard up ask. Only those three chips are left out; a card or address Chrome suggests there, and anything
+# the page itself says ("Payment method", "Order total"), still count.
+_CHROME = "com.android.chrome"
+_CHROME_ACCESSORY = "com.android.chrome:id/keyboard_accessory"
+_CHROME_CHIP = re.compile(r"^show saved (passwords( and password options)?|payment methods|addresses)$", re.I)
 _READ_KINDS = {"scroll", "swipe", "back", "home", "wait", "launch"}
 
 
@@ -91,6 +99,18 @@ class RiskVerdict:
 
 def _target_text(e: Element) -> str:
     return " ".join(x for x in (e.label, e.text, e.desc) if x)
+
+
+def _chrome_chip(screen: ScreenState, e: Element) -> bool:
+    """One of Chrome's own "Show saved …" chips in its keyboard accessory bar."""
+    if not any(_CHROME_CHIP.match(x.strip()) for x in (e.label, e.text, e.desc) if x) or e.package != _CHROME:
+        return False
+    p = e.parent
+    while p is not None and 0 <= p < len(screen.elements):
+        if screen.elements[p].resource_id == _CHROME_ACCESSORY:
+            return True
+        p = screen.elements[p].parent
+    return False
 
 
 def requests_ride(label: str, app: str | None = None) -> bool:
@@ -116,7 +136,7 @@ def _main_button(screen: ScreenState) -> Element | None:
 def classify(action: Action, screen: ScreenState, model_risk: Risk | None) -> RiskVerdict:
     reasons: list[str] = []
     level: Risk = "read" if action.kind in _READ_KINDS else "reversible"
-    screen_text = " ".join(_target_text(e) for e in screen.numbered)
+    screen_text = " ".join(_target_text(e) for e in screen.numbered if not _chrome_chip(screen, e))
     checkout = bool(_CHECKOUT.search(screen_text))
     destructive = bool(_DESTRUCTIVE.search(screen_text))
 
