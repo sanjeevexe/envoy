@@ -1,0 +1,67 @@
+{
+ "mode": "post",
+ "time": "2026-10-29T20:18:12",
+ "clip": "test-clip-1-201812.mp4",
+ "caption": "Made on my Mac, posted from my phone by Envoy.",
+ "offer": {
+  "title": "Put test-clip-1-201812.mp4 on your Pixel 5 and post it to Instagram?",
+  "goal": "Post the newest video in my phone's gallery to Instagram as a reel with this caption: \"Made on my Mac, posted from my phone by Envoy.\"",
+  "request": "the newest video in my phone's gallery to Instagram as a reel with this caption",
+  "device": "phone-09031FDD4000C6",
+  "preflight": [
+   {
+    "kind": "device",
+    "text": "I'll use your Pixel 5 (you said yes).",
+    "level": "info"
+   },
+   {
+    "kind": "app_note",
+    "text": "From earlier runs: A draft prompt must be cleared with Start new video before picking a gallery video for a new reel.",
+    "level": "info"
+   }
+  ],
+  "request_is_the_templates": true,
+  "caption_not_in_request": true,
+  "real_phone": true
+ },
+ "task": {
+  "id": "task-1029-201829-ece5",
+  "status": "taken_over",
+  "routine": null,
+  "model_calls": 0,
+  "cost_usd": 0.0,
+  "traces": [],
+  "detail": "paused: com.google.android.permissioncontroller came to the front on its own",
+  "source": "web",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 3,
+ "approvals": [],
+ "auto_approved": [],
+ "handoff": {
+  "status": "sent",
+  "remote_path": "/sdcard/Movies/Envoy/test-clip-1-201812.mp4",
+  "error": null
+ },
+ "marks_s": {
+  "outbox": 0.0,
+  "offer": 4.6,
+  "accepted": 16.6,
+  "running": 16.6,
+  "taken_over": 27.7,
+  "end": 27.7
+ },
+ "spent": {
+  "model_calls": 1,
+  "cost_usd": 0.0049,
+  "cost_at_standard_usd": 0.0049,
+  "jobs": {
+   "match": 1
+  }
+ },
+ "ok": false,
+ "failures": [
+  "Share was never asked",
+  "not posted: the task ended taken_over"
+ ]
+}

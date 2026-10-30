@@ -1,0 +1,92 @@
+{
+ "mode": "rehearse",
+ "time": "2026-10-29T20:43:43",
+ "clip": "test-clip-3-204343.mp4",
+ "caption": "Envoy rehearsal from the routine 20:43",
+ "offer": {
+  "title": "Put test-clip-3-204343.mp4 on your Pixel 5 and post it to Instagram?",
+  "goal": "Post the newest video in my phone's gallery to Instagram as a reel with this caption: \"Envoy rehearsal from the routine 20:43\"",
+  "request": "the newest video in my phone's gallery to Instagram as a reel with this caption",
+  "device": "phone-09031FDD4000C6",
+  "preflight": [
+   {
+    "kind": "device",
+    "text": "I'll use your Pixel 5 (you said yes).",
+    "level": "info"
+   },
+   {
+    "kind": "approval",
+    "text": "Sharing will need your OK.",
+    "level": "info"
+   },
+   {
+    "kind": "routine",
+    "text": "Using routine instagram_post_reel v2.",
+    "level": "info"
+   },
+   {
+    "kind": "app_note",
+    "text": "From earlier runs: A draft prompt must be cleared with Start new video before picking a gallery video for a new reel.",
+    "level": "info"
+   }
+  ],
+  "request_is_the_templates": true,
+  "caption_not_in_request": true,
+  "real_phone": true
+ },
+ "task": {
+  "id": "task-1029-204352-5e59",
+  "status": "declined",
+  "routine": "instagram_post_reel",
+  "model_calls": 2,
+  "cost_usd": 0.0104,
+  "traces": [],
+  "detail": "the user declined the approval",
+  "source": "web",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 11,
+ "approvals": [
+  {
+   "description": "tap \"Share\" in com.instagram.android (routine instagram_post_reel v2)",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/share_button'",
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "auto_approved": [],
+ "handoff": {
+  "status": "sent",
+  "remote_path": "/sdcard/Movies/Envoy/test-clip-3-204343.mp4",
+  "error": "the task after it: declined"
+ },
+ "marks_s": {
+  "outbox": 0.0,
+  "offer": 6.6,
+  "accepted": 8.9,
+  "running": 9.0,
+  "waiting_approval": 49.2,
+  "share_asked": 49.2,
+  "declined": 50.2,
+  "end": 50.2
+ },
+ "spent": {
+  "model_calls": 2,
+  "cost_usd": 0.0104,
+  "cost_at_standard_usd": 0.0104,
+  "jobs": {
+   "repair": 2
+  }
+ },
+ "ok": true,
+ "failures": [],
+ "cleanup": [
+  "tapped 'Save draft'",
+  "back",
+  "back",
+  "back on Instagram's home"
+ ]
+}

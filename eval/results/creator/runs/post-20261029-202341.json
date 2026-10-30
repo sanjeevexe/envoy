@@ -1,0 +1,78 @@
+{
+ "mode": "post",
+ "time": "2026-10-29T20:23:41",
+ "clip": "test-clip-2-202341.mp4",
+ "caption": "Second clip from my Mac. Envoy asked before Next and before Share.",
+ "offer": {
+  "title": "Put test-clip-2-202341.mp4 on your Pixel 5 and post it to Instagram?",
+  "goal": "Post the newest video in my phone's gallery to Instagram as a reel with this caption: \"Second clip from my Mac. Envoy asked before Next and before Share.\"",
+  "request": "the newest video in my phone's gallery to Instagram as a reel with this caption",
+  "device": "phone-09031FDD4000C6",
+  "preflight": [
+   {
+    "kind": "device",
+    "text": "I'll use your Pixel 5 (you said yes).",
+    "level": "info"
+   },
+   {
+    "kind": "app_note",
+    "text": "From earlier runs: A draft prompt must be cleared with Start new video before picking a gallery video for a new reel.",
+    "level": "info"
+   }
+  ],
+  "request_is_the_templates": true,
+  "caption_not_in_request": true,
+  "real_phone": true
+ },
+ "task": {
+  "id": "task-1029-202418-9af5",
+  "status": "done",
+  "routine": null,
+  "model_calls": 12,
+  "cost_usd": 0.0457,
+  "traces": [],
+  "detail": "Posted newest gallery video to Instagram as a reel with caption \"Second clip from my Mac. Envoy asked before Next and before Share.\" - visible in Reels feed with \"Done posting\" confirmation.",
+  "source": "web",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 15,
+ "approvals": [
+  {
+   "description": "tap \"Share\" in com.instagram.android",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/share_button'",
+    "model: labeled irreversible"
+   ],
+   "status": "approved",
+   "decided_by": "user"
+  }
+ ],
+ "auto_approved": [],
+ "handoff": {
+  "status": "posted",
+  "remote_path": "/sdcard/Movies/Envoy/test-clip-2-202341.mp4",
+  "error": null
+ },
+ "marks_s": {
+  "outbox": 0.0,
+  "offer": 5.6,
+  "accepted": 37.8,
+  "running": 37.8,
+  "waiting_approval": 87.2,
+  "share_asked": 87.2,
+  "done": 217.2,
+  "end": 217.2
+ },
+ "spent": {
+  "model_calls": 12,
+  "cost_usd": 0.0502,
+  "cost_at_standard_usd": 0.0502,
+  "jobs": {
+   "match": 1,
+   "plan": 1,
+   "step": 10
+  }
+ },
+ "ok": true,
+ "failures": []
+}

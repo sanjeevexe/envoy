@@ -1,0 +1,108 @@
+{
+ "task_id": "task-1029-202418-9af5-r1",
+ "goal": "Post the newest video in my phone's gallery to Instagram as a reel with this caption: \"Second clip from my Mac. Envoy asked before Next and before Share.\"",
+ "kept": [
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8
+ ],
+ "dropped": [
+  [
+   1,
+   "look: not a device action"
+  ]
+ ],
+ "model": "muse-wonder-1.0",
+ "model_calls": 1,
+ "cost_usd": 0.068328,
+ "cost_at_standard_usd": 0.068328,
+ "latency_s": 23.32,
+ "warnings": [],
+ "wonder": {
+  "name": "instagram_post_reel",
+  "intent": "Post a video from the gallery to Instagram as a reel",
+  "description": "Opens Instagram reel creation, selects the newest video in the phone gallery, advances to the caption screen, enters the provided caption, confirms it, and shares the reel.",
+  "patterns": [
+   "Post my newest gallery video as a reel with this caption",
+   "Share my latest video to Instagram Reels",
+   "Upload my newest gallery video to Instagram as a reel"
+  ],
+  "inputs": [
+   {
+    "name": "caption",
+    "type": "text",
+    "description": "The caption text to post with the reel.",
+    "from_memory": null,
+    "example": "Second clip from my Mac. Envoy asked before Next and before Share."
+   }
+  ],
+  "steps": [
+   {
+    "step": 1,
+    "id": "open_new_post_creation",
+    "intent": "Open new post creation",
+    "target_fixed_text": null,
+    "choice_input": null
+   },
+   {
+    "step": 2,
+    "id": "select_newest_gallery_video",
+    "intent": "Select the newest video in the gallery",
+    "target_fixed_text": "Video thumbnail",
+    "choice_input": null
+   },
+   {
+    "step": 3,
+    "id": "tap_next",
+    "intent": "Tap Next to proceed from the reel preview to the caption screen",
+    "target_fixed_text": "Next",
+    "choice_input": null
+   },
+   {
+    "step": 4,
+    "id": "tap_caption_field",
+    "intent": "Tap the caption field",
+    "target_fixed_text": "Write a caption and add hashtags\u2026",
+    "choice_input": null
+   },
+   {
+    "step": 5,
+    "id": "type_caption",
+    "intent": "Type {{caption}} into the caption field",
+    "target_fixed_text": "Write a caption and add hashtags\u2026",
+    "choice_input": null
+   },
+   {
+    "step": 6,
+    "id": "tap_ok",
+    "intent": "Tap OK to confirm the caption",
+    "target_fixed_text": "OK",
+    "choice_input": null
+   },
+   {
+    "step": 7,
+    "id": "tap_share",
+    "intent": "Tap Share to post the reel",
+    "target_fixed_text": "Share",
+    "choice_input": null
+   }
+  ],
+  "outputs": [
+   {
+    "name": "posting_confirmation",
+    "near": "Done posting. Want to send it directly to friends?",
+    "example": "Done posting. Want to send it directly to friends?"
+   }
+  ],
+  "data_values": [
+   "October 29, 2026 8:24 PM",
+   "envoy3955"
+  ]
+ },
+ "trace": "task-1029-202418-9af5-r1",
+ "confirmed_by_user": "the user approved Share in Envoy at 20:27 Oct 29 and the profile then showed 2 posts (recon 38-profile-refreshed); Envoy's check failed only on the Reels view's truncated caption"
+}

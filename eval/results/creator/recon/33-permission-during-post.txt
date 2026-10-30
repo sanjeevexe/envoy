@@ -1,0 +1,54 @@
+# com.instagram.android/com.instagram.android.activity.MainTabActivity secure=False 2026-10-29T20:18:58
+App: com.instagram.android · Screen: MainTabActivity
+[1] List (id: swipeable_tab_view_pager) (scrollable)
+[2] List (id: swipeable_nav_view_pager_inner_recycler_view) (scrollable)
+[3] List (id: list) (scrollable)
+[4] List "reels tray container" (scrollable)
+[5] Button "Your story" (id: outer_container)
+[6] Button "envoy3955's story, 0 of 13, Unseen."
+[7] Text "envoy3955's story, 0 of 13, Unseen." (id: avatar_container)
+[8] Text "Your story" (id: title_container)
+[9] Button "loganpaul" (id: outer_container)
+[10] Button "loganpaul's story, 1 of 13, Unseen."
+[11] Button "loganpaul's story, 1 of 13, Unseen." (id: avatar_image_view)
+[12] Text "loganpaul" (id: title_container)
+[13] Button "jordan_the_stallion8" (id: outer_container)
+[14] Button "jordan_the_stallion8's story, 2 of 13, Unseen."
+[15] Button "jordan_the_stallion8's story, 2 of 13, Unseen." (id: avatar_image_view)
+[16] Text "jordan_the_stallion8" (id: title_container)
+[17] Button "50cent" (id: outer_container)
+[18] Button "50cent's story, 3 of 13, Unseen."
+[19] Button "50cent's story, 3 of 13, Unseen." (id: avatar_image_view)
+[20] Text "50cent" (id: title_container)
+[21] Text "nasa posted a carousel 6 days ago" (id: row_feed_profile_header)
+[22] Button "Profile picture of nasa"
+[23] Button "nasa" (id: row_feed_photo_profile_name)
+[24] Text "Suggested for you" (id: secondary_label)
+[25] Button "Follow" (id: inline_follow_button)
+[26] Button "More actions for this post" (id: media_option_button)
+[27] Button "Photo 1 of 2 by NASA, 0 likes, 0 comments" (id: carousel_image_media_group)
+[28] Button "Like"
+[29] Button "1M"
+[30] Button "Comment"
+[31] Button "2,988"
+[32] Button "Repost"
+[33] Button "40.6K"
+[34] Button "Send post. 32.7K shares. Button. Double tap to choose who to send this post to."
+[35] Button "32.7K"
+[36] Button "Add to Saved" (id: row_feed_button_save)
+[37] Text "nasa This disc is 50,000 light-years wide!… more"
+[38] Button "nasa"
+[39] Button "This disc is 50,000 light-years wide!"
+[40] Button "This disc is 50,000 light-years wide!"
+[41] Button "more"
+[42] Text "6 days ago"
+[43] Button (id: action_bar_left_button)
+[44] Button "Instagram Home Feed" (id: action_bar_title_view)
+[45] Text "Instagram Home Feed" (id: title_logo_chevron_container)
+[46] Button (id: notification)
+[47] Button "Home" (id: feed_tab)
+[48] Button "Reels" (id: clips_tab)
+[49] Button "Message" (id: direct_tab)
+[50] Button "Search and explore" (id: search_tab)
+[51] Button "Profile" (id: profile_tab)
+(screen has a scrollable list; scroll to see more)

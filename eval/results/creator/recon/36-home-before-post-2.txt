@@ -1,0 +1,41 @@
+# com.instagram.android/com.instagram.android.activity.MainTabActivity secure=False 2026-10-29T20:23:34
+App: com.instagram.android · Screen: MainTabActivity
+[1] List (id: swipeable_tab_view_pager) (scrollable)
+[2] List (id: swipeable_nav_view_pager_inner_recycler_view) (scrollable)
+[3] List (id: list) (scrollable)
+[4] List "reels tray container" (scrollable)
+[5] Button "Your story" (id: outer_container)
+[6] Button "envoy3955's story, 0 of 13, Unseen."
+[7] Text "envoy3955's story, 0 of 13, Unseen." (id: avatar_container)
+[8] Text "Your story" (id: title_container)
+[9] Button "loganpaul" (id: outer_container)
+[10] Button "loganpaul's story, 1 of 13, Unseen."
+[11] Button "loganpaul's story, 1 of 13, Unseen." (id: avatar_image_view)
+[12] Text "loganpaul" (id: title_container)
+[13] Button "jordan_the_stallion8" (id: outer_container)
+[14] Button "jordan_the_stallion8's story, 2 of 13, Unseen."
+[15] Button "jordan_the_stallion8's story, 2 of 13, Unseen." (id: avatar_image_view)
+[16] Text "jordan_the_stallion8" (id: title_container)
+[17] Button "50cent" (id: outer_container)
+[18] Button "50cent's story, 3 of 13, Unseen."
+[19] Button "50cent's story, 3 of 13, Unseen." (id: avatar_image_view)
+[20] Text "50cent" (id: title_container)
+[21] Button "Posted! Way to go. · Want to send it to friends?" (id: row_pending_container)
+[22] Text "Posted! Way to go. · Want to send it to friends?" (id: row_pending_media_status_container)
+[23] Button "Send" (id: row_pending_media_reshare_button)
+[24] Button (id: media_group)
+[25] Text "envoy3955 posted a video 2 minutes ago" (id: row_feed_profile_header)
+[26] Button "Profile picture of envoy3955"
+[27] Button "envoy3955" (id: row_feed_photo_profile_name)
+[28] Button "envoy3955 · Original audio" (id: secondary_label)
+[29] Button "More actions for this post" (id: media_option_button)
+[30] Button (id: action_bar_left_button)
+[31] Button "Instagram Home Feed" (id: action_bar_title_view)
+[32] Text "Instagram Home Feed" (id: title_logo_chevron_container)
+[33] Button (id: notification)
+[34] Button "Home" (id: feed_tab) (selected)
+[35] Button "Reels" (id: clips_tab)
+[36] Button "Message" (id: direct_tab)
+[37] Button "Search and explore" (id: search_tab)
+[38] Button "Profile" (id: profile_tab)
+(screen has a scrollable list; scroll to see more)

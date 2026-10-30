@@ -1,0 +1,33 @@
+# com.instagram.android/com.instagram.android.activity.MainTabActivity secure=False 2026-10-29T20:21:19
+App: com.instagram.android · Screen: MainTabActivity
+[1] List (id: swipeable_tab_view_pager) (scrollable)
+[2] List (id: swipeable_nav_view_pager_inner_recycler_view) (scrollable)
+[3] List (id: clips_viewer_view_pager) (scrollable)
+[4] List (scrollable)
+[5] Text "Reel by envoy3955. Double tap to play or pause." (id: clips_media_component)
+[6] Text "Reel by envoy3955. Double tap to play or pause." (id: clips_single_media_component)
+[7] Text "Reel by envoy3955. Double tap to play or pause." (id: clips_viewer_video_layout)
+[8] Button (id: clips_author_info_component)
+[9] Button "Profile picture of envoy3955" (id: clips_author_profile_pic)
+[10] Button "envoy3955" (id: clips_author_username)
+[11] Button "Made on my Mac, posted from my phone by Envoy. …"
+[12] Button "Like" (id: like_button)
+[13] Button "Comment" (id: comment_button)
+[14] Button "Repost"
+[15] Button "Share" (id: direct_share_button)
+[16] Button "Save" (id: save_button)
+[17] Button "More" (id: clips_ufi_more_button_component)
+[18] Button "Create a reel"
+[19] Button "Reels" (selected)
+[20] Button "Friends"
+[21] Button "Tune"
+[22] Button "Get inspired on Edits" (id: clips_self_view_footer_navbar_button_container)
+[23] Button "Home" (id: feed_tab)
+[24] Button "Reels" (id: clips_tab) (selected)
+[25] Button "Message" (id: direct_tab)
+[26] Button "Search and explore" (id: search_tab)
+[27] Button "Profile" (id: profile_tab)
+[28] Button "Done posting. Want to send it directly to friends?" (id: upload_snackbar_container)
+[29] Text "Done posting. Want to send it directly to friends?" (id: upload_progress_bar_container)
+[30] Button "Send" (id: upload_snackbar_button)
+(screen has a scrollable list; scroll to see more)

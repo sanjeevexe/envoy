@@ -62,6 +62,7 @@ def test_a_caption_is_typed_text_and_share_still_waits_for_the_user(hand, captio
     [(goal, source, kw)] = env.runner.started
     assert source == "web" and goal == f'{IG["goal"].split("{")[0]}{caption}"'
     assert kw["request"] == IG["request"] and (kw["phone"], kw["phone_ok"], kw["app"]) == ("phone-0A1B", "phone-0A1B", "com.instagram.android")
+    assert kw["routine"] == "instagram_post_reel" and kw["inputs"] == {"caption": caption}
     for button in ("Next", "Share", "Post", "Share to Facebook", "Share now", "Post reel", "Publish"):
         assert decide(ApprovalRules(), goal=kw["request"], source=source, app=IG["package"], routine=None, origin="agent",
                       target=button, screen_text=f"New reel {caption} {button}", inputs=kw["inputs"]) is None, button
@@ -84,3 +85,23 @@ def test_on_instagrams_recorded_last_screen_next_publishes_and_always_asks():
         e = next(e for e in s.numbered if (e.label or e.desc) == label)
         assert not classify(Action(kind="tap", element=e.number), s, model_risk="reversible").irreversible, label
     assert not classify(Action(kind="type", element=caption.number, value="Golden hour"), s, model_risk="reversible").irreversible
+
+
+def test_the_learned_routine_types_the_caption_as_an_input_and_its_share_always_asks():
+    """instagram_post_reel, compiled from the second approved post: the caption is its input (a later post types the new
+    one), and its Share step is irreversible, so the executor asks before it whatever the caption or the request says.
+    On the Share screen Envoy recorded that run, the rule flags Share by its id too."""
+    import gzip
+
+    from routines.screens import screen_from_tree
+    from routines.store import RoutineStore
+    r = RoutineStore().get(IG["routine"])
+    assert r is not None and r.app == IG["package"] and list(r.inputs) == ["caption"]
+    assert any(s.action.value == "{{caption}}" for s in r.steps)
+    [share] = [s for s in r.steps if s.action.target is not None and s.action.target.resource_id == "share_button"]
+    assert share.risk == "irreversible" and share is r.steps[-1]
+    assert all(s.risk != "irreversible" for s in r.steps[:-1])
+    screen = screen_from_tree(json.loads(gzip.open(SCREENS / "instagram_reel_share.json.gz").read()))
+    button = next(e for e in screen.numbered if e.resource_id.endswith(":id/share_button"))
+    assert button.label == "Share"
+    assert classify(Action(kind="tap", element=button.number), screen, model_risk="reversible").irreversible

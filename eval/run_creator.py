@@ -62,7 +62,15 @@ RECON = OUT / "recon"
 RUNS = OUT / "runs"
 IG = "com.instagram.android"
 API = "http://127.0.0.1:8744"
-ENDED = ("done", "failed", "declined", "stopped", "needs_you", "taken_over")
+ENDED = ("done", "failed", "declined", "stopped")
+# A pause, not an end: the phone hands itself to you (a permission dialog came to the front, you touched it) or the
+# agent asks you to take over (needs_you while `waiting_for` is set); the task goes on after Resume on the phone or Hand
+# back in the app. needs_you with nothing to wait for is the end: the run gave up and asks you.
+PAUSED = ("needs_you", "taken_over")
+
+
+def ended(task: dict[str, Any]) -> bool:
+    return task["status"] in ENDED or (task["status"] == "needs_you" and not task.get("waiting_for"))
 PIXEL5 = (1080, 2340)
 # The button that publishes: a whole Share/Post/Publish label, or Instagram's share_button, which on Instagram 453's
 # reel screen is labelled only "Next" (stage 0, eval/results/creator/recon/13-reel-final-recheck.xml).
@@ -178,9 +186,14 @@ def gate(dump: Path) -> int:
     request would let it through. 0 when the screen's publishing button (a whole Share/Post/Publish label, or Instagram's
     share_button whatever its label) is irreversible by rule and asks; 1 otherwise: then stop and tell the coordinator,
     with the dump. The rule is never widened here."""
-    meta = dump.with_suffix(".txt").read_text().split("\n", 1)[0] if dump.with_suffix(".txt").exists() else ""
-    pkg = meta.split()[1].split("/")[0] if meta.startswith("# ") else IG
-    state = build_state(dump.read_text(), pkg, "", *PIXEL5)
+    if dump.name.endswith(".json.gz"):  # a screen a run recorded (data/runs/<trace>/screens/NNN_before.json.gz)
+        import gzip
+        from routines.screens import screen_from_tree
+        state = screen_from_tree(json.loads(gzip.open(dump).read()))
+    else:
+        meta = dump.with_suffix(".txt").read_text().split("\n", 1)[0] if dump.with_suffix(".txt").exists() else ""
+        pkg = meta.split()[1].split("/")[0] if meta.startswith("# ") else IG
+        state = build_state(dump.read_text(), pkg, "", *PIXEL5)
     request = HANDOFF_TEMPLATES["instagram"]["request"]
     screen_text = " ".join(" ".join(x for x in (e.label, e.text, e.desc) if x) for e in state.numbered)
     rows, found, ok = [], 0, True
@@ -200,13 +213,37 @@ def gate(dump: Path) -> int:
             found += 1
             ok = ok and bool(by_rule) and auto is None
     ok = ok and found > 0
-    (dump.with_suffix(".gate.json")).write_text(json.dumps({"dump": dump.name, "request": request, "targets": rows, "share_gated": ok}, indent=1))
+    (dump.parent / (dump.name.removesuffix(".gz").removesuffix(".json").removesuffix(".xml") + ".gate.json")).write_text(json.dumps({"dump": dump.name, "request": request, "targets": rows, "share_gated": ok}, indent=1))
     print("\nShare gate: " + ("FIRES (irreversible by rule, and the post's request doesn't approve it)" if ok else
                               "DOES NOT MATCH: stop, and send the coordinator this dump; don't widen the rule"))
     return 0 if ok else 1
 
 
 # ---- the routine: compiled from the approved post, into the library -----------------------------------------
+
+
+def compile_confirmed(trace: str, why: str) -> int:
+    """scripts/compile_routine.py for a post the user confirmed: Envoy's own after-check can't see a long caption on
+    Instagram (the Reels view cuts it off with "…", so the run ends done_unverified), and the compiler only takes
+    verified runs unless told the user confirmed it. `why` says how (written into the report beside the routine)."""
+    import asyncio
+    from agent.trace import RUNS as TRACES
+    from routines.compiler import compile_trace
+    from routines.model import dump_yaml
+    routine, report = asyncio.run(compile_trace(TRACES / trace, confirmed=True))
+    out = OUT / "routine"
+    out.mkdir(parents=True, exist_ok=True)
+    text = dump_yaml(routine)
+    (out / f"{routine.routine}.yaml").write_text(text)
+    (out / f"{routine.routine}.report.json").write_text(json.dumps({**report.__dict__, "trace": trace, "confirmed_by_user": why},
+                                                                   indent=1, default=str))
+    print(text)
+    print("# dropped:", *[f"#   step {n}: {w}" for n, w in report.dropped], sep="\n")
+    print(f"# compiler {report.model}: {report.latency_s} s, ${report.cost_at_standard_usd:.4f}")
+    for w in report.warnings:
+        print(f"# warning: {w}")
+    print(f"saved {(out / (routine.routine + '.yaml')).relative_to(REPO)}")
+    return 0
 
 
 def add_routine(yaml_path: Path, caption_input: str) -> int:
@@ -349,6 +386,9 @@ def run_flow(args: argparse.Namespace) -> int:
             status = task["status"]
             mark(status)
             say(f"task {status}{': ' + str(task.get('detail'))[:120] if task.get('detail') else ''}")
+            if status in PAUSED and not ended(task):
+                mark(f"paused_{len([k for k in marks if k.startswith('paused_')]) + 1}")
+                say("paused: Resume on the phone's Envoy banner (or Hand back in the app) and it goes on")
         for a in got["approvals"]:
             if a["id"] in seen:
                 continue
@@ -359,7 +399,7 @@ def run_flow(args: argparse.Namespace) -> int:
             if not posting and a["status"] == "pending":
                 api.decline(a["id"])
                 say("declined here (rehearsal): nothing is posted")
-        if status in ENDED:
+        if ended(task):
             break
         time.sleep(1)
     got = api.get(f"/api/tasks/{tid}")
@@ -411,9 +451,11 @@ def run_flow(args: argparse.Namespace) -> int:
 
 
 def discard_draft(max_steps: int = 10) -> list[str]:
-    """After a rehearsal: back out of Instagram's composer and discard the draft, so the next run starts clean. Taps only
-    a Discard button (Instagram 453: "Start over" on "Save draft?") or Back; anything the rules call irreversible is never
-    touched. Start over opens the camera, whose permission dialog is dismissed with Back, never answered."""
+    """After a rehearsal: leave Instagram's composer so the next run starts clean. Instagram 453 has no plain discard: its
+    "Start over" leaves the composer open (the next Create then asks "Keep editing your draft?", which costs a routine a
+    model repair), so the rehearsal is kept as a private draft with Save draft (on the caption screen or the "Save
+    draft?" dialog), never posted. Taps only that, a Discard button, or Back; anything the rules call irreversible is
+    never touched; a permission dialog is dismissed with Back, never answered."""
     done: list[str] = []
     try:
         dev = connect()
@@ -430,7 +472,7 @@ def discard_draft(max_steps: int = 10) -> list[str]:
             done.append(f"left Instagram ({state.package})")
             break
         btn = next((e for e in state.numbered
-                    if re.fullmatch(r"discard( reel| post| edits| video)?|start over", (e.label or e.desc or "").strip(), re.I)), None)
+                    if re.fullmatch(r"discard( reel| post| edits| video)?|save draft", (e.label or e.desc or "").strip(), re.I)), None)
         if btn is not None and not classify(Action(kind="tap", element=btn.number), state, None).irreversible:
             dev._act_sync(Action(kind="tap", element=btn.number))
             done.append(f"tapped {btn.label or btn.desc!r}")
@@ -465,6 +507,9 @@ def main() -> int:
     p.add_argument("clip")
     p = sub.add_parser("gate")
     p.add_argument("dump")
+    p = sub.add_parser("compile")
+    p.add_argument("trace", help="data/runs/<trace>: a post the user approved and saw on the profile")
+    p.add_argument("--confirmed-by-user", required=True, help="how the user confirmed it (kept with the routine)")
     p = sub.add_parser("add-routine")
     p.add_argument("yaml")
     p.add_argument("--caption-input", default="caption")
@@ -484,6 +529,8 @@ def main() -> int:
         return run_flow(args)
     if args.cmd == "gate":
         return gate(Path(args.dump))
+    if args.cmd == "compile":
+        return compile_confirmed(args.trace, args.confirmed_by_user)
     if args.cmd == "add-routine":
         return add_routine(Path(args.yaml), args.caption_input)
     if args.cmd == "push":

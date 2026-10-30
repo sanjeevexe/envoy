@@ -1,0 +1,164 @@
+routine: instagram_post_reel
+app: com.instagram.android
+version: 1
+status: active
+intent: Post a video from the gallery to Instagram as a reel
+description: Opens Instagram reel creation, selects the newest video in the phone gallery, advances to the caption screen, enters the provided
+  caption, confirms it, and shares the reel.
+patterns: [Post my newest gallery video as a reel with this caption, Share my latest video to Instagram Reels, Upload my newest gallery video
+    to Instagram as a reel]
+outputs: [posting_confirmation]
+start: fresh_launch
+inputs:
+  caption: {type: text, description: The caption text to post with the reel., example: Second clip from my Mac. Envoy asked before Next and before
+      Share.}
+steps:
+- id: open_new_post_creation
+  intent: Open new post creation
+  pre:
+  - {app_foreground: com.instagram.android}
+  - element_present: {resource_id: swipeable_tab_view_pager, kind: List}
+  action:
+    tap:
+      resource_id: action_bar_left_button
+      text: ''
+      kind: Button
+      cls: ImageView
+      parent: action_bar_buttons_container_left
+      in_list: true
+      position: [0.061, 0.091]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: gallery_title_container, text: New reel, kind: Text}
+  - element_present: {resource_id: fast_scroll_container, text: Today, kind: Text}
+  risk: reversible
+  note: trace step 2
+- id: select_newest_gallery_video
+  intent: Select the newest video in the gallery
+  pre:
+  - {app_foreground: com.instagram.android}
+  action:
+    tap:
+      resource_id: gallery_grid_item_thumbnail
+      text: Video thumbnail
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.5, 0.383]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: clips_stacked_timeline_swipe_up_icon_container, text: Swipe up to edit, kind: Text}
+  - element_present: {resource_id: post_capture_interactive_contents_container, text: Reel preview playing, kind: Text}
+  risk: reversible
+  note: trace step 3
+- id: tap_next
+  intent: Tap Next to proceed from the reel preview to the caption screen
+  pre:
+  - {app_foreground: com.instagram.android}
+  action:
+    tap:
+      resource_id: clips_right_action_button
+      text: Next
+      kind: Button
+      cls: Button
+      parent: clips_action_bar
+      siblings: [Double tap for tools that edit your video clips.]
+      in_list: false
+      position: [0.869, 0.945]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: action_bar_new_title_container, kind: Button}
+  - element_present: {resource_id: action_bar_title, text: New reel, kind: Button}
+  risk: reversible
+  note: trace step 4
+- id: tap_caption_field
+  intent: Tap the caption field
+  pre:
+  - {app_foreground: com.instagram.android}
+  action:
+    tap:
+      resource_id: caption_input_text_view
+      text: Write a caption and add hashtags…
+      desc: Write a caption
+      hint: Write a caption and add hashtags…
+      kind: EditText
+      cls: AutoCompleteTextView
+      in_list: true
+      position: [0.5, 0.517]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: action_bar_button_text, text: OK, kind: Button}
+  risk: reversible
+  note: trace step 5
+- id: type_caption
+  intent: "Type {{caption}} into the caption field"
+  pre:
+  - {app_foreground: com.instagram.android}
+  action:
+    type:
+      field:
+        resource_id: caption_input_text_view
+        text: Write a caption and add hashtags…
+        desc: Write a caption
+        hint: Write a caption and add hashtags…
+        kind: EditText
+        cls: AutoCompleteTextView
+        in_list: true
+        position: [0.5, 0.153]
+      value: "{{caption}}"
+  post:
+  - field_equals:
+      field: {resource_id: caption_input_text_view, text: Write a caption and add hashtags…, desc: Write a caption, kind: EditText}
+      value: "{{caption}}"
+  risk: reversible
+  note: trace step 6
+- id: tap_ok
+  intent: Tap OK to confirm the caption
+  pre:
+  - {app_foreground: com.instagram.android}
+  action:
+    tap:
+      resource_id: action_bar_button_text
+      text: OK
+      kind: Button
+      cls: Button
+      parent: action_bar
+      in_list: false
+      position: [0.921, 0.096]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: share_button_container, kind: Button}
+  - element_present: {resource_id: save_draft_button, text: Save draft, kind: Button}
+  risk: reversible
+  note: trace step 7
+- id: tap_share
+  intent: Tap Share to post the reel
+  pre:
+  - {app_foreground: com.instagram.android}
+  action:
+    tap:
+      resource_id: share_button
+      text: Share
+      kind: Button
+      cls: Button
+      parent: footer_button_container
+      siblings: [Save draft]
+      in_list: false
+      position: [0.74, 0.922]
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: action_bar_new_title_container, kind: Button}
+  risk: irreversible
+  extract:
+    posting_confirmation:
+      locator: {resource_id: upload_snackbar_container, kind: Button}
+  note: trace step 8
+compiled_from:
+  task_id: task-1029-202418-9af5-r1
+  goal: "Post the newest video in my phone's gallery to Instagram as a reel with this caption: \"Second clip from my Mac. Envoy asked before Next\
+    \ and before Share.\""
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-29 20:29:50"
+  trace_steps_kept: [2, 3, 4, 5, 6, 7, 8]
+  trace_steps_dropped: 1
+  cost_usd: 0.0683

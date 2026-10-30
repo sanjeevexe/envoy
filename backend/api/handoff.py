@@ -94,7 +94,9 @@ HANDOFF_TEMPLATES: dict[str, dict[str, Any]] = {
     "instagram": {"label": "Instagram", "package": "com.instagram.android",
                   "goal": "Post the newest video in my phone's gallery to Instagram as a reel with this caption: \"{caption}\"",
                   "request": "the newest video in my phone's gallery to Instagram as a reel with this caption",
-                  "caption_limit": 2200, "device_pref": "phone", "title": "Put {file} on {device} and post it to Instagram?"},
+                  "caption_limit": 2200, "device_pref": "phone", "title": "Put {file} on {device} and post it to Instagram?",
+                  # compiled from the second approved post (Oct 29); its Share step stays irreversible (eval/run_creator.py add-routine)
+                  "routine": "instagram_post_reel", "inputs": {"caption": "caption"}},
 }
 
 

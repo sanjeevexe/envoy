@@ -1,0 +1,86 @@
+{
+ "name": "instagram_post_reel",
+ "active": 2,
+ "versions": [
+  {
+   "version": 1,
+   "status": "retired",
+   "created": "2026-10-29 20:30:02",
+   "parent": null,
+   "changes": [
+    "compiled from task-1029-202418-9af5-r1"
+   ],
+   "verification": {
+    "by": "creator-workflow",
+    "share_steps": [
+     "tap_share"
+    ],
+    "checked": "2026-10-29 20:30"
+   }
+  },
+  {
+   "version": 2,
+   "status": "active",
+   "created": "2026-10-29 20:40:50",
+   "parent": 1,
+   "changes": [
+    "dropped open_new_post_creation's after-check on the gallery's 'Today' date label (fast_scroll_container): Instagram shows it only while the gallery scrolls, so the step failed on a correct screen (rehearsal task-1029-203119-da39, Oct 29 20:32)"
+   ],
+   "verification": {
+    "by": "creator-workflow",
+    "share_steps": [
+     "tap_share"
+    ],
+    "checked": "2026-10-29 20:40"
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-29 20:32:40",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1029-203119-da39-r1",
+   "status": "needs_user",
+   "rung": 6,
+   "model_calls": 9,
+   "duration_s": 71.34,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-29 20:41:50",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1029-204112-f256-r1",
+   "status": "declined",
+   "rung": 4,
+   "model_calls": 2,
+   "duration_s": 35.3,
+   "patches": 1
+  },
+  {
+   "time": "2026-10-29 20:44:32",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1029-204352-5e59-r1",
+   "status": "declined",
+   "rung": 4,
+   "model_calls": 2,
+   "duration_s": 36.95,
+   "patches": 1
+  },
+  {
+   "time": "2026-10-29 20:46:11",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1029-204528-2b32-r1",
+   "status": "declined",
+   "rung": 4,
+   "model_calls": 2,
+   "duration_s": 42.24,
+   "patches": 1
+  }
+ ],
+ "needs_recompile": true,
+ "app": "com.instagram.android"
+}

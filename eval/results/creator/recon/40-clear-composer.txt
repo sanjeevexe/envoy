@@ -1,0 +1,30 @@
+# com.instagram.android/com.instagram.android.activity.MainTabActivity secure=False 2026-10-29T20:43:21
+App: com.instagram.android · Screen: MainTabActivity
+[1] Button "Back to Home" (id: gallery_cancel_button)
+[2] Text "New reel" (id: gallery_title_container)
+[3] Button "Camera settings" (id: gallery_settings_gear)
+[4] Button "Drafts · 3" (id: gallery_destination_item)
+[5] Button "Templates" (id: gallery_destination_item)
+[6] Button "Recents"
+[7] Button "Select multiple, activate to select multiple photos in your gallery · Select"
+[8] Button (id: gallery_menu_multi_select_button)
+[9] List (id: gallery_recycler_view) (scrollable)
+[10] Button "Open camera"
+[11] Image "Camera" (id: gallery_grid_camera_item_icon)
+[12] Button "0:06"
+[13] Button "Unselected Video thumbnail created on October 29, 2026 8:41 PM" (id: gallery_grid_item_thumbnail)
+[14] Button "0:06"
+[15] Button "Unselected Video thumbnail created on October 29, 2026 8:31 PM" (id: gallery_grid_item_thumbnail)
+[16] Button "0:06"
+[17] Button "Unselected Video thumbnail created on October 29, 2026 8:24 PM" (id: gallery_grid_item_thumbnail)
+[18] Button "0:06"
+[19] Button "Unselected Video thumbnail created on October 29, 2026 8:18 PM" (id: gallery_grid_item_thumbnail)
+[20] Button "0:06"
+[21] Button "Unselected Video thumbnail created on October 29, 2026 8:11 PM" (id: gallery_grid_item_thumbnail)
+[22] Button "Unselected Video thumbnail created on October 29, 2026 8 PM" (id: gallery_grid_item_thumbnail)
+[23] Button "Unselected Video thumbnail created on October 29, 2026 7:59 PM" (id: gallery_grid_item_thumbnail)
+[24] Button "POST" (id: cam_dest_feed)
+[25] Button "STORY" (id: cam_dest_story)
+[26] Button "REEL" (id: cam_dest_clips) (selected)
+[27] Button "LIVE" (id: cam_dest_live)
+(screen has a scrollable list; scroll to see more)

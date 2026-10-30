@@ -1,0 +1,41 @@
+# com.instagram.android/com.instagram.android.activity.MainTabActivity secure=False 2026-10-29T20:40:58
+App: com.instagram.android · Screen: MainTabActivity
+[1] List (id: swipeable_tab_view_pager) (scrollable)
+[2] List (id: swipeable_nav_view_pager_inner_recycler_view) (scrollable)
+[3] List (id: list) (scrollable)
+[4] List "reels tray container" (scrollable)
+[5] Button "Your story" (id: outer_container)
+[6] Button "envoy3955's story, 0 of 13, Unseen."
+[7] Text "envoy3955's story, 0 of 13, Unseen." (id: avatar_container)
+[8] Text "Your story" (id: title_container)
+[9] Button "latto" (id: outer_container)
+[10] Button "latto's story, 1 of 13, Unseen."
+[11] Button "latto's story, 1 of 13, Unseen." (id: avatar_image_view)
+[12] Text "latto" (id: title_container)
+[13] Button "aaronparnas" (id: outer_container)
+[14] Button "aaronparnas's story, 2 of 13, Unseen."
+[15] Button "aaronparnas's story, 2 of 13, Unseen." (id: avatar_image_view)
+[16] Text "aaronparnas" (id: title_container)
+[17] Button "ellalangleymusic" (id: outer_container)
+[18] Button "ellalangleymusic's story, 3 of 13, Unseen."
+[19] Button "ellalangleymusic's story, 3 of 13, Unseen." (id: avatar_image_view)
+[20] Text "ellalangleymusic" (id: title_container)
+[21] Text "nasa posted a carousel October 2" (id: row_feed_profile_header)
+[22] Button "Profile picture of nasa"
+[23] Button "nasa" (id: row_feed_photo_profile_name)
+[24] Button "Morunas · A Simple Life" (id: secondary_label)
+[25] Button "Follow" (id: inline_follow_button)
+[26] Button "More actions for this post" (id: media_option_button)
+[27] Button "Photo 1 of 3 by NASA, 1,353,701 likes, 5,555 comments" (id: carousel_video_media_group)
+[28] Button "Turn sound on"
+[29] Text "1/3" (id: carousel_index_indicator_text_view)
+[30] Button (id: action_bar_left_button)
+[31] Button "Instagram Home Feed" (id: action_bar_title_view)
+[32] Text "Instagram Home Feed" (id: title_logo_chevron_container)
+[33] Button (id: notification)
+[34] Button "Home" (id: feed_tab) (selected)
+[35] Button "Reels" (id: clips_tab)
+[36] Button "Message" (id: direct_tab)
+[37] Button "Search and explore" (id: search_tab)
+[38] Button "Profile" (id: profile_tab)
+(screen has a scrollable list; scroll to see more)
