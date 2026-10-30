@@ -132,14 +132,13 @@ Also measured:
 ### Spend (stage 3)
 
 - **Meta: $0.615** of the $3 cap: the real-app set $0.37, the interfaces suite $0.10, diagnosing the crashes $0.11, voice and chat $0.03.
-- **Google:** about $0.87 so far (about 2.2 VM-hours).
-- **All stages so far:** Google about $1.14 plus the disk; Meta $0.685.
+- **Google:** about $1.39 (3.5 VM-hours).
+- **All stages:** Google about $1.66 plus the disk and the image; Meta $0.685.
 
 ### Not done (yet)
 
 - **The real-app retries:** a Starbucks sign-in retry (perhaps after updating the phone's web view in the Play Store), DoorDash with an address set, Chipotle, and Gmail (its answer key needs the Mac's Gmail API sign-in).
 - **On the iPhone:** "Ask Envoy (cloud)" (`shortcut.sh`; the user adds it), and the cloud copy's Home Screen icon.
-- **The machine image:** taken when the VM is stopped at the end, without the key.
 
 ### Recommendation
 
@@ -151,3 +150,12 @@ Also measured:
 Pick the cloud only if the Mac setup breaks. For that case:
 - start the VM at least an hour ahead, then `keep-awake.sh on` and `key.sh put 3`;
 - know that what the Mac copy learned (routines, memory, signed-in apps) isn't on the cloud copy.
+
+### Final state (Oct 29, 23:56 UTC)
+
+- **The VM `envoy-cloud` is stopped (TERMINATED), and the Meta key is off it.** `key.sh remove` found no file still holding the key. Keep-awake is off.
+- **On its disk (about $5 a month):** the cloud copy, ready to start. That's both phones with the user's sign-ins (Google, Amazon, Starbucks, DoorDash; Chipotle signed out) and WebView/Chrome 156, the API with its own tokens, the demo memory copy, and Tailscale (`envoy-cloud.tailffb391.ts.net`).
+- **`envoy-cloud-image`** (15.9 GB, us-east1, no key; about $0.80 a month) can start a copy in us-east1-c or d if us-east1-b is out of n2-standard-8s (`fallback.sh start`).
+- **Muse:** the "Envoy Cloud" connector in Muse for Mac points at a quick tunnel that has ended. Using it again needs `muse-tunnel.sh` and the connector's URL updated to the new address.
+- **Deleting** the VM, its disk and the image is the user's call: `scripts/cloud/delete.sh --yes-delete-envoy-cloud`.
+- **To use the cloud option:** `start.sh --vm-only`, `keep-awake.sh on`, `key.sh put 3`, then the switch in `docs/cloud.md`.

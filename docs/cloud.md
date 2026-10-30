@@ -219,10 +219,10 @@ Google's list prices for `us-east1` (on demand): `n2-standard-8` about **$0.39 a
 | Stage 0: create, toolchain, code, boot, device timings | 19:23–19:39 UTC, 16 min | $0.10 | 13 min of it was the emulator's first-boot work and a hung SSH session (below) |
 | Stage 1: portability ×2, sizes, the restart check, the clip | 19:39–19:59, 20 min | $0.13 | |
 | Stage 2: the key on, compile + verify, 3 replays, the key off | 19:59–20:04, 5 min | $0.04 | |
-| Stage 3: the cloud copy, the bars, the user's sitting, the renderer crashes and the real-app set | 20:25–22:40 and on, about 2.2 h so far | about $0.87 | the VM kept awake through the sitting |
-| **Total so far** | **about 2.9 h** | **about $1.14** | plus the disk, about $0.17 a day while it exists, and a few MB of egress |
+| Stage 3: the cloud copy, the bars, the user's sittings, the renderer crashes, the real-app set, Muse | 20:25–23:56, 3.5 h | about $1.39 | |
+| **Total** | **about 4.2 h** | **about $1.66** | plus the disk, about $0.17 a day while it exists; the machine image, about $0.80 a month; a few MB of egress |
 
-One emulator-hour on this VM costs about $0.39; with two phones and the API running, the cloud option costs about $0.39 an hour of use and $5 a month standing still. Meta: $0 for stage 1 (no key on the VM), **$0.070 for stage 2** (cap $1), **$0.615 for stage 3** (cap $3: the real-app set $0.37, the interfaces suite $0.10, diagnosing the crashes and `swangle` $0.11, voice and chat $0.03). Deleting the VM is the user's call (`scripts/cloud/delete.sh`).
+One emulator-hour on this VM costs about $0.39; with two phones and the API running, the cloud option costs about $0.39 an hour of use and $5 a month standing still. Meta: $0 for stage 1 (no key on the VM), **$0.070 for stage 2** (cap $1), **$0.615 for stage 3** (cap $3: the real-app set $0.37, the interfaces suite $0.10, diagnosing the crashes and `swangle` $0.11, voice and chat $0.03). **The VM is stopped (Oct 29, 23:56 UTC), with no key on it**, and `envoy-cloud-image` (15.9 GB, us-east1, no key) is there for `fallback.sh`. Standing still they cost about $5 + $0.80 a month. Deleting them is the user's call (`scripts/cloud/delete.sh`).
 
 ## The commands
 
