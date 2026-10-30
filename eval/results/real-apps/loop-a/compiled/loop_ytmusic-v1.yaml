@@ -1,0 +1,126 @@
+routine: loop_ytmusic
+app: com.google.android.apps.youtube.music
+version: 1
+status: active
+intent: Search for a song in YouTube Music and report the artist of the first song result.
+description: Searches YouTube Music for a requested song, filters the results to songs, and reports the artist shown for the first song result.
+patterns: [Search for a song in YouTube Music and tell me the artist, Find this song in YouTube Music and tell me who the artist is, Who is the
+    artist of the first song result for a song, Look up a song in YouTube Music and report its artist]
+outputs: [artist]
+start: fresh_launch
+inputs:
+  song_title: {type: text, description: The song to search for in YouTube Music., example: Bohemian Rhapsody}
+steps:
+- id: tap_search
+  intent: Tap the Search tab
+  pre:
+  - {app_foreground: com.google.android.apps.youtube.music}
+  - element_present: {resource_id: watch_fragment_container, text: Video player, kind: Text}
+  action:
+    tap:
+      text: Search
+      kind: Button
+      cls: LinearLayout
+      in_list: false
+      position: [0.5, 0.948]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: header_container, text: Recent searches, kind: Text}
+  risk: reversible
+  note: trace step 1
+- id: type_song_title
+  intent: "Type {{song_title}} into the search field"
+  pre:
+  - {app_foreground: com.google.android.apps.youtube.music}
+  action:
+    type:
+      field:
+        resource_id: search_edit_text
+        text: Type to search
+        hint: Type to search
+        kind: EditText
+        cls: EditText
+        parent: search_toolbar_layout
+        siblings: [Voice search]
+        in_list: false
+        position: [0.432, 0.084]
+      value: "{{song_title}}"
+  post:
+  - field_equals:
+      field: {resource_id: search_edit_text, text: Type to search, kind: EditText}
+      value: "{{song_title}}"
+  risk: reversible
+  note: trace step 2
+- id: find_tap_search_suggestion
+  intent: "Scroll to {{song_title}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        text_has: "{{song_title}}"
+        kind: Button
+        cls: LinearLayout
+        parent: suggestion_list
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      text_has: "{{song_title}}"
+      kind: Button
+      cls: LinearLayout
+      parent: suggestion_list
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: tap_search_suggestion
+  intent: "Tap the search suggestion for {{song_title}} to load the full search results"
+  pre:
+  - {app_foreground: com.google.android.apps.youtube.music}
+  action:
+    tap:
+      text_has: "{{song_title}}"
+      kind: Button
+      cls: LinearLayout
+      parent: suggestion_list
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: search_edit_text
+      text: "Search songs, artists, podcasts: {{song_title}}"
+      kind: EditText
+  - element_present: {resource_id: chip_cloud, kind: List}
+  risk: reversible
+  note: trace step 3
+- id: tap_songs_filter
+  intent: Tap the Songs filter to show only song results
+  pre:
+  - {app_foreground: com.google.android.apps.youtube.music}
+  action:
+    tap:
+      resource_id: chip_contents
+      text: Songs
+      kind: Text
+      cls: LinearLayout
+      parent: Show song results
+      in_list: true
+      position: [0.111, 0.145]
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: chip_cloud, kind: List}
+  risk: reversible
+  extract:
+    artist:
+      locator:
+        text_has: "{{song_title}}"
+        kind: Button
+      segment: 1
+  note: trace step 4
+compiled_from:
+  task_id: task-1030-163507-44b5-r1
+  goal: In the YouTube Music app, search for the song Bohemian Rhapsody and tell me the artist of the first song result.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-30 16:37:36"
+  trace_steps_kept: [1, 2, 3, 4]
+  trace_steps_dropped: 0
+  cost_usd: 0.0391

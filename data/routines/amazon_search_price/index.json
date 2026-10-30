@@ -1,0 +1,22 @@
+{
+ "name": "amazon_search_price",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-30 16:39:21",
+   "parent": null,
+   "changes": [
+    "named amazon_search_price (was loop_amazon v1 in loop A's copy; same steps)"
+   ],
+   "verification": {
+    "by": "loop-a",
+    "renamed_from": "loop_amazon v1"
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.amazon.mShop.android.shopping"
+}

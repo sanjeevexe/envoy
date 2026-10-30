@@ -98,9 +98,9 @@ def _real_grade(wf_id: str) -> Callable[[dict[str, Any], dict[str, Any]], tuple[
     return grade
 
 
-def _real(key: str, wf_id: str, device: str = "envoy-real") -> Task:
+def _real(key: str, wf_id: str, routine: str, device: str = "envoy-real") -> Task:
     wf = next(w for w in rr.WORKFLOWS if w.id == wf_id)
-    return Task(key, wf.goal, device, routines=[f"loop_{key}"], workflow=wf_id, grade=_real_grade(wf_id))
+    return Task(key, wf.goal, device, routines=[routine], workflow=wf_id, grade=_real_grade(wf_id))
 
 
 # ---- DoorDash "order my usual" (envoy-real; the demo's opener, routine doordash_order_meal) ---------------------------
@@ -185,11 +185,16 @@ TASKS: dict[str, Task] = {
                             routines=["skylark_check_in_flight", "skylark_air_check_in_flight"], approve=True,
                             prep=_skylark_prep, grade=_skylark_grade),
 }
-for _k, _w in [("amazon", "amazon"), ("starbucks", "starbucks"), ("chipotle", "chipotle"), ("target", "target_search"),
-               ("doordash_search", "doordash_search"), ("youtube", "youtube_search"), ("ytmusic", "ytmusic_artist"),
-               ("chrome", "chrome_wikipedia"), ("maps", "maps_address"), ("play", "play_rating"), ("gmail", "gmail_search"),
-               ("settings", "settings_bluetooth"), ("calendar", "calendar_today"), ("contacts", "contacts_count")]:
-    TASKS[_k] = _real(_k, _w)
+# The routine each first run is compiled into, named app_task like the library's own (loop A's first ones were loop_<task>).
+for _k, _w, _r in [("amazon", "amazon", "amazon_search_price"), ("starbucks", "starbucks", "starbucks_drink_calories"),
+                   ("chipotle", "chipotle", "chipotle_item_price"), ("target", "target_search", "target_search_price"),
+                   ("doordash_search", "doordash_search", "doordash_search_first_restaurant"),
+                   ("youtube", "youtube_search", "youtube_search_first_video"), ("ytmusic", "ytmusic_artist", "ytmusic_song_artist"),
+                   ("chrome", "chrome_wikipedia", "chrome_wikipedia_opened_year"), ("maps", "maps_address", "maps_place_address"),
+                   ("play", "play_rating", "play_app_rating"), ("gmail", "gmail_search", "gmail_search_subject"),
+                   ("settings", "settings_bluetooth", "settings_bluetooth_state"), ("calendar", "calendar_today", "calendar_events_today"),
+                   ("contacts", "contacts_count", "contacts_count")]:
+    TASKS[_k] = _real(_k, _w, _r)
 
 
 # ---- the API copy ---------------------------------------------------------------------------------------------------
@@ -400,6 +405,11 @@ def rows_for(key: str) -> list[dict[str, Any]]:
     return [r for r in map(json.loads, RUNS_FILE.read_text().splitlines()) if r.get("task") == key] if RUNS_FILE.exists() else []
 
 
+def alone_ok(r: dict[str, Any]) -> bool:
+    """A right replay the routine did by itself (repairs allowed): no plan or step calls, so the agent never took over."""
+    return bool(r.get("ok")) and r.get("kind") == "routine" and not ({"plan", "step"} & set(r.get("jobs") or {}))
+
+
 def _stats(rs: list[dict[str, Any]]) -> tuple[str, str]:
     counted = [r for r in rs if not r.get("skipped")]
     ok = [r for r in counted if r["ok"]]
@@ -413,8 +423,10 @@ def cmd_row(args: argparse.Namespace) -> int:
     first, rep = [r for r in rs if r["mode"] == "first"], [r for r in rs if r["mode"] == "replay"]
     (f, fs), (p, ps) = _stats(first), _stats(rep)
     skipped = sum(r.get("skipped", False) for r in rs if r["mode"] in ("first", "replay"))
+    alone = [r for r in rep if alone_ok(r)]
     t = TASKS[args.task]
-    print(f"| {t.key} | {t.goal} | {f} | {fs} | {p} | {ps} | medians of passing runs; {skipped} skipped |")
+    print(f"| {t.key} | {t.goal} | {f} | {fs} | {p} | {ps} | medians of passing runs; routine alone (no agent) "
+          f"{len(alone)}/{len([r for r in rep if not r.get('skipped')])}; {skipped} skipped |")
     for r in rs:
         print(f"  {r['mode']:8} {r.get('n', ''):>2} {r.get('status', ''):9} ok={r.get('ok', '')!s:5} {r.get('seconds')}s "
               f"{r.get('calls', '')} calls ${r.get('usd')} {r.get('routine') or ''} {r.get('answer', '')[:80]!r}")

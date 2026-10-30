@@ -1,0 +1,234 @@
+routine: loop_chipotle
+app: com.chipotle.ordering
+version: 1
+status: active
+intent: Find the price of a menu item at Chipotle.
+description: Select a pickup restaurant, open the requested item's menu category, and read the price shown for the requested item.
+patterns: [Find the price of a menu item at Chipotle, How much does a menu item cost at Chipotle, What is the price of an item on the Chipotle
+    menu, Check a Chipotle menu item price]
+outputs: [menu_item_price]
+start: fresh_launch
+inputs:
+  location_search: {type: text, description: 'City, state, or ZIP searched to find a pickup restaurant when no nearby restaurant is shown.', example: 'Denver,
+      CO'}
+  menu_category: {type: text, description: Menu category containing the requested item., example: CHIPS & SIDES}
+  menu_item_name: {type: text, description: Menu item whose price should be found., example: Chips & Guacamole}
+steps:
+- id: tap_menu_tab
+  intent: Tap the MENU tab.
+  pre:
+  - {app_foreground: com.chipotle.ordering}
+  - element_present: {resource_id: tab_item_container, text: HOME, kind: Text}
+  action:
+    tap:
+      resource_id: menuFragment
+      text: MENU
+      kind: Button
+      cls: FrameLayout
+      in_list: false
+      position: [0.278, 0.941]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: btn_group_order, text: GROUP, kind: Button}
+  - element_present: {resource_id: rv_menu, kind: List}
+  risk: reversible
+  note: trace step 1
+- id: tap_find_a_chipotle
+  intent: Tap the button to find a Chipotle restaurant so the full menu and prices are shown.
+  pre:
+  - {app_foreground: com.chipotle.ordering}
+  action:
+    tap:
+      resource_id: btn_find_a_chipotle
+      text: FIND A CHIPOTLE FOR THE FULL MENU
+      kind: Button
+      cls: ViewGroup
+      parent: cl_top_level_container
+      in_list: false
+      position: [0.5, 0.869]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 2
+- id: dismiss_location_data_dialog
+  intent: Tap OKAY to dismiss the location data dialog.
+  optional: true
+  pre:
+  - {app_foreground: com.chipotle.ordering}
+  action:
+    tap:
+      resource_id: md_button_positive
+      text: OKAY
+      kind: Button
+      cls: Button
+      parent: md_button_layout
+      in_list: false
+      position: [0.825, 0.584]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: view_tabs_bottom_sheet, kind: Button}
+  - element_present: {resource_id: btn_segment_left, text: PICKUP, kind: Button}
+  risk: reversible
+  note: "trace step 3 · one-time screen: optional"
+- id: search_pickup_location
+  intent: "Type {{location_search}} into the City, State, or ZIP search field."
+  pre:
+  - {app_foreground: com.chipotle.ordering}
+  action:
+    type:
+      field:
+        resource_id: view_search_input
+        text: City, State, or ZIP
+        hint: City, State, or ZIP
+        kind: EditText
+        cls: EditText
+        parent: view_search_container
+        in_list: false
+        position: [0.541, 0.083]
+      value: "{{location_search}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: view_search_input
+      text: "City, State, or ZIP: {{location_search}}, USA"
+      kind: EditText
+  - element_present: {resource_id: fab_location, kind: Button}
+  risk: reversible
+  note: trace step 4
+- id: expand_restaurant_list
+  intent: Tap the bottom sheet handle to expand the restaurant list.
+  pre:
+  - {app_foreground: com.chipotle.ordering}
+  action:
+    tap:
+      resource_id: view_tabs_bottom_sheet
+      text: ''
+      kind: Button
+      cls: ViewGroup
+      parent: view_main_content
+      in_list: false
+      position: [0.5, 0.929]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: vp_pager, kind: List}
+  - element_present:
+      resource_id: view_section_header
+      text: "{{location_search}}, USA"
+      kind: Text
+  risk: reversible
+  note: trace step 5
+- id: select_first_restaurant
+  intent: "Tap the first restaurant listed for {{location_search}}."
+  pre:
+  - {app_foreground: com.chipotle.ordering}
+  action:
+    tap:
+      resource_id: view_container
+      kind: Button
+      cls: ViewGroup
+      parent: rv_pick_up_list
+      in_list: true
+      position: [0.5, 0.33]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: fab_peek_back, kind: Button}
+  - element_present: {resource_id: btn_pickup_options, kind: Button}
+  risk: reversible
+  note: trace step 6
+- id: confirm_pickup_restaurant
+  intent: Tap PICK UP HERE to set the selected restaurant and load its menu.
+  pre:
+  - {app_foreground: com.chipotle.ordering}
+  action:
+    tap:
+      resource_id: btn_select_restaurant
+      text: PICK UP HERE
+      kind: Button
+      cls: Button
+      siblings: [Pickup]
+      in_list: false
+      position: [0.5, 0.882]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: tv_title, text: PICKING UP FROM, kind: Text}
+  - element_present: {resource_id: tab_item_container, text: HOME, kind: Text}
+  risk: reversible
+  note: trace step 7
+- id: return_to_menu_tab
+  intent: Tap the MENU tab to view menu categories.
+  pre:
+  - {app_foreground: com.chipotle.ordering}
+  action:
+    tap:
+      resource_id: menuFragment
+      text: MENU
+      kind: Button
+      cls: FrameLayout
+      in_list: false
+      position: [0.278, 0.941]
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: tv_title, text: PICKING UP FROM, kind: Text}
+  risk: reversible
+  note: trace step 8
+- id: scroll_to_menu_category
+  intent: "Scroll until the {{menu_category}} category is visible."
+  pre:
+  - {app_foreground: com.chipotle.ordering}
+  action:
+    scroll_until:
+      target:
+        resource_id: view_container
+        text_has: "{{menu_category}}"
+        kind: Button
+        cls: ViewGroup
+        parent: rv_menu
+        in_list: true
+      direction: down
+      max_scrolls: 8
+      container: {resource_id: rv_menu, kind: List}
+  post:
+  - element_present:
+      resource_id: view_container
+      text_has: "{{menu_category}}"
+      kind: Button
+      cls: ViewGroup
+      parent: rv_menu
+      in_list: true
+  risk: read
+  note: trace step 9 (+1 scrolls)
+- id: open_menu_category
+  intent: "Tap the {{menu_category}} category to find {{menu_item_name}}."
+  pre:
+  - {app_foreground: com.chipotle.ordering}
+  action:
+    tap:
+      resource_id: view_container
+      text_has: "{{menu_category}}"
+      kind: Button
+      cls: ViewGroup
+      parent: rv_menu
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: view_coordinator, kind: List}
+  - element_present:
+      resource_id: tv_title
+      text: "{{menu_category}}"
+      kind: Text
+  risk: reversible
+  extract:
+    menu_item_price:
+      locator: {resource_id: tv_price, kind: Text}
+      expect_digits: true
+      card: "{{menu_item_name}}"
+  note: trace step 10
+compiled_from:
+  task_id: task-1030-161523-ec65-r1
+  goal: In the Chipotle app, find the price of Chips & Guacamole.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-30 16:18:56"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  trace_steps_dropped: 0
+  cost_usd: 0.0964

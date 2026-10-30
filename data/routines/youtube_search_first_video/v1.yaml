@@ -1,0 +1,72 @@
+routine: youtube_search_first_video
+app: com.google.android.youtube
+version: 1
+status: active
+intent: Search YouTube and report the title of the first video in the results
+description: Searches YouTube for the given query and returns the title of the first non-sponsored video in the results.
+patterns: [search YouTube for something, find the first YouTube video for a search, look up a video on YouTube]
+outputs: [first_video_title]
+start: fresh_launch
+inputs:
+  search_query: {type: text, description: '', example: lofi hip hop}
+steps:
+- id: tap_search
+  intent: Tap the Search button
+  pre:
+  - {app_foreground: com.google.android.youtube}
+  - element_present: {resource_id: browse_fragment_layout_coordinator_layout, kind: List}
+  action:
+    tap:
+      resource_id: menu_item_view
+      text: Search
+      kind: Button
+      cls: ImageView
+      in_list: true
+      position: [0.942, 0.08]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: search_edit_text, text: Search or ask YouTube, kind: EditText}
+  - element_present: {resource_id: ai_mode, text: Ask, desc: Ask YouTube, kind: Button}
+  risk: reversible
+  note: trace step 1
+- id: type_search_query
+  intent: "Type {{search_query}} into the search box and submit the search"
+  pre:
+  - {app_foreground: com.google.android.youtube}
+  action:
+    type:
+      field:
+        resource_id: search_edit_text
+        text: Search or ask YouTube
+        hint: Search or ask YouTube
+        kind: EditText
+        cls: EditText
+        parent: search_box
+        in_list: false
+        position: [0.4, 0.079]
+      value: "{{search_query}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: search_query
+      text: "{{search_query}}"
+      kind: Button
+  - element_present: {resource_id: search_clear, text: Clear, kind: Button}
+  risk: reversible
+  extract:
+    first_video_title:
+      locator: {kind: Button}
+      first_row: true
+      until: " - "
+      skip_ads: true
+  note: trace step 2
+changes: [named youtube_search_first_video (was loop_youtube v1 in loop A's copy; same steps)]
+compiled_from:
+  task_id: task-1030-162656-3e9e-r1
+  goal: In the YouTube app, search for lofi hip hop and tell me the title of the first video in the results.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-30 16:29:58"
+  trace_steps_kept: [1, 2]
+  trace_steps_dropped: 0
+  cost_usd: 0.0421
