@@ -18,10 +18,11 @@ from devices.types import Action, Element, ScreenState
 Risk = Literal["read", "reversible", "irreversible"]
 
 # Irreversible verbs, in several languages. Plain "Cancel" (dismiss a dialog) is deliberately not here;
-# cancelling a thing ("Cancel trip", "Cancel order") is.
+# cancelling a thing ("Cancel trip", "Cancel order") is. Committing an order is, however it's worded ("Place Order", a closed
+# store's "Schedule Order"), even on a screen that says nothing about payment.
 _IRREVERSIBLE = re.compile(
     r"\b("
-    r"pay|pay now|place (your )?order|order now|purchase|buy( now)?|checkout|check out now|"
+    r"pay|pay now|(place|schedule|finali[sz]e) (your |my |an? |the |this )?order|order now|purchase|buy( now)?|checkout|check out now|"
     r"confirm|confirm (and )?(pay|order|booking|purchase|check-?in|seat)|complete (check-?in|purchase|order|booking)|"
     r"submit|send|transfer|donate|book (now|it|flight|trip|room)|reserve|"
     r"delete|remove account|cancel (trip|order|booking|reservation|flight|subscription|membership)|"

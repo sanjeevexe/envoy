@@ -37,6 +37,17 @@ def test_still_asks_for_anything_else():
     assert ask(rules=ApprovalRules(apps={"com.skylark.air": "always"})) is None
 
 
+def test_a_button_that_commits_an_order_always_asks_even_when_you_named_it():
+    """"schedule an order from Thai Basil", said by voice, used to skip asking at a checkout's "Schedule Order" when the
+    screen didn't say "order total" or "payment method": an order is money, whatever the screen says."""
+    cart = "Your cart from Thai Basil · Delivery 6:00 PM · Total $23.46 · Gift card"
+    for verb in ("Schedule", "Place", "Submit", "Confirm", "Complete", "Finalize"):
+        target = f"{verb} Order"
+        assert decide(RULES, goal=f"{verb.lower()} an order from thai basil", source="voice", app="com.example.food", routine=None,
+                      origin="agent", target=target, screen_text=cart) is None, target
+    assert ask(target="Confirm check-in") is not None  # what isn't an order still runs when you asked for it
+
+
 def test_standing_approval_covers_the_routine_only():
     standing = ApprovalRules(routines={"skylark_check_in_flight": "never"})
     auto = ask(rules=standing, source="trigger:check in 24h before", goal="Check me in for my flight to Chicago")

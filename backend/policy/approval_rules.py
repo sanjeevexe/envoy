@@ -32,8 +32,10 @@ DEFAULT_MODE = "unless_requested"
 # Where a request comes straight from the user: their own words in the web app, chat, voice or the iPhone.
 DIRECT_SOURCES = {"web", "chat", "voice", "iphone"}
 
+# A target that spends money. Committing an order counts however it's worded (a closed store's checkout says "Schedule Order").
 _MONEY_WORDS = re.compile(
-    r"\b(pay|pay now|place (your )?order|order now|purchase|buy( now)?|checkout|check out now|transfer|donate|tip|"
+    r"\b(pay|pay now|(place|schedule|submit|confirm|complete|finali[sz]e|send) (your |my |an? |the |this )?order|order now|purchase|"
+    r"buy( now)?|checkout|check out now|transfer|donate|tip|"
     r"subscribe|sign up and pay|add to (cart|bag)|upgrade for|pagar|comprar|payer|acheter|bezahlen|kaufen|支付|购买)\b", re.I)
 _PRICE = re.compile(r"[$€£¥₹]\s?\d|\b\d+[.,]\d{2}\s?(usd|eur|gbp)\b", re.I)
 _MONEY_SCREEN = re.compile(r"(card ending|will be charged|order total|payment method|total due|billing address|amount due)", re.I)

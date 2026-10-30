@@ -105,6 +105,23 @@ def test_publishing_words_inside_other_labels_are_not_flagged(label):
     assert not v.irreversible, v.reasons
 
 
+@pytest.mark.parametrize("label", ["Schedule Order", "Schedule order · $23.46", "Schedule your order", "Place Order", "Finalize order"])
+def test_a_button_that_commits_an_order_is_irreversible_by_rule(label):
+    """An order spends money, so its button is flagged without the model's label, even on a screen that says nothing about
+    payment (a closed store's checkout says "Schedule Order")."""
+    s = _buttons("Back", label)
+    target = next(e for e in s.numbered if e.label == label)
+    v = classify(Action(kind="tap", element=target.number), s, model_risk="reversible")
+    assert v.irreversible and f"rule: target says {label!r}" in v.reasons
+
+
+@pytest.mark.parametrize("label", ["Schedule", "Order for later", "Order details", "Reorder", "Orders", "Scheduled orders"])
+def test_order_words_that_commit_nothing_are_not_flagged(label):
+    s = _buttons(label)
+    v = classify(Action(kind="tap", element=s.numbered[0].number), s, model_risk="reversible")
+    assert not v.irreversible, v.reasons
+
+
 def test_instagrams_publish_button_labelled_next_is_irreversible_by_its_id():
     """Instagram 453's reel screen publishes with a button labelled only "Next" (id share_button): the rules flag it by
     its id, so posting always asks. Recorded on the Pixel 5 by creator-workflow, Oct 29."""
