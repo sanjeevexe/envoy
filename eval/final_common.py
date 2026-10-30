@@ -1,8 +1,9 @@
 """What every Phase 7 suite shares: where results go, what each run records about itself, and what it cost.
 
 Every suite writes `eval/results/final/<suite>.json` (and a short `<suite>.md`) with a `meta` block: the commit and whether
-it is the `eval-final` tag, uncommitted changes outside the results folder, the models and tier, the devices, wall time,
-and the model calls, tokens and dollars it caused. Costs are summed from `logs/model_costs.jsonl` by the suite's
+it is the `eval-final` tag, uncommitted changes outside the results folder, the models, tier and model profile (and whether
+`ENVOY_MODEL_PROFILE` or the adapter's default chose it), the devices, wall time, and the model calls, tokens and dollars it
+caused, with the profile each call was logged under. Costs are summed from `logs/model_costs.jsonl` by the suite's
 task-ID prefix, so calls from anything else on this Mac (the API, another eval) are never counted.
 """
 
@@ -46,10 +47,20 @@ def code_state() -> dict[str, Any]:
 
 
 def models(contributor: bool) -> dict[str, Any]:
-    """The models and efforts each job uses, as the adapter will resolve them."""
+    """The models and efforts each job uses, as the adapter will resolve them, and the profile that chose them."""
     jobs = {k: {"model": (j.model + "-contributor") if contributor and j.model.startswith("muse-spark") else j.model, "effort": j.effort}
             for k, j in ((k, job_config(k)) for k in JOBS) if k in ("step", "plan", "repair", "match", "compile", "extract", "answer", "grounding", "choose")}
-    return {"tier": "contributor" if contributor else "standard", "profile": active_profile(), "jobs": jobs}
+    overrides = {k: os.environ[f"ENVOY_MODEL_{k.upper()}"].strip() for k in JOBS if os.environ.get(f"ENVOY_MODEL_{k.upper()}", "").strip()}
+    return {"tier": "contributor" if contributor else "standard", "profile": active_profile(),
+            "profile_from": "ENVOY_MODEL_PROFILE" if os.environ.get("ENVOY_MODEL_PROFILE", "").strip() else "the adapter's default",
+            "overrides": overrides, "jobs": jobs}
+
+
+def profile_text(m: dict[str, Any]) -> str:
+    """A run's models in words, from its meta's models block: "the `hybrid` profile (Muse Wonder for compile, plan, …)"."""
+    wonder = sorted(k for k, v in (m.get("jobs") or {}).items() if str(v.get("model", "")).startswith("muse-wonder"))
+    name = f"the `{m['profile']}` profile" if m.get("profile") else "a profile it didn't record"
+    return f"{name} (Muse Wonder for {', '.join(wonder) or 'no job'}; Muse Spark for the rest)"
 
 
 def run_id() -> str:
@@ -59,11 +70,12 @@ def run_id() -> str:
 
 def costs(prefixes: Iterable[str], since: str | None = None) -> dict[str, Any]:
     """Model calls, tokens and dollars from the cost log whose task ID starts with one of `prefixes` (and, if given, logged
-    at or after `since`). By job and by model too."""
+    at or after `since`). By job, by model and by the profile each call was logged under too."""
     pre = tuple(prefixes)
     tot: dict[str, Any] = defaultdict(float)
     by_job: dict[str, dict[str, float]] = defaultdict(lambda: defaultdict(float))
     by_model: dict[str, float] = defaultdict(float)
+    by_profile: dict[str, float] = defaultdict(float)
     if not COST_LOG.exists():
         return {}
     with COST_LOG.open() as f:
@@ -85,9 +97,11 @@ def costs(prefixes: Iterable[str], since: str | None = None) -> dict[str, Any]:
             j["calls"] += 1
             j["standard_usd"] += r.get("cost_at_standard_usd") or 0
             by_model[r.get("model", "?")] += 1
+            by_profile[r.get("profile") or "not logged"] += 1
     out = {k: (round(v, 4) if k.endswith("usd") else int(v)) for k, v in tot.items()}
     out["by_job"] = {k: {"calls": int(v["calls"]), "standard_usd": round(v["standard_usd"], 4)} for k, v in by_job.items()}
     out["by_model"] = {k: int(v) for k, v in by_model.items()}
+    out["by_profile"] = {k: int(v) for k, v in by_profile.items()}
     return out
 
 
@@ -170,7 +184,7 @@ def header(meta: dict[str, Any], title: str) -> str:
     on = "`eval-final`" if code["is_eval_final"] else f"`{code['short']}`" + (" with uncommitted changes" if code["dirty"] else "")
     return (f"# {title}\n\n"
             f"Run {meta['run_id']} on {on}, {meta['started'][:16].replace('T', ' ')} UTC, {meta['wall_s'] / 60:.0f} min, "
-            f"{meta['models']['tier']} tier. {c.get('calls', 0)} model calls, ${c.get('standard_usd', 0):.3f} at standard prices "
+            f"{meta['models']['tier']} tier, {profile_text(meta['models'])}. {c.get('calls', 0)} model calls, ${c.get('standard_usd', 0):.3f} at standard prices "
             f"(${c.get('billed_usd', 0):.3f} billed).\n\n")
 
 

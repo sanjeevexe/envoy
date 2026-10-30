@@ -12,7 +12,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from final_common import OUT, REPO, load, med, pct
+from final_common import OUT, REPO, load, med, pct, profile_text
 
 CHARTS = OUT / "charts"
 LAYOUTS = {0: "Original", 1: "Moved button", 2: "Renamed labels", 3: "Extra screen", 4: "Hidden IDs", 5: "Renamed +\nhidden IDs"}
@@ -265,8 +265,37 @@ def _ran_on(d: dict[str, Any] | None) -> str:
         return "not run"
     code = d["meta"]["code"]
     here = "`eval-final`" if code["is_eval_final"] else f"`{code['short']}`{' (uncommitted changes)' if code['dirty'] else ''}"
+    here += f", `{d['meta']['models'].get('profile') or 'profile not recorded'}`"
     runs = {(r.get("run") or {}).get("run_id") for r in (d.get("workflows") or {}).values()}
     return f"{len(runs)} runs, the last on {here}" if len(runs) > 1 else here  # rows merged from `--only` reruns
+
+
+def models_line(data: dict[str, dict[str, Any] | None]) -> list[str]:
+    """Which model profile the suites ran on, and any suite that differs or whose calls were logged under another profile
+    (the interface checks' calls come from the API, which has its own environment)."""
+    ran = {n: d["meta"]["models"] for n, d in data.items() if d}
+    if not ran:
+        return []
+    by: dict[str | None, list[str]] = {}
+    for n, m in ran.items():
+        by.setdefault(m.get("profile"), []).append(n)
+    main = max(by, key=lambda p: len(by[p]))
+    first = next(m for m in ran.values() if m.get("profile") == main)
+    out = [f"**Models:** {'every suite' if len(by) == 1 else f'{len(by[main])} of {len(ran)} suites'} on {profile_text(first)}"
+           + (f", chosen by {first['profile_from']}." if first.get("profile_from") else ".")]
+    for p, names in by.items():
+        if p != main:
+            out.append(f"**On another profile:** {', '.join(names)} (`{p or 'not recorded'}`).")
+    stray = []
+    for n, d in data.items():
+        if not d:
+            continue
+        logged = {k: v for k, v in (d["meta"]["cost"].get("by_profile") or {}).items() if k != d["meta"]["models"].get("profile")}
+        if logged:
+            stray.append(f"{n} ({', '.join(f'{v} under `{k}`' for k, v in logged.items())})")
+    if stray:
+        out.append(f"**Calls logged under another profile:** {'; '.join(stray)}.")
+    return out
 
 
 def headline(name: str, d: dict[str, Any] | None) -> str:
@@ -397,6 +426,7 @@ def build() -> None:
           "Dollars are at Meta's standard prices whatever tier was billed. Built by `eval/run_final.py report` from the JSON beside this file.", "",
           f"**Ran on:** {len(on_tag)} of {sum(1 for d in data.values() if d)} suites on the `eval-final` tag"
           + ("." if len(on_tag) == sum(1 for d in data.values() if d) else "; the others are marked below (earlier commits are measurements, not final numbers)."),
+          *models_line(data),
           f"**Cost of these runs:** ${total_std:.2f} at standard prices (${total_billed:.2f} billed).", "",
           "| Suite | Result | Ran on |", "| --- | --- | --- |"]
     for n, title in titles.items():
@@ -429,13 +459,20 @@ def tiers_section(systems: dict[str, Any] | None) -> list[str]:
     s = [r for r in systems["rows"] if r["system"] == "agent" and r["layout"] == 0 and r["try"] == 1 and (r["task"], r["seed"]) in cells]
     if not c or len(s) != len(c):
         return []
+    step = lambda d: d["meta"]["models"]["jobs"]["step"]["model"]  # noqa: E731
+    same = step(contrib) == step(systems)
+    profiles = [d["meta"]["models"].get("profile") or "not recorded" for d in (contrib, systems)]
     row = lambda name, rs: (f"| {name} | {sum(r['passed'] for r in rs)}/{len(rs)} | {sum(r['steps'] for r in rs)} | {sum(r['calls'] for r in rs)} | "  # noqa: E731
                             f"{sum(r['duration_s'] for r in rs):.0f} s | {max(r['steps'] for r in rs)} |")
     return ["## 1c. The Contributor tier against the standard tier", "",
             f"The full agent on the same {len(c)} cells (each core task on the original layout, the same seed and booking), first try only. "
-            f"Contributor: {_ran_on(contrib)}; standard: {_ran_on(systems)}. Every measurement in this report runs on the standard tier.", "",
+            f"Contributor: {_ran_on(contrib)}; standard: {_ran_on(systems)}. Every measurement in this report runs on the standard tier."
+            + (f" The agent's own jobs ran on `{step(systems)}` in both rows (it has no Contributor tier), so only the Muse Spark jobs "
+               "(matching, grounding, choosing, extracting) differ between them." if same else "")
+            + (f" The two rows ran on different profiles (Contributor `{profiles[0]}`, standard `{profiles[1]}`), so they differ in more "
+               "than the tier." if profiles[0] != profiles[1] else ""), "",
             "| Tier | Right | Actions | Model calls | Time, summed | Most actions in one task |", "| --- | --- | --- | --- | --- | --- |",
-            row("Standard (`muse-spark-1.3`)", s), row("Contributor (`muse-spark-1.3-contributor`)", c), "",
+            row(f"Standard (`{step(systems)}` for steps)", s), row(f"Contributor (`{step(contrib)}` for steps)", c), "",
             "Data: `eval/results/final/systems-contributor.json` beside `systems.json`.", ""]
 
 

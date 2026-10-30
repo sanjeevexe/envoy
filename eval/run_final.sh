@@ -10,7 +10,8 @@
 # with several sessions on this Mac, tell the coordinator before starting. The model key is checked first (a failing key
 # stops the run before any device time). Each device is claimed through the coordinator's locks (~/Desktop/Envoy/coord/
 # devices.sh, owner phase7) before it is started, and released when the run moves on; without that folder the script
-# runs as before. Standard tier throughout (reported dollars are always at standard prices).
+# runs as before. Standard tier throughout (reported dollars are always at standard prices). The model profile is the
+# adapter's default unless ENVOY_MODEL_PROFILE is set; it is printed here and recorded in every suite's results.
 set -uo pipefail
 cd "$(dirname "$0")/.."
 source scripts/env.sh >/dev/null
@@ -35,7 +36,7 @@ claim() {  # claim <device> <minutes>: release the device held before, wait for 
   [ "$held" = "$1" ] && { "$COORD" extend "$1" phase7 "$2" >/dev/null; return 0; }
   [ -n "$held" ] && "$COORD" release "$held" phase7
   held=""
-  "$COORD" wait "$1" phase7 && "$COORD" claim "$1" phase7 "$2" "final evaluation on $(git rev-parse --short HEAD)" \
+  "$COORD" wait "$1" phase7 && "$COORD" claim "$1" phase7 "$2" "final evaluation on $(git rev-parse --short HEAD), ${PROFILE%% *} profile" \
     || { echo "could not claim $1: ask the coordinator"; exit 4; }
   held=$1
 }
@@ -51,6 +52,10 @@ only() {  # only <avd>: stop our other emulators cleanly, claim <avd>, wait for 
 }
 
 uv run --project backend python scripts/check_model_key.py || { echo "the model key fails: no run"; exit 3; }
+PROFILE=$(uv run --project backend python -c 'import os; from models.adapter import JOBS, WONDER, active_profile, model_for
+p = active_profile(); print(p, "(" + ("ENVOY_MODEL_PROFILE" if os.environ.get("ENVOY_MODEL_PROFILE", "").strip() else "the adapter default") + "; Muse Wonder for",
+      ", ".join(sorted(j for j in JOBS if model_for(j, p) == WONDER)) or "no job", end=")")') || { echo "unknown model profile: no run"; exit 3; }
+echo "model profile: $PROFILE"
 
 run() {  # run <log name> <args...>
   local name=$1; shift

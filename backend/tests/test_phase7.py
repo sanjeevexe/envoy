@@ -118,6 +118,51 @@ def test_costs_are_attributed_by_task_prefix_only(tmp_path, monkeypatch):
     assert fcm.costs(["f7-1"], "2026-11-02T10:00:01+00:00")["calls"] == 1
 
 
+def test_each_suite_records_its_model_profile_where_it_came_from_and_the_profile_its_calls_ran_on(tmp_path, monkeypatch):
+    import final_common as fcm
+    for job in ("step", "plan", "repair", "compile", "match"):
+        monkeypatch.delenv(f"ENVOY_MODEL_{job.upper()}", raising=False)
+    monkeypatch.setenv("ENVOY_MODEL_PROFILE", "hybrid")
+    m = fcm.models(False)
+    assert (m["profile"], m["profile_from"], m["overrides"]) == ("hybrid", "ENVOY_MODEL_PROFILE", {})
+    assert m["jobs"]["step"]["model"] == "muse-wonder-1.0" and m["jobs"]["match"]["model"] == "muse-spark-1.3"
+    assert fcm.models(True)["jobs"]["step"]["model"] == "muse-wonder-1.0"  # Wonder has no Contributor variant
+    assert "the `hybrid` profile (Muse Wonder for compile, plan, repair, step;" in fcm.profile_text(m)
+    monkeypatch.delenv("ENVOY_MODEL_PROFILE")
+    assert fcm.models(False)["profile_from"] == "the adapter's default"
+    log = tmp_path / "costs.jsonl"
+    rows = [{"time": "2026-11-02T10:00:00+00:00", "job": "step", "model": "muse-wonder-1.0", "profile": "hybrid", "task_id": "f7-1-sys-a"},
+            {"time": "2026-11-02T10:00:01+00:00", "job": "step", "model": "muse-spark-1.3", "profile": "spark", "task_id": "f7-1-sys-b"},
+            {"time": "2026-11-02T10:00:02+00:00", "job": "match", "model": "muse-spark-1.3", "task_id": "f7-1-sys-b-match"}]
+    log.write_text("\n".join(json.dumps(r) for r in rows) + "\n")
+    monkeypatch.setattr(fcm, "COST_LOG", log)
+    assert fcm.costs(["f7-1"])["by_profile"] == {"hybrid": 1, "spark": 1, "not logged": 1}
+
+
+def test_the_report_names_each_suites_profile_and_the_tier_rows_their_own_step_model(monkeypatch):
+    import final_report as rp
+
+    def run(profile, step_model, tier):
+        jobs = {"step": {"model": step_model}, "compile": {"model": "muse-wonder-1.0"}, "match": {"model": "muse-spark-1.3" + ("-contributor" if tier == "contributor" else "")}}
+        return {"meta": {"code": {"is_eval_final": True, "short": "abc1234", "dirty": []}, "cost": {"by_profile": {profile: 3}},
+                         "models": {"profile": profile, "profile_from": "the adapter's default", "tier": tier, "jobs": jobs}},
+                "rows": [{"system": "agent", "layout": 0, "try": 1, "task": "gate", "seed": 1, "passed": True, "steps": 3, "calls": 4, "duration_s": 20.0}]}
+    systems, contrib = run("hybrid", "muse-wonder-1.0", "standard"), run("hybrid", "muse-wonder-1.0", "contributor")
+    monkeypatch.setattr(rp, "load", lambda name: contrib if name == "systems-contributor" else None)
+    md = "\n".join(rp.tiers_section(systems))
+    assert "Standard (`muse-wonder-1.0` for steps)" in md and "Contributor (`muse-wonder-1.0` for steps)" in md and "in both rows" in md
+    assert "different profiles" not in md and "`eval-final`, `hybrid`" in rp._ran_on(systems)
+    old_contrib = run("spark", "muse-spark-1.3-contributor", "contributor")  # the Oct 28 Contributor run against a hybrid standard run
+    monkeypatch.setattr(rp, "load", lambda name: old_contrib if name == "systems-contributor" else None)
+    md = "\n".join(rp.tiers_section(systems))
+    assert "in both rows" not in md and "different profiles (Contributor `spark`, standard `hybrid`)" in md
+    interfaces = run("hybrid", "muse-wonder-1.0", "standard")
+    interfaces["meta"]["cost"]["by_profile"] = {"hybrid": 2, "spark": 5}  # an API started with another environment
+    lines = rp.models_line({"systems": systems, "interfaces": interfaces, "real": None})
+    assert lines[0].startswith("**Models:** every suite on the `hybrid` profile (Muse Wonder for compile, step;")
+    assert lines[1] == "**Calls logged under another profile:** interfaces (5 under `spark`)."
+
+
 def test_side_effects_are_whatever_changed_beyond_the_request():
     import final_core as fc
     w = fc.world(101)
