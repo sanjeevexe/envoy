@@ -81,11 +81,12 @@ def reset(app: str, clear: bool = False) -> None:
     time.sleep(1.0)
 
 
-def run_one(goal: str, app: str, kind: str, timeout_s: float, clear: bool = False) -> dict:
+def run_one(goal: str, app: str, kind: str, timeout_s: float, clear: bool = False, allow_phone: bool = False) -> dict:
     reset(app, clear)
     retired = retire_notes(app) if kind == "first" else 0
     t0 = time.time()
     tid = api("POST", "/api/tasks", {"goal": goal, "phone": DEVICE})["id"]
+    rec_device = DEVICE
     declined: list[str] = []
     handoff = None
     end = None
@@ -101,7 +102,12 @@ def run_one(goal: str, app: str, kind: str, timeout_s: float, clear: bool = Fals
         elif status == "needs_you":
             handoff = f"{task.get('waiting_for')}: {task.get('detail')}"
             if task.get("waiting_for") == "phone":
-                api("POST", f"/api/tasks/{tid}/phone", {"allow": False})
+                # "Use your Android phone?": yes only for a run the user asked to measure on their phone (--allow-phone)
+                api("POST", f"/api/tasks/{tid}/phone", {"allow": allow_phone})
+                if allow_phone:
+                    handoff, end = None, None
+                    time.sleep(0.5)
+                    continue
             else:  # a sign-in screen or a bot check: recorded, never done
                 api("POST", f"/api/tasks/{tid}/stop", {})
             end = end or time.time()
@@ -128,7 +134,7 @@ def run_one(goal: str, app: str, kind: str, timeout_s: float, clear: bool = Fals
            "status": task.get("status"), "ran": task.get("kind"), "routine": task.get("routine"), "result": task.get("result"),
            "detail": task.get("detail"), "duration_s": round(end - t0, 1), "model_calls": task.get("model_calls"),
            "cost_usd": cost, "cost_at_standard_usd": task.get("cost_usd"), "calls_logged": calls_logged,
-           "declined": declined, "handoff": handoff, "notes_retired": retired, "cleared": clear,
+           "declined": declined, "handoff": handoff, "notes_retired": retired, "cleared": clear, "device": rec_device,
            "main": subprocess.run(["git", "-C", str(REPO), "rev-parse", "--short", "HEAD"], capture_output=True, text=True).stdout.strip()}
     runs = json.loads(RUNS_FILE.read_text()) if RUNS_FILE.exists() else []
     runs.append(rec)
@@ -180,6 +186,9 @@ def main() -> int:
     r.add_argument("--goal", action="append", required=True)
     r.add_argument("--timeout-s", type=float, default=300)
     r.add_argument("--clear", action="store_true", help="clear the app's data before each run (a task that leaves state)")
+    r.add_argument("--serial", default=SERIAL, help="adb serial of the device (default envoy-real)")
+    r.add_argument("--device", default=DEVICE, help="the API's device id (default envoy-real; a phone is phone-<serial>)")
+    r.add_argument("--allow-phone", action="store_true", help="answer yes to \"use your Android phone?\" (the user asked for this phone)")
     s = sub.add_parser("save")
     s.add_argument("task_id")
     s.add_argument("--by", default="loop-b")
@@ -188,8 +197,9 @@ def main() -> int:
     m.add_argument("--app")
     args = ap.parse_args()
     if args.cmd == "run":
+        globals().update(SERIAL=args.serial, DEVICE=args.device)  # adb() and run_one() read these
         for goal in args.goal:
-            run_one(goal, args.app, args.kind, args.timeout_s, args.clear)
+            run_one(goal, args.app, args.kind, args.timeout_s, args.clear, args.allow_phone)
     elif args.cmd == "save":
         asyncio.run(save(args.task_id, args.by, args.note))
     else:
