@@ -1,0 +1,11 @@
+{
+ "status": "done",
+ "result": "Gate B12",
+ "steps": 2,
+ "calls": 4,
+ "usd": 0.0063463999999999994,
+ "profile": "spark",
+ "kind": "agent",
+ "task_id": "pixel-agent-spark-012238",
+ "wall_s": 12.4
+}
