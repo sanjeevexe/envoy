@@ -588,8 +588,8 @@ class RoutineExecutor:
             await asyncio.sleep(cfg.poll_s)
 
     def _skipped_ahead(self, ctx: _Ctx, idx: int, s: ScreenState) -> int | None:
-        """The index of a later step (at most two ahead) that is ready now while the steps in between are not,
-        if none of those in-between steps is irreversible."""
+        """The index of a later step (at most two ahead) that is ready now, with something on screen vouching for it,
+        while the steps in between are not, if none of those in-between steps is irreversible."""
         steps = ctx.routine.steps
         if idx + 2 >= len(steps) or self._ready_now(steps[idx + 1], s, ctx.inputs):
             return None
@@ -597,9 +597,24 @@ class RoutineExecutor:
             between = steps[idx + 1:j]
             if any(b.risk == "irreversible" for b in between):
                 return None
-            if self._ready_now(steps[j], s, ctx.inputs) and not any(self._ready_now(b, s, ctx.inputs) for b in between):
+            if self._vouched(steps[j], s, ctx.inputs) and not any(self._ready_now(b, s, ctx.inputs) for b in between):
                 return j
         return None
+
+    def _vouched(self, step: Step, s: ScreenState, inputs: dict[str, str]) -> bool:
+        """Ready now, and the screen says so: its own before-checks, its tap/type target, or a scroll's row or list (as in
+        `_reached`, but strict). A step with none of these (a scroll with no before-checks, Back, a wait) is ready on any
+        screen, so it can't show the app went there: on DoorDash's breakfast menu, with no Deluxe Meal, the scroll to the
+        meal's cheese choice was taken as reached and its tap step dropped (Oct 30)."""
+        if not self._ready_now(step, s, inputs):
+            return False
+        if self._specific(step.pre):
+            return True
+        a = step.action
+        if a.kind == "scroll_until" and a.target is not None:
+            return locators.locate(a.target, s, inputs).ok or (a.container is not None and locators.locate(a.container, s, inputs, margin=0.0).ok)
+        m = self._target(step, s, inputs)
+        return m is not None and m.ok
 
     # ---- acting -----------------------------------------------------------------------------
 
