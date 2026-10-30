@@ -69,6 +69,9 @@ APP_NAMES = {
     "instagram": "com.instagram.android",
 }
 TRAVEL = re.compile(r"\b(flight|trip|gate|check(ed)?[ -]?in|boarding|seat|airline|known traveler)\b", re.I)
+# What comes before an app's name when a goal names it as the app it's about: "on DoorDash", "in YouTube Music",
+# "open Gmail and ...", "using Chrome", "with Lyft" ("in the Gmail app" and "In Gmail, ..." are app_named_in's).
+AS_APP = re.compile(r"\b(?:in|on|open|launch|use|using|with|via)\s+(?:the\s+|my\s+)?$")
 # A bot check in a browser is a website's, not the browser's: it doesn't mean the browser blocks emulators.
 BROWSERS = {"com.android.chrome", "org.mozilla.firefox", "com.brave.browser", "com.microsoft.emmx", "com.sec.android.app.sbrowser",
             "com.duckduckgo.mobile.android", "com.opera.browser"}
@@ -79,15 +82,22 @@ FRESH_INSTALL = ("{name} was just installed from the Play Store, so its first-ru
 
 def app_for(goal: str, learned: dict[str, str] | None = None) -> str | None:
     """The app a goal is about: one Envoy knows by name (APP_NAMES, the apps that block emulators), one it installed
-    before when the goal names it as an app (`learned`: name → package), else SkyLark for travel words."""
+    before when the goal names it as an app (`learned`: name → package), else SkyLark for travel words. A goal naming
+    more than one is about the one it names as the app ("In the Gmail app, search my mail for DoorDash" is Gmail's),
+    else the one it names first; the longer name where two start at the same place ("YouTube Music", not "YouTube")."""
     g = goal.lower()
-    for name, pkg in {**APP_NAMES, **blocking_app_names()}.items():
-        if re.search(rf"\b{re.escape(name)}\b", g):
-            return pkg
-    if (named := app_named_in(goal)) is not None:
-        # Only as an app ("in the Weather app"), so an installed Weather app doesn't take every question about the weather;
-        # one Envoy doesn't know yet is an app to install, not SkyLark because of travel words ("in the Expedia app, my flight").
-        return (learned or {}).get(norm(named))
+    known = {**APP_NAMES, **blocking_app_names()}
+    named = app_named_in(goal)
+    # A learned app counts only when named as an app ("in the Weather app"), so it doesn't take every question about the weather.
+    if named is not None and (pkg := known.get(norm(named)) or (learned or {}).get(norm(named))):
+        return pkg
+    # Loop A, Oct 30: the first name in APP_NAMES's order won, so a Gmail search for DoorDash fresh-launched DoorDash.
+    places = [(AS_APP.search(g[:m.start()]) is None, m.start(), -len(name), pkg)
+              for name, pkg in known.items() for m in re.finditer(rf"\b{re.escape(name)}\b", g)]
+    if places:
+        return min(places)[-1]
+    if named is not None:  # one Envoy doesn't know yet is an app to install, not SkyLark because of travel words ("in the Expedia app, my flight")
+        return None
     return SKYLARK if TRAVEL.search(goal) else None  # the demo's airline is SkyLark
 
 

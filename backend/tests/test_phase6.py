@@ -572,6 +572,27 @@ def test_an_app_envoy_does_not_know_yet_goes_to_the_real_app_emulator():
     assert app_for("In the Wikipedia app, look up Paris", {"wikipedia": "org.wikipedia"}) == "org.wikipedia"
 
 
+def test_a_goal_naming_two_apps_is_about_the_one_it_names_as_the_app():
+    names = runner_mod.APP_NAMES
+    gmail, doordash, amazon = names["gmail"], names["doordash"], names["amazon"]
+    # Loop A, Oct 30: DoorDash came first in APP_NAMES, so the runner fresh-launched DoorDash for a Gmail search.
+    assert app_for("In the Gmail app, search my mail for DoorDash and tell me the subject of the first result.") == gmail
+    assert app_for("In Gmail, find my Amazon order email") == gmail
+    assert app_for("Order my usual from Chick-fil-A on DoorDash") == doordash
+    assert app_for("Find the DoorDash receipt in my Gmail") == gmail  # named as the app, though named second
+    assert app_for("Open YouTube Music and play the song my Instagram story used") == names["youtube music"]
+    assert app_for("In the Wikipedia app, look up Amazon", {"wikipedia": "org.wikipedia"}) == "org.wikipedia"
+    # Neither named as the app: the first one named, the longer name where two start together.
+    assert app_for("Search Gmail for my Amazon order") == gmail
+    assert app_for("Play Bohemian Rhapsody in YouTube Music") == names["youtube music"]  # not YouTube
+    # One app, or none: as before.
+    assert app_for("Search Amazon for AA batteries") == amazon
+    assert app_for("In the Gmail app, search my mail for Security alert and tell me the subject of the first result.") == gmail
+    assert app_for("What's my balance in Bank of America?") == "com.infonow.bofa"
+    assert app_for("What's the weather like this weekend?") is None
+    assert app_for("In the Expedia app, check my flight to Denver") is None
+
+
 def test_bot_checks_are_recognized_on_screen_and_in_hand_offs():
     def scr(activity, *labels):
         return SimpleNamespace(activity=activity, package=activity.rsplit(".", 1)[0], numbered=[SimpleNamespace(label=x) for x in labels])
