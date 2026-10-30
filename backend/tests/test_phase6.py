@@ -18,6 +18,7 @@ import numpy as np
 import pytest
 from PIL import Image, ImageDraw
 
+import api.devices as devices_mod
 import api.runner as runner_mod
 from agent.vision import Vision, mark, parse_sam
 from api.devices import DevicePool, Lease
@@ -216,6 +217,9 @@ class FakePhone:
     def foreground_package(self):
         return self.front
 
+    async def launch(self, package, fresh=False):
+        self.front = package
+
 
 def test_a_touch_pause_or_another_app_hands_the_phone_to_you():
     async def scenario():
@@ -267,12 +271,81 @@ def test_the_agents_own_app_switch_does_not_pause():
         pool._devices[did] = dev
         lease = pool.leases[did]
         watcher = asyncio.create_task(pool.watch(did, dev, "com.skylark.air", every_s=0.02))
+        await asyncio.sleep(0.05)  # the watcher has seen SkyLark in front
         lease.last_agent_call = time.time()  # Envoy just tapped something that opens the browser
         dev.front = "com.android.chrome"
         await asyncio.sleep(0.15)
         watcher.cancel()
         return lease.user_control
     assert asyncio.run(scenario()) is False
+
+
+LAUNCHER = "com.google.android.apps.nexuslauncher"
+
+
+class Clock:
+    """api.devices' clock, moved on by hand: "4 s later" without waiting 4 s."""
+
+    def __init__(self) -> None:
+        self.now = 1_800_000_000.0
+
+    def time(self) -> float:
+        return self.now
+
+
+def _watch(monkeypatch, front: str, app: str | None, after_4s) -> tuple[bool, str]:
+    """A task on `app` starts while `front` is in front of the phone; 4 s later (a model call before the agent's first
+    step) `after_4s(dev, gated)` plays what happens next. Returns how the watcher left the phone: (yours?, why)."""
+    clock = Clock()
+    monkeypatch.setattr(devices_mod, "time", clock)
+
+    async def scenario():
+        pool = DevicePool(EventBus())
+        did = "phone-R5CT"
+        pool.leases[did] = Lease(did, task_id="task-1")
+        dev = FakePhone()
+        dev.front = front
+        pool._devices[did] = dev
+        lease = pool.leases[did]
+        watcher = asyncio.create_task(pool.watch(did, dev, app, every_s=0.02))
+        await asyncio.sleep(0.1)
+        clock.now += 4
+        await asyncio.sleep(0.1)
+        if not lease.user_control:  # a paused phone holds the agent's next call until you hand it back
+            await asyncio.wait_for(after_4s(dev, pool.gated(did, dev)), 1)
+            await asyncio.sleep(0.1)
+        watcher.cancel()
+        return lease.user_control, lease.reason
+    return asyncio.run(scenario())
+
+
+def test_the_home_screen_in_front_when_envoy_starts_is_not_a_change(monkeypatch):
+    """Found on the Pixel 5 (Oct 30, task-1030-155330-0eb0): the watcher expected the task's app from the start, so the
+    home screen Envoy found paused the task ~2 s after you allowed it, before the agent's first action."""
+    async def first_step(dev, gated):
+        await gated.launch("com.ubercab", fresh=True)
+    assert _watch(monkeypatch, LAUNCHER, "com.ubercab", first_step) == (False, "")
+
+
+def test_an_app_envoy_has_no_name_for_already_in_front_is_not_a_change(monkeypatch):
+    """task-1030-155655-7387: Uber, installed by hand on the phone, was in front; with no app to expect, it paused."""
+    async def nothing(dev, gated):
+        pass
+    assert _watch(monkeypatch, "com.ubercab", None, nothing) == (False, "")
+
+
+def test_another_app_coming_to_the_front_on_its_own_still_pauses(monkeypatch):
+    async def a_call(dev, gated):
+        dev.front = "com.android.dialer"  # not something Envoy did
+    assert _watch(monkeypatch, "com.ubercab", "com.ubercab", a_call) \
+        == (True, "paused: com.android.dialer came to the front on its own")
+
+
+def test_an_app_replacing_the_home_screen_on_its_own_still_pauses(monkeypatch):
+    async def a_message(dev, gated):
+        dev.front = "com.whatsapp"
+    assert _watch(monkeypatch, LAUNCHER, "com.ubercab", a_message) \
+        == (True, "paused: com.whatsapp came to the front on its own")
 
 
 # ---- screens with no tree ------------------------------------------------------------------------

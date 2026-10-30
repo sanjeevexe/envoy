@@ -207,8 +207,15 @@ class DevicePool:
         the agent goes on from whatever you left on screen, so that app becomes the expected one."""
         lease = self.leases[did]
         started = started or time.time()
-        last_pkg = app or ""
         seen_handback = lease.handed_back_at
+        # What is in front when Envoy starts (your home screen, an app Envoy has no name for) is not a change. Expecting
+        # `app` from the start paused tasks on the Pixel 5 before the agent's first action (Oct 30).
+        try:
+            last_pkg = await asyncio.to_thread(device.foreground_package)
+        except Exception:  # noqa: BLE001
+            last_pkg = ""
+        if not last_pkg or last_pkg in BENIGN_FRONT:
+            last_pkg = app or ""
 
         def pause(reason: str, banner_reason: str | None) -> None:
             self.take_over(did, reason, by="phone")
