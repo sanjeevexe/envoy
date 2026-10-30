@@ -35,6 +35,7 @@ from memory.app_notes import AppNotes
 from memory.bridge import fill_inputs, notes_for, remember_run
 from memory.service import MemoryService
 from memory.store import MemoryStore
+from memory.usual import Usual, resolve as resolve_usual, with_usual
 from models.adapter import ModelAdapter, profile_models
 from policy.approval_rules import ApprovalRules
 from policy.approvals import ApprovalRequest
@@ -154,8 +155,14 @@ class TaskRunner:
         if asks_for_phone(goal) or asks_for_phone(request or ""):
             phone = phone or "phone"
             goal = strip_phone_words(goal)
-        task = self.store.create(goal, source, routine=routine, inputs=inputs or {}, app=app, request=request or goal, models=profile_models(),
+        request = request or goal
+        usual = self._usual(goal, request)
+        if usual is not None:  # "my usual from <place>": the order you told me, spelled out for the matcher and the agent
+            goal = with_usual(goal, usual, add_app=not app and not routine and app_for(goal, self._learned_names()) is None)
+        task = self.store.create(goal, source, routine=routine, inputs=inputs or {}, app=app, request=request, models=profile_models(),
                                  **({"parent": parent} if parent else {}))
+        if usual is not None:
+            task["usual"] = {"place": usual.place, "order": usual.order, "app": usual.app}  # for chat's reply; Before I start shows it
         if phone_ok:
             self.phone_allowed[task["id"]] = phone_ok  # before the run is scheduled: _choose_phone reads it
         self.bus.publish("task", task=task)
@@ -172,6 +179,16 @@ class TaskRunner:
             coro.close()
             raise RuntimeError("the task runner has no event loop yet")
         return task
+
+    def _usual(self, goal: str, request: str) -> Usual | None:
+        try:
+            return resolve_usual(self.memory, f"{goal}\n{request}")
+        except Exception:  # noqa: BLE001 - a usual that can't be read leaves the goal as you said it
+            return None
+
+    def app_names(self) -> list[str]:
+        """Every app name a request can use: the ones Envoy knows, the ones that block emulators, and the ones it installed."""
+        return [*APP_NAMES, *blocking_app_names(), *self._learned_names()]
 
     def stop(self, tid: str) -> bool:
         job = self.jobs.get(tid)

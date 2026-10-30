@@ -9,6 +9,9 @@ approve anything: approvals come only from the user's approval screen.
 
 A message with schedule words ("every Friday at 6 PM, order my usual") may set up a recurring job (api/recurring.py): a
 trigger created switched off, and a card asking you to turn it on. Every other message goes on exactly as before.
+
+"My usual from <place> is <order>" (typed or spoken in Envoy's own app) is stored as your usual, with you as its source
+(memory/usual.py), in code and with no model call; a later "order my usual from <place>" spells it out in the task.
 """
 
 from __future__ import annotations
@@ -17,6 +20,7 @@ import asyncio
 from typing import Any
 
 from memory.retrieval import Retriever
+from memory.usual import VIA, Usual, remember, said
 from models.prompts import CHAT_INSTRUCTIONS
 
 from api.crossapp import lead, may_span_apps
@@ -28,6 +32,8 @@ async def chat(message: str, *, adapter: Any, memory: Any, runner: Any, routines
     `spoken` is the short line a voice reply reads aloud.
     A request that needs two or more apps becomes a cross-app task first (api/crossapp.py); one that asks for something
     again and again may set up a recurring job (api/recurring.py); the rest is unchanged."""
+    if source in VIA and (usual := said(message, _app_names(runner))) is not None:
+        return told(memory, usual, source)
     lead_calls, lead_cost = 0, 0.0
     recurring = getattr(runner, "recurring", None)
     if recurring is not None and may_schedule(message):
@@ -78,12 +84,36 @@ async def chat(message: str, *, adapter: Any, memory: Any, runner: Any, routines
         return out
     if route.kind == "task":
         task = runner.start(route.goal or message, source, request=message)
-        out.update(reply=f"On it: {route.goal or message}. You can follow it here; anything that costs money, or that you didn't ask for, waits for your OK.",
-                   spoken=f"On it: {route.goal or message}.", task=task)
+        usual = task.get("usual") if isinstance(task, dict) else None
+        out.update(reply=f"On it: {task['goal'] if usual else route.goal or message}. You can follow it here; anything that costs money, or that you "
+                         "didn't ask for, waits for your OK.",
+                   spoken=f"On it: your usual from {usual['place']}, {usual['order']}." if usual else f"On it: {route.goal or message}.", task=task)
         return out
     out["reply"] = route.reply or "I can answer from what I remember, or do things in your phone apps."
     out["spoken"] = out["reply"]
     return out
+
+
+def told(memory: Any, usual: Usual, source: str) -> dict[str, Any]:
+    """You said what your usual is: stored, and said back. Without an app (and with a place that isn't one), asks for it:
+    a task needs to know where to order."""
+    eid, known = remember(memory, usual, via=VIA[source])
+    app = (memory.current(eid, "app") or {}).get("value")
+    what = f"your usual from {usual.place} is {usual.order}" + (f", on {app}" if app else "")
+    reply = f"Got it: {what}." + (" (It replaces the one I had.)" if known else "") + f' Ask for "my usual from {usual.place}" any time.'
+    from api.runner import app_for  # here, not at the top, as in phone_ready
+    if not app and app_for(usual.place) is None:
+        reply += f' Which app do you order it on? Say it again with the app, like "… on <app>", and I\'ll order it there.'
+    return {"kind": "reply", "model_calls": 0, "cost_usd": 0.0, "reply": reply, "spoken": f"Got it: {what}.",
+            "remembered": {"entity": eid, "place": usual.place, "order": usual.order, "app": app}}
+
+
+def _app_names(runner: Any) -> list[str]:
+    names = getattr(runner, "app_names", None)
+    if callable(names):
+        return names()
+    from api.runner import APP_NAMES
+    return list(APP_NAMES)
 
 
 def phone_ready(runner: Any, goal: str) -> bool:

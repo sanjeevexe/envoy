@@ -11,9 +11,9 @@ recorded runs, app notes, and the approval rules. It makes no model call, takes 
 it is cheap enough for every task (the runner's `preflight` step), every offer's card before Yes, and MCP's
 `heads_up` for Muse.
 
-Each line is {kind, text, level}: kind is device, blocked, install, signin, approval, routine or app_note; level is
-info, warn or stop. At most five, the most important first. A stop line changes nothing about the run: the runner
-already handles a missing phone; the line only says so up front.
+Each line is {kind, text, level}: kind is device, blocked, memory (your usual, memory/usual.py), install, signin, approval,
+routine or app_note; level is info, warn or stop. At most five, the most important first. A stop line changes nothing
+about the run: the runner already handles a missing phone; the line only says so up front.
 """
 
 from __future__ import annotations
@@ -29,7 +29,7 @@ from policy.approval_rules import DIRECT_SOURCES, ApprovalRules, involves_money,
 
 MAX_LINES = 5
 LEVELS = ("stop", "warn", "info")
-KINDS = ("blocked", "device", "signin", "install", "approval", "routine", "app_note")
+KINDS = ("blocked", "device", "memory", "signin", "install", "approval", "routine", "app_note")
 OK = ("done", "agent_done", "done_unverified")
 
 # A goal that buys something: its payment step will ask, whatever the mode (approval_rules: money always asks).
@@ -97,12 +97,23 @@ def _check(lines: list[dict[str, str]], runner: Any, goal: str, *, request: str 
     label = _label(runner, app) if app else (named or "the app")
     blocked = blocks_emulator(app, rules, learned)
 
-    for section in (_device, _signin, _install, _approval, _routine_line, _app_notes):
+    for section in (_device, _usual, _signin, _install, _approval, _routine_line, _app_notes):
         try:
             section(lines, runner=runner, goal=goal, request=request, source=source, app=app, routine=rt, phone=phone,
                     phone_ok=phone_ok, choice=choice, label=label, blocked=blocked, phones=phones, named=named, names=names)
         except Exception:  # noqa: BLE001 - one part failing costs only its own line
             continue
+
+
+# ---- what it took from memory ---------------------------------------------------------------------
+
+
+def _usual(lines: list[dict[str, str]], *, runner: Any, goal: str, request: str | None, **_: Any) -> None:
+    """"My usual from <place>": the order you told Envoy (memory/usual.py), so you see what it will order."""
+    from memory.usual import resolve
+    u = resolve(runner.memory, f"{goal}\n{request or ''}")
+    if u is not None:
+        _line(lines, "memory", f"Your usual from {u.place}: {u.order}" + (f", on {u.app}" if u.app else "") + ".")
 
 
 # ---- where it runs ------------------------------------------------------------------------------

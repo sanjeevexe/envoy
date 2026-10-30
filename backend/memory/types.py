@@ -13,7 +13,7 @@ from datetime import date, datetime
 
 ENTITY_TYPES = (
     "Person", "Trip", "Flight", "Reservation", "Order", "Item", "Place", "App", "Account", "Loyalty program",
-    "Subscription", "Event", "Preference", "Note", "Routine", "Task", "App note",
+    "Subscription", "Event", "Preference", "Usual", "Note", "Routine", "Task", "App note",
 )
 # Kept in the graph but not facts about the user: never in memory's notes, answers, graph or change alerts (memory/app_notes.py).
 NOT_ABOUT_YOU = ("App note",)
@@ -47,6 +47,7 @@ TYPES: dict[str, TypeSpec] = {t.name: t for t in [
     TypeSpec("Subscription", ("service", "plan", "renews_at", "price"), title=("service",)),
     TypeSpec("Event", ("title", "start", "end", "location"), title=("title", "start")),
     TypeSpec("Preference", ("text",), title=("text",)),
+    TypeSpec("Usual", ("place", "order", "app"), keys=(("place",),), title=("place",)),  # your usual order from a place (memory/usual.py)
     TypeSpec("Note", ("body",), title=("body",)),
     TypeSpec("Routine", ("name", "app", "version"), keys=(("name",),), title=("name",)),
     TypeSpec("Task", ("goal", "status"), title=("goal",)),
@@ -138,6 +139,8 @@ def normalize_key_value(attribute: str, value: str) -> str:
         return re.sub(r"[^0-9A-Za-z]", "", v).upper()
     if attribute == "email":
         return v.casefold()
+    if attribute == "place":  # "Pho 24" = "pho-24" = "pho24"
+        return re.sub(r"[^0-9a-z]", "", v.casefold())
     if attribute in ("from", "to"):
         m = re.search(r"\(([A-Z]{3})\)|^([A-Z]{3})$", v)  # "Atlanta (ATL)" = "ATL"
         if m:

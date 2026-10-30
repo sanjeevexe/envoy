@@ -36,6 +36,7 @@ from memory.app_notes import AppNotes
 from memory.retrieval import Retriever
 from memory.store import MemoryStore
 from memory.types import NOT_ABOUT_YOU
+from memory.usual import MAX_ORDER, MAX_PLACE, Usual, remember as remember_usual
 from models.adapter import ModelAdapter
 from routines.model import dump_yaml
 from routines.store import RoutineStore
@@ -581,6 +582,15 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
         res = memory.user_edit(eid, body["attribute"], str(body.get("value", "")))
         memory.commit()
         return {"result": getattr(res, "kind", str(res))}
+
+    @app.post("/api/memory/usual", dependencies=[Depends(session)])
+    def add_usual(body: dict[str, Any] = Body(...)) -> dict[str, Any]:
+        """Your usual order from a place, from the Memory page (memory/usual.py): place and order, and the app if you name it."""
+        place, order, app_ = (" ".join(str(body.get(k) or "").split()) for k in ("place", "order", "app"))
+        if not place or not order or len(place) > MAX_PLACE or len(order) > MAX_ORDER or len(app_) > MAX_PLACE:
+            raise HTTPException(400, "a place and an order are needed")
+        eid, known = remember_usual(memory, Usual(place, order, app_ or None), via="memory page")
+        return {"entity": eid, "replaced": known}
 
     @app.delete("/api/memory/source/{sid}", dependencies=[Depends(session)])
     def delete_source(sid: str) -> dict[str, Any]:

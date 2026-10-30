@@ -97,7 +97,7 @@ class Retriever:
             sender = re.sub(r"\s*<.*>", "", ref.get("from", "")) or "email"
             return f"email from {sender}, {self.ago(s['captured_at'])}"
         if kind == "user":
-            return "your edit"
+            return "what you told me" if ref.get("via") == "chat" else "your edit"
         if kind == "client":
             return f"note from {ref.get('author', 'an assistant')}"
         if kind == "photo":

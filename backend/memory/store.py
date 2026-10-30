@@ -251,10 +251,11 @@ class MemoryStore:
         self._after_change(eid)
         return FactResult(kind, fid)
 
-    def user_edit(self, eid: str, attribute: str, value: str) -> FactResult:
-        """An edit from Envoy's own interfaces: it outranks extracted facts and clears conflicts on that attribute."""
+    def user_edit(self, eid: str, attribute: str, value: str, source: str | None = None) -> FactResult:
+        """An edit from Envoy's own interfaces: it outranks extracted facts and clears conflicts on that attribute.
+        `source`: a user source already made for this edit (one statement setting several facts), else a new one."""
         eid = self.resolve(eid)
-        src = self.add_source("user", {"via": "edit"})
+        src = source or self.add_source("user", {"via": "edit"})
         now = self.clock()
         cur = self.current(eid, attribute)
         fid = self._insert_fact(eid, attribute, value, valid_from=now, valid_to=None, observed_at=now, source=src, confidence=1.0, author="user")

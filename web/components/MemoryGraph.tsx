@@ -1,7 +1,8 @@
 "use client";
 
 // The memory graph: entities and their links. Click one to see its facts, where each was seen, and its history;
-// edit a fact (your edit outranks anything Envoy read) or delete a source (its facts go with it).
+// edit a fact (your edit outranks anything Envoy read) or delete a source (its facts go with it). With nothing selected,
+// you can tell Envoy your usual order from a place (memory/usual.py), which "order my usual from …" then uses.
 import { useEffect, useRef, useState } from "react";
 import { MagnifyingGlassIcon, PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react";
 import { Button, Chip, cx, SectionLabel } from "@/components/ui";
@@ -16,9 +17,9 @@ type Entity = { entity: { id: string; type: string; name: string }; facts: Fact[
 // Node colors from the Sage palette (globals.css): greens for travel, apricots for shopping, inks for people and places;
 // lighter ones in dark mode, so every node stands out from its card.
 const LIGHT: Record<string, string> = { Person: "#1F2A24", Trip: "#5E9478", Flight: "#1F4F37", Reservation: "#5F6A63", Order: "#E8945A", Item: "#C2703A",
-  Place: "#7A3B12", "Loyalty program": "#6F8F7C", Note: "#4E5A53", Hotel: "#5F6A63" };
+  Place: "#7A3B12", "Loyalty program": "#6F8F7C", Note: "#4E5A53", Hotel: "#5F6A63", Usual: "#C2703A" };
 const DARK: Record<string, string> = { Person: "#ECEEE9", Trip: "#5E9478", Flight: "#B5DEC6", Reservation: "#98A39C", Order: "#E8945A", Item: "#F2B68A",
-  Place: "#C98A5A", "Loyalty program": "#8FB39E", Note: "#C2CAC4", Hotel: "#98A39C" };
+  Place: "#C98A5A", "Loyalty program": "#8FB39E", Note: "#C2CAC4", Hotel: "#98A39C", Usual: "#F2B68A" };
 const isDark = () => typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches;
 const colorOf = (type: string) => (isDark() ? DARK : LIGHT)[type] ?? (isDark() ? "#C2CAC4" : "#4E5A53");
 const token = (name: string) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -34,6 +35,8 @@ export default function MemoryGraph({ version }: { version: number }) {
   const [edit, setEdit] = useState<{ attribute: string; value: string } | null>(null);
   const [q, setQ] = useState("");
   const [notes, setNotes] = useState<string | null>(null);
+  const [usual, setUsual] = useState({ place: "", order: "", app: "" });
+  const [usualError, setUsualError] = useState<string | null>(null);
 
   useEffect(() => { api("/api/memory/graph").then(setGraph).catch(() => {}); }, [version]);
   useEffect(() => { if (selected) api(`/api/memory/entity/${selected}`).then(setEntity).catch(() => setEntity(null)); }, [selected, version]);
@@ -81,6 +84,18 @@ export default function MemoryGraph({ version }: { version: number }) {
     if (selected) api(`/api/memory/entity/${selected}`).then(setEntity).catch(() => setEntity(null));
   };
 
+  const saveUsual = async () => {
+    try {
+      const r = await post<{ entity: string }>("/api/memory/usual", usual);
+      setUsual({ place: "", order: "", app: "" });
+      setUsualError(null);
+      api("/api/memory/graph").then(setGraph);
+      setSelected(r.entity);
+    } catch {
+      setUsualError("Couldn't save it: a place and an order are needed.");
+    }
+  };
+
   const facts = entity?.facts.filter((f) => showHistory || f.current) ?? [];
   const types = [...new Set(graph.nodes.map((n) => n.type))];
   return (
@@ -102,7 +117,24 @@ export default function MemoryGraph({ version }: { version: number }) {
         </div>
       </div>
       <aside aria-label="Facts" className="w-full shrink-0 overflow-y-auto border-t border-line bg-raised p-4 md:p-6 lg:w-[380px] lg:border-l lg:border-t-0">
-        {!entity ? <p className="text-body text-muted">Select something in the graph to see what Envoy knows about it, and where each fact was seen.</p> : (
+        {!entity ? (
+          <div className="flex flex-col gap-5">
+            <p className="text-body text-muted">Select something in the graph to see what Envoy knows about it, and where each fact was seen.</p>
+            <form className="flex flex-col gap-2 rounded-block border border-line bg-surface p-4" aria-labelledby="usual-title"
+                  onSubmit={(e) => { e.preventDefault(); if (usual.place.trim() && usual.order.trim()) saveUsual(); }}>
+              <SectionLabel id="usual-title">Your usual</SectionLabel>
+              <p className="text-meta text-ink-2">What you always get from a place. Ask for &ldquo;my usual from&nbsp;…&rdquo; and Envoy orders it.</p>
+              {([["place", "Place", "Thai Basil"], ["order", "Order", "a pad see ew and a Thai iced tea"], ["app", "App you order it on (optional)", ""]] as const).map(([k, label, hint]) => (
+                <label key={k} className="flex flex-col gap-1 text-meta text-ink-2">{label}
+                  <input value={usual[k]} onChange={(e) => setUsual({ ...usual, [k]: e.target.value })} placeholder={hint}
+                         className="h-11 w-full rounded-full border border-control bg-surface px-4 text-[16px] text-ink outline-none placeholder:text-muted focus:border-sage md:text-body" />
+                </label>
+              ))}
+              {usualError && <p role="alert" className="text-meta text-brick">{usualError}</p>}
+              <Button variant="primary" className="mt-1 self-start" disabled={!usual.place.trim() || !usual.order.trim()}>Save</Button>
+            </form>
+          </div>
+        ) : (
           <div className="flex flex-col gap-4">
             <div>
               <div className="text-meta font-bold text-muted">{entity.entity.type}</div>
