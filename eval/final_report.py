@@ -449,31 +449,46 @@ def build() -> None:
     print(f"wrote {(OUT / 'report.md').relative_to(REPO)} with {sum(1 for c in charts.values() if c)} charts")
 
 
+TIERS_SPARK = "tiers-spark-2026-10-28"  # the Oct 28 comparison on Muse Spark, cited when this run's steps have no Contributor tier
+
+
 def tiers_section(systems: dict[str, Any] | None) -> list[str]:
-    """The Contributor tier against the standard tier: the full agent, the original layout, the same seed's 10 tasks."""
-    contrib = load("systems-contributor")
-    if not contrib or not systems:
+    """The Contributor tier against the standard tier: the full agent, the original layout, the same seed's 10 tasks. When this
+    run's agent steps are on a model with no Contributor variant (Muse Wonder: the hybrid and wonder profiles), run_final.sh
+    skips the tiers step, and the Oct 28 comparison on Muse Spark is shown instead, with why."""
+    from models.adapter import CONTRIBUTOR_MODELS
+    if not systems:
+        return []
+    step = lambda d: d["meta"]["models"]["jobs"]["step"]["model"]  # noqa: E731
+    why, data = "", "`eval/results/final/systems-contributor.json` beside `systems.json`"
+    if step(systems) not in CONTRIBUTOR_MODELS:
+        frozen = load(TIERS_SPARK)
+        if not frozen:
+            return []
+        why = (f"This run's agent steps (plan, step, repair) ran on `{step(systems)}` ({_ran_on(systems)}), which has no Contributor "
+               "tier, so the tiers step was skipped: only the Muse Spark jobs (matching, grounding, choosing, extracting) would have "
+               "changed tier. Below is the Oct 28 comparison on Muse Spark, its Contributor run beside Spark's standard run on the same cells. ")
+        contrib, systems, data = frozen["contributor"], frozen["standard"], f"`eval/results/final/{TIERS_SPARK}.json`"
+    else:
+        contrib = load("systems-contributor")
+    if not contrib:
         return []
     c = [r for r in contrib["rows"] if r["system"] == "agent" and r["layout"] == 0 and r["try"] == 1]
     cells = {(r["task"], r["seed"]) for r in c}
     s = [r for r in systems["rows"] if r["system"] == "agent" and r["layout"] == 0 and r["try"] == 1 and (r["task"], r["seed"]) in cells]
     if not c or len(s) != len(c):
         return []
-    step = lambda d: d["meta"]["models"]["jobs"]["step"]["model"]  # noqa: E731
-    same = step(contrib) == step(systems)
-    profiles = [d["meta"]["models"].get("profile") or "not recorded" for d in (contrib, systems)]
+    other = step(contrib).removesuffix("-contributor") != step(systems)
     row = lambda name, rs: (f"| {name} | {sum(r['passed'] for r in rs)}/{len(rs)} | {sum(r['steps'] for r in rs)} | {sum(r['calls'] for r in rs)} | "  # noqa: E731
                             f"{sum(r['duration_s'] for r in rs):.0f} s | {max(r['steps'] for r in rs)} |")
     return ["## 1c. The Contributor tier against the standard tier", "",
-            f"The full agent on the same {len(c)} cells (each core task on the original layout, the same seed and booking), first try only. "
+            why + f"The full agent on the same {len(c)} cells (each core task on the original layout, the same seed and booking), first try only. "
             f"Contributor: {_ran_on(contrib)}; standard: {_ran_on(systems)}. Every measurement in this report runs on the standard tier."
-            + (f" The agent's own jobs ran on `{step(systems)}` in both rows (it has no Contributor tier), so only the Muse Spark jobs "
-               "(matching, grounding, choosing, extracting) differ between them." if same else "")
-            + (f" The two rows ran on different profiles (Contributor `{profiles[0]}`, standard `{profiles[1]}`), so they differ in more "
-               "than the tier." if profiles[0] != profiles[1] else ""), "",
+            + (f" The two rows' steps ran on different models (`{step(contrib)}`, `{step(systems)}`), so they differ in more than the tier."
+               if other else ""), "",
             "| Tier | Right | Actions | Model calls | Time, summed | Most actions in one task |", "| --- | --- | --- | --- | --- | --- |",
             row(f"Standard (`{step(systems)}` for steps)", s), row(f"Contributor (`{step(contrib)}` for steps)", c), "",
-            "Data: `eval/results/final/systems-contributor.json` beside `systems.json`.", ""]
+            f"Data: {data}.", ""]
 
 
 def androidworld() -> dict[str, str]:

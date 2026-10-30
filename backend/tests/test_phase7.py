@@ -147,15 +147,22 @@ def test_the_report_names_each_suites_profile_and_the_tier_rows_their_own_step_m
         return {"meta": {"code": {"is_eval_final": True, "short": "abc1234", "dirty": []}, "cost": {"by_profile": {profile: 3}},
                          "models": {"profile": profile, "profile_from": "the adapter's default", "tier": tier, "jobs": jobs}},
                 "rows": [{"system": "agent", "layout": 0, "try": 1, "task": "gate", "seed": 1, "passed": True, "steps": 3, "calls": 4, "duration_s": 20.0}]}
-    systems, contrib = run("hybrid", "muse-wonder-1.0", "standard"), run("hybrid", "muse-wonder-1.0", "contributor")
-    monkeypatch.setattr(rp, "load", lambda name: contrib if name == "systems-contributor" else None)
+    # On spark the tiers step ran: its Contributor run sits beside this run's standard one.
+    spark, spark_c = run("spark", "muse-spark-1.3", "standard"), run("spark", "muse-spark-1.3-contributor", "contributor")
+    monkeypatch.setattr(rp, "load", lambda name: spark_c if name == "systems-contributor" else None)
+    md = "\n".join(rp.tiers_section(spark))
+    assert "Standard (`muse-spark-1.3` for steps)" in md and "Contributor (`muse-spark-1.3-contributor` for steps)" in md
+    assert "skipped" not in md and "different models" not in md and "systems-contributor.json" in md
+    # On hybrid the steps are on Wonder (no Contributor tier): the step was skipped, and the Oct 28 Spark pair is cited instead
+    # of any Contributor result lying around.
+    systems = run("hybrid", "muse-wonder-1.0", "standard")
+    frozen = {"standard": run(None, "muse-spark-1.3", "standard"), "contributor": run(None, "muse-spark-1.3-contributor", "contributor")}
+    monkeypatch.setattr(rp, "load", lambda name: {rp.TIERS_SPARK: frozen, "systems-contributor": spark_c}.get(name))
     md = "\n".join(rp.tiers_section(systems))
-    assert "Standard (`muse-wonder-1.0` for steps)" in md and "Contributor (`muse-wonder-1.0` for steps)" in md and "in both rows" in md
-    assert "different profiles" not in md and "`eval-final`, `hybrid`" in rp._ran_on(systems)
-    old_contrib = run("spark", "muse-spark-1.3-contributor", "contributor")  # the Oct 28 Contributor run against a hybrid standard run
-    monkeypatch.setattr(rp, "load", lambda name: old_contrib if name == "systems-contributor" else None)
-    md = "\n".join(rp.tiers_section(systems))
-    assert "in both rows" not in md and "different profiles (Contributor `spark`, standard `hybrid`)" in md
+    assert "ran on `muse-wonder-1.0` (`eval-final`, `hybrid`), which has no Contributor tier, so the tiers step was skipped" in md
+    assert "Standard (`muse-spark-1.3` for steps)" in md and "tiers-spark-2026-10-28.json" in md and "different models" not in md
+    monkeypatch.setattr(rp, "load", lambda name: None)
+    assert rp.tiers_section(systems) == []  # no Spark comparison kept: no section rather than a mixed one
     interfaces = run("hybrid", "muse-wonder-1.0", "standard")
     interfaces["meta"]["cost"]["by_profile"] = {"hybrid": 2, "spark": 5}  # an API started with another environment
     lines = rp.models_line({"systems": systems, "interfaces": interfaces, "real": None})

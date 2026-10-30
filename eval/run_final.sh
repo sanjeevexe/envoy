@@ -11,7 +11,9 @@
 # stops the run before any device time). Each device is claimed through the coordinator's locks (~/Desktop/Envoy/coord/
 # devices.sh, owner phase7) before it is started, and released when the run moves on; without that folder the script
 # runs as before. Standard tier throughout (reported dollars are always at standard prices). The model profile is the
-# adapter's default unless ENVOY_MODEL_PROFILE is set; it is printed here and recorded in every suite's results.
+# adapter's default unless ENVOY_MODEL_PROFILE is set; it is printed here and recorded in every suite's results. The tiers
+# step (the agent on the Contributor tier) runs only when the agent's steps are on a model with a Contributor tier (the
+# spark profile); on hybrid or wonder they are on Muse Wonder, which has none, and the report cites the Oct 28 Spark comparison.
 set -uo pipefail
 cd "$(dirname "$0")/.."
 source scripts/env.sh >/dev/null
@@ -56,6 +58,8 @@ PROFILE=$(uv run --project backend python -c 'import os; from models.adapter imp
 p = active_profile(); print(p, "(" + ("ENVOY_MODEL_PROFILE" if os.environ.get("ENVOY_MODEL_PROFILE", "").strip() else "the adapter default") + "; Muse Wonder for",
       ", ".join(sorted(j for j in JOBS if model_for(j, p) == WONDER)) or "no job", end=")")') || { echo "unknown model profile: no run"; exit 3; }
 echo "model profile: $PROFILE"
+TIER_STEPS=$(uv run --project backend python -c 'from models.adapter import CONTRIBUTOR_MODELS, model_for
+print("yes" if model_for("step") in CONTRIBUTOR_MODELS else "no")')
 
 run() {  # run <log name> <args...>
   local name=$1; shift
@@ -67,7 +71,10 @@ git describe --exact-match --tags HEAD 2>/dev/null | grep -qx eval-final || echo
 
 if step compile; then only envoy-test; run compile compile; fi
 if step systems; then only envoy-test; run systems systems; fi
-if step tiers; then only envoy-test; run tiers systems --systems agent --layouts 0 --seeds 1 --tries 1 --contributor --name systems-contributor; fi
+if step tiers; then
+  if [ "$TIER_STEPS" = yes ]; then only envoy-test; run tiers systems --systems agent --layouts 0 --seeds 1 --tries 1 --contributor --name systems-contributor
+  else echo "== $(date '+%H:%M') tiers skipped: the agent's steps run on Muse Wonder (${PROFILE%% *} profile), which has no Contributor tier"; fi
+fi
 if step repeats; then only envoy-test; run repeats repeats; fi
 if step change; then only envoy-test; run change change; run sizes-test sizes --device envoy-test; fi
 if step injection; then only envoy-test; run injection injection; fi

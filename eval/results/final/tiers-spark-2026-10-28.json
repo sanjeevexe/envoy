@@ -1,0 +1,683 @@
+{
+ "about": "The Contributor tier against the standard tier on Muse Spark, Oct 28: the full agent on the same 10 cells (each core task on the original layout, the same seed and booking), first try only. Kept apart from systems.json and systems-contributor.json for runs whose agent steps run on a model with no Contributor tier (Muse Wonder, in the hybrid and wonder profiles), where run_final.sh skips the tiers step. Both runs are on Muse Spark; profiles weren't recorded yet.",
+ "standard": {
+  "meta": {
+   "suite": "systems",
+   "run_id": "1027220657",
+   "started": "2026-10-28T02:06:57+00:00",
+   "finished": "2026-10-28T02:41:54+00:00",
+   "wall_s": 2096.5,
+   "code": {
+    "commit": "ad9a67be7e933625e87f3efda1cdee824be11b73",
+    "short": "ad9a67b",
+    "tags": [],
+    "is_eval_final": false,
+    "dirty": [
+     "ackend/memory/retrieval.py",
+     "backend/models/prompts.py",
+     "backend/routines/compiler.py",
+     "eval/baselines.py",
+     "testapps/skylark/app/src/main/java/com/skylark/air/Screens.kt",
+     "testapps/skylark/app/src/main/java/com/skylark/air/Store.kt",
+     "backend/routines/lifecycle.py",
+     "eval/capture_safety.py",
+     "eval/final_common.py",
+     "eval/final_core.py",
+     "eval/final_memory.py",
+     "eval/final_safety.py",
+     "eval/run_final.py"
+    ],
+    "branch": "main"
+   },
+   "models": {
+    "tier": "standard",
+    "jobs": {
+     "step": {
+      "model": "muse-spark-1.3",
+      "effort": "low"
+     },
+     "plan": {
+      "model": "muse-spark-1.3",
+      "effort": "medium"
+     },
+     "repair": {
+      "model": "muse-spark-1.3",
+      "effort": "medium"
+     },
+     "grounding": {
+      "model": "muse-spark-1.3",
+      "effort": "low"
+     },
+     "choose": {
+      "model": "muse-spark-1.3",
+      "effort": "low"
+     },
+     "extract": {
+      "model": "muse-spark-1.3",
+      "effort": "low"
+     },
+     "answer": {
+      "model": "muse-spark-1.3",
+      "effort": "low"
+     },
+     "compile": {
+      "model": "muse-wonder-1.0",
+      "effort": "medium"
+     },
+     "match": {
+      "model": "muse-spark-1.3",
+      "effort": "low"
+     }
+    }
+   },
+   "devices": [
+    "emulator-5554"
+   ],
+   "cost": {
+    "input_tokens": 1030153,
+    "cached_tokens": 737548,
+    "output_tokens": 95986,
+    "reasoning_tokens": 66835,
+    "calls": 462,
+    "errors": 0,
+    "billed_usd": 0.8843,
+    "standard_usd": 0.8843,
+    "by_job": {
+     "plan": {
+      "calls": 61,
+      "standard_usd": 0.1743
+     },
+     "step": {
+      "calls": 360,
+      "standard_usd": 0.6245
+     },
+     "match": {
+      "calls": 40,
+      "standard_usd": 0.0797
+     },
+     "repair": {
+      "calls": 1,
+      "standard_usd": 0.0059
+     }
+    },
+    "by_model": {
+     "muse-spark-1.3": 462
+    }
+   },
+   "spend_total_this_checkout": {
+    "billed_usd": 10.15,
+    "standard_usd": 10.787
+   },
+   "host": "Sanjeevs-MacBook-Pro"
+  },
+  "rows": [
+   {
+    "system": "agent",
+    "task": "check_in",
+    "layout": 0,
+    "seed": 101,
+    "try": 1,
+    "task_id": "f7-1027220657-age-check_in-L0-s101-t1",
+    "passed": true,
+    "status": "done",
+    "answer": "Checked in for flight to Pittsburgh. Boarding pass for Maya Patel: Flight SL 495 ATL→PIT on Sun, Nov 22, 2026, Seat 20E, Gate A15, Boarding 6:00 AM Group 5. Status: You're checked in.",
+    "steps": 8,
+    "approvals": 1,
+    "interventions": 0,
+    "duration_s": 18.75,
+    "side_effects": [],
+    "calls": 11,
+    "input_tokens": 25445,
+    "cached_tokens": 19547,
+    "output_tokens": 1505,
+    "reasoning_tokens": 792,
+    "standard_usd": 0.0167,
+    "billed_usd": 0.0167
+   },
+   {
+    "system": "agent",
+    "task": "change_seat",
+    "layout": 0,
+    "seed": 101,
+    "try": 1,
+    "task_id": "f7-1027220657-age-change_seat-L0-s101-t1",
+    "passed": true,
+    "status": "done",
+    "answer": "Seat on Pittsburgh flight SL 495 changed to 23C - confirmed as 'Your seat: 23C' with message 'Seat changed to 23C'.",
+    "steps": 6,
+    "approvals": 1,
+    "interventions": 0,
+    "duration_s": 17.45,
+    "side_effects": [],
+    "calls": 8,
+    "input_tokens": 26468,
+    "cached_tokens": 13832,
+    "output_tokens": 1310,
+    "reasoning_tokens": 765,
+    "standard_usd": 0.0234,
+    "billed_usd": 0.0234
+   },
+   {
+    "system": "agent",
+    "task": "add_ktn",
+    "layout": 0,
+    "seed": 101,
+    "try": 1,
+    "task_id": "f7-1027220657-age-add_ktn-L0-s101-t1",
+    "passed": true,
+    "status": "done",
+    "answer": "Known traveler number 59192807 saved to Pittsburgh trip (SL 495, confirmation 6NOS5N) - screen shows 'Known traveler number saved'.",
+    "steps": 4,
+    "approvals": 0,
+    "interventions": 0,
+    "duration_s": 12.31,
+    "side_effects": [],
+    "calls": 6,
+    "input_tokens": 13216,
+    "cached_tokens": 10022,
+    "output_tokens": 985,
+    "reasoning_tokens": 580,
+    "standard_usd": 0.0097,
+    "billed_usd": 0.0097
+   },
+   {
+    "system": "agent",
+    "task": "gate",
+    "layout": 0,
+    "seed": 101,
+    "try": 1,
+    "task_id": "f7-1027220657-age-gate-L0-s101-t1",
+    "passed": true,
+    "status": "done",
+    "answer": "Gate A15 - SL 495 ATL to PIT on Sun, Nov 22, 2026 leaves from Gate A15",
+    "steps": 2,
+    "approvals": 0,
+    "interventions": 0,
+    "duration_s": 7.73,
+    "side_effects": [],
+    "calls": 4,
+    "input_tokens": 7957,
+    "cached_tokens": 6212,
+    "output_tokens": 750,
+    "reasoning_tokens": 485,
+    "standard_usd": 0.0063,
+    "billed_usd": 0.0063
+   },
+   {
+    "system": "agent",
+    "task": "seat",
+    "layout": 0,
+    "seed": 101,
+    "try": 1,
+    "task_id": "f7-1027220657-age-seat-L0-s101-t1",
+    "passed": true,
+    "status": "done",
+    "answer": "Seat 20E",
+    "steps": 2,
+    "approvals": 0,
+    "interventions": 0,
+    "duration_s": 7.32,
+    "side_effects": [],
+    "calls": 4,
+    "input_tokens": 7962,
+    "cached_tokens": 6212,
+    "output_tokens": 756,
+    "reasoning_tokens": 514,
+    "standard_usd": 0.0063,
+    "billed_usd": 0.0063
+   },
+   {
+    "system": "agent",
+    "task": "flight_status",
+    "layout": 0,
+    "seed": 101,
+    "try": 1,
+    "task_id": "f7-1027220657-age-flight_status-L0-s101-t1",
+    "passed": true,
+    "status": "done",
+    "answer": "SL 495 · ATL → PIT · Sun, Nov 22, 2026 · On time · Gate A15 · Departs 7:35 AM",
+    "steps": 3,
+    "approvals": 0,
+    "interventions": 0,
+    "duration_s": 9.75,
+    "side_effects": [],
+    "calls": 5,
+    "input_tokens": 9885,
+    "cached_tokens": 8117,
+    "output_tokens": 924,
+    "reasoning_tokens": 555,
+    "standard_usd": 0.0074,
+    "billed_usd": 0.0074
+   },
+   {
+    "system": "agent",
+    "task": "miles",
+    "layout": 0,
+    "seed": 101,
+    "try": 1,
+    "task_id": "f7-1027220657-age-miles-L0-s101-t1",
+    "passed": true,
+    "status": "done",
+    "answer": "91,351 miles",
+    "steps": 0,
+    "approvals": 0,
+    "interventions": 0,
+    "duration_s": 4.19,
+    "side_effects": [],
+    "calls": 2,
+    "input_tokens": 3081,
+    "cached_tokens": 2530,
+    "output_tokens": 841,
+    "reasoning_tokens": 720,
+    "standard_usd": 0.0046,
+    "billed_usd": 0.0046
+   },
+   {
+    "system": "agent",
+    "task": "find_trip",
+    "layout": 0,
+    "seed": 101,
+    "try": 1,
+    "task_id": "f7-1027220657-age-find_trip-L0-s101-t1",
+    "passed": true,
+    "status": "done",
+    "answer": "Trip 6NOS5N goes to Pittsburgh (PIT) on flight SL 495 from ATL 7:35 AM to PIT 12:40 PM on Sun, Nov 22, 2026.",
+    "steps": 7,
+    "approvals": 0,
+    "interventions": 0,
+    "duration_s": 18.96,
+    "side_effects": [],
+    "calls": 9,
+    "input_tokens": 20832,
+    "cached_tokens": 15737,
+    "output_tokens": 1444,
+    "reasoning_tokens": 821,
+    "standard_usd": 0.0149,
+    "billed_usd": 0.0149
+   },
+   {
+    "system": "agent",
+    "task": "past_trip",
+    "layout": 0,
+    "seed": 101,
+    "try": 1,
+    "task_id": "f7-1027220657-age-past_trip-L0-s101-t1",
+    "passed": true,
+    "status": "done",
+    "answer": "Sat, Aug 22, 2026",
+    "steps": 3,
+    "approvals": 0,
+    "interventions": 0,
+    "duration_s": 10.29,
+    "side_effects": [],
+    "calls": 5,
+    "input_tokens": 10477,
+    "cached_tokens": 8117,
+    "output_tokens": 1093,
+    "reasoning_tokens": 773,
+    "standard_usd": 0.0088,
+    "billed_usd": 0.0088
+   },
+   {
+    "system": "agent",
+    "task": "gate_alerts",
+    "layout": 0,
+    "seed": 101,
+    "try": 1,
+    "task_id": "f7-1027220657-age-gate_alerts-L0-s101-t1",
+    "passed": true,
+    "status": "done",
+    "answer": "Gate change alerts are turned on in Profile settings.",
+    "steps": 2,
+    "approvals": 0,
+    "interventions": 0,
+    "duration_s": 8.32,
+    "side_effects": [],
+    "calls": 4,
+    "input_tokens": 7622,
+    "cached_tokens": 6212,
+    "output_tokens": 923,
+    "reasoning_tokens": 681,
+    "standard_usd": 0.0066,
+    "billed_usd": 0.0066
+   }
+  ]
+ },
+ "contributor": {
+  "meta": {
+   "suite": "systems-contributor",
+   "run_id": "1027224213",
+   "started": "2026-10-28T02:42:13+00:00",
+   "finished": "2026-10-28T02:48:03+00:00",
+   "wall_s": 349.9,
+   "code": {
+    "commit": "5c40e0b3dfe93588a9670df0fc628eb5f6885516",
+    "short": "5c40e0b",
+    "tags": [],
+    "is_eval_final": false,
+    "dirty": [
+     "EADME.md",
+     "THIRD_PARTY.md",
+     "backend/routines/compiler.py",
+     "backend/routines/executor.py",
+     "backend/routines/screens.py",
+     "backend/tests/test_phase7.py",
+     "eval/README.md",
+     "eval/final_common.py",
+     "eval/final_core.py",
+     "eval/final_memory.py",
+     "eval/final_report.py",
+     "eval/final_safety.py",
+     "eval/run_final.py",
+     "docs/phase-7-results.md",
+     "eval/phone_gate.py"
+    ],
+    "branch": "main"
+   },
+   "models": {
+    "tier": "contributor",
+    "jobs": {
+     "step": {
+      "model": "muse-spark-1.3-contributor",
+      "effort": "low"
+     },
+     "plan": {
+      "model": "muse-spark-1.3-contributor",
+      "effort": "medium"
+     },
+     "repair": {
+      "model": "muse-spark-1.3-contributor",
+      "effort": "medium"
+     },
+     "grounding": {
+      "model": "muse-spark-1.3-contributor",
+      "effort": "low"
+     },
+     "choose": {
+      "model": "muse-spark-1.3-contributor",
+      "effort": "low"
+     },
+     "extract": {
+      "model": "muse-spark-1.3-contributor",
+      "effort": "low"
+     },
+     "answer": {
+      "model": "muse-spark-1.3-contributor",
+      "effort": "low"
+     },
+     "compile": {
+      "model": "muse-wonder-1.0",
+      "effort": "medium"
+     },
+     "match": {
+      "model": "muse-spark-1.3-contributor",
+      "effort": "low"
+     }
+    }
+   },
+   "devices": [
+    "emulator-5554"
+   ],
+   "cost": {
+    "input_tokens": 231191,
+    "cached_tokens": 167106,
+    "output_tokens": 16851,
+    "reasoning_tokens": 10583,
+    "calls": 99,
+    "errors": 0,
+    "billed_usd": 0.0101,
+    "standard_usd": 0.1768,
+    "by_job": {
+     "plan": {
+      "calls": 14,
+      "standard_usd": 0.0366
+     },
+     "step": {
+      "calls": 85,
+      "standard_usd": 0.1402
+     }
+    },
+    "by_model": {
+     "muse-spark-1.3-contributor": 99
+    }
+   },
+   "spend_total_this_checkout": {
+    "billed_usd": 10.16,
+    "standard_usd": 10.964
+   },
+   "host": "Sanjeevs-MacBook-Pro"
+  },
+  "rows": [
+   {
+    "system": "agent",
+    "task": "check_in",
+    "layout": 0,
+    "seed": 101,
+    "try": 1,
+    "task_id": "f7-1027224213-age-check_in-L0-s101-t1",
+    "passed": true,
+    "status": "done",
+    "answer": "Checked in for flight SL 495 ATL to PIT on Sun Nov 22 2026, confirmation 6NOS5N, seat 20E, gate A15. Boarding pass available.",
+    "steps": 13,
+    "approvals": 1,
+    "interventions": 0,
+    "duration_s": 46.44,
+    "side_effects": [],
+    "calls": 17,
+    "input_tokens": 39945,
+    "cached_tokens": 30977,
+    "output_tokens": 2361,
+    "reasoning_tokens": 1241,
+    "standard_usd": 0.0259,
+    "billed_usd": 0.0014
+   },
+   {
+    "system": "agent",
+    "task": "change_seat",
+    "layout": 0,
+    "seed": 101,
+    "try": 1,
+    "task_id": "f7-1027224213-age-change_seat-L0-s101-t1",
+    "passed": true,
+    "status": "done",
+    "answer": "Seat changed to 23C on Pittsburgh flight SL 495. Screen shows 'Your seat: 23C' and 'Seat changed to 23C'.",
+    "steps": 23,
+    "approvals": 1,
+    "interventions": 0,
+    "duration_s": 85.73,
+    "side_effects": [],
+    "calls": 26,
+    "input_tokens": 70270,
+    "cached_tokens": 45434,
+    "output_tokens": 3988,
+    "reasoning_tokens": 2376,
+    "standard_usd": 0.0548,
+    "billed_usd": 0.0034
+   },
+   {
+    "system": "agent",
+    "task": "add_ktn",
+    "layout": 0,
+    "seed": 101,
+    "try": 1,
+    "task_id": "f7-1027224213-age-add_ktn-L0-s101-t1",
+    "passed": true,
+    "status": "done",
+    "answer": "Known traveler number 59192807 added to Pittsburgh trip (SL 495, confirmation 6NOS5N) - screen shows 'Known traveler number saved'.",
+    "steps": 4,
+    "approvals": 0,
+    "interventions": 0,
+    "duration_s": 17.51,
+    "side_effects": [],
+    "calls": 6,
+    "input_tokens": 13206,
+    "cached_tokens": 10022,
+    "output_tokens": 1246,
+    "reasoning_tokens": 848,
+    "standard_usd": 0.0108,
+    "billed_usd": 0.0006
+   },
+   {
+    "system": "agent",
+    "task": "gate",
+    "layout": 0,
+    "seed": 101,
+    "try": 1,
+    "task_id": "f7-1027224213-age-gate-L0-s101-t1",
+    "passed": true,
+    "status": "done",
+    "answer": "Gate A15",
+    "steps": 2,
+    "approvals": 0,
+    "interventions": 0,
+    "duration_s": 10.8,
+    "side_effects": [],
+    "calls": 4,
+    "input_tokens": 7961,
+    "cached_tokens": 6212,
+    "output_tokens": 705,
+    "reasoning_tokens": 462,
+    "standard_usd": 0.0061,
+    "billed_usd": 0.0003
+   },
+   {
+    "system": "agent",
+    "task": "seat",
+    "layout": 0,
+    "seed": 101,
+    "try": 1,
+    "task_id": "f7-1027224213-age-seat-L0-s101-t1",
+    "passed": true,
+    "status": "done",
+    "answer": "20E",
+    "steps": 4,
+    "approvals": 0,
+    "interventions": 0,
+    "duration_s": 14.63,
+    "side_effects": [],
+    "calls": 6,
+    "input_tokens": 12648,
+    "cached_tokens": 10022,
+    "output_tokens": 700,
+    "reasoning_tokens": 358,
+    "standard_usd": 0.0078,
+    "billed_usd": 0.0004
+   },
+   {
+    "system": "agent",
+    "task": "flight_status",
+    "layout": 0,
+    "seed": 101,
+    "try": 1,
+    "task_id": "f7-1027224213-age-flight_status-L0-s101-t1",
+    "passed": true,
+    "status": "done",
+    "answer": "SL 495 · ATL → PIT · Sun, Nov 22, 2026 · On time · Gate A15 · Departs 7:35 AM",
+    "steps": 5,
+    "approvals": 0,
+    "interventions": 0,
+    "duration_s": 18.69,
+    "side_effects": [],
+    "calls": 7,
+    "input_tokens": 14678,
+    "cached_tokens": 11927,
+    "output_tokens": 899,
+    "reasoning_tokens": 427,
+    "standard_usd": 0.0091,
+    "billed_usd": 0.0005
+   },
+   {
+    "system": "agent",
+    "task": "miles",
+    "layout": 0,
+    "seed": 101,
+    "try": 1,
+    "task_id": "f7-1027224213-age-miles-L0-s101-t1",
+    "passed": true,
+    "status": "done",
+    "answer": "91,351 miles",
+    "steps": 0,
+    "approvals": 0,
+    "interventions": 0,
+    "duration_s": 7.05,
+    "side_effects": [],
+    "calls": 2,
+    "input_tokens": 3084,
+    "cached_tokens": 2402,
+    "output_tokens": 789,
+    "reasoning_tokens": 665,
+    "standard_usd": 0.0046,
+    "billed_usd": 0.0002
+   },
+   {
+    "system": "agent",
+    "task": "find_trip",
+    "layout": 0,
+    "seed": 101,
+    "try": 1,
+    "task_id": "f7-1027224213-age-find_trip-L0-s101-t1",
+    "passed": true,
+    "status": "done",
+    "answer": "Trip 6NOS5N goes to Pittsburgh (PIT) - SL 495 ATL 7:35 AM → PIT 12:40 PM on Sun, Nov 22, 2026, Gate A15, Seat 20E, Status On time",
+    "steps": 13,
+    "approvals": 0,
+    "interventions": 0,
+    "duration_s": 56.76,
+    "side_effects": [],
+    "calls": 15,
+    "input_tokens": 36211,
+    "cached_tokens": 25759,
+    "output_tokens": 2642,
+    "reasoning_tokens": 1681,
+    "standard_usd": 0.0282,
+    "billed_usd": 0.0016
+   },
+   {
+    "system": "agent",
+    "task": "past_trip",
+    "layout": 0,
+    "seed": 101,
+    "try": 1,
+    "task_id": "f7-1027224213-age-past_trip-L0-s101-t1",
+    "passed": true,
+    "status": "done",
+    "answer": "Sat, Aug 22, 2026 - Columbus trip SL 1986 ATL → CMH",
+    "steps": 2,
+    "approvals": 0,
+    "interventions": 0,
+    "duration_s": 13.02,
+    "side_effects": [],
+    "calls": 4,
+    "input_tokens": 8092,
+    "cached_tokens": 6212,
+    "output_tokens": 806,
+    "reasoning_tokens": 525,
+    "standard_usd": 0.0067,
+    "billed_usd": 0.0004
+   },
+   {
+    "system": "agent",
+    "task": "gate_alerts",
+    "layout": 0,
+    "seed": 101,
+    "try": 1,
+    "task_id": "f7-1027224213-age-gate_alerts-L0-s101-t1",
+    "passed": true,
+    "status": "done",
+    "answer": "Gate change alerts is now turned on, verified on the Profile screen where the toggle shows as on.",
+    "steps": 9,
+    "approvals": 0,
+    "interventions": 0,
+    "duration_s": 40.65,
+    "side_effects": [],
+    "calls": 12,
+    "input_tokens": 25096,
+    "cached_tokens": 18139,
+    "output_tokens": 2715,
+    "reasoning_tokens": 2000,
+    "standard_usd": 0.023,
+    "billed_usd": 0.0013
+   }
+  ]
+ }
+}
