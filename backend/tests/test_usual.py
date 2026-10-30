@@ -235,6 +235,7 @@ def test_an_offers_card_shows_the_usual_too():
 
 @pytest.fixture
 def client(tmp_path, monkeypatch):
+    monkeypatch.setenv("MCP_BEARER_TOKEN", "mcp-test-token")  # as the other app tests: no .env needed
     monkeypatch.setenv("ENVOY_ALLOWED_HOSTS", "testserver")
     monkeypatch.setattr("api.app.API_DIR", tmp_path)
     from api.app import build, session_token
