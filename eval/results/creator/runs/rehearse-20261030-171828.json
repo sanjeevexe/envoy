@@ -1,0 +1,89 @@
+{
+ "mode": "rehearse",
+ "time": "2026-10-30T17:18:28",
+ "clip": "loopa-171828.mp4",
+ "caption": "Loop A v2-on-cb77111 1. Test pattern, not for posting.",
+ "offer": {
+  "title": "Put loopa-171828.mp4 on your Pixel 5 and post it to Instagram?",
+  "goal": "Post the newest video in my phone's gallery to Instagram as a reel with this caption: \"Loop A v2-on-cb77111 1. Test pattern, not for posting.\"",
+  "request": "the newest video in my phone's gallery to Instagram as a reel with this caption",
+  "device": "phone-09031FDD4000C6",
+  "preflight": [
+   {
+    "kind": "device",
+    "text": "I'll use your Pixel 5 (you said yes).",
+    "level": "info"
+   },
+   {
+    "kind": "approval",
+    "text": "Sharing will need your OK.",
+    "level": "info"
+   },
+   {
+    "kind": "routine",
+    "text": "Using routine instagram_post_reel v2.",
+    "level": "info"
+   }
+  ],
+  "request_is_the_templates": true,
+  "caption_not_in_request": true,
+  "real_phone": true
+ },
+ "task": {
+  "id": "task-1030-171836-f99d",
+  "status": "needs_you",
+  "routine": "instagram_post_reel",
+  "model_calls": 10,
+  "cost_usd": 0.1038,
+  "traces": [],
+  "detail": "routine step tap_next failed (after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) and the agent could not finish (failed); asking the user",
+  "source": "web",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 15,
+ "approvals": [
+  {
+   "description": "tap \"Share\" in com.instagram.android",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/share_button'",
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "auto_approved": [],
+ "handoff": {
+  "status": "sent",
+  "remote_path": "/sdcard/Movies/Envoy/loopa-171828.mp4",
+  "error": null
+ },
+ "marks_s": {
+  "outbox": 0.0,
+  "offer": 6.1,
+  "accepted": 7.8,
+  "running": 7.8,
+  "waiting_approval": 129.5,
+  "share_asked": 129.5,
+  "needs_you": 132.5,
+  "end": 132.5
+ },
+ "spent": {
+  "model_calls": 10,
+  "cost_usd": 0.1038,
+  "cost_at_standard_usd": 0.1038,
+  "jobs": {
+   "repair": 3,
+   "plan": 1,
+   "step": 6
+  }
+ },
+ "ok": true,
+ "failures": [],
+ "cleanup": [
+  "back (caption)",
+  "editor_cancel",
+  "start_over",
+  "gallery_home"
+ ]
+}

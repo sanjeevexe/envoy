@@ -40,3 +40,8 @@
 | 2026-10-30T14:04:30 | rehearse | yes | declined | instagram_post_reel | 30.1 s | 31.1 s | 0 | 0.0 | tap "Share" in com.instagram.android (routine instagram_post_reel v3) → declined |
 | 2026-10-30T14:05:51 | rehearse | yes | declined | instagram_post_reel | 28.7 s | 29.7 s | 0 | 0.0 | tap "Share" in com.instagram.android (routine instagram_post_reel v3) → declined |
 | 2026-10-30T14:07:11 | rehearse | yes | declined | instagram_post_reel | 26.8 s | 27.8 s | 0 | 0.0 | tap "Share" in com.instagram.android (routine instagram_post_reel v3) → declined |
+| 2026-10-30T17:18:28 | rehearse | yes | needs_you | instagram_post_reel | 129.5 s | 132.5 s | 10 | 0.1038 | tap "Share" in com.instagram.android → declined |
+| 2026-10-30T17:21:31 | rehearse | yes | declined | instagram_post_reel | 69.0 s | 70.0 s | 1 | 0.0177 | tap "Share" in com.instagram.android (routine instagram_post_reel v2) → declined |
+| 2026-10-30T17:23:31 | rehearse | yes | declined | instagram_post_reel | 68.9 s | 69.9 s | 1 | 0.0137 | tap "Share" in com.instagram.android (routine instagram_post_reel v2) → declined |
+| 2026-10-30T17:25:32 | rehearse | yes | declined | instagram_post_reel | 71.0 s | 72.0 s | 1 | 0.0198 | tap "Share" in com.instagram.android (routine instagram_post_reel v2) → declined |
+| 2026-10-30T17:27:34 | rehearse | yes | declined | instagram_post_reel | 66.2 s | 67.2 s | 1 | 0.0154 | tap "Share" in com.instagram.android (routine instagram_post_reel v2) → declined |
