@@ -35,6 +35,8 @@ Files: `comparison.json` (every number above), `traces/<profile>.md` (each episo
 
 ## Verdict
 
+**Update, Oct 30:** the user made `hybrid` the default (branch `coord/hybrid-default`): they judged the 3× rule too strict for real use, since saved routines replay mostly on Spark jobs and the extra cost lands on first runs and repairs, where hybrid helps.
+
 **Spark stays the default; `hybrid` stays available.** Hybrid passed 14 of 20 against Spark's 9 (+5, which meets the rule's
 "≥ 5 of 20"), but cost $0.104 per task against $0.030, **3.46×**, and the rule asks for under 3× per task. (Per *passed*
 task the ratio is 2.2×, $0.149 against $0.067; the rule is written per task, so that is the one applied.) Wonder on every

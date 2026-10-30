@@ -39,6 +39,7 @@ def test_parse_still_fails_on_garbage():
 
 def test_contributor_tier_only_for_test_apps(tmp_path, monkeypatch):
     monkeypatch.setenv("META_CONTRIBUTOR_TIER", "true")
+    monkeypatch.setenv("ENVOY_MODEL_PROFILE", "spark")  # Spark's step; hybrid's Wonder step is in test_wonder_never_runs_on_contributor_…
     a = ModelAdapter(api_key="x", meter=CostMeter(path=tmp_path / "c.jsonl"))
     assert a.build_request("step", "hi", data_scope="test_app", contributor=True)["model"] == "muse-spark-1.3-contributor"
     with pytest.raises(ContributorNotAllowed):
@@ -56,11 +57,18 @@ def _adapter(tmp_path):
     return ModelAdapter(api_key="x", meter=CostMeter(path=tmp_path / "c.jsonl"))
 
 
-def test_spark_profile_is_todays_split(monkeypatch):
-    from models.adapter import JOBS, model_for
+def test_the_default_profile_is_hybrid(monkeypatch):
+    from models.adapter import active_profile, model_for, step_cost_scale
     monkeypatch.delenv("ENVOY_MODEL_PROFILE", raising=False)
+    assert active_profile() == "hybrid" and model_for("step") == "muse-wonder-1.0" and model_for("chat") == "muse-spark-1.3"
+    assert step_cost_scale() == 3.2
+
+
+def test_spark_profile_is_the_job_table_split(monkeypatch):
+    from models.adapter import JOBS, model_for, step_cost_scale
+    monkeypatch.setenv("ENVOY_MODEL_PROFILE", "spark")
     assert model_for("step") == "muse-spark-1.3" and model_for("compile") == "muse-wonder-1.0"
-    assert all(model_for(j) == JOBS[j].model for j in JOBS)
+    assert all(model_for(j) == JOBS[j].model for j in JOBS) and step_cost_scale() == 1.0
 
 
 def test_hybrid_profile_moves_plan_step_repair_to_wonder(monkeypatch, tmp_path):
@@ -144,3 +152,54 @@ def test_profile_models_and_cost_scale(monkeypatch):
     pm = profile_models()
     assert pm["profile"] == "hybrid" and pm["jobs"]["step"] == "muse-wonder-1.0" and pm["jobs"]["chat"] == "muse-spark-1.3"
     assert step_cost_scale() == 3.2 and step_cost_scale("spark") == 1.0
+
+
+def test_a_hybrid_run_gets_the_cap_scaled_to_wonder_steps(monkeypatch, tmp_path):
+    """The per-task cap ($0.30, the user's) is set for Spark steps; under hybrid the agent stops at 3.2x that in dollars."""
+    import asyncio
+    import io
+    from pathlib import Path
+
+    from PIL import Image
+
+    from agent.loop import AgentRunner, RunConfig
+    from agent.trace import TraceWriter
+    from devices.screen import build_state
+    from devices.types import ActionResult
+    from models.schemas import Plan
+    from policy.approvals import ScriptedApprover
+
+    monkeypatch.setattr(TraceWriter.__init__, "__defaults__", (tmp_path,))
+    state = build_state((Path(__file__).parent / "screens" / "skylark_trip.xml").read_text(), "com.skylark.air",
+                        "com.skylark.air.MainActivity", 1080, 2400)
+
+    class Device:
+        async def wait_until_settled(self, *a, **k):
+            return state
+
+        async def observe(self, *a, **k):
+            return state
+
+        async def act(self, action):
+            return ActionResult(ok=True, duration_ms=0)
+
+        async def screenshot(self) -> bytes:  # asked for once the screen stops changing
+            buf = io.BytesIO()
+            Image.new("RGB", (1080, 2400), "white").save(buf, format="PNG")
+            return buf.getvalue()
+
+    class Adapter:  # every call costs $0.25 and no step finishes
+        def call(self, job, content, **kw):
+            parsed = (Plan.model_validate({"app": "com.skylark.air", "subgoals": ["read the gate"], "success_check": {"kind": "info", "value": "", "field_hint": ""}})
+                      if job == "plan" else
+                      StepOutput.model_validate({"reason": "r", "action": {"type": "wait", "seconds": 0}, "expected_result": "x", "risk": "read"}))
+            return SimpleNamespace(parsed=parsed, cost_usd=0.25, cost_at_standard_usd=0.25, usage={})
+
+    def run(profile: str):
+        monkeypatch.setenv("ENVOY_MODEL_PROFILE", profile)
+        return asyncio.run(AgentRunner(Device(), Adapter(), ScriptedApprover(approve=False), RunConfig()).run("gate?", task_id=f"cap-{profile}"))  # type: ignore[arg-type]
+
+    spark, hybrid = run("spark"), run("hybrid")
+    assert RunConfig().max_cost_usd == 0.30
+    assert spark.status == hybrid.status == "cost_limit"
+    assert 0.30 <= spark.cost_usd < 0.96 <= hybrid.cost_usd  # a step's calls land together, so each stops at the first step past its cap

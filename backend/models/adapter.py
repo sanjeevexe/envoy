@@ -92,9 +92,11 @@ PROFILES: dict[str, dict[str, str]] = {
     "hybrid": {"plan": WONDER, "step": WONDER, "repair": WONDER, "compile": WONDER},
     "wonder": {name: WONDER for name in JOBS},
 }
-# Spark by the comparison's rule (eval/results/androidworld/model-comparison/2026-10-28): hybrid passed 14 of 20 against
-# Spark's 9, at 3.46× the cost per task (the rule asks for under 3×).
-DEFAULT_PROFILE = "spark"
+# Hybrid since Oct 30, the user's call. In the comparison (eval/results/androidworld/model-comparison/2026-10-28) hybrid
+# passed 14 of 20 against Spark's 9 at 3.46× the cost per task, over the preset 3× rule; the user judged that rule too strict
+# for real use: saved routines replay mostly on Spark jobs, so the extra cost lands on first runs and repairs, where hybrid
+# helps. ENVOY_MODEL_PROFILE=spark brings back the all-Spark split.
+DEFAULT_PROFILE = "hybrid"
 WONDER_TIMEOUT_S = 120  # Wonder answers in 10-15 s at medium effort (Phase 2), with a long tail
 WONDER_MIN_OUTPUT_TOKENS = 8000  # its reasoning counts against max_output_tokens
 

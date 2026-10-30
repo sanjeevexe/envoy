@@ -7,6 +7,8 @@
   coordinator merges it after the AndroidWorld branch.
 
 The default profile stays `spark`, as the decision rule says. Every stage has now run.
+
+**Update, Oct 30:** the user made `hybrid` the default (branch `coord/hybrid-default`): they judged the 3× rule too strict for real use, since saved routines replay mostly on Spark jobs and the extra cost lands on first runs and repairs, where hybrid helps.
 - **Billing:** the Meta API's billing failures (02:16–about 13:00) ended with the new account.
 - **The coordinator:** the **Envoy coordinator** session holds the device locks (`~/Desktop/Envoy/coord/devices.sh`) and does
   every merge into main.
@@ -32,6 +34,7 @@ Nothing is blocking. Two calls are yours, with no rush:
 
 The rule asks for +5 tasks at under 3× the cost per task. Hybrid gained exactly 5 tasks but cost 3.46× per task, so `spark`
 stays the default and `hybrid` stays available.
+The user overrode this on Oct 30 and made `hybrid` the default (see the top).
 - **Hybrid's gains:** in 5 of its 6, Spark had picked a wrong strategy and ran out of steps.
 - **Wonder's losses:** all three were a replan after the work was already done.
 

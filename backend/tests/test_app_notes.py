@@ -10,6 +10,7 @@ from types import SimpleNamespace
 import pytest
 
 from agent.loop import AgentRunner, RunConfig
+from agent.trace import TraceWriter
 from devices.screen import build_state
 from devices.types import ActionResult
 from memory.app_notes import NOTE_TYPE, AppNotes, instruction_reason, personal_reason, read_trace
@@ -249,7 +250,7 @@ class StepAdapter:
 
 
 def test_the_agent_reads_notes_for_the_app_on_screen_and_records_them(tmp_path, monkeypatch):
-    monkeypatch.setattr("agent.trace.RUNS", tmp_path)
+    monkeypatch.setattr(TraceWriter.__init__, "__defaults__", (tmp_path,))
     store, notes = notes_store()
     sky = notes.add(SKYLARK, "The gate is on the trip detail screen, under Flight.", REF)
     notes.add(STARBUCKS, "A store must be chosen before prices show.", REF)
