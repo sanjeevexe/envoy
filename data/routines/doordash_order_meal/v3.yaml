@@ -1,0 +1,371 @@
+routine: doordash_order_meal
+app: com.dd.doordash
+version: 3
+status: active
+intent: "Order my usual from Chick-fil-A on DoorDash: a Chick-fil-A Deluxe Meal with American cheese, Waffle Potato Fries and a Frosted Lemonade"
+description: "Searches DoorDash for Chick-fil-A, builds the Chick-fil-A® Deluxe Meal with American cheese, Waffle Potato Fries and a Frosted Lemonade,\
+  \ adds it to the cart, and continues from the cart to checkout. Only this order: another meal, side or drink is a different request."
+patterns: [Order my usual from Chick-fil-A on DoorDash, Order me my usual from Chick-fil-A, 'Order a Chick-fil-A Deluxe Meal with American cheese,
+    Waffle Potato Fries and a Frosted Lemonade']
+start: fresh_launch
+steps:
+- id: tap_search_doordash
+  intent: Tap the DoorDash search field
+  pre:
+  - {app_foreground: com.dd.doordash}
+  - element_present: {resource_id: coordinatorLayout_homepage, kind: List}
+  action:
+    tap:
+      text: Search DoorDash
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.49, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: edit_text, text: Search DoorDash, kind: EditText}
+  - element_present: {resource_id: search_back_button, text: Close search, kind: Button}
+  risk: reversible
+  note: trace step 1
+- id: enter_restaurant_search
+  intent: Type Chick-fil-A into the 'Search DoorDash' field and view the results
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    type:
+      field:
+        resource_id: edit_text
+        text: Search DoorDash
+        hint: Search DoorDash
+        kind: EditText
+        cls: AutoCompleteTextView
+        in_list: false
+        position: [0.573, 0.079]
+      value: Chick-fil-A
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: search_query_title, text: Chick-fil-A, kind: Button}
+  risk: reversible
+  note: "tuned: typed search (doordash_search_restaurants' step) instead of the recent search the run tapped"
+- id: tap_restaurant_result
+  intent: Tap the restaurant result for Chick-fil-A
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      kind: Button
+      cls: FrameLayout
+      parent: results_list
+      in_list: true
+      position: [0.5, 0.415]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: store_fragment_container, kind: List}
+  risk: reversible
+  note: trace step 3
+- id: find_tap_meal_item
+  intent: Scroll to Chick-fil-A® Deluxe Meal if it is not on screen
+  action:
+    scroll_until:
+      target: {resource_id: container_card_view, text: Chick-fil-A® Deluxe Meal, kind: Button, cls: CardView, in_list: true}
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present: {resource_id: container_card_view, text: Chick-fil-A® Deluxe Meal, kind: Button, cls: CardView, in_list: true}
+  risk: read
+  note: "added: input-based list choice"
+- id: tap_meal_item
+  intent: Tap the menu item Chick-fil-A® Deluxe Meal
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap: {resource_id: container_card_view, text: Chick-fil-A® Deluxe Meal, kind: Button, cls: CardView, in_list: true}
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: store_fragment_container, kind: List}
+  risk: reversible
+  note: trace step 4
+- id: find_tap_meal_variant
+  intent: Scroll to the American variant if it is not on screen
+  action:
+    scroll_until:
+      target: {text: Chick-fil-A® Deluxe w/ American Meal, kind: Button, cls: ViewGroup, parent: options_recycler_view, in_list: true}
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present: {text: Chick-fil-A® Deluxe w/ American Meal, kind: Button, cls: ViewGroup, parent: options_recycler_view, in_list: true}
+  risk: read
+  note: "added: input-based list choice"
+- id: tap_meal_variant
+  intent: Tap the meal variant with American
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap: {text: Chick-fil-A® Deluxe w/ American Meal, kind: Button, cls: ViewGroup, parent: options_recycler_view, in_list: true}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: container_navBar_titles, text: Chick-fil-A® Deluxe w/ American Meal, kind: Text}
+  - element_present: {resource_id: checkbox, kind: CheckBox}
+  risk: reversible
+  note: trace step 5
+- id: tap_sandwich_option
+  intent: Tap the sandwich with American
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap: {text: Chick-fil-A® Deluxe Sandwich w/ American, kind: Button, cls: ViewGroup, parent: recyclerView, in_list: false}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: container_navBar_titles, text: Chick-fil-A® Deluxe Sandwich w/ American, kind: Text}
+  - element_present: {resource_id: recyclerView, kind: List}
+  risk: reversible
+  note: trace step 6
+- id: save_bun_and_condiment_options
+  intent: Tap Save options to confirm the bun and condiment selections and return to the meal customization
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: save_button
+      text: Save options
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.5, 0.939]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: container_navBar_titles, text: Chick-fil-A® Deluxe w/ American Meal, kind: Text}
+  - element_present: {resource_id: textView_storeItemHeader_title, text: Choose, kind: Text}
+  risk: reversible
+  note: trace step 8
+- id: tap_meal_sides
+  intent: Tap Meal Sides to choose the meal side
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      text: Meal Sides
+      kind: Button
+      cls: ViewGroup
+      parent: recyclerView
+      in_list: false
+      position: [0.5, 0.299]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: container_navBar_titles, text: Meal Sides, kind: Text}
+  - element_present: {resource_id: radio_button, kind: Radio}
+  risk: reversible
+  note: trace step 9
+- id: tap_side_option
+  intent: Tap the side option Chick-fil-A Waffle Potato Fries®
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap: {text: Chick-fil-A Waffle Potato Fries®, kind: Button, cls: ViewGroup, parent: recyclerView, in_list: false}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: container_navBar_titles, text: Chick-fil-A Waffle Potato Fries®, kind: Text}
+  - element_present: {resource_id: save_button, text: Save options, kind: Button}
+  risk: reversible
+  note: trace step 10
+- id: save_side_option
+  intent: Tap Save options to confirm the side selection
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: save_button
+      text: Save options
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.5, 0.939]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: container_navBar_titles, text: Meal Sides, kind: Text}
+  risk: reversible
+  note: trace step 11
+- id: save_meal_customization_after_side
+  intent: Tap Save options again to return to the main meal customization
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: save_button
+      text: Save options
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.5, 0.939]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: container_navBar_titles, text: Chick-fil-A® Deluxe w/ American Meal, kind: Text}
+  - element_present: {resource_id: checkbox, kind: CheckBox}
+  risk: reversible
+  note: trace step 12
+- id: tap_meal_beverages
+  intent: Tap Meal Beverages to choose the meal beverage
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      text: Meal Beverages
+      kind: Button
+      cls: ViewGroup
+      parent: recyclerView
+      in_list: false
+      position: [0.5, 0.369]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: container_navBar_titles, text: Meal Beverages, kind: Text}
+  - element_present: {resource_id: recyclerView, kind: List}
+  risk: reversible
+  note: trace step 13
+- id: find_tap_beverage_option
+  intent: Scroll to Frosted Lemonade if it is not on screen
+  action:
+    scroll_until:
+      target: {text: Frosted Lemonade, kind: Button, cls: ViewGroup, parent: recyclerView, in_list: true}
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present: {text: Frosted Lemonade, kind: Button, cls: ViewGroup, parent: recyclerView, in_list: true}
+  risk: read
+  note: "added: input-based list choice"
+- id: tap_beverage_option
+  intent: Tap the beverage option Frosted Lemonade
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap: {text: Frosted Lemonade, kind: Button, cls: ViewGroup, parent: recyclerView, in_list: true}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: container_navBar_titles, text: Frosted Lemonade, kind: Text}
+  - element_present: {resource_id: save_button, text: Save options, kind: Button}
+  risk: reversible
+  note: trace step 14
+- id: save_beverage_option
+  intent: Tap Save options to confirm the beverage selection
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: save_button
+      text: Save options
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.5, 0.939]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: container_navBar_titles, text: Meal Beverages, kind: Text}
+  - element_present: {resource_id: recyclerView, kind: List}
+  risk: reversible
+  note: trace step 15
+- id: confirm_beverage_selection
+  intent: Tap Save options to confirm the beverage selection and return to the meal customization
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: save_button
+      text: Save options
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.5, 0.939]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: container_navBar_titles, text: Chick-fil-A® Deluxe w/ American Meal, kind: Text}
+  - element_present: {resource_id: checkbox, kind: CheckBox}
+  risk: reversible
+  note: trace step 16
+- id: final_save_meal_options
+  intent: Tap Save options to finish the meal customization and return to the item page
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: save_button
+      text: Save options
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.5, 0.939]
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: container_navBar_titles, text: Chick-fil-A® Deluxe w/ American Meal, kind: Text}
+  risk: reversible
+  note: trace step 17
+- id: tap_add_to_order
+  intent: Tap Add to order to add the customized meal to the cart
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: addToCart_button
+      text: Add to order
+      kind: Button
+      cls: Button
+      parent: footer_button_layout
+      in_list: true
+      position: [0.5, 0.934]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: store_fragment_container, kind: List}
+  risk: reversible
+  note: trace step 18
+- id: find_tap_cart
+  intent: Scroll to Chick-fil-A if it is not on screen
+  action:
+    scroll_until:
+      target: {resource_id: button_orderCart, text: total before taxes, kind: Button, cls: ViewGroup, parent: button_ordercart_container, in_list: true}
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present: {resource_id: button_orderCart, text: total before taxes, kind: Button, cls: ViewGroup, parent: button_ordercart_container,
+      in_list: true}
+  risk: read
+  note: "added: input-based list choice"
+- id: tap_cart
+  intent: Tap the cart to proceed to checkout
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap: {resource_id: button_orderCart, text: total before taxes, kind: Button, cls: ViewGroup, parent: button_ordercart_container, in_list: true}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: container_navBar_titles, text: Your cart from, kind: Text}
+  risk: reversible
+  note: trace step 19
+- id: tap_continue_to_checkout
+  intent: Tap Continue to proceed from the cart to checkout review
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: button_orderCart_continue
+      text: Continue
+      kind: Button
+      cls: Button
+      parent: bottom_order_cart_sticky_container
+      in_list: false
+      position: [0.5, 0.93]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 20
+parent_version: 2
+changes:
+- "the usual's choices fixed (no inputs): a usual is one fixed order. With inputs, the matcher filled meal_item from memory's notes (the cart\
+  \ label an earlier run saved) in rerun 3 (task-1030-034018-1227), and the routine scrolled the menu for it; another usual is a different routine,\
+  \ compiled from its own run"
+compiled_from:
+  task_id: task-1030-032305-b761-r1
+  goal: "Order my usual from Chick-fil-A on DoorDash: a Chick-fil-A Deluxe Sandwich meal with waffle fries and a Frosted Lemonade"
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-30 03:27:02"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+  trace_steps_dropped: 0
+  cost_usd: 0.0967

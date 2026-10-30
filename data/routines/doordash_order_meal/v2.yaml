@@ -1,0 +1,463 @@
+routine: doordash_order_meal
+app: com.dd.doordash
+version: 2
+status: active
+intent: Order a specified meal from a restaurant on DoorDash
+description: Searches DoorDash for a restaurant, builds the meal with its option, side and drink, adds it to the cart, and continues from the
+  cart to checkout.
+patterns: [Order my usual on DoorDash, Order a meal on DoorDash, Get a sandwich meal delivered, Order my usual fast-food meal]
+start: fresh_launch
+inputs:
+  restaurant_name: {type: text, description: Restaurant to search for and open on DoorDash, example: Chick-fil-A}
+  meal_item: {type: text, description: The meal as the restaurant's menu names it, example: Deluxe Meal}
+  meal_option: {type: text, description: 'The meal''s cheese by its name alone, as the menu writes it after ''w/'' (American, Colby Jack, Pepper
+      Jack, No Cheese)', example: American}
+  side_option: {type: text, description: 'The meal''s side, as the menu names it', example: Waffle Potato Fries}
+  beverage_option: {type: text, description: 'The meal''s drink, as the menu names it', example: Frosted Lemonade}
+steps:
+- id: tap_search_doordash
+  intent: Tap the DoorDash search field
+  pre:
+  - {app_foreground: com.dd.doordash}
+  - element_present: {resource_id: coordinatorLayout_homepage, kind: List}
+  action:
+    tap:
+      text: Search DoorDash
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.49, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: edit_text, text: Search DoorDash, kind: EditText}
+  - element_present: {resource_id: search_back_button, text: Close search, kind: Button}
+  risk: reversible
+  note: trace step 1
+- id: enter_restaurant_search
+  intent: "Type {{restaurant_name}} into the 'Search DoorDash' field and view the results"
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    type:
+      field:
+        resource_id: edit_text
+        text: Search DoorDash
+        hint: Search DoorDash
+        kind: EditText
+        cls: AutoCompleteTextView
+        in_list: false
+        position: [0.573, 0.079]
+      value: "{{restaurant_name}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: search_query_title
+      text: "{{restaurant_name}}"
+      kind: Button
+  risk: reversible
+  note: "tuned: typed search (doordash_search_restaurants' step) instead of the recent search the run tapped"
+- id: tap_restaurant_result
+  intent: "Tap the restaurant result for {{restaurant_name}}"
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      kind: Button
+      cls: FrameLayout
+      parent: results_list
+      in_list: true
+      position: [0.5, 0.415]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: store_fragment_container, kind: List}
+  risk: reversible
+  note: trace step 3
+- id: find_tap_meal_item
+  intent: "Scroll to {{meal_item}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: container_card_view
+        text: "{{meal_item}}"
+        kind: Button
+        cls: CardView
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: container_card_view
+      text: "{{meal_item}}"
+      kind: Button
+      cls: CardView
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: tap_meal_item
+  intent: "Tap the menu item {{meal_item}}"
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: container_card_view
+      text: "{{meal_item}}"
+      kind: Button
+      cls: CardView
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: store_fragment_container, kind: List}
+  risk: reversible
+  note: trace step 4
+- id: find_tap_meal_variant
+  intent: "Scroll to the {{meal_option}} variant if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        text: "Chick-fil-A® Deluxe w/ {{meal_option}} Meal"
+        kind: Button
+        cls: ViewGroup
+        parent: options_recycler_view
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      text: "Chick-fil-A® Deluxe w/ {{meal_option}} Meal"
+      kind: Button
+      cls: ViewGroup
+      parent: options_recycler_view
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: tap_meal_variant
+  intent: "Tap the meal variant with {{meal_option}}"
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      text: "Chick-fil-A® Deluxe w/ {{meal_option}} Meal"
+      kind: Button
+      cls: ViewGroup
+      parent: options_recycler_view
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: container_navBar_titles
+      text: "Chick-fil-A® Deluxe w/ {{meal_option}} Meal"
+      kind: Text
+  - element_present: {resource_id: checkbox, kind: CheckBox}
+  risk: reversible
+  note: trace step 5
+- id: tap_sandwich_option
+  intent: "Tap the sandwich with {{meal_option}}"
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      text: "Chick-fil-A® Deluxe Sandwich w/ {{meal_option}}"
+      kind: Button
+      cls: ViewGroup
+      parent: recyclerView
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: container_navBar_titles
+      text: "Chick-fil-A® Deluxe Sandwich w/ {{meal_option}}"
+      kind: Text
+  - element_present: {resource_id: recyclerView, kind: List}
+  risk: reversible
+  note: trace step 6
+- id: save_bun_and_condiment_options
+  intent: Tap Save options to confirm the bun and condiment selections and return to the meal customization
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: save_button
+      text: Save options
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.5, 0.939]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: container_navBar_titles
+      text: "Chick-fil-A® Deluxe w/ {{meal_option}} Meal"
+      kind: Text
+  - element_present: {resource_id: textView_storeItemHeader_title, text: Choose, kind: Text}
+  risk: reversible
+  note: trace step 8
+- id: tap_meal_sides
+  intent: Tap Meal Sides to choose the meal side
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      text: Meal Sides
+      kind: Button
+      cls: ViewGroup
+      parent: recyclerView
+      in_list: false
+      position: [0.5, 0.299]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: container_navBar_titles, text: Meal Sides, kind: Text}
+  - element_present: {resource_id: radio_button, kind: Radio}
+  risk: reversible
+  note: trace step 9
+- id: tap_side_option
+  intent: "Tap the side option {{side_option}}"
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      text: "{{side_option}}"
+      kind: Button
+      cls: ViewGroup
+      parent: recyclerView
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: container_navBar_titles
+      text: "{{side_option}}"
+      kind: Text
+  - element_present: {resource_id: save_button, text: Save options, kind: Button}
+  risk: reversible
+  note: trace step 10
+- id: save_side_option
+  intent: Tap Save options to confirm the side selection
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: save_button
+      text: Save options
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.5, 0.939]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: container_navBar_titles, text: Meal Sides, kind: Text}
+  risk: reversible
+  note: trace step 11
+- id: save_meal_customization_after_side
+  intent: Tap Save options again to return to the main meal customization
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: save_button
+      text: Save options
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.5, 0.939]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: container_navBar_titles
+      text: "Chick-fil-A® Deluxe w/ {{meal_option}} Meal"
+      kind: Text
+  - element_present: {resource_id: checkbox, kind: CheckBox}
+  risk: reversible
+  note: trace step 12
+- id: tap_meal_beverages
+  intent: Tap Meal Beverages to choose the meal beverage
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      text: Meal Beverages
+      kind: Button
+      cls: ViewGroup
+      parent: recyclerView
+      in_list: false
+      position: [0.5, 0.369]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: container_navBar_titles, text: Meal Beverages, kind: Text}
+  - element_present: {resource_id: recyclerView, kind: List}
+  risk: reversible
+  note: trace step 13
+- id: find_tap_beverage_option
+  intent: "Scroll to {{beverage_option}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        text: "{{beverage_option}}"
+        kind: Button
+        cls: ViewGroup
+        parent: recyclerView
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      text: "{{beverage_option}}"
+      kind: Button
+      cls: ViewGroup
+      parent: recyclerView
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: tap_beverage_option
+  intent: "Tap the beverage option {{beverage_option}}"
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      text: "{{beverage_option}}"
+      kind: Button
+      cls: ViewGroup
+      parent: recyclerView
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: container_navBar_titles
+      text: "{{beverage_option}}"
+      kind: Text
+  - element_present: {resource_id: save_button, text: Save options, kind: Button}
+  risk: reversible
+  note: trace step 14
+- id: save_beverage_option
+  intent: Tap Save options to confirm the beverage selection
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: save_button
+      text: Save options
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.5, 0.939]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: container_navBar_titles, text: Meal Beverages, kind: Text}
+  - element_present: {resource_id: recyclerView, kind: List}
+  risk: reversible
+  note: trace step 15
+- id: confirm_beverage_selection
+  intent: Tap Save options to confirm the beverage selection and return to the meal customization
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: save_button
+      text: Save options
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.5, 0.939]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: container_navBar_titles
+      text: "Chick-fil-A® Deluxe w/ {{meal_option}} Meal"
+      kind: Text
+  - element_present: {resource_id: checkbox, kind: CheckBox}
+  risk: reversible
+  note: trace step 16
+- id: final_save_meal_options
+  intent: Tap Save options to finish the meal customization and return to the item page
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: save_button
+      text: Save options
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.5, 0.939]
+  post:
+  - {screen_changed: true}
+  - element_absent:
+      resource_id: container_navBar_titles
+      text: "Chick-fil-A® Deluxe w/ {{meal_option}} Meal"
+      kind: Text
+  risk: reversible
+  note: trace step 17
+- id: tap_add_to_order
+  intent: Tap Add to order to add the customized meal to the cart
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: addToCart_button
+      text: Add to order
+      kind: Button
+      cls: Button
+      parent: footer_button_layout
+      in_list: true
+      position: [0.5, 0.934]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: store_fragment_container, kind: List}
+  risk: reversible
+  note: trace step 18
+- id: find_tap_cart
+  intent: "Scroll to {{restaurant_name}} if it is not on screen"
+  action:
+    scroll_until:
+      target: {resource_id: button_orderCart, text: total before taxes, kind: Button, cls: ViewGroup, parent: button_ordercart_container, in_list: true}
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present: {resource_id: button_orderCart, text: total before taxes, kind: Button, cls: ViewGroup, parent: button_ordercart_container,
+      in_list: true}
+  risk: read
+  note: "added: input-based list choice"
+- id: tap_cart
+  intent: Tap the cart to proceed to checkout
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap: {resource_id: button_orderCart, text: total before taxes, kind: Button, cls: ViewGroup, parent: button_ordercart_container, in_list: true}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: container_navBar_titles, text: Your cart from, kind: Text}
+  risk: reversible
+  note: trace step 19
+- id: tap_continue_to_checkout
+  intent: Tap Continue to proceed from the cart to checkout review
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: button_orderCart_continue
+      text: Continue
+      kind: Button
+      cls: Button
+      parent: bottom_order_cart_sticky_container
+      in_list: false
+      position: [0.5, 0.93]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 20
+parent_version: 1
+changes:
+- "a typed search for {{restaurant_name}} (doordash_search_restaurants' step) instead of the recent search the run tapped: a fresh phone has none"
+- "inputs the usual's own words fill: meal_variant and sandwich_option (labels nobody says) become meal_option, the cheese's name ('American'),\
+  \ slotted into the recorded labels"
+- "input-bound choices scored by their words (text) instead of an exact substring (text_has): the matcher writes 'Chick-fil-A Deluxe Meal' where\
+  \ the menu writes 'Chick-fil-A® Deluxe Meal'"
+- dropped checks only a closed store (availability banner) or an account with no payment method (payment sheet) shows, and save_side_option's
+  after-check on a part of the side's label
+compiled_from:
+  task_id: task-1030-032305-b761-r1
+  goal: "Order my usual from Chick-fil-A on DoorDash: a Chick-fil-A Deluxe Sandwich meal with waffle fries and a Frosted Lemonade"
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-30 03:27:02"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+  trace_steps_dropped: 0
+  cost_usd: 0.0967

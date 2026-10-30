@@ -256,3 +256,29 @@ def test_the_memory_page_adds_a_usual(client):
         facts = c.get(f"/api/memory/entity/{node['id']}", headers=me(token)).json()["facts"]
         assert {f["attribute"]: f["sources"][0]["where"] for f in facts} == {"place": "your edit", "order": "your edit", "app": "your edit"}
     assert resolve(memory, "order my usual from thai basil").app == "Food Runner"
+
+
+# ---- the order itself always waits for your OK -------------------------------------------------------------
+
+
+def _checkout(*rows: tuple[str, str]) -> SimpleNamespace:
+    els = [SimpleNamespace(label=t, text=t, desc="", resource_id="", kind=k, editable=False) for k, t in rows]
+    return SimpleNamespace(numbered=els, text=" ".join(t for _, t in rows))
+
+
+@pytest.mark.parametrize("rows, button", [
+    ([("Text", "Your cart from Thai Basil"), ("Text", "Subtotal $20.40"), ("Button", "Place Order")], 3),  # the label alone
+    ([("Text", "Checkout"), ("Text", "Order total $23.46"), ("Button", "Schedule Order")], 3),  # a closed store's: the screen
+])
+def test_placing_the_usual_always_waits_for_your_ok(rows, button):
+    """However the usual was asked for (your own words, a routine set to never ask), the order's last button asks: risk.py
+    calls it irreversible whatever the model said, and approval_rules never skips a step that involves money."""
+    from devices.types import Action
+    from policy.approval_rules import ApprovalRules, decide
+    from policy.risk import classify
+    screen = _checkout(*rows)
+    assert classify(Action(kind="tap", element=button), screen, "reversible").irreversible
+    standing = ApprovalRules(default="unless_requested", routines={"food_order_meal": "never"})
+    for source in ("voice", "chat"):
+        assert decide(standing, goal="hey envoy order me my usual from thai basil", source=source, app="com.example.food",
+                      routine="food_order_meal", origin="routine_step", target=rows[button - 1][1], screen_text=screen.text) is None

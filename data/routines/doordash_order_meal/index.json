@@ -1,0 +1,143 @@
+{
+ "name": "doordash_order_meal",
+ "active": 3,
+ "versions": [
+  {
+   "version": 1,
+   "status": "retired",
+   "created": "2026-10-30 03:35:09",
+   "parent": null,
+   "changes": [
+    "compiled from task-1030-032305-b761-r1"
+   ],
+   "verification": {
+    "by": "doordash-usual",
+    "how": "compiled from task-1030-032305-b761-r1 (envoy-real, Oct 30 03:23; stopped at DoorDash's payment-method sheet: no payment method on the test account), confirmed: the cart held the asked meal",
+    "checked": "2026-10-30 03:27"
+   }
+  },
+  {
+   "version": 2,
+   "status": "retired",
+   "created": "2026-10-30 03:35:09",
+   "parent": 1,
+   "changes": [
+    "a typed search for {{restaurant_name}} (doordash_search_restaurants' step) instead of the recent search the run tapped: a fresh phone has none",
+    "inputs the usual's own words fill: meal_variant and sandwich_option (labels nobody says) become meal_option, the cheese's name ('American'), slotted into the recorded labels",
+    "input-bound choices scored by their words (text) instead of an exact substring (text_has): the matcher writes 'Chick-fil-A Deluxe Meal' where the menu writes 'Chick-fil-A® Deluxe Meal'",
+    "dropped checks only a closed store (availability banner) or an account with no payment method (payment sheet) shows, and save_side_option's after-check on a part of the side's label"
+   ],
+   "verification": {
+    "by": "doordash-usual",
+    "how": "every step's before-checks, target and after-checks on the recorded screens of task-1030-032305-b761-r1, with the menu's words and with the matcher's (Chick-fil-A Deluxe Meal, American, Waffle Potato Fries, Frosted Lemonade): 23/23 each; matcher fills all 5 inputs from the resolved goal (2/2)",
+    "checked": "2026-10-30 03:50"
+   }
+  },
+  {
+   "version": 3,
+   "status": "active",
+   "created": "2026-10-30 03:52:23",
+   "parent": 2,
+   "changes": [
+    "the usual's choices fixed (no inputs): a usual is one fixed order. With inputs, the matcher filled meal_item from memory's notes (the cart label an earlier run saved) in rerun 3 (task-1030-034018-1227), and the routine scrolled the menu for it; another usual is a different routine, compiled from its own run"
+   ],
+   "verification": {
+    "by": "doordash-usual",
+    "how": "offline on task-1030-032305-b761-r1's screens: 23/23 with no inputs",
+    "checked": "2026-10-30"
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-30 03:37:57",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1030-033714-d81a-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 38.1,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 03:40:10",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1030-033939-5819-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 21.8,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 03:43:58",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1030-034018-1227-r1",
+   "status": "needs_user",
+   "rung": 6,
+   "model_calls": 29,
+   "duration_s": 213.61,
+   "patches": 1
+  },
+  {
+   "time": "2026-10-30 03:53:43",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1030-035313-9871-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 26.28,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 03:54:21",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1030-035352-03fa-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 25.97,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 03:55:02",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1030-035429-be56-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 26.72,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 03:55:58",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1030-035512-ec87-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 39.99,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 03:56:34",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1030-035605-58e3-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 24.28,
+   "patches": 0
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.dd.doordash"
+}
