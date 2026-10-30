@@ -1,0 +1,134 @@
+{
+ "name": "gmail_search_subject",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-30 18:10:31",
+   "parent": null,
+   "changes": [
+    "compiled from task-1030-180655-0535-r1"
+   ],
+   "verification": {
+    "by": "loop-a",
+    "from": "task-1030-180655-0535-r1",
+    "checked": "replays in runs.jsonl"
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-30 18:11:04",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-181031-f9e9-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 20.87,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 18:11:49",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-181117-91b5-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 20.14,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 18:12:34",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-181202-9267-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 20.45,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 18:13:12",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-181247-e572-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 16.85,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 18:13:59",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-181325-2624-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 19.32,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 18:14:44",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-181412-4c69-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 19.34,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 18:18:03",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-181729-e298-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 20.02,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 18:18:51",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-181816-2305-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 20.07,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 18:19:38",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-181904-e317-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 19.6,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 18:20:16",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-181951-208c-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 12.71,
+   "patches": 0
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.google.android.gm"
+}

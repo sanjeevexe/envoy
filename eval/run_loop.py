@@ -324,6 +324,8 @@ def run_once(api: Copy, t: Task, mode: str, n: int) -> dict[str, Any]:
     time.sleep(12)  # memory and app notes are written after the phone work
     got = api.get(f"/api/tasks/{tid}")
     final = got["task"] if got["task"]["status"] in ENDED else task
+    if handed and final["status"] == "stopped":  # this loop stopped it at the hand-off: grade it as the hand-off it was
+        final = {**final, "status": "needs_you"}
     ok, why = t.grade(final, prep) if t.grade else (final["status"] == "done", "")
     steps = got["steps"]
     handoff = bool(handed) or final["status"] == "needs_you" or any("bot check" in (s.get("text") or "").lower() for s in steps)
