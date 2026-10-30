@@ -59,6 +59,15 @@ _CALL = re.compile(r"^(call|dial|voice call|video call|call now|place (a )?call|
 # a public post can't be taken back. Whole labels only, so "Share your feedback" or a "Posts" tab don't count; a Share that
 # only opens a share sheet (YouTube) is asked about too, which errs on the safe side.
 _PUBLISH = re.compile(r"^(share|post|publish)( (now|it|post|reel|story|to (your )?(feed|story)))?$", re.I)
+# A button that requests or books a ride: it charges for the trip and sends a driver, however it's worded ("Request UberX",
+# "Request Lyft", "Request a ride", "Book ride", "Schedule ride"; "Confirm pickup" is "confirm" above). From the label's first
+# word and with a ride after it, so "Request desktop site", "Request a feature", "Request refund", "Ride history", "Set pickup",
+# "Choose a ride" and "Schedule" don't count. In a ride app every button that starts with "Request" does, since its products
+# can't all be listed (Comfort, XL, Black, Priority Pickup, Wait & Save…).
+_RIDE = re.compile(r"^((request|book|schedule) (a |an |the |this |your |my )?(ride|cab|taxi|lyft|uber\w*)|"
+                   r"request (a |an |the |this |your |my )?(trip|pickup|car|driver))\b", re.I)
+_RIDE_APPS = {"com.ubercab", "me.lyft.android"}
+_RIDE_APP_REQUEST = re.compile(r"^request\b", re.I)
 # Labels that are safe whatever the screen says (dismissing, going back, declining).
 _SAFE = re.compile(r"^(back|navigate up|close|cancel|keep\b.*|not now|no,? thanks|don.?t allow|deny|dismiss|later|maybe later|skip|done)$", re.I)
 # Screen text that means money or a final step is involved.
@@ -82,6 +91,12 @@ class RiskVerdict:
 
 def _target_text(e: Element) -> str:
     return " ".join(x for x in (e.label, e.text, e.desc) if x)
+
+
+def requests_ride(label: str, app: str | None = None) -> bool:
+    """A button label that requests or books a ride (in a ride app, any label that starts with "Request")."""
+    label = label.strip()
+    return bool(_RIDE.match(label) or (app in _RIDE_APPS and _RIDE_APP_REQUEST.match(label)))
 
 
 def _under(screen: ScreenState, x: int | None, y: int | None) -> Element | None:
@@ -130,6 +145,8 @@ def classify(action: Action, screen: ScreenState, model_risk: Risk | None) -> Ri
                 reasons.append(f"rule: target places a call {target.label or target.desc!r}")
             elif any(_PUBLISH.match(x.strip()) for x in (target.label, target.desc) if x) and not target.editable:
                 reasons.append(f"rule: target publishes {target.label or target.desc!r}")
+            elif target.kind == "Button" and any(requests_ride(x, screen.package) for x in (target.label, target.desc) if x):
+                reasons.append(f"rule: target requests a ride {target.label or target.desc!r}")
             if checkout and target.kind == "Button" and not _SAFE.match(target.label.strip()):
                 reasons.append("screen: payment or final-confirmation step")
             elif destructive and target.kind == "Button" and not _SAFE.match(target.label.strip()):

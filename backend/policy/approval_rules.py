@@ -25,6 +25,7 @@ import re
 from dataclasses import dataclass, field
 from typing import Any
 
+from policy.risk import requests_ride
 from routines.screens import contains_value, fold
 
 MODES = ("always", "unless_requested", "never")
@@ -32,10 +33,12 @@ DEFAULT_MODE = "unless_requested"
 # Where a request comes straight from the user: their own words in the web app, chat, voice or the iPhone.
 DIRECT_SOURCES = {"web", "chat", "voice", "iphone"}
 
-# A target that spends money. Committing an order counts however it's worded (a closed store's checkout says "Schedule Order").
+# A target that spends money. Committing an order counts however it's worded (a closed store's checkout says "Schedule Order"),
+# and so does requesting a ride ("Request UberX", "Book ride", "Confirm pickup"): it charges for the trip and sends a driver.
 _MONEY_WORDS = re.compile(
     r"\b(pay|pay now|(place|schedule|submit|confirm|complete|finali[sz]e|send) (your |my |an? |the |this )?order|order now|purchase|"
     r"buy( now)?|checkout|check out now|transfer|donate|tip|"
+    r"(request|book|schedule|confirm) (your |my |an? |the |this )?(ride|pickup|cab|taxi|lyft|uber\w*)|request (your |my |an? |the |this )?(trip|car|driver)|"
     r"subscribe|sign up and pay|add to (cart|bag)|upgrade for|pagar|comprar|payer|acheter|bezahlen|kaufen|支付|购买)\b", re.I)
 _PRICE = re.compile(r"[$€£¥₹]\s?\d|\b\d+[.,]\d{2}\s?(usd|eur|gbp)\b", re.I)
 _MONEY_SCREEN = re.compile(r"(card ending|will be charged|order total|payment method|total due|billing address|amount due)", re.I)
@@ -85,8 +88,9 @@ def _words(s: str) -> set[str]:
     return {w[:-1] if len(w) > 4 and w.endswith("s") else w for w in re.findall(r"[a-z0-9]+", s)}
 
 
-def involves_money(target: str, screen_text: str) -> bool:
-    return bool(_MONEY_WORDS.search(target) or _PRICE.search(target) or _MONEY_SCREEN.search(screen_text))
+def involves_money(target: str, screen_text: str, app: str | None = None) -> bool:
+    return bool(_MONEY_WORDS.search(target) or _PRICE.search(target) or _MONEY_SCREEN.search(screen_text)
+                or requests_ride(target, app))
 
 
 def names_action(request: str, target: str) -> bool:
@@ -111,7 +115,7 @@ def details_missing(request: str, context: str) -> list[str]:
 def decide(rules: ApprovalRules, *, goal: str, source: str, app: str | None, routine: str | None, origin: str,
            target: str, screen_text: str, inputs: dict[str, str] | None = None) -> AutoApproval | None:
     """An approval the user already gave (by asking, or by a standing approval), or None: ask them."""
-    if involves_money(target, screen_text):
+    if involves_money(target, screen_text, app):
         return None
     mode = rules.mode_for(app, routine)
     if mode == "always":

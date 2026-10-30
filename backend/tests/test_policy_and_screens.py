@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from xml.sax.saxutils import quoteattr
 
 import pytest
 
@@ -71,21 +72,22 @@ def test_model_label_alone_can_force_approval():
     assert v.irreversible and v.reasons == ["model: labeled irreversible"]
 
 
-def _buttons(*labels: str) -> ScreenState:
-    """A screen of plain buttons, one per label, stacked down the page."""
+def _buttons(*labels: str, package: str = "com.example.app", clickable: bool = True) -> ScreenState:
+    """A screen of plain buttons (or, not clickable, plain texts), one per label, stacked down the page."""
     def node(i: int, label: str) -> str:
         top = 200 + i * 150
-        return (f'<node index="{i}" text="{label}" resource-id="" class="android.widget.Button" package="com.example.app" '
-                'content-desc="" checkable="false" checked="false" clickable="true" enabled="true" focusable="true" '
+        cls = "android.widget.Button" if clickable else "android.widget.TextView"
+        return (f'<node index="{i}" text={quoteattr(label)} resource-id="" class="{cls}" package="{package}" '
+                f'content-desc="" checkable="false" checked="false" clickable="{str(clickable).lower()}" enabled="true" focusable="true" '
                 'focused="false" scrollable="false" long-clickable="false" password="false" selected="false" '
                 f'visible-to-user="true" bounds="[40,{top}][1040,{top + 120}]" drawing-order="{i}" hint="" display-id="0" />')
     xml = ("<?xml version='1.0' encoding='UTF-8' standalone='yes' ?><hierarchy rotation=\"0\">"
-           '<node index="0" text="" resource-id="" class="android.widget.FrameLayout" package="com.example.app" content-desc="" '
+           f'<node index="0" text="" resource-id="" class="android.widget.FrameLayout" package="{package}" content-desc="" '
            'checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" '
            'scrollable="false" long-clickable="false" password="false" selected="false" visible-to-user="true" '
            'bounds="[0,0][1080,2400]" drawing-order="0" hint="" display-id="0">'
            + "".join(node(i, label) for i, label in enumerate(labels)) + "</node></hierarchy>")
-    return build_state(xml, "com.example.app", "com.example.app.MainActivity", 1080, 2400)
+    return build_state(xml, package, f"{package}.MainActivity", 1080, 2400)
 
 
 @pytest.mark.parametrize("label", ["Share", "Post", "Publish", "Share now", "Post reel", "Share to your story"])
@@ -118,6 +120,47 @@ def test_a_button_that_commits_an_order_is_irreversible_by_rule(label):
 @pytest.mark.parametrize("label", ["Schedule", "Order for later", "Order details", "Reorder", "Orders", "Scheduled orders"])
 def test_order_words_that_commit_nothing_are_not_flagged(label):
     s = _buttons(label)
+    v = classify(Action(kind="tap", element=s.numbered[0].number), s, model_risk="reversible")
+    assert not v.irreversible, v.reasons
+
+
+@pytest.mark.parametrize("label, app", [
+    ("Request UberX", "com.example.app"), ("Request Lyft", "com.example.app"), ("Request Uber Black", "com.example.app"),
+    ("Request a ride", "com.example.app"), ("Request pickup", "com.example.app"), ("Book ride", "com.example.app"),
+    ("Schedule a ride", "com.example.app"), ("Request UberX · $23.40", "com.example.app"),
+    ("Request Comfort", "com.ubercab"), ("Request XL", "com.ubercab"), ("Request Priority Pickup", "me.lyft.android"),
+    ("Request Wait & Save", "me.lyft.android"), ("Request", "me.lyft.android"),
+])
+def test_a_button_that_requests_a_ride_is_irreversible_by_rule(label, app):
+    """Requesting a ride charges for it and sends a driver, so its button is flagged without the model's label. In a ride app
+    any button that starts with "Request" counts, since its products can't all be listed (loop B's Lyft fare estimates)."""
+    s = _buttons("Back", label, package=app)
+    target = next(e for e in s.numbered if e.label == label)
+    v = classify(Action(kind="tap", element=target.number), s, model_risk="reversible")
+    assert v.irreversible and f"rule: target requests a ride {label!r}" in v.reasons
+
+
+def test_confirm_pickup_is_irreversible_by_rule():
+    s = _buttons("Back", "Confirm pickup", package="com.ubercab")
+    v = classify(Action(kind="tap", element=s.numbered[1].number), s, model_risk="reversible")
+    assert v.irreversible and "rule: target says 'Confirm pickup'" in v.reasons
+
+
+@pytest.mark.parametrize("label, app", [
+    ("Request a feature", "com.example.app"), ("Request refund", "com.example.app"), ("Request desktop site", "com.android.chrome"),
+    ("Ride history", "com.ubercab"), ("Ride details", "me.lyft.android"), ("Set pickup", "com.ubercab"),
+    ("Choose a ride", "com.ubercab"), ("See prices", "me.lyft.android"), ("Schedule", "com.ubercab"), ("Requests", "me.lyft.android"),
+])
+def test_ride_words_that_request_nothing_are_not_flagged(label, app):
+    s = _buttons(label, package=app)
+    v = classify(Action(kind="tap", element=s.numbered[0].number), s, model_risk="reversible")
+    assert not v.irreversible, v.reasons
+
+
+@pytest.mark.parametrize("label", ["Request a ride", "Request UberX"])
+def test_ride_words_on_a_text_that_is_not_a_button_are_not_flagged(label):
+    s = _buttons(label, package="com.ubercab", clickable=False)
+    assert s.numbered[0].kind == "Text"
     v = classify(Action(kind="tap", element=s.numbered[0].number), s, model_risk="reversible")
     assert not v.irreversible, v.reasons
 

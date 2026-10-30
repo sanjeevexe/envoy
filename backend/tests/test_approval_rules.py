@@ -48,6 +48,22 @@ def test_a_button_that_commits_an_order_always_asks_even_when_you_named_it():
     assert ask(target="Confirm check-in") is not None  # what isn't an order still runs when you asked for it
 
 
+def test_a_button_that_requests_a_ride_always_asks_even_when_you_named_it():
+    """Requesting a ride charges for it and sends a driver: "request an UberX to SFO", said by voice, used to skip asking at
+    "Request UberX" (the screen of fares says nothing about a card), and a fare check never gets to request one."""
+    fares = "Choose a ride · UberX · 4 seats · $46.20 · Comfort · $58.10 · UberXL · $71.85 · To SFO · San Francisco International Airport"
+    for goal, target, app in (("check the fare to SFO, don't book", "Request UberX", "com.ubercab"),
+                              ("request an UberX to SFO", "Request UberX", "com.ubercab"),
+                              ("request comfort to SFO", "Request Comfort", "com.ubercab"),  # a ride app's product
+                              ("request a lyft to SFO", "Request Lyft", "me.lyft.android"),
+                              ("book a ride to SFO", "Book ride", "com.example.rides"),
+                              ("schedule a ride to SFO", "Schedule ride", "com.example.rides"),
+                              ("get me an uber to SFO and confirm pickup", "Confirm pickup", "com.ubercab")):
+        assert decide(RULES, goal=goal, source="voice", app=app, routine=None, origin="agent", target=target,
+                      screen_text=fares) is None, (goal, target)
+    assert ask(target="Confirm check-in") is not None  # what isn't a ride still runs when you asked for it
+
+
 def test_standing_approval_covers_the_routine_only():
     standing = ApprovalRules(routines={"skylark_check_in_flight": "never"})
     auto = ask(rules=standing, source="trigger:check in 24h before", goal="Check me in for my flight to Chicago")
