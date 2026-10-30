@@ -8,7 +8,7 @@ from __future__ import annotations
 import json
 import shutil
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -261,7 +261,8 @@ def test_the_whole_path_through_the_web_approver(phase5_env):  # noqa: F811
     env = phase5_env
     started: list = []
     env.ctx.runner.start = starter(env.ctx.tasks, started)
-    demo_flight(env.memory)
+    soon = datetime.now() + timedelta(days=2)  # this env's scheduler runs on the real clock: the demo's Oct 30 flight is past
+    demo_flight(env.memory, date=f"{soon:%a, %b} {soon.day}, {soon.year}")
     trig = env.ctx.scheduler.add("before_fact", "Check in when check-in opens", {"entity_type": "Flight", "minutes_before": 1440 * 400},
                                  {"goal": "Check me in for my flight {number} to {trip.destination}", "routine": "skylark_check_in_flight",
                                   "inputs_from": {"trip_city": "trip.destination"}, "ask": True, "offer_title": "Check in for {number}?"})
