@@ -1,0 +1,153 @@
+routine: clock_set_alarm
+app: com.google.android.deskclock
+version: 5
+status: active
+intent: Set an alarm in the Clock app
+description: Opens the Alarm tab in the Clock app, adds a new alarm, picks the requested hour, minutes and AM/PM on the clock face, and saves
+  it; the output is the alarm that now shows that time, switched on.
+patterns: [Set an alarm, Create a new alarm, Add an alarm in Clock, Wake me up at a set time]
+outputs: [alarm_time]
+start: fresh_launch
+inputs:
+  alarm_hour: {type: text, description: 'Alarm hour, 1 to 12, without a leading zero', example: '7'}
+  alarm_minute: {type: text, description: 'Alarm minutes, two digits, a multiple of 5 (00, 05 ... 55)', example: '00'}
+  alarm_period: {type: text, description: AM or PM, example: AM}
+steps:
+- id: tap_alarm_tab
+  intent: Tap the Alarm tab in the Clock app
+  pre:
+  - {app_foreground: com.google.android.deskclock}
+  - element_present: {resource_id: action_bar_title, text: Clock, kind: Text}
+  action:
+    tap:
+      resource_id: tab_menu_alarm
+      text: Alarm
+      kind: Button
+      cls: FrameLayout
+      siblings: [Clock, Timer, Stopwatch]
+      in_list: false
+      position: [0.1, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: action_bar_title, text: Alarm, kind: Text}
+  - element_present: {resource_id: digital_clock, kind: Button}
+  risk: reversible
+  note: trace step 1
+- id: tap_add_alarm
+  intent: Tap Add alarm to create a new alarm
+  pre:
+  - {app_foreground: com.google.android.deskclock}
+  action:
+    tap:
+      resource_id: fab
+      text: Add alarm
+      kind: Button
+      cls: Button
+      parent: fab_container
+      in_list: false
+      position: [0.5, 0.816]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: header_title, text: Select time, kind: Text}
+  - element_present: {resource_id: material_clock_period_toggle, text: Select AM or PM, kind: Text}
+  risk: reversible
+  note: trace step 2
+- id: select_alarm_hour
+  intent: "Tap {{alarm_hour}} on the clock face"
+  pre:
+  - {app_foreground: com.google.android.deskclock}
+  - element_present: {resource_id: header_title, text: Select time, kind: Text}
+  action:
+    tap:
+      text_has: "{{alarm_hour}}"
+      kind: Button
+      cls: TextView
+      parent: material_clock_face
+      in_list: false
+  post:
+  - toggle_is:
+      target: {resource_id: material_minute_tv, kind: Toggle}
+      value: 'on'
+  risk: reversible
+  note: trace step 3 of task-1030-141911-98d6; loop B v5 checks that the face moved on to minutes (v1 checked the hour's number was gone, which
+    a 10 o'clock alarm can't pass)
+- id: select_alarm_minute
+  intent: "Tap {{alarm_minute}} on the minutes face"
+  pre:
+  - {app_foreground: com.google.android.deskclock}
+  - toggle_is:
+      target: {resource_id: material_minute_tv, kind: Toggle}
+      value: 'on'
+  action:
+    tap:
+      text_has: "{{alarm_minute}}"
+      kind: Button
+      cls: TextView
+      parent: material_clock_face
+      in_list: false
+  post:
+  - element_present:
+      resource_id: material_minute_tv
+      text: "{{alarm_minute}}"
+      kind: Toggle
+  risk: reversible
+  note: "loop B v5: the minutes (the first run's 7:00 left them at 00)"
+- id: select_alarm_period
+  intent: "Select {{alarm_period}}"
+  pre:
+  - {app_foreground: com.google.android.deskclock}
+  action:
+    tap:
+      text: "{{alarm_period}}"
+      kind: Toggle
+      cls: CompoundButton
+      parent: material_clock_period_toggle
+      in_list: false
+  post:
+  - toggle_is:
+      target:
+        text: "{{alarm_period}}"
+        kind: Toggle
+        parent: material_clock_period_toggle
+      value: 'on'
+  risk: reversible
+  note: "trace step 4 of task-1030-141911-98d6; loop B v5 finds AM/PM by its label: v1 templated the ID (material_clock_period_{{alarm_period}}_button),\
+    \ which the app writes in lower case"
+- id: confirm_alarm
+  intent: Tap OK to save the alarm
+  pre:
+  - {app_foreground: com.google.android.deskclock}
+  action:
+    tap:
+      resource_id: material_timepicker_ok_button
+      text: OK
+      kind: Button
+      cls: Button
+      siblings: [Select time, Switch to text input mode for the time input., Cancel]
+      in_list: false
+      position: [0.802, 0.759]
+  post:
+  - {screen_changed: true}
+  - toggle_is:
+      target:
+        text_has: "{{alarm_hour}}:{{alarm_minute}} {{alarm_period}}"
+        kind: Switch
+      value: 'on'
+  risk: reversible
+  extract:
+    alarm_time:
+      locator:
+        text_has: "{{alarm_hour}}:{{alarm_minute}} {{alarm_period}}"
+        kind: Switch
+  note: "trace step 5 of task-1030-141911-98d6; loop B v5 reads the alarm with the asked time (v1 read the first row: a default 9:00 AM alarm)"
+parent_version: 1
+changes:
+- "AM/PM found by its label: v1 templated the toggle ID with the input (material_clock_period_AM_button) but the app writes it in lower case,\
+  \ so the step failed or needed a repair in 5 of 6 v1 replays"
+- a minutes input and step (5-minute marks); the hour step checks the face moved on to minutes
+- add-alarm check fixed (v1 templated Select AM or PM with the input)
+- "output: the alarm with the asked time, switched on (v1 read the first row, a default 9:00 AM alarm, so a wrong 10:00 PM alarm read as done)"
+compiled_from:
+  task_id: task-1030-141911-98d6-r1
+  goal: "In the Clock app, set an alarm for 7:00 AM."
+  compiler: muse-wonder-1.0 + loop-b by hand

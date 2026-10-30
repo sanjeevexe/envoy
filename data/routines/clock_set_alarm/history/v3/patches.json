@@ -1,0 +1,10 @@
+[
+ {
+  "kind": "locator",
+  "step": "select_alarm_period",
+  "description": "step 'select_alarm_period': target found only by relaxed match; locator updated to {text_has='{{alarm_period}}', resource_id='material_clock_period_{{alarm_period}}_button', kind='Toggle'}",
+  "evidence": {
+   "score": 0.647
+  }
+ }
+]

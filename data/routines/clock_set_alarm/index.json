@@ -1,0 +1,214 @@
+{
+ "name": "clock_set_alarm",
+ "active": 5,
+ "versions": [
+  {
+   "version": 1,
+   "status": "retired",
+   "created": "2026-10-30 14:20:17",
+   "parent": null,
+   "changes": [
+    "compiled from task-1030-141911-98d6-r1"
+   ],
+   "verification": {
+    "by": "loop-b",
+    "how": "compiled from task-1030-141911-98d6 (envoy-real, first run on hybrid). 7:00 AM alarm on",
+    "checked": "2026-10-30 14:20"
+   }
+  },
+  {
+   "version": 2,
+   "status": "rejected",
+   "created": "2026-10-30 14:21:21",
+   "parent": 1,
+   "changes": [
+    "step 'select_alarm_period': target found only by relaxed match; locator updated to {text_has='{{alarm_period}}', resource_id='material_clock_period_{{alarm_period}}_button', kind='Toggle'}"
+   ],
+   "source_task": "task-1030-142034-d95f-r1",
+   "screenshots": [],
+   "trial": {
+    "passed": false,
+    "task_id": "task-1030-142128-b9cb-r1",
+    "status": "needs_user",
+    "model_calls": 5,
+    "duration_s": 51.37
+   }
+  },
+  {
+   "version": 3,
+   "status": "rejected",
+   "created": "2026-10-30 14:24:25",
+   "parent": 1,
+   "changes": [
+    "step 'select_alarm_period': target found only by relaxed match; locator updated to {text_has='{{alarm_period}}', resource_id='material_clock_period_{{alarm_period}}_button', kind='Toggle'}"
+   ],
+   "source_task": "task-1030-142333-560c-r1",
+   "screenshots": [],
+   "trial": {
+    "passed": false,
+    "task_id": "task-1030-142433-5ae6-r1",
+    "status": "agent_done",
+    "model_calls": 5,
+    "duration_s": 53.98
+   }
+  },
+  {
+   "version": 4,
+   "status": "rejected",
+   "created": "2026-10-30 14:25:59",
+   "parent": 1,
+   "changes": [
+    "step 'select_alarm_period' removed: its screen no longer appears after 'select_alarm_hour'; the app went straight to 'confirm_alarm'"
+   ],
+   "source_task": "task-1030-142541-0c54-r1",
+   "screenshots": [],
+   "trial": {
+    "passed": false,
+    "by": "loop-b",
+    "why": "wrong: without the AM/PM step a 10:00 AM request set 10:00 PM, and the output read the default 9:00 AM alarm (task-1030-142541-0c54)"
+   }
+  },
+  {
+   "version": 5,
+   "status": "active",
+   "created": "2026-10-30 14:27:32",
+   "parent": 1,
+   "changes": [
+    "AM/PM found by its label: v1 templated the toggle ID with the input (material_clock_period_AM_button) but the app writes it in lower case, so the step failed or needed a repair in 5 of 6 v1 replays",
+    "a minutes input and step (5-minute marks); the hour step checks the face moved on to minutes",
+    "add-alarm check fixed (v1 templated Select AM or PM with the input)",
+    "output: the alarm with the asked time, switched on (v1 read the first row, a default 9:00 AM alarm, so a wrong 10:00 PM alarm read as done)"
+   ],
+   "verification": {
+    "by": "loop-b",
+    "how": "hand-written from the recorded picker screens of task-1030-141911-98d6; live replays follow",
+    "checked": "2026-10-30 14:45"
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-30 14:21:21",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-142034-d95f-r1",
+   "status": "agent_done",
+   "rung": 5,
+   "model_calls": 5,
+   "duration_s": 41.2,
+   "patches": 1
+  },
+  {
+   "time": "2026-10-30 14:22:24",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1030-142128-b9cb-r1",
+   "status": "needs_user",
+   "rung": 6,
+   "model_calls": 5,
+   "duration_s": 51.37,
+   "patches": 1
+  },
+  {
+   "time": "2026-10-30 14:23:28",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-142230-81d8-r1",
+   "status": "needs_user",
+   "rung": 6,
+   "model_calls": 5,
+   "duration_s": 48.33,
+   "patches": 1
+  },
+  {
+   "time": "2026-10-30 14:24:25",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-142333-560c-r1",
+   "status": "agent_done",
+   "rung": 5,
+   "model_calls": 5,
+   "duration_s": 43.31,
+   "patches": 1
+  },
+  {
+   "time": "2026-10-30 14:25:33",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1030-142433-5ae6-r1",
+   "status": "agent_done",
+   "rung": 5,
+   "model_calls": 5,
+   "duration_s": 53.98,
+   "patches": 1
+  },
+  {
+   "time": "2026-10-30 14:25:59",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-142541-0c54-r1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 9.05,
+   "patches": 1
+  },
+  {
+   "time": "2026-10-30 14:27:54",
+   "kind": "run",
+   "version": 5,
+   "task_id": "task-1030-142734-b717-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 10.78,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 14:28:17",
+   "kind": "run",
+   "version": 5,
+   "task_id": "task-1030-142801-fa0e-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 9.72,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 14:28:40",
+   "kind": "run",
+   "version": 5,
+   "task_id": "task-1030-142824-df95-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 10.36,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 14:29:04",
+   "kind": "run",
+   "version": 5,
+   "task_id": "task-1030-142847-03ef-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 10.7,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 14:29:29",
+   "kind": "run",
+   "version": 5,
+   "task_id": "task-1030-142910-c4ce-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 9.89,
+   "patches": 0
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.google.android.deskclock"
+}

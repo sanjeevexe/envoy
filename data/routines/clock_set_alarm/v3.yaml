@@ -1,0 +1,128 @@
+routine: clock_set_alarm
+app: com.google.android.deskclock
+version: 3
+status: rejected
+intent: Set an alarm in the Clock app
+description: Opens the Alarm tab in the Clock app, adds a new alarm, selects the requested hour and AM/PM period, and saves it.
+patterns: [Set an alarm, Create a new alarm, Add an alarm in Clock, Wake me up at a set time]
+outputs: [alarm_time]
+start: fresh_launch
+inputs:
+  alarm_hour: {type: text, description: Alarm hour, example: '7'}
+  alarm_period: {type: text, description: Alarm period, example: AM}
+steps:
+- id: tap_alarm_tab
+  intent: Tap the Alarm tab in the Clock app
+  pre:
+  - {app_foreground: com.google.android.deskclock}
+  - element_present: {resource_id: action_bar_title, text: Clock, kind: Text}
+  action:
+    tap:
+      resource_id: tab_menu_alarm
+      text: Alarm
+      kind: Button
+      cls: FrameLayout
+      siblings: [Clock, Timer, Stopwatch]
+      in_list: false
+      position: [0.1, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: action_bar_title, text: Alarm, kind: Text}
+  - element_present: {resource_id: digital_clock, kind: Button}
+  risk: reversible
+  note: trace step 1
+- id: tap_add_alarm
+  intent: Tap Add alarm to create a new alarm
+  pre:
+  - {app_foreground: com.google.android.deskclock}
+  action:
+    tap:
+      resource_id: fab
+      text: Add alarm
+      kind: Button
+      cls: Button
+      parent: fab_container
+      in_list: false
+      position: [0.5, 0.816]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: header_title, text: Select time, kind: Text}
+  - element_present:
+      resource_id: material_clock_period_toggle
+      text: "Select {{alarm_period}} or PM"
+      kind: Text
+  risk: reversible
+  note: trace step 2
+- id: select_alarm_hour
+  intent: "Tap the {{alarm_hour}} hour on the clock face"
+  pre:
+  - {app_foreground: com.google.android.deskclock}
+  action:
+    tap:
+      text_has: "{{alarm_hour}}"
+      kind: Button
+      cls: TextView
+      parent: material_clock_face
+      in_list: false
+  post:
+  - element_absent:
+      text: "{{alarm_hour}}"
+      kind: Button
+  risk: reversible
+  note: trace step 3
+- id: select_alarm_period
+  intent: "Select {{alarm_period}} as the alarm period"
+  pre:
+  - {app_foreground: com.google.android.deskclock}
+  action:
+    tap:
+      resource_id: "material_clock_period_{{alarm_period}}_button"
+      text_has: "{{alarm_period}}"
+      kind: Toggle
+      cls: CompoundButton
+      parent: Select AM or PM
+      in_list: false
+  post:
+  - toggle_is:
+      target:
+        resource_id: "material_clock_period_{{alarm_period}}_button"
+        kind: Toggle
+      value: 'on'
+  risk: reversible
+  note: trace step 4
+- id: confirm_alarm
+  intent: Tap OK to save the alarm
+  pre:
+  - {app_foreground: com.google.android.deskclock}
+  action:
+    tap:
+      resource_id: material_timepicker_ok_button
+      text: OK
+      kind: Button
+      cls: Button
+      siblings: [Select time, Switch to text input mode for the time input., Cancel]
+      in_list: false
+      position: [0.802, 0.759]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: action_bar_title, text: Alarm, kind: Text}
+  - element_present: {resource_id: tab_menu_alarm, text: Alarm, kind: Text}
+  risk: reversible
+  extract:
+    alarm_time:
+      locator: {kind: Switch}
+      expect_digits: true
+      first_row: true
+  note: trace step 5
+parent_version: 1
+changes:
+- "step 'select_alarm_period': target found only by relaxed match; locator updated to {text_has='{{alarm_period}}', resource_id='material_clock_period_{{alarm_period}}_button',\
+  \ kind='Toggle'}"
+compiled_from:
+  task_id: task-1030-141911-98d6-r1
+  goal: "In the Clock app, set an alarm for 7:00 AM."
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-30 14:20:17"
+  trace_steps_kept: [1, 2, 3, 4, 5]
+  trace_steps_dropped: 0
+  cost_usd: 0.0571

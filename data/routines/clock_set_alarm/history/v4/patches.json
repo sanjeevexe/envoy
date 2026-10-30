@@ -1,0 +1,8 @@
+[
+ {
+  "kind": "remove",
+  "step": "select_alarm_period",
+  "description": "step 'select_alarm_period' removed: its screen no longer appears after 'select_alarm_hour'; the app went straight to 'confirm_alarm'",
+  "evidence": {}
+ }
+]
