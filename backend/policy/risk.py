@@ -52,6 +52,13 @@ _DESTRUCTIVE = re.compile(
     r"this will (reset|erase|delete|remove|wipe)",
     re.IGNORECASE,
 )
+# A dialog that asks, in so many words, to confirm a deletion, which _DESTRUCTIVE misses (no "want to delete", nothing about
+# undoing): Files' 'Delete "q2a8_fancy_banana.mp3"?', "Delete this event?", "Delete 3 items?", Simple Calendar's "Are you
+# sure you want to proceed with the deletion?" (AndroidWorld, Oct 28: 37 such taps were flagged by the model's label alone).
+# Matched in one text, from its first word, so a menu or toolbar that lists "Delete" doesn't count; and only the dialog's
+# affirmative button is flagged, so its "No" (not in _SAFE) stays a plain tap, as does "Cancel".
+_DELETE_ASK = re.compile(r"^delete\b[^?]{0,150}\?|\bproceed with (the )?deletion\b", re.I)
+_AFFIRM = re.compile(r"^(yes|ok|okay|delete|remove|erase|confirm|continue|proceed)\b", re.I)
 # A button that places a phone call (the dialer's dial button, "Call store"): it reaches a person outside the phone.
 _CALL = re.compile(r"^(call|dial|voice call|video call|call now|place (a )?call|call (the )?(store|restaurant|driver|support|us|back)|"
                    r"call \+?[\d\s().-]{5,})$", re.I)
@@ -113,6 +120,11 @@ def _chrome_chip(screen: ScreenState, e: Element) -> bool:
     return False
 
 
+def _asks_to_delete(screen: ScreenState) -> bool:
+    """A text on screen asks to confirm a deletion ("Delete "x.jpg"?", "…proceed with the deletion?")."""
+    return any(_DELETE_ASK.search(x.strip()) for e in screen.numbered for x in (e.label, e.text, e.desc) if x)
+
+
 def requests_ride(label: str, app: str | None = None) -> bool:
     """A button label that requests or books a ride (in a ride app, any label that starts with "Request")."""
     label = label.strip()
@@ -171,6 +183,8 @@ def classify(action: Action, screen: ScreenState, model_risk: Risk | None) -> Ri
                 reasons.append("screen: payment or final-confirmation step")
             elif destructive and target.kind == "Button" and not _SAFE.match(target.label.strip()):
                 reasons.append("screen: confirming something that can't be taken back")
+            elif target.kind == "Button" and _AFFIRM.match(target.label.strip()) and _asks_to_delete(screen):
+                reasons.append("screen: confirming a deletion")
     if model_risk == "irreversible":
         reasons.append("model: labeled irreversible")
     if model_risk == "reversible" and level == "read":

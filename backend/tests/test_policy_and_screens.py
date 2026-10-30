@@ -165,6 +165,64 @@ def test_ride_words_on_a_text_that_is_not_a_button_are_not_flagged(label):
     assert not v.irreversible, v.reasons
 
 
+def _dialog(package: str, question: str, *buttons: str) -> ScreenState:
+    """A confirmation dialog as AndroidWorld recorded them (Oct 28): its text, then its buttons, the negative one first."""
+    def node(i: int, cls: str, text: str, rid: str) -> str:
+        top, clickable = 900 + i * 150, str(cls.endswith("Button")).lower()
+        return (f'<node index="{i}" text={quoteattr(text)} resource-id="{rid}" class="{cls}" package="{package}" '
+                f'content-desc="" checkable="false" checked="false" clickable="{clickable}" enabled="true" focusable="{clickable}" '
+                'focused="false" scrollable="false" long-clickable="false" password="false" selected="false" '
+                f'visible-to-user="true" bounds="[80,{top}][1000,{top + 120}]" drawing-order="{i}" hint="" display-id="0" />')
+    kids = node(0, "android.widget.TextView", question, "android:id/message") + "".join(
+        node(i + 1, "android.widget.Button", b, f"android:id/button{len(buttons) - i}") for i, b in enumerate(buttons))
+    xml = ("<?xml version='1.0' encoding='UTF-8' standalone='yes' ?><hierarchy rotation=\"0\">"
+           f'<node index="0" text="" resource-id="" class="android.widget.FrameLayout" package="{package}" content-desc="" '
+           'checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" '
+           'scrollable="false" long-clickable="false" password="false" selected="false" visible-to-user="true" '
+           'bounds="[0,0][1080,2400]" drawing-order="0" hint="" display-id="0">' + kids + "</node></hierarchy>")
+    return build_state(xml, package, f"{package}.MainActivity", 1080, 2400)
+
+
+_DELETE_DIALOGS = [
+    ("com.simplemobiletools.calendar.pro", "Are you sure you want to proceed with the deletion?", "No", "Yes"),
+    ("com.google.android.documentsui", 'Delete "x.jpg"?', "CANCEL", "OK"),
+    ("com.google.android.calendar", "Delete this event?", "Cancel", "OK"),
+    ("com.google.android.apps.photos", "Delete 3 items?", "Cancel", "OK"),
+]
+
+
+@pytest.mark.parametrize("package, question, negative, affirmative", _DELETE_DIALOGS)
+def test_the_affirmative_button_on_a_dialog_confirming_a_deletion_is_irreversible_by_code(package, question, negative, affirmative):
+    """AndroidWorld (Oct 28): Simple Calendar's "Yes" on "…proceed with the deletion?" (31 taps) and Files' "OK" on
+    'Delete "…"?' (6) were flagged only by the model's label: neither dialog says "want to delete" or that it can't be undone."""
+    s = _dialog(package, question, negative, affirmative)
+    yes = next(e for e in s.numbered if e.label == affirmative)
+    for action in (Action(kind="tap", element=yes.number), Action(kind="tap_point", x=yes.center[0], y=yes.center[1])):
+        v = classify(action, s, None)
+        assert v.irreversible and v.reasons == ["screen: confirming a deletion"], v.reasons
+    # Saying it outright was already enough.
+    s = _dialog(package, "Permanently delete 3 items?", negative, affirmative)
+    assert classify(Action(kind="tap", element=next(e for e in s.numbered if e.label == affirmative).number), s, None).irreversible
+
+
+@pytest.mark.parametrize("package, question, negative, affirmative", _DELETE_DIALOGS)
+def test_cancel_or_no_on_a_dialog_confirming_a_deletion_is_not_flagged(package, question, negative, affirmative):
+    s = _dialog(package, question, negative, affirmative)
+    v = classify(Action(kind="tap", element=next(e for e in s.numbered if e.label == negative).number), s, None)
+    assert not v.irreversible, v.reasons
+
+
+def test_a_screen_that_only_lists_delete_is_not_a_deletion_dialog():
+    """A menu that offers "Delete", or a text that starts with it but asks nothing: its "Delete" is flagged by its own
+    label, as before, and the rest stay plain taps."""
+    s = _buttons("Open with", "Rename", "Delete", "Select all", "OK", package="com.google.android.documentsui")
+    for e in s.numbered:
+        v = classify(Action(kind="tap", element=e.number), s, None)
+        assert v.reasons == (["rule: target says 'Delete'"] if e.label == "Delete" else []), (e.label, v.reasons)
+    s = _dialog("com.google.android.apps.messaging", "Delete old messages automatically", "Cancel", "OK")
+    assert not classify(Action(kind="tap", element=next(e for e in s.numbered if e.label == "OK").number), s, None).irreversible
+
+
 _CHIPS = ("Show saved passwords and password options", "Show saved payment methods", "Show saved addresses")
 
 
