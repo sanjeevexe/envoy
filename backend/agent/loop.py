@@ -40,12 +40,17 @@ _PLACEHOLDER = re.compile(r"placeholder|schema requires|(required by|comply with
                           r"wrong action|this is wrong|\bmistake\b|^\W*\w?\W*$|^one short sentence", re.I)
 MAX_REMEMBERED = 6000  # characters of what the model kept from earlier screens (the oldest go first)
 PROGRESS_STEPS = 3  # changed screens in a row after which earlier stuck recoveries no longer count
+TASK_CAP_USD = 0.30  # per task when the agent's steps run on Spark (the user's cap, Oct 29)
+# Per task when they run on Muse Wonder (hybrid, wonder): the user's call on Oct 30, between the $0.30 and the $0.96 that
+# scaling $0.30 by Wonder's step price gave.
+WONDER_TASK_CAP_USD = 0.50
 
 
 @dataclass
 class RunConfig:
     max_steps: int = 25
-    max_cost_usd: float = 0.30  # per task (the user's cap, Oct 29); runner.py passes the same
+    max_cost_usd: float = TASK_CAP_USD  # runner.py passes the same
+    max_cost_usd_wonder: float = WONDER_TASK_CAP_USD  # used instead when the step model is Wonder
     data_scope: DataScope = "real"
     contributor: bool = False
     step_effort: str = "low"
@@ -180,7 +185,7 @@ class AgentRunner:
         names: dict[str, str] = {}  # screen signature -> readable name
         replans = 0
         prev_sig = ""
-        cost_cap = self.config.max_cost_usd * step_cost_scale()  # caps are set for Spark steps; a Wonder step costs ~3x
+        cost_cap = self.config.max_cost_usd_wonder if step_cost_scale() > 1 else self.config.max_cost_usd  # in real dollars
 
         def account(res) -> None:
             out.model_calls += 1

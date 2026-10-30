@@ -154,15 +154,15 @@ def test_profile_models_and_cost_scale(monkeypatch):
     assert step_cost_scale() == 3.2 and step_cost_scale("spark") == 1.0
 
 
-def test_a_hybrid_run_gets_the_cap_scaled_to_wonder_steps(monkeypatch, tmp_path):
-    """The per-task cap ($0.30, the user's) is set for Spark steps; under hybrid the agent stops at 3.2x that in dollars."""
+def test_the_task_cap_is_030_on_spark_steps_and_050_on_wonder_steps(monkeypatch, tmp_path):
+    """The user's per-task caps in real dollars: $0.30 when the agent's steps run on Spark, $0.50 on Wonder (Oct 30)."""
     import asyncio
     import io
     from pathlib import Path
 
     from PIL import Image
 
-    from agent.loop import AgentRunner, RunConfig
+    from agent.loop import TASK_CAP_USD, WONDER_TASK_CAP_USD, AgentRunner, RunConfig
     from agent.trace import TraceWriter
     from devices.screen import build_state
     from devices.types import ActionResult
@@ -188,18 +188,23 @@ def test_a_hybrid_run_gets_the_cap_scaled_to_wonder_steps(monkeypatch, tmp_path)
             Image.new("RGB", (1080, 2400), "white").save(buf, format="PNG")
             return buf.getvalue()
 
-    class Adapter:  # every call costs $0.25 and no step finishes
+    class Adapter:  # every call costs $0.05 and no step finishes
         def call(self, job, content, **kw):
             parsed = (Plan.model_validate({"app": "com.skylark.air", "subgoals": ["read the gate"], "success_check": {"kind": "info", "value": "", "field_hint": ""}})
                       if job == "plan" else
                       StepOutput.model_validate({"reason": "r", "action": {"type": "wait", "seconds": 0}, "expected_result": "x", "risk": "read"}))
-            return SimpleNamespace(parsed=parsed, cost_usd=0.25, cost_at_standard_usd=0.25, usage={})
+            return SimpleNamespace(parsed=parsed, cost_usd=0.05, cost_at_standard_usd=0.05, usage={})
 
-    def run(profile: str):
-        monkeypatch.setenv("ENVOY_MODEL_PROFILE", profile)
+    def run(profile: str | None):
+        if profile:
+            monkeypatch.setenv("ENVOY_MODEL_PROFILE", profile)
+        else:
+            monkeypatch.delenv("ENVOY_MODEL_PROFILE", raising=False)
         return asyncio.run(AgentRunner(Device(), Adapter(), ScriptedApprover(approve=False), RunConfig()).run("gate?", task_id=f"cap-{profile}"))  # type: ignore[arg-type]
 
-    spark, hybrid = run("spark"), run("hybrid")
-    assert RunConfig().max_cost_usd == 0.30
-    assert spark.status == hybrid.status == "cost_limit"
-    assert 0.30 <= spark.cost_usd < 0.96 <= hybrid.cost_usd  # a step's calls land together, so each stops at the first step past its cap
+    default, hybrid, spark = run(None), run("hybrid"), run("spark")
+    assert (TASK_CAP_USD, WONDER_TASK_CAP_USD) == (0.30, 0.50) and RunConfig().max_cost_usd == 0.30
+    assert default.status == hybrid.status == spark.status == "cost_limit"
+    # A step's calls land together, so a run stops at the first step that reaches its cap (a step is at most $0.15 here).
+    assert 0.30 <= spark.cost_usd < 0.45
+    assert 0.50 <= hybrid.cost_usd < 0.65 and 0.50 <= default.cost_usd < 0.65
