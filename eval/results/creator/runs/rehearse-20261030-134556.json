@@ -1,0 +1,87 @@
+{
+ "mode": "rehearse",
+ "time": "2026-10-30T13:45:56",
+ "clip": "loopa-134556.mp4",
+ "caption": "Loop A replay 3. Test pattern, not for posting.",
+ "offer": {
+  "title": "Put loopa-134556.mp4 on your Pixel 5 and post it to Instagram?",
+  "goal": "Post the newest video in my phone's gallery to Instagram as a reel with this caption: \"Loop A replay 3. Test pattern, not for posting.\"",
+  "request": "the newest video in my phone's gallery to Instagram as a reel with this caption",
+  "device": "phone-09031FDD4000C6",
+  "preflight": [
+   {
+    "kind": "device",
+    "text": "I'll use your Pixel 5 (you said yes).",
+    "level": "info"
+   },
+   {
+    "kind": "approval",
+    "text": "Sharing will need your OK.",
+    "level": "info"
+   },
+   {
+    "kind": "routine",
+    "text": "Using routine instagram_post_reel v2.",
+    "level": "info"
+   }
+  ],
+  "request_is_the_templates": true,
+  "caption_not_in_request": true,
+  "real_phone": true
+ },
+ "task": {
+  "id": "task-1030-134605-4308",
+  "status": "declined",
+  "routine": "instagram_post_reel",
+  "model_calls": 2,
+  "cost_usd": 0.033,
+  "traces": [],
+  "detail": "the user declined the approval",
+  "source": "web",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 11,
+ "approvals": [
+  {
+   "description": "tap \"Share\" in com.instagram.android (routine instagram_post_reel v2)",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/share_button'",
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "auto_approved": [],
+ "handoff": {
+  "status": "sent",
+  "remote_path": "/sdcard/Movies/Envoy/loopa-134556.mp4",
+  "error": "the task after it: declined"
+ },
+ "marks_s": {
+  "outbox": 0.0,
+  "offer": 6.1,
+  "accepted": 8.8,
+  "running": 8.8,
+  "waiting_approval": 72.8,
+  "share_asked": 72.8,
+  "declined": 73.8,
+  "end": 73.8
+ },
+ "spent": {
+  "model_calls": 2,
+  "cost_usd": 0.033,
+  "cost_at_standard_usd": 0.033,
+  "jobs": {
+   "repair": 2
+  }
+ },
+ "ok": true,
+ "failures": [],
+ "cleanup": [
+  "back (caption)",
+  "editor_cancel",
+  "start_over",
+  "gallery_home"
+ ]
+}

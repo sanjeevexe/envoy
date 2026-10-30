@@ -1,0 +1,86 @@
+{
+ "mode": "rehearse",
+ "time": "2026-10-30T13:54:35",
+ "clip": "loopa-135435.mp4",
+ "caption": "Loop A replay 7. Test pattern, not for posting.",
+ "offer": {
+  "title": "Put loopa-135435.mp4 on your Pixel 5 and post it to Instagram?",
+  "goal": "Post the newest video in my phone's gallery to Instagram as a reel with this caption: \"Loop A replay 7. Test pattern, not for posting.\"",
+  "request": "the newest video in my phone's gallery to Instagram as a reel with this caption",
+  "device": "phone-09031FDD4000C6",
+  "preflight": [
+   {
+    "kind": "device",
+    "text": "I'll use your Pixel 5 (you said yes).",
+    "level": "info"
+   },
+   {
+    "kind": "approval",
+    "text": "Sharing will need your OK.",
+    "level": "info"
+   },
+   {
+    "kind": "routine",
+    "text": "Using routine instagram_post_reel v2.",
+    "level": "info"
+   }
+  ],
+  "request_is_the_templates": true,
+  "caption_not_in_request": true,
+  "real_phone": true
+ },
+ "task": {
+  "id": "task-1030-135443-ee2c",
+  "status": "declined",
+  "routine": "instagram_post_reel",
+  "model_calls": 1,
+  "cost_usd": 0.0156,
+  "traces": [],
+  "detail": "the user declined a repair action",
+  "source": "web",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 6,
+ "approvals": [
+  {
+   "description": "tap \"Unselected Video thumbnail created on October 30, 2026 1:54 PM\" in com.instagram.android (routine instagram_post_reel v2)",
+   "reasons": [
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "auto_approved": [],
+ "handoff": {
+  "status": "sent",
+  "remote_path": "/sdcard/Movies/Envoy/loopa-135435.mp4",
+  "error": "the task after it: declined"
+ },
+ "marks_s": {
+  "outbox": 0.0,
+  "offer": 6.1,
+  "accepted": 8.2,
+  "running": 8.2,
+  "waiting_approval": 51.8,
+  "asked_1": 51.8,
+  "declined": 52.8,
+  "end": 52.8
+ },
+ "spent": {
+  "model_calls": 1,
+  "cost_usd": 0.0156,
+  "cost_at_standard_usd": 0.0156,
+  "jobs": {
+   "repair": 1
+  }
+ },
+ "ok": false,
+ "failures": [
+  "Share was never asked",
+  "asked about something before Share: ['tap \"Unselected Video thumbnail created on October 30, 2026 1:54 PM\" in com.instagram.android (routine instagram_post_reel v2)']"
+ ],
+ "cleanup": [
+  "gallery_home"
+ ]
+}

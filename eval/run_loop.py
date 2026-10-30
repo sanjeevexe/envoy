@@ -107,7 +107,7 @@ def _real(key: str, wf_id: str, device: str = "envoy-real") -> Task:
 
 DD = "com.dd.doordash"
 USUAL = "My usual from Chick-fil-A is a Chick-fil-A Deluxe Meal with American cheese, Waffle Potato Fries and a Frosted Lemonade, on DoorDash"
-DD_END = re.compile(r"select payment method|place order|schedule order|^checkout$", re.I)
+DD_END = re.compile(r"select payment method", re.I)  # the sheet the cart's Continue opens on the test account (no payment method)
 
 
 def _labels(screen: Any) -> list[str]:
@@ -122,7 +122,7 @@ def _dd_grade(task: dict[str, Any], prep: dict[str, Any]) -> tuple[bool, str]:
     s = asyncio.run(EmulatorDevice("envoy-real").connect().observe())
     at_end = s.package == DD and any(DD_END.search(x.strip()) for x in _labels(s))
     prep["end_screen"] = [x for x in _labels(s) if x][:12]
-    ok = (task["status"] == "done" or (task["status"] == "needs_you" and at_end))
+    ok = task["status"] in ("done", "needs_you") and at_end  # the coordinator: "reached checkout" = the payment sheet appeared
     return ok, f"end screen at checkout={at_end}"
 
 

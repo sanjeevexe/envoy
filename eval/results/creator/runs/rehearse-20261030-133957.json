@@ -1,0 +1,78 @@
+{
+ "mode": "rehearse",
+ "time": "2026-10-30T13:39:57",
+ "clip": "loopa-133957.mp4",
+ "caption": "Loop A first 2. Test pattern, not for posting.",
+ "offer": {
+  "title": "Put loopa-133957.mp4 on your Pixel 5 and post it to Instagram?",
+  "goal": "Post the newest video in my phone's gallery to Instagram as a reel with this caption: \"Loop A first 2. Test pattern, not for posting.\"",
+  "request": "the newest video in my phone's gallery to Instagram as a reel with this caption",
+  "device": "phone-09031FDD4000C6",
+  "preflight": [
+   {
+    "kind": "device",
+    "text": "I'll use your Pixel 5 (you said yes).",
+    "level": "info"
+   }
+  ],
+  "request_is_the_templates": true,
+  "caption_not_in_request": true,
+  "real_phone": true
+ },
+ "task": {
+  "id": "task-1030-134006-67cd",
+  "status": "failed",
+  "routine": null,
+  "model_calls": 9,
+  "cost_usd": 0.1172,
+  "traces": [],
+  "detail": "User declined the Share/post action. The reel is prepared with caption 'Loop A first 2. Test pattern, not for posting.' on the New reel screen, but it was not posted.",
+  "source": "web",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 13,
+ "approvals": [
+  {
+   "description": "tap \"Share\" in com.instagram.android",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/share_button'",
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "auto_approved": [],
+ "handoff": {
+  "status": "sent",
+  "remote_path": "/sdcard/Movies/Envoy/loopa-133957.mp4",
+  "error": "the task after it: failed"
+ },
+ "marks_s": {
+  "outbox": 0.0,
+  "offer": 6.6,
+  "accepted": 8.9,
+  "running": 8.9,
+  "waiting_approval": 54.2,
+  "share_asked": 54.2,
+  "failed": 57.2,
+  "end": 57.2
+ },
+ "spent": {
+  "model_calls": 9,
+  "cost_usd": 0.1172,
+  "cost_at_standard_usd": 0.1172,
+  "jobs": {
+   "plan": 1,
+   "step": 8
+  }
+ },
+ "ok": true,
+ "failures": [],
+ "cleanup": [
+  "back (caption)",
+  "editor_cancel",
+  "start_over",
+  "gallery_home"
+ ]
+}
