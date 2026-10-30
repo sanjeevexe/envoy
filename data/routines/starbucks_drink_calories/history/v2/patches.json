@@ -1,0 +1,23 @@
+[
+ {
+  "kind": "remove",
+  "step": "dismiss_location_prompt",
+  "description": "step 'dismiss_location_prompt' removed: its screen no longer appears after 'tap_order'; the app went straight to 'tap_skip_cafe_selection'",
+  "evidence": {}
+ },
+ {
+  "kind": "insert_before",
+  "step": "tap_skip_cafe_selection",
+  "description": "before 'tap_skip_cafe_selection', the screen needed tap No, thanks",
+  "evidence": {
+   "screenshots": [
+    "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/loop-reliability-b4a982/data/runs/task-1030-165903-8005-r1/screens/repair_03_1_before.png",
+    "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/loop-reliability-b4a982/data/runs/task-1030-165903-8005-r1/screens/repair_03_1_after.png"
+   ],
+   "reasons": [
+    ""
+   ],
+   "task_id": "task-1030-165903-8005-r1"
+  }
+ }
+]

@@ -1,0 +1,144 @@
+{
+ "name": "starbucks_drink_calories",
+ "active": 3,
+ "versions": [
+  {
+   "version": 1,
+   "status": "retired",
+   "created": "2026-10-30 16:39:50",
+   "parent": 1,
+   "changes": [
+    "named starbucks_drink_calories (was loop_starbucks v3 in loop A's copy; same steps)",
+    "drink_name is the menu name without the size: the matcher filled 'Grande Caffè Latte', which no search result row has, so find_tap_drink_result failed and the agent took over in 6 of 6 replays (loop A, Oct 30)"
+   ],
+   "verification": {
+    "by": "loop-a",
+    "renamed_from": "loop_starbucks v3"
+   }
+  },
+  {
+   "version": 2,
+   "status": "rejected",
+   "created": "2026-10-30 17:00:16",
+   "parent": 1,
+   "changes": [
+    "step 'dismiss_location_prompt' removed: its screen no longer appears after 'tap_order'; the app went straight to 'tap_skip_cafe_selection'",
+    "before 'tap_skip_cafe_selection', the screen needed tap No, thanks"
+   ],
+   "source_task": "task-1030-165903-8005-r1",
+   "screenshots": [
+    "history/v2/repair_03_1_before.png",
+    "history/v2/repair_03_1_after.png"
+   ],
+   "trial": {
+    "passed": false,
+    "task_id": "task-1030-170032-d660-r1",
+    "status": "declined",
+    "model_calls": 1,
+    "duration_s": 29.45
+   }
+  },
+  {
+   "version": 3,
+   "status": "active",
+   "created": "2026-10-30 17:02:19",
+   "parent": 1,
+   "changes": [
+    "after 'tap_order', an extra screen appeared; inserted tap_order_extra_1 (tap Choose a café)"
+   ],
+   "source_task": "task-1030-170124-e3c3-r1",
+   "screenshots": [
+    "history/v3/repair_01_1_before.png",
+    "history/v3/repair_01_1_after.png"
+   ],
+   "trial": {
+    "passed": true,
+    "task_id": "task-1030-170231-0a7b-r1",
+    "status": "done",
+    "model_calls": 0,
+    "duration_s": 9.7
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-30 16:58:23",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-165716-8514-r1",
+   "status": "done",
+   "rung": 4,
+   "model_calls": 1,
+   "duration_s": 57.38,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 16:58:51",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-165836-6af1-r1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 10.1,
+   "patches": 1
+  },
+  {
+   "time": "2026-10-30 17:00:15",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-165903-8005-r1",
+   "status": "done",
+   "rung": 4,
+   "model_calls": 1,
+   "duration_s": 61.31,
+   "patches": 2
+  },
+  {
+   "time": "2026-10-30 17:01:11",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1030-170032-d660-r1",
+   "status": "declined",
+   "rung": 2,
+   "model_calls": 1,
+   "duration_s": 29.45,
+   "patches": 2
+  },
+  {
+   "time": "2026-10-30 17:02:19",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-170124-e3c3-r1",
+   "status": "done",
+   "rung": 4,
+   "model_calls": 1,
+   "duration_s": 43.2,
+   "patches": 1
+  },
+  {
+   "time": "2026-10-30 17:02:45",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1030-170231-0a7b-r1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 9.7,
+   "patches": 1
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.starbucks.mobilecard",
+ "patch_attempts": [
+  {
+   "time": "2026-10-30 16:58:51",
+   "version": 1,
+   "source_task": "task-1030-165836-6af1-r1",
+   "result": "unchanged",
+   "changes": [
+    "step 'confirm_skip_to_menu': after-checks failed (still present: [28] \"For item availability · Choose a café\" score 0.96 (runner-u) but the next step was ready; after-checks rewritten from what happened"
+   ]
+  }
+ ]
+}

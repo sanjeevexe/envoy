@@ -1,0 +1,17 @@
+[
+ {
+  "kind": "insert_after",
+  "step": "tap_order",
+  "description": "after 'tap_order', an extra screen appeared; inserted tap_order_extra_1 (tap Choose a café)",
+  "evidence": {
+   "screenshots": [
+    "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/loop-reliability-b4a982/data/runs/task-1030-170124-e3c3-r1/screens/repair_01_1_before.png",
+    "/Users/sanjeevvarma/Desktop/Envoy/.claude/worktrees/loop-reliability-b4a982/data/runs/task-1030-170124-e3c3-r1/screens/repair_01_1_after.png"
+   ],
+   "reasons": [
+    "Tap the only visible café-selection element/scroll to reveal the Skip control, because menu browsing (and any re-presented location prompt) is reached by skipping café selection from this screen, moving toward the goal state rather than going back to look for a non-existent Order button."
+   ],
+   "task_id": "task-1030-170124-e3c3-r1"
+  }
+ }
+]
