@@ -1,0 +1,23 @@
+{
+ "name": "contacts_count_contacts",
+ "intent": "Count the contacts in the Contacts app",
+ "description": "Open the Contacts app and determine how many contacts are saved, without signing in, creating an account, or turning on sync.",
+ "patterns": [
+  "how many contacts do I have",
+  "count my contacts",
+  "how many contacts are saved"
+ ],
+ "inputs": [],
+ "steps": [],
+ "outputs": [
+  {
+   "name": "contact_count",
+   "near": "No contacts yet",
+   "example": "0"
+  }
+ ],
+ "data_values": [
+  "No contacts yet",
+  "envoy3955@gmail.com"
+ ]
+}

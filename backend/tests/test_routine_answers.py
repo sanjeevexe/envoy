@@ -42,6 +42,7 @@ from routines.screens import load_tree, screen_from_tree
 AW = Path(__file__).parent / "traces" / "androidworld"
 NEW = AW / "new_seeds"
 REAL = Path(__file__).parent / "traces" / "real_1f1fc11"  # Phase 7's envoy-real sources from its pass on 1f1fc11
+REAL_SMOKE = Path(__file__).parent / "traces" / "real_49685b0"  # and from its Oct 31 smoke on 49685b0
 FAST = ExecConfig(pre_timeout_s=0.6, post_timeout_s=0.6, stable_s=0.2, poll_s=0.01, patch_screenshots=False)
 
 
@@ -308,6 +309,17 @@ def test_the_days_heading_is_read_by_its_fixed_words_and_the_first_screen_waits_
                         "Nothing planned. Tap to create.", "Standup, 09:00 – 09:15")
     other = outputs(r, edited("calendar_today", next_day, REAL), {})
     assert other == {"todays_date": "Friday 30 October 2026", "todays_events_status": None}  # missing, never the wrong words
+
+
+def test_an_empty_state_wonder_lists_as_data_still_answers_the_count():
+    """Contacts on envoy-real, Phase 7's Oct 31 smoke: "how many contacts do I have?" → '0 contacts — "No contacts yet"'.
+    About 1 compile in 4, Wonder listed "No contacts yet" among the run's data values, so the inferred 0 had nothing to be
+    read from and the question wasn't compiled. The answer quotes those words and 0 is nowhere on the screen: they are the
+    screen's own."""
+    r, warnings = compiled("contacts_count", REAL_SMOKE)
+    assert r.outputs == ["contact_count"]
+    assert any("inferred from 'No contacts yet'" in w for w in warnings)
+    assert outputs(r, final_screen("contacts_count", REAL_SMOKE), {}) == {"contact_count": "No contacts yet"}
 
 
 def test_a_routine_whose_outputs_are_missing_leaves_the_screen_it_looked_at(tmp_path):

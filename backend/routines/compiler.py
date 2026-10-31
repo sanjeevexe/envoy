@@ -1031,7 +1031,12 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
                 ex = _every_rows(o.example, final, out_examples)
             ex = ex or _extract_for(o.name, o.near, o.example, final, examples, data_values, steps)
             state = bool(ex and ex.switch)
-            if ex is None and (ex := _state_text(o.near, final, data_values)) is not None:
+            # Wonder sometimes lists the words an inferred answer was read from among the run's data ("No contacts yet" for
+            # "0", about 1 compile in 4 on Oct 31). When the answer quotes them and its value is nowhere on the screen, they
+            # are the screen's own words.
+            inferred = bool(o.near) and contains_value(answer, o.near) and not any(contains_value(e.label, o.example) for e in final.numbered)
+            state_data = [v for v in data_values if norm(v) != norm(o.near)] if inferred else data_values
+            if ex is None and (ex := _state_text(o.near, final, state_data)) is not None:
                 state = True
                 if (no := _opposite(o.example)) is not None:
                     # A yes/no question answered from what the screen offers ("Convert to note" in a to-do's menu): the
