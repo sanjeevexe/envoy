@@ -154,7 +154,7 @@ async def run_episode(payload: dict[str, Any]) -> dict[str, Any]:
     from agent import loop
     from agent.loop import AgentRunner, RunConfig
     from devices import emulator
-    from models.adapter import JOBS, ModelAdapter
+    from models.adapter import ModelAdapter, job_config, profile_models
     from policy.approvals import ScriptedApprover
 
     emulator.AVDS.setdefault("AndroidWorldAvd", {"serial": SERIAL, "grpc_port": GRPC_PORT, "can_snapshot": False})
@@ -208,7 +208,8 @@ async def run_episode(payload: dict[str, Any]) -> dict[str, Any]:
         "trace_dir": str(trace_dir.relative_to(REPO)) if trace_dir.is_relative_to(REPO) else str(trace_dir),
         "envoy_commit": git_commit(),
         "answer_format": loop.STEP_INSTRUCTIONS.endswith(ANSWER_FORMAT),
-        "model": adapter.resolve_model(JOBS["step"], "test_app", cfg.contributor),
+        "model": adapter.resolve_model(job_config("step"), "test_app", cfg.contributor),  # the profile's step model
+        "models": profile_models(),  # every job's model under the profile (hybrid since d04f63d)
         "effort": {"step": cfg.step_effort, "plan": cfg.plan_effort},
     }
 
