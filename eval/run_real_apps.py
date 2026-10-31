@@ -135,7 +135,7 @@ WORKFLOWS = [
     Workflow("settings_bluetooth", "com.android.settings", "system", "In the Settings app, is Bluetooth turned on or off?",
              truth=_bluetooth, graded_by="truth"),
     Workflow("gmail_newest", "com.google.android.gm", "google", "In the Gmail app, what is the subject of the newest email in my inbox?",
-             truth=_gmail(None), graded_by="truth", memory=NO_ACCOUNT),
+             truth=_gmail(None), private=True, graded_by="truth", memory=NO_ACCOUNT),  # the newest mail can be a sign-in code
     Workflow("gmail_search", "com.google.android.gm", "google",
              "In the Gmail app, search my mail for DoorDash and tell me the subject of the first result.",
              second={"DoorDash": "Security alert"}, truth=_gmail("DoorDash", "Security alert"), graded_by="truth", memory=NO_ACCOUNT),
@@ -207,12 +207,41 @@ def agent_row(task_id: str) -> dict | None:
     return {k: r.get(k) for k in ("status", "result", "steps", "model_calls", "cost_at_standard_usd", "duration_s", "popups", "check")}
 
 
+def scrub(row: dict, secrets: list[str]) -> dict:
+    """A private workflow's row with every word of its answers (3+ characters) replaced wherever a check, compile note or step
+    detail quotes them, and its ground truth hidden: on Oct 31 Gmail's newest subject was a sign-in code, and both the answer
+    check's detail and the expected pattern repeated it."""
+    words = {w for s in secrets if isinstance(s, str) for w in re.findall(r"[A-Za-z0-9']{3,}", s)}
+    pat = re.compile(r"(?<![A-Za-z0-9])(?:" + "|".join(sorted(map(re.escape, words), key=len, reverse=True)) + r")(?![A-Za-z0-9])") \
+        if words else None
+
+    def walk(v: object) -> object:
+        if isinstance(v, str):
+            return pat.sub("[redacted]", v) if pat else v
+        if isinstance(v, dict):
+            return {k: walk(x) for k, x in v.items()}
+        if isinstance(v, list):
+            return [walk(x) for x in v]
+        return v
+    out = {k: walk(v) if k in ("agent", "compile", "routine_runs", "error") else v for k, v in row.items()}
+    for k in ("expect", "expect_second"):
+        if out.get(k):
+            out[k] = "[redacted]"
+    return out
+
+
 def step_rows(outcome) -> list[dict]:
     return [{"id": s.id, "status": s.status, "rung": s.rung, "rungs": s.rungs, "score": s.score, "detail": s.detail[:200],
              "ms": round(s.wait_ms + s.act_ms + s.post_ms)} for s in outcome.steps]
 
 
 async def run_one(wf: Workflow, args, device: EmulatorDevice, adapter: ModelAdapter, approver) -> dict:
+    row = await _run_one(wf, args, device, adapter, approver)
+    secrets = row.pop("_secrets", [])
+    return scrub(row, secrets) if wf.private else row
+
+
+async def _run_one(wf: Workflow, args, device: EmulatorDevice, adapter: ModelAdapter, approver) -> dict:
     task_id = f"{TASK_PREFIX}-{wf.id}"
     expect, expect_second = wf.expect, wf.expect_second
     if wf.truth:
@@ -237,6 +266,7 @@ async def run_one(wf: Workflow, args, device: EmulatorDevice, adapter: ModelAdap
         row["first_run"] = "not run"
         return row
     a_ok = a["status"] == "done" and right(a["result"], in_sentence(expect), {})
+    row["_secrets"] = [a["result"]]  # run_one scrubs a private row of these words
     row["agent"] = {**a, "result": redact(wf, a["result"])}
     row["first_run"] = ("pass" if a_ok else "wrong") if a["status"] == "done" else ("right, unverified" if a["status"] == "done_unverified"
                         and right(a["result"], in_sentence(expect), {}) else
@@ -284,6 +314,7 @@ async def run_one(wf: Workflow, args, device: EmulatorDevice, adapter: ModelAdap
             out = await ex.run(routine, inputs, task_id=f"{task_id}-{name.replace(' ', '-')}-{'repair' if allow_repair else 'strict'}",
                                launch="fresh", allow_repair=allow_repair, allow_agent=False, memory=wf.memory)
             text = " | ".join(v for v in out.outputs.values() if v)
+            row["_secrets"].append(text)
             blocked = out.status != "done" and bot_check(await device.observe())
             result = ("bot check" if blocked else "fail") if out.status != "done" else (
                 ("pass" if not allow_repair and out.model_calls == 0 else "pass after repair") if right(text, pattern, inputs, wf.graded_by == "truth")

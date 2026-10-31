@@ -361,6 +361,31 @@ def test_the_main_checkouts_routines_and_prompts_dont_keep_the_eval_off_its_tag(
     assert state["is_eval_final"] and state["dirty"] == []
 
 
+def test_a_private_rows_answer_is_scrubbed_from_every_note_that_quotes_it():
+    import run_real_apps as rr
+
+    by_id = {w.id: w for w in rr.WORKFLOWS}
+    assert by_id["gmail_newest"].private and by_id["doordash"].private and not by_id["gmail_search"].private
+    answer, output = "123456 - Your Spotify login code", "123456 - Your Spotify login code, button Copy code: 123456, Oct 30"
+    row = {"app": "com.google.android.gm", "goal": by_id["gmail_newest"].goal, "graded_by": "truth", "first_run": "wrong",
+           "expect": "123456.*Your.*Spotify.*login", "expect_second": None,
+           "agent": {"status": "done", "result": "[redacted]", "steps": 0, "check": {"passed": True, "detail": "answer visible on screen: 123456, Spotify"}},
+           "compile": {"compiled": True, "routine": "gmail_get_newest_email_subject", "outputs": ["newest_email_subject"]},
+           "routine_runs": [{"case": "same input", "result": "wrong", "status": "done", "outputs": {"newest_email_subject": "[redacted]"},
+                             "detail": "all steps and checks passed", "steps": [{"id": "read_subject", "detail": f"read {output!r}"}]}]}
+    out = rr.scrub(row, [answer, output])
+    text = json.dumps(out)
+    assert "123456" not in text and "Spotify" not in text and "login" not in text, text
+    assert out["expect"] == "[redacted]" and out["expect_second"] is None  # still no second input
+    assert out["agent"]["check"] == {"passed": True, "detail": "answer visible on screen: [redacted], [redacted]"}
+    assert out["routine_runs"][0]["result"] == "wrong" and out["compile"]["routine"] == row["compile"]["routine"]
+    assert out["goal"] == row["goal"] and out["first_run"] == "wrong"
+    dd = rr.scrub({"compile": {"compiled": False, "reason": "the run answered a question ('1 Hacker Way'), but no output can be read back"}},
+                  ["1 Hacker Way"])
+    assert "Hacker" not in dd["compile"]["reason"] and "no output can be read back" in dd["compile"]["reason"]
+    assert rr.scrub({"agent": {"result": "x"}}, []) == {"agent": {"result": "x"}}
+
+
 def test_the_newest_email_in_my_inbox_is_primarys_top_message_or_the_whole_inboxs(monkeypatch):
     import run_real_apps as rr
 
