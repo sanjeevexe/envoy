@@ -1,0 +1,44 @@
+routine: chrome_get_cheapest_flight_price
+app: com.android.chrome
+version: 1
+status: active
+intent: Find the price of the cheapest nonstop flight in Google Flights
+description: On a Google Flights one-way nonstop search results page in Chrome, switch to the Cheapest sorting and report the lowest nonstop flight
+  price.
+patterns: [cheapest nonstop flight price, how much is the cheapest nonstop flight, find the lowest-price nonstop flight, cheapest one-way nonstop
+    fare]
+outputs: [cheapest_nonstop_flight_price]
+start: fresh_launch
+steps:
+- id: tap_cheapest_sort
+  intent: "Tap the Cheapest tab to sort the nonstop flight results from {{origin_airport}} to {{destination_airport}} on {{departure_date}} by\
+    \ lowest price"
+  pre:
+  - {app_foreground: com.android.chrome}
+  - element_present: {resource_id: location_bar_status_icon_view, text: Connection is secure, kind: Text}
+  action:
+    tap:
+      resource_id: M7sBEb
+      text: Cheapest
+      kind: Button
+      cls: View
+      siblings: [Best]
+      in_list: true
+      position: [0.729, 0.528]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  extract:
+    cheapest_nonstop_flight_price:
+      near: Cheapest from
+      locator: {resource_id: M7sBEb, kind: Button}
+  note: trace step 1
+compiled_from:
+  task_id: task-1030-214314-a891-r1
+  goal: "In Chrome, open https://www.google.com/travel/flights?q=Flights%20from%20SFO%20to%20JFK%20on%202026-11-20%20one%20way%20nonstop and tell\
+    \ me the price of the cheapest nonstop flight."
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-30 21:44:59"
+  trace_steps_kept: [1]
+  trace_steps_dropped: 0
+  cost_usd: 0.0701

@@ -1,0 +1,162 @@
+{
+ "name": "chrome_get_cheapest_flight_price",
+ "active": 3,
+ "versions": [
+  {
+   "version": 1,
+   "status": "retired",
+   "created": "2026-10-30 21:44:59",
+   "parent": null,
+   "changes": [
+    "compiled from task-1030-214314-a891-r1"
+   ],
+   "verification": {
+    "by": "loop-b",
+    "how": "compiled from task-1030-214314-a891 (envoy-real, first run on hybrid). answer: 639 US dollars (JetBlue nonstop)",
+    "checked": "2026-10-30 21:44"
+   }
+  },
+  {
+   "version": 2,
+   "status": "retired",
+   "created": "2026-10-30 21:46:14",
+   "parent": 1,
+   "changes": [
+    "the search opened by its URL from the inputs (origin, destination, date) in the address bar, checked by that URL; v1 kept only the Cheapest tap and its inputs were dropped, so it read whatever page Chrome reopened"
+   ],
+   "verification": {
+    "by": "loop-b",
+    "how": "URL check tested on the recorded screens of task-1030-214314-a891 (holds on the query page only); live replays follow",
+    "checked": "2026-10-30 21:50"
+   }
+  },
+  {
+   "version": 3,
+   "status": "active",
+   "created": "2026-10-30 21:47:05",
+   "parent": 2,
+   "changes": [
+    "the Cheapest step is done only when its label shows a price (US dollars) and the output must hold digits: v2 read Cheapest from Fetching results before the prices loaded (task-1030-214615-3fb0, -214632-f10f)"
+   ],
+   "verification": {
+    "by": "loop-b",
+    "how": "from the two wrong v2 replays; live replays follow",
+    "checked": "2026-10-30 21:48"
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-30 21:46:25",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1030-214615-3fb0-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.04,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 21:46:44",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1030-214632-f10f-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.19,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 21:47:15",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1030-214706-6625-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.36,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 21:47:32",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1030-214722-289f-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.12,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 21:47:55",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1030-214747-f488-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 2.69,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 21:48:08",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1030-214802-75d0-r1",
+   "status": "failed",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 0.33,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 21:49:25",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1030-214813-6eaa-r1",
+   "status": "agent_done",
+   "rung": 5,
+   "model_calls": 6,
+   "duration_s": 68.27,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 21:49:41",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1030-214931-793f-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.08,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 21:50:08",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1030-214959-0ff9-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 2.72,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 21:50:26",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1030-215015-8cf6-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 2.98,
+   "patches": 0
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.android.chrome"
+}
