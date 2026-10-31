@@ -266,8 +266,10 @@ def test_the_compiler_keeps_a_screenshot_output_only_if_the_recorded_screenshot_
     ex = r.steps[-1].extract["opened"]
     assert r.outputs == ["opened"] and ex.from_screenshot == screen_read.shape_of("15 May 1889") and rep.model_calls == 1
     wrong = ScreenReadOutput(found=True, page_title="Eiffel Tower", quote="Height 330 m (1,083 ft)", value="330 m")
-    r2, rep2 = asyncio.run(compile_trace(d, adapter=Reads(wrong), spec=CHROME_SPEC))
-    assert "opened" not in r2.outputs and any("dropped" in w for w in rep2.warnings)
+    # "… tell me the year it opened" is a question: with its only output dropped, nothing is compiled (Oct 31; before, a
+    # routine that answered nothing was kept).
+    with pytest.raises(NotCompilable, match="opened.*dropped"):
+        asyncio.run(compile_trace(d, adapter=Reads(wrong), spec=CHROME_SPEC))
 
 
 def test_every_screenshot_read_passes_the_same_check():

@@ -22,12 +22,13 @@ type Change = {
   step: string; intent: string; kind: string; what: string; before: any; after: any; why?: string; patch?: string; score?: number; reasons?: string[];
   follows?: string | null;
 };
-type Src = { task_id: string; goal?: string; status?: string; steps?: number; model_calls?: number; duration_s?: number; usd?: number | null };
+// `taught`: the run was your demonstration (teach mode), not an agent run.
+type Src = { task_id: string; goal?: string; status?: string; steps?: number; model_calls?: number; duration_s?: number; usd?: number | null; taught?: boolean };
 type Version = {
   version: number; status: string; created?: string; parent?: number | null; origin: "compiled" | "recompiled" | "repaired"; notes: string[];
   changes: Change[]; shots: { label: string; intent?: string; before?: string; after?: string }[]; replaced_by?: number | null; diffable?: boolean;
   repair?: { task_id: string; rung: number | null; how: string | null; model_calls: number | null; run_rung: number | null; duration_s: number | null; time: string | null };
-  compiled?: { task_id?: string; goal?: string; compiler?: string; at?: string; usd?: number; source: Src | null;
+  compiled?: { task_id?: string; goal?: string; compiler?: string; at?: string; usd?: number; source: Src | null; taught?: boolean;
     verification: { case: string; passed: boolean; duration_s?: number; inputs: Record<string, string> }[] };
   trial?: { passed: boolean; task_id: string; status: string; model_calls?: number | null; duration_s?: number | null };
 };
@@ -37,7 +38,7 @@ type Run = {
   saved: { calls: number; seconds: number; usd: number | null } | null; event: { kind: "repaired" | "trial"; version: number; passed?: boolean } | null;
 };
 type Detail = {
-  name: string; app: string; intent: string; description: string; inputs: Record<string, { type: string; description: string; example?: string }>;
+  name: string; app: string; intent: string; description: string; taught?: boolean; inputs: Record<string, { type: string; description: string; example?: string }>;
   outputs: string[]; active: number | null; shown: number; shown_status: string | null; trial: number | null; needs_recompile: boolean; steps: StepV[]; done: Chk[];
   versions: Version[]; runs: Run[];
   savings: { source: Src | null; runs: number; finished: number; compared: number; failed: number; model_calls: number; saved: { calls: number; seconds: number; usd: number };
@@ -247,9 +248,11 @@ function VersionItem({ v, d }: { v: Version; d: Detail }) {
       <div className="mt-1.5 space-y-2 rounded-card border border-line bg-surface p-4 text-meta">
         {v.compiled && (
           <>
-            <p><span className="font-medium">{v.origin === "recompiled" ? "Recompiled" : "Compiled"} from the agent's run</span>
+            <p><span className="font-medium">{v.origin === "recompiled" ? "Recompiled" : "Compiled"} from {v.compiled.taught ? "what you showed Envoy" : "the agent's run"}</span>
               {v.compiled.goal && <> <span className="text-ink-2">“{v.compiled.goal}”</span></>}</p>
-            {src ? (
+            {src?.taught ? (
+              <p className="text-meta-2 text-ink-2">You did it once through the live view: {plural(src.steps ?? 0, "step")} in {secs(src.duration_s)}, with no model.</p>
+            ) : src ? (
               <p className="text-meta-2 text-ink-2">
                 The agent took {plural(src.steps ?? 0, "step")}, {plural(src.model_calls ?? 0, "model call")}, {secs(src.duration_s)} and {usd(src.usd)} at standard prices.
               </p>
@@ -341,6 +344,13 @@ function RunEvent({ r }: { r: Run }) {
 
 function Savings({ d }: { d: Detail }) {
   const s = d.savings, src = s.source;
+  if (src?.taught) return (
+    <p className="text-meta text-ink-2">
+      Taught by you: there's no agent run to compare it with, because you showed Envoy how instead.{" "}
+      {s.finished ? <>Since then it finished {plural(s.finished, "run")} with {plural(s.model_calls, "model call")}.</> : <>It hasn't run since.</>}
+      {s.compile_usd != null && <> Learning it cost {usd(s.compile_usd)} once.</>}
+    </p>
+  );
   if (!src) return <p className="text-meta text-ink-2">The agent run this routine was learned from isn't on this Mac, so there's nothing to compare its runs with.</p>;
   const perRun = src.usd ?? 0;
   const more = s.compile_usd && perRun > 0 ? Math.max(1, Math.ceil((s.compile_usd - s.saved.usd) / perRun)) : null;
@@ -475,6 +485,7 @@ export default function RoutineDetail({ name, back, openTask }: { name: string; 
         <span className="rounded-full bg-sage-tint px-2.5 py-1 font-semibold text-sage-ink">{d.active != null ? `v${d.active} active` : `no active version · v${d.shown} shown (${d.shown_status ?? "?"})`}</span>
         {d.trial != null && <span className="rounded-full bg-apricot-tint px-2.5 py-1 font-semibold text-apricot-ink">v{d.trial} on trial</span>}
         {repairs > 0 && <span className="rounded-full bg-sage-tint px-2.5 py-1 font-semibold text-sage-ink">repaired itself {repairs}×</span>}
+        {d.taught && <span className="rounded-full bg-well px-2.5 py-1 font-semibold text-ink">taught by you</span>}
       </div>
       {d.description && <p className="mt-2 max-w-3xl text-meta text-ink-2">{d.description}</p>}
       <dl className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-meta-2">
@@ -487,8 +498,8 @@ export default function RoutineDetail({ name, back, openTask }: { name: string; 
       <dl className="mt-3 grid grid-cols-2 gap-2 lg:grid-cols-4">
         {([
           ["Runs", `${s.runs}`, s.runs ? `${s.finished} finished${s.failed ? `, ${s.failed} didn't` : ""}` : "none yet", ""],
-          ["Model calls", `${s.model_calls}`, src?.model_calls != null ? `in its runs · the agent: ${src.model_calls}` : "in its runs", ""],
-          ["Time per run", secs(s.median_s), src?.duration_s != null ? `median · the agent: ${secs(src.duration_s)}` : "median", ""],
+          ["Model calls", `${s.model_calls}`, src?.taught ? "in its runs · learned from you" : src?.model_calls != null ? `in its runs · the agent: ${src.model_calls}` : "in its runs", ""],
+          ["Time per run", secs(s.median_s), src?.taught ? `median · you took ${secs(src.duration_s)}` : src?.duration_s != null ? `median · the agent: ${secs(src.duration_s)}` : "median", ""],
           ["Saved", s.compared ? usd(s.saved.usd) : "—", s.compared ? `${plural(s.saved.calls, "call")} · ${secs(s.saved.seconds)} · at standard prices`
             : s.finished ? "no agent run to compare with" : "no runs yet", "text-sage-ink"],
         ] as const).map(([label, value, sub, tone]) => (

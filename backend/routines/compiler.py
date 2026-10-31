@@ -1,7 +1,8 @@
 """Routine compiler: one successful agent trace → an app routine (design doc, App routines › Compiling).
 
 1. Confirm success: only runs that ended `done` with a passed success check (or that the user
-   confirmed) are compiled.
+   confirmed) are compiled. A taught trace (api/teach.py) is your own demonstration in the same
+   format, confirmed by you; its routine is marked `source: taught`.
 2. Clean up: drop pop-up dismissals (the shared handler covers them), looks, rejected or failed
    actions, steps with no visible effect, and back-tracks (a stretch of steps that ends on exactly
    the screen it started from). Recorded scrolls before a list tap become `scroll_until`.
@@ -310,7 +311,9 @@ def describe_steps(steps: list[TStep]) -> str:
         extra = f' typed "{s.typed}"' if s.kind == "type" else ""
         if s.kind == "scroll_until":
             extra = f" ({s.scrolls} scroll(s) {s.direction})"
-        lines.append(f"{i}. {s.kind}{tgt}{extra} — on screen {_title(s.before)!r} → {_title(s.after)!r}. Agent's reason: {s.reason}")
+        # A taught trace (api/teach.py) has no reasons: a person did the step.
+        why = f"Agent's reason: {s.reason}" if s.reason else "Done by the user, who showed the task."
+        lines.append(f"{i}. {s.kind}{tgt}{extra} — on screen {_title(s.before)!r} → {_title(s.after)!r}. {why}")
     return "\n".join(lines)
 
 
@@ -443,6 +446,18 @@ def _switch_state(near: str | None, example: str, final: ScreenState) -> Extract
     if el is None:
         return None
     return Extract(locator=Locator(text=el.label, kind=el.kind), switch=True)
+
+
+def _effect_checks(post: list[Check], before: ScreenState, examples: dict[str, str]) -> tuple[list[Check], list[Check]]:
+    """The after-checks that show the step's effect, and the ones that already held on the step's own before screen. Those say
+    nothing about what the step did, and at run time they make it look done before it runs: YouTube Music's "Songs" chip is
+    there whether or not it's selected, so on Oct 31 the routine skipped the filter and read the unfiltered results' first
+    artist (and Lyft's airline Skip "passed" without being taken, Oct 30)."""
+    keep, held = [], []
+    for c in post:
+        specific = c.kind not in ("screen_changed", "screen_like", "app_foreground")
+        (held if specific and chk.evaluate(c, before, examples).passed else keep).append(c)
+    return keep, held
 
 
 def _state_text(near: str | None, final: ScreenState, data_values: list[str]) -> Extract | None:
@@ -990,6 +1005,9 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
         post = [g for c in post if (g := chk_generalize(c, examples, data_values)) is not None and not _before_typed(g, i, typed_at)]
         if s.kind == "type" and (prior := _prior_text(s)) is not None:
             post = [c.model_copy(update={"value": bind_inputs(c.value, {FIELD: prior})}) if c.kind == "field_equals" else c for c in post]
+        post, held = _effect_checks(post, s.before, examples)
+        for c in held:
+            report.warnings.append(f"step {i}: after-check {c.describe()} already held before the step; dropped")
         if not post:
             post = [Check(kind="screen_changed")]
         out_steps.append(Step(id=sid, intent=intent, pre=pre, action=action, post=post,
@@ -1066,7 +1084,10 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
                 del extract[o.name]
                 outputs.remove(o.name)
                 report.warnings.append(f"output {o.name!r} reads {got!r} on the run's own final screen, not {o.example!r}; dropped")
-    question = bool(re.search(r"\?\s*$|^(what|how|when|where|which|who|is|are|do|does|did|can)\b", (run.get("goal") or "").strip(), re.I))
+    # "… and tell me the artist of the first result" asks a question too (Oct 31: YouTube Music's routine compiled with no
+    # output and answered nothing).
+    question = bool(re.search(r"\?\s*$|^(what|how|when|where|which|who|is|are|do|does|did|can)\b|"
+                              r"\btell me (the|its|their|what|who|which|how|when|where|if|whether)\b", (run.get("goal") or "").strip(), re.I))
     if not extract and final is not None and question and answer:
         # A question answered from what the screen says rather than a value on it ("No events today" from "Nothing planned"),
         # with no output named: report the screen text the answer quotes, word for word.
@@ -1114,7 +1135,8 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
         description=" ".join([spec.description, *limits]),
         patterns=spec.patterns, inputs=inputs, outputs=outputs, steps=out_steps, done=done,
         compiled_from={"task_id": run["task_id"], "goal": run["goal"], "compiler": compiler_model, "compiled_at": time.strftime("%Y-%m-%d %H:%M:%S"),
-                       "trace_steps_kept": report.kept, "trace_steps_dropped": len(dropped), "cost_usd": round(report.cost_at_standard_usd, 4)},
+                       "trace_steps_kept": report.kept, "trace_steps_dropped": len(dropped), "cost_usd": round(report.cost_at_standard_usd, 4),
+                       **({"source": "taught"} if run.get("source") == "taught" else {})},
     )
     return routine, report
 

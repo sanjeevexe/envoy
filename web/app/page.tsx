@@ -34,6 +34,7 @@ export default function Page() {
   const mobile = useMedia("(max-width: 767px)");
   const [tab, setTab] = useState<Tab>("Home");
   const [back, setBack] = useState<Tab>("Home"); // where Settings goes back to
+  const [teachAsk, setTeachAsk] = useState<{ goal: string } | null>(null); // "Show me once": the Teach form with a failed task's goal
   const [authed, setAuthed] = useState<boolean | null>(null);
   const [profile, setProfile] = useState("");
   const [publicUrl, setPublicUrl] = useState<string>();
@@ -111,6 +112,12 @@ export default function Page() {
           user_control: e.type === "takeover" ? true : e.type === "hand_back" ? false : !!m[e.avd]?.user_control, reason: e.reason ?? "" } }));
         if (e.type === "takeover_requested") setAvd(e.avd);
         break;
+      case "teach": {  // teach mode (backend/api/teach.py): the phone's Recording line, and Learning it after Finish
+        const t = e.teach ?? {};
+        const on = ["recording", "compiling", "replaying"].includes(t.status);
+        setLeases((m) => (m[t.device] ? { ...m, [t.device]: { ...m[t.device], teach: on ? t : null } } : m));
+        break;
+      }
       case "memory": setMemVersion((v) => v + 1); break;
       case "fact_changed": setBriefVersion((v) => v + 1); break;
       case "offer":  // one you asked for in chat shows in the conversation itself: no toast for it
@@ -137,6 +144,7 @@ export default function Page() {
   };
   const openTaskTab = (id: string) => { setOpenTask(id); setTab("Activity"); };
   const watch = (device?: string) => { if (device) setAvd(device); if (mobile) setTab("Phone"); };
+  const showMe = (goal: string, device?: string) => { if (device && leases[device]) setAvd(device); setTeachAsk({ goal }); setTab("Phone"); };
 
   if (authed === null) return <main className="h-[100dvh] bg-page" />;
   if (authed === false) return <Pair onPaired={load} />;
@@ -147,7 +155,7 @@ export default function Page() {
   const phoneView = (
     <div className="flex flex-col gap-3">
       <PhoneSwitch phones={phones} avd={avd} onChange={setAvd} />
-      <LivePhone key={avd} avd={avd} lease={leases[avd]} needsYou={needs ? needs.detail ?? "Envoy needs you" : null} mobile={mobile} />
+      <LivePhone key={avd} avd={avd} lease={leases[avd]} needsYou={needs ? needs.detail ?? "Envoy needs you" : null} mobile={mobile} teachAsk={teachAsk} />
     </div>
   );
   const content = (
@@ -157,7 +165,8 @@ export default function Page() {
               onListening={setListening} goPhone={() => go("Phone")} device={leases[avd]} />
       </div>
       {tab === "Activity" && <Activity tasks={taskList} all={tasks} steps={steps} approvals={Object.values(approvals)} openTask={openTask} setOpenTask={setOpenTask}
-                                       review={setReviewing} watch={watch} leases={leases} mood={mood} goPhone={() => go("Phone")} version={briefVersion} />}
+                                       review={setReviewing} watch={watch} leases={leases} mood={mood} goPhone={() => go("Phone")} version={briefVersion}
+                                       showMe={showMe} />}
       {tab === "Phone" && <div className="mx-auto w-full max-w-[520px] p-4 md:pt-8">{phoneView}</div>}
       {tab === "Memory" && <MemoryGraph version={memVersion} />}
       {tab === "Routines" && <RoutinesTab openTask={openTaskTab} />}

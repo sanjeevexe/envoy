@@ -394,3 +394,48 @@ def test_a_repair_reply_that_is_not_json_is_a_failed_attempt():
     assert first["not_run"] == "unparseable answer" and "decision" not in first and "not valid JSON" in model.prompts[1]
     assert out.status == "done" and phone.acts == [("tap", "Palo Alto · CA")]
     assert out.model_calls == 2 and round(out.cost_at_standard_usd, 2) == 0.16
+
+
+# ---- f. a step is skipped as done only on something it makes appear --------------------------------------------------------
+# Phase 7, Oct 31 (YouTube Music on envoy-real): the search's results were still loading when the filter step came up, its
+# only after-check ("the chip row is gone") held on that screen, and the step was skipped; the routine then read the mini
+# player's "Royal Philharmonic Orchestra & Matthew Freeman". Instagram's Share has an absence as its only check too.
+
+def _loading_app(loads: int = 3):
+    def screen(name: str, labels: list[str]):
+        return screen_from_tree({"package": "app", "activity": name, "signature": name, "elements": [
+            {"index": i, "number": i + 1, "kind": "Button", "label": t, "text": t, "clickable": True,
+             "bounds": [0, 200 * i, 1080, 200 * i + 150]} for i, t in enumerate(labels)]})
+    screens = {"loading": screen("loading", ["Search"]), "results": screen("results", ["Songs", "Albums", "Search"]),
+               "filtered": screen("filtered", ["Bohemian Rhapsody · Queen", "Search"])}
+
+    class Phone:
+        def __init__(self) -> None:
+            self.seen, self.acts = 0, []
+
+        async def observe(self, screenshot: bool = False):
+            self.seen += 1
+            if getattr(self, "at", None) is None:
+                return screens["loading" if self.seen <= loads else "results"]
+            return screens[self.at]
+
+        async def act(self, a):
+            label = (await self.observe()).numbered[a.element - 1].label
+            self.acts.append((a.kind, label))
+            self.at = "filtered" if label == "Songs" else getattr(self, "at", None)
+            return ActionResult(ok=True, duration_ms=1.0)
+    return Phone()
+
+
+@pytest.mark.parametrize("post, risk", [
+    ([Check(kind="element_absent", locator=Locator(text="Albums", kind="Button"))], "read"),  # an absence alone
+    ([Check(kind="element_present", locator=Locator(text="Search", kind="Button"))], "irreversible"),  # an irreversible step
+])
+def test_a_step_is_not_skipped_as_done_on_an_absence_or_when_irreversible(post, risk):
+    phone = _loading_app()
+    r = Routine(routine="songs", app="app", intent="Filter to songs", steps=[
+        Step(id="filter_by_songs", intent="Show only songs", risk=risk,
+             action=StepAction(kind="tap", target=Locator(text="Songs", kind="Button")), post=post)])
+    out = asyncio.run(RoutineExecutor(phone, adapter=Answers(phone, []), approver=ScriptedApprover(approve=True), config=FAST)
+                      .run(r, {}, launch="never"))
+    assert out.steps[0].status != "skipped" and phone.acts == [("tap", "Songs")]

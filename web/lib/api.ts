@@ -28,8 +28,13 @@ export type Approval = {
 };
 export type Lease = {
   avd: string; task_id: string | null; user_control: boolean; since: number; reason: string; running?: boolean;
-  kind?: "emulator" | "phone"; name?: string; android?: string; state?: string;
+  kind?: "emulator" | "phone"; name?: string; android?: string; state?: string; teach?: TeachState | null;
 };
+// Teach mode (backend/api/teach.py): you do a task once and it becomes a routine. While `recording` is "paused" (a sign-in
+// or secure screen) nothing is kept.
+export type TeachState = { id: string; goal: string; status: string; recording?: "on" | "paused"; why?: string; steps?: number; routine?: string };
+export type TeachResult = TeachState & { detail: string; version: number | null; notes: string[]; warnings: string[]; replay_task: string | null;
+  replay: { status: string; detail: string; duration_s: number } | null; cost_usd: number };
 // An offer: Envoy proposes one action and waits for your yes (backend/api/offers.py). `action.goal` is shown verbatim.
 export type OfferLine = { kind: string; text: string; level: "info" | "warn" | "stop" | string };
 export type Offer = {

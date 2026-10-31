@@ -73,9 +73,43 @@ def answer_on_screen(result: str, screen: ScreenState) -> CheckResult:
     return CheckResult(False, True, f"none of {tokens[:5]} is visible on the current screen")
 
 
+# An answer that states a setting's state ("Bluetooth is turned on", "Wi-Fi is off", "Dark theme is enabled").
+_ON_OFF = re.compile(r"\b(?:is|are|was|turned|switched|currently|set to)\s+(on|off)\b|\b(enabled|disabled)\b", re.I)
+
+
+def switch_agrees(result: str, screen: ScreenState) -> str | None:
+    """Why an on/off answer is confirmed by a switch on screen, or None. The switch must sit in the row whose words name what
+    the answer is about: Settings draws "Use Bluetooth" as one element and its switch, unlabelled, as another (Oct 31, on
+    hybrid: a right answer failed a check worded "Bluetooth on/off status", and the run wasn't compiled)."""
+    m = _ON_OFF.search(result)
+    subjects = answer_tokens(result)
+    if not m or not subjects:
+        return None
+    on = (m.group(1) or m.group(2)).casefold() in ("on", "enabled")
+    for sw in (e for e in screen.numbered if e.checkable):
+        mid = (sw.bounds[1] + sw.bounds[3]) / 2
+        row = [e for e in screen.numbered if e.label and e.bounds[1] <= mid <= e.bounds[3]]
+        words = " ".join(_norm(e.label) for e in row + [sw])
+        if any(_norm(t) in words for t in subjects):
+            if sw.checked != on:
+                return None  # the switch says otherwise
+            name = next((e.label for e in [sw] + row if e.label), subjects[0])
+            return f"the switch for {name!r} is {'on' if on else 'off'}, as the answer says"
+    return None
+
+
 def evaluate(check: SuccessCheck | None, screen: ScreenState, result: str, field_value: str | None = None) -> CheckResult:
     if check is None:
         return CheckResult(True, False, "no success check")
+    if check.kind in ("info", "text_visible"):
+        res = _evaluate(check, screen, result, field_value)
+        if not res.passed and (why := switch_agrees(result, screen)):
+            return CheckResult(True, True, why)
+        return res
+    return _evaluate(check, screen, result, field_value)
+
+
+def _evaluate(check: SuccessCheck, screen: ScreenState, result: str, field_value: str | None) -> CheckResult:
     text = _norm(_screen_text(screen))
     value = _norm(check.value)
     if check.kind == "info":

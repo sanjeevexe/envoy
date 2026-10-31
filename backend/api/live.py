@@ -14,6 +14,9 @@ Protocol (`WS /api/live/{avd}`):
   y2, ms}, `text` {text}, `key` {key: Back | Home | Enter | Backspace | Tab}. Coordinates are fractions of the screen
   (0–1). Input is passed straight to the phone: never logged, never stored, never shown to a model. An input with an
   `id` is acknowledged with `{"type": "ack", id, ms}` once the phone has it.
+- The one exception is teach mode (api/teach.py), which you start yourself with a goal and which `control` shows
+  (`teach.recording`): then each input is recorded with the screens around it, to become a routine. It records nothing
+  on sign-in and secure screens or in password fields, and nothing at all once you finish or cancel.
 - `ping` {t} at any time → `pong` {t, server}: the client's clock offset and round trip, so it can measure capture →
   screen latency on another device (the iPhone over the tailnet) without trusting the two clocks to agree.
 """
@@ -83,7 +86,7 @@ async def live_view(ws: WebSocket, avd: str, pool: Any, fps: float = 10, width: 
                 await ws.send_text(json.dumps({"type": "error", "error": f"frame: {type(e).__name__}"}))
                 await asyncio.sleep(1)
                 continue
-            control = (lease.user_control, lease.task_id, lease.reason)
+            control = (lease.user_control, lease.task_id, lease.reason, repr(lease.teach))
             if control != last_control:
                 last_control = control
                 await ws.send_text(json.dumps({"type": "control", "control": lease.state()}))
@@ -114,18 +117,29 @@ async def live_view(ws: WebSocket, avd: str, pool: Any, fps: float = 10, width: 
             px = lambda fx, fy: (max(0, min(w - 1, round(float(fx) * w))), max(0, min(h - 1, round(float(fy) * h))))  # noqa: E731
             kind = msg.get("type")
             t0 = time.perf_counter()
-            if kind == "tap":
-                await asyncio.to_thread(stream.tap, *px(msg["x"], msg["y"]))
-            elif kind == "long_press":
-                x, y = px(msg["x"], msg["y"])
-                await asyncio.to_thread(stream.swipe, x, y, x, y, 0.7)
-            elif kind == "swipe":
-                (x1, y1), (x2, y2) = px(msg["x1"], msg["y1"]), px(msg["x2"], msg["y2"])
-                await asyncio.to_thread(stream.swipe, x1, y1, x2, y2, float(msg.get("ms", 300)) / 1000)
-            elif kind == "text" and isinstance(msg.get("text"), str):
-                await asyncio.to_thread(stream.text, msg["text"][:500])
-            elif kind == "key" and msg.get("key") in KEYS:
-                await asyncio.to_thread(stream.key, KEYS[msg["key"]])
+
+            async def forward() -> None:
+                if kind == "tap":
+                    await asyncio.to_thread(stream.tap, *px(msg["x"], msg["y"]))
+                elif kind == "long_press":
+                    x, y = px(msg["x"], msg["y"])
+                    await asyncio.to_thread(stream.swipe, x, y, x, y, 0.7)
+                elif kind == "swipe":
+                    (x1, y1), (x2, y2) = px(msg["x1"], msg["y1"]), px(msg["x2"], msg["y2"])
+                    await asyncio.to_thread(stream.swipe, x1, y1, x2, y2, float(msg.get("ms", 300)) / 1000)
+                elif kind == "text" and isinstance(msg.get("text"), str):
+                    await asyncio.to_thread(stream.text, msg["text"][:500])
+                elif kind == "key" and msg.get("key") in KEYS:
+                    await asyncio.to_thread(stream.key, KEYS[msg["key"]])
+
+            recorder = pool.recorders.get(avd)
+            if recorder is None:
+                await forward()
+            else:  # teach mode, which you started: the screen before, the input, then the screen after (api/teach.py)
+                async with recorder.lock:
+                    await recorder.before(msg, w, h)
+                    await forward()
+                    await recorder.after(msg)
             if msg.get("id") is not None:
                 await ws.send_text(json.dumps({"type": "ack", "id": msg["id"], "ms": round((time.perf_counter() - t0) * 1000, 1)}))
 

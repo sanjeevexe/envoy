@@ -230,9 +230,10 @@ function StepRow({ l, isNew }: { l: Line; isNew: boolean }) {
   );
 }
 
-export function TaskDetail({ id, task, liveSteps, back, all, open, review, watch, deviceName }: {
+export function TaskDetail({ id, task, liveSteps, back, all, open, review, watch, deviceName, showMe }: {
   id: string; task?: Task; liveSteps: Step[]; back: () => void; all?: Record<string, Task>; open?: (id: string) => void;
   review?: (approvalId: string) => void; watch?: (device?: string) => void; deviceName?: (avd?: string) => string | undefined;
+  showMe?: (goal: string, device?: string) => void;  // teach mode with this task's goal, when the agent couldn't do it
 }) {
   const [data, setData] = useState<{ task: Task; steps: Step[]; approvals: Approval[] } | null>(null);
   const [now, setNow] = useState(() => Date.now() / 1000);
@@ -301,6 +302,13 @@ export function TaskDetail({ id, task, liveSteps, back, all, open, review, watch
             {t.kind === "crossapp" && t.status === "done" && t.detail && <p className="font-serif text-voice-2">{t.detail}</p>}
             {remembered.length > 0 && (
               <span className="flex flex-wrap gap-1.5">{[...new Set(remembered)].map((r) => <Chip key={r} icon={GraphIcon}>Remembered from {r}</Chip>)}</span>
+            )}
+            {showMe && t.status === "failed" && t.kind === "agent" && (
+              <span className="flex flex-wrap items-center gap-2">
+                <button onClick={() => showMe(t.request || t.goal, t.device ?? undefined)}
+                        className="h-11 rounded-full bg-sage px-4 text-[14px] font-bold text-white">Show me once</button>
+                <span className="text-meta-2 text-muted">Do it yourself on the phone and Envoy learns it.</span>
+              </span>
             )}
           </div>
         </div>

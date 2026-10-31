@@ -435,9 +435,13 @@ class RoutineExecutor:
                 continue
             last_bounds = None
             failed_once = True
-            # Already done (the effect is there) or an optional step whose screen didn't come.
+            # Already done (the effect is there) or an optional step whose screen didn't come. Only something the step makes
+            # appear says it's done: an absence also holds on a screen that hasn't loaded yet (Oct 31: YouTube Music's filter
+            # "held" on the results' loading screen, so the routine read the mini player instead), and an irreversible step
+            # (Instagram's Share, whose only check is an absence) is never assumed done.
             specific = self._specific(step.post)
-            if specific and self._check(specific, s, ctx.inputs)[0]:
+            shown = [c for c in specific if c.kind not in ("element_absent", "text_absent")]
+            if shown and step.risk != "irreversible" and self._check(specific, s, ctx.inputs)[0]:
                 return _Ready("skip", s, why="its after-checks already hold")
             req = self._next_required(ctx, idx) if step.optional else None
             if step.optional and req is not None and self._ready_now(req, s, ctx.inputs):

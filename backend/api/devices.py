@@ -50,6 +50,7 @@ class Lease:
     handed_back_at: float = 0.0
     last_agent_call: float = 0.0  # when the agent last acted (a foreground change soon after is its own doing)
     guard: Any = None  # on a real phone: checked before every call of the agent's; True means it just paused for you
+    teach: dict[str, Any] | None = None  # a teach session on this phone (api/teach.py): its goal, and whether it is recording
     agent_turn: asyncio.Event = field(default_factory=asyncio.Event)  # set while the agent may use the phone
     run_lock: asyncio.Lock = field(default_factory=asyncio.Lock)  # one task at a time per phone
 
@@ -57,7 +58,8 @@ class Lease:
         self.agent_turn.set()
 
     def state(self) -> dict[str, Any]:
-        return {"avd": self.avd, "task_id": self.task_id, "user_control": self.user_control, "since": self.since, "reason": self.reason}
+        return {"avd": self.avd, "task_id": self.task_id, "user_control": self.user_control, "since": self.since, "reason": self.reason,
+                "teach": self.teach}
 
 
 class GatedDevice:
@@ -96,6 +98,8 @@ class DevicePool:
         self.phones: dict[str, dict[str, Any]] = {}  # id → {id, serial, model, android, state, name?}, from the last discovery
         self._watchers: dict[str, asyncio.Task] = {}
         self.names: Any = lambda: {}  # id → the name you gave the phone (Settings › Phones); the API reads its setting
+        # Phones in teach mode (api/teach.py): only these record the live view's input, and only while you teach.
+        self.recorders: dict[str, Any] = {}
 
     @staticmethod
     def avd_for(app: str | None) -> str:

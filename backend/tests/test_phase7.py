@@ -342,6 +342,90 @@ def test_every_captured_irreversible_control_is_caught_by_code_and_no_reversible
         pytest.skip("no safety screens captured")
 
 
+def test_the_main_checkouts_routines_and_prompts_dont_keep_the_eval_off_its_tag(monkeypatch):
+    import final_common as fcm
+
+    main = (" M data/routines/skylark_check_in_flight/index.json\n M data/routines/skylark_get_flight_gate/index.json\n"
+            "?? data/routines/skylark_check_in_flight/v2.yaml\n?? prompts/demo-plan.md\n?? prompts/ui-sage-design/mock.html\n"
+            "?? testapps/skylark/app/build/outputs/apk/debug/app-debug.apk\n?? logs\n M eval/results/final/real.json\n")
+    assert fcm.dirty_paths(main) == []  # Oct 31: the first line was read as "ata/routines/…" and every suite was dirty
+    assert fcm.dirty_paths(" M backend/agent/loop.py\n") == ["backend/agent/loop.py"]
+    assert fcm.dirty_paths("?? backend/agent/new_rule.py\n?? scripts/x.sh\n?? eval/y.py\n") == ["backend/agent/new_rule.py", "scripts/x.sh", "eval/y.py"]
+    assert fcm.dirty_paths('R  web/src/a.ts -> web/src/b.ts\n') and fcm.dirty_paths("") == []
+
+    def git(*args, strip=True):
+        out = {"status": main, "tag": "eval-final\n", "rev-parse": "a594136\n"}[args[0]]
+        return out.strip() if strip else out
+    monkeypatch.setattr(fcm, "_git", git)
+    state = fcm.code_state()
+    assert state["is_eval_final"] and state["dirty"] == []
+
+
+def test_a_private_rows_answer_is_scrubbed_from_every_note_that_quotes_it():
+    import run_real_apps as rr
+
+    by_id = {w.id: w for w in rr.WORKFLOWS}
+    assert by_id["gmail_newest"].private and by_id["doordash"].private and not by_id["gmail_search"].private
+    answer, output = "123456 - Your Spotify login code", "123456 - Your Spotify login code, button Copy code: 123456, Oct 30"
+    row = {"app": "com.google.android.gm", "goal": by_id["gmail_newest"].goal, "graded_by": "truth", "first_run": "wrong",
+           "expect": "123456.*Your.*Spotify.*login", "expect_second": None,
+           "agent": {"status": "done", "result": "[redacted]", "steps": 0, "check": {"passed": True, "detail": "answer visible on screen: 123456, Spotify"}},
+           "compile": {"compiled": True, "routine": "gmail_get_newest_email_subject", "outputs": ["newest_email_subject"]},
+           "routine_runs": [{"case": "same input", "result": "wrong", "status": "done", "outputs": {"newest_email_subject": "[redacted]"},
+                             "detail": "all steps and checks passed", "steps": [{"id": "read_subject", "detail": f"read {output!r}"}]}]}
+    out = rr.scrub(row, [answer, output])
+    text = json.dumps(out)
+    assert "123456" not in text and "Spotify" not in text and "login" not in text, text
+    assert out["expect"] == "[redacted]" and out["expect_second"] is None  # still no second input
+    assert out["agent"]["check"] == {"passed": True, "detail": "answer visible on screen: [redacted], [redacted]"}
+    assert out["routine_runs"][0]["result"] == "wrong" and out["compile"]["routine"] == row["compile"]["routine"]
+    assert out["goal"] == row["goal"] and out["first_run"] == "wrong"
+    dd = rr.scrub({"compile": {"compiled": False, "reason": "the run answered a question ('1 Hacker Way'), but no output can be read back"}},
+                  ["1 Hacker Way"])
+    assert "Hacker" not in dd["compile"]["reason"] and "no output can be read back" in dd["compile"]["reason"]
+    assert rr.scrub({"agent": {"result": "x"}}, []) == {"agent": {"result": "x"}}
+
+
+def test_the_newest_email_in_my_inbox_is_primarys_top_message_or_the_whole_inboxs(monkeypatch):
+    import run_real_apps as rr
+
+    subjects = {"in:inbox category:primary": "123456 - Your Spotify login code", "in:inbox": "Welcome to Amazon: Shopping just got easier",
+                "DoorDash": "Your DoorDash order", "Security alert": "Security alert"}
+    asked = []
+
+    class Call:
+        def __init__(self, out):
+            self.out = out
+
+        def execute(self):
+            return self.out
+
+    class Messages:
+        def list(self, userId, q, maxResults):
+            asked.append(q)
+            return Call({"messages": [{"id": q}]} if q in subjects else {})
+
+        def get(self, userId, id, format, metadataHeaders):
+            return Call({"payload": {"headers": [{"name": "Subject", "value": subjects[id]}]}})
+
+    class Service:
+        def users(self):
+            return type("Users", (), {"messages": lambda self: Messages()})()
+
+    monkeypatch.setattr("integrations.mail.gmail_service", lambda: Service())
+    newest = next(w for w in rr.WORKFLOWS if w.id == "gmail_newest")
+    expect, second = newest.truth()
+    assert second is None and "" not in asked  # the inbox, never all mail (sent mail included)
+    for answer in ("123456 - Your Spotify login code", "Welcome to Amazon: Shopping just got easier"):
+        assert rr.right(answer, expect, {}, truth=True), answer
+    assert not rr.right("Welcome to Starbucks Rewards", expect, {}, truth=True)
+    subjects["in:inbox"] = subjects["in:inbox category:primary"]  # when they agree, one subject
+    assert "|" not in newest.truth()[0]
+    search = next(w for w in rr.WORKFLOWS if w.id == "gmail_search")
+    asked.clear()
+    assert rr.right("Your DoorDash order", search.truth()[0], {}, truth=True) and asked == ["DoorDash", "Security alert"]
+
+
 def test_the_phone_step_stops_when_the_screen_turns_sideways(monkeypatch):
     import subprocess
     import final_core as fc

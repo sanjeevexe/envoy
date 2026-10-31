@@ -368,3 +368,32 @@ def test_text_visible_check():
 def test_schemas_fit_metas_strict_subset():
     assert check_strict_subset(STEP_SCHEMA) == []
     assert check_strict_subset(PLAN_SCHEMA) == []
+
+
+def _picker(*, picker: bool, ok: str = "OK", package: str = "com.google.android.calendar") -> ScreenState:
+    """Google Calendar's date picker as teach mode recorded it (Oct 31): Material's mtrl_picker header, then Cancel and OK."""
+    def node(i: int, cls: str, text: str, rid: str, top: int) -> str:
+        clickable = str(cls.endswith("Button")).lower()
+        return (f'<node index="{i}" text={quoteattr(text)} resource-id="{rid}" class="{cls}" package="{package}" '
+                f'content-desc="" checkable="false" checked="false" clickable="{clickable}" enabled="true" focusable="{clickable}" '
+                'focused="false" scrollable="false" long-clickable="false" password="false" selected="false" '
+                f'visible-to-user="true" bounds="[80,{top}][1000,{top + 120}]" drawing-order="{i}" hint="" display-id="0" />')
+    header = f"{package}:id/{'mtrl_picker_header_title_and_selection' if picker else 'dialog_title'}"
+    kids = (node(0, "android.widget.TextView", "Select date", header, 300) + node(1, "android.widget.TextView", "Sun, Nov 1", f"{package}:id/x", 450)
+            + node(2, "android.widget.Button", "Cancel", f"{package}:id/cancel_button", 1800)
+            + node(3, "android.widget.Button", ok, f"{package}:id/confirm_button", 1950))
+    xml = ("<?xml version='1.0' encoding='UTF-8' standalone='yes' ?><hierarchy rotation=\"0\">"
+           f'<node index="0" text="" resource-id="" class="android.widget.FrameLayout" package="{package}" content-desc="" '
+           'checkable="false" checked="false" clickable="false" enabled="true" focusable="false" focused="false" '
+           'scrollable="false" long-clickable="false" password="false" selected="false" visible-to-user="true" '
+           'bounds="[0,0][1080,2400]" drawing-order="0" hint="" display-id="0">' + kids + "</node></hierarchy>")
+    return build_state(xml, package, f"{package}.MainActivity", 1080, 2400)
+
+
+def test_a_date_pickers_ok_is_not_irreversible_but_a_confirm_button_elsewhere_still_is():
+    def verdict(s: ScreenState, label: str = "OK"):
+        return classify(Action(kind="tap", element=next(e.number for e in s.numbered if e.label == label)), s, None)
+    on_picker = verdict(_picker(picker=True))
+    assert on_picker.level != "irreversible" and not on_picker.reasons
+    assert verdict(_picker(picker=False)).level == "irreversible"  # the same OK and id on any other dialog
+    assert verdict(_picker(picker=True, ok="Confirm and pay"), "Confirm and pay").level == "irreversible"  # not a picker's OK

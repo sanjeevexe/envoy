@@ -4,17 +4,22 @@
 // (never logged, never shown to a model). Hand back lets Envoy look again and continue.
 // Phase 5: touch (tap, swipe, long press; the page doesn't scroll while you're in control), typing with the iPhone's
 // keyboard, and latency measured against the Mac's clock (ping/pong), reported back so it can be compared over the tailnet.
+// Teach: you take over with a goal and do the task once while Envoy records it (the only time input is kept), then say it
+// worked; Envoy turns it into a routine and replays it once to show it runs. Sign-in and secure screens pause the recording.
 import { useEffect, useRef, useState } from "react";
-import { ArrowUUpLeftIcon, BackspaceIcon, CircleIcon, DeviceMobileIcon, HandIcon, KeyboardIcon, KeyReturnIcon } from "@phosphor-icons/react";
-import { Lease, loadMock, mockMode, post } from "@/lib/api";
+import { ArrowUUpLeftIcon, BackspaceIcon, ChalkboardTeacherIcon, CircleIcon, DeviceMobileIcon, HandIcon, KeyboardIcon, KeyReturnIcon } from "@phosphor-icons/react";
+import { api, Lease, loadMock, mockMode, post, TeachResult } from "@/lib/api";
 import { isStandalone, metric } from "@/lib/device";
 
-type Props = { avd: string; lease?: Lease; needsYou?: string | null; mobile?: boolean };
+// `teachAsk`: open the Teach form with this goal ("Show me once" on a task that failed).
+type Props = { avd: string; lease?: Lease; needsYou?: string | null; mobile?: boolean; teachAsk?: { goal: string } | null };
 const SENTINEL = "  ";
+const QUESTION = /\?\s*$|^(what|how|when|where|which|who|is|are|do|does|did|can)\b/i;  // as the compiler tells a question goal
+const LEARNING: Record<string, string> = { compiling: "Turning what you showed into a routine…", replaying: "Running it once on its own to check it works…" };
 
 const median = (xs: number[]) => (xs.length ? [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)] : 0);
 
-export default function LivePhone({ avd, lease, needsYou, mobile }: Props) {
+export default function LivePhone({ avd, lease, needsYou, mobile, teachAsk }: Props) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const kb = useRef<HTMLInputElement>(null);
   const ws = useRef<WebSocket | null>(null);
@@ -26,6 +31,10 @@ export default function LivePhone({ avd, lease, needsYou, mobile }: Props) {
   const [isPhone, setIsPhone] = useState(false);
   const [typed, setTyped] = useState("");
   const [keyboard, setKeyboard] = useState(false);
+  const [goal, setGoal] = useState<string | null>(teachAsk?.goal ?? null);  // the Teach form, open while not null
+  const [answer, setAnswer] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [taught, setTaught] = useState<TeachResult | null>(null);  // the last teach session's outcome
   const down = useRef<{ x: number; y: number; t: number; timer?: ReturnType<typeof setTimeout>; long?: boolean } | null>(null);
   const clock = useRef<{ offset: number; bestRtt: number }>({ offset: 0, bestRtt: Infinity });
   const sent = useRef<Record<number, number>>({});
@@ -33,6 +42,26 @@ export default function LivePhone({ avd, lease, needsYou, mobile }: Props) {
   const samples = useRef<{ frame: number[]; rtt: number[]; tap: number[]; bytes: number; frames: number }>({ frame: [], rtt: [], tap: [], bytes: 0, frames: 0 });
 
   useEffect(() => setControl(lease), [lease]);
+  useEffect(() => { if (teachAsk) { setTaught(null); setGoal(teachAsk.goal); } }, [teachAsk]);
+
+  // After Finish the phone is handed back and Envoy learns in the background: follow it until it's saved or failed.
+  const teachStatus = control?.teach?.status;
+  const [following, setFollowing] = useState(false);
+  useEffect(() => {
+    if (!following || mockMode()) return;
+    let stop = false;
+    const tick = async () => {
+      try {
+        const r = await api<TeachResult>(`/api/teach/${avd}`);
+        if (stop) return;
+        setTaught(r);
+        if (!["compiling", "replaying", "recording"].includes(r.status)) { setFollowing(false); return; }
+      } catch { /* the next tick tries again */ }
+      if (!stop) setTimeout(tick, 1500);
+    };
+    tick();
+    return () => { stop = true; };
+  }, [following, avd]);
 
   useEffect(() => {
     if (mockMode()) {  // mock mode: a still picture of the phone, and no socket
@@ -191,6 +220,25 @@ export default function LivePhone({ avd, lease, needsYou, mobile }: Props) {
 
   const takeOver = () => post(`/api/devices/${avd}/takeover`).then(setControl).catch((e) => setError(e.message));
   const handBack = () => { kb.current?.blur(); post(`/api/devices/${avd}/handback`).then(setControl).catch((e) => setError(e.message)); };
+  const teach = async (path: "start" | "finish" | "cancel", body: Record<string, unknown> = {}) => {
+    setBusy(true);
+    setError(null);
+    try {
+      const r = await post<TeachResult>(`/api/teach/${path}`, { device: avd, ...body });
+      setTaught(r);
+      if (path === "start") { setGoal(null); setAnswer(""); }
+      if (path === "finish") { kb.current?.blur(); setFollowing(true); }
+      if (path === "cancel") kb.current?.blur();
+      api<Lease[]>("/api/devices").then((ds) => { const me = ds.find((d) => d.avd === avd); if (me) setControl(me); }).catch(() => {});
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setBusy(false);
+    }
+  };
+  const recording = !!control?.teach && control.teach.status === "recording" && inControl;
+  const paused = recording && control?.teach?.recording === "paused";
+  const asking = recording && QUESTION.test(control?.teach?.goal ?? "");
 
   const keys: { k: string; label: string; icon: React.ReactNode }[] = [
     { k: "Back", label: "Back", icon: <ArrowUUpLeftIcon size={20} /> }, { k: "Home", label: "Home", icon: <CircleIcon size={20} /> },
@@ -198,7 +246,34 @@ export default function LivePhone({ avd, lease, needsYou, mobile }: Props) {
   ];
   return (
     <div className="flex flex-col gap-3">
-      {inControl ? (
+      {recording ? (
+        <div className={`rounded-block px-4 py-3 ${paused ? "border border-apricot-line bg-surface" : "bg-ink text-on-ink"}`} role="status" aria-live="polite">
+          <div className="flex items-center gap-2 text-body font-bold">
+            <span aria-hidden className={`h-2.5 w-2.5 shrink-0 rounded-full ${paused ? "bg-apricot" : "animate-pulse bg-apricot"}`} />
+            {paused ? <span className="text-apricot-ink">Recording paused</span> : "Recording"}
+            <span className={`ml-auto text-meta font-normal tabular-nums ${paused ? "text-ink-2" : "opacity-85"}`}>{control?.teach?.steps ?? 0} step{control?.teach?.steps === 1 ? "" : "s"}</span>
+          </div>
+          <div className={`mt-0.5 text-meta ${paused ? "text-ink-2" : "opacity-85"}`}>
+            {paused ? `On ${control?.teach?.why || "a sign-in screen"}: nothing here is kept. It records again on the next screen.`
+              : <>Show Envoy: <span className="font-semibold">{control?.teach?.goal}</span>. Each tap and what you type is kept; sign-in screens and passwords never are.</>}
+          </div>
+          {asking && (
+            <input value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="The answer you found" aria-label="The answer you found"
+                   className={`mt-3 h-11 w-full rounded-full border px-4 text-meta outline-none ${paused ? "border-control bg-surface" : "border-transparent bg-surface text-ink"} focus:border-sage`} />
+          )}
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button disabled={busy} onClick={() => teach("finish", { ok: true, answer })}
+                    className={`h-11 rounded-full px-5 text-[14px] font-bold disabled:opacity-60 ${paused ? "bg-sage text-white" : "bg-surface text-ink"}`}>Done, it worked</button>
+            <button disabled={busy} onClick={() => teach("cancel")}
+                    className={`h-11 rounded-full border px-4 text-[14px] font-bold disabled:opacity-60 ${paused ? "border-control bg-surface" : "border-on-ink/40"}`}>Cancel</button>
+          </div>
+        </div>
+      ) : teachStatus && LEARNING[teachStatus] ? (
+        <div className="rounded-block border border-line bg-surface px-4 py-3" role="status" aria-live="polite">
+          <div className="text-body font-bold">Learning it</div>
+          <div className="mt-0.5 text-meta text-ink-2">{LEARNING[teachStatus]}</div>
+        </div>
+      ) : inControl ? (
         <div className="rounded-block bg-ink px-4 py-3 text-on-ink">
           <div className="text-body font-bold">You&rsquo;re in control. Envoy is paused.</div>
           <div className="mt-0.5 text-meta opacity-85">What you type goes straight to the phone and is never logged or shown to a model.</div>
@@ -212,14 +287,40 @@ export default function LivePhone({ avd, lease, needsYou, mobile }: Props) {
           </span>
           <button onClick={takeOver} className="h-11 shrink-0 rounded-full bg-sage px-4 text-[14px] font-bold text-white">Take over</button>
         </div>
+      ) : goal !== null && !control?.task_id ? (
+        <form className="rounded-block border border-line bg-surface p-3" onSubmit={(e) => { e.preventDefault(); if (goal.trim()) teach("start", { goal }); }}>
+          <label htmlFor={`teach-${avd}`} className="block px-1 text-body font-bold">Show Envoy once</label>
+          <p className="mt-0.5 px-1 text-meta text-ink-2">Say what you&rsquo;ll do, then do it on the phone. Envoy records it and learns it as a routine.</p>
+          <input id={`teach-${avd}`} value={goal} onChange={(e) => setGoal(e.target.value)} autoFocus placeholder="Add a Calendar event called Dentist tomorrow at 3pm"
+                 className="mt-2 h-11 w-full rounded-full border border-control bg-surface px-4 text-meta outline-none focus:border-sage" />
+          <div className="mt-2 flex gap-2">
+            <button disabled={busy || !goal.trim()} className="h-11 rounded-full bg-sage px-5 text-[14px] font-bold text-white disabled:opacity-60">Start recording</button>
+            <button type="button" onClick={() => setGoal(null)} className="h-11 rounded-full border border-control bg-surface px-4 text-[14px] font-bold">Not now</button>
+          </div>
+        </form>
       ) : (
-        <div className="flex items-center gap-3 rounded-block border border-line bg-surface py-2 pl-4 pr-2">
-          <span className="min-w-0 flex-1 text-meta text-ink-2">{control?.task_id ? "Envoy is using the phone" : "The phone is idle"}</span>
-          <button onClick={takeOver} className="flex h-11 shrink-0 items-center gap-1.5 rounded-full border border-control bg-surface px-4 text-[14px] font-bold"><HandIcon size={18} />Take over</button>
+        <div className="flex flex-wrap items-center gap-2 rounded-block border border-line bg-surface py-2 pl-4 pr-2">
+          <span className="min-w-[8.5rem] flex-1 text-meta text-ink-2">{control?.task_id ? "Envoy is using the phone" : "The phone is idle"}</span>
+          <span className="flex gap-2">
+            {!control?.task_id && (
+              <button onClick={() => { setTaught(null); setGoal(""); }} className="flex h-11 shrink-0 items-center gap-1.5 rounded-full border border-control bg-surface px-4 text-[14px] font-bold">
+                <ChalkboardTeacherIcon size={18} />Teach</button>
+            )}
+            <button onClick={takeOver} className="flex h-11 shrink-0 items-center gap-1.5 rounded-full border border-control bg-surface px-4 text-[14px] font-bold"><HandIcon size={18} />Take over</button>
+          </span>
         </div>
       )}
-      <div className={`relative mx-auto w-full overflow-hidden rounded-[30px] border-[6px] ${inControl ? "border-sage" : "border-ink"} bg-ink shadow-phone`}
-           style={{ aspectRatio: `${size.w} / ${size.h}`, maxWidth: mobile ? `min(100%, calc((100dvh - ${inControl ? 430 : 350}px) * ${size.w / size.h}))` : 300 }}>
+      {taught && !recording && !(teachStatus && LEARNING[teachStatus]) && ["saved", "failed", "discarded"].includes(taught.status) && (
+        <div className={`rounded-block px-4 py-3 text-meta ${taught.status === "saved" ? "bg-sage-tint text-sage-ink" : taught.status === "failed" ? "bg-apricot-tint text-apricot-ink" : "bg-raised text-ink-2"}`} role="status">
+          <div className="font-bold">{taught.status === "saved" ? "Learned it" : taught.status === "failed" ? "Couldn't learn it this time" : "Nothing was kept"}</div>
+          <div className="mt-0.5">{taught.detail}</div>
+          {taught.status === "saved" && <div className="mt-1 text-meta-2">It&rsquo;s in Routines, marked taught. Next time, just ask.</div>}
+          {taught.status === "failed" && taught.notes.length > 0 && <ul className="mt-1 list-disc pl-4 text-meta-2">{taught.notes.slice(0, 3).map((n) => <li key={n}>{n}</li>)}</ul>}
+          <button onClick={() => setTaught(null)} className="mt-2 h-9 rounded-full border border-current/30 px-3 text-meta-2 font-bold">OK</button>
+        </div>
+      )}
+      <div className={`relative mx-auto w-full overflow-hidden rounded-[30px] border-[6px] ${recording && !paused ? "border-apricot" : inControl ? "border-sage" : "border-ink"} bg-ink shadow-phone`}
+           style={{ aspectRatio: `${size.w} / ${size.h}`, maxWidth: mobile ? `min(100%, calc((100dvh - ${recording ? (asking ? 530 : 470) : inControl ? 430 : 350}px) * ${size.w / size.h}))` : 300 }}>
         <canvas ref={canvas} tabIndex={0} aria-label={inControl ? "The phone's screen: tap, swipe, or type" : "The phone's screen, live"}
                 onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={() => { if (down.current?.timer) clearTimeout(down.current.timer); down.current = null; }}
                 onKeyDown={onKey} onContextMenu={(e) => e.preventDefault()}

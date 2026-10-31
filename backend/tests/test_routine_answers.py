@@ -184,6 +184,10 @@ def test_an_answer_read_wrong_on_the_runs_own_screen_is_not_kept(tmp_path):
     r, report = asyncio.run(compile_trace(d, adapter=NoModel(), confirmed=True, spec=spec))
     assert r.outputs == [] and r.steps[-1].extract is None
     assert any("reads 'Call with Marketing'" in w and w.endswith("dropped") for w in report.warnings)
+    # Asked as "… tell me …", it is still a question: no routine that answers nothing (YouTube Music, Oct 31).
+    (d / "run.json").write_text(json.dumps({**run, "goal": "Open Simple Calendar Pro and tell me the title of my next upcoming event."}))
+    with pytest.raises(NotCompilable, match="Call with Marketing"):
+        asyncio.run(compile_trace(d, adapter=NoModel(), confirmed=True, spec=spec))
 
 
 # ---- weak verification (backlog #1, #9) -------------------------------------------------------------------------------
@@ -403,3 +407,22 @@ def test_identical_results_differ_only_by_their_slot():
     # Words that fit the siblings differently still decide by score, never by the slot.
     other = tap.model_copy(update={"text": "Simple Calendar Pro3"})
     assert locators.locate(other, results, {}).element.label == "Simple Calendar Pro3"
+
+
+def test_an_after_check_that_held_before_the_step_is_not_kept():
+    """YouTube Music on envoy-real, Oct 31: filter_by_songs' after-check was the "Songs" chip, which is there selected or not.
+    On reruns the step looked done before it ran ("its after-checks already hold"), was skipped, and the routine read the
+    unfiltered results: "Royal Philharmonic Orchestra & Matthew Freeman" instead of Queen."""
+    from routines.compiler import _effect_checks
+    from routines.model import Check, Locator
+
+    def results(*labels: str):
+        return screen_from_tree({"package": "com.google.android.apps.youtube.music", "activity": "Search", "width": 1080,
+                                 "height": 2400, "elements": [
+            {"index": i, "parent": None, "number": i + 1, "kind": "Button", "class": "android.widget.Button", "label": t,
+             "text": t, "clickable": True, "bounds": [0, 200 * i, 1080, 200 * i + 150]} for i, t in enumerate(labels)]})
+    before = results("Songs", "Albums", "Bohemian Rhapsody · Royal Philharmonic Orchestra")
+    chip = Check(kind="element_present", locator=Locator(text="Songs", kind="Button"))
+    row = Check(kind="element_present", locator=Locator(text="Bohemian Rhapsody · Queen", kind="Button"))
+    keep, held = _effect_checks([Check(kind="screen_changed"), chip, row], before, {})
+    assert held == [chip] and keep == [Check(kind="screen_changed"), row]
