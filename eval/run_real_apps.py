@@ -87,7 +87,13 @@ def _bluetooth() -> tuple[str, None]:
 
 
 def _gmail(query: str | None, second: str | None = None) -> Callable[[], tuple[str, str | None]]:
-    """The subject of the newest message (for a search: the newest matching one), from the Gmail API."""
+    """The subject of the newest message (for a search: the newest matching one), from the Gmail API. "My inbox" is either
+    the Primary tab, where the Gmail app opens, or the whole inbox: on Oct 31 a Promotions mail was newer than Primary's top
+    message, which the agent read, and only the whole inbox's counted."""
+    def newest() -> str:
+        primary, inbox = subject("in:inbox category:primary"), subject("in:inbox")
+        return primary if primary == inbox else f"(?:{primary})|(?:{inbox})"
+
     def subject(q: str | None) -> str:
         from integrations.mail import gmail_service
         users = gmail_service().users()
@@ -98,7 +104,7 @@ def _gmail(query: str | None, second: str | None = None) -> Callable[[], tuple[s
         s = next((h["value"] for h in head["payload"]["headers"] if h["name"].lower() == "subject"), "")
         words = re.findall(r"[A-Za-z0-9']{3,}", s)[:4]  # the first few words, so emoji and punctuation don't matter
         return r".*".join(re.escape(w) for w in words) or re.escape(s)
-    return lambda: (subject(query), subject(second) if second else None)
+    return lambda: (subject(query) if query else newest(), subject(second) if second else None)
 
 
 WORKFLOWS = [

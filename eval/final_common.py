@@ -33,14 +33,30 @@ def now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
-def _git(*args: str) -> str:
-    return subprocess.run(["git", *args], cwd=REPO, capture_output=True, text=True).stdout.strip()
+def _git(*args: str, strip: bool = True) -> str:
+    out = subprocess.run(["git", *args], cwd=REPO, capture_output=True, text=True).stdout
+    return out.strip() if strip else out
+
+
+def dirty_paths(porcelain: str) -> list[str]:
+    """What `git status --porcelain` shows that could change what a suite runs. Changes under eval/results/, data/ and logs/
+    are what suites and the app write, and an untracked file counts only where code runs from (backend/, eval/, scripts/):
+    the main checkout keeps untracked prompts. Each line keeps its two status columns, so nothing may strip the output (on
+    Oct 31 a stripped first line read " M data/…" as "ata/…" and every suite was marked dirty, never `eval-final`)."""
+    out = []
+    for line in porcelain.splitlines():
+        status, path = line[:2], line[3:].strip('"')
+        if not path or path.startswith(("eval/results/", "data/", "logs/")):
+            continue
+        if status == "??" and not path.startswith(("backend/", "eval/", "scripts/")):
+            continue
+        out.append(path)
+    return out
 
 
 def code_state() -> dict[str, Any]:
-    """The commit a suite ran on. Changes under eval/results/ and data/ are what suites write, so they don't count as dirty."""
-    dirty = [line[3:] for line in _git("status", "--porcelain").splitlines()
-             if not line[3:].startswith(("eval/results/", "data/", "logs/"))]
+    """The commit a suite ran on, and whether anything uncommitted could change it (`dirty_paths`)."""
+    dirty = dirty_paths(_git("status", "--porcelain", "--untracked-files=all", strip=False))
     tags = _git("tag", "--points-at", "HEAD").split()
     return {"commit": _git("rev-parse", "HEAD"), "short": _git("rev-parse", "--short", "HEAD"), "tags": tags,
             "is_eval_final": TAG in tags and not dirty, "dirty": dirty[:20], "branch": _git("rev-parse", "--abbrev-ref", "HEAD")}
