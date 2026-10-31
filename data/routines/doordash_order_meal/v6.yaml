@@ -1,0 +1,218 @@
+routine: doordash_order_meal
+app: com.dd.doordash
+version: 6
+status: active
+intent: "Order my usual from Chick-fil-A on DoorDash: a Chick-fil-A Spicy Chicken Sandwich on its own"
+description: "Searches DoorDash for Chick-fil-A, opens Entrées, adds the Spicy Chicken Sandwich on its own (no meal) to the cart, continues from\
+  \ the cart to checkout and taps Place Order, which always waits for your OK. Only this order: another item or a meal is a different request."
+patterns: [Order my usual from Chick-fil-A on DoorDash, Order me my usual from Chick-fil-A, Order a Chick-fil-A Spicy Chicken Sandwich on its
+    own]
+start: fresh_launch
+steps:
+- id: tap_search_doordash
+  intent: Tap Search DoorDash to search for Chick-fil-A
+  pre:
+  - {app_foreground: com.dd.doordash}
+  - element_present: {resource_id: coordinatorLayout_homepage, kind: List}
+  action:
+    tap:
+      text: Search DoorDash
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.49, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: edit_text, text: Search DoorDash, kind: EditText}
+  - element_present: {resource_id: search_back_button, text: Close search, kind: Button}
+  risk: reversible
+  note: trace step 1
+- id: find_select_restaurant_search_suggestion
+  intent: Scroll to Chick-fil-A if it is not on screen
+  action:
+    scroll_until:
+      target: {resource_id: SearchStoreSuggestionComponent.Info.Query, text_has: Chick-fil-A, kind: Button, cls: View, in_list: true}
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present: {resource_id: SearchStoreSuggestionComponent.Info.Query, text_has: Chick-fil-A, kind: Button, cls: View, in_list: true}
+  risk: read
+  note: "added: input-based list choice"
+- id: select_restaurant_search_suggestion
+  intent: Select the search suggestion for Chick-fil-A
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap: {resource_id: SearchStoreSuggestionComponent.Info.Query, text_has: Chick-fil-A, kind: Button, cls: View, in_list: true}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: search_query_title, text: Chick-fil-A, kind: Button}
+  risk: reversible
+  note: trace step 2
+- id: open_restaurant_store
+  intent: Open the Chick-fil-A store from the search results
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      kind: Button
+      cls: FrameLayout
+      parent: results_list
+      in_list: true
+      position: [0.5, 0.405]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: store_fragment_container, kind: List}
+  risk: reversible
+  note: trace step 3
+- id: scroll_to_entrees
+  intent: Scroll until the Entrées category is visible
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    scroll_until:
+      target:
+        text: Entrées
+        kind: Button
+        cls: LinearLayout
+        in_list: true
+        position: [0.946, 0.138]
+      direction: down
+      max_scrolls: 8
+      container: {resource_id: menu_data_recycler_view, kind: List}
+  post:
+  - element_present:
+      text: Entrées
+      kind: Button
+      cls: LinearLayout
+      in_list: true
+      position: [0.946, 0.138]
+  risk: read
+  note: trace step 4 (+1 scrolls)
+- id: tap_entrees
+  intent: Tap Entrées to find the standalone item
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      text: Entrées
+      kind: Button
+      cls: LinearLayout
+      in_list: true
+      position: [0.946, 0.138]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 5
+- id: find_open_menu_item
+  intent: Scroll to Spicy Chicken Sandwich if it is not on screen
+  action:
+    scroll_until:
+      target: {resource_id: container_card_view, text: Spicy Chicken Sandwich, text_has: Spicy Chicken Sandwich, kind: Button, cls: CardView,
+        in_list: true}
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present: {resource_id: container_card_view, text: Spicy Chicken Sandwich, text_has: Spicy Chicken Sandwich, kind: Button, cls: CardView,
+      in_list: true}
+  risk: read
+  note: "added: input-based list choice"
+- id: open_menu_item
+  intent: Open the Spicy Chicken Sandwich menu item
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap: {resource_id: container_card_view, text: Spicy Chicken Sandwich, text_has: Spicy Chicken Sandwich, kind: Button, cls: CardView, in_list: true}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: collapsingToolbar_navBar, text: Spicy Chicken Sandwich, text_has: Spicy Chicken Sandwich, kind: Text}
+  risk: reversible
+  note: trace step 6
+- id: add_item_to_order
+  intent: Tap Add to order to add Spicy Chicken Sandwich on its own
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: addToCart_button
+      text: Add to order
+      kind: Button
+      cls: Button
+      parent: footer_button_layout
+      in_list: false
+      position: [0.5, 0.934]
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: footer_button_layout, kind: Button}
+  risk: reversible
+  note: trace step 8
+- id: find_open_cart
+  intent: Scroll to Chick-fil-A if it is not on screen
+  action:
+    scroll_until:
+      target: {resource_id: button_orderCart, text_has: Chick-fil-A, kind: Button, cls: ViewGroup, parent: button_ordercart_container, in_list: true}
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present: {resource_id: button_orderCart, text_has: Chick-fil-A, kind: Button, cls: ViewGroup, parent: button_ordercart_container,
+      in_list: true}
+  risk: read
+  note: "added: input-based list choice"
+- id: open_cart
+  intent: Tap the cart button for Chick-fil-A showing the added item
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap: {resource_id: button_orderCart, text_has: Chick-fil-A, kind: Button, cls: ViewGroup, parent: button_ordercart_container, in_list: true}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: container_navBar_titles, text: Your cart from, kind: Text}
+  - element_present: {resource_id: convert_to_group, text: Convert to Group Order, kind: Button}
+  risk: reversible
+  note: trace step 9
+- id: continue_to_checkout
+  intent: Tap Continue to proceed from the cart toward checkout
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: button_orderCart_continue
+      text: Continue
+      kind: Button
+      cls: Button
+      parent: bottom_order_cart_sticky_container
+      in_list: false
+      position: [0.5, 0.93]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 10
+- id: wait_for_checkout
+  intent: Wait for checkout to load
+  action: {wait: 3.0}
+  risk: read
+  note: "loop A: so place_order sees the checkout, not a loading screen"
+- id: place_order
+  intent: "Place the order (the payment step: it waits for your OK)"
+  optional: true
+  pre:
+  - {app_foreground: com.dd.doordash}
+  - element_present: {text: Place Order, kind: Button}
+  action:
+    tap: {text: Place Order, kind: Button, in_list: false}
+  post:
+  - {screen_changed: true}
+  risk: irreversible
+  note: "doordash-usual's template; optional: no payment method on the account means no Place Order"
+parent_version: 5
+changes:
+- "the user's real usual: a Spicy Chicken Sandwich on its own (was the placeholder Deluxe Meal), compiled from task-1030-212646-1800-r1; fixed\
+  \ choices, the exact menu row and the item page's title; a 3 s wait and an optional, irreversible place_order after Continue (loop A, Oct 30)"
+compiled_from:
+  task_id: task-1030-212646-1800-r1
+  goal: "Order me my usual from Chick-fil-A on DoorDash: a Chick-fil-A Spicy Chicken Sandwich on its own"
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-30 21:33:13"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  trace_steps_dropped: 0
+  cost_usd: 0.0603
