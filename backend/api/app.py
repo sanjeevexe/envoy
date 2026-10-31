@@ -62,6 +62,7 @@ from api.runner import SHOTS, TaskRunner
 from api.scheduler import Scheduler, check_alert, check_ask
 from api.siri import siri_router
 from api.store import API_DIR, REPO, TaskStore, new_id
+from api.teach import Teacher, TeachError
 from api.voice import voice_session
 
 PORT = int(os.environ.get("ENVOY_PORT", "8700"))
@@ -136,6 +137,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     bus.listeners.append(scheduler.repeats.on_event)
     runner.recurring = Recurring(ctx.offers, scheduler, adapter)  # chat sets up recurring jobs, switched off (api/recurring.py)
     ctx.handoff = Handoff(tasks, pool, bus, offers=ctx.offers, runner=runner)  # type: ignore[attr-defined]  # files from the Mac to the phone (api/handoff.py)
+    teacher = ctx.teacher = Teacher(pool, tasks, bus, routines, adapter, runner)  # type: ignore[attr-defined]  # you show a task once (api/teach.py)
 
     from mcp_server.server import build_mcp, mcp_app
     from mcp_stub.common import bearer_token
@@ -366,6 +368,8 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     def hand_back(avd: str) -> dict[str, Any]:
         if avd not in pool.leases:
             raise HTTPException(404)
+        if avd in pool.recorders:
+            raise HTTPException(409, "you're teaching Envoy on this phone: finish or cancel first")
         held = time.time() - pool.leases[avd].since if pool.leases[avd].user_control else None
         lease = pool.hand_back(avd)
         if lease.task_id:
@@ -373,6 +377,38 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
                 runner._step(lease.task_id, {"kind": "note", "text": f"handed back by you after {held:.0f} s"})
             runner._set(lease.task_id, status="running", waiting_for=None)
         return lease.state()
+
+    # ---- teach mode: you do a task once through the live view, and it becomes a routine (api/teach.py) ---------
+
+    async def teaching(call: Any) -> dict[str, Any]:
+        try:
+            return await call
+        except TeachError as e:
+            raise HTTPException(e.code, e.detail) from e
+
+    def teach_device(body: dict[str, Any]) -> str:
+        avd = body.get("device") or body.get("avd")
+        if not isinstance(avd, str) or not avd:
+            raise HTTPException(400, "which phone? (device)")
+        return avd
+
+    @app.post("/api/teach/start", dependencies=[Depends(session)])
+    async def teach_start(body: dict[str, Any] = Body(...)) -> dict[str, Any]:
+        """{device, goal, app?}: the phone goes into a teach-mode takeover and records what you do."""
+        return await teaching(teacher.start(teach_device(body), str(body.get("goal") or ""), body.get("app") or None))
+
+    @app.post("/api/teach/finish", dependencies=[Depends(session)])
+    async def teach_finish(body: dict[str, Any] = Body(...)) -> dict[str, Any]:
+        """{device, ok, answer?}: `ok` is your word that it worked (else nothing is kept); `answer` for a question."""
+        return await teaching(teacher.finish(teach_device(body), body.get("ok") is True, str(body.get("answer") or "")))
+
+    @app.post("/api/teach/cancel", dependencies=[Depends(session)])
+    async def teach_cancel(body: dict[str, Any] = Body(...)) -> dict[str, Any]:
+        return await teaching(teacher.cancel(teach_device(body)))
+
+    @app.get("/api/teach/{avd}", dependencies=[Depends(session)])
+    def teach_status(avd: str) -> dict[str, Any]:
+        return teacher.status(avd) or {"device": avd, "status": "none"}
 
     @app.websocket("/api/live/{avd}")
     async def live(ws: WebSocket, avd: str, fps: float = 10, width: int = 540, quality: int = 70) -> None:

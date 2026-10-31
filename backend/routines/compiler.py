@@ -310,7 +310,9 @@ def describe_steps(steps: list[TStep]) -> str:
         extra = f' typed "{s.typed}"' if s.kind == "type" else ""
         if s.kind == "scroll_until":
             extra = f" ({s.scrolls} scroll(s) {s.direction})"
-        lines.append(f"{i}. {s.kind}{tgt}{extra} — on screen {_title(s.before)!r} → {_title(s.after)!r}. Agent's reason: {s.reason}")
+        # A taught trace (api/teach.py) has no reasons: a person did the step.
+        why = f"Agent's reason: {s.reason}" if s.reason else "Done by the user, who showed the task."
+        lines.append(f"{i}. {s.kind}{tgt}{extra} — on screen {_title(s.before)!r} → {_title(s.after)!r}. {why}")
     return "\n".join(lines)
 
 
@@ -1132,7 +1134,8 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
         description=" ".join([spec.description, *limits]),
         patterns=spec.patterns, inputs=inputs, outputs=outputs, steps=out_steps, done=done,
         compiled_from={"task_id": run["task_id"], "goal": run["goal"], "compiler": compiler_model, "compiled_at": time.strftime("%Y-%m-%d %H:%M:%S"),
-                       "trace_steps_kept": report.kept, "trace_steps_dropped": len(dropped), "cost_usd": round(report.cost_at_standard_usd, 4)},
+                       "trace_steps_kept": report.kept, "trace_steps_dropped": len(dropped), "cost_usd": round(report.cost_at_standard_usd, 4),
+                       **({"source": "taught"} if run.get("source") == "taught" else {})},
     )
     return routine, report
 

@@ -13,16 +13,17 @@ import { TaskDetail, TaskList } from "@/components/Tasks";
 import { Button, Card, RowIcon, SectionLabel } from "@/components/ui";
 import { ago, api, Approval, Lease, Offer, Step, Task } from "@/lib/api";
 
-export default function Activity({ tasks, all, steps, approvals, openTask, setOpenTask, review, watch, leases, goPhone, version = 0 }: {
+export default function Activity({ tasks, all, steps, approvals, openTask, setOpenTask, review, watch, leases, goPhone, version = 0, showMe }: {
   tasks: Task[]; all: Record<string, Task>; steps: Record<string, Step[]>; approvals: Approval[]; openTask: string | null; setOpenTask: (id: string | null) => void;
   review: (id: string) => void; watch: (device?: string) => void; leases: Record<string, Lease>; mood: Mood; goPhone: () => void; version?: number;
+  showMe?: (goal: string, device?: string) => void;
 }) {
   const [offers, setOffers] = useState<Offer[]>([]);
   const [shown, setShown] = useState<string | null>(null); // a past offer, in its sheet
   useEffect(() => { api<Offer[]>("/api/offers?status=all&limit=12").then(setOffers).catch(() => {}); }, [version]);
   if (openTask) {
     return <TaskDetail id={openTask} task={all[openTask]} liveSteps={steps[openTask] ?? []} back={() => setOpenTask(null)} all={all} open={setOpenTask}
-                       review={review} watch={watch} deviceName={(d) => (d ? leases[d]?.name : undefined)} />;
+                       review={review} watch={watch} deviceName={(d) => (d ? leases[d]?.name : undefined)} showMe={showMe} />;
   }
   const pending = approvals.filter((a) => a.status === "pending").sort((a, b) => b.created_at - a.created_at)
     .map((a) => ({ ...a, goal: a.goal ?? all[a.task_id]?.goal }));

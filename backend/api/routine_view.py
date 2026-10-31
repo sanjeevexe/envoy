@@ -217,7 +217,8 @@ def _source_run(task_id: str | None, runs_dir: Path) -> dict[str, Any] | None:
         return None
     usd = d.get("cost_at_standard_usd", d.get("cost_usd"))
     return {"task_id": task_id, "goal": d.get("goal"), "status": d.get("status"), "steps": d.get("steps"),
-            "model_calls": d.get("model_calls"), "duration_s": d.get("duration_s"), "usd": round(usd, 5) if isinstance(usd, (int, float)) else None}
+            "model_calls": d.get("model_calls"), "duration_s": d.get("duration_s"), "usd": round(usd, 5) if isinstance(usd, (int, float)) else None,
+            **({"taught": True} if d.get("source") == "taught" else {})}  # your demonstration (api/teach.py), not an agent run
 
 
 # ---- the whole view -------------------------------------------------------------------------
@@ -286,6 +287,7 @@ def detail(store: RoutineStore, name: str, tasks: Any = None, runs_dir: Path | N
             sources[n] = _source_run(cf.get("task_id"), runs_dir)
             view["compiled"] = {"task_id": cf.get("task_id"), "goal": cf.get("goal"), "compiler": cf.get("compiler"),
                                 "at": cf.get("compiled_at"), "usd": cf.get("cost_usd"), "source": sources[n],
+                                **({"taught": True} if cf.get("source") == "taught" else {}),
                                 "verification": [{"case": c.get("case"), "passed": c.get("passed"), "duration_s": c.get("duration_s"),
                                                   "inputs": c.get("inputs") or {}}
                                                  for c in ((v.get("verification") or {}).get("cases") or [])]}
@@ -362,6 +364,7 @@ def detail(store: RoutineStore, name: str, tasks: Any = None, runs_dir: Path | N
 
     trial = next((v["version"] for v in reversed(versions) if v["status"] == "trial"), None)
     return {"name": name, "app": shown.app, "intent": shown.intent, "description": shown.description, "start": shown.start,
+            **({"taught": True} if shown.compiled_from.get("source") == "taught" else {}),
             "inputs": {k: {"type": s.type, "description": s.description, "example": s.example, "from_memory": s.from_memory}
                        for k, s in shown.inputs.items()},
             "outputs": shown.outputs, "active": active_v, "shown": shown.version, "shown_status": status.get(shown.version), "trial": trial, "needs_recompile": bool(idx.get("needs_recompile")),
