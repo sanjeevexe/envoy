@@ -445,6 +445,18 @@ def _switch_state(near: str | None, example: str, final: ScreenState) -> Extract
     return Extract(locator=Locator(text=el.label, kind=el.kind), switch=True)
 
 
+def _effect_checks(post: list[Check], before: ScreenState, examples: dict[str, str]) -> tuple[list[Check], list[Check]]:
+    """The after-checks that show the step's effect, and the ones that already held on the step's own before screen. Those say
+    nothing about what the step did, and at run time they make it look done before it runs: YouTube Music's "Songs" chip is
+    there whether or not it's selected, so on Oct 31 the routine skipped the filter and read the unfiltered results' first
+    artist (and Lyft's airline Skip "passed" without being taken, Oct 30)."""
+    keep, held = [], []
+    for c in post:
+        specific = c.kind not in ("screen_changed", "screen_like", "app_foreground")
+        (held if specific and chk.evaluate(c, before, examples).passed else keep).append(c)
+    return keep, held
+
+
 def _state_text(near: str | None, final: ScreenState, data_values: list[str]) -> Extract | None:
     """The short fixed text an inferred answer was read from ("No contacts yet", "Nothing planned"), as an output that
     reports it whole: on another run it is there or it isn't, and the routine says so rather than inventing a value."""
@@ -990,6 +1002,9 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
         post = [g for c in post if (g := chk_generalize(c, examples, data_values)) is not None and not _before_typed(g, i, typed_at)]
         if s.kind == "type" and (prior := _prior_text(s)) is not None:
             post = [c.model_copy(update={"value": bind_inputs(c.value, {FIELD: prior})}) if c.kind == "field_equals" else c for c in post]
+        post, held = _effect_checks(post, s.before, examples)
+        for c in held:
+            report.warnings.append(f"step {i}: after-check {c.describe()} already held before the step; dropped")
         if not post:
             post = [Check(kind="screen_changed")]
         out_steps.append(Step(id=sid, intent=intent, pre=pre, action=action, post=post,
