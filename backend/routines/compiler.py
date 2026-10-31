@@ -1066,7 +1066,10 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
                 del extract[o.name]
                 outputs.remove(o.name)
                 report.warnings.append(f"output {o.name!r} reads {got!r} on the run's own final screen, not {o.example!r}; dropped")
-    question = bool(re.search(r"\?\s*$|^(what|how|when|where|which|who|is|are|do|does|did|can)\b", (run.get("goal") or "").strip(), re.I))
+    # "… and tell me the artist of the first result" asks a question too (Oct 31: YouTube Music's routine compiled with no
+    # output and answered nothing).
+    question = bool(re.search(r"\?\s*$|^(what|how|when|where|which|who|is|are|do|does|did|can)\b|"
+                              r"\btell me (the|its|their|what|who|which|how|when|where|if|whether)\b", (run.get("goal") or "").strip(), re.I))
     if not extract and final is not None and question and answer:
         # A question answered from what the screen says rather than a value on it ("No events today" from "Nothing planned"),
         # with no output named: report the screen text the answer quotes, word for word.

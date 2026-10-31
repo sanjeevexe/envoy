@@ -184,6 +184,10 @@ def test_an_answer_read_wrong_on_the_runs_own_screen_is_not_kept(tmp_path):
     r, report = asyncio.run(compile_trace(d, adapter=NoModel(), confirmed=True, spec=spec))
     assert r.outputs == [] and r.steps[-1].extract is None
     assert any("reads 'Call with Marketing'" in w and w.endswith("dropped") for w in report.warnings)
+    # Asked as "… tell me …", it is still a question: no routine that answers nothing (YouTube Music, Oct 31).
+    (d / "run.json").write_text(json.dumps({**run, "goal": "Open Simple Calendar Pro and tell me the title of my next upcoming event."}))
+    with pytest.raises(NotCompilable, match="Call with Marketing"):
+        asyncio.run(compile_trace(d, adapter=NoModel(), confirmed=True, spec=spec))
 
 
 # ---- weak verification (backlog #1, #9) -------------------------------------------------------------------------------
