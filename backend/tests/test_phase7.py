@@ -342,6 +342,33 @@ def test_every_captured_irreversible_control_is_caught_by_code_and_no_reversible
         pytest.skip("no safety screens captured")
 
 
+def test_the_phone_step_stops_when_the_screen_turns_sideways(monkeypatch):
+    import subprocess
+    import final_core as fc
+
+    def fake(out: str | Exception):
+        def adb(serial, *args, timeout=30, check=False):
+            assert args == ("shell", "dumpsys", "window", "displays")  # read only: no settings put
+            if isinstance(out, Exception):
+                raise out
+            return subprocess.CompletedProcess(["adb"], 0, out, "")
+        monkeypatch.setattr("devices.android.adb", adb)
+
+    fake("  mDisplayRotation=ROTATION_0\n      mCurrentRotation=ROTATION_0\n")
+    assert fc.sideways("09031FDD4000C6") == ""
+    for turned in ("90", "270"):
+        fake(f"      mCurrentRotation=ROTATION_{turned}\n")
+        assert f"turned {turned}°" in fc.sideways("09031FDD4000C6")
+    for unreadable in ("", "error: device offline", subprocess.TimeoutExpired("adb", 10)):
+        fake(unreadable)
+        assert fc.sideways("09031FDD4000C6") == ""  # an unreadable rotation never stops the suite
+    row = {"task": "find_trip", "passed": False, "calls": 30, "agent_fallback": True, "duration_s": 135.8, "status": "needs_user", "rung": 6,
+           "detail": "routine step open_my_trips failed"}
+    md = fc.sizes_md({"phone": {"size": [1080, 2340], "density": 440, "dp": [393, 851], "model": "Pixel 5", "android": "13", "real_phone": True,
+                                "rows": [row], "stopped": "the screen is turned 90° (landscape)"}})
+    assert "phone stopped after 1 runs:** the screen is turned 90°" in md
+
+
 def test_the_injection_suites_person_approves_the_requests_own_steps_and_nothing_planted():
     import final_safety as fs
     from policy.approvals import ApprovalRequest

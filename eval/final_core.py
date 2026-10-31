@@ -738,6 +738,21 @@ def open_device(name: str) -> Any:
     return EmulatorDevice(name).connect()
 
 
+def sideways(serial: str) -> str:
+    """Why the device's screen isn't upright, or "". Routines are compiled upright, and a turned screen sends every tap to the
+    wrong place: in the Oct 31 smoke the Pixel lay on its side with auto-rotate on, SkyLark turned to landscape, and 25 of 30
+    phone runs fell to the agent ($5.65). Read only; the phone's settings are the user's."""
+    from devices.android import adb
+    try:
+        out = adb(serial, "shell", "dumpsys", "window", "displays", timeout=10).stdout or ""
+    except Exception:  # noqa: BLE001 (an unreadable rotation never stops the suite)
+        return ""
+    m = re.search(r"mCurrentRotation=ROTATION_(\d+)", out)
+    if not m or m.group(1) == "0":
+        return ""
+    return f"the screen is turned {m.group(1)}° (landscape): stand the phone upright or turn off auto-rotate, then run this step again"
+
+
 async def cmd_sizes(args: Any) -> None:
     """All 10 routines, compiled on envoy-test, unchanged on another device, on bookings they have never seen. Results for
     each device accumulate in sizes.json (one device per invocation, so only one emulator runs at a time)."""
@@ -749,6 +764,7 @@ async def cmd_sizes(args: Any) -> None:
     base = RoutineStore(LIB_COMPILED)
     rows = []
     print(f"   {args.device}: {caps.width}x{caps.height} @ {caps.density} dpi ({getattr(dev, 'model', '')}, Android {getattr(dev, 'android', '')})", flush=True)
+    stopped = ""
     for k in range(args.k):
         w = world(900 + k)
         for task in tasks(args.tasks):
@@ -757,16 +773,23 @@ async def cmd_sizes(args: Any) -> None:
                 continue
             row, _ = await run_direct(env, r, task, task.pick(w, k), w, 0, s.tid("size", args.device, task.id, f"k{k}"))
             rows.append(row)
+            if stopped := sideways(dev.serial):  # checked with the app still open: the launcher stays upright
+                print(f"error: {args.device} stopped after {len(rows)} runs: {stopped}", flush=True)
+                break
+        if stopped:
+            break
     devices = prev.get("devices", {})
     if args.tasks and args.device in devices:  # a rerun of some tasks replaces only their rows
         redone = {r["task"] for r in rows}
         rows = [r for r in devices[args.device]["rows"] if r["task"] not in redone] + rows
     devices[args.device] = {"size": [caps.width, caps.height], "density": caps.density, "dp": [round(caps.width * 160 / caps.density), round(caps.height * 160 / caps.density)],
                             "model": getattr(dev, "model", ""), "android": getattr(dev, "android", ""), "real_phone": caps.real_phone,
-                            "run_id": s.rid, "code": s.code["short"], "rows": rows}
+                            "run_id": s.rid, "code": s.code["short"], "rows": rows, **({"stopped": stopped} if stopped else {})}
     s.save({"devices": devices}, sizes_md(devices))
     if hasattr(dev, "close"):
         dev.close()
+    if stopped:
+        raise SystemExit(2)
 
 
 def sizes_md(devices: dict[str, Any]) -> str:
@@ -776,6 +799,7 @@ def sizes_md(devices: dict[str, Any]) -> str:
         md.append(f"| {name}{' (real phone: ' + d['model'] + ', Android ' + str(d['android']) + ')' if d.get('real_phone') else ''} | "
                   f"{d['size'][0]}×{d['size'][1]} at {d['density']} dpi | {d['dp'][0]}×{d['dp'][1]} | {len(rs)} | **{sum(r['passed'] for r in rs)}** | "
                   f"{sum(r['passed'] and r['calls'] == 0 for r in rs)} | {sum(r['agent_fallback'] for r in rs)} | {med([r['duration_s'] for r in rs])} |")
+    md += [f"\n**{n} stopped after {len(d['rows'])} runs:** {d['stopped']}" for n, d in devices.items() if d.get("stopped")]
     fails = [(n, r) for n, d in devices.items() for r in d["rows"] if not r["passed"] or r["calls"]]
     if fails:
         md += ["", "Not clean (failed, or needed a model call):", ""] + [f"- {n} · {r['task']}: {r['status']} rung {r['rung']}, {r['calls']} calls · {r['detail'][:120]}" for n, r in fails]
