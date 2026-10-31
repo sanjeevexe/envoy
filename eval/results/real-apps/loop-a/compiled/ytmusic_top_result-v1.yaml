@@ -1,0 +1,108 @@
+routine: ytmusic_top_result
+app: com.google.android.apps.youtube.music
+version: 1
+status: active
+intent: Search for a song in YouTube Music and report the top result
+description: Search YouTube Music for a requested song, open the matching suggestion, and report the title and artist of the top song result.
+patterns: [search for a song in YouTube Music, find a track on YouTube Music and tell me the top result, look up a song in YouTube Music, tell
+    me the top result for a song search]
+outputs: [title, artist]
+start: fresh_launch
+inputs:
+  search_query: {type: text, description: The song title or search query to look up., example: Bohemian Rhapsody}
+steps:
+- id: tap_search
+  intent: Tap Search to start a search
+  pre:
+  - {app_foreground: com.google.android.apps.youtube.music}
+  - element_present: {resource_id: watch_fragment_container, text: Video player, kind: Text}
+  action:
+    tap:
+      text: Search
+      kind: Button
+      cls: LinearLayout
+      in_list: false
+      position: [0.5, 0.948]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: header_container, text: Recent searches, kind: Text}
+  risk: reversible
+  note: trace step 1
+- id: type_search_query
+  intent: "Type {{search_query}} into the search box"
+  pre:
+  - {app_foreground: com.google.android.apps.youtube.music}
+  action:
+    type:
+      field:
+        resource_id: search_edit_text
+        text: Type to search
+        hint: Type to search
+        kind: EditText
+        cls: EditText
+        parent: search_toolbar_layout
+        siblings: [Voice search]
+        in_list: false
+        position: [0.432, 0.084]
+      value: "{{search_query}}"
+  post:
+  - field_equals:
+      field: {resource_id: search_edit_text, text: Type to search, kind: EditText}
+      value: "{{search_query}}"
+  risk: reversible
+  note: trace step 2
+- id: find_tap_matching_suggestion
+  intent: "Scroll to {{search_query}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        text_has: "{{search_query}}"
+        kind: Button
+        cls: LinearLayout
+        parent: suggestion_list
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      text_has: "{{search_query}}"
+      kind: Button
+      cls: LinearLayout
+      parent: suggestion_list
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: tap_matching_suggestion
+  intent: "Tap the suggestion matching {{search_query}} to load the search results"
+  pre:
+  - {app_foreground: com.google.android.apps.youtube.music}
+  action:
+    tap:
+      text_has: "{{search_query}}"
+      kind: Button
+      cls: LinearLayout
+      parent: suggestion_list
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: search_edit_text
+      text: "Search songs, artists, podcasts: {{search_query}}"
+      kind: EditText
+  - element_present: {resource_id: text1, text: Search, kind: Text}
+  risk: reversible
+  extract:
+    title:
+      locator: {resource_id: mini_player_metadata, kind: Button}
+      segment: 0
+    artist:
+      locator: {text: Songs, kind: Text}
+  note: trace step 3
+compiled_from:
+  task_id: task-1030-205818-f85d-r1
+  goal: In the YouTube Music app, search for Bohemian Rhapsody and tell me the title and artist of the top result.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-30 20:59:23"
+  trace_steps_kept: [1, 2, 3]
+  trace_steps_dropped: 1
+  cost_usd: 0.0532
