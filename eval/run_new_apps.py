@@ -30,7 +30,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
 OUT = REPO / "eval" / "results" / "real-apps" / "loop-b"
-RUNS_FILE = OUT / "runs.json"
+RUNS_FILE = OUT / os.environ.get("LOOPB_RUNS", "runs.json")  # a second device in parallel writes its own file, merged after
 COST_LOG = REPO / "logs" / "model_costs.jsonl"
 SERIAL = "emulator-5556"  # envoy-real
 DEVICE = "envoy-real"

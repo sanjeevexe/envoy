@@ -1,0 +1,154 @@
+routine: lyft_get_ride_fare
+app: me.lyft.android
+version: 2
+status: active
+intent: Get the fare for a standard Lyft ride
+description: Types the pickup and the destination in Lyft, takes the top search result for each, skips the airline question an airport asks, sets
+  the destination and reads the Standard fare. It never taps Select, Request or Confirm pickup.
+patterns: [what is the Lyft fare, how much is a Lyft ride, check the Lyft ride price, Lyft fare from pickup to destination]
+outputs: [fare]
+start: fresh_launch
+inputs:
+  pickup_location: {type: text, description: Pickup location to enter for the ride., example: Palo Alto Caltrain Station}
+  destination_location: {type: text, description: 'Destination as a place name Lyft can search (SFO airport, Oakland Airport)', example: SFO airport}
+steps:
+- id: open_ride_planning
+  intent: Open ride planning
+  pre:
+  - {app_foreground: me.lyft.android}
+  action:
+    tap:
+      text: Enter pickup location
+      kind: Button
+      cls: View
+      parent: LOCATION_SERVICES_DISABLED_BUTTONS
+      in_list: false
+      position: [0.5, 0.934]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: place_search_header_close_button, text: Close place search, kind: Button}
+  - element_present: {resource_id: PLACE_SEARCH_PICKUP_FIELD, text: Start, kind: EditText}
+  risk: reversible
+  note: trace step 1
+- id: enter_pickup_location
+  intent: "Enter {{pickup_location}} as the pickup location"
+  pre:
+  - {app_foreground: me.lyft.android}
+  action:
+    type:
+      field:
+        resource_id: PLACE_SEARCH_PICKUP_FIELD
+        text: Start
+        hint: Start
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.5, 0.209]
+      value: "{{pickup_location}}"
+  post:
+  - field_equals:
+      field: {resource_id: PLACE_SEARCH_PICKUP_FIELD, text: Start, kind: EditText}
+      value: "{{pickup_location}}"
+  risk: reversible
+  note: trace step 2
+- id: select_pickup_result
+  intent: "Take the top search result for {{pickup_location}}"
+  pre:
+  - {app_foreground: me.lyft.android}
+  - element_present: {resource_id: search_result_list_item, kind: Button}
+  action:
+    tap:
+      resource_id: search_result_list_item
+      kind: Button
+      cls: View
+      parent: search_result_list_root
+      position: [0.5, 0.342]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: PLACE_SEARCH_DROPOFF_FIELD, kind: EditText}
+  risk: reversible
+  note: "trace step 3; loop B by hand: the top result by its place, not by the typed words (Lyft writes the station Caltrain-Palo Alto)"
+- id: type_destination
+  intent: "Type {{destination_location}} as the destination"
+  pre:
+  - {app_foreground: me.lyft.android}
+  action:
+    type:
+      field: {resource_id: PLACE_SEARCH_DROPOFF_FIELD, text: Destination, hint: Destination, kind: EditText, cls: EditText, in_list: false}
+      value: "{{destination_location}}"
+  post:
+  - field_equals:
+      field: {resource_id: PLACE_SEARCH_DROPOFF_FIELD, kind: EditText}
+      value: "{{destination_location}}"
+  risk: reversible
+  note: "loop B by hand: the run tapped a suggested airport without typing; a new destination has to be typed"
+- id: select_destination_result
+  intent: "Take the top search result for {{destination_location}}"
+  pre:
+  - {app_foreground: me.lyft.android}
+  - element_present: {resource_id: search_result_list_item, kind: Button}
+  action:
+    tap:
+      resource_id: search_result_list_item
+      kind: Button
+      cls: View
+      parent: search_result_list_root
+      position: [0.5, 0.342]
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: place_search_header_close_button, text: Close place search, kind: Button}
+  risk: reversible
+  note: "trace step 4; loop B by hand: as the pickup"
+- id: skip_airline_selection
+  intent: Skip the airline question (airports only)
+  optional: true
+  pre:
+  - {app_foreground: me.lyft.android}
+  action:
+    tap:
+      text: Skip airline selection · Skip
+      kind: Button
+      cls: View
+      siblings: [Select your airline]
+      in_list: false
+      position: [0.922, 0.084]
+  post:
+  - {screen_changed: true}
+  - element_present: {text: Set destination, kind: Button}
+  - {text_absent: Select your airline}
+  risk: reversible
+  note: trace step 5
+- id: confirm_destination
+  intent: Set the destination to see the ride options
+  pre:
+  - {app_foreground: me.lyft.android}
+  action:
+    tap:
+      text: Set destination
+      kind: Button
+      cls: View
+      parent: trip_panel
+      in_list: false
+      position: [0.5, 0.921]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: request_ride_button, kind: Button}
+  - {text_visible: Price is}
+  risk: reversible
+  note: trace step 6
+- id: read_fare
+  intent: Read the Standard fare (never tap Select or Request)
+  pre:
+  - {app_foreground: me.lyft.android}
+  - element_present: {resource_id: request_ride_button, kind: Button}
+  - {text_visible: 'Standard, Price is'}
+  action: {wait: 1.0}
+  risk: read
+  extract:
+    fare:
+      pattern: "Standard, Price is (?P<v>\\$\\d[\\d,]*(?:\\.\\d{2})?),.*"
+  note: "loop B by hand: the Standard row's price (Standard, Price is $49.92, ...)"
+parent_version: 1
+changes:
+- "the airline Skip is done only when Set destination shows and Select your airline is gone: its after-checks (the airline lists) also held on\
+  \ the question itself, so replay 1 went on with it still open and the agent finished"

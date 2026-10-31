@@ -1,0 +1,190 @@
+{
+ "name": "lyft_get_ride_fare",
+ "active": 5,
+ "versions": [
+  {
+   "version": 1,
+   "status": "retired",
+   "created": "2026-10-30 17:32:21",
+   "parent": null,
+   "changes": [
+    "compiled from task-1030-172852-176f (first run on the user's Lyft account), then by hand before any replay: the destination typed (the run tapped a suggested airport), each place's top result by its place (Lyft writes the station Caltrain-Palo Alto), the airline question optional, the Standard fare read by its row once prices show; reviewed: no name, phone, address, card or ride history in it"
+   ],
+   "verification": {
+    "by": "loop-b",
+    "how": "offline on the recorded screens of task-1030-171945-f841 and -172852-176f: fare reads $49.99 and $49.92, read_fare ready only on the ride-options screen",
+    "checked": "2026-10-30 17:40"
+   }
+  },
+  {
+   "version": 2,
+   "status": "retired",
+   "created": "2026-10-30 17:35:01",
+   "parent": 1,
+   "changes": [
+    "the airline Skip is done only when Set destination shows and Select your airline is gone: its after-checks (the airline lists) also held on the question itself, so replay 1 went on with it still open and the agent finished"
+   ],
+   "verification": {
+    "by": "loop-b",
+    "how": "from the screens of task-1030-173222-d3a5 (the agent tapped Skip again, then Set destination showed); live replays follow",
+    "checked": "2026-10-30 17:45"
+   }
+  },
+  {
+   "version": 3,
+   "status": "retired",
+   "created": "2026-10-30 17:38:00",
+   "parent": 2,
+   "changes": [
+    "Set destination is optional: after the airline Skip, Lyft sometimes goes straight to the ride options (task-1030-173533-d7ca: route bar set, prices loading, no Set destination), and the step then fell to the agent"
+   ],
+   "verification": {
+    "by": "loop-b",
+    "how": "from the screens of task-1030-173533-d7ca; live replays follow",
+    "checked": "2026-10-30 17:40"
+   }
+  },
+  {
+   "version": 4,
+   "status": "retired",
+   "created": "2026-10-30 17:56:04",
+   "parent": 3,
+   "changes": [
+    "Set destination is done when its sheet closes, and a wait step lets the prices load (a bare route bar shows for several seconds first): in replays 1-3 the step's 5-s wait ran out, a repair reopened the search, and the agent finished"
+   ],
+   "verification": {
+    "by": "loop-b",
+    "how": "offline on the recorded screens of task-1030-172852-176f (Set destination, then prices) and task-1030-173843-8f3f (the bare route bar); live replays follow",
+    "checked": "2026-10-30 18:10"
+   }
+  },
+  {
+   "version": 5,
+   "status": "active",
+   "created": "2026-10-30 19:29:27",
+   "parent": 4,
+   "changes": [
+    "the pickup result is done only when the field stops showing the typed words: its after-checks (the destination field) already held before the tap, so replay task-1030-192740-1a69 skipped it and the agent finished"
+   ],
+   "verification": {
+    "by": "loop-b",
+    "how": "offline on task-1030-172852-176f: the check fails before the tap (002_after, 003_before) and holds after it (003_after)",
+    "checked": "2026-10-30 19:35"
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-30 17:34:25",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1030-173222-d3a5-r1",
+   "status": "agent_done",
+   "rung": 5,
+   "model_calls": 6,
+   "duration_s": 105.37,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 17:37:25",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1030-173533-d7ca-r1",
+   "status": "agent_done",
+   "rung": 5,
+   "model_calls": 6,
+   "duration_s": 96.22,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 17:40:37",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1030-173843-8f3f-r1",
+   "status": "agent_done",
+   "rung": 5,
+   "model_calls": 6,
+   "duration_s": 97.78,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 19:28:42",
+   "kind": "run",
+   "version": 4,
+   "task_id": "task-1030-192740-1a69-r1",
+   "status": "agent_done",
+   "rung": 5,
+   "model_calls": 7,
+   "duration_s": 53.08,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 19:29:56",
+   "kind": "run",
+   "version": 5,
+   "task_id": "task-1030-192937-2c3e-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 12.62,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 19:33:07",
+   "kind": "run",
+   "version": 5,
+   "task_id": "task-1030-193247-e9cb-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 11.58,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 19:38:10",
+   "kind": "run",
+   "version": 5,
+   "task_id": "task-1030-193752-5149-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 12.5,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-31 00:06:33",
+   "kind": "run",
+   "version": 5,
+   "task_id": "task-1031-000611-fdc0-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 11.31,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-31 00:09:45",
+   "kind": "run",
+   "version": 5,
+   "task_id": "task-1031-000921-dcc7-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 18.68,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-31 00:12:53",
+   "kind": "run",
+   "version": 5,
+   "task_id": "task-1031-001228-9932-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 19.48,
+   "patches": 0
+  }
+ ],
+ "needs_recompile": false,
+ "app": "me.lyft.android"
+}
