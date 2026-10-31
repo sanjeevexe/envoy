@@ -1,6 +1,6 @@
 {
  "name": "doordash_order_meal",
- "active": 6,
+ "active": 7,
  "versions": [
   {
    "version": 1,
@@ -77,11 +77,24 @@
   },
   {
    "version": 6,
-   "status": "active",
+   "status": "retired",
    "created": "2026-10-30 21:34:33",
    "parent": 5,
    "changes": [
     "the user's real usual: a Spicy Chicken Sandwich on its own (was the placeholder Deluxe Meal), compiled from task-1030-212646-1800-r1; fixed choices, the exact menu row and the item page's title; a 3 s wait and an optional, irreversible place_order after Continue (loop A, Oct 30)"
+   ],
+   "verification": {
+    "by": "loop-a",
+    "how": "replays in eval/results/real-apps/loop-a/runs.jsonl (task doordash_real)"
+   }
+  },
+  {
+   "version": 7,
+   "status": "active",
+   "created": "2026-10-30 21:48:43",
+   "parent": 6,
+   "changes": [
+    "after Continue, wait until checkout shows Place Order or Select Payment Method (up to ~13 s: the cart gone, then up to three 4 s waits while neither shows) instead of a fixed 3 s, so a slow checkout can't skip place_order's ask (loop A, Oct 30)"
    ],
    "verification": {
     "by": "loop-a",
@@ -275,6 +288,72 @@
    "rung": 1,
    "model_calls": 0,
    "duration_s": 25.61,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 21:56:52",
+   "kind": "run",
+   "version": 7,
+   "task_id": "task-1030-215621-152c-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 24.08,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 21:57:51",
+   "kind": "run",
+   "version": 7,
+   "task_id": "task-1030-215719-11e0-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 22.78,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 21:58:49",
+   "kind": "run",
+   "version": 7,
+   "task_id": "task-1030-215819-2e5b-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 22.87,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 21:59:44",
+   "kind": "run",
+   "version": 7,
+   "task_id": "task-1030-215916-3c1a-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 24.37,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 22:00:45",
+   "kind": "run",
+   "version": 7,
+   "task_id": "task-1030-220012-2b58-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 28.34,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-30 22:01:40",
+   "kind": "run",
+   "version": 7,
+   "task_id": "task-1030-220111-048a-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 24.46,
    "patches": 0
   }
  ],
