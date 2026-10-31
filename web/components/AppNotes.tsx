@@ -27,7 +27,7 @@ export default function AppNotes({ openTask }: { openTask: (id: string) => void 
           <Card key={app} className="overflow-hidden">
             <div className="flex items-center gap-3 border-b border-divider px-4 py-3">
               <RowIcon icon={appIcon(app)} size={32} />
-              <span className="min-w-0"><span className="block text-row font-bold">{appName(app)}</span><span className="block truncate text-meta-2 text-muted">{app}</span></span>
+              <span className="min-w-0 text-row font-bold">{appName(app)}</span>
             </div>
             {notes.map((n) => {
               const last = n.sources[0];

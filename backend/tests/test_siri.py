@@ -220,7 +220,7 @@ def ask(env, message, token=None):
     return r.status_code, r.json()
 
 
-ROUTINE = {"kind": "routine", "text": "Using routine skylark_check_in_flight v1: usually 9 s, no model calls.", "level": "info"}
+ROUTINE = {"kind": "routine", "text": "Using your routine “Check me in for my flight”: usually 9 s, no model calls.", "level": "info"}
 CHECKIN_WAITS = {"kind": "approval", "text": "Confirming check-in will wait for your OK.", "level": "info"}
 
 

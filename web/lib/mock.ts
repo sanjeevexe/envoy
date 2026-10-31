@@ -125,7 +125,7 @@ function seed(): DB {
         { kind: "device", text: "DoorDash is set to run on your phone: I'll ask before using your Pixel 5.", level: "warn" },
         { kind: "signin", text: "DoorDash asked you to sign in on your Pixel 5 last time (Oct 27).", level: "warn" },
         { kind: "approval", text: "The payment step will need your OK.", level: "info" },
-        { kind: "routine", text: "Using routine doordash_reorder_usual v3: usually 41 s, about 1 model call.", level: "info" },
+        { kind: "routine", text: "Using your routine “Reorder my usual on DoorDash”: usually 41 s, about 1 model call.", level: "info" },
         { kind: "app_note", text: "From earlier runs: A pop-up offering DashPass can appear before checkout", level: "info" },
       ] }),
       step(2, { kind: "note", text: "using routine doordash_reorder_usual v3 with restaurant = Thai Basil", time: ago(138),
@@ -158,7 +158,7 @@ function seed(): DB {
     kind: "routine", routine: "starbucks_order_usual", result: "Ordered a grande oat latte for pickup at 5th & Pine", created_at: earlier(7, 30, 9 * 3600), updated_at: earlier(7, 30, 9 * 3600) + 9 }), [
     step(1, { kind: "note", text: "using routine starbucks_order_usual v2", time: earlier(7, 30, 9 * 3600) }),
     step(2, { kind: "routine_step", text: "open_order", status: "done", rung: 0, shot: "sb-1", time: earlier(7, 30, 9 * 3600) + 3 }),
-    step(3, { kind: "approval", text: "Checkout: done without asking (standing approval)", reason: "you set routine starbucks_order_usual to run without asking", time: earlier(7, 30, 9 * 3600) + 7 }),
+    step(3, { kind: "routine_step", text: "checkout", status: "done", rung: 0, shot: "sb-1", risk: "irreversible", approval: { approved: true, by: "you on Maya's iPhone" }, time: earlier(7, 30, 9 * 3600) + 7 }),
     step(4, { kind: "finish", text: "all steps and checks passed", status: "done", time: earlier(7, 30, 9 * 3600) + 9 }),
   ]);
   add(task({ id: "task-cmp", goal: "Is AirPods Pro cheaper at Amazon or Target?", kind: "crossapp", result: "Amazon: $179.99 · Target: $189.99",
@@ -171,7 +171,7 @@ function seed(): DB {
     status: "declined", detail: "you declined Confirm check-in", created_at: ago(2 * 86400), updated_at: ago(2 * 86400 - 40) }), [
     step(1, { kind: "preflight", time: ago(2 * 86400), lines: [
       { kind: "approval", text: "Confirming check-in will need your OK.", level: "info" },
-      { kind: "routine", text: "Using routine skylark_check_in_flight v1: usually 9 s, no model calls.", level: "info" },
+      { kind: "routine", text: "Using your routine “Check me in for my flight”: usually 9 s, no model calls.", level: "info" },
     ] }),
     step(2, { kind: "note", text: "using routine skylark_check_in_flight v1 with trip_city = Chicago", time: ago(2 * 86400 - 1) }),
     step(3, { kind: "routine_step", text: "open_trips", status: "done", rung: 0, shot: "sl-1", time: ago(2 * 86400 - 6) }),
@@ -182,7 +182,7 @@ function seed(): DB {
     created_at: ago(26 * 60), updated_at: ago(25 * 60), model_calls: 2, cost_usd: 0.003 }), [
     step(1, { kind: "preflight", time: ago(26 * 60 - 3), lines: [
       { kind: "approval", text: "Confirming check-in will wait for your OK.", level: "info" },
-      { kind: "routine", text: "Using routine skylark_check_in_flight v1: usually 9 s, no model calls.", level: "info" },
+      { kind: "routine", text: "Using your routine “Check me in for my flight”: usually 9 s, no model calls.", level: "info" },
     ] }),
     step(2, { kind: "note", text: "using routine skylark_check_in_flight v1 with trip_city = Chicago", time: ago(26 * 60 - 4) }),
     step(3, { kind: "routine_step", text: "open_trips", status: "done", rung: 0, shot: "sl-1", time: ago(26 * 60 - 9) }),
@@ -197,11 +197,12 @@ function seed(): DB {
     ] }),
     step(2, { kind: "error", text: "Chase blocks emulators; it needs a real Android phone. Connect your Android phone (USB, or wireless debugging) and ask again.", time: ago(2 * 86400 + 598) }),
   ]);
-  add(task({ id: "task-old", goal: "What's my seat on the Chicago flight?", status: "failed", detail: "envoy-test is not running",
+  add(task({ id: "task-old", goal: "What's my seat on the Chicago flight?", status: "failed",
+    detail: "The emulator for this app (Test phone) isn't running right now. Start it (scripts/start_emulator.sh envoy-test) and ask again.",
     created_at: ago(3 * 86400), updated_at: ago(3 * 86400 - 5) }));
 
   const leases: Record<string, Lease> = {
-    "envoy-test": { avd: "envoy-test", task_id: null, user_control: false, since: 0, reason: "", running: true, kind: "emulator", name: "Pixel 8 emulator" },
+    "envoy-test": { avd: "envoy-test", task_id: null, user_control: false, since: 0, reason: "", running: true, kind: "emulator", name: "Test phone" },
     "pixel-5": { avd: "pixel-5", task_id: scenario === "full" || scenario === "offline" ? "task-dd" : null, user_control: false, since: ago(140), reason: "",
       running: true, kind: "phone", name: "Pixel 5", android: "13", state: "device" },
   };
@@ -263,7 +264,7 @@ function seed(): DB {
     ...(scenario === "full" || scenario === "offline" ? [offer({ id: "offer-ck", created_at: ago(1500), title: "Check in for SL 482?", status: "pending",
       body: "From your trigger “Ask me to check in when check-in opens”, which asks you first.", action: checkIn, key: "trig-checkin:flight@1",
       expires_at: todayAt(30, 10) > T ? todayAt(30, 10) : T + 18 * 3600, preflight: [
-        { kind: "device", text: "On the Pixel 8 emulator, where SkyLark runs", level: "info" },
+        { kind: "device", text: "On the Test phone, where SkyLark runs", level: "info" },
         { kind: "routine", text: "From your routine: check-in took 21 s the last 4 times, no model calls", level: "info" },
         { kind: "approval", text: "Confirming check-in will go ahead: you asked for it", level: "info" },
         { kind: "signin", text: "SkyLark signed you out 2 days ago: you may need to sign in", level: "warn" },
@@ -370,6 +371,9 @@ const ROUTINES = [
   { name: "skylark_get_flight_gate", app: "com.skylark.air", intent: "Look up my flight's gate", active: 3, steps: 4, runs: 23, success: 0.96, recompile: false,
     inputs: { trip_city: "The trip's destination city" }, outputs: ["gate", "terminal", "boarding_time"],
     versions: [{ version: 1, status: "retired" }, { version: 2, status: "retired", source_task: "task-1021" }, { version: 3, status: "active", source_task: "task-1026" }] },
+  // taught: you showed Envoy once (teach mode); its first version was compiled from your demonstration
+  { name: "skylark_check_flight_status", app: "com.skylark.air", intent: "Check my flight's status", active: 1, steps: 3, runs: 4, success: 1, recompile: false,
+    inputs: { flight_number: "The flight number" }, outputs: ["status"], versions: [{ version: 1, status: "active" }], taught: true },
   { name: "doordash_reorder_usual", app: "com.dd.doordash", intent: "Reorder my usual on DoorDash", active: 3, steps: 6, runs: 9, success: 0.89, recompile: false,
     inputs: { restaurant: "Which restaurant" }, outputs: ["total"], versions: [{ version: 1, status: "retired" }, { version: 2, status: "retired", source_task: "t" }, { version: 3, status: "active" }] },
   { name: "skylark_check_in_flight", app: "com.skylark.air", intent: "Check me in for my flight", active: 1, steps: 7, runs: 6, success: 0.67, recompile: false,
@@ -378,7 +382,8 @@ const ROUTINES = [
     inputs: {}, outputs: ["pickup_time"], versions: [{ version: 1, status: "retired" }, { version: 2, status: "active" }] },
   { name: "amazon_track_package", app: "com.amazon.mShop.android.shopping", intent: "Track my Amazon package", active: 1, steps: 3, runs: 2, success: 0.5, recompile: true,
     inputs: {}, outputs: ["delivery_eta"], versions: [{ version: 1, status: "active" }] },
-];
+] as { name: string; app: string; intent: string; active: number; steps: number; runs: number; success: number; recompile: boolean;
+  inputs: Record<string, string>; outputs: string[]; versions: { version: number; status: string; source_task?: string }[]; taught?: boolean }[];
 
 function routineDetail(name: string) {
   const r = ROUTINES.find((x) => x.name === name) ?? ROUTINES[0];
@@ -407,7 +412,8 @@ function routineDetail(name: string) {
     shots: i && name === "skylark_get_flight_gate" && v.version === 3 ? [{ label: "step 2", intent: "Close the miles promo if it shows", before: `/api/routines/${name}/history/3/before.png`, after: `/api/routines/${name}/history/3/after.png` }] : [],
     replaced_by: v.status === "retired" ? v.version + 1 : null,
     repair: i ? { task_id: `task-repair-${v.version}`, rung: v.version === 2 ? 2 : 4, how: v.version === 2 ? "relaxed match" : "local repair", model_calls: v.version === 2 ? 0 : 1, run_rung: null, duration_s: 14.2, time: null } : undefined,
-    compiled: i ? undefined : { task_id: "task-1019-agent", goal: r.intent, compiler: "Muse Spark", usd: 0.021, source: { task_id: "task-1019-agent", steps: 9, model_calls: 11, duration_s: 74, usd: 0.034 },
+    compiled: i ? undefined : { task_id: "task-1019-agent", goal: r.intent, compiler: "Muse Spark", usd: 0.021, taught: r.taught,
+      source: { task_id: "task-1019-agent", steps: r.taught ? 3 : 9, model_calls: r.taught ? 0 : 11, duration_s: r.taught ? 12 : 74, usd: r.taught ? 0 : 0.034, taught: r.taught },
       verification: [{ case: "same-inputs", passed: true, duration_s: 8.1, inputs: {} }, { case: "other-inputs", passed: true, duration_s: 7.6, inputs: {} }] },
     trial: v.status === "active" && i ? { passed: true, task_id: "task-trial", status: "done", model_calls: 0, duration_s: 7.9 } : undefined,
   }));
@@ -418,7 +424,8 @@ function routineDetail(name: string) {
     saved: { calls: 11, seconds: 66, usd: 0.034 }, event: null,
   }));
   return {
-    name: r.name, app: APP_LOOK[r.app]?.name ?? r.app, intent: r.intent, description: `Learned from one agent run. Replays ${r.intent.toLowerCase()} with no model calls while the app looks as expected.`,
+    name: r.name, app: APP_LOOK[r.app]?.name ?? r.app, intent: r.intent, taught: r.taught,
+    description: `Learned from ${r.taught ? "what you showed Envoy once" : "one agent run"}. Replays ${r.intent.toLowerCase()} with no model calls while the app looks as expected.`,
     inputs: Object.fromEntries(Object.entries(r.inputs).map(([k, d]) => [k, { type: "string", description: d, example: k === "trip_city" ? "Chicago" : "Thai Basil" }])),
     outputs: r.outputs, active: r.active, shown: r.active, shown_status: "active", trial: r.versions.find((v) => v.status === "trial")?.version ?? null,
     needs_recompile: r.recompile, steps, done: [{ kind: "text", text: "Gate", locator: null }], versions, runs,
@@ -498,7 +505,7 @@ function gateRun(source = "trigger:Watch my gate") {
   db.leases["envoy-test"] = { ...db.leases["envoy-test"], task_id: id };
   const script: [number, () => void][] = [
     [1000, () => { setTask(id, { status: "running" });
-      addStep(id, { kind: "preflight", lines: [{ kind: "routine", text: "Using routine skylark_get_flight_gate v3: usually 7 s, no model calls.", level: "info" }] }); }],
+      addStep(id, { kind: "preflight", lines: [{ kind: "routine", text: "Using your routine “Look up my flight’s gate”: usually 7 s, no model calls.", level: "info" }] }); }],
     [200, () => { addStep(id, { kind: "note", text: "using routine skylark_get_flight_gate v3 with trip_city = Chicago",
       sources: { trip_city: "Trip Chicago · Fri, Oct 30 (destination): email from SkyLark Air, Oct 12" } }); }],
     [1400, () => addStep(id, { kind: "routine_step", text: "open_trips", status: "done", rung: 0, shot: "sl-1" })],
@@ -756,7 +763,7 @@ export async function handle(path: string, init: RequestInit = {}): Promise<any>
   if (p === "/api/settings/approvals") {
     if (method === "POST") db.rules = body;
     return { rules: db.rules, apps: ["com.skylark.air", "com.dd.doordash", "com.starbucks.mobilecard", "com.amazon.mShop.android.shopping"],
-      routines: ROUTINES.map((r) => ({ name: r.name, app: r.app, intent: r.intent, irreversible: !/gate|track/.test(r.name) })) };
+      routines: ROUTINES.map((r) => ({ name: r.name, app: r.app, intent: r.intent, irreversible: /check_in|order/.test(r.name), money: /order/.test(r.name) })) };
   }
   if (p === "/api/settings/phones") {
     if (method === "POST") db.phoneApps = body.phone_apps;

@@ -9,7 +9,7 @@ import { api, post } from "@/lib/api";
 
 type Kinds = { emulator: boolean; phone: boolean };
 const KINDS: { key: keyof Kinds; label: string; detail: string }[] = [
-  { key: "emulator", label: "On the emulators", detail: "envoy-real and envoy-test, with the Google account signed in there" },
+  { key: "emulator", label: "On the emulators", detail: "Envoy\u2019s emulators, with the Google account signed in there" },
   { key: "phone", label: "On your Android phone", detail: "With the password manager you use on it" },
 ];
 

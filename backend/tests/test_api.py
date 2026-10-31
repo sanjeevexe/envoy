@@ -291,3 +291,26 @@ def test_a_takeover_and_its_hand_back_are_kept_in_the_task_history(api):
     notes = [s["text"] for s in ctx.tasks.steps(task["id"]) if s["kind"] == "note"]
     assert notes[0] == "taken over by you" and notes[1].startswith("handed back by you after") and len(notes) == 2
     assert ctx.tasks.get(task["id"])["status"] == "running"
+
+
+def test_a_routine_that_pays_has_no_never_ask_and_a_taught_one_says_so(api):
+    """Settings › Approvals › Per routine: a routine whose irreversible step spends money is marked `money` (the rules ask
+    for money whatever its mode, so Settings offers no "Never ask"). The Routines list marks one you taught."""
+    import shutil
+    from pathlib import Path
+    app, ctx, token = api
+    library = Path(__file__).resolve().parents[2] / "data" / "routines"
+    for name in ("doordash_order_meal", "skylark_check_in_flight", "skylark_get_flight_gate"):
+        shutil.copytree(library / name, ctx.routines.root / name)
+    taught = ctx.routines.get("skylark_get_flight_gate").model_copy(deep=True)
+    taught.compiled_from = {**taught.compiled_from, "source": "taught"}
+    ctx.routines.add(taught)
+    me = {"Authorization": f"Bearer {token}"}
+    with TestClient(ctx.asgi) as c:
+        per = {r["name"]: r for r in c.get("/api/settings/approvals", headers=me).json()["routines"]}
+        listed = {r["name"]: r for r in c.get("/api/routines", headers=me).json()}
+    assert per["doordash_order_meal"]["irreversible"] and per["doordash_order_meal"]["money"]  # "Place Order"
+    assert per["skylark_check_in_flight"]["irreversible"] and not per["skylark_check_in_flight"]["money"]  # "Confirm check-in"
+    assert not per["skylark_get_flight_gate"]["irreversible"] and not per["skylark_get_flight_gate"]["money"]
+    assert listed["skylark_get_flight_gate"]["taught"]
+    assert not listed["skylark_check_in_flight"]["taught"] and not listed["doordash_order_meal"]["taught"]

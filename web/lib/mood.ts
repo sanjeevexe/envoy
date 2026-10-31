@@ -2,7 +2,8 @@
 
 // The avatar's mood from real state, highest priority first:
 // 1. offline: the event stream isn't connected (after a short grace on first load);
-// 2. needs: a pending approval, a task in needs_you or waiting_approval, or a phone ask waiting;
+// 2. needs: something is waiting on you (page.tsx's count, the same as Activity's badge: an approval, a task that needs
+//    you, a phone ask, or a question from Envoy);
 // 3. listening: dictation is on;
 // 4. working: a task is running and its steps are arriving (one in the last ~1.5 s);
 // 5. thinking: a task is queued, or running with no step in the last ~1.5 s;
@@ -10,14 +11,14 @@
 // 7. idle.
 import { useEffect, useRef, useState } from "react";
 import type { Mood } from "@/components/Avatar";
-import type { Approval, Task } from "@/lib/api";
+import type { Task } from "@/lib/api";
 
 const STEP_FRESH_MS = 1500;
 const DONE_MS = 3000;
 const GRACE_MS = 2500;
 
-export function useMood({ connected, tasks, approvals, lastStepAt, listening }: {
-  connected: boolean; tasks: Record<string, Task>; approvals: Record<string, Approval>; lastStepAt: number; listening: boolean;
+export function useMood({ connected, tasks, waiting, lastStepAt, listening }: {
+  connected: boolean; tasks: Record<string, Task>; waiting: number; lastStepAt: number; listening: boolean;
 }): Mood {
   const [now, setNow] = useState(() => Date.now());
   const [mountedAt] = useState(() => Date.now());
@@ -48,7 +49,7 @@ export function useMood({ connected, tasks, approvals, lastStepAt, listening }: 
   useEffect(() => setNow(Date.now()), [lastStepAt]);
 
   if (!connected && now - mountedAt > GRACE_MS) return "offline";
-  if (Object.values(approvals).some((a) => a.status === "pending") || list.some((t) => t.status === "needs_you" || t.status === "waiting_approval")) return "needs";
+  if (waiting > 0) return "needs";
   if (listening) return "listening";
   if (running && now - lastStepAt < STEP_FRESH_MS) return "working";
   if (running || queued) return "thinking";

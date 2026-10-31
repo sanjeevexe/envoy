@@ -672,13 +672,18 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
 
     @app.get("/api/settings/approvals", dependencies=[Depends(session)])
     def get_approval_rules() -> dict[str, Any]:
+        from api.preflight import step_label
         from api.runner import APP_NAMES
-        from policy.approval_rules import MODES, ApprovalRules
+        from policy.approval_rules import MODES, ApprovalRules, involves_money
         rules = ApprovalRules.from_dict(tasks.setting("approval_rules"))
         apps = sorted({r.app for r in routines.active()} | set(APP_NAMES.values()))
+        # money: an irreversible step that spends money always asks, whatever the routine's mode (approval_rules.decide
+        # checks money first), so Settings offers no "Never ask" for it
         return {"rules": rules.to_dict(), "modes": list(MODES), "apps": apps,
                 "routines": [{"name": r.routine, "app": r.app, "intent": r.intent,
-                              "irreversible": any(s.risk == "irreversible" for s in r.steps)} for r in routines.active()]}
+                              "irreversible": any(s.risk == "irreversible" for s in r.steps),
+                              "money": any(s.risk == "irreversible" and involves_money(step_label(s), "", r.app) for s in r.steps)}
+                             for r in routines.active()]}
 
     @app.post("/api/settings/approvals", dependencies=[Depends(session)])
     def set_approval_rules(body: dict[str, Any] = Body(...)) -> dict[str, Any]:
@@ -746,7 +751,8 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
             out.append({"name": name, "app": r.app, "intent": r.intent, "active": idx.get("active"), "versions": idx.get("versions", []),
                         "inputs": {k: v.description for k, v in r.inputs.items()}, "outputs": r.outputs, "steps": len(r.steps),
                         "runs": len(runs), "success": round(ok / len(runs), 2) if runs else None,
-                        "recompile": idx.get("needs_recompile", idx.get("recompile", False))})
+                        "recompile": idx.get("needs_recompile", idx.get("recompile", False)),
+                        "taught": r.compiled_from.get("source") == "taught"})  # you showed Envoy once (api/teach.py)
         return out
 
     @app.get("/api/routines/{name}", dependencies=[Depends(session)])

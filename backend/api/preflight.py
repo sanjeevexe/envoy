@@ -3,7 +3,7 @@
     "Target blocks emulators: I'll ask to use your Pixel 5."
     "DoorDash asked you to sign in on envoy-real last time (Oct 27)."
     "The payment step will need your OK."
-    "Using routine skylark_check_in_flight v3: usually 9 s, no model calls."
+    "Using your routine “Check me in for my flight”: usually 9 s, no model calls."
 
 `check()` reads only what Envoy already knows: routing and the per-app phone settings (`api/routing.py`), the apps
 that block emulators, the apps Envoy installed, the task history (sign-in hand-offs, install steps), the routine's
@@ -220,7 +220,8 @@ def _doing(label: str) -> str:
     return " ".join([g.capitalize(), *rest])
 
 
-def _step_label(step: Any) -> str:
+def step_label(step: Any) -> str:
+    """The words on what a routine step taps ("Place order"), else its intent: what involves_money() is checked against."""
     t = step.action.target
     return ((t.text or t.text_has or t.desc or t.hint) if t is not None else None) or step.intent
 
@@ -232,7 +233,7 @@ def _approval(lines: list[dict[str, str]], *, runner: Any, goal: str, request: s
     words = request or goal
     rules = ApprovalRules.from_dict(runner.store.setting("approval_rules"))
     mode = rules.mode_for(app, routine.routine if routine is not None else None)
-    steps = [_step_label(s) for s in (routine.steps if routine is not None else []) if s.risk == "irreversible"]
+    steps = [step_label(s) for s in (routine.steps if routine is not None else []) if s.risk == "irreversible"]
     if involves_money(goal, "") or any(involves_money(s, "") for s in steps):
         _line(lines, "approval", "The payment step will need your OK.")
     elif routine is None and _BUYS.search(goal):
@@ -279,7 +280,7 @@ def _secs(s: float) -> str:
 def _routine_line(lines: list[dict[str, str]], *, runner: Any, routine: Any, **_: Any) -> None:
     if routine is None:
         return
-    head = f"Using routine {routine.routine} v{routine.version}"
+    head = f"Using your routine “{routine.intent}”"
     idx = runner.routines.index(routine.routine)
     runs = [r for r in idx.get("runs", []) if r.get("status") in OK and r.get("duration_s") is not None][-10:]
     if runs:

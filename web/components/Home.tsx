@@ -2,18 +2,18 @@
 
 // Home: Envoy's greeting. The avatar, a short briefing in Envoy's words (GET /api/briefing: built from what the stores
 // hold, no model call), what needs your OK, what happened today, what's next, your routines as suggestions, and the
-// composer. Typing or speaking moves into the conversation (components/Chat.tsx). An offer ("Should I check you in?")
-// is a card with Yes and Not now; once answered it stays, saying what happened, until Home reloads.
+// composer. Typing or speaking moves into the conversation (components/Chat.tsx). One thing waiting is shown in full
+// (an offer, "Should I check you in?", is a card with Yes and Not now); several are compact rows, each with Review
+// (components/Waiting.tsx). An offer you answer here stays as a one-line row saying what happened, until Home reloads.
 import { useEffect, useState } from "react";
-import { ClockIcon, GraphIcon, HandIcon, LockIcon, RepeatIcon } from "@phosphor-icons/react";
+import { ClockIcon, GraphIcon, RepeatIcon } from "@phosphor-icons/react";
 import Avatar, { type Mood } from "@/components/Avatar";
-import { readable } from "@/components/Approvals";
 import Chat from "@/components/Chat";
-import PhoneAsk from "@/components/PhoneAsk";
 import { appName } from "@/components/Tasks";
-import { OfferCard } from "@/components/Offers";
-import { appIcon, Button, Card, clock, Row, RowIcon, SectionLabel } from "@/components/ui";
-import { ago, api, Lease, Offer, Task } from "@/lib/api";
+import { OfferRow, OfferSheet } from "@/components/Offers";
+import Waiting, { type WaitingItem } from "@/components/Waiting";
+import { appIcon, Card, clock, Row, SectionLabel } from "@/components/ui";
+import { api, Lease, Offer, Task } from "@/lib/api";
 
 type Need = { kind: "approval" | "phone" | "task" | "offer"; id: string; task_id: string; title: string; detail: string; app?: string; time: number;
   status?: string; device?: string; offer?: Offer };
@@ -28,13 +28,15 @@ const greeting = (name: string | null) => {
   return name ? `${part}, ${name}` : part;
 };
 
-export default function Home({ tasks, openTask, review, mood, connected, version, onListening, goPhone }: {
+export default function Home({ tasks, openTask, review, mood, connected, version, onListening, goPhone, watch }: {
   tasks: Record<string, Task>; openTask: (id: string) => void; review: (approvalId: string) => void; mood: Mood; connected: boolean; version: number;
-  compact?: boolean; onListening: (on: boolean) => void; goPhone: () => void; device?: Lease;
+  compact?: boolean; onListening: (on: boolean) => void; goPhone: () => void; device?: Lease; watch?: (device?: string) => void;
 }) {
   const [b, setB] = useState<Briefing | null>(null);
   const [failed, setFailed] = useState(false);
   const [answered, setAnswered] = useState<Offer[]>([]); // offers you just answered: they stay, saying what happened
+  const [asking, setAsking] = useState<string | null>(null); // an offer's card, in a sheet (Review on its row)
+  const decided = (d: Offer) => setAnswered((xs) => [d, ...xs.filter((x) => x.id !== d.id)]);
   useEffect(() => {
     api<Briefing>("/api/briefing").then((x) => { setB(x); setFailed(false); }).catch(() => setFailed(true));
   }, [version, connected]);
@@ -56,13 +58,16 @@ export default function Home({ tasks, openTask, review, mood, connected, version
 
       {b && (b.needs.length > 0 || answered.length > 0) && (
         <section aria-label="Needs your OK" className="ev-rise ev-r2 mt-5 flex flex-col gap-3 px-4">
-          {b.needs.filter((n) => n.kind === "approval").map((n) => <NeedCard key={n.id} n={n} task={tasks[n.task_id]} review={review} goPhone={goPhone} openTask={openTask} />)}
-          {[...answered.filter((o) => !b.needs.some((n) => n.id === o.id)), ...b.needs.filter((n) => n.kind === "offer" && n.offer).map((n) => n.offer!)]
-            .sort((x, y) => y.created_at - x.created_at)  // the briefing's order, so an answered card stays where it was
-            .map((o) => <OfferCard key={o.id} o={o} openTask={openTask} onDecided={(d) => setAnswered((xs) => [d, ...xs.filter((x) => x.id !== d.id)])} />)}
-          {b.needs.filter((n) => n.kind !== "approval" && n.kind !== "offer").map((n) => <NeedCard key={n.id} n={n} task={tasks[n.task_id]} review={review} goPhone={goPhone} openTask={openTask} />)}
+          <Waiting items={waiting(b.needs, tasks, answered)} review={review} openOffer={setAsking} onDecided={decided} openTask={openTask}
+                   takeOver={(t) => { watch?.(t.device); goPhone(); }} />
+          {answered.length > 0 && (
+            <Card className="overflow-hidden">
+              {answered.map((o) => <OfferRow key={o.id} o={o} onOpen={(x) => (x.task_id ? openTask(x.task_id) : setAsking(x.id))} />)}
+            </Card>
+          )}
         </section>
       )}
+      {asking && <OfferSheet id={asking} onClose={() => setAsking(null)} openTask={openTask} onDecided={decided} />}
 
       {b && b.today.length > 0 && (
         <section aria-labelledby="today" className="ev-rise ev-r3">
@@ -88,23 +93,24 @@ export default function Home({ tasks, openTask, review, mood, connected, version
   return <Chat tasks={tasks} openTask={openTask} intro={intro} suggestions={b?.suggestions.map((s) => s.label) ?? []} onListening={onListening} mood={mood} />;
 }
 
-function NeedCard({ n, task, review, goPhone, openTask }: { n: Need; task?: Task; review: (id: string) => void; goPhone: () => void; openTask: (id: string) => void }) {
-  if (n.kind === "phone" && (task?.waiting_for ?? "phone") === "phone" && (task?.status ?? "needs_you") === "needs_you") {
-    return <PhoneAsk task={task ?? { id: n.task_id, goal: n.detail, detail: n.title, app: n.app } as Task} />;
+// The briefing's needs as the waiting list: approvals, then offers (newest first), then phone asks and tasks stuck on
+// you. A phone ask or a stuck task that has moved on since the briefing (the live task says so) isn't waiting any more,
+// and neither is an offer you just answered here.
+function waiting(needs: Need[], tasks: Record<string, Task>, answered: Offer[]): WaitingItem[] {
+  const out: WaitingItem[] = needs.filter((n) => n.kind === "approval").map((n) => ({ kind: "approval",
+    approval: { id: n.id, task_id: n.task_id, created_at: n.time, status: "pending", description: n.title, goal: n.detail || undefined, reasons: [], app: n.app ?? "", screen: "" } }));
+  needs.filter((n) => n.kind === "offer" && n.offer && !answered.some((o) => o.id === n.id)).sort((x, y) => y.time - x.time)
+    .forEach((n) => out.push({ kind: "offer", offer: n.offer! }));
+  for (const n of needs) {
+    if (n.kind !== "phone" && n.kind !== "task") continue;
+    const live: Task | undefined = tasks[n.task_id];
+    const said = { id: n.task_id, goal: n.kind === "phone" ? n.detail : n.title, detail: n.kind === "phone" ? n.title : n.detail, app: n.app, device: n.device,
+      updated_at: n.time } as Task;
+    const task = live ? { ...said, ...live } : said;
+    if (n.kind === "phone" && (task.status ?? "needs_you") === "needs_you" && (task.waiting_for ?? "phone") === "phone") out.push({ kind: "phone", task });
+    else if (n.kind === "task" && ["needs_you", "waiting_approval", undefined].includes(live?.status)) out.push({ kind: "task", task });
   }
-  const approval = n.kind === "approval";
-  return (
-    <Card tone="needs" className="flex items-center gap-3 py-3.5 pl-4 pr-3.5">
-      <RowIcon icon={approval ? LockIcon : HandIcon} tone="apricot" size={40} />
-      <button onClick={() => openTask(n.task_id)} className="min-w-0 flex-1 text-left">
-        <span className="block text-body font-bold [overflow-wrap:anywhere]">{approval ? readable(n.title) : n.title}</span>
-        <span className="mt-0.5 block truncate text-meta text-muted">{n.detail || appName(n.app)} · {ago(n.time)}</span>
-      </button>
-      {approval
-        ? <Button variant="sage" onClick={() => review(n.id)}>Review</Button>
-        : <Button variant="sage" onClick={goPhone}>Take over</Button>}
-    </Card>
-  );
+  return out;
 }
 
 function TodayRow({ x, openTask }: { x: Today; openTask: (id: string) => void }) {

@@ -19,8 +19,9 @@ import MemoryGraph from "@/components/MemoryGraph";
 import Pair from "@/components/Pair";
 import RoutinesTab from "@/components/Routines";
 import SettingsPage from "@/components/Settings";
+import { ACTIVE } from "@/components/Tasks";
 import { cx } from "@/components/ui";
-import { api, ApiError, Approval, EnvoyEvent, Lease, Step, Task, useEvents } from "@/lib/api";
+import { api, ApiError, Approval, EnvoyEvent, Lease, Offer, Step, Task, useEvents } from "@/lib/api";
 import { registerServiceWorker, useMedia } from "@/lib/device";
 import { useMood } from "@/lib/mood";
 
@@ -41,6 +42,7 @@ export default function Page() {
   const [tasks, setTasks] = useState<Record<string, Task>>({});
   const [steps, setSteps] = useState<Record<string, Step[]>>({});
   const [approvals, setApprovals] = useState<Record<string, Approval>>({});
+  const [offers, setOffers] = useState<Offer[]>([]); // Envoy's questions waiting for your answer
   const [leases, setLeases] = useState<Record<string, Lease>>({});
   const [avd, setAvd] = useState("envoy-test");
   const [openTask, setOpenTask] = useState<string | null>(null);
@@ -69,6 +71,8 @@ export default function Page() {
     }).catch((e) => setAuthed(e instanceof ApiError && e.status === 401 ? false : true));
   }, []);
 
+  const loadOffers = useCallback(() => { api<Offer[]>("/api/offers?status=pending").then(setOffers).catch(() => {}); }, []);
+
   // Where a link (or a notification) points: ?task=…, ?phone=<avd>, ?offer=<id>, ?handoff=<id> (a file from the Mac).
   const route = useCallback((href: string) => {
     const u = new URL(href, location.origin);
@@ -89,6 +93,8 @@ export default function Page() {
   }, [load, route]);
 
   // Phones come and go (a USB cable): refresh the list now and then.
+  useEffect(() => { if (authed) loadOffers(); }, [authed, loadOffers]);
+
   useEffect(() => {
     if (!authed) return;
     const id = setInterval(() => {
@@ -122,19 +128,24 @@ export default function Page() {
       case "fact_changed": setBriefVersion((v) => v + 1); break;
       case "offer":  // one you asked for in chat shows in the conversation itself: no toast for it
         setBriefVersion((v) => v + 1);
+        loadOffers();
         if (e.change === "created" && !["chat", "voice"].includes(e.offer?.source)) say(e.offer?.title ?? "Envoy has a question");
         break;
       case "handoff": setBriefVersion((v) => v + 1); break;
       case "photo": say(e.summary); break;
       case "paired": say(`Paired: ${e.name}`); break;
     }
-  }, [say]));
+  }, [say, loadOffers]));
+  useEffect(() => { if (connected) loadOffers(); }, [connected, loadOffers]);  // what changed while the stream was down
 
-  const mood = useMood({ connected, tasks, approvals, lastStepAt, listening });
   const taskList = useMemo(() => Object.values(tasks).sort((a, b) => b.created_at - a.created_at), [tasks]);
   const pending = Object.values(approvals).filter((a) => a.status === "pending");
   const needs = taskList.find((t) => t.status === "needs_you" && t.device === avd && t.waiting_for !== "phone");
-  const waitingOnYou = pending.length + taskList.filter((t) => t.status === "needs_you").length;
+  // Everything waiting on you, as Activity's "Needs you" lists it: approvals, tasks that need you (a phone ask, a
+  // takeover) and Envoy's questions. The sidebar count, the tab's dot and the avatar's mood all use this one count.
+  const questions = offers.filter((o) => o.status === "pending" && (!o.expires_at || o.expires_at > Date.now() / 1000));
+  const waitingOnYou = pending.length + taskList.filter((t) => t.status === "needs_you").length + questions.length;
+  const mood = useMood({ connected, tasks, waiting: waitingOnYou, lastStepAt, listening });
   const phones = Object.values(leases).sort((a, b) => (a.kind === "phone" ? 1 : 0) - (b.kind === "phone" ? 1 : 0));
 
   const go = (t: Tab) => {
@@ -145,31 +156,43 @@ export default function Page() {
   const openTaskTab = (id: string) => { setOpenTask(id); setTab("Activity"); };
   const watch = (device?: string) => { if (device) setAvd(device); if (mobile) setTab("Phone"); };
   const showMe = (goal: string, device?: string) => { if (device && leases[device]) setAvd(device); setTeachAsk({ goal }); setTab("Phone"); };
+  // The task a phone is busy with: its lease's, else an active task on it (leases are refreshed every 10 s).
+  const phoneTask = (d: string): Task | undefined => {
+    const own = tasks[leases[d]?.task_id ?? ""];
+    return own && ACTIVE.includes(own.status) ? own : taskList.find((t) => t.device === d && ACTIVE.includes(t.status));
+  };
+  const busy = (d: string) => !!phoneTask(d) || !!leases[d]?.user_control || !!leases[d]?.teach;
+  // Teach a new routine (Routines): an empty "Show Envoy once" form, on an idle emulator if this phone is busy. With none
+  // free, the phone says it's busy and the form opens when it's free.
+  const teachNew = () => showMe("", busy(avd) ? phones.find((d) => d.kind !== "phone" && d.running !== false && !busy(d.avd))?.avd : undefined);
 
   if (authed === null) return <main className="h-[100dvh] bg-page" />;
   if (authed === false) return <Pair onPaired={load} />;
 
   const reviewed = reviewing ? tasks[approvals[reviewing]?.task_id ?? ""]?.device : undefined;
+  const current = phoneTask(avd);
   const sheet = (reviewing && <ApprovalSheet id={reviewing} onClose={() => setReviewing(null)} device={reviewed ? leases[reviewed]?.name ?? reviewed : undefined} />)
     || (asking && <OfferSheet id={asking} onClose={() => setAsking(null)} openTask={openTaskTab} />);
   const phoneView = (
     <div className="flex flex-col gap-3">
       <PhoneSwitch phones={phones} avd={avd} onChange={setAvd} />
-      <LivePhone key={avd} avd={avd} lease={leases[avd]} needsYou={needs ? needs.detail ?? "Envoy needs you" : null} mobile={mobile} teachAsk={teachAsk} />
+      <LivePhone key={avd} avd={avd} lease={leases[avd]} needsYou={needs ? needs.detail ?? "Envoy needs you" : null} mobile={mobile} teachAsk={teachAsk}
+                 task={current} steps={current ? steps[current.id] : undefined} openTask={openTaskTab}
+                 ended={(id) => !!tasks[id] && !ACTIVE.includes(tasks[id].status)} />
     </div>
   );
   const content = (
     <>
       <div hidden={tab !== "Home"} className="h-full">
         <Home tasks={tasks} openTask={openTaskTab} review={setReviewing} mood={mood} connected={connected} version={briefVersion} compact={mobile}
-              onListening={setListening} goPhone={() => go("Phone")} device={leases[avd]} />
+              onListening={setListening} goPhone={() => go("Phone")} device={leases[avd]} watch={watch} />
       </div>
       {tab === "Activity" && <Activity tasks={taskList} all={tasks} steps={steps} approvals={Object.values(approvals)} openTask={openTask} setOpenTask={setOpenTask}
                                        review={setReviewing} watch={watch} leases={leases} mood={mood} goPhone={() => go("Phone")} version={briefVersion}
                                        showMe={showMe} />}
       {tab === "Phone" && <div className="mx-auto w-full max-w-[520px] p-4 md:pt-8">{phoneView}</div>}
       {tab === "Memory" && <MemoryGraph version={memVersion} />}
-      {tab === "Routines" && <RoutinesTab openTask={openTaskTab} />}
+      {tab === "Routines" && <RoutinesTab openTask={openTaskTab} teach={teachNew} />}
       {tab === "Settings" && <SettingsPage publicUrl={publicUrl} profile={profile} />}
     </>
   );

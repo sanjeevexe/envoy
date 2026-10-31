@@ -50,7 +50,7 @@ from routines.store import RoutineStore
 
 from api import autofill
 from api.approvals import WebApprover
-from api.devices import SKYLARK, DevicePool, phone_ref
+from api.devices import NAMES, SKYLARK, DevicePool, phone_ref
 from api.install import Installer, app_named_in
 from api.preflight import check as preflight_check
 from api.routing import (BLOCKS_EMULATOR, Choice, app_label, app_names as blocking_app_names, asks_for_phone, blocks_emulator, choose,
@@ -454,14 +454,14 @@ class TaskRunner:
                 # Said plainly, not as the device layer's error ("envoy-test is not running (scripts/...)"), and with the
                 # phone you have connected as the other way: it is used only when you ask for it.
                 phone = next((p for p in self.pool.phones.values() if p.get("state") == "device"), None)
-                why = f"The emulator for this app ({choice.device}) isn't running right now. " + (
+                why = f"The emulator for this app ({NAMES.get(choice.device, choice.device)}) isn't running right now. " + (
                     f"Ask again with \"on my phone\" to use {phone_ref(phone)}, or start the emulator and ask again."
                     if phone else f"Start it (scripts/start_emulator.sh {choice.device}) and ask again.")
                 self._set(tid, status="failed", detail=why, waiting_for=None)
                 self._step(tid, {"kind": "error", "text": why})
                 return None
             if asked or choice.reason.startswith("set to run"):
-                self._step(tid, {"kind": "note", "text": f"phone: {choice.device} ({choice.reason})"})
+                self._step(tid, {"kind": "note", "text": f"phone: {NAMES.get(choice.device, choice.device)} ({choice.reason})"})  # "Test phone", not its id
             return choice
         ref = phone_ref(self.pool.phones.get(choice.device))  # "your Pixel 5", or the name you gave it in Settings › Phones
         if self.phone_allowed.pop(tid, None) == choice.device:  # you said yes already (the task moved off the emulator, or an offer)

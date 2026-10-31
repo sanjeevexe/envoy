@@ -91,7 +91,7 @@ export function ApprovalBody({ id, device, onClose, standalone }: { id: string; 
       </div>
       <h2 className="mt-3.5 font-serif text-display-2 font-normal tracking-[-0.01em] [overflow-wrap:anywhere]">{readable(a.description)}</h2>
       {(a.goal || routineOf(a.description)) && (
-        <p className="mt-1 text-meta text-muted">{a.goal ? `For “${a.goal}”` : ""}{a.goal && routineOf(a.description) ? " · " : ""}{routineOf(a.description) ? `routine ${routineOf(a.description)}` : ""}</p>
+        <p className="mt-1 text-meta text-muted">{a.goal ? `For “${a.goal}”` : ""}{a.goal && routineOf(a.description) ? " · " : ""}{routineOf(a.description) ? "using your routine" : ""}</p>
       )}
 
       <div className="mt-4 text-meta font-bold text-muted">What Envoy will tap</div>

@@ -6,20 +6,38 @@
 // keyboard, and latency measured against the Mac's clock (ping/pong), reported back so it can be compared over the tailnet.
 // Teach: you take over with a goal and do the task once while Envoy records it (the only time input is kept), then say it
 // worked; Envoy turns it into a routine and replays it once to show it runs. Sign-in and secure screens pause the recording.
+// While Envoy works, the bar above the screen says what it's doing: the task's goal and its latest step, worded as in the
+// task view ("Step 3 of 6 · Open trip"), with a link to the task.
 import { useEffect, useRef, useState } from "react";
-import { ArrowUUpLeftIcon, BackspaceIcon, ChalkboardTeacherIcon, CircleIcon, DeviceMobileIcon, HandIcon, KeyboardIcon, KeyReturnIcon } from "@phosphor-icons/react";
-import { api, Lease, loadMock, mockMode, post, TeachResult } from "@/lib/api";
+import { ArrowUpRightIcon, ArrowUUpLeftIcon, BackspaceIcon, ChalkboardTeacherIcon, CircleIcon, DeviceMobileIcon, HandIcon, KeyboardIcon, KeyReturnIcon } from "@phosphor-icons/react";
+import { stepLine } from "@/components/Tasks";
+import { cx, IconButton } from "@/components/ui";
+import { api, Lease, loadMock, mockMode, post, Step, Task, TeachResult } from "@/lib/api";
 import { isStandalone, metric } from "@/lib/device";
 
-// `teachAsk`: open the Teach form with this goal ("Show me once" on a task that failed).
-type Props = { avd: string; lease?: Lease; needsYou?: string | null; mobile?: boolean; teachAsk?: { goal: string } | null };
+// `teachAsk`: open the Teach form with this goal ("Show me once" on a task that failed; empty from Routines).
+// `task`: what Envoy is doing on this phone, and `steps` its steps as they stream in (page.tsx). `ended`: whether a task
+// has finished, for a lease that still names it (leases are refreshed every 10 s).
+type Props = { avd: string; lease?: Lease; needsYou?: string | null; mobile?: boolean; teachAsk?: { goal: string } | null;
+  task?: Task; steps?: Step[]; openTask?: (id: string) => void; ended?: (taskId: string) => boolean };
 const SENTINEL = "  ";
 const QUESTION = /\?\s*$|^(what|how|when|where|which|who|is|are|do|does|did|can)\b/i;  // as the compiler tells a question goal
 const LEARNING: Record<string, string> = { compiling: "Turning what you showed into a routine…", replaying: "Running it once on its own to check it works…" };
 
 const median = (xs: number[]) => (xs.length ? [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)] : 0);
 
-export default function LivePhone({ avd, lease, needsYou, mobile, teachAsk }: Props) {
+// "Step 3 of 6 · Open trip": the latest step a person would count (a routine's steps, the agent's actions), in the task
+// view's words. "of 6" only for a routine, while the count fits (a repair can add steps).
+function stepCaption(t: Task, steps: Step[], total: number | null): string {
+  if (t.status === "queued") return "Getting ready";
+  const counted = steps.filter((s) => s.kind === (t.routine ? "routine_step" : "action"));
+  const last = counted.length ? stepLine(counted[counted.length - 1]) : null;
+  if (!last) return "Looking at the screen";
+  const n = counted.length;
+  return `Step ${n}${t.routine && total && n <= total ? ` of ${total}` : ""} · ${last.text}`;
+}
+
+export default function LivePhone({ avd, lease, needsYou, mobile, teachAsk, task, steps: liveSteps, openTask, ended }: Props) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const kb = useRef<HTMLInputElement>(null);
   const ws = useRef<WebSocket | null>(null);
@@ -40,6 +58,20 @@ export default function LivePhone({ avd, lease, needsYou, mobile, teachAsk }: Pr
   const sent = useRef<Record<number, number>>({});
   const nextId = useRef(1);
   const samples = useRef<{ frame: number[]; rtt: number[]; tap: number[]; bytes: number; frames: number }>({ frame: [], rtt: [], tap: [], bytes: 0, frames: 0 });
+  const [debug] = useState(() => typeof location !== "undefined" && new URLSearchParams(location.search).get("debug") === "1");  // the stream's numbers
+
+  // The task's steps so far (the page may have opened mid-task), plus those streaming in; a routine's step count.
+  const [stored, setStored] = useState<Step[]>([]);
+  const [total, setTotal] = useState<number | null>(null);
+  useEffect(() => {
+    setStored([]);
+    if (task?.id) api<{ steps: Step[] }>(`/api/tasks/${task.id}`).then((d) => setStored(d.steps ?? [])).catch(() => {});
+  }, [task?.id]);
+  useEffect(() => {
+    setTotal(null);
+    if (task?.routine) api<{ name: string; steps: number }[]>("/api/routines").then((rs) => setTotal(rs.find((r) => r.name === task.routine)?.steps ?? null)).catch(() => {});
+  }, [task?.routine]);
+  const taskSteps = [...stored, ...(liveSteps ?? []).filter((s) => s.seq > (stored[stored.length - 1]?.seq ?? 0))];
 
   useEffect(() => setControl(lease), [lease]);
   useEffect(() => { if (teachAsk) { setTaught(null); setGoal(teachAsk.goal); } }, [teachAsk]);
@@ -237,6 +269,8 @@ export default function LivePhone({ avd, lease, needsYou, mobile, teachAsk }: Pr
     }
   };
   const recording = !!control?.teach && control.teach.status === "recording" && inControl;
+  const working = !!task || (!!control?.task_id && !ended?.(control.task_id));
+  const free = !working && !inControl && !needsYou;  // the Teach form only opens on a phone nobody is using
   const paused = recording && control?.teach?.recording === "paused";
   const asking = recording && QUESTION.test(control?.teach?.goal ?? "");
 
@@ -287,7 +321,7 @@ export default function LivePhone({ avd, lease, needsYou, mobile, teachAsk }: Pr
           </span>
           <button onClick={takeOver} className="h-11 shrink-0 rounded-full bg-sage px-4 text-[14px] font-bold text-white">Take over</button>
         </div>
-      ) : goal !== null && !control?.task_id ? (
+      ) : goal !== null && free ? (
         <form className="rounded-block border border-line bg-surface p-3" onSubmit={(e) => { e.preventDefault(); if (goal.trim()) teach("start", { goal }); }}>
           <label htmlFor={`teach-${avd}`} className="block px-1 text-body font-bold">Show Envoy once</label>
           <p className="mt-0.5 px-1 text-meta text-ink-2">Say what you&rsquo;ll do, then do it on the phone. Envoy records it and learns it as a routine.</p>
@@ -300,14 +334,35 @@ export default function LivePhone({ avd, lease, needsYou, mobile, teachAsk }: Pr
         </form>
       ) : (
         <div className="flex flex-wrap items-center gap-2 rounded-block border border-line bg-surface py-2 pl-4 pr-2">
-          <span className="min-w-[8.5rem] flex-1 text-meta text-ink-2">{control?.task_id ? "Envoy is using the phone" : "The phone is idle"}</span>
-          <span className="flex gap-2">
-            {!control?.task_id && (
+          {task ? (
+            <span className="min-w-0 flex-1">
+              {openTask ? (  // the goal is the link to the task
+                <button onClick={() => openTask(task.id)} title="Open task" aria-label={`Open task: ${task.goal}`}
+                        className="flex max-w-full items-center gap-1 text-left text-meta font-bold hover:text-sage-ink">
+                  <span className="truncate">{task.goal}</span><ArrowUpRightIcon size={14} className="shrink-0 text-sage-ink" />
+                </button>
+              ) : <span className="block truncate text-meta font-bold">{task.goal}</span>}
+              <span className={cx("block truncate text-meta-2", task.status === "waiting_approval" ? "font-semibold text-apricot-ink" : "text-ink-2")}>
+                {task.status === "waiting_approval" ? "Waiting for your OK" : stepCaption(task, taskSteps, total)}
+              </span>
+            </span>
+          ) : <span className="min-w-[8.5rem] flex-1 text-meta text-ink-2">{working ? "Envoy is using the phone" : "The phone is idle"}</span>}
+          {task ? (  // while Envoy works, what it's doing gets the room: Take over is its icon
+            <IconButton label="Take over" variant="surface" onClick={takeOver}><HandIcon size={18} /></IconButton>
+          ) : <span className="flex gap-2">
+            {!working && (
               <button onClick={() => { setTaught(null); setGoal(""); }} className="flex h-11 shrink-0 items-center gap-1.5 rounded-full border border-control bg-surface px-4 text-[14px] font-bold">
                 <ChalkboardTeacherIcon size={18} />Teach</button>
             )}
             <button onClick={takeOver} className="flex h-11 shrink-0 items-center gap-1.5 rounded-full border border-control bg-surface px-4 text-[14px] font-bold"><HandIcon size={18} />Take over</button>
-          </span>
+          </span>}
+        </div>
+      )}
+      {goal !== null && !free && !recording && !(teachStatus && LEARNING[teachStatus]) && (
+        <div className="flex items-center gap-2 rounded-block bg-raised py-2 pl-4 pr-2 text-meta text-ink-2" role="status">
+          <ChalkboardTeacherIcon size={18} className="shrink-0" />
+          <span className="min-w-0 flex-1">The phone is busy. Teach when it&rsquo;s free.</span>
+          <button onClick={() => setGoal(null)} className="h-11 shrink-0 rounded-full px-3 text-meta font-bold text-sage-ink hover:bg-sage-tint/60">Not now</button>
         </div>
       )}
       {taught && !recording && !(teachStatus && LEARNING[teachStatus]) && ["saved", "failed", "discarded"].includes(taught.status) && (
@@ -363,7 +418,8 @@ export default function LivePhone({ avd, lease, needsYou, mobile, teachAsk }: Pr
         </div>
       )}
       <div className="text-center text-meta-2 tabular-nums text-muted">
-        {isPhone ? lease?.name ?? "your phone" : lease?.name ?? avd} · {stats.fps} fps · frame {stats.frame} ms · rtt {stats.rtt} ms{stats.tap ? ` · tap ${stats.tap} ms` : ""}
+        {lease?.name ?? (isPhone ? "Your phone" : "Emulator")}
+        {debug && <> · {stats.fps} fps · frame {stats.frame} ms · rtt {stats.rtt} ms{stats.tap ? ` · tap ${stats.tap} ms` : ""}</>}
       </div>
     </div>
   );
@@ -380,7 +436,7 @@ export function PhoneSwitch({ phones, avd, onChange }: { phones: Lease[]; avd: s
         return (
           <button key={d.avd} onClick={() => onChange(d.avd)} aria-pressed={on}
                   className={`flex h-11 shrink-0 items-center gap-2 rounded-full px-4 text-meta font-semibold transition-colors ${on ? "bg-ink text-on-ink" : "border border-control bg-surface text-ink"}`}>
-            <DeviceMobileIcon size={16} />{d.name ?? (d.kind === "phone" ? "Your phone" : d.avd)}{note && <span className={on ? "opacity-80" : "text-muted"}>· {note}</span>}
+            <DeviceMobileIcon size={16} />{d.name ?? (d.kind === "phone" ? "Your phone" : "Emulator")}{note && <span className={on ? "opacity-80" : "text-muted"}>· {note}</span>}
           </button>
         );
       })}

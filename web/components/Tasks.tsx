@@ -9,6 +9,7 @@ import {
 } from "@phosphor-icons/react";
 import Avatar, { type Mood } from "@/components/Avatar";
 import { appIcon, Card, Chip, cx, Done, RowIcon, sentence, Spinner, words } from "@/components/ui";
+import { readable } from "@/components/Approvals";
 import { rememberedFrom } from "@/components/Chat";
 import { api, ago, Approval, media, post, PreflightLine, Step, Task } from "@/lib/api";
 
@@ -40,9 +41,18 @@ export function StatusChip({ status }: { status: string }) {
   return <Chip tone={s.tone} className="shrink-0">{s.label}</Chip>;
 }
 
-const source = (t: Task) => t.source.startsWith("trigger:") ? `your trigger “${t.source.slice(8)}”` : t.source === "voice" ? "your voice" : t.source === "mcp" ? "an assistant" : t.source === "siri" ? "Siri" : t.source;
+const SOURCE: Record<string, string> = { web: "you", chat: "you", iphone: "you", voice: "your voice", mcp: "an assistant", siri: "Siri", teach: "you", repeats: "a habit" };
+const source = (t: Task) => t.source.startsWith("trigger:") ? `your trigger “${t.source.slice(8)}”` : SOURCE[t.source] ?? t.source;
 
-export function TaskList({ tasks, open }: { tasks: Task[]; open: (id: string) => void }) {
+// A phone as people see it: the name the API gives it ("Test phone", "Envoy's phone"), never its id. The emulators'
+// names are backend/api/devices.py's, for when the phone's lease isn't known here.
+const EMULATOR: Record<string, string> = { "envoy-test": "Test phone", "envoy-real": "Real-app phone", "envoy-small": "Small test phone", "envoy-large": "Large test phone" };
+export type DeviceName = (avd?: string) => string | undefined;
+export const phoneName = (avd: string, deviceName?: DeviceName) => deviceName?.(avd) ?? EMULATOR[avd] ?? "your phone";
+// "the Test phone", "your Pixel 5", "Envoy's phone" (a name you gave it says whose it is).
+const onThe = (avd: string, name: string) => (avd.startsWith("envoy") ? `the ${name}` : /^your\b|['’]s\b/i.test(name) ? name : `your ${name}`);
+
+export function TaskList({ tasks, open, deviceName }: { tasks: Task[]; open: (id: string) => void; deviceName?: DeviceName }) {
   if (!tasks.length) return <p className="px-4 py-6 text-body text-muted">No tasks yet. Ask Envoy something on Home.</p>;
   const ids = new Set(tasks.map((t) => t.id));
   const parts = (pid: string) => tasks.filter((t) => t.parent === pid).sort((a, b) => a.created_at - b.created_at);
@@ -63,7 +73,7 @@ export function TaskList({ tasks, open }: { tasks: Task[]; open: (id: string) =>
           {t.kind === "crossapp" && parts(t.id).map((p) => (
             <button key={p.id} onClick={() => open(p.id)} className="flex min-h-[48px] w-full items-center gap-3 py-2 pl-[64px] pr-4 text-left hover:bg-raised">
               <span className="min-w-0 flex-1 truncate text-meta-2 text-muted">
-                <span className="font-bold text-ink-2">{appName(p.app)}</span> · {p.device ?? "waiting for a phone"}{p.result ? ` · ${p.result}` : p.detail ? ` · ${p.detail}` : ""}
+                <span className="font-bold text-ink-2">{appName(p.app)}</span> · {p.device ? phoneName(p.device, deviceName) : "waiting for a phone"}{p.result ? ` · ${p.result}` : p.detail ? ` · ${p.detail}` : ""}
               </span>
               <StatusChip status={p.status} />
             </button>
@@ -75,7 +85,7 @@ export function TaskList({ tasks, open }: { tasks: Task[]; open: (id: string) =>
 }
 
 // The parts of a cross-app task, each with its own live status (from the page's task events).
-function Parts({ id, all, open }: { id: string; all?: Record<string, Task>; open?: (id: string) => void }) {
+function Parts({ id, all, open, deviceName }: { id: string; all?: Record<string, Task>; open?: (id: string) => void; deviceName?: DeviceName }) {
   const [fetched, setFetched] = useState<Task[]>([]);
   useEffect(() => { if (!all) api("/api/tasks?limit=100").then((ts: Task[]) => setFetched(ts.filter((t) => t.parent === id))).catch(() => {}); }, [id, all]);
   const parts = (all ? Object.values(all).filter((t) => t.parent === id) : fetched).sort((a, b) => a.created_at - b.created_at);
@@ -87,7 +97,7 @@ function Parts({ id, all, open }: { id: string; all?: Record<string, Task>; open
           <span className="flex items-center justify-between gap-2">
             <span className="text-body font-bold">{appName(p.app)}</span><StatusChip status={p.status} />
           </span>
-          <span className="mt-1 block text-meta-2 text-muted">{p.device ?? "waiting for a phone"}{p.routine ? " · a routine" : ""}</span>
+          <span className="mt-1 block text-meta-2 text-muted">{p.device ? phoneName(p.device, deviceName) : "waiting for a phone"}{p.routine ? " · a routine" : ""}</span>
           <span className="mt-1 block text-row">{p.result || p.detail || p.goal}</span>
         </button>
       ))}
@@ -131,8 +141,9 @@ function Result({ text }: { text: string }) {
 }
 
 type Line = { s: Step; icon: "done" | "spin" | Icon; tone?: "sage" | "apricot" | "neutral"; text: string; quiet?: boolean };
-// Steps are recorded once they're done; a routine step still in progress says so ("running").
-function line(s: Step): Line | null {
+// Steps are recorded once they're done; a routine step still in progress says so ("running"). Also the live phone's
+// caption (LivePhone.tsx), so a step reads the same under the phone as in the task.
+export function stepLine(s: Step): Line | null {
   const text = s.text ?? "";
   switch (s.kind) {
     case "plan": case "replan": return { s, icon: ListChecksIcon, tone: "neutral", text: `Plan: ${text}`, quiet: true };
@@ -232,7 +243,7 @@ function StepRow({ l, isNew }: { l: Line; isNew: boolean }) {
 
 export function TaskDetail({ id, task, liveSteps, back, all, open, review, watch, deviceName, showMe }: {
   id: string; task?: Task; liveSteps: Step[]; back: () => void; all?: Record<string, Task>; open?: (id: string) => void;
-  review?: (approvalId: string) => void; watch?: (device?: string) => void; deviceName?: (avd?: string) => string | undefined;
+  review?: (approvalId: string) => void; watch?: (device?: string) => void; deviceName?: DeviceName;
   showMe?: (goal: string, device?: string) => void;  // teach mode with this task's goal, when the agent couldn't do it
 }) {
   const [data, setData] = useState<{ task: Task; steps: Step[]; approvals: Approval[] } | null>(null);
@@ -252,7 +263,7 @@ export function TaskDetail({ id, task, liveSteps, back, all, open, review, watch
   const stored = data?.steps ?? [];
   const steps = [...stored, ...liveSteps.filter((s) => s.seq > (stored[stored.length - 1]?.seq ?? 0))];
   if (seen.current === null && data) seen.current = new Set(steps.map((s) => s.seq));
-  const lines = steps.map(line).filter(Boolean) as Line[];
+  const lines = steps.map(stepLine).filter(Boolean) as Line[];
   if (t.status === "running" && !lines.some((l) => l.icon === "spin")) {  // what it's doing now isn't a step yet
     lines.push({ s: { seq: -1, time: now, kind: "now" }, icon: "spin", text: "Looking at the screen" });
   }
@@ -263,9 +274,9 @@ export function TaskDetail({ id, task, liveSteps, back, all, open, review, watch
   const preflight = steps.find((s) => s.kind === "preflight")?.lines ?? [];
   const lastStepAt = steps.length ? steps[steps.length - 1].time : 0;
   const elapsed = (active ? now : t.updated_at) - t.created_at;
-  const device = deviceName?.(t.device) ?? t.device;
+  const device = t.device ? phoneName(t.device, deviceName) : undefined;
   const status = active
-    ? t.status === "running" || t.status === "queued" ? <><Spinner size={12} stroke={4} /> {t.device ? `Working on ${t.device.startsWith("envoy") ? "the" : "your"} ${device}` : "Getting a phone ready"}</>
+    ? t.status === "running" || t.status === "queued" ? <><Spinner size={12} stroke={4} /> {t.device ? `Working on ${onThe(t.device, device!)}` : "Getting a phone ready"}</>
       : t.status === "taken_over" ? <>You&rsquo;re in control of {device}</> : <span className="text-apricot-ink">{t.status === "waiting_approval" ? "Waiting for your OK" : "Waiting for you"}</span>
     : <span className="text-muted">{STATUS[t.status]?.label ?? t.status} · {ago(t.updated_at)}</span>;
   const fromYou = !t.source.startsWith("trigger:");
@@ -313,7 +324,7 @@ export function TaskDetail({ id, task, liveSteps, back, all, open, review, watch
           </div>
         </div>
 
-        {t.kind === "crossapp" && <Parts id={id} all={all} open={open} />}
+        {t.kind === "crossapp" && <Parts id={id} all={all} open={open} deviceName={deviceName} />}
 
         {(lines.length > 0 || pendingApprovals.length > 0) && (
           <Card className="ev-rise ev-r3 pb-3 pl-4 pr-2 pt-2">
@@ -331,7 +342,7 @@ export function TaskDetail({ id, task, liveSteps, back, all, open, review, watch
                 <li key={a.id} className="ev-step">
                   <button onClick={() => review?.(a.id)} className="flex min-h-[44px] w-full items-center gap-3 text-left">
                     <RowIcon icon={LockIcon} tone="apricot" size={24} />
-                    <span className="min-w-0 flex-1 truncate text-row text-ink-2">{a.description}</span>
+                    <span className="min-w-0 flex-1 truncate text-row text-ink-2">{readable(a.description)}</span>
                     <Chip tone="apricot" className="text-[12px] font-bold">Needs your OK</Chip>
                   </button>
                 </li>
@@ -342,7 +353,7 @@ export function TaskDetail({ id, task, liveSteps, back, all, open, review, watch
                 {decided.map((a) => (
                   <li key={a.id} className="flex min-h-[32px] items-center gap-2">
                     <ShieldCheckIcon size={16} className="shrink-0" />
-                    <span className="min-w-0 [overflow-wrap:anywhere]">{a.description}: {a.status}{a.decided_by ? ` by ${a.decided_by}` : ""}{a.note ? ` (${a.note})` : ""}</span>
+                    <span className="min-w-0 [overflow-wrap:anywhere]">{readable(a.description)}: {a.status}{a.decided_by ? ` by ${a.decided_by}` : ""}{a.note ? ` (${a.note})` : ""}</span>
                   </li>
                 ))}
               </ul>

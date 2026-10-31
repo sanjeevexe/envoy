@@ -68,7 +68,8 @@ function Proactivity() {
 }
 
 type Rules = { default: string; apps: Record<string, string>; routines: Record<string, string> };
-type Info = { rules: Rules; apps: string[]; routines: { name: string; app: string; intent: string; irreversible: boolean }[] };
+// `money`: the routine's irreversible step spends money, so it always asks (approval_rules.decide checks money first)
+type Info = { rules: Rules; apps: string[]; routines: { name: string; app: string; intent: string; irreversible: boolean; money?: boolean }[] };
 
 const LABEL: Record<string, string> = {
   always: "Always ask",
@@ -124,7 +125,7 @@ function Settings() {
         <Card className="overflow-hidden">
           {info.apps.map((app) => (
             <label key={app} className="flex min-h-[56px] items-center justify-between gap-3 border-b border-divider px-4 py-2 last:border-b-0">
-              <span className="min-w-0"><span className="block truncate text-row font-semibold">{appName(app)}</span><span className="block truncate text-meta-2 text-muted">{app}</span></span>
+              <span className="min-w-0 truncate text-row font-semibold">{appName(app)}</span>
               <select value={rules.apps[app] ?? ""} onChange={(e) => setApp(app, e.target.value)} className={select} aria-label={`When to ask in ${appName(app)}`}>
                 <option value="">Same as above</option>
                 <option value="unless_requested">{LABEL.unless_requested}</option>
@@ -139,12 +140,17 @@ function Settings() {
         <Card className="overflow-hidden">
           {info.routines.filter((r) => r.irreversible).map((r) => (
             <label key={r.name} className="flex min-h-[60px] items-center justify-between gap-3 border-b border-divider px-4 py-2 last:border-b-0">
-              <span className="min-w-0"><span className="block truncate text-row font-semibold">{r.intent}</span><span className="block truncate text-meta-2 text-muted">{r.name}</span></span>
+              <span className="min-w-0">
+                <span className="block truncate text-row font-semibold">{r.intent}</span>
+                <span className="block truncate text-meta-2 text-muted">{appName(r.app)}{r.money ? " · Payments always ask" : ""}</span>
+              </span>
               <select value={rules.routines[r.name] ?? ""} onChange={(e) => setRoutine(r.name, e.target.value)} className={select} aria-label={`When to ask for ${r.intent}`}>
                 <option value="">Same as app</option>
                 <option value="unless_requested">{LABEL.unless_requested}</option>
                 <option value="always">{LABEL.always}</option>
-                <option value="never">{LABEL.never}</option>
+                {r.money
+                  ? rules.routines[r.name] === "never" && <option value="never" disabled>Always asks: it spends money</option>  // set before money was checked here
+                  : <option value="never">{LABEL.never}</option>}
               </select>
             </label>
           ))}
@@ -213,10 +219,8 @@ function Phones() {
         {[...info.apps].sort((a, b) => (info.names?.[a] ?? a).localeCompare(info.names?.[b] ?? b)).map((app) => (
           <label key={app} className="flex min-h-[60px] items-center justify-between gap-3 border-b border-divider px-4 py-2 last:border-b-0">
             <span className="min-w-0">
-              <span className="block truncate text-row font-semibold">{info.names?.[app] ?? app}</span>
-              <span className="block truncate text-meta-2 text-muted">
-                {info.emulator_refused[app] ? "Blocks emulators" : info.names?.[app] ? app : ""}
-              </span>
+              <span className="block truncate text-row font-semibold">{info.names?.[app] ?? appName(app)}</span>
+              {info.emulator_refused[app] && <span className="block truncate text-meta-2 text-muted">Blocks emulators</span>}
               {info.learned?.[app] && info.phone_apps.includes(app) ? (
                 <span className="block text-meta-2 text-apricot-ink">
                   Set by Envoy: it {info.learned[app].why ?? "blocked the emulator"}{info.learned[app].at ? ` (${new Date(info.learned[app].at! * 1000).toLocaleDateString()})` : ""}

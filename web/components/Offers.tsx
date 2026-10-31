@@ -12,6 +12,17 @@ import { Button, Card, cx, Row, RowIcon } from "@/components/ui";
 import { ago, api, ApiError, Offer, OfferLine, post } from "@/lib/api";
 
 const KIND_ICON: Record<string, Icon> = { repeat: ArrowsClockwiseIcon, handoff: FileArrowUpIcon };
+export const offerIcon = (o: Offer): Icon => KIND_ICON[o.kind] ?? ChatCircleDotsIcon;
+
+// Where a question came from, in a few words (a compact row's meta line): "Your trigger “Morning coffee”", "From your Mac".
+export function offerFrom(o: Offer): string {
+  if (o.source.startsWith("trigger:")) return `Your trigger “${o.source.slice(8)}”`;
+  if (o.kind === "repeat") return "A habit I noticed";
+  if (o.kind === "handoff") return "A file from your Mac";
+  if (o.source === "mcp") return "An assistant asked";
+  if (o.source === "chat" || o.source === "voice") return "You asked me";
+  return "Envoy asks";
+}
 
 // What the card promises, verbatim: a task's goal, or what a trigger setup will do.
 export function whatIllDo(o: Offer): string {
@@ -81,7 +92,7 @@ export function OfferCard({ o, openTask, onDecided }: { o: Offer; openTask?: (id
   return (
     <Card tone={pending ? "needs" : undefined} className="p-4" aria-label={cur.title}>
       <div className="flex items-start gap-3">
-        <RowIcon icon={KIND_ICON[cur.kind] ?? ChatCircleDotsIcon} tone={pending ? "apricot" : "sage"} size={40} />
+        <RowIcon icon={offerIcon(cur)} tone={pending ? "apricot" : "sage"} size={40} />
         <div className="min-w-0 flex-1">
           <div className="text-body font-bold [overflow-wrap:anywhere]">{cur.title}</div>
           <div className="mt-0.5 text-meta text-muted [overflow-wrap:anywhere]">{cur.body ? `${cur.body} · ` : ""}{ago(cur.created_at)}</div>
@@ -121,19 +132,19 @@ export function OfferCard({ o, openTask, onDecided }: { o: Offer; openTask?: (id
 // A past offer in Activity: what it was and what happened to it.
 export function OfferRow({ o, onOpen }: { o: Offer; onOpen: (o: Offer) => void }) {
   return (
-    <Row icon={KIND_ICON[o.kind] ?? ChatCircleDotsIcon} tone={o.status === "accepted" ? "sage" : o.status === "pending" ? "apricot" : "neutral"}
+    <Row icon={offerIcon(o)} tone={o.status === "accepted" ? "sage" : o.status === "pending" ? "apricot" : "neutral"}
          title={o.title} meta={`${outcome(o)} · ${ago(o.decided_at ?? o.created_at)}`} onClick={() => onOpen(o)} />
   );
 }
 
-// The card on its own, from a push or a link (/?offer=<id>).
-export function OfferSheet({ id, onClose, openTask }: { id: string; onClose: () => void; openTask: (id: string) => void }) {
+// The card on its own: from a push or a link (/?offer=<id>), or Review on a compact row (components/Waiting.tsx).
+export function OfferSheet({ id, onClose, openTask, onDecided }: { id: string; onClose: () => void; openTask: (id: string) => void; onDecided?: (o: Offer) => void }) {
   const [o, setO] = useState<Offer | null>(null);
   const [missing, setMissing] = useState(false);
   useEffect(() => { api<Offer>(`/api/offers/${id}`).then(setO).catch(() => setMissing(true)); }, [id]);
   return (
     <Sheet label="Envoy asks" onClose={onClose}>
-      {o ? <OfferCard o={o} openTask={(t) => { onClose(); openTask(t); }} />
+      {o ? <OfferCard o={o} openTask={(t) => { onClose(); openTask(t); }} onDecided={onDecided} />
         : missing ? <p className="py-4 text-body text-ink-2">This question is gone: it was answered or removed.</p>
         : <div aria-hidden className="h-40 rounded-card bg-well" />}
       <Button className="mt-4 self-center" variant="ghost" onClick={onClose}>Close</Button>
