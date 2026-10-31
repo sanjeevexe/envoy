@@ -1,7 +1,8 @@
 """Routine compiler: one successful agent trace → an app routine (design doc, App routines › Compiling).
 
 1. Confirm success: only runs that ended `done` with a passed success check (or that the user
-   confirmed) are compiled.
+   confirmed) are compiled. A taught trace (api/teach.py) is your own demonstration in the same
+   format, confirmed by you; its routine is marked `source: taught`.
 2. Clean up: drop pop-up dismissals (the shared handler covers them), looks, rejected or failed
    actions, steps with no visible effect, and back-tracks (a stretch of steps that ends on exactly
    the screen it started from). Recorded scrolls before a list tap become `scroll_until`.

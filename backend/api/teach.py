@@ -46,6 +46,8 @@ from api.store import new_id
 _LAUNCHER = re.compile(r"launcher|trebuchet|com\.android\.systemui$", re.I)
 _HORIZONTAL = re.compile(r"horizontal|pager|carousel", re.I)
 SETTLE_S = 4.0  # a screen still changing after this is taken as it is (a spinner, a clock)
+IDLE_S = 20 * 60  # a teach session with no input for this long is cancelled: it would hold the phone from every task
+IDLE_CHECK_S = 30
 QUIET_MS = 300  # settled: nothing visible changed for this long
 MIN_DRAG = 0.02  # of the screen's width: a shorter swipe is a tap (LivePhone sends taps under this)
 
@@ -153,7 +155,7 @@ class Recorder:
         self.lock = asyncio.Lock()
         self.on_change = on_change or (lambda: None)  # the live view's Recording line follows `state()`
         self.screenshots = screenshots
-        self.started = time.time()
+        self.started = self.last_input = time.time()
         self.n = 0  # steps written
         self.paused: str | None = None  # why recording is paused right now
         self.pauses = 0  # inputs not recorded because the screen was private
@@ -177,6 +179,7 @@ class Recorder:
 
     async def before(self, msg: dict[str, Any], w: int, h: int) -> None:
         """Called before the input goes to the phone. A failure here costs the step, never the input."""
+        self.last_input = time.time()
         try:
             await self._before(msg, w, h)
         except Exception as e:  # noqa: BLE001
@@ -498,7 +501,8 @@ class Teacher:
         self.pool, self.tasks, self.bus, self.routines, self.adapter, self.runner = pool, tasks, bus, routines, adapter, runner
         self.root, self.screenshots = root, screenshots
         self.sessions: dict[str, Session] = {}  # device → its latest session
-        self.jobs: dict[str, asyncio.Task] = {}
+        self.jobs: dict[str, asyncio.Task] = {}  # device → the compile and replay after Finish
+        self.idlers: dict[str, asyncio.Task] = {}  # device → the watch that cancels a forgotten recording
 
     def _sweep(self) -> None:
         """A recording the API stopped in the middle of (no run.json, untouched for an hour) is never kept."""
@@ -536,6 +540,8 @@ class Teacher:
             device = await self.pool.device(avd)
         except Exception as e:  # noqa: BLE001
             raise TeachError(409, str(e)) from e
+        if lease.task_id or lease.run_lock.locked():  # taken while the phone was being connected
+            raise TeachError(409, "Envoy is using this phone: wait for its task to end, or stop it")
         await lease.run_lock.acquire()
         try:
             self._sweep()
@@ -560,11 +566,21 @@ class Teacher:
             self.pool.recorders[avd] = rec
             self.pool.take_over(avd, f"teaching: {goal}", by="teach")
             self._changed(s)
+            self.idlers[avd] = asyncio.get_running_loop().create_task(self._idle(s))
             return s.view()
         except BaseException:
             self.pool.recorders.pop(avd, None)
             lease.run_lock.release()
             raise
+
+    async def _idle(self, s: Session) -> None:
+        """Cancel a recording nobody is using (the tab was closed, you walked away), so tasks get the phone back."""
+        while s.status == "recording":
+            await asyncio.sleep(IDLE_CHECK_S)
+            if s.status == "recording" and time.time() - s.recorder.last_input > IDLE_S and self.sessions.get(s.avd) is s:
+                await self.cancel(s.avd)
+                s.detail = f"Nothing happened for {IDLE_S // 60} minutes, so the recording was stopped and deleted."
+                self._changed(s)
 
     def _recording(self, avd: str) -> Session:
         s = self.sessions.get(avd)
@@ -578,7 +594,7 @@ class Teacher:
         try:
             await s.recorder.discard()
         finally:
-            s.status, s.detail = "discarded", "cancelled: nothing was kept"
+            s.status, s.detail = "discarded", "You cancelled, so what you did was deleted."
             self._end(s)
         return s.view()
 
@@ -591,7 +607,7 @@ class Teacher:
             try:
                 await s.recorder.discard()
             finally:
-                s.status, s.detail = "discarded", "you said it didn't work: nothing was kept"
+                s.status, s.detail = "discarded", "You said it didn't work, so what you did was deleted."
                 self._end(s)
             return s.view()
         self.pool.recorders.pop(avd, None)
@@ -605,7 +621,8 @@ class Teacher:
         if self.pool.leases[avd].user_control:
             self.pool.hand_back(avd, by="teach")
         if s.recorder.n == 0:
-            s.status, s.detail = "failed", "nothing was recorded: no step happened outside sign-in screens and the home screen"
+            shutil.rmtree(trace, ignore_errors=True)
+            s.status, s.detail = "failed", "Nothing was recorded: no step happened outside sign-in screens and the home screen."
             self._end(s)
             return s.view()
         s.status, s.detail = "compiling", "turning what you showed into a routine"
@@ -649,7 +666,7 @@ class Teacher:
             added = self.routines.add(routine, verification={"by": "teach", "from": s.id, "cases": [
                 {"case": "replay", "passed": True, "inputs": inputs, "duration_s": out.duration_s, "status": out.status}]})
             s.version, s.status = added.version, "saved"
-            s.detail = f"saved as {added.routine} v{added.version}: it ran on its own in {out.duration_s:.0f} s"
+            s.detail = f"Saved as {added.routine} (v{added.version}). It ran once on its own, with no model, in {out.duration_s:.0f} s."
         except asyncio.CancelledError:
             s.status, s.detail = "failed", "stopped"
             raise

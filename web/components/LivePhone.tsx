@@ -299,26 +299,28 @@ export default function LivePhone({ avd, lease, needsYou, mobile, teachAsk }: Pr
           </div>
         </form>
       ) : (
-        <div className="flex items-center gap-2 rounded-block border border-line bg-surface py-2 pl-4 pr-2">
-          <span className="min-w-0 flex-1 text-meta text-ink-2">{control?.task_id ? "Envoy is using the phone" : "The phone is idle"}</span>
-          {!control?.task_id && (
-            <button onClick={() => { setTaught(null); setGoal(""); }} className="flex h-11 shrink-0 items-center gap-1.5 rounded-full border border-control bg-surface px-4 text-[14px] font-bold">
-              <ChalkboardTeacherIcon size={18} />Teach</button>
-          )}
-          <button onClick={takeOver} className="flex h-11 shrink-0 items-center gap-1.5 rounded-full border border-control bg-surface px-4 text-[14px] font-bold"><HandIcon size={18} />Take over</button>
+        <div className="flex flex-wrap items-center gap-2 rounded-block border border-line bg-surface py-2 pl-4 pr-2">
+          <span className="min-w-[8.5rem] flex-1 text-meta text-ink-2">{control?.task_id ? "Envoy is using the phone" : "The phone is idle"}</span>
+          <span className="flex gap-2">
+            {!control?.task_id && (
+              <button onClick={() => { setTaught(null); setGoal(""); }} className="flex h-11 shrink-0 items-center gap-1.5 rounded-full border border-control bg-surface px-4 text-[14px] font-bold">
+                <ChalkboardTeacherIcon size={18} />Teach</button>
+            )}
+            <button onClick={takeOver} className="flex h-11 shrink-0 items-center gap-1.5 rounded-full border border-control bg-surface px-4 text-[14px] font-bold"><HandIcon size={18} />Take over</button>
+          </span>
         </div>
       )}
       {taught && !recording && !(teachStatus && LEARNING[teachStatus]) && ["saved", "failed", "discarded"].includes(taught.status) && (
         <div className={`rounded-block px-4 py-3 text-meta ${taught.status === "saved" ? "bg-sage-tint text-sage-ink" : taught.status === "failed" ? "bg-apricot-tint text-apricot-ink" : "bg-raised text-ink-2"}`} role="status">
           <div className="font-bold">{taught.status === "saved" ? "Learned it" : taught.status === "failed" ? "Couldn't learn it this time" : "Nothing was kept"}</div>
           <div className="mt-0.5">{taught.detail}</div>
-          {taught.status === "saved" && taught.routine && <div className="mt-1 text-meta-2">It&rsquo;s in Routines as <span className="font-mono">{taught.routine}</span>, marked taught. Next time, just ask.</div>}
+          {taught.status === "saved" && <div className="mt-1 text-meta-2">It&rsquo;s in Routines, marked taught. Next time, just ask.</div>}
           {taught.status === "failed" && taught.notes.length > 0 && <ul className="mt-1 list-disc pl-4 text-meta-2">{taught.notes.slice(0, 3).map((n) => <li key={n}>{n}</li>)}</ul>}
           <button onClick={() => setTaught(null)} className="mt-2 h-9 rounded-full border border-current/30 px-3 text-meta-2 font-bold">OK</button>
         </div>
       )}
       <div className={`relative mx-auto w-full overflow-hidden rounded-[30px] border-[6px] ${recording && !paused ? "border-apricot" : inControl ? "border-sage" : "border-ink"} bg-ink shadow-phone`}
-           style={{ aspectRatio: `${size.w} / ${size.h}`, maxWidth: mobile ? `min(100%, calc((100dvh - ${inControl ? 430 : 350}px) * ${size.w / size.h}))` : 300 }}>
+           style={{ aspectRatio: `${size.w} / ${size.h}`, maxWidth: mobile ? `min(100%, calc((100dvh - ${recording ? (asking ? 530 : 470) : inControl ? 430 : 350}px) * ${size.w / size.h}))` : 300 }}>
         <canvas ref={canvas} tabIndex={0} aria-label={inControl ? "The phone's screen: tap, swipe, or type" : "The phone's screen, live"}
                 onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={() => { if (down.current?.timer) clearTimeout(down.current.timer); down.current = null; }}
                 onKeyDown={onKey} onContextMenu={(e) => e.preventDefault()}

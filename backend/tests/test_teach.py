@@ -513,3 +513,21 @@ def test_a_replay_that_fails_saves_nothing(api, monkeypatch):
     out = asyncio.run(show())
     assert out["status"] == "failed" and "type_ktn" in out["detail"] and ctx.routines.names() == []
     assert (Path(ctx.teacher.root) / out["id"] / "routine.yaml").exists()  # the draft stays with the recording
+
+
+def test_a_forgotten_recording_is_cancelled_and_gives_the_phone_back(tmp_path, monkeypatch):
+    monkeypatch.setattr(teach, "IDLE_S", 0.2)
+    monkeypatch.setattr(teach, "IDLE_CHECK_S", 0.1)
+    phone = Phone()
+
+    async def go():
+        pool = pool_with(phone)
+        t = Teacher(pool, SimpleNamespace(), EventBus(), SimpleNamespace(), SimpleNamespace(), root=tmp_path)
+        s = await t.start("envoy-test", "open my next trip", app=PKG)
+        await asyncio.sleep(0.6)
+        lease = pool.leases["envoy-test"]
+        assert not lease.user_control and not lease.run_lock.locked() and pool.recorders == {}
+        return t.status("envoy-test"), s["id"]
+
+    out, tid = asyncio.run(go())
+    assert out["status"] == "discarded" and "Nothing happened" in out["detail"] and not (tmp_path / tid).exists()
