@@ -2073,5 +2073,28 @@
   "cleared": false,
   "device": "envoy-real",
   "main": "3f7a9c5"
+ },
+ {
+  "time": "2026-10-31T01:18:11+00:00",
+  "app": "com.google.android.apps.docs",
+  "kind": "first",
+  "goal": "In Google Drive, how much of my storage is used?",
+  "task_id": "task-1030-211610-b712",
+  "status": "failed",
+  "ran": "agent",
+  "routine": null,
+  "result": "stopped after 25 steps",
+  "detail": "stopped after 25 steps",
+  "duration_s": 117.9,
+  "model_calls": 28,
+  "cost_usd": 0.2037,
+  "cost_at_standard_usd": 0.2014,
+  "calls_logged": 28,
+  "declined": [],
+  "handoff": null,
+  "notes_retired": 0,
+  "cleared": false,
+  "device": "envoy-real",
+  "main": "9a18586"
  }
 ]
