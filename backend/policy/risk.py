@@ -41,6 +41,11 @@ _IRREVERSIBLE_ID = re.compile(r"(^|[_-])(pay|purchase|checkout|confirm|submit|se
 # A label that says nothing about what it does ("Submit", "OK"): web forms label every button that way (Amazon's Add to Cart
 # and Buy Now are both "Submit"), so an ID that plainly names a reversible action speaks for it instead.
 _GENERIC = re.compile(r"^(submit|ok|okay|continue|go|done)$", re.I)
+# A date or time picker (Material's mtrl_picker_* / mtrl_calendar_* / material_timepicker_*): its OK only puts the date or time
+# into the form behind it. Google Calendar's is id confirm_button, so every event with a date asked for approval there (teach
+# mode's Calendar routine, Oct 31). What the form then does is judged at its own button.
+_PICKER_ID = re.compile(r"(^|[_-])(mtrl_picker|mtrl_calendar|material_timepicker|material_clock|date_picker|time_picker)", re.I)
+_PICKER_OK = re.compile(r"^(ok|okay|done|set|select|apply)$", re.I)
 _REVERSIBLE_ID = re.compile(r"(^|[_-])(add[_-]to[_-](cart|bag|basket|list|wishlist)|wishlist|save[_-]for[_-]later|search|filter)([_-]|$)", re.I)
 # A button that is only a price ("$4.99", "€7"): it buys something.
 _PRICE = re.compile(r"^\s*(US\s?)?[$€£¥₹]\s?\d[\d,]*(\.\d{1,2})?(\s*/\s*(mo|month|yr|year|wk|week))?\s*$", re.I)
@@ -169,7 +174,8 @@ def classify(action: Action, screen: ScreenState, model_risk: Risk | None) -> Ri
             named_reversible = _GENERIC.match(target.label.strip()) and _REVERSIBLE_ID.search(rid) and not _IRREVERSIBLE_ID.search(rid)
             if _IRREVERSIBLE.search(text) and not _SAFE.match(target.label.strip()) and not named_reversible:
                 reasons.append(f"rule: target says {target.label!r}")
-            elif _IRREVERSIBLE_ID.search(rid):
+            elif _IRREVERSIBLE_ID.search(rid) and not (_PICKER_OK.match(target.label.strip()) and any(
+                    _PICKER_ID.search(e.resource_id.split("/")[-1]) for e in screen.elements)):
                 reasons.append(f"rule: target id {target.resource_id!r}")
             elif _PRICE.match(target.label or ""):
                 reasons.append(f"rule: target is a price {target.label!r}")
