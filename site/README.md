@@ -1,6 +1,6 @@
 # Envoy's showcase site
 
-A guided tour of Envoy for judges, in ten sections, built only from real recordings and eval results in this repo. It is
+A guided tour of Envoy for judges, in eleven sections, built only from real recordings and eval results in this repo. It is
 static: no server, no analytics, no third-party calls (fonts are self-hosted). It follows the system's light or dark setting.
 
 ## View it
@@ -44,7 +44,8 @@ uv run --project backend python scripts/build_site_data.py import
 
 `import` reads loop A's checkout (`.claude/worktrees/loop-reliability-b4a982`), loop A's API copy (a scratchpad folder, read
 with `sqlite3` in read-only mode), loop B's checkout (`funny-goldwasser-65190c`, Clock and Google Flights frames only), and
-the main checkout's `data/runs/` and `data/demo/memory.db` (the demo world, read only). Those folders may be gone later; the
+the main checkout's `data/runs/` and `data/demo/memory.db` (the demo world, read only), and teach mode's recordings in the
+coordinator's shared notes folder (`teach-recordings/`). Those folders may be gone later; the
 imported copies are what the site uses. Any new frame must be looked at for private data before it is added (checklist below).
 
 ## Where every number comes from
@@ -53,7 +54,7 @@ imported copies are what the site uses. Any new frame must be looked at for priv
 | --- | --- | --- |
 | 1. The claim | The claim and "what's new" | `docs/technical-design.md` › Overview |
 | 1, 2, 3 | Starbucks first run: 45.6 s, 12 calls, $0.0795; replay 14.8 s, 2 calls, $0.005; new input 15.8 s | `eval/results/real-apps/loop-a/runs.jsonl` (task ids on the page) |
-| 1 | Limits: 4 of 11 new-input reruns (Oct 28); 15 of 15 (Oct 30) | `eval/results/final/report.md` suite 4; `eval/results/real-apps/table.md` |
+| 1 | Limits: 4 of 11 new-input reruns (Oct 28), 6 of 11 at the Oct 31 rehearsal; 15 of 15 (Oct 30) | `eval/results/final/report.md` suite 4; `eval/results/real_rerun_2026-10-31/README.md`; `eval/results/real-apps/table.md` |
 | 2 | Each step's frame, tapped element, reason, time, calls and dollars so far | `data/recordings/starbucks-first.json`, imported from loop A's trace (`steps.jsonl`, trees with element bounds), its API copy (one frame per action) and its model-cost log |
 | 3 | The compiled routine; the active v4; versions; compile cost (41.5 s, $0.0806) | `eval/results/real-apps/loop-a/compiled/loop_starbucks-v1.yaml`, `data/routines/starbucks_drink_calories/`, `runs.jsonl` (mode compile) |
 | 3 | The replay's step timings and rungs | `data/recordings/starbucks-replay.json` (loop A's trace) |
@@ -61,18 +62,20 @@ imported copies are what the site uses. Any new frame must be looked at for priv
 | 4 | 50 injected changes by layout; new inputs 50/50 | `eval/results/final/change.md` |
 | 4 | Real-app self-repairs: 1 kept, 4 rejected by trial; Starbucks v3's Wonder call | `data/routines/*/index.json`; `data/recordings/starbucks-repair.json` (loop A's cost log) |
 | 5 | Each app's first runs and replays (cells copied verbatim) | `eval/results/real-apps/table.md`; versions and steps from `data/routines/<id>/` |
-| 6 | Facts, sources, replaced seat, cancelled trip | `data/recordings/memory.json` (the demo world's `memory.db`, read only) |
-| 6 | Extraction 459/468, stale 0 of 12, the four ages | `eval/results/final/memory.md` |
-| 7 | 20/20 caught, 0/22 false flags; 20/20 with planted text, 0 followed; 0 values from planted emails | `eval/results/final/safety.md`, `eval/results/final/injection.md` |
-| 7 | The approval record; the planted screen and the agent's reasons | `data/recordings/approval.json` (loop A's API copy), `data/recordings/planted.json` (`data/runs/f7-1028004422-inj-trip_notice-add_ktn-agent-r0`) |
-| 8 | Wonder and Spark calls per job | the Starbucks recordings above |
-| 8 | Voice: heard exactly, final text 90 to 93 ms | `docs/phase-5-results.md` (Voice, scripted) |
-| 8 | SAM 3.1 on the seat map; 52 targets: 37% / 92% / 75% | `data/recordings/sam.json` (`data/runs/p6-canvas-src`), `eval/results/phase6/vision.json`, `docs/phase-6-results.md` |
-| 9 | Suites, targets, charts | `eval/results/final/report.md`, `eval/results/final/charts/` |
-| 9 | Pixel 5: 30/30, 0 calls | `eval/results/final/sizes.json` (devices.phone; Oct 28, `a9b923d`) |
-| 9 | AndroidWorld | `docs/androidworld-results.md` (Headline; held-out half) |
-| 9 | 578 test functions in 37 files | counted from `backend/tests/` by the build (a parametrized test counts once) |
-| 10 | Diagrams; what Envoy built; open-source plumbing | `docs/diagrams/`, `THIRD_PARTY.md` |
+| 6. Teach it | The Calendar demonstration (7 steps, 14.5 s), its routine ($0.0529), the replay (7/7, 0 calls, 6.2 s); SkyLark flight status | `data/recordings/teach.json`, imported from teach mode's recordings (the shared notes folder's `teach-recordings/`, made by `eval/teach_person.py` on Oct 31) |
+| 6 | Why Calendar: the Oct 30 loops' Calendar rows | `eval/results/real-apps/table.md` |
+| 7 | Facts, sources, replaced seat, cancelled trip | `data/recordings/memory.json` (the demo world's `memory.db`, read only) |
+| 7 | Extraction 459/468, stale 0 of 12, the four ages | `eval/results/final/memory.md` |
+| 8 | 20/20 caught, 0/22 false flags; 20/20 with planted text, 0 followed; 0 values from planted emails | `eval/results/final/safety.md`, `eval/results/final/injection.md` |
+| 8 | The approval record; the planted screen and the agent's reasons | `data/recordings/approval.json` (loop A's API copy), `data/recordings/planted.json` (`data/runs/f7-1028004422-inj-trip_notice-add_ktn-agent-r0`) |
+| 9 | Wonder and Spark calls per job | the Starbucks recordings above |
+| 9 | Voice: heard exactly, final text 90 to 93 ms | `docs/phase-5-results.md` (Voice, scripted) |
+| 9 | SAM 3.1 on the seat map; 52 targets: 37% / 92% / 75% | `data/recordings/sam.json` (`data/runs/p6-canvas-src`), `eval/results/phase6/vision.json`, `docs/phase-6-results.md` |
+| 10 | Suites, targets, charts | `eval/results/final/report.md`, `eval/results/final/charts/` |
+| 10 | Pixel 5: 30/30, 0 calls | `eval/results/final/sizes.json` (devices.phone; Oct 28, `a9b923d`) |
+| 10 | AndroidWorld | `docs/androidworld-results.md` (Headline; held-out half) |
+| 10 | Test functions (602 in 38 files at this build) | counted from `backend/tests/` by the build (a parametrized test counts once) |
+| 11 | Diagrams; what Envoy built; open-source plumbing | `docs/diagrams/`, `THIRD_PARTY.md` |
 
 Numbers measured on SkyLark, Envoy's own test app, carry an "Our test app" label wherever they appear.
 
@@ -90,6 +93,7 @@ account details.
 | `img/app-starbucks` | The Caffè Latte page, 190 calories | Clean |
 | `img/app-clock`, `img/app-flights` | A 7:00 AM alarm on envoy-real; a public Google Flights results page | Clean |
 | `img/repair-skylark-before`, `-after`, `img/approval-skylark`, `img/planted-trip-notice`, `img/sam-seat-map` | SkyLark screens: the test persona (Maya Patel), test bookings, a test known traveler number | Test app data only |
+| `img/teach-shown-01` … `07`, `img/teach-replay-01` … `07` | Google Calendar on envoy-real, the envoy3955 test account: the Halloween holiday, a new "Dentist" event, the time picker, the saved events | Test account only; no other events or contacts |
 | `img/chart-*`, `img/diagram-*` | Eval charts and design diagrams | No personal data |
 
 Left out on purpose: DoorDash frames (addresses), Lyft and Uber (the user's own accounts; Lyft appears as numbers only),

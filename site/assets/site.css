@@ -426,6 +426,15 @@ dl.fr dd span { color: var(--ink-2); font-size: 12.5px; }
 .ours b { color: var(--ink); }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }
 
+
+/* ---- teach ---- */
+.film { display: grid; grid-auto-flow: column; grid-auto-columns: 128px; gap: 12px; overflow-x: auto; padding: 14px 2px 6px; scrollbar-width: thin; }
+.film .phone { max-width: 128px; border-width: 5px; border-radius: 20px; box-shadow: 0 6px 16px rgba(31, 42, 36, 0.14); }
+.film .phone img { border-radius: 15px; }
+.film figcaption { font-size: 12px; line-height: 1.35; }
+.learn-mid { margin-top: 16px; padding: 14px 16px; border-radius: 16px; background: var(--raised); border: 1px solid var(--line); font-size: 14px; color: var(--ink-2); }
+.learn-mid b { color: var(--ink); }
+
 /* ---- motion: CSS only, none under reduced motion ---- */
 .ev-body { transform-box: fill-box; transform-origin: 50% 90%; animation: evBreathe 4.5s ease-in-out infinite; }
 .ev-eye { transform-box: fill-box; transform-origin: 50% 50%; animation: evBlink 5.5s infinite; }

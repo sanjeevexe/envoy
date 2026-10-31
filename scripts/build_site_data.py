@@ -317,6 +317,52 @@ def import_memory() -> dict:
     return out
 
 
+TEACH = HOME / "Library/Application Support/Claude/side-session-notes/local_f74ba43d-3237-4122-ab43-ffe3c799c156/teach-recordings"
+
+
+def import_teach() -> dict:
+    """Teach mode's recordings (Oct 31, eval/teach_person.py): a scripted person shows a task once through the live view,
+    the compiler turns it into a routine, and Envoy replays it on its own. Google Calendar on the envoy3955 test account."""
+    cal = TEACH / "calendar_dentist_today"
+    demo_run = json.loads((cal / "demonstration/run.json").read_text())
+    demo = [s for s in _read_jsonl(cal / "demonstration/steps.jsonl") if s["decision"]["action"]["type"] != "done"]
+    t0 = demo[0]["time"]
+    steps = []
+    for s in demo:
+        tg, act = s["target"], s["device_action"]
+        steps.append({"n": s["step"], "kind": act["kind"], "label": tg.get("label") or tg.get("text") or tg.get("desc"),
+                      "typed": act.get("text"), "box": tg["bounds"], "t": round(s["time"] - t0, 1),
+                      "frame": _frame(cal / "demonstration" / s["screenshot_before"], f"teach-shown-{s['step']:02d}")})
+    rtask = json.loads((cal / "replay_task.json").read_text())
+    rrun = json.loads((cal / "replay_trace/run.json").read_text())
+    rsteps = [s for s in _read_jsonl(cal / "replay_trace/steps.jsonl") if s.get("kind") == "routine_step"]
+    shots = [s["shot"] for s in rtask["steps"] if s.get("kind") == "routine_step"]
+    replay = [{"id": s["id"], "status": s["status"], "rung": s["rung"], "rungs": s["rungs"], "ms": s["timings_ms"]["total"],
+               "frame": _frame(cal / "replay_shots" / Path(shot).name, f"teach-replay-{i + 1:02d}")}
+              for i, (s, shot) in enumerate(zip(rsteps, shots))]
+    y = yaml.safe_load((cal / "routine_saved.yaml").read_text())
+    sky = TEACH / "skylark_flight_status"
+    sky_demo = json.loads((sky / "demonstration/run.json").read_text())
+    sky_run = json.loads((sky / "replay_trace/run.json").read_text())
+    sky_y = yaml.safe_load((sky / "routine_saved.yaml").read_text())
+    return {
+        "calendar": {
+            "goal": demo_run["goal"], "task_id": demo_run["task_id"], "app": y["app"],
+            "shown_et": datetime.fromtimestamp(t0, ET).strftime("%Y-%m-%d %H:%M"), "shown_s": demo_run["duration_s"],
+            "shown_calls": demo_run["model_calls"], "steps": steps,
+            "routine": {"name": y["routine"], "version": y["version"], "inputs": {k: v.get("example") for k, v in y["inputs"].items()},
+                        "steps": [{"id": s["id"], "intent": s["intent"]} for s in y["steps"]],
+                        "compiler": y["compiled_from"]["compiler"], "usd": y["compiled_from"]["cost_usd"]},
+            "replay": {"task_id": rtask["task"]["id"], "status": rrun["status"], "seconds": rrun["duration_s"],
+                       "calls": rrun["model_calls"], "steps": replay},
+        },
+        "skylark": {"goal": sky_demo["goal"], "shown_s": sky_demo["duration_s"], "steps": sky_demo["steps"],
+                    "answer": sky_demo["result"], "routine": sky_y["routine"], "usd": sky_y["compiled_from"]["cost_usd"],
+                    "replay_s": sky_run["duration_s"], "replay_calls": sky_run["model_calls"],
+                    "replay_output": next(iter(sky_run["outputs"].values()), "")},
+    }
+
+
 def do_import() -> None:
     REC.mkdir(parents=True, exist_ok=True)
     for name, cfg in RECORDINGS.items():
@@ -324,7 +370,7 @@ def do_import() -> None:
         (REC / f"{name}.json").write_text(json.dumps(rec, indent=1, ensure_ascii=False) + "\n")
         print(f"imported {name}: {len(rec['steps'])} steps")
     for name, fn in [("app-frames", import_app_frames), ("starbucks-repair", import_repair_call), ("planted", import_planted),
-                     ("approval", import_approval), ("sam", import_sam), ("memory", import_memory)]:
+                     ("approval", import_approval), ("sam", import_sam), ("memory", import_memory), ("teach", import_teach)]:
         (REC / f"{name}.json").write_text(json.dumps(fn(), indent=1, ensure_ascii=False) + "\n")
         print(f"imported {name}")
 
@@ -727,6 +773,16 @@ def built() -> dict:
     }
 
 
+def teach() -> dict:
+    rows = md_tables((REPO / "eval/results/real-apps/table.md").read_text())[0]
+    cal = [{"app": plain(r["app"]), "task": plain(r["task"]), "first": plain(r["first runs (x/3)"]), "notes": plain(r["notes"])}
+           for r in rows if r["app"].startswith("Google Calendar")]
+    return {"rec": json.loads((REC / "teach.json").read_text()), "calendar_rows": cal,
+            "src": src("site/data/recordings/teach.json", "teach mode's recordings, Oct 31"),
+            "table_src": src("eval/results/real-apps/table.md", "Google Calendar rows"),
+            "code_src": src("backend/api/teach.py"), "person_src": src("eval/teach_person.py")}
+
+
 def numbers(data: dict) -> dict:
     """Every headline number the site shows, with where it came from and whether it is from the eval-final tag yet."""
     st = data["eval"]
@@ -749,6 +805,7 @@ def build() -> dict:
         "learned": learned(),
         "repair": repair(),
         "apps": apps(),
+        "teach": teach(),
         "memory": memory(),
         "safety": safety(),
         "models": models(),

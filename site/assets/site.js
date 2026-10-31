@@ -56,8 +56,8 @@
         <ul style="margin:8px 0 0;padding-left:18px;color:var(--ink-2);font-size:14.5px">
           <li>It runs on a Mac today (emulators plus one real Pixel 5 over USB), with a one-time sign-in per app, done by the user.</li>
           <li>Apps with bot checks (Target) don't run on emulators; they need a real phone.</li>
-          <li>Real apps with new inputs: 4 of 11 reruns were right on Oct 28. After that week's fixes, five shipped routines went 15 of 15 on new inputs (Oct 30).
-            ${srcA({ path: "eval/results/final/report.md", note: "suite 4" }, "report.md")} ${srcA(L.table_src, "table.md")}</li>
+          <li>Real apps with new inputs, the eval's 18 workflows: 4 of 11 reruns were right with no model call on Oct 28, and 6 of 11 at the Oct 31 rehearsal on the hybrid profile (first runs 12 of 18 there). Separately, five routines shipped in the loops went 15 of 15 on new inputs (Oct 30).
+            ${srcA({ path: "eval/results/final/report.md", note: "suite 4" }, "report.md")} ${srcA({ path: "eval/results/real_rerun_2026-10-31/README.md" }, "rehearsal")} ${srcA(L.table_src, "table.md")}</li>
         </ul>
       </div>`;
   }
@@ -67,7 +67,7 @@
     const R = D.first_run, T = R.total;
     const body = $("#first-run-body");
     body.innerHTML = `
-      <span class="eyebrow"><span class="num">2</span> Watch a real first run</span>
+      <span class="eyebrow"><span class="num">${num("first-run")}</span> Watch a real first run</span>
       <h2 id="first-run-h">The first time, Muse Wonder decides every tap.</h2>
       <p class="lede">There's no routine for this yet, so the agent plans the task and reads each screen as text: the app's accessibility tree, numbered. Step through the run: the screen, the element it tapped, its reason, and the time and money spent so far.</p>
       <div class="label-rec">
@@ -212,7 +212,7 @@
     const rungChip = (s) => s.status === "skipped" ? `<span class="chip">skipped</span>`
       : s.rung === 0 ? "" : `<span class="chip apricot" title="${esc(s.rungs.join("; "))}">rung ${s.rung}</span>`;
     body.innerHTML = `
-      <span class="eyebrow"><span class="num">3</span> The same task, learned</span>
+      <span class="eyebrow"><span class="num">${num("learned")}</span> The same task, learned</span>
       <h2 id="learned-h">One Wonder call turns that run into a routine. The next request just replays it.</h2>
       <p class="lede">The compiler kept the taps, turned the drink into an input, and wrote checks for every step from the screens it saw. A replay runs those checks as code, so the model is called only to match the request and to read out the answer.</p>
       <div class="learn">
@@ -307,8 +307,10 @@
     return `<div class="phone"><img src="data/${esc(frame)}" alt="${esc(alt)}" loading="lazy" width="360" height="800">
       ${rects ? `<svg class="ring" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">${rects}</svg>` : ""}</div>`;
   }
+  // A section's number is its place on the page, so a section can be added without renumbering by hand.
+  const num = (id) => [...document.querySelectorAll("main section.sec")].findIndex((s) => s.id === id) + 1;
   const head = (n, id, eyebrow, h, lede) => `
-    <span class="eyebrow"><span class="num">${n}</span> ${esc(eyebrow)}</span>
+    <span class="eyebrow"><span class="num">${num(id)}</span> ${esc(eyebrow)}</span>
     <h2 id="${id}-h">${h}</h2>${lede ? `<p class="lede">${lede}</p>` : ""}`;
   const testApp = `<span class="chip apricot" title="SkyLark Air is Envoy's own test airline app">Our test app</span>`;
   const notFinal = (c) => D.eval.final ? "" : `<span class="chip apricot pending" title="Measured before the frozen Nov 2 eval">${c ? `on ${esc(c)} · ` : ""}final numbers after Nov 2</span>`;
@@ -351,7 +353,7 @@
           </div>
           <div class="card" style="padding:20px;margin-top:16px">
             <h3>On real apps it's harder, and the trial is why that's safe</h3>
-            <p style="margin:8px 0 0;color:var(--ink-2);font-size:14.5px">In the routine library, self-repair proposed ${R.real.length} new versions for real apps. The trial kept ${kept} and rejected ${R.real.length - kept}, so the routine stayed on the version that worked. Most real-app versions were fixed by hand during the loops, and the cards in section 5 say so.</p>
+            <p style="margin:8px 0 0;color:var(--ink-2);font-size:14.5px">In the routine library, self-repair proposed ${R.real.length} new versions for real apps. The trial kept ${kept} and rejected ${R.real.length - kept}, so the routine stayed on the version that worked. Most real-app versions were fixed by hand during the loops, and the cards in section ${num("real-apps")} say so.</p>
             <div class="block" style="padding:12px 14px;margin-top:12px;font-size:14px">
               <b>Kept: Starbucks v3.</b> ${esc(S.change.replace(/^./, (c) => c.toUpperCase()))}. Later replaced by a hand fix (v4). ${esc(MODEL[S.call.model] || S.call.model)}, one call, ${(S.call.ms / 1000).toFixed(1)} s, ${usd(S.call.usd)}; its trial passed with ${S.trial.model_calls} model calls in ${secs(S.trial.duration_s)}.
               <div class="small" style="margin-top:6px">Its reason: “${esc(S.reason)}”</div>
@@ -392,6 +394,46 @@
       </div>
       <div class="block" style="padding:14px 18px;margin-top:16px;font-size:14px;color:var(--ink-2)">
         Plus ${A.skylark.length} routines on SkyLark, ${testApp} our own airline app, where the eval can change the layout on purpose and check the app's real state: ${A.skylark.map((s) => `<code>${esc(s)}</code>`).join(", ")}.
+      </div>`;
+  }
+
+  // ---- teach it by showing it ----
+  function renderTeach() {
+    const T = D.teach, C = T.rec.calendar, K = T.rec.skylark, R = C.replay;
+    const label = (s) => s.kind === "type" ? `type “${esc(s.typed)}”` : `tap “${esc(s.label)}”`;
+    const film = (items) => `<div class="film">${items.join("")}</div>`;
+    $("#teach-body").innerHTML = `
+      ${head(0, "teach", "Teach it by showing it", "Where the agent stalls, a person can show Envoy once.",
+        "In teach mode a person does the task through Envoy's live view. Envoy records each screen and each tap or keystroke, Muse Wonder compiles the recording into a routine, and Envoy replays it on its own before saving it.")}
+      <div class="callout" style="margin-top:20px"><b>Who did the showing:</b> a script (<code>eval/teach_person.py</code>) that sends the web app's own live-view messages, taps as screen positions and typing key by key. No real person has taught Envoy yet. Everything below is what the code recorded.</div>
+      <div class="block" style="padding:14px 18px;margin-top:12px;font-size:14px;color:var(--ink-2)">
+        <b style="color:var(--ink)">Why Calendar.</b> In the Oct 30 loops, Google Calendar is where learning from the agent stalled:
+        ${(() => {
+          const emu = T.calendar_rows.find((r) => !/Pixel/.test(r.app)), px = T.calendar_rows.find((r) => /Pixel/.test(r.app));
+          return `${emu ? `On the emulator the agent found a holiday's date (${esc(emu.first.split(" ")[0])} first runs), but no routine could be compiled that reads the answer back.` : ""}
+            ${px ? `On the Pixel 5 it got stuck (${esc(px.first)}): that calendar draws its days, so they aren't in the accessibility tree.` : ""}`;
+        })()}
+        ${srcA(T.table_src, "table.md")}
+      </div>
+      <div class="card" style="padding:20px;margin-top:16px">
+        <div class="row-between"><h3>Shown once: “${esc(C.goal)}”</h3><span class="chip">${secs(C.shown_s)} · ${C.shown_calls} model calls</span></div>
+        ${film(C.steps.map((s) => `<figure>${phoneHTML(s.frame, `Google Calendar before step ${s.n}: ${s.kind} ${s.typed || s.label}`, [1080, 2400], [{ box: s.box, kind: "tap" }])}<figcaption><b>${s.n}.</b> ${label(s)}<br>${secs(s.t)}</figcaption></figure>`))}
+        <p class="small" style="margin:8px 0 0">Ringed: where the person touched, from the recorded screen. Google Calendar on Envoy's emulator, the envoy3955 test account. Both events were deleted afterwards.</p>
+        <div class="learn-mid">
+          <div><b>Compiled</b> by ${esc(MODEL[C.routine.compiler] || C.routine.compiler)}, one call, ${usd(C.routine.usd)}, into <code>${esc(C.routine.name)}</code> with inputs
+            ${Object.entries(C.routine.inputs).map(([k, v]) => `<span class="slot">{{${esc(k)}}}</span> (${esc(v)})`).join(" and ")}.</div>
+          <ol class="flow">${C.routine.steps.map((s) => `<li>${slots(s.intent)}</li>`).join("")}</ol>
+        </div>
+        <div class="row-between" style="margin-top:18px"><h3>Replayed alone</h3><span class="chip sage">${R.steps.length}/${R.steps.length} steps · ${secs(R.seconds)} · ${R.calls} model calls</span></div>
+        ${film(R.steps.map((s, i) => `<figure>${phoneHTML(s.frame, `Replay, after step ${i + 1}: ${s.id}`, [1080, 2400])}<figcaption><b>${i + 1}.</b> <code>${esc(s.id)}</code><br>${(s.ms / 1000).toFixed(1)} s${s.rung ? ` · rung ${s.rung}` : ""}</figcaption></figure>`))}
+        <p class="small" style="margin:8px 0 0">Each frame is the screen after its step. The last shows the replay's own “Saved "Dentist"” beside the event the person made. Rung 1 is wait and retry.</p>
+        <div class="callout" style="margin-top:14px"><b>As recorded, flaw included.</b> The last step is named “Tap Open Tasks”. Calendar's editor sheet sat over that button, and Save was on top at the same spot; the recorder named the element underneath. The replay taps the same point, so it saves, but the step's name and locator are wrong. Reported to teach mode.</div>
+        <div class="label-rec"><span><b>Recorded</b> ${esc(C.shown_et)} ET</span><span><b>Code</b> teach mode, on main since Oct 31</span><span><code>${esc(C.task_id)}</code></span>${srcA(T.src, "teach.json")} ${srcA(T.code_src, "teach.py")} ${srcA(T.person_src, "teach_person.py")}</div>
+      </div>
+      <div class="card" style="padding:18px 20px;margin-top:16px">
+        <div class="row-between"><h3>The same on SkyLark</h3>${testApp}</div>
+        <p style="margin:6px 0 0;color:var(--ink-2);font-size:14.5px">“${esc(K.goal)}”: shown in ${K.steps} steps (${secs(K.shown_s)}), compiled for ${usd(K.usd)} into <code>${esc(K.routine)}</code>, replayed alone in ${secs(K.replay_s)} with ${K.replay_calls} model calls. It read “${esc(K.replay_output)}”, the same answer the person saw.</p>
+        <div class="label-rec">${srcA(T.src, "teach.json")}</div>
       </div>`;
   }
 
@@ -596,8 +638,8 @@
   // ---- table of contents ----
   function renderToc() {
     const secs = [...document.querySelectorAll("main section.sec")];
-    const names = { claim: "The claim", "first-run": "A first run", learned: "Learned", repairs: "Repairs", "real-apps": "Real apps",
-      memory: "Memory", safety: "Safety", models: "Models", proof: "Proof", "how-built": "How it's built" };
+    const names = { claim: "Claim", "first-run": "First run", learned: "Learned", repairs: "Repairs", "real-apps": "Real apps",
+      teach: "Teach it", memory: "Memory", safety: "Safety", models: "Models", proof: "Proof", "how-built": "How it's built" };
     $("#toc").innerHTML = secs.map((s, k) => `<a href="#${s.id}" data-id="${s.id}"><span class="n">${k + 1}</span>${esc(names[s.id] || s.id)}</a>`).join("");
     const links = [...document.querySelectorAll("#toc a")];
     const io = new IntersectionObserver((es) => es.forEach((e) => {
@@ -611,6 +653,7 @@
   renderLearned();
   renderRepairs();
   renderApps();
+  renderTeach();
   renderMemory();
   renderSafety();
   renderModels();

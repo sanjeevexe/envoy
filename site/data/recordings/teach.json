@@ -1,0 +1,227 @@
+{
+ "calendar": {
+  "goal": "Add a Calendar event called Dentist today at 6pm",
+  "task_id": "teach-1031-155211-0258",
+  "app": "com.google.android.calendar",
+  "shown_et": "2026-10-31 15:52",
+  "shown_s": 14.5,
+  "shown_calls": 0,
+  "steps": [
+   {
+    "n": 1,
+    "kind": "tap",
+    "label": "Creation menu",
+    "typed": null,
+    "box": [
+     870,
+     2148,
+     1017,
+     2295
+    ],
+    "t": 0.0,
+    "frame": "img/teach-shown-01.webp"
+   },
+   {
+    "n": 2,
+    "kind": "tap",
+    "label": "Event",
+    "typed": null,
+    "box": [
+     696,
+     1980,
+     1017,
+     2127
+    ],
+    "t": 1.3,
+    "frame": "img/teach-shown-02.webp"
+   },
+   {
+    "n": 3,
+    "kind": "type",
+    "label": "Add title",
+    "typed": "Dentist",
+    "box": [
+     168,
+     270,
+     1017,
+     419
+    ],
+    "t": 3.4,
+    "frame": "img/teach-shown-03.webp"
+   },
+   {
+    "n": 4,
+    "kind": "tap",
+    "label": "4:00 PM",
+    "typed": null,
+    "box": [
+     875,
+     755,
+     1037,
+     881
+    ],
+    "t": 4.7,
+    "frame": "img/teach-shown-04.webp"
+   },
+   {
+    "n": 5,
+    "kind": "tap",
+    "label": "6",
+    "typed": null,
+    "box": [
+     478,
+     1559,
+     604,
+     1685
+    ],
+    "t": 5.9,
+    "frame": "img/teach-shown-05.webp"
+   },
+   {
+    "n": 6,
+    "kind": "tap",
+    "label": "OK",
+    "typed": null,
+    "box": [
+     782,
+     1763,
+     950,
+     1889
+    ],
+    "t": 7.2,
+    "frame": "img/teach-shown-06.webp"
+   },
+   {
+    "n": 7,
+    "kind": "tap",
+    "label": "Open Tasks",
+    "typed": null,
+    "box": [
+     806,
+     148,
+     933,
+     274
+    ],
+    "t": 12.0,
+    "frame": "img/teach-shown-07.webp"
+   }
+  ],
+  "routine": {
+   "name": "calendar_create_event",
+   "version": 1,
+   "inputs": {
+    "event_title": "Dentist",
+    "event_hour": "6"
+   },
+   "steps": [
+    {
+     "id": "open_creation_menu",
+     "intent": "Tap the Creation menu toggle"
+    },
+    {
+     "id": "select_event_type",
+     "intent": "Tap Event to start a new event"
+    },
+    {
+     "id": "enter_event_title",
+     "intent": "Type {{event_title}} in the Add title field"
+    },
+    {
+     "id": "open_time_picker",
+     "intent": "Tap the current start time to open the time picker"
+    },
+    {
+     "id": "select_event_hour",
+     "intent": "Select the hour {{event_hour}} in the time picker"
+    },
+    {
+     "id": "confirm_time",
+     "intent": "Tap OK to confirm the selected time"
+    },
+    {
+     "id": "finish_and_return",
+     "intent": "Tap Open Tasks to finish and return to the calendar"
+    }
+   ],
+   "compiler": "muse-wonder-1.0",
+   "usd": 0.0529
+  },
+  "replay": {
+   "task_id": "task-1031-155240-dfdd",
+   "status": "done",
+   "seconds": 6.16,
+   "calls": 0,
+   "steps": [
+    {
+     "id": "open_creation_menu",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 1.0 s"
+     ],
+     "ms": 1403,
+     "frame": "img/teach-replay-01.webp"
+    },
+    {
+     "id": "select_event_type",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "ms": 763,
+     "frame": "img/teach-replay-02.webp"
+    },
+    {
+     "id": "enter_event_title",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "ms": 773,
+     "frame": "img/teach-replay-03.webp"
+    },
+    {
+     "id": "open_time_picker",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "ms": 1010,
+     "frame": "img/teach-replay-04.webp"
+    },
+    {
+     "id": "select_event_hour",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "ms": 463,
+     "frame": "img/teach-replay-05.webp"
+    },
+    {
+     "id": "confirm_time",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "ms": 812,
+     "frame": "img/teach-replay-06.webp"
+    },
+    {
+     "id": "finish_and_return",
+     "status": "done",
+     "rung": 0,
+     "rungs": [],
+     "ms": 734,
+     "frame": "img/teach-replay-07.webp"
+    }
+   ]
+  }
+ },
+ "skylark": {
+  "goal": "What's the status of flight SL 1190?",
+  "shown_s": 10.2,
+  "steps": 3,
+  "answer": "Delayed 25 min",
+  "routine": "skylark_check_flight_status",
+  "usd": 0.0516,
+  "replay_s": 3.56,
+  "replay_calls": 0,
+  "replay_output": "Delayed 25 min"
+ }
+}
