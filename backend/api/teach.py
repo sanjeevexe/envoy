@@ -74,10 +74,32 @@ def _contains(e: Element, x: int, y: int) -> bool:
     return e.bounds[0] <= x <= e.bounds[2] and e.bounds[1] <= y <= e.bounds[3]
 
 
+def _under_finger(screen: ScreenState, x: int, y: int) -> list[Element]:
+    """What a finger at (x, y) reaches: the topmost interactive element there and the elements it sits in. Android hands
+    a touch to the view drawn on top, so an element another one covers (the calendar under an event editor sheet) is
+    not reached. In one window the later element in tree order is drawn on top; of two windows the smaller one is (a
+    dialog or menu over the app), as dumps list windows in no fixed order."""
+    by_index = {e.index: e for e in screen.elements}
+
+    def window(e: Element) -> Element:
+        while e.parent is not None and e.parent in by_index:
+            e = by_index[e.parent]
+        return e
+
+    under = [e for e in screen.elements if e.visible and not e.status_bar and _contains(e, x, y)
+             and (e.clickable or e.long_clickable or e.editable or e.checkable or e.scrollable)]
+    top = min(under, key=lambda e: (window(e).area, -e.index), default=None)
+    reached = []
+    while top is not None:
+        reached.append(top)
+        top = by_index.get(top.parent) if top.parent is not None else None
+    return reached
+
+
 def element_at(screen: ScreenState, x: int, y: int, long: bool = False) -> Element | None:
-    """The element a tap at (x, y) lands on: the smallest listed clickable element that contains it (for a long press, a
-    long-clickable one first). None means a coordinate tap."""
-    hits = [e for e in screen.numbered if not e.status_bar and _contains(e, x, y)
+    """The element a tap at (x, y) lands on: the smallest listed clickable element under the finger that nothing covers
+    (for a long press, a long-clickable one first). None means a coordinate tap."""
+    hits = [e for e in _under_finger(screen, x, y) if e.number is not None
             and (e.clickable or e.long_clickable or e.editable or e.checkable)]
     if long and (held := [e for e in hits if e.long_clickable]):
         hits = held
@@ -91,10 +113,10 @@ def on_keyboard(screen: ScreenState, x: int, y: int) -> bool:
 
 def drag_action(screen: ScreenState, x1: int, y1: int, x2: int, y2: int) -> tuple[Action, Element | None]:
     """A drag inside a list is a scroll of that list ("down" reveals what is further down: the finger moves up); any other
-    drag (a slider, a bottom sheet, a carousel that isn't a list) is a swipe."""
+    drag (a slider, a bottom sheet, a carousel that isn't a list) is a swipe. A list something covers isn't dragged."""
     dx, dy = x2 - x1, y2 - y1
     vertical = abs(dy) >= abs(dx)
-    lists = [e for e in screen.numbered if e.scrollable and not e.status_bar and _contains(e, x1, y1)]
+    lists = [e for e in _under_finger(screen, x1, y1) if e.scrollable and e.number is not None]
     if not vertical:
         lists = [e for e in lists if _HORIZONTAL.search(e.cls) or _HORIZONTAL.search(e.resource_id)]
     box = min(lists, key=lambda e: e.area, default=None)

@@ -193,6 +193,46 @@ def test_a_tap_is_the_smallest_clickable_element_under_the_finger():
     assert element_at(trip, *ktn.center).editable
 
 
+CAL = "com.google.android.calendar"
+
+
+def node(cls: str, bounds: str, kids: str = "", **attrs: str) -> str:
+    extra = "".join(f' {k.replace("_", "-")}="{v}"' for k, v in attrs.items())
+    return f'<node class="android.widget.{cls}" package="{CAL}" bounds="{bounds}"{extra}>{kids}</node>'
+
+
+# Google Calendar's event editor (from a teach recording, Oct 31): the sheet is drawn over the calendar, whose toolbar
+# stays in the tree; its "Open Tasks" sits under the sheet's Save.
+EDITOR = "<hierarchy>" + node("FrameLayout", "[0,0][1080,2400]", (
+    node("LinearLayout", "[0,128][1080,296]", node("Button", "[806,148][933,274]", resource_id=f"{CAL}:id/action_tasks",
+                                                   content_desc="Open Tasks", clickable="true"))
+    + node("ListView", "[0,296][1080,2400]", node("Button", "[0,400][1080,600]", content_desc="Halloween", clickable="true"),
+           resource_id=f"{CAL}:id/main_pane", scrollable="true")
+    + node("FrameLayout", "[0,128][1080,2400]", (
+        node("FrameLayout", "[0,128][1080,2400]", resource_id=f"{CAL}:id/editor_sheet_click_target", clickable="true")
+        + node("RelativeLayout", "[0,128][1080,296]", node("Button", "[807,149][1038,275]", resource_id=f"{CAL}:id/save",
+                                                           text="Save", clickable="true"))
+        + node("RecyclerView", "[0,296][1080,2400]", node("EditText", "[42,320][1038,460]", resource_id=f"{CAL}:id/title",
+                                                          text="Dentist", clickable="true"),
+               resource_id=f"{CAL}:id/expanded_recycler", scrollable="true")),
+        resource_id=f"{CAL}:id/event_editor_sheet"))) + "</hierarchy>"
+
+
+def test_a_tap_goes_to_what_is_on_top_not_to_what_a_sheet_covers():
+    editor = build_state(EDITOR, CAL, "x", W, H)
+    tasks = next(e for e in editor.numbered if e.label == "Open Tasks")
+    assert element_at(editor, 922, 212).label == "Save"  # Save's centre is inside the covered Open Tasks, which is smaller
+    assert element_at(editor, *tasks.center).label == "Save"
+    assert element_at(editor, 540, 500) is None  # the sheet's list, not the calendar's "Halloween" row under it
+    action, box = drag_action(editor, 540, 2000, 540, 1000)
+    assert action.kind == "scroll" and box.resource_id.endswith("expanded_recycler")  # not the calendar under the sheet
+    # A dialog's window over the app: the smaller window is on top, whichever order the dump lists them in
+    app = node("FrameLayout", "[0,0][1080,2400]", node("ImageButton", "[700,1150][800,1200]", content_desc="Today", clickable="true"))
+    dialog = node("FrameLayout", "[100,900][980,1500]", node("Button", "[600,1100][900,1250]", text="OK", clickable="true"))
+    for windows in (app + dialog, dialog + app):
+        assert element_at(build_state(f"<hierarchy>{windows}</hierarchy>", CAL, "x", W, H), 750, 1175).label == "OK"
+
+
 def test_a_drag_in_a_list_is_a_scroll_and_any_other_drag_a_swipe():
     store = build_state((SCREENS / "playstore_free.xml").read_text(), "com.android.vending", "x", W, H)
     action, box = drag_action(store, 540, 2000, 540, 1000)  # finger up: reveal what is further down
