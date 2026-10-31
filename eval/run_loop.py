@@ -215,6 +215,26 @@ def _gmail_second(task: dict[str, Any], prep: dict[str, Any]) -> tuple[bool, str
     return task["status"] == "done" and (rr.right(text, expect, {}, True) or rr.right(text, rr.in_sentence(expect), {}, True)), f"expect /{expect}/"
 
 
+def _second(key: str) -> Task:
+    """The workflow's second input (eval/run_real_apps.py `second`), replayed with the routine the first input compiled: does
+    it carry over to a new value? Graded by `expect_second` (else `expect`)."""
+    t = TASKS[key]
+    wf = next(w for w in rr.WORKFLOWS if w.id == t.workflow)
+    old, new = next(iter(wf.second.items()))
+    expect = wf.expect_second or wf.expect
+
+    def grade(task: dict[str, Any], prep: dict[str, Any]) -> tuple[bool, str]:
+        text = task.get("result") or ""
+        truth = wf.graded_by == "truth"
+        ok = task["status"] == "done" and (rr.right(text, expect, {"q": new}, truth) or rr.right(text, rr.in_sentence(expect), {"q": new}, truth))
+        return ok, f"expect /{expect}/ for {new!r}"
+    return Task(f"{key}2", t.goal.replace(old, new), t.device, routines=t.routines, grade=grade)
+
+
+for _k in ("amazon", "starbucks", "chipotle", "youtube", "play"):
+    TASKS[f"{_k}2"] = _second(_k)
+
+
 TASKS["gmail_security"] = Task("gmail_security", TASKS["gmail"].goal.replace("DoorDash", "Security alert"), "envoy-real",
                                routines=["gmail_search_subject"], grade=_gmail_second)
 
