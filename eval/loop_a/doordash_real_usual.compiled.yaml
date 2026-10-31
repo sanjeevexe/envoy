@@ -1,0 +1,279 @@
+routine: doordash_order_item
+app: com.dd.doordash
+version: 1
+status: draft
+intent: Order a menu item on its own from a restaurant on DoorDash
+description: Searches DoorDash for the requested restaurant, opens a single menu item without meal add-ons, adds it to the cart on its own, and
+  proceeds toward checkout.
+patterns: [order my usual on DoorDash, order a sandwich on its own on DoorDash, get me a menu item from DoorDash, add a single item to my DoorDash
+    cart]
+outputs: [cart_item, item_price]
+start: fresh_launch
+inputs:
+  restaurant_name: {type: text, description: The restaurant to order from on DoorDash, example: Chick-fil-A}
+  item_name: {type: text, description: The single menu item to order on its own, example: Spicy Chicken Sandwich}
+steps:
+- id: tap_search_doordash
+  intent: "Tap Search DoorDash to search for {{restaurant_name}}"
+  pre:
+  - {app_foreground: com.dd.doordash}
+  - element_present: {resource_id: coordinatorLayout_homepage, kind: List}
+  action:
+    tap:
+      text: Search DoorDash
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.49, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: edit_text, text: Search DoorDash, kind: EditText}
+  - element_present: {resource_id: search_back_button, text: Close search, kind: Button}
+  risk: reversible
+  note: trace step 1
+- id: find_select_restaurant_search_suggestion
+  intent: "Scroll to {{restaurant_name}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: SearchStoreSuggestionComponent.Info.Query
+        text_has: "{{restaurant_name}}"
+        kind: Button
+        cls: View
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: SearchStoreSuggestionComponent.Info.Query
+      text_has: "{{restaurant_name}}"
+      kind: Button
+      cls: View
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: select_restaurant_search_suggestion
+  intent: "Select the search suggestion for {{restaurant_name}}"
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: SearchStoreSuggestionComponent.Info.Query
+      text_has: "{{restaurant_name}}"
+      kind: Button
+      cls: View
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: search_query_title
+      text: "{{restaurant_name}}"
+      kind: Button
+  risk: reversible
+  note: trace step 2
+- id: open_restaurant_store
+  intent: "Open the {{restaurant_name}} store from the search results"
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      kind: Button
+      cls: FrameLayout
+      parent: results_list
+      in_list: true
+      position: [0.5, 0.405]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: store_fragment_container, kind: List}
+  risk: reversible
+  note: trace step 3
+- id: scroll_to_entrees
+  intent: Scroll until the Entrées category is visible
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    scroll_until:
+      target:
+        text: Entrées
+        kind: Button
+        cls: LinearLayout
+        in_list: true
+        position: [0.946, 0.138]
+      direction: down
+      max_scrolls: 8
+      container: {resource_id: menu_data_recycler_view, kind: List}
+  post:
+  - element_present:
+      text: Entrées
+      kind: Button
+      cls: LinearLayout
+      in_list: true
+      position: [0.946, 0.138]
+  risk: read
+  note: trace step 4 (+1 scrolls)
+- id: tap_entrees
+  intent: Tap Entrées to find the standalone item
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      text: Entrées
+      kind: Button
+      cls: LinearLayout
+      in_list: true
+      position: [0.946, 0.138]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 5
+- id: find_open_menu_item
+  intent: "Scroll to {{item_name}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: container_card_view
+        text_has: "{{item_name}}"
+        kind: Button
+        cls: CardView
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: container_card_view
+      text_has: "{{item_name}}"
+      kind: Button
+      cls: CardView
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: open_menu_item
+  intent: "Open the {{item_name}} menu item"
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: container_card_view
+      text_has: "{{item_name}}"
+      kind: Button
+      cls: CardView
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: store_fragment_container, kind: List}
+  risk: reversible
+  note: trace step 6
+- id: scroll_item_options
+  intent: Scroll through the item options to check for meal, fries, or drink selections before adding the item on its own
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    scroll_until:
+      target:
+        text_has: "{{item_name}}"
+        kind: Button
+      direction: down
+      max_scrolls: 8
+      container: {resource_id: options_recycler_view, kind: List}
+  post:
+  - element_present:
+      text_has: "{{item_name}}"
+      kind: Button
+  risk: read
+  note: trace step 7 (+1 scrolls)
+- id: add_item_to_order
+  intent: "Tap Add to order to add {{item_name}} on its own"
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: addToCart_button
+      text: Add to order
+      kind: Button
+      cls: Button
+      parent: footer_button_layout
+      in_list: false
+      position: [0.5, 0.934]
+  post:
+  - {screen_changed: true}
+  - element_absent: {resource_id: footer_button_layout, kind: Button}
+  risk: reversible
+  note: trace step 8
+- id: find_open_cart
+  intent: "Scroll to {{restaurant_name}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        resource_id: button_orderCart
+        text_has: "{{restaurant_name}}"
+        kind: Button
+        cls: ViewGroup
+        parent: button_ordercart_container
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      resource_id: button_orderCart
+      text_has: "{{restaurant_name}}"
+      kind: Button
+      cls: ViewGroup
+      parent: button_ordercart_container
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
+- id: open_cart
+  intent: "Tap the cart button for {{restaurant_name}} showing the added item"
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: button_orderCart
+      text_has: "{{restaurant_name}}"
+      kind: Button
+      cls: ViewGroup
+      parent: button_ordercart_container
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: container_navBar_titles, text: Your cart from, kind: Text}
+  - element_present: {resource_id: convert_to_group, text: Convert to Group Order, kind: Button}
+  risk: reversible
+  note: trace step 9
+- id: continue_to_checkout
+  intent: Tap Continue to proceed from the cart toward checkout
+  pre:
+  - {app_foreground: com.dd.doordash}
+  action:
+    tap:
+      resource_id: button_orderCart_continue
+      text: Continue
+      kind: Button
+      cls: Button
+      parent: bottom_order_cart_sticky_container
+      in_list: false
+      position: [0.5, 0.93]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  extract:
+    cart_item:
+      locator:
+        text_has: "{{item_name}}"
+        kind: Button
+      segment: 0
+    item_price:
+      locator:
+        text_has: "{{item_name}}"
+        kind: Button
+      segment: 2
+      expect_digits: true
+  note: trace step 10
+compiled_from:
+  task_id: task-1030-212646-1800-r1
+  goal: "Order me my usual from Chick-fil-A on DoorDash: a Chick-fil-A Spicy Chicken Sandwich on its own"
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-30 21:33:13"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  trace_steps_dropped: 0
+  cost_usd: 0.0603

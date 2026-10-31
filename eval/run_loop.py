@@ -215,6 +215,14 @@ def _gmail_second(task: dict[str, Any], prep: dict[str, Any]) -> tuple[bool, str
     return task["status"] == "done" and (rr.right(text, expect, {}, True) or rr.right(text, rr.in_sentence(expect), {}, True)), f"expect /{expect}/"
 
 
+# The user's real usual (relayed by the coordinator, Oct 30 21:25): the Spicy Chicken Sandwich on its own, on DoorDash. Told
+# in the menu's words with ", on DoorDash" (doordash-usual's recipe); loop A's copy only, never the live API.
+USUAL_REAL = "My usual from Chick-fil-A is a Chick-fil-A Spicy Chicken Sandwich on its own, on DoorDash"
+TASKS["doordash_real"] = Task("doordash_real", "Hey Envoy, I've had such a long day. Order me my usual from Chick-fil-A.", "envoy-real",
+                              routines=["doordash_order_meal"], chat=True, tell=USUAL_REAL, hand_off_ok=True, grade=_dd_grade,
+                              prep=lambda: {"before": _dd_clear()}, after=_dd_clear)
+
+
 def _ytm_top(task: dict[str, Any], prep: dict[str, Any]) -> tuple[bool, str]:
     text = task.get("result") or ""
     return task["status"] == "done" and re.search(r"\bqueen\b", text, re.I) is not None, "expect Queen (the top result's artist)"
