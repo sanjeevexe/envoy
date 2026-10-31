@@ -103,7 +103,8 @@ def _gmail(query: str | None, second: str | None = None) -> Callable[[], tuple[s
         head = users.messages().get(userId="me", id=msgs[0]["id"], format="metadata", metadataHeaders=["Subject"]).execute()
         s = next((h["value"] for h in head["payload"]["headers"] if h["name"].lower() == "subject"), "")
         words = re.findall(r"[A-Za-z0-9']{3,}", s)[:4]  # the first few words, so emoji and punctuation don't matter
-        return r".*".join(re.escape(w) for w in words) or re.escape(s)
+        # An empty pattern would match any answer: a mail with no subject is "(no subject)" in the app.
+        return r".*".join(re.escape(w) for w in words) or (re.escape(s) if s.strip() else r"no subject")
     return lambda: (subject(query) if query else newest(), subject(second) if second else None)
 
 
