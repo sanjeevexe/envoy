@@ -333,3 +333,28 @@ def test_a_count_of_nothing_is_verified_by_the_apps_empty_state():
     assert answer_on_screen("0", empty).passed
     assert not answer_on_screen("5 contacts", empty).passed  # a count the empty screen contradicts
     assert not answer_on_screen("0", screen("Search contacts", "Ann Lee", "Bo Chan")).passed  # no empty state shown
+
+
+def test_an_on_off_answer_is_verified_by_the_switch_in_its_row():
+    # Settings on envoy-real, Oct 31 on hybrid: "is Bluetooth turned on or off?" → "Bluetooth is turned on", right, but the plan's
+    # check was worded "Bluetooth on/off status" and the switch has no label of its own ("Use Bluetooth" is a separate row
+    # element), so the run ended done_unverified and wasn't compiled.
+    from agent.checks import evaluate
+    from routines.screens import screen_from_tree
+
+    def settings(on: bool, label: str = "Use Bluetooth"):
+        els = [{"index": 0, "parent": None, "kind": "Text", "class": "android.widget.TextView", "label": "Bluetooth", "text": "Bluetooth",
+                "bounds": [0, 100, 1080, 200], "number": 1},
+               {"index": 1, "parent": None, "kind": "Button", "class": "android.widget.LinearLayout", "label": label, "text": label,
+                "clickable": True, "bounds": [0, 300, 1080, 450], "number": 2},
+               {"index": 2, "parent": 1, "kind": "Switch", "class": "android.widget.Switch", "label": "", "checkable": True, "checked": on,
+                "clickable": True, "bounds": [900, 330, 1040, 420], "number": 3}]
+        return screen_from_tree({"package": "com.android.settings", "activity": "BluetoothDashboard", "width": 1080, "height": 2400,
+                                 "elements": els})
+    worded = SuccessCheck(kind="text_visible", value="Bluetooth on/off status", field_hint="")
+    res = evaluate(worded, settings(True), "Bluetooth is turned on")
+    assert res.passed and "'Use Bluetooth' is on" in res.detail
+    assert evaluate(worded, settings(False), "Bluetooth is off").passed
+    assert not evaluate(worded, settings(False), "Bluetooth is turned on").passed  # the switch says otherwise
+    assert not evaluate(worded, settings(True, label="Use Wi-Fi"), "Bluetooth is turned on").passed  # another setting's switch
+    assert not evaluate(worded, settings(True), "Bluetooth").passed  # no state stated
