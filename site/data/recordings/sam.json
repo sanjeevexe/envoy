@@ -1,0 +1,30 @@
+{
+ "run": "p6-canvas-src",
+ "goal": "Change my seat on my Denver flight to 10C.",
+ "target": "seat 10C",
+ "box": [
+  442,
+  492,
+  546,
+  594
+ ],
+ "model_point": [
+  470,
+  468
+ ],
+ "tap": [
+  494,
+  543
+ ],
+ "candidates": 84,
+ "calls": 3,
+ "usd": 0.00519,
+ "ms": 14944,
+ "screen": [
+  1080,
+  2400
+ ],
+ "reason": "Tap seat 10C to change from 22F",
+ "frame": "img/sam-seat-map.webp",
+ "recorded_et": "2026-10-27 20:31"
+}

@@ -1,0 +1,647 @@
+{
+ "entities": [
+  {
+   "name": "SL 482 · Fri, Oct 30, 2026",
+   "type": "Flight",
+   "facts": [
+    {
+     "attribute": "airline",
+     "value": "SkyLark Air",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email": 1
+     },
+     "seen": 1,
+     "first_et": "2026-10-01 22:00",
+     "last_et": "2026-10-01 22:00",
+     "first_source": {
+      "kind": "email",
+      "subject": "Booking confirmation KX7Q2M: Atlanta to Chicago",
+      "app": null
+     }
+    },
+    {
+     "attribute": "arrive_time",
+     "value": "7:25 AM",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email": 1,
+      "app_screen": 1
+     },
+     "seen": 2,
+     "first_et": "2026-10-01 22:00",
+     "last_et": "2026-10-29 17:22",
+     "first_source": {
+      "kind": "email",
+      "subject": "Booking confirmation KX7Q2M: Atlanta to Chicago",
+      "app": null
+     }
+    },
+    {
+     "attribute": "boarding_group",
+     "value": "Group 3",
+     "current": false,
+     "replaced_et": "2026-10-28 03:54",
+     "sources": {
+      "app_screen": 1,
+      "routine_run": 1
+     },
+     "seen": 2,
+     "first_et": "2026-10-28 03:54",
+     "last_et": "2026-10-28 03:54",
+     "first_source": {
+      "kind": "app_screen",
+      "subject": null,
+      "app": "com.skylark.air"
+     }
+    },
+    {
+     "attribute": "boarding_group",
+     "value": "3",
+     "current": false,
+     "replaced_et": "2026-10-28 17:13",
+     "sources": {
+      "photo": 1
+     },
+     "seen": 1,
+     "first_et": "2026-10-28 03:54",
+     "last_et": "2026-10-28 03:54",
+     "first_source": {
+      "kind": "photo",
+      "subject": null,
+      "app": null
+     }
+    },
+    {
+     "attribute": "boarding_group",
+     "value": "Group 3",
+     "current": false,
+     "replaced_et": "2026-10-28 17:29",
+     "sources": {
+      "app_screen": 2,
+      "routine_run": 2
+     },
+     "seen": 4,
+     "first_et": "2026-10-28 17:13",
+     "last_et": "2026-10-28 17:28",
+     "first_source": {
+      "kind": "app_screen",
+      "subject": null,
+      "app": "com.skylark.air"
+     }
+    },
+    {
+     "attribute": "boarding_group",
+     "value": "3",
+     "current": false,
+     "replaced_et": "2026-10-28 17:29",
+     "sources": {
+      "app_screen": 1
+     },
+     "seen": 1,
+     "first_et": "2026-10-28 17:29",
+     "last_et": "2026-10-28 17:29",
+     "first_source": {
+      "kind": "app_screen",
+      "subject": null,
+      "app": "com.skylark.air"
+     }
+    },
+    {
+     "attribute": "boarding_group",
+     "value": "Group 3",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "routine_run": 4,
+      "app_screen": 4
+     },
+     "seen": 8,
+     "first_et": "2026-10-28 17:29",
+     "last_et": "2026-10-29 17:25",
+     "first_source": {
+      "kind": "routine_run",
+      "subject": null,
+      "app": "com.skylark.air"
+     }
+    },
+    {
+     "attribute": "boarding_time",
+     "value": "5:30 AM",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "app_screen": 8,
+      "routine_run": 7,
+      "photo": 1
+     },
+     "seen": 16,
+     "first_et": "2026-10-28 03:54",
+     "last_et": "2026-10-29 17:25",
+     "first_source": {
+      "kind": "app_screen",
+      "subject": null,
+      "app": "com.skylark.air"
+     }
+    },
+    {
+     "attribute": "confirmation_code",
+     "value": "KX7Q2M",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email": 1,
+      "app_screen": 1
+     },
+     "seen": 2,
+     "first_et": "2026-10-01 22:00",
+     "last_et": "2026-10-29 17:22",
+     "first_source": {
+      "kind": "email",
+      "subject": "Booking confirmation KX7Q2M: Atlanta to Chicago",
+      "app": null
+     }
+    },
+    {
+     "attribute": "date",
+     "value": "Fri, Oct 30, 2026",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email": 1,
+      "app_screen": 8,
+      "photo": 1
+     },
+     "seen": 10,
+     "first_et": "2026-10-01 22:00",
+     "last_et": "2026-10-29 17:25",
+     "first_source": {
+      "kind": "email",
+      "subject": "Booking confirmation KX7Q2M: Atlanta to Chicago",
+      "app": null
+     }
+    },
+    {
+     "attribute": "depart_time",
+     "value": "6:10 AM",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email": 1,
+      "app_screen": 1
+     },
+     "seen": 2,
+     "first_et": "2026-10-01 22:00",
+     "last_et": "2026-10-29 17:22",
+     "first_source": {
+      "kind": "email",
+      "subject": "Booking confirmation KX7Q2M: Atlanta to Chicago",
+      "app": null
+     }
+    },
+    {
+     "attribute": "from",
+     "value": "Atlanta (ATL)",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email": 1,
+      "app_screen": 8,
+      "photo": 1
+     },
+     "seen": 10,
+     "first_et": "2026-10-01 22:00",
+     "last_et": "2026-10-29 17:25",
+     "first_source": {
+      "kind": "email",
+      "subject": "Booking confirmation KX7Q2M: Atlanta to Chicago",
+      "app": null
+     }
+    },
+    {
+     "attribute": "gate",
+     "value": "B12",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "app_screen": 8,
+      "routine_run": 8,
+      "photo": 1
+     },
+     "seen": 17,
+     "first_et": "2026-10-28 03:54",
+     "last_et": "2026-10-29 17:25",
+     "first_source": {
+      "kind": "app_screen",
+      "subject": null,
+      "app": "com.skylark.air"
+     }
+    },
+    {
+     "attribute": "number",
+     "value": "SL 482",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email": 1,
+      "app_screen": 8,
+      "photo": 1
+     },
+     "seen": 10,
+     "first_et": "2026-10-01 22:00",
+     "last_et": "2026-10-29 17:25",
+     "first_source": {
+      "kind": "email",
+      "subject": "Booking confirmation KX7Q2M: Atlanta to Chicago",
+      "app": null
+     }
+    },
+    {
+     "attribute": "seat",
+     "value": "14C",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email": 1,
+      "app_screen": 8,
+      "routine_run": 7,
+      "photo": 1
+     },
+     "seen": 17,
+     "first_et": "2026-10-01 22:00",
+     "last_et": "2026-10-29 17:25",
+     "first_source": {
+      "kind": "email",
+      "subject": "Booking confirmation KX7Q2M: Atlanta to Chicago",
+      "app": null
+     }
+    },
+    {
+     "attribute": "status",
+     "value": "On time",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "app_screen": 1
+     },
+     "seen": 1,
+     "first_et": "2026-10-29 17:22",
+     "last_et": "2026-10-29 17:22",
+     "first_source": {
+      "kind": "app_screen",
+      "subject": null,
+      "app": "com.skylark.air"
+     }
+    },
+    {
+     "attribute": "to",
+     "value": "Chicago (ORD)",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email": 1,
+      "app_screen": 8,
+      "photo": 1
+     },
+     "seen": 10,
+     "first_et": "2026-10-01 22:00",
+     "last_et": "2026-10-29 17:25",
+     "first_source": {
+      "kind": "email",
+      "subject": "Booking confirmation KX7Q2M: Atlanta to Chicago",
+      "app": null
+     }
+    }
+   ]
+  },
+  {
+   "name": "SL 1190 · Sat, Nov 14, 2026",
+   "type": "Flight",
+   "facts": [
+    {
+     "attribute": "airline",
+     "value": "SkyLark Air",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email": 2
+     },
+     "seen": 2,
+     "first_et": "2026-10-03 00:00",
+     "last_et": "2026-10-08 02:00",
+     "first_source": {
+      "kind": "email",
+      "subject": "Fwd: Booking confirmation PT4R8Z: Atlanta to Denver",
+      "app": null
+     }
+    },
+    {
+     "attribute": "arrive_time",
+     "value": "4:05 PM",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email_markup": 1,
+      "email": 1
+     },
+     "seen": 2,
+     "first_et": "2026-10-02 22:00",
+     "last_et": "2026-10-03 00:00",
+     "first_source": {
+      "kind": "email_markup",
+      "subject": "Your SkyLark trip to Denver is confirmed (PT4R8Z)",
+      "app": null
+     }
+    },
+    {
+     "attribute": "boarding_group",
+     "value": "5",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email_markup": 1
+     },
+     "seen": 1,
+     "first_et": "2026-10-02 22:00",
+     "last_et": "2026-10-02 22:00",
+     "first_source": {
+      "kind": "email_markup",
+      "subject": "Your SkyLark trip to Denver is confirmed (PT4R8Z)",
+      "app": null
+     }
+    },
+    {
+     "attribute": "confirmation_code",
+     "value": "PT4R8Z",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email_markup": 1,
+      "email": 2
+     },
+     "seen": 3,
+     "first_et": "2026-10-02 22:00",
+     "last_et": "2026-10-08 02:00",
+     "first_source": {
+      "kind": "email_markup",
+      "subject": "Your SkyLark trip to Denver is confirmed (PT4R8Z)",
+      "app": null
+     }
+    },
+    {
+     "attribute": "date",
+     "value": "Sat, Nov 14, 2026",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email_markup": 1,
+      "email": 2
+     },
+     "seen": 3,
+     "first_et": "2026-10-02 22:00",
+     "last_et": "2026-10-08 02:00",
+     "first_source": {
+      "kind": "email_markup",
+      "subject": "Your SkyLark trip to Denver is confirmed (PT4R8Z)",
+      "app": null
+     }
+    },
+    {
+     "attribute": "depart_time",
+     "value": "2:45 PM",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email_markup": 1,
+      "email": 1
+     },
+     "seen": 2,
+     "first_et": "2026-10-02 22:00",
+     "last_et": "2026-10-03 00:00",
+     "first_source": {
+      "kind": "email_markup",
+      "subject": "Your SkyLark trip to Denver is confirmed (PT4R8Z)",
+      "app": null
+     }
+    },
+    {
+     "attribute": "from",
+     "value": "ATL",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email_markup": 1,
+      "email": 2
+     },
+     "seen": 3,
+     "first_et": "2026-10-02 22:00",
+     "last_et": "2026-10-08 02:00",
+     "first_source": {
+      "kind": "email_markup",
+      "subject": "Your SkyLark trip to Denver is confirmed (PT4R8Z)",
+      "app": null
+     }
+    },
+    {
+     "attribute": "number",
+     "value": "SL 1190",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email_markup": 1,
+      "email": 2
+     },
+     "seen": 3,
+     "first_et": "2026-10-02 22:00",
+     "last_et": "2026-10-08 02:00",
+     "first_source": {
+      "kind": "email_markup",
+      "subject": "Your SkyLark trip to Denver is confirmed (PT4R8Z)",
+      "app": null
+     }
+    },
+    {
+     "attribute": "seat",
+     "value": "22F",
+     "current": false,
+     "replaced_et": "2026-10-08 02:00",
+     "sources": {
+      "email_markup": 1,
+      "email": 1
+     },
+     "seen": 2,
+     "first_et": "2026-10-02 22:00",
+     "last_et": "2026-10-03 00:00",
+     "first_source": {
+      "kind": "email_markup",
+      "subject": "Your SkyLark trip to Denver is confirmed (PT4R8Z)",
+      "app": null
+     }
+    },
+    {
+     "attribute": "seat",
+     "value": "21C",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email": 1
+     },
+     "seen": 1,
+     "first_et": "2026-10-08 02:00",
+     "last_et": "2026-10-08 02:00",
+     "first_source": {
+      "kind": "email",
+      "subject": "Seat change confirmed for SL 1190 on Sat, Nov 14, 2026",
+      "app": null
+     }
+    },
+    {
+     "attribute": "to",
+     "value": "DEN",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email_markup": 1,
+      "email": 2
+     },
+     "seen": 3,
+     "first_et": "2026-10-02 22:00",
+     "last_et": "2026-10-08 02:00",
+     "first_source": {
+      "kind": "email_markup",
+      "subject": "Your SkyLark trip to Denver is confirmed (PT4R8Z)",
+      "app": null
+     }
+    }
+   ]
+  },
+  {
+   "name": "Denver · Fri, Dec 4, 2026",
+   "type": "Trip",
+   "facts": [
+    {
+     "attribute": "airline",
+     "value": "SkyLark Air",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email": 1
+     },
+     "seen": 1,
+     "first_et": "2026-10-07 02:00",
+     "last_et": "2026-10-07 02:00",
+     "first_source": {
+      "kind": "email",
+      "subject": "Booking confirmation DN7Q4X: Atlanta to Denver",
+      "app": null
+     }
+    },
+    {
+     "attribute": "confirmation_code",
+     "value": "DN7Q4X",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email": 2
+     },
+     "seen": 2,
+     "first_et": "2026-10-07 02:00",
+     "last_et": "2026-10-08 07:00",
+     "first_source": {
+      "kind": "email",
+      "subject": "Booking confirmation DN7Q4X: Atlanta to Denver",
+      "app": null
+     }
+    },
+    {
+     "attribute": "destination",
+     "value": "Denver",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email": 2
+     },
+     "seen": 2,
+     "first_et": "2026-10-07 02:00",
+     "last_et": "2026-10-08 07:00",
+     "first_source": {
+      "kind": "email",
+      "subject": "Booking confirmation DN7Q4X: Atlanta to Denver",
+      "app": null
+     }
+    },
+    {
+     "attribute": "origin",
+     "value": "Atlanta",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email": 1
+     },
+     "seen": 1,
+     "first_et": "2026-10-07 02:00",
+     "last_et": "2026-10-07 02:00",
+     "first_source": {
+      "kind": "email",
+      "subject": "Booking confirmation DN7Q4X: Atlanta to Denver",
+      "app": null
+     }
+    },
+    {
+     "attribute": "start_date",
+     "value": "Fri, Dec 4, 2026",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email": 1
+     },
+     "seen": 1,
+     "first_et": "2026-10-07 02:00",
+     "last_et": "2026-10-07 02:00",
+     "first_source": {
+      "kind": "email",
+      "subject": "Booking confirmation DN7Q4X: Atlanta to Denver",
+      "app": null
+     }
+    },
+    {
+     "attribute": "status",
+     "value": "cancelled",
+     "current": true,
+     "replaced_et": null,
+     "sources": {
+      "email": 1
+     },
+     "seen": 1,
+     "first_et": "2026-10-08 07:00",
+     "last_et": "2026-10-08 07:00",
+     "first_source": {
+      "kind": "email",
+      "subject": "Your trip DN7Q4X has been cancelled",
+      "app": null
+     }
+    }
+   ]
+  }
+ ],
+ "counts": {
+  "Flight": 7,
+  "Item": 1,
+  "Order": 1,
+  "Person": 1,
+  "Trip": 7
+ },
+ "sources": {
+  "app_screen": 8,
+  "email": 11,
+  "email_markup": 3,
+  "photo": 1,
+  "routine_run": 8
+ },
+ "promos": [
+  "Fall fares to Chicago from $99",
+  "Fall fares to Phoenix from $99"
+ ]
+}

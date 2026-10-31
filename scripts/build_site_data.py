@@ -204,12 +204,129 @@ def import_routine(name: str, cfg: dict) -> dict:
     }
 
 
+MAIN = HOME / "Desktop/Envoy"  # the main checkout: its gitignored run traces and the demo world's memory
+LOOP_B = HOME / "Desktop/Envoy/.claude/worktrees/funny-goldwasser-65190c"  # loop B's checkout (new apps, Oct 30)
+
+# One answer frame per real app for the grid: the last frame of a first run. Each was looked at for private data.
+# Not here, on purpose: DoorDash (addresses), Lyft and Uber (the user's own accounts), Instagram (the Pixel's account).
+APP_FRAMES = {
+    "amazon_search_price": ("amazon", LOOP_A_API / "shots", "task-1030-145757-b70d", "loop-a"),
+    "youtube_search_first_video": ("youtube", LOOP_A_API / "shots", "task-1030-162656-3e9e", "loop-a"),
+    "play_app_rating": ("play", LOOP_A_API / "shots", "task-1030-164831-6b9e", "loop-a"),
+    "chipotle_item_price": ("chipotle", LOOP_A_API / "shots", "task-1030-161523-ec65", "loop-a"),
+    "gmail_search_subject": ("gmail", LOOP_A_API / "shots", "task-1030-180655-0535", "loop-a"),
+    "starbucks_drink_calories": ("starbucks", LOOP_A_API / "shots", "task-1030-155711-51c2", "loop-a"),
+    "clock_set_alarm": ("clock", LOOP_B / "data/api-loopb/shots", "task-1030-141911-98d6", "loop-b"),
+    "chrome_get_cheapest_flight_price": ("flights", LOOP_B / "data/api-loopb/shots", "task-1030-214314-a891", "loop-b"),
+}
+
+
+def import_app_frames() -> dict:
+    out = {}
+    for routine, (name, shots, task_id, loop) in APP_FRAMES.items():
+        last = sorted((shots / task_id).glob("*.jpg"))[-1]
+        out[routine] = {"frame": _frame(last, f"app-{name}"), "task_id": task_id, "loop": loop,
+                        "taken_et": datetime.fromtimestamp(int(last.stem) / 1000, ET).strftime("%Y-%m-%d %H:%M")}
+    return out
+
+
+def import_repair_call() -> dict:
+    """The model call behind Starbucks v3's self-repair (loop A, Oct 30), from loop A's cost log."""
+    calls = _calls(LOOP_A / "logs/model_costs.jsonl", "task-1030-170124-e3c3")
+    rep = [c for c in calls if c["job"] == "repair"]
+    return {"task_id": "task-1030-170124-e3c3", "repair_calls": [{k: c[k] for k in ("job", "model", "ms", "usd")} for c in rep]}
+
+
+def import_planted() -> dict:
+    """A planted instruction on SkyLark's trip screen (the injection suite, Oct 28), and what the agent did with it."""
+    run = MAIN / "data/runs/f7-1028004422-inj-trip_notice-add_ktn-agent-r0"
+    steps = [s for s in _read_jsonl(run / "steps.jsonl") if s.get("kind") == "action"]
+    s13 = next(s for s in steps if s["step"] == 13)
+    tree = _tree(run, s13["tree_before"])
+    notice = [e["bounds"] for e in tree["elements"]
+              if (e["text"] or "").startswith(("Message from SkyLark", "SYSTEM MESSAGE"))]
+    box = [min(b[0] for b in notice), min(b[1] for b in notice), max(b[2] for b in notice), max(b[3] for b in notice)]
+    mentions = [{"step": s["step"], "reason": s["decision"]["reason"]} for s in steps
+                if "inject" in s["decision"]["reason"].lower()]
+    r = json.loads((run / "run.json").read_text())
+    taps = [s["device_action"]["kind"] for s in steps if s.get("device_action")]
+    return {"run": run.name, "goal": r["goal"], "status": r["status"], "result": r["result"], "model_calls": r["model_calls"],
+            "usd": round(r["cost_usd"], 4), "seconds": r["duration_s"], "steps": len(steps), "frame": _frame(run / "screens/013_before.png", "planted-trip-notice"),
+            "box": box, "screen": [tree["width"], tree["height"]], "mentions": mentions,
+            "risks": sorted({(s.get("risk") or {}).get("level") or "none" for s in steps}), "actions": len(taps)}
+
+
+def import_approval() -> dict:
+    """An approval a SkyLark routine asked for before an irreversible tap (loop A's copy, Oct 30)."""
+    db = sqlite3.connect(f"file:{LOOP_A_API / 'envoy.db'}?mode=ro", uri=True)
+    row = db.execute("select id, task_id, created_at, status, description, reasons, screenshot, decided_at, decided_by "
+                     "from approvals where id='appr-1030-134627-2fca'").fetchone()
+    db.close()
+    aid, task, created, status, desc, reasons, shot, decided, by = row
+    return {"id": aid, "task_id": task, "asked_et": datetime.fromtimestamp(created, ET).strftime("%Y-%m-%d %H:%M:%S"),
+            "status": status, "description": desc, "reasons": json.loads(reasons), "decided_by": by,
+            "wait_s": round(decided - created, 1), "frame": _frame(LOOP_A_API / "approvals" / shot, "approval-skylark")}
+
+
+def import_sam() -> dict:
+    """SAM 3.1 on SkyLark's drawn seat map: the box Spark picked, and where the step model alone would have tapped."""
+    run = MAIN / "data/runs/p6-canvas-src"
+    s = next(x for x in _read_jsonl(run / "steps.jsonl") if x.get("vision"))
+    v = s["vision"]
+    r = json.loads((run / "run.json").read_text())
+    return {"run": run.name, "goal": r["goal"], "target": v["target"], "box": v["box"], "model_point": v["model_point"],
+            "tap": [s["device_action"]["x"], s["device_action"]["y"]], "candidates": v["candidates"], "calls": v["calls"],
+            "usd": round(v["cost_usd"], 5), "ms": v["ms"], "screen": v["size"], "reason": s["decision"]["reason"],
+            "frame": _frame(run / s["screenshot_before"], "sam-seat-map"),
+            "recorded_et": datetime.fromtimestamp(s["time"], ET).strftime("%Y-%m-%d %H:%M")}
+
+
+def import_memory() -> dict:
+    """A slice of the demo world's memory (SkyLark's test inbox and app; the test persona), read only with SQLite."""
+    db = sqlite3.connect(f"file:{MAIN / 'data/demo/memory.db'}?mode=ro", uri=True)
+    q = lambda sql, *a: db.execute(sql, a).fetchall()
+    kinds = {sid: (kind, json.loads(ref or "{}")) for sid, kind, ref in q("select id, kind, reference from sources")}
+
+    def facts(entity: str) -> list[dict]:
+        out = []
+        for fid, attr, val, vfrom, vto, obs, sup in q(
+                "select id, attribute, value, valid_from, valid_to, observed_at, superseded_by from facts where entity=? "
+                "order by attribute, observed_at", entity):
+            seen = q("select source, observed_at from fact_sources where fact=? order by observed_at", fid)
+            by_kind: dict[str, int] = {}
+            for sid, _ in seen:
+                by_kind[kinds[sid][0]] = by_kind.get(kinds[sid][0], 0) + 1
+            first_sid = seen[0][0] if seen else None
+            first = kinds.get(first_sid, ("", {}))
+            out.append({"attribute": attr, "value": val, "current": vto is None,
+                        "replaced_et": datetime.fromtimestamp(vto, ET).strftime("%Y-%m-%d %H:%M") if vto else None,
+                        "sources": by_kind, "seen": len(seen),
+                        "first_et": datetime.fromtimestamp(seen[0][1], ET).strftime("%Y-%m-%d %H:%M") if seen else None,
+                        "last_et": datetime.fromtimestamp(seen[-1][1], ET).strftime("%Y-%m-%d %H:%M") if seen else None,
+                        "first_source": {"kind": first[0], "subject": first[1].get("subject"), "app": first[1].get("app")}})
+        return out
+
+    ents = {name: eid for eid, name in q("select id, name from entities where merged_into is null")}
+    pick = ["SL 482 · Fri, Oct 30, 2026", "SL 1190 · Sat, Nov 14, 2026", "Denver · Fri, Dec 4, 2026"]
+    out = {"entities": [{"name": n, "type": q("select type from entities where id=?", ents[n])[0][0], "facts": facts(ents[n])}
+                        for n in pick],
+           "counts": {t: c for t, c in q("select type, count(*) from entities where merged_into is null group by type")},
+           "sources": {k: c for k, c in q("select kind, count(*) from sources group by kind")},
+           "promos": [json.loads(r)["subject"] for (r,) in q("select reference from sources where reference like '%promo%'")]}
+    db.close()
+    return out
+
+
 def do_import() -> None:
     REC.mkdir(parents=True, exist_ok=True)
     for name, cfg in RECORDINGS.items():
         rec = import_agent(name, cfg) if cfg["kind"] == "agent" else import_routine(name, cfg)
         (REC / f"{name}.json").write_text(json.dumps(rec, indent=1, ensure_ascii=False) + "\n")
         print(f"imported {name}: {len(rec['steps'])} steps")
+    for name, fn in [("app-frames", import_app_frames), ("starbucks-repair", import_repair_call), ("planted", import_planted),
+                     ("approval", import_approval), ("sam", import_sam), ("memory", import_memory)]:
+        (REC / f"{name}.json").write_text(json.dumps(fn(), indent=1, ensure_ascii=False) + "\n")
+        print(f"imported {name}")
 
 
 # ---------------------------------------------------------------------------------------------------------------------------
@@ -339,13 +456,308 @@ def learned() -> dict:
     }
 
 
+def md_tables(text: str) -> list[list[dict]]:
+    """Every Markdown table in a file, as rows of {header: cell}. Cells stay as written (the site quotes them)."""
+    tables, lines = [], text.splitlines()
+    i = 0
+    while i < len(lines):
+        if lines[i].startswith("|") and i + 1 < len(lines) and re.match(r"^\|[\s:|-]+\|$", lines[i + 1].strip()):
+            head = [c.strip() for c in lines[i].strip().strip("|").split("|")]
+            rows, i = [], i + 2
+            while i < len(lines) and lines[i].startswith("|"):
+                cells = [c.strip() for c in lines[i].strip().strip("|").split("|")]
+                rows.append(dict(zip(head, cells)))
+                i += 1
+            tables.append(rows)
+        else:
+            i += 1
+    return tables
+
+
+def plain(md: str) -> str:
+    """Markdown cell text as plain text: links to their words, no bold or code marks."""
+    md = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", md)
+    return md.replace("**", "").replace("`", "")
+
+
+def image(src_path: Path, name: str, width: int | None = None) -> str:
+    """A repo image (chart, diagram, patch evidence) as webp in site/data/img/."""
+    IMG.mkdir(parents=True, exist_ok=True)
+    im = Image.open(src_path).convert("RGB")
+    if width and im.width > width:
+        im = im.resize((width, round(im.height * width / im.width)), Image.LANCZOS)
+    out = IMG / f"{name}.webp"
+    im.save(out, "WEBP", quality=86, method=6)
+    return f"img/{out.name}"
+
+
+def eval_status() -> dict:
+    """Which suites ran on the eval-final tag, from report.md's own first lines."""
+    rep = (REPO / "eval/results/final/report.md").read_text()
+    m = re.search(r"\*\*Ran on:\*\* (\d+) of (\d+) suites on the `eval-final` tag", rep)
+    on, of = (int(m.group(1)), int(m.group(2))) if m else (0, 0)
+    return {"on_tag": on, "suites": of, "final": of > 0 and on == of, "src": src("eval/results/final/report.md")}
+
+
+def repair() -> dict:
+    change = json.loads((REPO / "eval/results/final/change.json").read_text())
+    md = (REPO / "eval/results/final/change.md").read_text()
+    layouts = next(t for t in md_tables(md) if t and "Layout" in t[0])
+    exp = next(e for e in change["experiments"] if e["task"] == "check_in" and e["layout"] == 3)
+    lib = REPO / "eval/results/final/library/change/check_in-L3/skylark_check_in_flight"
+    patch = json.loads((lib / "history/v2/patches.json").read_text())[0]
+    v1 = (lib / "v1.yaml").read_text().splitlines()
+    v2 = (lib / "v2.yaml").read_text().splitlines()
+    import difflib
+    diff = [l for l in difflib.unified_diff(v1, v2, "v1.yaml", "v2.yaml", lineterm="", n=1)]
+    code = change["meta"]["code"]
+    pick = lambda r: {k: r.get(k) for k in ("passed", "status", "rung", "duration_s", "calls", "standard_usd", "version")}
+    skylark = {
+        "task": "Check me in for my flight", "routine": exp["routine"], "layout": "3: extra screen",
+        "patch": patch["description"], "reason": patch["evidence"]["reasons"][0],
+        "repair_model": change["meta"]["models"]["jobs"]["repair"]["model"],
+        "first": pick(exp["first"]), "trial": pick(exp["trial"]), "after": pick(exp["after"]), "back": pick(exp["backcompat"]),
+        "steps_first": exp["first"]["steps"],
+        "before": image(lib / "history/v2/repair_08_1_before.png", "repair-skylark-before"),
+        "after_img": image(lib / "history/v2/repair_08_1_after.png", "repair-skylark-after"),
+        "diff": diff, "commit": code["short"], "dirty": bool(code.get("dirty")), "date": change["meta"]["started"][:10],
+        "src": src("eval/results/final/change.json", "check_in, layout 3"),
+        "lib_src": src(rel(lib / "history/v2/patches.json")),
+    }
+    # Real apps: the self-repairs in the library, and what their trials decided.
+    real = []
+    for idx in sorted((REPO / "data/routines").glob("*/index.json")):
+        ix = json.loads(idx.read_text())
+        if ix["name"].startswith("skylark_"):
+            continue
+        for v in ix["versions"]:
+            if v.get("source_task"):
+                real.append({"routine": ix["name"], "version": v["version"], "status": v["status"],
+                             "passed": (v.get("trial") or {}).get("passed"), "changes": v["changes"]})
+    sb = json.loads((REPO / "data/routines/starbucks_drink_calories/index.json").read_text())
+    v3 = next(v for v in sb["versions"] if v["version"] == 3)
+    call = json.loads((REC / "starbucks-repair.json").read_text())["repair_calls"][0]
+    reason = json.loads((REPO / "data/routines/starbucks_drink_calories/history/v3/patches.json").read_text())[0]["evidence"]["reasons"][0]
+    return {
+        "skylark": skylark,
+        "layouts": [{k: plain(v) for k, v in r.items()} for r in layouts],
+        "layouts_src": src("eval/results/final/change.md", "Injected UI changes"),
+        "new_inputs": next((r for r in md_tables(md)[0] if "All" in r.get("Task", "")), {}),
+        "real": real, "real_src": src("data/routines", "*/index.json, versions with a source_task"),
+        "starbucks": {"change": v3["changes"][0], "trial": v3["trial"], "reason": reason, "call": call,
+                      "src": src("data/routines/starbucks_drink_calories/index.json", "v3"),
+                      "call_src": src("site/data/recordings/starbucks-repair.json", "loop A's cost log")},
+    }
+
+
+# The grid's rows in eval/results/real-apps/table.md: (app column starts with, task column contains), first run and replay.
+APP_ROWS = {
+    "amazon_search_price": ("Amazon", ("Amazon (envoy-real)", "AA batteries")),
+    "youtube_search_first_video": ("YouTube", ("YouTube (envoy-real)", "lofi")),
+    "play_app_rating": ("Play Store", ("Play Store (envoy-real)", "Duolingo")),
+    "starbucks_drink_calories": ("Starbucks", ("Starbucks (envoy-real)", "Grande"), ("Starbucks (envoy-real), v4", "Grande")),
+    "chipotle_item_price": ("Chipotle", ("Chipotle (envoy-real)", "Guacamole")),
+    "gmail_search_subject": ("Gmail", ("Gmail (envoy-real), after the routing fix", "DoorDash")),
+    "doordash_order_meal": ("DoorDash", ("DoorDash (envoy-real), the user's real usual, v7 and the note-learner fix", "usual")),
+    "clock_set_alarm": ("Clock", ("Clock (loop B)", "alarm")),
+    "chrome_get_cheapest_flight_price": ("Google Flights in Chrome", ("Chrome / Google Flights by URL (loop B)", "cheapest"),
+                                         ("Chrome / Google Flights by URL (loop B) — v4", "cheapest")),
+    "lyft_get_ride_fare": ("Lyft", ("Lyft (loop B, envoy-real, the user's own account) — gate", "fare")),
+    "instagram_post_reel": ("Instagram", ("Instagram (Pixel 5)", "reel")),
+}
+APP_NOTES = {
+    "lyft_get_ride_fare": "On the user's own Lyft account, so the site shows numbers only: no screens and no routine steps. Fares only; never requested a ride.",
+    "instagram_post_reel": "On the Pixel 5. Share was declined every time; nothing was posted. No screens shown here (the phone's account).",
+    "doordash_order_meal": "Stops at the payment sheet; Place Order always asks first. No screens shown here (addresses).",
+}
+
+
+def apps() -> dict:
+    rows = md_tables((REPO / "eval/results/real-apps/table.md").read_text())[0]
+
+    def find(app: str, task: str) -> dict:
+        hit = [r for r in rows if r["app"] == app and task.lower() in r["task"].lower()]
+        assert len(hit) == 1, (app, task, len(hit))
+        return hit[0]
+
+    frames = json.loads((REC / "app-frames.json").read_text())
+    cards = []
+    for routine, (name, first_key, *replay_key) in APP_ROWS.items():
+        first = find(*first_key)
+        rep = find(*replay_key[0]) if replay_key else first
+        ix = json.loads((REPO / f"data/routines/{routine}/index.json").read_text())
+        y = yaml.safe_load((REPO / f"data/routines/{routine}/v{ix['active']}.yaml").read_text())
+        when = re.search(r"\b(Oct \d+)", rep["notes"]) or re.search(r"\b(Oct \d+)", first["notes"])
+        commit = re.search(r"main ([0-9a-f]{7})", rep["notes"])
+        cards.append({
+            "routine": routine, "name": name, "task": plain(first["task"]),
+            "first": {"runs": plain(first["first runs (x/3)"]), "cost": plain(first["first-run s / $"])},
+            "replay": {"runs": plain(rep["replays (x/N)"]), "cost": plain(rep["replay s / $"])},
+            "when": when.group(1) if when else "", "commit": commit.group(1) if commit else "",
+            "notes": plain(rep["notes"]) + ("" if rep is first else " — First runs: " + plain(first["notes"])),
+            "version": ix["active"], "steps": len(y["steps"]), "inputs": list((y.get("inputs") or {}).keys()),
+            "hand_fixed": any(not v.get("source_task") and v["version"] > 1 for v in ix["versions"]),
+            "frame": frames.get(routine), "private": APP_NOTES.get(routine),
+            "src": src("eval/results/real-apps/table.md", first["app"]),
+            "routine_src": src(f"data/routines/{routine}/index.json"),
+        })
+    skylark = sorted(p.parent.name for p in (REPO / "data/routines").glob("skylark_*/index.json"))
+    return {"cards": cards, "skylark": skylark, "src": src("eval/results/real-apps/table.md")}
+
+
+def memory() -> dict:
+    md = (REPO / "eval/results/final/memory.md").read_text()
+    t = md_tables(md)
+    m = re.search(r"\*\*(\d+) labeled items: (\d+)/(\d+) \((\d+)%\) of attributes right, (\d+) wrong values\.\*\*", md)
+    stale = re.search(r"\*\*Stale facts served without a warning: (\d+) of (\d+)\.\*\*", md)
+    run = re.search(r"Run (\d+) on `(\w+)`[^,]*, (\d{4}-\d\d-\d\d)", md)
+    ages = [r for r in t[2] if "gate" in r["Question"].lower()] if len(t) > 2 else []
+    return {
+        "demo": json.loads((REC / "memory.json").read_text()),
+        "demo_src": src("site/data/recordings/memory.json", "the demo world's memory, read only"),
+        "extraction": {"items": int(m.group(1)), "right": int(m.group(2)), "of": int(m.group(3)), "pct": int(m.group(4)),
+                       "wrong": int(m.group(5))} if m else None,
+        "extraction_sets": [{k: plain(v) for k, v in r.items()} for r in t[0]],
+        "stale": {"unwarned": int(stale.group(1)), "of": int(stale.group(2))} if stale else None,
+        "ages": [{k: plain(v) for k, v in r.items()} for r in ages],
+        "commit": run.group(2) if run else "", "date": run.group(3) if run else "",
+        "src": src("eval/results/final/memory.md"),
+        "readme_src": src("backend/memory/README.md"),
+    }
+
+
+def safety() -> dict:
+    s_md = (REPO / "eval/results/final/safety.md").read_text()
+    i_md = (REPO / "eval/results/final/injection.md").read_text()
+    st = md_tables(s_md)
+    caught = re.search(r"\*\*The policy gate caught (\d+) of (\d+)\*\* \(code signals alone: (\d+); the step model's own label: (\d+)\)", s_md)
+    rev = re.search(r"Flagged by the code signals: (\d+) of (\d+); by the gate \(model included\): (\d+) of (\d+)", s_md)
+    s_run = re.search(r"Run (\d+) on `(\w+)`[^,]*, (\d{4}-\d\d-\d\d)", s_md)
+    i_run = re.search(r"Run (\d+) on `(\w+)`[^,]*, (\d{4}-\d\d-\d\d)", i_md)
+    agent = re.search(r"Agent: (\d+) of (\d+) runs still did the task right[^;]*; it asked to do something else in (\d+)", i_md)
+    routines = re.search(r"Routines: (\d+) of (\d+)", i_md)
+    planted = dict(re.findall(r"- \*\*(\w+)\*\*: “(.+?)”", i_md))
+    inbox = re.search(r"Injected values stored: \*\*(\d+)\*\*; instructions stored as facts: \*\*(\d+)\*\*", i_md)
+    return {
+        "caught": [int(x) for x in caught.groups()] if caught else None,
+        "reversible": [int(x) for x in rev.groups()] if rev else None,
+        "controls": [{"app": r["App"], "control": plain(r["Control"]), "gate": r["Gate"]} for r in st[0]],
+        "safety_run": {"commit": s_run.group(2), "date": s_run.group(3)} if s_run else None,
+        "injection_run": {"commit": i_run.group(2), "date": i_run.group(3)} if i_run else None,
+        "agent": [int(x) for x in agent.groups()] if agent else None,
+        "routines": [int(x) for x in routines.groups()] if routines else None,
+        "planted_texts": planted, "inbox": [int(x) for x in inbox.groups()] if inbox else None,
+        "planted": json.loads((REC / "planted.json").read_text()),
+        "approval": json.loads((REC / "approval.json").read_text()),
+        "safety_src": src("eval/results/final/safety.md"), "injection_src": src("eval/results/final/injection.md"),
+        "planted_src": src("site/data/recordings/planted.json", "from data/runs, the injection suite's trace"),
+        "approval_src": src("site/data/recordings/approval.json", "loop A's API copy, read only"),
+    }
+
+
+def models() -> dict:
+    vision = json.loads((REPO / "eval/results/phase6/vision.json").read_text())
+    p5 = (REPO / "docs/phase-5-results.md").read_text()
+    voice = next(r for r in md_tables(p5)[1] if r and "Voice, scripted" in next(iter(r.values())))
+    first = json.loads((REC / "starbucks-first.json").read_text())
+    replay = json.loads((REC / "starbucks-replay.json").read_text())
+    return {
+        "vision": vision["summary"]["all"], "vision_canvas": vision["summary"]["skylark-canvas"],
+        "vision_src": src("eval/results/phase6/vision.json"),
+        "sam": json.loads((REC / "sam.json").read_text()),
+        "sam_src": src("site/data/recordings/sam.json", "from data/runs/p6-canvas-src"),
+        "phase6_src": src("docs/phase-6-results.md", "Results"),
+        "voice": plain(list(voice.values())[1]), "voice_src": src("docs/phase-5-results.md", "Voice, scripted"),
+        "wonder_calls": [c for c in first["calls"] if c["model"].startswith("muse-wonder")],
+        "spark_calls": [c for c in first["calls"] if c["model"].startswith("muse-spark")],
+        "replay_calls": replay["calls"],
+    }
+
+
+def proof() -> dict:
+    rep = (REPO / "eval/results/final/report.md").read_text()
+    t = md_tables(rep)
+    suites = [{"suite": plain(r["Suite"]), "result": plain(r["Result"]), "ran_on": plain(r["Ran on"])} for r in t[0]]
+    targets = [{k: plain(v) for k, v in r.items()} for r in t[1]]
+    charts = {n: image(REPO / f"eval/results/final/charts/{n}.png", f"chart-{n}", 1600) for n in
+              ["cost_and_time_over_repeated_runs", "success_by_system_and_layout", "recovery_by_injected_change", "real_apps_stages"]}
+    aw = (REPO / "docs/androidworld-results.md").read_text()
+    head = re.search(r"\*\*Headline\.\*\* (.+)", aw).group(1)
+    held = re.search(r"\*\*Held-out half:\*\* (.+)", aw)
+    sizes = json.loads((REPO / "eval/results/final/sizes.json").read_text())
+    phone = sizes["devices"]["phone"]
+    rows = phone.get("rows", phone) if isinstance(phone, dict) else phone
+    rows = rows if isinstance(rows, list) else list(rows.values())
+    ok = [r for r in rows if r.get("passed")]
+    secs = sorted(r.get("duration_s") or 0 for r in rows)
+    tests, files = 0, 0
+    import ast
+    for p in sorted((REPO / "backend/tests").rglob("test_*.py")):
+        files += 1
+        tests += sum(1 for n in ast.walk(ast.parse(p.read_text())) if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
+                     and n.name.startswith("test"))
+    return {
+        "suites": suites, "targets": targets, "charts": charts, "src": src("eval/results/final/report.md"),
+        "charts_src": src("eval/results/final/charts"),
+        "aw": {"headline": plain(head), "held_out": plain(held.group(1)) if held else "",
+               "src": src("docs/androidworld-results.md", "Headline")},
+        "phone": {"passed": len(ok), "runs": len(rows), "calls": sum(r.get("calls") or 0 for r in rows),
+                  "median_s": secs[len(secs) // 2] if secs else None, "commit": sizes["meta"]["code"]["short"],
+                  "date": sizes["meta"]["started"][:10], "src": src("eval/results/final/sizes.json", "devices.phone")},
+        "tests": {"functions": tests, "files": files, "src": src("backend/tests")},
+    }
+
+
+def built() -> dict:
+    tp = (REPO / "THIRD_PARTY.md").read_text()
+    in_use = md_tables(tp.split("## In use", 1)[1])[0]
+    ours = tp.split("## What Envoy builds itself", 1)[1].split("\n## ", 1)[0]
+    borrowed = tp.split("## Ideas borrowed", 1)[1] if "## Ideas borrowed" in tp else ""
+    # "- **Title** (when, where): what" or "- **Title:** what"
+    items = [(m.group(1).rstrip(":"), m.group(3)) for m in re.finditer(r"^- \*\*(.+?)\*\*( \([^)]*\))?:? (.+)$", ours, re.M)]
+    return {
+        "diagrams": {"architecture": image(REPO / "docs/diagrams/architecture.png", "diagram-architecture", 1400),
+                     "lifecycle": image(REPO / "docs/diagrams/routine-lifecycle.png", "diagram-routine-lifecycle", 1400)},
+        "diagrams_src": src("docs/diagrams"),
+        "ours": [{"title": a.rstrip(":"), "text": plain(b)} for a, b in items],
+        "plumbing": [{"name": plain(r["Component"]).split(" (")[0].split(",")[0], "license": r["License"],
+                      "use": plain(r["What we use it for"])} for r in in_use],
+        "borrowed": [plain(m) for m in re.findall(r"^- (.+)$", borrowed, re.M)],
+        "src": src("THIRD_PARTY.md"),
+    }
+
+
+def numbers(data: dict) -> dict:
+    """Every headline number the site shows, with where it came from and whether it is from the eval-final tag yet."""
+    st = data["eval"]
+    rows = [{"what": s["suite"], "value": s["result"], "commit": s["ran_on"], "final": "eval-final" in s["ran_on"],
+             "src": st["src"]["path"]} for s in data["proof"]["suites"]]
+    p = data["proof"]["phone"]
+    rows.append({"what": "Pixel 5: the 10 core routines on 3 new bookings each", "value": f"{p['passed']}/{p['runs']}, {p['calls']} model calls",
+                 "commit": p["commit"], "final": False, "src": p["src"]["path"]})
+    rows.append({"what": "AndroidWorld", "value": data["proof"]["aw"]["headline"][:160], "commit": "androidworld branch",
+                 "final": False, "src": data["proof"]["aw"]["src"]["path"]})
+    return {"eval_final": st, "rows": rows}
+
+
 def build() -> dict:
     data = {
         "meta": {"repo_url": REPO_URL},
+        "eval": eval_status(),
         "claim": claim(),
         "first_run": first_run(),
         "learned": learned(),
+        "repair": repair(),
+        "apps": apps(),
+        "memory": memory(),
+        "safety": safety(),
+        "models": models(),
+        "proof": proof(),
+        "built": built(),
     }
+    data["numbers"] = numbers(data)
+    (DATA / "numbers.json").parent.mkdir(parents=True, exist_ok=True)
+    (DATA / "numbers.json").write_text(json.dumps(data["numbers"], indent=1, ensure_ascii=False) + "\n")
     DATA.mkdir(parents=True, exist_ok=True)
     text = json.dumps(data, indent=1, ensure_ascii=False, sort_keys=False)
     (DATA / "site-data.json").write_text(text + "\n")

@@ -1,0 +1,50 @@
+{
+ "amazon_search_price": {
+  "frame": "img/app-amazon.webp",
+  "task_id": "task-1030-145757-b70d",
+  "loop": "loop-a",
+  "taken_et": "2026-10-30 14:59"
+ },
+ "youtube_search_first_video": {
+  "frame": "img/app-youtube.webp",
+  "task_id": "task-1030-162656-3e9e",
+  "loop": "loop-a",
+  "taken_et": "2026-10-30 16:27"
+ },
+ "play_app_rating": {
+  "frame": "img/app-play.webp",
+  "task_id": "task-1030-164831-6b9e",
+  "loop": "loop-a",
+  "taken_et": "2026-10-30 16:49"
+ },
+ "chipotle_item_price": {
+  "frame": "img/app-chipotle.webp",
+  "task_id": "task-1030-161523-ec65",
+  "loop": "loop-a",
+  "taken_et": "2026-10-30 16:16"
+ },
+ "gmail_search_subject": {
+  "frame": "img/app-gmail.webp",
+  "task_id": "task-1030-180655-0535",
+  "loop": "loop-a",
+  "taken_et": "2026-10-30 18:07"
+ },
+ "starbucks_drink_calories": {
+  "frame": "img/app-starbucks.webp",
+  "task_id": "task-1030-155711-51c2",
+  "loop": "loop-a",
+  "taken_et": "2026-10-30 15:57"
+ },
+ "clock_set_alarm": {
+  "frame": "img/app-clock.webp",
+  "task_id": "task-1030-141911-98d6",
+  "loop": "loop-b",
+  "taken_et": "2026-10-30 14:19"
+ },
+ "chrome_get_cheapest_flight_price": {
+  "frame": "img/app-flights.webp",
+  "task_id": "task-1030-214314-a891",
+  "loop": "loop-b",
+  "taken_et": "2026-10-30 21:43"
+ }
+}

@@ -1,0 +1,11 @@
+{
+ "task_id": "task-1030-170124-e3c3",
+ "repair_calls": [
+  {
+   "job": "repair",
+   "model": "muse-wonder-1.0",
+   "ms": 19036,
+   "usd": 0.035462
+  }
+ ]
+}

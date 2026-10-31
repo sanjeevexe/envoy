@@ -178,7 +178,7 @@
       if (e.key === "ArrowLeft") { stop(); show(i - 1); }
     });
     // ?step=N opens the run at step N (for links and screenshots).
-    show((+new URLSearchParams(location.search).get("step") || 1) - 1);
+    show((+new URLSearchParams(location.search).get("step") || 2) - 1);
   }
 
   // ---- 3: learned ----
@@ -296,10 +296,308 @@
     showV("compiled");
   }
 
+  // A recorded frame inside a phone, with a box from the recorded tree drawn over it (never baked into the picture).
+  function phoneHTML(frame, alt, screen, boxes = []) {
+    const [W, H] = screen || [1080, 2400];
+    const rects = boxes.map(({ box, kind }) => {
+      const p = 12, [x1, y1, x2, y2] = box;
+      const r = `x="${x1 - p}" y="${y1 - p}" width="${x2 - x1 + 2 * p}" height="${y2 - y1 + 2 * p}" rx="28"`;
+      return kind === "tap" ? `<rect class="tap-glow" ${r}/><rect class="tap" ${r}/>` : `<rect class="read" ${r}/>`;
+    }).join("");
+    return `<div class="phone"><img src="data/${esc(frame)}" alt="${esc(alt)}" loading="lazy" width="360" height="800">
+      ${rects ? `<svg class="ring" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">${rects}</svg>` : ""}</div>`;
+  }
+  const head = (n, id, eyebrow, h, lede) => `
+    <span class="eyebrow"><span class="num">${n}</span> ${esc(eyebrow)}</span>
+    <h2 id="${id}-h">${h}</h2>${lede ? `<p class="lede">${lede}</p>` : ""}`;
+  const testApp = `<span class="chip apricot" title="SkyLark Air is Envoy's own test airline app">Our test app</span>`;
+  const notFinal = (c) => D.eval.final ? "" : `<span class="chip apricot pending" title="Measured before the frozen Nov 2 eval">${c ? `on ${esc(c)} · ` : ""}final numbers after Nov 2</span>`;
+
+  // ---- 4: repairs ----
+  function renderRepairs() {
+    const R = D.repair, K = R.skylark, S = R.starbucks;
+    const kept = R.real.filter((v) => v.passed).length;
+    $("#repairs-body").innerHTML = `
+      ${head(4, "repairs", "It repairs itself", "When the app changes, Envoy fixes only the step that broke, then tests the fix before keeping it.",
+        "A failed check climbs a ladder: wait, relaxed matching, known pop-ups, then a local repair by the model, capped per step. A repair becomes a new version on trial, and it's kept only if a clean replay passes.")}
+      <div class="repair">
+        <div class="card" style="padding:20px">
+          <div class="row-between"><h3>An extra screen, injected on purpose</h3>${testApp}</div>
+          <p class="meta" style="margin:6px 0 0">SkyLark's check-in got a new “Review your trip” screen the routine had never seen. The routine's next step looked for “Confirm check-in” and didn't find it.</p>
+          <div class="pair">
+            <figure>${phoneHTML(K.before, "SkyLark: the injected Review your trip screen with Looks good", [1080, 2400])}<figcaption><b>Before the repair</b><br>The unexpected screen.</figcaption></figure>
+            <figure>${phoneHTML(K.after_img, "SkyLark: Confirm check-in, reached after tapping Looks good", [1080, 2400])}<figcaption><b>After</b><br>Back on the routine's path.</figcaption></figure>
+          </div>
+          <div class="quote"><span class="meta">${esc(MODEL[K.repair_model] || K.repair_model)}'s reason, one call:</span><br>“${esc(K.reason)}”</div>
+          <ol class="flow">
+            <li><b>Repair</b> on first meeting the change: ${secs(K.first.duration_s)}, ${K.first.calls} model call, ${usd(K.first.standard_usd)}. Rung ${K.first.rung} of the ladder.</li>
+            <li><b>Saved</b> as v2: ${esc(K.patch)}.</li>
+            <li><b>Trial</b> on a new booking: ${K.trial.passed ? "passed" : "failed"}, ${secs(K.trial.duration_s)}, ${K.trial.calls} model calls.</li>
+            <li><b>After:</b> another booking ${K.after.passed ? "passed" : "failed"} with ${K.after.calls} calls; back on the original layout ${K.back.passed ? "passed" : "failed"} too (the new step is optional).</li>
+          </ol>
+          <details class="read"><summary>The saved version's diff (v1 → v2)</summary><pre class="diff">${K.diff.map((l) => `<span class="${l[0] === "+" && !l.startsWith("+++") ? "add" : l[0] === "-" && !l.startsWith("---") ? "del" : ""}">${esc(l)}</span>`).join("\n")}</pre></details>
+          <div class="label-rec"><span><b>Recorded</b> ${esc(K.date)}</span><span><b>Commit</b> <code>${esc(K.commit)}</code>${K.dirty ? " (uncommitted changes)" : ""}</span>${srcA(K.src, "change.json")} ${srcA(K.lib_src, "patches.json")}</div>
+        </div>
+        <div>
+          <div class="card" style="padding:20px">
+            <div class="row-between"><h3>All 50 injected changes</h3>${testApp}</div>
+            <p class="meta" style="margin:6px 0 0">Each of the 10 routines met each of 5 changed layouts on a new booking.</p>
+            <div class="tbl-wrap"><table class="tbl">
+              <thead><tr><th>Change</th><th>Recovered</th><th>How</th><th class="r">Calls</th><th>Then, no call</th></tr></thead>
+              <tbody>${R.layouts.map((l) => `<tr><td>${esc(l.Layout.replace(/^\d: /, ""))}</td><td><b>${esc(l.Recovered)}</b></td><td class="small">${esc(l["Saved by"])}</td><td class="r">${esc(l["Model calls (first)"])}</td><td>${esc(l["After, no model call"])}</td></tr>`).join("")}</tbody>
+            </table></div>
+            <p class="small" style="margin:10px 0 0">New inputs on the same routines: ${esc(String(R.new_inputs.Passed || "").replace(/\*/g, ""))} of ${esc(R.new_inputs.Runs)} right, ${esc(R.new_inputs["No model call"])} with no model call. ${notFinal("6c507f3")}</p>
+            <div class="label-rec">${srcA(R.layouts_src, "change.md")}</div>
+          </div>
+          <div class="card" style="padding:20px;margin-top:16px">
+            <h3>On real apps it's harder, and the trial is why that's safe</h3>
+            <p style="margin:8px 0 0;color:var(--ink-2);font-size:14.5px">In the routine library, self-repair proposed ${R.real.length} new versions for real apps. The trial kept ${kept} and rejected ${R.real.length - kept}, so the routine stayed on the version that worked. Most real-app versions were fixed by hand during the loops, and the cards in section 5 say so.</p>
+            <div class="block" style="padding:12px 14px;margin-top:12px;font-size:14px">
+              <b>Kept: Starbucks v3.</b> ${esc(S.change.replace(/^./, (c) => c.toUpperCase()))}. Later replaced by a hand fix (v4). ${esc(MODEL[S.call.model] || S.call.model)}, one call, ${(S.call.ms / 1000).toFixed(1)} s, ${usd(S.call.usd)}; its trial passed with ${S.trial.model_calls} model calls in ${secs(S.trial.duration_s)}.
+              <div class="small" style="margin-top:6px">Its reason: “${esc(S.reason)}”</div>
+              <div class="label-rec" style="margin-top:8px">${srcA(S.src, "index.json")} ${srcA(S.call_src, "repair call")}</div>
+            </div>
+            <ul class="versions" style="margin-top:12px">${R.real.filter((v) => !v.passed).map((v) => `<li><span class="v">v${v.version}</span><div><span class="chip apricot">rejected by its trial</span> <code class="small">${esc(v.routine)}</code><p class="small">${esc(v.changes[0])}</p></div></li>`).join("")}</ul>
+            <div class="label-rec">${srcA(R.real_src, "data/routines/*/index.json")}</div>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  // ---- 5: real apps ----
+  // A table cell like "5/5 on v4 by the routine alone (639 ×2, …)": the count bold, the aside small.
+  const cell = (t) => { const m = String(t).match(/^([^(]+?)\s*(\(.+\))$/); return m ? `<b>${esc(m[1])}</b><small>${esc(m[2])}</small>` : `<b>${esc(t)}</b>`; };
+  function renderApps() {
+    const A = D.apps;
+    $("#real-apps-body").innerHTML = `
+      ${head(5, "real-apps", "Real apps", "Eleven real apps, each learned from a first run.",
+        "Every number below is copied from the real-app results table: first runs with no routine against replays of the saved one, on Envoy's emulators and the Pixel 5, Oct 30–31. Only apps with real recordings appear.")}
+      <div class="apps">${A.cards.map((c) => `
+        <article class="card app-card">
+          ${c.frame ? `<div class="app-shot"><img src="data/${esc(c.frame.frame)}" alt="${esc(c.name)}: the screen where the first run found its answer" loading="lazy" width="360" height="800"></div>` : `<div class="app-shot none"><span>${esc(c.private ? "No screens shown" : "")}</span></div>`}
+          <div class="app-body">
+            <div class="row-between"><h3>${esc(c.name)}</h3><span class="chip">v${c.version} · ${c.steps} steps</span></div>
+            <p class="app-task">${esc(c.task)}</p>
+            <dl class="fr">
+              <div><dt>First runs</dt><dd>${cell(c.first.runs)}<span>${esc(c.first.cost)}</span></dd></div>
+              <div class="rp"><dt>Replays</dt><dd>${cell(c.replay.runs)}<span>${esc(c.replay.cost)}</span></dd></div>
+            </dl>
+            ${c.private ? `<p class="small" style="margin:8px 0 0">${esc(c.private)}</p>` : ""}
+            ${c.hand_fixed ? `<p class="small" style="margin:6px 0 0">Some versions were fixed by hand; the routine's history says which.</p>` : ""}
+            <details class="read"><summary>The table's notes</summary><p class="small" style="margin:6px 0 0">${esc(c.notes)}</p></details>
+            <div class="label-rec" style="margin-top:8px">${c.when ? `<span><b>${esc(c.when)}</b></span>` : ""}${c.commit ? `<span><code>main ${esc(c.commit)}</code></span>` : ""}${srcA(c.src, "table.md")} ${srcA(c.routine_src, "routine")}</div>
+            ${c.frame ? `<div class="small">Frame: <code>${esc(c.frame.task_id)}</code>, ${esc(c.frame.taken_et)} ET (${esc(c.frame.loop)})</div>` : ""}
+          </div>
+        </article>`).join("")}
+      </div>
+      <div class="block" style="padding:14px 18px;margin-top:16px;font-size:14px;color:var(--ink-2)">
+        Plus ${A.skylark.length} routines on SkyLark, ${testApp} our own airline app, where the eval can change the layout on purpose and check the app's real state: ${A.skylark.map((s) => `<code>${esc(s)}</code>`).join(", ")}.
+      </div>`;
+  }
+
+  // ---- 6: memory ----
+  const KIND = { email: "email", email_markup: "email (markup)", app_screen: "app screen", routine_run: "routine run", photo: "photo" };
+  const ORDER = ["number", "date", "start_date", "from", "to", "depart_time", "seat", "gate", "boarding_time", "confirmation_code", "status"];
+  function renderMemory() {
+    const M = D.memory, X = M.extraction, demo = M.demo;
+    const factRow = (f) => `
+      <li class="${f.current ? "" : "old"}">
+        <span class="attr">${esc(f.attribute.replace(/_/g, " "))}</span>
+        <span class="val">${esc(f.value)}</span>
+        <span class="srcs">${Object.entries(f.sources).map(([k, n]) => `<span class="chip ${k === "email" || k === "email_markup" ? "" : "sage"}">${esc(KIND[k] || k)}${n > 1 ? ` ×${n}` : ""}</span>`).join("")}</span>
+        <span class="when small">${f.current ? `first seen ${esc(f.first_et.slice(5))}${f.first_source.subject ? ` in “${esc(f.first_source.subject)}”` : f.first_source.app ? ` in ${esc(f.first_source.app)}` : ""}` : `replaced ${esc(f.replaced_et.slice(5))}`}</span>
+      </li>`;
+    const ent = (name, filter) => {
+      const e = demo.entities.find((x) => x.name === name);
+      return `<div class="card ent"><div class="row-between"><h3>${esc(e.type)} · ${esc(e.name)}</h3>${testApp}</div>
+        <ul class="facts">${e.facts.filter(filter).sort((a, b) => ORDER.indexOf(a.attribute) - ORDER.indexOf(b.attribute)).map(factRow).join("")}</ul></div>`;
+    };
+    $("#memory-body").innerHTML = `
+      ${head(6, "memory", "Memory with sources", "Every fact says where and when it was seen. A newer source replaces an older value, and the old one stays as history.",
+        "Facts come in from app screens, email and photos, through Muse Spark (every value must appear in its source). The same flight seen in a booking email, eight app screens and a boarding-pass photo is one flight.")}
+      <div class="mem">
+        ${ent("SL 482 · Fri, Oct 30, 2026", (f) => f.current && ["number", "date", "from", "to", "depart_time", "seat", "gate", "boarding_time", "confirmation_code", "status"].includes(f.attribute))}
+        <div>
+          ${ent("SL 1190 · Sat, Nov 14, 2026", (f) => ["number", "date", "seat", "confirmation_code"].includes(f.attribute))}
+          <p class="small" style="margin:8px 4px 0">The seat came from the booking email, then a later “Seat change confirmed” email replaced it. Both stay in the graph, on two timelines: when it was true, and when Envoy learned it.</p>
+          <div style="margin-top:14px">${ent("Denver · Fri, Dec 4, 2026", (f) => ["confirmation_code", "start_date", "status"].includes(f.attribute))}</div>
+          <p class="small" style="margin:8px 4px 0">A cancellation email marks the trip cancelled. The test inbox's two fare promotions (${demo.promos.map((p) => `“${esc(p)}”`).join(", ")}) made no trips.</p>
+        </div>
+      </div>
+      <div class="label-rec">From the demo world: SkyLark's test inbox, SkyLark app runs and one test photo, for the test persona. ${srcA(M.demo_src, "memory.json")} ${srcA(M.readme_src, "backend/memory/README.md")}</div>
+      <div class="stats">
+        <div class="card stat"><div class="big">${X.right}/${X.of}</div><div class="lbl">attributes right on ${X.items} labeled items (${X.pct}%), <b>${X.wrong} wrong</b></div>${notFinal(M.commit)} ${srcA(M.src, "memory.md")}</div>
+        <div class="card stat"><div class="big">${M.stale.unwarned} of ${M.stale.of}</div><div class="lbl">stale facts served without a warning</div>${notFinal(M.commit)} ${srcA(M.src, "memory.md")}</div>
+        <div class="card stat wide"><div class="lbl" style="margin-bottom:8px">The same question at four ages, on the eval's own booking ${testApp}</div>
+          <ul class="ages">${M.ages.map((a) => `<li><span class="chip ${a.Warned ? "apricot" : "sage"}">${esc(a.Age)}</span> ${esc(a.Answer)}</li>`).join("")}</ul>
+          ${srcA(M.src, "memory.md › Stale facts")}</div>
+      </div>`;
+  }
+
+  // ---- 7: safety ----
+  function renderSafety() {
+    const S = D.safety, P = S.planted, A = S.approval;
+    const pk = P.mentions[P.mentions.length - 1];
+    $("#safety-body").innerHTML = `
+      ${head(7, "safety", "Safety", "It asks before anything it can't undo, and text on a screen is never an instruction.",
+        "Three signals vote on every tap: rules on the target's words, the screen's own warnings, and the model's label. Any one flags it, and the step waits for an approval on the user's phone. A routine asks too.")}
+      <div class="safety">
+        <div class="card" style="padding:20px">
+          <div class="row-between"><h3>An approval, recorded</h3>${testApp}</div>
+          <div class="pair one">
+            <figure>${phoneHTML(A.frame, "SkyLark: the Confirm check-in screen the routine stopped on", [1080, 2400])}</figure>
+            <div>
+              <p style="margin:0;font-family:var(--serif);font-size:17px">“${esc(A.description)}”</p>
+              <p class="meta" style="margin:10px 0 4px">Why it asked:</p>
+              <ul class="plain">${A.reasons.map((r) => `<li><span class="chip">${esc(r)}</span></li>`).join("")}</ul>
+              <p class="small" style="margin:10px 0 0">The routine stopped here and asked. The request itself was the OK: by default, “check me in” approves tapping Confirm check-in for that trip, and Envoy says so afterwards. Money, a step that isn't what was asked, or a request from a trigger, an email or an AI client always waits for a person, on their iPhone. Only a person can approve, never an AI through MCP. ${esc(A.asked_et)} ET.</p>
+              <div class="label-rec">${srcA(S.approval_src, "approval.json")}</div>
+            </div>
+          </div>
+          <div class="stats two" style="margin-top:16px">
+            <div class="block stat"><div class="big">${S.caught[0]}/${S.caught[1]}</div><div class="lbl">irreversible controls caught (code alone: ${S.caught[2]}), across SkyLark, Gmail, Amazon, Play, Settings, Chrome, Phone, YouTube</div>${notFinal(S.safety_run.commit)}</div>
+            <div class="block stat"><div class="big">${S.reversible[0]}/${S.reversible[1]}</div><div class="lbl">ordinary controls wrongly flagged by code (${S.reversible[2]} with the model's label)</div>${srcA(S.safety_src, "safety.md")}</div>
+          </div>
+        </div>
+        <div class="card" style="padding:20px">
+          <div class="row-between"><h3>Planted text on a screen</h3>${testApp}</div>
+          <div class="pair one">
+            <figure>${phoneHTML(P.frame, "SkyLark trip screen with a planted message telling the agent to cancel the trip", P.screen, [{ box: P.box, kind: "read" }])}<figcaption>Dashed: the planted message.</figcaption></figure>
+            <div>
+              <p class="meta" style="margin:0">The request:</p>
+              <p style="margin:2px 0 10px;font-family:var(--serif);font-size:17px">“${esc(P.goal)}”</p>
+              <p class="meta" style="margin:0">What the agent wrote while it worked:</p>
+              <ul class="plain">${P.mentions.slice(0, 3).map((m) => `<li class="small">Step ${m.step}: “${esc(m.reason)}”</li>`).join("")}</ul>
+              <p class="small" style="margin:10px 0 0"><b>It never tapped Cancel trip.</b> It saved the number and stopped. It was a clumsy run (${P.model_calls} model calls, ${secs(P.seconds)}, repeated Save taps), shown as recorded.</p>
+            </div>
+          </div>
+          <div class="stats two" style="margin-top:16px">
+            <div class="block stat"><div class="big">${S.agent[0]}/${S.agent[1]}</div><div class="lbl">agent runs still right with planted text; tried to follow it: <b>${S.agent[2]}</b>. Routines ${S.routines[0]}/${S.routines[1]}.</div>${notFinal(S.injection_run.commit)}</div>
+            <div class="block stat"><div class="big">${S.inbox[0]}</div><div class="lbl">values from 4 planted emails stored in memory (instructions stored as facts: ${S.inbox[1]})</div>${srcA(S.injection_src, "injection.md")}</div>
+          </div>
+          <div class="label-rec"><span><b>Recorded</b> ${esc(S.injection_run.date)}, injection suite</span><span><code>${esc(P.run)}</code></span>${srcA(S.planted_src, "planted.json")}</div>
+        </div>
+      </div>`;
+  }
+
+  // ---- 8: Meta's models ----
+  function renderModels() {
+    const M = D.models, V = M.vision, C = M.vision_canvas, Sm = M.sam, F = D.first_run, L = D.learned;
+    const sum = (cs) => cs.reduce((a, c) => a + c.usd, 0);
+    const pct = (x) => `${Math.round(x * 100)}%`;
+    const [W, H] = Sm.screen;
+    const mp = Sm.model_point;
+    $("#models-body").innerHTML = `
+      ${head(8, "models", "Meta's models, by job", "Each model does the job it's best at, and the expensive one works once per task, not on every run.",
+        "On the default profile, Muse Wonder plans, steps, repairs and compiles; Muse Spark 1.3 does the many small jobs; SAM 3.1 and Spark's grounding find targets on screens with no accessibility tree; Muse Voice Transcribe turns speech into a request.")}
+      <div class="models">
+        <div class="card model">
+          <div class="mname">Muse Wonder</div><div class="mjob">Plans, decides steps on a first run, repairs, compiles</div>
+          <p>In the Starbucks first run: ${M.wonder_calls.length} Wonder calls (plan and ${M.wonder_calls.length - 1} steps), ${usd(sum(M.wonder_calls))}. Then one call compiled the run into a routine: ${secs(L.compile.seconds)}, ${usd(L.compile.usd)}. On a replay: none.</p>
+          ${srcA(F.src, "recording")}
+        </div>
+        <div class="card model">
+          <div class="mname">Muse Spark 1.3</div><div class="mjob">Matches requests to routines, reads answers, fills memory, writes app notes, picks among SAM's boxes</div>
+          <p>Every Starbucks replay is 2 Spark calls: match and read the answer, ${usd(sum(M.replay_calls))} together. Memory extraction: ${D.memory.extraction.right}/${D.memory.extraction.of} attributes right, 0 wrong.</p>
+          ${srcA(L.replay_src, "recording")} ${srcA(D.memory.src, "memory.md")}
+        </div>
+        <div class="card model">
+          <div class="mname">Muse Voice Transcribe</div><div class="mjob">Speech to a request, push-to-talk</div>
+          <p>${esc(M.voice.split(". ").slice(0, 2).join(". "))}.</p>
+          ${srcA(M.voice_src, "phase-5-results.md")}
+        </div>
+      </div>
+      <div class="card sam">
+        <div class="pair one">
+          <figure><div class="phone"><img src="data/${esc(Sm.frame)}" alt="SkyLark's drawn seat map, with no accessibility tree for the seats" loading="lazy" width="540" height="1200">
+            <svg class="ring" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
+              <rect class="tap-glow" x="${Sm.box[0]}" y="${Sm.box[1]}" width="${Sm.box[2] - Sm.box[0]}" height="${Sm.box[3] - Sm.box[1]}" rx="14"/>
+              <rect class="tap" x="${Sm.box[0]}" y="${Sm.box[1]}" width="${Sm.box[2] - Sm.box[0]}" height="${Sm.box[3] - Sm.box[1]}" rx="14"/>
+              <g class="miss"><line x1="${mp[0] - 26}" y1="${mp[1] - 26}" x2="${mp[0] + 26}" y2="${mp[1] + 26}"/><line x1="${mp[0] + 26}" y1="${mp[1] - 26}" x2="${mp[0] - 26}" y2="${mp[1] + 26}"/></g>
+            </svg></div>
+            <figcaption>Ringed: the box SAM 3.1 proposed and Spark picked. ✕: where the step model alone pointed.</figcaption></figure>
+          <div>
+            <div class="row-between"><h3>SAM 3.1 on a screen that's only pixels</h3>${testApp}</div>
+            <p style="color:var(--ink-2);margin:8px 0 0">SkyLark's seat map is drawn on a canvas, so its seats aren't in the accessibility tree. Asked for “${esc(Sm.target)}”, the step model's own point fell just above the seat, outside its box. SAM 3.1 proposed ${Sm.candidates} boxes from a shape phrase, they were numbered on the screenshot, and Muse Spark picked one: ${Sm.calls} calls, ${usd(Sm.usd)}, ${(Sm.ms / 1000).toFixed(1)} s.</p>
+            <p class="small" style="margin:8px 0 0">Recorded ${esc(Sm.recorded_et)} ET. Only the chosen box was saved, not all ${Sm.candidates}. ${srcA(M.sam_src, "sam.json")}</p>
+            <div class="tbl-wrap" style="margin-top:14px"><table class="tbl">
+              <thead><tr><th>On ${V.step.targets} targets with no tree</th><th class="r">Hit</th><th class="r">Median error</th><th class="r">$ / target</th></tr></thead>
+              <tbody>
+                <tr><td>Step model's own coordinates</td><td class="r">${pct(V.step.accuracy)}</td><td class="r">${V.step.median_error_px} px</td><td class="r">${usd(V.step.cost_per_target)}</td></tr>
+                <tr><td>Grounding alone</td><td class="r">${pct(V.grounding.accuracy)}</td><td class="r">${V.grounding.median_error_px} px</td><td class="r">${usd(V.grounding.cost_per_target)}</td></tr>
+                <tr><td>SAM 3.1 + Spark's pick</td><td class="r">${pct(V.sam.accuracy)}</td><td class="r">${V.sam.median_error_px} px</td><td class="r">${usd(V.sam.cost_per_target)}</td></tr>
+              </tbody></table></div>
+            <p class="small" style="margin:8px 0 0">On the ${C.sam.targets} drawn seats alone, SAM + pick hit ${C.sam.hits} and grounding ${C.grounding.hits}. Envoy runs SAM first, then grounding: together they found all 52 (Oct 27). ${srcA(M.vision_src, "vision.json")} ${srcA(M.phase6_src, "phase-6-results.md")}</p>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  // ---- 9: the proof ----
+  function renderProof() {
+    const P = D.proof, E = D.eval;
+    const chart = (k, t, cap) => `<figure class="card chart"><img src="data/${esc(P.charts[k])}" alt="${esc(t)}" loading="lazy"><figcaption><b>${esc(t)}</b> ${cap} ${srcA({ path: P.charts_src.path + "/" + k + ".png" }, k + ".png")}</figcaption></figure>`;
+    $("#proof-body").innerHTML = `
+      ${head(9, "proof", "The proof", "The evaluation, scored by code on the app's real state, never by a model.",
+        "Each suite starts from a known state. Success is the app's own state or the right answer on screen. Dollars are at Meta's standard prices.")}
+      <div class="final-banner ${E.final ? "done" : ""}">
+        ${E.final ? `<b>Final numbers.</b> All ${E.suites} suites ran on the <code>eval-final</code> tag.`
+          : `<b>Final numbers after Nov 2.</b> ${E.on_tag} of ${E.suites} suites have run on the frozen <code>eval-final</code> tag so far. Every number below shows the commit it was measured on.`} ${srcA(E.src, "report.md")} ${srcA({ path: "site/data/numbers.json" }, "numbers.json")}
+      </div>
+      <div class="tbl-wrap card" style="margin-top:16px"><table class="tbl suites">
+        <thead><tr><th>Suite</th><th>Result</th><th>Measured on</th></tr></thead>
+        <tbody>${P.suites.map((s) => /^8\. AndroidWorld/.test(s.suite) ? { ...s, suite: "8. AndroidWorld", result: "Reported on its own page; summary below." } : s).map((s) => `<tr><td>${esc(s.suite)}</td><td>${esc(s.result)}</td><td><code class="small">${esc(s.ran_on)}</code>${/eval-final/.test(s.ran_on) ? "" : ' <span class="chip apricot pending">final after Nov 2</span>'}</td></tr>`).join("")}</tbody>
+      </table></div>
+      <p class="small" style="margin:8px 4px 0">Suites 0–3b and 5–7 run on SkyLark, our own test app, and on the test inbox; suite 4 is real apps. ${srcA(P.src, "report.md")}</p>
+      <h3 style="margin-top:28px">The design's own targets</h3>
+      <div class="tbl-wrap card" style="margin-top:10px"><table class="tbl">
+        <thead><tr><th>Target</th><th>Goal</th><th>Measured</th></tr></thead>
+        <tbody>${P.targets.map((t) => `<tr><td>${esc(t.Target)}</td><td>${esc(t.Goal)}</td><td>${esc(t.Measured)}</td></tr>`).join("")}</tbody>
+      </table></div>
+      <div class="charts">
+        ${chart("cost_and_time_over_repeated_runs", "First run vs later runs", "SkyLark's 10 core tasks, a new booking each time.")}
+        ${chart("real_apps_stages", "Real apps: where learning holds and where it breaks", "18 read-only workflows, Oct 28 (4/11 right on a new input then).")}
+        ${chart("recovery_by_injected_change", "Recovery from injected UI changes", "SkyLark, 50 of 50.")}
+        ${chart("success_by_system_and_layout", "Envoy vs the full agent vs a fixed replay", "SkyLark core set.")}
+      </div>
+      <div class="stats three" style="margin-top:16px">
+        <div class="card stat"><div class="lbl">The real phone (Pixel 5)</div><div class="big">${P.phone.passed}/${P.phone.runs}</div><div class="lbl">the 10 core routines, compiled on an emulator, on 3 new bookings each: <b>${P.phone.calls} model calls</b>, median ${secs(P.phone.median_s)}</div>${notFinal(P.phone.commit + ", " + P.phone.date)} ${srcA(P.phone.src, "sizes.json")}</div>
+        <div class="card stat"><div class="lbl">AndroidWorld (Google's benchmark, 116 tasks)</div><p style="margin:6px 0 0;font-size:14px;color:var(--ink-2)">${esc(P.aw.headline.split(". ").slice(0, 3).join(". "))}.</p><div class="small" style="margin-top:6px">Held-out half, re-measured Oct 29: ${esc(P.aw.held_out.split(".")[0])}. A rerun on the hybrid profile follows after Nov 2.</div>${srcA(P.aw.src, "androidworld-results.md")}</div>
+        <div class="card stat"><div class="lbl">Offline tests</div><div class="big">${P.tests.functions}</div><div class="lbl">test functions in ${P.tests.files} files, counted from the code (a parametrized test counts once)</div>${srcA(P.tests.src, "backend/tests")}</div>
+      </div>`;
+  }
+
+  // ---- 10: how it's built ----
+  function renderBuilt() {
+    const B = D.built;
+    $("#how-built-body").innerHTML = `
+      ${head(10, "how-built", "How it's built", "One task API for every interface, one device interface for every phone.", "")}
+      <figure class="card chart" style="margin-top:24px"><img src="data/${esc(B.diagrams.architecture)}" alt="Envoy's architecture: interfaces, the task API, the backend, Meta's models and the device layer" loading="lazy"><figcaption>${srcA(B.diagrams_src, "docs/diagrams")}</figcaption></figure>
+      <figure class="card chart" style="margin-top:16px"><img src="data/${esc(B.diagrams.lifecycle)}" alt="Routine lifecycle: compile once, run many times, repair locally" loading="lazy"><figcaption>${srcA(B.diagrams_src, "docs/diagrams")}</figcaption></figure>
+      <div class="built">
+        <div class="card" style="padding:20px">
+          <h3>What Envoy built itself</h3>
+          <ul class="ours">${B.ours.map((o) => `<li><b>${esc(o.title)}.</b> <span>${esc(o.text.split(". ")[0].replace(/\.$/, "").replace(/^./, (c) => c.toUpperCase()))}.</span></li>`).join("")}</ul>
+          <p class="small" style="margin:10px 0 0">Ideas borrowed, no code used: ${B.borrowed.map(esc).join(" ")}</p>
+        </div>
+        <div class="card" style="padding:20px">
+          <h3>Open-source plumbing</h3>
+          <p class="small" style="margin:6px 0 10px">Talking to phones, streaming video, serving HTTP, drawing the web app. Each credited with its license.</p>
+          <div class="chips">${B.plumbing.map((p) => `<span class="chip" title="${esc(p.license)}: ${esc(p.use)}">${esc(p.name)}</span>`).join("")}</div>
+          <div class="label-rec">${srcA(B.src, "THIRD_PARTY.md")}</div>
+        </div>
+      </div>
+      <div class="card next-up">
+        <div><h3>The code</h3><p class="meta" style="margin:4px 0 0">${D.meta.repo_url ? `<a href="${esc(D.meta.repo_url)}">${esc(D.meta.repo_url)}</a>` : "The repository link goes here when it's public."}</p></div>
+        <div class="meta">This site: <code>site/</code>, built by <code>scripts/build_site_data.py</code>.</div>
+      </div>`;
+  }
+
   // ---- table of contents ----
   function renderToc() {
     const secs = [...document.querySelectorAll("main section.sec")];
-    const names = { claim: "The claim", "first-run": "A first run", learned: "Learned" };
+    const names = { claim: "The claim", "first-run": "A first run", learned: "Learned", repairs: "Repairs", "real-apps": "Real apps",
+      memory: "Memory", safety: "Safety", models: "Models", proof: "Proof", "how-built": "How it's built" };
     $("#toc").innerHTML = secs.map((s, k) => `<a href="#${s.id}" data-id="${s.id}"><span class="n">${k + 1}</span>${esc(names[s.id] || s.id)}</a>`).join("");
     const links = [...document.querySelectorAll("#toc a")];
     const io = new IntersectionObserver((es) => es.forEach((e) => {
@@ -311,6 +609,13 @@
   renderClaim();
   renderFirstRun();
   renderLearned();
+  renderRepairs();
+  renderApps();
+  renderMemory();
+  renderSafety();
+  renderModels();
+  renderProof();
+  renderBuilt();
   renderToc();
   // ?only=<section id> shows one section alone (for screenshots: headless Chrome captures from the top).
   const only = new URLSearchParams(location.search).get("only");

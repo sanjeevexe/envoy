@@ -1,0 +1,14 @@
+{
+ "id": "appr-1030-134627-2fca",
+ "task_id": "task-1030-134617-2215",
+ "asked_et": "2026-10-30 13:46:27",
+ "status": "approved",
+ "description": "tap \"Confirm check-in\" in com.skylark.air (routine skylark_check_in_flight v1)",
+ "reasons": [
+  "rule: target says 'Confirm check-in'",
+  "model: labeled irreversible"
+ ],
+ "decided_by": "your request",
+ "wait_s": 0.0,
+ "frame": "img/approval-skylark.webp"
+}
