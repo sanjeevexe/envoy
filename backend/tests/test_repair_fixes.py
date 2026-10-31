@@ -374,3 +374,23 @@ def test_a_degenerate_repair_answer_is_a_failed_attempt(reason):
     first = out.steps[0].repairs[0]
     assert first["not_run"] == "degenerate answer" and "action" not in first and "unusable answer" in model.prompts[1]
     assert out.status == "done" and phone.acts == [("tap", "Palo Alto · CA")]  # only the second answer's tap ran
+
+
+def test_a_repair_reply_that_is_not_json_is_a_failed_attempt():
+    """Phase 7's Oct 31 phone step: a Wonder repair ran to its output cap writing broken JSON, and the parse error failed the
+    whole task. Now it's a failed attempt, paid for, and the ladder goes on."""
+    from models.adapter import StructuredOutputError
+    phone, r = _places_app()
+
+    class Broken(Answers):
+        def call(self, job, content, **kw):
+            if not self.prompts:
+                self.prompts.append(content[0]["text"])
+                raise StructuredOutputError("repair: reply is not a valid StepOutput", cost_usd=0.16, cost_at_standard_usd=0.16)
+            return super().call(job, content, **kw)
+    model = Broken(phone, [("Palo Alto · CA", "reversible", "Pick Palo Alto as the start")])
+    out, _ = _run_places(phone, r, model)
+    first = out.steps[0].repairs[0]
+    assert first["not_run"] == "unparseable answer" and "decision" not in first and "not valid JSON" in model.prompts[1]
+    assert out.status == "done" and phone.acts == [("tap", "Palo Alto · CA")]
+    assert out.model_calls == 2 and round(out.cost_at_standard_usd, 2) == 0.16

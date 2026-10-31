@@ -148,6 +148,14 @@ class ContributorNotAllowed(RuntimeError):
     pass
 
 
+class StructuredOutputError(ValueError):
+    """A reply that isn't the schema's JSON even after recovery. The call was made and paid for: its cost travels with it."""
+
+    def __init__(self, message: str, *, cost_usd: float = 0.0, cost_at_standard_usd: float = 0.0) -> None:
+        super().__init__(message)
+        self.cost_usd, self.cost_at_standard_usd = cost_usd, cost_at_standard_usd
+
+
 @dataclass
 class ModelResult:
     job: str
@@ -420,7 +428,13 @@ class ModelAdapter:
         text = getattr(resp, "output_text", "") or ""
         parsed = None
         if cfg.schema is not None and text:
-            parsed, how = parse_structured(cfg.schema, resp, text)
+            try:
+                parsed, how = parse_structured(cfg.schema, resp, text)
+            except ValueError as e:
+                # Oct 31: a Wonder repair ran to its 8,000-token cap writing broken JSON. Callers treat this as a failed call.
+                raise StructuredOutputError(f"{cfg.name}: {model}'s reply ({len(text)} characters, {usage.get('output_tokens', '?')} "
+                                            f"output tokens) is not a valid {cfg.schema.__name__}: {str(e)[:200]}",
+                                            cost_usd=cost, cost_at_standard_usd=cost_std) from e
             if how != "direct":
                 # Seen in Phase 1 (2 of ~60 calls): a sentence of preamble before the schema JSON.
                 self.meter.record({"time": datetime.now(timezone.utc).isoformat(timespec="milliseconds"), "job": cfg.name,

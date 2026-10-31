@@ -146,6 +146,25 @@ def test_cost_uses_the_resolved_models_prices(monkeypatch, tmp_path):
     assert entry["profile"] == "hybrid" and entry["model"] == "muse-wonder-1.0"
 
 
+def test_a_reply_cut_off_mid_json_is_a_structured_output_error_that_carries_its_cost(monkeypatch, tmp_path):
+    """Phase 7, Oct 31: a Wonder repair ran to its 8,000-token cap writing broken JSON; the ValidationError ended the task."""
+    from types import SimpleNamespace as NS
+    from models.adapter import StructuredOutputError
+    monkeypatch.setenv("ENVOY_MODEL_PROFILE", "hybrid")
+    a = _adapter(tmp_path)
+    usage = NS(input_tokens=1000, output_tokens=8000, total_tokens=9000, input_tokens_details=NS(cached_tokens=0),
+               output_tokens_details=NS(reasoning_tokens=0), model_extra={})
+
+    class Resp:
+        def create(self, **req):
+            return NS(usage=usage, output_text='{"reason": "0_remember' + '0_remember' * 500, output=[], id="r1")
+    a._client = NS(responses=Resp())
+    with pytest.raises(StructuredOutputError) as e:
+        a.call("repair", "hi", task_id="t1")
+    assert isinstance(e.value, ValueError) and e.value.cost_usd > 0.15 and "8000 output tokens" in str(e.value)
+    assert len((tmp_path / "c.jsonl").read_text().splitlines()) == 1  # logged as made and paid for
+
+
 def test_profile_models_and_cost_scale(monkeypatch):
     from models.adapter import profile_models, step_cost_scale
     monkeypatch.setenv("ENVOY_MODEL_PROFILE", "hybrid")

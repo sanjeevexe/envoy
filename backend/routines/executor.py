@@ -35,7 +35,7 @@ from agent.popups import match_popup
 from agent.trace import TraceWriter, screen_record
 from agent.vision import Vision
 from devices.types import Action, Device, Element, InvalidElement, ScreenState
-from models.adapter import DataScope, ModelAdapter
+from models.adapter import DataScope, ModelAdapter, StructuredOutputError
 from models.prompts import REPAIR_INSTRUCTIONS, repair_input
 from models.schemas import StepOutput
 from models.translate import to_device_action
@@ -978,8 +978,21 @@ class RoutineExecutor:
                                                                   self._step_text(step, ctx.inputs), remaining, "\n".join(tried), s.compact,
                                                                   app_notes=notes.text if notes else "")}]
             t0 = time.perf_counter()
-            res = await asyncio.to_thread(self.adapter.call, "repair", content, instructions=REPAIR_INSTRUCTIONS, data_scope=cfg.data_scope,
-                                          contributor=cfg.contributor, task_id=ctx.task_id, effort=cfg.repair_effort)
+            try:
+                res = await asyncio.to_thread(self.adapter.call, "repair", content, instructions=REPAIR_INSTRUCTIONS, data_scope=cfg.data_scope,
+                                              contributor=cfg.contributor, task_id=ctx.task_id, effort=cfg.repair_effort)
+            except StructuredOutputError as e:
+                # A reply that isn't a decision at all (Phase 7's Oct 31 phone step: Wonder ran to its output cap writing broken
+                # JSON, and the whole task failed): a failed attempt, like a degenerate answer.
+                ctx.repairs_run += 1
+                ctx.out.model_calls += 1
+                ctx.out.cost_usd += e.cost_usd
+                ctx.out.cost_at_standard_usd += e.cost_at_standard_usd
+                sr.repairs.append({"model": True, "phase": phase, "not_run": "unparseable answer", "error": str(e)[:300],
+                                   "model_ms": round((time.perf_counter() - t0) * 1000), "cost_usd": e.cost_at_standard_usd})
+                tried.append("unusable answer (not valid JSON): ignored")
+                s = await self._observe()
+                continue
             ctx.repairs_run += 1
             ctx.out.model_calls += 1
             ctx.out.cost_usd += res.cost_usd
