@@ -215,6 +215,17 @@ def _gmail_second(task: dict[str, Any], prep: dict[str, Any]) -> tuple[bool, str
     return task["status"] == "done" and (rr.right(text, expect, {}, True) or rr.right(text, rr.in_sentence(expect), {}, True)), f"expect /{expect}/"
 
 
+def _ytm_top(task: dict[str, Any], prep: dict[str, Any]) -> tuple[bool, str]:
+    text = task.get("result") or ""
+    return task["status"] == "done" and re.search(r"\bqueen\b", text, re.I) is not None, "expect Queen (the top result's artist)"
+
+
+# YouTube Music worded so the screen's answer is the true one (the coordinator: "who sings X" answered by the first Songs
+# row read a cover on Oct 30): the top result, title and artist.
+TASKS["ytmusic_top"] = Task("ytmusic_top", "In the YouTube Music app, search for Bohemian Rhapsody and tell me the title and artist of "
+                            "the top result.", "envoy-real", routines=["ytmusic_top_result"], workflow="ytmusic_artist", grade=_ytm_top)
+
+
 def _second(key: str) -> Task:
     """The workflow's second input (eval/run_real_apps.py `second`), replayed with the routine the first input compiled: does
     it carry over to a new value? Graded by `expect_second` (else `expect`)."""
