@@ -206,6 +206,9 @@ def add_preflight_later(env, lines, after_s=0.2):
     """The runner's own `preflight` step, a moment after chat returns (it comes once the routine is picked)."""
     def later():
         time.sleep(after_s)
+        end = time.monotonic() + 5
+        while not env.ctx.tasks.list(5) and time.monotonic() < end:  # the step follows the task: a slow request made it after 50 ms
+            time.sleep(0.01)
         for t in env.ctx.tasks.list(5):
             env.ctx.tasks.add_step(t["id"], {"kind": "preflight", "text": "before I start", "lines": lines})
     threading.Thread(target=later, daemon=True).start()

@@ -13,7 +13,10 @@ Retrieval, memory answers, the Memory graph and change alerts skip them: they ar
 Writing: after a task (or a routine run that needed a repair) ends, one Muse Spark call (job `app_note`) reads a compact
 trace with the app's current notes and proposes 0-3 operations (add, confirm, update, retire). Code then drops anything
 personal or specific to this run and anything that reads like an instruction or a permission rather than a description
-of the app, turns near-duplicates into confirmations and caps each app at MAX_PER_APP notes.
+of the app, turns near-duplicates into confirmations and caps each app at MAX_PER_APP notes. Only a run that finished
+(FINISHED) adds, confirms or updates a note; any other end (the step cap, a failure, a decline, a hand-off) can only retire
+one, so a failing run never teaches or reinforces a note (Oct 30: a DoorDash note learned at the step cap, confirmed by two more capped runs,
+sent first runs to the cap).
 Reading: the agent's plan and step prompts and routine repairs get the app's top notes (`for_prompt`), and each trace
 step records which notes it saw.
 """
@@ -41,6 +44,7 @@ PROMPT_TOP = 6
 PROMPT_CHARS = 600
 MAX_TEXT = 160
 DUPLICATE_OVERLAP = 0.75  # Jaccard on content words: a paraphrase is ~0.8; "the gate is…" vs "the seat is…" on one screen ~0.67
+FINISHED = ("done", "done_unverified", "agent_done")  # a run's successful ends: the agent's and a routine's (api/runner.py's `done`)
 # Values memory holds that identify the user or their bookings, orders and places: never allowed in a note. (Statuses such
 # as "On time", flags and the airline's own name are left out: a note about the app may well say "on time".)
 PERSONAL_ATTRIBUTES = {"name", "first_name", "last_name", "email", "phone", "username", "known_traveler_number", "confirmation_code",
@@ -66,6 +70,13 @@ _CHANGE = (r"(?:cancel|delete|remove|pay|buy|purchase|order|send|transfer|book|s
 _DESCRIBES = (r"(?:\s+[\w'-]+){0,3}?\s+(?:is|are|was|were|appears?|sits|shows|opens|lives|stays|leads|takes|brings|goes|removes|deletes|"
               r"cancels|adds|asks|needs|requires|costs|charges|can|will|may|might|only|buttons?|links?|options?|rows?|tabs?|menus?|"
               r"toggles?|switch|screens?|pages?|sheets?|icons?|fields?|labels?)\b")
+# An extra step ordered before ordering or paying: "Tap the store total bar at the bottom to review the cart before ordering"
+# (Oct 30, DoorDash: it sent first runs back into the cart until the step cap). As a description it still passes: "The cart
+# is the bar at the bottom", "A store must be chosen before prices show", "…set the start before picking the destination".
+_STEP = (r"(?:always\s+|first\s+|also\s+|please\s+|now\s+|then\s+)?"
+         r"(?:tap|press|click|open|reopen|select|choose|pick|scroll|swipe|review|check|go\s+to|visit|use)\b")
+_BEFORE_CHANGE = (r"\bbefore\s+(?:cancell?ing|deleting|paying|buying|purchasing|ordering|placing|checking\s+out|sending|transferring|booking|"
+                  r"subscribing|submitting|sharing|posting)\b")
 _INSTRUCTION = (
     ("approval or permission language",
      re.compile(r"\b(?:pre-?approv\w*|approv\w*|authori[sz]\w*|consent\w*|allowed\s+to|permitted\s+to|"
@@ -102,6 +113,8 @@ _INSTRUCTION = (
                 r"\b(?:should|must|has\s+to|have\s+to|needs?\s+to|is\s+to|are\s+to)\s+(?:always\s+|also\s+|now\s+)?be\s+(?:turned\s+(?:on|off)|"
                 r"switched\s+(?:on|off)|enabled|disabled|cancell?ed|deleted|removed|added|paid|bought|purchased|booked|ordered|sent|approved|"
                 r"accepted|shared|posted)\b", re.I)),
+    ("a step to take before ordering or paying",
+     re.compile(rf"(?:^|[.;!?:]\s+){_STEP}[^.;!?]*?{_BEFORE_CHANGE}|(?:^|[.;!?:]\s+){_BEFORE_CHANGE}[^.;!?]*?,\s*{_STEP}", re.I)),
 )
 
 
@@ -318,16 +331,22 @@ class AppNotes:
 
     def apply(self, app: str, ops: list[dict[str, Any]], ref: dict[str, Any], forbidden: set[str] | None = None,
               report: LearnReport | None = None, exact: set[str] | None = None) -> LearnReport:
-        """Proposed operations → notes, after the personal-data and instruction filters, merging and the cap."""
+        """Proposed operations → notes, after the personal-data and instruction filters, merging and the cap. A run that
+        didn't finish (`ref["outcome"]` not in FINISHED) can only retire a note: it neither adds nor confirms nor updates one."""
         rep = report or LearnReport(app)
         bad = (forbidden or set()) | self.forbidden()
         current = {n.id: n for n in self.list(app)}
+        finished = ref.get("outcome") in FINISHED
         for op in ops[:MAX_OPS]:
             kind, nid = op.get("op"), op.get("note_id") or ""
             text = " ".join((op.get("text") or "").split())[:MAX_TEXT]
             sref = {**ref, "step": op.get("step") or ref.get("step")}
             if kind in ("confirm", "retire", "update") and nid not in current:
                 rep.dropped.append({"op": kind, "note_id": nid, "why": "no such active note for this app"})
+                continue
+            if kind != "retire" and not finished:
+                rep.dropped.append({"op": kind, "note_id": nid, "text": text,
+                                    "why": f"the run didn't finish ({ref.get('outcome') or 'no outcome'}): it can only retire a note"})
                 continue
             if kind == "confirm":
                 self.confirm(nid, sref)

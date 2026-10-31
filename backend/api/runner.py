@@ -661,7 +661,7 @@ class TaskRunner:
 
     async def _learn_notes(self, tid: str, traces: list[str], app: str | None, goal: str, status: str, result: str,
                            inputs: dict[str, str], outputs: dict[str, Any], scope: str) -> None:
-        """After a run (done or not): what it shows about the app becomes, confirms or retires an app note."""
+        """After a run: what it shows about the app becomes, confirms or retires an app note (a run that didn't finish can only retire one)."""
         for trace in traces:
             try:
                 rep = await self.app_notes.learn(trace, app=app, goal=goal, status=status, result=result, inputs=inputs, outputs=outputs,
