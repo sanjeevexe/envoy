@@ -1,0 +1,71 @@
+routine: chrome_get_cheapest_flight_price
+app: com.android.chrome
+version: 4
+status: active
+intent: Find the price of the cheapest nonstop flight in Google Flights
+description: Opens a Google Flights search for a one-way nonstop flight in Chrome by its URL (origin, destination, date), switches to Cheapest
+  and reports the lowest price. Read only; it never opens a fare or books.
+patterns: [cheapest nonstop flight price, how much is the cheapest nonstop flight, find the lowest-price nonstop flight, cheapest one-way nonstop
+    fare]
+outputs: [cheapest_nonstop_flight_price]
+start: fresh_launch
+inputs:
+  origin_airport: {type: text, description: Origin airport code, example: SFO}
+  destination_airport: {type: text, description: Destination airport code, example: JFK}
+  departure_date: {type: text, description: Departure date as YYYY-MM-DD, example: '2026-11-20'}
+steps:
+- id: open_search_url
+  intent: "Open the Google Flights search for {{origin_airport}} to {{destination_airport}} on {{departure_date}} by its URL"
+  pre:
+  - {app_foreground: com.android.chrome}
+  action:
+    type:
+      field: {resource_id: url_bar, kind: EditText, cls: EditText, in_list: false}
+      value: "https://www.google.com/travel/flights?q=Flights%20from%20{{origin_airport}}%20to%20{{destination_airport}}%20on%20{{departure_date}}%20one%20way%20nonstop"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: url_bar
+      text_has: "Flights%20from%20{{origin_airport}}%20to%20{{destination_airport}}%20on%20{{departure_date}}"
+      kind: EditText
+  - {text_visible: Cheapest from}
+  risk: read
+  note: "loop B by hand (the coordinator's idea): the search by URL instead of the form, whose origin field kept resetting; the compiled run had\
+    \ opened it before its first recorded step"
+- id: tap_cheapest_sort
+  intent: Tap the Cheapest tab when Google shows one
+  optional: true
+  pre:
+  - {app_foreground: com.android.chrome}
+  - {text_visible: Cheapest from}
+  action:
+    tap:
+      resource_id: M7sBEb
+      text: Cheapest
+      kind: Button
+      cls: View
+      siblings: [Best]
+      in_list: true
+      position: [0.729, 0.528]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: M7sBEb, text_has: US dollars, kind: Button}
+  risk: read
+  note: "trace step 1; loop B v4: optional, as Google shows a plain list for some routes (LAX to SEA)"
+- id: read_cheapest_price
+  intent: Read the first flight's price (the list is sorted by price)
+  pre:
+  - {app_foreground: com.android.chrome}
+  - {text_visible: Nonstop flight with}
+  action: {wait: 0.5}
+  risk: read
+  extract:
+    cheapest_nonstop_flight_price: {pattern: 'From (?P<v>\d[\d,]* US dollars)\. Nonstop flight with .*'}
+  note: "loop B v4: the first flight row (From 639 US dollars. Nonstop flight with JetBlue ...), whether the Cheapest tab came or not"
+parent_version: 3
+changes:
+- "the Cheapest tab is optional and the price is read from the first flight row (From N US dollars. Nonstop flight with ...): for some routes\
+  \ Google shows a plain list with no tabs (LAX to SEA fell to the agent on v3)"
+compiled_from: {task_id: task-1030-214314-a891-r1, goal: 'In Chrome, open the Google Flights search URL for SFO to JFK on 2026-11-20 and tell
+    me the price of the cheapest nonstop flight.', compiler: muse-wonder-1.0 + loop-b by hand}

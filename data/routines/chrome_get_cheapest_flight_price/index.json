@@ -1,6 +1,6 @@
 {
  "name": "chrome_get_cheapest_flight_price",
- "active": 3,
+ "active": 4,
  "versions": [
   {
    "version": 1,
@@ -32,7 +32,7 @@
   },
   {
    "version": 3,
-   "status": "active",
+   "status": "retired",
    "created": "2026-10-30 21:47:05",
    "parent": 2,
    "changes": [
@@ -42,6 +42,20 @@
     "by": "loop-b",
     "how": "from the two wrong v2 replays; live replays follow",
     "checked": "2026-10-30 21:48"
+   }
+  },
+  {
+   "version": 4,
+   "status": "active",
+   "created": "2026-10-31 00:17:25",
+   "parent": 3,
+   "changes": [
+    "the Cheapest tab is optional and the price is read from the first flight row (From N US dollars. Nonstop flight with ...): for some routes Google shows a plain list with no tabs (LAX to SEA fell to the agent on v3)"
+   ],
+   "verification": {
+    "by": "loop-b",
+    "how": "offline on the recorded screens of task-1030-214314-a891, -214706-6625 (639 US dollars before and after the Cheapest tap) and task-1030-214813-6eaa (79 US dollars on the plain list); live replays follow",
+    "checked": "2026-10-31 00:20"
    }
   }
  ],
@@ -154,6 +168,61 @@
    "rung": 0,
    "model_calls": 0,
    "duration_s": 2.98,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-31 00:17:42",
+   "kind": "run",
+   "version": 4,
+   "task_id": "task-1031-001726-5e34-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 6.63,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-31 00:18:00",
+   "kind": "run",
+   "version": 4,
+   "task_id": "task-1031-001749-f08a-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 4.38,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-31 00:18:21",
+   "kind": "run",
+   "version": 4,
+   "task_id": "task-1031-001808-820b-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 4.13,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-31 00:18:38",
+   "kind": "run",
+   "version": 4,
+   "task_id": "task-1031-001828-00ea-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.99,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-31 00:18:56",
+   "kind": "run",
+   "version": 4,
+   "task_id": "task-1031-001845-9931-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 4.04,
    "patches": 0
   }
  ],
