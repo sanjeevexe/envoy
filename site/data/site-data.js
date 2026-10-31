@@ -3238,7 +3238,7 @@ window.ENVOY = {
    }
   },
   "tests": {
-   "functions": 602,
+   "functions": 603,
    "files": 38,
    "src": {
     "path": "backend/tests"

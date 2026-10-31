@@ -74,7 +74,7 @@ imported copies are what the site uses. Any new frame must be looked at for priv
 | 10 | Suites, targets, charts | `eval/results/final/report.md`, `eval/results/final/charts/` |
 | 10 | Pixel 5: 30/30, 0 calls | `eval/results/final/sizes.json` (devices.phone; Oct 28, `a9b923d`) |
 | 10 | AndroidWorld | `docs/androidworld-results.md` (Headline; held-out half) |
-| 10 | Test functions (602 in 38 files at this build) | counted from `backend/tests/` by the build (a parametrized test counts once) |
+| 10 | Test functions (counted at each build) | counted from `backend/tests/` by the build (a parametrized test counts once) |
 | 11 | Diagrams; what Envoy built; open-source plumbing | `docs/diagrams/`, `THIRD_PARTY.md` |
 
 Numbers measured on SkyLark, Envoy's own test app, carry an "Our test app" label wherever they appear.
