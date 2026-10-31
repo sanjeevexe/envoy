@@ -1,0 +1,1006 @@
+window.ENVOY = {
+ "meta": {
+  "repo_url": ""
+ },
+ "claim": {
+  "lead": "Envoy gives AI agents a phone layer: the ability to act inside any phone app, and to understand what those apps contain.",
+  "pitch": "Agents can search the web. Your phone knows your life.",
+  "prior": "Operating phone apps with an agent has been done (Mobilerun, Gemini on Android, AGI Inc.). Envoy's contribution is making it dependable, cheap and useful over time:",
+  "new": [
+   {
+    "title": "App routines",
+    "text": "One successful run is compiled into a reusable program with inputs, a check before and after every step, element-based targeting that works on any screen size, and self-repair that fixes only the broken step and saves the fix."
+   },
+   {
+    "title": "A trustworthy shared memory",
+    "text": "Facts pulled from app screens, email and photos land in one graph. Each fact records where and when it was seen, newer facts replace stale ones, and the same trip seen in an email and an app becomes one entity."
+   },
+   {
+    "title": "A device layer that routes between phones",
+    "text": "One interface over cloud emulators and real Android phones, with routines that run on either. The iPhone acts as a companion for approvals, the live view, voice and photos."
+   }
+  ],
+  "src": {
+   "path": "docs/technical-design.md",
+   "note": "Overview"
+  }
+ },
+ "first_run": {
+  "id": "starbucks-first",
+  "kind": "agent",
+  "app": "Starbucks",
+  "package": "com.starbucks.mobilecard",
+  "task_id": "task-1030-155711-51c2",
+  "device": "envoy-real",
+  "device_note": "envoy-real, an Android emulator signed in to Google's Play Store; no Starbucks account",
+  "where": "loop A (prompts/loop-reliability.md), Oct 30",
+  "started_et": "2026-10-30 15:57:11",
+  "goal": "In the Starbucks app, how many calories are in a Grande Caffè Latte?",
+  "answer": "190 calories",
+  "status": "done",
+  "plan": {
+   "subgoals": [
+    "Open the Starbucks menu",
+    "Find and open Caffè Latte",
+    "Select the Grande size",
+    "Read the calories shown for the Grande Caffè Latte"
+   ],
+   "usd": 0.01485,
+   "model_ms": 5873,
+   "t": 11.6
+  },
+  "steps": [
+   {
+    "n": 1,
+    "t": 16.0,
+    "action": {
+     "type": "tap",
+     "element": 19
+    },
+    "text": "tap \"Order\"",
+    "reason": "Tap Order to open menu",
+    "expected": "Menu categories screen appears",
+    "risk": "reversible",
+    "frame": null,
+    "box": [
+     276,
+     2127,
+     530,
+     2337
+    ],
+    "box_kind": "tap",
+    "screen": [
+     1080,
+     2400
+    ],
+    "model_ms": 1536,
+    "usd": 0.010996,
+    "compact": "App: com.starbucks.mobilecard · Screen: dIu · settled 500 ms\n[1] List (scrollable)\n[2] Text \"Can we get something started for you?\"\n[3] Button \"Sign in\"\n[4] Button \"Cafés\"\n[5] Button \"Account\"\n[6] List (scrollable)\n[7] Button \"See our Halloween favorites\"\n[8] Text \"So delicious, it’s frightening\"\n[9] Text \"Indulge in two new Halloween treats. Chocolate cake flavor haunts our Black Cat Frappuccino® Blended Beverage, and pairs perfectly with a decadent Venti Black Night Cookie.\"\n[10] Button \"See our Halloween favorites\"\n[11] Text \"STARBUCKS® REWARDS\"\n[12] List (scrollable)\n[13] Button \"Page 1 of 4. Like free coffee? It’s just one of the many reasons you’ll love Starbucks Rewards. (Terms apply)\"\n[14] Button \"Page 2 of 4. Come in for a free drink or treat on your birthday, every year. (Terms apply)\"\n[15] Button\n[16] Button \"Join now\"\n[17] Text \"Home\"\n[18] Text \"Home\"\n[19] Button \"Order\"\n[20] Button \"Gift\"\n[21] Button \"Rewards\"\n(screen has a scrollable list; scroll to see more)",
+    "calls_so_far": 3,
+    "usd_so_far": 0.028596
+   },
+   {
+    "n": 2,
+    "t": 18.6,
+    "action": {
+     "type": "tap",
+     "element": 3
+    },
+    "text": "tap \"No, thanks\"",
+    "reason": "Dismiss location prompt to proceed to menu",
+    "expected": "Dialog closed, menu/order screen visible",
+    "risk": "reversible",
+    "frame": "img/starbucks-first-02.webp",
+    "box": [
+     186,
+     1450,
+     491,
+     1576
+    ],
+    "box_kind": "tap",
+    "screen": [
+     1080,
+     2400
+    ],
+    "model_ms": 1461,
+    "usd": 0.010128,
+    "compact": "App: com.starbucks.mobilecard · Screen: dIu · settled 22 ms\n[1] Text \"Share your location in Settings?\"\n[2] Text \"It looks like you haven’t shared your location with Starbucks. Sharing your location enables you to see details like travel time, distance to cafés, item availability and more.\"\n[3] Button \"No, thanks\" (id: button2)\n[4] Button \"Share location\" (id: button1)",
+    "calls_so_far": 4,
+    "usd_so_far": 0.038724
+   },
+   {
+    "n": 3,
+    "t": 22.9,
+    "action": {
+     "type": "tap",
+     "element": 5
+    },
+    "text": "tap \"Skip\"",
+    "reason": "Skip café selection to access menu browsing",
+    "expected": "Menu or home screen without store picker blocking",
+    "risk": "reversible",
+    "frame": "img/starbucks-first-03.webp",
+    "box": [
+     914,
+     128,
+     1080,
+     275
+    ],
+    "box_kind": "tap",
+    "screen": [
+     1080,
+     2400
+    ],
+    "model_ms": 2944,
+    "usd": 0.005581,
+    "compact": "App: com.starbucks.mobilecard · Screen: dIu · settled 25 ms\n[1] Text \"Choose a café\"\n[2] Button \"Search\"\n[3] Text \"Pickup\" (selected)\n[4] Button \"Delivery\"\n[5] Button \"Skip\"\n[6] Button \"Google Map\"\n[7] Button \"Show Starbucks Cafés near me\"\n[8] Button \"Filter. 0 filters applied. Refine search by café attribute\"\n[9] Text \"No cafés found\" (id: stores_tab_empty_state_title)\n[10] Text \"Try searching another area, removing filters, or zooming in or out to get a better look.\" (id: stores_tab_empty_state_body)\n[11] Button \"Home\"\n[12] Text \"Order\"\n[13] Text \"Order\"\n[14] Button \"Gift\"\n[15] Button \"Rewards\"",
+    "calls_so_far": 5,
+    "usd_so_far": 0.044305
+   },
+   {
+    "n": 4,
+    "t": 26.4,
+    "action": {
+     "type": "tap",
+     "element": 4
+    },
+    "text": "tap \"Yes\"",
+    "reason": "Tap Yes to skip to menu without café",
+    "expected": "Menu screen appears",
+    "risk": "reversible",
+    "frame": "img/starbucks-first-04.webp",
+    "box": [
+     680,
+     1332,
+     911,
+     1458
+    ],
+    "box_kind": "tap",
+    "screen": [
+     1080,
+     2400
+    ],
+    "model_ms": 1673,
+    "usd": 0.004561,
+    "compact": "App: com.starbucks.mobilecard · Screen: dIu · settled 22 ms\n[1] Text \"Skip to menu?\"\n[2] Text \"We won’t be able to show what items are in stock until you select a café.\"\n[3] Button \"Choose a café\" (id: button2)\n[4] Button \"Yes\" (id: button1)",
+    "calls_so_far": 6,
+    "usd_so_far": 0.048866
+   },
+   {
+    "n": 5,
+    "t": 29.2,
+    "action": {
+     "type": "tap",
+     "element": 2
+    },
+    "text": "tap \"Search Menu\"",
+    "reason": "Tap Search Menu to find Caffè Latte",
+    "expected": "Search screen with text field",
+    "risk": "reversible",
+    "frame": "img/starbucks-first-05.webp",
+    "box": [
+     953,
+     128,
+     1080,
+     254
+    ],
+    "box_kind": "tap",
+    "screen": [
+     1080,
+     2400
+    ],
+    "model_ms": 1377,
+    "usd": 0.005769,
+    "compact": "App: com.starbucks.mobilecard · Screen: dIu · settled 30 ms\n[1] List (scrollable)\n[2] Button \"Search Menu\"\n[3] Text \"Order\"\n[4] Button \"1 of 4\"\n[5] Text \"Menu\"\n[6] Text \"2 of 4\" (selected)\n[7] Text \"Featured\" (selected)\n[8] Button \"3 of 4\"\n[9] Text \"Previous\"\n[10] Button \"4 of 4\"\n[11] Text \"Favorites\"\n[12] List (scrollable)\n[13] List (scrollable)\n[14] Text \"Signature Fall Flavors\"\n[15] Button \"See all 8\"\n[16] List (scrollable)\n[17] Button \"Pumpkin Spice Latte\"\n[18] Button \"Iced Pumpkin Spice Latte\"\n[19] Button \"Pumpkin Cream Cold Brew\"\n[20] Text \"Coffeehouse Favorites\"\n[21] Button \"See all 9\"\n[22] List (scrollable)\n[23] Button \"Aerocano\"\n[24] Button \"Caramel Aerocano\"\n[25] Text \"New to Fall\"\n[26] Button \"See all 6\"\n[27] Button\n[28] Button \"For item availability · Choose a café\"\n[29] Button \"0 item in your order\"\n[30] Button \"Home\"\n[31] Text \"Order\"\n[32] Text \"Order\"\n[33] Button \"Gift\"\n[34] Button \"Rewards\"\n(screen has a scrollable list; scroll to see more)",
+    "calls_so_far": 7,
+    "usd_so_far": 0.054635
+   },
+   {
+    "n": 6,
+    "t": 32.2,
+    "action": {
+     "type": "tap",
+     "element": 5
+    },
+    "text": "tap \"Caffè Latte\"",
+    "reason": "Caffè Latte is listed as recent search, tap it",
+    "expected": "Caffè Latte product page opens",
+    "risk": "reversible",
+    "frame": "img/starbucks-first-06.webp",
+    "box": [
+     0,
+     401,
+     1080,
+     527
+    ],
+    "box_kind": "tap",
+    "screen": [
+     1080,
+     2400
+    ],
+    "model_ms": 1734,
+    "usd": 0.005505,
+    "compact": "App: com.starbucks.mobilecard · Screen: dIu · settled 22 ms\n(the on-screen keyboard is open over the bottom of the screen)\n[1] Button \"RECENT SEARCHES\"\n[2] Button \"Back\"\n[3] EditText \"Search Menu\" (empty, focused)\n[4] Button \"Clear search\"\n[5] Button \"Caffè Latte\"\n[6] Button \"Caramel Macchiato\"\n[7] Button \"Flat White\"\n[8] Button \"Caffe Mocha\"\n[9] Button \"Caffe Americano\"",
+    "calls_so_far": 8,
+    "usd_so_far": 0.06014
+   },
+   {
+    "n": 7,
+    "t": 42.6,
+    "action": {
+     "type": "tap",
+     "element": 6
+    },
+    "text": "tap \"Caffè Latte\"",
+    "reason": "Tap Caffè Latte result to open its details.",
+    "expected": "Caffè Latte product page opens with size options.",
+    "risk": "reversible",
+    "frame": "img/starbucks-first-07.webp",
+    "box": [
+     0,
+     401,
+     1080,
+     629
+    ],
+    "box_kind": "tap",
+    "screen": [
+     1080,
+     2400
+    ],
+    "model_ms": 8761,
+    "usd": 0.005258,
+    "compact": "App: com.starbucks.mobilecard · Screen: dIu · settled 26 ms\n[1] Button \"Back\"\n[2] EditText \"Search Menu: Caffè Latte\" (focused)\n[3] Button \"Clear search\"\n[4] List (scrollable)\n[5] Text \"Results\"\n[6] Button \"Caffè Latte\"\n[7] Button \"Add to order\"\n[8] Button \"Iced Caffè Latte\"\n[9] Button \"Add to order\"\n[10] Button \"Iced Chai Latte\"\n[11] Button \"Add to order\"\n[12] Button \"Chai Latte\"\n[13] Button \"Add to order\"\n[14] Button \"London Fog Latte\"\n[15] Button \"Add to order\"\n[16] Button \"Pumpkin Spice Latte\"\n[17] Button \"Add to order\"\n[18] Button \"Pecan Crunch Latte\"\n[19] Button \"Add to order\"\n[20] Button \"Lavender Latte\"\n[21] Button \"Add to order\"\n[22] Button\n[23] Button \"For item availability · Choose a café\"\n[24] Button \"0 item in your order\"\n(screen has a scrollable list; scroll to see more)",
+    "calls_so_far": 9,
+    "usd_so_far": 0.065398
+   },
+   {
+    "n": 8,
+    "t": 45.4,
+    "action": {
+     "type": "done",
+     "result": "190 calories"
+    },
+    "text": "done",
+    "reason": "Grande size is selected and calories are displayed on screen",
+    "expected": "Goal answered with calories shown",
+    "risk": null,
+    "frame": "img/starbucks-first-08.webp",
+    "box": [
+     360,
+     893,
+     668,
+     1019
+    ],
+    "box_kind": "read",
+    "screen": [
+     1080,
+     2400
+    ],
+    "model_ms": 2001,
+    "usd": 0.006458,
+    "compact": "App: com.starbucks.mobilecard · Screen: dIu · settled 296 ms\n[1] List (scrollable)\n[2] Button \"Close\"\n[3] Button \"Share Caffè Latte\"\n[4] Text \"Caffè Latte\"\n[5] Text \"190 calories\"\n[6] Button \"nutrition disclaimer\"\n[7] List (scrollable)\n[8] Image \"Alert.\"\n[9] Text \"Choose a café to see availability\"\n[10] Text \"Size options\"\n[11] Button \"Short, 8 fl oz. 1 of 4\"\n[12] Button \"Tall, 12 fl oz. 2 of 4\"\n[13] Button \"Grande, 16 fl oz. 3 of 4\" (selected)\n[14] Button \"Venti, 20 fl oz. 4 of 4\"\n[15] Text \"What's included\"\n[16] Button \"Included. Milk Foam\"\n[17] Button \"Included. Milk 2% Milk\"\n[18] Button\n[19] Button \"Grande Caffè Latte. Add to order\"\n[20] Button\n[21] Button \"For item availability · Choose a café\"\n[22] Button \"0 item in your order\"\n(screen has a scrollable list; scroll to see more)",
+    "calls_so_far": 10,
+    "usd_so_far": 0.071856
+   }
+  ],
+  "calls": [
+   {
+    "job": "match",
+    "model": "muse-spark-1.3",
+    "ms": 1900,
+    "usd": 0.00275,
+    "t": 2.0
+   },
+   {
+    "job": "plan",
+    "model": "muse-wonder-1.0",
+    "ms": 5845,
+    "usd": 0.01485,
+    "t": 11.6
+   },
+   {
+    "job": "step",
+    "model": "muse-wonder-1.0",
+    "ms": 1509,
+    "usd": 0.010996,
+    "t": 14.0
+   },
+   {
+    "job": "step",
+    "model": "muse-wonder-1.0",
+    "ms": 1437,
+    "usd": 0.010128,
+    "t": 17.8
+   },
+   {
+    "job": "step",
+    "model": "muse-wonder-1.0",
+    "ms": 2922,
+    "usd": 0.005581,
+    "t": 21.9
+   },
+   {
+    "job": "step",
+    "model": "muse-wonder-1.0",
+    "ms": 1649,
+    "usd": 0.004561,
+    "t": 24.9
+   },
+   {
+    "job": "step",
+    "model": "muse-wonder-1.0",
+    "ms": 1353,
+    "usd": 0.005769,
+    "t": 28.2
+   },
+   {
+    "job": "step",
+    "model": "muse-wonder-1.0",
+    "ms": 1710,
+    "usd": 0.005505,
+    "t": 31.3
+   },
+   {
+    "job": "step",
+    "model": "muse-wonder-1.0",
+    "ms": 8736,
+    "usd": 0.005258,
+    "t": 41.4
+   },
+   {
+    "job": "step",
+    "model": "muse-wonder-1.0",
+    "ms": 1976,
+    "usd": 0.006458,
+    "t": 45.4
+   },
+   {
+    "job": "extract",
+    "model": "muse-spark-1.3",
+    "ms": 2880,
+    "usd": 0.003287,
+    "t": 48.4
+   },
+   {
+    "job": "app_note",
+    "model": "muse-spark-1.3",
+    "ms": 3296,
+    "usd": 0.004324,
+    "t": 51.7
+   }
+  ],
+  "app_notes": [
+   "Menu browsing is available after skipping cafe selection with Skip then Yes.",
+   "Use Search Menu to search for an item by name.",
+   "Item detail shows calories for the selected size with size options below."
+  ],
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: 190"
+  },
+  "total": {
+   "seconds": 45.6,
+   "calls": 12,
+   "usd": 0.0795,
+   "jobs": {
+    "match": 1,
+    "plan": 1,
+    "step": 8,
+    "extract": 1,
+    "app_note": 1
+   },
+   "commit": "main d014972, here a2ecceb",
+   "src": {
+    "path": "eval/results/real-apps/loop-a/runs.jsonl",
+    "note": "task-1030-155711-51c2"
+   }
+  },
+  "src": {
+   "path": "site/data/recordings/starbucks-first.json",
+   "note": "imported from loop A's trace and API copy"
+  }
+ },
+ "learned": {
+  "compiled": {
+   "routine": "loop_starbucks",
+   "app": "com.starbucks.mobilecard",
+   "version": 1,
+   "intent": "Look up how many calories are in a Starbucks drink",
+   "inputs": {
+    "drink_name": {
+     "type": "text",
+     "example": "Caffè Latte"
+    }
+   },
+   "outputs": [
+    "calories"
+   ],
+   "steps": [
+    {
+     "id": "tap_order",
+     "intent": "Tap Order to open the menu",
+     "optional": false,
+     "risk": "reversible",
+     "pre": [
+      "app in front: com.starbucks.mobilecard"
+     ],
+     "action": "tap Order",
+     "post": [
+      "the screen changed",
+      "“No, thanks” button (id button2) is on screen",
+      "“Share location” button (id button1) is on screen"
+     ],
+     "extract": []
+    },
+    {
+     "id": "dismiss_location_prompt",
+     "intent": "Tap No, thanks to dismiss the location prompt and proceed to the menu",
+     "optional": true,
+     "risk": "reversible",
+     "pre": [
+      "app in front: com.starbucks.mobilecard"
+     ],
+     "action": "tap No, thanks",
+     "post": [
+      "the screen changed",
+      "“No cafés found” text (id stores_tab_empty_state_title) is on screen",
+      "“Try searching another area, removing filters, or zooming in or out to get a better look.” text (id stores_tab_empty_state_body) is on screen"
+     ],
+     "extract": []
+    },
+    {
+     "id": "tap_skip_cafe_selection",
+     "intent": "Tap Skip to skip café selection and access menu browsing",
+     "optional": true,
+     "risk": "reversible",
+     "pre": [
+      "app in front: com.starbucks.mobilecard"
+     ],
+     "action": "tap Skip",
+     "post": [
+      "the screen changed",
+      "“Choose a café” button (id button2) is on screen",
+      "“Yes” button (id button1) is on screen"
+     ],
+     "extract": []
+    },
+    {
+     "id": "confirm_skip_to_menu",
+     "intent": "Tap Yes to confirm skipping to the menu without a café",
+     "optional": false,
+     "risk": "reversible",
+     "pre": [
+      "app in front: com.starbucks.mobilecard"
+     ],
+     "action": "tap Yes",
+     "post": [
+      "the screen changed",
+      "“Choose a café” button (id button2) is gone"
+     ],
+     "extract": []
+    },
+    {
+     "id": "tap_search_menu",
+     "intent": "Tap Search Menu to find {{drink_name}}",
+     "optional": false,
+     "risk": "reversible",
+     "pre": [
+      "app in front: com.starbucks.mobilecard"
+     ],
+     "action": "tap Search Menu",
+     "post": [
+      "the screen changed",
+      "“{{drink_name}}” button is on screen"
+     ],
+     "extract": []
+    },
+    {
+     "id": "tap_recent_drink_search",
+     "intent": "Tap {{drink_name}} from the recent searches",
+     "optional": false,
+     "risk": "reversible",
+     "pre": [
+      "app in front: com.starbucks.mobilecard"
+     ],
+     "action": "tap {{drink_name}}",
+     "post": [
+      "the screen changed",
+      "“Search Menu: {{drink_name}}” edittext is on screen"
+     ],
+     "extract": []
+    },
+    {
+     "id": "find_tap_drink_result",
+     "intent": "Scroll to {{drink_name}} if it is not on screen",
+     "optional": false,
+     "risk": "read",
+     "pre": [],
+     "action": "scroll down until {{drink_name}} (max 8)",
+     "post": [
+      "“{{drink_name}}” button is on screen"
+     ],
+     "extract": []
+    },
+    {
+     "id": "tap_drink_result",
+     "intent": "Tap the {{drink_name}} result to open its details and view the calories for the {{drink_size}} size",
+     "optional": false,
+     "risk": "reversible",
+     "pre": [
+      "app in front: com.starbucks.mobilecard"
+     ],
+     "action": "tap {{drink_name}}",
+     "post": [
+      "the screen changed",
+      "“{{drink_size}} {{drink_name}}. Add to order” button is on screen"
+     ],
+     "extract": [
+      "calories"
+     ]
+    }
+   ],
+   "src": {
+    "path": "eval/results/real-apps/loop-a/compiled/loop_starbucks-v1.yaml"
+   }
+  },
+  "active": {
+   "routine": "starbucks_drink_calories",
+   "app": "com.starbucks.mobilecard",
+   "version": 4,
+   "intent": "Look up how many calories are in a Starbucks drink",
+   "inputs": {
+    "drink_name": {
+     "type": "text",
+     "example": "Caffè Latte"
+    }
+   },
+   "outputs": [
+    "calories"
+   ],
+   "steps": [
+    {
+     "id": "tap_order",
+     "intent": "Tap Order to open the menu",
+     "optional": false,
+     "risk": "reversible",
+     "pre": [
+      "app in front: com.starbucks.mobilecard"
+     ],
+     "action": "tap Order",
+     "post": [
+      "the screen changed"
+     ],
+     "extract": []
+    },
+    {
+     "id": "dismiss_location_prompt",
+     "intent": "Tap No, thanks to dismiss the location prompt and proceed to the menu",
+     "optional": true,
+     "risk": "reversible",
+     "pre": [
+      "app in front: com.starbucks.mobilecard"
+     ],
+     "action": "tap No, thanks",
+     "post": [
+      "the screen changed",
+      "“No, thanks” button (id button2) is gone"
+     ],
+     "extract": []
+    },
+    {
+     "id": "tap_skip_cafe_selection",
+     "intent": "Tap Skip to skip café selection and access menu browsing",
+     "optional": true,
+     "risk": "reversible",
+     "pre": [
+      "app in front: com.starbucks.mobilecard"
+     ],
+     "action": "tap Skip",
+     "post": [
+      "the screen changed"
+     ],
+     "extract": []
+    },
+    {
+     "id": "dismiss_location_prompt_after_skip",
+     "intent": "Tap No, thanks to dismiss the location prompt and proceed to the menu",
+     "optional": true,
+     "risk": "reversible",
+     "pre": [
+      "app in front: com.starbucks.mobilecard"
+     ],
+     "action": "tap No, thanks",
+     "post": [
+      "the screen changed",
+      "“No, thanks” button (id button2) is gone"
+     ],
+     "extract": []
+    },
+    {
+     "id": "confirm_skip_to_menu",
+     "intent": "Tap Yes to confirm skipping to the menu without a café",
+     "optional": false,
+     "risk": "reversible",
+     "pre": [
+      "app in front: com.starbucks.mobilecard"
+     ],
+     "action": "tap Yes",
+     "post": [
+      "the screen changed",
+      "“Choose a café” button (id button2) is gone"
+     ],
+     "extract": []
+    },
+    {
+     "id": "tap_search_menu",
+     "intent": "Tap Search Menu to find {{drink_name}}",
+     "optional": false,
+     "risk": "reversible",
+     "pre": [
+      "app in front: com.starbucks.mobilecard"
+     ],
+     "action": "tap Search Menu",
+     "post": [
+      "the screen changed",
+      "“{{drink_name}}” button is on screen"
+     ],
+     "extract": []
+    },
+    {
+     "id": "tap_recent_drink_search",
+     "intent": "Tap {{drink_name}} from the recent searches",
+     "optional": false,
+     "risk": "reversible",
+     "pre": [
+      "app in front: com.starbucks.mobilecard"
+     ],
+     "action": "tap {{drink_name}}",
+     "post": [
+      "the screen changed",
+      "“Search Menu: {{drink_name}}” edittext is on screen"
+     ],
+     "extract": []
+    },
+    {
+     "id": "find_tap_drink_result",
+     "intent": "Scroll to {{drink_name}} if it is not on screen",
+     "optional": false,
+     "risk": "read",
+     "pre": [],
+     "action": "scroll down until {{drink_name}} (max 8)",
+     "post": [
+      "“{{drink_name}}” button is on screen"
+     ],
+     "extract": []
+    },
+    {
+     "id": "tap_drink_result",
+     "intent": "Tap the {{drink_name}} result to open its details and view the calories for the {{drink_size}} size",
+     "optional": false,
+     "risk": "reversible",
+     "pre": [
+      "app in front: com.starbucks.mobilecard"
+     ],
+     "action": "tap {{drink_name}}",
+     "post": [
+      "the screen changed",
+      "“{{drink_size}} {{drink_name}}. Add to order” button is on screen"
+     ],
+     "extract": [
+      "calories"
+     ]
+    }
+   ],
+   "src": {
+    "path": "data/routines/starbucks_drink_calories/v4.yaml"
+   }
+  },
+  "versions": [
+   {
+    "version": 1,
+    "status": "retired",
+    "created": "2026-10-30 16:39:50",
+    "changes": [
+     "named starbucks_drink_calories (was loop_starbucks v3 in loop A's copy; same steps)",
+     "drink_name is the menu name without the size: the matcher filled 'Grande Caffè Latte', which no search result row has, so find_tap_drink_result failed and the agent took over in 6 of 6 replays (loop A, Oct 30)"
+    ],
+    "by": "loop-a",
+    "trial": null
+   },
+   {
+    "version": 2,
+    "status": "rejected",
+    "created": "2026-10-30 17:00:16",
+    "changes": [
+     "step 'dismiss_location_prompt' removed: its screen no longer appears after 'tap_order'; the app went straight to 'tap_skip_cafe_selection'",
+     "before 'tap_skip_cafe_selection', the screen needed tap No, thanks"
+    ],
+    "by": "self-repair",
+    "trial": {
+     "passed": false,
+     "task_id": "task-1030-170032-d660-r1",
+     "status": "declined",
+     "model_calls": 1,
+     "duration_s": 29.45
+    }
+   },
+   {
+    "version": 3,
+    "status": "retired",
+    "created": "2026-10-30 17:02:19",
+    "changes": [
+     "after 'tap_order', an extra screen appeared; inserted tap_order_extra_1 (tap Choose a café)"
+    ],
+    "by": "self-repair",
+    "trial": {
+     "passed": true,
+     "task_id": "task-1030-170231-0a7b-r1",
+     "status": "done",
+     "model_calls": 0,
+     "duration_s": 9.7
+    }
+   },
+   {
+    "version": 4,
+    "status": "active",
+    "created": "2026-10-30 19:05:12",
+    "changes": [
+     "the location prompt is optional wherever it comes: tap_order and tap_skip_cafe_selection no longer require it (or the café dialog) in their after-checks, dismiss_location_prompt checks it is gone, and an optional copy follows Skip (loop A, Oct 30: on b1f3c9a 2 of 4 replays fell back to the agent at tap_order)"
+    ],
+    "by": "loop-a",
+    "trial": null
+   }
+  ],
+  "versions_src": {
+   "path": "data/routines/starbucks_drink_calories/index.json"
+  },
+  "compile": {
+   "seconds": 41.5,
+   "usd": 0.0806,
+   "steps": 8,
+   "inputs": [
+    "drink_name"
+   ],
+   "warnings": [
+    "input 'drink_size' is never used or shown; dropped"
+   ],
+   "commit": "main d014972, here a2ecceb",
+   "src": {
+    "path": "eval/results/real-apps/loop-a/runs.jsonl",
+    "note": "mode compile"
+   }
+  },
+  "first": {
+   "seconds": 45.6,
+   "calls": 12,
+   "usd": 0.0795,
+   "jobs": {
+    "match": 1,
+    "plan": 1,
+    "step": 8,
+    "extract": 1,
+    "app_note": 1
+   },
+   "commit": "main d014972, here a2ecceb",
+   "task_id": "task-1030-155711-51c2",
+   "answer": "190 calories",
+   "goal": "In the Starbucks app, how many calories are in a Grande Caffè Latte?",
+   "src": {
+    "path": "eval/results/real-apps/loop-a/runs.jsonl",
+    "note": "task-1030-155711-51c2"
+   }
+  },
+  "replay": {
+   "seconds": 14.8,
+   "calls": 2,
+   "usd": 0.005,
+   "jobs": {
+    "match": 1,
+    "extract": 1
+   },
+   "commit": "main 2a7f156, here 55abacf",
+   "task_id": "task-1030-204136-b8d5",
+   "answer": "calories: 190 calories",
+   "goal": "In the Starbucks app, how many calories are in a Grande Caffè Latte?",
+   "src": {
+    "path": "eval/results/real-apps/loop-a/runs.jsonl",
+    "note": "task-1030-204136-b8d5"
+   },
+   "routine_s": 9.83,
+   "routine_calls": 0,
+   "version": 4
+  },
+  "replay_steps": [
+   {
+    "n": 1,
+    "id": "tap_order",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "ms": {
+     "wait": 225,
+     "act": 192,
+     "post": 575,
+     "total": 992
+    },
+    "t": 5.88,
+    "detail": "",
+    "repairs": 0
+   },
+   {
+    "n": 2,
+    "id": "dismiss_location_prompt",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "ms": {
+     "wait": 345,
+     "act": 184,
+     "post": 296,
+     "total": 824
+    },
+    "t": 6.71,
+    "detail": "",
+    "repairs": 0
+   },
+   {
+    "n": 3,
+    "id": "tap_skip_cafe_selection",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "ms": {
+     "wait": 225,
+     "act": 193,
+     "post": 387,
+     "total": 805
+    },
+    "t": 7.51,
+    "detail": "",
+    "repairs": 0
+   },
+   {
+    "n": 4,
+    "id": "dismiss_location_prompt_after_skip",
+    "status": "skipped",
+    "rung": 0,
+    "rungs": [],
+    "ms": {
+     "wait": 71,
+     "act": 0,
+     "post": 0,
+     "total": 71
+    },
+    "t": 7.58,
+    "detail": "its after-checks already hold",
+    "repairs": 0
+   },
+   {
+    "n": 5,
+    "id": "confirm_skip_to_menu",
+    "status": "done",
+    "rung": 2,
+    "rungs": [
+     "relaxed match: after-checks failed but the next step (tap_search_menu) is ready"
+    ],
+    "ms": {
+     "wait": 192,
+     "act": 182,
+     "post": 1939,
+     "total": 2313
+    },
+    "t": 9.9,
+    "detail": "",
+    "repairs": 0
+   },
+   {
+    "n": 6,
+    "id": "tap_search_menu",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "ms": {
+     "wait": 196,
+     "act": 168,
+     "post": 271,
+     "total": 634
+    },
+    "t": 10.53,
+    "detail": "",
+    "repairs": 0
+   },
+   {
+    "n": 7,
+    "id": "tap_recent_drink_search",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "ms": {
+     "wait": 249,
+     "act": 213,
+     "post": 398,
+     "total": 861
+    },
+    "t": 11.39,
+    "detail": "",
+    "repairs": 0
+   },
+   {
+    "n": 8,
+    "id": "find_tap_drink_result",
+    "status": "done",
+    "rung": 0,
+    "rungs": [],
+    "ms": {
+     "wait": 72,
+     "act": 79,
+     "post": 184,
+     "total": 335
+    },
+    "t": 11.73,
+    "detail": "",
+    "repairs": 0
+   },
+   {
+    "n": 9,
+    "id": "tap_drink_result",
+    "status": "done",
+    "rung": 2,
+    "rungs": [
+     "relaxed match: after-checks held at the relaxed threshold"
+    ],
+    "ms": {
+     "wait": 204,
+     "act": 177,
+     "post": 2440,
+     "total": 2824
+    },
+    "t": 14.55,
+    "detail": "",
+    "repairs": 0
+   }
+  ],
+  "replay_calls": [
+   {
+    "job": "match",
+    "model": "muse-spark-1.3",
+    "ms": 2022,
+    "usd": 0.00227,
+    "t": 2.1
+   },
+   {
+    "job": "extract",
+    "model": "muse-spark-1.3",
+    "ms": 3010,
+    "usd": 0.002721,
+    "t": 17.8
+   }
+  ],
+  "replay_src": {
+   "path": "site/data/recordings/starbucks-replay.json",
+   "note": "imported from loop A's trace"
+  },
+  "new_input": {
+   "seconds": 15.8,
+   "calls": 2,
+   "usd": 0.0063,
+   "jobs": {
+    "match": 1,
+    "extract": 1
+   },
+   "commit": "main 2a7f156, here 55abacf",
+   "task_id": "task-1030-201551-c3b9",
+   "answer": "calories: 250 calories",
+   "goal": "In the Starbucks app, how many calories are in a Grande Caramel Macchiato?",
+   "src": {
+    "path": "eval/results/real-apps/loop-a/runs.jsonl",
+    "note": "task-1030-201551-c3b9"
+   }
+  },
+  "table_src": {
+   "path": "eval/results/real-apps/table.md",
+   "note": "Starbucks rows"
+  }
+ }
+};

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Envoy: a guided tour</title>
+<meta name="description" content="Envoy gives AI agents a phone layer. A guided tour built only from real recordings: a first run, the routine it became, self-repair, memory with sources, safety, and the eval.">
+<meta name="theme-color" content="#f6f3ec">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' rx='28' fill='%233e7c5c'/%3E%3Cg transform='translate(19 19) scale(0.68)'%3E%3Cpath d='M58 14C86 12 106 32 106 61C106 91 86 108 58 106C31 104 14 87 14 60C14 33 31 16 58 14Z' fill='%23f6f3ec'/%3E%3Cellipse cx='47' cy='58' rx='6' ry='8' fill='%233e7c5c'/%3E%3Cellipse cx='73' cy='58' rx='6' ry='8' fill='%233e7c5c'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="#claim" aria-label="Envoy, back to the top">
+      <svg width="30" height="30" viewBox="8 8 104 104" aria-hidden="true"><g class="ev-body"><path d="M58 14C86 12 106 32 106 61C106 91 86 108 58 106C31 104 14 87 14 60C14 33 31 16 58 14Z" fill="var(--sage)"/><ellipse class="ev-eye" cx="47" cy="58" rx="6" ry="8" fill="var(--face)"/><ellipse class="ev-eye" cx="73" cy="58" rx="6" ry="8" fill="var(--face)"/></g></svg>
+      <span class="wordmark">envoy</span>
+    </a>
+    <nav class="toc" id="toc" aria-label="Sections"></nav>
+    <a class="top-repo" id="repo-link" href="#how-built">The code</a>
+  </div>
+</header>
+
+<main id="main">
+  <!-- 1 -->
+  <section class="sec hero" id="claim" aria-labelledby="claim-h">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow"><span class="num">1</span> The claim</span>
+          <h1 id="claim-h" style="margin-top:14px">Phone agents think through every tap, every time. <em>Envoy learns an app once.</em></h1>
+          <p class="lede">It writes a successful run down as a program that checks every screen, repairs itself when the app changes, then replays it fast and nearly free.</p>
+        </div>
+        <div class="hero-avatar" aria-hidden="true">
+          <div class="glow"></div>
+          <svg width="220" height="220" viewBox="-12 -12 144 144" style="position:relative;overflow:visible">
+            <g class="ev-body"><path d="M58 14C86 12 106 32 106 61C106 91 86 108 58 106C31 104 14 87 14 60C14 33 31 16 58 14Z" fill="var(--sage)"/><g transform="translate(4 5)"><ellipse class="ev-eye" cx="47" cy="58" rx="5.5" ry="7.5" fill="var(--face)"/><ellipse class="ev-eye" cx="73" cy="58" rx="5.5" ry="7.5" fill="var(--face)"/></g><circle cx="35" cy="74" r="5.5" fill="var(--apricot)" opacity="0.55"/></g>
+            <rect x="84" y="64" width="30" height="48" rx="7" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/>
+            <rect x="90" y="72" width="18" height="3.5" rx="1.75" fill="var(--sage-track)"/>
+            <rect x="90" y="79" width="12" height="3.5" rx="1.75" fill="var(--sage-track)"/>
+            <circle class="ev-tap" cx="99" cy="96" r="5"/><circle cx="99" cy="96" r="2.5" fill="var(--sage)"/>
+          </svg>
+        </div>
+      </div>
+      <div id="proof"></div>
+      <div id="new"></div>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="sec" id="first-run" aria-labelledby="first-run-h">
+    <div class="wrap" id="first-run-body"></div>
+  </section>
+
+  <!-- 3 -->
+  <section class="sec" id="learned" aria-labelledby="learned-h">
+    <div class="wrap" id="learned-body"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap" id="foot"></div>
+</footer>
+
+<script src="data/site-data.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>
