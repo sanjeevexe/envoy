@@ -48,7 +48,7 @@ a real Android phone; the emulators run on a Mac today.
 
 ## More
 
-- Design: [`docs/technical-design.md`](docs/technical-design.md) (live version: https://claude.ai/artifact/Sf51zMf4SMi5ZZmJabgPR5)
+- Design: [`docs/technical-design.md`](docs/technical-design.md)
 - Phase results: [`docs/phase-0-findings.md`](docs/phase-0-findings.md) · [`docs/phase-1-results.md`](docs/phase-1-results.md) (agent loop) · [`docs/phase-2-results.md`](docs/phase-2-results.md) (app routines) · [`docs/phase-3-results.md`](docs/phase-3-results.md) (memory graph) · [`docs/phase-4-results.md`](docs/phase-4-results.md) (web app, live view, approvals, MCP) · [`docs/phase-5-results.md`](docs/phase-5-results.md) (iPhone companion, voice, photos) · [`docs/phase-6-results.md`](docs/phase-6-results.md) (real Android phone, SAM 3.1) · [`docs/real-app-test-set.md`](docs/real-app-test-set.md)
 - The final evaluation: [`eval/results/final/report.md`](eval/results/final/report.md) (how to run it: [Evaluate it](#evaluate-it))
 - Open-source credits: [`THIRD_PARTY.md`](THIRD_PARTY.md) · License: MIT ([`LICENSE`](LICENSE))

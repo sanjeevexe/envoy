@@ -145,8 +145,8 @@ what the report shows today, on development commits.
 
 ## Built during the hackathon
 
-- **The history:** all of Envoy is in this repo's history, from the first commit (the empty repository layout) to the
-  last.
+- **The history:** all of Envoy is in this repo's history, from the first commit on Oct 26, the day the hackathon
+  started (the empty repository layout), to the last.
 - **Open source:** projects like uiautomator2, scrcpy, FastAPI, the MCP SDK, Next.js and d3-force are plumbing,
   credited with their licenses in `THIRD_PARTY.md`.
 - **What Envoy builds itself:** the agent runtime, the routine compiler, executor and repair, the memory, the device

@@ -1,6 +1,6 @@
 # Envoy — Technical Design
 
-Oct 27, 2026 · Exported from the [live design doc](https://claude.ai/artifact/Sf51zMf4SMi5ZZmJabgPR5)
+Oct 27, 2026
 
 ## Overview
 
