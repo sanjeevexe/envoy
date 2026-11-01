@@ -169,7 +169,7 @@ def trigger_when(trig: dict[str, Any]) -> str:
 def trigger_what(ctx: Any, trig: dict[str, Any]) -> str:
     a = trig.get("action") or {}
     if not (a.get("goal") or a.get("routine")) and trig.get("kind") == "notification":
-        return f"tell you and {CLIENT}"
+        return f"tell you and {agent_name()}"
     if a.get("goal"):
         return f'"{_line(a["goal"], 80)}"'
     try:
