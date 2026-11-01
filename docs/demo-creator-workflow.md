@@ -95,6 +95,56 @@ The steps (the user does 2's tunnel, the key, and the iPhone):
    phone" and the finished task; note its exact words for the voice-over. Optionally, before step 4, ask Muse to check
    phone_updates every 2 minutes and tell you when the post is done (E1 showed scheduled checks work, ~10 min apart).
 
+## When Envoy runs in the cloud: the outbox forwarder
+
+Backlog #48 (built Nov 1, merged after the Nov 2 eval). Muse for Mac always writes the clip to `~/Envoy Outbox`, and the
+user never picks a route:
+
+| Where the clip is | Envoy on the Mac | Envoy in the cloud (`docs/cloud.md`) |
+| --- | --- | --- |
+| On the Mac, in `~/Envoy Outbox` | Envoy's own watcher, as above | The **outbox forwarder** sends it through Envoy's **door** |
+| Online, an https link | `send_to_phone` with the link | The same |
+
+- **The door** is `/mcp/outbox`, beside `/mcp`, with the same MCP key (`MCP_BEARER_TOKEN`) and nothing else: no
+  session token, no other path. Because it sits under `/mcp`, it is reached wherever Muse reaches `/mcp`: the tailnet
+  address, a quick tunnel, or Funnel's `/mcp` path: Tailscale passes the paths under `--set-path=/mcp` on, so
+  `scripts/muse_funnel.sh` needs no change (checked Nov 1 on the live Funnel: `/mcp/outbox` reached the API, which
+  answered 401 without the key; other paths got Tailscale's 404). On a public host it is the only path
+  besides `/mcp` (`api/app.py` dispatch). A clip and its sidecar sent there land in that Envoy's outbox as if dropped in:
+  the same handoff, the same offer ("Put pier.mp4 on … and post it to Instagram?"), the same yes. It takes photos and
+  videos only (by their bytes), at most 500 MB, cleans the name (no folders, hidden names or control characters; otherwise
+  as sent, so Muse's file name still finds it), and logs each call to `logs/door.jsonl` (never the key).
+- **The forwarder** is a small Mac-side process, no phones and no models (`backend/api/forwarder.py`). In the Mac's
+  `.env`, the user sets `ENVOY_REMOTE_URL` to the cloud Envoy's MCP address (the one Muse's connector uses, such as
+  `https://envoy-cloud.<tailnet>.ts.net:8443/mcp`) and `ENVOY_REMOTE_TOKEN` to its MCP key (`scripts/cloud/muse-token.sh`
+  puts it on the clipboard). Then:
+
+  ```bash
+  uv run --project backend python -m api.forwarder        # until Ctrl-C
+  ```
+
+  With no `ENVOY_REMOTE_URL`, or one that names this Mac, it says "Envoy runs on this Mac" and stops: the watcher already
+  handles the outbox. If an Envoy also answers on this Mac, it stops too (each clip would be offered twice) unless started
+  with `--also-here`.
+- **What it does.** Each new clip goes once its size has held for 2 s, with its sidecar if one is there; a sidecar that
+  comes later follows on its own, and the cloud Envoy's watcher treats it exactly as here (up to 30 s late it makes the
+  first offer; later, it replaces the offer). Sent files move to `~/Envoy Outbox/Sent/` (never deleted; a second
+  `pier.mp4` becomes `pier-2.mp4` there), and one line says what went where and what Envoy is doing with it, for example
+  `Sent pier.mp4 (49.2 MB) with pier.json to Envoy at envoy-cloud.<tailnet>.ts.net. Envoy has pier.mp4 and is asking you
+  in its app: "…" Moved to Sent/pier.mp4.` Offline or while that Envoy restarts, the clip stays and is tried again (5, 10,
+  30 s, then every minute; said once); a retry of a clip the door already has is recognized, so it isn't offered twice. A
+  clip Envoy refuses (too big, not a video) stays, said once. What was already in the outbox when it started stays, as
+  with the watcher (`--send-waiting` sends it).
+- **Muse doesn't know where Envoy runs.** It writes the clip and the sidecar and calls `send_to_phone("pier.mp4")` as it
+  does now; on the cloud Envoy that call waits while the clip is still coming through the door (up to 50 s), and a few
+  seconds for one not there yet while the forwarder is in touch. `list_phones` tells Muse each phone's kind (`cloud`,
+  `emulator` on the Mac, or `real`), whether it is online, and its apps, so it can say "post it from the cloud phone".
+- **Not wired yet: posting to Instagram from a cloud phone.** Instagram's handoff asks for the user's real phone, which the
+  cloud copy doesn't have, so a clip for Instagram reaches the cloud outbox and waits there: the door says "Envoy has
+  pier.mp4 but can't offer it: Your Android phone isn't connected …". And `send_to_phone` to an emulator only puts the
+  file in its gallery; it starts no post. The cloud Instagram test (`prompts/file-delivery.md`) needs one of the two
+  changed first: the coordinator's and the user's call.
+
 ## Setting up a take (one command)
 
 From the checkout whose API films the take (claim `pixel5` first):

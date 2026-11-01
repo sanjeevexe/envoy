@@ -52,7 +52,7 @@ from api.chat import chat
 from api.crossapp import CrossApp
 from api.devices import DevicePool
 from api.events import EventBus
-from api.handoff import Handoff, handoff_router
+from api.handoff import DOOR, Handoff, handoff_router
 from api.live import live_view
 from api.offers import Offers, offers_router
 from api.recurring import Recurring
@@ -697,15 +697,10 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
 
     @app.get("/api/settings/phones", dependencies=[Depends(session)])
     def get_phone_settings() -> dict[str, Any]:
-        from api.routing import EMULATOR_REFUSED
-        from api.runner import APP_NAMES
-        learned = tasks.setting("phone_apps_learned", {}) or {}
-        installed = tasks.setting("apps_installed", {}) or {}
-        apps = sorted({r.app for r in routines.active()} | set(APP_NAMES.values()) | set(learned) | set(installed))
-        names = {**{p: n.title() for n, p in APP_NAMES.items()}, **{p: a.get("name") for p, a in installed.items()},
-                 **EMULATOR_REFUSED, **{p: a.get("name") for p, a in learned.items()}}
+        from api.routing import EMULATOR_REFUSED, known_apps
+        apps, names = known_apps(tasks, routines)  # list_phones (MCP) reads the same list
         return {"phone_apps": tasks.setting("phone_apps", []) or [], "apps": apps, "emulator_refused": EMULATOR_REFUSED,
-                "learned": learned, "names": {p: n for p, n in names.items() if n},
+                "learned": tasks.setting("phone_apps_learned", {}) or {}, "names": names,
                 "phones": [d for d in pool.status() if d["kind"] == "phone"]}
 
     @app.post("/api/settings/phones", dependencies=[Depends(session)])
@@ -830,7 +825,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
         return {"deleted": tid}
 
     app.include_router(offers_router(ctx, session, caller))
-    app.include_router(handoff_router(ctx, session, caller))
+    app.include_router(handoff_router(ctx, session, caller, door_key=bearer_token(), door_log=LOGS / "door.jsonl"))  # files from another Mac
     app.include_router(siri_router(ctx, session, caller, csrf))
     app.include_router(signin_router(tasks, session))  # saved logins, off by default (api/autofill.py)
 
@@ -855,8 +850,8 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     async def dispatch(scope: dict, receive: Any, send: Any) -> None:
         """Only the names Envoy is served on (DNS rebinding); WebSockets only from those origins. A public address for AI
         clients (Muse) reaches /mcp and nothing else, and so does anything Tailscale says came in from the internet
-        (Funnel), whatever its host. /mcp goes to the MCP server (its own bearer token); everything else to the API and
-        web app."""
+        (Funnel), whatever its host; under /mcp that includes the outbox's door (/mcp/outbox, the Mac's forwarder, same key).
+        /mcp goes to the MCP server (its own bearer token); the door and everything else to the API and web app."""
         if scope["type"] in ("http", "websocket"):
             headers = {k.decode("latin-1").lower(): v.decode("latin-1") for k, v in scope.get("headers") or []}
             origin = headers.get("origin", "")
@@ -872,7 +867,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
                     await receive()
                     await send({"type": "websocket.close", "code": 4403})
                 return
-        if scope["type"] == "http" and (scope["path"] == "/mcp" or scope["path"].startswith("/mcp/")):
+        if scope["type"] == "http" and (scope["path"] == "/mcp" or scope["path"].startswith("/mcp/")) and scope["path"] != DOOR:
             await mcp(scope, receive, send)
         else:
             await app(scope, receive, send)

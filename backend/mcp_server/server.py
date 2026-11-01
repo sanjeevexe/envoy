@@ -10,8 +10,10 @@ press, and opening the link never approves anything (Muse's link previews fetch 
 
 Muse covers the web and the Mac, Envoy the phone (final-features plan, contracts 3 and 4): `send_to_phone` puts a file
 from Envoy's outbox (or an https URL) on a phone, `phone_updates` tells a client what happened there, and
-`create_trigger` proposes recurring phone work. Nothing here decides an offer or an approval: the real phone takes a file,
-and a proposed trigger turns on, only after the user's yes in Envoy.
+`create_trigger` proposes recurring phone work, and `list_phones` says which phones there are. Nothing here decides an
+offer or an approval: the real phone takes a file, and a proposed trigger turns on, only after the user's yes in Envoy.
+When Envoy runs away from the Mac (the cloud copy), a file name from Muse for Mac still works: the Mac's forwarder sends
+the outbox through the door (api/forwarder.py), and `send_to_phone` waits for a file that is on its way.
 """
 
 from __future__ import annotations
@@ -19,6 +21,7 @@ from __future__ import annotations
 import base64
 import os
 import re
+import sys
 import time
 from datetime import datetime
 from pathlib import Path
@@ -29,7 +32,9 @@ from mcp.server.transport_security import TransportSecuritySettings
 from mcp_types import Icon, ToolAnnotations
 
 from api.crossapp import lead, may_span_apps
+from api.devices import NAMES
 from api.handoff import HandoffError, read_sidecar
+from api.routing import blocks_emulator, choose, known_apps
 from memory.retrieval import Retriever
 from memory.service import MemoryService
 
@@ -45,6 +50,8 @@ INSTRUCTIONS = (
     "the approve_url from get_task. If run_task returns heads_up lines, tell the user before they wait on the task. "
     "send_to_phone puts a photo or video on the phone: a file the user (or you, on their Mac) put in Envoy's outbox folder, "
     "or an https URL. To an emulator it goes at once; to the user's real phone it waits for their OK in Envoy, so give them the url. "
+    "list_phones says which phones Envoy can use (a cloud phone, an emulator on the Mac, or the user's own phone), whether each is "
+    "online, and the apps it runs there; a phone's id is send_to_phone's device. "
     "phone_updates lists what happened on the phone since its cursor (finished tasks, tasks waiting for the user, changes, files, "
     "Envoy's questions); pass the cursor back next time. "
     "create_trigger proposes a recurring or event-triggered phone task: it is created switched off, and stays off until the user "
@@ -163,6 +170,52 @@ def trigger_what(ctx: Any, trig: dict[str, Any]) -> str:
         return f'"{_line(ctx.routines.get(a["routine"]).intent, 80)}"'
     except Exception:  # noqa: BLE001 - a routine that can't be read is still named
         return f"the routine {_line(a.get('routine'), 40)}"
+
+
+def host_kind() -> str:
+    """Where this Envoy and its emulators run: "cloud" on the cloud copy (ENVOY_HOST=cloud, or any Linux server: docs/cloud.md),
+    else "mac"."""
+    return (os.environ.get("ENVOY_HOST") or ("cloud" if sys.platform.startswith("linux") else "mac")).strip().lower()
+
+
+def phones_view(ctx: Any) -> dict[str, Any]:
+    """Each phone Envoy can use: its id, name, kind (cloud: an emulator on Envoy's cloud server; emulator: one on the
+    user's Mac; real: the user's own Android phone), whether it is online, and its apps. An emulator's apps are where
+    tasks go now (routing, api/routing.py: an app set to the user's phone runs on the real-app emulator while the phone is
+    away, if it can); a real phone's are the apps set to it and the ones that block emulators. Read only."""
+    pool, tasks = ctx.pool, ctx.tasks
+    try:
+        pool.refresh_phones()
+    except Exception:  # noqa: BLE001 - no adb: only the emulators, offline
+        pass
+    try:
+        running = pool.running()
+    except Exception:  # noqa: BLE001
+        running = {}
+    apps, names = known_apps(tasks, ctx.routines)
+    phone_apps, learned = tasks.setting("phone_apps", []) or [], tasks.setting("phone_apps_learned", {}) or {}
+    now = {a: choose(a, phone_apps=phone_apps, phones=list(pool.phones.values()), learned=learned).device for a in apps}
+    on_phone = [a for a in apps if a in phone_apps or blocks_emulator(a, phone_apps, learned)]
+
+    def label(pkgs: Any) -> list[str]:
+        return sorted({_line(names.get(p) or p, 40) for p in pkgs}, key=str.lower)
+
+    kind = "cloud" if host_kind() == "cloud" else "emulator"
+    out = [{"id": did, "name": NAMES.get(did, did), "kind": kind, "online": bool(running.get(did)),
+            "apps": label(a for a, d in now.items() if d == did)} for did in pool.leases if not did.startswith("phone-")]
+    named = tasks.setting("phone_names", {}) or {}
+    for pid in [*pool.phones, *(p for p in named if p not in pool.phones)]:
+        p = pool.phones.get(pid) or {}
+        row = {"id": pid, "name": _line(p.get("name") or named.get(pid) or p.get("model") or "Android phone", 40), "kind": "real",
+               "online": p.get("state") == "device", "apps": label(on_phone)}
+        if p.get("model"):
+            row["model"] = p["model"]
+        if p.get("state") == "unauthorized":
+            row["note"] = "connected, but it hasn't allowed USB debugging yet"
+        elif not p:
+            row["note"] = "not connected"
+        out.append(row)
+    return {"envoy_runs_on": "Envoy's cloud server" if kind == "cloud" else "the user's Mac", "phones": out}
 
 
 TASK_DONE = {"done": "Finished", "failed": "Failed", "declined": "Not done: the user said no", "stopped": "Stopped"}
@@ -319,12 +372,13 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> MCPServer:
         """Put a photo or video in the phone's gallery (Pictures/Envoy or Movies/Envoy). `file` is the name of a file in
         Envoy's outbox folder on the user's Mac (e.g. "clip.mp4"; no paths), or an https URL to download. A sidecar
         clip.json next to the file may name the app it's for: {"app": "gallery", "caption": "..."}. `device`: a phone's
-        id, "emulator", "phone", or leave it out. An emulator gets it at once; the user's real phone only after their OK
-        in Envoy (give them the url)."""
+        id (list_phones), "emulator", "phone", or leave it out. An emulator gets it at once; the user's real phone only
+        after their OK in Envoy (give them the url). The same file name works wherever Envoy runs: when it isn't on the
+        user's Mac, the file comes over from the Mac's outbox, and this waits for it while it does."""
         h = ctx.handoff
         try:
             url = file.strip().lower().startswith(("http://", "https://"))
-            path = h.download(file.strip()) if url else h.outbox_file(file)
+            path = h.download(file.strip()) if url else h.arrived(file)
             did = h.pick(device, read_sidecar(path)[0])
             item = h.add(path.name, "url" if url else "mcp", device=did)
         except HandoffError as e:
@@ -372,6 +426,13 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> MCPServer:
             return {"trigger_id": trig["id"], "error": "Envoy couldn't ask the user"}
         return {"trigger_id": trig["id"], "offer_id": offer["id"], "status": "waiting_for_user", "enabled": False,
                 "text": f"Waiting for the user's OK in Envoy. Until they say yes, it is off: {when}, {what}.", "url": f"{base}/?offer={offer['id']}"}
+
+    @server.tool(annotations=ToolAnnotations(title="List the phones Envoy can use", readOnlyHint=True, openWorldHint=False))
+    def list_phones() -> dict:
+        """The phones Envoy can use, so you can say which one to use: each one's id (send_to_phone's `device`), name, kind
+        ("cloud": an emulator on Envoy's cloud server; "emulator": one on the user's Mac; "real": the user's own Android
+        phone), whether it's online, and the apps Envoy runs on it. Any phone can take a photo or video. Read only."""
+        return phones_view(ctx)
 
     @server.tool(annotations=ToolAnnotations(title="What happened on the phone", readOnlyHint=True, openWorldHint=False))
     def phone_updates(since: str | None = None) -> dict:

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # A permanent public address for Muse's Envoy connector, so it's set up once (a quick tunnel, scripts/start_muse_test.sh,
-# changes address every run). Tailscale Funnel on a port of its own serves /mcp and nothing else; the API accepts that
-# address for /mcp alone (MCP_PERMANENT_URL in .env) and refuses anything else Tailscale marks as from the internet.
+# changes address every run). Tailscale Funnel on a port of its own serves /mcp and nothing else (the paths under it
+# too, so the outbox's door at /mcp/outbox, api/forwarder.py); the API accepts that address for /mcp alone
+# (MCP_PERMANENT_URL in .env) and refuses anything else Tailscale marks as from the internet.
 # Every call still needs MCP_BEARER_TOKEN: rotate it if it leaks (scripts/rotate_mcp_token.sh, then the API and Muse).
 # Funnel has to be allowed on the tailnet first, an admin setting: the first `on` prints Tailscale's link to allow it.
 #

@@ -34,7 +34,9 @@ replace these (TBD). Every row names the file it comes from.
 | AndroidWorld | 116 tasks, pass@1: Envoy as on `main` 21 (18%); with 13 general agent changes 57 (49%); on the held-out half 31 of 58 against 12; about $0.04 and 38 s a task | [`docs/androidworld-results.md`](docs/androidworld-results.md) |
 
 What isn't there yet: new inputs on real apps work about half the time; apps that refuse emulators (Target, banking) need
-a real Android phone; the emulators run on a Mac today.
+a real Android phone; the emulators run on a Mac today, with a cloud copy as a second option ([`docs/cloud.md`](docs/cloud.md)).
+A clip Muse for Mac hands over reaches the cloud copy too, through the Mac's outbox forwarder
+([`docs/demo-creator-workflow.md`](docs/demo-creator-workflow.md)), but posting it to Instagram from a cloud phone isn't wired yet.
 
 ## Try it
 

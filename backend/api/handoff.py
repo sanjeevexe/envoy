@@ -23,6 +23,12 @@ Muse's connector supports:
   covered (`phone_ok`, so no second "Use your phone?"). The user can also send a file from their own session
   (`POST /api/handoff/{id}/send`). MCP's `send_to_phone` pushes to an emulator at once; for the real phone it raises the
   same offer. Only files that arrive while Envoy runs raise offers.
+- **The door** (`POST /mcp/outbox`, backlog #48) is the outbox for a Mac that isn't this one: when Envoy runs in the
+  cloud, the Mac's forwarder (api/forwarder.py) sends each clip and its sidecar there, with the MCP key, and they land in
+  this outbox as if dropped in: the same record, the same offer (at once when the sidecar names the app, else after its
+  30 s), the same yes. It sits under /mcp so it is reached wherever /mcp is (the tailnet, Funnel's /mcp path, a quick
+  tunnel); public hosts reach /mcp and this, nothing else (api/app.py). While a file is coming through it,
+  `send_to_phone` waits for it instead of saying it isn't there.
 
 Statuses: waiting → offered → sent → posted (the task after it finished) | failed. A declined or expired offer puts the
 file back to waiting.
@@ -31,6 +37,7 @@ file back to waiting.
 from __future__ import annotations
 
 import asyncio
+import hmac
 import ipaddress
 import json
 import os
@@ -45,6 +52,8 @@ import unicodedata
 from pathlib import Path
 from typing import Any, Callable
 from urllib.parse import unquote, urljoin, urlsplit
+
+from fastapi import APIRouter, Body, Depends, HTTPException, Request
 
 from api.routing import TEST_EMULATOR, choose
 from api.store import TaskStore, new_id
@@ -67,6 +76,12 @@ SIDECAR_MAX = 64 * 1024
 # How long a new file waits for its sidecar before its offer is made without one. Muse for Mac wrote one 23 s after
 # moving the video (a permission prompt between, Oct 29); a sidecar that comes later still replaces the offer (scan).
 SIDECAR_GRACE_S = 30.0
+DOOR = "/mcp/outbox"
+# While the Mac's forwarder is in touch (its hello every few minutes), a name `send_to_phone` doesn't find yet may still
+# be settling on the Mac: it gets this long to show up. One already coming through the door gets ARRIVAL_WAIT_S.
+FORWARDER_SEEN_S = 15 * 60
+NOT_YET_S = 15.0
+ARRIVAL_WAIT_S = 50.0
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS handoffs (
@@ -101,7 +116,11 @@ HANDOFF_TEMPLATES: dict[str, dict[str, Any]] = {
 
 
 class HandoffError(ValueError):
-    """Said to the caller as it is: a file that isn't allowed, a phone that isn't there."""
+    """Said to the caller as it is: a file that isn't allowed, a phone that isn't there. `status` is the door's answer."""
+
+    def __init__(self, message: str, status: int = 400) -> None:
+        super().__init__(message)
+        self.status = status
 
 
 # ---- what counts as a file to send ------------------------------------------------------------------
@@ -164,6 +183,34 @@ def read_sidecar(media: Path) -> tuple[str | None, str | None, str | None]:
         caption = clean_caption(data["caption"], limit) if isinstance(data.get("caption"), str) else None
         return app, caption or None, note
     return None, None, None
+
+
+def sidecars(media: Path) -> tuple[Path, Path]:
+    """Where read_sidecar looks for a file's sidecar, in its order."""
+    return media.with_suffix(".json"), media.with_name(media.name + ".json")
+
+
+def write_sidecar(media: Path, data: dict[str, Any]) -> Path:
+    """A sidecar from the door, as `<name>.json` next to its file (so a file of the same stem never reads it): the two
+    typed values only, still checked by read_sidecar when they're used."""
+    path = sidecars(media)[1]
+    path.write_text(json.dumps({k: data[k] for k in ("app", "caption") if isinstance(data.get(k), str)}, ensure_ascii=False), encoding="utf-8")
+    return path
+
+
+def door_name(name: Any) -> str:
+    """A file name that came through the door, made safe for the outbox: its last part only, no control or direction
+    characters, no leading dots, tildes or spaces, at most 200 bytes; a photo or video by its extension. Otherwise as sent,
+    so the name Muse gives `send_to_phone` still finds it."""
+    s = re.split(r"[/\\]", unicodedata.normalize("NFC", str(name or "")))[-1]
+    s = "".join(ch for ch in s if unicodedata.category(ch)[0] != "C").strip().lstrip(".~ ").rstrip(". ")
+    p = Path(s)
+    if not s or kind_of(s) is None:
+        raise HandoffError("only photos and videos (jpg, jpeg, png, heic, webp, mp4, mov, m4v) go to the phone", status=415)
+    stem = p.stem
+    while len((stem + p.suffix).encode()) > 200:
+        stem = stem[:-1]
+    return stem.rstrip(". ") + p.suffix
 
 
 # ---- dating a copy now, so "the newest video in my gallery" is this one ----------------------------------
@@ -317,6 +364,8 @@ class Handoff:
         self._folder: Path | None = None  # the folder the seen list below belongs to
         self._seen: dict[str, float] = {}  # name → mtime when the watcher started on this folder
         self._sizes: dict[str, tuple[int, float, float]] = {}  # name → (size, mtime, since when it has had them)
+        self._received: dict[str, str] = {}  # the door: an upload's key → its handoff, so a retry isn't a second file
+        self.door_at = 0.0  # when the Mac's forwarder last came through the door (its hello, or a file)
         self._task: asyncio.Task | None = None
         with tasks.lock:
             tasks.db.executescript(SCHEMA)
@@ -353,9 +402,34 @@ class Handoff:
         if p.is_symlink() or p.resolve().parent != folder:
             raise HandoffError("that file isn't in Envoy's outbox")
         if not p.is_file():
-            raise HandoffError(f"there's no {name} in Envoy's outbox")
+            raise HandoffError(f"there's no {name} in Envoy's outbox", status=404)
         self._check_file(p)
         return p
+
+    def arrived(self, name: str, wait_s: float = ARRIVAL_WAIT_S, every_s: float = 0.5) -> Path:
+        """`outbox_file(name)`, for a name that may still be on its way from the Mac (Envoy away from it, the forwarder
+        sending): while it is coming through the door this waits for it (up to `wait_s`), and while the forwarder is in
+        touch a name not here yet gets NOT_YET_S to show up. Otherwise it answers at once, as outbox_file does."""
+        start = time.monotonic()
+        while True:
+            try:
+                return self.outbox_file(name)
+            except HandoffError as e:
+                waited = time.monotonic() - start
+                if e.status != 404:
+                    raise
+                uploading = self._uploading(name)
+                if not (uploading and waited < wait_s) and not (self.clock() - self.door_at < FORWARDER_SEEN_S and waited < NOT_YET_S):
+                    if uploading:
+                        raise HandoffError(f"{name} is still on its way from the Mac: ask again in a minute", status=404) from e
+                    raise
+            time.sleep(every_s)
+
+    def _uploading(self, name: str) -> bool:
+        try:
+            return (self.outbox() / f".{door_name(name)}.part").exists()
+        except HandoffError:
+            return False
 
     def _check_file(self, p: Path) -> str:
         kind = kind_of(p.name)
@@ -430,15 +504,19 @@ class Handoff:
                     self._update(item["id"], app=app, caption=caption, device=device[0], note=note or device[1])
                     if item["status"] == "offered" and item["offer_id"] and self.offers is not None:
                         self.reoffer(item, "A caption file for it arrived from your Mac: asking again with it")
-        # Its offer: at once when a sidecar named the app, else once the sidecar has had its chance.
         for hid in list(self._fresh):
-            item = self.item(hid)
-            if item is None or item["status"] != "waiting" or item["offer_id"]:
-                self._fresh.discard(hid)
-            elif item["app"] or now - item["created_at"] >= SIDECAR_GRACE_S:
-                self._fresh.discard(hid)
-                self.offer(hid, "outbox")
+            self._offer_when_due(hid, now)
         return new
+
+    def _offer_when_due(self, hid: str, now: float) -> dict[str, Any] | None:
+        """A new file's offer: at once when a sidecar named the app, else once the sidecar has had its chance."""
+        item = self.item(hid)
+        if item is None or item["status"] != "waiting" or item["offer_id"]:
+            self._fresh.discard(hid)
+        elif item["app"] or now - item["created_at"] >= SIDECAR_GRACE_S:
+            self._fresh.discard(hid)
+            return self.offer(hid, "outbox")
+        return None
 
     def _known(self, name: str, size: int, mtime: float) -> bool:
         with self.tasks.lock:
@@ -664,6 +742,101 @@ class Handoff:
         self._seen[path.name] = st.st_mtime  # the watcher doesn't record it a second time
         return self._record(path, self._check_file(path), origin=origin, device=device)
 
+    # ---- the door: the outbox of a Mac that isn't this one (api/forwarder.py) ---------------------------
+
+    def hello(self) -> dict[str, Any]:
+        """The forwarder checking in: what the door takes. While it keeps in touch, `arrived` waits a little for a name
+        it may be about to send."""
+        self.door_at = self.clock()
+        return {"door": DOOR, "max_bytes": self.max_bytes, "types": sorted(IMAGES | VIDEOS), "sidecar_grace_s": SIDECAR_GRACE_S}
+
+    def receive(self, name: Any, data: Any = None, sidecar: dict[str, Any] | None = None, key: str | None = None) -> dict[str, Any]:
+        """A file through the door, with its sidecar: it lands in the outbox and is recorded as the watcher records a new
+        file, so the offer is the same (at once when the sidecar names the app, else once it has had SIDECAR_GRACE_S).
+        A file of the same name is replaced, as a copy into the folder would; its earlier sidecar and pending offer go.
+        `data` None: a sidecar alone, for a file already here (it came late), which the watcher reads on its next look as
+        it reads any late sidecar. `key`: the sender's name for the upload, so a retry after a lost answer isn't a second
+        file. Raises HandoffError with the door's status (404, 413, 415)."""
+        name = door_name(name)
+        folder = self.outbox()
+        dest = folder / name
+        self.door_at = self.clock()
+        if data is None:
+            if not sidecar:
+                raise HandoffError("send a file, its sidecar, or both")
+            if dest.is_symlink() or not dest.is_file():
+                raise HandoffError(f"there's no {name} in Envoy's outbox for that sidecar", status=404)
+            for old in sidecars(dest):
+                old.unlink(missing_ok=True)
+            write_sidecar(dest, sidecar)
+            return self._door_answer(self._newest(name), name, late=True)
+        if key and (hid := self._received.get(key)) and (item := self.item(hid)) is not None and item["name"] == name \
+                and dest.is_file() and dest.stat().st_size == item["size"]:
+            return self._door_answer(item, name, again=True)
+        kind = kind_of(name)
+        part = folder / f".{name}.part"  # hidden and partial: the watcher never looks at it
+        try:
+            got = 0
+            with part.open("wb") as f:
+                while chunk := data.read(1 << 20):
+                    got += len(chunk)
+                    if got > self.max_bytes:
+                        raise HandoffError(f"{name} is over {self.max_bytes // (1024 * 1024)} MB", status=413)
+                    f.write(chunk)
+            if sniff(part) != kind:
+                raise HandoffError(f"{name} isn't a {kind} file by its contents", status=415)
+            for old in sidecars(dest):
+                old.unlink(missing_ok=True)
+            if sidecar:
+                write_sidecar(dest, sidecar)
+            self._retire(name, "a newer file of the same name came from the Mac")
+            self._seen[name] = part.stat().st_mtime  # the watcher doesn't record it a second time
+            part.replace(dest)
+        finally:
+            part.unlink(missing_ok=True)
+        item = self._record(dest, kind, origin="outbox")
+        if key:
+            self._received[key] = item["id"]
+        self._fresh.add(item["id"])
+        self._offer_when_due(item["id"], self.clock())
+        return self._door_answer(self.item(item["id"]), name)
+
+    def _newest(self, name: str) -> dict[str, Any] | None:
+        with self.tasks.lock:
+            row = self.tasks.db.execute("SELECT id FROM handoffs WHERE name=? ORDER BY created_at DESC LIMIT 1", (name,)).fetchone()
+        return self.item(row["id"]) if row else None
+
+    def _retire(self, name: str, why: str) -> None:
+        """Items still waiting for a file that is about to be replaced: they would send the new file, not theirs."""
+        for item in self.items(status="waiting") + self.items(status="offered"):
+            if item["name"] == name:
+                if item["offer_id"] and self.offers is not None:
+                    self.offers.withdraw(item["offer_id"], why)
+                self._update(item["id"], status="failed", error=why)
+
+    def _door_answer(self, item: dict[str, Any] | None, name: str, *, again: bool = False, late: bool = False) -> dict[str, Any]:
+        """What the forwarder says on the Mac: what Envoy now does with the file, in a sentence."""
+        if item is None:
+            return {"name": name, "text": f"Envoy has the sidecar for {name}, but no handoff for it, so it changes nothing."}
+        offer = self.offers.get(item["offer_id"]) if item["offer_id"] and self.offers is not None else None
+        status = item["status"]
+        if late:
+            text = (f"{name} already went to the phone; this sidecar came too late to change it." if status not in ("waiting", "offered") else
+                    f"Envoy has the sidecar for {name} and asks again with it in a few seconds." if status == "offered" else
+                    f"Envoy has the sidecar for {name} and asks with it in a few seconds.")
+        elif status == "offered" and offer:
+            text = f'Envoy has {name} and is asking you in its app: "{offer["title"]}"'
+        elif status == "waiting" and not item["device"]:
+            text = f"Envoy has {name} but can't offer it: {item['note'] or 'no phone can take it'}."
+        elif status == "waiting" and not item["offer_id"] and item["id"] in self._fresh:
+            left = max(1, round(SIDECAR_GRACE_S - (self.clock() - item["created_at"])))
+            text = f"Envoy has {name} and asks you in its app when its sidecar comes, or in {left} s without one."
+        else:
+            text = f"Envoy has {name} ({status}" + (f": {item['note'] or item['error']}" if item["note"] or item["error"] else "") + ")."
+        return {"name": name, "handoff_id": item["id"], "status": status, "app": item["app"], "device": item["device"],
+                "device_name": item["device_name"], "offer_id": item["offer_id"], "again": again,
+                "text": ("It was already there (a retry). " if again else "") + text}
+
     # ---- offers: the user's yes, in Envoy ------------------------------------------------------------
 
     def where(self, did: str | None) -> str:
@@ -855,12 +1028,92 @@ def _unique(folder: Path, name: str) -> str:
 # ---- the web app's routes ---------------------------------------------------------------------------
 
 
-def handoff_router(ctx: Any, session: Callable[..., None], caller: Callable[..., Any]) -> Any:
-    """`session` and `caller` are build()'s auth closures. Only the user's own session sees or sends anything here."""
-    from fastapi import APIRouter, Body, Depends, HTTPException
-
+def handoff_router(ctx: Any, session: Callable[..., None], caller: Callable[..., Any], *, door_key: str = "",
+                   door_log: Path | None = None) -> Any:
+    """`session` and `caller` are build()'s auth closures. Only the user's own session sees or sends anything here, but
+    the door, which takes the MCP key (`door_key`, MCP_BEARER_TOKEN) and nothing else; each call to it is a line in
+    `door_log`."""
     router = APIRouter()
     h: Handoff = ctx.handoff
+
+    def door_auth(request: Request) -> None:
+        got = request.headers.get("authorization", "")
+        if not (door_key and got[:7].lower() == "bearer " and hmac.compare_digest(got[7:].strip().encode(), door_key.encode())):
+            raise HTTPException(401, "the outbox's door takes Envoy's MCP key", headers={"WWW-Authenticate": "Bearer"})
+
+    def note(request: Request, **rec: Any) -> None:
+        if door_log is None:
+            return
+        rec = {"time": time.strftime("%Y-%m-%dT%H:%M:%S%z"), "path": DOOR, "method": request.method, "host": request.headers.get("host"),
+               "client": (request.client.host if request.client else None), "forwarded_for": request.headers.get("x-forwarded-for"),
+               "from_internet": "tailscale-funnel-request" in request.headers, **rec}
+        door_log.parent.mkdir(parents=True, exist_ok=True)
+        with door_log.open("a") as f:
+            f.write(json.dumps(rec, default=str) + "\n")
+
+    @router.get(DOOR)
+    def door_hello(request: Request) -> dict[str, Any]:
+        """The forwarder checking the key and the address, and keeping in touch."""
+        try:
+            door_auth(request)
+        except HTTPException:
+            note(request, status=401)
+            raise
+        note(request, status=200, hello=True)
+        return h.hello()
+
+    @router.post(DOOR)
+    async def door(request: Request) -> dict[str, Any]:
+        """The outbox's door (backlog #48): a multipart form with `file` (the clip, under its name on the Mac) and
+        `sidecar` (its JSON, {"app", "caption"}), or `sidecar` with `name` alone for a clip already here; `key` names the
+        upload, so a retry is known. Images and videos only, at most the outbox's 500 MB, said with Content-Length."""
+        rec: dict[str, Any] = {"status": 401}
+        try:
+            door_auth(request)
+            rec["status"] = 500  # until it's answered
+            size = request.headers.get("content-length", "")
+            if not size.isdigit():
+                raise HTTPException(411, "say how big the upload is (Content-Length)")
+            rec["size"] = int(size)
+            multipart = request.headers.get("content-type", "").startswith("multipart/form-data")  # else a sidecar alone, at most
+            if int(size) > (h.max_bytes if multipart else 0) + 2 * SIDECAR_MAX:
+                raise HTTPException(413, f"the outbox takes files up to {h.max_bytes // (1024 * 1024)} MB")
+            try:
+                form = await request.form(max_files=2, max_fields=4, max_part_size=SIDECAR_MAX)
+            except Exception as e:  # noqa: BLE001 - Starlette's MultiPartException, or a body that isn't a form
+                raise HTTPException(400, f"send a multipart form: file, sidecar, name, key ({str(e)[:100]})") from e
+            try:
+                upload, raw, key = form.get("file"), form.get("sidecar"), form.get("key")
+                if upload is not None and not hasattr(upload, "read"):
+                    raise HTTPException(400, "`file` is the clip itself, sent as a file")
+                if hasattr(raw, "read"):
+                    raw = (await raw.read(SIDECAR_MAX + 1)).decode("utf-8", "replace")
+                if raw and len(raw) > SIDECAR_MAX:
+                    raise HTTPException(413, f"a sidecar is at most {SIDECAR_MAX // 1024} KB")
+                sidecar = None
+                if raw:
+                    try:
+                        sidecar = json.loads(raw)
+                    except ValueError as e:
+                        raise HTTPException(400, "the sidecar isn't JSON") from e
+                    if not isinstance(sidecar, dict):
+                        raise HTTPException(400, 'the sidecar is a JSON object: {"app": ..., "caption": ...}')
+                name = str(form.get("name") or (upload.filename if upload is not None else "") or "")
+                rec.update(name=name[:200], sidecar=bool(sidecar))
+                try:
+                    out = await asyncio.to_thread(h.receive, name, upload.file if upload is not None else None, sidecar,
+                                                  str(key)[:200] if isinstance(key, str) and key else None)
+                except HandoffError as e:
+                    raise HTTPException(e.status, str(e)) from e
+            finally:
+                await form.close()
+            rec.update(status=200, stored=out["name"], handoff_id=out.get("handoff_id"), again=out.get("again"))
+            return out
+        except HTTPException as e:
+            rec.update(status=e.status_code, error=str(e.detail)[:200])
+            raise
+        finally:
+            note(request, **rec)
 
     @router.get("/api/handoff", dependencies=[Depends(session)])
     def list_handoffs(limit: int = 50) -> dict[str, Any]:

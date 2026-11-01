@@ -122,6 +122,18 @@ def choose(app: str | None, *, request: str = "", asked: str | None = None, phon
     return Choice(None, why, error=_not_connected(unauthorized))
 
 
+def known_apps(tasks: Any, routines: Any) -> tuple[list[str], dict[str, str]]:
+    """The apps Settings › Phones lists (the routines' apps, the ones Envoy knows by name, the ones it learned or
+    installed), and the names it shows for them and for the apps that block emulators."""
+    from api.runner import APP_NAMES
+    learned = tasks.setting("phone_apps_learned", {}) or {}
+    installed = tasks.setting("apps_installed", {}) or {}
+    apps = sorted({r.app for r in routines.active()} | set(APP_NAMES.values()) | set(learned) | set(installed))
+    names = {**{p: n.title() for n, p in APP_NAMES.items()}, **{p: a.get("name") for p, a in installed.items()},
+             **EMULATOR_REFUSED, **{p: a.get("name") for p, a in learned.items()}}
+    return apps, {p: n for p, n in names.items() if n}
+
+
 def _not_connected(unauthorized: list[dict[str, Any]]) -> str:
     if unauthorized:
         return "Your phone is connected but hasn't allowed USB debugging yet: unlock it and tap Allow."
