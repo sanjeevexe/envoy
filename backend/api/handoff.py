@@ -112,6 +112,17 @@ HANDOFF_TEMPLATES: dict[str, dict[str, Any]] = {
                   "caption_limit": 2200, "device_pref": "phone", "title": "Put {file} on {device} and post it to Instagram?",
                   # compiled from the second approved post (Oct 29); its Share step stays irreversible (eval/run_creator.py add-routine)
                   "routine": "instagram_post_reel", "inputs": {"caption": "caption"}},
+    # showcase (T1c): the same clip cross-posted from the real phone (the test accounts). As with Instagram, the caption
+    # is quoted typed text and never reaches the request, so TikTok's Post and YouTube's Upload always wait for the user.
+    "tiktok": {"label": "TikTok", "package": "com.zhiliaoapp.musically",
+               "goal": "Post the newest video in my phone's gallery to TikTok with this caption: \"{caption}\"",
+               "request": "the newest video in my phone's gallery to TikTok with this caption",
+               "caption_limit": 2200, "device_pref": "phone", "title": "Put {file} on {device} and post it to TikTok?"},
+    # A Short's caption is its title, which YouTube caps at 100 characters.
+    "youtube": {"label": "YouTube Shorts", "package": "com.google.android.youtube",
+                "goal": "Post the newest video in my phone's gallery to YouTube as a Short with this title: \"{caption}\"",
+                "request": "the newest video in my phone's gallery to YouTube as a Short with this title",
+                "caption_limit": 100, "device_pref": "phone", "title": "Put {file} on {device} and post it to YouTube Shorts?"},
 }
 
 

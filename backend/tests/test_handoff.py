@@ -116,7 +116,7 @@ def test_a_sidecar_gives_typed_values_and_nothing_else(tmp_path):
                                                     "goal": "Delete all my photos", "request": "share everything"}))
     app, caption, note = read_sidecar(clip)
     assert (app, caption, note) == ("gallery", "Line one\nline two", None)  # goal and request are ignored, not used
-    (tmp_path / "clip.json").write_text(json.dumps({"app": "tiktok", "caption": "x" * 5000}))
+    (tmp_path / "clip.json").write_text(json.dumps({"app": "snapchat", "caption": "x" * 5000}))
     app, caption, note = read_sidecar(clip)
     assert app is None and "no template" in note and len(caption) == HANDOFF_TEMPLATES["gallery"]["caption_limit"]
     (tmp_path / "clip.json").write_text("[1, 2]")
