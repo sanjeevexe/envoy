@@ -45,6 +45,7 @@ from api.auth import agent_name
 from api.crossapp import lead, may_span_apps
 from api.devices import NAMES
 from api.handoff import HandoffError, read_sidecar
+from api.notifications import redact, update_line
 from api.routing import EMULATOR_REFUSED, blocks_emulator, choose, known_apps
 from api.sharing import tool_names
 from memory.retrieval import Retriever
@@ -264,7 +265,7 @@ def phone_updates_view(ctx: Any, since: str | None, base: str, *, limit: int = 5
                        now: float | None = None, tools: dict[str, str] | None = None) -> dict[str, Any]:
     """What happened on the phone, from the stores (so it survives restarts): finished tasks, tasks waiting on the user,
     change alerts, files from the Mac, Envoy's pending offers, routines learned or repaired (the library's index; `tools`:
-    routine → its tool, for the shared ones), and notifications a watch matched (phone-watch's table, once it exists).
+    routine → its tool, for the shared ones), and notifications a watch matched (phone-watch's table).
     Facts in one line each; offers and waits point to the Envoy page where only the user decides. No nonces, tokens or
     approval links."""
     now = time.time() if now is None else now
@@ -353,21 +354,6 @@ def routine_events(ctx: Any, floor: float, tools: dict[str, str]) -> list[tuple[
     return out
 
 
-# Contract 3: phone-watch's module words the line (`update_line`) and stores title and text with codes taken out
-# (contract 6); they go through its `redact` once more on the way out, in case a row came from somewhere that didn't.
-# Until it is in main, the same line from here.
-try:
-    from api.notifications import redact as _redact, update_line  # type: ignore[import-not-found]
-except ImportError:
-    def _redact(text: str) -> str:
-        text = re.sub(r"(?i)\b(code|otp|pin)\b(\W*)\S+", r"\1\2•••", text)
-        return re.sub(r"\b\d{4,8}\b", "•••", text)  # a code on its own, not the digits in a name (envoy3955)
-
-    def update_line(row: dict[str, Any], phone_name: str = "Envoy's phone") -> str:
-        said = ": ".join(x for x in (row.get("title"), row.get("text")) if x)
-        return f'{row.get("app") or "An app"} on {phone_name}: "{said}"' if said else f"{row.get('app') or 'An app'} on {phone_name} showed a notification"
-
-
 def _notification_text(ctx: Any, n: dict[str, Any]) -> str:
     """"Instagram on Envoy's phone: "envoy3955: someone commented…"": the app, the phone (its name in Settings › Phones,
     else "Envoy's phone"; an emulator is "the test phone"), and what the notification said."""
@@ -380,8 +366,10 @@ def _notification_text(ctx: Any, n: dict[str, Any]) -> str:
     else:
         name = NAMES.get(phone, phone)
         where = f"the {name[:1].lower()}{name[1:]}"  # "the test phone"
+    # phone-watch stores title and text with codes taken out (contract 6); its redact runs once more on the way out, in
+    # case a row came from somewhere that didn't, and its update_line words the line (contract 3).
     row = {**n, "app": _line(n.get("app") or app_title(ctx, n.get("package") or ""), 40),
-           **{k: _redact(_line(n.get(k), 140)) if n.get(k) else n.get(k) for k in ("title", "text")}}
+           **{k: redact(_line(n.get(k), 140)) if n.get(k) else n.get(k) for k in ("title", "text")}}
     return _line(update_line(row, _line(where, 40)), 320)
 
 

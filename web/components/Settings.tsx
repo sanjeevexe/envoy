@@ -3,7 +3,8 @@
 // Settings: how proactive Envoy is (which of its offers notify you), when Envoy asks before an irreversible step (for
 // everything, per app, or per routine: the most specific wins), which apps run on your own Android phone and which
 // apps' notifications Envoy may watch there, this device and the others paired with Envoy, the AI agents that use Envoy,
-// what each may do and the tools they see (the learned routines you share), and how Envoy looks on this device (light or dark).
+// what each may do and the tools they see (the learned routines you share), and how Envoy looks on this device (light or
+// dark).
 import { useEffect, useState } from "react";
 import { CheckCircleIcon, DeviceMobileIcon } from "@phosphor-icons/react";
 import AgentKeys from "@/components/AgentKeys";
