@@ -14,10 +14,10 @@
 }
 
 :root {
-  --page: #f6f3ec;
+  --page: #efebe2;
   --surface: #ffffff;
-  --raised: #fbf9f4;
-  --well: #efebe3;
+  --raised: #f5f2eb;
+  --well: #e6e1d6;
   --ink: #1f2a24;
   --ink-2: #4e5a53;
   --muted: #5f6a63;
@@ -31,10 +31,10 @@
   --apricot-ink: #7a3b12;
   --apricot-line: #f1d9c6;
   --brick: #a63d2f;
-  --line: #ece7dd;
-  --control: #e3ded3;
-  --divider: #f0ece4;
-  --line-strong: #d9d3c7;
+  --line: #e3ddd1;
+  --control: #dbd5c9;
+  --divider: #e9e4da;
+  --line-strong: #cfc8bb;
   --face: #f6f3ec;
   --on-ink: #ffffff;
   --phone: #1f2a24;

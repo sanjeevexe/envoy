@@ -4,13 +4,13 @@
    Tailwind's own palette and type scale are switched off, so a raw color or size class can't creep back in. */
 
 :root {
-  --page: #f6f3ec;          /* cream: the page */
+  --page: #efebe2;          /* cream: the page */
   --surface: #ffffff;       /* cards, inputs */
-  --raised: #fbf9f4;        /* tab bar, sheets */
-  --well: #efebe3;          /* a picture's backdrop, quiet fills */
+  --raised: #f5f2eb;        /* tab bar, sheets */
+  --well: #e6e1d6;          /* a picture's backdrop, quiet fills */
   --ink: #1f2a24;           /* text, the approve button, your chat bubbles */
   --ink-2: #4e5a53;         /* Envoy's briefing, secondary text */
-  --muted: #5f6a63;         /* meta text: the lightest gray for text (5:1 on cream) */
+  --muted: #5f6a63;         /* meta text: the lightest gray for text (4.7:1 on cream) */
   --sage: #3e7c5c;          /* brand fills: the avatar, the mic, Review, done checks (white text on it) */
   --sage-ink: #2f6a4c;      /* sage as text or links */
   --sage-deep: #1f4f37;     /* a link's hover */
@@ -21,10 +21,10 @@
   --apricot-ink: #7a3b12;
   --apricot-line: #f1d9c6;  /* a needs-you card's border */
   --brick: #a63d2f;         /* only "can't be undone". Never a button fill */
-  --line: #ece7dd;          /* card border */
-  --control: #e3ded3;       /* control border */
-  --divider: #f0ece4;
-  --line-strong: #d9d3c7;   /* the sheet's grabber, Decline's border */
+  --line: #e3ddd1;          /* card border */
+  --control: #dbd5c9;       /* control border */
+  --divider: #e9e4da;
+  --line-strong: #cfc8bb;   /* the sheet's grabber, Decline's border */
   --offline: #b4beb7;       /* the avatar, asleep */
   --phone-line: #c9d6cd;
   --scrim: rgba(31, 42, 36, 0.45);
