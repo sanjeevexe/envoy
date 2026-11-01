@@ -4,7 +4,8 @@
 // its inputs, its versions and how its runs have gone; selecting one opens its detail. Teach a new routine opens the
 // phone's "Show Envoy once" form. Triggers start tasks on their own.
 import { useEffect, useRef, useState } from "react";
-import { ChalkboardTeacherIcon, PlayIcon } from "@phosphor-icons/react";
+import { ChalkboardTeacherIcon, PlayIcon, PlugsConnectedIcon } from "@phosphor-icons/react";
+import { useSharing } from "@/components/AgentTools";
 import AppNotes from "@/components/AppNotes";
 import RoutineDetail from "@/components/RoutineDetail";
 import Triggers from "@/components/Triggers";
@@ -35,6 +36,7 @@ export default function RoutinesTab({ openTask, teach, trigger, caught }: { open
 
 function Routines({ openTask, open, setOpen, teach }: { openTask: (id: string) => void; open: string | null; setOpen: (n: string | null) => void; teach: () => void }) {
   const [list, setList] = useState<R[] | null>(null);
+  const [sharing] = useSharing();
   const [returnTo, setReturnTo] = useState<string | null>(null);
   const rows = useRef<Record<string, HTMLButtonElement | null>>({});
   useEffect(() => { api("/api/routines").then(setList).catch(() => setList([])); }, []);
@@ -58,6 +60,7 @@ function Routines({ openTask, open, setOpen, teach }: { openTask: (id: string) =
         {list?.map((r) => {
           const repairs = r.versions.filter((v) => v.source_task).length;
           const trial = r.versions.find((v) => v.status === "trial");
+          const shared = !!sharing?.shared.includes(r.name);  // an agent sees it as a tool of its own (Settings › Agents)
           return (
             <div key={r.name} className="flex items-center gap-3 border-b border-divider py-1 pl-4 pr-3 last:border-b-0">
               <button ref={(el) => { rows.current[r.name] = el; }} onClick={() => setOpen(r.name)} className="flex min-h-[64px] min-w-0 flex-1 items-center gap-3 py-2 text-left">
@@ -68,8 +71,9 @@ function Routines({ openTask, open, setOpen, teach }: { openTask: (id: string) =
                     v{r.active ?? "?"} · {r.steps} steps · {r.runs ? `${r.runs} run${r.runs === 1 ? "" : "s"}, ${Math.round((r.success ?? 0) * 100)}% finished` : "not run yet"}
                     {Object.keys(r.inputs).length ? ` · needs ${Object.keys(r.inputs).join(", ").replace(/_/g, " ")}` : ""}
                   </span>
-                  {(r.taught || repairs > 0 || trial || r.recompile) && (
+                  {(r.taught || repairs > 0 || trial || r.recompile || shared) && (
                     <span className="mt-1.5 flex flex-wrap gap-1.5">
+                      {shared && <Chip icon={PlugsConnectedIcon}>Shared with agents</Chip>}
                       {r.taught && <Chip icon={ChalkboardTeacherIcon}>Taught by you</Chip>}
                       {repairs > 0 && <Chip>Repaired itself {repairs}×</Chip>}
                       {trial && <Chip tone="apricot">v{trial.version} on trial</Chip>}

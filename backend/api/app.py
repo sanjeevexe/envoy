@@ -64,6 +64,7 @@ from api.repeats import Repeats
 from api.push import Pusher, VapidKeys
 from api.runner import SHOTS, TaskRunner
 from api.scheduler import Scheduler, check_alert, check_ask
+from api.sharing import Sharing, sharing_router
 from api.siri import siri_router
 from api.store import API_DIR, REPO, TaskStore, new_id
 from api.teach import Teacher, TeachError
@@ -147,6 +148,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     from mcp_server.server import build_mcp, mcp_app
     from mcp_stub.common import bearer_token
     from mcp_stub.middleware import BearerAuthLogMiddleware
+    ctx.sharing = Sharing(tasks)  # type: ignore[attr-defined]  # which routines agents can call as tools (api/sharing.py)
     ctx.mcp = build_mcp(ctx, PORT, base=public)  # type: ignore[attr-defined]
     mcp_inner = mcp_app(ctx.mcp, PORT, extra_hosts=hosts)  # type: ignore[attr-defined]
     auth.mcp_token = bearer_token()  # Muse's key: every tool. Other agents' keys are in device_tokens (contract 2)
@@ -739,6 +741,8 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
         return {"id": did, "name": name or None, "names": names}
 
     # ---- routines and triggers -----------------------------------------------------------------
+
+    app.include_router(sharing_router(ctx, session, ctx.mcp.agent_tools))  # type: ignore[attr-defined]  # first: /api/routines/{name} would take "sharing"
 
     @app.get("/api/routines", dependencies=[Depends(session)])
     def list_routines() -> list[dict[str, Any]]:

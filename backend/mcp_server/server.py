@@ -14,6 +14,9 @@ from Envoy's outbox (or an https URL) on a phone, `phone_updates` tells a client
 offer or an approval: the real phone takes a file, and a proposed trigger turns on, only after the user's yes in Envoy.
 When Envoy runs away from the Mac (the cloud copy), a file name from Muse for Mac still works: the Mac's forwarder sends
 the outbox through the door (api/forwarder.py), and `send_to_phone` waits for a file that is on its way.
+
+Learned routines the user shares with agents (api/sharing.py, off by default) are tools of their own, by name and with
+typed inputs (phone-layer plan, contract 1: `RoutineTools`, `EnvoyMCP`). A call goes exactly where `run_routine` goes.
 """
 
 from __future__ import annotations
@@ -22,23 +25,31 @@ import base64
 import os
 import re
 import sys
+import threading
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
+import anyio
 from mcp.server.mcpserver import MCPServer
+from mcp.server.mcpserver.tools.base import Tool
+from mcp.server.mcpserver.utilities.func_metadata import ArgModelBase, FuncMetadata
 from mcp.server.transport_security import TransportSecuritySettings
 from mcp_types import Icon, ToolAnnotations
+from mcp_types import Tool as MCPTool
+from pydantic import ConfigDict, Field, create_model
 
 from api.agents import guard
 from api.auth import agent_name
 from api.crossapp import lead, may_span_apps
 from api.devices import NAMES
 from api.handoff import HandoffError, read_sidecar
-from api.routing import blocks_emulator, choose, known_apps
+from api.routing import EMULATOR_REFUSED, blocks_emulator, choose, known_apps
+from api.sharing import tool_names
 from memory.retrieval import Retriever
 from memory.service import MemoryService
+from routines.model import Routine
 
 try:  # "Before I start" (contract 2), from preflight-logins; until it is in main, run_task has no heads_up
     from api.preflight import check as preflight_check
@@ -54,6 +65,8 @@ INSTRUCTIONS = (
     "or an https URL. To an emulator it goes at once; to the user's real phone it waits for their OK in Envoy, so give them the url. "
     "list_phones says which phones Envoy can use (a cloud phone, an emulator on the Mac, or the user's own phone), whether each is "
     "online, and the apps it runs there; a phone's id is send_to_phone's device. "
+    "Routines the user shares with agents are also tools of their own, named after the routine (skylark_check_in_flight, say), "
+    "with the routine's inputs as arguments: calling one is run_routine with that routine. "
     "phone_updates lists what happened on the phone since its cursor (finished tasks, tasks waiting for the user, changes, files, "
     "Envoy's questions); pass the cursor back next time. "
     "create_trigger proposes a recurring or event-triggered phone task: it is created switched off, and stays off until the user "
@@ -294,12 +307,210 @@ def _handoff_text(ctx: Any, h: dict[str, Any]) -> str:
     return f"{name} couldn't be put on the phone: {_line(h['error'], 160)}"
 
 
-def build_mcp(ctx: Any, port: int, base: str | None = None) -> MCPServer:
-    """`ctx` holds the API's runner, task store, memory and routine library. `base` is where approval links point (the
-    tailnet address, where your paired iPhone is signed in)."""
-    server = MCPServer(name="envoy", title="Envoy", description="Envoy operates Android apps on the user's behalf and remembers what it sees.",
-                       instructions=INSTRUCTIONS, version="0.7.0", icons=envoy_icons())
+# ---- learned routines as tools (phone-layer plan, contract 1) ---------------------------------------
+
+LEARNED = ("Learned by Envoy from {how} on {date}; replays without model calls while the app looks as it did; anything "
+           "irreversible waits for the user's OK on their phone.")
+# How a tool's description names its app (the web app spells them the same way: web/components/Tasks.tsx).
+APP_TITLES = {
+    "com.skylark.air": "SkyLark", "com.amazon.mShop.android.shopping": "Amazon", "com.target.ui": "Target", "com.starbucks.mobilecard": "Starbucks",
+    "com.chipotle.ordering": "Chipotle", "com.dd.doordash": "DoorDash", "com.google.android.gm": "Gmail", "com.google.android.apps.maps": "Google Maps",
+    "com.google.android.apps.youtube.music": "YouTube Music", "com.google.android.youtube": "YouTube", "com.android.vending": "Play Store",
+    "com.android.chrome": "Chrome", "com.android.settings": "Settings", "com.google.android.calendar": "Calendar", "com.google.android.contacts": "Contacts",
+    "com.instagram.android": "Instagram", "com.zhiliaoapp.musically": "TikTok", "me.lyft.android": "Lyft", "com.google.android.deskclock": "Clock",
+}
+
+
+def app_title(ctx: Any, pkg: str) -> str:
+    """The app's name: as the web app spells it, else what Envoy saw when it installed or learned it, else its package."""
+    if pkg in APP_TITLES or pkg in EMULATOR_REFUSED:
+        return APP_TITLES.get(pkg) or EMULATOR_REFUSED[pkg]
+    try:
+        seen = {**(ctx.tasks.setting("apps_installed", {}) or {}), **(ctx.tasks.setting("phone_apps_learned", {}) or {})}
+    except Exception:  # noqa: BLE001 - no settings to read: the package
+        seen = {}
+    return _line((seen.get(pkg) or {}).get("name") or pkg, 40)
+
+
+def _sentence(s: str) -> str:
+    s = _line(s, 200).rstrip(".")
+    return s[:1].upper() + s[1:]
+
+
+def _learned_on(idx: dict[str, Any]) -> str:
+    """When Envoy first learned the routine (its first version), as "Oct 27, 2026"."""
+    first = min(idx.get("versions") or [{}], key=lambda v: v.get("version") or 0).get("created")
+    try:
+        d = datetime.strptime(str(first), "%Y-%m-%d %H:%M:%S")
+    except ValueError:
+        return "an earlier day"
+    return f"{d:%b} {d.day}, {d.year}"
+
+
+class RoutineArgs(ArgModelBase):
+    model_config = ConfigDict(arbitrary_types_allowed=True, coerce_numbers_to_str=True)  # an hour sent as 7 is "7"
+
+
+def input_schema(r: Routine) -> tuple[dict[str, Any], list[dict[str, Any]], type[ArgModelBase]]:
+    """A routine's inputs as a tool's JSON schema, as rows for Settings, and as the model a call is checked against.
+    text, code and phone are strings; a date is an ISO date; a choice with known choices is an enum. An input memory can
+    fill is optional; the rest are required."""
+    props: dict[str, Any] = {}
+    rows: list[dict[str, Any]] = []
+    fields: dict[str, Any] = {}
+    for i, (name, spec) in enumerate(r.inputs.items()):
+        what = _line(spec.description or name.replace("_", " "), 200).rstrip(".")
+        prop: dict[str, Any] = {"type": "string"}
+        typ: Any = str
+        if spec.type == "date":
+            prop["format"] = "date"
+            what += " (a date, YYYY-MM-DD)"
+        if spec.type == "choice" and spec.choices:
+            prop["enum"] = list(spec.choices)
+            typ = Literal[tuple(spec.choices)]
+        if spec.from_memory:
+            what += f". Envoy fills it from memory ({spec.from_memory}) if left out"
+        prop["description"] = what
+        props[name] = prop
+        required = not spec.from_memory
+        rows.append({"name": name, "type": spec.type, "required": required, "description": what,
+                     **({"choices": list(spec.choices)} if spec.type == "choice" and spec.choices else {})})
+        # Fields by position, named by alias: an input's name can be anything the compiler wrote ("from", "json").
+        fields[f"input_{i}"] = (typ, Field(alias=name)) if required else (typ | None, Field(None, alias=name))
+    schema: dict[str, Any] = {"type": "object", "properties": props}
+    if required_names := [row["name"] for row in rows if row["required"]]:
+        schema["required"] = required_names
+    return schema, rows, create_model(f"{r.routine}_inputs", __base__=RoutineArgs, **fields)
+
+
+def routine_description(r: Routine, app: str, idx: dict[str, Any]) -> str:
+    """What an agent reads about a routine's tool: its intent and app, what it does, its outputs, and how it runs."""
+    how = "the user doing it once" if r.compiled_from.get("source") == "taught" else "a run"
+    parts = [f"{_sentence(r.intent)}. App: {app} ({r.app}), on a phone Envoy operates."]
+    if r.description:
+        parts.append(_line(r.description, 300))
+    if r.outputs:
+        parts.append(f"Outputs: {', '.join(o.replace('_', ' ') for o in r.outputs)} (in get_task's result once it's done).")
+    parts.append(LEARNED.format(how=how, date=_learned_on(idx)))
+    parts.append("Returns a task ID; follow it with get_task.")
+    return " ".join(parts)
+
+
+def start_routine(ctx: Any, base: str, name: str, inputs: dict[str, str]) -> dict[str, Any]:
+    """Where run_routine and every routine tool go: the runner, with "Before I start" lines when there are any."""
+    r = ctx.routines.get(name)
+    heads = heads_up(ctx, r.intent, routine=name, inputs=inputs)
+    task = ctx.runner.start(r.intent, "mcp", routine=name, inputs=inputs)
+    return {"task_id": task["id"], "status": task["status"], "task_url": f"{base}/?task={task['id']}", **({"heads_up": heads} if heads else {})}
+
+
+def routine_tool(ctx: Any, base: str, routine: str, name: str) -> tuple[Tool, dict[str, Any]]:
+    """The library's routine `routine` (its active version) as a tool named `name`, and the row Settings › Agents shows."""
+    r, idx = ctx.routines.get(routine), ctx.routines.index(routine)
+    schema, rows, model = input_schema(r)
+    app = app_title(ctx, r.app)
+
+    def run(**args: Any) -> dict:
+        inputs = {k: str(v).strip() for k, v in args.items() if v is not None and str(v).strip()}
+        return start_routine(ctx, base, routine, inputs)
+
+    title = _line(_sentence(r.intent), 80)
+    read_only = all(s.risk == "read" for s in r.steps)
+    tool = Tool(fn=run, name=name, title=title, description=routine_description(r, app, idx), parameters=schema,
+                fn_metadata=FuncMetadata(arg_model=model), is_async=False,
+                annotations=ToolAnnotations(title=title, readOnlyHint=read_only, destructiveHint=False, openWorldHint=True),
+                meta={"envoy/routine": routine, "envoy/version": r.version, "envoy/app": r.app})
+    row = {"routine": routine, "tool": name, "app": r.app, "app_name": app, "title": title, "description": tool.description,
+           "version": r.version, "inputs": rows, "outputs": list(r.outputs), "read_only": read_only,
+           "irreversible": any(s.risk == "irreversible" for s in r.steps), "learned": _learned_on(idx),
+           "taught": r.compiled_from.get("source") == "taught"}
+    return tool, row
+
+
+class RoutineTools:
+    """Every shared routine with an active version, as a tool of its own. Read from the share switch and the library on
+    each tools/list and tools/call, so learning a routine, switching it on or off, retiring it or flipping its switch shows
+    on the next call with no restart. Only shared routines are read, and a tool is rebuilt only when its routine's active
+    version (or that version's file) changes."""
+
+    def __init__(self, ctx: Any, base: str) -> None:
+        self.ctx, self.base = ctx, base
+        self.sharing = getattr(ctx, "sharing", None)
+        self.lock = threading.Lock()
+        self.built: dict[str, tuple[tuple[Any, ...], Tool, dict[str, Any]]] = {}  # routine → (key, tool, row)
+
+    def _key(self, name: str) -> tuple[Any, ...] | None:
+        try:
+            v = self.ctx.routines.index(name).get("active")
+            return (v, (self.ctx.routines.root / name / f"v{v}.yaml").stat().st_mtime_ns) if v else None
+        except (OSError, ValueError):  # gone, or an index that can't be read: not a tool
+            return None
+
+    def current(self, reserved: set[str]) -> dict[str, tuple[Tool, dict[str, Any]]]:
+        """tool name → (tool, row), for what agents see now. `reserved`: the built-in tools' names."""
+        if self.sharing is None:
+            return {}
+        live = {n: k for n in self.sharing.names() if (k := self._key(n)) is not None}
+        out: dict[str, tuple[Tool, dict[str, Any]]] = {}
+        with self.lock:
+            for routine, name in tool_names(live, reserved).items():
+                key = (name, *live[routine])
+                got = self.built.get(routine)
+                if got is None or got[0] != key:
+                    try:
+                        got = (key, *routine_tool(self.ctx, self.base, routine, name))
+                    except Exception:  # noqa: BLE001 - a routine that can't be read isn't offered
+                        continue
+                    self.built[routine] = got
+                out[name] = (got[1], got[2])
+            for gone in set(self.built) - set(live):
+                del self.built[gone]
+        return out
+
+
+def as_listed(t: Tool) -> MCPTool:
+    return MCPTool(name=t.name, title=t.title, description=t.description, input_schema=t.parameters, output_schema=t.output_schema,
+                   annotations=t.annotations, icons=t.icons, _meta=t.meta)
+
+
+class EnvoyMCP(MCPServer):
+    """Envoy's MCP server: the built-in tools, plus each shared routine as a tool of its own (`RoutineTools`), which
+    `list_tools` and `call_tool` read fresh each time. Those two methods see every tool an agent lists or calls."""
+
+    routines: RoutineTools | None = None
+
+    def builtin(self) -> set[str]:
+        return {t.name for t in self._tool_manager.list_tools()}
+
+    async def routine_tools(self) -> dict[str, tuple[Tool, dict[str, Any]]]:
+        if self.routines is None:
+            return {}
+        return await anyio.to_thread.run_sync(self.routines.current, self.builtin())  # file and database reads, off the loop
+
+    async def list_tools(self) -> list[MCPTool]:
+        return [*await super().list_tools(), *(as_listed(t) for t, _ in (await self.routine_tools()).values())]
+
+    async def call_tool(self, name: str, arguments: dict[str, Any], context: Any = None) -> Any:
+        if name not in self.builtin() and (got := (await self.routine_tools()).get(name)) is not None:
+            return await got[0].run(arguments, context, convert_result=True)
+        return await super().call_tool(name, arguments, context)
+
+    def agent_tools(self) -> dict[str, Any]:
+        """What agents see, for Settings › Agents: the routine tools in full, and the built-in tools by name and title."""
+        rows = [row for _, row in (self.routines.current(self.builtin()) if self.routines else {}).values()]
+        builtin = [{"name": t.name, "title": t.title or (t.annotations.title if t.annotations else None) or t.name}
+                   for t in self._tool_manager.list_tools()]
+        return {"tools": sorted(rows, key=lambda x: x["tool"]), "builtin": builtin}
+
+
+def build_mcp(ctx: Any, port: int, base: str | None = None) -> EnvoyMCP:
+    """`ctx` holds the API's runner, task store, memory and routine library, and the share switch (`ctx.sharing`, which
+    decides the routine tools; none without it). `base` is where approval links point (the tailnet address, where your
+    paired iPhone is signed in)."""
+    server = EnvoyMCP(name="envoy", title="Envoy", description="Envoy operates Android apps on the user's behalf and remembers what it sees.",
+                      instructions=INSTRUCTIONS, version="0.7.0", icons=envoy_icons())
     base = base or public_base(port)
+    server.routines = RoutineTools(ctx, base)
 
     @server.tool(annotations=ToolAnnotations(title="Run a task on the user's phone", readOnlyHint=False, destructiveHint=False, openWorldHint=True))
     async def run_task(goal: str) -> dict:
@@ -332,17 +543,17 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> MCPServer:
 
     @server.tool(annotations=ToolAnnotations(title="List learned routines", readOnlyHint=True, openWorldHint=False))
     def list_routines() -> dict:
-        """Routines Envoy has learned (fast, no model calls while the app looks as expected), with their inputs."""
+        """Routines Envoy has learned (fast, no model calls while the app looks as expected), with their inputs. One the
+        user shares with agents also names its own `tool`."""
+        tools = {row["routine"]: name for name, (_, row) in server.routines.current(server.builtin()).items()}
         return {"routines": [{"name": r.routine, "app": r.app, "intent": r.intent, "version": r.version,
-                              "inputs": {k: v.description for k, v in r.inputs.items()}, "outputs": r.outputs} for r in ctx.routines.active()]}
+                              "inputs": {k: v.description for k, v in r.inputs.items()}, "outputs": r.outputs,
+                              **({"tool": tools[r.routine]} if r.routine in tools else {})} for r in ctx.routines.active()]}
 
     @server.tool(annotations=ToolAnnotations(title="Run a learned routine", readOnlyHint=False, destructiveHint=False, openWorldHint=True))
     def run_routine(name: str, inputs: dict[str, str] | None = None) -> dict:
         """Run a routine by name with its inputs (missing inputs are filled from memory). Returns a task ID."""
-        r = ctx.routines.get(name)
-        heads = heads_up(ctx, r.intent, routine=name, inputs=inputs or {})
-        task = ctx.runner.start(r.intent, "mcp", routine=name, inputs=inputs or {})
-        return {"task_id": task["id"], "status": task["status"], "task_url": f"{base}/?task={task['id']}", **({"heads_up": heads} if heads else {})}
+        return start_routine(ctx, base, name, inputs or {})
 
     @server.tool(annotations=ToolAnnotations(title="Search Envoy memory", readOnlyHint=True, openWorldHint=False))
     def memory_search(query: str) -> dict:

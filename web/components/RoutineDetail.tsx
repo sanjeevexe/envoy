@@ -5,6 +5,7 @@
 // was learned from.
 import { KeyboardEvent, ReactNode, useEffect, useRef, useState } from "react";
 import { CaretLeftIcon } from "@phosphor-icons/react";
+import { ShareWithAgents } from "@/components/AgentTools";
 import { appIcon, RowIcon } from "@/components/ui";
 import { api, media } from "@/lib/api";
 
@@ -488,6 +489,7 @@ export default function RoutineDetail({ name, back, openTask }: { name: string; 
         {d.taught && <span className="rounded-full bg-well px-2.5 py-1 font-semibold text-ink">taught by you</span>}
       </div>
       {d.description && <p className="mt-2 max-w-3xl text-meta text-ink-2">{d.description}</p>}
+      <ShareWithAgents name={d.name} />
       <dl className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-meta-2">
         <div className="flex gap-1"><dt className="text-muted">Inputs</dt><dd>{Object.keys(d.inputs).length ? Object.entries(d.inputs).map(([k, v], i) => (
           <span key={k}>{i ? ", " : ""}<span className="font-mono">{k}</span>{v.example && <span className="text-muted"> (e.g. {v.example})</span>}</span>)) : "none"}</dd></div>
