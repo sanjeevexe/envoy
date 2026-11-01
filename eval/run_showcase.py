@@ -357,6 +357,8 @@ def add_routine(yaml_path: Path) -> int:
         problems.append(f"steps after the post: {[s.id for s in r.steps[post[-1] + 1:]]}")
     problems += [f"step {s.id} types a fixed value {s.action.value!r}" for s in r.steps
                  if s.action.kind == "type" and not has_slot(s.action.value or "")]
+    if "phone" in r.inputs and r.inputs["phone"].type != "phone":  # agent-door: it would hide every tool's `phone` selector
+        problems.append("an input named 'phone' that isn't a phone number: rename it")
     for p in problems:
         print(f"REFUSED: {p}")
     if problems:
