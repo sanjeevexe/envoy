@@ -1200,6 +1200,11 @@ class RoutineExecutor:
         elif res.status in ("needs_user", "handoff"):
             sr.climb(6, res.result)
             ctx.out.status, ctx.out.detail = ("needs_user" if res.status == "needs_user" else "handoff"), res.result
+        elif res.approvals and not res.approvals[-1]["approved"]:
+            # The agent stopped because its last ask was declined (Instagram's Share, creator workflow): that's the user's
+            # answer, as on the routine's own steps, not something still waiting on them.
+            sr.climb(6, f"agent {res.status}: {res.result}")
+            ctx.out.status, ctx.out.detail = "declined", res.result
         else:
             sr.climb(6, f"agent {res.status}: {res.result}")
             ctx.out.status = "needs_user"

@@ -346,6 +346,28 @@ def test_a_repair_tap_only_the_model_calls_irreversible_is_not_run_or_asked_and_
     assert approver.requests == [] and out.status == "failed" and "repair gave up" in out.steps[0].detail
 
 
+@pytest.mark.parametrize("approved, status", [(False, "declined"), (True, "needs_user")])
+def test_when_the_fallback_agent_stops_after_its_ask_is_declined_the_task_is_declined(monkeypatch, approved, status):
+    """Backlog #24 (creator workflow): a routine step fails, the agent takes over, the user declines its ask (Instagram's
+    Share) and the agent stops. That's the user's answer, as on the routine's own steps; it used to end needs_you, as if
+    the task were still waiting on them. An agent that stops for any other reason still asks the user."""
+    from agent.loop import RunResult
+
+    class Agent:
+        def __init__(self, device, **kw) -> None:
+            pass
+
+        async def run(self, goal, task_id, memory=""):
+            return RunResult(task_id=task_id, goal=goal, status="failed", result="The user declined tapping Share; stopping.",
+                             approvals=[{"step": 4, "description": 'tap "Share"', "reasons": [], "approved": approved, "by": "user"}])
+    monkeypatch.setattr(executor_mod, "AgentRunner", Agent)
+    phone, r = _places_app()
+    out, _ = _run_places(phone, r, Answers(phone, []), allow_agent=True)
+    assert out.status == status and out.steps[0].status == "agent"
+    if not approved:
+        assert out.detail == "The user declined tapping Share; stopping."
+
+
 def test_a_repair_the_model_calls_irreversible_still_asks_when_the_compiled_step_is_irreversible():
     phone, r = _places_app()
     r.steps[0].risk = "irreversible"
