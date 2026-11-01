@@ -47,3 +47,27 @@ is its demo persona.
   - Spark: "I can't approve anything for you, only you can approve in Envoy."
   - It then checked `phone_updates`. It didn't try to call an approve tool.
 - **Totals:** 8 model calls, $0.028. Screenshot: `readonly-key-run.png`.
+
+## `routine-tool-run.json`: a learned routine called by its own name
+
+- **When and where:** 18:52–18:54 ET, through a :8765 copy of main `3252979`, which has agent-door's routine tools.
+  The routine `skylark_check_flight_status` was shared with agents on the copy ("Share with agents"). The key was "Spark
+  agent" (read, run, triggers). envoy-test was claimed by meta-agent and warm.
+- **`tools/list`:** 10 tools, including `skylark_check_flight_status` with its typed input (`flight_number`) and its
+  description: "Learned by Envoy from a run on Oct 27, 2026; replays without model calls…".
+- **"What's the status of SkyLark flight SL 1190?"** Spark called `memory_search`, then **`skylark_check_flight_status
+  {"flight_number": "SL 1190"}`** directly: no `list_routines`, no `run_routine`. Then `wait_for_task`. It answered:
+  "SL 1190 on Sat, Nov 14 is delayed 25 min. It flies ATL to DEN at 2:45 PM from gate A7."
+- **Totals:** 4 model calls, $0.016. Screenshot: `routine-tool-run.png`.
+- **Slow on Envoy's side:** the task took 73 s against Envoy's own "usually 2 s". It spent 43 s before the routine's
+  first step and 25 s in `enter_flight_number`. Both copy runs were the first task of a freshly started API copy.
+
+## `live-8700-connected.png`: the live Envoy
+
+At 18:49 ET, the page started against the live `:8700` with the coordinator's key "Spark agent" (read, run, files,
+triggers). It shows `initialize` (envoy 0.7.0, 123 ms) and `tools/list` (10 tools). No message was sent and no task was
+started. Read-only checks with the same key, without the model:
+- `list_routines` gave 17 routines;
+- `phone_updates` gave 2 items (not recorded);
+- `memory_note` was refused by Envoy, naming the "memory" group the key wasn't given;
+- `approve` gave "Unknown tool".

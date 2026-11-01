@@ -40,18 +40,32 @@ no other file.
 - **Claude doc:** `docs/agents.md` covers making a key in Settings › Agents, adding Envoy to Claude Code with
   `claude mcp add --transport http … --header "Authorization: Bearer $(pbpaste)"`, and running the Spark agent.
 
+## Stage 2 so far (Nov 1, evening)
+
+- **On the live :8700** with the coordinator's key ("Spark agent": read, run, files, triggers), read-only checks only:
+  - `initialize` answered, and `tools/list` gave 10 tools.
+  - `list_routines` and `phone_updates` answered.
+  - `memory_note` got Envoy's refusal naming the "memory" group.
+  - `approve` got "Unknown tool".
+  - The page connected (`evidence/2026-11-01/live-8700-connected.png`).
+  - No task was started there: that waits for the coordinator's OK.
+- **A learned routine called by name** (agent-door's routine tools, on a :8765 copy of main `3252979`):
+  - `skylark_check_flight_status` was shared, so it was in the tool list with its typed input.
+  - Spark called it directly with `{"flight_number": "SL 1190"}` and answered with the status.
+  - The page marks it "learned" (`evidence/2026-11-01/routine-tool-run.png`).
+
 ## Not done yet
 
-- **Stage 2:**
-  - the agent on the live :8700 with the key the coordinator makes;
-  - the Claude Code test, where the user adds Envoy and pastes the key.
-- **Learned routines as their own tools** (agent-door's T1a) aren't in main yet, so the agent uses `list_routines` and
-  `run_routine`. Once they land, they appear in the tool list as "learned" chips with no change here (tested with a fake
-  Envoy).
+- **The Claude Code test:** the user adds Envoy and pastes the key.
+- **A task on the live :8700:** only with the coordinator's OK.
 - **The approve card on the page has only been seen with a scripted model.** In real runs Spark never tried to call an
   approve tool: it refused in words.
-- **Speed on camera:** the recorded status run took 150 s because the emulator had just cold-booted (empty screen dumps
-  for ~100 s, then slow steps). Warm the phone before filming. A replay normally takes a few seconds.
+- **Speed on camera:** both status runs on the copy were slow on Envoy's side:
+  - 150 s right after a cold boot (empty screen dumps for ~100 s);
+  - 73 s on a warm emulator, with 43 s before the first step and 25 s typing the flight number.
+
+  Envoy's own estimate is "usually 2 s". Both were the first task of a freshly started API copy, so do one warm-up run
+  on :8700 before a take.
 - **The copy's library:** after that slow run, Envoy put a v2 trial of `skylark_check_flight_status` in the copy's own
   library. Nothing in this branch or in main changed.
 
@@ -66,7 +80,7 @@ no other file.
 
 ## Spend
 
-About $0.10 of Meta credit in all:
-- $0.068: the agent's 19 Spark calls;
-- $0.025: the copy Envoy's own 4 calls (memory and app notes after the runs);
+About $0.16 of Meta credit in all:
+- $0.083: the agent's 23 Spark calls;
+- $0.073: the copy Envoy's own 9 calls (memory, app notes and a patch after the runs);
 - $0.001: one probe of the function-call shape.
