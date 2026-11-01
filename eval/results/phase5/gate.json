@@ -115,7 +115,7 @@
    "step": "live view over the tailnet (HTTPS + Tailscale, from this Mac)",
    "ok": true,
    "t": 44.7,
-   "host": "https://sanjeevs-macbook-pro.tailffb391.ts.net:8443",
+   "host": "https://<mac>.<tailnet>.ts.net:8443",
    "device": "1080x2400",
    "frames": 1,
    "frame_ms_p50": 344,

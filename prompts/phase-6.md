@@ -23,7 +23,7 @@ Phases 0–5 are done, and their gates passed. This is the last build phase: it 
 - Repo: `~/Desktop/Envoy`, private GitHub repo `sanjeevexe/envoy` (must be public by Nov 4; I'll say when). MIT.
 - Meta API: a **shared key** in `.env`, about **$30 left** ($7.36 billed so far; all spend is in `logs/model_costs.jsonl`). The Contributor tier is allowed for SkyLark test data only, never real apps or real data.
 - **The Android phone** is a loan from IPaT, arriving **Wednesday, Oct 28**. I'll tell you its model and Android version when I have it, and I'll turn on Developer options. I factory-reset it when I give it back, so set it up however Envoy needs.
-- **My iPhone** (iOS 26.6) has Envoy on its Home Screen, paired, with push on; Tailscale Serve gives the API `https://sanjeevs-macbook-pro.tailffb391.ts.net:8443` (tailnet only). You can drive the iPhone through iPhone Mirroring, which blocks its microphone. Muse route 2 works through `scripts/start_muse_test.sh`; I start tunnels and enter tokens.
+- **My iPhone** (iOS 26.6) has Envoy on its Home Screen, paired, with push on; Tailscale Serve gives the API `https://<mac>.<tailnet>.ts.net:8443` (tailnet only). You can drive the iPhone through iPhone Mirroring, which blocks its microphone. Muse route 2 works through `scripts/start_muse_test.sh`; I start tunnels and enter tokens.
 
 **Running the demo (Phase 5).** The API may still be running (`curl http://127.0.0.1:8700/healthz`). If it isn't:
 ```bash

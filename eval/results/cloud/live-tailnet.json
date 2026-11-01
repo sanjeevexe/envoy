@@ -1,6 +1,6 @@
 {
  "time": "2026-10-29T20:41:43+00:00",
- "base": "https://envoy-cloud.tailffb391.ts.net:8443",
+ "base": "https://envoy-cloud.<tailnet>.ts.net:8443",
  "avd": "envoy-test",
  "hello": {
   "type": "hello",

@@ -93,7 +93,7 @@ The user asked for the full move as **an alternative, not a replacement**: two c
 
 - **The cloud copy on the VM:** the API, web app and MCP from main, envoy-test (SkyLark) and envoy-real (Play Store; the user's sign-ins).
 - **Its own data:** `~/envoy-state` holds its `.env` with its own MCP token, its own session token and VAPID keys, and a copy of the demo memory and test inbox.
-- **Started at boot** by systemd. Reached only over the tailnet at `https://envoy-cloud.tailffb391.ts.net:8443` (Tailscale Serve, approved by the user).
+- **Started at boot** by systemd. Reached only over the tailnet at `https://envoy-cloud.<tailnet>.ts.net:8443` (Tailscale Serve, approved by the user).
 - **Scripts:**
   - `envoy-setup.sh`, `vm-envoy.sh`, `tailnet.sh`
   - `login.sh`, `keep-awake.sh`, `key.sh` (now line-based)
@@ -154,7 +154,7 @@ Pick the cloud only if the Mac setup breaks. For that case:
 ### Final state (Oct 29, 23:56 UTC)
 
 - **The VM `envoy-cloud` is stopped (TERMINATED), and the Meta key is off it.** `key.sh remove` found no file still holding the key. Keep-awake is off.
-- **On its disk (about $5 a month):** the cloud copy, ready to start. That's both phones with the user's sign-ins (Google, Amazon, Starbucks, DoorDash; Chipotle signed out) and WebView/Chrome 156, the API with its own tokens, the demo memory copy, and Tailscale (`envoy-cloud.tailffb391.ts.net`).
+- **On its disk (about $5 a month):** the cloud copy, ready to start. That's both phones with the user's sign-ins (Google, Amazon, Starbucks, DoorDash; Chipotle signed out) and WebView/Chrome 156, the API with its own tokens, the demo memory copy, and Tailscale (`envoy-cloud.<tailnet>.ts.net`).
 - **`envoy-cloud-image`** (15.9 GB, us-east1, no key; about $0.80 a month) can start a copy in us-east1-c or d if us-east1-b is out of n2-standard-8s (`fallback.sh start`).
 - **Muse:** the "Envoy Cloud" connector in Muse for Mac points at a quick tunnel that has ended. Using it again needs `muse-tunnel.sh` and the connector's URL updated to the new address.
 - **Deleting** the VM, its disk and the image is the user's call: `scripts/cloud/delete.sh --yes-delete-envoy-cloud`.

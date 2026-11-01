@@ -25,6 +25,7 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import re
 import ssl
 import struct
 import subprocess
@@ -280,7 +281,8 @@ async def live() -> None:
                 sizes.append(len(m))
         await changer
     med = lambda xs: round(sorted(xs)[len(xs) // 2]) if xs else None  # noqa: E731
-    log("live view over the tailnet (HTTPS + Tailscale, from this Mac)", bool(lat), host=public, device=f"{hello['width']}x{hello['height']}",
+    host = re.sub(r"^https://[^.]+\.[^.]+\.ts\.net", "https://<mac>.<tailnet>.ts.net", public)  # results are public; the tailnet isn't
+    log("live view over the tailnet (HTTPS + Tailscale, from this Mac)", bool(lat), host=host, device=f"{hello['width']}x{hello['height']}",
         frames=len(lat), frame_ms_p50=med(lat), frame_ms_max=round(max(lat)) if lat else None, rtt_ms_p50=med(rtts), kb_per_frame=med([s / 1024 for s in sizes]))
 
 

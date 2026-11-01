@@ -14,8 +14,8 @@ Written by Claude from `prompts/phase-5.md` and the design doc on Oct 27, 2026. 
 
 ## What I found before planning
 
-- Tailscale is signed in on both devices, MagicDNS and HTTPS certificates are already on (`sanjeevs-macbook-pro.tailffb391.ts.net`).
-- **Serve's port 443 is already in use** by another app of yours (`/` → `127.0.0.1:8787`, "Fuel"). Envoy will not replace it: it goes on Serve's other HTTPS port, **8443** (`https://sanjeevs-macbook-pro.tailffb391.ts.net:8443`), tailnet only.
+- Tailscale is signed in on both devices, MagicDNS and HTTPS certificates are already on (`<mac>.<tailnet>.ts.net`).
+- **Serve's port 443 is already in use** by another app of yours (`/` → `127.0.0.1:8787`, "Fuel"). Envoy will not replace it: it goes on Serve's other HTTPS port, **8443** (`https://<mac>.<tailnet>.ts.net:8443`), tailnet only.
 - Muse Voice Transcribe (dev.meta.ai, read today): `wss://api.meta.ai/v1/asr/realtime`; the first text frame is the handshake (`authorization.accessToken = "Bearer <key>"`, `audioEncoding` `PCM_24KHZ`|`PCM_16KHZ`, `model`, `mode` `PUSH_TO_TALK`|`ENDPOINTING`|`DIARIZATION`, `partialMode`, `emitAudioProgress`, `keywords`, `languageBias`), acknowledged by `{"sessionId"}`; audio is binary 16-bit little-endian mono PCM at about real time (80 ms chunks); in push-to-talk a turn ends with `{"type": "endStream"}` (it ends the session), then a `transcript` with `final: true` and a `1000` close. Partials are cumulative. Billed per processed second at $0.18/hour.
 - Images go to Spark as `input_image` data URLs (JPEG/PNG; a ~1280 px image is about 1,300 to 1,500 tokens).
 - An iPhone Home Screen app keeps its own cookies and storage, separate from Safari. So signing in must happen **inside the installed app**, which is why a short code beats a link.

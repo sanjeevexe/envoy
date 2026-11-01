@@ -1,5 +1,5 @@
 {
- "base": "https://envoy-cloud.tailffb391.ts.net:8443",
+ "base": "https://envoy-cloud.<tailnet>.ts.net:8443",
  "said": "What's my gate for my Chicago flight?",
  "heard": "What's my gate for my Chicago flight?",
  "ok": true,

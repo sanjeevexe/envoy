@@ -344,7 +344,7 @@
     "OK  check-in done; finished task → push: status=done, result=seat: 14C; gate: B12; boarding time: 5:30 AM; boarding group: Group 3; flight: SL 482, checked_in=True, push_title=Done: Check me in for my flight, pushes=['takeover', 'approval', 'task']",
     "OK  boarding-pass screenshot → facts on SL 482 (photo source), image deleted: summary=Saved to Flight SL 482 · Fri, Oct 30, 2026, Person Maya Patel: 1 new, 8 confirmed., facts={'same': 8, 'replaced': 1}, dropped=[], photo_facts={'boarding_group': '3', 'boarding_time': '5:30 AM', 'date': 'Fri, Oct 30, 2026', 'from': 'Atlanta (ATL)', 'gate': 'B12', 'number': 'SL 482', 'seat': '14C', 'to': 'Chicago (ORD)'}, accuracy=7/7, flights=7→7, trips=7→7, deleted=True, files_left=[], tok",
     "OK  voice → Muse Voice Transcribe → chat: said=What's my gate for my Chicago flight?, heard=what's my gate for my Chicago flight?, partials=4, connect_ms=919, ready_ms=928, audio_ms=2638, release_to_text_ms=89, chat_ms=2630, release_to_reply_ms=2719, cost_usd=0.0001, reply=Gate B12, from your screenshot just now., spoken=Gate B12, from your screenshot just now., reply_kind=memory",
-    "OK  live view over the tailnet (HTTPS + Tailscale, from this Mac): host=https://sanjeevs-macbook-pro.tailffb391.ts.net:8443, device=1080x2400, frames=54, frame_ms_p50=24, frame_ms_max=45, rtt_ms_p50=0, kb_per_frame=80"
+    "OK  live view over the tailnet (HTTPS + Tailscale, from this Mac): host=https://<mac>.<tailnet>.ts.net:8443, device=1080x2400, frames=54, frame_ms_p50=24, frame_ms_max=45, rtt_ms_p50=0, kb_per_frame=80"
    ],
    "results": {
     "gate.json": {
@@ -464,7 +464,7 @@
        "step": "live view over the tailnet (HTTPS + Tailscale, from this Mac)",
        "ok": true,
        "t": 38.0,
-       "host": "https://sanjeevs-macbook-pro.tailffb391.ts.net:8443",
+       "host": "https://<mac>.<tailnet>.ts.net:8443",
        "device": "1080x2400",
        "frames": 54,
        "frame_ms_p50": 24,

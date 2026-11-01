@@ -22,7 +22,7 @@ Phases 0–4 are done, and their gates passed. This phase makes Envoy usable fro
 - Emulators: `envoy-test` (SkyLark; snapshots allowed; gRPC 8554) and `envoy-real` (real apps; never snapshot-restored; always stopped with `scripts/stop_emulator.sh`). Start with `scripts/start_emulator.sh <avd> [--window]`. At most two run at once.
 - Repo: `~/Desktop/Envoy`, private GitHub repo `sanjeevexe/envoy` (must be public by Nov 4; I'll say when). MIT.
 - Meta API: a **shared key** in `.env`, about **$31 left** (all-time spend is in `logs/model_costs.jsonl`; $6.94 billed so far). The Contributor tier is allowed for SkyLark test data only, never real apps or real data.
-- **Tailscale is installed and signed in** on the Mac (`sanjeevs-macbook-pro`) and my iPhone (`iphone174`), same tailnet. The Mac app's CLI is `/Applications/Tailscale.app/Contents/MacOS/Tailscale` (version 1.104.2; not on the PATH). Also installed: `cloudflared` (the Phase 0 Muse connector test). Not installed: mkcert.
+- **Tailscale is installed and signed in** on the Mac and my iPhone, same tailnet. The Mac app's CLI is `/Applications/Tailscale.app/Contents/MacOS/Tailscale` (version 1.104.2; not on the PATH). Also installed: `cloudflared` (the Phase 0 Muse connector test). Not installed: mkcert.
 - My iPhone: you can see and drive it through **iPhone Mirroring** on this Mac (computer use), as in the Phase 0 Muse test. I start tunnels and enter tokens myself.
 
 **Running the demo (Phase 4).** Nothing of Envoy is running when you start: the API is stopped (`envoy-test` may still be up; `start_emulator.sh` copes either way). **Before you begin, start it:** the emulator, then `demo_setup.py`, then the API in the background, and check `curl http://127.0.0.1:8700/healthz`.
