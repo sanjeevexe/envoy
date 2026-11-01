@@ -333,3 +333,22 @@ def test_phone_updates_reads_matched_notifications_in_one_line_with_codes_left_o
     assert tiktok.startswith('TikTok on the test phone: "Your login code') and "482913" not in tiktok and "\n" not in insta
     assert items[0]["app"] == "com.instagram.android" and items[0]["phone"] == "phone-0A1B" and items[0]["trigger_id"] == "trig-1"
     assert "trigger_id" not in items[1]
+
+
+# ---- agent keys (contract 2) ------------------------------------------------------------------------
+
+
+def test_only_a_key_with_run_sees_or_calls_a_shared_routines_tool(env):
+    from test_agent_keys import call as agent_call, key, new_agent, tools as agent_tools
+    env.ctx.sharing.set("skylark_get_flight_gate", True)
+    with TestClient(env.ctx.asgi) as c:
+        _, reader = new_agent(c, env, "Reader", ["read"])
+        _, runner = new_agent(c, env, "Runner", ["read", "run"])
+        assert "skylark_get_flight_gate" not in agent_tools(c, key(reader)) and "skylark_get_flight_gate" in agent_tools(c, key(runner))
+        err, text = agent_call(c, key(reader), "skylark_get_flight_gate", trip_city="Chicago")
+        assert err and '"run" tool group' in text and env.started == []
+        err, text = agent_call(c, key(runner), "skylark_get_flight_gate", trip_city="Chicago", phone="emulator")
+        assert not err and json.loads(text)["task_id"] == "task-1"
+        assert "skylark_get_flight_gate" in listed(c)  # Muse's key: every tool
+    assert env.started == [("Find the departure gate for a SkyLark flight to a given city", "mcp",
+                            {"routine": "skylark_get_flight_gate", "inputs": {"trip_city": "Chicago"}, "phone": "emulator"})]

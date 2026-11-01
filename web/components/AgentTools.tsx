@@ -1,8 +1,9 @@
 "use client";
 
 // Learned routines as agents' tools (backend/api/sharing.py): a routine you share, while it has an active version, is a
-// tool of its own in the tool list of Muse and any other agent connected to Envoy over MCP. Settings › Agents shows that
-// list exactly as agents see it, and keeps it current; each routine's page has its "Share with agents" switch.
+// tool of its own in the tool list of Muse and of any agent whose key has the "run" group (api/agents.py). Settings ›
+// Agents shows that list exactly as Muse sees it, and keeps it current; each routine's page has its "Share with agents"
+// switch.
 import { useEffect, useRef, useState } from "react";
 import { HandPalmIcon, PlugsConnectedIcon } from "@phosphor-icons/react";
 import { appIcon, Card, Chip, cx, RowIcon, Section, Switch } from "@/components/ui";
@@ -125,7 +126,7 @@ export default function AgentTools() {
   // A tool that appeared while you watch comes first, marked New; the rest by name, as agents list them.
   const tools = [...info.tools.filter((t) => fresh.has(t.tool)), ...info.tools.filter((t) => !fresh.has(t.tool))];
   return (
-    <Section title="Agent tools" intro={<>What Muse and any other agent connected to Envoy see right now. Each routine you share from its page becomes a tool of its own: an agent calls it by name, it replays for almost nothing, and anything irreversible still waits for your OK on your phone.</>}>
+    <Section title="Agent tools" intro={<>What agents connected to Envoy see right now. Each routine you share from its page becomes a tool of its own: an agent calls it by name, it replays for almost nothing, and anything irreversible still waits for your OK on your phone. Muse sees every tool; an agent with its own key sees the learned ones if its key has &ldquo;run&rdquo;.</>}>
       <Card className="overflow-hidden">
         <div className="flex items-center gap-2 border-b border-divider bg-raised px-4 py-3">
           <span aria-hidden className="h-2.5 w-2.5 shrink-0 rounded-full bg-sage" />
