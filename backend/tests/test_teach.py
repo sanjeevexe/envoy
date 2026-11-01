@@ -495,30 +495,35 @@ def test_the_teach_endpoints_need_your_session_and_keep_the_phone_until_the_end(
         assert not ctx.pool.leases["envoy-test"].user_control and not ctx.pool.leases["envoy-test"].run_lock.locked()
 
 
-def test_finishing_compiles_replays_once_and_saves_it_as_taught(api, monkeypatch):
-    ctx, phone, me = api
-    replays = []
+async def _show(ctx, phone) -> dict:
+    """The person shows the known-traveler-number task through the live view and finishes; returns the session's status."""
+    t = ctx.teacher
+    await t.start("envoy-test", "Add my known traveler number 55501234 to my Chicago trip", app=PKG)
+    rec = ctx.pool.recorders["envoy-test"]
+    sock = Socket(ktn_demo(phone))
+    await live_view(sock, "envoy-test", ctx.pool, fps=20)
+    assert any((m.get("control") or {}).get("teach", {}).get("recording") == "on" for m in sock.sent if m.get("type") == "hello")
+    out = await t.finish("envoy-test", ok=True)
+    assert out["status"] == "compiling" and not ctx.pool.leases["envoy-test"].user_control and rec.closed
+    await t.jobs["envoy-test"]
+    return t.status("envoy-test")
 
+
+def _clean_replay(monkeypatch, replays: list | None = None) -> None:
     async def replay(self, s, routine):
-        replays.append((routine.routine, self.pool.leases[s.avd].user_control))
+        if replays is not None:
+            replays.append((routine.routine, self.pool.leases[s.avd].user_control))
         return SimpleNamespace(status="done", detail="all steps and checks passed", duration_s=6.2, model_calls=0, outputs={},
                                steps=[], cost_at_standard_usd=0.0)
 
     monkeypatch.setattr(Teacher, "_replay", replay)
 
-    async def show():
-        t = ctx.teacher
-        await t.start("envoy-test", "Add my known traveler number 55501234 to my Chicago trip", app=PKG)
-        rec = ctx.pool.recorders["envoy-test"]
-        sock = Socket(ktn_demo(phone))
-        await live_view(sock, "envoy-test", ctx.pool, fps=20)
-        assert any((m.get("control") or {}).get("teach", {}).get("recording") == "on" for m in sock.sent if m.get("type") == "hello")
-        out = await t.finish("envoy-test", ok=True)
-        assert out["status"] == "compiling" and not ctx.pool.leases["envoy-test"].user_control and rec.closed
-        await t.jobs["envoy-test"]
-        return t.status("envoy-test")
 
-    out = asyncio.run(show())
+def test_finishing_compiles_replays_once_and_saves_it_as_taught(api, monkeypatch):
+    ctx, phone, me = api
+    replays = []
+    _clean_replay(monkeypatch, replays)
+    out = asyncio.run(_show(ctx, phone))
     assert out["status"] == "saved" and out["routine"] == "skylark_add_known_traveler_number" and out["version"] == 1, out
     assert replays == [("skylark_add_known_traveler_number", False)]  # replayed after the hand back
     r = ctx.routines.get("skylark_add_known_traveler_number")
@@ -530,6 +535,31 @@ def test_finishing_compiles_replays_once_and_saves_it_as_taught(api, monkeypatch
     from api import routine_view
     view = routine_view.detail(ctx.routines, r.routine, ctx.tasks, runs_dir=ctx.teacher.root)
     assert view["taught"] and view["versions"][0]["compiled"]["taught"]
+
+
+@pytest.mark.parametrize("status, calls, active", [("done", 0, 2), ("agent_done", 3, 1)], ids=["runs-clean", "needs-help"])
+def test_a_taught_routine_named_like_one_in_the_library_goes_on_trial(api, monkeypatch, status, calls, active):
+    """Backlog #43 (the user's call, Nov 1): showing a task whose routine is already in the library (a tuned demo routine)
+    must not replace it untested. The taught version goes on trial: the active one stays in use, the next run uses the
+    trial, and it becomes active only if that run finishes on its own; otherwise it's set aside and the old one stays."""
+    from routines.executor import RunOutcome
+    from routines.lifecycle import after_run, version_for_run
+    from routines.model import Routine, Step, StepAction
+    ctx, phone, me = api
+    name = "skylark_add_known_traveler_number"
+    ctx.routines.add(Routine(routine=name, app=PKG, intent="Add my known traveler number",
+                             steps=[Step(id="tuned", intent="The tuned way", action=StepAction(kind="back"))]))
+    _clean_replay(monkeypatch)
+    out = asyncio.run(_show(ctx, phone))
+    assert out["status"] == "saved" and out["version"] == 2 and "v1 stays in use until v2" in out["detail"], out
+    idx = ctx.routines.index(name)
+    assert idx["active"] == 1 and [v["status"] for v in idx["versions"]] == ["active", "trial"]
+    assert idx["versions"][1]["verification"]["by"] == "teach" and ctx.routines.get(name).steps[0].id == "tuned"
+    trial = version_for_run(ctx.routines, name)
+    assert trial.version == 2 and trial.compiled_from["source"] == "taught"
+    life = after_run(ctx.routines, trial, RunOutcome(routine=name, version=2, task_id="task-next", status=status, model_calls=calls))
+    assert life == {"trial": 2, "result": "activated" if active == 2 else "rejected"}
+    assert ctx.routines.index(name)["active"] == active and ctx.routines.get(name).version == active
 
 
 def test_a_replay_that_fails_saves_nothing(api, monkeypatch):

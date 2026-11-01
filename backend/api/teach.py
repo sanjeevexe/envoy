@@ -685,10 +685,14 @@ class Teacher:
                 s.detail = (f"the replay stopped at {failed.id}: {failed.detail or out.detail}" if failed else f"the replay {out.status}: {out.detail}")[:400]
                 return
             inputs = {k: v.example or "" for k, v in routine.inputs.items()}
-            added = self.routines.add(routine, verification={"by": "teach", "from": s.id, "cases": [
+            # A name already in the library goes on trial, so a showing never replaces a tuned routine untested (#43).
+            added = self.routines.add_trial(routine, verification={"by": "teach", "from": s.id, "cases": [
                 {"case": "replay", "passed": True, "inputs": inputs, "duration_s": out.duration_s, "status": out.status}]})
             s.version, s.status = added.version, "saved"
             s.detail = f"Saved as {added.routine} (v{added.version}). It ran once on its own, with no model, in {out.duration_s:.0f} s."
+            if added.status == "trial":
+                s.detail += (f" v{added.parent_version} stays in use until v{added.version} runs a real task on its own; "
+                             "if it can't, it's set aside.")
         except asyncio.CancelledError:
             s.status, s.detail = "failed", "stopped"
             raise

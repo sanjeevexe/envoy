@@ -573,6 +573,7 @@ A `type` action that also submits (presses Enter) is classified by the screen's 
 
 - When a screen contains a password field (the accessibility tree marks password fields), the agent stops and hands control to the user through the live view.
 - During a takeover the agent is paused, screenshots stop, and the user's input goes straight to the phone without being logged or shown to any model.
+- **Teach mode is the one exception, and only when the user starts it** ("Teach"): their taps and typing are recorded as a demonstration and compiled into a routine. Nothing is recorded on sign-in, secure or black screens, never what is typed into a password field, and cancelling keeps nothing. A taught routine named like one already in the library goes on trial instead of replacing it: the next run decides.
 - Sign-in codes from text messages (real Android phone only) are read only while a sign-in is in progress, used once, and never stored.
 
 ### Blocked app categories

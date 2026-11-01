@@ -159,6 +159,26 @@ class RoutineStore:
         self._write_index(r.routine, idx)
         return r
 
+    def add_trial(self, routine: Routine, verification: dict[str, Any] | None = None) -> Routine:
+        """A new version that has to earn its place: with a version already active (a taught routine named like one in
+        the library, backlog #43), it goes on trial. The next run uses it (lifecycle.version_for_run) and it becomes
+        active only if that run finishes on its own; otherwise it's rejected and the active version stays. With nothing
+        active it's added as `add` would."""
+        idx = self.index(routine.routine)
+        base = idx.get("active")
+        if base is None:
+            return self.add(routine, verification)
+        r = routine.model_copy(deep=True)
+        r.version = self._next_version(r.routine)
+        r.status = "trial"
+        r.parent_version = base
+        r.changes = r.changes or [f"recompiled from {r.compiled_from.get('task_id')}"]
+        self._save(r)
+        idx["versions"].append({"version": r.version, "status": "trial", "created": time.strftime("%Y-%m-%d %H:%M:%S"),
+                                "parent": base, "changes": r.changes, "verification": verification})
+        self._write_index(r.routine, idx)
+        return r
+
     def switch(self, name: str, on: bool) -> int | None:
         """Switch a routine off (no version is active, so the matcher skips it and an offer that names it runs the agent;
         its versions and runs stay) or back on (the version that was active). Returns the active version afterwards."""
