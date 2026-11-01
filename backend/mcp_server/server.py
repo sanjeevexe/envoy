@@ -353,18 +353,24 @@ def routine_events(ctx: Any, floor: float, tools: dict[str, str]) -> list[tuple[
     return out
 
 
-# Contract 6: phone-watch stores a notification's title and text with codes taken out; read through the same redaction
-# again here, in case a row comes from somewhere that didn't.
+# Contract 3: phone-watch's module words the line (`update_line`) and stores title and text with codes taken out
+# (contract 6); they go through its `redact` once more on the way out, in case a row came from somewhere that didn't.
+# Until it is in main, the same line from here.
 try:
-    from api.notifications import redact as _redact  # type: ignore[import-not-found]
+    from api.notifications import redact as _redact, update_line  # type: ignore[import-not-found]
 except ImportError:
     def _redact(text: str) -> str:
         text = re.sub(r"(?i)\b(code|otp|pin)\b(\W*)\S+", r"\1\2•••", text)
         return re.sub(r"\b\d{4,8}\b", "•••", text)  # a code on its own, not the digits in a name (envoy3955)
 
+    def update_line(row: dict[str, Any], phone_name: str = "Envoy's phone") -> str:
+        said = ": ".join(x for x in (row.get("title"), row.get("text")) if x)
+        return f'{row.get("app") or "An app"} on {phone_name}: "{said}"' if said else f"{row.get('app') or 'An app'} on {phone_name} showed a notification"
+
 
 def _notification_text(ctx: Any, n: dict[str, Any]) -> str:
-    """"Instagram on Envoy's phone: "envoy3955: someone commented…"": the app, the phone, and what the notification said."""
+    """"Instagram on Envoy's phone: "envoy3955: someone commented…"": the app, the phone (its name in Settings › Phones,
+    else "Envoy's phone"; an emulator is "the test phone"), and what the notification said."""
     phone = n.get("phone") or ""
     if not phone or phone.startswith("phone-"):
         try:
@@ -374,9 +380,9 @@ def _notification_text(ctx: Any, n: dict[str, Any]) -> str:
     else:
         name = NAMES.get(phone, phone)
         where = f"the {name[:1].lower()}{name[1:]}"  # "the test phone"
-    said = ": ".join(_redact(_line(x, 140)) for x in (n.get("title"), n.get("text")) if x)
-    app = _line(n.get("app") or app_title(ctx, n.get("package") or ""), 40)
-    return f'{app} on {_line(where, 40)}' + (f': "{_line(said, 240)}"' if said else "")
+    row = {**n, "app": _line(n.get("app") or app_title(ctx, n.get("package") or ""), 40),
+           **{k: _redact(_line(n.get(k), 140)) if n.get(k) else n.get(k) for k in ("title", "text")}}
+    return _line(update_line(row, _line(where, 40)), 320)
 
 
 def _has_table(db: Any, name: str) -> bool:
