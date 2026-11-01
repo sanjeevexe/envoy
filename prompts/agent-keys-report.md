@@ -1,12 +1,10 @@
 # A key per agent (T2a, phone-layer contract 2): report (Nov 1)
 
-Branch `claude/agent-keys-315ecc`, on main `869271f` (file delivery #48 included). Not merged, not pushed. Tests:
-`uv run --project backend pytest -q backend/tests` gives 803 passed on the default profile (790 on main, plus 13 new in
-`test_agent_keys.py`); `npm run build` in `web/` passes. With `ENVOY_MODEL_PROFILE=spark` it gave 802 passed in the
-first run (12 new tests then); the reruns with the 13th test each had one failure,
-`test_preflight::test_check_is_fast_on_a_long_history` (a 50 ms limit), while other sessions kept the load average near
-24. Side by side, main `869271f` failed it too (84, 238, 50 ms), and nothing of this branch is on its path. No device
-time, no model spend.
+Branch `claude/agent-keys-315ecc`. `17af085` (agent keys) and `09981fd` (the guard on a server subclass, the AgentKeys
+name) are in main; `scripts/agent_key.py` is one commit on top of main `09981fd`. Not pushed. Tests: `uv run --project backend pytest -q backend/tests` gives 839 passed on the default profile and with
+`ENVOY_MODEL_PROFILE=spark` (`test_agent_keys.py` has 15); `npm run build` in `web/` passes. One earlier spark rerun failed
+`test_preflight::test_check_is_fast_on_a_long_history` (a 50 ms limit, known: backlog #52) while other sessions kept the
+load average near 24; main `869271f` failed it too side by side, and it passed in the final runs. No device time, no model spend.
 
 ## What is true now
 
@@ -34,6 +32,13 @@ time, no model spend.
   `ENVOY_MCP_CLIENT_NAME`, which is gone.
 - **Keys open /mcp and nothing else:** `Auth.check` never accepts an agent key, so /api/*, the outbox door and the
   Settings list of paired devices are unchanged. Approvals are unchanged: no agent can approve.
+- **`scripts/agent_key.py`** (`issue <name> --tools read,run [--out <file>]`, `rotate`, `list`, `revoke`), for keys
+  nobody should see: the key goes into a gitignored file with mode 600 (default `data/api/agent_keys/<name>.key`, next
+  to the API's database) and the terminal shows only the name, the groups and the path. An `--out` inside the repo
+  that git would commit is refused before any key is made. It opens the API's database with sqlite3 and `Auth` only,
+  never `TaskStore()`, whose start-up marks running tasks stopped, so it is safe while :8700 runs; a test runs it
+  against a database a live app holds open, with a running task that stays running. Run it from ~/Desktop/Envoy (or pass
+  `--db`).
 - **No key in any log:** `logs/mcp.jsonl` gets `"caller": "<name>"`, the Authorization header stays redacted. A test
   creates, rotates, refuses and rate-limits keys and then scans every log, captured log record and stdout for them.
 
@@ -57,7 +62,8 @@ page doesn't.
 - **`api.auth.agent_for` is a method,** `Auth.agent_for` (`ctx.auth.agent_for`), since it reads the API's database. The
   contract's shape (`agent_for(token) -> Agent | None`, `Agent(name, tools)`) is otherwise as written; `Agent.tools`
   holds group names (and may hold single tool names).
-- **meta-agent's key on :8700** waits for the merge and restart; the user makes it in Settings › Agents on the Mac.
+- **meta-agent's key on :8700** waits for the merge and restart; the coordinator makes it with `scripts/agent_key.py`.
+  Claude's key is the user's click in Settings › Agents, since they paste it into Claude themselves.
 - `get_task` and `phone_updates` still show every task to every agent with the read group (the contract doesn't scope
   them). file-delivery's `get_file` can scope by `task["agent"]`.
 

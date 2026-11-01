@@ -289,3 +289,73 @@ def test_groups_and_allowed():
     assert allowed(reader, "get_task") and not allowed(reader, "run_task") and not allowed(reader, "skylark_check_in")
     assert allowed(Agent("Claude", frozenset({"read", "run_task"})), "run_task")  # a single tool by name
     assert not allowed(None, "get_task")
+
+
+# ---- scripts/agent_key.py ----------------------------------------------------------------------------------------
+
+
+def agent_key_script():
+    import importlib.util
+    from pathlib import Path
+    spec = importlib.util.spec_from_file_location("agent_key", Path(__file__).resolve().parents[2] / "scripts" / "agent_key.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_the_script_puts_a_key_in_a_file_and_never_prints_it_while_the_api_runs(tmp_path, monkeypatch, capsys):
+    """The coordinator makes meta-agent's key on the live API with scripts/agent_key.py: it must not stop the API's running
+    tasks (TaskStore's start-up would), and the key must reach only the file."""
+    from api.store import TaskStore
+    db = tmp_path / "api" / "envoy.db"
+    env = make(tmp_path, monkeypatch, tasks=TaskStore(db))
+    running = env.ctx.tasks.create("order my usual", "web")
+    env.ctx.tasks.update(running["id"], status="running")
+    script = agent_key_script()
+    out = tmp_path / "keys" / "meta.key"
+    with TestClient(env.ctx.asgi) as c:
+        assert script.main(["--db", str(db), "issue", "Meta agent", "--tools", "read,run,files,triggers", "--out", str(out)]) == 0
+        k = out.read_text().strip()
+        assert k.startswith("envoy_agent_") and out.stat().st_mode & 0o777 == 0o600
+        assert {"send_to_phone", "create_trigger", "run_task"} <= tools(c, key(k)) and "memory_note" not in tools(c, key(k))
+        assert script.main(["--db", str(db), "list"]) == 0
+        assert script.main(["--db", str(db), "rotate", "meta AGENT", "--out", str(out)]) == 0
+        k2 = out.read_text().strip()
+        body = {"jsonrpc": "2.0", "id": 1, "method": "tools/list", "params": {}}
+        assert k2 != k and c.post("/mcp", json=body, headers=key(k)).status_code == 401 and "run_task" in tools(c, key(k2))
+        assert [a["name"] for a in c.get("/api/agents", headers=me(env.token)).json()["agents"]] == ["Meta agent"]  # Settings sees it
+        assert script.main(["--db", str(db), "revoke", "Meta agent"]) == 0
+        assert c.post("/mcp", json=body, headers=key(k2)).status_code == 401
+        assert tools(c, MUSE) == EVERY_TOOL
+    printed = capsys.readouterr()
+    assert k not in printed.out + printed.err and k2 not in printed.out + printed.err
+    assert "Made a key for Meta agent (files, read, run, triggers). It is in" in printed.out and str(out) in printed.out
+    assert "Meta agent: files, read, run, triggers · key made" in printed.out and "Revoked Meta agent's key" in printed.out
+    assert env.ctx.tasks.get(running["id"])["status"] == "running"  # the API's running task carries on
+
+
+def test_the_script_refuses_a_key_file_git_would_commit_and_bad_input(tmp_path, monkeypatch):
+    from pathlib import Path
+
+    from api.store import TaskStore
+    db = tmp_path / "envoy.db"
+    TaskStore(db).db.close()
+    script = agent_key_script()
+    repo = Path(script.REPO)
+    tracked = repo / "backend" / "meta-agent.key"
+    with pytest.raises(SystemExit, match="isn't gitignored"):
+        script.main(["--db", str(db), "issue", "Meta agent", "--out", str(tracked)])
+    assert not tracked.exists()
+    assert script.main(["--db", str(db), "issue", "Meta agent", "--out", str(tmp_path / "k")]) == 0  # read and run, the default
+    with pytest.raises(SystemExit, match="already an agent called Meta agent"):
+        script.main(["--db", str(db), "issue", "meta agent", "--out", str(tmp_path / "k2")])
+    with pytest.raises(SystemExit, match="tool groups"):
+        script.main(["--db", str(db), "issue", "Other", "--tools", "read,admin", "--out", str(tmp_path / "k3")])
+    with pytest.raises(SystemExit, match="No agent called Nobody"):
+        script.main(["--db", str(db), "revoke", "Nobody"])
+    with pytest.raises(SystemExit, match="No Envoy database"):
+        script.main(["--db", str(tmp_path / "missing.db"), "list"])
+    assert not (tmp_path / "missing.db").exists() and not (tmp_path / "k2").exists() and not (tmp_path / "k3").exists()
+    monkeypatch.setattr(script, "API_DIR", tmp_path / "api-dir")  # the default file: next to the API's database, gitignored
+    assert script.key_file("Meta agent", None) == (tmp_path / "api-dir" / "agent_keys" / "meta-agent.key").resolve()
+    assert script.key_file("Meta agent", str(repo / "data" / "api" / "agent_keys" / "x.key")).name == "x.key"
