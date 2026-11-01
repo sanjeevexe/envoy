@@ -66,6 +66,7 @@ export type AgentToolInput = { name: string; type: string; required: boolean; de
 export type AgentTool = {
   routine: string; tool: string; app: string; app_name: string; title: string; description: string; version: number;
   inputs: AgentToolInput[]; outputs: string[]; read_only: boolean; irreversible: boolean; learned: string; taught: boolean;
+  phone?: boolean; // it also takes `phone`: which phone runs it (an id from list_phones, "phone" or "emulator")
 };
 export type AgentToolsInfo = { shared: string[]; tools: AgentTool[]; builtin: { name: string; title: string }[] };
 export type EnvoyEvent = { seq: number; time: number; type: string; [k: string]: any };

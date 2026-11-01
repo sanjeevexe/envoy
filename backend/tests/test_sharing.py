@@ -75,7 +75,7 @@ def test_unknown_routines_and_bad_bodies_are_refused(env):
     with TestClient(env.ctx.asgi) as c:
         h = {**me(env.token), **X}
         assert c.post("/api/routines/no_such_routine/share", json={"on": True}, headers=h).status_code == 404
-        assert c.post("/api/routines/..%2F..%2Fapi/share", json={"on": True}, headers=h).status_code == 404
+        assert c.post("/api/routines/..%2F..%2Fapi/share", json={"on": True}, headers=h).status_code in (404, 405)  # never the route
         assert c.post("/api/routines/skylark_get_flight_gate/share", json={"on": "yes"}, headers=h).status_code == 400
         assert c.post("/api/routines/skylark_get_flight_gate/share", json={}, headers=h).status_code == 400
         # A routine's own page still works, and "sharing" isn't taken for a routine's name.

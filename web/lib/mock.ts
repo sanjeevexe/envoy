@@ -474,7 +474,7 @@ function agentTools() {
     routine: r.name, tool: r.name, app: r.app, app_name: APP_NAME[r.app] ?? r.app, title: r.intent, version: r.active,
     description: `${r.intent}. App: ${APP_NAME[r.app] ?? r.app} (${r.app}), on a phone Envoy operates.`,
     inputs: Object.entries(r.inputs).map(([name, description]) => ({ name, type: "text", required: true, description })),
-    outputs: r.outputs, read_only: !/check_in|order/.test(r.name), irreversible: /check_in|order/.test(r.name), learned: "Oct 24, 2026", taught: !!r.taught,
+    outputs: r.outputs, phone: true, read_only: !/check_in|order/.test(r.name), irreversible: /check_in|order/.test(r.name), learned: "Oct 24, 2026", taught: !!r.taught,
   })).sort((a, b) => a.tool.localeCompare(b.tool));
   return { shared: [...db.shared].sort(), tools, builtin: BUILTIN };
 }

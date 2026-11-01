@@ -57,7 +57,8 @@ export function ShareWithAgents({ name }: { name: string }) {
   );
 }
 
-// `tool(trip_city, seat?)`: how an agent calls it. An input memory can fill is marked optional.
+// `tool(trip_city, seat?, phone?)`: how an agent calls it. An input memory can fill is marked optional, and so is the
+// phone it runs on.
 function Signature({ t }: { t: AgentTool }) {
   return (
     <code className="font-mono text-row font-semibold [overflow-wrap:anywhere]">
@@ -65,6 +66,7 @@ function Signature({ t }: { t: AgentTool }) {
       {t.inputs.map((i, n) => (
         <span key={i.name}>{n ? <span className="text-muted">, </span> : null}<span className={i.required ? "text-ink" : "text-muted"}>{i.name}{i.required ? "" : "?"}</span></span>
       ))}
+      {t.phone && <span className="text-muted" title='Which phone runs it: an id from list_phones, "phone" or "emulator"'>{t.inputs.length ? ", " : ""}phone?</span>}
       <span className="text-muted">)</span>
     </code>
   );
