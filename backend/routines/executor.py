@@ -356,6 +356,13 @@ class RoutineExecutor:
             if ready.removed:
                 ctx.out.patches.append(Patch("remove", step.id, f"step {step.id!r} skipped: its screen never appeared and {ready.why}"))
             await self._extract(ctx, step, ready.screen)
+            if step.risk == "irreversible" and self._next_required(ctx, idx) is None:
+                # Nothing required after it to say it wasn't needed: the run never asked, so the goal wasn't done. This used to
+                # end "done" (Oct 31 rehearsal: DoorDash with no card on the account opened "Select Payment Method", Place Order
+                # never showed, and the order "passed all steps and checks").
+                sr.detail = f"never got to {step.id!r}, the step that asks for your OK: its screen didn't come, so it wasn't done"
+                ctx.out.status = "needs_user"
+                return "stop"
             return "next"
         if ready.kind == "not_ready":
             rep = await self._repair(ctx, idx, sr, phase="before", screen=ready.screen, why=ready.why)

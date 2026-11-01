@@ -34,6 +34,10 @@ def read_discovery(grpc_port: int) -> dict[str, str]:
     raise RuntimeError(f"no running emulator with gRPC port {grpc_port}")
 
 
+# A wrong token (the emulator restarted with a new one) or a dropped connection: worth one reconnect.
+_STALE = (grpc.StatusCode.UNAUTHENTICATED, grpc.StatusCode.PERMISSION_DENIED, grpc.StatusCode.UNAVAILABLE)
+
+
 class EmulatorGrpc:
     def __init__(self, grpc_port: int, host: str = "127.0.0.1") -> None:
         self.grpc_port = grpc_port
@@ -55,19 +59,26 @@ class EmulatorGrpc:
             self._channel.close()
         self._channel = self._stub = None
 
-    def _call(self, fmt: int, timeout: float) -> pb.Image:
+    def _rpc(self, method: str, request, timeout: float):
+        """One call. A restarted emulator has a new per-launch token, and this client kept the old one, so the live view
+        stayed black until the API restarted (Oct 31 rehearsal): on a refused or lost session, reconnect once and retry."""
         if self._stub is None:
             self.connect()
-        assert self._stub is not None
-        return self._stub.getScreenshot(pb.ImageFormat(format=fmt), timeout=timeout, metadata=self._metadata)
+        try:
+            return getattr(self._stub, method)(request, timeout=timeout, metadata=self._metadata)
+        except grpc.RpcError as e:
+            if e.code() not in _STALE:
+                raise
+            self.close()
+            self.connect()
+            return getattr(self._stub, method)(request, timeout=timeout, metadata=self._metadata)
+
+    def _call(self, fmt: int, timeout: float) -> pb.Image:
+        return self._rpc("getScreenshot", pb.ImageFormat(format=fmt), timeout)
 
     def touch(self, x: int, y: int, pressure: int, timeout: float = 5) -> None:
         """One touch event on the virtual touchscreen: pressure 1 = finger down, 0 = finger up."""
-        if self._stub is None:
-            self.connect()
-        assert self._stub is not None
-        event = pb.TouchEvent(touches=[pb.Touch(x=x, y=y, identifier=0, pressure=pressure)])
-        self._stub.sendTouch(event, timeout=timeout, metadata=self._metadata)
+        self._rpc("sendTouch", pb.TouchEvent(touches=[pb.Touch(x=x, y=y, identifier=0, pressure=pressure)]), timeout)
 
     def tap(self, x: int, y: int, timeout: float = 5) -> None:
         """Tap via the emulator's virtual touchscreen: press, then release (emulators only)."""
@@ -76,25 +87,16 @@ class EmulatorGrpc:
 
     def frame(self, width: int, timeout: float = 5) -> Image.Image:
         """A frame scaled by the emulator to `width` pixels wide (the live view: less to copy and encode)."""
-        if self._stub is None:
-            self.connect()
-        assert self._stub is not None
-        img = self._stub.getScreenshot(pb.ImageFormat(format=pb.ImageFormat.RGB888, width=width), timeout=timeout, metadata=self._metadata)
+        img = self._rpc("getScreenshot", pb.ImageFormat(format=pb.ImageFormat.RGB888, width=width), timeout)
         return Image.frombytes("RGB", (img.format.width, img.format.height), img.image)
 
     def key(self, key: str, timeout: float = 5) -> None:
         """Press one named key ("Backspace", "Enter", "Tab", "GoBack", "GoHome", "AppSwitch")."""
-        if self._stub is None:
-            self.connect()
-        assert self._stub is not None
-        self._stub.sendKey(pb.KeyboardEvent(eventType=pb.KeyboardEvent.keypress, key=key), timeout=timeout, metadata=self._metadata)
+        self._rpc("sendKey", pb.KeyboardEvent(eventType=pb.KeyboardEvent.keypress, key=key), timeout)
 
     def text(self, text: str, timeout: float = 5) -> None:
         """Type text into the focused field, as a keyboard would."""
-        if self._stub is None:
-            self.connect()
-        assert self._stub is not None
-        self._stub.sendKey(pb.KeyboardEvent(text=text), timeout=timeout, metadata=self._metadata)
+        self._rpc("sendKey", pb.KeyboardEvent(text=text), timeout)
 
     def swipe(self, x1: int, y1: int, x2: int, y2: int, duration_s: float = 0.3, steps: int = 12) -> None:
         """A finger drag from (x1, y1) to (x2, y2)."""
