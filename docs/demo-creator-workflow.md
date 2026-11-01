@@ -68,7 +68,19 @@ Shot 5's "Posted" from Muse comes from Envoy's `phone_updates` tool. Envoy's sid
 each rehearsal it reads `"rehearse-1-032054.mp4" is in the gallery of Envoy's phone (Movies/Envoy/…)` and the task's
 `Failed: "Post the newest video …" (User declined …)`. After a real post it reads `"pier.mp4" was posted from Envoy's
 phone` and `Finished: "Post the newest video …"` (`tests/test_phone_name.py`); the file turns `posted` only when the task
-ends done, so only a real post shows it. Not yet seen through Muse (its permission prompts and the tunnel need you):
+ends done, so only a real post shows it. Seen through Muse for Mac on Nov 1 (a dry run on the Pixel and the live API,
+declined at Share): Muse answered "pier.mp4 is in the gallery of Envoy's phone, at Movies/Envoy/pier.mp4" and that the
+Instagram task "did not complete… approval to tap Share… was declined", then "So the video made it to your phone, it
+just wasn't posted to Instagram." Yes to the Share approval took 45 s (agent, 9 model calls, $0.12). What to expect on a take:
+
+- A new tunnel address means re-pointing the connector: ask Muse to update the Envoy connector's URL; it shows a Connect
+  card where you paste the key again (same key), then asks "Allow Muse to share information with <host>?" once.
+- Muse **copies** the clip into `~/Envoy Outbox` (the original stays on the Desktop), writes the sidecar, and also calls
+  `send_to_phone`; it's still one offer.
+- Muse's reply ends with an **"Approve it here"** card showing the Mac's tailnet address (`send_to_phone` returns the
+  app's link). Crop or blur it in the edit.
+
+The steps (the user does 2's tunnel, the key, and the iPhone):
 
 1. The live API on main with the phone name (after the coordinator's merge and restart); Settings › Phones: Envoy's phone.
 2. `scripts/instagram_take.py --routine off` from the main checkout, then `ENVOY_PORT=8700 scripts/start_muse_test.sh`.
