@@ -91,7 +91,7 @@ cat <<EOF
           then paste it into Muse's secure credentials field (never into a chat)
 $( [ "$MODE" = rest ] && echo "  OpenAPI: $PUBLIC_URL/openapi.json" )
   Log:    tail -f logs/$( [ "$MODE" = api ] && echo mcp.jsonl || echo mcp_stub.jsonl )
-  Stop:   Ctrl-C (then rotate the token in the main checkout: scripts/rotate_mcp_token.sh)
+  Stop:   Ctrl-C. The token is also the permanent address's (scripts/muse_funnel.sh): rotate it only if it leaks.
 
 EOF
 wait "${SERVER_PID:-$TUNNEL_PID}"
