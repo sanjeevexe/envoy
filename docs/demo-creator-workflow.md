@@ -73,8 +73,10 @@ declined at Share): Muse answered "pier.mp4 is in the gallery of Envoy's phone, 
 Instagram task "did not complete… approval to tap Share… was declined", then "So the video made it to your phone, it
 just wasn't posted to Instagram." Yes to the Share approval took 45 s (agent, 9 model calls, $0.12). What to expect on a take:
 
-- A new tunnel address means re-pointing the connector: ask Muse to update the Envoy connector's URL; it shows a Connect
-  card where you paste the key again (same key), then asks "Allow Muse to share information with <host>?" once.
+- **The permanent address** (`scripts/muse_funnel.sh on`, Tailscale Funnel on port 10000, /mcp only, `MCP_PERMANENT_URL`
+  in `.env`) is set up in Muse once, with "Always allow"; takes need no tunnel. With a quick tunnel instead, every new
+  address means re-pointing the connector: ask Muse to update the Envoy connector's URL; it shows a Connect card where
+  you paste the key again (same key), then asks "Allow Muse to share information with <host>?" once.
 - Muse **copies** the clip into `~/Envoy Outbox` (the original stays on the Desktop), writes the sidecar, and also calls
   `send_to_phone`; it's still one offer.
 - Muse's reply ends with an **"Approve it here"** card showing the Mac's tailnet address (`send_to_phone` returns the
@@ -83,7 +85,8 @@ just wasn't posted to Instagram." Yes to the Share approval took 45 s (agent, 9 
 The steps (the user does 2's tunnel, the key, and the iPhone):
 
 1. The live API on main with the phone name (after the coordinator's merge and restart); Settings › Phones: Envoy's phone.
-2. `scripts/instagram_take.py --routine off` from the main checkout, then `ENVOY_PORT=8700 scripts/start_muse_test.sh`.
+2. `scripts/instagram_take.py --routine off` from the main checkout. Muse reaches Envoy at the permanent address (or,
+   without it, `ENVOY_PORT=8700 scripts/start_muse_test.sh` and re-point the connector).
 3. Muse for Mac: "Send pier.mp4 to my phone for Instagram with the caption …"; allow its two prompts (Always allow, for
    takes without prompts).
 4. iPhone: "Put pier.mp4 on Envoy's phone and post it to Instagram?" → Yes. At Share: Approve only on the real take

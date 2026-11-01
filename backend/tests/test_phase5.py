@@ -473,6 +473,43 @@ def test_a_public_tunnel_reaches_mcp_only(env):
         assert c.post("/mcp", json=body, headers={**hdr, **tunnel, "Authorization": "Bearer mcp-test-token"}).status_code == 421
 
 
+def test_a_permanent_public_address_reaches_mcp_only(env, monkeypatch):
+    """Muse's connector set up once (Nov 1): MCP_PERMANENT_URL, Tailscale Funnel on a port of its own, is accepted for /mcp
+    alone, like a quick tunnel's but with no script running. Anything Tailscale marks as from the internet gets nothing
+    but /mcp on that address, even under the tailnet's own name."""
+    monkeypatch.setenv("MCP_PERMANENT_URL", "https://envoy-mac.example.ts.net:10000/mcp")
+    funnel = {"Host": "envoy-mac.example.ts.net:10000", "Tailscale-Funnel-Request": "?1"}
+    app_host = {"Host": "envoy-mac.example.ts.net:8443"}  # ENVOY_PUBLIC_URL: the tailnet-only address of the whole app
+    body = {"jsonrpc": "2.0", "id": 1, "method": "tools/list", "params": {}}
+    hdr = {"Accept": "application/json, text/event-stream", "Content-Type": "application/json", "MCP-Protocol-Version": "2025-11-25"}
+    key = {"Authorization": "Bearer mcp-test-token"}
+    with TestClient(env.ctx.asgi) as c:
+        r = c.post("/mcp", json=body, headers={**hdr, **funnel, **key})
+        assert r.status_code == 200 and "run_task" in r.text
+        assert c.post("/mcp", json=body, headers={**hdr, **funnel}).status_code == 401  # still needs its token
+        for path in ("/", "/healthz", "/api/state", "/approve/", "/login?k=x", "/api/pair"):
+            assert c.get(path, headers={**funnel, **me(env.token)}).status_code == 421
+        assert c.get("/healthz", headers=app_host).status_code == 200
+        from_internet = {**app_host, "Tailscale-Funnel-Request": "?1"}  # a funneled port under the app's own name
+        assert c.get("/healthz", headers=from_internet).status_code == 421
+        assert c.post("/mcp", json=body, headers={**hdr, **from_internet, **key}).status_code == 421
+        monkeypatch.delenv("MCP_PERMANENT_URL")
+        assert c.post("/mcp", json=body, headers={**hdr, **funnel, **key}).status_code == 421
+
+
+def test_a_funneled_port_is_never_taken_for_the_apps_address(monkeypatch):
+    """The API finds its tailnet address in `tailscale serve status`. A port open to the internet that proxies to the API
+    (Funnel for Muse) must not become that address: every host it allows gets the whole app."""
+    from api import auth
+    status = {"Web": {"mac.example.ts.net:10000": {"Handlers": {"/": {"Proxy": "http://127.0.0.1:8700"}}},
+                      "mac.example.ts.net:8443": {"Handlers": {"/": {"Proxy": "http://127.0.0.1:8700"}}}},
+              "AllowFunnel": {"mac.example.ts.net:10000": True}}
+    monkeypatch.setattr(auth.subprocess, "run", lambda *a, **kw: SimpleNamespace(stdout=json.dumps(status)))
+    assert auth.tailnet_url(8700) == "https://mac.example.ts.net:8443"
+    status["Web"].pop("mac.example.ts.net:8443")
+    assert auth.tailnet_url(8700) is None
+
+
 def test_muse_gets_envoys_icon_with_the_server_info(env):
     """Muse's connector card shows the server's icon, and through the tunnel it can fetch nothing but /mcp: so the icon
     comes inside `initialize` as data: URIs, Envoy's mark (web/public/icons/mark.svg and the PNG rendered from it)."""

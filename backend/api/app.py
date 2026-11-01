@@ -853,15 +853,17 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
             return HTMLResponse("<p>Envoy API is running. Build the web app: <code>cd web && npm run build</code></p>")
 
     async def dispatch(scope: dict, receive: Any, send: Any) -> None:
-        """Only the names Envoy is served on (DNS rebinding); WebSockets only from those origins. A public tunnel for AI
-        clients (Muse) reaches /mcp and nothing else. /mcp goes to the MCP server (its own bearer token); everything else
-        to the API and web app."""
+        """Only the names Envoy is served on (DNS rebinding); WebSockets only from those origins. A public address for AI
+        clients (Muse) reaches /mcp and nothing else, and so does anything Tailscale says came in from the internet
+        (Funnel), whatever its host. /mcp goes to the MCP server (its own bearer token); everything else to the API and
+        web app."""
         if scope["type"] in ("http", "websocket"):
             headers = {k.decode("latin-1").lower(): v.decode("latin-1") for k, v in scope.get("headers") or []}
             origin = headers.get("origin", "")
             host = headers.get("host", "")
             is_mcp = scope["type"] == "http" and (scope["path"] == "/mcp" or scope["path"].startswith("/mcp/"))
-            bad_host = host not in hosts and not (is_mcp and host in tunnel_hosts(API_DIR / "mcp_public_url"))
+            from_internet = "tailscale-funnel-request" in headers
+            bad_host = (from_internet or host not in hosts) and not (is_mcp and host in tunnel_hosts(API_DIR / "mcp_public_url"))
             bad_origin = scope["type"] == "websocket" and origin and origin.split("://", 1)[-1] not in hosts
             if bad_host or bad_origin:
                 if scope["type"] == "http":

@@ -147,10 +147,13 @@ def tailnet_url(port: int) -> str | None:
     """The https address Tailscale Serve gives this API (scripts/serve_tailnet.sh), or None if it isn't served."""
     try:
         out = subprocess.run([TAILSCALE, "serve", "status", "--json"], capture_output=True, text=True, timeout=5).stdout
-        web = (json.loads(out or "{}").get("Web") or {})
+        status = json.loads(out or "{}")
+        web, funnel = status.get("Web") or {}, status.get("AllowFunnel") or {}
     except Exception:  # noqa: BLE001 - no Tailscale: local only
         return None
     for hostport, cfg in web.items():
+        if funnel.get(hostport):  # a port open to the internet (Muse's /mcp, MCP_PERMANENT_URL) is never the app's address
+            continue
         for handler in (cfg.get("Handlers") or {}).values():
             if handler.get("Proxy", "").rstrip("/") in (f"http://127.0.0.1:{port}", f"http://localhost:{port}"):
                 return "https://" + hostport.removesuffix(":443")
@@ -164,14 +167,20 @@ def public_url(port: int) -> str:
 
 
 def tunnel_hosts(url_file: Path) -> set[str]:
-    """The public tunnel's host, only while `scripts/start_muse_test.sh` runs (it writes the URL to this file and removes
-    it on exit). An AI client such as Muse reaches Envoy's MCP server through it; nothing else is served there."""
+    """Public hosts where an AI client such as Muse reaches Envoy's MCP server, and nothing else is served: the permanent
+    one in MCP_PERMANENT_URL (Tailscale Funnel on a port of its own), and a quick tunnel's only while
+    `scripts/start_muse_test.sh` runs (it writes the URL to this file and removes it on exit)."""
+    urls = [os.environ.get("MCP_PERMANENT_URL", "").strip()]
     try:
-        url = url_file.read_text().strip()
+        urls.append(url_file.read_text().strip())
     except OSError:
-        return set()
-    host = url.split("://", 1)[-1].split("/", 1)[0]
-    return {host, f"{host}:443"} if url.startswith("https://") and host else set()
+        pass
+    hosts: set[str] = set()
+    for url in urls:
+        host = url.split("://", 1)[-1].split("/", 1)[0]
+        if url.startswith("https://") and host:
+            hosts |= {host} if ":" in host else {host, f"{host}:443"}
+    return hosts
 
 
 def allowed_hosts(port: int, public: str) -> set[str]:

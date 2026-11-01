@@ -518,7 +518,7 @@ The phone's screen streams to the browser and iPhone as video, and a "Take over"
 - **Relay:** Envoy's own scrcpy client in the API (Phase 6), instead of the planned Node service using the Tango libraries (`@yume-chan/adb`, `@yume-chan/adb-scrcpy`, MIT license) reads the stream over adb, decodes it on the Mac (PyAV, FFmpeg) and sends JPEG frames over the same WebSocket as the emulators' gRPC frames, with the same touch input and latency measurement.
 - **In the browser:** frames are drawn on a canvas; decoding with WebCodecs (`@yume-chan/scrcpy-decoder-webcodecs`) is no longer needed.
 - **On the iPhone:** the same page inside the companion app's web view. The same frames as on the Mac.
-- **HTTPS is required** for WebCodecs, Web Push and the microphone, so the iPhone reaches the Mac through Tailscale Serve (HTTPS inside the private network), and a Cloudflare Tunnel gives the MCP server its public address only while Muse needs it (the tunnel reaches `/mcp` and nothing else).
+- **HTTPS is required** for WebCodecs, Web Push and the microphone, so the iPhone reaches the Mac through Tailscale Serve (HTTPS inside the private network), and the MCP server's public address for Muse reaches `/mcp` and nothing else: Tailscale Funnel on a port of its own, set up in Muse once (`scripts/muse_funnel.sh`), or a Cloudflare quick tunnel only while it runs. The API also refuses anything but `/mcp` that Tailscale marks as from the internet, and every call needs the MCP bearer token.
 - **Target:** under 150 ms from the phone to the screen on the same network. Phase 6, on an emulator standing in for the phone: a tap shows as a changed frame in 62 ms, and that frame reaches the page 12 ms after decoding.
 
 Google's emulator WebRTC stack was considered, but it works only for emulators and its container scripts run only on Linux x86 machines. On emulators, Phase 4 streams the emulator's own gRPC frames instead (JPEG over the API's WebSocket, 18 to 60 ms locally), because scrcpy shows secure sign-in screens black and the gRPC frames don't; scrcpy and the relay are for real phones.
@@ -896,7 +896,7 @@ The gate runs drove these changes:
 - The voice relay pads silence to keep Transcribe at real time: a microphone that sent nothing (blocked by iPhone Mirroring) made Transcribe close the stream. Voice also became dictation into the message box, sent by the user: sending on release started a check-in the moment the user let go.
 - Photo text is read twice, the whole image and four tiles, because Apple's Vision skipped a lone confirmation code; codes tolerate the O/0 and I/1 confusions of OCR.
 - Signing in on the iPhone is a pairing code typed inside the Home Screen app, since it keeps its own cookies; Shortcuts get tokens that can only upload images.
-- HTTPS is Tailscale Serve on its own port, and a public tunnel for Muse reaches only `/mcp`.
+- HTTPS is Tailscale Serve on its own port, and Muse's public address (Funnel on another port, or a quick tunnel) reaches only `/mcp`.
 
 ## Phase 6 results
 
