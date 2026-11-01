@@ -1,7 +1,12 @@
 # file-delivery: report (phone-layer wave, T2c: files back from the phone)
 
-Branch `claude/file-back-t2c`, off main `869271f` (#48 merged). Full backend suite: 797 passed on the default profile
-and 797 on `ENVOY_MODEL_PROFILE=spark` (790 before). No device use, no model calls, $0.
+Branch `claude/file-back-t2c`, rebased on main `09981fd` (agent keys and phone-watch included). Full backend suite: 844
+passed on the default profile and 844 on `ENVOY_MODEL_PROFILE=spark`; this branch adds 7 tests. No device use, no model
+calls, $0.
+
+`test_preflight.py::test_check_is_fast_on_a_long_history` (a 50 ms limit) failed at 59–77 ms while the Mac's load
+average was 35–74, from other sessions' suites. It passed alone at load 17, and in both full runs above. This branch
+doesn't touch the code it times.
 
 ## What is true now
 
