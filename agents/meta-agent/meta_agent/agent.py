@@ -205,6 +205,12 @@ def summarize(tool: str, data: Any, is_error: bool) -> str:
     return _clip(", ".join(f"{k}: {v}" for k, v in list(data.items())[:4]))
 
 
+def approval_title(description: Any) -> str:
+    """Envoy's approval line for a person: 'tap "Confirm check-in" in com.skylark.air (routine …)' says "Confirm check-in"."""
+    m = re.match(r'\s*tap\s+"([^"]+)"', str(description or ""), re.I)
+    return _clip(m.group(1) if m else description, 120)
+
+
 def task_phase(view: dict[str, Any]) -> str:
     """Where a task stands, as the wait helper compares it: final, waiting on the user (which approvals), or working."""
     status = str(view.get("status") or "")
@@ -457,7 +463,7 @@ class Agent:
         if phase.startswith(("approval:", "user:")):
             if card is None or card["phase"] != phase:
                 approvals = view.get("pending_approvals") or []
-                title = "; ".join(_clip(a.get("description"), 120) for a in approvals) or _clip(view.get("detail") or "Envoy needs the user on the phone", 160)
+                title = "; ".join(approval_title(a.get("description")) for a in approvals) or _clip(view.get("detail") or "Envoy needs the user on the phone", 160)
                 self.waiting[tid] = {"phase": phase, "since": time.time()}
                 self.emit("waiting", {"key": tid, "kind": "approval" if approvals else "needs_you", "title": title,
                                       "goal": _clip(view.get("goal"), 120), "watch": True})

@@ -112,7 +112,7 @@ function rowHtml(r) {
   const via = r.via === "wait_for_task" ? `<span class="via">wait_for_task · ${r.polls || 1} ${r.polls === 1 ? "call" : "calls"}</span>`
     : r.via === "watch" ? `<span class="via">watching · ${r.polls || 1} ${r.polls === 1 ? "call" : "calls"}</span>`
     : r.polls > 1 ? `<span class="via">${r.polls} calls</span>` : "";
-  const tag = r.routine ? `<span class="routine-tag">learned routine</span>` : "";
+  const tag = r.routine || r.tool === "run_routine" ? `<span class="routine-tag">learned routine</span>` : "";
   const time = r.done ? dur(r.ms) : dur(Date.now() - r.start);
   return `<span class="st">${icon}</span><span class="name">${esc(r.tool)}${tag}${via}</span><span class="ms" data-start="${r.done ? "" : r.start}">${time}</span>`
     + `<span class="args">${esc(r.args)}</span><span class="res">${esc(r.summary || (r.done ? "" : "waiting for Envoy…"))}</span>`;
@@ -132,7 +132,7 @@ function waitCard(d, t) {
     : `${PHONE}<span>Only you can approve, in Envoy on your phone. The agent has no approve tool.</span>`;
   el.innerHTML = `<div class="av">${$(d.kind === "offer" ? "avatar-idle" : "avatar-needs").innerHTML}</div>`
     + `<div class="kicker">${esc(kicker)}</div><div class="timer" data-start="${d.kind === "offer" ? "" : t * 1000}"></div>`
-    + `<div class="title">${esc(d.title)}</div><div class="why">${why}</div>`;
+    + `<div class="title">${esc(d.title)}${d.goal ? `<span class="goal">${esc(d.goal)}</span>` : ""}</div><div class="why">${why}</div>`;
   stick(feed, () => feed.appendChild(el));
   return el;
 }
@@ -266,7 +266,7 @@ function handle(ev) {
       const pill = state.pills[d.key];
       if (pill) {
         const yes = d.outcome === "done" || d.outcome === "answered";
-        pill.className = "msg note";
+        pill.className = `msg note${yes ? "" : " no"}`;
         pill.innerHTML = `${PHONE}<span>${yes ? "Approved on your phone" : d.outcome === "declined" ? "You said no on your phone" : `The task ${esc(d.outcome)}`}</span><span class="t">${dur(d.after_s * 1000)}</span>`;
         delete state.pills[d.key];
       }
@@ -284,7 +284,7 @@ function handle(ev) {
       break;
     }
     case "envoy_update":
-      addMsg("note", `${PHONE}<span>Envoy: the task is now ${esc(d.status)}</span>`);
+      addMsg("note", `${PHONE}<span>Envoy says the task ${{ done: "finished", declined: "was declined", failed: "failed", stopped: "was stopped" }[d.status] || `is ${esc(d.status)}`}</span>`);
       break;
     case "error":
       addMsg("error", esc(d.text));
