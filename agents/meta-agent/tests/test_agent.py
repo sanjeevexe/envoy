@@ -237,6 +237,7 @@ def test_each_result_gets_a_line_for_the_feed():
     assert summarize("phone_updates", {"cursor": "u1.x", "items": []}, False) == "0 updates"
     assert summarize("x", {"error": "Tool x needs the run group"}, True) == "Tool x needs the run group"
     assert summarize("list_phones", {"phones": [{"name": "Test phone", "online": True}]}, False) == "1 phones: Test phone (online)"
+    assert summarize("memory_get", {"entity_id": "f1", "name": "SL 482", "facts": [{"attribute": "gate", "value": "B12"}]}, False) == "SL 482: 1 facts: gate B12"
     assert task_phase(view("running")) == "working" and task_phase(view("done")) == "final:done"
     assert task_phase(view("waiting_approval", approvals=["b", "a"])) == "approval:a,b" and task_phase(view("needs_you")) == "user:needs_you"
 
@@ -250,3 +251,13 @@ def test_a_tool_outside_the_agents_list_is_envoys_refusal_to_show(tmp_path):
     r = kinds(events, "refusal")[0]
     assert r == {"id": r["id"], "tool": "memory_note", "envoy": "Unknown tool: memory_note", "approval": False}
     assert json.loads(model.requests[1]["input"][-1]["output"]) == {"error": "Unknown tool: memory_note"}
+
+
+def test_a_namespace_in_front_of_a_name_is_dropped(tmp_path):
+    script = [[call("default.list_routines", {}, 1), call("default.skylark_check_in_flight", {"trip_city": "Chicago"}, 2)], [say("ok")]]
+    agent, envoy, model, events = make(tmp_path, script)
+    asyncio.run(agent.start())
+    asyncio.run(agent.ask("go"))
+    assert envoy.calls == [("list_routines", {}), ("skylark_check_in_flight", {"trip_city": "Chicago"})]  # a routine tool Envoy may have
+    assert [r["tool"] for r in kinds(events, "refusal")] == ["skylark_check_in_flight"]
+    assert kinds(events, "hello")[0]["server"] == {"name": "envoy", "title": "Envoy", "version": "0.7.0"}

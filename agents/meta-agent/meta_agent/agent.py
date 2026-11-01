@@ -194,6 +194,9 @@ def summarize(tool: str, data: Any, is_error: bool) -> str:
             f"{p.get('name')} ({'online' if p.get('online') else 'offline'})" for p in data["phones"]), 110)
     if "items" in data and "cursor" in data:
         return f"{len(data['items'])} updates" + (": " + _clip(data["items"][-1].get("text"), 100) if data["items"] else "")
+    if "facts" in data and "name" in data:
+        return f"{_clip(data['name'], 60)}: {len(data['facts'])} facts" + (
+            ": " + _clip(", ".join(f"{f.get('attribute')} {f.get('value')}" for f in data["facts"][:4]), 90) if data["facts"] else "")
     if "notes" in data and "entities" in data:
         return f"{len(data['entities'])} remembered things" + (": " + _clip(", ".join(str(e.get("name")) for e in data["entities"][:4]), 100)
                                                                if data["entities"] else "")
@@ -260,7 +263,8 @@ class Agent:
     async def start(self) -> None:
         t = time.perf_counter()
         await self.mcp.connect()
-        self.emit("hello", {"agent": self.name, "model": self.model, "server": self.mcp.server_info,
+        server = {k: self.mcp.server_info.get(k) for k in ("name", "title", "version") if self.mcp.server_info.get(k)}  # not its icons
+        self.emit("hello", {"agent": self.name, "model": self.model, "server": server,
                             "envoy": re.sub(r"^https?://", "", self.mcp.url), "rule": approval_rule(self.mcp.instructions),
                             "ms": round((time.perf_counter() - t) * 1000)})
         self._count_mcp()
@@ -398,7 +402,9 @@ class Agent:
             return json.dumps({"error": f"your arguments weren't valid JSON ({e}); call {name} again with a JSON object"})
         if name == WAIT_TOOL:
             return await self.wait_for_task(str(args.get("task_id") or ""), args.get("timeout_s"))
-        tool = self.fn_map.get(name, name)  # a name Envoy doesn't have still goes to Envoy: its answer is the answer
+        tool = self.fn_map.get(name) or self.fn_map.get(name.rpartition(".")[2]) or name.rpartition(".")[2] or name
+        # Spark sometimes puts a namespace in front ("default.list_routines"): the name after it is the tool. A name Envoy
+        # doesn't have still goes to Envoy, so its answer is the answer.
         res, ms, cid = await self._call(tool, args)
         known = tool in {t.name for t in self.tools}
         if res is None:
