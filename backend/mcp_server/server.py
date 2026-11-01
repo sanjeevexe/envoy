@@ -31,6 +31,8 @@ from mcp.server.mcpserver import MCPServer
 from mcp.server.transport_security import TransportSecuritySettings
 from mcp_types import Icon, ToolAnnotations
 
+from api.agents import guard
+from api.auth import agent_name
 from api.crossapp import lead, may_span_apps
 from api.devices import NAMES
 from api.handoff import HandoffError, read_sidecar
@@ -131,7 +133,6 @@ def _since(cursor: str | None) -> float | None:
 
 
 DAY_NAMES = {"mon": "Monday", "tue": "Tuesday", "wed": "Wednesday", "thu": "Thursday", "fri": "Friday", "sat": "Saturday", "sun": "Sunday"}
-CLIENT = os.environ.get("ENVOY_MCP_CLIENT_NAME", "Muse")  # who holds the connector's token (a stateless call doesn't say)
 
 
 def trigger_when(trig: dict[str, Any]) -> str:
@@ -387,14 +388,14 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> MCPServer:
             pending = ctx.offers.get(item["offer_id"]) if item["offer_id"] and getattr(ctx, "offers", None) is not None else None
             if pending and pending["status"] == "pending" and (pending["action"] or {}).get("device") != did:
                 # The watcher had asked about another phone (an emulator): ask again about this one.
-                offer = h.reoffer(item, f"{CLIENT} asked for it on {h.ref(did)}")
+                offer = h.reoffer(item, f"{agent_name()} asked for it on {h.ref(did)}")
             else:
                 offer = {"id": item["offer_id"]} if item["offer_id"] else h.offer(item["id"], "mcp")  # one offer per file
             return {"handoff_id": item["id"], "status": "waiting_for_user", "device": did, "device_name": item["device_name"],
                     "text": f"Waiting for the user's OK in Envoy before {item['name']} goes to {h.ref(did, 'their')}.",
                     **({"offer_id": offer["id"], "url": f"{base}/?offer={offer['id']}"} if offer and offer.get("id")
                        else {"url": f"{base}/?handoff={item['id']}"})}
-        item = h.send(item["id"], did, withdraw_why=f"{CLIENT} already sent it to your phone")
+        item = h.send(item["id"], did, withdraw_why=f"{agent_name()} already sent it to your phone")
         if item["status"] != "sent":
             return {"handoff_id": item["id"], "status": "failed", "error": item["error"]}
         return {"handoff_id": item["id"], "status": "sent", "device": did, "device_name": item["device_name"],
@@ -419,8 +420,8 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> MCPServer:
         except (ValueError, KeyError, TypeError) as e:
             return {"error": str(e)[:300]}
         when, what = trigger_when(trig), trigger_what(ctx, trig)
-        offer = offers.make(kind="trigger_request", title=f"{CLIENT} wants to set this up: {when}, {what}. Turn it on?",
-                            body=f"Each time it fires, Envoy asks you before it does anything. Asked through Envoy's connector by {CLIENT}.",
+        offer = offers.make(kind="trigger_request", title=f"{agent_name()} wants to set this up: {when}, {what}. Turn it on?",
+                            body=f"Each time it fires, Envoy asks you before it does anything. Asked through Envoy's connector by {agent_name()}.",
                             action={"type": "enable_trigger", "trigger_id": trig["id"]}, source="mcp", key=f"trigger_request:{trig['id']}")
         if offer is None:
             return {"trigger_id": trig["id"], "error": "Envoy couldn't ask the user"}
@@ -441,6 +442,7 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> MCPServer:
         the last call as `since` to get only what's new; without it, the last 24 hours. Read only."""
         return phone_updates_view(ctx, since, base)
 
+    guard(server)  # each agent sees and calls only its own tool groups, and its run calls are limited (api/agents.py)
     return server
 
 

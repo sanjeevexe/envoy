@@ -42,7 +42,8 @@ export function StatusChip({ status }: { status: string }) {
 }
 
 const SOURCE: Record<string, string> = { web: "you", chat: "you", iphone: "you", voice: "your voice", mcp: "an assistant", siri: "Siri", teach: "you", repeats: "a habit" };
-const source = (t: Task) => t.source.startsWith("trigger:") ? `your trigger “${t.source.slice(8)}”` : SOURCE[t.source] ?? t.source;
+// An agent that started a task over MCP is named ("from Claude"): its key says which one (Settings › Agents).
+const source = (t: Task) => t.source.startsWith("trigger:") ? `your trigger “${t.source.slice(8)}”` : t.source === "mcp" && t.agent ? t.agent : SOURCE[t.source] ?? t.source;
 
 // A phone as people see it: the name the API gives it ("Test phone", "Envoy's phone"), never its id. The emulators'
 // names are backend/api/devices.py's, for when the phone's lease isn't known here.

@@ -2,9 +2,11 @@
 
 // Settings: how proactive Envoy is (which of its offers notify you), when Envoy asks before an irreversible step (for
 // everything, per app, or per routine: the most specific wins), which apps run on your own Android phone, this
-// device and the others paired with Envoy, and how Envoy looks on this device (light or dark).
+// device and the others paired with Envoy, the AI agents that use Envoy and what each may do, and how Envoy looks on this
+// device (light or dark).
 import { useEffect, useState } from "react";
 import { CheckCircleIcon, DeviceMobileIcon } from "@phosphor-icons/react";
+import Agents from "@/components/Agents";
 import Companion from "@/components/Companion";
 import { Outbox } from "@/components/Handoff";
 import SavedLogins from "@/components/SavedLogins";
@@ -13,17 +15,19 @@ import { Button, Card, cx, Section, Segmented } from "@/components/ui";
 import { api, post } from "@/lib/api";
 import { setThemeChoice, themeChoice, type ThemeChoice } from "@/lib/theme";
 
-const SECTIONS = ["Approvals", "Phones", "Devices", "Appearance"] as const;
+const SECTIONS = ["Approvals", "Phones", "Devices", "Agents", "Appearance"] as const;
 export default function SettingsPage({ publicUrl, profile }: { publicUrl?: string; profile?: string }) {
   const [section, setSection] = useState<(typeof SECTIONS)[number]>("Approvals");
   return (
     <div className="mx-auto w-full max-w-[720px] pb-10 md:pt-6">
-      <div className="px-4 pt-3"><Segmented options={SECTIONS} value={section} onChange={setSection} label="Settings" /></div>
+      {/* On a phone the five sections are wider than the screen: the row scrolls sideways, the page doesn't. */}
+      <div className="overflow-x-auto px-4 pt-3 [scrollbar-width:none]"><Segmented options={SECTIONS} value={section} onChange={setSection} label="Settings" /></div>
       {profile && <p className="px-6 pt-2 text-meta-2 text-muted">Using {profile === "demo" ? "the demo memory (SkyLark test data)" : "your memory"}</p>}
       <div className="ev-fade" key={section}>
         {section === "Approvals" && <><Proactivity /><Settings /></>}
         {section === "Phones" && <><Phones /><SavedLogins /><Outbox /></>}
         {section === "Devices" && <Companion publicUrl={publicUrl} />}
+        {section === "Agents" && <Agents />}
         {section === "Appearance" && <Appearance />}
       </div>
     </div>
