@@ -12,6 +12,7 @@
 // - `idle`: nothing running and nothing waiting
 // - `offline`: the event stream never connects, and Home can't load its briefing
 // - `pair`: a device that isn't paired yet (the pairing screen)
+// The memory graph: `&graph=demo` (the demo profile's 17 things) or `&graph=large` (about 150).
 // `?mock=0` turns it off again (it's kept for the tab's session, so /approve links stay in mock mode).
 import type { Approval, EnvoyEvent, HandoffItem, Lease, Step, Task } from "@/lib/api";
 
@@ -331,6 +332,66 @@ const EDGES = [
   ["person-maya", "ordered", "order-dd"], ["order-dd", "from", "place-thai"], ["person-maya", "member_of", "loyalty-sb"], ["person-maya", "member_of", "loyalty-sl"],
 ].map(([source, relation, target], i) => ({ id: `edge-${i}`, source, target, relation }));
 
+// `?graph=demo`: the demo profile's memory as it is (data/demo/memory.db): you, 7 trips each with its flight, and an
+// order and its item that nothing links to. `?graph=large`: about 150 things of the kinds Envoy keeps, for checking that a
+// big memory stays readable. Without it: the mixed one above.
+const DEMO_TRIPS: [string, number, string, number][] = [
+  ["Chicago · Fri, Oct 30, 2026", 6, "SL 482 · Fri, Oct 30, 2026", 13], ["Denver · Sat, Nov 14, 2026", 6, "SL 1190 · Sat, Nov 14, 2026", 10],
+  ["Louisville", 4, "SL 1213 · Fri, Dec 4, 2026", 9], ["Savannah · Sun, Nov 22, 2026", 6, "SL 1585 · Sun, Nov 22, 2026", 9],
+  ["Boise", 3, "SL 1635 · Wed, Nov 25, 2026", 9], ["Tampa · Thu, Dec 10, 2026", 6, "SL 855 · Thu, Dec 10, 2026", 10],
+  ["Denver · Fri, Dec 4, 2026", 6, "SL 1192 · Fri, Dec 4, 2026", 9],
+];
+function demoGraph() {
+  const node = (id: string, type: string, name: string, facts: number): MemNode => ({ id, type, name, facts, stale: false, user_edited: false });
+  const nodes = [node("demo-maya", "Person", "Maya Patel", 2), ...DEMO_TRIPS.flatMap(([t, tf, f, ff], i) => [node(`demo-trip-${i}`, "Trip", t, tf), node(`demo-flight-${i}`, "Flight", f, ff)]),
+    node("demo-order", "Order", "Pinecone Outfitters · 448-2291", 5), node("demo-item", "Item", "Packable rain jacket", 3)];
+  const edges = DEMO_TRIPS.flatMap((_, i) => [["demo-maya", "travels_on", `demo-trip-${i}`], [`demo-trip-${i}`, "includes", `demo-flight-${i}`]])
+    .map(([source, relation, target], i) => ({ id: `demo-edge-${i}`, source, target, relation }));
+  return { nodes, edges };
+}
+function largeGraph() {
+  let seed = 7;
+  const rnd = () => ((seed = (seed * 1664525 + 1013904223) % 4294967296) / 4294967296);
+  const pick = <T,>(xs: T[]) => xs[Math.floor(rnd() * xs.length)];
+  const nodes: MemNode[] = [], edges: { id: string; source: string; target: string; relation: string }[] = [];
+  const add = (type: string, name: string, facts = 2 + Math.floor(rnd() * 7)) => {
+    const id = `big-${nodes.length}`;
+    nodes.push({ id, type, name, facts, stale: rnd() < 0.08, user_edited: rnd() < 0.04 });
+    return id;
+  };
+  const link = (source: string, relation: string, target: string) => edges.push({ id: `big-edge-${edges.length}`, source, target, relation });
+  const you = add("Person", "Maya Patel", 9);
+  const programs = ["SkyLark Miles", "Starbucks Rewards", "Target Circle", "Amazon Prime", "Marriott Bonvoy", "DashPass"].map((p) => { const id = add("Loyalty program", p, 3); link(you, "member_of", id); return id; });
+  const cities = ["Chicago", "Denver", "Louisville", "Savannah", "Boise", "Tampa", "Austin", "Portland", "Nashville", "San Diego", "Boston", "Minneapolis",
+    "Raleigh", "Salt Lake City", "Phoenix", "New Orleans", "Pittsburgh", "Kansas City"];
+  const hotels = ["The Drake", "Hotel Monaco", "The Brown", "Perry Lane", "The Grove", "Epicurean", "Hotel San José", "The Nines", "Thompson", "Pendry", "The Liberty", "Hewing"];
+  const months = ["Oct", "Nov", "Dec", "Jan", "Feb", "Mar"];
+  cities.forEach((c, i) => {
+    const day = `${months[i % 6]} ${3 + ((i * 7) % 25)}`;
+    const trip = add("Trip", `${c} · ${day}`);
+    link(you, "travels_on", trip);
+    const legs = rnd() < 0.45 ? 2 : 1;
+    for (let l = 0; l < legs; l++) { const f = add("Flight", `SL ${100 + Math.floor(rnd() * 1800)} · ${day}`, 6 + Math.floor(rnd() * 7)); link(trip, "includes", f); link(f, "earns", programs[0]); }
+    if (i < hotels.length) link(trip, "stays_at", add(i % 3 ? "Hotel" : "Reservation", `${hotels[i]}, ${c}`));
+  });
+  const places = ["Thai Basil", "Sushi Zen", "Taqueria Sol", "Pinecone Outfitters", "Target Ballard", "Blue Bottle 5th & Pine", "Chipotle Pike St", "Amazon",
+    "REI Flagship", "Trader Joe's", "Pho Bac", "Salt & Straw", "Paseo", "Molly Moon's", "Walgreens", "Best Buy"].map((p) => add("Place", p, 2 + Math.floor(rnd() * 3)));
+  const items = ["Pad thai, medium", "AirPods Pro", "Packable rain jacket", "Phone case", "Grande oat latte", "Burrito bowl", "Spicy tuna roll", "Wool socks",
+    "Dish soap", "Trail mix", "Carnitas tacos", "Cold brew", "Green curry", "USB-C cable", "Running shoes", "Sunscreen", "Paper towels", "Notebook",
+    "Headlamp", "Water bottle", "Pho tai", "Cuban roll", "Salted caramel pint", "Allergy pills", "Phone charger", "Spring rolls", "Coffee beans",
+    "Rain boots", "Yoga mat", "Batteries"].map((x) => add("Item", x, 1 + Math.floor(rnd() * 4)));
+  for (let o = 0; o < 30; o++) {
+    const place = pick(places);
+    const order = add("Order", `${nodes.find((n) => n.id === place)!.name} · ${months[o % 6]} ${1 + ((o * 11) % 28)}`, 3 + Math.floor(rnd() * 4));
+    link(you, "ordered", order); link(order, "from", place);
+    const n = 1 + Math.floor(rnd() * 2);
+    for (let k = 0; k < n; k++) link(order, "includes", items[(o * 3 + k * 7) % items.length]);
+  }
+  [0, 1, 5, 2].forEach((p) => { const u = add("Usual", `${nodes.find((n) => n.id === places[p])!.name} usual`, 2); link(you, "has_usual", u); link(u, "from", places[p]); });
+  return { nodes, edges };
+}
+let memGraph: { nodes: MemNode[]; edges: { id: string; source: string; target: string; relation: string }[] } = { nodes: NODES, edges: EDGES };
+
 const src = (id: string, where: string) => ({ id, where });
 const fact = (attribute: string, value: string, sources: { id: string; where: string }[], extra: Record<string, unknown> = {}) => ({
   id: `fact-${attribute}-${value}`.replace(/\W+/g, "-"), attribute, value, current: true, stale: false, conflict: 0, recorded_at: ago(3600), sources, ...extra,
@@ -353,6 +414,7 @@ const ENTITY: Record<string, { facts: any[] }> = {
   ] },
 };
 const entityOf = (id: string) => {
+  const { nodes: NODES, edges: EDGES } = memGraph;
   const n = NODES.find((x) => x.id === id) ?? NODES[0];
   const facts = ENTITY[id]?.facts ?? [
     fact("name", n.name.split(" · ")[0], [src("s-gen", "email from SkyLark Air, Oct 12")]),
@@ -647,6 +709,8 @@ export function start(s: string | null): void {
   scenario = (s === "1" || !s ? "full" : s) as Scenario;
   if (!["full", "quiet", "idle", "offline", "pair"].includes(scenario)) scenario = "full";
   db = seed();
+  const variant = typeof location !== "undefined" ? new URLSearchParams(location.search).get("graph") : null;
+  memGraph = variant === "demo" ? demoGraph() : variant === "large" ? largeGraph() : { nodes: NODES, edges: EDGES };
 }
 
 export async function handle(path: string, init: RequestInit = {}): Promise<any> {
@@ -714,7 +778,15 @@ export async function handle(path: string, init: RequestInit = {}): Promise<any>
       spoken: "Your gate is B22." };
     return { kind: "task", reply: "On it. I'll do that on the emulator and tell you when it's done.", task: chatTask(msg) };
   }
-  if (p === "/api/memory/graph") return { nodes: NODES, edges: EDGES };
+  if (p === "/api/memory/graph") return memGraph;
+  if (p === "/api/memory/usual") {  // your usual from a place: a Usual linked to you and to the place
+    if (!String(body.place ?? "").trim() || !String(body.order ?? "").trim()) throw err(400, "a place and an order are needed");
+    const id = `usual-${++runs}`;
+    const you = memGraph.nodes.find((n) => n.type === "Person");
+    memGraph = { nodes: [...memGraph.nodes, { id, type: "Usual", name: `${body.place} usual`, facts: 2, stale: false, user_edited: true }],
+      edges: you ? [...memGraph.edges, { id: `edge-${id}`, source: you.id, target: id, relation: "has_usual" }] : memGraph.edges };
+    return { entity: id };
+  }
   if ((m = p.match(/^\/api\/memory\/entity\/([^/]+)(\/fact)?$/))) return m[2] ? { ok: true } : entityOf(m[1]);
   if (p.startsWith("/api/memory/source/")) return { deleted: 1 };
   if (p === "/api/memory/search") return { markdown: "**Flight SL 482** (Fri, Oct 30, 2026): gate B22 (SkyLark app, 1 h ago; was B14), departs 6:05 AM, seat 14C, group 3." };

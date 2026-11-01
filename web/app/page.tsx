@@ -2,7 +2,8 @@
 
 // Envoy's web app. On a phone (the iPhone's Home Screen app): five tabs, Home, Activity, Phone, Memory and Routines,
 // with Settings from the header; the live phone is its own tab (streamed only while it's open). On a wider screen: a
-// sidebar with the same places, the content at a readable width, and the live phone on the right.
+// sidebar with the same places, the content at a readable width, and the live phone on the right (not beside the
+// Phone tab, nor the Memory graph, which fills the width).
 // Links (and notifications) open the right place: ?task=…, ?phone=<avd>, ?offer=<id> (the offer's card in a sheet);
 // /approve/?id=… is its own page.
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -191,7 +192,7 @@ export default function Page() {
                                        review={setReviewing} watch={watch} leases={leases} mood={mood} goPhone={() => go("Phone")} version={briefVersion}
                                        showMe={showMe} />}
       {tab === "Phone" && <div className="mx-auto w-full max-w-[520px] p-4 md:pt-8">{phoneView}</div>}
-      {tab === "Memory" && <MemoryGraph version={memVersion} />}
+      {tab === "Memory" && <MemoryGraph version={memVersion} mobile={mobile} />}
       {tab === "Routines" && <RoutinesTab openTask={openTaskTab} teach={teachNew} />}
       {tab === "Settings" && <SettingsPage publicUrl={publicUrl} profile={profile} />}
     </>
@@ -279,7 +280,7 @@ export default function Page() {
         </button>
       </nav>
       <section key={tab === "Home" ? "home" : tab} className="ev-fade min-w-0 flex-1 overflow-y-auto">{content}</section>
-      {tab !== "Phone" && (
+      {tab !== "Phone" && tab !== "Memory" && (  /* the graph gets the room */
         <aside aria-label="Live phone" className="w-[360px] shrink-0 overflow-y-auto border-l border-line bg-raised p-5">{phoneView}</aside>
       )}
       {status}{sheet}{toastEl}
