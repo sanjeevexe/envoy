@@ -61,6 +61,10 @@ uiautomator2 also installs its own helper APK (`app-uiautomator`, same project, 
 Envoy's own Android code (ours, built with the Android Gradle Plugin and Kotlin, Apache-2.0 build tools): SkyLark Air (`testapps/skylark`, Jetpack Compose) and, in Phase 6, the banner app (`android/banner`) that shows on a real phone while Envoy works on it.
 
 Development tools (not shipped):
+- [AndroidWorld](https://github.com/google-research/android_world) (Google Research, Apache-2.0) and its
+  [android_env](https://github.com/google-deepmind/android_env) (Apache-2.0): the benchmark in
+  `docs/androidworld-results.md`, cloned at `55ddaf5` into `third_party/` (gitignored) and driven by `eval/androidworld/`.
+  Its code is unmodified; `eval/androidworld/aw_env.py` replaces android_env's adb-server restart at import. Not part of Envoy.
 - [uv](https://github.com/astral-sh/uv) (MIT or Apache-2.0)
 - Homebrew OpenJDK 21 (GPL-2.0 with Classpath Exception)
 - [FFmpeg](https://ffmpeg.org) (LGPL-2.1+/GPL; run as an external tool to pull a frame from scrcpy recordings)
