@@ -6,9 +6,10 @@ download links for the files Envoy itself kept in a task the agent started, and 
   declined), and the links in a task's result (a routine's outputs, the agent's answer: a posted reel's link). Nothing
   else: a download names a file by the task's own records (`final`, an approval's id), never by a path, so no other
   file on the Mac or the phone can be reached.
-- **Whose.** Only tasks the calling agent started over MCP (contract 2): the agent comes from `api.auth.current_agent`,
-  and a task says who started it. Before agent keys there is one MCP key, Muse's, so Muse's tasks are the ones started
-  over MCP; tasks the user started (the web app, chat, Siri, a trigger) are never shared.
+- **Whose.** Only tasks the calling agent started (contract 2): the task's `agent` (recorded when an agent's MCP call
+  starts it) must be the calling agent's name (`api.auth.agent_name`). Muse's key gets Muse's tasks, another agent's key
+  its own; tasks the user started (the web app, chat, Siri, a trigger) and tasks from before agent keys (no `agent`)
+  are nobody's.
 - **The links.** `/mcp/files/<task>/<file>?exp=…&sig=…` on the address the agent called, so a public address that
   serves /mcp and nothing else (Funnel) serves them too. HMAC-signed with a key held in memory only and good for 10
   minutes: an expired or altered link is a 401, and a restart ends every link. The link is the credential, so an agent
@@ -41,7 +42,6 @@ LINK_S = 600  # how long a download link works
 FINAL = "final"
 FINAL_WIDTH = 720  # wide enough to read a receipt, small enough to fetch over a phone's connection
 WHICH = ("final", "approval", "link")
-MUSE = "Muse"  # contract 2: MCP_BEARER_TOKEN, the one MCP key before agent keys
 ID = re.compile(r"[A-Za-z0-9_-]{1,100}")
 HOST = re.compile(r"(?:[A-Za-z0-9.-]+|\[[0-9A-Fa-f:]+\])(?::\d{1,5})?")
 LOCAL = ("127.0.0.1", "localhost", "[::1]")
@@ -49,21 +49,10 @@ URL = re.compile(r"https?://[^\s<>\"'`]+")
 LABEL = re.compile(r"([A-Za-z][\w ]{0,40}):\s*$")  # "reel url: https://…" in a routine's outputs
 
 
-def calling_agent() -> str:
-    """The agent making this MCP call: contract 2's `api.auth.current_agent`, set for each call once agent keys are in;
-    before them every call comes with the one MCP key, Muse's."""
-    from api import auth
-    var = getattr(auth, "current_agent", None)
-    agent = var.get(None) if var is not None else None
-    return str(getattr(agent, "name", None) or agent or MUSE)
-
-
 def started_by(task: dict[str, Any]) -> str | None:
-    """The agent that started a task: the one agent keys record with an MCP task (contract 2), Muse for a task started
-    over MCP before them, None for the user's own."""
-    if task.get("source") != "mcp":
-        return None
-    return str(task.get("agent") or MUSE)
+    """The agent that started a task (contract 2: `TaskStore.create` records the calling agent for an MCP task), or None:
+    the user's own, or a task from before agent keys."""
+    return task.get("agent") or None
 
 
 def request_headers(call: Any) -> Any:
@@ -159,7 +148,7 @@ class TaskFiles:
         if task is None:
             return {"error": f"no task {str(task_id)[:100]}"}
         root = (self.tasks.get(task["parent"]) or task) if task.get("parent") else task  # a part is its cross-app task's
-        if started_by(root) != agent:
+        if not agent or started_by(root) != agent:
             return {"error": f"Envoy shares files only from tasks you ({agent}) started; {task_id} isn't one of them."}
         kinds = WHICH if not which or which == "all" else (which,) if which in WHICH else None
         if kinds is None:
@@ -277,4 +266,4 @@ def files_router(files: TaskFiles) -> APIRouter:
     return router
 
 
-__all__ = ["FILES", "TaskFiles", "calling_agent", "files_router", "link_base", "links_in", "request_headers", "started_by"]
+__all__ = ["FILES", "TaskFiles", "files_router", "link_base", "links_in", "request_headers", "started_by"]

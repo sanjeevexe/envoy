@@ -6,7 +6,6 @@ test_phase5.py, beside /mcp's."""
 from __future__ import annotations
 
 import asyncio
-import contextvars
 import io
 import json
 import threading
@@ -18,11 +17,12 @@ import pytest
 from fastapi.testclient import TestClient
 from PIL import Image
 
-from api import auth
+from api.auth import group_of
 from api.forwarder import Forwarder, KeyRefused, door_url, main as forwarder_main, remote_host
 from api.handoff import DOOR, HANDOFF_TEMPLATES, HandoffError, door_name
-from api.task_files import calling_agent, link_base, links_in
+from api.task_files import link_base, links_in
 from test_handoff import MP4, POSTING, Clock
+from test_agent_keys import call as call_as, key, new_agent, tools as tools_of
 from test_mcp_link import HDR, call, make, me
 
 KEY = {"Authorization": "Bearer mcp-test-token"}
@@ -459,9 +459,11 @@ class Phone:
         return Image.new("RGB", (width, width * 2), self.color)
 
 
-def finished(env, goal="post the clip to Instagram", source="mcp", status="done", result=None, phone=True, secure=False, **fields) -> str:
-    """A task that ran: its final screen taken through the runner's hook, as a run's last look takes it."""
-    tid = env.ctx.tasks.create(goal, source, status=status, result=result, **fields)["id"]
+def finished(env, goal="post the clip to Instagram", source="mcp", status="done", result=None, phone=True, secure=False,
+             agent="Muse", **fields) -> str:
+    """A task that ran, started by `agent` (as an MCP call records it): its final screen taken through the runner's
+    hook, as a run's last look takes it."""
+    tid = env.ctx.tasks.create(goal, source, status=status, result=result, **({"agent": agent} if agent else {}), **fields)["id"]
     if phone:
         env.ctx.runner.devices[tid] = Phone()
         env.ctx.files.on_final(tid, SimpleNamespace(secure=secure), {})  # off the loop: the picture is taken right here
@@ -518,34 +520,32 @@ def test_get_file_gives_an_agent_its_tasks_final_screen_approval_screens_and_lin
     assert "sig" not in (env.tmp / "files.jsonl").read_text()  # a link is a credential: never logged
 
 
-def test_get_file_is_only_for_tasks_the_calling_agent_started(env, monkeypatch):
+def test_get_file_is_only_for_tasks_the_calling_agent_started(env):
+    """Contract 2: a task's agent (recorded when an agent's MCP call starts it) must be the caller's. Muse's key gets
+    Muse's tasks only, and a key without the "files" group can't call get_file at all."""
     mine = finished(env)
-    web = finished(env, source="web")
-    chat = finished(env, source="chat")
-    trigger = finished(env, source="trigger")
+    legacy = finished(env, agent=None)  # started over MCP before agent keys: nobody's
+    web, chat, trigger = (finished(env, source=s, agent=None) for s in ("web", "chat", "trigger"))  # the user's own
+    theirs = finished(env, agent="Claude")
     with TestClient(env.ctx.asgi) as c:
+        _, claude = new_agent(c, env, "Claude", ["read", "run", "files"])
+        _, reader = new_agent(c, env, "Reader", ["read"])
         assert call(c, "get_file", task_id=mine)["files"]
-        for tid in (web, chat, trigger):  # the user's own tasks
+        for tid in (theirs, legacy, web, chat, trigger):
             got = call(c, "get_file", task_id=tid)
-            assert "files" not in got and "only from tasks you (Muse) started" in got["error"]
+            assert "files" not in got and "only from tasks you (Muse) started" in got["error"], tid
         assert call(c, "get_file", task_id="task-nope")["error"] == "no task task-nope"
         assert "no task" in call(c, "get_file", task_id="../../session_token")["error"]
-    # Contract 2: with agent keys, the call's agent (api.auth.current_agent) and the agent the task records.
-    var = contextvars.ContextVar("current_agent", default=None)
-    monkeypatch.setattr(auth, "current_agent", var, raising=False)
-    env.ctx.tasks.db.execute("ALTER TABLE tasks ADD COLUMN agent TEXT")  # where agent keys record it
-    theirs = finished(env, agent="Claude")
-    files, base = env.ctx.files, "https://envoy.example"
-    assert calling_agent() == "Muse"  # the one MCP key, Muse's
-    token = var.set(SimpleNamespace(name="Claude", tools=None))
-    try:
-        assert calling_agent() == "Claude"
-        assert files.view(theirs, None, base, calling_agent())["files"]
-        assert "isn't one of them" in files.view(mine, None, base, calling_agent())["error"]  # another agent's task
-    finally:
-        var.reset(token)
-    assert "isn't one of them" in files.view(theirs, None, base, calling_agent())["error"]
-    assert files.view(mine, None, base, calling_agent())["files"]
+        as_claude = {tid: call_as(c, key(claude), "get_file", task_id=tid) for tid in (theirs, mine, legacy, web)}
+        listed = tools_of(c, key(reader))
+        refused = call_as(c, key(reader), "get_file", task_id=mine)
+    err, text = as_claude[theirs]
+    assert not err and json.loads(text)["files"][0]["task_id"] == theirs
+    for tid in (mine, legacy, web):
+        err, text = as_claude[tid]
+        assert not err and "only from tasks you (Claude) started" in json.loads(text)["error"]
+    assert group_of("get_file") == "files" and "get_file" not in listed
+    assert refused[0] and 'get_file: it is in Envoy\'s "files" tool group' in refused[1]  # read only: the group to grant
 
 
 def test_an_expired_or_altered_link_gets_a_401(env):
@@ -603,7 +603,7 @@ def test_a_link_reaches_nothing_but_the_tasks_own_files(env):
 
 def test_no_picture_of_a_secure_screen_and_a_running_task_says_its_final_screen_comes_later(env):
     secure = finished(env, secure=True)
-    running = env.ctx.tasks.create("post the clip", "mcp", status="running")["id"]
+    running = env.ctx.tasks.create("post the clip", "mcp", status="running", agent="Muse")["id"]
     nothing = finished(env, phone=False)
     with TestClient(env.ctx.asgi) as c:
         got = call(c, "get_file", task_id=secure)
@@ -613,7 +613,7 @@ def test_no_picture_of_a_secure_screen_and_a_running_task_says_its_final_screen_
         assert call(c, "get_file", task_id=nothing)["text"] == "Envoy kept nothing of that kind for this task. There's no picture of the final screen."
 
     async def on_the_loop() -> str:  # the runner calls the hook on its loop: the picture is taken in a thread
-        tid = env.ctx.tasks.create("post the clip", "mcp", status="done")["id"]
+        tid = env.ctx.tasks.create("post the clip", "mcp", status="done", agent="Muse")["id"]
         env.ctx.runner.devices[tid] = Phone()
         env.ctx.files.on_final(tid, SimpleNamespace(secure=False), {})
         assert "being saved" in env.ctx.files.view(tid, None, "https://x", "Muse")["text"]
@@ -626,7 +626,7 @@ def test_no_picture_of_a_secure_screen_and_a_running_task_says_its_final_screen_
 
 
 def test_a_cross_app_task_gives_its_parts_files(env):
-    parent = env.ctx.tasks.create("compare the fares", "mcp", kind="crossapp", status="done")["id"]
+    parent = env.ctx.tasks.create("compare the fares", "mcp", kind="crossapp", status="done", agent="Muse")["id"]
     uber = finished(env, goal="Uber fare", source="crossapp", parent=parent, result="fare: $23 https://m.uber.com/r/1")
     lyft = finished(env, goal="Lyft fare", source="crossapp", parent=parent)
     got = env.ctx.files.view(parent, None, "https://x", "Muse")

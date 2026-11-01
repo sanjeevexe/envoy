@@ -13,9 +13,13 @@ and 797 on `ENVOY_MODEL_PROFILE=spark` (790 before). No device use, no model cal
   - `link`: the http(s) links in the task's result, from a routine's outputs or the agent's answer. A link is named when
     the output names it ("reel url").
   - A cross-app task gives its parts' files.
-- **Only the calling agent's own tasks.** The agent comes from contract 2's `api.auth.current_agent`, and the task's
-  recorded agent is compared with it. Until agent keys land, the one MCP key is Muse's, so Muse gets tasks started over
-  MCP. Tasks the user started (web, chat, Siri, a trigger) are never shared.
+- **Only the calling agent's own tasks (contract 2).** The task's `agent` (the new `tasks.agent` column, recorded when an
+  agent's MCP call starts the task) must equal the caller's name (`api.auth.agent_name()`). So Muse's key gets Muse's
+  tasks only, and each agent key gets its own.
+  - Never shared: tasks the user started (web, chat, Siri, a trigger), and MCP tasks from before agent keys, which have
+    no `agent`.
+  - get_file is in the `files` tool group. A key without that group doesn't see the tool, and a call gets agent-keys'
+    "files" group refusal.
 - **Short-lived signed links, under /mcp:**
   - Form: `/mcp/files/<task>/<file>?exp=…&sig=…`, on the address the agent called (Muse's Funnel address, or
     `http://127.0.0.1:…` on the Mac).
@@ -38,11 +42,10 @@ and 797 on `ENVOY_MODEL_PROFILE=spark` (790 before). No device use, no model cal
 - **Apps rarely put a post's link in the result.** `instagram_post_reel` outputs `posting_confirmation` text, not a URL.
   A link comes back only when a routine reads one (for example a showcase routine that copies the post's link) or the
   agent's answer contains one.
-- **Rebases:**
-  - Onto agent-keys: confirm where a task records its agent. `started_by()` reads `task["agent"]`. If agent-keys stores
-    it elsewhere (inside `request`, say), it's a one-line change there.
-  - Onto agent-door: `server.py` gains only an import line and the tool. `INSTRUCTIONS` doesn't mention `get_file`; the
-    tool's own description does.
+- **Tasks from before agent keys** give no files, even to Muse: nothing records who started them.
+- **Rebase onto agent-door:** `server.py` gains only a `Context` import, one import line and the tool. `INSTRUCTIONS`
+  doesn't mention `get_file`; the tool's own description does. `test_agent_keys.py`'s `EVERY_TOOL` now includes
+  `get_file`.
 
 ## What the video can honestly claim
 
