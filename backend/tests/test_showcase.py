@@ -71,7 +71,7 @@ def test_a_youtube_title_is_cut_to_youtubes_100_characters(hand):
 
 
 @pytest.mark.parametrize("label,rid,yes", [
-    ("Post", "", True), ("Upload Short", "", True), ("Upload", "", True), ("Your story", "", True), ("Share to story", "", True),
+    ("Post", "", True), ("Upload Short", "", True), ("Upload", "", True), ("Your story", "", True), ("Share to story", "", True), ("Close Friends", "", True),
     ("Next", "com.instagram.android:id/share_button", True), ("Share", "", True),
     ("Drafts", "", False), ("Posts", "", False), ("Add sound", "", False), ("Upload a video", "", False), ("Next", "", False),
 ])
@@ -88,3 +88,20 @@ def test_the_runner_reads_the_post_approval_by_its_target_or_rule():
     assert rs.is_post({"description": 'tap "Post" in com.zhiliaoapp.musically', "reasons": ["rule: target publishes 'Post'"]})
     assert rs.is_post({"description": 'tap "Upload Short" in com.google.android.youtube', "reasons": ["model: labeled irreversible"]})
     assert not rs.is_post({"description": 'tap "Add sound" in com.zhiliaoapp.musically', "reasons": ["model: labeled irreversible"]})
+
+
+def test_a_replay_records_the_button_it_was_asked_at():
+    assert rs.asked_at({"description": 'tap "Post" in com.zhiliaoapp.musically'}) == "Post"
+    assert rs.asked_at({"description": "something else"}) == "something else"
+
+
+def test_no_agent_run_on_youtube_or_an_instagram_story_while_the_rule_misses_their_button():
+    """The coordinator's condition (Nov 1): policy/risk.py must catch Upload Short and Your story by rule first. The
+    check reads the rule itself, so it lifts when the rule change lands."""
+    from policy.risk import _PUBLISH
+    upload_caught = bool(_PUBLISH.match("Upload Short"))
+    story_caught = bool(_PUBLISH.match("Your story"))
+    assert (rs.rule_gap(rs.APPS["youtube"], "Post it as a Short") is None) is upload_caught
+    assert (rs.rule_gap(rs.APPS["instagram"], "Put a poll sticker on my story") is None) is story_caught
+    assert rs.rule_gap(rs.APPS["instagram"], "Post this reel with a song") is None
+    assert rs.rule_gap(rs.APPS["tiktok"], "Post it with a sound") is None  # TikTok's Post is a whole "Post": caught

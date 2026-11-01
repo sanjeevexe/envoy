@@ -75,12 +75,12 @@ APPS = {"instagram": "com.instagram.android", "tiktok": "com.zhiliaoapp.musicall
 NAMES = {"com.instagram.android": "Instagram", "com.zhiliaoapp.musically": "TikTok", "com.google.android.youtube": "YouTube"}
 PIXEL5 = (1080, 2340)
 # The button that publishes, by its whole label: Instagram's Share (its reel's share_button may read only "Next"), its
-# Story's "Your story", TikTok's Post, YouTube's "Upload Short". The gate below checks each one is irreversible by rule.
+# Story's "Your story" and "Close Friends", TikTok's Post, YouTube's "Upload Short". The gate below checks each one is irreversible by rule.
 PUBLISH_LABEL = re.compile(r"(share|post|publish|upload)( (now|it|post|reel|short|video|story|to (your )?(feed|story)))?|your story|"
-                           r"share to (your )?story", re.I)
+                           r"share to (your )?story|close friends", re.I)
 PUBLISH_IDS = ("share_button",)
 # An approval that is the post itself (its description names the target, its reasons the rule that flagged it).
-POST_WORDS = re.compile(r"publishes|\b(share|post|upload)\b|share_button|your story", re.I)
+POST_WORDS = re.compile(r"publishes|\b(share|post|upload)\b|share_button|your story|close friends", re.I)
 # A camera viewfinder is open: no screenshot (it would show the room). By the camera's own controls.
 CAMERA = re.compile(r"^(flip|flip camera|switch camera|record|record video|capture|take (a )?photo|shutter|camera)$", re.I)
 # What `leave` may answer on its way out of a composer: things that throw away the unposted edit, nothing that keeps or
@@ -111,6 +111,31 @@ def safe_tap(dev: Any, query: str, nth: int, not_final: bool) -> None:
 
 def is_post(approval: dict[str, Any]) -> bool:
     return bool(POST_WORDS.search(f"{approval.get('description') or ''} {approval.get('reasons') or ''}"))
+
+
+def asked_at(approval: dict[str, Any]) -> str:
+    """The button an approval was asked at, from its description ('tap "Post" in com.zhiliaoapp.musically')."""
+    m = re.search(r'"([^"]*)"', approval.get("description") or "")
+    return m.group(1) if m else (approval.get("description") or "?")
+
+
+def rule_gap(pkg: str, goal: str) -> str | None:
+    """Why an agent run must wait (the coordinator, Nov 1): until policy/risk.py catches the app's publishing button by
+    rule, a run would have only the model's label between it and a public post. Checked against the rule itself, so it
+    lifts the moment the rule change lands."""
+    label = {"com.google.android.youtube": "Upload Short"}.get(pkg) or ("Your story" if pkg == APPS["instagram"] and
+                                                                         re.search(r"\bstor(y|ies)\b", goal, re.I) else None)
+    if label is None:
+        return None
+    xml = ('<?xml version="1.0" encoding="UTF-8"?><hierarchy rotation="0"><node index="0" text="" resource-id="" '
+           f'class="android.widget.FrameLayout" package="{pkg}" content-desc="" clickable="false" enabled="true" bounds="[0,0][1080,2340]">'
+           f'<node index="0" text="{label}" resource-id="" class="android.widget.Button" package="{pkg}" content-desc="" '
+           'clickable="true" enabled="true" bounds="[700,2100][1040,2220]" /></node></hierarchy>')
+    state = build_state(xml, pkg, "", *PIXEL5)
+    button = next((e for e in state.numbered if e.label == label), None)
+    if button is not None and classify(Action(kind="tap", element=button.number), state, None).irreversible:
+        return None
+    return f"{label!r} isn't irreversible by rule yet (policy/risk.py): no agent run on {NAMES[pkg]}{' Stories' if 'story' in label.lower() else ''} until the coordinator's rule change lands"
 
 
 def app_of(name: str) -> str:
@@ -238,7 +263,7 @@ def gate(dump: Path, pkg: str) -> int:
     rows, found, ok = [], 0, True
     for e in state.numbered:
         words = " ".join(x for x in (e.label, e.text, e.desc, e.resource_id.split("/")[-1]) if x)
-        if not re.search(r"share|post|publish|upload|your story", words, re.I):
+        if not re.search(r"share|post|publish|upload|your story|close friends", words, re.I):
             continue
         v = classify(Action(kind="tap", element=e.number), state, None)
         by_rule = [r for r in v.reasons if r.startswith(("rule:", "screen:"))]
@@ -412,6 +437,11 @@ def run_flow(args: argparse.Namespace) -> int:
     before = [a for a in approvals if not is_post(a) and (a.get("decided_by") == "user" or a["status"] in ("pending", "expired", "declined"))]
     if before:
         failures.append(f"asked about something before the post: {[a.get('description') for a in before]}")
+    if any(a["status"] == "approved" for a in approvals if is_post(a)):  # this script only declines: someone else approved it
+        failures.append(f"the post was approved: {[a.get('decided_by') for a in approvals if is_post(a) and a['status'] == 'approved']}")
+    if args.mode == "replay" and task.get("routine") != args.routine:
+        failures.append(f"the replay didn't run {args.routine} (task routine: {task.get('routine')!r})")
+    posts = [asked_at(a) for a in approvals if is_post(a)]
 
     cost = spent(tid, t0 - 5)
     pkg = task.get("app") or (app_of(args.app) if args.app else None)
@@ -419,7 +449,8 @@ def run_flow(args: argparse.Namespace) -> int:
               "task": {k: task.get(k) for k in ("id", "status", "routine", "model_calls", "cost_usd", "traces", "detail", "device")},
               "steps": len(steps), "repairs": [s.get("text") for s in steps if "repair" in (s.get("text") or "").lower()][:10],
               "approvals": [{k: a.get(k) for k in ("description", "reasons", "status", "decided_by")} for a in approvals],
-              "auto_approved": [s.get("text") for s in auto], "marks_s": marks, "spent": cost, "ok": not failures, "failures": failures,
+              "asked_at": posts, "auto_approved": [s.get("text") for s in auto], "marks_s": marks, "spent": cost, "ok": not failures,
+              "failures": failures,
               "profile": os.environ.get("ENVOY_MODEL_PROFILE") or "hybrid"}
     if not args.no_cleanup and pkg:
         result["cleanup"] = leave(connect(), pkg)
@@ -429,13 +460,13 @@ def run_flow(args: argparse.Namespace) -> int:
     path.write_text(json.dumps(result, indent=1, default=str))
     md = RUNS / "runs.md"
     if not md.exists():
-        md.write_text("| when | app | mode | ok | task | routine | start → post asked | total | calls | $ | approvals |\n"
-                      "|---|---|---|---|---|---|---|---|---|---|---|\n")
+        md.write_text("| when | app | mode | ok | task | routine | asked at | start → post asked | total | calls | $ | approvals |\n"
+                      "|---|---|---|---|---|---|---|---|---|---|---|---|\n")
     asked = "; ".join(f"{a.get('description')} → {a.get('status')}" for a in approvals)[:140]
     with md.open("a") as f:
         f.write(f"| {result['time']} | {NAMES.get(pkg or '', '?')} | {args.mode} | {'yes' if not failures else 'NO'} | {task['status']} | "
-                f"{task.get('routine') or 'agent'} | {marks.get('post_asked', '–')} s | {marks['end']} s | {cost['model_calls']} | "
-                f"{cost['cost_usd']} | {asked} |\n")
+                f"{task.get('routine') or 'agent'} | {', '.join(posts) or 'never asked'} | {marks.get('post_asked', '–')} s | {marks['end']} s | "
+                f"{cost['model_calls']} | {cost['cost_usd']} | {asked} |\n")
     say(f"saved {path.relative_to(REPO)}: {cost['model_calls']} model calls, ${cost['cost_usd']}")
     if failures:
         print("\n" + "\n".join(f"FAIL: {x}" for x in failures), flush=True)
@@ -498,6 +529,11 @@ def main() -> int:
     if args.cmd in ("first", "replay"):
         if not args.api_dir or Path(args.api_dir).resolve() == (REPO / "data" / "api").resolve():
             sys.exit("--api-dir (or ENVOY_API_DIR): the copy's data dir, never data/api")
+        if not args.app:
+            sys.exit("--app: which app the run is in (instagram, tiktok, youtube)")
+        # A replay can fall back to the agent (the repair ladder's rung 5), so it waits on the rule too.
+        if why := rule_gap(app_of(args.app), args.goal if args.cmd == "first" else args.routine):
+            sys.exit(f"REFUSED: {why}")
         return run_flow(args)
     if args.cmd == "gate":
         return gate(Path(args.dump), app_of(args.app))
