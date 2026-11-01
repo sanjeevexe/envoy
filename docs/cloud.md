@@ -185,6 +185,20 @@ So: two apps refused to create accounts from the cloud phone (Amazon, Chipotle),
 - **Routines, same input, ran 2–4× the Mac's time** (23.6 against 7.9 s, 30.5 against 16.3 s, 66.1 against 21.2 s): real apps draw much more than SkyLark, and every screen is drawn in software.
 - Gmail and Chipotle weren't run: Gmail's answer key needs the Mac's Gmail API sign-in, and Chipotle's first run sets a pickup store (73 s on the Mac).
 
+### The creator workflow on the cloud phone (Nov 1, backlog #49)
+
+**Instagram runs on the cloud emulator, and the creator workflow reached Share there: one run by the link path, 112 s from the task's start to the Share approval, 12 model calls and $0.155 to Share. It was declined, and nothing was posted.** On the Mac, the Pixel 5's Nov 1 dry run took 45 s from Yes to Share (agent, 9 calls, $0.12). Results and the second-by-second: `eval/results/cloud/instagram/`. Driver: `scripts/cloud/instagram_link.py`.
+
+- **Setup.** The VM still had Oct 29's code (`b3bad38`, before the creator workflow), so `push.sh` brought it to `9c8ad21`. The Real-app phone's WebView and Chrome were already 156 (Oct 29). Instagram 453.0.0.57.79, the Pixel's version, came from the Play Store in 76 s. The user signed in as envoy3955 through the live view and allowed photos and videos.
+- **No bot check, no emulator warning, no crash**, from the first launch through the run, on `swangle`.
+- **What ran.** `send_to_phone(<https clip>, device="envoy-real")` through the cloud copy's own `/mcp`: Envoy downloaded the clip and put it in the gallery in 2.2 s. Then `run_task` with the Instagram template's goal and the caption "Envoy cloud rehearsal". Envoy matched routine `instagram_post_reel` v2, whose first step failed on Instagram's first-run screens (a permission prompt, "Set up on new device: allow access to contacts"): two repairs, then the full agent from 41 s, which reached Share at 112 s. Share was asked by the `share_button` id rule (labelled "Next" on this install) and declined through the copy's API. Afterwards the profile still showed 2 posts.
+- **Where the time went.** About 35 s of the 112 s was model calls; the rest was the phone drawing in software and settling. The first-run screens cost about 40 s before the agent began; the Pixel's Instagram was long past them.
+
+Three things this found, none fixed here (they're product code, after the eval):
+1. **There is no offer on a cloud phone.** `send_to_phone` puts a file on an emulator at once and asks nothing, so no Instagram task starts by itself; the outbox route makes no offer either, because the Instagram template asks for a real phone. So the run had no "Yes": it started with `run_task`, as the creator doc's "No sidecar at all" fallback does. Coming from an AI client, Share asks whatever the approval mode. File delivery (`prompts/file-delivery.md`) should let a cloud phone take the offer as the Pixel does.
+2. **A link whose host sorts an IPv6 address first can't be downloaded on the VM.** `Handoff._download` connects to the first of the host's addresses, sorted as text, and the VM has no IPv6 route: MDN's CC0 sample (`2600:1901:…` before `34.111.…`) failed with "the download failed (ConnectError)", though `curl` on the VM fetched it. `test-videos.co.uk` (`104.21.…` first) worked. Trying each address, or IPv4 first, would fix it.
+3. **A cloud phone needs its apps' first-run screens cleared before a take**, as the Mac's phones had been.
+
 ### Choosing the cloud (and back): the switch
 
 One-time setup (the user, once the VM is on the tailnet):
@@ -206,7 +220,7 @@ One-time setup (the user, once the VM is on the tailnet):
 
 Nothing migrates either way, so switching back takes as long as the steps above. Anything done on the cloud copy (tasks, learned routines, memory) stays there.
 
-**What only the Mac option can do:** the Pixel 5 (USB), and so the Instagram creator scene; the real apps already signed in on the Mac's `envoy-real`; the Mac's memory and routine history.
+**What only the Mac option can do:** the Pixel 5 (USB), and so the Instagram creator scene as recorded: a clip from the Mac's outbox and the offer's Yes (the cloud phone can post a reel from a link, started with `run_task`; see "The creator workflow on the cloud phone"); the real apps already signed in on the Mac's `envoy-real`; the Mac's memory and routine history.
 
 **A stopped VM may not start on demand.** On Oct 29 the first restart failed with Google's `ZONE_RESOURCE_POOL_EXHAUSTED` (no n2-standard-8 free in us-east1-b), and the retry 17 s later worked. For a recording, start the VM well ahead and keep it awake. Start it well ahead and keep it awake on recording day. If a stockout lasts, `scripts/cloud/fallback.sh start us-east1-c` (or `-d`) starts a copy of the VM from its machine image in another zone, with the same tailnet name, so nothing on the iPhone or in Muse changes; then `export ENVOY_GCP_ZONE=us-east1-c` for the other scripts. Never run the copy and the original at once (one Tailscale identity).
 
@@ -220,9 +234,10 @@ Google's list prices for `us-east1` (on demand): `n2-standard-8` about **$0.39 a
 | Stage 1: portability ×2, sizes, the restart check, the clip | 19:39–19:59, 20 min | $0.13 | |
 | Stage 2: the key on, compile + verify, 3 replays, the key off | 19:59–20:04, 5 min | $0.04 | |
 | Stage 3: the cloud copy, the bars, the user's sittings, the renderer crashes, the real-app set, Muse | 20:25–23:56, 3.5 h | about $1.39 | |
-| **Total** | **about 4.2 h** | **about $1.66** | plus the disk, about $0.17 a day while it exists; the machine image, about $0.80 a month; a few MB of egress |
+| Nov 1: the creator workflow on the cloud phone (#49): the code pushed, Instagram installed, the user's sign-in, one declined run | 20:03–20:45, 42 min | $0.27 | |
+| **Total** | **about 4.9 h** | **about $1.93** | plus the disk, about $0.17 a day while it exists; the machine image, about $0.80 a month; a few MB of egress |
 
-One emulator-hour on this VM costs about $0.39; with two phones and the API running, the cloud option costs about $0.39 an hour of use and $5 a month standing still. Meta: $0 for stage 1 (no key on the VM), **$0.070 for stage 2** (cap $1), **$0.615 for stage 3** (cap $3: the real-app set $0.37, the interfaces suite $0.10, diagnosing the crashes and `swangle` $0.11, voice and chat $0.03). **The VM is stopped (Oct 29, 23:56 UTC), with no key on it**, and `envoy-cloud-image` (15.9 GB, us-east1, no key) is there for `fallback.sh`. Standing still they cost about $5 + $0.80 a month. Deleting them is the user's call (`scripts/cloud/delete.sh`).
+One emulator-hour on this VM costs about $0.39; with two phones and the API running, the cloud option costs about $0.39 an hour of use and $5 a month standing still. Meta: $0 for stage 1 (no key on the VM), **$0.070 for stage 2** (cap $1), **$0.615 for stage 3** (cap $3: the real-app set $0.37, the interfaces suite $0.10, diagnosing the crashes and `swangle` $0.11, voice and chat $0.03), **$0.181 for #49** (cap $3: the one Instagram run, 15 calls). **The VM is stopped (Nov 1, 20:45 UTC), with no key on it**, and `envoy-cloud-image` (15.9 GB, us-east1, no key) is there for `fallback.sh`. Standing still they cost about $5 + $0.80 a month. Deleting them is the user's call (`scripts/cloud/delete.sh`).
 
 ## The commands
 
@@ -240,7 +255,7 @@ scripts/cloud/stop.sh              # stop the emulator, then the VM (a stopped V
 scripts/cloud/delete.sh --yes-delete-envoy-cloud   # the user's call
 ```
 
-Also: `run.sh` (a short command on the VM), `key.sh put|remove` (the Meta key, stage 2 only), `vm-clip.sh` + `make_clip.py` (the clip), `compare.py` (the table above).
+Also: `run.sh` (a short command on the VM), `key.sh put|remove` (the Meta key, stage 2 only), `vm-clip.sh` + `make_clip.py` (the clip), `compare.py` (the table above), `instagram_link.py` (the creator workflow on the cloud phone, run on the VM with `bg.sh`).
 
 ## How it is kept closed
 

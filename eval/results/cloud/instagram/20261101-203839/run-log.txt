@@ -1,0 +1,9 @@
+[   2.2s] send_to_phone: {'handoff_id': 'handoff-1101-203840-c964', 'status': 'sent', 'device': 'envoy-real', 'device_name': 'Real-app phone', 'remote_path': '/sdcard/Movies/Envoy/Big_Buck_Bunny_720_10s_1MB.mp4', 'media_uri': 'content://media/external/video/media/1000000021', 'text': 'Big_Buck_Bunny_720_10s_1MB.mp4 is in the gallery of the Real-app phone (Movies/Envoy/Big_Buck_Bunny_720_10s_1MB.mp4).'}
+[   2.4s] run_task: task-1101-203842-6a59 queued; heads_up=[{'kind': 'approval', 'text': "Anything that can't be undone will wait for your OK.", 'level': 'info'}]
+[   2.4s] task running
+[ 114.4s] task waiting_approval
+[ 115.0s] Share asked ('tap "Next" in com.instagram.android', reasons ["rule: target id 'com.instagram.android:id/share_button'", 'model: labeled irreversible']): screen saved, declined. Nothing is posted.
+[ 116.0s] task running
+[ 119.0s] task declined: User declined the final Share action to post the reel with caption "Envoy cloud rehearsal", so the post was not completed.
+[ 132.0s] saved logs/ig/20261101-203839: start→Share 112.0 s, 15 model calls, $0.1809
+[ 132.0s] OK: declined at Share
