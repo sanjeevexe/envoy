@@ -7,7 +7,7 @@
 // device (light or dark).
 import { useEffect, useState } from "react";
 import { CheckCircleIcon, DeviceMobileIcon } from "@phosphor-icons/react";
-import Agents from "@/components/Agents";
+import AgentKeys from "@/components/AgentKeys";
 import Companion from "@/components/Companion";
 import { Outbox } from "@/components/Handoff";
 import NotificationWatch from "@/components/NotificationWatch";
@@ -29,7 +29,7 @@ export default function SettingsPage({ publicUrl, profile }: { publicUrl?: strin
         {section === "Approvals" && <><Proactivity /><Settings /></>}
         {section === "Phones" && <><Phones /><NotificationWatch /><SavedLogins /><Outbox /></>}
         {section === "Devices" && <Companion publicUrl={publicUrl} />}
-        {section === "Agents" && <Agents />}
+        {section === "Agents" && <AgentKeys />}
         {section === "Appearance" && <Appearance />}
       </div>
     </div>

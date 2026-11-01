@@ -15,7 +15,7 @@
 // The memory graph: `&graph=demo` (the demo profile's 17 things) or `&graph=large` (about 150).
 // `?mock=0` turns it off again (it's kept for the tab's session, so /approve links stay in mock mode).
 import type { Approval, EnvoyEvent, HandoffItem, Lease, NotificationEvent, Step, Task } from "@/lib/api";
-import type { AgentKey } from "@/components/Agents";
+import type { AgentKey } from "@/components/AgentKeys";
 
 export type Scenario = "full" | "quiet" | "idle" | "offline" | "pair";
 

@@ -1,8 +1,12 @@
 # A key per agent (T2a, phone-layer contract 2): report (Nov 1)
 
 Branch `claude/agent-keys-315ecc`, on main `869271f` (file delivery #48 included). Not merged, not pushed. Tests:
-`uv run --project backend pytest -q backend/tests` gives 802 passed on the default profile and with
-`ENVOY_MODEL_PROFILE=spark` (790 on main, plus 12 new in `test_agent_keys.py`); `npm run build` in `web/` passes. No device time, no model spend.
+`uv run --project backend pytest -q backend/tests` gives 803 passed on the default profile (790 on main, plus 13 new in
+`test_agent_keys.py`); `npm run build` in `web/` passes. With `ENVOY_MODEL_PROFILE=spark` it gave 802 passed in the
+first run (12 new tests then); the reruns with the 13th test each had one failure,
+`test_preflight::test_check_is_fast_on_a_long_history` (a 50 ms limit), while other sessions kept the load average near
+24. Side by side, main `869271f` failed it too (84, 238, 50 ms), and nothing of this branch is on its path. No device
+time, no model spend.
 
 ## What is true now
 
@@ -45,9 +49,11 @@ page doesn't.
 
 ## Not done
 
-- **Agent-door's routine tools:** they are under `run` by default (a tool no group names); a test adds one to the
-  server and checks a read-only key neither sees nor calls it. After agent-door's stage 1 merges, the rebase should
-  only need that test pointed at a real shared routine.
+- **Agent-door's routine tools:** they are under `run` by default (a tool no group names). agent-door's server merges
+  them in through its own `list_tools()` and `call_tool()` overrides; the guard works on the MCP messages around those
+  two, so it needs no lines there. A test builds a server subclass shaped like that and checks a read-only key neither
+  sees nor calls the merged tool, and a run key does. On the rebase: keep `guard(server)` before `return server`, and
+  show the keys (`AgentKeys`) and agent-door's `AgentTools` together in its "Agents" tab.
 - **`api.auth.agent_for` is a method,** `Auth.agent_for` (`ctx.auth.agent_for`), since it reads the API's database. The
   contract's shape (`agent_for(token) -> Agent | None`, `Agent(name, tools)`) is otherwise as written; `Agent.tools`
   holds group names (and may hold single tool names).

@@ -152,6 +152,43 @@ def test_a_learned_routines_own_tool_is_in_the_run_group(env):
     assert env.started == ["check in for Chicago"]
 
 
+def test_the_guard_covers_tools_a_server_subclass_merges_in_itself():
+    """agent-door's server (contract 1) doesn't register routine tools: its own list_tools() and call_tool() merge them
+    in on every call. The guard works on the MCP messages around those two, so it filters and refuses them unchanged."""
+    from mcp.server.mcpserver import MCPServer
+    from mcp_types import CallToolResult, TextContent, Tool
+
+    from api.agents import guard
+    from mcp_server.server import mcp_app
+
+    class Merging(MCPServer):
+        async def list_tools(self):
+            return [*await super().list_tools(), Tool(name="skylark_check_in", input_schema={"type": "object", "properties": {}})]
+
+        async def call_tool(self, name, arguments, context=None):
+            if name == "skylark_check_in":
+                return CallToolResult(content=[TextContent(type="text", text="started")])
+            return await super().call_tool(name, arguments, context)
+
+    server = Merging(name="t")
+    server.add_tool(lambda: {"ok": True}, name="get_task")
+    guard(server)
+    inner = mcp_app(server, 8799, extra_hosts=set())
+    who: list[Agent] = []
+
+    async def app(scope, receive, send):  # what the bearer check does: the agent rides in the request scope
+        await inner({**scope, "envoy.caller": who[-1]} if scope["type"] == "http" else scope, receive, send)
+
+    with TestClient(app, base_url="http://127.0.0.1:8799") as c:
+        who.append(Agent("Reader", frozenset({"read"})))
+        assert tools(c, BASE) == {"get_task"}
+        err, text = call(c, BASE, "skylark_check_in")
+        assert err and '"run" tool group' in text
+        who.append(Agent("Runner", frozenset({"read", "run"})))
+        assert tools(c, BASE) == {"get_task", "skylark_check_in"}
+        assert call(c, BASE, "skylark_check_in") == (False, "started")
+
+
 # ---- the rate limit -----------------------------------------------------------------------------------------------
 
 

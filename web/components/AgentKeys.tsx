@@ -16,7 +16,7 @@ export type AgentsInfo = {
   per_minute: number; mcp_url: string; can_manage: boolean;
 };
 
-export default function Agents() {
+export default function AgentKeys() {
   const [info, setInfo] = useState<AgentsInfo | null>(null);
   const [shown, setShown] = useState<{ name: string; secret: string; rotated: boolean } | null>(null);  // a key, until you press Done
   const [msg, setMsg] = useState<string | null>(null);
