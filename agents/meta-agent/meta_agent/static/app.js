@@ -2,8 +2,8 @@
 "use strict";
 
 const $ = (id) => document.getElementById(id);
-const convo = $("convo"), feed = $("feed"), toolsBox = $("tools");
-const state = { rows: {}, waits: {}, tools: new Map(), used: new Set(), busy: false, thinking: null, config: {}, stats: {}, lastN: -1, pills: {} };
+const convo = $("convo"), feed = $("feed"), toolsBox = $("tools"), dock = $("dock");
+const state = { rows: {}, waits: {}, tools: new Map(), used: new Set(), busy: false, thinking: null, config: {}, stats: {}, lastN: -1, showAll: false, flash: null };
 
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
@@ -85,13 +85,34 @@ function setBusy(on) {
 }
 
 function drawTools() {
+  // Learned routines first: they're what an agent gains from Envoy. Envoy's own tools fold into one chip once there are any.
+  const all = [...state.tools.values()];
+  const routines = all.filter((t) => t.routine), builtins = all.filter((t) => !t.routine);
+  const folded = routines.length > 0 && !state.showAll;
   toolsBox.innerHTML = "";
-  for (const t of state.tools.values()) {
+  const chip = (t) => {
     const el = document.createElement("span");
-    el.className = `tool-chip${t.routine ? " routine" : ""}${t.fresh ? " new" : ""}${state.used.has(t.name) ? " used" : ""}`;
+    el.className = `tool-chip${t.routine ? " routine" : ""}${t.fresh ? " new" : ""}${state.used.has(t.name) ? " used" : ""}${state.flash === t.name ? " flash" : ""}`;
     el.title = t.title || t.name;
-    el.innerHTML = `${esc(t.name)}${t.routine ? ` <span class="tag">learned</span>` : ""}`;
+    el.innerHTML = `<span class="tname">${esc(t.name)}</span>${t.routine ? ` <span class="tag">learned</span>` : ""}`;
     toolsBox.appendChild(el);
+  };
+  routines.forEach(chip);
+  if (folded) {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "tool-chip more";
+    b.title = builtins.map((t) => t.name).join(", ");
+    b.textContent = `+ ${builtins.length} Envoy tools`;
+    b.onclick = () => { state.showAll = true; drawTools(); };
+    toolsBox.appendChild(b);
+  } else {
+    builtins.forEach(chip);
+    if (routines.length) {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "tool-chip more"; b.textContent = "fewer";
+      b.onclick = () => { state.showAll = false; drawTools(); };
+      toolsBox.appendChild(b);
+    }
   }
 }
 
@@ -109,12 +130,13 @@ function row(id, html, cls) {
 
 function rowHtml(r) {
   const icon = r.done ? (r.ok ? CHECK : CROSS) : SPIN;
-  const via = r.via === "wait_for_task" ? `<span class="via">wait_for_task · ${r.polls || 1} ${r.polls === 1 ? "call" : "calls"}</span>`
+  const many = r.tasks > 1 ? ` · ${r.tasks} tasks` : "";
+  const via = r.via === "wait_for_task" ? `<span class="via">wait_for_task${many} · ${r.polls || 1} ${r.polls === 1 ? "call" : "calls"}</span>`
     : r.via === "watch" ? `<span class="via">watching · ${r.polls || 1} ${r.polls === 1 ? "call" : "calls"}</span>`
     : r.polls > 1 ? `<span class="via">${r.polls} calls</span>` : "";
   const tag = r.routine || r.tool === "run_routine" ? `<span class="routine-tag">learned routine</span>` : "";
   const time = r.done ? dur(r.ms) : dur(Date.now() - r.start);
-  return `<span class="st">${icon}</span><span class="name">${esc(r.tool)}${tag}${via}</span><span class="ms" data-start="${r.done ? "" : r.start}">${time}</span>`
+  return `<span class="st">${icon}</span><span class="name"><span class="tname">${esc(r.tool)}</span>${tag}${via}</span><span class="ms" data-start="${r.done ? "" : r.start}">${time}</span>`
     + `<span class="args">${esc(r.args)}</span><span class="res">${esc(r.summary || (r.done ? "" : "waiting for Envoy…"))}</span>`;
 }
 
@@ -124,6 +146,9 @@ function drawRow(id) {
   row(id, rowHtml(r), `${r.done ? (r.ok ? "ok" : "bad") : "pending"}${r.rpc ? " rpc" : ""}`);
 }
 
+// Envoy waiting for the user: a card in the dock above the feed (always in view, stacked when several tasks wait), a line
+// in the feed where it happened, and a pill in the conversation. An offer (a file for the real phone, a trigger to turn
+// on) is only a card in the feed: nothing here can follow it.
 function waitCard(d, t) {
   const el = document.createElement("div");
   el.className = `wait${d.kind === "offer" ? " offer" : ""}`;
@@ -133,23 +158,61 @@ function waitCard(d, t) {
   el.innerHTML = `<div class="av">${$(d.kind === "offer" ? "avatar-idle" : "avatar-needs").innerHTML}</div>`
     + `<div class="kicker">${esc(kicker)}</div><div class="timer" data-start="${d.kind === "offer" ? "" : t * 1000}"></div>`
     + `<div class="title">${esc(d.title)}${d.goal ? `<span class="goal">${esc(d.goal)}</span>` : ""}</div><div class="why">${why}</div>`;
-  stick(feed, () => feed.appendChild(el));
   return el;
 }
 
+function dockLayout() {
+  dock.classList.toggle("multi", dock.querySelectorAll(".wait:not(.leaving)").length > 1);
+}
+
+function openWait(d, t) {
+  if (d.kind === "offer") {
+    const el = waitCard(d, t);
+    stick(feed, () => feed.appendChild(el));
+    state.waits[d.key] = { card: el };
+    return;
+  }
+  const card = waitCard(d, t);
+  dock.appendChild(card);
+  dockLayout();
+  const line = document.createElement("div");
+  line.className = "asked";
+  line.innerHTML = `${PHONE}<span class="what">Asked you on your phone: <b>${esc(d.title)}</b></span><span class="state" data-start="${t * 1000}"></span>`;
+  stick(feed, () => feed.appendChild(line));
+  const pill = addMsg("note needs", `${PHONE}<span>Envoy is waiting for your OK on your phone</span><span class="t" data-start="${t * 1000}"></span>`);
+  state.waits[d.key] = { card, line, pill };
+}
+
 function closeWait(d) {
-  const el = state.waits[d.key];
-  if (!el) return;
+  const w = state.waits[d.key];
+  if (!w) return;
+  delete state.waits[d.key];
   const yes = d.outcome === "done" || d.outcome === "answered";
+  const said = yes ? "Approved on your phone" : d.outcome === "declined" ? "You said no on your phone" : `The task ${d.outcome}`;
+  const el = w.card;
   el.classList.add("closed");
   if (!yes) el.classList.add("no");
   el.querySelector(".av").innerHTML = $(yes ? "avatar-done" : "avatar-idle").innerHTML;
-  el.querySelector(".kicker").textContent = yes ? "Approved on your phone" : d.outcome === "declined" ? "You said no on your phone" : `The task ${d.outcome}`;
+  el.querySelector(".kicker").textContent = said;
   const timer = el.querySelector(".timer");
   timer.dataset.start = "";
   timer.textContent = dur(d.after_s * 1000);
   el.querySelector(".why").innerHTML = `${PHONE}<span>${esc(d.text || "")}</span>`;
-  delete state.waits[d.key];
+  if (w.line) {
+    w.line.classList.add("closed");
+    if (!yes) w.line.classList.add("no");
+    const st = w.line.querySelector(".state");
+    st.dataset.start = "";
+    st.textContent = `${yes ? "approved" : d.outcome === "declined" ? "declined" : d.outcome} · ${dur(d.after_s * 1000)}`;
+  }
+  if (w.pill) {
+    w.pill.className = `msg note${yes ? "" : " no"}`;
+    w.pill.innerHTML = `${PHONE}<span>${said}</span><span class="t">${dur(d.after_s * 1000)}</span>`;
+  }
+  if (el.parentElement === dock) {  // the answer shows for a few seconds, then the card leaves the dock
+    const leave = () => { el.classList.add("leaving"); dockLayout(); setTimeout(() => { el.remove(); dockLayout(); }, 420); };
+    if (document.body.classList.contains("replay")) { el.remove(); dockLayout(); } else setTimeout(leave, 5000);
+  }
 }
 
 function stat(id, value) {
@@ -231,8 +294,13 @@ function handle(ev) {
       break;
     case "call_start": {
       const routine = state.tools.get(d.tool)?.routine;
-      rowsData[d.id] = { tool: d.tool, args: args(d.args), via: d.via, rpc: d.rpc, start: ev.t * 1000, done: false, routine };
-      if (!d.rpc) { state.used.add(d.tool); drawTools(); }
+      rowsData[d.id] = { tool: d.tool, args: args(d.args), via: d.via, rpc: d.rpc, start: ev.t * 1000, done: false, routine,
+                         tasks: (d.args && d.args.task_ids) ? d.args.task_ids.length : 1 };
+      if (!d.rpc) {
+        state.used.add(d.tool);
+        if (routine) { state.flash = d.tool; setTimeout(() => { if (state.flash === d.tool) { state.flash = null; drawTools(); } }, 1600); }
+        drawTools();
+      }
       drawRow(d.id);
       break;
     }
@@ -251,27 +319,12 @@ function handle(ev) {
       break;
     }
     case "waiting":
-      if (state.waits[d.key]) {
-        state.waits[d.key].querySelector(".title").textContent = d.title;
-      } else {
-        state.waits[d.key] = waitCard(d, ev.t);
-        if (d.kind !== "offer") {
-          const pill = addMsg("note needs", `${PHONE}<span>Envoy is waiting for your OK on your phone</span><span class="t" data-start="${ev.t * 1000}"></span>`);
-          state.pills[d.key] = pill;
-        }
-      }
+      if (state.waits[d.key]) state.waits[d.key].card.querySelector(".title").firstChild.textContent = d.title;
+      else openWait(d, ev.t);
       break;
-    case "waiting_end": {
+    case "waiting_end":
       closeWait(d);
-      const pill = state.pills[d.key];
-      if (pill) {
-        const yes = d.outcome === "done" || d.outcome === "answered";
-        pill.className = `msg note${yes ? "" : " no"}`;
-        pill.innerHTML = `${PHONE}<span>${yes ? "Approved on your phone" : d.outcome === "declined" ? "You said no on your phone" : `The task ${esc(d.outcome)}`}</span><span class="t">${dur(d.after_s * 1000)}</span>`;
-        delete state.pills[d.key];
-      }
       break;
-    }
     case "refusal": {
       const el = document.createElement("div");
       el.className = "refusal";

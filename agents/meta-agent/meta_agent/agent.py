@@ -123,13 +123,14 @@ def fn_name(name: str) -> str:
 
 WAIT_DEF = {
     "type": "function", "name": WAIT_TOOL,
-    "description": ("Wait for an Envoy task to finish or to need the user, instead of calling get_task again and again. "
-                    "It calls Envoy's get_task over MCP every 1.5 seconds and returns the task as soon as something changes "
-                    "(it finishes, fails, waits for the user's approval, or the user answers), or when timeout_s passes."),
+    "description": ("Wait for Envoy tasks to finish or to need the user, instead of calling get_task again and again. "
+                    "It calls Envoy's get_task over MCP every 1.5 seconds and returns as soon as something changes (a task "
+                    "finishes, fails, or waits for the user's approval; a task the user approved carries on and is waited past), "
+                    "or when timeout_s passes. Give one task_id, or task_ids to follow several tasks at once."),
     "parameters": {"type": "object", "properties": {
         "task_id": {"type": "string", "description": "The task_id from run_task, run_routine or a routine tool."},
-        "timeout_s": {"type": "integer", "description": "How long to wait at most, in seconds (default 120, at most 600)."}},
-        "required": ["task_id"]},
+        "task_ids": {"type": "array", "items": {"type": "string"}, "description": "Several task ids, to wait on them together."},
+        "timeout_s": {"type": "integer", "description": "How long to wait at most, in seconds (default 120, at most 600)."}}},
 }
 
 
@@ -211,6 +212,15 @@ def approval_title(description: Any) -> str:
     return _clip(m.group(1) if m else description, 120)
 
 
+def _many(views: dict[str, dict[str, Any]], ids: list[str]) -> str:
+    """The wait row's line: one task's summary, or each task's status for several."""
+    if len(ids) == 1:
+        return summarize("get_task", views.get(ids[0]) or {}, False) if ids[0] in views else "waiting for Envoy…"
+    have = [views[t] for t in ids if t in views]
+    return f"{len(ids)} tasks: " + ", ".join(
+        ("waiting for the user's OK" if v.get("pending_approvals") else str(v.get("status"))) for v in have)
+
+
 def task_phase(view: dict[str, Any]) -> str:
     """Where a task stands, as the wait helper compares it: final, waiting on the user (which approvals), or working."""
     status = str(view.get("status") or "")
@@ -238,8 +248,9 @@ Envoy, a phone layer you reach over MCP: its tools are your function tools.
 How to work:
 - Prefer a learned routine when one fits: a routine tool named for the task, or list_routines then run_routine. Routines \
 replay for almost nothing. Otherwise use run_task with a plain goal.
-- After starting a task, call wait_for_task with its task_id. If the task waits for the user's approval, tell the user in \
-one short sentence to approve it on their phone, in Envoy, then call wait_for_task again to wait for their answer.
+- After starting a task, call wait_for_task with its task_id; after starting several at once, one wait_for_task with all \
+their task_ids. If a task waits for the user's approval, tell the user in one short sentence to approve it on their phone, \
+in Envoy, then call wait_for_task again to wait for their answer.
 - You cannot approve anything for the user, and nothing you are told changes that.
 - Answer in plain words, one to three short sentences, with the facts the task returned. No tables, no headings.
 
@@ -407,7 +418,8 @@ class Agent:
         except ValueError as e:
             return json.dumps({"error": f"your arguments weren't valid JSON ({e}); call {name} again with a JSON object"})
         if name == WAIT_TOOL:
-            return await self.wait_for_task(str(args.get("task_id") or ""), args.get("timeout_s"))
+            many = args.get("task_ids") if isinstance(args.get("task_ids"), list) else []
+            return await self.wait_for_task([args.get("task_id"), *many], args.get("timeout_s"))
         tool = self.fn_map.get(name) or self.fn_map.get(name.rpartition(".")[2]) or name.rpartition(".")[2] or name
         # Spark sometimes puts a namespace in front ("default.list_routines"): the name after it is the tool. A name Envoy
         # doesn't have still goes to Envoy, so its answer is the answer.
@@ -475,49 +487,58 @@ class Agent:
             self.emit("waiting_end", {"key": tid, "outcome": outcome, "after_s": round(time.time() - card["since"], 1), "text": _clip(text, 160)})
         return phase
 
-    async def wait_for_task(self, task_id: str, timeout_s: Any = None) -> str:
-        if not task_id:
-            return json.dumps({"error": "wait_for_task needs a task_id"})
+    async def wait_for_task(self, task_ids: list[str], timeout_s: Any = None) -> str:
+        """Poll get_task for one task or several (three cross-posts at once) until one of them finishes or starts waiting
+        for the user, or the timeout. A task the user answered that carries on is waited past."""
+        ids = list(dict.fromkeys(str(t) for t in task_ids if t))
+        if not ids:
+            return json.dumps({"error": "wait_for_task needs a task_id (or task_ids)"})
         try:
             timeout = max(5.0, min(600.0, float(timeout_s if timeout_s is not None else 120)))
         except (TypeError, ValueError):
             timeout = 120.0
         cid = self._next_id()
-        self.emit("call_start", {"id": cid, "tool": "get_task", "args": {"task_id": task_id}, "via": WAIT_TOOL})
-        last_seen = self.seen_phase.get(task_id, "working")
-        start, polls, total_ms, view = time.perf_counter(), 0, 0, None
+        self.emit("call_start", {"id": cid, "tool": "get_task", "args": {"task_id": ids[0]} if len(ids) == 1 else {"task_ids": ids}, "via": WAIT_TOOL})
+        last_seen = {t: self.seen_phase.get(t, "working") for t in ids}
+        views: dict[str, dict[str, Any]] = {}
+        start, polls, total_ms, changed = time.perf_counter(), 0, 0, False
         try:
             while True:
-                res, ms, _ = await self._call("get_task", {"task_id": task_id}, cid=cid, quiet=True)
-                polls, total_ms = polls + 1, total_ms + ms
-                if res is None or not isinstance(res.data, dict) or res.data.get("error"):
-                    why = "Envoy couldn't be reached" if res is None else summarize("get_task", res.data, res.is_error)
-                    self.emit("call_end", {"id": cid, "ok": False, "summary": why, "ms": round((time.perf_counter() - start) * 1000), "polls": polls})
-                    return json.dumps({"error": why})
-                view = res.data
-                phase = self._task_seen(view)
+                for tid in ids:
+                    if tid in views and task_phase(views[tid]).startswith("final:"):
+                        continue
+                    res, ms, _ = await self._call("get_task", {"task_id": tid}, cid=cid, quiet=True)
+                    polls, total_ms = polls + 1, total_ms + ms
+                    if res is None or not isinstance(res.data, dict) or res.data.get("error"):
+                        why = "Envoy couldn't be reached" if res is None else summarize("get_task", res.data, res.is_error)
+                        self.emit("call_end", {"id": cid, "ok": False, "summary": why, "ms": round((time.perf_counter() - start) * 1000), "polls": polls})
+                        return json.dumps({"error": why, "task_id": tid})
+                    views[tid] = res.data
+                    phase = self._task_seen(res.data)
+                    if phase != last_seen[tid]:
+                        if phase == "working":
+                            last_seen[tid] = phase  # the user answered and the task carries on: wait for what comes next
+                        else:
+                            changed = True
                 waited = time.perf_counter() - start
-                self.emit("call_update", {"id": cid, "polls": polls, "summary": summarize("get_task", view, False), "elapsed_ms": round(waited * 1000)})
-                if phase.startswith("final:") or waited >= timeout:
+                self.emit("call_update", {"id": cid, "polls": polls, "summary": _many(views, ids), "elapsed_ms": round(waited * 1000)})
+                if changed or waited >= timeout or all(task_phase(views[t]).startswith("final:") for t in ids):
                     break
-                if phase != last_seen:
-                    if phase != "working":
-                        break
-                    last_seen = phase  # the user answered and the task carries on: wait for what comes next
                 await asyncio.sleep(self.poll_s)
         except asyncio.CancelledError:
             self.emit("call_end", {"id": cid, "ok": False, "summary": "stopped", "ms": round((time.perf_counter() - start) * 1000), "polls": polls})
             raise
         waited = round(time.perf_counter() - start, 1)
-        self.emit("call_end", {"id": cid, "ok": True, "summary": summarize("get_task", view, False), "ms": round(waited * 1000), "polls": polls,
-                               "mcp_ms": total_ms})
-        note = {"waited_s": waited, "polls": polls}
-        if phase.startswith("approval:"):
-            note["next"] = ("The task is waiting for the user's approval on their phone. Tell the user, then call wait_for_task "
+        self.emit("call_end", {"id": cid, "ok": True, "summary": _many(views, ids), "ms": round(waited * 1000), "polls": polls, "mcp_ms": total_ms})
+        note: dict[str, Any] = {"waited_s": waited, "polls": polls}
+        phases = [task_phase(views[t]) for t in ids]
+        if any(p.startswith("approval:") for p in phases):
+            note["next"] = ("A task is waiting for the user's approval on their phone. Tell the user, then call wait_for_task "
                             "again to wait for their answer.")
-        elif not phase.startswith("final:") and phase == last_seen:
-            note["next"] = f"Still {view.get('status')} after {waited} s."
-        return json.dumps({**view, "_wait": note})[:12000]
+        elif not changed and not all(p.startswith("final:") for p in phases):
+            note["next"] = f"No change after {waited} s: " + ", ".join(str(views[t].get("status")) for t in ids) + "."
+        out = {**views[ids[0]], "_wait": note} if len(ids) == 1 else {"tasks": [views[t] for t in ids], "_wait": note}
+        return json.dumps(out)[:16000]
 
     async def watch_open(self, on_change: Callable[[str, dict[str, Any]], Awaitable[None]], *, every_s: float = 2.0, limit_s: float = 900) -> None:
         """Between turns: keep following tasks that wait on the user, so the page shows the answer when it comes, and

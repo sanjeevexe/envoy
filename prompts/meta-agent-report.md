@@ -16,7 +16,9 @@ no other file.
   - every MCP call on the right (tool, arguments, one-line result, time), with each Spark model call between them
     (time, tokens, cost);
   - a waiting card while Envoy waits for the user's OK on their phone, with a live timer, which turns into "Approved
-    on your phone" or "You said no on your phone";
+    on your phone" or "You said no on your phone". It sits in a dock above the feed, so it stays in view, and stacks
+    when several tasks wait (the cross-post: three routine tools, then one `wait_for_task` on all three);
+  - learned routines first in the tool strip, with Envoy's built-in tools folded into one chip;
   - an "Envoy refused" card with Envoy's own answer when the model calls a tool it wasn't given.
 - **Recorded on a real device** (envoy-test, a :8765 copy of main `17af085`, its own agent key "Spark agent"):
   - **Flight status:** SL 1190 through `run_routine skylark_check_flight_status`, done ("Delayed 25 min… gate A7").
@@ -27,7 +29,7 @@ no other file.
 - **With a read-only key** (agent keys), the agent saw 6 tools.
   - Spark once called a tool it wasn't given. Envoy's "Unknown tool" answer shows in the refusal card.
   - Asked to approve, Spark said only the user can, in Envoy.
-- **Tests:** `uv run --project backend pytest -q agents/meta-agent/tests` gives 23 passed. They cover:
+- **Tests:** `uv run --project backend pytest -q agents/meta-agent/tests` gives 24 passed. They cover:
   - the loop and the wait helper;
   - waiting cards and refusals;
   - stopping mid-wait;

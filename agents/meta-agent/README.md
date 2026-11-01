@@ -16,10 +16,11 @@ for a 1080p screen recording.
    conversation goes up each time, with the model's encrypted reasoning, its tool calls and their outputs replayed, as
    Meta's docs describe for stateless multi-turn tool use. It stops when the model answers without a tool call (at
    most 16 model calls per message).
-4. **Waiting.** One local helper, `wait_for_task`, calls Envoy's `get_task` every 1.5 s. It returns as soon as the task
-   finishes or waits for the user, so the model doesn't spend a call per poll. The page shows the polls as one row.
-5. **Approvals.** When Envoy waits for the user's OK, the page shows a waiting card until the user answers on their
-   phone. The agent has no way to approve: Envoy has no approve tool. If the model calls one anyway, the call still goes
+4. **Waiting.** One local helper, `wait_for_task`, calls Envoy's `get_task` every 1.5 s, for one task or several (three
+   cross-posts at once). It returns as soon as a task finishes or waits for the user, so the model doesn't spend a call
+   per poll. A task the user approved that carries on is waited past. The page shows the polls as one row.
+5. **Approvals.** When Envoy waits for the user's OK, a card comes up in a dock above the feed. It stays in view, has a
+   timer, and stacks with the others when several tasks wait. It stays until the user answers on their phone. The agent has no way to approve: Envoy has no approve tool. If the model calls one anyway, the call still goes
    to Envoy, and the page shows Envoy's answer together with the rule from Envoy's own instructions ("You cannot approve
    anything… only the user can, in Envoy."). Between messages, a card that is still open keeps being followed. When the
    user answers, the agent gets one short turn to say what happened.

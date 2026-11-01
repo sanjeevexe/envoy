@@ -37,6 +37,7 @@ class FakeEnvoy:
         self.instructions = INSTRUCTIONS
         self.tools = list(tools or TOOLS)
         self.views = list(task_views or [])
+        self.by_task: dict[str, list[dict[str, Any]]] = {}  # task id -> its own views, when several tasks run
         self.calls: list[tuple[str, dict[str, Any]]] = []
         self.answers: dict[str, Callable[[dict[str, Any]], Any]] = {
             "run_routine": lambda a: {"task_id": "t1", "status": "queued", "task_url": "http://127.0.0.1:8765/?task=t1"},
@@ -54,6 +55,10 @@ class FakeEnvoy:
 
     async def call_tool(self, name: str, arguments: dict[str, Any]) -> CallResult:
         self.calls.append((name, arguments))
+        if name == "get_task" and arguments.get("task_id") in self.by_task:
+            views = self.by_task[arguments["task_id"]]
+            view = dict(views.pop(0) if len(views) > 1 else views[0], task_id=arguments["task_id"])
+            return CallResult(view, json.dumps(view), False)
         if name == "get_task":
             view = self.views.pop(0) if len(self.views) > 1 else self.views[0]
             return CallResult(view, json.dumps(view), False)

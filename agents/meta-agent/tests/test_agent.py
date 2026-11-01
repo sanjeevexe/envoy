@@ -38,7 +38,7 @@ def test_envoys_tools_become_meta_function_tools_plus_the_wait_helper():
     assert inputs == {"type": "object", "additionalProperties": {"type": "string"}}  # `dict | None` as a plain object
     assert "title" not in json.dumps(by["run_routine"]["parameters"])
     assert by["run_routine"]["parameters"]["required"] == ["name"]
-    assert by["wait_for_task"]["parameters"]["required"] == ["task_id"]
+    assert set(by["wait_for_task"]["parameters"]["properties"]) == {"task_id", "task_ids", "timeout_s"}
 
 
 def test_names_meta_wont_take_are_mapped_and_still_reach_envoy_by_their_own_name():
@@ -263,3 +263,26 @@ def test_a_namespace_in_front_of_a_name_is_dropped(tmp_path):
     assert envoy.calls == [("list_routines", {}), ("skylark_check_in_flight", {"trip_city": "Chicago"})]  # a routine tool Envoy may have
     assert [r["tool"] for r in kinds(events, "refusal")] == ["skylark_check_in_flight"]
     assert kinds(events, "hello")[0]["server"] == {"name": "envoy", "title": "Envoy", "version": "0.7.0"}
+
+
+def test_one_wait_follows_three_cross_posts_and_returns_when_one_needs_the_user(tmp_path):
+    """Three routine tools called in one model turn (Instagram, TikTok, YouTube), then one wait on all three."""
+    posts = [Tool(n, f"{n}: learned by Envoy", {"type": "object", "properties": {"caption": {"type": "string"}}, "required": ["caption"]})
+             for n in ("instagram_reel_song", "tiktok_post_sound", "youtube_short_sound")]
+    script = [[call(t.name, {"caption": "Golden hour"}, i) for i, t in enumerate(posts, 1)],
+              [call("wait_for_task", {"task_ids": ["t1", "t2", "t3"]}, 4)], [say("Approve the Instagram post on your phone.")]]
+    agent, envoy, model, events = make(tmp_path, script, tools=[*TOOLS, *posts])
+    for i, t in enumerate(posts, 1):
+        envoy.answers[t.name] = lambda a, i=i: {"task_id": f"t{i}", "status": "queued"}
+    envoy.by_task = {"t1": [view("running"), view("waiting_approval", approvals=["a1"])], "t2": [view("queued")], "t3": [view("queued")]}
+    asyncio.run(agent.start())
+    asyncio.run(agent.ask("Post this clip everywhere with a trending sound"))
+    assert [n for n, _ in envoy.calls][:3] == ["instagram_reel_song", "tiktok_post_sound", "youtube_short_sound"]
+    assert [r["routine"] for r in kinds(events, "tools")[-1]["tools"] if r["name"].endswith(("_song", "_sound"))] == [True, True, True]
+    start = [d for d in kinds(events, "call_start") if d.get("via") == "wait_for_task"][0]
+    assert start["args"] == {"task_ids": ["t1", "t2", "t3"]}
+    end = [d for d in kinds(events, "call_end") if d.get("polls")][0]
+    assert end["polls"] == 6 and end["summary"] == "3 tasks: waiting for the user's OK, queued, queued"
+    out = json.loads(model.requests[2]["input"][-1]["output"])
+    assert [t["task_id"] for t in out["tasks"]] == ["t1", "t2", "t3"] and "approval" in out["_wait"]["next"]
+    assert [w["key"] for w in kinds(events, "waiting")] == ["t1"]
