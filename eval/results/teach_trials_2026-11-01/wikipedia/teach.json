@@ -1,0 +1,32 @@
+{
+ "teach": {
+  "id": "teach-1031-215540-5f6b",
+  "status": "failed",
+  "detail": "the replay stopped at tap_search_tab: step tap_search_tab: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00); no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+  "routine": "wikipedia_lookup_opening_year",
+  "version": null,
+  "steps": 11,
+  "shown_s": 32.1,
+  "cost_usd": 0.0512,
+  "notes": [],
+  "warnings": [
+   "step 4: the first result for {{article_title}}: chosen by its place in the list"
+  ],
+  "dropped": [],
+  "replay_task": "task-1031-215627-fd77"
+ },
+ "verification_replay": {
+  "status": "failed",
+  "detail": "step tap_search_tab: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00); no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+  "duration_s": 2.37,
+  "model_calls": 0,
+  "outputs": {},
+  "steps": [
+   {
+    "id": "tap_search_tab",
+    "status": "failed",
+    "detail": "step tap_search_tab: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00); no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)"
+   }
+  ]
+ }
+}

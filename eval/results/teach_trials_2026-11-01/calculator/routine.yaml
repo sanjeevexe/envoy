@@ -1,0 +1,197 @@
+routine: calculator_multiply_numbers
+app: com.google.android.calculator
+version: 1
+status: active
+intent: Multiply two four-digit numbers in the Calculator app
+description: Enters a four-digit number in the Calculator app, taps multiply, enters a second four-digit number, taps equals, and returns the
+  product shown as the final result.
+patterns: [what is a number times a number, multiply two numbers, calculate a product in Calculator]
+outputs: [product]
+start: fresh_launch
+inputs:
+  first_operand_digit_1: {type: text, description: '', example: '1'}
+  first_operand_digit_2: {type: text, description: '', example: '2'}
+  first_operand_digit_3: {type: text, description: '', example: '3'}
+  first_operand_digit_4: {type: text, description: '', example: '4'}
+  second_operand_digit_1: {type: text, description: '', example: '5'}
+  second_operand_digit_2: {type: text, description: '', example: '6'}
+  second_operand_digit_3: {type: text, description: '', example: '7'}
+  second_operand_digit_4: {type: text, description: '', example: '8'}
+steps:
+- id: tap_first_operand_digit_1
+  intent: "Tap the digit button {{first_operand_digit_1}}"
+  pre:
+  - {app_foreground: com.google.android.calculator}
+  - element_present:
+      resource_id: "digit_{{second_operand_digit_3}}"
+      text: "{{second_operand_digit_3}}"
+      kind: Button
+  action:
+    tap:
+      resource_id: "digit_{{first_operand_digit_1}}"
+      text_has: "{{first_operand_digit_1}}"
+      kind: Button
+      cls: ImageButton
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: formula
+      text: "{{first_operand_digit_1}}"
+      kind: EditText
+  risk: reversible
+  note: trace step 1
+- id: tap_first_operand_digit_2
+  intent: "Tap the digit button {{first_operand_digit_2}}"
+  pre:
+  - {app_foreground: com.google.android.calculator}
+  action:
+    tap:
+      resource_id: "digit_{{first_operand_digit_2}}"
+      text_has: "{{first_operand_digit_2}}"
+      kind: Button
+      cls: ImageButton
+      in_list: false
+  post:
+  - element_absent:
+      resource_id: formula
+      text: "{{first_operand_digit_1}}"
+      kind: EditText
+  risk: reversible
+  note: trace step 2
+- id: tap_first_operand_digit_3
+  intent: "Tap the digit button {{first_operand_digit_3}}"
+  pre:
+  - {app_foreground: com.google.android.calculator}
+  action:
+    tap:
+      resource_id: "digit_{{first_operand_digit_3}}"
+      text_has: "{{first_operand_digit_3}}"
+      kind: Button
+      cls: ImageButton
+      in_list: false
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 3
+- id: tap_first_operand_digit_4
+  intent: "Tap the digit button {{first_operand_digit_4}}"
+  pre:
+  - {app_foreground: com.google.android.calculator}
+  action:
+    tap:
+      resource_id: "digit_{{first_operand_digit_4}}"
+      text_has: "{{first_operand_digit_4}}"
+      kind: Button
+      cls: ImageButton
+      in_list: false
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 4
+- id: tap_multiply
+  intent: Tap the multiply button
+  pre:
+  - {app_foreground: com.google.android.calculator}
+  action:
+    tap:
+      resource_id: op_mul
+      text: multiply
+      kind: Button
+      cls: ImageButton
+      in_list: false
+      position: [0.871, 0.595]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 5
+- id: tap_second_operand_digit_1
+  intent: "Tap the digit button {{second_operand_digit_1}}"
+  pre:
+  - {app_foreground: com.google.android.calculator}
+  action:
+    tap:
+      resource_id: "digit_{{second_operand_digit_1}}"
+      text_has: "{{second_operand_digit_1}}"
+      kind: Button
+      cls: ImageButton
+      in_list: false
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 6
+- id: tap_second_operand_digit_2
+  intent: "Tap the digit button {{second_operand_digit_2}}"
+  pre:
+  - {app_foreground: com.google.android.calculator}
+  action:
+    tap:
+      resource_id: "digit_{{second_operand_digit_2}}"
+      text_has: "{{second_operand_digit_2}}"
+      kind: Button
+      cls: ImageButton
+      in_list: false
+  post:
+  - element_absent: {resource_id: formula, kind: EditText}
+  risk: reversible
+  note: trace step 7
+- id: tap_second_operand_digit_3
+  intent: "Tap the digit button {{second_operand_digit_3}}"
+  pre:
+  - {app_foreground: com.google.android.calculator}
+  action:
+    tap:
+      resource_id: "digit_{{second_operand_digit_3}}"
+      text_has: "{{second_operand_digit_3}}"
+      kind: Button
+      cls: ImageButton
+      in_list: false
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 8
+- id: tap_second_operand_digit_4
+  intent: "Tap the digit button {{second_operand_digit_4}}"
+  pre:
+  - {app_foreground: com.google.android.calculator}
+  action:
+    tap:
+      resource_id: "digit_{{second_operand_digit_4}}"
+      text_has: "{{second_operand_digit_4}}"
+      kind: Button
+      cls: ImageButton
+      in_list: false
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 9
+- id: tap_equals
+  intent: Tap the equals button
+  pre:
+  - {app_foreground: com.google.android.calculator}
+  action:
+    tap:
+      resource_id: eq
+      text: equals
+      kind: Button
+      cls: ImageButton
+      siblings: [point, delete]
+      in_list: false
+      position: [0.871, 0.92]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  extract:
+    product:
+      locator: {resource_id: result_final, kind: Button}
+      expect_digits: true
+  note: trace step 10
+compiled_from:
+  task_id: teach-1031-214501-82bd
+  goal: In the Calculator app, what is 1234 times 5678?
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-31 21:45:26"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  trace_steps_dropped: 0
+  cost_usd: 0.0669
+  source: taught

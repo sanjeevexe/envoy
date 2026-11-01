@@ -1,0 +1,152 @@
+routine: wikipedia_lookup_opening_year
+app: org.wikipedia
+version: 1
+status: draft
+intent: Find what year a landmark opened on Wikipedia
+description: Searches Wikipedia for a named landmark or structure, opens its article, scrolls through the article to find when it opened to the
+  public, and returns that opening date/year.
+patterns: [what year did it open, when did it open on Wikipedia, look up its opening year in Wikipedia, find when it opened to the public]
+outputs: [opening_date]
+start: fresh_launch
+inputs:
+  article_title: {type: text, description: The landmark or structure to look up on Wikipedia., example: Golden Gate Bridge}
+steps:
+- id: tap_search_tab
+  intent: Tap the Search tab
+  pre:
+  - {app_foreground: org.wikipedia}
+  - element_present: {resource_id: nav_tab_home, text: Home, kind: Text}
+  action:
+    tap:
+      resource_id: nav_tab_search
+      text: Search
+      kind: Button
+      cls: FrameLayout
+      siblings: [Home, Saved, Activity]
+      in_list: false
+      position: [0.5, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: nav_tab_search, text: Search, kind: Text}
+  - element_present: {resource_id: menu_tabs, text: Show tabs, kind: Button}
+  risk: reversible
+  note: trace step 1
+- id: tap_search_wikipedia
+  intent: Tap the Search Wikipedia field to start a search
+  pre:
+  - {app_foreground: org.wikipedia}
+  action:
+    tap:
+      resource_id: search_card
+      text: Search Wikipedia
+      kind: Button
+      cls: CardView
+      in_list: true
+      position: [0.5, 0.153]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: langCodeText, text: EN, kind: Text}
+  - element_present:
+      resource_id: search_container
+      text: "Recent searches:"
+      kind: Button
+  risk: reversible
+  note: trace step 2
+- id: type_article_title
+  intent: "Type {{article_title}} in the Search Wikipedia field"
+  pre:
+  - {app_foreground: org.wikipedia}
+  action:
+    type:
+      field:
+        resource_id: search_src_text
+        text: Search Wikipedia
+        hint: Search Wikipedia
+        kind: EditText
+        cls: AutoCompleteTextView
+        parent: search_plate
+        in_list: false
+        position: [0.502, 0.088]
+      value: "{{article_title}}"
+  post:
+  - field_equals:
+      field: {resource_id: search_src_text, text: Search Wikipedia, kind: EditText}
+      value: "{{article_title}}"
+  risk: reversible
+  note: trace step 3
+- id: tap_search_result
+  intent: "Tap the {{article_title}} search result"
+  pre:
+  - {app_foreground: org.wikipedia}
+  action:
+    tap:
+      kind: Button
+      cls: View
+      in_list: true
+      position: [0.5, 0.171]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: page_save, text: Save, kind: Button}
+  - element_present: {resource_id: page_language, text: Language, kind: Button}
+  risk: reversible
+  note: trace step 4
+- id: scroll_up_in_article
+  intent: Scroll up in the article to find information about when it opened
+  pre:
+  - {app_foreground: org.wikipedia}
+  action:
+    scroll_until:
+      target: {text: making significant contributions to its design. The bridge opened to the public on}
+      direction: up
+      max_scrolls: 8
+      container: {kind: List}
+  post:
+  - element_present: {text: making significant contributions to its design. The bridge opened to the public on}
+  risk: read
+  note: trace step 5 (+3 scrolls)
+- id: swipe_in_article
+  intent: Swipe in the article to continue looking for when it opened
+  pre:
+  - {app_foreground: org.wikipedia}
+  action:
+    swipe:
+      from:
+        resource_id: view_page_header_image
+        text: ''
+        kind: Button
+        cls: ImageView
+        parent: headerImageContainer
+        in_list: false
+        position: [0.5, 0.288]
+      vector: [0.0, 0.6]
+      start: [0.5, 0.3]
+      grip: [0.5, 0.535]
+  post:
+  - {screen_changed: true}
+  risk: read
+  note: trace step 8
+- id: scroll_down_in_article
+  intent: Scroll down in the article to find when it opened to the public
+  pre:
+  - {app_foreground: org.wikipedia}
+  action:
+    scroll_until:
+      target: {text: making significant contributions to its design. The bridge opened to the public on}
+      direction: down
+      max_scrolls: 8
+      container: {kind: List}
+  post:
+  - element_present: {text: making significant contributions to its design. The bridge opened to the public on}
+  risk: read
+  extract:
+    opening_date: {near: making significant contributions to its design. The bridge opened to the public on}
+  note: trace step 9 (+3 scrolls)
+compiled_from:
+  task_id: teach-1031-215540-5f6b
+  goal: In the Wikipedia app, what year did the Golden Gate Bridge open?
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-10-31 21:56:27"
+  trace_steps_kept: [1, 2, 3, 4, 5, 8, 9]
+  trace_steps_dropped: 0
+  cost_usd: 0.0512
+  source: taught

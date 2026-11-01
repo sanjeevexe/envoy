@@ -1,0 +1,71 @@
+[
+ {
+  "run": 1,
+  "routine": "wikipedia_lookup_opening_year",
+  "version": 1,
+  "inputs": {
+   "article_title": "Golden Gate Bridge"
+  },
+  "status": "done",
+  "passed": true,
+  "expected": "1937",
+  "outputs": {
+   "opening_date": "May 27, 1937"
+  },
+  "detail": "all steps and checks passed",
+  "model_calls": 0,
+  "cost_usd": 0.0,
+  "seconds": 11.8,
+  "wall_s": 11.8,
+  "steps": 7,
+  "rung": 1,
+  "declined_approvals": 0,
+  "trace": "teachtrial-wikipedia_lookup_opening_year-1031-215700-1"
+ },
+ {
+  "run": 2,
+  "routine": "wikipedia_lookup_opening_year",
+  "version": 1,
+  "inputs": {
+   "article_title": "Golden Gate Bridge"
+  },
+  "status": "done",
+  "passed": true,
+  "expected": "1937",
+  "outputs": {
+   "opening_date": "May 27, 1937"
+  },
+  "detail": "all steps and checks passed",
+  "model_calls": 0,
+  "cost_usd": 0.0,
+  "seconds": 11.8,
+  "wall_s": 11.8,
+  "steps": 7,
+  "rung": 1,
+  "declined_approvals": 0,
+  "trace": "teachtrial-wikipedia_lookup_opening_year-1031-215712-2"
+ },
+ {
+  "run": 3,
+  "routine": "wikipedia_lookup_opening_year",
+  "version": 1,
+  "inputs": {
+   "article_title": "Golden Gate Bridge"
+  },
+  "status": "done",
+  "passed": true,
+  "expected": "1937",
+  "outputs": {
+   "opening_date": "May 27, 1937"
+  },
+  "detail": "all steps and checks passed",
+  "model_calls": 0,
+  "cost_usd": 0.0,
+  "seconds": 12.6,
+  "wall_s": 12.6,
+  "steps": 7,
+  "rung": 1,
+  "declined_approvals": 0,
+  "trace": "teachtrial-wikipedia_lookup_opening_year-1031-215724-3"
+ }
+]

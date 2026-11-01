@@ -1,0 +1,23 @@
+[
+ {
+  "run": 1,
+  "routine": "wikipedia_lookup_opening_year",
+  "version": 1,
+  "inputs": {
+   "article_title": "Brooklyn Bridge"
+  },
+  "status": "failed",
+  "passed": false,
+  "expected": "1883",
+  "outputs": {},
+  "detail": "step tap_search_tab: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00); no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+  "model_calls": 0,
+  "cost_usd": 0.0,
+  "seconds": 2.2,
+  "wall_s": 2.2,
+  "steps": 1,
+  "rung": 1,
+  "declined_approvals": 0,
+  "trace": "teachtrial-wikipedia_lookup_opening_year-1031-215840-1"
+ }
+]
