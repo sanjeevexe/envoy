@@ -12,7 +12,9 @@ tap on "Turn on notifications"; each device's subscription is stored here. Envoy
 - Envoy **offers** to do something ("Should I check you in for SL 482?", api/offers.py), when the proactivity setting
   says so: `off` never, `important` (the default) for triggers, files from the Mac and trigger requests, `all` always.
   Approvals and takeovers aren't proactivity: they push whatever the setting. The push opens the offer; only a tap on
-  its Yes in the app (your session, a POST) says yes.
+  its Yes in the app (your session, a POST) says yes;
+- a **notification** trigger caught one on Envoy's phone ("Instagram: <title>", the redacted text; api/notifications.py),
+  unless the trigger is set not to push, or its ask mode raised an offer that pushes. Tapping it opens the trigger.
 
 A push carries a title, a line of text and the page to open; tapping it opens that page. It never carries an approval's
 nonce, so it can't decide anything: the approval page still needs your session and a POST.
@@ -223,6 +225,11 @@ class Pusher:
             ttl = int(max(60, min(86400, offer["expires_at"] - time.time()))) if offer.get("expires_at") else 6 * 3600
             self.notify("offer", offer.get("title") or "Envoy has a question", (offer.get("body") or goal or "Open Envoy to answer")[:180],
                         f"/?offer={offer.get('id')}", tag=f"offer-{offer.get('id')}", urgency="normal", ttl=ttl)
+        elif kind == "notification_matched" and ev.get("push"):
+            n = ev.get("event") or {}
+            app, title = n.get("app") or "Envoy", n.get("title") or ""
+            self.notify("notification", f"{app}: {title}" if title and title.casefold() != app.casefold() else app, n.get("text") or f"On {ev.get('phone_name') or 'Envoy’s phone'}",
+                        f"/?trigger={n.get('trigger_id')}", tag=f"notif-{n.get('id')}", urgency="high", ttl=3600, push_id=f"push-{n.get('id')}")
         elif kind == "task_finished":
             task = self.store.get(ev.get("task_id") or "") or {}
             if task.get("parent"):

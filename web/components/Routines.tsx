@@ -16,16 +16,18 @@ type R = { name: string; app: string; intent: string; active: number | null; ver
 
 const VIEWS = ["Routines", "Triggers"] as const;
 
-// `teach`: open the phone with an empty "Show Envoy once" form (page.tsx picks a phone that's free).
-export default function RoutinesTab({ openTask, teach }: { openTask: (id: string) => void; teach: () => void }) {
+// `teach`: open the phone with an empty "Show Envoy once" form (page.tsx picks a phone that's free). `trigger`: a trigger a
+// push opened (?trigger=…), shown in Triggers; `caught` changes when a notification trigger caught one.
+export default function RoutinesTab({ openTask, teach, trigger, caught }: { openTask: (id: string) => void; teach: () => void; trigger?: string | null; caught?: number }) {
   const [view, setView] = useState<(typeof VIEWS)[number]>("Routines");
+  useEffect(() => { if (trigger) setView("Triggers"); }, [trigger]);
   const [open, setOpen] = useState<string | null>(null);
   return (
     <>
       {open && <RoutineDetail name={open} back={() => setOpen(null)} openTask={openTask} />}
       <div hidden={!!open} className="mx-auto w-full max-w-[760px] pb-8 md:pt-6">
         <div className="px-4 pb-1 pt-3"><Segmented options={VIEWS} value={view} onChange={setView} label="Routines or triggers" /></div>
-        {view === "Routines" ? <Routines openTask={openTask} open={open} setOpen={setOpen} teach={teach} /> : <Triggers />}
+        {view === "Routines" ? <Routines openTask={openTask} open={open} setOpen={setOpen} teach={teach} /> : <Triggers focus={trigger} version={caught} />}
       </div>
     </>
   );

@@ -14,7 +14,7 @@
 // - `pair`: a device that isn't paired yet (the pairing screen)
 // The memory graph: `&graph=demo` (the demo profile's 17 things) or `&graph=large` (about 150).
 // `?mock=0` turns it off again (it's kept for the tab's session, so /approve links stay in mock mode).
-import type { Approval, EnvoyEvent, HandoffItem, Lease, Step, Task } from "@/lib/api";
+import type { Approval, EnvoyEvent, HandoffItem, Lease, NotificationEvent, Step, Task } from "@/lib/api";
 import type { AgentKey } from "@/components/Agents";
 
 export type Scenario = "full" | "quiet" | "idle" | "offline" | "pair";
@@ -104,7 +104,7 @@ type DB = {
   tasks: Record<string, Task>; steps: Record<string, Step[]>; approvals: Record<string, Approval & { nonce: string }>;
   leases: Record<string, Lease>; triggers: any[]; changes: any[]; rules: { default: string; apps: Record<string, string>; routines: Record<string, string> };
   photos: { enabled: boolean; scope: string }; phoneApps: string[]; phoneName?: string; signin: { emulator: boolean; phone: boolean }; notes: any[]; offers: any[]; proactivity: string;
-  handoffs: HandoffItem[]; outbox: string; agents: AgentKey[];
+  handoffs: HandoffItem[]; outbox: string; watchApps: string[]; caught: NotificationEvent[]; agents: AgentKey[];
 };
 let db: DB;
 
@@ -222,6 +222,13 @@ function seed(): DB {
     { id: "trig-dep", kind: "fact_changed", name: "Departure changed: look up the gate", spec: { entity_type: "Flight", attributes: ["depart_time"] },
       action: { routine: "skylark_get_flight_gate", inputs_from: { trip_city: "trip.destination" } }, enabled: false, last_fired: null, next: [],
       alerts: { on: false, attributes: ["*"] } },
+    { id: "trig-comments", kind: "notification", name: "Comments on my posts", spec: { package: ["com.instagram.android", "com.zhiliaoapp.musically", "com.google.android.youtube"],
+      contains: "comment" }, action: {}, enabled: true, last_fired: ago(780), next: [], alerts: { on: false, attributes: ["*"] } },
+  ];
+  // What the notification trigger caught on Envoy's phone (api/notifications.py), codes hidden; made-up accounts only.
+  const caught: NotificationEvent[] = [
+    { id: "notif-2", time: ago(780), phone: "pixel-5", package: "com.zhiliaoapp.musically", app: "TikTok", title: "TikTok", text: "pier.walks commented: the light at the end 😍", trigger_id: "trig-comments" },
+    { id: "notif-1", time: ago(2100), phone: "pixel-5", package: "com.instagram.android", app: "Instagram", title: "maya.makes", text: "sunday_sam commented: where is this?", trigger_id: "trig-comments" },
   ];
   const changes = [
     { id: 41, time: todayAt(18, 12) > T ? ago(1800) : todayAt(18, 12), task_id: "task-gate-0", entity_label: "Flight SL 482", attribute: "gate", old: "B14", new: "B22",
@@ -300,6 +307,7 @@ function seed(): DB {
   ];
   return {
     tasks, steps, approvals, leases, triggers, changes, offers, proactivity: "important", handoffs, outbox: "/Users/maya/Envoy Outbox",
+    watchApps: ["com.instagram.android", "com.zhiliaoapp.musically", "com.google.android.youtube"], caught: scenario === "idle" ? [] : caught,
     rules: { default: "unless_requested", apps: { "com.dd.doordash": "always" }, routines: { starbucks_order_usual: "never" } },
     photos: { enabled: true, scope: "screenshots" }, phoneApps: ["com.target.ui"], signin: { emulator: false, phone: false },
     agents: [{ id: "agt-claude", name: "Claude", tools: ["read", "run"], created_at: ago(2 * 86400), last_seen: ago(40 * 60) },
@@ -810,6 +818,15 @@ export async function handle(path: string, init: RequestInit = {}): Promise<any>
     return t;
   }
   if (p === "/api/alerts") return db.changes;
+  if (p === "/api/settings/notifications") {  // which apps Envoy may watch on Envoy's phone
+    if (method === "POST") db.watchApps = (body.apps ?? []).filter((a: unknown) => typeof a === "string");
+    const names: Record<string, string> = { "com.instagram.android": "Instagram", "com.zhiliaoapp.musically": "TikTok", "com.google.android.youtube": "YouTube",
+      "com.dd.doordash": "DoorDash", "com.starbucks.mobilecard": "Starbucks", "com.instagram.barcelona": "Threads" };
+    const watching = db.watchApps.length ? [{ phone: "pixel-5", name: "Envoy’s phone", packages: db.watchApps, online: true, last_ok: now() - 2, error: null, poll_ms: 140 }] : [];
+    return method === "POST" ? { on: db.watchApps } : { on: db.watchApps, read_from_phone: true, watching,
+      apps: Object.entries(names).sort((a, b) => a[1].localeCompare(b[1])).map(([pkg, name]) => ({ package: pkg, name, on: db.watchApps.includes(pkg), installed: pkg !== "com.instagram.barcelona" })) };
+  }
+  if (p === "/api/notifications") return { events: db.caught, watching: [] };
   if (p === "/api/offers") {
     const st = u.searchParams.get("status") ?? "pending";
     return db.offers.filter((o) => st === "all" || o.status === st).sort((a, b) => b.created_at - a.created_at).slice(0, Number(u.searchParams.get("limit") ?? 50));

@@ -4,8 +4,8 @@
 // with Settings from the header; the live phone is its own tab (streamed only while it's open). On a wider screen: a
 // sidebar with the same places, the content at a readable width, and the live phone on the right (not beside the
 // Phone tab, nor the Memory graph, which fills the width).
-// Links (and notifications) open the right place: ?task=…, ?phone=<avd>, ?offer=<id> (the offer's card in a sheet);
-// /approve/?id=… is its own page.
+// Links (and notifications) open the right place: ?task=…, ?phone=<avd>, ?offer=<id> (the offer's card in a sheet),
+// ?trigger=<id> (a notification trigger's push); /approve/?id=… is its own page.
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   CaretLeftIcon, DeviceMobileIcon, GraphIcon, HouseIcon, PulseIcon, RepeatIcon, SlidersHorizontalIcon, type Icon,
@@ -20,6 +20,7 @@ import MemoryGraph from "@/components/MemoryGraph";
 import Pair from "@/components/Pair";
 import RoutinesTab from "@/components/Routines";
 import SettingsPage from "@/components/Settings";
+import { caughtTitle } from "@/components/Triggers";
 import { ACTIVE } from "@/components/Tasks";
 import { cx } from "@/components/ui";
 import { api, ApiError, Approval, EnvoyEvent, Lease, Offer, Step, Task, useEvents } from "@/lib/api";
@@ -54,6 +55,8 @@ export default function Page() {
   const [toast, setToast] = useState<{ text: string; key: number } | null>(null);
   const [listening, setListening] = useState(false);
   const [lastStepAt, setLastStepAt] = useState(0);
+  const [trigger, setTrigger] = useState<string | null>(null); // a trigger a push opened
+  const [caught, setCaught] = useState(0); // notifications caught on Envoy's phone (Triggers reloads its list)
 
   const say = useCallback((text: string) => {
     const key = Date.now();
@@ -85,6 +88,7 @@ export default function Page() {
     else if (phone) { setAvd(phone); setTab(window.matchMedia("(max-width: 767px)").matches ? "Phone" : "Home"); }
     else if (t) { setOpenTask(t); setTab("Activity"); }
     else if (u.searchParams.get("handoff")) setTab("Activity");
+    else if (u.searchParams.get("trigger")) { setTrigger(u.searchParams.get("trigger")); setTab("Routines"); }
   }, []);
 
   useEffect(() => {
@@ -135,6 +139,7 @@ export default function Page() {
       case "handoff": setBriefVersion((v) => v + 1); break;
       case "photo": say(e.summary); break;
       case "paired": say(`Paired: ${e.name}`); break;
+      case "notification_matched": setCaught((v) => v + 1); say(`${caughtTitle({ app: e.event?.app ?? "An app", title: e.event?.title })} · on ${e.phone_name ?? "Envoy’s phone"}`); break;
     }
   }, [say, loadOffers]));
   useEffect(() => { if (connected) loadOffers(); }, [connected, loadOffers]);  // what changed while the stream was down
@@ -193,7 +198,7 @@ export default function Page() {
                                        showMe={showMe} />}
       {tab === "Phone" && <div className="mx-auto w-full max-w-[520px] p-4 md:pt-8">{phoneView}</div>}
       {tab === "Memory" && <MemoryGraph version={memVersion} mobile={mobile} />}
-      {tab === "Routines" && <RoutinesTab openTask={openTaskTab} teach={teachNew} />}
+      {tab === "Routines" && <RoutinesTab openTask={openTaskTab} teach={teachNew} trigger={trigger} caught={caught} />}
       {tab === "Settings" && <SettingsPage publicUrl={publicUrl} profile={profile} />}
     </>
   );
