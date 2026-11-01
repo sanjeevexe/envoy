@@ -33,7 +33,7 @@ def make(tmp_path, monkeypatch, tasks: TaskStore | None = None):
     adapter = SimpleNamespace(api_key="meta-test-key", meter=CostMeter(tmp_path / "costs.jsonl", daily_cap_usd=5), calls=[])
     app, ctx = build("demo", memory=MemoryStore(":memory:"), tasks=tasks or TaskStore(":memory:"), routines=RoutineStore(tmp_path / "routines"),
                      adapter=adapter)
-    ctx.pool.phones = dict(PIXEL)
+    ctx.pool.phones = {pid: dict(p) for pid, p in PIXEL.items()}  # its own copy: PIXEL is shared with other test files
     ctx.pool.refresh_phones = lambda: list(ctx.pool.phones.values())  # no real adb in tests
     ctx.pool.leases.setdefault("phone-0A1B", ctx.pool.leases["envoy-test"].__class__("phone-0A1B"))
     ctx.handoff.adb = FakeAdb()
