@@ -1,6 +1,6 @@
 """Scheduled and event-triggered tasks (design doc, Scheduled and event-triggered tasks).
 
-Five kinds of trigger, checked every few seconds:
+Six kinds of trigger. The first five are checked every few seconds here:
 
 - **time**: every N minutes, daily at a time, weekly on some days at a time (`weekly_on: {"days": ["fri"], "at": "18:00"}`),
   or once at a moment.
@@ -13,6 +13,10 @@ Five kinds of trigger, checked every few seconds:
   fact between two checks fire once, from the first old value to the last new one (none if it went back). Changes made
   while the trigger is paused are skipped, not replayed. A change made by a task this same trigger started doesn't fire
   it again.
+
+The sixth, **notification**, is driven from outside: a notification on Envoy's phone from an app you let Envoy watch
+(`spec.package`, words it contains). api/notifications.py reads the phone and calls `fire()` once per notification; its
+action may be left out, and then it only tells you (a push) and the agents (phone_updates).
 
 Email and fact-changed triggers read memory from a cursor (an email's row, an event's seq) that counts rows in one memory
 database, while the triggers live with the tasks, which both profiles share. So each cursor names its database
@@ -54,7 +58,7 @@ from memory.types import NOT_ABOUT_YOU, TYPES, normalize_key_value, parse_date
 
 from api.store import TaskStore
 
-KINDS = ("time", "before_fact", "watch", "email", "fact_changed")
+KINDS = ("time", "before_fact", "watch", "email", "fact_changed", "notification")
 DAYS = ("mon", "tue", "wed", "thu", "fri", "sat", "sun")  # weekly_on's days, as datetime.weekday() counts them
 CURSORS = {"email": "after_rowid", "fact_changed": "after_seq"}  # kind → its cursor in the memory database
 
@@ -135,8 +139,11 @@ class Scheduler:
         """A new trigger. `enabled=False` creates it switched off: nothing fires until it's turned on."""
         if kind not in KINDS:
             raise ValueError(f"unknown trigger kind {kind!r}")
-        if not (action.get("goal") or action.get("routine")):
+        if not (action.get("goal") or action.get("routine")) and kind != "notification":  # a notification can just tell you
             raise ValueError("a trigger runs a goal you wrote or a routine")
+        if kind == "notification":
+            from api.notifications import check_spec
+            check_spec(spec)
         if kind == "watch":
             if not action.get("routine"):
                 raise ValueError("a watcher reruns a routine")
@@ -376,6 +383,17 @@ class Scheduler:
 
     # ---- firing --------------------------------------------------------------------------------
 
+    def fire(self, trig: dict[str, Any], key: str, values: dict[str, str]) -> dict[str, Any] | None:
+        """An occasion found outside the loop (a notification): run the trigger's action, once per key. Returns the task,
+        the offer (ask mode), or None (already fired, or a trigger that only tells you)."""
+        cur = self.store.trigger(trig["id"]) or trig
+        if key in cur["fired"]:
+            return None
+        act = cur["action"] or {}
+        out = self._fire(cur, values, key) if (act.get("goal") or act.get("routine")) else None
+        self.store.update_trigger(cur["id"], last_fired=self.clock(), fired=(cur["fired"] + [key])[-200:])
+        return out
+
     def _fire(self, trig: dict[str, Any], values: dict[str, str], key: str = "") -> dict[str, Any] | None:
         action = trig["action"]
         src = f"trigger:{trig['name']}"
@@ -423,6 +441,8 @@ class Scheduler:
             when = self.clock() + trig["spec"]["every_minutes"] * 60  # the next one replaces it
         elif trig["kind"] == "time" and (trig["spec"].get("daily_at") or trig["spec"].get("weekly_on")):
             when = self.clock() + 86400
+        elif trig["kind"] == "notification":
+            when = self.clock() + 6 * 3600  # "Should I…?" about a comment is stale by evening; each one has its own card
         offer = self.offers.make(
             kind="trigger", title=title, body=f"From your trigger “{trig['name']}”, which asks you first.",
             action={"type": "task", "goal": goal, "request": request, "routine": action.get("routine"),

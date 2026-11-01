@@ -149,6 +149,9 @@ def trigger_when(trig: dict[str, Any]) -> str:
     if kind == "fact_changed":
         attrs = " or ".join(_line(a, 30).replace("_", " ") for a in spec.get("attributes") or [])
         return f"when a {_line(spec.get('entity_type') or 'fact', 30).lower()}'s {attrs or 'details'} change"
+    if kind == "notification":
+        from api.notifications import describe
+        return _line(describe(spec), 160)
     if isinstance(spec.get("weekly_on"), dict):
         days = [DAY_NAMES.get(d, d) for d in spec["weekly_on"].get("days") or []]
         on = "day" if len(days) == 7 else " and ".join(", ".join(days[:-1]).split(", ") + days[-1:]) if len(days) > 1 else "".join(days)
@@ -164,6 +167,8 @@ def trigger_when(trig: dict[str, Any]) -> str:
 
 def trigger_what(ctx: Any, trig: dict[str, Any]) -> str:
     a = trig.get("action") or {}
+    if not (a.get("goal") or a.get("routine")) and trig.get("kind") == "notification":
+        return f"tell you and {CLIENT}"
     if a.get("goal"):
         return f'"{_line(a["goal"], 80)}"'
     try:
@@ -408,8 +413,11 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> MCPServer:
         "Turn it on?"; nothing runs until they say yes in Envoy, and even then each run asks them first.
         kind: "time" (spec {"daily_at": "08:00"}, {"weekly_on": {"days": ["fri"], "at": "18:00"}} or {"every_minutes": 60}), "before_fact" ({"entity_type": "Flight",
         "minutes_before": 1440}), "watch" ({"every_minutes": 15, "until": <unix time>}, a read-only routine),
-        "email" ({"sender_contains": "...", "subject_contains": "..."}), or "fact_changed" ({"entity_type": "Flight",
-        "attributes": ["gate"]}). action: {"goal": "..."} or {"routine": "<name>", "inputs": {...}}."""
+        "email" ({"sender_contains": "...", "subject_contains": "..."}), "fact_changed" ({"entity_type": "Flight",
+        "attributes": ["gate"]}), or "notification": a notification on Envoy's phone ({"package": "com.instagram.android" or a
+        list of up to 5, "contains"?: "comment", "title_contains"?, "text_contains"?, "phone"?: a list_phones id}); it fires
+        only for apps the user lets Envoy watch, and each one shows in phone_updates. action: {"goal": "..."} or
+        {"routine": "<name>", "inputs": {...}}; a notification trigger may leave action empty ({}) to just tell you and the user."""
         offers = getattr(ctx, "offers", None)
         if offers is None:
             return {"error": "Envoy can't ask the user about new triggers here"}

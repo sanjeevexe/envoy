@@ -1,12 +1,14 @@
 "use client";
 
 // Settings: how proactive Envoy is (which of its offers notify you), when Envoy asks before an irreversible step (for
-// everything, per app, or per routine: the most specific wins), which apps run on your own Android phone, this
-// device and the others paired with Envoy, and how Envoy looks on this device (light or dark).
+// everything, per app, or per routine: the most specific wins), which apps run on your own Android phone and which
+// apps' notifications Envoy may watch there, this device and the others paired with Envoy, and how Envoy looks on this
+// device (light or dark).
 import { useEffect, useState } from "react";
 import { CheckCircleIcon, DeviceMobileIcon } from "@phosphor-icons/react";
 import Companion from "@/components/Companion";
 import { Outbox } from "@/components/Handoff";
+import NotificationWatch from "@/components/NotificationWatch";
 import SavedLogins from "@/components/SavedLogins";
 import { appName } from "@/components/Tasks";
 import { Button, Card, cx, Section, Segmented } from "@/components/ui";
@@ -22,7 +24,7 @@ export default function SettingsPage({ publicUrl, profile }: { publicUrl?: strin
       {profile && <p className="px-6 pt-2 text-meta-2 text-muted">Using {profile === "demo" ? "the demo memory (SkyLark test data)" : "your memory"}</p>}
       <div className="ev-fade" key={section}>
         {section === "Approvals" && <><Proactivity /><Settings /></>}
-        {section === "Phones" && <><Phones /><SavedLogins /><Outbox /></>}
+        {section === "Phones" && <><Phones /><NotificationWatch /><SavedLogins /><Outbox /></>}
         {section === "Devices" && <Companion publicUrl={publicUrl} />}
         {section === "Appearance" && <Appearance />}
       </div>

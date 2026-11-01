@@ -54,6 +54,7 @@ from api.devices import DevicePool
 from api.events import EventBus
 from api.handoff import DOOR, Handoff, handoff_router
 from api.live import live_view
+from api.notifications import NotificationWatcher, notifications_router
 from api.offers import Offers, offers_router
 from api.recurring import Recurring
 from api.repeats import Repeats
@@ -138,6 +139,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     runner.recurring = Recurring(ctx.offers, scheduler, adapter)  # chat sets up recurring jobs, switched off (api/recurring.py)
     ctx.handoff = Handoff(tasks, pool, bus, offers=ctx.offers, runner=runner)  # type: ignore[attr-defined]  # files from the Mac to the phone (api/handoff.py)
     teacher = ctx.teacher = Teacher(pool, tasks, bus, routines, adapter, runner)  # type: ignore[attr-defined]  # you show a task once (api/teach.py)
+    ctx.notifications = NotificationWatcher(tasks, pool, scheduler, bus)  # type: ignore[attr-defined]  # notifications on Envoy's phone (api/notifications.py)
 
     from mcp_server.server import build_mcp, mcp_app
     from mcp_stub.common import bearer_token
@@ -151,6 +153,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
         runner.loop = asyncio.get_running_loop()
         scheduler.run_in_background()
         ctx.handoff.run_in_background()  # type: ignore[attr-defined]
+        ctx.notifications.run_in_background()  # type: ignore[attr-defined]
         async with mcp_inner.router.lifespan_context(mcp_inner):
             yield
 
@@ -828,6 +831,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     app.include_router(handoff_router(ctx, session, caller, door_key=bearer_token(), door_log=LOGS / "door.jsonl"))  # files from another Mac
     app.include_router(siri_router(ctx, session, caller, csrf))
     app.include_router(signin_router(tasks, session))  # saved logins, off by default (api/autofill.py)
+    app.include_router(notifications_router(ctx, session))  # which apps' notifications Envoy watches, off by default
 
     # ---- the web app ---------------------------------------------------------------------------
 

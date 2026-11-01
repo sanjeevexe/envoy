@@ -53,6 +53,12 @@ export type HandoffItem = {
   media_uri: string | null; offer_id: string | null; task_id: string | null; created_at: number; updated_at: number; error: string | null;
   note: string | null; origin: string;
 };
+// Notifications on Envoy's phone (backend/api/notifications.py): the apps Envoy may watch (all off until you turn one on),
+// what notification triggers caught (codes hidden), and which phones are being read now.
+export type WatchApp = { package: string; name: string; on: boolean; installed: boolean };
+export type Watching = { phone: string; name: string; packages: string[]; online: boolean; last_ok: number | null; error: string | null; poll_ms: number | null };
+export type WatchSettings = { apps: WatchApp[]; on: string[]; read_from_phone: boolean; watching: Watching[] };
+export type NotificationEvent = { id: string; time: number; phone: string; package: string; app: string; title: string; text: string; trigger_id: string };
 export type EnvoyEvent = { seq: number; time: number; type: string; [k: string]: any };
 
 export class ApiError extends Error {
