@@ -32,7 +32,7 @@ from pathlib import Path
 from typing import Any, Literal
 
 import anyio
-from mcp.server.mcpserver import MCPServer
+from mcp.server.mcpserver import Context, MCPServer
 from mcp.server.mcpserver.tools.base import Tool
 from mcp.server.mcpserver.utilities.func_metadata import ArgModelBase, FuncMetadata
 from mcp.server.transport_security import TransportSecuritySettings
@@ -48,6 +48,7 @@ from api.handoff import HandoffError, read_sidecar
 from api.notifications import redact, update_line
 from api.routing import EMULATOR_REFUSED, blocks_emulator, choose, known_apps
 from api.sharing import tool_names
+from api.task_files import calling_agent, link_base, request_headers
 from memory.retrieval import Retriever
 from memory.service import MemoryService
 from routines.model import Routine
@@ -725,6 +726,14 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> EnvoyMCP:
         return {"handoff_id": item["id"], "status": "sent", "device": did, "device_name": item["device_name"],
                 "remote_path": item["remote_path"], "media_uri": item["media_uri"],
                 "text": f"{item['name']} is in the gallery of {h.ref(did, 'the')} ({item['remote_path'].removeprefix('/sdcard/')})."}
+
+    @server.tool(annotations=ToolAnnotations(title="Get the files from a task", readOnlyHint=True, openWorldHint=False))
+    def get_file(task_id: str, which: str | None = None, call: Context | None = None) -> dict:
+        """Files Envoy kept from a task you started: the screen when it ended ("final"), the screen at each approval it
+        asked for ("approval"), and the links in its result ("link", such as a posted reel's). `which` picks one kind;
+        leave it out for all. Each file is a download link that works for 10 minutes. Nothing else on the phone or the
+        Mac can be fetched. Read only."""
+        return ctx.files.view(task_id, which, link_base(request_headers(call), base), calling_agent())
 
     @server.tool(annotations=ToolAnnotations(title="Ask the user to set up a recurring phone task", readOnlyHint=False, destructiveHint=False,
                                              openWorldHint=False))

@@ -28,6 +28,15 @@ from test_api import FakeDevice, approver_for, ask, pending
 from test_handoff import MP4
 
 
+def a_download(env) -> str:
+    """A task an agent started over MCP, with its final screen, and get_file's signed link to it (a path)."""
+    tid = env.ctx.tasks.create("post the clip", "mcp", status="done")["id"]
+    (env.tmp / "shots" / tid).mkdir(parents=True)
+    (env.tmp / "shots" / tid / "final.jpg").write_bytes(b"\xff\xd8final")
+    url = env.ctx.files.link("https://x", tid, "final")[0]
+    return url.removeprefix("https://x")
+
+
 def b64(raw: bytes) -> str:
     return base64.urlsafe_b64encode(raw).decode().rstrip("=")
 
@@ -459,14 +468,15 @@ def test_a_stalled_microphone_is_padded_with_silence_to_real_time(env, monkeypat
 
 def test_a_public_tunnel_reaches_mcp_only(env):
     """Muse needs a public address for Envoy's MCP server (route 2). The tunnel's host is accepted for /mcp alone, and
-    the outbox's door under it (/mcp/outbox, backlog #48) with the same key; the web app, the API and the approval pages
-    are never served there."""
+    the outbox's door under it (/mcp/outbox, backlog #48) with the same key, and get_file's downloads (/mcp/files/…, T2c)
+    by signed link; the web app, the API and the approval pages are never served there."""
     (env.tmp / "mcp_public_url").write_text("https://quiet-river-1234.trycloudflare.com")
     tunnel = {"Host": "quiet-river-1234.trycloudflare.com"}
     body = {"jsonrpc": "2.0", "id": 1, "method": "tools/list", "params": {}}
     hdr = {"Accept": "application/json, text/event-stream", "Content-Type": "application/json", "MCP-Protocol-Version": "2025-11-25"}
     key = {"Authorization": "Bearer mcp-test-token"}
     clip = {"file": ("clip.mp4", MP4, "video/mp4")}
+    link = a_download(env)
     with TestClient(env.ctx.asgi) as c:
         r = c.post("/mcp", json=body, headers={**hdr, **tunnel, **key})
         assert r.status_code == 200 and "run_task" in r.text
@@ -475,24 +485,30 @@ def test_a_public_tunnel_reaches_mcp_only(env):
         assert door.status_code == 200 and door.json()["name"] == "clip.mp4"
         assert c.post("/mcp/outbox", files=clip, headers=tunnel).status_code == 401  # the same key, and only it
         assert c.post("/mcp/outbox", files=clip, headers={**tunnel, **me(env.token)}).status_code == 401
-        for path in ("/", "/api/state", "/approve/", "/login?k=x", "/api/pair", "/api/handoff", "/outbox", "/api/handoff/x/send"):
+        down = c.get(link, headers=tunnel)  # get_file's download: the signed link alone, no key
+        assert down.status_code == 200 and down.content == b"\xff\xd8final"
+        assert c.get(link.split("?")[0], headers={**tunnel, **key}).status_code == 401  # the key is no link
+        for path in ("/", "/api/state", "/approve/", "/login?k=x", "/api/pair", "/api/handoff", "/outbox", "/api/handoff/x/send",
+                     link.replace("/mcp/files/", "/api/shots/")):
             assert c.get(path, headers={**tunnel, **me(env.token)}).status_code == 421
         (env.tmp / "mcp_public_url").unlink()  # the tunnel script stopped
         assert c.post("/mcp", json=body, headers={**hdr, **tunnel, **key}).status_code == 421
         assert c.post("/mcp/outbox", files=clip, headers={**tunnel, **key}).status_code == 421
+        assert c.get(link, headers=tunnel).status_code == 421
 
 
 def test_a_permanent_public_address_reaches_mcp_only(env, monkeypatch):
     """Muse's connector set up once (Nov 1): MCP_PERMANENT_URL, Tailscale Funnel on a port of its own, is accepted for /mcp
     alone, like a quick tunnel's but with no script running. Anything Tailscale marks as from the internet gets nothing
-    but /mcp on that address, even under the tailnet's own name; under /mcp that includes the outbox's door (backlog #48),
-    which Funnel's /mcp path already serves."""
+    but /mcp on that address, even under the tailnet's own name; under /mcp that includes the outbox's door (backlog #48)
+    and get_file's downloads (T2c), which Funnel's /mcp path already serves."""
     monkeypatch.setenv("MCP_PERMANENT_URL", "https://envoy-mac.example.ts.net:10000/mcp")
     funnel = {"Host": "envoy-mac.example.ts.net:10000", "Tailscale-Funnel-Request": "?1"}
     app_host = {"Host": "envoy-mac.example.ts.net:8443"}  # ENVOY_PUBLIC_URL: the tailnet-only address of the whole app
     body = {"jsonrpc": "2.0", "id": 1, "method": "tools/list", "params": {}}
     hdr = {"Accept": "application/json, text/event-stream", "Content-Type": "application/json", "MCP-Protocol-Version": "2025-11-25"}
     key = {"Authorization": "Bearer mcp-test-token"}
+    link = a_download(env)
     with TestClient(env.ctx.asgi) as c:
         clip = {"file": ("clip.mp4", MP4, "video/mp4")}
         r = c.post("/mcp", json=body, headers={**hdr, **funnel, **key})
@@ -512,9 +528,14 @@ def test_a_permanent_public_address_reaches_mcp_only(env, monkeypatch):
         assert c.post("/mcp", json=body, headers={**hdr, **from_internet, **key}).status_code == 421
         assert c.post("/mcp/outbox", files=clip, headers={**from_internet, **key}).status_code == 421
         assert c.post("/mcp/outbox", files=clip, headers={**app_host, **key}).status_code == 200  # on the tailnet, the door is there too
+        assert c.get(link, headers=funnel).status_code == 200  # get_file's download, from the internet, by its signed link
+        assert c.get(link[:-1] + ("A" if not link.endswith("A") else "B"), headers=funnel).status_code == 401
+        assert c.get(link.replace("/mcp/files/", "/api/shots/"), headers={**funnel, **me(env.token)}).status_code == 421
+        assert c.get(link, headers=from_internet).status_code == 421 and c.get(link, headers=app_host).status_code == 200
         monkeypatch.delenv("MCP_PERMANENT_URL")
         assert c.post("/mcp", json=body, headers={**hdr, **funnel, **key}).status_code == 421
         assert c.post("/mcp/outbox", files=clip, headers={**funnel, **key}).status_code == 421
+        assert c.get(link, headers=funnel).status_code == 421
 
 
 def test_a_funneled_port_is_never_taken_for_the_apps_address(monkeypatch):
