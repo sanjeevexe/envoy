@@ -57,9 +57,10 @@ an input called `phone` keeps it as its input and has no selector.
 
 - `backend/tests/test_routine_tools.py` (18, one of them with agent-keys' keys: a read-only key neither sees nor calls a
   routine's tool, a key with run does) and `test_sharing.py` (6).
-- Full suite on the stage 2 commit: **813 passed** (default). On `ENVOY_MODEL_PROFILE=spark`: 812 passed, 1 failed:
-  `test_preflight.py::test_check_is_fast_on_a_long_history`, a timing test. It failed 1 of 3 runs on its own while the
-  Mac's load average was 19 (other sessions), and it doesn't touch this code.
+- Full suite on the branch tip (rebased on 17af085): **826 passed** on `ENVOY_MODEL_PROFILE=spark`; on the default
+  profile 825 passed and 1 failed: `test_preflight.py::test_check_is_fast_on_a_long_history`, which asserts that
+  preflight takes under 50 ms of wall time. It failed while the Mac's load average was 55–74 (other sessions) and
+  passes 4/4 on this branch at load 18; `preflight.py` and its test are the same as main's.
 - `npm run build` in `web/`: clean.
 
 ## Device check (stage 1)
