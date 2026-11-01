@@ -5,17 +5,19 @@ static: no server, no analytics, no third-party calls (fonts are self-hosted). I
 
 ## View it
 
-Open `site/index.html` in a browser. It works from `file://` because the data is a script (`data/site-data.js`), not a fetch.
+Online: https://sanjeevexe.github.io/envoy/ (GitHub Pages, from `.github/workflows/pages.yml`, which uploads `site/` as it
+is on every push to main that touches it).
 
-Source links on the page point at the repo's files relative to `site/` (`../eval/results/...`), so they work from a checkout.
-To browse with working links, serve the repo root and open `/site/`:
+Locally: open `site/index.html` in a browser. It works from `file://` because the data is a script (`data/site-data.js`),
+not a fetch.
+
+Source links on the page point at the repo on GitHub (`REPO_URL` in `scripts/build_site_data.py`,
+`https://github.com/sanjeevexe/envoy/blob/main/`). Set it to `""` and rebuild to make them relative to `site/`
+(`../eval/results/...`) instead; then serve the repo root and open `/site/` to follow them:
 
 ```bash
 python3 -m http.server 8765 --bind 127.0.0.1
 ```
-
-Then open `http://127.0.0.1:8765/site/`. Once the repo is public, set `REPO_URL` in `scripts/build_site_data.py` (for example
-`https://github.com/<owner>/<repo>/blob/main/`) and rebuild; every source link then points there.
 
 Two URL parameters help with screenshots: `?step=N` opens section 2's run at step N (the default is 2, the first recorded
 frame), and `?only=<section id>` shows one section alone (headless Chrome captures from the top of the page).

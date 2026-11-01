@@ -33,8 +33,9 @@ IMG = DATA / "img"
 REC = DATA / "recordings"
 ET = ZoneInfo("America/New_York")
 
-# The repo goes public later, on the user's click. Until then source links are relative to site/ (they work from a checkout).
-REPO_URL = ""  # e.g. "https://github.com/<owner>/<repo>/blob/main/" once public
+# Source links point at the public repo (the site is served from GitHub Pages, where ../ would leave the site). Set it to ""
+# to make them relative to site/ again (they work from a checkout).
+REPO_URL = "https://github.com/sanjeevexe/envoy/blob/main/"
 
 # ---------------------------------------------------------------------------------------------------------------------------
 # import: recorded runs from outside the repo

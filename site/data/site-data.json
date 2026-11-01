@@ -1,6 +1,6 @@
 {
  "meta": {
-  "repo_url": ""
+  "repo_url": "https://github.com/sanjeevexe/envoy/blob/main/"
  },
  "eval": {
   "on_tag": 0,
@@ -3238,7 +3238,7 @@
    }
   },
   "tests": {
-   "functions": 603,
+   "functions": 604,
    "files": 38,
    "src": {
     "path": "backend/tests"
@@ -3272,7 +3272,7 @@
    },
    {
     "title": "The task runner, takeover and approvals",
-    "text": "one task model for every interface, device leases where the agent waits at its next call to the phone while the user is in control, web approvals bound to the app's own screen with per-approval nonces, the live-view protocol on emulator gRPC frames, the scheduler with memory-derived triggers, chat routing, the MCP tools, and the web app (web/). FastAPI, the MCP SDK, Next.js, React, Tailwind and Cytoscape.js are plumbing."
+    "text": "one task model for every interface, device leases where the agent waits at its next call to the phone while the user is in control, web approvals bound to the app's own screen with per-approval nonces, the live-view protocol on emulator gRPC frames, the scheduler with memory-derived triggers, chat routing, the MCP tools, and the web app (web/). FastAPI, the MCP SDK, Next.js, React and Tailwind are plumbing. The memory graph view (Oct 31–Nov 1, web/components/GraphCanvas.tsx) is drawn by Envoy on a Canvas 2D element; d3's force simulation, zoom and quadtree are plumbing under it."
    },
    {
     "title": "The iPhone companion and voice",
@@ -3408,9 +3408,14 @@
     "use": "Web app styling"
    },
    {
-    "name": "Cytoscape.js",
-    "license": "MIT",
-    "use": "Memory graph view"
+    "name": "d3-force",
+    "license": "ISC",
+    "use": "The memory graph: the force simulation, pan and pinch zoom, finding the node under the pointer. The graph view itself (drawing, hover focus, label fade, groups, Focus) is ours (web/components/GraphCanvas.tsx)"
+   },
+   {
+    "name": "d3-zoom's dependencies: d3-dispatch",
+    "license": "ISC; BSD-3-Clause",
+    "use": "Installed with d3-zoom"
    },
    {
     "name": "Phosphor Icons for React",
