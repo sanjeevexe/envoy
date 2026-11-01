@@ -1,7 +1,8 @@
 # Envoy's showcase site
 
 A guided tour of Envoy for judges, in eleven sections, built only from real recordings and eval results in this repo. It is
-static: no server, no analytics, no third-party calls (fonts are self-hosted). It follows the system's light or dark setting.
+static: no server, no analytics, no third-party calls (fonts are self-hosted). It's light by default, whatever the
+device's setting; the sun/moon button in the top bar switches to dark and is remembered in that browser.
 
 ## View it
 

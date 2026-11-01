@@ -105,7 +105,7 @@ export function Segmented<T extends string>({ options, value, onChange, label }:
     <div role="group" aria-label={label} className="inline-flex rounded-full bg-well p-1">
       {options.map((o) => (
         <button key={o} aria-pressed={value === o} onClick={() => onChange(o)}
-                className={cx("h-9 min-w-[44px] rounded-full px-4 text-meta font-bold transition-colors",
+                className={cx("h-9 min-w-[44px] rounded-full px-3 text-meta font-bold transition-colors md:px-4",
                   value === o ? "bg-surface text-ink shadow-[0_1px_2px_rgba(31,42,36,0.08)]" : "text-muted hover:text-ink")}>
           {o}
         </button>

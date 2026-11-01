@@ -665,5 +665,19 @@
   if (only) document.querySelectorAll("main section.sec").forEach((s) => { if (s.id !== only) s.hidden = true; });
   // Sections render after load, so a #section link lands short; scroll again once they're in.
   if (location.hash) { const t = document.getElementById(location.hash.slice(1)); if (t) t.scrollIntoView(); }
+  // Light or dark: light unless the visitor picks dark with the top bar's toggle, remembered in this browser (the <head>
+  // script applies it before the first paint). The browser's own bar follows the page's color.
+  const toggle = $("#theme"), bar = $('meta[name="theme-color"]');
+  const theme = (dark) => {
+    if (dark) document.documentElement.dataset.theme = "dark"; else delete document.documentElement.dataset.theme;
+    bar.content = dark ? "#121815" : "#ece7dc";
+    toggle.setAttribute("aria-pressed", String(dark));
+  };
+  theme(document.documentElement.dataset.theme === "dark");
+  toggle.addEventListener("click", () => {
+    const dark = document.documentElement.dataset.theme !== "dark";
+    theme(dark);
+    try { localStorage.setItem("envoy-theme", dark ? "dark" : "light"); } catch (e) { /* private mode: this visit only */ }
+  });
   $("#foot").innerHTML = `Built by <code>scripts/build_site_data.py</code> from the repo's recordings and eval results. No analytics, no third-party calls.`;
 })();

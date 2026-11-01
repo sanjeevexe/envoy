@@ -1,8 +1,8 @@
 "use client";
 
 // Settings: how proactive Envoy is (which of its offers notify you), when Envoy asks before an irreversible step (for
-// everything, per app, or per routine: the most specific wins), which apps run on your own Android phone, and this
-// device and the others paired with Envoy.
+// everything, per app, or per routine: the most specific wins), which apps run on your own Android phone, this
+// device and the others paired with Envoy, and how Envoy looks on this device (light or dark).
 import { useEffect, useState } from "react";
 import { CheckCircleIcon, DeviceMobileIcon } from "@phosphor-icons/react";
 import Companion from "@/components/Companion";
@@ -11,8 +11,9 @@ import SavedLogins from "@/components/SavedLogins";
 import { appName } from "@/components/Tasks";
 import { Button, Card, cx, Section, Segmented } from "@/components/ui";
 import { api, post } from "@/lib/api";
+import { setThemeChoice, themeChoice, type ThemeChoice } from "@/lib/theme";
 
-const SECTIONS = ["Approvals", "Phones", "Devices"] as const;
+const SECTIONS = ["Approvals", "Phones", "Devices", "Appearance"] as const;
 export default function SettingsPage({ publicUrl, profile }: { publicUrl?: string; profile?: string }) {
   const [section, setSection] = useState<(typeof SECTIONS)[number]>("Approvals");
   return (
@@ -23,8 +24,55 @@ export default function SettingsPage({ publicUrl, profile }: { publicUrl?: strin
         {section === "Approvals" && <><Proactivity /><Settings /></>}
         {section === "Phones" && <><Phones /><SavedLogins /><Outbox /></>}
         {section === "Devices" && <Companion publicUrl={publicUrl} />}
+        {section === "Appearance" && <Appearance />}
       </div>
     </div>
+  );
+}
+
+// Appearance, per device (lib/theme.ts): Light is the default whatever the device's setting; Match device follows it.
+const LOOKS: { choice: ThemeChoice; label: string; detail: string }[] = [
+  { choice: "light", label: "Light", detail: "The cream look." },
+  { choice: "dark", label: "Dark", detail: "Deep green, easier on the eyes at night." },
+  { choice: "system", label: "Match device", detail: "Light or dark, following this device\u2019s own setting." },
+];
+
+function Appearance() {
+  const [choice, setChoice] = useState<ThemeChoice | null>(null);
+  useEffect(() => setChoice(themeChoice()), []);
+  if (!choice) return null;
+  return (
+    <Section title="Appearance" intro="How Envoy looks on this device. Each device keeps its own choice.">
+      <Card className="overflow-hidden" role="radiogroup" aria-label="Appearance">
+        {LOOKS.map((l) => (
+          <label key={l.choice} className="flex min-h-[64px] cursor-pointer items-center gap-3 border-b border-divider px-4 py-3 last:border-b-0">
+            <input type="radio" name="appearance" checked={choice === l.choice} onChange={() => { setThemeChoice(l.choice); setChoice(l.choice); }} />
+            <Swatch choice={l.choice} />
+            <span className="min-w-0">
+              <span className="block text-row font-semibold">{l.label}{l.choice === "light" && <span className="font-normal text-muted"> · the default</span>}</span>
+              <span className="mt-0.5 block text-meta-2 text-muted">{l.detail}</span>
+            </span>
+          </label>
+        ))}
+      </Card>
+    </Section>
+  );
+}
+
+// A tiny picture of a theme, in that theme's own tokens (globals.css applies either set inside any data-theme element;
+// the raw tokens, since Tailwind's color utilities resolve once on :root); Match device is half of each.
+function Swatch({ choice }: { choice: ThemeChoice }) {
+  const pic = (theme: "light" | "dark", cls?: string) => (
+    <span data-theme={theme} className={cx("absolute inset-0 flex items-center gap-1.5 bg-[var(--page)] pl-2", cls)}>
+      <span className="h-3.5 w-3.5 shrink-0 rounded-full bg-[var(--sage)]" />
+      <span className="flex flex-col gap-1"><span className="h-1 w-6 rounded-full bg-[var(--ink)]" /><span className="h-1 w-4 rounded-full bg-[var(--muted)]" /></span>
+    </span>
+  );
+  return (
+    <span aria-hidden className="relative h-9 w-[56px] shrink-0 overflow-hidden rounded-sm border border-line">
+      {pic(choice === "dark" ? "dark" : "light")}
+      {choice === "system" && pic("dark", "[clip-path:inset(0_0_0_50%)]")}
+    </span>
   );
 }
 

@@ -3,7 +3,11 @@
 /* Sage: Envoy's look. Every color, size and corner the app uses is a token here; components read only these.
    Tailwind's own palette and type scale are switched off, so a raw color or size class can't creep back in. */
 
-:root {
+/* Light is the default, whatever the device's setting. `[data-theme]` on <html> picks the other (Settings › Appearance:
+   Light, Dark or Match device; set before the first paint by lib/theme.ts's script in the layout). Either set of tokens
+   also applies inside any element carrying its own data-theme, so a swatch can show the other theme (read them as
+   var(--page) there: the color utilities resolve once, on :root). */
+:root, [data-theme="light"] {
   --page: #ece7dc;          /* cream: the page */
   --surface: #ffffff;       /* cards, inputs */
   --raised: #f2eee6;        /* tab bar, sheets */
@@ -35,34 +39,31 @@
 
 /* Dark: the same tokens, mapped to a deep green-black. Sage and apricot keep their fills (white text on sage
    still reads 4.9:1); text colors keep 4.5:1 or more on their backgrounds. */
-/* Light only (Oct 31: the user is trying the cream look everywhere, whatever the device's setting). The dark tokens
-   below stay for a quick revert: they apply only under data-theme="dark", which nothing sets. */
-@media all {
-  :root[data-theme="dark"] {
-    --page: #121815;
-    --surface: #1a221e;
-    --raised: #161d19;
-    --well: #222b26;
-    --ink: #eceee9;
-    --ink-2: #c2cac4;
-    --muted: #98a39c;
-    --sage-ink: #8fcba8;
-    --sage-deep: #b5dec6;
-    --sage-tint: #1f3529;
-    --sage-track: #2c4a39;
-    --apricot-tint: #3a2719;
-    --apricot-ink: #f2b68a;
-    --apricot-line: #4d3423;
-    --brick: #e8826f;
-    --line: #29322d;
-    --control: #36423b;
-    --divider: #222a25;
-    --line-strong: #4a564f;
-    --offline: #5d6862;
-    --phone-line: #3c4c42;
-    --scrim: rgba(0, 0, 0, 0.6);
-    --on-ink: #121815;
-  }
+:root[data-theme="dark"], [data-theme="dark"] {
+  --page: #121815;
+  --surface: #1a221e;
+  --raised: #161d19;
+  --well: #222b26;
+  --ink: #eceee9;
+  --ink-2: #c2cac4;
+  --muted: #98a39c;
+  --sage-ink: #8fcba8;
+  --sage-deep: #b5dec6;
+  --sage-tint: #1f3529;
+  --sage-track: #2c4a39;
+  --apricot-tint: #3a2719;
+  --apricot-ink: #f2b68a;
+  --apricot-line: #4d3423;
+  --brick: #e8826f;
+  --line: #29322d;
+  --control: #36423b;
+  --divider: #222a25;
+  --line-strong: #4a564f;
+  --offline: #5d6862;
+  --phone-line: #3c4c42;
+  --scrim: rgba(0, 0, 0, 0.6);
+  --on-ink: #121815;
+  color-scheme: dark;
 }
 
 @theme {

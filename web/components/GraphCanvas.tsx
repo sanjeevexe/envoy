@@ -48,7 +48,7 @@ const mix = (a: string, b: string, t: number) => `rgb(${hex(a).map((v, i) => Mat
 function palette(): Palette {
   const css = getComputedStyle(document.documentElement);
   const v = (n: string) => css.getPropertyValue(n).trim() || "#888888";
-  const dark = document.documentElement.dataset.theme === "dark";  // light only for now (globals.css)
+  const dark = document.documentElement.dataset.theme === "dark";  // Settings › Appearance (lib/theme.ts)
   const node = v("--muted"), accent = dark ? v("--sage-ink") : v("--sage"), apricot = dark ? v("--apricot-ink") : v("--apricot");
   return { page: v("--page"), node, accent, travel: mix(node, accent, dark ? 0.5 : 0.42), shopping: mix(node, apricot, dark ? 0.45 : 0.45), apricot,
     link: dark ? v("--line-strong") : mix(v("--line-strong"), v("--muted"), 0.18), label: v("--ink-2"), strong: v("--ink"), muted: v("--muted") };
@@ -89,9 +89,9 @@ class Engine {
 
     const resize = new ResizeObserver(() => this.resize());
     resize.observe(canvas);
-    const scheme = window.matchMedia("(prefers-color-scheme: dark)");
-    const retheme = () => { this.pal = palette(); this.dirty = true; };
-    scheme.addEventListener("change", retheme);
+    // the theme is data-theme on <html> (lib/theme.ts): read the tokens again whenever it changes
+    const theme = new MutationObserver(() => { this.pal = palette(); this.dirty = true; });
+    theme.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
     const down = (e: PointerEvent) => this.down(e), move = (e: PointerEvent) => this.move(e), up = (e: PointerEvent) => this.up(e);
     const leave = () => this.setHover(null), click = (e: MouseEvent) => this.click(e);
     canvas.addEventListener("pointerdown", down);
@@ -104,7 +104,7 @@ class Engine {
     const frame = () => { this.frame(); this.raf = requestAnimationFrame(frame); };
     this.raf = requestAnimationFrame(frame);
     this.stop = () => {
-      cancelAnimationFrame(this.raf); this.sim.stop(); resize.disconnect(); scheme.removeEventListener("change", retheme); sel.on(".zoom", null);
+      cancelAnimationFrame(this.raf); this.sim.stop(); resize.disconnect(); theme.disconnect(); sel.on(".zoom", null);
       canvas.removeEventListener("pointerdown", down); canvas.removeEventListener("pointermove", move); canvas.removeEventListener("pointerup", up);
       canvas.removeEventListener("pointercancel", up); canvas.removeEventListener("pointerleave", leave); canvas.removeEventListener("click", click);
       if (this.hoverTimer) clearTimeout(this.hoverTimer);

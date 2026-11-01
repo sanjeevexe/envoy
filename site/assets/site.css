@@ -46,32 +46,31 @@
   --ease-spring: cubic-bezier(0.2, 0.9, 0.3, 1);
   color-scheme: light;
 }
-/* Light only (Oct 31: the user is trying the cream look everywhere, whatever the device's setting). The dark tokens
-   below stay for a quick revert: they apply only under data-theme="dark", which nothing sets. */
-@media all {
-  :root[data-theme="dark"] {
-    --page: #121815;
-    --surface: #1a221e;
-    --raised: #161d19;
-    --well: #222b26;
-    --ink: #eceee9;
-    --ink-2: #c2cac4;
-    --muted: #98a39c;
-    --sage-ink: #8fcba8;
-    --sage-deep: #b5dec6;
-    --sage-tint: #1f3529;
-    --sage-track: #2c4a39;
-    --apricot-tint: #3a2719;
-    --apricot-ink: #f2b68a;
-    --apricot-line: #4d3423;
-    --brick: #e8826f;
-    --line: #29322d;
-    --control: #36423b;
-    --divider: #222a25;
-    --line-strong: #4a564f;
-    --on-ink: #121815;
-    --phone: #0b0f0d;
-  }
+/* Light by default, whatever the device's setting; dark when the visitor picks it with the top bar's toggle (data-theme
+   on <html>, set before the first paint by the script in index.html). */
+:root[data-theme="dark"] {
+  --page: #121815;
+  --surface: #1a221e;
+  --raised: #161d19;
+  --well: #222b26;
+  --ink: #eceee9;
+  --ink-2: #c2cac4;
+  --muted: #98a39c;
+  --sage-ink: #8fcba8;
+  --sage-deep: #b5dec6;
+  --sage-tint: #1f3529;
+  --sage-track: #2c4a39;
+  --apricot-tint: #3a2719;
+  --apricot-ink: #f2b68a;
+  --apricot-line: #4d3423;
+  --brick: #e8826f;
+  --line: #29322d;
+  --control: #36423b;
+  --divider: #222a25;
+  --line-strong: #4a564f;
+  --on-ink: #121815;
+  --phone: #0b0f0d;
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -109,12 +108,19 @@ button { font: inherit; color: inherit; }
 .toc::-webkit-scrollbar { display: none; }
 .toc a {
   flex: none; text-decoration: none; color: var(--muted); font-size: 13px; font-weight: 600;
-  padding: 8px 12px; border-radius: 999px; min-height: 36px; display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 10px; border-radius: 999px; min-height: 36px; display: inline-flex; align-items: center; gap: 6px;
 }
 .toc a .n { font-variant-numeric: tabular-nums; opacity: 0.7; }
 .toc a:hover { color: var(--ink); background: var(--well); }
 .toc a.on { color: var(--sage-ink); background: var(--sage-tint); }
 .top-repo { flex: none; font-size: 13px; font-weight: 600; }
+.theme {
+  flex: none; width: 38px; height: 38px; border-radius: 999px; border: 1px solid var(--control); background: var(--surface);
+  color: var(--ink-2); display: inline-grid; place-items: center; cursor: pointer;
+}
+.theme:hover { background: var(--well); color: var(--ink); }
+.theme .sun, :root[data-theme="dark"] .theme .moon { display: none; }
+:root[data-theme="dark"] .theme .sun { display: block; }
 
 /* ---- layout ---- */
 main { overflow-x: clip; }
@@ -419,6 +425,10 @@ dl.fr dd span { color: var(--ink-2); font-size: 12.5px; }
 .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 28px; }
 .chart { padding: 12px; overflow: hidden; }
 .chart img { width: 100%; border-radius: 10px; background: #fff; }
+/* Dark: the charts and diagrams are drawn on white, so they sit in a cream paper frame, a touch dimmer, instead of
+   glaring raw out of a dark card; phones get a hairline so their bezel reads against the page. */
+:root[data-theme="dark"] .chart img { padding: 10px; background: #f2eee6; filter: brightness(0.92); }
+:root[data-theme="dark"] .phone { box-shadow: 0 0 0 1px var(--line-strong), var(--shadow-phone); }
 .chart figcaption { text-align: left; margin-top: 10px; }
 .stats.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
