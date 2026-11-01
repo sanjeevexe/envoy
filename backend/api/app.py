@@ -7,7 +7,9 @@ Kinds of caller (api/auth.py):
 - **Your paired devices** (the iPhone's Home Screen app, Phase 5): their own session, from a pairing code shown on the Mac.
 - **Device tokens with a scope** (Shortcuts): "Send to Envoy" can upload images, nothing else; "Ask Envoy" (Siri) can
   only ask what a chat message can, and its irreversible steps wait for your OK (api/siri.py).
-- **AI clients**, through `/mcp` with the MCP bearer token. They can start and follow tasks and use memory, never approve.
+- **AI clients**, through `/mcp`: Muse with the MCP bearer token, every other agent with a key of its own (Settings ›
+  Agents, api/agents.py) that opens only the tool groups it was given. They can start and follow tasks and use memory,
+  never approve.
 
 The API answers only to the names it is served on (127.0.0.1, localhost, its Tailscale Serve name), and WebSockets
 check their Origin, so a page on another name can't reach it (DNS rebinding).
@@ -44,6 +46,7 @@ from routines.model import dump_yaml
 from routines.store import RoutineStore
 
 from api import routine_view
+from api.agents import agents_router
 from api.alerts import ChangeAlerts
 from api.autofill import signin_router
 from api.auth import Auth, Caller, allowed_hosts, public_url, tunnel_hosts
@@ -144,8 +147,10 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     from mcp_server.server import build_mcp, mcp_app
     from mcp_stub.common import bearer_token
     from mcp_stub.middleware import BearerAuthLogMiddleware
-    mcp_inner = mcp_app(build_mcp(ctx, PORT, base=public), PORT, extra_hosts=hosts)
-    mcp = BearerAuthLogMiddleware(mcp_inner, token=bearer_token(), log_path=REPO / "logs" / "mcp.jsonl", server="mcp")
+    ctx.mcp = build_mcp(ctx, PORT, base=public)  # type: ignore[attr-defined]
+    mcp_inner = mcp_app(ctx.mcp, PORT, extra_hosts=hosts)  # type: ignore[attr-defined]
+    auth.mcp_token = bearer_token()  # Muse's key: every tool. Other agents' keys are in device_tokens (contract 2)
+    mcp = BearerAuthLogMiddleware(mcp_inner, token=bearer_token(), log_path=LOGS / "mcp.jsonl", server="mcp", verify=auth.agent_for)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
@@ -828,6 +833,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
         return {"deleted": tid}
 
     app.include_router(offers_router(ctx, session, caller))
+    app.include_router(agents_router(ctx, session, owner, caller))  # a key per AI agent (Settings › Agents)
     app.include_router(handoff_router(ctx, session, caller, door_key=bearer_token(), door_log=LOGS / "door.jsonl"))  # files from another Mac
     app.include_router(siri_router(ctx, session, caller, csrf))
     app.include_router(signin_router(tasks, session))  # saved logins, off by default (api/autofill.py)
@@ -855,7 +861,8 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
         """Only the names Envoy is served on (DNS rebinding); WebSockets only from those origins. A public address for AI
         clients (Muse) reaches /mcp and nothing else, and so does anything Tailscale says came in from the internet
         (Funnel), whatever its host; under /mcp that includes the outbox's door (/mcp/outbox, the Mac's forwarder, same key).
-        /mcp goes to the MCP server (its own bearer token); the door and everything else to the API and web app."""
+        /mcp goes to the MCP server, whose bearer check takes Muse's key or an agent's (Auth.agent_for, which names the
+        agent for the call: api/agents.py); the door and everything else to the API and web app."""
         if scope["type"] in ("http", "websocket"):
             headers = {k.decode("latin-1").lower(): v.decode("latin-1") for k, v in scope.get("headers") or []}
             origin = headers.get("origin", "")

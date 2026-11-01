@@ -9,6 +9,7 @@ export type Task = {
   result?: string; detail?: string; waiting_for?: string | null; model_calls?: number; cost_usd?: number;
   parent?: string | null; // the cross-app task this one is a part of
   request?: string | null; // what you asked, when the goal was reworded
+  agent?: string | null; // the AI agent that started it over MCP ("Muse", "Claude")
 };
 export type Step = {
   seq: number; time: number; kind: string; text?: string; reason?: string; risk?: string | null; status?: string;

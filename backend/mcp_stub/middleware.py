@@ -4,6 +4,10 @@ Every HTTP request is logged to logs/mcp_stub.jsonl (method, path, JSON-RPC
 method, tool name and arguments, headers with the token removed, auth result,
 status). Requests without the right `Authorization: Bearer <token>` get a 401,
 except paths in `open_prefixes` (health check, fake approval page).
+
+With `verify` (Envoy's API: one key per agent, api/agents.py), a presented token is
+good when `verify(token)` names its caller; the caller goes to the app as
+`scope["envoy.caller"]` and its name into the log line, never the token.
 """
 
 from __future__ import annotations
@@ -13,7 +17,7 @@ import json
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
@@ -61,6 +65,7 @@ class BearerAuthLogMiddleware:
         log_path: Path,
         server: str,
         open_prefixes: tuple[str, ...] = ("/healthz", "/approve/"),
+        verify: Callable[[str], Any] | None = None,
     ) -> None:
         if not token:
             raise ValueError("MCP_BEARER_TOKEN is empty; refusing to start without auth")
@@ -69,16 +74,20 @@ class BearerAuthLogMiddleware:
         self.log_path = log_path
         self.server = server
         self.open_prefixes = open_prefixes
+        self.verify = verify
         log_path.parent.mkdir(parents=True, exist_ok=True)
 
-    def _check(self, headers: dict[str, str]) -> str:
+    def _check(self, headers: dict[str, str]) -> tuple[str, Any]:
         value = headers.get("authorization")
         if not value:
-            return "missing"
+            return "missing", None
         scheme, _, presented = value.partition(" ")
         if scheme.lower() != "bearer" or not presented:
-            return "malformed"
-        return "ok" if hmac.compare_digest(presented.strip().encode(), self.token) else "wrong_token"
+            return "malformed", None
+        if self.verify is not None:
+            caller = self.verify(presented.strip())
+            return ("ok", caller) if caller is not None else ("wrong_token", None)
+        return ("ok", None) if hmac.compare_digest(presented.strip().encode(), self.token) else ("wrong_token", None)
 
     def _write(self, record: dict[str, Any]) -> None:
         with self.log_path.open("a") as f:
@@ -120,7 +129,9 @@ class BearerAuthLogMiddleware:
             await send(message)
 
         is_open = path.startswith(self.open_prefixes)
-        auth = "open_path" if is_open else self._check(headers)
+        auth, caller = ("open_path", None) if is_open else self._check(headers)
+        if caller is not None:
+            scope = {**scope, "envoy.caller": caller}
         record: dict[str, Any] = {
             "time": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
             "server": self.server,
@@ -129,6 +140,7 @@ class BearerAuthLogMiddleware:
             "query": scope.get("query_string", b"").decode("latin-1") or None,
             "client": (scope.get("client") or [None])[0],
             "auth": auth,
+            **({"caller": getattr(caller, "name", str(caller))} if caller is not None else {}),
             "headers": {k: ("<redacted>" if k in REDACTED_HEADERS else v) for k, v in headers.items()},
             **_summarize_body(body),
         }

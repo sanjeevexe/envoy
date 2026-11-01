@@ -15,6 +15,7 @@
 // The memory graph: `&graph=demo` (the demo profile's 17 things) or `&graph=large` (about 150).
 // `?mock=0` turns it off again (it's kept for the tab's session, so /approve links stay in mock mode).
 import type { Approval, EnvoyEvent, HandoffItem, Lease, NotificationEvent, Step, Task } from "@/lib/api";
+import type { AgentKey } from "@/components/AgentKeys";
 
 export type Scenario = "full" | "quiet" | "idle" | "offline" | "pair";
 
@@ -103,7 +104,7 @@ type DB = {
   tasks: Record<string, Task>; steps: Record<string, Step[]>; approvals: Record<string, Approval & { nonce: string }>;
   leases: Record<string, Lease>; triggers: any[]; changes: any[]; rules: { default: string; apps: Record<string, string>; routines: Record<string, string> };
   photos: { enabled: boolean; scope: string }; phoneApps: string[]; phoneName?: string; signin: { emulator: boolean; phone: boolean }; notes: any[]; offers: any[]; proactivity: string;
-  handoffs: HandoffItem[]; outbox: string; watchApps: string[]; caught: NotificationEvent[];
+  handoffs: HandoffItem[]; outbox: string; watchApps: string[]; caught: NotificationEvent[]; agents: AgentKey[];
 };
 let db: DB;
 
@@ -189,6 +190,8 @@ function seed(): DB {
     step(3, { kind: "routine_step", text: "open_trips", status: "done", rung: 0, shot: "sl-1", time: ago(26 * 60 - 9) }),
     step(4, { kind: "routine_step", text: "confirm_check_in", status: "failed", rung: 0, detail: "you declined it", risk: "irreversible", time: ago(25 * 60) }),
   ]);
+  add(task({ id: "task-muse", goal: "What's the gate for my flight today?", source: "mcp", agent: "Muse", app: "com.skylark.air", device: "envoy-test",
+    kind: "routine", routine: "skylark_get_flight_gate", result: "Gate B22", created_at: ago(5 * 3600 + 300), updated_at: ago(5 * 3600 + 290) }));
   add(task({ id: "task-chase", goal: "What's my checking balance in Chase?", app: "com.chase.sig.android", status: "failed",
     detail: "Chase blocks emulators; it needs a real Android phone. Connect your Android phone (USB, or wireless debugging) and ask again.",
     created_at: ago(2 * 86400 + 600), updated_at: ago(2 * 86400 + 598) }), [
@@ -307,6 +310,8 @@ function seed(): DB {
     watchApps: ["com.instagram.android", "com.zhiliaoapp.musically", "com.google.android.youtube"], caught: scenario === "idle" ? [] : caught,
     rules: { default: "unless_requested", apps: { "com.dd.doordash": "always" }, routines: { starbucks_order_usual: "never" } },
     photos: { enabled: true, scope: "screenshots" }, phoneApps: ["com.target.ui"], signin: { emulator: false, phone: false },
+    agents: [{ id: "agt-claude", name: "Claude", tools: ["read", "run"], created_at: ago(2 * 86400), last_seen: ago(40 * 60) },
+      { id: "agt-meta", name: "Meta agent", tools: ["files", "read", "run", "triggers"], created_at: ago(86400), last_seen: ago(3 * 60) }],
     notes: [
       { id: "note-1", app: "com.skylark.air", text: "A SkyLark Miles promo can cover the trip list; Not now closes it.", status: "active", confirmations: 4,
         first_seen: ago(5 * 86400), last_confirmed: ago(7200), sources: [{ task_id: "task-amz", step: 2, kind: "routine" }] },
@@ -868,6 +873,31 @@ export async function handle(path: string, init: RequestInit = {}): Promise<any>
     { id: "dev-2", name: "Send to Envoy (Shortcut)", scope: "photos", created_at: ago(4 * 86400), last_seen: ago(2 * 86400) },
     { id: "dev-3", name: "Ask Envoy (Siri)", scope: "siri", created_at: ago(2 * 86400), last_seen: ago(26 * 60) },
   ], push: [{ id: "push-1", device_id: "dev-1", service: "Apple", last_ok: ago(1800), failures: 0 }], me: { kind: "owner", device_id: null, name: "Mac" } };
+  if (p === "/api/agents") {
+    if (method === "POST") {
+      const name = String(body.name ?? "").trim();
+      if (!name || [...db.agents.map((a) => a.name), "Muse"].some((n) => n.toLowerCase() === name.toLowerCase())) throw err(409, `There is already an agent called ${name}.`);
+      const agent = { id: `agt-${++runs}`, name, tools: [...(body.tools ?? ["read", "run"])].sort(), created_at: now(), last_seen: null };
+      db.agents.push(agent);
+      return { agent, key: "envoy_agent_mock_key_not_real" };
+    }
+    return { agents: db.agents, muse: { name: "Muse", key: true, last_seen: ago(5 * 60) }, default: ["read", "run"], per_minute: 30,
+      mcp_url: "https://envoy-mac.tail1234.ts.net:10000/mcp", can_manage: true, groups: [
+        { id: "read", label: "Read", detail: "follow tasks, see routines, search memory, read the phone's updates and its list of phones", tools: ["get_task", "list_phones", "list_routines", "memory_get", "memory_search", "phone_updates"] },
+        { id: "run", label: "Run", detail: "start tasks and routines; every irreversible step still waits for your OK", tools: ["run_routine", "run_task"] },
+        { id: "memory", label: "Memory", detail: "add notes to your memory", tools: ["memory_note"] },
+        { id: "files", label: "Files", detail: "put photos and videos on a phone, and get files back", tools: ["get_file", "send_to_phone"] },
+        { id: "triggers", label: "Triggers", detail: "propose recurring tasks; each stays off until you turn it on", tools: ["create_trigger"] },
+      ] };
+  }
+  if ((m = p.match(/^\/api\/agents\/([^/]+)(\/rotate)?$/))) {
+    const a = db.agents.find((x) => x.id === m![1]);
+    if (!a) throw err(404, "no such agent");
+    if (method === "DELETE") { db.agents = db.agents.filter((x) => x !== a); return { revoked: a.id }; }
+    if (m[2]) { a.created_at = now(); a.last_seen = null; return { agent: a, key: "envoy_agent_mock_rotated_key_not_real" }; }
+    a.tools = [...body.tools].sort();
+    return a;
+  }
   if (p === "/api/pair/start") return { code: "482917", expires_in: 300 };
   if (p === "/api/pair") { scenario = "full"; db = seed(); return { ok: true }; }
   if (p === "/api/tokens") return { token: "envoy_photos_mock_token_not_real", upload_url: "https://envoy-mac.tail1234.ts.net:8443/api/photos" };

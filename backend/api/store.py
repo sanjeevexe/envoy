@@ -25,7 +25,8 @@ SCHEMA = """
 CREATE TABLE IF NOT EXISTS tasks (
   id TEXT PRIMARY KEY, goal TEXT NOT NULL, source TEXT NOT NULL, status TEXT NOT NULL, created_at REAL, updated_at REAL,
   app TEXT, device TEXT, kind TEXT, routine TEXT, inputs TEXT, result TEXT, detail TEXT, waiting_for TEXT,
-  model_calls INTEGER DEFAULT 0, cost_usd REAL DEFAULT 0, traces TEXT DEFAULT '[]', memory TEXT, request TEXT, parent TEXT, models TEXT
+  model_calls INTEGER DEFAULT 0, cost_usd REAL DEFAULT 0, traces TEXT DEFAULT '[]', memory TEXT, request TEXT, parent TEXT, models TEXT,
+  agent TEXT
 );
 CREATE TABLE IF NOT EXISTS steps (
   task_id TEXT, seq INTEGER, time REAL, data TEXT, PRIMARY KEY (task_id, seq)
@@ -62,6 +63,8 @@ class TaskStore:
                 self.db.execute("ALTER TABLE tasks ADD COLUMN parent TEXT")
             if "models" not in columns:  # databases from before model profiles (the profile and each job's model)
                 self.db.execute("ALTER TABLE tasks ADD COLUMN models TEXT")
+            if "agent" not in columns:  # databases from before agent keys (which agent started a task over MCP)
+                self.db.execute("ALTER TABLE tasks ADD COLUMN agent TEXT")
             # A restart ends whatever was running: the runner that owned it is gone.
             self.db.execute("UPDATE tasks SET status='stopped', detail='the server restarted' WHERE status IN (%s)" % ",".join("?" * len(ACTIVE)), ACTIVE)
             self.db.execute("UPDATE approvals SET status='expired', note='the server restarted' WHERE status='pending'")
@@ -70,6 +73,10 @@ class TaskStore:
     # ---- tasks ---------------------------------------------------------------------------------
 
     def create(self, goal: str, source: str, **fields: Any) -> dict[str, Any]:
+        if source == "mcp" and "agent" not in fields:  # the agent whose MCP call this is (phone-layer contract 2)
+            from api.auth import current_agent
+            if (agent := current_agent.get()) is not None:
+                fields["agent"] = agent.name
         tid = new_id("task")
         now = time.time()
         with self.lock:
