@@ -12,16 +12,18 @@ const SHARING = "/api/routines/sharing";
 
 // The sharing state; with `every`, read again that often while the page is visible, so a routine learned or shared
 // elsewhere shows up here too.
-export function useSharing(every?: number): [AgentToolsInfo | null, (next: AgentToolsInfo) => void] {
+export function useSharing(every?: number): [AgentToolsInfo | null, (next: AgentToolsInfo) => void, string | null] {
   const [info, setInfo] = useState<AgentToolsInfo | null>(null);
+  const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     let gone = false;
-    const load = () => api<AgentToolsInfo>(SHARING).then((x) => { if (!gone) setInfo(x); }).catch(() => {});
+    const load = () => api<AgentToolsInfo>(SHARING).then((x) => { if (!gone) { setInfo(x); setError(null); } })
+      .catch((e) => { if (!gone) setError(e.message ?? "couldn't load them"); });
     load();
     const t = every ? setInterval(() => { if (document.visibilityState === "visible") load(); }, every) : undefined;
     return () => { gone = true; if (t) clearInterval(t); };
   }, [every]);
-  return [info, setInfo];
+  return [info, setInfo, error];
 }
 
 // On a routine's page: share it with agents or not. Off by default; approvals are the same either way.
@@ -103,7 +105,7 @@ function ToolRow({ t, fresh }: { t: AgentTool; fresh: boolean }) {
 
 // Settings › Agents: every tool an agent connected to Envoy sees now. The learned ones first, in full; then Envoy's own.
 export default function AgentTools() {
-  const [info] = useSharing(4000);
+  const [info, , error] = useSharing(4000);
   const seen = useRef<Set<string> | null>(null);
   const [fresh, setFresh] = useState<Set<string>>(new Set());
   useEffect(() => {
@@ -115,17 +117,20 @@ export default function AgentTools() {
     }
     seen.current = now;
   }, [info]);
-  if (!info) return <p className="px-6 py-6 text-body text-muted">Loading…</p>;
+  if (!info) return error ? <p role="alert" className="mx-6 mt-6 rounded-block bg-apricot-tint px-3 py-2 text-meta text-apricot-ink">Couldn&rsquo;t load the agent tools: {error}</p>
+    : <p className="px-6 py-6 text-body text-muted">Loading…</p>;
   const n = info.tools.length;
+  // A tool that appeared while you watch comes first, marked New; the rest by name, as agents list them.
+  const tools = [...info.tools.filter((t) => fresh.has(t.tool)), ...info.tools.filter((t) => !fresh.has(t.tool))];
   return (
     <Section title="Agent tools" intro={<>What Muse and any other agent connected to Envoy see right now. Each routine you share from its page becomes a tool of its own: an agent calls it by name, it replays for almost nothing, and anything irreversible still waits for your OK on your phone.</>}>
       <Card className="overflow-hidden">
         <div className="flex items-center gap-2 border-b border-divider bg-raised px-4 py-3">
           <span aria-hidden className="h-2.5 w-2.5 shrink-0 rounded-full bg-sage" />
-          <span className="text-meta font-bold">{n ? `${n} learned ${n === 1 ? "tool" : "tools"}` : "No learned tools yet"}</span>
+          <span className="shrink-0 text-meta font-bold">{n ? `${n} learned ${n === 1 ? "tool" : "tools"}` : "No learned tools yet"}</span>
           <span className="text-meta-2 text-muted">· updates as you share and Envoy learns</span>
         </div>
-        {n ? info.tools.map((t) => <ToolRow key={t.tool} t={t} fresh={fresh.has(t.tool)} />)
+        {n ? tools.map((t) => <ToolRow key={t.tool} t={t} fresh={fresh.has(t.tool)} />)
           : <p className="px-4 py-5 text-meta text-ink-2">Open a routine and turn on <b>Share with agents</b>. It shows up here, and in every agent&rsquo;s tool list, at once.</p>}
       </Card>
       <Card className="px-4 py-3">
