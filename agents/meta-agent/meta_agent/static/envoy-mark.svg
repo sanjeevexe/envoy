@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Envoy">
+  <!-- Envoy's mark: the avatar's resting face on a sage tile (prompts/ui-sage-design/Main.dc.html). The source of every
+       icon in this folder: scripts/make_icons.mjs reads the face and the colors from here. -->
+  <rect width="120" height="120" rx="28" fill="#3E7C5C"/>
+  <g transform="translate(19 19) scale(0.68)">
+    <path d="M58 14C86 12 106 32 106 61C106 91 86 108 58 106C31 104 14 87 14 60C14 33 31 16 58 14Z" fill="#F6F3EC"/>
+    <ellipse cx="47" cy="58" rx="6" ry="8" fill="#3E7C5C"/>
+    <ellipse cx="73" cy="58" rx="6" ry="8" fill="#3E7C5C"/>
+  </g>
+</svg>

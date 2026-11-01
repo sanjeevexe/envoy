@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spark agent with Envoy</title>
+<link rel="icon" href="/static/envoy-mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="who">
+    <span class="agent-mark" aria-hidden="true">
+      <svg viewBox="0 0 48 48" width="48" height="48"><rect width="48" height="48" rx="14" fill="#1F2A24"/><path d="M24 9c1.6 8.4 6.6 13.4 15 15-8.4 1.6-13.4 6.6-15 15-1.6-8.4-6.6-13.4-15-15 8.4-1.6 13.4-6.6 15-15Z" fill="#F6F3EC"/></svg>
+    </span>
+    <div>
+      <h1 id="agent-name">Spark agent</h1>
+      <p class="sub">Runs on <b id="agent-model">muse-spark-1.3</b> through Meta's API · uses Envoy only over MCP</p>
+    </div>
+  </div>
+  <div class="link" aria-hidden="true">
+    <svg viewBox="0 0 120 24" width="120" height="24"><path class="link-line" d="M4 12h112"/><circle class="link-dot" cx="12" cy="12" r="4"/></svg>
+    <span>MCP</span>
+  </div>
+  <div class="envoy">
+    <img src="/static/envoy-mark.svg" width="48" height="48" alt="">
+    <div>
+      <div class="envoy-name"><span id="conn-dot" class="dot off"></span><span id="envoy-title">Envoy</span></div>
+      <p class="sub" id="envoy-sub">Connecting…</p>
+    </div>
+  </div>
+  <div class="stats" aria-live="polite">
+    <div class="stat"><span class="v" id="s-model">0</span><span class="k">model calls</span></div>
+    <div class="stat"><span class="v" id="s-mcp">0</span><span class="k">MCP calls</span></div>
+    <div class="stat"><span class="v" id="s-cost">$0.000</span><span class="k">spent</span></div>
+  </div>
+</header>
+
+<main class="cols">
+  <section class="card convo" aria-label="Conversation">
+    <div class="card-head">
+      <h2>Conversation</h2>
+      <button class="ghost" id="reset" type="button">New conversation</button>
+    </div>
+    <div class="scroll" id="convo">
+      <div class="empty" id="empty">
+        <p class="hello">Ask for something on your phone.</p>
+        <p class="hint">The agent decides which of Envoy's tools to call. Anything irreversible waits for your OK on your phone.</p>
+      </div>
+    </div>
+    <div class="composer">
+      <div class="chips" id="chips"></div>
+      <form id="form" autocomplete="off">
+        <input id="text" type="text" placeholder="Message the agent" aria-label="Message the agent" maxlength="2000">
+        <button type="button" class="stop" id="stop" hidden aria-label="Stop the agent">
+          <svg width="12" height="12" viewBox="0 0 10 10" aria-hidden="true"><rect width="10" height="10" rx="2.5" fill="currentColor"/></svg>Stop
+        </button>
+        <button type="submit" class="send" id="send" aria-label="Send">
+          <svg class="ic" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <section class="card feed" aria-label="Every MCP call to Envoy">
+    <div class="card-head">
+      <h2><span class="live"></span>Every call to Envoy</h2>
+      <span class="head-note">tool · arguments · result · time</span>
+    </div>
+    <div class="tools" id="tools"></div>
+    <div class="scroll" id="feed" aria-live="polite"></div>
+  </section>
+</main>
+
+<template id="avatar-needs">
+  <svg viewBox="-12 -12 144 144" aria-hidden="true"><circle class="ev-halo" cx="60" cy="60" r="54" fill="#E8945A"/><g class="ev-body"><path d="M58 14C86 12 106 32 106 61C106 91 86 108 58 106C31 104 14 87 14 60C14 33 31 16 58 14Z" fill="#3E7C5C"/><circle cx="35" cy="74" r="5.5" fill="#E8945A" opacity=".55"/><circle cx="85" cy="74" r="5.5" fill="#E8945A" opacity=".55"/><path class="ev-line" d="M40 44q7-5 14 0"/><path class="ev-line" d="M66 44q7-5 14 0"/><ellipse class="ev-eye" cx="47" cy="58" rx="6" ry="8.5" fill="#F6F3EC"/><ellipse class="ev-eye" cx="73" cy="58" rx="6" ry="8.5" fill="#F6F3EC"/></g></svg>
+</template>
+<template id="avatar-done">
+  <svg viewBox="-12 -12 144 144" aria-hidden="true"><g class="ev-body"><path d="M58 14C86 12 106 32 106 61C106 91 86 108 58 106C31 104 14 87 14 60C14 33 31 16 58 14Z" fill="#3E7C5C"/><circle cx="35" cy="73" r="6" fill="#E8945A" opacity=".8"/><circle cx="85" cy="73" r="6" fill="#E8945A" opacity=".8"/><path class="ev-line" d="M41 61q6-8 12 0"/><path class="ev-line" d="M67 61q6-8 12 0"/></g><g class="ev-pop"><circle cx="102" cy="22" r="14" fill="#1F2A24"/><path class="ev-check" d="M95.5 22.5l4.5 4.5 8-9"/></g></svg>
+</template>
+<template id="avatar-idle">
+  <svg viewBox="-12 -12 144 144" aria-hidden="true"><g><path d="M58 14C86 12 106 32 106 61C106 91 86 108 58 106C31 104 14 87 14 60C14 33 31 16 58 14Z" fill="#5F6A63"/><ellipse cx="47" cy="58" rx="6" ry="8" fill="#F6F3EC"/><ellipse cx="73" cy="58" rx="6" ry="8" fill="#F6F3EC"/></g></svg>
+</template>
+<script src="/static/app.js"></script>
+</body>
+</html>
