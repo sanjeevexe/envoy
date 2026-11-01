@@ -1,0 +1,23 @@
+{
+  "task_id": "teach-1031-215540-5f6b",
+  "goal": "In the Wikipedia app, what year did the Golden Gate Bridge open?",
+  "status": "done",
+  "result": "May 27, 1937",
+  "source": "taught",
+  "taught": true,
+  "check": {
+    "passed": true,
+    "evaluable": false,
+    "detail": "you showed it and said it worked"
+  },
+  "plan": {
+    "app": "org.wikipedia"
+  },
+  "steps": 11,
+  "model_calls": 0,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.0,
+  "duration_s": 32.2,
+  "paused_inputs": 0,
+  "notes": []
+}

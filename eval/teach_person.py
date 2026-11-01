@@ -35,6 +35,7 @@ from routines.screens import norm  # noqa: E402
 #       first on screen whose id is `id`, label contains `text`, label is exactly `label`, label matches `re`
 #   ("type", "text")   key by key, as the web app's keyboard sends it     ("key", "Enter" | "Back" | "Backspace")
 #   ("swipe", (x1, y1, x2, y2))   fractions                               ("wait", seconds)
+#   ("swipe_until", ((x1, y1, x2, y2), {finder}, most))   slow drags until that element shows above the bottom 15%
 DEMOS: dict[str, dict[str, Any]] = {
     "skylark_status": {
         "device": "envoy-test", "app": "com.skylark.air", "goal": "What's the status of flight SL 1190?", "answer": "Delayed 25 min",
@@ -56,6 +57,25 @@ DEMOS: dict[str, dict[str, Any]] = {
         "steps": [("tap", {"label": "Creation menu"}), ("tap", {"label": "Event"}), ("type", "Dentist"),
                   ("tap", {"re": r"^\d{1,2}:\d{2} [AP]M$"}), ("tap", {"label": "6"}), ("tap", {"id": "material_timepicker_ok_button"}),
                   ("tap", {"id": "save"}), ("wait", 1.5)],
+    },
+    # Teach trials (Nov 1, eval/results/teach_trials_2026-11-01): Loop B's tasks, whose agent runs are the comparison.
+    # Wikipedia's routine from an agent run read its answer after one article's own wording and isn't in the library.
+    "wikipedia_opened": {
+        "device": "envoy-real", "app": "org.wikipedia", "goal": "In the Wikipedia app, what year did the Golden Gate Bridge open?",
+        "answer": "1937",
+        "steps": [("tap", {"id": "nav_tab_search"}), ("tap", {"id": "search_card"}), ("type", "Golden Gate Bridge"),
+                  ("tap", {"re": r"^Golden Gate Bridge · Bridge"}), ("wait", 2.5),
+                  ("swipe", (0.5, 0.75, 0.5, 0.45)), ("wait", 1.5)],  # the year is just below the lead's first paragraph
+    },
+    # The same, answered with the date the sentence gives: the compiler then anchors the read on that sentence's own words.
+    "wikipedia_opened_date": {
+        "device": "envoy-real", "app": "org.wikipedia", "goal": "In the Wikipedia app, what year did the Golden Gate Bridge open?",
+        "answer": "May 27, 1937",
+        "steps": [("tap", {"id": "nav_tab_search"}), ("tap", {"id": "search_card"}), ("type", "Golden Gate Bridge"),
+                  ("tap", {"re": r"^Golden Gate Bridge · Bridge"}), ("wait", 4.0),  # the header image loads, and the text moves
+                  # The app reopens an article where you last left it: up to the top first, then down to the sentence.
+                  *[("swipe", (0.5, 0.3, 0.5, 0.9))] * 4, ("wait", 1.0),
+                  ("swipe_until", ((0.5, 0.65, 0.5, 0.5), {"text": "opened to the public on"}, 8)), ("wait", 1.5)],
     },
     "skylark_gate": {
         "device": "envoy-test", "app": "com.skylark.air", "goal": "What gate is my Chicago flight at?", "answer": "B12",
@@ -119,6 +139,20 @@ async def demonstrate(name: str, api: str, token: str, eyes_wait: float) -> dict
                     x1, y1, x2, y2 = arg
                     await ws.send(json.dumps({"type": "swipe", "x1": x1, "y1": y1, "x2": x2, "y2": y2, "ms": 350}))
                     print(f"  swipe {arg}")
+                elif kind == "swipe_until":
+                    (x1, y1, x2, y2), want, most = arg
+                    for _ in range(most):
+                        try:
+                            seen = find(await eyes.observe(), want).center[1]
+                        except LookupError:
+                            seen = None
+                        if seen is not None and seen < 0.85 * h:
+                            break
+                        await ws.send(json.dumps({"type": "swipe", "x1": x1, "y1": y1, "x2": x2, "y2": y2, "ms": 1200}))  # a slow drag: no fling
+                        print(f"  swipe {arg[0]} looking for {want} (seen at y={seen})")
+                        await asyncio.sleep(eyes_wait + 0.8)
+                    else:
+                        raise LookupError(f"not found after {most} swipes: {want}")
                 elif kind == "wait":
                     await asyncio.sleep(arg)
                 await asyncio.sleep(eyes_wait)

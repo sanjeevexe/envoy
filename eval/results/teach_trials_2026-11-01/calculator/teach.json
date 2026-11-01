@@ -1,0 +1,79 @@
+{
+ "teach": {
+  "id": "teach-1031-214501-82bd",
+  "status": "saved",
+  "detail": "Saved as calculator_multiply_numbers (v1). It ran once on its own, with no model, in 6 s.",
+  "routine": "calculator_multiply_numbers",
+  "version": 1,
+  "steps": 10,
+  "shown_s": 10.6,
+  "cost_usd": 0.0669,
+  "notes": [],
+  "warnings": [
+   "step 6: after-check present: {resource_id='formula', kind='EditText'} already held before the step; dropped"
+  ],
+  "dropped": [],
+  "replay_task": "task-1031-214526-5aef"
+ },
+ "verification_replay": {
+  "status": "done",
+  "detail": "all steps and checks passed",
+  "duration_s": 6.3,
+  "model_calls": 0,
+  "outputs": {
+   "product": "7006652"
+  },
+  "steps": [
+   {
+    "id": "tap_first_operand_digit_1",
+    "status": "done",
+    "detail": ""
+   },
+   {
+    "id": "tap_first_operand_digit_2",
+    "status": "done",
+    "detail": ""
+   },
+   {
+    "id": "tap_first_operand_digit_3",
+    "status": "done",
+    "detail": ""
+   },
+   {
+    "id": "tap_first_operand_digit_4",
+    "status": "done",
+    "detail": ""
+   },
+   {
+    "id": "tap_multiply",
+    "status": "done",
+    "detail": ""
+   },
+   {
+    "id": "tap_second_operand_digit_1",
+    "status": "done",
+    "detail": ""
+   },
+   {
+    "id": "tap_second_operand_digit_2",
+    "status": "done",
+    "detail": ""
+   },
+   {
+    "id": "tap_second_operand_digit_3",
+    "status": "done",
+    "detail": ""
+   },
+   {
+    "id": "tap_second_operand_digit_4",
+    "status": "done",
+    "detail": ""
+   },
+   {
+    "id": "tap_equals",
+    "status": "done",
+    "detail": ""
+   }
+  ]
+ }
+}

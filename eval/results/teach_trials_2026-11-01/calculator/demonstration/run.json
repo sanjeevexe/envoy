@@ -1,0 +1,23 @@
+{
+  "task_id": "teach-1031-214501-82bd",
+  "goal": "In the Calculator app, what is 1234 times 5678?",
+  "status": "done",
+  "result": "7006652",
+  "source": "taught",
+  "taught": true,
+  "check": {
+    "passed": true,
+    "evaluable": false,
+    "detail": "you showed it and said it worked"
+  },
+  "plan": {
+    "app": "com.google.android.calculator"
+  },
+  "steps": 10,
+  "model_calls": 0,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.0,
+  "duration_s": 10.6,
+  "paused_inputs": 0,
+  "notes": []
+}
