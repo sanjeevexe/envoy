@@ -1,0 +1,19 @@
+{
+ "at": "2026-11-01 17:51:34 EST",
+ "server": "envoy",
+ "list_ms": 4,
+ "tools": [
+  "create_trigger",
+  "get_task",
+  "list_phones",
+  "list_routines",
+  "memory_get",
+  "memory_note",
+  "memory_search",
+  "phone_updates",
+  "run_routine",
+  "run_task",
+  "send_to_phone"
+ ],
+ "routine_tools": []
+}

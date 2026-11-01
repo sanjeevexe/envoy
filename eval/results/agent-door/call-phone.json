@@ -1,0 +1,200 @@
+{
+ "at": "2026-11-01 18:29:08 EST",
+ "server": "envoy",
+ "list_ms": 53,
+ "tools": [
+  "create_trigger",
+  "get_task",
+  "list_phones",
+  "list_routines",
+  "memory_get",
+  "memory_note",
+  "memory_search",
+  "phone_updates",
+  "run_routine",
+  "run_task",
+  "send_to_phone",
+  "skylark_add_known_traveler_number",
+  "skylark_check_in_flight",
+  "skylark_get_flight_gate"
+ ],
+ "routine_tools": [
+  {
+   "_meta": {
+    "envoy/routine": "skylark_add_known_traveler_number",
+    "envoy/version": 1,
+    "envoy/app": "com.skylark.air"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": true,
+    "readOnlyHint": false,
+    "title": "Add a known traveler number to a SkyLark flight trip"
+   },
+   "description": "Add a known traveler number to a SkyLark flight trip. App: SkyLark (com.skylark.air), on a phone Envoy operates. Open My Trips in SkyLark Air, select the requested trip, enter the known traveler number from memory into the traveler information field, and save it. Outputs: known traveler number, confirmation code (in get_task's result once it's done). Learned by Envoy from a run on Oct 27, 2026; replays without model calls while the app looks as it did; anything irreversible waits for the user's OK on their phone. Returns a task ID; follow it with get_task.",
+   "inputSchema": {
+    "properties": {
+     "trip_city": {
+      "type": "string",
+      "description": "City of the trip to update"
+     },
+     "user_known_traveler_number": {
+      "type": "string",
+      "description": "Known traveler number to add to the trip. Envoy fills it from memory (user.known_traveler_number) if left out"
+     },
+     "phone": {
+      "type": "string",
+      "description": "Which phone runs it: an id from list_phones, \"phone\" (the user's own Android phone; Envoy asks them in Envoy first) or \"emulator\". Leave it out and Envoy picks the phone as it always does."
+     }
+    },
+    "required": [
+     "trip_city"
+    ],
+    "type": "object"
+   },
+   "name": "skylark_add_known_traveler_number",
+   "title": "Add a known traveler number to a SkyLark flight trip"
+  },
+  {
+   "_meta": {
+    "envoy/routine": "skylark_check_in_flight",
+    "envoy/version": 1,
+    "envoy/app": "com.skylark.air"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": true,
+    "readOnlyHint": false,
+    "title": "Check in for a SkyLark flight"
+   },
+   "description": "Check in for a SkyLark flight. App: SkyLark (com.skylark.air), on a phone Envoy operates. Starts SkyLark check-in for the flight to the requested city, selects the passenger, confirms no hazardous materials are being carried, confirms check-in, and returns the boarding pass details shown on completion. Only works when trip_city is the one already shown on 'Next trip'. Outputs: seat, gate, boarding time, boarding group, flight (in get_task's result once it's done). Learned by Envoy from a run on Oct 27, 2026; replays without model calls while the app looks as it did; anything irreversible waits for the user's OK on their phone. Returns a task ID; follow it with get_task.",
+   "inputSchema": {
+    "properties": {
+     "trip_city": {
+      "type": "string",
+      "description": "Destination city of the flight to check in for"
+     },
+     "phone": {
+      "type": "string",
+      "description": "Which phone runs it: an id from list_phones, \"phone\" (the user's own Android phone; Envoy asks them in Envoy first) or \"emulator\". Leave it out and Envoy picks the phone as it always does."
+     }
+    },
+    "required": [
+     "trip_city"
+    ],
+    "type": "object"
+   },
+   "name": "skylark_check_in_flight",
+   "title": "Check in for a SkyLark flight"
+  },
+  {
+   "_meta": {
+    "envoy/routine": "skylark_get_flight_gate",
+    "envoy/version": 1,
+    "envoy/app": "com.skylark.air"
+   },
+   "annotations": {
+    "destructiveHint": false,
+    "openWorldHint": true,
+    "readOnlyHint": false,
+    "title": "Find the departure gate for a SkyLark flight to a given city"
+   },
+   "description": "Find the departure gate for a SkyLark flight to a given city. App: SkyLark (com.skylark.air), on a phone Envoy operates. Open My Trips in SkyLark Air, select the trip to the requested destination city, and read the departure gate from the trip details screen. Outputs: gate (in get_task's result once it's done). Learned by Envoy from a run on Oct 27, 2026; replays without model calls while the app looks as it did; anything irreversible waits for the user's OK on their phone. Returns a task ID; follow it with get_task.",
+   "inputSchema": {
+    "properties": {
+     "trip_city": {
+      "type": "string",
+      "description": "The destination city of the flight, shown in the goal and matched against the trip rows in My Trips"
+     },
+     "phone": {
+      "type": "string",
+      "description": "Which phone runs it: an id from list_phones, \"phone\" (the user's own Android phone; Envoy asks them in Envoy first) or \"emulator\". Leave it out and Envoy picks the phone as it always does."
+     }
+    },
+    "required": [
+     "trip_city"
+    ],
+    "type": "object"
+   },
+   "name": "skylark_get_flight_gate",
+   "title": "Find the departure gate for a SkyLark flight to a given city"
+  }
+ ],
+ "call": {
+  "tool": "skylark_get_flight_gate",
+  "arguments": {
+   "trip_city": "Chicago",
+   "phone": "envoy-test"
+  },
+  "is_error": false,
+  "result": {
+   "task_id": "task-1101-182910-4ae7",
+   "status": "queued",
+   "task_url": "http://127.0.0.1:8761/?task=task-1101-182910-4ae7",
+   "heads_up": [
+    {
+     "kind": "routine",
+     "text": "Using your routine “Find the departure gate for a SkyLark flight to a given city”: usually 1.7 s, no model calls.",
+     "level": "info"
+    }
+   ]
+  },
+  "seconds": 2.38
+ },
+ "task": {
+  "task_id": "task-1101-182910-4ae7",
+  "goal": "Find the departure gate for a SkyLark flight to a given city",
+  "status": "done",
+  "result": "gate: B12",
+  "detail": "all steps and checks passed",
+  "routine": "skylark_get_flight_gate",
+  "app": "com.skylark.air",
+  "steps": [
+   {
+    "kind": "preflight",
+    "text": "before I start: Using your routine “Find the departure gate for a SkyLark flight to a given city”: usually 1.7 s, no model calls.",
+    "risk": null
+   },
+   {
+    "kind": "note",
+    "text": "using routine skylark_get_flight_gate v1 with trip_city = Chicago",
+    "risk": null
+   },
+   {
+    "kind": "note",
+    "text": "phone: Test phone (you picked it)",
+    "risk": null
+   },
+   {
+    "kind": "routine_step",
+    "text": "tap_my_trips",
+    "risk": null
+   },
+   {
+    "kind": "routine_step",
+    "text": "find_tap_trip_row",
+    "risk": null
+   },
+   {
+    "kind": "routine_step",
+    "text": "tap_trip_row",
+    "risk": null
+   },
+   {
+    "kind": "finish",
+    "text": "all steps and checks passed",
+    "risk": null
+   },
+   {
+    "kind": "note",
+    "text": "saving what it saw to memory",
+    "risk": null
+   }
+  ],
+  "pending_approvals": [],
+  "waiting_for_user": false,
+  "task_url": "http://127.0.0.1:8761/?task=task-1101-182910-4ae7",
+  "followed_s": 46.1,
+  "polls": 15
+ }
+}
