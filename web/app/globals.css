@@ -30,13 +30,15 @@
   --scrim: rgba(31, 42, 36, 0.45);
   --face: #f6f3ec;          /* the avatar's eyes, on sage */
   --on-ink: #ffffff;        /* text on an ink fill (your bubbles, the primary button) */
-  color-scheme: light dark;
+  color-scheme: light;
 }
 
 /* Dark: the same tokens, mapped to a deep green-black. Sage and apricot keep their fills (white text on sage
    still reads 4.9:1); text colors keep 4.5:1 or more on their backgrounds. */
-@media (prefers-color-scheme: dark) {
-  :root {
+/* Light only (Oct 31: the user is trying the cream look everywhere, whatever the device's setting). The dark tokens
+   below stay for a quick revert: they apply only under data-theme="dark", which nothing sets. */
+@media all {
+  :root[data-theme="dark"] {
     --page: #121815;
     --surface: #1a221e;
     --raised: #161d19;

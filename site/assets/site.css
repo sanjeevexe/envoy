@@ -44,10 +44,12 @@
   --shadow-card: 0 1px 2px rgba(31, 42, 36, 0.04);
   --shadow-phone: 0 18px 40px rgba(31, 42, 36, 0.18);
   --ease-spring: cubic-bezier(0.2, 0.9, 0.3, 1);
-  color-scheme: light dark;
+  color-scheme: light;
 }
-@media (prefers-color-scheme: dark) {
-  :root {
+/* Light only (Oct 31: the user is trying the cream look everywhere, whatever the device's setting). The dark tokens
+   below stay for a quick revert: they apply only under data-theme="dark", which nothing sets. */
+@media all {
+  :root[data-theme="dark"] {
     --page: #121815;
     --surface: #1a221e;
     --raised: #161d19;

@@ -48,7 +48,7 @@ const mix = (a: string, b: string, t: number) => `rgb(${hex(a).map((v, i) => Mat
 function palette(): Palette {
   const css = getComputedStyle(document.documentElement);
   const v = (n: string) => css.getPropertyValue(n).trim() || "#888888";
-  const dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const dark = document.documentElement.dataset.theme === "dark";  // light only for now (globals.css)
   const node = v("--muted"), accent = dark ? v("--sage-ink") : v("--sage"), apricot = dark ? v("--apricot-ink") : v("--apricot");
   return { page: v("--page"), node, accent, travel: mix(node, accent, dark ? 0.5 : 0.42), shopping: mix(node, apricot, dark ? 0.45 : 0.45), apricot,
     link: dark ? v("--line-strong") : mix(v("--line-strong"), v("--muted"), 0.18), label: v("--ink-2"), strong: v("--ink"), muted: v("--muted") };

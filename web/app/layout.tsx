@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 // The page's own color, so the iOS status bar runs straight into the app's header (cream, or deep green in dark mode).
 export const viewport: Viewport = {
   width: "device-width", initialScale: 1, viewportFit: "cover",
-  themeColor: [{ media: "(prefers-color-scheme: light)", color: "#F6F3EC" }, { media: "(prefers-color-scheme: dark)", color: "#121815" }],
+  themeColor: "#F6F3EC",  // light only for now (globals.css)
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
