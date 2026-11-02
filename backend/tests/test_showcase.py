@@ -113,3 +113,14 @@ def test_a_button_the_rule_misses_still_stops_the_run(monkeypatch):
 def test_instagrams_story_bubble_in_the_tray_is_not_a_publishing_button():
     assert not rs.publishes("Your story", "com.instagram.android:id/outer_container")
     assert rs.publishes("Your story", "com.instagram.android:id/your_story_share_shortcut_button")
+
+
+@pytest.mark.parametrize("name,done", [("instagram_reel_song", "{{caption}}"), ("tiktok_post_sound", "{{caption}}"),
+                                       ("youtube_short_sound", "{{short_title}}")])
+def test_a_routine_learned_from_a_declined_post_keeps_no_done_check_it_never_saw(name, done):
+    from routines.model import load_yaml
+    v2 = load_yaml((Path(__file__).resolve().parents[2] / "data" / "routines" / name / "v2.yaml").read_text())
+    assert [c.text for c in v2.done] == [done]  # each v2 took its plan's caption check; TikTok's failed a real post (Nov 2)
+    r, note = rs.drop_unseen_done(v2)
+    assert r.done == [] and r.steps == v2.steps and done in note and "never" in note
+    assert rs.drop_unseen_done(r) == (r, None)  # the Story's (it had none) is left as it is

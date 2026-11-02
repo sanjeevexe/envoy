@@ -21,11 +21,44 @@ evidence in `eval/results/showcase/routine/*.v2-candidate.yaml` (and YouTube's v
 | `youtube_short_sound` | its stray "Captions unavailable" before-check dropped | 3/3 at "Upload Short", 94–144 s, 2–8 calls ($0.04–0.14), the newest clip each time. The search tap still needs a repair or the agent. **With the locator case fix (953b014): 1 more replay, 42 s, 0 calls, $0.** The search step now starts the search |
 
 How "which clip" was checked: before each replay a labelled test clip ("REEL 2", "STORY 3", "TIKTOK 1"…, each its own
-colour) was pushed. The approval screenshot at the final button (kept outside the repo) shows which one it was. The
-track or sound is confirmed by the step's own `text_has` on title and artist.
+colour) was pushed. The approval screenshot at the final button (kept outside the repo) shows which one it was.
+**Correction (Nov 2):** I wrote here that the track or sound was "confirmed by the step's own `text_has` on title and
+artist". That check is on the result row that gets tapped, not on the editor, so it never showed the sound was
+attached. For TikTok it wasn't (below). Instagram's reel shows the song on the posted reel. YouTube's add step has an
+after-check on the editor's sound button, "{{sound_title}} Adjust or change sound".
+
+## The real posts (Nov 2, 01:00–02:00 ET)
+
+meta-agent started each one from its page on :8700 on the user's word. The user allowed Envoy's phone and approved the
+final button in Envoy on their iPhone. I prepped the Pixel (take setup, the "ENVOY TEST / Nov 1" clip pushed last) and
+followed each task read-only over MCP.
+
+| Post | Task | Routine | Result |
+| --- | --- | --- | --- |
+| Instagram Reel + song | task-1102-005928-4182 | `instagram_reel_song` v2 | **live** as envoy3955, "JVKE · golden hour", caption "Posted by Envoy · test"; 0 calls, rung 2 (2 after-checks relaxed, so Envoy put a v3 on trial) |
+| Instagram Story + poll | task-1102-013244-b7c8 | `instagram_story_poll` v3 | **live**, poll "Did Envoy post this?" Yes / No; 0 calls, rung 1, 36 s |
+| TikTok + sound | task-1102-014139-7f5e | `tiktok_post_sound` v2 | **posted without the sound** ("Original sound by envoy"), 7 vision calls. Envoy said "failed" because its done-check didn't see the caption |
+| YouTube Short + sound | task-1102-015325-106a | `youtube_short_sound` v2 | **live** as @envoy-e8o, public. Before Upload Short, the details screen showed YouTube's music notice and #goldenhour/#jvke, and the Short's sound tile is in use by 281K Shorts. The add-sound step passed only on a relaxed check (likely the "Swipe up to edit" hint) |
+
+**Why TikTok has no sound.** In the source run (task-1101-210013-7814) the agent's first try left the editor's sound
+label (`tv_top_text`) at "Add sound":
+- Steps 11–14: red check, then the row, then a tap on the preview.
+- At step 19 the agent went back to check, saw "Add sound", and redid it: 20 open the sheet, 21 the row, 23 Back. The
+  label then read "golden hour".
+- The compiler dropped 19–24 as "back-track: returned to the same screen" and kept the first try.
+- `close_sound_sheet`'s only after-check is the word "Music", so no run could see the sound was missing. Rehearsals
+  stop at Post, whose screen doesn't show the sound.
+
+The compiler session has the case. Then: recompile, rehearse on the copy (checking "golden hour" in the editor before
+Post), and re-post after the user deletes the songless one.
+
+**Why TikTok said "failed".** A routine learned from a declined post kept a done-check, the plan's "the caption is
+visible". No run had seen it after the post, and TikTok leaves the composer after Post. `compile --final-from-declined`
+now drops it and says so in the changes (07de462). `youtube_short_sound` v3 is v2 without it. YouTube's own passed
+tonight because YouTube lands on the channel page, which shows the title.
 
 **Wording for the video:** Instagram's two are "learned from one run" (no hand edits). TikTok's and YouTube's are
-"learned, one step tuned". Instagram's replay with no model calls when the app shows no tip. TikTok uses vision on
+"learned, one step tuned". TikTok's can't be said to post "with a song" until its re-post. Instagram's replay with no model calls when the app shows no tip. TikTok uses vision on
 its drawn sound list every run (~$0.02). YouTube still repairs its search step.
 
 Still open in the compiled routines (for the compiler session):

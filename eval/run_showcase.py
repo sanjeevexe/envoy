@@ -33,7 +33,8 @@ Stage 1 runs on this session's API copy (127.0.0.1:8764: its own data dir, sessi
   uv run --project backend python eval/run_showcase.py compile <trace> --name tiktok_post_sound [--final-from-declined]
       Wonder compiles the declined first run under a new name (eval/results/showcase/routine/). A declined tap never ran,
       so the compiler drops it; --final-from-declined adds it back as the routine's last step, irreversible, built from
-      the recorded screen it was declined on (said in the routine's `changes`).
+      the recorded screen it was declined on (said in the routine's `changes`), and drops the done-check, which describes
+      the screen after the post that a declined run never saw.
   uv run --project backend python eval/run_showcase.py add-routine <yaml>   into this checkout's library, only if its post
       step is irreversible and every input is typed from an input
   uv run --project backend python eval/run_showcase.py replay --routine tiktok_post_sound --input caption="…" --api-dir <…>
@@ -397,6 +398,18 @@ def gate(dump: Path, pkg: str) -> int:
 # ---- stage 1: compiling the first run under a new name ---------------------------------------------------------
 
 
+def drop_unseen_done(routine: Any) -> tuple[Any, str | None]:
+    """A declined run's done-check (its success check, generalized) describes the screen after the post, which the run
+    never reached, so it was never verified. TikTok's caption check ended a real post "failed" (Nov 2): TikTok leaves the
+    composer after Post. Without one, a run that passes every step, the post included, ends done (as the Story's did)."""
+    if not routine.done:
+        return routine, None
+    note = ("done-check dropped (" + "; ".join(c.describe() for c in routine.done) + "): it describes the screen after the "
+            "post, which a declined run never reaches, so it was never verified; the post step itself is the end")
+    return routine.model_copy(update={"done": []}), note
+
+
+
 def compile_run(trace: str, name: str, final_from_declined: bool, recompile: str | None = None, reuse_spec: bool = False) -> int:
     """Wonder compiles a declined first run (`confirmed`: it ended at the post the user declined, so it has no verified
     end); the routine is renamed (never instagram_post_reel or another existing name, backlog #43). With
@@ -439,6 +452,9 @@ def compile_run(trace: str, name: str, final_from_declined: bool, recompile: str
                                   note=f"trace step {last.get('step')}: the post tap the user declined (never ran, so no after-check)"))
         changes.append(f"its last step (tap {el.label or el.desc!r}) is the tap declined at step {last.get('step')}, "
                        "built from that screen; irreversible")
+        routine, note = drop_unseen_done(routine)
+        if note:
+            changes.append(note)
     routine = routine.model_copy(update={"routine": name, "changes": changes})
     ROUTINES.mkdir(parents=True, exist_ok=True)
     text = dump_yaml(routine)

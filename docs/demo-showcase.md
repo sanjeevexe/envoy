@@ -11,11 +11,26 @@ and recompiled with the compiler fix (main ffde928); `prompts/showcase-report.md
 | --- | --- | --- | --- |
 | `instagram_reel_song` | song_title, song_artist, caption | 3/3 at Share, 0 calls unless Instagram shows a tip | learned |
 | `instagram_story_poll` (v3) | poll_question, poll_option_1, poll_option_2 | 3/3 at "Your story", 0 calls, right clip | learned |
-| `tiktok_post_sound` | sound_title, sound_artist, caption | 3/3 at Post, ~7 vision calls (~$0.02) | learned, one step added |
+| `tiktok_post_sound` | sound_title, sound_artist, caption | 3/3 at Post, ~7 vision calls (~$0.02), **but no sound attached** (below) | learned, one step added |
 | `youtube_short_sound` | sound_title, sound_artist, short_title | at "Upload Short" every run; 0 calls with the case fix (953b014) | learned, one step tuned |
 
 The song for all three: JVKE's "golden hour" (in all three libraries). Which features work on the test accounts is
 pre-check P3 (`eval/results/showcase/p3.md`).
+
+**The real posts (Nov 2, 01:00–02:00 ET).** meta-agent started each one on :8700 on the user's word, and the user
+approved each in Envoy on their iPhone:
+- Reel (`instagram_reel_song` v2): live, with the song, 0 calls.
+- Story with a poll (`instagram_story_poll` v3): live, 0 calls.
+- TikTok (`tiktok_post_sound` v2): went up **without the sound** ("Original sound by envoy"). The routine never
+  attaches it. In its source run the agent's first try left the editor at "Add sound". The agent noticed and redid it
+  (steps 19–24), but the compiler dropped that correction as a "back-track". The step's only after-check is the word
+  "Music", and the rehearsals stopped at Post, whose screen doesn't show the sound. The user deletes that post; it is
+  re-posted after the compiler fix and a rehearsal that checks "golden hour" in the editor before Post.
+- YouTube Short (`youtube_short_sound` v2): live and public. The details screen showed YouTube's music notice and
+  #goldenhour, so the sound was on before Upload Short.
+
+A routine learned from a declined post kept a done-check ("the caption is visible") that no run had seen after the
+post. TikTok's ended a real post "failed". `compile --final-from-declined` drops it now (`youtube_short_sound` v3).
 
 ## Before a take
 - The newest video in the gallery is the clip: every routine picks the gallery's first slot. Push it last.

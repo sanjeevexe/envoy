@@ -1,0 +1,177 @@
+{
+ "task_id": "task-1101-211106-9b42-r1",
+ "goal": "Post the newest video in my phone's gallery to YouTube as a Short with the sound \"golden hour\" by JVKE from YouTube's sound library and this title: \"Envoy rehearsal: one clip, three apps\"",
+ "kept": [
+  1,
+  2,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14
+ ],
+ "dropped": [
+  [
+   3,
+   "pop-up (permission prompt: deny): the shared handler covers it"
+  ],
+  [
+   15,
+   "tap: not a device action"
+  ]
+ ],
+ "model": "cached",
+ "model_calls": 0,
+ "cost_usd": 0.0,
+ "cost_at_standard_usd": 0.0,
+ "latency_s": 0.0,
+ "warnings": [
+  "step 10: the first result for {{sound_title}}: chosen by its place in the list",
+  "step 10: its target matched 25 look-alikes on the recorded screen; now the one that shows {{sound_title}}, {{sound_artist}}"
+ ],
+ "wonder": {
+  "name": "youtube_post_short",
+  "intent": "Post the newest gallery video as a YouTube Short with a chosen sound and title",
+  "description": "Prepares a YouTube Short from the newest video in the phone gallery, adds a chosen sound from the YouTube sound library, and enters the requested title before upload.",
+  "patterns": [
+   "post my newest video to YouTube as a Short",
+   "upload the latest gallery video as a Short with this sound",
+   "make a YouTube Short from my newest clip",
+   "turn the newest video in my gallery into a Short"
+  ],
+  "inputs": [
+   {
+    "name": "sound_title",
+    "type": "text",
+    "description": "Title of the sound to search for in YouTube's sound library",
+    "from_memory": null,
+    "example": "golden hour"
+   },
+   {
+    "name": "sound_artist",
+    "type": "text",
+    "description": "Artist credited for the requested sound, used to pick the correct search result",
+    "from_memory": null,
+    "example": "JVKE"
+   },
+   {
+    "name": "short_title",
+    "type": "text",
+    "description": "Title or caption to enter for the Short",
+    "from_memory": null,
+    "example": "Envoy rehearsal: one clip, three apps"
+   }
+  ],
+  "steps": [
+   {
+    "step": 1,
+    "id": "tap_create",
+    "intent": "Tap Create to start the Short creation flow",
+    "target_fixed_text": "Create",
+    "choice_input": null
+   },
+   {
+    "step": 2,
+    "id": "tap_import_video_from_photo_library",
+    "intent": "Tap Import video from photo library to select a video from the gallery",
+    "target_fixed_text": "Import video from photo library",
+    "choice_input": null
+   },
+   {
+    "step": 3,
+    "id": "tap_select_from_gallery",
+    "intent": "Tap Select from gallery to grant access and show gallery media",
+    "target_fixed_text": "Select from gallery",
+    "choice_input": null
+   },
+   {
+    "step": 4,
+    "id": "select_newest_video",
+    "intent": "Select the newest video shown at the top of Recent",
+    "target_fixed_text": null,
+    "choice_input": null
+   },
+   {
+    "step": 5,
+    "id": "tap_add_selected_video",
+    "intent": "Tap Add to confirm importing the selected video",
+    "target_fixed_text": "Add",
+    "choice_input": null
+   },
+   {
+    "step": 6,
+    "id": "tap_add_sound",
+    "intent": "Tap Add sound to open the YouTube sound library",
+    "target_fixed_text": "Add sound",
+    "choice_input": null
+   },
+   {
+    "step": 7,
+    "id": "tap_music_search",
+    "intent": "Tap Search to focus the sound library search box",
+    "target_fixed_text": "Search",
+    "choice_input": null
+   },
+   {
+    "step": 8,
+    "id": "type_sound_title",
+    "intent": "Type {{sound_title}} into the search box",
+    "target_fixed_text": "Search",
+    "choice_input": null
+   },
+   {
+    "step": 9,
+    "id": "tap_trigger_search",
+    "intent": "Tap the button to trigger a new search with {{sound_title}}",
+    "target_fixed_text": "Trigger a new search with",
+    "choice_input": "sound_title"
+   },
+   {
+    "step": 10,
+    "id": "select_sound_result",
+    "intent": "Select the result for {{sound_title}} by {{sound_artist}} from the sound library results",
+    "target_fixed_text": null,
+    "choice_input": "sound_title"
+   },
+   {
+    "step": 11,
+    "id": "tap_add_music_to_video",
+    "intent": "Tap Add this music to your video to add the selected sound to the Short",
+    "target_fixed_text": "Add this music to your video",
+    "choice_input": null
+   },
+   {
+    "step": 12,
+    "id": "tap_next",
+    "intent": "Tap Next to proceed to the posting details",
+    "target_fixed_text": "Next",
+    "choice_input": null
+   },
+   {
+    "step": 13,
+    "id": "type_short_caption",
+    "intent": "Type {{short_title}} into the Caption your Short field",
+    "target_fixed_text": "Caption your Short",
+    "choice_input": null
+   }
+  ],
+  "outputs": [],
+  "data_values": [
+   "Video taken on Nov 1, 2026, 7:19:40 PM with duration 00:08",
+   "Jake Lawson",
+   "1 minute",
+   "281K Shorts"
+  ]
+ },
+ "ambiguous": [],
+ "trace": "task-1101-211106-9b42-r1",
+ "name": "youtube_short_sound",
+ "recompile": "done-check rule: a declined run's done-check is dropped (Nov 2)",
+ "final_from_declined": true
+}
