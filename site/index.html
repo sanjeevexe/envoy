@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Envoy: a guided tour</title>
-<meta name="description" content="Envoy gives AI agents a phone layer. A guided tour built only from real recordings: a first run, the routine it became, self-repair, memory with sources, safety, and the eval.">
+<title>Envoy: the phone layer agents call</title>
+<meta name="description" content="Muse has a computer. Envoy gives it a phone. Envoy is the phone layer AI agents call over MCP: it acts in Android apps, learns each task into a routine, and watches the phone, with approvals on the person's iPhone. A tour built only from real recordings.">
 <meta name="theme-color" content="#ece7dc">
 <!-- Light unless the visitor picked dark here (the toggle in the top bar, remembered in this browser): set before the
      first paint, so a dark visit never flashes cream. -->
@@ -28,14 +28,14 @@
 </header>
 
 <main id="main">
-  <!-- 1 -->
+  <!-- 1: the phone layer -->
   <section class="sec hero" id="claim" aria-labelledby="claim-h">
     <div class="wrap">
       <div class="hero-grid">
         <div>
-          <span class="eyebrow"><span class="num" data-sec="claim">1</span> The claim</span>
-          <h1 id="claim-h" style="margin-top:14px">Phone agents think through every tap, every time. <em>Envoy learns an app once.</em></h1>
-          <p class="lede">It writes a successful run down as a program that checks every screen, repairs itself when the app changes, then replays it fast and nearly free.</p>
+          <span class="eyebrow"><span class="num" data-sec="claim">1</span> The phone layer agents call</span>
+          <h1 id="claim-h" style="margin-top:14px">Muse has a computer. <em>Envoy gives it a phone.</em></h1>
+          <p class="lede">Envoy is the phone layer AI agents call. It <b>acts</b> in real Android apps, <b>learns</b> each task into a routine it can replay for almost nothing, and <b>watches</b> the phone for what happens. Muse, or any agent that speaks MCP, is the front door. Anything irreversible waits for the person's yes, in Envoy on their iPhone.</p>
         </div>
         <div class="hero-avatar" aria-hidden="true">
           <div class="glow"></div>
@@ -48,27 +48,55 @@
           </svg>
         </div>
       </div>
-      <div id="proof"></div>
-      <div id="new"></div>
+      <div id="layer"></div>
+      <div id="pillars"></div>
+      <div id="limits"></div>
     </div>
   </section>
 
-  <!-- 2 -->
+  <!-- the layer: agents, tools, app-only posts, watching, keys -->
+  <section class="sec" id="agents" aria-labelledby="agents-h">
+    <div class="wrap" id="agents-body"></div>
+  </section>
+
+  <section class="sec" id="tools" aria-labelledby="tools-h">
+    <div class="wrap" id="tools-body"></div>
+  </section>
+
+  <section class="sec" id="app-only" aria-labelledby="app-only-h">
+    <div class="wrap" id="app-only-body"></div>
+  </section>
+
+  <section class="sec" id="watches" aria-labelledby="watches-h">
+    <div class="wrap" id="watches-body"></div>
+  </section>
+
+  <section class="sec" id="keys" aria-labelledby="keys-h">
+    <div class="wrap" id="keys-body"></div>
+  </section>
+
+  <!-- underneath: the routine engine and the evidence (Oct 27–31) -->
+  <div class="wrap part" id="underneath">
+    <span class="lbl">Underneath the layer</span>
+    <p>Everything above stands on one idea: a successful run is compiled into a routine that checks every screen, repairs itself when the app changes, and keeps its versions. The sections below show that engine on recordings from Oct 27–31, then memory, safety, Meta's models and the evaluation.</p>
+  </div>
+
+  <!-- the engine: a first run -->
   <section class="sec" id="first-run" aria-labelledby="first-run-h">
     <div class="wrap" id="first-run-body"></div>
   </section>
 
-  <!-- 3 -->
+  <!-- the routine it became -->
   <section class="sec" id="learned" aria-labelledby="learned-h">
     <div class="wrap" id="learned-body"></div>
   </section>
 
-  <!-- 4 -->
+  <!-- repairs -->
   <section class="sec" id="repairs" aria-labelledby="repairs-h">
     <div class="wrap" id="repairs-body"></div>
   </section>
 
-  <!-- 5 -->
+  <!-- real apps -->
   <section class="sec" id="real-apps" aria-labelledby="real-apps-h">
     <div class="wrap" id="real-apps-body"></div>
   </section>
@@ -78,27 +106,27 @@
     <div class="wrap" id="teach-body"></div>
   </section>
 
-  <!-- 6 -->
+  <!-- memory -->
   <section class="sec" id="memory" aria-labelledby="memory-h">
     <div class="wrap" id="memory-body"></div>
   </section>
 
-  <!-- 7 -->
+  <!-- safety -->
   <section class="sec" id="safety" aria-labelledby="safety-h">
     <div class="wrap" id="safety-body"></div>
   </section>
 
-  <!-- 8 -->
+  <!-- models -->
   <section class="sec" id="models" aria-labelledby="models-h">
     <div class="wrap" id="models-body"></div>
   </section>
 
-  <!-- 9 -->
+  <!-- results -->
   <section class="sec" id="proof" aria-labelledby="proof-h">
     <div class="wrap" id="proof-body"></div>
   </section>
 
-  <!-- 10 -->
+  <!-- how it is built -->
   <section class="sec" id="how-built" aria-labelledby="how-built-h">
     <div class="wrap" id="how-built-body"></div>
   </section>

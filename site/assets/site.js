@@ -11,7 +11,6 @@
   const commit = (c) => esc(c).replace(/, here (\w+)/, " (loop A's branch $1)");
   const usd = (x) => "$" + (x >= 0.1 ? x.toFixed(2) : x.toFixed(4).replace(/0+$/, "").replace(/\.$/, ""));
   const secs = (x) => `${(+x).toFixed(1)} s`;
-  const ratio = (a, b) => { const r = a / b; return r >= 10 ? Math.round(r) : Math.round(r * 10) / 10; };
   const MODEL = { "muse-wonder-1.0": "Muse Wonder", "muse-spark-1.3": "Muse Spark 1.3", "muse-spark-1.3-contributor": "Muse Spark 1.3" };
   const JOB = { match: "match the request to a routine", plan: "plan", step: "decide a step", extract: "read the answer for memory", app_note: "write app notes", compile: "compile" };
   const date = (s) => {
@@ -22,43 +21,281 @@
   const srcA = (s, label) => s ? `<a class="src" href="${esc(repoBase + s.path)}" title="${esc(s.note || "")}">${esc(label || s.path)}</a>` : "";
   const slots = (t) => esc(t).replace(/\{\{(\w+)\}\}/g, '<span class="slot">{{$1}}</span>');
 
-  // ---- 1: the claim ----
-  function renderClaim() {
-    const L = D.learned, f = L.first, r = L.replay;
-    $("#proof").innerHTML = `
-      <div class="card proof" role="group" aria-label="One real task, first run against replay">
-        <div class="cell app"><span class="lbl">One real app</span><b>Starbucks</b><span class="meta">“${esc(f.goal.replace(/^In the Starbucks app, /, "").replace(/^./, (c) => c.toUpperCase()))}”</span></div>
-        <div class="cell"><div class="lbl">First run</div><div class="val">${secs(f.seconds)} <small>· ${f.calls} model calls · ${usd(f.usd)}</small></div></div>
-        <div class="arrow" aria-hidden="true">→</div>
-        <div class="cell replay"><div class="lbl">Learned</div><div class="val">${secs(r.seconds)} <small>· ${r.calls} calls · ${usd(r.usd)}</small></div></div>
-        <div class="proof-foot">
-          <span class="chip sage">${ratio(f.seconds, r.seconds)}× faster</span>
-          <span class="chip sage">${ratio(f.calls, r.calls)}× fewer model calls</span>
-          <span class="chip sage">${ratio(f.usd, r.usd)}× cheaper</span>
-          <span class="meta">Same request, same answer (190 calories), Oct 30 on an Android emulator.</span>
-          ${srcA(f.src, "runs.jsonl")}
+  // A capture (a page or an app screen) that opens at full size; its pixels are the recording's own.
+  const shot = (img, alt, cap, cls = "") => `<figure class="shot ${cls}"><a href="data/${esc(img)}" target="_blank" rel="noopener" title="Open at full size"><img src="data/${esc(img)}" alt="${esc(alt)}" loading="lazy"></a>${cap ? `<figcaption>${cap}</figcaption>` : ""}</figure>`;
+  // A tool call as an agent made it: name(arg: "value", …).
+  const callSig = (tool, args) => `${esc(tool)}(${Object.entries(args || {}).map(([k, v]) => `<span class="arg">${esc(k)}:</span> ${esc(JSON.stringify(v))}`).join(", ")})`;
+  const sec = (id) => `<a href="#${id}">section ${num(id)}</a>`;
+
+  // ---- 1: the phone layer ----
+  function renderHero() {
+    const L = D.learned, f = L.first, r = L.replay, W = D.watches, A = D.agents;
+    const ig = W.live.find((x) => /^Instagram/.test(x.App) && /^\+/.test(x["Shown on iPhone"]));
+    const posts = A.crosspost.rows.filter((x) => x.kind === "call").length;
+    $("#layer").innerHTML = `
+      <div class="layer" role="img" aria-label="Agents call Envoy over MCP; Envoy acts on its phones; the person approves on their iPhone">
+        <div class="lnode"><span class="lbl">The front door</span><b>Muse</b><span>or any MCP agent: the Spark agent on Meta's models, Claude Code</span></div>
+        <div class="larrow" aria-hidden="true"><span>MCP</span></div>
+        <div class="lnode core"><span class="lbl">Envoy</span><b>acts · learns · watches</b><span>tools, learned routines, memory and triggers, on a Mac</span></div>
+        <div class="larrow" aria-hidden="true"><span>adb</span></div>
+        <div class="lnode"><span class="lbl">The phones</span><b>Envoy's phone</b><span>a Pixel 5, plus emulators on the Mac and a cloud phone tested on Google Cloud</span></div>
+        <div class="lnode person"><span class="lbl">The person</span><b>Envoy on their iPhone</b><span>approves anything irreversible, watches live, gets the pushes. No agent can approve.</span></div>
+      </div>`;
+    $("#pillars").innerHTML = `
+      <div class="pillars">
+        <a class="card pillar" href="#agents"><span class="lbl">Agents call it</span><div class="big">3 agents</div>
+          <p>Muse, the Spark agent on Meta's own models, and Claude Code have each called Envoy's tools over MCP.</p><span class="more">${num("agents")} · Agents call it →</span></a>
+        <a class="card pillar" href="#app-only"><span class="lbl">Acts</span><div class="big">${posts} posts, 1 request</div>
+          <p>A Reel with a song from Instagram's library, a Story poll, a TikTok and a YouTube Short with a sound: features only the apps have, each a routine an agent calls by name. Each has gone live once, approved on the iPhone.</p><span class="more">${num("app-only")} · App-only posts →</span></a>
+        <a class="card pillar" href="#learned"><span class="lbl">Learns</span><div class="big">${secs(f.seconds)} → ${secs(r.seconds)}</div>
+          <p>${f.calls} → ${r.calls} model calls, ${usd(f.usd)} → ${usd(r.usd)}: Starbucks, first run against the routine it became (Oct 30). Routines check every screen and repair themselves.</p><span class="more">${num("first-run")}–${num("teach")} · How it learns →</span></a>
+        <a class="card pillar" href="#watches"><span class="lbl">Watches</span><div class="big">${esc(ig ? ig["Shown on iPhone"].replace(/^\+/, "") : "")}</div>
+          <p>From an Instagram comment landing on Envoy's phone to the push on the person's iPhone (Nov 2). At that moment it's also waiting for agents in <code>phone_updates</code>.</p><span class="more">${num("watches")} · Watches →</span></a>
+      </div>`;
+    $("#limits").innerHTML = `
+      <div class="block howto">
+        <span><i class="dot"></i>Every screen is a real recording or capture, labeled with where and when it was made.</span>
+        <span><i class="dot"></i>Every number links to the file it came from.</span>
+        <span><i class="dot ap"></i>SkyLark is our own test app. We say so wherever it appears.</span>
+      </div>
+      <div class="card limits">
+        <h3>Limits, plainly</h3>
+        <ul>
+          <li>Envoy runs on a Mac today: Android emulators plus one Pixel 5 over USB ("Envoy's phone"). A cloud phone was tested on Google Cloud; the posts shown here ran on the Pixel. Each app's sign-in is done once, by the person. ${srcA({ path: "docs/cloud.md" }, "cloud.md")}</li>
+          <li>Envoy learns a task, not a whole app. Real apps with new inputs: 4 of 11 reruns were right with no model call on Oct 28, 6 of 11 at the Oct 31 rehearsal. ${srcA({ path: "eval/results/final/report.md", note: "suite 4" }, "report.md")} ${srcA({ path: "eval/results/real_rerun_2026-10-31/README.md" }, "rehearsal")}</li>
+          <li>Agents hear about the phone when they next ask: a Muse scheduled task checked <code>phone_updates</code> about every 10 minutes. Envoy's own push to the iPhone is immediate.</li>
+          <li>TikTok sent no phone notification for any of three test comments, so notification triggers are shown for Instagram and YouTube only.</li>
+          <li>The Story poll routine fails while a Story is already live. Teach mode can't yet learn keypad entry, or apps that reopen on their last screen. Target and banking apps refuse emulators.</li>
+          <li>${D.eval.final ? "The results are the final evaluation's, on the <code>eval-final</code> tag." : "The final evaluation runs Nov 3. Until then, results say which development commit they were measured on."} The layer's own runs (sections ${num("agents")}–${num("keys")}) are from Nov 1–2; each says where it ran.</li>
+        </ul>
+      </div>`;
+  }
+
+  // ---- the Spark agent's runs, from its page's event log ----
+  function sparkLog(run, { skipAnswersOf = [] } = {}) {
+    const t0 = (run.rows.find((x) => x.kind === "user") || { t: 0 }).t;
+    const asked = {};
+    const out = [];
+    for (const r of run.rows) {
+      if (r.kind === "user" || r.kind === "wait") continue;
+      if (r.kind === "ask") asked[r.task] = r.ask === "approval" ? r.title : "use Envoy's phone";
+      const label = r.kind === "ask" ? r.title : r.kind === "answer" ? `${asked[r.task]}|${r.outcome}` : null;
+      const prev = out[out.length - 1];
+      if (label && prev && prev.kind === r.kind && prev.label === label && Math.abs(r.t - prev.t) < 2) { prev.n += 1; continue; }
+      out.push({ ...r, label, what: asked[r.task], n: 1 });
+    }
+    const t = (r) => `<span class="t">${(r.t - t0).toFixed(1)} s</span>`;
+    return `<ol class="tline">${out.map((r) => {
+      if (r.kind === "commentary") return `<li class="say">${t(r)}<span>“${esc(r.text)}”</span></li>`;
+      if (r.kind === "reply") return `<li class="say reply">${t(r)}<span><b>Answer:</b> “${esc(r.text)}”</span></li>`;
+      if (r.kind === "call") return `<li class="call">${t(r)}<span><code>${callSig(r.tool, r.args)}</code><span class="res">${r.ok ? "→" : "✕"} ${esc(r.result)}</span></span></li>`;
+      if (r.kind === "refusal") return `<li class="refuse">${t(r)}<span><span class="chip">Envoy refused</span> “${esc(r.text)}”</span></li>`;
+      if (r.kind === "ask") return `<li class="ask">${t(r)}<span><span class="chip apricot">Envoy asks on the iPhone${r.n > 1 ? ` ×${r.n}` : ""}</span> ${r.ask === "approval" ? `final button <b>${esc(r.title)}</b>` : `“${esc(r.title)}”`}</span></li>`;
+      if (r.kind === "answer") return `<li class="ans">${t(r)}<span>${esc(r.what === "use Envoy's phone" ? "Use Envoy's phone" : r.what)}${r.n > 1 ? ` ×${r.n}` : ""}: <span class="chip ${r.outcome === "declined" ? "" : "sage"}">${r.outcome === "declined" ? "declined" : "yes"}</span> after ${secs(r.after_s)}</span></li>`;
+      return "";
+    }).join("")}</ol>`;
+  }
+
+  // ---- agents call it ----
+  function renderAgents() {
+    const A = D.agents, X = A.crosspost, R1 = A.run1, M = A.muse, MD = M.dry_run, C = A.claude;
+    const ask = X.rows.find((x) => x.kind === "user");
+    const done = C.tasks.filter((t) => t.status === "done");
+    $("#agents-body").innerHTML = `
+      ${head(0, "agents", "Agents call it", "Muse, or any MCP agent, asks. Envoy does it on a phone.",
+        `Envoy is an MCP server (Streamable HTTP at <code>/mcp</code>). An agent can run a task in plain words, call a learned routine by its name, search what Envoy remembers from the phone, put a file from the Mac on the phone, pick the phone, follow a task, and read what happened since it last asked. It can propose a trigger, which stays off until the person turns it on. It can't approve anything: there is no such tool.`)}
+      <div class="card xpost">
+        <div class="row-between"><h3>The Spark agent: one request, four app-only posts</h3><span class="chip">${esc(X.model)} · ${X.model_calls} model calls · ${usd(X.usd)}</span></div>
+        <p class="goal" style="margin:12px 0 0">${esc(ask.text)}</p>
+        <div class="xgrid">
+          <div>
+            ${sparkLog(X)}
+            <p class="small" style="margin:10px 0 0">Times from the request. Spark called the four learned routines at once, then followed them with one wait; the posts ran one at a time on Envoy's phone. Each stopped at the app's final button and asked the person. ${X.mcp_calls} MCP calls in all, most of them the wait's <code>get_task</code> polls.</p>
+          </div>
+          <div class="shots">
+            ${shot(A.shots.asks, "The Spark agent's page: four Use Envoy's phone asks stacked while Envoy waits", "Four phone asks stacked: each post first asks to use Envoy's phone.")}
+            ${shot(A.shots.declined, "The Spark agent's page after all four final buttons were declined", "The end: Spark reports that nothing was posted.")}
+          </div>
+        </div>
+        <div class="callout" style="margin-top:14px"><b>A dry run, on purpose.</b> This ran on a test copy of Envoy, whose “user” was a script that said yes to using the phone and no at every final button about 20 s after it was asked. Nothing was posted. Envoy's own model calls: TikTok's routine reads its drawn sound list with vision (7 calls, about $0.02); the other three made none. An earlier run (${esc(R1.started_et.slice(11))} ET, three posts) showed one rough edge: TikTok and YouTube first failed because only Instagram was set to the phone, and Spark retried them with <code>phone: "phone"</code>. ${srcA(A.run1_src, "run 1")}</div>
+        <div class="label-rec"><span><b>Recorded</b> ${esc(date(X.started_et + ":00"))}</span><span><b>Envoy</b> a test copy (<code>${esc(X.envoy)}</code>), main <code>aa4614e</code></span><span><b>Phone</b> Envoy's phone, a Pixel 5 (Android 13), test accounts</span>${srcA(A.crosspost_src, "event log")} ${srcA(A.crosspost_readme, "README")}</div>
+      </div>
+      <div class="agent-row">
+        <div class="card" style="padding:20px">
+          <div class="row-between"><h3>Muse, end to end</h3><span class="chip apricot">Dry run, Nov 2: every final post declined</span></div>
+          <p style="margin:8px 0 0;color:var(--ink-2);font-size:14.5px">${esc(MD.what)}</p>
+          <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Routine and task</th><th>Status</th><th class="r">Calls</th><th class="r">Time</th></tr></thead>
+            <tbody>${MD.tasks.map((t) => `<tr><td><code class="small">${esc(t.routine)}</code><div class="small">${esc(t.id)}</div></td><td>${esc(t.status)}${t.status !== "declined" ? `<div class="small">${esc(t.detail)}</div>` : ""}</td><td class="r">${t.model_calls}</td><td class="r">${secs(t.seconds)}</td></tr>`).join("")}</tbody></table></div>
+          <ul class="plain" style="margin-top:8px">${MD.notes.map((n) => `<li class="small">${esc(n.replace(/^seconds runs/, "Time runs"))}</li>`).join("")}</ul>
+          <p class="small" style="margin:8px 0 0">Muse posts one at a time, waiting for a tap in its chat between posts. Library songs and poll stickers exist only in the apps, and Muse has no TikTok or YouTube connector, so it hands these to Envoy; Muse can post plain Instagram content itself. ${srcA(M.dry_run_src, "task-rows.json")} ${srcA(D.showcase.doc_src, "demo-showcase.md")}</p>
+          <div class="pair shots2">
+            ${shot(M.mac, "Muse for Mac moving the newest video into Envoy's outbox folder and writing its caption file", "Muse for Mac puts a clip and its caption file in Envoy's outbox (Oct 29). Cropped to Muse's window.")}
+            ${shot(M.no_accept, "Muse in the iPhone app saying it can't accept Envoy's offers: there's no accept or approve tool", "Muse, asked to accept Envoy's offers: “there's no accept or approve tool” (Oct 29).", "phone-shot")}
+          </div>
+          <div class="label-rec">${srcA(M.src, "eval/results/muse-link")} ${srcA(M.doc, "docs/muse-link.md")}</div>
+        </div>
+        <div class="card" style="padding:20px">
+          <div class="row-between"><h3>Claude Code, too</h3><span class="chip">the live Envoy, Nov 1</span></div>
+          <p style="margin:8px 0 0;color:var(--ink-2);font-size:14.5px">With its own key (read and run), Claude Code saw Envoy's tools and ran a learned routine: ${done.length} flight-status tasks, done in ${done.map((t) => secs(t.seconds)).join(" and ")}, ${done.reduce((a, t) => a + t.model_calls, 0)} model calls. Its check-in stopped at “Confirm check-in” for the person, and Claude said it can't approve: “Only the user can decide it, on their phone in Envoy.”</p>
+          <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Routine and task</th><th>Agent</th><th>Status</th><th class="r">Time</th></tr></thead>
+            <tbody>${C.tasks.map((t) => `<tr><td><code class="small">${esc(t.routine)}</code><div class="small">${esc(t.id)}</div></td><td>${esc(t.agent)}</td><td>${esc(t.status)}${t.detail && t.status !== "done" ? `<div class="small">${esc(t.detail)}</div>` : ""}</td><td class="r">${secs(t.seconds)}</td></tr>`).join("")}</tbody></table></div>
+          <p class="small" style="margin:8px 0 0">The check-in's approval was never answered: an API restart stopped the task first, so nothing was checked in. SkyLark ${testApp}. ${srcA(C.src, "task-rows.json")} ${srcA(C.readme, "README")}</p>
         </div>
       </div>`;
-    const C = D.claim;
-    $("#new").innerHTML = `
-      <div class="prior"><span class="chip">What's new vs. existing phone agents</span><p>${esc(C.prior.replace(/:$/, "."))}</p></div>
-      <div class="new-grid">
-        ${C.new.map((n, i) => `<div class="card"><div class="k">${i + 1}</div><h3>${esc(n.title)}</h3><p>${esc(n.text)}</p></div>`).join("")}
+  }
+
+  // ---- routines become tools ----
+  function renderTools() {
+    const T = D.tools, B = T.by_name, tool = T.tool;
+    const props = Object.entries(tool.input.properties || {});
+    const sig = `${esc(tool.name)}(${props.map(([k]) => esc(k)).join(", ")})`;
+    const fresh = T.after.tools.filter((t) => !T.before.tools.includes(t));
+    const byName = B.rows.find((r) => r.kind === "call" && r.tool === "skylark_check_flight_status");
+    const wait = B.rows.find((r) => r.kind === "wait");
+    $("#tools-body").innerHTML = `
+      ${head(0, "tools", "Learned routines become tools", "Share a learned routine, and agents get it as a tool of its own, by name.",
+        `Each routine has a “Share with agents” switch, off by default. Once it's on, the next <code>tools/list</code> carries the routine as a tool: typed inputs from the routine, a description of what it does and when Envoy learned it, and a note that anything irreversible waits for the person. Calling it replays the routine, with no restart and no reconnect. The four posting tools in ${sec("app-only")} are routines shared this way.`)}
+      <div class="tools-grid">
+        <div class="card" style="padding:20px">
+          <div class="row-between"><h3>One switch, one new tool</h3>${testApp}</div>
+          <div class="toollist"><span class="lbl">Before · ${T.before.tools.length} tools</span><div class="chips">${T.before.tools.map((t) => `<code class="tchip">${esc(t)}</code>`).join("")}</div></div>
+          <div class="toollist"><span class="lbl">After sharing one routine · ${T.after.tools.length} tools</span><div class="chips">${T.after.tools.map((t) => `<code class="tchip ${fresh.includes(t) ? "new" : ""}">${esc(t)}</code>`).join("")}</div></div>
+          <div class="tooldef">
+            <div class="sig">${sig}</div>
+            <p>${esc(tool.description)}</p>
+            <ul class="plain">${props.map(([k, v]) => `<li class="small"><code>${esc(k)}</code> · ${esc(v.type)}${(tool.input.required || []).includes(k) ? ", required" : ""}: ${esc(v.description || "")}</li>`).join("")}</ul>
+          </div>
+          <p class="meta" style="margin:12px 0 4px">Then one call to it:</p>
+          <div class="tline-one"><code>${callSig(T.call.tool, T.call.args)}</code> → <b>${esc(T.call.status)}</b>, “${esc(T.call.result)}”, ${esc(T.call.detail)}.</div>
+          <p class="small" style="margin:8px 0 0">Envoy's heads-up before it started: “${esc(T.call.heads_up[0] || "")}” The routine's steps: ${T.call.steps.map((s) => `<code>${esc(s)}</code>`).join(", ")}.</p>
+          <div class="label-rec"><span><b>Recorded</b> ${esc(T.before.at.slice(0, 16))}–${esc(T.call.at.slice(11, 16))} ET, a test copy of Envoy</span>${srcA(T.door_src, "eval/results/agent-door")} ${srcA(T.report_src, "report")}</div>
+        </div>
+        <div>
+          <div class="card" style="padding:20px">
+            <div class="row-between"><h3>The Spark agent calls it by name</h3>${testApp}</div>
+            <p style="margin:8px 0 0;color:var(--ink-2);font-size:14.5px">Asked “${esc((B.rows.find((r) => r.kind === "user") || {}).text)}”, Spark searched memory, then called the learned tool directly, with no <code>list_routines</code> and no <code>run_routine</code>:</p>
+            <div class="tline-one" style="margin-top:10px"><code>${callSig(byName.tool, byName.args)}</code></div>
+            <p style="margin:10px 0 0;font-family:var(--serif);font-size:17px">“${esc((B.rows.find((r) => r.kind === "reply") || {}).text)}”</p>
+            <p class="small" style="margin:8px 0 0">${B.model_calls} Spark calls, ${usd(B.usd)}. The routine made none. Slow on Envoy's side, honestly: the task took ${secs(wait.ms / 1000)} on a freshly started test copy, most of it before the first step; a replay on a warm phone takes seconds.</p>
+            ${shot(T.shot, "The Spark agent's page: skylark_check_flight_status called as a learned routine", "The Spark agent's page: the learned tool is marked “learned routine”.")}
+            <div class="label-rec"><span><b>Recorded</b> ${esc(date(B.started_et + ":00"))}</span>${srcA(T.by_name_src, "event log")} ${srcA(T.evidence_readme, "README")}</div>
+          </div>
+          <div class="card" style="padding:20px;margin-top:16px">
+            <h3>What the person sees</h3>
+            <p class="small" style="margin:6px 0 0">Settings › Agents › Agent tools lists each shared routine as an agent calls it, live: inputs, outputs, when it was learned. A test copy with SkyLark's demo data.</p>
+            ${shot(T.settings, "Envoy's Settings, Agent tools: three learned tools, each with its inputs and when it was learned", "")}
+            <p class="small" style="margin:8px 0 0">Muse saw a newly shared tool without reconnecting (checked Nov 1 with Muse for Mac against a probe server; no capture in the repo). Its client adds a new tool to its own allowed list before the first call. ${srcA(T.settings_src, "capture")}</p>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  // ---- acts: the app-only posts ----
+  function renderAppOnly() {
+    const S = D.showcase;
+    const range = (xs, f) => { const a = Math.min(...xs), b = Math.max(...xs); return a === b ? f(a) : `${f(a)}–${f(b)}`; };
+    const card = (c) => {
+      const R = c.replays, ok = R.filter((r) => r.ok), zero = R.filter((r) => r.calls === 0);
+      const asked = R[0] ? R[0].asked : c.first.asked;
+      return `<article class="card post-card">
+        <div class="row-between"><span class="chip sage">${esc(c.app)}</span><span class="chip">v${c.version} · ${c.steps} steps</span></div>
+        <h3>${esc(c.what)}</h3>
+        <div class="sig small"><code>${esc(c.name)}(${c.inputs.map(esc).join(", ")})</code></div>
+        <dl class="fr">
+          <div><dt>First run, the agent</dt><dd><b>asked at ${esc(c.first.asked)} after ${esc(c.first.to_ask)}</b><span>${c.first.calls} model calls · ${usd(c.first.usd)}</span></dd></div>
+          <div class="rp"><dt>Replays of v${c.version}</dt><dd><b>${ok.length}/${R.length} reached ${esc(asked)}</b><span>${range(R.map((r) => r.calls), String)} model calls · ${range(R.map((r) => Math.round(parseFloat(r.to_ask))), String)} s to the ask${zero.length && zero.length < R.length ? ` · ${zero.length} of ${R.length} with 0 calls` : ""}</span></dd></div>
+        </dl>
+        <p class="small" style="margin:8px 0 0" title="${esc(c.made)}">From one agent run, ${esc(c.made.split(";").pop().replace(/\s*\(showcase\)\s*$/, "").trim())}.</p>
+        <ul class="plain real">${c.real.map((p) => `<li><span class="chip ${/^live/.test(p.result) ? "sage" : "apricot"}">${/^live/.test(p.result) ? "posted" : "flawed"}</span> <span class="small">${esc(p.post)}, ${esc(p.routine)}: ${esc(p.result.replace(/[;.]$/, ""))}</span></li>`).join("")}</ul>
+        <div class="label-rec" style="margin-top:8px">${srcA(c.src, "index.json")} ${srcA(c.yaml_src, `v${c.version}.yaml`)}</div>
+      </article>`;
+    };
+    $("#app-only-body").innerHTML = `
+      ${head(0, "app-only", "Acts, in the apps", "One clip, four posts, each using something only the app has.",
+        `A song from Instagram's music library on a Reel, a poll sticker on a Story, a library sound on a TikTok and on a YouTube Short. Each is a routine Envoy learned from one agent run on Envoy's phone, compiled by Muse Wonder, and shared with agents as a tool. Rehearsals stop at the app's final button; a post goes out only after the person's yes on their iPhone.`)}
+      <div class="app-only">
+        <div class="posts">${S.cards.map(card).join("")}</div>
+        <div class="poll-side">
+          <figure class="pair-phone"><div class="phone"><img src="data/${esc(S.poll)}" alt="Instagram's Story editor on Envoy's phone with a poll sticker: Sunrise or sunset?" loading="lazy" width="540" height="1170"></div>
+            <figcaption>A poll sticker on an Instagram Story, on Envoy's phone (Nov 1, 19:25). A feasibility check driven step by step by hand, before the routine was learned. Test account; the clip is a test pattern. ${srcA(S.poll_src, "capture")}</figcaption></figure>
+        </div>
       </div>
-      <div class="label-rec">${srcA(C.src, "docs/technical-design.md › Overview")}</div>
-      <div class="block howto">
-        <span><i class="dot"></i>Every screen is a real recording, labeled with its app, date and commit.</span>
-        <span><i class="dot"></i>Every number links to the file it came from.</span>
-        <span><i class="dot ap"></i>SkyLark is our own test app. We say so wherever it appears, and lead with real apps.</span>
+      <div class="callout" style="margin-top:16px"><b>As recorded, flaws included.</b> The first real TikTok went up without its sound: in the source run the agent noticed the sound hadn't attached and redid it, but the compiler dropped that correction as a back-track, and the step's check only looked for the word “Music”. The compiler now keeps such a correction; the recompiled v3 checks the editor names the sound, and its re-post had it. The Story routine fails while a Story is already live. YouTube's search step sometimes needs a repair or the agent (the 2–8 calls above).</div>
+      <div class="block" style="padding:14px 18px;margin-top:12px;font-size:14px;color:var(--ink-2)">
+        A rehearsal declines the final tap, so the compiler adds it back as the routine's last step, built from the screen it was declined on and marked irreversible.
+        <b style="color:var(--ink)">The real posts, Nov 2, about 01:00–02:31 ET:</b> on test accounts. The first four were started from the Spark agent on the person's word, each with both asks (using Envoy's phone, then the final button) approved on the iPhone; the TikTok re-post followed at 02:30. First runs and replays: Nov 1–2 on a test copy, every one declined at the final button. ${srcA(S.report_src, "showcase-report.md")} ${srcA(S.runs_src, "runs.md")} ${srcA(S.doc_src, "demo-showcase.md")} ${srcA(S.p3_src, "p3.md")}
+      </div>`;
+  }
+
+  // ---- watches ----
+  const KINDS = {
+    time: "a time: every N minutes, daily, weekly, or once",
+    before_fact: "a time from memory, such as 24 hours before a flight; it moves when the flight does",
+    watch: "a read-only routine re-run on a schedule (a gate, a delivery), with an alert when what it reads changes",
+    email: "a new email from a sender",
+    fact_changed: "a remembered fact that changes, such as a departure time",
+    notification: "a notification on Envoy's phone, from an app the person lets Envoy watch (new, Nov 1)",
+  };
+  function renderWatches() {
+    const W = D.watches;
+    const cols = W.live.length ? Object.keys(W.live[0]) : [];
+    $("#watches-body").innerHTML = `
+      ${head(0, "watches", "Watches", "Envoy watches the phone, and tells the person and their agents.",
+        `A trigger can just tell, ask first (“Should I…?” on the iPhone), or run a routine. Agents can propose one with <code>create_trigger</code>; it's created switched off, and only the person turns it on. What happened reaches agents through <code>phone_updates</code>: finished tasks, routines learned or repaired, notifications a trigger matched.`)}
+      <div class="card" style="padding:20px;margin-top:28px">
+        <h3>Real comments on the showcase posts, Nov 2</h3>
+        <p class="small" style="margin:6px 0 0">The live Envoy and Envoy's phone, with the trigger “Instagram, TikTok or YouTube: comment” set to just tell. Times run from the notification landing on the phone.</p>
+        <div class="tbl-wrap"><table class="tbl watch-tbl"><thead><tr>${cols.map((c) => `<th>${esc(c)}</th>`).join("")}</tr></thead>
+          <tbody>${W.live.map((r) => `<tr>${cols.map((c, i) => `<td${i === cols.length - 1 && /^\+/.test(r[c]) ? ' class="hit"' : ""}>${esc(r[c])}</td>`).join("")}</tr>`).join("")}</tbody></table></div>
+        <p class="small" style="margin:8px 0 0">Envoy's part stayed under 4 s. The time from a comment to its notification is each app's own: seconds on Instagram, about two minutes on YouTube. TikTok showed the comments only inside the app, which a notification watcher can't see. ${srcA(W.src, "phone-watch-report.md")}</p>
       </div>
-      <div class="card" style="margin-top:16px;padding:18px 20px">
-        <h3 style="font-size:17px">Limits, plainly</h3>
-        <ul style="margin:8px 0 0;padding-left:18px;color:var(--ink-2);font-size:14.5px">
-          <li>It runs on a Mac today (emulators plus one real Pixel 5 over USB), with a one-time sign-in per app, done by the user.</li>
-          <li>Apps with bot checks (Target) don't run on emulators; they need a real phone.</li>
-          <li>Real apps with new inputs, the eval's 18 workflows: 4 of 11 reruns were right with no model call on Oct 28, and 6 of 11 at the Oct 31 rehearsal on the hybrid profile (first runs 12 of 18 there). Separately, five routines shipped in the loops went 15 of 15 on new inputs (Oct 30).
-            ${srcA({ path: "eval/results/final/report.md", note: "suite 4" }, "report.md")} ${srcA({ path: "eval/results/real_rerun_2026-10-31/README.md" }, "rehearsal")} ${srcA(L.table_src, "table.md")}</li>
-        </ul>
+      <div class="watch-grid">
+        <div class="card" style="padding:20px">
+          <h3>Six kinds of trigger</h3>
+          <ul class="kinds">${W.kinds.map((k) => `<li><code>${esc(k)}</code><span>${esc(KINDS[k] || "")}</span></li>`).join("")}</ul>
+          <div class="label-rec">${srcA(W.kinds_src, "scheduler.py")} ${srcA(W.code_src, "notifications.py")}</div>
+        </div>
+        <div class="card" style="padding:20px">
+          <h3>How an agent hears it</h3>
+          <p style="margin:8px 0 0;color:var(--ink-2);font-size:14.5px">Agents ask; Envoy doesn't push to them. Here a Muse scheduled task checked Envoy's phone updates every 10 minutes and told the person, unprompted, about a file Envoy was waiting to put on the phone (Oct 29). So an agent hears within its own check interval; Envoy's push to the iPhone is immediate.</p>
+          ${shot(W.muse, "Muse on the iPhone: a scheduled task checking Envoy's phone updates every 10 minutes reports a new offer", "Muse's scheduled task reports a new phone update. Cropped below the status bar.", "tall")}
+          <ul class="plain" style="margin-top:12px">
+            <li class="small"><b>Off by default:</b> each app is watched only after the person switches it on in Settings › Phones.</li>
+            <li class="small"><b>Little kept:</b> the notification list is read in memory and dropped; only matched notifications are stored, with code-like numbers hidden first (unit-tested, not yet seen live).</li>
+          </ul>
+          <div class="label-rec">${srcA(W.muse_src, "capture")}</div>
+        </div>
+      </div>`;
+  }
+
+  // ---- a key per agent ----
+  function renderKeys() {
+    const K = D.keys, R = K.readonly;
+    const refusal = R.rows.find((r) => r.kind === "refusal");
+    const approveAsk = R.rows.filter((r) => r.kind === "user").pop();
+    const approveReply = R.rows.filter((r) => r.kind === "reply").pop();
+    $("#keys-body").innerHTML = `
+      ${head(0, "keys", "A key per agent", "Each agent gets its own key, and only the tools it was given.",
+        `The person makes an agent's key in Settings › Agents on the Mac: a name and tool groups. The key is shown once and stored only as a hash. Every task says which agent started it (“from Spark agent”, “from Claude”). Each agent can start at most ${K.per_minute} tasks a minute. No key, whatever its groups, can approve anything.`)}
+      <div class="keys-grid">
+        <div class="card" style="padding:20px">
+          <h3>Tool groups</h3>
+          <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Group</th><th>Tools</th></tr></thead>
+            <tbody>${Object.entries(K.groups).map(([g, ts]) => `<tr><td><b>${esc(g)}</b></td><td>${ts.map((t) => `<code class="small">${esc(t)}</code>`).join(", ")}${g === "run" ? `<div class="small">and every shared routine's own tool</div>` : ""}</td></tr>`).join("")}</tbody></table></div>
+          ${shot(K.settings, "Envoy's Settings, Agents: Muse's key, and the form to add an agent with tool groups Read, Run, Memory, Files and Triggers", "Settings › Agents on a test copy: a new agent gets read and run unless the person adds more.")}
+          <div class="label-rec">${srcA(K.groups_src, "auth.py")} ${srcA(K.settings_src, "capture")} ${srcA(K.doc_src, "docs/agents.md")}</div>
+        </div>
+        <div class="card" style="padding:20px">
+          <div class="row-between"><h3>The Spark agent on a read-only key</h3>${testApp}</div>
+          <ul class="plain" style="margin-top:10px">
+            <li><b>It sees ${R.tools.length} tools,</b> all in the read group: ${R.tools.map((t) => `<code class="small">${esc(t.name)}</code>`).join(", ")}.</li>
+            ${refusal ? `<li><b>It called one it wasn't given</b>, <code>${esc(refusal.tool)}</code>. Envoy answered “${esc(refusal.text)}”, and nothing started.</li>` : ""}
+            ${approveAsk ? `<li><b>Asked “${esc(approveAsk.text)}”:</b> “${esc(approveReply.text)}”</li>` : ""}
+          </ul>
+          ${shot(K.readonly_shot, "The Spark agent's page: Envoy refused an unknown tool, and Spark says only the person can approve", "")}
+          <p class="small" style="margin:8px 0 0">${R.model_calls} Spark calls, ${usd(R.usd)}. A test copy of Envoy, no phone used.</p>
+          <div class="label-rec"><span><b>Recorded</b> ${esc(date(R.started_et + ":00"))}</span>${srcA(K.readonly_src, "event log")} ${srcA(K.report_src, "report")}</div>
+        </div>
       </div>`;
   }
 
@@ -313,7 +550,7 @@
     <span class="eyebrow"><span class="num">${num(id)}</span> ${esc(eyebrow)}</span>
     <h2 id="${id}-h">${h}</h2>${lede ? `<p class="lede">${lede}</p>` : ""}`;
   const testApp = `<span class="chip apricot" title="SkyLark Air is Envoy's own test airline app">Our test app</span>`;
-  const notFinal = (c) => D.eval.final ? "" : `<span class="chip apricot pending" title="Measured before the frozen Nov 2 eval">${c ? `on ${esc(c)} · ` : ""}final numbers after Nov 2</span>`;
+  const notFinal = (c) => D.eval.final ? "" : `<span class="chip apricot pending" title="Measured before the final evaluation on Nov 3">${c ? `on ${esc(c)} · ` : ""}final numbers after Nov 3</span>`;
 
   // ---- 4: repairs ----
   function renderRepairs() {
@@ -580,15 +817,15 @@
     const P = D.proof, E = D.eval;
     const chart = (k, t, cap) => `<figure class="card chart"><img src="data/${esc(P.charts[k])}" alt="${esc(t)}" loading="lazy"><figcaption><b>${esc(t)}</b> ${cap} ${srcA({ path: P.charts_src.path + "/" + k + ".png" }, k + ".png")}</figcaption></figure>`;
     $("#proof-body").innerHTML = `
-      ${head(9, "proof", "The proof", "The evaluation, scored by code on the app's real state, never by a model.",
+      ${head(9, "proof", "The results", "The evaluation, scored by code on the app's real state, never by a model.",
         "Each suite starts from a known state. Success is the app's own state or the right answer on screen. Dollars are at Meta's standard prices.")}
       <div class="final-banner ${E.final ? "done" : ""}">
         ${E.final ? `<b>Final numbers.</b> All ${E.suites} suites ran on the <code>eval-final</code> tag.`
-          : `<b>Final numbers after Nov 2.</b> ${E.on_tag} of ${E.suites} suites have run on the frozen <code>eval-final</code> tag so far. Every number below shows the commit it was measured on.`} ${srcA(E.src, "report.md")} ${srcA({ path: "site/data/numbers.json" }, "numbers.json")}
+          : `<b>Final numbers after Nov 3.</b> The final evaluation runs Nov 3 on the <code>eval-final</code> tag; ${E.on_tag} of ${E.suites} suites have run on it so far. Every number below shows the commit it was measured on.`} ${srcA(E.src, "report.md")} ${srcA({ path: "site/data/numbers.json" }, "numbers.json")}
       </div>
       <div class="tbl-wrap card" style="margin-top:16px"><table class="tbl suites">
         <thead><tr><th>Suite</th><th>Result</th><th>Measured on</th></tr></thead>
-        <tbody>${P.suites.map((s) => /^8\. AndroidWorld/.test(s.suite) ? { ...s, suite: "8. AndroidWorld", result: "Reported on its own page; summary below." } : s).map((s) => `<tr><td>${esc(s.suite)}</td><td>${esc(s.result)}</td><td><code class="small">${esc(s.ran_on)}</code>${/eval-final/.test(s.ran_on) ? "" : ' <span class="chip apricot pending">final after Nov 2</span>'}</td></tr>`).join("")}</tbody>
+        <tbody>${P.suites.map((s) => /^8\. AndroidWorld/.test(s.suite) ? { ...s, suite: "8. AndroidWorld", result: "Reported on its own page; summary below." } : s).map((s) => `<tr><td>${esc(s.suite)}</td><td>${esc(s.result)}</td><td><code class="small">${esc(s.ran_on)}</code>${/eval-final/.test(s.ran_on) ? "" : ' <span class="chip apricot pending">final after Nov 3</span>'}</td></tr>`).join("")}</tbody>
       </table></div>
       <p class="small" style="margin:8px 4px 0">Suites 0–3b and 5–7 run on SkyLark, our own test app, and on the test inbox; suite 4 is real apps. ${srcA(P.src, "report.md")}</p>
       <h3 style="margin-top:28px">The design's own targets</h3>
@@ -604,7 +841,7 @@
       </div>
       <div class="stats three" style="margin-top:16px">
         <div class="card stat"><div class="lbl">The real phone (Pixel 5)</div><div class="big">${P.phone.passed}/${P.phone.runs}</div><div class="lbl">the 10 core routines, compiled on an emulator, on 3 new bookings each: <b>${P.phone.calls} model calls</b>, median ${secs(P.phone.median_s)}</div>${notFinal(P.phone.commit + ", " + P.phone.date)} ${srcA(P.phone.src, "sizes.json")}</div>
-        <div class="card stat"><div class="lbl">AndroidWorld (Google's benchmark, 116 tasks)</div><p style="margin:6px 0 0;font-size:14px;color:var(--ink-2)">${esc(P.aw.headline.split(". ").slice(0, 3).join(". "))}.</p><div class="small" style="margin-top:6px">Held-out half, re-measured Oct 29: ${esc(P.aw.held_out.split(".")[0])}. A rerun on the hybrid profile follows after Nov 2.</div>${srcA(P.aw.src, "androidworld-results.md")}</div>
+        <div class="card stat"><div class="lbl">AndroidWorld (Google's benchmark, 116 tasks)</div><p style="margin:6px 0 0;font-size:14px;color:var(--ink-2)">${esc(P.aw.headline.split(". ").slice(0, 3).join(". "))}.</p><div class="small" style="margin-top:6px">Held-out half, re-measured Oct 29: ${esc(P.aw.held_out.split(".")[0])}. A rerun on the hybrid profile may follow the Nov 3 evaluation.</div>${srcA(P.aw.src, "androidworld-results.md")}</div>
         <div class="card stat"><div class="lbl">Offline tests</div><div class="big">${P.tests.functions}</div><div class="lbl">test functions in ${P.tests.files} files, counted from the code (a parametrized test counts once)</div>${srcA(P.tests.src, "backend/tests")}</div>
       </div>`;
   }
@@ -638,8 +875,9 @@
   // ---- table of contents ----
   function renderToc() {
     const secs = [...document.querySelectorAll("main section.sec")];
-    const names = { claim: "Claim", "first-run": "First run", learned: "Learned", repairs: "Repairs", "real-apps": "Real apps",
-      teach: "Teach it", memory: "Memory", safety: "Safety", models: "Models", proof: "Proof", "how-built": "How it's built" };
+    const names = { claim: "Phone layer", agents: "Agents", tools: "Tools", "app-only": "App-only", watches: "Watches", keys: "Keys",
+      "first-run": "First run", learned: "Learned", repairs: "Repairs", "real-apps": "Real apps", teach: "Teach it", memory: "Memory",
+      safety: "Safety", models: "Models", proof: "Results", "how-built": "How it's built" };
     $("#toc").innerHTML = secs.map((s, k) => `<a href="#${s.id}" data-id="${s.id}"><span class="n">${k + 1}</span>${esc(names[s.id] || s.id)}</a>`).join("");
     const links = [...document.querySelectorAll("#toc a")];
     const io = new IntersectionObserver((es) => es.forEach((e) => {
@@ -648,7 +886,12 @@
     secs.forEach((s) => io.observe(s));
   }
 
-  renderClaim();
+  renderHero();
+  renderAgents();
+  renderTools();
+  renderAppOnly();
+  renderWatches();
+  renderKeys();
   renderFirstRun();
   renderLearned();
   renderRepairs();
@@ -662,7 +905,10 @@
   renderToc();
   // ?only=<section id> shows one section alone (for screenshots: headless Chrome captures from the top).
   const only = new URLSearchParams(location.search).get("only");
-  if (only) document.querySelectorAll("main section.sec").forEach((s) => { if (s.id !== only) s.hidden = true; });
+  if (only) {
+    document.querySelectorAll("main section.sec").forEach((s) => { if (s.id !== only) s.hidden = true; });
+    document.querySelectorAll("main .part").forEach((p) => { p.hidden = true; });
+  }
   // Sections render after load, so a #section link lands short; scroll again once they're in.
   if (location.hash) { const t = document.getElementById(location.hash.slice(1)); if (t) t.scrollIntoView(); }
   // Light or dark: light unless the visitor picks dark with the top bar's toggle, remembered in this browser (the <head>
