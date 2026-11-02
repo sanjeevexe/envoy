@@ -37,7 +37,8 @@ followed each task read-only over MCP.
 | --- | --- | --- | --- |
 | Instagram Reel + song | task-1102-005928-4182 | `instagram_reel_song` v2 | **live** as envoy3955, "JVKE · golden hour", caption "Posted by Envoy · test"; 0 calls, rung 2 (2 after-checks relaxed, so Envoy put a v3 on trial) |
 | Instagram Story + poll | task-1102-013244-b7c8 | `instagram_story_poll` v3 | **live**, poll "Did Envoy post this?" Yes / No; 0 calls, rung 1, 36 s |
-| TikTok + sound | task-1102-014139-7f5e | `tiktok_post_sound` v2 | **posted without the sound** ("Original sound by envoy"), 7 vision calls. Envoy said "failed" because its done-check didn't see the caption |
+| TikTok + sound | task-1102-014139-7f5e | `tiktok_post_sound` v2 | **posted without the sound** ("Original sound by envoy"), 7 vision calls. Envoy said "failed" because its done-check didn't see the caption. The user kept it |
+| TikTok re-post | task-1102-023044-d081 (02:30–02:31) | `tiktok_post_sound` v3 | **live** as envoy, "Posted by Envoy · test 2", **♫ golden hour - JVKE**; done, 3 calls, 53 s, close_sound_sheet at rung 0 |
 | YouTube Short + sound | task-1102-015325-106a | `youtube_short_sound` v2 | **live** as @envoy-e8o, public. Before Upload Short, the details screen showed YouTube's music notice and #goldenhour/#jvke, and the Short's sound tile is in use by 281K Shorts. The add-sound step passed only on a relaxed check (likely the "Swipe up to edit" hint) |
 
 **Why TikTok has no sound.** In the source run (task-1101-210013-7814) the agent's first try left the editor's sound

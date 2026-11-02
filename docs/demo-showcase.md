@@ -24,8 +24,9 @@ approved each in Envoy on their iPhone:
 - TikTok (`tiktok_post_sound` v2): went up **without the sound** ("Original sound by envoy"). The routine never
   attaches it. In its source run the agent's first try left the editor at "Add sound". The agent noticed and redid it
   (steps 19–24), but the compiler dropped that correction as a "back-track". The step's only after-check is the word
-  "Music", and the rehearsals stopped at Post, whose screen doesn't show the sound. The user deletes that post; it is
-  re-posted after the compiler fix and a rehearsal that checks "golden hour" in the editor before Post.
+  "Music", and the rehearsals stopped at Post, whose screen doesn't show the sound. The user kept that post.
+- TikTok re-post (`tiktok_post_sound` v3, built with the compiler fix and rehearsed 3/3): live as envoy, captioned
+  "Posted by Envoy · test 2", with **♫ golden hour - JVKE**. 3 calls, 53 s, the editor's sound checked before Next.
 - YouTube Short (`youtube_short_sound` v2): live and public. The details screen showed YouTube's music notice and
   #goldenhour, so the sound was on before Upload Short.
 
