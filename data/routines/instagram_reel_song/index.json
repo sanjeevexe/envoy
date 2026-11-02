@@ -107,6 +107,6 @@
    "patches": 0
   }
  ],
- "needs_recompile": true,
+ "needs_recompile": false,
  "app": "com.instagram.android"
 }

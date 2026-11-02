@@ -107,6 +107,6 @@
    "patches": 3
   }
  ],
- "needs_recompile": true,
+ "needs_recompile": false,
  "app": "com.google.android.youtube"
 }
