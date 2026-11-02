@@ -62,6 +62,10 @@ class Locator(_Model):
     row_has: str | None = None
     in_list: bool | None = None
     position: tuple[float, float] | None = None  # centre as a fraction of the screen (weak tiebreaker only)
+    # One of a uniform list or grid of look-alikes that nothing else tells apart (every gallery thumbnail reads "Video
+    # thumbnail created on <date>"): its place among the elements this locator matches there, in reading order (0: the
+    # first). The compiler pairs it with before-checks that hold the list's start in view, so a scrolled list matches nothing.
+    nth: int | None = None
     # Phase 6: a target drawn on screen with no accessibility node (a canvas seat map, a map pin). The executor looks
     # for the recorded picture first (no model call), then asks Muse Spark's grounding for `visual` (one call).
     visual: str | None = None  # what it looks like, with inputs as {{slots}}: "seat {{seat}}"
@@ -75,6 +79,8 @@ class Locator(_Model):
             v = getattr(self, k)
             if v:
                 bits.append(f"{k}={v!r}")
+        if self.nth is not None:
+            bits.append(f"nth={self.nth}")
         return "{" + ", ".join(bits) + "}"
 
 
