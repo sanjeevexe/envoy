@@ -591,7 +591,13 @@ def run_flow(args: argparse.Namespace) -> int:
     mark("end")
     auto = [s for s in steps if s.get("kind") == "approval" and "without asking" in (s.get("text") or "")]
     failures = []
-    if not any(is_post(a) for a in approvals):
+    expect_stop = getattr(args, "expect_stop", False)
+    if expect_stop:  # a planted wrong outcome must stop the run before the final step, and nothing may be asked
+        if "outcome check" not in (task.get("detail") or ""):
+            failures.append(f"expected an outcome-check stop; the task ended {task['status']}: {task.get('detail')!r}")
+        if approvals:
+            failures.append(f"asked though the outcome was wrong: {[a.get('description') for a in approvals]}")
+    elif not any(is_post(a) for a in approvals):
         failures.append("the post was never asked" + (" and the task ended done: check the profile now" if task["status"] == "done" else ""))
     if any(POST_WORDS.search(s.get("text") or "") for s in auto):
         failures.append(f"a publishing step went through without asking: {[s.get('text') for s in auto]}")
@@ -609,7 +615,7 @@ def run_flow(args: argparse.Namespace) -> int:
     cost = spent(tid, t0 - 5)
     # How each routine step went (rung 0: matched at once; 4: a repair call; 5–6: the agent), from the routine's trace.
     from agent.trace import RUNS as TRACES
-    routine_steps = []
+    routine_steps, outcome_checks = [], []
     trace = TRACES / f"{tid}-r1" / "steps.jsonl"
     if args.mode == "replay" and trace.exists():
         for line in trace.read_text().splitlines():
@@ -617,12 +623,14 @@ def run_flow(args: argparse.Namespace) -> int:
             if r.get("kind") == "routine_step":
                 routine_steps.append({"id": r.get("id"), "status": r.get("status"), "rung": r.get("rung"),
                                       "score": r.get("score"), "rungs": r.get("rungs") or []})
+            elif r.get("kind") == "outcome_checks":  # the song/caption/clip verdicts before the final step (C2)
+                outcome_checks.append({k: r.get(k) for k in ("when", "picks", "fields", "clip", "problems")})
     pkg = app_of(args.app) if args.app else task.get("app")  # the copy recorded a TikTok routine's task as Instagram's (Nov 1)
     result = {"mode": args.mode, "app": pkg, "time": datetime.fromtimestamp(t0).isoformat(timespec="seconds"), "request": body,
               "task": {k: task.get(k) for k in ("id", "status", "routine", "model_calls", "cost_usd", "traces", "detail", "device")},
               "steps": len(steps), "repairs": [s.get("text") for s in steps if "repair" in (s.get("text") or "").lower()][:10],
               "approvals": [{k: a.get(k) for k in ("description", "reasons", "status", "decided_by")} for a in approvals],
-              "asked_at": posts, "approval_shot": approval_shot, "routine_steps": routine_steps, "auto_approved": [s.get("text") for s in auto], "marks_s": marks, "spent": cost, "ok": not failures,
+              "asked_at": posts, "approval_shot": approval_shot, "routine_steps": routine_steps, "outcome_checks": outcome_checks, "auto_approved": [s.get("text") for s in auto], "marks_s": marks, "spent": cost, "ok": not failures,
               "failures": failures,
               "profile": os.environ.get("ENVOY_MODEL_PROFILE") or "hybrid"}
     if not args.no_cleanup and pkg:
@@ -708,6 +716,8 @@ def main() -> int:
         else:
             p.add_argument("--routine", required=True)
             p.add_argument("--input", action="append", help="name=value, once per input")
+            p.add_argument("--expect-stop", action="store_true", help="a planted wrong outcome: the run must stop on an outcome check "
+                           "before the final step, with nothing asked")
         p.add_argument("--api", default=API)
         p.add_argument("--api-dir", default=os.environ.get("ENVOY_API_DIR") or "", help="the copy's data dir (its session_token)")
         p.add_argument("--no-cleanup", action="store_true")
