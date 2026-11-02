@@ -1,0 +1,53 @@
+{
+ "mode": "replay",
+ "app": "com.google.android.youtube",
+ "time": "2026-11-01T21:14:02",
+ "request": {
+  "phone": "phone-09031FDD4000C6",
+  "routine": "youtube_short_sound",
+  "inputs": {
+   "sound_title": "golden hour",
+   "sound_artist": "JVKE",
+   "short_title": "Envoy rehearsal replay 1"
+  }
+ },
+ "task": {
+  "id": "task-1101-211402-9bef",
+  "status": "needs_you",
+  "routine": "youtube_short_sound",
+  "model_calls": 28,
+  "cost_usd": 0.2859,
+  "traces": [],
+  "detail": "routine step tap_create failed (before-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) and the agent could not finish (step_limit); asking the user",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 34,
+ "repairs": [],
+ "approvals": [],
+ "asked_at": [],
+ "auto_approved": [],
+ "marks_s": {
+  "running": 0.3,
+  "needs_you": 1.3,
+  "phone_yes": 1.3,
+  "end": 235.9
+ },
+ "spent": {
+  "model_calls": 28,
+  "cost_usd": 0.2858,
+  "cost_at_standard_usd": 0.2858,
+  "jobs": {
+   "repair": 2,
+   "plan": 2,
+   "step": 24
+  }
+ },
+ "ok": false,
+ "failures": [
+  "the post was never asked"
+ ],
+ "profile": "hybrid",
+ "cleanup": [
+  "force-stopped YouTube"
+ ]
+}

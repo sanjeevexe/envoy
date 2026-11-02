@@ -1,0 +1,60 @@
+{
+ "name": "youtube_short_sound",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-11-01 21:14:01",
+   "parent": null,
+   "changes": [
+    "compiled by showcase from task-1101-211106-9b42-r1, a first run declined at the post (eval/run_showcase.py)",
+    "its last step (tap 'Upload Short') is the tap declined at step 15, built from that screen; irreversible"
+   ],
+   "verification": {
+    "by": "showcase",
+    "post_steps": [
+     "tap_post"
+    ],
+    "checked": "2026-11-01 21:14"
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-11-01 21:17:57",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1101-211402-9bef-r1",
+   "status": "needs_user",
+   "rung": 6,
+   "model_calls": 28,
+   "duration_s": 231.78,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-01 21:19:42",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1101-211800-1393-r1",
+   "status": "declined",
+   "rung": 6,
+   "model_calls": 10,
+   "duration_s": 98.27,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-01 21:23:36",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1101-211945-6608-r1",
+   "status": "needs_user",
+   "rung": 6,
+   "model_calls": 43,
+   "duration_s": 227.95,
+   "patches": 0
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.google.android.youtube"
+}

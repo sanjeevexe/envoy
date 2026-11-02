@@ -1,0 +1,61 @@
+{
+ "name": "instagram_reel_song",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-11-01 20:32:39",
+   "parent": null,
+   "changes": [
+    "compiled by showcase from task-1101-202945-39d5-r1, a first run declined at the post (eval/run_showcase.py)",
+    "its last step (tap 'Share') is the tap declined at step 12, built from that screen; irreversible",
+    "intent and patterns name the music (hand edit of the description only, no step changed), so the matcher doesn't confuse it with instagram_post_reel for a plain reel"
+   ],
+   "verification": {
+    "by": "showcase",
+    "post_steps": [
+     "tap_post"
+    ],
+    "checked": "2026-11-01 20:32"
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-11-01 20:37:36",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1101-203331-38c1-r1",
+   "status": "declined",
+   "rung": 6,
+   "model_calls": 17,
+   "duration_s": 241.41,
+   "patches": 2
+  },
+  {
+   "time": "2026-11-01 20:42:54",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1101-203827-e6eb-r1",
+   "status": "declined",
+   "rung": 6,
+   "model_calls": 18,
+   "duration_s": 263.61,
+   "patches": 2
+  },
+  {
+   "time": "2026-11-01 20:48:19",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1101-204344-e5f4-r1",
+   "status": "declined",
+   "rung": 6,
+   "model_calls": 22,
+   "duration_s": 273.06,
+   "patches": 2
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.instagram.android"
+}

@@ -108,3 +108,8 @@ def test_agent_runs_wait_on_the_rule_for_each_apps_publishing_button():
 def test_a_button_the_rule_misses_still_stops_the_run(monkeypatch):
     monkeypatch.setitem(rs.GATED, rs.APPS["tiktok"], ("Make it live", ""))
     assert "isn't irreversible by rule" in rs.rule_gap(rs.APPS["tiktok"], "x")
+
+
+def test_instagrams_story_bubble_in_the_tray_is_not_a_publishing_button():
+    assert not rs.publishes("Your story", "com.instagram.android:id/outer_container")
+    assert rs.publishes("Your story", "com.instagram.android:id/your_story_share_shortcut_button")

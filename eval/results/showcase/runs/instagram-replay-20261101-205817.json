@@ -1,0 +1,66 @@
+{
+ "mode": "replay",
+ "app": "com.instagram.android",
+ "time": "2026-11-01T20:58:17",
+ "request": {
+  "phone": "phone-09031FDD4000C6",
+  "routine": "instagram_story_poll",
+  "inputs": {
+   "poll_question": "Sunrise or sunset?",
+   "poll_option_1": "Sunrise",
+   "poll_option_2": "Sunset"
+  }
+ },
+ "task": {
+  "id": "task-1101-205817-890e",
+  "status": "declined",
+  "routine": "instagram_story_poll",
+  "model_calls": 1,
+  "cost_usd": 0.0141,
+  "traces": [],
+  "detail": "the user declined the approval",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 16,
+ "repairs": [],
+ "approvals": [
+  {
+   "description": "tap \"Your story\" in com.instagram.android (routine instagram_story_poll v1)",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/your_story_share_shortcut_button'",
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "asked_at": [
+  "Your story"
+ ],
+ "auto_approved": [],
+ "marks_s": {
+  "running": 0.2,
+  "needs_you": 1.2,
+  "phone_yes": 1.2,
+  "waiting_approval": 70.5,
+  "post_asked": 70.5,
+  "declined": 71.6,
+  "end": 71.6
+ },
+ "spent": {
+  "model_calls": 1,
+  "cost_usd": 0.0141,
+  "cost_at_standard_usd": 0.0141,
+  "jobs": {
+   "repair": 1
+  }
+ },
+ "ok": true,
+ "failures": [],
+ "profile": "hybrid",
+ "cleanup": [
+  "story: Cancel",
+  "story: Discard",
+  "gallery_home"
+ ]
+}

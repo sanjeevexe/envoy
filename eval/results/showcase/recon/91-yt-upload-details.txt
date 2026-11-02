@@ -1,0 +1,10 @@
+# com.google.android.youtube/com.google.android.apps.youtube.app.extensions.upload.UploadActivity secure=False camera=False 2026-11-01T20:49:31
+App: com.google.android.youtube · Screen: UploadActivity
+[1] Button "Navigate up"
+[2] Text "Add details"
+[3] Button "Edit thumbnail"
+[4] EditText "Caption your Short" (empty)
+[5] Button "Get feedback"
+[6] Button "Show more"
+[7] Button "Save draft" (id: shorts_snapshot_bottom_button)
+[8] Button "Upload Short" (id: upload_bottom_button)

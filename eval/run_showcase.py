@@ -79,6 +79,9 @@ PIXEL5 = (1080, 2340)
 PUBLISH_LABEL = re.compile(r"(share|post|publish|upload)( (now|it|post|reel|short|video|story|to (your )?(feed|story)))?|your story|"
                            r"share to (your )?story|close friends", re.I)
 PUBLISH_IDS = ("share_button",)
+# Labelled like a publishing button, but not one: Instagram's "Your story" bubble in Home's tray only opens the Story
+# camera (the coordinator's rule in cd168d6 leaves it a plain tap).
+NOT_PUBLISH_IDS = ("outer_container",)
 # An approval that is the post itself (its description names the target, its reasons the rule that flagged it).
 POST_WORDS = re.compile(r"publishes|\b(share|post|upload)\b|share_button|your story|close friends", re.I)
 # A camera viewfinder is open: no screenshot (it would show the room). By the camera's own controls.
@@ -94,7 +97,8 @@ SOCIAL = re.compile(r"^(follow|follow back|like|subscribe|comment|add comment|se
 
 
 def publishes(label: str | None, resource_id: str | None) -> bool:
-    return bool(PUBLISH_LABEL.fullmatch((label or "").strip())) or (resource_id or "").split("/")[-1] in PUBLISH_IDS
+    rid = (resource_id or "").split("/")[-1]
+    return rid not in NOT_PUBLISH_IDS and (bool(PUBLISH_LABEL.fullmatch((label or "").strip())) or rid in PUBLISH_IDS)
 
 
 # A feed video's share icon (TikTok: "Share video. 4,682 shares"): it opens the share sheet, where Duet is. Allowed only
@@ -251,6 +255,32 @@ def open_app(dev: Any, pkg: str, fresh: bool) -> None:
     print(f"opened {NAMES[pkg]}{' (fresh)' if fresh else ''}: {'ok' if got.ok else got.error}")
 
 
+# Instagram's Story composer, which instagram_take.leave_composer doesn't know (Back there only opens and closes "Discard
+# edits?"): its Cancel, the dialog's Discard, then "Back to Home" from the Story gallery and camera. By id and label.
+STORY_TAPS = (("cancel_button", "Cancel"), ("igds_alert_dialog_primary_button", "Discard"),
+              ("gallery_cancel_button", "Back to Home"), ("camera_home_button", "Back to Home"))
+
+
+def leave_story(dev: Any, max_steps: int = 8, wait_s: float = 1.3) -> list[str]:
+    done: list[str] = []
+    for _ in range(max_steps):
+        state, _ = observe(dev)
+        story = any(e.resource_id.endswith(("your_story_share_shortcut_button", "story_share_controls_action_bar")) for e in state.numbered)
+        dialog = any((e.label or "") == "Discard" for e in state.numbered)
+        story_camera = any(e.resource_id.endswith("cam_dest_story") and e.selected for e in state.elements)
+        if not (story or dialog or story_camera):
+            return done
+        hit = next((e for rid, label in STORY_TAPS for e in state.numbered
+                    if e.resource_id.endswith("/" + rid) and (e.label or "").strip() == label), None)
+        if hit is None or classify(Action(kind="tap", element=hit.number), state, None).irreversible:
+            done.append("story: nothing known to tap")
+            return done
+        dev._act_sync(Action(kind="tap", element=hit.number))
+        done.append(f"story: {hit.label}")
+        time.sleep(wait_s)
+    return done
+
+
 def leave(dev: Any, pkg: str, max_steps: int = 12, wait_s: float = 1.3) -> list[str]:
     """Out of the app's composer, keeping nothing: a dialog on the way gets its discard answer (LEAVE_OK), everything
     else gets Back, until the app's home (its bottom tabs) or another app is in front. Never taps anything that posts,
@@ -258,7 +288,13 @@ def leave(dev: Any, pkg: str, max_steps: int = 12, wait_s: float = 1.3) -> list[
     if pkg == APPS["instagram"]:
         sys.path.insert(0, str(REPO / "scripts"))
         from instagram_take import leave_composer
-        return leave_composer(dev)
+        return leave_story(dev) + leave_composer(dev)
+    if pkg in (APPS["tiktok"], APPS["youtube"]):
+        # Both apps' exits ask with a discard labelled "Delete" (the rule flags it) or loop between the camera and its
+        # close sheet; force-stopping leaves the unposted edit the same way, with nothing tapped. Measured on P3 and the
+        # first runs (Nov 1). YouTube then offers "Continue your draft video?" once; a run answers it.
+        dev.adb.shell(f"am force-stop {pkg}")
+        return [f"force-stopped {NAMES[pkg]}"]
     done: list[str] = []
     for _ in range(max_steps):
         state, _ = observe(dev)
@@ -438,11 +474,20 @@ def run_flow(args: argparse.Namespace) -> int:
         rules = api.post("/api/settings/approvals", {**rules, "apps": {**(rules.get("apps") or {}), **{p: "always" for p in APPS.values()}}})
     if any((rules.get("apps") or {}).get(p) != "always" for p in APPS.values()):
         sys.exit(f"the copy didn't take 'always ask' for the three apps: {rules}")
-    inputs = dict(kv.split("=", 1) for kv in args.input or [])
-    body = {"phone": phone["id"], **({"routine": args.routine, "inputs": inputs} if args.mode == "replay" else {"goal": args.goal})}
+    inputs = dict(kv.split("=", 1) for kv in getattr(args, "input", None) or [])
+    pid = phone.get("id") or phone["avd"]  # /api/devices names a phone by `avd` ("phone-<serial>")
+    if args.mode == "replay":
+        body = {"phone": pid, "routine": args.routine, "inputs": inputs}
+    else:
+        # The first run is the agent's: naming the routine it will become (not in the library yet) skips the matcher,
+        # which could otherwise pick instagram_post_reel for "a reel with this caption" (runner._plan: "routine … isn't
+        # active: the agent does it instead").
+        if (REPO / "data" / "routines" / args.as_).exists():
+            sys.exit(f"{args.as_!r} is already in the library: a first run must be the agent's, under a new name")
+        body = {"phone": pid, "goal": args.goal, "routine": args.as_}
     task = api.post("/api/tasks", body)
     tid = task["id"]
-    say(f"task {tid}: {task['goal']!r} on {phone['id']}")
+    say(f"task {tid}: {task['goal']!r} on {pid}")
 
     seen: set[str] = set()
     status = None
@@ -458,7 +503,15 @@ def run_flow(args: argparse.Namespace) -> int:
             mark("phone_yes")
             say("said yes to using Envoy's phone (this copy's session)")
         elif status in PAUSED and not ended(task) and task.get("waiting_for") != "phone":
-            mark(f"paused_{len([k for k in marks if k.startswith('paused_')]) + 1}")
+            n = len([k for k in marks if k.startswith('paused_')]) + 1
+            if f"paused_{n - 1}" not in marks or marks.get(f"handback_{n - 1}"):
+                mark(f"paused_{n}")
+            # The app relaunching itself (TikTok after a force-stop: "came to the front on its own") isn't a person at
+            # the phone, so this copy's session hands it back once. A real touch ("you touched…") waits for a person.
+            if "on its own" in str(task.get("detail") or "") and f"handback_{n}" not in marks:
+                api.post(f"/api/devices/{pid}/handback", {})
+                mark(f"handback_{n}")
+                say("handed back (the app came to the front on its own; nobody touched the phone)")
         for a in got["approvals"]:
             if a["id"] in seen:
                 continue
@@ -493,7 +546,7 @@ def run_flow(args: argparse.Namespace) -> int:
     posts = [asked_at(a) for a in approvals if is_post(a)]
 
     cost = spent(tid, t0 - 5)
-    pkg = task.get("app") or (app_of(args.app) if args.app else None)
+    pkg = app_of(args.app) if args.app else task.get("app")  # the copy recorded a TikTok routine's task as Instagram's (Nov 1)
     result = {"mode": args.mode, "app": pkg, "time": datetime.fromtimestamp(t0).isoformat(timespec="seconds"), "request": body,
               "task": {k: task.get(k) for k in ("id", "status", "routine", "model_calls", "cost_usd", "traces", "detail", "device")},
               "steps": len(steps), "repairs": [s.get("text") for s in steps if "repair" in (s.get("text") or "").lower()][:10],
@@ -574,6 +627,7 @@ def main() -> int:
         p.add_argument("--app", default=None)
         if mode == "first":
             p.add_argument("--goal", required=True)
+            p.add_argument("--as", dest="as_", required=True, help="the new routine's name (not in the library): the agent runs")
         else:
             p.add_argument("--routine", required=True)
             p.add_argument("--input", action="append", help="name=value, once per input")

@@ -1,0 +1,73 @@
+{
+ "mode": "first",
+ "app": "com.google.android.youtube",
+ "time": "2026-11-01T21:11:06",
+ "request": {
+  "phone": "phone-09031FDD4000C6",
+  "goal": "Post the newest video in my phone's gallery to YouTube as a Short with the sound \"golden hour\" by JVKE from YouTube's sound library and this title: \"Envoy rehearsal: one clip, three apps\"",
+  "routine": "youtube_short_sound"
+ },
+ "task": {
+  "id": "task-1101-211106-9b42",
+  "status": "failed",
+  "routine": null,
+  "model_calls": 16,
+  "cost_usd": 0.114,
+  "traces": [],
+  "detail": "User declined approval to tap 'Upload Short' to post the Short titled 'Envoy rehearsal: one clip, three apps' with 'golden hour' by JVKE, so posting cannot proceed.",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 22,
+ "repairs": [],
+ "approvals": [
+  {
+   "description": "tap \"Upload Short\" in com.google.android.youtube",
+   "reasons": [
+    "rule: target publishes 'Upload Short'",
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "asked_at": [
+  "Upload Short"
+ ],
+ "auto_approved": [],
+ "marks_s": {
+  "running": 0.2,
+  "needs_you": 1.2,
+  "phone_yes": 1.2,
+  "waiting_approval": 84.7,
+  "post_asked": 84.7,
+  "failed": 88.7,
+  "end": 88.7
+ },
+ "spent": {
+  "model_calls": 16,
+  "cost_usd": 0.114,
+  "cost_at_standard_usd": 0.114,
+  "jobs": {
+   "plan": 1,
+   "step": 15
+  }
+ },
+ "ok": true,
+ "failures": [],
+ "profile": "hybrid",
+ "cleanup": [
+  "back",
+  "back",
+  "back",
+  "tapped 'Discard edits'",
+  "back",
+  "tapped 'Cancel'",
+  "back",
+  "tapped 'Cancel'",
+  "back",
+  "tapped 'Cancel'",
+  "back",
+  "tapped 'Cancel'",
+  "stopped after 12 steps on com.google.android.apps.youtube.app.extensions.creationmodes.main.CreationModesActivity"
+ ]
+}
