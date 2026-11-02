@@ -1,6 +1,6 @@
 # Per-app phone routing and install on demand
 
-Oct 28, 2026. Branch `app-routing` (worktree `~/Desktop/Envoy-app-routing`), cut from main `a4142d5`. Prompt:
+Oct 28, 2026. Branch `app-routing` (in its own worktree), cut from main `a4142d5`. Prompt:
 `prompts/app-routing-onboarding.md` (not in the public repo). Results: `eval/results/app_onboarding/`.
 
 ## What changed
@@ -118,7 +118,7 @@ installed in 8 to 22 s before the agent starts.
   never reaches the emulator now. No other app showed a bot check on envoy-real. Learning, the plain message and
   moving to the phone are covered with fakes.
 - **Moving a task to the phone isn't run on the Pixel 5.** The Pixel 5 has no Google account and so no Play Store apps;
-  a task moved there for an app it lacks ends with "install it from the Play Store". Needs your OK to try.
+  a task moved there for an app it lacks ends with "install it from the Play Store". Trying it needs the author's go.
 - **The banking apps are listed by reputation** (device-integrity checks are common in banking apps), not tested:
   Envoy doesn't sign in, so we can't see their checks. Any of them can be removed from the JSON.
 - **Install by name leans on the Play Store's layout as of Oct 28**: result cards with their own buttons, and a
@@ -140,9 +140,9 @@ throwaway memory. Unit tests make no model calls.
 
 ## Merge
 
-Waiting for your OK. On your OK, in `~/Desktop/Envoy-app-routing`: `git merge main` (main had moved to `6b90832`, already
-merged), run `uv run --project backend pytest backend/tests -q` and `npm run build` in `web/`, tell the active sessions,
-then in `~/Desktop/Envoy`: `git merge --ff-only app-routing`. No push.
+The merge steps: in the `app-routing` worktree, `git merge main` (main had moved to `6b90832`, already
+merged), run `uv run --project backend pytest backend/tests -q` and `npm run build` in `web/`,
+then in the main checkout: `git merge --ff-only app-routing`. No push.
 
-Files other sessions should know about: `api/runner.py` (the Wonder branch also edits it, in other lines),
+Files other branches also touch: `api/runner.py` (the Wonder branch also edits it, in other lines),
 `eval/run_real_apps.py` (`bot_check` keeps its name and behavior; `run_one`'s row is unchanged).

@@ -510,7 +510,7 @@ Every request, from any interface, becomes a **task**: a goal, the interface it 
 
 ### Voice
 
-The web app and iPhone stream microphone audio through the backend (which holds the API key) to Meta's **Muse Voice Transcribe** (real-time speech to text over WebSocket, in public preview since September 2026). The transcript goes into the message box for the user to check; once sent, it reaches the assistant like typed text, as the user's own words for the approval rules (source `voice`). Replies are short and spoken by the device's built-in speech engine, which keeps voice on Meta models and costs nothing extra. If Muse Voice Transcribe is unavailable or too slow, the fallback is the browser's own speech recognition in Chrome. Phase 5: voice is dictation. The user taps the mic, taps stop, and the transcript lands in the message box to check and send; sending on release had started a check-in the moment the user let go. Each dictation is one Transcribe session (24 kHz PCM from an AudioWorklet; audio is buffered while the session connects). The final text arrives about 70 to 300 ms after stopping, on the user's Mac and iPhone alike, at $0.18 per audio hour. Transcribe closes a stream that falls behind real time, so the relay pads silence whenever the browser's audio stalls.
+The web app and iPhone stream microphone audio through the backend (which holds the API key) to Meta's **Muse Voice Transcribe** (real-time speech to text over WebSocket, in public preview since September 2026). The transcript goes into the message box for the user to check; once sent, it reaches the assistant like typed text, as the user's own words for the approval rules (source `voice`). Replies are short and spoken by the device's built-in speech engine, which keeps voice on Meta models and costs nothing extra. If Muse Voice Transcribe is unavailable or too slow, the fallback is the browser's own speech recognition in Chrome. Phase 5: voice is dictation. The user taps the mic, taps stop, and the transcript lands in the message box to check and send; sending on release had started a check-in the moment the user let go. Each dictation is one Transcribe session (24 kHz PCM from an AudioWorklet; audio is buffered while the session connects). The final text arrives about 70 to 300 ms after stopping, on the author's Mac and iPhone alike, at $0.18 per audio hour. Transcribe closes a stream that falls behind real time, so the relay pads silence whenever the browser's audio stalls.
 
 ### iPhone companion app
 
@@ -1018,11 +1018,11 @@ The evaluation drove five changes to memory:
 
 ## Phase 4 results
 
-Phase 4 passed its gate on Oct 27, 2026: the user ran the full check-in in the web app, signing in through the live view and approving, and memory updated. Details are in `docs/phase-4-results.md`.
+Phase 4 passed its gate on Oct 27, 2026: the author ran the full check-in in the web app, signing in through the live view and approving, and memory updated. Details are in `docs/phase-4-results.md`.
 
 | Measure | Result |
 | --- | --- |
-| Gate, by the user in the web app | Passed (second attempt; the first found a bug, fixed below) |
+| Gate, by the author in the web app | Passed (second attempt; the first found a bug, fixed below) |
 | Gate, scripted | 10/10 in 83 s: sign-in hand-off, takeover, hand back, approval with a screenshot, check-in, memory update, MCP task, chat from memory |
 | Model calls for the check-in | 1 (choosing the routine); the routine ran with none |
 | Approval rules | Opening an approval decides nothing; the MCP token, a stale nonce and a cross-site POST are refused; no answer means no |
@@ -1032,22 +1032,22 @@ Phase 4 passed its gate on Oct 27, 2026: the user ran the full check-in in the w
 
 The gate runs drove these changes:
 
-- An approval is bound to the app's own elements: the user's run found a closing keyboard making an approval look stale. A stale approval is asked again, never treated as a decline.
+- An approval is bound to the app's own elements: the author's run found a closing keyboard making an approval look stale. A stale approval is asked again, never treated as a decline.
 - A task is done as soon as the phone work is; memory is written right after, instead of keeping the task "running" for 11 seconds.
 - Approvals are configurable: by default Envoy doesn't ask for the step the user asked for (money, other actions, other details and requests from triggers or AI clients still ask); "always ask" and per-routine standing approvals are settings. Checked on SkyLark: 4/4 modes behave as intended.
 - On emulators the live view uses the emulator's gRPC frames, not scrcpy; one process serves the API, the MCP server and the web app; takeover is a lease that makes the agent wait at its next call to the phone; the scheduler is Envoy's own, so delayed flights move their triggers.
 
 ## Phase 5 results
 
-Phase 5 passed its gate on Oct 27, 2026, on the user's iPhone: the approval arrived as a push, the user approved on the iPhone and the check-in finished; a SkyLark boarding-pass screenshot shared with "Send to Envoy" became facts on the existing flight, with a photo source. The same check-in also ran from the Muse app through Envoy's MCP server: Muse can't approve, so it waited for the user and reported the result when asked. Details are in `docs/phase-5-results.md`.
+Phase 5 passed its gate on Oct 27, 2026, on the author's iPhone: the approval arrived as a push, the author approved on the iPhone and the check-in finished; a SkyLark boarding-pass screenshot shared with "Send to Envoy" became facts on the existing flight, with a photo source. The same check-in also ran from the Muse app through Envoy's MCP server: Muse can't approve, so it waited for the author and reported the result when asked. Details are in `docs/phase-5-results.md`.
 
 | Measure | Result |
 | --- | --- |
-| Gate, on the user's iPhone | Passed: push, approval on the iPhone, check-in done; screenshot to facts on SL 482, image deleted. From the Muse app too: Muse said it couldn't approve, the user approved from the push, Muse reported the seat and gate |
+| Gate, on the author's iPhone | Passed: push, approval on the iPhone, check-in done; screenshot to facts on SL 482, image deleted. From the Muse app too: Muse said it couldn't approve, the author approved from the push, Muse reported the seat and gate |
 | Gate, scripted | 8/8: takeover, approval and done pushes (decrypted by a fake push service; no nonce in any push); screenshot to facts; voice; live view over HTTPS |
 | Push delivery to the iPhone | 0.7 to 2.3 s from sending to the service worker's receipt (4 of 5 under 1.2 s) |
 | Live view on the iPhone over the tailnet | 66 to 115 ms from capture to screen; round trip 27 to 47 ms |
-| Voice (Muse Voice Transcribe) | Exact transcript; final text about 90 ms after stopping; $0.0001 for a 2.6 s turn. On the user's Mac and iPhone: 8 tries, final text 74 to 296 ms after stopping |
+| Voice (Muse Voice Transcribe) | Exact transcript; final text about 90 ms after stopping; $0.0001 for a 2.6 s turn. On the author's Mac and iPhone: 8 tries, final text 74 to 296 ms after stopping |
 | Screenshot extraction | 73 of 73 values right on 7 app screenshots, none wrong, all merged into known trips and flights; about $0.007 each |
 | Sign-in codes on a locked iPhone | A Shortcuts message automation forwarded a code about 2 s after it arrived |
 | Whole of Phase 5 | 70 model calls, $0.41 at standard prices |
@@ -1065,7 +1065,7 @@ Phase 6 was built and measured on emulators, and its gate (a routine learned on 
 
 | Measure | Result |
 | --- | --- |
-| Gate, on the real phone | Passed on a Pixel 5 (Android 13): Envoy asked and you allowed it on the iPhone; the banner showed; `skylark_check_in_flight` v1, compiled on `envoy-test`, ran with no model call; you approved the check-in on the iPhone (4.8 s); SkyLark's state confirmed it; memory updated; 27 s end to end |
+| Gate, on the real phone | Passed on a Pixel 5 (Android 13): Envoy asked and the author allowed it on the iPhone; the banner showed; `skylark_check_in_flight` v1, compiled on `envoy-test`, ran with no model call; the author approved the check-in on the iPhone (4.8 s); SkyLark's state confirmed it; memory updated; 27 s end to end |
 | A touch, and a takeover, on the real phone | A touch paused the run before its next action, and Resume on the banner finished it; a takeover and hand back from the iPhone's live view, with an approval pending, finished with one approval |
 | scrcpy on the real phone | Starts in 0.6 s; tap to changed frame 65 ms; a screenshot from the stream 7.8 ms (screencap 358 ms) |
 | Live view of the real phone | On the Mac 9.1 fps, 5 ms per frame after capture; on the iPhone over the tailnet 27 to 39 ms per frame (target 150 ms) |
@@ -1099,9 +1099,9 @@ The runs drove these changes:
 
 The measurement passes found 31 problems, each fixed and tested: compiler gaps (answers on the first screen, a value whose ID every row shares, a switch's state, a price before its details), safety-gate gaps (a tap at a point skipped the rules; uninstall, erase and call buttons), and grading errors in the suites themselves (a shape-graded price from the wrong menu item, a right answer graded wrong).
 
-AndroidWorld's 13 agent changes were tested on SkyLark and the real apps before merging, with `main`'s agent run the same evening as an A/B. The first round checked in the wrong flight through Home's "Check in" (4 of 11 plans). After three follow-ups and a compiler fix, every SkyLark suite passed: 10 of 10 routines compiled, agent and routines 120 of 120 with no side effects, and the merged agent needs a median 2 steps per task where `main`'s needed 4 ($0.0073 against $0.0090). On real apps it over-checked answers already on screen (contacts_count 25 steps against 0), so the merge waits for that fix and a real-app rerun.
+AndroidWorld's 13 agent changes were tested on SkyLark and the real apps before merging, with `main`'s agent run the same evening as an A/B. The first round checked in the wrong flight through Home's "Check in" (4 of 11 plans). After three follow-ups and a compiler fix, every SkyLark suite passed: 10 of 10 routines compiled, agent and routines 120 of 120 with no side effects, and the merged agent needs a median 2 steps per task where `main`'s needed 4 ($0.0073 against $0.0090). On real apps it over-checked answers already on screen (contacts_count 25 steps against 0), so that fix and a real-app rerun came first; the changes merged into `main` on Oct 29 (`105d04e`).
 
-Several sessions shared one Mac, so devices and merges went through one coordinator session with device locks. Two outside failures shaped the evaluation: AndroidWorld's emulator controller restarted the shared adb server (now refused), and the Meta API's billing failed from Oct 29, 02:16 (a new account; every run now checks the key first).
+Several coding sessions shared one Mac, so each device was claimed through a lock and only one session merged into `main`. Two outside failures shaped the evaluation: AndroidWorld's emulator controller restarted the shared adb server (now refused), and the Meta API's billing failed from Oct 29, 02:16 (a new account; every run now checks the key first).
 
 ## Open questions
 

@@ -4,7 +4,7 @@
 
 AndroidWorld (Google Research; Rawles et al., 2024; Apache-2.0) is a benchmark of 116 parameterized tasks across 20 open-source Android apps, set up, randomized and scored by its own code on a live emulator. This page reports Envoy on it: the headline success rate, its cost and speed, where it fails and why, what general changes fixed, and what routines did across seeds.
 
-**Headline.** Envoy as on `main` solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001). Both runs are seed 30, pass@1, at about $0.04 and 38 s per task (median $0.030).
+**Headline.** Envoy as on `main` before these changes (the Oct 28 baseline) solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only (merged into `main` on Oct 29), it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001). Both runs are seed 30, pass@1, at about $0.04 and 38 s per task (median $0.030).
 
 **Routines.** Envoy compiled 59 routines from its solved runs, and 22 did their own seed-30 task on their own. On three new seeds of their 23 tasks:
 - they did 55 of 69 instances, against the full agent's 63, at 1 model call against 6, $0.002 against $0.012, and 8 s against 19 s;
@@ -12,7 +12,7 @@ AndroidWorld (Google Research; Rawles et al., 2024; Apache-2.0) is a benchmark o
 - with the agent run where a routine failed, 67 of 69.
 
 **Re-measured on what merges (Oct 29).**
-- **The tree:** `coord/aw-rerun` (`736a6e4`). It is `main` with the 13, Phase 7's three SkyLark follow-ups and the answer fix (below).
+- **The tree:** a staging branch (`736a6e4`): `main` with the 13, Phase 7's three SkyLark follow-ups and the answer fix (below).
 - **Held-out half:** 30.5 of 58 against `main`'s 12 (+21 −2, p = 0.0001). Against Oct 28's 31: +5 −6, so unchanged within noise.
 - **Cost and time:** $2.44 for the 58 tasks, a median of $0.034 and 41 s.
 
@@ -22,7 +22,7 @@ AndroidWorld (Google Research; Rawles et al., 2024; Apache-2.0) is a benchmark o
 - **Phase 7's same-day rerun of that fix against `main`:** 13 of 18 same-input workflows passed, against 9. Chipotle went from the step limit to a pass, and there were far fewer actions.
 - **Contacts still looped once in 3,** each time the plan asked for "the full contacts list". A planner line removes those plans in replays (33/120 → 0/90). Phase 7 checks it live before it merges.
 
-**Routines:** a compiler fix from another session reads answers by their place on the screen. On new seeds, the three question routines now do 9 of 9 (0 before).
+**Routines:** a separate compiler fix reads answers by their place on the screen. On new seeds, the three question routines now do 9 of 9 (0 before).
 
 The rest of this page shows how each number was made.
 
@@ -295,7 +295,7 @@ Why the others failed, on the very screens they were compiled from. Four of thes
     - the source note's wording ("individuals were present");
     - `expect_digits` on a location, because seed 30's was "100 Main St Chicago". The new seeds' were "Virtual", "The Coffee Bean" and "Sarah's apartment".
   - The agent did all 9.
-  - Recompiling the three sources with `aw-merge`'s compiler (773536a, with Phase 7's row fix) gives the same extracts (`routines/recompiled-aw-merge-773536a/`). This gap is separate from past_trip's, and is in the coordinator's backlog.
+  - Recompiling the three sources with `aw-merge`'s compiler (773536a, with Phase 7's row fix) gives the same extracts (`routines/recompiled-aw-merge-773536a/`). This gap is separate from past_trip's, and is in the project's backlog.
 - **A different app** (OpenAppTaskEval's "Open the camera app" twice, TurnOnWifiAndOpenApp's "…then open the clock app" once):
   - The routines were compiled from runs that opened Contacts and Settings, and don't take the app as an input.
   - The matcher correctly declined all three (`no_routine`) rather than open the wrong app.
@@ -316,7 +316,7 @@ Its failures are all of one kind: something the run never showed as an input (wh
 - the app as an input when the goal names one;
 - a routine verified on more than one instance, or flagged when its source run did nothing irreversible for a goal that asks for it.
 
-**The answer fix in the compiler, measured (Oct 29).** The routine-answers session changed the compiler (`1f1fc11`, on `aw-merge`):
+**The answer fix in the compiler, measured (Oct 29).** A separate change to the compiler (`1f1fc11`, on `aw-merge`):
 - it reads an answer by where it sits on the screen, not by the source run's example value;
 - it refuses a run that had nothing to do.
 
@@ -339,9 +339,9 @@ I replayed its recompiled routines through the same harness:
   - MarkorCreateNoteAndSms and NotesIsTodo did 3/3.
   - MarkorEditNote did 0/3: the kind of edit changes with the seed.
   - SimpleCalendarEventOnDateAtTime did 0/3: the matcher filled the time but left the date empty.
-  - That same date-and-time routine was also chosen for two date-only questions, and then needed a time. Both are matcher issues, in the coordinator's backlog.
+  - That same date-and-time routine was also chosen for two date-only questions, and then needed a time. Both are matcher issues, in the project's backlog.
 
-**An incident during this stage.** At 22:32 the emulator stalled (AndroidWorld couldn't read the screen, and `dumpsys` timed out). android_env, AndroidWorld's emulator library, then restarted the adb server that every session on this Mac shares (`adb kill-server`). That crashed Phase 7's SkyLark runs on envoy-test.
+**An incident during this stage.** At 22:32 the emulator stalled (AndroidWorld couldn't read the screen, and `dumpsys` timed out). android_env, AndroidWorld's emulator library, then restarted the adb server that every run on this Mac shares (`adb kill-server`). That crashed Phase 7's SkyLark runs on envoy-test.
 - The next 26 routine episodes failed at once on adb. They're set aside with a README (`routines-seeds/invalidated/`) and were rerun after the fix.
 - The agent stage hadn't started.
 - The fix (`3631542`) replaces android_env's restart with a wait, refuses any adb command that would kill or restart the server, and the runner won't start without it (`cdd130e`).
@@ -369,7 +369,7 @@ The leaderboard (fetched Oct 27, `eval/results/androidworld/leaderboard-2026-10-
 | **Envoy, with the changes (this branch)** | Muse Spark 1.3, low effort | A11y tree (+ screenshot on request, 11% of steps) | seed 30 | **49.1** (held-out half: 53.4) |
 
 What this says, with the caveats attached:
-- **Envoy as on `main` sits with the paper's 2024 agents on weaker setups** (M3A-Simple with GPT-4 Turbo, 19.8; M3A with Gemini 1.5 Pro on the tree, 19.4): 18%.
+- **Envoy before the changes sits with the paper's 2024 agents on weaker setups** (M3A-Simple with GPT-4 Turbo, 19.8; M3A with Gemini 1.5 Pro on the tree, 19.4): 18%.
 - **With the changes it is at 49%** (53% on the held-out half), above the paper's best agent (M3A with GPT-4 Turbo, 30.6) and between AndroidGen (46.8) and V-Droid (59.5) among tree-only entries. It does that with one general model at low effort, no task-specific training, and about $0.04 and 38 s per task. The held-out 53% is the number to quote. The all-116 figure includes the dev half the fixes were chosen on, though the two halves came out close (45% and 53%).
 - **It is far from the top of the board** (90–100%, frontier models with screenshots, often several models per step) and from people (80%).
 - **Not like for like.** The paper's numbers (its Table 3, seed 30, temperature 0) ran on x86_64 under the budgets of the time, about twice the steps human annotators needed; Envoy's ran on arm64 under the current budgets. Envoy is one model call per step at `low` effort plus one plan call, and answers in one step where M3A takes two. The leaderboard's label for Envoy would be "Screenshot + A11y tree", because screenshots are available, but 89% of the final run's steps carried no screenshot (201 screenshots in 1,777 steps).
@@ -377,7 +377,7 @@ What this says, with the caveats attached:
 
 ## Real apps beside the benchmark (Oct 29)
 
-The user's rule since Oct 29 (coord rule 7): AndroidWorld exists to make Envoy better on real apps.
+The project's rule since Oct 29: AndroidWorld exists to make Envoy better on real apps.
 - Every change to the core agent is measured on Envoy's own cases, Phase 7's real-app runs and SkyLark, before it's proposed. A real-app drop blocks it, whatever the benchmark gain.
 - Behavior only the benchmark needs lives in its adapter (`eval/androidworld/`), not in Envoy's instructions.
 
@@ -405,7 +405,7 @@ Each case is replayed from its recorded screen, with the plan the live run made 
 - **DoorDash's detour came from its plan, not the step prompt.**
   - The live plan was made on an 816-token screen before the app had loaded ("Wait for DoorDash to finish loading…", "Open Account or Profile section").
   - Under that plan, `main`'s own prompts also go to Account (9 of 10). On the loaded screen, every version taps the address.
-  - The fix belongs at planning time: plan, or plan again, once the app has loaded. It's in the coordinator's backlog.
+  - The fix belongs at planning time: plan, or plan again, once the app has loaded. It's in the project's backlog.
 - **Contacts' 25 steps were a rare draw.**
   - Under the live plan, `main` and the merged agent both answer at once (10 of 10).
   - On fresh plans, the merged agent switched filters once in 8, `main` never.
@@ -433,7 +433,7 @@ No answer changed on AndroidWorld, and none came early with a different value. T
 
 **An earlier wording, kept out.** Phase 7 asked whether the risk wording could stop labelling SkyLark's "Check in" (which only opens the flow) irreversible. The wording that did so also made the model call Amazon's Buy Now and Play's "Buy for $…" "read". The safety probe fell to 73–75 of 100. The current wording stays (`wording-2026-10-29/`).
 
-**Phase 7's same-day real-app rerun of the fix** (Oct 29 afternoon, envoy-real, `main` `53ab459` against `coord/aw-rerun` `736a6e4`, Phase 7's numbers):
+**Phase 7's same-day real-app rerun of the fix** (Oct 29 afternoon, envoy-real, `main` `53ab459` against the staging branch `736a6e4`, Phase 7's numbers):
 - **Same-input workflows passed:** 9 of 18 on `main`, 13 of 18 with the fix.
 - **Better with the fix:** chipotle went from the step limit to a pass; settings_bluetooth, gmail_search, maps_address and play_rating also improved. There were far fewer actions: DoorDash took 1 against 13, and the plan-before-load detour didn't recur.
 - **contacts_count still looped once:** on `736a6e4` its 3 runs were a 25-step filter loop, a right answer left unverified, and a pass. `main` answered all 3 with no action.
@@ -458,7 +458,7 @@ Replayed on the loop run's own first screen, `736a6e4`'s prompts, 30 per cell:
 
 **AndroidWorld and real apps, side by side:**
 
-| | `main` | `main` + the 13 (Oct 28) | `coord/aw-rerun`: + 3 follow-ups + the answer fix (Oct 29) |
+| | `main` | `main` + the 13 (Oct 28) | staging `736a6e4`: + 3 follow-ups + the answer fix (Oct 29) |
 | --- | ---: | ---: | ---: |
 | AndroidWorld held-out half (58 tasks, seed 30, pass@1) | 12 | 31 | 30.5 |
 | Real-app same-input workflows (Phase 7, Oct 29 afternoon) | 9/18 | | 13/18 |
@@ -479,10 +479,10 @@ Replayed on the loop run's own first screen, `736a6e4`'s prompts, 30 per cell:
 
 ## What Envoy should change on `main`, ranked
 
-**Approved for `main` (Oct 28, the user: "All 13").** The merge, and the SkyLark and real-app reruns on the result before it, are the coordinator's: this branch never commits to `main`. The coordinator, under the user's authority over merges, merges the three SkyLark follow-ups and the answer fix with them. They're staged as `coord/aw-rerun` (`736a6e4`) and go in once Phase 7's same-day real-app rerun meets the bar: no workflow worse than `main`.
+**Approved for `main` (Oct 28, the author: "All 13").** The merge, and the SkyLark and real-app reruns on the result before it, happen outside this branch: this branch never commits to `main`. The three SkyLark follow-ups and the answer fix merge with them. They're staged on a staging branch (`736a6e4`) and go in once Phase 7's same-day real-app rerun meets the bar: no workflow worse than `main`.
 
 **Proposed on Oct 29, after the 13:**
-- **The answer fix,** `b630d3f` + `9a573f8`: answers in the phone's words, and AndroidWorld's answer form moves to its adapter. It's staged in `coord/aw-rerun`, and the real-app rerun and held-out half above were run on it.
+- **The answer fix,** `b630d3f` + `9a573f8`: answers in the phone's words, and AndroidWorld's answer form moves to its adapter. It's on the same staging branch (`736a6e4`), and the real-app rerun and held-out half above were run on it.
 - **The contacts planner line,** `edfab2b`: replayed offline above. Phase 7's live contacts runs and a SkyLark check come before the merge.
 
 The 13 agent commits below cherry-pick cleanly onto `main` as it is on Oct 28 (`e0789e1`: Phases 6 and 7, cross-app answers and app routing). On that result `main`'s whole suite passes (251 tests). Main's commits since the branch was measured touch routine repair, the phone, the task history and the API's routing, and none of the agent, model or device code, so the agent is still the one measured here. The only differences are the AndroidWorld tests and a two-line trace change (`73c6fab`). Against branches still waiting to merge:
@@ -551,7 +551,7 @@ Measured offline, from the runs' own inputs, each fix in its own commit on this 
 
 **Also for `main`, not code:**
 - **The $0.15 per-run cap** stopped 4 of 116 long tasks (OsmAndTrack, ExpenseAddMultiple, two recipe tasks) before their step budget, at standard prices. It is a product decision; for AndroidWorld-length tasks (up to 120 steps) about $0.30 would let them finish.
-- **Two problems to report to AndroidWorld's maintainers** (a public issue, so only with your OK): app snapshots are deleted when the emulator reboots on API 33, and then each app keeps its state from task to task without an error; a Clock timer started by one task keeps ticking on the home screen in every later one. Also two setup strings that don't match on this image (Contacts' "Don't allow" has a curly apostrophe; OpenTracks shows no "Allow").
+- **Two problems to report to AndroidWorld's maintainers** (a public issue, so only with the author's OK): app snapshots are deleted when the emulator reboots on API 33, and then each app keeps its state from task to task without an error; a Clock timer started by one task keeps ticking on the home screen in every later one. Also two setup strings that don't match on this image (Contacts' "Don't allow" has a curly apostrophe; OpenTracks shows no "Allow").
 
 ## What is left, or uncertain
 
@@ -560,16 +560,16 @@ Measured offline, from the runs' own inputs, each fix in its own commit on this 
 - **The dev half was used four times** (three rounds and the final); its 26 is not an estimate. The held-out half was used once.
 - **The setting differs from the official one** in ways that could move the number either way: arm64 instead of x86_64, Envoy's own device layer instead of AndroidWorld's, the forwarder parked during episodes, the one-step answer. All of it is listed under Setting.
 - **The Contributor tier is not the product's tier.** The dev rounds ran on it; the headline doesn't.
-- **Real apps are not AndroidWorld.** They weren't, either: Phase 7's real-app pass on the 13 found two read-only questions that turned into searches ("Real apps beside the benchmark"). One came from the agent's answer rule, now fixed and replayed. The other, DoorDash, came from a plan made before the app had loaded, which `main`'s prompts follow too; it's in the coordinator's backlog. The replays are single steps from recorded screens. Phase 7's same-day real-app rerun of the fix, against `main`, is the live test.
+- **Real apps are not AndroidWorld.** They weren't, either: Phase 7's real-app pass on the 13 found two read-only questions that turned into searches ("Real apps beside the benchmark"). One came from the agent's answer rule, now fixed and replayed. The other, DoorDash, came from a plan made before the app had loaded, which `main`'s prompts follow too; it's in the project's backlog. The replays are single steps from recorded screens. Phase 7's same-day real-app rerun of the fix, against `main`, is the live test.
 - **The two failed Bluetooth dones** (SystemBluetoothTurnOff in the final run, and earlier ones) suggest that the emulator's Bluetooth state can lag behind its Settings screen. I didn't chase that further.
 - **The answer fix and the planner line were measured offline from recorded screens**, from one or two steps of each run. The live real-app rerun covers the answer fix only. The planner line is untested on a phone, and the held-out half ran without it. Its AndroidWorld effect is estimated only from plan replays: question plans with a filter or settings step 5/125 → 1/125.
-- **The three SkyLark follow-ups** passed Phase 7's second SkyLark round live (above). On AndroidWorld they're in the held-out re-run on `coord/aw-rerun` (`736a6e4`).
+- **The three SkyLark follow-ups** passed Phase 7's second SkyLark round live (above). On AndroidWorld they're in the held-out re-run on the staging branch (`736a6e4`).
 - **Routines across seeds are one pass on three seeds, from routines verified on a single instance.** RecipeDeleteMultipleRecipesWithConstraint shows how a degenerate instance can pass verification. The routine-bug fixes waiting on another branch (popup focus, twin fields, row-anchored icons, dates for the matcher) weren't in this run. The 5 PopupWindow routines and the 2 Pro Expense routines they'd recompile weren't among the verified 22 anyway.
-- **Not done:** pass@k or other seeds for the full agent beyond the routines comparison. The AndroidWorld issues are drafted here, not filed. Neither is the android_env behaviour of restarting the adb server on failure, which is worth raising with its maintainers (with your OK).
+- **Not done:** pass@k or other seeds for the full agent beyond the routines comparison. The AndroidWorld issues are drafted here, not filed. Neither is the android_env behaviour of restarting the adb server on failure, which is worth raising with its maintainers (with the author's OK).
 
 ## Proposed text for other documents
 
-These are drafts for the main chat, which owns these files. Nothing here has been applied.
+These are drafts for other documents, which this branch doesn't edit. Nothing here has been applied.
 
 ### Proposed for the design doc's Evaluation section
 

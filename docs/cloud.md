@@ -2,7 +2,7 @@
 
 Oct 29, 2026. **The same SkyLark routines, compiled on the Mac, ran unchanged on an Android emulator on a Google Cloud server: 48 of 48 with no model calls, at about half the Mac's speed.** That is on an emulator past its first boot; the very first run on a brand-new one passed 9 of 18 (below). Stage 2 then ran the whole learn-then-replay loop there: one agent run, a routine compiled from it on the VM, and that routine replayed 3 of 3 on bookings it had never seen, for $0.07 of Meta credit.
 
-Envoy runs on the user's Mac by default: the API, the web app, the emulators and the USB connection to Envoy's phone (the Pixel 5). Only the model calls go to Meta. The design always said "a cloud host later". This is the first step: the same code and the same routines on a Google Cloud server, measured against the numbers the Mac already recorded. Nothing was re-measured on the Mac.
+Envoy runs on the person's own Mac by default: the API, the web app, the emulators and the USB connection to Envoy's phone (the Pixel 5). Only the model calls go to Meta. The design always said "a cloud host later". This is the first step: the same code and the same routines on a Google Cloud server, measured against the numbers the Mac already recorded. Nothing was re-measured on the Mac.
 
 Results: `eval/results/cloud/`. Scripts: `scripts/cloud/`. Report: `prompts/cloud-proof-report.md`.
 
@@ -39,7 +39,7 @@ From `python3 scripts/cloud/compare.py`. Success is SkyLark's own state check, a
 | Both | Mac | **48/48** | 48 | 0 | 3.1 | |
 | | Cloud | **48/48** | 48 | 0 | 5.5 | |
 
-Every routine ran in rung 0 (as recorded) except `find_trip` on one booking in each suite, which needed rung 2 (a relaxed match, no model call). The Mac's sizes row for `envoy-test` was recorded on `e875c4a`; since then only `skylark_check_flight_status`'s compiled routine changed (7 lines).
+Every routine ran at fallback level 0 (as recorded, with no fallback) except `find_trip` on one booking in each suite, which needed fallback level 2 (a relaxed match, no model call). The Mac's sizes row for `envoy-test` was recorded on `e875c4a`; since then only `skylark_check_flight_status`'s compiled routine changed (7 lines).
 
 **Per routine, the cloud takes about twice as long** (sizes, median seconds):
 
@@ -109,7 +109,7 @@ The learned routine lives only in the VM's copy (`eval/results/final/library/com
 
 ## Stage 3: Envoy in the cloud, as a second option
 
-At the user's request (Oct 29), the cloud copy is a full **alternative** to the Mac setup, not a replacement. Before the Nov 3 recording the user picks whichever works better. Nothing on the Mac changes when the cloud is chosen.
+At the author's request (Oct 29), the cloud copy is a full **alternative** to the Mac setup, not a replacement. Before the Nov 3 recording the author picks whichever works better. Nothing on the Mac changes when the cloud is chosen.
 
 ### What the cloud copy is
 
@@ -119,7 +119,7 @@ At the user's request (Oct 29), the cloud copy is a full **alternative** to the 
 | API, web app, MCP | `127.0.0.1:8700`; tailnet `https://<mac>.<tailnet>.ts.net:8443` | the VM's `127.0.0.1:8700`; tailnet `https://envoy-cloud.<tailnet>.ts.net:8443` only |
 | Code | the main checkout | `git archive` of main (`scripts/cloud/push.sh`), the web app built on the VM |
 | Data | `data/api`, `data/demo/memory.db` | its own: `~/envoy-state` (`.env` with its own MCP token, the API's own session token and VAPID keys, a copy of the demo memory and test inbox taken Oct 29) |
-| Phones | envoy-test, envoy-real (signed in), the Pixel 5 over USB | envoy-test, envoy-real (new: sign-ins are the user's step), **no Pixel 5** |
+| Phones | envoy-test, envoy-real (signed in), the Pixel 5 over USB | envoy-test, envoy-real (new: sign-ins are the person's step), **no Pixel 5** |
 | Starts | when you start it | `scripts/cloud/start.sh --vm-only`: systemd starts both emulators and the API at boot |
 | Costs | nothing extra | about $0.39 an hour while running; the disk about $5 a month |
 
@@ -154,14 +154,14 @@ Half the inputs were a 150 ms swipe, which the ack waits for. The tailnet path f
 
 The suite changed the cloud copy's SkyLark and memory; both were put back afterwards (a backup of the memory and the task database, then `demo_setup.py --app-only`).
 
-**The iPhone** (the user's sitting, Oct 29 evening: the cloud copy paired as "Envoy Cloud", its live view used for 20–30 minutes while apps installed and signed in; the web app reports its own latency to `/api/metrics`): frame lag p50 **290 ms** (median of 26 sessions; 204–404), round trip 64 ms, a tap acknowledged in 74 ms. The Mac's browser in the same sitting: 230 ms (159–304). The Mac copy's iPhone record is 66–115 ms. Under that load (two emulators, Play Store installs), the cloud copy's live view is about 2.5–4× the Mac copy's and over the 150 ms target: usable for a sign-in, visibly laggy to watch.
+**The iPhone** (the author's sitting, Oct 29 evening: the cloud copy paired as "Envoy Cloud", its live view used for 20–30 minutes while apps installed and signed in; the web app reports its own latency to `/api/metrics`): frame lag p50 **290 ms** (median of 26 sessions; 204–404), round trip 64 ms, a tap acknowledged in 74 ms. The Mac's browser in the same sitting: 230 ms (159–304). The Mac copy's iPhone record is 66–115 ms. Under that load (two emulators, Play Store installs), the cloud copy's live view is about 2.5–4× the Mac copy's and over the 150 ms target: usable for a sign-in, visibly laggy to watch.
 
-**Real apps and sign-ins from a data-center address** (the user signed in on the cloud phone and typed every password; Oct 29):
+**Real apps and sign-ins from a data-center address** (the author signed in on the cloud phone and typed every password; Oct 29):
 
 | App | Result on the cloud phone (two sittings, Oct 29 evening) |
 | --- | --- |
 | Google (Play Store, Gmail; the phone's test account) | **Signed in**, no challenge |
-| Amazon | **Creating an account was refused** ("detected suspicious activity"). An account made on the user's laptop **signed in** |
+| Amazon | **Creating an account was refused** ("detected suspicious activity"). An account made on the author's laptop **signed in** |
 | Starbucks | First "your browser is outdated, try again". The image's WebView and Chrome were version 124 (May 2024) and had never been updated; after updating both to 156 in the Play Store, **sign-in worked, and so did creating an account on the emulator** |
 | DoorDash | **Signed in** with Google; after the renderer fix (below) it worked |
 | Chipotle | **Creating an account was refused**, as with Amazon. An account made on the laptop **would not sign in**, even with the browser updated: no error, the login page just stays. The likeliest cause is a silent block of the address or of emulators; not established |
@@ -169,11 +169,11 @@ The suite changed the cloud copy's SkyLark and memory; both were put back afterw
 
 So: two apps refused to create accounts from the cloud phone (Amazon, Chipotle), and one silently refused to sign in (Chipotle). Every other sign-in worked, once the phone's browser was current. **A new cloud phone needs Android System WebView and Chrome updated in the Play Store first**; until then, web-based sign-ins (Starbucks) fail as "outdated browser".
 
-**The emulator crashed under real apps** with SwiftShader, the renderer stage 1 used. The Test phone died while DoorDash drew its screens (a segfault in the emulator's `RenderThread`, in the kernel log). The Real-app phone died about a minute into an Amazon run, three times. Turning off the emulator's host video decoder (`-feature -HardwareDecoder`) didn't help. **Switching to `-gpu swangle`** (ANGLE on SwiftShader) did: the same Amazon run then completed. Later the Test phone also died on plain SwiftShader, and once on `swangle` while apps played video ("h264 no frame" in its log). So both phones now start with `-gpu swangle -feature -HardwareDecoder` (`scripts/cloud/env-linux.sh`), only through systemd; that setup came through the browser updates and the user's last sitting. On `swangle`, SkyLark did 18/18 but slower (median 7.3 s against 6.2 s), and one run fell to the agent.
+**The emulator crashed under real apps** with SwiftShader, the renderer stage 1 used. The Test phone died while DoorDash drew its screens (a segfault in the emulator's `RenderThread`, in the kernel log). The Real-app phone died about a minute into an Amazon run, three times. Turning off the emulator's host video decoder (`-feature -HardwareDecoder`) didn't help. **Switching to `-gpu swangle`** (ANGLE on SwiftShader) did: the same Amazon run then completed. Later the Test phone also died on plain SwiftShader, and once on `swangle` while apps played video ("h264 no frame" in its log). So both phones now start with `-gpu swangle -feature -HardwareDecoder` (`scripts/cloud/env-linux.sh`), only through systemd; that setup came through the browser updates and the author's last sitting. On `swangle`, SkyLark did 18/18 but slower (median 7.3 s against 6.2 s), and one run fell to the agent.
 
-**A mix-up, and the fix.** The sitting's instructions said "envoy-real", but the web app calls the phones **Test phone** (envoy-test, shown first) and **Real-app phone** (envoy-real), so the sign-ins went onto the Test phone. With the user's OK, the two AVDs were swapped on the VM (both stopped cleanly, their folders renamed): the signed-in phone is now the Real-app phone, which always cold-boots and never loads a snapshot, and the fresh one is the Test phone, with SkyLark reinstalled and seeded. The Real-app phone kept its 10 GB data partition.
+**A mix-up, and the fix.** The sitting's instructions said "envoy-real", but the web app calls the phones **Test phone** (envoy-test, shown first) and **Real-app phone** (envoy-real), so the sign-ins went onto the Test phone. With the author's OK, the two AVDs were swapped on the VM (both stopped cleanly, their folders renamed): the signed-in phone is now the Real-app phone, which always cold-boots and never loads a snapshot, and the fresh one is the Test phone, with SkyLark reinstalled and seeded. The Real-app phone kept its 10 GB data partition.
 
-**Muse to the cloud copy works** (Oct 29, 23:20–23:30 UTC). The user started `scripts/cloud/muse-tunnel.sh` (a Cloudflare quick tunnel from the VM). Through it, `/mcp` without the token was refused (401) and the web app's pages weren't reachable at all (421). In Muse for Mac, "Add a custom connector called Envoy Cloud at <tunnel>/mcp" made the connector. The user pasted the cloud copy's MCP token (`scripts/cloud/muse-token.sh`) and allowed the tunnel's host. Muse listed the cloud copy's ten tools. Then "Using Envoy Cloud, what's my gate for my Chicago flight?" was answered "**B12** — SkyLark SL 482, ATL to ORD on Friday, Oct 30", with the cloud copy's own note that the gate was last seen in the app the evening before. The cloud copy's MCP log shows 6 calls from Meta's servers, all authenticated, 200/202, about 3 ms each on the VM. Screenshot: `eval/results/cloud/stage3/muse-envoy-cloud.jpg`. The Mac's own Envoy connector was left as it was.
+**Muse to the cloud copy works** (Oct 29, 23:20–23:30 UTC). The author started `scripts/cloud/muse-tunnel.sh` (a Cloudflare quick tunnel from the VM). Through it, `/mcp` without the token was refused (401) and the web app's pages weren't reachable at all (421). In Muse for Mac, "Add a custom connector called Envoy Cloud at <tunnel>/mcp" made the connector. The author pasted the cloud copy's MCP token (`scripts/cloud/muse-token.sh`) and allowed the tunnel's host. Muse listed the cloud copy's ten tools. Then "Using Envoy Cloud, what's my gate for my Chicago flight?" was answered "**B12** — SkyLark SL 482, ATL to ORD on Friday, Oct 30", with the cloud copy's own note that the gate was last seen in the app the evening before. The cloud copy's MCP log shows 6 calls from Meta's servers, all authenticated, 200/202, about 3 ms each on the VM. Screenshot: `eval/results/cloud/stage3/muse-envoy-cloud.jpg`. The Mac's own Envoy connector was left as it was.
 
 **The real-app set on the cloud phone** (`eval/run_final.py real --only …`, read-only, every approval declined, standard tier, after the sign-ins and the swap, `swangle`; $0.37; `eval/results/cloud/stage3/real.json`). Mac: Phase 7's recorded rows (`eval/results/final/real.json`).
 
@@ -196,7 +196,7 @@ So: two apps refused to create accounts from the cloud phone (Amazon, Chipotle),
 
 **Instagram runs on the cloud emulator, and the creator workflow reached Share there: one run by the link path, 112 s from the task's start to the Share approval, 12 model calls and $0.155 to Share. It was declined, and nothing was posted.** On the Mac, the Pixel 5's Nov 1 dry run took 45 s from Yes to Share (agent, 9 calls, $0.12). Results and the second-by-second: `eval/results/cloud/instagram/`. Driver: `scripts/cloud/instagram_link.py`.
 
-- **Setup.** The VM still had Oct 29's code (`b3bad38`, before the creator workflow), so `push.sh` brought it to `9c8ad21`. The Real-app phone's WebView and Chrome were already 156 (Oct 29). Instagram 453.0.0.57.79, the Pixel's version, came from the Play Store in 76 s. The user signed in as envoy3955 through the live view and allowed photos and videos.
+- **Setup.** The VM still had Oct 29's code (`b3bad38`, before the creator workflow), so `push.sh` brought it to `9c8ad21`. The Real-app phone's WebView and Chrome were already 156 (Oct 29). Instagram 453.0.0.57.79, the Pixel's version, came from the Play Store in 76 s. The author signed in as envoy3955 through the live view and allowed photos and videos.
 - **No bot check, no emulator warning, no crash**, from the first launch through the run, on `swangle`.
 - **What ran.** `send_to_phone(<https clip>, device="envoy-real")` through the cloud copy's own `/mcp`: Envoy downloaded the clip and put it in the gallery in 2.2 s. Then `run_task` with the Instagram template's goal and the caption "Envoy cloud rehearsal". Envoy matched routine `instagram_post_reel` v2, whose first step failed on Instagram's first-run screens (a permission prompt, "Set up on new device: allow access to contacts"): two repairs, then the full agent from 41 s, which reached Share at 112 s. Share was asked by the `share_button` id rule (labelled "Next" on this install) and declined through the copy's API. Afterwards the profile still showed 2 posts.
 - **Where the time went.** About 35 s of the 112 s was model calls; the rest was the phone drawing in software and settling. The first-run screens cost about 40 s before the agent began; the Pixel's Instagram was long past them.
@@ -208,7 +208,7 @@ Three things this found, none fixed here (they're product code, after the eval):
 
 ### Choosing the cloud (and back): the switch
 
-One-time setup (the user, once the VM is on the tailnet):
+One-time setup (yours, once the VM is on the tailnet):
 1. **Sign in on the Mac:** `scripts/cloud/login.sh` opens the cloud copy's sign-in link in the Mac's browser. Its token is never printed.
 2. **The iPhone:** in that browser window, open Settings › Devices › "Pair your iPhone" › "Show a pairing code", as with the Mac copy. Then on the iPhone, Safari › `https://envoy-cloud.<tailnet>.ts.net:8443`, type the code, Share › Add to Home Screen, and name it **Envoy Cloud**. The Mac's **Envoy** icon stays as it is: one icon per host. Allow notifications from the new icon too.
 3. **Siri:** `scripts/cloud/shortcut.sh` builds **Ask Envoy (cloud)**. Open it on the Mac; Shortcuts adds it, and iCloud brings it to the iPhone. It never replaces the Mac's **Ask Envoy**.
@@ -229,7 +229,7 @@ Nothing migrates either way, so switching back takes as long as the steps above.
 
 **What only the Mac option can do:** the Pixel 5 (USB), and so the Instagram creator scene as recorded: a clip from the Mac's outbox and the offer's Yes (the cloud phone can post a reel from a link, started with `run_task`; see "The creator workflow on the cloud phone"); the real apps already signed in on the Mac's `envoy-real`; the Mac's memory and routine history.
 
-**A stopped VM may not start on demand.** On Oct 29 the first restart failed with Google's `ZONE_RESOURCE_POOL_EXHAUSTED` (no n2-standard-8 free in us-east1-b), and the retry 17 s later worked. For a recording, start the VM well ahead and keep it awake. Start it well ahead and keep it awake on recording day. If a stockout lasts, `scripts/cloud/fallback.sh start us-east1-c` (or `-d`) starts a copy of the VM from its machine image in another zone, with the same tailnet name, so nothing on the iPhone or in Muse changes; then `export ENVOY_GCP_ZONE=us-east1-c` for the other scripts. Never run the copy and the original at once (one Tailscale identity).
+**A stopped VM may not start on demand.** On Oct 29 the first restart failed with Google's `ZONE_RESOURCE_POOL_EXHAUSTED` (no n2-standard-8 free in us-east1-b), and the retry 17 s later worked. For a recording, start the VM well ahead and keep it awake. If a stockout lasts, `scripts/cloud/fallback.sh start us-east1-c` (or `-d`) starts a copy of the VM from its machine image in another zone, with the same tailnet name, so nothing on the iPhone or in Muse changes; then `export ENVOY_GCP_ZONE=us-east1-c` for the other scripts. Never run the copy and the original at once (one Tailscale identity).
 
 ## Cost
 
@@ -240,11 +240,11 @@ Google's list prices for `us-east1` (on demand): `n2-standard-8` about **$0.39 a
 | Stage 0: create, toolchain, code, boot, device timings | 19:23–19:39 UTC, 16 min | $0.10 | 13 min of it was the emulator's first-boot work and a hung SSH session (below) |
 | Stage 1: portability ×2, sizes, the restart check, the clip | 19:39–19:59, 20 min | $0.13 | |
 | Stage 2: the key on, compile + verify, 3 replays, the key off | 19:59–20:04, 5 min | $0.04 | |
-| Stage 3: the cloud copy, the bars, the user's sittings, the renderer crashes, the real-app set, Muse | 20:25–23:56, 3.5 h | about $1.39 | |
-| Nov 1: the creator workflow on the cloud phone (#49): the code pushed, Instagram installed, the user's sign-in, one declined run | 20:03–20:45, 42 min | $0.27 | |
+| Stage 3: the cloud copy, the bars, the author's sittings, the renderer crashes, the real-app set, Muse | 20:25–23:56, 3.5 h | about $1.39 | |
+| Nov 1: the creator workflow on the cloud phone: the code pushed, Instagram installed, the author's sign-in, one declined run | 20:03–20:45, 42 min | $0.27 | |
 | **Total** | **about 4.9 h** | **about $1.93** | plus the disk, about $0.17 a day while it exists; the machine image, about $0.80 a month; a few MB of egress |
 
-One emulator-hour on this VM costs about $0.39; with two phones and the API running, the cloud option costs about $0.39 an hour of use and $5 a month standing still. Meta: $0 for stage 1 (no key on the VM), **$0.070 for stage 2** (cap $1), **$0.615 for stage 3** (cap $3: the real-app set $0.37, the interfaces suite $0.10, diagnosing the crashes and `swangle` $0.11, voice and chat $0.03), **$0.181 for #49** (cap $3: the one Instagram run, 15 calls). **The VM is stopped (Nov 1, 20:45 UTC), with no key on it**, and `envoy-cloud-image` (15.9 GB, us-east1, no key) is there for `fallback.sh`. Standing still they cost about $5 + $0.80 a month. Deleting them is the user's call (`scripts/cloud/delete.sh`).
+One emulator-hour on this VM costs about $0.39; with two phones and the API running, the cloud option costs about $0.39 an hour of use and $5 a month standing still. Meta: $0 for stage 1 (no key on the VM), **$0.070 for stage 2** (cap $1), **$0.615 for stage 3** (cap $3: the real-app set $0.37, the interfaces suite $0.10, diagnosing the crashes and `swangle` $0.11, voice and chat $0.03), **$0.181 for the Nov 1 creator workflow** (cap $3: the one Instagram run, 15 calls). **The VM is stopped (Nov 1, 20:45 UTC), with no key on it**, and `envoy-cloud-image` (15.9 GB, us-east1, no key) is there for `fallback.sh`. Standing still they cost about $5 + $0.80 a month. Deleting them is the author's call (`scripts/cloud/delete.sh`).
 
 ## The commands
 
@@ -259,7 +259,7 @@ scripts/cloud/bg.sh portability uv run --project backend python eval/run_phase6.
 scripts/cloud/wait.sh portability  # follows the log until it ends
 scripts/cloud/fetch.sh eval/results/phase6/cloud.json eval/results/cloud/portability.json
 scripts/cloud/stop.sh              # stop the emulator, then the VM (a stopped VM costs only its disk)
-scripts/cloud/delete.sh --yes-delete-envoy-cloud   # the user's call
+scripts/cloud/delete.sh --yes-delete-envoy-cloud   # the author's call
 ```
 
 Also: `run.sh` (a short command on the VM), `key.sh put|remove` (the Meta key, stage 2 only), `vm-clip.sh` + `make_clip.py` (the clip), `compare.py` (the table above), `instagram_link.py` (the creator workflow on the cloud phone, run on the VM with `bg.sh`).
@@ -297,7 +297,7 @@ No product code changed. Everything was handled from outside:
 
 ## The clip
 
-`eval/results/cloud/clip/cloud-clip.mp4`: 40.5 s, 1920×1080, real time. The VM's terminal on the left (the instance's name, zone and machine type from the metadata server; `hostname`, `x86_64`, 8 vCPU; its own `adb devices`), and the cloud emulator on the right while three routines run: check-in, change seat and gate, each PASS with 0 model calls. Made by `scripts/cloud/vm-clip.sh` on the VM (one clock for the recording and the transcript) and `scripts/cloud/make_clip.py` on the Mac. Raw: `emulator.mp4` (re-encoded to 1.5 MB) and `terminal.tsv`. Git ignores `*.mp4`, so the two videos are not in the repo: copies are in `~/Desktop/Envoy/captures/cloud/` (an ignored folder), with `terminal.tsv` tracked here. Nothing personal is in frame: the project's ID is stripped, and SkyLark shows its test passenger only. The clip's run was not one of the measured runs (the recorder takes CPU).
+`eval/results/cloud/clip/cloud-clip.mp4`: 40.5 s, 1920×1080, real time. The VM's terminal on the left (the instance's name, zone and machine type from the metadata server; `hostname`, `x86_64`, 8 vCPU; its own `adb devices`), and the cloud emulator on the right while three routines run: check-in, change seat and gate, each PASS with 0 model calls. Made by `scripts/cloud/vm-clip.sh` on the VM (one clock for the recording and the transcript) and `scripts/cloud/make_clip.py` on the Mac. Raw: `emulator.mp4` (re-encoded to 1.5 MB) and `terminal.tsv`. Git ignores `*.mp4`, so the two videos are not in the repo: copies are in the local checkout's `captures/cloud/` (an ignored folder), with `terminal.tsv` tracked here. Nothing personal is in frame: the project's ID is stripped, and SkyLark shows its test passenger only. The clip's run was not one of the measured runs (the recorder takes CPU).
 
 ## Limits, plainly
 

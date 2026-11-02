@@ -100,7 +100,7 @@ you said: `api.siri` logs the kind of answer and the timings only.
 
 ## On the iPhone (stage 2)
 
-Tested Oct 29 on the user's iPhone (iOS 18.7) against the live API (:8700 at `059bb7f`, over Tailscale), with two
+Tested Oct 29 on the author's iPhone (iOS 18.7) against the live API (:8700 at `059bb7f`, over Tailscale), with two
 screen recordings (mic on). One shortcut, the default `speak+notify` build, works on every surface; no second build
 was needed.
 
@@ -125,7 +125,7 @@ What it said (part 2, the demo take):
 | "What day is my flight?" | "Fri, Oct 30, 2026, from the SkyLark app yesterday at 5:50 PM." | |
 | "What gate is my flight?" | "That may have changed. I'm checking the app." | a task on envoy-test read Gate B12 in 8.3 s and "Done: …" was pushed |
 | "What gate is my flight?" (twice) | "Gate B12, from the SkyLark app just now." | |
-| "Check me in for my flight." | "On it: Check me in for my flight. Anything that can't be undone will wait for your OK." | the routine ran 5 steps on envoy-test and asked at Confirm check-in 10 s after the request; you decided on the iPhone app 80 s later |
+| "Check me in for my flight." | "On it: Check me in for my flight. Anything that can't be undone will wait for your OK." | the routine ran 5 steps on envoy-test and asked at Confirm check-in 10 s after the request; the decision came on the iPhone app 80 s later |
 
 Two things to know from the test:
 
@@ -183,5 +183,5 @@ show (it didn't on Oct 29).
    to keep SkyLark as it was; after an approve, reseed with `scripts/demo_setup.py --signed-in --app-only`.)
 
 Fallback: the Control Center button does the same as the Action Button. The Oct 29 take is the part 2 recording
-(the user's `RPReplay_Final1793309109.MP4`, 3 min 45 s; not in the repo): steps 1 and 2 with the approval opened from
+(`RPReplay_Final1793309109.MP4`, 3 min 45 s; not in the repo): steps 1 and 2 with the approval opened from
 the app because of Do Not Disturb.

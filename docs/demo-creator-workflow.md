@@ -1,13 +1,13 @@
 # Demo: the creator workflow (Mac → phone → Instagram)
 
-The headline scene of the video. A clip finished on the Mac goes to the Android phone, Envoy offers to post it, the user
+The headline scene of the video. A clip finished on the Mac goes to the Android phone, Envoy offers to post it, the person
 approves the Share, and the next time it runs from the routine Envoy learned. Instagram is Meta's app and Muse is Meta's
 assistant: Envoy gives Muse the one surface it can't reach.
 
-Kept honest on purpose: a **test account**, **every post approved by the user on Instagram's own Share screen**, low
+Kept honest on purpose: a **test account**, **every post approved by the person on Instagram's own Share screen**, low
 volume, and **no likes, follows or DMs**.
 
-Status: measured Oct 29 on the Pixel 5 (Instagram 453, test account envoy3955): two real posts approved by the user and
+Status: measured Oct 29 on the Pixel 5 (Instagram 453, test account envoy3955): two real posts approved by the author and
 four rehearsals (`eval/results/creator/runs/runs.md`; details in `prompts/creator-workflow-report.md`). Rehearsed again
 Oct 30 on the hybrid model profile, with the take setup in one command, a full-resolution recording of the phone, and the
 phone called "Envoy's phone" on screen (`prompts/creator-rehearsal-report.md`).
@@ -20,7 +20,7 @@ sets it too.
 
 | Where | State |
 | --- | --- |
-| Mac | Envoy's web app open on the API that runs the demo (the live API after the coordinator's restart). Muse for Mac open. A Finder window on `~/Envoy Outbox` (empty). The clip (`pier.mp4`) on the desktop. |
+| Mac | Envoy's web app open on the API that runs the demo (the live API, after its restart). Muse for Mac open. A Finder window on `~/Envoy Outbox` (empty). The clip (`pier.mp4`) on the desktop. |
 | iPhone | Envoy's companion (the PWA), paired, notifications on, screen recording ready. |
 | Pixel 5 | Plugged in over USB, unlocked, screen on. Instagram signed in to the **test account** (envoy3955). Instagram's photos-and-videos, camera and microphone access allowed (done Oct 29), so no Android dialog pauses the run. Then **`scripts/instagram_take.py --routine off`** (take 1) or **`--routine on`** (take 2), below: it leaves Instagram on Home with Create opening the gallery. Optional: delete the rehearsal drafts by hand (Create › Drafts › ⋯ › Delete; they show as "Drafts · N" on the gallery screen). Its live view open in Envoy on the Mac. **Nobody touches the phone during a take**: a touch pauses Envoy ("Envoy paused · Resume"). |
 | Envoy settings | Settings › Phones: the Pixel named **Envoy's phone**; Instagram on "use my phone". Proactivity: Important (handoff offers push). |
@@ -32,10 +32,10 @@ sets it too.
 
 | # | Screen | Who does what | What it shows | Expected time |
 | --- | --- | --- | --- | --- |
-| 1 | Mac | The creator asks Muse for Mac: "Send pier.mp4 to my phone for Instagram with the caption *Golden hour at the pier. Made on my Mac, posted from my phone.*" | Muse moves the clip into `~/Envoy Outbox` and writes `pier.json` (`{"app": "Instagram", "caption": "…"}`) | not measured here: the runs wrote the sidecar and clip themselves (Muse for Mac is muse-link's sitting) |
-| 2 | iPhone | The phone buzzes: **"Put pier.mp4 on Envoy's phone and post it to Instagram?"** The card says what Envoy will do, word for word, and its "Before I start" lines ("I'll use Envoy's phone (you said yes).", "Sharing will need your OK."). The user taps **Yes**. | The offer: nothing moves without a yes | offer 4–6 s after the clip lands |
+| 1 | Mac | The creator asks Muse for Mac: "Send pier.mp4 to my phone for Instagram with the caption *Golden hour at the pier. Made on my Mac, posted from my phone.*" | Muse moves the clip into `~/Envoy Outbox` and writes `pier.json` (`{"app": "Instagram", "caption": "…"}`) | not measured here: the runs wrote the sidecar and clip themselves (Muse for Mac is covered in `docs/muse-link.md`) |
+| 2 | iPhone | The phone buzzes: **"Put pier.mp4 on Envoy's phone and post it to Instagram?"** The card says what Envoy will do, word for word, and its "Before I start" lines ("I'll use Envoy's phone (you said yes).", "Sharing will need your OK."). The creator taps **Yes**. | The offer: nothing moves without a yes | offer 4–6 s after the clip lands |
 | 3 | Mac (live view of the Pixel) | Nobody: Envoy puts the clip on the phone, opens Instagram, starts a reel, picks the newest video (it is first in the gallery), goes on, types the caption, OK | The agent on the real phone | hybrid (Oct 30): 46–50 s from Yes to the approval, 9 model calls, ~$0.12 (105 s on a checkout that hadn't read the phone's app names: see Warm-up). Spark (Oct 29): 49 s, 12 calls, $0.06 |
-| 4 | iPhone | **"Approve: tap Share"** with the screenshot of the "New reel" screen (caption filled in). The user checks the caption and taps **Approve**. (On an account's very first reel the button reads **Next** and one more screen with Share follows; both are `share_button`, both ask. The test account is past that.) | Publishing is never automatic: the request doesn't cover a public post, and the rule flags the button by its id whatever it's labelled | the user's time |
+| 4 | iPhone | **"Approve: tap Share"** with the screenshot of the "New reel" screen (caption filled in). The creator checks the caption and taps **Approve**. (On an account's very first reel the button reads **Next** and one more screen with Share follows; both are `share_button`, both ask. The test account is past that.) | Publishing is never automatic: the request doesn't cover a public post, and the rule flags the button by its id whatever it's labelled | the creator's time |
 | 5 | Pixel / Mac | Instagram posts the reel ("Done posting"); Envoy says it's done | The post on the test account's profile | ~10 s after Approve |
 | 6 | Mac | Second clip, second caption, same steps 1–2. On the task page: **Routine steps** (Open new post creation … Tap share), then the same Share approval | "The next time, learned and almost free" | v2 on hybrid (Oct 30): 47–54 s from Yes to the approval, 2 repair calls, ~$0.03; once in five runs the repair asked an extra approval. The v3 candidate (`eval/results/creator/routine/`, not in the library): 18–20 s, 0 calls. Spark, Oct 29: 38–44 s, 2 calls |
 | 7 | Mac | Activity / the task page side by side: first run vs routine (steps, seconds, model calls, cost) | The learning, in numbers | – |
@@ -54,7 +54,7 @@ Plain ASCII on purpose: the caption is typed through the ADB keyboard (checked i
 | --- | --- |
 | Muse for Mac can't write the sidecar (or asks for a permission mid-take) | Drag `pier.mp4` and a prepared `pier.json` into `~/Envoy Outbox` together (the sidecar first). A sidecar that arrives up to 30 s after the clip still counts; a later one replaces the offer. |
 | No sidecar at all | The offer is "Put pier.mp4 on Envoy's phone?" (push only). Say yes, then ask Envoy "Post the newest video in my phone's gallery to Instagram as a reel with this caption: …" (Share still asks). |
-| Instagram shows a pop-up (seen in stage 0: a "Brand survey" on opening, "Others can now download and share your reels" on the last screen, an "Add to your story" tip) | The agent handles pop-ups; if it stalls, the user takes over in the live view, closes it, and hands back. Open Instagram once before recording so the survey is gone. |
+| Instagram shows a pop-up (seen in stage 0: a "Brand survey" on opening, "Others can now download and share your reels" on the last screen, an "Add to your story" tip) | The agent handles pop-ups; if it stalls, the creator takes over in the live view, closes it, and hands back. Open Instagram once before recording so the survey is gone. |
 | The run stops at a step it can't do | Take over in the live view, finish up to Share, hand back; the Share approval still comes. |
 | The post fails, or Instagram is down | Cut to the pre-recorded take of the first real post. |
 | The routine fails on take 2 | It falls back to repair and then the agent by itself; the take still ends at the Share approval (just slower). Re-record take 2. |
@@ -82,9 +82,9 @@ just wasn't posted to Instagram." Yes to the Share approval took 45 s (agent, 9 
 - Muse's reply ends with an **"Approve it here"** card showing the Mac's tailnet address (`send_to_phone` returns the
   app's link). Crop or blur it in the edit.
 
-The steps (the user does 2's tunnel, the key, and the iPhone):
+The steps (the author does 2's tunnel, the key, and the iPhone):
 
-1. The live API on main with the phone name (after the coordinator's merge and restart); Settings › Phones: Envoy's phone.
+1. The live API on main with the phone name (after the merge and the API's restart); Settings › Phones: Envoy's phone.
 2. `scripts/instagram_take.py --routine off` from the main checkout. Muse reaches Envoy at the permanent address (or,
    without it, `ENVOY_PORT=8700 scripts/start_muse_test.sh` and re-point the connector).
 3. Muse for Mac: "Send pier.mp4 to my phone for Instagram with the caption …"; allow its two prompts (Always allow, for
@@ -97,8 +97,8 @@ The steps (the user does 2's tunnel, the key, and the iPhone):
 
 ## When Envoy runs in the cloud: the outbox forwarder
 
-Backlog #48 (built and merged Nov 1, `869271f`). Muse for Mac always writes the clip to `~/Envoy Outbox`, and the
-user never picks a route:
+The outbox forwarder was built and merged Nov 1 (`869271f`). Muse for Mac always writes the clip to `~/Envoy Outbox`, and the
+person never picks a route:
 
 | Where the clip is | Envoy on the Mac | Envoy in the cloud (`docs/cloud.md`) |
 | --- | --- | --- |
@@ -143,7 +143,7 @@ user never picks a route:
   cloud copy doesn't have, so a clip for Instagram reaches the cloud outbox and waits there: the door says "Envoy has
   pier.mp4 but can't offer it: Your Android phone isn't connected …". And `send_to_phone` to an emulator only puts the
   file in its gallery; it starts no post. The cloud Instagram test needs one of the two
-  changed first: the coordinator's and the user's call. Not changed as of Nov 2.
+  changed first, and that is the author's call. Not changed as of Nov 2.
 
 ## Setting up a take (one command)
 

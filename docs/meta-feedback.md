@@ -97,7 +97,7 @@ The submission form asks for "feedback from your experience using Meta products"
 
 **What worked well**
 - **Fast and exact on short commands.** "What's my gate for my Chicago flight?" came back word for word, and the final transcript arrived **90 to 93 ms** after we sent `endStream` (4 runs). Cumulative partials arrived while the audio streamed, so the app can show text as you talk.
-- **Just as fast on real devices.** Eight dictations on the user's Mac and iPhone got their final text 74 to 296 ms after `endStream`.
+- **Just as fast on real devices.** Eight dictations on our own Mac and iPhone got their final text 74 to 296 ms after `endStream`.
 - **Cheap enough to leave on.** A 2.6 s turn cost $0.0001 ($0.18 per audio hour, billed per whole second).
 - **The protocol is small and easy to relay.** A handshake JSON with the key inside it (so a server can hold the key and relay a browser's audio), binary PCM, `endStream`, a final `transcript`. The keyword list (`keywords`) is a nice touch for app names like "SkyLark".
 
@@ -122,7 +122,7 @@ The submission form asks for "feedback from your experience using Meta products"
 
 **What worked well**
 - **Setup from one chat message.** "Add a custom MCP connector called Envoy at <URL>" brought up the "Add custom connector" card with the URL already filled in; only the key was typed, into the secure store. Muse then listed all seven of our tools and summarized them accurately.
-- **It never tried to approve.** After `run_task`, Muse checked the task twice, said the check-in was "waiting for your approval on the final step", showed our approval link as a card, and said "I can't approve that for you". After the user approved on our page, "Is the check-in done?" made it call `get_task` and report the seat, gate and boarding time correctly.
+- **It never tried to approve.** After `run_task`, Muse checked the task twice, said the check-in was "waiting for your approval on the final step", showed our approval link as a card, and said "I can't approve that for you". After we approved on our page, "Is the check-in done?" made it call `get_task` and report the seat, gate and boarding time correctly.
 - **Chat-time tool calls didn't prompt**; only setup did.
 
 **What could be better**

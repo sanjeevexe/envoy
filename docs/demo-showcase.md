@@ -9,14 +9,14 @@ for TikTok or YouTube. Each post is a routine Envoy learned, which an agent call
 - **Real posts, night of Nov 1.** All four app-only features have each gone live once. The Reel with a library song,
   the Story with a poll and the YouTube Short went live at 0 model calls each. The TikTok first went up without its
   sound; the re-post (v3, 3 calls) went live with "golden hour". Each was started from the Spark
-  agent on the user's go and approved on the iPhone (details below).
+  agent on the author's go and approved on the iPhone (details below).
 - **Muse end to end, Nov 2 (a dry run, every final step declined).** Muse for Mac moved the clip to Envoy's outbox,
   called `send_to_phone`, then called the three routine tools by name. The Reel, the TikTok and the Short each reached
   their final button with the song and the caption, at 0, 3 and 0 model calls, about 1 min 15 s each. Record:
   `docs/muse-link.md`, "Nov 1–2: routine tools and the cross-post dry run".
 - **Comments come back.** A comment on the Reel reached the iPhone 1.57 s after it landed on Envoy's phone. A YouTube
   comment took about 2 minutes, all but 3.6 s of it YouTube's own delay. No TikTok notification came (`prompts/phone-watch-report.md`).
-- **Known gap:** the Story routine fails while a Story is already live (backlog #64): its first tap opens the live
+- **Known gap:** the Story routine fails while a Story is already live: its first tap opens the live
   Story's poll results. One Story take per 24 hours, unless the live one is deleted.
 - **Showcase routines don't run in the cloud.** Every run here was on the Pixel. Library songs and stickers are untested
   on emulators.
@@ -34,14 +34,14 @@ and recompiled with the compiler fix (main ffde928); `prompts/showcase-report.md
 The song for all three: JVKE's "golden hour" (in all three libraries). Which features work on the test accounts is
 pre-check P3 (`eval/results/showcase/p3.md`).
 
-**The real posts (Nov 2, 01:00–02:00 ET).** meta-agent started each one on :8700 on the user's word, and the user
-approved each in Envoy on their iPhone:
+**The real posts (Nov 2, 01:00–02:00 ET).** meta-agent started each one on :8700 on the author's word, and the author
+approved each in Envoy on the iPhone:
 - Reel (`instagram_reel_song` v2): live, with the song, 0 calls.
 - Story with a poll (`instagram_story_poll` v3): live, 0 calls.
 - TikTok (`tiktok_post_sound` v2): went up **without the sound** ("Original sound by envoy"). The routine never
   attaches it. In its source run the agent's first try left the editor at "Add sound". The agent noticed and redid it
   (steps 19–24), but the compiler dropped that correction as a "back-track". The step's only after-check is the word
-  "Music", and the rehearsals stopped at Post, whose screen doesn't show the sound. The user kept that post.
+  "Music", and the rehearsals stopped at Post, whose screen doesn't show the sound. That post was left up.
 - TikTok re-post (`tiktok_post_sound` v3, built with the compiler fix and rehearsed 3/3): live as envoy, captioned
   "Posted by Envoy · test 2", with **♫ golden hour - JVKE**. 3 calls, 53 s, the editor's sound checked before Next.
 - YouTube Short (`youtube_short_sound` v2): live and public. The details screen showed YouTube's music notice and
@@ -61,10 +61,10 @@ post. TikTok's ended a real post "failed". `compile --final-from-declined` drops
 
 ## Kept honest on purpose
 
-- **Test accounts only:** Instagram `envoy3955`, plus the TikTok and YouTube test accounts the user made and signed in to
-  on the Pixel. Envoy and the sessions never sign in, create accounts or type passwords.
+- **Test accounts only:** Instagram `envoy3955`, plus the TikTok and YouTube test accounts the author made and signed in to
+  on the Pixel. Envoy and the coding sessions that built it never sign in, create accounts or type passwords.
 - **Every post stops at the app's final button** (Instagram's Share, or Next with id `share_button`; TikTok's Post;
-  YouTube's Upload Short) and waits for the user's OK. Rehearsals decline it. A real post happens only after the user
+  YouTube's Upload Short) and waits for the person's OK. Rehearsals decline it. A real post happens only after the author
   says yes in chat.
 - **No likes, follows, comments or DMs.** `eval/run_showcase.py tap` refuses them, and any publishing button, whatever
   flag it's given.
@@ -89,7 +89,7 @@ Sources: the apps' and APIs' own help pages, collected Nov 1 (the research notes
 
 ## How it's run
 
-Claim the Pixel first (`~/Desktop/Envoy/coord/devices.sh claim pixel5 showcase 60 "<purpose>"`) and keep it upright.
+Claim the Pixel first with the shared device lock (a local script outside the repo: `devices.sh claim pixel5 showcase 60 "<purpose>"`) and keep it upright.
 
 **Stage 0 (P3), by hand, with no model calls:** `uv run --project backend python eval/run_showcase.py …`
 

@@ -94,7 +94,7 @@ The per-phase result pages (below) have the detail and the method for each numbe
 
 ## Known gaps
 
-- The poll Story routine fails while a Story is already live (backlog #64).
+- The poll Story routine fails while a Story is already live.
 - Teach mode can't yet learn keypad entry, or apps that reopen on their last screen.
 - Target and banking apps refuse emulators, so they need Envoy's phone.
 - No TikTok notification came through in testing (three comments), so TikTok notifications are unproven.
