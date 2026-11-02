@@ -2,21 +2,32 @@
 
 **Muse has a computer. Envoy gives it a phone.**
 
-Envoy is the phone layer AI agents call. It **acts** in real Android apps, **learns** each task it does into a routine
-that replays in seconds with few or no model calls, and **watches** the phone for what an agent should hear about.
-Muse, Meta's assistant, is the front door: it calls Envoy as a custom MCP connector, and so can any MCP agent. Envoy's
-own app on your iPhone is where you approve and watch. Nothing irreversible (a post, an order, a check-in) happens
-without your yes.
+Envoy gives a machine a new capability: it lets AI agents like Meta's Muse work real Android apps, turns each task it
+does into a checked routine they can call by name, and tells them what happens on the phone, while a person approves
+every irreversible step on their iPhone.
 
-**Why a phone layer.** Agents already work the web and a growing list of connectors, but some things exist only in
-phone apps: a Reel set to a song from Instagram's music library, a Story with a poll sticker, a TikTok (Muse has no
-TikTok connector). Asked on Nov 1, Muse described its own limit: "On its own, Muse can't open and tap around in apps on
-your phone." And an agent that works an app step by step pays for every step, every time. Envoy replays what it learned
-for almost nothing, which is also what makes watching the phone affordable.
+<!-- SLOT hero GIF (from the takes: Muse on the Mac asks → Envoy's phone works the app → the iPhone yes). Add it here as
+![Muse asks on the Mac, Envoy's phone posts, the person approves on the iPhone](docs/media/hero.gif) -->
 
-**What that looks like.** You ask Muse on your Mac to post a clip with a song to Instagram, TikTok and YouTube. Muse
-puts the clip on Envoy's phone (`send_to_phone`), then calls the routine Envoy learned for each app as a tool, by name.
-Envoy's phone runs each one and stops at the app's final button until you approve on your iPhone.
+![Agents call Envoy over MCP; Envoy runs every phone through one device interface; the person approves on the iPhone](docs/diagrams/architecture.png)
+
+**Three numbers** (development numbers until the final evaluation on Nov 3; each is one pass, scoped in
+[the evidence appendix](#evidence-appendix)):
+<!-- SLOT final numbers: replace all three from eval/results/final/report.md after `eval/run_final.py report` (Nov 3). 1 is
+suite 4's real.json (medians over the workflows whose first run and same-input rerun both passed); 2 is suite 3; 3 is the
+"Irreversible actions taken without approval" target row. -->
+- **Real apps, 9 read-only workflows:** Envoy's replay used 0 model calls and a median 6.08 s; the agent's first run took a
+  median 4 calls, 17.87 s and $0.0308 (Oct 31, `hybrid` profile).
+- **SkyLark, our own test app, changed on purpose 50 times:** 50 recovered, then 50 of 50 ran with no model call (agent
+  on Spark).
+- **Irreversible actions without the person's yes: 0,** over 7 declined live runs and 30 runs with planted instructions
+  (SkyLark, agent on Spark).
+
+> **Meta models: who does what.** Wonder turns task experience into reusable routines; Spark handles matching and
+> extraction; SAM helps locate drawn controls when the accessibility tree is missing. Muse is the front door, and the
+> tool list an agent sees grows as Envoy learns: a routine shared with agents is a tool of its own at the agent's next
+> `tools/list`, with no restart. On the default `hybrid` profile, Wonder also plans and takes the agent's steps on a task
+> Envoy hasn't learned yet ([`backend/models/adapter.py`](backend/models/adapter.py)).
 
 - **Showcase site:** https://sanjeevexe.github.io/envoy/ (a guided tour built only from recorded runs and results)
 - **Demo video (3 minutes):** TBD, the YouTube link goes here on Nov 4
@@ -25,50 +36,133 @@ Envoy's phone runs each one and stops at the app's final button until you approv
 Built solo for the Meta Global AI Developer Hackathon (Oct 26 – Nov 4, 2026, indie track). Open-source projects are
 plumbing, credited in [`THIRD_PARTY.md`](THIRD_PARTY.md), which also says what Envoy builds itself.
 
+## Who it's for
+
+A creator finishes a clip and wants it out as an Instagram Reel with a song from Instagram's music library, a Story with
+a poll sticker, a TikTok with a sound and a YouTube Short. Each of those is a feature only the app has, so today every
+clip means four rounds of tapping in three apps. With Envoy, the creator asks Muse on the Mac. Envoy's phone works each
+app from a routine it learned from its own runs, and stops at each app's final button until the creator says yes on
+their iPhone. The agent does the heavy lifting; the person keeps the keys.
+
+<!-- SLOT measured benefit (the timed run by hand): the same clip and app features by hand vs through Envoy, as
+hands-on time, elapsed time, interventions and whether every post was right, with the one-time setup kept apart from
+repeat use. One trial: say so. -->
+
+Beyond creators, the same layer is meant for anyone whose work lives in phone apps no agent can reach: a small business
+that runs on its ordering and messaging apps, someone for whom tapping through apps is hard, and any agent platform that
+wants a phone.
+
+**What's new.** Agents working phone apps isn't new (Mobilerun, Gemini on Android), and SkillDroid compiles successful
+runs into templates. Envoy adds checks after every step, written as code; repairs kept as versions with a trial and a
+rollback; learned routines served to agents as tools of their own; and an approval only the person can give
+([`docs/technical-design.md`](docs/technical-design.md#what-is-new-honestly)).
+
 ## What works today
 
 | | What | Evidence |
 | --- | --- | --- |
-| **Agents call it** | MCP at `/mcp` (Streamable HTTP), 12 tools: run a task or a routine, search memory, send a file to the phone, get files back, propose a trigger, list phones, read phone updates… Muse for Mac and the Muse app add it as a custom connector | [`backend/mcp_server/README.md`](backend/mcp_server/README.md), [`docs/muse-link.md`](docs/muse-link.md) |
-| **Three agents** | Muse; the Spark agent, a small agent on Meta's Muse Spark that reaches Envoy only over MCP; and Claude Code. Each has its own key and tool groups; every task says which agent asked | [`docs/agents.md`](docs/agents.md), [`agents/meta-agent/evidence/2026-11-01/`](agents/meta-agent/evidence/2026-11-01/) |
-| **Learned tasks become tools** | Share a routine in Settings › Agents (off by default) and it appears in agents' tool lists under its own name, with typed inputs, no restart. In a Nov 2 dry run, Muse called the Reel, TikTok and Short routines by name, and each reached its final button | [`prompts/agent-door-report.md`](prompts/agent-door-report.md), [`docs/muse-link.md`](docs/muse-link.md#nov-12-routine-tools-and-the-cross-post-dry-run), [`eval/results/showcase/muse-2026-11-02/task-rows.json`](eval/results/showcase/muse-2026-11-02/task-rows.json) |
-| **App-only posts** | One clip from the Mac → an Instagram Reel with a library song, an Instagram Story with a poll sticker, a YouTube Short and a TikTok with a sound. All four have gone live on test accounts (the night of Nov 1), each started by the Spark agent and approved on the iPhone: the Reel, Story and Short with 0 model calls, the TikTok with 3. The first TikTok lost its song to a compiler bug, since fixed; the re-post has it | [`docs/demo-showcase.md`](docs/demo-showcase.md), [`prompts/showcase-report.md`](prompts/showcase-report.md) |
-| **Watches** | A notification on Envoy's phone can start a task or reach the agent; each app is off until you allow it, and codes are hidden before anything is stored. An Instagram comment reached the iPhone 1.6 s after it landed on Envoy's phone; YouTube works too (Envoy's part 3.6 s). Plus time, email and changed-fact triggers, change alerts, and habits | [`prompts/phone-watch-report.md`](prompts/phone-watch-report.md), [`prompts/proactive-report.md`](prompts/proactive-report.md), [`prompts/alerts-report.md`](prompts/alerts-report.md) |
-| **Learns** | A successful run compiles into a routine: a check before and after every step, targets found by what they are, a local repair when the app changes, versions with a trial and a rollback | [`backend/routines/README.md`](backend/routines/README.md), [Results](#results-so-far) |
-| **Teach mode** | Do a task once through the live view; Envoy compiles it and replays it once before saving. A Google Calendar lesson (7 steps) replayed 7/7 with 0 model calls | [`backend/api/README.md`](backend/api/README.md) (`teach.py`), [`site/README.md`](site/README.md), [`eval/results/teach_trials_2026-11-01/`](eval/results/teach_trials_2026-11-01/README.md) |
-| **Phones** | "Envoy's phone" (a Pixel 5, Android 13, over USB) and emulators on the Mac; agents pick one with `list_phones`. A copy of Envoy on Google Cloud was tested too: routines for SkyLark, our own test app, compiled on the Mac ran there 48/48 with no model calls | [`docs/phase-6-results.md`](docs/phase-6-results.md), [`docs/cloud.md`](docs/cloud.md) |
-| **Files** | `send_to_phone` puts a Mac clip on the phone (a real phone waits for your OK); `get_file` gives the agent the final screen, the screen you approved, or a link from its own task | [`docs/muse-link.md`](docs/muse-link.md), [`prompts/file-delivery-report.md`](prompts/file-delivery-report.md) |
+| **Agents call it** | MCP at `/mcp` (Streamable HTTP), 12 built-in tools: run a task or a routine, search memory, send a file to the phone, get files back, propose a trigger, list phones, read phone updates… Muse for Mac and the Muse app add it as a custom connector | [`backend/mcp_server/README.md`](backend/mcp_server/README.md), [`docs/muse-link.md`](docs/muse-link.md) |
+| **Any MCP agent** | Muse; the Spark agent, a small agent on Meta's Muse Spark that reaches Envoy only over MCP; and any MCP client (Claude Code tested). Each has its own key and tool groups; every task says which agent asked | [`docs/agents.md`](docs/agents.md), [`agents/meta-agent/evidence/2026-11-01/`](agents/meta-agent/evidence/2026-11-01/) |
+| **Learned tasks become tools** | Share a routine in Settings › Agents (off by default) and it appears in agents' tool lists under its own name, with typed inputs, no restart. In a Nov 2 dry run, Muse called the Reel, TikTok and Short routines by name, and each reached its final button | [`eval/results/agent-door/`](eval/results/agent-door/) (`tools-before.json`, `tools-after.json`, `call.json`), [`eval/results/showcase/muse-2026-11-02/task-rows.json`](eval/results/showcase/muse-2026-11-02/task-rows.json) |
+| **App-only posts** | One clip from the Mac → an Instagram Reel with a library song, a Story with a poll sticker, a TikTok with a sound and a YouTube Short with a sound. All four went live on test accounts on the night of Nov 1, each started by the Spark agent and approved on the iPhone: the Reel, Story and Short with 0 model calls in Envoy's replay, the TikTok with 3. The agent that calls pays for its own turns: the Spark agent used 11 model calls ($0.044) to drive a three-post run. Which routines were tuned by hand is in [the write-up](docs/submission.md#hand-edits-stated-exactly) | [`docs/demo-showcase.md`](docs/demo-showcase.md), [`data/routines/`](data/routines/) (each `index.json`), [`agents/meta-agent/evidence/2026-11-01/crosspost/`](agents/meta-agent/evidence/2026-11-01/crosspost/README.md) |
+| **Watches** | A notification on Envoy's phone can start a task or reach the agent; each app is off until you allow it, and codes are hidden before anything is stored. An Instagram comment reached the iPhone 1.57 s after it landed on Envoy's phone. Plus time, email and changed-fact triggers, change alerts, and habits | [`docs/demo-showcase.md`](docs/demo-showcase.md), [`eval/results/alerts/`](eval/results/alerts/alerts.md), [`eval/results/recurring/`](eval/results/recurring/recurring.md) |
+| **Learns** | A successful run compiles into a routine: a check before and after every step, targets found by what they are, a local repair when the app changes, versions with a trial and a rollback | [`backend/routines/README.md`](backend/routines/README.md), [Results](#results) |
+| **Teach mode** | Do a task once through the live view; Envoy compiles it and replays it once before saving. A Google Calendar lesson (7 steps) replayed 7/7 with 0 model calls in Envoy's replay | [`eval/results/teach_trials_2026-11-01/`](eval/results/teach_trials_2026-11-01/README.md) |
+| **Phones** | "Envoy's phone" (a Pixel 5, Android 13, over USB) and emulators on the Mac; agents pick one with `list_phones`. A copy of Envoy on Google Cloud was tested too: routines for SkyLark compiled on the Mac ran there 48/48 with no model calls | [`docs/phase-6-results.md`](docs/phase-6-results.md), [`docs/cloud.md`](docs/cloud.md) |
+| **Files** | `send_to_phone` puts a Mac clip on the phone (a real phone waits for your OK); `get_file` gives the agent the final screen, the screen you approved, or a link from its own task | [`docs/muse-link.md`](docs/muse-link.md) |
 | **You approve** | An irreversible step waits for your yes in Envoy on the iPhone, unless you set that routine to run without asking; spending money always asks. No agent has an approve tool; asked to approve, Claude Code and the Spark agent each said only you can | [`backend/policy/approval_rules.py`](backend/policy/approval_rules.py), [`docs/agents.md`](docs/agents.md) |
 
-## Results so far
+## Results
 
 **Development numbers, not final.** Measured Oct 27–31 on development commits. The final evaluation runs Nov 3,
 17:00–22:00 ET, on the `eval-final` tag; `eval/run_final.py report` then rewrites
-[`eval/results/final/report.md`](eval/results/final/report.md), and its numbers replace these. Each row names its source.
+[`eval/results/final/report.md`](eval/results/final/report.md), and its numbers replace these. Times and costs are
+medians, with the spread beside them; dollars are at Meta's standard prices. Commits and configs are in
+[the evidence appendix](#evidence-appendix).
+
+### Real apps
+
+18 read-only workflows in apps Envoy didn't build (Amazon, Starbucks, DoorDash, Gmail, Maps, YouTube…): ask a question,
+check the answer. Each row is one pass. A new input applies to 11 of the 18.
+
+| Pass | First run right | Compiled into a routine | Same input, no model call | New input, no model call |
+| --- | --- | --- | --- | --- |
+| Oct 28, agent on Spark | 14/18 | 14/18 | 13/18 | 4/11 |
+| Oct 31, `hybrid` | 12/18 | 12/18 | 9/18 | 6/11 |
+| Nov 3, final, `hybrid` | TBD | TBD | TBD | TBD |
+
+Target's bot check stopped both Target workflows on every pass.
+
+**The cost curve.** On the workflows whose first run and same-input rerun both passed, the routine called by name
+against the agent's first run:
+
+| Pass | Workflows | The agent's first run | Envoy's replay | Compiling it, once |
+| --- | --- | --- | --- | --- |
+| Oct 28, agent on Spark | 13 | 6 calls (2–19), 19.3 s (4.39–47.89 s), $0.0105 | 0 calls, 7.88 s (1.13–21.41 s), $0 | $0.0449 (Wonder) |
+
+| Oct 31, `hybrid` | 9 | 4 calls (2–9), 17.87 s (5.95–28.73 s), $0.0308 | 0 calls, 6.08 s (0.72–27.43 s), $0 | $0.0476 (Wonder) |
+| Nov 3, final | TBD | TBD | TBD | TBD |
+
+Asked in words instead of by name, Envoy's matcher adds one Spark call to pick the routine.
+
+<!-- SLOT final: fill both "Nov 3, final" rows from eval/results/final/real.json. The cost curve uses the same rule as
+above: medians and ranges over the workflows whose first run and same-input rerun both passed. -->
+
+<!-- SLOT reliability batch (pre-registered, run on the tag after the eval): its table goes here, reported narrowly (this
+version, these workflows, these inputs, every attempt). -->
+
+
+### SkyLark, our own test app
+
+SkyLark is an airline app we built so every run can start from a known state and be scored by the app's real state.
+These ran on Oct 27–28, with the agent's steps on Spark.
 
 | What | Result | Source |
 | --- | --- | --- |
-| A real-app task, learned once | "How many calories are in a Grande Caffè Latte?" in the Starbucks app. The agent's first run: 45.6 s, 12 model calls, $0.0795. The routine compiled from it: 14.8 s, 2 calls, $0.005, the same answer (190 calories) | [`eval/results/real-apps/loop-a/runs.jsonl`](eval/results/real-apps/loop-a/runs.jsonl) (`task-1030-155711-51c2`, `task-1030-204136-b8d5`) |
-| Asking again | SkyLark, our own test airline app: the first request took a median 27.9 s and $0.051; requests 2–10 were 90/90 right at a median 1 model call, 5.9 s and $0.0023 (86% fewer calls) | [`report.md`](eval/results/final/report.md), suite 2 |
-| Against simpler approaches | SkyLark, 10 tasks on 4 layouts: Envoy's routines 40/40 on the first try (median 1 call, 5.5 s); the agent every time 40/40 (5 calls, 10.1 s); a fixed replay 14/40 | `report.md`, suite 1 |
-| When the app changes | We changed SkyLark's layout on purpose, 50 times: 50 recovered, then 50/50 ran with no model call. 50 new inputs: 50/50 with no model call | `report.md`, suite 3 |
-| On Envoy's phone | The Pixel 5 (Android 13): the 10 core routines on 3 new bookings each, 30/30 with no model call | [`eval/results/final/sizes.md`](eval/results/final/sizes.md) |
-| Real apps | 18 read-only workflows on test accounts: the first run right 14/18; the routine rerun right with no call 13/18; with a new input 4/11 (6/11 at the Oct 31 rehearsal); Target blocked by its bot check | `report.md`, suite 4; [`eval/results/real_rerun_2026-10-31/README.md`](eval/results/real_rerun_2026-10-31/README.md) |
-| Safety | Irreversible steps caught 20/20 by code alone; 0 irreversible actions without approval over 7 declined live runs and 30 runs with planted instructions | `report.md`, suites 6 and 6b |
-| AndroidWorld | 116 tasks, pass@1: Envoy as on `main` 21 (18%); with 13 general agent changes 57 (49%); on the held-out half 31 of 58 against 12; about $0.04 and 38 s a task | [`docs/androidworld-results.md`](docs/androidworld-results.md) |
+| Asking again | Request 1 (the agent, then the compile): 5.5 calls, 27.9 s, $0.051. Requests 2–10: 90/90 right at 1 call (the matcher), 5.9 s, $0.0023; each request's median 5.2–6.6 s | [`repeats.md`](eval/results/final/repeats.md) |
+| Against simpler approaches | 10 tasks on 4 layouts. Envoy's routines 40/40 on the first try, 1 call, 5.5 s (4.8–6.0 s by layout). The agent every time 40/40, 5 calls, 10.1 s (9.2–12.0 s). A fixed replay of the same taps 14/40 | [`systems.md`](eval/results/final/systems.md) |
+| When the app changes | We changed SkyLark's layout on purpose, 50 times, over 5 kinds of change: 50 recovered, then 50/50 ran with no model call. 50 new inputs: 50/50 with no model call | [`change.md`](eval/results/final/change.md) |
+| On Envoy's phone | The Pixel 5: the 10 core routines on 3 new bookings each, 30/30 with no model call | [`sizes.md`](eval/results/final/sizes.md) |
+| Safety | 20 irreversible controls: 20 caught, all 20 by code alone. 7 live runs declined at the approval: 7 held. Instructions planted on screens: the agent right in 20 of 20 runs and tried to follow them in 0; the routines never tried (10 runs) | [`safety.md`](eval/results/final/safety.md), [`injection.md`](eval/results/final/injection.md) |
+
+### AndroidWorld, by cost
+
+On Google's AndroidWorld benchmark (116 tasks in 20 open-source apps; agent on Spark at low effort, seed 30, pass@1),
+22 routines Envoy compiled from its own solved runs did 55 of 69 new-seed instances at a median 1 model call, $0.0021 and
+8.3 s; the full agent did 63 at 6 calls, $0.0122 and 19.0 s. Pairing each routine miss with the agent's own run on that
+instance gives 67 of 69 (computed, not run). Separately, 13 general agent changes, chosen on half the tasks, took the
+held-out half from 12 to 31 of 58; they have been part of Envoy since Oct 29
+([`docs/androidworld-results.md`](docs/androidworld-results.md)).
 
 ## Limits, said plainly
 
-- **Learn a task once, not an app:** new inputs on real apps passed 4 of 11 (Oct 28) and 6 of 11 (Oct 31). On our own
-  test app, 50 of 50.
+- **Learn a task once, not an app.** New inputs on real apps passed 4 of 11 on Oct 28, then 5, 6, 6 and 6 of 11 in the
+  four passes through Oct 31; on our own test app, 50 of 50. When a step fails, the routine repairs that step and keeps
+  the fix as a new version on trial, so a workflow can pass "after a repair".
+- **A routine's first days are rough.** In an Oct 30 development loop, the Starbucks routine's 26 replays took a median
+  66.95 s and 4 calls (14.2–148.8 s, 2–12 calls) while it was being fixed; the last four, on the loop's final commit,
+  took 14.8–15.9 s and 2 calls each (the matcher and the answer's extraction), three of them with a new drink
+  ([`runs.jsonl`](eval/results/real-apps/loop-a/runs.jsonl)).
+- **Step checks aren't outcome checks.** The first TikTok passed every step check and went out without its sound. The
+  routine now checks that the editor names the sound, but Envoy doesn't yet check every outcome (the right clip, sound
+  and caption) before the final button.
+  <!-- SLOT outcome checks: if they land before the eval, say what is checked now and link the negative tests. -->
 - **The Story routine fails while a Story is already live:** its first tap opens the live Story's poll results.
 - **Teach mode** doesn't yet learn keypad entry reliably, or apps that reopen on their last screen.
 - **No TikTok notifications:** TikTok sent none for any comment in testing.
 - **Muse hears about phone events when it next checks** `phone_updates` (its scheduled task checked about every 10
   minutes). Envoy's own push to your iPhone is immediate.
-- **Apps that refuse emulators** (Target's bot check, banking apps) need a real Android phone.
-- **Envoy runs on a Mac today,** with Envoy's phone over USB; the cloud phone is a tested option, and the showcase ran on
-  Envoy's phone. You sign in to each app once on the phone Envoy uses.
+
+## Setup today, the path to a product, and the platform question
+
+Today Envoy runs on a Mac, with its own Android phone (Envoy's phone over USB, or an emulator) running the apps, and the
+person's iPhone as where they approve. You sign in to each app once on the phone Envoy uses. The path from here is a
+cloud phone per person, which is tested ([`docs/cloud.md`](docs/cloud.md)), with MCP as the door for any agent. This is a
+hackathon build, not a product. The showcase posted only to test accounts, the real-app passes are read-only, and every
+post waits for a person's yes. Some apps push back: Target's bot check stops Envoy on emulators, banking apps refuse
+them, and automating an app may break its terms. Envoy drives the phone from the Mac, and Google Play forbids publishing
+an app that uses accessibility features to act on its own, so any on-phone helper stays sideloaded
+([`docs/technical-design.md`](docs/technical-design.md)).
 
 ## Run it
 
@@ -105,7 +199,7 @@ use a second emulator, `envoy-real`, made the same way with a 16 GB data partiti
 ([`docs/phase-0-findings.md`](docs/phase-0-findings.md)).
 
 **Connect an agent.** Make it a key in Settings › Agents, then:
-- **Claude Code** (or any MCP client): `claude mcp add --transport http …`, step by step in [`docs/agents.md`](docs/agents.md).
+- **Any MCP client,** such as Claude Code: `claude mcp add --transport http …`, step by step in [`docs/agents.md`](docs/agents.md).
 - **The Spark agent:** `uv run --project backend python agents/meta-agent/run.py` with the key in `ENVOY_AGENT_KEY_FILE`,
   then http://127.0.0.1:8790 ([`agents/meta-agent/README.md`](agents/meta-agent/README.md)).
 - **Muse:** `scripts/start_muse_test.sh` opens a public HTTPS tunnel that serves `/mcp` and nothing else; add it in Muse
@@ -136,7 +230,35 @@ uv run --project backend python eval/run_final.py report       # eval/results/fi
   phone, SAM 3.1) · [7](docs/phase-7-results.md) (evaluation) · [AndroidWorld](docs/androidworld-results.md)
 - **Feedback on Meta's tools:** [`docs/meta-feedback.md`](docs/meta-feedback.md) · **Credits:**
   [`THIRD_PARTY.md`](THIRD_PARTY.md) · **License:** MIT ([`LICENSE`](LICENSE))
+- **Build logs:** [`prompts/`](prompts/README.md) holds the plans and reports written while building; the evidence is in
+  `eval/results/` and `docs/`.
 - **Layout:** `backend/` (Python 3.13: device layer, agent, routines, memory, models, the API and MCP server) ·
   `agents/` (the Spark agent) · `web/` (the web app, also the iPhone's Home Screen app) · `site/` (the showcase) ·
   `eval/` (task sets, runners, results) · `testapps/` (SkyLark) · `scripts/` · `android/`, `bridge-android/`,
   `relay/`, `ios/` (the on-phone banner, an optional accessibility service, a scrcpy relay, an optional iPhone app)
+
+## Evidence appendix
+
+Every number above, with its scope, configuration and commit. The profiles are in
+[`backend/models/adapter.py`](backend/models/adapter.py): `hybrid` (the default since Oct 30) runs plan, step, repair
+and compile on Muse Wonder 1.0 and the rest on Muse Spark 1.3; "agent on Spark" means steps on Spark at low effort and
+compile on Wonder. Every run below used the standard tier.
+
+| Number | Scope | Commit | Evidence |
+| --- | --- | --- | --- |
+| Real apps, Oct 28 | 18 workflows on `envoy-real`; rows from 4 runs that day | `401e994`, `524b93a`, `cddf1b2`, `00ec5d9` | [`real.md`](eval/results/final/real.md), `real.json` (suite 4) |
+| Real apps, Oct 31 | the same 18, `hybrid`; Gmail's two rows rerun after a missing token | `a594136` (runs `1031150937`, `1031152557`) | [`real_rerun_2026-10-31/`](eval/results/real_rerun_2026-10-31/README.md) |
+| New-input trajectory 4 → 6 of 11 | five passes, Oct 28–31 | `00ec5d9`, `53ab459`, `736a6e4`, `059bb7f`, `a594136` | `real_rerun_2026-10-31/README.md`, "The four stages" |
+| The cost curve, and the top real-app number | medians (range) over the workflows whose first run and same-input rerun both passed; the routine is called by name, so no matcher call; compile cost is Wonder's, once per routine | as the pass | computed from each pass's `real.json` (`agent`, `routine_runs` "same input", `compile.cost_usd`) |
+| SkyLark suites 1, 2, 3, 3b, 6, 6b | agent on Spark | `ad9a67b`, `5c3d716`, `6c507f3`, `5504260` (emulators) and `a9b923d` (Pixel), `849e51a`, `7395743` | [`report.md`](eval/results/final/report.md) and each suite's `.md` / `.json` |
+| "0 irreversible actions without approval" | 7 declined live runs (suite 6) and 30 runs with planted instructions (suite 6b) | `849e51a`, `7395743` | `report.md`, "The design's success targets" |
+| Starbucks loop | every replay in the loop (26, one declined at a repair); the file doesn't record the profile, and `hybrid` was the default on those commits | each row names its commits, `a2ecceb` … `55abacf` | [`runs.jsonl`](eval/results/real-apps/loop-a/runs.jsonl) |
+| AndroidWorld | 116 tasks, seed 30, pass@1, agent on Spark at low effort; routines on 3 new seeds of their 23 tasks | baseline and `a80b976` (the 13 changes); seeds `e9594f0`, `b82e512`, `cdd130e`; merged in `105d04e` | [`docs/androidworld-results.md`](docs/androidworld-results.md) |
+| The live posts | Nov 1–2 (ET), Envoy's phone, test accounts; 0 / 0 / 3 / 0 calls for the Reel, Story, TikTok re-post and Short | tasks `task-1102-005928-4182`, `-013244-b7c8`, `-023044-d081`, `-015325-106a` | [`docs/demo-showcase.md`](docs/demo-showcase.md); versions and hand edits in each `data/routines/<name>/index.json` |
+| Muse's dry run | Nov 2, Muse for Mac, every final step declined | the task rows | [`task-rows.json`](eval/results/showcase/muse-2026-11-02/task-rows.json) |
+| The Spark agent's own cost | a three-post run on a test copy, Nov 1, declined at each final button | — | [`crosspost/README.md`](agents/meta-agent/evidence/2026-11-01/crosspost/README.md), "Cost" |
+| The cloud phone, 48/48 | SkyLark routines compiled on the Mac, replayed on an emulator on Google Cloud, Oct 29 | — | [`docs/cloud.md`](docs/cloud.md) |
+
+`report.md` marks the development runs "(uncommitted changes)". That flag came from a bug, fixed Oct 31, that counted
+routine data as code ([`real_rerun_2026-10-31/README.md`](eval/results/real_rerun_2026-10-31/README.md)); the final run
+on the tag clears it.
