@@ -274,3 +274,20 @@ def test_a_place_among_look_alikes_is_looked_for_back_at_the_lists_start():
     dev = _Gallery(at_start=True)
     asyncio.run(RoutineExecutor(dev)._reveal(SimpleNamespace(inputs={}), _clip_step(None, never)))
     assert dev.moves[0] == "down"
+
+
+# ---- rows that show the input but for its case --------------------------------------------------------------------------
+# YouTube's sound search (Nov 1, backlog #56): after typing "golden hour" it suggests "Trigger a new search with golden hour"
+# and "...with Golden Hour". The step's text_has fit both, so it found nothing; the editor's buttons behind the picker were
+# in the tree by then, so its after-checks "held" and the routine skipped the search, then scrolled 8 times for a result.
+
+
+def test_rows_that_show_the_input_but_for_its_case_are_told_apart_by_its_case():
+    s = _screen("youtube_sound_suggestions")
+    loc = Locator(text="Trigger a new search with", text_has="{{sound_title}}", kind="Button", cls="ViewGroup", in_list=False)
+    pick = locators.locate(loc, s, {"sound_title": "golden hour"}).element
+    assert pick is not None and pick.label == "Trigger a new search with golden hour"
+    assert locators.locate(loc, s, {"sound_title": "Golden Hour"}).element.label == "Trigger a new search with Golden Hour"
+    assert not locators.locate(loc, s, {"sound_title": "GOLDEN HOUR"}).ok  # neither shows it so: still nothing
+    # The compiler no longer reports the step ambiguous: the locator picks the row the run tapped.
+    assert disambiguate(loc, pick, s, {"sound_title": "golden hour", "sound_artist": "JVKE"}, [])[2] is None

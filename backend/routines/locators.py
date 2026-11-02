@@ -333,6 +333,9 @@ def locate(loc: Locator, screen: ScreenState, inputs: dict[str, str] | None = No
     if best >= threshold and best - runner < margin and (slot := _same_slot(rendered, scored, screen, margin)) is not None:
         e, det = slot
         return Match(e, best, runner, threshold, det)
+    if best >= threshold and best - runner < margin and (same := _same_case(rendered, scored, margin)) is not None:
+        e, det = same
+        return Match(e, best, runner, threshold, det)
     if best < threshold or best - runner < margin:
         return Match(None, best, runner, threshold, det)
     return Match(e, best, runner, threshold, det)
@@ -414,6 +417,17 @@ def list_head(els: list[Element], screen: ScreenState) -> Element | None:
         return first
     inside = [x for x in candidates(screen) if first.index in _ancestors(x, screen) and (x.label or usable_id(x.resource_id))]
     return inside[0] if inside else None
+
+
+def _same_case(loc: Locator, scored: list, margin: float) -> tuple[Element, dict] | None:
+    """Rows that show the input alike but for its case ("Trigger a new search with golden hour", "…with Golden Hour":
+    YouTube's sound search suggestions, Nov 1): the one that shows it exactly as given, if only one does."""
+    if not loc.text_has:
+        return None
+    want = re.compile(rf"(?<![0-9A-Za-z]){re.escape(' '.join(loc.text_has.split()))}(?![0-9A-Za-z])")
+    tied = [(e, det) for sc, e, det in scored if scored[0][0] - sc < margin]
+    exact = [(e, det) for e, det in tied if any(want.search(" ".join((t or "").split())) for t in (e.label, e.text, e.desc))]
+    return exact[0] if len(exact) == 1 and len(tied) > 1 else None
 
 
 def _same_slot(loc: Locator, scored: list, screen: ScreenState, margin: float) -> tuple[Element, dict] | None:
