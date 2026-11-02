@@ -1,0 +1,183 @@
+{
+ "mode": "replay",
+ "app": "com.zhiliaoapp.musically",
+ "time": "2026-11-02T02:21:52",
+ "request": {
+  "phone": "phone-09031FDD4000C6",
+  "routine": "tiktok_post_sound",
+  "inputs": {
+   "sound_title": "golden hour",
+   "sound_artist": "JVKE",
+   "caption": "Envoy rehearsal v3 2"
+  }
+ },
+ "task": {
+  "id": "task-1102-022153-95a2",
+  "status": "declined",
+  "routine": "tiktok_post_sound",
+  "model_calls": 3,
+  "cost_usd": 0.0071,
+  "traces": [],
+  "detail": "the user declined the approval",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 21,
+ "repairs": [],
+ "approvals": [
+  {
+   "description": "tap \"Post\" in com.zhiliaoapp.musically (routine tiktok_post_sound v3)",
+   "reasons": [
+    "rule: target publishes 'Post'",
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "asked_at": [
+  "Post"
+ ],
+ "approval_shot": "approval-task-1102-022153-95a2.jpg",
+ "routine_steps": [
+  {
+   "id": "launch_tiktok",
+   "status": "done",
+   "rung": 0,
+   "score": null,
+   "rungs": []
+  },
+  {
+   "id": "tap_create",
+   "status": "done",
+   "rung": 1,
+   "score": 1.0,
+   "rungs": [
+    "wait and retry: after-checks held after 2.8 s"
+   ]
+  },
+  {
+   "id": "tap_upload",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "select_newest_video",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "tap_next_after_gallery",
+   "status": "done",
+   "rung": 1,
+   "score": 1.0,
+   "rungs": [
+    "wait and retry: after-checks held after 3.9 s"
+   ]
+  },
+  {
+   "id": "tap_music",
+   "status": "done",
+   "rung": 0,
+   "score": 0.982,
+   "rungs": []
+  },
+  {
+   "id": "tap_search_in_sound_sheet",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "type_sound_search",
+   "status": "done",
+   "rung": 0,
+   "score": 0.999,
+   "rungs": []
+  },
+  {
+   "id": "execute_sound_search",
+   "status": "done",
+   "rung": 0,
+   "score": 0.999,
+   "rungs": []
+  },
+  {
+   "id": "wait_for_sound_results",
+   "status": "done",
+   "rung": 0,
+   "score": null,
+   "rungs": []
+  },
+  {
+   "id": "apply_first_sound_result",
+   "status": "done",
+   "rung": 0,
+   "score": null,
+   "rungs": [
+    "looked for 'red check button for first result golden hour by JVKE' (sam, 2.6 s)"
+   ]
+  },
+  {
+   "id": "close_sound_sheet",
+   "status": "done",
+   "rung": 0,
+   "score": null,
+   "rungs": []
+  },
+  {
+   "id": "tap_next_after_sound",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "type_caption",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "go_back_to_review",
+   "status": "done",
+   "rung": 0,
+   "score": null,
+   "rungs": []
+  },
+  {
+   "id": "tap_post",
+   "status": "declined",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  }
+ ],
+ "auto_approved": [],
+ "marks_s": {
+  "running": 0.2,
+  "needs_you": 1.2,
+  "phone_yes": 1.2,
+  "waiting_approval": 56.6,
+  "post_asked": 56.6,
+  "declined": 57.6,
+  "end": 57.6
+ },
+ "spent": {
+  "model_calls": 3,
+  "cost_usd": 0.0071,
+  "cost_at_standard_usd": 0.0071,
+  "jobs": {
+   "sam": 2,
+   "choose": 1
+  }
+ },
+ "ok": true,
+ "failures": [],
+ "profile": "hybrid"
+}

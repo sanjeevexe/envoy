@@ -410,7 +410,8 @@ def drop_unseen_done(routine: Any) -> tuple[Any, str | None]:
 
 
 
-def compile_run(trace: str, name: str, final_from_declined: bool, recompile: str | None = None, reuse_spec: bool = False) -> int:
+def compile_run(trace: str, name: str, final_from_declined: bool, recompile: str | None = None, reuse_spec: bool = False,
+                spec_file: Path | None = None) -> int:
     """Wonder compiles a declined first run (`confirmed`: it ended at the post the user declined, so it has no verified
     end); the routine is renamed (never instagram_post_reel or another existing name, backlog #43). With
     `final_from_declined`, the tap that was declined becomes the last step: its locator is built from the screen it was
@@ -431,6 +432,9 @@ def compile_run(trace: str, name: str, final_from_declined: bool, recompile: str
     if reuse_spec:  # the Wonder answer the first compile paid for (its report), so a recompile costs no model call
         from models.schemas import CompiledRoutine
         spec = CompiledRoutine.model_validate(json.loads((ROUTINES / f"{name}.report.json").read_text())["wonder"])
+    if spec_file is not None:  # a Wonder answer remapped onto a changed cleaned list (the compiler session's, by trace number)
+        from models.schemas import CompiledRoutine
+        spec = CompiledRoutine.model_validate(json.loads(spec_file.read_text()))
     routine, report = asyncio.run(compile_trace(TRACES / trace, confirmed=True, spec=spec))
     changes = [f"compiled by showcase from {trace}, a first run declined at the post (eval/run_showcase.py)"
                + (f"; recompiled ({recompile})" if recompile else "")]
@@ -690,6 +694,7 @@ def main() -> int:
     p.add_argument("--final-from-declined", action="store_true")
     p.add_argument("--recompile", default=None, help="why (e.g. 'compiler fix ffde928'): recompile a routine already in the library")
     p.add_argument("--reuse-spec", action="store_true", help="reuse the first compile's Wonder answer (no model call)")
+    p.add_argument("--spec", type=Path, help="a Wonder answer from this file (no model call), e.g. one remapped onto a new cleaned list")
     p = sub.add_parser("add-routine")
     p.add_argument("yaml")
     for mode in ("first", "replay"):
@@ -721,7 +726,7 @@ def main() -> int:
     if args.cmd == "keep":
         return keep(args.stem)
     if args.cmd == "compile":
-        return compile_run(args.trace, args.name, args.final_from_declined, args.recompile, args.reuse_spec)
+        return compile_run(args.trace, args.name, args.final_from_declined, args.recompile, args.reuse_spec, args.spec)
     if args.cmd == "add-routine":
         return add_routine(Path(args.yaml))
     if args.cmd == "push":

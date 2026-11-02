@@ -1,0 +1,311 @@
+routine: tiktok_post_sound
+app: com.instagram.android
+version: 1
+status: draft
+intent: Post the newest gallery video to TikTok with a chosen sound and caption
+description: Opens TikTok, creates a post from the newest video in the phone gallery, searches TikTok's sound library for the requested sound
+  and applies it, then adds the requested caption and dismisses the keyboard for review.
+patterns: [Post my newest video to TikTok with a sound and caption, Create a TikTok from my latest gallery clip, Upload my newest phone video
+    to TikTok, Make a TikTok post from my most recent video]
+start: fresh_launch
+inputs:
+  sound_title: {type: text, description: Title of the sound to find in TikTok's sound library., example: golden hour}
+  sound_artist: {type: text, description: Artist of the sound to find in TikTok's sound library., example: JVKE}
+  caption:
+    type: text
+    description: Caption to enter as the post description.
+    example: "Envoy rehearsal: one clip, three apps"
+steps:
+- id: launch_tiktok
+  intent: Launch TikTok
+  pre:
+  - {app_foreground: com.instagram.android}
+  - element_present: {resource_id: swipeable_tab_view_pager, kind: List}
+  action: {launch: com.zhiliaoapp.musically}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: viewpager, kind: List}
+  risk: read
+  note: trace step 1
+- id: tap_create
+  intent: Tap Create to start a new post
+  pre:
+  - {app_foreground: com.zhiliaoapp.musically}
+  action:
+    tap:
+      resource_id: oox
+      text: Create
+      kind: Button
+      cls: Button
+      siblings: [Home, Friends, Inbox]
+      in_list: true
+      position: [0.5, 0.943]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: upload_hot_area, kind: Button}
+  - element_present: {resource_id: e1n, kind: Button}
+  risk: reversible
+  note: trace step 2
+- id: tap_upload
+  intent: Tap Upload to open the gallery
+  pre:
+  - {app_foreground: com.zhiliaoapp.musically}
+  action:
+    tap:
+      resource_id: upload_hot_area
+      text: ''
+      kind: Button
+      cls: FrameLayout
+      parent: uxu
+      in_list: false
+      position: [0.102, 0.91]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: viewpager_choose_media, kind: List}
+  - element_present: {resource_id: video_image_mixed_bottom_view_root, text: Next, kind: Button}
+  risk: reversible
+  note: trace step 3
+- id: select_newest_video
+  intent: Tap the first, newest video in the gallery list
+  pre:
+  - {app_foreground: com.zhiliaoapp.musically}
+  action:
+    tap:
+      kind: Button
+      cls: FrameLayout
+      parent: jnn
+      in_list: true
+      position: [0.169, 0.246]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: view_pager, kind: List}
+  - element_present: {resource_id: biq, text: AutoCut, kind: Button}
+  risk: reversible
+  note: trace step 4
+- id: tap_next_after_gallery
+  intent: Tap Next to proceed to the editor with the selected video
+  pre:
+  - {app_foreground: com.zhiliaoapp.musically}
+  action:
+    tap:
+      resource_id: y3s
+      text: Next
+      kind: Button
+      cls: Button
+      parent: pit
+      in_list: false
+      position: [0.74, 0.927]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: e1m, text: Close, kind: Image}
+  - element_present: {resource_id: bry, kind: Button}
+  risk: reversible
+  note: trace step 5
+- id: tap_music
+  intent: Tap the Music area to open the sound library
+  pre:
+  - {app_foreground: com.zhiliaoapp.musically}
+  action:
+    tap:
+      resource_id: e1x
+      text: Music
+      kind: Button
+      cls: LinearLayout
+      in_list: false
+      position: [0.453, 0.099]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: g3t, text: Bottom sheet, kind: Text}
+  - element_present: {resource_id: n6o, text: Hot, kind: Text}
+  risk: reversible
+  note: trace step 6
+- id: tap_search_in_sound_sheet
+  intent: Tap Search in the Add sound sheet
+  pre:
+  - {app_foreground: com.zhiliaoapp.musically}
+  action:
+    tap:
+      resource_id: c55
+      text: Search
+      kind: Button
+      cls: ImageView
+      in_list: false
+      position: [0.939, 0.557]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: zmf, text: Close, kind: Button}
+  - element_present: {resource_id: hwf, text: Search, kind: EditText}
+  risk: reversible
+  note: trace step 7
+- id: type_sound_search
+  intent: "Type {{sound_title}} {{sound_artist}} into the Search field"
+  pre:
+  - {app_foreground: com.zhiliaoapp.musically}
+  action:
+    type:
+      field:
+        resource_id: hwf
+        text: Search
+        hint: Search
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.463, 0.14]
+      value: "{{sound_title}} {{sound_artist}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: tv_sug
+      text: "{{sound_title}} {{sound_artist}} piano"
+      kind: Text
+  - element_present:
+      resource_id: hwf
+      text: "Search: {{sound_title}} {{sound_artist}}"
+      kind: EditText
+  risk: reversible
+  note: trace step 8
+- id: execute_sound_search
+  intent: "Tap Search to execute the search for {{sound_title}} by {{sound_artist}}"
+  pre:
+  - {app_foreground: com.zhiliaoapp.musically}
+  action:
+    tap:
+      resource_id: tv_search_action
+      text: Search
+      kind: Button
+      cls: Button
+      in_list: false
+      position: [0.901, 0.14]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: uwr, text: Play, kind: Button}
+  - element_present: {resource_id: mdz, text: Add to Favorites, kind: Button}
+  risk: reversible
+  note: trace step 9
+- id: apply_first_sound_result
+  intent: "Tap the apply/check control for the first result matching {{sound_title}} by {{sound_artist}}"
+  pre:
+  - {app_foreground: com.zhiliaoapp.musically}
+  action:
+    tap:
+      visual: "red check button for first result {{sound_title}} by {{sound_artist}}"
+      region: [0.806, 0.5, 0.957, 0.538]
+      density: 440
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: g3t, text: Bottom sheet, kind: Text}
+  - element_present: {resource_id: n6o, text: Hot, kind: Text}
+  risk: reversible
+  note: trace step 11
+- id: close_sound_sheet
+  intent: "Press Back to close the sound sheet and return to the editor with {{sound_title}} added"
+  pre:
+  - {app_foreground: com.zhiliaoapp.musically}
+  action: {back: true}
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: e1v
+      text: Music
+      text_has: "{{sound_title}}"
+      kind: Text
+  - element_present:
+      resource_id: e1x
+      text: Music
+      text_has: "{{sound_title}}"
+      kind: Button
+  risk: read
+  note: trace step 23
+- id: tap_next_after_sound
+  intent: Tap Next to proceed to the caption and post screen
+  pre:
+  - {app_foreground: com.zhiliaoapp.musically}
+  action:
+    tap:
+      resource_id: q25
+      text: Next
+      kind: Button
+      cls: LinearLayout
+      parent: myt
+      in_list: false
+      position: [0.74, 0.917]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: fgc, text: Preview, kind: Text}
+  risk: reversible
+  note: trace step 24
+- id: type_caption
+  intent: "Type {{caption}} into the Add description field"
+  pre:
+  - {app_foreground: com.zhiliaoapp.musically}
+  action:
+    type:
+      field:
+        resource_id: h_n
+        text: Add description...
+        hint: Add description...
+        kind: EditText
+        cls: EditText
+        parent: video_header_layout
+        siblings: [Preview]
+        in_list: false
+        position: [0.323, 0.211]
+      value: "{{caption}}"
+  post:
+  - field_equals:
+      field: {resource_id: h_n, text: Add description..., kind: EditText}
+      value: "{{caption}}"
+  risk: reversible
+  note: "trace step 16 · moved after trace step 24: typed during the round trip 12–21"
+- id: go_back_to_review
+  intent: Press back to close the keyboard and review the preview before posting
+  optional: true
+  pre:
+  - {app_foreground: com.zhiliaoapp.musically}
+  action: {back: true}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: kkx, text: Settings, kind: Image}
+  - element_present: {resource_id: vvx, kind: Button}
+  risk: read
+  note: "trace step 17 · closes the keyboard: optional · moved after trace step 24: typed during the round trip 12–21"
+- id: tap_post
+  intent: Tap Post to publish
+  pre:
+  - element_present:
+      resource_id: tl7
+      text: Post
+      kind: Button
+      cls: Button
+      parent: gli
+      siblings: [Drafts]
+      in_list: false
+      position: [0.74, 0.929]
+  action:
+    tap:
+      resource_id: tl7
+      text: Post
+      kind: Button
+      cls: Button
+      parent: gli
+      siblings: [Drafts]
+      in_list: false
+      position: [0.74, 0.929]
+  risk: irreversible
+  note: "trace step 25: the post tap the user declined (never ran, so no after-check)"
+changes:
+- compiled by showcase from task-1101-210013-7814-r1, a first run declined at the post (eval/run_showcase.py); recompiled (compiler fix bebaa50
+  (a correction is learned), remapped Wonder answer)
+- its last step (tap 'Post') is the tap declined at step 25, built from that screen; irreversible
+- "done-check dropped (text visible: '{{caption}}'): it describes the screen after the post, which a declined run never reaches, so it was never\
+  \ verified; the post step itself is the end"
+compiled_from:
+  task_id: task-1101-210013-7814-r1
+  goal: "Post the newest video in my phone's gallery to TikTok with the sound \"golden hour\" by JVKE from TikTok's sound library and this caption:\
+    \ \"Envoy rehearsal: one clip, three apps\""
+  compiler: cached
+  compiled_at: "2026-11-02 02:11:25"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 23, 24, 16, 17]
+  trace_steps_dropped: 11
+  cost_usd: 0.0

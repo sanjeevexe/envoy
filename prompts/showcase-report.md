@@ -52,6 +52,21 @@ label (`tv_top_text`) at "Add sound":
 The compiler session has the case. Then: recompile, rehearse on the copy (checking "golden hour" in the editor before
 Post), and re-post after the user deletes the songless one.
 
+**TikTok v3, rehearsed (Nov 2, 02:19–02:24).** Compiled with the compiler's fix (bebaa50, main 9cfc1be) from the
+same source run, using the compiler session's Wonder answer remapped by trace number ($0, `compile --spec`). v2's hand
+edits were re-applied: the app name, the 3 s wait, and no before-check on the launch. The new path is search, the red
+check, **Back**, Next, caption, Back, Post. close_sound_sheet now requires the editor's sound label (e1v/e1x) to name
+{{sound_title}}.
+
+Three replays on the :8764 copy, each declined at Post:
+| Replay | Steps | Clip | close_sound_sheet | Time to Post | Calls |
+| --- | --- | --- | --- | --- | --- |
+| 1 | tap_create needed a local repair after TikTok's cold start | right | rung 0 | 115 s | 5 ($0.049) |
+| 2 | all | right | rung 0 | 57 s | 3 ($0.007) |
+| 3 | all | right | rung 0 | 57 s | 3 ($0.007) |
+
+After replay 2's decline, Back to the editor read **"Music · golden hour"** (e1x, e1v).
+
 **Why TikTok said "failed".** A routine learned from a declined post kept a done-check, the plan's "the caption is
 visible". No run had seen it after the post, and TikTok leaves the composer after Post. `compile --final-from-declined`
 now drops it and says so in the changes (07de462). `youtube_short_sound` v3 is v2 without it. YouTube's own passed
