@@ -231,6 +231,33 @@ def swipe(dev: Any, direction: str) -> None:
     print(f"swiped {direction}: {'ok' if got.ok else got.error}")
 
 
+def setup_youtube(dev: Any, wait_s: float = 7) -> list[str]:
+    """Before a YouTube run: a run that was force-stopped mid-edit can leave an autosave, and the next Create opens on
+    "Continue your draft video?", which the routine doesn't expect (2 of 3 v2 replays). Open Create, answer that
+    "Start over" (it drops the rehearsal's own unsaved edit), and force-stop on the empty camera, which leaves none
+    (checked twice by hand, Nov 1)."""
+    pkg = APPS["youtube"]
+    dev.adb.shell(f"am force-stop {pkg}")
+    dev._act_sync(Action(kind="launch", package=pkg))
+    time.sleep(wait_s)
+    done = []
+    state, _ = observe(dev)
+    create = next((e for e in state.numbered if (e.label or "").strip() == "Create"), None)
+    if create is None:
+        dev.adb.shell(f"am force-stop {pkg}")
+        return ["no Create on YouTube's home: left it"]
+    dev._act_sync(Action(kind="tap", element=create.number))
+    time.sleep(4)
+    state, _ = observe(dev)
+    again = next((e for e in state.numbered if (e.label or "").strip() == "Start over"), None)
+    if again is not None and any("Continue your draft video" in (e.label or "") for e in state.numbered):
+        dev._act_sync(Action(kind="tap", element=again.number))
+        done.append("draft prompt: Start over")
+        time.sleep(3)
+    dev.adb.shell(f"am force-stop {pkg}")
+    return done + ["force-stopped on the camera"]
+
+
 def tap_at(dev: Any, x: int, y: int) -> None:
     """A point, for what an app draws without an accessibility tree (TikTok's sound search results). Whatever element
     is under it gets safe_tap's refusals and the risk rule's verdict first."""
@@ -491,6 +518,7 @@ def run_flow(args: argparse.Namespace) -> int:
 
     seen: set[str] = set()
     status = None
+    approval_shot: str | None = None
     while time.time() - t0 < 900:
         got = api.get(f"/api/tasks/{tid}")
         task = got["task"]
@@ -518,6 +546,13 @@ def run_flow(args: argparse.Namespace) -> int:
             seen.add(a["id"])
             post = is_post(a)
             mark("post_asked" if post else f"asked_{len(seen)}")
+            if post and a.get("screenshot"):  # what was on screen at the ask (which clip), kept outside the repo
+                shot = api.http.get(f"/api/approvals/{a['id']}/shot")
+                if shot.status_code == 200:
+                    SHOTS.mkdir(parents=True, exist_ok=True)
+                    shot_path = SHOTS / f"approval-{tid}.jpg"
+                    shot_path.write_bytes(shot.content)
+                    approval_shot = shot_path.name  # in SHOTS, outside the repo (never a full path: it names the Mac's user)
             say(f"approval asked: {a.get('description')!r} reasons={a.get('reasons')} {'(the post)' if post else '(NOT the post)'}")
             if a["status"] == "pending":
                 api.decline(a["id"])
@@ -546,12 +581,22 @@ def run_flow(args: argparse.Namespace) -> int:
     posts = [asked_at(a) for a in approvals if is_post(a)]
 
     cost = spent(tid, t0 - 5)
+    # How each routine step went (rung 0: matched at once; 4: a repair call; 5–6: the agent), from the routine's trace.
+    from agent.trace import RUNS as TRACES
+    routine_steps = []
+    trace = TRACES / f"{tid}-r1" / "steps.jsonl"
+    if args.mode == "replay" and trace.exists():
+        for line in trace.read_text().splitlines():
+            r = json.loads(line)
+            if r.get("kind") == "routine_step":
+                routine_steps.append({"id": r.get("id"), "status": r.get("status"), "rung": r.get("rung"),
+                                      "score": r.get("score"), "rungs": r.get("rungs") or []})
     pkg = app_of(args.app) if args.app else task.get("app")  # the copy recorded a TikTok routine's task as Instagram's (Nov 1)
     result = {"mode": args.mode, "app": pkg, "time": datetime.fromtimestamp(t0).isoformat(timespec="seconds"), "request": body,
               "task": {k: task.get(k) for k in ("id", "status", "routine", "model_calls", "cost_usd", "traces", "detail", "device")},
               "steps": len(steps), "repairs": [s.get("text") for s in steps if "repair" in (s.get("text") or "").lower()][:10],
               "approvals": [{k: a.get(k) for k in ("description", "reasons", "status", "decided_by")} for a in approvals],
-              "asked_at": posts, "auto_approved": [s.get("text") for s in auto], "marks_s": marks, "spent": cost, "ok": not failures,
+              "asked_at": posts, "approval_shot": approval_shot, "routine_steps": routine_steps, "auto_approved": [s.get("text") for s in auto], "marks_s": marks, "spent": cost, "ok": not failures,
               "failures": failures,
               "profile": os.environ.get("ENVOY_MODEL_PROFILE") or "hybrid"}
     if not args.no_cleanup and pkg:
@@ -616,6 +661,7 @@ def main() -> int:
     p.add_argument("stem")
     p = sub.add_parser("leave")
     p.add_argument("app")
+    sub.add_parser("setup-youtube")
     p = sub.add_parser("compile")
     p.add_argument("trace", help="data/runs/<trace>: a first run declined at the post")
     p.add_argument("--name", required=True, help="a new routine name (never one in the library)")
@@ -680,6 +726,8 @@ def main() -> int:
         swipe(dev, args.direction)
     elif args.cmd == "key":
         dev._act_sync(Action(kind=args.key))
+    elif args.cmd == "setup-youtube":
+        print("\n".join(setup_youtube(dev)))
     elif args.cmd == "leave":
         print("\n".join(leave(dev, app_of(args.app))))
     return 0

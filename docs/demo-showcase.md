@@ -4,8 +4,26 @@ The video's climax (T1c, `prompts/phone-layer-plan.md` §5 "showcase"). One clip
 5) to Instagram, TikTok and YouTube Shorts. Each post uses a feature that the website and Muse's connectors don't have,
 and each is a routine Envoy learned, which an agent calls as a tool (agent-door's routine tools).
 
-Status, Nov 1: pre-check P3 done by hand on the Pixel (`eval/results/showcase/p3.md`, which has the details, the final
-buttons and the recommendation). The user picks the showcase from it.
+Status, Nov 1 (night): four routines in the library, each learned from one agent run and declined at the final
+button, with a few locators tuned by hand (`prompts/showcase-report.md`):
+
+| Tool (routine) | Inputs | Replays, active version |
+| --- | --- | --- |
+| `instagram_reel_song` | song_title, song_artist, caption | 3/3 at Share, 0 calls |
+| `instagram_story_poll` | poll_question, poll_option_1, poll_option_2 | 3/3 at "Your story", 0 calls |
+| `tiktok_post_sound` | sound_title, sound_artist, caption | 3/3 at Post, 7 vision calls (~$0.02) |
+| `youtube_short_sound` | sound_title, sound_artist, short_title | 4/4 at "Upload Short", 2–9 calls (one step still repairs) |
+
+The song for all three: JVKE's "golden hour" (in all three libraries). Which features work on the test accounts is
+pre-check P3 (`eval/results/showcase/p3.md`).
+
+## Before a take
+- The newest video in the gallery is the clip: every routine picks the gallery's first slot. Push it last.
+- Instagram: `scripts/instagram_take.py` (a reel started earlier comes back as "Keep editing your draft?").
+- YouTube: `uv run --project backend python eval/run_showcase.py setup-youtube` (an autosaved draft makes Create open
+  on "Continue your draft video?").
+- TikTok: watch for the launch pause ("came to the front on its own"); press Resume on the phone's Envoy banner.
+- Each routine is a tool for Muse only once "Share with agents" is on (its page in Envoy).
 
 ## Kept honest on purpose
 

@@ -271,6 +271,7 @@ steps:
 done:
 - text_visible: "{{caption}}"
 changes:
+- "two locators tuned by hand (showcase): learned from one run, two steps tuned"
 - compiled by showcase from task-1101-202945-39d5-r1, a first run declined at the post (eval/run_showcase.py)
 - its last step (tap 'Share') is the tap declined at step 12, built from that screen; irreversible
 - intent and patterns name the music (hand edit of the description only, no step changed), so the matcher doesn't confuse it with instagram_post_reel

@@ -1,10 +1,10 @@
 {
  "name": "tiktok_post_sound",
- "active": 1,
+ "active": 2,
  "versions": [
   {
    "version": 1,
-   "status": "active",
+   "status": "retired",
    "created": "2026-11-01 21:06:56",
    "parent": null,
    "changes": [
@@ -17,6 +17,27 @@
      "tap_post"
     ],
     "checked": "2026-11-01 21:06"
+   }
+  },
+  {
+   "version": 2,
+   "status": "active",
+   "created": "2026-11-01 21:31:25",
+   "parent": 1,
+   "changes": [
+    "tuned by hand (showcase): a 3 s wait added before the visual tap, one locator tuned, the app corrected",
+    "compiled by showcase from task-1101-210013-7814-r1, a first run declined at the post (eval/run_showcase.py)",
+    "its last step (tap 'Post') is the tap declined at step 25, built from that screen; irreversible",
+    "wait_for_sound_results (new, 3 s) before apply_first_sound_result: TikTok draws its search results with no accessibility nodes, so execute_sound_search's after-checks pass before they appear and the visual tap looked too early (3/3 v1 replays failed: 'couldn't see the red check button'). Hand edit: showcase",
+    "select_sound_result: the row whose label has '{{sound_title}} · {{sound_artist}}' (0.82 vs 0 on the recorded sheet; v1's locator had no text: any list button). Hand edit: showcase",
+    "app: com.zhiliaoapp.musically. v1 said com.instagram.android: the first run's task had no app (Envoy doesn't know TikTok's name) and the phone was on Instagram before the run launched TikTok, so the compiler took Instagram. A replay then fresh-launched Instagram first (and paused: 'TikTok came to the front on its own'). Correction: showcase"
+   ],
+   "verification": {
+    "by": "showcase",
+    "post_steps": [
+     "tap_post"
+    ],
+    "checked": "2026-11-01 21:31"
    }
   }
  ],
@@ -53,8 +74,41 @@
    "model_calls": 5,
    "duration_s": 45.65,
    "patches": 1
+  },
+  {
+   "time": "2026-11-01 21:44:00",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1101-214220-c7d7-r1",
+   "status": "declined",
+   "rung": 1,
+   "model_calls": 7,
+   "duration_s": 91.5,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-01 21:45:08",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1101-214406-2cda-r1",
+   "status": "declined",
+   "rung": 1,
+   "model_calls": 7,
+   "duration_s": 59.61,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-01 21:46:21",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1101-214515-ba11-r1",
+   "status": "declined",
+   "rung": 1,
+   "model_calls": 7,
+   "duration_s": 57.33,
+   "patches": 0
   }
  ],
- "needs_recompile": false,
- "app": "com.instagram.android"
+ "needs_recompile": true,
+ "app": "com.zhiliaoapp.musically"
 }

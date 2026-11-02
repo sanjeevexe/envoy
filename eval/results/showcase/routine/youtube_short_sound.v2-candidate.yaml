@@ -297,6 +297,7 @@ steps:
 done:
 - text_visible: "{{short_title}}"
 changes:
+- "tuned by hand (showcase): one stray before-check dropped, one locator tuned"
 - compiled by showcase from task-1101-211106-9b42-r1, a first run declined at the post (eval/run_showcase.py)
 - its last step (tap 'Upload Short') is the tap declined at step 15, built from that screen; irreversible
 - "tap_create: dropped its before-check on 'Captions unavailable' (caption_toggle_container): a video autoplaying on Home when the first run was\
