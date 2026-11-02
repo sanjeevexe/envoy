@@ -4,16 +4,26 @@
 // tool of its own in the tool list of Muse and of any agent whose key has the "run" group (api/agents.py). Settings ›
 // Agents shows that list exactly as Muse sees it, and keeps it current (it's what to film if an agent keeps its own list
 // until it reconnects); `/?settings=agents#agent-tools` opens it, scrolled to the list. A tool that appears while it's open
-// scrolls into view, marked New. Each routine's page has its "Share with agents" switch.
+// scrolls into view, marked New. Each routine's page has its "Share with agents" switch, and so does this list: each
+// learned tool, and the active routines not shared yet. Every flip says "envoy:sharing" on the window, so the rest of the
+// page (the agents' cards, which say how many tools each sees) reads it again at once.
 import { useEffect, useRef, useState } from "react";
-import { ArrowRightIcon, HandPalmIcon, PlugsConnectedIcon, SparkleIcon } from "@phosphor-icons/react";
+import { ArrowRightIcon, CaretDownIcon, HandPalmIcon, PlugsConnectedIcon, SparkleIcon } from "@phosphor-icons/react";
 import { appIcon, Card, Chip, cx, RowIcon, Section, Switch } from "@/components/ui";
 import { ago, api, post, type AgentTool, type AgentToolsInfo } from "@/lib/api";
 
 const SHARING = "/api/routines/sharing";
+export const SHARING_EVENT = "envoy:sharing";  // a routine was shared or unshared on this page
 
-// The sharing state; with `every`, read again that often while the page is visible, so a routine learned or shared
-// elsewhere shows up here too.
+// Share a routine with agents or stop: the new state, and the event that tells the page.
+export async function share(name: string, on: boolean): Promise<AgentToolsInfo> {
+  const next = await post<AgentToolsInfo>(`/api/routines/${encodeURIComponent(name)}/share`, { on });
+  window.dispatchEvent(new Event(SHARING_EVENT));
+  return next;
+}
+
+// The sharing state, read again on every flip on this page; with `every`, also that often while the page is visible, so
+// a routine learned or shared elsewhere shows up here too.
 export function useSharing(every?: number): [AgentToolsInfo | null, (next: AgentToolsInfo) => void, string | null] {
   const [info, setInfo] = useState<AgentToolsInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +33,8 @@ export function useSharing(every?: number): [AgentToolsInfo | null, (next: Agent
       .catch((e) => { if (!gone) setError(e.message ?? "couldn't load them"); });
     load();
     const t = every ? setInterval(() => { if (document.visibilityState === "visible") load(); }, every) : undefined;
-    return () => { gone = true; if (t) clearInterval(t); };
+    window.addEventListener(SHARING_EVENT, load);
+    return () => { gone = true; if (t) clearInterval(t); window.removeEventListener(SHARING_EVENT, load); };
   }, [every]);
   return [info, setInfo, error];
 }
@@ -38,7 +49,7 @@ export function ShareWithAgents({ name }: { name: string }) {
   const tool = info.tools.find((t) => t.routine === name);
   const flip = async (next: boolean) => {
     setBusy(true); setError(null);
-    try { setInfo(await post<AgentToolsInfo>(`/api/routines/${encodeURIComponent(name)}/share`, { on: next })); }
+    try { setInfo(await share(name, next)); }
     catch (e: any) { setError(e.message ?? "couldn't change it"); }
     finally { setBusy(false); }
   };
@@ -81,8 +92,9 @@ function Signature({ t }: { t: AgentTool }) {
   );
 }
 
-// `added`: when this tool appeared while the list was open (it's marked New, with a sage edge, until you leave).
-function ToolRow({ t, added }: { t: AgentTool; added?: number }) {
+// `added`: when this tool appeared while the list was open (it's marked New, with a sage edge, until you leave). Its
+// switch stops sharing it: the row goes, and the routine is back under Not shared.
+function ToolRow({ t, added, flip, busy }: { t: AgentTool; added?: number; flip: (name: string, on: boolean) => void; busy: boolean }) {
   return (
     <div id={`agent-tool-${t.tool}`} className={cx("flex scroll-mt-24 gap-3 border-b border-divider px-4 py-4 last:border-b-0",
       !!added && "ev-rise bg-sage-tint/50 shadow-[inset_4px_0_0_var(--sage)]")}>
@@ -114,13 +126,58 @@ function ToolRow({ t, added }: { t: AgentTool; added?: number }) {
         )}
         <p className="mt-2 text-meta-2 text-muted">Learned {t.taught ? "from you" : "from a run"} on {t.learned} · replays with no model calls while the app looks as it did</p>
       </div>
+      <div className="-mr-1 -mt-2 shrink-0"><Switch on onChange={(on) => flip(t.routine, on)} disabled={busy} label={`Share ${t.tool} with agents`} /></div>
     </div>
+  );
+}
+
+type Learned = { name: string; app: string; intent: string; active: number | null };
+
+// The library's active routines that aren't tools: each with its switch, folded away unless nothing is shared yet. One
+// shared without an active version is here too, switched on, and says why agents don't see it.
+function NotShared({ info, flip, busy, open: startOpen }: { info: AgentToolsInfo; flip: (name: string, on: boolean) => void; busy: string | null; open: boolean }) {
+  const [routines, setRoutines] = useState<Learned[] | null>(null);
+  const [open, setOpen] = useState(startOpen);
+  useEffect(() => { api<Learned[]>("/api/routines").then(setRoutines).catch(() => setRoutines([])); }, []);
+  const tools = new Set(info.tools.map((t) => t.routine));
+  const rest = (routines ?? []).filter((r) => !tools.has(r.name) && (r.active != null || info.shared.includes(r.name)));
+  if (!rest.length) return null;
+  return (
+    <Card className="overflow-hidden">
+      <button onClick={() => setOpen(!open)} aria-expanded={open}
+              className="flex min-h-[52px] w-full items-center gap-2 px-4 py-2 text-left transition-colors hover:bg-raised">
+        <span className="text-meta font-bold">Not shared</span>
+        <span className="flex-1 text-meta-2 text-muted">{rest.length} {rest.length === 1 ? "routine" : "routines"} · share one and it&rsquo;s a tool at once</span>
+        <CaretDownIcon size={16} className={cx("shrink-0 text-muted transition-transform", open && "rotate-180")} />
+      </button>
+      {open && rest.map((r) => {
+        const on = info.shared.includes(r.name);
+        return (
+          <div key={r.name} className="flex items-center gap-3 border-t border-divider py-1 pl-4 pr-3">
+            <RowIcon icon={appIcon(r.app)} size={28} tone="neutral" />
+            <span className="min-w-0 flex-1 py-1.5">
+              <span className="block truncate text-meta font-semibold">{r.intent}</span>
+              <span className="block truncate font-mono text-meta-2 text-muted">{r.name}{on && r.active == null ? " · shared, but it has no active version" : ""}</span>
+            </span>
+            <Switch on={on} onChange={(next) => flip(r.name, next)} disabled={busy === r.name} label={`Share ${r.intent} with agents`} />
+          </div>
+        );
+      })}
+    </Card>
   );
 }
 
 // Settings › Agents: every tool an agent connected to Envoy sees now. The learned ones first, in full; then Envoy's own.
 export default function AgentTools() {
-  const [info, , error] = useSharing(4000);
+  const [info, setInfo, error] = useSharing(4000);
+  const [busy, setBusy] = useState<string | null>(null);
+  const [failed, setFailed] = useState<string | null>(null);
+  const flip = async (name: string, on: boolean) => {
+    setBusy(name); setFailed(null);
+    try { setInfo(await share(name, on)); }
+    catch (e: any) { setFailed(`Couldn't change ${name}: ${e.message ?? "try again"}`); }
+    finally { setBusy(null); }
+  };
   const seen = useRef<Set<string> | null>(null);
   const [added, setAdded] = useState<Record<string, number>>({});  // tool → when it appeared while the list was open
   useEffect(() => {
@@ -149,7 +206,7 @@ export default function AgentTools() {
     ...info.tools.filter((t) => !added[t.tool])];
   return (
     <div ref={section} id="agent-tools" className="scroll-mt-2">
-      <Section title="Agent tools" intro={<>What agents connected to Envoy see right now. Each routine you share from its page becomes a tool of its own: an agent calls it by name, it replays for almost nothing, and anything irreversible still waits for your OK on your phone. Muse sees every tool; an agent with its own key sees the learned ones if its key has &ldquo;run&rdquo;.</>}>
+      <Section title="Agent tools" intro={<>What agents connected to Envoy see right now. Each routine you share, here or on its page, becomes a tool of its own: an agent calls it by name, it replays for almost nothing, and anything irreversible still waits for your OK on your phone. Muse sees every tool; an agent with its own key sees the learned ones if its key has &ldquo;run&rdquo;.</>}>
         <Card className="overflow-hidden">
           <div className="flex flex-wrap items-center gap-x-2.5 gap-y-0.5 border-b border-divider bg-raised px-4 py-3">
             <span aria-hidden className="relative flex h-2.5 w-2.5 shrink-0">  {/* live: it reads the list every few seconds */}
@@ -159,9 +216,11 @@ export default function AgentTools() {
             <span className="shrink-0 text-title font-bold">{n ? `${n} learned ${n === 1 ? "tool" : "tools"}` : "No learned tools yet"}</span>
             <span className="text-meta-2 text-muted">live · updates as you share and Envoy learns</span>
           </div>
-          {n ? tools.map((t) => <ToolRow key={t.tool} t={t} added={added[t.tool]} />)
-            : <p className="px-4 py-5 text-meta text-ink-2">Open a routine and turn on <b>Share with agents</b>. It shows up here, and in every agent&rsquo;s tool list, at once.</p>}
+          {n ? tools.map((t) => <ToolRow key={t.tool} t={t} added={added[t.tool]} flip={flip} busy={busy === t.routine} />)
+            : <p className="px-4 py-5 text-meta text-ink-2">Share a routine below, or with <b>Share with agents</b> on its page. It shows up here, and in every agent&rsquo;s tool list, at once.</p>}
         </Card>
+        {failed && <p role="alert" className="rounded-block bg-apricot-tint px-3 py-2 text-meta text-apricot-ink">{failed}</p>}
+        <NotShared info={info} flip={flip} busy={busy} open={n === 0} />
         <Card className="px-4 py-3">
           <p className="text-meta font-bold">Envoy&rsquo;s own tools <span className="font-normal text-muted">· always there</span></p>
           <ul className="mt-2 flex flex-wrap gap-1.5">
