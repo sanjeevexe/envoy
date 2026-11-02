@@ -72,7 +72,8 @@ routine tools, `phone`, what no tool can do, and its tests.
 - **`docs/muse-link.md`:** the stale "For the Muse test" section (an old worktree, :8742) is replaced by "How Muse
   connects". It names no host: only that it's the Mac's Tailscale name on port 10000. Also:
   - what was built since;
-  - a new record, "Nov 2: one request, end to end", with the 947bf44 fix and #64.
+  - a new record, "Nov 1–2: routine tools and the cross-post dry run": the P1 probe (Nov 1) and the Nov 2 Muse
+    dry run, with the 947bf44 fix and #64. docs-readme links to it.
 - **`docs/cloud.md`:**
   - "Where this stands (Nov 2)": the showcase never ran in the cloud, `list_phones` kind `cloud`, the forwarder, the VM
     stopped;
@@ -127,13 +128,16 @@ routine tools, `phone`, what no tool can do, and its tests.
      `eval/results/teach_trials_2026-11-01/README.md`.
    - The "Calendar add event (Oct 31)" success in `prompts/demo-plan.md` has no evidence file I could find, so I didn't
      cite it.
-3. **The TikTok re-post.** `prompts/showcase-report.md` (tracked) records a v3 re-post, live with the sound (Nov 2,
-   02:30, 3 calls, 53 s). The fact sheet's "Proven live" doesn't mention it.
-   - I kept the record in the docs, as `docs/demo-showcase.md` already had it.
-   - If the user deleted that post or doesn't want it claimed, say so.
-4. **The Muse dry run of Nov 2** (0/3/0 calls, about 1 min 15 s each, 5 taps) comes only from the coordinator's banner
-   in `prompts/demo-plan.md`, which isn't in git. I recorded it in `docs/muse-link.md`, citing the coordinator's notes;
-   there's no evidence file in the repo.
+3. **The TikTok re-post** is confirmed by the coordinator (Nov 2): live with "golden hour", so all four app-only
+   features have each gone live once. The docs say so now.
+   - One mismatch on its duration: the coordinator's message says 67 s, but `prompts/showcase-report.md` line 41 and
+     `docs/demo-showcase.md` say 53 s.
+   - I left 53 s (the tracked source) and gave no time anywhere new.
+4. **The Muse dry run of Nov 2** (0/3/0 calls, about 1 min 15 s each, 5 taps) comes from the coordinator's banner in
+   `prompts/demo-plan.md` (not in git). `docs/muse-link.md` cites `eval/results/showcase/muse-2026-11-02/task-rows.json`.
+   That file arrives with the site-rework branch, so the path resolves only after both are merged.
+   - The P1 probe record (Nov 1) comes from the pivot notes' §11, also not in git.
+   - Neither has screenshots in the repo.
 5. **Routine tools appearing live in Muse.** The no-reconnect evidence is the P1 probe (a probe server, not Envoy's
    tools). With Envoy's own tools, the Nov 2 rehearsal shows Muse calling them by name. I worded it exactly that way.
 6. **The approval timeout.** `WebApprover`'s `timeout_s=900` marks the approval expired, with decision "no". I wrote
@@ -152,7 +156,11 @@ routine tools, `phone`, what no tool can do, and its tests.
   - Its Phase-6 paragraph says "Use your Android phone?" and "your phone". Fine for a general user's phone, but the
     Pixel is "Envoy's phone" in demo wording.
 - **`docs/submission.md`:** it still says "TBD (Nov 2)" in several places. The eval is Nov 3.
-- **site (the site session):** `site/data/img/diagram-architecture.webp` is the old architecture diagram. The new one
+- **site (the site session):**
+  - The site's build reads `docs/androidworld-results.md` ("**Headline.**", "**Held-out half:**") and
+    `docs/phase-5-results.md` ("Voice, scripted"). I didn't touch either.
+  - `docs/diagrams/architecture.png` keeps its path but has new content. `routine-lifecycle.png` is unchanged.
+  - `site/data/img/diagram-architecture.webp` is the old architecture diagram. The new one
   is `docs/diagrams/architecture.png`, with its source `docs/diagrams/architecture.html`.
 - **No owner named:**
   - `relay/README.md` still says the Node relay was "Built in Phase 4". Phase 6 replaced it with Envoy's own Python

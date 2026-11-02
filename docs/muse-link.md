@@ -22,7 +22,7 @@ Built since (Nov 1, `docs/technical-design.md`):
 - `list_phones` and a `phone` choice on `run_task`, `run_routine` and the routine tools;
 - `phone_updates` also reports routines Envoy learned or repaired, and notifications a watch matched on Envoy's phone.
 
-The section "Nov 2: one request, end to end" (at the end) puts them together.
+The section "Nov 1–2: routine tools and the cross-post dry run" (at the end) puts them together.
 
 Muse for Mac and Envoy's backend run on the same Mac, so a folder both can reach is the most robust handoff: it works even if Muse for Mac can't use a custom connector at all.
 
@@ -132,9 +132,22 @@ Oct 29, 1:24–2:12 pm ET, in the Muse app on your iPhone (driven through iPhone
 - Muse's Devices page has a **Developer mode** for "pairing community devices not verified by Meta" that "get full access to your agent": left off, but a possible future path for a phone.
 - The watcher's "Put pier-sunset.mp4 …?" stayed pending after Muse had sent the file. Fixed since: when Muse's `send_to_phone` or your own Send puts a file on the phone, its pending offer is withdrawn ("Muse already sent it to your phone", "Sent to your phone"; proactive's `Offers.withdraw`), so a late yes gets "already withdrawn". Asking again for a file already on that phone doesn't put a second copy there.
 
-## Nov 2: one request, end to end (a dry run)
+## Nov 1–2: routine tools and the cross-post dry run
 
-On Nov 2, 11:38–12:20 ET, the person asked Muse for Mac to post one clip from the Mac to Instagram, TikTok and YouTube Shorts, each with the song "golden hour". It ran against the live Envoy and Envoy's phone. The person declined every final step, so nothing was posted. This record comes from the coordinator's notes of the rehearsal; its screenshots aren't in the repo.
+### Nov 1: does Muse see a new tool without reconnecting? (pre-check P1)
+
+On Nov 1, about 19:20 ET, in Muse for Mac. The test used a throwaway probe MCP server on the Funnel address (path `/probe`, its own key), not Envoy's own tools. It checked whether a routine shared while Muse is connected can reach Muse at all. The record comes from the coordinator's pivot notes, which aren't in the repo.
+
+- **Setup.** Muse connected with the key the user pasted. It called `initialize` and `tools/list` once, then the probe's two tools to verify them.
+- **A tool added while the connector stayed connected was seen live.** Asked to list the probe's tools "live", Muse called `tools/list` again and named the new tool as "new since my earlier check". There was no reconnect.
+- **Muse's client keeps an allowed list of tools.** The new tool was blocked until Muse added it to that list. Asked to call it, Muse "added it to the client's allowed list after reviewing its empty-input schema, then called it". So the first call to a newly shared routine may take one extra step in Muse, unless the request asks for it.
+- **Nothing is cached between calls.** Every call was a fresh `initialize` and then the call (stateless).
+
+Envoy's routine tools are read fresh on every `tools/list` (`docs/technical-design.md`, "Routines as agent tools"), so a routine shared in Envoy reaches Muse the same way. The next section shows Muse calling them by name.
+
+### Nov 2: one request, end to end (a dry run)
+
+On Nov 2, 11:38–12:20 ET, the person asked Muse for Mac to post one clip from the Mac to Instagram, TikTok and YouTube Shorts, each with the song "golden hour". It ran against the live Envoy and Envoy's phone. The person declined every final step, so nothing was posted. The tasks' records are in `eval/results/showcase/muse-2026-11-02/task-rows.json`; the rest comes from the coordinator's notes of the rehearsal.
 
 - **The path.** Muse copied the clip into Envoy's outbox and called `send_to_phone`. Envoy asked on the iPhone, and the person said yes. Muse then called the shared routine tools by name: `instagram_reel_song`, `tiktok_post_sound` and `youtube_short_sound`.
 - **The runs.** Each task first asked "use Envoy's phone?" on the iPhone. The Reel, the TikTok and the Short each reached their final button with the song and the caption, at 0, 3 and 0 model calls, about 1 min 15 s each after the phone OK.

@@ -86,7 +86,8 @@ Each row names the file it comes from. After the final run, `eval/run_final.py r
 | Safety | Irreversible actions caught 20/20; live declines held 7/7; planted instructions followed 0 times in 20 | [final/report.md](../eval/results/final/report.md) suites 6 and 6b |
 | AndroidWorld (Google's 116 tasks) | Held-out half: 31 of 58 (53.4%), against 12 for Envoy before the changes; 30.5 of 58 when re-measured Oct 29 | [androidworld-results.md](androidworld-results.md) |
 | The cloud phone | SkyLark routines compiled on the Mac: 48/48 on a Google Cloud emulator, no model calls, median 5.5 s (3.1 s on the Mac) | [cloud.md](cloud.md) |
-| The showcase, real posts (night of Nov 1) | The Reel with a song, the Story with a poll and the YouTube Short went live, at 0 model calls each. The TikTok went up without its sound (a routine defect, since fixed); the re-post had it | [demo-showcase.md](demo-showcase.md) |
+| The showcase, real posts (night of Nov 1) | All four app-only features went live once. The Reel with a song, the Story with a poll and the YouTube Short at 0 model calls each. The TikTok first went up without its sound (a routine defect, since fixed); the re-post had it, at 3 calls | [demo-showcase.md](demo-showcase.md), [showcase-report.md](../prompts/showcase-report.md) |
+| Muse end to end (Nov 2, a dry run, every final step declined) | Muse called the shared routine tools by name. The Reel, the TikTok and the Short each reached their final button with the song: 0, 3 and 0 model calls, about 1 min 15 s each | [muse-link.md](muse-link.md) |
 | Notifications (Nov 2) | An Instagram comment reached the iPhone 1.57 s after it landed on Envoy's phone. For YouTube, Envoy's part took 3.6 s, but YouTube took about 2 minutes to notify | [phone-watch-report.md](../prompts/phone-watch-report.md) |
 
 The per-phase result pages (below) have the detail and the method for each number up to Oct 29.

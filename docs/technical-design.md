@@ -373,7 +373,7 @@ Built Nov 1 (`api/sharing.py`, `mcp_server/server.py` `RoutineTools`). Each rout
 A call goes exactly where `run_routine` goes: preflight, then the runner, with approvals unchanged. The server reads the switches and the library on every `tools/list` and `tools/call`. So learning, sharing, retiring or repairing a routine shows up on the agent's next request, with no restart. `phone_updates` also reports a routine learned or repaired, naming its tool when it's shared.
 
 **With Muse:**
-- In a probe on Nov 1, Muse saw a tool added while its connector stayed connected, on its next `tools/list`, with no reconnect.
+- In a probe on Nov 1, Muse saw a tool added while its connector stayed connected, on its next `tools/list`, with no reconnect (`docs/muse-link.md`, "Nov 1–2: routine tools and the cross-post dry run").
 - Muse's client keeps an allowed list of tools, so the first call to a new tool may take one extra step while Muse adds it.
 - On Nov 2, Muse called Envoy's shared routine tools by name (see One request, end to end).
 

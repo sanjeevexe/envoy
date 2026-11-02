@@ -6,13 +6,14 @@ for TikTok or YouTube. Each post is a routine Envoy learned, which an agent call
 (`docs/technical-design.md`, "Routines as agent tools").
 
 **Where it stands (Nov 2):**
-- **Real posts, night of Nov 1.** The Reel with a library song, the Story with a poll and the YouTube Short went live,
-  at 0 model calls each. The TikTok first went up without its sound; the re-post had it. Each was started from the Spark
+- **Real posts, night of Nov 1.** All four app-only features have each gone live once. The Reel with a library song,
+  the Story with a poll and the YouTube Short went live at 0 model calls each. The TikTok first went up without its
+  sound; the re-post (v3, 3 calls) went live with "golden hour". Each was started from the Spark
   agent on the user's go and approved on the iPhone (details below).
 - **Muse end to end, Nov 2 (a dry run, every final step declined).** Muse for Mac moved the clip to Envoy's outbox,
   called `send_to_phone`, then called the three routine tools by name. The Reel, the TikTok and the Short each reached
   their final button with the song and the caption, at 0, 3 and 0 model calls, about 1 min 15 s each. Record:
-  `docs/muse-link.md`, "Nov 2: one request, end to end".
+  `docs/muse-link.md`, "Nov 1–2: routine tools and the cross-post dry run".
 - **Comments come back.** A comment on the Reel reached the iPhone 1.57 s after it landed on Envoy's phone. A YouTube
   comment took about 2 minutes, all but 3.6 s of it YouTube's own delay. No TikTok notification came (`prompts/phone-watch-report.md`).
 - **Known gap:** the Story routine fails while a Story is already live (backlog #64): its first tap opens the live
