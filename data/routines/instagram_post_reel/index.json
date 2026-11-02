@@ -1,6 +1,6 @@
 {
  "name": "instagram_post_reel",
- "active": 2,
+ "active": null,
  "versions": [
   {
    "version": 1,
@@ -82,5 +82,9 @@
   }
  ],
  "needs_recompile": true,
- "app": "com.instagram.android"
+ "app": "com.instagram.android",
+ "off": {
+  "version": 2,
+  "since": "2026-11-01 13:36:54"
+ }
 }

@@ -1,0 +1,8 @@
+[
+ {
+  "kind": "post",
+  "step": "tap_add_music_to_video",
+  "description": "step 'tap_add_music_to_video': after-checks failed (no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) but the next step was ready; after-checks rewritten from what happened",
+  "evidence": {}
+ }
+]

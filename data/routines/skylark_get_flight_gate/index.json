@@ -152,6 +152,39 @@
    "model_calls": 0,
    "duration_s": 1.64,
    "patches": 0
+  },
+  {
+   "time": "2026-10-28 01:01:55",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1028-010048-6f55-r1",
+   "status": "agent_done",
+   "rung": 5,
+   "model_calls": 4,
+   "duration_s": 60.91,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 03:52:38",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1028-035126-dfc4-r1",
+   "status": "agent_done",
+   "rung": 5,
+   "model_calls": 4,
+   "duration_s": 67.78,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-29 17:22:04",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1029-172156-f460-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 2.24,
+   "patches": 0
   }
  ],
  "needs_recompile": false,

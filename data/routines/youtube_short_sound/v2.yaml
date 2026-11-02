@@ -1,7 +1,7 @@
 routine: youtube_short_sound
 app: com.google.android.youtube
 version: 2
-status: active
+status: retired
 intent: Post the newest gallery video as a YouTube Short with a chosen sound and title
 description: Prepares a YouTube Short from the newest video in the phone gallery, adds a chosen sound from the YouTube sound library, and enters
   the requested title before upload.

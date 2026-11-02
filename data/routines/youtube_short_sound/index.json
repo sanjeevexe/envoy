@@ -1,6 +1,6 @@
 {
  "name": "youtube_short_sound",
- "active": 2,
+ "active": 3,
  "versions": [
   {
    "version": 1,
@@ -21,7 +21,7 @@
   },
   {
    "version": 2,
-   "status": "active",
+   "status": "retired",
    "created": "2026-11-01 22:13:44",
    "parent": 1,
    "changes": [
@@ -36,6 +36,24 @@
      "tap_post"
     ],
     "checked": "2026-11-01 22:13"
+   }
+  },
+  {
+   "version": 3,
+   "status": "active",
+   "created": "2026-11-02 01:55:35",
+   "parent": 2,
+   "changes": [
+    "step 'tap_add_music_to_video': after-checks failed (no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) but the next step was ready; after-checks rewritten from what happened"
+   ],
+   "source_task": "task-1102-015325-106a-r1",
+   "screenshots": [],
+   "trial": {
+    "passed": true,
+    "task_id": "task-1102-114712-1c04-r1",
+    "status": "declined",
+    "model_calls": 0,
+    "duration_s": 40.99
    }
   }
  ],
@@ -116,6 +134,28 @@
    "model_calls": 0,
    "duration_s": 35.88,
    "patches": 1
+  },
+  {
+   "time": "2026-11-02 01:55:35",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1102-015325-106a-r1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 87.76,
+   "patches": 1
+  },
+  {
+   "time": "2026-11-02 11:48:29",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1102-114712-1c04-r1",
+   "status": "declined",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 40.99,
+   "patches": 0
   }
  ],
  "needs_recompile": false,

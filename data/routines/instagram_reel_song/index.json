@@ -1,6 +1,6 @@
 {
  "name": "instagram_reel_song",
- "active": 2,
+ "active": 3,
  "versions": [
   {
    "version": 1,
@@ -22,7 +22,7 @@
   },
   {
    "version": 2,
-   "status": "active",
+   "status": "retired",
    "created": "2026-11-01 22:13:42",
    "parent": 1,
    "changes": [
@@ -36,6 +36,25 @@
      "tap_post"
     ],
     "checked": "2026-11-01 22:13"
+   }
+  },
+  {
+   "version": 3,
+   "status": "active",
+   "created": "2026-11-02 01:24:28",
+   "parent": 2,
+   "changes": [
+    "step 'search_song_title': after-checks failed (no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) but the next step was ready; after-checks rewritten from what happened",
+    "step 'find_tap_matching_track': after-checks failed (no match (best 0.49 < 0.80 or ambiguous, runner-up 0.47)) but the next step was ready; after-checks rewritten from what happened"
+   ],
+   "source_task": "task-1102-005928-4182-r1",
+   "screenshots": [],
+   "trial": {
+    "passed": true,
+    "task_id": "task-1102-114116-06e0-r1",
+    "status": "declined",
+    "model_calls": 0,
+    "duration_s": 177.58
    }
   }
  ],
@@ -104,6 +123,28 @@
    "rung": 1,
    "model_calls": 0,
    "duration_s": 44.06,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-02 01:24:28",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1102-005928-4182-r1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 929.08,
+   "patches": 2
+  },
+  {
+   "time": "2026-11-02 11:44:31",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1102-114116-06e0-r1",
+   "status": "declined",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 177.58,
    "patches": 0
   }
  ],
