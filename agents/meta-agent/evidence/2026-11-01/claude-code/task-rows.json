@@ -1,0 +1,63 @@
+{
+ "source": "sqlite3 -readonly ~/Desktop/Envoy/data/api/envoy.db (the live :8700), Nov 1, 2026; every task with agent 'Claude'",
+ "tasks": [
+  {
+   "id": "task-1101-192403-5d37",
+   "status": "done",
+   "source": "mcp",
+   "agent": "Claude",
+   "goal": "Check the status of a SkyLark flight",
+   "routine": "skylark_check_flight_status",
+   "created": "2026-11-01 19:24:03",
+   "updated": "2026-11-01 19:24:12",
+   "seconds": 9.3,
+   "result": "flight status: Delayed 25 min; route: ATL → DEN; date: Sat, Nov 14, 2026; gate: A7; departure time: 2:45 PM",
+   "detail": "all steps and checks passed",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "started_by": "desktop-app session"
+  },
+  {
+   "id": "task-1101-192406-ec01",
+   "status": "done",
+   "source": "mcp",
+   "agent": "Claude",
+   "goal": "Check the status of a SkyLark flight",
+   "routine": "skylark_check_flight_status",
+   "created": "2026-11-01 19:24:06",
+   "updated": "2026-11-01 19:24:18",
+   "seconds": 12.2,
+   "result": "flight status: Delayed 25 min; route: ATL → DEN; date: Sat, Nov 14, 2026; gate: A7; departure time: 2:45 PM",
+   "detail": "all steps and checks passed",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "started_by": "claude -p (meta-agent's run 1)"
+  },
+  {
+   "id": "task-1101-192414-0023",
+   "status": "stopped",
+   "source": "mcp",
+   "agent": "Claude",
+   "goal": "Check in for a SkyLark flight",
+   "routine": "skylark_check_in_flight",
+   "created": "2026-11-01 19:24:14",
+   "updated": "2026-11-01 19:24:19",
+   "seconds": 5.1,
+   "result": null,
+   "detail": "the server restarted",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "started_by": "desktop-app session"
+  }
+ ],
+ "approvals": [
+  {
+   "id": "appr-1101-192419-c300",
+   "task_id": "task-1101-192414-0023",
+   "status": "expired",
+   "description": "tap \"Confirm check-in\" in com.skylark.air (routine skylark_check_in_flight v1)",
+   "created": "2026-11-01 19:24:19",
+   "decided_by": null
+  }
+ ]
+}

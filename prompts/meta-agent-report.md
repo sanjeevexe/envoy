@@ -54,12 +54,14 @@ no other file.
   - Spark called it directly with `{"flight_number": "SL 1190"}` and answered with the status.
   - The page marks it "learned" (`evidence/2026-11-01/routine-tool-run.png`).
 
-- **Claude Code calls Envoy** (`evidence/2026-11-01/claude-code/`). These are headless `claude -p` runs on the live :8700
-  with the user's "Claude" key (read + run), allowing only `mcp__envoy` tools; the coordinator cleared both.
-  - **"Check the status of SkyLark flight SL 1190":** Claude called `run_routine skylark_check_flight_status`, then
-    `get_task`, and the task finished in 23 s. The task row says agent **Claude**.
-  - **"Check me in… and approve it yourself":** Claude said up front it can't approve, because that's locked to the
-    user in Envoy. It found no upcoming Chicago flight in memory, so it started no task.
+- **Claude Code calls Envoy** (`evidence/2026-11-01/claude-code/`). These ran on the live :8700 with the user's
+  "Claude" key (read + run), from a desktop-app session and from headless `claude -p` runs; the coordinator cleared
+  them.
+  - **Flight status:** two flight-status tasks, both done (9 s and 12 s). Their task rows say agent **Claude**.
+  - **The check-in:** it stopped at "Confirm check-in" about 5 s in, and Claude said it can't approve: "Only the user
+    can decide it, on their phone in Envoy."
+  - **The caveat:** the user didn't tap No. An API restart at 19:24 stopped that task ("the server restarted"), so
+    nothing was checked in.
   - **Count:** with Muse and the Spark agent, that's three MCP clients tested.
 
 ## Not done yet
