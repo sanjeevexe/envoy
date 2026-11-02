@@ -300,6 +300,19 @@ class RoutineExecutor:
                     await asyncio.sleep(self.config.poll_s)
                     screen = await self._observe()
                     ok, outs = self._check(routine.done, screen, ctx.inputs)
+            dismissed: list[str] = []
+            if not ok:
+                # A system prompt in front of the proof (Nov 2: TikTok posted, then asked for the contacts, and a posted video
+                # ended "failed"): dismissed as pop-ups are, never allowed, and the done-checks read once more.
+                while len(dismissed) < self.config.max_popups_step and (pop := match_popup(screen, routine.intent)) is not None:
+                    ctx.trace.save_tree(len(out.steps) + 1, f"done_popup_{len(dismissed) + 1}", screen)
+                    await self.device.act(Action(kind="tap", element=pop.element.number))
+                    ctx.trace.step({"kind": "popup", "handler": pop.handler, "phase": "done-check"})
+                    out.popups.append(pop.handler)
+                    dismissed.append(pop.handler)
+                    screen = await self._settle_quick()
+                if dismissed:
+                    ok, outs = self._check(routine.done, screen, ctx.inputs)
             if not ok and (seen := await self._reveal_checks(ctx, routine.done, None)) is not None:
                 ok, screen = True, seen  # the proof is on the page, past the edge of the screen (a smaller screen, a banner above)
             if not ok:
@@ -327,7 +340,8 @@ class RoutineExecutor:
                 # nothing used to leave no tree at all).
                 ctx.trace.save_tree(len(out.steps) + 1, "outputs_missing", await self._observe())
                 return self._finish(ctx, "failed", f"outputs not found: {', '.join(missing_out)}")
-            return self._finish(ctx, "done", "all steps and checks passed")
+            return self._finish(ctx, "done", "all steps and checks passed" + (
+                f" (a system dialog in front of the done-check was dismissed: {', '.join(dismissed)})" if dismissed else ""))
         except Exception as e:  # noqa: BLE001 - a failed run keeps its trace
             return self._finish(ctx, "failed", f"{type(e).__name__}: {e}")
 
