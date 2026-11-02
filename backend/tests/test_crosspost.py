@@ -247,6 +247,26 @@ def test_partial_failure_a_retry_finishes_only_tiktok_and_youtube_and_instagram_
     assert [p["app"] for p in kids(r, pid)].count(IG) == 1
 
 
+def test_two_posts_in_one_app_are_told_apart_by_their_routines():
+    async def scenario():
+        r, cp = make()
+        story = Post("instagram_story_poll", IG, "Instagram", "Post a story with a poll", {"poll_question": "Which?"})
+        pid = cp.start([*posts(IG), story, *posts(TT)], "mcp")["id"]
+        await decide(r, pid, IG)
+        await decide(r, pid, IG, yes=False)
+        await decide(r, pid, TT)
+        await ended(r, pid)
+        parent = r.store.get(pid)
+        again = cp.retry(pid, "mcp")
+        await decide(r, pid, IG, yes=False)
+        await ended(r, pid)
+        return parent, again
+    parent, again = asyncio.run(scenario())
+    assert parent["goal"] == "Post to Instagram (instagram_reel_song), Instagram (instagram_story_poll) and TikTok"
+    assert parent["result"] == "Instagram (instagram_reel_song): done · Instagram (instagram_story_poll): not posted (declined) · TikTok: done"
+    assert again["retrying"] == ["Instagram (instagram_story_poll)"] and POSTS == {IG: 1, TT: 1}
+
+
 def test_a_declined_post_is_not_posted_and_the_parent_says_what_a_retry_would_run():
     async def scenario():
         r, cp = make()

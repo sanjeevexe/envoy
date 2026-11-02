@@ -58,6 +58,7 @@ class Post:
     app_name: str
     goal: str  # the routine's intent: what its part's task says it does
     inputs: dict[str, str] = field(default_factory=dict)
+    label: str = ""  # how Envoy names this destination: its app, and its routine too when another post shares that app
 
 
 def tapped(approvals: list[dict[str, Any]], before: float | None = None) -> bool:
@@ -101,7 +102,9 @@ class CrossPost:
 
     def start(self, posts: list[Post], source: str, phone: str | None = None) -> dict[str, Any]:
         """The parent task; its parts start one after another, the first at once."""
-        goal = "Post to " + _join([p.app_name for p in posts])
+        for p in posts:
+            p.label = p.label or (p.app_name if [x.app for x in posts].count(p.app) == 1 else f"{p.app_name} ({p.routine})")
+        goal = "Post to " + _join([p.label for p in posts])
         parent = self.store.create(goal, source, kind="crossapp", request=goal)
         pid = parent["id"]
         self.bus.publish("task", task=parent)
@@ -116,17 +119,17 @@ class CrossPost:
         again; a queued one or one under way is left to finish."""
         rows = self.view(pid)
         again = [r for r in rows if r["status"] in RETRYABLE]
-        left = [{"app": r["app_name"], "status": r["status"]} for r in rows if r["status"] not in RETRYABLE]
+        left = [{"app": r["label"], "status": r["status"]} for r in rows if r["status"] not in RETRYABLE]
         if not again:
             return {"error": "nothing to retry: " + "; ".join(f"{r['app']} is {r['status']}" for r in left)
                     + (". Outcome unknown means the post may exist: the user checks that app; Envoy won't post there again."
                        if any(r["status"] == "unknown" for r in left) else "")}
         plan = self._plan(pid) or {}
         posts = [Post(**p) for p in plan.get("posts", []) if p["routine"] in {r["routine"] for r in again}]
-        self._step(pid, {"kind": "note", "text": "retry: " + ", ".join(f"{r['app_name']} ({r['status']})" for r in again)
+        self._step(pid, {"kind": "note", "text": "retry: " + ", ".join(f"{r['label']} ({r['status']})" for r in again)
                          + ("; left as they are: " + ", ".join(f"{r['app']} ({r['status']})" for r in left) if left else "")})
         self._on_loop(lambda: self._queue(pid, posts, source, plan.get("phone")))
-        return {"retrying": [r["app_name"] for r in again], "left_alone": left}
+        return {"retrying": [r["label"] for r in again], "left_alone": left}
 
     def _on_loop(self, fn: Any) -> None:
         """The queues and the parent's job live on the runner's loop; an MCP tool may call in from a worker thread."""
@@ -224,7 +227,7 @@ class CrossPost:
         rows = self.view(pid)
         kids = [self.store.get(p["task_id"]) or {} for p in self.parts(pid)]
         said = {r["status"] for r in rows}
-        unknown = [r["app_name"] for r in rows if r["status"] == "unknown"]
+        unknown = [r["label"] for r in rows if r["status"] == "unknown"]
         undone = [r for r in rows if r["status"] in RETRYABLE]
         if said == {"done"}:
             status, detail = "done", None
@@ -234,9 +237,9 @@ class CrossPost:
                       "so the post may be there. Envoy won't post there again.")
         else:
             status = "declined" if all(r["status"] == "declined" for r in undone) else "failed"
-            detail = "Not posted: " + "; ".join(f"{r['app_name']} ({r['status']})" for r in undone)
+            detail = "Not posted: " + "; ".join(f"{r['label']} ({r['status']})" for r in undone)
         if undone:
-            detail = (detail + "; " if detail else "") + "a retry runs only " + _join([r["app_name"] for r in undone])
+            detail = (detail + "; " if detail else "") + "a retry runs only " + _join([r["label"] for r in undone])
         self._set(pid, status=status, result=self._result(rows), detail=detail, waiting_for=None,
                   model_calls=sum(k.get("model_calls") or 0 for k in kids), cost_usd=round(sum(k.get("cost_usd") or 0 for k in kids), 5))
         self.bus.publish("task_finished", task_id=pid, duration_s=round(time.time() - t0, 1))
@@ -254,7 +257,7 @@ class CrossPost:
 
     def _name(self, pid: str, tid: str) -> str:
         routine = next((p["routine"] for p in self.parts(pid) if p["task_id"] == tid), None)
-        return next((p["app_name"] for p in (self._plan(pid) or {}).get("posts", []) if p["routine"] == routine), "a part")
+        return next((p.get("label") or p["app_name"] for p in (self._plan(pid) or {}).get("posts", []) if p["routine"] == routine), "a part")
 
     def view(self, pid: str) -> list[dict[str, Any]]:
         """Each destination: its routine and app, its outcome (with what the user should do about it), its latest part's
@@ -280,14 +283,15 @@ class CrossPost:
                 text += f" ({task['detail']})"
             elif status == "waiting" and task.get("detail"):
                 text += f": {task['detail']}"
-            rows.append({"routine": post["routine"], "app": post["app"], "app_name": post["app_name"], "status": status, "text": text,
+            rows.append({"routine": post["routine"], "app": post["app"], "app_name": post["app_name"], "label": post.get("label") or post["app_name"],
+                         "status": status, "text": text,
                          "task_id": tries[-1]["task_id"] if tries else None, "attempts": len(tries)})
         return rows
 
     def _result(self, rows: list[dict[str, Any]]) -> str:
         short = {"unknown": "outcome unknown, check this one", "failed": "not posted (failed)", "declined": "not posted (declined)",
                  "verifying": "verifying…"}
-        return " · ".join(f"{r['app_name']}: {short.get(r['status'], TEXT[r['status']])}" for r in rows)
+        return " · ".join(f"{r['label']}: {short.get(r['status'], TEXT[r['status']])}" for r in rows)
 
     def _on_event(self, ev: dict[str, Any]) -> None:
         if ev.get("type") == "task_finished" and ev.get("task_id") in self.parent_of:
@@ -305,7 +309,7 @@ class CrossPost:
         waiting = next((r for r in rows if r["status"] == "waiting"), None)
         task = self.store.get(waiting["task_id"]) or {} if waiting else {}
         status = {"waiting_approval": "waiting_approval"}.get(task.get("status"), "needs_you") if waiting else "running"
-        detail = f"{waiting['app_name']}: {task.get('detail') or 'waiting for you'}" if waiting else None
+        detail = f"{waiting['label']}: {task.get('detail') or 'waiting for you'}" if waiting else None
         shown = (status, detail, self._result(rows))
         if self.shown.get(pid) != shown:
             self.shown[pid] = shown

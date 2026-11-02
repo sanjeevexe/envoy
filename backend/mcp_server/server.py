@@ -724,7 +724,7 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> EnvoyMCP:
         view = task_view(task, ctx.tasks.steps(task_id), ctx.tasks.approvals(task_id=task_id), base)
         if task.get("kind") == "crossapp" and crossposts().is_crosspost(task_id):
             view["posts"] = crossposts().view(task_id)
-            if undone := [p["app_name"] for p in view["posts"] if p["status"] in RETRYABLE]:
+            if undone := [p.get("label") or p["app_name"] for p in view["posts"] if p["status"] in RETRYABLE]:
                 view["retry"] = f"cross_post with retry={task_id} runs only {', '.join(undone)} again"
         return view
 
@@ -778,8 +778,8 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> EnvoyMCP:
             return {"error": error}
         task = crossposts().start(chosen, "mcp", asked)
         return {"task_id": task["id"], "status": task["status"], "task_url": f"{base}/?task={task['id']}",
-                "posts": [{"routine": p.routine, "app": p.app_name, "status": "queued"} for p in chosen],
-                "text": f"Posting to {', '.join(p.app_name for p in chosen)}, one after another. Each post waits for the user's OK "
+                "posts": [{"routine": p.routine, "app": p.label or p.app_name, "status": "queued"} for p in chosen],
+                "text": f"Posting to {', '.join(p.label or p.app_name for p in chosen)}, one after another. Each post waits for the user's OK "
                         "in Envoy on their phone; follow it with get_task."}
 
     @server.tool(annotations=ToolAnnotations(title="Search Envoy memory", readOnlyHint=True, openWorldHint=False))
