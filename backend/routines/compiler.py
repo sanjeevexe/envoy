@@ -68,6 +68,7 @@ class TStep:
     swipe: tuple[int, int, int, int] | None = None  # recorded swipe start and end, device pixels
     vision: dict[str, Any] | None = None  # a tap_point's target as the agent saw it (Phase 6): description, box, crop
     trace_dir: Path | None = None
+    moved: str = ""  # why it comes later than in the trace (typing done during a round trip)
 
 
 # Screens an app shows once (onboarding, a welcome tour, "what's new", a promo): a step that only gets past one is kept
@@ -147,7 +148,48 @@ def load_trace(trace_dir: Path, *, confirmed: bool = False) -> tuple[dict, list[
     return run, records
 
 
-def clean(trace_dir: Path, records: list[dict]) -> tuple[list[TStep], list[tuple[int, str]]]:
+def _toward_goal(stretch: list[TStep], goal: str) -> bool:
+    """Whether a stretch made an element of a screen it passes through show, when seen again, something the goal asks for
+    that it didn't show before (TikTok's editor: "Music · Add sound", then "Music · golden hour")."""
+    first: dict[tuple[str, str], str] = {}  # (activity, ID) -> its label the first time the stretch shows it
+    for screen in [stretch[0].before, *(t.after for t in stretch)]:
+        for e in screen.numbered:
+            if e.in_list or e.status_bar or not e.label or not usable_id(e.resource_id):
+                continue
+            old = first.setdefault((screen.activity, short_id(e.resource_id)), e.label)
+            if e.label != old and any(len(p) >= 3 and contains_value(goal, p) and not contains_value(old, p) for p in parts_of(e.label)):
+                return True
+    return False
+
+
+def _moved_typing(stretch: list[TStep], later: list[TStep]) -> dict[int, list[TStep]] | None:
+    """The typing a round trip did, each with the steps after it on the same screen (closing the keyboard), keyed by the
+    later step whose after-screen is that screen again: it is done there instead. None if the stretch has another effect
+    (an irreversible step, a toggle), a screen it typed on doesn't come back, or the stretch left the typed screen's
+    activity (a document's editor, whose leaving saves it: then the round trip was the save)."""
+    moved: dict[int, list[TStep]] = {}
+    k = 0
+    while k < len(stretch):
+        t = stretch[k]
+        if t.risk == "irreversible" or (t.target is not None and t.target.checkable):
+            return None
+        k += 1
+        if t.kind != "type":
+            continue
+        group, screen = [t], {t.before.signature, t.after.signature}
+        while k < len(stretch) and stretch[k].kind != "type" and {stretch[k].before.signature, stretch[k].after.signature} <= screen:
+            group.append(stretch[k])
+            k += 1
+        if k < len(stretch) and stretch[k].after.activity != t.before.activity:
+            return None  # leaving its activity is what kept the typing (Markor saves a note as you leave its editor)
+        q = next((q for q, x in enumerate(later) if x.after.signature == t.before.signature), None)
+        if q is None:
+            return None
+        moved.setdefault(q, []).extend(group)
+    return moved
+
+
+def clean(trace_dir: Path, records: list[dict], goal: str = "") -> tuple[list[TStep], list[tuple[int, str]]]:
     steps: list[TStep] = []
     dropped: list[tuple[int, str]] = []
     app = ""
@@ -208,20 +250,33 @@ def clean(trace_dir: Path, records: list[dict]) -> tuple[list[TStep], list[tuple
     def effectful(t: TStep) -> bool:
         return t.risk == "irreversible" or t.kind == "type" or (t.target is not None and t.target.checkable)
 
+    # Two exceptions (Nov 2, TikTok's sound: the agent's first try left no sound; it went back from the post screen, added
+    # it, and came back): a stretch on whose way a screen came to show what the goal asks for is a correction, not a round
+    # trip; and typing in a round trip (the caption, typed before the correction) is done where its screen comes back.
     changed = True
     while changed:
         changed = False
         for i in range(len(steps)):
             for j in range(len(steps) - 1, i, -1):
                 a, b = steps[i].before, steps[j].after
-                if any(effectful(t) for t in steps[i:j + 1]):
+                if not (a.signature == b.signature and _layout_key(a) == _layout_key(b)) or _toward_goal(steps[i:j + 1], goal):
                     continue
-                if a.signature == b.signature and _layout_key(a) == _layout_key(b):
-                    for s in steps[i:j + 1]:
+                moved = _moved_typing(steps[i:j + 1], steps[j + 1:]) if any(effectful(t) for t in steps[i:j + 1]) else {}
+                if moved is None:
+                    continue
+                kept = {t.n for group in moved.values() for t in group}
+                for s in steps[i:j + 1]:
+                    if s.n not in kept:
                         dropped.append((s.n, f"back-track: steps {steps[i].n}–{steps[j].n} returned to the same screen"))
-                    del steps[i:j + 1]
-                    changed = True
-                    break
+                later = []
+                for q, t in enumerate(steps[j + 1:]):
+                    later.append(t)
+                    for m in moved.get(q, []):
+                        m.moved = f"moved after trace step {t.n}: typed during the round trip {steps[i].n}–{steps[j].n}"
+                        later.append(m)
+                steps[i:] = later
+                changed = True
+                break
             if changed:
                 break
 
@@ -613,7 +668,10 @@ def generalize_check(c: Check, examples: dict[str, str], data_values: list[str])
         text = None
     desc = loc.desc if _data_free(loc.desc, data_values) else None
     value = bind_inputs(c.value, examples) if c.kind == "field_equals" else c.value
-    new_loc = loc.model_copy(update={"text": text, "resource_id": rid, "desc": desc})
+    upd = {"text": text, "resource_id": rid, "desc": desc}
+    if loc.text_has and not has_slot(loc.text_has):  # an input the check names (checks._with_input): its {{slot}}
+        upd["text_has"] = bind_inputs(loc.text_has, examples) if has_slot(bind_inputs(loc.text_has, examples)) else None
+    new_loc = loc.model_copy(update=upd)
     if not (new_loc.text or new_loc.desc or (new_loc.resource_id and usable_id(new_loc.resource_id)) or new_loc.hint):
         return None
     return c.model_copy(update={"locator": new_loc, "value": value})
@@ -944,11 +1002,12 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
     adapter = adapter or ModelAdapter()
     run, records = load_trace(trace_dir, confirmed=confirmed)
     report = CompileReport(task_id=run["task_id"], goal=run["goal"])
-    steps, dropped = clean(trace_dir, records)
+    steps, dropped = clean(trace_dir, records, run.get("goal", ""))
     if (why := degenerate(run.get("goal", ""), run.get("result", ""), steps, records)) is not None:
         raise NotCompilable(why)  # before the model call: nothing to pay for
     report.dropped = dropped
     report.kept = [s.n for s in steps]
+    report.warnings += [f"trace step {s.n}: {s.moved}" for s in steps if s.moved]
     # The screen the agent answered from (its done step) is the most up to date: content can load after a step settles.
     final = _done_screen(trace_dir, records) or (steps[-1].after if steps else _final_screen(trace_dir, records))
     answer = run.get("result", "")
@@ -1137,7 +1196,7 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
                               risk=s.risk if s.risk in ("read", "reversible", "irreversible") else "read",
                               optional=(why := _optional_why(s, sid, intent)) is not None,
                               note=f"trace step {s.n}" + (f" (+{s.scrolls} scrolls)" if s.scrolls else "")
-                              + (f" · {why}: optional" if why else "")))
+                              + (f" · {why}: optional" if why else "") + (f" · {s.moved}" if s.moved else "")))
 
     # A list row chosen by an input may sit further down for another value: reveal it first.
     with_scrolls: list[Step] = []
