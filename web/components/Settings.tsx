@@ -20,7 +20,11 @@ import { setThemeChoice, themeChoice, type ThemeChoice } from "@/lib/theme";
 
 const SECTIONS = ["Approvals", "Phones", "Devices", "Agents", "Appearance"] as const;
 export default function SettingsPage({ publicUrl, profile }: { publicUrl?: string; profile?: string }) {
-  const [section, setSection] = useState<(typeof SECTIONS)[number]>("Approvals");
+  // `/?settings=agents` (any section's name) opens that section; Approvals otherwise.
+  const [section, setSection] = useState<(typeof SECTIONS)[number]>(() => {
+    const asked = typeof location === "undefined" ? null : new URLSearchParams(location.search).get("settings");
+    return SECTIONS.find((x) => x.toLowerCase() === asked?.toLowerCase()) ?? "Approvals";
+  });
   return (
     <div className="mx-auto w-full max-w-[720px] pb-10 md:pt-6">
       {/* On a phone the five sections are wider than the screen: the row scrolls sideways, the page doesn't. */}
