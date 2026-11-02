@@ -97,7 +97,7 @@ The steps (the user does 2's tunnel, the key, and the iPhone):
 
 ## When Envoy runs in the cloud: the outbox forwarder
 
-Backlog #48 (built Nov 1, merged after the Nov 2 eval). Muse for Mac always writes the clip to `~/Envoy Outbox`, and the
+Backlog #48 (built and merged Nov 1, `869271f`). Muse for Mac always writes the clip to `~/Envoy Outbox`, and the
 user never picks a route:
 
 | Where the clip is | Envoy on the Mac | Envoy in the cloud (`docs/cloud.md`) |
@@ -142,8 +142,8 @@ user never picks a route:
 - **Not wired yet: posting to Instagram from a cloud phone.** Instagram's handoff asks for the user's real phone, which the
   cloud copy doesn't have, so a clip for Instagram reaches the cloud outbox and waits there: the door says "Envoy has
   pier.mp4 but can't offer it: Your Android phone isn't connected …". And `send_to_phone` to an emulator only puts the
-  file in its gallery; it starts no post. The cloud Instagram test (`prompts/file-delivery.md`) needs one of the two
-  changed first: the coordinator's and the user's call.
+  file in its gallery; it starts no post. The cloud Instagram test needs one of the two
+  changed first: the coordinator's and the user's call. Not changed as of Nov 2.
 
 ## Setting up a take (one command)
 

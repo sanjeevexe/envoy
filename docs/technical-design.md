@@ -1,27 +1,32 @@
 # Envoy — Technical Design
 
-Oct 27, 2026
+Oct 27, 2026. Updated Nov 2, 2026 for the phone-layer frame (main `947bf44`): the overview, the architecture, the device layer's phone choice, the MCP server and agents, triggers and approvals. The phase results further down are records of their day.
 
 ## Overview
 
-**Envoy gives AI agents a phone layer: the ability to act inside any phone app, and to understand what those apps contain.** Agents can search the web, but the current state of a person's life (bookings, orders, balances, live updates) sits inside phone apps they cannot reach. Envoy runs emulated Android phones (on the laptop for this build, on cloud machines later) and, when needed, the user's own Android phone, lets a Muse-powered agent operate them the way a person would, and turns what it sees into one shared memory that every interface reads and writes.
+**Envoy is the phone layer agents call.** It **acts** in Android apps, **learns** the tasks it does there, and **watches** the phone for events. The one-liner: *Muse has a computer. Envoy gives it a phone.*
 
-**Pitch:** *Agents can search the web. Your phone knows your life.*
+An agent such as Muse (Meta's assistant) already has the web, its connectors and, in Muse for Mac, the computer. Much of a person's life still runs through phone apps, and some features exist only there: a Reel set to a song from Instagram's library, a poll sticker on a Story, a sound on a TikTok or a YouTube Short. Muse's connector catalog also had none for TikTok, YouTube, Uber or DoorDash when we checked (Nov 1). Asked whether it can use the person's phone apps, Muse said: "On its own, Muse can't open and tap around in apps on your phone." Envoy is that missing layer, reached the way agents reach everything else: over MCP.
 
-**What a phone layer gives an agent**
+**Envoy is not a rival assistant.** Muse, or any MCP agent, is the front door. The person asks there; the agent calls Envoy's tools; Envoy runs the task on an Android phone. Envoy's own app, on the person's iPhone, is where they approve anything irreversible and watch the phone work.
 
-- **Reach:** finish tasks inside apps that have no website or API, instead of handing the user a link.
-- **Context:** know the user's real bookings, orders, points and habits without asking.
-- **Live state:** monitor gate changes, delivery status and expiring points, and act before being asked.
-- **Cross-app answers:** compare prices across delivery or ride apps, or total spending across apps that never share data.
+| Pillar | What Envoy does | Built in |
+| --- | --- | --- |
+| **Acts** | Runs real Android apps the way a person would: on **Envoy's phone** (a Pixel 5 on Android 13, over USB), on emulators on the Mac, or on a cloud phone. Anything irreversible stops for the person's yes on their iPhone. | Device layer, Agent runtime, Safety |
+| **Learns** | Compiles a successful run into a **routine**: a program that checks every screen, repairs itself when the app changes, and keeps versions. The next run takes seconds and few or no model calls. Teach mode learns a routine from the person doing the task once. A routine the person shares with agents becomes an MCP **tool of its own**, by name. | App routines |
+| **Watches** | **Notification triggers** (a notification on Envoy's phone starts a task or reaches the agent), time triggers, change alerts, habits, and `phone_updates`, which tells an agent what happened on the phone. | Scheduled and event-triggered tasks |
 
-**What is actually new.** Operating phone apps with an agent has been done (Mobilerun, Gemini on Android, AGI Inc.). Envoy's contribution is making it dependable, cheap and useful over time:
+Underneath all three is a **memory** of what Envoy has seen in apps, in email and in shared screenshots. Every fact keeps its source.
+
+**What is actually new.** Operating phone apps with an agent has been done (Mobilerun, Gemini on Android, AGI Inc.). Envoy's contribution is making it dependable, cheap and callable:
 
 1. **App routines.** One successful run is compiled into a reusable program with inputs, a check before and after every step, element-based targeting that works on any screen size, and self-repair that fixes only the broken step and saves the fix.
-2. **A trustworthy shared memory.** Facts pulled from app screens, email and photos land in one graph. Each fact records where and when it was seen, newer facts replace stale ones, and the same trip seen in an email and an app becomes one entity.
-3. **A device layer that routes between phones.** One interface over cloud emulators and real Android phones, with routines that run on either. The iPhone acts as a companion for approvals, the live view, voice and photos.
+2. **Learned routines as agent tools.** A routine shared with agents appears in their tool list with typed inputs, the moment it's shared. An agent calls `instagram_reel_song(song_title, song_artist, caption)`; Envoy replays it on the phone, and asks the person before the post.
+3. **A trustworthy shared memory.** Facts pulled from app screens, email and photos land in one graph. Each fact records where and when it was seen, newer facts replace stale ones, and the same trip seen in an email and an app becomes one entity.
+4. **A device layer that routes between phones.** One interface over emulators (on the Mac or in the cloud) and real Android phones, with routines that run on either. Agents can see the phones and pick one.
+5. **A human gate no agent can pass.** Each agent has its own key and its own tools. None of them can approve, accept an offer, or answer for the person: Envoy has no tool for it.
 
-**Fit with the hackathon.** Indie track, theme *Push the Frontier*: Envoy gives Muse a capability it lacks today. As of October 2026, Muse acts through the web, partner connectors and (soon) Mac desktop apps; no source found shows it operating phone apps.
+**Fit with the hackathon.** Indie track, theme *Push the Frontier*, "give a machine a new capability": Envoy gives Muse, and any MCP agent, a phone. Three agents have called it: Muse (on the Mac and in its iPhone app), the Spark agent (a small agent on Meta's own models, `agents/meta-agent/`) and Claude Code.
 
 ## Goals and non-goals
 
@@ -31,10 +36,19 @@ Envoy succeeds if a routine learned from one run works on new inputs, survives U
 
 1. An agent, driven by Meta models, completes multi-step tasks in real Android apps on a cloud emulator.
 2. Successful runs become app routines that take inputs, verify every step, and repair themselves.
-3. A shared memory graph, filled from app screens, Gmail, Calendar and iPhone photos, that every interface reads and writes in real time.
+3. A shared memory graph, filled from app screens, Gmail, Calendar and iPhone photos, that every interface reads and writes in real time. (Calendar wasn't built.)
 4. Users interact by web chat, voice, an MCP connector (for Muse or other assistants), and an iPhone companion app.
 5. Users sign in themselves through a live view, approve irreversible actions, and control what is remembered.
 6. A device layer ready for real Android phones, tested on a borrowed phone once available.
+
+Added Nov 1, when Envoy became the phone layer agents call (all built by Nov 2):
+
+7. A shared routine is an MCP tool of its own, by name and with typed inputs.
+8. Each agent has its own key and tool set, and every task records which agent started it.
+9. Notifications on Envoy's phone can start a task or reach the agent.
+10. Files go both ways: a clip from the Mac to the phone (`send_to_phone`), and screens and links back to the agent (`get_file`).
+11. Agents can list the phones (`list_phones`) and pick one for a task.
+12. A second agent besides Muse, on Meta's models, uses Envoy only over MCP.
 
 **Non-goals for this build**
 
@@ -58,30 +72,39 @@ Envoy succeeds if a routine learned from one run works on new inputs, survives U
 
 ## Architecture
 
-Envoy has four layers: interfaces, one Python backend, Meta's models, and a device layer. Every interface goes through a single task API, and every phone through a single device interface, so adding a new interface or a new kind of phone does not touch the core.
+Envoy has four layers: the callers, one Python backend, Meta's models, and a device layer.
+- **The callers** are agents, over MCP, each with its own key, and the person's own surfaces: Envoy's iPhone app, the web app on the Mac, and Siri.
+- **The backend** runs everything in one process: the API, the MCP server, the agent, routines, memory, policy and the scheduler.
+- **Meta's models** are reached through one adapter.
+- **The device layer** puts every phone behind one interface.
 
-![Envoy architecture: interfaces, backend, models, devices](diagrams/architecture.png)
+Every caller goes through one task API, and every phone through one device interface. So a new agent, surface or kind of phone doesn't touch the core.
 
-The routine engine and memory service (highlighted) are where the new work is; the rest makes them usable and safe.
+![Envoy architecture: agents and the person's surfaces, the MCP server and task API, the backend, Meta's models, and the phones](diagrams/architecture.png)
 
-### One task, end to end
+The routine engine, the memory service and the policy engine (highlighted) are where the new work is. Routines are what an agent calls, memory is what it asks, and policy is the gate no agent can pass.
 
-The user says "check me in for my flight" to the iPhone companion:
+### One request, end to end
 
-1. **Voice to task.** Muse Voice Transcribe turns speech into text; the task API creates a task scoped to the airline app and trip memory.
-2. **Context.** The memory service finds the next upcoming trip, with its confirmation code and the user's last name, each with its source.
-3. **Routine match.** The routine engine finds `skylark_check_in` (version 3) and fills its inputs from memory. With no routine, the agent runtime runs the task step by step instead.
-4. **Phone.** The device router leases the long-lived emulator, which is already signed in to the airline app.
-5. **Run.** The executor runs each step with its checks, with no model calls while checks pass. Every step streams to the web app and iPhone.
-6. **Approval.** "Confirm check-in" is irreversible, so the policy engine sends an approval notification to the iPhone; the user approves from the lock screen.
-7. **Memory.** The routine's outputs (seat 14C, gate B12, boarding 5:30 AM) become facts linked to the trip and the app screen they came from; the graph view updates live and the calendar event is updated.
-8. **Watching.** The scheduler adds a watcher that re-checks the gate every 15 minutes from 3 hours before departure, and tells the user if it changes.
+The person asks Muse for Mac to post a clip from the Mac as an Instagram Reel, set to a song from Instagram's library. This ran as a dry run on Nov 2, with each final step declined by the person (see `docs/muse-link.md`).
 
-If the app has changed since the routine was learned, step 5 climbs the fallback ladder, repairs the broken step, and saves a candidate version 4 (see App routines).
+1. **The clip.** Muse copies the clip into Envoy's outbox folder on the Mac and calls `send_to_phone`. Envoy's phone is a real phone, so Envoy asks the person on their iPhone first. On their yes, the clip lands in the phone's gallery.
+2. **The tool.** Muse lists Envoy's tools and finds `instagram_reel_song`: a routine Envoy learned, which the person shared with agents. Muse calls it with the song, the artist and the caption. Envoy starts a task, recorded as "from Muse", and returns its ID at once.
+3. **The phone.** Instagram is set to run on Envoy's phone, so the task first asks the person "use Envoy's phone?" on the iPhone. A "no" moves the task to an emulator. No answer within 15 minutes ends the task as not done.
+4. **The run.** The executor replays the routine step by step, with a check before and after each one. While the checks pass, it makes no model calls. Every step streams to Envoy's web app and iPhone app.
+5. **The approval.** Share is irreversible, so the task stops and Envoy pushes an approval to the person's iPhone. Muse is told the task is waiting for the person's OK in Envoy. Muse has no tool to approve it.
+6. **Back to the agent.** Muse follows the task with `get_task`, or later with `phone_updates`, and tells the person how it ended. `get_file` can give it the final screen and the approval screens.
+7. **Memory.** The routine's outputs become facts, each linked to the app screen it came from.
+
+If the app has changed since the routine was learned, step 4 climbs the fallback ladder, repairs the broken step, and puts a new version on trial (see App routines).
+
+In that Nov 2 rehearsal, the same request went to three apps, and nothing was posted. The Reel, the TikTok and the YouTube Short each reached their final button with the song and the caption, at 0, 3 and 0 model calls, about 1 min 15 s each after the phone OK.
+
+The same task API serves the person's own surfaces. A request typed or dictated in Envoy's app, or spoken to Siri, becomes the same kind of task. When the approval rules decide what to ask, words typed or dictated in Envoy's app count as the person's own. Words from Siri, a trigger, an email or an agent don't (see Safety).
 
 ## Device layer
 
-The agent never knows which phone it is using: one `Device` interface covers emulated phones and real Android phones. The first version drives both through uiautomator2; Envoy's own on-phone app (the **Envoy bridge**) replaces it only if measurements show it is needed. The iPhone is a companion, never a device the agent controls.
+The agent never knows which phone it is using: one `Device` interface covers emulated phones and real Android phones. The first version drives both through uiautomator2; Envoy's own on-phone app (the **Envoy bridge**) would replace it only if measurements showed it was needed, and they didn't (Phase 6). The iPhone is a companion, never a device the agent controls.
 
 ### The Device interface
 
@@ -100,7 +123,7 @@ class Device(Protocol):
 
 `ScreenState` holds the foreground app and screen, the accessibility tree as normalized JSON, a screen signature (a hash of the stable parts of the tree), an optional screenshot, and a timestamp.
 
-### Envoy bridge (on every Android device)
+### Envoy bridge (planned, not built)
 
 Built only if Phase 1 shows that waiting for the screen to settle, or setting text, is unreliable on real apps. Phase 0 measured a uiautomator2 tree read at 31 ms and a full observation at about 70 ms, so read speed is no longer a reason to build it; and on a real phone (Phase 6, a Pixel 5 on Android 13) settling and set-text both held, so it is not built. If built, it is a small Kotlin accessibility service that:
 
@@ -122,11 +145,11 @@ On emulators, the agent's screenshots come from the emulator's own gRPC screensh
 - **Snapshots for test apps:** test apps and evaluation restore a known snapshot before each task, which makes runs and routine verification repeatable. A restore takes about 1.8 s including reconnecting (Phase 0), and each snapshot is about 3.8 GB on disk, so old ones are pruned. After a restore, the backend re-establishes adb forwarding, the automation server and the video session.
 - **No rollback for real apps:** real apps run on a long-lived emulator that is never restored to an old snapshot. Restoring an old signed-in session can replay expired sign-in tokens, which can get the session revoked or the account flagged. It always cold-boots with snapshots off and is shut down cleanly, because a hard kill can lose recent writes.
 - **Pool:** a task leases a device for its duration; other tasks queue (see Leases and failures). Price comparisons would lease two emulators at once (stretch).
-- **Later, in the cloud:** the same stack on a Google Cloud N2 machine with nested virtualization (about $0.19 per hour) or an AWS C8i machine (about $0.38 per hour), or Genymotion's hosted phones. For the hackathon, the emulators run on the laptop.
+- **In the cloud (tested Oct 29 and Nov 1):** the same stack on a Google Cloud `n2-standard-8` with nested virtualization, about $0.39 an hour. SkyLark routines compiled on the Mac ran there unchanged, 48 of 48 with no model calls. A full copy of Envoy (API, web app, MCP, two emulators) then ran there as an alternative to the Mac (`docs/cloud.md`). Envoy runs on the Mac by default; the cloud server is stopped between uses.
 
 ### Backend 2: a real Android phone
 
-- Connected by wireless debugging (Android 11+): pair once, then connect over the same Wi-Fi. Campus Wi-Fi usually isolates devices from each other, so the fallback is USB, or the Mac joining the phone's hotspot.
+- **Envoy's phone** is a Google Pixel 5 on Android 13, on loan, plugged into the Mac over USB. Wireless debugging (Android 11+) was the original plan, but it's untested: campus Wi-Fi usually isolates devices from each other.
 - uiautomator2 (or the bridge, if built) is installed over adb. Android 13+ restricts accessibility access for sideloaded apps, so the bridge would be enabled once through the "Allow restricted settings" menu or an adb setting.
 - On Samsung phones, Auto Blocker must be turned off.
 - Secure sign-in and payment screens behave as described in Live view and sign-in.
@@ -136,16 +159,27 @@ On emulators, the agent's screenshots come from the emulator's own gRPC screensh
 
 | Situation | Phone used | Why |
 | --- | --- | --- |
-| Default | Cloud phone | Keeps the user's phone free; snapshots make runs repeatable |
+| Default | An emulator | Keeps the real phone free; snapshots make test runs repeatable |
+| An agent names a phone (`phone` on `run_task`, `run_routine` or a routine tool) | That phone | The agent saw it with `list_phones`. The real phone still asks the person first |
+| The person says "on my phone", or set the app to run there (Settings › Phones) | Real phone | Their choice |
 | App refuses to run on an emulator (device integrity checks) | Real phone | Emulators never pass Google's device integrity check |
 | App showed a bot check on an emulator, or the Play Store says the emulator isn't compatible | Real phone, from then on | Envoy sets "use my phone" for the app itself (Settings › Phones, with the reason; unticking undoes it) and offers to move the task |
-| App the task names isn't installed on the emulator | Cloud phone, after installing it from the Play Store | Free apps only; a paid app asks through the approval flow and Envoy never pays |
+| App the task names isn't installed on the emulator | The emulator, after installing it from the Play Store | Free apps only; a paid app asks through the approval flow and Envoy never pays |
 | App allows only one signed-in device, and the user is signed in on their phone | Real phone | Avoids signing out the user's phone |
 | Task needs the SIM or the phone's own number | Real phone | The emulator has no SIM |
-| Two apps compared at once | Two cloud phones | Runs in parallel |
-| No real phone connected | Cloud phone, or the user is told the app is unsupported | Never fails silently |
+| Two apps compared at once | Two phones | Cross-app parts on different phones run in parallel |
+| No real phone connected | The emulator, or the user is told the app needs a real phone | Never fails silently |
 
-Before using the real phone, Envoy asks the user, shows a banner on the phone while it works, and pauses when the screen changes in a way its last action did not cause, or when the user presses Pause on the banner. Phase 6 builds it: the task waits on "Use your Android phone for this task?" (in the app and as an iPhone push; only the user's session answers, and no answer is never a yes); a small overlay app shows "Envoy is using this phone · Pause"; and a touch is told from Envoy's own input by getevent, which sees only the phone's physical input (everything Envoy does is injected). A touch, Pause, or another app coming to the front without an action of Envoy's hands the phone to the user like a takeover, checked before every action of the agent's; Resume on the phone or in the app gives it back. The user also picks the phone by saying "on my phone" or by setting an app to run there.
+**`list_phones`** tells an agent which phones Envoy can use. For each it gives an `id`, a name, a `kind` (`cloud`: an emulator on Envoy's cloud server; `emulator`: one on the Mac; `real`: an Android phone), whether it's online, and the apps Envoy runs there. The `id` is what `phone` and `send_to_phone`'s `device` take. Naming a phone doesn't skip anything: `api/routing.py` still decides, and the real phone still asks.
+
+**Before using the real phone, Envoy asks the person.**
+- The task waits for the person's answer to "use Envoy's phone?" (in the app it reads "Envoy wants to use <the phone's name> for this task"). It shows in Envoy's app and as an iPhone push. Only the person's own session can answer.
+- **No answer is never a yes.** If 15 minutes pass with no answer, the task ends as not done ("no answer about using Envoy's phone"). Only the person's "no" moves the task to an emulator. (Until `947bf44` on Nov 2, silence also moved it, and on Nov 2 an emulator with no Instagram then opened the Play Store.) For an app that blocks emulators, a "no" ends the task too.
+
+**While it works, it shows and yields.** Phase 6 built this part:
+- A small overlay app (`android/banner/`) shows "Envoy is using this phone · Pause".
+- Envoy pauses when the screen changes in a way its last action didn't cause, or when the person presses Pause. A touch is told from Envoy's own input by getevent, which sees only the phone's physical input; everything Envoy does is injected.
+- A touch, Pause, or another app coming to the front hands the phone to the person like a takeover. This is checked before every action of the agent's. Resume on the phone or in the app gives it back.
 
 Apps that block emulators are data, not code: a starting list (`api/emulator_blocked.json`: Target, Uber Eats, common banking and payment apps) plus the ones Envoy finds itself. With no phone connected, Envoy says plainly that the app blocks emulators and needs a real Android phone, instead of trying the emulator (docs/app-routing-onboarding.md).
 
@@ -225,7 +259,7 @@ For Flutter apps, games and custom-drawn screens:
 
 ### Several phones at once
 
-As a stretch goal, for tasks like "cheapest delivery for this order," a lead agent splits the task into subtasks, runs each on its own emulator in parallel, and combines the results. This follows the lead-agent-and-subagents pattern Meta describes for Muse Spark, implemented by Envoy's own orchestrator.
+Built Oct 28 (`api/crossapp.py`). A question that needs two or more apps ("How many calories are in a Caffè Latte at Starbucks, and what's the first place DoorDash shows for a latte?") goes to a lead step: one Muse Spark call splits it into one part per app. Each part is an ordinary task, on the phone routing picks. Parts on different phones run at the same time, and parts on the same phone wait for it. One more call writes the answer, and every value it cites must appear in its part's result. This follows the lead-agent-and-subagents pattern Meta describes for Muse Spark, implemented by Envoy's own orchestrator. `run_task` over MCP takes the same path, unless the agent names a phone.
 
 ### Traces
 
@@ -237,7 +271,7 @@ Every step is stored with its before and after screens, the action and its eleme
 - **Waiting for approval** releases the lease after 2 minutes; the task observes the screen again when it resumes.
 - **Device errors** (adb offline, emulator crash, automation server stopped) reconnect with backoff up to 3 times; then the task fails with its trace saved.
 - **Model calls** time out at 30 seconds and retry twice, backing off on rate limits. An invalid element number triggers a fresh observation and one retry.
-- **Backend restarts** mark running tasks as failed rather than resuming them half-way.
+- **Backend restarts** mark running tasks as stopped ("the server restarted") and pending approvals as expired, rather than resuming them half-way.
 
 ## App routines
 
@@ -316,6 +350,34 @@ A request is matched to a routine in four filters: the app, the intent pattern, 
 ### Working on any phone
 
 Because locators use element attributes, not coordinates, the same routine runs on emulators of different screen sizes and on a real phone. Portability is tested cheaply before a real phone is available by running each routine on two emulator profiles (a small phone and a large phone). Phase 6: the 6 SkyLark routines compiled on a 1080 by 2400 emulator passed 18 of 18 on a 720 by 1280, 320 dpi one with no model calls, once a target below the fold is found by scrolling its list and an output scrolled out of view is read by scrolling back (neither needs a model call), and 12 of 12 through the real-phone code path.
+
+### Teach mode: learning from the person
+
+Built Oct 31 (`api/teach.py`). Instead of an agent run, the person does the task once, through the live view, after pressing Teach. The live view shows Recording.
+- **What's recorded:** each tap, typing and scroll, with the screen before and after. A tap is the smallest clickable element under it.
+- **What isn't:** sign-in and secure screens pause the recording and store nothing, and password fields are never recorded. Cancelling, "it didn't work" or 20 idle minutes delete it all.
+- **Compiling:** the recording compiles like an agent's trace. Envoy then replays it once, strictly, on the same phone, before saving it, marked "taught".
+
+On Oct 31, a scripted demonstrator taught Google Calculator "what is 1234 times 5678?". The routine replayed 3 of 3 with 0 model calls in about 6 s, and got a new input (4321 × 8765) right; the agent took about 40 s and $0.08 for the same question. Teaching Wikipedia failed: the answer was prose with nothing to anchor a read on (`eval/results/teach_trials_2026-11-01/README.md`).
+
+**Known gaps:** teach mode can't yet learn keypad entry reliably, or apps that reopen on their last screen (the Clock, Wikipedia).
+
+### Routines as agent tools
+
+Built Nov 1 (`api/sharing.py`, `mcp_server/server.py` `RoutineTools`). Each routine has a **Share with agents** switch, off by default, on its page in Envoy and in Settings › Agents. While it's on and the routine has an active version, the routine is a tool of its own in every agent's `tools/list`:
+- **Name:** the routine's name (`instagram_reel_song`), or `routine_<name>` if that isn't a valid tool name or clashes with a built-in tool.
+- **Arguments:** the routine's typed inputs as a JSON schema. A date is `format: date`, and a choice with known options is an enum. An input memory can fill is optional, and the rest are required. An optional `phone` is added too.
+- **Description:** what it does and in which app, which of its steps can't be undone (so Envoy asks first), what it returns, and when Envoy learned it ("replays without model calls while the app looks as it did").
+- **Hints:** `readOnlyHint` only when every step only reads.
+
+A call goes exactly where `run_routine` goes: preflight, then the runner, with approvals unchanged. The server reads the switches and the library on every `tools/list` and `tools/call`. So learning, sharing, retiring or repairing a routine shows up on the agent's next request, with no restart. `phone_updates` also reports a routine learned or repaired, naming its tool when it's shared.
+
+**With Muse:**
+- In a probe on Nov 1, Muse saw a tool added while its connector stayed connected, on its next `tools/list`, with no reconnect (`docs/muse-link.md`, "Nov 1–2: routine tools and the cross-post dry run").
+- Muse's client keeps an allowed list of tools, so the first call to a new tool may take one extra step while Muse adds it.
+- On Nov 2, Muse called Envoy's shared routine tools by name (see One request, end to end).
+
+`run_routine` still runs any active routine by name, shared or not. The switch decides which routines are tools of their own, not which can run. Approvals are the same either way.
 
 ### What is new, honestly
 
@@ -413,16 +475,17 @@ Prior systems (Zep and Graphiti, mem0, Letta, A-MEM, GraphRAG) build memory from
 
 ## Interfaces and integrations
 
-Every interface talks to the same task API and memory service, and every change is pushed to all of them over one event stream. That is what keeps web, voice, iPhone and outside assistants in sync: none of them holds its own state.
+Every interface talks to the same task API and memory service, and every change is pushed to all of them over one event stream. That keeps agents, the web app, voice and the iPhone in sync: none of them holds its own state. Agents are the front door. The person's own surfaces are where they approve, watch and set things up.
 
 | Interface | What the user does there | Built with |
 | --- | --- | --- |
 | Web app | Chat, watch tasks run, take over the phone, approve actions, browse and edit the memory graph, manage routines and permissions | React (Next.js, a static export served by the API), WebSocket event stream, live view over WebSocket (emulator frames; scrcpy for real phones) |
 | Voice | Speak requests on the web or iPhone and hear short spoken replies | Meta's Muse Voice Transcribe for speech to text (public preview); spoken replies from the browser's or iPhone's built-in speech |
 | iPhone companion | Approve actions from notifications, follow a running task, watch or take over the phone, send screenshots and photos in | The web app added to the Home Screen, over Tailscale Serve HTTPS on the user's tailnet; Web Push; a 6-digit pairing code |
-| MCP server | Muse (if custom connectors accept it), Claude, ChatGPT or any MCP client can use Envoy's phone and memory | MCP Python SDK v2, Streamable HTTP, OAuth 2.1 |
-| Gmail and Calendar | Envoy reads confirmation emails and adds events | Google APIs on a personal Google Cloud project |
-| Scheduler | Tasks that run at a time or when something happens | Envoy's own small scheduler inside the backend |
+| MCP server | Agents use Envoy's phones, routines and memory: Muse (a custom connector, on the Mac and in its iPhone app), the Spark agent, Claude Code, or any MCP client | MCP Python SDK 2.3, Streamable HTTP, stateless; a bearer key per agent |
+| Siri | "Ask Envoy" from Siri, the Action Button or Control Center; Envoy's one-line answer is spoken back | An Apple Shortcut that posts to `/api/siri` with a `siri`-scoped token (`docs/siri.md`) |
+| Gmail | Envoy reads confirmation emails into memory | Gmail API, read-only, on a personal Google Cloud project. The Calendar API was planned but not built |
+| Scheduler | Tasks that run at a time, or when something happens on the phone, in email or in memory | Envoy's own scheduler inside the backend |
 
 ### Tasks: the shared unit of work
 
@@ -430,13 +493,20 @@ Every request, from any interface, becomes a **task**: a goal, the interface it 
 
 ### Web app
 
-- **Chat** with the assistant, which is a Muse Spark model with Envoy's tools: run a task, run a routine, search memory, read email, manage calendar.
+- **Chat** with Envoy's own assistant, on Muse Spark: answer from memory, start a task or a routine, ask several apps at once, or set up a recurring job. This was route 1 into Muse (below). The person's agent of choice now plays this role over MCP.
 - **Task view:** the steps as they happen, each with its screenshot, the action taken, its risk level, and the model's one-line reason.
 - **Live phone panel:** the phone's screen streamed in real time, with a "Take over" button (see Live view and sign-in).
 - **Approvals inbox** for pending irreversible actions.
 - **Memory graph view:** an Obsidian-style map of entities and links; click a node to see its facts, sources and history, edit it, or delete it.
-- **Routines library:** each routine's steps, inputs, version history, success rate and cost per run.
-- **Settings:** per-app permissions (act, remember, blocked), photo and message sources, standing approvals.
+- **Routines library:** each routine's steps, inputs, version history (each repair's before and after), runs against the agent run it came from, and its **Share with agents** switch.
+- **Activity:** tasks with who started them ("from Muse"), files from the Mac, and Envoy's offers.
+- **Triggers:** the person's triggers, the notification watch form, and what was caught on Envoy's phone.
+- **Settings:**
+  - **Approvals:** when Envoy asks.
+  - **Phones:** which apps run on Envoy's phone, which apps Envoy may watch for notifications, the outbox folder, and phone names.
+  - **Devices:** paired iPhones and tokens.
+  - **Agents:** each agent's key and tool groups, and the tools agents see.
+  - **Appearance.**
 
 ### Voice
 
@@ -455,58 +525,130 @@ The companion is the web app added to the iPhone's Home Screen, which needs no A
 
 ### MCP server
 
-Envoy exposes its abilities as an MCP server (Streamable HTTP and stateless, serving spec versions 2026-07-28 and 2025-11-25, the version Muse's connector uses; bearer token, plus OAuth 2.1 if a client requires it), so any assistant that accepts remote MCP servers can use them.
+This is how agents call the phone layer. The API serves the MCP server at `/mcp` on its own port: Streamable HTTP, stateless, JSON responses. It runs on the MCP Python SDK 2.3, which speaks protocol 2026-07-28 and the older handshake versions up to 2025-11-25. Muse's connector uses 2025-11-25. Each request stands alone, so there's no session to lose. Any assistant that accepts a remote MCP server with a bearer key can use it. The exact tool list is in `backend/mcp_server/README.md`, and how to connect a client is in `docs/agents.md`.
 
 | Tool | Purpose |
 | --- | --- |
-| `run_task(goal, apps?, deadline?)` | Start a task; returns a task ID |
-| `get_task(task_id)` | Status, steps so far, and pending approvals with a link the user opens to approve |
-| `list_routines()` / `run_routine(name, inputs)` | Use learned routines directly |
-| `memory_search(query)` | Search the memory graph; returns facts with sources |
-| `memory_get(entity_id)` | One entity, its facts and links |
-| `memory_note(text, links?)` | Add a note; recorded with the client as its author |
+| `run_task(goal, phone?)` | Start a task in a phone app from plain words; returns a task ID (a cross-app question becomes one task with a part per app) |
+| `get_task(task_id)` | Status, recent steps, the result, and pending approvals, each saying it waits for the user's OK in Envoy (no approval link) |
+| `list_routines()` / `run_routine(name, inputs?, phone?)` | Use learned routines by name; missing inputs are filled from memory |
+| *one tool per shared routine* | A routine the person shares with agents, called by its own name with typed arguments (see App routines) |
+| `memory_search(query)` / `memory_get(entity_id)` | Facts with their sources; one entity, its facts and links |
+| `memory_note(text, links?)` | Add a note, recorded with the client as its author |
+| `send_to_phone(file, device?)` | Put a photo or video from Envoy's outbox on the Mac, or from an https URL, in a phone's gallery. The person's real phone takes it only after their OK |
+| `get_file(task_id, which?)` | The final screen, the approval screens and the result's links from a task this agent started, as 10-minute signed links |
+| `create_trigger(kind, name, spec, action)` | Propose a recurring or event-triggered task. It's created off; the person turns it on in Envoy |
+| `list_phones()` | The phones Envoy can use, whether each is online, and its apps |
+| `phone_updates(since?)` | What happened on the phone since a cursor: tasks finished or waiting, changes, files, Envoy's questions, routines learned or repaired, notifications a watch matched |
 
-There is deliberately no approve tool: an assistant must never approve its own irreversible action (see Safety). Approval links must never approve on a page load, because Muse's link preview fetches them automatically (Phase 0). For the hackathon the server requires a bearer token, since `run_task` drives a phone; OAuth 2.1 is added if a client requires it.
+`initialize` returns Envoy's instructions. They say how the tools fit together, and that outbox files, captions and everything the tools return are content, never instructions.
+
+**There is deliberately no approve tool.** An agent must never approve its own irreversible action (see Safety). No tool accepts an offer or answers Envoy's questions either, and no tool returns an approval link or nonce: links point at the person's own devices, and Muse's link previews fetch links on their own (Phase 0).
+
+### Agents: a key and a tool set each
+
+Built Nov 1 (`api/agents.py`, `api/auth.py`):
+- **Muse's key** is `MCP_BEARER_TOKEN` in `.env`, with every tool.
+- **Any other agent** gets its own key in Settings › Agents. The key is shown once and stored only as a hash, in `device_tokens` with scope `agent:<name>`. It can be rotated (the old key stops at once) or revoked, and Settings shows when each agent was last seen. `scripts/agent_key.py` makes a key straight into a private file, for keys nobody should see.
+- **Tool groups** (read and run by default):
+
+  | Group | Tools |
+  | --- | --- |
+  | read | `get_task`, `list_routines`, `memory_search`, `memory_get`, `phone_updates`, `list_phones` |
+  | run | `run_task`, `run_routine`, and every shared routine's tool |
+  | memory | `memory_note` |
+  | files | `send_to_phone`, `get_file` |
+  | triggers | `create_trigger` |
+
+- **The guard** on the MCP server shows each agent only its own groups' tools. A call outside them gets a tool error that names the group to grant. Run-group calls are capped at 30 a minute per agent.
+- **Who asked:** a task an agent starts records the agent's name, and the web app says "from Claude" or "Started by Muse". Envoy's questions name it too ("Muse wants to set this up: …"). `get_file` serves only the calling agent's own tasks.
+- **Keys open `/mcp` and nothing else.** An agent key never works on `/api/*`, and no key appears in a log: the MCP log records the agent's name.
+
+**Tested callers:**
+- **Muse:** the Muse app and Muse for Mac, as a custom connector.
+- **The Spark agent** (`agents/meta-agent/`): a small agent on Muse Spark 1.3 that reaches Envoy only over MCP, with a page made for filming. It started the showcase's real posts on the night of Nov 1.
+- **Claude Code:** it saw its tools, ran flight-status routines, and at a check-in said only the person could approve.
 
 ### Path into Muse
 
-Envoy is built to plug into the real Muse app, but it never depends on that: three routes are tried in parallel, and the demo uses the best one that works.
+Envoy was built to plug into the real Muse app without depending on it. Three routes were tried in parallel:
 
-| Route | What it takes | Status |
+| Route | What it takes | Status (Nov 2) |
 | --- | --- | --- |
-| 1. Envoy's own assistant, built on Muse Spark | Nothing beyond the Meta API | Always works; the fallback demo |
-| 2. Muse custom connector | A public HTTPS address for the MCP server, a bearer token, and asking the Muse app to connect to it | Verified in Phase 0: Muse's free tier added Envoy as a custom connector, called both tools and showed the approval link. Phase 5: the Muse app ran a real check-in through Envoy's own MCP server, waited for the user's approval on Envoy's page and reported the seat and gate |
-| 3. Listed connector or Meta AI Connectors preview | A submission to the Muse Connector Platform review, and joining the Meta AI Connectors waitlist | Apply on day one; unlikely to clear review before Nov 4 |
+| 1. Envoy's own assistant, built on Muse Spark | Nothing beyond the Meta API | Works. It is the chat in Envoy's web app, and the fallback |
+| 2. Muse custom connector | A public HTTPS address that serves only `/mcp`, and a key the person pastes into Muse's secure credentials field | **Works, and it's the front door.** Muse in its iPhone app and Muse for Mac reach Envoy through a Tailscale Funnel address that serves `/mcp` and nothing else. Muse has run check-ins, `send_to_phone`, `create_trigger` and `phone_updates` (Oct 27–29, `docs/muse-link.md`), and called shared routine tools by name (Nov 2) |
+| 3. Listed connector or Meta AI Connectors preview | The Muse Connector Platform's review, or the preview's waitlist | Drafts in `docs/connector-application.md`; not submitted |
 
-**Phase 0 connector test (about 2 hours):**
+What Muse's client does, as measured:
+- It calls `initialize` and then the tool on every request. It declares no client capabilities, so Envoy can't push to it.
+- It hears about the phone by polling `phone_updates`. A Muse scheduled task polled about every 10 minutes on its own (Oct 29). So an event waits for Muse's next check, while Envoy's own push to the iPhone is immediate.
+- It draws its own generic icon for every custom connector.
 
-1. Run a stub MCP server with two tools, `memory_search` (returns a fake trip) and `run_task` (only logs the request), behind Tailscale Funnel or a Cloudflare Tunnel with a bearer token.
-2. In the Muse app's free tier, ask Muse to add a custom connector for that address and token, then ask "what's my gate?" and "check me in for my flight."
-3. Record what happens: whether it connects, calls the tools, passes the right arguments, and shows the approval link `get_task` returns.
-4. If MCP fails but Muse can call ordinary web APIs, expose the same tools as a small REST API with an OpenAPI description and try again.
-5. Ask Meta's team at kickoff or in Discord office hours whether hackathon builders can get connector access.
+**Safety is unchanged:** Muse is an AI client like any other. It gets no approve tool, approvals still come only from Envoy's own screens, it sees only what tools return, and its key can be rotated at any time.
 
-**Decision after the test.** Route 2 works (Phase 0), so the demo opens in the real Muse app ("check me in for my flight") and Envoy does the phone work, with the approval on the user's iPhone. If it doesn't, the demo uses Envoy's own Muse Spark assistant, and the pitch shows the standard MCP server that Muse can connect to once connector access opens.
-
-**Safety is unchanged:** Muse is an AI client like any other. It gets no approve tool, approvals still come only from Envoy's own screens, it sees only what tools return, and its token can be revoked at any time. Its approval links point at the user's tailnet, so link previews can't fetch them.
-
-### Gmail and Calendar
+### Gmail
 
 - A personal Google Cloud project in testing mode, with a dedicated test Google account as its only user. `gmail.readonly` is a restricted scope, but personal use under 100 users is exempt from Google's verification; the user sees an "unverified app" warning once.
-- In testing mode, sign-in tokens expire every 7 days, so the design includes a one-click re-connect.
-- New mail is found by polling Gmail's history every 2 minutes. Gmail push notifications (Pub/Sub) are a later upgrade, since they need a public endpoint and topic permissions.
+- In testing mode, sign-in tokens expire every 7 days, so the user reconnects once a week (`scripts/connect_gmail.py`).
+- New mail is read into memory by `scripts/ingest_mail.py`, which carries on from Gmail's last history ID. The API doesn't poll Gmail by itself, and Gmail push (Pub/Sub) is a later upgrade.
 - Confirmation emails (flights, orders, reservations) go through extraction into memory.
-- Calendar events are read to link trips and reservations; writing events (`calendar.events` scope) is a stretch goal.
+- **Calendar wasn't built.** Reading events to link trips, and writing them, stayed a plan.
 
 ### Scheduled and event-triggered tasks
 
-APScheduler runs inside the backend. Three kinds of trigger create tasks:
+Envoy's own scheduler runs inside the backend (`api/scheduler.py`), checking every 10 seconds. A trigger has a kind, a spec and an action: a goal, or a routine with inputs. There are six kinds:
 
-1. **Time:** fixed ("every Sunday at 9 AM, clip coupons") or derived from memory ("24 hours before any flight's departure, check in"). Derived triggers update when the fact changes, such as a delayed departure.
-2. **Events:** a new email matching a pattern, a new screenshot from the iPhone, or a fact changing in memory.
-3. **Watchers:** re-run a read-only routine every N minutes while something is active (for example, check the airline app for gate changes from 3 hours before departure until boarding).
+| Kind | Fires | Example spec |
+| --- | --- | --- |
+| `time` | Daily, weekly, every N minutes, or once | `{"weekly_on": {"days": ["fri"], "at": "18:00"}}` |
+| `before_fact` | A set time before a remembered event; it moves when the event moves (a delayed flight) | `{"entity_type": "Flight", "minutes_before": 1440}` |
+| `watch` | Reruns a **read-only** routine every N minutes until a time | `{"every_minutes": 15, "until": <time>}` |
+| `email` | A new email in memory whose sender or subject matches | `{"sender_contains": "skylark"}` |
+| `fact_changed` | A remembered fact changes (a gate) | `{"entity_type": "Flight", "attributes": ["gate"]}` |
+| `notification` | A notification on Envoy's phone, from an app the person lets Envoy watch (below) | `{"package": "com.instagram.android", "contains": "comment"}` |
 
-Event triggers can only start a routine or task template the user created in advance; the triggering email or screenshot supplies typed inputs, never the goal or the plan. Triggered tasks follow the same policy as user-started ones: if a step is irreversible and no standing approval covers it, the user gets an approval request.
+**Ask mode.** A trigger in ask mode raises an offer ("Should I check you in for SL 482?") instead of starting its task. Every trigger an agent proposes is in ask mode.
+
+**Offers** (`api/offers.py`) are Envoy proposing one specific action and waiting for the person's yes. They come from:
+- a trigger in ask mode;
+- a habit (`api/repeats.py`): "You checked your flight status on your last 3 Mondays. Make this a habit?" Code finds the pattern, with no model call;
+- a file arriving in the outbox from the Mac;
+- an agent or chat asking to set up a trigger.
+
+What an offer does is fixed by a rule or a template in Envoy's code. An email, a fact, a sidecar or a pattern only fills typed values. The card shows the goal word for word, and only the person's own session can answer it.
+
+**Change alerts** (`api/alerts.py`). A task a trigger started is quiet when it finishes, unless it changed something memory remembered: a new gate, or an app disagreeing with the person's own note. Then it pushes once.
+
+**Recurring jobs from chat** (`api/recurring.py`). "Every Friday at 6 PM, order my usual from Thai Basil" becomes a trigger, switched off, with an offer: "Set this up?". The goal must be the person's own words.
+
+**Agents propose, the person decides.** `create_trigger` over MCP makes the trigger switched off, in ask mode, and raises a "trigger_request" offer: "Muse wants to set this up: every Friday at 18:00, … Turn it on?". Nothing runs until the person says yes in Envoy, and then each run asks them first.
+
+Event triggers only start a routine or a goal set up in advance. The triggering email, notification or fact supplies typed values, never the goal or the plan. Triggered tasks follow the same approval rules as the person's own, except that their words never count as the person's request. So an irreversible step asks, unless a standing approval covers the routine.
+
+### Phone notifications: watching Envoy's phone
+
+Built Nov 1, and checked live on Nov 2 (`api/notifications.py`). A notification trigger names up to 5 apps, and optionally words the notification must contain. While such a trigger is on, the watcher reads Envoy's phone's notifications every 3 seconds (`adb shell dumpsys notification --noredact`, one call per phone per poll). It reads only the apps the person lets Envoy watch.
+
+On a match, Envoy:
+1. stores the event, redacted, and `phone_updates` reports it to agents;
+2. pushes it to the person's iPhone ("Instagram: <title>");
+3. runs the trigger's action if it has one: a goal or a routine, or in ask mode an offer. With no action, it only tells the person and the agents.
+
+**Off by default, per app.** Settings › Phones › Watch notifications lists the phone's apps, and every one starts off. A trigger, or an agent proposing one, can't turn an app on.
+
+**Privacy:**
+- The dump is parsed in memory and dropped. Only matched notifications are stored.
+- Before storing, runs of 4–8 digits become "••••", and the rest of a line after "code", "OTP", "PIN" or "password" becomes "[hidden]". This is unit-tested, not shown live.
+- The log has ids, packages and timings, never words.
+
+**Fires once.** It fires once per notification, only for notifications posted after the trigger was turned on, and again only when the words change or Android alerts again. Group summaries and ongoing notifications never fire.
+
+**Measured on Nov 2**, on Envoy's phone, with real comments on the showcase's posts:
+- **Instagram:** the comment reached the person's iPhone 1.57 s after it landed on the phone.
+- **YouTube:** Envoy's part took 3.6 s, but YouTube itself took about 2 minutes to notify.
+- **TikTok:** no notification came for any of three comments, even with its comment push turned on.
+
+Agents hear about a notification when they next call `phone_updates` (Muse's scheduled check runs about every 10 minutes). The push to the iPhone is immediate.
 
 ## Live view and sign-in
 
@@ -542,7 +684,7 @@ The emulator has no SIM, so text-message codes arrive on the user's iPhone. Thre
 
 1. **The user types the code** in the live view (always available).
 2. **An iPhone Shortcuts automation** forwards messages containing "code" to Envoy, and the agent types it. Phase 5 tested it on a locked phone: it works, once the shortcut has been run by hand to grant its network permission.
-3. **A real Android phone** with the bridge can read the code from the notification. Android 15 hides codes from untrusted notification readers, so this may need the agent to read the notification on screen instead.
+3. **A real Android phone** could read the code from its notification. Not built: Envoy's notification watcher (Scheduled and event-triggered tasks) hides codes before it stores anything, and isn't used for sign-ins. Android 15 also hides codes from untrusted notification readers.
 
 For testing, codes can be injected into the emulator with `adb emu sms send`. Codes are used once and never stored (see Safety).
 
@@ -562,12 +704,20 @@ A `type` action that also submits (presses Enter) is classified by the screen's 
 
 ### Approvals
 
-- An approval request shows a screenshot, a one-line description ("Place order at Chipotle, $14.82"), and the amount if any. It goes to the iPhone as an actionable push notification and to the web app.
+- An approval request shows a screenshot, a one-line description ("Place order at Chipotle, $14.82"), and the amount if any. It goes to the iPhone as a web push and to the web app. Web pushes have no action buttons, so tapping one opens the approval page, where the person approves or declines.
 - The approval is bound to the exact screen it was shown for: the app's own elements, not the keyboard or status bar, which come and go. If the screen changes before the tap (price changed, new pop-up), the agent asks again.
-- No answer within a time limit means the task is paused, never auto-approved.
+- No answer within 15 minutes counts as no, never as yes. The same holds for "use Envoy's phone?": silence ends the task as not done (see Device layer).
 - **The user chooses when Envoy asks**, for everything, per app or per routine: *always ask*; *ask unless I asked for it* (the default: "check me in" is the OK to tap "Confirm check-in" for that trip, and Envoy says so afterwards); or, for a routine, *never ask* (a standing approval, e.g. "check in for my flights automatically", which also covers a trigger starting it). Envoy still asks whenever money is involved, when the step isn't what was asked (the button's own words must be in the request), when the details differ (names, codes and numbers in the request must be on the screen or in the task's inputs), and when the request came from a trigger, an email or an AI client rather than the user, unless a standing approval covers the routine. These are rules, not model judgments.
 
 **Only a person can approve.** Approvals are accepted only from Envoy's own approval screen or iPhone notification, never through MCP or the chat assistant's tools, so no AI (including the one running the task) can approve its own action.
+
+**Agents get no way around it.**
+- Envoy has no approve tool, and no tool that accepts an offer or answers Envoy's questions.
+- A request from an agent never counts as the person asking, so its irreversible steps always ask, unless the person gave a routine a standing approval. Money always asks.
+- When an agent's task waits, `get_task` and `phone_updates` say it's waiting for the person's OK in Envoy, and give no link that could approve it.
+- Tested with all three agents. Muse, asked to turn on a trigger and accept Envoy's offers, said it had no tool for it. The Spark agent, asked to approve, said only the person can. Claude Code, at a check-in, said only the person could decide it, on their phone.
+
+**One thing to know when filming.** A request typed into Envoy's own app that names the button ("post this to TikTok") counts as the person's OK for that button, by the default rule. So posting scenes start from an agent, whose calls always ask. Since Nov 1 the rules also count YouTube's Upload, TikTok's Repost and TikTok's one-tap "Your Story" as publishing buttons, so they're irreversible steps too.
 
 ### Sign-in and credentials
 
@@ -601,7 +751,7 @@ Before a screen, log line or fact is saved, a redaction pass removes password-fi
 
 ### Untrusted content and prompt injection
 
-App screens, emails, notifications and web pages are treated as data, never as instructions.
+App screens, emails, notifications, web pages, files from the Mac and their sidecars are treated as data, never as instructions. So is everything Envoy's MCP tools return, and Envoy's instructions tell agents so.
 
 - The plan comes only from the user's request. Text from screens is passed to the model inside clearly marked data sections.
 - Each task gets a scope: the apps and memory areas it may touch. Leaving that scope (opening an unrelated app, sending data somewhere new) pauses the run for approval.
@@ -664,43 +814,47 @@ All calls go through one module that sets the model, effort and schema per job, 
 
 ## Tech stack and repository
 
-Python runs the agent and memory, a small Node service relays video, React is the web app, Kotlin is used for the on-phone bridge and test apps, and Swift is used for the iPhone; everything lives in one repository.
+Python runs the backend (API, MCP server, agent, routines, memory) and the live view's video, React is the web app, Kotlin is used for the test app and the phone's banner, and an Apple Shortcut is the only iPhone code; everything lives in one repository. The table is the plan's, with what changed noted.
 
 | Part | Technology | Notes |
 | --- | --- | --- |
 | Backend | Python 3.13 (managed with `uv`), FastAPI, asyncio, Pydantic | Task API, agent runtime, routine engine, policy engine, memory service, scheduler |
 | Model calls | OpenAI Python SDK pointed at `https://api.meta.ai/v1` | Responses API, structured output |
-| Phone control | `adbutils` (MIT), Envoy bridge over WebSocket; `uiautomator2` (MIT) for the first days |  |
+| Phone control | `adbutils` (MIT) and `uiautomator2` (MIT); emulator gRPC for screenshots and taps | The Envoy bridge wasn't needed (Phase 6) |
 | Frames for the agent | PyAV decoding the scrcpy stream |  |
-| Storage | SQLite with FTS5 and `sqlite-vec` | One file on the FileVault-encrypted disk; embeddings only if needed |
+| Storage | SQLite with FTS5 | One file on the FileVault-encrypted disk. `sqlite-vec` embeddings were never needed |
 | Scheduler | Envoy's own, inside FastAPI (Phase 4) | Times derived from memory are recomputed on every check; Temporal or Inngest only if durable long waits become necessary |
-| MCP server | MCP Python SDK v2, Streamable HTTP, OAuth 2.1 | Needs a public HTTPS address for outside assistants |
+| MCP server | MCP Python SDK 2.3, Streamable HTTP, stateless; a bearer key per agent | Muse reaches it through a Tailscale Funnel address that serves only `/mcp`. OAuth 2.1 was never needed |
 | Video relay | Node with TypeScript, `@yume-chan/adb` and `@yume-chan/adb-scrcpy` | Real phones (Phase 6); emulators stream gRPC frames from the API. Phase 6 replaced it with Envoy's own scrcpy client in Python (frames decoded with PyAV), pinned to scrcpy server 5.0.1 |
-| Web app | Next.js, React, TypeScript, Tailwind; Cytoscape.js for the graph; WebCodecs decoder |  |
-| Envoy bridge | Kotlin accessibility service | Sideloaded over adb |
-| Test apps | Kotlin with Jetpack Compose | SkyLark Air (airline) and a small shop app, each with switchable layout versions to inject UI changes |
-| iPhone companion | The web app on the Home Screen: Web Push, microphone, photo picker; iOS Shortcuts for sharing and codes | No Apple account needed; native SwiftUI optional later |
-| Gmail and Calendar | Google API Python client, Pub/Sub push | Personal Google Cloud project |
+| Web app | Next.js, React, TypeScript, Tailwind; Cytoscape.js for the graph | Frames are JPEG over WebSocket, so no WebCodecs decoder |
+| Phone banner | Kotlin overlay app (`android/banner/`) | "Envoy is using this phone · Pause" on a real phone |
+| Test apps | Kotlin with Jetpack Compose | SkyLark Air (airline), with switchable layout versions to inject UI changes. The shop app wasn't built |
+| iPhone companion | The web app on the Home Screen: Web Push, microphone, photo picker; iOS Shortcuts for sharing, codes and Siri | No Apple account needed; no native app was built |
+| Gmail | Google API Python client, read-only | Personal Google Cloud project; no Pub/Sub, no Calendar |
+| The Spark agent | Python, Meta's Responses API, Starlette for its page | `agents/meta-agent/`; imports none of Envoy's code |
 | Dev setup | Android SDK command-line tools and emulator, arm64 Java 21, scrcpy, Tailscale or mkcert | Muse Code can help write code |
 
 ```text
 envoy/
   backend/
-    api/            # task API, WebSocket event stream, auth
-    agent/          # loop, planner, screen formatter, actions, traces
-    routines/       # compiler, locators, checks, executor, repair, versions
-    memory/         # schema, extraction, entity matching, retrieval, renderer
-    policy/         # risk classifier, approvals, app categories, redaction
-    devices/        # Device interface, emulator and phone backends, pool, router
+    api/            # task API, event stream, auth, agent keys, routing, scheduler, notifications, offers, files
+    agent/          # loop, planner, screen formatter, actions, traces, vision
+    routines/       # compiler, locators, checks, executor, repair, versions, matcher
+    memory/         # schema, extraction, entity matching, retrieval, app notes
+    policy/         # risk classifier, approval rules, sign-in and bot-check detection
+    devices/        # Device interface, emulator and phone backends, scrcpy client
     models/         # Meta API adapter, prompts, schemas, cost meter
-    integrations/   # Gmail, Calendar, scheduler, triggers
+    integrations/   # Gmail
     mcp_server/     # MCP server tools (not mcp/, which would shadow the SDK)
-  bridge-android/   # Kotlin accessibility service (Envoy bridge)
-  relay/            # Node scrcpy video relay
-  web/              # Next.js app
-  ios/              # optional native companion (later)
-  testapps/         # SkyLark Air, shop app (with layout variants)
+    mcp_stub/       # the Phase 0 stub, and the bearer-key middleware
+  agents/meta-agent/  # the Spark agent: an MCP client on Meta's models
+  android/banner/   # the overlay shown on a real phone while Envoy works
+  web/              # Next.js app (also the iPhone companion)
+  testapps/         # SkyLark Air (with layout variants)
   eval/             # task sets, injected UI changes, runners, reports
+  scripts/          # setup, Muse's Funnel address, agent keys, Shortcuts, cloud
+  site/             # the showcase site
+  bridge-android/, relay/, ios/   # planned, not built (README only)
 ```
 
 ### Test apps
@@ -716,11 +870,11 @@ SkyLark Air comes first and is time-boxed to about one day; the shop app is a st
 
 ## Build phases
 
-The build runs in eight phases with no fixed dates; each ends at a gate that must pass before the next phase starts. If a phase stalls, its scope is cut rather than squeezing the later phases: features freeze on Nov 2, so Nov 3 and 4 go to evaluation, the demo video and the write-up.
+The build ran in eight phases with no fixed dates; each ended at a gate that had to pass before the next phase started. Phases 0–6 passed their gates by Oct 28. After them came a wave of final features (Oct 29–Nov 1: offers, Before I start, Siri, files from the Mac, teach mode), and then the phone-layer wave (Nov 1–2: routines as tools, agent keys, notification triggers, files back, phone choice, the Spark agent, the showcase). There was no feature cut. The final evaluation runs Nov 3, 17:00–22:00 ET, on the `eval-final` tag, and the submission is due Nov 4, 9 PM ET.
 
 ![Build phases: 8 phases, each with an exit gate](diagrams/build-phases.png)
 
-The agent loop and app routines come first because everything else depends on them. Surfaces and the iPhone come after the core works, so a failing core is found early rather than hidden behind a polished interface.
+The diagram is the Oct 26 plan. The agent loop and app routines come first because everything else depends on them. Surfaces and the iPhone come after the core works, so a failing core is found early rather than hidden behind a polished interface.
 
 ## Evaluation
 
@@ -770,6 +924,12 @@ The biggest risk is reliability: phone agents are flaky, and "whether it works" 
 | Automating real apps breaks their terms of service | Medium | Low (for the hackathon) | Our own test apps for most testing; real apps only on the user's own accounts; noted in the submission |
 | Muse custom connectors are not open to hackathon developers | Medium | Low | Envoy's own web app and MCP server work without it; the connector is an add-on |
 | Scope grows beyond what one person can finish | High | High | Strict build phases with exit criteria; nothing from a later phase starts until the current phase passes |
+
+**How these turned out (Nov 2):**
+- **Muse custom connectors:** open, and working. Muse is Envoy's front door.
+- **An Android phone:** one was available. A Pixel 5 has been Envoy's phone since Oct 28.
+- **Apps refusing the emulator:** still true for Target (a bot check on most fresh launches) and banking apps. They run on Envoy's phone instead.
+- **Reliability on real apps:** a learned task replays well, but new inputs on real apps are the weak spot: 4 of 11 (Oct 28) and 6 of 11 (Oct 31). See `docs/README.md` for the numbers and their sources.
 
 ## Phase 0 results
 
@@ -935,7 +1095,7 @@ The runs drove these changes:
 
 ## Phase 7 results
 
-*Draft (Oct 29): the final numbers come from one run of every suite on the `eval-final` tag (Nov 2).* Details in `docs/phase-7-results.md`; report in `eval/results/final/report.md`.
+*Draft (Oct 29): the final numbers come from one run of every suite on the `eval-final` tag, now Nov 3, 17:00–22:00 ET.* Details in `docs/phase-7-results.md`; report in `eval/results/final/report.md`.
 
 The measurement passes found 31 problems, each fixed and tested: compiler gaps (answers on the first screen, a value whose ID every row shares, a switch's state, a price before its details), safety-gate gaps (a tap at a point skipped the rules; uninstall, erase and call buttons), and grading errors in the suites themselves (a shape-graded price from the wrong menu item, a right answer graded wrong).
 
@@ -955,8 +1115,8 @@ These are the answers that could change the design; most can be settled in Phase
 - [x] **Real apps:** which shopping and food apps run on the emulator without blocking sign-in? Answered in Phase 0: Target, Starbucks, Chipotle and Amazon; DoorDash runs but its guest mode hangs; Uber Eats won't install.
 - [x] **Android phone:** the IPaT loan arrives Wednesday, Oct 28; which Android version does it run (Android 15 changes notification access). Answered in Phase 6: a Google Pixel 5 on Android 13, so Android 15's notification limits don't apply to it (they weren't tested).
 - [x] **Sign-in codes on iPhone:** does a Shortcuts message automation forward codes while the phone is locked? Answered in Phase 5: yes, about 2 s after the message, once the shortcut has been run by hand to grant its network permission.
-- [ ] **Official rules:** limits on open-source code, required submission materials, demo video length.
-- [ ] **Apple account:** decided: the iPhone companion is a Home Screen web app, so no paid account is needed.
+- [x] **Official rules:** a demo video of at most 3 minutes on YouTube, showing only what was built during the hackathon; due Nov 4, 9 PM ET (`docs/submission.md`).
+- [x] **Apple account:** decided: the iPhone companion is a Home Screen web app, so no paid account is needed.
 
 ## Sources
 

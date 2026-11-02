@@ -1,6 +1,6 @@
 # Spark agent: an agent on Meta's models that uses Envoy over MCP
 
-A small, standalone agent that proves Envoy is a phone layer **any** agent can call. It runs on Meta's Muse Spark 1.3
+A small, standalone agent that shows Envoy is a phone layer **any** agent can call, not only Muse. It runs on Meta's Muse Spark 1.3
 (Responses API, the same key the backend uses) and reaches Envoy **only over MCP**, with its own agent key. It imports
 none of Envoy's code. A page at `http://127.0.0.1:8790` shows the conversation and every MCP call, and is laid out
 for a 1080p screen recording.
@@ -26,6 +26,20 @@ for a 1080p screen recording.
    user answers, the agent gets one short turn to say what happened.
 6. **Costs.** Each model call is priced like `backend/models/adapter.py` prices them, and written to
    `logs/meta_agent_costs.jsonl`. There's a daily cap: `META_AGENT_DAILY_CAP_USD`, $3 by default.
+
+## What it has done
+
+- **Nov 1, on a test copy** (`envoy-test`, its own key): SkyLark flight status through a routine, and a check-in that
+  stopped at "Confirm check-in" with the waiting card up and was declined. With a read-only key it saw 6 tools; asked to
+  approve, it said only the user can. Evidence: `evidence/2026-11-01/`.
+- **A learned routine called by name:** with `skylark_check_flight_status` shared, it called the tool directly
+  (`evidence/2026-11-01/routine-tool-run.png`).
+- **The cross-post dry run** (Nov 1, 23:22–23:36, Envoy's phone, every post declined): four routine tools at once, then
+  one wait; each post reached its final button in 31–86 s once it had the phone (`evidence/2026-11-01/crosspost/`).
+- **The real posts, night of Nov 1:** on the user's go, it started the showcase's posts on the live Envoy, and the user
+  approved each on their iPhone (`docs/demo-showcase.md`).
+
+Do one warm-up task before filming: the first task after an API start took 43 s before its first step.
 
 ## Run it
 

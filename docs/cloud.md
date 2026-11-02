@@ -2,9 +2,16 @@
 
 Oct 29, 2026. **The same SkyLark routines, compiled on the Mac, ran unchanged on an Android emulator on a Google Cloud server: 48 of 48 with no model calls, at about half the Mac's speed.** That is on an emulator past its first boot; the very first run on a brand-new one passed 9 of 18 (below). Stage 2 then ran the whole learn-then-replay loop there: one agent run, a routine compiled from it on the VM, and that routine replayed 3 of 3 on bookings it had never seen, for $0.07 of Meta credit.
 
-Today Envoy runs on the user's Mac: the API, the web app, the emulators and the Pixel 5's USB connection. Only the model calls go to Meta. The design always said "a cloud host later" (`docs/technical-design.md`, "Later, in the cloud"). This is the first step: the same code and the same routines on a Google Cloud server, measured against the numbers the Mac already recorded. Nothing was re-measured on the Mac.
+Envoy runs on the user's Mac by default: the API, the web app, the emulators and the USB connection to Envoy's phone (the Pixel 5). Only the model calls go to Meta. The design always said "a cloud host later". This is the first step: the same code and the same routines on a Google Cloud server, measured against the numbers the Mac already recorded. Nothing was re-measured on the Mac.
 
-Brief: `prompts/cloud-proof.md`. Results: `eval/results/cloud/`. Scripts: `scripts/cloud/`. Report: `prompts/cloud-proof-report.md`.
+Results: `eval/results/cloud/`. Scripts: `scripts/cloud/`. Report: `prompts/cloud-proof-report.md`.
+
+**Where this stands (Nov 2):**
+- **What's true:** "Envoy's phones can run in the cloud" was tested on Google Cloud. Stages 1–3 below ran there on Oct 29, and a plain Instagram Reel reached Share on the cloud phone on Nov 1 (declined).
+- **The showcase's posts** (the library song, the poll sticker, TikTok and YouTube) all ran on Envoy's phone, the Pixel, never in the cloud. Library songs and stickers are untested on any emulator.
+- **For agents:** when Envoy runs in the cloud, `list_phones` reports its emulators as `kind: "cloud"` (set by `ENVOY_HOST=cloud`, or any Linux host), and `envoy_runs_on` says "Envoy's cloud server".
+- **Files from the Mac** still work by name: the Mac's outbox forwarder (`python -m api.forwarder`, built Nov 1) sends each clip and its sidecar to the cloud Envoy, through its `/mcp/outbox` door, using the cloud copy's own MCP key. See `docs/demo-creator-workflow.md`, "When Envoy runs in the cloud".
+- **The VM is stopped** (since Nov 1, 20:45 UTC), with no Meta key on it.
 
 ## What ran, and where
 
@@ -195,7 +202,7 @@ So: two apps refused to create accounts from the cloud phone (Amazon, Chipotle),
 - **Where the time went.** About 35 s of the 112 s was model calls; the rest was the phone drawing in software and settling. The first-run screens cost about 40 s before the agent began; the Pixel's Instagram was long past them.
 
 Three things this found, none fixed here (they're product code, after the eval):
-1. **There is no offer on a cloud phone.** `send_to_phone` puts a file on an emulator at once and asks nothing, so no Instagram task starts by itself; the outbox route makes no offer either, because the Instagram template asks for a real phone. So the run had no "Yes": it started with `run_task`, as the creator doc's "No sidecar at all" fallback does. Coming from an AI client, Share asks whatever the approval mode. File delivery (`prompts/file-delivery.md`) should let a cloud phone take the offer as the Pixel does.
+1. **There is no offer on a cloud phone.** `send_to_phone` puts a file on an emulator at once and asks nothing, so no Instagram task starts by itself; the outbox route makes no offer either, because the Instagram template asks for a real phone. So the run had no "Yes": it started with `run_task`, as the creator doc's "No sidecar at all" fallback does. Coming from an AI client, Share asks whatever the approval mode. Still true on Nov 2: the forwarder (Nov 1) gets the clip to the cloud copy, but the Instagram template still waits for a real phone there, so the offer doesn't come. Letting a cloud phone take the offer as the Pixel does isn't built.
 2. **A link whose host sorts an IPv6 address first can't be downloaded on the VM.** `Handoff._download` connects to the first of the host's addresses, sorted as text, and the VM has no IPv6 route: MDN's CC0 sample (`2600:1901:…` before `34.111.…`) failed with "the download failed (ConnectError)", though `curl` on the VM fetched it. `test-videos.co.uk` (`104.21.…` first) worked. Trying each address, or IPv4 first, would fix it.
 3. **A cloud phone needs its apps' first-run screens cleared before a take**, as the Mac's phones had been.
 
@@ -215,7 +222,7 @@ One-time setup (the user, once the VM is on the tailnet):
 4. Muse: run `scripts/cloud/muse-tunnel.sh` and use the **Envoy Cloud** connector, after updating its URL if the tunnel's address changed (quick tunnels get a new one each time). Turn the Mac's connector off for the session, so Muse doesn't pick the wrong one.
 
 **To switch back to the Mac:**
-1. Use the **Envoy** icon. Rename the shortcuts back. Use the Mac's Muse connector and tunnel (`scripts/start_muse_test.sh`), and turn the cloud one off.
+1. Use the **Envoy** icon. Rename the shortcuts back. Use the Mac's Muse connector (its permanent Funnel address, `scripts/muse_funnel.sh`), and turn the cloud one off.
 2. `scripts/cloud/key.sh remove`, `scripts/cloud/keep-awake.sh off`, then `scripts/cloud/stop.sh`.
 
 Nothing migrates either way, so switching back takes as long as the steps above. Anything done on the cloud copy (tasks, learned routines, memory) stays there.
@@ -295,10 +302,9 @@ No product code changed. Everything was handled from outside:
 ## Limits, plainly
 
 - Real phones still plug into a Mac (USB). Wireless debugging over the tailnet is an untested idea.
-- Real apps and sign-ins weren't tried in the cloud.
-- Data-center addresses may trigger apps' bot checks; that wasn't tested.
-- One VM, one emulator, one region, one afternoon. The cloud runs were k=3 like the Mac's, and they're as small a sample.
-- The API and web app didn't run on the VM (stage 3, not started).
+- Real apps ran in the cloud only in stage 3's real-app set and the Nov 1 Instagram run. Data-center addresses may trigger more apps' bot checks than the Mac does; that wasn't measured.
+- One VM, one region, one afternoon for stages 1–3. The cloud runs were k=3 like the Mac's, and they're as small a sample.
+- The cloud copy and the Mac share nothing: routines, memory and paired devices stay where they were made.
 
 ## For the write-up
 

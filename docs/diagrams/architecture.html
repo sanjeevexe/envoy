@@ -1,0 +1,102 @@
+<!doctype html>
+<!-- The source of architecture.png (Nov 2, 2026). Render: Chrome --headless=new --force-device-scale-factor=2
+     --window-size=672,640 --screenshot=architecture.png architecture.html, then trim the white space below. -->
+<html><head><meta charset="utf-8">
+<style>
+  :root { --line:#cfcdc4; --text:#1a1a1a; --muted:#555; --bar:#ebebe8; --hi:#e4edf8; --hiline:#2f74d0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #fff; }
+  body { width: 672px; padding: 14px 21px 18px; font-family: -apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif; color: var(--text); }
+  h1 { font-size: 13.2px; font-weight: 600; letter-spacing: -0.1px; margin: 4px 0 16px; }
+  .row { display: flex; gap: 10px; }
+  .group { border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px 10px; }
+  .glabel { font-size: 10.6px; font-weight: 600; margin-bottom: 7px; }
+  .glabel span { font-weight: 400; color: var(--muted); }
+  .box { flex: 1; border: 1px solid var(--line); border-radius: 7px; background: #fff; padding: 8px 6px; text-align: center; }
+  .box b { display: block; font-size: 10.6px; font-weight: 600; }
+  .box i { display: block; font-style: normal; font-size: 9.4px; color: var(--muted); margin-top: 2px; line-height: 1.3; }
+  .box.hi { background: var(--hi); border: 1.5px solid var(--hiline); }
+  .bar { border: 1px solid var(--line); border-radius: 8px; background: var(--bar); padding: 8px 10px; text-align: center; font-size: 10.6px; }
+  .bar b { font-weight: 600; }
+  .bar span { color: var(--muted); }
+  .arrows { display: flex; height: 22px; }
+  .arrows div { flex: 1; display: flex; justify-content: center; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .models { width: 150px; border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px; font-size: 10px; line-height: 1.95; }
+  .models .glabel { font-size: 10.6px; margin-bottom: 2px; }
+  .models .note { color: var(--muted); margin-top: 6px; line-height: 1.35; }
+  .side { display: flex; align-items: center; width: 22px; justify-content: center; }
+  .caption { font-size: 9.6px; color: var(--muted); margin-top: 12px; line-height: 1.5; }
+  .mid { display:flex; align-items:center; gap: 8px; font-size: 9.6px; color: var(--muted); height: 22px; padding-left: 222px; }
+</style></head>
+<body>
+<h1>Agents call Envoy over MCP; every phone goes through one device interface</h1>
+
+<div class="row">
+  <div class="group" style="flex: 3">
+    <div class="glabel">Agents <span>· the front door, each with its own key</span></div>
+    <div class="row" style="gap:8px">
+      <div class="box"><b>Muse</b><i>Mac and iPhone app</i></div>
+      <div class="box"><b>Spark agent</b><i>on Meta's models</i></div>
+      <div class="box"><b>Any MCP client</b><i>Claude Code, tested</i></div>
+    </div>
+  </div>
+  <div class="group" style="flex: 2">
+    <div class="glabel">The person <span>· approves and watches</span></div>
+    <div class="row" style="gap:8px">
+      <div class="box"><b>Envoy on iPhone</b><i>approvals, live view</i></div>
+      <div class="box"><b>Web app, Siri</b><i>chat, routines, settings</i></div>
+    </div>
+  </div>
+</div>
+
+<div class="arrows" style="width:100%">
+  <div style="flex:3"><svg width="10" height="22"><path d="M5 2 V20" stroke="#bdbbb2" stroke-width="1.2"/><path d="M1.5 6 L5 2 L8.5 6 M1.5 16 L5 20 L8.5 16" fill="none" stroke="#bdbbb2" stroke-width="1.2"/></svg></div>
+  <div style="flex:2"><svg width="10" height="22"><path d="M5 2 V20" stroke="#bdbbb2" stroke-width="1.2"/><path d="M1.5 6 L5 2 L8.5 6 M1.5 16 L5 20 L8.5 16" fill="none" stroke="#bdbbb2" stroke-width="1.2"/></svg></div>
+</div>
+
+<div class="row">
+  <div class="bar" style="flex:3"><b>MCP server</b> <span>· built-in tools + one per shared routine · no approve tool</span></div>
+  <div class="bar" style="flex:2"><b>Web API</b> <span>· the person's own session</span></div>
+</div>
+
+<div class="arrows"><div><svg width="10" height="22"><path d="M5 2 V20" stroke="#bdbbb2" stroke-width="1.2"/><path d="M1.5 6 L5 2 L8.5 6 M1.5 16 L5 20 L8.5 16" fill="none" stroke="#bdbbb2" stroke-width="1.2"/></svg></div></div>
+
+<div class="bar"><b>Task API and event stream</b> <span>· every task says who started it; every change reaches every surface</span></div>
+
+<div class="arrows"><div><svg width="10" height="22"><path d="M5 2 V20" stroke="#bdbbb2" stroke-width="1.2"/><path d="M1.5 6 L5 2 L8.5 6 M1.5 16 L5 20 L8.5 16" fill="none" stroke="#bdbbb2" stroke-width="1.2"/></svg></div></div>
+
+<div class="row" style="gap:0; align-items: stretch">
+  <div class="group" style="flex:1">
+    <div class="glabel">Envoy backend <span>(Python, one process)</span></div>
+    <div class="grid">
+      <div class="box"><b>Agent runtime</b><i>observe, decide, act</i></div>
+      <div class="box hi"><b>Routine engine</b><i>compile, replay, repair</i></div>
+      <div class="box hi"><b>Policy engine</b><i>risk and approvals</i></div>
+      <div class="box hi"><b>Memory service</b><i>graph in SQLite</i></div>
+      <div class="box"><b>Triggers and watch</b><i>time, email, facts, notifications</i></div>
+      <div class="box"><b>Files and mail</b><i>outbox in, get_file out, Gmail</i></div>
+    </div>
+  </div>
+  <div class="side"><svg width="22" height="10"><path d="M2 5 H20" stroke="#bdbbb2" stroke-width="1.2"/><path d="M6 1.5 L2 5 L6 8.5 M16 1.5 L20 5 L16 8.5" fill="none" stroke="#bdbbb2" stroke-width="1.2"/></svg></div>
+  <div class="models">
+    <div class="glabel">Meta Model API</div>
+    Muse Spark 1.3<br>Muse Wonder 1.0<br>SAM 3.1<br>Voice Transcribe
+    <div class="note">one adapter, cost meter</div>
+  </div>
+</div>
+
+<div class="mid"><svg width="10" height="22"><path d="M5 2 V20" stroke="#bdbbb2" stroke-width="1.2"/><path d="M1.5 6 L5 2 L8.5 6 M1.5 16 L5 20 L8.5 16" fill="none" stroke="#bdbbb2" stroke-width="1.2"/></svg>actions down, screens up</div>
+
+<div class="group">
+  <div class="glabel">Device layer <span>· one interface for every phone; agents can list them and pick one</span></div>
+  <div class="row" style="gap:8px">
+    <div class="box"><b>Envoy's phone</b><i>Pixel 5, Android 13, USB</i></div>
+    <div class="box"><b>Emulators</b><i>on the Mac: test and real apps</i></div>
+    <div class="box"><b>Cloud phone</b><i>Google Cloud, tested</i></div>
+    <div class="box"><b>Live view</b><i>gRPC frames, scrcpy</i></div>
+  </div>
+</div>
+
+<div class="caption">Anything irreversible waits for the person's yes in Envoy on their iPhone; no agent can approve. The iPhone is a companion:<br>the agent never controls it. Highlighted: routines (which agents call as tools), memory, and the approval gate.</div>
+</body></html>

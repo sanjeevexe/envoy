@@ -6,10 +6,12 @@ Two drafts:
 
 Fields in [brackets] are yours to fill in. The field lists come from the public pages as read on Oct 26, 2026 (platform.muse.ai/docs and dev.meta.ai/products/connectors). The forms themselves may ask for more.
 
+**Updated Nov 2:** the tool table, approvals and status lines below match main (`947bf44`). A REST API with an OpenAPI description to the same tools was the fallback if MCP failed. MCP worked, so the REST API wasn't built; say "in active development" if a form needs one.
+
 ## Before you submit: two cautions
 
 - **The Muse Connector Platform review expects an organization.** It asks for business verification, authority to submit, brand assets, a privacy policy and product terms, support and security contacts, a data-processing questionnaire, and a test account that stays available throughout review. As a solo hackathon project, Envoy has no company website or privacy policy yet. Submitting is still worth it on day one, as the design doc's route 3 says, but treat a rejection or "incomplete" as likely. If the form insists on a company, say so plainly rather than inventing one.
-- **Meta AI Connectors wants a REST API ("live or in active development").** Envoy's REST fallback (OpenAPI) fits this. Pick "in active development (launching within 60 days)".
+- **Meta AI Connectors wants a REST API ("live or in active development").** Envoy's REST fallback (OpenAPI) was planned but not built, since MCP worked. Pick "in active development (launching within 60 days)".
 
 ---
 
@@ -37,31 +39,38 @@ Fields in [brackets] are yours to fill in. The field lists come from the public 
 - Apps that block emulators run on the user's own Android phone instead.
 - Finance, health, messaging, password-manager and government apps are blocked by default.
 
-### Tools (MCP, Streamable HTTP; REST with OpenAPI also available)
+### Tools (MCP, Streamable HTTP)
 
 | Tool | Inputs | Output | Read/Write | Sensitive | Side effects |
 | --- | --- | --- | --- | --- | --- |
 | `memory_search` | `query` | Matching facts, each with source and time | Read | No | None |
 | `memory_get` | `entity_id` | One entity, its facts and links | Read | No | None |
-| `get_task` | `task_id` | Status, steps so far, pending approvals with an approval link | Read | No | None |
-| `list_routines` | none | The user's learned routines and their inputs | Read | No | None |
+| `get_task` | `task_id` | Status, recent steps, result, pending approvals (each "waiting for the user's OK in Envoy"; no link) | Read | No | None |
+| `list_routines` | none | The user's learned routines, their inputs and outputs | Read | No | None |
+| `list_phones` | none | The phones Envoy can use, online or not, and their apps | Read | No | None |
+| `phone_updates` | `since?` | What happened on the phone since a cursor | Read | No | None |
+| `get_file` | `task_id`, `which?` | 10-minute links to the final screen, approval screens and result links of a task this assistant started | Read | **Yes** | None |
 | `memory_note` | `text`, `links?` | The new note's ID | Write | No | Adds a note to the user's memory, recorded with the assistant as its author |
-| `run_task` | `goal`, `apps?`, `deadline?` | Task ID, status, approval link if needed | Write | **Yes** | Operates the user's phone apps. Irreversible steps (pay, order, submit, send, confirm, cancel, delete) pause for the user's approval |
-| `run_routine` | `name`, `inputs` | Task ID, status, approval link if needed | Write | **Yes** | Same as `run_task` |
+| `run_task` | `goal`, `phone?` | Task ID and status | Write | **Yes** | Operates the user's phone apps. Irreversible steps (pay, order, submit, send, confirm, cancel, delete) pause for the user's approval |
+| `run_routine` | `name`, `inputs?`, `phone?` | Task ID and status | Write | **Yes** | Same as `run_task` |
+| one tool per routine the user shares | the routine's typed inputs, `phone?` | Task ID and status | Write | **Yes** | Same as `run_routine` with that routine |
+| `send_to_phone` | `file`, `device?` | Sent, or waiting for the user's OK | Write | **Yes** | Puts a photo or video in a phone's gallery; the user's real phone takes it only after their OK |
+| `create_trigger` | `kind`, `name`, `spec`, `action` | Trigger ID, waiting for the user | Write | No | Proposes a recurring task, created switched off until the user turns it on |
 
 **Approval is deliberately not a tool.**
 - No AI client, Muse included, can approve an irreversible step.
 - Envoy's policy engine classifies every action before it runs, using rules, screen context and a model risk label. Any irreversible action waits for the user.
 - The user approves only on Envoy's own approval page or through its iPhone notification. The page is bound to the exact screen shown, so a change in price or content asks again.
-- Approvals are never automatic, and timeouts pause the task rather than approve it.
+- Approvals are never automatic. No answer within 15 minutes counts as no.
 
 **Status handling:**
 - `run_task` returns immediately with a task ID.
-- `get_task` reports `queued`, `running`, `waiting_for_approval` (with `approve_url`), `waiting_for_user` (sign-in hand-off), `done` (with result) or `failed` (with reason).
+- `get_task` reports `queued`, `running`, `waiting_approval` (the user's OK in Envoy; no link), `needs_you` (a sign-in hand-off, or the user's OK to use their phone), `taken_over`, `done` (with result), `failed`, `declined` or `stopped` (with reason).
 
 **Errors and limits:**
 - 401 for a missing or wrong token.
-- 429 with `Retry-After` for rate limits; [your chosen limit, e.g. 30 tasks per hour per user].
+- Each assistant has its own key and tool set; a call outside its tools gets a tool error naming the permission to ask for.
+- At most 30 run calls a minute per assistant; more get a tool error saying when to try again.
 - Tasks have step and cost limits and stop with a reason when they hit them.
 
 ### Data processing questionnaire (draft answers)
@@ -120,8 +129,8 @@ Fields in [brackets] are yours to fill in. The field lists come from the public 
 | Team size | 1 |
 | Industry | Consumer software / productivity |
 | API status | In active development (launching within 60 days) |
-| Protocol | REST API (OpenAPI/Swagger); also an MCP server |
-| API docs link | [public URL]/openapi.json |
+| Protocol | An MCP server (live); a REST API with OpenAPI in development |
+| API docs link | [the repo's backend/mcp_server/README.md, or a public docs URL] |
 | AI platforms integrated with | Meta Model API (Muse Spark 1.3, Muse Wonder); MCP clients |
 | Meta surfaces wanted | Meta AI app and web; AI glasses |
 | How soon you could start | Immediately |

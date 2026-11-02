@@ -1,8 +1,25 @@
 # Demo: the app-only cross-post (Instagram + TikTok + YouTube Shorts)
 
-The video's climax (T1c, `prompts/phone-layer-plan.md` §5 "showcase"). One clip is posted from Envoy's phone (the Pixel
-5) to Instagram, TikTok and YouTube Shorts. Each post uses a feature that the website and Muse's connectors don't have,
-and each is a routine Envoy learned, which an agent calls as a tool (agent-door's routine tools).
+The video's climax. One clip is posted from Envoy's phone (the Pixel 5) to Instagram, TikTok and YouTube Shorts. Each
+post uses a feature that only the app has: the website and Instagram's API don't offer it, and Muse has no connector
+for TikTok or YouTube. Each post is a routine Envoy learned, which an agent calls as a tool of its own
+(`docs/technical-design.md`, "Routines as agent tools").
+
+**Where it stands (Nov 2):**
+- **Real posts, night of Nov 1.** All four app-only features have each gone live once. The Reel with a library song,
+  the Story with a poll and the YouTube Short went live at 0 model calls each. The TikTok first went up without its
+  sound; the re-post (v3, 3 calls) went live with "golden hour". Each was started from the Spark
+  agent on the user's go and approved on the iPhone (details below).
+- **Muse end to end, Nov 2 (a dry run, every final step declined).** Muse for Mac moved the clip to Envoy's outbox,
+  called `send_to_phone`, then called the three routine tools by name. The Reel, the TikTok and the Short each reached
+  their final button with the song and the caption, at 0, 3 and 0 model calls, about 1 min 15 s each. Record:
+  `docs/muse-link.md`, "Nov 1–2: routine tools and the cross-post dry run".
+- **Comments come back.** A comment on the Reel reached the iPhone 1.57 s after it landed on Envoy's phone. A YouTube
+  comment took about 2 minutes, all but 3.6 s of it YouTube's own delay. No TikTok notification came (`prompts/phone-watch-report.md`).
+- **Known gap:** the Story routine fails while a Story is already live (backlog #64): its first tap opens the live
+  Story's poll results. One Story take per 24 hours, unless the live one is deleted.
+- **Showcase routines don't run in the cloud.** Every run here was on the Pixel. Library songs and stickers are untested
+  on emulators.
 
 Status, Nov 1 (night): four routines in the library, each learned from one agent run (declined at the final button)
 and recompiled with the compiler fix (main ffde928); `prompts/showcase-report.md` has the details:
@@ -56,7 +73,7 @@ post. TikTok's ended a real post "failed". `compile --final-from-declined` drops
 
 ## The features (P3)
 
-Sources: `prompts/app-only-research.md`.
+Sources: the apps' and APIs' own help pages, collected Nov 1 (the research notes themselves aren't in the repo).
 
 | App | Feature | Why it's app-only | On the test account |
 | --- | --- | --- | --- |
