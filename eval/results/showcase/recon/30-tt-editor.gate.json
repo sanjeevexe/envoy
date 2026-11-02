@@ -1,0 +1,61 @@
+{
+ "dump": "30-tt-editor.xml",
+ "app": "com.zhiliaoapp.musically",
+ "request": "the newest video in my phone's gallery to TikTok with this caption",
+ "targets": [
+  {
+   "element": 5,
+   "kind": "Button",
+   "label": "Your Story",
+   "text": "",
+   "desc": "",
+   "id": "com.zhiliaoapp.musically:id/ts6",
+   "bounds": [
+    33,
+    2086,
+    529,
+    2207
+   ],
+   "risk": "reversible",
+   "reasons": [],
+   "asks": true
+  },
+  {
+   "element": 6,
+   "kind": "Text",
+   "label": "Your Story",
+   "text": "",
+   "desc": "",
+   "id": "com.zhiliaoapp.musically:id/tsa",
+   "bounds": [
+    126,
+    2101,
+    435,
+    2192
+   ],
+   "risk": "reversible",
+   "reasons": [],
+   "asks": true
+  },
+  {
+   "element": 10,
+   "kind": "Button",
+   "label": "Share",
+   "text": "",
+   "desc": "Share",
+   "id": "",
+   "bounds": [
+    926,
+    309,
+    1080,
+    452
+   ],
+   "risk": "irreversible",
+   "reasons": [
+    "rule: target publishes 'Share'"
+   ],
+   "asks": true
+  }
+ ],
+ "post_gated": false
+}

@@ -1,0 +1,28 @@
+# com.google.android.youtube/com.google.android.apps.youtube.app.extensions.creationmodes.main.CreationModesActivity secure=False camera=False 2026-11-01T19:40:36
+App: com.google.android.youtube · Screen: CreationModesActivity
+[1] Button (id: touch_outside)
+[2] Button "Close" (id: gallery_header_close_button)
+[3] Button "Create video"
+[4] Text "Create from gallery" (id: gallery_header_create_title)
+[5] Button "Recents" (id: select_album_button)
+[6] List (id: media_grid_recycler_view) (scrollable)
+[7] Button "showcase-test.mp4 · 1 · 0:08"
+[8] Text "showcase-test.mp4 · 1 · 0:08" (id: thumb_image_view_parent)
+[9] Text "1" (id: multi_select_badge)
+[10] Button "pier.mp4 · 0:08"
+[11] Text "pier.mp4 · 0:08" (id: thumb_image_view_parent)
+[12] Button "loopa-172734.mp4 · 0:04"
+[13] Text "loopa-172734.mp4 · 0:04" (id: thumb_image_view_parent)
+[14] Button "loopa-172532.mp4 · 0:04"
+[15] Text "loopa-172532.mp4 · 0:04" (id: thumb_image_view_parent)
+[16] Button "loopa-172331.mp4 · 0:04"
+[17] Text "loopa-172331.mp4 · 0:04" (id: thumb_image_view_parent)
+[18] Button "loopa-172131.mp4 · 0:04"
+[19] Text "loopa-172131.mp4 · 0:04" (id: thumb_image_view_parent)
+[20] Button "Selected Video 1 Created November 1, 7:19 PM" (id: thumbnail_row_item)
+[21] Button (id: thumbnail_image)
+[22] Text "0:08" (id: duration_text_view)
+[23] Button (id: icon_view)
+[24] Button "Edit with AI" (id: secondary_footer_button)
+[25] Button "Next" (id: multi_select_next_button)
+(screen has a scrollable list; scroll to see more)

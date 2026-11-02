@@ -1,0 +1,45 @@
+# com.zhiliaoapp.musically/com.ss.android.ugc.aweme.splash.SplashActivity secure=False camera=False 2026-11-01T19:33:07
+App: com.zhiliaoapp.musically · Screen: SplashActivity
+[1] Button (id: f4u)
+[2] Image "Search" (id: mj3)
+[3] Text "Search for effects" (id: tv_search)
+[4] Button "Checkmark" (id: lxn)
+[5] Button "Block" (id: l5v)
+[6] List (id: yc9) (scrollable)
+[7] Button "Trending" (selected)
+[8] Text "Trending" (id: n6o) (selected)
+[9] Button "Intro&Outro"
+[10] Text "Intro&Outro" (id: n6o)
+[11] Button "Basic"
+[12] Text "Basic" (id: n6o)
+[13] Button "Vibe"
+[14] Text "Vibe" (id: n6o)
+[15] List (id: viewpager) (scrollable)
+[16] List (id: u8l) (scrollable)
+[17] Text "High Quality" (id: lq_)
+[18] Text "bluegrain" (id: lq_)
+[19] Text "stars" (id: lq_)
+[20] Text "Retro Scarlet ✧" (id: lq_)
+[21] Text "burning" (id: lq_)
+[22] Text "Overdramatic Editing" (id: lq_)
+[23] Text "Love Spotlight" (id: lq_)
+[24] Text "Love Window" (id: lq_)
+[25] Text "00:00 · / · 00:08" (id: tv_time_container)
+[26] Text "00:00 · / · 00:08" (id: obd)
+[27] Button "Play video" (id: m5a)
+[28] Button (id: m5c) (disabled)
+[29] Button (id: m5b) (disabled)
+[30] Button (id: m59)
+[31] Text "Video sound off" (id: j38)
+[32] Text "Video sound off" (id: opz)
+[33] Button (id: xrj)
+[34] Image "@2131824674" (id: lu6)
+[35] List (id: tyu) (scrollable)
+[36] Button "Edit"
+[37] Button "Sound"
+[38] Button "Text"
+[39] Button "Effects"
+[40] Button "Magic"
+[41] Button "Captions"
+[42] Button (id: fz2)
+(screen has a scrollable list; scroll to see more)

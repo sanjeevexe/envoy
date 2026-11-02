@@ -1,0 +1,18 @@
+# com.zhiliaoapp.musically/com.ss.android.ugc.aweme.choosemusic.activity.ChooseMusicActivity secure=False camera=False 2026-11-01T19:30:17
+App: com.zhiliaoapp.musically · Screen: ChooseMusicActivity
+[1] Button (id: vm1)
+[2] Button "Sounds · Down" (id: obe)
+[3] Button "Current sound · Cavern Below the House" (id: e1u)
+[4] Button "Play" (id: uwr)
+[5] Text "Current sound · Cavern Below the House" (id: vw4)
+[6] Button "Cut" (id: me1)
+[7] Button "Add to Favorites" (id: mdz)
+[8] Button "Delete" (id: me2)
+[9] Button (id: a4)
+[10] Button "Search" (id: bs)
+[11] EditText "Search: Golden Hour" (id: hwf)
+[12] Button "Close" (id: m1q)
+[13] Button "Adjust" (id: by)
+[14] List (scrollable)
+[15] List (scrollable)
+(screen has a scrollable list; scroll to see more)

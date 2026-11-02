@@ -4,8 +4,8 @@ The video's climax (T1c, `prompts/phone-layer-plan.md` §5 "showcase"). One clip
 5) to Instagram, TikTok and YouTube Shorts. Each post uses a feature that the website and Muse's connectors don't have,
 and each is a routine Envoy learned, which an agent calls as a tool (agent-door's routine tools).
 
-Status, Nov 1: prepared, not yet run on the phone. Which features work on the test accounts is pre-check P3 (below). The
-user picks the showcase from that report.
+Status, Nov 1: pre-check P3 done by hand on the Pixel (`eval/results/showcase/p3.md`, which has the details, the final
+buttons and the recommendation). The user picks the showcase from it.
 
 ## Kept honest on purpose
 
@@ -25,15 +25,15 @@ Sources: `prompts/app-only-research.md`.
 
 | App | Feature | Why it's app-only | On the test account |
 | --- | --- | --- | --- |
-| Instagram | A song from the music library on a Reel | The computer flow has no audio step; the API takes only original audio | not checked yet |
-| Instagram | A poll sticker on a Story | The website can't post Stories; the API rejects stickers | not checked yet |
-| TikTok | A sound from the library | The official FAQ starts "In the TikTok app" (web sound support: sources conflict) | not checked yet |
-| TikTok | An effect | App only | not checked yet |
-| TikTok | Voiceover | App only | not checked yet |
-| TikTok | Duet | App only | not checked yet |
-| YouTube Shorts | A sound from the library | Android and iPhone only | not checked yet |
-| YouTube Shorts | Green screen | Android and iPhone only | not checked yet |
-| YouTube Shorts | Remix | Android and iPhone only | not checked yet |
+| Instagram | A song from the music library on a Reel | The computer flow has no audio step; the API takes only original audio | **works** |
+| Instagram | A poll sticker on a Story | The website can't post Stories; the API rejects stickers | **works** ("Multi-option Poll Sticker") |
+| TikTok | A sound from the library | The official FAQ starts "In the TikTok app" (web sound support: sources conflict) | **works**; search results have no accessibility nodes (one point tap) |
+| TikTok | An effect | App only | **works** (Edit › Effects) |
+| TikTok | Voiceover | App only | found; records the room's microphone |
+| TikTok | Duet | App only | found; record-only (films the room) |
+| YouTube Shorts | A sound from the library | Android and iPhone only | **works** up to "Create channel" (the account has none yet) |
+| YouTube Shorts | Green screen | Android and iPhone only | found; record-only (films the room) |
+| YouTube Shorts | Remix | Android and iPhone only | **works** as "Use this sound" + a gallery clip |
 
 ## How it's run
 

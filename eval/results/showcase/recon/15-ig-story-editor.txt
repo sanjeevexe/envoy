@@ -1,0 +1,16 @@
+# com.instagram.android/com.instagram.android.activity.MainTabActivity secure=False camera=False 2026-11-01T19:24:22
+App: com.instagram.android · Screen: MainTabActivity
+[1] Button "@2131977915" (id: quick_capture_root_container)
+[2] Button "Text" (id: add_text_button)
+[3] Button "Stickers" (id: asset_button)
+[4] Button "Music" (id: music_button)
+[5] Button "Effects" (id: camera_ar_effect_button)
+[6] Button "Mute volume"
+[7] Button "Show more tools" (id: overflow_button)
+[8] Button "Cancel" (id: cancel_button)
+[9] Button "Add a caption…" (id: add_caption_textview)
+[10] Button (id: story_share_controls_action_bar)
+[11] Button "Your story" (id: your_story_share_shortcut_button)
+[12] Button "Close Friends" (id: close_friends_story_share_shortcut_button)
+[13] Button "Share to" (id: story_share_recipient_picker_button)
+[14] Text "@2131977915" (id: post_capture_texture_view_container)

@@ -1,0 +1,76 @@
+# com.zhiliaoapp.musically/com.ss.android.ugc.aweme.splash.SplashActivity secure=False camera=True 2026-11-01T19:29:08
+App: com.zhiliaoapp.musically · Screen: SplashActivity
+[1] Button "@2131823469" (id: tyw)
+[2] Button (id: upload_hot_area)
+[3] List (scrollable)
+[4] Button (id: e1n)
+[5] Button "Add sound · Music" (id: e1x)
+[6] Button "@2131823557" (id: l5m)
+[7] Text "60s · 15s · PHOTO" (id: x8f)
+[8] Text "60s · 15s · PHOTO" (id: x8b)
+[9] Text "60s · 15s · PHOTO" (id: f2g)
+[10] Text "60s" (id: yb2)
+[11] Text "15s" (id: yb2)
+[12] Text "PHOTO" (id: yb2)
+[13] Text "TEXT" (id: yb2)
+[14] Text "CAMERA · CREATE" (id: cn5)
+[15] Text "CAMERA · CREATE" (id: yah)
+[16] Text "CAMERA · CREATE" (id: f2g)
+[17] Text "CAMERA" (id: yb2)
+[18] Text "CREATE" (id: yb2)
+[19] Button "Flip"
+[20] Button "Flash"
+[21] Button "AI Cast"
+[22] Button "Timer"
+[23] Button "Layout"
+[24] Button "Ratio"
+[25] Button "Dropdown menu" (id: znv)
+[26] Button "Close" (id: bs2)
+[27] Button "Recents · Down" (id: dvu)
+[28] Text "All" (selected)
+[29] Button "Videos"
+[30] Button "Photos"
+[31] Button "Live Photos"
+[32] List (id: viewpager_choose_media) (scrollable)
+[33] List (id: jnn) (scrollable)
+[34] Button "00:08"
+[35] Button (id: ioj)
+[36] Button "1" (id: l3z)
+[37] Button "00:08"
+[38] Button (id: ioj)
+[39] Button (id: l3z)
+[40] Button "00:04"
+[41] Button (id: ioj)
+[42] Button (id: l3z)
+[43] Button "00:04"
+[44] Button (id: ioj)
+[45] Button (id: l3z)
+[46] Button "00:04"
+[47] Button (id: ioj)
+[48] Button (id: l3z)
+[49] Button "00:04"
+[50] Button (id: ioj)
+[51] Button (id: l3z)
+[52] Button "00:04"
+[53] Button (id: ioj)
+[54] Button (id: l3z)
+[55] Button "00:04"
+[56] Button (id: ioj)
+[57] Button (id: l3z)
+[58] Button "00:04"
+[59] Button (id: ioj)
+[60] Button (id: l3z)
+[61] Button (id: ioj)
+[62] Button (id: l3z)
+[63] Button (id: ioj)
+[64] Button (id: l3z)
+[65] Button (id: ioj)
+[66] Button (id: l3z)
+[67] Button (id: video_image_mixed_bottom_view_root)
+[68] Button "Use layout" (id: pbj)
+[69] CheckBox (id: n6l) (off)
+[70] Button "00:08" (id: v0z)
+[71] Button (id: fza)
+[72] Button "AutoCut" (id: biq)
+[73] Button "Next (1)" (id: y3s)
+(screen has a scrollable list; scroll to see more)

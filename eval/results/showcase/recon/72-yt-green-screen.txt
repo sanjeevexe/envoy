@@ -1,0 +1,17 @@
+# com.google.android.youtube/com.google.android.apps.youtube.app.extensions.creationmodes.main.CreationModesActivity secure=False camera=False 2026-11-01T19:41:57
+App: com.google.android.youtube · Screen: CreationModesActivity
+[1] Button (id: touch_outside)
+[2] Text "Green screen" (id: bottom_sheet_title)
+[3] Button "DONE" (id: bottom_sheet_done_text)
+[4] List (id: asset_list_container) (scrollable)
+[5] Button "Remove green screen" (id: green_screen_media_item_thumbnail_container)
+[6] Button "showcase-test.mp4" (id: green_screen_media_item_thumbnail_container)
+[7] Text "0:08" (id: green_screen_media_thumbnail_container)
+[8] Button "pier.mp4" (id: green_screen_media_item_thumbnail_container)
+[9] Text "0:08" (id: green_screen_media_thumbnail_container)
+[10] Button "loopa-172734.mp4" (id: green_screen_media_item_thumbnail_container)
+[11] Text "0:04" (id: green_screen_media_thumbnail_container)
+[12] Button "loopa-172532.mp4" (id: green_screen_media_item_thumbnail_container)
+[13] Text "0:04" (id: green_screen_media_thumbnail_container)
+[14] Button "loopa-172331.mp4" (id: green_screen_media_item_thumbnail_container)
+(screen has a scrollable list; scroll to see more)

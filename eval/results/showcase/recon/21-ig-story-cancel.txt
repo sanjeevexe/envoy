@@ -1,0 +1,6 @@
+# com.instagram.android/com.instagram.android.activity.MainTabActivity secure=False camera=False 2026-11-01T19:26:00
+App: com.instagram.android · Screen: MainTabActivity
+[1] Text "Discard edits? · If you go back now, you'll lose all the edits you've made." (id: igds_alert_dialog_text_container)
+[2] Button "Discard" (id: igds_alert_dialog_primary_button)
+[3] Button "Save draft" (id: igds_alert_dialog_secondary_button)
+[4] Button "Keep editing" (id: igds_alert_dialog_cancel_button)

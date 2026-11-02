@@ -1,0 +1,9 @@
+# com.zhiliaoapp.musically/com.ss.android.ugc.aweme.choosemusic.activity.ChooseMusicActivity secure=False camera=False 2026-11-01T19:30:01
+App: com.zhiliaoapp.musically · Screen: ChooseMusicActivity
+(the on-screen keyboard is open over the bottom of the screen)
+[1] Button "Close" (id: zmf)
+[2] Button "Sounds · Down" (id: obe)
+[3] Button (id: a4)
+[4] Button "Search" (id: bs)
+[5] EditText "Search" (id: hwf) (empty, focused)
+[6] Button "Search" (id: tv_search_action)

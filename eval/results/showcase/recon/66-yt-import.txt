@@ -1,0 +1,27 @@
+# com.google.android.youtube/com.google.android.apps.youtube.app.extensions.creationmodes.main.CreationModesActivity secure=False camera=False 2026-11-01T19:40:23
+App: com.google.android.youtube · Screen: CreationModesActivity
+[1] Button (id: touch_outside)
+[2] Button "Close" (id: gallery_header_close_button)
+[3] Button "Create video"
+[4] Text "Create from gallery" (id: gallery_header_create_title)
+[5] Button "Recents" (id: select_album_button)
+[6] List (id: media_grid_recycler_view) (scrollable)
+[7] Button "showcase-test.mp4 · 0:08"
+[8] Text "showcase-test.mp4 · 0:08" (id: thumb_image_view_parent)
+[9] Button "pier.mp4 · 0:08"
+[10] Text "pier.mp4 · 0:08" (id: thumb_image_view_parent)
+[11] Button "loopa-172734.mp4 · 0:04"
+[12] Text "loopa-172734.mp4 · 0:04" (id: thumb_image_view_parent)
+[13] Button "loopa-172532.mp4 · 0:04"
+[14] Text "loopa-172532.mp4 · 0:04" (id: thumb_image_view_parent)
+[15] Button "loopa-172331.mp4 · 0:04"
+[16] Text "loopa-172331.mp4 · 0:04" (id: thumb_image_view_parent)
+[17] Button "loopa-172131.mp4 · 0:04"
+[18] Text "loopa-172131.mp4 · 0:04" (id: thumb_image_view_parent)
+[19] Button "loopa-171828.mp4"
+[20] Text "loopa-171828.mp4" (id: thumb_image_view_parent)
+[21] Button "loopa-140829.mp4"
+[22] Text "loopa-140829.mp4" (id: thumb_image_view_parent)
+[23] Button "loopa-140711.mp4"
+[24] Text "loopa-140711.mp4" (id: thumb_image_view_parent)
+(screen has a scrollable list; scroll to see more)

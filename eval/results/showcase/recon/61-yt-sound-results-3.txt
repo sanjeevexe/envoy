@@ -1,0 +1,40 @@
+# com.google.android.youtube/com.google.android.apps.youtube.app.extensions.creationmodes.main.CreationModesActivity secure=False camera=True 2026-11-01T19:39:12
+App: com.google.android.youtube · Screen: CreationModesActivity
+(the on-screen keyboard is open over the bottom of the screen)
+[1] Button "Flip camera" (id: shorts_flip_button)
+[2] Button "Timer controls" (id: shorts_timer_button)
+[3] Button "Record up to 15 seconds. Toggle to record up to 180 seconds. · 15s" (id: shorts_toolbar_duration_button)
+[4] Button "Effects" (id: effect_picker_entry_button)
+[5] Button "Speed controls" (id: shorts_speed_button)
+[6] Button "Close camera" (id: shorts_camera_close_button)
+[7] Button "Add sound" (id: shorts_camera_music_button)
+[8] Button "Create with AI" (id: shorts_camera_ai_playground_top_end_button)
+[9] Text "Camera" (id: shorts_camera_canvas_accessibility_view)
+[10] Button "Sounds" (id: reel_pivot_root_view)
+[11] Button "Close" (id: music_picker_leading_button)
+[12] Button "Create an original track"
+[13] Button "Search" (id: music_picker_search_box)
+[14] Button "For you" (id: tabs_bar_text_tab_view) (selected)
+[15] Button "Saved" (id: tabs_bar_text_tab_view)
+[16] List (id: reel_browse_tabs_view_pager) (scrollable)
+[17] List (scrollable)
+[18] Button "Ramalama (Bang Bang), Róisín Murphy, Matthew Herbert, 1 minute, 430K Shorts, Play a preview"
+[19] Button "Add to Favorites"
+[20] Button "RELEASED, The hottest new songs this week, served up fresh every Friday."
+[21] Text "Create music"
+[22] List (scrollable)
+[23] Button "Create a slowed vaporwave track about playing old video games"
+[24] Button "Create a psy-trance track about ignoring all the haters"
+[25] Button "Sounds" (id: music_search_root)
+[26] Button "Close" (id: music_search_exit)
+[27] Button "Create an original track"
+[28] EditText "Search: Golden Hour" (id: search_input_text)
+[29] Button "Clear search" (id: cancel_icon)
+[30] Button "CANCEL" (id: search_cancel)
+[31] Button "Trigger a new search with Golden Hour"
+[32] Button "Fill the search box with Golden Hour"
+[33] Button "Trigger a new search with golden hour"
+[34] Button "Fill the search box with golden hour"
+[35] Button "Trigger a new search with Golden Hours (2004 Remaster)"
+[36] Button "Fill the search box with Golden Hours (2004 Remaster)"
+(screen has a scrollable list; scroll to see more)

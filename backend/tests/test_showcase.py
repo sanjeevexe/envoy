@@ -104,4 +104,6 @@ def test_no_agent_run_on_youtube_or_an_instagram_story_while_the_rule_misses_the
     assert (rs.rule_gap(rs.APPS["youtube"], "Post it as a Short") is None) is upload_caught
     assert (rs.rule_gap(rs.APPS["instagram"], "Put a poll sticker on my story") is None) is story_caught
     assert rs.rule_gap(rs.APPS["instagram"], "Post this reel with a song") is None
-    assert rs.rule_gap(rs.APPS["tiktok"], "Post it with a sound") is None  # TikTok's Post is a whole "Post": caught
+    # TikTok's Post is a whole "Post" (caught), but its editor's one-tap "Your Story" (id ts6) isn't, P3 found
+    from policy.risk import _PUBLISH as P
+    assert (rs.rule_gap(rs.APPS["tiktok"], "Post it with a sound") is None) is bool(P.match("Your Story"))

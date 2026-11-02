@@ -1,0 +1,42 @@
+# com.google.android.youtube/com.google.android.apps.youtube.app.extensions.creationmodes.main.CreationModesActivity secure=False camera=True 2026-11-01T19:38:58
+App: com.google.android.youtube · Screen: CreationModesActivity
+(the on-screen keyboard is open over the bottom of the screen)
+[1] Button "Flip camera" (id: shorts_flip_button)
+[2] Button "Timer controls" (id: shorts_timer_button)
+[3] Button "Record up to 15 seconds. Toggle to record up to 180 seconds. · 15s" (id: shorts_toolbar_duration_button)
+[4] Button "Effects" (id: effect_picker_entry_button)
+[5] Button "Speed controls" (id: shorts_speed_button)
+[6] Button "Close camera" (id: shorts_camera_close_button)
+[7] Button "Add sound" (id: shorts_camera_music_button)
+[8] Button "Create with AI" (id: shorts_camera_ai_playground_top_end_button)
+[9] Text "Camera" (id: shorts_camera_canvas_accessibility_view)
+[10] Button "Sounds" (id: reel_pivot_root_view)
+[11] Button "Close" (id: music_picker_leading_button)
+[12] Button "Create an original track"
+[13] Button "Search" (id: music_picker_search_box)
+[14] Button "For you" (id: tabs_bar_text_tab_view) (selected)
+[15] Button "Saved" (id: tabs_bar_text_tab_view)
+[16] List (id: reel_browse_tabs_view_pager) (scrollable)
+[17] List (scrollable)
+[18] Button "Oh Klahoma, Jack Stauber, 1 minute, 268K Shorts, Play a preview"
+[19] Button "Add to Favorites"
+[20] Button "Spooky, Scary Skeletons (Undead Tombstone Remix), Andrew Gold, 1 minute, 30 seconds, 1M Shorts, Play a preview"
+[21] Button "Add to Favorites"
+[22] Button "POKITO, Daddy Yankee, Diljit Dosanjh, 1 minute, 2.4K Shorts, Play a preview"
+[23] Text "Create music"
+[24] List (scrollable)
+[25] Button "Create a slowed vaporwave track about playing old video games"
+[26] Button "Create a psy-trance track about ignoring all the haters"
+[27] Button "Sounds" (id: music_search_root)
+[28] Button "Close" (id: music_search_exit)
+[29] Button "Create an original track"
+[30] EditText "Search: Golden Hour" (id: search_input_text)
+[31] Button "Clear search" (id: cancel_icon)
+[32] Button "CANCEL" (id: search_cancel)
+[33] Button "Trigger a new search with Golden Hour"
+[34] Button "Fill the search box with Golden Hour"
+[35] Button "Trigger a new search with golden hour"
+[36] Button "Fill the search box with golden hour"
+[37] Button "Trigger a new search with Golden Hours (2004 Remaster)"
+[38] Button "Fill the search box with Golden Hours (2004 Remaster)"
+(screen has a scrollable list; scroll to see more)

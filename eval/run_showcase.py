@@ -97,12 +97,23 @@ def publishes(label: str | None, resource_id: str | None) -> bool:
     return bool(PUBLISH_LABEL.fullmatch((label or "").strip())) or (resource_id or "").split("/")[-1] in PUBLISH_IDS
 
 
-def safe_tap(dev: Any, query: str, nth: int, not_final: bool) -> None:
+# A feed video's share icon (TikTok: "Share video. 4,682 shares"): it opens the share sheet, where Duet is. Allowed only
+# with --opens-sheet, said on purpose, and only on a feed (no Post or Upload on screen).
+SHARE_SHEET = re.compile(r"^share video\b", re.I)
+
+
+def safe_tap(dev: Any, query: str, nth: int, not_final: bool, opens_sheet: bool = False) -> None:
     """run_creator's tap (the risk rules, publishing words need --not-final), after this script's own refusals: a
     button that publishes (TikTok's Post, YouTube's Upload Short, Instagram's "Your story", which the shared word list
     doesn't name) and anything social are never tapped here, --not-final or not."""
     state, _ = observe(dev)
     el = find(state, query, nth)
+    if opens_sheet:
+        on_feed = not any(publishes(e.label, e.resource_id) or publishes(e.desc, None) for e in state.numbered)
+        if not (any(SHARE_SHEET.match((x or "").strip()) for x in (el.label, el.desc)) and on_feed):
+            sys.exit(f"REFUSED: --opens-sheet is only for a feed video's 'Share video…' icon, not #{el.number} {el.label!r}")
+        tap(dev, query, nth, True)
+        return
     for x in (el.label, el.desc):
         if publishes(x, el.resource_id) or SOCIAL.match((x or "").strip()):
             sys.exit(f"REFUSED: #{el.number} {x!r} ({el.resource_id}) publishes or is social: stage 0 stops before it. Nothing was tapped.")
@@ -119,23 +130,31 @@ def asked_at(approval: dict[str, Any]) -> str:
     return m.group(1) if m else (approval.get("description") or "?")
 
 
+# The publishing buttons a run passes and the risk rule must catch first (the coordinator, Nov 1), as P3 recorded them
+# (eval/results/showcase/p3.md): YouTube's upload (not reached yet: the label it will most likely have), Instagram's
+# Story "Your story" (by label: the coordinator's condition, though its id is caught), TikTok's editor "Your Story" (one
+# tap posts a TikTok Story, on the screen every TikTok flow passes).
+GATED = {"com.google.android.youtube": ("Upload Short", ""), "com.zhiliaoapp.musically": ("Your Story", "com.zhiliaoapp.musically:id/ts6")}
+
+
 def rule_gap(pkg: str, goal: str) -> str | None:
-    """Why an agent run must wait (the coordinator, Nov 1): until policy/risk.py catches the app's publishing button by
-    rule, a run would have only the model's label between it and a public post. Checked against the rule itself, so it
+    """Why an agent run must wait: until policy/risk.py catches the app's publishing button by rule, a run would have
+    only the model's label between it and a public post. Checked against the rule itself, on a one-button screen, so it
     lifts the moment the rule change lands."""
-    label = {"com.google.android.youtube": "Upload Short"}.get(pkg) or ("Your story" if pkg == APPS["instagram"] and
-                                                                         re.search(r"\bstor(y|ies)\b", goal, re.I) else None)
+    label, rid = GATED.get(pkg) or (("Your story", "") if pkg == APPS["instagram"] and re.search(r"\bstor(y|ies)\b", goal, re.I)
+                                    else (None, ""))
     if label is None:
         return None
     xml = ('<?xml version="1.0" encoding="UTF-8"?><hierarchy rotation="0"><node index="0" text="" resource-id="" '
            f'class="android.widget.FrameLayout" package="{pkg}" content-desc="" clickable="false" enabled="true" bounds="[0,0][1080,2340]">'
-           f'<node index="0" text="{label}" resource-id="" class="android.widget.Button" package="{pkg}" content-desc="" '
+           f'<node index="0" text="{label}" resource-id="{rid}" class="android.widget.Button" package="{pkg}" content-desc="" '
            'clickable="true" enabled="true" bounds="[700,2100][1040,2220]" /></node></hierarchy>')
     state = build_state(xml, pkg, "", *PIXEL5)
     button = next((e for e in state.numbered if e.label == label), None)
     if button is not None and classify(Action(kind="tap", element=button.number), state, None).irreversible:
         return None
-    return f"{label!r} isn't irreversible by rule yet (policy/risk.py): no agent run on {NAMES[pkg]}{' Stories' if 'story' in label.lower() else ''} until the coordinator's rule change lands"
+    where = f"{NAMES[pkg]}{' Stories' if pkg == APPS['instagram'] else ''}"
+    return f"{label!r} isn't irreversible by rule yet (policy/risk.py): no agent run on {where} until the coordinator's rule change lands"
 
 
 def app_of(name: str) -> str:
@@ -165,26 +184,29 @@ def facts(dev: Any) -> dict[str, Any]:
             "time": datetime.now().isoformat(timespec="seconds")}
 
 
-def save_look(dev: Any, label: str) -> Path:
+def save_look(dev: Any, label: str, private: bool = False) -> Path:
     """NN-label.xml (masked) and NN-label.txt (the agent's view) in the repo; NN-label.png in SHOTS, never on a secure
-    screen or while a camera viewfinder is open."""
-    RECON.mkdir(parents=True, exist_ok=True)
-    n = 1 + max((int(p.name[:2]) for p in RECON.glob("[0-9][0-9]-*")), default=0)
+    screen or while a camera viewfinder is open. `private` (a feed: other people's names and captions): all three go
+    to SHOTS, nothing to the repo."""
+    where = SHOTS if private else RECON
+    where.mkdir(parents=True, exist_ok=True)
+    n = 1 + max((int(p.name[:2]) for d in (RECON, SHOTS) if d.exists() for p in d.glob("[0-9][0-9]-*")), default=0)
     stem = f"{n:02d}-{re.sub(r'[^a-z0-9]+', '-', label.lower()).strip('-')}"
     state, xml = observe(dev)
-    (RECON / f"{stem}.xml").write_text(xml)
+    (where / f"{stem}.xml").write_text(xml)
     cam = camera_on(state)
     head = (f"# {state.package}/{state.activity} secure={state.secure} camera={cam} "
             f"{datetime.now().isoformat(timespec='seconds')}\n")
-    (RECON / f"{stem}.txt").write_text(head + state.compact + "\n")
+    (where / f"{stem}.txt").write_text(head + state.compact + "\n")
     print(head + state.compact)
     shot = ""
     if not state.secure and not cam:
         SHOTS.mkdir(parents=True, exist_ok=True)
         (SHOTS / f"{stem}.png").write_bytes(dev.screencap_png())
         shot = f"; screenshot {SHOTS / (stem + '.png')} (outside the repo: `keep {stem}` after checking it)"
-    print(f"\nsaved {(RECON / stem).relative_to(REPO)}.xml/.txt{shot}{' (camera open: no screenshot)' if cam else ''}")
-    return RECON / stem
+    saved = where / stem if private else (RECON / stem).relative_to(REPO)
+    print(f"\nsaved {saved}.xml/.txt{shot}{' (camera open: no screenshot)' if cam else ''}{' (private: not in the repo)' if private else ''}")
+    return where / stem
 
 
 def keep(stem: str) -> int:
@@ -203,6 +225,23 @@ def swipe(dev: Any, direction: str) -> None:
     dx, dy = {"up": (0, -h // 3), "down": (0, h // 3), "left": (-w // 3, 0), "right": (w // 3, 0)}[direction]
     got = dev._act_sync(Action(kind="swipe", x=cx, y=cy, x2=cx + dx, y2=cy + dy))
     print(f"swiped {direction}: {'ok' if got.ok else got.error}")
+
+
+def tap_at(dev: Any, x: int, y: int) -> None:
+    """A point, for what an app draws without an accessibility tree (TikTok's sound search results). Whatever element
+    is under it gets safe_tap's refusals and the risk rule's verdict first."""
+    state, _ = observe(dev)
+    action = Action(kind="tap_point", x=x, y=y)
+    v = classify(action, state, None)
+    under = [e for e in state.numbered if e.bounds[0] <= x <= e.bounds[2] and e.bounds[1] <= y <= e.bounds[3]]
+    for e in under:
+        for w in (e.label, e.desc):
+            if publishes(w, e.resource_id) or SOCIAL.match((w or "").strip()):
+                sys.exit(f"REFUSED: ({x}, {y}) is on #{e.number} {w!r}: publishes or is social. Nothing was tapped.")
+    if v.irreversible:
+        sys.exit(f"REFUSED: ({x}, {y}) is irreversible by rule ({'; '.join(v.reasons)}). Nothing was tapped.")
+    got = dev._act_sync(action)
+    print(f"tapped ({x}, {y}) on {[e.label or e.resource_id for e in under][-1:] or 'nothing in the tree'}: {'ok' if got.ok else got.error}")
 
 
 def open_app(dev: Any, pkg: str, fresh: bool) -> None:
@@ -233,6 +272,14 @@ def leave(dev: Any, pkg: str, max_steps: int = 12, wait_s: float = 1.3) -> list[
         answer = next((e for e in state.numbered if e.kind == "Button" and LEAVE_OK.match((e.label or "").strip())
                        and not NEVER.search(e.label or "") and not classify(Action(kind="tap", element=e.number), state, None).irreversible),
                       None)
+        # TikTok's "Delete · Discard" / "Drafts · Save draft": its discard says Delete, which the rule flags. Force-stopping
+        # the app leaves the unsaved edit the same way, with nothing tapped.
+        flagged = any(e.kind == "Button" and LEAVE_OK.match((e.label or "").split(" · ")[-1].strip())
+                      and classify(Action(kind="tap", element=e.number), state, None).irreversible for e in state.numbered)
+        if flagged:
+            dev.adb.shell(f"am force-stop {pkg}")
+            done.append("force-stopped (its discard is flagged irreversible by rule)")
+            return done
         dialog = len(state.numbered) < 12  # a dialog's few buttons, not a screen that merely has a Cancel
         if answer is not None and dialog:
             dev._act_sync(Action(kind="tap", element=answer.number))
@@ -486,11 +533,19 @@ def main() -> int:
     p.add_argument("--fresh", action="store_true")
     p = sub.add_parser("look")
     p.add_argument("label")
+    p.add_argument("--private", action="store_true", help="a feed or anything with other people's content: nothing goes in the repo")
     p = sub.add_parser("tap")
     p.add_argument("query")
     p.add_argument("--nth", type=int, default=0)
     p.add_argument("--not-final", action="store_true", help="the target only opens a screen, though it has a publishing word")
     p.add_argument("--look", default=None, help="save the screen after the tap under this label")
+    p.add_argument("--private", action="store_true", help="with --look: nothing goes in the repo")
+    p.add_argument("--opens-sheet", action="store_true", help="a feed video's 'Share video…' icon (opens the share sheet)")
+    p = sub.add_parser("tap-at")
+    p.add_argument("x", type=int)
+    p.add_argument("y", type=int)
+    p.add_argument("--look", default=None)
+    p.add_argument("--private", action="store_true")
     p = sub.add_parser("type")
     p.add_argument("query")
     p.add_argument("text")
@@ -554,12 +609,17 @@ def main() -> int:
     elif args.cmd == "open":
         open_app(dev, app_of(args.app), args.fresh)
     elif args.cmd == "look":
-        save_look(dev, args.label)
+        save_look(dev, args.label, args.private)
     elif args.cmd == "tap":
-        safe_tap(dev, args.query, args.nth, args.not_final)
+        safe_tap(dev, args.query, args.nth, args.not_final, args.opens_sheet)
         if args.look:
             time.sleep(1.5)
-            save_look(dev, args.look)
+            save_look(dev, args.look, args.private)
+    elif args.cmd == "tap-at":
+        tap_at(dev, args.x, args.y)
+        if args.look:
+            time.sleep(1.5)
+            save_look(dev, args.look, args.private)
     elif args.cmd == "type":
         type_into(dev, args.query, args.text, args.nth)
     elif args.cmd == "swipe":

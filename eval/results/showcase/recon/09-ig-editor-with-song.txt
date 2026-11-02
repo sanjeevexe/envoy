@@ -1,0 +1,23 @@
+# com.instagram.android/com.instagram.android.activity.MainTabActivity secure=False camera=False 2026-11-01T19:22:24
+App: com.instagram.android · Screen: MainTabActivity
+[1] Button "Reel preview playing · @2131977915 · Green Screen" (id: quick_capture_root_container)
+[2] Button "Double tap for tools that edit your video clips." (id: clips_left_action_button)
+[3] Text "Edit video"
+[4] Button "Next" (id: clips_right_action_button)
+[5] Button "Add audio" (id: clips_action_bar_add_music_button)
+[6] Text "Audio"
+[7] Button "Add text" (id: clips_action_bar_add_text_button)
+[8] Text "Text"
+[9] Button "Voiceover" (id: clips_action_bar_voiceover_button)
+[10] Button "Captions" (id: clips_action_bar_captions_button)
+[11] Button "Add sticker" (id: clips_action_bar_add_sticker_button)
+[12] Text "Stickers"
+[13] Button "Cancel" (id: cancel_button)
+[14] Text "Reel preview playing" (id: post_capture_interactive_contents_container)
+[15] Text "Reel preview playing" (id: post_capture_interactive_drawable_container_holder)
+[16] Text "@2131977915" (id: post_capture_texture_view_container)
+[17] Button "Add audio button"
+[18] Text "Touch up"
+[19] Text "Change video speed, currently 1.0x"
+[20] Text "Enable effects button"
+[21] Button "Expand tools menu, button"

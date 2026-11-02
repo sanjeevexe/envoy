@@ -1,0 +1,32 @@
+# com.instagram.android/com.instagram.modal.ModalActivity secure=False camera=False 2026-11-01T19:22:58
+App: com.instagram.android · Screen: ModalActivity
+[1] List (id: scroll_view) (scrollable)
+[2] Button "Add location · People you share this content with can see the location you tag and view this content on the map. · Add …" (id: content_view)
+[3] Button "Edit cover"
+[4] EditText "Write a caption and add hashtags…" (id: caption_input_text_view) (empty)
+[5] Button "Hashtags"
+[6] Text "Hashtags" (id: button_layout)
+[7] Button "Poll"
+[8] Text "Poll" (id: button_layout)
+[9] Button "Prompt"
+[10] Text "Prompt" (id: button_layout)
+[11] Button "Tag people"
+[12] Button "Add location"
+[13] Text "This label is required for realistic photos and videos made with AI. People will see it on your content. Learn more"
+[14] Button "Learn more"
+[15] Toggle (off)
+[16] Button "Audience · Everyone"
+[17] Button "Facebook"
+[18] Toggle (off)
+[19] Text "Your story"
+[20] Text "New"
+[21] Toggle (off)
+[22] Button "More options"
+[23] Button (id: share_button_container)
+[24] Button "Save draft" (id: save_draft_button)
+[25] Button "Share" (id: share_button)
+[26] Button (id: action_bar)
+[27] Button (id: action_bar_new_title_container)
+[28] Button "Back" (id: action_bar_button_back)
+[29] Button "New reel" (id: action_bar_title)
+(screen has a scrollable list; scroll to see more)

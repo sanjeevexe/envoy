@@ -1,0 +1,9 @@
+# com.instagram.android/com.instagram.android.activity.MainTabActivity secure=False camera=False 2026-11-01T19:20:25
+App: com.instagram.android · Screen: MainTabActivity
+[1] Text "Keep editing your draft? · If you start a new video, this draft will be saved." (id: scroll_view)
+[2] Text "Keep editing your draft? · If you start a new video, this draft will be saved." (id: dialog_view_container)
+[3] Text "Keep editing your draft? · If you start a new video, this draft will be saved." (id: panorama_dialog_headline)
+[4] Button (id: primary_button_row)
+[5] Button "Keep editing" (id: primary_button)
+[6] Button (id: auxiliary_button_row)
+[7] Button "Start new video" (id: auxiliary_button)

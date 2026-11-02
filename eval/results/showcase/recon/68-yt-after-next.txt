@@ -1,0 +1,15 @@
+# com.google.android.youtube/com.google.android.apps.youtube.app.extensions.creationmodes.main.CreationModesActivity secure=False camera=False 2026-11-01T19:40:52
+App: com.google.android.youtube · Screen: CreationModesActivity
+[1] Text "Swipe up to edit" (id: shorts_edit_above_bottom_bar_container)
+[2] Text "Swipe up to edit" (id: affordance_container)
+[3] Button "Text" (id: shorts_edit_text_button)
+[4] Button "Effects" (id: shorts_edit_effect_picker_button)
+[5] Button "Filters" (id: shorts_edit_preset_button)
+[6] Button "Stickers" (id: shorts_editor_sticker_picker_button)
+[7] Button "Captions" (id: shorts_edit_captions_button)
+[8] Button "More tools" (id: expandy_toolbar_more)
+[9] Button "Exit editor" (id: shorts_edit_back)
+[10] Button "golden hour" (id: shorts_edit_sound_button)
+[11] Button "Volume" (id: shorts_edit_outline_volume_button)
+[12] Button "Edit" (id: shorts_edit_timeline_button)
+[13] Button "Next" (id: shorts_post_bottom_button)
