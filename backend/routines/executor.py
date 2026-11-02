@@ -169,6 +169,7 @@ class _Ctx:
     repairs_run: int = 0
     started: float = 0.0
     jump_to: int | None = None  # set when the app skipped ahead to a later step's screen
+    plan: chk.OutcomePlan | None = None  # what the inputs promise, checked before the irreversible step
 
 
 class RoutineExecutor:
@@ -179,6 +180,7 @@ class RoutineExecutor:
         self.approver = approver or TerminalApprover()
         self.config = config or ExecConfig()
         self.app_notes = app_notes  # memory's AppNotes: a repair (and the fallback agent) reads the app's notes
+        self._watch: chk.OutcomeWatch | None = None  # this run's picked inputs, followed over every screen it reads
 
     def _app_notes(self, package: str) -> Any:
         if self.app_notes is None:
@@ -191,7 +193,10 @@ class RoutineExecutor:
     # ---- observing --------------------------------------------------------------------------
 
     async def _observe(self) -> ScreenState:
-        return await self.device.observe()
+        s = await self.device.observe()
+        if self._watch is not None:
+            self._watch.see(s)
+        return s
 
     async def _screenshot(self, ctx: _Ctx, name: str) -> str | None:
         if not self.config.patch_screenshots:
@@ -271,6 +276,11 @@ class RoutineExecutor:
                 s = await self._observe()
                 if s.package != routine.app:
                     await self.device.launch(routine.app)
+            ctx.plan = chk.outcome_plan(routine)
+            self._watch = chk.OutcomeWatch(ctx.plan, ctx.inputs)
+            if (why := await self._clip_problem(ctx)) is not None:  # the routine would pick another clip: stop before any step
+                trace.step({"kind": "outcome_checks", "when": "start", "problems": [why]})
+                return self._finish(ctx, "failed", f"stopped before starting (outcome check): {why}")
 
             i = 0
             while i < len(routine.steps):
@@ -354,6 +364,65 @@ class RoutineExecutor:
                           "duration_s": out.duration_s, "patches": [p.description for p in out.patches], "approvals": out.approvals})
         return out
 
+    # ---- outcome checks before the irreversible step ----------------------------------------------
+
+    async def _outcome_problems(self, ctx: _Ctx, screen: ScreenState) -> list[str]:
+        """What the inputs asked for that isn't on screen, just before the step that asks for the OK (checks.OutcomePlan):
+        a picked song never shown on the editor, a typed caption its field no longer holds, another clip than the one
+        pushed. Recorded in the trace either way, with what each check could and couldn't see."""
+        plan = ctx.plan or chk.OutcomePlan()
+        if self._watch is not None:
+            self._watch.see(screen)
+        problems = list(self._watch.problems()) if self._watch is not None else []
+        fields: dict[str, str] = {}
+        for name, loc in plan.fields:
+            value = str(ctx.inputs.get(name) or "")
+            m = locators.locate(loc, screen, ctx.inputs, threshold=locators.RELAXED, margin=0.0)
+            if not value.strip() or m.element is None or m.element.kind != "EditText":
+                fields[name] = "not on the final screen"
+                continue
+            shown = m.element.text or m.element.full_label or m.element.label
+            if not contains_value(shown, value) and hasattr(self.device, "read_field"):
+                try:
+                    shown = await self.device.read_field(m.element) or shown  # the XML dump turns emoji into ".."
+                except Exception:  # noqa: BLE001 - the tree's text stands
+                    pass
+            p = chk.field_problem(name, value, shown)
+            fields[name] = p or "held"
+            if p:
+                problems.append(p)
+        clip = await self._clip_problem(ctx)
+        if clip:
+            problems.append(clip)
+        ctx.trace.step({"kind": "outcome_checks", "when": "before the final step",
+                        "picks": dict(self._watch.state) if self._watch is not None else {}, "fields": fields,
+                        "clip": clip or ("checked" if plan.gallery and self._pushed(ctx) else "not checkable"), "problems": problems})
+        return problems
+
+    def _pushed(self, ctx: _Ctx) -> dict[str, Any] | None:
+        serial = getattr(self.device, "serial", None)
+        if not serial or not (ctx.plan and ctx.plan.gallery) or not hasattr(getattr(self.device, "adb", None), "shell"):
+            return None
+        from api.handoff import recent_push
+        return recent_push(serial)
+
+    async def _clip_problem(self, ctx: _Ctx) -> str | None:
+        """A routine that takes "the gallery's newest" posts the clip Envoy pushed only if that clip is still the newest:
+        TikTok saves its own copy of each post into DCIM/Camera (Nov 2), so the next app in a cross-post would take it."""
+        pushed = self._pushed(ctx)
+        if pushed is None:
+            return None
+        from api.handoff import newest_media
+        try:
+            newest = await asyncio.to_thread(newest_media, self.device.adb.shell, pushed.get("kind") or "video")  # type: ignore[attr-defined]
+        except Exception:  # noqa: BLE001 - unreadable: not checkable, never a stop
+            return None
+        if newest is None or newest["media_uri"] == pushed.get("media_uri"):
+            return None
+        by = f", saved by {newest['owner']}" if newest.get("owner") and newest["owner"] != "com.android.shell" else ""
+        return (f"the gallery's newest {pushed.get('kind') or 'video'} is {newest['name']} ({newest['path']}{by}), not "
+                f"{pushed.get('name')}, the clip Envoy put on the phone: the routine takes the newest, so it would post the wrong one")
+
     # ---- one step ---------------------------------------------------------------------------
 
     async def _run_step(self, ctx: _Ctx, idx: int, sr: StepRun) -> Literal["next", "stop", "finished"]:
@@ -388,6 +457,11 @@ class RoutineExecutor:
                 ready = rep
             else:
                 return await self._escalate(ctx, idx, sr, ready.why if rep == "gave_up" else rep)
+
+        if step.risk == "irreversible" and (problems := await self._outcome_problems(ctx, ready.screen)):
+            sr.status, sr.detail = "failed", "stopped before the final step (outcome check): " + "; ".join(problems)
+            ctx.out.status = "failed"
+            return "stop"
 
         # Act through the policy gate.
         before = ready.screen

@@ -680,6 +680,8 @@ def main() -> int:
     p.add_argument("key", choices=["back", "home"])
     p = sub.add_parser("push")
     p.add_argument("clip")
+    p.add_argument("--api-dir", default=None, help="record the push in this API copy's data dir (pushes.json), as the API's own push "
+                   "would, so its posting routines check they pick this clip")
     p = sub.add_parser("gate")
     p.add_argument("dump")
     p.add_argument("--app", required=True)
@@ -730,7 +732,14 @@ def main() -> int:
     if args.cmd == "add-routine":
         return add_routine(Path(args.yaml))
     if args.cmd == "push":
-        print(json.dumps(push(Path(args.clip)), indent=1))
+        got = push(Path(args.clip))
+        if args.api_dir:
+            from api.handoff import MEDIA, remember_push
+            from run_creator import the_phone
+            kind = next(k for k, base in MEDIA.items() if got["media_uri"].startswith(base))
+            remember_push(Path(args.api_dir) / "pushes.json", the_phone()["serial"], kind, got["remote_path"], got["media_uri"])
+            got["recorded_in"] = str(Path(args.api_dir).name) + "/pushes.json"
+        print(json.dumps(got, indent=1))
         return 0
     dev = connect()
     if args.cmd == "facts":
