@@ -10,6 +10,7 @@ import base64
 import io
 import json
 import struct
+import threading
 import time
 from pathlib import Path
 from types import SimpleNamespace
@@ -190,8 +191,10 @@ class FakeBanner:
     def __init__(self) -> None:
         self.st = {"paused": False, "reason": "", "changed_at": 0.0, "shown": True}
         self.calls: list[str] = []
+        self.reads = 0  # the watcher reads the banner first on each of its checks
 
     def state(self):
+        self.reads += 1
         return dict(self.st)
 
     def pause(self, reason):
@@ -222,45 +225,166 @@ class FakePhone:
         self.front = package
 
 
+async def _until(cond, timeout_s: float = 2.0) -> bool:
+    """Wait for the watcher's state rather than a fixed time: True once `cond()` holds, False after `timeout_s`."""
+    end = time.monotonic() + timeout_s
+    while not cond():
+        if time.monotonic() > end:
+            return False
+        await asyncio.sleep(0.005)
+    return True
+
+
+async def _ticks(dev, n: int = 3) -> None:
+    """Wait until the watcher has made `n` more checks of the phone, each one finished but perhaps the last."""
+    seen = dev.banner.reads
+    assert await _until(lambda: dev.banner.reads >= seen + n), "the watcher stopped checking"
+
+
+def _watched_phone() -> tuple[DevicePool, str, FakePhone, Lease]:
+    pool = DevicePool(EventBus())
+    did = "phone-R5CT"
+    pool.leases[did] = Lease(did, task_id="task-1")
+    dev = FakePhone()
+    pool._devices[did] = dev
+    return pool, did, dev, pool.leases[did]
+
+
 def test_a_touch_pause_or_another_app_hands_the_phone_to_you():
     async def scenario():
-        bus = EventBus()
-        bus.bind(asyncio.get_running_loop())
-        pool = DevicePool(bus)
-        did = "phone-R5CT"
-        pool.leases[did] = Lease(did, task_id="task-1")
-        dev = FakePhone()
-        pool._devices[did] = dev
+        pool, did, dev, lease = _watched_phone()
+        pool.bus.bind(asyncio.get_running_loop())
         watcher = asyncio.create_task(pool.watch(did, dev, "com.skylark.air", every_s=0.02))
-        lease = pool.leases[did]
-        await asyncio.sleep(0.1)
+        await _ticks(dev)
         assert not lease.user_control
         dev.touches.last_touch = time.time()  # you touch the phone
-        await asyncio.sleep(0.1)
+        await _until(lambda: lease.user_control)
         touched = (lease.user_control, lease.reason, lease.agent_turn.is_set())
+        assert await _until(lambda: dev.banner.st["paused"])  # the banner shows the pause, with Resume
         dev.banner.resume()  # Resume on the phone's banner
-        await asyncio.sleep(0.1)
-        resumed = lease.user_control
+        resumed = not await _until(lambda: not lease.user_control)
         dev.banner.st.update(paused=True, reason="you pressed Pause on the phone", changed_at=time.time())
-        await asyncio.sleep(0.1)
+        await _until(lambda: lease.user_control)
         paused = (lease.user_control, lease.reason)
         dev.banner.resume()
-        await asyncio.sleep(0.1)
+        await _until(lambda: not lease.user_control)
+        await _ticks(dev)
         lease.last_agent_call = time.time() - 10
         dev.front = "com.android.dialer"  # a call comes in: not something Envoy did
-        await asyncio.sleep(0.1)
+        await _until(lambda: lease.user_control)
         other_app = (lease.user_control, lease.reason)
+        assert await _until(lambda: dev.banner.st["paused"])
         pool.hand_back(did)  # you hand back with the call still on screen: the agent goes on from there
-        await asyncio.sleep(0.15)
-        after_hand_back = lease.user_control
+        assert await _until(lambda: not dev.banner.st["paused"])  # the hand back's Resume reached the banner
+        await _ticks(dev)  # and the watcher has looked at the phone since
+        after_hand_back = (lease.user_control, lease.reason)
         watcher.cancel()
-        assert after_hand_back is False
-        return touched, resumed, paused, other_app
-    touched, resumed, paused, other_app = asyncio.run(scenario())
+        return touched, resumed, paused, other_app, after_hand_back
+    touched, resumed, paused, other_app, after_hand_back = asyncio.run(scenario())
     assert touched == (True, "paused: you touched the phone", False)  # the agent's next call waits
     assert resumed is False
     assert paused == (True, "paused: you pressed Pause on the phone")
     assert other_app == (True, "paused: com.android.dialer came to the front on its own")
+    assert after_hand_back == (False, "")
+
+
+def _paused_by_a_call(dev, lease):
+    """The watcher has paused the phone for an incoming call, and the banner shows it (with Resume)."""
+    async def go():
+        await _ticks(dev)
+        lease.last_agent_call = time.time() - 10
+        dev.front = "com.android.dialer"
+        assert await _until(lambda: lease.user_control and dev.banner.st["paused"])
+        await _ticks(dev)
+    return go()
+
+
+def test_a_hand_back_is_not_undone_by_a_banner_read_from_before_it():
+    """Backlog #57: the watcher read the banner (paused, for the call) and the answer arrived after you handed back in
+    the app; it paused again at once with "paused: another app came to the front", the Pause the hand back lifted."""
+    async def scenario():
+        pool, did, dev, lease = _watched_phone()
+        watcher = asyncio.create_task(pool.watch(did, dev, "com.skylark.air", every_s=0.02))
+        await _paused_by_a_call(dev, lease)
+        reading, answer = threading.Event(), threading.Event()
+        real_state = dev.banner.state
+
+        def read_in_flight():
+            st = real_state()  # what the phone said...
+            reading.set()
+            answer.wait(2)  # ...reaches the watcher after the hand back
+            return st
+        dev.banner.state = read_in_flight
+        assert await asyncio.to_thread(reading.wait, 2)
+        dev.banner.state = real_state
+        pool.hand_back(did)
+        assert await _until(lambda: not dev.banner.st["paused"])
+        answer.set()
+        await _ticks(dev)
+        watcher.cancel()
+        return lease.user_control, lease.reason
+    assert asyncio.run(scenario()) == (False, "")
+
+
+def test_a_hand_back_is_not_undone_while_its_resume_reaches_the_banner():
+    """On the phone the Resume is an adb call, and the banner takes the intent after the call returns: until then the
+    banner still reads paused."""
+    async def scenario():
+        pool, did, dev, lease = _watched_phone()
+        changes: list[tuple[bool, str]] = []  # what the task's status follows
+        watcher = asyncio.create_task(pool.watch(did, dev, "com.skylark.air", every_s=0.02,
+                                                 on_change=lambda paused, why: changes.append((paused, why))))
+        await _paused_by_a_call(dev, lease)
+        real_resume = dev.banner.resume
+
+        def slow_resume():
+            time.sleep(0.2)  # several of the watcher's checks read the banner still paused
+            real_resume()
+        dev.banner.resume = slow_resume
+        changes.clear()
+        pool.hand_back(did)
+        assert await _until(lambda: not dev.banner.st["paused"])
+        await _ticks(dev)
+        after = list(changes)  # not even a moment paused again
+        dev.banner.st.update(paused=True, reason="you pressed Pause on the phone", changed_at=time.time())
+        await _until(lambda: lease.user_control)  # a Pause after the Resume landed is yours, as always
+        watcher.cancel()
+        return after, (lease.user_control, lease.reason)
+    assert asyncio.run(scenario()) == ([(False, "")], (True, "paused: you pressed Pause on the phone"))
+
+
+def test_a_pause_you_press_as_the_hand_backs_resume_lands_counts_at_once():
+    """The watcher never sees the banner resumed: Resume lands and you press Pause between two of its checks. That
+    Pause is newer, by the banner's own clock, than the one the hand back lifted."""
+    async def scenario():
+        pool, did, dev, lease = _watched_phone()
+        watcher = asyncio.create_task(pool.watch(did, dev, "com.skylark.air", every_s=0.02))
+        await _paused_by_a_call(dev, lease)
+        dev.banner.resume = lambda: dev.banner.st.update(paused=True, reason="you pressed Pause on the phone",
+                                                         changed_at=time.time())
+        pool.hand_back(did)
+        await _until(lambda: lease.user_control, timeout_s=1.0)  # well inside RESUME_LANDS_S
+        watcher.cancel()
+        return lease.user_control, lease.reason
+    assert asyncio.run(scenario()) == (True, "paused: you pressed Pause on the phone")
+
+
+def test_a_banner_still_paused_long_after_a_hand_back_pauses_again(monkeypatch):
+    """A Resume that never lands leaves the phone showing Paused: past RESUME_LANDS_S Envoy believes the banner."""
+    monkeypatch.setattr(devices_mod, "RESUME_LANDS_S", 0.2)
+
+    async def scenario():
+        pool, did, dev, lease = _watched_phone()
+        watcher = asyncio.create_task(pool.watch(did, dev, "com.skylark.air", every_s=0.02))
+        await _paused_by_a_call(dev, lease)
+        dev.banner.resume = lambda: None  # lost on the way to the phone
+        pool.hand_back(did)
+        await _ticks(dev)
+        early = lease.user_control
+        await _until(lambda: lease.user_control)
+        watcher.cancel()
+        return early, (lease.user_control, lease.reason)
+    assert asyncio.run(scenario()) == (False, (True, "paused: another app came to the front"))
 
 
 def test_the_agents_own_app_switch_does_not_pause():
@@ -452,6 +576,40 @@ def test_an_app_that_comes_up_long_after_envoys_launch_still_pauses(monkeypatch)
         await _seconds_later(devices_mod.LAUNCH_WAIT_S + 5)
         dev.front = TIKTOK
     assert _watch(monkeypatch, LAUNCHER, TIKTOK, much_later) == (True, f"paused: {TIKTOK} came to the front on its own")
+
+
+def test_a_hand_back_while_envoys_launch_still_draws_does_not_pause_again(monkeypatch):
+    """Backlog #57, with #54's launch grace: you touch the phone while TikTok is still drawing after Envoy's launch,
+    open Instagram, and hand back in the app. TikTok's window then comes up: Envoy's launch finishing, not a reason
+    to pause. The grace only ever lets the launched app through, so after a hand back a call still pauses."""
+    clock = Clock()
+    monkeypatch.setattr(devices_mod, "time", clock)
+
+    async def scenario():
+        pool, did, dev, lease = _watched_phone()
+        dev.front = LAUNCHER
+        watcher = asyncio.create_task(pool.watch(did, dev, TIKTOK, every_s=0.02))
+        await _ticks(dev)
+        _cold_start(dev)
+        await pool.gated(did, dev).launch(TIKTOK, fresh=True)
+        await _ticks(dev)
+        dev.touches.last_touch = clock.now + 0.5  # you touch the phone
+        assert await _until(lambda: lease.user_control and dev.banner.st["paused"])
+        dev.front = "com.instagram.android"  # you open Instagram while the phone is yours
+        clock.now += 2
+        pool.hand_back(did)  # in the app, with Instagram in front
+        assert await _until(lambda: not dev.banner.st["paused"])
+        await _ticks(dev)
+        clock.now += 2
+        dev.front = TIKTOK  # TikTok's first window, 4 s after Envoy launched it
+        await _ticks(dev)
+        after = (lease.user_control, lease.reason)
+        clock.now += 4
+        dev.front = "com.android.dialer"
+        await _until(lambda: lease.user_control)
+        watcher.cancel()
+        return after, (lease.user_control, lease.reason)
+    assert asyncio.run(scenario()) == ((False, ""), (True, "paused: com.android.dialer came to the front on its own"))
 
 
 def test_an_earlier_tasks_launch_excuses_nothing_in_the_next(monkeypatch):

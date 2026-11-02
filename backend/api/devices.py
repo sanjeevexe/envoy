@@ -35,6 +35,11 @@ BENIGN_FRONT = {"ai.envoy.banner", "com.android.systemui"}
 # the app draws a window: TikTok's cold start after a fresh launch took ~4 s on the Pixel 5 (Nov 1), past the 3 s that
 # any other change gets after one of Envoy's actions, and paused 2 of 3 replays as "came to the front on its own".
 LAUNCH_WAIT_S = 20.0
+# How long after a hand back the banner may still read paused because the Resume it was sent hasn't landed: the read is
+# an adb call (~100 ms) and `am start-foreground-service` returns before the banner takes the intent. A read from that
+# moment re-paused the phone at once with the Pause the hand back was lifting (backlog #57). Past this, the banner's
+# Pause is believed again: the phone shows it, so Envoy shouldn't act as if it didn't.
+RESUME_LANDS_S = 3.0
 
 
 def phone_ref(phone: dict[str, Any] | None, whose: str = "your") -> str:
@@ -246,6 +251,9 @@ class DevicePool:
         lease = self.leases[did]
         started = started or time.time()
         seen_handback = lease.handed_back_at
+        resuming = 0.0  # when the last hand back was seen, until the banner shows its Resume landed
+        landed = 0.0  # a hand back made because the banner already showed Resume: nothing to wait for
+        held = (0.0, 0.0)  # (lease.since, the banner's own time of its Pause) while the phone was yours
         # What is in front when Envoy starts (your home screen, an app Envoy has no name for) is not a change. Expecting
         # `app` from the start paused tasks on the Pixel 5 before the agent's first action (Oct 30).
         try:
@@ -267,15 +275,24 @@ class DevicePool:
             try:
                 banner = await asyncio.to_thread(device.banner.state)
                 if lease.user_control:
+                    if banner["paused"]:
+                        held = (lease.since, banner["changed_at"])
                     if banner["shown"] and not banner["paused"] and banner["changed_at"] > lease.since:
                         self.hand_back(did, by="you, on the phone")
+                        landed = lease.handed_back_at
                     continue
                 if lease.handed_back_at > seen_handback:  # you gave it back (here, in the app, or on the iPhone)
                     seen_handback = lease.handed_back_at
+                    resuming = 0.0 if landed == seen_handback else time.time()
                     last_pkg = await asyncio.to_thread(device.foreground_package) or last_pkg
                     if on_change:
                         on_change(False, "")
-                if banner["paused"]:
+                # Until a hand back's Resume lands, the banner may still show the Pause it lifted: that one isn't yours.
+                # A Pause newer than it (by the banner's own clock) is, and so is one still there after RESUME_LANDS_S.
+                if resuming and (not banner["paused"] or time.time() - resuming > RESUME_LANDS_S
+                                 or (held[0] == lease.since > 0 and banner["changed_at"] > held[1])):
+                    resuming = 0.0
+                if banner["paused"] and not resuming:
                     pause(f"paused: {banner['reason'] or 'you pressed Pause on the phone'}", None)
                     continue
                 if self._touched(did, device, started, on_change):
