@@ -1,0 +1,144 @@
+{
+ "task_id": "task-1101-205058-3079-r1",
+ "goal": "Post the newest video in my phone's gallery to my Instagram story with a poll sticker that asks \"Sunrise or sunset?\" with the options \"Sunrise\" and \"Sunset\"",
+ "kept": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10
+ ],
+ "dropped": [
+  [
+   11,
+   "tap: not a device action"
+  ]
+ ],
+ "model": "cached",
+ "model_calls": 0,
+ "cost_usd": 0.0,
+ "cost_at_standard_usd": 0.0,
+ "latency_s": 0.0,
+ "warnings": [
+  "step 2: its target matched 8 look-alikes on the recorded screen; now the first of them in its list, which must show {text='Open camera', kind='Button'} (the list's start)"
+ ],
+ "wonder": {
+  "name": "instagram_post_video_story_with_poll",
+  "intent": "Post the newest gallery video to an Instagram story with a poll sticker",
+  "description": "Opens Instagram story creation, selects the newest video from the gallery, adds a multi-option poll sticker, enters the requested question and two answer options, and confirms placement of the poll sticker on the story.",
+  "patterns": [
+   "Post my newest video to my Instagram story with a poll",
+   "Add a poll sticker to my latest gallery video on my story",
+   "Create an Instagram story from my newest video with a two-option poll"
+  ],
+  "inputs": [
+   {
+    "name": "poll_question",
+    "type": "text",
+    "description": "The question displayed on the poll sticker",
+    "from_memory": null,
+    "example": "Sunrise or sunset?"
+   },
+   {
+    "name": "poll_option_1",
+    "type": "text",
+    "description": "The first answer option for the poll",
+    "from_memory": null,
+    "example": "Sunrise"
+   },
+   {
+    "name": "poll_option_2",
+    "type": "text",
+    "description": "The second answer option for the poll",
+    "from_memory": null,
+    "example": "Sunset"
+   }
+  ],
+  "steps": [
+   {
+    "step": 1,
+    "id": "open_story_creation",
+    "intent": "Tap 'Your story' to open story creation",
+    "target_fixed_text": "Your story",
+    "choice_input": null
+   },
+   {
+    "step": 2,
+    "id": "select_newest_video",
+    "intent": "Select the newest video thumbnail in the gallery",
+    "target_fixed_text": "Video thumbnail",
+    "choice_input": null
+   },
+   {
+    "step": 3,
+    "id": "open_stickers_panel",
+    "intent": "Tap 'Stickers' to open the stickers panel",
+    "target_fixed_text": "Stickers",
+    "choice_input": null
+   },
+   {
+    "step": 4,
+    "id": "select_poll_sticker",
+    "intent": "Tap 'Multi-option Poll Sticker' to add a poll sticker",
+    "target_fixed_text": "Multi-option Poll Sticker",
+    "choice_input": null
+   },
+   {
+    "step": 5,
+    "id": "enter_poll_question",
+    "intent": "Type {{poll_question}} into the poll question field",
+    "target_fixed_text": "ASK A QUESTION\u2026",
+    "choice_input": null
+   },
+   {
+    "step": 6,
+    "id": "tap_first_poll_option",
+    "intent": "Tap the first poll option field to edit it",
+    "target_fixed_text": "Yes",
+    "choice_input": null
+   },
+   {
+    "step": 7,
+    "id": "enter_first_poll_option",
+    "intent": "Type {{poll_option_1}} into the first poll option field",
+    "target_fixed_text": "Yes",
+    "choice_input": null
+   },
+   {
+    "step": 8,
+    "id": "tap_second_poll_option",
+    "intent": "Tap the second poll option field to edit it",
+    "target_fixed_text": "No",
+    "choice_input": null
+   },
+   {
+    "step": 9,
+    "id": "enter_second_poll_option",
+    "intent": "Type {{poll_option_2}} into the second poll option field",
+    "target_fixed_text": "No",
+    "choice_input": null
+   },
+   {
+    "step": 10,
+    "id": "confirm_poll_sticker",
+    "intent": "Tap 'Done' to place the poll sticker",
+    "target_fixed_text": "Done",
+    "choice_input": null
+   }
+  ],
+  "outputs": [],
+  "data_values": [
+   "November 1, 2026 7:19 PM"
+  ]
+ },
+ "ambiguous": [],
+ "trace": "task-1101-205058-3079-r1",
+ "name": "instagram_story_poll",
+ "recompile": "compiler fix ffde928",
+ "final_from_declined": true
+}

@@ -2,12 +2,13 @@
 
 // Settings: how proactive Envoy is (which of its offers notify you), when Envoy asks before an irreversible step (for
 // everything, per app, or per routine: the most specific wins), which apps run on your own Android phone and which
-// apps' notifications Envoy may watch there, this device and the others paired with Envoy, the AI agents that use Envoy
-// and what each may do, and how Envoy looks on this
-// device (light or dark).
+// apps' notifications Envoy may watch there, this device and the others paired with Envoy, the AI agents that use Envoy,
+// what each may do and the tools they see (the learned routines you share), and how Envoy looks on this device (light or
+// dark).
 import { useEffect, useState } from "react";
 import { CheckCircleIcon, DeviceMobileIcon } from "@phosphor-icons/react";
 import AgentKeys from "@/components/AgentKeys";
+import AgentTools from "@/components/AgentTools";
 import Companion from "@/components/Companion";
 import { Outbox } from "@/components/Handoff";
 import NotificationWatch from "@/components/NotificationWatch";
@@ -19,9 +20,14 @@ import { setThemeChoice, themeChoice, type ThemeChoice } from "@/lib/theme";
 
 const SECTIONS = ["Approvals", "Phones", "Devices", "Agents", "Appearance"] as const;
 export default function SettingsPage({ publicUrl, profile }: { publicUrl?: string; profile?: string }) {
-  const [section, setSection] = useState<(typeof SECTIONS)[number]>("Approvals");
+  // `/?settings=agents` (any section's name) opens that section; Approvals otherwise.
+  const [section, setSection] = useState<(typeof SECTIONS)[number]>(() => {
+    const asked = typeof location === "undefined" ? null : new URLSearchParams(location.search).get("settings");
+    return SECTIONS.find((x) => x.toLowerCase() === asked?.toLowerCase()) ?? "Approvals";
+  });
   return (
-    <div className="mx-auto w-full max-w-[720px] pb-10 md:pt-6">
+    // Agents is wider: on a big screen (filmed at 1080p) the agents and the tools they see sit side by side.
+    <div className={cx("@container mx-auto w-full pb-10 md:pt-6", section === "Agents" ? "max-w-[1180px]" : "max-w-[720px]")}>
       {/* On a phone the five sections are wider than the screen: the row scrolls sideways, the page doesn't. */}
       <div className="overflow-x-auto px-4 pt-3 [scrollbar-width:none]"><Segmented options={SECTIONS} value={section} onChange={setSection} label="Settings" /></div>
       {profile && <p className="px-6 pt-2 text-meta-2 text-muted">Using {profile === "demo" ? "the demo memory (SkyLark test data)" : "your memory"}</p>}
@@ -29,7 +35,7 @@ export default function SettingsPage({ publicUrl, profile }: { publicUrl?: strin
         {section === "Approvals" && <><Proactivity /><Settings /></>}
         {section === "Phones" && <><Phones /><NotificationWatch /><SavedLogins /><Outbox /></>}
         {section === "Devices" && <Companion publicUrl={publicUrl} />}
-        {section === "Agents" && <AgentKeys />}
+        {section === "Agents" && <div className="grid grid-cols-1 items-start @5xl:grid-cols-2"><AgentKeys /><AgentTools /></div>}
         {section === "Appearance" && <Appearance />}
       </div>
     </div>

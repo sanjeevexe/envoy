@@ -1,0 +1,37 @@
+# com.zhiliaoapp.musically/com.ss.android.ugc.aweme.splash.SplashActivity secure=False camera=False 2026-11-01T19:31:21
+App: com.zhiliaoapp.musically · Screen: SplashActivity
+[1] Button "Play" (id: mg3)
+[2] Button "Cancel" (id: tv_cancel)
+[3] Button "Save" (id: tv_save)
+[4] Button "Clear"
+[5] Button (id: o4o)
+[6] Button "Change your voice or record a voiceover"
+[7] Button "Block" (id: l5v)
+[8] List (id: ya0) (scrollable)
+[9] Text "Trending" (selected)
+[10] Button "Singers"
+[11] Button "Characters"
+[12] Button "Enhancers"
+[13] List (id: vp_content) (scrollable)
+[14] List (scrollable)
+[15] List (scrollable)
+[16] Button "Warm (Español)"
+[17] Text "Warm (Español)" (id: lq_)
+[18] Button "Magnetic"
+[19] Text "Magnetic" (id: lq_)
+[20] Button "Cave"
+[21] Text "Cave" (id: lq_)
+[22] Button "Wukong"
+[23] Text "Wukong" (id: lq_)
+[24] Button "Front Man"
+[25] Text "Front Man" (id: lq_)
+[26] Button "Church"
+[27] Text "Church" (id: lq_)
+[28] Button "Telephone"
+[29] Text "Telephone" (id: lq_)
+[30] Button "Super Mama (Español)"
+[31] Text "Super Mama (Español)" (id: lq_)
+[32] Text "Clear" (id: tv_tip_layout)
+[33] Button "Microphone · Record" (id: ah4)
+[34] Text "Microphone · Record" (id: ah5)
+(screen has a scrollable list; scroll to see more)

@@ -1,0 +1,206 @@
+{
+ "mode": "replay",
+ "app": "com.zhiliaoapp.musically",
+ "time": "2026-11-01T23:12:08",
+ "request": {
+  "phone": "phone-09031FDD4000C6",
+  "routine": "tiktok_post_sound",
+  "inputs": {
+   "sound_title": "golden hour",
+   "sound_artist": "JVKE",
+   "caption": "Envoy rehearsal launch check 2"
+  }
+ },
+ "task": {
+  "id": "task-1101-231208-dc64",
+  "status": "declined",
+  "routine": "tiktok_post_sound",
+  "model_calls": 7,
+  "cost_usd": 0.0207,
+  "traces": [],
+  "detail": "the user declined the approval",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 23,
+ "repairs": [],
+ "approvals": [
+  {
+   "description": "tap \"Post\" in com.zhiliaoapp.musically (routine tiktok_post_sound v2)",
+   "reasons": [
+    "rule: target publishes 'Post'",
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "asked_at": [
+  "Post"
+ ],
+ "approval_shot": "approval-task-1101-231208-dc64.jpg",
+ "routine_steps": [
+  {
+   "id": "launch_tiktok",
+   "status": "skipped",
+   "rung": 0,
+   "score": null,
+   "rungs": []
+  },
+  {
+   "id": "tap_create",
+   "status": "done",
+   "rung": 1,
+   "score": 1.0,
+   "rungs": [
+    "wait and retry: after-checks held after 2.3 s"
+   ]
+  },
+  {
+   "id": "tap_upload",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "select_newest_video",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "tap_next_after_gallery",
+   "status": "done",
+   "rung": 2,
+   "score": 1.0,
+   "rungs": [
+    "relaxed match: after-checks failed but the next step (tap_music) is ready"
+   ]
+  },
+  {
+   "id": "tap_music",
+   "status": "done",
+   "rung": 0,
+   "score": 0.973,
+   "rungs": []
+  },
+  {
+   "id": "tap_search_in_sound_sheet",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "type_sound_search",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "execute_sound_search",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "wait_for_sound_results",
+   "status": "done",
+   "rung": 0,
+   "score": null,
+   "rungs": []
+  },
+  {
+   "id": "apply_first_sound_result",
+   "status": "done",
+   "rung": 1,
+   "score": null,
+   "rungs": [
+    "looked for 'red check button for first result golden hour by JVKE' (sam, 3.5 s)",
+    "wait and retry: after-checks held after 1.7 s"
+   ]
+  },
+  {
+   "id": "find_select_sound_result",
+   "status": "done",
+   "rung": 2,
+   "score": 0.8,
+   "rungs": [
+    "relaxed match: after-checks held at the relaxed threshold"
+   ]
+  },
+  {
+   "id": "select_sound_result",
+   "status": "done",
+   "rung": 0,
+   "score": 0.8,
+   "rungs": []
+  },
+  {
+   "id": "close_sound_sheet",
+   "status": "done",
+   "rung": 0,
+   "score": null,
+   "rungs": [
+    "looked for 'video preview above sound sheet' (sam\u2192grounding, 11.5 s)"
+   ]
+  },
+  {
+   "id": "tap_next_after_sound",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "type_caption",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "go_back_to_review",
+   "status": "done",
+   "rung": 0,
+   "score": null,
+   "rungs": []
+  },
+  {
+   "id": "tap_post",
+   "status": "declined",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  }
+ ],
+ "auto_approved": [],
+ "marks_s": {
+  "running": 0.4,
+  "needs_you": 1.4,
+  "phone_yes": 1.4,
+  "waiting_approval": 73.7,
+  "post_asked": 73.7,
+  "declined": 74.7,
+  "end": 74.7
+ },
+ "spent": {
+  "model_calls": 7,
+  "cost_usd": 0.0207,
+  "cost_at_standard_usd": 0.0207,
+  "jobs": {
+   "sam": 4,
+   "choose": 2,
+   "grounding": 1
+  }
+ },
+ "ok": true,
+ "failures": [],
+ "profile": "hybrid",
+ "cleanup": [
+  "force-stopped TikTok"
+ ]
+}

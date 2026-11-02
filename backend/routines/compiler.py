@@ -9,7 +9,8 @@
 3. Generalize: Muse Wonder names the inputs and decides what stays fixed (Spark at high effort if
    Wonder fails). Values that equal an input become {{slots}} in typed text, locators and checks;
    a list row chosen because it shows an input becomes an input-based locator (`text_has`); booking
-   data that is not an input is removed so the routine doesn't expect it.
+   data that is not an input is removed so the routine doesn't expect it. A locator that then fits several look-alikes on
+   its recorded screen is told apart by the inputs it shows, else by its place in its list, else reported (`disambiguate`).
 4. Add checks: each step's before and after trees are diffed (routines/checks.py).
 5. Verify by replay (`verify`): replay from a reset with the same inputs and with a second set of
    inputs; only routines that pass go into the library (routines/store.py).
@@ -33,7 +34,7 @@ from routines import checks as chk
 from routines import locators
 from routines import screen_read
 from routines.model import FIELD, Check, Extract, InputSpec, Locator, Routine, Step, StepAction, has_slot, render_str, slot_names
-from routines.screens import contains_value, fold, load_tree, norm, parts_of, short_id, usable_id
+from routines.screens import contains_value, fold, jaccard, load_tree, norm, parts_of, short_id, signature_keys, usable_id
 from routines.visual import encode as encode_png
 
 _DIGIT = re.compile(r"\d")
@@ -67,6 +68,7 @@ class TStep:
     swipe: tuple[int, int, int, int] | None = None  # recorded swipe start and end, device pixels
     vision: dict[str, Any] | None = None  # a tap_point's target as the agent saw it (Phase 6): description, box, crop
     trace_dir: Path | None = None
+    moved: str = ""  # why it comes later than in the trace (typing done during a round trip)
 
 
 # Screens an app shows once (onboarding, a welcome tour, "what's new", a promo): a step that only gets past one is kept
@@ -108,6 +110,9 @@ class CompileReport:
     latency_s: float = 0.0
     warnings: list[str] = field(default_factory=list)
     wonder: dict[str, Any] | None = None
+    # Steps whose target still matches several elements on the recorded screen (nothing in the run tells them apart): on a
+    # rerun they fall back on the ladder. {"step": id, "trace_step": n, "matches": k, "locator": ...}
+    ambiguous: list[dict[str, Any]] = field(default_factory=list)
 
 
 # ---- 1 + 2: load and clean up -----------------------------------------------------------------
@@ -143,7 +148,48 @@ def load_trace(trace_dir: Path, *, confirmed: bool = False) -> tuple[dict, list[
     return run, records
 
 
-def clean(trace_dir: Path, records: list[dict]) -> tuple[list[TStep], list[tuple[int, str]]]:
+def _toward_goal(stretch: list[TStep], goal: str) -> bool:
+    """Whether a stretch made an element of a screen it passes through show, when seen again, something the goal asks for
+    that it didn't show before (TikTok's editor: "Music · Add sound", then "Music · golden hour")."""
+    first: dict[tuple[str, str], str] = {}  # (activity, ID) -> its label the first time the stretch shows it
+    for screen in [stretch[0].before, *(t.after for t in stretch)]:
+        for e in screen.numbered:
+            if e.in_list or e.status_bar or not e.label or not usable_id(e.resource_id):
+                continue
+            old = first.setdefault((screen.activity, short_id(e.resource_id)), e.label)
+            if e.label != old and any(len(p) >= 3 and contains_value(goal, p) and not contains_value(old, p) for p in parts_of(e.label)):
+                return True
+    return False
+
+
+def _moved_typing(stretch: list[TStep], later: list[TStep]) -> dict[int, list[TStep]] | None:
+    """The typing a round trip did, each with the steps after it on the same screen (closing the keyboard), keyed by the
+    later step whose after-screen is that screen again: it is done there instead. None if the stretch has another effect
+    (an irreversible step, a toggle), a screen it typed on doesn't come back, or the stretch left the typed screen's
+    activity (a document's editor, whose leaving saves it: then the round trip was the save)."""
+    moved: dict[int, list[TStep]] = {}
+    k = 0
+    while k < len(stretch):
+        t = stretch[k]
+        if t.risk == "irreversible" or (t.target is not None and t.target.checkable):
+            return None
+        k += 1
+        if t.kind != "type":
+            continue
+        group, screen = [t], {t.before.signature, t.after.signature}
+        while k < len(stretch) and stretch[k].kind != "type" and {stretch[k].before.signature, stretch[k].after.signature} <= screen:
+            group.append(stretch[k])
+            k += 1
+        if k < len(stretch) and stretch[k].after.activity != t.before.activity:
+            return None  # leaving its activity is what kept the typing (Markor saves a note as you leave its editor)
+        q = next((q for q, x in enumerate(later) if x.after.signature == t.before.signature), None)
+        if q is None:
+            return None
+        moved.setdefault(q, []).extend(group)
+    return moved
+
+
+def clean(trace_dir: Path, records: list[dict], goal: str = "") -> tuple[list[TStep], list[tuple[int, str]]]:
     steps: list[TStep] = []
     dropped: list[tuple[int, str]] = []
     app = ""
@@ -204,20 +250,33 @@ def clean(trace_dir: Path, records: list[dict]) -> tuple[list[TStep], list[tuple
     def effectful(t: TStep) -> bool:
         return t.risk == "irreversible" or t.kind == "type" or (t.target is not None and t.target.checkable)
 
+    # Two exceptions (Nov 2, TikTok's sound: the agent's first try left no sound; it went back from the post screen, added
+    # it, and came back): a stretch on whose way a screen came to show what the goal asks for is a correction, not a round
+    # trip; and typing in a round trip (the caption, typed before the correction) is done where its screen comes back.
     changed = True
     while changed:
         changed = False
         for i in range(len(steps)):
             for j in range(len(steps) - 1, i, -1):
                 a, b = steps[i].before, steps[j].after
-                if any(effectful(t) for t in steps[i:j + 1]):
+                if not (a.signature == b.signature and _layout_key(a) == _layout_key(b)) or _toward_goal(steps[i:j + 1], goal):
                     continue
-                if a.signature == b.signature and _layout_key(a) == _layout_key(b):
-                    for s in steps[i:j + 1]:
+                moved = _moved_typing(steps[i:j + 1], steps[j + 1:]) if any(effectful(t) for t in steps[i:j + 1]) else {}
+                if moved is None:
+                    continue
+                kept = {t.n for group in moved.values() for t in group}
+                for s in steps[i:j + 1]:
+                    if s.n not in kept:
                         dropped.append((s.n, f"back-track: steps {steps[i].n}–{steps[j].n} returned to the same screen"))
-                    del steps[i:j + 1]
-                    changed = True
-                    break
+                later = []
+                for q, t in enumerate(steps[j + 1:]):
+                    later.append(t)
+                    for m in moved.get(q, []):
+                        m.moved = f"moved after trace step {t.n}: typed during the round trip {steps[i].n}–{steps[j].n}"
+                        later.append(m)
+                steps[i:] = later
+                changed = True
+                break
             if changed:
                 break
 
@@ -422,6 +481,100 @@ def generalize_locator(loc: Locator, examples: dict[str, str], data_values: list
     return loc.model_copy(update=upd)
 
 
+_WHOLE_SLOT = re.compile(r"\{\{\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}\}")
+_ORDINAL = ("first", "second", "third", "fourth", "fifth")
+
+
+def _input_texts(e: Element, examples: dict[str, str], data_values: list[str]) -> list[str]:
+    """What of an input the element shows, as `text_has` values, most specific first: the stretch from its first input to
+    its last ("{{song_title}} by {{song_artist}}" in "Select track golden hour by JVKE,3:29"), then each input alone."""
+    out: list[str] = []
+    examples = {k: v for k, v in examples.items() if ":" not in k and v}  # whole inputs, not a date's parts
+    for label in dict.fromkeys(t for t in (e.full_label or e.label, e.desc) if t):
+        bound = bind_inputs(label, examples) or ""
+        slots = [m for m in _WHOLE_SLOT.finditer(bound) if m.group(1) in examples]
+        if not slots:
+            continue
+        span = bound[slots[0].start():slots[-1].end()]
+        between = _WHOLE_SLOT.sub("", span)
+        if len(slots) > 1 and len(between) <= 24 and _data_free(span, data_values):
+            out.append(span)
+        out += [m.group(0) for m in sorted(slots, key=lambda m: -len(examples[m.group(1)]))]
+    return list(dict.fromkeys(out))
+
+
+def disambiguate(loc: Locator, target: Element, screen: ScreenState, examples: dict[str, str], data_values: list[str], *,
+                 scrolled: bool = False) -> tuple[Locator, list[Check], str | None, int]:
+    """A step's locator made to pick exactly the element the run acted on, when on the recorded screen it matches several
+    look-alikes (every gallery thumbnail reads "Video thumbnail created on <date>"; every track row of a search has a
+    catalogue ID and, once its words are cut out as data, nothing else). A locator that already picks it is returned as is.
+
+    In order: (a) the input the element shows, as `text_has` (the track "{{song_title}} by {{song_artist}}"); (b) one of a
+    uniform list or grid that starts with a fixed item (the gallery's camera tile): its place among the look-alikes (`nth`),
+    with a before-check on that item (the list is shown, at its start), so a scrolled gallery matches nothing, not another clip.
+    Not for a target reached by scrolling, whose place depends on how far the list went. (c) otherwise unchanged, and
+    reported ambiguous. Returns the locator, before-checks to add, what was done ("text_has", "nth", "ambiguous" or None)
+    and how many elements the step's locator matched."""
+    from routines.executor import list_choice  # the executor imports this module
+
+    def picks(cand: Locator) -> bool:
+        m = list_choice(cand, screen, examples, locators.STRICT)
+        return m.element is not None and m.element.index == target.index
+
+    if picks(loc):
+        return loc, [], None, 1
+    hits = locators.all_matching(loc, screen, examples)
+    if len(hits) < 2:
+        return loc, [], None, len(hits)  # too weak to find anything: not this case
+    if target.index not in {e.index for e in hits}:
+        return loc, [], "ambiguous", len(hits)
+    # A text field's words are what it holds (another run's field is empty, or holds another value): not what chooses it.
+    for text in [] if target.editable else _input_texts(target, examples, data_values):
+        cand = loc.model_copy(update={"text_has": text})
+        if picks(cand):
+            return cand, [], "text_has", len(hits)
+    if not scrolled:
+        base = loc.model_copy(update={"position": None})
+        alike = locators.in_order(locators.tied(base, screen, examples), screen)
+        head = locators.list_head(alike, screen) if alike and len(alike) > 1 else None
+        if alike and head is not None and target.index in {e.index for e in alike}:
+            cand = base.model_copy(update={"nth": [e.index for e in alike].index(target.index)})
+            # The list is shown, at its start, while its fixed first item is: without it the place means nothing. (Not the
+            # list node itself: it is on screen only while it can scroll, and Instagram's grid of six clips can't.)
+            start = generalize_check(Check(kind="element_present", locator=chk.anchor_locator(head, screen)), examples, data_values)
+            if start is not None and picks(cand) and chk.evaluate(start, screen, examples).passed:
+                return cand, [start], "nth", len(hits)
+    return loc, [], "ambiguous", len(hits)
+
+
+# A list's scroll indicator: the date or letter label of a fast scroller, a scroll bar's thumb. Apps show it only while the
+# list moves (Instagram's gallery shows "Today" for a moment as it opens), so a check on it holds by chance.
+_SCROLL_INDICATOR = re.compile(r"fast_?scroll|scroll_?(?:bar|indicator|thumb|bubble|label|handle)|scrubber|section_?index", re.I)
+
+
+def _passing(c: Check, screen: ScreenState, nxt: ScreenState | None, examples: dict[str, str]) -> str | None:
+    """Why a check on `screen` names something only passing through it (None: it doesn't): a scroll indicator, or something
+    the same screen no longer shows when the next step starts (`nxt`, its before-screen). On Nov 1 a story replay scrolled
+    the gallery to find Instagram's fast-scroll "Today" (it shows while the grid moves), and the next step took the wrong clip."""
+    if c.kind not in ("element_present", "text_visible"):
+        return None
+    o = chk.evaluate(c, screen, examples)
+    if not o.passed:
+        return None
+    k: int | None = o.element.index if o.element is not None else None
+    for _ in range(6):  # the element and its nearest ancestors
+        if k is None or not 0 <= k < len(screen.elements):
+            break
+        x = screen.elements[k]
+        if _SCROLL_INDICATOR.search(short_id(x.resource_id) or "") or _SCROLL_INDICATOR.search(x.cls.rsplit(".", 1)[-1]):
+            return "a scroll indicator"
+        k = x.parent
+    if nxt is not None and nxt.activity == screen.activity and jaccard(signature_keys(nxt), signature_keys(screen)) >= 0.6 \
+            and not chk.evaluate(c, nxt, examples).passed:
+        return "gone from the same screen when the next step starts"
+    return None
+
+
 def _before_typed(c: Check, step: int, typed_at: dict[str, int]) -> bool:
     """A check that names an input before the step that types it (search history: "aa batteries · delete")."""
     loc = c.locator
@@ -515,7 +668,10 @@ def generalize_check(c: Check, examples: dict[str, str], data_values: list[str])
         text = None
     desc = loc.desc if _data_free(loc.desc, data_values) else None
     value = bind_inputs(c.value, examples) if c.kind == "field_equals" else c.value
-    new_loc = loc.model_copy(update={"text": text, "resource_id": rid, "desc": desc})
+    upd = {"text": text, "resource_id": rid, "desc": desc}
+    if loc.text_has and not has_slot(loc.text_has):  # an input the check names (checks._with_input): its {{slot}}
+        upd["text_has"] = bind_inputs(loc.text_has, examples) if has_slot(bind_inputs(loc.text_has, examples)) else None
+    new_loc = loc.model_copy(update=upd)
     if not (new_loc.text or new_loc.desc or (new_loc.resource_id and usable_id(new_loc.resource_id)) or new_loc.hint):
         return None
     return c.model_copy(update={"locator": new_loc, "value": value})
@@ -846,11 +1002,12 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
     adapter = adapter or ModelAdapter()
     run, records = load_trace(trace_dir, confirmed=confirmed)
     report = CompileReport(task_id=run["task_id"], goal=run["goal"])
-    steps, dropped = clean(trace_dir, records)
+    steps, dropped = clean(trace_dir, records, run.get("goal", ""))
     if (why := degenerate(run.get("goal", ""), run.get("result", ""), steps, records)) is not None:
         raise NotCompilable(why)  # before the model call: nothing to pay for
     report.dropped = dropped
     report.kept = [s.n for s in steps]
+    report.warnings += [f"trace step {s.n}: {s.moved}" for s in steps if s.moved]
     # The screen the agent answered from (its done step) is the most up to date: content can load after a step settles.
     final = _done_screen(trace_dir, records) or (steps[-1].after if steps else _final_screen(trace_dir, records))
     answer = run.get("result", "")
@@ -943,6 +1100,22 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             if searched is not None:  # a result's words are that result's: only its place (and ID, type) say "first"
                 loc = loc.model_copy(update={"text": None, "desc": None, "siblings": [], "text_has": None, "alt_texts": [],
                                              "row": [], "row_has": None})
+        extra_pre: list[Check] = []
+        if loc is not None and s.target is not None and s.kind in ("tap", "long_press", "type", "scroll_until"):
+            # A locator that fits several look-alikes on the recorded screen picks whichever comes up first on a rerun.
+            scrolled = s.kind == "scroll_until" or (i >= 2 and steps[i - 2].kind == "scroll_until")
+            loc, extra_pre, how, n = disambiguate(loc, s.target, target_screen, step_examples, data_values, scrolled=scrolled)
+            if how == "text_has":
+                report.warnings.append(f"step {i}: its target matched {n} look-alikes on the recorded screen; now the one that "
+                                       f"shows {loc.text_has}")
+            elif how == "nth":
+                place = _ORDINAL[loc.nth] if (loc.nth or 0) < len(_ORDINAL) else f"#{(loc.nth or 0) + 1}"
+                report.warnings.append(f"step {i}: its target matched {n} look-alikes on the recorded screen; now the {place} of "
+                                       f"them in its list, which must show {extra_pre[-1].locator.describe()} (the list's start)")
+            elif how == "ambiguous":
+                report.ambiguous.append({"step": sid, "trace_step": s.n, "matches": n, "locator": loc.describe()})
+                report.warnings.append(f"step {i}: ambiguous: its target matches {n} elements on the recorded screen and nothing "
+                                       f"in the run tells them apart; a rerun falls back on the ladder there")
         if s.kind in ("tap", "long_press"):
             action = StepAction(kind=s.kind, target=loc)
         elif s.kind == "type":
@@ -1003,6 +1176,15 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             post = chk.derive_post(s.before, s.after, s.kind, s.target, s.typed, examples, submit=s.submit)
         pre = [g for c in pre if (g := chk_generalize(c, examples, data_values)) is not None and not _before_typed(g, i, typed_at)]
         post = [g for c in post if (g := chk_generalize(c, examples, data_values)) is not None and not _before_typed(g, i, typed_at)]
+        # A check on something only passing through the screen holds by chance (a scroll indicator, a label gone a moment later).
+        nxt_before = steps[i].before if i < len(steps) else None
+        derived = [(pre, s.before, None)] + ([(post, s.after, nxt_before)] if s.kind != "scroll_until" else [])
+        for checks, screen, nxt in derived:
+            for c in list(checks):
+                if (why := _passing(c, screen, nxt, examples)) is not None:
+                    checks.remove(c)
+                    report.warnings.append(f"step {i}: check {c.describe()} names {why}; dropped")
+        pre += extra_pre
         if s.kind == "type" and (prior := _prior_text(s)) is not None:
             post = [c.model_copy(update={"value": bind_inputs(c.value, {FIELD: prior})}) if c.kind == "field_equals" else c for c in post]
         post, held = _effect_checks(post, s.before, examples)
@@ -1014,7 +1196,7 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
                               risk=s.risk if s.risk in ("read", "reversible", "irreversible") else "read",
                               optional=(why := _optional_why(s, sid, intent)) is not None,
                               note=f"trace step {s.n}" + (f" (+{s.scrolls} scrolls)" if s.scrolls else "")
-                              + (f" · {why}: optional" if why else "")))
+                              + (f" · {why}: optional" if why else "") + (f" · {s.moved}" if s.moved else "")))
 
     # A list row chosen by an input may sit further down for another value: reveal it first.
     with_scrolls: list[Step] = []

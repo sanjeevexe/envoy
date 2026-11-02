@@ -104,11 +104,15 @@ def test_the_starbucks_routine_types_the_drink_whatever_the_recent_searches_show
     assert not [a for a in phone.acts if a[0] == "tap" and a[1] in ("Caffe Latte", "Caffè Mocha", "Caffe Mocha", "Caramel Macchiato")]
 
 
-def test_the_compiled_starbucks_routine_stalls_on_the_recent_searches():
-    """Why it was rewritten: its step taps the recent search for the drink, and "Caffè Latte" and "Caffe Latte" tie."""
+def test_the_compiled_starbucks_routine_takes_the_recent_search_written_as_asked():
+    """Why it was rewritten: its step taps the recent search for the drink, and "Caffè Latte" and "Caffe Latte" tied, so
+    it stalled there ("no match"). Since Nov 1 a tie between rows that show the input alike is broken by the one that shows
+    it exactly as given (locators._same_case, for YouTube's "golden hour" and "Golden Hour" suggestions)."""
     v1 = load_yaml((SB / "starbucks_v1.yaml").read_text())
-    out = run(Starbucks("menu"), from_step(v1, "tap_search_menu"), {"drink_name": "Caffè Latte"}, allow_repair=False)
-    assert out.status == "failed" and "select_recent_search_result" in out.detail and "no match" in out.detail
+    phone = Starbucks("menu")
+    out = run(phone, from_step(v1, "tap_search_menu"), {"drink_name": "Caffè Latte"}, allow_repair=False)
+    assert out.status == "done" and out.outputs == {"calories": "190 calories"} and out.model_calls == 0
+    assert ("tap", "Caffè Latte", None) in phone.acts and ("tap", "Caffe Latte", None) not in phone.acts
 
 
 def test_the_starbucks_drink_step_needs_the_drinks_page_not_the_results_list():

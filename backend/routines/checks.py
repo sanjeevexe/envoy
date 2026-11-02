@@ -168,6 +168,18 @@ def anchor_locator(e: Element, screen: ScreenState) -> Locator:
     return Locator(resource_id=full.resource_id, text=text, kind=full.kind, desc=full.desc)
 
 
+def _with_input(loc: Locator, e: Element, inputs: dict[str, str]) -> Locator:
+    """An anchor that keeps a row's label, not its value ("Music" of "Music · golden hour"), still names an input its value
+    shows: TikTok's editor reads "Music" whatever the sound, so a step that added none passed (Nov 2, a post without its
+    song). The input becomes `text_has`, and the compiler writes it as its {{slot}}."""
+    label = e.label or e.text or e.desc or ""
+    if not loc.text or " · " not in label or e.editable:
+        return loc
+    value = label.split(" · ", 1)[1]
+    shown = max((v for v in inputs.values() if v and contains_value(value, v)), key=len, default=None)
+    return loc.model_copy(update={"text_has": shown}) if shown else loc
+
+
 def derive_pre(before: ScreenState, target: Element | None, inputs: dict[str, str], first: bool) -> list[Check]:
     checks = [Check(kind="app_foreground", package=before.package)]
     if first:
@@ -216,7 +228,7 @@ def derive_post(before: ScreenState, after: ScreenState, action_kind: str, targe
         if rid and rid in seen_ids:
             continue
         seen_ids.add(rid)
-        checks.append(Check(kind="element_present", locator=anchor_locator(e, after)))
+        checks.append(Check(kind="element_present", locator=_with_input(anchor_locator(e, after), e, inputs)))
         if len([c for c in checks if c.kind == "element_present"]) >= max_anchors:
             break
     if not any(c.kind in ("element_present", "toggle_is") for c in checks) and disappeared:

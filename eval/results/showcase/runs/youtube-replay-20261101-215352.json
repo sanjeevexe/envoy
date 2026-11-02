@@ -1,0 +1,175 @@
+{
+ "mode": "replay",
+ "app": "com.google.android.youtube",
+ "time": "2026-11-01T21:53:52",
+ "request": {
+  "phone": "phone-09031FDD4000C6",
+  "routine": "youtube_short_sound",
+  "inputs": {
+   "sound_title": "golden hour",
+   "sound_artist": "JVKE",
+   "short_title": "Envoy rehearsal v2 replay 3"
+  }
+ },
+ "task": {
+  "id": "task-1101-215352-24f7",
+  "status": "declined",
+  "routine": "youtube_short_sound",
+  "model_calls": 4,
+  "cost_usd": 0.1024,
+  "traces": [],
+  "detail": "the user declined the approval",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 19,
+ "repairs": [],
+ "approvals": [
+  {
+   "description": "tap \"Upload Short\" in com.google.android.youtube (routine youtube_short_sound v2)",
+   "reasons": [
+    "rule: target publishes 'Upload Short'",
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "asked_at": [
+  "Upload Short"
+ ],
+ "approval_shot": "approval-task-1101-215352-24f7.jpg",
+ "routine_steps": [
+  {
+   "id": "tap_create",
+   "status": "done",
+   "rung": 4,
+   "score": 1.0,
+   "rungs": [
+    "wait and retry: waited 2.5 s",
+    "local repair: 1 repair action(s) satisfied the after-checks"
+   ]
+  },
+  {
+   "id": "tap_import_video_from_photo_library",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "tap_select_from_gallery",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "select_newest_video",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "tap_add_selected_video",
+   "status": "done",
+   "rung": 1,
+   "score": 0.919,
+   "rungs": [
+    "wait and retry: after-checks held after 2.0 s"
+   ]
+  },
+  {
+   "id": "tap_add_sound",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "tap_music_search",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "type_sound_title",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "tap_trigger_search",
+   "status": "skipped",
+   "rung": 0,
+   "score": null,
+   "rungs": []
+  },
+  {
+   "id": "select_sound_result",
+   "status": "done",
+   "rung": 4,
+   "score": null,
+   "rungs": [
+    "wait and retry: waited 5 s",
+    "local repair: 2 repair action(s) satisfied the after-checks"
+   ]
+  },
+  {
+   "id": "tap_add_music_to_video",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "tap_next",
+   "status": "done",
+   "rung": 1,
+   "score": 1.0,
+   "rungs": [
+    "wait and retry: after-checks held after 1.5 s"
+   ]
+  },
+  {
+   "id": "type_short_caption",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "tap_post",
+   "status": "declined",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  }
+ ],
+ "auto_approved": [],
+ "marks_s": {
+  "running": 0.3,
+  "needs_you": 1.3,
+  "phone_yes": 1.3,
+  "waiting_approval": 98.0,
+  "post_asked": 98.0,
+  "declined": 99.0,
+  "end": 99.0
+ },
+ "spent": {
+  "model_calls": 4,
+  "cost_usd": 0.1024,
+  "cost_at_standard_usd": 0.1024,
+  "jobs": {
+   "repair": 4
+  }
+ },
+ "ok": true,
+ "failures": [],
+ "profile": "hybrid",
+ "cleanup": [
+  "force-stopped YouTube"
+ ]
+}

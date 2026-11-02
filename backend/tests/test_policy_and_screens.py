@@ -90,7 +90,7 @@ def _buttons(*labels: str, package: str = "com.example.app", clickable: bool = T
     return build_state(xml, package, f"{package}.MainActivity", 1080, 2400)
 
 
-@pytest.mark.parametrize("label", ["Share", "Post", "Publish", "Share now", "Post reel", "Share to your story"])
+@pytest.mark.parametrize("label", ["Share", "Post", "Publish", "Share now", "Post reel", "Share to your story", "Upload", "Upload Short", "Repost"])
 def test_a_button_that_publishes_is_irreversible_by_rule(label):
     """A public post can't be taken back, so the rules flag it without the model's label (Instagram's last screen is
     "Share")."""
@@ -100,11 +100,21 @@ def test_a_button_that_publishes_is_irreversible_by_rule(label):
     assert v.irreversible and f"rule: target publishes {label!r}" in v.reasons
 
 
-@pytest.mark.parametrize("label", ["Share your feedback", "Posts", "Post office hours", "Shared with you", "Republish settings"])
+@pytest.mark.parametrize("label", ["Share your feedback", "Posts", "Post office hours", "Shared with you", "Republish settings", "Upload settings", "Your story"])
 def test_publishing_words_inside_other_labels_are_not_flagged(label):
     s = _buttons(label)
     v = classify(Action(kind="tap", element=s.numbered[0].number), s, model_risk="reversible")
     assert not v.irreversible, v.reasons
+
+
+def test_tiktoks_your_story_button_publishes_but_instagrams_story_bubble_does_not():
+    """TikTok's editor posts a TikTok Story in one tap from "Your Story"; Instagram's feed bubble with the same words only
+    opens the camera (its story share buttons are caught by id)."""
+    tiktok = _buttons("Next", "Your Story", package="com.zhiliaoapp.musically")
+    v = classify(Action(kind="tap", element=tiktok.numbered[1].number), tiktok, model_risk="reversible")
+    assert v.irreversible and "rule: target publishes 'Your Story'" in v.reasons
+    insta = _buttons("Your story", package="com.instagram.android")
+    assert not classify(Action(kind="tap", element=insta.numbered[0].number), insta, model_risk="reversible").irreversible
 
 
 @pytest.mark.parametrize("label", ["Schedule Order", "Schedule order · $23.46", "Schedule your order", "Place Order", "Finalize order"])

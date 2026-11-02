@@ -1,0 +1,29 @@
+# com.instagram.android/com.instagram.android.activity.MainTabActivity secure=False camera=False 2026-11-01T19:22:07
+App: com.instagram.android · Screen: MainTabActivity
+[1] Button "Reel preview playing · @2131977915 · Green Screen" (id: quick_capture_root_container)
+[2] Text "Reel preview playing · @2131977915" (id: post_capture_controls_container)
+[3] Text "Reel preview playing" (id: post_capture_interactive_contents_container)
+[4] Text "Reel preview playing" (id: post_capture_interactive_drawable_container_holder)
+[5] Text "@2131977915" (id: post_capture_texture_view_container)
+[6] Button "Add audio button"
+[7] Text "Touch up"
+[8] Text "Change video speed, currently 1.0x"
+[9] Text "Enable effects button"
+[10] Button "Expand tools menu, button"
+[11] Button "Dismiss" (id: background_dimmer)
+[12] Button "What A Wonderful World · Louis Armstrong" (id: layout_container_bottom_sheet)
+[13] Button "5000.0 · Select the part of the audio track you want. Swipe left or right with two fingers to adjust value." (id: music_editor_controls_container)
+[14] List (id: recyclerview) (scrollable)
+[15] Button "Music Only" (selected)
+[16] Button "Dynamic Reveal Lyrics"
+[17] Button "Typewriter Lyrics"
+[18] Button "Karaoke Lyrics"
+[19] Button "Cube Reveal Lyrics"
+[20] Text "5000.0" (id: controls_above_scrubber_compose)
+[21] Text "Select the part of the audio track you want. Swipe left or right with two fingers to adjust value." (id: scrubber_compose_stub)
+[22] Button "Report lyrics issues" (id: report_lyrics_button)
+[23] Button "Return to music search" (id: album_art_button)
+[24] Button "Change background color" (id: music_sticker_color_button)
+[25] Button "Done" (id: music_editor_done_button)
+[26] Text "What A Wonderful World" (id: song_title_container)
+(screen has a scrollable list; scroll to see more)

@@ -1,0 +1,17 @@
+# com.instagram.android/com.instagram.android.activity.MainTabActivity secure=False camera=True 2026-11-01T19:23:57
+App: com.instagram.android · Screen: MainTabActivity
+[1] Button "Boomerang button · Effects" (id: quick_capture_root_container)
+[2] Button "Back to Home" (id: camera_home_button)
+[3] Button "Flash off" (id: camera_flash_button)
+[4] Button "Story Settings" (id: camera_settings_gear)
+[5] Button "Tô sem filtro" (id: ar_effect_in_tray_icon)
+[6] Button "OLD FILM ..️" (id: ar_effect_in_tray_icon)
+[7] Button "Shutter selected." (id: ar_effect_in_tray_icon)
+[8] Button "Shutter" (id: camera_shutter_button)
+[9] Button "Gallery" (id: gallery_preview_button)
+[10] Button "Switch to back camera" (id: camera_switch_button)
+[11] Button "Create Mode button"
+[12] Button "Expand tools menu, button"
+[13] Button "POST" (id: cam_dest_feed)
+[14] Button "STORY" (id: cam_dest_story) (selected)
+[15] Button "INSTANTS" (id: cam_dest_quick_snap)

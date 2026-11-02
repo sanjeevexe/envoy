@@ -1,0 +1,8 @@
+# com.google.android.permissioncontroller/com.android.permissioncontroller.permission.ui.GrantPermissionsActivity secure=False camera=False 2026-11-01T19:37:28
+App: com.google.android.permissioncontroller · Screen: GrantPermissionsActivity
+[1] Button (id: grant_singleton)
+[2] Button "Allow YouTube to take pictures and record video?" (id: grant_dialog)
+[3] Text "Allow YouTube to take pictures and record video?" (id: content_container)
+[4] Button "While using the app" (id: permission_allow_foreground_only_button)
+[5] Button "Only this time" (id: permission_allow_one_time_button)
+[6] Button "Don’t allow" (id: permission_deny_button)

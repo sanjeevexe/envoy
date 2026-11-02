@@ -1,0 +1,11 @@
+# com.google.android.youtube/com.google.android.apps.youtube.app.extensions.creationmodes.main.CreationModesActivity secure=False camera=False 2026-11-01T19:42:15
+App: com.google.android.youtube · Screen: CreationModesActivity
+[1] Button "Close trim" (id: shorts_trim_back)
+[2] Button "Record up to 60 seconds. Toggle to record up to 15 seconds." (id: shorts_duration_button)
+[3] Text "60s" (id: duration_button_text)
+[4] Button "Video preview. Tap to pause." (id: shorts_creation_player_view_container)
+[5] Text "Filmstrip selected at 0 minutes 0 seconds to 0 minutes 8 seconds · Left Trim Handle selected at 0 minutes 0 seconds out…" (id: shorts_edit_video_trim_container)
+[6] Text "Filmstrip selected at 0 minutes 0 seconds to 0 minutes 8 seconds · Left Trim Handle selected at 0 minutes 0 seconds out…" (id: shorts_edit_video_trim_view)
+[7] Text "Right Trim Handle selected at 0 minutes 8 seconds out of 0 minutes 8 seconds"
+[8] Text "Drag to adjust video" (id: trim_edu_container)
+[9] Button "Done" (id: creation_next_button)

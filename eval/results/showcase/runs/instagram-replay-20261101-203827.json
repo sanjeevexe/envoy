@@ -1,0 +1,69 @@
+{
+ "mode": "replay",
+ "app": "com.instagram.android",
+ "time": "2026-11-01T20:38:27",
+ "request": {
+  "phone": "phone-09031FDD4000C6",
+  "routine": "instagram_reel_song",
+  "inputs": {
+   "song_title": "golden hour",
+   "song_artist": "JVKE",
+   "caption": "Envoy rehearsal replay 2"
+  }
+ },
+ "task": {
+  "id": "task-1101-203827-e6eb",
+  "status": "declined",
+  "routine": "instagram_reel_song",
+  "model_calls": 18,
+  "cost_usd": 0.3544,
+  "traces": [],
+  "detail": "The user declined the Share action to post the reel, so the reel was not posted.",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 26,
+ "repairs": [],
+ "approvals": [
+  {
+   "description": "tap \"Share\" in com.instagram.android",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/share_button'",
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "asked_at": [
+  "Share"
+ ],
+ "auto_approved": [],
+ "marks_s": {
+  "running": 0.2,
+  "needs_you": 1.2,
+  "phone_yes": 1.2,
+  "waiting_approval": 264.6,
+  "post_asked": 264.6,
+  "declined": 267.6,
+  "end": 267.6
+ },
+ "spent": {
+  "model_calls": 18,
+  "cost_usd": 0.3544,
+  "cost_at_standard_usd": 0.3544,
+  "jobs": {
+   "repair": 4,
+   "plan": 1,
+   "step": 13
+  }
+ },
+ "ok": true,
+ "failures": [],
+ "profile": "hybrid",
+ "cleanup": [
+  "back (caption)",
+  "editor_cancel",
+  "start_over",
+  "gallery_home"
+ ]
+}

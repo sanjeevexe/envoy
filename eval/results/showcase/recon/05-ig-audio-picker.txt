@@ -1,0 +1,53 @@
+# com.instagram.android/com.instagram.android.activity.MainTabActivity secure=False camera=False 2026-11-01T19:21:10
+App: com.instagram.android · Screen: MainTabActivity
+[1] Button "Reel preview playing · @2131977915 · Green Screen" (id: quick_capture_root_container)
+[2] Button "Tap to open current video in Edits timeline editor."
+[3] Text "Try Edits"
+[4] Text "Reel preview playing · @2131977915" (id: post_capture_controls_container)
+[5] Text "Reel preview playing" (id: post_capture_interactive_contents_container)
+[6] Text "Reel preview playing" (id: post_capture_interactive_drawable_container_holder)
+[7] Text "@2131977915" (id: post_capture_texture_view_container)
+[8] Button "Add audio button"
+[9] Text "Touch up"
+[10] Text "Change video speed, currently 1.0x"
+[11] Text "Enable effects button"
+[12] Button "Expand tools menu, button"
+[13] Button (id: layout_container_bottom_sheet)
+[14] EditText "Search..." (id: row_search_edit_text) (empty)
+[15] Button "Import music · Import"
+[16] Text "Import music · Import" (id: import_button_on_search_bar)
+[17] List (scrollable)
+[18] Text "For you"
+[19] Button "Trending"
+[20] Button "Saved"
+[21] Button "Original audio"
+[22] List (id: content_list) (scrollable)
+[23] List (scrollable)
+[24] Button "Album art · have u eva (feat. Cannelle) · horsegiirL" (id: spotlight_banner_frame_layout)
+[25] Text "Page 1 of 6"
+[26] Button "Select track Girls Just Want To Have Fun by Cyndi Lauper,1.4M reels,3:54" (id: audio_browser_preview_track_1_323230265024757_TRACK_323230265024757)
+[27] Text "Girls Just Want To Have Fun · Cyndi Lauper • 1.4M reels • 3:54" (id: text_container)
+[28] Text "Girls Just Want To Have Fun" (id: song_title_container)
+[29] Text "Cyndi Lauper • 1.4M reels • 3:54" (id: artist_name_container)
+[30] Button "Save Girls Just Want To Have Fun by Cyndi Lauper"
+[31] Button "Select track Regulate (feat. Nate Dogg) by Warren G,explicit,56K reels,4:08" (id: audio_browser_preview_track_1_389476718308916_TRACK_389476718308916)
+[32] Text "Regulate (feat. Nate Dogg) · E · Warren G • 56K reels • 4:08" (id: text_container)
+[33] Text "Regulate (feat. Nate Dogg) · E" (id: song_title_container)
+[34] Text "Warren G • 56K reels • 4:08" (id: artist_name_container)
+[35] Button "Save Regulate (feat. Nate Dogg) by Warren G"
+[36] Button "Select track What A Wonderful World by Louis Armstrong,1.2M reels,2:17" (id: audio_browser_preview_track_1_900313413487875_TRACK_900313413487875)
+[37] Text "What A Wonderful World · Louis Armstrong • 1.2M reels • 2:17" (id: text_container)
+[38] Text "What A Wonderful World" (id: song_title_container)
+[39] Text "Louis Armstrong • 1.2M reels • 2:17" (id: artist_name_container)
+[40] Button "Save What A Wonderful World by Louis Armstrong"
+[41] Button "Select track I Know What You Want x Madison Calley by madisoncalley,13M reels,0:57" (id: audio_browser_preview_track_1_3132622323696161_TRACK_3132622323696161)
+[42] Text "I Know What You Want x Madison Calley · madisoncalley • 13M reels • 0:57" (id: text_container)
+[43] Text "I Know What You Want x Madison Calley" (id: song_title_container)
+[44] Text "madisoncalley • 13M reels • 0:57" (id: artist_name_container)
+[45] Button "Save I Know What You Want x Madison Calley by madisoncalley"
+[46] Button "Select track Grateful for It All by Gary Rivers Music,5.4K reels,3:40" (id: audio_browser_preview_track_1_1828827664873635_TRACK_1828827664873635)
+[47] Text "Grateful for It All · Gary Rivers Music • 5.4K reels • 3:40" (id: text_container)
+[48] Text "Grateful for It All" (id: song_title_container)
+[49] Text "Gary Rivers Music • 5.4K reels • 3:40" (id: artist_name_container)
+[50] Button "Save Grateful for It All by Gary Rivers Music"
+(screen has a scrollable list; scroll to see more)

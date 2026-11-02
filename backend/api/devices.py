@@ -23,6 +23,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any
 
+from devices.apps import looks_like_package
 from devices.emulator import AVDS, EmulatorDevice
 from devices.phone import PhoneDevice, discover
 
@@ -30,6 +31,15 @@ SKYLARK = "com.skylark.air"
 NAMES = {"envoy-test": "Test phone", "envoy-real": "Real-app phone", "envoy-small": "Small test phone", "envoy-large": "Large test phone"}
 # Apps that may come to the front on their own without it being you: Envoy's banner, the launcher Envoy itself opens.
 BENIGN_FRONT = {"ai.envoy.banner", "com.android.systemui"}
+# How long after Envoy launches an app that app may still come to the front as Envoy's doing. `am start` returns before
+# the app draws a window: TikTok's cold start after a fresh launch took ~4 s on the Pixel 5 (Nov 1), past the 3 s that
+# any other change gets after one of Envoy's actions, and paused 2 of 3 replays as "came to the front on its own".
+LAUNCH_WAIT_S = 20.0
+# How long after a hand back the banner may still read paused because the Resume it was sent hasn't landed: the read is
+# an adb call (~100 ms) and `am start-foreground-service` returns before the banner takes the intent. A read from that
+# moment re-paused the phone at once with the Pause the hand back was lifting (backlog #57). Past this, the banner's
+# Pause is believed again: the phone shows it, so Envoy shouldn't act as if it didn't.
+RESUME_LANDS_S = 3.0
 
 
 def phone_ref(phone: dict[str, Any] | None, whose: str = "your") -> str:
@@ -49,6 +59,8 @@ class Lease:
     requested_at: float = 0.0  # when the agent last asked the user to take over
     handed_back_at: float = 0.0
     last_agent_call: float = 0.0  # when the agent last acted (a foreground change soon after is its own doing)
+    launching: str = ""  # the app Envoy last launched, until it is seen in front after the launch
+    launched_at: float = 0.0  # when that launch returned (0 while it is still under way)
     guard: Any = None  # on a real phone: checked before every call of the agent's; True means it just paused for you
     teach: dict[str, Any] | None = None  # a teach session on this phone (api/teach.py): its goal, and whether it is recording
     agent_turn: asyncio.Event = field(default_factory=asyncio.Event)  # set while the agent may use the phone
@@ -79,14 +91,38 @@ class GatedDevice:
             await self._lease.agent_turn.wait()
             if self._lease.guard is not None and self._lease.guard():  # you touched the phone a moment ago
                 await self._lease.agent_turn.wait()
+            target = self._launch_target(name, args, kwargs)
             if name in ("act", "launch"):  # and when it starts: a fresh launch shows the home screen before the app
                 self._lease.last_agent_call = time.time()
+            if target:
+                self._lease.launching, self._lease.launched_at = target, 0.0
             try:
                 return await attr(*args, **kwargs)
             finally:
                 if name in ("act", "launch"):
                     self._lease.last_agent_call = time.time()
+                if target and self._lease.launching == target:
+                    self._lease.launching, self._lease.launched_at = self._launched_package(target), time.time()
         return gated
+
+    @staticmethod
+    def _launch_target(name: str, args: tuple, kwargs: dict) -> str:
+        """The app a call launches: `launch(package)`, or an action of kind "launch" (the agent's, a routine step's)."""
+        if name == "launch":
+            return str(args[0] if args else kwargs.get("package") or "")
+        if name == "act":
+            action = args[0] if args else kwargs.get("action")
+            if getattr(action, "kind", None) == "launch":
+                return str(getattr(action, "package", None) or "")
+        return ""
+
+    def _launched_package(self, target: str) -> str:
+        """An app launched by the name people use ("TikTok") is in front as its package: the launcher activity the
+        phone resolved the name to says which."""
+        if looks_like_package(target):
+            return target
+        comp = str(getattr(self._device, "_launchers", {}).get(target) or "")
+        return comp.split("/")[0] if "/" in comp else target
 
 
 class DevicePool:
@@ -180,6 +216,7 @@ class DevicePool:
             return
         self._background(device.banner.show, banner_text)
         self.stop_watch(did)
+        self.leases[did].launching = ""  # an earlier task's launch excuses nothing in this one
         started = time.time()
         # The touch watcher hears a finger within milliseconds; checking it before each of the agent's calls (no adb)
         # stops the very next action, which the 0.5 s watch loop alone could miss (Phase 6: two steps slipped through).
@@ -214,6 +251,9 @@ class DevicePool:
         lease = self.leases[did]
         started = started or time.time()
         seen_handback = lease.handed_back_at
+        resuming = 0.0  # when the last hand back was seen, until the banner shows its Resume landed
+        landed = 0.0  # a hand back made because the banner already showed Resume: nothing to wait for
+        held = (0.0, 0.0)  # (lease.since, the banner's own time of its Pause) while the phone was yours
         # What is in front when Envoy starts (your home screen, an app Envoy has no name for) is not a change. Expecting
         # `app` from the start paused tasks on the Pixel 5 before the agent's first action (Oct 30).
         try:
@@ -235,22 +275,39 @@ class DevicePool:
             try:
                 banner = await asyncio.to_thread(device.banner.state)
                 if lease.user_control:
+                    if banner["paused"]:
+                        held = (lease.since, banner["changed_at"])
                     if banner["shown"] and not banner["paused"] and banner["changed_at"] > lease.since:
                         self.hand_back(did, by="you, on the phone")
+                        landed = lease.handed_back_at
                     continue
                 if lease.handed_back_at > seen_handback:  # you gave it back (here, in the app, or on the iPhone)
                     seen_handback = lease.handed_back_at
+                    resuming = 0.0 if landed == seen_handback else time.time()
                     last_pkg = await asyncio.to_thread(device.foreground_package) or last_pkg
                     if on_change:
                         on_change(False, "")
-                if banner["paused"]:
+                # Until a hand back's Resume lands, the banner may still show the Pause it lifted: that one isn't yours.
+                # A Pause newer than it (by the banner's own clock) is, and so is one still there after RESUME_LANDS_S.
+                if resuming and (not banner["paused"] or time.time() - resuming > RESUME_LANDS_S
+                                 or (held[0] == lease.since > 0 and banner["changed_at"] > held[1])):
+                    resuming = 0.0
+                if banner["paused"] and not resuming:
                     pause(f"paused: {banner['reason'] or 'you pressed Pause on the phone'}", None)
                     continue
                 if self._touched(did, device, started, on_change):
                     continue
+                checked = time.time()
                 pkg = await asyncio.to_thread(device.foreground_package)
+                # The app Envoy just launched is its own doing however long it takes to draw, within LAUNCH_WAIT_S. Once
+                # it has been in front after the launch returned, it is judged like any other app (seen before that,
+                # it may be the copy a fresh launch is about to stop).
+                launched = bool(pkg) and pkg == lease.launching \
+                    and (not lease.launched_at or checked - lease.launched_at <= LAUNCH_WAIT_S)
+                if launched and lease.launched_at and checked >= lease.launched_at:
+                    lease.launching = ""
                 if pkg and pkg != last_pkg and pkg not in BENIGN_FRONT:
-                    if time.time() - lease.last_agent_call > 3:
+                    if not launched and time.time() - lease.last_agent_call > 3:
                         pause(f"paused: {pkg} came to the front on its own", "another app came to the front")
                         continue
                     last_pkg = pkg

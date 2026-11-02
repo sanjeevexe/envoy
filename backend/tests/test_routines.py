@@ -228,6 +228,17 @@ def test_recompile_flag_after_most_recent_runs_fail(tmp_path):
     assert flags[-1] is True and flags[2] is False
 
 
+def test_runs_the_user_declined_at_the_approval_never_flag_a_recompile(tmp_path):
+    """Rehearsals of a posting routine all end "declined" at Share: the routine worked, so it isn't flagged."""
+    from routines.executor import RunOutcome
+    store = RoutineStore(tmp_path)
+    r = store.add(_routine())
+    flags = [store.record_run(r.routine, RunOutcome(r.routine, 1, f"t{i}", "declined")) for i in range(6)]
+    assert not any(flags) and store.index(r.routine)["needs_recompile"] is False
+    flags = [store.record_run(r.routine, RunOutcome(r.routine, 1, f"f{i}", s)) for i, s in enumerate(["failed", "failed", "failed", "failed"])]
+    assert flags[-1] is True  # 4 failures in the last 6 runs still flag it
+
+
 def _labels_screen(labels: list[tuple[str, str, bool]]) -> ScreenState:
     """A tiny screen: (kind, label, in_list) per element, stacked top to bottom."""
     from routines.screens import screen_from_tree

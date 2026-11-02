@@ -64,8 +64,10 @@ from api.repeats import Repeats
 from api.push import Pusher, VapidKeys
 from api.runner import SHOTS, TaskRunner
 from api.scheduler import Scheduler, check_alert, check_ask
+from api.sharing import Sharing, sharing_router
 from api.siri import siri_router
 from api.store import API_DIR, REPO, TaskStore, new_id
+from api.task_files import FILES, TaskFiles, files_router
 from api.teach import Teacher, TeachError
 from api.voice import voice_session
 
@@ -141,12 +143,15 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     bus.listeners.append(scheduler.repeats.on_event)
     runner.recurring = Recurring(ctx.offers, scheduler, adapter)  # chat sets up recurring jobs, switched off (api/recurring.py)
     ctx.handoff = Handoff(tasks, pool, bus, offers=ctx.offers, runner=runner)  # type: ignore[attr-defined]  # files from the Mac to the phone (api/handoff.py)
+    ctx.files = TaskFiles(tasks, runner, shots=API_DIR / "shots", approvals=API_DIR / "approvals",  # type: ignore[attr-defined]
+                          log=LOGS / "files.jsonl")  # files back to the agent: get_file's download links (api/task_files.py)
     teacher = ctx.teacher = Teacher(pool, tasks, bus, routines, adapter, runner)  # type: ignore[attr-defined]  # you show a task once (api/teach.py)
     ctx.notifications = NotificationWatcher(tasks, pool, scheduler, bus)  # type: ignore[attr-defined]  # notifications on Envoy's phone (api/notifications.py)
 
     from mcp_server.server import build_mcp, mcp_app
     from mcp_stub.common import bearer_token
     from mcp_stub.middleware import BearerAuthLogMiddleware
+    ctx.sharing = Sharing(tasks)  # type: ignore[attr-defined]  # which routines agents can call as tools (api/sharing.py)
     ctx.mcp = build_mcp(ctx, PORT, base=public)  # type: ignore[attr-defined]
     mcp_inner = mcp_app(ctx.mcp, PORT, extra_hosts=hosts)  # type: ignore[attr-defined]
     auth.mcp_token = bearer_token()  # Muse's key: every tool. Other agents' keys are in device_tokens (contract 2)
@@ -740,6 +745,8 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
 
     # ---- routines and triggers -----------------------------------------------------------------
 
+    app.include_router(sharing_router(ctx, session, ctx.mcp.agent_tools))  # type: ignore[attr-defined]  # first: /api/routines/{name} would take "sharing"
+
     @app.get("/api/routines", dependencies=[Depends(session)])
     def list_routines() -> list[dict[str, Any]]:
         out = []
@@ -835,6 +842,7 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     app.include_router(offers_router(ctx, session, caller))
     app.include_router(agents_router(ctx, session, owner, caller))  # a key per AI agent (Settings › Agents)
     app.include_router(handoff_router(ctx, session, caller, door_key=bearer_token(), door_log=LOGS / "door.jsonl"))  # files from another Mac
+    app.include_router(files_router(ctx.files))  # type: ignore[attr-defined]  # get_file's downloads, by signed link only
     app.include_router(siri_router(ctx, session, caller, csrf))
     app.include_router(signin_router(tasks, session))  # saved logins, off by default (api/autofill.py)
     app.include_router(notifications_router(ctx, session))  # which apps' notifications Envoy watches, off by default
@@ -860,9 +868,10 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     async def dispatch(scope: dict, receive: Any, send: Any) -> None:
         """Only the names Envoy is served on (DNS rebinding); WebSockets only from those origins. A public address for AI
         clients (Muse) reaches /mcp and nothing else, and so does anything Tailscale says came in from the internet
-        (Funnel), whatever its host; under /mcp that includes the outbox's door (/mcp/outbox, the Mac's forwarder, same key).
-        /mcp goes to the MCP server, whose bearer check takes Muse's key or an agent's (Auth.agent_for, which names the
-        agent for the call: api/agents.py); the door and everything else to the API and web app."""
+        (Funnel), whatever its host; under /mcp that includes the outbox's door (/mcp/outbox, the Mac's forwarder, same key)
+        and get_file's downloads (/mcp/files/…, a signed link each). /mcp goes to the MCP server, whose bearer check takes
+        Muse's key or an agent's (Auth.agent_for, which names the agent for the call: api/agents.py); the door, the
+        downloads and everything else to the API and web app."""
         if scope["type"] in ("http", "websocket"):
             headers = {k.decode("latin-1").lower(): v.decode("latin-1") for k, v in scope.get("headers") or []}
             origin = headers.get("origin", "")
@@ -878,7 +887,8 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
                     await receive()
                     await send({"type": "websocket.close", "code": 4403})
                 return
-        if scope["type"] == "http" and (scope["path"] == "/mcp" or scope["path"].startswith("/mcp/")) and scope["path"] != DOOR:
+        if scope["type"] == "http" and (scope["path"] == "/mcp" or scope["path"].startswith("/mcp/")) and scope["path"] != DOOR \
+                and not scope["path"].startswith(FILES + "/"):
             await mcp(scope, receive, send)
         else:
             await app(scope, receive, send)

@@ -1,0 +1,134 @@
+{
+ "prompt": "Use Envoy to check the status of SkyLark flight SL 1190.",
+ "steps": [
+  {
+   "step": "init",
+   "model": "claude-opus-5",
+   "envoy": [
+    {
+     "name": "envoy",
+     "status": "connected"
+    }
+   ],
+   "allowed": "mcp__envoy only"
+  },
+  {
+   "step": "says",
+   "text": "I'll check Envoy's memory first, then use the phone if needed."
+  },
+  {
+   "step": "call",
+   "tool": "ToolSearch",
+   "input": {
+    "query": "select:mcp__envoy__memory_search,mcp__envoy__run_task,mcp__envoy__get_task,mcp__envoy__list_routines,mcp__envoy__list_phones",
+    "max_results": 5
+   }
+  },
+  {
+   "step": "call",
+   "tool": "mcp__envoy__memory_search",
+   "input": {
+    "query": "SkyLark SL 1190 flight status"
+   }
+  },
+  {
+   "step": "result",
+   "tool": "mcp__envoy__memory_search",
+   "error": false,
+   "text": "(memory result, not kept in the public repo)"
+  },
+  {
+   "step": "call",
+   "tool": "mcp__envoy__list_routines",
+   "input": {}
+  },
+  {
+   "step": "result",
+   "tool": "mcp__envoy__list_routines",
+   "error": false,
+   "text": "17 routines: amazon_search_price, chipotle_item_price, chrome_get_cheapest_flight_price, clock_set_alarm, doordash_order_meal, gmail_search_subject, lyft_get_ride_fare, play_app_rating, skylark_add_known_traveler_number, skylark_air_check_in_flight, skylark_change_seat, skylark_check_flight_status, skylark_check_in_flight, skylark_get_flight_gate, skylark_lookup_trip_destination, starbucks_drink_calories, youtube_search_first_video"
+  },
+  {
+   "step": "says",
+   "text": "Memory has the booking but no live status. Running the SkyLark status routine on the phone."
+  },
+  {
+   "step": "call",
+   "tool": "ToolSearch",
+   "input": {
+    "query": "select:mcp__envoy__run_routine",
+    "max_results": 1
+   }
+  },
+  {
+   "step": "call",
+   "tool": "mcp__envoy__run_routine",
+   "input": {
+    "name": "skylark_check_flight_status",
+    "inputs": {
+     "flight_number": "SL 1190"
+    }
+   }
+  },
+  {
+   "step": "result",
+   "tool": "mcp__envoy__run_routine",
+   "error": false,
+   "text": "{\"task_id\": \"task-1101-192406-ec01\", \"status\": \"queued\", \"heads_up\": [\"Using your routine “Check the status of a SkyLark flight”: usually 2 s, no model calls.\"]}"
+  },
+  {
+   "step": "says",
+   "text": "Heads-up from Envoy: it's using your saved routine \"Check the status of a SkyLark flight\" — usually ~2s, no model calls."
+  },
+  {
+   "step": "call",
+   "tool": "mcp__envoy__get_task",
+   "input": {
+    "task_id": "task-1101-192406-ec01"
+   }
+  },
+  {
+   "step": "result",
+   "tool": "mcp__envoy__get_task",
+   "error": false,
+   "text": "{\"task_id\": \"task-1101-192406-ec01\", \"status\": \"running\", \"routine\": \"skylark_check_flight_status\"}"
+  },
+  {
+   "step": "call",
+   "tool": "mcp__envoy__get_task",
+   "input": {
+    "task_id": "task-1101-192406-ec01"
+   }
+  },
+  {
+   "step": "result",
+   "tool": "mcp__envoy__get_task",
+   "error": false,
+   "text": "{\"task_id\": \"task-1101-192406-ec01\", \"status\": \"running\", \"routine\": \"skylark_check_flight_status\"}"
+  },
+  {
+   "step": "call",
+   "tool": "mcp__envoy__get_task",
+   "input": {
+    "task_id": "task-1101-192406-ec01"
+   }
+  },
+  {
+   "step": "result",
+   "tool": "mcp__envoy__get_task",
+   "error": false,
+   "text": "{\"task_id\": \"task-1101-192406-ec01\", \"status\": \"done\", \"routine\": \"skylark_check_flight_status\", \"result\": \"flight status: Delayed 25 min; route: ATL → DEN; date: Sat, Nov 14, 2026; gate: A7; departure time: 2:45 PM\", \"detail\": \"all steps and checks passed\"}"
+  },
+  {
+   "step": "says",
+   "text": "**SL 1190 — Delayed 25 min**\n\n| | |\n|---|---|\n| Route | ATL → DEN |\n| Date | Sat, Nov 14, 2026 |\n| Scheduled departure | 2:45 PM (so ~3:10 PM as delayed) |\n| Gate | A7 |\n\nFrom your booking in Envoy's memory: seat 21C, boarding group 5, confirmation PT4R8Z, scheduled arrival 4:05 PM.\n\nSince the flight is still two weeks out, the delay and gate will likely shift — worth re-checking closer to the date."
+  },
+  {
+   "step": "end",
+   "turns": 9,
+   "duration_ms": 22774,
+   "claude_cost_usd": 0.6964,
+   "final": "**SL 1190 — Delayed 25 min**\n\n| | |\n|---|---|\n| Route | ATL → DEN |\n| Date | Sat, Nov 14, 2026 |\n| Scheduled departure | 2:45 PM (so ~3:10 PM as delayed) |\n| Gate | A7 |\n\nFrom your booking in Envoy's memory: seat 21C, boarding group 5, confirmation PT4R8Z, scheduled arrival 4:05 PM.\n\nSince the flight is still two weeks out, the delay and gate will likely shift — worth re-checking closer to the date."
+  }
+ ]
+}

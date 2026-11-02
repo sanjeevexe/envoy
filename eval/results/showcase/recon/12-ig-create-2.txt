@@ -1,0 +1,33 @@
+# com.instagram.android/com.instagram.android.activity.MainTabActivity secure=False camera=True 2026-11-01T19:23:45
+App: com.instagram.android · Screen: MainTabActivity
+[1] Button "Back to Home" (id: gallery_cancel_button)
+[2] Text "New reel" (id: gallery_title_container)
+[3] Button "Camera settings" (id: gallery_settings_gear)
+[4] List (id: gallery_destination_bar) (scrollable)
+[5] Button "Edits" (id: gallery_destination_item)
+[6] Button "Drafts · 46" (id: gallery_destination_item)
+[7] Button "Templates" (id: gallery_destination_item)
+[8] Button "Recents"
+[9] Button "Select multiple, activate to select multiple photos in your gallery · Select"
+[10] Button (id: gallery_menu_multi_select_button)
+[11] List (id: gallery_recycler_view) (scrollable)
+[12] Button "Open camera"
+[13] Image "Camera" (id: gallery_grid_camera_item_icon)
+[14] Button "0:08"
+[15] Button "Unselected Video thumbnail created on November 1, 2026 7:19 PM" (id: gallery_grid_item_thumbnail)
+[16] Button "0:08"
+[17] Button "Unselected Video thumbnail created on November 1, 2026 1:51 PM" (id: gallery_grid_item_thumbnail)
+[18] Button "0:04"
+[19] Button "Unselected Video thumbnail created on October 30, 2026 5:27 PM" (id: gallery_grid_item_thumbnail)
+[20] Button "0:04"
+[21] Button "Unselected Video thumbnail created on October 30, 2026 5:25 PM" (id: gallery_grid_item_thumbnail)
+[22] Button "0:04"
+[23] Button "Unselected Video thumbnail created on October 30, 2026 5:23 PM" (id: gallery_grid_item_thumbnail)
+[24] Button "Unselected Video thumbnail created on October 30, 2026 5:21 PM" (id: gallery_grid_item_thumbnail)
+[25] Button "Unselected Video thumbnail created on October 30, 2026 5:18 PM" (id: gallery_grid_item_thumbnail)
+[26] Button "Unselected Video thumbnail created on October 30, 2026 2:08 PM" (id: gallery_grid_item_thumbnail)
+[27] Button "STORY" (id: cam_dest_story)
+[28] Button "INSTANTS" (id: cam_dest_quick_snap)
+[29] Button "REEL" (id: cam_dest_clips) (selected)
+[30] Button "LIVE" (id: cam_dest_live)
+(screen has a scrollable list; scroll to see more)

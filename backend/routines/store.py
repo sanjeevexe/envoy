@@ -256,13 +256,16 @@ class RoutineStore:
         self._set_status(name, version, "rejected", trial=trial)
 
     def record_run(self, name: str, outcome: RunOutcome, kind: str = "run") -> bool:
-        """Log a run; returns True when the routine now fails more than half of its recent runs."""
+        """Log a run; returns True when the routine now fails more than half of its recent runs (a run the user declined at
+        its approval isn't a failure)."""
         idx = self.index(name)
         idx["runs"].append({"time": time.strftime("%Y-%m-%d %H:%M:%S"), "kind": kind, "version": outcome.version, "task_id": outcome.task_id,
                             "status": outcome.status, "rung": outcome.rung, "model_calls": outcome.model_calls,
                             "duration_s": outcome.duration_s, "patches": len(outcome.patches)})
         recent = [r for r in idx["runs"] if r["kind"] == "run"][-RECENT_RUNS:]
-        failures = sum(1 for r in recent if r["status"] != "done")
+        # A run the user declined at its approval did its job: it reached the step that asks and stopped there because they
+        # said no (every rehearsal of a posting routine ends that way), so it doesn't count toward recompiling.
+        failures = sum(1 for r in recent if r["status"] not in ("done", "declined"))
         idx["needs_recompile"] = len(recent) >= MIN_RUNS_FOR_RECOMPILE and failures > len(recent) / 2
         self._write_index(name, idx)
         return idx["needs_recompile"]

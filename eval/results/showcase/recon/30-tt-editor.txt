@@ -1,0 +1,21 @@
+# com.zhiliaoapp.musically/com.ss.android.ugc.aweme.splash.SplashActivity secure=False camera=False 2026-11-01T19:29:24
+App: com.zhiliaoapp.musically · Screen: SplashActivity
+[1] Button "Music · Cavern Below the House" (id: e1x)
+[2] Text "Music · Cavern Below the House" (id: e1v)
+[3] Button "@2131823392" (id: e1l)
+[4] Image "Close" (id: e1m)
+[5] Button "Your Story" (id: ts6)
+[6] Text "Your Story" (id: tsa)
+[7] Button "Next" (id: q25)
+[8] Button (id: bry)
+[9] Button "Settings"
+[10] Button "Share"
+[11] Button "Edit"
+[12] Button "Templates"
+[13] Button "Text"
+[14] Button "Stickers"
+[15] Button "Filters"
+[16] Button "Voice"
+[17] Button "Captions"
+[18] Button (id: zh2)
+[19] Button "AI · AutoCut" (id: hpm)

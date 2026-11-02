@@ -1,9 +1,12 @@
 """File delivery wherever Envoy runs (backlog #48): the outbox's door (`/mcp/outbox`), the Mac's forwarder
-(api/forwarder.py), send_to_phone waiting for a file on its way, and list_phones. The public-host rule for the door is
-in test_phase5.py, beside /mcp's."""
+(api/forwarder.py), send_to_phone waiting for a file on its way, and list_phones. Files back to the agent (T2c):
+get_file's signed download links (api/task_files.py). The public-host rule for the door and the downloads is in
+test_phase5.py, beside /mcp's."""
 
 from __future__ import annotations
 
+import asyncio
+import io
 import json
 import threading
 import time
@@ -12,10 +15,14 @@ from types import SimpleNamespace
 import httpx
 import pytest
 from fastapi.testclient import TestClient
+from PIL import Image
 
+from api.auth import group_of
 from api.forwarder import Forwarder, KeyRefused, door_url, main as forwarder_main, remote_host
 from api.handoff import DOOR, HANDOFF_TEMPLATES, HandoffError, door_name
+from api.task_files import link_base, links_in
 from test_handoff import MP4, POSTING, Clock
+from test_agent_keys import call as call_as, key, new_agent, tools as tools_of
 from test_mcp_link import HDR, call, make, me
 
 KEY = {"Authorization": "Bearer mcp-test-token"}
@@ -436,3 +443,207 @@ def test_list_phones_says_each_phones_kind_whether_its_online_and_its_apps(env, 
     by = {p["id"]: p for p in cloud["phones"]}
     assert by["envoy-test"]["kind"] == by["envoy-real"]["kind"] == "cloud"
     assert "Instagram" in by["envoy-real"]["apps"] and "Target" not in by["envoy-real"]["apps"]  # with no phone, routing's fallback; Target can't
+
+
+# ---- files back to the agent: get_file (T2c) ----------------------------------------------------------
+
+
+class Phone:
+    """A phone at a run's end: the frame Envoy takes of its last screen."""
+
+    def __init__(self, color=(62, 124, 92)) -> None:
+        self.color, self.widths = color, []
+
+    def frame(self, width: int, timeout: float = 5):
+        self.widths.append(width)
+        return Image.new("RGB", (width, width * 2), self.color)
+
+
+def finished(env, goal="post the clip to Instagram", source="mcp", status="done", result=None, phone=True, secure=False,
+             agent="Muse", **fields) -> str:
+    """A task that ran, started by `agent` (as an MCP call records it): its final screen taken through the runner's
+    hook, as a run's last look takes it."""
+    tid = env.ctx.tasks.create(goal, source, status=status, result=result, **({"agent": agent} if agent else {}), **fields)["id"]
+    if phone:
+        env.ctx.runner.devices[tid] = Phone()
+        env.ctx.files.on_final(tid, SimpleNamespace(secure=secure), {})  # off the loop: the picture is taken right here
+        env.ctx.runner.devices.pop(tid)
+    return tid
+
+
+def approved(env, tid: str, what='tap "Share"', status="approved") -> dict:
+    a = env.ctx.tasks.add_approval(tid, what, ["rule: posts"], "com.instagram.android", "Share", f"{tid}-a.jpg")
+    (env.tmp / "approvals").mkdir(exist_ok=True)
+    (env.tmp / "approvals" / f"{tid}-a.jpg").write_bytes(b"\xff\xd8approval-picture")
+    env.ctx.tasks.decide_approval(a["id"], status, "user")
+    return env.ctx.tasks.approval(a["id"])
+
+
+def path_of(url: str) -> str:
+    return "/" + url.split("://", 1)[1].split("/", 1)[1]
+
+
+def test_get_file_gives_an_agent_its_tasks_final_screen_approval_screens_and_links(env):
+    tid = finished(env, result="posting confirmation: Your reel has been shared; reel url: https://www.instagram.com/reel/C0ffee123/.")
+    a = approved(env, tid)
+    assert (env.tmp / "shots" / tid / "final.jpg").is_file()
+    with TestClient(env.ctx.asgi) as c:
+        tools = {t["name"]: t for t in c.post("/mcp", json={"jsonrpc": "2.0", "id": 1, "method": "tools/list", "params": {}},
+                                              headers=HDR).json()["result"]["tools"]}
+        got = call(c, "get_file", task_id=tid)
+        final, shot = got["files"]
+        down = c.get(path_of(final["url"]))
+        head = c.head(path_of(final["url"]))
+        approval = c.get(path_of(shot["url"]))
+        local = c.post("/mcp", json={"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "get_file", "arguments": {
+            "task_id": tid, "which": "final"}}}, headers={**HDR, "Host": "127.0.0.1:8700"}).json()
+        only = {w: call(c, "get_file", task_id=tid, which=w) for w in ("final", "approval", "link", "everything")}
+    assert tools["get_file"]["annotations"]["readOnlyHint"] is True and set(tools["get_file"]["inputSchema"]["properties"]) == {"task_id", "which"}
+    assert got["status"] == "done" and [f["which"] for f in got["files"]] == ["final", "approval"]
+    assert final["url"].startswith(f"https://testserver/mcp/files/{tid}/final?exp=")  # the address the agent called
+    assert shot["file_id"] == a["id"] and '"tap "Share"" (approved)' in shot["about"]
+    assert got["links"] == [{"url": "https://www.instagram.com/reel/C0ffee123/", "name": "reel url", "task_id": tid}]
+    assert "2 files" in got["text"] and "10 minutes" in got["text"] and "1 link" in got["text"]
+    assert down.status_code == 200 and down.headers["content-type"] == "image/jpeg" and "no-store" in down.headers["cache-control"]
+    assert down.content == (env.tmp / "shots" / tid / "final.jpg").read_bytes() and down.content[:2] == b"\xff\xd8"
+    assert Image.open(io.BytesIO(down.content)).size == (720, 1440)
+    assert head.status_code == 200 and head.content == b""
+    assert approval.status_code == 200 and approval.content == b"\xff\xd8approval-picture"
+    url = json.loads(local["result"]["content"][0]["text"])["files"][0]["url"]
+    assert url.startswith(f"http://127.0.0.1:8700/mcp/files/{tid}/final?")  # this Mac's own address stays http
+    assert [f["which"] for f in only["final"]["files"]] == ["final"] and only["final"]["links"] == []
+    assert [f["which"] for f in only["approval"]["files"]] == ["approval"]
+    assert only["link"]["files"] == [] and len(only["link"]["links"]) == 1
+    assert "error" in only["everything"]
+    log = [json.loads(line) for line in (env.tmp / "files.jsonl").read_text().splitlines()]
+    assert [(r["file_id"], r["status"]) for r in log] == [("final", 200), ("final", 200), (a["id"], 200)]
+    assert "sig" not in (env.tmp / "files.jsonl").read_text()  # a link is a credential: never logged
+
+
+def test_get_file_is_only_for_tasks_the_calling_agent_started(env):
+    """Contract 2: a task's agent (recorded when an agent's MCP call starts it) must be the caller's. Muse's key gets
+    Muse's tasks only, and a key without the "files" group can't call get_file at all."""
+    mine = finished(env)
+    legacy = finished(env, agent=None)  # started over MCP before agent keys: nobody's
+    web, chat, trigger = (finished(env, source=s, agent=None) for s in ("web", "chat", "trigger"))  # the user's own
+    theirs = finished(env, agent="Claude")
+    with TestClient(env.ctx.asgi) as c:
+        _, claude = new_agent(c, env, "Claude", ["read", "run", "files"])
+        _, reader = new_agent(c, env, "Reader", ["read"])
+        assert call(c, "get_file", task_id=mine)["files"]
+        for tid in (theirs, legacy, web, chat, trigger):
+            got = call(c, "get_file", task_id=tid)
+            assert "files" not in got and "only from tasks you (Muse) started" in got["error"], tid
+        assert call(c, "get_file", task_id="task-nope")["error"] == "no task task-nope"
+        assert "no task" in call(c, "get_file", task_id="../../session_token")["error"]
+        as_claude = {tid: call_as(c, key(claude), "get_file", task_id=tid) for tid in (theirs, mine, legacy, web)}
+        listed = tools_of(c, key(reader))
+        refused = call_as(c, key(reader), "get_file", task_id=mine)
+    err, text = as_claude[theirs]
+    assert not err and json.loads(text)["files"][0]["task_id"] == theirs
+    for tid in (mine, legacy, web):
+        err, text = as_claude[tid]
+        assert not err and "only from tasks you (Claude) started" in json.loads(text)["error"]
+    assert group_of("get_file") == "files" and "get_file" not in listed
+    assert refused[0] and 'get_file: it is in Envoy\'s "files" tool group' in refused[1]  # read only: the group to grant
+
+
+def test_an_expired_or_altered_link_gets_a_401(env):
+    tid = finished(env)
+    other = finished(env)
+    a = approved(env, tid)
+    files, now = env.ctx.files, time.time()
+    files.clock = lambda: now
+    url = path_of(files.link("https://testserver", tid, "final")[0])
+    shot = path_of(files.link("https://testserver", tid, a["id"])[0])
+    sig = url.split("sig=")[1]
+    exp = int(url.split("exp=")[1].split("&")[0])
+    with TestClient(env.ctx.asgi) as c:
+        assert c.get(url).status_code == 200 and c.get(shot).status_code == 200
+        bad = [url.replace(f"exp={exp}", f"exp={exp + 600}"),  # a later expiry
+               url[:-2] + ("BB" if url.endswith("AA") else "AA"),  # another signature
+               url.replace(tid, other),  # the same signature for another task
+               url.replace("/final?", f"/{a['id']}?"),  # or another of its files
+               url.split("?")[0], url.split("&")[0], f"{url.split('?')[0]}?exp=abc&sig={sig}", f"{url.split('?')[0]}?exp=-1&sig={sig}"]
+        for u in bad:
+            r = c.get(u)
+            assert r.status_code == 401 and "isn't a download link Envoy made" in r.json()["detail"], u
+        files.clock = lambda: now + 601
+        r = c.get(url)
+        assert r.status_code == 401 and "expired" in r.json()["detail"] and c.get(shot).status_code == 401
+        files.clock = lambda: now
+        assert c.get(url).status_code == 200
+        files.key = b"a restart makes a new key"
+        assert c.get(url).status_code == 401  # a restart ends every link
+    statuses = [json.loads(line)["status"] for line in (env.tmp / "files.jsonl").read_text().splitlines()]
+    assert statuses == [200, 200, *[401] * len(bad), 401, 401, 200, 401]
+
+
+def test_a_link_reaches_nothing_but_the_tasks_own_files(env):
+    """No path traversal: a download names a file by the task's records, and resolves inside its folder."""
+    tid = finished(env)
+    (env.tmp / "secret.txt").write_text("the-secret")
+    (env.tmp / "shots" / "secret.jpg").write_text("the-secret")
+    files = env.ctx.files
+    poisoned = env.ctx.tasks.add_approval(tid, "x", [], "app", "s", "../secret.txt")  # a picture's name that leaves its folder
+    tries = []
+    with TestClient(env.ctx.asgi) as c:
+        for fid in ["../secret.txt", "..", "final/../../secret.txt", "%2e%2e", "secret.jpg", "..%2Fsecret.txt", poisoned["id"]]:
+            for t in (tid, "..", f"{tid}/..", "%2e%2e"):
+                tries.append(c.get(path_of(files.link("https://testserver", t, fid)[0])))  # even a link Envoy signed itself
+                tries.append(c.get(f"/mcp/files/{t}/{fid}?exp=9999999999&sig=x"))
+        tries += [c.get("/mcp/files/..%2F..%2Fsecret.txt/final"), c.get(f"/mcp/files/{tid}/..%2F..%2Fsecret.txt"),
+                  c.get(f"/mcp/files/{tid}/final/../../secret.txt"), c.get("/mcp/files/../secret.txt")]
+        assert c.get(path_of(files.link("https://testserver", tid, "final")[0])).status_code == 200
+    assert len(tries) == 60 and not any("the-secret" in r.text or r.headers.get("content-type") == "image/jpeg" for r in tries)
+    # A client folds "/mcp/files/../.." into "/" itself, which is the web app's page (421 on a public address), never a file.
+    assert {r.request.url.path for r in tries if r.status_code == 200} <= {"/"}
+    assert files.open(tid, poisoned["id"]) is None and files.open("..", "final") is None and files.open(tid, "../secret.txt") is None
+
+
+def test_no_picture_of_a_secure_screen_and_a_running_task_says_its_final_screen_comes_later(env):
+    secure = finished(env, secure=True)
+    running = env.ctx.tasks.create("post the clip", "mcp", status="running", agent="Muse")["id"]
+    nothing = finished(env, phone=False)
+    with TestClient(env.ctx.asgi) as c:
+        got = call(c, "get_file", task_id=secure)
+        assert got["files"] == [] and "secure one" in got["text"]
+        assert not (env.tmp / "shots" / secure).exists()
+        assert "still running" in call(c, "get_file", task_id=running)["text"]
+        assert call(c, "get_file", task_id=nothing)["text"] == "Envoy kept nothing of that kind for this task. There's no picture of the final screen."
+
+    async def on_the_loop() -> str:  # the runner calls the hook on its loop: the picture is taken in a thread
+        tid = env.ctx.tasks.create("post the clip", "mcp", status="done", agent="Muse")["id"]
+        env.ctx.runner.devices[tid] = Phone()
+        env.ctx.files.on_final(tid, SimpleNamespace(secure=False), {})
+        assert "being saved" in env.ctx.files.view(tid, None, "https://x", "Muse")["text"]
+        await env.ctx.files.saving[tid]
+        await asyncio.sleep(0)
+        return tid
+
+    tid = asyncio.run(on_the_loop())
+    assert tid not in env.ctx.files.saving and (env.tmp / "shots" / tid / "final.jpg").is_file()
+
+
+def test_a_cross_app_task_gives_its_parts_files(env):
+    parent = env.ctx.tasks.create("compare the fares", "mcp", kind="crossapp", status="done", agent="Muse")["id"]
+    uber = finished(env, goal="Uber fare", source="crossapp", parent=parent, result="fare: $23 https://m.uber.com/r/1")
+    lyft = finished(env, goal="Lyft fare", source="crossapp", parent=parent)
+    got = env.ctx.files.view(parent, None, "https://x", "Muse")
+    assert [f["task_id"] for f in got["files"]] == [uber, lyft]
+    assert got["links"] == [{"url": "https://m.uber.com/r/1", "task_id": uber}]
+    assert env.ctx.files.view(uber, "final", "https://x", "Muse")["files"]  # a part is its cross-app task's
+
+
+def test_the_links_in_a_result_and_the_address_download_links_use():
+    assert links_in("Done. See https://www.instagram.com/reel/abc/, or (https://example.com/x). https://www.instagram.com/reel/abc/") == [
+        {"url": "https://www.instagram.com/reel/abc/"}, {"url": "https://example.com/x"}]
+    assert links_in("order: #123; receipt: https://dd.example/r?id=9&t=1;") == [{"url": "https://dd.example/r?id=9&t=1", "name": "receipt"}]
+    assert links_in("ftp://x javascript:alert(1) www.example.com") == [] and links_in(None) == []
+    fallback = "https://envoy-mac.example.ts.net:8443"
+    assert link_base({"host": "envoy-mac.example.ts.net:10000"}, fallback) == "https://envoy-mac.example.ts.net:10000"
+    assert link_base({"host": "127.0.0.1:8700"}, fallback) == "http://127.0.0.1:8700"
+    assert link_base({"host": "localhost:8701"}, fallback) == "http://localhost:8701"
+    assert link_base({"host": "x.example", "x-forwarded-proto": "http"}, fallback) == "http://x.example"
+    for bad in ({"host": "evil.example/path"}, {"host": "a@b"}, {"host": ""}, {}, None):
+        assert link_base(bad, fallback) == fallback

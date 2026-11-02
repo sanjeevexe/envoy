@@ -1,0 +1,63 @@
+{
+ "dump": "10-ig-reel-share-screen.xml",
+ "app": "com.instagram.android",
+ "request": "the newest video in my phone's gallery to Instagram with this caption",
+ "targets": [
+  {
+   "element": 2,
+   "kind": "Button",
+   "label": "Add location \u00b7 People you share this content with can see the location you tag and view this content on the map. \u00b7 Add \u2026",
+   "text": "",
+   "desc": "",
+   "id": "com.instagram.android:id/content_view",
+   "bounds": [
+    0,
+    290,
+    1080,
+    2058
+   ],
+   "risk": "reversible",
+   "reasons": [],
+   "asks": true
+  },
+  {
+   "element": 19,
+   "kind": "Button",
+   "label": "",
+   "text": "",
+   "desc": "",
+   "id": "com.instagram.android:id/share_button_container",
+   "bounds": [
+    0,
+    2058,
+    1080,
+    2274
+   ],
+   "risk": "irreversible",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/share_button_container'"
+   ],
+   "asks": true
+  },
+  {
+   "element": 21,
+   "kind": "Button",
+   "label": "Share",
+   "text": "",
+   "desc": "Share",
+   "id": "com.instagram.android:id/share_button",
+   "bounds": [
+    562,
+    2098,
+    1036,
+    2219
+   ],
+   "risk": "irreversible",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/share_button'"
+   ],
+   "asks": true
+  }
+ ],
+ "post_gated": true
+}

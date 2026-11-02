@@ -1,0 +1,101 @@
+{
+ "dump": "20-ig-story-with-poll.xml",
+ "app": "com.instagram.android",
+ "request": "the newest video in my phone's gallery to Instagram with this caption",
+ "targets": [
+  {
+   "element": 10,
+   "kind": "Button",
+   "label": "",
+   "text": "",
+   "desc": "",
+   "id": "com.instagram.android:id/story_share_controls_action_bar",
+   "bounds": [
+    33,
+    2128,
+    1047,
+    2248
+   ],
+   "risk": "irreversible",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/story_share_controls_action_bar'"
+   ],
+   "asks": true
+  },
+  {
+   "element": 11,
+   "kind": "Button",
+   "label": "Your story",
+   "text": "",
+   "desc": "Your story",
+   "id": "com.instagram.android:id/your_story_share_shortcut_button",
+   "bounds": [
+    33,
+    2128,
+    464,
+    2248
+   ],
+   "risk": "irreversible",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/your_story_share_shortcut_button'"
+   ],
+   "asks": true
+  },
+  {
+   "element": 12,
+   "kind": "Button",
+   "label": "Close Friends",
+   "text": "",
+   "desc": "Close Friends",
+   "id": "com.instagram.android:id/close_friends_story_share_shortcut_button",
+   "bounds": [
+    480,
+    2128,
+    911,
+    2248
+   ],
+   "risk": "irreversible",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/close_friends_story_share_shortcut_button'"
+   ],
+   "asks": true
+  },
+  {
+   "element": 13,
+   "kind": "Button",
+   "label": "Share to",
+   "text": "",
+   "desc": "Share to",
+   "id": "com.instagram.android:id/story_share_recipient_picker_button",
+   "bounds": [
+    927,
+    2128,
+    1047,
+    2248
+   ],
+   "risk": "irreversible",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/story_share_recipient_picker_button'"
+   ],
+   "asks": true
+  },
+  {
+   "element": 15,
+   "kind": "Text",
+   "label": "@2131977915",
+   "text": "",
+   "desc": "",
+   "id": "com.instagram.android:id/post_capture_texture_view_container",
+   "bounds": [
+    0,
+    136,
+    1080,
+    2056
+   ],
+   "risk": "reversible",
+   "reasons": [],
+   "asks": true
+  }
+ ],
+ "post_gated": true
+}

@@ -1,0 +1,292 @@
+routine: instagram_reel_song
+app: com.instagram.android
+version: 1
+status: draft
+intent: Post a gallery video to Instagram as a reel set to a song from Instagram's music library
+description: "Posts the newest video from the phone's gallery to Instagram as a reel, adds a selected track from Instagram's music library, and\
+  \ enters a caption before the final share step. Only works when song_artist is the one already shown on 'Select track golden hour by JVKE,3:29'."
+patterns: [post my newest video as an Instagram reel with a song from the music library, make an Instagram reel from my newest video set to a
+    song, post a reel with music from Instagram's library and a caption]
+start: fresh_launch
+inputs:
+  song_title: {type: text, description: Search term and title of the song to add from Instagram's music library., example: golden hour}
+  song_artist: {type: text, description: Artist of the song to add., example: JVKE}
+  caption:
+    type: text
+    description: Caption to enter for the reel.
+    example: "Envoy rehearsal: one clip, three apps"
+steps:
+- id: tap_create_button
+  intent: Tap the create button to start a new reel
+  pre:
+  - {app_foreground: com.instagram.android}
+  - element_present: {resource_id: swipeable_tab_view_pager, kind: List}
+  action:
+    tap:
+      resource_id: action_bar_left_button
+      text: ''
+      kind: Button
+      cls: ImageView
+      parent: action_bar_buttons_container_left
+      in_list: true
+      position: [0.061, 0.091]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: gallery_title_container, text: New reel, kind: Text}
+  - element_present: {resource_id: gallery_cancel_button, text: Back to Home, kind: Button}
+  risk: reversible
+  note: trace step 1
+- id: tap_newest_video_thumbnail
+  intent: Tap the newest video thumbnail in the gallery
+  pre:
+  - {app_foreground: com.instagram.android}
+  action:
+    tap:
+      resource_id: gallery_grid_item_thumbnail
+      alt_texts: [Video thumbnail]
+      kind: Button
+      cls: Button
+      in_list: true
+      position: [0.5, 0.383]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: clips_stacked_timeline_swipe_up_icon_container, text: Swipe up to edit, kind: Text}
+  - element_present: {resource_id: post_capture_interactive_contents_container, text: Reel preview playing, kind: Text}
+  risk: reversible
+  note: trace step 2
+- id: tap_add_audio
+  intent: Tap Add audio to open the music library
+  pre:
+  - {app_foreground: com.instagram.android}
+  action:
+    tap:
+      resource_id: clips_action_bar_add_music_button
+      text: Add audio
+      kind: Button
+      cls: Button
+      parent: creation_toolbar_recyclerview
+      siblings: [Add text, Voiceover, Captions]
+      in_list: false
+      position: [0.116, 0.832]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: layout_container_bottom_sheet, kind: Button}
+  - element_present: {resource_id: row_search_edit_text, text: Search..., kind: EditText}
+  risk: reversible
+  note: trace step 3
+- id: search_song_title
+  intent: "Type {{song_title}} in the Search... field"
+  pre:
+  - {app_foreground: com.instagram.android}
+  action:
+    type:
+      field:
+        resource_id: row_search_edit_text
+        text: Search...
+        hint: Search...
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.375, 0.43]
+      value: "{{song_title}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: action_text, text: See more, kind: Button}
+  risk: reversible
+  note: trace step 4
+- id: retype_song_title_search
+  intent: "Type {{song_title}} in the Search... field again if it is empty"
+  pre:
+  - {app_foreground: com.instagram.android}
+  action:
+    type:
+      field:
+        resource_id: row_search_edit_text
+        text: Search...
+        hint: Search...
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.551, 0.155]
+      value: "{{song_title}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: row_search_edit_text
+      text: "Search...: {{song_title}}"
+      kind: EditText
+  - element_present: {resource_id: music_list, kind: List}
+  risk: reversible
+  note: trace step 5
+- id: tap_matching_track
+  intent: "Tap the track {{song_title}} by {{song_artist}} in the search results"
+  pre:
+  - {app_foreground: com.instagram.android}
+  - element_present:
+      resource_id: audio_browser_track_*_*
+      text_has: "{{song_title}} by {{song_artist}}"
+      kind: Button
+      cls: Button
+      parent: music_list
+      in_list: true
+  action:
+    tap:
+      resource_id: audio_browser_track_*_*
+      text_has: "{{song_title}} by {{song_artist}}"
+      kind: Button
+      cls: Button
+      parent: music_list
+      in_list: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: audio_bar_select_tap_target
+      text: "Select track {{song_title}} by {{song_artist}}"
+      kind: Button
+  - element_present: {resource_id: audio_bar_compose, kind: Button}
+  risk: reversible
+  note: trace step 6
+- id: confirm_selected_track
+  intent: "Tap the bottom-bar button to select the track {{song_title}} by {{song_artist}}"
+  pre:
+  - {app_foreground: com.instagram.android}
+  action:
+    tap:
+      resource_id: audio_bar_select_tap_target
+      text: Select track
+      text_has: "{{song_title}}"
+      kind: Button
+      cls: Button
+      parent: audio_bar
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: background_dimmer, text: Dismiss, kind: Button}
+  - element_present:
+      resource_id: layout_container_bottom_sheet
+      text: "{{song_title}}"
+      kind: Button
+  risk: reversible
+  note: trace step 7
+- id: tap_done_music_editor
+  intent: Tap Done to confirm the audio selection
+  pre:
+  - {app_foreground: com.instagram.android}
+  action:
+    tap:
+      resource_id: music_editor_done_button
+      text: Done
+      kind: Button
+      cls: Button
+      parent: music_editor_header_button_container
+      siblings: [Return to music search]
+      in_list: false
+      position: [0.902, 0.115]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: clips_left_action_button, text: Double tap for tools that edit your video clips., kind: Button}
+  - element_present: {resource_id: clips_right_action_button, text: Next, kind: Button}
+  risk: reversible
+  note: trace step 8
+- id: tap_next_to_share_screen
+  intent: Tap Next to reach the share screen
+  pre:
+  - {app_foreground: com.instagram.android}
+  action:
+    tap:
+      resource_id: clips_right_action_button
+      text: Next
+      kind: Button
+      cls: Button
+      parent: clips_action_bar
+      siblings: [Double tap for tools that edit your video clips.]
+      in_list: false
+      position: [0.869, 0.945]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: action_bar_new_title_container, kind: Button}
+  - element_present: {resource_id: action_bar_title, text: New reel, kind: Button}
+  risk: reversible
+  note: trace step 9
+- id: type_caption
+  intent: "Type {{caption}} in the caption field"
+  pre:
+  - {app_foreground: com.instagram.android}
+  action:
+    type:
+      field:
+        resource_id: caption_input_text_view
+        text: Write a caption and add hashtags…
+        desc: Write a caption
+        hint: Write a caption and add hashtags…
+        kind: EditText
+        cls: AutoCompleteTextView
+        in_list: true
+        position: [0.5, 0.517]
+      value: "{{caption}}"
+  post:
+  - field_equals:
+      field: {resource_id: caption_input_text_view, text: Write a caption and add hashtags…, desc: Write a caption, kind: EditText}
+      value: "{{caption}}"
+  risk: reversible
+  note: trace step 10
+- id: close_keyboard
+  intent: Press back to close the keyboard and reveal the Share button
+  optional: true
+  pre:
+  - {app_foreground: com.instagram.android}
+  action: {back: true}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: share_button_container, kind: Button}
+  - element_present: {resource_id: save_draft_button, text: Save draft, kind: Button}
+  risk: read
+  note: "trace step 11 · closes the keyboard: optional"
+- id: tap_post
+  intent: Tap Share to publish
+  pre:
+  - element_present:
+      resource_id: share_button
+      text: Share
+      kind: Button
+      cls: Button
+      parent: footer_button_container
+      siblings: [Save draft]
+      in_list: false
+      position: [0.74, 0.922]
+  action:
+    tap:
+      resource_id: share_button
+      text: Share
+      kind: Button
+      cls: Button
+      parent: footer_button_container
+      siblings: [Save draft]
+      in_list: false
+      position: [0.74, 0.922]
+  risk: irreversible
+  note: "trace step 12: the post tap the user declined (never ran, so no after-check)"
+done:
+- text_visible: "{{caption}}"
+changes:
+- "two locators tuned by hand (showcase): learned from one run, two steps tuned"
+- compiled by showcase from task-1101-202945-39d5-r1, a first run declined at the post (eval/run_showcase.py)
+- its last step (tap 'Share') is the tap declined at step 12, built from that screen; irreversible
+- intent and patterns name the music (hand edit of the description only, no step changed), so the matcher doesn't confuse it with instagram_post_reel
+  for a plain reel
+- "tap_newest_video_thumbnail: the grid's first video slot (its id, in the grid, nearest the recorded position), not its label: every thumbnail\
+  \ reads 'Unselected Video thumbnail created on <date>', so the label fit all of them, the executor scrolled to look, and the repair picked an\
+  \ Oct 30 clip (replays 1-3, Nov 1). Same change as instagram_post_reel's v3 candidate. Hand edit: showcase"
+- "tap_matching_track: the result row whose label has '{{song_title}} by {{song_artist}}' (any row id), and its before-check waits for that row\
+  \ instead of one track's catalogue id: v1's tap had no text, so every row tied and the executor scrolled past the results. Hand edit: showcase"
+compiled_from:
+  task_id: task-1101-202945-39d5-r1
+  goal: "Post the newest video in my phone's gallery to Instagram as a reel with the song \"golden hour\" by JVKE from Instagram's music library\
+    \ and this caption: \"Envoy rehearsal: one clip, three apps\""
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-11-01 20:32:12"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+  trace_steps_dropped: 1
+  cost_usd: 0.0637

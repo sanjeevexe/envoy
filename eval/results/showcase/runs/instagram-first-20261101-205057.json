@@ -1,0 +1,75 @@
+{
+ "mode": "first",
+ "app": "com.instagram.android",
+ "time": "2026-11-01T20:50:57",
+ "request": {
+  "phone": "phone-09031FDD4000C6",
+  "goal": "Post the newest video in my phone's gallery to my Instagram story with a poll sticker that asks \"Sunrise or sunset?\" with the options \"Sunrise\" and \"Sunset\"",
+  "routine": "instagram_story_poll"
+ },
+ "task": {
+  "id": "task-1101-205058-3079",
+  "status": "failed",
+  "routine": null,
+  "model_calls": 14,
+  "cost_usd": 0.0853,
+  "traces": [],
+  "detail": "User declined tapping 'Your story' to post the story; stopping as instructed and not retrying.",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 18,
+ "repairs": [],
+ "approvals": [
+  {
+   "description": "tap \"Your story\" in com.instagram.android",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/your_story_share_shortcut_button'",
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "asked_at": [
+  "Your story"
+ ],
+ "auto_approved": [],
+ "marks_s": {
+  "running": 0.2,
+  "needs_you": 1.2,
+  "phone_yes": 1.2,
+  "waiting_approval": 75.6,
+  "post_asked": 75.6,
+  "failed": 79.6,
+  "end": 79.6
+ },
+ "spent": {
+  "model_calls": 14,
+  "cost_usd": 0.0853,
+  "cost_at_standard_usd": 0.0853,
+  "jobs": {
+   "plan": 1,
+   "step": 13
+  }
+ },
+ "ok": true,
+ "failures": [],
+ "profile": "hybrid",
+ "cleanup": [
+  "back (unknown)",
+  "back (unknown)",
+  "back (unknown)",
+  "back (unknown)",
+  "back (unknown)",
+  "back (unknown)",
+  "back (unknown)",
+  "back (unknown)",
+  "back (unknown)",
+  "back (unknown)",
+  "back (unknown)",
+  "back (unknown)",
+  "back (unknown)",
+  "back (unknown)",
+  "stopped after 14 steps on unknown"
+ ]
+}

@@ -1,0 +1,153 @@
+{
+ "task_id": "task-1101-202945-39d5-r1",
+ "goal": "Post the newest video in my phone's gallery to Instagram as a reel with the song \"golden hour\" by JVKE from Instagram's music library and this caption: \"Envoy rehearsal: one clip, three apps\"",
+ "kept": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11
+ ],
+ "dropped": [
+  [
+   12,
+   "tap: not a device action"
+  ]
+ ],
+ "model": "muse-wonder-1.0",
+ "model_calls": 1,
+ "cost_usd": 0.063664,
+ "cost_at_standard_usd": 0.063664,
+ "latency_s": 20.45,
+ "warnings": [
+  "step 6: the first result for {{song_title}}: chosen by its place in the list",
+  "input 'song_artist' is not used by any action: step 'tap_matching_track' now requires the screen to show it (Button 'Select track golden hour by JVKE,3:29'); other values need a repair or a recompile"
+ ],
+ "wonder": {
+  "name": "instagram_post_video_as_reel",
+  "intent": "Post a gallery video to Instagram as a reel",
+  "description": "Posts the newest video from the phone's gallery to Instagram as a reel, adds a selected track from Instagram's music library, and enters a caption before the final share step.",
+  "patterns": [
+   "post my newest video as a reel",
+   "share my latest gallery video to Instagram",
+   "make an Instagram reel from my newest video",
+   "post a video to Instagram with music and a caption"
+  ],
+  "inputs": [
+   {
+    "name": "song_title",
+    "type": "text",
+    "description": "Search term and title of the song to add from Instagram's music library.",
+    "from_memory": null,
+    "example": "golden hour"
+   },
+   {
+    "name": "song_artist",
+    "type": "text",
+    "description": "Artist of the song to add.",
+    "from_memory": null,
+    "example": "JVKE"
+   },
+   {
+    "name": "caption",
+    "type": "text",
+    "description": "Caption to enter for the reel.",
+    "from_memory": null,
+    "example": "Envoy rehearsal: one clip, three apps"
+   }
+  ],
+  "steps": [
+   {
+    "step": 1,
+    "id": "tap_create_button",
+    "intent": "Tap the create button to start a new reel",
+    "target_fixed_text": null,
+    "choice_input": null
+   },
+   {
+    "step": 2,
+    "id": "tap_newest_video_thumbnail",
+    "intent": "Tap the newest video thumbnail in the gallery",
+    "target_fixed_text": "Video thumbnail created on",
+    "choice_input": null
+   },
+   {
+    "step": 3,
+    "id": "tap_add_audio",
+    "intent": "Tap Add audio to open the music library",
+    "target_fixed_text": "Add audio",
+    "choice_input": null
+   },
+   {
+    "step": 4,
+    "id": "search_song_title",
+    "intent": "Type {{song_title}} in the Search... field",
+    "target_fixed_text": "Search...",
+    "choice_input": null
+   },
+   {
+    "step": 5,
+    "id": "retype_song_title_search",
+    "intent": "Type {{song_title}} in the Search... field again if it is empty",
+    "target_fixed_text": "Search...",
+    "choice_input": null
+   },
+   {
+    "step": 6,
+    "id": "tap_matching_track",
+    "intent": "Tap the track {{song_title}} by {{song_artist}} in the search results",
+    "target_fixed_text": "Select track",
+    "choice_input": "song_title"
+   },
+   {
+    "step": 7,
+    "id": "confirm_selected_track",
+    "intent": "Tap the bottom-bar button to select the track {{song_title}} by {{song_artist}}",
+    "target_fixed_text": "Select track",
+    "choice_input": "song_title"
+   },
+   {
+    "step": 8,
+    "id": "tap_done_music_editor",
+    "intent": "Tap Done to confirm the audio selection",
+    "target_fixed_text": "Done",
+    "choice_input": null
+   },
+   {
+    "step": 9,
+    "id": "tap_next_to_share_screen",
+    "intent": "Tap Next to reach the share screen",
+    "target_fixed_text": "Next",
+    "choice_input": null
+   },
+   {
+    "step": 10,
+    "id": "type_caption",
+    "intent": "Type {{caption}} in the caption field",
+    "target_fixed_text": "Write a caption and add hashtags\u2026",
+    "choice_input": null
+   },
+   {
+    "step": 11,
+    "id": "close_keyboard",
+    "intent": "Press back to close the keyboard and reveal the Share button",
+    "target_fixed_text": null,
+    "choice_input": null
+   }
+  ],
+  "outputs": [],
+  "data_values": [
+   "November 1, 2026 7:19 PM",
+   "3:29"
+  ]
+ },
+ "trace": "task-1101-202945-39d5-r1",
+ "name": "instagram_reel_song",
+ "final_from_declined": true
+}

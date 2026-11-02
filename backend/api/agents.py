@@ -98,6 +98,28 @@ def guard(server: Any) -> AgentGuard:
     return g
 
 
+class Taken(ValueError):
+    """The name is Muse's or another live agent's."""
+
+
+def new_name(auth: Any, name: Any) -> str:
+    """A new agent's name, tidied, or ValueError (Taken when it is in use). Settings › Agents and scripts/agent_key.py."""
+    name = re.sub(r"\s+", " ", str(name or "")).strip()
+    if not NAME.match(name):
+        raise ValueError("Give the agent a name of up to 40 letters, digits, spaces or - . '")
+    taken = next((n for n in (MUSE, *(a["name"] for a in auth.agents())) if n.casefold() == name.casefold()), None)
+    if taken:
+        raise Taken(f"There is already an agent called {taken}. Rotate its key instead, or pick another name.")
+    return name
+
+
+def tool_groups(got: Any) -> list[str]:
+    """Tool groups as given (a list), checked, or ValueError."""
+    if not isinstance(got, (list, tuple)) or not got or not all(isinstance(g, str) and g in TOOL_GROUPS for g in got):
+        raise ValueError(f"tools is a list of tool groups: {', '.join(TOOL_GROUPS)}")
+    return sorted(set(got))
+
+
 def agents_router(ctx: Any, session: Callable[..., None], owner: Callable[..., None], caller: Callable[..., Any]) -> APIRouter:
     """Settings › Agents. Seeing the agents and revoking a key are for any of your sessions (cut an agent off from your
     iPhone); creating a key, rotating one and changing what one may do happen on the Mac, like pairing a device. The
@@ -106,15 +128,29 @@ def agents_router(ctx: Any, session: Callable[..., None], owner: Callable[..., N
     auth = ctx.auth
 
     def groups(body: dict[str, Any], default: tuple[str, ...] | None = None) -> list[str]:
-        got = body.get("tools", default)
-        if not isinstance(got, (list, tuple)) or not got or not all(isinstance(g, str) and g in TOOL_GROUPS for g in got):
-            raise HTTPException(400, f"tools is a list of tool groups: {', '.join(TOOL_GROUPS)}")
-        return sorted(set(got))
+        try:
+            return tool_groups(body.get("tools", default))
+        except ValueError as e:
+            raise HTTPException(400, str(e)) from e
+
+    def every_tool() -> tuple[list[str], list[str]]:
+        """(every tool an agent can list now, the learned ones among them): Envoy's own and each shared routine's (contract 1)."""
+        server = getattr(ctx, "mcp", None)
+        try:
+            builtin = set(server.builtin())
+            learned = set(server.routines.current(builtin)) if getattr(server, "routines", None) is not None else set()
+        except Exception:  # noqa: BLE001 - no MCP server here (a test app): no tool lists, the rest of the page as before
+            return [], []
+        return sorted(learned) + sorted(builtin - learned), sorted(learned)
 
     @r.get("/api/agents", dependencies=[Depends(session)])
     def list_agents(request: Request) -> dict[str, Any]:
+        """The agents, and for each the tools it sees right now: allowed() over the same list tools/list gives it."""
         me = caller(request)
-        return {"agents": auth.agents(), "muse": {"name": MUSE, "key": bool(auth.mcp_token), "last_seen": auth.muse_last_seen()},
+        tools, learned = every_tool()
+        agents = [{**a, "sees": [t for t in tools if allowed(Agent(a["name"], frozenset(a["tools"])), t)]} for a in auth.agents()]
+        return {"agents": agents, "learned": learned,
+                "muse": {"name": MUSE, "key": bool(auth.mcp_token), "last_seen": auth.muse_last_seen(), "sees": tools},
                 "groups": [{"id": g, "label": GROUP_TEXT[g][0], "detail": GROUP_TEXT[g][1], "tools": sorted(TOOL_GROUPS[g])} for g in TOOL_GROUPS],
                 "default": list(DEFAULT_GROUPS), "per_minute": RUN_PER_MINUTE, "mcp_url": mcp_url(ctx),
                 "can_manage": me is not None and me.kind == "owner"}
@@ -122,11 +158,10 @@ def agents_router(ctx: Any, session: Callable[..., None], owner: Callable[..., N
     @r.post("/api/agents", dependencies=[Depends(owner)])
     def new_agent(body: dict[str, Any] = Body(...)) -> dict[str, Any]:
         """A new agent and its key. The key is in this answer only: Envoy keeps its hash."""
-        name = re.sub(r"\s+", " ", str(body.get("name") or "")).strip()
-        if not NAME.match(name):
-            raise HTTPException(400, "Give the agent a name of up to 40 letters, digits, spaces or - . '")
-        if name.casefold() == MUSE.casefold() or any(a["name"].casefold() == name.casefold() for a in auth.agents()):
-            raise HTTPException(409, f"There is already an agent called {name}. Rotate its key instead, or pick another name.")
+        try:
+            name = new_name(auth, body.get("name"))
+        except ValueError as e:
+            raise HTTPException(409 if isinstance(e, Taken) else 400, str(e)) from e
         agent, key = auth.issue_agent(name, groups(body, DEFAULT_GROUPS))
         return {"agent": agent, "key": key}
 

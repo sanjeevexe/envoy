@@ -1,0 +1,51 @@
+# com.instagram.android/com.instagram.android.activity.MainTabActivity secure=False camera=False 2026-11-01T19:21:28
+App: com.instagram.android · Screen: MainTabActivity
+(the on-screen keyboard is open over the bottom of the screen)
+[1] Button "Reel preview playing · @2131977915 · Green Screen" (id: quick_capture_root_container)
+[2] Button "Tap to open current video in Edits timeline editor."
+[3] Text "Try Edits"
+[4] Text "Reel preview playing · @2131977915" (id: post_capture_controls_container)
+[5] Text "Reel preview playing" (id: post_capture_interactive_contents_container)
+[6] Text "Reel preview playing" (id: post_capture_interactive_drawable_container_holder)
+[7] Text "@2131977915" (id: post_capture_texture_view_container)
+[8] Button "Add audio button"
+[9] Text "Touch up"
+[10] Text "Change video speed, currently 1.0x"
+[11] Text "Enable effects button"
+[12] Button "Expand tools menu, button"
+[13] Button (id: layout_container_bottom_sheet)
+[14] Button "Back" (id: back_button_ui_refresh_v2)
+[15] EditText "Search...: What a Wonderful World" (id: row_search_edit_text) (focused)
+[16] Button "Clear text"
+[17] Button "Artist"
+[18] Button "Title"
+[19] Button "Lyrics"
+[20] Button "Vibe"
+[21] Button "Type"
+[22] List (id: music_list) (scrollable)
+[23] Button "Select track What A Wonderful World by Louis Armstrong,2:17" (id: audio_browser_track_0_900313413487875)
+[24] Text "What A Wonderful World · Louis Armstrong • 2:17" (id: text_container)
+[25] Text "What A Wonderful World" (id: song_title_container)
+[26] Text "Louis Armstrong • 2:17" (id: artist_name_container)
+[27] Button "Save What A Wonderful World by Louis Armstrong"
+[28] Button "Select track What A Wonderful World (Live Acoustic) by The Macarons Project,2:11" (id: audio_browser_track_1_787745341699651)
+[29] Text "What A Wonderful World (Live Acoustic) · The Macarons Project • 2:11" (id: text_container)
+[30] Text "What A Wonderful World (Live Acoustic)" (id: song_title_container)
+[31] Text "The Macarons Project • 2:11" (id: artist_name_container)
+[32] Button "Save What A Wonderful World (Live Acoustic) by The Macarons Project"
+[33] Button "Select track What A Wonderful World (Instrumental) by The Hit Crew,2:22" (id: audio_browser_track_2_2203325669898316)
+[34] Text "What A Wonderful World (Instrumental) · The Hit Crew • 2:22" (id: text_container)
+[35] Text "What A Wonderful World (Instrumental)" (id: song_title_container)
+[36] Text "The Hit Crew • 2:22" (id: artist_name_container)
+[37] Button "Save What A Wonderful World (Instrumental) by The Hit Crew"
+[38] Button "Select track Original audio by hanhtan27,2:56" (id: audio_browser_track_3_102694162822581)
+[39] Text "Original audio · hanhtan27 • 2:56" (id: text_container)
+[40] Text "Original audio" (id: song_title_container)
+[41] Text "hanhtan27 • 2:56" (id: artist_name_container)
+[42] Button "Save Original audio by hanhtan27"
+[43] Button "Select track What A Wonderful World by Israel Kamakawiwo'ole,4:30" (id: audio_browser_track_4_216114825699367)
+[44] Text "What A Wonderful World · Israel Kamakawiwo'ole • 4:30" (id: text_container)
+[45] Text "What A Wonderful World" (id: song_title_container)
+[46] Text "Israel Kamakawiwo'ole • 4:30" (id: artist_name_container)
+[47] Button "Save What A Wonderful World by Israel Kamakawiwo'ole"
+(screen has a scrollable list; scroll to see more)

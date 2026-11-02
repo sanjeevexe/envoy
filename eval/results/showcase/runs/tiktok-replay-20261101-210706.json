@@ -1,0 +1,60 @@
+{
+ "mode": "replay",
+ "app": "com.zhiliaoapp.musically",
+ "time": "2026-11-01T21:07:06",
+ "request": {
+  "phone": "phone-09031FDD4000C6",
+  "routine": "tiktok_post_sound",
+  "inputs": {
+   "sound_title": "golden hour",
+   "sound_artist": "JVKE",
+   "caption": "Envoy rehearsal replay 1"
+  }
+ },
+ "task": {
+  "id": "task-1101-210706-e837",
+  "status": "failed",
+  "routine": "tiktok_post_sound",
+  "model_calls": 5,
+  "cost_usd": 0.022,
+  "traces": [],
+  "detail": "couldn't see 'red check button for first result golden hour by JVKE' on the screen",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 17,
+ "repairs": [],
+ "approvals": [],
+ "asked_at": [],
+ "auto_approved": [],
+ "marks_s": {
+  "running": 0.3,
+  "needs_you": 1.3,
+  "phone_yes": 1.3,
+  "taken_over": 11.4,
+  "paused_1": 11.4,
+  "handback_1": 11.4,
+  "failed": 51.6,
+  "end": 51.6
+ },
+ "spent": {
+  "model_calls": 5,
+  "cost_usd": 0.022,
+  "cost_at_standard_usd": 0.022,
+  "jobs": {
+   "repair": 1,
+   "sam": 2,
+   "choose": 1,
+   "grounding": 1
+  }
+ },
+ "ok": false,
+ "failures": [
+  "the post was never asked"
+ ],
+ "profile": "hybrid",
+ "cleanup": [
+  "left Instagram (com.zhiliaoapp.musically)",
+  "(cleanup ran Instagram's leave by mistake: TikTok was left on its sound search)"
+ ],
+ "note": "filed as Instagram by the first runner (it read the task row's app, which the copy set to Instagram); moved and corrected by hand"
+}

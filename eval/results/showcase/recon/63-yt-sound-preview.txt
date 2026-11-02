@@ -1,0 +1,71 @@
+# com.google.android.youtube/com.google.android.apps.youtube.app.extensions.creationmodes.main.CreationModesActivity secure=False camera=True 2026-11-01T19:39:39
+App: com.google.android.youtube · Screen: CreationModesActivity
+[1] Button (id: record_button_view)
+[2] Button "Record button" (id: shorts_record_button_touch_area)
+[3] Button "Flip camera" (id: shorts_flip_button)
+[4] Button "Timer controls" (id: shorts_timer_button)
+[5] Button "Record up to 15 seconds. Toggle to record up to 180 seconds. · 15s" (id: shorts_toolbar_duration_button)
+[6] Button "Effects" (id: effect_picker_entry_button)
+[7] Button "Speed controls" (id: shorts_speed_button)
+[8] Button "Green screen" (id: shorts_camera_green_screen_button)
+[9] Button "More tools" (id: shorts_expandy_toolbar_more)
+[10] Button "Import video from photo library" (id: reel_camera_gallery_button_delegate)
+[11] Text "Add" (id: reel_camera_gallery_button_label)
+[12] Button (id: shorts_camera_effect_picker_prominent_delegate)
+[13] Button "Close camera" (id: shorts_camera_close_button)
+[14] Button "Add sound" (id: shorts_camera_music_button)
+[15] Button "Create with AI" (id: shorts_camera_ai_playground_top_end_button)
+[16] Text "Camera" (id: shorts_camera_canvas_accessibility_view)
+[17] List (id: creation_mode_switcher_view) (scrollable)
+[18] Button "Video" (id: creation_mode_button)
+[19] Button "Short" (id: creation_mode_button) (selected)
+[20] Button "Live" (id: creation_mode_button)
+[21] Button "Sounds" (id: music_search_root)
+[22] Button "Close" (id: music_search_exit)
+[23] Button "Create an original track"
+[24] EditText "Search: Golden Hour" (id: search_input_text)
+[25] Button "Clear search" (id: cancel_icon)
+[26] Button "CANCEL" (id: search_cancel)
+[27] Button "All"
+[28] Button "Official music"
+[29] Button "Original sounds"
+[30] List (id: music_search_content_recycler_view) (scrollable)
+[31] Text "golden hour, JVKE, Jake Lawson, 1 minute, 281K Shorts, Play a preview"
+[32] Button "golden hour, JVKE, Jake Lawson, 1 minute, 281K Shorts, Play a preview"
+[33] Button "Add to Favorites"
+[34] Text "golden hour (Fujii Kaze Remix), JVKE, Fujii Kaze, 1 minute, 6.4K Shorts, Play a preview"
+[35] Button "golden hour (Fujii Kaze Remix), JVKE, Fujii Kaze, 1 minute, 6.4K Shorts, Play a preview"
+[36] Button "Add to Favorites"
+[37] Text "golden hour (Ruel Remix), JVKE, Jake Lawson, 1 minute, 12K Shorts, Play a preview"
+[38] Button "golden hour (Ruel Remix), JVKE, Jake Lawson, 1 minute, 12K Shorts, Play a preview"
+[39] Button "Add to Favorites"
+[40] Text "golden hour (Leon Leiden Remix), JVKE, Leon Leiden, 1 minute, 6.4K Shorts, Play a preview"
+[41] Button "golden hour (Leon Leiden Remix), JVKE, Leon Leiden, 1 minute, 6.4K Shorts, Play a preview"
+[42] Button "Add to Favorites"
+[43] Text "Golden Hour -JVKE (Lyrics), Makeup Vibes, 42 seconds, 3K Shorts, Play a preview"
+[44] Button "Golden Hour -JVKE (Lyrics), Makeup Vibes, 42 seconds, 3K Shorts, Play a preview"
+[45] Button "Add to Favorites"
+[46] Text "golden hour (Cello Version), JVKE, Jake Lawson, 1 minute, 14K Shorts, Play a preview"
+[47] Button "golden hour (Cello Version), JVKE, Jake Lawson, 1 minute, 14K Shorts, Play a preview"
+[48] Button "Add to Favorites"
+[49] Text "golden hour (Orchestral Version), JVKE, Jake Lawson, 1 minute, 3.6K Shorts, Play a preview"
+[50] Button "golden hour (Orchestral Version), JVKE, Jake Lawson, 1 minute, 3.6K Shorts, Play a preview"
+[51] Button "Add to Favorites"
+[52] Button "Sounds" (id: reel_pivot_root_view)
+[53] Button "Close" (id: music_picker_leading_button)
+[54] Button "Create an original track"
+[55] Button "Search" (id: music_picker_search_box)
+[56] Button "For you" (id: tabs_bar_text_tab_view) (selected)
+[57] Button "Saved" (id: tabs_bar_text_tab_view)
+[58] List (id: reel_browse_tabs_view_pager) (scrollable)
+[59] List (scrollable)
+[60] Button "Sunflower (Spider-Man: Into the Spider-Verse), Post Malone, Swae Lee, 1 minute, 1.1M Shorts, Play a preview"
+[61] Button "Add to Favorites"
+[62] Button "Angel Of My Dreams, JADE, Jade Thirlwall, 1 minute, 11K Shorts, Play a preview"
+[63] Button "Add to Favorites"
+[64] Button "Oh Klahoma, Jack Stauber, 1 minute, 268K Shorts, Play a preview"
+[65] Text "Create music"
+[66] List (scrollable)
+[67] Button "Create a slowed vaporwave track about playing old video games"
+[68] Button "Create a psy-trance track about ignoring all the haters"
+(screen has a scrollable list; scroll to see more)

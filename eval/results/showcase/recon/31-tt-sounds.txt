@@ -1,0 +1,44 @@
+# com.zhiliaoapp.musically/com.ss.android.ugc.aweme.splash.SplashActivity secure=False camera=False 2026-11-01T19:29:47
+App: com.zhiliaoapp.musically · Screen: SplashActivity
+[1] Button (id: zy6)
+[2] Text "Bottom sheet" (id: g3t)
+[3] Button "Hot"
+[4] Text "Hot" (id: n6o)
+[5] Button "For You" (selected)
+[6] Text "For You" (id: n6o) (selected)
+[7] Button "Favorites"
+[8] Text "Favorites" (id: n6o)
+[9] Button "Recent"
+[10] Text "Recent" (id: n6o)
+[11] Button "Search" (id: c55)
+[12] List (id: uw2) (scrollable)
+[13] List (id: v6k) (scrollable)
+[14] Button "Cavern Below the House · Gordon Petty · ‎87 posts · · 1:10"
+[15] Text "Cavern Below the House" (id: zgd)
+[16] Text "Gordon Petty · ‎87 posts · · 1:10" (id: vrc)
+[17] Button "Cut" (id: fse)
+[18] Button "Add to Favorites" (id: eey)
+[19] Button "Wake up · LuhDN · ‎469 posts · · 0:08"
+[20] Text "Wake up · LuhDN · ‎469 posts · · 0:08" (id: vertical_item_music_new_rl)
+[21] Text "Wake up" (id: zgd)
+[22] Text "LuhDN · ‎469 posts · · 0:08" (id: vrc)
+[23] Button "Waiting · leverfall · ‎167.9K posts · · 0:13"
+[24] Text "Waiting · leverfall · ‎167.9K posts · · 0:13" (id: vertical_item_music_new_rl)
+[25] Text "Waiting" (id: zgd)
+[26] Text "leverfall · ‎167.9K posts · · 0:13" (id: vrc)
+[27] Button "Hello · OMFG · ‎37.1K posts · · 1:00"
+[28] Text "Hello · OMFG · ‎37.1K posts · · 1:00" (id: vertical_item_music_new_rl)
+[29] Text "Hello" (id: zgd)
+[30] Text "OMFG · ‎37.1K posts · · 1:00" (id: vrc)
+[31] Button "VERITY HARDTEKK - Slowed"
+[32] Text "VERITY HARDTEKK - Slowed" (id: vertical_item_music_new_rl)
+[33] Text "VERITY HARDTEKK - Slowed" (id: zgd)
+[34] Button (id: qnm)
+[35] Image "Microphone" (id: kfq)
+[36] Text "Original"
+[37] Button (id: x3i)
+[38] Image "Music" (id: kgf)
+[39] Text "Sound"
+[40] Button (id: volume_click_view)
+[41] Text "Volume"
+(screen has a scrollable list; scroll to see more)

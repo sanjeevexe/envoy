@@ -1,0 +1,38 @@
+# com.google.android.youtube/com.google.android.apps.youtube.app.extensions.creationmodes.main.CreationModesActivity secure=False camera=True 2026-11-01T19:38:19
+App: com.google.android.youtube · Screen: CreationModesActivity
+[1] Button (id: record_button_view)
+[2] Button "Record button" (id: shorts_record_button_touch_area)
+[3] Button "Flip camera" (id: shorts_flip_button)
+[4] Button "Timer controls" (id: shorts_timer_button)
+[5] Button "Record up to 15 seconds. Toggle to record up to 180 seconds. · 15s" (id: shorts_toolbar_duration_button)
+[6] Button "Effects" (id: effect_picker_entry_button)
+[7] Button "Speed controls" (id: shorts_speed_button)
+[8] Button "Green screen" (id: shorts_camera_green_screen_button)
+[9] Button "More tools" (id: shorts_expandy_toolbar_more)
+[10] Button "Import video from photo library" (id: reel_camera_gallery_button_delegate)
+[11] Text "Add" (id: reel_camera_gallery_button_label)
+[12] Button (id: shorts_camera_effect_picker_prominent_delegate)
+[13] Button "Close camera" (id: shorts_camera_close_button)
+[14] Button "Add sound" (id: shorts_camera_music_button)
+[15] Button "Create with AI" (id: shorts_camera_ai_playground_top_end_button)
+[16] Text "Camera" (id: shorts_camera_canvas_accessibility_view)
+[17] List (id: creation_mode_switcher_view) (scrollable)
+[18] Button "Video" (id: creation_mode_button)
+[19] Button "Short" (id: creation_mode_button) (selected)
+[20] Button "Live" (id: creation_mode_button)
+[21] Button "Sounds" (id: reel_pivot_root_view)
+[22] Button "Close" (id: music_picker_leading_button)
+[23] Button "Create an original track"
+[24] Button "Search" (id: music_picker_search_box)
+[25] Button "For you" (id: tabs_bar_text_tab_view) (selected)
+[26] Button "Saved" (id: tabs_bar_text_tab_view)
+[27] List (id: reel_browse_tabs_view_pager) (scrollable)
+[28] List (scrollable)
+[29] Button "Ramalama (Bang Bang), Róisín Murphy, Matthew Herbert, 1 minute, 430K Shorts, Play a preview"
+[30] Button "Add to Favorites"
+[31] Button "RELEASED, The hottest new songs this week, served up fresh every Friday."
+[32] Text "Create music"
+[33] List (scrollable)
+[34] Button "Create a slowed vaporwave track about playing old video games"
+[35] Button "Create a psy-trance track about ignoring all the haters"
+(screen has a scrollable list; scroll to see more)

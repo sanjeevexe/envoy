@@ -155,3 +155,16 @@ export function clock(t: number): string {
 export const sentence = (s: string) => (s ? s[0].toUpperCase() + s.slice(1) : s);
 // A routine step's id ("add_pad_thai_medium") as words.
 export const words = (id: string) => sentence(id.replace(/_/g, " "));
+
+// An on/off switch (role="switch"): a 48×28 track in a 44px-tall touch target.
+export function Switch({ on, onChange, label, disabled }: { on: boolean; onChange: (on: boolean) => void; label: string; disabled?: boolean }) {
+  return (
+    <button type="button" role="switch" aria-checked={on} aria-label={label} title={label} disabled={disabled} onClick={() => onChange(!on)}
+            className="inline-flex h-11 shrink-0 items-center rounded-full disabled:opacity-50">
+      <span className={cx("relative h-7 w-12 rounded-full transition-colors", on ? "bg-sage" : "bg-line-strong")}>
+        <span className={cx("absolute top-[3px] h-[22px] w-[22px] rounded-full bg-white shadow-[0_1px_2px_rgba(31,42,36,0.3)] transition-[left]",
+          on ? "left-[23px]" : "left-[3px]")} />
+      </span>
+    </button>
+  );
+}

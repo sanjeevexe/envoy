@@ -77,7 +77,8 @@ export default function Page() {
 
   const loadOffers = useCallback(() => { api<Offer[]>("/api/offers?status=pending").then(setOffers).catch(() => {}); }, []);
 
-  // Where a link (or a notification) points: ?task=…, ?phone=<avd>, ?offer=<id>, ?handoff=<id> (a file from the Mac).
+  // Where a link (or a notification) points: ?task=…, ?phone=<avd>, ?offer=<id>, ?handoff=<id> (a file from the Mac),
+  // ?settings=<section>.
   const route = useCallback((href: string) => {
     const u = new URL(href, location.origin);
     if (u.pathname.startsWith("/approve")) { location.href = u.href; return; }
@@ -89,6 +90,7 @@ export default function Page() {
     else if (t) { setOpenTask(t); setTab("Activity"); }
     else if (u.searchParams.get("handoff")) setTab("Activity");
     else if (u.searchParams.get("trigger")) { setTrigger(u.searchParams.get("trigger")); setTab("Routines"); }
+    else if (u.searchParams.get("settings")) setTab("Settings");  // ?settings=agents: Settings opens that section
   }, []);
 
   useEffect(() => {

@@ -323,8 +323,18 @@ def locate(loc: Locator, screen: ScreenState, inputs: dict[str, str] | None = No
         return Match(None, 0.0, 0.0, threshold)
     best, e, det = scored[0]
     runner = scored[1][0] if len(scored) > 1 else 0.0
+    if rendered.nth is not None and best >= threshold:
+        # One of a list's look-alikes, by its place among them (the newest video: the first thumbnail of the gallery).
+        ordered = in_order([x for sc, x, _ in scored if sc >= threshold and best - sc < margin], screen)
+        if ordered is None or rendered.nth >= len(ordered):
+            return Match(None, best, runner, threshold, det)
+        e = ordered[rendered.nth]
+        return Match(e, best, runner, threshold, next(d for _, x, d in scored if x.index == e.index))
     if best >= threshold and best - runner < margin and (slot := _same_slot(rendered, scored, screen, margin)) is not None:
         e, det = slot
+        return Match(e, best, runner, threshold, det)
+    if best >= threshold and best - runner < margin and (same := _same_case(rendered, scored, margin)) is not None:
+        e, det = same
         return Match(e, best, runner, threshold, det)
     if best < threshold or best - runner < margin:
         return Match(None, best, runner, threshold, det)
@@ -349,6 +359,75 @@ def all_matching(loc: Locator, screen: ScreenState, inputs: dict[str, str] | Non
                  role: str = "target") -> list[Element]:
     """Every element `loc` describes well enough, best first (when the one wanted is told apart by something else)."""
     return [e for sc, e, _ in _ranked(render(loc, inputs or {}), screen, True, role) if sc >= threshold]
+
+
+# ---- look-alikes in a list ----------------------------------------------------------------------
+# A uniform list or grid: elements of one ID and type, each in an item of its own of the same container (their lowest
+# common ancestor), as a gallery's thumbnails or a results list's rows are. Its look-alikes are told apart by place.
+
+
+def tied(loc: Locator, screen: ScreenState, inputs: dict[str, str] | None = None, *, threshold: float = STRICT,
+         margin: float = MARGIN) -> list[Element]:
+    """The elements `loc` matches equally well (within `margin` of the best), best first: one if it picks one."""
+    scored = _ranked(render(loc, inputs or {}), screen, True, "target")
+    if not scored or scored[0][0] < threshold:
+        return []
+    return [e for sc, e, _ in scored if sc >= threshold and scored[0][0] - sc < margin]
+
+
+def container_of(els: list[Element], screen: ScreenState) -> int | None:
+    """Index of the lowest node that holds every element of `els`."""
+    if not els:
+        return None
+    common = set.intersection(*(set(_ancestors(e, screen)) for e in els))
+    return next((a for a in _ancestors(els[0], screen) if a in common), None)
+
+
+def item_of(e: Element, container: int, screen: ScreenState) -> int | None:
+    """Index of the container's child that `e` sits in (`e` itself when it is one)."""
+    chain = [e.index, *_ancestors(e, screen)]
+    k = chain.index(container) if container in chain else 0
+    return chain[k - 1] if k > 0 else None
+
+
+def in_order(els: list[Element], screen: ScreenState) -> list[Element] | None:
+    """`els` in reading order (rows top to bottom, then left to right) if they are one uniform list's look-alikes, else None."""
+    if len(els) < 2:
+        return list(els)
+    shapes = {(short_id(e.resource_id) if usable_id(e.resource_id) else "", e.kind, e.cls.rsplit(".", 1)[-1]) for e in els}
+    container = container_of(els, screen)
+    if len(shapes) > 1 or container is None:
+        return None
+    items = [item_of(e, container, screen) for e in els]
+    if None in items or len(set(items)) < len(items):
+        return None
+    return sorted(els, key=lambda e: (e.bounds[1], e.bounds[0]))
+
+
+def list_head(els: list[Element], screen: ScreenState) -> Element | None:
+    """The fixed item a uniform list starts with, in view only while the list is at its start (the camera tile before a
+    gallery's thumbnails): its container's first child, if that holds none of the look-alikes, else None."""
+    container = container_of(els, screen)
+    if container is None:
+        return None
+    first = min((x for x in screen.elements if x.parent == container), key=lambda x: x.index, default=None)
+    if first is None or first.index in {item_of(e, container, screen) for e in els}:
+        return None
+    if first.number and (first.label or usable_id(first.resource_id)):
+        return first
+    inside = [x for x in candidates(screen) if first.index in _ancestors(x, screen) and (x.label or usable_id(x.resource_id))]
+    return inside[0] if inside else None
+
+
+def _same_case(loc: Locator, scored: list, margin: float) -> tuple[Element, dict] | None:
+    """Rows that show the input alike but for its case ("Trigger a new search with golden hour", "…with Golden Hour":
+    YouTube's sound search suggestions, Nov 1): the one that shows it exactly as given, if only one does."""
+    if not loc.text_has:
+        return None
+    want = re.compile(rf"(?<![0-9A-Za-z]){re.escape(' '.join(loc.text_has.split()))}(?![0-9A-Za-z])")
+    tied = [(e, det) for sc, e, det in scored if scored[0][0] - sc < margin]
+    exact = [(e, det) for e, det in tied if any(want.search(" ".join((t or "").split())) for t in (e.label, e.text, e.desc))]
+    return exact[0] if len(exact) == 1 and len(tied) > 1 else None
 
 
 def _same_slot(loc: Locator, scored: list, screen: ScreenState, margin: float) -> tuple[Element, dict] | None:
@@ -387,14 +466,14 @@ def updated(loc: Locator, e: Element, screen: ScreenState) -> Locator:
     label, neighbors and position are this run's booking data, so its old fixed text stays. An ID the new screen
     doesn't show (a build without IDs) is kept rather than dropped: such screens ignore IDs anyway."""
     fresh = build(e, screen)
-    upd: dict = {"text_has": loc.text_has, "row_has": loc.row_has, "row": loc.row}  # the row it was chosen by stays
+    upd: dict = {"text_has": loc.text_has, "row_has": loc.row_has, "row": loc.row, "nth": loc.nth}  # what chose it stays
     if not fresh.resource_id and loc.resource_id:
         upd["resource_id"] = loc.resource_id
     if loc.resource_id and "{{" in loc.resource_id:
         upd["resource_id"] = loc.resource_id
     if loc.text and "{{" in loc.text:
         upd["text"] = loc.text
-    if loc.text_has or loc.in_list:
+    if loc.text_has or loc.in_list or loc.nth is not None:  # chosen by an input or a place: its own words are this run's data
         upd.update(text=loc.text, siblings=loc.siblings, position=loc.position, parent=loc.parent or fresh.parent, desc=loc.desc,
                    resource_id=loc.resource_id or fresh.resource_id)
     new_text = upd.get("text", fresh.text)

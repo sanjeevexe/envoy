@@ -1,0 +1,36 @@
+{
+ "at": "2026-11-02T00:15:01.307Z",
+ "before": {
+  "mcp_has_tool": false,
+  "sees": {
+   "Muse": 15,
+   "Spark agent": 11,
+   "Reader": 6
+  }
+ },
+ "shared_in_settings": {
+  "ms_to_row": 58,
+  "first_row": "agent-tool-skylark_check_flight_status",
+  "new_mark": true,
+  "events": 1,
+  "mcp_has_tool": true,
+  "sees": {
+   "Muse": 16,
+   "Spark agent": 12,
+   "Reader": 6
+  }
+ },
+ "routine_page": {
+  "switch_on": "true",
+  "names_tool": true
+ },
+ "unshared_on_routine_page": {
+  "switch_on": "false",
+  "mcp_has_tool": false,
+  "sees": {
+   "Muse": 15,
+   "Spark agent": 11,
+   "Reader": 6
+  }
+ }
+}

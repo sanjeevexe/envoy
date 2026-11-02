@@ -1,0 +1,124 @@
+{
+ "name": "tiktok_post_sound",
+ "active": 2,
+ "versions": [
+  {
+   "version": 1,
+   "status": "retired",
+   "created": "2026-11-01 21:06:56",
+   "parent": null,
+   "changes": [
+    "compiled by showcase from task-1101-210013-7814-r1, a first run declined at the post (eval/run_showcase.py)",
+    "its last step (tap 'Post') is the tap declined at step 25, built from that screen; irreversible"
+   ],
+   "verification": {
+    "by": "showcase",
+    "post_steps": [
+     "tap_post"
+    ],
+    "checked": "2026-11-01 21:06"
+   }
+  },
+  {
+   "version": 2,
+   "status": "active",
+   "created": "2026-11-01 22:13:43",
+   "parent": 1,
+   "changes": [
+    "recompiled with the compiler fix (ffde928) from the same run; learned, one step added and its app corrected by hand (showcase)",
+    "hand edit: showcase. wait_for_sound_results (3 s) before apply_first_sound_result: TikTok draws its search results with no accessibility nodes, so the previous step's after-checks pass at once and the visual tap looked too early (0/3 v1 replays)",
+    "hand edit: showcase. app com.zhiliaoapp.musically (the compiler said com.instagram.android) and launch_tiktok's before-check on Instagram's home pager dropped: the source run (Nov 1, 21:00) predates TikTok's name in Envoy (ffde928), so its task had no app, and Instagram was on screen before the agent launched TikTok",
+    "compiled by showcase from task-1101-210013-7814-r1, a first run declined at the post (eval/run_showcase.py); recompiled (compiler fix ffde928)",
+    "its last step (tap 'Post') is the tap declined at step 25, built from that screen; irreversible"
+   ],
+   "verification": {
+    "by": "showcase",
+    "post_steps": [
+     "tap_post"
+    ],
+    "checked": "2026-11-01 22:13"
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-11-01 21:07:56",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1101-210706-e837-r1",
+   "status": "failed",
+   "rung": 4,
+   "model_calls": 5,
+   "duration_s": 46.72,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-01 21:08:52",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1101-210759-1c14-r1",
+   "status": "failed",
+   "rung": 4,
+   "model_calls": 5,
+   "duration_s": 48.24,
+   "patches": 1
+  },
+  {
+   "time": "2026-11-01 21:09:45",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1101-210855-8ea4-r1",
+   "status": "failed",
+   "rung": 4,
+   "model_calls": 5,
+   "duration_s": 45.65,
+   "patches": 1
+  },
+  {
+   "time": "2026-11-01 22:27:39",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1101-222629-f5f3-r1",
+   "status": "declined",
+   "rung": 2,
+   "model_calls": 7,
+   "duration_s": 62.32,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-01 22:29:02",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1101-222746-56dd-r1",
+   "status": "declined",
+   "rung": 2,
+   "model_calls": 8,
+   "duration_s": 68.25,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-01 22:30:21",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1101-222910-b129-r1",
+   "status": "declined",
+   "rung": 2,
+   "model_calls": 7,
+   "duration_s": 61.76,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-01 23:13:22",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1101-231208-dc64-r1",
+   "status": "declined",
+   "rung": 2,
+   "model_calls": 7,
+   "duration_s": 65.4,
+   "patches": 1
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.zhiliaoapp.musically"
+}

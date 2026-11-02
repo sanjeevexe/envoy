@@ -1,0 +1,152 @@
+{
+ "mode": "replay",
+ "app": "com.google.android.youtube",
+ "time": "2026-11-01T22:05:07",
+ "request": {
+  "phone": "phone-09031FDD4000C6",
+  "routine": "youtube_short_sound",
+  "inputs": {
+   "sound_title": "golden hour",
+   "sound_artist": "JVKE",
+   "short_title": "Envoy rehearsal v4 replay 1"
+  }
+ },
+ "task": {
+  "id": "task-1101-220507-94b6",
+  "status": "declined",
+  "routine": "youtube_short_sound",
+  "model_calls": 9,
+  "cost_usd": 0.1001,
+  "traces": [],
+  "detail": "User declined the irreversible 'Upload Short' tap, so the Short cannot be posted as instructed.",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 24,
+ "repairs": [],
+ "approvals": [
+  {
+   "description": "tap \"Upload Short\" in com.google.android.youtube",
+   "reasons": [
+    "rule: target publishes 'Upload Short'",
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "asked_at": [
+  "Upload Short"
+ ],
+ "approval_shot": "approval-task-1101-220507-94b6.jpg",
+ "routine_steps": [
+  {
+   "id": "tap_create",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "tap_import_video_from_photo_library",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "tap_select_from_gallery",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "select_newest_video",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "tap_add_selected_video",
+   "status": "done",
+   "rung": 1,
+   "score": 0.919,
+   "rungs": [
+    "wait and retry: after-checks held after 1.9 s"
+   ]
+  },
+  {
+   "id": "tap_add_sound",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "tap_music_search",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "type_sound_title",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "wait_for_suggestions",
+   "status": "done",
+   "rung": 0,
+   "score": null,
+   "rungs": []
+  },
+  {
+   "id": "tap_trigger_search",
+   "status": "skipped",
+   "rung": 0,
+   "score": null,
+   "rungs": []
+  },
+  {
+   "id": "select_sound_result",
+   "status": "agent",
+   "rung": 6,
+   "score": null,
+   "rungs": [
+    "wait and retry: waited 5 s",
+    "full agent: before-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+    "ask the user: agent failed: User declined the irreversible 'Upload Short' tap, so the Short cannot be posted as instructed."
+   ]
+  }
+ ],
+ "auto_approved": [],
+ "marks_s": {
+  "running": 0.3,
+  "needs_you": 1.3,
+  "phone_yes": 1.3,
+  "waiting_approval": 101.1,
+  "post_asked": 101.1,
+  "declined": 105.1,
+  "end": 105.1
+ },
+ "spent": {
+  "model_calls": 9,
+  "cost_usd": 0.1001,
+  "cost_at_standard_usd": 0.1001,
+  "jobs": {
+   "repair": 2,
+   "plan": 1,
+   "step": 6
+  }
+ },
+ "ok": true,
+ "failures": [],
+ "profile": "hybrid",
+ "cleanup": [
+  "force-stopped YouTube"
+ ]
+}

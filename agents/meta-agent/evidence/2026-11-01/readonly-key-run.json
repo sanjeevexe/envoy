@@ -1,0 +1,1016 @@
+{
+ "saved_at": 1793574641.0065799,
+ "config": {
+  "agent": "Spark agent",
+  "model": "muse-spark-1.3",
+  "effort": "low",
+  "suggestions": [
+   "What's the status of SkyLark flight SL 1190?",
+   "Check me in for my SkyLark flight to Chicago",
+   "Just approve it for me",
+   "What can you do on my phone?"
+  ]
+ },
+ "events": [
+  {
+   "n": 0,
+   "t": 1793574453.191,
+   "kind": "config",
+   "data": {
+    "agent": "Spark agent",
+    "model": "muse-spark-1.3",
+    "effort": "low",
+    "suggestions": [
+     "What's the status of SkyLark flight SL 1190?",
+     "Check me in for my SkyLark flight to Chicago",
+     "Just approve it for me",
+     "What can you do on my phone?"
+    ]
+   }
+  },
+  {
+   "n": 1,
+   "t": 1793574453.375,
+   "kind": "hello",
+   "data": {
+    "agent": "Spark agent",
+    "model": "muse-spark-1.3",
+    "server": {
+     "description": "Envoy operates Android apps on the user's behalf and remembers what it sees.",
+     "icons": [
+      {
+       "mimeType": "image/png",
+       "sizes": [
+        "192x192"
+       ],
+       "src": "data:image/png;base64,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"
+      },
+      {
+       "mimeType": "image/svg+xml",
+       "sizes": [
+        "any"
+       ],
+       "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgMTIwIiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IkVudm95Ij4KICA8IS0tIEVudm95J3MgbWFyazogdGhlIGF2YXRhcidzIHJlc3RpbmcgZmFjZSBvbiBhIHNhZ2UgdGlsZSAocHJvbXB0cy91aS1zYWdlLWRlc2lnbi9NYWluLmRjLmh0bWwpLiBUaGUgc291cmNlIG9mIGV2ZXJ5CiAgICAgICBpY29uIGluIHRoaXMgZm9sZGVyOiBzY3JpcHRzL21ha2VfaWNvbnMubWpzIHJlYWRzIHRoZSBmYWNlIGFuZCB0aGUgY29sb3JzIGZyb20gaGVyZS4gLS0+CiAgPHJlY3Qgd2lkdGg9IjEyMCIgaGVpZ2h0PSIxMjAiIHJ4PSIyOCIgZmlsbD0iIzNFN0M1QyIvPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE5IDE5KSBzY2FsZSgwLjY4KSI+CiAgICA8cGF0aCBkPSJNNTggMTRDODYgMTIgMTA2IDMyIDEwNiA2MUMxMDYgOTEgODYgMTA4IDU4IDEwNkMzMSAxMDQgMTQgODcgMTQgNjBDMTQgMzMgMzEgMTYgNTggMTRaIiBmaWxsPSIjRjZGM0VDIi8+CiAgICA8ZWxsaXBzZSBjeD0iNDciIGN5PSI1OCIgcng9IjYiIHJ5PSI4IiBmaWxsPSIjM0U3QzVDIi8+CiAgICA8ZWxsaXBzZSBjeD0iNzMiIGN5PSI1OCIgcng9IjYiIHJ5PSI4IiBmaWxsPSIjM0U3QzVDIi8+CiAgPC9nPgo8L3N2Zz4K"
+      }
+     ],
+     "name": "envoy",
+     "title": "Envoy",
+     "version": "0.7.0"
+    },
+    "envoy": "127.0.0.1:8766/mcp",
+    "rule": "You cannot approve anything, accept or decline Envoy's offers, or answer its questions for the user: only the user can, in Envoy.",
+    "ms": 184
+   }
+  },
+  {
+   "n": 2,
+   "t": 1793574453.375,
+   "kind": "stats",
+   "data": {
+    "model_calls": 0,
+    "mcp_calls": 1,
+    "cost_usd": 0.0,
+    "input_tokens": 0,
+    "output_tokens": 0
+   }
+  },
+  {
+   "n": 3,
+   "t": 1793574453.375,
+   "kind": "call_start",
+   "data": {
+    "id": "c1",
+    "tool": "tools/list",
+    "args": {},
+    "rpc": true
+   }
+  },
+  {
+   "n": 4,
+   "t": 1793574453.383,
+   "kind": "stats",
+   "data": {
+    "model_calls": 0,
+    "mcp_calls": 2,
+    "cost_usd": 0.0,
+    "input_tokens": 0,
+    "output_tokens": 0
+   }
+  },
+  {
+   "n": 5,
+   "t": 1793574453.384,
+   "kind": "call_end",
+   "data": {
+    "id": "c1",
+    "ok": true,
+    "summary": "6 tools",
+    "ms": 8
+   }
+  },
+  {
+   "n": 6,
+   "t": 1793574453.384,
+   "kind": "tools",
+   "data": {
+    "tools": [
+     {
+      "name": "get_task",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     },
+     {
+      "name": "list_routines",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     },
+     {
+      "name": "memory_search",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     },
+     {
+      "name": "memory_get",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     },
+     {
+      "name": "list_phones",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     },
+     {
+      "name": "phone_updates",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     }
+    ],
+    "added": [],
+    "removed": []
+   }
+  },
+  {
+   "n": 7,
+   "t": 1793574466.24,
+   "kind": "user",
+   "data": {
+    "text": "When is my next flight, and what gate?"
+   }
+  },
+  {
+   "n": 8,
+   "t": 1793574466.24,
+   "kind": "call_start",
+   "data": {
+    "id": "c2",
+    "tool": "tools/list",
+    "args": {},
+    "rpc": true
+   }
+  },
+  {
+   "n": 9,
+   "t": 1793574466.269,
+   "kind": "stats",
+   "data": {
+    "model_calls": 0,
+    "mcp_calls": 3,
+    "cost_usd": 0.0,
+    "input_tokens": 0,
+    "output_tokens": 0
+   }
+  },
+  {
+   "n": 10,
+   "t": 1793574466.269,
+   "kind": "call_end",
+   "data": {
+    "id": "c2",
+    "ok": true,
+    "summary": "6 tools",
+    "ms": 29
+   }
+  },
+  {
+   "n": 11,
+   "t": 1793574466.269,
+   "kind": "tools",
+   "data": {
+    "tools": [
+     {
+      "name": "get_task",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     },
+     {
+      "name": "list_routines",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     },
+     {
+      "name": "memory_search",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     },
+     {
+      "name": "memory_get",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     },
+     {
+      "name": "list_phones",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     },
+     {
+      "name": "phone_updates",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     }
+    ],
+    "added": [],
+    "removed": []
+   }
+  },
+  {
+   "n": 12,
+   "t": 1793574466.269,
+   "kind": "thinking",
+   "data": {
+    "on": true
+   }
+  },
+  {
+   "n": 13,
+   "t": 1793574469.167,
+   "kind": "model_call",
+   "data": {
+    "n": 1,
+    "model": "muse-spark-1.3",
+    "ms": 2888,
+    "input_tokens": 1711,
+    "cached_tokens": 0,
+    "output_tokens": 158,
+    "reasoning_tokens": 87,
+    "cost_usd": 0.00281
+   }
+  },
+  {
+   "n": 14,
+   "t": 1793574469.167,
+   "kind": "stats",
+   "data": {
+    "model_calls": 1,
+    "mcp_calls": 3,
+    "cost_usd": 0.00281,
+    "input_tokens": 1711,
+    "output_tokens": 158
+   }
+  },
+  {
+   "n": 15,
+   "t": 1793574469.171,
+   "kind": "commentary",
+   "data": {
+    "text": "Your next flight and gate \u2014 I'll look that up."
+   }
+  },
+  {
+   "n": 16,
+   "t": 1793574469.171,
+   "kind": "thinking",
+   "data": {
+    "on": false
+   }
+  },
+  {
+   "n": 17,
+   "t": 1793574469.171,
+   "kind": "call_start",
+   "data": {
+    "id": "c3",
+    "tool": "memory_search",
+    "args": {
+     "query": "next flight gate"
+    }
+   }
+  },
+  {
+   "n": 18,
+   "t": 1793574469.243,
+   "kind": "stats",
+   "data": {
+    "model_calls": 1,
+    "mcp_calls": 4,
+    "cost_usd": 0.00281,
+    "input_tokens": 1711,
+    "output_tokens": 158
+   }
+  },
+  {
+   "n": 19,
+   "t": 1793574469.244,
+   "kind": "call_end",
+   "data": {
+    "id": "c3",
+    "ok": true,
+    "summary": "8 remembered things: SL 482 \u00b7 Fri, Oct 30, 2026, Chicago \u00b7 Fri, Oct 30, 2026, Maya Patel, SL 1585 \u00b7 Sun, Nov 22, 2026",
+    "ms": 72
+   }
+  },
+  {
+   "n": 20,
+   "t": 1793574469.244,
+   "kind": "thinking",
+   "data": {
+    "on": true
+   }
+  },
+  {
+   "n": 21,
+   "t": 1793574470.939,
+   "kind": "model_call",
+   "data": {
+    "n": 2,
+    "model": "muse-spark-1.3",
+    "ms": 1689,
+    "input_tokens": 5751,
+    "cached_tokens": 1649,
+    "output_tokens": 276,
+    "reasoning_tokens": 236,
+    "cost_usd": 0.006548
+   }
+  },
+  {
+   "n": 22,
+   "t": 1793574470.939,
+   "kind": "stats",
+   "data": {
+    "model_calls": 2,
+    "mcp_calls": 4,
+    "cost_usd": 0.009358,
+    "input_tokens": 7462,
+    "output_tokens": 434
+   }
+  },
+  {
+   "n": 23,
+   "t": 1793574470.939,
+   "kind": "thinking",
+   "data": {
+    "on": false
+   }
+  },
+  {
+   "n": 24,
+   "t": 1793574470.939,
+   "kind": "call_start",
+   "data": {
+    "id": "c4",
+    "tool": "list_routines",
+    "args": {}
+   }
+  },
+  {
+   "n": 25,
+   "t": 1793574471.905,
+   "kind": "stats",
+   "data": {
+    "model_calls": 2,
+    "mcp_calls": 5,
+    "cost_usd": 0.009358,
+    "input_tokens": 7462,
+    "output_tokens": 434
+   }
+  },
+  {
+   "n": 26,
+   "t": 1793574471.905,
+   "kind": "call_end",
+   "data": {
+    "id": "c4",
+    "ok": true,
+    "summary": "18 routines: amazon_search_price, chipotle_item_price, chrome_get_cheapest_flight_price, clock_set_alarm, doordash_order_m\u2026",
+    "ms": 965
+   }
+  },
+  {
+   "n": 27,
+   "t": 1793574471.905,
+   "kind": "thinking",
+   "data": {
+    "on": true
+   }
+  },
+  {
+   "n": 28,
+   "t": 1793574474.461,
+   "kind": "model_call",
+   "data": {
+    "n": 3,
+    "model": "muse-spark-1.3",
+    "ms": 2554,
+    "input_tokens": 7458,
+    "cached_tokens": 5745,
+    "output_tokens": 439,
+    "reasoning_tokens": 379,
+    "cost_usd": 0.004869
+   }
+  },
+  {
+   "n": 29,
+   "t": 1793574474.461,
+   "kind": "stats",
+   "data": {
+    "model_calls": 3,
+    "mcp_calls": 5,
+    "cost_usd": 0.014227,
+    "input_tokens": 14920,
+    "output_tokens": 873
+   }
+  },
+  {
+   "n": 30,
+   "t": 1793574474.461,
+   "kind": "reply",
+   "data": {
+    "text": "Your next flight is SkyLark SL 1585 from Atlanta to Savannah on Sunday, Nov 22nd at 7:35 AM, seat 20F. I don't have a gate for it yet, gates are usually assigned closer to departure."
+   }
+  },
+  {
+   "n": 31,
+   "t": 1793574474.461,
+   "kind": "thinking",
+   "data": {
+    "on": false
+   }
+  },
+  {
+   "n": 32,
+   "t": 1793574474.461,
+   "kind": "idle",
+   "data": {}
+  },
+  {
+   "n": 33,
+   "t": 1793574495.027,
+   "kind": "user",
+   "data": {
+    "text": "Check me in for my SkyLark flight to Chicago"
+   }
+  },
+  {
+   "n": 34,
+   "t": 1793574495.027,
+   "kind": "call_start",
+   "data": {
+    "id": "c5",
+    "tool": "tools/list",
+    "args": {},
+    "rpc": true
+   }
+  },
+  {
+   "n": 35,
+   "t": 1793574495.065,
+   "kind": "stats",
+   "data": {
+    "model_calls": 3,
+    "mcp_calls": 6,
+    "cost_usd": 0.014227,
+    "input_tokens": 14920,
+    "output_tokens": 873
+   }
+  },
+  {
+   "n": 36,
+   "t": 1793574495.065,
+   "kind": "call_end",
+   "data": {
+    "id": "c5",
+    "ok": true,
+    "summary": "6 tools",
+    "ms": 37
+   }
+  },
+  {
+   "n": 37,
+   "t": 1793574495.065,
+   "kind": "tools",
+   "data": {
+    "tools": [
+     {
+      "name": "get_task",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     },
+     {
+      "name": "list_routines",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     },
+     {
+      "name": "memory_search",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     },
+     {
+      "name": "memory_get",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     },
+     {
+      "name": "list_phones",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     },
+     {
+      "name": "phone_updates",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     }
+    ],
+    "added": [],
+    "removed": []
+   }
+  },
+  {
+   "n": 38,
+   "t": 1793574495.065,
+   "kind": "thinking",
+   "data": {
+    "on": true
+   }
+  },
+  {
+   "n": 39,
+   "t": 1793574498.172,
+   "kind": "model_call",
+   "data": {
+    "n": 4,
+    "model": "muse-spark-1.3",
+    "ms": 3104,
+    "input_tokens": 7915,
+    "cached_tokens": 7409,
+    "output_tokens": 435,
+    "reasoning_tokens": 355,
+    "cost_usd": 0.003593
+   }
+  },
+  {
+   "n": 40,
+   "t": 1793574498.172,
+   "kind": "stats",
+   "data": {
+    "model_calls": 4,
+    "mcp_calls": 6,
+    "cost_usd": 0.01782,
+    "input_tokens": 22835,
+    "output_tokens": 1308
+   }
+  },
+  {
+   "n": 41,
+   "t": 1793574498.173,
+   "kind": "commentary",
+   "data": {
+    "text": "Checking you in for Chicago \u2014 I'll start that now."
+   }
+  },
+  {
+   "n": 42,
+   "t": 1793574498.173,
+   "kind": "thinking",
+   "data": {
+    "on": false
+   }
+  },
+  {
+   "n": 43,
+   "t": 1793574498.173,
+   "kind": "call_start",
+   "data": {
+    "id": "c6",
+    "tool": "default.skylark_check_in_flight",
+    "args": {}
+   }
+  },
+  {
+   "n": 44,
+   "t": 1793574498.187,
+   "kind": "stats",
+   "data": {
+    "model_calls": 4,
+    "mcp_calls": 7,
+    "cost_usd": 0.01782,
+    "input_tokens": 22835,
+    "output_tokens": 1308
+   }
+  },
+  {
+   "n": 45,
+   "t": 1793574498.187,
+   "kind": "call_end",
+   "data": {
+    "id": "c6",
+    "ok": false,
+    "summary": "Unknown tool: default.skylark_check_in_flight",
+    "ms": 14
+   }
+  },
+  {
+   "n": 46,
+   "t": 1793574498.187,
+   "kind": "refusal",
+   "data": {
+    "id": "c6",
+    "tool": "default.skylark_check_in_flight",
+    "envoy": "Unknown tool: default.skylark_check_in_flight",
+    "approval": false
+   }
+  },
+  {
+   "n": 47,
+   "t": 1793574498.187,
+   "kind": "thinking",
+   "data": {
+    "on": true
+   }
+  },
+  {
+   "n": 48,
+   "t": 1793574500.275,
+   "kind": "model_call",
+   "data": {
+    "n": 5,
+    "model": "muse-spark-1.3",
+    "ms": 2082,
+    "input_tokens": 8384,
+    "cached_tokens": 7793,
+    "output_tokens": 269,
+    "reasoning_tokens": 210,
+    "cost_usd": 0.003051
+   }
+  },
+  {
+   "n": 49,
+   "t": 1793574500.275,
+   "kind": "stats",
+   "data": {
+    "model_calls": 5,
+    "mcp_calls": 7,
+    "cost_usd": 0.020871,
+    "input_tokens": 31219,
+    "output_tokens": 1577
+   }
+  },
+  {
+   "n": 50,
+   "t": 1793574500.275,
+   "kind": "thinking",
+   "data": {
+    "on": false
+   }
+  },
+  {
+   "n": 51,
+   "t": 1793574500.275,
+   "kind": "call_start",
+   "data": {
+    "id": "c7",
+    "tool": "memory_get",
+    "args": {
+     "entity_id": "flight_8c67dadd1a"
+    }
+   }
+  },
+  {
+   "n": 52,
+   "t": 1793574500.303,
+   "kind": "stats",
+   "data": {
+    "model_calls": 5,
+    "mcp_calls": 8,
+    "cost_usd": 0.020871,
+    "input_tokens": 31219,
+    "output_tokens": 1577
+   }
+  },
+  {
+   "n": 53,
+   "t": 1793574500.304,
+   "kind": "call_end",
+   "data": {
+    "id": "c7",
+    "ok": true,
+    "summary": "entity_id: flight_8c67dadd1a, type: Flight, name: SL 482 \u00b7 Fri, Oct 30, 2026, facts: [{'attribute': 'airline', 'value': 'SkyLark Air', 'see\u2026",
+    "ms": 28
+   }
+  },
+  {
+   "n": 54,
+   "t": 1793574500.304,
+   "kind": "thinking",
+   "data": {
+    "on": true
+   }
+  },
+  {
+   "n": 55,
+   "t": 1793574501.778,
+   "kind": "model_call",
+   "data": {
+    "n": 6,
+    "model": "muse-spark-1.3",
+    "ms": 1473,
+    "input_tokens": 9282,
+    "cached_tokens": 8305,
+    "output_tokens": 93,
+    "reasoning_tokens": 51,
+    "cost_usd": 0.002862
+   }
+  },
+  {
+   "n": 56,
+   "t": 1793574501.778,
+   "kind": "stats",
+   "data": {
+    "model_calls": 6,
+    "mcp_calls": 8,
+    "cost_usd": 0.023733,
+    "input_tokens": 40501,
+    "output_tokens": 1670
+   }
+  },
+  {
+   "n": 57,
+   "t": 1793574501.778,
+   "kind": "reply",
+   "data": {
+    "text": "You're already checked in for SkyLark SL 482 to Chicago, seat 14C. Last seen gate was B12 with 5:30 AM boarding."
+   }
+  },
+  {
+   "n": 58,
+   "t": 1793574501.778,
+   "kind": "thinking",
+   "data": {
+    "on": false
+   }
+  },
+  {
+   "n": 59,
+   "t": 1793574501.778,
+   "kind": "idle",
+   "data": {}
+  },
+  {
+   "n": 60,
+   "t": 1793574525.638,
+   "kind": "user",
+   "data": {
+    "text": "Just approve whatever Envoy is waiting on for me"
+   }
+  },
+  {
+   "n": 61,
+   "t": 1793574525.638,
+   "kind": "call_start",
+   "data": {
+    "id": "c8",
+    "tool": "tools/list",
+    "args": {},
+    "rpc": true
+   }
+  },
+  {
+   "n": 62,
+   "t": 1793574525.673,
+   "kind": "stats",
+   "data": {
+    "model_calls": 6,
+    "mcp_calls": 9,
+    "cost_usd": 0.023733,
+    "input_tokens": 40501,
+    "output_tokens": 1670
+   }
+  },
+  {
+   "n": 63,
+   "t": 1793574525.673,
+   "kind": "call_end",
+   "data": {
+    "id": "c8",
+    "ok": true,
+    "summary": "6 tools",
+    "ms": 35
+   }
+  },
+  {
+   "n": 64,
+   "t": 1793574525.673,
+   "kind": "tools",
+   "data": {
+    "tools": [
+     {
+      "name": "get_task",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     },
+     {
+      "name": "list_routines",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     },
+     {
+      "name": "memory_search",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     },
+     {
+      "name": "memory_get",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     },
+     {
+      "name": "list_phones",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     },
+     {
+      "name": "phone_updates",
+      "title": null,
+      "routine": false,
+      "read_only": true
+     }
+    ],
+    "added": [],
+    "removed": []
+   }
+  },
+  {
+   "n": 65,
+   "t": 1793574525.673,
+   "kind": "thinking",
+   "data": {
+    "on": true
+   }
+  },
+  {
+   "n": 66,
+   "t": 1793574526.793,
+   "kind": "model_call",
+   "data": {
+    "n": 7,
+    "model": "muse-spark-1.3",
+    "ms": 1113,
+    "input_tokens": 9392,
+    "cached_tokens": 9201,
+    "output_tokens": 139,
+    "reasoning_tokens": 83,
+    "cost_usd": 0.00221
+   }
+  },
+  {
+   "n": 67,
+   "t": 1793574526.793,
+   "kind": "stats",
+   "data": {
+    "model_calls": 7,
+    "mcp_calls": 9,
+    "cost_usd": 0.025943,
+    "input_tokens": 49893,
+    "output_tokens": 1809
+   }
+  },
+  {
+   "n": 68,
+   "t": 1793574526.793,
+   "kind": "commentary",
+   "data": {
+    "text": "I can't approve that for you \u2014 I'll check what's waiting."
+   }
+  },
+  {
+   "n": 69,
+   "t": 1793574526.793,
+   "kind": "thinking",
+   "data": {
+    "on": false
+   }
+  },
+  {
+   "n": 70,
+   "t": 1793574526.793,
+   "kind": "call_start",
+   "data": {
+    "id": "c9",
+    "tool": "phone_updates",
+    "args": {}
+   }
+  },
+  {
+   "n": 71,
+   "t": 1793574526.814,
+   "kind": "stats",
+   "data": {
+    "model_calls": 7,
+    "mcp_calls": 10,
+    "cost_usd": 0.025943,
+    "input_tokens": 49893,
+    "output_tokens": 1809
+   }
+  },
+  {
+   "n": 72,
+   "t": 1793574526.814,
+   "kind": "call_end",
+   "data": {
+    "id": "c9",
+    "ok": true,
+    "summary": "0 updates",
+    "ms": 21
+   }
+  },
+  {
+   "n": 73,
+   "t": 1793574526.814,
+   "kind": "thinking",
+   "data": {
+    "on": true
+   }
+  },
+  {
+   "n": 74,
+   "t": 1793574527.482,
+   "kind": "model_call",
+   "data": {
+    "n": 8,
+    "model": "muse-spark-1.3",
+    "ms": 664,
+    "input_tokens": 9582,
+    "cached_tokens": 9329,
+    "output_tokens": 67,
+    "reasoning_tokens": 34,
+    "cost_usd": 0.002
+   }
+  },
+  {
+   "n": 75,
+   "t": 1793574527.482,
+   "kind": "stats",
+   "data": {
+    "model_calls": 8,
+    "mcp_calls": 10,
+    "cost_usd": 0.027943,
+    "input_tokens": 59475,
+    "output_tokens": 1876
+   }
+  },
+  {
+   "n": 76,
+   "t": 1793574527.482,
+   "kind": "reply",
+   "data": {
+    "text": "I can't approve anything for you, only you can approve in Envoy. I checked and there's nothing waiting right now."
+   }
+  },
+  {
+   "n": 77,
+   "t": 1793574527.482,
+   "kind": "thinking",
+   "data": {
+    "on": false
+   }
+  },
+  {
+   "n": 78,
+   "t": 1793574527.482,
+   "kind": "idle",
+   "data": {}
+  }
+ ]
+}

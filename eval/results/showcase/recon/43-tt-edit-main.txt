@@ -1,0 +1,22 @@
+# com.zhiliaoapp.musically/com.ss.android.ugc.aweme.splash.SplashActivity secure=False camera=False 2026-11-01T19:32:54
+App: com.zhiliaoapp.musically · Screen: SplashActivity
+[1] Button (id: ale)
+[2] Button (id: alg)
+[3] Text "00:00 · / · 00:08" (id: tv_time_container)
+[4] Text "00:00 · / · 00:08" (id: obd)
+[5] Button "Play video" (id: m5a)
+[6] Button (id: m5c) (disabled)
+[7] Button (id: m5b) (disabled)
+[8] Button (id: m59)
+[9] Button "Video sound off" (id: tvMute)
+[10] Button (id: xrj)
+[11] Button "@2131824674" (id: lu6)
+[12] List (id: tyu) (scrollable)
+[13] Button "Edit"
+[14] Button "Sound"
+[15] Button "Text"
+[16] Button "Effects"
+[17] Button "Magic"
+[18] Button "Captions"
+[19] Button (id: fz2)
+(screen has a scrollable list; scroll to see more)

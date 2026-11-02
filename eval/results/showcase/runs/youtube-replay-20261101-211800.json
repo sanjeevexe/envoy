@@ -1,0 +1,66 @@
+{
+ "mode": "replay",
+ "app": "com.google.android.youtube",
+ "time": "2026-11-01T21:18:00",
+ "request": {
+  "phone": "phone-09031FDD4000C6",
+  "routine": "youtube_short_sound",
+  "inputs": {
+   "sound_title": "golden hour",
+   "sound_artist": "JVKE",
+   "short_title": "Envoy rehearsal replay 2"
+  }
+ },
+ "task": {
+  "id": "task-1101-211800-1393",
+  "status": "declined",
+  "routine": "youtube_short_sound",
+  "model_calls": 10,
+  "cost_usd": 0.1235,
+  "traces": [],
+  "detail": "User declined the Upload Short action; the Short was not posted and I will not retry the upload.",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 24,
+ "repairs": [],
+ "approvals": [
+  {
+   "description": "tap \"Upload Short\" in com.google.android.youtube",
+   "reasons": [
+    "rule: target publishes 'Upload Short'",
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "asked_at": [
+  "Upload Short"
+ ],
+ "auto_approved": [],
+ "marks_s": {
+  "running": 0.3,
+  "needs_you": 1.3,
+  "phone_yes": 1.3,
+  "waiting_approval": 99.8,
+  "post_asked": 99.8,
+  "declined": 102.8,
+  "end": 102.8
+ },
+ "spent": {
+  "model_calls": 10,
+  "cost_usd": 0.1235,
+  "cost_at_standard_usd": 0.1235,
+  "jobs": {
+   "repair": 2,
+   "plan": 1,
+   "step": 7
+  }
+ },
+ "ok": true,
+ "failures": [],
+ "profile": "hybrid",
+ "cleanup": [
+  "force-stopped YouTube"
+ ]
+}

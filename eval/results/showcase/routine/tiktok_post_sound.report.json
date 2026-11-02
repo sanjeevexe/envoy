@@ -1,0 +1,222 @@
+{
+ "task_id": "task-1101-210013-7814-r1",
+ "goal": "Post the newest video in my phone's gallery to TikTok with the sound \"golden hour\" by JVKE from TikTok's sound library and this caption: \"Envoy rehearsal: one clip, three apps\"",
+ "kept": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  11,
+  12,
+  14,
+  15,
+  16,
+  17
+ ],
+ "dropped": [
+  [
+   10,
+   "look: not a device action"
+  ],
+  [
+   13,
+   "look: not a device action"
+  ],
+  [
+   18,
+   "look: not a device action"
+  ],
+  [
+   22,
+   "look: not a device action"
+  ],
+  [
+   25,
+   "tap: not a device action"
+  ],
+  [
+   19,
+   "back-track: steps 19\u201324 returned to the same screen"
+  ],
+  [
+   20,
+   "back-track: steps 19\u201324 returned to the same screen"
+  ],
+  [
+   21,
+   "back-track: steps 19\u201324 returned to the same screen"
+  ],
+  [
+   23,
+   "back-track: steps 19\u201324 returned to the same screen"
+  ],
+  [
+   24,
+   "back-track: steps 19\u201324 returned to the same screen"
+  ]
+ ],
+ "model": "muse-wonder-1.0",
+ "model_calls": 1,
+ "cost_usd": 0.077584,
+ "cost_at_standard_usd": 0.077584,
+ "latency_s": 27.4,
+ "warnings": [
+  "step 11: the first result for {{sound_artist}}: chosen by its place in the list"
+ ],
+ "wonder": {
+  "name": "tiktok_post_newest_gallery_video",
+  "intent": "Post the newest gallery video to TikTok with a chosen sound and caption",
+  "description": "Opens TikTok, creates a post from the newest video in the phone gallery, searches TikTok's sound library for the requested sound and applies it, then adds the requested caption and dismisses the keyboard for review.",
+  "patterns": [
+   "Post my newest video to TikTok with a sound and caption",
+   "Create a TikTok from my latest gallery clip",
+   "Upload my newest phone video to TikTok",
+   "Make a TikTok post from my most recent video"
+  ],
+  "inputs": [
+   {
+    "name": "sound_title",
+    "type": "text",
+    "description": "Title of the sound to find in TikTok's sound library.",
+    "from_memory": null,
+    "example": "golden hour"
+   },
+   {
+    "name": "sound_artist",
+    "type": "text",
+    "description": "Artist of the sound to find in TikTok's sound library.",
+    "from_memory": null,
+    "example": "JVKE"
+   },
+   {
+    "name": "caption",
+    "type": "text",
+    "description": "Caption to enter as the post description.",
+    "from_memory": null,
+    "example": "Envoy rehearsal: one clip, three apps"
+   }
+  ],
+  "steps": [
+   {
+    "step": 1,
+    "id": "launch_tiktok",
+    "intent": "Launch TikTok",
+    "target_fixed_text": null,
+    "choice_input": null
+   },
+   {
+    "step": 2,
+    "id": "tap_create",
+    "intent": "Tap Create to start a new post",
+    "target_fixed_text": "Create",
+    "choice_input": null
+   },
+   {
+    "step": 3,
+    "id": "tap_upload",
+    "intent": "Tap Upload to open the gallery",
+    "target_fixed_text": null,
+    "choice_input": null
+   },
+   {
+    "step": 4,
+    "id": "select_newest_video",
+    "intent": "Tap the first, newest video in the gallery list",
+    "target_fixed_text": null,
+    "choice_input": null
+   },
+   {
+    "step": 5,
+    "id": "tap_next_after_gallery",
+    "intent": "Tap Next to proceed to the editor with the selected video",
+    "target_fixed_text": "Next",
+    "choice_input": null
+   },
+   {
+    "step": 6,
+    "id": "tap_music",
+    "intent": "Tap the Music area to open the sound library",
+    "target_fixed_text": "Music",
+    "choice_input": null
+   },
+   {
+    "step": 7,
+    "id": "tap_search_in_sound_sheet",
+    "intent": "Tap Search in the Add sound sheet",
+    "target_fixed_text": "Search",
+    "choice_input": null
+   },
+   {
+    "step": 8,
+    "id": "type_sound_search",
+    "intent": "Type {{sound_title}} {{sound_artist}} into the Search field",
+    "target_fixed_text": "Search",
+    "choice_input": null
+   },
+   {
+    "step": 9,
+    "id": "execute_sound_search",
+    "intent": "Tap Search to execute the search for {{sound_title}} by {{sound_artist}}",
+    "target_fixed_text": "Search",
+    "choice_input": null
+   },
+   {
+    "step": 10,
+    "id": "apply_first_sound_result",
+    "intent": "Tap the apply/check control for the first result matching {{sound_title}} by {{sound_artist}}",
+    "target_fixed_text": null,
+    "choice_input": "sound_title"
+   },
+   {
+    "step": 11,
+    "id": "select_sound_result",
+    "intent": "Tap the {{sound_title}} by {{sound_artist}} sound result to select it",
+    "target_fixed_text": null,
+    "choice_input": "sound_title"
+   },
+   {
+    "step": 12,
+    "id": "close_sound_sheet",
+    "intent": "Tap the video preview to close the sound sheet and return to editing",
+    "target_fixed_text": null,
+    "choice_input": null
+   },
+   {
+    "step": 13,
+    "id": "tap_next_after_sound",
+    "intent": "Tap Next to proceed to the caption and post screen",
+    "target_fixed_text": "Next",
+    "choice_input": null
+   },
+   {
+    "step": 14,
+    "id": "type_caption",
+    "intent": "Type {{caption}} into the Add description field",
+    "target_fixed_text": "Add description...",
+    "choice_input": null
+   },
+   {
+    "step": 15,
+    "id": "go_back_to_review",
+    "intent": "Press back to close the keyboard and review the preview before posting",
+    "target_fixed_text": null,
+    "choice_input": null
+   }
+  ],
+  "outputs": [],
+  "data_values": [
+   "00:08",
+   "Rust Ritual",
+   "742.4K posts",
+   "1:00"
+  ]
+ },
+ "trace": "task-1101-210013-7814-r1",
+ "name": "tiktok_post_sound",
+ "final_from_declined": true
+}

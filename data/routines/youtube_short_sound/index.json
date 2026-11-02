@@ -1,0 +1,123 @@
+{
+ "name": "youtube_short_sound",
+ "active": 2,
+ "versions": [
+  {
+   "version": 1,
+   "status": "retired",
+   "created": "2026-11-01 21:14:01",
+   "parent": null,
+   "changes": [
+    "compiled by showcase from task-1101-211106-9b42-r1, a first run declined at the post (eval/run_showcase.py)",
+    "its last step (tap 'Upload Short') is the tap declined at step 15, built from that screen; irreversible"
+   ],
+   "verification": {
+    "by": "showcase",
+    "post_steps": [
+     "tap_post"
+    ],
+    "checked": "2026-11-01 21:14"
+   }
+  },
+  {
+   "version": 2,
+   "status": "active",
+   "created": "2026-11-01 22:13:44",
+   "parent": 1,
+   "changes": [
+    "recompiled with the compiler fix (ffde928) from the same run; learned, one step tuned by hand (showcase)",
+    "hand edit: showcase. tap_create: its before-check on 'Captions unavailable' (caption_toggle_container) dropped: a video autoplaying on Home when the run was recorded, usually absent (2 of 3 v1 replays failed there)",
+    "compiled by showcase from task-1101-211106-9b42-r1, a first run declined at the post (eval/run_showcase.py); recompiled (compiler fix ffde928)",
+    "its last step (tap 'Upload Short') is the tap declined at step 15, built from that screen; irreversible"
+   ],
+   "verification": {
+    "by": "showcase",
+    "post_steps": [
+     "tap_post"
+    ],
+    "checked": "2026-11-01 22:13"
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-11-01 21:17:57",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1101-211402-9bef-r1",
+   "status": "needs_user",
+   "rung": 6,
+   "model_calls": 28,
+   "duration_s": 231.78,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-01 21:19:42",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1101-211800-1393-r1",
+   "status": "declined",
+   "rung": 6,
+   "model_calls": 10,
+   "duration_s": 98.27,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-01 21:23:36",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1101-211945-6608-r1",
+   "status": "needs_user",
+   "rung": 6,
+   "model_calls": 43,
+   "duration_s": 227.95,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-01 22:33:21",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1101-223055-1f79-r1",
+   "status": "declined",
+   "rung": 6,
+   "model_calls": 8,
+   "duration_s": 142.08,
+   "patches": 2
+  },
+  {
+   "time": "2026-11-01 22:35:42",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1101-223345-be30-r1",
+   "status": "declined",
+   "rung": 6,
+   "model_calls": 8,
+   "duration_s": 112.63,
+   "patches": 2
+  },
+  {
+   "time": "2026-11-01 22:37:41",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1101-223608-9fdc-r1",
+   "status": "declined",
+   "rung": 4,
+   "model_calls": 2,
+   "duration_s": 90.16,
+   "patches": 3
+  },
+  {
+   "time": "2026-11-01 23:38:30",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1101-233748-d83d-r1",
+   "status": "declined",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 35.88,
+   "patches": 1
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.google.android.youtube"
+}

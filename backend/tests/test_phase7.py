@@ -56,6 +56,17 @@ def test_a_trial_that_runs_on_its_own_becomes_active(tmp_path):
     assert store.index(v1.routine)["active"] == 2 and version_for_run(store, v1.routine).status == "active"
 
 
+def test_a_trial_declined_at_its_approval_with_no_calls_becomes_active(tmp_path):
+    """Rehearsals stop at the post's approval and the user says no: the trial still ran every step on its own."""
+    store = RoutineStore(tmp_path)
+    v1 = store.add(_routine())
+    after_run(store, v1, RunOutcome(v1.routine, 1, "t1", "done", patches=[_patch(v1)], model_calls=1))
+    trial = version_for_run(store, v1.routine)
+    assert after_run(store, trial, RunOutcome(v1.routine, 2, "t2", "declined", model_calls=0)) == {"trial": 2, "result": "activated"}
+    v3 = store.propose(store.get(v1.routine), [_patch(store.get(v1.routine))], "t3")
+    assert after_run(store, version_for_run(store, v1.routine), RunOutcome(v1.routine, v3.version, "t4", "declined", model_calls=2))["result"] == "rejected"
+
+
 def test_a_trial_that_needs_repair_or_the_agent_is_rolled_back(tmp_path):
     store = RoutineStore(tmp_path)
     v1 = store.add(_routine())

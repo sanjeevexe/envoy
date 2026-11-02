@@ -1,0 +1,27 @@
+{
+ "dump": "91-yt-upload-details.xml",
+ "app": "com.google.android.youtube",
+ "request": "the newest video in my phone's gallery to YouTube with this caption",
+ "targets": [
+  {
+   "element": 8,
+   "kind": "Button",
+   "label": "Upload Short",
+   "text": "Upload Short",
+   "desc": "",
+   "id": "com.google.android.youtube:id/upload_bottom_button",
+   "bounds": [
+    556,
+    2131,
+    1047,
+    2241
+   ],
+   "risk": "irreversible",
+   "reasons": [
+    "rule: target publishes 'Upload Short'"
+   ],
+   "asks": true
+  }
+ ],
+ "post_gated": true
+}

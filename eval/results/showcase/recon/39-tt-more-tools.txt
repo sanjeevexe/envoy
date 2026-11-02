@@ -1,0 +1,6 @@
+# com.zhiliaoapp.musically/com.ss.android.ugc.aweme.splash.SplashActivity secure=False camera=False 2026-11-01T19:31:57
+App: com.zhiliaoapp.musically · Screen: SplashActivity
+[1] Button "Dialog" (id: visual_area)
+[2] Text "Discard audio edits?" (id: dki)
+[3] Button "Discard"
+[4] Button "Cancel"

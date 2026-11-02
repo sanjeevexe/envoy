@@ -70,7 +70,13 @@ _CALL = re.compile(r"^(call|dial|voice call|video call|call now|place (a )?call|
 # A button whose whole label publishes something for others to see ("Share" on Instagram's last screen, "Post", "Publish"):
 # a public post can't be taken back. Whole labels only, so "Share your feedback" or a "Posts" tab don't count; a Share that
 # only opens a share sheet (YouTube) is asked about too, which errs on the safe side.
-_PUBLISH = re.compile(r"^(share|post|publish)( (now|it|post|reel|story|to (your )?(feed|story)))?$", re.I)
+_PUBLISH = re.compile(r"^(share|post|publish|upload|repost)( (now|it|post|reel|story|short|video|to (your )?(feed|story)))?$", re.I)
+# YouTube's Shorts end on "Upload" and TikTok's share sheet has "Repost" (showcase P3, Nov 1). TikTok's editor also posts a
+# TikTok Story in one tap from a button that says only "Your Story" (id ts6, TikTok 47.5). In Instagram the same words
+# label the feed's own story bubble, which only opens the camera, and its story share buttons are caught by their ids
+# (your_story_share_shortcut_button…), so "Your Story" counts only in TikTok.
+_STORY_APPS = {"com.zhiliaoapp.musically", "com.ss.android.ugc.trill"}
+_STORY_POST = re.compile(r"^your story$", re.I)
 # A button that requests or books a ride: it charges for the trip and sends a driver, however it's worded ("Request UberX",
 # "Request Lyft", "Request a ride", "Book ride", "Schedule ride"; "Confirm pickup" is "confirm" above). From the label's first
 # word and with a ride after it, so "Request desktop site", "Request a feature", "Request refund", "Ride history", "Set pickup",
@@ -181,7 +187,8 @@ def classify(action: Action, screen: ScreenState, model_risk: Risk | None) -> Ri
                 reasons.append(f"rule: target is a price {target.label!r}")
             elif any(_CALL.match(x.strip()) for x in (target.label, target.desc) if x) and not target.editable:
                 reasons.append(f"rule: target places a call {target.label or target.desc!r}")
-            elif any(_PUBLISH.match(x.strip()) for x in (target.label, target.desc) if x) and not target.editable:
+            elif any(_PUBLISH.match(x.strip()) or (screen.package in _STORY_APPS and _STORY_POST.match(x.strip()))
+                     for x in (target.label, target.desc) if x) and not target.editable:
                 reasons.append(f"rule: target publishes {target.label or target.desc!r}")
             elif target.kind == "Button" and any(requests_ride(x, screen.package) for x in (target.label, target.desc) if x):
                 reasons.append(f"rule: target requests a ride {target.label or target.desc!r}")

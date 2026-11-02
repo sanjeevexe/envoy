@@ -1,0 +1,35 @@
+# com.google.android.youtube/com.google.android.apps.youtube.app.extensions.creationmodes.main.CreationModesActivity secure=False camera=True 2026-11-01T19:38:30
+App: com.google.android.youtube · Screen: CreationModesActivity
+(the on-screen keyboard is open over the bottom of the screen)
+[1] Button "Flip camera" (id: shorts_flip_button)
+[2] Button "Timer controls" (id: shorts_timer_button)
+[3] Button "Record up to 15 seconds. Toggle to record up to 180 seconds. · 15s" (id: shorts_toolbar_duration_button)
+[4] Button "Effects" (id: effect_picker_entry_button)
+[5] Button "Speed controls" (id: shorts_speed_button)
+[6] Button "Green screen" (id: shorts_camera_green_screen_button)
+[7] Button "Close camera" (id: shorts_camera_close_button)
+[8] Button "Add sound" (id: shorts_camera_music_button)
+[9] Button "Create with AI" (id: shorts_camera_ai_playground_top_end_button)
+[10] Text "Camera" (id: shorts_camera_canvas_accessibility_view)
+[11] Button "Sounds" (id: reel_pivot_root_view)
+[12] Button "Close" (id: music_picker_leading_button)
+[13] Button "Create an original track"
+[14] Button "Search" (id: music_picker_search_box)
+[15] Button "For you" (id: tabs_bar_text_tab_view) (selected)
+[16] Button "Saved" (id: tabs_bar_text_tab_view)
+[17] List (id: reel_browse_tabs_view_pager) (scrollable)
+[18] List (scrollable)
+[19] Button "RELEASED, The hottest new songs this week, served up fresh every Friday."
+[20] Button "misery., pupsies, 1 minute, 30 seconds, 1.7M Shorts, Play a preview"
+[21] Button "Add to Favorites"
+[22] Button "Halloween Trends,"
+[23] Text "Create music"
+[24] List (scrollable)
+[25] Button "Create a slowed vaporwave track about playing old video games"
+[26] Button "Create a psy-trance track about ignoring all the haters"
+[27] Button "Sounds" (id: music_search_root)
+[28] Button "Close" (id: music_search_exit)
+[29] Button "Create an original track"
+[30] EditText "Search" (id: search_input_text) (empty, focused)
+[31] Button "CANCEL" (id: search_cancel)
+(screen has a scrollable list; scroll to see more)

@@ -1,0 +1,316 @@
+routine: youtube_short_sound
+app: com.google.android.youtube
+version: 1
+status: draft
+intent: Post the newest gallery video as a YouTube Short with a chosen sound and title
+description: Prepares a YouTube Short from the newest video in the phone gallery, adds a chosen sound from the YouTube sound library, and enters
+  the requested title before upload. Only works when sound_artist is the one already shown on 'golden hour, JVKE, Jake Lawson, 1 minute, 281K
+  Shorts, Play a preview'.
+patterns: [post my newest video to YouTube as a Short, upload the latest gallery video as a Short with this sound, make a YouTube Short from my
+    newest clip, turn the newest video in my gallery into a Short]
+start: fresh_launch
+inputs:
+  sound_title: {type: text, description: Title of the sound to search for in YouTube's sound library, example: golden hour}
+  sound_artist: {type: text, description: 'Artist credited for the requested sound, used to pick the correct search result', example: JVKE}
+  short_title:
+    type: text
+    description: Title or caption to enter for the Short
+    example: "Envoy rehearsal: one clip, three apps"
+steps:
+- id: tap_create
+  intent: Tap Create to start the Short creation flow
+  pre:
+  - {app_foreground: com.google.android.youtube}
+  action:
+    tap:
+      text: Create
+      kind: Button
+      cls: Button
+      siblings: [Home, Shorts, Subscriptions]
+      in_list: false
+      position: [0.5, 0.944]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: reel_camera_gallery_button_label, text: Add, kind: Text}
+  - element_present: {resource_id: shorts_camera_drafts_button_label, text: Drafts, kind: Text}
+  risk: reversible
+  note: trace step 1
+- id: tap_import_video_from_photo_library
+  intent: Tap Import video from photo library to select a video from the gallery
+  pre:
+  - {app_foreground: com.google.android.youtube}
+  action:
+    tap:
+      resource_id: reel_camera_gallery_button_delegate
+      text: Import video from photo library
+      kind: Button
+      cls: Button
+      parent: reel_camera_bottom_bar
+      siblings: [Open draft picker]
+      in_list: false
+      position: [0.092, 0.787]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 2
+- id: tap_select_from_gallery
+  intent: Tap Select from gallery to grant access and show gallery media
+  pre:
+  - {app_foreground: com.google.android.youtube}
+  action:
+    tap:
+      resource_id: select_from_gallery_button
+      text: Select from gallery
+      kind: Button
+      cls: Button
+      parent: gallery_grid_container
+      in_list: false
+      position: [0.5, 0.622]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: privacy_text, text: This app can only access the photos you select, kind: Text}
+  - element_present: {resource_id: picker_tab_viewpager, kind: List}
+  risk: reversible
+  note: trace step 4
+- id: select_newest_video
+  intent: Select the newest video shown at the top of Recent
+  pre:
+  - {app_foreground: com.google.android.providers.media.module}
+  action:
+    tap:
+      kind: Button
+      cls: FrameLayout
+      parent: picker_tab_recyclerview
+      siblings: [Recent]
+      in_list: true
+      position: [0.164, 0.364]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: button_view_selected, text: View selected, kind: Button}
+  risk: reversible
+  note: trace step 5
+- id: tap_add_selected_video
+  intent: Tap Add to confirm importing the selected video
+  pre:
+  - {app_foreground: com.google.android.providers.media.module}
+  action:
+    tap:
+      resource_id: button_add
+      text: Add
+      kind: Button
+      cls: Button
+      parent: picker_bottom_bar
+      siblings: [View selected]
+      in_list: false
+      position: [0.847, 0.929]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: shorts_edit_above_bottom_bar_container, text: Swipe up to edit, kind: Text}
+  - element_present: {resource_id: affordance_container, text: Swipe up to edit, kind: Text}
+  risk: reversible
+  note: trace step 6
+- id: tap_add_sound
+  intent: Tap Add sound to open the YouTube sound library
+  pre:
+  - {app_foreground: com.google.android.youtube}
+  action:
+    tap:
+      resource_id: shorts_edit_sound_button
+      text: Add sound
+      kind: Button
+      cls: Button
+      parent: shorts_edit_top_bar_container
+      siblings: [Exit editor, Volume]
+      in_list: false
+      position: [0.5, 0.1]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: reel_pivot_root_view, text: Sounds, kind: Button}
+  - element_present: {resource_id: music_picker_leading_button, text: Close, kind: Button}
+  risk: reversible
+  note: trace step 7
+- id: tap_music_search
+  intent: Tap Search to focus the sound library search box
+  pre:
+  - {app_foreground: com.google.android.youtube}
+  action:
+    tap:
+      resource_id: music_picker_search_box
+      text: Search
+      kind: Button
+      cls: RelativeLayout
+      parent: music_picker_header
+      in_list: false
+      position: [0.5, 0.154]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: music_search_root, text: Sounds, kind: Button}
+  - element_present: {resource_id: music_search_exit, text: Close, kind: Button}
+  risk: reversible
+  note: trace step 8
+- id: type_sound_title
+  intent: "Type {{sound_title}} into the search box"
+  pre:
+  - {app_foreground: com.google.android.youtube}
+  action:
+    type:
+      field:
+        resource_id: search_input_text
+        text: Search
+        hint: Search
+        kind: EditText
+        cls: EditText
+        parent: search_input_text_box
+        in_list: false
+        position: [0.463, 0.162]
+      value: "{{sound_title}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: search_input_text
+      text: "Search: {{sound_title}}"
+      kind: EditText
+  - element_present: {resource_id: cancel_icon, text: Clear search, kind: Button}
+  risk: reversible
+  note: trace step 9
+- id: tap_trigger_search
+  intent: "Tap the button to trigger a new search with {{sound_title}}"
+  pre:
+  - {app_foreground: com.google.android.youtube}
+  action:
+    tap:
+      text: Trigger a new search with
+      text_has: "{{sound_title}}"
+      kind: Button
+      cls: ViewGroup
+      in_list: false
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: expandy_toolbar_more, text: More tools, kind: Button}
+  - element_present: {resource_id: shorts_edit_timeline_button, text: Edit, kind: Button}
+  risk: reversible
+  note: trace step 10
+- id: select_sound_result
+  intent: "Select the result for {{sound_title}} by {{sound_artist}} from the sound library results"
+  pre:
+  - {app_foreground: com.google.android.youtube}
+  - element_present:
+      text_has: "{{sound_artist}}"
+      kind: Text
+  action:
+    tap:
+      text: "{{sound_title}}, {{sound_artist}}, 1 minute, Shorts, Play a preview"
+      text_has: "{{sound_title}}, {{sound_artist}}"
+      kind: Button
+      cls: ViewGroup
+      in_list: true
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 11
+- id: tap_add_music_to_video
+  intent: Tap Add this music to your video to add the selected sound to the Short
+  pre:
+  - {app_foreground: com.google.android.youtube}
+  action:
+    tap:
+      text: Add this music to your video
+      kind: Button
+      cls: ViewGroup
+      in_list: true
+      position: [0.908, 0.3]
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: shorts_edit_sound_button
+      text: "{{sound_title}} Adjust or change sound"
+      desc: 'golden hour
+
+
+        Adjust or change sound'
+      kind: Button
+  - element_present: {resource_id: shorts_edit_above_bottom_bar_container, text: Swipe up to edit, kind: Text}
+  risk: reversible
+  note: trace step 12
+- id: tap_next
+  intent: Tap Next to proceed to the posting details
+  pre:
+  - {app_foreground: com.google.android.youtube}
+  action:
+    tap:
+      resource_id: shorts_post_bottom_button
+      text: Next
+      kind: Button
+      cls: Button
+      parent: shorts_post_button_container
+      in_list: false
+      position: [0.738, 0.925]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: shorts_snapshot_bottom_button, text: Save draft, kind: Button}
+  - element_present: {resource_id: upload_bottom_button, text: Upload Short, kind: Button}
+  risk: reversible
+  note: trace step 13
+- id: type_short_caption
+  intent: "Type {{short_title}} into the Caption your Short field"
+  pre:
+  - {app_foreground: com.google.android.youtube}
+  action:
+    type:
+      field:
+        text: Caption your Short
+        hint: Caption your Short
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.625, 0.249]
+      value: "{{short_title}}"
+  post:
+  - field_equals:
+      field: {text: Caption your Short, kind: EditText}
+      value: "{{short_title}}"
+  risk: reversible
+  note: trace step 14
+- id: tap_post
+  intent: Tap Upload Short to publish
+  pre:
+  - element_present:
+      resource_id: upload_bottom_button
+      text: Upload Short
+      kind: Button
+      cls: Button
+      parent: upload_bottom_button_container
+      in_list: false
+      position: [0.742, 0.545]
+  action:
+    tap:
+      resource_id: upload_bottom_button
+      text: Upload Short
+      kind: Button
+      cls: Button
+      parent: upload_bottom_button_container
+      in_list: false
+      position: [0.742, 0.545]
+  risk: irreversible
+  note: "trace step 15: the post tap the user declined (never ran, so no after-check)"
+done:
+- text_visible: "{{short_title}}"
+changes:
+- "tuned by hand (showcase): one stray before-check dropped, one locator tuned"
+- compiled by showcase from task-1101-211106-9b42-r1, a first run declined at the post (eval/run_showcase.py)
+- its last step (tap 'Upload Short') is the tap declined at step 15, built from that screen; irreversible
+- "tap_create: dropped its before-check on 'Captions unavailable' (caption_toggle_container): a video autoplaying on Home when the first run was\
+  \ recorded; usually absent, so 2 of 3 v1 replays failed at the first step and the repairs wandered (one into Chrome's first-run sign-in screen).\
+  \ Hand edit: showcase"
+- "select_sound_result: the result row whose label has '{{sound_title}}, {{sound_artist}}' (0.89 vs 0.66 on the recorded results; v1's locator\
+  \ had no text: every row tied). Hand edit: showcase"
+compiled_from:
+  task_id: task-1101-211106-9b42-r1
+  goal: "Post the newest video in my phone's gallery to YouTube as a Short with the sound \"golden hour\" by JVKE from YouTube's sound library\
+    \ and this title: \"Envoy rehearsal: one clip, three apps\""
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-11-01 21:13:43"
+  trace_steps_kept: [1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+  trace_steps_dropped: 2
+  cost_usd: 0.0713

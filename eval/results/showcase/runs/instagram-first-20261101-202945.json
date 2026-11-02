@@ -1,0 +1,64 @@
+{
+ "mode": "first",
+ "app": "com.instagram.android",
+ "time": "2026-11-01T20:29:45",
+ "request": {
+  "phone": "phone-09031FDD4000C6",
+  "goal": "Post the newest video in my phone's gallery to Instagram as a reel with the song \"golden hour\" by JVKE from Instagram's music library and this caption: \"Envoy rehearsal: one clip, three apps\"",
+  "routine": "instagram_reel_song"
+ },
+ "task": {
+  "id": "task-1101-202945-39d5",
+  "status": "failed",
+  "routine": null,
+  "model_calls": 14,
+  "cost_usd": 0.1267,
+  "traces": [],
+  "detail": "User declined approval for the final Share action, so the reel was not posted.",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 19,
+ "repairs": [],
+ "approvals": [
+  {
+   "description": "tap \"Share\" in com.instagram.android",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/share_button'",
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "asked_at": [
+  "Share"
+ ],
+ "auto_approved": [],
+ "marks_s": {
+  "running": 0.1,
+  "needs_you": 1.1,
+  "phone_yes": 1.1,
+  "waiting_approval": 98.7,
+  "post_asked": 98.7,
+  "failed": 102.7,
+  "end": 102.7
+ },
+ "spent": {
+  "model_calls": 14,
+  "cost_usd": 0.1267,
+  "cost_at_standard_usd": 0.1267,
+  "jobs": {
+   "plan": 1,
+   "step": 13
+  }
+ },
+ "ok": true,
+ "failures": [],
+ "profile": "hybrid",
+ "cleanup": [
+  "back (caption)",
+  "editor_cancel",
+  "start_over",
+  "gallery_home"
+ ]
+}

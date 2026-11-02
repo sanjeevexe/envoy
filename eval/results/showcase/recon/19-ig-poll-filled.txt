@@ -1,0 +1,11 @@
+# com.instagram.android/com.instagram.android.activity.MainTabActivity secure=False camera=False 2026-11-01T19:25:29
+App: com.instagram.android · Screen: MainTabActivity
+(the on-screen keyboard is open over the bottom of the screen)
+[1] Button "@2131977915" (id: quick_capture_root_container)
+[2] Button "Change background color" (id: poll_sticker_v2_color_button)
+[3] EditText "ASK A QUESTION…: SUNRISE OR SUNSET?" (id: poll_sticker_v2_question)
+[4] EditText "Yes: Sunrise"
+[5] EditText "No: Sunset" (focused)
+[6] EditText "Add another option…" (empty)
+[7] Button "Done" (id: done_button)
+[8] Text "@2131977915" (id: post_capture_texture_view_container)

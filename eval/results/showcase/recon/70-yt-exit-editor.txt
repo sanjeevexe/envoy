@@ -1,0 +1,6 @@
+# com.google.android.youtube/com.google.android.apps.youtube.app.extensions.creationmodes.main.CreationModesActivity secure=False camera=False 2026-11-01T19:41:33
+App: com.google.android.youtube · Screen: CreationModesActivity
+[1] Button (id: touch_outside)
+[2] Button "Discard edits" (id: close_bottom_sheet_reshoot)
+[3] Button "Save as draft" (id: close_bottom_sheet_exit)
+[4] Button "Cancel" (id: close_bottom_sheet_cancel)

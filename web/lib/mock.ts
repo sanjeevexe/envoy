@@ -104,7 +104,7 @@ type DB = {
   tasks: Record<string, Task>; steps: Record<string, Step[]>; approvals: Record<string, Approval & { nonce: string }>;
   leases: Record<string, Lease>; triggers: any[]; changes: any[]; rules: { default: string; apps: Record<string, string>; routines: Record<string, string> };
   photos: { enabled: boolean; scope: string }; phoneApps: string[]; phoneName?: string; signin: { emulator: boolean; phone: boolean }; notes: any[]; offers: any[]; proactivity: string;
-  handoffs: HandoffItem[]; outbox: string; watchApps: string[]; caught: NotificationEvent[]; agents: AgentKey[];
+  handoffs: HandoffItem[]; outbox: string; watchApps: string[]; caught: NotificationEvent[]; agents: AgentKey[]; shared: string[];
 };
 let db: DB;
 
@@ -308,10 +308,11 @@ function seed(): DB {
   return {
     tasks, steps, approvals, leases, triggers, changes, offers, proactivity: "important", handoffs, outbox: "/Users/maya/Envoy Outbox",
     watchApps: ["com.instagram.android", "com.zhiliaoapp.musically", "com.google.android.youtube"], caught: scenario === "idle" ? [] : caught,
+    shared: ["skylark_get_flight_gate", "skylark_check_in_flight"],
     rules: { default: "unless_requested", apps: { "com.dd.doordash": "always" }, routines: { starbucks_order_usual: "never" } },
     photos: { enabled: true, scope: "screenshots" }, phoneApps: ["com.target.ui"], signin: { emulator: false, phone: false },
     agents: [{ id: "agt-claude", name: "Claude", tools: ["read", "run"], created_at: ago(2 * 86400), last_seen: ago(40 * 60) },
-      { id: "agt-meta", name: "Meta agent", tools: ["files", "read", "run", "triggers"], created_at: ago(86400), last_seen: ago(3 * 60) }],
+      { id: "agt-spark", name: "Spark agent", tools: ["files", "read", "run", "triggers"], created_at: ago(86400), last_seen: ago(3 * 60) }],
     notes: [
       { id: "note-1", app: "com.skylark.air", text: "A SkyLark Miles promo can cover the trip list; Not now closes it.", status: "active", confirmations: 4,
         first_seen: ago(5 * 86400), last_confirmed: ago(7200), sources: [{ task_id: "task-amz", step: 2, kind: "routine" }] },
@@ -459,6 +460,24 @@ const ROUTINES = [
     inputs: {}, outputs: ["delivery_eta"], versions: [{ version: 1, status: "active" }] },
 ] as { name: string; app: string; intent: string; active: number; steps: number; runs: number; success: number; recompile: boolean;
   inputs: Record<string, string>; outputs: string[]; versions: { version: number; status: string; source_task?: string }[]; taught?: boolean }[];
+
+// What agents see (backend/api/sharing.py): each shared routine as a tool of its own, then Envoy's built-in tools.
+const BUILTIN = [["run_task", "Run a task on the user's phone"], ["get_task", "Get a task's status"], ["list_routines", "List learned routines"],
+  ["run_routine", "Run a learned routine"], ["memory_search", "Search Envoy memory"], ["memory_get", "Get one remembered entity"],
+  ["memory_note", "Add a note to Envoy memory"], ["send_to_phone", "Put a photo or video on the user's phone"],
+  ["create_trigger", "Ask the user to set up a recurring phone task"], ["list_phones", "List the phones Envoy can use"],
+  ["phone_updates", "What happened on the phone"]].map(([name, title]) => ({ name, title }));
+const APP_NAME: Record<string, string> = { "com.skylark.air": "SkyLark", "com.dd.doordash": "DoorDash", "com.starbucks.mobilecard": "Starbucks",
+  "com.amazon.mShop.android.shopping": "Amazon" };
+function agentTools() {
+  const tools = ROUTINES.filter((r) => db.shared.includes(r.name)).map((r) => ({
+    routine: r.name, tool: r.name, app: r.app, app_name: APP_NAME[r.app] ?? r.app, title: r.intent, version: r.active,
+    description: `${r.intent}. Runs a routine Envoy learned in the ${APP_NAME[r.app] ?? r.app} app (${r.app}), on a phone Envoy operates.`,
+    inputs: Object.entries(r.inputs).map(([name, description]) => ({ name, type: "text", required: true, description })),
+    outputs: r.outputs, phone: true, read_only: !/check_in|order/.test(r.name), irreversible: /check_in|order/.test(r.name), learned: "Oct 24, 2026", taught: !!r.taught,
+  })).sort((a, b) => a.tool.localeCompare(b.tool));
+  return { shared: [...db.shared].sort(), tools, builtin: BUILTIN };
+}
 
 function routineDetail(name: string) {
   const r = ROUTINES.find((x) => x.name === name) ?? ROUTINES[0];
@@ -804,6 +823,13 @@ export async function handle(path: string, init: RequestInit = {}): Promise<any>
   if (p.startsWith("/api/memory/source/")) return { deleted: 1 };
   if (p === "/api/memory/search") return { markdown: "**Flight SL 482** (Fri, Oct 30, 2026): gate B22 (SkyLark app, 1 h ago; was B14), departs 6:05 AM, seat 14C, group 3." };
   if (p === "/api/routines") return ROUTINES;
+  if (p === "/api/routines/sharing") return agentTools();
+  if ((m = p.match(/^\/api\/routines\/([^/]+)\/share$/)) && method === "POST") {
+    const name = decodeURIComponent(m[1]);
+    db.shared = body.on ? [...new Set([...db.shared, name])] : db.shared.filter((n) => n !== name);
+    const out = agentTools();
+    return { ...out, routine: name, on: !!body.on, tool: out.tools.find((t) => t.routine === name)?.tool ?? null };
+  }
   if ((m = p.match(/^\/api\/routines\/([^/]+)\/detail$/))) return routineDetail(decodeURIComponent(m[1]));
   if ((m = p.match(/^\/api\/routines\/([^/]+)$/))) return { index: {}, yaml: `routine: ${m[1]}\nversion: 3\napp: com.skylark.air\nsteps:\n  - id: open_trips\n    action: tap\n    target: {text: My trips}\n` };
   if (p === "/api/triggers" && method === "POST") { const t = { id: `trig-${++runs}`, enabled: true, last_fired: null, next: [], alerts: { on: false, attributes: ["*"] }, ...body }; db.triggers.push(t); return t; }
@@ -881,14 +907,19 @@ export async function handle(path: string, init: RequestInit = {}): Promise<any>
       db.agents.push(agent);
       return { agent, key: "envoy_agent_mock_key_not_real" };
     }
-    return { agents: db.agents, muse: { name: "Muse", key: true, last_seen: ago(5 * 60) }, default: ["read", "run"], per_minute: 30,
-      mcp_url: "https://envoy-mac.tail1234.ts.net:10000/mcp", can_manage: true, groups: [
-        { id: "read", label: "Read", detail: "follow tasks, see routines, search memory, read the phone's updates and its list of phones", tools: ["get_task", "list_phones", "list_routines", "memory_get", "memory_search", "phone_updates"] },
-        { id: "run", label: "Run", detail: "start tasks and routines; every irreversible step still waits for your OK", tools: ["run_routine", "run_task"] },
-        { id: "memory", label: "Memory", detail: "add notes to your memory", tools: ["memory_note"] },
-        { id: "files", label: "Files", detail: "put photos and videos on a phone, and get files back", tools: ["get_file", "send_to_phone"] },
-        { id: "triggers", label: "Triggers", detail: "propose recurring tasks; each stays off until you turn it on", tools: ["create_trigger"] },
-      ] };
+    const groups = [
+      { id: "read", label: "Read", detail: "follow tasks, see routines, search memory, read the phone's updates and its list of phones", tools: ["get_task", "list_phones", "list_routines", "memory_get", "memory_search", "phone_updates"] },
+      { id: "run", label: "Run", detail: "start tasks and routines; every irreversible step still waits for your OK", tools: ["run_routine", "run_task"] },
+      { id: "memory", label: "Memory", detail: "add notes to your memory", tools: ["memory_note"] },
+      { id: "files", label: "Files", detail: "put photos and videos on a phone, and get files back", tools: ["get_file", "send_to_phone"] },
+      { id: "triggers", label: "Triggers", detail: "propose recurring tasks; each stays off until you turn it on", tools: ["create_trigger"] },
+    ];
+    // What each agent's tools/list holds (api/agents.py `sees`): learned tools need Run; Envoy's own, their group.
+    const learned = agentTools().tools.map((t) => t.tool), own = BUILTIN.map((b) => b.name).sort();
+    const sees = (have: string[]) => [...learned.filter(() => have.includes("run")), ...own.filter((t) => groups.some((g) => have.includes(g.id) && g.tools.includes(t)))];
+    return { agents: db.agents.map((a) => ({ ...a, sees: sees(a.tools) })), learned,
+      muse: { name: "Muse", key: true, last_seen: ago(5 * 60), sees: [...learned, ...own] }, default: ["read", "run"], per_minute: 30,
+      mcp_url: "https://envoy-mac.tail1234.ts.net:10000/mcp", can_manage: true, groups };
   }
   if ((m = p.match(/^\/api\/agents\/([^/]+)(\/rotate)?$/))) {
     const a = db.agents.find((x) => x.id === m![1]);

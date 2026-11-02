@@ -60,6 +60,15 @@ export type WatchApp = { package: string; name: string; on: boolean; installed: 
 export type Watching = { phone: string; name: string; packages: string[]; online: boolean; last_ok: number | null; error: string | null; poll_ms: number | null };
 export type WatchSettings = { apps: WatchApp[]; on: string[]; read_from_phone: boolean; watching: Watching[] };
 export type NotificationEvent = { id: string; time: number; phone: string; package: string; app: string; title: string; text: string; trigger_id: string };
+// A learned routine agents call as a tool of its own over MCP (backend/api/sharing.py, mcp_server/server.py): only while you
+// share it and it has an active version. Settings › Agents lists these exactly as agents see them.
+export type AgentToolInput = { name: string; type: string; required: boolean; description: string; choices?: string[] };
+export type AgentTool = {
+  routine: string; tool: string; app: string; app_name: string; title: string; description: string; version: number;
+  inputs: AgentToolInput[]; outputs: string[]; read_only: boolean; irreversible: boolean; learned: string; taught: boolean;
+  phone?: boolean; // it also takes `phone`: which phone runs it (an id from list_phones, "phone" or "emulator")
+};
+export type AgentToolsInfo = { shared: string[]; tools: AgentTool[]; builtin: { name: string; title: string }[] };
 export type EnvoyEvent = { seq: number; time: number; type: string; [k: string]: any };
 
 export class ApiError extends Error {
