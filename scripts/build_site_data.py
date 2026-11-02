@@ -5,7 +5,7 @@
 
 The default build reads only files committed in this repo: eval/results/, data/routines/, docs/ and the recordings already
 imported into site/data/recordings/. It is deterministic: the same checkout gives the same files, byte for byte. After the
-Nov 2 eval, `eval/run_final.py report` rewrites eval/results/final/; run the default build and the site's numbers follow.
+Nov 3 eval, `eval/run_final.py report` rewrites eval/results/final/; run the default build and the site's numbers follow.
 
 `import` copies a few recorded runs into site/data/recordings/ from where they were recorded (run traces and phone frames are
 gitignored, so they live in the checkout and API copy that ran them). Every frame it copies was looked at by hand for
@@ -394,19 +394,6 @@ def loop_a_runs() -> dict[str, dict]:
             if r.get("task_id") and r.get("mode") != "compile"}
 
 
-def claim() -> dict:
-    """The claim and 'what is actually new', from the design doc's Overview."""
-    doc = (REPO / "docs/technical-design.md").read_text()
-    overview = doc.split("## Overview", 1)[1].split("\n## ", 1)[0]
-    lead = re.search(r"\*\*(Envoy gives AI agents a phone layer[^*]+)\*\*", overview).group(1)
-    pitch = re.search(r"\*\*Pitch:\*\* \*(.+?)\*", overview).group(1)
-    new_block = overview.split("**What is actually new.**", 1)[1]
-    prior = new_block.split("\n", 1)[0].strip()
-    items = re.findall(r"^\d\. \*\*(.+?)\*\* (.+)$", new_block, re.M)
-    return {"lead": lead, "pitch": pitch, "prior": prior, "new": [{"title": t.rstrip("."), "text": x} for t, x in items],
-            "src": src("docs/technical-design.md", "Overview")}
-
-
 def routine_yaml(path: Path) -> dict:
     r = yaml.safe_load(path.read_text())
     steps = []
@@ -527,10 +514,13 @@ def plain(md: str) -> str:
     return md.replace("**", "").replace("`", "")
 
 
-def image(src_path: Path, name: str, width: int | None = None) -> str:
-    """A repo image (chart, diagram, patch evidence) as webp in site/data/img/."""
+def image(src_path: Path, name: str, width: int | None = None, crop: tuple[int, int, int, int] | None = None) -> str:
+    """A repo image (chart, diagram, capture) as webp in site/data/img/. `crop` keeps one part of a capture (a window, a
+    column); the pixels kept are the capture's own."""
     IMG.mkdir(parents=True, exist_ok=True)
     im = Image.open(src_path).convert("RGB")
+    if crop:
+        im = im.crop(crop)
     if width and im.width > width:
         im = im.resize((width, round(im.height * width / im.width)), Image.LANCZOS)
     out = IMG / f"{name}.webp"
@@ -784,6 +774,181 @@ def teach() -> dict:
             "code_src": src("backend/api/teach.py"), "person_src": src("eval/teach_person.py")}
 
 
+# ---------------------------------------------------------------------------------------------------------------------------
+# the phone layer (Nov 1–2): agents calling Envoy, routines as tools, the app-only posts, watching, keys
+# ---------------------------------------------------------------------------------------------------------------------------
+
+SPARK = REPO / "agents/meta-agent/evidence/2026-11-01"  # the Spark agent's runs: its page's own event logs and captures
+
+
+def spark_run(path: Path) -> dict:
+    """A Spark agent run, from its page's event log (GET /api/recording): what was asked, each call to Envoy, each wait for
+    the person and how it ended, what the agent said, and its totals. The waits' get_task polls are folded into the waits."""
+    ev = json.loads(path.read_text())["events"]
+    t0 = ev[0]["t"]
+    at = lambda e: round(e["t"] - t0, 1)
+    ends = {e["data"]["id"]: e["data"] for e in ev if e["kind"] == "call_end"}
+    tools, rows = [], []
+    for e in ev:
+        k, d = e["kind"], e["data"]
+        if k == "tools" and not tools:
+            tools = [{"name": t["name"], "learned": bool(t.get("routine"))} for t in d["tools"]]
+        elif k in ("user", "commentary", "reply"):
+            rows.append({"t": at(e), "kind": k, "text": d["text"]})
+        elif k == "call_start" and d["tool"] != "tools/list" and d.get("via") != "wait_for_task":
+            end = ends.get(d["id"], {})
+            rows.append({"t": at(e), "kind": "call", "tool": d["tool"], "args": d["args"], "ok": end.get("ok"),
+                         "result": end.get("summary"), "ms": end.get("ms")})
+        elif k == "call_start" and d.get("via") == "wait_for_task":
+            end = ends.get(d["id"], {})
+            rows.append({"t": at(e), "kind": "wait", "result": end.get("summary"), "ms": end.get("ms"), "polls": end.get("polls")})
+        elif k == "waiting":
+            rows.append({"t": at(e), "kind": "ask", "task": d["key"], "ask": d["kind"], "title": d["title"], "goal": d["goal"]})
+        elif k == "waiting_end":
+            rows.append({"t": at(e), "kind": "answer", "task": d["key"], "outcome": d["outcome"], "after_s": d["after_s"]})
+        elif k == "refusal":
+            rows.append({"t": at(e), "kind": "refusal", "tool": d["tool"], "text": d["envoy"]})
+    hello = next(e["data"] for e in ev if e["kind"] == "hello")
+    last = [e["data"] for e in ev if e["kind"] == "stats"][-1]
+    return {"started_et": datetime.fromtimestamp(t0, ET).strftime("%Y-%m-%d %H:%M"), "model": hello["model"],
+            "envoy": hello.get("envoy") or "", "tools": tools, "rows": rows, "seconds": at(ev[-1]),
+            "model_calls": last["model_calls"], "mcp_calls": last["mcp_calls"], "usd": round(last["cost_usd"], 4)}
+
+
+def agents() -> dict:
+    """Agents calling Envoy: the Spark agent's cross-post (four routine tools at once, on Envoy's phone), Muse's captures from
+    the Oct 29 link sitting, and Claude Code's tasks on the live API (task rows read read-only)."""
+    cc = json.loads((SPARK / "claude-code/task-rows.json").read_text())
+    muse = REPO / "eval/results/muse-link"
+    return {
+        "crosspost": spark_run(SPARK / "crosspost/run2-four-posts.json"),
+        "crosspost_src": src(rel(SPARK / "crosspost/run2-four-posts.json"), "the Spark agent page's event log"),
+        "crosspost_readme": src(rel(SPARK / "crosspost/README.md")),
+        "run1": {k: v for k, v in spark_run(SPARK / "crosspost/run1-three-posts.json").items() if k != "rows"},
+        "run1_src": src(rel(SPARK / "crosspost/run1-three-posts.json")),
+        "shots": {"asks": image(SPARK / "crosspost/run2-four-phone-asks.png", "agents-spark-four-asks", 1600),
+                  "declined": image(SPARK / "crosspost/run2-all-declined.png", "agents-spark-all-declined", 1600)},
+        "muse": {"mac": image(muse / "e3-mac-moves-clip-and-sidecar.jpg", "muse-mac-outbox", crop=(85, 38, 740, 476)),
+                 "no_accept": image(muse / "muse-refuses-to-accept-offers.jpg", "muse-no-accept-tool"),
+                 "src": src("eval/results/muse-link", "the Oct 29 Muse sitting"), "doc": src("docs/muse-link.md")},
+        "claude": {"tasks": cc["tasks"], "approvals": cc["approvals"], "src": src(rel(SPARK / "claude-code/task-rows.json")),
+                   "readme": src(rel(SPARK / "claude-code/README.md"))},
+        "mcp_src": src("backend/mcp_server/README.md"),
+    }
+
+
+def tools() -> dict:
+    """A routine shared with agents becomes a tool of its own: the tool list before and after one switch, the tool as agents
+    see it, one call to it (agent-door's check on a test copy), and the Spark agent calling a routine by its name."""
+    door = REPO / "eval/results/agent-door"
+    before = json.loads((door / "tools-before.json").read_text())
+    after = json.loads((door / "tools-after.json").read_text())
+    call = json.loads((door / "call.json").read_text())
+    tool = after["routine_tools"][0]
+    return {
+        "before": {"at": before["at"], "tools": before["tools"]}, "after": {"at": after["at"], "tools": after["tools"]},
+        "tool": {"name": tool["name"], "description": tool["description"], "input": tool["inputSchema"],
+                 "meta": tool["_meta"], "read_only": tool["annotations"].get("readOnlyHint")},
+        "call": {"tool": call["call"]["tool"], "args": call["call"]["arguments"], "at": call["at"],
+                 "heads_up": [h["text"] for h in call["call"]["result"].get("heads_up", [])],
+                 "status": call["task"]["status"], "result": call["task"]["result"], "detail": call["task"]["detail"],
+                 "steps": [s["text"] for s in call["task"]["steps"] if s["kind"] == "routine_step"]},
+        "door_src": src("eval/results/agent-door", "tools-before.json, tools-after.json, call.json"),
+        "by_name": spark_run(SPARK / "routine-tool-run.json"),
+        "by_name_src": src(rel(SPARK / "routine-tool-run.json")), "evidence_readme": src(rel(SPARK / "README.md")),
+        "shot": image(SPARK / "routine-tool-run.png", "tools-spark-by-name", 1600),
+        "settings": image(door / "agent-tools-new-1080p.png", "tools-settings-agent-tools", crop=(545, 615, 1245, 1080)),
+        "settings_src": src("eval/results/agent-door/agent-tools-new-1080p.png"),
+        "report_src": src("prompts/agent-door-report.md"),
+    }
+
+
+# The app-only posts: each tool (a routine in the library), its app, and what it posts.
+SHOWCASE = {
+    "instagram_reel_song": ("Instagram", "A Reel set to a song from Instagram's music library"),
+    "instagram_story_poll": ("Instagram", "A Story with a poll sticker"),
+    "tiktok_post_sound": ("TikTok", "A TikTok with a sound from TikTok's library"),
+    "youtube_short_sound": ("YouTube", "A YouTube Short with a sound from YouTube's library"),
+}
+
+
+def showcase() -> dict:
+    """The four app-only routines: each one's first run and its replays (runs.md, rows copied), its active version in the
+    library, and what happened when the user had it post for real (showcase's report, the result cell's first sentence)."""
+    runs = md_tables((REPO / "eval/results/showcase/runs/runs.md").read_text())[0]
+    report = (REPO / "prompts/showcase-report.md").read_text()
+    posts = next(t for t in md_tables(report) if t and {"Post", "Task", "Routine", "Result"} <= set(t[0]))
+    cards = []
+    for name, (app, what) in SHOWCASE.items():
+        lib = REPO / f"data/routines/{name}"
+        ix = json.loads((lib / "index.json").read_text())
+        active = next(v for v in ix["versions"] if v["version"] == ix["active"])
+        y = routine_yaml(lib / f"v{ix['active']}.yaml")
+        source = re.search(r"task-(\d\d)(\d\d)-(\d\d)(\d\d)(\d\d)-\w{4}", ix["versions"][0]["changes"][0])
+        when = datetime(2026, *(int(source.group(i)) for i in range(1, 6)))
+        # runs.md times the row from the runner's own clock, up to a second before the task's id
+        first = next(r for r in runs if r["mode"] == "first" and abs((datetime.fromisoformat(r["when"]) - when).total_seconds()) <= 5)
+        # Replays of the active version: rows from after it was compiled that name it, or name no version (the agent
+        # finished the run). Earlier rows may name the same version number for a hand-tuned candidate tried that night.
+        compiled = yaml.safe_load((lib / f"v{ix['active']}.yaml").read_text())["compiled_from"]["compiled_at"]
+        mark, since = f"(routine {name} v{ix['active']})", compiled.replace(" ", "T")
+        reps = [r for r in runs if r["mode"] == "replay" and r["routine"] == name and r["when"] >= since
+                and (mark in r["approvals"] or "(routine " not in r["approvals"])]
+        row = lambda r: {"when": r["when"], "ok": r["ok"] == "yes", "asked": r["asked at"], "to_ask": r["start → post asked"],
+                         "calls": int(r["calls"]), "usd": float(r["$"])}
+        real = []
+        for p in posts:
+            if f"`{name}`" in p["Routine"]:
+                first_sentence = re.split(r"(?<=[.;])\s", plain(p["Result"]), maxsplit=1)[0]
+                real.append({"post": plain(p["Post"]), "task": plain(p["Task"]), "routine": plain(p["Routine"]),
+                             # test accounts' handles stay off the site
+                             "result": re.sub(r" as @?[\w.-]+(?=[,;])", "", first_sentence)})
+        cards.append({
+            "name": name, "app": app, "what": what, "version": ix["active"], "steps": len(y["steps"]),
+            "inputs": list(y["inputs"].keys()), "outputs": y["outputs"], "made": active["changes"][0], "compiled": compiled,
+            "first": row(first) | {"task": source.group(0)}, "replays": [row(r) for r in reps], "real": real,
+            "src": src(f"data/routines/{name}/index.json"), "yaml_src": src(f"data/routines/{name}/v{ix['active']}.yaml"),
+        })
+    return {"cards": cards, "runs_src": src("eval/results/showcase/runs/runs.md"),
+            "report_src": src("prompts/showcase-report.md", "The real posts"), "doc_src": src("docs/demo-showcase.md"),
+            "p3_src": src("eval/results/showcase/p3.md"),
+            "poll": image(REPO / "eval/results/showcase/recon/20-ig-story-with-poll.png", "showcase-story-poll", 540),
+            "poll_src": src("eval/results/showcase/recon/20-ig-story-with-poll.png")}
+
+
+def watches() -> dict:
+    """Watching the phone: the trigger kinds (from the scheduler's code) and the Nov 2 live check of notification triggers
+    on Envoy's phone with real comments (phone-watch's report, its table copied)."""
+    kinds = re.search(r"^KINDS = \(([^)]*)\)", (REPO / "backend/api/scheduler.py").read_text(), re.M).group(1)
+    md = (REPO / "prompts/phone-watch-report.md").read_text()
+    # The report's table is indented under a list item; read it with the indent taken off.
+    table = next(t for t in md_tables("\n".join(l.strip() for l in md.splitlines()))
+                 if t and "Landed on the Pixel" in t[0])
+    return {"kinds": re.findall(r'"(\w+)"', kinds), "kinds_src": src("backend/api/scheduler.py", "KINDS"),
+            "live": [{k: plain(v) for k, v in r.items()} for r in table],
+            "src": src("prompts/phone-watch-report.md", "Stage 2, the live API and the Pixel"),
+            "code_src": src("backend/api/notifications.py"),
+            "muse": image(REPO / "eval/results/muse-link/e1-muse-tells-you-unprompted.jpg", "muse-watches-updates",
+                          crop=(0, 64, 564, 1146)),
+            "muse_src": src("eval/results/muse-link/e1-muse-tells-you-unprompted.jpg")}
+
+
+def keys() -> dict:
+    """A key per agent: the tool groups (from the code), the Settings › Agents card a key is made on (a test copy), and the
+    Spark agent on a read-only key."""
+    auth = (REPO / "backend/api/auth.py").read_text()
+    block = auth.split("TOOL_GROUPS", 1)[1].split("}\n", 1)[0]
+    groups = {g: sorted(re.findall(r'"(\w+)"', names)) for g, names in re.findall(r'"(\w+)": frozenset\(\{([^}]*)\}\)', block)}
+    per_minute = int(re.search(r"^RUN_PER_MINUTE = (\d+)", (REPO / "backend/api/agents.py").read_text(), re.M).group(1))
+    door = REPO / "eval/results/agent-door"
+    return {"groups": groups, "groups_src": src("backend/api/auth.py", "TOOL_GROUPS"), "per_minute": per_minute,
+            "readonly": spark_run(SPARK / "readonly-key-run.json"), "readonly_src": src(rel(SPARK / "readonly-key-run.json")),
+            "readonly_shot": image(SPARK / "readonly-key-run.png", "keys-spark-read-only", 1600),
+            "settings": image(door / "agent-tools-new-1080p.png", "keys-settings-agents", crop=(545, 120, 1245, 605)),
+            "settings_src": src("eval/results/agent-door/agent-tools-new-1080p.png"),
+            "doc_src": src("docs/agents.md"), "report_src": src("prompts/agent-keys-report.md")}
+
+
 def numbers(data: dict) -> dict:
     """Every headline number the site shows, with where it came from and whether it is from the eval-final tag yet."""
     st = data["eval"]
@@ -801,7 +966,11 @@ def build() -> dict:
     data = {
         "meta": {"repo_url": REPO_URL},
         "eval": eval_status(),
-        "claim": claim(),
+        "agents": agents(),
+        "tools": tools(),
+        "showcase": showcase(),
+        "watches": watches(),
+        "keys": keys(),
         "first_run": first_run(),
         "learned": learned(),
         "repair": repair(),

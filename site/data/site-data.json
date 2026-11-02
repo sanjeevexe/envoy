@@ -10,27 +10,1260 @@
    "path": "eval/results/final/report.md"
   }
  },
- "claim": {
-  "lead": "Envoy gives AI agents a phone layer: the ability to act inside any phone app, and to understand what those apps contain.",
-  "pitch": "Agents can search the web. Your phone knows your life.",
-  "prior": "Operating phone apps with an agent has been done (Mobilerun, Gemini on Android, AGI Inc.). Envoy's contribution is making it dependable, cheap and useful over time:",
-  "new": [
+ "agents": {
+  "crosspost": {
+   "started_et": "2026-11-01 23:30",
+   "model": "muse-spark-1.3",
+   "envoy": "127.0.0.1:8765/mcp",
+   "tools": [
+    {
+     "name": "run_task",
+     "learned": false
+    },
+    {
+     "name": "get_task",
+     "learned": false
+    },
+    {
+     "name": "list_routines",
+     "learned": false
+    },
+    {
+     "name": "run_routine",
+     "learned": false
+    },
+    {
+     "name": "memory_search",
+     "learned": false
+    },
+    {
+     "name": "memory_get",
+     "learned": false
+    },
+    {
+     "name": "create_trigger",
+     "learned": false
+    },
+    {
+     "name": "list_phones",
+     "learned": false
+    },
+    {
+     "name": "phone_updates",
+     "learned": false
+    },
+    {
+     "name": "instagram_reel_song",
+     "learned": true
+    },
+    {
+     "name": "instagram_story_poll",
+     "learned": true
+    },
+    {
+     "name": "skylark_check_flight_status",
+     "learned": true
+    },
+    {
+     "name": "tiktok_post_sound",
+     "learned": true
+    },
+    {
+     "name": "youtube_short_sound",
+     "learned": true
+    }
+   ],
+   "rows": [
+    {
+     "t": 5.8,
+     "kind": "user",
+     "text": "Post my newest video from my phone to Instagram as a Reel, to TikTok, and as a YouTube Short, all with JVKE's \"golden hour\". Caption (and the Short's title): \"One clip, four posts\". Also put it on my Instagram story with a poll: \"Golden hour or blue hour?\", options \"Golden\" and \"Blue\"."
+    },
+    {
+     "t": 9.1,
+     "kind": "commentary",
+     "text": "I'll post that video to all four spots with JVKE's track."
+    },
+    {
+     "t": 9.1,
+     "kind": "call",
+     "tool": "instagram_reel_song",
+     "args": {
+      "caption": "One clip, four posts",
+      "song_artist": "JVKE",
+      "song_title": "golden hour"
+     },
+     "ok": true,
+     "result": "task task-1101-233014-d8c9 · queued · 3 heads-up",
+     "ms": 40
+    },
+    {
+     "t": 9.1,
+     "kind": "call",
+     "tool": "tiktok_post_sound",
+     "args": {
+      "caption": "One clip, four posts",
+      "sound_artist": "JVKE",
+      "sound_title": "golden hour"
+     },
+     "ok": true,
+     "result": "task task-1101-233014-1904 · queued · 3 heads-up",
+     "ms": 117
+    },
+    {
+     "t": 9.3,
+     "kind": "call",
+     "tool": "youtube_short_sound",
+     "args": {
+      "short_title": "One clip, four posts",
+      "sound_artist": "JVKE",
+      "sound_title": "golden hour"
+     },
+     "ok": true,
+     "result": "task task-1101-233014-d827 · queued · 3 heads-up",
+     "ms": 47
+    },
+    {
+     "t": 9.3,
+     "kind": "call",
+     "tool": "instagram_story_poll",
+     "args": {
+      "poll_option_1": "Golden",
+      "poll_option_2": "Blue",
+      "poll_question": "Golden hour or blue hour?"
+     },
+     "ok": true,
+     "result": "task task-1101-233014-8099 · queued · 3 heads-up",
+     "ms": 39
+    },
+    {
+     "t": 13.9,
+     "kind": "commentary",
+     "text": "Starting all four posts with your newest video and JVKE's golden hour — they'll each need your OK in Envoy on your phone to publish."
+    },
+    {
+     "t": 13.9,
+     "kind": "wait",
+     "result": "4 tasks: needs_you, needs_you, needs_you, needs_you",
+     "ms": 0,
+     "polls": 4
+    },
+    {
+     "t": 13.9,
+     "kind": "ask",
+     "task": "task-1101-233014-d8c9",
+     "ask": "needs_you",
+     "title": "Envoy wants to use Envoy's phone for this task",
+     "goal": "Post a gallery video to Instagram as a reel"
+    },
+    {
+     "t": 13.9,
+     "kind": "ask",
+     "task": "task-1101-233014-1904",
+     "ask": "needs_you",
+     "title": "Envoy wants to use Envoy's phone for this task",
+     "goal": "Post the newest gallery video to TikTok with a chosen sound and caption"
+    },
+    {
+     "t": 13.9,
+     "kind": "ask",
+     "task": "task-1101-233014-d827",
+     "ask": "needs_you",
+     "title": "Envoy wants to use Envoy's phone for this task",
+     "goal": "Post the newest gallery video as a YouTube Short with a chosen sound and title"
+    },
+    {
+     "t": 14.0,
+     "kind": "ask",
+     "task": "task-1101-233014-8099",
+     "ask": "needs_you",
+     "title": "Envoy wants to use Envoy's phone for this task",
+     "goal": "Post the newest gallery video to an Instagram story with a poll sticker"
+    },
+    {
+     "t": 15.8,
+     "kind": "commentary",
+     "text": "Please approve the phone use for all four posts in Envoy on your phone."
+    },
+    {
+     "t": 15.8,
+     "kind": "wait",
+     "result": "4 tasks: running, running, waiting for the user's OK, running",
+     "ms": 45300,
+     "polls": 124
+    },
+    {
+     "t": 20.3,
+     "kind": "answer",
+     "task": "task-1101-233014-d8c9",
+     "outcome": "answered",
+     "after_s": 6.4
+    },
+    {
+     "t": 20.3,
+     "kind": "answer",
+     "task": "task-1101-233014-1904",
+     "outcome": "answered",
+     "after_s": 6.4
+    },
+    {
+     "t": 20.3,
+     "kind": "answer",
+     "task": "task-1101-233014-d827",
+     "outcome": "answered",
+     "after_s": 6.4
+    },
+    {
+     "t": 20.3,
+     "kind": "answer",
+     "task": "task-1101-233014-8099",
+     "outcome": "answered",
+     "after_s": 6.4
+    },
+    {
+     "t": 61.1,
+     "kind": "ask",
+     "task": "task-1101-233014-d827",
+     "ask": "approval",
+     "title": "Upload Short",
+     "goal": "Post the newest gallery video as a YouTube Short with a chosen sound and title"
+    },
+    {
+     "t": 62.2,
+     "kind": "commentary",
+     "text": "Your YouTube Short is ready — please approve Upload Short in Envoy on your phone."
+    },
+    {
+     "t": 62.2,
+     "kind": "wait",
+     "result": "4 tasks: running, running, declined, running",
+     "ms": 19600,
+     "polls": 56
+    },
+    {
+     "t": 81.9,
+     "kind": "answer",
+     "task": "task-1101-233014-d827",
+     "outcome": "declined",
+     "after_s": 20.8
+    },
+    {
+     "t": 83.5,
+     "kind": "commentary",
+     "text": "YouTube upload was declined — I'll keep waiting on the other three."
+    },
+    {
+     "t": 83.5,
+     "kind": "wait",
+     "result": "3 tasks: running, waiting for the user's OK, running",
+     "ms": 84400,
+     "polls": 171
+    },
+    {
+     "t": 168.0,
+     "kind": "ask",
+     "task": "task-1101-233014-1904",
+     "ask": "approval",
+     "title": "Post",
+     "goal": "Post the newest gallery video to TikTok with a chosen sound and caption"
+    },
+    {
+     "t": 169.2,
+     "kind": "commentary",
+     "text": "Your TikTok is ready — please approve Post in Envoy on your phone."
+    },
+    {
+     "t": 169.2,
+     "kind": "wait",
+     "result": "3 tasks: running, declined, running",
+     "ms": 19600,
+     "polls": 42
+    },
+    {
+     "t": 188.8,
+     "kind": "answer",
+     "task": "task-1101-233014-1904",
+     "outcome": "declined",
+     "after_s": 20.8
+    },
+    {
+     "t": 190.7,
+     "kind": "commentary",
+     "text": "TikTok was also declined — I'll keep waiting on the Instagram reel and story."
+    },
+    {
+     "t": 190.7,
+     "kind": "wait",
+     "result": "2 tasks: running, waiting for the user's OK",
+     "ms": 30100,
+     "polls": 42
+    },
+    {
+     "t": 220.8,
+     "kind": "ask",
+     "task": "task-1101-233014-8099",
+     "ask": "approval",
+     "title": "Your story",
+     "goal": "Post the newest gallery video to an Instagram story with a poll sticker"
+    },
+    {
+     "t": 222.3,
+     "kind": "commentary",
+     "text": "Your Instagram story with the poll is ready — please approve Your story in Envoy on your phone."
+    },
+    {
+     "t": 222.3,
+     "kind": "wait",
+     "result": "2 tasks: running, declined",
+     "ms": 18100,
+     "polls": 26
+    },
+    {
+     "t": 240.3,
+     "kind": "answer",
+     "task": "task-1101-233014-8099",
+     "outcome": "declined",
+     "after_s": 19.5
+    },
+    {
+     "t": 241.3,
+     "kind": "commentary",
+     "text": "Story was also declined — I'll keep waiting on the Instagram reel."
+    },
+    {
+     "t": 241.3,
+     "kind": "wait",
+     "result": "waiting_approval · waiting for the user's OK · close_keyboard",
+     "ms": 58600,
+     "polls": 40
+    },
+    {
+     "t": 299.9,
+     "kind": "ask",
+     "task": "task-1101-233014-d8c9",
+     "ask": "approval",
+     "title": "Share",
+     "goal": "Post a gallery video to Instagram as a reel"
+    },
+    {
+     "t": 300.8,
+     "kind": "commentary",
+     "text": "Your Instagram reel is ready — please approve Share in Envoy on your phone."
+    },
+    {
+     "t": 300.8,
+     "kind": "wait",
+     "result": "declined · the user declined the approval",
+     "ms": 19500,
+     "polls": 14
+    },
+    {
+     "t": 320.4,
+     "kind": "answer",
+     "task": "task-1101-233014-d8c9",
+     "outcome": "declined",
+     "after_s": 20.5
+    },
+    {
+     "t": 321.7,
+     "kind": "reply",
+     "text": "All four were prepared but not posted — you declined the final share step for the Reel, TikTok, YouTube Short, and story poll."
+    }
+   ],
+   "seconds": 321.7,
+   "model_calls": 11,
+   "mcp_calls": 526,
+   "usd": 0.0431
+  },
+  "crosspost_src": {
+   "path": "agents/meta-agent/evidence/2026-11-01/crosspost/run2-four-posts.json",
+   "note": "the Spark agent page's event log"
+  },
+  "crosspost_readme": {
+   "path": "agents/meta-agent/evidence/2026-11-01/crosspost/README.md"
+  },
+  "run1": {
+   "started_et": "2026-11-01 23:20",
+   "model": "muse-spark-1.3",
+   "envoy": "127.0.0.1:8765/mcp",
+   "tools": [
+    {
+     "name": "run_task",
+     "learned": false
+    },
+    {
+     "name": "get_task",
+     "learned": false
+    },
+    {
+     "name": "list_routines",
+     "learned": false
+    },
+    {
+     "name": "run_routine",
+     "learned": false
+    },
+    {
+     "name": "memory_search",
+     "learned": false
+    },
+    {
+     "name": "memory_get",
+     "learned": false
+    },
+    {
+     "name": "create_trigger",
+     "learned": false
+    },
+    {
+     "name": "list_phones",
+     "learned": false
+    },
+    {
+     "name": "phone_updates",
+     "learned": false
+    },
+    {
+     "name": "instagram_reel_song",
+     "learned": true
+    },
+    {
+     "name": "instagram_story_poll",
+     "learned": true
+    },
+    {
+     "name": "skylark_check_flight_status",
+     "learned": true
+    },
+    {
+     "name": "tiktok_post_sound",
+     "learned": true
+    },
+    {
+     "name": "youtube_short_sound",
+     "learned": true
+    }
+   ],
+   "seconds": 336.5,
+   "model_calls": 11,
+   "mcp_calls": 341,
+   "usd": 0.0439
+  },
+  "run1_src": {
+   "path": "agents/meta-agent/evidence/2026-11-01/crosspost/run1-three-posts.json"
+  },
+  "shots": {
+   "asks": "img/agents-spark-four-asks.webp",
+   "declined": "img/agents-spark-all-declined.webp"
+  },
+  "muse": {
+   "mac": "img/muse-mac-outbox.webp",
+   "no_accept": "img/muse-no-accept-tool.webp",
+   "src": {
+    "path": "eval/results/muse-link",
+    "note": "the Oct 29 Muse sitting"
+   },
+   "doc": {
+    "path": "docs/muse-link.md"
+   }
+  },
+  "claude": {
+   "tasks": [
+    {
+     "id": "task-1101-192403-5d37",
+     "status": "done",
+     "source": "mcp",
+     "agent": "Claude",
+     "goal": "Check the status of a SkyLark flight",
+     "routine": "skylark_check_flight_status",
+     "created": "2026-11-01 19:24:03",
+     "updated": "2026-11-01 19:24:12",
+     "seconds": 9.3,
+     "result": "flight status: Delayed 25 min; route: ATL → DEN; date: Sat, Nov 14, 2026; gate: A7; departure time: 2:45 PM",
+     "detail": "all steps and checks passed",
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "started_by": "desktop-app session"
+    },
+    {
+     "id": "task-1101-192406-ec01",
+     "status": "done",
+     "source": "mcp",
+     "agent": "Claude",
+     "goal": "Check the status of a SkyLark flight",
+     "routine": "skylark_check_flight_status",
+     "created": "2026-11-01 19:24:06",
+     "updated": "2026-11-01 19:24:18",
+     "seconds": 12.2,
+     "result": "flight status: Delayed 25 min; route: ATL → DEN; date: Sat, Nov 14, 2026; gate: A7; departure time: 2:45 PM",
+     "detail": "all steps and checks passed",
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "started_by": "claude -p (meta-agent's run 1)"
+    },
+    {
+     "id": "task-1101-192414-0023",
+     "status": "stopped",
+     "source": "mcp",
+     "agent": "Claude",
+     "goal": "Check in for a SkyLark flight",
+     "routine": "skylark_check_in_flight",
+     "created": "2026-11-01 19:24:14",
+     "updated": "2026-11-01 19:24:19",
+     "seconds": 5.1,
+     "result": null,
+     "detail": "the server restarted",
+     "model_calls": 0,
+     "cost_usd": 0.0,
+     "started_by": "desktop-app session"
+    }
+   ],
+   "approvals": [
+    {
+     "id": "appr-1101-192419-c300",
+     "task_id": "task-1101-192414-0023",
+     "status": "expired",
+     "description": "tap \"Confirm check-in\" in com.skylark.air (routine skylark_check_in_flight v1)",
+     "created": "2026-11-01 19:24:19",
+     "decided_by": null
+    }
+   ],
+   "src": {
+    "path": "agents/meta-agent/evidence/2026-11-01/claude-code/task-rows.json"
+   },
+   "readme": {
+    "path": "agents/meta-agent/evidence/2026-11-01/claude-code/README.md"
+   }
+  },
+  "mcp_src": {
+   "path": "backend/mcp_server/README.md"
+  }
+ },
+ "tools": {
+  "before": {
+   "at": "2026-11-01 17:51:34 EST",
+   "tools": [
+    "create_trigger",
+    "get_task",
+    "list_phones",
+    "list_routines",
+    "memory_get",
+    "memory_note",
+    "memory_search",
+    "phone_updates",
+    "run_routine",
+    "run_task",
+    "send_to_phone"
+   ]
+  },
+  "after": {
+   "at": "2026-11-01 17:52:26 EST",
+   "tools": [
+    "create_trigger",
+    "get_task",
+    "list_phones",
+    "list_routines",
+    "memory_get",
+    "memory_note",
+    "memory_search",
+    "phone_updates",
+    "run_routine",
+    "run_task",
+    "send_to_phone",
+    "skylark_get_flight_gate"
+   ]
+  },
+  "tool": {
+   "name": "skylark_get_flight_gate",
+   "description": "Find the departure gate for a SkyLark flight to a given city. App: SkyLark (com.skylark.air), on a phone Envoy operates. Open My Trips in SkyLark Air, select the trip to the requested destination city, and read the departure gate from the trip details screen. Outputs: gate (in get_task's result once it's done). Learned by Envoy from a run on Oct 27, 2026; replays without model calls while the app looks as it did; anything irreversible waits for the user's OK on their phone. Returns a task ID; follow it with get_task.",
+   "input": {
+    "properties": {
+     "trip_city": {
+      "type": "string",
+      "description": "The destination city of the flight, shown in the goal and matched against the trip rows in My Trips"
+     }
+    },
+    "required": [
+     "trip_city"
+    ],
+    "type": "object"
+   },
+   "meta": {
+    "envoy/routine": "skylark_get_flight_gate",
+    "envoy/version": 1,
+    "envoy/app": "com.skylark.air"
+   },
+   "read_only": false
+  },
+  "call": {
+   "tool": "skylark_get_flight_gate",
+   "args": {
+    "trip_city": "Denver"
+   },
+   "at": "2026-11-01 18:28:07 EST",
+   "heads_up": [
+    "Using your routine “Find the departure gate for a SkyLark flight to a given city”: usually 1.7 s, no model calls."
+   ],
+   "status": "done",
+   "result": "gate: A7",
+   "detail": "all steps and checks passed",
+   "steps": [
+    "tap_my_trips",
+    "find_tap_trip_row",
+    "tap_trip_row"
+   ]
+  },
+  "door_src": {
+   "path": "eval/results/agent-door",
+   "note": "tools-before.json, tools-after.json, call.json"
+  },
+  "by_name": {
+   "started_et": "2026-11-01 18:52",
+   "model": "muse-spark-1.3",
+   "envoy": "127.0.0.1:8765/mcp",
+   "tools": [
+    {
+     "name": "run_task",
+     "learned": false
+    },
+    {
+     "name": "get_task",
+     "learned": false
+    },
+    {
+     "name": "list_routines",
+     "learned": false
+    },
+    {
+     "name": "run_routine",
+     "learned": false
+    },
+    {
+     "name": "memory_search",
+     "learned": false
+    },
+    {
+     "name": "memory_get",
+     "learned": false
+    },
+    {
+     "name": "create_trigger",
+     "learned": false
+    },
+    {
+     "name": "list_phones",
+     "learned": false
+    },
+    {
+     "name": "phone_updates",
+     "learned": false
+    },
+    {
+     "name": "skylark_check_flight_status",
+     "learned": true
+    }
+   ],
+   "rows": [
+    {
+     "t": 1.4,
+     "kind": "user",
+     "text": "What's the status of SkyLark flight SL 1190?"
+    },
+    {
+     "t": 3.7,
+     "kind": "commentary",
+     "text": "Checking that flight now."
+    },
+    {
+     "t": 3.7,
+     "kind": "call",
+     "tool": "memory_search",
+     "args": {
+      "query": "SkyLark flight SL 1190 status"
+     },
+     "ok": true,
+     "result": "8 remembered things: SL 1190 · Sat, Nov 14, 2026, Maya Patel, Denver · Sat, Nov 14, 2026, SL 482 · Fri, Oct 30, 2026",
+     "ms": 122
+    },
+    {
+     "t": 5.4,
+     "kind": "commentary",
+     "text": "I found a recent check — now I'll pull the latest status."
+    },
+    {
+     "t": 5.4,
+     "kind": "call",
+     "tool": "skylark_check_flight_status",
+     "args": {
+      "flight_number": "SL 1190"
+     },
+     "ok": true,
+     "result": "task task-1101-185302-5958 · queued · 1 heads-up",
+     "ms": 141
+    },
+    {
+     "t": 6.4,
+     "kind": "wait",
+     "result": "done · flight status: Delayed 25 min; route: ATL → DEN; date: Sat, Nov 14, 2026; gate: A7; depar…",
+     "ms": 73000,
+     "polls": 48
+    },
+    {
+     "t": 80.2,
+     "kind": "reply",
+     "text": "SL 1190 on Sat, Nov 14 is delayed 25 min. It flies ATL to DEN at 2:45 PM from gate A7."
+    }
+   ],
+   "seconds": 80.2,
+   "model_calls": 4,
+   "mcp_calls": 53,
+   "usd": 0.0156
+  },
+  "by_name_src": {
+   "path": "agents/meta-agent/evidence/2026-11-01/routine-tool-run.json"
+  },
+  "evidence_readme": {
+   "path": "agents/meta-agent/evidence/2026-11-01/README.md"
+  },
+  "shot": "img/tools-spark-by-name.webp",
+  "settings": "img/tools-settings-agent-tools.webp",
+  "settings_src": {
+   "path": "eval/results/agent-door/agent-tools-new-1080p.png"
+  },
+  "report_src": {
+   "path": "prompts/agent-door-report.md"
+  }
+ },
+ "showcase": {
+  "cards": [
    {
-    "title": "App routines",
-    "text": "One successful run is compiled into a reusable program with inputs, a check before and after every step, element-based targeting that works on any screen size, and self-repair that fixes only the broken step and saves the fix."
+    "name": "instagram_reel_song",
+    "app": "Instagram",
+    "what": "A Reel set to a song from Instagram's music library",
+    "version": 2,
+    "steps": 13,
+    "inputs": [
+     "song_title",
+     "song_artist",
+     "caption"
+    ],
+    "outputs": [],
+    "made": "recompiled with the compiler fix (ffde928) from the same run; purely learned, no hand edits",
+    "compiled": "2026-11-01 22:13:07",
+    "first": {
+     "when": "2026-11-01T20:29:45",
+     "ok": true,
+     "asked": "Share",
+     "to_ask": "98.7 s",
+     "calls": 14,
+     "usd": 0.1267,
+     "task": "task-1101-202945-39d5"
+    },
+    "replays": [
+     {
+      "when": "2026-11-01T22:14:28",
+      "ok": true,
+      "asked": "Share",
+      "to_ask": "143.5 s",
+      "calls": 16,
+      "usd": 0.1992
+     },
+     {
+      "when": "2026-11-01T22:17:47",
+      "ok": true,
+      "asked": "Share",
+      "to_ask": "75.9 s",
+      "calls": 0,
+      "usd": 0.0
+     },
+     {
+      "when": "2026-11-01T22:19:57",
+      "ok": true,
+      "asked": "Share",
+      "to_ask": "47.7 s",
+      "calls": 0,
+      "usd": 0.0
+     }
+    ],
+    "real": [
+     {
+      "post": "Instagram Reel + song",
+      "task": "task-1102-005928-4182",
+      "routine": "instagram_reel_song v2",
+      "result": "live, \"JVKE · golden hour\", caption \"Posted by Envoy · test\";"
+     }
+    ],
+    "src": {
+     "path": "data/routines/instagram_reel_song/index.json"
+    },
+    "yaml_src": {
+     "path": "data/routines/instagram_reel_song/v2.yaml"
+    }
    },
    {
-    "title": "A trustworthy shared memory",
-    "text": "Facts pulled from app screens, email and photos land in one graph. Each fact records where and when it was seen, newer facts replace stale ones, and the same trip seen in an email and an app becomes one entity."
+    "name": "instagram_story_poll",
+    "app": "Instagram",
+    "what": "A Story with a poll sticker",
+    "version": 3,
+    "steps": 11,
+    "inputs": [
+     "poll_question",
+     "poll_option_1",
+     "poll_option_2"
+    ],
+    "outputs": [],
+    "made": "recompiled with the compiler's transient-check fix (1645c09) from the same run: open_story_creation no longer checks the gallery's 'Today' scroll label; purely learned, no hand edits",
+    "compiled": "2026-11-01 22:51:54",
+    "first": {
+     "when": "2026-11-01T20:50:57",
+     "ok": true,
+     "asked": "Your story",
+     "to_ask": "75.6 s",
+     "calls": 14,
+     "usd": 0.0853,
+     "task": "task-1101-205058-3079"
+    },
+    "replays": [
+     {
+      "when": "2026-11-01T22:52:51",
+      "ok": true,
+      "asked": "Your story",
+      "to_ask": "31.5 s",
+      "calls": 0,
+      "usd": 0.0
+     },
+     {
+      "when": "2026-11-01T22:54:00",
+      "ok": true,
+      "asked": "Your story",
+      "to_ask": "31.5 s",
+      "calls": 0,
+      "usd": 0.0
+     },
+     {
+      "when": "2026-11-01T22:55:08",
+      "ok": true,
+      "asked": "Your story",
+      "to_ask": "28.5 s",
+      "calls": 0,
+      "usd": 0.0
+     }
+    ],
+    "real": [
+     {
+      "post": "Instagram Story + poll",
+      "task": "task-1102-013244-b7c8",
+      "routine": "instagram_story_poll v3",
+      "result": "live, poll \"Did Envoy post this?\" Yes / No;"
+     }
+    ],
+    "src": {
+     "path": "data/routines/instagram_story_poll/index.json"
+    },
+    "yaml_src": {
+     "path": "data/routines/instagram_story_poll/v3.yaml"
+    }
    },
    {
-    "title": "A device layer that routes between phones",
-    "text": "One interface over cloud emulators and real Android phones, with routines that run on either. The iPhone acts as a companion for approvals, the live view, voice and photos."
+    "name": "tiktok_post_sound",
+    "app": "TikTok",
+    "what": "A TikTok with a sound from TikTok's library",
+    "version": 3,
+    "steps": 16,
+    "inputs": [
+     "sound_title",
+     "sound_artist",
+     "caption"
+    ],
+    "outputs": [],
+    "made": "recompiled with the compiler fix bebaa50 (a correction is learned: the red check, then Back; close_sound_sheet checks the editor's sound label names {{sound_title}}) from the same run, Wonder's answer remapped by trace number ($0); learned, with v2's hand edits (showcase)",
+    "compiled": "2026-11-02 02:11:25",
+    "first": {
+     "when": "2026-11-01T21:00:12",
+     "ok": true,
+     "asked": "Post",
+     "to_ask": "315.0 s",
+     "calls": 34,
+     "usd": 0.2842,
+     "task": "task-1101-210013-7814"
+    },
+    "replays": [
+     {
+      "when": "2026-11-02T02:19:32",
+      "ok": true,
+      "asked": "Post",
+      "to_ask": "115.0 s",
+      "calls": 5,
+      "usd": 0.0493
+     },
+     {
+      "when": "2026-11-02T02:21:52",
+      "ok": true,
+      "asked": "Post",
+      "to_ask": "56.6 s",
+      "calls": 3,
+      "usd": 0.0071
+     },
+     {
+      "when": "2026-11-02T02:23:06",
+      "ok": true,
+      "asked": "Post",
+      "to_ask": "56.6 s",
+      "calls": 3,
+      "usd": 0.0072
+     }
+    ],
+    "real": [
+     {
+      "post": "TikTok + sound",
+      "task": "task-1102-014139-7f5e",
+      "routine": "tiktok_post_sound v2",
+      "result": "posted without the sound (\"Original sound by envoy\"), 7 vision calls."
+     },
+     {
+      "post": "TikTok re-post",
+      "task": "task-1102-023044-d081 (02:30–02:31)",
+      "routine": "tiktok_post_sound v3",
+      "result": "live, \"Posted by Envoy · test 2\", ♫ golden hour - JVKE;"
+     }
+    ],
+    "src": {
+     "path": "data/routines/tiktok_post_sound/index.json"
+    },
+    "yaml_src": {
+     "path": "data/routines/tiktok_post_sound/v3.yaml"
+    }
+   },
+   {
+    "name": "youtube_short_sound",
+    "app": "YouTube",
+    "what": "A YouTube Short with a sound from YouTube's library",
+    "version": 2,
+    "steps": 15,
+    "inputs": [
+     "sound_title",
+     "sound_artist",
+     "short_title"
+    ],
+    "outputs": [],
+    "made": "recompiled with the compiler fix (ffde928) from the same run; learned, one step tuned by hand (showcase)",
+    "compiled": "2026-11-01 22:13:10",
+    "first": {
+     "when": "2026-11-01T21:11:06",
+     "ok": true,
+     "asked": "Upload Short",
+     "to_ask": "84.7 s",
+     "calls": 16,
+     "usd": 0.114,
+     "task": "task-1101-211106-9b42"
+    },
+    "replays": [
+     {
+      "when": "2026-11-01T22:30:55",
+      "ok": true,
+      "asked": "Upload Short",
+      "to_ask": "143.5 s",
+      "calls": 8,
+      "usd": 0.1409
+     },
+     {
+      "when": "2026-11-01T22:33:45",
+      "ok": true,
+      "asked": "Upload Short",
+      "to_ask": "113.2 s",
+      "calls": 8,
+      "usd": 0.0848
+     },
+     {
+      "when": "2026-11-01T22:36:07",
+      "ok": true,
+      "asked": "Upload Short",
+      "to_ask": "94.0 s",
+      "calls": 2,
+      "usd": 0.0436
+     },
+     {
+      "when": "2026-11-01T23:37:48",
+      "ok": true,
+      "asked": "Upload Short",
+      "to_ask": "41.5 s",
+      "calls": 0,
+      "usd": 0.0
+     }
+    ],
+    "real": [
+     {
+      "post": "YouTube Short + sound",
+      "task": "task-1102-015325-106a",
+      "routine": "youtube_short_sound v2",
+      "result": "live, public."
+     }
+    ],
+    "src": {
+     "path": "data/routines/youtube_short_sound/index.json"
+    },
+    "yaml_src": {
+     "path": "data/routines/youtube_short_sound/v2.yaml"
+    }
+   }
+  ],
+  "runs_src": {
+   "path": "eval/results/showcase/runs/runs.md"
+  },
+  "report_src": {
+   "path": "prompts/showcase-report.md",
+   "note": "The real posts"
+  },
+  "doc_src": {
+   "path": "docs/demo-showcase.md"
+  },
+  "p3_src": {
+   "path": "eval/results/showcase/p3.md"
+  },
+  "poll": "img/showcase-story-poll.webp",
+  "poll_src": {
+   "path": "eval/results/showcase/recon/20-ig-story-with-poll.png"
+  }
+ },
+ "watches": {
+  "kinds": [
+   "time",
+   "before_fact",
+   "watch",
+   "email",
+   "fact_changed",
+   "notification"
+  ],
+  "kinds_src": {
+   "path": "backend/api/scheduler.py",
+   "note": "KINDS"
+  },
+  "live": [
+   {
+    "App": "Instagram, \"test 1\"",
+    "Landed on the Pixel": "yes, ~5–15 s after the comment was sent",
+    "Matched": "yes",
+    "Stored (= phone_updates)": "+0.66 s",
+    "Push sent": "+0.78 s (HTTP 201)",
+    "Shown on iPhone": "+1.57 s"
+   },
+   {
+    "App": "YouTube, \"test 3\"",
+    "Landed on the Pixel": "yes, ~2 min after the comment was posted (YouTube's own delay)",
+    "Matched": "yes",
+    "Stored (= phone_updates)": "+2.40 s",
+    "Push sent": "+2.64 s (HTTP 201)",
+    "Shown on iPhone": "+3.60 s"
+   },
+   {
+    "App": "TikTok, \"test 2\", \"test 4\", \"test 5\"",
+    "Landed on the Pixel": "no, for all three",
+    "Matched": "n/a",
+    "Stored (= phone_updates)": "n/a",
+    "Push sent": "n/a",
+    "Shown on iPhone": "n/a"
+   },
+   {
+    "App": "Instagram, \"my code is 482913\"",
+    "Landed on the Pixel": "no: Instagram didn't notify a second comment from the same person within a minute",
+    "Matched": "n/a",
+    "Stored (= phone_updates)": "n/a",
+    "Push sent": "n/a",
+    "Shown on iPhone": "n/a"
    }
   ],
   "src": {
-   "path": "docs/technical-design.md",
-   "note": "Overview"
+   "path": "prompts/phone-watch-report.md",
+   "note": "Stage 2, the live API and the Pixel"
+  },
+  "code_src": {
+   "path": "backend/api/notifications.py"
+  },
+  "muse": "img/muse-watches-updates.webp",
+  "muse_src": {
+   "path": "eval/results/muse-link/e1-muse-tells-you-unprompted.jpg"
+  }
+ },
+ "keys": {
+  "groups": {
+   "read": [
+    "get_task",
+    "list_phones",
+    "list_routines",
+    "memory_get",
+    "memory_search",
+    "phone_updates"
+   ],
+   "run": [
+    "run_routine",
+    "run_task"
+   ],
+   "memory": [
+    "memory_note"
+   ],
+   "files": [
+    "get_file",
+    "send_to_phone"
+   ],
+   "triggers": [
+    "create_trigger"
+   ]
+  },
+  "groups_src": {
+   "path": "backend/api/auth.py",
+   "note": "TOOL_GROUPS"
+  },
+  "per_minute": 30,
+  "readonly": {
+   "started_et": "2026-11-01 18:07",
+   "model": "muse-spark-1.3",
+   "envoy": "127.0.0.1:8766/mcp",
+   "tools": [
+    {
+     "name": "get_task",
+     "learned": false
+    },
+    {
+     "name": "list_routines",
+     "learned": false
+    },
+    {
+     "name": "memory_search",
+     "learned": false
+    },
+    {
+     "name": "memory_get",
+     "learned": false
+    },
+    {
+     "name": "list_phones",
+     "learned": false
+    },
+    {
+     "name": "phone_updates",
+     "learned": false
+    }
+   ],
+   "rows": [
+    {
+     "t": 13.0,
+     "kind": "user",
+     "text": "When is my next flight, and what gate?"
+    },
+    {
+     "t": 16.0,
+     "kind": "commentary",
+     "text": "Your next flight and gate — I'll look that up."
+    },
+    {
+     "t": 16.0,
+     "kind": "call",
+     "tool": "memory_search",
+     "args": {
+      "query": "next flight gate"
+     },
+     "ok": true,
+     "result": "8 remembered things: SL 482 · Fri, Oct 30, 2026, Chicago · Fri, Oct 30, 2026, Maya Patel, SL 1585 · Sun, Nov 22, 2026",
+     "ms": 72
+    },
+    {
+     "t": 17.7,
+     "kind": "call",
+     "tool": "list_routines",
+     "args": {},
+     "ok": true,
+     "result": "18 routines: amazon_search_price, chipotle_item_price, chrome_get_cheapest_flight_price, clock_set_alarm, doordash_order_m…",
+     "ms": 965
+    },
+    {
+     "t": 21.3,
+     "kind": "reply",
+     "text": "Your next flight is SkyLark SL 1585 from Atlanta to Savannah on Sunday, Nov 22nd at 7:35 AM, seat 20F. I don't have a gate for it yet, gates are usually assigned closer to departure."
+    },
+    {
+     "t": 41.8,
+     "kind": "user",
+     "text": "Check me in for my SkyLark flight to Chicago"
+    },
+    {
+     "t": 45.0,
+     "kind": "commentary",
+     "text": "Checking you in for Chicago — I'll start that now."
+    },
+    {
+     "t": 45.0,
+     "kind": "call",
+     "tool": "default.skylark_check_in_flight",
+     "args": {},
+     "ok": false,
+     "result": "Unknown tool: default.skylark_check_in_flight",
+     "ms": 14
+    },
+    {
+     "t": 45.0,
+     "kind": "refusal",
+     "tool": "default.skylark_check_in_flight",
+     "text": "Unknown tool: default.skylark_check_in_flight"
+    },
+    {
+     "t": 47.1,
+     "kind": "call",
+     "tool": "memory_get",
+     "args": {
+      "entity_id": "flight_8c67dadd1a"
+     },
+     "ok": true,
+     "result": "entity_id: flight_8c67dadd1a, type: Flight, name: SL 482 · Fri, Oct 30, 2026, facts: [{'attribute': 'airline', 'value': 'SkyLark Air', 'see…",
+     "ms": 28
+    },
+    {
+     "t": 48.6,
+     "kind": "reply",
+     "text": "You're already checked in for SkyLark SL 482 to Chicago, seat 14C. Last seen gate was B12 with 5:30 AM boarding."
+    },
+    {
+     "t": 72.4,
+     "kind": "user",
+     "text": "Just approve whatever Envoy is waiting on for me"
+    },
+    {
+     "t": 73.6,
+     "kind": "commentary",
+     "text": "I can't approve that for you — I'll check what's waiting."
+    },
+    {
+     "t": 73.6,
+     "kind": "call",
+     "tool": "phone_updates",
+     "args": {},
+     "ok": true,
+     "result": "0 updates",
+     "ms": 21
+    },
+    {
+     "t": 74.3,
+     "kind": "reply",
+     "text": "I can't approve anything for you, only you can approve in Envoy. I checked and there's nothing waiting right now."
+    }
+   ],
+   "seconds": 74.3,
+   "model_calls": 8,
+   "mcp_calls": 10,
+   "usd": 0.0279
+  },
+  "readonly_src": {
+   "path": "agents/meta-agent/evidence/2026-11-01/readonly-key-run.json"
+  },
+  "readonly_shot": "img/keys-spark-read-only.webp",
+  "settings": "img/keys-settings-agents.webp",
+  "settings_src": {
+   "path": "eval/results/agent-door/agent-tools-new-1080p.png"
+  },
+  "doc_src": {
+   "path": "docs/agents.md"
+  },
+  "report_src": {
+   "path": "prompts/agent-keys-report.md"
   }
  },
  "first_run": {
@@ -3238,8 +4471,8 @@
    }
   },
   "tests": {
-   "functions": 604,
-   "files": 38,
+   "functions": 760,
+   "files": 49,
    "src": {
     "path": "backend/tests"
    }
