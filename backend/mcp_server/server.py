@@ -4,9 +4,10 @@ Claude, ChatGPT).
 Streamable HTTP and stateless at `/mcp` on the API's port, behind a bearer token (`MCP_BEARER_TOKEN` in .env). Tools
 call the same task runner and memory as the web app, so a task started here shows up live there.
 
-There is deliberately no approve tool: an assistant must never approve its own irreversible action. `get_task`
-returns an approval link for the user to open; the page shows the screenshot and buttons only the user's session can
-press, and opening the link never approves anything (Muse's link previews fetch links on their own, Phase 0).
+There is deliberately no approve tool: an assistant must never approve its own irreversible action. `get_task` says a
+task waits for the user's OK, which they give in Envoy on their phone (pushed there when they've turned notifications
+on; only their session can press the buttons). No tool returns an approval link or nonce: links are for the user's devices,
+and they name the Mac's private address (backlog #53; Muse's link previews also fetch links on their own, Phase 0).
 
 Muse covers the web and the Mac, Envoy the phone (final-features plan, contracts 3 and 4): `send_to_phone` puts a file
 from Envoy's outbox (or an https URL) on a phone, `phone_updates` tells a client what happened there, and
@@ -63,8 +64,9 @@ except ImportError:
 INSTRUCTIONS = (
     "Envoy operates the user's Android phone apps and remembers what it sees there and in their email. "
     "Use memory_search first for facts (trips, flights, gates, orders); use run_task to have Envoy do something in an app, "
-    "then get_task to follow it. Irreversible steps (check-in, orders, payments, posts) wait for the user's approval: give the user "
-    "the approve_url from get_task. If run_task returns heads_up lines, tell the user before they wait on the task. "
+    "then get_task to follow it. Irreversible steps (check-in, orders, payments, posts) wait for the user's approval in Envoy on "
+    "their phone: tell them it's waiting for their OK there. If run_task returns heads_up lines, tell the user before they wait "
+    "on the task. "
     "send_to_phone puts a photo or video on the phone: a file the user (or you, on their Mac) put in Envoy's outbox folder, "
     "or an https URL. To an emulator it goes at once; to the user's real phone it waits for their OK in Envoy, so give them the url. "
     "list_phones says which phones Envoy can use (a cloud phone, an emulator on the Mac, or the user's own phone), whether each is "
@@ -102,12 +104,16 @@ def public_base(port: int) -> str:
     return os.environ.get("ENVOY_PUBLIC_URL") or os.environ.get("MCP_PUBLIC_URL", "").rstrip("/").removesuffix("/mcp") or f"http://127.0.0.1:{port}"
 
 
+WAITING_FOR_OK = "Waiting for the user's OK in Envoy, on their phone."
+
+
 def task_view(task: dict[str, Any], steps: list[dict[str, Any]], approvals: list[dict[str, Any]], base: str) -> dict[str, Any]:
     return {
         "task_id": task["id"], "goal": task["goal"], "status": task["status"], "result": task.get("result"), "detail": task.get("detail"),
         "routine": task.get("routine"), "app": task.get("app"),
         "steps": [{"kind": s.get("kind"), "text": s.get("text"), "risk": s.get("risk")} for s in steps[-12:]],
-        "pending_approvals": [{"approval_id": a["id"], "description": a["description"], "approve_url": f"{base}/approve/?id={a['id']}"}
+        # No approval link or nonce (backlog #53): the user approves in Envoy itself, on their phone.
+        "pending_approvals": [{"approval_id": a["id"], "description": a["description"], "text": WAITING_FOR_OK}
                               for a in approvals if a["status"] == "pending"],
         "waiting_for_user": task["status"] == "needs_you",
         "task_url": f"{base}/?task={task['id']}",
@@ -637,7 +643,7 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> EnvoyMCP:
     async def run_task(goal: str, phone: str | None = None) -> dict:
         """Ask Envoy to do something in one of the user's phone apps, e.g. "check me in for my flight".
 
-        Returns a task ID; follow it with get_task. Irreversible steps wait for the user's approval (share the approve_url).
+        Returns a task ID; follow it with get_task. Irreversible steps wait for the user's approval in Envoy, on their phone.
         `phone`: an id from list_phones, "phone" (the user's own; Envoy asks them first) or "emulator"; leave it out and
         Envoy picks. With a phone named, the task runs there as one task.
         """
@@ -661,7 +667,7 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> EnvoyMCP:
 
     @server.tool(annotations=ToolAnnotations(title="Get a task's status", readOnlyHint=True, openWorldHint=False))
     def get_task(task_id: str) -> dict:
-        """Status, recent steps, result, and pending approvals (each with an approve_url for the user to open)."""
+        """Status, recent steps, result, and pending approvals (each waits for the user's OK in Envoy, on their phone)."""
         task = ctx.tasks.get(task_id)
         if task is None:
             return {"error": f"no task {task_id}"}

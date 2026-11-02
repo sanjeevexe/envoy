@@ -28,7 +28,7 @@ give it. Every task it starts says which agent asked ("from Claude").
   - answer Envoy's questions for you.
 
   Envoy has no tool for any of these. Anything irreversible (a check-in, an order, a payment, a post) waits for your OK
-  on your phone, and the agent gets an `approve_url` to show you.
+  in Envoy on your phone, and the agent is told it's waiting for your OK there (it gets no approval link).
 
 ## Make a key (you, in Envoy, about a minute)
 
