@@ -97,7 +97,7 @@ The Contributor tier (Meta may train on inputs) is used only with our own test a
 - **Muse gets a phone, and its tool list grows as Envoy learns.** In a dry run on Nov 2, Muse for Mac copied a clip
   into Envoy's outbox, called `send_to_phone`, then called the Reel, TikTok and Short routines by name. Each reached
   its final button in about 1 min 15 s, with 0, 3 and 0 model calls, and Muse read each result back. Every final step
-  was declined (`eval/results/showcase/muse-2026-11-02/task-rows.json`). On Nov 1, Muse saw a newly added tool without reconnecting (`docs/muse-link.md`).
+  was declined (`eval/results/showcase/muse-2026-11-02/task-rows.json`). On Nov 1, Muse saw a tool newly added to a test connector without reconnecting (`docs/muse-link.md` › "Nov 1–2").
 - **Wonder turns a run into an API.** Each showcase routine was learned from one agent run and compiled by Muse Wonder.
   Instagram's two needed no hand edits. Shared with agents, each becomes a typed MCP tool that replays for almost
   nothing (`prompts/showcase-report.md`, `prompts/agent-door-report.md`).
@@ -132,8 +132,8 @@ The full log, kept as we went, with dates and evidence: `docs/meta-feedback.md`.
   - Voice Transcribe returned final text 74 to 296 ms after the audio ended, on a real Mac and iPhone.
   - SAM 3.1's boxes were pixel-exact.
   - In the Muse app, the connector kept the token out of chat and never tried to approve on the user's behalf.
-  - Muse saw a connector's newly added tool live (Nov 1), so a routine you share joins its tool list with no
-    reconnect.
+  - Muse saw a tool newly added to a test connector live, with no reconnect (Nov 1). That's what lets a routine you
+    share join Envoy's tools in Muse.
 - **What would help:**
   - Document that strict JSON output writes keys alphabetically. It silently changes how a model reasons when a
     schema's order matters.

@@ -55,10 +55,11 @@ Not pushed. No devices, no API, no model calls, $0.
 1. **Muse and the routine tools.** The Nov 2 Muse dry run (`send_to_phone`, then the three routine tools by name;
    0 / 3 / 0 calls, about 1 min 15 s each) now points at `eval/results/showcase/muse-2026-11-02/task-rows.json`, the
    path the coordinator named. That file comes with the site-rework branch, so **the link doesn't resolve on this
-   branch until site-rework is merged**. Merge it first, or check the path then. P1 (Nov 1: Muse saw a newly added tool
-   without reconnecting) still has no committed evidence. The README no longer claims it; the submission still does,
-   pointing at `docs/muse-link.md` ("Why Meta's models matter" bullet 1 and one feedback line). I asked docs-folder to
-   add it there. If it doesn't, cut those two lines or commit the evidence.
+   branch until site-rework is merged**. Merge it first, or check the path then. docs-folder has added both parts to `docs/muse-link.md` ›
+   "Nov 1–2: routine tools and the cross-post dry run" (its branch `claude/docs-folder-042308`, 066b1c5, not merged).
+   The README's routine-tools row links that anchor. P1 (Nov 1) ran on a probe connector, not on Envoy's own tools, and
+   has no evidence file, only the pivot notes. The submission now says "a tool newly added to a test connector" and
+   cites the doc section ("Why Meta's models matter" bullet 1 and one feedback line); the README doesn't claim it.
 2. **Muse's quote:** "On its own, Muse can't open and tap around in apps on your phone." It's from the user's Muse for
    Mac chat on Nov 1 (pivot §1) and isn't in the repo. The fact sheet says to quote Muse rather than assert the limit,
    so I quoted it. **The user decides** whether to keep it, and whether to back it with a screenshot.
@@ -102,4 +103,4 @@ Not pushed. No devices, no API, no model calls, $0.
 ## For the user to decide
 
 - Keep Muse's quote (item 2)?
-- Keep the P1 line in the submission (item 1) before its evidence is in the repo, or cut it?
+- Keep the P1 line in the submission (item 1)? Its only record is docs/muse-link.md's write-up of the probe.
