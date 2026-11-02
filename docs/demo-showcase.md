@@ -12,7 +12,7 @@ and recompiled with the compiler fix (main ffde928); `prompts/showcase-report.md
 | `instagram_reel_song` | song_title, song_artist, caption | 3/3 at Share, 0 calls unless Instagram shows a tip | learned |
 | `instagram_story_poll` (v3) | poll_question, poll_option_1, poll_option_2 | 3/3 at "Your story", 0 calls, right clip | learned |
 | `tiktok_post_sound` | sound_title, sound_artist, caption | 3/3 at Post, ~7 vision calls (~$0.02) | learned, one step added |
-| `youtube_short_sound` | sound_title, sound_artist, short_title | 3/3 at "Upload Short", 2–8 calls | learned, one step tuned |
+| `youtube_short_sound` | sound_title, sound_artist, short_title | at "Upload Short" every run; 0 calls with the case fix (953b014) | learned, one step tuned |
 
 The song for all three: JVKE's "golden hour" (in all three libraries). Which features work on the test accounts is
 pre-check P3 (`eval/results/showcase/p3.md`).

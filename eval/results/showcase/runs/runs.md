@@ -49,3 +49,4 @@
 | 2026-11-01T22:55:08 | Instagram | replay | yes | declined | instagram_story_poll | Your story | 28.5 s | 29.5 s | 0 | 0.0 | tap "Your story" in com.instagram.android (routine instagram_story_poll v3) → declined |
 | 2026-11-01T22:55:47 | TikTok | replay | NO | taken_over | tiktok_post_sound | never asked | – s | 900.8 s | 9 | 0.1321 |  |
 | 2026-11-01T23:12:08 | TikTok | replay | yes | declined | tiktok_post_sound | Post | 73.7 s | 74.7 s | 7 | 0.0207 | tap "Post" in com.zhiliaoapp.musically (routine tiktok_post_sound v2) → declined |
+| 2026-11-01T23:37:48 | YouTube | replay | yes | declined | youtube_short_sound | Upload Short | 41.5 s | 42.5 s | 0 | 0.0 | tap "Upload Short" in com.google.android.youtube (routine youtube_short_sound v2) → declined |

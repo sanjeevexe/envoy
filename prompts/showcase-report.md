@@ -18,7 +18,7 @@ evidence in `eval/results/showcase/routine/*.v2-candidate.yaml` (and YouTube's v
 | `instagram_reel_song` | none: purely learned | 3/3 at Share. Two at **0 calls** (48–76 s); one met Instagram's one-time "Explore audio" tip and the agent finished (144 s, 16 calls). The newest clip and JVKE's "golden hour" every time |
 | `instagram_story_poll` (v3) | none: purely learned | v3, recompiled once more with the compiler's transient-check fix (1645c09): **3/3 at "Your story", 29–32 s, 0 calls, the right clip each time**. (v2 went 3/3 too, but once with the wrong clip, from the "Today" check below; v3 doesn't have it) |
 | `tiktok_post_sound` | a 3 s wait before the visual tap; the app corrected (the source run predates TikTok's name in Envoy) | 3/3 at Post, 71–76 s, 7–8 vision calls (~$0.02), the newest clip each time. On main 98d96de (agent-door's launch fix 8f7a082): 2 more runs, **no "came to the front on its own" pause**. One of them paused at 107 s on "you touched the phone" while nobody else held the Pixel (a real touch, or a false one: not seen again), and the other ran clean to Post in 74 s with 7 vision calls |
-| `youtube_short_sound` | its stray "Captions unavailable" before-check dropped | 3/3 at "Upload Short", 94–144 s, 2–8 calls ($0.04–0.14), the newest clip each time. The search tap still needs a repair or the agent |
+| `youtube_short_sound` | its stray "Captions unavailable" before-check dropped | 3/3 at "Upload Short", 94–144 s, 2–8 calls ($0.04–0.14), the newest clip each time. The search tap still needs a repair or the agent. **With the locator case fix (953b014): 1 more replay, 42 s, 0 calls, $0.** The search step now starts the search |
 
 How "which clip" was checked: before each replay a labelled test clip ("REEL 2", "STORY 3", "TIKTOK 1"…, each its own
 colour) was pushed. The approval screenshot at the final button (kept outside the repo) shows which one it was. The
@@ -34,7 +34,7 @@ Still open in the compiled routines (for the compiler session):
   Oct 29). The executor scrolled the grid to find it, so the next step's "list start" check ("Open camera") failed,
   and the repair picked the top visible thumbnail: the wrong clip. Fix: never an after-check. Then recompile (cached)
   and replay.
-- **YouTube's search tap** (tap_trigger_search): the compiler flags it as ambiguous ("golden hour" and "Golden Hour"
+- **Fixed (953b014):** YouTube's search tap (tap_trigger_search). The compiler flagged it as ambiguous ("golden hour" and "Golden Hour"
   suggestions), and the tap doesn't start the search. Hand waits of 1.5 s and 4 s didn't help.
 - **Fixed (8f7a082), as far as 2 runs show:** TikTok's launch. In every v2 replay before it, the task paused at launch ("TikTok came to the front on its own"), even with
   the app corrected. The routine starts with a fresh launch *and* a learned `launch_tiktok` step; the second launch

@@ -105,6 +105,17 @@
    "model_calls": 2,
    "duration_s": 90.16,
    "patches": 3
+  },
+  {
+   "time": "2026-11-01 23:38:30",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1101-233748-d83d-r1",
+   "status": "declined",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 35.88,
+   "patches": 1
   }
  ],
  "needs_recompile": false,
