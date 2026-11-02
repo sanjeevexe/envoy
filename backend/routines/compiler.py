@@ -34,7 +34,7 @@ from routines import checks as chk
 from routines import locators
 from routines import screen_read
 from routines.model import FIELD, Check, Extract, InputSpec, Locator, Routine, Step, StepAction, has_slot, render_str, slot_names
-from routines.screens import contains_value, fold, load_tree, norm, parts_of, short_id, usable_id
+from routines.screens import contains_value, fold, jaccard, load_tree, norm, parts_of, short_id, signature_keys, usable_id
 from routines.visual import encode as encode_png
 
 _DIGIT = re.compile(r"\d")
@@ -490,6 +490,34 @@ def disambiguate(loc: Locator, target: Element, screen: ScreenState, examples: d
             if start is not None and picks(cand) and chk.evaluate(start, screen, examples).passed:
                 return cand, [start], "nth", len(hits)
     return loc, [], "ambiguous", len(hits)
+
+
+# A list's scroll indicator: the date or letter label of a fast scroller, a scroll bar's thumb. Apps show it only while the
+# list moves (Instagram's gallery shows "Today" for a moment as it opens), so a check on it holds by chance.
+_SCROLL_INDICATOR = re.compile(r"fast_?scroll|scroll_?(?:bar|indicator|thumb|bubble|label|handle)|scrubber|section_?index", re.I)
+
+
+def _passing(c: Check, screen: ScreenState, nxt: ScreenState | None, examples: dict[str, str]) -> str | None:
+    """Why a check on `screen` names something only passing through it (None: it doesn't): a scroll indicator, or something
+    the same screen no longer shows when the next step starts (`nxt`, its before-screen). On Nov 1 a story replay scrolled
+    the gallery to find Instagram's fast-scroll "Today" (it shows while the grid moves), and the next step took the wrong clip."""
+    if c.kind not in ("element_present", "text_visible"):
+        return None
+    o = chk.evaluate(c, screen, examples)
+    if not o.passed:
+        return None
+    k: int | None = o.element.index if o.element is not None else None
+    for _ in range(6):  # the element and its nearest ancestors
+        if k is None or not 0 <= k < len(screen.elements):
+            break
+        x = screen.elements[k]
+        if _SCROLL_INDICATOR.search(short_id(x.resource_id) or "") or _SCROLL_INDICATOR.search(x.cls.rsplit(".", 1)[-1]):
+            return "a scroll indicator"
+        k = x.parent
+    if nxt is not None and nxt.activity == screen.activity and jaccard(signature_keys(nxt), signature_keys(screen)) >= 0.6 \
+            and not chk.evaluate(c, nxt, examples).passed:
+        return "gone from the same screen when the next step starts"
+    return None
 
 
 def _before_typed(c: Check, step: int, typed_at: dict[str, int]) -> bool:
@@ -1089,6 +1117,14 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             post = chk.derive_post(s.before, s.after, s.kind, s.target, s.typed, examples, submit=s.submit)
         pre = [g for c in pre if (g := chk_generalize(c, examples, data_values)) is not None and not _before_typed(g, i, typed_at)]
         post = [g for c in post if (g := chk_generalize(c, examples, data_values)) is not None and not _before_typed(g, i, typed_at)]
+        # A check on something only passing through the screen holds by chance (a scroll indicator, a label gone a moment later).
+        nxt_before = steps[i].before if i < len(steps) else None
+        derived = [(pre, s.before, None)] + ([(post, s.after, nxt_before)] if s.kind != "scroll_until" else [])
+        for checks, screen, nxt in derived:
+            for c in list(checks):
+                if (why := _passing(c, screen, nxt, examples)) is not None:
+                    checks.remove(c)
+                    report.warnings.append(f"step {i}: check {c.describe()} names {why}; dropped")
         pre += extra_pre
         if s.kind == "type" and (prior := _prior_text(s)) is not None:
             post = [c.model_copy(update={"value": bind_inputs(c.value, {FIELD: prior})}) if c.kind == "field_equals" else c for c in post]

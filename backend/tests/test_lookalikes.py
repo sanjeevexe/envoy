@@ -185,3 +185,92 @@ def test_look_alikes_that_nothing_tells_apart_are_reported_ambiguous():
     assert disambiguate(rows, row, t, INPUTS, [])[2] == "text_has"
     got, _, how, _ = disambiguate(rows, dataclasses.replace(row, editable=True), t, INPUTS, [])
     assert how != "text_has" and got.text_has is None
+
+
+# ---- checks on something only passing through the screen ----------------------------------------------------------------
+# Nov 1, a recompiled story replay: step 1's after-check was Instagram's fast-scroll "Today", which shows only while the
+# gallery grid moves (here, for a moment as it opens). It failed, the executor scrolled to find it, and the gallery was left
+# at Oct 29: the next step's "Open camera" check failed and the repair took the top clip there, the wrong one.
+
+TODAY = Check(kind="element_present", locator=Locator(resource_id="fast_scroll_container", text="Today", kind="Text"))
+
+
+def test_a_check_on_a_scroll_indicator_or_on_what_is_gone_a_moment_later_is_not_compiled():
+    from routines.compiler import _passing
+    opening, settled = _screen("story_gallery_opening"), _screen("story_gallery")
+    assert chk.evaluate(TODAY, opening, {}).passed and not chk.evaluate(TODAY, settled, {}).passed
+    assert _passing(TODAY, opening, None, {}) == "a scroll indicator"
+    # Named otherwise, it is still gone from the same screen when the next step starts.
+    assert _passing(Check(kind="text_visible", text="Today"), opening, settled, {}) == "gone from the same screen when the next step starts"
+    assert _passing(Check(kind="text_visible", text="Today"), opening, _screen("tracks"), {}) is None  # another screen says nothing
+    title = Check(kind="element_present", locator=Locator(resource_id="gallery_title_container", text="Add to story", kind="Text"))
+    assert _passing(title, opening, settled, {}) is None
+
+
+def test_the_gallery_opening_step_keeps_its_title_check_and_drops_today(tmp_path):
+    trace = tmp_path / "trace"
+    (trace / "screens").mkdir(parents=True)
+    for name in ("tracks_after", "story_gallery_opening", "story_gallery", "gallery_after"):
+        shutil.copy(LA / f"{name}.json.gz", trace / "screens" / f"{name}.json.gz")
+    music, opening, settled = _screen("tracks_after"), _screen("story_gallery_opening"), _screen("story_gallery")
+    assert TODAY in chk.derive_post(music, opening, "tap", None, None, {})  # what the compiler wrote before
+    back = next(e for e in music.numbered if e.label == "Back")
+    newest = _thumbs(settled)[0]
+    run = {"task_id": "t-today", "goal": "Pick the newest video in my story gallery", "status": "done", "result": "Picked it.",
+           "check": {"passed": True, "detail": "ok"}}
+    (trace / "run.json").write_text(json.dumps(run))
+    (trace / "steps.jsonl").write_text("\n".join(json.dumps(r) for r in [
+        _record(1, "tracks_after", "story_gallery_opening", back.index, {"type": "tap", "element": back.number}, "Back to the gallery"),
+        _record(2, "story_gallery", "gallery_after", newest.index, {"type": "tap", "element": newest.number}, "Newest video"),
+    ]) + "\n")
+    spec = CompiledRoutine.model_validate({
+        "name": "instagram_story_clip", "intent": "Pick the newest clip", "description": "", "patterns": [], "inputs": [],
+        "steps": [{"step": 1, "id": "open_gallery", "intent": "Open the gallery", "target_fixed_text": "Back", "choice_input": None},
+                  {"step": 2, "id": "select_newest_video", "intent": "Tap the newest video",
+                   "target_fixed_text": "Video thumbnail created on", "choice_input": None}],
+        "outputs": [], "data_values": []})
+    routine, report = asyncio.run(compile_trace(trace, spec=spec))
+    opened = routine.steps[0]
+    assert TODAY not in opened.post and not any("fast_scroll" in c.describe() for c in opened.post)
+    assert any(c.locator is not None and c.locator.text == "Add to story" for c in opened.post)
+    assert any("fast_scroll_container" in w and "a scroll indicator; dropped" in w for w in report.warnings)
+    assert routine.steps[1].action.target.nth == 0
+
+
+class _Gallery:
+    """A gallery that a scroll up brings back to its start and a scroll down takes to Oct 30."""
+
+    def __init__(self, at_start: bool) -> None:
+        self.screen = _screen("gallery") if at_start else _screen("gallery_scrolled")
+        self.moves: list[str] = []
+
+    async def act(self, a):
+        self.moves.append(a.direction)
+        self.screen = _screen("gallery") if a.direction == "up" else _screen("gallery_scrolled")
+
+    async def observe(self, screenshot: bool = False):
+        return self.screen
+
+
+def _clip_step(nth: int | None, pre: list[Check]):
+    from routines.model import Step, StepAction
+    return Step(id="clip", intent="Tap the newest video", pre=pre, action=StepAction(kind="tap", target=Locator(
+        resource_id="gallery_grid_item_thumbnail", text="Video thumbnail created on", kind="Button", cls="Button", in_list=True, nth=nth)))
+
+
+def test_a_place_among_look_alikes_is_looked_for_back_at_the_lists_start():
+    from types import SimpleNamespace
+    from routines.executor import RoutineExecutor
+    start = [Check(kind="element_present", locator=Locator(text="Open camera", kind="Button"))]
+    dev = _Gallery(at_start=False)
+    found = asyncio.run(RoutineExecutor(dev)._reveal(SimpleNamespace(inputs={}), _clip_step(0, start)))
+    assert dev.moves == ["up"] and found is not None and found[1].element.label == NEWEST
+    # Back at the start and still not ready: it stays there (a repair then sees the newest clips), never scrolls down.
+    dev = _Gallery(at_start=True)
+    never = [Check(kind="element_present", locator=Locator(text="Nothing like this", kind="Button"))]
+    assert asyncio.run(RoutineExecutor(dev)._reveal(SimpleNamespace(inputs={}), _clip_step(0, never))) is None
+    assert set(dev.moves) == {"up"} and dev.screen is not None and any(e.label == "Open camera" for e in dev.screen.numbered)
+    # Any other target is looked for below first, as before.
+    dev = _Gallery(at_start=True)
+    asyncio.run(RoutineExecutor(dev)._reveal(SimpleNamespace(inputs={}), _clip_step(None, never)))
+    assert dev.moves[0] == "down"

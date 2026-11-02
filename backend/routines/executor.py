@@ -859,9 +859,14 @@ class RoutineExecutor:
 
     async def _reveal(self, ctx: _Ctx, step: Step, max_scrolls: int = 8) -> tuple[ScreenState, locators.Match] | None:
         """Scroll the screen's largest list down (then back up) until the step's target and before-checks hold.
-        None if the screen has no list or the target never shows: the ladder goes on to repair."""
+        None if the screen has no list or the target never shows: the ladder goes on to repair.
+
+        A target chosen by its place among a list's look-alikes (`nth`: the gallery's newest clip) is only ever above: the
+        list goes back up to its start, never down, so a repair after it also sees the list's start (Nov 1, a story replay:
+        a scroll left the gallery at Oct 29, and the repair took the top clip there)."""
         s = await self._observe()
-        direction, flipped = "down", False
+        target = step.action.target
+        direction, flipped = ("up", True) if target is not None and target.nth is not None else ("down", False)
         for _ in range(2 * max_scrolls):
             lists = [e for e in s.numbered if e.kind == "List"]
             if not lists:
