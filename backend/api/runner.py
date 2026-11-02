@@ -469,19 +469,25 @@ class TaskRunner:
             return choice
         self._step(tid, {"kind": "note", "text": f"phone: {ref} ({choice.reason})"})
         blocked = blocks_emulator(app, rules, learned)
-        if not await self._ask_for_phone(tid, choice.device, ref, why=f"{app_label(app, learned)} blocks emulators" if blocked else None):
+        allow, by = await self._ask_for_phone(tid, choice.device, ref, why=f"{app_label(app, learned)} blocks emulators" if blocked else None)
+        if not allow:
             if blocked is not None:
                 self._set(tid, status="declined", detail=f"you kept your phone for yourself ({app_label(app, learned)} blocks emulators)",
                           waiting_for=None)
+                return None
+            if by == "no answer":
+                # Silence is no choice of the emulator (Nov 2: Muse's Story ask went unanswered for 15 min, moved to envoy-real,
+                # and opened the Play Store for Instagram). Only your "no" sends a task to the emulator (backlog #63).
+                self._set(tid, status="declined", detail=f"not done: no answer about using {ref}", waiting_for=None)
                 return None
             emulator = self.pool.avd_for(app)
             self._step(tid, {"kind": "note", "text": f"running on the emulator ({emulator}) instead"})
             return Choice(emulator, "you chose the emulator")
         return choice
 
-    async def _ask_for_phone(self, tid: str, did: str, ref: str, why: str | None = None) -> bool:
-        """Wait for your answer to "Use your Android phone for this task?". No answer is never a yes. `why`: said with it
-        ("Target blocks emulators")."""
+    async def _ask_for_phone(self, tid: str, did: str, ref: str, why: str | None = None) -> tuple[bool, str]:
+        """Wait for your answer to "Use your Android phone for this task?": (yes?, who answered, or "no answer"). No answer
+        is never a yes. `why`: said with it ("Target blocks emulators")."""
         fut: asyncio.Future = asyncio.get_running_loop().create_future()
         self.phone_asks[tid] = fut
         self._set(tid, status="needs_you", waiting_for="phone", detail=(f"{why}: " if why else "") + f"Envoy wants to use {ref} for this task")
@@ -495,7 +501,7 @@ class TaskRunner:
             self.phone_asks.pop(tid, None)
         self._step(tid, {"kind": "note", "text": f"{ref}: " + (f"allowed by {by}" if allow else f"not used ({by})")})
         self._set(tid, status="running", waiting_for=None, detail=None)
-        return allow
+        return allow, by
 
     def answer_phone(self, tid: str, allow: bool, by: str) -> bool:
         """Your answer, from the web app or the iPhone (session only). False if nothing is waiting."""
@@ -558,7 +564,7 @@ class TaskRunner:
         """Ask to move this task to your phone, when one is connected. Its id if you said yes."""
         await asyncio.to_thread(self.pool.refresh_phones)
         phone = next((p for p in self.pool.phones.values() if p.get("state") == "device"), None)
-        if phone is None or not await self._ask_for_phone(tid, phone["id"], phone_ref(phone), why=f"{name} blocks emulators"):
+        if phone is None or not (await self._ask_for_phone(tid, phone["id"], phone_ref(phone), why=f"{name} blocks emulators"))[0]:
             return None
         self.phone_allowed[tid] = phone["id"]
         self.moved.add(tid)

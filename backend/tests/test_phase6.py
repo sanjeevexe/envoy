@@ -151,9 +151,29 @@ def test_no_answer_is_never_a_yes_for_your_phone():
         choice = await r._choose_phone(task["id"], "com.skylark.air", "phone")
         return r, task, choice
     r, task, choice = asyncio.run(scenario())
-    assert choice == Choice("envoy-test", "you chose the emulator")  # SkyLark works on the emulator: it runs there instead
+    # Not moved to the emulator either (#63, Nov 2: an unanswered ask moved Muse's Instagram Story to envoy-real, which
+    # went to the Play Store). It ends, not done.
+    assert choice is None
+    t = r.store.get(task["id"])
+    assert t["status"] == "declined" and t["detail"].startswith("not done: no answer about using")
     steps = [s["text"] for s in r.store.steps(task["id"])]
     assert any("not used (no answer)" in s for s in steps)
+    assert not any("running on the emulator" in s for s in steps)
+
+
+def test_your_no_to_the_phone_runs_it_on_the_emulator():
+    async def scenario():
+        r = runner_with(FakePool())
+        r.loop = asyncio.get_running_loop()
+        task = r.store.create("check in", "web")
+        waiting = asyncio.create_task(r._choose_phone(task["id"], "com.skylark.air", "phone"))
+        for _ in range(50):
+            await asyncio.sleep(0.01)
+            if r.store.get(task["id"])["waiting_for"] == "phone":
+                break
+        assert r.answer_phone(task["id"], False, "you on iPhone")
+        return await waiting
+    assert asyncio.run(scenario()) == Choice("envoy-test", "you chose the emulator")
 
 
 def test_your_yes_lets_envoy_use_the_phone():
