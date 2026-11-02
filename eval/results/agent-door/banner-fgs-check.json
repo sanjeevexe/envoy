@@ -1,0 +1,55 @@
+{
+ "cycles": 30,
+ "serial": "emulator-5554",
+ "avd": "envoy-test",
+ "sdk": "35",
+ "before": "package:ai.envoy.banner versionCode:2",
+ "old": {
+  "version": "package:ai.envoy.banner versionCode:1",
+  "back_to_back": {
+   "crash_lines": 4,
+   "fgs_exceptions": 2,
+   "first": [
+    "11-02 03:07:42.989  4769  4769 E AndroidRuntime: FATAL EXCEPTION: main",
+    "11-02 03:07:42.989  4769  4769 E AndroidRuntime: Process: ai.envoy.banner, PID: 4769",
+    "11-02 03:07:42.989  4769  4769 E AndroidRuntime: android.app.RemoteServiceException$ForegroundServiceDidNotStartInTimeException: Context.startForegroundService() did not then call Service.startForeground(): ServiceRecord{6187e75 u0 ai.envoy.banner/.BannerService c:com.android.shell}"
+   ]
+  },
+  "concurrent": {
+   "crash_lines": 4,
+   "fgs_exceptions": 2,
+   "first": [
+    "11-02 03:07:47.121  5040  5040 E AndroidRuntime: FATAL EXCEPTION: main",
+    "11-02 03:07:47.121  5040  5040 E AndroidRuntime: Process: ai.envoy.banner, PID: 5040",
+    "11-02 03:07:47.121  5040  5040 E AndroidRuntime: android.app.RemoteServiceException$ForegroundServiceDidNotStartInTimeException: Context.startForegroundService() did not then call Service.startForeground(): ServiceRecord{cafb899 u0 ai.envoy.banner/.BannerService c:com.android.shell}"
+   ]
+  }
+ },
+ "new": {
+  "version": "package:ai.envoy.banner versionCode:2",
+  "back_to_back": {
+   "crash_lines": 0,
+   "fgs_exceptions": 0,
+   "first": []
+  },
+  "concurrent": {
+   "crash_lines": 0,
+   "fgs_exceptions": 0,
+   "first": []
+  },
+  "aside_back": {
+   "crash_lines": 0,
+   "fgs_exceptions": 0,
+   "first": []
+  },
+  "api_banner": {
+   "crash_lines": 0,
+   "fgs_exceptions": 0,
+   "first": [],
+   "installed": 2,
+   "shown": true,
+   "hidden": true
+  }
+ },
+ "after": "package:ai.envoy.banner versionCode:2"
+}
