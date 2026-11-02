@@ -212,6 +212,17 @@ def approval_title(description: Any) -> str:
     return _clip(m.group(1) if m else description, 120)
 
 
+def wait_title(detail: Any) -> str:
+    """What a task waiting on the user (not an approval) asks, as a card's title: Envoy's "Envoy wants to use Envoy's phone
+    for this task" says "Use Envoy's phone?", with the reason Envoy gives before it ("Target blocks emulators: …") kept."""
+    text = str(detail or "").strip()
+    m = re.search(r"Envoy wants to use (.+?) for this task", text)
+    if not m:
+        return _clip(text or "Envoy needs the user on the phone", 160)
+    why = text[:m.start()].strip().rstrip(":").strip()
+    return _clip(f"Use {m.group(1)}?" + (f" ({why})" if why else ""), 160)
+
+
 def _many(views: dict[str, dict[str, Any]], ids: list[str]) -> str:
     """The wait row's line: one task's summary, or each task's status for several."""
     if len(ids) == 1:
@@ -475,7 +486,7 @@ class Agent:
         if phase.startswith(("approval:", "user:")):
             if card is None or card["phase"] != phase:
                 approvals = view.get("pending_approvals") or []
-                title = "; ".join(approval_title(a.get("description")) for a in approvals) or _clip(view.get("detail") or "Envoy needs the user on the phone", 160)
+                title = "; ".join(approval_title(a.get("description")) for a in approvals) or wait_title(view.get("detail"))
                 self.waiting[tid] = {"phase": phase, "since": time.time()}
                 self.emit("waiting", {"key": tid, "kind": "approval" if approvals else "needs_you", "title": title,
                                       "goal": _clip(view.get("goal"), 120), "watch": True})

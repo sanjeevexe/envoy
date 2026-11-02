@@ -10,7 +10,8 @@ import re
 import pytest
 
 from fakes import SECRET, TOOLS, FakeEnvoy, FakeModel, call, reasoning, say, view
-from meta_agent.agent import Agent, CostLog, approval_rule, approval_title, clean_schema, fn_name, function_tools, summarize, task_phase
+from meta_agent.agent import (Agent, CostLog, approval_rule, approval_title, clean_schema, fn_name, function_tools, summarize, task_phase,
+                              wait_title)
 from meta_agent.mcp_client import Tool
 
 
@@ -240,6 +241,9 @@ def test_each_result_gets_a_line_for_the_feed():
     assert summarize("memory_get", {"entity_id": "f1", "name": "SL 482", "facts": [{"attribute": "gate", "value": "B12"}]}, False) == "SL 482: 1 facts: gate B12"
     assert approval_title('tap "Confirm check-in" in com.skylark.air (routine skylark_check_in_flight v1)') == "Confirm check-in"
     assert approval_title("Pay $18.42") == "Pay $18.42"
+    assert wait_title("Envoy wants to use Envoy's phone for this task") == "Use Envoy's phone?"
+    assert wait_title("Target blocks emulators: Envoy wants to use your Pixel 5 for this task") == "Use your Pixel 5? (Target blocks emulators)"
+    assert wait_title("you touched the phone") == "you touched the phone" and wait_title(None) == "Envoy needs the user on the phone"
     assert task_phase(view("running")) == "working" and task_phase(view("done")) == "final:done"
     assert task_phase(view("waiting_approval", approvals=["b", "a"])) == "approval:a,b" and task_phase(view("needs_you")) == "user:needs_you"
 

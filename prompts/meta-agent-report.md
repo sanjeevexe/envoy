@@ -64,6 +64,25 @@ no other file.
     nothing was checked in.
   - **Count:** with Muse and the Spark agent, that's three MCP clients tested.
 
+## The cross-post dry run (Nov 1, 23:22–23:36)
+
+Evidence is in `agents/meta-agent/evidence/2026-11-01/crosspost/`. It ran on a `:8765` copy with the Pixel 5, using
+showcase's four routines shared with agents, and every post was declined on the copy. Nothing was posted.
+
+- **Run 1, three posts** (main `5d757fa`, with the same reel, TikTok and YouTube routines as `aa4614e`):
+  - Spark called the three routine tools at once, then one `wait_for_task`.
+  - TikTok and YouTube first failed without `phone`, because only Instagram is set to the phone, as on :8700. Spark
+    retried those two with `phone: "phone"`.
+- **Run 2, four posts with the Story poll** (main `aa4614e`, all three apps set to the phone): four calls went straight
+  to the Pixel, then one wait.
+- **Final buttons:** each reached its button (Share, Post, Upload Short, Your story) in 31–86 s once it had the phone.
+  Posts run one at a time.
+- **Envoy's model calls:** TikTok uses 7 vision calls (~$0.02). The others used none, and YouTube needed no repair.
+- **For filming on :8700:**
+  - Each routine task asks "use Envoy's phone?" before it runs, so the iPhone gets a phone OK and then a post approval
+    for every post.
+  - Setting TikTok and YouTube to the phone (Settings › Phones, the user's call) saves Spark's failed first calls.
+
 ## Not done yet
 
 - **A task on the live :8700:** only with the coordinator's OK.
@@ -90,7 +109,9 @@ no other file.
 
 ## Spend
 
-About $0.16 of Meta credit in all:
+**The cross-post dry run:** $0.125. Spark took $0.087 over 22 calls, and the copy Envoy's TikTok vision calls $0.038.
+
+**Before it:** about $0.16 of Meta credit in all:
 - $0.083: the agent's 23 Spark calls;
 - $0.073: the copy Envoy's own 9 calls (memory, app notes and a patch after the runs);
 - $0.001: one probe of the function-call shape.
