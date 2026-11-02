@@ -550,24 +550,30 @@ def disambiguate(loc: Locator, target: Element, screen: ScreenState, examples: d
 # A list's scroll indicator: the date or letter label of a fast scroller, a scroll bar's thumb. Apps show it only while the
 # list moves (Instagram's gallery shows "Today" for a moment as it opens), so a check on it holds by chance.
 _SCROLL_INDICATOR = re.compile(r"fast_?scroll|scroll_?(?:bar|indicator|thumb|bubble|label|handle)|scrubber|section_?index", re.I)
+# System UI drawn over the app: a heads-up notification (Nov 2, Amazon's start screen had CapCut's "An amazing template for
+# you!" over it, and the routine waited for it on every rerun). Traces keep the element IDs, not each element's package.
+_SYSTEM_UI = "com.android.systemui:"
 
 
 def _passing(c: Check, screen: ScreenState, nxt: ScreenState | None, examples: dict[str, str]) -> str | None:
-    """Why a check on `screen` names something only passing through it (None: it doesn't): a scroll indicator, or something
-    the same screen no longer shows when the next step starts (`nxt`, its before-screen). On Nov 1 a story replay scrolled
-    the gallery to find Instagram's fast-scroll "Today" (it shows while the grid moves), and the next step took the wrong clip."""
+    """Why a check on `screen` names something only passing through it (None: it doesn't): a scroll indicator, a system
+    notification drawn over the app, or something the same screen no longer shows when the next step starts (`nxt`, its
+    before-screen). On Nov 1 a story replay scrolled the gallery to find Instagram's fast-scroll "Today" (it shows while the
+    grid moves), and the next step took the wrong clip."""
     if c.kind not in ("element_present", "text_visible"):
         return None
     o = chk.evaluate(c, screen, examples)
     if not o.passed:
         return None
     k: int | None = o.element.index if o.element is not None else None
-    for _ in range(6):  # the element and its nearest ancestors
+    for depth in range(64):  # the element and its ancestors
         if k is None or not 0 <= k < len(screen.elements):
             break
         x = screen.elements[k]
-        if _SCROLL_INDICATOR.search(short_id(x.resource_id) or "") or _SCROLL_INDICATOR.search(x.cls.rsplit(".", 1)[-1]):
+        if depth < 6 and (_SCROLL_INDICATOR.search(short_id(x.resource_id) or "") or _SCROLL_INDICATOR.search(x.cls.rsplit(".", 1)[-1])):
             return "a scroll indicator"
+        if x.resource_id.startswith(_SYSTEM_UI):
+            return "a system notification drawn over the app"
         k = x.parent
     if nxt is not None and nxt.activity == screen.activity and jaccard(signature_keys(nxt), signature_keys(screen)) >= 0.6 \
             and not chk.evaluate(c, nxt, examples).passed:
