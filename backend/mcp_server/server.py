@@ -46,11 +46,13 @@ from api.crossapp import lead, may_span_apps
 from api.devices import NAMES
 from api.handoff import HandoffError, read_sidecar
 from api.notifications import redact, update_line
+from api.preflight import step_label
 from api.routing import EMULATOR_REFUSED, blocks_emulator, choose, known_apps
 from api.sharing import tool_names
 from api.task_files import link_base, request_headers
 from memory.retrieval import Retriever
 from memory.service import MemoryService
+from policy.approval_rules import involves_money
 from routines.model import Routine
 
 try:  # "Before I start" (contract 2), from preflight-logins; until it is in main, run_task has no heads_up
@@ -451,7 +453,7 @@ def input_schema(r: Routine) -> tuple[dict[str, Any], list[dict[str, Any]], type
     rows: list[dict[str, Any]] = []
     fields: dict[str, Any] = {}
     for i, (name, spec) in enumerate(r.inputs.items()):
-        what = _line(spec.description or name.replace("_", " "), 200).rstrip(".")
+        what = _line(spec.description or f"The {name.replace('_', ' ')}", 200).rstrip(".")  # the compiler left some blank
         prop: dict[str, Any] = {"type": "string"}
         typ: Any = str
         if spec.type == "date":
@@ -478,16 +480,32 @@ def input_schema(r: Routine) -> tuple[dict[str, Any], list[dict[str, Any]], type
     return schema, rows, create_model(f"{r.routine}_inputs", __base__=RoutineArgs, **fields)
 
 
+def what_it_changes(r: Routine) -> str:
+    """The routine's effect, said plainly for an agent deciding whether to allow the tool: that it only reads, that
+    nothing it does is irreversible, or which of its steps can't be undone and that Envoy asks the user before it."""
+    final = [re.sub(r"\{\{\s*(\w+)(?::\w+)?\s*\}\}", r"<\1>", _line(s.intent, 80)).rstrip(".") for s in r.steps if s.risk == "irreversible"]
+    if final:
+        steps = " and ".join(f'"{x}"' for x in final[:2]) + (f" and {len(final) - 2} more" if len(final) > 2 else "")
+        # As Settings › Approvals decides it: a step that spends money always asks, whatever the routine's own setting.
+        money = any(s.risk == "irreversible" and involves_money(step_label(s), "", r.app) for s in r.steps)
+        return (f"Its step {steps} can't be undone, so Envoy asks the user on their phone first and does it only with their OK"
+                + (": it spends money, so it always asks." if money else " (or a standing approval they gave this routine in Envoy)."))
+    if all(s.risk == "read" for s in r.steps):
+        return "It only reads the app: nothing in it changes."
+    return "Nothing it does is irreversible."
+
+
 def routine_description(r: Routine, app: str, idx: dict[str, Any]) -> str:
-    """What an agent reads about a routine's tool: its intent and app, what it does, its outputs, and how it runs."""
+    """What an agent reads about a routine's tool (and reviews before it allows the tool, as Muse does): what it does and
+    where, what it changes, what comes back, and how it runs."""
     how = "the user doing it once" if r.compiled_from.get("source") == "taught" else "a run"
-    parts = [f"{_sentence(r.intent)}. App: {app} ({r.app}), on a phone Envoy operates."]
+    parts = [f"{_sentence(r.intent)}. Runs a routine Envoy learned in the {app} app ({r.app}), on a phone Envoy operates."]
     if r.description:
         parts.append(_line(r.description, 300))
-    if r.outputs:
-        parts.append(f"Outputs: {', '.join(o.replace('_', ' ') for o in r.outputs)} (in get_task's result once it's done).")
+    parts.append(what_it_changes(r))
+    gives = f": {', '.join(o.replace('_', ' ') for o in r.outputs)}" if r.outputs else ""
+    parts.append(f"Returns a task_id at once; follow it with get_task, whose result has what the run found{gives}.")
     parts.append(LEARNED.format(how=how, date=_learned_on(idx)))
-    parts.append("Returns a task ID; follow it with get_task.")
     return " ".join(parts)
 
 

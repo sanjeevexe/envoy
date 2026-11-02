@@ -81,8 +81,11 @@ def test_the_tool_has_the_routines_inputs_intent_app_outputs_and_how_it_runs(env
     assert t["inputSchema"] == {"type": "object", "properties": {"trip_city": {"type": "string", "description": "Destination city of the flight to check in for"},
                                                                  "phone": {"type": "string", "description": PHONE}}, "required": ["trip_city"]}
     d = t["description"]
-    assert d.startswith("Check in for a SkyLark flight. App: SkyLark (com.skylark.air), on a phone Envoy operates.")
-    assert "Outputs: seat, gate, boarding time, boarding group, flight (in get_task's result once it's done)." in d
+    assert d.startswith("Check in for a SkyLark flight. Runs a routine Envoy learned in the SkyLark app (com.skylark.air), on a phone Envoy operates.")
+    assert ('Its step "Tap Confirm check-in to complete check-in for the flight to <trip_city>" can\'t be undone, so Envoy asks '
+            "the user on their phone first and does it only with their OK (or a standing approval they gave this routine in Envoy).") in d
+    assert ("Returns a task_id at once; follow it with get_task, whose result has what the run found: seat, gate, boarding time, "
+            "boarding group, flight.") in d
     assert ("Learned by Envoy from a run on Oct 27, 2026; replays without model calls while the app looks as it did; anything "
             "irreversible waits for the user's OK on their phone.") in d
     assert t["title"] == "Check in for a SkyLark flight"
@@ -352,3 +355,21 @@ def test_only_a_key_with_run_sees_or_calls_a_shared_routines_tool(env):
         assert "skylark_get_flight_gate" in listed(c)  # Muse's key: every tool
     assert env.started == [("Find the departure gate for a SkyLark flight to a given city", "mcp",
                             {"routine": "skylark_get_flight_gate", "inputs": {"trip_city": "Chicago"}, "phone": "emulator"})]
+
+
+def test_a_tools_description_says_plainly_what_it_changes():
+    """An agent reviews a tool's schema before it allows it (Muse does, P1): the description says whether the routine only
+    reads, changes nothing irreversible, or has a step that can't be undone, which Envoy asks the user about first (always,
+    when it spends money)."""
+    from mcp_server.server import what_it_changes
+    from routines.model import Locator
+    step = lambda risk, intent, text=None: Step(id=intent.split()[0].lower(), intent=intent, risk=risk,
+                                                action=StepAction(kind="tap", target=Locator(text=text or intent)))
+    base = calendar_routine()
+    assert what_it_changes(base) == "It only reads the app: nothing in it changes."
+    assert what_it_changes(base.model_copy(update={"steps": [*base.steps, step("reversible", "Type the title")]})) == "Nothing it does is irreversible."
+    post = base.model_copy(update={"steps": [*base.steps, step("irreversible", "Tap Share to post the reel to {{account}}.", "Share")]})
+    assert what_it_changes(post) == ('Its step "Tap Share to post the reel to <account>" can\'t be undone, so Envoy asks the user on '
+                                     "their phone first and does it only with their OK (or a standing approval they gave this routine in Envoy).")
+    order = base.model_copy(update={"app": "com.dd.doordash", "steps": [*base.steps, step("irreversible", "Place the order", "Place order")]})
+    assert what_it_changes(order).endswith("does it only with their OK: it spends money, so it always asks.")
