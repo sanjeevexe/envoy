@@ -1,6 +1,6 @@
 # Phase 7 results: the final evaluation
 
-**Status (Oct 29, early morning): measurement passes done; AndroidWorld's agent changes tested and not yet merged; the Meta API down since 02:16 ("402 Billing verification failed"), so nothing that calls a model can run until the new account's key is in.** The final numbers come from one run of every suite on the frozen commit, tagged `eval-final` on Nov 2. Until then this file records what the measurement passes found and what changed because of it. Plan: `prompts/phase-7-plan.md`. Report: `eval/results/final/report.md`.
+**Status (Oct 29, early morning): measurement passes done; AndroidWorld's agent changes tested and not yet merged; the Meta API down since 02:16 ("402 Billing verification failed"), so nothing that calls a model can run until the new account's key is in.** The final numbers come from one run of every suite on the frozen commit, tagged `eval-final`; that run moved to Nov 3, 17:00–22:00 ET. Until then this file records what the measurement passes found and what changed because of it. Plan: `prompts/phase-7-plan.md`. Report: `eval/results/final/report.md`.
 
 ## What was built
 
@@ -86,7 +86,7 @@ More than a dozen sessions worked on Envoy that night, so devices and merges wen
 ## Not finished yet
 
 - [x] Every suite's measurement pass, and the fixes they found (1–31).
-- [ ] The final run on `eval-final` (Nov 2), and the hand checks of its shape-graded real-app answers.
+- [ ] The final run on `eval-final` (Nov 3), and the hand checks of its shape-graded real-app answers.
 - [x] The Phase 6 gate on the real phone (Oct 28: a Pixel 5 on Android 13), with portability 18/18, all 10 core routines 30/30, and the stream and live-view numbers: `docs/phase-6-results.md`.
 - [ ] AndroidWorld's agent changes on `main`: SkyLark passed (round 2); the real-app rerun on the over-checking fix decides it (finding 37), then AndroidWorld re-measures its held-out half on what merges.
 - [ ] AndroidWorld's results from the `androidworld` branch.

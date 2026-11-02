@@ -7,6 +7,7 @@ The agent loop: plan, then observe → decide → check policy → act → verif
 | `loop.py` | `AgentRunner.run(goal)`: the loop, limits, stuck recovery and `done` verification. Returns a `RunResult` with status, result, steps, model calls, tokens, cost, approvals and a trace path. |
 | `checks.py` | Success checks evaluated in code on the final screen. `info` checks require the answer to be visible on screen, so answers can't be made up. |
 | `popups.py` | Shared pop-up handler (permission, rating and notification prompts, "app not responding"), answered with the declining option and no model call. |
+| `vision.py` | Finding a described target on a screenshot when the screen has no tree: SAM 3.1 proposes regions and the model picks one, with Muse Spark's visual grounding as the fallback (52 of 52 in Phase 6). |
 | `trace.py` | Run traces in `data/runs/<task_id>/`: `steps.jsonl`, gzipped before and after trees, downscaled screenshots. The input for the routine compiler. |
 
 ## One step

@@ -1,7 +1,7 @@
 # Per-app phone routing and install on demand
 
 Oct 28, 2026. Branch `app-routing` (worktree `~/Desktop/Envoy-app-routing`), cut from main `a4142d5`. Prompt:
-`prompts/app-routing-onboarding.md`. Results: `eval/results/app_onboarding/`.
+`prompts/app-routing-onboarding.md` (not in the public repo). Results: `eval/results/app_onboarding/`.
 
 ## What changed
 

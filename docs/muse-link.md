@@ -1,14 +1,13 @@
 # Muse link: files from the Mac to the phone, and what Muse can see
 
-## For the Muse test (you, about 30 minutes)
+## How Muse connects (Nov 2)
 
-1. In a terminal: `cd ~/Desktop/Envoy/.claude/worktrees/jolly-khayyam-b99b59 && ENVOY_PORT=8742 scripts/start_muse_test.sh` (it prints the URL, the token's last 4 characters and a command that copies the token; it stays open, and Ctrl-C ends it).
-2. In Muse, open the Envoy connector and change its URL to the one the script printed (it ends in `/mcp`).
-3. Run the script's `Copy:` line in another terminal, then paste the token into Muse's secure credentials field for the connector (never into the chat).
-4. When Muse asks, choose **Always allow this site**.
-5. Open **Muse for Mac**, signed in to the same account.
+- **The address.** Muse's Envoy connector points at a permanent public address: the Mac's Tailscale name on port 10000, path `/mcp`. Tailscale Funnel serves that port with `/mcp` and nothing else; `scripts/muse_funnel.sh on|off|status` sets it up. The API accepts that address for `/mcp` alone and refuses anything else Tailscale marks as from the internet.
+- **The key.** It's `MCP_BEARER_TOKEN` from `.env`, pasted into the connector's secure credentials field in Muse, never into the chat. `scripts/rotate_mcp_token.sh` replaces it if it leaks; then Muse needs the new one.
+- **One connector for both.** The Muse app on the iPhone and Muse for Mac share the account, so one connector serves both.
+- **The Oct 29 tests.** These (below) ran against a test copy of the API behind a Cloudflare quick tunnel (`scripts/start_muse_test.sh`), whose address changes every run.
 
-Then tell me in the session. I run Envoy's side (the API copy on :8742) and read its request log; you type what I suggest into Muse.
+Muse is Envoy's front door: the person asks Muse, and Muse calls Envoy's tools. Other agents connect the same way, each with its own key (`docs/agents.md`).
 
 ## What this is
 
@@ -16,6 +15,14 @@ Muse covers the web (its cloud computer) and the Mac (Muse for Mac reaches Messa
 
 1. **A file finished on the Mac reaches the phone's gallery,** through a watched folder (the outbox) or an MCP tool (`send_to_phone`).
 2. **Muse can see what happened on the phone** (`phone_updates`).
+3. **Muse gets files back** from tasks it started (`get_file`, below).
+
+Built since (Nov 1, `docs/technical-design.md`):
+- the routines the person shares with agents are tools of their own, which Muse calls by name;
+- `list_phones` and a `phone` choice on `run_task`, `run_routine` and the routine tools;
+- `phone_updates` also reports routines Envoy learned or repaired, and notifications a watch matched on Envoy's phone.
+
+The section "Nov 2: one request, end to end" (at the end) puts them together.
 
 Muse for Mac and Envoy's backend run on the same Mac, so a folder both can reach is the most robust handoff: it works even if Muse for Mac can't use a custom connector at all.
 
@@ -124,3 +131,14 @@ Oct 29, 1:24–2:12 pm ET, in the Muse app on your iPhone (driven through iPhone
 **Seen along the way:**
 - Muse's Devices page has a **Developer mode** for "pairing community devices not verified by Meta" that "get full access to your agent": left off, but a possible future path for a phone.
 - The watcher's "Put pier-sunset.mp4 …?" stayed pending after Muse had sent the file. Fixed since: when Muse's `send_to_phone` or your own Send puts a file on the phone, its pending offer is withdrawn ("Muse already sent it to your phone", "Sent to your phone"; proactive's `Offers.withdraw`), so a late yes gets "already withdrawn". Asking again for a file already on that phone doesn't put a second copy there.
+
+## Nov 2: one request, end to end (a dry run)
+
+On Nov 2, 11:38–12:20 ET, the person asked Muse for Mac to post one clip from the Mac to Instagram, TikTok and YouTube Shorts, each with the song "golden hour". It ran against the live Envoy and Envoy's phone. The person declined every final step, so nothing was posted. This record comes from the coordinator's notes of the rehearsal; its screenshots aren't in the repo.
+
+- **The path.** Muse copied the clip into Envoy's outbox and called `send_to_phone`. Envoy asked on the iPhone, and the person said yes. Muse then called the shared routine tools by name: `instagram_reel_song`, `tiktok_post_sound` and `youtube_short_sound`.
+- **The runs.** Each task first asked "use Envoy's phone?" on the iPhone. The Reel, the TikTok and the Short each reached their final button with the song and the caption, at 0, 3 and 0 model calls, about 1 min 15 s each after the phone OK.
+- **Back to Muse.** Muse read each result through `phone_updates` and reported it correctly.
+- **Muse does one post per turn.** After starting each task, it ends its turn with reply buttons ("I've approved/declined X in Envoy") and waits for a tap before the next. It also waits once after `send_to_phone`, to check the clip landed, since the routines take the gallery's newest video. Expect about 5 taps in Muse, plus a "use Envoy's phone?" ask and an approval on the iPhone for each post.
+- **Found and fixed.** The poll Story's "use Envoy's phone?" went unanswered for 15 minutes. That silence counted as "use the emulator", so the task moved to an emulator with no Instagram, which opened the Play Store. Since `947bf44` (Nov 2), no answer ends the task as not done, and only the person's "no" moves a task to an emulator.
+- **Still open.** The poll Story routine fails while a Story is already live (backlog #64). Its first tap opens the live Story's poll results.

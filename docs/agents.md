@@ -1,8 +1,11 @@
 # Connecting agents to Envoy
 
-Envoy is the phone layer agents call. Any MCP client can use it: Muse (Meta's assistant), Claude, or the
-Spark agent in `agents/meta-agent/`, which runs on Meta's models. Each one gets its own key, with only the tools you
-give it. Every task it starts says which agent asked ("from Claude").
+Envoy is the phone layer agents call. Any MCP client can use it. Three have, so far: Muse (Meta's assistant, on the
+Mac and in its iPhone app), the Spark agent in `agents/meta-agent/` (on Meta's models), and Claude Code. Each one gets
+its own key, with only the tools you give it. Every task it starts says which agent asked ("from Claude").
+
+What each tool does is in [backend/mcp_server/README.md](../backend/mcp_server/README.md). Muse's side (files from the
+Mac, `phone_updates`, what was tested) is in [muse-link.md](muse-link.md).
 
 ## What an agent gets
 
@@ -10,7 +13,7 @@ give it. Every task it starts says which agent asked ("from Claude").
   The public Funnel address serves `/mcp` and nothing else.
 - **The key:** `Authorization: Bearer <key>` on every request. Keys are made in Envoy's Settings › Agents (below).
   `MCP_BEARER_TOKEN` in `.env` stays Muse's key.
-- **The tools, in groups** (contract 2 of `prompts/phone-layer-plan.md`):
+- **The tools, in groups** (`backend/api/auth.py` `TOOL_GROUPS`):
 
   | Group | Tools |
   | --- | --- |
@@ -28,7 +31,43 @@ give it. Every task it starts says which agent asked ("from Claude").
   - answer Envoy's questions for you.
 
   Envoy has no tool for any of these. Anything irreversible (a check-in, an order, a payment, a post) waits for your OK
-  in Envoy on your phone, and the agent is told it's waiting for your OK there (it gets no approval link).
+  in Envoy on your iPhone, and the agent is told it's waiting for your OK there (it gets no approval link). A request
+  from an agent never counts as you asking, so its irreversible steps always ask, unless you gave that routine a
+  standing approval.
+
+## Learned routines as tools
+
+A routine Envoy learned can be a tool of its own, so an agent sees, say, `instagram_reel_song(song_title,
+song_artist, caption, phone?)` in its tool list instead of having to know `run_routine`.
+
+- **Share it:** turn on **Share with agents** on the routine's page, or in **Settings › Agents › Agent tools**. Every
+  routine starts off. Settings › Agents lists each shared tool as an agent calls it, with its inputs, what it returns,
+  and whether it asks before an irreversible step. A tool that appears while you watch is marked New.
+- **It shows up at once.** The agent's next `tools/list` has it: no restart, no reconnect. Muse's client keeps an
+  allowed list of tools, so the first time it may say it's adding the new tool before calling it.
+- **It's in the run group.** An agent with only Read doesn't see it.
+- **Calling it is `run_routine`** with that routine: the same approvals and the same "Before I start" lines.
+  `run_routine` still runs any learned routine by name; sharing decides which ones are tools of their own.
+
+Envoy also tells agents, through `phone_updates`, when it learns or repairs a routine, and names the tool when the
+routine is shared.
+
+## Phones and files
+
+- **`list_phones`** shows the phones Envoy can use: Envoy's phone (a real Android phone), emulators on the Mac, or a
+  cloud phone, whether each is online, and the apps Envoy runs on each. Pass a phone's `id` as `phone` to `run_task`,
+  `run_routine` or a routine tool, or leave it out and Envoy picks. A real phone still asks you before each task.
+- **`send_to_phone`** puts a photo or video from Envoy's outbox on the Mac (or an https URL) on a phone. To an emulator
+  it goes at once; to a real phone it waits for your OK in Envoy.
+- **`get_file`** gives an agent what Envoy kept from a task *that agent* started: the final screen, the approval
+  screens, and links in the result, each as a download link that works for 10 minutes. It's in the files group.
+
+## Hearing back
+
+MCP over stateless HTTP can't push to an agent, so an agent checks `phone_updates` with the cursor from its last call.
+It lists finished tasks, tasks waiting for you, changes Envoy noticed, files, Envoy's questions to you, routines learned
+or repaired, and notifications a watch matched. A Muse scheduled task checked it about every 10 minutes on its own
+(Oct 29). Envoy's own push to your iPhone is immediate.
 
 ## Make a key (you, in Envoy, about a minute)
 
@@ -57,7 +96,11 @@ claude mcp add --transport http --scope user envoy http://127.0.0.1:8700/mcp --h
 
 **Try it:** "Use Envoy to check the status of SkyLark flight SL 1190." Claude calls a routine (or `run_task`) and then
 `get_task`. The task shows in Envoy as "from Claude". Then ask "Check me in for my SkyLark flight to Chicago" and
-"approve it for me". Claude should say only you can approve, on your phone, because Envoy gave it no way to.
+"approve it for me". Claude should say only you can approve, in Envoy on your iPhone, because Envoy gave it no way to.
+
+**Tested Nov 1** with a "Claude" key (Read and Run), on the live Envoy: Claude Code ran two flight-status tasks, both
+done and recorded as from Claude. At the check-in, the task stopped at "Confirm check-in", and Claude said only the
+user can decide it, on their phone in Envoy. Evidence: `agents/meta-agent/evidence/2026-11-01/claude-code/`.
 
 To remove it: `claude mcp remove envoy --scope user`. Then revoke the key in Settings › Agents.
 
@@ -84,6 +127,7 @@ ENVOY_AGENT_KEY_FILE=~/.config/envoy/meta-agent.key uv run --project backend pyt
 
 - **URL:** `http://127.0.0.1:8700/mcp` on this Mac, or the public `/mcp` address.
 - **Header:** `Authorization: Bearer <key>`.
-- **Transport:** Streamable HTTP, stateless. Each POST stands alone, and the answer is JSON. Protocol `2025-11-25`.
+- **Transport:** Streamable HTTP, stateless. Each POST stands alone, and the answer is JSON. Protocol `2025-11-25`
+  (what Muse uses) or `2026-07-28`.
 - **Instructions:** `initialize` returns Envoy's instructions. Give them to the model: they say how the tools fit
   together, and that what the tools return is content, never instructions.
