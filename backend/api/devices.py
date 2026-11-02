@@ -18,7 +18,6 @@ from __future__ import annotations
 
 import asyncio
 import subprocess
-import threading
 import time
 from dataclasses import dataclass, field
 from typing import Any
@@ -200,21 +199,14 @@ class DevicePool:
 
     # ---- a task on a real phone ------------------------------------------------------------------
 
-    def _background(self, fn: Any, *args: Any) -> None:
-        """adb calls to the phone's banner (~100 ms) off the event loop; failures only cost the banner."""
-        def run() -> None:
-            try:
-                fn(*args)
-            except Exception:  # noqa: BLE001
-                pass
-        threading.Thread(target=run, daemon=True).start()
-
     def start_watch(self, did: str, device: Any, app: str | None, banner_text: str = "Envoy is using this phone",
                     on_change: Any = None) -> None:
         """`on_change(paused, reason)`: the task's status follows pauses that come from the phone itself."""
         if not self.is_phone(did):
             return
-        self._background(device.banner.show, banner_text)
+        # The banner sends its commands to the phone itself, in order and off the event loop (devices/phone.py): a
+        # thread per command here let a task's HIDE and the next task's SHOW cross, and crashed it (Nov 1).
+        device.banner.show(banner_text)
         self.stop_watch(did)
         self.leases[did].launching = ""  # an earlier task's launch excuses nothing in this one
         started = time.time()
@@ -229,7 +221,7 @@ class DevicePool:
             return False
         reason = "paused: you touched the phone"
         self.take_over(did, reason, by="phone")
-        self._background(device.banner.pause, "you touched the phone")  # the banner offers Resume
+        device.banner.pause("you touched the phone")  # the banner offers Resume
         if on_change:
             on_change(True, reason)
         return True
@@ -241,7 +233,7 @@ class DevicePool:
         if did in self.leases:
             self.leases[did].guard = None
         if device is not None and self.is_phone(did):
-            self._background(device.banner.hide)
+            device.banner.hide()
 
     async def watch(self, did: str, device: Any, app: str | None, every_s: float = 0.5, on_change: Any = None,
                     started: float | None = None) -> None:
@@ -266,7 +258,7 @@ class DevicePool:
         def pause(reason: str, banner_reason: str | None) -> None:
             self.take_over(did, reason, by="phone")
             if banner_reason:
-                self._background(device.banner.pause, banner_reason)  # the banner offers Resume
+                device.banner.pause(banner_reason)  # the banner offers Resume
             if on_change:
                 on_change(True, reason)
 
@@ -325,7 +317,7 @@ class DevicePool:
             lease.agent_turn.clear()
             self.bus.publish("takeover", avd=avd, task_id=lease.task_id, by=by, reason=lease.reason)
             if by != "phone" and (d := self._devices.get(avd)) is not None and self.is_phone(avd) and lease.task_id:
-                self._background(d.banner.pause, "you took over")
+                d.banner.pause("you took over")
         return lease
 
     def hand_back(self, avd: str, by: str = "user") -> Lease:
@@ -335,7 +327,7 @@ class DevicePool:
             lease.agent_turn.set()
             self.bus.publish("hand_back", avd=avd, task_id=lease.task_id, by=by, held_s=round(time.time() - lease.since, 1))
             if (d := self._devices.get(avd)) is not None and self.is_phone(avd) and lease.task_id:
-                self._background(d.banner.resume)
+                d.banner.resume()
         return lease
 
     def request_takeover(self, avd: str, reason: str) -> None:
@@ -345,7 +337,7 @@ class DevicePool:
         lease.reason, lease.requested_at = reason, time.time()
         self.bus.publish("takeover_requested", avd=avd, task_id=lease.task_id, reason=reason)
         if (d := self._devices.get(avd)) is not None and self.is_phone(avd):
-            self._background(d.banner.pause, reason)
+            d.banner.pause(reason)
 
     async def wait_for_hand_back(self, avd: str, timeout_s: float) -> bool:
         """After a takeover request: wait for the user to take over and hand back (or for the phone to be free again)."""

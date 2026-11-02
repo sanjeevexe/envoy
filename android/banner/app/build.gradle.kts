@@ -12,8 +12,8 @@ android {
         applicationId = "ai.envoy.banner"
         minSdk = 29
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2  // Envoy reinstalls the banner when the built one is newer than the phone's (devices/phone.py)
+        versionName = "1.1"
     }
 
     compileOptions {

@@ -113,49 +113,144 @@ def is_physical_input(line: str) -> bool:
     return kind == "EV_KEY" and value == "DOWN"
 
 
+ASIDE_SINCE = 2  # the banner version that steps aside for a tap (ASIDE, BACK) without stopping its service
+
+
+def built_version(apk: Path | None = None) -> int:
+    """The versionCode of the banner built in android/banner (its output-metadata.json); 0 if none is built."""
+    apk = apk or BANNER_APK
+    if not apk.exists():
+        return 0
+    try:
+        return int(json.loads((apk.parent / "output-metadata.json").read_text())["elements"][0]["versionCode"])
+    except Exception:  # noqa: BLE001 - an APK without its metadata: the first version
+        return 1
+
+
+def installed_version(out: str) -> int:
+    """The banner's versionCode from `pm list packages --show-versioncode ai.envoy.banner`; 0 if it isn't installed."""
+    m = re.search(rf"^package:{re.escape(BANNER_PACKAGE)} versionCode:(\d+)\s*$", out, re.M)
+    return int(m.group(1)) if m else 0
+
+
 class Banner:
-    """The pill on the phone's screen while Envoy works on it (android/banner)."""
+    """The pill on the phone's screen while Envoy works on it (android/banner).
+
+    Its commands reach the phone one at a time, in the order Envoy gives them, from a thread of the Banner's own; the
+    callers don't wait for adb (~100 ms each), except a step aside before a tap. Each command was a thread of its own
+    before, so a task's HIDE and the next task's SHOW went out together, the HIDE stopped the service with the SHOW's
+    start pending, and Android 13 crashed the banner ("Envoy banner keeps stopping", Pixel 5, Nov 1). Now a HIDE still
+    waiting when the next SHOW comes is dropped (the service just goes on), and a banner that isn't showing gets no HIDE.
+    """
 
     def __init__(self, serial: str) -> None:
         self.serial = serial
         self.ready = False
+        self.installed = 0  # the banner's versionCode on the phone, once install() has looked
         self.visible = False  # shown by Envoy and not hidden since
         self.text = "Envoy is using this phone"
+        self._pending: list[tuple[str, tuple[str, ...], threading.Event | None]] = []
+        self._busy = False  # a command is on its way to the phone
+        self._cv = threading.Condition()
+        self._worker: threading.Thread | None = None
 
     def _svc(self, action: str, *extra: str) -> None:
         adb(self.serial, "shell", "am", "start-foreground-service", "-n", f"{BANNER_PACKAGE}/.BannerService",
             "-a", f"{BANNER_PACKAGE}.{action}", *extra, timeout=15)
 
     def install(self) -> bool:
-        """Install the banner if it isn't (or is older), and allow its overlay. False if the APK hasn't been built."""
+        """Install the banner if it isn't on the phone, or if the one built in android/banner is newer (its versionCode),
+        and allow its overlay. False if there is none on the phone and none built."""
         if self.ready:
             return True
-        listed = adb(self.serial, "shell", "pm", "list", "packages", BANNER_PACKAGE, timeout=10).stdout
-        if f"package:{BANNER_PACKAGE}" not in listed:
-            if not BANNER_APK.exists():
-                return False
+        have = installed_version(adb(self.serial, "shell", "pm", "list", "packages", "--show-versioncode", BANNER_PACKAGE,
+                                     timeout=10).stdout)
+        built = built_version()
+        if built > have:
             adb(self.serial, "install", "-r", "-g", str(BANNER_APK), timeout=120, check=True)
+            have = built
+        if not have:
+            return False
         adb(self.serial, "shell", "appops", "set", BANNER_PACKAGE, "SYSTEM_ALERT_WINDOW", "allow", timeout=10)
-        self.ready = True
+        self.installed, self.ready = have, True
         return True
 
     def show(self, text: str) -> None:
-        if self.install():
-            self.text, self.visible = text, True
-            self._svc("SHOW", "--es", "text", _shell_quote(text[:60]))
+        self.text, self.visible = text, True
+        self._send("SHOW", "--es", "text", _shell_quote(text[:60]))
 
     def pause(self, reason: str) -> None:
-        if self.ready:
-            self._svc("PAUSE", "--es", "reason", _shell_quote(reason[:80]))
+        self._send("PAUSE", "--es", "reason", _shell_quote(reason[:80]))
 
     def resume(self) -> None:
-        if self.ready:
-            self._svc("RESUME")
+        self._send("RESUME")
 
     def hide(self) -> None:
-        if self.ready:
-            self.visible = False
-            self._svc("HIDE")
+        if not self.visible:  # nothing showing: starting the service only to stop it again is how the crash began
+            return
+        self.visible = False
+        self._send("HIDE")
+
+    def step_aside(self) -> None:
+        """Out of the way of a tap Envoy makes under the pill (back with step_back); returns once the phone has it."""
+        self._send("ASIDE", wait=True)
+
+    def step_back(self) -> None:
+        self._send("BACK")
+
+    def _send(self, action: str, *extra: str, wait: bool = False) -> None:
+        done = threading.Event() if wait else None
+        with self._cv:
+            if action == "SHOW" and self._pending and self._pending[-1][0] == "HIDE":
+                self._pending.pop()  # the next task's banner right behind the last one's: the service keeps running
+            self._pending.append((action, extra, done))
+            if self._worker is None:
+                self._worker = threading.Thread(target=self._run, name=f"banner-{self.serial}", daemon=True)
+                self._worker.start()
+            self._cv.notify_all()
+        if done is not None:
+            done.wait(20)
+
+    def _run(self) -> None:
+        while True:
+            with self._cv:
+                if not self._pending:
+                    self._cv.wait(30)
+                if not self._pending:  # idle: the next command starts another thread
+                    self._worker = None
+                    return
+                action, extra, done = self._pending.pop(0)
+                self._busy = True
+            try:
+                self._do(action, extra)
+            except Exception:  # noqa: BLE001 - a command that fails costs only the banner
+                pass
+            finally:
+                with self._cv:
+                    self._busy = False
+                    self._cv.notify_all()
+                if done is not None:
+                    done.set()
+
+    def _do(self, action: str, extra: tuple[str, ...]) -> None:
+        if action == "SHOW":
+            if not self.install():
+                return
+        elif not self.ready:
+            return
+        if action in ("ASIDE", "BACK") and self.installed < ASIDE_SINCE:  # an older banner: hidden and shown again
+            action, extra = ("HIDE", ()) if action == "ASIDE" else ("SHOW", ("--es", "text", _shell_quote(self.text[:60])))
+        self._svc(action, *extra)
+
+    def wait_idle(self, timeout_s: float = 10.0) -> bool:
+        """Until every command given so far has gone to the phone; False if that took longer than `timeout_s`."""
+        end = time.time() + timeout_s
+        with self._cv:
+            while self._pending or self._busy:
+                if end - time.time() <= 0:
+                    return False
+                self._cv.wait(end - time.time())
+        return True
 
     def state(self) -> dict[str, Any]:
         """{paused, reason, changed_at (s), shown}; paused False if the banner can't be read."""
@@ -208,17 +303,18 @@ class PhoneDevice(AndroidDevice):
     def _tap(self, x: int, y: int, hold_s: float = 0.0) -> None:
         """A tap under the banner would land on the banner, not the app: it is a window of its own above the app, and on
         its Pause button an injected tap paused the run as if you had pressed it (Pixel 5, where the pill sits over the
-        app's top bar, the search box of many apps). The banner steps aside for that tap and comes back."""
+        app's top bar, the search box of many apps). The banner steps aside for that tap and comes back (its service
+        running throughout, since version 2: stopping and starting it for every such tap is what crashed it)."""
         rect = self._banner_rect()
         stepped = rect is not None and rect[0] <= x <= rect[2] and rect[1] <= y <= rect[3]
         if stepped:
-            self.banner.hide()
+            self.banner.step_aside()
             time.sleep(0.15)
         try:
             path = self._tap_now(x, y, hold_s)
         finally:
             if stepped:
-                self.banner.show(self.banner.text)
+                self.banner.step_back()
         self._log_tap(x, y, hold_s, path, stepped)
 
     def _log_tap(self, x: int, y: int, hold_s: float, path: str, stepped: bool) -> None:

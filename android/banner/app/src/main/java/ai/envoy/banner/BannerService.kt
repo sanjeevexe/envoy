@@ -26,9 +26,18 @@ import android.widget.TextView
  *   adb shell am start-foreground-service -n ai.envoy.banner/.BannerService -a ai.envoy.banner.PAUSE --es reason "…"
  *   adb shell am start-foreground-service -n ai.envoy.banner/.BannerService -a ai.envoy.banner.RESUME
  *   adb shell am start-foreground-service -n ai.envoy.banner/.BannerService -a ai.envoy.banner.HIDE
+ *   adb shell am start-foreground-service -n ai.envoy.banner/.BannerService -a ai.envoy.banner.ASIDE   (since version 2)
+ *   adb shell am start-foreground-service -n ai.envoy.banner/.BannerService -a ai.envoy.banner.BACK    (since version 2)
  *
  * Pause and Resume on the pill change the state the Mac reads through StateProvider. The window never takes focus
- * (the keyboard stays with the app) and only the pill itself is touchable.
+ * (the keyboard stays with the app) and only the pill itself is touchable. ASIDE and BACK move the pill out of the way of
+ * a tap Envoy makes under it and bring it back, leaving its state and the service as they are.
+ *
+ * Every start-foreground-service promises a startForeground() call, and Android 12+ crashes the app
+ * (ForegroundServiceDidNotStartInTimeException, "Envoy banner keeps stopping") if the service is stopped while a start
+ * still owes one. So the service is in the foreground from onCreate and on every command, and HIDE stops it only when
+ * no later command has arrived (stopSelf(startId)): a HIDE and the next task's SHOW right behind it crashed the Pixel 5
+ * twice on Nov 1, when plain stopSelf() brought the service down with the SHOW still pending.
  */
 class BannerService : Service() {
     private var view: LinearLayout? = null
@@ -38,8 +47,13 @@ class BannerService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? = null
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    override fun onCreate() {
+        super.onCreate()
         startInForeground()
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        startInForeground()  // first, whatever the command: this start's promise is kept before anything else runs
         when (intent?.action) {
             ACTION_SHOW -> {
                 text = intent.getStringExtra("text") ?: text
@@ -51,12 +65,19 @@ class BannerService : Service() {
             ACTION_HIDE -> {
                 hide()
                 State.set(this, paused = false, reason = "", shown = false)
-                stopForeground(STOP_FOREGROUND_REMOVE)
-                stopSelf()
+                stopWhenIdle(startId)
             }
+            ACTION_ASIDE -> hide()
+            ACTION_BACK -> if (State.shown(this)) show() else stopWhenIdle(startId)
             else -> show()
         }
         return START_NOT_STICKY
+    }
+
+    /** Out of the foreground and stopped, unless a command arrived after this one: that one still owes its startForeground(). */
+    private fun stopWhenIdle(startId: Int) {
+        stopForeground(STOP_FOREGROUND_REMOVE)
+        stopSelf(startId)
     }
 
     override fun onDestroy() {
@@ -68,7 +89,9 @@ class BannerService : Service() {
 
     private fun startInForeground() {
         val nm = getSystemService(NotificationManager::class.java)
-        nm.createNotificationChannel(NotificationChannel(CHANNEL, "Envoy at work", NotificationManager.IMPORTANCE_LOW))
+        if (nm.getNotificationChannel(CHANNEL) == null) {
+            nm.createNotificationChannel(NotificationChannel(CHANNEL, "Envoy at work", NotificationManager.IMPORTANCE_LOW))
+        }
         val n = Notification.Builder(this, CHANNEL)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentTitle("Envoy is using this phone")
@@ -126,6 +149,8 @@ class BannerService : Service() {
         const val ACTION_PAUSE = "ai.envoy.banner.PAUSE"
         const val ACTION_RESUME = "ai.envoy.banner.RESUME"
         const val ACTION_HIDE = "ai.envoy.banner.HIDE"
+        const val ACTION_ASIDE = "ai.envoy.banner.ASIDE"
+        const val ACTION_BACK = "ai.envoy.banner.BACK"
     }
 }
 
@@ -133,6 +158,7 @@ class BannerService : Service() {
 object State {
     private fun prefs(c: Context) = c.getSharedPreferences("state", Context.MODE_PRIVATE)
     fun paused(c: Context) = prefs(c).getBoolean("paused", false)
+    fun shown(c: Context) = prefs(c).getBoolean("shown", false)
     fun set(c: Context, paused: Boolean, reason: String, shown: Boolean = true) {
         prefs(c).edit().putBoolean("paused", paused).putString("reason", reason).putBoolean("shown", shown)
             .putLong("changed_at", System.currentTimeMillis()).apply()

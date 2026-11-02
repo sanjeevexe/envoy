@@ -10,7 +10,9 @@ from __future__ import annotations
 import asyncio
 import json
 import sys
+import threading
 from pathlib import Path
+from types import SimpleNamespace
 
 from models.schemas import CompiledRoutine
 from routines.compiler import compile_trace
@@ -802,16 +804,137 @@ def test_a_tap_under_the_phone_banner_steps_the_banner_aside():
     s.elements[1].package = BANNER_PACKAGE  # the pill, as the Pixel 5 put it: over the app's search box
     dev._last = s
     dev.banner.show("Envoy is using this phone")
+    assert dev.banner.wait_idle()
     calls.clear()
     dev._tap(540, 200)  # Gmail's search box, under the pill
-    assert calls == ["HIDE", "tap 540,200", "SHOW"] and dev.banner.visible
+    assert dev.banner.wait_idle()
+    assert calls == ["HIDE", "tap 540,200", "SHOW"] and dev.banner.visible  # a banner older than ASIDE_SINCE
+    dev.banner.installed = 2
+    calls.clear()
+    dev._tap(540, 200)
+    assert dev.banner.wait_idle()
+    assert calls == ["ASIDE", "tap 540,200", "BACK"]  # version 2: the service keeps running for the tap
     calls.clear()
     dev._tap(540, 1200)  # elsewhere: the banner stays
     assert calls == ["tap 540,1200"]
     dev.banner.hide()
+    assert dev.banner.wait_idle()
     calls.clear()
     dev._tap(540, 200)  # no banner showing: nothing to step aside
     assert calls == ["tap 540,200"]
+
+
+class _BannerOnAPhone:
+    """devices.phone.Banner with adb replaced: each command it sends is recorded, and the first can be held back (the
+    phone still busy with it) while more are given."""
+
+    def __init__(self, installed: int = 2) -> None:
+        from devices.phone import Banner
+        self.sent: list[str] = []
+        self.hold = threading.Event()
+        self.hold.set()
+        outer = self
+
+        class Recorded(Banner):
+            def _svc(self, action, *extra):
+                outer.hold.wait(5)
+                outer.sent.append(action if action != "SHOW" else f"SHOW {extra[-1]}")
+
+            def state(self):
+                return {"paused": False, "reason": "", "changed_at": 0.0, "shown": True}
+        self.banner = Recorded("no-such-phone")
+        self.banner.ready, self.banner.installed = True, installed
+
+
+def test_banner_commands_reach_the_phone_in_order_from_one_thread():
+    b = _BannerOnAPhone()
+    b.hold.clear()  # the phone is still taking the first command while the next ones are given
+    b.banner.show("Envoy is using this phone")
+    b.banner.pause("you touched the phone")
+    b.banner.resume()
+    b.hold.set()
+    assert b.banner.wait_idle()
+    assert b.sent == ["SHOW 'Envoy is using this phone'", "PAUSE", "RESUME"]
+
+
+def test_the_next_tasks_banner_right_behind_a_hide_keeps_the_service_running():
+    """Nov 1, Pixel 5: a task's HIDE and the next task's SHOW went out together (a thread each), the HIDE stopped the
+    service with the SHOW's start pending, and Android 13 crashed it ("Envoy banner keeps stopping"). A HIDE still waiting
+    when the SHOW comes is dropped; the SHOW alone sets the banner up for the new task."""
+    b = _BannerOnAPhone()
+    b.banner.show("Task one")
+    assert b.banner.wait_idle()
+    b.hold.clear()
+    b.banner.pause("you touched the phone")  # on its way when the task ends
+    b.banner.hide()
+    b.banner.show("Task two")
+    b.hold.set()
+    assert b.banner.wait_idle()
+    assert b.sent == ["SHOW 'Task one'", "PAUSE", "SHOW 'Task two'"]
+
+
+def test_a_banner_that_isnt_showing_gets_no_hide():
+    b = _BannerOnAPhone()
+    b.banner.hide()  # a task that ended before its banner showed, or a second hide
+    b.banner.show("Envoy is using this phone")
+    b.banner.hide()
+    assert b.banner.wait_idle()
+    b.banner.hide()
+    assert b.banner.wait_idle()
+    assert b.sent == ["SHOW 'Envoy is using this phone'", "HIDE"]
+
+
+def test_the_banner_is_reinstalled_when_the_one_built_is_newer(monkeypatch, tmp_path):
+    from devices import phone
+    apk = tmp_path / "app-debug.apk"
+    apk.write_bytes(b"apk")
+    (tmp_path / "output-metadata.json").write_text(json.dumps({"elements": [{"versionCode": 2, "versionName": "1.1"}]}))
+    monkeypatch.setattr(phone, "BANNER_APK", apk)
+    on_phone = {"code": 1}
+    ran: list[str] = []
+
+    def fake_adb(serial, *args, **kw):
+        ran.append(" ".join(args[:2]))
+        out = f"package:{phone.BANNER_PACKAGE} versionCode:{on_phone['code']}\n" if on_phone["code"] else ""
+        if args[:2] == ("install", "-r"):
+            on_phone["code"] = 2
+        return SimpleNamespace(stdout=out if "list" in args else "")
+    monkeypatch.setattr(phone, "adb", fake_adb)
+    b = phone.Banner("no-such-phone")
+    assert b.install() and b.installed == 2 and "install -r" in ran  # version 1 on the phone, 2 built: reinstalled
+    ran.clear()
+    b = phone.Banner("no-such-phone")
+    assert b.install() and b.installed == 2 and "install -r" not in ran  # the same version: left as it is
+    monkeypatch.setattr(phone, "BANNER_APK", tmp_path / "missing.apk")
+    on_phone["code"] = 0
+    assert phone.Banner("no-such-phone").install() is False  # none on the phone and none built
+    assert phone.built_version(tmp_path / "missing.apk") == 0
+    assert phone.installed_version(f"package:{phone.BANNER_PACKAGE}.extra versionCode:9\n") == 0
+
+
+def test_back_to_back_tasks_on_a_phone_send_one_show_and_no_hide():
+    from api.devices import DevicePool, Lease
+    from api.events import EventBus
+    b = _BannerOnAPhone()
+    pool = DevicePool(EventBus())
+    did = "phone-R5CT"
+    pool.leases[did] = Lease(did)
+    dev = SimpleNamespace(banner=b.banner, touches=SimpleNamespace(touched_since=lambda t: False),
+                          foreground_package=lambda: "com.zhiliaoapp.musically")
+    pool.is_phone = lambda d: True  # type: ignore[method-assign]
+
+    async def two_tasks():
+        pool.start_watch(did, dev, "com.zhiliaoapp.musically")
+        await asyncio.to_thread(b.banner.wait_idle)
+        b.hold.clear()  # the phone is slow to take the next command
+        pool.stop_watch(did, dev)  # the first task ends...
+        pool.start_watch(did, dev, "com.zhiliaoapp.musically")  # ...and the next starts at once
+        b.hold.set()
+        await asyncio.to_thread(b.banner.wait_idle)
+        pool.stop_watch(did, dev)
+        await asyncio.to_thread(b.banner.wait_idle)
+    asyncio.run(two_tasks())
+    assert b.sent == ["SHOW 'Envoy is using this phone'", "SHOW 'Envoy is using this phone'", "HIDE"]
 
 
 def test_a_request_for_an_emulator_that_isnt_running_says_so_plainly_and_names_your_phone():

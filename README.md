@@ -119,7 +119,7 @@ iPhone users use Envoy's emulators; Android users use an emulator or their own p
 Tested on a Google Pixel 5 (Android 13) over USB: the Phase 6 gate passed there (`docs/phase-6-results.md`). Plug the phone in by USB (or pair it for wireless debugging) and allow USB debugging on it. Envoy lists it beside the emulators (the phone picker in the app, Settings › Phones). Tasks stay on an emulator unless you say "… on my phone", set the app to run on your phone, or the app refuses emulators; Envoy then asks first ("Use your Android phone?", on the Mac and as a push on the iPhone). While it works there, a banner on the phone says so; touching the phone, pressing Pause on the banner, or another app coming to the front hands the phone to you, and Resume (on the phone or in the app) gives it back. The live view and takeover work on the phone through scrcpy; sign-in screens are black there, so you sign in on the phone itself.
 
 ```bash
-(cd android/banner && ./gradlew :app:assembleDebug)                    # the banner app Envoy installs on your phone
+(cd android/banner && ./gradlew :app:assembleDebug)                    # the banner app Envoy installs on your phone (again when this build is newer)
 uv run --project backend python eval/run_phase6.py portability --device phone --no-control   # SkyLark routines on the phone
 uv run --project backend python eval/run_phase6.py stream --device phone                     # scrcpy frames and input
 uv run --project backend python eval/phone_check.py device                                   # reading, settling and set-text on the phone
