@@ -44,12 +44,18 @@ Stage 1, Nov 1. Branch `claude/phone-watch-ddc0ae`. Stage 2 (the live check on t
   - One poll takes 60–130 ms on the emulator. The target is under 10 s.
   - The push to a real iPhone wasn't measured: the test copy has no subscriptions. Stage 2 on :8700 measures it with push receipts.
 
+- **The Pixel (Android 13), P2, Nov 1 ~19:20, read-only, counts only:**
+  - Flags print in hex. Every notification in the shade has a key and a post time.
+  - Instagram's one notification has a title, a text and a bigText.
+  - TikTok and YouTube had no notifications yet: nothing has happened on those accounts.
+  - Found and fixed two Android 13 layout facts the fake samples hadn't covered:
+    - Apps add their own extras keys (not `android.*`) between the standard ones.
+    - A multi-line title or ticker prints its later lines from column 0.
+  - Each one made a Play services notification parse with no words. After the fix, every notification with a title and text parses both.
+  - Both cases are now in the fake sample.
+
 ## Not done / not verified
 
-- **The Pixel (Android 13):**
-  - P2 still to run once the coordinator says it's connected and free: `PYTHONPATH=backend uv run --project backend python -m api.notifications report <serial>` (counts only).
-  - Android 13 is expected to print flags in hex. The parser handles both, but only fake samples have shown that so far.
-  - Whether Instagram, TikTok and YouTube put the comment in `android.text` / `android.bigText` is unknown until P2. An app that draws only a custom view would give no words.
 - **Stage 2:** the user comments on the test account's post from their own phone, and we time it to the push and to phone_updates.
 - **phone_updates** shows these events only once agent-door's reader lands (contract 3).
 - An API restart doesn't replay notifications that landed while it was down.
@@ -58,4 +64,4 @@ Stage 1, Nov 1. Branch `claude/phone-watch-ddc0ae`. Stage 2 (the live check on t
 
 - "Envoy watches the notifications on its phone, for the apps you allow, and tells Muse and your iPhone within a few seconds." On the emulator: median ~1.25 s from landing to the push being queued. Measure on the Pixel before quoting a number.
 - "Codes are hidden before anything is stored; nothing else is kept."
-- Not yet: any claim about TikTok or YouTube comments specifically, until P2 and Stage 2 show their notifications carry the words.
+- Not yet: any claim about TikTok or YouTube comments specifically. On the Pixel they had no notifications at P2; Stage 2 will show whether their comment notifications carry the words.
