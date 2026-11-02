@@ -28,6 +28,7 @@ from api.routing import BLOCKS_EMULATOR, EMULATOR_REFUSED, Choice, app_names, as
 from api.runner import FRESH_INSTALL, TaskRunner, app_for
 from api.store import TaskStore
 from devices import phone as phone_mod
+from devices import types as devices_types
 from devices.phone import is_physical_input, phone_id
 from devices.scrcpy import DOWN, MSG_TOUCH, UP, key_msg, text_msg, touch_msg
 from devices.screen import build_state
@@ -359,6 +360,120 @@ def test_an_app_replacing_the_home_screen_on_its_own_still_pauses(monkeypatch):
         dev.front = "com.whatsapp"
     assert _watch(monkeypatch, LAUNCHER, "com.ubercab", a_message) \
         == (True, "paused: com.whatsapp came to the front on its own")
+
+
+TIKTOK = "com.zhiliaoapp.musically"
+
+
+def _cold_start(dev) -> None:
+    """`am start` returns before the app draws its first window: Envoy's launch is over with the old screen in front."""
+    async def am_start(package, fresh=False):
+        pass
+    dev.launch = am_start
+
+
+async def _seconds_later(s: float) -> None:
+    """The watcher sees what is in front now, then `s` seconds pass on the Clock _watch put in api.devices."""
+    await asyncio.sleep(0.06)  # a few of the watcher's checks
+    devices_mod.time.now += s
+    await asyncio.sleep(0.06)
+
+
+def test_an_app_that_draws_its_window_seconds_after_envoys_launch_is_not_a_change(monkeypatch):
+    """Backlog #54 (showcase, Nov 1: task-1101-214220-c7d7, task-1101-214515-ba11): TikTok's cold start after a fresh
+    launch drew its first window ~4 s after `am start` returned, past the 3 s after Envoy's last action, and 2 of 3
+    tiktok_post_sound replays paused with "com.zhiliaoapp.musically came to the front on its own"."""
+    async def first_step(dev, gated):
+        _cold_start(dev)
+        await gated.launch(TIKTOK, fresh=True)
+        await _seconds_later(4)
+        dev.front = TIKTOK
+    assert _watch(monkeypatch, LAUNCHER, TIKTOK, first_step) == (False, "")
+
+
+def test_a_fresh_relaunch_of_the_app_in_front_that_draws_late_is_not_a_change(monkeypatch):
+    """The app is in front when the launch starts (seen then, it is the copy about to be stopped), the force-stop shows
+    the home screen, and the new copy draws its window seconds after the launch returned."""
+    async def relaunch(dev, gated):
+        async def force_stop_then_am_start(package, fresh=False):
+            await asyncio.sleep(0.06)  # the watcher sees the old copy in front
+            dev.front = LAUNCHER
+            await asyncio.sleep(0.06)
+        dev.launch = force_stop_then_am_start
+        await gated.launch(TIKTOK, fresh=True)
+        await _seconds_later(4)
+        dev.front = TIKTOK
+    assert _watch(monkeypatch, TIKTOK, TIKTOK, relaunch) == (False, "")
+
+
+def test_an_app_the_agent_launches_by_name_and_draws_late_is_not_a_change(monkeypatch):
+    async def agent_launch(dev, gated):
+        dev._launchers = {"TikTok": f"{TIKTOK}/com.ss.android.ugc.aweme.splash.SplashActivity"}  # how the phone resolved it
+
+        async def act(action):
+            return SimpleNamespace(ok=True)
+        dev.act = act
+        await gated.act(devices_types.Action(kind="launch", package="TikTok"))
+        await _seconds_later(4)
+        dev.front = TIKTOK
+    assert _watch(monkeypatch, LAUNCHER, None, agent_launch) == (False, "")
+
+
+def test_another_app_while_envoys_launch_draws_still_pauses(monkeypatch):
+    async def a_call(dev, gated):
+        _cold_start(dev)
+        await gated.launch(TIKTOK, fresh=True)
+        await _seconds_later(4)
+        dev.front = "com.android.dialer"  # not the app Envoy launched
+    assert _watch(monkeypatch, LAUNCHER, TIKTOK, a_call) == (True, "paused: com.android.dialer came to the front on its own")
+
+
+def test_the_launched_app_coming_back_on_its_own_later_still_pauses(monkeypatch):
+    """Once the app Envoy launched has been in front, its launch is over: it coming back by itself later (here, from a
+    file picker the agent opened) is judged like any other app."""
+    async def picker_closed(dev, gated):
+        await gated.launch(TIKTOK, fresh=True)  # up at once
+        await _seconds_later(1)
+
+        async def open_picker(action):
+            dev.front = "com.google.android.documentsui"
+            return SimpleNamespace(ok=True)
+        dev.act = open_picker
+        await gated.act(devices_types.Action(kind="tap", element=3))
+        await _seconds_later(4)
+        dev.front = TIKTOK
+    assert _watch(monkeypatch, LAUNCHER, TIKTOK, picker_closed) == (True, f"paused: {TIKTOK} came to the front on its own")
+
+
+def test_an_app_that_comes_up_long_after_envoys_launch_still_pauses(monkeypatch):
+    async def much_later(dev, gated):
+        _cold_start(dev)
+        await gated.launch(TIKTOK, fresh=True)
+        await _seconds_later(devices_mod.LAUNCH_WAIT_S + 5)
+        dev.front = TIKTOK
+    assert _watch(monkeypatch, LAUNCHER, TIKTOK, much_later) == (True, f"paused: {TIKTOK} came to the front on its own")
+
+
+def test_an_earlier_tasks_launch_excuses_nothing_in_the_next(monkeypatch):
+    clock = Clock()
+    monkeypatch.setattr(devices_mod, "time", clock)
+
+    async def scenario():
+        pool = DevicePool(EventBus())
+        did = "phone-R5CT"
+        pool.leases[did] = Lease(did, task_id="task-2", launching=TIKTOK, launched_at=clock.now)  # never came up then
+        dev = FakePhone()
+        dev.front = LAUNCHER
+        pool._devices[did] = dev
+        monkeypatch.setattr(pool, "is_phone", lambda d: True)
+        pool.start_watch(did, dev, "com.ubercab")
+        await asyncio.sleep(0.1)
+        clock.now += 4
+        dev.front = TIKTOK  # TikTok on its own, in a task on Uber
+        await asyncio.sleep(1.2)  # start_watch's loop checks every 0.5 s
+        pool.stop_watch(did)
+        return pool.leases[did].user_control, pool.leases[did].reason
+    assert asyncio.run(scenario()) == (True, f"paused: {TIKTOK} came to the front on its own")
 
 
 # ---- screens with no tree ------------------------------------------------------------------------
