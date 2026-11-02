@@ -291,3 +291,61 @@ def test_rows_that_show_the_input_but_for_its_case_are_told_apart_by_its_case():
     assert not locators.locate(loc, s, {"sound_title": "GOLDEN HOUR"}).ok  # neither shows it so: still nothing
     # The compiler no longer reports the step ambiguous: the locator picks the row the run tapped.
     assert disambiguate(loc, pick, s, {"sound_title": "golden hour", "sound_artist": "JVKE"}, [])[2] is None
+
+
+# ---- after-checks on a screen that never stands still ------------------------------------------------------------------
+# Nov 1, a reel replay (task-1101-221428-b419): typing the song went straight to the results, past the "See more" screen
+# the run had recorded after that step, so its after-check failed. The next step was ready, which is accepted as "the
+# checks were over-specific", but only on a screen still for a second, and the results never were for 5 s (a tip came
+# and went over the editor behind the picker). A repair chased "See more" and the agent finished the run.
+
+
+class _NeverStill:
+    """Instagram's sound search: typing opens the results at once, and the screen never stands still."""
+
+    def __init__(self) -> None:
+        self.at, self.n, self.acts = "search", 0, []
+        self.screens = {n: _screen(n) for n in ("search", "tracks", "tracks_after")}
+
+    async def observe(self, screenshot: bool = False):
+        self.n += 1
+        return self.screens[self.at] if self.at == "search" else self.screens["tracks" if self.n % 2 else "tracks_after"]
+
+    async def act(self, a):
+        from devices.types import ActionResult
+        self.acts.append((a.kind, a.text))
+        if a.kind == "type":
+            self.at = "results"
+        return ActionResult(ok=True, duration_ms=1.0)
+
+
+def test_a_step_that_led_further_than_recorded_is_accepted_at_the_deadline_on_a_moving_screen():
+    from policy.approvals import ScriptedApprover
+    from routines.executor import ExecConfig, RoutineExecutor
+    from routines.model import Routine, Step, StepAction
+    field = dict(resource_id="row_search_edit_text", text="Search...", hint="Search...", kind="EditText", cls="EditText", in_list=False)
+    ig = Check(kind="app_foreground", package=IG)
+    routine = Routine(routine="r", app=IG, intent="search a song", inputs={}, steps=[
+        Step(id="search_song_title", intent="Type the song", pre=[ig], risk="reversible",
+             action=StepAction(kind="type", target=Locator(**field, position=(0.551, 0.155)), value="{{song_title}}", submit=True),
+             post=[Check(kind="screen_changed"),
+                   Check(kind="element_present", locator=Locator(resource_id="action_text", text="See more", kind="Button"))]),
+        Step(id="retype_song_title_search", intent="Type it again if the field is empty", pre=[ig], risk="reversible",
+             action=StepAction(kind="type", target=Locator(**field, position=(0.551, 0.155)), value="{{song_title}}", submit=True),
+             post=[Check(kind="element_present", locator=Locator(resource_id="row_search_edit_text", text="Search...: {{song_title}}",
+                                                                 kind="EditText")),
+                   Check(kind="element_present", locator=Locator(resource_id="music_list", kind="List"))]),
+    ])
+    phone = _NeverStill()
+    config = ExecConfig(pre_timeout_s=0.6, post_timeout_s=0.6, stable_s=0.2, poll_s=0.01, patch_screenshots=False)
+
+    class NoModel:
+        def call(self, *a, **kw):
+            raise AssertionError("no model call expected")
+
+    ex = RoutineExecutor(phone, adapter=NoModel(), approver=ScriptedApprover(approve=True), config=config)
+    out = asyncio.run(ex.run(routine, {"song_title": "golden hour"}, launch="never", allow_repair=False, allow_agent=False))
+    assert out.status == "done" and out.model_calls == 0, out.detail
+    first = out.steps[0]
+    assert any("next step (retype_song_title_search) is ready (the screen still moving)" in r for r in first.rungs)
+    assert [p.kind for p in out.patches] == ["post"] and "after-checks rewritten from what happened" in out.patches[0].description

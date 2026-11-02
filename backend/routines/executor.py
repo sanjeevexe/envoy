@@ -569,16 +569,19 @@ class RoutineExecutor:
                     sr.climb(2, "after-checks held past the edge of the screen (scrolled to see them)")
                     return _Ready("ok", seen)
             # Only "where the app went" checks failed, the screen changed, and the next step is ready: the checks were
-            # over-specific (something optional that didn't show this time). Accept, and patch them to what happened.
+            # over-specific (something optional that didn't show this time). Accept, and patch them to what happened. Also
+            # at the deadline on a screen that never stood still (Nov 1, a reel replay: Instagram went straight to the
+            # results the step's recorded "See more" screen led to, while a tip came and went over the editor behind).
             nav_only = all(o.passed or o.check.kind in ("element_present", "element_absent", "text_visible", "screen_like") for o in outs)
-            if changed and stable and nav_only and nxt is not None and not nxt.optional and self._ready_now(nxt, s, ctx.inputs) \
+            if changed and (stable or now >= deadline) and nav_only and nxt is not None and not nxt.optional \
+                    and self._ready_now(nxt, s, ctx.inputs) \
                     and self._reached(ctx, idx, s):  # a next step with nothing to anchor it (a scroll) is "ready" anywhere
                 fresh = chk.derive_post(before, s, step.action.kind, None, None, {k: v for k, v in ctx.inputs.items() if v})
                 fresh = [g for c in fresh if (g := chk_generalize(c, ctx.inputs, [])) is not None] or [Check(kind="screen_changed")]
                 failed = "; ".join(o.detail for o in outs if not o.passed)
                 ctx.out.patches.append(Patch("post", step.id, f"step {step.id!r}: after-checks failed ({failed[:80]}) but the next step "
                                              f"was ready; after-checks rewritten from what happened", checks=fresh))
-                sr.climb(2, f"after-checks failed but the next step ({nxt.id}) is ready")
+                sr.climb(2, f"after-checks failed but the next step ({nxt.id}) is ready" + ("" if stable else " (the screen still moving)"))
                 return _Ready("ok", s)
             # A screen that changed and then sat still for a while won't fix itself.
             if (changed and stable and now - start >= cfg.stable_s + 0.5) or now >= deadline:
