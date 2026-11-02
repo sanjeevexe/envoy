@@ -8,6 +8,7 @@
 // revoke one.
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowsClockwiseIcon, CopyIcon, KeyIcon, PlugsConnectedIcon, PlusIcon, RobotIcon, TrashIcon } from "@phosphor-icons/react";
+import { SHARING_EVENT } from "@/components/AgentTools";
 import { Button, Card, Chip, cx, IconButton, RowIcon, Section } from "@/components/ui";
 import { ago, api, post } from "@/lib/api";
 
@@ -18,9 +19,6 @@ export type AgentsInfo = {
   groups: AgentGroup[]; default: string[]; per_minute: number; mcp_url: string; can_manage: boolean;
 };
 
-// The page reloads when a routine is shared or unshared here (AgentTools fires this), and every few seconds while it shows.
-export const SHARING_EVENT = "envoy:sharing";
-
 export default function AgentKeys() {
   const [info, setInfo] = useState<AgentsInfo | null>(null);
   const [shown, setShown] = useState<{ name: string; secret: string; rotated: boolean } | null>(null);  // a key, until you press Done
@@ -28,7 +26,7 @@ export default function AgentKeys() {
   const [msg, setMsg] = useState<string | null>(null);
   const load = useCallback(() => { api<AgentsInfo>("/api/agents").then(setInfo).catch((e) => setMsg(e.message)); }, []);
   useEffect(() => {
-    load();
+    load();  // again when a routine is shared or unshared on this page (AgentTools), and every few seconds while it shows
     const t = setInterval(() => { if (document.visibilityState === "visible") load(); }, 4000);
     window.addEventListener(SHARING_EVENT, load);
     return () => { clearInterval(t); window.removeEventListener(SHARING_EVENT, load); };
