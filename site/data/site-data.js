@@ -382,6 +382,7 @@ window.ENVOY = {
   "crosspost_readme": {
    "path": "agents/meta-agent/evidence/2026-11-01/crosspost/README.md"
   },
+  "crosspost_commit": "aa4614e",
   "run1": {
    "started_et": "2026-11-01 23:20",
    "model": "muse-spark-1.3",
@@ -478,7 +479,8 @@ window.ENVOY = {
       "seconds": 195.5,
       "detail": "the user declined the approval",
       "model_calls": 0,
-      "cost_usd": 0.0
+      "cost_usd": 0.0,
+      "note": ""
      },
      {
       "id": "task-1102-114533-67b7",
@@ -492,7 +494,8 @@ window.ENVOY = {
       "seconds": 75.1,
       "detail": "the user declined the approval",
       "model_calls": 3,
-      "cost_usd": 0.0073
+      "cost_usd": 0.0073,
+      "note": ""
      },
      {
       "id": "task-1102-114712-1c04",
@@ -506,7 +509,8 @@ window.ENVOY = {
       "seconds": 77.4,
       "detail": "the user declined the approval",
       "model_calls": 0,
-      "cost_usd": 0.0
+      "cost_usd": 0.0,
+      "note": ""
      },
      {
       "id": "task-1102-114842-f1dc",
@@ -520,7 +524,8 @@ window.ENVOY = {
       "seconds": 911.8,
       "detail": "Couldn't install Something went wrong: no Install button, price or Open on the page",
       "model_calls": 0,
-      "cost_usd": 0.0
+      "cost_usd": 0.0,
+      "note": "Its “use Envoy's phone?” ask went unanswered for 15 minutes, so the task moved to an emulator, which had no Instagram. Fixed since: an unanswered ask now ends the task."
      },
      {
       "id": "task-1102-121512-0b47",
@@ -534,7 +539,8 @@ window.ENVOY = {
       "seconds": 273.9,
       "detail": "routine step open_story_creation failed (after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) and the agent could not finish (step_limit); asking the user",
       "model_calls": 30,
-      "cost_usd": 0.4251
+      "cost_usd": 0.4251,
+      "note": "The retry, on Envoy's phone. A Story from the night before was still live, so the routine's first tap opened it instead of a new Story; the agent's fallback ran out of steps and asked the person. Still open."
      }
     ]
    },
@@ -825,7 +831,8 @@ window.ENVOY = {
     "name": "instagram_reel_song",
     "app": "Instagram",
     "what": "A Reel set to a song from Instagram's music library",
-    "version": 2,
+    "version": 3,
+    "base": 2,
     "steps": 13,
     "inputs": [
      "song_title",
@@ -833,7 +840,7 @@ window.ENVOY = {
      "caption"
     ],
     "outputs": [],
-    "made": "recompiled with the compiler fix (ffde928) from the same run; purely learned, no hand edits",
+    "hand": null,
     "compiled": "2026-11-01 22:13:07",
     "first": {
      "when": "2026-11-01T20:29:45",
@@ -875,14 +882,30 @@ window.ENVOY = {
       "post": "Instagram Reel + song",
       "task": "task-1102-005928-4182",
       "routine": "instagram_reel_song v2",
+      "live": true,
+      "calls": 0,
       "result": "live, \"JVKE · golden hour\", caption \"Posted by Envoy · test\";"
      }
     ],
+    "repair": {
+     "version": 3,
+     "from_task": "task-1102-005928-4182",
+     "after_live_post": true,
+     "steps": 2,
+     "passed": true,
+     "trial": {
+      "task": "task-1102-114116-06e0",
+      "status": "declined",
+      "calls": 0,
+      "seconds": 195.5,
+      "by": "Muse's dry run, Nov 2"
+     }
+    },
     "src": {
      "path": "data/routines/instagram_reel_song/index.json"
     },
     "yaml_src": {
-     "path": "data/routines/instagram_reel_song/v2.yaml"
+     "path": "data/routines/instagram_reel_song/v3.yaml"
     }
    },
    {
@@ -890,6 +913,7 @@ window.ENVOY = {
     "app": "Instagram",
     "what": "A Story with a poll sticker",
     "version": 3,
+    "base": 3,
     "steps": 11,
     "inputs": [
      "poll_question",
@@ -897,7 +921,7 @@ window.ENVOY = {
      "poll_option_2"
     ],
     "outputs": [],
-    "made": "recompiled with the compiler's transient-check fix (1645c09) from the same run: open_story_creation no longer checks the gallery's 'Today' scroll label; purely learned, no hand edits",
+    "hand": null,
     "compiled": "2026-11-01 22:51:54",
     "first": {
      "when": "2026-11-01T20:50:57",
@@ -939,9 +963,12 @@ window.ENVOY = {
       "post": "Instagram Story + poll",
       "task": "task-1102-013244-b7c8",
       "routine": "instagram_story_poll v3",
+      "live": true,
+      "calls": 0,
       "result": "live, poll \"Did Envoy post this?\" Yes / No;"
      }
     ],
+    "repair": null,
     "src": {
      "path": "data/routines/instagram_story_poll/index.json"
     },
@@ -954,6 +981,7 @@ window.ENVOY = {
     "app": "TikTok",
     "what": "A TikTok with a sound from TikTok's library",
     "version": 3,
+    "base": 3,
     "steps": 16,
     "inputs": [
      "sound_title",
@@ -961,7 +989,7 @@ window.ENVOY = {
      "caption"
     ],
     "outputs": [],
-    "made": "recompiled with the compiler fix bebaa50 (a correction is learned: the red check, then Back; close_sound_sheet checks the editor's sound label names {{sound_title}}) from the same run, Wonder's answer remapped by trace number ($0); learned, with v2's hand edits (showcase)",
+    "hand": "two hand edits: a 3 s wait before tapping TikTok's drawn sound list, and the app's name",
     "compiled": "2026-11-02 02:11:25",
     "first": {
      "when": "2026-11-01T21:00:12",
@@ -1003,15 +1031,20 @@ window.ENVOY = {
       "post": "TikTok + sound",
       "task": "task-1102-014139-7f5e",
       "routine": "tiktok_post_sound v2",
+      "live": false,
+      "calls": 7,
       "result": "posted without the sound (\"Original sound by envoy\"), 7 vision calls."
      },
      {
       "post": "TikTok re-post",
-      "task": "task-1102-023044-d081 (02:30–02:31)",
+      "task": "task-1102-023044-d081",
       "routine": "tiktok_post_sound v3",
+      "live": true,
+      "calls": 3,
       "result": "live, \"Posted by Envoy · test 2\", ♫ golden hour - JVKE;"
      }
     ],
+    "repair": null,
     "src": {
      "path": "data/routines/tiktok_post_sound/index.json"
     },
@@ -1023,7 +1056,8 @@ window.ENVOY = {
     "name": "youtube_short_sound",
     "app": "YouTube",
     "what": "A YouTube Short with a sound from YouTube's library",
-    "version": 2,
+    "version": 3,
+    "base": 2,
     "steps": 15,
     "inputs": [
      "sound_title",
@@ -1031,7 +1065,7 @@ window.ENVOY = {
      "short_title"
     ],
     "outputs": [],
-    "made": "recompiled with the compiler fix (ffde928) from the same run; learned, one step tuned by hand (showcase)",
+    "hand": "one hand edit: a stray before-check (“Captions unavailable”) dropped",
     "compiled": "2026-11-01 22:13:10",
     "first": {
      "when": "2026-11-01T21:11:06",
@@ -1081,14 +1115,30 @@ window.ENVOY = {
       "post": "YouTube Short + sound",
       "task": "task-1102-015325-106a",
       "routine": "youtube_short_sound v2",
+      "live": true,
+      "calls": null,
       "result": "live, public."
      }
     ],
+    "repair": {
+     "version": 3,
+     "from_task": "task-1102-015325-106a",
+     "after_live_post": true,
+     "steps": 1,
+     "passed": true,
+     "trial": {
+      "task": "task-1102-114712-1c04",
+      "status": "declined",
+      "calls": 0,
+      "seconds": 77.4,
+      "by": "Muse's dry run, Nov 2"
+     }
+    },
     "src": {
      "path": "data/routines/youtube_short_sound/index.json"
     },
     "yaml_src": {
-     "path": "data/routines/youtube_short_sound/v2.yaml"
+     "path": "data/routines/youtube_short_sound/v3.yaml"
     }
    }
   ],
@@ -1104,10 +1154,6 @@ window.ENVOY = {
   },
   "p3_src": {
    "path": "eval/results/showcase/p3.md"
-  },
-  "poll": "img/showcase-story-poll.webp",
-  "poll_src": {
-   "path": "eval/results/showcase/recon/20-ig-story-with-poll.png"
   }
  },
  "watches": {
@@ -1724,7 +1770,7 @@ window.ENVOY = {
   },
   "src": {
    "path": "site/data/recordings/starbucks-first.json",
-   "note": "imported from loop A's trace and API copy"
+   "note": "imported from the run's trace"
   }
  },
  "learned": {
@@ -2305,7 +2351,7 @@ window.ENVOY = {
   ],
   "replay_src": {
    "path": "site/data/recordings/starbucks-replay.json",
-   "note": "imported from loop A's trace"
+   "note": "imported from the run's trace"
   },
   "new_input": {
    "seconds": 15.8,
@@ -2322,6 +2368,38 @@ window.ENVOY = {
    "src": {
     "path": "eval/results/real-apps/loop-a/runs.jsonl",
     "note": "task-1030-201551-c3b9"
+   }
+  },
+  "loop": {
+   "first": {
+    "seconds": {
+     "median": 44.0,
+     "min": 37.2,
+     "max": 59.8,
+     "n": 5
+    },
+    "calls": {
+     "median": 12,
+     "min": 12,
+     "max": 13,
+     "n": 5
+    },
+    "commits": 2
+   },
+   "replay": {
+    "seconds": {
+     "median": 67.4,
+     "min": 14.2,
+     "max": 148.8,
+     "n": 25
+    },
+    "calls": {
+     "median": 4,
+     "min": 2,
+     "max": 12,
+     "n": 25
+    },
+    "commits": 8
    }
   },
   "table_src": {
@@ -2571,6 +2649,16 @@ window.ENVOY = {
     ]
    },
    {
+    "routine": "instagram_reel_song",
+    "version": 3,
+    "status": "active",
+    "passed": true,
+    "changes": [
+     "step 'search_song_title': after-checks failed (no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) but the next step was ready; after-checks rewritten from what happened",
+     "step 'find_tap_matching_track': after-checks failed (no match (best 0.49 < 0.80 or ambiguous, runner-up 0.47)) but the next step was ready; after-checks rewritten from what happened"
+    ]
+   },
+   {
     "routine": "starbucks_drink_calories",
     "version": 2,
     "status": "rejected",
@@ -2587,6 +2675,15 @@ window.ENVOY = {
     "passed": true,
     "changes": [
      "after 'tap_order', an extra screen appeared; inserted tap_order_extra_1 (tap Choose a café)"
+    ]
+   },
+   {
+    "routine": "youtube_short_sound",
+    "version": 3,
+    "status": "active",
+    "passed": true,
+    "changes": [
+     "step 'tap_add_music_to_video': after-checks failed (no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) but the next step was ready; after-checks rewritten from what happened"
     ]
    }
   ],
@@ -2616,408 +2713,502 @@ window.ENVOY = {
    },
    "call_src": {
     "path": "site/data/recordings/starbucks-repair.json",
-    "note": "loop A's cost log"
+    "note": "the run's model-cost log"
    }
   }
  },
- "apps": {
-  "cards": [
+ "real": {
+  "current": {
+   "date": "2026-10-28",
+   "commit": "00ec5d9",
+   "final": false,
+   "profile": "all-Spark",
+   "tier": "standard",
+   "runs": 4,
+   "run_id": "1028032143",
+   "stages": {
+    "first_run": [
+     13,
+     18
+    ],
+    "compiled": [
+     14,
+     18
+    ],
+    "same_input": [
+     13,
+     18
+    ],
+    "same_with_repair": 14,
+    "new_input": [
+     4,
+     11
+    ],
+    "bot_checks": [
+     "target",
+     "target_search"
+    ]
+   }
+  },
+  "curve": {
+   "n": 14,
+   "repaired": 1,
+   "first": {
+    "calls": {
+     "median": 6.0,
+     "min": 2,
+     "max": 25,
+     "n": 14
+    },
+    "seconds": {
+     "median": 19.43,
+     "min": 4.39,
+     "max": 73.46,
+     "n": 14
+    },
+    "usd": {
+     "median": 0.011,
+     "min": 0.0050864,
+     "max": 0.0498646,
+     "n": 14
+    }
+   },
+   "rerun": {
+    "calls": {
+     "median": 0.0,
+     "min": 0,
+     "max": 2,
+     "n": 14
+    },
+    "seconds": {
+     "median": 8.08,
+     "min": 1.13,
+     "max": 53.09,
+     "n": 14
+    },
+    "usd": {
+     "median": 0.0,
+     "min": 0.0,
+     "max": 0.0125,
+     "n": 14
+    }
+   }
+  },
+  "rows": [
    {
-    "routine": "amazon_search_price",
-    "name": "Amazon",
-    "task": "\"Search for AA batteries and tell me the price of the first result\"",
-    "first": {
-     "runs": "3/3",
-     "cost": "127 s / $0.087"
+    "workflow": "amazon",
+    "goal": "In the Amazon app, search for AA batteries and tell me the price of the first result.",
+    "graded_by": "shape",
+    "first_run": "pass",
+    "agent": {
+     "actions": 2,
+     "calls": 4,
+     "seconds": 25.59
     },
-    "replay": {
-     "runs": "6/6",
-     "cost": "45 s / $0.005"
-    },
-    "when": "Oct 30",
-    "commit": "3f14765",
-    "notes": "loop A, Oct 30, main 3f14765–12eacaa. Routine amazon_search_price (2 steps; in main), routine alone 6/6, 19–62 s. First runs are slow on the device, not in steps (3–7 agent steps): single screen reads up to 20 s, type/scroll 7–9 s on Amazon's tree (backlog #34)",
-    "version": 1,
+    "compiled": true,
     "steps": 2,
-    "inputs": [
-     "search_query"
-    ],
-    "hand_fixed": false,
-    "frame": {
-     "frame": "img/app-amazon.webp",
-     "task_id": "task-1030-145757-b70d",
-     "loop": "loop-a",
-     "taken_et": "2026-10-30 14:59"
+    "same": {
+     "result": "pass",
+     "calls": 0,
+     "seconds": 21.24
     },
-    "private": null,
-    "src": {
-     "path": "eval/results/real-apps/table.md",
-     "note": "Amazon (envoy-real)"
-    },
-    "routine_src": {
-     "path": "data/routines/amazon_search_price/index.json"
+    "new": {
+     "result": "fail",
+     "calls": 0,
+     "seconds": 69.34
     }
    },
    {
-    "routine": "youtube_search_first_video",
-    "name": "YouTube",
-    "task": "\"Search for lofi hip hop and tell me the title of the first video\"",
-    "first": {
-     "runs": "3/3",
-     "cost": "40 s / $0.038"
+    "workflow": "target",
+    "goal": "In the Target app, what are today's hours for my Target store?",
+    "graded_by": "shape",
+    "first_run": "bot check",
+    "agent": {
+     "actions": 0,
+     "calls": 2,
+     "seconds": 10.1
     },
-    "replay": {
-     "runs": "6/6",
-     "cost": "26 s / $0.003"
+    "compiled": false,
+    "steps": null,
+    "same": null,
+    "new": null
+   },
+   {
+    "workflow": "target_search",
+    "goal": "In the Target app, search for paper towels and tell me the price of the first result.",
+    "graded_by": "shape",
+    "first_run": "bot check",
+    "agent": {
+     "actions": 0,
+     "calls": 2,
+     "seconds": 8.6
     },
-    "when": "Oct 30",
-    "commit": "12eacaa",
-    "notes": "loop A, Oct 30, main 12eacaa. Routine youtube_search_first_video (in main), routine alone 6/6, 22–28 s",
-    "version": 1,
+    "compiled": false,
+    "steps": null,
+    "same": null,
+    "new": null
+   },
+   {
+    "workflow": "starbucks",
+    "goal": "In the Starbucks app, how many calories are in a Grande Caffè Latte?",
+    "graded_by": "truth",
+    "first_run": "pass",
+    "agent": {
+     "actions": 8,
+     "calls": 10,
+     "seconds": 32.41
+    },
+    "compiled": true,
+    "steps": 8,
+    "same": {
+     "result": "pass",
+     "calls": 0,
+     "seconds": 21.41
+    },
+    "new": {
+     "result": "pass",
+     "calls": 0,
+     "seconds": 25.41
+    }
+   },
+   {
+    "workflow": "chipotle",
+    "goal": "In the Chipotle app, find the price of Chips & Guacamole.",
+    "graded_by": "shape",
+    "first_run": "pass",
+    "agent": {
+     "actions": 21,
+     "calls": 25,
+     "seconds": 73.46
+    },
+    "compiled": true,
+    "steps": 22,
+    "same": {
+     "result": "pass after repair",
+     "calls": 2,
+     "seconds": 53.09
+    },
+    "new": {
+     "result": "pass after repair",
+     "calls": 1,
+     "seconds": 51.46
+    }
+   },
+   {
+    "workflow": "doordash",
+    "goal": "In the DoorDash app, what is my saved delivery address?",
+    "graded_by": "truth",
+    "first_run": "pass",
+    "agent": {
+     "actions": 1,
+     "calls": 3,
+     "seconds": 12.47
+    },
+    "compiled": true,
+    "steps": 1,
+    "same": {
+     "result": "pass",
+     "calls": 0,
+     "seconds": 9.64
+    },
+    "new": null
+   },
+   {
+    "workflow": "doordash_search",
+    "goal": "In the DoorDash app, search for pizza and tell me the name of the first restaurant in the results.",
+    "graded_by": "shape",
+    "first_run": "pass",
+    "agent": {
+     "actions": 2,
+     "calls": 4,
+     "seconds": 18.35
+    },
+    "compiled": true,
     "steps": 2,
-    "inputs": [
-     "search_query"
-    ],
-    "hand_fixed": false,
-    "frame": {
-     "frame": "img/app-youtube.webp",
-     "task_id": "task-1030-162656-3e9e",
-     "loop": "loop-a",
-     "taken_et": "2026-10-30 16:27"
+    "same": {
+     "result": "pass",
+     "calls": 0,
+     "seconds": 16.3
     },
-    "private": null,
-    "src": {
-     "path": "eval/results/real-apps/table.md",
-     "note": "YouTube (envoy-real)"
-    },
-    "routine_src": {
-     "path": "data/routines/youtube_search_first_video/index.json"
+    "new": {
+     "result": "pass after repair",
+     "calls": 0,
+     "seconds": 20.15
     }
    },
    {
-    "routine": "play_app_rating",
-    "name": "Play Store",
-    "task": "\"What is the star rating of the Duolingo app?\"",
-    "first": {
-     "runs": "3/3",
-     "cost": "28 s / $0.034"
+    "workflow": "settings_version",
+    "goal": "In the Settings app, what Android version is this phone running?",
+    "graded_by": "truth",
+    "first_run": "pass",
+    "agent": {
+     "actions": 4,
+     "calls": 6,
+     "seconds": 15.33
     },
-    "replay": {
-     "runs": "6/6",
-     "cost": "26 s / $0.005"
-    },
-    "when": "Oct 30",
-    "commit": "12eacaa",
-    "notes": "loop A, Oct 30, main 12eacaa. Routine play_app_rating (in main), routine alone 6/6, 22–88 s",
-    "version": 1,
-    "steps": 2,
-    "inputs": [
-     "app_name"
-    ],
-    "hand_fixed": false,
-    "frame": {
-     "frame": "img/app-play.webp",
-     "task_id": "task-1030-164831-6b9e",
-     "loop": "loop-a",
-     "taken_et": "2026-10-30 16:49"
-    },
-    "private": null,
-    "src": {
-     "path": "eval/results/real-apps/table.md",
-     "note": "Play Store (envoy-real)"
-    },
-    "routine_src": {
-     "path": "data/routines/play_app_rating/index.json"
-    }
-   },
-   {
-    "routine": "starbucks_drink_calories",
-    "name": "Starbucks",
-    "task": "\"How many calories are in a Grande Caffè Latte?\"",
-    "first": {
-     "runs": "3/3",
-     "cost": "46 s / $0.080"
-    },
-    "replay": {
-     "runs": "5/6 (v4)",
-     "cost": "63 s / $0.005"
-    },
-    "when": "Oct 30",
-    "commit": "b1f3c9a",
-    "notes": "loop A, Oct 30 19:14, main b1f3c9a. starbucks_drink_calories v4 (the location prompt optional wherever it comes), built from v1: 2 calls and no repairs in each routine-alone run; 1 agent fallback (127 s). The swept-in self-repair v3 had 2/4 routine alone at 18:20. Times are on the slow emulator — First runs: loop A, Oct 30, main 12eacaa. As compiled: right answer 6/6 but the routine alone 0/6 (drink_name filled \"Grande Caffè Latte\", no row matched, the agent finished: 109 s / $0.088). Fixed (starbucks_drink_calories, in main: the menu name without the size): routine alone 5/6, clean runs 14–15 s / $0.004, repaired 56–77 s. The miss: the location prompt came late, over Skip; the repair's No-thanks tap asked (declined). 190 calories every time",
-    "version": 4,
-    "steps": 9,
-    "inputs": [
-     "drink_name"
-    ],
-    "hand_fixed": true,
-    "frame": {
-     "frame": "img/app-starbucks.webp",
-     "task_id": "task-1030-155711-51c2",
-     "loop": "loop-a",
-     "taken_et": "2026-10-30 15:57"
-    },
-    "private": null,
-    "src": {
-     "path": "eval/results/real-apps/table.md",
-     "note": "Starbucks (envoy-real)"
-    },
-    "routine_src": {
-     "path": "data/routines/starbucks_drink_calories/index.json"
-    }
-   },
-   {
-    "routine": "chipotle_item_price",
-    "name": "Chipotle",
-    "task": "\"Find the price of Chips & Guacamole\"",
-    "first": {
-     "runs": "2/3",
-     "cost": "94 s / $0.093"
-    },
-    "replay": {
-     "runs": "6/6 (v fixed)",
-     "cost": "58 s / $0.005"
-    },
-    "when": "Oct 30",
-    "commit": "12eacaa",
-    "notes": "loop A, Oct 30, main 12eacaa. First-run miss: the agent hit the 25-step cap. As compiled: 0/6 used the routine (inputs location and category the request can't fill; the agent ran: 70 s / $0.096). Fixed (chipotle_item_price, in main: Denver, CO and CHIPS & SIDES fixed): routine alone 6/6, 17–59 s, $4.90 each time",
-    "version": 1,
-    "steps": 10,
-    "inputs": [
-     "menu_item_name"
-    ],
-    "hand_fixed": false,
-    "frame": {
-     "frame": "img/app-chipotle.webp",
-     "task_id": "task-1030-161523-ec65",
-     "loop": "loop-a",
-     "taken_et": "2026-10-30 16:16"
-    },
-    "private": null,
-    "src": {
-     "path": "eval/results/real-apps/table.md",
-     "note": "Chipotle (envoy-real)"
-    },
-    "routine_src": {
-     "path": "data/routines/chipotle_item_price/index.json"
-    }
-   },
-   {
-    "routine": "gmail_search_subject",
-    "name": "Gmail",
-    "task": "\"Search my mail for DoorDash and tell me the subject of the first result\"",
-    "first": {
-     "runs": "3/3",
-     "cost": "53 s / $0.058"
-    },
-    "replay": {
-     "runs": "6/6",
-     "cost": "33 s / $0.004"
-    },
-    "when": "Oct 30",
-    "commit": "b1f3c9a",
-    "notes": "loop A, Oct 30 18:06, main b1f3c9a (the app named as the app wins). Replaces loop A's earlier Gmail row: those runs were routed to DoorDash. Graded by the Gmail API. Routine gmail_search_subject (3 steps), routine alone 6/6; a new input (\"Security alert\") 4/4 with the same routine, 26–36 s",
-    "version": 1,
+    "compiled": true,
     "steps": 3,
-    "inputs": [
-     "search_query"
-    ],
-    "hand_fixed": false,
-    "frame": {
-     "frame": "img/app-gmail.webp",
-     "task_id": "task-1030-180655-0535",
-     "loop": "loop-a",
-     "taken_et": "2026-10-30 18:07"
+    "same": {
+     "result": "pass",
+     "calls": 0,
+     "seconds": 7.88
     },
-    "private": null,
-    "src": {
-     "path": "eval/results/real-apps/table.md",
-     "note": "Gmail (envoy-real), after the routing fix"
-    },
-    "routine_src": {
-     "path": "data/routines/gmail_search_subject/index.json"
-    }
+    "new": null
    },
    {
-    "routine": "doordash_order_meal",
-    "name": "DoorDash",
-    "task": "\"Hey Envoy, I've had such a long day. Order me my usual from Chick-fil-A.\" (the usual: a Chick-fil-A Spicy Chicken Sandwich on its own, on DoorDash)",
-    "first": {
-     "runs": "3/3",
-     "cost": "73 s / $0.174"
+    "workflow": "settings_bluetooth",
+    "goal": "In the Settings app, is Bluetooth turned on or off?",
+    "graded_by": "truth",
+    "first_run": "pass",
+    "agent": {
+     "actions": 6,
+     "calls": 8,
+     "seconds": 22.08
     },
-    "replay": {
-     "runs": "6/6 (v7)",
-     "cost": "34 s / $0.003"
-    },
-    "when": "Oct 30",
-    "commit": "d966cac",
-    "notes": "loop A, Oct 30 21:51–22:01, main d966cac (b7b9b39: only a finished run teaches app notes), a fresh copy of main's demo memory. First runs reached the payment sheet (63–87 s, 12–16 step calls) and taught no DoorDash note (a hand-off isn't a finished run), so no cart-review note formed. v7 waits for checkout until Place Order or Select Payment Method shows (cart gone, then up to three 4 s waits while neither shows, ~13 s at most) instead of a fixed 3 s: routine alone 6/6, 31–36 s, 2 calls; on the test account the sheet came at once (the waits and place_order skipped, ~1.1 s each). The real Place Order ask needs the user's account on the Pixel",
-    "version": 7,
-    "steps": 17,
-    "inputs": [],
-    "hand_fixed": true,
-    "frame": null,
-    "private": "Stops at the payment sheet; Place Order always asks first. No screens shown here (addresses).",
-    "src": {
-     "path": "eval/results/real-apps/table.md",
-     "note": "DoorDash (envoy-real), the user's real usual, v7 and the note-learner fix"
-    },
-    "routine_src": {
-     "path": "data/routines/doordash_order_meal/index.json"
-    }
-   },
-   {
-    "routine": "clock_set_alarm",
-    "name": "Clock",
-    "task": "set an alarm (7:00 AM; replays 6:30 AM, 9:45 PM, 11:15 AM)",
-    "first": {
-     "runs": "2/3",
-     "cost": "41 s / $0.055"
-    },
-    "replay": {
-     "runs": "5/5 on v5 (v1–v4: 2/6 right)",
-     "cost": "18 s / $0.004, 1 call (the matcher)"
-    },
-    "when": "Oct 30",
-    "commit": "5e7602b",
-    "notes": "Oct 30, main 5e7602b. First run 2 asked to approve OK and was declined by the loop's rule. v1 templated the AM/PM toggle's ID with the input (the app writes it in lower case) and read the first alarm row (a default 9:00 AM alarm), so two \"done\" replays were wrong; v5 by hand: AM/PM by label, a minutes step, output = the alarm with the asked time. Each run starts with Clock's data cleared.",
-    "version": 5,
-    "steps": 6,
-    "inputs": [
-     "alarm_hour",
-     "alarm_minute",
-     "alarm_period"
-    ],
-    "hand_fixed": true,
-    "frame": {
-     "frame": "img/app-clock.webp",
-     "task_id": "task-1030-141911-98d6",
-     "loop": "loop-b",
-     "taken_et": "2026-10-30 14:19"
-    },
-    "private": null,
-    "src": {
-     "path": "eval/results/real-apps/table.md",
-     "note": "Clock (loop B)"
-    },
-    "routine_src": {
-     "path": "data/routines/clock_set_alarm/index.json"
-    }
-   },
-   {
-    "routine": "chrome_get_cheapest_flight_price",
-    "name": "Google Flights in Chrome",
-    "task": "cheapest nonstop one-way flight (SFO → JFK on 2026-11-20; replays SFO → BOS, LAX → SEA)",
-    "first": {
-     "runs": "3/3",
-     "cost": "33 s / $0.058"
-    },
-    "replay": {
-     "runs": "5/5 on v4 by the routine alone (639 ×2, BOS 312, LAX → SEA 70 then 79)",
-     "cost": "12 s / $0.005, 1 call"
-    },
-    "when": "Oct 31",
-    "commit": "721b3a6",
-    "notes": "Oct 31, main 721b3a6. The Cheapest tab is optional and the price is read from the first flight row, so the plain-list page that sent LAX → SEA to the agent on v3 is covered. Each value matched the page's own Cheapest label; BOS rose from 259 to 312 overnight. — First runs: Oct 30, main b7b9b39. The coordinator's idea: the search opened by its URL instead of the form. The compiled routine kept only the Cheapest tap (its inputs dropped), so v2 types the URL from the inputs, checked by that URL; v2 read \"Fetching results\" twice (wrong), and v3 waits for a price. Chrome reached 15 runs today. Next fix if wanted: Cheapest optional and the first \"From N US dollars\" row when Google shows a plain list.",
-    "version": 4,
+    "compiled": true,
     "steps": 3,
-    "inputs": [
-     "origin_airport",
-     "destination_airport",
-     "departure_date"
-    ],
-    "hand_fixed": true,
-    "frame": {
-     "frame": "img/app-flights.webp",
-     "task_id": "task-1030-214314-a891",
-     "loop": "loop-b",
-     "taken_et": "2026-10-30 21:43"
+    "same": {
+     "result": "pass",
+     "calls": 0,
+     "seconds": 3.21
     },
-    "private": null,
-    "src": {
-     "path": "eval/results/real-apps/table.md",
-     "note": "Chrome / Google Flights by URL (loop B)"
+    "new": null
+   },
+   {
+    "workflow": "gmail_newest",
+    "goal": "In the Gmail app, what is the subject of the newest email in my inbox?",
+    "graded_by": "truth",
+    "first_run": "pass",
+    "agent": {
+     "actions": 14,
+     "calls": 19,
+     "seconds": 47.89
     },
-    "routine_src": {
-     "path": "data/routines/chrome_get_cheapest_flight_price/index.json"
+    "compiled": true,
+    "steps": 1,
+    "same": {
+     "result": "pass",
+     "calls": 0,
+     "seconds": 2.29
+    },
+    "new": null
+   },
+   {
+    "workflow": "gmail_search",
+    "goal": "In the Gmail app, search my mail for DoorDash and tell me the subject of the first result.",
+    "graded_by": "truth",
+    "first_run": "pass",
+    "agent": {
+     "actions": 3,
+     "calls": 5,
+     "seconds": 21.96
+    },
+    "compiled": true,
+    "steps": 3,
+    "same": {
+     "result": "pass",
+     "calls": 0,
+     "seconds": 8.28
+    },
+    "new": {
+     "result": "pass",
+     "calls": 0,
+     "seconds": 13.49
     }
    },
    {
-    "routine": "lyft_get_ride_fare",
-    "name": "Lyft",
-    "task": "Standard fare from a public pickup to SFO (one replay to OAK)",
-    "first": {
-     "runs": "3/3 (Oct 30)",
-     "cost": "82 s / $0.060"
+    "workflow": "calendar_today",
+    "goal": "In Google Calendar, do I have any events today?",
+    "graded_by": "truth",
+    "first_run": "pass",
+    "agent": {
+     "actions": 0,
+     "calls": 2,
+     "seconds": 4.39
     },
-    "replay": {
-     "runs": "6/6 on v5 by the routine alone (3 on Oct 30 incl. OAK, 3 on Oct 31)",
-     "cost": "21 s / $0.006, 1 call"
+    "compiled": true,
+    "steps": 1,
+    "same": {
+     "result": "pass",
+     "calls": 0,
+     "seconds": 1.47
     },
-    "when": "Oct 31",
-    "commit": "721b3a6",
-    "notes": "Oct 31, main 721b3a6. Numbers only; never requested a ride. Shipped as lyft_get_ride_fare v5 (v1–v4 kept as history; reviewed: no name, phone, address, card or ride history).",
-    "version": 5,
-    "steps": 9,
-    "inputs": [
-     "pickup_location",
-     "destination_location"
-    ],
-    "hand_fixed": true,
-    "frame": null,
-    "private": "On the user's own Lyft account, so the site shows numbers only: no screens and no routine steps. Fares only; never requested a ride.",
-    "src": {
-     "path": "eval/results/real-apps/table.md",
-     "note": "Lyft (loop B, envoy-real, the user's own account) — gate"
+    "new": null
+   },
+   {
+    "workflow": "contacts_count",
+    "goal": "In the Contacts app, how many contacts do I have?",
+    "graded_by": "truth",
+    "first_run": "pass",
+    "agent": {
+     "actions": 0,
+     "calls": 2,
+     "seconds": 6.05
     },
-    "routine_src": {
-     "path": "data/routines/lyft_get_ride_fare/index.json"
+    "compiled": true,
+    "steps": 1,
+    "same": {
+     "result": "pass",
+     "calls": 0,
+     "seconds": 1.13
+    },
+    "new": null
+   },
+   {
+    "workflow": "maps_address",
+    "goal": "In Google Maps, search for the Empire State Building and tell me its street address.",
+    "graded_by": "truth",
+    "first_run": "pass",
+    "agent": {
+     "actions": 4,
+     "calls": 6,
+     "seconds": 19.3
+    },
+    "compiled": true,
+    "steps": 3,
+    "same": {
+     "result": "pass",
+     "calls": 0,
+     "seconds": 11.8
+    },
+    "new": {
+     "result": "pass",
+     "calls": 0,
+     "seconds": 12.51
     }
    },
    {
-    "routine": "instagram_post_reel",
-    "name": "Instagram",
-    "task": "Clip from the Mac → offer → yes → \"post the newest video as a reel with this caption\" (Share declined, nothing posted)",
-    "first": {
-     "runs": "3/3",
-     "cost": "45 s / $0.133"
+    "workflow": "play_rating",
+    "goal": "In the Google Play Store app, what is the star rating of the Duolingo app?",
+    "graded_by": "shape",
+    "first_run": "pass",
+    "agent": {
+     "actions": 6,
+     "calls": 8,
+     "seconds": 19.56
     },
-    "replay": {
-     "runs": "10/11 (v2)",
-     "cost": "62 s / $0.030"
+    "compiled": true,
+    "steps": 3,
+    "same": {
+     "result": "pass",
+     "calls": 0,
+     "seconds": 4.96
     },
-    "when": "Oct 30",
-    "commit": "00e50dd",
-    "notes": "loop A, Oct 30. Time is yes → Share asked. Replays are routine v2, the library's: 7/8 on main 00e50dd (1 fail: a repair's thumbnail tap was labelled irreversible and asked; 1 fell back to the agent, 94 s, $0.13), 3/3 on 3f14765 (skip-ahead fix; 56–60 s, 1 repair each). v2 is slower than the agent: select_newest_gallery_video waits ~33 s, then repairs (1–2 Wonder calls) every run. The v3 candidate (eval/results/creator/routine/, not in the library: the user's call) on loop A's copy only: 4/4 reached Share, 20–21 s, 0 calls (the 4th was paused 5 min by a touch on the phone, untimed)",
-    "version": 2,
-    "steps": 7,
-    "inputs": [
-     "caption"
-    ],
-    "hand_fixed": true,
-    "frame": null,
-    "private": "On the Pixel 5. Share was declined every time; nothing was posted. No screens shown here (the phone's account).",
-    "src": {
-     "path": "eval/results/real-apps/table.md",
-     "note": "Instagram (Pixel 5)"
+    "new": {
+     "result": "fail",
+     "calls": 2,
+     "seconds": 59.79
+    }
+   },
+   {
+    "workflow": "youtube_search",
+    "goal": "In the YouTube app, search for lofi hip hop and tell me the title of the first video in the results.",
+    "graded_by": "shape",
+    "first_run": "error",
+    "agent": {
+     "actions": 4,
+     "calls": 5,
+     "seconds": 511.67
     },
-    "routine_src": {
-     "path": "data/routines/instagram_post_reel/index.json"
+    "compiled": false,
+    "steps": null,
+    "same": null,
+    "new": null
+   },
+   {
+    "workflow": "ytmusic_artist",
+    "goal": "In the YouTube Music app, search for the song Bohemian Rhapsody and tell me the artist of the first song result.",
+    "graded_by": "truth",
+    "first_run": "pass",
+    "agent": {
+     "actions": 6,
+     "calls": 8,
+     "seconds": 17.85
+    },
+    "compiled": true,
+    "steps": 5,
+    "same": {
+     "result": "pass",
+     "calls": 0,
+     "seconds": 7.78
+    },
+    "new": {
+     "result": "pass",
+     "calls": 0,
+     "seconds": 8.0
+    }
+   },
+   {
+    "workflow": "chrome_wikipedia",
+    "goal": "In Chrome, go to en.m.wikipedia.org, search for Eiffel Tower and tell me the year it opened.",
+    "graded_by": "truth",
+    "first_run": "right, unverified",
+    "agent": {
+     "actions": 10,
+     "calls": 15,
+     "seconds": 70.56
+    },
+    "compiled": false,
+    "steps": null,
+    "same": null,
+    "new": null
+   }
+  ],
+  "passes": [
+   {
+    "date": "Oct 28",
+    "commit": "00ec5d9",
+    "profile": "all-Spark",
+    "cells": {
+     "First run right": "13/18",
+     "Compiled": "14/18",
+     "Same input, no model call": "13/18 (14 with a repair)",
+     "New input, no model call": "4/11"
+    }
+   },
+   {
+    "date": "Oct 29",
+    "commit": "53ab459",
+    "profile": "all-Spark",
+    "cells": {
+     "First run right": "14/18",
+     "Compiled": "14/18",
+     "Same input, no model call": "9/18 (11 with a repair)",
+     "New input, no model call": "5/11"
+    }
+   },
+   {
+    "date": "Oct 29",
+    "commit": "059bb7f",
+    "profile": "all-Spark",
+    "cells": {
+     "First run right": "15/18",
+     "Compiled": "16/18",
+     "Same input, no model call": "12/18 (14 with a repair)",
+     "New input, no model call": "6/11"
+    }
+   },
+   {
+    "date": "Oct 31",
+    "commit": "a594136",
+    "profile": "hybrid",
+    "cells": {
+     "First run right": "12/18",
+     "Compiled": "12/18",
+     "Same input, no model call": "9/18 (9 with a repair)",
+     "New input, no model call": "6/11"
     }
    }
   ],
-  "skylark": [
-   "skylark_add_known_traveler_number",
-   "skylark_air_check_in_flight",
-   "skylark_change_seat",
-   "skylark_check_flight_status",
-   "skylark_check_in_flight",
-   "skylark_get_flight_gate",
-   "skylark_lookup_trip_destination"
-  ],
   "src": {
-   "path": "eval/results/real-apps/table.md"
+   "path": "eval/results/final/real.json"
+  },
+  "md_src": {
+   "path": "eval/results/final/real.md"
+  },
+  "passes_src": {
+   "path": "eval/results/real_rerun_2026-10-31/README.md",
+   "note": "The four stages"
   }
  },
  "teach": {
@@ -4221,7 +4412,7 @@ window.ENVOY = {
   },
   "approval_src": {
    "path": "site/data/recordings/approval.json",
-   "note": "loop A's API copy, read only"
+   "note": "a test copy of Envoy, read only"
   }
  },
  "models": {
@@ -4277,6 +4468,12 @@ window.ENVOY = {
     "cost_per_target": 0.00554
    }
   },
+  "sam_then_grounding": [
+   52,
+   52,
+   49,
+   52
+  ],
   "vision_src": {
    "path": "eval/results/phase6/vision.json"
   },
@@ -4317,116 +4514,7 @@ window.ENVOY = {
   "phase6_src": {
    "path": "docs/phase-6-results.md",
    "note": "Results"
-  },
-  "voice": "\"What's my gate for my Chicago flight?\" heard exactly. Final text 90 to 93 ms after release (connecting takes 0.25 to 1.45 s but overlaps the speech, which is buffered). Chat answered from memory in 3.4 s (\"Gate B12, from your screenshot and the SkyLark app just now\"): release → reply 3.5 s. Cost $0.0001 for a 2.6 s turn ($0.18 per audio hour).",
-  "voice_src": {
-   "path": "docs/phase-5-results.md",
-   "note": "Voice, scripted"
-  },
-  "wonder_calls": [
-   {
-    "job": "plan",
-    "model": "muse-wonder-1.0",
-    "ms": 5845,
-    "usd": 0.01485,
-    "t": 11.6
-   },
-   {
-    "job": "step",
-    "model": "muse-wonder-1.0",
-    "ms": 1509,
-    "usd": 0.010996,
-    "t": 14.0
-   },
-   {
-    "job": "step",
-    "model": "muse-wonder-1.0",
-    "ms": 1437,
-    "usd": 0.010128,
-    "t": 17.8
-   },
-   {
-    "job": "step",
-    "model": "muse-wonder-1.0",
-    "ms": 2922,
-    "usd": 0.005581,
-    "t": 21.9
-   },
-   {
-    "job": "step",
-    "model": "muse-wonder-1.0",
-    "ms": 1649,
-    "usd": 0.004561,
-    "t": 24.9
-   },
-   {
-    "job": "step",
-    "model": "muse-wonder-1.0",
-    "ms": 1353,
-    "usd": 0.005769,
-    "t": 28.2
-   },
-   {
-    "job": "step",
-    "model": "muse-wonder-1.0",
-    "ms": 1710,
-    "usd": 0.005505,
-    "t": 31.3
-   },
-   {
-    "job": "step",
-    "model": "muse-wonder-1.0",
-    "ms": 8736,
-    "usd": 0.005258,
-    "t": 41.4
-   },
-   {
-    "job": "step",
-    "model": "muse-wonder-1.0",
-    "ms": 1976,
-    "usd": 0.006458,
-    "t": 45.4
-   }
-  ],
-  "spark_calls": [
-   {
-    "job": "match",
-    "model": "muse-spark-1.3",
-    "ms": 1900,
-    "usd": 0.00275,
-    "t": 2.0
-   },
-   {
-    "job": "extract",
-    "model": "muse-spark-1.3",
-    "ms": 2880,
-    "usd": 0.003287,
-    "t": 48.4
-   },
-   {
-    "job": "app_note",
-    "model": "muse-spark-1.3",
-    "ms": 3296,
-    "usd": 0.004324,
-    "t": 51.7
-   }
-  ],
-  "replay_calls": [
-   {
-    "job": "match",
-    "model": "muse-spark-1.3",
-    "ms": 2022,
-    "usd": 0.00227,
-    "t": 2.1
-   },
-   {
-    "job": "extract",
-    "model": "muse-spark-1.3",
-    "ms": 3010,
-    "usd": 0.002721,
-    "t": 17.8
-   }
-  ]
+  }
  },
  "proof": {
   "suites": [
@@ -4538,9 +4626,27 @@ window.ENVOY = {
   "aw": {
    "headline": "Envoy as on main solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001). Both runs are seed 30, pass@1, at about $0.04 and 38 s per task (median $0.030).",
    "held_out": "30.5 of 58 against main's 12 (+21 −2, p = 0.0001). Against Oct 28's 31: +5 −6, so unchanged within noise.",
+   "routines": {
+    "did": "55",
+    "of": "69",
+    "agent": "63",
+    "calls": "1",
+    "agent_calls": "6",
+    "usd": "$0.002",
+    "agent_usd": "$0.012",
+    "fallback": [
+     67,
+     69
+    ]
+   },
+   "held": [
+    31,
+    58,
+    12
+   ],
    "src": {
     "path": "docs/androidworld-results.md",
-    "note": "Headline"
+    "note": "Headline, Routines"
    }
   },
   "phone": {
