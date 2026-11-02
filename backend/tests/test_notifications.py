@@ -32,7 +32,8 @@ T0 = 1_793_500_000.0  # the Mac's clock in these tests (Nov 2026)
 
 
 def record(pkg: str, nid: int, title: str | None, text: str | None, posted_ms: int, *, tag: str = "null", flags: str = "0",
-           android: int = 15, big: str | None = None, typed: str = "String", redacted: bool = False, alerted_ms: int | None = None) -> str:
+           android: int = 15, big: str | None = None, typed: str = "String", redacted: bool = False, alerted_ms: int | None = None,
+           ticker: str | None = None) -> str:
     """One NotificationRecord as dumpsys prints it. Android 15 names flags (`GROUP_SUMMARY|LOCAL_ONLY`) and prints
     `when=a/b`; Android 13 prints flags in hex and `when=a`."""
     key = f"0|{pkg}|{nid}|{tag}|10123"
@@ -47,8 +48,9 @@ def record(pkg: str, nid: int, title: str | None, text: str | None, posted_ms: i
         f"Notification(channel=fake shortcut=null contentView=null vibrate=null sound=null defaults=0 flags={flags} color=0x00000000 vis=PRIVATE))",
         "      uid=10123 userId=0", f"      opPkg={pkg}", f"      flags={flags}", f"      originalFlags={flags}", "      pri=0", f"      key={key}",
         "      seen=false", f"      groupKey={key}", "      notification=", "            contentIntent=null", f"            when={when}",
-        "            tickerText=null", "            extras={", extra("android.title", title),
-        "                android.reduced.images=Boolean (true)", extra("android.text", text)]
+        f"            tickerText={ticker}" if ticker else "            tickerText=null", "            extras={", extra("android.title", title),
+        "                gcm.n.analytics_data=Bundle (Bundle[{fake=1}])",  # an app's own keys sit between android.* ones
+        "                android.reduced.images=Boolean (true)", extra("android.text", text), "                com.fake.app.badge=Integer (3)"]
     if big is not None:
         lines.append(extra("android.bigText", big))
     lines += ["                android.appInfo=ApplicationInfo (ApplicationInfo{1234abc fake})", "            }",
@@ -101,6 +103,16 @@ def test_parse_reads_android_13_and_several_dumps_in_one_string():
     assert a13[f"0|{IG}|0|null|10123"].quiet and a13[f"0|{TT}|5|null|10123"].quiet  # 0x200 and 0x2 in hex
     both = parse(FAKE + "\n" + FAKE)  # one dump per package in one adb call: the same key once
     assert len(both) == 6
+
+
+def test_values_over_several_lines_from_column_zero_dont_end_the_list():
+    """Android 13 prints a title or ticker's later lines from column 0 (seen on the Pixel's Play services notification)."""
+    d = dump(record("com.fake.app", 1, "Setting up\nyour phone\n  Almost done:", "fake text", 1_793_499_990_000,
+                    ticker="Setting up\nyour phone\nCurrent step:"),
+             record(IG, 2, "envoy_test_acct", "fake_viewer_1 commented: hi", 1_793_499_991_000))
+    got = {s.package: s for s in parse(d)}
+    assert got["com.fake.app"].title == "Setting up\nyour phone\n  Almost done:" and got["com.fake.app"].text == "fake text"
+    assert got[IG].text == "fake_viewer_1 commented: hi"  # the record after it is still read
 
 
 def test_a_dump_without_noredact_gives_no_words_and_says_so():

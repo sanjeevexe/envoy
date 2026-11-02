@@ -100,9 +100,16 @@ class Shown:
 _RECORD = re.compile(r"^ {4}NotificationRecord\(0x[0-9a-fA-F]+: pkg=(\S+) ")
 _FIELD = re.compile(r"^ {6}(key|flags|mUpdateTimeMs|mCreationTimeMs|mInterruptionTimeMs)=(.*)$")
 _WHEN = re.compile(r"^\s+when=(\d+)")
-_EXTRA = re.compile(r"^(\s+)(android\.[\w.]+)=(.*)$")
+_EXTRA = re.compile(r"^(\s+)([\w.$:-]+)=(.*)$")  # any key: apps add their own (Android 13's gms does), not only android.*
 _TYPED = re.compile(r"^(?:String|SpannableString|SpannedString|SpannableStringBuilder|StringBuilder|CharSequence) \((.*)\)$", re.S)
 _REDACTED = re.compile(r"^\w+ \[length=\d+\]$")
+# Where the list ends: the blank "  ", a field ("  mArchive=…"), the next section (names seen on Android 13 and 15), or the
+# next dump. Nothing else ends it: a title or ticker over several lines prints its later lines from column 0 on Android
+# 13, and they can look like anything.
+_LIST_ENDS = re.compile(r"^  (|m[A-Z]\w*=.*|(Enqueued Notification List|Snoozed notifications|Ranking Config|Notification listeners|"
+                        r"Notification assistant services|Notification attention state|Zen Mode|Zen Log|Condition providers|"
+                        r"Group summaries|Usage Stats):)$")
+_DUMP = "Current Notification Manager state:"
 
 
 def _flags(raw: str) -> frozenset[str]:
@@ -162,11 +169,11 @@ def _records(dump: str) -> list[tuple[Shown, bool]]:
             elif cur is not None:
                 extras[cur].append(line)  # a value that runs over several lines (a message with line breaks)
             continue
-        if line.startswith("  ") and not line.startswith("   "):  # a section of the dump (two spaces in)
+        if line == "  Notification List:":
             close()
-            in_list = line.strip() == "Notification List:"
+            in_list = True
             continue
-        if not line.startswith(" ") and line.strip():  # a new dump ("Current Notification Manager state:")
+        if line == _DUMP or _LIST_ENDS.match(line):
             close()
             in_list = False
             continue
