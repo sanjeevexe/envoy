@@ -15,7 +15,7 @@ from test_mcp_link import make, me
 
 BASE = {"Accept": "application/json, text/event-stream", "Content-Type": "application/json", "MCP-Protocol-Version": "2025-11-25"}
 MUSE = {**BASE, "Authorization": "Bearer mcp-test-token"}
-EVERY_TOOL = {"run_task", "get_task", "list_routines", "run_routine", "memory_search", "memory_get", "memory_note",
+EVERY_TOOL = {"run_task", "get_task", "list_routines", "run_routine", "cross_post", "memory_search", "memory_get", "memory_note",
               "send_to_phone", "phone_updates", "create_trigger", "list_phones", "get_file"}
 
 
@@ -83,7 +83,7 @@ def test_revoking_one_key_leaves_muse_and_the_other_agents_working(env):
         assert c.delete(f"/api/agents/{claude['id']}", headers=me(env.token)).json() == {"revoked": claude["id"]}
         body = {"jsonrpc": "2.0", "id": 1, "method": "tools/list", "params": {}}
         assert c.post("/mcp", json=body, headers=key(k1)).status_code == 401
-        assert tools(c, key(k2)) == TOOL_GROUPS["read"] | {"run_task", "run_routine"}  # read and run, the default
+        assert tools(c, key(k2)) == TOOL_GROUPS["read"] | {"run_task", "run_routine", "cross_post"}  # read and run, the default
         assert tools(c, MUSE) == EVERY_TOOL
         assert not call(c, MUSE, "run_task", goal="check me in for my flight")[0]
         assert [a["name"] for a in c.get("/api/agents", headers=me(env.token)).json()["agents"]] == ["Meta agent"]

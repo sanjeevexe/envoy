@@ -18,6 +18,8 @@ the outbox through the door (api/forwarder.py), and `send_to_phone` waits for a 
 
 Learned routines the user shares with agents (api/sharing.py, off by default) are tools of their own, by name and with
 typed inputs (phone-layer plan, contract 1: `RoutineTools`, `EnvoyMCP`). A call goes exactly where `run_routine` goes.
+`cross_post` runs several of them as one task with a part per destination (api/crosspost.py): one request posts to
+Instagram, TikTok and YouTube, each post still waiting for the user's OK, and a retry runs only what didn't post.
 """
 
 from __future__ import annotations
@@ -30,7 +32,7 @@ import threading
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Literal
+from typing import Annotated, Any, Literal
 
 import anyio
 from mcp.server.mcpserver import Context, MCPServer
@@ -39,11 +41,12 @@ from mcp.server.mcpserver.utilities.func_metadata import ArgModelBase, FuncMetad
 from mcp.server.transport_security import TransportSecuritySettings
 from mcp_types import Icon, ToolAnnotations
 from mcp_types import Tool as MCPTool
-from pydantic import ConfigDict, Field, create_model
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, create_model
 
 from api.agents import guard
 from api.auth import agent_name
 from api.crossapp import lead, may_span_apps
+from api.crosspost import MAX_POSTS, RETRYABLE, CrossPost, Post
 from api.devices import NAMES
 from api.handoff import HandoffError, read_sidecar
 from api.notifications import redact, update_line
@@ -74,6 +77,8 @@ INSTRUCTIONS = (
     "routine tools (their optional phone; leave it out and Envoy picks). "
     "Routines the user shares with agents are also tools of their own, named after the routine (skylark_check_in_flight, say), "
     "with the routine's inputs as arguments: calling one is run_routine with that routine. "
+    "cross_post posts to several apps in one request (one task, a part per destination, each a shared routine); get_task's "
+    "posts says how each went. A post whose outcome is unknown may exist: tell the user to check that app, never post it again. "
     "phone_updates lists what happened on the phone since its cursor (finished tasks, tasks waiting for the user, changes, files, "
     "Envoy's questions, routines learned or repaired, notifications a watch matched); pass the cursor back next time. "
     "create_trigger proposes a recurring or event-triggered phone task: it is created switched off, and stays off until the user "
@@ -528,6 +533,45 @@ def start_routine(ctx: Any, base: str, name: str, inputs: dict[str, str], phone:
     return {"task_id": task["id"], "status": task["status"], "task_url": f"{base}/?task={task['id']}", **({"heads_up": heads} if heads else {})}
 
 
+class PostArgs(BaseModel):
+    """One destination of a cross-post."""
+
+    routine: str = Field(description="A routine the user shares with agents, by its name or its tool's name, e.g. instagram_reel_song")
+    inputs: dict[str, str] = Field(default_factory=dict, description="That routine's inputs, exactly as its own tool takes them")
+
+
+def cross_posts(ctx: Any, shared: dict[str, dict[str, Any]], posts: list[PostArgs]) -> tuple[list[Post], str | None]:
+    """The destinations, checked before anything starts: shared routines (`shared`: by routine and by tool name), each
+    once, with the inputs their own tools take. (posts, None) or ([], why not)."""
+    if not posts:
+        return [], "posts is empty: name the routine to post with for each app"
+    if len(posts) > MAX_POSTS:
+        return [], f"at most {MAX_POSTS} destinations in one cross-post"
+    out: list[Post] = []
+    for p in posts:
+        row = shared.get(p.routine)
+        if row is None:
+            names = sorted({r["routine"] for r in shared.values()})
+            return [], (f"{p.routine} isn't a routine the user shares with agents" + (f" (shared: {', '.join(names)})" if names else "")
+                        + ". The user shares one in Envoy, on the routine's page or in Settings › Agents.")
+        name = row["routine"]
+        if any(x.routine == name for x in out):
+            return [], f"{name} is named twice: each destination once, or it would post twice"
+        r = ctx.routines.get(name)
+        if unknown := sorted(set(p.inputs) - set(r.inputs)):
+            return [], f"{name} has no input {', '.join(unknown)}; its inputs: {', '.join(r.inputs) or 'none'}"
+        inputs = {k: str(v).strip() for k, v in p.inputs.items() if str(v).strip()}
+        if missing := [k for k, spec in r.inputs.items() if not spec.from_memory and k not in inputs]:
+            return [], f"{name} needs {', '.join(missing)}"
+        try:
+            input_schema(r)[2].model_validate(inputs)
+        except ValidationError as e:
+            err = e.errors()[0]
+            return [], f"{name}: {'.'.join(str(x) for x in err.get('loc', ()))} {err.get('msg', 'is not valid')}".strip()
+        out.append(Post(name, r.app, app_title(ctx, r.app), r.intent, inputs))
+    return out, None
+
+
 def routine_tool(ctx: Any, base: str, routine: str, name: str) -> tuple[Tool, dict[str, Any]]:
     """The library's routine `routine` (its active version) as a tool named `name`, and the row Settings › Agents shows."""
     r, idx = ctx.routines.get(routine), ctx.routines.index(routine)
@@ -639,6 +683,12 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> EnvoyMCP:
     base = base or public_base(port)
     server.routines = RoutineTools(ctx, base)
 
+    def crossposts() -> CrossPost:
+        """Cross-posts (api/crosspost.py): one per API, made when first used (it follows the runner's events)."""
+        if getattr(ctx, "crosspost", None) is None:
+            ctx.crosspost = CrossPost(ctx.runner)
+        return ctx.crosspost
+
     @server.tool(annotations=ToolAnnotations(title="Run a task on the user's phone", readOnlyHint=False, destructiveHint=False, openWorldHint=True))
     async def run_task(goal: str, phone: str | None = None) -> dict:
         """Ask Envoy to do something in one of the user's phone apps, e.g. "check me in for my flight".
@@ -671,7 +721,12 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> EnvoyMCP:
         task = ctx.tasks.get(task_id)
         if task is None:
             return {"error": f"no task {task_id}"}
-        return task_view(task, ctx.tasks.steps(task_id), ctx.tasks.approvals(task_id=task_id), base)
+        view = task_view(task, ctx.tasks.steps(task_id), ctx.tasks.approvals(task_id=task_id), base)
+        if task.get("kind") == "crossapp" and crossposts().is_crosspost(task_id):
+            view["posts"] = crossposts().view(task_id)
+            if undone := [p["app_name"] for p in view["posts"] if p["status"] in RETRYABLE]:
+                view["retry"] = f"cross_post with retry={task_id} runs only {', '.join(undone)} again"
+        return view
 
     @server.tool(annotations=ToolAnnotations(title="List learned routines", readOnlyHint=True, openWorldHint=False))
     def list_routines() -> dict:
@@ -687,6 +742,45 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> EnvoyMCP:
         """Run a routine by name with its inputs (missing inputs are filled from memory). Returns a task ID. `phone`: an id
         from list_phones, "phone" (the user's own; Envoy asks them first) or "emulator"; leave it out and Envoy picks."""
         return start_routine(ctx, base, name, inputs or {}, phone)
+
+    @server.tool(annotations=ToolAnnotations(title="Post to several apps in one request", readOnlyHint=False, destructiveHint=False,
+                                             openWorldHint=True))
+    def cross_post(
+        posts: Annotated[list[PostArgs] | None, Field(description="One per app: the routine to post with and its inputs. Leave out with retry.")] = None,
+        retry: Annotated[str | None, Field(description="A cross-post's task_id: run again only its destinations that failed or were declined.")] = None,
+        phone: Annotated[str | None, Field(description=PHONE)] = None,
+    ) -> dict:
+        """Post to several apps in one request: one task with a part per destination, each part running a routine the user
+        shares with agents (instagram_reel_song, tiktok_post_sound, youtube_short_sound, say) with that routine's own inputs.
+        The parts run one after another, and each post waits for the user's OK in Envoy on their phone: nothing is posted
+        without it. Returns the task_id at once; follow it with get_task, whose `posts` gives each destination's outcome:
+        done, failed or declined (not posted), waiting, verifying… or outcome unknown. Outcome unknown means the post tap
+        went through and the run ended before its check: tell the user to check that app; Envoy never posts there again by
+        itself. To finish the rest, call cross_post with retry set to the task_id: only destinations that failed or were
+        declined run again."""
+        if (posts is None) == (retry is None):
+            return {"error": "give posts (a new cross-post) or retry (a cross-post's task_id), not both"}
+        if retry is not None:
+            task = ctx.tasks.get(retry)
+            if task is None or not crossposts().is_crosspost(retry):
+                return {"error": f"no cross-post {retry}"}
+            got = crossposts().retry(retry, "mcp")
+            if "error" in got:
+                return got
+            return {"task_id": retry, "task_url": f"{base}/?task={retry}", **got, "posts": crossposts().view(retry),
+                    "text": f"Posting again to {', '.join(got['retrying'])}, one after another; each post waits for the user's OK in Envoy."}
+        asked, error = phone_choice(ctx, phone)
+        if error:
+            return {"error": error}
+        shared = {name: row for name, (_, row) in server.routines.current(server.builtin()).items()}
+        chosen, error = cross_posts(ctx, {**shared, **{row["routine"]: row for row in shared.values()}}, posts or [])
+        if error:
+            return {"error": error}
+        task = crossposts().start(chosen, "mcp", asked)
+        return {"task_id": task["id"], "status": task["status"], "task_url": f"{base}/?task={task['id']}",
+                "posts": [{"routine": p.routine, "app": p.app_name, "status": "queued"} for p in chosen],
+                "text": f"Posting to {', '.join(p.app_name for p in chosen)}, one after another. Each post waits for the user's OK "
+                        "in Envoy on their phone; follow it with get_task."}
 
     @server.tool(annotations=ToolAnnotations(title="Search Envoy memory", readOnlyHint=True, openWorldHint=False))
     def memory_search(query: str) -> dict:
