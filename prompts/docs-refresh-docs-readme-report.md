@@ -52,24 +52,21 @@ Not pushed. No devices, no API, no model calls, $0.
 
 ## Not sure it's true, or no committed evidence
 
-1. **Muse and the routine tools.** Two claims have no committed evidence yet:
-   - P1, Nov 1: Muse saw a newly added tool without reconnecting.
-   - The Nov 2 Muse dry run: `send_to_phone`, then the three routine tools by name; 0 / 3 / 0 calls, about 1 min 15 s
-     each.
-
-   Their sources are pivot §11 and the demo-plan banner, which aren't in git. Both files point at `docs/muse-link.md`.
-   I asked docs-folder to add a short section there. If it doesn't, either commit the evidence somewhere or cut those
-   two sentences (README "Learned tasks become tools"; submission "Why Meta's models matter" bullet 1 and the two Muse
-   feedback lines).
+1. **Muse and the routine tools.** The Nov 2 Muse dry run (`send_to_phone`, then the three routine tools by name;
+   0 / 3 / 0 calls, about 1 min 15 s each) now points at `eval/results/showcase/muse-2026-11-02/task-rows.json`, the
+   path the coordinator named. That file comes with the site-rework branch, so **the link doesn't resolve on this
+   branch until site-rework is merged**. Merge it first, or check the path then. P1 (Nov 1: Muse saw a newly added tool
+   without reconnecting) still has no committed evidence. The README no longer claims it; the submission still does,
+   pointing at `docs/muse-link.md` ("Why Meta's models matter" bullet 1 and one feedback line). I asked docs-folder to
+   add it there. If it doesn't, cut those two lines or commit the evidence.
 2. **Muse's quote:** "On its own, Muse can't open and tap around in apps on your phone." It's from the user's Muse for
    Mac chat on Nov 1 (pivot §1) and isn't in the repo. The fact sheet says to quote Muse rather than assert the limit,
    so I quoted it. **The user decides** whether to keep it, and whether to back it with a screenshot.
 3. **YouTube Short, "0 model calls":** this comes from the fact sheet and the demo-plan banner. The showcase report's
    real-post table gives no call count for `task-1102-015325-106a`. A read-only look at that task would settle it.
-4. **The TikTok re-post:** the fact sheet only says the TikTok posted without its song. `docs/demo-showcase.md` and
-   `prompts/showcase-report.md` (both committed) say a v3 re-post went live with "golden hour" at 02:30. I wrote "the
-   re-post has it", and "each started by the Spark agent and approved on the iPhone" for all of them, per the report's
-   intro.
+4. **The TikTok re-post** (settled by the coordinator's correction): `tiktok_post_sound` v3 went live with "golden
+   hour" on Nov 2 at 02:30 (task-1102-023044-d081, 3 calls). Both files now say all four features went live, with the
+   TikTok at 3 calls. I give no time for it: the report says 53 s and the coordinator's note says 67 s.
 5. **Instagram on emulators:** the fact sheet says it's untested, but `docs/cloud.md` (Nov 1, backlog #49) has
    Instagram reaching Share on the cloud emulator (declined). I claim neither. The site session may care.
 6. **The Story limit's detail** ("its first tap opens the live Story's poll results") comes from the banner (#64),
@@ -105,4 +102,4 @@ Not pushed. No devices, no API, no model calls, $0.
 ## For the user to decide
 
 - Keep Muse's quote (item 2)?
-- Publish the two Muse claims (item 1) before their evidence is in the repo, or hold them?
+- Keep the P1 line in the submission (item 1) before its evidence is in the repo, or cut it?

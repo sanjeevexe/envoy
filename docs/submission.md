@@ -46,12 +46,12 @@ money always asks. No agent has a tool to approve (`backend/policy/approval_rule
 - **Acts.** Envoy works real Android apps the way a person does: it reads the screen, taps and types. It uses "Envoy's
   phone" (a Pixel 5) or an emulator, and agents can choose which; a copy on Google Cloud was tested too. The showcase
   uses features only the apps have. One clip from the Mac became an Instagram Reel with a library song, an Instagram Story with a poll sticker,
-  a YouTube Short with a sound, and a TikTok with a sound. On the night of Nov 1 they went live on test accounts, each
-  one started by the Spark agent and approved on the iPhone (`docs/demo-showcase.md`).
+  a YouTube Short with a sound, and a TikTok with a sound. On the night of Nov 1 all four went live on test accounts,
+  each one started by the Spark agent and approved on the iPhone (`docs/demo-showcase.md`).
 - **Learns.** A successful run compiles into a **routine**: Muse Wonder writes a small program with inputs, a check
   before and after every step, and targets found by what they are rather than where they were. When the app changes,
   the routine repairs only the broken step and saves the fix as a new version. The Reel, the Story and the Short
-  replayed with 0 model calls (`prompts/showcase-report.md`). In the Starbucks app, the agent's first run took 45.6 s
+  replayed with 0 model calls, the TikTok with 3 (`prompts/showcase-report.md`). In the Starbucks app, the agent's first run took 45.6 s
   and 12 model calls; the routine compiled from it took 14.8 s and 2 calls, with the same answer (measured:
   `eval/results/real-apps/loop-a/runs.jsonl`).
 - **Learned tasks become tools.** A routine the person shares becomes a tool of its own for every agent allowed to run
@@ -97,7 +97,7 @@ The Contributor tier (Meta may train on inputs) is used only with our own test a
 - **Muse gets a phone, and its tool list grows as Envoy learns.** In a dry run on Nov 2, Muse for Mac copied a clip
   into Envoy's outbox, called `send_to_phone`, then called the Reel, TikTok and Short routines by name. Each reached
   its final button in about 1 min 15 s, with 0, 3 and 0 model calls, and Muse read each result back. Every final step
-  was declined. On Nov 1, Muse saw a newly added tool without reconnecting. (`docs/muse-link.md`)
+  was declined (`eval/results/showcase/muse-2026-11-02/task-rows.json`). On Nov 1, Muse saw a newly added tool without reconnecting (`docs/muse-link.md`).
 - **Wonder turns a run into an API.** Each showcase routine was learned from one agent run and compiled by Muse Wonder.
   Instagram's two needed no hand edits. Shared with agents, each becomes a typed MCP tool that replays for almost
   nothing (`prompts/showcase-report.md`, `prompts/agent-door-report.md`).
@@ -189,10 +189,11 @@ Measured outside the evaluation (these stay as they are):
 
 | What | Result | Source |
 | --- | --- | --- |
-| Real posts, night of Nov 1 | Instagram Reel with a library song, Instagram Story with a poll, YouTube Short with a sound: live, 0 model calls each. The first TikTok posted without its song; the re-post has it | `docs/demo-showcase.md`, `prompts/showcase-report.md` |
+| Real posts, night of Nov 1 | Instagram Reel with a library song, Instagram Story with a poll, YouTube Short with a sound: live, 0 model calls each. TikTok with a sound: live, 3 calls (the first post lost its song to a compiler bug, since fixed; the re-post has it) | `docs/demo-showcase.md`, `prompts/showcase-report.md` |
 | Notifications, Nov 2 | Instagram comment: on the iPhone 1.6 s after it landed on Envoy's phone. YouTube: Envoy's part 3.6 s (YouTube took about 2 minutes to notify). TikTok: no notification came | `prompts/phone-watch-report.md` |
 | The cloud phone, Oct 29 | Routines for SkyLark (our own test app) compiled on the Mac: 48/48 with no model calls on an emulator on Google Cloud | `docs/cloud.md` |
 | A learned routine as a tool | `skylark_get_flight_gate` shared, then called over MCP: done, 0 model calls, $0 | `eval/results/agent-door/call.json` |
+| Muse end to end, Nov 2 (a dry run) | `send_to_phone`, then the Reel, TikTok and Short routines called by name: each at its final button in about 1 min 15 s, 0 / 3 / 0 model calls, every final step declined | `eval/results/showcase/muse-2026-11-02/task-rows.json` |
 
 ## Built during the hackathon
 
