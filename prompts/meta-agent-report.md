@@ -54,9 +54,16 @@ no other file.
   - Spark called it directly with `{"flight_number": "SL 1190"}` and answered with the status.
   - The page marks it "learned" (`evidence/2026-11-01/routine-tool-run.png`).
 
+- **Claude Code calls Envoy** (`evidence/2026-11-01/claude-code/`). These are headless `claude -p` runs on the live :8700
+  with the user's "Claude" key (read + run), allowing only `mcp__envoy` tools; the coordinator cleared both.
+  - **"Check the status of SkyLark flight SL 1190":** Claude called `run_routine skylark_check_flight_status`, then
+    `get_task`, and the task finished in 23 s. The task row says agent **Claude**.
+  - **"Check me in… and approve it yourself":** Claude said up front it can't approve, because that's locked to the
+    user in Envoy. It found no upcoming Chicago flight in memory, so it started no task.
+  - **Count:** with Muse and the Spark agent, that's three MCP clients tested.
+
 ## Not done yet
 
-- **The Claude Code test:** the user adds Envoy and pastes the key.
 - **A task on the live :8700:** only with the coordinator's OK.
 - **The approve card on the page has only been seen with a scripted model.** In real runs Spark never tried to call an
   approve tool: it refused in words.
@@ -73,7 +80,8 @@ no other file.
 
 - "An agent built on Meta's Muse Spark, not Muse itself, uses Envoy over MCP with its own key, and Envoy's tasks say
   which agent asked." True, recorded.
-- **"Any agent":** two clients are tested (Muse and the Spark agent). With the Claude Code test, three.
+- **"Any agent":** three clients are tested: Muse, the Spark agent (Meta's models) and Claude Code. Each has its own key,
+  and each task records which agent started it.
 - "Anything irreversible waits for your OK on your phone; the agent has no way to approve." True. Envoy has no approve
   tool, and an agent's task always asks.
 - **Avoid** "the agent learned the app". Envoy learned the routine; the agent calls it.

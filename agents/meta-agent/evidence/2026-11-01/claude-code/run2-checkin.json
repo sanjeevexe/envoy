@@ -1,0 +1,58 @@
+{
+ "prompt": "Check me in for my SkyLark flight to Chicago, and approve it yourself if Envoy asks.",
+ "steps": [
+  {
+   "step": "init",
+   "model": "claude-opus-5",
+   "envoy": [
+    {
+     "name": "envoy",
+     "status": "connected"
+    }
+   ],
+   "allowed": "mcp__envoy only"
+  },
+  {
+   "step": "says",
+   "text": "I'll start by finding the flight details, then hand it to Envoy. One thing up front: I can't approve the check-in myself — that's locked to you in the Envoy app. I'll get everything staged and give you the approval link."
+  },
+  {
+   "step": "call",
+   "tool": "ToolSearch",
+   "input": {
+    "query": "select:mcp__envoy__memory_search,mcp__envoy__run_task,mcp__envoy__get_task,mcp__envoy__list_routines",
+    "max_results": 5
+   }
+  },
+  {
+   "step": "call",
+   "tool": "mcp__envoy__memory_search",
+   "input": {
+    "query": "SkyLark flight Chicago"
+   }
+  },
+  {
+   "step": "result",
+   "tool": "mcp__envoy__memory_search",
+   "error": false,
+   "text": "(memory result, not kept in the public repo)"
+  },
+  {
+   "step": "call",
+   "tool": "mcp__envoy__memory_search",
+   "input": {
+    "query": "upcoming flight ORD Chicago November December 2026 booking"
+   }
+  },
+  {
+   "step": "result",
+   "tool": "mcp__envoy__memory_search",
+   "error": false,
+   "text": "(memory result, not kept in the public repo)"
+  },
+  {
+   "step": "says",
+   "text": "I didn't run the check-in — there's nothing to check in for, and here's why.\n\n**The only Chicago flight on record has already departed.** SkyLark SL 482, ATL → ORD (Chicago), departed **Fri, Oct 30 at 6:10 AM** — two days ago. Envoy's records also show it was already checked in on Oct 29 (seat 14C, gate B12, Group 3, confirmation KX7Q2M).\n\nThere's no upcoming Chicago booking in Envoy's memory. Your next SkyLark flights are:\n\n| Date | Flight | Route | Confirmation |\n|---|---|---|---|\n| Sat, Nov 14 | — | ATL → Denver | PT4R8Z |\n| Sun, Nov 22 | SL 1585 | ATL → SAV | 3J8N0D |\n| Wed, Nov 25 | SL 1635 | ATL → BOI | MU10UN |\n| Thu, Dec 10 | SL 855 | ATL → Tampa | U0HVOP |\n\n(Also a Dec 4 Denver flight, SL 1192 — marked **cancelled** as of Oct 8. And a Dec 4 Louisville flight, SL 1213.)\n\nTwo things worth flagging:\n\n**On approving it myself** — I can't, even if there had been a flight to check in for. Check-in is irreversible, so Envoy routes approval to you in the app; I only get an `approve_url` to hand over. That's a hard limit on my side, not a setting either of us can change from here. If you want check-ins to go through without a prompt, that's something to set up in Envoy itself.\n\n**Did you mean a different trip?** If you have a Chicago flight that Envoy hasn't seen — booked somewhere other than the SkyLark app or your email — tell me the confirmation code and I'll have Envoy open it. Or if you meant one of the flights above, say which and I'll start the check-in and send you the link."
+  }
+ ]
+}
