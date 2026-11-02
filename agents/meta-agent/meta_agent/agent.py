@@ -240,6 +240,8 @@ def task_phase(view: dict[str, Any]) -> str:
     ids = sorted(str(a.get("approval_id")) for a in view.get("pending_approvals") or [])
     if ids:
         return "approval:" + ",".join(ids)
+    if status == "waiting_approval":  # nothing pending: the user just answered, and Envoy hasn't said yet how
+        return "settling"
     if status in WAITING_ON_USER or view.get("waiting_for_user"):
         return f"user:{status}"
     return "working"
@@ -479,10 +481,12 @@ class Agent:
 
     def _task_seen(self, view: dict[str, Any], *, by_model: bool = True) -> str:
         tid = str(view.get("task_id"))
+        card = self.waiting.get(tid)
         phase = task_phase(view)
+        if phase == "settling":  # the card stays as it is until Envoy says whether that answer was a yes or a no
+            phase = card["phase"] if card else self.seen_phase.get(tid, "working")
         if by_model:
             self.seen_phase[tid] = phase
-        card = self.waiting.get(tid)
         if phase.startswith(("approval:", "user:")):
             if card is None or card["phase"] != phase:
                 approvals = view.get("pending_approvals") or []

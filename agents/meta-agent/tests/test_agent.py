@@ -112,6 +112,18 @@ def test_declining_on_the_phone_closes_the_card_as_a_no(tmp_path):
     assert kinds(events, "waiting_end")[0]["outcome"] == "declined"
 
 
+def test_the_moment_after_an_answer_keeps_the_card_until_envoy_says_yes_or_no(tmp_path):
+    # Envoy can show "waiting_approval" with nothing pending right after the user's answer: no second card, and the
+    # card closes on what Envoy says next (here a no, which must never read as approved).
+    for after, outcome in ((view("declined"), "declined"), (view("running"), "answered")):
+        script = [[call("wait_for_task", {"task_id": "t1"}, 1)], [call("wait_for_task", {"task_id": "t1"}, 2)], [say("Done.")]]
+        views = [view("waiting_approval", approvals=["a1"]), view("waiting_approval"), after, view("done")]
+        agent, envoy, model, events = make(tmp_path, script, views=views)
+        asyncio.run(agent.start())
+        asyncio.run(agent.ask("check me in"))
+        assert len(kinds(events, "waiting")) == 1 and [e["outcome"] for e in kinds(events, "waiting_end")] == [outcome]
+
+
 def test_an_offer_for_the_real_phone_shows_as_asked_and_isnt_watched(tmp_path):
     script = [[call("send_to_phone", {"file": "clip.mp4", "device": "phone"}, 1)], [say("Approve it in Envoy.")]]
     agent, envoy, model, events = make(tmp_path, script)
@@ -246,6 +258,7 @@ def test_each_result_gets_a_line_for_the_feed():
     assert wait_title("you touched the phone") == "you touched the phone" and wait_title(None) == "Envoy needs the user on the phone"
     assert task_phase(view("running")) == "working" and task_phase(view("done")) == "final:done"
     assert task_phase(view("waiting_approval", approvals=["b", "a"])) == "approval:a,b" and task_phase(view("needs_you")) == "user:needs_you"
+    assert task_phase(view("waiting_approval")) == "settling"  # answered a moment ago, outcome not known yet
 
 
 def test_a_tool_outside_the_agents_list_is_envoys_refusal_to_show(tmp_path):
