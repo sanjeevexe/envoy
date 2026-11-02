@@ -95,15 +95,16 @@ def test_a_replay_records_the_button_it_was_asked_at():
     assert rs.asked_at({"description": "something else"}) == "something else"
 
 
-def test_no_agent_run_on_youtube_or_an_instagram_story_while_the_rule_misses_their_button():
-    """The coordinator's condition (Nov 1): policy/risk.py must catch Upload Short and Your story by rule first. The
-    check reads the rule itself, so it lifts when the rule change lands."""
-    from policy.risk import _PUBLISH
-    upload_caught = bool(_PUBLISH.match("Upload Short"))
-    story_caught = bool(_PUBLISH.match("Your story"))
-    assert (rs.rule_gap(rs.APPS["youtube"], "Post it as a Short") is None) is upload_caught
-    assert (rs.rule_gap(rs.APPS["instagram"], "Put a poll sticker on my story") is None) is story_caught
+def test_agent_runs_wait_on_the_rule_for_each_apps_publishing_button():
+    """The coordinator's condition (Nov 1): YouTube's Upload Short, TikTok's editor "Your Story" (id ts6) and Instagram's
+    Story "Your story" (by its id) must be irreversible by rule before an agent run there. main cd168d6 catches all three;
+    the check reads the rule itself, on the button P3 recorded."""
+    assert rs.rule_gap(rs.APPS["youtube"], "Post it as a Short") is None
+    assert rs.rule_gap(rs.APPS["tiktok"], "Post it with a sound") is None
+    assert rs.rule_gap(rs.APPS["instagram"], "Put a poll sticker on my story") is None
     assert rs.rule_gap(rs.APPS["instagram"], "Post this reel with a song") is None
-    # TikTok's Post is a whole "Post" (caught), but its editor's one-tap "Your Story" (id ts6) isn't, P3 found
-    from policy.risk import _PUBLISH as P
-    assert (rs.rule_gap(rs.APPS["tiktok"], "Post it with a sound") is None) is bool(P.match("Your Story"))
+
+
+def test_a_button_the_rule_misses_still_stops_the_run(monkeypatch):
+    monkeypatch.setitem(rs.GATED, rs.APPS["tiktok"], ("Make it live", ""))
+    assert "isn't irreversible by rule" in rs.rule_gap(rs.APPS["tiktok"], "x")

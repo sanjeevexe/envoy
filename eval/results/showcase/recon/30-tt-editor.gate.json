@@ -16,8 +16,10 @@
     529,
     2207
    ],
-   "risk": "reversible",
-   "reasons": [],
+   "risk": "irreversible",
+   "reasons": [
+    "rule: target publishes 'Your Story'"
+   ],
    "asks": true
   },
   {
@@ -33,8 +35,10 @@
     435,
     2192
    ],
-   "risk": "reversible",
-   "reasons": [],
+   "risk": "irreversible",
+   "reasons": [
+    "rule: target publishes 'Your Story'"
+   ],
    "asks": true
   },
   {
@@ -57,5 +61,5 @@
    "asks": true
   }
  ],
- "post_gated": false
+ "post_gated": true
 }

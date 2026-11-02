@@ -131,18 +131,18 @@ def asked_at(approval: dict[str, Any]) -> str:
 
 
 # The publishing buttons a run passes and the risk rule must catch first (the coordinator, Nov 1), as P3 recorded them
-# (eval/results/showcase/p3.md): YouTube's upload (not reached yet: the label it will most likely have), Instagram's
-# Story "Your story" (by label: the coordinator's condition, though its id is caught), TikTok's editor "Your Story" (one
-# tap posts a TikTok Story, on the screen every TikTok flow passes).
+# (eval/results/showcase/p3.md): YouTube's upload (not reached yet: the label it will most likely have), TikTok's editor
+# "Your Story" (one tap posts a TikTok Story, on the screen every TikTok flow passes), Instagram's Story "Your story"
+# (caught by its id). main cd168d6 catches all three.
 GATED = {"com.google.android.youtube": ("Upload Short", ""), "com.zhiliaoapp.musically": ("Your Story", "com.zhiliaoapp.musically:id/ts6")}
+STORY = ("Your story", "com.instagram.android:id/your_story_share_shortcut_button")
 
 
 def rule_gap(pkg: str, goal: str) -> str | None:
     """Why an agent run must wait: until policy/risk.py catches the app's publishing button by rule, a run would have
     only the model's label between it and a public post. Checked against the rule itself, on a one-button screen, so it
     lifts the moment the rule change lands."""
-    label, rid = GATED.get(pkg) or (("Your story", "") if pkg == APPS["instagram"] and re.search(r"\bstor(y|ies)\b", goal, re.I)
-                                    else (None, ""))
+    label, rid = GATED.get(pkg) or (STORY if pkg == APPS["instagram"] and re.search(r"\bstor(y|ies)\b", goal, re.I) else (None, ""))
     if label is None:
         return None
     xml = ('<?xml version="1.0" encoding="UTF-8"?><hierarchy rotation="0"><node index="0" text="" resource-id="" '
