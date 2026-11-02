@@ -18,7 +18,7 @@ from test_mcp_link import HDR, make
 
 LIB = Path(__file__).resolve().parents[2] / "data" / "routines"
 BUILTIN = {"run_task", "get_task", "list_routines", "run_routine", "memory_search", "memory_get", "memory_note", "send_to_phone",
-           "phone_updates", "create_trigger", "list_phones"}
+           "phone_updates", "create_trigger", "list_phones", "get_file"}
 
 
 @pytest.fixture()
