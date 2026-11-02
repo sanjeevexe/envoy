@@ -32,7 +32,9 @@ def after_run(store: RoutineStore, routine: Routine, outcome: RunOutcome, kind: 
     if held:
         return {"held": routine.version} if routine.status == "trial" or outcome.patches else {}
     if routine.status == "trial":
-        passed = outcome.status == "done" and outcome.model_calls == 0
+        # A run the user declined at its approval got there on its own: every step before the one that asks ran (a
+        # rehearsal of a posting routine always ends that way), so with no model calls it passes like a done run.
+        passed = outcome.status in ("done", "declined") and outcome.model_calls == 0
         verdict = {"passed": passed, "task_id": outcome.task_id, "status": outcome.status, "model_calls": outcome.model_calls,
                    "duration_s": outcome.duration_s}
         (store.activate if passed else store.reject)(routine.routine, routine.version, verdict)
