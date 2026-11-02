@@ -1,7 +1,8 @@
 # Docs refresh: the showcase site rework (Nov 2)
 
-Session site-rework, branch `claude/site-rework-3da8f9` on main `947bf44`. Only `site/**`, `scripts/build_site_data.py` and
-this report (with its screenshots in `prompts/docs-refresh-site-rework-report/`) changed. Not pushed, not merged: pushing
+Session site-rework, branch `claude/site-rework-3da8f9` on main `947bf44`. Only `site/**`, `scripts/build_site_data.py`,
+this report (with its screenshots in `prompts/docs-refresh-site-rework-report/`) and, on the coordinator's word,
+`eval/results/showcase/muse-2026-11-02/task-rows.json` changed. Not pushed, not merged: pushing
 main redeploys https://sanjeevexe.github.io/envoy/, so that waits for the user's OK through the coordinator. No devices, no
 model calls, $0.
 
@@ -30,7 +31,7 @@ model calls, $0.
 **Five new sections, each built from files in the repo:**
 | # | Section | Evidence |
 | --- | --- | --- |
-| 2 | Agents call it | The Spark agent's four-post cross-post rendered from its own event log (`agents/meta-agent/evidence/2026-11-01/crosspost/run2-four-posts.json`): the request, the four routine-tool calls with arguments, the phone asks, each final button and its decline, Spark's words, 11 calls, $0.043. Two of its page captures. Muse: two Oct 29 captures (Muse for Mac filling the outbox; Muse saying there's no accept or approve tool) plus the Nov 2 end-to-end dry run **in words only**. Claude Code: its three task rows from the live API and its refusal to approve |
+| 2 | Agents call it | The Spark agent's four-post cross-post rendered from its own event log (`agents/meta-agent/evidence/2026-11-01/crosspost/run2-four-posts.json`): the request, the four routine-tool calls with arguments, the phone asks, each final button and its decline, Spark's words, 11 calls, $0.043. Two of its page captures. Muse: the Nov 2 end-to-end dry run from its five task rows (`eval/results/showcase/muse-2026-11-02/task-rows.json`, added on the coordinator's word), with both Story failures and their notes, plus two Oct 29 captures (Muse for Mac filling the outbox; Muse saying there's no accept or approve tool). Claude Code: its three task rows from the live API and its refusal to approve |
 | 3 | Learned routines become tools | `eval/results/agent-door/`: the tool list before and after one share switch, the new tool exactly as agents see it, one call to it. The Spark agent calling `skylark_check_flight_status` by name (event log and capture). A crop of Settings › Agents › Agent tools |
 | 4 | Acts, in the apps | The four showcase routines from `data/routines/` (version, steps, inputs, how made). Each one's first run and the replays of its active version, copied from `eval/results/showcase/runs/runs.md`. Its real post from `prompts/showcase-report.md`. One P3 frame of the Story poll sticker on the Pixel, labeled as driven by hand before the routine existed. A "flaws included" callout: TikTok's songless post, the live-Story failure, YouTube's search repair |
 | 5 | Watches | The six trigger kinds read from `backend/api/scheduler.py`. The Nov 2 live comment table copied from `prompts/phone-watch-report.md` (Instagram +1.57 s; YouTube's ~2 min delay; TikTok none; the code comment not notified). Muse's scheduled task polling `phone_updates` (Oct 29 capture, cropped) |
@@ -82,12 +83,17 @@ eval path, and privacy rows for every new image.
 
 ## Sections without real footage
 
-- **Muse end to end (Nov 2):** no capture or task rows are in the repo. The page states it in words, with a chip
-  "Dry run, Nov 2 · no capture in the repo yet", and no source link. I asked the coordinator whether a capture or a
-  read-only task-row dump could be committed (like `claude-code/task-rows.json`). If one lands, it can replace the words.
+- **Muse end to end (Nov 2):** resolved. The coordinator read Muse's five task rows from the live API read-only and
+  checked them for privacy. They're now in `eval/results/showcase/muse-2026-11-02/task-rows.json`, and the card renders
+  them under "Dry run, Nov 2: every final post declined":
+  - the Reel, TikTok and Short were declined at their final buttons with 0, 3 and 0 model calls;
+  - the first Story failed, an unanswered phone ask that moved to an emulator (#63, fixed in `947bf44`);
+  - the Story retry hit the live-Story bug (#64, open).
+  There's still no screen capture of Muse for this run.
 - **Muse seeing a new tool without reconnecting (P1):** in words only, labeled "no capture in the repo".
-- **Watches:** no capture of the notification on the Pixel or the push on the iPhone. The section is the timing table plus
-  the Oct 29 Muse capture. I mentioned to the coordinator that an iPhone push still (no handles) would help, if cheap.
+- **Watches:** no capture of the notification on the Pixel or the push on the iPhone. The coordinator decided against a
+  fresh one: it would need a public comment on the test account. The section is the timing table plus the Oct 29 Muse
+  capture.
 - **App-only posts:** no frame from Envoy's own runs.
   - The showcase source traces have screen trees but no screenshots.
   - The approval screenshots stayed outside the repo on purpose (TikTok's shows nearby places).
@@ -97,9 +103,8 @@ eval path, and privacy rows for every new image.
 
 ## Unsure, or worth a second look
 
-- **The TikTok re-post with the sound.** `prompts/showcase-report.md` and `docs/demo-showcase.md` say task-1102-023044-d081
-  went live with "♫ golden hour - JVKE". The fact sheet only mentions the songless first post. The page shows both, cited
-  to the report. I asked the coordinator to confirm.
+- **The TikTok re-post with the sound:** confirmed by the coordinator. task-1102-023044-d081 is done in the database, and
+  the fact sheet's line was stale. All four app-only features have gone live once, and the Acts card in section 1 says so.
 - **The YouTube Short's model calls on its real post** aren't in any committed file, so the page doesn't claim "0 calls"
   for it. It shows "live, public".
 - **Replays per routine** count only runs after the active version was compiled. Earlier rows reuse the same version
@@ -113,8 +118,7 @@ eval path, and privacy rows for every new image.
 1. **Link the live posts?** The public Reel and Short URLs are in the (uncommitted) demo plan, on test accounts. The page
    doesn't link them now.
 2. **Show the test accounts' handles?** They're removed from the page now.
-3. **A phone capture for Watches?** An iPhone push for an Instagram comment, if the coordinator can take one cleanly.
-4. **The navigation has 16 entries** and scrolls sideways on narrower screens. Shorter names or fewer stops are possible if
+3. **The navigation has 16 entries** and scrolls sideways on narrower screens. Shorter names or fewer stops are possible if
    it feels long.
 
 ## For the other docs sessions

@@ -46,7 +46,7 @@
         <a class="card pillar" href="#agents"><span class="lbl">Agents call it</span><div class="big">3 agents</div>
           <p>Muse, the Spark agent on Meta's own models, and Claude Code have each called Envoy's tools over MCP.</p><span class="more">${num("agents")} · Agents call it →</span></a>
         <a class="card pillar" href="#app-only"><span class="lbl">Acts</span><div class="big">${posts} posts, 1 request</div>
-          <p>A Reel with a song from Instagram's library, a Story poll, a TikTok and a YouTube Short with a sound: features only the apps have, each a routine an agent calls by name.</p><span class="more">${num("app-only")} · App-only posts →</span></a>
+          <p>A Reel with a song from Instagram's library, a Story poll, a TikTok and a YouTube Short with a sound: features only the apps have, each a routine an agent calls by name. Each has gone live once, approved on the iPhone.</p><span class="more">${num("app-only")} · App-only posts →</span></a>
         <a class="card pillar" href="#learned"><span class="lbl">Learns</span><div class="big">${secs(f.seconds)} → ${secs(r.seconds)}</div>
           <p>${f.calls} → ${r.calls} model calls, ${usd(f.usd)} → ${usd(r.usd)}: Starbucks, first run against the routine it became (Oct 30). Routines check every screen and repair themselves.</p><span class="more">${num("first-run")}–${num("teach")} · How it learns →</span></a>
         <a class="card pillar" href="#watches"><span class="lbl">Watches</span><div class="big">${esc(ig ? ig["Shown on iPhone"].replace(/^\+/, "") : "")}</div>
@@ -98,7 +98,7 @@
 
   // ---- agents call it ----
   function renderAgents() {
-    const A = D.agents, X = A.crosspost, R1 = A.run1, M = A.muse, C = A.claude;
+    const A = D.agents, X = A.crosspost, R1 = A.run1, M = A.muse, MD = M.dry_run, C = A.claude;
     const ask = X.rows.find((x) => x.kind === "user");
     const done = C.tasks.filter((t) => t.status === "done");
     $("#agents-body").innerHTML = `
@@ -122,9 +122,12 @@
       </div>
       <div class="agent-row">
         <div class="card" style="padding:20px">
-          <div class="row-between"><h3>Muse, end to end</h3><span class="chip apricot">Dry run, Nov 2 · no capture in the repo yet</span></div>
-          <p style="margin:8px 0 0;color:var(--ink-2);font-size:14.5px">One request in Muse: it copied a clip from the Mac into Envoy's outbox and called <code>send_to_phone</code> (the iPhone asked first), then called the shared routine tools by name. The Reel, the TikTok and the Short each reached their final button with “golden hour” and the caption, with 0, 3 and 0 model calls, about 1 min 15 s each. Muse read each result back through <code>phone_updates</code>. Every final button was declined. Muse posts one at a time, waiting for a tap in its chat between posts.</p>
-          <p class="small" style="margin:8px 0 0">Library songs and poll stickers exist only in the apps, and Muse has no TikTok or YouTube connector, so it hands these to Envoy. Muse can post plain Instagram content itself. ${srcA(D.showcase.doc_src, "demo-showcase.md")}</p>
+          <div class="row-between"><h3>Muse, end to end</h3><span class="chip apricot">Dry run, Nov 2: every final post declined</span></div>
+          <p style="margin:8px 0 0;color:var(--ink-2);font-size:14.5px">${esc(MD.what)}</p>
+          <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Routine and task</th><th>Status</th><th class="r">Calls</th><th class="r">Time</th></tr></thead>
+            <tbody>${MD.tasks.map((t) => `<tr><td><code class="small">${esc(t.routine)}</code><div class="small">${esc(t.id)}</div></td><td>${esc(t.status)}${t.status !== "declined" ? `<div class="small">${esc(t.detail)}</div>` : ""}</td><td class="r">${t.model_calls}</td><td class="r">${secs(t.seconds)}</td></tr>`).join("")}</tbody></table></div>
+          <ul class="plain" style="margin-top:8px">${MD.notes.map((n) => `<li class="small">${esc(n.replace(/^seconds runs/, "Time runs"))}</li>`).join("")}</ul>
+          <p class="small" style="margin:8px 0 0">Muse posts one at a time, waiting for a tap in its chat between posts. Library songs and poll stickers exist only in the apps, and Muse has no TikTok or YouTube connector, so it hands these to Envoy; Muse can post plain Instagram content itself. ${srcA(M.dry_run_src, "task-rows.json")} ${srcA(D.showcase.doc_src, "demo-showcase.md")}</p>
           <div class="pair shots2">
             ${shot(M.mac, "Muse for Mac moving the newest video into Envoy's outbox folder and writing its caption file", "Muse for Mac puts a clip and its caption file in Envoy's outbox (Oct 29). Cropped to Muse's window.")}
             ${shot(M.no_accept, "Muse in the iPhone app saying it can't accept Envoy's offers: there's no accept or approve tool", "Muse, asked to accept Envoy's offers: “there's no accept or approve tool” (Oct 29).", "phone-shot")}

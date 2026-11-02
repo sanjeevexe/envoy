@@ -816,8 +816,8 @@ def spark_run(path: Path) -> dict:
 
 
 def agents() -> dict:
-    """Agents calling Envoy: the Spark agent's cross-post (four routine tools at once, on Envoy's phone), Muse's captures from
-    the Oct 29 link sitting, and Claude Code's tasks on the live API (task rows read read-only)."""
+    """Agents calling Envoy: the Spark agent's cross-post (four routine tools at once, on Envoy's phone), Muse's Nov 2 dry run
+    and its captures from the Oct 29 link sitting, and Claude Code's tasks on the live API (task rows read read-only)."""
     cc = json.loads((SPARK / "claude-code/task-rows.json").read_text())
     muse = REPO / "eval/results/muse-link"
     return {
@@ -828,7 +828,9 @@ def agents() -> dict:
         "run1_src": src(rel(SPARK / "crosspost/run1-three-posts.json")),
         "shots": {"asks": image(SPARK / "crosspost/run2-four-phone-asks.png", "agents-spark-four-asks", 1600),
                   "declined": image(SPARK / "crosspost/run2-all-declined.png", "agents-spark-all-declined", 1600)},
-        "muse": {"mac": image(muse / "e3-mac-moves-clip-and-sidecar.jpg", "muse-mac-outbox", crop=(85, 38, 740, 476)),
+        "muse": {"dry_run": json.loads((REPO / "eval/results/showcase/muse-2026-11-02/task-rows.json").read_text()),
+                 "dry_run_src": src("eval/results/showcase/muse-2026-11-02/task-rows.json", "Muse's tasks, read read-only"),
+                 "mac": image(muse / "e3-mac-moves-clip-and-sidecar.jpg", "muse-mac-outbox", crop=(85, 38, 740, 476)),
                  "no_accept": image(muse / "muse-refuses-to-accept-offers.jpg", "muse-no-accept-tool"),
                  "src": src("eval/results/muse-link", "the Oct 29 Muse sitting"), "doc": src("docs/muse-link.md")},
         "claude": {"tasks": cc["tasks"], "approvals": cc["approvals"], "src": src(rel(SPARK / "claude-code/task-rows.json")),

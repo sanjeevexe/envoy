@@ -79,7 +79,7 @@ Section numbers are positions on the page (the page numbers itself).
 | 1 | Limits | `eval/results/final/report.md` suite 4, `eval/results/real_rerun_2026-10-31/README.md`, `docs/cloud.md`, `prompts/phone-watch-report.md`, `prompts/showcase-report.md` |
 | 2. Agents call it | The Spark agent's cross-post: the request, each tool call, each ask on the iPhone and how it ended, Spark's words, its calls and dollars | `agents/meta-agent/evidence/2026-11-01/crosspost/run2-four-posts.json` (the agent page's event log), its `README.md`, and `run1-three-posts.json` |
 | 2 | Muse's Oct 29 captures (the Mac outbox; no accept or approve tool) | `eval/results/muse-link/`, `docs/muse-link.md` |
-| 2 | Muse end to end, Nov 2 (a dry run) | **No file in the repo**: the coordinator's rehearsal notes. The page says so |
+| 2 | Muse end to end, Nov 2 (a dry run, every final post declined): its five tasks, their calls and times, and the notes on the two Story failures (#63 fixed in `947bf44`, #64 open) | `eval/results/showcase/muse-2026-11-02/task-rows.json` (the live API's task rows, read read-only by the coordinator) |
 | 2 | Claude Code's tasks on the live API (agent "Claude", 0 model calls) and its refusal to approve | `agents/meta-agent/evidence/2026-11-01/claude-code/task-rows.json` and `README.md` |
 | 3. Routines become tools | The tool list before and after one share switch, the tool as agents see it, one call to it | `eval/results/agent-door/tools-before.json`, `tools-after.json`, `call.json` |
 | 3 | The Spark agent calling `skylark_check_flight_status` by name | `agents/meta-agent/evidence/2026-11-01/routine-tool-run.json` and `.png` |

@@ -372,7 +372,7 @@ pre.diff .del { color: var(--brick); }
 .tbl th { text-align: left; font-size: 12px; font-weight: 700; color: var(--muted); padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
 .tbl td { padding: 8px 10px; border-bottom: 1px solid var(--divider); vertical-align: top; }
 .tbl tr:last-child td { border-bottom: 0; }
-.tbl .r { text-align: right; }
+.tbl .r { text-align: right; white-space: nowrap; }
 .card.tbl-wrap { padding: 4px 6px; }
 .plain { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 6px; }
 .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 20px; }

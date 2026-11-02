@@ -457,6 +457,91 @@ window.ENVOY = {
    "declined": "img/agents-spark-all-declined.webp"
   },
   "muse": {
+   "dry_run": {
+    "source": "sqlite3 -readonly ~/Desktop/Envoy/data/api/envoy.db (the live :8700), read Nov 2, 2026 by the coordinator; every task Muse started in the Nov 2 rehearsal",
+    "what": "A dry run of the cross-post climax from Muse for Mac (11:38-12:20 ET). Muse copied a test clip on the Mac into Envoy's outbox, called send_to_phone (an offer the user approved on the iPhone), then called the shared routine tools by name, one per turn. Each task first asked 'use Envoy's phone?' on the iPhone. The user declined every final post button, so nothing was posted.",
+    "notes": [
+     "seconds runs from Muse's call to the task's end, so it includes the phone ask and the time the final approval waited on the iPhone; each post reached its final button about 1 min 15 s after the phone OK.",
+     "task-1102-114842-f1dc: its 'use Envoy's phone?' ask went unanswered for 15 min, and the task moved to an emulator, which had no Instagram and opened the Play Store. Fixed in main 947bf44 (backlog #63): no answer now ends the task as not done.",
+     "task-1102-121512-0b47: the Story retry on the Pixel. The night-before Story was still live, so the routine's first tap opened its poll results, and the agent fallback hit its step limit (backlog #64)."
+    ],
+    "tasks": [
+     {
+      "id": "task-1102-114116-06e0",
+      "status": "declined",
+      "source": "mcp",
+      "agent": "Muse",
+      "goal": "Post a gallery video to Instagram as a reel",
+      "routine": "instagram_reel_song",
+      "created": "2026-11-02 11:41:16",
+      "updated": "2026-11-02 11:44:31",
+      "seconds": 195.5,
+      "detail": "the user declined the approval",
+      "model_calls": 0,
+      "cost_usd": 0.0
+     },
+     {
+      "id": "task-1102-114533-67b7",
+      "status": "declined",
+      "source": "mcp",
+      "agent": "Muse",
+      "goal": "Post the newest gallery video to TikTok with a chosen sound and caption",
+      "routine": "tiktok_post_sound",
+      "created": "2026-11-02 11:45:33",
+      "updated": "2026-11-02 11:46:48",
+      "seconds": 75.1,
+      "detail": "the user declined the approval",
+      "model_calls": 3,
+      "cost_usd": 0.0073
+     },
+     {
+      "id": "task-1102-114712-1c04",
+      "status": "declined",
+      "source": "mcp",
+      "agent": "Muse",
+      "goal": "Post the newest gallery video as a YouTube Short with a chosen sound and title",
+      "routine": "youtube_short_sound",
+      "created": "2026-11-02 11:47:12",
+      "updated": "2026-11-02 11:48:29",
+      "seconds": 77.4,
+      "detail": "the user declined the approval",
+      "model_calls": 0,
+      "cost_usd": 0.0
+     },
+     {
+      "id": "task-1102-114842-f1dc",
+      "status": "failed",
+      "source": "mcp",
+      "agent": "Muse",
+      "goal": "Post the newest gallery video to an Instagram story with a poll sticker",
+      "routine": "instagram_story_poll",
+      "created": "2026-11-02 11:48:42",
+      "updated": "2026-11-02 12:03:54",
+      "seconds": 911.8,
+      "detail": "Couldn't install Something went wrong: no Install button, price or Open on the page",
+      "model_calls": 0,
+      "cost_usd": 0.0
+     },
+     {
+      "id": "task-1102-121512-0b47",
+      "status": "needs_you",
+      "source": "mcp",
+      "agent": "Muse",
+      "goal": "Post the newest gallery video to an Instagram story with a poll sticker",
+      "routine": "instagram_story_poll",
+      "created": "2026-11-02 12:15:12",
+      "updated": "2026-11-02 12:19:46",
+      "seconds": 273.9,
+      "detail": "routine step open_story_creation failed (after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) and the agent could not finish (step_limit); asking the user",
+      "model_calls": 30,
+      "cost_usd": 0.4251
+     }
+    ]
+   },
+   "dry_run_src": {
+    "path": "eval/results/showcase/muse-2026-11-02/task-rows.json",
+    "note": "Muse's tasks, read read-only"
+   },
    "mac": "img/muse-mac-outbox.webp",
    "no_accept": "img/muse-no-accept-tool.webp",
    "src": {
