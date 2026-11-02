@@ -1,6 +1,6 @@
 # phone-watch: notifications on Envoy's phone as a trigger source (T1b, contract 3)
 
-Stage 1, Nov 1. Branch `claude/phone-watch-ddc0ae`. Stage 2 (the live check on the Pixel, with the user commenting from their own phone) is not done yet.
+Stage 1 Nov 1 (in main as d00db3d, the Android 13 fix as dc9ae37). Stage 2, the live check on the Pixel with real comments, ran Nov 2 01:59–02:18 ET on :8700 (93ef04d).
 
 ## What is true now
 
@@ -52,16 +52,34 @@ Stage 1, Nov 1. Branch `claude/phone-watch-ddc0ae`. Stage 2 (the live check on t
     - Apps add their own extras keys (not `android.*`) between the standard ones.
     - A multi-line title or ticker prints its later lines from column 0.
   - Each one made a Play services notification parse with no words. After the fix, every notification with a title and text parses both.
-  - Both cases are now in the fake sample.
+  - Both cases are now in the fake sample. A re-run on the Pixel with the final parser was clean.
+
+- **Stage 2, Nov 2, the live API and the Pixel, with real comments.**
+  - Setup: the user turned on watching Instagram, TikTok and YouTube and added the trigger `Instagram, TikTok or YouTube: "comment"` ("Just tell me"). The comments came from the user's personal accounts, on the showcase's posts.
+  - Times run from the notification landing on the Pixel (its post time, corrected for the Pixel's clock, 1.0 s behind the Mac's). "Shown" is the iPhone service worker's receipt.
+
+  | App | Landed on the Pixel | Matched | Stored (= phone_updates) | Push sent | Shown on iPhone |
+  | --- | --- | --- | --- | --- | --- |
+  | Instagram, "test 1" | yes, ~5–15 s after the comment was sent | yes | +0.66 s | +0.78 s (HTTP 201) | **+1.57 s** |
+  | YouTube, "test 3" | yes, **~2 min** after the comment was posted (YouTube's own delay) | yes | +2.40 s | +2.64 s (HTTP 201) | **+3.60 s** |
+  | TikTok, "test 2", "test 4", "test 5" | **no**, for all three | n/a | n/a | n/a | n/a |
+  | Instagram, "my code is 482913" | **no**: Instagram didn't notify a second comment from the same person within a minute | n/a | n/a | n/a | n/a |
+
+  - **TikTok:** its Comments push setting was off on the new account. It was turned on at 02:12:30 and test 5 posted at 02:13:10, yet no system notification arrived by 02:18. TikTok showed the comments only as in-app banners, which a notification watcher can't see. POST_NOTIFICATIONS is granted, and the shade and Android's archive never held a TikTok notification.
+  - **YouTube** later re-posted its notification with different words (no "comment"), and the trigger correctly didn't fire again.
+  - **phone_updates** (agent-door's reader, live): one read-only MCP call returned both events as `notification` items.
+  - Envoy's part (landing → the user's iPhone) stayed under 4 s; the target was under 10 s. The time from a comment to its landing is each app's, and varies (Instagram seconds, YouTube minutes).
 
 ## Not done / not verified
 
-- **Stage 2:** the user comments on the test account's post from their own phone, and we time it to the push and to phone_updates.
-- **phone_updates** shows these events only once agent-door's reader lands (contract 3).
+- **TikTok** comment notifications, never seen on the Pixel. It may need time after turning the setting on, or TikTok may throttle push on a brand-new account.
+- **Redaction live:** Instagram sent no notification for the code comment. A unit test covers that exact text.
 - An API restart doesn't replay notifications that landed while it was down.
+- The `app` field of agent-door's phone_updates item is the package name; the line text names the app.
 
 ## What the video can honestly claim
 
-- "Envoy watches the notifications on its phone, for the apps you allow, and tells Muse and your iPhone within a few seconds." On the emulator: median ~1.25 s from landing to the push being queued. Measure on the Pixel before quoting a number.
-- "Codes are hidden before anything is stored; nothing else is kept."
-- Not yet: any claim about TikTok or YouTube comments specifically. On the Pixel they had no notifications at P2; Stage 2 will show whether their comment notifications carry the words.
+- **Instagram:** "A comment on your post reaches your iPhone 1.6 s after it lands on Envoy's phone, and Muse sees it at the same moment." Measured on the Pixel, Nov 2.
+- **YouTube:** "YouTube comments too." Envoy's part was 3.6 s, but YouTube took ~2 min to notify, so give no time from the comment.
+- **TikTok:** don't claim it. TikTok didn't post a phone notification for any of three comments.
+- "Envoy watches only the apps you allow; codes are hidden before anything is stored." True as built, but not shown live (see above).
