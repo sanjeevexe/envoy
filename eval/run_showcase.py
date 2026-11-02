@@ -397,7 +397,7 @@ def gate(dump: Path, pkg: str) -> int:
 # ---- stage 1: compiling the first run under a new name ---------------------------------------------------------
 
 
-def compile_run(trace: str, name: str, final_from_declined: bool) -> int:
+def compile_run(trace: str, name: str, final_from_declined: bool, recompile: str | None = None, reuse_spec: bool = False) -> int:
     """Wonder compiles a declined first run (`confirmed`: it ended at the post the user declined, so it has no verified
     end); the routine is renamed (never instagram_post_reel or another existing name, backlog #43). With
     `final_from_declined`, the tap that was declined becomes the last step: its locator is built from the screen it was
@@ -412,10 +412,15 @@ def compile_run(trace: str, name: str, final_from_declined: bool) -> int:
     from routines.screens import screen_from_tree
     if not re.fullmatch(r"[a-z][a-z0-9_]{2,63}", name):
         sys.exit(f"{name!r}: lower case, digits and _ only")
-    if (REPO / "data" / "routines" / name).exists():
+    if (REPO / "data" / "routines" / name).exists() and not recompile:
         sys.exit(f"{name!r} is already in the library: pick a new name (a compile under it would become its trial)")
-    routine, report = asyncio.run(compile_trace(TRACES / trace, confirmed=True))
-    changes = [f"compiled by showcase from {trace}, a first run declined at the post (eval/run_showcase.py)"]
+    spec = None
+    if reuse_spec:  # the Wonder answer the first compile paid for (its report), so a recompile costs no model call
+        from models.schemas import CompiledRoutine
+        spec = CompiledRoutine.model_validate(json.loads((ROUTINES / f"{name}.report.json").read_text())["wonder"])
+    routine, report = asyncio.run(compile_trace(TRACES / trace, confirmed=True, spec=spec))
+    changes = [f"compiled by showcase from {trace}, a first run declined at the post (eval/run_showcase.py)"
+               + (f"; recompiled ({recompile})" if recompile else "")]
     if final_from_declined:
         records = [json.loads(x) for x in (TRACES / trace / "steps.jsonl").read_text().splitlines() if x.strip()]
         last = next((r for r in reversed(records) if r.get("kind") == "action" and (r.get("approval") or {}).get("approved") is False), None)
@@ -437,15 +442,16 @@ def compile_run(trace: str, name: str, final_from_declined: bool) -> int:
     routine = routine.model_copy(update={"routine": name, "changes": changes})
     ROUTINES.mkdir(parents=True, exist_ok=True)
     text = dump_yaml(routine)
-    (ROUTINES / f"{name}.yaml").write_text(text)
-    (ROUTINES / f"{name}.report.json").write_text(json.dumps({**report.__dict__, "trace": trace, "name": name,
+    stem = f"{name}.recompiled" if recompile else name  # a recompile never overwrites the first compile or its report
+    (ROUTINES / f"{stem}.yaml").write_text(text)
+    (ROUTINES / f"{stem}.report.json").write_text(json.dumps({**report.__dict__, "trace": trace, "name": name, "recompile": recompile,
                                                               "final_from_declined": final_from_declined}, indent=1, default=str))
     print(text)
     print("# dropped:", *[f"#   step {n}: {w}" for n, w in report.dropped], sep="\n")
     print(f"# compiler {report.model}: {report.latency_s} s, ${report.cost_usd:.4f}")
     for w in report.warnings:
         print(f"# warning: {w}")
-    print(f"saved {(ROUTINES / (name + '.yaml')).relative_to(REPO)}")
+    print(f"saved {(ROUTINES / (stem + '.yaml')).relative_to(REPO)}")
     return 0
 
 
@@ -666,6 +672,8 @@ def main() -> int:
     p.add_argument("trace", help="data/runs/<trace>: a first run declined at the post")
     p.add_argument("--name", required=True, help="a new routine name (never one in the library)")
     p.add_argument("--final-from-declined", action="store_true")
+    p.add_argument("--recompile", default=None, help="why (e.g. 'compiler fix ffde928'): recompile a routine already in the library")
+    p.add_argument("--reuse-spec", action="store_true", help="reuse the first compile's Wonder answer (no model call)")
     p = sub.add_parser("add-routine")
     p.add_argument("yaml")
     for mode in ("first", "replay"):
@@ -697,7 +705,7 @@ def main() -> int:
     if args.cmd == "keep":
         return keep(args.stem)
     if args.cmd == "compile":
-        return compile_run(args.trace, args.name, args.final_from_declined)
+        return compile_run(args.trace, args.name, args.final_from_declined, args.recompile, args.reuse_spec)
     if args.cmd == "add-routine":
         return add_routine(Path(args.yaml))
     if args.cmd == "push":

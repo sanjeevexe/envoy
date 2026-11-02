@@ -22,22 +22,21 @@
   {
    "version": 2,
    "status": "active",
-   "created": "2026-11-01 21:31:25",
+   "created": "2026-11-01 22:13:43",
    "parent": 1,
    "changes": [
-    "tuned by hand (showcase): a 3 s wait added before the visual tap, one locator tuned, the app corrected",
-    "compiled by showcase from task-1101-210013-7814-r1, a first run declined at the post (eval/run_showcase.py)",
-    "its last step (tap 'Post') is the tap declined at step 25, built from that screen; irreversible",
-    "wait_for_sound_results (new, 3 s) before apply_first_sound_result: TikTok draws its search results with no accessibility nodes, so execute_sound_search's after-checks pass before they appear and the visual tap looked too early (3/3 v1 replays failed: 'couldn't see the red check button'). Hand edit: showcase",
-    "select_sound_result: the row whose label has '{{sound_title}} · {{sound_artist}}' (0.82 vs 0 on the recorded sheet; v1's locator had no text: any list button). Hand edit: showcase",
-    "app: com.zhiliaoapp.musically. v1 said com.instagram.android: the first run's task had no app (Envoy doesn't know TikTok's name) and the phone was on Instagram before the run launched TikTok, so the compiler took Instagram. A replay then fresh-launched Instagram first (and paused: 'TikTok came to the front on its own'). Correction: showcase"
+    "recompiled with the compiler fix (ffde928) from the same run; learned, one step added and its app corrected by hand (showcase)",
+    "hand edit: showcase. wait_for_sound_results (3 s) before apply_first_sound_result: TikTok draws its search results with no accessibility nodes, so the previous step's after-checks pass at once and the visual tap looked too early (0/3 v1 replays)",
+    "hand edit: showcase. app com.zhiliaoapp.musically (the compiler said com.instagram.android) and launch_tiktok's before-check on Instagram's home pager dropped: the source run (Nov 1, 21:00) predates TikTok's name in Envoy (ffde928), so its task had no app, and Instagram was on screen before the agent launched TikTok",
+    "compiled by showcase from task-1101-210013-7814-r1, a first run declined at the post (eval/run_showcase.py); recompiled (compiler fix ffde928)",
+    "its last step (tap 'Post') is the tap declined at step 25, built from that screen; irreversible"
    ],
    "verification": {
     "by": "showcase",
     "post_steps": [
      "tap_post"
     ],
-    "checked": "2026-11-01 21:31"
+    "checked": "2026-11-01 22:13"
    }
   }
  ],
@@ -76,36 +75,36 @@
    "patches": 1
   },
   {
-   "time": "2026-11-01 21:44:00",
+   "time": "2026-11-01 22:27:39",
    "kind": "run",
    "version": 2,
-   "task_id": "task-1101-214220-c7d7-r1",
+   "task_id": "task-1101-222629-f5f3-r1",
    "status": "declined",
-   "rung": 1,
+   "rung": 2,
    "model_calls": 7,
-   "duration_s": 91.5,
+   "duration_s": 62.32,
    "patches": 0
   },
   {
-   "time": "2026-11-01 21:45:08",
+   "time": "2026-11-01 22:29:02",
    "kind": "run",
    "version": 2,
-   "task_id": "task-1101-214406-2cda-r1",
+   "task_id": "task-1101-222746-56dd-r1",
    "status": "declined",
-   "rung": 1,
-   "model_calls": 7,
-   "duration_s": 59.61,
+   "rung": 2,
+   "model_calls": 8,
+   "duration_s": 68.25,
    "patches": 0
   },
   {
-   "time": "2026-11-01 21:46:21",
+   "time": "2026-11-01 22:30:21",
    "kind": "run",
    "version": 2,
-   "task_id": "task-1101-214515-ba11-r1",
+   "task_id": "task-1101-222910-b129-r1",
    "status": "declined",
-   "rung": 1,
+   "rung": 2,
    "model_calls": 7,
-   "duration_s": 57.33,
+   "duration_s": 61.76,
    "patches": 0
   }
  ],

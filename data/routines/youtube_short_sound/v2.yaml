@@ -4,8 +4,7 @@ version: 2
 status: active
 intent: Post the newest gallery video as a YouTube Short with a chosen sound and title
 description: Prepares a YouTube Short from the newest video in the phone gallery, adds a chosen sound from the YouTube sound library, and enters
-  the requested title before upload. Only works when sound_artist is the one already shown on 'golden hour, JVKE, Jake Lawson, 1 minute, 281K
-  Shorts, Play a preview'.
+  the requested title before upload.
 patterns: [post my newest video to YouTube as a Short, upload the latest gallery video as a Short with this sound, make a YouTube Short from my
     newest clip, turn the newest video in my gallery into a Short]
 start: fresh_launch
@@ -191,16 +190,31 @@ steps:
   - element_present: {resource_id: shorts_edit_timeline_button, text: Edit, kind: Button}
   risk: reversible
   note: trace step 10
+- id: find_select_sound_result
+  intent: "Scroll to {{sound_title}}, {{sound_artist}} if it is not on screen"
+  action:
+    scroll_until:
+      target:
+        text_has: "{{sound_title}}, {{sound_artist}}"
+        kind: Button
+        cls: ViewGroup
+        in_list: true
+      direction: down
+      max_scrolls: 8
+  post:
+  - element_present:
+      text_has: "{{sound_title}}, {{sound_artist}}"
+      kind: Button
+      cls: ViewGroup
+      in_list: true
+  risk: read
+  note: "added: input-based list choice"
 - id: select_sound_result
   intent: "Select the result for {{sound_title}} by {{sound_artist}} from the sound library results"
   pre:
   - {app_foreground: com.google.android.youtube}
-  - element_present:
-      text_has: "{{sound_artist}}"
-      kind: Text
   action:
     tap:
-      text: "{{sound_title}}, {{sound_artist}}, 1 minute, Shorts, Play a preview"
       text_has: "{{sound_title}}, {{sound_artist}}"
       kind: Button
       cls: ViewGroup
@@ -298,20 +312,17 @@ done:
 - text_visible: "{{short_title}}"
 parent_version: 1
 changes:
-- "tuned by hand (showcase): one stray before-check dropped, one locator tuned"
-- compiled by showcase from task-1101-211106-9b42-r1, a first run declined at the post (eval/run_showcase.py)
+- recompiled with the compiler fix (ffde928) from the same run; learned, one step tuned by hand (showcase)
+- "hand edit: showcase. tap_create: its before-check on 'Captions unavailable' (caption_toggle_container) dropped: a video autoplaying on Home\
+  \ when the run was recorded, usually absent (2 of 3 v1 replays failed there)"
+- compiled by showcase from task-1101-211106-9b42-r1, a first run declined at the post (eval/run_showcase.py); recompiled (compiler fix ffde928)
 - its last step (tap 'Upload Short') is the tap declined at step 15, built from that screen; irreversible
-- "tap_create: dropped its before-check on 'Captions unavailable' (caption_toggle_container): a video autoplaying on Home when the first run was\
-  \ recorded; usually absent, so 2 of 3 v1 replays failed at the first step and the repairs wandered (one into Chrome's first-run sign-in screen).\
-  \ Hand edit: showcase"
-- "select_sound_result: the result row whose label has '{{sound_title}}, {{sound_artist}}' (0.89 vs 0.66 on the recorded results; v1's locator\
-  \ had no text: every row tied). Hand edit: showcase"
 compiled_from:
   task_id: task-1101-211106-9b42-r1
   goal: "Post the newest video in my phone's gallery to YouTube as a Short with the sound \"golden hour\" by JVKE from YouTube's sound library\
     \ and this title: \"Envoy rehearsal: one clip, three apps\""
-  compiler: muse-wonder-1.0
-  compiled_at: "2026-11-01 21:13:43"
+  compiler: cached
+  compiled_at: "2026-11-01 22:13:10"
   trace_steps_kept: [1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
   trace_steps_dropped: 2
-  cost_usd: 0.0713
+  cost_usd: 0.0

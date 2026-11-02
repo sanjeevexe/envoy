@@ -22,20 +22,19 @@
   {
    "version": 2,
    "status": "active",
-   "created": "2026-11-01 21:31:24",
+   "created": "2026-11-01 22:13:42",
    "parent": 1,
    "changes": [
-    "one locator tuned by hand (showcase): learned from one run, one step tuned",
-    "compiled by showcase from task-1101-205058-3079-r1, a first run declined at the post (eval/run_showcase.py)",
-    "its last step (tap 'Your story') is the tap declined at step 11, built from that screen; irreversible",
-    "select_newest_video: the grid's first video slot (its id, in the grid, nearest the recorded position), not its label: every thumbnail reads 'Unselected Video thumbnail created on <date>', so the label fit all of them, the executor scrolled, and the repair picked an Oct 30 clip in replay 3 (Nov 1). Same change as instagram_post_reel's v3 candidate. Hand edit: showcase"
+    "recompiled with the compiler fix (ffde928) from the same run; purely learned, no hand edits",
+    "compiled by showcase from task-1101-205058-3079-r1, a first run declined at the post (eval/run_showcase.py); recompiled (compiler fix ffde928)",
+    "its last step (tap 'Your story') is the tap declined at step 11, built from that screen; irreversible"
    ],
    "verification": {
     "by": "showcase",
     "post_steps": [
      "tap_post"
     ],
-    "checked": "2026-11-01 21:31"
+    "checked": "2026-11-01 22:13"
    }
   }
  ],
@@ -74,36 +73,36 @@
    "patches": 1
   },
   {
-   "time": "2026-11-01 21:39:35",
+   "time": "2026-11-01 22:22:28",
    "kind": "run",
    "version": 2,
-   "task_id": "task-1101-213907-9bf4-r1",
+   "task_id": "task-1101-222200-171e-r1",
    "status": "declined",
    "rung": 0,
    "model_calls": 0,
-   "duration_s": 24.93,
+   "duration_s": 24.72,
    "patches": 0
   },
   {
-   "time": "2026-11-01 21:40:40",
+   "time": "2026-11-01 22:24:14",
    "kind": "run",
    "version": 2,
-   "task_id": "task-1101-214012-4da7-r1",
+   "task_id": "task-1101-222306-2ac6-r1",
    "status": "declined",
-   "rung": 0,
-   "model_calls": 0,
-   "duration_s": 24.88,
-   "patches": 0
+   "rung": 4,
+   "model_calls": 1,
+   "duration_s": 66.7,
+   "patches": 1
   },
   {
-   "time": "2026-11-01 21:41:47",
+   "time": "2026-11-01 22:25:21",
    "kind": "run",
    "version": 2,
-   "task_id": "task-1101-214117-dcb2-r1",
+   "task_id": "task-1101-222452-32aa-r1",
    "status": "declined",
-   "rung": 0,
+   "rung": 1,
    "model_calls": 0,
-   "duration_s": 25.85,
+   "duration_s": 25.6,
    "patches": 0
   }
  ],

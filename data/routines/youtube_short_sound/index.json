@@ -1,6 +1,6 @@
 {
  "name": "youtube_short_sound",
- "active": 4,
+ "active": 2,
  "versions": [
   {
    "version": 1,
@@ -21,65 +21,21 @@
   },
   {
    "version": 2,
-   "status": "retired",
-   "created": "2026-11-01 21:31:25",
+   "status": "active",
+   "created": "2026-11-01 22:13:44",
    "parent": 1,
    "changes": [
-    "tuned by hand (showcase): one stray before-check dropped, one locator tuned",
-    "compiled by showcase from task-1101-211106-9b42-r1, a first run declined at the post (eval/run_showcase.py)",
-    "its last step (tap 'Upload Short') is the tap declined at step 15, built from that screen; irreversible",
-    "tap_create: dropped its before-check on 'Captions unavailable' (caption_toggle_container): a video autoplaying on Home when the first run was recorded; usually absent, so 2 of 3 v1 replays failed at the first step and the repairs wandered (one into Chrome's first-run sign-in screen). Hand edit: showcase",
-    "select_sound_result: the result row whose label has '{{sound_title}}, {{sound_artist}}' (0.89 vs 0.66 on the recorded results; v1's locator had no text: every row tied). Hand edit: showcase"
+    "recompiled with the compiler fix (ffde928) from the same run; learned, one step tuned by hand (showcase)",
+    "hand edit: showcase. tap_create: its before-check on 'Captions unavailable' (caption_toggle_container) dropped: a video autoplaying on Home when the run was recorded, usually absent (2 of 3 v1 replays failed there)",
+    "compiled by showcase from task-1101-211106-9b42-r1, a first run declined at the post (eval/run_showcase.py); recompiled (compiler fix ffde928)",
+    "its last step (tap 'Upload Short') is the tap declined at step 15, built from that screen; irreversible"
    ],
    "verification": {
     "by": "showcase",
     "post_steps": [
      "tap_post"
     ],
-    "checked": "2026-11-01 21:31"
-   }
-  },
-  {
-   "version": 3,
-   "status": "retired",
-   "created": "2026-11-01 21:58:11",
-   "parent": 2,
-   "changes": [
-    "tuned by hand (showcase): one stray before-check dropped, one locator tuned, one 1.5 s wait added",
-    "compiled by showcase from task-1101-211106-9b42-r1, a first run declined at the post (eval/run_showcase.py)",
-    "its last step (tap 'Upload Short') is the tap declined at step 15, built from that screen; irreversible",
-    "tap_create: dropped its before-check on 'Captions unavailable' (caption_toggle_container): a video autoplaying on Home when the first run was recorded; usually absent, so 2 of 3 v1 replays failed at the first step and the repairs wandered (one into Chrome's first-run sign-in screen). Hand edit: showcase",
-    "select_sound_result: the result row whose label has '{{sound_title}}, {{sound_artist}}' (0.89 vs 0.66 on the recorded results; v1's locator had no text: every row tied). Hand edit: showcase",
-    "wait_for_suggestions (new, 1.5 s) before tap_trigger_search: in 2 of 3 v2 replays the suggestion tap landed while the list re-drew after Enter, so the search never ran; tap_trigger_search's after-checks (editor buttons behind the sheet) can't tell. Hand edit: showcase"
-   ],
-   "verification": {
-    "by": "showcase",
-    "post_steps": [
-     "tap_post"
-    ],
-    "checked": "2026-11-01 21:58"
-   }
-  },
-  {
-   "version": 4,
-   "status": "active",
-   "created": "2026-11-01 22:04:40",
-   "parent": 3,
-   "changes": [
-    "tuned by hand (showcase): one stray before-check dropped, one locator tuned, one 4 s wait added",
-    "compiled by showcase from task-1101-211106-9b42-r1, a first run declined at the post (eval/run_showcase.py)",
-    "its last step (tap 'Upload Short') is the tap declined at step 15, built from that screen; irreversible",
-    "tap_create: dropped its before-check on 'Captions unavailable' (caption_toggle_container): a video autoplaying on Home when the first run was recorded; usually absent, so 2 of 3 v1 replays failed at the first step and the repairs wandered (one into Chrome's first-run sign-in screen). Hand edit: showcase",
-    "select_sound_result: the result row whose label has '{{sound_title}}, {{sound_artist}}' (0.89 vs 0.66 on the recorded results; v1's locator had no text: every row tied). Hand edit: showcase",
-    "wait_for_suggestions (new, 1.5 s) before tap_trigger_search: in 2 of 3 v2 replays the suggestion tap landed while the list re-drew after Enter, so the search never ran; tap_trigger_search's after-checks (editor buttons behind the sheet) can't tell. Hand edit: showcase",
-    "wait_for_suggestions: 4 s instead of 1.5 s: with 1.5 s the suggestion tap still didn't start the search in 3 of 3 v3 replays (a repair tapped it again); the first run's agent tapped several seconds after typing. Hand edit: showcase"
-   ],
-   "verification": {
-    "by": "showcase",
-    "post_steps": [
-     "tap_post"
-    ],
-    "checked": "2026-11-01 22:04"
+    "checked": "2026-11-01 22:13"
    }
   }
  ],
@@ -118,81 +74,37 @@
    "patches": 0
   },
   {
-   "time": "2026-11-01 21:50:47",
+   "time": "2026-11-01 22:33:21",
    "kind": "run",
    "version": 2,
-   "task_id": "task-1101-214657-0703-r1",
-   "status": "needs_user",
-   "rung": 6,
-   "model_calls": 50,
-   "duration_s": 226.84,
-   "patches": 0
-  },
-  {
-   "time": "2026-11-01 21:53:47",
-   "kind": "run",
-   "version": 2,
-   "task_id": "task-1101-215052-39b0-r1",
+   "task_id": "task-1101-223055-1f79-r1",
    "status": "declined",
    "rung": 6,
-   "model_calls": 28,
-   "duration_s": 171.55,
-   "patches": 0
-  },
-  {
-   "time": "2026-11-01 21:55:30",
-   "kind": "run",
-   "version": 2,
-   "task_id": "task-1101-215352-24f7-r1",
-   "status": "declined",
-   "rung": 4,
-   "model_calls": 4,
-   "duration_s": 95.72,
+   "model_calls": 8,
+   "duration_s": 142.08,
    "patches": 2
   },
   {
-   "time": "2026-11-01 22:00:06",
+   "time": "2026-11-01 22:35:42",
    "kind": "run",
-   "version": 3,
-   "task_id": "task-1101-215853-0896-r1",
+   "version": 2,
+   "task_id": "task-1101-223345-be30-r1",
+   "status": "declined",
+   "rung": 6,
+   "model_calls": 8,
+   "duration_s": 112.63,
+   "patches": 2
+  },
+  {
+   "time": "2026-11-01 22:37:41",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1101-223608-9fdc-r1",
    "status": "declined",
    "rung": 4,
    "model_calls": 2,
-   "duration_s": 68.95,
-   "patches": 2
-  },
-  {
-   "time": "2026-11-01 22:01:43",
-   "kind": "run",
-   "version": 3,
-   "task_id": "task-1101-220031-b53f-r1",
-   "status": "declined",
-   "rung": 4,
-   "model_calls": 2,
-   "duration_s": 68.59,
-   "patches": 2
-  },
-  {
-   "time": "2026-11-01 22:03:50",
-   "kind": "run",
-   "version": 3,
-   "task_id": "task-1101-220209-ef43-r1",
-   "status": "declined",
-   "rung": 6,
-   "model_calls": 9,
-   "duration_s": 97.18,
-   "patches": 0
-  },
-  {
-   "time": "2026-11-01 22:06:51",
-   "kind": "run",
-   "version": 4,
-   "task_id": "task-1101-220507-94b6-r1",
-   "status": "declined",
-   "rung": 6,
-   "model_calls": 9,
-   "duration_s": 99.99,
-   "patches": 0
+   "duration_s": 90.16,
+   "patches": 3
   }
  ],
  "needs_recompile": true,

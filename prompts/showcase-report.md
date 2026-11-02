@@ -3,25 +3,42 @@
 Session `showcase`, branch `claude/showcase-414a4d` (rebased on main cd168d6). The Pixel 5 (Android 13), the test
 accounts (Instagram envoy3955, the user's TikTok and YouTube test accounts), and a `:8764` API copy with its own data
 dir and outbox, set to "always ask" for the three apps. **Nothing was posted**: every run stopped at the app's final
-button and was declined there. No likes, follows, comments or DMs. Spend: **$3.67** of Meta's API (runs $3.40,
-compiles $0.27).
+button and was declined there. No likes, follows, comments or DMs. Spend: **$4.22** of Meta's API (all runs and
+compiles).
 
-## What is true now
+## What is true now (recompiled with the compiler fix, main ffde928)
 
-| Routine (active version) | Feature | Replays of the active version | Learned vs tuned |
-| --- | --- | --- | --- |
-| `instagram_reel_song` (v2) | A Reel set to a song from Instagram's music library | **3/3** asked at Share, 49–92 s, **0 calls, $0**. Each picked the newest clip and JVKE's "golden hour" | Learned from one run; two locators tuned (the thumbnail; the track row) |
-| `instagram_story_poll` (v2) | A Story with a poll sticker | **3/3** asked at "Your story", 28–31 s, **0 calls, $0**, newest clip, poll typed | Learned from one run; one locator tuned (the thumbnail) |
-| `tiktok_post_sound` (v2) | A TikTok with a sound from TikTok's library | **3/3** asked at Post, 62–100 s, 7 vision calls each (no repairs), ~$0.017 | Learned from one run; a 3 s wait added, one locator tuned, its app corrected |
-| `youtube_short_sound` (v4) | A Short with a sound from YouTube's library | v3+v4: **4/4** asked at "Upload Short", 72–101 s, 2–9 calls, $0.04–0.12 | Learned from one run; one stray check dropped, one locator tuned, a wait added. Still repairs one step (below) |
+The user's call was "tune now, compiler later", and the compiler fix landed the same night. So the four routines in
+the library are **v1** (the first compile, retired) and **v2** (recompiled from the same source run with the fixed
+compiler, reusing Wonder's cached answer at $0). The hand-tuned versions never went into the library. They're kept as
+evidence in `eval/results/showcase/routine/*.v2-candidate.yaml` (and YouTube's v3/v4 candidates).
 
-Per run: `eval/results/showcase/runs/` (`runs.md` and one JSON each, with every routine step's rung). The approval
-screenshots, which show which labelled test clip ("REEL 2", "STORY 3"…) reached the final screen, are kept outside the
-repo (the TikTok one shows the phone's nearby places). P3, which features work on the accounts: `eval/results/showcase/p3.md`.
+| Routine v2 | Hand edits | Replays (3 each, declined at the final button) |
+| --- | --- | --- |
+| `instagram_reel_song` | none: purely learned | 3/3 at Share. Two at **0 calls** (48–76 s); one met Instagram's one-time "Explore audio" tip and the agent finished (144 s, 16 calls). The newest clip and JVKE's "golden hour" every time |
+| `instagram_story_poll` | none: purely learned | 3/3 at "Your story". Two at **0 calls**, 29–30 s, the right clip. **One wrong clip** (an Oct 29 video) after a repair: see the transient "Today" check below |
+| `tiktok_post_sound` | a 3 s wait before the visual tap; the app corrected (the source run predates TikTok's name in Envoy) | 3/3 at Post, 71–76 s, 7–8 vision calls (~$0.02), the newest clip each time |
+| `youtube_short_sound` | its stray "Captions unavailable" before-check dropped | 3/3 at "Upload Short", 94–144 s, 2–8 calls ($0.04–0.14), the newest clip each time. The search tap still needs a repair or the agent |
 
-**What the video can honestly say:** "Envoy learned each post from one run; we tuned a few steps by hand", and the
-Instagram ones "replay with no model calls". Not "purely learned" until the compiler fix below lands and they're
-recompiled. TikTok uses vision on its drawn sound list every run (cheap, ~$0.02). YouTube still spends a repair.
+How "which clip" was checked: before each replay a labelled test clip ("REEL 2", "STORY 3", "TIKTOK 1"…, each its own
+colour) was pushed. The approval screenshot at the final button (kept outside the repo) shows which one it was. The
+track or sound is confirmed by the step's own `text_has` on title and artist.
+
+**Wording for the video:** Instagram's two are "learned from one run" (no hand edits). TikTok's and YouTube's are
+"learned, one step tuned". Instagram's replay with no model calls when the app shows no tip. TikTok uses vision on
+its drawn sound list every run (~$0.02). YouTube still repairs its search step.
+
+Still open in the compiled routines (for the compiler session):
+- **A transient after-check** (`instagram_story_poll`, open_story_creation): `fast_scroll_container` "Today", the
+  gallery's date label that shows only while the grid scrolls (the same check `instagram_post_reel` v2 dropped on
+  Oct 29). The executor scrolled the grid to find it, so the next step's "list start" check ("Open camera") failed,
+  and the repair picked the top visible thumbnail: the wrong clip. Fix: never an after-check. Then recompile (cached)
+  and replay.
+- **YouTube's search tap** (tap_trigger_search): the compiler flags it as ambiguous ("golden hour" and "Golden Hour"
+  suggestions), and the tap doesn't start the search. Hand waits of 1.5 s and 4 s didn't help.
+- **TikTok's launch**: in every replay the task paused at launch ("TikTok came to the front on its own"), even with
+  the app corrected. The routine starts with a fresh launch *and* a learned `launch_tiktok` step; the second launch
+  may be what trips it. On :8700 that pause waits for someone to press Resume.
 
 ## How each routine was made
 1. The agent's first run on hybrid, with `eval/run_showcase.py first --as <new name>`. The name isn't in the library,
@@ -30,8 +47,9 @@ recompiled. TikTok uses vision on its drawn sound list every run (cheap, ~$0.02)
    run. The declined tap, which never ran, is added back as the last step: irreversible, with no after-check, and noted
    in the change log.
 3. `add-routine`, then 3 replays of v1, declined (all in `runs.md`).
-4. The v1 replays showed list locators that tie, so the tuned versions went in through `RoutineStore.add`. Each change
-   log starts with what was tuned by hand. **Not through `add_trial`:** a trial becomes active only after a run that
+4. The v1 replays showed list locators that tie. The tuned versions were tried first (all four reached the final
+   button), then replaced by recompiles with the compiler fix plus the two hand edits the coordinator named. They went
+   in through `RoutineStore.add`, and each change log starts with what, if anything, was edited by hand. **Not through `add_trial`:** a trial becomes active only after a run that
    ends *done* with 0 calls (`lifecycle.after_run`), and a declined rehearsal never ends done, so its first replay
    would have rejected the trial.
 

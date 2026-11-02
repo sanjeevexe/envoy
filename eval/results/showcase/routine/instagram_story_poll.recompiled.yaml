@@ -1,0 +1,236 @@
+routine: instagram_story_poll
+app: com.instagram.android
+version: 1
+status: draft
+intent: Post the newest gallery video to an Instagram story with a poll sticker
+description: Opens Instagram story creation, selects the newest video from the gallery, adds a multi-option poll sticker, enters the requested
+  question and two answer options, and confirms placement of the poll sticker on the story.
+patterns: [Post my newest video to my Instagram story with a poll, Add a poll sticker to my latest gallery video on my story, Create an Instagram
+    story from my newest video with a two-option poll]
+start: fresh_launch
+inputs:
+  poll_question: {type: text, description: The question displayed on the poll sticker, example: 'Sunrise or sunset?'}
+  poll_option_1: {type: text, description: The first answer option for the poll, example: Sunrise}
+  poll_option_2: {type: text, description: The second answer option for the poll, example: Sunset}
+steps:
+- id: open_story_creation
+  intent: Tap 'Your story' to open story creation
+  pre:
+  - {app_foreground: com.instagram.android}
+  - element_present: {resource_id: swipeable_tab_view_pager, kind: List}
+  action:
+    tap:
+      resource_id: outer_container
+      text: Your story
+      kind: Button
+      cls: LinearLayout
+      parent: reels tray container
+      in_list: true
+      position: [0.136, 0.205]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: gallery_title_container, text: Add to story, kind: Text}
+  - element_present: {resource_id: fast_scroll_container, text: Today, kind: Text}
+  risk: reversible
+  note: trace step 1
+- id: select_newest_video
+  intent: Select the newest video thumbnail in the gallery
+  pre:
+  - {app_foreground: com.instagram.android}
+  - element_present: {text: Open camera, kind: Button}
+  action:
+    tap: {resource_id: gallery_grid_item_thumbnail, text: Video thumbnail, kind: Button, cls: Button, in_list: true, nth: 0}
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: add_text_button, text: Text, kind: Button}
+  - element_present: {resource_id: asset_button, text: Stickers, kind: Button}
+  risk: reversible
+  note: trace step 2
+- id: open_stickers_panel
+  intent: Tap 'Stickers' to open the stickers panel
+  pre:
+  - {app_foreground: com.instagram.android}
+  action:
+    tap:
+      resource_id: asset_button
+      text: Stickers
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.914, 0.159]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: row_search_edit_text, text: Search, kind: EditText}
+  - element_present: {resource_id: list, kind: List}
+  risk: reversible
+  note: trace step 3
+- id: select_poll_sticker
+  intent: Tap 'Multi-option Poll Sticker' to add a poll sticker
+  pre:
+  - {app_foreground: com.instagram.android}
+  action:
+    tap:
+      resource_id: sticker_sheet_redesign_item
+      text: Multi-option Poll Sticker
+      kind: Button
+      cls: ViewGroup
+      siblings: [Reaction Sticker, Slider sticker, Link Sticker]
+      in_list: true
+      position: [0.318, 0.799]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: poll_sticker_v2_color_button, text: Change background color, kind: Button}
+  - element_present: {resource_id: poll_sticker_v2_question, text: ASK A QUESTION…, kind: EditText}
+  risk: reversible
+  note: trace step 4
+- id: enter_poll_question
+  intent: "Type {{poll_question}} into the poll question field"
+  pre:
+  - {app_foreground: com.instagram.android}
+  action:
+    type:
+      field:
+        resource_id: poll_sticker_v2_question
+        text: ASK A QUESTION…
+        hint: ASK A QUESTION…
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.5, 0.208]
+      value: "{{poll_question}}"
+  post:
+  - field_equals:
+      field: {resource_id: poll_sticker_v2_question, text: ASK A QUESTION…, kind: EditText}
+      value: "{{poll_question}}"
+  risk: reversible
+  note: trace step 5
+- id: tap_first_poll_option
+  intent: Tap the first poll option field to edit it
+  pre:
+  - {app_foreground: com.instagram.android}
+  action:
+    tap:
+      text: 'Yes'
+      hint: 'Yes'
+      kind: EditText
+      cls: EditText
+      siblings: ['No', Add another option…]
+      in_list: false
+      position: [0.5, 0.288]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 6
+- id: enter_first_poll_option
+  intent: "Type {{poll_option_1}} into the first poll option field"
+  pre:
+  - {app_foreground: com.instagram.android}
+  action:
+    type:
+      field:
+        text: 'Yes'
+        hint: 'Yes'
+        kind: EditText
+        cls: EditText
+        siblings: ['No', Add another option…]
+        in_list: false
+        position: [0.5, 0.288]
+      value: "{{poll_option_1}}"
+  post:
+  - field_equals:
+      field: {text: 'Yes', kind: EditText}
+      value: "{{poll_option_1}}"
+  risk: reversible
+  note: trace step 7
+- id: tap_second_poll_option
+  intent: Tap the second poll option field to edit it
+  pre:
+  - {app_foreground: com.instagram.android}
+  action:
+    tap:
+      text: 'No'
+      hint: 'No'
+      kind: EditText
+      cls: EditText
+      siblings: [Sunrise, Add another option…]
+      in_list: false
+      position: [0.5, 0.354]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 8
+- id: enter_second_poll_option
+  intent: "Type {{poll_option_2}} into the second poll option field"
+  pre:
+  - {app_foreground: com.instagram.android}
+  action:
+    type:
+      field:
+        text: 'No'
+        hint: 'No'
+        kind: EditText
+        cls: EditText
+        siblings: [Sunrise, Add another option…]
+        in_list: false
+        position: [0.5, 0.354]
+      value: "{{poll_option_2}}"
+  post:
+  - field_equals:
+      field: {text: 'No', kind: EditText}
+      value: "{{poll_option_2}}"
+  risk: reversible
+  note: trace step 9
+- id: confirm_poll_sticker
+  intent: Tap 'Done' to place the poll sticker
+  pre:
+  - {app_foreground: com.instagram.android}
+  action:
+    tap:
+      resource_id: done_button
+      text: Done
+      kind: Button
+      cls: Button
+      parent: layout_post_capture_button_config
+      in_list: false
+      position: [0.902, 0.09]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: add_text_button, text: Text, kind: Button}
+  - element_present: {resource_id: asset_button, text: Stickers, kind: Button}
+  risk: reversible
+  note: trace step 10
+- id: tap_post
+  intent: Tap Your story to publish
+  pre:
+  - element_present:
+      resource_id: your_story_share_shortcut_button
+      text: Your story
+      kind: Button
+      cls: Button
+      parent: story_share_controls_action_bar
+      siblings: [Close Friends, Share to]
+      in_list: false
+      position: [0.23, 0.935]
+  action:
+    tap:
+      resource_id: your_story_share_shortcut_button
+      text: Your story
+      kind: Button
+      cls: Button
+      parent: story_share_controls_action_bar
+      siblings: [Close Friends, Share to]
+      in_list: false
+      position: [0.23, 0.935]
+  risk: irreversible
+  note: "trace step 11: the post tap the user declined (never ran, so no after-check)"
+changes: ['compiled by showcase from task-1101-205058-3079-r1, a first run declined at the post (eval/run_showcase.py); recompiled (compiler fix
+    ffde928)', 'its last step (tap ''Your story'') is the tap declined at step 11, built from that screen; irreversible']
+compiled_from:
+  task_id: task-1101-205058-3079-r1
+  goal: Post the newest video in my phone's gallery to my Instagram story with a poll sticker that asks "Sunrise or sunset?" with the options
+    "Sunrise" and "Sunset"
+  compiler: cached
+  compiled_at: "2026-11-01 22:13:08"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  trace_steps_dropped: 1
+  cost_usd: 0.0

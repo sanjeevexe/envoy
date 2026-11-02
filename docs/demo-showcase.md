@@ -4,15 +4,15 @@ The video's climax (T1c, `prompts/phone-layer-plan.md` §5 "showcase"). One clip
 5) to Instagram, TikTok and YouTube Shorts. Each post uses a feature that the website and Muse's connectors don't have,
 and each is a routine Envoy learned, which an agent calls as a tool (agent-door's routine tools).
 
-Status, Nov 1 (night): four routines in the library, each learned from one agent run and declined at the final
-button, with a few locators tuned by hand (`prompts/showcase-report.md`):
+Status, Nov 1 (night): four routines in the library, each learned from one agent run (declined at the final button)
+and recompiled with the compiler fix (main ffde928); `prompts/showcase-report.md` has the details:
 
-| Tool (routine) | Inputs | Replays, active version |
-| --- | --- | --- |
-| `instagram_reel_song` | song_title, song_artist, caption | 3/3 at Share, 0 calls |
-| `instagram_story_poll` | poll_question, poll_option_1, poll_option_2 | 3/3 at "Your story", 0 calls |
-| `tiktok_post_sound` | sound_title, sound_artist, caption | 3/3 at Post, 7 vision calls (~$0.02) |
-| `youtube_short_sound` | sound_title, sound_artist, short_title | 4/4 at "Upload Short", 2–9 calls (one step still repairs) |
+| Tool (routine, v2) | Inputs | Replays | Learned vs tuned |
+| --- | --- | --- | --- |
+| `instagram_reel_song` | song_title, song_artist, caption | 3/3 at Share, 0 calls unless Instagram shows a tip | learned |
+| `instagram_story_poll` | poll_question, poll_option_1, poll_option_2 | 3/3 at "Your story" (one wrong clip after a repair: a compiler fix is pending) | learned |
+| `tiktok_post_sound` | sound_title, sound_artist, caption | 3/3 at Post, ~7 vision calls (~$0.02) | learned, one step added |
+| `youtube_short_sound` | sound_title, sound_artist, short_title | 3/3 at "Upload Short", 2–8 calls | learned, one step tuned |
 
 The song for all three: JVKE's "golden hour" (in all three libraries). Which features work on the test accounts is
 pre-check P3 (`eval/results/showcase/p3.md`).

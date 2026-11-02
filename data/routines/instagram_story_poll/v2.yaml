@@ -37,14 +37,9 @@ steps:
   intent: Select the newest video thumbnail in the gallery
   pre:
   - {app_foreground: com.instagram.android}
+  - element_present: {text: Open camera, kind: Button}
   action:
-    tap:
-      resource_id: gallery_grid_item_thumbnail
-      alt_texts: [Video thumbnail]
-      kind: Button
-      cls: Button
-      in_list: true
-      position: [0.5, 0.445]
+    tap: {resource_id: gallery_grid_item_thumbnail, text: Video thumbnail, kind: Button, cls: Button, in_list: true, nth: 0}
   post:
   - {screen_changed: true}
   - element_present: {resource_id: add_text_button, text: Text, kind: Button}
@@ -229,19 +224,15 @@ steps:
   risk: irreversible
   note: "trace step 11: the post tap the user declined (never ran, so no after-check)"
 parent_version: 1
-changes:
-- "one locator tuned by hand (showcase): learned from one run, one step tuned"
-- compiled by showcase from task-1101-205058-3079-r1, a first run declined at the post (eval/run_showcase.py)
-- its last step (tap 'Your story') is the tap declined at step 11, built from that screen; irreversible
-- "select_newest_video: the grid's first video slot (its id, in the grid, nearest the recorded position), not its label: every thumbnail reads\
-  \ 'Unselected Video thumbnail created on <date>', so the label fit all of them, the executor scrolled, and the repair picked an Oct 30 clip\
-  \ in replay 3 (Nov 1). Same change as instagram_post_reel's v3 candidate. Hand edit: showcase"
+changes: ['recompiled with the compiler fix (ffde928) from the same run; purely learned, no hand edits', 'compiled by showcase from task-1101-205058-3079-r1,
+    a first run declined at the post (eval/run_showcase.py); recompiled (compiler fix ffde928)', 'its last step (tap ''Your story'') is the tap
+    declined at step 11, built from that screen; irreversible']
 compiled_from:
   task_id: task-1101-205058-3079-r1
   goal: Post the newest video in my phone's gallery to my Instagram story with a poll sticker that asks "Sunrise or sunset?" with the options
     "Sunrise" and "Sunset"
-  compiler: muse-wonder-1.0
-  compiled_at: "2026-11-01 20:53:51"
+  compiler: cached
+  compiled_at: "2026-11-01 22:13:08"
   trace_steps_kept: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   trace_steps_dropped: 1
-  cost_usd: 0.0598
+  cost_usd: 0.0
