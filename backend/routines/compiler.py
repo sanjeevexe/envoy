@@ -1308,7 +1308,7 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
                                   action=StepAction(kind="wait", seconds=0.3), risk="read", note="added: the answer is on the start screen"))
         out_steps[-1].extract = extract
     # After the outputs: an output read in the row an input names (a menu item's price) uses that input.
-    limits = _add_witnesses(out_steps, steps, examples, inputs, report)
+    limits = _add_witnesses(out_steps, steps, examples, inputs, report, start=steps[0].before if steps else final)
 
     # Safety net: the run's irreversible action must survive cleanup, or the routine would "succeed" without doing the job.
     if any(r.get("approval", {}).get("approved") for r in records if r.get("kind") == "action") and \
@@ -1365,7 +1365,7 @@ def _prior_text(s: TStep) -> str | None:
 
 
 def _add_witnesses(out_steps: list[Step], steps: list[TStep], examples: dict[str, str], inputs: dict[str, InputSpec],
-                   report: CompileReport) -> list[str]:
+                   report: CompileReport, start: ScreenState | None = None) -> list[str]:
     """An input that no action uses must at least be visible before the step that depends on it.
 
     Example: an agent checked in through Home's "Check in" button, which always means the next trip.
@@ -1381,9 +1381,12 @@ def _add_witnesses(out_steps: list[Step], steps: list[TStep], examples: dict[str
         for st in out_steps:
             n = int(st.note.split()[2]) if st.note and st.note.startswith("trace step") else None
             ts = by_trace.get(n) if n is not None else None
-            if ts is None:
+            # The step added to read an answer the app opens to reads the run's first screen (Nov 2, Chrome reopened on the
+            # Eiffel Tower article: its heading is where the topic shows, and without a check any topic got 1889).
+            screen = ts.before if ts is not None else (start if st.id == "read_answer" else None)
+            if screen is None:
                 continue
-            el = next((e for e in ts.before.numbered if contains_value(e.label, value)), None)
+            el = next((e for e in screen.numbered if contains_value(e.label, value)), None)
             if el is None:
                 continue
             loc = Locator(resource_id=short_id(el.resource_id) if usable_id(el.resource_id) else None, text_has="{{" + name + "}}",
