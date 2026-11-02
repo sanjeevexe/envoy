@@ -106,6 +106,17 @@
    "model_calls": 7,
    "duration_s": 61.76,
    "patches": 0
+  },
+  {
+   "time": "2026-11-01 23:13:22",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1101-231208-dc64-r1",
+   "status": "declined",
+   "rung": 2,
+   "model_calls": 7,
+   "duration_s": 65.4,
+   "patches": 1
   }
  ],
  "needs_recompile": false,
