@@ -1,6 +1,6 @@
 {
  "name": "tiktok_post_sound",
- "active": 2,
+ "active": 3,
  "versions": [
   {
    "version": 1,
@@ -21,7 +21,7 @@
   },
   {
    "version": 2,
-   "status": "active",
+   "status": "retired",
    "created": "2026-11-01 22:13:43",
    "parent": 1,
    "changes": [
@@ -37,6 +37,23 @@
      "tap_post"
     ],
     "checked": "2026-11-01 22:13"
+   }
+  },
+  {
+   "version": 3,
+   "status": "active",
+   "created": "2026-11-02 02:25:32",
+   "parent": 2,
+   "changes": [
+    "recompiled with the compiler fix bebaa50 (a correction is learned: the red check, then Back; close_sound_sheet checks the editor's sound label names {{sound_title}}) from the same run, Wonder's answer remapped by trace number ($0); learned, with v2's hand edits (showcase)",
+    "hand edit: showcase. wait_for_sound_results (3 s) before apply_first_sound_result, as in v2: TikTok draws its search results with no accessibility nodes, so the visual tap needs them drawn",
+    "hand edit: showcase. app com.zhiliaoapp.musically (the compiler said com.instagram.android), and launch_tiktok's before-checks (Instagram in front, its home pager) dropped: the source run predates TikTok's name in Envoy, and any app may be in front before the launch",
+    "compiled by showcase from task-1101-210013-7814-r1, a first run declined at the post (eval/run_showcase.py); recompiled (compiler fix bebaa50 (a correction is learned), remapped Wonder answer)",
+    "its last step (tap 'Post') is the tap declined at step 25, built from that screen; irreversible",
+    "done-check dropped (text visible: '{{caption}}'): it describes the screen after the post, which a declined run never reaches, so it was never verified; the post step itself is the end"
+   ],
+   "verification": {
+    "rehearsals": "3/3 declined at Post, close_sound_sheet rung 0, editor named golden hour (showcase 20bd077, Nov 2 02:19-02:23)"
    }
   }
  ],
@@ -117,6 +134,17 @@
    "model_calls": 7,
    "duration_s": 65.4,
    "patches": 1
+  },
+  {
+   "time": "2026-11-02 01:43:37",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1102-014139-7f5e-r1",
+   "status": "failed",
+   "rung": 2,
+   "model_calls": 7,
+   "duration_s": 72.59,
+   "patches": 0
   }
  ],
  "needs_recompile": false,
