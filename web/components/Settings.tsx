@@ -26,7 +26,8 @@ export default function SettingsPage({ publicUrl, profile }: { publicUrl?: strin
     return SECTIONS.find((x) => x.toLowerCase() === asked?.toLowerCase()) ?? "Approvals";
   });
   return (
-    <div className="mx-auto w-full max-w-[720px] pb-10 md:pt-6">
+    // Agents is wider: on a big screen (filmed at 1080p) the agents and the tools they see sit side by side.
+    <div className={cx("@container mx-auto w-full pb-10 md:pt-6", section === "Agents" ? "max-w-[1180px]" : "max-w-[720px]")}>
       {/* On a phone the five sections are wider than the screen: the row scrolls sideways, the page doesn't. */}
       <div className="overflow-x-auto px-4 pt-3 [scrollbar-width:none]"><Segmented options={SECTIONS} value={section} onChange={setSection} label="Settings" /></div>
       {profile && <p className="px-6 pt-2 text-meta-2 text-muted">Using {profile === "demo" ? "the demo memory (SkyLark test data)" : "your memory"}</p>}
@@ -34,7 +35,7 @@ export default function SettingsPage({ publicUrl, profile }: { publicUrl?: strin
         {section === "Approvals" && <><Proactivity /><Settings /></>}
         {section === "Phones" && <><Phones /><NotificationWatch /><SavedLogins /><Outbox /></>}
         {section === "Devices" && <Companion publicUrl={publicUrl} />}
-        {section === "Agents" && <><AgentKeys /><AgentTools /></>}
+        {section === "Agents" && <div className="grid grid-cols-1 items-start @5xl:grid-cols-2"><AgentKeys /><AgentTools /></div>}
         {section === "Appearance" && <Appearance />}
       </div>
     </div>

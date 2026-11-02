@@ -359,3 +359,24 @@ def test_the_script_refuses_a_key_file_git_would_commit_and_bad_input(tmp_path, 
     monkeypatch.setattr(script, "API_DIR", tmp_path / "api-dir")  # the default file: next to the API's database, gitignored
     assert script.key_file("Meta agent", None) == (tmp_path / "api-dir" / "agent_keys" / "meta-agent.key").resolve()
     assert script.key_file("Meta agent", str(repo / "data" / "api" / "agent_keys" / "x.key")).name == "x.key"
+
+
+def test_settings_lists_exactly_the_tools_each_agent_sees(env):
+    """Settings › Agents shows each agent's tools as tools/list gives them to its key: its groups, and the routines shared
+    with agents while it has run (contract 1)."""
+    import shutil
+    from pathlib import Path
+    shutil.copytree(Path(__file__).resolve().parents[2] / "data" / "routines" / "skylark_get_flight_gate",
+                    env.ctx.routines.root / "skylark_get_flight_gate")
+    with TestClient(env.ctx.asgi) as c:
+        _, reader = new_agent(c, env, "Reader", ["read"])
+        _, runner = new_agent(c, env, "Runner", ["read", "run"])
+        env.ctx.sharing.set("skylark_get_flight_gate", True)
+        seen = c.get("/api/agents", headers=me(env.token)).json()
+        sees = {a["name"]: a["sees"] for a in seen["agents"]}
+        assert seen["learned"] == ["skylark_get_flight_gate"]
+        assert set(sees["Reader"]) == tools(c, key(reader)) == set(TOOL_GROUPS["read"])
+        assert set(sees["Runner"]) == tools(c, key(runner)) and sees["Runner"][0] == "skylark_get_flight_gate"  # learned first
+        assert set(seen["muse"]["sees"]) == tools(c, MUSE) == EVERY_TOOL | {"skylark_get_flight_gate"}
+        env.ctx.sharing.set("skylark_get_flight_gate", False)
+        assert "skylark_get_flight_gate" not in c.get("/api/agents", headers=me(env.token)).json()["muse"]["sees"]

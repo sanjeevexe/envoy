@@ -312,7 +312,7 @@ function seed(): DB {
     rules: { default: "unless_requested", apps: { "com.dd.doordash": "always" }, routines: { starbucks_order_usual: "never" } },
     photos: { enabled: true, scope: "screenshots" }, phoneApps: ["com.target.ui"], signin: { emulator: false, phone: false },
     agents: [{ id: "agt-claude", name: "Claude", tools: ["read", "run"], created_at: ago(2 * 86400), last_seen: ago(40 * 60) },
-      { id: "agt-meta", name: "Meta agent", tools: ["files", "read", "run", "triggers"], created_at: ago(86400), last_seen: ago(3 * 60) }],
+      { id: "agt-spark", name: "Spark agent", tools: ["files", "read", "run", "triggers"], created_at: ago(86400), last_seen: ago(3 * 60) }],
     notes: [
       { id: "note-1", app: "com.skylark.air", text: "A SkyLark Miles promo can cover the trip list; Not now closes it.", status: "active", confirmations: 4,
         first_seen: ago(5 * 86400), last_confirmed: ago(7200), sources: [{ task_id: "task-amz", step: 2, kind: "routine" }] },
@@ -907,14 +907,19 @@ export async function handle(path: string, init: RequestInit = {}): Promise<any>
       db.agents.push(agent);
       return { agent, key: "envoy_agent_mock_key_not_real" };
     }
-    return { agents: db.agents, muse: { name: "Muse", key: true, last_seen: ago(5 * 60) }, default: ["read", "run"], per_minute: 30,
-      mcp_url: "https://envoy-mac.tail1234.ts.net:10000/mcp", can_manage: true, groups: [
-        { id: "read", label: "Read", detail: "follow tasks, see routines, search memory, read the phone's updates and its list of phones", tools: ["get_task", "list_phones", "list_routines", "memory_get", "memory_search", "phone_updates"] },
-        { id: "run", label: "Run", detail: "start tasks and routines; every irreversible step still waits for your OK", tools: ["run_routine", "run_task"] },
-        { id: "memory", label: "Memory", detail: "add notes to your memory", tools: ["memory_note"] },
-        { id: "files", label: "Files", detail: "put photos and videos on a phone, and get files back", tools: ["get_file", "send_to_phone"] },
-        { id: "triggers", label: "Triggers", detail: "propose recurring tasks; each stays off until you turn it on", tools: ["create_trigger"] },
-      ] };
+    const groups = [
+      { id: "read", label: "Read", detail: "follow tasks, see routines, search memory, read the phone's updates and its list of phones", tools: ["get_task", "list_phones", "list_routines", "memory_get", "memory_search", "phone_updates"] },
+      { id: "run", label: "Run", detail: "start tasks and routines; every irreversible step still waits for your OK", tools: ["run_routine", "run_task"] },
+      { id: "memory", label: "Memory", detail: "add notes to your memory", tools: ["memory_note"] },
+      { id: "files", label: "Files", detail: "put photos and videos on a phone, and get files back", tools: ["get_file", "send_to_phone"] },
+      { id: "triggers", label: "Triggers", detail: "propose recurring tasks; each stays off until you turn it on", tools: ["create_trigger"] },
+    ];
+    // What each agent's tools/list holds (api/agents.py `sees`): learned tools need Run; Envoy's own, their group.
+    const learned = agentTools().tools.map((t) => t.tool), own = BUILTIN.map((b) => b.name).sort();
+    const sees = (have: string[]) => [...learned.filter(() => have.includes("run")), ...own.filter((t) => groups.some((g) => have.includes(g.id) && g.tools.includes(t)))];
+    return { agents: db.agents.map((a) => ({ ...a, sees: sees(a.tools) })), learned,
+      muse: { name: "Muse", key: true, last_seen: ago(5 * 60), sees: [...learned, ...own] }, default: ["read", "run"], per_minute: 30,
+      mcp_url: "https://envoy-mac.tail1234.ts.net:10000/mcp", can_manage: true, groups };
   }
   if ((m = p.match(/^\/api\/agents\/([^/]+)(\/rotate)?$/))) {
     const a = db.agents.find((x) => x.id === m![1]);

@@ -133,10 +133,24 @@ def agents_router(ctx: Any, session: Callable[..., None], owner: Callable[..., N
         except ValueError as e:
             raise HTTPException(400, str(e)) from e
 
+    def every_tool() -> tuple[list[str], list[str]]:
+        """(every tool an agent can list now, the learned ones among them): Envoy's own and each shared routine's (contract 1)."""
+        server = getattr(ctx, "mcp", None)
+        try:
+            builtin = set(server.builtin())
+            learned = set(server.routines.current(builtin)) if getattr(server, "routines", None) is not None else set()
+        except Exception:  # noqa: BLE001 - no MCP server here (a test app): no tool lists, the rest of the page as before
+            return [], []
+        return sorted(learned) + sorted(builtin - learned), sorted(learned)
+
     @r.get("/api/agents", dependencies=[Depends(session)])
     def list_agents(request: Request) -> dict[str, Any]:
+        """The agents, and for each the tools it sees right now: allowed() over the same list tools/list gives it."""
         me = caller(request)
-        return {"agents": auth.agents(), "muse": {"name": MUSE, "key": bool(auth.mcp_token), "last_seen": auth.muse_last_seen()},
+        tools, learned = every_tool()
+        agents = [{**a, "sees": [t for t in tools if allowed(Agent(a["name"], frozenset(a["tools"])), t)]} for a in auth.agents()]
+        return {"agents": agents, "learned": learned,
+                "muse": {"name": MUSE, "key": bool(auth.mcp_token), "last_seen": auth.muse_last_seen(), "sees": tools},
                 "groups": [{"id": g, "label": GROUP_TEXT[g][0], "detail": GROUP_TEXT[g][1], "tools": sorted(TOOL_GROUPS[g])} for g in TOOL_GROUPS],
                 "default": list(DEFAULT_GROUPS), "per_minute": RUN_PER_MINUTE, "mcp_url": mcp_url(ctx),
                 "can_manage": me is not None and me.kind == "owner"}
