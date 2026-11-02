@@ -1,6 +1,6 @@
 {
  "name": "instagram_story_poll",
- "active": 2,
+ "active": 3,
  "versions": [
   {
    "version": 1,
@@ -21,7 +21,7 @@
   },
   {
    "version": 2,
-   "status": "active",
+   "status": "retired",
    "created": "2026-11-01 22:13:42",
    "parent": 1,
    "changes": [
@@ -35,6 +35,24 @@
      "tap_post"
     ],
     "checked": "2026-11-01 22:13"
+   }
+  },
+  {
+   "version": 3,
+   "status": "active",
+   "created": "2026-11-01 22:52:07",
+   "parent": 2,
+   "changes": [
+    "recompiled with the compiler's transient-check fix (1645c09) from the same run: open_story_creation no longer checks the gallery's 'Today' scroll label; purely learned, no hand edits",
+    "compiled by showcase from task-1101-205058-3079-r1, a first run declined at the post (eval/run_showcase.py); recompiled (compiler fix 1645c09 (transient checks))",
+    "its last step (tap 'Your story') is the tap declined at step 11, built from that screen; irreversible"
+   ],
+   "verification": {
+    "by": "showcase",
+    "post_steps": [
+     "tap_post"
+    ],
+    "checked": "2026-11-01 22:52"
    }
   }
  ],
@@ -103,6 +121,39 @@
    "rung": 1,
    "model_calls": 0,
    "duration_s": 25.6,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-01 22:53:23",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1101-225251-9986-r1",
+   "status": "declined",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 26.35,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-01 22:54:31",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1101-225400-a91e-r1",
+   "status": "declined",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 29.39,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-01 22:55:37",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1101-225509-c557-r1",
+   "status": "declined",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 24.79,
    "patches": 0
   }
  ],

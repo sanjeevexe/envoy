@@ -10,7 +10,7 @@ and recompiled with the compiler fix (main ffde928); `prompts/showcase-report.md
 | Tool (routine, v2) | Inputs | Replays | Learned vs tuned |
 | --- | --- | --- | --- |
 | `instagram_reel_song` | song_title, song_artist, caption | 3/3 at Share, 0 calls unless Instagram shows a tip | learned |
-| `instagram_story_poll` | poll_question, poll_option_1, poll_option_2 | 3/3 at "Your story" (one wrong clip after a repair: a compiler fix is pending) | learned |
+| `instagram_story_poll` (v3) | poll_question, poll_option_1, poll_option_2 | 3/3 at "Your story", 0 calls, right clip | learned |
 | `tiktok_post_sound` | sound_title, sound_artist, caption | 3/3 at Post, ~7 vision calls (~$0.02) | learned, one step added |
 | `youtube_short_sound` | sound_title, sound_artist, short_title | 3/3 at "Upload Short", 2–8 calls | learned, one step tuned |
 
@@ -22,7 +22,8 @@ pre-check P3 (`eval/results/showcase/p3.md`).
 - Instagram: `scripts/instagram_take.py` (a reel started earlier comes back as "Keep editing your draft?").
 - YouTube: `uv run --project backend python eval/run_showcase.py setup-youtube` (an autosaved draft makes Create open
   on "Continue your draft video?").
-- TikTok: watch for the launch pause ("came to the front on its own"); press Resume on the phone's Envoy banner.
+- TikTok: the launch pause ("came to the front on its own") didn't recur after main 8f7a082 (2 runs). If the
+  task pauses anyway, press Resume on the phone's Envoy banner.
 - Each routine is a tool for Muse only once "Share with agents" is on (its page in Envoy).
 
 ## Kept honest on purpose

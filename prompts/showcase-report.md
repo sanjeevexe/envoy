@@ -3,7 +3,7 @@
 Session `showcase`, branch `claude/showcase-414a4d` (rebased on main cd168d6). The Pixel 5 (Android 13), the test
 accounts (Instagram envoy3955, the user's TikTok and YouTube test accounts), and a `:8764` API copy with its own data
 dir and outbox, set to "always ask" for the three apps. **Nothing was posted**: every run stopped at the app's final
-button and was declined there. No likes, follows, comments or DMs. Spend: **$4.22** of Meta's API (all runs and
+button and was declined there. No likes, follows, comments or DMs. Spend: **$4.37** of Meta's API (all runs and
 compiles).
 
 ## What is true now (recompiled with the compiler fix, main ffde928)
@@ -16,8 +16,8 @@ evidence in `eval/results/showcase/routine/*.v2-candidate.yaml` (and YouTube's v
 | Routine v2 | Hand edits | Replays (3 each, declined at the final button) |
 | --- | --- | --- |
 | `instagram_reel_song` | none: purely learned | 3/3 at Share. Two at **0 calls** (48–76 s); one met Instagram's one-time "Explore audio" tip and the agent finished (144 s, 16 calls). The newest clip and JVKE's "golden hour" every time |
-| `instagram_story_poll` | none: purely learned | 3/3 at "Your story". Two at **0 calls**, 29–30 s, the right clip. **One wrong clip** (an Oct 29 video) after a repair: see the transient "Today" check below |
-| `tiktok_post_sound` | a 3 s wait before the visual tap; the app corrected (the source run predates TikTok's name in Envoy) | 3/3 at Post, 71–76 s, 7–8 vision calls (~$0.02), the newest clip each time |
+| `instagram_story_poll` (v3) | none: purely learned | v3, recompiled once more with the compiler's transient-check fix (1645c09): **3/3 at "Your story", 29–32 s, 0 calls, the right clip each time**. (v2 went 3/3 too, but once with the wrong clip, from the "Today" check below; v3 doesn't have it) |
+| `tiktok_post_sound` | a 3 s wait before the visual tap; the app corrected (the source run predates TikTok's name in Envoy) | 3/3 at Post, 71–76 s, 7–8 vision calls (~$0.02), the newest clip each time. On main 98d96de (agent-door's launch fix 8f7a082): 2 more runs, **no "came to the front on its own" pause**. One of them paused at 107 s on "you touched the phone" while nobody else held the Pixel (a real touch, or a false one: not seen again), and the other ran clean to Post in 74 s with 7 vision calls |
 | `youtube_short_sound` | its stray "Captions unavailable" before-check dropped | 3/3 at "Upload Short", 94–144 s, 2–8 calls ($0.04–0.14), the newest clip each time. The search tap still needs a repair or the agent |
 
 How "which clip" was checked: before each replay a labelled test clip ("REEL 2", "STORY 3", "TIKTOK 1"…, each its own
@@ -29,14 +29,14 @@ track or sound is confirmed by the step's own `text_has` on title and artist.
 its drawn sound list every run (~$0.02). YouTube still repairs its search step.
 
 Still open in the compiled routines (for the compiler session):
-- **A transient after-check** (`instagram_story_poll`, open_story_creation): `fast_scroll_container` "Today", the
+- **Fixed (1645c09):** a transient after-check (`instagram_story_poll`, open_story_creation): `fast_scroll_container` "Today", the
   gallery's date label that shows only while the grid scrolls (the same check `instagram_post_reel` v2 dropped on
   Oct 29). The executor scrolled the grid to find it, so the next step's "list start" check ("Open camera") failed,
   and the repair picked the top visible thumbnail: the wrong clip. Fix: never an after-check. Then recompile (cached)
   and replay.
 - **YouTube's search tap** (tap_trigger_search): the compiler flags it as ambiguous ("golden hour" and "Golden Hour"
   suggestions), and the tap doesn't start the search. Hand waits of 1.5 s and 4 s didn't help.
-- **TikTok's launch**: in every replay the task paused at launch ("TikTok came to the front on its own"), even with
+- **Fixed (8f7a082), as far as 2 runs show:** TikTok's launch. In every v2 replay before it, the task paused at launch ("TikTok came to the front on its own"), even with
   the app corrected. The routine starts with a fresh launch *and* a learned `launch_tiktok` step; the second launch
   may be what trips it. On :8700 that pause waits for someone to press Resume.
 
@@ -94,3 +94,10 @@ What the compiler got wrong, with the hand fix that worked (each `*.v2-candidate
   `tiktok` and `youtube` entries without a `routine` key; pointing them at these routines is a one-line change once
   the user wants the Mac-clip offer to use them.
 - **Sharing:** each routine becomes an MCP tool (agent-door) only after "Share with agents" is turned on for it.
+
+## `instagram_post_reel` with the new compiler (not added: it's switched off)
+Recompiled from its own source run (task-1029-202418-9af5-r1, Oct 29, cached Wonder answer, $0):
+`eval/results/showcase/routine/instagram_post_reel.recompiled-1645c09.yaml`. The same 7 steps. The one change is
+`select_newest_gallery_video`, which becomes "the first thumbnail in the grid, which must show 'Open camera'" in
+place of v2's text-plus-position locator. That's the fix its hand-edited v3 candidate made, now learned. The
+compiler also drops the gallery's "Today" check by itself (v2 had dropped it by hand). Nothing else differs.

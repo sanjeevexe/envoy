@@ -1,0 +1,151 @@
+{
+ "mode": "replay",
+ "app": "com.instagram.android",
+ "time": "2026-11-01T22:54:00",
+ "request": {
+  "phone": "phone-09031FDD4000C6",
+  "routine": "instagram_story_poll",
+  "inputs": {
+   "poll_question": "Sunrise or sunset?",
+   "poll_option_1": "Sunrise",
+   "poll_option_2": "Sunset"
+  }
+ },
+ "task": {
+  "id": "task-1101-225400-a91e",
+  "status": "declined",
+  "routine": "instagram_story_poll",
+  "model_calls": 0,
+  "cost_usd": 0.0,
+  "traces": [],
+  "detail": "the user declined the approval",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 16,
+ "repairs": [],
+ "approvals": [
+  {
+   "description": "tap \"Your story\" in com.instagram.android (routine instagram_story_poll v3)",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/your_story_share_shortcut_button'",
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "asked_at": [
+  "Your story"
+ ],
+ "approval_shot": "approval-task-1101-225400-a91e.jpg",
+ "routine_steps": [
+  {
+   "id": "open_story_creation",
+   "status": "done",
+   "rung": 1,
+   "score": 1.0,
+   "rungs": [
+    "wait and retry: ready after 1.1 s"
+   ]
+  },
+  {
+   "id": "select_newest_video",
+   "status": "done",
+   "rung": 1,
+   "score": 0.845,
+   "rungs": [
+    "wait and retry: ready after 1.1 s",
+    "wait and retry: after-checks held after 1.6 s"
+   ]
+  },
+  {
+   "id": "open_stickers_panel",
+   "status": "done",
+   "rung": 1,
+   "score": 1.0,
+   "rungs": [
+    "wait and retry: after-checks held after 1.9 s"
+   ]
+  },
+  {
+   "id": "select_poll_sticker",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "enter_poll_question",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "tap_first_poll_option",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "enter_first_poll_option",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "tap_second_poll_option",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "enter_second_poll_option",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "confirm_poll_sticker",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "tap_post",
+   "status": "declined",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  }
+ ],
+ "auto_approved": [],
+ "marks_s": {
+  "running": 0.2,
+  "needs_you": 1.3,
+  "phone_yes": 1.3,
+  "waiting_approval": 31.5,
+  "post_asked": 31.5,
+  "declined": 32.5,
+  "end": 32.5
+ },
+ "spent": {
+  "model_calls": 0,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.0,
+  "jobs": {}
+ },
+ "ok": true,
+ "failures": [],
+ "profile": "hybrid",
+ "cleanup": [
+  "story: Cancel",
+  "story: Discard",
+  "gallery_home"
+ ]
+}
