@@ -315,13 +315,14 @@ def clean(trace_dir: Path, records: list[dict], goal: str = "") -> tuple[list[TS
 
 def _launched_app(steps: list[TStep]) -> str | None:
     """The app a run opened as its first step (from the home screen, or over another app): the routine's own app, which
-    the routine's start launches fresh. None if the run didn't start with a launch."""
+    the routine's start launches fresh. None if the run didn't start with a launch of another app (a relaunch of the app
+    it was in stays a step)."""
     if not steps or steps[0].kind != "launch":
         return None
     first = steps[0]
     # Still the screen it was launched from (a slow app): the screen the next step started on.
     opened = [first.after.package] + [t.before.package for t in steps[1:2]]
-    return next((p for p in opened if p and p != first.before.package), first.after.package or None)
+    return next((p for p in opened if p and p != first.before.package), None)
 
 
 # ---- 1b: a run with nothing to do -------------------------------------------------------------
