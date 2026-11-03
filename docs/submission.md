@@ -50,18 +50,18 @@ connector. Any MCP agent can do the same; the Spark agent (a small agent built o
   phone" (a Pixel 5) or an emulator, and agents can choose which; a copy on Google Cloud was tested too. The showcase uses features Muse's connectors can't reach: one clip from the Mac became an Instagram Reel with a library song, an Instagram
   Story with a poll sticker, a YouTube Short with a sound, and a TikTok with a sound. On the night of Nov 1 all four
   went live on test accounts, each one started by the Spark agent and approved on the iPhone (`docs/demo-showcase.md`).
-- **Learns.** A verified run becomes a **routine** when the person taps **Make it a routine** on its task's card: Envoy
-  compiles it, replays it once strictly on the same phone and saves it with sharing off (`backend/api/teach.py`,
-  `learn_task`; `backend/tests/test_teach.py`). A script or the evaluation can compile a run too, teach mode compiles a
-  person's demonstration, and the compiler can still refuse a run. Muse Wonder writes a small program with inputs,
-  checks before and after its steps, and targets found by what they are rather than where they were. When the app
-  changes, the routine repairs the broken step (the agent finishes if that fails) and keeps the fix as a new version, on
-  trial until it passes. In the live posts (one each), the Reel, the Story and the Short replayed with 0 model calls in
-  Envoy's replay and the TikTok with 3; the agent that calls Envoy pays for its own turns (in a declined dry run on a test
-  copy, Nov 1, the Spark agent used 11 model calls, $0.044, to drive three posts:
-  `agents/meta-agent/evidence/2026-11-01/crosspost/README.md`). On the 12 of 18 read-only real-app workflows whose first
-  run and same-input rerun both passed (Nov 2, `hybrid`, standard tier), Envoy's replay used 0 model calls at a median 5.40 s,
-  against the agent's first run at a median 5 calls and 19.36 s ([Results](#results)).
+- **Learns.** In Envoy, a finished agent task's card has a "Make it a routine" button: Envoy compiles that run into a
+  **routine**, replays it once strictly on the same phone, and saves it with the share off (`backend/api/teach.py`,
+  `learn_task`; `backend/tests/test_teach.py`). Teach mode compiles what a person shows the same way, and the compiler
+  can refuse a run. Muse Wonder writes a small program with inputs, checks before and after its steps, and targets found
+  by what they are rather than where they were. When the app changes, the routine repairs the broken step (the agent
+  finishes if that fails) and keeps the fix as a new version, on trial until it passes. In the live posts (one each),
+  the Reel, the Story and the Short replayed with 0 model calls in Envoy's replay and the TikTok with 3; the agent that
+  calls Envoy pays for its own turns (in a declined dry run on a test copy, Nov 1, the Spark agent used 11 model calls,
+  $0.044, to drive three posts: `agents/meta-agent/evidence/2026-11-01/crosspost/README.md`). On the 12 of 18 read-only
+  real-app workflows whose first run and same-input rerun both passed (Nov 2, `hybrid`, standard tier), Envoy's replay
+  used 0 model calls at a median 5.40 s, against the agent's first run at a median 5 calls and 19.36 s
+  ([Results](#results)).
 - **Learned tasks become tools.** A routine the person shares becomes a tool of its own for every agent allowed to run
   tasks, such as `instagram_reel_song(song_title, song_artist, caption)`, with no restart
   (`eval/results/agent-door/tools-before.json`, `tools-after.json`). Teach mode learns a routine from one demonstration
@@ -337,6 +337,9 @@ Measured outside the evaluation (these stay as they are):
   and caption) before the final button.
   <!-- SLOT outcome checks: if they land before the eval, say what is checked now and link the negative tests. -->
 - **The Story routine fails while a Story is already live:** its first tap opens the live Story's poll results.
+- **Envoy doesn't make a routine on its own:** the person presses "Make it a routine" on a finished task, or teaches it,
+  and the compiler can refuse a run. The button is new (Nov 2); the routines shown here were compiled before it, by the
+  evaluation or a script.
 - **Teach mode** doesn't yet learn keypad entry reliably, or apps that reopen on their last screen.
 - **TikTok** sent no phone notification for any comment in testing, so Envoy can't watch TikTok comments yet.
 - **Muse hears about phone events when it next checks** `phone_updates` (a Muse scheduled task checked about every 10
