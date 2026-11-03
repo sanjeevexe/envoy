@@ -1,0 +1,624 @@
+{
+ "at": "2026-11-02 18:27:23 EST",
+ "copy": "127.0.0.1:8761, branch claude/agent-door-cross-post 30fd6bb",
+ "tools": [
+  "create_trigger",
+  "cross_post",
+  "get_file",
+  "get_task",
+  "list_phones",
+  "list_routines",
+  "memory_get",
+  "memory_note",
+  "memory_search",
+  "phone_updates",
+  "run_routine",
+  "run_task",
+  "send_to_phone",
+  "skylark_check_in_flight",
+  "skylark_get_flight_gate"
+ ],
+ "cross_post_tool": {
+  "description": "Post to several apps in one request: one task with a part per destination, each part running a routine the user\nshares with agents (instagram_reel_song, tiktok_post_sound, youtube_short_sound, say) with that routine's own inputs.\nThe parts run one after another, and each post waits for the user's OK in Envoy on their phone: nothing is posted\nwithout it. Returns the task_id at once; follow it with get_task, whose `posts` gives each destination's outcome:\ndone, failed or declined (not posted), waiting, verifying… or outcome unknown. Outcome unknown means the post tap\nwent through and the run ended before its check: tell the user to check that app; Envoy never posts there again by\nitself. To finish the rest, call cross_post with retry set to the task_id: only destinations that failed or were\ndeclined run again.",
+  "inputSchema": {
+   "properties": {
+    "posts": {
+     "anyOf": [
+      {
+       "items": {
+        "$ref": "#/$defs/PostArgs"
+       },
+       "type": "array"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "description": "One per app: the routine to post with and its inputs. Leave out with retry.",
+     "title": "Posts"
+    },
+    "retry": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "description": "A cross-post's task_id: run again only its destinations that failed or were declined.",
+     "title": "Retry"
+    },
+    "phone": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "description": "Which phone runs it: an id from list_phones, \"phone\" (the user's own Android phone; Envoy asks them in Envoy first) or \"emulator\". Leave it out and Envoy picks the phone as it always does.",
+     "title": "Phone"
+    }
+   },
+   "type": "object",
+   "$defs": {
+    "PostArgs": {
+     "description": "One destination of a cross-post.",
+     "properties": {
+      "routine": {
+       "description": "A routine the user shares with agents, by its name or its tool's name, e.g. instagram_reel_song",
+       "title": "Routine",
+       "type": "string"
+      },
+      "inputs": {
+       "additionalProperties": {
+        "type": "string"
+       },
+       "description": "That routine's inputs, exactly as its own tool takes them",
+       "title": "Inputs",
+       "type": "object"
+      }
+     },
+     "required": [
+      "routine"
+     ],
+     "title": "PostArgs",
+     "type": "object"
+    }
+   },
+   "title": "cross_postArguments"
+  }
+ },
+ "unshared_call": {
+  "error": "instagram_story_poll isn't a routine the user shares with agents (shared: skylark_check_in_flight, skylark_get_flight_gate). The user shares one in Envoy, on the routine's page or in Settings › Agents."
+ },
+ "start": {
+  "task_id": "task-1102-182723-bda1",
+  "status": "running",
+  "task_url": "http://127.0.0.1:8761/?task=task-1102-182723-bda1",
+  "posts": [
+   {
+    "routine": "skylark_check_in_flight",
+    "app": "SkyLark (skylark_check_in_flight)",
+    "status": "queued"
+   },
+   {
+    "routine": "skylark_get_flight_gate",
+    "app": "SkyLark (skylark_get_flight_gate)",
+    "status": "queued"
+   }
+  ],
+  "text": "Posting to SkyLark (skylark_check_in_flight), SkyLark (skylark_get_flight_gate), one after another. Each post waits for the user's OK in Envoy on their phone; follow it with get_task.",
+  "returned_in_s": 0.06
+ },
+ "after_decline": {
+  "task": {
+   "status": "declined",
+   "result": "SkyLark (skylark_check_in_flight): not posted (declined) · SkyLark (skylark_get_flight_gate): done",
+   "detail": "Not posted: SkyLark (skylark_check_in_flight) (declined); a retry runs only SkyLark (skylark_check_in_flight)",
+   "retry": "cross_post with retry=task-1102-182723-bda1 runs only SkyLark (skylark_check_in_flight) again"
+  },
+  "posts": [
+   {
+    "routine": "skylark_check_in_flight",
+    "app": "com.skylark.air",
+    "app_name": "SkyLark",
+    "label": "SkyLark (skylark_check_in_flight)",
+    "status": "declined",
+    "text": "not posted: the post wasn't approved (User declined the Check in approval for flight SL 1190 to Denver, so check-in was not completed.)",
+    "task_id": "task-1102-182723-321c",
+    "attempts": 1
+   },
+   {
+    "routine": "skylark_get_flight_gate",
+    "app": "com.skylark.air",
+    "app_name": "SkyLark",
+    "label": "SkyLark (skylark_get_flight_gate)",
+    "status": "done",
+    "text": "done",
+    "task_id": "task-1102-182754-de27",
+    "attempts": 1
+   }
+  ],
+  "seen": [
+   [
+    "running",
+    [
+     [
+      "SkyLark",
+      "running"
+     ],
+     [
+      "SkyLark",
+      "queued"
+     ]
+    ]
+   ],
+   [
+    "waiting_approval",
+    [
+     [
+      "SkyLark",
+      "waiting"
+     ],
+     [
+      "SkyLark",
+      "queued"
+     ]
+    ]
+   ],
+   [
+    "running",
+    [
+     [
+      "SkyLark",
+      "running"
+     ],
+     [
+      "SkyLark",
+      "queued"
+     ]
+    ]
+   ],
+   [
+    "running",
+    [
+     [
+      "SkyLark",
+      "declined"
+     ],
+     [
+      "SkyLark",
+      "running"
+     ]
+    ]
+   ],
+   [
+    "declined",
+    [
+     [
+      "SkyLark",
+      "declined"
+     ],
+     [
+      "SkyLark",
+      "done"
+     ]
+    ]
+   ]
+  ]
+ },
+ "retry": {
+  "task_id": "task-1102-182723-bda1",
+  "task_url": "http://127.0.0.1:8761/?task=task-1102-182723-bda1",
+  "retrying": [
+   "SkyLark (skylark_check_in_flight)"
+  ],
+  "left_alone": [
+   {
+    "app": "SkyLark (skylark_get_flight_gate)",
+    "status": "done"
+   }
+  ],
+  "posts": [
+   {
+    "routine": "skylark_check_in_flight",
+    "app": "com.skylark.air",
+    "app_name": "SkyLark",
+    "label": "SkyLark (skylark_check_in_flight)",
+    "status": "running",
+    "text": "posting…",
+    "task_id": "task-1102-182839-b6fa",
+    "attempts": 2
+   },
+   {
+    "routine": "skylark_get_flight_gate",
+    "app": "com.skylark.air",
+    "app_name": "SkyLark",
+    "label": "SkyLark (skylark_get_flight_gate)",
+    "status": "done",
+    "text": "done",
+    "task_id": "task-1102-182754-de27",
+    "attempts": 1
+   }
+  ],
+  "text": "Posting again to SkyLark (skylark_check_in_flight), one after another; each post waits for the user's OK in Envoy.",
+  "returned_in_s": 0.03
+ },
+ "after_retry": {
+  "task": {
+   "status": "done",
+   "result": "SkyLark (skylark_check_in_flight): done · SkyLark (skylark_get_flight_gate): done",
+   "detail": null,
+   "retry": null
+  },
+  "posts": [
+   {
+    "routine": "skylark_check_in_flight",
+    "app": "com.skylark.air",
+    "app_name": "SkyLark",
+    "label": "SkyLark (skylark_check_in_flight)",
+    "status": "done",
+    "text": "done",
+    "task_id": "task-1102-182839-b6fa",
+    "attempts": 2
+   },
+   {
+    "routine": "skylark_get_flight_gate",
+    "app": "com.skylark.air",
+    "app_name": "SkyLark",
+    "label": "SkyLark (skylark_get_flight_gate)",
+    "status": "done",
+    "text": "done",
+    "task_id": "task-1102-182754-de27",
+    "attempts": 1
+   }
+  ],
+  "seen": [
+   [
+    "running",
+    [
+     [
+      "SkyLark",
+      "running"
+     ],
+     [
+      "SkyLark",
+      "done"
+     ]
+    ]
+   ],
+   [
+    "waiting_approval",
+    [
+     [
+      "SkyLark",
+      "waiting"
+     ],
+     [
+      "SkyLark",
+      "done"
+     ]
+    ]
+   ],
+   [
+    "running",
+    [
+     [
+      "SkyLark",
+      "verifying"
+     ],
+     [
+      "SkyLark",
+      "done"
+     ]
+    ]
+   ],
+   [
+    "done",
+    [
+     [
+      "SkyLark",
+      "done"
+     ],
+     [
+      "SkyLark",
+      "done"
+     ]
+    ]
+   ]
+  ]
+ },
+ "parts": [
+  {
+   "id": "task-1102-182723-321c",
+   "routine": "skylark_check_in_flight",
+   "status": "declined",
+   "model_calls": 5,
+   "device": "envoy-test"
+  },
+  {
+   "id": "task-1102-182754-de27",
+   "routine": "skylark_get_flight_gate",
+   "status": "done",
+   "model_calls": 5,
+   "device": "envoy-test"
+  },
+  {
+   "id": "task-1102-182839-b6fa",
+   "routine": "skylark_check_in_flight",
+   "status": "done",
+   "model_calls": 11,
+   "device": "envoy-test"
+  }
+ ],
+ "timeline": [
+  {
+   "t": 1793662043.2,
+   "status": "running",
+   "result": "SkyLark (skylark_check_in_flight): posting… · SkyLark (skylark_get_flight_gate): queued",
+   "detail": null,
+   "posts": [
+    {
+     "routine": "skylark_check_in_flight",
+     "app": "com.skylark.air",
+     "app_name": "SkyLark",
+     "label": "SkyLark (skylark_check_in_flight)",
+     "status": "running",
+     "text": "posting…",
+     "task_id": "task-1102-182723-321c",
+     "attempts": 1
+    },
+    {
+     "routine": "skylark_get_flight_gate",
+     "app": "com.skylark.air",
+     "app_name": "SkyLark",
+     "label": "SkyLark (skylark_get_flight_gate)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    }
+   ]
+  },
+  {
+   "t": 1793662071.3,
+   "status": "waiting_approval",
+   "result": "SkyLark (skylark_check_in_flight): waiting for the user · SkyLark (skylark_get_flight_gate): queued",
+   "detail": "SkyLark (skylark_check_in_flight): waiting for you",
+   "posts": [
+    {
+     "routine": "skylark_check_in_flight",
+     "app": "com.skylark.air",
+     "app_name": "SkyLark",
+     "label": "SkyLark (skylark_check_in_flight)",
+     "status": "waiting",
+     "text": "waiting for the user",
+     "task_id": "task-1102-182723-321c",
+     "attempts": 1
+    },
+    {
+     "routine": "skylark_get_flight_gate",
+     "app": "com.skylark.air",
+     "app_name": "SkyLark",
+     "label": "SkyLark (skylark_get_flight_gate)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    }
+   ]
+  },
+  {
+   "answered": "decline",
+   "approval": "tap \"Check in\" in com.skylark.air",
+   "http": 200
+  },
+  {
+   "t": 1793662073.4,
+   "status": "running",
+   "result": "SkyLark (skylark_check_in_flight): posting… · SkyLark (skylark_get_flight_gate): queued",
+   "detail": null,
+   "posts": [
+    {
+     "routine": "skylark_check_in_flight",
+     "app": "com.skylark.air",
+     "app_name": "SkyLark",
+     "label": "SkyLark (skylark_check_in_flight)",
+     "status": "running",
+     "text": "posting…",
+     "task_id": "task-1102-182723-321c",
+     "attempts": 1
+    },
+    {
+     "routine": "skylark_get_flight_gate",
+     "app": "com.skylark.air",
+     "app_name": "SkyLark",
+     "label": "SkyLark (skylark_get_flight_gate)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    }
+   ]
+  },
+  {
+   "t": 1793662075.4,
+   "status": "running",
+   "result": "SkyLark (skylark_check_in_flight): not posted (declined) · SkyLark (skylark_get_flight_gate): posting…",
+   "detail": null,
+   "posts": [
+    {
+     "routine": "skylark_check_in_flight",
+     "app": "com.skylark.air",
+     "app_name": "SkyLark",
+     "label": "SkyLark (skylark_check_in_flight)",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (User declined the Check in approval for flight SL 1190 to Denver, so check-in was not completed.)",
+     "task_id": "task-1102-182723-321c",
+     "attempts": 1
+    },
+    {
+     "routine": "skylark_get_flight_gate",
+     "app": "com.skylark.air",
+     "app_name": "SkyLark",
+     "label": "SkyLark (skylark_get_flight_gate)",
+     "status": "running",
+     "text": "posting…",
+     "task_id": "task-1102-182754-de27",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "t": 1793662119.6,
+   "status": "declined",
+   "result": "SkyLark (skylark_check_in_flight): not posted (declined) · SkyLark (skylark_get_flight_gate): done",
+   "detail": "Not posted: SkyLark (skylark_check_in_flight) (declined); a retry runs only SkyLark (skylark_check_in_flight)",
+   "posts": [
+    {
+     "routine": "skylark_check_in_flight",
+     "app": "com.skylark.air",
+     "app_name": "SkyLark",
+     "label": "SkyLark (skylark_check_in_flight)",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (User declined the Check in approval for flight SL 1190 to Denver, so check-in was not completed.)",
+     "task_id": "task-1102-182723-321c",
+     "attempts": 1
+    },
+    {
+     "routine": "skylark_get_flight_gate",
+     "app": "com.skylark.air",
+     "app_name": "SkyLark",
+     "label": "SkyLark (skylark_get_flight_gate)",
+     "status": "done",
+     "text": "done",
+     "task_id": "task-1102-182754-de27",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "t": 1793662119.6,
+   "status": "running",
+   "result": "SkyLark (skylark_check_in_flight): posting… · SkyLark (skylark_get_flight_gate): done",
+   "detail": null,
+   "posts": [
+    {
+     "routine": "skylark_check_in_flight",
+     "app": "com.skylark.air",
+     "app_name": "SkyLark",
+     "label": "SkyLark (skylark_check_in_flight)",
+     "status": "running",
+     "text": "posting…",
+     "task_id": "task-1102-182839-b6fa",
+     "attempts": 2
+    },
+    {
+     "routine": "skylark_get_flight_gate",
+     "app": "com.skylark.air",
+     "app_name": "SkyLark",
+     "label": "SkyLark (skylark_get_flight_gate)",
+     "status": "done",
+     "text": "done",
+     "task_id": "task-1102-182754-de27",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "t": 1793662167.8,
+   "status": "waiting_approval",
+   "result": "SkyLark (skylark_check_in_flight): waiting for the user · SkyLark (skylark_get_flight_gate): done",
+   "detail": "SkyLark (skylark_check_in_flight): waiting for you",
+   "posts": [
+    {
+     "routine": "skylark_check_in_flight",
+     "app": "com.skylark.air",
+     "app_name": "SkyLark",
+     "label": "SkyLark (skylark_check_in_flight)",
+     "status": "waiting",
+     "text": "waiting for the user",
+     "task_id": "task-1102-182839-b6fa",
+     "attempts": 2
+    },
+    {
+     "routine": "skylark_get_flight_gate",
+     "app": "com.skylark.air",
+     "app_name": "SkyLark",
+     "label": "SkyLark (skylark_get_flight_gate)",
+     "status": "done",
+     "text": "done",
+     "task_id": "task-1102-182754-de27",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "answered": "approve",
+   "approval": "tap \"Confirm check-in\" in com.skylark.air",
+   "http": 200
+  },
+  {
+   "t": 1793662169.8,
+   "status": "running",
+   "result": "SkyLark (skylark_check_in_flight): verifying… · SkyLark (skylark_get_flight_gate): done",
+   "detail": null,
+   "posts": [
+    {
+     "routine": "skylark_check_in_flight",
+     "app": "com.skylark.air",
+     "app_name": "SkyLark",
+     "label": "SkyLark (skylark_check_in_flight)",
+     "status": "verifying",
+     "text": "verifying…: its post tap went through, and its check is still running",
+     "task_id": "task-1102-182839-b6fa",
+     "attempts": 2
+    },
+    {
+     "routine": "skylark_get_flight_gate",
+     "app": "com.skylark.air",
+     "app_name": "SkyLark",
+     "label": "SkyLark (skylark_get_flight_gate)",
+     "status": "done",
+     "text": "done",
+     "task_id": "task-1102-182754-de27",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "t": 1793662171.9,
+   "status": "done",
+   "result": "SkyLark (skylark_check_in_flight): done · SkyLark (skylark_get_flight_gate): done",
+   "detail": null,
+   "posts": [
+    {
+     "routine": "skylark_check_in_flight",
+     "app": "com.skylark.air",
+     "app_name": "SkyLark",
+     "label": "SkyLark (skylark_check_in_flight)",
+     "status": "done",
+     "text": "done",
+     "task_id": "task-1102-182839-b6fa",
+     "attempts": 2
+    },
+    {
+     "routine": "skylark_get_flight_gate",
+     "app": "com.skylark.air",
+     "app_name": "SkyLark",
+     "label": "SkyLark (skylark_get_flight_gate)",
+     "status": "done",
+     "text": "done",
+     "task_id": "task-1102-182754-de27",
+     "attempts": 1
+    }
+   ]
+  }
+ ]
+}

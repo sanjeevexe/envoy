@@ -1,0 +1,331 @@
+{
+ "after_retry": {
+  "task": {
+   "status": "declined",
+   "result": "YouTube (youtube_short_sound): not posted (declined) · YouTube (youtube_search_first_video): done",
+   "detail": "Not posted: YouTube (youtube_short_sound) (declined); a retry runs only YouTube (youtube_short_sound)",
+   "retry": "cross_post with retry=task-1102-213257-6a8a runs only YouTube (youtube_short_sound) again"
+  },
+  "posts": [
+   {
+    "routine": "youtube_short_sound",
+    "app": "com.google.android.youtube",
+    "app_name": "YouTube",
+    "label": "YouTube (youtube_short_sound)",
+    "status": "declined",
+    "text": "not posted: the post wasn't approved (the user declined the approval)",
+    "task_id": "task-1102-213354-95e3",
+    "attempts": 2
+   },
+   {
+    "routine": "youtube_search_first_video",
+    "app": "com.google.android.youtube",
+    "app_name": "YouTube",
+    "label": "YouTube (youtube_search_first_video)",
+    "status": "done",
+    "text": "done",
+    "task_id": "task-1102-213503-d5a4",
+    "attempts": 1
+   }
+  ],
+  "seen": [
+   [
+    "needs_you",
+    [
+     [
+      "YouTube (youtube_short_sound)",
+      "waiting"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "queued"
+     ]
+    ]
+   ],
+   [
+    "running",
+    [
+     [
+      "YouTube (youtube_short_sound)",
+      "running"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "queued"
+     ]
+    ]
+   ],
+   [
+    "waiting_approval",
+    [
+     [
+      "YouTube (youtube_short_sound)",
+      "waiting"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "queued"
+     ]
+    ]
+   ],
+   [
+    "needs_you",
+    [
+     [
+      "YouTube (youtube_short_sound)",
+      "declined"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "waiting"
+     ]
+    ]
+   ],
+   [
+    "running",
+    [
+     [
+      "YouTube (youtube_short_sound)",
+      "declined"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "running"
+     ]
+    ]
+   ],
+   [
+    "declined",
+    [
+     [
+      "YouTube (youtube_short_sound)",
+      "declined"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "done"
+     ]
+    ]
+   ]
+  ],
+  "approvals": [
+   {
+    "task_id": "task-1102-213354-95e3",
+    "description": "tap \"Upload Short\" in com.google.android.youtube (routine youtube_short_sound v3)",
+    "status": "declined"
+   },
+   {
+    "task_id": "task-1102-213257-cdee",
+    "description": "tap \"Upload Short\" in com.google.android.youtube (routine youtube_short_sound v3)",
+    "status": "pending"
+   }
+  ],
+  "never_approved": true
+ },
+ "timeline": [
+  {
+   "t": 0.0,
+   "status": "needs_you",
+   "detail": "YouTube (youtube_short_sound): Envoy wants to use Envoy's phone for this task",
+   "posts": [
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "waiting",
+     "text": "waiting for the user: Envoy wants to use Envoy's phone for this task",
+     "task_id": "task-1102-213354-95e3",
+     "attempts": 2
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    }
+   ]
+  },
+  {
+   "t": 0.0,
+   "phone_yes": "task-1102-213354-95e3",
+   "routine": "youtube_short_sound",
+   "http": 200
+  },
+  {
+   "t": 0.0,
+   "declined": "tap \"Upload Short\" in com.google.android.youtube (routine youtube_short_sound v3)",
+   "task": "task-1102-213257-cdee",
+   "http": 409,
+   "why": ""
+  },
+  {
+   "t": 3.0,
+   "status": "running",
+   "detail": null,
+   "posts": [
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "running",
+     "text": "posting…",
+     "task_id": "task-1102-213354-95e3",
+     "attempts": 2
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    }
+   ]
+  },
+  {
+   "t": 45.2,
+   "status": "waiting_approval",
+   "detail": "YouTube (youtube_short_sound): waiting for you",
+   "posts": [
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "waiting",
+     "text": "waiting for the user",
+     "task_id": "task-1102-213354-95e3",
+     "attempts": 2
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    }
+   ]
+  },
+  {
+   "t": 45.2,
+   "declined": "tap \"Upload Short\" in com.google.android.youtube (routine youtube_short_sound v3)",
+   "task": "task-1102-213354-95e3",
+   "http": 200,
+   "why": ""
+  },
+  {
+   "t": 48.2,
+   "status": "needs_you",
+   "detail": "YouTube (youtube_search_first_video): Envoy wants to use Envoy's phone for this task",
+   "posts": [
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (the user declined the approval)",
+     "task_id": "task-1102-213354-95e3",
+     "attempts": 2
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "waiting",
+     "text": "waiting for the user: Envoy wants to use Envoy's phone for this task",
+     "task_id": "task-1102-213503-d5a4",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "t": 48.2,
+   "phone_yes": "task-1102-213503-d5a4",
+   "routine": "youtube_search_first_video",
+   "http": 200
+  },
+  {
+   "t": 51.2,
+   "status": "running",
+   "detail": null,
+   "posts": [
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (the user declined the approval)",
+     "task_id": "task-1102-213354-95e3",
+     "attempts": 2
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "running",
+     "text": "posting…",
+     "task_id": "task-1102-213503-d5a4",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "t": 60.3,
+   "status": "declined",
+   "detail": "Not posted: YouTube (youtube_short_sound) (declined); a retry runs only YouTube (youtube_short_sound)",
+   "posts": [
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (the user declined the approval)",
+     "task_id": "task-1102-213354-95e3",
+     "attempts": 2
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "done",
+     "text": "done",
+     "task_id": "task-1102-213503-d5a4",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "t": 65.3,
+   "second_look": {
+    "status": "declined",
+    "posts": [
+     [
+      "YouTube (youtube_short_sound)",
+      "declined"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "done"
+     ]
+    ]
+   }
+  }
+ ]
+}

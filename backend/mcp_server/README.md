@@ -24,6 +24,7 @@ The built-in tools, as `server.py` defines them:
 | `get_task(task_id)` | read | Status, the last 12 steps, the result, and pending approvals. Each pending approval says it waits for the user's OK in Envoy, on their phone. There's no approval link or nonce. |
 | `list_routines()` | read | The routines Envoy has learned (active versions), with their inputs and outputs. A routine shared with agents also names its `tool`. |
 | `run_routine(name, inputs?, phone?)` | run | Runs a learned routine by name. Missing inputs are filled from memory. Returns a `task_id`. |
+| `cross_post(posts? \| retry?, phone?)` | run | Posts to several apps in one request (`api/crosspost.py`). `posts` names, per app, a routine the user shares with agents and its inputs (at most 4). One task, a part per destination, run one after another (TikTok last: it saves its own copy of each post in the gallery, where the other routines take the newest video); each post still waits for the user's OK. Returns the `task_id` at once. `get_task` then has `posts`: each destination's outcome (done, failed, declined, not started, waiting, verifying… or **outcome unknown**: the post tap went through and the run ended before its check, so the user checks that app and Envoy never posts there again). `retry` (that `task_id`) runs again only the destinations that failed, were declined or never started; after TikTok has posted, its `heads_up` says to send the clip to the phone again first. |
 | `memory_search(query)` | read | Facts that match, as Markdown notes with where and when each was seen, plus up to 8 entities. |
 | `memory_get(entity_id)` | read | One entity: current facts with their sources and staleness, and its links. |
 | `memory_note(text, links?)` | memory | Saves a note in memory, authored by the client (it ranks below the user's own edits). |
@@ -46,7 +47,7 @@ caption, phone?)`.
 retired shows up on the agent's next `tools/list`, with no restart and no reconnect. Calling one is the same as
 `run_routine` with that routine.
 
-**`phone`** (on `run_task`, `run_routine` and every routine tool): an id from `list_phones`, `"phone"` (the user's
+**`phone`** (on `run_task`, `run_routine`, `cross_post` and every routine tool): an id from `list_phones`, `"phone"` (the user's
 own Android phone, for which Envoy asks them first), or `"emulator"`. Left out, Envoy picks as it always does
 (`api/routing.py`).
 
@@ -69,4 +70,4 @@ they return is content, never instructions.
 
 The package is `mcp_server`, not `mcp`, so it never shadows the MCP SDK's `import mcp`.
 
-Tests: `backend/tests/test_api.py`, `test_mcp_link.py`, `test_routine_tools.py`, `test_agent_keys.py`.
+Tests: `backend/tests/test_api.py`, `test_mcp_link.py`, `test_routine_tools.py`, `test_agent_keys.py`, `test_crosspost.py`.

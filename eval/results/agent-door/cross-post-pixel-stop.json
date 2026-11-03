@@ -1,0 +1,363 @@
+{
+ "at": "2026-11-02 21:32:57 EST",
+ "start": {
+  "task_id": "task-1102-213257-6a8a",
+  "status": "running",
+  "task_url": "http://127.0.0.1:8761/?task=task-1102-213257-6a8a",
+  "posts": [
+   {
+    "routine": "youtube_short_sound",
+    "app": "YouTube (youtube_short_sound)",
+    "status": "queued"
+   },
+   {
+    "routine": "youtube_search_first_video",
+    "app": "YouTube (youtube_search_first_video)",
+    "status": "queued"
+   }
+  ],
+  "text": "Posting to YouTube (youtube_short_sound), YouTube (youtube_search_first_video), one after another. Each post waits for the user's OK in Envoy on their phone; follow it with get_task.",
+  "returned_in_s": 0.22
+ },
+ "end": {
+  "task": {
+   "status": "stopped",
+   "result": "YouTube (youtube_short_sound): not posted (failed) · YouTube (youtube_search_first_video): not posted (never started)",
+   "detail": "stopped by you",
+   "retry": "cross_post with retry=task-1102-213257-6a8a runs only YouTube (youtube_short_sound), YouTube (youtube_search_first_video) again"
+  },
+  "posts": [
+   {
+    "routine": "youtube_short_sound",
+    "app": "com.google.android.youtube",
+    "app_name": "YouTube",
+    "label": "YouTube (youtube_short_sound)",
+    "status": "failed",
+    "text": "not posted: it stopped before its post step (stopped by you)",
+    "task_id": "task-1102-213257-cdee",
+    "attempts": 1
+   },
+   {
+    "routine": "youtube_search_first_video",
+    "app": "com.google.android.youtube",
+    "app_name": "YouTube",
+    "label": "YouTube (youtube_search_first_video)",
+    "status": "not_started",
+    "text": "not posted: it never started (the cross-post stopped first)",
+    "task_id": null,
+    "attempts": 0
+   }
+  ],
+  "seen": [
+   [
+    "running",
+    [
+     [
+      "YouTube (youtube_short_sound)",
+      "running"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "queued"
+     ]
+    ]
+   ],
+   [
+    "needs_you",
+    [
+     [
+      "YouTube (youtube_short_sound)",
+      "waiting"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "queued"
+     ]
+    ]
+   ],
+   [
+    "running",
+    [
+     [
+      "YouTube (youtube_short_sound)",
+      "running"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "queued"
+     ]
+    ]
+   ],
+   [
+    "waiting_approval",
+    [
+     [
+      "YouTube (youtube_short_sound)",
+      "waiting"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "queued"
+     ]
+    ]
+   ],
+   [
+    "stopped",
+    [
+     [
+      "YouTube (youtube_short_sound)",
+      "failed"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "not_started"
+     ]
+    ]
+   ]
+  ]
+ },
+ "parent_row": {
+  "status": "stopped",
+  "result": "YouTube (youtube_short_sound): not posted (failed) · YouTube (youtube_search_first_video): not posted (never started)",
+  "detail": "stopped by you",
+  "model_calls": 0
+ },
+ "result_matches_posts": true,
+ "no_unknown": true,
+ "retry": {
+  "task_id": "task-1102-213257-6a8a",
+  "task_url": "http://127.0.0.1:8761/?task=task-1102-213257-6a8a",
+  "retrying": [
+   "YouTube (youtube_short_sound)",
+   "YouTube (youtube_search_first_video)"
+  ],
+  "left_alone": [],
+  "posts": [
+   {
+    "routine": "youtube_short_sound",
+    "app": "com.google.android.youtube",
+    "app_name": "YouTube",
+    "label": "YouTube (youtube_short_sound)",
+    "status": "running",
+    "text": "posting…",
+    "task_id": "task-1102-213354-95e3",
+    "attempts": 2
+   },
+   {
+    "routine": "youtube_search_first_video",
+    "app": "com.google.android.youtube",
+    "app_name": "YouTube",
+    "label": "YouTube (youtube_search_first_video)",
+    "status": "queued",
+    "text": "queued",
+    "task_id": null,
+    "attempts": 0
+   }
+  ],
+  "text": "Posting again to YouTube (youtube_short_sound), YouTube (youtube_search_first_video), one after another; each post waits for the user's OK in Envoy.",
+  "returned_in_s": 0.03
+ },
+ "timeline": [
+  {
+   "t": 0.4,
+   "status": "running",
+   "detail": null,
+   "posts": [
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "running",
+     "text": "posting…",
+     "task_id": "task-1102-213257-cdee",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    }
+   ]
+  },
+  {
+   "t": 3.4,
+   "status": "needs_you",
+   "detail": "YouTube (youtube_short_sound): Envoy wants to use Envoy's phone for this task",
+   "posts": [
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "waiting",
+     "text": "waiting for the user: Envoy wants to use Envoy's phone for this task",
+     "task_id": "task-1102-213257-cdee",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    }
+   ]
+  },
+  {
+   "t": 3.4,
+   "phone_yes": "task-1102-213257-cdee",
+   "routine": "youtube_short_sound",
+   "http": 200
+  },
+  {
+   "t": 6.4,
+   "status": "running",
+   "detail": null,
+   "posts": [
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "running",
+     "text": "posting…",
+     "task_id": "task-1102-213257-cdee",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    }
+   ]
+  },
+  {
+   "t": 45.6,
+   "status": "waiting_approval",
+   "detail": "YouTube (youtube_short_sound): waiting for you",
+   "posts": [
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "waiting",
+     "text": "waiting for the user",
+     "task_id": "task-1102-213257-cdee",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    }
+   ]
+  },
+  {
+   "t": 45.7,
+   "stopped_parent_at": "tap \"Upload Short\" in com.google.android.youtube (routine youtube_short_sound v3)",
+   "task": "task-1102-213257-cdee",
+   "http": 200
+  },
+  {
+   "t": 49.7,
+   "approval_after_stop": "pending"
+  },
+  {
+   "t": 49.7,
+   "decline_after_stop": {
+    "http": 409,
+    "text": "{\"detail\":\"the task is no longer waiting\"}"
+   }
+  },
+  {
+   "t": 52.7,
+   "status": "stopped",
+   "detail": "stopped by you",
+   "posts": [
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "failed",
+     "text": "not posted: it stopped before its post step (stopped by you)",
+     "task_id": "task-1102-213257-cdee",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "not_started",
+     "text": "not posted: it never started (the cross-post stopped first)",
+     "task_id": null,
+     "attempts": 0
+    }
+   ]
+  },
+  {
+   "t": 57.7,
+   "second_look": {
+    "status": "stopped",
+    "posts": [
+     [
+      "YouTube (youtube_short_sound)",
+      "failed"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "not_started"
+     ]
+    ]
+   }
+  },
+  {
+   "t": 57.7,
+   "status": "running",
+   "detail": null,
+   "posts": [
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "running",
+     "text": "posting…",
+     "task_id": "task-1102-213354-95e3",
+     "attempts": 2
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    }
+   ]
+  }
+ ]
+}

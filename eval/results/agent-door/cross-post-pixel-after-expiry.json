@@ -1,0 +1,138 @@
+{
+ "at": "21:18:46",
+ "parent": {
+  "status": "stopped",
+  "result": "Instagram: not posted (declined) · YouTube (youtube_short_sound): waiting for the user · YouTube (youtube_search_first_video): done · TikTok: queued",
+  "detail": "stopped by you"
+ },
+ "get_task": {
+  "status": "stopped",
+  "result": "Instagram: not posted (declined) · YouTube (youtube_short_sound): waiting for the user · YouTube (youtube_search_first_video): done · TikTok: queued",
+  "detail": "stopped by you",
+  "retry": "cross_post with retry=task-1102-205728-0023 runs only Instagram, YouTube (youtube_short_sound), TikTok again",
+  "posts": [
+   {
+    "routine": "instagram_reel_song",
+    "app": "com.instagram.android",
+    "app_name": "Instagram",
+    "label": "Instagram",
+    "status": "declined",
+    "text": "not posted: the post wasn't approved (the user declined the approval)",
+    "task_id": "task-1102-210140-addb",
+    "attempts": 2
+   },
+   {
+    "routine": "youtube_short_sound",
+    "app": "com.google.android.youtube",
+    "app_name": "YouTube",
+    "label": "YouTube (youtube_short_sound)",
+    "status": "failed",
+    "text": "not posted: it stopped before its post step (stopped by you)",
+    "task_id": "task-1102-210252-ad1b",
+    "attempts": 2
+   },
+   {
+    "routine": "youtube_search_first_video",
+    "app": "com.google.android.youtube",
+    "app_name": "YouTube",
+    "label": "YouTube (youtube_search_first_video)",
+    "status": "done",
+    "text": "done",
+    "task_id": "task-1102-210017-20c6",
+    "attempts": 1
+   },
+   {
+    "routine": "tiktok_post_sound",
+    "app": "com.zhiliaoapp.musically",
+    "app_name": "TikTok",
+    "label": "TikTok",
+    "status": "declined",
+    "text": "not posted: the post wasn't approved (the user declined the approval)",
+    "task_id": "task-1102-210029-4057",
+    "attempts": 1
+   }
+  ]
+ },
+ "parts": [
+  {
+   "id": "task-1102-205728-00d7",
+   "routine": "instagram_reel_song",
+   "status": "declined",
+   "detail": "the user declined the approval",
+   "model_calls": 0,
+   "cost": null
+  },
+  {
+   "id": "task-1102-205935-e9d9",
+   "routine": "youtube_short_sound",
+   "status": "declined",
+   "detail": "the user declined the approval",
+   "model_calls": 0,
+   "cost": null
+  },
+  {
+   "id": "task-1102-210017-20c6",
+   "routine": "youtube_search_first_video",
+   "status": "done",
+   "detail": "all steps and checks passed",
+   "model_calls": 0,
+   "cost": null
+  },
+  {
+   "id": "task-1102-210029-4057",
+   "routine": "tiktok_post_sound",
+   "status": "declined",
+   "detail": "the user declined the approval",
+   "model_calls": 3,
+   "cost": null
+  },
+  {
+   "id": "task-1102-210140-addb",
+   "routine": "instagram_reel_song",
+   "status": "declined",
+   "detail": "the user declined the approval",
+   "model_calls": 1,
+   "cost": null
+  },
+  {
+   "id": "task-1102-210252-ad1b",
+   "routine": "youtube_short_sound",
+   "status": "running",
+   "detail": "stopped by you",
+   "model_calls": 0,
+   "cost": null
+  }
+ ],
+ "approvals": [
+  {
+   "task_id": "task-1102-210252-ad1b",
+   "status": "expired",
+   "note": "no answer in time: not done, never auto-approved",
+   "description": "tap \"Upload Short\" in com.google.android.youtube (routine youtube_short_sound v3)"
+  },
+  {
+   "task_id": "task-1102-210140-addb",
+   "status": "declined",
+   "note": "",
+   "description": "tap \"Share\" in com.instagram.android (routine instagram_reel_song v3)"
+  },
+  {
+   "task_id": "task-1102-210029-4057",
+   "status": "declined",
+   "note": "",
+   "description": "tap \"Post\" in com.zhiliaoapp.musically (routine tiktok_post_sound v3)"
+  },
+  {
+   "task_id": "task-1102-205935-e9d9",
+   "status": "declined",
+   "note": "",
+   "description": "tap \"Upload Short\" in com.google.android.youtube (routine youtube_short_sound v3)"
+  },
+  {
+   "task_id": "task-1102-205728-00d7",
+   "status": "declined",
+   "note": "",
+   "description": "tap \"Share\" in com.instagram.android (routine instagram_reel_song v3)"
+  }
+ ]
+}
