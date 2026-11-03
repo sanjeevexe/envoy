@@ -1,0 +1,184 @@
+{
+ "mode": "replay",
+ "app": "com.instagram.android",
+ "time": "2026-11-02T20:30:54",
+ "request": {
+  "phone": "phone-09031FDD4000C6",
+  "routine": "instagram_reel_song",
+  "inputs": {
+   "song_title": "golden hour",
+   "song_artist": "JVKE",
+   "caption": "Envoy C2 reel \u00b7 test"
+  }
+ },
+ "task": {
+  "id": "task-1102-203054-52aa",
+  "status": "declined",
+  "routine": "instagram_reel_song",
+  "model_calls": 0,
+  "cost_usd": 0.0,
+  "traces": [],
+  "detail": "the user declined the approval",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 18,
+ "repairs": [],
+ "approvals": [
+  {
+   "description": "tap \"Share\" in com.instagram.android (routine instagram_reel_song v3)",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/share_button'",
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "asked_at": [
+  "Share"
+ ],
+ "approval_shot": "approval-task-1102-203054-52aa.jpg",
+ "routine_steps": [
+  {
+   "id": "tap_create_button",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "tap_newest_video_thumbnail",
+   "status": "done",
+   "rung": 1,
+   "score": 0.871,
+   "rungs": [
+    "wait and retry: after-checks held after 2.9 s"
+   ]
+  },
+  {
+   "id": "tap_add_audio",
+   "status": "done",
+   "rung": 1,
+   "score": 1.0,
+   "rungs": [
+    "wait and retry: after-checks held after 2.1 s"
+   ]
+  },
+  {
+   "id": "search_song_title",
+   "status": "done",
+   "rung": 1,
+   "score": 1.0,
+   "rungs": [
+    "wait and retry: after-checks held after 2.0 s"
+   ]
+  },
+  {
+   "id": "retype_song_title_search",
+   "status": "done",
+   "rung": 0,
+   "score": 0.985,
+   "rungs": []
+  },
+  {
+   "id": "find_tap_matching_track",
+   "status": "done",
+   "rung": 2,
+   "score": 0.903,
+   "rungs": [
+    "relaxed match: after-checks held past the edge of the screen (scrolled to see them)"
+   ]
+  },
+  {
+   "id": "tap_matching_track",
+   "status": "done",
+   "rung": 1,
+   "score": 0.903,
+   "rungs": [
+    "searched for 'golden hour by JVKE': the list didn't show it",
+    "wait and retry: ready after 57.6 s",
+    "wait and retry: after-checks held after 4.7 s"
+   ]
+  },
+  {
+   "id": "confirm_selected_track",
+   "status": "done",
+   "rung": 0,
+   "score": 0.882,
+   "rungs": []
+  },
+  {
+   "id": "tap_done_music_editor",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "tap_next_to_share_screen",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "type_caption",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "close_keyboard",
+   "status": "done",
+   "rung": 0,
+   "score": null,
+   "rungs": []
+  },
+  {
+   "id": "tap_post",
+   "status": "declined",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  }
+ ],
+ "outcome_checks": [
+  {
+   "when": "before the final step",
+   "picks": {
+    "song_title": "shown"
+   },
+   "fields": {
+    "caption": "held"
+   },
+   "clip": "checked",
+   "problems": []
+  }
+ ],
+ "auto_approved": [],
+ "marks_s": {
+  "running": 0.2,
+  "needs_you": 1.2,
+  "phone_yes": 1.2,
+  "waiting_approval": 127.4,
+  "post_asked": 127.4,
+  "declined": 128.4,
+  "end": 128.4
+ },
+ "spent": {
+  "model_calls": 0,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.0,
+  "jobs": {}
+ },
+ "ok": true,
+ "failures": [],
+ "profile": "hybrid",
+ "cleanup": [
+  "back (caption)",
+  "editor_cancel",
+  "start_over",
+  "gallery_home"
+ ]
+}
