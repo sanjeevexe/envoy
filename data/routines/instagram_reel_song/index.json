@@ -69,7 +69,7 @@
    ],
    "verification": {
     "offline": "backend/tests/test_reel_caption_fix.py",
-    "device": "pending"
+    "device": "Nov 3, 14:57-15:10 ET, Envoy's phone (Pixel 5), a test copy at f2671b0, approvals asking, every Share declined: 5/5 cold Reels with golden hour reached Share with clip, song and caption checks all yes, 0 model calls (the retype guard ran in 1 of 5: OK left the caption empty); TikTok v3 no-regression 1/1"
    }
   }
  ],
