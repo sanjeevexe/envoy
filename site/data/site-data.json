@@ -831,74 +831,15 @@
     "name": "instagram_reel_song",
     "app": "Instagram",
     "what": "A Reel set to a song from Instagram's music library",
-    "version": 3,
-    "base": 2,
-    "steps": 13,
+    "version": 4,
+    "steps": 15,
     "inputs": [
      "song_title",
      "song_artist",
      "caption"
     ],
     "outputs": [],
-    "hand": null,
-    "compiled": "2026-11-01 22:13:07",
-    "first": {
-     "when": "2026-11-01T20:29:45",
-     "ok": true,
-     "asked": "Share",
-     "to_ask": "98.7 s",
-     "calls": 14,
-     "usd": 0.1267,
-     "agent": false,
-     "task": "task-1101-202945-39d5"
-    },
-    "replays": [
-     {
-      "when": "2026-11-01T22:14:28",
-      "ok": true,
-      "asked": "Share",
-      "to_ask": "143.5 s",
-      "calls": 16,
-      "usd": 0.1992,
-      "agent": true
-     },
-     {
-      "when": "2026-11-01T22:17:47",
-      "ok": true,
-      "asked": "Share",
-      "to_ask": "75.9 s",
-      "calls": 0,
-      "usd": 0.0,
-      "agent": false
-     },
-     {
-      "when": "2026-11-01T22:19:57",
-      "ok": true,
-      "asked": "Share",
-      "to_ask": "47.7 s",
-      "calls": 0,
-      "usd": 0.0,
-      "agent": false
-     },
-     {
-      "when": "2026-11-02T19:15:18",
-      "ok": false,
-      "asked": "never asked",
-      "to_ask": "– s",
-      "calls": 28,
-      "usd": 0.2789,
-      "agent": true
-     },
-     {
-      "when": "2026-11-02T20:30:54",
-      "ok": true,
-      "asked": "Share",
-      "to_ask": "127.4 s",
-      "calls": 0,
-      "usd": 0.0,
-      "agent": false
-     }
-    ],
+    "hand": "two hand edits after the posting batch (Nov 3): Instagram's OK closes the caption edit instead of Back, and an empty caption is typed again before Share",
     "real": [
      {
       "task": "task-1102-005928-4182",
@@ -927,29 +868,19 @@
       "by": "Muse's dry run, Nov 2"
      }
     },
-    "every": {
-     "ok": 10,
-     "n": 11
+    "after_batch": {
+     "version": 4,
+     "ok": 5,
+     "n": 5,
+     "final": "Share",
+     "calls": 0,
+     "when": "Nov 3"
     },
-    "checked": {
-     "picks": {
-      "song_title": "shown"
-     },
-     "fields": {
-      "caption": "held"
-     },
-     "clip": "checked",
-     "when": "2026-11-02T20:30:54",
-     "src": {
-      "path": "eval/results/showcase/runs/instagram-replay-20261102-203054.json"
-     }
-    },
-    "planted": [],
     "src": {
      "path": "data/routines/instagram_reel_song/index.json"
     },
     "yaml_src": {
-     "path": "data/routines/instagram_reel_song/v3.yaml"
+     "path": "data/routines/instagram_reel_song/v4.yaml"
     }
    },
    {
@@ -957,7 +888,6 @@
     "app": "Instagram",
     "what": "A Story with a poll sticker",
     "version": 3,
-    "base": 3,
     "steps": 11,
     "inputs": [
      "poll_question",
@@ -966,55 +896,6 @@
     ],
     "outputs": [],
     "hand": null,
-    "compiled": "2026-11-01 22:51:54",
-    "first": {
-     "when": "2026-11-01T20:50:57",
-     "ok": true,
-     "asked": "Your story",
-     "to_ask": "75.6 s",
-     "calls": 14,
-     "usd": 0.0853,
-     "agent": false,
-     "task": "task-1101-205058-3079"
-    },
-    "replays": [
-     {
-      "when": "2026-11-01T22:52:51",
-      "ok": true,
-      "asked": "Your story",
-      "to_ask": "31.5 s",
-      "calls": 0,
-      "usd": 0.0,
-      "agent": false
-     },
-     {
-      "when": "2026-11-01T22:54:00",
-      "ok": true,
-      "asked": "Your story",
-      "to_ask": "31.5 s",
-      "calls": 0,
-      "usd": 0.0,
-      "agent": false
-     },
-     {
-      "when": "2026-11-01T22:55:08",
-      "ok": true,
-      "asked": "Your story",
-      "to_ask": "28.5 s",
-      "calls": 0,
-      "usd": 0.0,
-      "agent": false
-     },
-     {
-      "when": "2026-11-02T19:06:46",
-      "ok": true,
-      "asked": "Your story",
-      "to_ask": "108.9 s",
-      "calls": 15,
-      "usd": 0.1499,
-      "agent": true
-     }
-    ],
     "real": [
      {
       "task": "task-1102-013244-b7c8",
@@ -1030,12 +911,7 @@
      }
     ],
     "repair": null,
-    "every": {
-     "ok": 13,
-     "n": 13
-    },
-    "checked": null,
-    "planted": [],
+    "after_batch": null,
     "src": {
      "path": "data/routines/instagram_story_poll/index.json"
     },
@@ -1048,7 +924,6 @@
     "app": "TikTok",
     "what": "A TikTok with a sound from TikTok's library",
     "version": 3,
-    "base": 3,
     "steps": 16,
     "inputs": [
      "sound_title",
@@ -1057,64 +932,6 @@
     ],
     "outputs": [],
     "hand": "three hand edits: a 3 s wait before TikTok's drawn sound list, the app's name, and no before-check on its launch",
-    "compiled": "2026-11-02 02:11:25",
-    "first": {
-     "when": "2026-11-01T21:00:12",
-     "ok": true,
-     "asked": "Post",
-     "to_ask": "315.0 s",
-     "calls": 34,
-     "usd": 0.2842,
-     "agent": false,
-     "task": "task-1101-210013-7814"
-    },
-    "replays": [
-     {
-      "when": "2026-11-02T02:19:32",
-      "ok": true,
-      "asked": "Post",
-      "to_ask": "115.0 s",
-      "calls": 5,
-      "usd": 0.0493,
-      "agent": false
-     },
-     {
-      "when": "2026-11-02T02:21:52",
-      "ok": true,
-      "asked": "Post",
-      "to_ask": "56.6 s",
-      "calls": 3,
-      "usd": 0.0071,
-      "agent": false
-     },
-     {
-      "when": "2026-11-02T02:23:06",
-      "ok": true,
-      "asked": "Post",
-      "to_ask": "56.6 s",
-      "calls": 3,
-      "usd": 0.0072,
-      "agent": false
-     },
-     {
-      "when": "2026-11-02T19:23:21",
-      "ok": false,
-      "asked": "never asked",
-      "to_ask": "– s",
-      "calls": 33,
-      "usd": 0.2736,
-      "agent": true
-     },
-     {
-      "when": "2026-11-02T20:33:32",
-      "ok": true,
-      "asked": "Post",
-      "to_ask": "66.6 s",
-      "calls": 3,
-      "usd": 0.0073,
-      "agent": false
-     }
-    ],
     "real": [
      {
       "task": "task-1102-014139-7f5e",
@@ -1142,32 +959,7 @@
      }
     ],
     "repair": null,
-    "every": {
-     "ok": 11,
-     "n": 16
-    },
-    "checked": {
-     "picks": {
-      "sound_title": "shown"
-     },
-     "fields": {
-      "caption": "held"
-     },
-     "clip": "checked",
-     "when": "2026-11-02T20:33:32",
-     "src": {
-      "path": "eval/results/showcase/runs/tiktok-replay-20261102-203332.json"
-     }
-    },
-    "planted": [
-     {
-      "routine": "tiktok_post_sound",
-      "detail": "stopped before starting (outcome check): the gallery's newest video is neg-b.mp4 (Movies/Envoy/), not neg-a.mp4, the clip Envoy put on the phone: the routine takes the newest, so it would post the wrong one",
-      "src": {
-       "path": "eval/results/showcase/runs/tiktok-replay-20261102-192737.json"
-      }
-     }
-    ],
+    "after_batch": null,
     "src": {
      "path": "data/routines/tiktok_post_sound/index.json"
     },
@@ -1180,7 +972,6 @@
     "app": "YouTube",
     "what": "A YouTube Short with a sound from YouTube's library",
     "version": 3,
-    "base": 2,
     "steps": 15,
     "inputs": [
      "sound_title",
@@ -1189,64 +980,6 @@
     ],
     "outputs": [],
     "hand": "one hand edit: a stray before-check (“Captions unavailable”) dropped",
-    "compiled": "2026-11-01 22:13:10",
-    "first": {
-     "when": "2026-11-01T21:11:06",
-     "ok": true,
-     "asked": "Upload Short",
-     "to_ask": "84.7 s",
-     "calls": 16,
-     "usd": 0.114,
-     "agent": false,
-     "task": "task-1101-211106-9b42"
-    },
-    "replays": [
-     {
-      "when": "2026-11-01T22:30:55",
-      "ok": true,
-      "asked": "Upload Short",
-      "to_ask": "143.5 s",
-      "calls": 8,
-      "usd": 0.1409,
-      "agent": true
-     },
-     {
-      "when": "2026-11-01T22:33:45",
-      "ok": true,
-      "asked": "Upload Short",
-      "to_ask": "113.2 s",
-      "calls": 8,
-      "usd": 0.0848,
-      "agent": true
-     },
-     {
-      "when": "2026-11-01T22:36:07",
-      "ok": true,
-      "asked": "Upload Short",
-      "to_ask": "94.0 s",
-      "calls": 2,
-      "usd": 0.0436,
-      "agent": false
-     },
-     {
-      "when": "2026-11-01T23:37:48",
-      "ok": true,
-      "asked": "Upload Short",
-      "to_ask": "41.5 s",
-      "calls": 0,
-      "usd": 0.0,
-      "agent": false
-     },
-     {
-      "when": "2026-11-02T20:35:05",
-      "ok": true,
-      "asked": "Upload Short",
-      "to_ask": "41.5 s",
-      "calls": 0,
-      "usd": 0.0,
-      "agent": false
-     }
-    ],
     "real": [
      {
       "task": "task-1102-015325-106a",
@@ -1275,24 +1008,7 @@
       "by": "Muse's dry run, Nov 2"
      }
     },
-    "every": {
-     "ok": 11,
-     "n": 15
-    },
-    "checked": {
-     "picks": {
-      "sound_title": "shown"
-     },
-     "fields": {
-      "short_title": "held"
-     },
-     "clip": "checked",
-     "when": "2026-11-02T20:35:05",
-     "src": {
-      "path": "eval/results/showcase/runs/youtube-replay-20261102-203505.json"
-     }
-    },
-    "planted": [],
+    "after_batch": null,
     "src": {
      "path": "data/routines/youtube_short_sound/index.json"
     },
@@ -1313,6 +1029,904 @@
   },
   "p3_src": {
    "path": "eval/results/showcase/p3.md"
+  }
+ },
+ "batch": {
+  "routines": {
+   "instagram_story_poll": {
+    "n": 10,
+    "reached": 10,
+    "yes": 10,
+    "classes": {
+     "no repair": 9,
+     "repair": 1
+    },
+    "secs": {
+     "median": 32.45,
+     "min": 31.4,
+     "max": 41.5,
+     "n": 10
+    },
+    "calls": 1,
+    "usd": 0.016,
+    "final": "Your story",
+    "states": {
+     "cold": {
+      "n": 4,
+      "reached": 4
+     },
+     "open": {
+      "n": 3,
+      "reached": 3
+     },
+     "draft": {
+      "n": 3,
+      "reached": 3
+     }
+    },
+    "songs": {
+     "": {
+      "n": 10,
+      "yes": 10,
+      "agent": 0
+     }
+    },
+    "stops": {},
+    "versions": [
+     3
+    ],
+    "yes_cell": "10 (poll by eye)"
+   },
+   "instagram_reel_song": {
+    "n": 10,
+    "reached": 7,
+    "yes": 7,
+    "classes": {
+     "no repair": 7,
+     "failed": 3
+    },
+    "secs": {
+     "median": 59.6,
+     "min": 55.6,
+     "max": 111.8,
+     "n": 7
+    },
+    "calls": 31,
+    "usd": 0.4608,
+    "final": "Share",
+    "states": {
+     "cold": {
+      "n": 4,
+      "reached": 2
+     },
+     "open": {
+      "n": 3,
+      "reached": 3
+     },
+     "draft": {
+      "n": 3,
+      "reached": 2
+     }
+    },
+    "songs": {
+     "golden hour": {
+      "n": 6,
+      "yes": 5,
+      "agent": 0
+     },
+     "Please Please Please": {
+      "n": 1,
+      "yes": 1,
+      "agent": 0
+     },
+     "Flowers": {
+      "n": 1,
+      "yes": 0,
+      "agent": 0
+     },
+     "Watermelon Sugar": {
+      "n": 1,
+      "yes": 1,
+      "agent": 0
+     },
+     "Levitating": {
+      "n": 1,
+      "yes": 0,
+      "agent": 0
+     }
+    },
+    "stops": {
+     "caption": 2
+    },
+    "versions": [
+     3
+    ],
+    "yes_cell": "7"
+   },
+   "youtube_short_sound": {
+    "n": 10,
+    "reached": 5,
+    "yes": 4,
+    "classes": {
+     "no repair": 4,
+     "failed": 5,
+     "agent fallback": 1
+    },
+    "secs": {
+     "median": 41.5,
+     "min": 40.4,
+     "max": 116.9,
+     "n": 5
+    },
+    "calls": 33,
+    "usd": 0.4851,
+    "final": "Upload Short",
+    "states": {
+     "cold": {
+      "n": 4,
+      "reached": 2
+     },
+     "open": {
+      "n": 3,
+      "reached": 2
+     },
+     "draft": {
+      "n": 3,
+      "reached": 1
+     }
+    },
+    "songs": {
+     "golden hour": {
+      "n": 6,
+      "yes": 4,
+      "agent": 0
+     },
+     "Please Please Please": {
+      "n": 1,
+      "yes": 0,
+      "agent": 1
+     },
+     "Flowers": {
+      "n": 1,
+      "yes": 0,
+      "agent": 0
+     },
+     "Watermelon Sugar": {
+      "n": 1,
+      "yes": 0,
+      "agent": 0
+     },
+     "Levitating": {
+      "n": 1,
+      "yes": 0,
+      "agent": 0
+     }
+    },
+    "stops": {
+     "song": 3
+    },
+    "versions": [
+     3
+    ],
+    "yes_cell": "4"
+   },
+   "tiktok_post_sound": {
+    "n": 10,
+    "reached": 10,
+    "yes": 10,
+    "classes": {
+     "no repair": 10
+    },
+    "secs": {
+     "median": 60.6,
+     "min": 57.6,
+     "max": 69.7,
+     "n": 10
+    },
+    "calls": 30,
+    "usd": 0.0723,
+    "final": "Post",
+    "states": {
+     "cold": {
+      "n": 4,
+      "reached": 4
+     },
+     "open": {
+      "n": 3,
+      "reached": 3
+     },
+     "draft": {
+      "n": 3,
+      "reached": 3
+     }
+    },
+    "songs": {
+     "golden hour": {
+      "n": 6,
+      "yes": 6,
+      "agent": 0
+     },
+     "Please Please Please": {
+      "n": 1,
+      "yes": 1,
+      "agent": 0
+     },
+     "Flowers": {
+      "n": 1,
+      "yes": 1,
+      "agent": 0
+     },
+     "Watermelon Sugar": {
+      "n": 1,
+      "yes": 1,
+      "agent": 0
+     },
+     "Levitating": {
+      "n": 1,
+      "yes": 1,
+      "agent": 0
+     }
+    },
+    "stops": {},
+    "versions": [
+     3
+    ],
+    "yes_cell": "10"
+   }
+  },
+  "n": 40,
+  "date": "2026-11-03",
+  "tag": "cf78fa0",
+  "attempts": [
+   {
+    "code": "P01",
+    "routine": "instagram_story_poll",
+    "state": "cold",
+    "song": null,
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "n/a",
+     "caption": "n/a",
+     "poll": "not checkable"
+    },
+    "calls": 0,
+    "to_ask": 33.4
+   },
+   {
+    "code": "P02",
+    "routine": "instagram_story_poll",
+    "state": "open",
+    "song": null,
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "n/a",
+     "caption": "n/a",
+     "poll": "not checkable"
+    },
+    "calls": 0,
+    "to_ask": 33.4
+   },
+   {
+    "code": "P03",
+    "routine": "instagram_story_poll",
+    "state": "draft",
+    "song": null,
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "n/a",
+     "caption": "n/a",
+     "poll": "not checkable"
+    },
+    "calls": 0,
+    "to_ask": 32.4
+   },
+   {
+    "code": "P04",
+    "routine": "instagram_story_poll",
+    "state": "cold",
+    "song": null,
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "n/a",
+     "caption": "n/a",
+     "poll": "not checkable"
+    },
+    "calls": 0,
+    "to_ask": 31.5
+   },
+   {
+    "code": "P05",
+    "routine": "instagram_story_poll",
+    "state": "open",
+    "song": null,
+    "class": "repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "n/a",
+     "caption": "n/a",
+     "poll": "not checkable"
+    },
+    "calls": 1,
+    "to_ask": 41.5
+   },
+   {
+    "code": "P06",
+    "routine": "instagram_story_poll",
+    "state": "draft",
+    "song": null,
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "n/a",
+     "caption": "n/a",
+     "poll": "not checkable"
+    },
+    "calls": 0,
+    "to_ask": 32.5
+   },
+   {
+    "code": "P07",
+    "routine": "instagram_story_poll",
+    "state": "cold",
+    "song": null,
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "n/a",
+     "caption": "n/a",
+     "poll": "not checkable"
+    },
+    "calls": 0,
+    "to_ask": 31.4
+   },
+   {
+    "code": "P08",
+    "routine": "instagram_story_poll",
+    "state": "open",
+    "song": null,
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "n/a",
+     "caption": "n/a",
+     "poll": "not checkable"
+    },
+    "calls": 0,
+    "to_ask": 32.4
+   },
+   {
+    "code": "P09",
+    "routine": "instagram_story_poll",
+    "state": "draft",
+    "song": null,
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "n/a",
+     "caption": "n/a",
+     "poll": "not checkable"
+    },
+    "calls": 0,
+    "to_ask": 32.4
+   },
+   {
+    "code": "P10",
+    "routine": "instagram_story_poll",
+    "state": "cold",
+    "song": null,
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "n/a",
+     "caption": "n/a",
+     "poll": "not checkable"
+    },
+    "calls": 0,
+    "to_ask": 34.4
+   },
+   {
+    "code": "R01",
+    "routine": "instagram_reel_song",
+    "state": "cold",
+    "song": "golden hour",
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 0,
+    "to_ask": 59.6
+   },
+   {
+    "code": "R02",
+    "routine": "instagram_reel_song",
+    "state": "open",
+    "song": "golden hour",
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 0,
+    "to_ask": 55.6
+   },
+   {
+    "code": "R03",
+    "routine": "instagram_reel_song",
+    "state": "draft",
+    "song": "golden hour",
+    "class": "failed",
+    "reached": false,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "no",
+     "poll": "n/a"
+    },
+    "calls": 0,
+    "to_ask": null
+   },
+   {
+    "code": "R04",
+    "routine": "instagram_reel_song",
+    "state": "cold",
+    "song": "golden hour",
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 0,
+    "to_ask": 57.5
+   },
+   {
+    "code": "R05",
+    "routine": "instagram_reel_song",
+    "state": "open",
+    "song": "golden hour",
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 0,
+    "to_ask": 57.6
+   },
+   {
+    "code": "R06",
+    "routine": "instagram_reel_song",
+    "state": "draft",
+    "song": "Please Please Please",
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 0,
+    "to_ask": 111.8
+   },
+   {
+    "code": "R07",
+    "routine": "instagram_reel_song",
+    "state": "cold",
+    "song": "Flowers",
+    "class": "failed",
+    "reached": false,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "no",
+     "poll": "n/a"
+    },
+    "calls": 1,
+    "to_ask": null
+   },
+   {
+    "code": "R08",
+    "routine": "instagram_reel_song",
+    "state": "open",
+    "song": "Watermelon Sugar",
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 0,
+    "to_ask": 108.8
+   },
+   {
+    "code": "R09",
+    "routine": "instagram_reel_song",
+    "state": "draft",
+    "song": "golden hour",
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 0,
+    "to_ask": 59.6
+   },
+   {
+    "code": "R10",
+    "routine": "instagram_reel_song",
+    "state": "cold",
+    "song": "Levitating",
+    "class": "failed",
+    "reached": false,
+    "checks": {
+     "clip": "not checkable",
+     "song": "not checkable",
+     "caption": "not checkable",
+     "poll": "n/a"
+    },
+    "calls": 30,
+    "to_ask": null
+   },
+   {
+    "code": "S01",
+    "routine": "youtube_short_sound",
+    "state": "cold",
+    "song": "golden hour",
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 0,
+    "to_ask": 41.5
+   },
+   {
+    "code": "S02",
+    "routine": "youtube_short_sound",
+    "state": "open",
+    "song": "golden hour",
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 0,
+    "to_ask": 42.5
+   },
+   {
+    "code": "S03",
+    "routine": "youtube_short_sound",
+    "state": "draft",
+    "song": "golden hour",
+    "class": "failed",
+    "reached": false,
+    "checks": {
+     "clip": "not checkable",
+     "song": "not checkable",
+     "caption": "not checkable",
+     "poll": "n/a"
+    },
+    "calls": 5,
+    "to_ask": null
+   },
+   {
+    "code": "S04",
+    "routine": "youtube_short_sound",
+    "state": "cold",
+    "song": "golden hour",
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 0,
+    "to_ask": 40.4
+   },
+   {
+    "code": "S05",
+    "routine": "youtube_short_sound",
+    "state": "open",
+    "song": "golden hour",
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 0,
+    "to_ask": 41.5
+   },
+   {
+    "code": "S06",
+    "routine": "youtube_short_sound",
+    "state": "draft",
+    "song": "Please Please Please",
+    "class": "agent fallback",
+    "reached": true,
+    "checks": {
+     "clip": "not checkable",
+     "song": "not checkable",
+     "caption": "not checkable",
+     "poll": "n/a"
+    },
+    "calls": 19,
+    "to_ask": 116.9
+   },
+   {
+    "code": "S07",
+    "routine": "youtube_short_sound",
+    "state": "cold",
+    "song": "Flowers",
+    "class": "failed",
+    "reached": false,
+    "checks": {
+     "clip": "yes",
+     "song": "no",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 2,
+    "to_ask": null
+   },
+   {
+    "code": "S08",
+    "routine": "youtube_short_sound",
+    "state": "open",
+    "song": "Watermelon Sugar",
+    "class": "failed",
+    "reached": false,
+    "checks": {
+     "clip": "yes",
+     "song": "no",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 2,
+    "to_ask": null
+   },
+   {
+    "code": "S09",
+    "routine": "youtube_short_sound",
+    "state": "draft",
+    "song": "golden hour",
+    "class": "failed",
+    "reached": false,
+    "checks": {
+     "clip": "not checkable",
+     "song": "not checkable",
+     "caption": "not checkable",
+     "poll": "n/a"
+    },
+    "calls": 5,
+    "to_ask": null
+   },
+   {
+    "code": "S10",
+    "routine": "youtube_short_sound",
+    "state": "cold",
+    "song": "Levitating",
+    "class": "failed",
+    "reached": false,
+    "checks": {
+     "clip": "yes",
+     "song": "no",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 0,
+    "to_ask": null
+   },
+   {
+    "code": "T01",
+    "routine": "tiktok_post_sound",
+    "state": "cold",
+    "song": "golden hour",
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 3,
+    "to_ask": 69.7
+   },
+   {
+    "code": "T02",
+    "routine": "tiktok_post_sound",
+    "state": "open",
+    "song": "golden hour",
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 3,
+    "to_ask": 69.7
+   },
+   {
+    "code": "T03",
+    "routine": "tiktok_post_sound",
+    "state": "draft",
+    "song": "golden hour",
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 3,
+    "to_ask": 58.6
+   },
+   {
+    "code": "T04",
+    "routine": "tiktok_post_sound",
+    "state": "cold",
+    "song": "golden hour",
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 3,
+    "to_ask": 65.6
+   },
+   {
+    "code": "T05",
+    "routine": "tiktok_post_sound",
+    "state": "open",
+    "song": "golden hour",
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 3,
+    "to_ask": 59.6
+   },
+   {
+    "code": "T06",
+    "routine": "tiktok_post_sound",
+    "state": "draft",
+    "song": "Please Please Please",
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 3,
+    "to_ask": 61.6
+   },
+   {
+    "code": "T07",
+    "routine": "tiktok_post_sound",
+    "state": "cold",
+    "song": "Flowers",
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 3,
+    "to_ask": 57.6
+   },
+   {
+    "code": "T08",
+    "routine": "tiktok_post_sound",
+    "state": "open",
+    "song": "Watermelon Sugar",
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 3,
+    "to_ask": 59.6
+   },
+   {
+    "code": "T09",
+    "routine": "tiktok_post_sound",
+    "state": "draft",
+    "song": "golden hour",
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 3,
+    "to_ask": 58.5
+   },
+   {
+    "code": "T10",
+    "routine": "tiktok_post_sound",
+    "state": "cold",
+    "song": "Levitating",
+    "class": "no repair",
+    "reached": true,
+    "checks": {
+     "clip": "yes",
+     "song": "yes",
+     "caption": "yes",
+     "poll": "n/a"
+    },
+    "calls": 3,
+    "to_ask": 61.6
+   }
+  ],
+  "src": {
+   "path": "eval/results/showcase-batch/RESULTS.md"
+  },
+  "protocol_src": {
+   "path": "eval/results/showcase-batch/PROTOCOL.md"
+  },
+  "attempts_src": {
+   "path": "eval/results/showcase-batch/attempts"
   }
  },
  "watches": {
@@ -2818,7 +3432,7 @@
    {
     "routine": "instagram_reel_song",
     "version": 3,
-    "status": "active",
+    "status": "retired",
     "passed": true,
     "changes": [
      "step 'search_song_title': after-checks failed (no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) but the next step was ready; after-checks rewritten from what happened",
@@ -4999,8 +5613,8 @@
    }
   },
   "tests": {
-   "functions": 802,
-   "files": 53,
+   "functions": 811,
+   "files": 55,
    "src": {
     "path": "backend/tests"
    }
