@@ -5,7 +5,13 @@ repair answer, is a failed attempt: it neither runs nor asks.
 
 tests/traces/starbucks_search holds Starbucks screens recorded on envoy-real: the menu, the search screen with the five
 recent searches that broke the compiled routine ("Caffè Latte" and "Caffe Latte" among them), the Results list for a
-typed "Caffè Latte", and the drink's page; and the routine as Phase 7 compiled it (starbucks_v1.yaml).
+typed "Caffè Latte", and the drink's page; the routine as Phase 7 compiled it (starbucks_v1.yaml); and as it was repaired
+by hand on Oct 28 to type the drink (starbucks_v2.yaml, eval/results/final/real_compiled/starbucks.yaml at 074390a).
+
+tests/traces/look_up_trip_repeats holds skylark_look_up_trip v1-v4 as the repeats suite left them on Oct 27
+(eval/results/final/library/repeats/skylark_look_up_trip at 6c987dc): v2-v4 are patches that changed nothing, and each
+made a version. Both are pinned copies: the final evaluation (00782c0) rewrote eval/results/final, which these tests
+no longer read.
 """
 
 from __future__ import annotations
@@ -28,8 +34,8 @@ from routines.screens import load_tree, norm, screen_from_tree
 from routines.store import RoutineStore, same_program
 
 HERE = Path(__file__).parent
-REPO = HERE.parents[1]
 SB = HERE / "traces" / "starbucks_search"
+LOOK_UP_TRIP = HERE / "traces" / "look_up_trip_repeats"
 FAST = ExecConfig(pre_timeout_s=0.6, post_timeout_s=0.6, stable_s=0.2, poll_s=0.01, patch_screenshots=False)
 
 
@@ -96,7 +102,7 @@ def from_step(r: Routine, step_id: str) -> Routine:
 # ---- a. Starbucks calories with recent searches in the app -------------------------------------------------------------------
 
 def test_the_starbucks_routine_types_the_drink_whatever_the_recent_searches_show():
-    r = load_yaml((REPO / "eval" / "results" / "final" / "real_compiled" / "starbucks.yaml").read_text())
+    r = load_yaml((SB / "starbucks_v2.yaml").read_text())
     phone = Starbucks("menu")
     out = run(phone, from_step(r, "tap_search_menu"), {"drink_name": "Caffè Latte"}, allow_repair=False)
     assert out.status == "done" and out.outputs == {"calories": "190 calories"} and out.model_calls == 0
@@ -116,7 +122,7 @@ def test_the_compiled_starbucks_routine_takes_the_recent_search_written_as_asked
 
 
 def test_the_starbucks_drink_step_needs_the_drinks_page_not_the_results_list():
-    r = load_yaml((REPO / "eval" / "results" / "final" / "real_compiled" / "starbucks.yaml").read_text())
+    r = load_yaml((SB / "starbucks_v2.yaml").read_text())
     step = r.steps[r.step_index("open_drink_product")]
     ex = RoutineExecutor(Starbucks("results"), adapter=NoModel(), config=FAST)
     screens = Starbucks("results").screens
@@ -208,13 +214,12 @@ def test_a_relaxed_repair_followed_by_back_is_accepted_for_lack_of_evidence_agai
 # ---- c. a patch that changes nothing makes no version ------------------------------------------------------------------------
 
 def _look_up_trip() -> Routine:
-    return load_yaml((REPO / "eval" / "results" / "final" / "library" / "repeats" / "skylark_look_up_trip" / "v1.yaml").read_text())
+    return load_yaml((LOOK_UP_TRIP / "v1.yaml").read_text())
 
 
 def test_the_repeats_suites_look_up_trip_versions_were_identical():
-    lib = REPO / "eval" / "results" / "final" / "library" / "repeats" / "skylark_look_up_trip"
-    v1 = load_yaml((lib / "v1.yaml").read_text())
-    assert all(same_program(v1, load_yaml((lib / f"v{n}.yaml").read_text())) for n in (2, 3, 4))
+    v1 = _look_up_trip()
+    assert all(same_program(v1, load_yaml((LOOK_UP_TRIP / f"v{n}.yaml").read_text())) for n in (2, 3, 4))
     assert not same_program(v1, v1.model_copy(update={"intent": "something else"}))
 
 

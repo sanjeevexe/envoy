@@ -1,5 +1,10 @@
 """Learned routines as MCP tools (phone-layer plan, T1a and contract 1): a shared routine with an active version is a tool
-of its own, by name and with typed inputs, and the tool list follows the library and the share switch with no restart."""
+of its own, by name and with typed inputs, and the tool list follows the library and the share switch with no restart.
+
+tests/traces/library holds three SkyLark routines as the live library (data/routines) had them at 192cd29: check-in v1
+active (learned Oct 27; v2, a repair from Oct 28, rejected), the gate, and adding a known traveler number. They are
+pinned copies: the live API keeps writing runs and repairs there (check-in's v3 trial on Nov 3), which these tests
+must not follow."""
 
 from __future__ import annotations
 
@@ -16,7 +21,8 @@ from mcp_server.server import PHONE
 from routines.model import InputSpec, Routine, Step, StepAction
 from test_mcp_link import HDR, make
 
-LIB = Path(__file__).resolve().parents[2] / "data" / "routines"
+LIB = Path(__file__).resolve().parents[2] / "data" / "routines"  # the live library (test_crosspost's creator routines)
+SKYLARK_LIB = Path(__file__).resolve().parent / "traces" / "library"  # the pinned SkyLark routines
 BUILTIN = {"run_task", "get_task", "list_routines", "run_routine", "cross_post", "memory_search", "memory_get", "memory_note", "send_to_phone",
            "phone_updates", "create_trigger", "list_phones", "get_file"}
 
@@ -25,7 +31,7 @@ BUILTIN = {"run_task", "get_task", "list_routines", "run_routine", "cross_post",
 def env(tmp_path, monkeypatch):
     e = make(tmp_path, monkeypatch)
     for name in ("skylark_check_in_flight", "skylark_get_flight_gate", "skylark_add_known_traveler_number"):
-        shutil.copytree(LIB / name, e.ctx.routines.root / name)
+        shutil.copytree(SKYLARK_LIB / name, e.ctx.routines.root / name)
     e.started = []
 
     def start(goal, source, **kw):

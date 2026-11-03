@@ -5,8 +5,9 @@ every rerun.
 
 tests/traces/routine_fixes holds envoy-real recordings: the Phase 7 Amazon and Play Store traces with Wonder's cached
 compile answers, Amazon's results for "USB-C cable" (a second input, whose first rows differ in shape), Play's Search tab
-(the suggestions that showed Duolingo), and the Chrome Wikipedia trace whose article page has no tree (its last
-screenshot shrunk; the account's address replaced).
+(the suggestions that showed Duolingo), the Chrome Wikipedia trace whose article page has no tree (its last
+screenshot shrunk; the account's address replaced), and the DoorDash first-restaurant routine Phase 7 compiled
+(doordash_search.yaml).
 """
 
 from __future__ import annotations
@@ -71,8 +72,9 @@ class Picks:
 
 
 def doordash_store(tmp_path: Path) -> RoutineStore:
-    """The DoorDash first-restaurant routine Phase 7 compiled, and a menu-item price routine next to it."""
-    search = load_yaml((REPO / "eval" / "results" / "final" / "real_compiled" / "doordash_search.yaml").read_text())
+    """The DoorDash first-restaurant routine Phase 7 compiled, and a menu-item price routine next to it. The routine is a
+    pinned copy (eval/results/final/real_compiled/doordash_search.yaml at e18e434): the final evaluation recompiled it."""
+    search = load_yaml((FX / "doordash_search.yaml").read_text())
     price = search.model_copy(update={
         "routine": "doordash_get_item_price", "intent": "Get the price of a menu item on DoorDash",
         "description": "Searches DoorDash for a menu item and returns its price at the first store that has it.",
