@@ -1,7 +1,7 @@
 routine: skylark_check_in_flight
 app: com.skylark.air
 version: 1
-status: active
+status: retired
 intent: Check in for a SkyLark flight
 description: Starts SkyLark check-in for the flight to the requested city, selects the passenger, confirms no hazardous materials are being carried,
   confirms check-in, and returns the boarding pass details shown on completion. Only works when trip_city is the one already shown on 'Next trip'.
@@ -133,37 +133,24 @@ steps:
       near: Seat
       locator: {resource_id: row_bp_seat, kind: Text}
       segment: 1
-      first_in_list: false
-      next_element: false
       expect_digits: true
     gate:
       near: Gate
       locator: {resource_id: row_bp_gate, kind: Text}
       segment: 1
-      first_in_list: false
-      next_element: false
-      expect_digits: false
     boarding_time:
       near: Boarding
       locator: {resource_id: row_bp_boarding, kind: Text}
       segment: 1
-      first_in_list: false
-      next_element: false
       expect_digits: true
     boarding_group:
       near: Boarding
       locator: {resource_id: row_bp_boarding, kind: Text}
       segment: 2
-      first_in_list: false
-      next_element: false
-      expect_digits: false
     flight:
       near: Flight
       locator: {resource_id: row_bp_flight, kind: Text}
       segment: 1
-      first_in_list: false
-      next_element: false
-      expect_digits: false
   note: trace step 6
 done:
 - element_present: {text: Boarding pass}

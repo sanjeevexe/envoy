@@ -1,10 +1,10 @@
 {
  "name": "skylark_check_in_flight",
- "active": 1,
+ "active": 3,
  "versions": [
   {
    "version": 1,
-   "status": "active",
+   "status": "retired",
    "created": "2026-10-27 02:27:42",
    "parent": null,
    "changes": [
@@ -49,6 +49,29 @@
     "passed": false,
     "by": "Phase 7 (phone gate)",
     "reason": "learned from a run the person took over: an approved tap that didn't take effect read as 'an extra screen appeared'"
+   }
+  },
+  {
+   "version": 3,
+   "status": "active",
+   "created": "2026-11-03 03:31:36",
+   "parent": 1,
+   "changes": [
+    "after 'tap_check_in', an extra screen appeared; inserted tap_check_in_extra_1 (tap None), tap_check_in_extra_2 (tap Check in)"
+   ],
+   "source_task": "task-1103-033059-3af4-r1",
+   "screenshots": [
+    "history/v3/repair_01_1_before.png",
+    "history/v3/repair_01_1_after.png",
+    "history/v3/repair_01_2_before.png",
+    "history/v3/repair_01_2_after.png"
+   ],
+   "trial": {
+    "passed": true,
+    "task_id": "task-1103-033139-4b31-r1",
+    "status": "done",
+    "model_calls": 0,
+    "duration_s": 3.13
    }
   }
  ],
@@ -260,6 +283,72 @@
    "rung": 0,
    "model_calls": 0,
    "duration_s": 83.44,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-03 03:28:50",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1103-032827-4ddc-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 2.98,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-03 03:30:54",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1103-033003-0e60-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 39.17,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-03 03:31:36",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1103-033059-3af4-r1",
+   "status": "done",
+   "rung": 4,
+   "model_calls": 2,
+   "duration_s": 26.45,
+   "patches": 1
+  },
+  {
+   "time": "2026-11-03 03:31:59",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1103-033139-4b31-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.13,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-03 03:32:19",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1103-033202-aae2-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.19,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-03 03:34:21",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1103-033358-7028-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.15,
    "patches": 0
   }
  ],

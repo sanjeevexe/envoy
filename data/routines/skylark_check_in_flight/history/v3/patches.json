@@ -1,0 +1,20 @@
+[
+ {
+  "kind": "insert_after",
+  "step": "tap_check_in",
+  "description": "after 'tap_check_in', an extra screen appeared; inserted tap_check_in_extra_1 (tap None), tap_check_in_extra_2 (tap Check in)",
+  "evidence": {
+   "screenshots": [
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/task-1103-033059-3af4-r1/screens/repair_01_1_before.png",
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/task-1103-033059-3af4-r1/screens/repair_01_1_after.png",
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/task-1103-033059-3af4-r1/screens/repair_01_2_before.png",
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/task-1103-033059-3af4-r1/screens/repair_01_2_after.png"
+   ],
+   "reasons": [
+    "Choose [2] next trip card, not [3] (already tried and dead) nor [6] dismiss (promo is below check-in and unrelated) nor [10] trips (equivalent but one extra step). Risk safe as reversible navigation toward cb_passenger_0 / Continue after-checks.",
+    "Expected 'Check in' button is present on this trip detail screen as element 9 (id btn_checkin, vs expected btn_home_checkin). Tapping it should start check-in and lead to passenger selection with Continue, matching the after-checks."
+   ],
+   "task_id": "task-1103-033059-3af4-r1"
+  }
+ }
+]
