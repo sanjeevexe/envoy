@@ -1,0 +1,105 @@
+{
+ "mode": "replay",
+ "app": "com.instagram.android",
+ "time": "2026-11-02T19:15:18",
+ "request": {
+  "phone": "phone-09031FDD4000C6",
+  "routine": "instagram_reel_song",
+  "inputs": {
+   "song_title": "golden hour",
+   "song_artist": "JVKE",
+   "caption": "Envoy C2 reel \u00b7 test"
+  }
+ },
+ "task": {
+  "id": "task-1102-191518-2d17",
+  "status": "needs_you",
+  "routine": "instagram_reel_song",
+  "model_calls": 28,
+  "cost_usd": 0.2789,
+  "traces": [],
+  "detail": "routine step retype_song_title_search failed (after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) and the agent could not finish (step_limit); asking the user",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 37,
+ "repairs": [],
+ "approvals": [],
+ "asked_at": [],
+ "approval_shot": null,
+ "routine_steps": [
+  {
+   "id": "tap_create_button",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "tap_newest_video_thumbnail",
+   "status": "done",
+   "rung": 1,
+   "score": 0.871,
+   "rungs": [
+    "wait and retry: after-checks held after 1.7 s"
+   ]
+  },
+  {
+   "id": "tap_add_audio",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "search_song_title",
+   "status": "done",
+   "rung": 2,
+   "score": 1.0,
+   "rungs": [
+    "relaxed match: after-checks failed but the next step (retype_song_title_search) is ready"
+   ]
+  },
+  {
+   "id": "retype_song_title_search",
+   "status": "agent",
+   "rung": 6,
+   "score": 1.0,
+   "rungs": [
+    "wait and retry: waited 3.3 s",
+    "full agent: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+    "ask the user: agent step_limit: stopped after 25 steps"
+   ]
+  }
+ ],
+ "outcome_checks": [],
+ "auto_approved": [],
+ "marks_s": {
+  "running": 0.2,
+  "needs_you": 1.2,
+  "phone_yes": 1.2,
+  "end": 457.3
+ },
+ "spent": {
+  "model_calls": 28,
+  "cost_usd": 0.2789,
+  "cost_at_standard_usd": 0.2789,
+  "jobs": {
+   "repair": 2,
+   "plan": 3,
+   "step": 23
+  }
+ },
+ "ok": false,
+ "failures": [
+  "the post was never asked"
+ ],
+ "profile": "hybrid",
+ "cleanup": [
+  "back (unknown)",
+  "back (unknown)",
+  "back (unknown)",
+  "editor_cancel",
+  "start_over",
+  "gallery_home"
+ ]
+}

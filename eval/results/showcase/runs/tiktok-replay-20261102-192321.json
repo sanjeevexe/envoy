@@ -1,0 +1,104 @@
+{
+ "mode": "replay",
+ "app": "com.zhiliaoapp.musically",
+ "time": "2026-11-02T19:23:21",
+ "request": {
+  "phone": "phone-09031FDD4000C6",
+  "routine": "tiktok_post_sound",
+  "inputs": {
+   "sound_title": "golden hour",
+   "sound_artist": "JVKE",
+   "caption": "Envoy C2 tiktok \u00b7 test"
+  }
+ },
+ "task": {
+  "id": "task-1102-192321-4a4c",
+  "status": "needs_you",
+  "routine": "tiktok_post_sound",
+  "model_calls": 33,
+  "cost_usd": 0.2736,
+  "traces": [],
+  "detail": "routine step tap_next_after_gallery failed (after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) and the agent could not finish (step_limit); asking the user",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 38,
+ "repairs": [],
+ "approvals": [],
+ "asked_at": [],
+ "approval_shot": null,
+ "routine_steps": [
+  {
+   "id": "launch_tiktok",
+   "status": "done",
+   "rung": 0,
+   "score": null,
+   "rungs": []
+  },
+  {
+   "id": "tap_create",
+   "status": "done",
+   "rung": 1,
+   "score": 1.0,
+   "rungs": [
+    "wait and retry: after-checks held after 2.0 s"
+   ]
+  },
+  {
+   "id": "tap_upload",
+   "status": "done",
+   "rung": 0,
+   "score": 1.0,
+   "rungs": []
+  },
+  {
+   "id": "select_newest_video",
+   "status": "done",
+   "rung": 1,
+   "score": 1.0,
+   "rungs": [
+    "wait and retry: after-checks held after 1.7 s"
+   ]
+  },
+  {
+   "id": "tap_next_after_gallery",
+   "status": "agent",
+   "rung": 6,
+   "score": 1.0,
+   "rungs": [
+    "wait and retry: waited 5.6 s",
+    "went back and tapped 'Close': the step's after-checks still failed",
+    "full agent: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+    "ask the user: agent step_limit: stopped after 25 steps"
+   ]
+  }
+ ],
+ "outcome_checks": [],
+ "auto_approved": [],
+ "marks_s": {
+  "running": 0.2,
+  "needs_you": 1.2,
+  "phone_yes": 1.2,
+  "end": 222.4
+ },
+ "spent": {
+  "model_calls": 33,
+  "cost_usd": 0.2736,
+  "cost_at_standard_usd": 0.2736,
+  "jobs": {
+   "repair": 2,
+   "plan": 2,
+   "step": 25,
+   "sam": 2,
+   "choose": 1,
+   "grounding": 1
+  }
+ },
+ "ok": false,
+ "failures": [
+  "the post was never asked"
+ ],
+ "profile": "hybrid",
+ "cleanup": [
+  "force-stopped TikTok"
+ ]
+}

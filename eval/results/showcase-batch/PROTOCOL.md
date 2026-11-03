@@ -55,17 +55,21 @@ The Story is in because U5 keeps it in the V3 take.
   people or places. They're pushed to `Movies/Envoy/` immediately before their attempt, as the newest video. The
   push's `media_uri` is recorded.
 - **Songs:** attempts 01–05 use "golden hour" by JVKE, the video's input, which P3 found in all three libraries
-  (`eval/results/showcase/p3.md`). Attempts 06–10 each use a different song. These weren't checked in advance: a song
-  missing from a library is a failed attempt, with its reason.
+  (`eval/results/showcase/p3.md`). Attempts 06–10 each use a different song.
+  - **Library check before the batch:** each song is searched for in all three apps' libraries. This is a search only:
+    nothing is added and nothing is posted.
+  - A song any library lacks is swapped for its alternate below, and the swap is written in `RESULTS.md`.
+  - Why: a song missing from an app's library measures the app, not Envoy.
+  - If a song that passed the check is missing during the batch, that attempt is failed, with the reason.
 
-| # | Song (song_title / sound_title) | Artist |
-| --- | --- | --- |
-| 01–05 | golden hour | JVKE |
-| 06 | Espresso | Sabrina Carpenter |
-| 07 | Flowers | Miley Cyrus |
-| 08 | As It Was | Harry Styles |
-| 09 | Blinding Lights | The Weeknd |
-| 10 | Levitating | Dua Lipa |
+| # | Song (song_title / sound_title) | Artist | Alternate (same artist) |
+| --- | --- | --- | --- |
+| 01–05 | golden hour | JVKE | none: found in all three by P3 |
+| 06 | Espresso | Sabrina Carpenter | Please Please Please |
+| 07 | Flowers | Miley Cyrus | Wrecking Ball |
+| 08 | As It Was | Harry Styles | Watermelon Sugar |
+| 09 | Blinding Lights | The Weeknd | Save Your Tears |
+| 10 | Levitating | Dua Lipa | Don't Start Now |
 
 - **Captions and titles:** R and T use `Envoy batch R01 · test` and so on, with the attempt's own code. S uses the
   same pattern as its `short_title`.

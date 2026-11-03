@@ -364,54 +364,6 @@ class RoutineExecutor:
                           "duration_s": out.duration_s, "patches": [p.description for p in out.patches], "approvals": out.approvals})
         return out
 
-    # ---- a tap that opened another screen: the control named for the step's screen -----------------
-
-    async def _named_control(self, ctx: _Ctx, idx: int, sr: StepRun, before: ScreenState, tapped: Element | None) -> ScreenState | None:
-        """The tap opened another screen than the step's, and the screen it was made on has one control named exactly what
-        the after-checks expect next: go back, tap that one, and keep it if the after-checks then hold. #64: with a Story
-        live, Instagram's "Your story" ring opens that Story (its poll results), while the tray's "Add to story" button
-        still opens the composer the step's after-check names ("Add to story"). No model call; never an irreversible control."""
-        step = ctx.routine.steps[idx]
-        if step.action.kind != "tap" or step.risk == "irreversible" or not hasattr(self.device, "act"):
-            return None
-        names = set()
-        for c in step.post:
-            if c.kind == "element_present" and c.locator is not None:
-                names.add(norm(render_str(c.locator.text or "", ctx.inputs)))
-            elif c.kind == "text_visible":
-                names.add(norm(render_str(c.text or "", ctx.inputs)))
-        names.discard("")
-        tapped_key = (tapped.resource_id, tapped.label, tapped.bounds) if tapped is not None else None
-        cands = [e for e in before.numbered if e.clickable and norm(e.label) in names and (e.resource_id, e.label, e.bounds) != tapped_key]
-        if len(cands) != 1:
-            return None
-        cand = cands[0]
-        from policy.risk import classify
-        if classify(Action(kind="tap", element=cand.number), before, None).irreversible:
-            return None
-        await self.device.act(Action(kind="back"))
-        deadline = time.perf_counter() + self.config.post_timeout_s
-        loc = locators.build(cand, before)
-        while True:  # back where the tap was made (the tray may redraw: a viewed Story's ring turns grey), the control on it
-            s = await self._observe()
-            m = locators.locate(loc, s, ctx.inputs)
-            if s.package == before.package and s.activity == before.activity and m.ok:
-                break
-            if time.perf_counter() >= deadline:
-                return None  # not back where the tap was made: leave it to the repair
-            await asyncio.sleep(self.config.poll_s)
-        await self.device.act(Action(kind="tap", element=m.element.number))
-        while True:
-            after = await self._observe()
-            if self._check(step.post, after, ctx.inputs, before=s)[0]:
-                # No patch: which control opens the step's screen depends on the app's state (a Story live or not), so the
-                # routine keeps its target and this runs each time it's needed, with no model call.
-                sr.climb(2, f"the tap opened another screen; went back and tapped {cand.label!r}, the control named for the step's screen")
-                return after
-            if time.perf_counter() >= deadline + self.config.post_timeout_s:
-                return None
-            await asyncio.sleep(self.config.poll_s)
-
     # ---- outcome checks before the irreversible step ----------------------------------------------
 
     async def _outcome_problems(self, ctx: _Ctx, screen: ScreenState) -> list[str]:
@@ -535,10 +487,6 @@ class RoutineExecutor:
             sr.status, sr.detail = "handoff", post.why
             ctx.out.status = "handoff"
             return "stop"
-        if post.kind == "not_ready" and (named := await self._named_control(ctx, idx, sr, before, ready.element)) is not None:
-            sr.status = "done"
-            await self._extract(ctx, step, named)
-            return "next"
         rep = await self._repair(ctx, idx, sr, phase="after", screen=post.screen, why=post.why, before=before)
         if rep == "post_ok":
             sr.status = "done"

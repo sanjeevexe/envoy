@@ -1,0 +1,61 @@
+{
+ "mode": "replay",
+ "app": "com.zhiliaoapp.musically",
+ "time": "2026-11-02T19:27:37",
+ "request": {
+  "phone": "phone-09031FDD4000C6",
+  "routine": "tiktok_post_sound",
+  "inputs": {
+   "sound_title": "golden hour",
+   "sound_artist": "JVKE",
+   "caption": "Envoy C2 negative \u00b7 test"
+  }
+ },
+ "task": {
+  "id": "task-1102-192737-cef2",
+  "status": "failed",
+  "routine": "tiktok_post_sound",
+  "model_calls": 0,
+  "cost_usd": 0.0,
+  "traces": [],
+  "detail": "stopped before starting (outcome check): the gallery's newest video is neg-b.mp4 (Movies/Envoy/), not neg-a.mp4, the clip Envoy put on the phone: the routine takes the newest, so it would post the wrong one",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 5,
+ "repairs": [],
+ "approvals": [],
+ "asked_at": [],
+ "approval_shot": null,
+ "routine_steps": [],
+ "outcome_checks": [
+  {
+   "when": "start",
+   "picks": null,
+   "fields": null,
+   "clip": null,
+   "problems": [
+    "the gallery's newest video is neg-b.mp4 (Movies/Envoy/), not neg-a.mp4, the clip Envoy put on the phone: the routine takes the newest, so it would post the wrong one"
+   ]
+  }
+ ],
+ "auto_approved": [],
+ "marks_s": {
+  "running": 0.2,
+  "needs_you": 1.2,
+  "phone_yes": 1.2,
+  "failed": 10.3,
+  "end": 10.3
+ },
+ "spent": {
+  "model_calls": 0,
+  "cost_usd": 0.0,
+  "cost_at_standard_usd": 0.0,
+  "jobs": {}
+ },
+ "ok": true,
+ "failures": [],
+ "profile": "hybrid",
+ "cleanup": [
+  "force-stopped TikTok"
+ ]
+}

@@ -70,8 +70,11 @@ After replay 2's decline, Back to the editor read **"Music · golden hour"** (e1
 
 **Why TikTok said "failed".** A routine learned from a declined post kept a done-check, the plan's "the caption is
 visible". No run had seen it after the post, and TikTok leaves the composer after Post. `compile --final-from-declined`
-now drops it and says so in the changes (07de462). `youtube_short_sound` v3 is v2 without it. YouTube's own passed
-tonight because YouTube lands on the channel page, which shows the title.
+now drops it and says so in the changes (07de462).
+- My `youtube_short_sound` v3 candidate (`eval/results/showcase/routine/youtube_short_sound.v3.yaml`) is v2 without it.
+- **The live v3 isn't that candidate.** It's the trial post 4's run made, which became active, and **it still has the
+  done-check** "{{short_title}}" visible.
+- YouTube's done-check passed tonight because YouTube lands on the channel page, which shows the title.
 
 **Wording for the video:** Instagram's two are "learned from one run" (no hand edits). TikTok's and YouTube's are
 "learned, one step tuned". TikTok's can't be said to post "with a song" until its re-post. Instagram's replay with no model calls when the app shows no tip. TikTok uses vision on
@@ -126,6 +129,30 @@ What the compiler got wrong, with the hand fix that worked (each `*.v2-candidate
   once, so the visual step looked too early. A 3 s wait fixed it.
 
 ## Not done / still open
+
+**WS-A, Nov 2 evening (branch `claude/showcase-ws-a`):** C3 33507ef, C2 ae0f90b. C1 was tried and backed out; see
+below.
+
+- **C2 on the Pixel:**
+  - **Wrong clip, planted:** clip A pushed and recorded, clip B pushed after it. The TikTok replay stopped 10 s in,
+    before any step: "the gallery's newest video is neg-b.mp4 …, not neg-a.mp4, the clip Envoy put on the phone". 0
+    calls, nothing asked (`eval/results/showcase/runs/tiktok-replay-20261102-192737.json`).
+  - **No clean positive run per app yet.** The Pixel had no internet: Wi-Fi "GTvisitor" sat behind an unvalidated
+    captive portal, and ping failed. Instagram's music search showed "Loading / Retry" until the agent's 25-step limit
+    (28 calls). TikTok's gallery-to-editor step never came (33 calls). Both records are kept. They say nothing about
+    the routines.
+  - The song and caption negatives are unit tests built on the real songless screens (`test_outcome_checks.py`).
+- **C1 (#64), not fixed:** with a Story live, the tray ring opens that Story.
+  - Tried: go back and tap the tray's "Add to story" button, the control named for the step's screen.
+  - On the Pixel, it opens Instagram's composer in its last-used mode. That's "New reel" after any Reel, and the take
+    setup always opens Create. The accessibility tree shows no Story switch.
+  - I backed the change out rather than send the fallback into the Reel composer.
+  - Run 1 (old code) still reached "Your story" through repair and the full agent: 15 calls, $0.15.
+  - Fallback per U5: delete the live Story before V4 and B1.
+- **Known gap, not fixed before the tag:** the executor accepts a failed after-check that names an input. That
+  happens on "the next step is ready" (executor.py, "relaxed match: after-checks failed but the next step … is ready")
+  and rewrites the check into a trial. That's how YouTube's sound check (best 0.00) was waved through in real post 4.
+  C2's check before the final step covers the outcome either way.
 - **YouTube's sound search:** the routine's tap on "Trigger a new search with golden hour" doesn't start the search.
   A repair taps it again (2 calls), or the agent finishes the step (~$0.10). Waits of 1.5 s (v3) and 4 s (v4) didn't
   change it, so it isn't timing. Likely keyboard focus taking the first tap; it's for the executor or compiler fix.
