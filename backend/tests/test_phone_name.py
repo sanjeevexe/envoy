@@ -118,7 +118,9 @@ def test_muse_hears_the_phones_name_in_phone_updates():
 @pytest.fixture
 def lib(tmp_path) -> RoutineStore:
     shutil.copytree(LIBRARY / "instagram_post_reel", tmp_path / "routines" / "instagram_post_reel")
-    return RoutineStore(tmp_path / "routines")
+    store = RoutineStore(tmp_path / "routines")
+    store.switch("instagram_post_reel", on=True)  # the live library has it switched off since Nov 1
+    return store
 
 
 def test_a_routine_switched_off_keeps_its_versions_and_comes_back_on(lib):

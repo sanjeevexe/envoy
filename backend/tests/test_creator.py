@@ -95,7 +95,9 @@ def test_the_learned_routine_types_the_caption_as_an_input_and_its_share_always_
 
     from routines.screens import screen_from_tree
     from routines.store import RoutineStore
-    r = RoutineStore().get(IG["routine"])
+    store = RoutineStore()
+    idx = store.index(IG["routine"])
+    r = store.get(IG["routine"], idx["active"] or idx["off"]["version"])  # switched off in the live library since Nov 1
     assert r is not None and r.app == IG["package"] and list(r.inputs) == ["caption"]
     assert any(s.action.value == "{{caption}}" for s in r.steps)
     [share] = [s for s in r.steps if s.action.target is not None and s.action.target.resource_id == "share_button"]

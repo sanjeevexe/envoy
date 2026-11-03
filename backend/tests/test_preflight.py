@@ -241,8 +241,10 @@ def test_button_labels_are_said_as_what_envoy_will_be_doing():
 def test_a_routine_says_its_usual_time_and_model_calls(lib):
     r = make_runner(lib)
     said = f"Using your routine “{lib.get(CHECK_IN).intent}”"  # its name in words: no id, no version
-    assert texts(check(r, "check me in", routine=CHECK_IN), "routine") == [f"{said}: 3 s when I tested it, no model calls."]
     idx = lib.index(CHECK_IN)
+    idx["runs"] = []  # no runs yet: it gives the time from its checking replay
+    lib._write_index(CHECK_IN, idx)
+    assert texts(check(r, "check me in", routine=CHECK_IN), "routine") == [f"{said}: 3 s when I tested it, no model calls."]
     run = {"time": "2026-10-28 17:29:21", "kind": "run", "version": 1, "status": "done", "rung": 0, "patches": 0}
     idx["runs"] = [{**run, "task_id": f"t{i}-r1", "duration_s": d, "model_calls": 0} for i, d in enumerate((8.7, 9.2, 30.0, 9.1))]
     idx["runs"].append({**run, "task_id": "tx-r1", "status": "failed", "duration_s": 300.0, "model_calls": 4})  # failures don't count
