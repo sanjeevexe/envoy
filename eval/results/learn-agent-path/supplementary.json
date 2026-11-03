@@ -1,0 +1,320 @@
+{
+ "protocol": "eval/results/learn-agent-path/PROTOCOL.md",
+ "versions": {
+  "eval_final": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_head": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "harness_head": "2f918da4b08aa88f4f4969af3591379e8bf32abe",
+  "problems": [],
+  "library": "empty"
+ },
+ "started": "2026-11-03T09:41:51+00:00",
+ "phone": "envoy-real",
+ "push_subscriptions": 0,
+ "phones": [
+  "envoy-test",
+  "envoy-real",
+  "phone-09031FDD4000C6"
+ ],
+ "notes": [
+  "Google Calendar's \"Holidays\" calendar on envoy-real is unchecked in the app, as it was for the eval and the pass above."
+ ],
+ "rows": [
+  {
+   "row": "amazon",
+   "workflow": "amazon",
+   "app": "com.amazon.mShop.android.shopping",
+   "question": "In the Amazon app, search for AA batteries and tell me the price of the first result.",
+   "graded_by": "shape",
+   "second": {
+    "AA batteries": "USB-C cable"
+   },
+   "time": "2026-11-03T09:41:51+00:00",
+   "agent": {
+    "task_id": "task-1103-044153-5301",
+    "status": "done",
+    "seconds": 70.4,
+    "model_calls": 4,
+    "cost_usd": 0.0502,
+    "approvals_declined": 0,
+    "answer": "$19.99",
+    "outcome": "right"
+   },
+   "learn": {
+    "status": "saved",
+    "reason": "Saved as amazon_search_first_result_price (v1). It ran once on its own, with no model, in 8 s. Agents can't call it until you share it in Settings › Agents.",
+    "routine": "amazon_search_first_result_price",
+    "version": 1,
+    "replay_seconds": 8.4,
+    "replay_model_calls": 0,
+    "compile_model_calls": 1,
+    "compile_cost_usd": 0.0494,
+    "seconds": 24.2,
+    "approvals_declined": 0,
+    "outcome": "saved"
+   },
+   "share": {
+    "tool": "amazon_search_first_result_price",
+    "outcome": "listed"
+   },
+   "call": {
+    "case": "new input",
+    "tool": "amazon_search_first_result_price",
+    "inputs": {
+     "search_query": "USB-C cable"
+    },
+    "task_id": "task-1103-044327-644c",
+    "status": "failed",
+    "seconds": 46.2,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "approvals_declined": 0,
+    "answer": "outputs not found: first_result_price",
+    "outcome": "no answer"
+   }
+  },
+  {
+   "row": "starbucks",
+   "workflow": "starbucks",
+   "app": "com.starbucks.mobilecard",
+   "question": "In the Starbucks app, how many calories are in a Grande Caffè Latte?",
+   "graded_by": "truth",
+   "second": {
+    "Caffè Latte": "Caramel Macchiato",
+    "Caffe Latte": "Caramel Macchiato"
+   },
+   "time": "2026-11-03T09:44:13+00:00",
+   "agent": {
+    "task_id": "task-1103-044418-9bc9",
+    "status": "done",
+    "seconds": 40.2,
+    "model_calls": 10,
+    "cost_usd": 0.0466,
+    "approvals_declined": 0,
+    "answer": "190 calories",
+    "outcome": "right"
+   },
+   "learn": {
+    "status": "saved",
+    "reason": "Saved as starbucks_get_drink_calories (v1). It ran once on its own, with no model, in 10 s. Agents can't call it until you share it in Settings › Agents.",
+    "routine": "starbucks_get_drink_calories",
+    "version": 1,
+    "replay_seconds": 9.8,
+    "replay_model_calls": 0,
+    "compile_model_calls": 1,
+    "compile_cost_usd": 0.0517,
+    "seconds": 30.2,
+    "approvals_declined": 0,
+    "outcome": "saved"
+   },
+   "share": {
+    "tool": "starbucks_get_drink_calories",
+    "outcome": "listed"
+   },
+   "call": {
+    "case": "new input",
+    "tool": "starbucks_get_drink_calories",
+    "inputs": {
+     "drink_name": "Caramel Macchiato",
+     "drink_size": "Grande"
+    },
+    "task_id": "task-1103-044528-f40e",
+    "status": "done",
+    "seconds": 14.1,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "approvals_declined": 0,
+    "answer": "250 calories",
+    "outcome": "right, 0 calls"
+   }
+  },
+  {
+   "row": "chipotle",
+   "workflow": "chipotle",
+   "app": "com.chipotle.ordering",
+   "question": "In the Chipotle app, find the price of Chips & Guacamole.",
+   "graded_by": "shape",
+   "second": {
+    "Chips & Guacamole": "Chips & Queso Blanco"
+   },
+   "time": "2026-11-03T09:45:42+00:00",
+   "agent": {
+    "task_id": "task-1103-044546-3c3d",
+    "status": "failed",
+    "seconds": 112.6,
+    "model_calls": 29,
+    "cost_usd": 0.1922,
+    "approvals_declined": 0,
+    "answer": "stopped after 25 steps",
+    "outcome": "no answer"
+   },
+   "learn": {
+    "outcome": "not learnable",
+    "reason": "the task ended failed"
+   }
+  },
+  {
+   "row": "gmail_search",
+   "workflow": "gmail_search",
+   "app": "com.google.android.gm",
+   "question": "In the Gmail app, search my mail for DoorDash and tell me the subject of the first result.",
+   "graded_by": "truth",
+   "second": {
+    "DoorDash": "Security alert"
+   },
+   "time": "2026-11-03T09:47:39+00:00",
+   "agent": {
+    "task_id": "task-1103-044740-9b84",
+    "status": "done",
+    "seconds": 36.2,
+    "model_calls": 6,
+    "cost_usd": 0.0503,
+    "approvals_declined": 0,
+    "answer": "envoy, take 40% off at these spots ..",
+    "outcome": "right"
+   },
+   "learn": {
+    "status": "saved",
+    "reason": "Saved as gmail_search_email_subject (v1). It ran once on its own, with no model, in 5 s. Agents can't call it until you share it in Settings › Agents.",
+    "routine": "gmail_search_email_subject",
+    "version": 1,
+    "replay_seconds": 4.74,
+    "replay_model_calls": 0,
+    "compile_model_calls": 1,
+    "compile_cost_usd": 0.0525,
+    "seconds": 22.2,
+    "approvals_declined": 0,
+    "outcome": "saved"
+   },
+   "share": {
+    "tool": "gmail_search_email_subject",
+    "outcome": "listed"
+   },
+   "call": {
+    "case": "new input",
+    "tool": "gmail_search_email_subject",
+    "inputs": {
+     "search_query": "Security alert"
+    },
+    "task_id": "task-1103-044840-0111",
+    "status": "done",
+    "seconds": 6.0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "approvals_declined": 0,
+    "answer": "Security alert",
+    "outcome": "right, 0 calls"
+   }
+  },
+  {
+   "row": "play_rating",
+   "workflow": "play_rating",
+   "app": "com.android.vending",
+   "question": "In the Google Play Store app, what is the star rating of the Duolingo app?",
+   "graded_by": "shape",
+   "second": {
+    "Duolingo": "Spotify"
+   },
+   "time": "2026-11-03T09:48:46+00:00",
+   "agent": {
+    "task_id": "task-1103-044847-6764",
+    "status": "done",
+    "seconds": 14.5,
+    "model_calls": 3,
+    "cost_usd": 0.0178,
+    "approvals_declined": 0,
+    "answer": "4.7",
+    "outcome": "right"
+   },
+   "learn": {
+    "status": "saved",
+    "reason": "Saved as google_play_store_get_app_star_rating (v1). It ran once on its own, with no model, in 1 s. Agents can't call it until you share it in Settings › Agents.",
+    "routine": "google_play_store_get_app_star_rating",
+    "version": 1,
+    "replay_seconds": 1.18,
+    "replay_model_calls": 0,
+    "compile_model_calls": 1,
+    "compile_cost_usd": 0.0313,
+    "seconds": 12.1,
+    "approvals_declined": 0,
+    "outcome": "saved"
+   },
+   "share": {
+    "tool": "google_play_store_get_app_star_rating",
+    "outcome": "listed"
+   },
+   "call": {
+    "case": "new input",
+    "tool": "google_play_store_get_app_star_rating",
+    "inputs": {
+     "app_name": "Spotify"
+    },
+    "task_id": "task-1103-044917-6f6b",
+    "status": "failed",
+    "seconds": 12.1,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "approvals_declined": 0,
+    "answer": "Couldn't install 404.: the Play Store isn't in front (com.android.chrome)",
+    "outcome": "no answer"
+   }
+  },
+  {
+   "row": "youtube_search",
+   "workflow": "youtube_search",
+   "app": "com.google.android.youtube",
+   "question": "In the YouTube app, search for lofi hip hop and tell me the title of the first video in the results.",
+   "graded_by": "shape",
+   "second": {
+    "lofi hip hop": "pasta carbonara recipe"
+   },
+   "time": "2026-11-03T09:49:29+00:00",
+   "agent": {
+    "task_id": "task-1103-044930-164e",
+    "status": "done",
+    "seconds": 30.2,
+    "model_calls": 5,
+    "cost_usd": 0.0337,
+    "approvals_declined": 0,
+    "answer": "lofi hip hop radio .. beats to relax/study to",
+    "outcome": "right"
+   },
+   "learn": {
+    "status": "saved",
+    "reason": "Saved as youtube_search_video (v1). It ran once on its own, with no model, in 4 s. Agents can't call it until you share it in Settings › Agents.",
+    "routine": "youtube_search_video",
+    "version": 1,
+    "replay_seconds": 4.09,
+    "replay_model_calls": 0,
+    "compile_model_calls": 1,
+    "compile_cost_usd": 0.0493,
+    "seconds": 24.2,
+    "approvals_declined": 0,
+    "outcome": "saved"
+   },
+   "share": {
+    "tool": "youtube_search_video",
+    "outcome": "listed"
+   },
+   "call": {
+    "case": "new input",
+    "tool": "youtube_search_video",
+    "inputs": {
+     "search_query": "pasta carbonara recipe"
+    },
+    "task_id": "task-1103-045025-de4e",
+    "status": "done",
+    "seconds": 10.1,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "approvals_declined": 0,
+    "answer": "Carbonara | Basics with Babish",
+    "outcome": "right, 0 calls"
+   }
+  }
+ ],
+ "deviations": [],
+ "why": [
+  "Over MCP, run_task matches the tag's routine library first: in the pass above, 6 workflows (amazon, starbucks, chipotle, gmail_search, play_rating, youtube_search) ran a library routine instead of the agent, and \"Make it a routine\" can't take a routine's task, so the learn rate couldn't be measured for them. This pass runs just those 6, in the protocol's order, on a second fresh copy at the tag whose only change is its routine library deleted (`git rm -r data/routines`), under the same rules otherwise (the coordinator's call, Nov 3). Its rows stay out of the headline."
+ ],
+ "ended": "2026-11-03T09:50:35+00:00"
+}

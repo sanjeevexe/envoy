@@ -1,0 +1,775 @@
+{
+ "protocol": "eval/results/learn-agent-path/PROTOCOL.md",
+ "versions": {
+  "eval_final": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_head": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "harness_head": "75b2c05792da8ff5ce4c4b5239fa80ede8986a46",
+  "problems": []
+ },
+ "started": "2026-11-03T09:05:08+00:00",
+ "phone": "envoy-real",
+ "push_subscriptions": 0,
+ "phones": [
+  "envoy-test",
+  "envoy-real",
+  "phone-09031FDD4000C6"
+ ],
+ "notes": [
+  "Google Calendar's \"Holidays\" calendar on envoy-real is unchecked in the app, as it was for the eval (Nov 3 is Election Day, which made calendar_today ambiguous); the coordinator re-enables it after this pass."
+ ],
+ "rows": [
+  {
+   "row": "amazon",
+   "workflow": "amazon",
+   "app": "com.amazon.mShop.android.shopping",
+   "question": "In the Amazon app, search for AA batteries and tell me the price of the first result.",
+   "graded_by": "shape",
+   "second": {
+    "AA batteries": "USB-C cable"
+   },
+   "time": "2026-11-03T09:05:08+00:00",
+   "agent": {
+    "task_id": "task-1103-040509-493a",
+    "status": "failed",
+    "seconds": 42.2,
+    "model_calls": 1,
+    "cost_usd": 0.0,
+    "approvals_declined": 0,
+    "answer": "outputs not found: first_result_price",
+    "outcome": "no answer",
+    "library_routine": "amazon_search_price"
+   },
+   "learn": {
+    "outcome": "not learnable",
+    "reason": "ran library routine amazon_search_price, which ended failed"
+   }
+  },
+  {
+   "row": "target",
+   "workflow": "target",
+   "app": "com.target.ui",
+   "question": "In the Target app, what are today's hours for my Target store?",
+   "graded_by": "shape",
+   "second": null,
+   "time": "2026-11-03T09:05:52+00:00",
+   "agent": {
+    "task_id": "task-1103-040556-990e",
+    "status": "needs_you",
+    "seconds": 12.1,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "approvals_declined": 0,
+    "answer": null,
+    "outcome": "blocked"
+   },
+   "learn": {
+    "outcome": "blocked",
+    "reason": "the task ended needs_you"
+   }
+  },
+  {
+   "row": "target_search",
+   "workflow": "target_search",
+   "app": "com.target.ui",
+   "question": "In the Target app, search for paper towels and tell me the price of the first result.",
+   "graded_by": "shape",
+   "second": {
+    "paper towels": "AA batteries"
+   },
+   "time": "2026-11-03T09:06:08+00:00",
+   "agent": {
+    "task_id": "task-1103-040609-01fd",
+    "status": "timed out",
+    "seconds": 361.8,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "approvals_declined": 0,
+    "answer": null,
+    "outcome": "no answer"
+   },
+   "learn": {
+    "outcome": "not learnable",
+    "reason": "the task ended timed out"
+   }
+  },
+  {
+   "row": "starbucks",
+   "workflow": "starbucks",
+   "app": "com.starbucks.mobilecard",
+   "question": "In the Starbucks app, how many calories are in a Grande Caffè Latte?",
+   "graded_by": "truth",
+   "second": {
+    "Caffè Latte": "Caramel Macchiato",
+    "Caffe Latte": "Caramel Macchiato"
+   },
+   "time": "2026-11-03T09:12:11+00:00",
+   "agent": {
+    "task_id": "task-1103-041213-0156",
+    "status": "timed out",
+    "seconds": 361.8,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "approvals_declined": 0,
+    "answer": null,
+    "outcome": "no answer",
+    "library_routine": "starbucks_drink_calories"
+   },
+   "learn": {
+    "outcome": "not learnable",
+    "reason": "ran library routine starbucks_drink_calories, which ended timed out"
+   }
+  },
+  {
+   "row": "chipotle",
+   "workflow": "chipotle",
+   "app": "com.chipotle.ordering",
+   "question": "In the Chipotle app, find the price of Chips & Guacamole.",
+   "graded_by": "shape",
+   "second": {
+    "Chips & Guacamole": "Chips & Queso Blanco"
+   },
+   "time": "2026-11-03T09:22:02+00:00",
+   "agent": {
+    "task_id": "task-1103-042203-a511",
+    "status": "done",
+    "seconds": 22.1,
+    "model_calls": 1,
+    "cost_usd": 0.0,
+    "approvals_declined": 0,
+    "answer": "menu item price: $4.90",
+    "library_routine": "chipotle_item_price",
+    "outcome": "right"
+   },
+   "learn": {
+    "outcome": "not learnable",
+    "reason": "ran library routine chipotle_item_price: this task ran the routine chipotle_item_price"
+   }
+  },
+  {
+   "row": "doordash",
+   "workflow": "doordash",
+   "app": "com.dd.doordash",
+   "question": "In the DoorDash app, what is my saved delivery address?",
+   "graded_by": "truth",
+   "second": null,
+   "time": "2026-11-03T09:22:25+00:00",
+   "agent": {
+    "task_id": "task-1103-042227-27d4",
+    "status": "done",
+    "seconds": 45.7,
+    "model_calls": 4,
+    "cost_usd": 0.0413,
+    "approvals_declined": 0,
+    "answer": "[redacted]",
+    "outcome": "right"
+   },
+   "learn": {
+    "status": "saved",
+    "reason": "Saved as doordash_get_saved_address (v1). It ran once on its own, with no model, in 4 s. Agents can't call it until you share it in Settings › Agents.",
+    "routine": "doordash_get_saved_address",
+    "version": 1,
+    "replay_seconds": 4.35,
+    "replay_model_calls": 0,
+    "compile_model_calls": 1,
+    "compile_cost_usd": 0.0432,
+    "seconds": 20.1,
+    "approvals_declined": 0,
+    "outcome": "saved"
+   },
+   "share": {
+    "tool": "doordash_get_saved_address",
+    "outcome": "listed"
+   },
+   "call": {
+    "case": "same input",
+    "tool": "doordash_get_saved_address",
+    "inputs": {},
+    "task_id": "task-1103-042333-fe99",
+    "status": "done",
+    "seconds": 6.0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "approvals_declined": 0,
+    "answer": "[redacted]",
+    "outcome": "right, 0 calls"
+   }
+  },
+  {
+   "row": "doordash_search",
+   "workflow": "doordash_search",
+   "app": "com.dd.doordash",
+   "question": "In the DoorDash app, search for pizza and tell me the name of the first restaurant in the results.",
+   "graded_by": "shape",
+   "second": {
+    "pizza": "sushi"
+   },
+   "time": "2026-11-03T09:23:39+00:00",
+   "agent": {
+    "task_id": "task-1103-042341-dda8",
+    "status": "done",
+    "seconds": 34.2,
+    "model_calls": 5,
+    "cost_usd": 0.0462,
+    "approvals_declined": 0,
+    "answer": "Mountain Mike's Pizza",
+    "outcome": "right"
+   },
+   "learn": {
+    "status": "saved",
+    "reason": "Saved as doordash_search_first_restaurant (v1). It ran once on its own, with no model, in 10 s. Agents can't call it until you share it in Settings › Agents.",
+    "routine": "doordash_search_first_restaurant",
+    "version": 1,
+    "replay_seconds": 9.83,
+    "replay_model_calls": 0,
+    "compile_model_calls": 1,
+    "compile_cost_usd": 0.0539,
+    "seconds": 30.2,
+    "approvals_declined": 0,
+    "outcome": "saved"
+   },
+   "share": {
+    "tool": "doordash_search_first_restaurant",
+    "outcome": "listed"
+   },
+   "call": {
+    "case": "new input",
+    "tool": "doordash_search_first_restaurant",
+    "inputs": {
+     "search_query": "sushi"
+    },
+    "task_id": "task-1103-042446-ef9d",
+    "status": "done",
+    "seconds": 14.1,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "approvals_declined": 0,
+    "answer": "SH HAWAIIAN BBQ &DONUTS",
+    "outcome": "right, 0 calls"
+   }
+  },
+  {
+   "row": "settings_version",
+   "workflow": "settings_version",
+   "app": "com.android.settings",
+   "question": "In the Settings app, what Android version is this phone running?",
+   "graded_by": "truth",
+   "second": null,
+   "time": "2026-11-03T09:25:00+00:00",
+   "agent": {
+    "task_id": "task-1103-042504-f1d9",
+    "status": "done",
+    "seconds": 37.7,
+    "model_calls": 8,
+    "cost_usd": 0.0404,
+    "approvals_declined": 0,
+    "answer": "Android version 15",
+    "outcome": "right"
+   },
+   "learn": {
+    "status": "saved",
+    "reason": "Saved as settings_check_android_version (v1). It ran once on its own, with no model, in 10 s. Agents can't call it until you share it in Settings › Agents.",
+    "routine": "settings_check_android_version",
+    "version": 1,
+    "replay_seconds": 9.59,
+    "replay_model_calls": 0,
+    "compile_model_calls": 1,
+    "compile_cost_usd": 0.0353,
+    "seconds": 24.1,
+    "approvals_declined": 0,
+    "outcome": "saved"
+   },
+   "share": {
+    "tool": "settings_check_android_version",
+    "outcome": "listed"
+   },
+   "call": {
+    "case": "same input",
+    "tool": "settings_check_android_version",
+    "inputs": {},
+    "task_id": "task-1103-042606-0339",
+    "status": "done",
+    "seconds": 12.1,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "approvals_declined": 0,
+    "answer": "15",
+    "outcome": "right, 0 calls"
+   }
+  },
+  {
+   "row": "settings_bluetooth",
+   "workflow": "settings_bluetooth",
+   "app": "com.android.settings",
+   "question": "In the Settings app, is Bluetooth turned on or off?",
+   "graded_by": "truth",
+   "second": null,
+   "time": "2026-11-03T09:26:18+00:00",
+   "agent": {
+    "task_id": "task-1103-042619-2167",
+    "status": "done",
+    "seconds": 28.6,
+    "model_calls": 6,
+    "cost_usd": 0.0289,
+    "approvals_declined": 0,
+    "answer": "Bluetooth is turned on (Use Bluetooth switch is on)",
+    "outcome": "right"
+   },
+   "learn": {
+    "status": "saved",
+    "reason": "Saved as settings_check_bluetooth_status (v1). It ran once on its own, with no model, in 2 s. Agents can't call it until you share it in Settings › Agents.",
+    "routine": "settings_check_bluetooth_status",
+    "version": 1,
+    "replay_seconds": 2.47,
+    "replay_model_calls": 0,
+    "compile_model_calls": 1,
+    "compile_cost_usd": 0.0375,
+    "seconds": 20.2,
+    "approvals_declined": 0,
+    "outcome": "saved"
+   },
+   "share": {
+    "tool": "settings_check_bluetooth_status",
+    "outcome": "listed"
+   },
+   "call": {
+    "case": "same input",
+    "tool": "settings_check_bluetooth_status",
+    "inputs": {},
+    "task_id": "task-1103-042708-a04a",
+    "status": "done",
+    "seconds": 4.0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "approvals_declined": 0,
+    "answer": "on",
+    "outcome": "right, 0 calls"
+   }
+  },
+  {
+   "row": "gmail_newest",
+   "workflow": "gmail_newest",
+   "app": "com.google.android.gm",
+   "question": "In the Gmail app, what is the subject of the newest email in my inbox?",
+   "graded_by": "truth",
+   "second": null,
+   "time": "2026-11-03T09:28:20+00:00",
+   "agent": {
+    "task_id": "task-1103-042821-9ee9",
+    "status": "done",
+    "seconds": 46.2,
+    "model_calls": 4,
+    "cost_usd": 0.0381,
+    "approvals_declined": 0,
+    "answer": "[redacted]",
+    "outcome": "right"
+   },
+   "learn": {
+    "status": "saved",
+    "reason": "Saved as gmail_get_newest_email_subject (v1). It ran once on its own, with no model, in 2 s. Agents can't call it until you share it in Settings › Agents.",
+    "routine": "gmail_get_newest_email_subject",
+    "version": 1,
+    "replay_seconds": 2.29,
+    "replay_model_calls": 0,
+    "compile_model_calls": 1,
+    "compile_cost_usd": 0.0434,
+    "seconds": 16.1,
+    "approvals_declined": 0,
+    "outcome": "saved"
+   },
+   "share": {
+    "tool": "gmail_get_newest_email_subject",
+    "outcome": "listed"
+   },
+   "call": {
+    "case": "same input",
+    "tool": "gmail_get_newest_email_subject",
+    "inputs": {},
+    "task_id": "task-1103-042924-ddc6",
+    "status": "done",
+    "seconds": 4.0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "approvals_declined": 0,
+    "answer": "[redacted]",
+    "outcome": "right, 0 calls"
+   }
+  },
+  {
+   "row": "gmail_search",
+   "workflow": "gmail_search",
+   "app": "com.google.android.gm",
+   "question": "In the Gmail app, search my mail for DoorDash and tell me the subject of the first result.",
+   "graded_by": "truth",
+   "second": {
+    "DoorDash": "Security alert"
+   },
+   "time": "2026-11-03T09:29:28+00:00",
+   "agent": {
+    "task_id": "task-1103-042931-af30",
+    "status": "done",
+    "seconds": 14.1,
+    "model_calls": 1,
+    "cost_usd": 0.0,
+    "approvals_declined": 0,
+    "answer": "email subject: envoy, take 40% off at these spots ..",
+    "library_routine": "gmail_search_subject",
+    "outcome": "right"
+   },
+   "learn": {
+    "outcome": "not learnable",
+    "reason": "ran library routine gmail_search_subject: this task ran the routine gmail_search_subject"
+   }
+  },
+  {
+   "row": "calendar_today",
+   "workflow": "calendar_today",
+   "app": "com.google.android.calendar",
+   "question": "In Google Calendar, do I have any events today?",
+   "graded_by": "truth",
+   "second": null,
+   "time": "2026-11-03T09:29:45+00:00",
+   "agent": {
+    "task_id": "task-1103-042946-53c1",
+    "status": "done",
+    "seconds": 74.7,
+    "model_calls": 16,
+    "cost_usd": 0.1312,
+    "approvals_declined": 0,
+    "answer": "No — Tuesday, November 3, 2026 shows 'Nothing planned. Tap to create.', so you have no events today.",
+    "outcome": "right"
+   },
+   "learn": {
+    "status": "failed",
+    "reason": "can't become a routine: the run answered a question (\"No — Tuesday, November 3, 2026 shows 'Nothing planned. Tap t\"), but no output can be read back from its own final screen: output 'todays_events': 'Nothing planned. Tap to create.' is not on the final screen, or nothing anchors it; dropped",
+    "routine": null,
+    "version": null,
+    "replay_seconds": null,
+    "replay_model_calls": null,
+    "compile_model_calls": 1,
+    "compile_cost_usd": 0.0,
+    "seconds": 20.2,
+    "approvals_declined": 0,
+    "outcome": "not compilable"
+   }
+  },
+  {
+   "row": "contacts_count",
+   "workflow": "contacts_count",
+   "app": "com.google.android.contacts",
+   "question": "In the Contacts app, how many contacts do I have?",
+   "graded_by": "truth",
+   "second": null,
+   "time": "2026-11-03T09:31:21+00:00",
+   "agent": {
+    "task_id": "task-1103-043122-c254",
+    "status": "done",
+    "seconds": 16.1,
+    "model_calls": 3,
+    "cost_usd": 0.0186,
+    "approvals_declined": 0,
+    "answer": "0 contacts — the Contacts app shows \"No contacts yet\".",
+    "outcome": "right"
+   },
+   "learn": {
+    "status": "saved",
+    "reason": "Saved as contacts_count_contacts (v1). It ran once on its own, with no model, in 1 s. Agents can't call it until you share it in Settings › Agents.",
+    "routine": "contacts_count_contacts",
+    "version": 1,
+    "replay_seconds": 0.75,
+    "replay_model_calls": 0,
+    "compile_model_calls": 1,
+    "compile_cost_usd": 0.026,
+    "seconds": 22.2,
+    "approvals_declined": 0,
+    "outcome": "saved"
+   },
+   "share": {
+    "tool": "contacts_count_contacts",
+    "outcome": "listed"
+   },
+   "call": {
+    "case": "same input",
+    "tool": "contacts_count_contacts",
+    "inputs": {},
+    "task_id": "task-1103-043201-286a",
+    "status": "done",
+    "seconds": 4.0,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "approvals_declined": 0,
+    "answer": "No contacts yet",
+    "outcome": "right, 0 calls"
+   }
+  },
+  {
+   "row": "maps_address",
+   "workflow": "maps_address",
+   "app": "com.google.android.apps.maps",
+   "question": "In Google Maps, search for the Empire State Building and tell me its street address.",
+   "graded_by": "truth",
+   "second": {
+    "Empire State Building": "Space Needle"
+   },
+   "time": "2026-11-03T09:32:05+00:00",
+   "agent": {
+    "task_id": "task-1103-043206-e5f3",
+    "status": "done",
+    "seconds": 34.2,
+    "model_calls": 7,
+    "cost_usd": 0.0422,
+    "approvals_declined": 0,
+    "answer": "20 W 34th St., New York, NY 10001",
+    "outcome": "right"
+   },
+   "learn": {
+    "status": "saved",
+    "reason": "Saved as google_maps_get_place_address (v1). It ran once on its own, with no model, in 10 s. Agents can't call it until you share it in Settings › Agents.",
+    "routine": "google_maps_get_place_address",
+    "version": 1,
+    "replay_seconds": 10.01,
+    "replay_model_calls": 0,
+    "compile_model_calls": 1,
+    "compile_cost_usd": 0.0463,
+    "seconds": 26.2,
+    "approvals_declined": 0,
+    "outcome": "saved"
+   },
+   "share": {
+    "tool": "google_maps_get_place_address",
+    "outcome": "listed"
+   },
+   "call": {
+    "case": "new input",
+    "tool": "google_maps_get_place_address",
+    "inputs": {
+     "place_name": "Space Needle"
+    },
+    "task_id": "task-1103-043307-95e6",
+    "status": "done",
+    "seconds": 12.1,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "approvals_declined": 0,
+    "answer": "400 Broad St, Seattle, WA 98109",
+    "outcome": "right, 0 calls"
+   }
+  },
+  {
+   "row": "play_rating",
+   "workflow": "play_rating",
+   "app": "com.android.vending",
+   "question": "In the Google Play Store app, what is the star rating of the Duolingo app?",
+   "graded_by": "shape",
+   "second": {
+    "Duolingo": "Spotify"
+   },
+   "time": "2026-11-03T09:33:19+00:00",
+   "agent": {
+    "task_id": "task-1103-043321-9374",
+    "status": "done",
+    "seconds": 134.0,
+    "model_calls": 7,
+    "cost_usd": 0.0944,
+    "approvals_declined": 0,
+    "answer": "star rating: 4.7 stars in 48 million reviews",
+    "library_routine": "play_app_rating",
+    "outcome": "right"
+   },
+   "learn": {
+    "outcome": "not learnable",
+    "reason": "ran library routine play_app_rating: this task ran the routine play_app_rating"
+   }
+  },
+  {
+   "row": "youtube_search",
+   "workflow": "youtube_search",
+   "app": "com.google.android.youtube",
+   "question": "In the YouTube app, search for lofi hip hop and tell me the title of the first video in the results.",
+   "graded_by": "shape",
+   "second": {
+    "lofi hip hop": "pasta carbonara recipe"
+   },
+   "time": "2026-11-03T09:35:35+00:00",
+   "agent": {
+    "task_id": "task-1103-043536-f71e",
+    "status": "done",
+    "seconds": 10.1,
+    "model_calls": 1,
+    "cost_usd": 0.0,
+    "approvals_declined": 0,
+    "answer": "first video title: lofi hip hop radio .. beats to relax/study to",
+    "library_routine": "youtube_search_first_video",
+    "outcome": "right"
+   },
+   "learn": {
+    "outcome": "not learnable",
+    "reason": "ran library routine youtube_search_first_video: this task ran the routine youtube_search_first_video"
+   }
+  },
+  {
+   "row": "ytmusic_artist",
+   "workflow": "ytmusic_artist",
+   "app": "com.google.android.apps.youtube.music",
+   "question": "In the YouTube Music app, search for the song Blinding Lights and tell me the artist of the first song result.",
+   "graded_by": "truth",
+   "second": {
+    "Blinding Lights": "Shape of You"
+   },
+   "time": "2026-11-03T09:35:46+00:00",
+   "agent": {
+    "task_id": "task-1103-043551-add9",
+    "status": "done",
+    "seconds": 38.2,
+    "model_calls": 7,
+    "cost_usd": 0.0708,
+    "approvals_declined": 0,
+    "answer": "The Weeknd",
+    "outcome": "right"
+   },
+   "learn": {
+    "status": "saved",
+    "reason": "Saved as youtube_music_search_song_artist (v1). It ran once on its own, with no model, in 5 s. Agents can't call it until you share it in Settings › Agents.",
+    "routine": "youtube_music_search_song_artist",
+    "version": 1,
+    "replay_seconds": 5.19,
+    "replay_model_calls": 0,
+    "compile_model_calls": 1,
+    "compile_cost_usd": 0.0452,
+    "seconds": 20.2,
+    "approvals_declined": 0,
+    "outcome": "saved"
+   },
+   "share": {
+    "tool": "youtube_music_search_song_artist",
+    "outcome": "listed"
+   },
+   "call": {
+    "case": "new input",
+    "tool": "youtube_music_search_song_artist",
+    "inputs": {
+     "song_title": "Shape of You"
+    },
+    "task_id": "task-1103-043651-e0e6",
+    "status": "done",
+    "seconds": 24.1,
+    "model_calls": 1,
+    "cost_usd": 0.0214,
+    "approvals_declined": 0,
+    "answer": "Ed Sheeran",
+    "outcome": "right with model calls"
+   }
+  },
+  {
+   "row": "chrome_wikipedia",
+   "workflow": "chrome_wikipedia",
+   "app": "com.android.chrome",
+   "question": "In Chrome, go to en.m.wikipedia.org, search for Eiffel Tower and tell me the year it opened.",
+   "graded_by": "truth",
+   "second": {
+    "Eiffel Tower": "Statue of Liberty"
+   },
+   "time": "2026-11-03T09:37:15+00:00",
+   "agent": {
+    "task_id": "task-1103-043719-19a0",
+    "status": "done",
+    "seconds": 58.3,
+    "model_calls": 11,
+    "cost_usd": 0.0787,
+    "approvals_declined": 0,
+    "answer": "1889",
+    "outcome": "right"
+   },
+   "learn": {
+    "status": "failed",
+    "reason": "the replay stopped at scroll_to_opening_information: step scroll_to_opening_information: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+    "routine": "chrome_search_wikipedia",
+    "version": null,
+    "replay_seconds": 20.16,
+    "replay_model_calls": 0,
+    "compile_model_calls": 1,
+    "compile_cost_usd": 0.0496,
+    "seconds": 40.3,
+    "approvals_declined": 0,
+    "outcome": "replay failed"
+   }
+  },
+  {
+   "row": "target_search-retry",
+   "workflow": "target_search",
+   "app": "com.target.ui",
+   "question": "In the Target app, search for paper towels and tell me the price of the first result.",
+   "graded_by": "shape",
+   "second": {
+    "paper towels": "AA batteries"
+   },
+   "time": "2026-11-03T09:38:57+00:00",
+   "agent": {
+    "task_id": "task-1103-043859-ba58",
+    "status": "needs_you",
+    "seconds": 12.4,
+    "model_calls": 0,
+    "cost_usd": 0.0,
+    "approvals_declined": 0,
+    "answer": null,
+    "outcome": "blocked"
+   },
+   "learn": {
+    "outcome": "blocked",
+    "reason": "the task ended needs_you"
+   }
+  },
+  {
+   "row": "starbucks-retry",
+   "workflow": "starbucks",
+   "app": "com.starbucks.mobilecard",
+   "question": "In the Starbucks app, how many calories are in a Grande Caffè Latte?",
+   "graded_by": "truth",
+   "second": {
+    "Caffè Latte": "Caramel Macchiato",
+    "Caffe Latte": "Caramel Macchiato"
+   },
+   "time": "2026-11-03T09:39:12+00:00",
+   "agent": {
+    "task_id": "task-1103-043913-fccb",
+    "status": "done",
+    "seconds": 22.6,
+    "model_calls": 1,
+    "cost_usd": 0.0,
+    "approvals_declined": 0,
+    "answer": "calories: 190 calories",
+    "library_routine": "starbucks_drink_calories",
+    "outcome": "right"
+   },
+   "learn": {
+    "outcome": "not learnable",
+    "reason": "ran library routine starbucks_drink_calories: this task ran the routine starbucks_drink_calories"
+   }
+  }
+ ],
+ "deviations": [
+  "- **The phone held by Target's hand-off (a harness fault).** Target's task ended needs_you: the tag lists Target as blocking emulators (`backend/api/emulator_blocked.json`), so it asked to use the Pixel 5 (declined), then waited for a takeover. The harness at `75b2c05` moved on without ending it, and it held envoy-real: the next three tasks waited for the phone and never reached it. target_search and starbucks hit the 6-minute cap (their rows are kept as recorded); chipotle's task was stopped while still waiting, before any row was written, so its row is its first attempt on the phone. The harness was stopped, the open tasks ended as the person would, the copy restarted on the same api-dir, and the pass resumed from chipotle with `d259f3b`, which ends any task left waiting for the person. target_search and starbucks ran once more at the end as `-retry` rows under the protocol's infrastructure-fault rule; the headline counts their originals (counted by their retries, the agent path would be 15/18: target_search-retry is blocked, starbucks-retry right).",
+  "- **A second stop, before gmail_newest started.** The suite's Gmail truth grader found no Gmail connection in the harness's checkout (`data/gmail/` is gitignored). No task had started. `data/gmail` was linked to the main checkout's read-only connection, as the eval's checkout had it, and the pass resumed from gmail_newest.",
+  "- **Classes amended after the pass** (`--report --amend`, harness `2f918da`, from the stopped copy's own task records, read-only; listed in results.json's `amended`). Target was recorded live as \"no answer\" and is \"blocked\" (the coordinator's call, the protocol's bot-check class): the harness's block pattern didn't know \"blocks emulators\", and stopping the task replaced its detail. The same rule makes target_search-retry blocked. The amend also names the library routine amazon and starbucks ran.",
+  "- **Library routines pre-empt the agent.** Over MCP, run_task first matches the tag's routine library: 6 workflows (amazon, starbucks, chipotle, gmail_search, play_rating, youtube_search) ran a library routine, not the agent. Their rows are kept as they happened (amazon's `amazon_search_price` failed with \"outputs not found\"), and \"Make it a routine\" refuses a routine's task, so the learn rate couldn't be measured for them. The supplementary pass above measures those 6 on a second copy with an empty library (the coordinator's call).",
+  "- **Harness commits** (eval/ only; both copies stayed at the tag): `75b2c05` started the pass, `d259f3b` resumed it twice, `2f918da` amended the classes and ran the supplementary pass."
+ ],
+ "resumed": [
+  {
+   "time": "2026-11-03T09:22:02+00:00",
+   "harness_head": "d259f3b98e224f137fafdbf442142213c9463a20",
+   "after": "starbucks"
+  },
+  {
+   "time": "2026-11-03T09:28:19+00:00",
+   "harness_head": "d259f3b98e224f137fafdbf442142213c9463a20",
+   "after": "settings_bluetooth"
+  }
+ ],
+ "ended": "2026-11-03T09:39:36+00:00",
+ "amended": [
+  "amazon: a no answer → no answer, b not learnable → not learnable (ran library routine amazon_search_price, which ended failed)",
+  "target: a no answer → blocked, b not learnable → blocked",
+  "starbucks: a no answer → no answer, b not learnable → not learnable (ran library routine starbucks_drink_calories, which ended timed out)",
+  "target_search-retry: a no answer → blocked, b not learnable → blocked"
+ ]
+}
