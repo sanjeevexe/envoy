@@ -2435,6 +2435,8 @@
    "patch": "after 'continue_after_hazmat_declaration', an extra screen appeared; inserted continue_after_hazmat_declaration_extra_1 (tap Looks good)",
    "reason": "Continue appears renamed to Looks good, tapping it should advance to Confirm check-in.",
    "repair_model": "muse-spark-1.3",
+   "profile": "Spark",
+   "tier": "standard",
    "first": {
     "passed": true,
     "status": "done",
@@ -2742,7 +2744,7 @@
    "date": "2026-10-28",
    "commit": "00ec5d9",
    "final": false,
-   "profile": "all-Spark",
+   "profile": "Spark",
    "tier": "standard",
    "runs": 4,
    "run_id": "1028032143",
@@ -3178,7 +3180,7 @@
    {
     "date": "Oct 28",
     "commit": "00ec5d9",
-    "profile": "all-Spark",
+    "profile": "Spark",
     "cells": {
      "First run right": "13/18",
      "Compiled": "14/18",
@@ -3189,7 +3191,7 @@
    {
     "date": "Oct 29",
     "commit": "53ab459",
-    "profile": "all-Spark",
+    "profile": "Spark",
     "cells": {
      "First run right": "14/18",
      "Compiled": "14/18",
@@ -3200,7 +3202,7 @@
    {
     "date": "Oct 29",
     "commit": "059bb7f",
-    "profile": "all-Spark",
+    "profile": "Spark",
     "cells": {
      "First run right": "15/18",
      "Compiled": "16/18",
@@ -4541,57 +4543,79 @@
    {
     "suite": "0. The core set's routines",
     "result": "10 of 10 routines compiled and verified",
-    "ran_on": "ad9a67b (uncommitted changes)"
+    "ran_on": "ad9a67b (uncommitted changes)",
+    "profile": "Spark",
+    "tier": "standard"
    },
    {
     "suite": "1. Three systems on SkyLark's core set",
     "result": "Envoy routines 40/40 (100%) first try, 40/40 within 3, median 1.0 calls, 5.5 s; Full agent every time 40/40 (100%) first try, 40/40 within 3, median 5.0 calls, 10.1 s; Fixed replay 14/40 (35%) first try, 17/40 within 3, median 0.0 calls, 2.6 s",
-    "ran_on": "ad9a67b (uncommitted changes)"
+    "ran_on": "ad9a67b (uncommitted changes)",
+    "profile": "Spark",
+    "tier": "standard"
    },
    {
     "suite": "2. First run vs later runs",
     "result": "request 1 median $0.051 and 27.9 s; requests 2–10 90/90 right, median 1.0 call, $0.0023, 5.9 s",
-    "ran_on": "5c3d716 (uncommitted changes)"
+    "ran_on": "5c3d716 (uncommitted changes)",
+    "profile": "Spark",
+    "tier": "standard"
    },
    {
     "suite": "3. Routines under change",
     "result": "new inputs 50/50 (100%) (50 with no model call); injected changes recovered 50/50 (100%), then 50/50 ran alone with no model call",
-    "ran_on": "6c507f3 (uncommitted changes)"
+    "ran_on": "6c507f3 (uncommitted changes)",
+    "profile": "Spark",
+    "tier": "standard"
    },
    {
     "suite": "3b. Three screen sizes and the real phone",
     "result": "envoy-test 30/30; envoy-small 30/30; envoy-large 29/30",
-    "ran_on": "5504260 (uncommitted changes)"
+    "ran_on": "5504260 (uncommitted changes)",
+    "profile": "Spark",
+    "tier": "standard"
    },
    {
     "suite": "4. Real apps",
     "result": "first run 14/18, compiled 14/18, rerun right with no call 13/18, new input 4/11; bot checks: target, target_search",
-    "ran_on": "4 runs, the last on 00ec5d9 (uncommitted changes)"
+    "ran_on": "4 runs, the last on 00ec5d9 (uncommitted changes)",
+    "profile": "Spark",
+    "tier": "standard"
    },
    {
     "suite": "5. Memory",
     "result": "extraction 459/468 (98%) on 62 labeled items, 0 wrong; stale facts served without a warning 0/12",
-    "ran_on": "5c3d716 (uncommitted changes)"
+    "ran_on": "5c3d716 (uncommitted changes)",
+    "profile": "Spark",
+    "tier": "standard"
    },
    {
     "suite": "6. Safety: irreversible actions",
     "result": "irreversible caught 20/20 (code alone 20); reversible flagged by code 0/22; live declines held 7/7",
-    "ran_on": "849e51a (uncommitted changes)"
+    "ran_on": "849e51a (uncommitted changes)",
+    "profile": "Spark",
+    "tier": "standard"
    },
    {
     "suite": "6b. Safety: planted instructions",
     "result": "agent right 20/20 with planted text, tried to follow it 0; irreversible without approval 0; injected values stored from email 0",
-    "ran_on": "7395743 (uncommitted changes)"
+    "ran_on": "7395743 (uncommitted changes)",
+    "profile": "Spark",
+    "tier": "standard"
    },
    {
     "suite": "7. Interfaces, end to end",
     "result": "phase4 passed; approval_modes passed; phase5 passed",
-    "ran_on": "e18e434 (uncommitted changes)"
+    "ran_on": "e18e434 (uncommitted changes)",
+    "profile": "Spark",
+    "tier": "standard"
    },
    {
     "suite": "8. AndroidWorld (the other chat's branch)",
     "result": "see the branch's report",
-    "ran_on": "androidworld branch"
+    "ran_on": "androidworld branch",
+    "profile": "",
+    "tier": ""
    }
   ],
   "targets": [
@@ -4664,6 +4688,7 @@
     58,
     12
    ],
+   "model": "Muse Spark 1.3",
    "src": {
     "path": "docs/androidworld-results.md",
     "note": "Headline, Routines"
@@ -4673,8 +4698,10 @@
    "passed": 30,
    "runs": 30,
    "calls": 0,
-   "median_s": 7.14,
+   "median_s": 6.59,
    "commit": "a9b923d",
+   "profile": "Spark",
+   "tier": "standard",
    "date": "2026-10-28",
    "src": {
     "path": "eval/results/final/sizes.json",
@@ -5084,8 +5111,8 @@
    },
    {
     "what": "AndroidWorld",
-    "value": "Envoy as on main solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the he",
-    "commit": "androidworld branch",
+    "value": "Envoy as on main solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001). Both runs are seed 30, pass@1, at about $0.04 and 38 s per task (median $0.030).",
+    "commit": "merged into main Oct 29 (105d04e)",
     "final": false,
     "src": "docs/androidworld-results.md"
    }

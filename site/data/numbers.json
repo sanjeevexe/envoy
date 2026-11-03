@@ -94,8 +94,8 @@
   },
   {
    "what": "AndroidWorld",
-   "value": "Envoy as on main solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the he",
-   "commit": "androidworld branch",
+   "value": "Envoy as on main solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001). Both runs are seed 30, pass@1, at about $0.04 and 38 s per task (median $0.030).",
+   "commit": "merged into main Oct 29 (105d04e)",
    "final": false,
    "src": "docs/androidworld-results.md"
   }

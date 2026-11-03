@@ -537,6 +537,7 @@ def repair() -> dict:
         "task": "Check me in for my flight", "routine": exp["routine"], "layout": "3: extra screen",
         "patch": patch["description"], "reason": patch["evidence"]["reasons"][0],
         "repair_model": change["meta"]["models"]["jobs"]["repair"]["model"],
+        "profile": _profile(change["meta"]["models"]["jobs"]), "tier": change["meta"]["models"]["tier"],
         "first": pick(exp["first"]), "trial": pick(exp["trial"]), "after": pick(exp["after"]), "back": pick(exp["backcompat"]),
         "steps_first": exp["first"]["steps"],
         "before": image(lib / "history/v2/repair_08_1_before.png", "repair-skylark-before"),
@@ -577,8 +578,9 @@ def _spread(xs: list[float]) -> dict:
 
 
 def _profile(jobs: dict) -> str:
-    """The model profile a run used: hybrid when Muse Wonder takes the agent's steps, else all-Spark."""
-    return "hybrid" if jobs["step"]["model"].startswith("muse-wonder") else "all-Spark"
+    """The model profile a run used: hybrid (the default) when Muse Wonder takes the agent's steps, else the Spark profile.
+    Both compile with Muse Wonder."""
+    return "hybrid" if jobs["step"]["model"].startswith("muse-wonder") else "Spark"
 
 
 def real_apps() -> dict:
@@ -621,7 +623,7 @@ def real_apps() -> dict:
         if not m or "after" in head:
             continue
         cell = {re.sub(r"^\d\. ", "", r["Stage"]): plain(r[head]) for r in stages}
-        passes.append({"date": m.group(1), "commit": m.group(2), "profile": "hybrid" if m.group(3) == "hybrid" else "all-Spark",
+        passes.append({"date": m.group(1), "commit": m.group(2), "profile": "hybrid" if m.group(3) == "hybrid" else "Spark",
                        "cells": cell})
     passes.sort(key=lambda p: datetime.strptime(p["date"] + " 2026", "%b %d %Y"))
     return {"current": current, "curve": curve, "rows": rows, "passes": passes,
@@ -693,10 +695,19 @@ def models() -> dict:
     }
 
 
+# Each suite's own file beside report.md (suite 8, AndroidWorld, reports elsewhere).
+SUITE_FILES = {"0": "compile", "1": "systems", "2": "repeats", "3": "change", "3b": "sizes", "4": "real", "5": "memory",
+               "6": "safety", "6b": "injection", "7": "interfaces"}
+
+
 def proof() -> dict:
     rep = (REPO / "eval/results/final/report.md").read_text()
     t = md_tables(rep)
     suites = [{"suite": plain(r["Suite"]), "result": plain(r["Result"]), "ran_on": plain(r["Ran on"])} for r in t[0]]
+    for s in suites:
+        f = SUITE_FILES.get(s["suite"].split(".")[0])
+        meta = json.loads((REPO / f"eval/results/final/{f}.json").read_text())["meta"] if f else None
+        s["profile"], s["tier"] = (_profile(meta["models"]["jobs"]), meta["models"]["tier"]) if meta else ("", "")
     targets = [{k: plain(v) for k, v in r.items()} for r in t[1]]
     charts = {n: image(REPO / f"eval/results/final/charts/{n}.png", f"chart-{n}", 1600) for n in
               ["cost_and_time_over_repeated_runs", "success_by_system_and_layout", "recovery_by_injected_change", "real_apps_stages"]}
@@ -712,7 +723,7 @@ def proof() -> dict:
     rows = phone.get("rows", phone) if isinstance(phone, dict) else phone
     rows = rows if isinstance(rows, list) else list(rows.values())
     ok = [r for r in rows if r.get("passed")]
-    secs = sorted(r.get("duration_s") or 0 for r in rows)
+    secs = [r.get("duration_s") or 0 for r in rows]
     tests, files = 0, 0
     import ast
     for p in sorted((REPO / "backend/tests").rglob("test_*.py")):
@@ -728,9 +739,11 @@ def proof() -> dict:
                             "agent_calls": rt.group(5), "usd": rt.group(6), "agent_usd": rt.group(7),
                             "fallback": [int(fb.group(1)), int(fb.group(2))]},
                "held": [int(x) for x in ho.groups()],
+               "model": plain(re.search(r"^\| Model \| ([^|,]+)", aw, re.M).group(1)).strip(),
                "src": src("docs/androidworld-results.md", "Headline, Routines")},
         "phone": {"passed": len(ok), "runs": len(rows), "calls": sum(r.get("calls") or 0 for r in rows),
-                  "median_s": secs[len(secs) // 2] if secs else None, "commit": sizes["meta"]["code"]["short"],
+                  "median_s": round(statistics.median(secs), 2) if secs else None, "commit": sizes["meta"]["code"]["short"],
+                  "profile": _profile(sizes["meta"]["models"]["jobs"]), "tier": sizes["meta"]["models"]["tier"],
                   "date": sizes["meta"]["started"][:10], "src": src("eval/results/final/sizes.json", "devices.phone")},
         "tests": {"functions": tests, "files": files, "src": src("backend/tests")},
     }
@@ -995,7 +1008,8 @@ def numbers(data: dict) -> dict:
     p = data["proof"]["phone"]
     rows.append({"what": "Pixel 5: the 10 core routines on 3 new bookings each", "value": f"{p['passed']}/{p['runs']}, {p['calls']} model calls",
                  "commit": p["commit"], "final": False, "src": p["src"]["path"]})
-    rows.append({"what": "AndroidWorld", "value": data["proof"]["aw"]["headline"][:160], "commit": "androidworld branch",
+    # The AndroidWorld work was merged into main on Oct 29 (105d04e); its headline's "as on main" is main before that merge.
+    rows.append({"what": "AndroidWorld", "value": data["proof"]["aw"]["headline"], "commit": "merged into main Oct 29 (105d04e)",
                  "final": False, "src": data["proof"]["aw"]["src"]["path"]})
     return {"eval_final": st, "rows": rows}
 

@@ -60,7 +60,9 @@ whether it is final. If a file's wording changes, the build stops with an error 
 page):
 - `eval/results/final/real.json` and `real.md` ("Rows come from N runs");
 - `eval/results/real_rerun_2026-10-31/README.md` (the "Stage" table; one column per pass, a fix branch's column left out);
-- `docs/androidworld-results.md` ("**Headline.**", "**Held-out half:**", the "**Routines.**" bullets);
+- `docs/androidworld-results.md` ("**Headline.**", "**Held-out half:**", the "**Routines.**" bullets, the "| Model |" row);
+- each suite's JSON beside `report.md` (`meta.models`: the profile and tier named on the page; hybrid when Muse Wonder
+  decides the agent's steps, else the Spark profile);
 - `docs/phase-6-results.md` ("SAM then grounding N of N; grounding alone N of N");
 - `eval/results/showcase/live-2026-11-02/task-rows.json` (with the build's note for the songless TikTok, keyed by task id;
   every other row must be "done");

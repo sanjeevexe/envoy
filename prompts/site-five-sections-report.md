@@ -1,6 +1,6 @@
 # The showcase site in five sections (WS-F, Nov 2)
 
-Branch `claude/site-five-sections`, from local main `192cd29`. Only `site/**`, `scripts/build_site_data.py` and this report
+Branch `claude/site-five-sections`, rebased onto main `46a3dd4`. Only `site/**`, `scripts/build_site_data.py` and this report
 (with its screenshots in `prompts/site-five-sections-report/`) changed. Not pushed, not merged. No devices, no model calls,
 $0.
 
@@ -60,6 +60,29 @@ New: `?open=1` opens every evidence group, and `#ev-<group>` opens one.
   - Removed: the eight real-app grid frames and their `app-frames.json`, and the hand-driven Story-poll frame.
   - Every image left was checked at full size in the earlier rework.
   - The screenshots in this report's folder are of the site itself.
+
+## The fact check's site rows, applied (Nov 2, evening)
+
+The baseline (`docs/claims.md` on `claude/keen-wu-000a7e`) checked the old site at 726965e. Rows my rework had already
+removed (the real-app cards, the voice line, "the expensive one works once per task", the Starbucks bars) are gone. For
+the rest, on this branch, rebased onto main 46a3dd4:
+- **W6, W73, W44, W47 (Starbucks):** no best replay as typical, no "every replay is 2 Spark calls", no "on a replay:
+  none". The first run says it took two hand fixes and one kept self-repair before its replays ran cleanly; the one replay
+  in the evidence is "among the quickest, not the typical one", with the loop's median.
+- **W5:** no "4 posts, 1 request"; the dry runs and the live posts are separate cards.
+- **W10, W65, W80, W82:** the Pixel tile, the memory tiles and the design targets carry "our test app".
+- **Profiles:** every timing and cost names its profile and tier: the Spark profile for `report.md`'s suites (read from
+  each suite's JSON) and AndroidWorld; hybrid for the Starbucks runs (read from the run's own model calls), the posting
+  rehearsals (each run file records it) and the Oct 31 rehearsal. "all-Spark" is gone: that profile compiles with Wonder.
+- **W30, W31, W52:** rebuilt on 46a3dd4: the Reel and Short at v3, self-repair 7 proposed / 3 kept.
+- **W83:** the builder's median now averages an even list's two middle values: the Pixel's 30 runs give 6.6 s, not 7.1.
+- **"0 model calls":** "in Envoy's replay" (or "Envoy's own calls") wherever a calling agent could be read as free.
+- **W84, W87:** AndroidWorld says the 13 changes are now in main; `numbers.json` gives its full headline and "merged into
+  main Oct 29 (105d04e)".
+- **W9, W12, W15, W61, W62, W69, W76, W79:** "every section links to the files its numbers came from"; each new-input
+  number with its pass and profile; banking apps "expected to (not tested)"; teach mode's "one scripted demonstration and
+  one replay"; "both events were deleted" dropped (no record); "on 42 captured screens from 8 apps"; SAM's 52 targets
+  scoped (16 drawn seats in our test app); the safety suites use captured real-app screens.
 
 ## Still open
 
