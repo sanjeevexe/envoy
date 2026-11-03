@@ -255,15 +255,26 @@ def set_state(dev: Any, a: dict[str, Any], args: argparse.Namespace) -> list[str
         did.append(f"launched; {s.package == pkg and 'on the app' or 'NOT on the app: ' + s.package}, {s.activity.rsplit('.', 1)[-1]}")
     else:  # draft: made with the gallery's newest clip before this attempt's clip is pushed (an older clip)
         routine, until = DRAFT_UNTIL[w]
-        status, steps = run_steps(dev, Path(args.tag_dir), routine, until, {})
-        done = ", ".join(f"{s['id']}:{s['status']}" for s in steps)
-        did.append(f"draft: {routine} up to {until}: {status} ({done})")
-        if w in "RPT":
+        for _ in range(3):  # a setup that stops before the editor (TikTok's launch check, T03) made no draft: again
+            status, steps = run_steps(dev, Path(args.tag_dir), routine, until, {})
+            done = ", ".join(f"{s['id']}:{s['status']}" for s in steps)
+            did.append(f"draft: {routine} up to {until}: {status} ({done})")
+            if not any(s["status"] == "failed" and s["id"] != until for s in steps):
+                break
+            force_stop(dev, pkg)
+            home(dev)
+        got = None
+        if w == "T":  # TikTok keeps drafts from its post screen: the editor's Next, then Drafts (never Post)
+            nxt = tap_label(dev, r"^next$")
+            time.sleep(3)
+            got = tap_label(dev, r"^drafts?$") if nxt else None
+            did.append(f"next ({nxt!r}), then {'tapped ' + repr(got) if got else 'no Drafts offered'}")
+        if w in "RPT" and not got:
             dev.adb.shell("input keyevent KEYCODE_BACK")
             time.sleep(1.5)
             got = tap_label(dev, r"save draft|^drafts")
             did.append(f"back, then {'tapped ' + repr(got) if got else 'no Save draft offered'}")
-            time.sleep(2)
+        time.sleep(2)
         force_stop(dev, pkg)
         home(dev)
         did.append("force-stopped")
