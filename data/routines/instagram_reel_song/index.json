@@ -1,6 +1,6 @@
 {
  "name": "instagram_reel_song",
- "active": 3,
+ "active": 4,
  "versions": [
   {
    "version": 1,
@@ -40,7 +40,7 @@
   },
   {
    "version": 3,
-   "status": "active",
+   "status": "retired",
    "created": "2026-11-02 01:24:28",
    "parent": 2,
    "changes": [
@@ -55,6 +55,21 @@
     "status": "declined",
     "model_calls": 0,
     "duration_s": 177.58
+   }
+  },
+  {
+   "version": 4,
+   "status": "active",
+   "created": "2026-11-03 14:05:58",
+   "parent": 3,
+   "changes": [
+    "hand edit: showcase (Nov 3). close_keyboard (Back) replaced by tap_caption_ok (Instagram's OK): in the showcase batch B1 the caption was empty at Share in 2 of 7 Reels (R03, R07), after type_caption's own check had held; the outcome check stopped both before Share",
+    "hand edit: showcase (Nov 3). retype_caption_if_cleared and tap_caption_ok_after_retype, both optional: the caption is typed again only if the field is empty before Share",
+    "the outcome checks are unchanged (executor code); every other step is v3's"
+   ],
+   "verification": {
+    "offline": "backend/tests/test_reel_caption_fix.py",
+    "device": "pending"
    }
   }
  ],

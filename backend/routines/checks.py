@@ -276,7 +276,9 @@ def outcome_plan(routine: Routine) -> OutcomePlan:
             if a.submit or _is_search(a.target):
                 picked |= names
             else:
-                fields += [(n, a.target) for n in sorted(names) if n in routine.inputs and routine.inputs[n].type == "text"]
+                # One check per input: a step that types it again (the Reel's retype guard) adds no second check.
+                fields += [(n, a.target) for n in sorted(names)
+                           if n in routine.inputs and routine.inputs[n].type == "text" and n not in {f for f, _ in fields}]
         for loc in (a.target, a.container):
             if loc is not None and loc.in_list and a.kind in ("tap", "long_press", "scroll_until"):
                 picked |= slot_names(loc.text_has) | slot_names(loc.text) | slot_names(loc.row_has)
