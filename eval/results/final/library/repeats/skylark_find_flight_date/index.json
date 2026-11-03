@@ -1,0 +1,148 @@
+{
+ "name": "skylark_find_flight_date",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-11-03 00:24:38",
+   "parent": null,
+   "changes": [
+    "compiled from f7-1103001513-src-past_trip-a1"
+   ],
+   "verification": {
+    "cases": [
+     {
+      "case": "same-inputs",
+      "inputs": {
+       "trip_city": "Seattle"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 4.88,
+      "outputs": {
+       "flight_date": "Tue, Mar 3, 2026"
+      }
+     },
+     {
+      "case": "second-inputs",
+      "inputs": {
+       "trip_city": "Detroit"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 2.93,
+      "outputs": {
+       "flight_date": "Fri, Oct 2, 2026"
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-11-03 02:20:14",
+   "kind": "run",
+   "version": 1,
+   "task_id": "f7-1103020715-rep-past_trip-n2",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 2.87,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-03 02:20:30",
+   "kind": "run",
+   "version": 1,
+   "task_id": "f7-1103020715-rep-past_trip-n3",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 6.24,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-03 02:20:43",
+   "kind": "run",
+   "version": 1,
+   "task_id": "f7-1103020715-rep-past_trip-n4",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 6.11,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-03 02:20:56",
+   "kind": "run",
+   "version": 1,
+   "task_id": "f7-1103020715-rep-past_trip-n5",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 6.05,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-03 02:21:06",
+   "kind": "run",
+   "version": 1,
+   "task_id": "f7-1103020715-rep-past_trip-n6",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 2.87,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-03 02:21:18",
+   "kind": "run",
+   "version": 1,
+   "task_id": "f7-1103020715-rep-past_trip-n7",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 2.78,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-03 02:21:35",
+   "kind": "run",
+   "version": 1,
+   "task_id": "f7-1103020715-rep-past_trip-n8",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 5.83,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-03 02:21:47",
+   "kind": "run",
+   "version": 1,
+   "task_id": "f7-1103020715-rep-past_trip-n9",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.09,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-03 02:21:56",
+   "kind": "run",
+   "version": 1,
+   "task_id": "f7-1103020715-rep-past_trip-n10",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.01,
+   "patches": 0
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

@@ -5,30 +5,30 @@
   {
    "version": 1,
    "status": "retired",
-   "created": "2026-10-27 23:57:45",
+   "created": "2026-11-03 02:31:32",
    "parent": null,
    "changes": [
-    "v1 compiled from f7-1027215614-src-check_in-a1"
+    "v1 compiled from f7-1103001513-src-check_in-a1"
    ],
    "verification": null
   },
   {
    "version": 2,
    "status": "active",
-   "created": "2026-10-27 23:57:57",
+   "created": "2026-11-03 02:31:43",
    "parent": 1,
    "changes": [
-    "step 'continue_after_passenger_selection': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}",
-    "step 'continue_after_hazmat_declaration': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}",
-    "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}",
-    "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}",
+    "step 'tap_continue_passenger': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}",
+    "step 'tap_continue_hazmat': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}",
+    "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}",
+    "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}",
     "step 'tap_check_in': after-checks failed (no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) but the next step was ready; after-checks rewritten from what happened"
    ],
-   "source_task": "f7-1027234941-chg-check_in-L2-first",
+   "source_task": "f7-1103022306-chg-check_in-L2-first",
    "screenshots": [],
    "trial": {
     "passed": true,
-    "task_id": "f7-1027234941-chg-check_in-L2-trial",
+    "task_id": "f7-1103022306-chg-check_in-L2-trial",
     "status": "done"
    }
   }

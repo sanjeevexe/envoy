@@ -1,14 +1,14 @@
 {
  "name": "skylark_check_flight_status",
- "active": 1,
+ "active": 2,
  "versions": [
   {
    "version": 1,
-   "status": "active",
-   "created": "2026-10-27 22:01:09",
+   "status": "retired",
+   "created": "2026-11-03 00:21:37",
    "parent": null,
    "changes": [
-    "compiled from f7-1027215614-src-flight_status-a1"
+    "compiled from f7-1103001513-src-flight_status-a1"
    ],
    "verification": {
     "cases": [
@@ -20,13 +20,9 @@
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 3.37,
+      "duration_s": 2.52,
       "outputs": {
-       "flight_status": "Delayed 25 min",
-       "route": "ATL → DEN",
-       "flight_date": "Sat, Nov 14, 2026",
-       "gate": "A7",
-       "departure_time": "2:45 PM"
+       "flight_status": "SL 1190 · ATL → DEN · Sat, Nov 14, 2026 · Delayed 25 min · Gate A7 · Departs 2:45 PM"
       }
      },
      {
@@ -37,13 +33,9 @@
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 3.53,
+      "duration_s": 2.57,
       "outputs": {
-       "flight_status": "On time",
-       "route": "ATL → TPA",
-       "flight_date": "Wed, Nov 25, 2026",
-       "gate": "B17",
-       "departure_time": "6:00 AM"
+       "flight_status": "SL 291 · ATL → TPA · Wed, Nov 25, 2026 · On time · Gate B17 · Departs 6:00 AM"
       }
      }
     ]
@@ -51,28 +43,57 @@
   },
   {
    "version": 2,
-   "status": "trial",
-   "created": "2026-10-27 22:29:13",
+   "status": "active",
+   "created": "2026-11-03 01:29:42",
    "parent": 1,
    "changes": [
     "step 'open_flight_status': after-check 1 matched only relaxed; updated to {text='Status', resource_id='screen_title', kind='Text'}",
     "step 'open_flight_status': after-check 2 matched only relaxed; updated to {text='Status', resource_id='nav_status', kind='Text'}"
    ],
-   "source_task": "f7-1027220657-rou-flight_status-L2-s101-t1",
-   "screenshots": []
+   "source_task": "f7-1103002528-rou-flight_status-L2-s101-t1",
+   "screenshots": [],
+   "trial": {
+    "passed": true,
+    "task_id": "f7-1103002528-rou-flight_status-L2-s102-t1",
+    "status": "done",
+    "model_calls": 0,
+    "duration_s": 2.24
+   }
   }
  ],
  "runs": [
   {
-   "time": "2026-10-27 22:29:13",
+   "time": "2026-11-03 01:29:42",
    "kind": "run",
    "version": 1,
-   "task_id": "f7-1027220657-rou-flight_status-L2-s101-t1",
+   "task_id": "f7-1103002528-rou-flight_status-L2-s101-t1",
    "status": "done",
    "rung": 2,
    "model_calls": 0,
-   "duration_s": 3.71,
+   "duration_s": 3.15,
    "patches": 2
+  },
+  {
+   "time": "2026-11-03 01:36:24",
+   "kind": "run",
+   "version": 2,
+   "task_id": "f7-1103002528-rou-flight_status-L2-s102-t1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 2.24,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-03 01:42:45",
+   "kind": "run",
+   "version": 2,
+   "task_id": "f7-1103002528-rou-flight_status-L2-s103-t1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 2.44,
+   "patches": 0
   }
  ],
  "needs_recompile": false,

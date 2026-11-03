@@ -13,8 +13,8 @@
  },
  {
   "kind": "locator",
-  "step": "tap_change_seat",
-  "description": "step 'tap_change_seat': target found only by relaxed match; locator updated to {text='Seats', resource_id='btn_change_seat', kind='Button'}",
+  "step": "open_change_seat",
+  "description": "step 'open_change_seat': target found only by relaxed match; locator updated to {text='Seats', resource_id='btn_change_seat', kind='Button'}",
   "evidence": {
    "score": 0.676
   }

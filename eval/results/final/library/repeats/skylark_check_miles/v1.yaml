@@ -1,0 +1,29 @@
+routine: skylark_check_miles
+app: SkyLark Air
+version: 1
+status: active
+intent: Check your SkyLark miles balance
+description: Open SkyLark and read the SkyLark Rewards miles balance shown on the home screen, with no navigation required.
+patterns: ['How many SkyLark miles do I have?', Check my SkyLark miles, 'What is my SkyLark Rewards balance?', Show my miles balance]
+outputs: [skylark_miles]
+start: fresh_launch
+steps:
+- id: read_answer
+  intent: Read the answer on the app's first screen
+  pre:
+  - {app_foreground: com.skylark.air}
+  action: {wait: 0.3}
+  risk: read
+  extract:
+    skylark_miles:
+      near: "SkyLark Rewards:"
+      locator: {resource_id: text_home_miles, kind: Text}
+      expect_digits: true
+  note: "added: the answer is on the start screen"
+compiled_from:
+  task_id: f7-1103001513-src-miles-a1
+  goal: How many SkyLark miles do I have?
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-11-03 00:22:12"
+  trace_steps_dropped: 0
+  cost_usd: 0.0302

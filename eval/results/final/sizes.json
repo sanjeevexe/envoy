@@ -1,35 +1,36 @@
 {
  "meta": {
   "suite": "sizes",
-  "run_id": "1028175643",
-  "started": "2026-10-28T21:56:43+00:00",
-  "finished": "2026-10-28T22:03:20+00:00",
-  "wall_s": 397.0,
+  "run_id": "1103114754",
+  "started": "2026-11-03T16:47:54+00:00",
+  "finished": "2026-11-03T16:54:32+00:00",
+  "wall_s": 397.5,
   "code": {
-   "commit": "a9b923dea24314fad6f4cdd648997c49437f7f70",
-   "short": "a9b923d",
-   "tags": [],
-   "is_eval_final": false,
-   "dirty": [
-    "android/banner/app/build",
-    "logs",
-    "testapps/skylark/app/build"
+   "commit": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+   "short": "cf78fa0",
+   "tags": [
+    "eval-final"
    ],
-   "branch": "phase6-phone"
+   "is_eval_final": true,
+   "dirty": [],
+   "branch": "main"
   },
   "models": {
    "tier": "standard",
+   "profile": "hybrid",
+   "profile_from": "the adapter's default",
+   "overrides": {},
    "jobs": {
     "step": {
-     "model": "muse-spark-1.3",
+     "model": "muse-wonder-1.0",
      "effort": "low"
     },
     "plan": {
-     "model": "muse-spark-1.3",
+     "model": "muse-wonder-1.0",
      "effort": "medium"
     },
     "repair": {
-     "model": "muse-spark-1.3",
+     "model": "muse-wonder-1.0",
      "effort": "medium"
     },
     "grounding": {
@@ -63,11 +64,12 @@
   ],
   "cost": {
    "by_job": {},
-   "by_model": {}
+   "by_model": {},
+   "by_profile": {}
   },
   "spend_total_this_checkout": {
-   "billed_usd": 16.297,
-   "standard_usd": 17.19
+   "billed_usd": 82.629,
+   "standard_usd": 83.707
   },
   "host": "Sanjeevs-MacBook-Pro"
  },
@@ -85,8 +87,8 @@
    "model": "sdk_gphone64_arm64",
    "android": "15",
    "real_phone": false,
-   "run_id": "1028001450",
-   "code": "e875c4a",
+   "run_id": "1103025441",
+   "code": "cf78fa0",
    "rows": [
     {
      "task": "check_in",
@@ -108,17 +110,17 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       },
@@ -133,29 +135,29 @@
        "rung": 0
       },
       {
-       "id": "continue_after_passenger_selection",
+       "id": "tap_continue_passenger",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_no_hazardous_materials",
+       "id": "acknowledge_hazardous_materials",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "continue_after_hazmat_declaration",
+       "id": "tap_continue_hazmat",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_check_in",
+       "id": "tap_confirm_check_in",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 4.62,
+     "duration_s": 4.47,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-check_in-k0",
+     "task_id": "f7-1103025441-size-envoy-test-check_in-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -174,8 +176,10 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "confirmed_seat": "23B",
-      "flight_number": "SL 1912"
+      "seat": "23B",
+      "gate": "B19",
+      "boarding": "11:05 AM · Group 1",
+      "confirmation": "FPVDK2"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -197,7 +201,7 @@
        "rung": 0
       },
       {
-       "id": "tap_change_seat",
+       "id": "open_change_seat",
        "status": "done",
        "rung": 0
       },
@@ -215,11 +219,16 @@
        "id": "confirm_seat",
        "status": "done",
        "rung": 0
+      },
+      {
+       "id": "back_to_trip",
+       "status": "done",
+       "rung": 0
       }
      ],
-     "duration_s": 6.28,
+     "duration_s": 6.78,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-change_seat-k0",
+     "task_id": "f7-1103025441-size-envoy-test-change_seat-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -238,9 +247,7 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "known_traveler_number": "71253619",
-      "save_confirmation": "Known traveler number saved",
-      "confirmation_code": "FPVDK2"
+      "known_traveler_number_saved": "Known traveler number saved"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -272,9 +279,9 @@
        "rung": 0
       }
      ],
-     "duration_s": 3.29,
+     "duration_s": 3.33,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-add_ktn-k0",
+     "task_id": "f7-1103025441-size-envoy-test-add_ktn-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -300,24 +307,24 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_open_trip",
+       "id": "find_tap_trip_for_city",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "open_trip",
+       "id": "tap_trip_for_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 1.98,
+     "duration_s": 1.8,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-gate-k0",
+     "task_id": "f7-1103025441-size-envoy-test-gate-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -343,24 +350,24 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip_to_city",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip_to_city",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 1.69,
+     "duration_s": 1.76,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-seat-k0",
+     "task_id": "f7-1103025441-size-envoy-test-seat-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -379,11 +386,7 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "flight_status": "On time",
-      "route": "ATL → OMA",
-      "flight_date": "Mon, Dec 7, 2026",
-      "gate": "B19",
-      "departure_time": "12:40 PM"
+      "flight_status": "SL 1912 · ATL → OMA · Mon, Dec 7, 2026 · On time · Gate B19 · Departs 12:40 PM"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -400,19 +403,14 @@
        "rung": 0
       },
       {
-       "id": "dismiss_keyboard",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "search_flight_status",
+       "id": "search_flight",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 2.88,
+     "duration_s": 2.39,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-flight_status-k0",
+     "task_id": "f7-1103025441-size-envoy-test-flight_status-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -443,9 +441,9 @@
        "rung": 0
       }
      ],
-     "duration_s": 0.69,
+     "duration_s": 0.72,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-miles-k0",
+     "task_id": "f7-1103025441-size-envoy-test-miles-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -471,24 +469,34 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_open_trip_by_confirmation_code",
+       "id": "enter_confirmation_code",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "open_trip_by_confirmation_code",
+       "id": "enter_last_name",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_open_matching_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "open_matching_trip",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 1.72,
+     "duration_s": 4.28,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-find_trip-k0",
+     "task_id": "f7-1103025441-size-envoy-test-find_trip-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -507,32 +515,26 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "flight_date": "Sun, Apr 26, 2026",
-      "flight": "SL 1023 · ATL 9:00 AM → OKC 11:00 AM"
+      "flight_date": "Sun, Apr 26, 2026"
      },
      "detail": "all steps and checks passed",
      "version": 1,
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "scroll_to_trip",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "open_trip_details",
+       "id": "scroll_until_trip_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 5.05,
+     "duration_s": 4.76,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-past_trip-k0",
+     "task_id": "f7-1103025441-size-envoy-test-past_trip-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -556,19 +558,19 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_profile",
+       "id": "tap_profile",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "turn_on_gate_change_alerts",
+       "id": "tap_gate_change_alerts_toggle",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 1.31,
+     "duration_s": 1.39,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-gate_alerts-k0",
+     "task_id": "f7-1103025441-size-envoy-test-gate_alerts-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -597,17 +599,17 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       },
@@ -622,29 +624,29 @@
        "rung": 0
       },
       {
-       "id": "continue_after_passenger_selection",
+       "id": "tap_continue_passenger",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_no_hazardous_materials",
+       "id": "acknowledge_hazardous_materials",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "continue_after_hazmat_declaration",
+       "id": "tap_continue_hazmat",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_check_in",
+       "id": "tap_confirm_check_in",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 3.83,
+     "duration_s": 4.29,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-check_in-k1",
+     "task_id": "f7-1103025441-size-envoy-test-check_in-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -663,8 +665,10 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "confirmed_seat": "20B",
-      "flight_number": "SL 1266"
+      "seat": "20B",
+      "gate": "A11",
+      "boarding": "2:15 PM · Group 5",
+      "confirmation": "WGB094"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -686,7 +690,7 @@
        "rung": 0
       },
       {
-       "id": "tap_change_seat",
+       "id": "open_change_seat",
        "status": "done",
        "rung": 0
       },
@@ -704,11 +708,16 @@
        "id": "confirm_seat",
        "status": "done",
        "rung": 0
+      },
+      {
+       "id": "back_to_trip",
+       "status": "done",
+       "rung": 0
       }
      ],
-     "duration_s": 4.3,
+     "duration_s": 4.95,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-change_seat-k1",
+     "task_id": "f7-1103025441-size-envoy-test-change_seat-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -727,9 +736,7 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "known_traveler_number": "15515142",
-      "save_confirmation": "Known traveler number saved",
-      "confirmation_code": "WGB094"
+      "known_traveler_number_saved": "Known traveler number saved"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -761,9 +768,9 @@
        "rung": 0
       }
      ],
-     "duration_s": 3.38,
+     "duration_s": 3.44,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-add_ktn-k1",
+     "task_id": "f7-1103025441-size-envoy-test-add_ktn-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -789,24 +796,24 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_open_trip",
+       "id": "find_tap_trip_for_city",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "open_trip",
+       "id": "tap_trip_for_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 1.63,
+     "duration_s": 1.82,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-gate-k1",
+     "task_id": "f7-1103025441-size-envoy-test-gate-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -832,24 +839,24 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip_to_city",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip_to_city",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 1.62,
+     "duration_s": 1.81,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-seat-k1",
+     "task_id": "f7-1103025441-size-envoy-test-seat-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -868,11 +875,7 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "flight_status": "On time",
-      "route": "ATL → BOI",
-      "flight_date": "Sun, Nov 22, 2026",
-      "gate": "A11",
-      "departure_time": "3:50 PM"
+      "flight_status": "SL 1266 · ATL → BOI · Sun, Nov 22, 2026 · On time · Gate A11 · Departs 3:50 PM"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -889,19 +892,14 @@
        "rung": 0
       },
       {
-       "id": "dismiss_keyboard",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "search_flight_status",
+       "id": "search_flight",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 3.19,
+     "duration_s": 2.56,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-flight_status-k1",
+     "task_id": "f7-1103025441-size-envoy-test-flight_status-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -932,9 +930,9 @@
        "rung": 0
       }
      ],
-     "duration_s": 0.72,
+     "duration_s": 0.7,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-miles-k1",
+     "task_id": "f7-1103025441-size-envoy-test-miles-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -960,24 +958,34 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_open_trip_by_confirmation_code",
+       "id": "enter_confirmation_code",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "open_trip_by_confirmation_code",
+       "id": "enter_last_name",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_open_matching_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "open_matching_trip",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 1.68,
+     "duration_s": 4.2,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-find_trip-k1",
+     "task_id": "f7-1103025441-size-envoy-test-find_trip-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -996,32 +1004,26 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "flight_date": "Sun, Aug 9, 2026",
-      "flight": "SL 1718 · ATL 9:00 AM → BDL 11:00 AM"
+      "flight_date": "Sun, Aug 9, 2026"
      },
      "detail": "all steps and checks passed",
      "version": 1,
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "scroll_to_trip",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "open_trip_details",
+       "id": "scroll_until_trip_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 3.32,
+     "duration_s": 2.9,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-past_trip-k1",
+     "task_id": "f7-1103025441-size-envoy-test-past_trip-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -1045,19 +1047,19 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_profile",
+       "id": "tap_profile",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "turn_on_gate_change_alerts",
+       "id": "tap_gate_change_alerts_toggle",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 1.3,
+     "duration_s": 1.34,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-gate_alerts-k1",
+     "task_id": "f7-1103025441-size-envoy-test-gate_alerts-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -1086,17 +1088,17 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       },
@@ -1111,29 +1113,29 @@
        "rung": 0
       },
       {
-       "id": "continue_after_passenger_selection",
+       "id": "tap_continue_passenger",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_no_hazardous_materials",
+       "id": "acknowledge_hazardous_materials",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "continue_after_hazmat_declaration",
+       "id": "tap_continue_hazmat",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_check_in",
+       "id": "tap_confirm_check_in",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 4.28,
+     "duration_s": 4.32,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-check_in-k2",
+     "task_id": "f7-1103025441-size-envoy-test-check_in-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -1152,8 +1154,10 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "confirmed_seat": "10D",
-      "flight_number": "SL 144"
+      "seat": "10D",
+      "gate": "B22",
+      "boarding": "6:00 AM · Group 1",
+      "confirmation": "JJWMZZ"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -1175,7 +1179,7 @@
        "rung": 0
       },
       {
-       "id": "tap_change_seat",
+       "id": "open_change_seat",
        "status": "done",
        "rung": 0
       },
@@ -1193,11 +1197,16 @@
        "id": "confirm_seat",
        "status": "done",
        "rung": 0
+      },
+      {
+       "id": "back_to_trip",
+       "status": "done",
+       "rung": 0
       }
      ],
-     "duration_s": 4.21,
+     "duration_s": 4.95,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-change_seat-k2",
+     "task_id": "f7-1103025441-size-envoy-test-change_seat-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -1216,9 +1225,7 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "known_traveler_number": "72626391",
-      "save_confirmation": "Known traveler number saved",
-      "confirmation_code": "JJWMZZ"
+      "known_traveler_number_saved": "Known traveler number saved"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -1250,9 +1257,9 @@
        "rung": 0
       }
      ],
-     "duration_s": 3.24,
+     "duration_s": 3.59,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-add_ktn-k2",
+     "task_id": "f7-1103025441-size-envoy-test-add_ktn-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -1278,24 +1285,24 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_open_trip",
+       "id": "find_tap_trip_for_city",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "open_trip",
+       "id": "tap_trip_for_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 1.81,
+     "duration_s": 1.78,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-gate-k2",
+     "task_id": "f7-1103025441-size-envoy-test-gate-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -1321,24 +1328,24 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip_to_city",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip_to_city",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 1.7,
+     "duration_s": 1.78,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-seat-k2",
+     "task_id": "f7-1103025441-size-envoy-test-seat-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -1357,11 +1364,7 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "flight_status": "On time",
-      "route": "ATL → SDF",
-      "flight_date": "Thu, Nov 19, 2026",
-      "gate": "B22",
-      "departure_time": "7:35 AM"
+      "flight_status": "SL 144 · ATL → SDF · Thu, Nov 19, 2026 · On time · Gate B22 · Departs 7:35 AM"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -1378,19 +1381,14 @@
        "rung": 0
       },
       {
-       "id": "dismiss_keyboard",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "search_flight_status",
+       "id": "search_flight",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 2.82,
+     "duration_s": 2.62,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-flight_status-k2",
+     "task_id": "f7-1103025441-size-envoy-test-flight_status-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -1421,9 +1419,9 @@
        "rung": 0
       }
      ],
-     "duration_s": 0.7,
+     "duration_s": 0.71,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-miles-k2",
+     "task_id": "f7-1103025441-size-envoy-test-miles-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -1449,30 +1447,40 @@
      "patches": [
       {
        "kind": "locator",
-       "step": "open_trip_by_confirmation_code",
-       "description": "step 'open_trip_by_confirmation_code': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}"
+       "step": "open_matching_trip",
+       "description": "step 'open_matching_trip': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}"
       }
      ],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_open_trip_by_confirmation_code",
+       "id": "enter_confirmation_code",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "enter_last_name",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_open_matching_trip",
        "status": "done",
        "rung": 2
       },
       {
-       "id": "open_trip_by_confirmation_code",
+       "id": "open_matching_trip",
        "status": "done",
        "rung": 2
       }
      ],
-     "duration_s": 3.55,
+     "duration_s": 6.02,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-find_trip-k2",
+     "task_id": "f7-1103025441-size-envoy-test-find_trip-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -1491,32 +1499,26 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "flight_date": "Wed, Apr 29, 2026",
-      "flight": "SL 705 · ATL 9:00 AM → ANC 11:00 AM"
+      "flight_date": "Wed, Apr 29, 2026"
      },
      "detail": "all steps and checks passed",
      "version": 1,
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "scroll_to_trip",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "open_trip_details",
+       "id": "scroll_until_trip_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 4.78,
+     "duration_s": 4.64,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-past_trip-k2",
+     "task_id": "f7-1103025441-size-envoy-test-past_trip-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -1540,19 +1542,19 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_profile",
+       "id": "tap_profile",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "turn_on_gate_change_alerts",
+       "id": "tap_gate_change_alerts_toggle",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 1.2,
+     "duration_s": 1.37,
      "side_effects": [],
-     "task_id": "f7-1028001450-size-envoy-test-gate_alerts-k2",
+     "task_id": "f7-1103025441-size-envoy-test-gate_alerts-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -1576,8 +1578,8 @@
    "model": "sdk_gphone64_arm64",
    "android": "15",
    "real_phone": false,
-   "run_id": "1028022936",
-   "code": "5504260",
+   "run_id": "1103033518",
+   "code": "cf78fa0",
    "rows": [
     {
      "task": "check_in",
@@ -1599,17 +1601,17 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       },
@@ -1624,29 +1626,29 @@
        "rung": 0
       },
       {
-       "id": "continue_after_passenger_selection",
+       "id": "tap_continue_passenger",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_no_hazardous_materials",
+       "id": "acknowledge_hazardous_materials",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "continue_after_hazmat_declaration",
+       "id": "tap_continue_hazmat",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_check_in",
+       "id": "tap_confirm_check_in",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 7.06,
+     "duration_s": 8.02,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-check_in-k0",
+     "task_id": "f7-1103033518-size-envoy-small-check_in-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -1665,8 +1667,10 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "confirmed_seat": "23B",
-      "flight_number": "SL 1912"
+      "seat": "23B",
+      "gate": "B19",
+      "boarding": "11:05 AM · Group 1",
+      "confirmation": "FPVDK2"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -1688,7 +1692,7 @@
        "rung": 0
       },
       {
-       "id": "tap_change_seat",
+       "id": "open_change_seat",
        "status": "done",
        "rung": 0
       },
@@ -1706,11 +1710,16 @@
        "id": "confirm_seat",
        "status": "done",
        "rung": 0
+      },
+      {
+       "id": "back_to_trip",
+       "status": "done",
+       "rung": 0
       }
      ],
-     "duration_s": 8.94,
+     "duration_s": 11.18,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-change_seat-k0",
+     "task_id": "f7-1103033518-size-envoy-small-change_seat-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -1729,9 +1738,7 @@
      "rung": 2,
      "agent_fallback": false,
      "outputs": {
-      "known_traveler_number": "71253619",
-      "save_confirmation": "Known traveler number saved",
-      "confirmation_code": "FPVDK2"
+      "known_traveler_number_saved": "Known traveler number saved"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -1763,9 +1770,9 @@
        "rung": 0
       }
      ],
-     "duration_s": 13.52,
+     "duration_s": 6.95,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-add_ktn-k0",
+     "task_id": "f7-1103033518-size-envoy-small-add_ktn-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -1791,24 +1798,24 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_open_trip",
+       "id": "find_tap_trip_for_city",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "open_trip",
+       "id": "tap_trip_for_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 3.41,
+     "duration_s": 3.1,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-gate-k0",
+     "task_id": "f7-1103033518-size-envoy-small-gate-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -1834,24 +1841,67 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip_to_city",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip_to_city",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 3.41,
+     "duration_s": 3.42,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-seat-k0",
+     "task_id": "f7-1103033518-size-envoy-small-seat-k0",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "flight_status",
+     "layout": 0,
+     "seed": 900,
+     "target": "FPVDK2",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "flight_status": "SL 1912 · ATL → OMA · Mon, Dec 7, 2026 · On time · Gate B19 · Departs 12:40 PM"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_flight_status",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "enter_flight_number",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "search_flight",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 2.61,
+     "side_effects": [],
+     "task_id": "f7-1103033518-size-envoy-small-flight_status-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -1882,9 +1932,9 @@
        "rung": 0
       }
      ],
-     "duration_s": 0.69,
+     "duration_s": 1.05,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-miles-k0",
+     "task_id": "f7-1103033518-size-envoy-small-miles-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -1910,24 +1960,34 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_open_trip_by_confirmation_code",
+       "id": "enter_confirmation_code",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "open_trip_by_confirmation_code",
+       "id": "enter_last_name",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_open_matching_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "open_matching_trip",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 3.49,
+     "duration_s": 5.24,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-find_trip-k0",
+     "task_id": "f7-1103033518-size-envoy-small-find_trip-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -1946,32 +2006,26 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "flight_date": "Sun, Apr 26, 2026",
-      "flight": "SL 1023 · ATL 9:00 AM → OKC 11:00 AM"
+      "flight_date": "Sun, Apr 26, 2026"
      },
      "detail": "all steps and checks passed",
      "version": 1,
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "scroll_to_trip",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "open_trip_details",
+       "id": "scroll_until_trip_city",
        "status": "done",
        "rung": 0
       }
      ],
      "duration_s": 7.7,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-past_trip-k0",
+     "task_id": "f7-1103033518-size-envoy-small-past_trip-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -1995,19 +2049,19 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_profile",
+       "id": "tap_profile",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "turn_on_gate_change_alerts",
+       "id": "tap_gate_change_alerts_toggle",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 1.36,
+     "duration_s": 1.37,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-gate_alerts-k0",
+     "task_id": "f7-1103033518-size-envoy-small-gate_alerts-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -2036,17 +2090,17 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       },
@@ -2061,29 +2115,29 @@
        "rung": 0
       },
       {
-       "id": "continue_after_passenger_selection",
+       "id": "tap_continue_passenger",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_no_hazardous_materials",
+       "id": "acknowledge_hazardous_materials",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "continue_after_hazmat_declaration",
+       "id": "tap_continue_hazmat",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_check_in",
+       "id": "tap_confirm_check_in",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 6.24,
+     "duration_s": 5.77,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-check_in-k1",
+     "task_id": "f7-1103033518-size-envoy-small-check_in-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -2102,8 +2156,10 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "confirmed_seat": "20B",
-      "flight_number": "SL 1266"
+      "seat": "20B",
+      "gate": "A11",
+      "boarding": "2:15 PM · Group 5",
+      "confirmation": "WGB094"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -2125,7 +2181,7 @@
        "rung": 0
       },
       {
-       "id": "tap_change_seat",
+       "id": "open_change_seat",
        "status": "done",
        "rung": 0
       },
@@ -2143,11 +2199,16 @@
        "id": "confirm_seat",
        "status": "done",
        "rung": 0
+      },
+      {
+       "id": "back_to_trip",
+       "status": "done",
+       "rung": 0
       }
      ],
-     "duration_s": 7.19,
+     "duration_s": 9.52,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-change_seat-k1",
+     "task_id": "f7-1103033518-size-envoy-small-change_seat-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -2166,9 +2227,7 @@
      "rung": 2,
      "agent_fallback": false,
      "outputs": {
-      "known_traveler_number": "15515142",
-      "save_confirmation": "Known traveler number saved",
-      "confirmation_code": "WGB094"
+      "known_traveler_number_saved": "Known traveler number saved"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -2200,9 +2259,9 @@
        "rung": 0
       }
      ],
-     "duration_s": 15.23,
+     "duration_s": 7.11,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-add_ktn-k1",
+     "task_id": "f7-1103033518-size-envoy-small-add_ktn-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -2228,24 +2287,24 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_open_trip",
+       "id": "find_tap_trip_for_city",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "open_trip",
+       "id": "tap_trip_for_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 3.41,
+     "duration_s": 3.5,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-gate-k1",
+     "task_id": "f7-1103033518-size-envoy-small-gate-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -2271,24 +2330,67 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip_to_city",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip_to_city",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 3.45,
+     "duration_s": 3.1,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-seat-k1",
+     "task_id": "f7-1103033518-size-envoy-small-seat-k1",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "flight_status",
+     "layout": 0,
+     "seed": 901,
+     "target": "WGB094",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "flight_status": "SL 1266 · ATL → BOI · Sun, Nov 22, 2026 · On time · Gate A11 · Departs 3:50 PM"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_flight_status",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "enter_flight_number",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "search_flight",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 2.42,
+     "side_effects": [],
+     "task_id": "f7-1103033518-size-envoy-small-flight_status-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -2319,9 +2421,9 @@
        "rung": 0
       }
      ],
-     "duration_s": 0.72,
+     "duration_s": 0.74,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-miles-k1",
+     "task_id": "f7-1103033518-size-envoy-small-miles-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -2337,34 +2439,50 @@
      "target": "WGB094",
      "passed": true,
      "status": "done",
-     "rung": 0,
+     "rung": 2,
      "agent_fallback": false,
      "outputs": {
       "destination": "Boise"
      },
      "detail": "all steps and checks passed",
      "version": 1,
-     "patches": [],
-     "steps": [
+     "patches": [
       {
-       "id": "open_my_trips",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "find_open_trip_by_confirmation_code",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "open_trip_by_confirmation_code",
-       "status": "done",
-       "rung": 0
+       "kind": "locator",
+       "step": "open_matching_trip",
+       "description": "step 'open_matching_trip': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}"
       }
      ],
-     "duration_s": 3.32,
+     "steps": [
+      {
+       "id": "tap_my_trips",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "enter_confirmation_code",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "enter_last_name",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_open_matching_trip",
+       "status": "done",
+       "rung": 2
+      },
+      {
+       "id": "open_matching_trip",
+       "status": "done",
+       "rung": 2
+      }
+     ],
+     "duration_s": 7.05,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-find_trip-k1",
+     "task_id": "f7-1103033518-size-envoy-small-find_trip-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -2383,32 +2501,26 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "flight_date": "Sun, Aug 9, 2026",
-      "flight": "SL 1718 · ATL 9:00 AM → BDL 11:00 AM"
+      "flight_date": "Sun, Aug 9, 2026"
      },
      "detail": "all steps and checks passed",
      "version": 1,
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "scroll_to_trip",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "open_trip_details",
+       "id": "scroll_until_trip_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 5.98,
+     "duration_s": 6.66,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-past_trip-k1",
+     "task_id": "f7-1103033518-size-envoy-small-past_trip-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -2432,19 +2544,19 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_profile",
+       "id": "tap_profile",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "turn_on_gate_change_alerts",
+       "id": "tap_gate_change_alerts_toggle",
        "status": "done",
        "rung": 0
       }
      ],
      "duration_s": 1.32,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-gate_alerts-k1",
+     "task_id": "f7-1103033518-size-envoy-small-gate_alerts-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -2473,17 +2585,17 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       },
@@ -2498,29 +2610,29 @@
        "rung": 0
       },
       {
-       "id": "continue_after_passenger_selection",
+       "id": "tap_continue_passenger",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_no_hazardous_materials",
+       "id": "acknowledge_hazardous_materials",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "continue_after_hazmat_declaration",
+       "id": "tap_continue_hazmat",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_check_in",
+       "id": "tap_confirm_check_in",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 7.06,
+     "duration_s": 9.57,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-check_in-k2",
+     "task_id": "f7-1103033518-size-envoy-small-check_in-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -2539,8 +2651,10 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "confirmed_seat": "10D",
-      "flight_number": "SL 144"
+      "seat": "10D",
+      "gate": "B22",
+      "boarding": "6:00 AM · Group 1",
+      "confirmation": "JJWMZZ"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -2562,7 +2676,7 @@
        "rung": 0
       },
       {
-       "id": "tap_change_seat",
+       "id": "open_change_seat",
        "status": "done",
        "rung": 0
       },
@@ -2580,11 +2694,16 @@
        "id": "confirm_seat",
        "status": "done",
        "rung": 0
+      },
+      {
+       "id": "back_to_trip",
+       "status": "done",
+       "rung": 0
       }
      ],
-     "duration_s": 8.21,
+     "duration_s": 7.36,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-change_seat-k2",
+     "task_id": "f7-1103033518-size-envoy-small-change_seat-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -2603,9 +2722,7 @@
      "rung": 2,
      "agent_fallback": false,
      "outputs": {
-      "known_traveler_number": "72626391",
-      "save_confirmation": "Known traveler number saved",
-      "confirmation_code": "JJWMZZ"
+      "known_traveler_number_saved": "Known traveler number saved"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -2637,9 +2754,9 @@
        "rung": 0
       }
      ],
-     "duration_s": 15.81,
+     "duration_s": 8.26,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-add_ktn-k2",
+     "task_id": "f7-1103033518-size-envoy-small-add_ktn-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -2665,24 +2782,24 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_open_trip",
+       "id": "find_tap_trip_for_city",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "open_trip",
+       "id": "tap_trip_for_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 4.61,
+     "duration_s": 4.99,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-gate-k2",
+     "task_id": "f7-1103033518-size-envoy-small-gate-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -2708,24 +2825,67 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip_to_city",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip_to_city",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 4.63,
+     "duration_s": 5.01,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-seat-k2",
+     "task_id": "f7-1103033518-size-envoy-small-seat-k2",
+     "calls": 0,
+     "input_tokens": 0,
+     "cached_tokens": 0,
+     "output_tokens": 0,
+     "reasoning_tokens": 0,
+     "standard_usd": 0.0,
+     "billed_usd": 0.0
+    },
+    {
+     "task": "flight_status",
+     "layout": 0,
+     "seed": 902,
+     "target": "JJWMZZ",
+     "passed": true,
+     "status": "done",
+     "rung": 0,
+     "agent_fallback": false,
+     "outputs": {
+      "flight_status": "SL 144 · ATL → SDF · Thu, Nov 19, 2026 · On time · Gate B22 · Departs 7:35 AM"
+     },
+     "detail": "all steps and checks passed",
+     "version": 1,
+     "patches": [],
+     "steps": [
+      {
+       "id": "open_flight_status",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "enter_flight_number",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "search_flight",
+       "status": "done",
+       "rung": 0
+      }
+     ],
+     "duration_s": 2.35,
+     "side_effects": [],
+     "task_id": "f7-1103033518-size-envoy-small-flight_status-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -2756,9 +2916,9 @@
        "rung": 0
       }
      ],
-     "duration_s": 0.78,
+     "duration_s": 0.74,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-miles-k2",
+     "task_id": "f7-1103033518-size-envoy-small-miles-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -2784,24 +2944,34 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_open_trip_by_confirmation_code",
+       "id": "enter_confirmation_code",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "open_trip_by_confirmation_code",
+       "id": "enter_last_name",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_open_matching_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "open_matching_trip",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 9.87,
+     "duration_s": 6.84,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-find_trip-k2",
+     "task_id": "f7-1103033518-size-envoy-small-find_trip-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -2820,32 +2990,26 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "flight_date": "Wed, Apr 29, 2026",
-      "flight": "SL 705 · ATL 9:00 AM → ANC 11:00 AM"
+      "flight_date": "Wed, Apr 29, 2026"
      },
      "detail": "all steps and checks passed",
      "version": 1,
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "scroll_to_trip",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "open_trip_details",
+       "id": "scroll_until_trip_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 11.15,
+     "duration_s": 7.64,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-past_trip-k2",
+     "task_id": "f7-1103033518-size-envoy-small-past_trip-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -2869,175 +3033,19 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_profile",
+       "id": "tap_profile",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "turn_on_gate_change_alerts",
+       "id": "tap_gate_change_alerts_toggle",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 1.4,
+     "duration_s": 1.34,
      "side_effects": [],
-     "task_id": "f7-1028022217-size-envoy-small-gate_alerts-k2",
-     "calls": 0,
-     "input_tokens": 0,
-     "cached_tokens": 0,
-     "output_tokens": 0,
-     "reasoning_tokens": 0,
-     "standard_usd": 0.0,
-     "billed_usd": 0.0
-    },
-    {
-     "task": "flight_status",
-     "layout": 0,
-     "seed": 900,
-     "target": "FPVDK2",
-     "passed": true,
-     "status": "done",
-     "rung": 0,
-     "agent_fallback": false,
-     "outputs": {
-      "flight_status": "On time",
-      "route": "ATL → OMA",
-      "flight_date": "Mon, Dec 7, 2026",
-      "gate": "B19",
-      "departure_time": "12:40 PM"
-     },
-     "detail": "all steps and checks passed",
-     "version": 1,
-     "patches": [],
-     "steps": [
-      {
-       "id": "open_flight_status",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "enter_flight_number",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "dismiss_keyboard",
-       "status": "skipped",
-       "rung": 0
-      },
-      {
-       "id": "search_flight_status",
-       "status": "done",
-       "rung": 0
-      }
-     ],
-     "duration_s": 2.54,
-     "side_effects": [],
-     "task_id": "f7-1028022936-size-envoy-small-flight_status-k0",
-     "calls": 0,
-     "input_tokens": 0,
-     "cached_tokens": 0,
-     "output_tokens": 0,
-     "reasoning_tokens": 0,
-     "standard_usd": 0.0,
-     "billed_usd": 0.0
-    },
-    {
-     "task": "flight_status",
-     "layout": 0,
-     "seed": 901,
-     "target": "WGB094",
-     "passed": true,
-     "status": "done",
-     "rung": 0,
-     "agent_fallback": false,
-     "outputs": {
-      "flight_status": "On time",
-      "route": "ATL → BOI",
-      "flight_date": "Sun, Nov 22, 2026",
-      "gate": "A11",
-      "departure_time": "3:50 PM"
-     },
-     "detail": "all steps and checks passed",
-     "version": 1,
-     "patches": [],
-     "steps": [
-      {
-       "id": "open_flight_status",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "enter_flight_number",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "dismiss_keyboard",
-       "status": "skipped",
-       "rung": 0
-      },
-      {
-       "id": "search_flight_status",
-       "status": "done",
-       "rung": 0
-      }
-     ],
-     "duration_s": 2.5,
-     "side_effects": [],
-     "task_id": "f7-1028022936-size-envoy-small-flight_status-k1",
-     "calls": 0,
-     "input_tokens": 0,
-     "cached_tokens": 0,
-     "output_tokens": 0,
-     "reasoning_tokens": 0,
-     "standard_usd": 0.0,
-     "billed_usd": 0.0
-    },
-    {
-     "task": "flight_status",
-     "layout": 0,
-     "seed": 902,
-     "target": "JJWMZZ",
-     "passed": true,
-     "status": "done",
-     "rung": 0,
-     "agent_fallback": false,
-     "outputs": {
-      "flight_status": "On time",
-      "route": "ATL → SDF",
-      "flight_date": "Thu, Nov 19, 2026",
-      "gate": "B22",
-      "departure_time": "7:35 AM"
-     },
-     "detail": "all steps and checks passed",
-     "version": 1,
-     "patches": [],
-     "steps": [
-      {
-       "id": "open_flight_status",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "enter_flight_number",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "dismiss_keyboard",
-       "status": "skipped",
-       "rung": 0
-      },
-      {
-       "id": "search_flight_status",
-       "status": "done",
-       "rung": 0
-      }
-     ],
-     "duration_s": 2.55,
-     "side_effects": [],
-     "task_id": "f7-1028022936-size-envoy-small-flight_status-k2",
+     "task_id": "f7-1103033518-size-envoy-small-gate_alerts-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -3061,8 +3069,8 @@
    "model": "sdk_gphone64_arm64",
    "android": "15",
    "real_phone": false,
-   "run_id": "1028023040",
-   "code": "5504260",
+   "run_id": "1103034008",
+   "code": "cf78fa0",
    "rows": [
     {
      "task": "check_in",
@@ -3084,17 +3092,17 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       },
@@ -3109,29 +3117,29 @@
        "rung": 0
       },
       {
-       "id": "continue_after_passenger_selection",
+       "id": "tap_continue_passenger",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_no_hazardous_materials",
+       "id": "acknowledge_hazardous_materials",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "continue_after_hazmat_declaration",
+       "id": "tap_continue_hazmat",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_check_in",
+       "id": "tap_confirm_check_in",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 12.71,
+     "duration_s": 7.45,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-check_in-k0",
+     "task_id": "f7-1103034008-size-envoy-large-check_in-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -3147,11 +3155,13 @@
      "target": "FPVDK2",
      "passed": true,
      "status": "done",
-     "rung": 1,
+     "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "confirmed_seat": "23B",
-      "flight_number": "SL 1912"
+      "seat": "23B",
+      "gate": "B19",
+      "boarding": "11:05 AM · Group 1",
+      "confirmation": "FPVDK2"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -3160,7 +3170,7 @@
       {
        "id": "open_my_trips",
        "status": "done",
-       "rung": 1
+       "rung": 0
       },
       {
        "id": "find_open_trip",
@@ -3173,7 +3183,7 @@
        "rung": 0
       },
       {
-       "id": "tap_change_seat",
+       "id": "open_change_seat",
        "status": "done",
        "rung": 0
       },
@@ -3191,11 +3201,16 @@
        "id": "confirm_seat",
        "status": "done",
        "rung": 0
+      },
+      {
+       "id": "back_to_trip",
+       "status": "done",
+       "rung": 0
       }
      ],
-     "duration_s": 20.39,
+     "duration_s": 7.57,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-change_seat-k0",
+     "task_id": "f7-1103034008-size-envoy-large-change_seat-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -3209,16 +3224,14 @@
      "layout": 0,
      "seed": 900,
      "target": "FPVDK2",
-     "passed": false,
-     "status": "failed",
-     "rung": 2,
+     "passed": true,
+     "status": "done",
+     "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "known_traveler_number": null,
-      "save_confirmation": null,
-      "confirmation_code": null
+      "known_traveler_number_saved": "Known traveler number saved"
      },
-     "detail": "done-check failed: '71253619' not visible",
+     "detail": "all steps and checks passed",
      "version": 1,
      "patches": [],
      "steps": [
@@ -3245,12 +3258,12 @@
       {
        "id": "save_known_traveler_number",
        "status": "done",
-       "rung": 2
+       "rung": 0
       }
      ],
-     "duration_s": 31.52,
+     "duration_s": 4.14,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-add_ktn-k0",
+     "task_id": "f7-1103034008-size-envoy-large-add_ktn-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -3266,7 +3279,7 @@
      "target": "FPVDK2",
      "passed": true,
      "status": "done",
-     "rung": 1,
+     "rung": 0,
      "agent_fallback": false,
      "outputs": {
       "gate": "B19"
@@ -3276,24 +3289,24 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
-       "status": "done",
-       "rung": 1
-      },
-      {
-       "id": "find_open_trip",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "open_trip",
+       "id": "find_tap_trip_for_city",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "tap_trip_for_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 5.81,
+     "duration_s": 2.42,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-gate-k0",
+     "task_id": "f7-1103034008-size-envoy-large-gate-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -3319,24 +3332,24 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip_to_city",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip_to_city",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 2.65,
+     "duration_s": 1.94,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-seat-k0",
+     "task_id": "f7-1103034008-size-envoy-large-seat-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -3355,11 +3368,7 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "flight_status": "On time",
-      "route": "ATL → OMA",
-      "flight_date": "Mon, Dec 7, 2026",
-      "gate": "B19",
-      "departure_time": "12:40 PM"
+      "flight_status": "SL 1912 · ATL → OMA · Mon, Dec 7, 2026 · On time · Gate B19 · Departs 12:40 PM"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -3376,19 +3385,14 @@
        "rung": 0
       },
       {
-       "id": "dismiss_keyboard",
-       "status": "skipped",
-       "rung": 0
-      },
-      {
-       "id": "search_flight_status",
+       "id": "search_flight",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 4.63,
+     "duration_s": 3.07,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-flight_status-k0",
+     "task_id": "f7-1103034008-size-envoy-large-flight_status-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -3419,9 +3423,9 @@
        "rung": 0
       }
      ],
-     "duration_s": 0.95,
+     "duration_s": 0.74,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-miles-k0",
+     "task_id": "f7-1103034008-size-envoy-large-miles-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -3447,24 +3451,34 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_open_trip_by_confirmation_code",
+       "id": "enter_confirmation_code",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "open_trip_by_confirmation_code",
+       "id": "enter_last_name",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_open_matching_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "open_matching_trip",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 3.43,
+     "duration_s": 4.56,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-find_trip-k0",
+     "task_id": "f7-1103034008-size-envoy-large-find_trip-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -3483,32 +3497,26 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "flight_date": "Sun, Apr 26, 2026",
-      "flight": "SL 1023 · ATL 9:00 AM → OKC 11:00 AM"
+      "flight_date": "Sun, Apr 26, 2026"
      },
      "detail": "all steps and checks passed",
      "version": 1,
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "scroll_to_trip",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "open_trip_details",
+       "id": "scroll_until_trip_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 7.44,
+     "duration_s": 5.88,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-past_trip-k0",
+     "task_id": "f7-1103034008-size-envoy-large-past_trip-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -3532,19 +3540,19 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_profile",
+       "id": "tap_profile",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "turn_on_gate_change_alerts",
+       "id": "tap_gate_change_alerts_toggle",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 2.13,
+     "duration_s": 1.81,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-gate_alerts-k0",
+     "task_id": "f7-1103034008-size-envoy-large-gate_alerts-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -3573,17 +3581,17 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       },
@@ -3598,29 +3606,29 @@
        "rung": 0
       },
       {
-       "id": "continue_after_passenger_selection",
+       "id": "tap_continue_passenger",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_no_hazardous_materials",
+       "id": "acknowledge_hazardous_materials",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "continue_after_hazmat_declaration",
+       "id": "tap_continue_hazmat",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_check_in",
+       "id": "tap_confirm_check_in",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 5.94,
+     "duration_s": 4.85,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-check_in-k1",
+     "task_id": "f7-1103034008-size-envoy-large-check_in-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -3639,8 +3647,10 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "confirmed_seat": "20B",
-      "flight_number": "SL 1266"
+      "seat": "20B",
+      "gate": "A11",
+      "boarding": "2:15 PM · Group 5",
+      "confirmation": "WGB094"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -3662,7 +3672,7 @@
        "rung": 0
       },
       {
-       "id": "tap_change_seat",
+       "id": "open_change_seat",
        "status": "done",
        "rung": 0
       },
@@ -3680,11 +3690,16 @@
        "id": "confirm_seat",
        "status": "done",
        "rung": 0
+      },
+      {
+       "id": "back_to_trip",
+       "status": "done",
+       "rung": 0
       }
      ],
-     "duration_s": 7.11,
+     "duration_s": 6.77,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-change_seat-k1",
+     "task_id": "f7-1103034008-size-envoy-large-change_seat-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -3703,9 +3718,7 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "known_traveler_number": "15515142",
-      "save_confirmation": "Known traveler number saved",
-      "confirmation_code": "WGB094"
+      "known_traveler_number_saved": "Known traveler number saved"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -3737,9 +3750,9 @@
        "rung": 0
       }
      ],
-     "duration_s": 5.12,
+     "duration_s": 4.27,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-add_ktn-k1",
+     "task_id": "f7-1103034008-size-envoy-large-add_ktn-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -3765,24 +3778,24 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_open_trip",
+       "id": "find_tap_trip_for_city",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "open_trip",
+       "id": "tap_trip_for_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 2.36,
+     "duration_s": 2.13,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-gate-k1",
+     "task_id": "f7-1103034008-size-envoy-large-gate-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -3808,24 +3821,24 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip_to_city",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip_to_city",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 2.36,
+     "duration_s": 2.0,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-seat-k1",
+     "task_id": "f7-1103034008-size-envoy-large-seat-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -3844,11 +3857,7 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "flight_status": "On time",
-      "route": "ATL → BOI",
-      "flight_date": "Sun, Nov 22, 2026",
-      "gate": "A11",
-      "departure_time": "3:50 PM"
+      "flight_status": "SL 1266 · ATL → BOI · Sun, Nov 22, 2026 · On time · Gate A11 · Departs 3:50 PM"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -3865,19 +3874,14 @@
        "rung": 0
       },
       {
-       "id": "dismiss_keyboard",
-       "status": "skipped",
-       "rung": 0
-      },
-      {
-       "id": "search_flight_status",
+       "id": "search_flight",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 4.83,
+     "duration_s": 3.19,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-flight_status-k1",
+     "task_id": "f7-1103034008-size-envoy-large-flight_status-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -3908,9 +3912,9 @@
        "rung": 0
       }
      ],
-     "duration_s": 1.1,
+     "duration_s": 0.87,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-miles-k1",
+     "task_id": "f7-1103034008-size-envoy-large-miles-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -3936,24 +3940,34 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_open_trip_by_confirmation_code",
+       "id": "enter_confirmation_code",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "open_trip_by_confirmation_code",
+       "id": "enter_last_name",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_open_matching_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "open_matching_trip",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 2.21,
+     "duration_s": 4.66,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-find_trip-k1",
+     "task_id": "f7-1103034008-size-envoy-large-find_trip-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -3972,32 +3986,26 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "flight_date": "Sun, Aug 9, 2026",
-      "flight": "SL 1718 · ATL 9:00 AM → BDL 11:00 AM"
+      "flight_date": "Sun, Aug 9, 2026"
      },
      "detail": "all steps and checks passed",
      "version": 1,
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "scroll_to_trip",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "open_trip_details",
+       "id": "scroll_until_trip_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 4.8,
+     "duration_s": 4.1,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-past_trip-k1",
+     "task_id": "f7-1103034008-size-envoy-large-past_trip-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -4021,19 +4029,19 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_profile",
+       "id": "tap_profile",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "turn_on_gate_change_alerts",
+       "id": "tap_gate_change_alerts_toggle",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 2.35,
+     "duration_s": 1.59,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-gate_alerts-k1",
+     "task_id": "f7-1103034008-size-envoy-large-gate_alerts-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -4062,17 +4070,17 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       },
@@ -4087,29 +4095,29 @@
        "rung": 0
       },
       {
-       "id": "continue_after_passenger_selection",
+       "id": "tap_continue_passenger",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_no_hazardous_materials",
+       "id": "acknowledge_hazardous_materials",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "continue_after_hazmat_declaration",
+       "id": "tap_continue_hazmat",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_check_in",
+       "id": "tap_confirm_check_in",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 7.81,
+     "duration_s": 5.11,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-check_in-k2",
+     "task_id": "f7-1103034008-size-envoy-large-check_in-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -4128,8 +4136,10 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "confirmed_seat": "10D",
-      "flight_number": "SL 144"
+      "seat": "10D",
+      "gate": "B22",
+      "boarding": "6:00 AM · Group 1",
+      "confirmation": "JJWMZZ"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -4151,7 +4161,7 @@
        "rung": 0
       },
       {
-       "id": "tap_change_seat",
+       "id": "open_change_seat",
        "status": "done",
        "rung": 0
       },
@@ -4169,11 +4179,16 @@
        "id": "confirm_seat",
        "status": "done",
        "rung": 0
+      },
+      {
+       "id": "back_to_trip",
+       "status": "done",
+       "rung": 0
       }
      ],
-     "duration_s": 8.51,
+     "duration_s": 5.73,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-change_seat-k2",
+     "task_id": "f7-1103034008-size-envoy-large-change_seat-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -4192,9 +4207,7 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "known_traveler_number": "72626391",
-      "save_confirmation": "Known traveler number saved",
-      "confirmation_code": "JJWMZZ"
+      "known_traveler_number_saved": "Known traveler number saved"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -4226,9 +4239,9 @@
        "rung": 0
       }
      ],
-     "duration_s": 5.84,
+     "duration_s": 3.64,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-add_ktn-k2",
+     "task_id": "f7-1103034008-size-envoy-large-add_ktn-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -4254,24 +4267,24 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_open_trip",
+       "id": "find_tap_trip_for_city",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "open_trip",
+       "id": "tap_trip_for_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 2.28,
+     "duration_s": 2.35,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-gate-k2",
+     "task_id": "f7-1103034008-size-envoy-large-gate-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -4297,24 +4310,24 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip_to_city",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip_to_city",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 2.21,
+     "duration_s": 1.93,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-seat-k2",
+     "task_id": "f7-1103034008-size-envoy-large-seat-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -4333,11 +4346,7 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "flight_status": "On time",
-      "route": "ATL → SDF",
-      "flight_date": "Thu, Nov 19, 2026",
-      "gate": "B22",
-      "departure_time": "7:35 AM"
+      "flight_status": "SL 144 · ATL → SDF · Thu, Nov 19, 2026 · On time · Gate B22 · Departs 7:35 AM"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -4354,19 +4363,14 @@
        "rung": 0
       },
       {
-       "id": "dismiss_keyboard",
-       "status": "skipped",
-       "rung": 0
-      },
-      {
-       "id": "search_flight_status",
+       "id": "search_flight",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 5.51,
+     "duration_s": 3.01,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-flight_status-k2",
+     "task_id": "f7-1103034008-size-envoy-large-flight_status-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -4397,9 +4401,9 @@
        "rung": 0
       }
      ],
-     "duration_s": 0.82,
+     "duration_s": 0.74,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-miles-k2",
+     "task_id": "f7-1103034008-size-envoy-large-miles-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -4425,24 +4429,34 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_open_trip_by_confirmation_code",
+       "id": "enter_confirmation_code",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "open_trip_by_confirmation_code",
+       "id": "enter_last_name",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_open_matching_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "open_matching_trip",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 3.08,
+     "duration_s": 4.69,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-find_trip-k2",
+     "task_id": "f7-1103034008-size-envoy-large-find_trip-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -4461,32 +4475,26 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "flight_date": "Wed, Apr 29, 2026",
-      "flight": "SL 705 · ATL 9:00 AM → ANC 11:00 AM"
+      "flight_date": "Wed, Apr 29, 2026"
      },
      "detail": "all steps and checks passed",
      "version": 1,
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "scroll_to_trip",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "open_trip_details",
+       "id": "scroll_until_trip_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 6.25,
+     "duration_s": 3.34,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-past_trip-k2",
+     "task_id": "f7-1103034008-size-envoy-large-past_trip-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -4510,19 +4518,19 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_profile",
+       "id": "tap_profile",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "turn_on_gate_change_alerts",
+       "id": "tap_gate_change_alerts_toggle",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 2.22,
+     "duration_s": 1.51,
      "side_effects": [],
-     "task_id": "f7-1028023040-size-envoy-large-gate_alerts-k2",
+     "task_id": "f7-1103034008-size-envoy-large-gate_alerts-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -4546,8 +4554,8 @@
    "model": "Pixel 5",
    "android": "13",
    "real_phone": true,
-   "run_id": "1028175643",
-   "code": "a9b923d",
+   "run_id": "1103114754",
+   "code": "cf78fa0",
    "rows": [
     {
      "task": "check_in",
@@ -4569,17 +4577,17 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       },
@@ -4594,29 +4602,29 @@
        "rung": 0
       },
       {
-       "id": "continue_after_passenger_selection",
+       "id": "tap_continue_passenger",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_no_hazardous_materials",
+       "id": "acknowledge_hazardous_materials",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "continue_after_hazmat_declaration",
+       "id": "tap_continue_hazmat",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_check_in",
+       "id": "tap_confirm_check_in",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 12.66,
+     "duration_s": 14.62,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-check_in-k0",
+     "task_id": "f7-1103114754-size-phone-check_in-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -4635,8 +4643,10 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "confirmed_seat": "23B",
-      "flight_number": "SL 1912"
+      "seat": "23B",
+      "gate": "B19",
+      "boarding": "11:05 AM · Group 1",
+      "confirmation": "FPVDK2"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -4658,7 +4668,7 @@
        "rung": 0
       },
       {
-       "id": "tap_change_seat",
+       "id": "open_change_seat",
        "status": "done",
        "rung": 0
       },
@@ -4676,11 +4686,16 @@
        "id": "confirm_seat",
        "status": "done",
        "rung": 0
+      },
+      {
+       "id": "back_to_trip",
+       "status": "done",
+       "rung": 0
       }
      ],
-     "duration_s": 16.52,
+     "duration_s": 19.43,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-change_seat-k0",
+     "task_id": "f7-1103114754-size-phone-change_seat-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -4699,9 +4714,7 @@
      "rung": 2,
      "agent_fallback": false,
      "outputs": {
-      "known_traveler_number": "71253619",
-      "save_confirmation": "Known traveler number saved",
-      "confirmation_code": "FPVDK2"
+      "known_traveler_number_saved": "Known traveler number saved"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -4733,9 +4746,9 @@
        "rung": 2
       }
      ],
-     "duration_s": 22.66,
+     "duration_s": 13.23,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-add_ktn-k0",
+     "task_id": "f7-1103114754-size-phone-add_ktn-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -4761,24 +4774,24 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_open_trip",
+       "id": "find_tap_trip_for_city",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "open_trip",
+       "id": "tap_trip_for_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 4.63,
+     "duration_s": 5.2,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-gate-k0",
+     "task_id": "f7-1103114754-size-phone-gate-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -4804,24 +4817,24 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip_to_city",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip_to_city",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 4.58,
+     "duration_s": 4.96,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-seat-k0",
+     "task_id": "f7-1103114754-size-phone-seat-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -4840,11 +4853,7 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "flight_status": "On time",
-      "route": "ATL → OMA",
-      "flight_date": "Mon, Dec 7, 2026",
-      "gate": "B19",
-      "departure_time": "12:40 PM"
+      "flight_status": "SL 1912 · ATL → OMA · Mon, Dec 7, 2026 · On time · Gate B19 · Departs 12:40 PM"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -4861,19 +4870,14 @@
        "rung": 0
       },
       {
-       "id": "dismiss_keyboard",
-       "status": "skipped",
-       "rung": 0
-      },
-      {
-       "id": "search_flight_status",
+       "id": "search_flight",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 6.05,
+     "duration_s": 5.7,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-flight_status-k0",
+     "task_id": "f7-1103114754-size-phone-flight_status-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -4904,9 +4908,9 @@
        "rung": 0
       }
      ],
-     "duration_s": 1.34,
+     "duration_s": 1.54,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-miles-k0",
+     "task_id": "f7-1103114754-size-phone-miles-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -4932,24 +4936,34 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_open_trip_by_confirmation_code",
+       "id": "enter_confirmation_code",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "open_trip_by_confirmation_code",
+       "id": "enter_last_name",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_open_matching_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "open_matching_trip",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 4.51,
+     "duration_s": 13.99,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-find_trip-k0",
+     "task_id": "f7-1103114754-size-phone-find_trip-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -4968,32 +4982,26 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "flight_date": "Sun, Apr 26, 2026",
-      "flight": "SL 1023 · ATL 9:00 AM → OKC 11:00 AM"
+      "flight_date": "Sun, Apr 26, 2026"
      },
      "detail": "all steps and checks passed",
      "version": 1,
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "scroll_to_trip",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "open_trip_details",
+       "id": "scroll_until_trip_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 9.17,
+     "duration_s": 8.4,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-past_trip-k0",
+     "task_id": "f7-1103114754-size-phone-past_trip-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -5017,19 +5025,19 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_profile",
+       "id": "tap_profile",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "turn_on_gate_change_alerts",
+       "id": "tap_gate_change_alerts_toggle",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 3.74,
+     "duration_s": 3.85,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-gate_alerts-k0",
+     "task_id": "f7-1103114754-size-phone-gate_alerts-k0",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -5058,17 +5066,17 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       },
@@ -5083,29 +5091,29 @@
        "rung": 0
       },
       {
-       "id": "continue_after_passenger_selection",
+       "id": "tap_continue_passenger",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_no_hazardous_materials",
+       "id": "acknowledge_hazardous_materials",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "continue_after_hazmat_declaration",
+       "id": "tap_continue_hazmat",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_check_in",
+       "id": "tap_confirm_check_in",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 11.83,
+     "duration_s": 13.88,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-check_in-k1",
+     "task_id": "f7-1103114754-size-phone-check_in-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -5124,8 +5132,10 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "confirmed_seat": "20B",
-      "flight_number": "SL 1266"
+      "seat": "20B",
+      "gate": "A11",
+      "boarding": "2:15 PM · Group 5",
+      "confirmation": "WGB094"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -5147,7 +5157,7 @@
        "rung": 0
       },
       {
-       "id": "tap_change_seat",
+       "id": "open_change_seat",
        "status": "done",
        "rung": 0
       },
@@ -5165,11 +5175,16 @@
        "id": "confirm_seat",
        "status": "done",
        "rung": 0
+      },
+      {
+       "id": "back_to_trip",
+       "status": "done",
+       "rung": 0
       }
      ],
-     "duration_s": 12.62,
+     "duration_s": 15.82,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-change_seat-k1",
+     "task_id": "f7-1103114754-size-phone-change_seat-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -5188,9 +5203,7 @@
      "rung": 2,
      "agent_fallback": false,
      "outputs": {
-      "known_traveler_number": "15515142",
-      "save_confirmation": "Known traveler number saved",
-      "confirmation_code": "WGB094"
+      "known_traveler_number_saved": "Known traveler number saved"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -5222,9 +5235,9 @@
        "rung": 2
       }
      ],
-     "duration_s": 22.72,
+     "duration_s": 13.76,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-add_ktn-k1",
+     "task_id": "f7-1103114754-size-phone-add_ktn-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -5250,24 +5263,24 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_open_trip",
+       "id": "find_tap_trip_for_city",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "open_trip",
+       "id": "tap_trip_for_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 4.59,
+     "duration_s": 5.13,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-gate-k1",
+     "task_id": "f7-1103114754-size-phone-gate-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -5293,24 +5306,24 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip_to_city",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip_to_city",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 4.55,
+     "duration_s": 5.17,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-seat-k1",
+     "task_id": "f7-1103114754-size-phone-seat-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -5329,11 +5342,7 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "flight_status": "On time",
-      "route": "ATL → BOI",
-      "flight_date": "Sun, Nov 22, 2026",
-      "gate": "A11",
-      "departure_time": "3:50 PM"
+      "flight_status": "SL 1266 · ATL → BOI · Sun, Nov 22, 2026 · On time · Gate A11 · Departs 3:50 PM"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -5350,19 +5359,14 @@
        "rung": 0
       },
       {
-       "id": "dismiss_keyboard",
-       "status": "skipped",
-       "rung": 0
-      },
-      {
-       "id": "search_flight_status",
+       "id": "search_flight",
        "status": "done",
        "rung": 0
       }
      ],
      "duration_s": 5.84,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-flight_status-k1",
+     "task_id": "f7-1103114754-size-phone-flight_status-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -5393,9 +5397,9 @@
        "rung": 0
       }
      ],
-     "duration_s": 1.39,
+     "duration_s": 1.4,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-miles-k1",
+     "task_id": "f7-1103114754-size-phone-miles-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -5421,24 +5425,34 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_open_trip_by_confirmation_code",
+       "id": "enter_confirmation_code",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "open_trip_by_confirmation_code",
+       "id": "enter_last_name",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_open_matching_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "open_matching_trip",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 4.5,
+     "duration_s": 13.58,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-find_trip-k1",
+     "task_id": "f7-1103114754-size-phone-find_trip-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -5457,32 +5471,26 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "flight_date": "Sun, Aug 9, 2026",
-      "flight": "SL 1718 · ATL 9:00 AM → BDL 11:00 AM"
+      "flight_date": "Sun, Aug 9, 2026"
      },
      "detail": "all steps and checks passed",
      "version": 1,
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "scroll_to_trip",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "open_trip_details",
+       "id": "scroll_until_trip_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 9.19,
+     "duration_s": 8.57,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-past_trip-k1",
+     "task_id": "f7-1103114754-size-phone-past_trip-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -5506,19 +5514,19 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_profile",
+       "id": "tap_profile",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "turn_on_gate_change_alerts",
+       "id": "tap_gate_change_alerts_toggle",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 3.7,
+     "duration_s": 3.86,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-gate_alerts-k1",
+     "task_id": "f7-1103114754-size-phone-gate_alerts-k1",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -5547,17 +5555,17 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       },
@@ -5572,29 +5580,29 @@
        "rung": 0
       },
       {
-       "id": "continue_after_passenger_selection",
+       "id": "tap_continue_passenger",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_no_hazardous_materials",
+       "id": "acknowledge_hazardous_materials",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "continue_after_hazmat_declaration",
+       "id": "tap_continue_hazmat",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "confirm_check_in",
+       "id": "tap_confirm_check_in",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 14.24,
+     "duration_s": 16.21,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-check_in-k2",
+     "task_id": "f7-1103114754-size-phone-check_in-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -5613,8 +5621,10 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "confirmed_seat": "10D",
-      "flight_number": "SL 144"
+      "seat": "10D",
+      "gate": "B22",
+      "boarding": "6:00 AM · Group 1",
+      "confirmation": "JJWMZZ"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -5636,7 +5646,7 @@
        "rung": 0
       },
       {
-       "id": "tap_change_seat",
+       "id": "open_change_seat",
        "status": "done",
        "rung": 0
       },
@@ -5654,11 +5664,16 @@
        "id": "confirm_seat",
        "status": "done",
        "rung": 0
+      },
+      {
+       "id": "back_to_trip",
+       "status": "done",
+       "rung": 0
       }
      ],
-     "duration_s": 14.97,
+     "duration_s": 18.35,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-change_seat-k2",
+     "task_id": "f7-1103114754-size-phone-change_seat-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -5677,9 +5692,7 @@
      "rung": 2,
      "agent_fallback": false,
      "outputs": {
-      "known_traveler_number": "72626391",
-      "save_confirmation": "Known traveler number saved",
-      "confirmation_code": "JJWMZZ"
+      "known_traveler_number_saved": "Known traveler number saved"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -5711,9 +5724,9 @@
        "rung": 2
       }
      ],
-     "duration_s": 25.4,
+     "duration_s": 16.16,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-add_ktn-k2",
+     "task_id": "f7-1103114754-size-phone-add_ktn-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -5739,24 +5752,24 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_open_trip",
+       "id": "find_tap_trip_for_city",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "open_trip",
+       "id": "tap_trip_for_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 7.25,
+     "duration_s": 7.24,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-gate-k2",
+     "task_id": "f7-1103114754-size-phone-gate-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -5782,24 +5795,24 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_select_trip_to_city",
+       "id": "find_tap_trip_row",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "select_trip_to_city",
+       "id": "tap_trip_row",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 7.26,
+     "duration_s": 7.69,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-seat-k2",
+     "task_id": "f7-1103114754-size-phone-seat-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -5818,11 +5831,7 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "flight_status": "On time",
-      "route": "ATL → SDF",
-      "flight_date": "Thu, Nov 19, 2026",
-      "gate": "B22",
-      "departure_time": "7:35 AM"
+      "flight_status": "SL 144 · ATL → SDF · Thu, Nov 19, 2026 · On time · Gate B22 · Departs 7:35 AM"
      },
      "detail": "all steps and checks passed",
      "version": 1,
@@ -5839,19 +5848,14 @@
        "rung": 0
       },
       {
-       "id": "dismiss_keyboard",
-       "status": "skipped",
-       "rung": 0
-      },
-      {
-       "id": "search_flight_status",
+       "id": "search_flight",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 5.96,
+     "duration_s": 5.37,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-flight_status-k2",
+     "task_id": "f7-1103114754-size-phone-flight_status-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -5882,9 +5886,9 @@
        "rung": 0
       }
      ],
-     "duration_s": 1.41,
+     "duration_s": 1.52,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-miles-k2",
+     "task_id": "f7-1103114754-size-phone-miles-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -5910,24 +5914,34 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "find_open_trip_by_confirmation_code",
+       "id": "enter_confirmation_code",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "open_trip_by_confirmation_code",
+       "id": "enter_last_name",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "find_open_matching_trip",
+       "status": "done",
+       "rung": 0
+      },
+      {
+       "id": "open_matching_trip",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 7.14,
+     "duration_s": 16.55,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-find_trip-k2",
+     "task_id": "f7-1103114754-size-phone-find_trip-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -5946,32 +5960,26 @@
      "rung": 0,
      "agent_fallback": false,
      "outputs": {
-      "flight_date": "Wed, Apr 29, 2026",
-      "flight": "SL 705 · ATL 9:00 AM → ANC 11:00 AM"
+      "flight_date": "Wed, Apr 29, 2026"
      },
      "detail": "all steps and checks passed",
      "version": 1,
      "patches": [],
      "steps": [
       {
-       "id": "open_my_trips",
+       "id": "tap_my_trips",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "scroll_to_trip",
-       "status": "done",
-       "rung": 0
-      },
-      {
-       "id": "open_trip_details",
+       "id": "scroll_until_trip_city",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 9.63,
+     "duration_s": 8.6,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-past_trip-k2",
+     "task_id": "f7-1103114754-size-phone-past_trip-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,
@@ -5995,19 +6003,19 @@
      "patches": [],
      "steps": [
       {
-       "id": "open_profile",
+       "id": "tap_profile",
        "status": "done",
        "rung": 0
       },
       {
-       "id": "turn_on_gate_change_alerts",
+       "id": "tap_gate_change_alerts_toggle",
        "status": "done",
        "rung": 0
       }
      ],
-     "duration_s": 3.4,
+     "duration_s": 4.03,
      "side_effects": [],
-     "task_id": "f7-1028175643-size-phone-gate_alerts-k2",
+     "task_id": "f7-1103114754-size-phone-gate_alerts-k2",
      "calls": 0,
      "input_tokens": 0,
      "cached_tokens": 0,

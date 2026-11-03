@@ -3,14 +3,14 @@ app: com.android.settings
 version: 1
 status: draft
 intent: Check whether Bluetooth is turned on in the Settings app
-description: Open the Settings app, navigate through Connected devices and Connection preferences to the Bluetooth screen, and report whether
-  the Use Bluetooth switch is on or off.
-patterns: [is Bluetooth on or off, is Bluetooth turned on, check Bluetooth status, is Bluetooth enabled]
+description: Opens Settings, navigates through Connected devices and Connection preferences to the Bluetooth page, and reports the state of the
+  Use Bluetooth switch.
+patterns: [is bluetooth on, is bluetooth turned on or off, check bluetooth status, bluetooth on or off]
 outputs: [bluetooth_status]
 start: fresh_launch
 steps:
-- id: open_connected_devices
-  intent: Open Connected devices in Settings
+- id: tap_connected_devices
+  intent: Tap Connected devices to reach connectivity settings
   pre:
   - {app_foreground: com.android.settings}
   - element_present: {resource_id: settings_homepage_c*tainer, kind: List}
@@ -27,8 +27,8 @@ steps:
   - element_present: {resource_id: c*tent_parent, kind: List}
   risk: reversible
   note: trace step 1
-- id: open_connection_preferences
-  intent: Open Connection preferences
+- id: tap_connection_preferences
+  intent: Tap Connection preferences to reach Bluetooth settings
   pre:
   - {app_foreground: com.android.settings}
   action:
@@ -38,13 +38,13 @@ steps:
       cls: LinearLayout
       parent: recycler_view
       in_list: true
-      position: [0.5, 0.477]
+      position: [0.5, 0.45]
   post:
   - {screen_changed: true}
   risk: reversible
-  note: trace step 5
-- id: open_bluetooth_settings
-  intent: Open Bluetooth settings to read its on or off state
+  note: trace step 2
+- id: tap_bluetooth
+  intent: Tap Bluetooth to open its settings page and check the switch
   pre:
   - {app_foreground: com.android.settings}
   action:
@@ -54,7 +54,7 @@ steps:
       cls: LinearLayout
       parent: recycler_view
       in_list: true
-      position: [0.5, 0.328]
+      position: [0.5, 0.301]
   post:
   - {screen_changed: true}
   risk: reversible
@@ -63,16 +63,12 @@ steps:
       near: When Bluetooth is turned
       locator: {resource_id: title, kind: Text}
       after: ', your device can communicate with other nearby Bluetooth devices'
-      first_in_list: false
-      next_element: false
-      expect_digits: false
-      switch: false
-  note: trace step 6
+  note: trace step 3
 compiled_from:
-  task_id: f7-1028023735-real-settings_bluetooth
+  task_id: f7-1103034419-real-settings_bluetooth
   goal: In the Settings app, is Bluetooth turned on or off?
   compiler: muse-wonder-1.0
-  compiled_at: "2026-10-28 02:49:17"
-  trace_steps_kept: [1, 5, 6]
-  trace_steps_dropped: 3
-  cost_usd: 0.0357
+  compiled_at: "2026-11-03 03:53:42"
+  trace_steps_kept: [1, 2, 3]
+  trace_steps_dropped: 0
+  cost_usd: 0.0328

@@ -1,18 +1,17 @@
 {
- "name": "skylark_get_flight_seat",
- "intent": "Get the seat for a SkyLark flight",
- "description": "Open My Trips in SkyLark Air, select the trip to the requested city, and read the seat shown on the trip details screen.",
+ "name": "skylark_get_seat",
+ "intent": "Get the seat assignment for a SkyLark flight",
+ "description": "Open My Trips in SkyLark Air, select the trip to the requested city, and read the seat assignment from the trip details.",
  "patterns": [
   "What seat do I have on my flight",
-  "What is my seat",
-  "Find my seat assignment",
-  "My seat on my flight"
+  "What is my seat assignment",
+  "Show my seat for my flight"
  ],
  "inputs": [
   {
    "name": "trip_city",
    "type": "text",
-   "description": "The destination city of the flight whose seat is being requested.",
+   "description": "City of the destination for the trip whose seat is requested",
    "from_memory": null,
    "example": "Denver"
   }
@@ -20,14 +19,14 @@
  "steps": [
   {
    "step": 1,
-   "id": "open_my_trips",
+   "id": "tap_my_trips",
    "intent": "Tap My Trips",
    "target_fixed_text": "My Trips",
    "choice_input": null
   },
   {
    "step": 2,
-   "id": "select_trip_to_city",
+   "id": "tap_trip_row",
    "intent": "Tap the trip to {{trip_city}}",
    "target_fixed_text": null,
    "choice_input": "trip_city"
@@ -41,13 +40,11 @@
   }
  ],
  "data_values": [
-  "Sat, Nov 14, 2026",
   "SL 1190",
-  "ATL",
-  "DEN",
-  "PT4R8Z",
   "2:45 PM",
   "4:05 PM",
+  "Sat, Nov 14, 2026",
+  "PT4R8Z",
   "Delayed 25 min",
   "A7",
   "22F",

@@ -1,33 +1,36 @@
 {
  "meta": {
   "suite": "memory",
-  "run_id": "1028003834",
-  "started": "2026-10-28T04:38:34+00:00",
-  "finished": "2026-10-28T04:42:39+00:00",
-  "wall_s": 245.3,
+  "run_id": "1103031455",
+  "started": "2026-11-03T08:14:55+00:00",
+  "finished": "2026-11-03T08:26:30+00:00",
+  "wall_s": 694.6,
   "code": {
-   "commit": "5c3d716bcf6130ba31642de6c1e80c5cee819a20",
-   "short": "5c3d716",
-   "tags": [],
-   "is_eval_final": false,
-   "dirty": [
-    "val/final_memory.py"
+   "commit": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+   "short": "cf78fa0",
+   "tags": [
+    "eval-final"
    ],
+   "is_eval_final": true,
+   "dirty": [],
    "branch": "main"
   },
   "models": {
    "tier": "standard",
+   "profile": "hybrid",
+   "profile_from": "the adapter's default",
+   "overrides": {},
    "jobs": {
     "step": {
-     "model": "muse-spark-1.3",
+     "model": "muse-wonder-1.0",
      "effort": "low"
     },
     "plan": {
-     "model": "muse-spark-1.3",
+     "model": "muse-wonder-1.0",
      "effort": "medium"
     },
     "repair": {
-     "model": "muse-spark-1.3",
+     "model": "muse-wonder-1.0",
      "effort": "medium"
     },
     "grounding": {
@@ -58,27 +61,34 @@
   },
   "devices": [],
   "cost": {
-   "input_tokens": 32882,
-   "cached_tokens": 19156,
-   "output_tokens": 29478,
-   "reasoning_tokens": 22964,
-   "calls": 20,
+   "input_tokens": 72170,
+   "cached_tokens": 42568,
+   "output_tokens": 76882,
+   "reasoning_tokens": 59846,
+   "calls": 74,
    "errors": 0,
-   "billed_usd": 0.1453,
-   "standard_usd": 0.1453,
+   "billed_usd": 0.3701,
+   "standard_usd": 0.3701,
    "by_job": {
     "extract": {
-     "calls": 20,
-     "standard_usd": 0.1453
+     "calls": 50,
+     "standard_usd": 0.3145
+    },
+    "answer": {
+     "calls": 24,
+     "standard_usd": 0.0556
     }
    },
    "by_model": {
-    "muse-spark-1.3": 20
+    "muse-spark-1.3": 74
+   },
+   "by_profile": {
+    "hybrid": 74
    }
   },
   "spend_total_this_checkout": {
-   "billed_usd": 11.759,
-   "standard_usd": 12.563
+   "billed_usd": 80.787,
+   "standard_usd": 81.847
   },
   "host": "Sanjeevs-MacBook-Pro"
  },
@@ -141,7 +151,7 @@
     "stale_without_warning": false,
     "warned_when_fresh": false,
     "replaced_served_as_current": false,
-    "answer": "38,240 miles, from the SkyLark app just now.",
+    "answer": "You have 38,240 SkyLark miles, from the SkyLark app just now.",
     "notes_stale_lines": 0
    },
    {
@@ -153,7 +163,7 @@
     "stale_without_warning": false,
     "warned_when_fresh": false,
     "replaced_served_as_current": false,
-    "answer": "Your DoorDash order will arrive at 7:45 PM, from the DoorDash app just now.",
+    "answer": "7:45 PM, from the DoorDash app just now.",
     "notes_stale_lines": 0
    },
    {
@@ -201,7 +211,7 @@
     "stale_without_warning": false,
     "warned_when_fresh": false,
     "replaced_served_as_current": false,
-    "answer": "Boarding starts at 5:30 AM, from the SkyLark app 45 minutes ago.",
+    "answer": "Boarding is 5:30 AM, from the SkyLark app 45 minutes ago.",
     "notes_stale_lines": 2
    },
    {
@@ -213,7 +223,7 @@
     "stale_without_warning": false,
     "warned_when_fresh": false,
     "replaced_served_as_current": false,
-    "answer": "You have 38,240 miles, from the SkyLark app 45 minutes ago.",
+    "answer": "You have 38,240 SkyLark miles, from the SkyLark app 45 minutes ago.",
     "notes_stale_lines": 0
    },
    {
@@ -225,7 +235,7 @@
     "stale_without_warning": false,
     "warned_when_fresh": false,
     "replaced_served_as_current": false,
-    "answer": "7:45 PM, from the DoorDash app 45 minutes ago, but it may have changed.",
+    "answer": "7:45 PM from the DoorDash app 45 minutes ago, but it may have changed.",
     "notes_stale_lines": 2
    },
    {
@@ -237,7 +247,7 @@
     "stale_without_warning": false,
     "warned_when_fresh": false,
     "replaced_served_as_current": false,
-    "answer": "Gate C14, from the SkyLark app yesterday at 10:05 PM, but it may have changed.",
+    "answer": "Gate C14, from the SkyLark app 8 hours ago, but it may have changed.",
     "notes_stale_lines": 3
    },
    {
@@ -249,7 +259,7 @@
     "stale_without_warning": false,
     "warned_when_fresh": false,
     "replaced_served_as_current": false,
-    "answer": "Seat 14C, from the SkyLark app yesterday at 10:05 PM.",
+    "answer": "Seat 14C, from the SkyLark app 8 hours ago.",
     "notes_stale_lines": 5
    },
    {
@@ -261,7 +271,7 @@
     "stale_without_warning": false,
     "warned_when_fresh": false,
     "replaced_served_as_current": false,
-    "answer": "On time, from the SkyLark app yesterday at 10:05 PM but it may have changed.",
+    "answer": "Yes, on time from the SkyLark app 8 hours ago, but it may have changed.",
     "notes_stale_lines": 5
    },
    {
@@ -273,7 +283,7 @@
     "stale_without_warning": false,
     "warned_when_fresh": false,
     "replaced_served_as_current": false,
-    "answer": "Boarding starts at 5:30 AM, from the SkyLark app yesterday at 10:05 PM, but it may have changed.",
+    "answer": "Boarding starts at 5:30 AM, from the SkyLark app 8 hours ago, but it may have changed.",
     "notes_stale_lines": 3
    },
    {
@@ -285,7 +295,7 @@
     "stale_without_warning": false,
     "warned_when_fresh": false,
     "replaced_served_as_current": false,
-    "answer": "You have 38,240 miles, from the SkyLark app 8 hours ago.",
+    "answer": "You have 38,240 SkyLark miles, from the SkyLark app 8 hours ago.",
     "notes_stale_lines": 0
    },
    {
@@ -297,7 +307,7 @@
     "stale_without_warning": false,
     "warned_when_fresh": false,
     "replaced_served_as_current": false,
-    "answer": "7:45 PM, from the DoorDash app 8 hours ago, but it may have changed.",
+    "answer": "7:45 PM from the DoorDash app 8 hours ago, but it may have changed.",
     "notes_stale_lines": 2
    },
    {
@@ -309,7 +319,7 @@
     "stale_without_warning": false,
     "warned_when_fresh": false,
     "replaced_served_as_current": false,
-    "answer": "Gate C14, from the SkyLark app 10 days ago, but it may be out of date.",
+    "answer": "Gate C14, from the SkyLark app 10 days ago, but it may have changed.",
     "notes_stale_lines": 3
    },
    {
@@ -321,7 +331,7 @@
     "stale_without_warning": false,
     "warned_when_fresh": false,
     "replaced_served_as_current": false,
-    "answer": "14C, from the SkyLark app 10 days ago.",
+    "answer": "Seat 14C, from the SkyLark app 10 days ago.",
     "notes_stale_lines": 5
    },
    {
@@ -345,7 +355,7 @@
     "stale_without_warning": false,
     "warned_when_fresh": false,
     "replaced_served_as_current": false,
-    "answer": "Boarding starts at 5:30 AM, from the SkyLark app 10 days ago, but it may be out of date.",
+    "answer": "Boarding starts at 5:30 AM, from the SkyLark app 10 days ago, but it may have changed.",
     "notes_stale_lines": 3
    },
    {
@@ -357,7 +367,7 @@
     "stale_without_warning": false,
     "warned_when_fresh": false,
     "replaced_served_as_current": false,
-    "answer": "38,240 miles, from the SkyLark app 10 days ago, but it may have changed.",
+    "answer": "You have 38,240 miles, from the SkyLark app 10 days ago, but it may have changed.",
     "notes_stale_lines": 1
    },
    {
@@ -369,11 +379,44 @@
     "stale_without_warning": false,
     "warned_when_fresh": false,
     "replaced_served_as_current": false,
-    "answer": "7:45 PM, from the DoorDash app 10 days ago, but it may have changed.",
+    "answer": "7:45 PM from the DoorDash app 10 days ago, but it may have changed.",
     "notes_stale_lines": 2
    }
   ],
-  "questions": 24
+  "questions": 24,
+  "clock_start": "2026-10-28 09:00",
+  "run": {
+   "run_id": "1103031455",
+   "commit": "cf78fa0",
+   "is_eval_final": true,
+   "dirty": false,
+   "cost": {
+    "input_tokens": 72170,
+    "cached_tokens": 42568,
+    "output_tokens": 76882,
+    "reasoning_tokens": 59846,
+    "calls": 74,
+    "errors": 0,
+    "billed_usd": 0.3701,
+    "standard_usd": 0.3701,
+    "by_job": {
+     "extract": {
+      "calls": 50,
+      "standard_usd": 0.3145
+     },
+     "answer": {
+      "calls": 24,
+      "standard_usd": 0.0556
+     }
+    },
+    "by_model": {
+     "muse-spark-1.3": 74
+    },
+    "by_profile": {
+     "hybrid": 74
+    }
+   }
+  }
  },
  "emails_large": {
   "items": 28,
@@ -408,9 +451,12 @@
     "email": "000-plain-KX7Q2M",
     "kind": "plain",
     "method": "model",
-    "found": 9,
+    "found": 8,
     "wrong": 0,
-    "missing": 0,
+    "missing": 1,
+    "missing_attrs": [
+     "Trip.start_date"
+    ],
     "dropped": []
    },
    {
@@ -420,6 +466,7 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -429,15 +476,17 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
     "email": "003-plain-8V7EN3",
     "kind": "plain",
     "method": "model",
-    "found": 8,
+    "found": 9,
     "wrong": 0,
-    "missing": 1,
+    "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -447,15 +496,19 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
     "email": "005-plain-BQ6U0H",
     "kind": "plain",
     "method": "model",
-    "found": 9,
+    "found": 8,
     "wrong": 0,
-    "missing": 0,
+    "missing": 1,
+    "missing_attrs": [
+     "Trip.start_date"
+    ],
     "dropped": []
    },
    {
@@ -465,6 +518,7 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -474,6 +528,7 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -483,6 +538,7 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -492,6 +548,7 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -501,6 +558,7 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -510,15 +568,17 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
     "email": "012-forward-F6LP5K",
     "kind": "forward",
     "method": "model",
-    "found": 8,
+    "found": 9,
     "wrong": 0,
-    "missing": 1,
+    "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -528,6 +588,7 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -537,6 +598,7 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -546,6 +608,7 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -555,24 +618,29 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
     "email": "017-forward-1VA6V9",
     "kind": "forward",
     "method": "model",
-    "found": 9,
+    "found": 8,
     "wrong": 0,
-    "missing": 0,
+    "missing": 1,
+    "missing_attrs": [
+     "Trip.start_date"
+    ],
     "dropped": []
    },
    {
     "email": "018-plain-BVTQ5K",
     "kind": "plain",
     "method": "model",
-    "found": 8,
+    "found": 9,
     "wrong": 0,
-    "missing": 1,
+    "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -582,6 +650,7 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -591,6 +660,7 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -600,6 +670,7 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -609,6 +680,7 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -618,6 +690,7 @@
     "found": 3,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -627,6 +700,7 @@
     "found": 2,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -636,6 +710,7 @@
     "found": 0,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -645,6 +720,7 @@
     "found": 0,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -654,6 +730,7 @@
     "found": 2,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    }
   ],
@@ -786,27 +863,34 @@
    }
   ],
   "run": {
-   "run_id": "1028003158",
-   "commit": "5c3d716",
-   "is_eval_final": false,
-   "dirty": true,
+   "run_id": "1103031455",
+   "commit": "cf78fa0",
+   "is_eval_final": true,
+   "dirty": false,
    "cost": {
-    "input_tokens": 58994,
-    "cached_tokens": 38418,
-    "output_tokens": 65428,
-    "reasoning_tokens": 49565,
-    "calls": 50,
+    "input_tokens": 72170,
+    "cached_tokens": 42568,
+    "output_tokens": 76882,
+    "reasoning_tokens": 59846,
+    "calls": 74,
     "errors": 0,
-    "billed_usd": 0.3095,
-    "standard_usd": 0.3095,
+    "billed_usd": 0.3701,
+    "standard_usd": 0.3701,
     "by_job": {
      "extract": {
       "calls": 50,
-      "standard_usd": 0.3095
+      "standard_usd": 0.3145
+     },
+     "answer": {
+      "calls": 24,
+      "standard_usd": 0.0556
      }
     },
     "by_model": {
-     "muse-spark-1.3": 50
+     "muse-spark-1.3": 74
+    },
+    "by_profile": {
+     "hybrid": 74
     }
    }
   }
@@ -815,9 +899,9 @@
   "items": 15,
   "kind": "emails",
   "attributes": {
-   "found": 95,
+   "found": 94,
    "wrong": 0,
-   "missing": 2
+   "missing": 3
   },
   "by_method": {
    "markup": {
@@ -826,9 +910,9 @@
     "missing": 0
    },
    "model": {
-    "found": 59,
+    "found": 58,
     "wrong": 0,
-    "missing": 2
+    "missing": 3
    }
   },
   "matching": {
@@ -847,6 +931,7 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -856,15 +941,19 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
     "email": "002-forward-PO2DRV",
     "kind": "forward",
     "method": "model",
-    "found": 9,
+    "found": 8,
     "wrong": 0,
-    "missing": 0,
+    "missing": 1,
+    "missing_attrs": [
+     "Trip.start_date"
+    ],
     "dropped": []
    },
    {
@@ -874,6 +963,7 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -883,6 +973,7 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -892,6 +983,9 @@
     "found": 8,
     "wrong": 0,
     "missing": 1,
+    "missing_attrs": [
+     "Trip.start_date"
+    ],
     "dropped": []
    },
    {
@@ -901,6 +995,7 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -910,6 +1005,9 @@
     "found": 8,
     "wrong": 0,
     "missing": 1,
+    "missing_attrs": [
+     "Trip.start_date"
+    ],
     "dropped": []
    },
    {
@@ -919,6 +1017,7 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -928,6 +1027,7 @@
     "found": 9,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -937,6 +1037,7 @@
     "found": 3,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -946,6 +1047,7 @@
     "found": 2,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -955,6 +1057,7 @@
     "found": 0,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -964,6 +1067,7 @@
     "found": 0,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    },
    {
@@ -973,6 +1077,7 @@
     "found": 2,
     "wrong": 0,
     "missing": 0,
+    "missing_attrs": [],
     "dropped": []
    }
   ],
@@ -1035,27 +1140,34 @@
    }
   ],
   "run": {
-   "run_id": "1028003158",
-   "commit": "5c3d716",
-   "is_eval_final": false,
-   "dirty": true,
+   "run_id": "1103031455",
+   "commit": "cf78fa0",
+   "is_eval_final": true,
+   "dirty": false,
    "cost": {
-    "input_tokens": 58994,
-    "cached_tokens": 38418,
-    "output_tokens": 65428,
-    "reasoning_tokens": 49565,
-    "calls": 50,
+    "input_tokens": 72170,
+    "cached_tokens": 42568,
+    "output_tokens": 76882,
+    "reasoning_tokens": 59846,
+    "calls": 74,
     "errors": 0,
-    "billed_usd": 0.3095,
-    "standard_usd": 0.3095,
+    "billed_usd": 0.3701,
+    "standard_usd": 0.3701,
     "by_job": {
      "extract": {
       "calls": 50,
-      "standard_usd": 0.3095
+      "standard_usd": 0.3145
+     },
+     "answer": {
+      "calls": 24,
+      "standard_usd": 0.0556
      }
     },
     "by_model": {
-     "muse-spark-1.3": 50
+     "muse-spark-1.3": 74
+    },
+    "by_profile": {
+     "hybrid": 74
     }
    }
   }
@@ -1064,9 +1176,9 @@
   "items": 12,
   "kind": "app screens",
   "attributes": {
-   "found": 80,
+   "found": 76,
    "wrong": 0,
-   "missing": 4
+   "missing": 8
   },
   "rows": [
    {
@@ -1088,17 +1200,19 @@
     "wrong": 0,
     "missing": 0,
     "missing_attrs": [],
-    "evidence": "16/16",
+    "evidence": "14/14",
     "dropped": []
    },
    {
     "booking": "LRK51J",
     "city": "Spokane",
-    "found": 7,
+    "found": 6,
     "wrong": 0,
-    "missing": 0,
-    "missing_attrs": [],
-    "evidence": "14/14",
+    "missing": 1,
+    "missing_attrs": [
+     "Trip.confirmation_code"
+    ],
+    "evidence": "13/13",
     "dropped": []
    },
    {
@@ -1120,12 +1234,22 @@
     "wrong": 0,
     "missing": 0,
     "missing_attrs": [],
-    "evidence": "14/14",
+    "evidence": "15/15",
     "dropped": []
    },
    {
     "booking": "4VPHVZ",
     "city": "Louisville",
+    "found": 7,
+    "wrong": 0,
+    "missing": 0,
+    "missing_attrs": [],
+    "evidence": "16/16",
+    "dropped": []
+   },
+   {
+    "booking": "TYV7EN",
+    "city": "Sacramento",
     "found": 6,
     "wrong": 0,
     "missing": 1,
@@ -1133,16 +1257,6 @@
      "Trip.confirmation_code"
     ],
     "evidence": "13/13",
-    "dropped": []
-   },
-   {
-    "booking": "TYV7EN",
-    "city": "Sacramento",
-    "found": 7,
-    "wrong": 0,
-    "missing": 0,
-    "missing_attrs": [],
-    "evidence": "14/14",
     "dropped": []
    },
    {
@@ -1160,31 +1274,37 @@
    {
     "booking": "8GYFPZ",
     "city": "Buffalo",
-    "found": 7,
+    "found": 6,
     "wrong": 0,
-    "missing": 0,
-    "missing_attrs": [],
-    "evidence": "14/14",
+    "missing": 1,
+    "missing_attrs": [
+     "Trip.confirmation_code"
+    ],
+    "evidence": "13/13",
     "dropped": []
    },
    {
     "booking": "S4PDGI",
     "city": "Omaha",
-    "found": 7,
+    "found": 6,
     "wrong": 0,
-    "missing": 0,
-    "missing_attrs": [],
-    "evidence": "15/15",
+    "missing": 1,
+    "missing_attrs": [
+     "Trip.confirmation_code"
+    ],
+    "evidence": "13/13",
     "dropped": []
    },
    {
     "booking": "MQZ5ZZ",
     "city": "Boise",
-    "found": 7,
+    "found": 6,
     "wrong": 0,
-    "missing": 0,
-    "missing_attrs": [],
-    "evidence": "14/14",
+    "missing": 1,
+    "missing_attrs": [
+     "Trip.confirmation_code"
+    ],
+    "evidence": "13/13",
     "dropped": []
    },
    {
@@ -1194,32 +1314,39 @@
     "wrong": 0,
     "missing": 0,
     "missing_attrs": [],
-    "evidence": "15/15",
+    "evidence": "16/16",
     "dropped": []
    }
   ],
   "run": {
-   "run_id": "1028003834",
-   "commit": "5c3d716",
-   "is_eval_final": false,
-   "dirty": true,
+   "run_id": "1103031455",
+   "commit": "cf78fa0",
+   "is_eval_final": true,
+   "dirty": false,
    "cost": {
-    "input_tokens": 32882,
-    "cached_tokens": 19156,
-    "output_tokens": 29478,
-    "reasoning_tokens": 22964,
-    "calls": 20,
+    "input_tokens": 72170,
+    "cached_tokens": 42568,
+    "output_tokens": 76882,
+    "reasoning_tokens": 59846,
+    "calls": 74,
     "errors": 0,
-    "billed_usd": 0.1453,
-    "standard_usd": 0.1453,
+    "billed_usd": 0.3701,
+    "standard_usd": 0.3701,
     "by_job": {
      "extract": {
-      "calls": 20,
-      "standard_usd": 0.1453
+      "calls": 50,
+      "standard_usd": 0.3145
+     },
+     "answer": {
+      "calls": 24,
+      "standard_usd": 0.0556
      }
     },
     "by_model": {
-     "muse-spark-1.3": 20
+     "muse-spark-1.3": 74
+    },
+    "by_profile": {
+     "hybrid": 74
     }
    }
   }
@@ -1324,27 +1451,34 @@
    }
   ],
   "run": {
-   "run_id": "1028003834",
-   "commit": "5c3d716",
-   "is_eval_final": false,
-   "dirty": true,
+   "run_id": "1103031455",
+   "commit": "cf78fa0",
+   "is_eval_final": true,
+   "dirty": false,
    "cost": {
-    "input_tokens": 32882,
-    "cached_tokens": 19156,
-    "output_tokens": 29478,
-    "reasoning_tokens": 22964,
-    "calls": 20,
+    "input_tokens": 72170,
+    "cached_tokens": 42568,
+    "output_tokens": 76882,
+    "reasoning_tokens": 59846,
+    "calls": 74,
     "errors": 0,
-    "billed_usd": 0.1453,
-    "standard_usd": 0.1453,
+    "billed_usd": 0.3701,
+    "standard_usd": 0.3701,
     "by_job": {
      "extract": {
-      "calls": 20,
-      "standard_usd": 0.1453
+      "calls": 50,
+      "standard_usd": 0.3145
+     },
+     "answer": {
+      "calls": 24,
+      "standard_usd": 0.0556
      }
     },
     "by_model": {
-     "muse-spark-1.3": 20
+     "muse-spark-1.3": 74
+    },
+    "by_profile": {
+     "hybrid": 74
     }
    }
   }

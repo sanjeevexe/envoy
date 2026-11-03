@@ -20,46 +20,18 @@
   "evidence": {}
  },
  {
-  "kind": "check",
-  "step": "find_open_trip",
-  "description": "step 'find_open_trip': after-check 0 matched only relaxed; updated to {text='Omaha', kind='Button'}",
-  "evidence": {}
- },
- {
   "kind": "locator",
-  "step": "open_trip",
-  "description": "step 'open_trip': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}",
-  "evidence": {
-   "score": 0.791
-  }
- },
- {
-  "kind": "locator",
-  "step": "tap_change_seat",
-  "description": "step 'tap_change_seat': the element moved or changed; new locator {text='Seats', resource_id='btn_change_seat', kind='Button'}",
+  "step": "open_change_seat",
+  "description": "step 'open_change_seat': the element moved or changed; new locator {text='Seats', resource_id='btn_change_seat', kind='Button'}",
   "evidence": {
    "screenshots": [
-    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/f7-1027234941-chg-change_seat-L5-first/screens/repair_04_1_before.png",
-    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/f7-1027234941-chg-change_seat-L5-first/screens/repair_04_1_after.png"
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/f7-1103022306-chg-change_seat-L5-first/screens/repair_04_1_before.png",
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/f7-1103022306-chg-change_seat-L5-first/screens/repair_04_1_after.png"
    ],
    "reasons": [
-    "Seats button is the renamed entry to seat selection for missing Change seat."
+    "Expected 'Change seat' is absent; Button 'Seats' [17] is the renamed equivalent to open the seat map toward list_seats."
    ],
-   "task_id": "f7-1027234941-chg-change_seat-L5-first"
-  }
- },
- {
-  "kind": "check",
-  "step": "find_select_seat",
-  "description": "step 'find_select_seat': after-check 0 matched only relaxed; updated to {text='Seat 13C, aisle, available', kind='Button'}",
-  "evidence": {}
- },
- {
-  "kind": "locator",
-  "step": "select_seat",
-  "description": "step 'select_seat': target found only by relaxed match; locator updated to {text_has='{{new_seat}}', text='Seat', resource_id='seat_{{new_seat}}', kind='Button'}",
-  "evidence": {
-   "score": 0.62
+   "task_id": "f7-1103022306-chg-change_seat-L5-first"
   }
  }
 ]

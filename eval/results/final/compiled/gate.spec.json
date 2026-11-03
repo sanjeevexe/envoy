@@ -1,12 +1,11 @@
 {
  "name": "skylark_get_departure_gate",
  "intent": "Find the departure gate for a SkyLark flight",
- "description": "Open My Trips in SkyLark Air, select the trip matching the requested city, and read the departure gate from the trip details.",
+ "description": "Opens My Trips in SkyLark Air, selects the trip for the requested city, and reads the departure gate from the trip details.",
  "patterns": [
-  "what gate does my flight leave from",
-  "what gate is my flight",
-  "what is my departure gate",
-  "find the gate for my flight"
+  "What gate does my flight leave from?",
+  "What is my departure gate?",
+  "Which gate is my flight departing from?"
  ],
  "inputs": [
   {
@@ -20,15 +19,15 @@
  "steps": [
   {
    "step": 1,
-   "id": "open_my_trips",
+   "id": "tap_my_trips",
    "intent": "Tap My Trips",
    "target_fixed_text": "My Trips",
    "choice_input": null
   },
   {
    "step": 2,
-   "id": "open_trip",
-   "intent": "Open the trip to {{trip_city}}",
+   "id": "tap_trip_for_city",
+   "intent": "Tap the trip to {{trip_city}}",
    "target_fixed_text": null,
    "choice_input": "trip_city"
   }
@@ -44,13 +43,15 @@
   "SL 1190",
   "Sat, Nov 14, 2026",
   "PT4R8Z",
-  "ATL → DEN",
+  "ATL",
+  "DEN",
   "2:45 PM",
   "4:05 PM",
   "Delayed 25 min",
   "A7",
   "22F",
   "2:05 PM",
-  "Group 5"
+  "Group 5",
+  "0"
  ]
 }

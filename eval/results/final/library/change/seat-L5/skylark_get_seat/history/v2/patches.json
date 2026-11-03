@@ -1,0 +1,22 @@
+[
+ {
+  "kind": "locator",
+  "step": "tap_my_trips",
+  "description": "step 'tap_my_trips': target found only by relaxed match; locator updated to {text='Trips', resource_id='nav_trips', kind='Button'}",
+  "evidence": {
+   "score": 0.733
+  }
+ },
+ {
+  "kind": "check",
+  "step": "tap_my_trips",
+  "description": "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', kind='Text'}",
+  "evidence": {}
+ },
+ {
+  "kind": "check",
+  "step": "tap_my_trips",
+  "description": "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', kind='Text'}",
+  "evidence": {}
+ }
+]

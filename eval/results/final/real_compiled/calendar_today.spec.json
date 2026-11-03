@@ -1,24 +1,28 @@
 {
- "name": "google_calendar_check_todays_events",
- "intent": "Check Google Calendar for events scheduled today.",
- "description": "Check Google Calendar when it first opens to determine whether any events are scheduled for today and report what is shown for today.",
+ "name": "calendar_check_todays_events",
+ "intent": "Check today's events in Google Calendar",
+ "description": "Open Google Calendar, view today, and report whether anything is planned for today. Do not sign in, create an account, turn on sync, or install anything; if asked, continue without an account.",
  "patterns": [
   "Do I have any events today?",
-  "What is on my calendar today?",
-  "Anything planned for today?",
-  "Check today's events"
+  "What's on my calendar today?",
+  "Check my calendar for today",
+  "Anything planned today?"
  ],
  "inputs": [],
  "steps": [],
  "outputs": [
   {
-   "name": "events_today",
-   "near": "Wednesday 28 October 2026, Open Day View",
+   "name": "todays_events_status",
+   "near": "Tuesday 03 November 2026, Open Day View",
    "example": "Nothing planned. Tap to create."
+  },
+  {
+   "name": "date_checked",
+   "near": "Open Day View",
+   "example": "Tuesday 03 November 2026"
   }
  ],
  "data_values": [
-  "Wednesday 28 October 2026",
-  "Nothing planned. Tap to create."
+  "Tuesday 03 November 2026"
  ]
 }

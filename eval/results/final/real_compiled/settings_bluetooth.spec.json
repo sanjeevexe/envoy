@@ -1,33 +1,33 @@
 {
  "name": "settings_check_bluetooth_status",
  "intent": "Check whether Bluetooth is turned on in the Settings app",
- "description": "Open the Settings app, navigate through Connected devices and Connection preferences to the Bluetooth screen, and report whether the Use Bluetooth switch is on or off.",
+ "description": "Opens Settings, navigates through Connected devices and Connection preferences to the Bluetooth page, and reports the state of the Use Bluetooth switch.",
  "patterns": [
-  "is Bluetooth on or off",
-  "is Bluetooth turned on",
-  "check Bluetooth status",
-  "is Bluetooth enabled"
+  "is bluetooth on",
+  "is bluetooth turned on or off",
+  "check bluetooth status",
+  "bluetooth on or off"
  ],
  "inputs": [],
  "steps": [
   {
    "step": 1,
-   "id": "open_connected_devices",
-   "intent": "Open Connected devices in Settings",
+   "id": "tap_connected_devices",
+   "intent": "Tap Connected devices to reach connectivity settings",
    "target_fixed_text": "Connected devices",
    "choice_input": null
   },
   {
    "step": 2,
-   "id": "open_connection_preferences",
-   "intent": "Open Connection preferences",
+   "id": "tap_connection_preferences",
+   "intent": "Tap Connection preferences to reach Bluetooth settings",
    "target_fixed_text": "Connection preferences",
    "choice_input": null
   },
   {
    "step": 3,
-   "id": "open_bluetooth_settings",
-   "intent": "Open Bluetooth settings to read its on or off state",
+   "id": "tap_bluetooth",
+   "intent": "Tap Bluetooth to open its settings page and check the switch",
    "target_fixed_text": "Bluetooth",
    "choice_input": null
   }

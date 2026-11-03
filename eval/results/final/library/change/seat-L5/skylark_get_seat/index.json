@@ -1,0 +1,37 @@
+{
+ "name": "skylark_get_seat",
+ "active": 2,
+ "versions": [
+  {
+   "version": 1,
+   "status": "retired",
+   "created": "2026-11-03 02:50:10",
+   "parent": null,
+   "changes": [
+    "v1 compiled from f7-1103001513-src-seat-a1"
+   ],
+   "verification": null
+  },
+  {
+   "version": 2,
+   "status": "active",
+   "created": "2026-11-03 02:50:21",
+   "parent": 1,
+   "changes": [
+    "step 'tap_my_trips': target found only by relaxed match; locator updated to {text='Trips', resource_id='nav_trips', kind='Button'}",
+    "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', kind='Text'}",
+    "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', kind='Text'}"
+   ],
+   "source_task": "f7-1103022306-chg-seat-L5-first",
+   "screenshots": [],
+   "trial": {
+    "passed": true,
+    "task_id": "f7-1103022306-chg-seat-L5-trial",
+    "status": "done"
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

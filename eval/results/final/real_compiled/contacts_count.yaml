@@ -1,30 +1,27 @@
 routine: contacts_count_contacts
-app: com.google.android.contacts
+app: Contacts
 version: 1
 status: draft
 intent: Count the contacts in the Contacts app
-description: Open the Contacts app and report how many contacts it contains, continuing without an account if prompted and without signing in,
-  creating an account, turning on sync, or installing anything.
-patterns: [how many contacts do I have, count my contacts, how many contacts are in my contacts app]
+description: Open the Contacts app and report how many contacts are present, including when the contacts list is empty.
+patterns: [how many contacts do I have, count my contacts, how many contacts are saved]
 outputs: [contact_count]
 start: fresh_launch
 steps:
 - id: read_answer
   intent: Read the answer on the app's first screen
+  pre:
+  - {app_foreground: com.google.android.contacts}
   action: {wait: 0.3}
   risk: read
   extract:
     contact_count:
       locator: {text: No contacts yet, kind: Text}
-      first_in_list: false
-      next_element: false
-      expect_digits: false
-      switch: false
   note: "added: the answer is on the start screen"
 compiled_from:
-  task_id: f7-1028023735-real-contacts_count
+  task_id: f7-1103034419-real-contacts_count
   goal: In the Contacts app, how many contacts do I have?
   compiler: muse-wonder-1.0
-  compiled_at: "2026-10-28 02:52:28"
+  compiled_at: "2026-11-03 03:56:14"
   trace_steps_dropped: 0
-  cost_usd: 0.029
+  cost_usd: 0.0415

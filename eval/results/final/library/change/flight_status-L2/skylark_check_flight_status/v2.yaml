@@ -3,17 +3,15 @@ app: com.skylark.air
 version: 2
 status: active
 intent: Check the status of a SkyLark flight
-description: Open Flight status in the SkyLark app, enter a flight number, search for it, and report the route, date, delay status, gate, and
-  departure time shown in the result.
-patterns: [what's the status of my flight, check flight status, is this flight delayed, look up a flight status, what gate does this flight leave
-    from]
-outputs: [flight_status, route, flight_date, gate, departure_time]
+description: Opens SkyLark Flight status, enters a flight number, searches, and returns the resulting flight status line.
+patterns: [what's the status of my flight, check flight status, is my flight delayed, look up a flight]
+outputs: [flight_status]
 start: fresh_launch
 inputs:
-  flight_number: {type: text, description: The SkyLark flight number to look up, example: SL 1190}
+  flight_number: {type: text, description: SkyLark flight number to look up, example: SL 1190}
 steps:
 - id: open_flight_status
-  intent: Open the Flight status screen
+  intent: Tap Flight status to open flight status lookup
   pre:
   - {app_foreground: com.skylark.air}
   - element_present: {resource_id: screen_title, text: SkyLark Air, kind: Text}
@@ -30,9 +28,9 @@ steps:
   - element_present: {resource_id: screen_title, text: Status, kind: Text}
   - element_present: {resource_id: nav_status, text: Status, kind: Text}
   risk: reversible
-  note: trace step 3
+  note: trace step 1
 - id: enter_flight_number
-  intent: "Type {{flight_number}} into the Flight number field"
+  intent: "Enter {{flight_number}} into the Flight number field"
   pre:
   - {app_foreground: com.skylark.air}
   action:
@@ -52,25 +50,9 @@ steps:
       field: {resource_id: field_flight_number, text: Flight number, kind: EditText}
       value: "{{flight_number}}"
   risk: reversible
-  note: trace step 4
-- id: dismiss_keyboard
-  intent: Tap Done to dismiss the keyboard
-  pre:
-  - {app_foreground: com.skylark.air}
-  action:
-    tap:
-      text: Done
-      kind: Button
-      cls: FrameLayout
-      siblings: [Show emoji keyboard, More stylus options]
-      in_list: false
-      position: [0.088, 0.488]
-  post:
-  - {screen_changed: true}
-  risk: reversible
-  note: trace step 5
-- id: search_flight_status
-  intent: "Tap Search to look up the status of {{flight_number}}"
+  note: trace step 2
+- id: search_flight
+  intent: "Tap Search to look up {{flight_number}}"
   pre:
   - {app_foreground: com.skylark.air}
   action:
@@ -92,46 +74,16 @@ steps:
   extract:
     flight_status:
       locator: {resource_id: text_status_result, kind: Text}
-      segment: 3
-      first_in_list: false
-      next_element: false
-      expect_digits: false
-    route:
-      locator: {resource_id: text_status_result, kind: Text}
-      segment: 1
-      first_in_list: false
-      next_element: false
-      expect_digits: false
-    flight_date:
-      locator: {resource_id: text_status_result, kind: Text}
-      segment: 2
-      first_in_list: false
-      next_element: false
-      expect_digits: false
-    gate:
-      near: Gate
-      locator: {resource_id: text_status_result, kind: Text}
-      segment: 4
-      first_in_list: false
-      next_element: false
-      expect_digits: false
-    departure_time:
-      near: Departs
-      locator: {resource_id: text_status_result, kind: Text}
-      segment: 5
-      first_in_list: false
-      next_element: false
-      expect_digits: true
-  note: trace step 6
+  note: trace step 3
 parent_version: 1
 changes:
 - "step 'open_flight_status': after-check 1 matched only relaxed; updated to {text='Status', resource_id='screen_title', kind='Text'}"
 - "step 'open_flight_status': after-check 2 matched only relaxed; updated to {text='Status', resource_id='nav_status', kind='Text'}"
 compiled_from:
-  task_id: f7-1027215614-src-flight_status-a1
+  task_id: f7-1103001513-src-flight_status-a1
   goal: What's the status of SkyLark flight SL 1190?
   compiler: muse-wonder-1.0
-  compiled_at: "2026-10-27 22:00:55"
-  trace_steps_kept: [3, 4, 5, 6]
-  trace_steps_dropped: 2
-  cost_usd: 0.0547
+  compiled_at: "2026-11-03 00:21:24"
+  trace_steps_kept: [1, 2, 3]
+  trace_steps_dropped: 0
+  cost_usd: 0.0502

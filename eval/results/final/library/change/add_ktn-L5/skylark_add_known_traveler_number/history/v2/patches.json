@@ -18,19 +18,5 @@
   "step": "open_my_trips",
   "description": "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', kind='Text'}",
   "evidence": {}
- },
- {
-  "kind": "check",
-  "step": "find_select_trip",
-  "description": "step 'find_select_trip': after-check 0 matched only relaxed; updated to {text='Omaha', kind='Button'}",
-  "evidence": {}
- },
- {
-  "kind": "locator",
-  "step": "select_trip",
-  "description": "step 'select_trip': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}",
-  "evidence": {
-   "score": 0.791
-  }
  }
 ]

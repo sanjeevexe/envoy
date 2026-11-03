@@ -1,33 +1,33 @@
 {
  "name": "skylark_turn_on_gate_change_alerts",
- "intent": "Turn on gate change alerts for a SkyLark account",
- "description": "Turns on the Gate change alerts toggle in the SkyLark Profile settings so the user is notified when a gate changes.",
+ "intent": "Turn on gate change alerts in SkyLark Air",
+ "description": "Opens the Profile tab in SkyLark Air and turns on the gate change alerts toggle so notifications are sent when a gate changes.",
  "patterns": [
-  "Turn on gate change alerts",
-  "Enable gate change alerts",
-  "Notify me when my gate changes",
-  "Turn on gate change notifications"
+  "turn on gate change alerts",
+  "enable gate change alerts",
+  "notify me when my gate changes",
+  "turn on gate change notifications"
  ],
  "inputs": [],
  "steps": [
   {
    "step": 1,
-   "id": "open_profile",
-   "intent": "Tap Profile to open the profile settings.",
+   "id": "tap_profile",
+   "intent": "Tap the Profile tab to access settings.",
    "target_fixed_text": "Profile",
    "choice_input": null
   },
   {
    "step": 2,
-   "id": "turn_on_gate_change_alerts",
-   "intent": "Tap the Gate change alerts toggle to turn gate change alerts on.",
+   "id": "tap_gate_change_alerts_toggle",
+   "intent": "Tap the Gate change alerts toggle to turn on gate change alerts.",
    "target_fixed_text": "Gate change alerts",
    "choice_input": null
   }
  ],
  "outputs": [
   {
-   "name": "gate_change_alerts_status",
+   "name": "gate_change_alerts_enabled",
    "near": "Gate change alerts",
    "example": "on"
   }

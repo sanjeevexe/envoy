@@ -2,13 +2,13 @@ routine: skylark_turn_on_gate_change_alerts
 app: com.skylark.air
 version: 1
 status: draft
-intent: Turn on gate change alerts for a SkyLark account
-description: Turns on the Gate change alerts toggle in the SkyLark Profile settings so the user is notified when a gate changes.
-patterns: [Turn on gate change alerts, Enable gate change alerts, Notify me when my gate changes, Turn on gate change notifications]
+intent: Turn on gate change alerts in SkyLark Air
+description: Opens the Profile tab in SkyLark Air and turns on the gate change alerts toggle so notifications are sent when a gate changes.
+patterns: [turn on gate change alerts, enable gate change alerts, notify me when my gate changes, turn on gate change notifications]
 start: fresh_launch
 steps:
-- id: open_profile
-  intent: Tap Profile to open the profile settings.
+- id: tap_profile
+  intent: Tap the Profile tab to access settings.
   pre:
   - {app_foreground: com.skylark.air}
   - element_present: {resource_id: screen_title, text: SkyLark Air, kind: Text}
@@ -26,8 +26,8 @@ steps:
   - element_present: {resource_id: text_name, text: Maya Patel, kind: Text}
   risk: reversible
   note: trace step 1
-- id: turn_on_gate_change_alerts
-  intent: Tap the Gate change alerts toggle to turn gate change alerts on.
+- id: tap_gate_change_alerts_toggle
+  intent: Tap the Gate change alerts toggle to turn on gate change alerts.
   pre:
   - {app_foreground: com.skylark.air}
   action:
@@ -50,10 +50,10 @@ done:
     target: {resource_id: switch_gate_alerts, text: Gate change alerts, kind: Toggle}
     value: 'on'
 compiled_from:
-  task_id: f7-1027215614-src-gate_alerts-a1
+  task_id: f7-1103001513-src-gate_alerts-a1
   goal: Turn on gate change alerts.
   compiler: muse-wonder-1.0
-  compiled_at: "2026-10-27 22:04:42"
+  compiled_at: "2026-11-03 00:25:16"
   trace_steps_kept: [1, 2]
   trace_steps_dropped: 0
-  cost_usd: 0.0421
+  cost_usd: 0.0359

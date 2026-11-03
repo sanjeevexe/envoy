@@ -1,32 +1,16 @@
 {
  "name": "skylark_check_flight_status",
- "active": 2,
+ "active": 1,
  "versions": [
   {
    "version": 1,
-   "status": "retired",
-   "created": "2026-10-28 00:07:30",
+   "status": "active",
+   "created": "2026-11-03 02:42:23",
    "parent": null,
    "changes": [
-    "v1 compiled from f7-1027215614-src-flight_status-a1"
+    "v1 compiled from f7-1103001513-src-flight_status-a1"
    ],
    "verification": null
-  },
-  {
-   "version": 2,
-   "status": "active",
-   "created": "2026-10-28 00:07:38",
-   "parent": 1,
-   "changes": [
-    "step 'enter_flight_number': after-check 0 matched only relaxed; updated to {text='Flight number: SL 649', kind='EditText'}"
-   ],
-   "source_task": "f7-1027234941-chg-flight_status-L4-first",
-   "screenshots": [],
-   "trial": {
-    "passed": true,
-    "task_id": "f7-1027234941-chg-flight_status-L4-trial",
-    "status": "done"
-   }
   }
  ],
  "runs": [],

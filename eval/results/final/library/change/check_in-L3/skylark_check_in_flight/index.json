@@ -5,29 +5,29 @@
   {
    "version": 1,
    "status": "retired",
-   "created": "2026-10-28 00:02:04",
+   "created": "2026-11-03 02:36:10",
    "parent": null,
    "changes": [
-    "v1 compiled from f7-1027215614-src-check_in-a1"
+    "v1 compiled from f7-1103001513-src-check_in-a1"
    ],
    "verification": null
   },
   {
    "version": 2,
    "status": "active",
-   "created": "2026-10-28 00:02:17",
+   "created": "2026-11-03 02:36:28",
    "parent": 1,
    "changes": [
-    "after 'continue_after_hazmat_declaration', an extra screen appeared; inserted continue_after_hazmat_declaration_extra_1 (tap Looks good)"
+    "after 'tap_continue_hazmat', an extra screen appeared; inserted tap_continue_hazmat_extra_1 (tap Looks good)"
    ],
-   "source_task": "f7-1027234941-chg-check_in-L3-first",
+   "source_task": "f7-1103022306-chg-check_in-L3-first",
    "screenshots": [
     "history/v2/repair_08_1_before.png",
     "history/v2/repair_08_1_after.png"
    ],
    "trial": {
     "passed": true,
-    "task_id": "f7-1027234941-chg-check_in-L3-trial",
+    "task_id": "f7-1103022306-chg-check_in-L3-trial",
     "status": "done"
    }
   }

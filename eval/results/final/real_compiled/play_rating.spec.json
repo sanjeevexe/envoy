@@ -1,36 +1,43 @@
 {
- "name": "play_store_get_app_rating",
- "intent": "Get the star rating of an app in the Google Play Store",
- "description": "Open the Google Play Store, find the requested app, open its listing, and read its average star rating from the details page without installing it.",
+ "name": "play_store_get_app_star_rating",
+ "intent": "Look up an app's star rating in the Google Play Store",
+ "description": "Searches the Google Play Store for a named app and reads the average star rating shown on its listing, without installing the app or signing in.",
  "patterns": [
   "what is the star rating of an app",
-  "check an app's rating in the Play Store",
   "how many stars does an app have",
-  "find an app's Play Store rating"
+  "check an app's Play Store rating",
+  "what rating does an app have on Google Play"
  ],
  "inputs": [
   {
    "name": "app_name",
    "type": "text",
-   "description": "The app whose star rating is requested",
+   "description": "The app to look up",
    "from_memory": null,
-   "example": "Duolingo: Learn Languages"
+   "example": "Duolingo"
   }
  ],
  "steps": [
   {
    "step": 1,
    "id": "tap_search",
-   "intent": "Tap Search to look for {{app_name}}",
+   "intent": "Tap Search to start looking up an app",
    "target_fixed_text": "Search",
    "choice_input": null
   },
   {
    "step": 2,
-   "id": "open_app_listing",
-   "intent": "Tap the {{app_name}} result to open its listing and see its star rating",
-   "target_fixed_text": null,
-   "choice_input": "app_name"
+   "id": "tap_search_field",
+   "intent": "Tap the search field",
+   "target_fixed_text": "Search or ask Play",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "type_app_name",
+   "intent": "Type {{app_name}} and submit the search",
+   "target_fixed_text": "Search apps & games",
+   "choice_input": null
   }
  ],
  "outputs": [
@@ -40,9 +47,5 @@
    "example": "4.7 stars"
   }
  ],
- "data_values": [
-  "48 million reviews",
-  "110 MB",
-  "Everyone"
- ]
+ "data_values": []
 }

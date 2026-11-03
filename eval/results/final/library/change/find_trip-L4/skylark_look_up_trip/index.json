@@ -1,33 +1,16 @@
 {
  "name": "skylark_look_up_trip",
- "active": 2,
+ "active": 1,
  "versions": [
   {
    "version": 1,
-   "status": "retired",
-   "created": "2026-10-28 00:08:09",
+   "status": "active",
+   "created": "2026-11-03 02:42:45",
    "parent": null,
    "changes": [
-    "v1 compiled from f7-1027215614-src-find_trip-a1"
+    "v1 compiled from f7-1103001513-src-find_trip-a1"
    ],
    "verification": null
-  },
-  {
-   "version": 2,
-   "status": "active",
-   "created": "2026-10-28 00:08:16",
-   "parent": 1,
-   "changes": [
-    "step 'open_trip_by_confirmation_code': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}",
-    "step 'find_open_trip_by_confirmation_code': after-check 0 matched only relaxed; updated to {text='Memphis', kind='Button'}"
-   ],
-   "source_task": "f7-1027234941-chg-find_trip-L4-first",
-   "screenshots": [],
-   "trial": {
-    "passed": true,
-    "task_id": "f7-1027234941-chg-find_trip-L4-trial",
-    "status": "done"
-   }
   }
  ],
  "runs": [],

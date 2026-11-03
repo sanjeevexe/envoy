@@ -1,34 +1,55 @@
 {
  "name": "skylark_look_up_trip",
- "intent": "Look up a SkyLark trip by confirmation code",
- "description": "Open SkyLark Air My Trips, select the trip matching the given confirmation code, and report where that trip goes.",
+ "intent": "Look up a SkyLark flight trip",
+ "description": "Look up a SkyLark trip using a confirmation code and last name, open the matching trip row, and report where the trip goes.",
  "patterns": [
   "look up my trip",
   "where does my trip go",
   "find my trip with my confirmation code",
-  "tell me my trip destination"
+  "tell me where my trip goes"
  ],
  "inputs": [
   {
    "name": "trip_confirmation_code",
    "type": "text",
-   "description": "Confirmation code of the trip to look up.",
+   "description": "Confirmation code for the trip to look up",
    "from_memory": null,
    "example": "PT4R8Z"
+  },
+  {
+   "name": "user_last_name",
+   "type": "text",
+   "description": "Last name on the booking",
+   "from_memory": "user.last_name",
+   "example": "Patel"
   }
  ],
  "steps": [
   {
    "step": 1,
-   "id": "open_my_trips",
-   "intent": "Open My Trips",
+   "id": "tap_my_trips",
+   "intent": "Tap My Trips",
    "target_fixed_text": "My Trips",
    "choice_input": null
   },
   {
    "step": 2,
-   "id": "open_trip_by_confirmation_code",
-   "intent": "Open the trip showing confirmation code {{trip_confirmation_code}}",
+   "id": "enter_confirmation_code",
+   "intent": "Enter {{trip_confirmation_code}} into the Confirmation code field",
+   "target_fixed_text": "Confirmation code",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "enter_last_name",
+   "intent": "Enter {{user_last_name}} into the Last name field",
+   "target_fixed_text": "Last name",
+   "choice_input": null
+  },
+  {
+   "step": 4,
+   "id": "open_matching_trip",
+   "intent": "Tap the trip row matching {{trip_confirmation_code}}",
    "target_fixed_text": null,
    "choice_input": "trip_confirmation_code"
   }
@@ -36,7 +57,7 @@
  "outputs": [
   {
    "name": "destination",
-   "near": "Trip to",
+   "near": "Trip to Denver",
    "example": "Denver"
   }
  ],
@@ -44,8 +65,7 @@
   "Denver",
   "Sat, Nov 14, 2026",
   "SL 1190",
-  "ATL",
-  "DEN",
+  "ATL → DEN",
   "2:45 PM",
   "4:05 PM",
   "Delayed 25 min",

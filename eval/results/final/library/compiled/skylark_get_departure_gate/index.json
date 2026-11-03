@@ -5,10 +5,10 @@
   {
    "version": 1,
    "status": "active",
-   "created": "2026-10-27 21:59:43",
+   "created": "2026-11-03 00:19:49",
    "parent": null,
    "changes": [
-    "compiled from f7-1027215614-src-gate-a1"
+    "compiled from f7-1103001513-src-gate-a1"
    ],
    "verification": {
     "cases": [
@@ -20,7 +20,7 @@
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 1.82,
+      "duration_s": 1.94,
       "outputs": {
        "gate": "A7"
       }
@@ -33,7 +33,7 @@
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 1.79,
+      "duration_s": 1.87,
       "outputs": {
        "gate": "B17"
       }

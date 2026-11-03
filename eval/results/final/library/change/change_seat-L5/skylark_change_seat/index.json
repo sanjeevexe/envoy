@@ -1,41 +1,37 @@
 {
  "name": "skylark_change_seat",
- "active": 2,
+ "active": 1,
  "versions": [
   {
    "version": 1,
-   "status": "retired",
-   "created": "2026-10-28 00:10:22",
+   "status": "active",
+   "created": "2026-11-03 02:46:22",
    "parent": null,
    "changes": [
-    "v1 compiled from f7-1027215614-src-change_seat-a1"
+    "v1 compiled from f7-1103001513-src-change_seat-a1"
    ],
    "verification": null
   },
   {
    "version": 2,
-   "status": "active",
-   "created": "2026-10-28 00:10:44",
+   "status": "rejected",
+   "created": "2026-11-03 02:47:30",
    "parent": 1,
    "changes": [
     "step 'open_my_trips': target found only by relaxed match; locator updated to {text='Trips', resource_id='nav_trips', kind='Button'}",
-    "step 'open_trip': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}",
-    "step 'tap_change_seat': the element moved or changed; new locator {text='Seats', resource_id='btn_change_seat', kind='Button'}",
-    "step 'select_seat': target found only by relaxed match; locator updated to {text_has='{{new_seat}}', text='Seat', resource_id='seat_{{new_seat}}', kind='Button'}",
+    "step 'open_change_seat': the element moved or changed; new locator {text='Seats', resource_id='btn_change_seat', kind='Button'}",
     "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', kind='Text'}",
-    "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', kind='Text'}",
-    "step 'find_open_trip': after-check 0 matched only relaxed; updated to {text='Omaha', kind='Button'}",
-    "step 'find_select_seat': after-check 0 matched only relaxed; updated to {text='Seat 13C, aisle, available', kind='Button'}"
+    "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', kind='Text'}"
    ],
-   "source_task": "f7-1027234941-chg-change_seat-L5-first",
+   "source_task": "f7-1103022306-chg-change_seat-L5-first",
    "screenshots": [
     "history/v2/repair_04_1_before.png",
     "history/v2/repair_04_1_after.png"
    ],
    "trial": {
-    "passed": true,
-    "task_id": "f7-1027234941-chg-change_seat-L5-trial",
-    "status": "done"
+    "passed": false,
+    "task_id": "f7-1103022306-chg-change_seat-L5-trial",
+    "status": "failed"
    }
   }
  ],

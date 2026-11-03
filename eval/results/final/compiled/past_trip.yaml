@@ -1,18 +1,17 @@
-routine: skylark_get_trip_date
+routine: skylark_find_flight_date
 app: com.skylark.air
 version: 1
 status: draft
 intent: Find the date of a past SkyLark flight to a city
-description: Opens My Trips in SkyLark Air, finds the past trip to the requested city, opens its details, and reads the flight date from the trip
-  details screen.
-patterns: [When did I fly to a city, When was my flight to a city, What date was my trip to a city, When did I travel to a city]
-outputs: [flight_date, flight]
+description: Searches the My Trips list in SkyLark Air for a trip to the requested city and returns the date of that flight.
+patterns: [when did I fly to, when was my flight to, what date was my trip to, when did I travel to]
+outputs: [flight_date]
 start: fresh_launch
 inputs:
-  trip_city: {type: text, description: The destination city of the past trip to look up., example: Seattle}
+  trip_city: {type: text, description: The destination city of the trip to look up., example: Seattle}
 steps:
-- id: open_my_trips
-  intent: Open My Trips to access trip history
+- id: tap_my_trips
+  intent: Tap "My Trips"
   pre:
   - {app_foreground: com.skylark.air}
   - element_present: {resource_id: screen_title, text: SkyLark Air, kind: Text}
@@ -30,8 +29,8 @@ steps:
   - element_present: {resource_id: nav_trips, text: My Trips, kind: Text}
   risk: reversible
   note: trace step 1
-- id: scroll_to_trip
-  intent: "Scroll until the past trip to {{trip_city}} is visible"
+- id: scroll_until_trip_city
+  intent: "Scroll down until the trip to {{trip_city}} is visible"
   pre:
   - {app_foreground: com.skylark.air}
   action:
@@ -39,61 +38,29 @@ steps:
       target:
         resource_id: trip_row_*
         text_has: "{{trip_city}}"
-        kind: Button
-        cls: View
-        parent: list_trips
         in_list: true
       direction: down
       max_scrolls: 8
+      container: {resource_id: list_trips, kind: List}
   post:
   - element_present:
       resource_id: trip_row_*
       text_has: "{{trip_city}}"
-      kind: Button
-      cls: View
-      parent: list_trips
       in_list: true
   risk: read
-  note: trace step 2 (+1 scrolls)
-- id: open_trip_details
-  intent: "Tap the past trip to {{trip_city}} to open its details and read the flight date"
-  pre:
-  - {app_foreground: com.skylark.air}
-  action:
-    tap:
-      resource_id: trip_row_*
-      text_has: "{{trip_city}}"
-      kind: Button
-      cls: View
-      parent: list_trips
-      in_list: true
-  post:
-  - {screen_changed: true}
-  - element_present:
-      resource_id: screen_title
-      text: "Trip to {{trip_city}}"
-      kind: Text
-  - element_present: {resource_id: text_checked_in, text: You're checked in, kind: Text}
-  risk: reversible
   extract:
     flight_date:
-      near: Date
-      locator: {resource_id: row_date, kind: Text}
+      locator:
+        resource_id: trip_row_*
+        text_has: "{{trip_city}}"
+        in_list: true
       segment: 1
-      first_in_list: false
-      next_element: false
-      expect_digits: false
-    flight:
-      locator: {resource_id: text_flight, kind: Text}
-      first_in_list: false
-      next_element: false
-      expect_digits: false
-  note: trace step 3
+  note: trace step 2 (+2 scrolls)
 compiled_from:
-  task_id: f7-1027215614-src-past_trip-a1
+  task_id: f7-1103001513-src-past_trip-a1
   goal: When did I fly to Seattle?
   compiler: muse-wonder-1.0
-  compiled_at: "2026-10-27 22:03:55"
-  trace_steps_kept: [1, 2, 3]
+  compiled_at: "2026-11-03 00:24:20"
+  trace_steps_kept: [1, 2]
   trace_steps_dropped: 0
-  cost_usd: 0.0385
+  cost_usd: 0.0515

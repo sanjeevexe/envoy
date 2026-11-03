@@ -1,29 +1,29 @@
-routine: google_calendar_check_todays_events
-app: com.google.android.calendar
+routine: calendar_check_todays_events
+app: Calendar
 version: 1
 status: draft
-intent: Check Google Calendar for events scheduled today.
-description: Check Google Calendar when it first opens to determine whether any events are scheduled for today and report what is shown for today.
-patterns: ['Do I have any events today?', 'What is on my calendar today?', 'Anything planned for today?', Check today's events]
-outputs: [events_today]
+intent: Check today's events in Google Calendar
+description: Open Google Calendar, view today, and report whether anything is planned for today. Do not sign in, create an account, turn on sync,
+  or install anything; if asked, continue without an account.
+patterns: ['Do I have any events today?', 'What''s on my calendar today?', Check my calendar for today, 'Anything planned today?']
+outputs: [todays_events_status, date_checked]
 start: fresh_launch
 steps:
 - id: read_answer
   intent: Read the answer on the app's first screen
+  pre:
+  - {app_foreground: com.google.android.calendar}
   action: {wait: 0.3}
   risk: read
   extract:
-    events_today:
+    todays_events_status:
       locator: {text: Nothing planned. Tap to create., kind: Text}
-      first_in_list: false
-      next_element: false
-      expect_digits: false
-      switch: false
+    date_checked: {pattern: '(?P<v>.+?)\s*,\ Open\ Day\ View'}
   note: "added: the answer is on the start screen"
 compiled_from:
-  task_id: f7-1028023735-real-calendar_today
+  task_id: f7-1103034419-real-calendar_today
   goal: In Google Calendar, do I have any events today?
   compiler: muse-wonder-1.0
-  compiled_at: "2026-10-28 02:52:09"
+  compiled_at: "2026-11-03 03:55:43"
   trace_steps_dropped: 0
-  cost_usd: 0.0385
+  cost_usd: 0.0458

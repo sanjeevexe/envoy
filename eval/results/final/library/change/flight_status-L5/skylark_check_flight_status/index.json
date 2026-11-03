@@ -5,29 +5,28 @@
   {
    "version": 1,
    "status": "retired",
-   "created": "2026-10-28 00:12:46",
+   "created": "2026-11-03 02:50:43",
    "parent": null,
    "changes": [
-    "v1 compiled from f7-1027215614-src-flight_status-a1"
+    "v1 compiled from f7-1103001513-src-flight_status-a1"
    ],
    "verification": null
   },
   {
    "version": 2,
    "status": "active",
-   "created": "2026-10-28 00:12:55",
+   "created": "2026-11-03 02:50:51",
    "parent": 1,
    "changes": [
     "step 'open_flight_status': target found only by relaxed match; locator updated to {text='Status', resource_id='nav_status', kind='Button'}",
     "step 'open_flight_status': after-check 1 matched only relaxed; updated to {text='Status', kind='Text'}",
-    "step 'open_flight_status': after-check 2 matched only relaxed; updated to {text='Status', kind='Text'}",
-    "step 'enter_flight_number': after-check 0 matched only relaxed; updated to {text='Flight number: SL 1834', kind='EditText'}"
+    "step 'open_flight_status': after-check 2 matched only relaxed; updated to {text='Status', kind='Text'}"
    ],
-   "source_task": "f7-1027234941-chg-flight_status-L5-first",
+   "source_task": "f7-1103022306-chg-flight_status-L5-first",
    "screenshots": [],
    "trial": {
     "passed": true,
-    "task_id": "f7-1027234941-chg-flight_status-L5-trial",
+    "task_id": "f7-1103022306-chg-flight_status-L5-trial",
     "status": "done"
    }
   }

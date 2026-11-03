@@ -1,17 +1,17 @@
 [
  {
   "kind": "insert_after",
-  "step": "continue_after_hazmat_declaration",
-  "description": "after 'continue_after_hazmat_declaration', an extra screen appeared; inserted continue_after_hazmat_declaration_extra_1 (tap Looks good)",
+  "step": "tap_continue_hazmat",
+  "description": "after 'tap_continue_hazmat', an extra screen appeared; inserted tap_continue_hazmat_extra_1 (tap Looks good)",
   "evidence": {
    "screenshots": [
-    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/f7-1027234941-chg-check_in-L3-first/screens/repair_08_1_before.png",
-    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/f7-1027234941-chg-check_in-L3-first/screens/repair_08_1_after.png"
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/f7-1103022306-chg-check_in-L3-first/screens/repair_08_1_before.png",
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/f7-1103022306-chg-check_in-L3-first/screens/repair_08_1_after.png"
    ],
    "reasons": [
-    "Continue appears renamed to Looks good, tapping it should advance to Confirm check-in."
+    "The expected Continue (btn_continue, hazmat acknowledgement) is not present; instead an extra Review your trip interstitial blocks the path to the Confirm check-in screen required by the after-checks. Its main affirmative button, \"Looks good\", is the user-intended way forward toward completing check-in for SL 1782, consistent with the goal and remaining step."
    ],
-   "task_id": "f7-1027234941-chg-check_in-L3-first"
+   "task_id": "f7-1103022306-chg-check_in-L3-first"
   }
  }
 ]

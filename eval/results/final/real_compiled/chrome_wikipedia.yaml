@@ -1,0 +1,82 @@
+routine: chrome_search_wikipedia_article
+app: com.android.chrome
+version: 1
+status: draft
+intent: Search Wikipedia in Chrome for a topic and find the year it opened
+description: Opens the mobile Wikipedia site in Chrome, searches for the requested topic, scrolls through the article to find its opening information,
+  and reports the opening year.
+patterns: [search Wikipedia for something and tell me when it opened, look up a topic on Wikipedia and find its opening year, find when something
+    opened on Wikipedia]
+outputs: [opening_year]
+start: fresh_launch
+inputs:
+  topic: {type: text, description: Topic or article title to search for on Wikipedia, example: Eiffel Tower}
+steps:
+- id: open_wikipedia
+  intent: Type en.m.wikipedia.org in the URL bar and submit
+  pre:
+  - {app_foreground: com.android.chrome}
+  - element_present: {resource_id: compositor_view_holder, text: Web View, kind: Text}
+  action:
+    type:
+      field:
+        resource_id: url_bar
+        text: "Search Google or type URL: about:blank"
+        hint: Search Google or type URL
+        kind: EditText
+        cls: EditText
+        parent: location_bar
+        in_list: false
+        position: [0.418, 0.084]
+      value: en.m.wikipedia.org
+      submit: true
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 1
+- id: open_search
+  intent: Tap Search to open the search field
+  pre:
+  - {app_foreground: com.android.chrome}
+  action:
+    tap:
+      resource_id: searchIcon
+      text: Search
+      kind: Button
+      cls: Button
+      in_list: true
+      position: [0.83, 0.143]
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  note: trace step 2
+- id: search_for_topic
+  intent: "Type {{topic}} in the search field and submit"
+  pre:
+  - {app_foreground: com.android.chrome}
+  action:
+    type:
+      field:
+        text: ''
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.538, 0.146]
+      value: "{{topic}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  risk: reversible
+  extract:
+    opening_year:
+      near: "Opening: what does the page say? (opening year)"
+      from_screenshot: \b(1\d|20)\d{2}\b
+  note: trace step 3
+compiled_from:
+  task_id: f7-1103034419-real-chrome_wikipedia
+  goal: In Chrome, go to en.m.wikipedia.org, search for Eiffel Tower and tell me the year it opened.
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-11-03 04:01:02"
+  trace_steps_kept: [1, 2, 3, 4]
+  trace_steps_dropped: 0
+  cost_usd: 0.0473

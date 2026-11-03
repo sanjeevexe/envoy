@@ -1,8 +1,0 @@
-[
- {
-  "kind": "check",
-  "step": "enter_flight_number",
-  "description": "step 'enter_flight_number': after-check 0 matched only relaxed; updated to {text='Flight number: SL 649', kind='EditText'}",
-  "evidence": {}
- }
-]

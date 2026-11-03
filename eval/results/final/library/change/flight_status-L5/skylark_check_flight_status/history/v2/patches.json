@@ -18,11 +18,5 @@
   "step": "open_flight_status",
   "description": "step 'open_flight_status': after-check 2 matched only relaxed; updated to {text='Status', kind='Text'}",
   "evidence": {}
- },
- {
-  "kind": "check",
-  "step": "enter_flight_number",
-  "description": "step 'enter_flight_number': after-check 0 matched only relaxed; updated to {text='Flight number: SL 1834', kind='EditText'}",
-  "evidence": {}
  }
 ]

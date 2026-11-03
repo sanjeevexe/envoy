@@ -5,30 +5,28 @@
   {
    "version": 1,
    "status": "retired",
-   "created": "2026-10-28 00:09:24",
+   "created": "2026-11-03 02:45:05",
    "parent": null,
    "changes": [
-    "v1 compiled from f7-1027215614-src-check_in-a1"
+    "v1 compiled from f7-1103001513-src-check_in-a1"
    ],
    "verification": null
   },
   {
    "version": 2,
    "status": "active",
-   "created": "2026-10-28 00:09:53",
+   "created": "2026-11-03 02:45:49",
    "parent": 1,
    "changes": [
-    "step 'open_my_trips': target found only by relaxed match; locator updated to {text='Trips', resource_id='nav_trips', kind='Button'}",
-    "step 'select_trip': target found only by relaxed match; locator updated to {text_has='{{trip_city}}', resource_id='trip_row_*', kind='Button'}",
-    "step 'continue_after_passenger_selection': the element moved or changed; new locator {text='Next', resource_id='btn_continue', kind='Button'}",
-    "step 'continue_after_hazmat_declaration': the element moved or changed; new locator {text='Next', resource_id='btn_continue', kind='Button'}",
-    "step 'confirm_check_in': target found only by relaxed match; locator updated to {text='Complete check-in', resource_id='btn_confirm_checkin', kind='Button'}",
-    "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', kind='Text'}",
-    "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', kind='Text'}",
-    "step 'find_select_trip': after-check 0 matched only relaxed; updated to {text='Omaha', kind='Button'}",
+    "step 'tap_my_trips': target found only by relaxed match; locator updated to {text='Trips', resource_id='nav_trips', kind='Button'}",
+    "step 'tap_continue_passenger': the element moved or changed; new locator {text='Next', resource_id='btn_continue', kind='Button'}",
+    "step 'tap_continue_hazmat': the element moved or changed; new locator {text='Next', resource_id='btn_continue', kind='Button'}",
+    "step 'tap_confirm_check_in': target found only by relaxed match; locator updated to {text='Complete check-in', resource_id='btn_confirm_checkin', kind='Button'}",
+    "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', kind='Text'}",
+    "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', kind='Text'}",
     "step 'tap_check_in': after-checks failed (no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) but the next step was ready; after-checks rewritten from what happened"
    ],
-   "source_task": "f7-1027234941-chg-check_in-L5-first",
+   "source_task": "f7-1103022306-chg-check_in-L5-first",
    "screenshots": [
     "history/v2/repair_06_1_before.png",
     "history/v2/repair_06_1_after.png",
@@ -37,7 +35,7 @@
    ],
    "trial": {
     "passed": true,
-    "task_id": "f7-1027234941-chg-check_in-L5-trial",
+    "task_id": "f7-1103022306-chg-check_in-L5-trial",
     "status": "done"
    }
   }

@@ -1,22 +1,19 @@
-routine: play_store_get_app_rating
+routine: play_store_get_app_star_rating
 app: com.android.vending
 version: 1
 status: draft
-intent: Get the star rating of an app in the Google Play Store
-description: Open the Google Play Store, find the requested app, open its listing, and read its average star rating from the details page without
-  installing it.
-patterns: [what is the star rating of an app, check an app's rating in the Play Store, how many stars does an app have, find an app's Play Store
-    rating]
+intent: Look up an app's star rating in the Google Play Store
+description: Searches the Google Play Store for a named app and reads the average star rating shown on its listing, without installing the app
+  or signing in.
+patterns: [what is the star rating of an app, how many stars does an app have, check an app's Play Store rating, what rating does an app have
+    on Google Play]
 outputs: [star_rating]
 start: fresh_launch
 inputs:
-  app_name:
-    type: text
-    description: The app whose star rating is requested
-    example: "Duolingo: Learn Languages"
+  app_name: {type: text, description: The app to look up, example: Duolingo}
 steps:
 - id: tap_search
-  intent: "Tap Search to look for {{app_name}}"
+  intent: Tap Search to start looking up an app
   pre:
   - {app_foreground: com.android.vending}
   action:
@@ -29,47 +26,54 @@ steps:
   post:
   - {screen_changed: true}
   risk: reversible
-  note: trace step 5
-- id: find_open_app_listing
-  intent: "Scroll to {{app_name}} if it is not on screen"
-  action:
-    scroll_until:
-      target:
-        text_has: "{{app_name}}"
-        kind: Button
-        cls: View
-        in_list: true
-      direction: down
-      max_scrolls: 8
-  post:
-  - element_present:
-      text_has: "{{app_name}}"
-      kind: Button
-      cls: View
-      in_list: true
-  risk: read
-  note: "added: input-based list choice"
-- id: open_app_listing
-  intent: "Tap the {{app_name}} result to open its listing and see its star rating"
+  note: trace step 1
+- id: tap_search_field
+  intent: Tap the search field
   pre:
   - {app_foreground: com.android.vending}
   action:
     tap:
-      text_has: "{{app_name}}"
+      text: Search or ask Play
       kind: Button
       cls: View
-      in_list: true
+      in_list: false
+      position: [0.514, 0.084]
   post:
   - {screen_changed: true}
   risk: reversible
+  note: trace step 2
+- id: type_app_name
+  intent: "Type {{app_name}} and submit the search"
+  pre:
+  - {app_foreground: com.android.vending}
+  action:
+    type:
+      field:
+        text: Search apps & games
+        hint: Search apps & games
+        kind: EditText
+        cls: EditText
+        in_list: false
+        position: [0.5, 0.084]
+      value: "{{app_name}}"
+      submit: true
+  post:
+  - {screen_changed: true}
+  - element_present:
+      text: "{{app_name}}"
+      kind: Button
+  risk: reversible
   extract:
-    star_rating: {near: Average rating, first_in_list: false, next_element: false, expect_digits: true, switch: false}
-  note: trace step 6
+    star_rating:
+      near: Average rating
+      expect_digits: true
+      card: "{{app_name}}"
+  note: trace step 3
 compiled_from:
-  task_id: f7-1028030222-real-play_rating
+  task_id: f7-1103034419-real-play_rating
   goal: In the Google Play Store app, what is the star rating of the Duolingo app?
   compiler: muse-wonder-1.0
-  compiled_at: "2026-10-28 03:07:10"
-  trace_steps_kept: [5, 6]
-  trace_steps_dropped: 4
-  cost_usd: 0.045
+  compiled_at: "2026-11-03 03:58:04"
+  trace_steps_kept: [1, 2, 3]
+  trace_steps_dropped: 0
+  cost_usd: 0.0472

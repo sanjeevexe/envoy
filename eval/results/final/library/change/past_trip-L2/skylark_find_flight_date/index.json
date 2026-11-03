@@ -1,0 +1,36 @@
+{
+ "name": "skylark_find_flight_date",
+ "active": 2,
+ "versions": [
+  {
+   "version": 1,
+   "status": "retired",
+   "created": "2026-11-03 02:35:29",
+   "parent": null,
+   "changes": [
+    "v1 compiled from f7-1103001513-src-past_trip-a1"
+   ],
+   "verification": null
+  },
+  {
+   "version": 2,
+   "status": "active",
+   "created": "2026-11-03 02:35:37",
+   "parent": 1,
+   "changes": [
+    "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}",
+    "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}"
+   ],
+   "source_task": "f7-1103022306-chg-past_trip-L2-first",
+   "screenshots": [],
+   "trial": {
+    "passed": true,
+    "task_id": "f7-1103022306-chg-past_trip-L2-trial",
+    "status": "done"
+   }
+  }
+ ],
+ "runs": [],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

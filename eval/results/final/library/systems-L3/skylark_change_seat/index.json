@@ -5,10 +5,10 @@
   {
    "version": 1,
    "status": "active",
-   "created": "2026-10-27 21:58:06",
+   "created": "2026-11-03 00:18:07",
    "parent": null,
    "changes": [
-    "compiled from f7-1027215614-src-change_seat-a1"
+    "compiled from f7-1103001513-src-change_seat-a1"
    ],
    "verification": {
     "cases": [
@@ -16,30 +16,34 @@
       "case": "same-inputs",
       "inputs": {
        "trip_city": "Denver",
-       "new_seat": "21C"
+       "desired_seat": "21C"
       },
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 5.13,
+      "duration_s": 5.07,
       "outputs": {
-       "confirmed_seat": "21C",
-       "flight_number": "SL 1190"
+       "seat": "21C",
+       "gate": "A7",
+       "boarding": "2:05 PM · Group 5",
+       "confirmation": "PT4R8Z"
       }
      },
      {
       "case": "second-inputs",
       "inputs": {
        "trip_city": "Tampa",
-       "new_seat": "23B"
+       "desired_seat": "23B"
       },
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 6.29,
+      "duration_s": 7.0,
       "outputs": {
-       "confirmed_seat": "23B",
-       "flight_number": "SL 291"
+       "seat": "23B",
+       "gate": "B17",
+       "boarding": "6:00 AM · Group 5",
+       "confirmation": "RPOIG8"
       }
      }
     ]
@@ -48,14 +52,36 @@
  ],
  "runs": [
   {
-   "time": "2026-10-28 03:48:45",
+   "time": "2026-11-03 01:47:54",
    "kind": "run",
    "version": 1,
-   "task_id": "f7-1028034646-rou-change_seat-L3-s101-t1",
+   "task_id": "f7-1103002528-rou-change_seat-L3-s101-t1",
    "status": "done",
    "rung": 0,
    "model_calls": 0,
-   "duration_s": 7.34,
+   "duration_s": 6.58,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-03 01:55:11",
+   "kind": "run",
+   "version": 1,
+   "task_id": "f7-1103002528-rou-change_seat-L3-s102-t1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 6.98,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-03 02:02:31",
+   "kind": "run",
+   "version": 1,
+   "task_id": "f7-1103002528-rou-change_seat-L3-s103-t1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 4.61,
    "patches": 0
   }
  ],

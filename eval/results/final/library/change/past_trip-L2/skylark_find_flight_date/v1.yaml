@@ -1,0 +1,67 @@
+routine: skylark_find_flight_date
+app: com.skylark.air
+version: 1
+status: retired
+intent: Find the date of a past SkyLark flight to a city
+description: Searches the My Trips list in SkyLark Air for a trip to the requested city and returns the date of that flight.
+patterns: [when did I fly to, when was my flight to, what date was my trip to, when did I travel to]
+outputs: [flight_date]
+start: fresh_launch
+inputs:
+  trip_city: {type: text, description: The destination city of the trip to look up., example: Seattle}
+steps:
+- id: tap_my_trips
+  intent: Tap "My Trips"
+  pre:
+  - {app_foreground: com.skylark.air}
+  - element_present: {resource_id: screen_title, text: SkyLark Air, kind: Text}
+  action:
+    tap:
+      resource_id: nav_trips
+      text: My Trips
+      kind: Button
+      cls: View
+      in_list: false
+      position: [0.373, 0.93]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: screen_title, text: My Trips, kind: Text}
+  - element_present: {resource_id: nav_trips, text: My Trips, kind: Text}
+  risk: reversible
+  note: trace step 1
+- id: scroll_until_trip_city
+  intent: "Scroll down until the trip to {{trip_city}} is visible"
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    scroll_until:
+      target:
+        resource_id: trip_row_*
+        text_has: "{{trip_city}}"
+        in_list: true
+      direction: down
+      max_scrolls: 8
+      container: {resource_id: list_trips, kind: List}
+  post:
+  - element_present:
+      resource_id: trip_row_*
+      text_has: "{{trip_city}}"
+      in_list: true
+  risk: read
+  extract:
+    flight_date:
+      locator:
+        resource_id: trip_row_*
+        text_has: "{{trip_city}}"
+        in_list: true
+      segment: 1
+  note: trace step 2 (+2 scrolls)
+changes: [v1 compiled from f7-1103001513-src-past_trip-a1]
+compiled_from:
+  task_id: f7-1103001513-src-past_trip-a1
+  goal: When did I fly to Seattle?
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-11-03 00:24:20"
+  trace_steps_kept: [1, 2]
+  trace_steps_dropped: 0
+  cost_usd: 0.0515

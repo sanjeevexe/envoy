@@ -1,17 +1,17 @@
 [
  {
   "kind": "insert_after",
-  "step": "continue_after_hazmat_declaration",
-  "description": "after 'continue_after_hazmat_declaration', an extra screen appeared; inserted continue_after_hazmat_declaration_extra_1 (tap Looks good)",
+  "step": "tap_continue_hazmat",
+  "description": "after 'tap_continue_hazmat', an extra screen appeared; inserted tap_continue_hazmat_extra_1 (tap Looks good)",
   "evidence": {
    "screenshots": [
-    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/f7-1028034646-rou-check_in-L3-s101-t1/screens/repair_08_1_before.png",
-    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/f7-1028034646-rou-check_in-L3-s101-t1/screens/repair_08_1_after.png"
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/f7-1103002528-rou-check_in-L3-s101-t1/screens/repair_08_1_before.png",
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/f7-1103002528-rou-check_in-L3-s101-t1/screens/repair_08_1_after.png"
    ],
    "reasons": [
-    "Extra Review screen blocks Confirm check-in, advance with its main button."
+    "Extra 'Review your trip' screen (Step 3 of 4) stands between the hazardous-materials step and the Confirm check-in screen. Its main button 'Looks good' advances toward that screen, consistent with wanting to check in."
    ],
-   "task_id": "f7-1028034646-rou-check_in-L3-s101-t1"
+   "task_id": "f7-1103002528-rou-check_in-L3-s101-t1"
   }
  }
 ]

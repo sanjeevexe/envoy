@@ -1,24 +1,24 @@
 {
- "name": "starbucks_get_drink_calories",
- "intent": "Check how many calories are in a Starbucks drink",
- "description": "Opens a Starbucks menu item, uses its preselected Grande size, and reads the calorie count shown on the product page.",
+ "name": "starbucks_get_item_calories",
+ "intent": "Look up the calories for a Starbucks menu item in a chosen size",
+ "description": "Open the Starbucks menu without selecting a café, search for a menu item, open its product page for the requested size, and read the calorie count shown there.",
  "patterns": [
-  "how many calories are in a drink",
-  "what is the calorie count for a menu item",
-  "check the calories in a drink"
+  "how many calories are in a menu item",
+  "what is the calorie count for a drink",
+  "check the calories for an item and size"
  ],
  "inputs": [
   {
    "name": "drink_name",
    "type": "text",
-   "description": "The Starbucks menu drink to look up.",
+   "description": "Menu item to look up",
    "from_memory": null,
    "example": "Caffè Latte"
   },
   {
-   "name": "size_name",
+   "name": "size",
    "type": "text",
-   "description": "The drink size whose calories are requested; Grande is preselected on the product page in this run.",
+   "description": "Requested size of the menu item",
    "from_memory": null,
    "example": "Grande"
   }
@@ -26,50 +26,50 @@
  "steps": [
   {
    "step": 1,
-   "id": "tap_order",
-   "intent": "Tap Order to open the ordering section",
+   "id": "open_order",
+   "intent": "Tap Order to open the menu",
    "target_fixed_text": "Order",
    "choice_input": null
   },
   {
    "step": 2,
    "id": "dismiss_location_prompt",
-   "intent": "Go back to dismiss the location permission prompt",
-   "target_fixed_text": null,
+   "intent": "Dismiss the location prompt",
+   "target_fixed_text": "No, thanks",
    "choice_input": null
   },
   {
    "step": 3,
-   "id": "tap_skip",
-   "intent": "Tap Skip to bypass café selection",
+   "id": "skip_store_selection",
+   "intent": "Skip selecting a café so the menu can be browsed",
    "target_fixed_text": "Skip",
    "choice_input": null
   },
   {
    "step": 4,
    "id": "confirm_skip_to_menu",
-   "intent": "Confirm skipping to the menu",
+   "intent": "Confirm skipping directly to the menu",
    "target_fixed_text": "Yes",
    "choice_input": null
   },
   {
    "step": 5,
-   "id": "tap_search_menu",
-   "intent": "Tap Search Menu to look for {{drink_name}}",
+   "id": "open_search_menu",
+   "intent": "Open menu search to find {{drink_name}}",
    "target_fixed_text": "Search Menu",
    "choice_input": null
   },
   {
    "step": 6,
-   "id": "select_recent_search_result",
-   "intent": "Select {{drink_name}} from the available search suggestions",
+   "id": "select_search_suggestion",
+   "intent": "Tap the {{drink_name}} search suggestion",
    "target_fixed_text": null,
    "choice_input": "drink_name"
   },
   {
    "step": 7,
-   "id": "open_drink_product",
-   "intent": "Open {{drink_name}} from the results to view the calories for the {{size_name}} size",
+   "id": "open_menu_item",
+   "intent": "Tap the {{drink_name}} result to open its product page and read the calories for the {{size}} size",
    "target_fixed_text": null,
    "choice_input": "drink_name"
   }
@@ -81,7 +81,5 @@
    "example": "190 calories"
   }
  ],
- "data_values": [
-  "16 fl oz"
- ]
+ "data_values": []
 }

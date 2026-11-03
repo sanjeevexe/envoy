@@ -1,14 +1,14 @@
 {
  "name": "skylark_check_in_flight",
- "active": 1,
+ "active": 2,
  "versions": [
   {
    "version": 1,
-   "status": "active",
-   "created": "2026-10-27 21:57:10",
+   "status": "retired",
+   "created": "2026-11-03 00:16:47",
    "parent": null,
    "changes": [
-    "compiled from f7-1027215614-src-check_in-a1"
+    "compiled from f7-1103001513-src-check_in-a1"
    ],
    "verification": {
     "cases": [
@@ -20,7 +20,7 @@
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 4.58,
+      "duration_s": 4.54,
       "outputs": {
        "seat": "22F",
        "gate": "A7",
@@ -36,7 +36,7 @@
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 4.0,
+      "duration_s": 4.32,
       "outputs": {
        "seat": "11E",
        "gate": "B17",
@@ -49,30 +49,59 @@
   },
   {
    "version": 2,
-   "status": "trial",
-   "created": "2026-10-28 03:48:32",
+   "status": "active",
+   "created": "2026-11-03 01:47:01",
    "parent": 1,
    "changes": [
-    "after 'continue_after_hazmat_declaration', an extra screen appeared; inserted continue_after_hazmat_declaration_extra_1 (tap Looks good)"
+    "after 'tap_continue_hazmat', an extra screen appeared; inserted tap_continue_hazmat_extra_1 (tap Looks good)"
    ],
-   "source_task": "f7-1028034646-rou-check_in-L3-s101-t1",
+   "source_task": "f7-1103002528-rou-check_in-L3-s101-t1",
    "screenshots": [
     "history/v2/repair_08_1_before.png",
     "history/v2/repair_08_1_after.png"
-   ]
+   ],
+   "trial": {
+    "passed": true,
+    "task_id": "f7-1103002528-rou-check_in-L3-s102-t1",
+    "status": "done",
+    "model_calls": 0,
+    "duration_s": 4.63
+   }
   }
  ],
  "runs": [
   {
-   "time": "2026-10-28 03:48:32",
+   "time": "2026-11-03 01:47:01",
    "kind": "run",
    "version": 1,
-   "task_id": "f7-1028034646-rou-check_in-L3-s101-t1",
+   "task_id": "f7-1103002528-rou-check_in-L3-s101-t1",
    "status": "done",
    "rung": 4,
    "model_calls": 1,
-   "duration_s": 11.69,
+   "duration_s": 14.86,
    "patches": 1
+  },
+  {
+   "time": "2026-11-03 01:54:14",
+   "kind": "run",
+   "version": 2,
+   "task_id": "f7-1103002528-rou-check_in-L3-s102-t1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 4.63,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-03 02:01:39",
+   "kind": "run",
+   "version": 2,
+   "task_id": "f7-1103002528-rou-check_in-L3-s103-t1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 4.37,
+   "patches": 0
   }
  ],
  "needs_recompile": false,

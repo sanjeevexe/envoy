@@ -1,18 +1,18 @@
-routine: gmail_search_mail
+routine: gmail_search_first_result_subject
 app: com.google.android.gm
 version: 1
 status: draft
-intent: Search Gmail for a term and report the subject of the first result
-description: Searches Gmail using a provided search term, opens the first matching email, and reports that email's subject.
-patterns: [search my mail and tell me the first subject, find the first email matching a search term, what is the subject of the first matching
-    email, search my email for this and report the top result]
-outputs: [first_result_subject]
+intent: Search Gmail and get the subject of the first result
+description: Searches Gmail for a user-provided term, opens the first matching email, and returns its subject line from the opened conversation.
+patterns: [search my mail for something and tell me the first subject, find emails about a topic in Gmail, what is the subject of the first email
+    matching a search, search Gmail for a sender or keyword]
+outputs: [subject]
 start: fresh_launch
 inputs:
-  search_query: {type: text, description: The term to search for in Gmail., example: DoorDash}
+  search_term: {type: text, description: The term to search for in Gmail., example: DoorDash}
 steps:
-- id: tap_search_in_mail
-  intent: Tap the Search in mail field to start a search
+- id: tap_search_field
+  intent: Tap the Search in mail field
   pre:
   - {app_foreground: com.google.android.gm}
   - element_present: {resource_id: compose_button, text: Compose, kind: Button}
@@ -32,8 +32,8 @@ steps:
   - element_absent: {resource_id: compose_button, text: Compose, kind: Button}
   risk: reversible
   note: trace step 1
-- id: type_search_query
-  intent: "Type {{search_query}} into the Search in mail field and run the search"
+- id: type_search_term
+  intent: "Type {{search_term}} into the Search in mail field and submit the search"
   pre:
   - {app_foreground: com.google.android.gm}
   action:
@@ -47,14 +47,14 @@ steps:
         parent: open_search_view_text_container
         in_list: true
         position: [0.519, 0.088]
-      value: "{{search_query}}"
+      value: "{{search_term}}"
       submit: true
   post:
   - {screen_changed: true}
   risk: reversible
   note: trace step 2
-- id: open_first_search_result
-  intent: "Tap the first search result matching {{search_query}} to open it and confirm its subject"
+- id: open_first_result
+  intent: Tap the first result in the search results list
   pre:
   - {app_foreground: com.google.android.gm}
   action:
@@ -63,26 +63,22 @@ steps:
       cls: FrameLayout
       parent: thread_list_view
       in_list: true
-      position: [0.5, 0.289]
+      position: [0.5, 0.299]
   post:
   - {screen_changed: true}
   - element_present: {resource_id: item_pager, kind: List}
   - element_present: {resource_id: archive, text: Archive, kind: Button}
   risk: reversible
   extract:
-    first_result_subject:
+    subject:
       locator: {resource_id: subject_and_folder_view, kind: Button}
       after: Inbox
-      first_in_list: false
-      next_element: false
-      expect_digits: false
-      switch: false
   note: trace step 3
 compiled_from:
-  task_id: f7-1028023735-real-gmail_search
+  task_id: f7-1103034419-real-gmail_search
   goal: In the Gmail app, search my mail for DoorDash and tell me the subject of the first result.
   compiler: muse-wonder-1.0
-  compiled_at: "2026-10-28 02:51:27"
+  compiled_at: "2026-11-03 03:55:04"
   trace_steps_kept: [1, 2, 3]
   trace_steps_dropped: 0
-  cost_usd: 0.0486
+  cost_usd: 0.0489

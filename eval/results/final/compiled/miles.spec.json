@@ -1,27 +1,30 @@
 {
- "name": "skylark_get_miles",
- "intent": "Get the SkyLark miles balance",
- "description": "Reads the SkyLark miles balance shown on the SkyLark Air home screen and returns it. No navigation or input is required.",
+ "name": "skylark_check_miles",
+ "intent": "Check your SkyLark miles balance",
+ "description": "Open SkyLark and read the SkyLark Rewards miles balance shown on the home screen, with no navigation required.",
  "patterns": [
   "How many SkyLark miles do I have?",
-  "What is my SkyLark miles balance?",
-  "Check my SkyLark rewards miles",
-  "Show my SkyLark miles"
+  "Check my SkyLark miles",
+  "What is my SkyLark Rewards balance?",
+  "Show my miles balance"
  ],
  "inputs": [],
  "steps": [],
  "outputs": [
   {
    "name": "skylark_miles",
-   "near": "SkyLark Rewards",
+   "near": "SkyLark Rewards:",
    "example": "38,240 miles"
   }
  ],
  "data_values": [
-  "38,240 miles",
   "Chicago",
   "Fri, Oct 30, 2026",
   "SL 482",
-  "ATL 6:10 AM → ORD 7:25 AM"
+  "ATL",
+  "6:10 AM",
+  "ORD",
+  "7:25 AM",
+  "Maya"
  ]
 }

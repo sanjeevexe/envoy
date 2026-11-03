@@ -1,17 +1,19 @@
-routine: doordash_search_restaurants
+routine: doordash_search_first_restaurant
 app: com.dd.doordash
 version: 1
 status: draft
-intent: Search DoorDash for food and report the first restaurant in the results
-description: Searches DoorDash for a requested food or cuisine and returns the name of the first restaurant shown in the search results.
-patterns: [search DoorDash for food, find restaurants on DoorDash, look up food on DoorDash, what is the first DoorDash restaurant for this food]
+intent: Search DoorDash for a food and report the first restaurant in the results
+description: Open search in the DoorDash app, search for the requested food or query, and return the name of the first restaurant shown in the
+  results list.
+patterns: [search for food and tell me the first restaurant, find the top restaurant in DoorDash, search DoorDash and name the first result, what
+    is the first restaurant for this food]
 outputs: [first_restaurant_name]
 start: fresh_launch
 inputs:
-  search_query: {type: text, description: The food or cuisine to search for in DoorDash., example: pizza}
+  search_query: {type: text, description: The food or search term to look up in DoorDash., example: pizza}
 steps:
-- id: open_search
-  intent: Tap 'Search DoorDash' to open search
+- id: tap_search_doordash
+  intent: Tap the Search DoorDash field to start a search
   pre:
   - {app_foreground: com.dd.doordash}
   - element_present: {resource_id: coordinatorLayout_homepage, kind: List}
@@ -28,8 +30,8 @@ steps:
   - element_present: {resource_id: search_back_button, text: Close search, kind: Button}
   risk: reversible
   note: trace step 1
-- id: enter_search_query
-  intent: "Type {{search_query}} into the 'Search DoorDash' field and view the results"
+- id: type_search_query
+  intent: "Type {{search_query}} into the Search DoorDash field and submit the search"
   pre:
   - {app_foreground: com.dd.doordash}
   action:
@@ -55,15 +57,12 @@ steps:
     first_restaurant_name:
       pattern: "(?P<v>[^,]+?),\\s*\\d+(?:\\.\\d+)?\\ mi\\ away(?:,.*)?"
       first_in_list: true
-      next_element: false
-      expect_digits: false
-      switch: false
   note: trace step 2
 compiled_from:
-  task_id: f7-1028023735-real-doordash_search
+  task_id: f7-1103034419-real-doordash_search
   goal: In the DoorDash app, search for pizza and tell me the name of the first restaurant in the results.
   compiler: muse-wonder-1.0
-  compiled_at: "2026-10-28 02:46:50"
+  compiled_at: "2026-11-03 03:52:03"
   trace_steps_kept: [1, 2]
   trace_steps_dropped: 0
-  cost_usd: 0.0504
+  cost_usd: 0.0446

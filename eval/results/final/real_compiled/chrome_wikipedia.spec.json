@@ -1,0 +1,57 @@
+{
+ "name": "chrome_search_wikipedia_article",
+ "intent": "Search Wikipedia in Chrome for a topic and find the year it opened",
+ "description": "Opens the mobile Wikipedia site in Chrome, searches for the requested topic, scrolls through the article to find its opening information, and reports the opening year.",
+ "patterns": [
+  "search Wikipedia for something and tell me when it opened",
+  "look up a topic on Wikipedia and find its opening year",
+  "find when something opened on Wikipedia"
+ ],
+ "inputs": [
+  {
+   "name": "topic",
+   "type": "text",
+   "description": "Topic or article title to search for on Wikipedia",
+   "from_memory": null,
+   "example": "Eiffel Tower"
+  }
+ ],
+ "steps": [
+  {
+   "step": 1,
+   "id": "open_wikipedia",
+   "intent": "Type en.m.wikipedia.org in the URL bar and submit",
+   "target_fixed_text": "Search Google or type URL",
+   "choice_input": null
+  },
+  {
+   "step": 2,
+   "id": "open_search",
+   "intent": "Tap Search to open the search field",
+   "target_fixed_text": "Search",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "search_for_topic",
+   "intent": "Type {{topic}} in the search field and submit",
+   "target_fixed_text": null,
+   "choice_input": null
+  },
+  {
+   "step": 4,
+   "id": "scroll_to_opening_information",
+   "intent": "Scroll down the article to find the opening information",
+   "target_fixed_text": null,
+   "choice_input": null
+  }
+ ],
+ "outputs": [
+  {
+   "name": "opening_year",
+   "near": "Opening",
+   "example": "1889"
+  }
+ ],
+ "data_values": []
+}

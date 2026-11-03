@@ -1,176 +1,92 @@
 {
  "name": "chipotle_find_menu_item_price",
- "intent": "Find the price of a menu item in the Chipotle app.",
- "description": "Sets the preferred pickup location by ZIP code, navigates to the menu category containing the requested item, opens the item, and returns its displayed price.",
+ "intent": "Find the price of a Chipotle menu item",
+ "description": "Finds the price of a Chipotle menu item at the preferred pickup location and returns the price shown in the menu.",
  "patterns": [
   "find the price of a menu item",
   "how much does a menu item cost",
-  "check the price of this item",
-  "what is the price of that side"
+  "check a Chipotle menu price",
+  "what is the price of this item"
  ],
  "inputs": [
-  {
-   "name": "zip_code",
-   "type": "text",
-   "description": "ZIP code for the preferred pickup location.",
-   "from_memory": "preferred_location.zip_code",
-   "example": "10001"
-  },
   {
    "name": "menu_item",
    "type": "text",
    "description": "Menu item whose price should be found.",
    "from_memory": null,
    "example": "Chips & Guacamole"
+  },
+  {
+   "name": "preferred_zip_code",
+   "type": "text",
+   "description": "ZIP code for the preferred Chipotle pickup location.",
+   "from_memory": "preferred_location.zip_code",
+   "example": "10001"
   }
  ],
  "steps": [
   {
    "step": 1,
-   "id": "open_pickup_or_delivery",
-   "intent": "Open pickup or delivery options to set the pickup location.",
-   "target_fixed_text": "PICKUP OR DELIVERY",
+   "id": "open_menu_tab",
+   "intent": "Open the MENU tab",
+   "target_fixed_text": "MENU",
    "choice_input": null
   },
   {
    "step": 2,
-   "id": "go_back_from_location_disclosure",
-   "intent": "Go back to dismiss the blocking location-data disclosure.",
-   "target_fixed_text": null,
+   "id": "scroll_to_chips_and_sides",
+   "intent": "Scroll until the CHIPS & SIDES category is visible",
+   "target_fixed_text": "CHIPS & SIDES",
    "choice_input": null
   },
   {
    "step": 3,
-   "id": "go_back_from_permission_prompt",
-   "intent": "Go back to dismiss the blocking location permission prompt.",
-   "target_fixed_text": null,
+   "id": "open_chips_and_sides",
+   "intent": "Open the CHIPS & SIDES category containing {{menu_item}}",
+   "target_fixed_text": "CHIPS & SIDES",
    "choice_input": null
   },
   {
    "step": 4,
-   "id": "search_pickup_location_by_zip",
-   "intent": "Type {{zip_code}} into the City, State, or ZIP search field.",
-   "target_fixed_text": "City, State, or ZIP",
-   "choice_input": "zip_code"
+   "id": "dismiss_location_dialog",
+   "intent": "Dismiss the location-data dialog blocking the menu",
+   "target_fixed_text": "OKAY",
+   "choice_input": null
   },
   {
    "step": 5,
-   "id": "return_to_home_after_search",
-   "intent": "Go back to return to the home screen.",
-   "target_fixed_text": null,
+   "id": "tap_location_search",
+   "intent": "Tap the location search field",
+   "target_fixed_text": "City, State, or ZIP",
    "choice_input": null
   },
   {
    "step": 6,
-   "id": "reopen_pickup_or_delivery",
-   "intent": "Open pickup or delivery options again to set the pickup location.",
-   "target_fixed_text": "PICKUP OR DELIVERY",
+   "id": "enter_preferred_zip_code",
+   "intent": "Type {{preferred_zip_code}} into the location search field",
+   "target_fixed_text": "City, State, or ZIP",
    "choice_input": null
   },
   {
    "step": 7,
-   "id": "go_back_from_location_disclosure_again",
-   "intent": "Go back to dismiss the blocking location-data disclosure.",
+   "id": "reveal_location_list",
+   "intent": "Swipe to reveal the list of pickup locations for {{preferred_zip_code}}",
    "target_fixed_text": null,
    "choice_input": null
   },
   {
    "step": 8,
-   "id": "go_back_from_permission_prompt_again",
-   "intent": "Go back to dismiss the blocking location permission prompt.",
+   "id": "select_pickup_location",
+   "intent": "Tap a pickup location shown for {{preferred_zip_code}}",
    "target_fixed_text": null,
-   "choice_input": null
+   "choice_input": "preferred_zip_code"
   },
   {
    "step": 9,
-   "id": "search_pickup_location_by_zip_again",
-   "intent": "Type {{zip_code}} into the City, State, or ZIP search field.",
-   "target_fixed_text": "City, State, or ZIP",
-   "choice_input": "zip_code"
-  },
-  {
-   "step": 10,
-   "id": "return_to_home_after_search_again",
-   "intent": "Go back to clear the blocking prompt and return to the home screen.",
-   "target_fixed_text": null,
-   "choice_input": null
-  },
-  {
-   "step": 11,
-   "id": "open_pickup_or_delivery_final_attempt",
-   "intent": "Open pickup or delivery options to set the pickup location before viewing the menu.",
-   "target_fixed_text": "PICKUP OR DELIVERY",
-   "choice_input": null
-  },
-  {
-   "step": 12,
-   "id": "go_back_from_location_disclosure_final",
-   "intent": "Go back to dismiss the blocking location-data disclosure.",
-   "target_fixed_text": null,
-   "choice_input": null
-  },
-  {
-   "step": 13,
-   "id": "enter_zip_in_search_field",
-   "intent": "Type {{zip_code}} into the City, State, or ZIP search field.",
-   "target_fixed_text": "City, State, or ZIP",
-   "choice_input": "zip_code"
-  },
-  {
-   "step": 14,
-   "id": "reenter_zip_in_search_field",
-   "intent": "Type {{zip_code}} into the correct City, State, or ZIP search field to find the pickup location.",
-   "target_fixed_text": "City, State, or ZIP",
-   "choice_input": "zip_code"
-  },
-  {
-   "step": 15,
-   "id": "open_location_list",
-   "intent": "Open the location list to choose a pickup location.",
-   "target_fixed_text": null,
-   "choice_input": null
-  },
-  {
-   "step": 16,
-   "id": "select_pickup_location_for_zip",
-   "intent": "Select the pickup location that shows {{zip_code}}.",
-   "target_fixed_text": null,
-   "choice_input": "zip_code"
-  },
-  {
-   "step": 17,
    "id": "confirm_pickup_location",
-   "intent": "Confirm the selected pickup location.",
+   "intent": "Tap PICK UP HERE to select the pickup location and proceed to the menu",
    "target_fixed_text": "PICK UP HERE",
    "choice_input": null
-  },
-  {
-   "step": 18,
-   "id": "open_menu",
-   "intent": "Open the menu.",
-   "target_fixed_text": "MENU",
-   "choice_input": null
-  },
-  {
-   "step": 19,
-   "id": "scroll_to_chips_and_sides",
-   "intent": "Scroll until the CHIPS & SIDES category is visible.",
-   "target_fixed_text": "CHIPS & SIDES",
-   "choice_input": null
-  },
-  {
-   "step": 20,
-   "id": "open_chips_and_sides",
-   "intent": "Open the CHIPS & SIDES category.",
-   "target_fixed_text": "CHIPS & SIDES",
-   "choice_input": null
-  },
-  {
-   "step": 21,
-   "id": "open_menu_item",
-   "intent": "Open {{menu_item}} to view its price.",
-   "target_fixed_text": null,
-   "choice_input": "menu_item"
   }
  ],
  "outputs": [
@@ -181,6 +97,6 @@
   }
  ],
  "data_values": [
-  "500 W 33rd street · New York, NY 10001"
+  "500 W 33rd street"
  ]
 }

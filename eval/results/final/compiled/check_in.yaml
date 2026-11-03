@@ -3,16 +3,16 @@ app: com.skylark.air
 version: 1
 status: draft
 intent: Check in for a SkyLark flight
-description: Opens My Trips in SkyLark Air, selects the trip for the requested destination, and completes check-in by selecting the passenger,
-  confirming no hazardous materials, and confirming check-in.
-patterns: [Check me in for my flight, Check in for my upcoming flight, I want to check in for my trip]
+description: Opens My Trips in SkyLark Air, opens the requested trip, selects the passenger, acknowledges no hazardous materials, and confirms
+  check-in to obtain the boarding pass.
+patterns: [Check me in for my flight, Check in for my trip, Check me in, Get my boarding pass]
 outputs: [seat, gate, boarding_time, boarding_group]
 start: fresh_launch
 inputs:
-  trip_city: {type: text, description: Destination city of the flight to check in for., example: Denver}
+  trip_city: {type: text, description: Destination city of the flight to check in for, example: Denver}
 steps:
-- id: open_my_trips
-  intent: Open My Trips
+- id: tap_my_trips
+  intent: Tap My Trips
   pre:
   - {app_foreground: com.skylark.air}
   - element_present: {resource_id: screen_title, text: SkyLark Air, kind: Text}
@@ -29,8 +29,8 @@ steps:
   - element_present: {resource_id: screen_title, text: My Trips, kind: Text}
   - element_present: {resource_id: nav_trips, text: My Trips, kind: Text}
   risk: reversible
-  note: trace step 3
-- id: find_select_trip
+  note: trace step 1
+- id: find_tap_trip_row
   intent: "Scroll to {{trip_city}} if it is not on screen"
   action:
     scroll_until:
@@ -53,8 +53,8 @@ steps:
       in_list: true
   risk: read
   note: "added: input-based list choice"
-- id: select_trip
-  intent: "Select the trip to {{trip_city}}"
+- id: tap_trip_row
+  intent: "Tap the trip row for the flight to {{trip_city}}"
   pre:
   - {app_foreground: com.skylark.air}
   action:
@@ -73,9 +73,9 @@ steps:
       kind: Text
   - element_present: {resource_id: btn_checkin, text: Check in, kind: Button}
   risk: reversible
-  note: trace step 4
+  note: trace step 2
 - id: tap_check_in
-  intent: Tap Check in
+  intent: Tap Check in for the selected trip
   pre:
   - {app_foreground: com.skylark.air}
   action:
@@ -91,10 +91,10 @@ steps:
   - {screen_changed: true}
   - element_present: {resource_id: cb_passenger_0, kind: Toggle}
   - element_present: {resource_id: btn_continue, text: Continue, kind: Button}
-  risk: reversible
-  note: trace step 5
+  risk: irreversible
+  note: trace step 3
 - id: select_passenger
-  intent: Select the passenger
+  intent: Select the passenger to check in
   pre:
   - {app_foreground: com.skylark.air}
   action:
@@ -110,8 +110,8 @@ steps:
       target: {resource_id: cb_passenger_0, kind: Toggle}
       value: 'on'
   risk: reversible
-  note: trace step 6
-- id: continue_after_passenger_selection
+  note: trace step 4
+- id: tap_continue_passenger
   intent: Tap Continue after selecting the passenger
   pre:
   - {app_foreground: com.skylark.air}
@@ -128,9 +128,9 @@ steps:
   - {screen_changed: true}
   - element_present: {resource_id: cb_hazmat, text: I'm not carrying hazardous materials, kind: Toggle}
   risk: reversible
-  note: trace step 7
-- id: confirm_no_hazardous_materials
-  intent: Confirm I'm not carrying hazardous materials
+  note: trace step 5
+- id: acknowledge_hazardous_materials
+  intent: Toggle the acknowledgement that I am not carrying hazardous materials
   pre:
   - {app_foreground: com.skylark.air}
   action:
@@ -148,9 +148,9 @@ steps:
       target: {resource_id: cb_hazmat, text: I'm not carrying hazardous materials, kind: Toggle}
       value: 'on'
   risk: reversible
-  note: trace step 8
-- id: continue_after_hazmat_declaration
-  intent: Tap Continue after the hazardous materials declaration
+  note: trace step 6
+- id: tap_continue_hazmat
+  intent: Tap Continue after the hazardous materials acknowledgement
   pre:
   - {app_foreground: com.skylark.air}
   action:
@@ -168,9 +168,9 @@ steps:
   - element_present: {resource_id: btn_confirm_checkin, text: Confirm check-in, kind: Button}
   - element_present: {resource_id: row_confirm_passenger, text: Passenger, kind: Text}
   risk: reversible
-  note: trace step 9
-- id: confirm_check_in
-  intent: Confirm check-in
+  note: trace step 7
+- id: tap_confirm_check_in
+  intent: Tap Confirm check-in to complete check-in
   pre:
   - {app_foreground: com.skylark.air}
   action:
@@ -191,38 +191,26 @@ steps:
       near: Seat
       locator: {resource_id: row_bp_seat, kind: Text}
       segment: 1
-      first_in_list: false
-      next_element: false
       expect_digits: true
     gate:
       near: Gate
       locator: {resource_id: row_bp_gate, kind: Text}
       segment: 1
-      first_in_list: false
-      next_element: false
-      expect_digits: false
     boarding_time:
       near: Boarding
       locator: {resource_id: row_bp_boarding, kind: Text}
       segment: 1
-      first_in_list: false
-      next_element: false
       expect_digits: true
     boarding_group:
       near: Boarding
       locator: {resource_id: row_bp_boarding, kind: Text}
       segment: 2
-      first_in_list: false
-      next_element: false
-      expect_digits: false
-  note: trace step 10
-done:
-- element_present: {text: Boarding pass}
+  note: trace step 8
 compiled_from:
-  task_id: f7-1027215614-src-check_in-a1
+  task_id: f7-1103001513-src-check_in-a1
   goal: Check me in for my flight to Denver.
   compiler: muse-wonder-1.0
-  compiled_at: "2026-10-27 21:56:53"
-  trace_steps_kept: [3, 4, 5, 6, 7, 8, 9, 10]
-  trace_steps_dropped: 2
-  cost_usd: 0.049
+  compiled_at: "2026-11-03 00:16:27"
+  trace_steps_kept: [1, 2, 3, 4, 5, 6, 7, 8]
+  trace_steps_dropped: 0
+  cost_usd: 0.0549

@@ -5,22 +5,23 @@
   {
    "version": 1,
    "status": "active",
-   "created": "2026-10-27 22:03:29",
+   "created": "2026-11-03 00:23:33",
    "parent": null,
    "changes": [
-    "compiled from f7-1027215614-src-find_trip-a1"
+    "compiled from f7-1103001513-src-find_trip-a1"
    ],
    "verification": {
     "cases": [
      {
       "case": "same-inputs",
       "inputs": {
-       "trip_confirmation_code": "PT4R8Z"
+       "trip_confirmation_code": "PT4R8Z",
+       "user_last_name": "Patel"
       },
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 1.8,
+      "duration_s": 4.37,
       "outputs": {
        "destination": "Denver"
       }
@@ -28,12 +29,13 @@
      {
       "case": "second-inputs",
       "inputs": {
-       "trip_confirmation_code": "RPOIG8"
+       "trip_confirmation_code": "RPOIG8",
+       "user_last_name": "Patel"
       },
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 1.82,
+      "duration_s": 3.96,
       "outputs": {
        "destination": "Tampa"
       }
@@ -44,17 +46,50 @@
  ],
  "runs": [
   {
-   "time": "2026-10-27 22:22:18",
+   "time": "2026-11-03 00:55:08",
    "kind": "run",
    "version": 1,
-   "task_id": "f7-1027220657-rou-find_trip-L1-s101-t1",
+   "task_id": "f7-1103002528-rou-find_trip-L1-s101-t1",
    "status": "done",
    "rung": 0,
    "model_calls": 0,
-   "duration_s": 1.84,
+   "duration_s": 4.09,
    "patches": 0
+  },
+  {
+   "time": "2026-11-03 01:14:04",
+   "kind": "run",
+   "version": 1,
+   "task_id": "f7-1103002528-rou-find_trip-L1-s102-t1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 4.11,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-03 01:23:59",
+   "kind": "run",
+   "version": 1,
+   "task_id": "f7-1103002528-rou-find_trip-L1-s103-t1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 5.49,
+   "patches": 1
   }
  ],
  "needs_recompile": false,
- "app": "com.skylark.air"
+ "app": "com.skylark.air",
+ "patch_attempts": [
+  {
+   "time": "2026-11-03 01:23:59",
+   "version": 1,
+   "source_task": "f7-1103002528-rou-find_trip-L1-s103-t1",
+   "result": "unchanged",
+   "changes": [
+    "step 'open_matching_trip': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}"
+   ]
+  }
+ ]
 }

@@ -1,14 +1,14 @@
 {
  "name": "skylark_check_in_flight",
- "active": 1,
+ "active": 2,
  "versions": [
   {
    "version": 1,
-   "status": "active",
-   "created": "2026-10-27 21:57:10",
+   "status": "retired",
+   "created": "2026-11-03 00:16:47",
    "parent": null,
    "changes": [
-    "compiled from f7-1027215614-src-check_in-a1"
+    "compiled from f7-1103001513-src-check_in-a1"
    ],
    "verification": {
     "cases": [
@@ -20,7 +20,7 @@
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 4.58,
+      "duration_s": 4.54,
       "outputs": {
        "seat": "22F",
        "gate": "A7",
@@ -36,7 +36,7 @@
       "passed": true,
       "status": "done",
       "detail": "all steps and checks passed",
-      "duration_s": 4.0,
+      "duration_s": 4.32,
       "outputs": {
        "seat": "11E",
        "gate": "B17",
@@ -49,31 +49,60 @@
   },
   {
    "version": 2,
-   "status": "trial",
-   "created": "2026-10-27 22:24:47",
+   "status": "active",
+   "created": "2026-11-03 01:26:07",
    "parent": 1,
    "changes": [
-    "step 'continue_after_passenger_selection': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}",
-    "step 'continue_after_hazmat_declaration': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}",
-    "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}",
-    "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}",
+    "step 'tap_continue_passenger': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}",
+    "step 'tap_continue_hazmat': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}",
+    "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}",
+    "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}",
     "step 'tap_check_in': after-checks failed (no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)) but the next step was ready; after-checks rewritten from what happened"
    ],
-   "source_task": "f7-1027220657-rou-check_in-L2-s101-t1",
-   "screenshots": []
+   "source_task": "f7-1103002528-rou-check_in-L2-s101-t1",
+   "screenshots": [],
+   "trial": {
+    "passed": true,
+    "task_id": "f7-1103002528-rou-check_in-L2-s102-t1",
+    "status": "done",
+    "model_calls": 0,
+    "duration_s": 3.89
+   }
   }
  ],
  "runs": [
   {
-   "time": "2026-10-27 22:24:47",
+   "time": "2026-11-03 01:26:07",
    "kind": "run",
    "version": 1,
-   "task_id": "f7-1027220657-rou-check_in-L2-s101-t1",
+   "task_id": "f7-1103002528-rou-check_in-L2-s101-t1",
    "status": "done",
    "rung": 2,
    "model_calls": 0,
-   "duration_s": 7.34,
+   "duration_s": 7.8,
    "patches": 5
+  },
+  {
+   "time": "2026-11-03 01:33:00",
+   "kind": "run",
+   "version": 2,
+   "task_id": "f7-1103002528-rou-check_in-L2-s102-t1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.89,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-03 01:39:34",
+   "kind": "run",
+   "version": 2,
+   "task_id": "f7-1103002528-rou-check_in-L2-s103-t1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 4.06,
+   "patches": 0
   }
  ],
  "needs_recompile": false,

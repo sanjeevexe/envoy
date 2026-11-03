@@ -1,16 +1,16 @@
-routine: skylark_get_flight_seat
+routine: skylark_get_seat
 app: com.skylark.air
 version: 1
 status: draft
-intent: Get the seat for a SkyLark flight
-description: Open My Trips in SkyLark Air, select the trip to the requested city, and read the seat shown on the trip details screen.
-patterns: [What seat do I have on my flight, What is my seat, Find my seat assignment, My seat on my flight]
+intent: Get the seat assignment for a SkyLark flight
+description: Open My Trips in SkyLark Air, select the trip to the requested city, and read the seat assignment from the trip details.
+patterns: [What seat do I have on my flight, What is my seat assignment, Show my seat for my flight]
 outputs: [seat]
 start: fresh_launch
 inputs:
-  trip_city: {type: text, description: The destination city of the flight whose seat is being requested., example: Denver}
+  trip_city: {type: text, description: City of the destination for the trip whose seat is requested, example: Denver}
 steps:
-- id: open_my_trips
+- id: tap_my_trips
   intent: Tap My Trips
   pre:
   - {app_foreground: com.skylark.air}
@@ -29,7 +29,7 @@ steps:
   - element_present: {resource_id: nav_trips, text: My Trips, kind: Text}
   risk: reversible
   note: trace step 1
-- id: find_select_trip_to_city
+- id: find_tap_trip_row
   intent: "Scroll to {{trip_city}} if it is not on screen"
   action:
     scroll_until:
@@ -52,7 +52,7 @@ steps:
       in_list: true
   risk: read
   note: "added: input-based list choice"
-- id: select_trip_to_city
+- id: tap_trip_row
   intent: "Tap the trip to {{trip_city}}"
   pre:
   - {app_foreground: com.skylark.air}
@@ -77,15 +77,13 @@ steps:
       near: Seat
       locator: {resource_id: row_seat, kind: Text}
       segment: 1
-      first_in_list: false
-      next_element: false
       expect_digits: true
   note: trace step 2
 compiled_from:
-  task_id: f7-1027215614-src-seat-a1
+  task_id: f7-1103001513-src-seat-a1
   goal: What seat do I have on my flight to Denver?
   compiler: muse-wonder-1.0
-  compiled_at: "2026-10-27 22:00:07"
+  compiled_at: "2026-11-03 00:20:27"
   trace_steps_kept: [1, 2]
   trace_steps_dropped: 0
-  cost_usd: 0.0431
+  cost_usd: 0.038

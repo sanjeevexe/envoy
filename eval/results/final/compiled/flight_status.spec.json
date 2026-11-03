@@ -1,19 +1,18 @@
 {
  "name": "skylark_check_flight_status",
  "intent": "Check the status of a SkyLark flight",
- "description": "Open Flight status in the SkyLark app, enter a flight number, search for it, and report the route, date, delay status, gate, and departure time shown in the result.",
+ "description": "Opens SkyLark Flight status, enters a flight number, searches, and returns the resulting flight status line.",
  "patterns": [
   "what's the status of my flight",
   "check flight status",
-  "is this flight delayed",
-  "look up a flight status",
-  "what gate does this flight leave from"
+  "is my flight delayed",
+  "look up a flight"
  ],
  "inputs": [
   {
    "name": "flight_number",
    "type": "text",
-   "description": "The SkyLark flight number to look up",
+   "description": "SkyLark flight number to look up",
    "from_memory": null,
    "example": "SL 1190"
   }
@@ -22,28 +21,21 @@
   {
    "step": 1,
    "id": "open_flight_status",
-   "intent": "Open the Flight status screen",
+   "intent": "Tap Flight status to open flight status lookup",
    "target_fixed_text": "Flight status",
    "choice_input": null
   },
   {
    "step": 2,
    "id": "enter_flight_number",
-   "intent": "Type {{flight_number}} into the Flight number field",
+   "intent": "Enter {{flight_number}} into the Flight number field",
    "target_fixed_text": "Flight number",
    "choice_input": null
   },
   {
    "step": 3,
-   "id": "dismiss_keyboard",
-   "intent": "Tap Done to dismiss the keyboard",
-   "target_fixed_text": "Done",
-   "choice_input": null
-  },
-  {
-   "step": 4,
-   "id": "search_flight_status",
-   "intent": "Tap Search to look up the status of {{flight_number}}",
+   "id": "search_flight",
+   "intent": "Tap Search to look up {{flight_number}}",
    "target_fixed_text": "Search",
    "choice_input": null
   }
@@ -51,28 +43,8 @@
  "outputs": [
   {
    "name": "flight_status",
-   "near": "SL 1190 · ATL → DEN · Sat, Nov 14, 2026 · Delayed 25 min · Gate A7 · Departs 2:45 PM",
-   "example": "Delayed 25 min"
-  },
-  {
-   "name": "route",
-   "near": "SL 1190 · ATL → DEN · Sat, Nov 14, 2026 · Delayed 25 min · Gate A7 · Departs 2:45 PM",
-   "example": "ATL → DEN"
-  },
-  {
-   "name": "flight_date",
-   "near": "SL 1190 · ATL → DEN · Sat, Nov 14, 2026 · Delayed 25 min · Gate A7 · Departs 2:45 PM",
-   "example": "Sat, Nov 14, 2026"
-  },
-  {
-   "name": "gate",
-   "near": "Gate A7",
-   "example": "A7"
-  },
-  {
-   "name": "departure_time",
-   "near": "Departs 2:45 PM",
-   "example": "2:45 PM"
+   "near": "Flight status",
+   "example": "SL 1190 · ATL → DEN · Sat, Nov 14, 2026 · Delayed 25 min · Gate A7 · Departs 2:45 PM"
   }
  ],
  "data_values": [

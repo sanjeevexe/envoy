@@ -1,68 +1,54 @@
 {
- "name": "youtube_music_find_song_artist",
- "intent": "Find the artist of a song in YouTube Music",
- "description": "Searches YouTube Music for a requested song, opens the Songs results, and reports the artist of the first song result.",
+ "name": "youtube_music_search_song_artist",
+ "intent": "Search for a song in YouTube Music and identify the artist of the first song result",
+ "description": "Searches YouTube Music for a requested song, filters the results to songs, and returns the artist shown for the first song result.",
  "patterns": [
   "search for a song and tell me the artist",
-  "who sings this song in YouTube Music",
-  "find the artist of the first song result",
-  "look up a song artist"
+  "find a song in YouTube Music and tell me who the artist is",
+  "who is the artist of the first song result for a song",
+  "look up a song and tell me its artist"
  ],
  "inputs": [
   {
-   "name": "song_title",
+   "name": "song_name",
    "type": "text",
-   "description": "The song title to search for",
+   "description": "The song title to search for.",
    "from_memory": null,
-   "example": "Bohemian Rhapsody"
+   "example": "Blinding Lights"
   }
  ],
  "steps": [
   {
    "step": 1,
-   "id": "dismiss_continue_listening_prompt",
-   "intent": "Dismiss the continue listening prompt",
-   "target_fixed_text": "Got it",
-   "choice_input": null
-  },
-  {
-   "step": 2,
-   "id": "open_search",
-   "intent": "Open search",
+   "id": "tap_search",
+   "intent": "Tap Search to start searching",
    "target_fixed_text": "Search",
    "choice_input": null
   },
   {
-   "step": 3,
-   "id": "go_back",
-   "intent": "Go back",
-   "target_fixed_text": null,
+   "step": 2,
+   "id": "enter_song_name",
+   "intent": "Type {{song_name}} into the search field and submit",
+   "target_fixed_text": "Type to search",
    "choice_input": null
   },
   {
-   "step": 4,
-   "id": "select_search_suggestion",
-   "intent": "Select the {{song_title}} search suggestion",
-   "target_fixed_text": null,
-   "choice_input": "song_title"
-  },
-  {
-   "step": 5,
-   "id": "show_song_results",
-   "intent": "Open the song results to read the artist of the first song result",
-   "target_fixed_text": "Show song results",
+   "step": 3,
+   "id": "filter_by_songs",
+   "intent": "Tap Songs to show only song results",
+   "target_fixed_text": "Songs",
    "choice_input": null
   }
  ],
  "outputs": [
   {
    "name": "artist",
-   "near": "Bohemian Rhapsody · Queen • 5:55 • 2.7B plays",
-   "example": "Queen"
+   "near": "Blinding Lights · The Weeknd • 3:22 • 3.7B plays",
+   "example": "The Weeknd"
   }
  ],
  "data_values": [
-  "5:55",
-  "2.7B plays"
+  "3:22",
+  "3.7B plays"
  ]
 }

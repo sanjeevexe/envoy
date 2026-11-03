@@ -1,35 +1,33 @@
 {
  "name": "skylark_look_up_trip",
- "active": 2,
+ "active": 1,
  "versions": [
   {
    "version": 1,
-   "status": "retired",
-   "created": "2026-10-28 00:13:29",
+   "status": "active",
+   "created": "2026-11-03 02:51:20",
    "parent": null,
    "changes": [
-    "v1 compiled from f7-1027215614-src-find_trip-a1"
+    "v1 compiled from f7-1103001513-src-find_trip-a1"
    ],
    "verification": null
   },
   {
    "version": 2,
-   "status": "active",
-   "created": "2026-10-28 00:13:37",
+   "status": "rejected",
+   "created": "2026-11-03 02:52:15",
    "parent": 1,
    "changes": [
-    "step 'open_my_trips': target found only by relaxed match; locator updated to {text='Trips', resource_id='nav_trips', kind='Button'}",
-    "step 'open_trip_by_confirmation_code': target found only by relaxed match; locator updated to {text_has='{{trip_confirmation_code}}', resource_id='trip_row_{{trip_confirmation_code}}', kind='Button'}",
-    "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', kind='Text'}",
-    "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', kind='Text'}",
-    "step 'find_open_trip_by_confirmation_code': after-check 0 matched only relaxed; updated to {text='Omaha', kind='Button'}"
+    "step 'tap_my_trips': target found only by relaxed match; locator updated to {text='Trips', resource_id='nav_trips', kind='Button'}",
+    "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', kind='Text'}",
+    "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', kind='Text'}"
    ],
-   "source_task": "f7-1027234941-chg-find_trip-L5-first",
+   "source_task": "f7-1103022306-chg-find_trip-L5-first",
    "screenshots": [],
    "trial": {
-    "passed": true,
-    "task_id": "f7-1027234941-chg-find_trip-L5-trial",
-    "status": "done"
+    "passed": false,
+    "task_id": "f7-1103022306-chg-find_trip-L5-trial",
+    "status": "failed"
    }
   }
  ],

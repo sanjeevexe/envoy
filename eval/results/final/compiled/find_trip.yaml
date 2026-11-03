@@ -2,16 +2,17 @@ routine: skylark_look_up_trip
 app: com.skylark.air
 version: 1
 status: draft
-intent: Look up a SkyLark trip by confirmation code
-description: Open SkyLark Air My Trips, select the trip matching the given confirmation code, and report where that trip goes.
-patterns: [look up my trip, where does my trip go, find my trip with my confirmation code, tell me my trip destination]
+intent: Look up a SkyLark flight trip
+description: Look up a SkyLark trip using a confirmation code and last name, open the matching trip row, and report where the trip goes.
+patterns: [look up my trip, where does my trip go, find my trip with my confirmation code, tell me where my trip goes]
 outputs: [destination]
 start: fresh_launch
 inputs:
-  trip_confirmation_code: {type: text, description: Confirmation code of the trip to look up., example: PT4R8Z}
+  trip_confirmation_code: {type: text, description: Confirmation code for the trip to look up, example: PT4R8Z}
+  user_last_name: {type: text, description: Last name on the booking, from_memory: user.last_name, example: Patel}
 steps:
-- id: open_my_trips
-  intent: Open My Trips
+- id: tap_my_trips
+  intent: Tap My Trips
   pre:
   - {app_foreground: com.skylark.air}
   - element_present: {resource_id: screen_title, text: SkyLark Air, kind: Text}
@@ -29,7 +30,51 @@ steps:
   - element_present: {resource_id: nav_trips, text: My Trips, kind: Text}
   risk: reversible
   note: trace step 1
-- id: find_open_trip_by_confirmation_code
+- id: enter_confirmation_code
+  intent: "Enter {{trip_confirmation_code}} into the Confirmation code field"
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    type:
+      field:
+        resource_id: field_confirmation
+        text: Confirmation code
+        hint: Confirmation code
+        kind: EditText
+        cls: EditText
+        siblings: [Find a trip]
+        in_list: true
+        position: [0.5, 0.228]
+      value: "{{trip_confirmation_code}}"
+  post:
+  - field_equals:
+      field: {resource_id: field_confirmation, text: Confirmation code, kind: EditText}
+      value: "{{trip_confirmation_code}}"
+  risk: reversible
+  note: trace step 2
+- id: enter_last_name
+  intent: "Enter {{user_last_name}} into the Last name field"
+  pre:
+  - {app_foreground: com.skylark.air}
+  action:
+    type:
+      field:
+        resource_id: field_last_name
+        text: Last name
+        hint: Last name
+        kind: EditText
+        cls: EditText
+        siblings: [Find a trip]
+        in_list: true
+        position: [0.5, 0.307]
+      value: "{{user_last_name}}"
+  post:
+  - field_equals:
+      field: {resource_id: field_last_name, text: Last name, kind: EditText}
+      value: "{{user_last_name}}"
+  risk: reversible
+  note: trace step 3
+- id: find_open_matching_trip
   intent: "Scroll to {{trip_confirmation_code}} if it is not on screen"
   action:
     scroll_until:
@@ -52,8 +97,8 @@ steps:
       in_list: true
   risk: read
   note: "added: input-based list choice"
-- id: open_trip_by_confirmation_code
-  intent: "Open the trip showing confirmation code {{trip_confirmation_code}}"
+- id: open_matching_trip
+  intent: "Tap the trip row matching {{trip_confirmation_code}}"
   pre:
   - {app_foreground: com.skylark.air}
   action:
@@ -66,22 +111,22 @@ steps:
       in_list: true
   post:
   - {screen_changed: true}
-  - element_present: {resource_id: screen_title, kind: Text}
-  - element_present: {resource_id: row_confirmation, text: Confirmation, kind: Text}
+  - element_present:
+      resource_id: row_confirmation
+      text: Confirmation
+      text_has: "{{trip_confirmation_code}}"
+      kind: Text
   risk: reversible
   extract:
     destination:
       near: Trip to
       locator: {resource_id: screen_title, kind: Text}
-      first_in_list: false
-      next_element: false
-      expect_digits: false
-  note: trace step 2
+  note: trace step 4
 compiled_from:
-  task_id: f7-1027215614-src-find_trip-a1
+  task_id: f7-1103001513-src-find_trip-a1
   goal: Look up my trip with confirmation code PT4R8Z and tell me where it goes.
   compiler: muse-wonder-1.0
-  compiled_at: "2026-10-27 22:03:15"
-  trace_steps_kept: [1, 2]
+  compiled_at: "2026-11-03 00:23:14"
+  trace_steps_kept: [1, 2, 3, 4]
   trace_steps_dropped: 0
-  cost_usd: 0.0456
+  cost_usd: 0.0529

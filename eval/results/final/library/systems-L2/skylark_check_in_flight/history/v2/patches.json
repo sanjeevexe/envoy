@@ -1,14 +1,14 @@
 [
  {
   "kind": "check",
-  "step": "open_my_trips",
-  "description": "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}",
+  "step": "tap_my_trips",
+  "description": "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}",
   "evidence": {}
  },
  {
   "kind": "check",
-  "step": "open_my_trips",
-  "description": "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}",
+  "step": "tap_my_trips",
+  "description": "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}",
   "evidence": {}
  },
  {
@@ -19,16 +19,16 @@
  },
  {
   "kind": "locator",
-  "step": "continue_after_passenger_selection",
-  "description": "step 'continue_after_passenger_selection': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}",
+  "step": "tap_continue_passenger",
+  "description": "step 'tap_continue_passenger': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}",
   "evidence": {
    "score": 0.676
   }
  },
  {
   "kind": "locator",
-  "step": "continue_after_hazmat_declaration",
-  "description": "step 'continue_after_hazmat_declaration': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}",
+  "step": "tap_continue_hazmat",
+  "description": "step 'tap_continue_hazmat': target found only by relaxed match; locator updated to {text='Next', resource_id='btn_continue', kind='Button'}",
   "evidence": {
    "score": 0.676
   }

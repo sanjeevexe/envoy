@@ -1,0 +1,101 @@
+{
+ "name": "skylark_find_flight_date",
+ "active": 2,
+ "versions": [
+  {
+   "version": 1,
+   "status": "retired",
+   "created": "2026-11-03 00:24:38",
+   "parent": null,
+   "changes": [
+    "compiled from f7-1103001513-src-past_trip-a1"
+   ],
+   "verification": {
+    "cases": [
+     {
+      "case": "same-inputs",
+      "inputs": {
+       "trip_city": "Seattle"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 4.88,
+      "outputs": {
+       "flight_date": "Tue, Mar 3, 2026"
+      }
+     },
+     {
+      "case": "second-inputs",
+      "inputs": {
+       "trip_city": "Detroit"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 2.93,
+      "outputs": {
+       "flight_date": "Fri, Oct 2, 2026"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "version": 2,
+   "status": "active",
+   "created": "2026-11-03 01:31:36",
+   "parent": 1,
+   "changes": [
+    "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}",
+    "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}"
+   ],
+   "source_task": "f7-1103002528-rou-past_trip-L2-s101-t1",
+   "screenshots": [],
+   "trial": {
+    "passed": true,
+    "task_id": "f7-1103002528-rou-past_trip-L2-s102-t1",
+    "status": "done",
+    "model_calls": 0,
+    "duration_s": 2.95
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-11-03 01:31:36",
+   "kind": "run",
+   "version": 1,
+   "task_id": "f7-1103002528-rou-past_trip-L2-s101-t1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 3.58,
+   "patches": 2
+  },
+  {
+   "time": "2026-11-03 01:38:06",
+   "kind": "run",
+   "version": 2,
+   "task_id": "f7-1103002528-rou-past_trip-L2-s102-t1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 2.95,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-03 01:44:34",
+   "kind": "run",
+   "version": 2,
+   "task_id": "f7-1103002528-rou-past_trip-L2-s103-t1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 2.7,
+   "patches": 0
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

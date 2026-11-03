@@ -1,0 +1,101 @@
+{
+ "name": "skylark_get_seat",
+ "active": 2,
+ "versions": [
+  {
+   "version": 1,
+   "status": "retired",
+   "created": "2026-11-03 00:20:42",
+   "parent": null,
+   "changes": [
+    "compiled from f7-1103001513-src-seat-a1"
+   ],
+   "verification": {
+    "cases": [
+     {
+      "case": "same-inputs",
+      "inputs": {
+       "trip_city": "Denver"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 1.97,
+      "outputs": {
+       "seat": "22F"
+      }
+     },
+     {
+      "case": "second-inputs",
+      "inputs": {
+       "trip_city": "Tampa"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 1.9,
+      "outputs": {
+       "seat": "11E"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "version": 2,
+   "status": "active",
+   "created": "2026-11-03 01:29:03",
+   "parent": 1,
+   "changes": [
+    "step 'tap_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}",
+    "step 'tap_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}"
+   ],
+   "source_task": "f7-1103002528-rou-seat-L2-s101-t1",
+   "screenshots": [],
+   "trial": {
+    "passed": true,
+    "task_id": "f7-1103002528-rou-seat-L2-s102-t1",
+    "status": "done",
+    "model_calls": 0,
+    "duration_s": 1.71
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-11-03 01:29:03",
+   "kind": "run",
+   "version": 1,
+   "task_id": "f7-1103002528-rou-seat-L2-s101-t1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 2.57,
+   "patches": 2
+  },
+  {
+   "time": "2026-11-03 01:35:45",
+   "kind": "run",
+   "version": 2,
+   "task_id": "f7-1103002528-rou-seat-L2-s102-t1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 1.71,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-03 01:42:07",
+   "kind": "run",
+   "version": 2,
+   "task_id": "f7-1103002528-rou-seat-L2-s103-t1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 1.78,
+   "patches": 0
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

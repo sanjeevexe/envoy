@@ -1,16 +1,16 @@
 {
- "name": "gmail_search_mail",
- "intent": "Search Gmail for a term and report the subject of the first result",
- "description": "Searches Gmail using a provided search term, opens the first matching email, and reports that email's subject.",
+ "name": "gmail_search_first_result_subject",
+ "intent": "Search Gmail and get the subject of the first result",
+ "description": "Searches Gmail for a user-provided term, opens the first matching email, and returns its subject line from the opened conversation.",
  "patterns": [
-  "search my mail and tell me the first subject",
-  "find the first email matching a search term",
-  "what is the subject of the first matching email",
-  "search my email for this and report the top result"
+  "search my mail for something and tell me the first subject",
+  "find emails about a topic in Gmail",
+  "what is the subject of the first email matching a search",
+  "search Gmail for a sender or keyword"
  ],
  "inputs": [
   {
-   "name": "search_query",
+   "name": "search_term",
    "type": "text",
    "description": "The term to search for in Gmail.",
    "from_memory": null,
@@ -20,37 +20,36 @@
  "steps": [
   {
    "step": 1,
-   "id": "tap_search_in_mail",
-   "intent": "Tap the Search in mail field to start a search",
+   "id": "tap_search_field",
+   "intent": "Tap the Search in mail field",
    "target_fixed_text": "Search in mail",
    "choice_input": null
   },
   {
    "step": 2,
-   "id": "type_search_query",
-   "intent": "Type {{search_query}} into the Search in mail field and run the search",
+   "id": "type_search_term",
+   "intent": "Type {{search_term}} into the Search in mail field and submit the search",
    "target_fixed_text": "Search in mail",
    "choice_input": null
   },
   {
    "step": 3,
-   "id": "open_first_search_result",
-   "intent": "Tap the first search result matching {{search_query}} to open it and confirm its subject",
+   "id": "open_first_result",
+   "intent": "Tap the first result in the search results list",
    "target_fixed_text": null,
-   "choice_input": "search_query"
+   "choice_input": null
   }
  ],
  "outputs": [
   {
-   "name": "first_result_subject",
+   "name": "subject",
    "near": "Inbox",
-   "example": "Hey, you made it .. Here’s 40% off"
+   "example": "envoy, take 40% off at these spots .."
   }
  ],
  "data_values": [
-  "Hey, you made it .. Here’s 40% off",
-  "40% off",
-  "DoorDash · 2 days ago",
-  "$0 delivery fee"
+  "40% off your first order of $15+",
+  "YOUGOT40",
+  "Yesterday"
  ]
 }

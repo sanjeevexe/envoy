@@ -1,51 +1,61 @@
 {
  "name": "amazon_search_first_result_price",
- "intent": "Search for a product on Amazon and report the price of the first result",
- "description": "Opens Amazon search, runs the requested product search, and reports the price of the first result shown under Results.",
+ "intent": "Search for a product in Amazon and report the price of the first result",
+ "description": "Searches Amazon for the requested product and returns the price shown for the first search result.",
  "patterns": [
   "search Amazon and tell me the price of the first result",
-  "look up a product on Amazon and report its first price",
-  "what is the first result price for this on Amazon"
+  "look up a product on Amazon and report the first price",
+  "find this on Amazon and tell me how much the first result costs"
  ],
  "inputs": [
   {
    "name": "search_query",
    "type": "text",
-   "description": "Product or product type to search for on Amazon",
+   "description": "The product to search for on Amazon.",
    "from_memory": null,
-   "example": "aa batteries"
+   "example": "AA batteries"
   }
  ],
  "steps": [
   {
    "step": 1,
-   "id": "tap_search_box",
-   "intent": "Tap the Search box to open Amazon search",
+   "id": "tap_search",
+   "intent": "Tap Search to open the Amazon search field",
    "target_fixed_text": "Search",
    "choice_input": null
   },
   {
    "step": 2,
-   "id": "tap_search_suggestion",
-   "intent": "Tap the {{search_query}} suggestion to run the search",
+   "id": "type_search_query",
+   "intent": "Type {{search_query}} into the Search Amazon field and submit the search",
+   "target_fixed_text": "Search Amazon",
+   "choice_input": null
+  },
+  {
+   "step": 3,
+   "id": "scroll_to_first_result_price",
+   "intent": "Scroll down to reveal the price of the first search result",
    "target_fixed_text": null,
-   "choice_input": "search_query"
+   "choice_input": null
   }
  ],
  "outputs": [
   {
-   "name": "first_result_product",
-   "near": "Results",
-   "example": "Energizer MAX AA Batteries (20 Pack), Double A Alkaline Batteries"
-  },
-  {
    "name": "first_result_price",
-   "near": "Energizer MAX AA Batteries (20 Pack), Double A Alkaline Batteries",
-   "example": "$19.44 ( $0.97 /count)"
+   "near": "AA Batteries with Power Boost Ingredients, Long-lasting Alkaline Double AA Battery for Household and Office Devices",
+   "example": "$19.99"
   }
  ],
  "data_values": [
-  "Fri, Oct 30",
-  "Delivering to Atlanta 30308 - Update location ⌵"
+  "Lectron 240V EV Charger · $449.99",
+  "usb-c cable",
+  "Duracell Coppertop AA Batteries, 24 Count, 12-Year Shelf Life, Long-lasting",
+  "AA Batteries with Power Boost Ingredients, Long-lasting Alkaline Double AA Battery for Household and Office Devices",
+  "4.8 out of 5 stars 140,515 ratings Positively reviewed for power boost 90K+ bought in past month",
+  "$24.49",
+  "Tomorrow, Nov 4",
+  "Sun, Nov 8",
+  "Energizer AA Batteries Alkaline Power, 32 Count Alkaline Double A Battery Pack",
+  "$21.78 ( $0.68 /count)"
  ]
 }

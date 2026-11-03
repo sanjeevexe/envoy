@@ -1,18 +1,18 @@
 {
- "name": "skylark_get_trip_date",
+ "name": "skylark_find_flight_date",
  "intent": "Find the date of a past SkyLark flight to a city",
- "description": "Opens My Trips in SkyLark Air, finds the past trip to the requested city, opens its details, and reads the flight date from the trip details screen.",
+ "description": "Searches the My Trips list in SkyLark Air for a trip to the requested city and returns the date of that flight.",
  "patterns": [
-  "When did I fly to a city",
-  "When was my flight to a city",
-  "What date was my trip to a city",
-  "When did I travel to a city"
+  "when did I fly to",
+  "when was my flight to",
+  "what date was my trip to",
+  "when did I travel to"
  ],
  "inputs": [
   {
    "name": "trip_city",
    "type": "text",
-   "description": "The destination city of the past trip to look up.",
+   "description": "The destination city of the trip to look up.",
    "from_memory": null,
    "example": "Seattle"
   }
@@ -20,22 +20,15 @@
  "steps": [
   {
    "step": 1,
-   "id": "open_my_trips",
-   "intent": "Open My Trips to access trip history",
+   "id": "tap_my_trips",
+   "intent": "Tap \"My Trips\"",
    "target_fixed_text": "My Trips",
    "choice_input": null
   },
   {
    "step": 2,
-   "id": "scroll_to_trip",
-   "intent": "Scroll until the past trip to {{trip_city}} is visible",
-   "target_fixed_text": null,
-   "choice_input": "trip_city"
-  },
-  {
-   "step": 3,
-   "id": "open_trip_details",
-   "intent": "Tap the past trip to {{trip_city}} to open its details and read the flight date",
+   "id": "scroll_until_trip_city",
+   "intent": "Scroll down until the trip to {{trip_city}} is visible",
    "target_fixed_text": null,
    "choice_input": "trip_city"
   }
@@ -43,27 +36,13 @@
  "outputs": [
   {
    "name": "flight_date",
-   "near": "Date",
+   "near": "Seattle",
    "example": "Tue, Mar 3, 2026"
-  },
-  {
-   "name": "flight",
-   "near": "SL 1708",
-   "example": "SL 1708 · ATL 8:20 AM → SEA 10:55 AM"
   }
  ],
  "data_values": [
   "SL 1708",
-  "ATL 8:20 AM → SEA 10:55 AM",
-  "8:20 AM",
-  "10:55 AM",
-  "Tue, Mar 3, 2026",
-  "KS4V9Q",
-  "Landed",
-  "E14",
-  "12A",
-  "7:40 AM",
-  "Group 2",
-  "1"
+  "ATL → SEA",
+  "KS4V9Q"
  ]
 }

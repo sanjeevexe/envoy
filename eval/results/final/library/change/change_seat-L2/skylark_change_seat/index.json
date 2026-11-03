@@ -5,28 +5,28 @@
   {
    "version": 1,
    "status": "retired",
-   "created": "2026-10-27 23:58:22",
+   "created": "2026-11-03 02:32:11",
    "parent": null,
    "changes": [
-    "v1 compiled from f7-1027215614-src-change_seat-a1"
+    "v1 compiled from f7-1103001513-src-change_seat-a1"
    ],
    "verification": null
   },
   {
    "version": 2,
    "status": "active",
-   "created": "2026-10-27 23:58:31",
+   "created": "2026-11-03 02:32:22",
    "parent": 1,
    "changes": [
-    "step 'tap_change_seat': target found only by relaxed match; locator updated to {text='Seats', resource_id='btn_change_seat', kind='Button'}",
+    "step 'open_change_seat': target found only by relaxed match; locator updated to {text='Seats', resource_id='btn_change_seat', kind='Button'}",
     "step 'open_my_trips': after-check 1 matched only relaxed; updated to {text='Trips', resource_id='screen_title', kind='Text'}",
     "step 'open_my_trips': after-check 2 matched only relaxed; updated to {text='Trips', resource_id='nav_trips', kind='Text'}"
    ],
-   "source_task": "f7-1027234941-chg-change_seat-L2-first",
+   "source_task": "f7-1103022306-chg-change_seat-L2-first",
    "screenshots": [],
    "trial": {
     "passed": true,
-    "task_id": "f7-1027234941-chg-change_seat-L2-trial",
+    "task_id": "f7-1103022306-chg-change_seat-L2-trial",
     "status": "done"
    }
   }

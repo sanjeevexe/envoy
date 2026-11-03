@@ -2,9 +2,9 @@ routine: settings_get_android_version
 app: com.android.settings
 version: 1
 status: draft
-intent: Get the Android version this phone is running from Settings
-description: Open Settings, navigate to the About device page, scroll to the Android version entry, and report the version shown.
-patterns: ['What Android version is this phone running?', Check the Android version in Settings, Find my phone's Android version]
+intent: Find what Android version this phone is running in Settings
+description: Open the About device section in the Settings app and read the Android version listed there.
+patterns: [what Android version is this phone running, check the Android version, what Android version do I have]
 outputs: [android_version]
 start: fresh_launch
 steps:
@@ -21,9 +21,10 @@ steps:
         cls: LinearLayout
         parent: recycler_view
         in_list: true
-        position: [0.5, 0.829]
+        position: [0.5, 0.84]
       direction: down
       max_scrolls: 8
+      container: {resource_id: settings_homepage_container, kind: List}
   post:
   - element_present:
       text: About emulated device
@@ -31,11 +32,11 @@ steps:
       cls: LinearLayout
       parent: recycler_view
       in_list: true
-      position: [0.5, 0.829]
+      position: [0.5, 0.84]
   risk: read
   note: trace step 1 (+2 scrolls)
-- id: open_about_device
-  intent: Tap the About device entry to open the device information page
+- id: tap_about_device
+  intent: Tap the About device entry to open device information
   pre:
   - {app_foreground: com.android.settings}
   action:
@@ -45,14 +46,14 @@ steps:
       cls: LinearLayout
       parent: recycler_view
       in_list: true
-      position: [0.5, 0.829]
+      position: [0.5, 0.84]
   post:
   - {screen_changed: true}
   - element_present: {resource_id: content_parent, kind: List}
   risk: reversible
   note: trace step 3
 - id: scroll_to_android_version
-  intent: Scroll down on the About device page to reveal the Android version entry
+  intent: Scroll down to reveal the Android version entry
   pre:
   - {app_foreground: com.android.settings}
   action:
@@ -65,13 +66,13 @@ steps:
   - element_present: {text: Android version}
   risk: read
   extract:
-    android_version: {near: Android version, segment: 1, first_in_list: false, next_element: false, expect_digits: true, switch: false}
+    android_version: {near: Android version, segment: 1, expect_digits: true}
   note: trace step 4 (+1 scrolls)
 compiled_from:
-  task_id: f7-1028030222-real-settings_version
+  task_id: f7-1103034419-real-settings_version
   goal: In the Settings app, what Android version is this phone running?
   compiler: muse-wonder-1.0
-  compiled_at: "2026-10-28 03:05:32"
+  compiled_at: "2026-11-03 03:53:03"
   trace_steps_kept: [1, 3, 4]
   trace_steps_dropped: 0
-  cost_usd: 0.0421
+  cost_usd: 0.0448

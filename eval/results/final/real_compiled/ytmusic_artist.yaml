@@ -1,40 +1,21 @@
-routine: youtube_music_find_song_artist
+routine: youtube_music_search_song_artist
 app: com.google.android.apps.youtube.music
 version: 1
 status: draft
-intent: Find the artist of a song in YouTube Music
-description: Searches YouTube Music for a requested song, opens the Songs results, and reports the artist of the first song result.
-patterns: [search for a song and tell me the artist, who sings this song in YouTube Music, find the artist of the first song result, look up a
-    song artist]
+intent: Search for a song in YouTube Music and identify the artist of the first song result
+description: Searches YouTube Music for a requested song, filters the results to songs, and returns the artist shown for the first song result.
+patterns: [search for a song and tell me the artist, find a song in YouTube Music and tell me who the artist is, who is the artist of the first
+    song result for a song, look up a song and tell me its artist]
 outputs: [artist]
 start: fresh_launch
 inputs:
-  song_title: {type: text, description: The song title to search for, example: Bohemian Rhapsody}
+  song_name: {type: text, description: The song title to search for., example: Blinding Lights}
 steps:
-- id: dismiss_continue_listening_prompt
-  intent: Dismiss the continue listening prompt
-  optional: true
+- id: tap_search
+  intent: Tap Search to start searching
   pre:
   - {app_foreground: com.google.android.apps.youtube.music}
-  - element_present: {resource_id: title, text: Continue listening from anywhere, kind: Text}
-  action:
-    tap:
-      resource_id: primary_action
-      text: Got it
-      kind: Button
-      cls: Button
-      siblings: [Manage]
-      in_list: false
-      position: [0.74, 0.814]
-  post:
-  - {screen_changed: true}
-  - element_absent: {resource_id: title, text: Continue listening from anywhere, kind: Text}
-  risk: reversible
-  note: "trace step 1 · one-time screen: optional"
-- id: open_search
-  intent: Open search
-  pre:
-  - {app_foreground: com.google.android.apps.youtube.music}
+  - element_present: {resource_id: watch_fragment_container, text: Video player, kind: Text}
   action:
     tap:
       text: Search
@@ -44,75 +25,67 @@ steps:
       position: [0.5, 0.948]
   post:
   - {screen_changed: true}
-  - element_present:
-      resource_id: edit_suggestion
-      text: "Edit suggestion {{song_title}}"
-      kind: Button
   - element_present: {resource_id: search_edit_text, text: Type to search, kind: EditText}
+  - element_present: {resource_id: toolbar_back_navigation, text: Search back, kind: Button}
   risk: reversible
-  note: trace step 2
-- id: go_back
-  intent: Go back
-  pre:
-  - {app_foreground: com.google.android.apps.youtube.music}
-  action: {back: true}
-  post:
-  - {screen_changed: true}
-  - element_present: {resource_id: text1, text: Search, kind: Text}
-  risk: read
-  note: trace step 3
-- id: select_search_suggestion
-  intent: "Select the {{song_title}} search suggestion"
+  note: trace step 1
+- id: enter_song_name
+  intent: "Type {{song_name}} into the search field and submit"
   pre:
   - {app_foreground: com.google.android.apps.youtube.music}
   action:
-    tap:
-      text_has: "{{song_title}}"
-      kind: Button
-      cls: LinearLayout
-      parent: suggestion_list
-      in_list: false
+    type:
+      field:
+        resource_id: search_edit_text
+        text: Type to search
+        hint: Type to search
+        kind: EditText
+        cls: EditText
+        parent: search_toolbar_layout
+        siblings: [Voice search]
+        in_list: false
+        position: [0.432, 0.084]
+      value: "{{song_name}}"
+      submit: true
   post:
   - {screen_changed: true}
   - element_present:
       resource_id: search_edit_text
-      text: "Search songs, artists, podcasts: {{song_title}}"
+      text: "Search songs, artists, podcasts: {{song_name}}"
       kind: EditText
-  - element_present: {resource_id: chip_cloud, kind: List}
+  - element_present: {resource_id: text1, text: Search, kind: Text}
   risk: reversible
-  note: trace step 5
-- id: show_song_results
-  intent: Open the song results to read the artist of the first song result
+  note: trace step 2
+- id: filter_by_songs
+  intent: Tap Songs to show only song results
   pre:
   - {app_foreground: com.google.android.apps.youtube.music}
   action:
     tap:
-      text: Show song results
+      resource_id: chip_contents
+      text: Songs
       kind: Text
-      cls: FrameLayout
-      parent: chip_cloud
-      siblings: [Show artist results, Show video results, Show community playlist results]
+      cls: LinearLayout
+      parent: Show song results
       in_list: true
       position: [0.111, 0.145]
   post:
   - {screen_changed: true}
-  - element_absent: {resource_id: chip_cloud, kind: List}
+  - element_present: {resource_id: search_clear_button, text: Clear filters, kind: Button}
   risk: reversible
   extract:
     artist:
-      near: Bohemian Rhapsody
-      locator: {resource_id: two_column_item_content_parent, kind: Button}
+      locator:
+        resource_id: two_column_item_content_parent
+        text_has: "{{song_name}}"
+        in_list: true
       segment: 1
-      first_in_list: false
-      next_element: false
-      expect_digits: false
-      switch: false
-  note: trace step 6
+  note: trace step 3
 compiled_from:
-  task_id: f7-1028023735-real-ytmusic_artist
-  goal: In the YouTube Music app, search for the song Bohemian Rhapsody and tell me the artist of the first song result.
+  task_id: f7-1103034419-real-ytmusic_artist
+  goal: In the YouTube Music app, search for the song Blinding Lights and tell me the artist of the first song result.
   compiler: muse-wonder-1.0
-  compiled_at: "2026-10-28 02:59:21"
-  trace_steps_kept: [1, 2, 3, 5, 6]
-  trace_steps_dropped: 1
-  cost_usd: 0.0356
+  compiled_at: "2026-11-03 03:59:19"
+  trace_steps_kept: [1, 2, 3]
+  trace_steps_dropped: 0
+  cost_usd: 0.0402
