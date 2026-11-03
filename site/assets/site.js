@@ -326,6 +326,20 @@
   // What a real post carried, from its task's inputs.
   const postText = (name, i) => name === "instagram_story_poll" ? `poll “${i.poll_question}” ${i.poll_option_1} / ${i.poll_option_2}`
     : `“${i.song_title || i.sound_title}” by ${i.song_artist || i.sound_artist}, ${i.short_title ? "title" : "caption"} “${i.caption || i.short_title}”`;
+  // The batch's limits for the limits list, read from its records; a version made after it is named, never counted.
+  const batchLimits = () => {
+    const out = [];
+    for (const c of D.showcase.cards) {
+      const b = D.batch.routines[c.name], name = POST[c.name];
+      if (b.stops.song) {
+        const ok = Object.entries(b.songs).filter(([, v]) => v.yes).map(([k]) => `“${esc(k)}”`);
+        out.push(`the ${name} passed every check only with ${ok.join(", ")}, its sound check stopping ${b.stops.song} runs with other songs`);
+      }
+      if (b.stops.caption) out.push(`the ${name}'s outcome checks stopped ${b.stops.caption} runs whose caption was lost before ${esc(b.final)}`);
+      if (c.after_batch && (b.stops.song || b.stops.caption)) out.push(`after the batch, the ${name}'s v${c.after_batch.version} (${esc(c.after_batch.kind)}) is on its card, not counted here`);
+    }
+    return out.length ? `In the posting batch, ${out.join("; ")}.` : "";
+  };
   // What the batch says about one routine, besides its counts: what stopped its runs, and its songs.
   const batchNote = (b) => {
     const fails = (b.classes.failed || 0), stops = Object.values(b.stops).reduce((x, y) => x + y, 0), agent = b.classes["agent fallback"] || 0;
@@ -352,11 +366,11 @@
         <h3>${esc(c.what)}</h3>
         <div class="sig small"><code>${esc(c.name)}(${c.inputs.map(esc).join(", ")})</code></div>
         <dl class="fr">
-          <div><dt>Made</dt><dd><b>${c.hand ? "Compiled from one agent run" : "Learned from one agent run"}</b><span>${c.hand ? esc(c.hand.replace(/^./, (x) => x.toUpperCase())) : "No hand edits"}${c.repair && c.repair.passed ? `. Its checks were repaired automatically after its live post (v${c.repair.version})` : ""}.</span></dd></div>
+          <div><dt>Made</dt><dd><b>${c.hand && !c.hand_from ? "Compiled from one agent run" : "Learned from one agent run"}</b><span>${c.hand_from ? `No hand edits until v${c.hand_from.version} (${esc(c.hand_from.date)}), which has ${esc(c.hand)}` : c.hand ? esc(c.hand.replace(/^./, (x) => x.toUpperCase())) : "No hand edits"}${c.repair && c.repair.passed ? `. Its checks were repaired automatically after its live post (v${c.repair.version})` : ""}.</span></dd></div>
           <div class="rp"><dt>The batch, final tag</dt><dd><b>${b.reached} of ${b.n} reached ${esc(b.final)}</b><span>${esc(b.yes_cell.replace(/ \(poll by eye\)$/, ""))} with every check yes${/by eye/.test(b.yes_cell) ? " (the poll by eye)" : ""} · median ${s0(b.secs.median)} to the final button · ${b.calls} model call${b.calls === 1 ? "" : "s"} in all, ran v${b.versions.join(", v")}</span></dd></div>
         </dl>
         <p class="small" style="margin:6px 0 0">${batchNote(b)}</p>
-        ${ab ? `<p class="small after-batch" style="margin:6px 0 0"><b>After the batch, not part of it:</b> v${ab.version} fixes the caption loss; on Envoy's phone ${ab.ok} of ${ab.n} cold Reels reached ${esc(ab.final)} with every check yes, ${ab.calls} model calls (${esc(ab.when)}).</p>` : ""}
+        ${ab ? `<p class="small after-batch" style="margin:6px 0 0"><b>After the batch, not part of it:</b> v${ab.version} (${esc(ab.date)}), ${esc(ab.kind)}${c.hand_from && ab.kind === "hand edits" ? " (above)" : ""}${ab.check ? `; on Envoy's phone ${ab.check.ok} of ${ab.check.n} ${esc(ab.check.what || "runs")} reached ${esc(ab.check.final)} with every check yes${ab.check.calls != null ? `, ${ab.check.calls} model calls` : ""}` : `; its device check is in the routine's ${srcA(c.src, "versions")}`}.</p>` : ""}
         <ul class="plain real">${c.real.map((p) => `<li><span class="chip ${p.live ? "sage" : "apricot"}">${p.live ? "live" : "flawed"}</span> <span class="small">${esc(p.live ? postText(c.name, p.inputs) : p.note)} · ${p.calls} model calls in Envoy</span></li>`).join("")}</ul>
         <div class="label-rec" style="margin-top:8px">${srcA(c.yaml_src, `v${c.version}.yaml`)} ${srcA(c.src, "versions")}</div>
       </article>`;
@@ -503,7 +517,7 @@
         <ul>
           <li>Envoy learns a task, not an app. New inputs on real apps are the weak spot: ${RA.passes.map((p) => `${esc(p.cells["New input, no model call"])} (${esc(passLabel(p))}, ${esc(p.profile)} profile)`).join(", ")}${cur.final ? `, ${esc(cur.stages["New input, no model call"])} (the final evaluation, ${esc(cur.profile)} profile)` : ""}.</li>
           <li>Most real-app routine versions in the library were fixed by hand during testing; self-repair's trials kept ${D.repair.real.filter((v) => v.passed).length} of its ${D.repair.real.length} real-app versions. The posting routines' hand edits are on each card in ${sec("acts")}.</li>
-          <li>In the posting batch, the YouTube Short passed every check only with “golden hour”; with other songs its sound never attached. The Reel lost its caption twice, stopped before Share by the outcome checks and fixed after the batch. ${srcA(D.batch.src, "RESULTS.md")}</li>
+          ${batchLimits() ? `<li>${batchLimits()} ${srcA(D.batch.src, "RESULTS.md")}</li>` : ""}
           <li>The live posts were started from the Spark agent. Muse's own run of the four was a dry run, and its Story failed twice.</li>
           <li>Agents hear about the phone when they next check; Muse checked about every 10 minutes. TikTok sent no notification for our three test comments.</li>
           <li>Envoy doesn't make a routine on its own: the person presses “Make it a routine” on a finished task, or teaches it, and the compiler can refuse a run. The button is new (Nov 2); the routines on this page were compiled before it, by the evaluation or a script. ${srcA({ path: "backend/api/teach.py" }, "teach.py")}</li>

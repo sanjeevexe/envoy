@@ -1061,8 +1061,8 @@ SHOWCASE = {
 # What a person changed by hand in each, worded from the version's own changes (checked below against index.json, so a new
 # version with other edits stops the build instead of leaving this wrong).
 HAND_EDITS = {
-    "instagram_reel_song": ("two hand edits after the posting batch (Nov 3): Instagram's OK closes the caption edit instead of "
-                            "Back, and an empty caption is typed again before Share"),
+    "instagram_reel_song": ("two hand edits for the caption fix after the posting batch: Instagram's OK closes the caption edit "
+                            "instead of Back, and an empty caption is typed again before Share"),
     "instagram_story_poll": None,
     "tiktok_post_sound": "three hand edits: a 3 s wait before TikTok's drawn sound list, the app's name, and no before-check on its launch",
     "youtube_short_sound": "one hand edit: a stray before-check (“Captions unavailable”) dropped",
@@ -1078,18 +1078,32 @@ LIVE_NOTES = {
 }
 
 
+def day_et(stamp: str) -> str:
+    """'2026-11-03 14:05:58' (the Mac's clock, ET) as 'Nov 3'."""
+    return datetime.fromisoformat(stamp.replace(" ", "T")).strftime("%b %-d")
+
+
 def _after_batch(ix: dict) -> dict | None:
-    """A version made after the batch (Nov 3) with a device check recorded in its verification: what it changed and how
-    its check went. Never counted with the batch."""
+    """The active version, if it was made on or after the posting batch's day: what kind of change it is and its device
+    check, read from its own verification. Never counted with the batch. If the device check's wording can't be read, the
+    page links the version history instead of quoting it."""
     v = next((v for v in ix["versions"] if v["version"] == ix["active"]), None)
-    dev = ((v or {}).get("verification") or {}).get("device") or ""
-    m = re.search(r"(\d+)/(\d+) cold \w+ .*?reached (\w+) with ([^,]+(?:, [^,]+)*?) checks all yes, (\d+) model calls", dev)
-    if not v or not v["created"].startswith("2026-11-03") or not m:
+    if not v or v["created"][:10] < batch_day():
         return None
-    return {"version": v["version"], "ok": int(m.group(1)), "n": int(m.group(2)), "final": m.group(3), "calls": int(m.group(5)),
-            "when": dev.split(",")[0]}
+    text = " ".join(v["changes"])
+    kind = ("hand edits" if "hand edit" in text.replace("no hand edits", "") else
+            "an automatic repair" if v.get("source_task") else "a new version")
+    dev = ((v.get("verification") or {}).get("device")) or ""
+    m = re.search(r"(\d+)/(\d+) ([^;:]*?)reached ([\w ]+?) with [^;]*?(all yes|every check yes)", dev)
+    calls = re.search(r"(\d+) model calls", dev)
+    return {"version": v["version"], "date": day_et(v["created"]), "kind": kind,
+            "check": m and {"ok": int(m.group(1)), "n": int(m.group(2)), "what": m.group(3).strip(), "final": m.group(4),
+                            "calls": int(calls.group(1)) if calls else None}}
 
 
+def batch_day() -> str:
+    """The day the posting batch started, from its attempt records."""
+    return min(json.loads(f.read_text())["started"] for f in (BATCH / "attempts").glob("*.json"))[:10]
 BATCH = REPO / "eval/results/showcase-batch"  # the pre-registered posting batch (B1), run on the eval-final tag
 
 
@@ -1166,6 +1180,12 @@ def showcase() -> dict:
         hand = HAND_EDITS[name]
         assert ("no hand edits" in made) == (hand is None) and (hand is None or "hand edit" in made), (name, made[:200])
         y = routine_yaml(lib / f"v{ix['active']}.yaml")
+        # Learned with no hand edits, then edited by hand later: the first hand-edited version after the last clean one.
+        lineage = [v for v in ix["versions"] if v["version"] <= ix["active"]]
+        clean = [v["version"] for v in lineage if "no hand edits" in " ".join(v["changes"])]
+        later = [v for v in lineage if clean and v["version"] > clean[-1]
+                 and "hand edit" in " ".join(v["changes"]).replace("no hand edits", "")]
+        hand_from = {"version": later[0]["version"], "date": day_et(later[0]["created"])} if later else None
         # Envoy's own model calls; "seconds" isn't shown: it includes the waits for both yeses on the iPhone.
         real = [{"task": t["id"], "live": t["status"] == "done", "calls": t["model_calls"], "inputs": t["inputs"],
                  "created": t["created"], "note": LIVE_NOTES.get(t["id"], "")}
@@ -1184,7 +1204,7 @@ def showcase() -> dict:
                                       "by": "Muse's dry run, Nov 2"}}
         cards.append({
             "name": name, "app": app, "what": what, "version": ix["active"], "steps": len(y["steps"]),
-            "inputs": list(y["inputs"].keys()), "outputs": y["outputs"], "hand": hand, "real": real, "repair": repair,
+            "inputs": list(y["inputs"].keys()), "outputs": y["outputs"], "hand": hand, "hand_from": hand_from, "real": real, "repair": repair,
             "after_batch": _after_batch(ix),
             "src": src(f"data/routines/{name}/index.json"), "yaml_src": src(f"data/routines/{name}/v{ix['active']}.yaml"),
         })

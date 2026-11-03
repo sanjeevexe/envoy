@@ -839,7 +839,11 @@
      "caption"
     ],
     "outputs": [],
-    "hand": "two hand edits after the posting batch (Nov 3): Instagram's OK closes the caption edit instead of Back, and an empty caption is typed again before Share",
+    "hand": "two hand edits for the caption fix after the posting batch: Instagram's OK closes the caption edit instead of Back, and an empty caption is typed again before Share",
+    "hand_from": {
+     "version": 4,
+     "date": "Nov 3"
+    },
     "real": [
      {
       "task": "task-1102-005928-4182",
@@ -870,11 +874,15 @@
     },
     "after_batch": {
      "version": 4,
-     "ok": 5,
-     "n": 5,
-     "final": "Share",
-     "calls": 0,
-     "when": "Nov 3"
+     "date": "Nov 3",
+     "kind": "hand edits",
+     "check": {
+      "ok": 5,
+      "n": 5,
+      "what": "cold Reels with golden hour",
+      "final": "Share",
+      "calls": 0
+     }
     },
     "src": {
      "path": "data/routines/instagram_reel_song/index.json"
@@ -896,6 +904,7 @@
     ],
     "outputs": [],
     "hand": null,
+    "hand_from": null,
     "real": [
      {
       "task": "task-1102-013244-b7c8",
@@ -932,6 +941,7 @@
     ],
     "outputs": [],
     "hand": "three hand edits: a 3 s wait before TikTok's drawn sound list, the app's name, and no before-check on its launch",
+    "hand_from": null,
     "real": [
      {
       "task": "task-1102-014139-7f5e",
@@ -980,6 +990,7 @@
     ],
     "outputs": [],
     "hand": "one hand edit: a stray before-check (“Captions unavailable”) dropped",
+    "hand_from": null,
     "real": [
      {
       "task": "task-1102-015325-106a",
