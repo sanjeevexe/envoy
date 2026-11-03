@@ -664,6 +664,19 @@ def real_apps() -> dict:
 REAL_CURVE = "eval/results/real_rerun_2026-11-02_wsd-baseline/real.json"
 
 
+def _readme_final_curve(readme: str) -> dict | None:
+    """The README's cost curve as one pass (the final eval's): a "| | Median (range) |" table after "**The cost curve.**",
+    and the workflow count from its lead-in ("On the 13 workflows ..."). Returned in the per-pass row's shape."""
+    lead = re.search(r"\*\*The cost curve\.\*\* On the (\d+) workflows", readme)
+    table = next((t for t in md_tables(readme[readme.index("**The cost curve.**"):])
+                  if t and set(t[0]) == {"", "Median (range)"}), None)
+    if not lead or not table:
+        return None
+    cells = {r[""].split(" (")[0]: r["Median (range)"] for r in table}
+    return {"Workflows": lead.group(1), "The agent's first run": cells.get("The agent's first run", ""),
+            "Envoy's replay": cells.get("Envoy's replay", ""), "Compiling it, once": cells.get("Compiling it, once", "")}
+
+
 def _check_readme_curve(curve: dict) -> None:
     """The README's cost-curve table must give the site's numbers for the same pass. Skipped while the README has no such
     row (or it still says TBD); a mismatch stops the build, so the two never ship different numbers."""
@@ -672,7 +685,10 @@ def _check_readme_curve(curve: dict) -> None:
         return
     label = "Nov 3, final" if curve["pass"]["final"] else f"{curve['pass']['date']}, `{curve['pass']['profile']}`"
     table = next((t for t in md_tables(readme) if t and {"Pass", "Workflows", "Compiling it, once"} <= set(t[0])), None)
-    row = next((r for r in table or [] if r["Pass"].startswith(label)), None)
+    if table is None and curve["pass"]["final"]:
+        row = _readme_final_curve(readme)  # the README's one-pass table, once the final eval ran
+    else:
+        row = next((r for r in table or [] if r["Pass"].startswith(label)), None)
     if not row:
         sys.exit(f"README.md's cost curve has no row for {label}, the site's pass ({curve['pass']['src']['path']})")
     if "TBD" in row["Workflows"]:

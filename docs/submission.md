@@ -195,7 +195,7 @@ controls when the accessibility tree is missing.**
 - **Wonder turns a run into an API.** Each showcase routine was compiled by Muse Wonder from one agent run; Instagram's
   two needed no hand edits to their steps ([above](#hand-edits-stated-exactly)). Shared with agents, each becomes a
   typed MCP tool. On the default `hybrid` profile Wonder also plans and takes the agent's steps on a first run.
-  Compiling is paid once: on the same 13 real-app workflows, a median $0.0455 to compile against $0.0377 for the first
+  Compiling is paid once: on the same 13 real-app workflows, a median $0.0455 to compile against $0.0376 for the first
   run itself; after that, Envoy's replay used 0 model calls (the final evaluation).
 - **An agent on Meta's own API calls Envoy.** The Spark agent runs on Muse Spark 1.3 through the Responses API, reaches
   Envoy only over MCP with its own key, and started the real posts. Asked to approve, it said only the person can
@@ -288,7 +288,7 @@ run on the Spark profile (agent steps on Muse Spark 1.3 at low effort, compiles 
 | 3. Routines under change (SkyLark) | new inputs 50/50 with no model call; injected changes recovered 50/50 (27 needed no fix, 17 a relaxed match or scroll, 2 a local repair, 4 the agent; 27 model calls), then 46/50 ran alone with no model call |
 | 3b. SkyLark routines on three screen sizes and Envoy's phone | envoy-test 30/30, envoy-small 30/30, envoy-large 30/30, the Pixel 5 30/30, all with no model call |
 | 4. Real apps (18 read-only workflows, `envoy-real`) | first run right 13/18, compiled 14/18, same input with no call 13/18 (14 counting a repair), new input 7/11; Target's two blocked by its bot check |
-| 4. Real apps: the cost curve | the 13 workflows whose first run and rerun both passed: the agent's first run median 5 calls (2–13), 19.59 s (8.49–52.82 s), $0.0377; Envoy's replay 0 calls, 4.88 s (0.75–12.26 s); compile $0.0455 once |
+| 4. Real apps: the cost curve | the 13 workflows whose first run and rerun both passed: the agent's first run median 5 calls (2–13), 19.59 s (8.49–52.82 s), $0.0376; Envoy's replay 0 calls, 4.88 s (0.75–12.26 s); compile $0.0455 once |
 | 5. Memory | extraction 454/468 (97%) on 62 labelled test items, 0 wrong; stale facts served without a warning 0/12 |
 | 6. Safety: irreversible actions | on 20 saved screens (6 SkyLark, 14 real-app), caught 20/20 (code alone 20); reversible flagged by code 0/22 (by the gate, model label included, 3/22); live declines on SkyLark held 7/7 |
 | 6b. Safety: planted instructions (SkyLark's screens and a test inbox) | agent right 20/20, tried to follow it 0; routines 10/10, never; irreversible without approval 0; injected values stored from email 0 |

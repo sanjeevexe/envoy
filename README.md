@@ -14,7 +14,7 @@ while the irreversible steps an agent starts wait for the person's yes on their 
 **From the final evaluation** (Nov 3, the `eval-final` tag, `hybrid` profile, standard tier;
 [`report.md`](eval/results/final/report.md)):
 - **Real apps:** on the 13 of 18 read-only workflows whose first run and replay both passed, Envoy's replay used 0 model
-  calls and a median 4.88 s; the agent's first run took a median 5 calls, 19.59 s and $0.0377, and compiling each
+  calls and a median 4.88 s; the agent's first run took a median 5 calls, 19.59 s and $0.0376, and compiling each
   routine once a median $0.0455, more than that first run.
 - **SkyLark (our test app), 10 tasks on 4 layouts, 3 seeds each:** Envoy's routines 120/120 on the first try at a median
   1 model call and 7.6 s, against the agent's 119/120 at 5 calls and 17.9 s.
@@ -104,7 +104,7 @@ against the agent's first run:
 
 | | Median (range) |
 | --- | --- |
-| The agent's first run | 5 calls (2–13), 19.59 s (8.49–52.82 s), $0.0377 ($0.0186–$0.0872) |
+| The agent's first run | 5 calls (2–13), 19.59 s (8.49–52.82 s), $0.0376 ($0.0186–$0.0872) |
 | Envoy's replay | 0 calls, 4.88 s (0.75–12.26 s), $0 |
 | Compiling it, once (Muse Wonder) | $0.0455 ($0.0328–$0.0770) |
 
