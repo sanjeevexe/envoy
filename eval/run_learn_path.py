@@ -52,7 +52,8 @@ OUT = REPO / "eval" / "results" / "learn-agent-path"
 CAP_S = 360  # each run_task, learn and tool call (PROTOCOL.md: 6 min)
 POLL_S = 2.0
 ENDED = {"done", "failed", "declined", "stopped", "needs_you", "taken_over"}
-BLOCKED = re.compile(r"\bbot\b|human verification|captcha|press and hold|sign[- ]?in|log[- ]?in", re.I)
+BLOCKED = re.compile(r"\bbot\b|blocks emulators|human verification|captcha|press and hold|sign[- ]?in|log[- ]?in", re.I)
+LIBRARY_EMPTIED = re.compile(r"^D  data/routines/")
 
 
 def now() -> str:
@@ -74,14 +75,21 @@ class Copy:
         self.base = f"http://127.0.0.1:{port}"
         self.proc: subprocess.Popen | None = None
 
-    def check(self, dry: bool) -> dict:
+    def check(self, dry: bool, empty_library: bool = False) -> dict:
+        """`empty_library`: the supplementary pass (README, Deviations), whose copy differs from the tag only by its routine
+        library deleted (`git rm -r data/routines`)."""
         tag = git(self.checkout, "rev-parse", "eval-final^{commit}")
         head = git(self.checkout, "rev-parse", "HEAD")
-        dirty = git(self.checkout, "status", "--porcelain", "--untracked-files=no")
+        dirty = [ln for ln in git(self.checkout, "status", "--porcelain", "--untracked-files=no").splitlines() if ln]
         problems = []
         if not tag or tag != head:
             problems.append(f"the copy's HEAD {head[:9]} is not eval-final {tag[:9] or '(no tag)'}")
-        if dirty:
+        if empty_library:
+            if not dirty or any(not LIBRARY_EMPTIED.match(ln) for ln in dirty):
+                problems.append("the copy's only change must be its routine library deleted")
+            if any((self.checkout / "data" / "routines").glob("*")):
+                problems.append("the copy's routine library isn't empty")
+        elif dirty:
             problems.append("the copy's checkout has changes")
         if (self.checkout / "logs").is_symlink():
             problems.append("the copy's logs/ is a link: its cost log must be its own")
@@ -92,7 +100,8 @@ class Copy:
             problems.append("this harness's eval/run_real_apps.py differs from the tag's (the tasks and graders must be the tag's)")
         if problems and not dry:
             sys.exit("refusing to start: " + "; ".join(problems))
-        return {"eval_final": tag, "copy_head": head, "harness_head": git(REPO, "rev-parse", "HEAD"), "problems": problems}
+        return {"eval_final": tag, "copy_head": head, "harness_head": git(REPO, "rev-parse", "HEAD"), "problems": problems,
+                "library": "empty" if empty_library else "the tag's"}
 
     def start(self) -> None:
         self.api_dir.mkdir(parents=True, exist_ok=True)
@@ -245,6 +254,8 @@ async def run_task(wf: rr.Workflow, copy: Copy, mcp: Client, phone: str, dry: bo
     answer = got["task"].get("result") or got["view"].get("result")
     secrets_seen.append(answer or "")
     a["answer"] = rr.redact(wf, answer)
+    if got["task"].get("routine"):
+        a["library_routine"] = got["task"]["routine"]  # run_task matched the library: a routine ran, not the agent
     if a["status"] == "done":
         a["outcome"] = "right" if rr.right(answer, rr.in_sentence(expect), {}) else "wrong"
     else:
@@ -255,7 +266,7 @@ async def run_task(wf: rr.Workflow, copy: Copy, mcp: Client, phone: str, dry: bo
     lr: dict = {}
     row["learn"] = lr
     if a["status"] != "done":
-        lr.update({"outcome": "blocked" if a["outcome"] == "blocked" else "not learnable", "reason": f"the task ended {a['status']}"})
+        lr.update(unlearned(a))
         return finish(wf, row, secrets_seen)
     since = now()
     for _ in range(15):  # the phone stays leased a moment after the task ends; a person would wait for it too
@@ -264,7 +275,7 @@ async def run_task(wf: rr.Workflow, copy: Copy, mcp: Client, phone: str, dry: bo
             break
         time.sleep(POLL_S)
     if code != 200:
-        lr.update({"outcome": "not learnable", "reason": str(view.get("detail") or view)[:300]})
+        lr.update(unlearned(a, str(view.get("detail") or view)[:300]))
         return finish(wf, row, secrets_seen)
     t0, declined = time.time(), 0
     while time.time() - t0 < CAP_S and view.get("status") in ("compiling", "replaying"):
@@ -341,6 +352,44 @@ async def run_task(wf: rr.Workflow, copy: Copy, mcp: Client, phone: str, dry: bo
     return finish(wf, row, secrets_seen)
 
 
+def unlearned(a: dict, refused: str | None = None) -> dict:
+    """Stage b for a task "Make it a routine" can't take: one that didn't end done, or one the learn refused."""
+    lib = a.get("library_routine")
+    if refused is not None:
+        return {"outcome": "not learnable", "reason": f"ran library routine {lib}: {refused}" if lib else refused}
+    return {"outcome": "blocked" if a["outcome"] == "blocked" else "not learnable",
+            "reason": f"ran library routine {lib}, which ended {a['status']}" if lib else f"the task ended {a['status']}"}
+
+
+def amend(rows: list[dict], db: Path) -> list[str]:
+    """Rows recorded before the harness noted library routines and counted "blocks emulators" as a block: the same rules,
+    applied afterwards from the stopped copy's own task records (read-only). Returns what changed."""
+    con = sqlite3.connect(f"file:{db}?mode=ro", uri=True)
+    changed = []
+    try:
+        for r in rows:
+            a, lr = r.get("agent") or {}, r.get("learn") or {}
+            t = con.execute("SELECT routine, detail, result FROM tasks WHERE id=?", (a.get("task_id"),)).fetchone() if a.get("task_id") else None
+            if t is None:
+                continue
+            routine, detail, result = t
+            before = (a.get("outcome"), lr.get("outcome"), lr.get("reason"))
+            if routine and not a.get("library_routine"):
+                a["library_routine"] = routine
+            if a.get("outcome") == "no answer" and blocked(result, detail):
+                a["outcome"] = "blocked"
+            if a.get("status") != "done":
+                lr.update(unlearned(a))
+            elif routine and lr.get("outcome") == "not learnable" and not lr["reason"].startswith("ran library routine"):
+                lr["reason"] = f"ran library routine {routine}: {lr['reason']}"
+            if (a.get("outcome"), lr.get("outcome"), lr.get("reason")) != before:
+                changed.append(f"{r['row']}: a {before[0]} → {a.get('outcome')}, b {before[1]} → {lr.get('outcome')}"
+                               + (f" ({lr.get('reason')})" if lr.get("reason") != before[2] else ""))
+    finally:
+        con.close()
+    return changed
+
+
 def finish(wf: rr.Workflow, row: dict, seen: list[str]) -> dict:
     return rr.scrub(row, [s for s in seen if s]) if wf.private else row
 
@@ -358,29 +407,47 @@ def rates(rows: list[dict]) -> dict:
             "new_input_right_0_calls": sum(r["call"]["outcome"] == "right, 0 calls" for r in right)}
 
 
-def readme(doc: dict) -> str:
-    rows, r = doc["rows"], rates(doc["rows"])
-    lines = [
-        "# The agent path and \"Make it a routine\": results", "",
-        f"Run under [PROTOCOL.md](PROTOCOL.md) on `eval-final` = `{doc['versions']['eval_final'][:9]}` (copy HEAD "
-        f"`{doc['versions']['copy_head'][:9]}`, harness `{doc['versions']['harness_head'][:9]}`), {doc['started']} → {doc.get('ended', '…')}.", "",
-        f"- **Agent path:** right {r['agent_right']}/{r['tasks']}.",
-        f"- **Learn rate:** saved {r['saved']}/{r['tasks']}.",
-        f"- **New input:** right {r['new_input_right']}/{r['saved_with_second']} saved routines with a second input; "
-        f"{r['new_input_right_0_calls']} of them with 0 model calls.", "",
-        *([f"Starting state: {n}" for n in doc.get("notes") or []] + ([""] if doc.get("notes") else [])),
-        "| Row | a. Agent path | b. Make it a routine | c. Share | d. Call | Calls (a / compile / replay / d) |",
-        "| --- | --- | --- | --- | --- | --- |"]
+def summary(doc: dict) -> list[str]:
+    r = rates(doc["rows"])
+    return [f"`eval-final` = `{doc['versions']['eval_final'][:9]}` (copy HEAD `{doc['versions']['copy_head'][:9]}`, harness "
+            f"`{doc['versions']['harness_head'][:9]}`), {doc['started']} → {doc.get('ended', '…')}.", "",
+            f"- **Agent path:** right {r['agent_right']}/{r['tasks']}.",
+            f"- **Learn rate:** saved {r['saved']}/{r['tasks']}.",
+            f"- **New input:** right {r['new_input_right']}/{r['saved_with_second']} saved routines with a second input; "
+            f"{r['new_input_right_0_calls']} of them with 0 model calls.", ""]
+
+
+def table(rows: list[dict]) -> list[str]:
+    lines = ["| Row | a. Agent path | b. Make it a routine | c. Share | d. Call | Calls (a / compile / replay / d) |",
+             "| --- | --- | --- | --- | --- | --- |"]
     for x in rows:
         a, lr, sh, c = x.get("agent") or {}, x.get("learn") or {}, x.get("share") or {}, x.get("call") or {}
-        lines.append(f"| {x['row']} | {a.get('outcome', '–')} | {lr.get('outcome', '–')}"
-                     + (f" ({lr['reason'][:80]})" if lr.get("outcome") not in (None, "saved") and lr.get("reason") else "")
+        lines.append(f"| {x['row']} | {a.get('outcome', '–')}"
+                     + (f" (library routine {a['library_routine']})" if a.get("library_routine") else "")
+                     + f" | {lr.get('outcome', '–')}"
+                     + (f" ({lr['reason'][:100]})" if lr.get("outcome") not in (None, "saved") and lr.get("reason") else "")
                      + f" | {sh.get('outcome', '–')} | {(c.get('case', '') + ': ') if c else ''}{c.get('outcome', '–')} | "
                      f"{a.get('model_calls', '–')} / {lr.get('compile_model_calls', '–')} / {lr.get('replay_model_calls', '–')} / {c.get('model_calls', '–')} |")
-    by_hand = [f"- {x['row']}: {stage} answer {ans!r}" for x in rows if x.get("graded_by") == "shape"
-               for stage, ans in (("first-run", (x.get("agent") or {}).get("answer")), ("tool-call", (x.get("call") or {}).get("answer"))) if ans]
-    lines += ["", "## Shape-graded answers to read by hand", "", *(by_hand or ["None."]), "", "## Deviations", "",
-              *(doc.get("deviations") or ["None."]), ""]
+    return lines
+
+
+def by_hand(rows: list[dict]) -> list[str]:
+    return [f"- {x['row']}: {stage} answer {ans!r}" for x in rows if x.get("graded_by") == "shape"
+            for stage, ans in (("first-run", (x.get("agent") or {}).get("answer")), ("tool-call", (x.get("call") or {}).get("answer"))) if ans]
+
+
+def readme(doc: dict, extra: dict | None = None) -> str:
+    """The pass under the protocol; `extra`, the supplementary pass with an empty library, as its own section."""
+    lines = ["# The agent path and \"Make it a routine\": results", "",
+             "Run under [PROTOCOL.md](PROTOCOL.md) on " + summary(doc)[0], *summary(doc)[1:],
+             *([f"Starting state: {n}" for n in doc.get("notes") or []] + ([""] if doc.get("notes") else [])),
+             *table(doc["rows"]),
+             "", "## Shape-graded answers to read by hand", "", *(by_hand(doc["rows"]) or ["None."])]
+    if extra:
+        lines += ["", "## Supplementary pass: an empty routine library (a deviation, outside the headline)", "",
+                  *(extra.get("why") or []), "", "Run on " + summary(extra)[0], *summary(extra)[1:], *table(extra["rows"]),
+                  "", "Shape-graded answers to read by hand:", "", *(by_hand(extra["rows"]) or ["None."])]
+    lines += ["", "## Deviations", "", *(doc.get("deviations") or ["None."]), ""]
     return "\n".join(lines)
 
 
@@ -394,18 +461,29 @@ async def main() -> int:
     ap.add_argument("--retry", default="", help="a workflow lost to an infrastructure fault, run again as its own row")
     ap.add_argument("--dry-run", action="store_true", help="no phone: a phone id that doesn't exist, so nothing runs on a device")
     ap.add_argument("--note", action="append", default=[], help="the phone's starting state, said in the README")
+    ap.add_argument("--supplementary", action="store_true",
+                    help="the deviation pass: a copy whose routine library is deleted; results to supplementary.json")
+    ap.add_argument("--why", action="append", default=[], help="the supplementary pass's reason, said in the README")
     ap.add_argument("--report", action="store_true")
+    ap.add_argument("--amend", type=Path, help="with --report: the pass's stopped api-dir, to apply amend() to results.json")
+    ap.add_argument("--deviation", action="append", default=[], help="with --report: a deviation to add to the README")
     args = ap.parse_args()
-    results = OUT / "results.json"
+    results, extra = OUT / "results.json", OUT / "supplementary.json"
     if args.report:
-        (OUT / "README.md").write_text(readme(json.loads(results.read_text())))
+        doc = json.loads(results.read_text())
+        if args.amend:
+            doc["amended"] = doc.get("amended", []) + amend(doc["rows"], args.amend.resolve() / "envoy.db")
+            print("\n".join(doc["amended"]) or "nothing to amend")
+        doc["deviations"] = doc.get("deviations", []) + args.deviation
+        results.write_text(json.dumps(doc, indent=1, ensure_ascii=False))
+        (OUT / "README.md").write_text(readme(doc, json.loads(extra.read_text()) if extra.exists() else None))
         return 0
     if args.port == 8700 or args.port < 8701:
         sys.exit("the copy runs on its own port, 8701 or higher")
     if args.dry_run:
         args.phone = "dry-run-no-phone"  # never one of the emulators the eval holds
     copy = Copy(args.copy.resolve(), args.api_dir.resolve(), args.port)
-    versions = copy.check(args.dry_run)
+    versions = copy.check(args.dry_run, empty_library=args.supplementary)
     copy.start()
     try:
         subs = copy.push_subscriptions()
@@ -417,10 +495,12 @@ async def main() -> int:
         ids = [p.get("id") for p in (phones.get("phones") if isinstance(phones, dict) else []) or []]
         if args.phone not in ids and not args.dry_run:  # (a dry run's phone doesn't exist on purpose)
             sys.exit(f"no phone {args.phone!r} on the copy (it has {ids})")
-        out = copy.api_dir / "dry-run.json" if args.dry_run else results
+        out = copy.api_dir / "dry-run.json" if args.dry_run else extra if args.supplementary else results
         doc = json.loads(out.read_text()) if out.exists() and args.retry else {
             "protocol": "eval/results/learn-agent-path/PROTOCOL.md", "versions": versions, "started": now(), "phone": args.phone,
             "push_subscriptions": subs, "phones": ids, "notes": args.note, "rows": [], "deviations": []}
+        if args.supplementary:
+            doc["why"] = args.why
         only = [w for w in args.only.split(",") if w]
         wanted = [w for w in rr.WORKFLOWS if (not only or w.id in only)]
         if args.retry:
@@ -440,7 +520,8 @@ async def main() -> int:
         doc["ended"] = now()
         out.write_text(json.dumps(doc, indent=1, ensure_ascii=False))
         if not args.dry_run:
-            (OUT / "README.md").write_text(readme(doc))
+            main_doc = json.loads(results.read_text()) if args.supplementary else doc
+            (OUT / "README.md").write_text(readme(main_doc, json.loads(extra.read_text()) if extra.exists() else None))
         return 0
     finally:
         copy.stop()
