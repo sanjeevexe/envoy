@@ -435,15 +435,26 @@ def cmd_songs(args: argparse.Namespace) -> int:
     tag_dir = Path(args.tag_dir)
     results: dict[str, Any] = {"when": datetime.now().isoformat(timespec="seconds"), "checks": [], "swaps": {}}
     songs = {n: SONGS[n] for n in range(6, 11)} if not args.alternates else {n: (ALTERNATES[n], SONGS[n][1]) for n in args.alternates}
+    only = {(int(c[:-1]), c[-1]) for c in args.checks.split(",")} if args.checks else None
     for n, (title, artist) in songs.items():
         for w in "RTS":
+            if only and (n, w) not in only:
+                continue
             routine, until = SEARCH_UNTIL[w]
             names = ("song_title", "song_artist") if w == "R" else ("sound_title", "sound_artist")
-            if w in "R":
-                instagram_reset(args)
-            elif w == "S":
-                rs.setup_youtube(dev)
-            status, steps = run_steps(dev, tag_dir, routine, until, dict(zip(names, (title, artist))))
+            tries = []
+            for _ in range(3):  # a check that stops before the search (TikTok's launch check, say) says nothing about the library
+                if w in "R":
+                    instagram_reset(args)
+                elif w == "S":
+                    rs.setup_youtube(dev)
+                status, steps = run_steps(dev, tag_dir, routine, until, dict(zip(names, (title, artist))))
+                early = next((st["id"] for st in steps if st["status"] == "failed" and st["id"] != until), None)
+                tries.append(early or status)
+                if not early:
+                    break
+                force_stop(dev, rs.APPS[WORKFLOWS[w].app])
+                home(dev)
             time.sleep(2)
             s, _ = rs.observe(dev)
             shown = any(contains_value(e.label, title) and contains_value(e.label, artist) for e in s.numbered)
@@ -453,12 +464,14 @@ def cmd_songs(args: argparse.Namespace) -> int:
             except Exception:  # noqa: BLE001
                 shot = None
             found = "yes" if (status == "done" and w != "T") or shown else ("see screenshot" if w == "T" else "no")
+            found = "not reached" if early else found
             results["checks"].append({"n": n, "title": title, "artist": artist, "app": w, "status": status, "found": found,
-                                      "steps": steps, "screenshot": shot.name if shot else None})
+                                      "tries": tries, "steps": steps, "screenshot": shot.name if shot else None})
             print(f"{n:02d} {title} / {artist} in {w}: {found} ({status})", flush=True)
             force_stop(dev, rs.APPS[WORKFLOWS[w].app])
             home(dev)
-    (OUT / ("songs-alternates.json" if args.alternates else "songs.json")).write_text(json.dumps(results, indent=1, ensure_ascii=False))
+    name = "songs-alternates" if args.alternates else "songs"
+    (OUT / (f"{name}-recheck.json" if args.checks else f"{name}.json")).write_text(json.dumps(results, indent=1, ensure_ascii=False))
     return 0
 
 
@@ -502,6 +515,7 @@ def main() -> int:
         else:
             p.add_argument("--alternates", type=lambda s: [int(x) for x in s.split(",")], default=None,
                            help="check these attempts' alternates instead (e.g. 6,9)")
+            p.add_argument("--checks", default="", help="only these song/app pairs, e.g. 09T,10T (written to *-recheck.json)")
     sub.add_parser("report")
     sub.add_parser("clips")
     args = ap.parse_args()
