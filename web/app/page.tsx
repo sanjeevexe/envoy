@@ -114,6 +114,7 @@ export default function Page() {
     switch (e.type) {
       case "task": setTasks((m) => ({ ...m, [e.task.id]: e.task })); if (["done", "failed", "declined"].includes(e.task.status)) setBriefVersion((v) => v + 1); break;
       case "step": setSteps((m) => ({ ...m, [e.task_id]: [...(m[e.task_id] ?? []), e.step] })); setLastStepAt(Date.now()); break;
+      case "task_learn": setTasks((m) => (m[e.task_id] ? { ...m, [e.task_id]: { ...m[e.task_id], learn: e.learn } } : m)); break;
       case "approval_requested":
       case "approval_decided":
         setApprovals((m) => ({ ...m, [e.approval.id]: e.approval }));

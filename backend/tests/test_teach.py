@@ -585,6 +585,107 @@ def test_a_replay_that_fails_saves_nothing(api, monkeypatch):
     assert (Path(ctx.teacher.root) / out["id"] / "routine.yaml").exists()  # the draft stays with the recording
 
 
+# ---- "Make it a routine" on a finished agent task -------------------------------------------------
+
+KTN = "skylark_add_known_traveler_number"
+
+
+def _agent_task(ctx, phone) -> str:
+    """A task the agent finished on envoy-test, its run kept as `<task>-r1` as api/runner.py names it. (A demonstration is a
+    trace in the agent's own format; its run.json is made an agent run's.)"""
+    _, trace = asyncio.run(demonstrate(phone, ktn_demo(phone), ctx.teacher.root))
+    task = ctx.tasks.create("Add my known traveler number 55501234 to my Chicago trip", "web", kind="agent", status="done",
+                            device="envoy-test", app=PKG, result="Saved your known traveler number")
+    run = ctx.teacher.root / f"{task['id']}-r1"
+    trace.rename(run)
+    meta = {k: v for k, v in json.loads((run / "run.json").read_text()).items() if k not in ("source", "taught", "notes", "paused_inputs")}
+    (run / "run.json").write_text(json.dumps({**meta, "task_id": run.name, "status": "done", "check": {"passed": True, "evaluable": True}}))
+    return task["id"]
+
+
+def _learn(ctx, tid: str) -> dict:
+    async def go():
+        out = await ctx.teacher.learn_task(tid)
+        assert out["status"] == "compiling" and ctx.pool.leases["envoy-test"].run_lock.locked()  # no task starts meanwhile
+        await ctx.teacher.jobs["envoy-test"]
+    asyncio.run(go())
+    return ctx.tasks.get(tid)["learn"]
+
+
+def test_make_it_a_routine_learns_a_finished_agent_task_and_keeps_it_unshared(api, monkeypatch):
+    from api.sharing import Sharing
+    from mcp_server.server import phone_updates_view
+    ctx, phone, me = api
+    replays = []
+    _clean_replay(monkeypatch, replays)
+    tid = _agent_task(ctx, phone)
+    finished_at = ctx.tasks.get(tid)["updated_at"]
+    learn = _learn(ctx, tid)
+    assert learn["status"] == "saved" and learn["routine"] == KTN and learn["version"] == 1 and learn["steps"] == 3, learn
+    assert learn["replay"] == {"status": "done", "duration_s": 6.2, "model_calls": 0} and learn["cost_usd"] == 0.04
+    assert "Saved as skylark_add_known_traveler_number (v1)" in learn["detail"] and "Settings › Agents" in learn["detail"]
+    assert replays == [(KTN, False)] and not ctx.pool.leases["envoy-test"].run_lock.locked()
+    r = ctx.routines.get(KTN)
+    assert r.status == "active" and r.compiled_from.get("source") != "taught"
+    v = ctx.routines.index(KTN)["versions"][0]
+    assert v["changes"] == [f"learned from task {tid}"] and v["verification"]["by"] == "learn" and v["verification"]["from"] == tid
+    assert not Sharing(ctx.tasks).shared(KTN)  # agents get it only when you share it
+    assert [e["learn"]["status"] for e in ctx.bus.recent if e["type"] == "task_learn"] == ["compiling", "replaying", "saved"]
+    # phone_updates: the routine is learned, and the task isn't reported as finishing a second time
+    assert ctx.tasks.get(tid)["updated_at"] == finished_at
+    items = phone_updates_view(ctx, None, "https://envoy.example")["items"]
+    assert [i["routine"] for i in items if i["type"] == "routine_learned"] == [KTN]
+    assert len([i for i in items if i["type"] == "task" and i["task_id"] == tid]) == 1
+    with TestClient(ctx.asgi) as c:
+        assert c.post(f"/api/tasks/{tid}/learn", headers=me).status_code == 409  # it's a routine already
+        assert c.get(f"/api/tasks/{tid}", headers=me).json()["task"]["learn"]["routine"] == KTN
+
+
+def test_make_it_a_routine_takes_only_a_finished_agent_task_whose_run_was_kept(api):
+    ctx, phone, me = api
+    tid = _agent_task(ctx, phone)
+    t = ctx.tasks
+    failed = t.create("x", "web", kind="agent", status="failed", device="envoy-test")["id"]
+    ran = t.create("x", "web", kind="routine", routine="skylark_check_in", status="done", device="envoy-test")["id"]
+    nowhere = t.create("x", "web", kind="agent", status="done")["id"]
+    lost = t.create("x", "web", kind="agent", status="done", device="envoy-test")["id"]
+    with TestClient(ctx.asgi) as c:
+        assert c.post(f"/api/tasks/{tid}/learn").status_code == 401  # your session only: not MCP, not an agent
+        assert c.post("/api/tasks/task-nope/learn", headers=me).status_code == 404
+        for other, why in ((failed, "only a task that finished"), (ran, "ran the routine skylark_check_in"), (nowhere, "phone"),
+                           (lost, "wasn't kept")):
+            r = c.post(f"/api/tasks/{other}/learn", headers=me)
+            assert r.status_code == 409 and why in r.json()["detail"], (other, r.json())
+        ctx.pool.leases["envoy-test"].task_id = "task-busy"
+        r = c.post(f"/api/tasks/{tid}/learn", headers=me)
+        assert r.status_code == 409 and "using this phone" in r.json()["detail"]
+        ctx.pool.leases["envoy-test"].task_id = None
+    assert t.get(tid).get("learn") is None and ctx.routines.names() == [] and not ctx.pool.leases["envoy-test"].run_lock.locked()
+
+
+@pytest.mark.parametrize("why", ["not-compilable", "replay-fails"])
+def test_a_task_that_cant_become_a_routine_says_why_and_saves_nothing(api, monkeypatch, why):
+    from routines import compiler
+    ctx, phone, me = api
+    if why == "not-compilable":
+        async def refuse(*a, **k):
+            raise compiler.NotCompilable("the run answered a question, but no output can be read back from its own final screen")
+        monkeypatch.setattr(compiler, "compile_trace", refuse)
+    else:
+        async def replay(self, s, routine):
+            return SimpleNamespace(status="failed", detail="post-check failed", duration_s=3.0, model_calls=0, outputs={},
+                                   steps=[SimpleNamespace(id="type_ktn", status="failed", detail="field not found")], cost_at_standard_usd=0.0)
+        monkeypatch.setattr(Teacher, "_replay", replay)
+    tid = _agent_task(ctx, phone)
+    for _ in range(2):  # and a failed one can be tried again
+        learn = _learn(ctx, tid)
+        assert learn["status"] == "failed" and ctx.routines.names() == [] and not ctx.pool.leases["envoy-test"].run_lock.locked()
+        if why == "not-compilable":
+            assert learn["detail"].startswith("can't become a routine: the run answered a question") and learn["routine"] is None
+        else:
+            assert "type_ktn: field not found" in learn["detail"] and learn["replay"]["status"] == "failed"
+
+
 def test_a_forgotten_recording_is_cancelled_and_gives_the_phone_back(tmp_path, monkeypatch):
     monkeypatch.setattr(teach, "IDLE_S", 0.2)
     monkeypatch.setattr(teach, "IDLE_CHECK_S", 0.1)

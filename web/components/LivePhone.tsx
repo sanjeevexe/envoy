@@ -305,7 +305,9 @@ export default function LivePhone({ avd, lease, needsYou, mobile, teachAsk, task
       ) : teachStatus && LEARNING[teachStatus] ? (
         <div className="rounded-block border border-line bg-surface px-4 py-3" role="status" aria-live="polite">
           <div className="text-body font-bold">Learning it</div>
-          <div className="mt-0.5 text-meta text-ink-2">{LEARNING[teachStatus]}</div>
+          <div className="mt-0.5 text-meta text-ink-2">
+            {teachStatus === "compiling" && control?.teach?.source_task ? "Turning a finished task’s run into a routine…" : LEARNING[teachStatus]}
+          </div>
         </div>
       ) : inControl ? (
         <div className="rounded-block bg-ink px-4 py-3 text-on-ink">

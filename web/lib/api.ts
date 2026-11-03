@@ -10,6 +10,13 @@ export type Task = {
   parent?: string | null; // the cross-app task this one is a part of
   request?: string | null; // what you asked, when the goal was reworded
   agent?: string | null; // the AI agent that started it over MCP ("Muse", "Claude")
+  learn?: TaskLearn | null; // "Make it a routine" on this finished task
+};
+// "Make it a routine" (backend/api/teach.py learn_task): the run is compiled, checked once on its phone with no model, and
+// saved, not shared with agents. compiling → replaying → saved | failed.
+export type TaskLearn = {
+  id: string; status: "compiling" | "replaying" | "saved" | "failed"; detail: string; routine?: string | null; version?: number | null;
+  steps: number; replay?: { status: string; duration_s: number; model_calls: number } | null; replay_task?: string | null; cost_usd: number;
 };
 export type Step = {
   seq: number; time: number; kind: string; text?: string; reason?: string; risk?: string | null; status?: string;
@@ -33,7 +40,10 @@ export type Lease = {
 };
 // Teach mode (backend/api/teach.py): you do a task once and it becomes a routine. While `recording` is "paused" (a sign-in
 // or secure screen) nothing is kept.
-export type TeachState = { id: string; goal: string; status: string; recording?: "on" | "paused"; why?: string; steps?: number; routine?: string };
+export type TeachState = {
+  id: string; goal: string; status: string; recording?: "on" | "paused"; why?: string; steps?: number; routine?: string;
+  source_task?: string; // learning from a finished task ("Make it a routine"), not from a showing
+};
 export type TeachResult = TeachState & { detail: string; version: number | null; notes: string[]; warnings: string[]; replay_task: string | null;
   replay: { status: string; detail: string; duration_s: number } | null; cost_usd: number };
 // An offer: Envoy proposes one action and waits for your yes (backend/api/offers.py). `action.goal` is shown verbatim.

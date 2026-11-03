@@ -242,6 +242,49 @@ function StepRow({ l, isNew }: { l: Line; isNew: boolean }) {
   );
 }
 
+// "Make it a routine" on a task the agent finished (backend/api/teach.py learn_task): its run is compiled, checked once on
+// the same phone with no model, and saved. Agents can call it only after you share it in Settings › Agents.
+function MakeRoutine({ t, where }: { t: Task; where: string }) {
+  const [asking, setAsking] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const l = t.learn;
+  const start = () => {
+    setAsking(true);
+    setError(null);
+    post(`/api/tasks/${t.id}/learn`).catch((e) => setError(e.message)).finally(() => setAsking(false));
+  };
+  if (l?.status === "saved") {
+    const calls = l.replay?.model_calls ?? 0;
+    return (
+      <div className="flex flex-col gap-1 rounded-[16px] bg-sage-tint/60 px-4 py-3">
+        <span className="flex items-center gap-2 text-body font-bold [overflow-wrap:anywhere]"><RepeatIcon size={18} className="shrink-0 text-sage-ink" /> Saved as the routine {l.routine}</span>
+        <span className="text-meta-2 text-muted">
+          {l.steps} {l.steps === 1 ? "step" : "steps"} · checked once on {where} in {Math.round(l.replay?.duration_s ?? 0)} s, {calls === 0 ? "with no model" : `${calls} model ${calls === 1 ? "call" : "calls"}`}
+          {" "}· agents can call it once you share it in Settings › Agents
+        </span>
+      </div>
+    );
+  }
+  if (asking || l?.status === "compiling" || l?.status === "replaying") {
+    return (
+      <span className="flex items-center gap-2 text-meta font-semibold text-sage-ink" aria-live="polite">
+        <Spinner size={12} stroke={4} /> {l?.status === "replaying" ? `Checking it once on ${where}, with no model` : "Turning this run into a routine"}
+      </span>
+    );
+  }
+  return (
+    <span className="flex flex-col gap-1.5">
+      <span className="flex flex-wrap items-center gap-2">
+        <button onClick={start} className="h-11 rounded-full bg-sage px-4 text-[14px] font-bold text-white">{l?.status === "failed" ? "Try again" : "Make it a routine"}</button>
+        <span className="text-meta-2 text-muted">Envoy checks it once on the phone; after that it runs with no model.</span>
+      </span>
+      {(error || l?.status === "failed") && (
+        <span className="text-meta-2 text-apricot-ink [overflow-wrap:anywhere]" role="status">Not saved: {error ?? l?.detail}</span>
+      )}
+    </span>
+  );
+}
+
 export function TaskDetail({ id, task, liveSteps, back, all, open, review, watch, deviceName, showMe }: {
   id: string; task?: Task; liveSteps: Step[]; back: () => void; all?: Record<string, Task>; open?: (id: string) => void;
   review?: (approvalId: string) => void; watch?: (device?: string) => void; deviceName?: DeviceName;
@@ -322,6 +365,7 @@ export function TaskDetail({ id, task, liveSteps, back, all, open, review, watch
                 <span className="text-meta-2 text-muted">Do it yourself on the phone and Envoy learns it.</span>
               </span>
             )}
+            {t.status === "done" && t.kind === "agent" && !t.routine && t.device && <MakeRoutine t={t} where={onThe(t.device, device!)} />}
           </div>
         </div>
 

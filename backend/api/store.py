@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS tasks (
   id TEXT PRIMARY KEY, goal TEXT NOT NULL, source TEXT NOT NULL, status TEXT NOT NULL, created_at REAL, updated_at REAL,
   app TEXT, device TEXT, kind TEXT, routine TEXT, inputs TEXT, result TEXT, detail TEXT, waiting_for TEXT,
   model_calls INTEGER DEFAULT 0, cost_usd REAL DEFAULT 0, traces TEXT DEFAULT '[]', memory TEXT, request TEXT, parent TEXT, models TEXT,
-  agent TEXT
+  agent TEXT, learn TEXT
 );
 CREATE TABLE IF NOT EXISTS steps (
   task_id TEXT, seq INTEGER, time REAL, data TEXT, PRIMARY KEY (task_id, seq)
@@ -65,6 +65,8 @@ class TaskStore:
                 self.db.execute("ALTER TABLE tasks ADD COLUMN models TEXT")
             if "agent" not in columns:  # databases from before agent keys (which agent started a task over MCP)
                 self.db.execute("ALTER TABLE tasks ADD COLUMN agent TEXT")
+            if "learn" not in columns:  # databases from before "Make it a routine" (api/teach.py, learn_task)
+                self.db.execute("ALTER TABLE tasks ADD COLUMN learn TEXT")
             # A restart ends whatever was running: the runner that owned it is gone.
             self.db.execute("UPDATE tasks SET status='stopped', detail='the server restarted' WHERE status IN (%s)" % ",".join("?" * len(ACTIVE)), ACTIVE)
             self.db.execute("UPDATE approvals SET status='expired', note='the server restarted' WHERE status='pending'")
@@ -94,6 +96,14 @@ class TaskStore:
         enc["updated_at"] = time.time()
         with self.lock:
             self.db.execute(f"UPDATE tasks SET {', '.join(f'{k}=?' for k in enc)} WHERE id=?", (*enc.values(), tid))
+            self.db.commit()
+        return self.get(tid)
+
+    def set_learn(self, tid: str, learn: dict[str, Any]) -> dict[str, Any] | None:
+        """"Make it a routine" on a finished task: its progress and result. It leaves `updated_at` alone, so the task isn't
+        reported as finishing again (phone_updates lists tasks by it)."""
+        with self.lock:
+            self.db.execute("UPDATE tasks SET learn=? WHERE id=?", (json.dumps(learn, default=str), tid))
             self.db.commit()
         return self.get(tid)
 
@@ -210,7 +220,7 @@ class TaskStore:
 
 def _task(r: sqlite3.Row) -> dict[str, Any]:
     d = dict(r)
-    for k in ("inputs", "traces", "memory", "models"):
+    for k in ("inputs", "traces", "memory", "models", "learn"):
         if d.get(k):
             try:
                 d[k] = json.loads(d[k])

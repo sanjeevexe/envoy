@@ -21,12 +21,18 @@ Privacy (live.py: takeover input is never logged, stored or shown to a model):
 - On a sign-in or secure screen (policy/signin.py `sign_in_reason`, a password field, FLAG_SECURE, a black frame from a
   real phone) recording pauses and stores nothing: no tree, no picture, no input. It resumes on the next ordinary screen.
 - Text typed into a password field is never recorded. Cancel deletes everything recorded; so does "it didn't work".
+
+"Make it a routine" on a finished agent task (`Teacher.learn_task`, POST /api/tasks/{id}/learn) takes the same path from
+the compile on: the agent's own trace instead of a showing, your tap as the confirmation, the same strict replay on the
+phone it ran on, and the library with "learned from task <id>". Its progress and result are on that task (`learn`). The
+new routine isn't shared with agents until you switch it on (api/sharing.py).
 """
 
 from __future__ import annotations
 
 import asyncio
 import io
+import json
 import re
 import shutil
 import time
@@ -491,7 +497,7 @@ class Session:
     avd: str
     goal: str
     app: str | None
-    recorder: Recorder
+    recorder: Recorder | None  # None: learning from a finished task's own trace, nothing is recorded
     status: str = "recording"  # recording → compiling → replaying → saved | failed; or discarded
     detail: str = ""
     started: float = field(default_factory=time.time)
@@ -503,15 +509,24 @@ class Session:
     replay_task: str | None = None
     cost_usd: float = 0.0
     trace_dir: str = ""
+    source_task: str | None = None  # the finished task this routine is learned from ("Make it a routine")
 
     def view(self) -> dict[str, Any]:
         out = {"id": self.id, "device": self.avd, "goal": self.goal, "app": self.app, "status": self.status, "detail": self.detail,
                "started": self.started, "routine": self.routine, "version": self.version, "steps": self.steps,
-               "notes": self.recorder.notes, "replay": self.replay, "replay_task": self.replay_task, "cost_usd": round(self.cost_usd, 4),
-               "warnings": self.report.get("warnings", []), "dropped": self.report.get("dropped", [])}
-        if self.status == "recording":
+               "notes": self.recorder.notes if self.recorder else [], "replay": self.replay, "replay_task": self.replay_task,
+               "cost_usd": round(self.cost_usd, 4), "warnings": self.report.get("warnings", []), "dropped": self.report.get("dropped", []),
+               **({"source_task": self.source_task} if self.source_task else {})}
+        if self.status == "recording" and self.recorder is not None:
             out.update(self.recorder.state())
         return out
+
+    def learn_view(self) -> dict[str, Any]:
+        """What the task's card shows while its routine is learned, and after."""
+        replay = {k: self.replay[k] for k in ("status", "duration_s", "model_calls") if k in self.replay} if self.replay else None
+        return {"id": self.id, "status": self.status, "detail": self.detail, "routine": self.routine, "version": self.version,
+                "steps": self.steps, "replay": replay, "replay_task": self.replay_task, "cost_usd": round(self.cost_usd, 4),
+                "started": self.started}
 
 
 class Teacher:
@@ -528,7 +543,7 @@ class Teacher:
 
     def _sweep(self) -> None:
         """A recording the API stopped in the middle of (no run.json, untouched for an hour) is never kept."""
-        live = {s.recorder.trace.dir for s in self.sessions.values()}
+        live = {s.recorder.trace.dir for s in self.sessions.values() if s.recorder is not None}
         for d in self.root.glob("teach-*"):
             try:
                 if d.is_dir() and d not in live and not (d / "run.json").exists() and time.time() - d.stat().st_mtime > 3600:
@@ -543,9 +558,13 @@ class Teacher:
     def _changed(self, s: Session) -> None:
         lease = self.pool.leases.get(s.avd)
         if lease is not None:
-            lease.teach = {"id": s.id, "goal": s.goal, "status": s.status, **(s.recorder.state() if s.status == "recording" else {}),
-                           **({"routine": s.routine} if s.routine else {})}
+            lease.teach = {"id": s.id, "goal": s.goal, "status": s.status,
+                           **(s.recorder.state() if s.status == "recording" and s.recorder is not None else {}),
+                           **({"routine": s.routine} if s.routine else {}), **({"source_task": s.source_task} if s.source_task else {})}
         self.bus.publish("teach", teach=s.view())
+        if s.source_task:  # the task's card; its own event, as a "task" one would set off the finished-task listeners again
+            self.tasks.set_learn(s.source_task, learn := s.learn_view())
+            self.bus.publish("task_learn", task_id=s.source_task, learn=learn)
 
     async def start(self, avd: str, goal: str, app: str | None = None) -> dict[str, Any]:
         goal = " ".join((goal or "").split())
@@ -652,6 +671,63 @@ class Teacher:
         self.jobs[avd] = asyncio.get_running_loop().create_task(self._learn(s, trace))
         return s.view()
 
+    def _task_trace(self, tid: str) -> Path | None:
+        """A task's run as the agent recorded it: its last attempt (`<task>-r<n>`, api/runner.py), under the runs folder."""
+        root, name = self.root.resolve(), re.compile(rf"{re.escape(tid)}-r\d+(-phone)?")
+        runs = [d for d in self.root.glob(f"{tid}-r*") if name.fullmatch(d.name) and (d / "run.json").is_file()
+                and (d / "steps.jsonl").is_file() and d.resolve().is_relative_to(root)]
+        return max(runs, key=lambda d: (d / "run.json").stat().st_mtime, default=None)
+
+    async def learn_task(self, tid: str) -> dict[str, Any]:
+        """"Make it a routine": a task the agent finished becomes a routine as a showing does after Finish (the compile,
+        one strict replay on the phone it ran on, then the library). Your tap is the confirmation that it worked. The
+        compile and the replay run in the background; the task's `learn` follows them."""
+        task = self.tasks.get(tid)
+        if task is None:
+            raise TeachError(404, "no such task")
+        if (task.get("learn") or {}).get("status") in ("compiling", "replaying"):
+            raise TeachError(409, "this task is already becoming a routine")
+        if (task.get("learn") or {}).get("status") == "saved":
+            raise TeachError(409, f"this task is already the routine {task['learn'].get('routine')}")
+        if task.get("status") != "done":
+            raise TeachError(409, f"only a task that finished can become a routine (this one is {task.get('status')})")
+        if task.get("routine") or task.get("kind") != "agent":
+            raise TeachError(409, f"this task ran the routine {task['routine']}" if task.get("routine") else
+                             "only a task Envoy's agent did on a phone can become a routine")
+        avd = task.get("device")
+        lease = self.pool.leases.get(avd) if avd else None
+        if lease is None:
+            raise TeachError(409, "it didn't run on a phone Envoy has now")
+        trace = self._task_trace(tid)
+        try:
+            acts = sum(json.loads(line).get("kind") == "action" for line in (trace / "steps.jsonl").read_text().splitlines()
+                       if line.strip()) if trace else 0
+        except (OSError, ValueError):
+            trace = None
+        if trace is None:
+            raise TeachError(409, "its run wasn't kept, so there's nothing to learn it from")
+        if (s := self.sessions.get(avd)) is not None and s.status in ("recording", "compiling", "replaying"):
+            raise TeachError(409, "this phone is being taught: wait for that to end")
+        if lease.task_id or lease.run_lock.locked() or lease.user_control:
+            raise TeachError(409, "Envoy or you are using this phone: wait for that to end")
+        try:
+            await self.pool.device(avd)
+        except Exception as e:  # noqa: BLE001
+            raise TeachError(409, str(e)) from e
+        if lease.task_id or lease.run_lock.locked():  # taken while the phone was being connected
+            raise TeachError(409, "Envoy is using this phone: wait for its task to end")
+        await lease.run_lock.acquire()  # held through the replay, as a teach session holds it
+        try:
+            s = Session(new_id("learn"), avd, task["goal"], task.get("app"), None, status="compiling",
+                        detail="turning this task's run into a routine", steps=acts, trace_dir=str(trace), source_task=tid)
+            self.sessions[avd] = s
+            self._changed(s)
+            self.jobs[avd] = asyncio.get_running_loop().create_task(self._learn(s, trace))
+        except BaseException:
+            lease.run_lock.release()
+            raise
+        return s.learn_view()
+
     def _end(self, s: Session) -> None:
         lease = self.pool.leases[s.avd]
         if lease.user_control:
@@ -665,7 +741,7 @@ class Teacher:
         from routines.compiler import NotCompilable, compile_trace
         try:
             try:
-                routine, report = await compile_trace(trace, adapter=self.adapter, confirmed=True)
+                routine, report = await compile_trace(trace, adapter=self.adapter, confirmed=True, memory=self._memory(s))
             except NotCompilable as e:
                 s.status, s.detail = "failed", f"can't become a routine: {e}"
                 return
@@ -673,6 +749,9 @@ class Teacher:
             s.report = {"warnings": report.warnings, "dropped": [list(d) for d in report.dropped], "kept": report.kept,
                         "model": report.model, "cost_usd": report.cost_at_standard_usd}
             s.routine = routine.routine
+            if s.source_task:
+                routine = routine.model_copy(update={"changes": [f"learned from task {s.source_task}"]})
+                s.steps = len(routine.steps)
             (trace / "routine.yaml").write_text(_dump(routine))
             s.status, s.detail = "replaying", f"running {routine.routine} once, on its own, to show it works"
             self._changed(s)
@@ -686,13 +765,16 @@ class Teacher:
                 return
             inputs = {k: v.example or "" for k, v in routine.inputs.items()}
             # A name already in the library goes on trial, so a showing never replaces a tuned routine untested (#43).
-            added = self.routines.add_trial(routine, verification={"by": "teach", "from": s.id, "cases": [
-                {"case": "replay", "passed": True, "inputs": inputs, "duration_s": out.duration_s, "status": out.status}]})
+            added = self.routines.add_trial(routine, verification={"by": "learn" if s.source_task else "teach", "from": s.source_task or s.id,
+                                                                   "cases": [{"case": "replay", "passed": True, "inputs": inputs,
+                                                                              "duration_s": out.duration_s, "status": out.status}]})
             s.version, s.status = added.version, "saved"
             s.detail = f"Saved as {added.routine} (v{added.version}). It ran once on its own, with no model, in {out.duration_s:.0f} s."
             if added.status == "trial":
                 s.detail += (f" v{added.parent_version} stays in use until v{added.version} runs a real task on its own; "
                              "if it can't, it's set aside.")
+            if s.source_task:
+                s.detail += " Agents can't call it until you share it in Settings › Agents."
         except asyncio.CancelledError:
             s.status, s.detail = "failed", "stopped"
             raise
@@ -700,6 +782,17 @@ class Teacher:
             s.status, s.detail = "failed", f"{type(e).__name__}: {e}"[:400]
         finally:
             self._end(s)
+
+    def _memory(self, s: Session) -> str:
+        """What the agent was told from memory for this goal (api/runner.py), so the compiler tells remembered values from
+        inputs. A showing has none: you typed what you typed."""
+        if not s.source_task or self.runner is None or getattr(self.runner, "memory", None) is None:
+            return ""
+        try:
+            from memory.bridge import notes_for
+            return notes_for(self.runner.memory, s.goal)
+        except Exception:  # noqa: BLE001 - the compile goes on without it
+            return ""
 
     async def _replay(self, s: Session, routine: Any) -> Any:
         """One strict replay on the same phone (no repair, no agent), as a task you can watch and approve steps of."""
@@ -710,11 +803,13 @@ class Teacher:
         lease = self.pool.leases[avd]
         device = await self.pool.device(avd)
         inputs = {k: v.example or "" for k, v in routine.inputs.items()}
-        task = self.tasks.create(s.goal, "teach", kind="routine", routine=routine.routine, inputs=inputs, app=routine.app, device=avd)
+        task = self.tasks.create(s.goal, "learn" if s.source_task else "teach", kind="routine", routine=routine.routine, inputs=inputs,
+                                 app=routine.app, device=avd)
         tid = task["id"]
         s.replay_task = tid
         set_ = self.runner._set if self.runner is not None else (lambda t, **f: self.tasks.update(t, **f))
-        set_(tid, status="running", detail="replaying what you showed, once, with no model")
+        set_(tid, status="running", detail="running the new routine once, with no model, to check it" if s.source_task
+             else "replaying what you showed, once, with no model")
         trace_id = f"{tid}-replay"
         if self.runner is not None:
             self.runner.trace_task[trace_id] = tid

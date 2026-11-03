@@ -423,6 +423,12 @@ def build(profile: str | None = None, *, adapter: ModelAdapter | None = None, me
     def teach_status(avd: str) -> dict[str, Any]:
         return teacher.status(avd) or {"device": avd, "status": "none"}
 
+    @app.post("/api/tasks/{tid}/learn", dependencies=[Depends(session)])
+    async def learn_task(tid: str) -> dict[str, Any]:
+        """"Make it a routine": a task the agent finished on a phone is compiled, replayed once strictly on that phone and
+        saved, not shared (api/teach.py `learn_task`). The task's `learn` follows it; only your session can ask."""
+        return await teaching(teacher.learn_task(tid))
+
     @app.websocket("/api/live/{avd}")
     async def live(ws: WebSocket, avd: str, fps: float = 10, width: int = 540, quality: int = 70) -> None:
         if not is_session(ws):
