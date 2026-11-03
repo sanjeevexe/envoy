@@ -1,0 +1,83 @@
+{
+ "mode": "replay",
+ "app": "com.instagram.android",
+ "time": "2026-11-02T19:06:46",
+ "request": {
+  "phone": "phone-09031FDD4000C6",
+  "routine": "instagram_story_poll",
+  "inputs": {
+   "poll_question": "Envoy C1 1: which one?",
+   "poll_option_1": "Coffee",
+   "poll_option_2": "Tea"
+  }
+ },
+ "task": {
+  "id": "task-1102-190646-29b6",
+  "status": "declined",
+  "routine": "instagram_story_poll",
+  "model_calls": 15,
+  "cost_usd": 0.1499,
+  "traces": [],
+  "detail": "User declined the 'Your story' share action; per instructions I must stop and not retry it, so the poll story cannot be posted.",
+  "device": "phone-09031FDD4000C6"
+ },
+ "steps": 20,
+ "repairs": [],
+ "approvals": [
+  {
+   "description": "tap \"Your story\" in com.instagram.android",
+   "reasons": [
+    "rule: target id 'com.instagram.android:id/your_story_share_shortcut_button'",
+    "model: labeled irreversible"
+   ],
+   "status": "declined",
+   "decided_by": "user"
+  }
+ ],
+ "asked_at": [
+  "Your story"
+ ],
+ "approval_shot": "approval-task-1102-190646-29b6.jpg",
+ "routine_steps": [
+  {
+   "id": "open_story_creation",
+   "status": "agent",
+   "rung": 6,
+   "score": 1.0,
+   "rungs": [
+    "wait and retry: waited 2.9 s",
+    "full agent: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+    "ask the user: agent failed: User declined the 'Your story' share action; per instructions I must stop and not retry it, so the poll story cannot be posted."
+   ]
+  }
+ ],
+ "outcome_checks": [],
+ "auto_approved": [],
+ "marks_s": {
+  "running": 0.2,
+  "needs_you": 1.2,
+  "phone_yes": 1.3,
+  "waiting_approval": 108.9,
+  "post_asked": 108.9,
+  "declined": 113.0,
+  "end": 113.0
+ },
+ "spent": {
+  "model_calls": 15,
+  "cost_usd": 0.1499,
+  "cost_at_standard_usd": 0.1499,
+  "jobs": {
+   "repair": 2,
+   "plan": 1,
+   "step": 12
+  }
+ },
+ "ok": true,
+ "failures": [],
+ "profile": "hybrid",
+ "cleanup": [
+  "story: Cancel",
+  "story: Discard",
+  "gallery_home"
+ ]
+}

@@ -73,6 +73,68 @@ MEDIA = {"image": "content://media/external/images/media", "video": "content://m
 CONTENT_TYPES = {"image/jpeg": ".jpg", "image/png": ".png", "image/heic": ".heic", "image/heif": ".heic", "image/webp": ".webp",
                  "video/mp4": ".mp4", "video/quicktime": ".mov", "video/x-m4v": ".m4v"}
 SIDECAR_MAX = 64 * 1024
+PUSH_FRESH_S = 3 * 3600  # a push this recent is the clip a posting routine must pick (cross-posts take minutes)
+
+
+# ---- the last push per phone, so a posting routine can check it picks that clip ------------------------------------
+# The posting routines take "the gallery's newest video" by its place in the grid. Before they post, the executor
+# compares the gallery's newest item with the last file pushed here (routines/executor.py). It is a small file in the
+# API's data dir, not the task store, so the push can come from another process (eval/run_creator.py's push).
+
+def _pushes_file() -> Path:
+    from api.store import API_DIR
+    return API_DIR / "pushes.json"
+
+
+def pushes_file_of(tasks: Any) -> Path | None:
+    """Where a Handoff on this task store records its pushes: next to the store's database file, the API's data dir.
+    None for an in-memory store (tests, eval/run_creator.py's push), so a test never writes into a real API's folder."""
+    try:
+        f = tasks.db.execute("PRAGMA database_list").fetchone()[2]
+    except Exception:  # noqa: BLE001 - a stand-in store
+        return None
+    return Path(f).parent / "pushes.json" if f else None
+
+
+def remember_push(path: Path, serial: str, kind: str, remote: str, media_uri: str, at: float | None = None) -> None:
+    try:
+        pushes = json.loads(path.read_text()) if path.exists() else {}
+    except (OSError, ValueError):
+        pushes = {}
+    pushes[serial] = {"kind": kind, "remote_path": remote, "name": remote.rsplit("/", 1)[-1], "media_uri": media_uri,
+                      "at": time.time() if at is None else at}
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(".tmp")
+    tmp.write_text(json.dumps(pushes, indent=1))
+    tmp.replace(path)
+
+
+def recent_push(serial: str, now: float | None = None, max_age_s: float = PUSH_FRESH_S) -> dict[str, Any] | None:
+    """The last file pushed to this phone, if it was pushed in the last `max_age_s`."""
+    try:
+        got = json.loads(_pushes_file().read_text()).get(serial)
+    except (OSError, ValueError):
+        return None
+    if not got or (now if now is not None else time.time()) - float(got.get("at") or 0) > max_age_s:
+        return None
+    return got
+
+
+def newest_media(shell: Callable[[str], str], kind: str) -> dict[str, Any] | None:
+    """The gallery's newest image or video, as the routines see it (latest date_added, then the highest id), from the
+    media store: {media_uri, name, path, owner}. `shell` runs one adb shell command on the phone."""
+    out = shell(f"content query --uri {MEDIA[kind]} --projection _id:_display_name:relative_path:date_added:owner_package_name")
+    rows = []
+    for line in str(out).splitlines():
+        f = dict(re.findall(r"(\w+)=([^,]*)(?:,|$)", line.split(" ", 2)[-1]))
+        if f.get("_id", "").isdigit():
+            rows.append((int(f.get("date_added") or 0) if (f.get("date_added") or "").isdigit() else 0, int(f["_id"]), f))
+    if not rows:
+        return None
+    _, rid, f = max(rows)
+    return {"media_uri": f"{MEDIA[kind]}/{rid}", "name": f.get("_display_name", "").strip(), "path": (f.get("relative_path") or "").strip(),
+            "owner": (f.get("owner_package_name") or "").strip()}
+
 # How long a new file waits for its sidecar before its offer is made without one. Muse for Mac wrote one 23 s after
 # moving the video (a permission prompt between, Oct 29); a sidecar that comes later still replaces the offer (scan).
 SIDECAR_GRACE_S = 30.0
@@ -372,6 +434,7 @@ class Handoff:
         self.resolve_ip = resolve_ip or _resolve
         self.public_ip = public_ip or (lambda ip: ip.is_global and not ip.is_multicast)  # where a download may connect
         self.index_wait_s = 10.0  # how long the gallery gets to pick a file up
+        self.pushes_file = pushes_file_of(tasks)  # each push is recorded here (None: not recorded), for the posting routines
         self._folder: Path | None = None  # the folder the seen list below belongs to
         self._seen: dict[str, float] = {}  # name → mtime when the watcher started on this folder
         self._sizes: dict[str, tuple[int, float, float]] = {}  # name → (size, mtime, since when it has had them)
@@ -678,6 +741,8 @@ class Handoff:
         # adb push keeps the Mac's modified time; the gallery sorts by date, so this copy is dated now.
         self._sh(serial, f"touch {remote}")
         uri = self._indexed(serial, kind, remote, self.index_wait_s)
+        if self.pushes_file is not None:
+            remember_push(self.pushes_file, serial, kind, remote, uri)
         return {"device": device, "remote_path": remote, "media_uri": uri}
 
     def _sh(self, serial: str, cmd: str, timeout: float = 30) -> str:

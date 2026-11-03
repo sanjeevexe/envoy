@@ -15,12 +15,12 @@ short static text, not inside a list, and no booking data unless it is an input.
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Awaitable, Callable
 
 from devices.types import Element, ScreenState
 from routines import locators
-from routines.model import Check, Locator, render, render_str
+from routines.model import Check, Locator, Routine, render, render_str, slot_names
 from routines.screens import body, contains_value, jaccard, norm, screen_text, short_id, signature_keys, usable_id
 
 FieldReader = Callable[[Element], Awaitable[str | None]]
@@ -238,3 +238,94 @@ def derive_post(before: ScreenState, after: ScreenState, action_kind: str, targe
     if not checks:
         checks.append(Check(kind="screen_changed"))
     return checks
+
+
+# ---- outcome checks before the final step ---------------------------------------------------------------------------
+# A step's checks show the routine is where it was when it was learned, not that what was asked for is on screen: on
+# Nov 2 a real TikTok went out without its song after passing every step check (its only check after closing the sound
+# sheet was the word "Music"). These checks come from the routine's typed inputs and run in code just before its
+# irreversible step, whatever its YAML says, so learned routines need no hand edits for them.
+
+_PICKED = re.compile(r"song|sound|music|track|audio", re.I)  # an input chosen from the app's own library
+_TITLE_LIKE = re.compile(r"title|name", re.I)
+_SEARCHY = re.compile(r"(?<![a-z])search", re.I)  # "Search...", search_input_text; not "research"
+_GALLERY = re.compile(r"\b(newest|latest|most recent)\b[^.]{0,40}\b(video|clip|photo|image)|\bgallery\b", re.I)
+
+
+@dataclass
+class OutcomePlan:
+    """What a routine's inputs promise: `picks`, values chosen from a library list (the song) that must show on the
+    editor afterwards; `fields`, values typed into a field (the caption) that the field must still hold on the final
+    screen when it is there; `gallery`, the routine posts "the gallery's newest" item (the pushed clip must be it)."""
+    picks: list[str] = field(default_factory=list)
+    fields: list[tuple[str, Locator]] = field(default_factory=list)
+    gallery: bool = False
+
+
+def _is_search(loc: Locator | None) -> bool:
+    return loc is not None and any(_SEARCHY.search(x or "") for x in (loc.resource_id, loc.hint, loc.text, loc.desc))
+
+
+def outcome_plan(routine: Routine) -> OutcomePlan:
+    picked: set[str] = set()
+    fields: list[tuple[str, Locator]] = []
+    for s in routine.steps:
+        a = s.action
+        if a.kind == "type" and a.target is not None:
+            names = slot_names(a.value)
+            if a.submit or _is_search(a.target):
+                picked |= names
+            else:
+                fields += [(n, a.target) for n in sorted(names) if n in routine.inputs and routine.inputs[n].type == "text"]
+        for loc in (a.target, a.container):
+            if loc is not None and loc.in_list and a.kind in ("tap", "long_press", "scroll_until"):
+                picked |= slot_names(loc.text_has) | slot_names(loc.text) | slot_names(loc.row_has)
+    media = sorted(n for n in picked if n in routine.inputs and (_PICKED.search(n) or _PICKED.search(routine.inputs[n].description)))
+    titles = [n for n in media if _TITLE_LIKE.search(n)]
+    words = " ".join([routine.intent, routine.description, *(s.intent for s in routine.steps)])
+    return OutcomePlan(picks=titles or media, fields=fields, gallery=bool(_GALLERY.search(words)))
+
+
+def _label(e: Element) -> str:
+    return " ".join(x for x in (getattr(e, "full_label", None) or e.label, e.text, e.desc) if x)
+
+
+class OutcomeWatch:
+    """Each picked value's last state over the screens a run has shown, in order: "picking" while it shows in a list or a
+    search field, "shown" once a screen shows it only outside them (the editor's "Music · golden hour"), "unseen" before
+    either. A sheet left without applying the pick leaves it at "picking": the Nov 2 songless TikTok."""
+
+    def __init__(self, plan: OutcomePlan, inputs: dict[str, str]) -> None:
+        self.values = {n: inputs[n] for n in plan.picks if str(inputs.get(n) or "").strip()}
+        self.state = {n: "unseen" for n in self.values}
+
+    def see(self, screen: ScreenState) -> None:
+        for n, v in self.values.items():
+            picking = shown = False
+            for e in screen.numbered:
+                if not contains_value(_label(e), v):
+                    continue
+                if e.in_list or (e.kind == "EditText" and (_SEARCHY.search(e.label or "") or _SEARCHY.search(e.resource_id or ""))):
+                    picking = True
+                elif e.kind != "EditText":
+                    shown = True
+            if picking:
+                self.state[n] = "picking"
+            elif shown:
+                self.state[n] = "shown"
+
+    def problems(self) -> list[str]:
+        out = []
+        for n, v in self.values.items():
+            if self.state[n] == "picking":
+                out.append(f"{n} {v!r} was picked from a list but never showed on the editor afterwards, so it may not be attached")
+            elif self.state[n] == "unseen":
+                out.append(f"{n} {v!r} never showed on screen")
+        return out
+
+
+def field_problem(name: str, value: str, shown: str | None) -> str | None:
+    """A typed value its field no longer holds on the final screen (None: it does)."""
+    if contains_value(shown or "", value):
+        return None
+    return f"{name}: the field on the final screen shows {(shown or '')[:80]!r}, not {value[:80]!r}"
