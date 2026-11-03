@@ -77,6 +77,14 @@ def adb(*args: str) -> str:
     return subprocess.run(["adb", "-s", SERIAL, *args], capture_output=True, text=True, timeout=30).stdout.strip()
 
 
+async def chrome_blank(app: str) -> None:
+    """Chrome reopens its last tab on a fresh launch, so a run after a run starts on the article the last one found (Nov 2:
+    the first run started on the Eiffel Tower article and never typed the topic). A blank page first, as run_loop.py does."""
+    if app == "com.android.chrome":
+        adb("shell", "am", "start", "-a", "android.intent.action.VIEW", "-d", "about:blank", "-p", app)
+        await asyncio.sleep(2.0)
+
+
 def _android_version() -> tuple[str, None]:
     return rf"\b{re.escape(adb('shell', 'getprop', 'ro.build.version.release'))}\b", None
 
@@ -253,6 +261,7 @@ async def _run_one(wf: Workflow, args, device: EmulatorDevice, adapter: ModelAda
 
     # 1. First run (the agent), unless a trace exists and no rerun is asked for.
     if not args.regression and (args.rerun_agent or agent_row(task_id) is None):
+        await chrome_blank(wf.app)
         await device.launch(wf.app, fresh=True)
         await asyncio.sleep(2.0)
         blocked = bot_check(await device.observe())
@@ -311,6 +320,7 @@ async def _run_one(wf: Workflow, args, device: EmulatorDevice, adapter: ModelAda
             runs.append({"case": name, "result": "input not learned", "detail": "the compiled routine has no input the second value fits"})
             continue
         for allow_repair in (False, True):
+            await chrome_blank(wf.app)
             out = await ex.run(routine, inputs, task_id=f"{task_id}-{name.replace(' ', '-')}-{'repair' if allow_repair else 'strict'}",
                                launch="fresh", allow_repair=allow_repair, allow_agent=False, memory=wf.memory)
             text = " | ".join(v for v in out.outputs.values() if v)
