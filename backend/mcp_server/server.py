@@ -755,10 +755,10 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> EnvoyMCP:
         The parts run one after another (TikTok last: it saves its own copy of each post in the phone's gallery, where the
         other routines take the newest video), and each post waits for the user's OK in Envoy on their phone: nothing is
         posted without it. Returns the task_id at once; follow it with get_task, whose `posts` gives each destination's outcome:
-        done, failed or declined (not posted), waiting, verifying… or outcome unknown. Outcome unknown means the post tap
+        done, failed, declined or not started (not posted), waiting, verifying… or outcome unknown. Outcome unknown means the post tap
         went through and the run ended before its check: tell the user to check that app; Envoy never posts there again by
-        itself. To finish the rest, call cross_post with retry set to the task_id: only destinations that failed or were
-        declined run again; if it returns heads_up lines, tell the user before they wait on it."""
+        itself. To finish the rest, call cross_post with retry set to the task_id: only destinations that failed, were
+        declined or never started run again; if it returns heads_up lines, tell the user before they wait on it."""
         if (posts is None) == (retry is None):
             return {"error": "give posts (a new cross-post) or retry (a cross-post's task_id), not both"}
         if retry is not None:

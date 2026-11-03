@@ -9,14 +9,15 @@ and parts (api/crossapp.py, whose kind it keeps, so the app shows the parts unde
   every irreversible step still waits for the user's OK, part by part.
 - **An outcome per destination:**
   - done: the part ended done (its routine's own checks held);
-  - failed, or declined: it ended before any approved irreversible tap ran, so Envoy posted nothing there;
+  - failed, or declined: it ended before any approved irreversible tap ran, so Envoy posted nothing there; not started:
+    the cross-post was stopped (or the API restarted) before its turn;
   - waiting: on the user (an approval, a sign-in, the phone); verifying: the approved tap ran and its check is still
     going;
   - **outcome unknown:** an approved irreversible tap ran and the part ended without its checks holding (a timeout, a
     stop, a check that failed after the tap). The post may exist, and Envoy can't look for it: it says so, asks the user
     to check that app, and never posts there again by itself.
-- **Retry** (`cross_post` with `retry`): only destinations whose last part failed or was declined run again. Done and
-  unknown ones never do; one queued or under way is left to finish.
+- **Retry** (`cross_post` with `retry`): only destinations whose last part failed or was declined, or that never started,
+  run again. Done and unknown ones never do; one queued or under way is left to finish.
 - **An app that saves its own copy of a post in the gallery runs last** (SAVES_COPY: TikTok, whose export lands in
   DCIM/Camera). The posting routines take "the gallery's newest video", so a part after TikTok's would pick TikTok's
   copy. A retry that would run after TikTok posted says to send the clip to the phone again first; the executor's
@@ -40,7 +41,7 @@ WAITING = ("waiting_approval", "needs_you", "taken_over")
 MAX_POSTS = 4
 PART_LIMIT_S = 40 * 60  # a backstop for a part that hangs: the phone ask and the approval wait (15 min each) fit inside
 SCREEN_CHANGED = "the screen changed before the action ran"  # api/approvals.py: said yes, then not acted on
-RETRYABLE = ("failed", "declined")
+RETRYABLE = ("failed", "declined", "not_started")
 # Apps that save their own copy of what they post into the phone's gallery (Pixel 5, Nov 2: TikTok's exports in
 # DCIM/Camera at 01:43 and 02:31, owner com.zhiliaoapp.musically): after one, the newest video is no longer the clip.
 SAVES_COPY = {"com.zhiliaoapp.musically": "TikTok"}
@@ -52,6 +53,7 @@ TEXT = {
     "waiting": "waiting for the user",
     "done": "done",
     "failed": "not posted: it stopped before its post step",
+    "not_started": "not posted: it never started (the cross-post stopped first)",
     "declined": "not posted: the post wasn't approved",
     "unknown": "outcome unknown, check this one: its post tap went through and the run ended before its check finished",
     "stopped": "stopped",
@@ -131,8 +133,8 @@ class CrossPost:
         return self.store.get(pid) or parent
 
     def retry(self, pid: str, source: str) -> dict[str, Any]:
-        """Run again only the destinations whose last part failed or was declined. Done ones and unknown ones never run
-        again; a queued one or one under way is left to finish."""
+        """Run again only the destinations whose last part failed or was declined, or that never started. Done ones and
+        unknown ones never run again; a queued one or one under way is left to finish."""
         rows = self.view(pid)
         again = [r for r in rows if r["status"] in RETRYABLE]
         left = [{"app": r["label"], "status": r["status"]} for r in rows if r["status"] not in RETRYABLE]
@@ -299,7 +301,7 @@ class CrossPost:
         for post in plan.get("posts", []):
             tries = [p for p in parts if p["routine"] == post["routine"]]
             task: dict[str, Any] = {}
-            status = "queued"
+            status = "not_started"  # "queued" below while it waits in the live queue; after a stop or a restart, a retry runs it
             if tries:
                 tid = tries[-1]["task_id"]
                 task = self.store.get(tid) or {}
@@ -321,6 +323,7 @@ class CrossPost:
 
     def _result(self, rows: list[dict[str, Any]]) -> str:
         short = {"unknown": "outcome unknown, check this one", "failed": "not posted (failed)", "declined": "not posted (declined)",
+                 "not_started": "not posted (never started)",
                  "verifying": "verifying…"}
         return " · ".join(f"{r['label']}: {short.get(r['status'], TEXT[r['status']])}" for r in rows)
 

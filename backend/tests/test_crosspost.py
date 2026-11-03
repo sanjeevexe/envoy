@@ -18,7 +18,7 @@ from fastapi.testclient import TestClient
 
 import api.crosspost as crosspost_mod
 import api.runner as runner_mod
-from api.crosspost import CrossPost, Post, outcome, tapped
+from api.crosspost import RETRYABLE, CrossPost, Post, outcome, tapped
 from api.events import EventBus
 from api.runner import TaskRunner
 from api.store import TaskStore
@@ -399,9 +399,11 @@ def test_stopping_the_cross_post_stops_its_part_and_runs_nothing_more():
         return r, cp, pid, stopped, result
     r, cp, pid, stopped, result = asyncio.run(scenario())
     assert stopped == ("stopped", "stopped")
-    assert statuses(cp, pid) == {"Instagram": "failed", "TikTok": "queued"} and POSTS == {}  # not "unknown": no tap ran
+    assert statuses(cp, pid) == {"Instagram": "failed", "TikTok": "not_started"} and POSTS == {}  # not "unknown": no tap ran
     # The parent's own line says how each ended, not how it looked at the stop (Pixel, Nov 2: "YouTube: waiting for the user")
-    assert result == "Instagram: not posted (failed) · TikTok: queued"
+    assert result == "Instagram: not posted (failed) · TikTok: not posted (never started)"
+    # TikTok never started, and nothing will start it now: a retry runs it (Pixel, Nov 2: the search sat at "queued")
+    assert [row["label"] for row in cp.view(pid) if row["status"] in RETRYABLE] == ["Instagram", "TikTok"]
 
 
 def test_outcomes_hold_after_a_restart_from_the_store_alone():
