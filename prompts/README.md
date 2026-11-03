@@ -3,7 +3,8 @@
 This folder is the project's working record, kept public as part of how Envoy was built. It isn't documentation, and
 it isn't evidence on its own.
 
-- **What's here:** the phase prompts (`phase-0.md` … `phase-7.md`), the plans written from them (`*-plan.md`), and the
+- **What's here:** the phase prompts (`phase-0.md`, `phase-2.md` … `phase-7.md`; Phase 1 had no separate
+  prompt), the plans written from them (`*-plan.md`), and the
   report each build session wrote when it finished (`*-report.md`, some with a folder of screenshots). They were written
   for the next session, so they use working names: session names, branch and staging names, backlog numbers, and "the
   user" for the author.

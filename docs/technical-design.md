@@ -383,10 +383,12 @@ A call goes exactly where `run_routine` goes: preflight, then the runner, with a
 
 The closest prior work is **SkillDroid** (April 2026), which compiles successful phone-agent runs into parameterized templates with weighted element locators, checks the screen before each step, and fixes stuck steps with one model call. Earlier systems (MobileGPT, Agent Workflow Memory, Agent Skill Induction, Mobilerun's macros) cover parts of the idea. Envoy's additions, to the best of our search:
 
-- **Checks after every step,** not just before, written as code.
+- **Checks after steps,** not just before, written as code (the showcase routines' final post step has none: the post is the end).
 - **Local repairs patched back into the routine,** with versions, a trial period and rollback, instead of recompiling the whole routine or patching nothing.
 - **Tested portability** across screen sizes and from emulator to a real phone.
 - **Routines connected to memory:** inputs filled from facts with sources, and outputs written back as new facts.
+- **Learned routines served as agent tools:** a shared routine is a tool of its own, with typed inputs, at the agent's next `tools/list`.
+- **An approval no agent can give:** the MCP server has no approve tool, so an irreversible step an agent starts waits for the person.
 
 ## Shared memory
 
@@ -890,7 +892,7 @@ Envoy is measured against two baselines on its own task set and an AndroidWorld 
 
 - **Core set:** 10 SkyLark Air tasks (check in, change seat, find gate, add a traveler number, and others) × 3 systems × 4 layouts (the original plus a moved button, a renamed label and an extra confirmation screen) = 120 runs, roughly 2 to 6 hours on one emulator, run once near the end of the build. Each task has a programmatic success check.
 - **Real apps (5 to 10 tasks):** shopping and food apps chosen once they are confirmed to run on the emulator. Irreversible steps stop at the approval prompt, so no orders are placed.
-- **AndroidWorld (measured Oct 27–28, branch `androidworld`):** Google's 116 tasks over 20 apps, run unmodified through AndroidWorld's own runner and scoring on an API 33 emulator, seed 30, pass@1, with Envoy's whole agent as the agent. The tasks were split 58/58 into a dev half for finding and fixing failures and a held-out half that measures the result; the split was committed before any run. Envoy as on `main` scored 21 of 116 (18%); with 13 general agent changes found on the dev half, 57 (49%), and 31 of 58 (53%) on the held-out half against 12, at about $0.04 and 38 s per task (`docs/androidworld-results.md`). Routines compiled from seed-30 runs were replayed on three other seeds. Three follow-up changes made for SkyLark were measured offline; the held-out half is re-measured on what merges.
+- **AndroidWorld (measured Oct 27–28, branch `androidworld`):** Google's 116 tasks over 20 apps, run unmodified through AndroidWorld's own runner and scoring on an API 33 emulator, seed 30, pass@1, with Envoy's whole agent as the agent. The tasks were split 58/58 into a dev half for finding and fixing failures and a held-out half that measures the result; the split was committed before any run. Envoy before the changes scored 21 of 116 (18%); with 13 general agent changes found on the dev half, 57 (49%), and 31 of 58 (53%) on the held-out half against 12, at about $0.04 and 38 s per task on the Spark profile (`docs/androidworld-results.md`). Routines compiled from seed-30 runs were replayed on three other seeds. The 13 merged into `main` on Oct 29 (`105d04e`); re-measured on a staging tree with them and three SkyLark follow-ups, the held-out half scored 30.5 of 58.
 - **Stretch:** the shop test app, and MAS-Bench, which tests shortcuts that agents generate for themselves.
 
 ### Metrics

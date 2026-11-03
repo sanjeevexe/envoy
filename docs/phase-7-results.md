@@ -88,7 +88,7 @@ More than a dozen coding sessions worked on Envoy in parallel that night, so dev
 - [x] Every suite's measurement pass, and the fixes they found (1–31).
 - [ ] The final run on `eval-final` (Nov 3), and the hand checks of its shape-graded real-app answers.
 - [x] The Phase 6 gate on the real phone (Oct 28: a Pixel 5 on Android 13), with portability 18/18, all 10 core routines 30/30, and the stream and live-view numbers: `docs/phase-6-results.md`.
-- [x] AndroidWorld's agent changes on `main`: SkyLark passed (round 2), the real-app rerun on the over-checking fix passed (finding 37), and they merged on Oct 29 (`105d04e`); AndroidWorld re-measured its held-out half on what merged (`docs/androidworld-results.md`).
+- [x] AndroidWorld's agent changes on `main`: SkyLark passed (round 2). The real-app rerun on the over-checking fix (finding 37) still found contacts_count worse; a planner guard (`5fa03bf`) and an empty-state check (`83a9702`) followed, and the decisive check passed against the bar of at most one more failure than `main` (`eval/results/real_rerun_2026-10-29/`). They merged on Oct 29 (`105d04e`). AndroidWorld re-measured its held-out half on the staging tree before those two (`docs/androidworld-results.md`).
 - [x] AndroidWorld's results from the `androidworld` branch: `docs/androidworld-results.md`.
 - [ ] The Meta API key on the new account (the author's step), checked with `scripts/check_model_key.py`, then :8700 restarted (`scripts/restart_api.sh`).
 - [ ] Both copies of the design doc, `docs/meta-feedback.md`, `prompts/submission-notes.md`.
