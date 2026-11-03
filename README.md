@@ -3,8 +3,8 @@
 **Muse has a computer. Envoy gives it a phone.**
 
 Envoy gives a machine a new capability: it lets AI agents like Meta's Muse work real Android apps, turns each task it
-does into a checked routine they can call by name, and tells them what happens on the phone, while a person approves
-every irreversible step on their iPhone.
+finishes and verifies into a checked routine they can call by name, and tells them what happens on the phone, while the
+irreversible steps an agent starts wait for the person's yes on their iPhone.
 
 <!-- SLOT hero GIF (from the takes: Muse on the Mac asks → Envoy's phone works the app → the iPhone yes). Add it here as
 ![Muse asks on the Mac, Envoy's phone posts, the person approves on the iPhone](docs/media/hero.gif) -->
@@ -17,11 +17,11 @@ every irreversible step on their iPhone.
 suite 4's real.json (medians over the workflows whose first run and same-input rerun both passed); 2 is suite 3; 3 is the
 "Irreversible actions taken without approval" target row. -->
 - **Real apps, 9 read-only workflows:** Envoy's replay used 0 model calls and a median 6.08 s; the agent's first run took a
-  median 4 calls, 17.87 s and $0.0308 (Oct 31, `hybrid` profile).
-- **SkyLark, our own test app, changed on purpose 50 times:** 50 recovered, then 50 of 50 ran with no model call (agent
-  on Spark).
-- **Irreversible actions without the person's yes: 0,** over 7 declined live runs and 30 runs with planted instructions
-  (SkyLark, agent on Spark).
+  median 4 calls, 17.87 s and $0.0308 (Oct 31, `hybrid` profile, standard tier).
+- **SkyLark (our test app), changed on purpose 50 times:** 50 recovered (25 needed no fix), then 50 of 50 ran with no
+  model call (Spark profile, standard tier).
+- **Irreversible actions without approval: 0,** over 7 declined live runs and 30 runs with planted instructions on
+  SkyLark (our test app; Spark profile, standard tier).
 
 > **Meta models: who does what.** Wonder turns task experience into reusable routines; Spark handles matching and
 > extraction; SAM helps locate drawn controls when the accessibility tree is missing. Muse is the front door, and the
@@ -33,14 +33,14 @@ suite 4's real.json (medians over the workflows whose first run and same-input r
 - **Demo video (3 minutes):** TBD, the YouTube link goes here on Nov 4
 - **The write-up:** [`docs/submission.md`](docs/submission.md)
 
-Built solo for the Meta Global AI Developer Hackathon (Oct 26 – Nov 4, 2026, indie track). Open-source projects are
+Built solo for the Meta Global AI Developer Hackathon (indie track; submissions close Nov 4, 2026), from the first
+commit on Oct 26 (the repository layout and the design plan, no code yet) to the last. Open-source projects are
 plumbing, credited in [`THIRD_PARTY.md`](THIRD_PARTY.md), which also says what Envoy builds itself.
 
 ## Who it's for
 
 A creator finishes a clip and wants it out as an Instagram Reel with a song from Instagram's music library, a Story with
-a poll sticker, a TikTok with a sound and a YouTube Short. Each of those is a feature only the app has, so today every
-clip means four rounds of tapping in three apps. With Envoy, the creator asks Muse on the Mac. Envoy's phone works each
+a poll sticker, a TikTok with a sound and a YouTube Short. None of those is within reach of Muse's connectors, so today every clip means four rounds of tapping in three apps. With Envoy, the creator asks Muse on the Mac. Envoy's phone works each
 app from a routine it learned from its own runs, and stops at each app's final button until the creator says yes on
 their iPhone. The agent does the heavy lifting; the person keeps the keys.
 
@@ -53,7 +53,7 @@ that runs on its ordering and messaging apps, someone for whom tapping through a
 wants a phone.
 
 **What's new.** Agents working phone apps isn't new (Mobilerun, Gemini on Android), and SkillDroid compiles successful
-runs into templates. Envoy adds checks after every step, written as code; repairs kept as versions with a trial and a
+runs into templates. Envoy adds checks after its steps as well as before, written as code; repairs kept as versions with a trial and a
 rollback; learned routines served to agents as tools of their own; and an approval only the person can give
 ([`docs/technical-design.md`](docs/technical-design.md#what-is-new-honestly)).
 
@@ -63,43 +63,46 @@ rollback; learned routines served to agents as tools of their own; and an approv
 | --- | --- | --- |
 | **Agents call it** | MCP at `/mcp` (Streamable HTTP), 12 built-in tools: run a task or a routine, search memory, send a file to the phone, get files back, propose a trigger, list phones, read phone updates… Muse for Mac and the Muse app add it as a custom connector | [`backend/mcp_server/README.md`](backend/mcp_server/README.md), [`docs/muse-link.md`](docs/muse-link.md) |
 | **Any MCP agent** | Muse; the Spark agent, a small agent on Meta's Muse Spark that reaches Envoy only over MCP; and any MCP client (Claude Code tested). Each has its own key and tool groups; every task says which agent asked | [`docs/agents.md`](docs/agents.md), [`agents/meta-agent/evidence/2026-11-01/`](agents/meta-agent/evidence/2026-11-01/) |
-| **Learned tasks become tools** | Share a routine in Settings › Agents (off by default) and it appears in agents' tool lists under its own name, with typed inputs, no restart. In a Nov 2 dry run, Muse called the Reel, TikTok and Short routines by name, and each reached its final button | [`eval/results/agent-door/`](eval/results/agent-door/) (`tools-before.json`, `tools-after.json`, `call.json`), [`eval/results/showcase/muse-2026-11-02/task-rows.json`](eval/results/showcase/muse-2026-11-02/task-rows.json) |
+| **Learned tasks become tools** | Share a routine in Settings › Agents (off by default) and it appears in agents' tool lists under its own name, with typed inputs, no restart. In a Nov 2 dry run, Muse called the Reel, TikTok and Short routines by name; each reached its final button and was declined, and the two tries at the poll Story failed. Nothing was posted | [`eval/results/agent-door/`](eval/results/agent-door/) (`tools-before.json`, `tools-after.json`, `call.json`), [`eval/results/showcase/muse-2026-11-02/task-rows.json`](eval/results/showcase/muse-2026-11-02/task-rows.json) |
 | **App-only posts** | One clip from the Mac → an Instagram Reel with a library song, a Story with a poll sticker, a TikTok with a sound and a YouTube Short with a sound. All four went live on test accounts on the night of Nov 1, each started by the Spark agent and approved on the iPhone: the Reel, Story and Short with 0 model calls in Envoy's replay, the TikTok with 3. The agent that calls pays for its own turns: the Spark agent used 11 model calls ($0.044) to drive a three-post run. Which routines were tuned by hand is in [the write-up](docs/submission.md#hand-edits-stated-exactly) | [`docs/demo-showcase.md`](docs/demo-showcase.md), [`data/routines/`](data/routines/) (each `index.json`), [`agents/meta-agent/evidence/2026-11-01/crosspost/`](agents/meta-agent/evidence/2026-11-01/crosspost/README.md) |
 | **Watches** | A notification on Envoy's phone can start a task or reach the agent; each app is off until you allow it, and codes are hidden before anything is stored. An Instagram comment reached the iPhone 1.57 s after it landed on Envoy's phone. Plus time, email and changed-fact triggers, change alerts, and habits | [`docs/demo-showcase.md`](docs/demo-showcase.md), [`eval/results/alerts/`](eval/results/alerts/alerts.md), [`eval/results/recurring/`](eval/results/recurring/recurring.md) |
-| **Learns** | A successful run compiles into a routine: a check before and after every step, targets found by what they are, a local repair when the app changes, versions with a trial and a rollback | [`backend/routines/README.md`](backend/routines/README.md), [Results](#results) |
-| **Teach mode** | Do a task once through the live view; Envoy compiles it and replays it once before saving. A Google Calendar lesson (7 steps) replayed 7/7 with 0 model calls in Envoy's replay | [`eval/results/teach_trials_2026-11-01/`](eval/results/teach_trials_2026-11-01/README.md) |
-| **Phones** | "Envoy's phone" (a Pixel 5, Android 13, over USB) and emulators on the Mac; agents pick one with `list_phones`. A copy of Envoy on Google Cloud was tested too: routines for SkyLark compiled on the Mac ran there 48/48 with no model calls | [`docs/phase-6-results.md`](docs/phase-6-results.md), [`docs/cloud.md`](docs/cloud.md) |
+| **Learns** | A run that finishes and is verified compiles into a routine: checks before and after its steps, targets found by what they are, a local repair when the app changes (the agent finishes if that fails), versions with a trial and a rollback | [`backend/routines/README.md`](backend/routines/README.md), [Results](#results) |
+| **Teach mode** | Do a task once through the live view; Envoy compiles it and replays it once before saving. A scripted Google Calendar lesson (7 steps) passed its verification replay, all 7 steps, with 0 model calls in Envoy's replay | [`site/data/recordings/teach.json`](site/data/recordings/teach.json), [`eval/results/teach_trials_2026-11-01/`](eval/results/teach_trials_2026-11-01/README.md) |
+| **Phones** | "Envoy's phone" (a Pixel 5, Android 13, over USB) and emulators on the Mac; agents pick one with `list_phones`. A copy of Envoy on Google Cloud was tested too: routines for SkyLark (our test app) compiled on the Mac ran there 48/48 with no model calls, once the new emulator had finished its first boot (its very first pass: 9/18) | [`docs/phase-6-results.md`](docs/phase-6-results.md), [`docs/cloud.md`](docs/cloud.md) |
 | **Files** | `send_to_phone` puts a Mac clip on the phone (a real phone waits for your OK); `get_file` gives the agent the final screen, the screen you approved, or a link from its own task | [`docs/muse-link.md`](docs/muse-link.md) |
-| **You approve** | An irreversible step waits for your yes in Envoy on the iPhone, unless you set that routine to run without asking; spending money always asks. No agent has an approve tool; asked to approve, Claude Code and the Spark agent each said only you can | [`backend/policy/approval_rules.py`](backend/policy/approval_rules.py), [`docs/agents.md`](docs/agents.md) |
+| **You approve** | An irreversible step that an agent or a trigger starts waits for your yes in Envoy on the iPhone, unless you set that routine to run without asking. When you ask Envoy yourself, your request is the yes ("Always ask" in Settings changes that). Spending money always asks. No agent has an approve tool; asked to approve, Claude Code and the Spark agent each said only you can | [`backend/policy/approval_rules.py`](backend/policy/approval_rules.py), [`docs/agents.md`](docs/agents.md) |
 
 ## Results
 
-**Development numbers, not final.** Measured Oct 27–31 on development commits. The final evaluation runs Nov 3,
-17:00–22:00 ET, on the `eval-final` tag; `eval/run_final.py report` then rewrites
-[`eval/results/final/report.md`](eval/results/final/report.md), and its numbers replace these. Times and costs are
+**Development numbers, not final.** Measured Oct 27 – Nov 2 on development commits, each row with its model profile
+and the standard tier. The final evaluation runs Nov 3, 17:00–22:00 ET, on the `eval-final` tag with the `hybrid`
+profile; `eval/run_final.py report` then rewrites [`eval/results/final/report.md`](eval/results/final/report.md), and
+its numbers replace the rows that cite it. The AndroidWorld and Starbucks numbers stay development numbers. Times and costs are
 medians, with the spread beside them; dollars are at Meta's standard prices. Commits and configs are in
 [the evidence appendix](#evidence-appendix).
 
 ### Real apps
 
 18 read-only workflows in apps Envoy didn't build (Amazon, Starbucks, DoorDash, Gmail, Maps, YouTube…): ask a question,
-check the answer. Each row is one pass. A new input applies to 11 of the 18.
+check the answer; nothing ordered, posted or changed. Each row is one whole pass on the `envoy-real` emulator, with its
+profile. A new input applies to 11 of the 18.
 
 | Pass | First run right | Compiled into a routine | Same input, no model call | New input, no model call |
 | --- | --- | --- | --- | --- |
-| Oct 28, agent on Spark | 14/18 | 14/18 | 13/18 | 4/11 |
-| Oct 31, `hybrid` | 12/18 | 12/18 | 9/18 | 6/11 |
+| Oct 28, Spark profile (4 runs) | 14/18 | 14/18 | 13/18 | 4/11 |
+| Oct 31, `hybrid` (a rehearsal) | 12/18 | 12/18 | 9/18 | 6/11 |
+| Nov 2, `hybrid` (a baseline; its results are being committed) | 14/18 | 15/18 | 12/18 | 8/11 |
 | Nov 3, final, `hybrid` | TBD | TBD | TBD | TBD |
 
-Target's bot check stopped both Target workflows on every pass.
+Target's bot check stopped both Target workflows on every pass. The passes differ in profile as well as code, so read
+them as separate measurements, not a before and after.
 
 **The cost curve.** On the workflows whose first run and same-input rerun both passed, the routine called by name
 against the agent's first run:
 
 | Pass | Workflows | The agent's first run | Envoy's replay | Compiling it, once |
 | --- | --- | --- | --- | --- |
-| Oct 28, agent on Spark | 13 | 6 calls (2–19), 19.3 s (4.39–47.89 s), $0.0105 | 0 calls, 7.88 s (1.13–21.41 s), $0 | $0.0449 (Wonder) |
-
+| Oct 28, Spark profile | 13 | 6 calls (2–19), 19.3 s (4.39–47.89 s), $0.0105 | 0 calls, 7.88 s (1.13–21.41 s), $0 | $0.0449 (Wonder) |
 | Oct 31, `hybrid` | 9 | 4 calls (2–9), 17.87 s (5.95–28.73 s), $0.0308 | 0 calls, 6.08 s (0.72–27.43 s), $0 | $0.0476 (Wonder) |
 | Nov 3, final | TBD | TBD | TBD | TBD |
 
@@ -111,23 +114,22 @@ above: medians and ranges over the workflows whose first run and same-input reru
 <!-- SLOT reliability batch (pre-registered, run on the tag after the eval): its table goes here, reported narrowly (this
 version, these workflows, these inputs, every attempt). -->
 
-
-### SkyLark, our own test app
+### SkyLark (our test app)
 
 SkyLark is an airline app we built so every run can start from a known state and be scored by the app's real state.
-These ran on Oct 27–28, with the agent's steps on Spark.
+Every number in this table is on SkyLark, measured Oct 27–28 on the Spark profile, standard tier.
 
 | What | Result | Source |
 | --- | --- | --- |
-| Asking again | Request 1 (the agent, then the compile): 5.5 calls, 27.9 s, $0.051. Requests 2–10: 90/90 right at 1 call (the matcher), 5.9 s, $0.0023; each request's median 5.2–6.6 s | [`repeats.md`](eval/results/final/repeats.md) |
+| Asking again | Request 1 (the agent, then the compile): 5.5 calls, 27.9 s, $0.051. Requests 2–10: 90/90 right at 1 call (the matcher), 5.9 s, $0.0023; each request's median 5.2–6.6 s. 86% fewer calls on average (1.0 against 7.4 per request) | [`repeats.md`](eval/results/final/repeats.md) |
 | Against simpler approaches | 10 tasks on 4 layouts. Envoy's routines 40/40 on the first try, 1 call, 5.5 s (4.8–6.0 s by layout). The agent every time 40/40, 5 calls, 10.1 s (9.2–12.0 s). A fixed replay of the same taps 14/40 | [`systems.md`](eval/results/final/systems.md) |
-| When the app changes | We changed SkyLark's layout on purpose, 50 times, over 5 kinds of change: 50 recovered, then 50/50 ran with no model call. 50 new inputs: 50/50 with no model call | [`change.md`](eval/results/final/change.md) |
-| On Envoy's phone | The Pixel 5: the 10 core routines on 3 new bookings each, 30/30 with no model call | [`sizes.md`](eval/results/final/sizes.md) |
-| Safety | 20 irreversible controls: 20 caught, all 20 by code alone. 7 live runs declined at the approval: 7 held. Instructions planted on screens: the agent right in 20 of 20 runs and tried to follow them in 0; the routines never tried (10 runs) | [`safety.md`](eval/results/final/safety.md), [`injection.md`](eval/results/final/injection.md) |
+| When the app changes | We changed SkyLark's layout on purpose, 50 times, over 5 kinds of change: 50 recovered (25 needed no fix, 22 a relaxed match, 3 a local repair; 4 model calls in all), then 50/50 ran with no model call. 50 new inputs: 50/50 with no model call | [`change.md`](eval/results/final/change.md) |
+| On Envoy's phone | SkyLark's 10 core routines on 3 new bookings each, on the Pixel 5: 30/30 with no model call | [`sizes.md`](eval/results/final/sizes.md) |
+| Safety | Irreversible controls on 20 saved screens (6 SkyLark, 14 real-app): 20 caught, all 20 by code rules alone. 7 live runs on SkyLark declined at the approval: 7 held. Instructions planted on screens: the agent right in 20 of 20 runs and tried to follow them in 0; the routines never tried (10 runs) | [`safety.md`](eval/results/final/safety.md), [`injection.md`](eval/results/final/injection.md) |
 
 ### AndroidWorld, by cost
 
-On Google's AndroidWorld benchmark (116 tasks in 20 open-source apps; agent on Spark at low effort, seed 30, pass@1),
+On Google's AndroidWorld benchmark (116 tasks in 20 open-source apps; Spark profile at low effort, standard tier, one seed, pass@1),
 22 routines Envoy compiled from its own solved runs did 55 of 69 new-seed instances at a median 1 model call, $0.0021 and
 8.3 s; the full agent did 63 at 6 calls, $0.0122 and 19.0 s. Pairing each routine miss with the agent's own run on that
 instance gives 67 of 69 (computed, not run). Separately, 13 general agent changes, chosen on half the tasks, took the
@@ -136,13 +138,14 @@ held-out half from 12 to 31 of 58; they have been part of Envoy since Oct 29
 
 ## Limits, said plainly
 
-- **Learn a task once, not an app.** New inputs on real apps passed 4 of 11 on Oct 28, then 5, 6, 6 and 6 of 11 in the
-  four passes through Oct 31; on our own test app, 50 of 50. When a step fails, the routine repairs that step and keeps
+- **Learn a task once, not an app.** New inputs on real apps passed 4 to 6 of 11 in five passes, Oct 28–31 (the Spark
+  profile, then `hybrid` on Oct 31), and 8 of 11 in the Nov 2 `hybrid` baseline; on SkyLark (our test app), 50 of 50. When a step fails, the routine repairs that step and keeps
   the fix as a new version on trial, so a workflow can pass "after a repair".
-- **A routine's first days are rough.** In an Oct 30 development loop, the Starbucks routine's 26 replays took a median
-  66.95 s and 4 calls (14.2–148.8 s, 2–12 calls) while it was being fixed; the last four, on the loop's final commit,
-  took 14.8–15.9 s and 2 calls each (the matcher and the answer's extraction), three of them with a new drink
-  ([`runs.jsonl`](eval/results/real-apps/loop-a/runs.jsonl)).
+- **A routine's first days are rough.** In an Oct 30 development loop on `envoy-real` (`hybrid`), the agent's first run
+  of a Starbucks calorie question took 45.6 s and 12 model calls. Over the 26 replays of the routine compiled from it,
+  the median was 66.95 s and 4 calls (14.2–148.8 s, 2–12 calls). Only on the loop's last commit, after one automatic
+  repair and two hand fixes (v4), did its 4 replays take 14.8–15.9 s and 2 calls each, three of them with a new drink
+  ([`runs.jsonl`](eval/results/real-apps/loop-a/runs.jsonl), [`index.json`](data/routines/starbucks_drink_calories/index.json)).
 - **Step checks aren't outcome checks.** The first TikTok passed every step check and went out without its sound. The
   routine now checks that the editor names the sound, but Envoy doesn't yet check every outcome (the right clip, sound
   and caption) before the final button.
@@ -194,7 +197,9 @@ uv run --project backend python -m api                   # http://127.0.0.1:8700
 ```
 
 Open the sign-in link it prints and ask in Chat: "Check me in for my flight". Envoy hands you SkyLark's sign-in (any
-email and password, then the test SMS code `demo_setup.py` printed), then asks you to approve the check-in. Real apps
+email and password, then the test SMS code `demo_setup.py` printed), then checks you in, because asking was your OK. To
+approve it on your iPhone first, set approvals to "Always ask" in Settings, or send the same request from an agent over
+MCP. Real apps
 use a second emulator, `envoy-real`, made the same way with a 16 GB data partition
 ([`docs/phase-0-findings.md`](docs/phase-0-findings.md)).
 
@@ -241,20 +246,21 @@ uv run --project backend python eval/run_final.py report       # eval/results/fi
 
 Every number above, with its scope, configuration and commit. The profiles are in
 [`backend/models/adapter.py`](backend/models/adapter.py): `hybrid` (the default since Oct 30) runs plan, step, repair
-and compile on Muse Wonder 1.0 and the rest on Muse Spark 1.3; "agent on Spark" means steps on Spark at low effort and
-compile on Wonder. Every run below used the standard tier.
+and compile on Muse Wonder 1.0 and the rest on Muse Spark 1.3; the Spark profile runs plan, step and repair on Spark
+(steps at low effort) and compiles on Wonder. Every run below used the standard tier.
 
 | Number | Scope | Commit | Evidence |
 | --- | --- | --- | --- |
-| Real apps, Oct 28 | 18 workflows on `envoy-real`; rows from 4 runs that day | `401e994`, `524b93a`, `cddf1b2`, `00ec5d9` | [`real.md`](eval/results/final/real.md), `real.json` (suite 4) |
+| Real apps, Oct 28 | 18 workflows on `envoy-real`, Spark profile; rows from 4 runs that day | `401e994`, `524b93a`, `cddf1b2`, `00ec5d9` | [`real.md`](eval/results/final/real.md), `real.json` (suite 4) |
 | Real apps, Oct 31 | the same 18, `hybrid`; Gmail's two rows rerun after a missing token | `a594136` (runs `1031150937`, `1031152557`) | [`real_rerun_2026-10-31/`](eval/results/real_rerun_2026-10-31/README.md) |
-| New-input trajectory 4 → 6 of 11 | five passes, Oct 28–31 | `00ec5d9`, `53ab459`, `736a6e4`, `059bb7f`, `a594136` | `real_rerun_2026-10-31/README.md`, "The four stages" |
+| Real apps, Nov 2 | the same 18, `hybrid`, a baseline before the final evaluation | `192cd29` | being committed; the path goes here once it lands |
+| New inputs, 4 to 6 of 11 | five passes, Oct 28–31: four on the Spark profile, then `hybrid` on Oct 31 | `00ec5d9`, `53ab459`, `736a6e4`, `059bb7f`, `a594136` | `real_rerun_2026-10-31/README.md`, "The four stages" |
 | The cost curve, and the top real-app number | medians (range) over the workflows whose first run and same-input rerun both passed; the routine is called by name, so no matcher call; compile cost is Wonder's, once per routine | as the pass | computed from each pass's `real.json` (`agent`, `routine_runs` "same input", `compile.cost_usd`) |
-| SkyLark suites 1, 2, 3, 3b, 6, 6b | agent on Spark | `ad9a67b`, `5c3d716`, `6c507f3`, `5504260` (emulators) and `a9b923d` (Pixel), `849e51a`, `7395743` | [`report.md`](eval/results/final/report.md) and each suite's `.md` / `.json` |
-| "0 irreversible actions without approval" | 7 declined live runs (suite 6) and 30 runs with planted instructions (suite 6b) | `849e51a`, `7395743` | `report.md`, "The design's success targets" |
-| Starbucks loop | every replay in the loop (26, one declined at a repair); the file doesn't record the profile, and `hybrid` was the default on those commits | each row names its commits, `a2ecceb` … `55abacf` | [`runs.jsonl`](eval/results/real-apps/loop-a/runs.jsonl) |
-| AndroidWorld | 116 tasks, seed 30, pass@1, agent on Spark at low effort; routines on 3 new seeds of their 23 tasks | baseline and `a80b976` (the 13 changes); seeds `e9594f0`, `b82e512`, `cdd130e`; merged in `105d04e` | [`docs/androidworld-results.md`](docs/androidworld-results.md) |
-| The live posts | Nov 1–2 (ET), Envoy's phone, test accounts; 0 / 0 / 3 / 0 calls for the Reel, Story, TikTok re-post and Short | tasks `task-1102-005928-4182`, `-013244-b7c8`, `-023044-d081`, `-015325-106a` | [`docs/demo-showcase.md`](docs/demo-showcase.md); versions and hand edits in each `data/routines/<name>/index.json` |
+| SkyLark suites 1, 2, 3, 3b, 6, 6b | SkyLark (our test app), Spark profile | `ad9a67b`, `5c3d716`, `6c507f3`, `5504260` (emulators) and `a9b923d` (Pixel), `849e51a`, `7395743` | [`report.md`](eval/results/final/report.md) and each suite's `.md` / `.json` |
+| "0 irreversible actions without approval" | on SkyLark: 7 declined live runs (suite 6) and 30 runs with planted instructions (suite 6b); the 20 irreversible controls are on saved screens, 6 SkyLark and 14 real-app | `849e51a`, `7395743` | `report.md`, "The design's success targets" |
+| Starbucks loop | every replay in the loop (26, one declined at a repair); the file doesn't record the profile, and `hybrid` was the default on those commits; v4 came after one automatic repair and two hand fixes | each row names its commits, `a2ecceb` … `55abacf` | [`runs.jsonl`](eval/results/real-apps/loop-a/runs.jsonl) |
+| AndroidWorld | 116 tasks, seed 30, pass@1, Spark profile at low effort; routines on 3 new seeds of their 23 tasks | baseline and `a80b976` (the 13 changes); seeds `e9594f0`, `b82e512`, `cdd130e`; merged in `105d04e` | [`docs/androidworld-results.md`](docs/androidworld-results.md) |
+| The live posts | Nov 1–2 (ET), Envoy's phone, test accounts; 0 / 0 / 3 / 0 model calls in Envoy's replay for the Reel, Story, TikTok re-post and Short | tasks `task-1102-005928-4182`, `-013244-b7c8`, `-023044-d081`, `-015325-106a` | [`docs/demo-showcase.md`](docs/demo-showcase.md); versions and hand edits in each `data/routines/<name>/index.json` |
 | Muse's dry run | Nov 2, Muse for Mac, every final step declined | the task rows | [`task-rows.json`](eval/results/showcase/muse-2026-11-02/task-rows.json) |
 | The Spark agent's own cost | a three-post run on a test copy, Nov 1, declined at each final button | — | [`crosspost/README.md`](agents/meta-agent/evidence/2026-11-01/crosspost/README.md), "Cost" |
 | The cloud phone, 48/48 | SkyLark routines compiled on the Mac, replayed on an emulator on Google Cloud, Oct 29 | — | [`docs/cloud.md`](docs/cloud.md) |
