@@ -1,6 +1,6 @@
 # The showcase site in five sections (WS-F, Nov 2)
 
-Branch `claude/site-five-sections`, rebased onto main `46a3dd4`. Only `site/**`, `scripts/build_site_data.py` and this report
+Branch `claude/site-five-sections`, rebased onto main `557f150`. Only `site/**`, `scripts/build_site_data.py` and this report
 (with its screenshots in `prompts/site-five-sections-report/`) changed. Not pushed, not merged. No devices, no model calls,
 $0.
 
@@ -83,6 +83,36 @@ the rest, on this branch, rebased onto main 46a3dd4:
   number with its pass and profile; banking apps "expected to (not tested)"; teach mode's "one scripted demonstration and
   one replay"; "both events were deleted" dropped (no record); "on 42 captured screens from 8 apps"; SAM's 52 targets
   scoped (16 drawn seats in our test app); the safety suites use captured real-app screens.
+
+## The fact check's second pass, applied (Nov 2, late evening)
+
+On `3790eae` the second pass (`docs/claims.md`, WB rows) verified the baseline fixes and found these, now fixed on this
+branch, rebased onto main 557f150:
+- **WB41 (false):** the Oct 28 row's first run read 13/18 from the rehearsal README, which copied real.json's count. Each
+  pass's row now comes from its own published stage table (real.md): 14/18. The Nov 2 hybrid pass on 192cd29 (new input
+  8/11) is now a row; the Nov 2 check pass isn't, since its totals mix runs.
+- **WB67 (false):** the share-switch evidence now picks the run's call to a learned routine:
+  `skylark_check_flight_status(flight_number: "SL 1190")`, not `memory_search`.
+- **WB73 (false), WB74:** the README says task ids and commits stay out of the prose (profiles are in it), and gives the
+  rebuild check (`git diff --exit-code site/data`).
+- **WB22, WB6:** "among 42 controls on 30 captured screens from 8 apps (15 of the screens from SkyLark)"; the planted-text
+  runs are labeled SkyLark. Both counts are read from safety.json.
+- **WB11, WB12, WB53:** the posting cards say "Rehearsals of v2" where v3 is an automatic repair, and how many the agent
+  finished (read from each run file's model jobs). The results line gives 13 of 13 since each last compile and 41 of 49
+  across all versions.
+- **WB13:** after the last hand fix, 9 of the next 10 Starbucks replays ran clean, one fell back to the agent (from
+  runs.jsonl, times compared in one zone).
+- **Approval wording (WB35, WB36):** "anything an agent asks for that can't be undone waits for your yes"; a request from
+  an agent, a trigger or an email waits unless that routine is set to run without asking; money always asks; a request the
+  person types counts as their OK.
+- **"Learns":** the lede, the section 2 heading and the meta description now say a verified run can be compiled into a
+  checked routine; section 2 and the limits say agent runs are compiled by a script or the evaluation today, and teach
+  mode compiles in the running Envoy.
+- **After the eval:** `eval/results/final/real.md` becomes the final pass, so the Oct 28 row leaves the table (its numbers
+  live only in that file's history) and the "Final evaluation" row takes its place. Simulated and restored.
+- **Scope rows:** WB38 (Muse: three declined, the Story failed), WB40 (the Oct 28 pass is 4 runs; the runs table lists
+  them), WB42, WB47, WB49 ("against a probe MCP server"), WB51 (TikTok's three hand edits), WB62 (the 22 of 59 routines),
+  WB64 (three test comments), WB66, WB70, WB72.
 
 ## Still open
 

@@ -5,7 +5,8 @@ repo. Five sections tell one story, the same one as the demo video, then an evid
 
 - **1, the idea:** "Muse has a computer. Envoy gives it a phone." One plain line on what Envoy is, how an agent, Envoy,
   Envoy's phone and the person's iPhone fit, one live post start to finish, and three numbers.
-- **2, learns:** a first run step by step, the routine it becomes, first run vs routine on real apps, a new input, repairs,
+- **2, learns:** a first run step by step, the checked routine a verified run can be compiled into, first run vs routine on
+  real apps, a new input, repairs,
   and a routine shared as an agent's tool; Meta's models by job.
 - **3, acts:** the four app-only posts (how each was made, its rehearsals, its live post), the Spark agent's one-request dry
   run, Muse's dry run, and "only a person approves".
@@ -16,7 +17,7 @@ repo. Five sections tell one story, the same one as the demo video, then an evid
   task ids; the Starbucks routine, call by call; all 50 SkyLark repairs; real apps workflow by workflow; the design's
   targets and charts; the share switch; SAM; safety tests; agent keys; Claude Code; teach mode; memory; how it's built.
 
-Task ids, commits and configuration stay out of the five sections' prose and live in the evidence.
+Task ids and commits stay out of the five sections' prose (each number names its model profile); they live in the evidence.
 
 It is static: no server, no analytics, no third-party calls (fonts are self-hosted). It's light by default, whatever the
 device's setting; the sun/moon button in the top bar switches to dark and is remembered in that browser.
@@ -48,7 +49,8 @@ uv run --project backend python scripts/build_site_data.py
 ```
 
 This reads only committed files and writes `site/data/` (`site-data.js`, `site-data.json`, `numbers.json`, and the webp
-copies of charts, diagrams, captures and patch evidence in `img/`). Same checkout, same bytes.
+copies of charts, diagrams, captures and patch evidence in `img/`). To check that a rebuild changes nothing, run it on a clean
+checkout and then `git diff --exit-code site/data`: it prints nothing and exits 0.
 
 **After the Nov 3 eval:** `eval/run_final.py report` rewrites `eval/results/final/`. Run the command above and commit `site/data/`.
 The "final numbers after Nov 3" markers go away by themselves: the results banner reads `report.md`'s "Ran on" line, and
@@ -59,7 +61,7 @@ whether it is final. If a file's wording changes, the build stops with an error 
 **What else the build parses** (it stops with an error if the wording changes, so a docs edit can't put a wrong number on the
 page):
 - `eval/results/final/real.json` and `real.md` ("Rows come from N runs");
-- `eval/results/real_rerun_2026-10-31/README.md` (the "Stage" table; one column per pass, a fix branch's column left out);
+- each pass's `real.md` (the "Stage | Passed" table) and the Oct 31 README's "Stage" table (its two Oct 29 columns);
 - `docs/androidworld-results.md` ("**Headline.**", "**Held-out half:**", the "**Routines.**" bullets, the "| Model |" row);
 - each suite's JSON beside `report.md` (`meta.models`: the profile and tier named on the page; hybrid when Muse Wonder
   decides the agent's steps, else the Spark profile);
@@ -116,7 +118,7 @@ Section numbers are positions on the page (the page numbers itself); "E:" is a g
 | 4. Watches | Real comments → the iPhone (+1.57 s Instagram; YouTube ~2 min; TikTok none) | `prompts/phone-watch-report.md` › Stage 2 (table copied) |
 | 4 | Six trigger kinds; Muse's scheduled task | `backend/api/scheduler.py` (`KINDS`); `eval/results/muse-link/e1-muse-tells-you-unprompted.jpg` (cropped) |
 | 5. Results | The banner | `eval/results/final/report.md` ("Ran on") |
-| 5 | Real apps, one pass per row | `eval/results/real_rerun_2026-10-31/README.md` (Oct 28–31 passes on main); after the eval, the final row from `real.json` |
+| 5 | Real apps, one pass per row | each pass's own published stage table: `eval/results/final/real.md` (Oct 28 until the eval, then the final row), `eval/results/real_rerun_2026-10-31/real.md`, `eval/results/real_rerun_2026-11-02_wsd-baseline/real.md`; the two Oct 29 passes from `eval/results/real_rerun_2026-10-31/README.md` (its Oct 28 column is left out: its first-run cell is real.json's 13, the published table says 14) |
 | 5 | First run vs routine (calls, time, cost) | `eval/results/final/real.json` |
 | 5 | Posting routines' rehearsals, all four | `runs.md`, as in section 3 |
 | 5 | SkyLark suites | `eval/results/final/report.md` (suites 0–3b, 5–7) |

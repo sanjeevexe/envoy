@@ -849,6 +849,7 @@
      "to_ask": "98.7 s",
      "calls": 14,
      "usd": 0.1267,
+     "agent": false,
      "task": "task-1101-202945-39d5"
     },
     "replays": [
@@ -858,7 +859,8 @@
       "asked": "Share",
       "to_ask": "143.5 s",
       "calls": 16,
-      "usd": 0.1992
+      "usd": 0.1992,
+      "agent": true
      },
      {
       "when": "2026-11-01T22:17:47",
@@ -866,7 +868,8 @@
       "asked": "Share",
       "to_ask": "75.9 s",
       "calls": 0,
-      "usd": 0.0
+      "usd": 0.0,
+      "agent": false
      },
      {
       "when": "2026-11-01T22:19:57",
@@ -874,7 +877,8 @@
       "asked": "Share",
       "to_ask": "47.7 s",
       "calls": 0,
-      "usd": 0.0
+      "usd": 0.0,
+      "agent": false
      }
     ],
     "real": [
@@ -905,6 +909,10 @@
       "by": "Muse's dry run, Nov 2"
      }
     },
+    "every": {
+     "ok": 9,
+     "n": 9
+    },
     "src": {
      "path": "data/routines/instagram_reel_song/index.json"
     },
@@ -934,6 +942,7 @@
      "to_ask": "75.6 s",
      "calls": 14,
      "usd": 0.0853,
+     "agent": false,
      "task": "task-1101-205058-3079"
     },
     "replays": [
@@ -943,7 +952,8 @@
       "asked": "Your story",
       "to_ask": "31.5 s",
       "calls": 0,
-      "usd": 0.0
+      "usd": 0.0,
+      "agent": false
      },
      {
       "when": "2026-11-01T22:54:00",
@@ -951,7 +961,8 @@
       "asked": "Your story",
       "to_ask": "31.5 s",
       "calls": 0,
-      "usd": 0.0
+      "usd": 0.0,
+      "agent": false
      },
      {
       "when": "2026-11-01T22:55:08",
@@ -959,7 +970,8 @@
       "asked": "Your story",
       "to_ask": "28.5 s",
       "calls": 0,
-      "usd": 0.0
+      "usd": 0.0,
+      "agent": false
      }
     ],
     "real": [
@@ -977,6 +989,10 @@
      }
     ],
     "repair": null,
+    "every": {
+     "ok": 12,
+     "n": 12
+    },
     "src": {
      "path": "data/routines/instagram_story_poll/index.json"
     },
@@ -997,7 +1013,7 @@
      "caption"
     ],
     "outputs": [],
-    "hand": "two hand edits: a 3 s wait before tapping TikTok's drawn sound list, and the app's name",
+    "hand": "three hand edits: a 3 s wait before TikTok's drawn sound list, the app's name, and no before-check on its launch",
     "compiled": "2026-11-02 02:11:25",
     "first": {
      "when": "2026-11-01T21:00:12",
@@ -1006,6 +1022,7 @@
      "to_ask": "315.0 s",
      "calls": 34,
      "usd": 0.2842,
+     "agent": false,
      "task": "task-1101-210013-7814"
     },
     "replays": [
@@ -1015,7 +1032,8 @@
       "asked": "Post",
       "to_ask": "115.0 s",
       "calls": 5,
-      "usd": 0.0493
+      "usd": 0.0493,
+      "agent": false
      },
      {
       "when": "2026-11-02T02:21:52",
@@ -1023,7 +1041,8 @@
       "asked": "Post",
       "to_ask": "56.6 s",
       "calls": 3,
-      "usd": 0.0071
+      "usd": 0.0071,
+      "agent": false
      },
      {
       "when": "2026-11-02T02:23:06",
@@ -1031,7 +1050,8 @@
       "asked": "Post",
       "to_ask": "56.6 s",
       "calls": 3,
-      "usd": 0.0072
+      "usd": 0.0072,
+      "agent": false
      }
     ],
     "real": [
@@ -1061,6 +1081,10 @@
      }
     ],
     "repair": null,
+    "every": {
+     "ok": 10,
+     "n": 14
+    },
     "src": {
      "path": "data/routines/tiktok_post_sound/index.json"
     },
@@ -1090,6 +1114,7 @@
      "to_ask": "84.7 s",
      "calls": 16,
      "usd": 0.114,
+     "agent": false,
      "task": "task-1101-211106-9b42"
     },
     "replays": [
@@ -1099,7 +1124,8 @@
       "asked": "Upload Short",
       "to_ask": "143.5 s",
       "calls": 8,
-      "usd": 0.1409
+      "usd": 0.1409,
+      "agent": true
      },
      {
       "when": "2026-11-01T22:33:45",
@@ -1107,7 +1133,8 @@
       "asked": "Upload Short",
       "to_ask": "113.2 s",
       "calls": 8,
-      "usd": 0.0848
+      "usd": 0.0848,
+      "agent": true
      },
      {
       "when": "2026-11-01T22:36:07",
@@ -1115,7 +1142,8 @@
       "asked": "Upload Short",
       "to_ask": "94.0 s",
       "calls": 2,
-      "usd": 0.0436
+      "usd": 0.0436,
+      "agent": false
      },
      {
       "when": "2026-11-01T23:37:48",
@@ -1123,7 +1151,8 @@
       "asked": "Upload Short",
       "to_ask": "41.5 s",
       "calls": 0,
-      "usd": 0.0
+      "usd": 0.0,
+      "agent": false
      }
     ],
     "real": [
@@ -1153,6 +1182,10 @@
       "seconds": 77.4,
       "by": "Muse's dry run, Nov 2"
      }
+    },
+    "every": {
+     "ok": 10,
+     "n": 14
     },
     "src": {
      "path": "data/routines/youtube_short_sound/index.json"
@@ -2425,6 +2458,11 @@
   "table_src": {
    "path": "eval/results/real-apps/table.md",
    "note": "Starbucks rows"
+  },
+  "after_last": {
+   "n": 10,
+   "clean": 9,
+   "version": 4
   }
  },
  "repair": {
@@ -2748,28 +2786,33 @@
    "tier": "standard",
    "runs": 4,
    "run_id": "1028032143",
+   "breakdown": [
+    {
+     "run": "1028023735",
+     "commit": "524b93a",
+     "rows": 12
+    },
+    {
+     "run": "1028030222",
+     "commit": "401e994",
+     "rows": 4
+    },
+    {
+     "run": "1028031054",
+     "commit": "cddf1b2",
+     "rows": 1
+    },
+    {
+     "run": "1028032143",
+     "commit": "00ec5d9",
+     "rows": 1
+    }
+   ],
    "stages": {
-    "first_run": [
-     13,
-     18
-    ],
-    "compiled": [
-     14,
-     18
-    ],
-    "same_input": [
-     13,
-     18
-    ],
-    "same_with_repair": 14,
-    "new_input": [
-     4,
-     11
-    ],
-    "bot_checks": [
-     "target",
-     "target_search"
-    ]
+    "First run right": "14/18",
+    "Compiled": "14/18",
+    "Same input, no model call": "13/18 (14 with a repair)",
+    "New input, no model call": "4/11"
    }
   },
   "curve": {
@@ -3182,10 +3225,14 @@
     "commit": "00ec5d9",
     "profile": "Spark",
     "cells": {
-     "First run right": "13/18",
+     "First run right": "14/18",
      "Compiled": "14/18",
      "Same input, no model call": "13/18 (14 with a repair)",
      "New input, no model call": "4/11"
+    },
+    "src": {
+     "path": "eval/results/final/real.md",
+     "note": "stages"
     }
    },
    {
@@ -3197,6 +3244,10 @@
      "Compiled": "14/18",
      "Same input, no model call": "9/18 (11 with a repair)",
      "New input, no model call": "5/11"
+    },
+    "src": {
+     "path": "eval/results/real_rerun_2026-10-31/README.md",
+     "note": "The four stages"
     }
    },
    {
@@ -3208,6 +3259,10 @@
      "Compiled": "16/18",
      "Same input, no model call": "12/18 (14 with a repair)",
      "New input, no model call": "6/11"
+    },
+    "src": {
+     "path": "eval/results/real_rerun_2026-10-31/README.md",
+     "note": "The four stages"
     }
    },
    {
@@ -3219,6 +3274,25 @@
      "Compiled": "12/18",
      "Same input, no model call": "9/18 (9 with a repair)",
      "New input, no model call": "6/11"
+    },
+    "src": {
+     "path": "eval/results/real_rerun_2026-10-31/real.md",
+     "note": "stages"
+    }
+   },
+   {
+    "date": "Nov 2",
+    "commit": "192cd29",
+    "profile": "hybrid",
+    "cells": {
+     "First run right": "14/18",
+     "Compiled": "15/18",
+     "Same input, no model call": "12/18 (14 with a repair)",
+     "New input, no model call": "8/11"
+    },
+    "src": {
+     "path": "eval/results/real_rerun_2026-11-02_wsd-baseline/real.md",
+     "note": "stages"
     }
    }
   ],
@@ -4223,6 +4297,12 @@
   }
  },
  "safety": {
+  "captured": {
+   "controls": 42,
+   "screens": 30,
+   "apps": 8,
+   "skylark_screens": 15
+  },
   "caught": [
    20,
    20,
@@ -4681,7 +4761,9 @@
     "fallback": [
      67,
      69
-    ]
+    ],
+    "compiled": 59,
+    "alone": 22
    },
    "held": [
     31,
@@ -4709,8 +4791,8 @@
    }
   },
   "tests": {
-   "functions": 760,
-   "files": 49,
+   "functions": 762,
+   "files": 50,
    "src": {
     "path": "backend/tests"
    }

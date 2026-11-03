@@ -471,6 +471,12 @@ def learned() -> dict:
                  for rows in [[r for r in runs.values() if r.get("task") in ("starbucks", "starbucks2") and r["mode"] == mode
                                and r.get("ok") is True]]},
         "table_src": src("eval/results/real-apps/table.md", "Starbucks rows"),
+        # The replays after the last version was made: how many ran clean (2 calls: match and read the answer)
+        "after_last": (lambda rows: {"n": len(rows), "clean": sum(1 for r in rows if r["calls"] <= 2), "version": index["active"]})(
+            [r for r in runs.values() if r.get("task") in ("starbucks", "starbucks2") and r["mode"] == "replay"
+             # the run's time is UTC; the version's is the Mac's (ET)
+             and datetime.fromisoformat(r["time"]) >= datetime.fromisoformat(
+                 next(v["created"] for v in index["versions"] if v["version"] == index["active"])).replace(tzinfo=ET)]),
     }
 
 
@@ -608,27 +614,55 @@ def real_apps() -> dict:
              "rerun": {"calls": _spread([r["model_calls"] for _, r in pairs]), "seconds": _spread([r["duration_s"] for _, r in pairs]),
                        "usd": _spread([r["cost_usd"] for _, r in pairs])}}
     code = meta["code"]
+    breakdown = [(rid, c, len([x for x in names.split(",") if x.strip()])) for rid, c, names in
+                 re.findall(r"(\d{10}) on `(\w+)`: ([^;]+?)(?:;|\.\s|$)", md.split("Rows come from", 1)[1].split("\n\n", 1)[0])] \
+        if runs else []
     current = {"date": meta["started"][:10], "commit": code["short"], "final": bool(code.get("is_eval_final")),
                "profile": _profile(meta["models"]["jobs"]), "tier": meta["models"]["tier"],
                "runs": int(runs.group(1)) if runs else 1, "run_id": meta["run_id"],
-               "stages": {"first_run": [st["first_run"], st["n"]], "compiled": [st["compiled"], st["n"]],
-                          "same_input": [st["same_input"], st["n"]], "same_with_repair": st["same_input_with_repair"],
-                          "new_input": [st["new_input"], st["n_second"]], "bot_checks": st["bot_checks"]}}
-    # Earlier passes on main, one per row (a fix branch's pass is left out): "Oct 28 (`00ec5d9`, spark)" heads a column.
+               "breakdown": [{"run": r, "commit": c, "rows": n} for r, c, n in sorted(breakdown, key=lambda x: -x[2])],
+               "stages": _stages(md)}
+    # One pass per row, each from its own published stage table (real.md). The Oct 31 rehearsal's README carries the Oct 29
+    # passes, whose folders hold no comparable table; its Oct 28 column is left out because its first-run cell (13/18) is
+    # real.json's count, where real.md, the published table, says 14/18.
     rr_md = (REPO / "eval/results/real_rerun_2026-10-31/README.md").read_text()
     stages = next(t for t in md_tables(rr_md) if t and "Stage" in t[0])
     passes = []
     for head in stages[0]:
         m = re.match(r"(\w+ \d+)(?: main)? \(`(\w+)`, (\w+)\)", head)
-        if not m or "after" in head:
+        if not m or "after" in head or m.group(1) != "Oct 29":
             continue
-        cell = {re.sub(r"^\d\. ", "", r["Stage"]): plain(r[head]) for r in stages}
         passes.append({"date": m.group(1), "commit": m.group(2), "profile": "hybrid" if m.group(3) == "hybrid" else "Spark",
-                       "cells": cell})
+                       "cells": {re.sub(r"^\d\. ", "", r["Stage"]): plain(r[head]) for r in stages},
+                       "src": src("eval/results/real_rerun_2026-10-31/README.md", "The four stages")})
+    for path in REAL_PASSES + ["eval/results/final/real.json"]:
+        j = json.loads((REPO / path).read_text())["meta"]
+        if path.startswith("eval/results/final/") and j["code"].get("is_eval_final"):
+            continue  # the final pass is its own row on the page
+        passes.append({"date": datetime.fromisoformat(j["started"]).astimezone(ET).strftime("%b %-d"), "commit": j["code"]["short"],
+                       "profile": _profile(j["models"]["jobs"]), "cells": _stages((REPO / path).with_suffix(".md").read_text()),
+                       "src": src(path.replace(".json", ".md"), "stages")})
     passes.sort(key=lambda p: datetime.strptime(p["date"] + " 2026", "%b %d %Y"))
     return {"current": current, "curve": curve, "rows": rows, "passes": passes,
             "src": src("eval/results/final/real.json"), "md_src": src("eval/results/final/real.md"),
             "passes_src": src("eval/results/real_rerun_2026-10-31/README.md", "The four stages")}
+
+
+# Real-app passes with their own folder (real.json and real.md), besides the eval's current one. Not the Nov 2 check
+# (wsd-check): its stage totals mix runs, as its README says.
+REAL_PASSES = ["eval/results/real_rerun_2026-10-31/real.json", "eval/results/real_rerun_2026-11-02_wsd-baseline/real.json"]
+STAGE_NAMES = {"1": "First run right", "2": "Compiled", "3": "Same input, no model call", "4": "New input, no model call"}
+
+
+def _stages(md: str) -> dict:
+    """A real.md's published stage table ("1. First run: … | 14/18"), keyed like the rehearsal README's rows."""
+    t = next(t for t in md_tables(md) if t and "Stage" in t[0] and "Passed" in t[0])
+    out = {}
+    for r in t:
+        m = re.match(r"(\d)\. ", r["Stage"])
+        if m:
+            out[STAGE_NAMES[m.group(1)]] = plain(r["Passed"]).replace(" counting a repair)", " with a repair)")
+    return out
 
 
 def memory() -> dict:
@@ -664,7 +698,11 @@ def safety() -> dict:
     routines = re.search(r"Routines: (\d+) of (\d+)", i_md)
     planted = dict(re.findall(r"- \*\*(\w+)\*\*: “(.+?)”", i_md))
     inbox = re.search(r"Injected values stored: \*\*(\d+)\*\*; instructions stored as facts: \*\*(\d+)\*\*", i_md)
+    screens = json.loads((REPO / "eval/results/final/safety.json").read_text())["screens"]["rows"]
+    by_screen = {r["screen"]: r["app"] for r in screens}
     return {
+        "captured": {"controls": len(screens), "screens": len(by_screen), "apps": len(set(by_screen.values())),
+                     "skylark_screens": sum(1 for a in by_screen.values() if a == "SkyLark")},
         "caught": [int(x) for x in caught.groups()] if caught else None,
         "reversible": [int(x) for x in rev.groups()] if rev else None,
         "controls": [{"app": r["App"], "control": plain(r["Control"]), "gate": r["Gate"]} for r in st[0]],
@@ -717,6 +755,7 @@ def proof() -> dict:
     rt = re.search(r"they did (\d+) of (\d+) instances, against the full agent's (\d+), at (\d+) model call against (\d+), "
                    r"(\$[\d.]+) against (\$[\d.]+)", aw)
     fb = re.search(r"with the agent run where a routine failed, (\d+) of (\d+)", aw)
+    nr = re.search(r"Envoy compiled (\d+) routines from its solved runs, and (\d+) did their own seed-30 task on their own", aw)
     ho = re.search(r"On the held-out half, never used to choose a change, that is (\d+) of (\d+) \([\d.]+%\) against (\d+)", head)
     sizes = json.loads((REPO / "eval/results/final/sizes.json").read_text())
     phone = sizes["devices"]["phone"]
@@ -737,7 +776,8 @@ def proof() -> dict:
                # framed by cost: routines against the full agent on new seeds, and the agent's held-out half
                "routines": {"did": rt.group(1), "of": rt.group(2), "agent": rt.group(3), "calls": rt.group(4),
                             "agent_calls": rt.group(5), "usd": rt.group(6), "agent_usd": rt.group(7),
-                            "fallback": [int(fb.group(1)), int(fb.group(2))]},
+                            "fallback": [int(fb.group(1)), int(fb.group(2))],
+                            "compiled": int(nr.group(1)), "alone": int(nr.group(2))},
                "held": [int(x) for x in ho.groups()],
                "model": plain(re.search(r"^\| Model \| ([^|,]+)", aw, re.M).group(1)).strip(),
                "src": src("docs/androidworld-results.md", "Headline, Routines")},
@@ -897,7 +937,7 @@ SHOWCASE = {
 HAND_EDITS = {
     "instagram_reel_song": None,
     "instagram_story_poll": None,
-    "tiktok_post_sound": "two hand edits: a 3 s wait before tapping TikTok's drawn sound list, and the app's name",
+    "tiktok_post_sound": "three hand edits: a 3 s wait before TikTok's drawn sound list, the app's name, and no before-check on its launch",
     "youtube_short_sound": "one hand edit: a stray before-check (“Captions unavailable”) dropped",
 }
 
@@ -918,6 +958,12 @@ def showcase() -> dict:
     live = json.loads(LIVE.read_text())["tasks"]
     assert set(LIVE_NOTES) <= {t["id"] for t in live}, set(LIVE_NOTES) - {t["id"] for t in live}
     muse = {t["id"]: t for t in json.loads((REPO / "eval/results/showcase/muse-2026-11-02/task-rows.json").read_text())["tasks"]}
+    # A rehearsal the agent finished: its run file's model jobs include a plan or a step (vision reads and repairs don't).
+    agent_runs = set()
+    for f in sorted((REPO / "eval/results/showcase/runs").glob("*-replay-*.json")):
+        j = json.loads(f.read_text())
+        if {"plan", "step"} & set((j.get("spent") or {}).get("jobs") or {}):
+            agent_runs.add(j["time"])
     cards = []
     for name, (app, what) in SHOWCASE.items():
         lib = REPO / f"data/routines/{name}"
@@ -941,7 +987,8 @@ def showcase() -> dict:
         reps = [r for r in runs if r["mode"] == "replay" and r["routine"] == name and r["when"] >= compiled.replace(" ", "T")
                 and (any(m in r["approvals"] for m in marks) or "(routine " not in r["approvals"])]
         row = lambda r: {"when": r["when"], "ok": r["ok"] == "yes", "asked": r["asked at"], "to_ask": r["start → post asked"],
-                         "calls": int(r["calls"]), "usd": float(r["$"])}
+                         "calls": int(r["calls"]), "usd": float(r["$"]), "agent": r["when"] in agent_runs}
+        every = [r for r in runs if r["mode"] == "replay" and r["routine"] == name]
         # Envoy's own model calls; "seconds" isn't shown: it includes the waits for both yeses on the iPhone.
         real = [{"task": t["id"], "live": t["status"] == "done", "calls": t["model_calls"], "inputs": t["inputs"],
                  "created": t["created"], "note": LIVE_NOTES.get(t["id"], "")}
@@ -960,6 +1007,7 @@ def showcase() -> dict:
             "name": name, "app": app, "what": what, "version": ix["active"], "base": base["version"], "steps": len(y["steps"]),
             "inputs": list(y["inputs"].keys()), "outputs": y["outputs"], "hand": hand, "compiled": compiled,
             "first": row(first) | {"task": source.group(0)}, "replays": [row(r) for r in reps], "real": real, "repair": repair,
+            "every": {"ok": sum(1 for r in every if r["ok"] == "yes"), "n": len(every)},
             "src": src(f"data/routines/{name}/index.json"), "yaml_src": src(f"data/routines/{name}/v{ix['active']}.yaml"),
         })
     return {"cards": cards, "runs_src": src("eval/results/showcase/runs/runs.md"),
