@@ -1,10 +1,10 @@
 {
- "source": "sqlite3 -readonly ~/Desktop/Envoy/data/api/envoy.db (the live :8700), read Nov 2, 2026 by the coordinator; every task Muse started in the Nov 2 rehearsal",
+ "source": "sqlite3 -readonly data/api/envoy.db (the live :8700 API), read Nov 2, 2026; every task Muse started in the Nov 2 rehearsal",
  "what": "A dry run of the cross-post climax from Muse for Mac (11:38-12:20 ET). Muse copied a test clip on the Mac into Envoy's outbox, called send_to_phone (an offer the user approved on the iPhone), then called the shared routine tools by name, one per turn. Each task first asked 'use Envoy's phone?' on the iPhone. The user declined every final post button, so nothing was posted.",
  "notes": [
   "seconds runs from Muse's call to the task's end, so it includes the phone ask and the time the final approval waited on the iPhone; each post reached its final button about 1 min 15 s after the phone OK.",
-  "task-1102-114842-f1dc: its 'use Envoy's phone?' ask went unanswered for 15 min, and the task moved to an emulator, which had no Instagram and opened the Play Store. Fixed in main 947bf44 (backlog #63): no answer now ends the task as not done.",
-  "task-1102-121512-0b47: the Story retry on the Pixel. The night-before Story was still live, so the routine's first tap opened its poll results, and the agent fallback hit its step limit (backlog #64)."
+  "task-1102-114842-f1dc: its 'use Envoy's phone?' ask went unanswered for 15 min, and the task moved to an emulator, which had no Instagram and opened the Play Store. Fixed the same day (main 947bf44): no answer now ends the task as not done.",
+  "task-1102-121512-0b47: the Story retry on the Pixel. The night-before Story was still live, so the routine's first tap opened its poll results, and the agent fallback hit its step limit (a known gap: the Story routine fails while a Story is already live)."
  ],
  "tasks": [
   {

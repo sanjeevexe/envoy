@@ -1,0 +1,107 @@
+{
+ "source": "sqlite3 -readonly data/api/envoy.db (the live :8700 API), read Nov 2, 2026; the five real posting tasks of the night of Nov 1-2",
+ "what": "Real posts to Envoy's own accounts on Envoy's phone (a Pixel 5), each started over MCP from the Spark agent (a small agent on Meta's models) on the user's go, with both asks ('use Envoy's phone?' and the final post) approved on the user's iPhone. One test clip, the library song 'golden hour' (JVKE).",
+ "notes": [
+  "seconds runs from the agent's call to the task's end, so it includes the phone ask and the time the final approval waited on the iPhone.",
+  "model_calls and cost_usd are Envoy's own; the calling agent's calls are not counted here.",
+  "task-1102-014139-7f5e: TikTok published this post without the song (the routine tapped the sound's row, but the sound never reached the editor), and the run then failed its done-check. The compiler was fixed, and task-1102-023044-d081 re-posted with the song using tiktok_post_sound v3.",
+  "The Instagram Story (task-1102-013244-b7c8) was posted while no other Story was live."
+ ],
+ "tasks": [
+  {
+   "id": "task-1102-005928-4182",
+   "status": "done",
+   "source": "mcp",
+   "agent": "Spark agent",
+   "goal": "Post a gallery video to Instagram as a reel",
+   "routine": "instagram_reel_song",
+   "inputs": {
+    "caption": "Posted by Envoy · test",
+    "song_artist": "JVKE",
+    "song_title": "golden hour"
+   },
+   "created": "2026-11-02 00:59:28",
+   "updated": "2026-11-02 01:24:31",
+   "seconds": 1502.7,
+   "detail": "all steps and checks passed",
+   "model_calls": 0,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "task-1102-013244-b7c8",
+   "status": "done",
+   "source": "mcp",
+   "agent": "Spark agent",
+   "goal": "Post the newest gallery video to an Instagram story with a poll sticker",
+   "routine": "instagram_story_poll",
+   "inputs": {
+    "poll_option_1": "Yes",
+    "poll_option_2": "No",
+    "poll_question": "Did Envoy post this?"
+   },
+   "created": "2026-11-02 01:32:44",
+   "updated": "2026-11-02 01:37:06",
+   "seconds": 262.6,
+   "detail": "all steps and checks passed",
+   "model_calls": 0,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "task-1102-014139-7f5e",
+   "status": "failed",
+   "source": "mcp",
+   "agent": "Spark agent",
+   "goal": "Post the newest gallery video to TikTok with a chosen sound and caption",
+   "routine": "tiktok_post_sound",
+   "inputs": {
+    "sound_title": "golden hour",
+    "sound_artist": "JVKE",
+    "caption": "Posted by Envoy · test"
+   },
+   "created": "2026-11-02 01:41:39",
+   "updated": "2026-11-02 01:43:37",
+   "seconds": 117.7,
+   "detail": "done-check failed: 'Posted by Envoy · test' not visible",
+   "model_calls": 7,
+   "cost_usd": 0.0191
+  },
+  {
+   "id": "task-1102-015325-106a",
+   "status": "done",
+   "source": "mcp",
+   "agent": "Spark agent",
+   "goal": "Post the newest gallery video as a YouTube Short with a chosen sound and title",
+   "routine": "youtube_short_sound",
+   "inputs": {
+    "sound_title": "golden hour",
+    "sound_artist": "JVKE",
+    "short_title": "Posted by Envoy · test"
+   },
+   "created": "2026-11-02 01:53:25",
+   "updated": "2026-11-02 01:55:38",
+   "seconds": 133.5,
+   "detail": "all steps and checks passed",
+   "model_calls": 0,
+   "cost_usd": 0.0
+  },
+  {
+   "id": "task-1102-023044-d081",
+   "status": "done",
+   "source": "mcp",
+   "agent": "Spark agent",
+   "goal": "Post the newest gallery video to TikTok with a chosen sound and caption",
+   "routine": "tiktok_post_sound",
+   "inputs": {
+    "sound_title": "golden hour",
+    "sound_artist": "JVKE",
+    "caption": "Posted by Envoy · test 2"
+   },
+   "created": "2026-11-02 02:30:44",
+   "updated": "2026-11-02 02:31:51",
+   "seconds": 67.5,
+   "detail": "all steps and checks passed",
+   "model_calls": 3,
+   "cost_usd": 0.0072
+  }
+ ]
+}

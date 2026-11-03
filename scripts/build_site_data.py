@@ -18,6 +18,7 @@ import gzip
 import json
 import re
 import sqlite3
+import statistics
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -206,30 +207,6 @@ def import_routine(name: str, cfg: dict) -> dict:
 
 
 MAIN = HOME / "Desktop/Envoy"  # the main checkout: its gitignored run traces and the demo world's memory
-LOOP_B = HOME / "Desktop/Envoy/.claude/worktrees/funny-goldwasser-65190c"  # loop B's checkout (new apps, Oct 30)
-
-# One answer frame per real app for the grid: the last frame of a first run. Each was looked at for private data.
-# Not here, on purpose: DoorDash (addresses), Lyft and Uber (the user's own accounts), Instagram (the Pixel's account).
-APP_FRAMES = {
-    "amazon_search_price": ("amazon", LOOP_A_API / "shots", "task-1030-145757-b70d", "loop-a"),
-    "youtube_search_first_video": ("youtube", LOOP_A_API / "shots", "task-1030-162656-3e9e", "loop-a"),
-    "play_app_rating": ("play", LOOP_A_API / "shots", "task-1030-164831-6b9e", "loop-a"),
-    "chipotle_item_price": ("chipotle", LOOP_A_API / "shots", "task-1030-161523-ec65", "loop-a"),
-    "gmail_search_subject": ("gmail", LOOP_A_API / "shots", "task-1030-180655-0535", "loop-a"),
-    "starbucks_drink_calories": ("starbucks", LOOP_A_API / "shots", "task-1030-155711-51c2", "loop-a"),
-    "clock_set_alarm": ("clock", LOOP_B / "data/api-loopb/shots", "task-1030-141911-98d6", "loop-b"),
-    "chrome_get_cheapest_flight_price": ("flights", LOOP_B / "data/api-loopb/shots", "task-1030-214314-a891", "loop-b"),
-}
-
-
-def import_app_frames() -> dict:
-    out = {}
-    for routine, (name, shots, task_id, loop) in APP_FRAMES.items():
-        last = sorted((shots / task_id).glob("*.jpg"))[-1]
-        out[routine] = {"frame": _frame(last, f"app-{name}"), "task_id": task_id, "loop": loop,
-                        "taken_et": datetime.fromtimestamp(int(last.stem) / 1000, ET).strftime("%Y-%m-%d %H:%M")}
-    return out
-
 
 def import_repair_call() -> dict:
     """The model call behind Starbucks v3's self-repair (loop A, Oct 30), from loop A's cost log."""
@@ -370,7 +347,7 @@ def do_import() -> None:
         rec = import_agent(name, cfg) if cfg["kind"] == "agent" else import_routine(name, cfg)
         (REC / f"{name}.json").write_text(json.dumps(rec, indent=1, ensure_ascii=False) + "\n")
         print(f"imported {name}: {len(rec['steps'])} steps")
-    for name, fn in [("app-frames", import_app_frames), ("starbucks-repair", import_repair_call), ("planted", import_planted),
+    for name, fn in [("starbucks-repair", import_repair_call), ("planted", import_planted),
                      ("approval", import_approval), ("sam", import_sam), ("memory", import_memory), ("teach", import_teach)]:
         (REC / f"{name}.json").write_text(json.dumps(fn(), indent=1, ensure_ascii=False) + "\n")
         print(f"imported {name}")
@@ -447,7 +424,7 @@ def first_run() -> dict:
     row = runs[rec["task_id"]]
     rec["total"] = {"seconds": row["seconds"], "calls": row["calls"], "usd": row["usd"], "jobs": row["jobs"],
                     "commit": row["commit"], "src": src("eval/results/real-apps/loop-a/runs.jsonl", rec["task_id"])}
-    rec["src"] = src("site/data/recordings/starbucks-first.json", "imported from loop A's trace and API copy")
+    rec["src"] = src("site/data/recordings/starbucks-first.json", "imported from the run's trace")
     return rec
 
 
@@ -484,9 +461,22 @@ def learned() -> dict:
                                     "version": replay["version"]},
         "replay_steps": replay["steps"],
         "replay_calls": replay["calls"],
-        "replay_src": src("site/data/recordings/starbucks-replay.json", "imported from loop A's trace"),
+        "replay_src": src("site/data/recordings/starbucks-replay.json", "imported from the run's trace"),
         "new_input": counters(new_input),
+        # Every Starbucks first run and replay in the Oct 30 reliability loop, as medians with their range (rows across the
+        # loop's code versions; the replay above is one of them, not the typical one).
+        "loop": {mode: {"seconds": _spread([r["seconds"] for r in rows]), "calls": _spread([r["calls"] for r in rows]),
+                        "commits": len({r["commit"] for r in rows})}
+                 for mode in ("first", "replay")
+                 for rows in [[r for r in runs.values() if r.get("task") in ("starbucks", "starbucks2") and r["mode"] == mode
+                               and r.get("ok") is True]]},
         "table_src": src("eval/results/real-apps/table.md", "Starbucks rows"),
+        # The replays after the last version was made: how many ran clean (2 calls: match and read the answer)
+        "after_last": (lambda rows: {"n": len(rows), "clean": sum(1 for r in rows if r["calls"] <= 2), "version": index["active"]})(
+            [r for r in runs.values() if r.get("task") in ("starbucks", "starbucks2") and r["mode"] == "replay"
+             # the run's time is UTC; the version's is the Mac's (ET)
+             and datetime.fromisoformat(r["time"]) >= datetime.fromisoformat(
+                 next(v["created"] for v in index["versions"] if v["version"] == index["active"])).replace(tzinfo=ET)]),
     }
 
 
@@ -553,6 +543,7 @@ def repair() -> dict:
         "task": "Check me in for my flight", "routine": exp["routine"], "layout": "3: extra screen",
         "patch": patch["description"], "reason": patch["evidence"]["reasons"][0],
         "repair_model": change["meta"]["models"]["jobs"]["repair"]["model"],
+        "profile": _profile(change["meta"]["models"]["jobs"]), "tier": change["meta"]["models"]["tier"],
         "first": pick(exp["first"]), "trial": pick(exp["trial"]), "after": pick(exp["after"]), "back": pick(exp["backcompat"]),
         "steps_first": exp["first"]["steps"],
         "before": image(lib / "history/v2/repair_08_1_before.png", "repair-skylark-before"),
@@ -583,63 +574,139 @@ def repair() -> dict:
         "real": real, "real_src": src("data/routines", "*/index.json, versions with a source_task"),
         "starbucks": {"change": v3["changes"][0], "trial": v3["trial"], "reason": reason, "call": call,
                       "src": src("data/routines/starbucks_drink_calories/index.json", "v3"),
-                      "call_src": src("site/data/recordings/starbucks-repair.json", "loop A's cost log")},
+                      "call_src": src("site/data/recordings/starbucks-repair.json", "the run's model-cost log")},
     }
 
 
-# The grid's rows in eval/results/real-apps/table.md: (app column starts with, task column contains), first run and replay.
-APP_ROWS = {
-    "amazon_search_price": ("Amazon", ("Amazon (envoy-real)", "AA batteries")),
-    "youtube_search_first_video": ("YouTube", ("YouTube (envoy-real)", "lofi")),
-    "play_app_rating": ("Play Store", ("Play Store (envoy-real)", "Duolingo")),
-    "starbucks_drink_calories": ("Starbucks", ("Starbucks (envoy-real)", "Grande"), ("Starbucks (envoy-real), v4", "Grande")),
-    "chipotle_item_price": ("Chipotle", ("Chipotle (envoy-real)", "Guacamole")),
-    "gmail_search_subject": ("Gmail", ("Gmail (envoy-real), after the routing fix", "DoorDash")),
-    "doordash_order_meal": ("DoorDash", ("DoorDash (envoy-real), the user's real usual, v7 and the note-learner fix", "usual")),
-    "clock_set_alarm": ("Clock", ("Clock (loop B)", "alarm")),
-    "chrome_get_cheapest_flight_price": ("Google Flights in Chrome", ("Chrome / Google Flights by URL (loop B)", "cheapest"),
-                                         ("Chrome / Google Flights by URL (loop B) — v4", "cheapest")),
-    "lyft_get_ride_fare": ("Lyft", ("Lyft (loop B, envoy-real, the user's own account) — gate", "fare")),
-    "instagram_post_reel": ("Instagram", ("Instagram (Pixel 5)", "reel")),
-}
-APP_NOTES = {
-    "lyft_get_ride_fare": "On the user's own Lyft account, so the site shows numbers only: no screens and no routine steps. Fares only; never requested a ride.",
-    "instagram_post_reel": "On the Pixel 5. Share was declined every time; nothing was posted. No screens shown here (the phone's account).",
-    "doordash_order_meal": "Stops at the payment sheet; Place Order always asks first. No screens shown here (addresses).",
-}
+def _spread(xs: list[float]) -> dict:
+    """A median with its range, never a best run."""
+    return {"median": round(statistics.median(xs), 4), "min": min(xs), "max": max(xs), "n": len(xs)}
 
 
-def apps() -> dict:
-    rows = md_tables((REPO / "eval/results/real-apps/table.md").read_text())[0]
+def _profile(jobs: dict) -> str:
+    """The model profile a run used: hybrid (the default) when Muse Wonder takes the agent's steps, else the Spark profile.
+    Both compile with Muse Wonder."""
+    return "hybrid" if jobs["step"]["model"].startswith("muse-wonder") else "Spark"
 
-    def find(app: str, task: str) -> dict:
-        hit = [r for r in rows if r["app"] == app and task.lower() in r["task"].lower()]
-        assert len(hit) == 1, (app, task, len(hit))
-        return hit[0]
 
-    frames = json.loads((REC / "app-frames.json").read_text())
-    cards = []
-    for routine, (name, first_key, *replay_key) in APP_ROWS.items():
-        first = find(*first_key)
-        rep = find(*replay_key[0]) if replay_key else first
-        ix = json.loads((REPO / f"data/routines/{routine}/index.json").read_text())
-        y = yaml.safe_load((REPO / f"data/routines/{routine}/v{ix['active']}.yaml").read_text())
-        when = re.search(r"\b(Oct \d+)", rep["notes"]) or re.search(r"\b(Oct \d+)", first["notes"])
-        commit = re.search(r"main ([0-9a-f]{7})", rep["notes"])
-        cards.append({
-            "routine": routine, "name": name, "task": plain(first["task"]),
-            "first": {"runs": plain(first["first runs (x/3)"]), "cost": plain(first["first-run s / $"])},
-            "replay": {"runs": plain(rep["replays (x/N)"]), "cost": plain(rep["replay s / $"])},
-            "when": when.group(1) if when else "", "commit": commit.group(1) if commit else "",
-            "notes": plain(rep["notes"]) + ("" if rep is first else " — First runs: " + plain(first["notes"])),
-            "version": ix["active"], "steps": len(y["steps"]), "inputs": list((y.get("inputs") or {}).keys()),
-            "hand_fixed": any(not v.get("source_task") and v["version"] > 1 for v in ix["versions"]),
-            "frame": frames.get(routine), "private": APP_NOTES.get(routine),
-            "src": src("eval/results/real-apps/table.md", first["app"]),
-            "routine_src": src(f"data/routines/{routine}/index.json"),
-        })
-    skylark = sorted(p.parent.name for p in (REPO / "data/routines").glob("skylark_*/index.json"))
-    return {"cards": cards, "skylark": skylark, "src": src("eval/results/real-apps/table.md")}
+def real_apps() -> dict:
+    """Real apps: each workflow's first run against its same-input rerun as medians with their range (the cost curve), from
+    the curve's pass; the eval's own suite (suite 4) for the stages; and every earlier pass, one per row, so each number
+    sits next to its trajectory. After the Nov 3 eval rewrites real.json, the final pass is both."""
+    d = json.loads((REPO / "eval/results/final/real.json").read_text())
+    meta = d["meta"]
+    md = (REPO / "eval/results/final/real.md").read_text()
+    runs = re.search(r"Rows come from (\d+) runs", md)
+    # The cost curve's pass: the final eval's once it ran on the tag, else the newest full pass on the hybrid profile (the
+    # profile the final eval uses). The README's cost curve uses the same pass and rule; the build checks they agree.
+    curve_path = "eval/results/final/real.json" if meta["code"].get("is_eval_final") else REAL_CURVE
+    cd = json.loads((REPO / curve_path).read_text())
+    pairs, rows = [], []
+    for name, w in cd["workflows"].items():
+        a, rr = w["agent"], {r["case"]: r for r in w.get("routine_runs", [])}
+        same, new = rr.get("same input"), rr.get("new input")
+        rows.append({"workflow": name, "goal": w["goal"], "graded_by": w["graded_by"], "first_run": w["first_run"],
+                     "agent": {"actions": a["steps"], "calls": a["model_calls"], "seconds": a["duration_s"]},
+                     "compiled": bool(w["compile"]["compiled"]), "steps": w["compile"].get("steps"),
+                     # a rerun that never ran ("input not learned") has no calls or time
+                     "same": same and {"result": same["result"], "calls": same.get("model_calls"), "seconds": same.get("duration_s")},
+                     "new": new and {"result": new["result"], "calls": new.get("model_calls"), "seconds": new.get("duration_s")}})
+        # both passed outright: a rerun that needed a repair isn't counted
+        if w["first_run"] == "pass" and same and same["result"] == "pass":
+            pairs.append((a, same, w["compile"].get("cost_usd") or 0))
+    cm = cd["meta"]
+    curve = {"n": len(pairs), "of": len(cd["workflows"]),
+             "pass": {"date": datetime.fromisoformat(cm["started"]).astimezone(ET).strftime("%b %-d"), "commit": cm["code"]["short"],
+                      "final": bool(cm["code"].get("is_eval_final")), "profile": _profile(cm["models"]["jobs"]),
+                      "tier": cm["models"]["tier"], "run": cm["run_id"], "src": src(curve_path),
+                      "md_src": src(curve_path.replace(".json", ".md"))},
+             "first": {"calls": _spread([a["model_calls"] for a, _, _ in pairs]), "seconds": _spread([a["duration_s"] for a, _, _ in pairs]),
+                       "usd": _spread([a["cost_at_standard_usd"] for a, _, _ in pairs])},
+             "rerun": {"calls": _spread([r["model_calls"] for _, r, _ in pairs]), "seconds": _spread([r["duration_s"] for _, r, _ in pairs]),
+                       "usd": _spread([r["cost_usd"] for _, r, _ in pairs])},
+             "compile": _spread([c for _, _, c in pairs])}
+    _check_readme_curve(curve)
+    code = meta["code"]
+    breakdown = [(rid, c, len([x for x in names.split(",") if x.strip()])) for rid, c, names in
+                 re.findall(r"(\d{10}) on `(\w+)`: ([^;]+?)(?:;|\.\s|$)", md.split("Rows come from", 1)[1].split("\n\n", 1)[0])] \
+        if runs else []
+    current = {"date": meta["started"][:10], "commit": code["short"], "final": bool(code.get("is_eval_final")),
+               "profile": _profile(meta["models"]["jobs"]), "tier": meta["models"]["tier"],
+               "runs": int(runs.group(1)) if runs else 1, "run_id": meta["run_id"],
+               "breakdown": [{"run": r, "commit": c, "rows": n} for r, c, n in sorted(breakdown, key=lambda x: -x[2])],
+               "stages": _stages(md)}
+    # One pass per row, each from its own published stage table (real.md). The Oct 31 rehearsal's README carries the Oct 29
+    # passes, whose folders hold no comparable table; its Oct 28 column is left out because its first-run cell (13/18) is
+    # real.json's count, where real.md, the published table, says 14/18.
+    rr_md = (REPO / "eval/results/real_rerun_2026-10-31/README.md").read_text()
+    stages = next(t for t in md_tables(rr_md) if t and "Stage" in t[0])
+    passes = []
+    for head in stages[0]:
+        m = re.match(r"(\w+ \d+)(?: main)? \(`(\w+)`, (\w+)\)", head)
+        if not m or "after" in head or m.group(1) != "Oct 29":
+            continue
+        passes.append({"date": m.group(1), "commit": m.group(2), "profile": "hybrid" if m.group(3) == "hybrid" else "Spark",
+                       "cells": {re.sub(r"^\d\. ", "", r["Stage"]): plain(r[head]) for r in stages},
+                       "src": src("eval/results/real_rerun_2026-10-31/README.md", "The four stages")})
+    for path in REAL_PASSES + ["eval/results/final/real.json"]:
+        j = json.loads((REPO / path).read_text())["meta"]
+        if path.startswith("eval/results/final/") and j["code"].get("is_eval_final"):
+            continue  # the final pass is its own row on the page
+        passes.append({"date": datetime.fromisoformat(j["started"]).astimezone(ET).strftime("%b %-d"), "commit": j["code"]["short"],
+                       "profile": _profile(j["models"]["jobs"]), "cells": _stages((REPO / path).with_suffix(".md").read_text()),
+                       "src": src(path.replace(".json", ".md"), "stages")})
+    passes.sort(key=lambda p: datetime.strptime(p["date"] + " 2026", "%b %d %Y"))
+    return {"current": current, "curve": curve, "rows": rows, "passes": passes,
+            "src": src("eval/results/final/real.json"), "md_src": src("eval/results/final/real.md"),
+            "passes_src": src("eval/results/real_rerun_2026-10-31/README.md", "The four stages")}
+
+
+REAL_CURVE = "eval/results/real_rerun_2026-11-02_wsd-baseline/real.json"
+
+
+def _check_readme_curve(curve: dict) -> None:
+    """The README's cost-curve table must give the site's numbers for the same pass. Skipped while the README has no such
+    row (or it still says TBD); a mismatch stops the build, so the two never ship different numbers."""
+    readme = (REPO / "README.md").read_text()
+    if "**The cost curve.**" not in readme:
+        return
+    label = "Nov 3, final" if curve["pass"]["final"] else f"{curve['pass']['date']}, `{curve['pass']['profile']}`"
+    table = next((t for t in md_tables(readme) if t and {"Pass", "Workflows", "Compiling it, once"} <= set(t[0])), None)
+    row = next((r for r in table or [] if r["Pass"].startswith(label)), None)
+    if not row:
+        sys.exit(f"README.md's cost curve has no row for {label}, the site's pass ({curve['pass']['src']['path']})")
+    if "TBD" in row["Workflows"]:
+        return
+    num = lambda pat, text: float(re.search(pat, text).group(1))
+    f, r, c = curve["first"], curve["rerun"], curve["compile"]
+    got = {"workflows": int(row["Workflows"]),
+           "first calls": num(r"([\d.]+) calls", row["The agent's first run"]),
+           "first s": num(r"([\d.]+) s", row["The agent's first run"]), "first $": num(r"\$([\d.]+)", row["The agent's first run"]),
+           "replay calls": num(r"([\d.]+) calls", row["Envoy's replay"]), "replay s": num(r"([\d.]+) s", row["Envoy's replay"]),
+           "compile $": num(r"\$([\d.]+)", row["Compiling it, once"])}
+    want = {"workflows": curve["n"], "first calls": f["calls"]["median"], "first s": f["seconds"]["median"],
+            "first $": f["usd"]["median"], "replay calls": r["calls"]["median"], "replay s": r["seconds"]["median"],
+            "compile $": c["median"]}
+    off = {k: (got[k], round(want[k], 4)) for k in want if abs(got[k] - want[k]) > (0.006 if k.endswith(" s") else 0.00006)}
+    if off:
+        sys.exit(f"README.md's cost curve ({label}) disagrees with the site's, from {curve['pass']['src']['path']}: {off}")
+
+
+# Real-app passes with their own folder (real.json and real.md), besides the eval's current one. Not the Nov 2 check
+# (wsd-check): its stage totals mix runs, as its README says.
+REAL_PASSES = ["eval/results/real_rerun_2026-10-31/real.json", "eval/results/real_rerun_2026-11-02_wsd-baseline/real.json"]
+STAGE_NAMES = {"1": "First run right", "2": "Compiled", "3": "Same input, no model call", "4": "New input, no model call"}
+
+
+def _stages(md: str) -> dict:
+    """A real.md's published stage table ("1. First run: … | 14/18"), keyed like the rehearsal README's rows."""
+    t = next(t for t in md_tables(md) if t and "Stage" in t[0] and "Passed" in t[0])
+    out = {}
+    for r in t:
+        m = re.match(r"(\d)\. ", r["Stage"])
+        if m:
+            out[STAGE_NAMES[m.group(1)]] = plain(r["Passed"]).replace(" counting a repair)", " with a repair)")
+    return out
 
 
 def memory() -> dict:
@@ -675,7 +742,11 @@ def safety() -> dict:
     routines = re.search(r"Routines: (\d+) of (\d+)", i_md)
     planted = dict(re.findall(r"- \*\*(\w+)\*\*: “(.+?)”", i_md))
     inbox = re.search(r"Injected values stored: \*\*(\d+)\*\*; instructions stored as facts: \*\*(\d+)\*\*", i_md)
+    screens = json.loads((REPO / "eval/results/final/safety.json").read_text())["screens"]["rows"]
+    by_screen = {r["screen"]: r["app"] for r in screens}
     return {
+        "captured": {"controls": len(screens), "screens": len(by_screen), "apps": len(set(by_screen.values())),
+                     "skylark_screens": sum(1 for a in by_screen.values() if a == "SkyLark")},
         "caught": [int(x) for x in caught.groups()] if caught else None,
         "reversible": [int(x) for x in rev.groups()] if rev else None,
         "controls": [{"app": r["App"], "control": plain(r["Control"]), "gate": r["Gate"]} for r in st[0]],
@@ -688,45 +759,54 @@ def safety() -> dict:
         "approval": json.loads((REC / "approval.json").read_text()),
         "safety_src": src("eval/results/final/safety.md"), "injection_src": src("eval/results/final/injection.md"),
         "planted_src": src("site/data/recordings/planted.json", "from data/runs, the injection suite's trace"),
-        "approval_src": src("site/data/recordings/approval.json", "loop A's API copy, read only"),
+        "approval_src": src("site/data/recordings/approval.json", "a test copy of Envoy, read only"),
     }
 
 
 def models() -> dict:
     vision = json.loads((REPO / "eval/results/phase6/vision.json").read_text())
-    p5 = (REPO / "docs/phase-5-results.md").read_text()
-    voice = next(r for r in md_tables(p5)[1] if r and "Voice, scripted" in next(iter(r.values())))
-    first = json.loads((REC / "starbucks-first.json").read_text())
-    replay = json.loads((REC / "starbucks-replay.json").read_text())
     return {
         "vision": vision["summary"]["all"], "vision_canvas": vision["summary"]["skylark-canvas"],
+        # SAM first, then grounding, on a fresh sample of the 52 targets: the line Envoy's default order rests on
+        "sam_then_grounding": [int(x) for x in re.search(r"SAM then grounding (\d+) of (\d+); grounding alone (\d+) of (\d+)",
+                                                          (REPO / "docs/phase-6-results.md").read_text()).groups()],
         "vision_src": src("eval/results/phase6/vision.json"),
         "sam": json.loads((REC / "sam.json").read_text()),
         "sam_src": src("site/data/recordings/sam.json", "from data/runs/p6-canvas-src"),
         "phase6_src": src("docs/phase-6-results.md", "Results"),
-        "voice": plain(list(voice.values())[1]), "voice_src": src("docs/phase-5-results.md", "Voice, scripted"),
-        "wonder_calls": [c for c in first["calls"] if c["model"].startswith("muse-wonder")],
-        "spark_calls": [c for c in first["calls"] if c["model"].startswith("muse-spark")],
-        "replay_calls": replay["calls"],
     }
+
+
+# Each suite's own file beside report.md (suite 8, AndroidWorld, reports elsewhere).
+SUITE_FILES = {"0": "compile", "1": "systems", "2": "repeats", "3": "change", "3b": "sizes", "4": "real", "5": "memory",
+               "6": "safety", "6b": "injection", "7": "interfaces"}
 
 
 def proof() -> dict:
     rep = (REPO / "eval/results/final/report.md").read_text()
     t = md_tables(rep)
     suites = [{"suite": plain(r["Suite"]), "result": plain(r["Result"]), "ran_on": plain(r["Ran on"])} for r in t[0]]
+    for s in suites:
+        f = SUITE_FILES.get(s["suite"].split(".")[0])
+        meta = json.loads((REPO / f"eval/results/final/{f}.json").read_text())["meta"] if f else None
+        s["profile"], s["tier"] = (_profile(meta["models"]["jobs"]), meta["models"]["tier"]) if meta else ("", "")
     targets = [{k: plain(v) for k, v in r.items()} for r in t[1]]
     charts = {n: image(REPO / f"eval/results/final/charts/{n}.png", f"chart-{n}", 1600) for n in
               ["cost_and_time_over_repeated_runs", "success_by_system_and_layout", "recovery_by_injected_change", "real_apps_stages"]}
     aw = (REPO / "docs/androidworld-results.md").read_text()
     head = re.search(r"\*\*Headline\.\*\* (.+)", aw).group(1)
     held = re.search(r"\*\*Held-out half:\*\* (.+)", aw)
+    rt = re.search(r"they did (\d+) of (\d+) instances, against the full agent's (\d+), at (\d+) model call against (\d+), "
+                   r"(\$[\d.]+) against (\$[\d.]+)", aw)
+    fb = re.search(r"with the agent run where a routine failed, (\d+) of (\d+)", aw)
+    nr = re.search(r"Envoy compiled (\d+) routines from its solved runs, and (\d+) did their own seed-30 task on their own", aw)
+    ho = re.search(r"On the held-out half, never used to choose a change, that is (\d+) of (\d+) \([\d.]+%\) against (\d+)", head)
     sizes = json.loads((REPO / "eval/results/final/sizes.json").read_text())
     phone = sizes["devices"]["phone"]
     rows = phone.get("rows", phone) if isinstance(phone, dict) else phone
     rows = rows if isinstance(rows, list) else list(rows.values())
     ok = [r for r in rows if r.get("passed")]
-    secs = sorted(r.get("duration_s") or 0 for r in rows)
+    secs = [r.get("duration_s") or 0 for r in rows]
     tests, files = 0, 0
     import ast
     for p in sorted((REPO / "backend/tests").rglob("test_*.py")):
@@ -737,9 +817,17 @@ def proof() -> dict:
         "suites": suites, "targets": targets, "charts": charts, "src": src("eval/results/final/report.md"),
         "charts_src": src("eval/results/final/charts"),
         "aw": {"headline": plain(head), "held_out": plain(held.group(1)) if held else "",
-               "src": src("docs/androidworld-results.md", "Headline")},
+               # framed by cost: routines against the full agent on new seeds, and the agent's held-out half
+               "routines": {"did": rt.group(1), "of": rt.group(2), "agent": rt.group(3), "calls": rt.group(4),
+                            "agent_calls": rt.group(5), "usd": rt.group(6), "agent_usd": rt.group(7),
+                            "fallback": [int(fb.group(1)), int(fb.group(2))],
+                            "compiled": int(nr.group(1)), "alone": int(nr.group(2))},
+               "held": [int(x) for x in ho.groups()],
+               "model": plain(re.search(r"^\| Model \| ([^|,]+)", aw, re.M).group(1)).strip(),
+               "src": src("docs/androidworld-results.md", "Headline, Routines")},
         "phone": {"passed": len(ok), "runs": len(rows), "calls": sum(r.get("calls") or 0 for r in rows),
-                  "median_s": secs[len(secs) // 2] if secs else None, "commit": sizes["meta"]["code"]["short"],
+                  "median_s": round(statistics.median(secs), 2) if secs else None, "commit": sizes["meta"]["code"]["short"],
+                  "profile": _profile(sizes["meta"]["models"]["jobs"]), "tier": sizes["meta"]["models"]["tier"],
                   "date": sizes["meta"]["started"][:10], "src": src("eval/results/final/sizes.json", "devices.phone")},
         "tests": {"functions": tests, "files": files, "src": src("backend/tests")},
     }
@@ -815,20 +903,36 @@ def spark_run(path: Path) -> dict:
             "model_calls": last["model_calls"], "mcp_calls": last["mcp_calls"], "usd": round(last["cost_usd"], 4)}
 
 
+# Muse's Nov 2 dry run: what stopped the two tasks that didn't reach a final button, in the site's words (from the notes in
+# task-rows.json). Keyed by task id; the build stops if an id isn't in the file.
+MUSE_DRY_RUN_NOTES = {
+    "task-1102-114842-f1dc": ("Its “use Envoy's phone?” ask went unanswered for 15 minutes, so the task moved to an emulator, "
+                              "which had no Instagram. Fixed since: an unanswered ask now ends the task."),
+    "task-1102-121512-0b47": ("The retry, on Envoy's phone. A Story from the night before was still live, so the routine's first tap "
+                              "opened it instead of a new Story; the agent's fallback ran out of steps and asked the person. Still open."),
+}
+
+
 def agents() -> dict:
     """Agents calling Envoy: the Spark agent's cross-post (four routine tools at once, on Envoy's phone), Muse's Nov 2 dry run
     and its captures from the Oct 29 link sitting, and Claude Code's tasks on the live API (task rows read read-only)."""
     cc = json.loads((SPARK / "claude-code/task-rows.json").read_text())
     muse = REPO / "eval/results/muse-link"
+    muse_rows = json.loads((REPO / "eval/results/showcase/muse-2026-11-02/task-rows.json").read_text())
+    ids = {t["id"] for t in muse_rows["tasks"]}
+    assert set(MUSE_DRY_RUN_NOTES) <= ids, set(MUSE_DRY_RUN_NOTES) - ids
+    for t in muse_rows["tasks"]:
+        t["note"] = MUSE_DRY_RUN_NOTES.get(t["id"], "")
     return {
         "crosspost": spark_run(SPARK / "crosspost/run2-four-posts.json"),
         "crosspost_src": src(rel(SPARK / "crosspost/run2-four-posts.json"), "the Spark agent page's event log"),
         "crosspost_readme": src(rel(SPARK / "crosspost/README.md")),
+        "crosspost_commit": re.search(r"## `run2-four-posts\.json`.*\(main `(\w+)`\)", (SPARK / "crosspost/README.md").read_text()).group(1),
         "run1": {k: v for k, v in spark_run(SPARK / "crosspost/run1-three-posts.json").items() if k != "rows"},
         "run1_src": src(rel(SPARK / "crosspost/run1-three-posts.json")),
         "shots": {"asks": image(SPARK / "crosspost/run2-four-phone-asks.png", "agents-spark-four-asks", 1600),
                   "declined": image(SPARK / "crosspost/run2-all-declined.png", "agents-spark-all-declined", 1600)},
-        "muse": {"dry_run": json.loads((REPO / "eval/results/showcase/muse-2026-11-02/task-rows.json").read_text()),
+        "muse": {"dry_run": muse_rows,
                  "dry_run_src": src("eval/results/showcase/muse-2026-11-02/task-rows.json", "Muse's tasks, read read-only"),
                  "mac": image(muse / "e3-mac-moves-clip-and-sidecar.jpg", "muse-mac-outbox", crop=(85, 38, 740, 476)),
                  "no_accept": image(muse / "muse-refuses-to-accept-offers.jpg", "muse-no-accept-tool"),
@@ -872,50 +976,87 @@ SHOWCASE = {
     "tiktok_post_sound": ("TikTok", "A TikTok with a sound from TikTok's library"),
     "youtube_short_sound": ("YouTube", "A YouTube Short with a sound from YouTube's library"),
 }
+# What a person changed by hand in each, worded from the version's own changes (checked below against index.json, so a new
+# version with other edits stops the build instead of leaving this wrong).
+HAND_EDITS = {
+    "instagram_reel_song": None,
+    "instagram_story_poll": None,
+    "tiktok_post_sound": "three hand edits: a 3 s wait before TikTok's drawn sound list, the app's name, and no before-check on its launch",
+    "youtube_short_sound": "one hand edit: a stray before-check (“Captions unavailable”) dropped",
+}
+
+
+LIVE = REPO / "eval/results/showcase/live-2026-11-02/task-rows.json"  # the real posts' task rows, read read-only from the live API
+# The one real post that wasn't right, in the site's words (from the file's notes). Keyed by task id; the build stops if the id
+# isn't in the file. Every other row with status "done" went live (docs/demo-showcase.md, "The real posts").
+LIVE_NOTES = {
+    "task-1102-014139-7f5e": "published without its song: the routine tapped the sound's row, but the sound never reached the "
+                             "editor; then the run failed its done-check",
+}
 
 
 def showcase() -> dict:
-    """The four app-only routines: each one's first run and its replays (runs.md, rows copied), its active version in the
-    library, and what happened when the user had it post for real (showcase's report, the result cell's first sentence)."""
+    """The four app-only routines: how each was made, its rehearsals (runs.md, rows copied), an automatic repair and its trial
+    where there is one, and its real posts (the live API's task rows)."""
     runs = md_tables((REPO / "eval/results/showcase/runs/runs.md").read_text())[0]
-    report = (REPO / "prompts/showcase-report.md").read_text()
-    posts = next(t for t in md_tables(report) if t and {"Post", "Task", "Routine", "Result"} <= set(t[0]))
+    live = json.loads(LIVE.read_text())["tasks"]
+    assert set(LIVE_NOTES) <= {t["id"] for t in live}, set(LIVE_NOTES) - {t["id"] for t in live}
+    muse = {t["id"]: t for t in json.loads((REPO / "eval/results/showcase/muse-2026-11-02/task-rows.json").read_text())["tasks"]}
+    # A rehearsal the agent finished: its run file's model jobs include a plan or a step (vision reads and repairs don't).
+    agent_runs = set()
+    for f in sorted((REPO / "eval/results/showcase/runs").glob("*-replay-*.json")):
+        j = json.loads(f.read_text())
+        if {"plan", "step"} & set((j.get("spent") or {}).get("jobs") or {}):
+            agent_runs.add(j["time"])
     cards = []
     for name, (app, what) in SHOWCASE.items():
         lib = REPO / f"data/routines/{name}"
         ix = json.loads((lib / "index.json").read_text())
-        active = next(v for v in ix["versions"] if v["version"] == ix["active"])
+        ver = {v["version"]: v for v in ix["versions"]}
+        active = ver[ix["active"]]
+        # An automatic repair (a version made from a task) patches the version before it; that one is the compiled base.
+        base = ver[ix["active"] - 1] if active.get("source_task") else active
+        made = " ".join(base["changes"])
+        hand = HAND_EDITS[name]
+        assert ("no hand edits" in made) == (hand is None) and (hand is None or "hand edit" in made), (name, made[:200])
         y = routine_yaml(lib / f"v{ix['active']}.yaml")
         source = re.search(r"task-(\d\d)(\d\d)-(\d\d)(\d\d)(\d\d)-\w{4}", ix["versions"][0]["changes"][0])
         when = datetime(2026, *(int(source.group(i)) for i in range(1, 6)))
         # runs.md times the row from the runner's own clock, up to a second before the task's id
         first = next(r for r in runs if r["mode"] == "first" and abs((datetime.fromisoformat(r["when"]) - when).total_seconds()) <= 5)
-        # Replays of the active version: rows from after it was compiled that name it, or name no version (the agent
-        # finished the run). Earlier rows may name the same version number for a hand-tuned candidate tried that night.
-        compiled = yaml.safe_load((lib / f"v{ix['active']}.yaml").read_text())["compiled_from"]["compiled_at"]
-        mark, since = f"(routine {name} v{ix['active']})", compiled.replace(" ", "T")
-        reps = [r for r in runs if r["mode"] == "replay" and r["routine"] == name and r["when"] >= since
-                and (mark in r["approvals"] or "(routine " not in r["approvals"])]
+        # Rehearsals of what's in the library: rows from after the base was compiled that name the base or the active version,
+        # or name none (the agent finished the run). Earlier rows may reuse a version number for a hand-tuned candidate.
+        compiled = yaml.safe_load((lib / f"v{base['version']}.yaml").read_text())["compiled_from"]["compiled_at"]
+        marks = {f"(routine {name} v{base['version']})", f"(routine {name} v{ix['active']})"}
+        reps = [r for r in runs if r["mode"] == "replay" and r["routine"] == name and r["when"] >= compiled.replace(" ", "T")
+                and (any(m in r["approvals"] for m in marks) or "(routine " not in r["approvals"])]
         row = lambda r: {"when": r["when"], "ok": r["ok"] == "yes", "asked": r["asked at"], "to_ask": r["start → post asked"],
-                         "calls": int(r["calls"]), "usd": float(r["$"])}
-        real = []
-        for p in posts:
-            if f"`{name}`" in p["Routine"]:
-                first_sentence = re.split(r"(?<=[.;])\s", plain(p["Result"]), maxsplit=1)[0]
-                real.append({"post": plain(p["Post"]), "task": plain(p["Task"]), "routine": plain(p["Routine"]),
-                             # test accounts' handles stay off the site
-                             "result": re.sub(r" as @?[\w.-]+(?=[,;])", "", first_sentence)})
+                         "calls": int(r["calls"]), "usd": float(r["$"]), "agent": r["when"] in agent_runs}
+        every = [r for r in runs if r["mode"] == "replay" and r["routine"] == name]
+        # Envoy's own model calls; "seconds" isn't shown: it includes the waits for both yeses on the iPhone.
+        real = [{"task": t["id"], "live": t["status"] == "done", "calls": t["model_calls"], "inputs": t["inputs"],
+                 "created": t["created"], "note": LIVE_NOTES.get(t["id"], "")}
+                for t in live if t["routine"] == name]
+        assert all(r["live"] or r["note"] for r in real), name
+        repair = None
+        if active.get("source_task"):
+            trial = active.get("trial") or {}
+            t = muse.get(re.sub(r"-r\d+$", "", trial.get("task_id", "")))
+            repair = {"version": ix["active"], "from_task": re.sub(r"-r\d+$", "", active["source_task"]),
+                      "after_live_post": any(re.sub(r"-r\d+$", "", active["source_task"]) == p["task"] for p in real),
+                      "steps": len(active["changes"]), "passed": trial.get("passed"),
+                      "trial": t and {"task": t["id"], "status": t["status"], "calls": t["model_calls"], "seconds": t["seconds"],
+                                      "by": "Muse's dry run, Nov 2"}}
         cards.append({
-            "name": name, "app": app, "what": what, "version": ix["active"], "steps": len(y["steps"]),
-            "inputs": list(y["inputs"].keys()), "outputs": y["outputs"], "made": active["changes"][0], "compiled": compiled,
-            "first": row(first) | {"task": source.group(0)}, "replays": [row(r) for r in reps], "real": real,
+            "name": name, "app": app, "what": what, "version": ix["active"], "base": base["version"], "steps": len(y["steps"]),
+            "inputs": list(y["inputs"].keys()), "outputs": y["outputs"], "hand": hand, "compiled": compiled,
+            "first": row(first) | {"task": source.group(0)}, "replays": [row(r) for r in reps], "real": real, "repair": repair,
+            "every": {"ok": sum(1 for r in every if r["ok"] == "yes"), "n": len(every)},
             "src": src(f"data/routines/{name}/index.json"), "yaml_src": src(f"data/routines/{name}/v{ix['active']}.yaml"),
         })
     return {"cards": cards, "runs_src": src("eval/results/showcase/runs/runs.md"),
-            "report_src": src("prompts/showcase-report.md", "The real posts"), "doc_src": src("docs/demo-showcase.md"),
-            "p3_src": src("eval/results/showcase/p3.md"),
-            "poll": image(REPO / "eval/results/showcase/recon/20-ig-story-with-poll.png", "showcase-story-poll", 540),
-            "poll_src": src("eval/results/showcase/recon/20-ig-story-with-poll.png")}
+            "live_src": src(rel(LIVE), "the real posts' task rows"), "doc_src": src("docs/demo-showcase.md"),
+            "p3_src": src("eval/results/showcase/p3.md")}
 
 
 def watches() -> dict:
@@ -959,7 +1100,8 @@ def numbers(data: dict) -> dict:
     p = data["proof"]["phone"]
     rows.append({"what": "Pixel 5: the 10 core routines on 3 new bookings each", "value": f"{p['passed']}/{p['runs']}, {p['calls']} model calls",
                  "commit": p["commit"], "final": False, "src": p["src"]["path"]})
-    rows.append({"what": "AndroidWorld", "value": data["proof"]["aw"]["headline"][:160], "commit": "androidworld branch",
+    # The AndroidWorld work was merged into main on Oct 29 (105d04e); its headline's "as on main" is main before that merge.
+    rows.append({"what": "AndroidWorld", "value": data["proof"]["aw"]["headline"], "commit": "merged into main Oct 29 (105d04e)",
                  "final": False, "src": data["proof"]["aw"]["src"]["path"]})
     return {"eval_final": st, "rows": rows}
 
@@ -976,7 +1118,7 @@ def build() -> dict:
         "first_run": first_run(),
         "learned": learned(),
         "repair": repair(),
-        "apps": apps(),
+        "real": real_apps(),
         "teach": teach(),
         "memory": memory(),
         "safety": safety(),
