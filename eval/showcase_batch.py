@@ -169,6 +169,12 @@ def make_clip(label: str, colour: tuple[int, int, int], out: Path) -> Path:
     return out
 
 
+def clip_of(a: dict[str, Any]) -> Path:
+    """The attempt's clip: the one `clips` made before the batch, or made now if it's missing."""
+    out = CLIPS / f"batch-{a['code'].lower()}.mp4"
+    return out if out.exists() else make_clip(a["clip_label"], WORKFLOWS[a["workflow"]].colour, out)
+
+
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -306,7 +312,7 @@ def run_attempt(dev: Any, a: dict[str, Any], args: argparse.Namespace, versions:
     t0 = time.time()
     try:
         rec["setup"] = set_state(dev, a, args)
-        clip = make_clip(a["clip_label"], WORKFLOWS[a["workflow"]].colour, CLIPS / f"batch-{a['code'].lower()}.mp4")
+        clip = clip_of(a)
         p = py("eval/run_showcase.py", "push", str(clip), "--api-dir", args.api_dir, timeout=180, cwd=tag_dir)
         got = json.loads(p.stdout[p.stdout.index("{"):]) if "{" in p.stdout else {}
         rec["clip"] = {"file": clip.name, "sha256": sha256(clip), "remote_path": got.get("remote_path"), "media_uri": got.get("media_uri")}
@@ -381,13 +387,18 @@ def cmd_run(args: argparse.Namespace) -> int:
     swaps = json.loads((OUT / "songs.json").read_text()).get("swaps", {}) if (OUT / "songs.json").exists() else {}
     swaps = {int(k): v for k, v in swaps.items()}
     codes = args.only.split(",") if args.only else ORDER[ORDER.index(args.start):] if args.start else ORDER
+    until = datetime.combine(datetime.now().date(), datetime.strptime(args.until, "%H:%M").time()) if args.until else None
     dev = rs.connect()
     last_end = 0.0
-    for code in codes:
+    for i, code in enumerate(codes):
         if (ATTEMPTS / f"{code}.json").exists() and not args.redo:
             print(f"{code}: already recorded, skipped")
             continue
         wait = args.gap - (time.time() - last_end)
+        if until and datetime.now().timestamp() + max(wait, 0) > until.timestamp():  # between attempts, never inside one
+            left = [c for c in codes[i:] if args.redo or not (ATTEMPTS / f"{c}.json").exists()]
+            print(f"STOP at {datetime.now():%H:%M}: no attempt starts after {args.until}. Not run ({len(left)}): {' '.join(left)}")
+            return 3
         if last_end and wait > 0:
             time.sleep(wait)
         a = attempt(code, swaps)
@@ -401,6 +412,18 @@ def cmd_run(args: argparse.Namespace) -> int:
         if rec.get("stop_rule"):
             print(f"STOP: {rec['stop_rule']}")
             return 2
+    return 0
+
+
+def cmd_clips(args: argparse.Namespace) -> int:
+    """Make the 40 clips before the batch (off the phone), and list each one's hash."""
+    made = {}
+    for code in ORDER:
+        a = attempt(code)
+        out = make_clip(a["clip_label"], WORKFLOWS[a["workflow"]].colour, CLIPS / f"batch-{code.lower()}.mp4")
+        made[code] = {"file": out.name, "sha256": sha256(out)}
+    (CLIPS / "manifest.json").write_text(json.dumps(made, indent=1))
+    print(f"{len(made)} clips in {CLIPS}")
     return 0
 
 
@@ -475,12 +498,14 @@ def main() -> int:
             p.add_argument("--from", dest="start", default="")
             p.add_argument("--gap", type=float, default=120.0)
             p.add_argument("--redo", action="store_true")
+            p.add_argument("--until", default="", help="HH:MM today: start no attempt after this (the Pixel's window)")
         else:
             p.add_argument("--alternates", type=lambda s: [int(x) for x in s.split(",")], default=None,
                            help="check these attempts' alternates instead (e.g. 6,9)")
     sub.add_parser("report")
+    sub.add_parser("clips")
     args = ap.parse_args()
-    return {"run": cmd_run, "songs": cmd_songs, "report": cmd_report}[args.cmd](args)
+    return {"run": cmd_run, "songs": cmd_songs, "report": cmd_report, "clips": cmd_clips}[args.cmd](args)
 
 
 if __name__ == "__main__":

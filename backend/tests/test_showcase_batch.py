@@ -55,3 +55,18 @@ def test_outcome_checks_say_yes_no_or_not_checkable_never_assume():
     off = _rec("S", asked=("Upload Short",), checks={"picks": {"sound_title": "shown"}, "fields": {"short_title": "not on the final screen"},
                                                        "clip": "not checkable", "problems": []})
     assert sb.outcome_checks(off) == {"clip": "not checkable", "song": "yes", "caption": "not checkable", "poll": "n/a"}
+
+
+def test_until_stops_between_attempts_and_lists_the_rest(tmp_path, monkeypatch, capsys):
+    import argparse
+    monkeypatch.setattr(sb, "ATTEMPTS", tmp_path / "attempts")
+    monkeypatch.setattr(sb, "OUT", tmp_path)
+    monkeypatch.setattr(sb, "copy_ok", lambda args, tag: {"tag": "x", "copy_head": "x", "copy_clean": True, "push_subs": 0})
+    monkeypatch.setattr(sb.rs, "connect", lambda: object())
+    ran = []
+    monkeypatch.setattr(sb, "run_attempt", lambda dev, a, args, v: ran.append(a["code"]) or {**a, "class": "no repair", "checks": {}, "wall_s": 1})
+    monkeypatch.setattr(sb, "write_table", lambda: None)
+    args = argparse.Namespace(tag_dir=str(tmp_path), only="R01,T01,S01", start="", gap=0.0, redo=False, until="00:00")
+    assert sb.cmd_run(args) == 3 and ran == []  # nothing starts after the cutoff
+    assert "Not run (3): R01 T01 S01" in capsys.readouterr().out
+    assert sb.cmd_run(argparse.Namespace(**{**vars(args), "until": ""})) == 0 and ran == ["R01", "T01", "S01"]
