@@ -1,0 +1,1509 @@
+{
+ "at": "2026-11-02 20:57:18 EST",
+ "copy": "127.0.0.1:8761, branch claude/agent-door-cross-post 2fda9b0",
+ "approval_rules": {
+  "com.instagram.android": "always",
+  "com.zhiliaoapp.musically": "always",
+  "com.google.android.youtube": "always"
+ },
+ "tools": [
+  "create_trigger",
+  "cross_post",
+  "get_file",
+  "get_task",
+  "instagram_reel_song",
+  "list_phones",
+  "list_routines",
+  "memory_get",
+  "memory_note",
+  "memory_search",
+  "phone_updates",
+  "run_routine",
+  "run_task",
+  "send_to_phone",
+  "tiktok_post_sound",
+  "youtube_search_first_video",
+  "youtube_short_sound"
+ ],
+ "phone": {
+  "id": "phone-09031FDD4000C6",
+  "name": "Envoy's phone",
+  "online": true
+ },
+ "push": {
+  "name": "xpost-205719.mp4",
+  "offer_action": {
+   "type": "handoff",
+   "handoff_id": "handoff-1102-205724-0456",
+   "file": "xpost-205719.mp4",
+   "device": "phone-09031FDD4000C6",
+   "then": null
+  },
+  "media_uri": "content://media/external/video/media/1000000133",
+  "remote_path": "/sdcard/Movies/Envoy/xpost-205719.mp4",
+  "pushes_json": {
+   "09031FDD4000C6": {
+    "kind": "video",
+    "remote_path": "/sdcard/Movies/Envoy/xpost-205719.mp4",
+    "name": "xpost-205719.mp4",
+    "media_uri": "content://media/external/video/media/1000000133",
+    "at": 1793671047.8861
+   }
+  }
+ },
+ "start": {
+  "task_id": "task-1102-205728-0023",
+  "status": "running",
+  "task_url": "http://127.0.0.1:8761/?task=task-1102-205728-0023",
+  "posts": [
+   {
+    "routine": "instagram_reel_song",
+    "app": "Instagram",
+    "status": "queued"
+   },
+   {
+    "routine": "youtube_short_sound",
+    "app": "YouTube (youtube_short_sound)",
+    "status": "queued"
+   },
+   {
+    "routine": "youtube_search_first_video",
+    "app": "YouTube (youtube_search_first_video)",
+    "status": "queued"
+   },
+   {
+    "routine": "tiktok_post_sound",
+    "app": "TikTok",
+    "status": "queued"
+   }
+  ],
+  "text": "Posting to Instagram, YouTube (youtube_short_sound), YouTube (youtube_search_first_video), TikTok, one after another. Each post waits for the user's OK in Envoy on their phone; follow it with get_task.",
+  "returned_in_s": 0.26
+ },
+ "pass1": {
+  "task": {
+   "status": "declined",
+   "result": "Instagram: not posted (declined) · YouTube (youtube_short_sound): not posted (declined) · YouTube (youtube_search_first_video): done · TikTok: not posted (declined)",
+   "detail": "Not posted: Instagram (declined); YouTube (youtube_short_sound) (declined); TikTok (declined); a retry runs only Instagram, YouTube (youtube_short_sound) and TikTok",
+   "retry": "cross_post with retry=task-1102-205728-0023 runs only Instagram, YouTube (youtube_short_sound), TikTok again"
+  },
+  "posts": [
+   {
+    "routine": "instagram_reel_song",
+    "app": "com.instagram.android",
+    "app_name": "Instagram",
+    "label": "Instagram",
+    "status": "declined",
+    "text": "not posted: the post wasn't approved (the user declined the approval)",
+    "task_id": "task-1102-205728-00d7",
+    "attempts": 1
+   },
+   {
+    "routine": "youtube_short_sound",
+    "app": "com.google.android.youtube",
+    "app_name": "YouTube",
+    "label": "YouTube (youtube_short_sound)",
+    "status": "declined",
+    "text": "not posted: the post wasn't approved (the user declined the approval)",
+    "task_id": "task-1102-205935-e9d9",
+    "attempts": 1
+   },
+   {
+    "routine": "youtube_search_first_video",
+    "app": "com.google.android.youtube",
+    "app_name": "YouTube",
+    "label": "YouTube (youtube_search_first_video)",
+    "status": "done",
+    "text": "done",
+    "task_id": "task-1102-210017-20c6",
+    "attempts": 1
+   },
+   {
+    "routine": "tiktok_post_sound",
+    "app": "com.zhiliaoapp.musically",
+    "app_name": "TikTok",
+    "label": "TikTok",
+    "status": "declined",
+    "text": "not posted: the post wasn't approved (the user declined the approval)",
+    "task_id": "task-1102-210029-4057",
+    "attempts": 1
+   }
+  ],
+  "seen": [
+   [
+    "running",
+    [
+     [
+      "Instagram",
+      "running"
+     ],
+     [
+      "YouTube (youtube_short_sound)",
+      "queued"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "queued"
+     ],
+     [
+      "TikTok",
+      "queued"
+     ]
+    ]
+   ],
+   [
+    "needs_you",
+    [
+     [
+      "Instagram",
+      "waiting"
+     ],
+     [
+      "YouTube (youtube_short_sound)",
+      "queued"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "queued"
+     ],
+     [
+      "TikTok",
+      "queued"
+     ]
+    ]
+   ],
+   [
+    "running",
+    [
+     [
+      "Instagram",
+      "running"
+     ],
+     [
+      "YouTube (youtube_short_sound)",
+      "queued"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "queued"
+     ],
+     [
+      "TikTok",
+      "queued"
+     ]
+    ]
+   ],
+   [
+    "waiting_approval",
+    [
+     [
+      "Instagram",
+      "waiting"
+     ],
+     [
+      "YouTube (youtube_short_sound)",
+      "queued"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "queued"
+     ],
+     [
+      "TikTok",
+      "queued"
+     ]
+    ]
+   ],
+   [
+    "needs_you",
+    [
+     [
+      "Instagram",
+      "declined"
+     ],
+     [
+      "YouTube (youtube_short_sound)",
+      "waiting"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "queued"
+     ],
+     [
+      "TikTok",
+      "queued"
+     ]
+    ]
+   ],
+   [
+    "running",
+    [
+     [
+      "Instagram",
+      "declined"
+     ],
+     [
+      "YouTube (youtube_short_sound)",
+      "running"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "queued"
+     ],
+     [
+      "TikTok",
+      "queued"
+     ]
+    ]
+   ],
+   [
+    "waiting_approval",
+    [
+     [
+      "Instagram",
+      "declined"
+     ],
+     [
+      "YouTube (youtube_short_sound)",
+      "waiting"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "queued"
+     ],
+     [
+      "TikTok",
+      "queued"
+     ]
+    ]
+   ],
+   [
+    "needs_you",
+    [
+     [
+      "Instagram",
+      "declined"
+     ],
+     [
+      "YouTube (youtube_short_sound)",
+      "declined"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "waiting"
+     ],
+     [
+      "TikTok",
+      "queued"
+     ]
+    ]
+   ],
+   [
+    "running",
+    [
+     [
+      "Instagram",
+      "declined"
+     ],
+     [
+      "YouTube (youtube_short_sound)",
+      "declined"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "running"
+     ],
+     [
+      "TikTok",
+      "queued"
+     ]
+    ]
+   ],
+   [
+    "needs_you",
+    [
+     [
+      "Instagram",
+      "declined"
+     ],
+     [
+      "YouTube (youtube_short_sound)",
+      "declined"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "done"
+     ],
+     [
+      "TikTok",
+      "waiting"
+     ]
+    ]
+   ],
+   [
+    "running",
+    [
+     [
+      "Instagram",
+      "declined"
+     ],
+     [
+      "YouTube (youtube_short_sound)",
+      "declined"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "done"
+     ],
+     [
+      "TikTok",
+      "running"
+     ]
+    ]
+   ],
+   [
+    "waiting_approval",
+    [
+     [
+      "Instagram",
+      "declined"
+     ],
+     [
+      "YouTube (youtube_short_sound)",
+      "declined"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "done"
+     ],
+     [
+      "TikTok",
+      "waiting"
+     ]
+    ]
+   ],
+   [
+    "declined",
+    [
+     [
+      "Instagram",
+      "declined"
+     ],
+     [
+      "YouTube (youtube_short_sound)",
+      "declined"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "done"
+     ],
+     [
+      "TikTok",
+      "declined"
+     ]
+    ]
+   ]
+  ],
+  "part_order": [
+   "instagram_reel_song",
+   "youtube_short_sound",
+   "youtube_search_first_video",
+   "tiktok_post_sound"
+  ]
+ },
+ "retry": {
+  "task_id": "task-1102-205728-0023",
+  "task_url": "http://127.0.0.1:8761/?task=task-1102-205728-0023",
+  "retrying": [
+   "Instagram",
+   "YouTube (youtube_short_sound)",
+   "TikTok"
+  ],
+  "left_alone": [
+   {
+    "app": "YouTube (youtube_search_first_video)",
+    "status": "done"
+   }
+  ],
+  "posts": [
+   {
+    "routine": "instagram_reel_song",
+    "app": "com.instagram.android",
+    "app_name": "Instagram",
+    "label": "Instagram",
+    "status": "running",
+    "text": "posting…",
+    "task_id": "task-1102-210140-addb",
+    "attempts": 2
+   },
+   {
+    "routine": "youtube_short_sound",
+    "app": "com.google.android.youtube",
+    "app_name": "YouTube",
+    "label": "YouTube (youtube_short_sound)",
+    "status": "queued",
+    "text": "queued",
+    "task_id": "task-1102-205935-e9d9",
+    "attempts": 1
+   },
+   {
+    "routine": "youtube_search_first_video",
+    "app": "com.google.android.youtube",
+    "app_name": "YouTube",
+    "label": "YouTube (youtube_search_first_video)",
+    "status": "done",
+    "text": "done",
+    "task_id": "task-1102-210017-20c6",
+    "attempts": 1
+   },
+   {
+    "routine": "tiktok_post_sound",
+    "app": "com.zhiliaoapp.musically",
+    "app_name": "TikTok",
+    "label": "TikTok",
+    "status": "queued",
+    "text": "queued",
+    "task_id": "task-1102-210029-4057",
+    "attempts": 1
+   }
+  ],
+  "text": "Posting again to Instagram, YouTube (youtube_short_sound), TikTok, one after another; each post waits for the user's OK in Envoy.",
+  "returned_in_s": 0.04
+ },
+ "timeline": [
+  {
+   "t": 9.2,
+   "status": "running",
+   "detail": null,
+   "posts": [
+    {
+     "routine": "instagram_reel_song",
+     "app": "com.instagram.android",
+     "app_name": "Instagram",
+     "label": "Instagram",
+     "status": "running",
+     "text": "posting…",
+     "task_id": "task-1102-205728-00d7",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    },
+    {
+     "routine": "tiktok_post_sound",
+     "app": "com.zhiliaoapp.musically",
+     "app_name": "TikTok",
+     "label": "TikTok",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    }
+   ]
+  },
+  {
+   "t": 12.2,
+   "status": "needs_you",
+   "detail": "Instagram: Envoy wants to use Envoy's phone for this task",
+   "posts": [
+    {
+     "routine": "instagram_reel_song",
+     "app": "com.instagram.android",
+     "app_name": "Instagram",
+     "label": "Instagram",
+     "status": "waiting",
+     "text": "waiting for the user: Envoy wants to use Envoy's phone for this task",
+     "task_id": "task-1102-205728-00d7",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    },
+    {
+     "routine": "tiktok_post_sound",
+     "app": "com.zhiliaoapp.musically",
+     "app_name": "TikTok",
+     "label": "TikTok",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    }
+   ]
+  },
+  {
+   "t": 12.2,
+   "phone_yes": "task-1102-205728-00d7",
+   "routine": "instagram_reel_song",
+   "http": 200
+  },
+  {
+   "t": 15.2,
+   "status": "running",
+   "detail": null,
+   "posts": [
+    {
+     "routine": "instagram_reel_song",
+     "app": "com.instagram.android",
+     "app_name": "Instagram",
+     "label": "Instagram",
+     "status": "running",
+     "text": "posting…",
+     "task_id": "task-1102-205728-00d7",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    },
+    {
+     "routine": "tiktok_post_sound",
+     "app": "com.zhiliaoapp.musically",
+     "app_name": "TikTok",
+     "label": "TikTok",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    }
+   ]
+  },
+  {
+   "t": 135.7,
+   "status": "waiting_approval",
+   "detail": "Instagram: waiting for you",
+   "posts": [
+    {
+     "routine": "instagram_reel_song",
+     "app": "com.instagram.android",
+     "app_name": "Instagram",
+     "label": "Instagram",
+     "status": "waiting",
+     "text": "waiting for the user",
+     "task_id": "task-1102-205728-00d7",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    },
+    {
+     "routine": "tiktok_post_sound",
+     "app": "com.zhiliaoapp.musically",
+     "app_name": "TikTok",
+     "label": "TikTok",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    }
+   ]
+  },
+  {
+   "t": 135.7,
+   "declined": "tap \"Share\" in com.instagram.android (routine instagram_reel_song v3)",
+   "task": "task-1102-205728-00d7",
+   "why": ""
+  },
+  {
+   "t": 138.7,
+   "status": "needs_you",
+   "detail": "YouTube (youtube_short_sound): Envoy wants to use Envoy's phone for this task",
+   "posts": [
+    {
+     "routine": "instagram_reel_song",
+     "app": "com.instagram.android",
+     "app_name": "Instagram",
+     "label": "Instagram",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (the user declined the approval)",
+     "task_id": "task-1102-205728-00d7",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "waiting",
+     "text": "waiting for the user: Envoy wants to use Envoy's phone for this task",
+     "task_id": "task-1102-205935-e9d9",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    },
+    {
+     "routine": "tiktok_post_sound",
+     "app": "com.zhiliaoapp.musically",
+     "app_name": "TikTok",
+     "label": "TikTok",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    }
+   ]
+  },
+  {
+   "t": 138.7,
+   "phone_yes": "task-1102-205935-e9d9",
+   "routine": "youtube_short_sound",
+   "http": 200
+  },
+  {
+   "t": 141.7,
+   "status": "running",
+   "detail": null,
+   "posts": [
+    {
+     "routine": "instagram_reel_song",
+     "app": "com.instagram.android",
+     "app_name": "Instagram",
+     "label": "Instagram",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (the user declined the approval)",
+     "task_id": "task-1102-205728-00d7",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "running",
+     "text": "posting…",
+     "task_id": "task-1102-205935-e9d9",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    },
+    {
+     "routine": "tiktok_post_sound",
+     "app": "com.zhiliaoapp.musically",
+     "app_name": "TikTok",
+     "label": "TikTok",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    }
+   ]
+  },
+  {
+   "t": 177.9,
+   "status": "waiting_approval",
+   "detail": "YouTube (youtube_short_sound): waiting for you",
+   "posts": [
+    {
+     "routine": "instagram_reel_song",
+     "app": "com.instagram.android",
+     "app_name": "Instagram",
+     "label": "Instagram",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (the user declined the approval)",
+     "task_id": "task-1102-205728-00d7",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "waiting",
+     "text": "waiting for the user",
+     "task_id": "task-1102-205935-e9d9",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    },
+    {
+     "routine": "tiktok_post_sound",
+     "app": "com.zhiliaoapp.musically",
+     "app_name": "TikTok",
+     "label": "TikTok",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    }
+   ]
+  },
+  {
+   "t": 177.9,
+   "declined": "tap \"Upload Short\" in com.google.android.youtube (routine youtube_short_sound v3)",
+   "task": "task-1102-205935-e9d9",
+   "why": ""
+  },
+  {
+   "t": 180.9,
+   "status": "needs_you",
+   "detail": "YouTube (youtube_search_first_video): Envoy wants to use Envoy's phone for this task",
+   "posts": [
+    {
+     "routine": "instagram_reel_song",
+     "app": "com.instagram.android",
+     "app_name": "Instagram",
+     "label": "Instagram",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (the user declined the approval)",
+     "task_id": "task-1102-205728-00d7",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (the user declined the approval)",
+     "task_id": "task-1102-205935-e9d9",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "waiting",
+     "text": "waiting for the user: Envoy wants to use Envoy's phone for this task",
+     "task_id": "task-1102-210017-20c6",
+     "attempts": 1
+    },
+    {
+     "routine": "tiktok_post_sound",
+     "app": "com.zhiliaoapp.musically",
+     "app_name": "TikTok",
+     "label": "TikTok",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    }
+   ]
+  },
+  {
+   "t": 180.9,
+   "phone_yes": "task-1102-210017-20c6",
+   "routine": "youtube_search_first_video",
+   "http": 200
+  },
+  {
+   "t": 183.9,
+   "status": "running",
+   "detail": null,
+   "posts": [
+    {
+     "routine": "instagram_reel_song",
+     "app": "com.instagram.android",
+     "app_name": "Instagram",
+     "label": "Instagram",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (the user declined the approval)",
+     "task_id": "task-1102-205728-00d7",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (the user declined the approval)",
+     "task_id": "task-1102-205935-e9d9",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "running",
+     "text": "posting…",
+     "task_id": "task-1102-210017-20c6",
+     "attempts": 1
+    },
+    {
+     "routine": "tiktok_post_sound",
+     "app": "com.zhiliaoapp.musically",
+     "app_name": "TikTok",
+     "label": "TikTok",
+     "status": "queued",
+     "text": "queued",
+     "task_id": null,
+     "attempts": 0
+    }
+   ]
+  },
+  {
+   "t": 193.0,
+   "status": "needs_you",
+   "detail": "TikTok: Envoy wants to use Envoy's phone for this task",
+   "posts": [
+    {
+     "routine": "instagram_reel_song",
+     "app": "com.instagram.android",
+     "app_name": "Instagram",
+     "label": "Instagram",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (the user declined the approval)",
+     "task_id": "task-1102-205728-00d7",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (the user declined the approval)",
+     "task_id": "task-1102-205935-e9d9",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "done",
+     "text": "done",
+     "task_id": "task-1102-210017-20c6",
+     "attempts": 1
+    },
+    {
+     "routine": "tiktok_post_sound",
+     "app": "com.zhiliaoapp.musically",
+     "app_name": "TikTok",
+     "label": "TikTok",
+     "status": "waiting",
+     "text": "waiting for the user: Envoy wants to use Envoy's phone for this task",
+     "task_id": "task-1102-210029-4057",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "t": 193.0,
+   "phone_yes": "task-1102-210029-4057",
+   "routine": "tiktok_post_sound",
+   "http": 200
+  },
+  {
+   "t": 196.0,
+   "status": "running",
+   "detail": null,
+   "posts": [
+    {
+     "routine": "instagram_reel_song",
+     "app": "com.instagram.android",
+     "app_name": "Instagram",
+     "label": "Instagram",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (the user declined the approval)",
+     "task_id": "task-1102-205728-00d7",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (the user declined the approval)",
+     "task_id": "task-1102-205935-e9d9",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "done",
+     "text": "done",
+     "task_id": "task-1102-210017-20c6",
+     "attempts": 1
+    },
+    {
+     "routine": "tiktok_post_sound",
+     "app": "com.zhiliaoapp.musically",
+     "app_name": "TikTok",
+     "label": "TikTok",
+     "status": "running",
+     "text": "posting…",
+     "task_id": "task-1102-210029-4057",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "t": 253.2,
+   "status": "waiting_approval",
+   "detail": "TikTok: waiting for you",
+   "posts": [
+    {
+     "routine": "instagram_reel_song",
+     "app": "com.instagram.android",
+     "app_name": "Instagram",
+     "label": "Instagram",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (the user declined the approval)",
+     "task_id": "task-1102-205728-00d7",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (the user declined the approval)",
+     "task_id": "task-1102-205935-e9d9",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "done",
+     "text": "done",
+     "task_id": "task-1102-210017-20c6",
+     "attempts": 1
+    },
+    {
+     "routine": "tiktok_post_sound",
+     "app": "com.zhiliaoapp.musically",
+     "app_name": "TikTok",
+     "label": "TikTok",
+     "status": "waiting",
+     "text": "waiting for the user",
+     "task_id": "task-1102-210029-4057",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "t": 253.2,
+   "declined": "tap \"Post\" in com.zhiliaoapp.musically (routine tiktok_post_sound v3)",
+   "task": "task-1102-210029-4057",
+   "why": ""
+  },
+  {
+   "t": 256.2,
+   "status": "declined",
+   "detail": "Not posted: Instagram (declined); YouTube (youtube_short_sound) (declined); TikTok (declined); a retry runs only Instagram, YouTube (youtube_short_sound) and TikTok",
+   "posts": [
+    {
+     "routine": "instagram_reel_song",
+     "app": "com.instagram.android",
+     "app_name": "Instagram",
+     "label": "Instagram",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (the user declined the approval)",
+     "task_id": "task-1102-205728-00d7",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (the user declined the approval)",
+     "task_id": "task-1102-205935-e9d9",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "done",
+     "text": "done",
+     "task_id": "task-1102-210017-20c6",
+     "attempts": 1
+    },
+    {
+     "routine": "tiktok_post_sound",
+     "app": "com.zhiliaoapp.musically",
+     "app_name": "TikTok",
+     "label": "TikTok",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (the user declined the approval)",
+     "task_id": "task-1102-210029-4057",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "t": 261.3,
+   "second_look": {
+    "status": "declined",
+    "posts": [
+     [
+      "Instagram",
+      "declined"
+     ],
+     [
+      "YouTube (youtube_short_sound)",
+      "declined"
+     ],
+     [
+      "YouTube (youtube_search_first_video)",
+      "done"
+     ],
+     [
+      "TikTok",
+      "declined"
+     ]
+    ]
+   }
+  },
+  {
+   "t": 261.3,
+   "status": "running",
+   "detail": null,
+   "posts": [
+    {
+     "routine": "instagram_reel_song",
+     "app": "com.instagram.android",
+     "app_name": "Instagram",
+     "label": "Instagram",
+     "status": "running",
+     "text": "posting…",
+     "task_id": "task-1102-210140-addb",
+     "attempts": 2
+    },
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": "task-1102-205935-e9d9",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "done",
+     "text": "done",
+     "task_id": "task-1102-210017-20c6",
+     "attempts": 1
+    },
+    {
+     "routine": "tiktok_post_sound",
+     "app": "com.zhiliaoapp.musically",
+     "app_name": "TikTok",
+     "label": "TikTok",
+     "status": "queued",
+     "text": "queued",
+     "task_id": "task-1102-210029-4057",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "t": 264.3,
+   "status": "needs_you",
+   "detail": "Instagram: Envoy wants to use Envoy's phone for this task",
+   "posts": [
+    {
+     "routine": "instagram_reel_song",
+     "app": "com.instagram.android",
+     "app_name": "Instagram",
+     "label": "Instagram",
+     "status": "waiting",
+     "text": "waiting for the user: Envoy wants to use Envoy's phone for this task",
+     "task_id": "task-1102-210140-addb",
+     "attempts": 2
+    },
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": "task-1102-205935-e9d9",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "done",
+     "text": "done",
+     "task_id": "task-1102-210017-20c6",
+     "attempts": 1
+    },
+    {
+     "routine": "tiktok_post_sound",
+     "app": "com.zhiliaoapp.musically",
+     "app_name": "TikTok",
+     "label": "TikTok",
+     "status": "queued",
+     "text": "queued",
+     "task_id": "task-1102-210029-4057",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "t": 264.3,
+   "phone_yes": "task-1102-210140-addb",
+   "routine": "instagram_reel_song",
+   "http": 200
+  },
+  {
+   "t": 267.3,
+   "status": "running",
+   "detail": null,
+   "posts": [
+    {
+     "routine": "instagram_reel_song",
+     "app": "com.instagram.android",
+     "app_name": "Instagram",
+     "label": "Instagram",
+     "status": "running",
+     "text": "posting…",
+     "task_id": "task-1102-210140-addb",
+     "attempts": 2
+    },
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": "task-1102-205935-e9d9",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "done",
+     "text": "done",
+     "task_id": "task-1102-210017-20c6",
+     "attempts": 1
+    },
+    {
+     "routine": "tiktok_post_sound",
+     "app": "com.zhiliaoapp.musically",
+     "app_name": "TikTok",
+     "label": "TikTok",
+     "status": "queued",
+     "text": "queued",
+     "task_id": "task-1102-210029-4057",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "t": 333.6,
+   "status": "waiting_approval",
+   "detail": "Instagram: waiting for you",
+   "posts": [
+    {
+     "routine": "instagram_reel_song",
+     "app": "com.instagram.android",
+     "app_name": "Instagram",
+     "label": "Instagram",
+     "status": "waiting",
+     "text": "waiting for the user",
+     "task_id": "task-1102-210140-addb",
+     "attempts": 2
+    },
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "queued",
+     "text": "queued",
+     "task_id": "task-1102-205935-e9d9",
+     "attempts": 1
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "done",
+     "text": "done",
+     "task_id": "task-1102-210017-20c6",
+     "attempts": 1
+    },
+    {
+     "routine": "tiktok_post_sound",
+     "app": "com.zhiliaoapp.musically",
+     "app_name": "TikTok",
+     "label": "TikTok",
+     "status": "queued",
+     "text": "queued",
+     "task_id": "task-1102-210029-4057",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "t": 333.6,
+   "declined": "tap \"Share\" in com.instagram.android (routine instagram_reel_song v3)",
+   "task": "task-1102-210140-addb",
+   "why": ""
+  },
+  {
+   "t": 336.6,
+   "status": "needs_you",
+   "detail": "YouTube (youtube_short_sound): Envoy wants to use Envoy's phone for this task",
+   "posts": [
+    {
+     "routine": "instagram_reel_song",
+     "app": "com.instagram.android",
+     "app_name": "Instagram",
+     "label": "Instagram",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (the user declined the approval)",
+     "task_id": "task-1102-210140-addb",
+     "attempts": 2
+    },
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "waiting",
+     "text": "waiting for the user: Envoy wants to use Envoy's phone for this task",
+     "task_id": "task-1102-210252-ad1b",
+     "attempts": 2
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "done",
+     "text": "done",
+     "task_id": "task-1102-210017-20c6",
+     "attempts": 1
+    },
+    {
+     "routine": "tiktok_post_sound",
+     "app": "com.zhiliaoapp.musically",
+     "app_name": "TikTok",
+     "label": "TikTok",
+     "status": "queued",
+     "text": "queued",
+     "task_id": "task-1102-210029-4057",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "t": 336.6,
+   "phone_yes": "task-1102-210252-ad1b",
+   "routine": "youtube_short_sound",
+   "http": 200
+  },
+  {
+   "t": 339.6,
+   "status": "running",
+   "detail": null,
+   "posts": [
+    {
+     "routine": "instagram_reel_song",
+     "app": "com.instagram.android",
+     "app_name": "Instagram",
+     "label": "Instagram",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (the user declined the approval)",
+     "task_id": "task-1102-210140-addb",
+     "attempts": 2
+    },
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "running",
+     "text": "posting…",
+     "task_id": "task-1102-210252-ad1b",
+     "attempts": 2
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "done",
+     "text": "done",
+     "task_id": "task-1102-210017-20c6",
+     "attempts": 1
+    },
+    {
+     "routine": "tiktok_post_sound",
+     "app": "com.zhiliaoapp.musically",
+     "app_name": "TikTok",
+     "label": "TikTok",
+     "status": "queued",
+     "text": "queued",
+     "task_id": "task-1102-210029-4057",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "t": 378.8,
+   "status": "waiting_approval",
+   "detail": "YouTube (youtube_short_sound): waiting for you",
+   "posts": [
+    {
+     "routine": "instagram_reel_song",
+     "app": "com.instagram.android",
+     "app_name": "Instagram",
+     "label": "Instagram",
+     "status": "declined",
+     "text": "not posted: the post wasn't approved (the user declined the approval)",
+     "task_id": "task-1102-210140-addb",
+     "attempts": 2
+    },
+    {
+     "routine": "youtube_short_sound",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_short_sound)",
+     "status": "waiting",
+     "text": "waiting for the user",
+     "task_id": "task-1102-210252-ad1b",
+     "attempts": 2
+    },
+    {
+     "routine": "youtube_search_first_video",
+     "app": "com.google.android.youtube",
+     "app_name": "YouTube",
+     "label": "YouTube (youtube_search_first_video)",
+     "status": "done",
+     "text": "done",
+     "task_id": "task-1102-210017-20c6",
+     "attempts": 1
+    },
+    {
+     "routine": "tiktok_post_sound",
+     "app": "com.zhiliaoapp.musically",
+     "app_name": "TikTok",
+     "label": "TikTok",
+     "status": "queued",
+     "text": "queued",
+     "task_id": "task-1102-210029-4057",
+     "attempts": 1
+    }
+   ]
+  },
+  {
+   "t": 378.8,
+   "stopped_parent_at": "tap \"Upload Short\" in com.google.android.youtube (routine youtube_short_sound v3)",
+   "task": "task-1102-210252-ad1b",
+   "http": 200
+  },
+  {
+   "t": 382.8,
+   "approval_after_stop": "pending"
+  }
+ ]
+}
