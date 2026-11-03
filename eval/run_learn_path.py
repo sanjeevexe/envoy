@@ -75,12 +75,13 @@ class Copy:
         self.base = f"http://127.0.0.1:{port}"
         self.proc: subprocess.Popen | None = None
 
-    def check(self, dry: bool, empty_library: bool = False) -> dict:
+    def check(self, dry: bool, empty_library: bool = False, resume: bool = False) -> dict:
         """`empty_library`: the supplementary pass (README, Deviations), whose copy differs from the tag only by its routine
-        library deleted (`git rm -r data/routines`)."""
+        library deleted (`git rm -r data/routines`). `resume`: the same pass's api-dir again, after the copy was stopped."""
         tag = git(self.checkout, "rev-parse", "eval-final^{commit}")
         head = git(self.checkout, "rev-parse", "HEAD")
-        dirty = [ln for ln in git(self.checkout, "status", "--porcelain", "--untracked-files=no").splitlines() if ln]
+        dirty = [ln for ln in git(self.checkout, "status", "--porcelain", "--untracked-files=no").splitlines() if ln
+                 and not (resume and ln[3:].startswith("data/routines/"))]  # (the pass's own run history, written by the copy)
         problems = []
         if not tag or tag != head:
             problems.append(f"the copy's HEAD {head[:9]} is not eval-final {tag[:9] or '(no tag)'}")
@@ -93,7 +94,9 @@ class Copy:
             problems.append("the copy's checkout has changes")
         if (self.checkout / "logs").is_symlink():
             problems.append("the copy's logs/ is a link: its cost log must be its own")
-        if self.api_dir.exists() and any(self.api_dir.iterdir()):
+        if resume and not (self.api_dir / "envoy.db").exists():
+            problems.append(f"{self.api_dir} has no pass to resume")
+        elif not resume and self.api_dir.exists() and any(self.api_dir.iterdir()):
             problems.append(f"{self.api_dir} is not a new, empty folder")
         same = subprocess.run(["git", "-C", str(REPO), "diff", "--quiet", f"{tag}", "--", "eval/run_real_apps.py"]).returncode == 0
         if not same:
@@ -124,9 +127,10 @@ class Copy:
             self.stop()
             sys.exit(f"the copy didn't come up on :{self.port} (see {self.api_dir}/server.out)")
         key = self.api_dir / "agent.key"
-        subprocess.run(["uv", "run", "--project", "backend", "python", "scripts/agent_key.py", "issue", "learn-harness",
-                        "--tools", "read,run", "--out", str(key)], cwd=self.checkout, env=env, check=True,
-                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        if not key.exists():  # (a resumed pass keeps its key: it lives in the copy's database)
+            subprocess.run(["uv", "run", "--project", "backend", "python", "scripts/agent_key.py", "issue", "learn-harness",
+                            "--tools", "read,run", "--out", str(key)], cwd=self.checkout, env=env, check=True,
+                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     def stop(self) -> None:
         if self.proc is not None and self.proc.poll() is None:
@@ -168,6 +172,15 @@ class Copy:
                 n += 1
         return n
 
+    def free_phone(self) -> list[str]:
+        """Stop any task still open on the copy (one left waiting for the person holds the phone), as the person would. The
+        ids stopped."""
+        _, listed = self.http("GET", "/api/tasks")
+        open_ = [t["id"] for t in (listed if isinstance(listed, list) else []) if t.get("status") not in ENDED - {"needs_you"}]
+        for tid in open_:
+            self.http("POST", f"/api/tasks/{tid}/stop")
+        return open_
+
     def decline(self, aid: str) -> bool:
         code, a = self.http("GET", f"/api/approvals/{aid}")
         if code != 200 or a.get("status") != "pending":
@@ -196,6 +209,8 @@ def follow(copy: Copy, mcp: Client, tid: str, rec: dict) -> dict:
     else:
         copy.http("POST", f"/api/tasks/{tid}/stop")
         view = {**view, "status": "timed out"}
+    if view.get("status") == "needs_you":  # waiting for the person (a hand-off, a question) holds the phone: end it, as they would
+        copy.http("POST", f"/api/tasks/{tid}/stop")
     _, full = copy.http("GET", f"/api/tasks/{tid}")
     task = full.get("task") or {}
     rec.update({"status": view.get("status"), "seconds": round(time.time() - t0, 1), "model_calls": task.get("model_calls"),
@@ -241,6 +256,8 @@ async def run_task(wf: rr.Workflow, copy: Copy, mcp: Client, phone: str, dry: bo
     secrets_seen: list[str] = []
 
     # a. The agent path.
+    if (left := copy.free_phone()):
+        row["stopped_before"] = left
     await prepare(wf, dry)
     a: dict = {}
     err, res = mcp.call("run_task", {"goal": wf.goal, "phone": phone})
@@ -409,8 +426,9 @@ def rates(rows: list[dict]) -> dict:
 
 def summary(doc: dict) -> list[str]:
     r = rates(doc["rows"])
+    resumed = "".join(f"; resumed {x['time']} with harness `{x['harness_head'][:9]}` after {x['after']}" for x in doc.get("resumed") or [])
     return [f"`eval-final` = `{doc['versions']['eval_final'][:9]}` (copy HEAD `{doc['versions']['copy_head'][:9]}`, harness "
-            f"`{doc['versions']['harness_head'][:9]}`), {doc['started']} → {doc.get('ended', '…')}.", "",
+            f"`{doc['versions']['harness_head'][:9]}`{resumed}), {doc['started']} → {doc.get('ended', '…')}.", "",
             f"- **Agent path:** right {r['agent_right']}/{r['tasks']}.",
             f"- **Learn rate:** saved {r['saved']}/{r['tasks']}.",
             f"- **New input:** right {r['new_input_right']}/{r['saved_with_second']} saved routines with a second input; "
@@ -459,6 +477,7 @@ async def main() -> int:
     ap.add_argument("--phone", default="envoy-real")
     ap.add_argument("--only", default="", help="workflows, comma-separated (the declared order is kept)")
     ap.add_argument("--retry", default="", help="a workflow lost to an infrastructure fault, run again as its own row")
+    ap.add_argument("--resume", action="store_true", help="the same pass and api-dir again: the workflows with no row yet, in order")
     ap.add_argument("--dry-run", action="store_true", help="no phone: a phone id that doesn't exist, so nothing runs on a device")
     ap.add_argument("--note", action="append", default=[], help="the phone's starting state, said in the README")
     ap.add_argument("--supplementary", action="store_true",
@@ -483,7 +502,7 @@ async def main() -> int:
     if args.dry_run:
         args.phone = "dry-run-no-phone"  # never one of the emulators the eval holds
     copy = Copy(args.copy.resolve(), args.api_dir.resolve(), args.port)
-    versions = copy.check(args.dry_run, empty_library=args.supplementary)
+    versions = copy.check(args.dry_run, empty_library=args.supplementary, resume=args.resume)
     copy.start()
     try:
         subs = copy.push_subscriptions()
@@ -496,19 +515,25 @@ async def main() -> int:
         if args.phone not in ids and not args.dry_run:  # (a dry run's phone doesn't exist on purpose)
             sys.exit(f"no phone {args.phone!r} on the copy (it has {ids})")
         out = copy.api_dir / "dry-run.json" if args.dry_run else extra if args.supplementary else results
-        doc = json.loads(out.read_text()) if out.exists() and args.retry else {
+        doc = json.loads(out.read_text()) if out.exists() and (args.retry or args.resume) else {
             "protocol": "eval/results/learn-agent-path/PROTOCOL.md", "versions": versions, "started": now(), "phone": args.phone,
             "push_subscriptions": subs, "phones": ids, "notes": args.note, "rows": [], "deviations": []}
         if args.supplementary:
             doc["why"] = args.why
+        if args.resume or args.retry:
+            doc.setdefault("resumed", []).append({"time": now(), "harness_head": versions["harness_head"],
+                                                  "after": doc["rows"][-1]["row"] if doc["rows"] else None})
         only = [w for w in args.only.split(",") if w]
-        wanted = [w for w in rr.WORKFLOWS if (not only or w.id in only)]
-        if args.retry:
-            wanted = [w for w in rr.WORKFLOWS if w.id in args.retry.split(",")]
+        wanted = [(w, w.id) for w in rr.WORKFLOWS if (not only or w.id in only)]
+        if args.resume:
+            have = {r["row"] for r in doc["rows"]}
+            wanted = [(w, i) for w, i in wanted if i not in have]
+        elif args.retry:
+            wanted = []
+        wanted += [(w, f"{w.id}-retry") for w in rr.WORKFLOWS if w.id in args.retry.split(",")]
         if args.dry_run:
             wanted = wanted[:1]
-        for wf in wanted:
-            row_id = f"{wf.id}-retry" if args.retry else wf.id
+        for wf, row_id in wanted:
             row = await run_task(wf, copy, mcp, args.phone, args.dry_run, row_id)
             doc["rows"].append(row)
             out.write_text(json.dumps(doc, indent=1, ensure_ascii=False))
