@@ -4935,6 +4935,53 @@ window.ENVOY = {
    "src": {
     "path": "docs/androidworld-results.md",
     "note": "Headline, Routines"
+   },
+   "hybrid": {
+    "date": "2026-11-03",
+    "profile": "hybrid",
+    "commit": "7ed4aa6",
+    "stage": "2026-11-03-hybrid-7ed4aa6",
+    "all": {
+     "success": 74,
+     "n": 116,
+     "rate": 63.8
+    },
+    "held": {
+     "success": 36,
+     "n": 58,
+     "rate": 62.1
+    },
+    "median_usd": 0.0903,
+    "median_s": 51.845,
+    "calls_median": 11.0,
+    "vs": {
+     "held": {
+      "n": 58,
+      "before": 31.0,
+      "after": 36.0,
+      "gained": 8,
+      "lost": 3,
+      "p_paired": 0.2266
+     },
+     "all": {
+      "n": 116,
+      "before": 57.0,
+      "after": 74.0,
+      "gained": 20,
+      "lost": 3,
+      "p_paired": 0.0005
+     },
+     "before": "final-standard"
+    },
+    "src": {
+     "path": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/README.md"
+    },
+    "summary_src": {
+     "path": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/summary.json"
+    },
+    "compare_src": {
+     "path": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/compare_final-standard.json"
+    }
    }
   },
   "phone": {
@@ -5358,6 +5405,13 @@ window.ENVOY = {
     "commit": "merged into main Oct 29 (105d04e)",
     "final": false,
     "src": "docs/androidworld-results.md"
+   },
+   {
+    "what": "AndroidWorld, the shipped default (hybrid) on main",
+    "commit": "7ed4aa6",
+    "final": false,
+    "value": "74/116 (63.8%); held-out 36/58 (62.1%), 2026-11-03",
+    "src": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/summary.json"
    }
   ]
  }

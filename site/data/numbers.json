@@ -98,6 +98,13 @@
    "commit": "merged into main Oct 29 (105d04e)",
    "final": false,
    "src": "docs/androidworld-results.md"
+  },
+  {
+   "what": "AndroidWorld, the shipped default (hybrid) on main",
+   "commit": "7ed4aa6",
+   "final": false,
+   "value": "74/116 (63.8%); held-out 36/58 (62.1%), 2026-11-03",
+   "src": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/summary.json"
   }
  ]
 }

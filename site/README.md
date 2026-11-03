@@ -69,6 +69,8 @@ page):
 - each suite's JSON beside `report.md` (`meta.models`: the profile and tier named on the page; hybrid when Muse Wonder
   decides the agent's steps, else the Spark profile);
 - `docs/phase-6-results.md` ("SAM then grounding N of N; grounding alone N of N");
+- `eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/summary.json` (its `stage` names the date, profile and commit) and
+  `compare_final-standard.json`;
 - `eval/results/showcase/live-2026-11-02/task-rows.json` (with the build's note for the songless TikTok, keyed by task id;
   every other row must be "done");
 - `prompts/phone-watch-report.md` (the Stage 2 table with "Landed on the Pixel");
@@ -130,7 +132,8 @@ Section numbers are positions on the page (the page numbers itself); "E:" is a g
 | 5 | Posting routines' rehearsals, all four | `runs.md`, as in section 3 |
 | 5 | SkyLark suites | `eval/results/final/report.md` (suites 0–3b, 5–7) |
 | 5 | Pixel 5: 30/30, 0 calls | `eval/results/final/sizes.json` (devices.phone) |
-| 5 | AndroidWorld by cost; the held-out half | `docs/androidworld-results.md` (Headline, Routines) |
+| 5 | AndroidWorld, Oct 28–29 (the Spark profile): the held-out half, the routines by cost | `docs/androidworld-results.md` (Headline, Routines) |
+| 5 | AndroidWorld, the shipped default (hybrid) on main, Nov 3: overall, held-out, median cost and time per task; the held-out change from Oct 28 and its p value | `eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/summary.json` and `compare_final-standard.json` (`AW_HYBRID` in the build) |
 | 5 | Limits | the sections above, plus `docs/cloud.md` |
 | E: runs | Every run cited: when, where, commit, profile, task ids | the files above; the first run's profile from its model calls |
 | E: routine | The Starbucks routine as compiled and v4; every model call; one replay's steps; versions | `eval/results/real-apps/loop-a/compiled/loop_starbucks-v1.yaml`, `data/routines/starbucks_drink_calories/`, `site/data/recordings/starbucks-replay.json`, `starbucks-repair.json` |

@@ -443,7 +443,7 @@
     const mixed = new Set(skySuites.map((s) => /eval-final/.test(s.ran_on))).size > 1;
     const profiles = [...new Set(skySuites.map((s) => `${s.profile} profile, ${s.tier} tier`))];
     const skyProfiles = profiles.length === 1 ? `Every suite here ran on the ${profiles[0]}` : `Profiles: ${profiles.join("; ")}`;
-    const aw = P.aw;
+    const aw = P.aw, AH = aw.hybrid;
     $("#results-body").innerHTML = `
       ${head("results", "Results", "Scored by code, on real apps first.",
         "Every suite starts from a known state and is scored by code, on the app's real state or the right answer on screen, never by a model. Each number says which pass and which profile it's from: hybrid, the default, has Muse Wonder decide the agent's steps; the Spark profile has Muse Spark decide them. Both compile with Muse Wonder. Dollars are at Meta's standard prices.")}
@@ -477,9 +477,15 @@
         <tbody>${skySuites.map((s) => `<tr><td>${esc(s.suite.replace(/^\w+\. /, ""))}</td><td>${esc(s.result)}</td>${mixed ? `<td>${/eval-final/.test(s.ran_on) ? '<span class="chip sage">final</span>' : '<span class="chip apricot pending">development pass</span>'}</td>` : ""}</tr>`).join("")}</tbody>
       </table></div>
       ${E.final || mixed ? "" : `<p class="small" style="margin:8px 4px 0">All development passes; the commit each ran on is in the ${ev("runs", "evidence")}. ${notFinal()}</p>`}
-      <div class="stats two" style="margin-top:12px">
+      <div class="stats results-tiles" style="margin-top:12px">
         <div class="card stat"><div class="row-between"><div class="lbl">The Pixel 5, Envoy's phone</div>${testApp}</div><div class="big">${P.phone.passed}/${P.phone.runs}</div><div class="lbl">SkyLark's 10 core routines, compiled on an emulator, on 3 new bookings each: <b>${P.phone.calls} model calls in Envoy's replay</b>, median ${secs(P.phone.median_s)} (${esc(P.phone.profile)} profile, ${esc(P.phone.tier)} tier)</div>${notFinal(P.phone.commit)} ${srcA(P.phone.src, "sizes.json")}</div>
-        <div class="card stat"><div class="lbl">AndroidWorld, Google's benchmark (the agent on ${esc(aw.model)}, the Spark profile)</div><p style="margin:6px 0 0;font-size:14.5px;color:var(--ink-2)">The ${aw.routines.alone} routines (of ${aw.routines.compiled} compiled from the agent's solved runs) that did their own task alone, replayed on three new seeds: ${esc(aw.routines.did)} of ${esc(aw.routines.of)} instances right at ${esc(aw.routines.calls)} model call and ${esc(aw.routines.usd)} each, where the full agent did ${esc(aw.routines.agent)} at ${esc(aw.routines.agent_calls)} calls and ${esc(aw.routines.agent_usd)}. Counting the agent's run where a routine failed (computed): ${aw.routines.fallback[0]} of ${aw.routines.fallback[1]}. The agent alone, after 13 general changes found on a dev half (now in main): ${aw.held[0]} of ${aw.held[1]} on the held-out half, against ${aw.held[2]} before them.</p>${srcA(aw.src, "androidworld-results.md")}</div>
+        <div class="card stat wide aw"><div class="lbl">AndroidWorld, Google's benchmark: ${AH.all.n} tasks across 20 apps, scored by its own code</div>
+          <div class="aw-grid">
+            <div><div class="big">${AH.all.success}/${AH.all.n}</div><div class="lbl"><b>The shipped default (${esc(AH.profile)}) on main, ${day(AH.date)}:</b> ${AH.all.rate}%; the held-out half ${AH.held.success} of ${AH.held.n} (${AH.held.rate}%). A median ${usd(AH.median_usd)} and ${s0(AH.median_s)} a task.</div>${srcA(AH.src, "README.md")} ${srcA(AH.summary_src, "summary.json")}</div>
+            <div><div class="big">${aw.held[0]}/${aw.held[1]}</div><div class="lbl"><b>Oct 28–29, the agent on ${esc(aw.model)} (the Spark profile):</b> the held-out half after 13 general changes found on a dev half, against ${aw.held[2]} before them. The ${aw.routines.alone} routines (of ${aw.routines.compiled} compiled from its solved runs) that did their own task alone, on three new seeds: ${esc(aw.routines.did)} of ${esc(aw.routines.of)} right at ${esc(aw.routines.calls)} model call and ${esc(aw.routines.usd)} each, where the full agent did ${esc(aw.routines.agent)} at ${esc(aw.routines.agent_calls)} calls and ${esc(aw.routines.agent_usd)}; counting the agent's run where a routine failed (computed), ${aw.routines.fallback[0]} of ${aw.routines.fallback[1]}.</div>${srcA(aw.src, "androidworld-results.md")}</div>
+          </div>
+          <p class="small" style="margin:10px 0 0">Not a model-only comparison: the code changed between the two runs too. The held-out half was reused, and its gain from Oct 28 to Nov 3 (+${AH.vs.held.gained} −${AH.vs.held.lost}, p = ${AH.vs.held.p_paired.toFixed(2)}) is within run-to-run noise. ${srcA(AH.compare_src, "comparison")}</p>
+        </div>
       </div>
       <div class="card limits" style="margin-top:20px">
         <h3>Limits, plainly</h3>
@@ -527,6 +533,7 @@
       ["The posting routines' rehearsals", "Nov 1–2", "Envoy's phone", "a test copy", "hybrid profile", "", srcA(D.showcase.runs_src, "runs.md")],
       [`Real apps, ${RA.final ? "the final evaluation" : "the evaluation's real-app suite"} (${D.real.rows.length} workflows; section 5)`, day(RA.date), "Android emulator", RA.breakdown.length > 1 ? `rows from ${RA.breakdown.length} runs: ${RA.breakdown.map((b) => `<code>${esc(b.commit)}</code> (${b.rows} ${b.rows === 1 ? "row" : "rows"})`).join(", ")}` : `<code>${esc(RA.commit)}</code>`, `${RA.profile} profile, ${RA.tier} tier`, RA.breakdown.length > 1 ? RA.breakdown.map((b) => `run ${esc(b.run)}`).join(", ") : `run ${esc(RA.run_id)}`, srcA(D.real.md_src, "real.md")],
       ...D.real.passes.filter((p) => p.commit !== RA.commit).map((p) => [`Real apps, ${passLabel(p)}${/pass$/.test(passLabel(p)) ? "" : " pass"}`, p.date, "Android emulator", `<code>${esc(p.commit)}</code>`, `${p.profile} profile`, "", srcA(p.src, p.src.path.split("/").pop())]),
+      ["AndroidWorld, the shipped default (section 5)", day(D.proof.aw.hybrid.date), "AndroidWorld's emulator (Pixel 6, API 33)", `main <code>${esc(D.proof.aw.hybrid.commit)}</code>`, `${esc(D.proof.aw.hybrid.profile)} profile, standard tier`, esc(D.proof.aw.hybrid.stage), srcA(D.proof.aw.hybrid.src, "README.md")],
       ["SkyLark repair example (section 2)", day(K.date), "Android emulator", `<code>${esc(K.commit)}</code>`, `${K.profile} profile, ${K.tier} tier`, "", srcA(K.src, "change.json")],
       ...D.proof.suites.map((s) => [`Evaluation suite ${plainText(s.suite)}`, "", "", `<code>${esc(s.ran_on)}</code>`, s.profile ? `${s.profile} profile, ${s.tier} tier` : "", "", srcA(D.proof.src, "report.md")]),
     ];

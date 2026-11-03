@@ -839,6 +839,25 @@ def models() -> dict:
     }
 
 
+# AndroidWorld on the shipped default (hybrid) at main, Nov 3: a separate run, shown next to the Oct 28-29 numbers.
+AW_HYBRID = REPO / "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6"
+
+
+def aw_hybrid() -> dict:
+    """The run's own summary.json, and its paired comparison with Oct 28's final-standard (compare_final-standard.json)."""
+    sm = json.loads((AW_HYBRID / "summary.json").read_text())
+    cmp = json.loads((AW_HYBRID / "compare_final-standard.json").read_text())
+    m = re.match(r"(\d{4}-\d\d-\d\d)-(\w+)-([0-9a-f]{7})$", sm["stage"])
+    pick = lambda h: {"success": int(h["success"]), "n": h["n"], "rate": h["rate"]}
+    return {"date": m.group(1), "profile": m.group(2), "commit": m.group(3), "stage": sm["stage"],
+            "all": pick(sm["overall"]), "held": pick(sm["by_half"]["held_out"]),
+            "median_usd": sm["cost_standard_usd"]["median_task"], "median_s": sm["time_s"]["envoy_median"],
+            "calls_median": sm["model_calls"]["median"],
+            "vs": {"held": cmp["by_half"]["held_out"], "all": cmp["by_half"]["all"], "before": cmp["before"]},
+            "src": src(rel(AW_HYBRID / "README.md")), "summary_src": src(rel(AW_HYBRID / "summary.json")),
+            "compare_src": src(rel(AW_HYBRID / "compare_final-standard.json"))}
+
+
 # Each suite's own file beside report.md (suite 8, AndroidWorld, reports elsewhere).
 SUITE_FILES = {"0": "compile", "1": "systems", "2": "repeats", "3": "change", "3b": "sizes", "4": "real", "5": "memory",
                "6": "safety", "6b": "injection", "7": "interfaces"}
@@ -886,7 +905,8 @@ def proof() -> dict:
                             "compiled": int(nr.group(1)), "alone": int(nr.group(2))},
                "held": [int(x) for x in ho.groups()],
                "model": plain(re.search(r"^\| Model \| ([^|,]+)", aw, re.M).group(1)).strip(),
-               "src": src("docs/androidworld-results.md", "Headline, Routines")},
+               "src": src("docs/androidworld-results.md", "Headline, Routines"),
+               "hybrid": aw_hybrid()},
         "phone": {"passed": len(ok), "runs": len(rows), "calls": sum(r.get("calls") or 0 for r in rows),
                   "median_s": round(statistics.median(secs), 2) if secs else None, "commit": sizes["meta"]["code"]["short"],
                   "profile": _profile(sizes["meta"]["models"]["jobs"]), "tier": sizes["meta"]["models"]["tier"],
@@ -1175,6 +1195,10 @@ def numbers(data: dict) -> dict:
     # The AndroidWorld work was merged into main on Oct 29 (105d04e); its headline's "as on main" is main before that merge.
     rows.append({"what": "AndroidWorld", "value": data["proof"]["aw"]["headline"], "commit": "merged into main Oct 29 (105d04e)",
                  "final": False, "src": data["proof"]["aw"]["src"]["path"]})
+    h = data["proof"]["aw"]["hybrid"]
+    rows.append({"what": "AndroidWorld, the shipped default (hybrid) on main", "commit": h["commit"], "final": False,
+                 "value": f"{h['all']['success']}/{h['all']['n']} ({h['all']['rate']}%); held-out {h['held']['success']}/{h['held']['n']} "
+                          f"({h['held']['rate']}%), {h['date']}", "src": h["summary_src"]["path"]})
     return {"eval_final": st, "rows": rows}
 
 
