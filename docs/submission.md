@@ -67,6 +67,12 @@ connector. Any MCP agent can do the same; the Spark agent (a small agent built o
   (`eval/results/agent-door/tools-before.json`, `tools-after.json`). Teach mode learns a routine from one demonstration
   through the live view, tested with a scripted demonstrator (`site/data/recordings/teach.json`,
   `eval/results/teach_trials_2026-11-01/`).
+- **One request, every post.** `cross_post` runs the shared posting routines as one task with a part per destination.
+  Each part ends done, failed, declined, waiting, outcome unknown (the post tap went through before its check) or not
+  started; a retry runs only the parts that didn't post, and an outcome-unknown part is never posted again by itself
+  (`backend/tests/test_crosspost.py`). On Envoy's phone (Nov 2, a test copy, every final button declined), one request
+  started four parts and returned in 0.26 s; three reached their final button and were declined, a YouTube search part
+  finished, and a retry re-ran only those three (`eval/results/agent-door/cross-post-pixel.json`).
 - **Watches.** A notification on Envoy's phone can start a task or reach the agent. Each app stays off until the person
   allows it. An Instagram comment reached the iPhone 1.57 s after it landed on Envoy's phone (`docs/demo-showcase.md`).
   Time, email and changed-fact triggers, change alerts and habits run on the same scheduler, and agents read what
@@ -138,6 +144,8 @@ or by Envoy, are listed in `data/routines/<name>/index.json`.
 | `instagram_story_poll` (v3) | none | recompiled twice after compiler fixes, from the same run |
 | `tiktok_post_sound` (v3) | a 3 s wait before tapping TikTok's drawn sound list; the app's name corrected (the source run predates TikTok in Envoy's app list); the launch step's before-checks dropped | recompiled after compiler fixes, from the same run, with those edits re-applied: it now checks that the editor names the sound |
 | `youtube_short_sound` (v3) | one before-check dropped (a "Captions unavailable" label from a video playing when the run was recorded) | recompiled once after a compiler fix, from the same run; after the live post, Envoy repaired one after-check on its own, and that version passed its trial in Muse's dry run (0 model calls in Envoy's replay, declined at Upload Short) |
+
+The outcome checks added on Nov 2 (song, caption, clip) live in code and change none of these routines.
 
 ## Public GitHub repository
 
@@ -291,8 +299,12 @@ and logs. Suites 0, 1 and 6 ran with uncommitted code (`backend/routines/compile
 `backend/policy/risk.py` among others), suites 2, 5 and 6b with uncommitted eval files, and suite 7 with docs. The
 final run, on the `eval-final` tag, replaces them all.
 
-<!-- SLOT reliability batch: the pre-registered runs of the showcase workflows on the tag (after the eval), reported
-narrowly: this version, these workflows, these inputs, every attempt and every intervention. -->
+**The showcase batch** was declared before the final evaluation's tag: the four posting workflows (Reel, TikTok, Short,
+Story), 10 attempts each on the tagged code, every attempt kept and every final button declined
+(`eval/results/showcase-batch/PROTOCOL.md`). It runs after the evaluation.
+
+<!-- SLOT reliability batch: its results, reported narrowly: this version, these workflows, these inputs, every attempt
+and every intervention. -->
 
 <!-- SLOT cold start: the routine that didn't exist, its first run and compile (timed), the share, Muse listing the new
 tool, a second input someone else picked, and the checked answer. -->
@@ -306,6 +318,8 @@ Measured outside the evaluation (these stay as they are):
 | Notifications, Nov 2 | Instagram comment: on the iPhone 1.57 s after it landed on Envoy's phone. YouTube: Envoy's part 3.6 s (YouTube took about 2 minutes to notify). TikTok: no notification came | `docs/demo-showcase.md` |
 | The cloud phone, Oct 29 | Routines for SkyLark (our own test app) compiled on the Mac: 48/48 with no model calls on an emulator on Google Cloud, once it had finished its first boot (the very first pass on a brand-new one: 9/18) | `docs/cloud.md` |
 | A learned routine as a tool | `skylark_get_flight_gate` shared, then called over MCP: done, 0 model calls in Envoy's replay, $0 | `eval/results/agent-door/call.json` |
+| One request, every post, Nov 2 | `cross_post` on Envoy's phone through a test copy: four parts from one request (returned in 0.26 s); Instagram, the Short and TikTok declined at their final button, a YouTube search part done; a retry re-ran only the three. Nothing posted | `eval/results/agent-door/cross-post-pixel.json` |
+| Outcome checks, Nov 2 | On Envoy's phone: a wrong newest clip stopped the TikTok routine before its first step (0 calls); the Reel, TikTok and Short then reached their final buttons with song, caption and clip checked, every one declined | `eval/results/showcase/runs/runs.md` (19:27–20:35) |
 | Muse end to end, Nov 2 (a dry run) | `send_to_phone`, then five tasks through the routine tools. The Reel, TikTok and Short each reached its final button and was declined: 0 / 3 / 0 model calls in Envoy's replay, 195.5 / 75.1 / 77.4 s from Muse's call to the end (phone ask and approval wait included). The poll Story failed twice (an unanswered phone ask, since fixed; the live-Story gap). Nothing was posted | `eval/results/showcase/muse-2026-11-02/task-rows.json` |
 
 ## Built during the hackathon
@@ -332,10 +346,13 @@ Measured outside the evaluation (these stay as they are):
   trial; if the repair fails, the agent finishes the task.
 - **A replay can answer wrong.** On Nov 2, the YouTube Music routine's same-input replay read the artist from a mini
   player an earlier run had left playing, with no model call.
-- **Step checks aren't outcome checks.** The first TikTok passed every check up to the Post button and went out without
-  its sound; only its done-check, after posting, failed. Its routine now checks that the editor names the sound, but Envoy doesn't yet check every outcome (the right clip, sound
-  and caption) before the final button.
-  <!-- SLOT outcome checks: if they land before the eval, say what is checked now and link the negative tests. -->
+- **Outcome checks are new, and narrow.** The first TikTok passed every check up to the Post button and went out without
+  its sound; only its done-check, after posting, failed. Since Nov 2, before a posting routine's final step, code checks
+  that the song shows on the editor, the caption is in its field and the clip is the one Envoy pushed, and stops the run
+  otherwise, before any approval is asked. On Envoy's phone a wrong newest clip stopped the TikTok routine before its
+  first step, and the Reel, TikTok and Short then reached their final buttons with all three checked
+  (`eval/results/showcase/runs/runs.md`, Nov 2 19:27–20:35; `backend/tests/test_outcome_checks.py`). The checks cover
+  the posting routines' song, caption and clip, nothing else, and live in code, not in the routines.
 - **The Story routine fails while a Story is already live:** its first tap opens the live Story's poll results.
 - **Envoy doesn't make a routine on its own:** the person presses "Make it a routine" on a finished task, or teaches it,
   and the compiler can refuse a run. The button is new (Nov 2); the routines shown here were compiled before it, by the
@@ -344,8 +361,9 @@ Measured outside the evaluation (these stay as they are):
 - **TikTok** sent no phone notification for any comment in testing, so Envoy can't watch TikTok comments yet.
 - **Muse hears about phone events when it next checks** `phone_updates` (a Muse scheduled task checked about every 10
   minutes). Envoy's own push to the iPhone is immediate.
-- **One post per Muse turn:** in the Nov 2 dry run Muse started one post, ended its turn, and waited for a tap before
-  the next.
+- **One post per Muse turn,** with one routine tool per post: in the Nov 2 dry run Muse started one post, ended its
+  turn, and waited for a tap before the next. `cross_post`, added after, takes every post in one request; the records
+  here show it called by a test driver over MCP, not yet by Muse.
 - **Apps that refuse emulators** (Target's bot check; banking apps are expected to, untested) need a real Android phone
   (Target on Envoy's phone isn't tested yet). iPhone-only users can't reach them.
 - **Where it runs:** on a Mac today, with Envoy's phone over USB. The cloud phone was tested (`docs/cloud.md`), but it

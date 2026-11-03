@@ -18,7 +18,7 @@ Mac, `phone_updates`, what was tested) is in [muse-link.md](muse-link.md).
   | Group | Tools |
   | --- | --- |
   | read | `get_task`, `list_routines`, `memory_search`, `memory_get`, `phone_updates`, `list_phones` |
-  | run | `run_task`, `run_routine`, and every learned routine you share as a tool |
+  | run | `run_task`, `run_routine`, `cross_post`, and every learned routine you share as a tool |
   | memory | `memory_note` |
   | files | `send_to_phone`, `get_file` |
   | triggers | `create_trigger` |
@@ -48,6 +48,12 @@ song_artist, caption, phone?)` in its tool list instead of having to know `run_r
 - **It's in the run group.** An agent with only Read doesn't see it.
 - **Calling it is `run_routine`** with that routine: the same approvals and the same "Before I start" lines.
   `run_routine` still runs any learned routine by name; sharing decides which ones are tools of their own.
+- **Several posts in one request: `cross_post`.** It takes one entry per destination (a shared routine and its inputs)
+  and runs them as one task with a part per post, one after another, TikTok last. It returns the task's id at once;
+  `get_task` gives each part's outcome: done, failed, declined, waiting, outcome unknown (the post tap went through
+  before its check; tell the person to look in that app) or not started. `cross_post` with `retry` set to the task's id
+  runs only the parts that didn't post. Every post still waits for the person's OK, unless they gave that routine a
+  standing approval (`backend/tests/test_crosspost.py`, `eval/results/agent-door/cross-post-pixel.json`).
 
 Envoy also tells agents, through `phone_updates`, when it learns or repairs a routine, and names the tool when the
 routine is shared.

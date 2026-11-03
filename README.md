@@ -62,10 +62,11 @@ rollback; learned routines served to agents as tools of their own; and an approv
 
 | | What | Evidence |
 | --- | --- | --- |
-| **Agents call it** | MCP at `/mcp` (Streamable HTTP), 12 built-in tools: run a task or a routine, search memory, send a file to the phone, get files back, propose a trigger, list phones, read phone updates… Muse for Mac and the Muse app add it as a custom connector | [`backend/mcp_server/README.md`](backend/mcp_server/README.md), [`docs/muse-link.md`](docs/muse-link.md) |
+| **Agents call it** | MCP at `/mcp` (Streamable HTTP), 13 built-in tools: run a task or a routine, post to several apps in one request, search memory, send a file to the phone, get files back, propose a trigger, list phones, read phone updates… Muse for Mac and the Muse app add it as a custom connector | [`backend/mcp_server/README.md`](backend/mcp_server/README.md), [`docs/muse-link.md`](docs/muse-link.md) |
 | **Any MCP agent** | Muse; the Spark agent, a small agent on Meta's Muse Spark that reaches Envoy only over MCP; and any MCP client (Claude Code tested). Each has its own key and tool groups; every task says which agent asked | [`docs/agents.md`](docs/agents.md), [`agents/meta-agent/evidence/2026-11-01/`](agents/meta-agent/evidence/2026-11-01/) |
 | **Learned tasks become tools** | Share a routine in Settings › Agents (off by default) and it appears in agents' tool lists under its own name, with typed inputs, no restart. In a Nov 2 dry run, Muse called the Reel, TikTok and Short routines by name; each reached its final button and was declined, and the two tries at the poll Story failed. Nothing was posted | [`eval/results/agent-door/`](eval/results/agent-door/) (`tools-before.json`, `tools-after.json`, `call.json`), [`eval/results/showcase/muse-2026-11-02/task-rows.json`](eval/results/showcase/muse-2026-11-02/task-rows.json) |
 | **App-only posts** | One clip from the Mac → an Instagram Reel with a library song, a Story with a poll sticker, a TikTok with a sound and a YouTube Short with a sound. All four went live on test accounts on the night of Nov 1, each started by the Spark agent and approved on the iPhone: the Reel, Story and Short with 0 model calls in Envoy's replay, the TikTok with 3. The agent that calls pays for its own turns: in a declined dry run on a test copy (Nov 1), the Spark agent used 11 model calls ($0.044) to drive three posts. Which routines were tuned by hand is in [the write-up](docs/submission.md#hand-edits-stated-exactly) | [`docs/demo-showcase.md`](docs/demo-showcase.md), [`data/routines/`](data/routines/) (each `index.json`), [`agents/meta-agent/evidence/2026-11-01/crosspost/`](agents/meta-agent/evidence/2026-11-01/crosspost/README.md) |
+| **One request, every post** | `cross_post` runs the shared posting routines as one task with a part per destination, one after another. Each part ends done, failed, declined, waiting, outcome unknown (the post tap went through before its check) or not started, and a retry runs only the parts that didn't post; an outcome-unknown part is never posted again by itself. On Envoy's phone (Nov 2, a test copy, every final button declined): one request started four parts and returned in 0.26 s; three reached their final button and were declined, a YouTube search part finished, and a retry re-ran only those three | [`eval/results/agent-door/cross-post-pixel.json`](eval/results/agent-door/cross-post-pixel.json), [`backend/tests/test_crosspost.py`](backend/tests/test_crosspost.py) |
 | **Watches** | A notification on Envoy's phone can start a task or reach the agent; each app is off until you allow it, and codes are hidden before anything is stored. An Instagram comment reached the iPhone 1.57 s after it landed on Envoy's phone. Plus time, email and changed-fact triggers, change alerts, and habits | [`docs/demo-showcase.md`](docs/demo-showcase.md), [`eval/results/alerts/`](eval/results/alerts/alerts.md), [`eval/results/recurring/`](eval/results/recurring/recurring.md) |
 | **Learns** | In Envoy, a finished agent task's card has a "Make it a routine" button: Envoy compiles that run, replays it once strictly on the same phone, and saves it with the share off. Teach mode compiles what a person shows the same way, and the compiler can refuse a run. A routine has checks before and after its steps, targets found by what they are, a local repair when the app changes (the agent finishes if that fails), versions with a trial and a rollback | [`backend/routines/README.md`](backend/routines/README.md), [`backend/api/teach.py`](backend/api/teach.py) (`learn_task`) and its tests in [`backend/tests/test_teach.py`](backend/tests/test_teach.py), [Results](#results) |
 | **Teach mode** | Do a task once through the live view; Envoy compiles it and replays it once before saving. A scripted Google Calendar lesson (7 steps) passed its verification replay, all 7 steps, with 0 model calls in Envoy's replay | [`site/data/recordings/teach.json`](site/data/recordings/teach.json), [`eval/results/teach_trials_2026-11-01/`](eval/results/teach_trials_2026-11-01/README.md) |
@@ -113,8 +114,12 @@ Asked in words instead of by name, Envoy's matcher adds one Spark call to pick t
 <!-- SLOT final: fill both "Nov 3, final" rows from eval/results/final/real.json. The cost curve uses the same rule as
 above: medians and ranges over the workflows whose first run and same-input rerun both passed. -->
 
-<!-- SLOT reliability batch (pre-registered, run on the tag after the eval): its table goes here, reported narrowly (this
-version, these workflows, these inputs, every attempt). -->
+**The showcase batch** was declared before the final evaluation's tag: the four posting workflows (Reel, TikTok, Short, Story),
+10 attempts each on the tagged code, every attempt kept and every final button declined
+([`eval/results/showcase-batch/PROTOCOL.md`](eval/results/showcase-batch/PROTOCOL.md)). It runs after the evaluation.
+
+<!-- SLOT reliability batch (run on the tag after the eval): its table goes here, reported narrowly (this version, these
+workflows, these inputs, every attempt). -->
 
 ### SkyLark (our test app)
 
@@ -158,11 +163,13 @@ held-out half from 12 to 31 of 58; they have been part of Envoy since Oct 29
   [`table.md`](eval/results/real-apps/table.md), [`index.json`](data/routines/starbucks_drink_calories/index.json)).
 - **A replay can answer wrong.** On Nov 2, the YouTube Music routine's same-input replay read the artist from a mini
   player an earlier run had left playing, and gave a wrong answer with no model call.
-- **Step checks aren't outcome checks.** The first TikTok passed every check up to the Post button and went out without
-  its sound; only its done-check, after posting, failed. The
-  routine now checks that the editor names the sound, but Envoy doesn't yet check every outcome (the right clip, sound
-  and caption) before the final button.
-  <!-- SLOT outcome checks: if they land before the eval, say what is checked now and link the negative tests. -->
+- **Outcome checks are new, and narrow.** The first TikTok passed every check up to the Post button and went out without
+  its sound; only its done-check, after posting, failed. Since Nov 2, before a posting routine's final step, code checks
+  that the song shows on the editor, the caption is in its field and the clip is the one Envoy pushed, and stops the run
+  otherwise, before any approval is asked. On Envoy's phone a wrong newest clip stopped the TikTok routine before its
+  first step, and the Reel, TikTok and Short then reached their final buttons with all three checked
+  ([`runs.md`](eval/results/showcase/runs/runs.md), Nov 2 19:27–20:35; [`test_outcome_checks.py`](backend/tests/test_outcome_checks.py)).
+  The checks cover the posting routines' song, caption and clip, nothing else, and live in code, not in the routines.
 - **The Story routine fails while a Story is already live:** its first tap opens the live Story's poll results.
 - **Envoy doesn't make a routine on its own:** the person presses "Make it a routine" on a finished task, or teaches it,
   and the compiler can refuse a run. The button is new (Nov 2); the routines shown here were compiled before it, by the
@@ -282,6 +289,8 @@ and compile on Muse Wonder 1.0 and the rest on Muse Spark 1.3; the Spark profile
 | Muse's dry run | Nov 2, Muse for Mac, every final step declined | the task rows | [`task-rows.json`](eval/results/showcase/muse-2026-11-02/task-rows.json) |
 | The Spark agent's own cost | a three-post run on a test copy, Nov 1, declined at each final button | — | [`crosspost/README.md`](agents/meta-agent/evidence/2026-11-01/crosspost/README.md), "Cost" |
 | The cloud phone, 48/48 | SkyLark routines compiled on the Mac, replayed on an emulator on Google Cloud, Oct 29 | — | [`docs/cloud.md`](docs/cloud.md) |
+| `cross_post` on Envoy's phone | one request, four parts, a test copy of the branch, every final button declined, Nov 2 20:57–21:37 | the branch's code, merged in `79dfb8d` | [`cross-post-pixel.json`](eval/results/agent-door/cross-post-pixel.json) and the `cross-post-pixel-*.json` beside it |
+| Outcome checks on Envoy's phone | the wrong-clip stop and the clean Reel, TikTok and Short runs, Nov 2 19:27–20:35, every final button declined | merged in `373eb86` | [`runs.md`](eval/results/showcase/runs/runs.md) and each run's JSON |
 
 `report.md` marks the development runs "(uncommitted changes)", and each suite's JSON lists what was uncommitted
 (`meta.code.dirty`). Suites 3 and 4 flagged only routine data, and the Pixel run of 3b only build output and logs.
