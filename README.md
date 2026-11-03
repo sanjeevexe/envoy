@@ -149,10 +149,12 @@ this version, these workflows and inputs, one phone and one set of accounts, one
   edit. Three Shorts never showed their song on the editor: YouTube's sound search didn't list "Flowers", "Watermelon
   Sugar" or "Levitating" as the routine looks for them.
 - **The Short works with "golden hour" and not yet with other songs.** Of its runs with another song, three stopped at
-  the song check and one was finished by the agent, so its sound couldn't be checked. The likely cause, per the
-  results: when the song isn't on the first screen of results, Envoy's search fallback retypes the search as "title,
-  artist", with a comma, and YouTube returns nothing for it. Two more Shorts, started from a saved draft, stopped at
-  YouTube's "Continue your draft video?" prompt.
+  the song check and one was finished by the agent, so its sound couldn't be checked. The cause was found after the
+  batch, by a search-only check on Envoy's phone, and wasn't measured in it: in YouTube's sound search, Enter doesn't
+  search; only tapping its suggestion does. v3 skips that tap, so the list stays on YouTube's trending sounds, where
+  "golden hour" was and the other songs weren't. A fix was tried and not merged: it needs a tie-break in the locator
+  matcher ([`yt-song-fix-writeup.md`](eval/results/showcase-batch/yt-song-fix-writeup.md)). Two more Shorts, started
+  from a saved draft, stopped at YouTube's "Continue your draft video?" prompt.
 - **The Reel's third miss:** Instagram's music search didn't show "Levitating", which the library check had found
   earlier, and the agent stopped at its step limit.
 - **Model calls in Envoy's replay:** 95 over the 40 attempts, $1.0342. TikTok reads its drawn sound list by vision on
