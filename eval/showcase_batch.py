@@ -78,13 +78,17 @@ BOT = re.compile(r"captcha|verify (it'?s you|you'?re (a )?human|your (identity|a
 
 # ---- the schedule ------------------------------------------------------------------------------------------------
 
+FALLBACK = SONGS[1]  # the coordinator's ruling (Nov 3): a song whose alternate is missing too uses "golden hour"
+
+
 def attempt(code: str, swaps: dict[int, str] | None = None) -> dict[str, Any]:
-    """An attempt's fixed facts: workflow, starting state, clip label, inputs (PROTOCOL.md's tables)."""
+    """An attempt's fixed facts: workflow, starting state, clip label, inputs (PROTOCOL.md's tables). A swap is the
+    same artist's alternate, or "fallback" for golden hour by JVKE."""
     w, n = code[0], int(code[1:])
     wf = WORKFLOWS[w]
     title, artist = SONGS[n]
     if swaps and n in swaps:
-        title = swaps[n]
+        title, artist = FALLBACK if swaps[n] == "fallback" else (swaps[n], artist)
     if w == "R":
         inputs = {"song_title": title, "song_artist": artist, "caption": f"Envoy batch {code} · test"}
     elif w == "T":

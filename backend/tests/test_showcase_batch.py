@@ -17,6 +17,7 @@ def test_the_schedule_is_the_protocols_interleaved_order_with_its_states():
     assert sb.attempt("S07")["inputs"] == {"sound_title": "Flowers", "sound_artist": "Miley Cyrus", "short_title": "Envoy batch S07 · test"}
     assert sb.attempt("P03")["inputs"] == {"poll_question": "Envoy batch P03: which one?", "poll_option_1": "Beach", "poll_option_2": "Mountains"}
     assert sb.attempt("T09", {9: "Save Your Tears"})["inputs"]["sound_title"] == "Save Your Tears"  # a recorded swap, same artist
+    assert sb.attempt("R06", {6: "fallback"})["inputs"]["song_artist"] == "JVKE"  # alternate missing too: golden hour
 
 
 def _rec(w: str, *, asked=("Share",), ok=True, rungs=(0,), notes=(), checks=None, status="declined", interventions=(), approved=False):
