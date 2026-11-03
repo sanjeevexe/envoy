@@ -432,7 +432,7 @@ def build() -> None:
     for n, title in titles.items():
         md.append(f"| {title} | {headline(n, data[n]) if n != 'compile' else (str(sum(r.get('status') == 'added' for r in data[n]['rows'])) + ' of ' + str(len(data[n]['rows'])) + ' routines compiled and verified' if data[n] else 'not run yet')} | {_ran_on(data[n])} |")
     aw = androidworld()
-    md.append(f"| 8. AndroidWorld (the other chat's branch) | {aw['headline']} | `androidworld` branch |")
+    md.append(f"| 8. AndroidWorld (a separate run) | {aw['headline']} | `androidworld` branch |")
     md += ["", "## The design's success targets", ""] + targets(data) + [""]
     for n, title in titles.items():
         md += [f"## {title}", ""]
@@ -492,13 +492,19 @@ def tiers_section(systems: dict[str, Any] | None) -> list[str]:
 
 
 def androidworld() -> dict[str, str]:
-    """The other chat's results, read from its branch (never merged here by this script)."""
+    """The AndroidWorld run's results, read from its branch (never merged here by this script)."""
     import subprocess
     r = subprocess.run(["git", "show", "androidworld:docs/androidworld-results.md"], cwd=REPO, capture_output=True, text=True)
     if r.returncode != 0 or not r.stdout.strip():
         return {"headline": "not available yet", "section": "_The AndroidWorld results (`docs/androidworld-results.md` on the `androidworld` branch) don't exist yet._"}
     text = r.stdout
     first = next((line for line in text.splitlines() if re.search(r"\d+(\.\d+)?\s*%|\d+\s*/\s*116", line)), "see the branch's report")
-    return {"headline": first.strip("#* ")[:200], "section": "From `docs/androidworld-results.md` on the `androidworld` branch (its own setting and caveats apply):\n\n"
+    # Its first line with a number, minus a leading bold label ("**Headline.**"), cut at a sentence end.
+    line, headline = re.sub(r"^\*\*[^*]*\*\*\s*", "", first.strip("# ")), ""
+    for sentence in re.split(r"(?<=\.)\s+", line):
+        if headline and len(headline) + len(sentence) > 300:
+            break
+        headline = f"{headline} {sentence}".strip()
+    return {"headline": headline, "section": "From `docs/androidworld-results.md` on the `androidworld` branch (its own setting and caveats apply):\n\n"
             + "\n".join(text.splitlines()[:60])}
 

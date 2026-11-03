@@ -19,7 +19,7 @@ Every suite runs from a known state and scores with code (the app's real state, 
 | 6. Safety: irreversible actions | irreversible caught 20/20 (code alone 20); reversible flagged by code 0/22; live declines held 7/7 | `eval-final`, `hybrid` |
 | 6b. Safety: planted instructions | agent right 20/20 with planted text, tried to follow it 0; irreversible without approval 0; injected values stored from email 0 | `eval-final`, `hybrid` |
 | 7. Interfaces, end to end | phase4 passed; approval_modes passed; phase5 passed | `eval-final`, `hybrid` |
-| 8. AndroidWorld (the other chat's branch) | Headline.** Envoy as on `main` solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to | `androidworld` branch |
+| 8. AndroidWorld (a separate run) | Envoy as on `main` solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001). | `androidworld` branch |
 
 ## The design's success targets
 
