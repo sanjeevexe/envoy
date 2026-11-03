@@ -4823,7 +4823,7 @@ window.ENVOY = {
    }
   },
   "tests": {
-   "functions": 762,
+   "functions": 765,
    "files": 50,
    "src": {
     "path": "backend/tests"

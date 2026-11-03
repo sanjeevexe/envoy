@@ -134,7 +134,7 @@
     const body = $("#learns-body");
     body.innerHTML = `
       ${head("learns", "Learns", "A verified run becomes a checked routine. Shared, it's a tool.",
-        "The first time, Muse Wonder plans the task and picks every tap from the screen's accessibility tree. A run whose answer checks out on screen can be compiled into a routine with one more Wonder call: the taps, the inputs, and a check before and after every step. Today agent runs are compiled by a script or the evaluation, and teach mode compiles what a person shows in the running Envoy. On a clean replay the checks run as code, and a model is asked only to match the request and read the answer.")}
+        "The first time, Muse Wonder plans the task and picks every tap from the screen's accessibility tree. A run whose answer checks out on screen can be compiled into a routine with one more Wonder call: the taps, the inputs, and a check before and after every step. In Envoy, a finished agent task's card has a “Make it a routine” button: Envoy compiles that run, replays it once strictly on the same phone, and saves it with the share off. Teach mode compiles what a person shows the same way, and the compiler can refuse a run. On a clean replay the checks run as code, and a model is asked only to match the request and read the answer.")}
       <h3 class="sub-h">A first run, step by step</h3>
       <div class="label-rec">
         <span><b>App</b> Starbucks, no account</span>
@@ -462,7 +462,7 @@
           <li>Most real-app routine versions in the library were fixed by hand during testing; self-repair's trials kept ${D.repair.real.filter((v) => v.passed).length} of its ${D.repair.real.length} real-app versions. The posting routines' hand edits are on each card in ${sec("acts")}.</li>
           <li>The live posts were started from the Spark agent. Muse's own run of the four was a dry run, and its Story failed twice.</li>
           <li>Agents hear about the phone when they next check; Muse checked about every 10 minutes. TikTok sent no notification for our three test comments.</li>
-          <li>The running Envoy doesn't compile an agent's run by itself yet: agent runs are compiled by a script or the evaluation; teach-mode lessons compile in the running Envoy.</li>
+          <li>Envoy doesn't make a routine on its own: the person presses “Make it a routine” on a finished task, or teaches it, and the compiler can refuse a run. The button is new (Nov 2); the routines on this page were compiled before it, by the evaluation or a script. ${srcA({ path: "backend/api/teach.py" }, "teach.py")}</li>
           <li>Envoy runs on a Mac with one Pixel over USB today, each app signed in once by the person. A cloud phone was tested on Google Cloud; the posts here ran on the Pixel. Target's bot check blocks emulators; banking apps are expected to (not tested). ${srcA({ path: "docs/cloud.md" }, "cloud.md")}</li>
         </ul>
       </div>`;

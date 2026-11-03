@@ -1,6 +1,6 @@
 # The showcase site in five sections (WS-F, Nov 2)
 
-Branch `claude/site-five-sections`, rebased onto main `557f150`. Only `site/**`, `scripts/build_site_data.py` and this report
+Branch `claude/site-five-sections`, rebased onto main `d5653ad`. Only `site/**`, `scripts/build_site_data.py` and this report
 (with its screenshots in `prompts/site-five-sections-report/`) changed. Not pushed, not merged. No devices, no model calls,
 $0.
 
@@ -126,6 +126,14 @@ workflows whose first run and same-input rerun both passed, with no repair. The 
 The build now checks `README.md`'s cost-curve table: the row for the same pass must give the same numbers, or the build
 stops. Tested against WS-E's README (`claude/pitch-ws-e`): it passes, and a planted 5.90 s stops it. On main's README,
 which has no such table yet, the check is skipped.
+
+## "Make it a routine" (Nov 2, night)
+
+Main d5653ad adds a "Make it a routine" button on a finished agent task's card: Envoy compiles that run, replays it once
+strictly on the same phone, and saves it with the share off. Rebased onto d5653ad, the two "learns" lines say so:
+section 2's lede, and the limit, which now reads that Envoy doesn't make a routine on its own (the person presses the button
+or teaches it, and the compiler can refuse a run), and that the routines on the page were compiled before the button, by the
+evaluation or a script. The rebuild's only data change is the test count (765 test functions).
 
 ## Still open
 
