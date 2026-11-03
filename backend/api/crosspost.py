@@ -17,6 +17,10 @@ and parts (api/crossapp.py, whose kind it keeps, so the app shows the parts unde
     to check that app, and never posts there again by itself.
 - **Retry** (`cross_post` with `retry`): only destinations whose last part failed or was declined run again. Done and
   unknown ones never do; one queued or under way is left to finish.
+- **An app that saves its own copy of a post in the gallery runs last** (SAVES_COPY: TikTok, whose export lands in
+  DCIM/Camera). The posting routines take "the gallery's newest video", so a part after TikTok's would pick TikTok's
+  copy. A retry that would run after TikTok posted says to send the clip to the phone again first; the executor's
+  clip check (the newest item against the last push) stops such a post before its first step otherwise.
 - The tool returns the parent's id at once; get_task (its `posts`) and phone_updates follow it. A part held up longer
   than PART_LIMIT_S is stopped and judged like any other end.
 
@@ -37,6 +41,9 @@ MAX_POSTS = 4
 PART_LIMIT_S = 40 * 60  # a backstop for a part that hangs: the phone ask and the approval wait (15 min each) fit inside
 SCREEN_CHANGED = "the screen changed before the action ran"  # api/approvals.py: said yes, then not acted on
 RETRYABLE = ("failed", "declined")
+# Apps that save their own copy of what they post into the phone's gallery (Pixel 5, Nov 2: TikTok's exports in
+# DCIM/Camera at 01:43 and 02:31, owner com.zhiliaoapp.musically): after one, the newest video is no longer the clip.
+SAVES_COPY = {"com.zhiliaoapp.musically": "TikTok"}
 
 TEXT = {
     "queued": "queued",
@@ -89,6 +96,12 @@ def _join(names: list[str]) -> str:
     return names[0] if len(names) == 1 else ", ".join(names[:-1]) + " and " + names[-1]
 
 
+def in_order(posts: list[Post]) -> list[Post]:
+    """The order the parts run in: as given, except that an app that saves its own copy of the post in the gallery goes
+    after the others, so none of them picks that copy as the newest video."""
+    return sorted(posts, key=lambda p: p.app in SAVES_COPY)
+
+
 class CrossPost:
     def __init__(self, runner: Any) -> None:
         self.runner, self.store, self.bus = runner, runner.store, runner.bus
@@ -101,15 +114,18 @@ class CrossPost:
     # ---- starting ------------------------------------------------------------------------------
 
     def start(self, posts: list[Post], source: str, phone: str | None = None) -> dict[str, Any]:
-        """The parent task; its parts start one after another, the first at once."""
+        """The parent task; its parts start one after another (`in_order`), the first at once."""
+        posts = in_order(posts)
         for p in posts:
             p.label = p.label or (p.app_name if [x.app for x in posts].count(p.app) == 1 else f"{p.app_name} ({p.routine})")
         goal = "Post to " + _join([p.label for p in posts])
         parent = self.store.create(goal, source, kind="crossapp", request=goal)
         pid = parent["id"]
         self.bus.publish("task", task=parent)
+        last = [SAVES_COPY[p.app] for p in posts if p.app in SAVES_COPY and len(posts) > 1]
         self._step(pid, {"kind": "plan", "crosspost": True, "phone": phone,
-                         "text": f"{len(posts)} posts, one after another: " + "; ".join(f"{p.app_name} with routine {p.routine}" for p in posts),
+                         "text": f"{len(posts)} posts, one after another: " + "; ".join(f"{p.app_name} with routine {p.routine}" for p in posts)
+                         + (f" ({_join(last)} last: it saves its own copy of the post in the gallery)" if last else ""),
                          "posts": [asdict(p) for p in posts]})
         self._on_loop(lambda: self._queue(pid, posts, source, phone))
         return self.store.get(pid) or parent
@@ -126,10 +142,20 @@ class CrossPost:
                        if any(r["status"] == "unknown" for r in left) else "")}
         plan = self._plan(pid) or {}
         posts = [Post(**p) for p in plan.get("posts", []) if p["routine"] in {r["routine"] for r in again}]
+        # An app that saves its own copy of the post may have done so already (it posted, may have, or is posting): the
+        # gallery's newest video is then that copy, not the clip, for every part that runs after it.
+        saved = [r["label"] for r in rows if r["app"] in SAVES_COPY and r["attempts"] and r["status"] not in RETRYABLE]
+        after = [r["label"] for r in again if r["app"] not in SAVES_COPY]
+        heads_up = (f"{_join(saved)} saves its own copy of what it posts in the phone's gallery, so the newest video there may no "
+                    f"longer be the clip: send the clip to the phone again (send_to_phone) before {_join(after)} runs. Otherwise Envoy "
+                    "stops that post before its first step, since its routine takes the gallery's newest video.") if saved and after else None
         self._step(pid, {"kind": "note", "text": "retry: " + ", ".join(f"{r['label']} ({r['status']})" for r in again)
-                         + ("; left as they are: " + ", ".join(f"{r['app']} ({r['status']})" for r in left) if left else "")})
+                         + ("; left as they are: " + ", ".join(f"{r['app']} ({r['status']})" for r in left) if left else "")
+                         + (f". {heads_up}" if heads_up else "")})
         self._on_loop(lambda: self._queue(pid, posts, source, plan.get("phone")))
-        return {"retrying": [r["label"] for r in again], "left_alone": left}
+        label = {r["routine"]: r["label"] for r in again}
+        return {"retrying": [label[p.routine] for p in in_order(posts)], "left_alone": left,
+                **({"heads_up": [{"kind": "gallery", "text": heads_up, "level": "warn"}]} if heads_up else {})}
 
     def _on_loop(self, fn: Any) -> None:
         """The queues and the parent's job live on the runner's loop; an MCP tool may call in from a worker thread."""
@@ -151,6 +177,7 @@ class CrossPost:
     def _queue(self, pid: str, posts: list[Post], source: str, phone: str | None) -> None:
         q = self.queues.setdefault(pid, [])
         q.extend(p for p in posts if p.routine not in {x.routine for x in q})
+        q[:] = in_order(q)  # a retry queued behind a part still to start keeps TikTok last too
         job = self.runner.jobs.get(pid)
         if job is None or job.done():  # its job ended (or never ran): a new one takes the queue
             self.runner.jobs[pid] = asyncio.get_running_loop().create_task(self._run(pid, source, phone))

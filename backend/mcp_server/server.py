@@ -46,7 +46,7 @@ from pydantic import BaseModel, ConfigDict, Field, ValidationError, create_model
 from api.agents import guard
 from api.auth import agent_name
 from api.crossapp import lead, may_span_apps
-from api.crosspost import MAX_POSTS, RETRYABLE, CrossPost, Post
+from api.crosspost import MAX_POSTS, RETRYABLE, CrossPost, Post, in_order
 from api.devices import NAMES
 from api.handoff import HandoffError, read_sidecar
 from api.notifications import redact, update_line
@@ -752,12 +752,13 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> EnvoyMCP:
     ) -> dict:
         """Post to several apps in one request: one task with a part per destination, each part running a routine the user
         shares with agents (instagram_reel_song, tiktok_post_sound, youtube_short_sound, say) with that routine's own inputs.
-        The parts run one after another, and each post waits for the user's OK in Envoy on their phone: nothing is posted
-        without it. Returns the task_id at once; follow it with get_task, whose `posts` gives each destination's outcome:
+        The parts run one after another (TikTok last: it saves its own copy of each post in the phone's gallery, where the
+        other routines take the newest video), and each post waits for the user's OK in Envoy on their phone: nothing is
+        posted without it. Returns the task_id at once; follow it with get_task, whose `posts` gives each destination's outcome:
         done, failed or declined (not posted), waiting, verifying… or outcome unknown. Outcome unknown means the post tap
         went through and the run ended before its check: tell the user to check that app; Envoy never posts there again by
         itself. To finish the rest, call cross_post with retry set to the task_id: only destinations that failed or were
-        declined run again."""
+        declined run again; if it returns heads_up lines, tell the user before they wait on it."""
         if (posts is None) == (retry is None):
             return {"error": "give posts (a new cross-post) or retry (a cross-post's task_id), not both"}
         if retry is not None:
@@ -776,6 +777,7 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> EnvoyMCP:
         chosen, error = cross_posts(ctx, {**shared, **{row["routine"]: row for row in shared.values()}}, posts or [])
         if error:
             return {"error": error}
+        chosen = in_order(chosen)  # the order the parts run in: TikTok last
         task = crossposts().start(chosen, "mcp", asked)
         return {"task_id": task["id"], "status": task["status"], "task_url": f"{base}/?task={task['id']}",
                 "posts": [{"routine": p.routine, "app": p.label or p.app_name, "status": "queued"} for p in chosen],

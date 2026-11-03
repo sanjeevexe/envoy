@@ -40,6 +40,12 @@ ROUTINE = {IG: "instagram_reel_song", TT: "tiktok_post_sound", YT: "youtube_shor
 PLAN: dict[str, list[str]] = {}
 POSTS: dict[str, int] = {}
 SPANS: list[tuple[str, float, float]] = []
+# The phone's gallery, newest last, and the clip Envoy last pushed. TikTok's post adds its own copy (as on the Pixel, Nov 2).
+# With CLIP_CHECK on, the other routines check the newest item against the push before their first step, as the
+# executor's clip check does (WS-A, C2), and stop without asking for anything on a mismatch.
+GALLERY: list[str] = []
+PUSHED: dict[str, str] = {}
+CLIP_CHECK: list[bool] = [False]
 
 
 class FakeExecutor:
@@ -52,6 +58,10 @@ class FakeExecutor:
         t0 = time.time()
         try:
             await asyncio.sleep(0.05)
+            if CLIP_CHECK[0] and app != TT and GALLERY and GALLERY[-1] != PUSHED.get("name"):
+                return SimpleNamespace(status="failed", outputs={}, model_calls=0, cost_at_standard_usd=0.0,
+                                       detail=f"the gallery's newest video is {GALLERY[-1]} (saved by {TT}), not {PUSHED.get('name')}, "
+                                              "the clip Envoy put on the phone: the routine takes the newest, so it would post the wrong one")
             if mode == "fail":
                 return SimpleNamespace(status="failed", detail="couldn't find Create on the screen", outputs={}, model_calls=0,
                                        cost_at_standard_usd=0.0)
@@ -61,6 +71,8 @@ class FakeExecutor:
                 return SimpleNamespace(status="declined", detail="the user declined the approval", outputs={}, model_calls=0,
                                        cost_at_standard_usd=0.0)
             POSTS[app] = POSTS.get(app, 0) + 1  # the approved tap: a post
+            if app == TT:
+                GALLERY.append(f"tiktok-export-{POSTS[app]}.mp4")  # TikTok saves its own copy in DCIM/Camera
             if mode == "post_then_timeout":
                 raise TimeoutError("the screen didn't settle after the tap")
             if mode == "post_then_hang":
@@ -80,12 +92,16 @@ def fake_phone_work(monkeypatch, tmp_path):
     POSTS.clear()
     SPANS.clear()
     PLAN.update({IG: ["post"], TT: ["post"], YT: ["post"]})
+    GALLERY[:] = ["clip.mp4"]
+    PUSHED.update(name="clip.mp4")
+    CLIP_CHECK[0] = False
 
 
 def make() -> tuple[TaskRunner, CrossPost]:
     store, bus, mem = TaskStore(":memory:"), EventBus(), MemoryStore(":memory:")
     r = TaskRunner(store, bus, Pool(), mem, SimpleNamespace(), adapter=SimpleNamespace())
     r.loop = asyncio.get_running_loop()
+    r.approval_timeout_s = 20  # a test that fails mid-way doesn't leave an approval's thread waiting 15 min
 
     async def plan(tid, goal, routine_name, inputs, app):
         return SimpleNamespace(routine=routine_name, version=1, app=app), inputs, app, {}, 0
@@ -159,16 +175,16 @@ def test_one_parent_task_runs_a_part_per_destination_one_after_another():
         r, cp = make()
         parent = cp.start(posts(IG, TT, YT), "mcp")
         pid = parent["id"]
-        for app in (IG, TT, YT):
+        for app in (IG, YT, TT):  # TikTok last (SAVES_COPY)
             await decide(r, pid, app)
         await ended(r, pid)
         return r, cp, pid
     r, cp, pid = asyncio.run(scenario())
     parent = r.store.get(pid)
-    assert parent["status"] == "done" and parent["kind"] == "crossapp" and parent["goal"] == "Post to Instagram, TikTok and YouTube"
-    assert parent["result"] == "Instagram: done · TikTok: done · YouTube: done"
+    assert parent["status"] == "done" and parent["kind"] == "crossapp" and parent["goal"] == "Post to Instagram, YouTube and TikTok"
+    assert parent["result"] == "Instagram: done · YouTube: done · TikTok: done"
     parts = kids(r, pid)
-    assert [(p["app"], p["routine"], p["status"]) for p in parts] == [(IG, ROUTINE[IG], "done"), (TT, ROUTINE[TT], "done"), (YT, ROUTINE[YT], "done")]
+    assert [(p["app"], p["routine"], p["status"]) for p in parts] == [(IG, ROUTINE[IG], "done"), (YT, ROUTINE[YT], "done"), (TT, ROUTINE[TT], "done")]
     assert POSTS == {IG: 1, TT: 1, YT: 1}
     spans = sorted(SPANS, key=lambda s: s[1])
     assert all(a[2] <= b[1] for a, b in zip(spans, spans[1:]))  # one after another, never two at once
@@ -199,7 +215,8 @@ def test_a_timeout_right_after_the_post_tap_is_outcome_unknown_and_nothing_posts
     assert parent["status"] == "needs_you" and parent["detail"].startswith("Check TikTok yourself: the post tap went through")
     assert "Envoy won't post there again" in parent["detail"] and "a retry runs only YouTube" in parent["detail"]
     assert "check this one" in parent["result"] and "Check TikTok yourself" in tiktok["text"]
-    assert again == {"retrying": ["YouTube"], "left_alone": [{"app": "Instagram", "status": "done"}, {"app": "TikTok", "status": "unknown"}]}
+    assert again["retrying"] == ["YouTube"] and again["left_alone"] == [{"app": "Instagram", "status": "done"}, {"app": "TikTok", "status": "unknown"}]
+    assert "TikTok saves its own copy" in again["heads_up"][0]["text"]  # it may have posted, so its copy may be the newest
     assert POSTS == {IG: 1, TT: 1, YT: 1}  # TikTok's tap ran once, and nothing ran it again
     assert [p["app"] for p in kids(r, pid)].count(TT) == 1
     assert statuses(cp, pid) == {"Instagram": "done", "TikTok": "unknown", "YouTube": "done"}
@@ -207,44 +224,112 @@ def test_a_timeout_right_after_the_post_tap_is_outcome_unknown_and_nothing_posts
     assert r.store.get(pid)["status"] == "needs_you"
 
 
-@pytest.mark.parametrize("youtube", ["still waiting", "ran out of time"])
+@pytest.mark.parametrize("youtube", ["approved", "ran out of time"])
 def test_partial_failure_a_retry_finishes_only_tiktok_and_youtube_and_instagram_posts_once(youtube):
-    """Instagram done, TikTok failed, YouTube waiting for its approval. A retry runs TikTok again and leaves YouTube to
-    finish (or, when its wait ran out without a yes, runs it again too); Instagram is never run again."""
+    """Instagram done, YouTube waiting for its approval, TikTok still to run (it runs last). A retry while YouTube waits
+    has nothing to run and leaves Instagram alone. Then TikTok fails, after YouTube was approved (the retry runs only
+    TikTok) or after YouTube's wait ran out without a yes (it runs YouTube and TikTok). Instagram posts once."""
     PLAN.update({TT: ["fail", "post"]})
 
     async def scenario():
         r, cp = make()
         pid = cp.start(posts(IG, TT, YT), "mcp")["id"]
         await decide(r, pid, IG)
-        await until(lambda: statuses(cp, pid) == {"Instagram": "done", "TikTok": "failed", "YouTube": "waiting"})
-        mid = (statuses(cp, pid), r.store.get(pid)["status"])
-        if youtube == "ran out of time":  # its approval expired: nothing was posted, so it is unfinished
+        await until(lambda: statuses(cp, pid) == {"Instagram": "done", "YouTube": "waiting", "TikTok": "queued"})
+        mid = (r.store.get(pid)["status"], cp.retry(pid, "mcp"))
+        if youtube == "approved":
+            await decide(r, pid, YT)
+        else:  # its approval expired: nothing was posted there, so it is unfinished
             a = next(a for a in r.store.approvals(status="pending") if (r.store.get(a["task_id"]) or {}).get("app") == YT)
             r.store.decide_approval(a["id"], "expired", "timeout", "no answer in time: not done, never auto-approved")
             r.approvers[a["task_id"]]._events[a["id"]].set()
-            await until(lambda: statuses(cp, pid)["YouTube"] == "declined")
-            await ended(r, pid)
-        again = cp.retry(pid, "mcp")
-        if youtube == "still waiting":
-            await decide(r, pid, YT)
-            await decide(r, pid, TT)
-        else:
-            await decide(r, pid, TT)
-            await decide(r, pid, YT)
         await ended(r, pid)
-        return r, cp, pid, mid, again
-    r, cp, pid, mid, again = asyncio.run(scenario())
-    assert mid == ({"Instagram": "done", "TikTok": "failed", "YouTube": "waiting"}, "waiting_approval")
-    if youtube == "still waiting":
-        assert again == {"retrying": ["TikTok"], "left_alone": [{"app": "Instagram", "status": "done"}, {"app": "YouTube", "status": "waiting"}]}
+        failed = statuses(cp, pid)
+        again = cp.retry(pid, "mcp")
+        for app in ([TT] if youtube == "approved" else [YT, TT]):
+            await decide(r, pid, app)
+        await ended(r, pid)
+        return r, cp, pid, mid, failed, again
+    r, cp, pid, (waiting, early), failed, again = asyncio.run(scenario())
+    assert waiting == "waiting_approval"
+    assert early["error"].startswith("nothing to retry: Instagram is done; YouTube is waiting; TikTok is queued")
+    if youtube == "approved":
+        assert failed == {"Instagram": "done", "YouTube": "done", "TikTok": "failed"}
+        assert again["retrying"] == ["TikTok"]
     else:
-        assert again == {"retrying": ["TikTok", "YouTube"], "left_alone": [{"app": "Instagram", "status": "done"}]}
+        assert failed == {"Instagram": "done", "YouTube": "declined", "TikTok": "failed"}
+        assert again["retrying"] == ["YouTube", "TikTok"] and again["left_alone"] == [{"app": "Instagram", "status": "done"}]
+    assert "heads_up" not in again  # TikTok hadn't posted
     assert POSTS == {IG: 1, TT: 1, YT: 1}
-    assert statuses(cp, pid) == {"Instagram": "done", "TikTok": "done", "YouTube": "done"}
-    assert r.store.get(pid)["status"] == "done"
-    assert {row["app_name"]: row["attempts"] for row in cp.view(pid)} == {"Instagram": 1, "TikTok": 2, "YouTube": 1 if youtube == "still waiting" else 2}
+    assert statuses(cp, pid) == {"Instagram": "done", "TikTok": "done", "YouTube": "done"} and r.store.get(pid)["status"] == "done"
+    assert {row["app_name"]: row["attempts"] for row in cp.view(pid)} == {"Instagram": 1, "TikTok": 2, "YouTube": 1 if youtube == "approved" else 2}
     assert [p["app"] for p in kids(r, pid)].count(IG) == 1
+
+
+def test_tiktok_runs_last_so_no_other_post_picks_its_copy_of_the_clip():
+    """TikTok saves its own copy of every post in the gallery (DCIM/Camera on the Pixel, Nov 2), and the other routines
+    take the gallery's newest video. Given first, it still runs after Instagram and YouTube, and each posts the clip."""
+    CLIP_CHECK[0] = True
+
+    async def scenario():
+        r, cp = make()
+        pid = cp.start(posts(TT, IG, YT), "mcp")["id"]
+        for app in (IG, YT, TT):
+            await decide(r, pid, app)
+        await ended(r, pid)
+        return r, cp, pid
+    r, cp, pid = asyncio.run(scenario())
+    assert [p["app"] for p in kids(r, pid)] == [IG, YT, TT] and [row["app_name"] for row in cp.view(pid)] == ["Instagram", "YouTube", "TikTok"]
+    assert r.store.get(pid)["status"] == "done" and POSTS == {IG: 1, YT: 1, TT: 1}
+    assert "(TikTok last: it saves its own copy of the post in the gallery)" in next(s for s in r.store.steps(pid) if s["kind"] == "plan")["text"]
+
+
+def test_a_retry_after_tiktok_posted_asks_for_the_clip_again_and_the_clip_check_stops_a_wrong_post():
+    """TikTok before another part: Instagram failed, YouTube and TikTok posted, and TikTok's copy is now the newest video.
+    The retry says to send the clip again first; run without it, the clip check stops Instagram before any step (not
+    posted, so it can be retried); with the clip sent again, Instagram posts it, once."""
+    CLIP_CHECK[0] = True
+    PLAN.update({IG: ["fail", "post"]})
+
+    async def scenario():
+        r, cp = make()
+        pid = cp.start(posts(IG, YT, TT), "mcp")["id"]
+        await decide(r, pid, YT)
+        await decide(r, pid, TT)
+        await ended(r, pid)
+        first = cp.retry(pid, "mcp")
+        await ended(r, pid)
+        stopped = (statuses(cp, pid), (r.store.get(kids(r, pid)[-1]["id"]) or {}).get("detail"), POSTS.get(IG))
+        GALLERY.append("clip-again.mp4")  # send_to_phone puts the clip on the phone again: the newest, and the last push
+        PUSHED.update(name="clip-again.mp4")
+        second = cp.retry(pid, "mcp")
+        await decide(r, pid, IG)
+        await ended(r, pid)
+        return r, cp, pid, first, stopped, second
+    r, cp, pid, first, stopped, second = asyncio.run(scenario())
+    assert first["retrying"] == ["Instagram"] and first["heads_up"][0]["level"] == "warn"
+    assert "TikTok saves its own copy of what it posts" in first["heads_up"][0]["text"] and "send_to_phone" in first["heads_up"][0]["text"]
+    assert stopped[0] == {"Instagram": "failed", "YouTube": "done", "TikTok": "done"}
+    assert f"saved by {TT}" in stopped[1] and stopped[2] is None  # stopped before its first step: nothing posted
+    assert second["retrying"] == ["Instagram"]
+    assert statuses(cp, pid) == {"Instagram": "done", "YouTube": "done", "TikTok": "done"} and POSTS == {IG: 1, YT: 1, TT: 1}
+
+
+def test_a_retry_that_runs_tiktok_too_keeps_it_last():
+    PLAN.update({IG: ["fail", "post"], TT: ["fail", "post"]})
+
+    async def scenario():
+        r, cp = make()
+        pid = cp.start(posts(TT, IG), "mcp")["id"]
+        await ended(r, pid)
+        again = cp.retry(pid, "mcp")
+        await decide(r, pid, IG)
+        await decide(r, pid, TT)
+        await ended(r, pid)
+        return r, pid, again
+    r, pid, again = asyncio.run(scenario())
+    assert again["retrying"] == ["Instagram", "TikTok"] and "heads_up" not in again  # TikTok hadn't posted: nothing to say
+    assert [p["app"] for p in kids(r, pid)] == [IG, TT, IG, TT] and POSTS == {IG: 1, TT: 1}
 
 
 def test_two_posts_in_one_app_are_told_apart_by_their_routines():
@@ -365,11 +450,11 @@ def test_cross_post_is_a_tool_that_returns_its_task_at_once(env):
     assert "outcome unknown" in t["description"] and "waits for the user's OK in Envoy" in t["description"]
     assert not err, text
     got = json.loads(text)
-    assert got["task_id"] == "task-cp" and [p["app"] for p in got["posts"]] == ["Instagram", "TikTok", "YouTube"]
+    assert got["task_id"] == "task-cp" and [p["app"] for p in got["posts"]] == ["Instagram", "YouTube", "TikTok"]  # TikTok last
     (chosen, source, phone), = env.started
-    assert [p.routine for p in chosen] == list(ROUTINE.values()) and source == "mcp" and phone is None
-    assert chosen[2].inputs == {"sound_title": "golden hour", "sound_artist": "JVKE", "short_title": "one clip"}
-    assert chosen[1].app == TT and chosen[1].app_name == "TikTok"
+    assert [p.routine for p in chosen] == [ROUTINE[IG], ROUTINE[YT], ROUTINE[TT]] and source == "mcp" and phone is None
+    assert chosen[1].inputs == {"sound_title": "golden hour", "sound_artist": "JVKE", "short_title": "one clip"}
+    assert chosen[2].app == TT and chosen[2].app_name == "TikTok"
 
 
 @pytest.mark.parametrize("posts, says", [
