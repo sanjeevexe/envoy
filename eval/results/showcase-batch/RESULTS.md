@@ -99,7 +99,7 @@ executor's own search rung retypes the search as "<title>, <artist>", and the se
 YouTube's "yes" can come from the search box alone. Its screenshots (outside the repo) do show result rows for
 Espresso, As It Was, Watermelon Sugar and Levitating, each with all credited artists ("Harry Styles, Mitch Rowland").
 "Flowers" by Miley Cyrus, "Please Please Please" and "Blinding Lights" show only the search box, over an empty list.
-So for S07 (Flowers), YouTube's library isn't established.
+A search after the batch (Nov 3, search only) found "Flowers" by Miley Cyrus in YouTube's library, at row #0.
 
 ## Deviations from PROTOCOL.md
 
@@ -126,7 +126,11 @@ So for S07 (Flowers), YouTube's library isn't established.
   caption yes, at 0 model calls (in the first run OK left the caption empty and the retype put it back); **TikTok 1/1**
   (no change, v3); **Short not run** (the check was stopped when the phone was needed). Merged as main 0d28e5a, with
   the device check recorded in f064d5a. B1 itself ran v3, as above.
-- **YouTube's song pick** (S07, S08, S10) stays open, at the author's call. Likely cause: when the song isn't on the
-  first screen of results, the executor's search rung retypes the search as "<title>, <artist>" with a comma, and
-  YouTube returns no results for it.
+- **YouTube's song pick** (S07, S08, S10) stays open. The cause was found after the batch, by a search-only
+  diagnostic on the Pixel (Nov 3), not measured in it. Enter in YouTube's Sounds search box doesn't search: only
+  tapping its "Trigger a new search with …" suggestion does. v3 skips that tap, because its check sees the editor behind
+  the search sheet, so the list stays on YouTube's trending sounds, where golden hour was and the other songs weren't.
+  A fix was tried after the batch and not merged. YouTube lists suggestions that differ only in case ("flowers",
+  most likely from search history, and "Flowers"), so it needs a tie-break in the locator matcher. Evidence: branch
+  `claude/yt-song-fix` and `yt-song-fix-writeup.md` here.
 - YouTube's draft prompt (S03, S06, S09) and Instagram's search missing a song it had listed earlier (R10) are open too.
