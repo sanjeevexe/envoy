@@ -514,7 +514,7 @@ dl.fr dd span { color: var(--ink-2); font-size: 12.5px; }
 .trust-grid { display: grid; grid-template-columns: minmax(0, 1fr) 200px; gap: 20px; margin-top: 10px; align-items: start; }
 .trust-grid > ul { display: grid; gap: 10px; font-size: 14.5px; color: var(--ink-2); }
 .trust-grid > ul b { color: var(--ink); }
-.results-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; margin-top: 12px; align-items: start; }
+.results-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; margin-top: 12px; align-items: start; }
 .tbl tr.final td { background: var(--sage-tint, var(--raised)); font-weight: 700; }
 section.appx { border-top: 1px solid var(--line-strong); }
 details.ev { margin-top: 10px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }

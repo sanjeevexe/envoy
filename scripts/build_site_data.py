@@ -590,29 +590,42 @@ def _profile(jobs: dict) -> str:
 
 
 def real_apps() -> dict:
-    """Real apps, from the eval's own file (suite 4): its stages, and each workflow's first run against its same-input rerun
-    as medians with their range. Earlier passes come from the Oct 31 rehearsal's README, one pass per row, so each number
-    sits next to its trajectory. After the Nov 3 eval rewrites real.json, the current pass is the final one."""
+    """Real apps: each workflow's first run against its same-input rerun as medians with their range (the cost curve), from
+    the curve's pass; the eval's own suite (suite 4) for the stages; and every earlier pass, one per row, so each number
+    sits next to its trajectory. After the Nov 3 eval rewrites real.json, the final pass is both."""
     d = json.loads((REPO / "eval/results/final/real.json").read_text())
-    meta, st = d["meta"], d["stages"]
+    meta = d["meta"]
     md = (REPO / "eval/results/final/real.md").read_text()
     runs = re.search(r"Rows come from (\d+) runs", md)
+    # The cost curve's pass: the final eval's once it ran on the tag, else the newest full pass on the hybrid profile (the
+    # profile the final eval uses). The README's cost curve uses the same pass and rule; the build checks they agree.
+    curve_path = "eval/results/final/real.json" if meta["code"].get("is_eval_final") else REAL_CURVE
+    cd = json.loads((REPO / curve_path).read_text())
     pairs, rows = [], []
-    for name, w in d["workflows"].items():
+    for name, w in cd["workflows"].items():
         a, rr = w["agent"], {r["case"]: r for r in w.get("routine_runs", [])}
         same, new = rr.get("same input"), rr.get("new input")
         rows.append({"workflow": name, "goal": w["goal"], "graded_by": w["graded_by"], "first_run": w["first_run"],
                      "agent": {"actions": a["steps"], "calls": a["model_calls"], "seconds": a["duration_s"]},
                      "compiled": bool(w["compile"]["compiled"]), "steps": w["compile"].get("steps"),
-                     "same": same and {"result": same["result"], "calls": same["model_calls"], "seconds": same["duration_s"]},
-                     "new": new and {"result": new["result"], "calls": new["model_calls"], "seconds": new["duration_s"]}})
-        if w["first_run"] == "pass" and same and same["result"].startswith("pass"):
-            pairs.append((a, same))
-    curve = {"n": len(pairs), "repaired": sum(1 for _, r in pairs if "repair" in r["result"]),
-             "first": {"calls": _spread([a["model_calls"] for a, _ in pairs]), "seconds": _spread([a["duration_s"] for a, _ in pairs]),
-                       "usd": _spread([a["cost_at_standard_usd"] for a, _ in pairs])},
-             "rerun": {"calls": _spread([r["model_calls"] for _, r in pairs]), "seconds": _spread([r["duration_s"] for _, r in pairs]),
-                       "usd": _spread([r["cost_usd"] for _, r in pairs])}}
+                     # a rerun that never ran ("input not learned") has no calls or time
+                     "same": same and {"result": same["result"], "calls": same.get("model_calls"), "seconds": same.get("duration_s")},
+                     "new": new and {"result": new["result"], "calls": new.get("model_calls"), "seconds": new.get("duration_s")}})
+        # both passed outright: a rerun that needed a repair isn't counted
+        if w["first_run"] == "pass" and same and same["result"] == "pass":
+            pairs.append((a, same, w["compile"].get("cost_usd") or 0))
+    cm = cd["meta"]
+    curve = {"n": len(pairs), "of": len(cd["workflows"]),
+             "pass": {"date": datetime.fromisoformat(cm["started"]).astimezone(ET).strftime("%b %-d"), "commit": cm["code"]["short"],
+                      "final": bool(cm["code"].get("is_eval_final")), "profile": _profile(cm["models"]["jobs"]),
+                      "tier": cm["models"]["tier"], "run": cm["run_id"], "src": src(curve_path),
+                      "md_src": src(curve_path.replace(".json", ".md"))},
+             "first": {"calls": _spread([a["model_calls"] for a, _, _ in pairs]), "seconds": _spread([a["duration_s"] for a, _, _ in pairs]),
+                       "usd": _spread([a["cost_at_standard_usd"] for a, _, _ in pairs])},
+             "rerun": {"calls": _spread([r["model_calls"] for _, r, _ in pairs]), "seconds": _spread([r["duration_s"] for _, r, _ in pairs]),
+                       "usd": _spread([r["cost_usd"] for _, r, _ in pairs])},
+             "compile": _spread([c for _, _, c in pairs])}
+    _check_readme_curve(curve)
     code = meta["code"]
     breakdown = [(rid, c, len([x for x in names.split(",") if x.strip()])) for rid, c, names in
                  re.findall(r"(\d{10}) on `(\w+)`: ([^;]+?)(?:;|\.\s|$)", md.split("Rows come from", 1)[1].split("\n\n", 1)[0])] \
@@ -646,6 +659,37 @@ def real_apps() -> dict:
     return {"current": current, "curve": curve, "rows": rows, "passes": passes,
             "src": src("eval/results/final/real.json"), "md_src": src("eval/results/final/real.md"),
             "passes_src": src("eval/results/real_rerun_2026-10-31/README.md", "The four stages")}
+
+
+REAL_CURVE = "eval/results/real_rerun_2026-11-02_wsd-baseline/real.json"
+
+
+def _check_readme_curve(curve: dict) -> None:
+    """The README's cost-curve table must give the site's numbers for the same pass. Skipped while the README has no such
+    row (or it still says TBD); a mismatch stops the build, so the two never ship different numbers."""
+    readme = (REPO / "README.md").read_text()
+    if "**The cost curve.**" not in readme:
+        return
+    label = "Nov 3, final" if curve["pass"]["final"] else f"{curve['pass']['date']}, `{curve['pass']['profile']}`"
+    table = next((t for t in md_tables(readme) if t and {"Pass", "Workflows", "Compiling it, once"} <= set(t[0])), None)
+    row = next((r for r in table or [] if r["Pass"].startswith(label)), None)
+    if not row:
+        sys.exit(f"README.md's cost curve has no row for {label}, the site's pass ({curve['pass']['src']['path']})")
+    if "TBD" in row["Workflows"]:
+        return
+    num = lambda pat, text: float(re.search(pat, text).group(1))
+    f, r, c = curve["first"], curve["rerun"], curve["compile"]
+    got = {"workflows": int(row["Workflows"]),
+           "first calls": num(r"([\d.]+) calls", row["The agent's first run"]),
+           "first s": num(r"([\d.]+) s", row["The agent's first run"]), "first $": num(r"\$([\d.]+)", row["The agent's first run"]),
+           "replay calls": num(r"([\d.]+) calls", row["Envoy's replay"]), "replay s": num(r"([\d.]+) s", row["Envoy's replay"]),
+           "compile $": num(r"\$([\d.]+)", row["Compiling it, once"])}
+    want = {"workflows": curve["n"], "first calls": f["calls"]["median"], "first s": f["seconds"]["median"],
+            "first $": f["usd"]["median"], "replay calls": r["calls"]["median"], "replay s": r["seconds"]["median"],
+            "compile $": c["median"]}
+    off = {k: (got[k], round(want[k], 4)) for k in want if abs(got[k] - want[k]) > (0.006 if k.endswith(" s") else 0.00006)}
+    if off:
+        sys.exit(f"README.md's cost curve ({label}) disagrees with the site's, from {curve['pass']['src']['path']}: {off}")
 
 
 # Real-app passes with their own folder (real.json and real.md), besides the eval's current one. Not the Nov 2 check

@@ -114,6 +114,19 @@ branch, rebased onto main 557f150:
   them), WB42, WB47, WB49 ("against a probe MCP server"), WB51 (TikTok's three hand edits), WB62 (the 22 of 59 routines),
   WB64 (three test comments), WB66, WB70, WB72.
 
+## The cost curve matches the README (Nov 2, night)
+
+On the coordinator's word, the cost curve (section 1's "Learns" number, section 2's replay table, section 5's "First run
+vs routine", the evidence's workflow table) now comes from the Nov 2 hybrid pass on 192cd29
+(`eval/results/real_rerun_2026-11-02_wsd-baseline/real.json`), with WS-E's rule: medians and ranges over the 12 of 18
+workflows whose first run and same-input rerun both passed, with no repair. The agent's first run: 5 calls (2–13),
+19.36 s, $0.0368; Envoy's replay: 0 calls, 5.40 s; compiling once: $0.0415 (Muse Wonder). After the eval it switches to
+`eval/results/final/real.json`.
+
+The build now checks `README.md`'s cost-curve table: the row for the same pass must give the same numbers, or the build
+stops. Tested against WS-E's README (`claude/pitch-ws-e`): it passes, and a planted 5.90 s stops it. On main's README,
+which has no such table yet, the check is skipped.
+
 ## Still open
 
 1. **The live posts' raw rows: done.** The coordinator's five task rows are now

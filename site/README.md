@@ -60,7 +60,10 @@ whether it is final. If a file's wording changes, the build stops with an error 
 
 **What else the build parses** (it stops with an error if the wording changes, so a docs edit can't put a wrong number on the
 page):
-- `eval/results/final/real.json` and `real.md` ("Rows come from N runs");
+- `eval/results/final/real.json` and `real.md` ("Rows come from N runs"), and the cost curve's pass's `real.json`;
+- `README.md`'s cost-curve table ("**The cost curve.**"; columns Pass, Workflows, The agent's first run, Envoy's replay,
+  Compiling it, once): the row for the curve's pass must give the site's numbers, or the build stops. It's skipped while the
+  README has no such table or the row says TBD;
 - each pass's `real.md` (the "Stage | Passed" table) and the Oct 31 README's "Stage" table (its two Oct 29 columns);
 - `docs/androidworld-results.md` ("**Headline.**", "**Held-out half:**", the "**Routines.**" bullets, the "| Model |" row);
 - each suite's JSON beside `report.md` (`meta.models`: the profile and tier named on the page; hybrid when Muse Wonder
@@ -97,10 +100,10 @@ Section numbers are positions on the page (the page numbers itself); "E:" is a g
 | --- | --- | --- |
 | 1. The idea | The one-liner and the plain line | The words are in `site/index.html` |
 | 1 | One post, start to finish; the four posts and which went live | `eval/results/showcase/live-2026-11-02/task-rows.json` (the live API's rows for the five real posts, read read-only); "live" for each done row, per `docs/demo-showcase.md` |
-| 1 | Learns: first run vs routine, medians over the real-app workflows | `eval/results/final/real.json` (see section 5) |
+| 1 | Learns: first run vs routine, medians over the real-app workflows | the cost curve's pass (see section 5) |
 | 1 | Watches: 1.57 s | `prompts/phone-watch-report.md` (see section 4) |
 | 2. Learns | Starbucks first run: each step's frame, tapped element, reason, time, calls and dollars so far; the run's total; its compile | `eval/results/real-apps/loop-a/runs.jsonl`; `site/data/recordings/starbucks-first.json` (imported from the run's trace, its API copy and its model-cost log) |
-| 2 | Then it replays: first run vs routine on real apps (medians, ranges) | `eval/results/final/real.json`: workflows whose first run passed and whose same-input rerun passed |
+| 2 | Then it replays: first run vs routine on real apps (medians, ranges); compile cost | the cost curve's pass (see section 5) |
 | 2 | Starbucks's own replays and first runs (medians, ranges, 8 code versions) | `eval/results/real-apps/loop-a/runs.jsonl` (task `starbucks`/`starbucks2`, ok rows) |
 | 2 | A new input (Caramel Macchiato, one run); new inputs pass by pass | `runs.jsonl`; `eval/results/real_rerun_2026-10-31/README.md` |
 | 2 | Real-app self-repairs proposed and kept; the Reel's and Short's repairs and their trials | `data/routines/*/index.json` (versions with a `source_task`); trials matched to `eval/results/showcase/muse-2026-11-02/task-rows.json` |
@@ -119,7 +122,7 @@ Section numbers are positions on the page (the page numbers itself); "E:" is a g
 | 4 | Six trigger kinds; Muse's scheduled task | `backend/api/scheduler.py` (`KINDS`); `eval/results/muse-link/e1-muse-tells-you-unprompted.jpg` (cropped) |
 | 5. Results | The banner | `eval/results/final/report.md` ("Ran on") |
 | 5 | Real apps, one pass per row | each pass's own published stage table: `eval/results/final/real.md` (Oct 28 until the eval, then the final row), `eval/results/real_rerun_2026-10-31/real.md`, `eval/results/real_rerun_2026-11-02_wsd-baseline/real.md`; the two Oct 29 passes from `eval/results/real_rerun_2026-10-31/README.md` (its Oct 28 column is left out: its first-run cell is real.json's 13, the published table says 14) |
-| 5 | First run vs routine (calls, time, cost) | `eval/results/final/real.json` |
+| 5 | First run vs routine (calls, time, cost) and compiling once: the cost curve | `eval/results/real_rerun_2026-11-02_wsd-baseline/real.json` (the newest full pass on the hybrid profile, `REAL_CURVE`) until the eval, then `eval/results/final/real.json`. Medians and ranges over the workflows whose first run and same-input rerun both passed, with no repair (`agent`, `routine_runs` "same input", `compile.cost_usd`). The README's cost curve uses the same pass and rule, and the build checks they agree |
 | 5 | Posting routines' rehearsals, all four | `runs.md`, as in section 3 |
 | 5 | SkyLark suites | `eval/results/final/report.md` (suites 0–3b, 5–7) |
 | 5 | Pixel 5: 30/30, 0 calls | `eval/results/final/sizes.json` (devices.phone) |
@@ -128,7 +131,7 @@ Section numbers are positions on the page (the page numbers itself); "E:" is a g
 | E: runs | Every run cited: when, where, commit, profile, task ids | the files above; the first run's profile from its model calls |
 | E: routine | The Starbucks routine as compiled and v4; every model call; one replay's steps; versions | `eval/results/real-apps/loop-a/compiled/loop_starbucks-v1.yaml`, `data/routines/starbucks_drink_calories/`, `site/data/recordings/starbucks-replay.json`, `starbucks-repair.json` |
 | E: repairs | SkyLark's extra-screen repair; 50 changes by layout; real-app self-repairs | `eval/results/final/change.json`, `change.md`, `eval/results/final/library/change/check_in-L3/`, `data/routines/*/index.json` |
-| E: real | Each real-app workflow | `eval/results/final/real.json` |
+| E: real | Each real-app workflow | the cost curve's pass |
 | E: targets | Design targets, four charts | `eval/results/final/report.md`, `eval/results/final/charts/` |
 | E: tools | The tool list before and after one share switch; the tool; one call; Settings › Agent tools; the Spark agent calling it by name | `eval/results/agent-door/`; `agents/meta-agent/evidence/2026-11-01/routine-tool-run.json` and `.png` |
 | E: models | SAM 3.1 on the seat map; 52 targets | `site/data/recordings/sam.json`, `eval/results/phase6/vision.json`, `docs/phase-6-results.md` |

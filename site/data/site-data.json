@@ -2816,47 +2816,67 @@
    }
   },
   "curve": {
-   "n": 14,
-   "repaired": 1,
+   "n": 12,
+   "of": 18,
+   "pass": {
+    "date": "Nov 2",
+    "commit": "192cd29",
+    "final": false,
+    "profile": "hybrid",
+    "tier": "standard",
+    "run": "1102175459",
+    "src": {
+     "path": "eval/results/real_rerun_2026-11-02_wsd-baseline/real.json"
+    },
+    "md_src": {
+     "path": "eval/results/real_rerun_2026-11-02_wsd-baseline/real.md"
+    }
+   },
    "first": {
     "calls": {
-     "median": 6.0,
+     "median": 5.0,
      "min": 2,
-     "max": 25,
-     "n": 14
+     "max": 13,
+     "n": 12
     },
     "seconds": {
-     "median": 19.43,
-     "min": 4.39,
-     "max": 73.46,
-     "n": 14
+     "median": 19.36,
+     "min": 6.62,
+     "max": 43.82,
+     "n": 12
     },
     "usd": {
-     "median": 0.011,
-     "min": 0.0050864,
-     "max": 0.0498646,
-     "n": 14
+     "median": 0.0368,
+     "min": 0.015659199999999998,
+     "max": 0.0864344,
+     "n": 12
     }
    },
    "rerun": {
     "calls": {
      "median": 0.0,
      "min": 0,
-     "max": 2,
-     "n": 14
+     "max": 0,
+     "n": 12
     },
     "seconds": {
-     "median": 8.08,
-     "min": 1.13,
-     "max": 53.09,
-     "n": 14
+     "median": 5.395,
+     "min": 0.74,
+     "max": 15.18,
+     "n": 12
     },
     "usd": {
      "median": 0.0,
      "min": 0.0,
-     "max": 0.0125,
-     "n": 14
+     "max": 0.0,
+     "n": 12
     }
+   },
+   "compile": {
+    "median": 0.0415,
+    "min": 0.0244,
+    "max": 0.0855,
+    "n": 12
    }
   },
   "rows": [
@@ -2868,19 +2888,19 @@
     "agent": {
      "actions": 2,
      "calls": 4,
-     "seconds": 25.59
+     "seconds": 33.37
     },
     "compiled": true,
     "steps": 2,
     "same": {
-     "result": "pass",
-     "calls": 0,
-     "seconds": 21.24
+     "result": "pass after repair",
+     "calls": 1,
+     "seconds": 39.53
     },
     "new": {
      "result": "fail",
-     "calls": 0,
-     "seconds": 69.34
+     "calls": 2,
+     "seconds": 75.96
     }
    },
    {
@@ -2919,21 +2939,21 @@
     "graded_by": "truth",
     "first_run": "pass",
     "agent": {
-     "actions": 8,
-     "calls": 10,
-     "seconds": 32.41
+     "actions": 7,
+     "calls": 9,
+     "seconds": 29.9
     },
     "compiled": true,
     "steps": 8,
     "same": {
      "result": "pass",
      "calls": 0,
-     "seconds": 21.41
+     "seconds": 9.37
     },
     "new": {
      "result": "pass",
      "calls": 0,
-     "seconds": 25.41
+     "seconds": 10.11
     }
    },
    {
@@ -2942,40 +2962,36 @@
     "graded_by": "shape",
     "first_run": "pass",
     "agent": {
-     "actions": 21,
-     "calls": 25,
-     "seconds": 73.46
+     "actions": 11,
+     "calls": 13,
+     "seconds": 43.82
     },
     "compiled": true,
-    "steps": 22,
+    "steps": 12,
     "same": {
-     "result": "pass after repair",
-     "calls": 2,
-     "seconds": 53.09
+     "result": "pass",
+     "calls": 0,
+     "seconds": 15.18
     },
     "new": {
-     "result": "pass after repair",
-     "calls": 1,
-     "seconds": 51.46
+     "result": "pass",
+     "calls": 0,
+     "seconds": 19.73
     }
    },
    {
     "workflow": "doordash",
     "goal": "In the DoorDash app, what is my saved delivery address?",
     "graded_by": "truth",
-    "first_run": "pass",
+    "first_run": "failed",
     "agent": {
-     "actions": 1,
-     "calls": 3,
-     "seconds": 12.47
+     "actions": 7,
+     "calls": 12,
+     "seconds": 50.0
     },
-    "compiled": true,
-    "steps": 1,
-    "same": {
-     "result": "pass",
-     "calls": 0,
-     "seconds": 9.64
-    },
+    "compiled": false,
+    "steps": null,
+    "same": null,
     "new": null
    },
    {
@@ -2986,19 +3002,19 @@
     "agent": {
      "actions": 2,
      "calls": 4,
-     "seconds": 18.35
+     "seconds": 14.8
     },
     "compiled": true,
     "steps": 2,
     "same": {
      "result": "pass",
      "calls": 0,
-     "seconds": 16.3
+     "seconds": 7.72
     },
     "new": {
-     "result": "pass after repair",
+     "result": "pass",
      "calls": 0,
-     "seconds": 20.15
+     "seconds": 8.16
     }
    },
    {
@@ -3007,16 +3023,16 @@
     "graded_by": "truth",
     "first_run": "pass",
     "agent": {
-     "actions": 4,
-     "calls": 6,
-     "seconds": 15.33
+     "actions": 5,
+     "calls": 7,
+     "seconds": 26.7
     },
     "compiled": true,
     "steps": 3,
     "same": {
      "result": "pass",
      "calls": 0,
-     "seconds": 7.88
+     "seconds": 10.07
     },
     "new": null
    },
@@ -3026,16 +3042,16 @@
     "graded_by": "truth",
     "first_run": "pass",
     "agent": {
-     "actions": 6,
-     "calls": 8,
-     "seconds": 22.08
+     "actions": 3,
+     "calls": 5,
+     "seconds": 15.35
     },
     "compiled": true,
     "steps": 3,
     "same": {
      "result": "pass",
      "calls": 0,
-     "seconds": 3.21
+     "seconds": 3.28
     },
     "new": null
    },
@@ -3045,16 +3061,16 @@
     "graded_by": "truth",
     "first_run": "pass",
     "agent": {
-     "actions": 14,
-     "calls": 19,
-     "seconds": 47.89
+     "actions": 1,
+     "calls": 3,
+     "seconds": 11.78
     },
     "compiled": true,
     "steps": 1,
     "same": {
      "result": "pass",
      "calls": 0,
-     "seconds": 2.29
+     "seconds": 3.18
     },
     "new": null
    },
@@ -3066,19 +3082,19 @@
     "agent": {
      "actions": 3,
      "calls": 5,
-     "seconds": 21.96
+     "seconds": 21.51
     },
     "compiled": true,
     "steps": 3,
     "same": {
      "result": "pass",
      "calls": 0,
-     "seconds": 8.28
+     "seconds": 5.48
     },
     "new": {
      "result": "pass",
      "calls": 0,
-     "seconds": 13.49
+     "seconds": 5.2
     }
    },
    {
@@ -3089,14 +3105,14 @@
     "agent": {
      "actions": 0,
      "calls": 2,
-     "seconds": 4.39
+     "seconds": 9.5
     },
     "compiled": true,
     "steps": 1,
     "same": {
      "result": "pass",
      "calls": 0,
-     "seconds": 1.47
+     "seconds": 0.85
     },
     "new": null
    },
@@ -3108,14 +3124,14 @@
     "agent": {
      "actions": 0,
      "calls": 2,
-     "seconds": 6.05
+     "seconds": 6.62
     },
     "compiled": true,
     "steps": 1,
     "same": {
      "result": "pass",
      "calls": 0,
-     "seconds": 1.13
+     "seconds": 0.74
     },
     "new": null
    },
@@ -3127,19 +3143,19 @@
     "agent": {
      "actions": 4,
      "calls": 6,
-     "seconds": 19.3
+     "seconds": 28.62
     },
     "compiled": true,
     "steps": 3,
     "same": {
      "result": "pass",
      "calls": 0,
-     "seconds": 11.8
+     "seconds": 11.63
     },
     "new": {
      "result": "pass",
      "calls": 0,
-     "seconds": 12.51
+     "seconds": 11.98
     }
    },
    {
@@ -3148,37 +3164,45 @@
     "graded_by": "shape",
     "first_run": "pass",
     "agent": {
-     "actions": 6,
-     "calls": 8,
-     "seconds": 19.56
+     "actions": 3,
+     "calls": 5,
+     "seconds": 17.21
     },
     "compiled": true,
     "steps": 3,
     "same": {
      "result": "pass",
      "calls": 0,
-     "seconds": 4.96
+     "seconds": 4.66
     },
     "new": {
-     "result": "fail",
-     "calls": 2,
-     "seconds": 59.79
+     "result": "pass",
+     "calls": 0,
+     "seconds": 4.28
     }
    },
    {
     "workflow": "youtube_search",
     "goal": "In the YouTube app, search for lofi hip hop and tell me the title of the first video in the results.",
     "graded_by": "shape",
-    "first_run": "error",
+    "first_run": "pass",
     "agent": {
-     "actions": 4,
-     "calls": 5,
-     "seconds": 511.67
+     "actions": 3,
+     "calls": 6,
+     "seconds": 24.97
     },
-    "compiled": false,
-    "steps": null,
-    "same": null,
-    "new": null
+    "compiled": true,
+    "steps": 2,
+    "same": {
+     "result": "pass",
+     "calls": 0,
+     "seconds": 5.31
+    },
+    "new": {
+     "result": "pass",
+     "calls": 0,
+     "seconds": 5.09
+    }
    },
    {
     "workflow": "ytmusic_artist",
@@ -3186,21 +3210,21 @@
     "graded_by": "truth",
     "first_run": "pass",
     "agent": {
-     "actions": 6,
-     "calls": 8,
-     "seconds": 17.85
+     "actions": 4,
+     "calls": 6,
+     "seconds": 21.7
     },
     "compiled": true,
-    "steps": 5,
+    "steps": 4,
     "same": {
-     "result": "pass",
+     "result": "wrong",
      "calls": 0,
-     "seconds": 7.78
+     "seconds": 4.79
     },
     "new": {
      "result": "pass",
      "calls": 0,
-     "seconds": 8.0
+     "seconds": 5.44
     }
    },
    {
@@ -3209,14 +3233,22 @@
     "graded_by": "truth",
     "first_run": "right, unverified",
     "agent": {
-     "actions": 10,
-     "calls": 15,
-     "seconds": 70.56
+     "actions": 4,
+     "calls": 7,
+     "seconds": 44.66
     },
-    "compiled": false,
-    "steps": null,
-    "same": null,
-    "new": null
+    "compiled": true,
+    "steps": 1,
+    "same": {
+     "result": "pass after repair",
+     "calls": 3,
+     "seconds": 17.67
+    },
+    "new": {
+     "result": "input not learned",
+     "calls": null,
+     "seconds": null
+    }
    }
   ],
   "passes": [

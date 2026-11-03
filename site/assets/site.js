@@ -59,12 +59,13 @@
     return `<div class="phone"><img src="data/${esc(frame)}" alt="${esc(alt)}" loading="lazy" width="360" height="800">
       ${rects ? `<svg class="ring" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">${rects}</svg>` : ""}</div>`;
   }
-  // The real-app pass the page's real-app numbers come from, in words.
-  const realPass = () => {
-    const c = D.real.current;
-    return c.final ? `the final evaluation (${day(c.date)}, ${c.profile} profile)`
-      : `the ${day(c.date)} pass of the evaluation's real-app suite (${c.runs > 1 ? `${c.runs} runs, ` : ""}${c.profile} profile)`;
+  // The cost curve's pass: the newest full real-app pass on the hybrid profile until the final evaluation replaces it.
+  const curvePass = () => {
+    const c = D.real.curve.pass;
+    return c.final ? `the final evaluation (${c.date}, ${c.profile} profile, ${c.tier} tier)`
+      : `the ${c.date} real-app pass (${c.profile} profile, ${c.tier} tier)`;
   };
+  const s2 = (x) => `${(Math.round(+x * 100 + 1e-6) / 100).toFixed(2)} s`;  // half up, as the README rounds
   const passLabel = (p) => {
     const same = D.real.passes.filter((q) => q.date === p.date);
     return same.length > 1 ? `${p.date}, ${["first", "second", "third"][same.indexOf(p)]} pass` : p.date;
@@ -108,7 +109,7 @@
     $("#pillars").innerHTML = `
       <div class="pillars three">
         <a class="card pillar" href="#learns"><span class="lbl">Learns</span><div class="big">${C.first.calls.median} → ${C.rerun.calls.median} model calls</div>
-          <p>A real-app task's first run, then its learned routine with the same input: medians over ${C.n} workflows, Envoy's own calls; ${s0(C.first.seconds.median)} → ${s0(C.rerun.seconds.median)}. From ${realPass()}.</p><span class="more">${num("learns")} · Learns →</span></a>
+          <p>A real-app task's first run, then its learned routine with the same input: medians over the ${C.n} of ${C.of} workflows where both passed, Envoy's own calls; ${s2(C.first.seconds.median)} → ${s2(C.rerun.seconds.median)}. From ${curvePass()}.</p><span class="more">${num("learns")} · Learns →</span></a>
         <a class="card pillar" href="#acts"><span class="lbl">Acts</span><div class="big">${S.cards.filter((c) => c.real.some((p) => p.live)).length} app-only posts</div>
           <p>A Reel with a library song, a Story poll, a TikTok and a YouTube Short with a sound. Live on Nov 2, each approved on the iPhone; the TikTok on its second try.</p><span class="more">${num("acts")} · Acts →</span></a>
         <a class="card pillar" href="#watches"><span class="lbl">Watches</span><div class="big">${esc(ig ? ig["Shown on iPhone"].replace(/^\+/, "") : "")}</div>
@@ -190,12 +191,12 @@
       <div class="learn-grid">
         <div class="card" style="padding:20px">
           <h3>Then it replays</h3>
-          <p class="small" style="margin:6px 0 0">On real apps, a first run against its learned routine rerun with the same input, medians over the ${C.n} workflows where both were right; the routine's calls are Envoy's own:</p>
+          <p class="small" style="margin:6px 0 0">On real apps, a first run against its learned routine rerun with the same input, medians over the ${C.n} of ${C.of} workflows where both passed; the routine's calls are Envoy's own:</p>
           <div class="tbl-wrap"><table class="tbl curve"><thead><tr><th></th><th class="r">Model calls</th><th class="r">Time</th></tr></thead><tbody>
-            <tr><td>First run</td><td class="r">${med(C.first.calls)}</td><td class="r">${med(C.first.seconds, s0)}</td></tr>
-            <tr><td>Routine</td><td class="r">${med(C.rerun.calls)}</td><td class="r">${med(C.rerun.seconds, s0)}</td></tr>
+            <tr><td>First run</td><td class="r">${med(C.first.calls)}</td><td class="r">${med(C.first.seconds, s2)}</td></tr>
+            <tr><td>Routine</td><td class="r">${med(C.rerun.calls)}</td><td class="r">${med(C.rerun.seconds, s2)}</td></tr>
           </tbody></table></div>
-          <p class="small" style="margin:8px 0 0">From ${realPass()}; the trajectory is in ${sec("results")}. Starbucks on its own (hybrid profile) replayed with fewer calls but more slowly: across its ${L.loop.replay.calls.n} finished replays on Oct 30, a median ${L.loop.replay.calls.median} model calls against its first runs' ${L.loop.first.calls.median}, but ${s0(L.loop.replay.seconds.median)} (${s0(L.loop.replay.seconds.min)}–${s0(L.loop.replay.seconds.max)}) against ${s0(L.loop.first.seconds.median)}. ${notFinal(D.real.current.commit)} ${srcA(D.real.src, "real.json")} ${srcA(T.src, "Starbucks runs")}</p>
+          <p class="small" style="margin:8px 0 0">From ${curvePass()}; compiling each routine cost a median ${usd(C.compile.median)} once (Muse Wonder). The trajectory is in ${sec("results")}. Starbucks on its own (hybrid profile) replayed with fewer calls but more slowly: across its ${L.loop.replay.calls.n} finished replays on Oct 30, a median ${L.loop.replay.calls.median} model calls against its first runs' ${L.loop.first.calls.median}, but ${s0(L.loop.replay.seconds.median)} (${s0(L.loop.replay.seconds.min)}–${s0(L.loop.replay.seconds.max)}) against ${s0(L.loop.first.seconds.median)}. ${notFinal(D.real.current.commit)} ${srcA(D.real.src, "real.json")} ${srcA(T.src, "Starbucks runs")}</p>
         </div>
         <div class="card" style="padding:20px">
           <h3>A new input</h3>
@@ -433,12 +434,13 @@
         </table></div>
         <div class="card" style="padding:18px 20px">
           <h3>First run vs routine</h3>
-          <p class="small" style="margin:4px 0 0">Medians and ranges over the ${C.n} workflows whose first run was right and whose routine reran right with the same input${C.repaired ? ` (${C.repaired} after a repair)` : ""}, from ${realPass()}.</p>
+          <p class="small" style="margin:4px 0 0">Medians and ranges over the ${C.n} of ${C.of} workflows whose first run and same-input rerun both passed (a rerun that needed a repair isn't counted), from ${curvePass()}. The routine is called by name; asked in words, Envoy's matcher adds one Spark call.</p>
           <div class="tbl-wrap"><table class="tbl curve"><thead><tr><th></th><th class="r">Calls</th><th class="r">Time</th><th class="r">Cost</th></tr></thead><tbody>
-            <tr><td>First run</td><td class="r">${med(C.first.calls)}</td><td class="r">${med(C.first.seconds, s0)}</td><td class="r">${med(C.first.usd, usd)}</td></tr>
-            <tr><td>Routine</td><td class="r">${med(C.rerun.calls)}</td><td class="r">${med(C.rerun.seconds, s0)}</td><td class="r">${med(C.rerun.usd, usd)}</td></tr>
+            <tr><td>The agent's first run</td><td class="r">${med(C.first.calls)}</td><td class="r">${med(C.first.seconds, s2)}</td><td class="r">${med(C.first.usd, usd)}</td></tr>
+            <tr><td>Envoy's replay</td><td class="r">${med(C.rerun.calls)}</td><td class="r">${med(C.rerun.seconds, s2)}</td><td class="r">${med(C.rerun.usd, usd)}</td></tr>
+            <tr><td>Compiling it, once</td><td class="r">1 <span class="rng">(Muse Wonder)</span></td><td class="r">–</td><td class="r">${med(C.compile, usd)}</td></tr>
           </tbody></table></div>
-          <p class="small" style="margin:8px 0 0">The routine's calls are Envoy's own; an agent calling Envoy pays for its own model too (the Spark agent's four-post run: ${D.agents.crosspost.model_calls} calls, ${usd(D.agents.crosspost.usd)}). ${notFinal(cur.commit)} ${srcA(RA.src, "real.json")} ${srcA(RA.passes_src, "earlier passes")}</p>
+          <p class="small" style="margin:8px 0 0">The routine's calls are Envoy's own; an agent calling Envoy pays for its own model too (the Spark agent's four-post run: ${D.agents.crosspost.model_calls} calls, ${usd(D.agents.crosspost.usd)}). ${C.pass.final ? "" : notFinal(C.pass.commit)} ${srcA(C.pass.src, "real.json")} ${srcA(C.pass.md_src, "real.md")}</p>
         </div>
       </div>
       <p class="small" style="margin:10px 4px 0">Misses, as recorded: Target's bot check stops every run on an emulator; a few routines fit their first input's screens only. Each workflow, pass by pass, is in the ${ev("real", "evidence")}. On Envoy's phone, since each posting routine's last compile, its rehearsals reached the final button ${reps.filter((r) => r.ok).length} of ${reps.length} times; across all their versions, ${S.cards.reduce((a, c) => a + c.every.ok, 0)} of ${S.cards.reduce((a, c) => a + c.every.n, 0)} (${sec("acts")}).</p>
@@ -593,12 +595,12 @@
             <div class="label-rec">${srcA(RP.layouts_src, "change.md")} ${srcA(RP.real_src, "index.json files")}</div>
           </div>
         </div>`)}
-      ${group("real", "Real apps, workflow by workflow", `${esc(RA.rows.length)} workflows, ${esc(realPass())}`, `
+      ${group("real", "Real apps, workflow by workflow", `${esc(RA.rows.length)} workflows, ${esc(curvePass())}`, `
         <div class="tbl-wrap card"><table class="tbl">
           <thead><tr><th>Workflow</th><th>First run</th><th class="r">Agent</th><th>Compiled</th><th>Same input</th><th>New input</th><th>Graded by</th></tr></thead>
-          <tbody>${RA.rows.map((r) => `<tr><td><code class="small">${esc(r.workflow)}</code><div class="small">${esc(r.goal)}</div></td><td>${esc(r.first_run)}</td><td class="r">${r.agent.calls} calls, ${s0(r.agent.seconds)}</td><td>${r.compiled ? `yes, ${r.steps} steps` : "no"}</td><td>${r.same ? `${res(r.same)}, ${s0(r.same.seconds)}` : "–"}</td><td>${res(r.new)}</td><td class="small">${esc(r.graded_by === "truth" ? "the app's truth" : "the answer's shape")}</td></tr>`).join("")}</tbody>
+          <tbody>${RA.rows.map((r) => `<tr><td><code class="small">${esc(r.workflow)}</code><div class="small">${esc(r.goal)}</div></td><td>${esc(r.first_run)}</td><td class="r">${r.agent.calls} calls, ${s0(r.agent.seconds)}</td><td>${r.compiled ? `yes, ${r.steps} steps` : "no"}</td><td>${r.same ? `${res(r.same)}${r.same.seconds != null ? `, ${s0(r.same.seconds)}` : ""}` : "–"}</td><td>${res(r.new)}</td><td class="small">${esc(r.graded_by === "truth" ? "the app's truth" : "the answer's shape")}</td></tr>`).join("")}</tbody>
         </table></div>
-        <p class="small" style="margin:8px 0 0">“Graded by shape” answers (a price, a title) were also read by a person. ${srcA(RA.md_src, "real.md")} ${srcA(RA.src, "real.json")}</p>`)}
+        <p class="small" style="margin:8px 0 0">“Graded by shape” answers (a price, a title) are also read by a person; the pass's real.md says how many were. ${srcA(RA.curve.pass.md_src, "real.md")} ${srcA(RA.curve.pass.src, "real.json")}</p>`)}
       ${group("targets", "The design's targets on our test app, and four charts", "three on SkyLark, one on real apps; Spark profile", `
         <div class="tbl-wrap card"><table class="tbl"><thead><tr><th>Target</th><th>Goal</th><th>Measured</th></tr></thead>
           <tbody>${P.targets.map((t) => `<tr><td>${esc(t.Target)}</td><td>${esc(t.Goal)}</td><td>${esc(t.Measured)}</td></tr>`).join("")}</tbody></table></div>
