@@ -56,9 +56,9 @@ connector. Any MCP agent can do the same; the Spark agent (a small agent built o
   version, on trial until it passes. In the live posts (one each), the Reel, the Story and the Short replayed with 0
   model calls in Envoy's replay and the TikTok with 3; the agent that calls Envoy pays
   for its own turns (the Spark agent used 11 model calls, $0.044, to drive a three-post run:
-  `agents/meta-agent/evidence/2026-11-01/crosspost/README.md`). On 9 read-only real-app workflows (Oct 31, `hybrid`,
-  standard tier), Envoy's replay used 0 model calls at a median 6.08 s, against the agent's first run at a median 4 calls and
-  17.87 s ([Results](#results)).
+  `agents/meta-agent/evidence/2026-11-01/crosspost/README.md`). On 12 read-only real-app workflows (Nov 2, `hybrid`,
+  standard tier), Envoy's replay used 0 model calls at a median 5.40 s, against the agent's first run at a median 5 calls
+  and 19.36 s ([Results](#results)).
 - **Learned tasks become tools.** A routine the person shares becomes a tool of its own for every agent allowed to run
   tasks, such as `instagram_reel_song(song_title, song_artist, caption)`, with no restart
   (`eval/results/agent-door/tools-before.json`, `tools-after.json`). Teach mode learns a routine from one demonstration
@@ -127,10 +127,10 @@ or by Envoy, are listed in `data/routines/<name>/index.json`.
 
 | Routine (active version) | By hand | Since |
 | --- | --- | --- |
-| `instagram_reel_song` (v3) | none to its steps | recompiled once after a compiler fix, from the same run; after the live post, Envoy repaired two after-checks on its own, and that version passed its trial in Muse's dry run (0 calls, declined at Share) |
+| `instagram_reel_song` (v3) | none to its steps | recompiled once after a compiler fix, from the same run; after the live post, Envoy repaired two after-checks on its own, and that version passed its trial in Muse's dry run (0 model calls in Envoy's replay, declined at Share) |
 | `instagram_story_poll` (v3) | none | recompiled twice after compiler fixes, from the same run |
 | `tiktok_post_sound` (v3) | a 3 s wait before tapping TikTok's drawn sound list; the app's name corrected (the source run predates TikTok in Envoy's app list); the launch step's before-checks dropped | recompiled after compiler fixes, from the same run, with those edits re-applied: it now checks that the editor names the sound |
-| `youtube_short_sound` (v3) | one before-check dropped (a "Captions unavailable" label from a video playing when the run was recorded) | recompiled once after a compiler fix, from the same run; after the live post, Envoy repaired one after-check on its own, and that version passed its trial in Muse's dry run (0 calls, declined at Upload Short) |
+| `youtube_short_sound` (v3) | one before-check dropped (a "Captions unavailable" label from a video playing when the run was recorded) | recompiled once after a compiler fix, from the same run; after the live post, Envoy repaired one after-check on its own, and that version passed its trial in Muse's dry run (0 model calls in Envoy's replay, declined at Upload Short) |
 
 ## Public GitHub repository
 
@@ -174,8 +174,8 @@ controls when the accessibility tree is missing.**
 - **Wonder turns a run into an API.** Each showcase routine was compiled by Muse Wonder from one agent run; Instagram's
   two needed no hand edits to their steps ([above](#hand-edits-stated-exactly)). Shared with agents, each becomes a typed
   MCP tool. On the default `hybrid` profile Wonder also plans and takes the agent's steps on a first run. Compiling is
-  paid once: on 9 real-app workflows, a median $0.0476 to compile against $0.0308 for the first run itself; after that,
-  Envoy's replay used 0 model calls (measured Oct 31).
+  paid once: on 12 real-app workflows, a median $0.0415 to compile against $0.0368 for the first run itself; after that,
+  Envoy's replay used 0 model calls (measured Nov 2).
 - **An agent on Meta's own API calls Envoy.** The Spark agent runs on Muse Spark 1.3 through the Responses API, reaches
   Envoy only over MCP with its own key, and started the real posts. Asked to approve, it said only the person can
   (`agents/meta-agent/evidence/2026-11-01/`).
@@ -266,8 +266,8 @@ move for that reason too.
 | 2. First run vs later runs (SkyLark) | request 1 median 5.5 calls, $0.051, 27.9 s; requests 2–10 90/90, median 1 call, $0.0023, 5.9 s (`5c3d716`) | TBD |
 | 3. Routines under change (SkyLark) | new inputs 50/50 with no model call; injected changes recovered 50/50 (25 needed no fix, 22 a relaxed match, 3 a local repair), then 50/50 alone (`6c507f3`) | TBD |
 | 3b. SkyLark routines on three screen sizes and Envoy's phone | envoy-test 30/30, envoy-small 30/30, envoy-large 29/30 (`5504260`); Pixel 5 30/30 with no model call (`a9b923d`, `sizes.md`) | TBD |
-| 4. Real apps (18 read-only workflows) | Oct 28, Spark profile (rows from 4 runs; last `00ec5d9`): first run 14/18, compiled 14/18, rerun with no call 13/18, new input 4/11. Oct 31 rehearsal, `hybrid` (`a594136`): 12/18, 12/18, 9/18, 6/11. Nov 2 baseline, `hybrid` (`192cd29`; results being committed): 14/18, 15/18, 12/18, 8/11 | TBD |
-| 4. Real apps: the cost curve | Oct 31, `hybrid`, the 9 workflows whose first run and rerun both passed: the agent's first run median 4 calls (2–9), 17.87 s, $0.0308; Envoy's replay 0 calls, 6.08 s (0.72–27.43 s); compile $0.0476 once | TBD |
+| 4. Real apps (18 read-only workflows) | Oct 28, Spark profile (rows from 4 runs; last `00ec5d9`): first run 14/18, compiled 14/18, rerun with no call 13/18, new input 4/11. Oct 31 rehearsal, `hybrid` (`a594136`): 12/18, 12/18, 9/18, 6/11. Nov 2 baseline, `hybrid` (`192cd29`, `eval/results/real_rerun_2026-11-02_wsd-baseline/`): 14/18, 15/18, 12/18, 8/11 | TBD |
+| 4. Real apps: the cost curve | Nov 2, `hybrid`, the 12 workflows whose first run and rerun both passed: the agent's first run median 5 calls (2–13), 19.36 s, $0.0368; Envoy's replay 0 calls, 5.40 s (0.74–15.18 s); compile $0.0415 once. Oct 31, `hybrid`, 9 workflows: 4 calls, 17.87 s, $0.0308 against 0 calls, 6.08 s; compile $0.0476 | TBD |
 | 5. Memory | extraction 459/468 (98%) on 62 labelled test items, 0 wrong; stale facts served without a warning 0/12 (`5c3d716`) | TBD |
 | 6. Safety: irreversible actions | on 20 saved screens (6 SkyLark, 14 real-app), caught 20/20 (code alone 20); reversible flagged by code 0/22 (by the gate, model label included, 1/22); live declines on SkyLark held 7/7 (`849e51a`) | TBD |
 | 6b. Safety: planted instructions (SkyLark's screens and a test inbox) | agent right 20/20, followed it 0; irreversible without approval 0; injected values stored 0 (`7395743`) | TBD |
@@ -313,7 +313,11 @@ Measured outside the evaluation (these stay as they are):
 
 - **Learn a task once, not an app.** New inputs on real apps passed 4 to 6 of 11 in five passes, Oct 28–31 (the Spark
   profile, then `hybrid` on Oct 31; `eval/results/real_rerun_2026-10-31/README.md`), and 8 of 11 in the Nov 2 `hybrid`
-  baseline (results being committed). Routines on our own test app do far
+  baseline (`eval/results/real_rerun_2026-11-02_wsd-baseline/`). After two compiler fixes, a two-workflow check got
+  Amazon's same input to pass with no model call (its new input still finds no price) and Chrome's Wikipedia lookup to
+  learn its topic, right on a new one with 1 model call to read the year (`eval/results/real_rerun_2026-11-02_wsd-check/`).
+- **A replay can answer wrong.** On Nov 2, the YouTube Music routine's same-input replay read the artist from a mini
+  player an earlier run had left playing, with no model call. Routines on our own test app do far
   better (50 of 50). A failed step is repaired locally and kept as a new version on trial.
 - **Step checks aren't outcome checks.** The first TikTok passed every step check and went out without its sound. Its
   routine now checks that the editor names the sound, but Envoy doesn't yet check every outcome (the right clip, sound

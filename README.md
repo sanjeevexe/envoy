@@ -16,8 +16,8 @@ irreversible steps an agent starts wait for the person's yes on their iPhone.
 <!-- SLOT final numbers: replace all three from eval/results/final/report.md after `eval/run_final.py report` (Nov 3). 1 is
 suite 4's real.json (medians over the workflows whose first run and same-input rerun both passed); 2 is suite 3; 3 is the
 "Irreversible actions taken without approval" target row. -->
-- **Real apps, 9 read-only workflows:** Envoy's replay used 0 model calls and a median 6.08 s; the agent's first run took a
-  median 4 calls, 17.87 s and $0.0308 (Oct 31, `hybrid` profile, standard tier).
+- **Real apps, 12 read-only workflows:** Envoy's replay used 0 model calls and a median 5.40 s; the agent's first run took
+  a median 5 calls, 19.36 s and $0.0368 (Nov 2, `hybrid` profile, standard tier).
 - **SkyLark (our test app), changed on purpose 50 times:** 50 recovered (25 needed no fix), then 50 of 50 ran with no
   model call (Spark profile, standard tier).
 - **Irreversible actions without approval: 0,** over 7 declined live runs and 30 runs with planted instructions on
@@ -91,7 +91,7 @@ profile. A new input applies to 11 of the 18.
 | --- | --- | --- | --- | --- |
 | Oct 28, Spark profile (4 runs) | 14/18 | 14/18 | 13/18 | 4/11 |
 | Oct 31, `hybrid` (a rehearsal) | 12/18 | 12/18 | 9/18 | 6/11 |
-| Nov 2, `hybrid` (a baseline; its results are being committed) | 14/18 | 15/18 | 12/18 | 8/11 |
+| Nov 2, `hybrid` (a baseline) | 14/18 | 15/18 | 12/18 | 8/11 |
 | Nov 3, final, `hybrid` | TBD | TBD | TBD | TBD |
 
 Target's bot check stopped both Target workflows on every pass. The passes differ in profile as well as code, so read
@@ -104,6 +104,7 @@ against the agent's first run:
 | --- | --- | --- | --- | --- |
 | Oct 28, Spark profile | 13 | 6 calls (2–19), 19.3 s (4.39–47.89 s), $0.0105 | 0 calls, 7.88 s (1.13–21.41 s), $0 | $0.0449 (Wonder) |
 | Oct 31, `hybrid` | 9 | 4 calls (2–9), 17.87 s (5.95–28.73 s), $0.0308 | 0 calls, 6.08 s (0.72–27.43 s), $0 | $0.0476 (Wonder) |
+| Nov 2, `hybrid` | 12 | 5 calls (2–13), 19.36 s (6.62–43.82 s), $0.0368 | 0 calls, 5.40 s (0.74–15.18 s), $0 | $0.0415 (Wonder) |
 | Nov 3, final | TBD | TBD | TBD | TBD |
 
 Asked in words instead of by name, Envoy's matcher adds one Spark call to pick the routine.
@@ -139,13 +140,19 @@ held-out half from 12 to 31 of 58; they have been part of Envoy since Oct 29
 ## Limits, said plainly
 
 - **Learn a task once, not an app.** New inputs on real apps passed 4 to 6 of 11 in five passes, Oct 28–31 (the Spark
-  profile, then `hybrid` on Oct 31), and 8 of 11 in the Nov 2 `hybrid` baseline; on SkyLark (our test app), 50 of 50. When a step fails, the routine repairs that step and keeps
+  profile, then `hybrid` on Oct 31), and 8 of 11 in the Nov 2 `hybrid` baseline; on SkyLark (our test app), 50 of 50.
+  A two-workflow check after two compiler fixes (Nov 2): Amazon's same input now passes with no model call, but its new
+  input still finds no price; Chrome's Wikipedia lookup now learns its topic and answered a new one right, with 1 model
+  call to read the year from the screen
+  ([`real_rerun_2026-11-02_wsd-check/`](eval/results/real_rerun_2026-11-02_wsd-check/README.md)). When a step fails, the routine repairs that step and keeps
   the fix as a new version on trial, so a workflow can pass "after a repair".
 - **A routine's first days are rough.** In an Oct 30 development loop on `envoy-real` (`hybrid`), the agent's first run
   of a Starbucks calorie question took 45.6 s and 12 model calls. Over the 26 replays of the routine compiled from it,
   the median was 66.95 s and 4 calls (14.2–148.8 s, 2–12 calls). Only on the loop's last commit, after one automatic
   repair and two hand fixes (v4), did its 4 replays take 14.8–15.9 s and 2 calls each, three of them with a new drink
   ([`runs.jsonl`](eval/results/real-apps/loop-a/runs.jsonl), [`index.json`](data/routines/starbucks_drink_calories/index.json)).
+- **A replay can answer wrong.** On Nov 2, the YouTube Music routine's same-input replay read the artist from a mini
+  player an earlier run had left playing, and gave a wrong answer with no model call.
 - **Step checks aren't outcome checks.** The first TikTok passed every step check and went out without its sound. The
   routine now checks that the editor names the sound, but Envoy doesn't yet check every outcome (the right clip, sound
   and caption) before the final button.
@@ -253,8 +260,9 @@ and compile on Muse Wonder 1.0 and the rest on Muse Spark 1.3; the Spark profile
 | --- | --- | --- | --- |
 | Real apps, Oct 28 | 18 workflows on `envoy-real`, Spark profile; rows from 4 runs that day | `401e994`, `524b93a`, `cddf1b2`, `00ec5d9` | [`real.md`](eval/results/final/real.md), `real.json` (suite 4) |
 | Real apps, Oct 31 | the same 18, `hybrid`; Gmail's two rows rerun after a missing token | `a594136` (runs `1031150937`, `1031152557`) | [`real_rerun_2026-10-31/`](eval/results/real_rerun_2026-10-31/README.md) |
-| Real apps, Nov 2 | the same 18, `hybrid`, a baseline before the final evaluation | `192cd29` | being committed; the path goes here once it lands |
-| New inputs, 4 to 6 of 11 | five passes, Oct 28–31: four on the Spark profile, then `hybrid` on Oct 31 | `00ec5d9`, `53ab459`, `736a6e4`, `059bb7f`, `a594136` | `real_rerun_2026-10-31/README.md`, "The four stages" |
+| Real apps, Nov 2 | the same 18, `hybrid`: 16 run (run `1102175459`), Target's two carried over from `524b93a`; 13 shape-graded answers not yet read by a person | `192cd29` | [`real_rerun_2026-11-02_wsd-baseline/`](eval/results/real_rerun_2026-11-02_wsd-baseline/README.md) |
+| Real apps, Nov 2 check | amazon and chrome_wikipedia only, `hybrid`, after two compiler fixes and a blank Chrome page before each run; its `real.md` totals mix runs, so only its README and these two rows count | `3d0df77` | [`real_rerun_2026-11-02_wsd-check/`](eval/results/real_rerun_2026-11-02_wsd-check/README.md) |
+| New inputs, 4 to 6 of 11, then 8 | five passes, Oct 28–31: four on the Spark profile, then `hybrid` on Oct 31; 8 of 11 on Nov 2, `hybrid` | `00ec5d9`, `53ab459`, `736a6e4`, `059bb7f`, `a594136` | `real_rerun_2026-10-31/README.md`, "The four stages" |
 | The cost curve, and the top real-app number | medians (range) over the workflows whose first run and same-input rerun both passed; the routine is called by name, so no matcher call; compile cost is Wonder's, once per routine | as the pass | computed from each pass's `real.json` (`agent`, `routine_runs` "same input", `compile.cost_usd`) |
 | SkyLark suites 1, 2, 3, 3b, 6, 6b | SkyLark (our test app), Spark profile | `ad9a67b`, `5c3d716`, `6c507f3`, `5504260` (emulators) and `a9b923d` (Pixel), `849e51a`, `7395743` | [`report.md`](eval/results/final/report.md) and each suite's `.md` / `.json` |
 | "0 irreversible actions without approval" | on SkyLark: 7 declined live runs (suite 6) and 30 runs with planted instructions (suite 6b); the 20 irreversible controls are on saved screens, 6 SkyLark and 14 real-app | `849e51a`, `7395743` | `report.md`, "The design's success targets" |
