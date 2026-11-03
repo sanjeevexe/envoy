@@ -69,6 +69,7 @@ class TStep:
     vision: dict[str, Any] | None = None  # a tap_point's target as the agent saw it (Phase 6): description, box, crop
     trace_dir: Path | None = None
     moved: str = ""  # why it comes later than in the trace (typing done during a round trip)
+    settle_ms: float = 0.0  # how long the screen took to settle after it, as the agent recorded it
 
 
 # Screens an app shows once (onboarding, a welcome tour, "what's new", a promo): a step that only gets past one is kept
@@ -122,12 +123,17 @@ def _app_text(s: ScreenState | None) -> bool:
     return s is not None and any(e.label.strip() and not e.status_bar for e in s.numbered)
 
 
+def _unseen_answer(run: dict) -> bool:
+    """The run ended unverified because its own check found none of the answer's words in the final screen's tree."""
+    check = run.get("check") or {}
+    return run.get("status") == "done_unverified" and "visible on the current screen" in (check.get("detail") or "")
+
+
 def screen_only(trace_dir: Path, run: dict, records: list[dict] | None = None) -> bool:
     """An unverified run whose answer couldn't be checked only because its last screen has no accessibility tree (a page
     Chrome draws without one): the screenshot holds the answer. The compiler then reads it from the recorded screenshot
     and keeps it only if that read passes screen_read.accept, the check every rerun passes too."""
-    check = run.get("check") or {}
-    if run.get("status") != "done_unverified" or "visible on the current screen" not in (check.get("detail") or ""):
+    if not _unseen_answer(run):
         return False
     if records is None:
         records = [json.loads(line) for line in (trace_dir / "steps.jsonl").read_text().splitlines() if line.strip()]
@@ -241,6 +247,7 @@ def clean(trace_dir: Path, records: list[dict], goal: str = "") -> tuple[list[TS
             swipe=(dev["x"], dev["y"], dev["x2"], dev["y2"]) if dev["kind"] == "swipe" and dev.get("x") is not None else None,
             vision=r.get("vision") if dev["kind"] == "tap_point" else None, trace_dir=trace_dir,
             expected=(r.get("decision") or {}).get("expected_result", ""), risk=(r.get("risk") or {}).get("level", "read"),
+            settle_ms=float((r.get("screen_after") or {}).get("settle_ms") or 0.0),
         ))
 
     # Back-tracks: a stretch of navigation that ends on exactly the screen it started from (same labels and the
@@ -304,6 +311,17 @@ def clean(trace_dir: Path, records: list[dict], goal: str = "") -> tuple[list[TS
         out.append(s)
         i += 1
     return out, dropped
+
+
+def _launched_app(steps: list[TStep]) -> str | None:
+    """The app a run opened as its first step (from the home screen, or over another app): the routine's own app, which
+    the routine's start launches fresh. None if the run didn't start with a launch."""
+    if not steps or steps[0].kind != "launch":
+        return None
+    first = steps[0]
+    # Still the screen it was launched from (a slow app): the screen the next step started on.
+    opened = [first.after.package] + [t.before.package for t in steps[1:2]]
+    return next((p for p in opened if p and p != first.before.package), first.after.package or None)
 
 
 # ---- 1b: a run with nothing to do -------------------------------------------------------------
@@ -648,6 +666,23 @@ def _search_result(el: Element, screen: ScreenState, earlier: list["TStep"], exa
             and not (skip_ads and is_ad(e))]
     top = min(rows, key=lambda e: e.bounds[1], default=None)
     return shown[0] if top is not None and top.index == el.index else None
+
+
+def _first_naming(loc: Locator, target: Element, screen: ScreenState, examples: dict[str, str], typed: set[str]) -> Locator | None:
+    """A row chosen by an input typed earlier in the run, which several rows show, outside a list the tree marks (Uber's
+    search results: "Piedmont Park, 1320 Monroe Dr NE, …" above "Piedmont Park Active Oval, …", all under the 0.80 bar
+    on the run's own screen): the first of them, by place (`nth` 0), if that is the row the run tapped. None otherwise,
+    and for rows over the bar, which `disambiguate` tells apart."""
+    from routines.executor import list_choice  # the executor imports this module
+    if not loc.text_has or loc.nth is not None or not typed & set(slot_names(loc.text_has)):
+        return None
+    if (m := list_choice(loc, screen, examples, locators.STRICT)).element is not None and m.element.index == target.index:
+        return None  # it picks the row already
+    if m.score >= locators.STRICT:
+        return None
+    first = loc.model_copy(update={"nth": 0, "position": None})
+    m = locators.locate(first, screen, examples)
+    return first if m.element is not None and m.element.index == target.index else None
 
 
 _AD = re.compile(r"^\W*(sponsored|ad)\b|\bsponsored ad\b", re.I)
@@ -1014,6 +1049,9 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
     report.dropped = dropped
     report.kept = [s.n for s in steps]
     report.warnings += [f"trace step {s.n}: {s.moved}" for s in steps if s.moved]
+    # A run that opened its app itself (the agent started on the home screen, Nov 2's Uber fare): that launch is the
+    # routine's start, a fresh launch of the app it opened. Kept as a step, the routine's app was the launcher.
+    launched = _launched_app(steps)
     # The screen the agent answered from (its done step) is the most up to date: content can load after a step settles.
     final = _done_screen(trace_dir, records) or (steps[-1].after if steps else _final_screen(trace_dir, records))
     answer = run.get("result", "")
@@ -1076,6 +1114,9 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
     typed_at = {n: k for n, v in examples.items() if v
                 and (k := next((k for k, t in enumerate(steps, 1) if t.kind == "type" and t.typed and contains_value(t.typed, v)), 0))}
     for i, s in enumerate(steps, 1):
+        if i == 1 and launched:
+            report.warnings.append(f"trace step {s.n}: the run opened {launched} itself; the routine starts by launching it")
+            continue
         meta = per_step.get(i)
         sid = _slug(meta.id if meta else s.reason, f"step_{i}")
         while sid in used_ids:
@@ -1106,6 +1147,9 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             if searched is not None:  # a result's words are that result's: only its place (and ID, type) say "first"
                 loc = loc.model_copy(update={"text": None, "desc": None, "siblings": [], "text_has": None, "alt_texts": [],
                                              "row": [], "row_has": None})
+            elif (first := _first_naming(loc, s.target, target_screen, step_examples, {n for n, k in typed_at.items() if k < i})) is not None:
+                loc = first
+                report.warnings.append(f"step {i}: several rows show {loc.text_has}; the first of them, by its place")
         extra_pre: list[Check] = []
         if loc is not None and s.target is not None and s.kind in ("tap", "long_press", "type", "scroll_until"):
             # A locator that fits several look-alikes on the recorded screen picks whichever comes up first on a rerun.
@@ -1252,6 +1296,14 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
                 else:
                     # An answer the agent inferred ("0" from "No contacts yet"): the routine reports the words it was read from.
                     report.warnings.append(f"output {o.name!r}: {o.example!r} was inferred from {o.near!r}; the routine reports that text")
+            if ex is None and _unseen_answer(run) and not any(contains_value(e.label, o.example) for e in final.numbered):
+                # The run's own check found the answer nowhere in the tree, and it isn't there: a screen whose content is
+                # drawn without one under a little that is (Uber's fares, under a "Tap for savings details" tip). Read from
+                # the screenshot, as for a page with no tree at all.
+                if (ex := await _screenshot_extract(o, trace_dir, examples, adapter, run["task_id"], report)) is not None:
+                    outputs.append(o.name)
+                    extract[o.name] = ex
+                    continue
             if ex is None:
                 report.warnings.append(f"output {o.name!r}: {o.example!r} is not on the final screen, or nothing anchors it; dropped")
                 continue
@@ -1263,8 +1315,8 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
     _rows(extract, spec.outputs, final, examples, report)
     if final is not None and not shot_only:
         for o in spec.outputs:
-            if o.name not in extract or o.name in stated or extract[o.name].row_of:
-                continue  # (a value read in another output's row was read back there by _rows)
+            if o.name not in extract or o.name in stated or extract[o.name].row_of or extract[o.name].from_screenshot:
+                continue  # (a value read in another output's row was read back there by _rows; one read from the screenshot, there)
             ex = extract[o.name]
             if not _same_answer(got := _read_back(ex, final, examples, extract), o.example, ex.every):
                 # Read back from the screen the agent answered from, it gives another value: on the next run it would answer
@@ -1306,18 +1358,25 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             out_steps.append(Step(id="read_answer", intent="Read the answer on the app's first screen",
                                   pre=[Check(kind="app_foreground", package=final.package)] if final is not None and final.package else [],
                                   action=StepAction(kind="wait", seconds=0.3), risk="read", note="added: the answer is on the start screen"))
+        elif all(e.from_screenshot for e in extract.values()) and (settle := _settle_s(steps, out_steps[-1])) >= 1.5:
+            # An answer only the screenshot holds can't be seen to load in the tree (Uber's fares, 4.2 s after the tap that
+            # opened them): read once the screen has had as long as it took on the run.
+            out_steps.append(Step(id="wait_for_answer", intent="Let the answer be drawn, then read it from the screen",
+                                  action=StepAction(kind="wait", seconds=round(min(settle, 5.0), 1)), risk="read",
+                                  note=f"added: the run's screen took {settle:.1f} s to settle; the answer is read from the screenshot"))
         out_steps[-1].extract = extract
     # After the outputs: an output read in the row an input names (a menu item's price) uses that input.
-    limits = _add_witnesses(out_steps, steps, examples, inputs, report, start=steps[0].before if steps else final)
+    start = (steps[1].before if len(steps) > 1 else steps[0].after) if launched else (steps[0].before if steps else final)
+    limits = _add_witnesses(out_steps, steps, examples, inputs, report, start=start)
 
     # Safety net: the run's irreversible action must survive cleanup, or the routine would "succeed" without doing the job.
     if any(r.get("approval", {}).get("approved") for r in records if r.get("kind") == "action") and \
             not any(st.risk == "irreversible" for st in out_steps):
         raise NotCompilable("cleanup removed the run's approved irreversible step; refusing to compile a routine that would skip it")
     done = _done_checks(run, examples, data_values, final)
-    # The app the run worked in: where its first step started (Settings' search screen belongs to another package, and a
-    # routine launched as that one never starts), else the plan's app, else the final screen's.
-    app = (steps[0].before.package if steps else "") or (run.get("plan") or {}).get("app") or (final.package if final else "") or ""
+    # The app the run worked in: the one it opened itself, else where its first step started (Settings' search screen belongs
+    # to another package, and a routine launched as that one never starts), else the plan's app, else the final screen's.
+    app = launched or (steps[0].before.package if steps else "") or (run.get("plan") or {}).get("app") or (final.package if final else "") or ""
     routine = Routine(
         routine=_slug(spec.name, "routine"), app=app, version=1, status="draft", intent=spec.intent,
         description=" ".join([spec.description, *limits]),
@@ -1327,6 +1386,12 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
                        **({"source": "taught"} if run.get("source") == "taught" else {})},
     )
     return routine, report
+
+
+def _settle_s(steps: list[TStep], step: Step) -> float:
+    """How long, in seconds, the run's screen took to settle after the trace step `step` was compiled from."""
+    m = re.match(r"trace step (\d+)\b", step.note or "")
+    return next((t.settle_ms / 1000 for t in steps if m and t.n == int(m.group(1))), 0.0)
 
 
 def _aim_trailing_scrolls(out_steps: list[Step], extract: dict[str, Extract], report: CompileReport) -> list[Step]:

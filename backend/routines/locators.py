@@ -323,9 +323,15 @@ def locate(loc: Locator, screen: ScreenState, inputs: dict[str, str] | None = No
         return Match(None, 0.0, 0.0, threshold)
     best, e, det = scored[0]
     runner = scored[1][0] if len(scored) > 1 else 0.0
-    if rendered.nth is not None and best >= threshold:
+    floor = threshold
+    if rendered.nth is not None and rendered.text_has and best < threshold:
+        # Rows that all show the input, and say much else besides (Uber's results: "Piedmont Park, 1320 Monroe Dr NE, …"),
+        # score under the bar on how closely their words match it. The relaxed rung would take them, and their place picks
+        # one: the strict pass takes them at the relaxed bar instead of waiting 5 s for that rung.
+        floor = min(threshold, RELAXED)
+    if rendered.nth is not None and best >= floor:
         # One of a list's look-alikes, by its place among them (the newest video: the first thumbnail of the gallery).
-        ordered = in_order([x for sc, x, _ in scored if sc >= threshold and best - sc < margin], screen)
+        ordered = in_order([x for sc, x, _ in scored if sc >= floor and best - sc < margin], screen)
         if ordered is None or rendered.nth >= len(ordered):
             return Match(None, best, runner, threshold, det)
         e = ordered[rendered.nth]
