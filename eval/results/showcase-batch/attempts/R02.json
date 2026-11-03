@@ -1,0 +1,238 @@
+{
+ "code": "R02",
+ "workflow": "R",
+ "routine": "instagram_reel_song",
+ "app": "instagram",
+ "final": "Share",
+ "state": "open",
+ "clip_label": "BATCH R02",
+ "inputs": {
+  "song_title": "golden hour",
+  "song_artist": "JVKE",
+  "caption": "Envoy batch R02 · test"
+ },
+ "song": {
+  "title": "golden hour",
+  "artist": "JVKE"
+ },
+ "versions": {
+  "tag": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_head": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_clean": true,
+  "driver": "7259133a1831aa191fae6d985895c7c5ddc73360",
+  "driver_dirty": false,
+  "push_subs": 0
+ },
+ "started": "2026-11-03T12:41:27",
+ "setup": [
+  "instagram_take: READY in 26.1 s: outbox empty; routine instagram_post_reel off; Instagram as envoy3955, Create opens ['gallery', 'galler",
+  "launched; on the app, MainTabActivity"
+ ],
+ "clip": {
+  "file": "batch-r02.mp4",
+  "sha256": "1347ea5e1fb03ace1adfeb2a5f1158a039fb84bc3c6ba12a19cda0db665d3c42",
+  "remote_path": "/sdcard/Movies/Envoy/batch-r02.mp4",
+  "media_uri": "content://media/external/video/media/1000000138"
+ },
+ "replay": {
+  "mode": "replay",
+  "app": "com.instagram.android",
+  "time": "2026-11-03T12:42:04",
+  "request": {
+   "phone": "phone-09031FDD4000C6",
+   "routine": "instagram_reel_song",
+   "inputs": {
+    "song_title": "golden hour",
+    "song_artist": "JVKE",
+    "caption": "Envoy batch R02 · test"
+   }
+  },
+  "task": {
+   "id": "task-1103-124204-e6d8",
+   "status": "declined",
+   "routine": "instagram_reel_song",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "traces": [],
+   "detail": "the user declined the approval",
+   "device": "phone-09031FDD4000C6"
+  },
+  "steps": 18,
+  "repairs": [],
+  "approvals": [
+   {
+    "description": "tap \"Share\" in com.instagram.android (routine instagram_reel_song v3)",
+    "reasons": [
+     "rule: target id 'com.instagram.android:id/share_button'",
+     "model: labeled irreversible"
+    ],
+    "status": "declined",
+    "decided_by": "user"
+   }
+  ],
+  "asked_at": [
+   "Share"
+  ],
+  "approval_shot": "approval-task-1103-124204-e6d8.jpg",
+  "routine_steps": [
+   {
+    "id": "tap_create_button",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_newest_video_thumbnail",
+    "status": "done",
+    "rung": 1,
+    "score": 0.871,
+    "rungs": [
+     "wait and retry: ready after 1.0 s",
+     "wait and retry: after-checks held after 2.7 s"
+    ]
+   },
+   {
+    "id": "tap_add_audio",
+    "status": "done",
+    "rung": 1,
+    "score": 1.0,
+    "rungs": [
+     "wait and retry: after-checks held after 1.8 s"
+    ]
+   },
+   {
+    "id": "search_song_title",
+    "status": "done",
+    "rung": 1,
+    "score": 1.0,
+    "rungs": [
+     "wait and retry: after-checks held after 1.9 s"
+    ]
+   },
+   {
+    "id": "retype_song_title_search",
+    "status": "done",
+    "rung": 0,
+    "score": 0.985,
+    "rungs": []
+   },
+   {
+    "id": "find_tap_matching_track",
+    "status": "done",
+    "rung": 2,
+    "score": 0.903,
+    "rungs": [
+     "relaxed match: after-checks held past the edge of the screen (scrolled to see them)"
+    ]
+   },
+   {
+    "id": "tap_matching_track",
+    "status": "done",
+    "rung": 1,
+    "score": 0.903,
+    "rungs": [
+     "wait and retry: after-checks held after 3.0 s"
+    ]
+   },
+   {
+    "id": "confirm_selected_track",
+    "status": "done",
+    "rung": 0,
+    "score": 0.882,
+    "rungs": []
+   },
+   {
+    "id": "tap_done_music_editor",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_next_to_share_screen",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "type_caption",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "close_keyboard",
+    "status": "done",
+    "rung": 0,
+    "score": null,
+    "rungs": []
+   },
+   {
+    "id": "tap_post",
+    "status": "declined",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   }
+  ],
+  "outcome_checks": [
+   {
+    "when": "before the final step",
+    "picks": {
+     "song_title": "shown"
+    },
+    "fields": {
+     "caption": "held"
+    },
+    "clip": "checked",
+    "problems": []
+   }
+  ],
+  "auto_approved": [],
+  "marks_s": {
+   "running": 0.2,
+   "needs_you": 1.2,
+   "phone_yes": 1.2,
+   "waiting_approval": 55.6,
+   "post_asked": 55.6,
+   "declined": 56.6,
+   "end": 56.6
+  },
+  "spent": {
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "cost_at_standard_usd": 0.0,
+   "jobs": {}
+  },
+  "ok": true,
+  "failures": [],
+  "profile": "hybrid",
+  "cleanup": [
+   "back (caption)",
+   "editor_cancel",
+   "start_over",
+   "gallery_home"
+  ]
+ },
+ "replay_file": "eval/results/showcase/runs/instagram-replay-20261103-124204.json",
+ "routine_version": 3,
+ "approval_shot": {
+  "file": "approval-task-1103-124204-e6d8.jpg",
+  "sha256": "229f656cc2b1e599d60c41cdda49bd81ecf1bef7b0caad0c3d760ac4b7c89587"
+ },
+ "interventions": [],
+ "active_after": 3,
+ "ended": "2026-11-03T12:43:09",
+ "wall_s": 101.6,
+ "stop_rule": null,
+ "checks": {
+  "clip": "yes",
+  "song": "yes",
+  "caption": "yes",
+  "poll": "n/a"
+ },
+ "class": "no repair"
+}

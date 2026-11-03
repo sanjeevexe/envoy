@@ -1,0 +1,211 @@
+{
+ "code": "P02",
+ "workflow": "P",
+ "routine": "instagram_story_poll",
+ "app": "instagram",
+ "final": "Your story",
+ "state": "open",
+ "clip_label": "BATCH P02",
+ "inputs": {
+  "poll_question": "Envoy batch P02: which one?",
+  "poll_option_1": "Cats",
+  "poll_option_2": "Dogs"
+ },
+ "song": null,
+ "versions": {
+  "tag": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_head": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_clean": true,
+  "driver": "7259133a1831aa191fae6d985895c7c5ddc73360",
+  "driver_dirty": false,
+  "push_subs": 0
+ },
+ "started": "2026-11-03T12:51:42",
+ "setup": [
+  "instagram_take: READY in 40.5 s: outbox empty; routine instagram_post_reel off; Instagram as envoy3955, Create opens ['keep_editing', 'g",
+  "launched; on the app, MainTabActivity"
+ ],
+ "clip": {
+  "file": "batch-p02.mp4",
+  "sha256": "0c981e7875171516007f9659832486777d6e83fadfd72f4185e4a541bfc1c029",
+  "remote_path": "/sdcard/Movies/Envoy/batch-p02.mp4",
+  "media_uri": "content://media/external/video/media/1000000141"
+ },
+ "replay": {
+  "mode": "replay",
+  "app": "com.instagram.android",
+  "time": "2026-11-03T12:52:33",
+  "request": {
+   "phone": "phone-09031FDD4000C6",
+   "routine": "instagram_story_poll",
+   "inputs": {
+    "poll_question": "Envoy batch P02: which one?",
+    "poll_option_1": "Cats",
+    "poll_option_2": "Dogs"
+   }
+  },
+  "task": {
+   "id": "task-1103-125233-e840",
+   "status": "declined",
+   "routine": "instagram_story_poll",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "traces": [],
+   "detail": "the user declined the approval",
+   "device": "phone-09031FDD4000C6"
+  },
+  "steps": 16,
+  "repairs": [],
+  "approvals": [
+   {
+    "description": "tap \"Your story\" in com.instagram.android (routine instagram_story_poll v3)",
+    "reasons": [
+     "rule: target id 'com.instagram.android:id/your_story_share_shortcut_button'",
+     "model: labeled irreversible"
+    ],
+    "status": "declined",
+    "decided_by": "user"
+   }
+  ],
+  "asked_at": [
+   "Your story"
+  ],
+  "approval_shot": "approval-task-1103-125233-e840.jpg",
+  "routine_steps": [
+   {
+    "id": "open_story_creation",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "select_newest_video",
+    "status": "done",
+    "rung": 0,
+    "score": 0.845,
+    "rungs": []
+   },
+   {
+    "id": "open_stickers_panel",
+    "status": "done",
+    "rung": 1,
+    "score": 1.0,
+    "rungs": [
+     "wait and retry: after-checks held after 2.1 s"
+    ]
+   },
+   {
+    "id": "select_poll_sticker",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "enter_poll_question",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_first_poll_option",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "enter_first_poll_option",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_second_poll_option",
+    "status": "done",
+    "rung": 0,
+    "score": 0.939,
+    "rungs": []
+   },
+   {
+    "id": "enter_second_poll_option",
+    "status": "done",
+    "rung": 0,
+    "score": 0.939,
+    "rungs": []
+   },
+   {
+    "id": "confirm_poll_sticker",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_post",
+    "status": "declined",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   }
+  ],
+  "outcome_checks": [
+   {
+    "when": "before the final step",
+    "picks": {},
+    "fields": {
+     "poll_question": "not on the final screen",
+     "poll_option_1": "not on the final screen",
+     "poll_option_2": "not on the final screen"
+    },
+    "clip": "checked",
+    "problems": []
+   }
+  ],
+  "auto_approved": [],
+  "marks_s": {
+   "running": 0.2,
+   "needs_you": 1.2,
+   "phone_yes": 1.2,
+   "waiting_approval": 33.4,
+   "post_asked": 33.4,
+   "declined": 34.4,
+   "end": 34.4
+  },
+  "spent": {
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "cost_at_standard_usd": 0.0,
+   "jobs": {}
+  },
+  "ok": true,
+  "failures": [],
+  "profile": "hybrid",
+  "cleanup": [
+   "story: Cancel",
+   "story: Discard",
+   "gallery_home"
+  ]
+ },
+ "replay_file": "eval/results/showcase/runs/instagram-replay-20261103-125233.json",
+ "routine_version": 3,
+ "approval_shot": {
+  "file": "approval-task-1103-125233-e840.jpg",
+  "sha256": "8dd673e9352a1e6687ff78ca473511dd16c01884701457cc23335ba45202347a"
+ },
+ "interventions": [],
+ "active_after": 3,
+ "ended": "2026-11-03T12:53:14",
+ "wall_s": 91.7,
+ "stop_rule": null,
+ "checks": {
+  "clip": "yes",
+  "song": "n/a",
+  "caption": "n/a",
+  "poll": "not checkable"
+ },
+ "class": "no repair"
+}

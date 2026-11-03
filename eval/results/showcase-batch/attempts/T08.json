@@ -1,0 +1,256 @@
+{
+ "code": "T08",
+ "workflow": "T",
+ "routine": "tiktok_post_sound",
+ "app": "tiktok",
+ "final": "Post",
+ "state": "open",
+ "clip_label": "BATCH T08",
+ "inputs": {
+  "sound_title": "Watermelon Sugar",
+  "sound_artist": "Harry Styles",
+  "caption": "Envoy batch T08 · test"
+ },
+ "song": {
+  "title": "Watermelon Sugar",
+  "artist": "Harry Styles"
+ },
+ "versions": {
+  "tag": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_head": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_clean": true,
+  "driver": "d03caf8346eb0321dc03fc24b6b38de8331c0f86",
+  "driver_dirty": false,
+  "push_subs": 0
+ },
+ "started": "2026-11-03T14:13:10",
+ "setup": [
+  "launched; on the app, SplashActivity"
+ ],
+ "clip": {
+  "file": "batch-t08.mp4",
+  "sha256": "3879805172a61f6560afde4e6179ddff5934afe74841d9a635c82a3df711e50c",
+  "remote_path": "/sdcard/Movies/Envoy/batch-t08.mp4",
+  "media_uri": "content://media/external/video/media/1000000163"
+ },
+ "replay": {
+  "mode": "replay",
+  "app": "com.zhiliaoapp.musically",
+  "time": "2026-11-03T14:13:23",
+  "request": {
+   "phone": "phone-09031FDD4000C6",
+   "routine": "tiktok_post_sound",
+   "inputs": {
+    "sound_title": "Watermelon Sugar",
+    "sound_artist": "Harry Styles",
+    "caption": "Envoy batch T08 · test"
+   }
+  },
+  "task": {
+   "id": "task-1103-141323-43de",
+   "status": "declined",
+   "routine": "tiktok_post_sound",
+   "model_calls": 3,
+   "cost_usd": 0.0073,
+   "traces": [],
+   "detail": "the user declined the approval",
+   "device": "phone-09031FDD4000C6"
+  },
+  "steps": 21,
+  "repairs": [],
+  "approvals": [
+   {
+    "description": "tap \"Post\" in com.zhiliaoapp.musically (routine tiktok_post_sound v3)",
+    "reasons": [
+     "rule: target publishes 'Post'",
+     "model: labeled irreversible"
+    ],
+    "status": "declined",
+    "decided_by": "user"
+   }
+  ],
+  "asked_at": [
+   "Post"
+  ],
+  "approval_shot": "approval-task-1103-141323-43de.jpg",
+  "routine_steps": [
+   {
+    "id": "launch_tiktok",
+    "status": "done",
+    "rung": 0,
+    "score": null,
+    "rungs": []
+   },
+   {
+    "id": "tap_create",
+    "status": "done",
+    "rung": 1,
+    "score": 1.0,
+    "rungs": [
+     "wait and retry: after-checks held after 2.3 s"
+    ]
+   },
+   {
+    "id": "tap_upload",
+    "status": "done",
+    "rung": 1,
+    "score": 1.0,
+    "rungs": [
+     "wait and retry: after-checks held after 1.6 s"
+    ]
+   },
+   {
+    "id": "select_newest_video",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_next_after_gallery",
+    "status": "done",
+    "rung": 1,
+    "score": 1.0,
+    "rungs": [
+     "wait and retry: after-checks held after 3.4 s"
+    ]
+   },
+   {
+    "id": "tap_music",
+    "status": "done",
+    "rung": 0,
+    "score": 0.982,
+    "rungs": []
+   },
+   {
+    "id": "tap_search_in_sound_sheet",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "type_sound_search",
+    "status": "done",
+    "rung": 0,
+    "score": 0.999,
+    "rungs": []
+   },
+   {
+    "id": "execute_sound_search",
+    "status": "done",
+    "rung": 0,
+    "score": 0.999,
+    "rungs": []
+   },
+   {
+    "id": "wait_for_sound_results",
+    "status": "done",
+    "rung": 0,
+    "score": null,
+    "rungs": []
+   },
+   {
+    "id": "apply_first_sound_result",
+    "status": "done",
+    "rung": 1,
+    "score": null,
+    "rungs": [
+     "looked for 'red check button for first result Watermelon Sugar by Harry Styles' (sam, 4.4 s)",
+     "wait and retry: after-checks held after 1.6 s"
+    ]
+   },
+   {
+    "id": "close_sound_sheet",
+    "status": "done",
+    "rung": 0,
+    "score": null,
+    "rungs": []
+   },
+   {
+    "id": "tap_next_after_sound",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "type_caption",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "go_back_to_review",
+    "status": "done",
+    "rung": 0,
+    "score": null,
+    "rungs": []
+   },
+   {
+    "id": "tap_post",
+    "status": "declined",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   }
+  ],
+  "outcome_checks": [
+   {
+    "when": "before the final step",
+    "picks": {
+     "sound_title": "shown"
+    },
+    "fields": {
+     "caption": "held"
+    },
+    "clip": "checked",
+    "problems": []
+   }
+  ],
+  "auto_approved": [],
+  "marks_s": {
+   "running": 0.2,
+   "needs_you": 1.2,
+   "phone_yes": 1.2,
+   "waiting_approval": 59.6,
+   "post_asked": 59.6,
+   "declined": 60.6,
+   "end": 60.6
+  },
+  "spent": {
+   "model_calls": 3,
+   "cost_usd": 0.0073,
+   "cost_at_standard_usd": 0.0073,
+   "jobs": {
+    "sam": 2,
+    "choose": 1
+   }
+  },
+  "ok": true,
+  "failures": [],
+  "profile": "hybrid",
+  "cleanup": [
+   "force-stopped TikTok"
+  ]
+ },
+ "replay_file": "eval/results/showcase/runs/tiktok-replay-20261103-141323.json",
+ "routine_version": 3,
+ "approval_shot": {
+  "file": "approval-task-1103-141323-43de.jpg",
+  "sha256": "20d68bec25896e8ba3c0fb15a50a0702ba378f04e10dab22760506c9c9d7a34d"
+ },
+ "interventions": [],
+ "active_after": 3,
+ "ended": "2026-11-03T14:14:24",
+ "wall_s": 74.3,
+ "stop_rule": null,
+ "checks": {
+  "clip": "yes",
+  "song": "yes",
+  "caption": "yes",
+  "poll": "n/a"
+ },
+ "class": "no repair"
+}

@@ -1,0 +1,222 @@
+{
+ "code": "S08",
+ "workflow": "S",
+ "routine": "youtube_short_sound",
+ "app": "youtube",
+ "final": "Upload Short",
+ "state": "open",
+ "clip_label": "BATCH S08",
+ "inputs": {
+  "sound_title": "Watermelon Sugar",
+  "sound_artist": "Harry Styles",
+  "short_title": "Envoy batch S08 · test"
+ },
+ "song": {
+  "title": "Watermelon Sugar",
+  "artist": "Harry Styles"
+ },
+ "versions": {
+  "tag": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_head": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_clean": true,
+  "driver": "d03caf8346eb0321dc03fc24b6b38de8331c0f86",
+  "driver_dirty": false,
+  "push_subs": 0
+ },
+ "started": "2026-11-03T14:16:25",
+ "setup": [
+  "setup_youtube: force-stopped on the camera",
+  "launched; on the app, Shell$HomeActivity"
+ ],
+ "clip": {
+  "file": "batch-s08.mp4",
+  "sha256": "7db0e20bc03b4d87be4412153048bbda70da0951f868ffb34bec7ddc52a14d91",
+  "remote_path": "/sdcard/Movies/Envoy/batch-s08.mp4",
+  "media_uri": "content://media/external/video/media/1000000164"
+ },
+ "replay": {
+  "mode": "replay",
+  "app": "com.google.android.youtube",
+  "time": "2026-11-03T14:16:49",
+  "request": {
+   "phone": "phone-09031FDD4000C6",
+   "routine": "youtube_short_sound",
+   "inputs": {
+    "sound_title": "Watermelon Sugar",
+    "sound_artist": "Harry Styles",
+    "short_title": "Envoy batch S08 · test"
+   }
+  },
+  "task": {
+   "id": "task-1103-141650-de08",
+   "status": "failed",
+   "routine": "youtube_short_sound",
+   "model_calls": 2,
+   "cost_usd": 0.063,
+   "traces": [],
+   "detail": "stopped before the final step (outcome check): sound_title 'Watermelon Sugar' was picked from a list but never showed on the editor afterwards, so it may not be attached",
+   "device": "phone-09031FDD4000C6"
+  },
+  "steps": 18,
+  "repairs": [],
+  "approvals": [],
+  "asked_at": [],
+  "approval_shot": null,
+  "routine_steps": [
+   {
+    "id": "tap_create",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_import_video_from_photo_library",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_select_from_gallery",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "select_newest_video",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_add_selected_video",
+    "status": "done",
+    "rung": 1,
+    "score": 0.919,
+    "rungs": [
+     "wait and retry: after-checks held after 1.9 s"
+    ]
+   },
+   {
+    "id": "tap_add_sound",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_music_search",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "type_sound_title",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_trigger_search",
+    "status": "skipped",
+    "rung": 0,
+    "score": null,
+    "rungs": []
+   },
+   {
+    "id": "find_select_sound_result",
+    "status": "done",
+    "rung": 2,
+    "score": null,
+    "rungs": [
+     "searched for 'Watermelon Sugar, Harry Styles': the list didn't show it",
+     "wait and retry: scrolled 8 times without finding {text_has='{{sound_title}}, {{sound_artist}}', kind='Button'}",
+     "relaxed match: the app skipped ahead to tap_next"
+    ]
+   },
+   {
+    "id": "tap_next",
+    "status": "done",
+    "rung": 4,
+    "score": 1.0,
+    "rungs": [
+     "wait and retry: waited 5.2 s",
+     "local repair: 2 repair action(s) satisfied the after-checks"
+    ]
+   },
+   {
+    "id": "type_short_caption",
+    "status": "done",
+    "rung": 0,
+    "score": 0.982,
+    "rungs": []
+   },
+   {
+    "id": "tap_post",
+    "status": "failed",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   }
+  ],
+  "outcome_checks": [
+   {
+    "when": "before the final step",
+    "picks": {
+     "sound_title": "picking"
+    },
+    "fields": {
+     "short_title": "held"
+    },
+    "clip": "checked",
+    "problems": [
+     "sound_title 'Watermelon Sugar' was picked from a list but never showed on the editor afterwards, so it may not be attached"
+    ]
+   }
+  ],
+  "auto_approved": [],
+  "marks_s": {
+   "running": 0.2,
+   "needs_you": 1.3,
+   "phone_yes": 1.3,
+   "failed": 99.8,
+   "end": 99.8
+  },
+  "spent": {
+   "model_calls": 2,
+   "cost_usd": 0.063,
+   "cost_at_standard_usd": 0.063,
+   "jobs": {
+    "repair": 2
+   }
+  },
+  "ok": false,
+  "failures": [
+   "the post was never asked"
+  ],
+  "profile": "hybrid",
+  "cleanup": [
+   "force-stopped YouTube"
+  ]
+ },
+ "replay_file": "eval/results/showcase/runs/youtube-replay-20261103-141649.json",
+ "routine_version": null,
+ "approval_shot": null,
+ "interventions": [],
+ "active_after": 3,
+ "ended": "2026-11-03T14:18:30",
+ "wall_s": 125.6,
+ "stop_rule": null,
+ "checks": {
+  "clip": "yes",
+  "song": "no",
+  "caption": "yes",
+  "poll": "n/a"
+ },
+ "class": "failed"
+}

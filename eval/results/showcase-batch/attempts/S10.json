@@ -1,0 +1,233 @@
+{
+ "code": "S10",
+ "workflow": "S",
+ "routine": "youtube_short_sound",
+ "app": "youtube",
+ "final": "Upload Short",
+ "state": "cold",
+ "clip_label": "BATCH S10",
+ "inputs": {
+  "sound_title": "Levitating",
+  "sound_artist": "Dua Lipa",
+  "short_title": "Envoy batch S10 · test"
+ },
+ "song": {
+  "title": "Levitating",
+  "artist": "Dua Lipa"
+ },
+ "versions": {
+  "tag": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_head": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_clean": true,
+  "driver": "d03caf8346eb0321dc03fc24b6b38de8331c0f86",
+  "driver_dirty": false,
+  "push_subs": 0
+ },
+ "started": "2026-11-03T14:50:43",
+ "setup": [
+  "setup_youtube: draft prompt: Start over; force-stopped on the camera",
+  "force-stopped; launcher in front"
+ ],
+ "clip": {
+  "file": "batch-s10.mp4",
+  "sha256": "448f4812923c11809ebfe859638f0909c8aee6c3c4f88521e9e3460bb4435334",
+  "remote_path": "/sdcard/Movies/Envoy/batch-s10.mp4",
+  "media_uri": "content://media/external/video/media/1000000172"
+ },
+ "replay": {
+  "mode": "replay",
+  "app": "com.google.android.youtube",
+  "time": "2026-11-03T14:51:01",
+  "request": {
+   "phone": "phone-09031FDD4000C6",
+   "routine": "youtube_short_sound",
+   "inputs": {
+    "sound_title": "Levitating",
+    "sound_artist": "Dua Lipa",
+    "short_title": "Envoy batch S10 · test"
+   }
+  },
+  "task": {
+   "id": "task-1103-145101-21e4",
+   "status": "failed",
+   "routine": "youtube_short_sound",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "traces": [],
+   "detail": "stopped before the final step (outcome check): sound_title 'Levitating' was picked from a list but never showed on the editor afterwards, so it may not be attached",
+   "device": "phone-09031FDD4000C6"
+  },
+  "steps": 20,
+  "repairs": [],
+  "approvals": [],
+  "asked_at": [],
+  "approval_shot": null,
+  "routine_steps": [
+   {
+    "id": "tap_create",
+    "status": "done",
+    "rung": 1,
+    "score": 1.0,
+    "rungs": [
+     "wait and retry: after-checks held after 1.5 s"
+    ]
+   },
+   {
+    "id": "tap_import_video_from_photo_library",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_select_from_gallery",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "select_newest_video",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_add_selected_video",
+    "status": "done",
+    "rung": 1,
+    "score": 0.919,
+    "rungs": [
+     "wait and retry: after-checks held after 2.0 s"
+    ]
+   },
+   {
+    "id": "tap_add_sound",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_music_search",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "type_sound_title",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_trigger_search",
+    "status": "done",
+    "rung": 0,
+    "score": 0.894,
+    "rungs": []
+   },
+   {
+    "id": "find_select_sound_result",
+    "status": "done",
+    "rung": 2,
+    "score": 0.8,
+    "rungs": [
+     "relaxed match: after-checks held at the relaxed threshold"
+    ]
+   },
+   {
+    "id": "select_sound_result",
+    "status": "done",
+    "rung": 0,
+    "score": 0.8,
+    "rungs": []
+   },
+   {
+    "id": "tap_add_music_to_video",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_next",
+    "status": "done",
+    "rung": 1,
+    "score": 1.0,
+    "rungs": [
+     "wait and retry: after-checks held after 1.7 s"
+    ]
+   },
+   {
+    "id": "type_short_caption",
+    "status": "done",
+    "rung": 0,
+    "score": 0.982,
+    "rungs": []
+   },
+   {
+    "id": "tap_post",
+    "status": "failed",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   }
+  ],
+  "outcome_checks": [
+   {
+    "when": "before the final step",
+    "picks": {
+     "sound_title": "picking"
+    },
+    "fields": {
+     "short_title": "held"
+    },
+    "clip": "checked",
+    "problems": [
+     "sound_title 'Levitating' was picked from a list but never showed on the editor afterwards, so it may not be attached"
+    ]
+   }
+  ],
+  "auto_approved": [],
+  "marks_s": {
+   "running": 0.2,
+   "needs_you": 1.2,
+   "phone_yes": 1.2,
+   "failed": 42.5,
+   "end": 42.5
+  },
+  "spent": {
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "cost_at_standard_usd": 0.0,
+   "jobs": {}
+  },
+  "ok": false,
+  "failures": [
+   "the post was never asked"
+  ],
+  "profile": "hybrid",
+  "cleanup": [
+   "force-stopped YouTube"
+  ]
+ },
+ "replay_file": "eval/results/showcase/runs/youtube-replay-20261103-145101.json",
+ "routine_version": null,
+ "approval_shot": null,
+ "interventions": [],
+ "active_after": 3,
+ "ended": "2026-11-03T14:51:44",
+ "wall_s": 61.5,
+ "stop_rule": null,
+ "checks": {
+  "clip": "yes",
+  "song": "no",
+  "caption": "yes",
+  "poll": "n/a"
+ },
+ "class": "failed"
+}

@@ -1,0 +1,134 @@
+{
+ "code": "S03",
+ "workflow": "S",
+ "routine": "youtube_short_sound",
+ "app": "youtube",
+ "final": "Upload Short",
+ "state": "draft",
+ "clip_label": "BATCH S03",
+ "inputs": {
+  "sound_title": "golden hour",
+  "sound_artist": "JVKE",
+  "short_title": "Envoy batch S03 · test"
+ },
+ "song": {
+  "title": "golden hour",
+  "artist": "JVKE"
+ },
+ "versions": {
+  "tag": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_head": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_clean": true,
+  "driver": "7259133a1831aa191fae6d985895c7c5ddc73360",
+  "driver_dirty": false,
+  "push_subs": 0
+ },
+ "started": "2026-11-03T13:02:32",
+ "setup": [
+  "setup_youtube: force-stopped on the camera",
+  "draft: youtube_short_sound up to tap_add_selected_video: failed (tap_create:done, tap_import_video_from_photo_library:done, tap_select_from_gallery:done, select_newest_video:done, tap_add_selected_video:done)",
+  "force-stopped"
+ ],
+ "clip": {
+  "file": "batch-s03.mp4",
+  "sha256": "f27540335f0832d6737802a65927f67e508149d06f8159adfa8ae82888fa2ddc",
+  "remote_path": "/sdcard/Movies/Envoy/batch-s03.mp4",
+  "media_uri": "content://media/external/video/media/1000000144"
+ },
+ "replay": {
+  "mode": "replay",
+  "app": "com.google.android.youtube",
+  "time": "2026-11-03T13:03:06",
+  "request": {
+   "phone": "phone-09031FDD4000C6",
+   "routine": "youtube_short_sound",
+   "inputs": {
+    "sound_title": "golden hour",
+    "sound_artist": "JVKE",
+    "short_title": "Envoy batch S03 · test"
+   }
+  },
+  "task": {
+   "id": "task-1103-130307-12e4",
+   "status": "declined",
+   "routine": "youtube_short_sound",
+   "model_calls": 5,
+   "cost_usd": 0.0713,
+   "traces": [],
+   "detail": "User declined tapping 'Start over' to discard the draft, so the task cannot continue as planned.",
+   "device": "phone-09031FDD4000C6"
+  },
+  "steps": 10,
+  "repairs": [],
+  "approvals": [
+   {
+    "description": "tap \"Start over\" in com.google.android.youtube",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "status": "declined",
+    "decided_by": "user"
+   }
+  ],
+  "asked_at": [],
+  "approval_shot": null,
+  "routine_steps": [
+   {
+    "id": "tap_create",
+    "status": "agent",
+    "rung": 6,
+    "score": 1.0,
+    "rungs": [
+     "wait and retry: waited 3.1 s",
+     "full agent: after-checks failed: no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00); no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00)",
+     "ask the user: agent failed: User declined tapping 'Start over' to discard the draft, so the task cannot continue as planned."
+    ]
+   }
+  ],
+  "outcome_checks": [],
+  "auto_approved": [],
+  "marks_s": {
+   "running": 0.3,
+   "needs_you": 1.3,
+   "phone_yes": 1.3,
+   "waiting_approval": 41.5,
+   "asked_1": 41.5,
+   "declined": 45.5,
+   "end": 45.5
+  },
+  "spent": {
+   "model_calls": 5,
+   "cost_usd": 0.0713,
+   "cost_at_standard_usd": 0.0713,
+   "jobs": {
+    "repair": 2,
+    "plan": 1,
+    "step": 2
+   }
+  },
+  "ok": false,
+  "failures": [
+   "the post was never asked",
+   "asked about something before the post: ['tap \"Start over\" in com.google.android.youtube']"
+  ],
+  "profile": "hybrid",
+  "cleanup": [
+   "force-stopped YouTube"
+  ]
+ },
+ "replay_file": "eval/results/showcase/runs/youtube-replay-20261103-130306.json",
+ "routine_version": null,
+ "approval_shot": null,
+ "interventions": [],
+ "active_after": 3,
+ "ended": "2026-11-03T13:03:53",
+ "wall_s": 80.5,
+ "stop_rule": null,
+ "checks": {
+  "clip": "not checkable",
+  "song": "not checkable",
+  "caption": "not checkable",
+  "poll": "n/a"
+ },
+ "class": "failed"
+}

@@ -1,0 +1,242 @@
+{
+ "code": "R06",
+ "workflow": "R",
+ "routine": "instagram_reel_song",
+ "app": "instagram",
+ "final": "Share",
+ "state": "draft",
+ "clip_label": "BATCH R06",
+ "inputs": {
+  "song_title": "Please Please Please",
+  "song_artist": "Sabrina Carpenter",
+  "caption": "Envoy batch R06 · test"
+ },
+ "song": {
+  "title": "Please Please Please",
+  "artist": "Sabrina Carpenter"
+ },
+ "versions": {
+  "tag": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_head": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_clean": true,
+  "driver": "d03caf8346eb0321dc03fc24b6b38de8331c0f86",
+  "driver_dirty": false,
+  "push_subs": 0
+ },
+ "started": "2026-11-03T13:36:42",
+ "setup": [
+  "instagram_take: READY in 26.3 s: outbox empty; routine instagram_post_reel off; Instagram as envoy3955, Create opens ['gallery', 'galler",
+  "draft: instagram_reel_song up to tap_newest_video_thumbnail: failed (tap_create_button:done, tap_newest_video_thumbnail:done)",
+  "back, then tapped 'Save draft'",
+  "force-stopped"
+ ],
+ "clip": {
+  "file": "batch-r06.mp4",
+  "sha256": "f10efabd76e62d3af2f09b37823963ec12e763e3b5a44278ecd7a55cf1c2dbc4",
+  "remote_path": "/sdcard/Movies/Envoy/batch-r06.mp4",
+  "media_uri": "content://media/external/video/media/1000000154"
+ },
+ "replay": {
+  "mode": "replay",
+  "app": "com.instagram.android",
+  "time": "2026-11-03T13:37:29",
+  "request": {
+   "phone": "phone-09031FDD4000C6",
+   "routine": "instagram_reel_song",
+   "inputs": {
+    "song_title": "Please Please Please",
+    "song_artist": "Sabrina Carpenter",
+    "caption": "Envoy batch R06 · test"
+   }
+  },
+  "task": {
+   "id": "task-1103-133729-560f",
+   "status": "declined",
+   "routine": "instagram_reel_song",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "traces": [],
+   "detail": "the user declined the approval",
+   "device": "phone-09031FDD4000C6"
+  },
+  "steps": 18,
+  "repairs": [],
+  "approvals": [
+   {
+    "description": "tap \"Share\" in com.instagram.android (routine instagram_reel_song v3)",
+    "reasons": [
+     "rule: target id 'com.instagram.android:id/share_button'",
+     "model: labeled irreversible"
+    ],
+    "status": "declined",
+    "decided_by": "user"
+   }
+  ],
+  "asked_at": [
+   "Share"
+  ],
+  "approval_shot": "approval-task-1103-133729-560f.jpg",
+  "routine_steps": [
+   {
+    "id": "tap_create_button",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_newest_video_thumbnail",
+    "status": "done",
+    "rung": 1,
+    "score": 0.871,
+    "rungs": [
+     "wait and retry: ready after 0.9 s",
+     "wait and retry: after-checks held after 2.1 s"
+    ]
+   },
+   {
+    "id": "tap_add_audio",
+    "status": "done",
+    "rung": 1,
+    "score": 1.0,
+    "rungs": [
+     "wait and retry: after-checks held after 1.6 s"
+    ]
+   },
+   {
+    "id": "search_song_title",
+    "status": "done",
+    "rung": 2,
+    "score": 1.0,
+    "rungs": [
+     "relaxed match: after-checks failed but the next step (retype_song_title_search) is ready"
+    ]
+   },
+   {
+    "id": "retype_song_title_search",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "find_tap_matching_track",
+    "status": "done",
+    "rung": 2,
+    "score": 0.909,
+    "rungs": [
+     "relaxed match: after-checks held past the edge of the screen (scrolled to see them)"
+    ]
+   },
+   {
+    "id": "tap_matching_track",
+    "status": "done",
+    "rung": 1,
+    "score": 0.909,
+    "rungs": [
+     "searched for 'Please Please Please by Sabrina Carpenter': the list didn't show it",
+     "wait and retry: ready after 53.9 s",
+     "wait and retry: after-checks held after 1.9 s"
+    ]
+   },
+   {
+    "id": "confirm_selected_track",
+    "status": "done",
+    "rung": 0,
+    "score": 0.872,
+    "rungs": []
+   },
+   {
+    "id": "tap_done_music_editor",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_next_to_share_screen",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "type_caption",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "close_keyboard",
+    "status": "done",
+    "rung": 0,
+    "score": null,
+    "rungs": []
+   },
+   {
+    "id": "tap_post",
+    "status": "declined",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   }
+  ],
+  "outcome_checks": [
+   {
+    "when": "before the final step",
+    "picks": {
+     "song_title": "shown"
+    },
+    "fields": {
+     "caption": "held"
+    },
+    "clip": "checked",
+    "problems": []
+   }
+  ],
+  "auto_approved": [],
+  "marks_s": {
+   "running": 0.2,
+   "needs_you": 1.2,
+   "phone_yes": 1.2,
+   "waiting_approval": 111.8,
+   "post_asked": 111.8,
+   "declined": 112.9,
+   "end": 112.9
+  },
+  "spent": {
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "cost_at_standard_usd": 0.0,
+   "jobs": {}
+  },
+  "ok": true,
+  "failures": [],
+  "profile": "hybrid",
+  "cleanup": [
+   "back (caption)",
+   "editor_cancel",
+   "start_over",
+   "gallery_home"
+  ]
+ },
+ "replay_file": "eval/results/showcase/runs/instagram-replay-20261103-133729.json",
+ "routine_version": 3,
+ "approval_shot": {
+  "file": "approval-task-1103-133729-560f.jpg",
+  "sha256": "34c670a1a7e22087a2dd5f30380858817035dff1e4221d518e4ecbc7f98d9ec2"
+ },
+ "interventions": [],
+ "active_after": 3,
+ "ended": "2026-11-03T13:39:31",
+ "wall_s": 168.5,
+ "stop_rule": null,
+ "checks": {
+  "clip": "yes",
+  "song": "yes",
+  "caption": "yes",
+  "poll": "n/a"
+ },
+ "class": "no repair"
+}

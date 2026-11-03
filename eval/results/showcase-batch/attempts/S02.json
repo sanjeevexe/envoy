@@ -1,0 +1,244 @@
+{
+ "code": "S02",
+ "workflow": "S",
+ "routine": "youtube_short_sound",
+ "app": "youtube",
+ "final": "Upload Short",
+ "state": "open",
+ "clip_label": "BATCH S02",
+ "inputs": {
+  "sound_title": "golden hour",
+  "sound_artist": "JVKE",
+  "short_title": "Envoy batch S02 · test"
+ },
+ "song": {
+  "title": "golden hour",
+  "artist": "JVKE"
+ },
+ "versions": {
+  "tag": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_head": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_clean": true,
+  "driver": "7259133a1831aa191fae6d985895c7c5ddc73360",
+  "driver_dirty": false,
+  "push_subs": 0
+ },
+ "started": "2026-11-03T12:48:34",
+ "setup": [
+  "setup_youtube: force-stopped on the camera",
+  "launched; on the app, Shell$HomeActivity"
+ ],
+ "clip": {
+  "file": "batch-s02.mp4",
+  "sha256": "eab495978000219d512018630cb67151837a2d8a735fc874d212b718af8fd041",
+  "remote_path": "/sdcard/Movies/Envoy/batch-s02.mp4",
+  "media_uri": "content://media/external/video/media/1000000140"
+ },
+ "replay": {
+  "mode": "replay",
+  "app": "com.google.android.youtube",
+  "time": "2026-11-03T12:48:57",
+  "request": {
+   "phone": "phone-09031FDD4000C6",
+   "routine": "youtube_short_sound",
+   "inputs": {
+    "sound_title": "golden hour",
+    "sound_artist": "JVKE",
+    "short_title": "Envoy batch S02 · test"
+   }
+  },
+  "task": {
+   "id": "task-1103-124857-f54f",
+   "status": "declined",
+   "routine": "youtube_short_sound",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "traces": [],
+   "detail": "the user declined the approval",
+   "device": "phone-09031FDD4000C6"
+  },
+  "steps": 20,
+  "repairs": [],
+  "approvals": [
+   {
+    "description": "tap \"Upload Short\" in com.google.android.youtube (routine youtube_short_sound v3)",
+    "reasons": [
+     "rule: target publishes 'Upload Short'",
+     "model: labeled irreversible"
+    ],
+    "status": "declined",
+    "decided_by": "user"
+   }
+  ],
+  "asked_at": [
+   "Upload Short"
+  ],
+  "approval_shot": "approval-task-1103-124857-f54f.jpg",
+  "routine_steps": [
+   {
+    "id": "tap_create",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_import_video_from_photo_library",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_select_from_gallery",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "select_newest_video",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_add_selected_video",
+    "status": "done",
+    "rung": 1,
+    "score": 0.919,
+    "rungs": [
+     "wait and retry: after-checks held after 2.1 s"
+    ]
+   },
+   {
+    "id": "tap_add_sound",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_music_search",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "type_sound_title",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_trigger_search",
+    "status": "done",
+    "rung": 0,
+    "score": 0.867,
+    "rungs": []
+   },
+   {
+    "id": "find_select_sound_result",
+    "status": "done",
+    "rung": 2,
+    "score": 0.8,
+    "rungs": [
+     "relaxed match: after-checks held at the relaxed threshold"
+    ]
+   },
+   {
+    "id": "select_sound_result",
+    "status": "done",
+    "rung": 0,
+    "score": 0.8,
+    "rungs": []
+   },
+   {
+    "id": "tap_add_music_to_video",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_next",
+    "status": "done",
+    "rung": 1,
+    "score": 1.0,
+    "rungs": [
+     "wait and retry: after-checks held after 2.0 s"
+    ]
+   },
+   {
+    "id": "type_short_caption",
+    "status": "done",
+    "rung": 0,
+    "score": 0.982,
+    "rungs": []
+   },
+   {
+    "id": "tap_post",
+    "status": "declined",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   }
+  ],
+  "outcome_checks": [
+   {
+    "when": "before the final step",
+    "picks": {
+     "sound_title": "shown"
+    },
+    "fields": {
+     "short_title": "held"
+    },
+    "clip": "checked",
+    "problems": []
+   }
+  ],
+  "auto_approved": [],
+  "marks_s": {
+   "running": 0.2,
+   "needs_you": 1.2,
+   "phone_yes": 1.2,
+   "waiting_approval": 42.5,
+   "post_asked": 42.5,
+   "declined": 43.5,
+   "end": 43.5
+  },
+  "spent": {
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "cost_at_standard_usd": 0.0,
+   "jobs": {}
+  },
+  "ok": true,
+  "failures": [],
+  "profile": "hybrid",
+  "cleanup": [
+   "force-stopped YouTube"
+  ]
+ },
+ "replay_file": "eval/results/showcase/runs/youtube-replay-20261103-124857.json",
+ "routine_version": 3,
+ "approval_shot": {
+  "file": "approval-task-1103-124857-f54f.jpg",
+  "sha256": "bd762437b7a07fdf1aff96e59dd657ff08504a45e2f9367651ee998fd6dcffb7"
+ },
+ "interventions": [],
+ "active_after": 3,
+ "ended": "2026-11-03T12:49:42",
+ "wall_s": 67.2,
+ "stop_rule": null,
+ "checks": {
+  "clip": "yes",
+  "song": "yes",
+  "caption": "yes",
+  "poll": "n/a"
+ },
+ "class": "no repair"
+}

@@ -1,0 +1,237 @@
+{
+ "code": "R08",
+ "workflow": "R",
+ "routine": "instagram_reel_song",
+ "app": "instagram",
+ "final": "Share",
+ "state": "open",
+ "clip_label": "BATCH R08",
+ "inputs": {
+  "song_title": "Watermelon Sugar",
+  "song_artist": "Harry Styles",
+  "caption": "Envoy batch R08 · test"
+ },
+ "song": {
+  "title": "Watermelon Sugar",
+  "artist": "Harry Styles"
+ },
+ "versions": {
+  "tag": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_head": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_clean": true,
+  "driver": "d03caf8346eb0321dc03fc24b6b38de8331c0f86",
+  "driver_dirty": false,
+  "push_subs": 0
+ },
+ "started": "2026-11-03T14:08:35",
+ "setup": [
+  "instagram_take: READY in 25.9 s: outbox empty; routine instagram_post_reel off; Instagram as envoy3955, Create opens ['gallery', 'galler",
+  "launched; on the app, MainTabActivity"
+ ],
+ "clip": {
+  "file": "batch-r08.mp4",
+  "sha256": "8fcdee535dc630b50e3075edba63e1aa9f81ea2895038edb83e8ad05fc804d78",
+  "remote_path": "/sdcard/Movies/Envoy/batch-r08.mp4",
+  "media_uri": "content://media/external/video/media/1000000162"
+ },
+ "replay": {
+  "mode": "replay",
+  "app": "com.instagram.android",
+  "time": "2026-11-03T14:09:11",
+  "request": {
+   "phone": "phone-09031FDD4000C6",
+   "routine": "instagram_reel_song",
+   "inputs": {
+    "song_title": "Watermelon Sugar",
+    "song_artist": "Harry Styles",
+    "caption": "Envoy batch R08 · test"
+   }
+  },
+  "task": {
+   "id": "task-1103-140912-4047",
+   "status": "declined",
+   "routine": "instagram_reel_song",
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "traces": [],
+   "detail": "the user declined the approval",
+   "device": "phone-09031FDD4000C6"
+  },
+  "steps": 18,
+  "repairs": [],
+  "approvals": [
+   {
+    "description": "tap \"Share\" in com.instagram.android (routine instagram_reel_song v3)",
+    "reasons": [
+     "rule: target id 'com.instagram.android:id/share_button'",
+     "model: labeled irreversible"
+    ],
+    "status": "declined",
+    "decided_by": "user"
+   }
+  ],
+  "asked_at": [
+   "Share"
+  ],
+  "approval_shot": "approval-task-1103-140912-4047.jpg",
+  "routine_steps": [
+   {
+    "id": "tap_create_button",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_newest_video_thumbnail",
+    "status": "done",
+    "rung": 1,
+    "score": 0.871,
+    "rungs": [
+     "wait and retry: after-checks held after 1.8 s"
+    ]
+   },
+   {
+    "id": "tap_add_audio",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "search_song_title",
+    "status": "done",
+    "rung": 2,
+    "score": 1.0,
+    "rungs": [
+     "relaxed match: after-checks failed but the next step (retype_song_title_search) is ready"
+    ]
+   },
+   {
+    "id": "retype_song_title_search",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "find_tap_matching_track",
+    "status": "done",
+    "rung": 2,
+    "score": 0.91,
+    "rungs": [
+     "relaxed match: after-checks held past the edge of the screen (scrolled to see them)"
+    ]
+   },
+   {
+    "id": "tap_matching_track",
+    "status": "done",
+    "rung": 1,
+    "score": 0.91,
+    "rungs": [
+     "searched for 'Watermelon Sugar by Harry Styles': the list didn't show it",
+     "wait and retry: ready after 51.7 s",
+     "wait and retry: after-checks held after 3.3 s"
+    ]
+   },
+   {
+    "id": "confirm_selected_track",
+    "status": "done",
+    "rung": 0,
+    "score": 0.876,
+    "rungs": []
+   },
+   {
+    "id": "tap_done_music_editor",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_next_to_share_screen",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "type_caption",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "close_keyboard",
+    "status": "done",
+    "rung": 0,
+    "score": null,
+    "rungs": []
+   },
+   {
+    "id": "tap_post",
+    "status": "declined",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   }
+  ],
+  "outcome_checks": [
+   {
+    "when": "before the final step",
+    "picks": {
+     "song_title": "shown"
+    },
+    "fields": {
+     "caption": "held"
+    },
+    "clip": "checked",
+    "problems": []
+   }
+  ],
+  "auto_approved": [],
+  "marks_s": {
+   "running": 0.2,
+   "needs_you": 1.2,
+   "phone_yes": 1.2,
+   "waiting_approval": 108.8,
+   "post_asked": 108.8,
+   "declined": 109.8,
+   "end": 109.8
+  },
+  "spent": {
+   "model_calls": 0,
+   "cost_usd": 0.0,
+   "cost_at_standard_usd": 0.0,
+   "jobs": {}
+  },
+  "ok": true,
+  "failures": [],
+  "profile": "hybrid",
+  "cleanup": [
+   "back (caption)",
+   "editor_cancel",
+   "start_over",
+   "gallery_home"
+  ]
+ },
+ "replay_file": "eval/results/showcase/runs/instagram-replay-20261103-140911.json",
+ "routine_version": 3,
+ "approval_shot": {
+  "file": "approval-task-1103-140912-4047.jpg",
+  "sha256": "c263a04a07f9c4894097f7ca3ce99b86a440f90988cdd3bd059d1f459dfc1a78"
+ },
+ "interventions": [],
+ "active_after": 3,
+ "ended": "2026-11-03T14:11:10",
+ "wall_s": 154.8,
+ "stop_rule": null,
+ "checks": {
+  "clip": "yes",
+  "song": "yes",
+  "caption": "yes",
+  "poll": "n/a"
+ },
+ "class": "no repair"
+}

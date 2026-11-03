@@ -1,0 +1,229 @@
+{
+ "code": "R07",
+ "workflow": "R",
+ "routine": "instagram_reel_song",
+ "app": "instagram",
+ "final": "Share",
+ "state": "cold",
+ "clip_label": "BATCH R07",
+ "inputs": {
+  "song_title": "Flowers",
+  "song_artist": "Miley Cyrus",
+  "caption": "Envoy batch R07 · test"
+ },
+ "song": {
+  "title": "Flowers",
+  "artist": "Miley Cyrus"
+ },
+ "versions": {
+  "tag": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_head": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_clean": true,
+  "driver": "d03caf8346eb0321dc03fc24b6b38de8331c0f86",
+  "driver_dirty": false,
+  "push_subs": 0
+ },
+ "started": "2026-11-03T13:53:33",
+ "setup": [
+  "instagram_take: READY in 26.3 s: outbox empty; routine instagram_post_reel off; Instagram as envoy3955, Create opens ['gallery', 'galler",
+  "force-stopped; launcher in front"
+ ],
+ "clip": {
+  "file": "batch-r07.mp4",
+  "sha256": "fe58d502363647134e65c0039ddc4b3f94f0e7932b73c3585fa6002b4c5631f6",
+  "remote_path": "/sdcard/Movies/Envoy/batch-r07.mp4",
+  "media_uri": "content://media/external/video/media/1000000158"
+ },
+ "replay": {
+  "mode": "replay",
+  "app": "com.instagram.android",
+  "time": "2026-11-03T13:54:03",
+  "request": {
+   "phone": "phone-09031FDD4000C6",
+   "routine": "instagram_reel_song",
+   "inputs": {
+    "song_title": "Flowers",
+    "song_artist": "Miley Cyrus",
+    "caption": "Envoy batch R07 · test"
+   }
+  },
+  "task": {
+   "id": "task-1103-135403-aba8",
+   "status": "failed",
+   "routine": "instagram_reel_song",
+   "model_calls": 1,
+   "cost_usd": 0.0131,
+   "traces": [],
+   "detail": "stopped before the final step (outcome check): caption: the field on the final screen shows 'Write a caption and add hashtags…', not 'Envoy batch R07 · test'",
+   "device": "phone-09031FDD4000C6"
+  },
+  "steps": 18,
+  "repairs": [],
+  "approvals": [],
+  "asked_at": [],
+  "approval_shot": null,
+  "routine_steps": [
+   {
+    "id": "tap_create_button",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_newest_video_thumbnail",
+    "status": "done",
+    "rung": 4,
+    "score": 0.871,
+    "rungs": [
+     "wait and retry: waited 16.1 s",
+     "local repair: 1 repair action(s) satisfied the after-checks"
+    ]
+   },
+   {
+    "id": "tap_add_audio",
+    "status": "done",
+    "rung": 1,
+    "score": 1.0,
+    "rungs": [
+     "wait and retry: after-checks held after 1.5 s"
+    ]
+   },
+   {
+    "id": "search_song_title",
+    "status": "done",
+    "rung": 1,
+    "score": 1.0,
+    "rungs": [
+     "wait and retry: after-checks held after 2.3 s"
+    ]
+   },
+   {
+    "id": "retype_song_title_search",
+    "status": "done",
+    "rung": 0,
+    "score": 0.985,
+    "rungs": []
+   },
+   {
+    "id": "find_tap_matching_track",
+    "status": "done",
+    "rung": 2,
+    "score": 0.903,
+    "rungs": [
+     "relaxed match: after-checks held past the edge of the screen (scrolled to see them)"
+    ]
+   },
+   {
+    "id": "tap_matching_track",
+    "status": "done",
+    "rung": 1,
+    "score": 0.903,
+    "rungs": [
+     "searched for 'Flowers by Miley Cyrus': the list didn't show it",
+     "wait and retry: ready after 52.6 s",
+     "wait and retry: after-checks held after 2.9 s"
+    ]
+   },
+   {
+    "id": "confirm_selected_track",
+    "status": "done",
+    "rung": 0,
+    "score": 0.882,
+    "rungs": []
+   },
+   {
+    "id": "tap_done_music_editor",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_next_to_share_screen",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "type_caption",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "close_keyboard",
+    "status": "done",
+    "rung": 0,
+    "score": null,
+    "rungs": []
+   },
+   {
+    "id": "tap_post",
+    "status": "failed",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   }
+  ],
+  "outcome_checks": [
+   {
+    "when": "before the final step",
+    "picks": {
+     "song_title": "shown"
+    },
+    "fields": {
+     "caption": "caption: the field on the final screen shows 'Write a caption and add hashtags…', not 'Envoy batch R07 · test'"
+    },
+    "clip": "checked",
+    "problems": [
+     "caption: the field on the final screen shows 'Write a caption and add hashtags…', not 'Envoy batch R07 · test'"
+    ]
+   }
+  ],
+  "auto_approved": [],
+  "marks_s": {
+   "running": 0.2,
+   "needs_you": 1.2,
+   "phone_yes": 1.2,
+   "failed": 131.0,
+   "end": 131.0
+  },
+  "spent": {
+   "model_calls": 1,
+   "cost_usd": 0.0131,
+   "cost_at_standard_usd": 0.0131,
+   "jobs": {
+    "repair": 1
+   }
+  },
+  "ok": false,
+  "failures": [
+   "the post was never asked"
+  ],
+  "profile": "hybrid",
+  "cleanup": [
+   "back (caption)",
+   "editor_cancel",
+   "start_over",
+   "gallery_home"
+  ]
+ },
+ "replay_file": "eval/results/showcase/runs/instagram-replay-20261103-135403.json",
+ "routine_version": null,
+ "approval_shot": null,
+ "interventions": [],
+ "active_after": 3,
+ "ended": "2026-11-03T13:56:23",
+ "wall_s": 169.4,
+ "stop_rule": null,
+ "checks": {
+  "clip": "yes",
+  "song": "yes",
+  "caption": "no",
+  "poll": "n/a"
+ },
+ "class": "failed"
+}
