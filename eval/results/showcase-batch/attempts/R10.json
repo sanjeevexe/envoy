@@ -1,0 +1,177 @@
+{
+ "code": "R10",
+ "workflow": "R",
+ "routine": "instagram_reel_song",
+ "app": "instagram",
+ "final": "Share",
+ "state": "cold",
+ "clip_label": "BATCH R10",
+ "inputs": {
+  "song_title": "Levitating",
+  "song_artist": "Dua Lipa",
+  "caption": "Envoy batch R10 · test"
+ },
+ "song": {
+  "title": "Levitating",
+  "artist": "Dua Lipa"
+ },
+ "versions": {
+  "tag": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_head": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_clean": true,
+  "driver": "d03caf8346eb0321dc03fc24b6b38de8331c0f86",
+  "driver_dirty": false,
+  "push_subs": 0
+ },
+ "started": "2026-11-03T14:38:51",
+ "setup": [
+  "instagram_take: READY in 26.1 s: outbox empty; routine instagram_post_reel off; Instagram as envoy3955, Create opens ['gallery', 'galler",
+  "force-stopped; launcher in front"
+ ],
+ "clip": {
+  "file": "batch-r10.mp4",
+  "sha256": "94dcb915ed3b2e9aeaf570d78907a5e1e9b74141408148c29163fe09b293976b",
+  "remote_path": "/sdcard/Movies/Envoy/batch-r10.mp4",
+  "media_uri": "content://media/external/video/media/1000000170"
+ },
+ "replay": {
+  "mode": "replay",
+  "app": "com.instagram.android",
+  "time": "2026-11-03T14:39:20",
+  "request": {
+   "phone": "phone-09031FDD4000C6",
+   "routine": "instagram_reel_song",
+   "inputs": {
+    "song_title": "Levitating",
+    "song_artist": "Dua Lipa",
+    "caption": "Envoy batch R10 · test"
+   }
+  },
+  "task": {
+   "id": "task-1103-143920-7555",
+   "status": "needs_you",
+   "routine": "instagram_reel_song",
+   "model_calls": 30,
+   "cost_usd": 0.4477,
+   "traces": [],
+   "detail": "routine step tap_matching_track failed (target not found: no match (best 0.29 < 0.80 or ambiguous, runner-up 0.00)) and the agent could not finish (step_limit); asking the user",
+   "device": "phone-09031FDD4000C6"
+  },
+  "steps": 41,
+  "repairs": [],
+  "approvals": [],
+  "asked_at": [],
+  "approval_shot": null,
+  "routine_steps": [
+   {
+    "id": "tap_create_button",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_newest_video_thumbnail",
+    "status": "done",
+    "rung": 1,
+    "score": 0.871,
+    "rungs": [
+     "wait and retry: after-checks held after 1.9 s"
+    ]
+   },
+   {
+    "id": "tap_add_audio",
+    "status": "done",
+    "rung": 1,
+    "score": 1.0,
+    "rungs": [
+     "wait and retry: after-checks held after 1.9 s"
+    ]
+   },
+   {
+    "id": "search_song_title",
+    "status": "done",
+    "rung": 1,
+    "score": 1.0,
+    "rungs": [
+     "wait and retry: after-checks held after 2.6 s"
+    ]
+   },
+   {
+    "id": "retype_song_title_search",
+    "status": "done",
+    "rung": 0,
+    "score": 0.985,
+    "rungs": []
+   },
+   {
+    "id": "find_tap_matching_track",
+    "status": "done",
+    "rung": 1,
+    "score": null,
+    "rungs": [
+     "searched for 'Levitating by Dua Lipa': the list didn't show it",
+     "wait and retry: scrolled 8 times without finding {text_has='{{song_title}} by {{song_artist}}', resource_id='audio_browser_track_*_*', kind='Button'}"
+    ]
+   },
+   {
+    "id": "tap_matching_track",
+    "status": "agent",
+    "rung": 6,
+    "score": null,
+    "rungs": [
+     "searched for 'Levitating by Dua Lipa': the list didn't show it",
+     "wait and retry: waited 5 s",
+     "full agent: target not found: no match (best 0.29 < 0.80 or ambiguous, runner-up 0.00)",
+     "ask the user: agent step_limit: stopped after 25 steps"
+    ]
+   }
+  ],
+  "outcome_checks": [],
+  "auto_approved": [],
+  "marks_s": {
+   "running": 0.2,
+   "needs_you": 1.2,
+   "phone_yes": 1.2,
+   "end": 363.3
+  },
+  "spent": {
+   "model_calls": 30,
+   "cost_usd": 0.4477,
+   "cost_at_standard_usd": 0.4477,
+   "jobs": {
+    "repair": 2,
+    "plan": 3,
+    "step": 25
+   }
+  },
+  "ok": false,
+  "failures": [
+   "the post was never asked"
+  ],
+  "profile": "hybrid",
+  "cleanup": [
+   "back (unknown)",
+   "back (unknown)",
+   "back (unknown)",
+   "editor_cancel",
+   "start_over",
+   "gallery_home"
+  ]
+ },
+ "replay_file": "eval/results/showcase/runs/instagram-replay-20261103-143920.json",
+ "routine_version": null,
+ "approval_shot": null,
+ "interventions": [],
+ "active_after": 3,
+ "ended": "2026-11-03T14:45:35",
+ "wall_s": 404.4,
+ "stop_rule": null,
+ "checks": {
+  "clip": "not checkable",
+  "song": "not checkable",
+  "caption": "not checkable",
+  "poll": "n/a"
+ },
+ "class": "failed"
+}

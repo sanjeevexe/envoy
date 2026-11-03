@@ -1,0 +1,1013 @@
+{
+ "when": "2026-11-03T12:00:46",
+ "checks": [
+  {
+   "n": 6,
+   "title": "Espresso",
+   "artist": "Sabrina Carpenter",
+   "app": "R",
+   "status": "failed",
+   "found": "no",
+   "steps": [
+    {
+     "id": "tap_create_button",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 1.7 s"
+     ]
+    },
+    {
+     "id": "tap_newest_video_thumbnail",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 1.9 s"
+     ]
+    },
+    {
+     "id": "tap_add_audio",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "search_song_title",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 2.0 s"
+     ]
+    },
+    {
+     "id": "retype_song_title_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "find_tap_matching_track",
+     "status": "done",
+     "rung": 2,
+     "rungs": [
+      "relaxed match: after-checks held past the edge of the screen (scrolled to see them)"
+     ]
+    }
+   ],
+   "screenshot": "songs-R-06-espresso.png"
+  },
+  {
+   "n": 6,
+   "title": "Espresso",
+   "artist": "Sabrina Carpenter",
+   "app": "T",
+   "status": "done",
+   "found": "yes",
+   "steps": [
+    {
+     "id": "launch_tiktok",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 2.1 s"
+     ]
+    },
+    {
+     "id": "tap_create",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 4.5 s",
+      "wait and retry: after-checks held after 2.7 s"
+     ]
+    },
+    {
+     "id": "tap_upload",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "select_newest_video",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_next_after_gallery",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 3.7 s"
+     ]
+    },
+    {
+     "id": "tap_music",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_search_in_sound_sheet",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "type_sound_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "execute_sound_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "wait_for_sound_results",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    }
+   ],
+   "screenshot": "songs-T-06-espresso.png"
+  },
+  {
+   "n": 6,
+   "title": "Espresso",
+   "artist": "Sabrina Carpenter",
+   "app": "S",
+   "status": "failed",
+   "found": "yes",
+   "steps": [
+    {
+     "id": "tap_create",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 1.6 s"
+     ]
+    },
+    {
+     "id": "tap_import_video_from_photo_library",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_select_from_gallery",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "select_newest_video",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_add_selected_video",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 2.0 s"
+     ]
+    },
+    {
+     "id": "tap_add_sound",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_music_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "type_sound_title",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_trigger_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "find_select_sound_result",
+     "status": "done",
+     "rung": 2,
+     "rungs": [
+      "relaxed match: after-checks held at the relaxed threshold"
+     ]
+    }
+   ],
+   "screenshot": "songs-S-06-espresso.png"
+  },
+  {
+   "n": 7,
+   "title": "Flowers",
+   "artist": "Miley Cyrus",
+   "app": "R",
+   "status": "failed",
+   "found": "yes",
+   "steps": [
+    {
+     "id": "tap_create_button",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 1.7 s"
+     ]
+    },
+    {
+     "id": "tap_newest_video_thumbnail",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 1.0 s",
+      "wait and retry: after-checks held after 2.2 s"
+     ]
+    },
+    {
+     "id": "tap_add_audio",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "search_song_title",
+     "status": "done",
+     "rung": 2,
+     "rungs": [
+      "relaxed match: after-checks failed but the next step (retype_song_title_search) is ready"
+     ]
+    },
+    {
+     "id": "retype_song_title_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "find_tap_matching_track",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    }
+   ],
+   "screenshot": "songs-R-07-flowers.png"
+  },
+  {
+   "n": 7,
+   "title": "Flowers",
+   "artist": "Miley Cyrus",
+   "app": "T",
+   "status": "done",
+   "found": "yes",
+   "steps": [
+    {
+     "id": "launch_tiktok",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 2.3 s"
+     ]
+    },
+    {
+     "id": "tap_create",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 4.3 s",
+      "wait and retry: after-checks held after 2.8 s"
+     ]
+    },
+    {
+     "id": "tap_upload",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 1.8 s"
+     ]
+    },
+    {
+     "id": "select_newest_video",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_next_after_gallery",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 2.7 s"
+     ]
+    },
+    {
+     "id": "tap_music",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_search_in_sound_sheet",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "type_sound_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "execute_sound_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "wait_for_sound_results",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    }
+   ],
+   "screenshot": "songs-T-07-flowers.png"
+  },
+  {
+   "n": 7,
+   "title": "Flowers",
+   "artist": "Miley Cyrus",
+   "app": "S",
+   "status": "failed",
+   "found": "yes",
+   "steps": [
+    {
+     "id": "tap_create",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 1.5 s"
+     ]
+    },
+    {
+     "id": "tap_import_video_from_photo_library",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_select_from_gallery",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "select_newest_video",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_add_selected_video",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 1.5 s"
+     ]
+    },
+    {
+     "id": "tap_add_sound",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_music_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "type_sound_title",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_trigger_search",
+     "status": "skipped",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "find_select_sound_result",
+     "status": "failed",
+     "rung": 1,
+     "rungs": [
+      "searched for 'Flowers, Miley Cyrus': the list didn't show it",
+      "wait and retry: scrolled 8 times without finding {text_has='{{sound_title}}, {{sound_artist}}', kind='Button'}",
+      "wait and retry: waited 1.6 s"
+     ]
+    }
+   ],
+   "screenshot": "songs-S-07-flowers.png"
+  },
+  {
+   "n": 8,
+   "title": "As It Was",
+   "artist": "Harry Styles",
+   "app": "R",
+   "status": "failed",
+   "found": "no",
+   "steps": [
+    {
+     "id": "tap_create_button",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 1.7 s"
+     ]
+    },
+    {
+     "id": "tap_newest_video_thumbnail",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 1.1 s",
+      "wait and retry: after-checks held after 2.0 s"
+     ]
+    },
+    {
+     "id": "tap_add_audio",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "search_song_title",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 2.0 s"
+     ]
+    },
+    {
+     "id": "retype_song_title_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "find_tap_matching_track",
+     "status": "done",
+     "rung": 2,
+     "rungs": [
+      "relaxed match: after-checks held past the edge of the screen (scrolled to see them)"
+     ]
+    }
+   ],
+   "screenshot": "songs-R-08-as-it-was.png"
+  },
+  {
+   "n": 8,
+   "title": "As It Was",
+   "artist": "Harry Styles",
+   "app": "T",
+   "status": "failed",
+   "found": "see screenshot",
+   "steps": [
+    {
+     "id": "launch_tiktok",
+     "status": "failed",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: waited 1.6 s"
+     ]
+    }
+   ],
+   "screenshot": "songs-T-08-as-it-was.png"
+  },
+  {
+   "n": 8,
+   "title": "As It Was",
+   "artist": "Harry Styles",
+   "app": "S",
+   "status": "failed",
+   "found": "yes",
+   "steps": [
+    {
+     "id": "tap_create",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 1.8 s"
+     ]
+    },
+    {
+     "id": "tap_import_video_from_photo_library",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_select_from_gallery",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "select_newest_video",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_add_selected_video",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 1.6 s"
+     ]
+    },
+    {
+     "id": "tap_add_sound",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_music_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "type_sound_title",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_trigger_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "find_select_sound_result",
+     "status": "done",
+     "rung": 2,
+     "rungs": [
+      "searched for 'As It Was, Harry Styles': the list didn't show it",
+      "relaxed match: after-checks held at the relaxed threshold"
+     ]
+    }
+   ],
+   "screenshot": "songs-S-08-as-it-was.png"
+  },
+  {
+   "n": 9,
+   "title": "Blinding Lights",
+   "artist": "The Weeknd",
+   "app": "R",
+   "status": "failed",
+   "found": "no",
+   "steps": [
+    {
+     "id": "tap_create_button",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 1.7 s"
+     ]
+    },
+    {
+     "id": "tap_newest_video_thumbnail",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 1.1 s",
+      "wait and retry: after-checks held after 1.9 s"
+     ]
+    },
+    {
+     "id": "tap_add_audio",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "search_song_title",
+     "status": "done",
+     "rung": 2,
+     "rungs": [
+      "relaxed match: after-checks failed but the next step (retype_song_title_search) is ready"
+     ]
+    },
+    {
+     "id": "retype_song_title_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "find_tap_matching_track",
+     "status": "done",
+     "rung": 2,
+     "rungs": [
+      "relaxed match: after-checks held past the edge of the screen (scrolled to see them)"
+     ]
+    }
+   ],
+   "screenshot": "songs-R-09-blinding-lights.png"
+  },
+  {
+   "n": 9,
+   "title": "Blinding Lights",
+   "artist": "The Weeknd",
+   "app": "T",
+   "status": "done",
+   "found": "yes",
+   "steps": [
+    {
+     "id": "launch_tiktok",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 4.3 s"
+     ]
+    },
+    {
+     "id": "tap_create",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 2.6 s"
+     ]
+    },
+    {
+     "id": "tap_upload",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "select_newest_video",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_next_after_gallery",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 3.2 s"
+     ]
+    },
+    {
+     "id": "tap_music",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_search_in_sound_sheet",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "type_sound_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "execute_sound_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "wait_for_sound_results",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    }
+   ],
+   "screenshot": "songs-T-09-blinding-lights.png"
+  },
+  {
+   "n": 9,
+   "title": "Blinding Lights",
+   "artist": "The Weeknd",
+   "app": "S",
+   "status": "failed",
+   "found": "yes",
+   "steps": [
+    {
+     "id": "tap_create",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 1.9 s"
+     ]
+    },
+    {
+     "id": "tap_import_video_from_photo_library",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_select_from_gallery",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "select_newest_video",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_add_selected_video",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 1.8 s"
+     ]
+    },
+    {
+     "id": "tap_add_sound",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_music_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "type_sound_title",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_trigger_search",
+     "status": "skipped",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "find_select_sound_result",
+     "status": "failed",
+     "rung": 1,
+     "rungs": [
+      "searched for 'Blinding Lights, The Weeknd': the list didn't show it",
+      "wait and retry: scrolled 8 times without finding {text_has='{{sound_title}}, {{sound_artist}}', kind='Button'}",
+      "wait and retry: waited 1.5 s"
+     ]
+    }
+   ],
+   "screenshot": "songs-S-09-blinding-lights.png"
+  },
+  {
+   "n": 10,
+   "title": "Levitating",
+   "artist": "Dua Lipa",
+   "app": "R",
+   "status": "failed",
+   "found": "yes",
+   "steps": [
+    {
+     "id": "tap_create_button",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 1.9 s"
+     ]
+    },
+    {
+     "id": "tap_newest_video_thumbnail",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 1.7 s"
+     ]
+    },
+    {
+     "id": "tap_add_audio",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "search_song_title",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "retype_song_title_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "find_tap_matching_track",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "searched for 'Levitating by Dua Lipa': the list didn't show it",
+      "wait and retry: scrolled 8 times without finding {text_has='{{song_title}} by {{song_artist}}', resource_id='audio_browser_track_*_*', kind='Button'}"
+     ]
+    }
+   ],
+   "screenshot": "songs-R-10-levitating.png"
+  },
+  {
+   "n": 10,
+   "title": "Levitating",
+   "artist": "Dua Lipa",
+   "app": "T",
+   "status": "done",
+   "found": "yes",
+   "steps": [
+    {
+     "id": "launch_tiktok",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 2.4 s"
+     ]
+    },
+    {
+     "id": "tap_create",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 2.8 s"
+     ]
+    },
+    {
+     "id": "tap_upload",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "select_newest_video",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_next_after_gallery",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 3.1 s"
+     ]
+    },
+    {
+     "id": "tap_music",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_search_in_sound_sheet",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "type_sound_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "execute_sound_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "wait_for_sound_results",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    }
+   ],
+   "screenshot": "songs-T-10-levitating.png"
+  },
+  {
+   "n": 10,
+   "title": "Levitating",
+   "artist": "Dua Lipa",
+   "app": "S",
+   "status": "failed",
+   "found": "yes",
+   "steps": [
+    {
+     "id": "tap_create",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 1.5 s",
+      "wait and retry: after-checks held after 1.6 s"
+     ]
+    },
+    {
+     "id": "tap_import_video_from_photo_library",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_select_from_gallery",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "select_newest_video",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_add_selected_video",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 1.7 s"
+     ]
+    },
+    {
+     "id": "tap_add_sound",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_music_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "type_sound_title",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_trigger_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "find_select_sound_result",
+     "status": "done",
+     "rung": 2,
+     "rungs": [
+      "relaxed match: after-checks held at the relaxed threshold"
+     ]
+    }
+   ],
+   "screenshot": "songs-S-10-levitating.png"
+  }
+ ],
+ "swaps": {
+  "6": "Please Please Please",
+  "8": "Watermelon Sugar",
+  "9": "fallback"
+ },
+ "swap_notes": {
+  "6": "Espresso is not in Instagram's library on the test account; its alternate is in all three (songs-alternates-*.json)",
+  "8": "As It Was is not in Instagram's library; its alternate is in all three",
+  "9": "Blinding Lights and its alternate Save Your Tears are not in Instagram's library: golden hour by JVKE (the coordinator's ruling, Nov 3)",
+  "first_pass": "A first pass at 11:55 was stopped: Live Caption was on and hid TikTok's screen; this file is the rerun from 12:01"
+ }
+}

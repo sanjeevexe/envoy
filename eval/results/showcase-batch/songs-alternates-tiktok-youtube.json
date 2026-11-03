@@ -1,0 +1,333 @@
+{
+ "when": "2026-11-03T12:23:57",
+ "checks": [
+  {
+   "n": 6,
+   "title": "Please Please Please",
+   "artist": "Sabrina Carpenter",
+   "app": "T",
+   "status": "done",
+   "found": "yes",
+   "tries": [
+    "done"
+   ],
+   "steps": [
+    {
+     "id": "launch_tiktok",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 4.8 s"
+     ]
+    },
+    {
+     "id": "tap_create",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 2.8 s"
+     ]
+    },
+    {
+     "id": "tap_upload",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "select_newest_video",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_next_after_gallery",
+     "status": "done",
+     "rung": 2,
+     "rungs": [
+      "relaxed match: after-checks failed but the next step (tap_music) is ready"
+     ]
+    },
+    {
+     "id": "tap_music",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_search_in_sound_sheet",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "type_sound_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "execute_sound_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "wait_for_sound_results",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    }
+   ],
+   "screenshot": "songs-T-06-please-please-please.png"
+  },
+  {
+   "n": 6,
+   "title": "Please Please Please",
+   "artist": "Sabrina Carpenter",
+   "app": "S",
+   "status": "failed",
+   "found": "yes",
+   "tries": [
+    "failed"
+   ],
+   "steps": [
+    {
+     "id": "tap_create",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 1.6 s"
+     ]
+    },
+    {
+     "id": "tap_import_video_from_photo_library",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_select_from_gallery",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "select_newest_video",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_add_selected_video",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 1.7 s"
+     ]
+    },
+    {
+     "id": "tap_add_sound",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_music_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "type_sound_title",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_trigger_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "find_select_sound_result",
+     "status": "failed",
+     "rung": 1,
+     "rungs": [
+      "searched for 'Please Please Please, Sabrina Carpenter': the list didn't show it",
+      "wait and retry: scrolled 8 times without finding {text_has='{{sound_title}}, {{sound_artist}}', kind='Button'}",
+      "wait and retry: waited 7.1 s"
+     ]
+    }
+   ],
+   "screenshot": "songs-S-06-please-please-please.png"
+  },
+  {
+   "n": 8,
+   "title": "Watermelon Sugar",
+   "artist": "Harry Styles",
+   "app": "T",
+   "status": "done",
+   "found": "yes",
+   "tries": [
+    "done"
+   ],
+   "steps": [
+    {
+     "id": "launch_tiktok",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 2.2 s"
+     ]
+    },
+    {
+     "id": "tap_create",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 4.0 s",
+      "wait and retry: after-checks held after 2.8 s"
+     ]
+    },
+    {
+     "id": "tap_upload",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 2.1 s"
+     ]
+    },
+    {
+     "id": "select_newest_video",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_next_after_gallery",
+     "status": "done",
+     "rung": 2,
+     "rungs": [
+      "relaxed match: after-checks failed but the next step (tap_music) is ready"
+     ]
+    },
+    {
+     "id": "tap_music",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_search_in_sound_sheet",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "type_sound_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "execute_sound_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "wait_for_sound_results",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    }
+   ],
+   "screenshot": "songs-T-08-watermelon-sugar.png"
+  },
+  {
+   "n": 8,
+   "title": "Watermelon Sugar",
+   "artist": "Harry Styles",
+   "app": "S",
+   "status": "failed",
+   "found": "yes",
+   "tries": [
+    "failed"
+   ],
+   "steps": [
+    {
+     "id": "tap_create",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: ready after 1.7 s"
+     ]
+    },
+    {
+     "id": "tap_import_video_from_photo_library",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_select_from_gallery",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "select_newest_video",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_add_selected_video",
+     "status": "done",
+     "rung": 1,
+     "rungs": [
+      "wait and retry: after-checks held after 1.7 s"
+     ]
+    },
+    {
+     "id": "tap_add_sound",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_music_search",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "type_sound_title",
+     "status": "done",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "tap_trigger_search",
+     "status": "skipped",
+     "rung": 0,
+     "rungs": []
+    },
+    {
+     "id": "find_select_sound_result",
+     "status": "failed",
+     "rung": 1,
+     "rungs": [
+      "searched for 'Watermelon Sugar, Harry Styles': the list didn't show it",
+      "wait and retry: scrolled 8 times without finding {text_has='{{sound_title}}, {{sound_artist}}', kind='Button'}",
+      "wait and retry: waited 1.5 s"
+     ]
+    }
+   ],
+   "screenshot": "songs-S-08-watermelon-sugar.png"
+  }
+ ],
+ "swaps": {}
+}

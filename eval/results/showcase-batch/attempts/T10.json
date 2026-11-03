@@ -1,0 +1,256 @@
+{
+ "code": "T10",
+ "workflow": "T",
+ "routine": "tiktok_post_sound",
+ "app": "tiktok",
+ "final": "Post",
+ "state": "cold",
+ "clip_label": "BATCH T10",
+ "inputs": {
+  "sound_title": "Levitating",
+  "sound_artist": "Dua Lipa",
+  "caption": "Envoy batch T10 · test"
+ },
+ "song": {
+  "title": "Levitating",
+  "artist": "Dua Lipa"
+ },
+ "versions": {
+  "tag": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_head": "cf78fa04f7fd80691bba60f7cf5331c4eb2ea3df",
+  "copy_clean": true,
+  "driver": "d03caf8346eb0321dc03fc24b6b38de8331c0f86",
+  "driver_dirty": false,
+  "push_subs": 0
+ },
+ "started": "2026-11-03T14:47:35",
+ "setup": [
+  "force-stopped; launcher in front"
+ ],
+ "clip": {
+  "file": "batch-t10.mp4",
+  "sha256": "285b5dc5c12d3d37a873e581a53455d59e6e649b554e09cd87f900021c5be563",
+  "remote_path": "/sdcard/Movies/Envoy/batch-t10.mp4",
+  "media_uri": "content://media/external/video/media/1000000171"
+ },
+ "replay": {
+  "mode": "replay",
+  "app": "com.zhiliaoapp.musically",
+  "time": "2026-11-03T14:47:39",
+  "request": {
+   "phone": "phone-09031FDD4000C6",
+   "routine": "tiktok_post_sound",
+   "inputs": {
+    "sound_title": "Levitating",
+    "sound_artist": "Dua Lipa",
+    "caption": "Envoy batch T10 · test"
+   }
+  },
+  "task": {
+   "id": "task-1103-144739-dc61",
+   "status": "declined",
+   "routine": "tiktok_post_sound",
+   "model_calls": 3,
+   "cost_usd": 0.0072,
+   "traces": [],
+   "detail": "the user declined the approval",
+   "device": "phone-09031FDD4000C6"
+  },
+  "steps": 21,
+  "repairs": [],
+  "approvals": [
+   {
+    "description": "tap \"Post\" in com.zhiliaoapp.musically (routine tiktok_post_sound v3)",
+    "reasons": [
+     "rule: target publishes 'Post'",
+     "model: labeled irreversible"
+    ],
+    "status": "declined",
+    "decided_by": "user"
+   }
+  ],
+  "asked_at": [
+   "Post"
+  ],
+  "approval_shot": "approval-task-1103-144739-dc61.jpg",
+  "routine_steps": [
+   {
+    "id": "launch_tiktok",
+    "status": "done",
+    "rung": 1,
+    "score": null,
+    "rungs": [
+     "wait and retry: after-checks held after 4.1 s"
+    ]
+   },
+   {
+    "id": "tap_create",
+    "status": "done",
+    "rung": 1,
+    "score": 1.0,
+    "rungs": [
+     "wait and retry: after-checks held after 2.7 s"
+    ]
+   },
+   {
+    "id": "tap_upload",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "select_newest_video",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "tap_next_after_gallery",
+    "status": "done",
+    "rung": 1,
+    "score": 1.0,
+    "rungs": [
+     "wait and retry: after-checks held after 3.5 s"
+    ]
+   },
+   {
+    "id": "tap_music",
+    "status": "done",
+    "rung": 0,
+    "score": 0.982,
+    "rungs": []
+   },
+   {
+    "id": "tap_search_in_sound_sheet",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "type_sound_search",
+    "status": "done",
+    "rung": 0,
+    "score": 0.999,
+    "rungs": []
+   },
+   {
+    "id": "execute_sound_search",
+    "status": "done",
+    "rung": 0,
+    "score": 0.999,
+    "rungs": []
+   },
+   {
+    "id": "wait_for_sound_results",
+    "status": "done",
+    "rung": 0,
+    "score": null,
+    "rungs": []
+   },
+   {
+    "id": "apply_first_sound_result",
+    "status": "done",
+    "rung": 1,
+    "score": null,
+    "rungs": [
+     "looked for 'red check button for first result Levitating by Dua Lipa' (sam, 5.0 s)",
+     "wait and retry: after-checks held after 1.9 s"
+    ]
+   },
+   {
+    "id": "close_sound_sheet",
+    "status": "done",
+    "rung": 0,
+    "score": null,
+    "rungs": []
+   },
+   {
+    "id": "tap_next_after_sound",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "type_caption",
+    "status": "done",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   },
+   {
+    "id": "go_back_to_review",
+    "status": "done",
+    "rung": 0,
+    "score": null,
+    "rungs": []
+   },
+   {
+    "id": "tap_post",
+    "status": "declined",
+    "rung": 0,
+    "score": 1.0,
+    "rungs": []
+   }
+  ],
+  "outcome_checks": [
+   {
+    "when": "before the final step",
+    "picks": {
+     "sound_title": "shown"
+    },
+    "fields": {
+     "caption": "held"
+    },
+    "clip": "checked",
+    "problems": []
+   }
+  ],
+  "auto_approved": [],
+  "marks_s": {
+   "running": 0.2,
+   "needs_you": 1.2,
+   "phone_yes": 1.2,
+   "waiting_approval": 61.6,
+   "post_asked": 61.6,
+   "declined": 62.6,
+   "end": 62.6
+  },
+  "spent": {
+   "model_calls": 3,
+   "cost_usd": 0.0072,
+   "cost_at_standard_usd": 0.0072,
+   "jobs": {
+    "sam": 2,
+    "choose": 1
+   }
+  },
+  "ok": true,
+  "failures": [],
+  "profile": "hybrid",
+  "cleanup": [
+   "force-stopped TikTok"
+  ]
+ },
+ "replay_file": "eval/results/showcase/runs/tiktok-replay-20261103-144739.json",
+ "routine_version": 3,
+ "approval_shot": {
+  "file": "approval-task-1103-144739-dc61.jpg",
+  "sha256": "c1944e1fcab58f39a9f7a751b35754e4af840b6cd7ff70be8f99bcbd3d46ced8"
+ },
+ "interventions": [],
+ "active_after": 3,
+ "ended": "2026-11-03T14:48:43",
+ "wall_s": 67.2,
+ "stop_rule": null,
+ "checks": {
+  "clip": "yes",
+  "song": "yes",
+  "caption": "yes",
+  "poll": "n/a"
+ },
+ "class": "no repair"
+}
