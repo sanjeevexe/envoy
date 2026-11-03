@@ -81,7 +81,7 @@ class Copy:
         tag = git(self.checkout, "rev-parse", "eval-final^{commit}")
         head = git(self.checkout, "rev-parse", "HEAD")
         dirty = [ln for ln in git(self.checkout, "status", "--porcelain", "--untracked-files=no").splitlines() if ln
-                 and not (resume and ln[3:].startswith("data/routines/"))]  # (the pass's own run history, written by the copy)
+                 and not (resume and ln.split(maxsplit=1)[-1].startswith("data/routines/"))]  # (the pass's own run history)
         problems = []
         if not tag or tag != head:
             problems.append(f"the copy's HEAD {head[:9]} is not eval-final {tag[:9] or '(no tag)'}")
