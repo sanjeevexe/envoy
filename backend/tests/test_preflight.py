@@ -26,7 +26,7 @@ from routines.store import RoutineStore
 
 INSTAGRAM = "com.instagram.android"
 TARGET, DOORDASH, AMAZON, SKYLARK = "com.target.ui", "com.dd.doordash", "com.amazon.mShop.android.shopping", "com.skylark.air"
-LIBRARY = Path(__file__).resolve().parents[2] / "data" / "routines"
+LIBRARY = Path(__file__).resolve().parent / "traces" / "library"  # pinned SkyLark routines (see test_routine_tools)
 CHECK_IN = "skylark_check_in_flight"
 PIXEL = {"id": "phone-0A1B", "serial": "0A1B", "model": "Pixel 5", "state": "device"}
 
@@ -104,7 +104,8 @@ class Pool:
 
 @pytest.fixture
 def lib(tmp_path) -> RoutineStore:
-    """A routine library with SkyLark's check-in (v1, its irreversible step is "Confirm check-in") and no runs yet."""
+    """A routine library with SkyLark's check-in (v1, its irreversible step is "Confirm check-in"), from the pinned copy:
+    the live library's check-in moved on to a v3 trial (Nov 3) that has no checking replay."""
     shutil.copytree(LIBRARY / CHECK_IN, tmp_path / "routines" / CHECK_IN)
     return RoutineStore(tmp_path / "routines")
 

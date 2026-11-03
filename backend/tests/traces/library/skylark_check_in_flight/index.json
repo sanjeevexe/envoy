@@ -1,0 +1,268 @@
+{
+ "name": "skylark_check_in_flight",
+ "active": 1,
+ "versions": [
+  {
+   "version": 1,
+   "status": "active",
+   "created": "2026-10-27 02:27:42",
+   "parent": null,
+   "changes": [
+    "compiled from p1-final-code-check-checkin-v0-r0"
+   ],
+   "verification": {
+    "cases": [
+     {
+      "case": "same-inputs",
+      "inputs": {
+       "trip_city": "Chicago"
+      },
+      "passed": true,
+      "status": "done",
+      "detail": "all steps and checks passed",
+      "duration_s": 3.18,
+      "outputs": {
+       "seat": "14C",
+       "gate": "B12",
+       "boarding_time": "5:30 AM",
+       "boarding_group": "Group 3",
+       "flight": "SL 482"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "version": 2,
+   "status": "rejected",
+   "created": "2026-10-28 17:35:45",
+   "parent": 1,
+   "changes": [
+    "after 'confirm_check_in', an extra screen appeared; inserted confirm_check_in_extra_1 (tap Confirm check-in)"
+   ],
+   "source_task": "task-1028-173406-f8e0-r1",
+   "screenshots": [
+    "history/v2/repair_06_1_before.png",
+    "history/v2/repair_06_1_after.png"
+   ],
+   "trial": {
+    "passed": false,
+    "by": "Phase 7 (phone gate)",
+    "reason": "learned from a run the person took over: an approved tap that didn't take effect read as 'an extra screen appeared'"
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-10-28 01:00:36",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1028-010018-484a-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 2.99,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 01:02:25",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1028-010214-8507-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.2,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 01:02:39",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1028-010229-fc65-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.85,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 01:02:50",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1028-010243-c4b0-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 2.98,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 01:03:03",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1028-010253-1874-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.39,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 01:04:33",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1028-010418-20e5-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.23,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 01:08:00",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1028-010743-8992-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.16,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 03:51:17",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1028-035103-5f47-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.21,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 03:53:03",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1028-035255-c275-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.32,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 03:53:16",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1028-035306-8024-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 4.17,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 03:53:28",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1028-035320-a171-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.35,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 03:53:41",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1028-035332-21ab-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.91,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 03:54:49",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1028-035435-dd20-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 3.44,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 17:13:10",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1028-171248-bf5a-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 13.35,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 17:28:14",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1028-172747-fcc3-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 17.21,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 17:29:21",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1028-172856-ead7-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 18.38,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-28 17:35:45",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1028-173406-f8e0-r1",
+   "status": "done",
+   "rung": 4,
+   "model_calls": 1,
+   "duration_s": 92.82,
+   "patches": 1
+  },
+  {
+   "time": "2026-10-28 17:50:44",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1028-174938-7eb1-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 59.38,
+   "patches": 0
+  },
+  {
+   "time": "2026-10-29 17:25:03",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1029-172332-ba39-r1",
+   "status": "done",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 83.44,
+   "patches": 0
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.skylark.air"
+}

@@ -10,7 +10,7 @@ from fastapi.testclient import TestClient
 from api.sharing import Sharing
 from api.store import TaskStore
 from test_mcp_link import HDR, me
-from test_routine_tools import LIB, env, listed  # noqa: F401 - env is a fixture
+from test_routine_tools import SKYLARK_LIB, env, listed  # noqa: F401 - env is a fixture
 
 X = {"X-Envoy": "1"}
 
@@ -84,7 +84,7 @@ def test_unknown_routines_and_bad_bodies_are_refused(env):
 
 
 def test_a_routine_named_like_a_built_in_tool_gets_a_prefixed_tool(env):
-    shutil.copytree(LIB / "skylark_get_flight_gate", env.ctx.routines.root / "list_phones")
+    shutil.copytree(SKYLARK_LIB / "skylark_get_flight_gate", env.ctx.routines.root / "list_phones")
     for f in ("index.json", "v1.yaml"):
         p = env.ctx.routines.root / "list_phones" / f
         p.write_text(p.read_text().replace("skylark_get_flight_gate", "list_phones"))
