@@ -1,0 +1,131 @@
+{
+ "task": "RecipeAddMultipleRecipesFromMarkor",
+ "seed": 4162951690,
+ "goal": "Add the recipes from recipes.txt in Markor to the Broccoli recipe app.",
+ "score": 0.0,
+ "aw_run_time_s": 237.9,
+ "aw_episode_length": 60,
+ "agent": "envoy",
+ "finished": "2026-11-03 13:26:52.425700",
+ "envoy": {
+  "run_id": "aw-2026-11-03-hybrid-7ed4aa6-1103-132256-2487",
+  "goal": "Add the recipes from recipes.txt in Markor to the Broccoli recipe app.",
+  "max_steps": 60,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "cost_limit",
+  "result": "stopped at $0.510",
+  "done": false,
+  "answer": null,
+  "steps_device": 52,
+  "iterations": 52,
+  "looks": 0,
+  "screenshots_sent": 2,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 8,
+   "tap": 12,
+   "type": 18,
+   "scroll": 11,
+   "back": 2,
+   "swipe": 1
+  },
+  "model_calls": 55,
+  "input_tokens": 139108,
+  "cached_tokens": 85392,
+  "output_tokens": 13878,
+  "reasoning_tokens": 7446,
+  "cost_usd": 0.509502,
+  "cost_at_standard_usd": 0.509502,
+  "duration_s": 231.39,
+  "model_s": 155.35,
+  "device_s": 76.04,
+  "connect_s": 0.85,
+  "approvals": [
+   {
+    "step": 12,
+    "description": "tap \"SAVE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 25,
+    "description": "tap \"SAVE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 35,
+    "description": "tap \"SAVE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Scroll down in this New Recipe form and fill in Ingredients and Directions for Garlic Butter Shrimp, then tap SAVE",
+    "Open Markor and open recipes.txt itself from Documents, reading the full file rather than the separate individual Title documents",
+    "Note every recipe in recipes.txt, including Thai Peanut Noodle Salad, with its description, ingredients and directions",
+    "Return to the Broccoli recipe list and use the new-recipe button to add each recipe from recipes.txt not yet saved",
+    "For each recipe fill Title, Description, Ingredients and Directions and tap SAVE, ending on the Broccoli recipe list"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Garlic Butter Shrimp",
+    "field_hint": ""
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-2026-11-03-hybrid-7ed4aa6-1103-132256-2487",
+  "envoy_commit": "7ed4aa60493a38978f34661165f5bf2dd7e7ef09",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/traces/RecipeAddMultipleRecipesFromMarkor__s4162951690.jsonl.gz",
+  "wall_s": 233.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

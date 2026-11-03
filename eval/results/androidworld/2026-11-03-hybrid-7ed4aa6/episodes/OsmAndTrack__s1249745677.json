@@ -1,0 +1,102 @@
+{
+ "task": "OsmAndTrack",
+ "seed": 1249745677,
+ "goal": "Save a track with waypoints Schönberg, Liechtenstein, Triesen, Liechtenstein, Bendern, Liechtenstein in the OsmAnd maps app in the same order as listed.",
+ "score": 0.0,
+ "aw_run_time_s": 262.5,
+ "aw_episode_length": 120,
+ "agent": "envoy",
+ "finished": "2026-11-03 13:15:42.611400",
+ "envoy": {
+  "run_id": "aw-2026-11-03-hybrid-7ed4aa6-1103-131121-03b6",
+  "goal": "Save a track with waypoints Schönberg, Liechtenstein, Triesen, Liechtenstein, Bendern, Liechtenstein in the OsmAnd maps app in the same order as listed.",
+  "max_steps": 120,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "cost_limit",
+  "result": "stopped at $0.501",
+  "done": false,
+  "answer": null,
+  "steps_device": 49,
+  "iterations": 56,
+  "looks": 7,
+  "screenshots_sent": 11,
+  "replans": 2,
+  "stuck_recoveries": 1,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 35,
+   "type": 4,
+   "look": 7,
+   "back": 8,
+   "wait": 1
+  },
+  "model_calls": 59,
+  "input_tokens": 142079,
+  "cached_tokens": 94560,
+  "output_tokens": 14622,
+  "reasoning_tokens": 8490,
+  "cost_usd": 0.501428,
+  "cost_at_standard_usd": 0.501428,
+  "duration_s": 256.34,
+  "model_s": 189.29,
+  "device_s": 67.05,
+  "connect_s": 0.84,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "OsmAnd",
+   "subgoals": [
+    "In Plan a route, use the bottom Add/Points controls (not the top Back to search, History, or Country results) to add a point, searching by the full name 'Schönberg, Liechtenstein' and selecting the place result",
+    "Add the next point the same way for 'Triesen, Liechtenstein', then add 'Bendern, Liechtenstein', so the Points list shows them in that listed order",
+    "Open Points to verify the three points are in order, then use Options or Done to save as a new track and confirm saving",
+    "Open the saved track from My Places > Tracks and open its waypoints/points list to verify it"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Bendern, Liechtenstein",
+    "field_hint": ""
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-2026-11-03-hybrid-7ed4aa6-1103-131121-03b6",
+  "envoy_commit": "7ed4aa60493a38978f34661165f5bf2dd7e7ef09",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/traces/OsmAndTrack__s1249745677.jsonl.gz",
+  "wall_s": 258.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.9
+  }
+ }
+}

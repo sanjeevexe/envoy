@@ -1,0 +1,105 @@
+{
+ "task": "NotesMeetingAttendeeCount",
+ "seed": 1619313862,
+ "goal": "How many attendees were present in the meeting titled 'Employee Performance Evaluation' in the Joplin app? Express your answer as just a single number.",
+ "score": 1.0,
+ "aw_run_time_s": 53.4,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-03 13:06:46.752700",
+ "envoy": {
+  "run_id": "aw-2026-11-03-hybrid-7ed4aa6-1103-130559-38db",
+  "goal": "How many attendees were present in the meeting titled 'Employee Performance Evaluation' in the Joplin app? Express your answer as just a single number.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "25",
+  "done": true,
+  "answer": "25",
+  "steps_device": 5,
+  "iterations": 6,
+  "looks": 0,
+  "screenshots_sent": 1,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "type": 1,
+   "scroll": 1,
+   "done": 1
+  },
+  "model_calls": 7,
+  "input_tokens": 14639,
+  "cached_tokens": 6852,
+  "output_tokens": 1182,
+  "reasoning_tokens": 557,
+  "cost_usd": 0.056158,
+  "cost_at_standard_usd": 0.056158,
+  "duration_s": 39.32,
+  "model_s": 30.37,
+  "device_s": 8.95,
+  "connect_s": 0.85,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Joplin",
+   "subgoals": [
+    "Open Joplin",
+    "Find and open the note titled 'Employee Performance Evaluation'",
+    "Locate the attendees information in the note",
+    "Read the number of attendees present"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "number of attendees present in the 'Employee Performance Evaluation' meeting",
+    "field_hint": ""
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: 25"
+  },
+  "trace_dir": "data/runs/aw-2026-11-03-hybrid-7ed4aa6-1103-130559-38db",
+  "envoy_commit": "7ed4aa60493a38978f34661165f5bf2dd7e7ef09",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/traces/NotesMeetingAttendeeCount__s1619313862.jsonl.gz",
+  "wall_s": 44.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

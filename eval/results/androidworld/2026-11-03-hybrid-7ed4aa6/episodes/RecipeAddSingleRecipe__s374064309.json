@@ -1,0 +1,116 @@
+{
+ "task": "RecipeAddSingleRecipe",
+ "seed": 374064309,
+ "goal": "Add the following recipes into the Broccoli app:\nRecipe: Chicken Caesar Salad Wrap\n description: An ideal recipe for experimenting with different flavors and ingredients.\n servings: 3-4 servings\n preparationTime: 2 hrs\n ingredients: as desired\n directions: Toss chopped romaine lettuce with Caesar dressing, grilled chicken strips, and Parmesan cheese. Wrap in a large tortilla. Feel free to substitute with ingredients you have on hand.\n",
+ "score": 1.0,
+ "aw_run_time_s": 43.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-03 13:28:40.482228",
+ "envoy": {
+  "run_id": "aw-2026-11-03-hybrid-7ed4aa6-1103-132759-20ea",
+  "goal": "Add the following recipes into the Broccoli app:\nRecipe: Chicken Caesar Salad Wrap\n description: An ideal recipe for experimenting with different flavors and ingredients.\n servings: 3-4 servings\n preparationTime: 2 hrs\n ingredients: as desired\n directions: Toss chopped romaine lettuce with Caesar dressing, grilled chicken strips, and Parmesan cheese. Wrap in a large tortilla. Feel free to substitute with ingredients you have on hand.\n",
+  "max_steps": 24,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Added recipe 'Chicken Caesar Salad Wrap' to Broccoli app with description, 3-4 servings, 2 hrs preparation time, ingredients 'as desired', and directions as specified. Recipe details screen confirms it was saved.",
+  "done": true,
+  "answer": "Added recipe 'Chicken Caesar Salad Wrap' to Broccoli app with description, 3-4 servings, 2 hrs preparation time, ingredients 'as desired', and directions as specified. Recipe details screen confirms it was saved.",
+  "steps_device": 10,
+  "iterations": 11,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "type": 6,
+   "scroll": 1,
+   "done": 1
+  },
+  "model_calls": 12,
+  "input_tokens": 27480,
+  "cached_tokens": 19696,
+  "output_tokens": 2027,
+  "reasoning_tokens": 659,
+  "cost_usd": 0.075615,
+  "cost_at_standard_usd": 0.075615,
+  "duration_s": 36.05,
+  "model_s": 21.26,
+  "device_s": 14.79,
+  "connect_s": 0.85,
+  "approvals": [
+   {
+    "step": 10,
+    "description": "tap \"SAVE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Open the Broccoli app",
+    "Tap the add or new recipe button",
+    "Enter the recipe details: Chicken Caesar Salad Wrap, description, 3-4 servings, 2 hrs preparation time, and ingredients as desired",
+    "Enter the directions: Toss chopped romaine lettuce with Caesar dressing, grilled chicken strips, and Parmesan cheese. Wrap in a large tortilla. Feel free to substitute with ingredients you have on hand.",
+    "Save the recipe and confirm it appears in the recipe list"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Chicken Caesar Salad Wrap",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Chicken Caesar Salad Wrap' is visible"
+  },
+  "trace_dir": "data/runs/aw-2026-11-03-hybrid-7ed4aa6-1103-132759-20ea",
+  "envoy_commit": "7ed4aa60493a38978f34661165f5bf2dd7e7ef09",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/traces/RecipeAddSingleRecipe__s374064309.jsonl.gz",
+  "wall_s": 38.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.8
+  }
+ }
+}

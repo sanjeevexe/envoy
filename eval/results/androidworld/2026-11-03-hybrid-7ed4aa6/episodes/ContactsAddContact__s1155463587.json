@@ -1,0 +1,117 @@
+{
+ "task": "ContactsAddContact",
+ "seed": 1155463587,
+ "goal": "Create a new contact for Hugo Pereira. Their number is +13920741751.",
+ "score": 1.0,
+ "aw_run_time_s": 39.4,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-03 12:33:58.187735",
+ "envoy": {
+  "run_id": "aw-2026-11-03-hybrid-7ed4aa6-1103-123319-f30a",
+  "goal": "Create a new contact for Hugo Pereira. Their number is +13920741751.",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Created contact Hugo Pereira with number +13920741751 and opened its details.",
+  "done": true,
+  "answer": "Created contact Hugo Pereira with number +13920741751 and opened its details.",
+  "steps_device": 9,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 4,
+   "type": 3,
+   "done": 1
+  },
+  "model_calls": 10,
+  "input_tokens": 19746,
+  "cached_tokens": 15112,
+  "output_tokens": 1520,
+  "reasoning_tokens": 549,
+  "cost_usd": 0.051958,
+  "cost_at_standard_usd": 0.051958,
+  "duration_s": 31.05,
+  "model_s": 18.18,
+  "device_s": 12.87,
+  "connect_s": 0.85,
+  "approvals": [
+   {
+    "step": 9,
+    "description": "tap \"Save\" in com.google.android.contacts",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [
+   "permission prompt: deny"
+  ],
+  "plan": {
+   "app": "Contacts",
+   "subgoals": [
+    "Open Contacts",
+    "Tap the create new contact button",
+    "Enter first name Hugo and last name Pereira",
+    "Enter phone number +13920741751",
+    "Save the contact and open its details"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Hugo Pereira",
+    "field_hint": ""
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Hugo Pereira' is visible"
+  },
+  "trace_dir": "data/runs/aw-2026-11-03-hybrid-7ed4aa6-1103-123319-f30a",
+  "envoy_commit": "7ed4aa60493a38978f34661165f5bf2dd7e7ef09",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/traces/ContactsAddContact__s1155463587.jsonl.gz",
+  "wall_s": 35.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.4
+  }
+ }
+}

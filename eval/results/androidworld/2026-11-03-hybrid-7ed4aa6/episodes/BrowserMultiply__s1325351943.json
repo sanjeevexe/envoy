@@ -1,0 +1,100 @@
+{
+ "task": "BrowserMultiply",
+ "seed": 1325351943,
+ "goal": "Open the file task.html in Downloads in the file manager; when prompted open it with Chrome. Then click the button 5 times, remember the numbers displayed, and enter their product in the form.",
+ "score": 0.0,
+ "aw_run_time_s": 125.4,
+ "aw_episode_length": 22,
+ "agent": "envoy",
+ "finished": "2026-11-03 12:29:43.090465",
+ "envoy": {
+  "run_id": "aw-2026-11-03-hybrid-7ed4aa6-1103-122741-007a",
+  "goal": "Open the file task.html in Downloads in the file manager; when prompted open it with Chrome. Then click the button 5 times, remember the numbers displayed, and enter their product in the form.",
+  "max_steps": 22,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 22 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 22,
+  "iterations": 22,
+  "looks": 0,
+  "screenshots_sent": 6,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 19,
+   "scroll": 2
+  },
+  "model_calls": 25,
+  "input_tokens": 56630,
+  "cached_tokens": 37716,
+  "output_tokens": 7518,
+  "reasoning_tokens": 4616,
+  "cost_usd": 0.233559,
+  "cost_at_standard_usd": 0.233559,
+  "duration_s": 116.84,
+  "model_s": 88.51,
+  "device_s": 28.33,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Chrome",
+   "subgoals": [
+    "Tap the page's \"Home\" button to reset the Memory Task",
+    "Tap \"Click Me\" exactly 5 times, noting the number displayed after each tap",
+    "Scroll down in Chrome to reveal the answer form below the button",
+    "Enter the product of the five displayed numbers into the form field",
+    "Tap the form's submit button"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "confirmation or result shown after submitting the product of the five numbers",
+    "field_hint": ""
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-2026-11-03-hybrid-7ed4aa6-1103-122741-007a",
+  "envoy_commit": "7ed4aa60493a38978f34661165f5bf2dd7e7ef09",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/traces/BrowserMultiply__s1325351943.jsonl.gz",
+  "wall_s": 119.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

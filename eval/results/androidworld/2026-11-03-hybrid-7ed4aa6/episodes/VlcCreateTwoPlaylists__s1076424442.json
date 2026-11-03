@@ -1,0 +1,107 @@
+{
+ "task": "VlcCreateTwoPlaylists",
+ "seed": 1076424442,
+ "goal": "Create a playlist titled \"Ultimate Fails Series\" with the following files in VLC (located in Internal Memory/VLCVideos), in order: 2023_03_29_highlight_14_.mp4, scene_94_HD_MYI6.mp4, moment_1_HD_2023_07_27.mp4, recording_61_4K_final.mp4. And then, create a playlist titled \"Adventure Marathon\" with the following files in VLC, in order: clip_12_HD_2023_02_25.mp4, 8u3n_footage_29_HD.mp4, footage_46_raw_jZFR.mp4, D7B0_highlight_2_4K.mp4.",
+ "score": 1.0,
+ "aw_run_time_s": 154.1,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-03 14:46:01.157689",
+ "envoy": {
+  "run_id": "aw-2026-11-03-hybrid-7ed4aa6-1103-144331-8b3b",
+  "goal": "Create a playlist titled \"Ultimate Fails Series\" with the following files in VLC (located in Internal Memory/VLCVideos), in order: 2023_03_29_highlight_14_.mp4, scene_94_HD_MYI6.mp4, moment_1_HD_2023_07_27.mp4, recording_61_4K_final.mp4. And then, create a playlist titled \"Adventure Marathon\" with the following files in VLC, in order: clip_12_HD_2023_02_25.mp4, 8u3n_footage_29_HD.mp4, footage_46_raw_jZFR.mp4, D7B0_highlight_2_4K.mp4.",
+  "max_steps": 48,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Created playlists 'Ultimate Fails Series' and 'Adventure Marathon', each with 4 files in the specified order.",
+  "done": true,
+  "answer": "Created playlists 'Ultimate Fails Series' and 'Adventure Marathon', each with 4 files in the specified order.",
+  "steps_device": 38,
+  "iterations": 40,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 1,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 33,
+   "type": 2,
+   "scroll": 1,
+   "back": 1,
+   "done": 2
+  },
+  "model_calls": 43,
+  "input_tokens": 136038,
+  "cached_tokens": 78204,
+  "output_tokens": 9244,
+  "reasoning_tokens": 3191,
+  "cost_usd": 0.431857,
+  "cost_at_standard_usd": 0.431857,
+  "duration_s": 141.93,
+  "model_s": 93.67,
+  "device_s": 48.26,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "VLC",
+   "subgoals": [
+    "Close this menu and open the Playlists tab to verify 'Ultimate Fails Series' already exists with its 4 files in order, recreating it from Browse > Internal memory > VLCVideos if missing or out of order",
+    "Go to Browse > Internal memory > VLCVideos, open the menu for clip_12_HD_2023_02_25.mp4, tap 'Add to playlist' > 'Add to new playlist' and name it 'Adventure Marathon'",
+    "Add 8u3n_footage_29_HD.mp4 to 'Adventure Marathon' via its menu > 'Add to playlist'",
+    "Add footage_46_raw_jZFR.mp4, then D7B0_highlight_2_4K.mp4, to 'Adventure Marathon' in that order via their menus > 'Add to playlist'",
+    "Open the Playlists tab and open 'Adventure Marathon' to confirm its 4 files are listed in order"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Adventure Marathon",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Adventure Marathon' is visible"
+  },
+  "trace_dir": "data/runs/aw-2026-11-03-hybrid-7ed4aa6-1103-144331-8b3b",
+  "envoy_commit": "7ed4aa60493a38978f34661165f5bf2dd7e7ef09",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/traces/VlcCreateTwoPlaylists__s1076424442.jsonl.gz",
+  "wall_s": 147.6,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

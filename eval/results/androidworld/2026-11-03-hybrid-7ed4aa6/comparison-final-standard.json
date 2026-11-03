@@ -1,0 +1,447 @@
+{
+ "before": "final-standard (Oct 28; backend a80b976 + harness 1c2a680; spark; $0.15 task cap)",
+ "after": "2026-11-03-hybrid-7ed4aa6 (Nov 3; main 7ed4aa6; hybrid; $0.50 task cap on Wonder)",
+ "n_common": 116,
+ "overall": {
+  "n": 116,
+  "before": 57.0,
+  "after": 74.0,
+  "gained": 20,
+  "lost": 3,
+  "p_sign": 0.0005,
+  "gained_tasks": [
+   "ExpenseAddMultiple",
+   "ExpenseAddSingle",
+   "ExpenseDeleteMultiple2",
+   "FilesDeleteFile",
+   "MarkorDeleteAllNotes",
+   "MarkorDeleteNewestNote",
+   "MarkorDeleteNote",
+   "MarkorMoveNote",
+   "OsmAndFavorite",
+   "RecipeAddMultipleRecipes",
+   "RetroPlayingQueue",
+   "SimpleCalendarDeleteOneEvent",
+   "SimpleCalendarEventsInTimeRange",
+   "SimpleCalendarNextMeetingWithPerson",
+   "SportsTrackerActivityDuration",
+   "SystemBluetoothTurnOff",
+   "SystemBluetoothTurnOn",
+   "SystemBluetoothTurnOnVerify",
+   "TurnOffWifiAndTurnOnBluetooth",
+   "VlcCreateTwoPlaylists"
+  ],
+  "lost_tasks": [
+   "ExpenseDeleteDuplicates",
+   "RecipeAddMultipleRecipesFromImage",
+   "SimpleDrawProCreateDrawing"
+  ]
+ },
+ "by_half": {
+  "dev": {
+   "n": 58,
+   "before": 26.0,
+   "after": 38.0,
+   "gained": 12,
+   "lost": 0,
+   "p_sign": 0.0005,
+   "gained_tasks": [
+    "ExpenseAddMultiple",
+    "ExpenseDeleteMultiple2",
+    "MarkorDeleteAllNotes",
+    "MarkorDeleteNote",
+    "OsmAndFavorite",
+    "RecipeAddMultipleRecipes",
+    "RetroPlayingQueue",
+    "SimpleCalendarNextMeetingWithPerson",
+    "SportsTrackerActivityDuration",
+    "SystemBluetoothTurnOn",
+    "SystemBluetoothTurnOnVerify",
+    "VlcCreateTwoPlaylists"
+   ],
+   "lost_tasks": []
+  },
+  "held_out": {
+   "n": 58,
+   "before": 31.0,
+   "after": 36.0,
+   "gained": 8,
+   "lost": 3,
+   "p_sign": 0.2266,
+   "gained_tasks": [
+    "ExpenseAddSingle",
+    "FilesDeleteFile",
+    "MarkorDeleteNewestNote",
+    "MarkorMoveNote",
+    "SimpleCalendarDeleteOneEvent",
+    "SimpleCalendarEventsInTimeRange",
+    "SystemBluetoothTurnOff",
+    "TurnOffWifiAndTurnOnBluetooth"
+   ],
+   "lost_tasks": [
+    "ExpenseDeleteDuplicates",
+    "RecipeAddMultipleRecipesFromImage",
+    "SimpleDrawProCreateDrawing"
+   ]
+  }
+ },
+ "by_difficulty": {
+  "easy": {
+   "n": 61,
+   "before": 40.0,
+   "after": 50.0,
+   "gained": 11,
+   "lost": 1,
+   "p_sign": 0.0063,
+   "gained_tasks": [
+    "ExpenseAddSingle",
+    "MarkorDeleteAllNotes",
+    "MarkorDeleteNewestNote",
+    "MarkorDeleteNote",
+    "RetroPlayingQueue",
+    "SimpleCalendarDeleteOneEvent",
+    "SimpleCalendarEventsInTimeRange",
+    "SportsTrackerActivityDuration",
+    "SystemBluetoothTurnOff",
+    "SystemBluetoothTurnOn",
+    "SystemBluetoothTurnOnVerify"
+   ],
+   "lost_tasks": [
+    "SimpleDrawProCreateDrawing"
+   ]
+  },
+  "medium": {
+   "n": 36,
+   "before": 12.0,
+   "after": 19.0,
+   "gained": 8,
+   "lost": 1,
+   "p_sign": 0.0391,
+   "gained_tasks": [
+    "ExpenseAddMultiple",
+    "FilesDeleteFile",
+    "MarkorMoveNote",
+    "OsmAndFavorite",
+    "RecipeAddMultipleRecipes",
+    "SimpleCalendarNextMeetingWithPerson",
+    "TurnOffWifiAndTurnOnBluetooth",
+    "VlcCreateTwoPlaylists"
+   ],
+   "lost_tasks": [
+    "ExpenseDeleteDuplicates"
+   ]
+  },
+  "hard": {
+   "n": 19,
+   "before": 5.0,
+   "after": 5.0,
+   "gained": 1,
+   "lost": 1,
+   "p_sign": 1.0,
+   "gained_tasks": [
+    "ExpenseDeleteMultiple2"
+   ],
+   "lost_tasks": [
+    "RecipeAddMultipleRecipesFromImage"
+   ]
+  }
+ },
+ "by_half_difficulty": {
+  "dev/easy": {
+   "n": 31,
+   "before": 21.0,
+   "after": 27.0,
+   "gained": 6,
+   "lost": 0
+  },
+  "dev/medium": {
+   "n": 18,
+   "before": 5.0,
+   "after": 10.0,
+   "gained": 5,
+   "lost": 0
+  },
+  "dev/hard": {
+   "n": 9,
+   "before": 0.0,
+   "after": 1.0,
+   "gained": 1,
+   "lost": 0
+  },
+  "held_out/easy": {
+   "n": 30,
+   "before": 19.0,
+   "after": 23.0,
+   "gained": 5,
+   "lost": 1
+  },
+  "held_out/medium": {
+   "n": 18,
+   "before": 7.0,
+   "after": 9.0,
+   "gained": 3,
+   "lost": 1
+  },
+  "held_out/hard": {
+   "n": 10,
+   "before": 5.0,
+   "after": 4.0,
+   "gained": 0,
+   "lost": 1
+  }
+ },
+ "by_app": {
+  "audio recorder": {
+   "n": 2,
+   "before": 2.0,
+   "after": 2.0,
+   "gained": 0,
+   "lost": 0
+  },
+  "broccoli app": {
+   "n": 10,
+   "before": 5.0,
+   "after": 6.0,
+   "gained": 1,
+   "lost": 0
+  },
+  "camera": {
+   "n": 2,
+   "before": 1.0,
+   "after": 1.0,
+   "gained": 0,
+   "lost": 0
+  },
+  "chrome": {
+   "n": 3,
+   "before": 0.0,
+   "after": 0.0,
+   "gained": 0,
+   "lost": 0
+  },
+  "clipper": {
+   "n": 1,
+   "before": 0.0,
+   "after": 0.0,
+   "gained": 0,
+   "lost": 0
+  },
+  "clock": {
+   "n": 3,
+   "before": 3.0,
+   "after": 3.0,
+   "gained": 0,
+   "lost": 0
+  },
+  "contacts": {
+   "n": 2,
+   "before": 2.0,
+   "after": 2.0,
+   "gained": 0,
+   "lost": 0
+  },
+  "files": {
+   "n": 2,
+   "before": 0.0,
+   "after": 1.0,
+   "gained": 1,
+   "lost": 0
+  },
+  "joplin": {
+   "n": 4,
+   "before": 3.0,
+   "after": 3.0,
+   "gained": 0,
+   "lost": 0
+  },
+  "markor": {
+   "n": 10,
+   "before": 3.0,
+   "after": 7.0,
+   "gained": 4,
+   "lost": 0
+  },
+  "multi-app": {
+   "n": 11,
+   "before": 6.0,
+   "after": 5.0,
+   "gained": 0,
+   "lost": 1
+  },
+  "open tracks sports tracker": {
+   "n": 6,
+   "before": 0.0,
+   "after": 1.0,
+   "gained": 1,
+   "lost": 0
+  },
+  "osmand": {
+   "n": 3,
+   "before": 0.0,
+   "after": 1.0,
+   "gained": 1,
+   "lost": 0
+  },
+  "pro expense": {
+   "n": 7,
+   "before": 3.0,
+   "after": 5.0,
+   "gained": 3,
+   "lost": 1
+  },
+  "retro music": {
+   "n": 4,
+   "before": 1.0,
+   "after": 2.0,
+   "gained": 1,
+   "lost": 0
+  },
+  "settings": {
+   "n": 14,
+   "before": 10.0,
+   "after": 14.0,
+   "gained": 4,
+   "lost": 0
+  },
+  "simple calendar pro": {
+   "n": 17,
+   "before": 12.0,
+   "after": 15.0,
+   "gained": 3,
+   "lost": 0
+  },
+  "simple draw pro": {
+   "n": 1,
+   "before": 1.0,
+   "after": 0.0,
+   "gained": 0,
+   "lost": 1
+  },
+  "simple gallery pro": {
+   "n": 1,
+   "before": 0.0,
+   "after": 0.0,
+   "gained": 0,
+   "lost": 0
+  },
+  "simple sms messenger": {
+   "n": 5,
+   "before": 4.0,
+   "after": 4.0,
+   "gained": 0,
+   "lost": 0
+  },
+  "tasks": {
+   "n": 6,
+   "before": 0.0,
+   "after": 0.0,
+   "gained": 0,
+   "lost": 0
+  },
+  "vlc": {
+   "n": 2,
+   "before": 1.0,
+   "after": 2.0,
+   "gained": 1,
+   "lost": 0
+  }
+ },
+ "cost_time": {
+  "before": {
+   "total_usd": 4.6748,
+   "mean_task_usd": 0.0403,
+   "median_task_usd": 0.0297,
+   "per_solved_task_usd": 0.082,
+   "envoy_median_s": 37.9,
+   "envoy_mean_s": 48.9,
+   "model_median_s": 19.5,
+   "device_median_s": 17.6,
+   "androidworld_task_median_s": 46.0,
+   "steps_total": 1777,
+   "model_calls_total": 2018,
+   "statuses": {
+    "cost_limit": 4,
+    "done": 46,
+    "done_unverified": 13,
+    "failed": 2,
+    "step_limit": 51
+   },
+   "dones_scored_0": 2
+  },
+  "after": {
+   "total_usd": 14.5397,
+   "mean_task_usd": 0.1253,
+   "median_task_usd": 0.0903,
+   "per_solved_task_usd": 0.1965,
+   "envoy_median_s": 51.8,
+   "envoy_mean_s": 64.3,
+   "model_median_s": 32.7,
+   "device_median_s": 16.1,
+   "androidworld_task_median_s": 60.5,
+   "steps_total": 1600,
+   "model_calls_total": 1837,
+   "statuses": {
+    "cost_limit": 2,
+    "done": 54,
+    "done_unverified": 22,
+    "failed": 3,
+    "step_limit": 35
+   },
+   "dones_scored_0": 2
+  }
+ },
+ "held_out_vs_oct29_remeasure": {
+  "n": 58,
+  "before": 30.5,
+  "after": 36.0,
+  "gained": 9,
+  "lost": 3,
+  "p_sign": 0.146,
+  "gained_tasks": [
+   "ExpenseDeleteMultiple",
+   "FilesDeleteFile",
+   "MarkorCreateNoteAndSms",
+   "MarkorDeleteNewestNote",
+   "MarkorMoveNote",
+   "RecipeDeleteMultipleRecipes",
+   "RetroSavePlaylist",
+   "SimpleCalendarEventOnDateAtTime",
+   "SimpleCalendarEventsInTimeRange"
+  ],
+  "lost_tasks": [
+   "ExpenseDeleteDuplicates",
+   "SimpleDrawProCreateDrawing",
+   "TasksDueOnDate"
+  ]
+ },
+ "cmp20_spark_oct28": {
+  "n": 20,
+  "before": 9.0,
+  "after": 13.0,
+  "gained": 4,
+  "lost": 0,
+  "p_sign": 0.125,
+  "gained_tasks": [
+   "FilesDeleteFile",
+   "MarkorMoveNote",
+   "SportsTrackerActivityDuration",
+   "SystemBluetoothTurnOn"
+  ],
+  "lost_tasks": []
+ },
+ "cmp20_hybrid_oct28": {
+  "n": 20,
+  "before": 14.0,
+  "after": 13.0,
+  "gained": 1,
+  "lost": 2,
+  "p_sign": 1.0,
+  "gained_tasks": [
+   "MarkorDeleteNewestNote"
+  ],
+  "lost_tasks": [
+   "RetroCreatePlaylist",
+   "SimpleSmsResend"
+  ]
+ }
+}

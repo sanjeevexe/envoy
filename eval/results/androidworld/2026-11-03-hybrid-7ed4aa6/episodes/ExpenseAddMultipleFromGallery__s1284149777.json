@@ -1,0 +1,136 @@
+{
+ "task": "ExpenseAddMultipleFromGallery",
+ "seed": 1284149777,
+ "goal": "Add the expenses from expenses.jpg in Simple Gallery Pro to pro expense.",
+ "score": 1.0,
+ "aw_run_time_s": 156.3,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-03 12:39:39.453122",
+ "envoy": {
+  "run_id": "aw-2026-11-03-hybrid-7ed4aa6-1103-123708-c565",
+  "goal": "Add the expenses from expenses.jpg in Simple Gallery Pro to pro expense.",
+  "max_steps": 60,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Added the 3 expenses from expenses.jpg to Pro Expense: Dress $436.35 (Clothes, Paid by card), Furnishing $350.07 (Housing, A need), and Dental Care $39.54 (Health Care, A need). They appear in the Recent list with total outcome 980.81 USD (including pre-existing Social Club Dues).",
+  "done": true,
+  "answer": "Added the 3 expenses from expenses.jpg to Pro Expense: Dress $436.35 (Clothes, Paid by card), Furnishing $350.07 (Housing, A need), and Dental Care $39.54 (Health Care, A need). They appear in the Recent list with total outcome 980.81 USD (including pre-existing Social Club Dues).",
+  "steps_device": 31,
+  "iterations": 35,
+  "looks": 3,
+  "screenshots_sent": 5,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 4,
+   "tap": 14,
+   "look": 3,
+   "type": 9,
+   "scroll": 2,
+   "swipe": 2,
+   "done": 1
+  },
+  "model_calls": 38,
+  "input_tokens": 90541,
+  "cached_tokens": 58436,
+  "output_tokens": 8966,
+  "reasoning_tokens": 4535,
+  "cost_usd": 0.319427,
+  "cost_at_standard_usd": 0.319427,
+  "duration_s": 146.32,
+  "model_s": 103.0,
+  "device_s": 43.31,
+  "connect_s": 0.86,
+  "approvals": [
+   {
+    "step": 16,
+    "description": "tap \"SAVE\" in com.arduia.expense",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 22,
+    "description": "tap \"SAVE\" in com.arduia.expense",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 31,
+    "description": "tap \"SAVE\" in com.arduia.expense",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Pro Expense",
+   "subgoals": [
+    "Save the current Dental Care expense entry in Pro Expense",
+    "Open the Pro Expense home/Totals view to review the expenses already added",
+    "Switch to Gallery and reopen expenses.jpg from the gallery/DCIM list to compare it against the saved expenses",
+    "Return to Pro Expense and add any missing expenses from the image, with their names, amounts, dates, and categories",
+    "Save the final missing expense and open the expense list or Totals view"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Dental Care",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Dental Care' is visible"
+  },
+  "trace_dir": "data/runs/aw-2026-11-03-hybrid-7ed4aa6-1103-123708-c565",
+  "envoy_commit": "7ed4aa60493a38978f34661165f5bf2dd7e7ef09",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/traces/ExpenseAddMultipleFromGallery__s1284149777.jsonl.gz",
+  "wall_s": 148.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

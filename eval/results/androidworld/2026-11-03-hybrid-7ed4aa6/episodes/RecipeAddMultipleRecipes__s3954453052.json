@@ -1,0 +1,107 @@
+{
+ "task": "RecipeAddMultipleRecipes",
+ "seed": 3954453052,
+ "goal": "Add the following recipes into the Broccoli app:\nRecipe: Chicken Alfredo Pasta\n description: A delicious and healthy choice for any time of the day.\n servings: 2 servings\n preparationTime: 10 mins\n ingredients: as desired\n directions: Cook fettuccine pasta, toss with Alfredo sauce and grilled chicken strips. Serve with a sprinkle of Parmesan cheese. Try adding a pinch of your favorite spices for extra flavor.\n\nRecipe: Quinoa Salad with Vegetables\n description: A quick and easy meal, perfect for busy weekdays.\n servings: 8 servings\n preparationTime: 30 mins\n ingredients: to your liking\n directions: Mix cooked quinoa with diced vegetables, feta cheese, and a lemon olive oil dressing. Try adding a pinch of your favorite spices for extra flavor.\n\nRecipe: Butternut Squash Soup\n description: A delicious and healthy choice for any time of the day.\n servings: 1 serving\n preparationTime: 45 mins\n ingredients: per individual taste\n directions: Sauté onions and garlic, add cubed butternut squash and broth. Puree until smooth and season with nutmeg, salt, and pepper. Feel free to substitute with ingredients you have on hand.\n",
+ "score": 1.0,
+ "aw_run_time_s": 175.6,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-03 13:18:38.691220",
+ "envoy": {
+  "run_id": "aw-2026-11-03-hybrid-7ed4aa6-1103-131548-8280",
+  "goal": "Add the following recipes into the Broccoli app:\nRecipe: Chicken Alfredo Pasta\n description: A delicious and healthy choice for any time of the day.\n servings: 2 servings\n preparationTime: 10 mins\n ingredients: as desired\n directions: Cook fettuccine pasta, toss with Alfredo sauce and grilled chicken strips. Serve with a sprinkle of Parmesan cheese. Try adding a pinch of your favorite spices for extra flavor.\n\nRecipe: Quinoa Salad with Vegetables\n description: A quick and easy meal, perfect for busy weekdays.\n servings: 8 servings\n preparationTime: 30 mins\n ingredients: to your liking\n directions: Mix cooked quinoa with diced vegetables, feta cheese, and a lemon olive oil dressing. Try adding a pinch of your favorite spices for extra flavor.\n\nRecipe: Butternut Squash Soup\n description: A delicious and healthy choice for any time of the day.\n servings: 1 serving\n preparationTime: 45 mins\n ingredients: per individual taste\n directions: Sauté onions and garlic, add cubed butternut squash and broth. Puree until smooth and season with nutmeg, salt, and pepper. Feel free to substitute with ingredients you have on hand.\n",
+  "max_steps": 60,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Added Chicken Alfredo Pasta, Quinoa Salad with Vegetables, and Butternut Squash Soup to Broccoli app.",
+  "done": true,
+  "answer": "Added Chicken Alfredo Pasta, Quinoa Salad with Vegetables, and Butternut Squash Soup to Broccoli app.",
+  "steps_device": 46,
+  "iterations": 48,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 1,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 18,
+   "type": 18,
+   "scroll": 7,
+   "back": 2,
+   "done": 2
+  },
+  "model_calls": 51,
+  "input_tokens": 152274,
+  "cached_tokens": 96156,
+  "output_tokens": 9085,
+  "reasoning_tokens": 2514,
+  "cost_usd": 0.425403,
+  "cost_at_standard_usd": 0.425403,
+  "duration_s": 166.0,
+  "model_s": 104.68,
+  "device_s": 61.32,
+  "connect_s": 0.85,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Fill this New Recipe form with the Quinoa Salad with Vegetables details from the goal and tap SAVE",
+    "From the Recipes list, tap the add/new button to open another New Recipe form",
+    "Fill in the Butternut Squash Soup details from the goal and tap SAVE",
+    "Check the Recipes list for Chicken Alfredo Pasta; if it is missing, add it with its details and tap SAVE",
+    "Return to the Recipes list showing the saved recipes"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Butternut Squash Soup",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Butternut Squash Soup' is visible"
+  },
+  "trace_dir": "data/runs/aw-2026-11-03-hybrid-7ed4aa6-1103-131548-8280",
+  "envoy_commit": "7ed4aa60493a38978f34661165f5bf2dd7e7ef09",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/traces/RecipeAddMultipleRecipes__s3954453052.jsonl.gz",
+  "wall_s": 168.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}
