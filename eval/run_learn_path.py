@@ -258,7 +258,11 @@ async def run_task(wf: rr.Workflow, copy: Copy, mcp: Client, phone: str, dry: bo
         lr.update({"outcome": "blocked" if a["outcome"] == "blocked" else "not learnable", "reason": f"the task ended {a['status']}"})
         return finish(wf, row, secrets_seen)
     since = now()
-    code, view = copy.http("POST", f"/api/tasks/{tid}/learn")
+    for _ in range(15):  # the phone stays leased a moment after the task ends; a person would wait for it too
+        code, view = copy.http("POST", f"/api/tasks/{tid}/learn")
+        if code != 409 or not re.search(r"using this phone|being taught", str(view.get("detail"))):
+            break
+        time.sleep(POLL_S)
     if code != 200:
         lr.update({"outcome": "not learnable", "reason": str(view.get("detail") or view)[:300]})
         return finish(wf, row, secrets_seen)
@@ -364,6 +368,7 @@ def readme(doc: dict) -> str:
         f"- **Learn rate:** saved {r['saved']}/{r['tasks']}.",
         f"- **New input:** right {r['new_input_right']}/{r['saved_with_second']} saved routines with a second input; "
         f"{r['new_input_right_0_calls']} of them with 0 model calls.", "",
+        *([f"Starting state: {n}" for n in doc.get("notes") or []] + ([""] if doc.get("notes") else [])),
         "| Row | a. Agent path | b. Make it a routine | c. Share | d. Call | Calls (a / compile / replay / d) |",
         "| --- | --- | --- | --- | --- | --- |"]
     for x in rows:
@@ -388,6 +393,7 @@ async def main() -> int:
     ap.add_argument("--only", default="", help="workflows, comma-separated (the declared order is kept)")
     ap.add_argument("--retry", default="", help="a workflow lost to an infrastructure fault, run again as its own row")
     ap.add_argument("--dry-run", action="store_true", help="no phone: a phone id that doesn't exist, so nothing runs on a device")
+    ap.add_argument("--note", action="append", default=[], help="the phone's starting state, said in the README")
     ap.add_argument("--report", action="store_true")
     args = ap.parse_args()
     results = OUT / "results.json"
@@ -414,7 +420,7 @@ async def main() -> int:
         out = copy.api_dir / "dry-run.json" if args.dry_run else results
         doc = json.loads(out.read_text()) if out.exists() and args.retry else {
             "protocol": "eval/results/learn-agent-path/PROTOCOL.md", "versions": versions, "started": now(), "phone": args.phone,
-            "push_subscriptions": subs, "phones": ids, "rows": [], "deviations": []}
+            "push_subscriptions": subs, "phones": ids, "notes": args.note, "rows": [], "deviations": []}
         only = [w for w in args.only.split(",") if w]
         wanted = [w for w in rr.WORKFLOWS if (not only or w.id in only)]
         if args.retry:
