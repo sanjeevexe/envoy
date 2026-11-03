@@ -209,13 +209,16 @@ def follow(copy: Copy, mcp: Client, tid: str, rec: dict) -> dict:
     else:
         copy.http("POST", f"/api/tasks/{tid}/stop")
         view = {**view, "status": "timed out"}
+    waiting = None
     if view.get("status") == "needs_you":  # waiting for the person (a hand-off, a question) holds the phone: end it, as they would
+        _, pre = copy.http("GET", f"/api/tasks/{tid}")
+        waiting = (pre.get("task") or {}).get("detail")  # (the stop replaces it with "stopped by you")
         copy.http("POST", f"/api/tasks/{tid}/stop")
     _, full = copy.http("GET", f"/api/tasks/{tid}")
     task = full.get("task") or {}
     rec.update({"status": view.get("status"), "seconds": round(time.time() - t0, 1), "model_calls": task.get("model_calls"),
                 "cost_usd": task.get("cost_usd"), "approvals_declined": len(declined)})
-    return {"view": view, "task": task}
+    return {"view": view, "task": task, "waiting": waiting}
 
 
 def outputs_text(result: str | None, outputs: list[str]) -> str:
@@ -276,7 +279,7 @@ async def run_task(wf: rr.Workflow, copy: Copy, mcp: Client, phone: str, dry: bo
     if a["status"] == "done":
         a["outcome"] = "right" if rr.right(answer, rr.in_sentence(expect), {}) else "wrong"
     else:
-        a["outcome"] = "blocked" if blocked(answer, got["task"].get("detail")) else "no answer"
+        a["outcome"] = "blocked" if blocked(answer, got["task"].get("detail"), got["waiting"]) else "no answer"
     row["agent"] = a
 
     # b. Make it a routine.
@@ -378,9 +381,11 @@ def unlearned(a: dict, refused: str | None = None) -> dict:
             "reason": f"ran library routine {lib}, which ended {a['status']}" if lib else f"the task ended {a['status']}"}
 
 
-def amend(rows: list[dict], db: Path) -> list[str]:
+def amend(rows: list[dict], db: Path, blocks_emulator: set[str] = frozenset()) -> list[str]:
     """Rows recorded before the harness noted library routines and counted "blocks emulators" as a block: the same rules,
-    applied afterwards from the stopped copy's own task records (read-only). Returns what changed."""
+    applied afterwards from the stopped copy's own task records (read-only), its steps, and the apps the copy's code lists
+    as blocking emulators (`blocks_emulator`: a task of theirs that ended waiting for you was asking for your real phone).
+    Returns what changed."""
     con = sqlite3.connect(f"file:{db}?mode=ro", uri=True)
     changed = []
     try:
@@ -390,10 +395,13 @@ def amend(rows: list[dict], db: Path) -> list[str]:
             if t is None:
                 continue
             routine, detail, result = t
+            steps = [s.get("text") or "" for (d,) in con.execute("SELECT data FROM steps WHERE task_id=?", (a["task_id"],))
+                     if (s := json.loads(d)).get("kind") == "handoff"]  # (what the task handed to you, not the agent's reasons)
             before = (a.get("outcome"), lr.get("outcome"), lr.get("reason"))
             if routine and not a.get("library_routine"):
                 a["library_routine"] = routine
-            if a.get("outcome") == "no answer" and blocked(result, detail):
+            if a.get("outcome") == "no answer" and (blocked(result, detail, *steps)
+                                                   or (a.get("status") == "needs_you" and r.get("app") in blocks_emulator)):
                 a["outcome"] = "blocked"
             if a.get("status") != "done":
                 lr.update(unlearned(a))
@@ -484,14 +492,15 @@ async def main() -> int:
                     help="the deviation pass: a copy whose routine library is deleted; results to supplementary.json")
     ap.add_argument("--why", action="append", default=[], help="the supplementary pass's reason, said in the README")
     ap.add_argument("--report", action="store_true")
-    ap.add_argument("--amend", type=Path, help="with --report: the pass's stopped api-dir, to apply amend() to results.json")
+    ap.add_argument("--amend", type=Path, help="with --report and --copy: the pass's stopped api-dir, to apply amend() to results.json")
     ap.add_argument("--deviation", action="append", default=[], help="with --report: a deviation to add to the README")
     args = ap.parse_args()
     results, extra = OUT / "results.json", OUT / "supplementary.json"
     if args.report:
         doc = json.loads(results.read_text())
         if args.amend:
-            doc["amended"] = doc.get("amended", []) + amend(doc["rows"], args.amend.resolve() / "envoy.db")
+            listed = json.loads((args.copy / "backend" / "api" / "emulator_blocked.json").read_text())["apps"]
+            doc["amended"] = doc.get("amended", []) + amend(doc["rows"], args.amend.resolve() / "envoy.db", set(listed))
             print("\n".join(doc["amended"]) or "nothing to amend")
         doc["deviations"] = doc.get("deviations", []) + args.deviation
         results.write_text(json.dumps(doc, indent=1, ensure_ascii=False))
