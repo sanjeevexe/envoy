@@ -2,6 +2,7 @@
   "about": "Apps known to block emulators: tasks for them go to your Android phone (asking first), and with no phone connected Envoy says so instead of trying. Read by api/routing.py. Apps Envoy finds blocking on its own (a bot check on an emulator, or the Play Store saying the emulator isn't compatible) are added to your settings instead, where you can undo them. Package ids checked on play.google.com, Oct 28, 2026.",
   "apps": {
     "com.target.ui": {"name": "Target", "names": ["target"], "why": "a press-and-hold bot check (HUMAN Security) on most launches on envoy-real (Oct 27, 2026)"},
+    "com.ubercab": {"name": "Uber", "names": ["uber"], "why": "the Play Store won't install it on envoy-real: \"your device isn't compatible\" (Oct 30, 2026)"},
     "com.ubercab.eats": {"name": "Uber Eats", "names": ["uber eats"], "why": "the Play Store won't install it on an emulator: \"your device isn't compatible\" (Phase 0)"},
     "com.chase.sig.android": {"name": "Chase", "names": ["chase", "chase mobile"], "why": "banking app: device integrity checks"},
     "com.infonow.bofa": {"name": "Bank of America", "names": ["bank of america", "bofa"], "why": "banking app: device integrity checks"},

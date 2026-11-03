@@ -847,6 +847,18 @@ def test_apps_known_to_block_emulators_are_data_and_go_to_your_phone():
     assert choose("com.target.ui", asked="emulator").device == "envoy-real"
 
 
+def test_uber_goes_to_your_phone_and_lyft_to_the_real_app_emulator():
+    """Uber won't install on an emulator, so a fare check names it and goes to the phone, never an emulator (Nov 2's
+    cold start). Lyft lives on envoy-real, where its routine runs; Uber Eats stays its own app."""
+    assert app_for("How much is an Uber from here to Piedmont Park right now?") == "com.ubercab"
+    assert app_for("Order lunch on Uber Eats") == "com.ubercab.eats"
+    c = choose("com.ubercab", phones=[PHONE])
+    assert c.real_phone and c.reason.startswith("Uber blocks emulators")
+    assert choose("com.ubercab").device is None  # no phone: said plainly, nothing on an emulator
+    assert app_for("What's a Lyft to Midtown right now?") == "me.lyft.android"
+    assert choose("me.lyft.android", phones=[PHONE]).device == "envoy-real"
+
+
 def test_a_learned_block_counts_only_while_the_app_is_set_to_your_phone():
     learned = {SHOP: {"name": "Shop", "why": "showed a bot check (HSBlockActivity) on the emulator"}}
     c = choose(SHOP, phone_apps=[SHOP], learned=learned)

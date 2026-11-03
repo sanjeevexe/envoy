@@ -66,7 +66,7 @@ APP_NAMES = {
     "chipotle": "com.chipotle.ordering", "doordash": "com.dd.doordash", "gmail": "com.google.android.gm", "google maps": "com.google.android.apps.maps",
     "youtube music": "com.google.android.apps.youtube.music", "youtube": "com.google.android.youtube", "play store": "com.android.vending",
     "chrome": "com.android.chrome", "settings": "com.android.settings", "calendar": "com.google.android.calendar", "contacts": "com.google.android.contacts",
-    "instagram": "com.instagram.android", "tiktok": "com.zhiliaoapp.musically",
+    "instagram": "com.instagram.android", "tiktok": "com.zhiliaoapp.musically", "lyft": "me.lyft.android",
 }
 TRAVEL = re.compile(r"\b(flight|trip|gate|check(ed)?[ -]?in|boarding|seat|airline|known traveler)\b", re.I)
 # What comes before an app's name when a goal names it as the app it's about: "on DoorDash", "in YouTube Music",
