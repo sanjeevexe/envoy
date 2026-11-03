@@ -4780,7 +4780,7 @@ window.ENVOY = {
    "path": "eval/results/final/charts"
   },
   "aw": {
-   "headline": "Envoy as on main solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001). Both runs are seed 30, pass@1, at about $0.04 and 38 s per task (median $0.030).",
+   "headline": "Envoy as on main before these changes (the Oct 28 baseline) solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only (merged into main on Oct 29), it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001). Both runs are seed 30, pass@1, at about $0.04 and 38 s per task (median $0.030).",
    "held_out": "30.5 of 58 against main's 12 (+21 −2, p = 0.0001). Against Oct 28's 31: +5 −6, so unchanged within noise.",
    "routines": {
     "did": "55",
@@ -5225,7 +5225,7 @@ window.ENVOY = {
    },
    {
     "what": "AndroidWorld",
-    "value": "Envoy as on main solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001). Both runs are seed 30, pass@1, at about $0.04 and 38 s per task (median $0.030).",
+    "value": "Envoy as on main before these changes (the Oct 28 baseline) solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only (merged into main on Oct 29), it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001). Both runs are seed 30, pass@1, at about $0.04 and 38 s per task (median $0.030).",
     "commit": "merged into main Oct 29 (105d04e)",
     "final": false,
     "src": "docs/androidworld-results.md"
