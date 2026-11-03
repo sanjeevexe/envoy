@@ -74,6 +74,7 @@ page):
 - `eval/results/showcase/live-2026-11-02/task-rows.json` (with the build's note for the songless TikTok, keyed by task id;
   every other row must be "done");
 - `prompts/phone-watch-report.md` (the Stage 2 table with "Landed on the Pixel");
+- `eval/results/showcase-batch/RESULTS.md` (its per-workflow table: the build's counts from the attempts must match it);
 - `eval/results/learn-agent-path/README.md` (its two "**Agent path:** … **Learn rate:** … **New input:**" headlines must match
   the counts from `results.json` and `supplementary.json`);
 - `eval/results/showcase/runs/runs.md`; `eval/results/showcase/muse-2026-11-02/task-rows.json` (with the build's own notes for
@@ -117,8 +118,10 @@ Section numbers are positions on the page (the page numbers itself); "E:" is a g
 | 2 | Muse saw a new tool without reconnecting | **No file in the repo** (pre-check P1, Nov 1). The page says so |
 | 2 | Meta's models by job; SAM then grounding 52 of 52, grounding alone 49 | `docs/phase-6-results.md` (Results, the fresh sample) |
 | 3. Acts | Each posting routine: version, steps, inputs, how it was made (hand edits), automatic repair | `data/routines/<name>/index.json` and `v<active>.yaml`; `HAND_EDITS` in the build, checked against them |
-| 3 | Rehearsals: reached the final button (the row records where it asked), Envoy's calls, seconds to the final button, which the agent finished | `eval/results/showcase/runs/runs.md` (rows after the compiled base, per its `compiled_from.compiled_at`, naming the base or active version) and each run's file in `eval/results/showcase/runs/` (its model jobs). A planted outcome-check test (a run that "stopped before starting (outcome check)") isn't counted |
-| 3 | Checked before the final button: the song or sound shown, the caption or title held, the clip | the latest run file with `outcome_checks` for each routine (Nov 2) |
+| 3 | The posting batch on the final tag, per routine: reached the final button, every check yes, median seconds to the final button, Envoy's model calls, the version it ran, what stopped its runs and its songs | `eval/results/showcase-batch/attempts/*.json` (counted by the build), checked against `RESULTS.md`'s per-workflow table; the Story's "every check yes" cell (the poll read by eye) is shown as RESULTS.md writes it |
+| 3 | After the batch, not part of it: any routine's active version made on or after the batch's day, its kind of change and its device check (today the Reel's v4: 5 of 5 cold Reels to Share). A Short fix that lands later shows the same way on rebuild | each routine's `data/routines/<name>/index.json` (the active version's `created` and `verification.device`) |
+| 3 | "No hand edits until vN": a routine learned with no hand edits and edited by hand later (the Reel since v4; the Story has none) | each routine's `index.json`: the last version saying "no hand edits", then the first later version with a hand edit |
+| E: batch | Each of the 40 attempts: start, song, class, reached, the clip, song and text checks, calls | `eval/results/showcase-batch/attempts/*.json` |
 | 3 | The real posts: what each carried (its inputs), Envoy's model calls, and the songless TikTok in the build's words (`LIVE_NOTES`, from the file's notes) | `eval/results/showcase/live-2026-11-02/task-rows.json` |
 | 3 | The Spark agent's four-post dry run: request, calls, asks, answers, its calls and dollars; two captures | `agents/meta-agent/evidence/2026-11-01/crosspost/` (event log, README, PNGs) |
 | 3 | Muse's Nov 2 dry run: five tasks, how each ended, calls, time | `eval/results/showcase/muse-2026-11-02/task-rows.json` (the live API's rows, read read-only); the Story notes are the build's words for the file's notes |

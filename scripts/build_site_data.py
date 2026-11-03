@@ -1061,7 +1061,8 @@ SHOWCASE = {
 # What a person changed by hand in each, worded from the version's own changes (checked below against index.json, so a new
 # version with other edits stops the build instead of leaving this wrong).
 HAND_EDITS = {
-    "instagram_reel_song": None,
+    "instagram_reel_song": ("two hand edits for the caption fix after the posting batch: Instagram's OK closes the caption edit "
+                            "instead of Back, and an empty caption is typed again before Share"),
     "instagram_story_poll": None,
     "tiktok_post_sound": "three hand edits: a 3 s wait before TikTok's drawn sound list, the app's name, and no before-check on its launch",
     "youtube_short_sound": "one hand edit: a stray before-check (“Captions unavailable”) dropped",
@@ -1077,27 +1078,96 @@ LIVE_NOTES = {
 }
 
 
+def day_et(stamp: str) -> str:
+    """'2026-11-03 14:05:58' (the Mac's clock, ET) as 'Nov 3'."""
+    return datetime.fromisoformat(stamp.replace(" ", "T")).strftime("%b %-d")
+
+
+def _after_batch(ix: dict) -> dict | None:
+    """The active version, if it was made on or after the posting batch's day: what kind of change it is and its device
+    check, read from its own verification. Never counted with the batch. If the device check's wording can't be read, the
+    page links the version history instead of quoting it."""
+    v = next((v for v in ix["versions"] if v["version"] == ix["active"]), None)
+    if not v or v["created"][:10] < batch_day():
+        return None
+    text = " ".join(v["changes"])
+    kind = ("hand edits" if "hand edit" in text.replace("no hand edits", "") else
+            "an automatic repair" if v.get("source_task") else "a new version")
+    dev = ((v.get("verification") or {}).get("device")) or ""
+    m = re.search(r"(\d+)/(\d+) ([^;:]*?)reached ([\w ]+?) with [^;]*?(all yes|every check yes)", dev)
+    calls = re.search(r"(\d+) model calls", dev)
+    return {"version": v["version"], "date": day_et(v["created"]), "kind": kind,
+            "check": m and {"ok": int(m.group(1)), "n": int(m.group(2)), "what": m.group(3).strip(), "final": m.group(4),
+                            "calls": int(calls.group(1)) if calls else None}}
+
+
+def batch_day() -> str:
+    """The day the posting batch started, from its attempt records."""
+    return min(json.loads(f.read_text())["started"] for f in (BATCH / "attempts").glob("*.json"))[:10]
+BATCH = REPO / "eval/results/showcase-batch"  # the pre-registered posting batch (B1), run on the eval-final tag
+
+
+def batch() -> dict:
+    """The posting batch: every attempt's record (attempts/*.json), counted per routine, and checked against the
+    per-workflow table its RESULTS.md publishes, so the two can't drift. A check of the poll isn't in the records (it was
+    read by eye on the approval screenshots); the table's own cell says so and is shown as written."""
+    attempts = [json.loads(f.read_text()) for f in sorted((BATCH / "attempts").glob("*.json"))]
+    table = next(t for t in md_tables((BATCH / "RESULTS.md").read_text()) if t and "Reached the final button" in t[0])
+    out = {}
+    for a in attempts:
+        r = a.get("replay") or {}
+        spent = r.get("spent") or {}
+        reached = bool(r.get("asked_at"))
+        machine = {k: v for k, v in a["checks"].items() if k != "poll"}
+        w = out.setdefault(a["routine"], {"n": 0, "reached": 0, "yes": 0, "classes": {}, "secs": [], "calls": 0, "usd": 0.0,
+                                          "final": a["final"], "states": {}, "songs": {}, "stops": {}, "versions": set()})
+        w["n"] += 1
+        w["reached"] += reached
+        w["yes"] += reached and all(v in ("yes", "n/a") for v in machine.values())
+        w["classes"][a["class"]] = w["classes"].get(a["class"], 0) + 1
+        w["calls"] += spent.get("model_calls") or 0
+        w["usd"] += spent.get("cost_at_standard_usd") or 0
+        if reached:
+            w["secs"].append((r.get("marks_s") or {}).get("post_asked"))
+        if a.get("routine_version"):
+            w["versions"].add(a["routine_version"])
+        song = (a.get("song") or {}).get("title")
+        sg = w["songs"].setdefault(song or "", {"n": 0, "yes": 0, "agent": 0})
+        sg["n"] += 1
+        sg["yes"] += reached and all(v in ("yes", "n/a") for v in machine.values())
+        sg["agent"] += a["class"] == "agent fallback"
+        st = w["states"].setdefault(a["state"], {"n": 0, "reached": 0})
+        st["n"] += 1
+        st["reached"] += reached
+        for k, v in machine.items():
+            if v == "no":  # an outcome check stopped the run before the final button
+                w["stops"][k] = w["stops"].get(k, 0) + 1
+    for name, w in out.items():
+        row = next(r for r in table if f"`{name}`" in r["Workflow"])
+        assert int(row["Reached the final button"]) == w["reached"], (name, "reached", w["reached"])
+        assert int(row["…with every outcome check yes"].split()[0]) == w["yes"] or "by eye" in row["…with every outcome check yes"], (name, "yes")
+        w["yes_cell"] = plain(row["…with every outcome check yes"]).replace(", below", "")
+        w["secs"] = _spread([x for x in w["secs"] if x is not None])
+        w["usd"] = round(w["usd"], 4)
+        w["versions"] = sorted(w["versions"])
+    first = min(a["started"] for a in attempts)
+    return {"routines": out, "n": len(attempts), "date": first[:10], "tag": attempts[0]["versions"]["tag"][:7],
+            "attempts": [{"code": a["code"], "routine": a["routine"], "state": a["state"],
+                          "song": (a.get("song") or {}).get("title"), "class": a["class"],
+                          "reached": bool((a.get("replay") or {}).get("asked_at")), "checks": a["checks"],
+                          "calls": ((a.get("replay") or {}).get("spent") or {}).get("model_calls"),
+                          "to_ask": ((a.get("replay") or {}).get("marks_s") or {}).get("post_asked") if (a.get("replay") or {}).get("asked_at") else None}
+                         for a in attempts],
+            "src": src("eval/results/showcase-batch/RESULTS.md"), "protocol_src": src("eval/results/showcase-batch/PROTOCOL.md"),
+            "attempts_src": src("eval/results/showcase-batch/attempts")}
+
+
 def showcase() -> dict:
-    """The four app-only routines: how each was made, its rehearsals (runs.md, rows copied), an automatic repair and its trial
-    where there is one, and its real posts (the live API's task rows)."""
-    runs = md_tables((REPO / "eval/results/showcase/runs/runs.md").read_text())[0]
+    """The four app-only routines: how each was made, an automatic repair and its trial where there is one, a version made
+    after the posting batch, and its real posts (the live API's task rows). Their reliability is the batch's (batch())."""
     live = json.loads(LIVE.read_text())["tasks"]
     assert set(LIVE_NOTES) <= {t["id"] for t in live}, set(LIVE_NOTES) - {t["id"] for t in live}
     muse = {t["id"]: t for t in json.loads((REPO / "eval/results/showcase/muse-2026-11-02/task-rows.json").read_text())["tasks"]}
-    # A rehearsal the agent finished: its run file's model jobs include a plan or a step (vision reads and repairs don't).
-    # A planted test of the outcome checks (a wrong clip) stops before starting, as it should; it isn't a rehearsal.
-    agent_runs, planted, checked = set(), {}, {}
-    for f in sorted((REPO / "eval/results/showcase/runs").glob("*-replay-*.json")):
-        j = json.loads(f.read_text())
-        if {"plan", "step"} & set((j.get("spent") or {}).get("jobs") or {}):
-            agent_runs.add(j["time"])
-        detail = (j.get("task") or {}).get("detail") or ""
-        if detail.startswith("stopped before starting (outcome check)"):
-            planted[j["time"]] = {"routine": j["request"]["routine"], "detail": detail, "src": src(rel(f))}
-        oc = [c for c in j.get("outcome_checks") or [] if not c.get("problems")]
-        if oc and j.get("asked_at"):
-            checked[j["request"]["routine"]] = {"picks": oc[0].get("picks"), "fields": oc[0].get("fields"),
-                                                "clip": oc[0].get("clip"), "when": j["time"], "src": src(rel(f))}
     cards = []
     for name, (app, what) in SHOWCASE.items():
         lib = REPO / f"data/routines/{name}"
@@ -1110,40 +1180,32 @@ def showcase() -> dict:
         hand = HAND_EDITS[name]
         assert ("no hand edits" in made) == (hand is None) and (hand is None or "hand edit" in made), (name, made[:200])
         y = routine_yaml(lib / f"v{ix['active']}.yaml")
-        source = re.search(r"task-(\d\d)(\d\d)-(\d\d)(\d\d)(\d\d)-\w{4}", ix["versions"][0]["changes"][0])
-        when = datetime(2026, *(int(source.group(i)) for i in range(1, 6)))
-        # runs.md times the row from the runner's own clock, up to a second before the task's id
-        first = next(r for r in runs if r["mode"] == "first" and abs((datetime.fromisoformat(r["when"]) - when).total_seconds()) <= 5)
-        # Rehearsals of what's in the library: rows from after the base was compiled that name the base or the active version,
-        # or name none (the agent finished the run). Earlier rows may reuse a version number for a hand-tuned candidate.
-        compiled = yaml.safe_load((lib / f"v{base['version']}.yaml").read_text())["compiled_from"]["compiled_at"]
-        marks = {f"(routine {name} v{base['version']})", f"(routine {name} v{ix['active']})"}
-        reps = [r for r in runs if r["mode"] == "replay" and r["routine"] == name and r["when"] >= compiled.replace(" ", "T")
-                and (any(m in r["approvals"] for m in marks) or "(routine " not in r["approvals"]) and r["when"] not in planted]
-        # reached its final button: the run recorded where it asked (a run that stopped earlier says "never asked")
-        row = lambda r: {"when": r["when"], "ok": r["asked at"] != "never asked", "asked": r["asked at"], "to_ask": r["start → post asked"],
-                         "calls": int(r["calls"]), "usd": float(r["$"]), "agent": r["when"] in agent_runs}
-        every = [r for r in runs if r["mode"] == "replay" and r["routine"] == name and r["when"] not in planted]
+        # Learned with no hand edits, then edited by hand later: the first hand-edited version after the last clean one.
+        lineage = [v for v in ix["versions"] if v["version"] <= ix["active"]]
+        clean = [v["version"] for v in lineage if "no hand edits" in " ".join(v["changes"])]
+        later = [v for v in lineage if clean and v["version"] > clean[-1]
+                 and "hand edit" in " ".join(v["changes"]).replace("no hand edits", "")]
+        hand_from = {"version": later[0]["version"], "date": day_et(later[0]["created"])} if later else None
         # Envoy's own model calls; "seconds" isn't shown: it includes the waits for both yeses on the iPhone.
         real = [{"task": t["id"], "live": t["status"] == "done", "calls": t["model_calls"], "inputs": t["inputs"],
                  "created": t["created"], "note": LIVE_NOTES.get(t["id"], "")}
                 for t in live if t["routine"] == name]
         assert all(r["live"] or r["note"] for r in real), name
         repair = None
-        if active.get("source_task"):
-            trial = active.get("trial") or {}
+        auto = [v for v in ix["versions"] if v.get("source_task") and v["version"] <= ix["active"]]
+        if auto:
+            rv = auto[-1]
+            trial = rv.get("trial") or {}
             t = muse.get(re.sub(r"-r\d+$", "", trial.get("task_id", "")))
-            repair = {"version": ix["active"], "from_task": re.sub(r"-r\d+$", "", active["source_task"]),
-                      "after_live_post": any(re.sub(r"-r\d+$", "", active["source_task"]) == p["task"] for p in real),
-                      "steps": len(active["changes"]), "passed": trial.get("passed"),
+            repair = {"version": rv["version"], "from_task": re.sub(r"-r\d+$", "", rv["source_task"]),
+                      "after_live_post": any(re.sub(r"-r\d+$", "", rv["source_task"]) == p["task"] for p in real),
+                      "steps": len(rv["changes"]), "passed": trial.get("passed"),
                       "trial": t and {"task": t["id"], "status": t["status"], "calls": t["model_calls"], "seconds": t["seconds"],
                                       "by": "Muse's dry run, Nov 2"}}
         cards.append({
-            "name": name, "app": app, "what": what, "version": ix["active"], "base": base["version"], "steps": len(y["steps"]),
-            "inputs": list(y["inputs"].keys()), "outputs": y["outputs"], "hand": hand, "compiled": compiled,
-            "first": row(first) | {"task": source.group(0)}, "replays": [row(r) for r in reps], "real": real, "repair": repair,
-            "every": {"ok": sum(1 for r in every if r["asked at"] != "never asked"), "n": len(every)},
-            "checked": checked.get(name), "planted": [v for v in planted.values() if v["routine"] == name],
+            "name": name, "app": app, "what": what, "version": ix["active"], "steps": len(y["steps"]),
+            "inputs": list(y["inputs"].keys()), "outputs": y["outputs"], "hand": hand, "hand_from": hand_from, "real": real, "repair": repair,
+            "after_batch": _after_batch(ix),
             "src": src(f"data/routines/{name}/index.json"), "yaml_src": src(f"data/routines/{name}/v{ix['active']}.yaml"),
         })
     return {"cards": cards, "runs_src": src("eval/results/showcase/runs/runs.md"),
@@ -1209,6 +1271,7 @@ def build() -> dict:
         "agents": agents(),
         "tools": tools(),
         "showcase": showcase(),
+        "batch": batch(),
         "watches": watches(),
         "keys": keys(),
         "first_run": first_run(),

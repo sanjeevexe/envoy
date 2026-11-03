@@ -326,26 +326,51 @@
   // What a real post carried, from its task's inputs.
   const postText = (name, i) => name === "instagram_story_poll" ? `poll “${i.poll_question}” ${i.poll_option_1} / ${i.poll_option_2}`
     : `“${i.song_title || i.sound_title}” by ${i.song_artist || i.sound_artist}, ${i.short_title ? "title" : "caption"} “${i.caption || i.short_title}”`;
-  // The outcome checks a rehearsal ran before the final button, in words.
-  const FIELD = { song_title: "the song", sound_title: "the sound", caption: "the caption", short_title: "the title" };
-  const checkText = (k) => [...Object.keys(k.picks || {}).map((f) => `${FIELD[f] || f} shown`),
-    ...Object.keys(k.fields || {}).map((f) => `${FIELD[f] || f} still in its field`), k.clip === "checked" ? "the clip is the one put on the phone" : ""].filter(Boolean).join(", ");
+  // The batch's limits for the limits list, read from its records; a version made after it is named, never counted.
+  const batchLimits = () => {
+    const out = [];
+    for (const c of D.showcase.cards) {
+      const b = D.batch.routines[c.name], name = POST[c.name];
+      if (b.stops.song) {
+        const ok = Object.entries(b.songs).filter(([, v]) => v.yes).map(([k]) => `“${esc(k)}”`);
+        out.push(`the ${name} passed every check only with ${ok.join(", ")}, its sound check stopping ${b.stops.song} runs with other songs`);
+      }
+      if (b.stops.caption) out.push(`the ${name}'s outcome checks stopped ${b.stops.caption} runs whose caption was lost before ${esc(b.final)}`);
+      if (c.after_batch && (b.stops.song || b.stops.caption)) out.push(`after the batch, the ${name}'s v${c.after_batch.version} (${esc(c.after_batch.kind)}) is on its card, not counted here`);
+    }
+    return out.length ? `In the posting batch, ${out.join("; ")}.` : "";
+  };
+  // What the batch says about one routine, besides its counts: what stopped its runs, and its songs.
+  const batchNote = (b) => {
+    const fails = (b.classes.failed || 0), stops = Object.values(b.stops).reduce((x, y) => x + y, 0), agent = b.classes["agent fallback"] || 0;
+    const parts = [];
+    if (b.stops.caption) parts.push(`The outcome checks stopped ${b.stops.caption} runs before ${esc(b.final)}: the caption had been lost`);
+    if (b.stops.song) {
+      const okSongs = Object.entries(b.songs).filter(([, v]) => v.yes).map(([k]) => k);
+      parts.push(`Every check passed only with ${okSongs.map((t) => `“${esc(t)}”`).join(", ")} (${okSongs.map((t) => b.songs[t].yes).join(", ")} of ${okSongs.map((t) => b.songs[t].n).join(", ")}); with the other songs, the sound check found it never attached and stopped ${b.stops.song} runs before ${esc(b.final)}`);
+    }
+    if (agent) parts.push(`the agent finished ${agent}, so its checks couldn't run`);
+    if (fails > stops) parts.push(`${fails - stops} more ${fails - stops === 1 ? "run" : "runs"} stopped for other reasons, given in the results`);
+    if (b.classes.repair) parts.push(`${b.classes.repair} needed a repair`);
+    if (/by eye/.test(b.yes_cell)) parts.push("the poll isn't text on the final screen, so it was read by eye on the approval screenshots");
+    if (!parts.length && b.calls === b.n * 3) parts.push("3 model calls a run: it reads TikTok's drawn sound list with vision");
+    return parts.length ? parts.join("; ").replace(/^./, (x) => x.toUpperCase()) + "." : "";
+  };
   const POST = { instagram_reel_song: "Reel", instagram_story_poll: "Story", tiktok_post_sound: "TikTok", youtube_short_sound: "Short" };
   function renderActs() {
-    const S = D.showcase, A = D.agents, X = A.crosspost, MD = A.muse.dry_run, K = D.keys, R = K.readonly, SF = D.safety;
-    const range = (xs, f) => { const a = Math.min(...xs), b = Math.max(...xs); return a === b ? f(a) : `${f(a)}–${f(b)}`; };
+    const S = D.showcase, A = D.agents, X = A.crosspost, MD = A.muse.dry_run, K = D.keys, R = K.readonly, SF = D.safety, BT = D.batch;
     const card = (c) => {
-      const R = c.replays, ok = R.filter((r) => r.ok);
-      const asked = (R.find((r) => r.ok) || c.first).asked;
+      const b = BT.routines[c.name], ab = c.after_batch;
       return `<article class="card post-card">
         <div class="row-between"><span class="chip sage">${esc(c.app)}</span><span class="chip">v${c.version} · ${c.steps} steps</span></div>
         <h3>${esc(c.what)}</h3>
         <div class="sig small"><code>${esc(c.name)}(${c.inputs.map(esc).join(", ")})</code></div>
         <dl class="fr">
-          <div><dt>Made</dt><dd><b>${c.hand ? "Compiled from one agent run" : "Learned from one agent run"}</b><span>${c.hand ? esc(c.hand.replace(/^./, (x) => x.toUpperCase())) : "No hand edits"}${c.repair && c.repair.passed ? ". Its checks were repaired automatically after its live post" : ""}.</span></dd></div>
-          <div class="rp"><dt>Rehearsals since v${c.base}</dt><dd><b>${ok.length} of ${R.length} reached ${esc(asked)}</b><span>${R.some((r) => r.agent) ? `${R.filter((r) => r.agent).length} finished by the agent · ` : ""}${range(R.map((r) => r.calls), String)} model calls in Envoy's replay · ${range(ok.map((r) => Math.round(parseFloat(r.to_ask))), String)} s to the final button</span></dd></div>
+          <div><dt>Made</dt><dd><b>${c.hand && !c.hand_from ? "Compiled from one agent run" : "Learned from one agent run"}</b><span>${c.hand_from ? `No hand edits until v${c.hand_from.version} (${esc(c.hand_from.date)}), which has ${esc(c.hand)}` : c.hand ? esc(c.hand.replace(/^./, (x) => x.toUpperCase())) : "No hand edits"}${c.repair && c.repair.passed ? `. Its checks were repaired automatically after its live post (v${c.repair.version})` : ""}.</span></dd></div>
+          <div class="rp"><dt>The batch, final tag</dt><dd><b>${b.reached} of ${b.n} reached ${esc(b.final)}</b><span>${esc(b.yes_cell.replace(/ \(poll by eye\)$/, ""))} with every check yes${/by eye/.test(b.yes_cell) ? " (the poll by eye)" : ""} · median ${s0(b.secs.median)} to the final button · ${b.calls} model call${b.calls === 1 ? "" : "s"} in all, ran v${b.versions.join(", v")}</span></dd></div>
         </dl>
-        ${c.checked ? `<p class="small" style="margin:6px 0 0"><b>Checked before the final button</b> (Nov 2): ${checkText(c.checked)}.</p>` : ""}
+        <p class="small" style="margin:6px 0 0">${batchNote(b)}</p>
+        ${ab ? `<p class="small after-batch" style="margin:6px 0 0"><b>After the batch, not part of it:</b> v${ab.version} (${esc(ab.date)}), ${esc(ab.kind)}${c.hand_from && ab.kind === "hand edits" ? " (above)" : ""}${ab.check ? `; on Envoy's phone ${ab.check.ok} of ${ab.check.n} ${esc(ab.check.what || "runs")} reached ${esc(ab.check.final)} with every check yes${ab.check.calls != null ? `, ${ab.check.calls} model calls` : ""}` : `; its device check is in the routine's ${srcA(c.src, "versions")}`}.</p>` : ""}
         <ul class="plain real">${c.real.map((p) => `<li><span class="chip ${p.live ? "sage" : "apricot"}">${p.live ? "live" : "flawed"}</span> <span class="small">${esc(p.live ? postText(c.name, p.inputs) : p.note)} · ${p.calls} model calls in Envoy</span></li>`).join("")}</ul>
         <div class="label-rec" style="margin-top:8px">${srcA(c.yaml_src, `v${c.version}.yaml`)} ${srcA(c.src, "versions")}</div>
       </article>`;
@@ -356,7 +381,7 @@
       ${head("acts", "Acts", "It acts in the apps, and waits for a yes on the iPhone.",
         "Some things exist only inside an app. Muse can post plain Instagram content itself, but library songs and poll stickers exist only in the apps, and Muse has no connector for TikTok. So each of these four posts was compiled from one agent run on Envoy's phone into a routine, and shared with agents as a tool. Each final button here waited for the person's yes on their iPhone. No agent can approve: there is no tool for it.")}
       <div class="posts four">${S.cards.map(card).join("")}</div>
-      <p class="small" style="margin:10px 4px 0">Rehearsals ran on a test copy of Envoy (hybrid profile, as each run file records) on Nov 1–2; every one that reached its final button was declined there. A planted wrong-clip test, which stopped before starting as it should, isn't counted. A rehearsal declines the final tap, so the compiler adds it back as the routine's last step, marked irreversible. The live posts went out on Nov 2 on test accounts. ${srcA(S.runs_src, "rehearsals")} ${srcA(S.live_src, "the posts' task rows")} ${srcA(S.doc_src, "demo-showcase.md")}</p>
+      <p class="small" style="margin:10px 4px 0">The batch was declared before it ran: the four routines at the final evaluation's tag, ${BT.n / S.cards.length} attempts each from a cold app, an open app or a saved draft, with listed songs, on Envoy's phone with the test accounts (${day(BT.date)}). Every final button it reached was declined; nothing was posted. Each card counts every attempt. A rehearsal declines the final tap, so the compiler adds it back as the routine's last step, marked irreversible. The live posts went out on Nov 2 on test accounts. ${srcA(BT.src, "RESULTS.md")} ${srcA(BT.protocol_src, "PROTOCOL.md")} ${srcA(S.live_src, "the posts' task rows")} ${srcA(S.doc_src, "demo-showcase.md")}</p>
       <div class="callout" style="margin-top:14px"><b>As recorded, flaws included.</b> The first live TikTok went out without its sound. The agent had noticed the sound hadn't attached and redone it, but the compiler dropped that correction as a back-track, and the step's check never looked at the editor. The compiler now keeps such a correction, the recompiled routine checks that the editor names the sound, and the re-post had it. The routines' step checks show they reached the right screens, not that the clip, sound or caption were right. Since Nov 2, code also checks just before the final button that the song or sound asked for is shown, the caption or title is still in its field, and the clip is the one put on the phone (the Reel, TikTok and Short; not yet the Story). A planted wrong clip stopped TikTok before it started. The Story routine still fails while a Story is already live.</div>
       <div class="agent-row">
         <div class="card" style="padding:20px">
@@ -438,7 +463,7 @@
     if (cur.final) {
       passes.push({ label: "Final evaluation", profile: cur.profile, final: true, cells: stage.map((k) => cur.stages[k]) });
     }
-    const reps = S.cards.flatMap((c) => c.replays);
+    const BR = Object.values(D.batch.routines);
     const skySuites = P.suites.filter((s) => !/^(4|8)\./.test(s.suite));
     const mixed = new Set(skySuites.map((s) => /eval-final/.test(s.ran_on))).size > 1;
     const profiles = [...new Set(skySuites.map((s) => `${s.profile} profile, ${s.tier} tier`))];
@@ -469,7 +494,7 @@
           <p class="small" style="margin:8px 0 0">The routine's calls are Envoy's own; an agent calling Envoy pays for its own model too (the Spark agent's four-post run: ${D.agents.crosspost.model_calls} calls, ${usd(D.agents.crosspost.usd)}). ${C.pass.final ? "" : notFinal(C.pass.commit)} ${srcA(C.pass.src, "real.json")} ${srcA(C.pass.md_src, "real.md")}</p>
         </div>
       </div>
-      <p class="small" style="margin:10px 4px 0">Misses, as recorded: Target's bot check stops every run on an emulator; a few routines fit their first input's screens only. Each workflow, pass by pass, is in the ${ev("real", "evidence")}. On Envoy's phone, since each posting routine's last compile, its rehearsals reached the final button ${reps.filter((r) => r.ok).length} of ${reps.length} times; across all their versions, ${S.cards.reduce((a, c) => a + c.every.ok, 0)} of ${S.cards.reduce((a, c) => a + c.every.n, 0)} (${sec("acts")}).</p>
+      <p class="small" style="margin:10px 4px 0">Misses, as recorded: Target's bot check stops every run on an emulator; a few routines fit their first input's screens only. Each workflow, pass by pass, is in the ${ev("real", "evidence")}. On Envoy's phone, the posting batch on the final tag: ${BR.reduce((x, b) => x + b.reached, 0)} of ${D.batch.n} declined attempts reached their final button (${S.cards.map((c) => `${POST[c.name]} ${D.batch.routines[c.name].reached}`).join(", ")}; ${sec("acts")}).</p>
       <h3 class="sub-h" style="margin-top:28px">SkyLark, our test app: the stress test</h3>
       <p class="small" style="margin:4px 0 0">Our own airline app, where the evaluation can change the layout on purpose and check the app's real state. Memory also uses test inboxes, and the safety suites also use captured screens from real apps. ${skyProfiles}.</p>
       <div class="tbl-wrap card" style="margin-top:10px"><table class="tbl suites">
@@ -492,6 +517,7 @@
         <ul>
           <li>Envoy learns a task, not an app. New inputs on real apps are the weak spot: ${RA.passes.map((p) => `${esc(p.cells["New input, no model call"])} (${esc(passLabel(p))}, ${esc(p.profile)} profile)`).join(", ")}${cur.final ? `, ${esc(cur.stages["New input, no model call"])} (the final evaluation, ${esc(cur.profile)} profile)` : ""}.</li>
           <li>Most real-app routine versions in the library were fixed by hand during testing; self-repair's trials kept ${D.repair.real.filter((v) => v.passed).length} of its ${D.repair.real.length} real-app versions. The posting routines' hand edits are on each card in ${sec("acts")}.</li>
+          ${batchLimits() ? `<li>${batchLimits()} ${srcA(D.batch.src, "RESULTS.md")}</li>` : ""}
           <li>The live posts were started from the Spark agent. Muse's own run of the four was a dry run, and its Story failed twice.</li>
           <li>Agents hear about the phone when they next check; Muse checked about every 10 minutes. TikTok sent no notification for our three test comments.</li>
           <li>Envoy doesn't make a routine on its own: the person presses “Make it a routine” on a finished task, or teaches it, and the compiler can refuse a run. The button is new (Nov 2); the routines on this page were compiled before it, by the evaluation or a script. ${srcA({ path: "backend/api/teach.py" }, "teach.py")}</li>
@@ -533,6 +559,7 @@
       ["The posting routines' rehearsals", "Nov 1–2", "Envoy's phone", "a test copy", "hybrid profile", "", srcA(D.showcase.runs_src, "runs.md")],
       [`Real apps, ${RA.final ? "the final evaluation" : "the evaluation's real-app suite"} (${D.real.rows.length} workflows; section 5)`, day(RA.date), "Android emulator", RA.breakdown.length > 1 ? `rows from ${RA.breakdown.length} runs: ${RA.breakdown.map((b) => `<code>${esc(b.commit)}</code> (${b.rows} ${b.rows === 1 ? "row" : "rows"})`).join(", ")}` : `<code>${esc(RA.commit)}</code>`, `${RA.profile} profile, ${RA.tier} tier`, RA.breakdown.length > 1 ? RA.breakdown.map((b) => `run ${esc(b.run)}`).join(", ") : `run ${esc(RA.run_id)}`, srcA(D.real.md_src, "real.md")],
       ...D.real.passes.filter((p) => p.commit !== RA.commit).map((p) => [`Real apps, ${passLabel(p)}${/pass$/.test(passLabel(p)) ? "" : " pass"}`, p.date, "Android emulator", `<code>${esc(p.commit)}</code>`, `${p.profile} profile`, "", srcA(p.src, p.src.path.split("/").pop())]),
+      ["The posting batch (section 3)", day(D.batch.date), "Envoy's phone (Pixel 5)", `the <code>eval-final</code> tag (<code>${esc(D.batch.tag)}</code>), a clean copy`, "hybrid profile, standard tier", `${D.batch.n} attempts`, srcA(D.batch.src, "RESULTS.md")],
       ["AndroidWorld, the shipped default (section 5)", day(D.proof.aw.hybrid.date), "AndroidWorld's emulator (Pixel 6, API 33)", `main <code>${esc(D.proof.aw.hybrid.commit)}</code>`, `${esc(D.proof.aw.hybrid.profile)} profile, standard tier`, esc(D.proof.aw.hybrid.stage), srcA(D.proof.aw.hybrid.src, "README.md")],
       ["SkyLark repair example (section 2)", day(K.date), "Android emulator", `<code>${esc(K.commit)}</code>`, `${K.profile} profile, ${K.tier} tier`, "", srcA(K.src, "change.json")],
       ...D.proof.suites.map((s) => [`Evaluation suite ${plainText(s.suite)}`, "", "", `<code>${esc(s.ran_on)}</code>`, s.profile ? `${s.profile} profile, ${s.tier} tier` : "", "", srcA(D.proof.src, "report.md")]),
@@ -540,6 +567,15 @@
     return `<div class="tbl-wrap"><table class="tbl runs"><thead><tr><th>What</th><th>When</th><th>Where</th><th>Code</th><th>Config</th><th>Task or run ids</th><th></th></tr></thead>
       <tbody>${rows.map((r) => `<tr>${r.map((c, i) => `<td${i === 5 ? ' class="ids"' : ""}>${i === 0 || i === 1 || i === 2 ? esc(c) : c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>
       <p class="small" style="margin:8px 0 0">A commit written “X, a branch of main Y” ran on a working branch made from that commit of <code>main</code>. “The live Envoy” is the copy on the Mac that Envoy's phone and the iPhone use; a test copy has its own data, and every final button on one here was declined.</p>`;
+  }
+
+  // The posting batch's attempts, as recorded (the clip, the song and the typed text checked before the final button).
+  function batchTable() {
+    const BT = D.batch, mark = (v) => v === "yes" ? "✓" : v === "no" ? "✕" : v === "n/a" ? "–" : "?";
+    return `<div class="tbl-wrap card"><table class="tbl batch">
+      <thead><tr><th>Attempt</th><th>Start</th><th>Song</th><th>How it ended</th><th class="r">To the final button</th><th>Clip</th><th>Song</th><th>Text</th><th class="r">Calls</th></tr></thead>
+      <tbody>${BT.attempts.map((a) => `<tr><td><code class="small">${esc(a.code)}</code> <span class="small">${esc(POST[a.routine])}</span></td><td>${esc(a.state)}</td><td class="small">${esc(a.song || "–")}</td><td>${esc(a.class)}${a.reached ? "" : ", not reached"}</td><td class="r">${a.to_ask != null ? s0(a.to_ask) : "–"}</td><td>${mark(a.checks.clip)}</td><td>${mark(a.checks.song)}</td><td>${mark(a.checks.caption)}</td><td class="r">${a.calls ?? "–"}</td></tr>`).join("")}</tbody></table></div>
+      <p class="small" style="margin:8px 0 0">✓ checked yes, ✕ checked no (the run stopped before the final button), ? not checkable, – not applicable. The Story's poll isn't text on the final screen; it was checked by eye on the approval screenshots, which stay outside the repo. Calls are Envoy's own, in its replay. ${srcA(BT.attempts_src, "attempts")} ${srcA(BT.src, "RESULTS.md")} ${srcA(BT.protocol_src, "PROTOCOL.md")}</p>`;
   }
 
   function renderEvidence() {
@@ -643,6 +679,7 @@
           ${chart("recovery_by_injected_change", "Recovery from injected UI changes", "SkyLark, 50 of 50.")}
           ${chart("success_by_system_and_layout", "Envoy vs the full agent vs a fixed replay", "SkyLark core set.")}
         </div>`)}
+      ${group("batch", "The posting batch, attempt by attempt", `${D.batch.n} declined attempts on the final tag, ${day(D.batch.date)}`, batchTable())}
       ${group("tools", "One share switch, one new tool", "the tool list before and after, as agents see it", "<div id='tools-x'></div>")}
       ${group("models", "SAM 3.1 on a screen that's only pixels", "Meta's models", "<div id='models-x'></div>")}
       ${group("safety", "Safety tests: an approval, and planted text", "", "<div id='safety-x'></div>")}
