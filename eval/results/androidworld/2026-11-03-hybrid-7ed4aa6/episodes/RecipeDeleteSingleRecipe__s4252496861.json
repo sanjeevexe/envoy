@@ -1,0 +1,125 @@
+{
+ "task": "RecipeDeleteSingleRecipe",
+ "seed": 4252496861,
+ "goal": "Delete the following recipes from Broccoli app: Thai Peanut Noodle Salad.",
+ "score": 1.0,
+ "aw_run_time_s": 35.2,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-03 13:42:02.167528",
+ "envoy": {
+  "run_id": "aw-2026-11-03-hybrid-7ed4aa6-1103-134128-f149",
+  "goal": "Delete the following recipes from Broccoli app: Thai Peanut Noodle Salad.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done_unverified",
+  "result": "Deleted Thai Peanut Noodle Salad from Broccoli; the recipe list now shows \"No recipes found.\" and the recipe is no longer listed.",
+  "done": true,
+  "answer": "Deleted Thai Peanut Noodle Salad from Broccoli; the recipe list now shows \"No recipes found.\" and the recipe is no longer listed.",
+  "steps_device": 5,
+  "iterations": 7,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 1,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 4,
+   "done": 2
+  },
+  "model_calls": 8,
+  "input_tokens": 14622,
+  "cached_tokens": 11808,
+  "output_tokens": 1621,
+  "reasoning_tokens": 832,
+  "cost_usd": 0.046038,
+  "cost_at_standard_usd": 0.046038,
+  "duration_s": 25.51,
+  "model_s": 17.67,
+  "device_s": 7.84,
+  "connect_s": 0.87,
+  "approvals": [
+   {
+    "step": 4,
+    "description": "tap \"Delete\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'Delete'"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 5,
+    "description": "tap \"DELETE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'DELETE'",
+     "screen: confirming a deletion",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Open Broccoli to the recipe list",
+    "Open the Thai Peanut Noodle Salad recipe from the list",
+    "Open the recipe's delete option",
+    "Confirm the deletion",
+    "Return to the recipe list showing Thai Peanut Noodle Salad is no longer listed"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "recipe list without Thai Peanut Noodle Salad",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": false,
+   "evaluable": true,
+   "detail": "none of ['Deleted', 'Thai', 'Peanut', 'Noodle', 'Salad'] is visible on the current screen"
+  },
+  "trace_dir": "data/runs/aw-2026-11-03-hybrid-7ed4aa6-1103-134128-f149",
+  "envoy_commit": "7ed4aa60493a38978f34661165f5bf2dd7e7ef09",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/traces/RecipeDeleteSingleRecipe__s4252496861.jsonl.gz",
+  "wall_s": 28.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.1
+  }
+ }
+}

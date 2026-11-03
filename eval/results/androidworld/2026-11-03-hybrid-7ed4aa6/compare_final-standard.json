@@ -1,0 +1,57 @@
+{
+ "before": "final-standard",
+ "after": "2026-11-03-hybrid-7ed4aa6",
+ "by_half": {
+  "dev": {
+   "n": 58,
+   "before": 26.0,
+   "after": 38.0,
+   "gained": 12,
+   "lost": 0,
+   "p_paired": 0.0005
+  },
+  "held_out": {
+   "n": 58,
+   "before": 31.0,
+   "after": 36.0,
+   "gained": 8,
+   "lost": 3,
+   "p_paired": 0.2266
+  },
+  "all": {
+   "n": 116,
+   "before": 57.0,
+   "after": 74.0,
+   "gained": 20,
+   "lost": 3,
+   "p_paired": 0.0005
+  }
+ },
+ "gained": [
+  "ExpenseAddMultiple",
+  "ExpenseAddSingle",
+  "ExpenseDeleteMultiple2",
+  "FilesDeleteFile",
+  "MarkorDeleteAllNotes",
+  "MarkorDeleteNewestNote",
+  "MarkorDeleteNote",
+  "MarkorMoveNote",
+  "OsmAndFavorite",
+  "RecipeAddMultipleRecipes",
+  "RetroPlayingQueue",
+  "SimpleCalendarDeleteOneEvent",
+  "SimpleCalendarEventsInTimeRange",
+  "SimpleCalendarNextMeetingWithPerson",
+  "SportsTrackerActivityDuration",
+  "SystemBluetoothTurnOff",
+  "SystemBluetoothTurnOn",
+  "SystemBluetoothTurnOnVerify",
+  "TurnOffWifiAndTurnOnBluetooth",
+  "VlcCreateTwoPlaylists"
+ ],
+ "lost": [
+  "ExpenseDeleteDuplicates",
+  "RecipeAddMultipleRecipesFromImage",
+  "SimpleDrawProCreateDrawing"
+ ]
+}

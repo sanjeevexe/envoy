@@ -1,0 +1,100 @@
+{
+ "task": "SystemCopyToClipboard",
+ "seed": 148786894,
+ "goal": "Copy the following text to the clipboard: Tracking #: 5K672F4C",
+ "score": 0.0,
+ "aw_run_time_s": 73.7,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-11-03 14:32:13.719892",
+ "envoy": {
+  "run_id": "aw-2026-11-03-hybrid-7ed4aa6-1103-143102-deaf",
+  "goal": "Copy the following text to the clipboard: Tracking #: 5K672F4C",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 10,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 4,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 1,
+  "actions": {
+   "launch": 7,
+   "home": 1,
+   "tap": 1,
+   "type": 1
+  },
+  "model_calls": 13,
+  "input_tokens": 25970,
+  "cached_tokens": 18916,
+  "output_tokens": 4257,
+  "reasoning_tokens": 2969,
+  "cost_usd": 0.117139,
+  "cost_at_standard_usd": 0.117139,
+  "duration_s": 66.55,
+  "model_s": 51.47,
+  "device_s": 15.08,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Open Markor instead of Clipper or Chrome",
+    "Create a new text file or note",
+    "Type exactly: Tracking #: 5K672F4C",
+    "Select all of the text and tap Copy"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Tracking #: 5K672F4C",
+    "field_hint": ""
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-2026-11-03-hybrid-7ed4aa6-1103-143102-deaf",
+  "envoy_commit": "7ed4aa60493a38978f34661165f5bf2dd7e7ef09",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/traces/SystemCopyToClipboard__s148786894.jsonl.gz",
+  "wall_s": 69.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

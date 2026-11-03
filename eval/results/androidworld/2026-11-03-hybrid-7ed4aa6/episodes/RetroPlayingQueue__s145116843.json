@@ -1,0 +1,107 @@
+{
+ "task": "RetroPlayingQueue",
+ "seed": 145116843,
+ "goal": "Add the following songs, in order, Through the Storm, Hidden Paths, Forever Young, Whispers of the Past, Heartbeat Away to my playing queue in Retro music.",
+ "score": 1.0,
+ "aw_run_time_s": 150.0,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-03 13:47:19.849625",
+ "envoy": {
+  "run_id": "aw-2026-11-03-hybrid-7ed4aa6-1103-134455-fbd0",
+  "goal": "Add the following songs, in order, Through the Storm, Hidden Paths, Forever Young, Whispers of the Past, Heartbeat Away to my playing queue in Retro music.",
+  "max_steps": 32,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Added the 5 songs to the playing queue in order: Through the Storm, Hidden Paths, Forever Young, Whispers of the Past, Heartbeat Away. The Now playing queue shows them in that order.",
+  "done": true,
+  "answer": "Added the 5 songs to the playing queue in order: Through the Storm, Hidden Paths, Forever Young, Whispers of the Past, Heartbeat Away. The Now playing queue shows them in that order.",
+  "steps_device": 29,
+  "iterations": 31,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 27,
+   "look": 1,
+   "scroll": 1,
+   "done": 1
+  },
+  "model_calls": 34,
+  "input_tokens": 81533,
+  "cached_tokens": 51584,
+  "output_tokens": 9346,
+  "reasoning_tokens": 5135,
+  "cost_usd": 0.317033,
+  "cost_at_standard_usd": 0.317033,
+  "duration_s": 138.3,
+  "model_s": 97.65,
+  "device_s": 40.65,
+  "connect_s": 0.87,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Retro Music",
+   "subgoals": [
+    "Tap the small menu button to the right of 'Through the Storm' (not the song itself) and choose the add-to-queue option",
+    "Tap the small menu button to the right of 'Hidden Paths' and choose the add-to-queue option",
+    "Tap the small menu button to the right of 'Forever Young' and choose the add-to-queue option",
+    "Scroll the Songs list down past 'Through the Storm' to reveal 'Whispers of the Past', then add it via its right-hand menu",
+    "Scroll back up to 'Heartbeat Away' and add it via its right-hand menu as the last song",
+    "Open the now-playing queue to show the queued songs in order"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Whispers of the Past",
+    "field_hint": ""
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Whispers of the Past' is visible"
+  },
+  "trace_dir": "data/runs/aw-2026-11-03-hybrid-7ed4aa6-1103-134455-fbd0",
+  "envoy_commit": "7ed4aa60493a38978f34661165f5bf2dd7e7ef09",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/traces/RetroPlayingQueue__s145116843.jsonl.gz",
+  "wall_s": 142.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

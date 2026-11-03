@@ -1,0 +1,119 @@
+{
+ "task": "SimpleCalendarAddOneEventTomorrow",
+ "seed": 3213291567,
+ "goal": "In Simple Calendar Pro, create a calendar event for tomorrow at 20h with the title 'Call with the Team' and the description 'We will prepare for team roles.'. The event should last for 30 mins.",
+ "score": 1.0,
+ "aw_run_time_s": 111.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-03 13:58:38.419407",
+ "envoy": {
+  "run_id": "aw-2026-11-03-hybrid-7ed4aa6-1103-135650-da8c",
+  "goal": "In Simple Calendar Pro, create a calendar event for tomorrow at 20h with the title 'Call with the Team' and the description 'We will prepare for team roles.'. The event should last for 30 mins.",
+  "max_steps": 34,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Created calendar event 'Call with the Team' for tomorrow (Oct 16) at 20:00-20:30 (30 mins) with description 'We will prepare for team roles.', now visible in day view.",
+  "done": true,
+  "answer": "Created calendar event 'Call with the Team' for tomorrow (Oct 16) at 20:00-20:30 (30 mins) with description 'We will prepare for team roles.', now visible in day view.",
+  "steps_device": 22,
+  "iterations": 27,
+  "looks": 3,
+  "screenshots_sent": 3,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 1,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 16,
+   "type": 2,
+   "look": 3,
+   "done": 2,
+   "back": 2,
+   "tap_point": 1
+  },
+  "model_calls": 33,
+  "input_tokens": 70350,
+  "cached_tokens": 46116,
+  "output_tokens": 5544,
+  "reasoning_tokens": 2499,
+  "cost_usd": 0.229548,
+  "cost_at_standard_usd": 0.229548,
+  "duration_s": 102.65,
+  "model_s": 66.83,
+  "device_s": 35.82,
+  "connect_s": 0.85,
+  "approvals": [
+   {
+    "step": 17,
+    "description": "tap \"Save\" in com.simplemobiletools.calendar.pro",
+    "reasons": [
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Calendar (com.simplemobiletools.calendar.pro)",
+   "subgoals": [
+    "Close the search field and return to the October month view",
+    "Tap the 16 October day cell to open tomorrow's day view",
+    "Tap New Event from that day view so the date is preset to 16 October",
+    "Enter title 'Call with the Team' and description 'We will prepare for team roles.'",
+    "Set start time to 20:00 and end time to 20:30, keeping the 16 October date",
+    "Save the event and return to the day view showing it"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Call with the Team",
+    "field_hint": ""
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Call with the Team' is visible"
+  },
+  "trace_dir": "data/runs/aw-2026-11-03-hybrid-7ed4aa6-1103-135650-da8c",
+  "envoy_commit": "7ed4aa60493a38978f34661165f5bf2dd7e7ef09",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/traces/SimpleCalendarAddOneEventTomorrow__s3213291567.jsonl.gz",
+  "wall_s": 105.1,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

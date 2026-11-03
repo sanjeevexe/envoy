@@ -1,0 +1,100 @@
+{
+ "task": "NotesTodoItemCount",
+ "seed": 1631305569,
+ "goal": "How many to-dos do I have in the 'Ideas' folder in the Joplin app? Express your answer as just a single number.",
+ "score": 0.0,
+ "aw_run_time_s": 56.5,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-11-03 13:08:19.114583",
+ "envoy": {
+  "run_id": "aw-2026-11-03-hybrid-7ed4aa6-1103-130730-95bb",
+  "goal": "How many to-dos do I have in the 'Ideas' folder in the Joplin app? Express your answer as just a single number.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 9,
+  "iterations": 10,
+  "looks": 1,
+  "screenshots_sent": 1,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 6,
+   "back": 2,
+   "look": 1
+  },
+  "model_calls": 12,
+  "input_tokens": 24707,
+  "cached_tokens": 17136,
+  "output_tokens": 2341,
+  "reasoning_tokens": 1248,
+  "cost_usd": 0.080531,
+  "cost_at_standard_usd": 0.080531,
+  "duration_s": 44.41,
+  "model_s": 29.46,
+  "device_s": 14.95,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Joplin",
+   "subgoals": [
+    "Tap the Sidebar button to open the notebooks/folders list",
+    "Locate and open the 'Ideas' folder from the sidebar",
+    "View the list of items inside the 'Ideas' folder",
+    "Count only the to-do items shown in that folder list"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "number of to-dos in the 'Ideas' folder",
+    "field_hint": null
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-2026-11-03-hybrid-7ed4aa6-1103-130730-95bb",
+  "envoy_commit": "7ed4aa60493a38978f34661165f5bf2dd7e7ef09",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/traces/NotesTodoItemCount__s1631305569.jsonl.gz",
+  "wall_s": 46.9,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.0
+  }
+ }
+}

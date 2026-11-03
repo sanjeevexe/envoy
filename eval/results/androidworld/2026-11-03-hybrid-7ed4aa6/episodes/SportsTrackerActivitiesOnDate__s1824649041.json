@@ -1,0 +1,100 @@
+{
+ "task": "SportsTrackerActivitiesOnDate",
+ "seed": 1824649041,
+ "goal": "What activities did I do October 01 in the OpenTracks app? Answer with the activity type only. If there are multiple types, format your answer in a comma separated list.",
+ "score": 0.0,
+ "aw_run_time_s": 103.2,
+ "aw_episode_length": 20,
+ "agent": "envoy",
+ "finished": "2026-11-03 14:20:11.772350",
+ "envoy": {
+  "run_id": "aw-2026-11-03-hybrid-7ed4aa6-1103-141831-730d",
+  "goal": "What activities did I do October 01 in the OpenTracks app? Answer with the activity type only. If there are multiple types, format your answer in a comma separated list.",
+  "max_steps": 20,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 20 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 20,
+  "iterations": 20,
+  "looks": 0,
+  "screenshots_sent": 4,
+  "replans": 2,
+  "stuck_recoveries": 1,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 11,
+   "scroll": 7,
+   "back": 1
+  },
+  "model_calls": 23,
+  "input_tokens": 57001,
+  "cached_tokens": 34156,
+  "output_tokens": 5774,
+  "reasoning_tokens": 3034,
+  "cost_usd": 0.213691,
+  "cost_at_standard_usd": 0.213691,
+  "duration_s": 95.44,
+  "model_s": 64.74,
+  "device_s": 30.7,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "OpenTracks",
+   "subgoals": [
+    "Scroll down the track list past the visible 1 Oct entries to confirm every 1 Oct track and note all of them",
+    "Open the first 1 Oct track and open its edit/details view, scrolling within it to read its activity type/category field",
+    "Return to the track list and open each other 1 Oct track the same way, reading its activity type/category field",
+    "Return to the track list showing the 1 Oct tracks once all their activity types have been read"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "activity type only for each track dated October 01, comma-separated if there are multiple types",
+    "field_hint": ""
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-2026-11-03-hybrid-7ed4aa6-1103-141831-730d",
+  "envoy_commit": "7ed4aa60493a38978f34661165f5bf2dd7e7ef09",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/traces/SportsTrackerActivitiesOnDate__s1824649041.jsonl.gz",
+  "wall_s": 98.0,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.6
+  }
+ }
+}

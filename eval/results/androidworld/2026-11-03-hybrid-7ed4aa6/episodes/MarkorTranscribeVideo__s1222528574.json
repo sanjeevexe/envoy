@@ -1,0 +1,101 @@
+{
+ "task": "MarkorTranscribeVideo",
+ "seed": 1222528574,
+ "goal": "Transcribe the contents of video ZwUN_moment_70_.mp4 by watching it in VLC player (located in Download) and writing the sequence of strings shown on each frame to the text file ZwUN_moment_70__transcription.txt in Markor as a comma separated list. For example, if the first frame shows the text \"edna\" and the second frame shows the text \"pineapple\", then the text file should contain only the following text: \"edna, pineapple\".",
+ "score": 0.0,
+ "aw_run_time_s": 121.4,
+ "aw_episode_length": 20,
+ "agent": "envoy",
+ "finished": "2026-11-03 13:05:19.834779",
+ "envoy": {
+  "run_id": "aw-2026-11-03-hybrid-7ed4aa6-1103-130322-c1a6",
+  "goal": "Transcribe the contents of video ZwUN_moment_70_.mp4 by watching it in VLC player (located in Download) and writing the sequence of strings shown on each frame to the text file ZwUN_moment_70__transcription.txt in Markor as a comma separated list. For example, if the first frame shows the text \"edna\" and the second frame shows the text \"pineapple\", then the text file should contain only the following text: \"edna, pineapple\".",
+  "max_steps": 20,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 20 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 17,
+  "iterations": 20,
+  "looks": 3,
+  "screenshots_sent": 7,
+  "replans": 2,
+  "stuck_recoveries": 0,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 15,
+   "look": 3,
+   "tap_point": 1
+  },
+  "model_calls": 27,
+  "input_tokens": 56485,
+  "cached_tokens": 36716,
+  "output_tokens": 6020,
+  "reasoning_tokens": 3348,
+  "cost_usd": 0.218201,
+  "cost_at_standard_usd": 0.218201,
+  "duration_s": 112.74,
+  "model_s": 75.55,
+  "device_s": 37.19,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Markor",
+   "subgoals": [
+    "Pause the already-open ZwUN_moment_70_ video in VLC and seek to 0:00",
+    "Play or step through the 0:24 video slowly, noting the exact string shown on each distinct frame in order",
+    "Leave VLC and open Markor, then create or open ZwUN_moment_70__transcription.txt",
+    "Enter only the noted strings as a comma-separated list in the file",
+    "Save ZwUN_moment_70__transcription.txt in Markor"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "saved transcription file open in Markor containing only the comma-separated strings from the video frames",
+    "field_hint": "ZwUN_moment_70__transcription.txt"
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-2026-11-03-hybrid-7ed4aa6-1103-130322-c1a6",
+  "envoy_commit": "7ed4aa60493a38978f34661165f5bf2dd7e7ef09",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/traces/MarkorTranscribeVideo__s1222528574.jsonl.gz",
+  "wall_s": 115.2,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

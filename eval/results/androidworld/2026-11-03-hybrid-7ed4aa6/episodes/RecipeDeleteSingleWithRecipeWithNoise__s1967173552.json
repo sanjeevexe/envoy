@@ -1,0 +1,128 @@
+{
+ "task": "RecipeDeleteSingleWithRecipeWithNoise",
+ "seed": 1967173552,
+ "goal": "Delete the following recipes from Broccoli app: Classic Margherita Pizza.",
+ "score": 1.0,
+ "aw_run_time_s": 60.5,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-03 13:43:03.591479",
+ "envoy": {
+  "run_id": "aw-2026-11-03-hybrid-7ed4aa6-1103-134205-c7f7",
+  "goal": "Delete the following recipes from Broccoli app: Classic Margherita Pizza.",
+  "max_steps": 20,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Classic Margherita Pizza deleted from Broccoli; verified by searching again - 'No recipes found.'",
+  "done": true,
+  "answer": "Classic Margherita Pizza deleted from Broccoli; verified by searching again - 'No recipes found.'",
+  "steps_device": 9,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "scroll": 2,
+   "tap": 5,
+   "type": 1,
+   "done": 1
+  },
+  "model_calls": 12,
+  "input_tokens": 22161,
+  "cached_tokens": 17136,
+  "output_tokens": 3316,
+  "reasoning_tokens": 2150,
+  "cost_usd": 0.089847,
+  "cost_at_standard_usd": 0.089847,
+  "duration_s": 54.02,
+  "model_s": 39.46,
+  "device_s": 14.56,
+  "connect_s": 0.85,
+  "approvals": [
+   {
+    "step": 6,
+    "description": "tap \"Delete\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'Delete'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   },
+   {
+    "step": 7,
+    "description": "tap \"DELETE\" in com.flauschcode.broccoli",
+    "reasons": [
+     "rule: target says 'DELETE'",
+     "screen: confirming a deletion",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Broccoli",
+   "subgoals": [
+    "Use the Search button on the Recipes screen and search for Classic Margherita Pizza",
+    "Open Classic Margherita Pizza from the search results",
+    "Open the recipe's overflow menu and tap Delete",
+    "Confirm deletion in the 'Delete this recipe?' dialog",
+    "Search the recipes list again for Classic Margherita Pizza and verify it no longer appears"
+   ],
+   "success_check": {
+    "kind": "element_present",
+    "value": "New Recipe",
+    "field_hint": null
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "element 'New Recipe' present"
+  },
+  "trace_dir": "data/runs/aw-2026-11-03-hybrid-7ed4aa6-1103-134205-c7f7",
+  "envoy_commit": "7ed4aa60493a38978f34661165f5bf2dd7e7ef09",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/traces/RecipeDeleteSingleWithRecipeWithNoise__s1967173552.jsonl.gz",
+  "wall_s": 56.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.7
+  }
+ }
+}

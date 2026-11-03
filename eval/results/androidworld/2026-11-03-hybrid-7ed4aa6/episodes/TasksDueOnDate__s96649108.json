@@ -1,0 +1,111 @@
+{
+ "task": "TasksDueOnDate",
+ "seed": 96649108,
+ "goal": "What tasks do I have due October 24 2023 in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 0.0,
+ "aw_run_time_s": 60.6,
+ "aw_episode_length": 10,
+ "agent": "envoy",
+ "finished": "2026-11-03 14:37:09.705431",
+ "envoy": {
+  "run_id": "aw-2026-11-03-hybrid-7ed4aa6-1103-143610-3d39",
+  "goal": "What tasks do I have due October 24 2023 in Tasks app? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "step_limit",
+  "result": "stopped after 10 steps",
+  "done": false,
+  "answer": null,
+  "steps_device": 10,
+  "iterations": 10,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 1,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "scroll": 4,
+   "swipe": 1,
+   "tap": 3,
+   "back": 1
+  },
+  "model_calls": 12,
+  "input_tokens": 24605,
+  "cached_tokens": 17136,
+  "output_tokens": 3506,
+  "reasoning_tokens": 2225,
+  "cost_usd": 0.103423,
+  "cost_at_standard_usd": 0.103423,
+  "duration_s": 54.29,
+  "model_s": 36.19,
+  "device_s": 18.1,
+  "connect_s": 0.85,
+  "approvals": [
+   {
+    "step": 8,
+    "description": "tap \"Organize Closet · Donate old clothes and shoes. Put winter clothes in storage.\" in org.tasks",
+    "reasons": [
+     "rule: target says 'Organize Closet · Donate old clothes and shoes. Put winter clothes in storage.'"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "Tasks",
+   "subgoals": [
+    "Open each task in the list labeled \"Tue\" (other than the Grocery Shopping already checked) and read its exact due date in the task detail",
+    "Scroll the task list further and repeat for any additional \"Tue\" or \"Oct 24\" tasks found",
+    "Note only the titles whose detail shows due October 24, 2023",
+    "Answer with those titles only, comma-separated if multiple, or none if none match"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "titles of tasks due October 24 2023",
+    "field_hint": ""
+   }
+  },
+  "check": null,
+  "trace_dir": "data/runs/aw-2026-11-03-hybrid-7ed4aa6-1103-143610-3d39",
+  "envoy_commit": "7ed4aa60493a38978f34661165f5bf2dd7e7ef09",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/traces/TasksDueOnDate__s96649108.jsonl.gz",
+  "wall_s": 56.8,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}

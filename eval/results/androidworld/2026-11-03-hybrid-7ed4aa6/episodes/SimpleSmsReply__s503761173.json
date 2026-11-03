@@ -1,0 +1,115 @@
+{
+ "task": "SimpleSmsReply",
+ "seed": 503761173,
+ "goal": "Reply to +18407874306 with message: Yoga class every Tuesday and Thursday at 6 PM. in Simple SMS Messenger",
+ "score": 1.0,
+ "aw_run_time_s": 43.7,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-03 14:11:58.291076",
+ "envoy": {
+  "run_id": "aw-2026-11-03-hybrid-7ed4aa6-1103-141123-05bc",
+  "goal": "Reply to +18407874306 with message: Yoga class every Tuesday and Thursday at 6 PM. in Simple SMS Messenger",
+  "max_steps": 12,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Replied to +18407874306 with 'Yoga class every Tuesday and Thursday at 6 PM.'",
+  "done": true,
+  "answer": "Replied to +18407874306 with 'Yoga class every Tuesday and Thursday at 6 PM.'",
+  "steps_device": 4,
+  "iterations": 5,
+  "looks": 0,
+  "screenshots_sent": 0,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 0,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "tap": 2,
+   "type": 1,
+   "done": 1
+  },
+  "model_calls": 6,
+  "input_tokens": 12474,
+  "cached_tokens": 5200,
+  "output_tokens": 986,
+  "reasoning_tokens": 394,
+  "cost_usd": 0.049856,
+  "cost_at_standard_usd": 0.049856,
+  "duration_s": 24.78,
+  "model_s": 12.45,
+  "device_s": 12.34,
+  "connect_s": 0.85,
+  "approvals": [
+   {
+    "step": 4,
+    "description": "tap \"SMS\" in com.simplemobiletools.smsmessenger",
+    "reasons": [
+     "rule: target id 'com.simplemobiletools.smsmessenger:id/thread_send_message'",
+     "model: labeled irreversible"
+    ],
+    "approved": true,
+    "by": "eval-policy"
+   }
+  ],
+  "popups": [],
+  "plan": {
+   "app": "SMS Messenger",
+   "subgoals": [
+    "Open SMS Messenger",
+    "Open the conversation with +18407874306",
+    "Enter 'Yoga class every Tuesday and Thursday at 6 PM.' in the message field",
+    "Tap Send so the message appears in the conversation"
+   ],
+   "success_check": {
+    "kind": "text_visible",
+    "value": "Yoga class every Tuesday and Thursday at 6 PM.",
+    "field_hint": ""
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "'Yoga class every Tuesday and Thursday at 6 PM.' is visible"
+  },
+  "trace_dir": "data/runs/aw-2026-11-03-hybrid-7ed4aa6-1103-141123-05bc",
+  "envoy_commit": "7ed4aa60493a38978f34661165f5bf2dd7e7ef09",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/traces/SimpleSmsReply__s503761173.jsonl.gz",
+  "wall_s": 27.4,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 1.6
+  }
+ }
+}

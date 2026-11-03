@@ -1,0 +1,105 @@
+{
+ "task": "SimpleCalendarEventsInTimeRange",
+ "seed": 481426288,
+ "goal": "Do I have any events between 4:15pm and 8pm Friday in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+ "score": 1.0,
+ "aw_run_time_s": 60.4,
+ "aw_episode_length": 1,
+ "agent": "envoy",
+ "finished": "2026-11-03 14:05:56.361542",
+ "envoy": {
+  "run_id": "aw-2026-11-03-hybrid-7ed4aa6-1103-140458-98a6",
+  "goal": "Do I have any events between 4:15pm and 8pm Friday in Simple Calendar Pro? Answer with the titles only. If there are multiples titles, format your answer in a comma separated list.",
+  "max_steps": 10,
+  "config": {
+   "tier": "standard"
+  },
+  "status": "done",
+  "result": "Cooking Class",
+  "done": true,
+  "answer": "Cooking Class",
+  "steps_device": 3,
+  "iterations": 5,
+  "looks": 1,
+  "screenshots_sent": 2,
+  "replans": 0,
+  "stuck_recoveries": 0,
+  "vision_calls": 1,
+  "invalid_elements": 0,
+  "done_rejected": 0,
+  "tap_point_rejected": 0,
+  "model_errors": 0,
+  "placeholders_asked_again": 0,
+  "actions": {
+   "launch": 1,
+   "look": 1,
+   "tap_point": 1,
+   "scroll": 1,
+   "done": 1
+  },
+  "model_calls": 10,
+  "input_tokens": 14200,
+  "cached_tokens": 8504,
+  "output_tokens": 1595,
+  "reasoning_tokens": 849,
+  "cost_usd": 0.071139,
+  "cost_at_standard_usd": 0.071139,
+  "duration_s": 49.9,
+  "model_s": 24.42,
+  "device_s": 25.48,
+  "connect_s": 0.86,
+  "approvals": [],
+  "popups": [],
+  "plan": {
+   "app": "Calendar (com.simplemobiletools.calendar.pro)",
+   "subgoals": [
+    "Open Simple Calendar Pro (com.simplemobiletools.calendar.pro)",
+    "Navigate to Friday, October 20, 2023",
+    "Open the day view for that Friday",
+    "Read the events scheduled between 4:15pm and 8pm and note their titles only"
+   ],
+   "success_check": {
+    "kind": "info",
+    "value": "titles of events between 4:15pm and 8pm on Friday (comma-separated list, or none if there are no such events)",
+    "field_hint": ""
+   }
+  },
+  "check": {
+   "passed": true,
+   "evaluable": true,
+   "detail": "answer visible on screen: Cooking, Class"
+  },
+  "trace_dir": "data/runs/aw-2026-11-03-hybrid-7ed4aa6-1103-140458-98a6",
+  "envoy_commit": "7ed4aa60493a38978f34661165f5bf2dd7e7ef09",
+  "answer_format": true,
+  "model": "muse-wonder-1.0",
+  "models": {
+   "profile": "hybrid",
+   "jobs": {
+    "step": "muse-wonder-1.0",
+    "plan": "muse-wonder-1.0",
+    "repair": "muse-wonder-1.0",
+    "grounding": "muse-spark-1.3",
+    "choose": "muse-spark-1.3",
+    "extract": "muse-spark-1.3",
+    "same_entity": "muse-spark-1.3",
+    "answer": "muse-spark-1.3",
+    "compile": "muse-wonder-1.0",
+    "match": "muse-spark-1.3",
+    "screen_read": "muse-spark-1.3",
+    "chat": "muse-spark-1.3",
+    "app_note": "muse-spark-1.3"
+   }
+  },
+  "effort": {
+   "step": "low",
+   "plan": "low"
+  },
+  "trace_digest": "eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/traces/SimpleCalendarEventsInTimeRange__s481426288.jsonl.gz",
+  "wall_s": 55.5,
+  "harness": {
+   "crash_dialog_after_episode": null,
+   "forwarder_restore_s": 2.2
+  }
+ }
+}
