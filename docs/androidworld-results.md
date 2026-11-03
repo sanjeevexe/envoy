@@ -1,6 +1,6 @@
 # Envoy on AndroidWorld
 
-*Oct 28–29, 2026. Branch `androidworld`. Plan: `prompts/androidworld-plan.md`. Results: `eval/results/androidworld/`.*
+*Oct 28–29, 2026, with a separate run of the shipped default on Nov 3 (below the headline). Branch `androidworld`. Plan: `prompts/androidworld-plan.md`. Results: `eval/results/androidworld/`.*
 
 AndroidWorld (Google Research; Rawles et al., 2024; Apache-2.0) is a benchmark of 116 parameterized tasks across 20 open-source Android apps, set up, randomized and scored by its own code on a live emulator. This page reports Envoy on it: the headline success rate, its cost and speed, where it fails and why, what general changes fixed, and what routines did across seeds.
 
@@ -23,6 +23,12 @@ AndroidWorld (Google Research; Rawles et al., 2024; Apache-2.0) is a benchmark o
 - **Contacts still looped once in 3,** each time the plan asked for "the full contacts list". A planner line removes those plans in replays (33/120 → 0/90). Phase 7 then checked it live, and it merged on Oct 29 (`105d04e`).
 
 **Routines:** a separate compiler fix reads answers by their place on the screen. On new seeds, the three question routines now do 9 of 9 (0 before).
+
+**The shipped default, Nov 3 (a separate run).** Envoy as it ships, `main` at `7ed4aa6` on the default `hybrid` profile (agent steps on Muse Wonder, a $0.50 per-task cap), solved 74 of 116 tasks (63.8%), and 36 of 58 (62.1%) on the held-out half: seed 30, pass@1, the standard tier, at a mean $0.125 a task (`eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/README.md`). It sits next to the Oct 28 numbers above and doesn't replace them:
+- **Against Oct 28's 57,** it gained 20 tasks and lost 3 (p = 0.0005). On the held-out half alone the change is +8 −3 (p = 0.23), within the run-to-run noise measured below, so it shows no held-out change.
+- **It isn't a model-only comparison.** `main` also has Phase 7's three SkyLark follow-ups, the answer fix, the contacts planner line and empty-state check, the on/off switch check and the repair JSON fix, and a higher cost cap ($0.50 against $0.15). One run can't split the gain among them. The model-only evidence is still the 20-task comparison of Oct 28 (hybrid 14 of 20, Spark 9).
+- **The held-out half is less clean than it was:** it was run on Oct 28 and 29, its traces were read for mechanism counts, and 11 of the 20 tasks behind the Oct 30 choice of `hybrid` as the default are held-out tasks.
+- **It costs more:** about 3.1 times as much per task, and about 14 s more, all of it model time.
 
 The rest of this page shows how each number was made.
 

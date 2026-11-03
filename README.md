@@ -78,7 +78,7 @@ approval only the person can give ([`docs/technical-design.md`](docs/technical-d
 profile and the standard tier, for $11.68 at standard prices
 ([`eval/results/final/report.md`](eval/results/final/report.md)). Every suite starts from a known state and scores with
 code: the app's real state, or the right answer on screen. Times and costs are medians, with the spread beside them
-where the source gives one; dollars are at Meta's standard prices. AndroidWorld is a separate run (below). Commits and
+where the source gives one; dollars are at Meta's standard prices. AndroidWorld's runs are separate (below). Commits and
 configs are in [the evidence appendix](#evidence-appendix).
 
 ### Real apps
@@ -149,14 +149,28 @@ Every number in this table is on SkyLark, except the 14 real-app saved screens i
 | Screen sizes and Envoy's phone | SkyLark's 10 core routines on 3 new bookings each, on three emulator sizes and the Pixel 5: 30/30 on each, with no model call | [`sizes.md`](eval/results/final/sizes.md) |
 | Safety | Irreversible controls on 20 saved screens (6 SkyLark, 14 real-app): 20 caught, all 20 by code rules alone; reversible controls flagged by code 0/22. 7 live runs declined at the approval: 7 held. Instructions planted on screens: the agent right in 20 of 20 runs and tried to follow them in 0; the routines 10 of 10, never. Irreversible changes without approval: 0 | [`safety.md`](eval/results/final/safety.md), [`injection.md`](eval/results/final/injection.md) |
 
-### AndroidWorld, by cost (a separate run)
+### AndroidWorld (separate runs)
 
-On Google's AndroidWorld benchmark (116 tasks in 20 open-source apps; Spark profile at low effort, standard tier, one
-seed, pass@1, Oct 28–29), the 22 of 59 routines Envoy compiled from its solved runs that redid their own seed-30 task
-did 55 of 69 new-seed instances at a median 1 model call, $0.0021 and 8.3 s; the full agent did 63 at 6 calls, $0.0122
-and 19.0 s. Pairing each routine miss with the agent's own run on that instance gives 67 of 69 (computed, not run).
-Separately, 13 general agent changes, chosen on half the tasks, took the held-out half from 12 to 31 of 58; they have
-been part of Envoy since Oct 29 ([`docs/androidworld-results.md`](docs/androidworld-results.md)).
+On Google's AndroidWorld benchmark (116 tasks in 20 open-source apps; seed 30, pass@1, standard tier), two runs, side
+by side:
+
+| Run | All 116 | Held-out half (58) | Mean cost per task |
+| --- | --- | --- | --- |
+| Oct 28, Spark profile: the agent with 13 general changes, chosen on the other half (the `androidworld` branch, `a80b976`) | 57 (49.1%) | 31 (53.4%) | $0.040 |
+| Nov 3, the shipped default (`hybrid`) on `main` (`7ed4aa6`) | **74 (63.8%)** | 36 (62.1%) | $0.125 |
+
+- **The Oct 28 run** is the clean estimate of the 13 changes: the held-out half went from 12 to 31 of 58 against the
+  agent before them. They have been part of Envoy since Oct 29.
+- **The Nov 3 run** is Envoy as it ships, with agent steps on Muse Wonder. Against Oct 28 it gained 20 tasks and lost 3
+  overall, but on the held-out half alone the change (+8 −3, p = 0.23) is within run-to-run noise. It isn't a model-only
+  comparison: `main` also has other agent changes since Oct 28 and a higher per-task cost cap. The held-out half had
+  already been run on Oct 28 and 29 and helped choose `hybrid` as the default, so it's less clean than it was. Each task
+  cost about 3.1 times as much
+  ([`eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/`](eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/README.md)).
+- **Routines, by cost (Oct 28, Spark profile):** the 22 of 59 routines Envoy compiled from its solved runs that redid
+  their own seed-30 task did 55 of 69 new-seed instances at a median 1 model call, $0.0021 and 8.3 s; the full agent
+  did 63 at 6 calls, $0.0122 and 19.0 s. Pairing each routine miss with the agent's own run on that instance gives 67
+  of 69 (computed, not run) ([`docs/androidworld-results.md`](docs/androidworld-results.md)).
 
 ## Limits, said plainly
 
@@ -284,6 +298,7 @@ and compile on Muse Wonder 1.0 and the rest on Muse Spark 1.3; the Spark profile
 | "0 irreversible changes without approval" | on SkyLark: 7 declined live runs (suite 6) and 30 runs with planted instructions (suite 6b); the 20 irreversible controls are on saved screens, 6 SkyLark and 14 real-app | `cf78fa0` | `report.md`, "The design's success targets" |
 | "Make it a routine" on real apps | the 18 real-app questions over MCP on a copy at the tag, then the button on each finished task, then each saved routine shared and called; the supplementary pass on a second copy with an empty routine library, outside the headline; deviations listed in its README | `cf78fa0` (harness `75b2c05`, `d259f3b`, `2f918da`) | [`learn-agent-path/`](eval/results/learn-agent-path/README.md), its `PROTOCOL.md`, `results.json`, `supplementary.json` |
 | AndroidWorld (a separate run) | 116 tasks, seed 30, pass@1, Spark profile at low effort, Oct 28–29; routines on 3 new seeds of their 23 tasks | baseline and `a80b976` (the 13 changes); seeds `e9594f0`, `b82e512`, `cdd130e`; merged in `105d04e` | [`docs/androidworld-results.md`](docs/androidworld-results.md) |
+| AndroidWorld, the shipped default | all 116 tasks, seed 30, pass@1, standard tier, `hybrid`, a $0.50 per-task cap; one run, Nov 3; $14.54 in all | `main` `7ed4aa6` | [`2026-11-03-hybrid-7ed4aa6/`](eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/README.md) (`run.json`, `comparison-final-standard.json`) |
 | The live posts | Nov 1–2 (ET), Envoy's phone, test accounts; 0 / 0 / 3 / 0 model calls in Envoy's replay for the Reel, Story, TikTok re-post and Short | tasks `task-1102-005928-4182`, `-013244-b7c8`, `-023044-d081`, `-015325-106a` | [`docs/demo-showcase.md`](docs/demo-showcase.md); versions and hand edits in each `data/routines/<name>/index.json` |
 | Muse's dry run | Nov 2, Muse for Mac, every final step declined | the task rows | [`task-rows.json`](eval/results/showcase/muse-2026-11-02/task-rows.json) |
 | The Spark agent's own cost | a three-post run on a test copy, Nov 1, declined at each final button | — | [`crosspost/README.md`](agents/meta-agent/evidence/2026-11-01/crosspost/README.md), "Cost" |

@@ -212,8 +212,11 @@ controls when the accessibility tree is missing.**
 - **Wonder where it pays.** In the model comparison on 20 AndroidWorld tasks (14 of them ones the all-Spark agent had
   failed), the hybrid split passed 14
   against Spark's 9 (one run each, a margin near run-to-run noise), at 3.46× the cost per task
-  (`eval/results/androidworld/model-comparison/2026-10-28/README.md`). Saved routines replay on Spark jobs or none, so
-  that cost lands on first runs and repairs.
+  (`eval/results/androidworld/model-comparison/2026-10-28/README.md`). On all 116 tasks, the shipped default (`hybrid`)
+  solved 74 (63.8%) on Nov 3, against 57 on the Spark profile on Oct 28, at about 3.1 times the cost per task; that
+  isn't a model-only comparison, and on the held-out half the gain is within noise
+  (`eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/`). Saved routines replay on Spark jobs or none, so that cost
+  lands on first runs and repairs.
 - **SAM 3.1 and grounding for drawn screens.** From the screenshot alone (the methods got no accessibility tree), SAM's
   boxes plus a Spark pick, with grounding where SAM's boxes missed, found 52 of 52 targets in each of two samples;
   grounding alone found 92% and 49 of 52. The first sample is 16 seats on our test app's canvas map, which is truly
@@ -277,8 +280,9 @@ From the final evaluation: all 10 suites on the `eval-final` tag (`cf78fa0`), No
 (Muse Wonder plans, steps, repairs and compiles; Muse Spark does the rest) and the standard tier, $11.68 at standard
 prices. Nothing was uncommitted in any suite (each suite's `meta.code.dirty` is empty). This table is the evidence
 appendix: `eval/results/final/report.md`, and each suite's `.md` and `.json` beside it with its run id. Suites 0–3b are
-on SkyLark, our test app; 6 and 6b use SkyLark with saved real-app screens and a test inbox. AndroidWorld is a separate
-run on the Spark profile (agent steps on Muse Spark 1.3 at low effort, compiles on Muse Wonder 1.0).
+on SkyLark, our test app; 6 and 6b use SkyLark with saved real-app screens and a test inbox. AndroidWorld's two runs are
+separate: Oct 28–29 on the Spark profile (agent steps on Muse Spark 1.3 at low effort, compiles on Muse Wonder 1.0), and
+Nov 3 on the shipped default, `hybrid`.
 
 | Suite | Final (`eval-final`, `hybrid`, standard tier) |
 | --- | --- |
@@ -293,7 +297,8 @@ run on the Spark profile (agent steps on Muse Spark 1.3 at low effort, compiles 
 | 6. Safety: irreversible actions | on 20 saved screens (6 SkyLark, 14 real-app), caught 20/20 (code alone 20); reversible flagged by code 0/22 (by the gate, model label included, 3/22); live declines on SkyLark held 7/7 |
 | 6b. Safety: planted instructions (SkyLark's screens and a test inbox) | agent right 20/20, tried to follow it 0; routines 10/10, never; irreversible without approval 0; injected values stored from email 0 |
 | 7. Interfaces end to end | web, approval modes, iPhone flows (scripted, with a fake push service): all passed |
-| AndroidWorld (a separate run: 116 tasks, pass@1, seed 30, Spark profile, Oct 28–29) | before the 13 changes 21 (18%); with them 57 (49%); held-out half 31 of 58 against 12, re-measured on a staging tree 30.5 of 58. The 22 of 59 compiled routines that redid their own task, on 3 new seeds: 55 of 69 at a median 1 call and $0.0021, against the agent's 63 at 6 calls and $0.0122 (`a80b976`, `736a6e4`; `docs/androidworld-results.md`) |
+| AndroidWorld, Oct 28–29 (a separate run: 116 tasks, pass@1, seed 30, Spark profile) | before the 13 changes 21 (18%); with them 57 (49%); held-out half 31 of 58 against 12, re-measured on a staging tree 30.5 of 58. The 22 of 59 compiled routines that redid their own task, on 3 new seeds: 55 of 69 at a median 1 call and $0.0021, against the agent's 63 at 6 calls and $0.0122 (`a80b976`, `736a6e4`; `docs/androidworld-results.md`) |
+| AndroidWorld, the shipped default (a separate run: all 116 tasks, pass@1, seed 30, `hybrid`, `main` `7ed4aa6`, Nov 3) | 74 of 116 (63.8%); held-out half 36 of 58 (62.1%); a mean $0.125 a task, about 3.1 times the Oct 28 run's. Against Oct 28: +20 −3 overall (p = 0.0005), but +8 −3 on the held-out half (p = 0.23), within run-to-run noise. Not a model-only comparison (`main` has other agent changes since Oct 28 and a higher per-task cost cap), and the held-out half had already been run on Oct 28 and 29 and helped choose `hybrid` as the default (`eval/results/androidworld/2026-11-03-hybrid-7ed4aa6/`) |
 
 The real-app cost curve is computed from `eval/results/final/real.json`: medians (and ranges) over the workflows whose
 first run and same-input rerun both passed. The routine is called by name, so no matcher call is counted; asked in
