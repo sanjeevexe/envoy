@@ -459,12 +459,12 @@
   },
   "muse": {
    "dry_run": {
-    "source": "sqlite3 -readonly ~/Desktop/Envoy/data/api/envoy.db (the live :8700), read Nov 2, 2026 by the coordinator; every task Muse started in the Nov 2 rehearsal",
+    "source": "sqlite3 -readonly data/api/envoy.db (the live :8700 API), read Nov 2, 2026; every task Muse started in the Nov 2 rehearsal",
     "what": "A dry run of the cross-post climax from Muse for Mac (11:38-12:20 ET). Muse copied a test clip on the Mac into Envoy's outbox, called send_to_phone (an offer the user approved on the iPhone), then called the shared routine tools by name, one per turn. Each task first asked 'use Envoy's phone?' on the iPhone. The user declined every final post button, so nothing was posted.",
     "notes": [
      "seconds runs from Muse's call to the task's end, so it includes the phone ask and the time the final approval waited on the iPhone; each post reached its final button about 1 min 15 s after the phone OK.",
-     "task-1102-114842-f1dc: its 'use Envoy's phone?' ask went unanswered for 15 min, and the task moved to an emulator, which had no Instagram and opened the Play Store. Fixed in main 947bf44 (backlog #63): no answer now ends the task as not done.",
-     "task-1102-121512-0b47: the Story retry on the Pixel. The night-before Story was still live, so the routine's first tap opened its poll results, and the agent fallback hit its step limit (backlog #64)."
+     "task-1102-114842-f1dc: its 'use Envoy's phone?' ask went unanswered for 15 min, and the task moved to an emulator, which had no Instagram and opened the Play Store. Fixed the same day (main 947bf44): no answer now ends the task as not done.",
+     "task-1102-121512-0b47: the Story retry on the Pixel. The night-before Story was still live, so the routine's first tap opened its poll results, and the agent fallback hit its step limit (a known gap: the Story routine fails while a Story is already live)."
     ],
     "tasks": [
      {
@@ -879,12 +879,16 @@
     ],
     "real": [
      {
-      "post": "Instagram Reel + song",
       "task": "task-1102-005928-4182",
-      "routine": "instagram_reel_song v2",
       "live": true,
       "calls": 0,
-      "result": "live, \"JVKE · golden hour\", caption \"Posted by Envoy · test\";"
+      "inputs": {
+       "caption": "Posted by Envoy · test",
+       "song_artist": "JVKE",
+       "song_title": "golden hour"
+      },
+      "created": "2026-11-02 00:59:28",
+      "note": ""
      }
     ],
     "repair": {
@@ -960,12 +964,16 @@
     ],
     "real": [
      {
-      "post": "Instagram Story + poll",
       "task": "task-1102-013244-b7c8",
-      "routine": "instagram_story_poll v3",
       "live": true,
       "calls": 0,
-      "result": "live, poll \"Did Envoy post this?\" Yes / No;"
+      "inputs": {
+       "poll_option_1": "Yes",
+       "poll_option_2": "No",
+       "poll_question": "Did Envoy post this?"
+      },
+      "created": "2026-11-02 01:32:44",
+      "note": ""
      }
     ],
     "repair": null,
@@ -1028,20 +1036,28 @@
     ],
     "real": [
      {
-      "post": "TikTok + sound",
       "task": "task-1102-014139-7f5e",
-      "routine": "tiktok_post_sound v2",
       "live": false,
       "calls": 7,
-      "result": "posted without the sound (\"Original sound by envoy\"), 7 vision calls."
+      "inputs": {
+       "sound_title": "golden hour",
+       "sound_artist": "JVKE",
+       "caption": "Posted by Envoy · test"
+      },
+      "created": "2026-11-02 01:41:39",
+      "note": "published without its song: the routine tapped the sound's row, but the sound never reached the editor; then the run failed its done-check"
      },
      {
-      "post": "TikTok re-post",
       "task": "task-1102-023044-d081",
-      "routine": "tiktok_post_sound v3",
       "live": true,
       "calls": 3,
-      "result": "live, \"Posted by Envoy · test 2\", ♫ golden hour - JVKE;"
+      "inputs": {
+       "sound_title": "golden hour",
+       "sound_artist": "JVKE",
+       "caption": "Posted by Envoy · test 2"
+      },
+      "created": "2026-11-02 02:30:44",
+      "note": ""
      }
     ],
     "repair": null,
@@ -1112,12 +1128,16 @@
     ],
     "real": [
      {
-      "post": "YouTube Short + sound",
       "task": "task-1102-015325-106a",
-      "routine": "youtube_short_sound v2",
       "live": true,
-      "calls": null,
-      "result": "live, public."
+      "calls": 0,
+      "inputs": {
+       "sound_title": "golden hour",
+       "sound_artist": "JVKE",
+       "short_title": "Posted by Envoy · test"
+      },
+      "created": "2026-11-02 01:53:25",
+      "note": ""
      }
     ],
     "repair": {
@@ -1145,9 +1165,9 @@
   "runs_src": {
    "path": "eval/results/showcase/runs/runs.md"
   },
-  "report_src": {
-   "path": "prompts/showcase-report.md",
-   "note": "The real posts"
+  "live_src": {
+   "path": "eval/results/showcase/live-2026-11-02/task-rows.json",
+   "note": "the real posts' task rows"
   },
   "doc_src": {
    "path": "docs/demo-showcase.md"

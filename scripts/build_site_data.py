@@ -889,12 +889,21 @@ HAND_EDITS = {
 }
 
 
+LIVE = REPO / "eval/results/showcase/live-2026-11-02/task-rows.json"  # the real posts' task rows, read read-only from the live API
+# The one real post that wasn't right, in the site's words (from the file's notes). Keyed by task id; the build stops if the id
+# isn't in the file. Every other row with status "done" went live (docs/demo-showcase.md, "The real posts").
+LIVE_NOTES = {
+    "task-1102-014139-7f5e": "published without its song: the routine tapped the sound's row, but the sound never reached the "
+                             "editor; then the run failed its done-check",
+}
+
+
 def showcase() -> dict:
     """The four app-only routines: how each was made, its rehearsals (runs.md, rows copied), an automatic repair and its trial
-    where there is one, and what happened when it posted for real (showcase's report, the result cell's first sentence)."""
+    where there is one, and its real posts (the live API's task rows)."""
     runs = md_tables((REPO / "eval/results/showcase/runs/runs.md").read_text())[0]
-    report = (REPO / "prompts/showcase-report.md").read_text()
-    posts = next(t for t in md_tables(report) if t and {"Post", "Task", "Routine", "Result"} <= set(t[0]))
+    live = json.loads(LIVE.read_text())["tasks"]
+    assert set(LIVE_NOTES) <= {t["id"] for t in live}, set(LIVE_NOTES) - {t["id"] for t in live}
     muse = {t["id"]: t for t in json.loads((REPO / "eval/results/showcase/muse-2026-11-02/task-rows.json").read_text())["tasks"]}
     cards = []
     for name, (app, what) in SHOWCASE.items():
@@ -920,15 +929,11 @@ def showcase() -> dict:
                 and (any(m in r["approvals"] for m in marks) or "(routine " not in r["approvals"])]
         row = lambda r: {"when": r["when"], "ok": r["ok"] == "yes", "asked": r["asked at"], "to_ask": r["start → post asked"],
                          "calls": int(r["calls"]), "usd": float(r["$"])}
-        real = []
-        for p in posts:
-            if f"`{name}`" in p["Routine"]:
-                first_sentence = re.split(r"(?<=[.;])\s", plain(p["Result"]), maxsplit=1)[0]
-                calls = re.search(r"(\d+) (?:vision )?calls", plain(p["Result"]))
-                real.append({"post": plain(p["Post"]), "task": plain(p["Task"]).split(" ")[0], "routine": plain(p["Routine"]),
-                             "live": plain(p["Result"]).startswith("live"), "calls": int(calls.group(1)) if calls else None,
-                             # test accounts' handles stay off the site
-                             "result": re.sub(r" as @?[\w.-]+(?=[,;])", "", first_sentence)})
+        # Envoy's own model calls; "seconds" isn't shown: it includes the waits for both yeses on the iPhone.
+        real = [{"task": t["id"], "live": t["status"] == "done", "calls": t["model_calls"], "inputs": t["inputs"],
+                 "created": t["created"], "note": LIVE_NOTES.get(t["id"], "")}
+                for t in live if t["routine"] == name]
+        assert all(r["live"] or r["note"] for r in real), name
         repair = None
         if active.get("source_task"):
             trial = active.get("trial") or {}
@@ -945,7 +950,7 @@ def showcase() -> dict:
             "src": src(f"data/routines/{name}/index.json"), "yaml_src": src(f"data/routines/{name}/v{ix['active']}.yaml"),
         })
     return {"cards": cards, "runs_src": src("eval/results/showcase/runs/runs.md"),
-            "report_src": src("prompts/showcase-report.md", "The real posts"), "doc_src": src("docs/demo-showcase.md"),
+            "live_src": src(rel(LIVE), "the real posts' task rows"), "doc_src": src("docs/demo-showcase.md"),
             "p3_src": src("eval/results/showcase/p3.md")}
 
 

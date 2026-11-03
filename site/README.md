@@ -62,7 +62,8 @@ page):
 - `eval/results/real_rerun_2026-10-31/README.md` (the "Stage" table; one column per pass, a fix branch's column left out);
 - `docs/androidworld-results.md` ("**Headline.**", "**Held-out half:**", the "**Routines.**" bullets);
 - `docs/phase-6-results.md` ("SAM then grounding N of N; grounding alone N of N");
-- `prompts/showcase-report.md` (the real-posts table: Post, Task, Routine, Result);
+- `eval/results/showcase/live-2026-11-02/task-rows.json` (with the build's note for the songless TikTok, keyed by task id;
+  every other row must be "done");
 - `prompts/phone-watch-report.md` (the Stage 2 table with "Landed on the Pixel");
 - `eval/results/showcase/runs/runs.md`; `eval/results/showcase/muse-2026-11-02/task-rows.json` (with the build's own notes for
   the two Story tasks, keyed by task id);
@@ -91,7 +92,7 @@ Section numbers are positions on the page (the page numbers itself); "E:" is a g
 | Section | What it shows | Source |
 | --- | --- | --- |
 | 1. The idea | The one-liner and the plain line | The words are in `site/index.html` |
-| 1 | One post, start to finish; the four posts and which went live | `prompts/showcase-report.md` › "The real posts" (each Result cell's first sentence and its call count; test accounts' handles taken out) |
+| 1 | One post, start to finish; the four posts and which went live | `eval/results/showcase/live-2026-11-02/task-rows.json` (the live API's rows for the five real posts, read read-only); "live" for each done row, per `docs/demo-showcase.md` |
 | 1 | Learns: first run vs routine, medians over the real-app workflows | `eval/results/final/real.json` (see section 5) |
 | 1 | Watches: 1.57 s | `prompts/phone-watch-report.md` (see section 4) |
 | 2. Learns | Starbucks first run: each step's frame, tapped element, reason, time, calls and dollars so far; the run's total; its compile | `eval/results/real-apps/loop-a/runs.jsonl`; `site/data/recordings/starbucks-first.json` (imported from the run's trace, its API copy and its model-cost log) |
@@ -105,7 +106,7 @@ Section numbers are positions on the page (the page numbers itself); "E:" is a g
 | 2 | Meta's models by job; SAM then grounding 52 of 52, grounding alone 49 | `docs/phase-6-results.md` (Results, the fresh sample) |
 | 3. Acts | Each posting routine: version, steps, inputs, how it was made (hand edits), automatic repair | `data/routines/<name>/index.json` and `v<active>.yaml`; `HAND_EDITS` in the build, checked against them |
 | 3 | Rehearsals: reached the final button, Envoy's calls, seconds to the final button | `eval/results/showcase/runs/runs.md` (rows after the compiled base, per its `compiled_from.compiled_at`, naming the base or active version) |
-| 3 | The live posts | `prompts/showcase-report.md` › "The real posts" |
+| 3 | The real posts: what each carried (its inputs), Envoy's model calls, and the songless TikTok in the build's words (`LIVE_NOTES`, from the file's notes) | `eval/results/showcase/live-2026-11-02/task-rows.json` |
 | 3 | The Spark agent's four-post dry run: request, calls, asks, answers, its calls and dollars; two captures | `agents/meta-agent/evidence/2026-11-01/crosspost/` (event log, README, PNGs) |
 | 3 | Muse's Nov 2 dry run: five tasks, how each ended, calls, time | `eval/results/showcase/muse-2026-11-02/task-rows.json` (the live API's rows, read read-only); the Story notes are the build's words for the file's notes |
 | 3 | Muse for Mac's outbox; "there's no accept or approve tool" | `eval/results/muse-link/` (Oct 29) |

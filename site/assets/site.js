@@ -101,7 +101,7 @@
           const ok = c.real.find((p) => p.live), bad = c.real.find((p) => !p.live);
           return `<li><span class="chip ${ok ? "sage" : "apricot"}">${ok ? "live" : "not live"}</span> <b>${esc(c.what)}</b>${bad && ok ? `<span class="small"> · the re-post; the first had no sound</span>` : ""}</li>`;
         }).join("")}</ul>
-        <p class="small" style="margin:10px 0 0">All ${live.length} live posts on Nov 2 went the same way: two yeses on the iPhone each, on test accounts. They were started one at a time from the Spark agent, an agent on Meta's models, on the person's word. Muse ran the same four as a dry run, every final button declined (${sec("acts")}). ${srcA(S.report_src, "the posts")}</p>
+        <p class="small" style="margin:10px 0 0">All ${live.length} live posts on Nov 2 went the same way: two yeses on the iPhone each, on test accounts. They were started one at a time from the Spark agent, an agent on Meta's models, on the person's word. Muse ran the same four as a dry run, every final button declined (${sec("acts")}). ${srcA(S.live_src, "task rows")}</p>
       </div>`;
     $("#pillars").innerHTML = `
       <div class="pillars three">
@@ -296,6 +296,9 @@
   }
 
   // ---- 3: acts ----
+  // What a real post carried, from its task's inputs.
+  const postText = (name, i) => name === "instagram_story_poll" ? `poll “${i.poll_question}” ${i.poll_option_1} / ${i.poll_option_2}`
+    : `“${i.song_title || i.sound_title}” by ${i.song_artist || i.sound_artist}, ${i.short_title ? "title" : "caption"} “${i.caption || i.short_title}”`;
   const POST = { instagram_reel_song: "Reel", instagram_story_poll: "Story", tiktok_post_sound: "TikTok", youtube_short_sound: "Short" };
   function renderActs() {
     const S = D.showcase, A = D.agents, X = A.crosspost, MD = A.muse.dry_run, K = D.keys, R = K.readonly, SF = D.safety;
@@ -311,7 +314,7 @@
           <div><dt>Made</dt><dd><b>${c.hand ? "Compiled from one agent run" : "Learned from one agent run"}</b><span>${c.hand ? esc(c.hand.replace(/^./, (x) => x.toUpperCase())) : "No hand edits"}${c.repair && c.repair.passed ? ". Its checks were repaired automatically after its live post" : ""}.</span></dd></div>
           <div class="rp"><dt>Rehearsals</dt><dd><b>${ok.length} of ${R.length} reached ${esc(asked)}</b><span>${range(R.map((r) => r.calls), String)} model calls in Envoy's replay · ${range(R.map((r) => Math.round(parseFloat(r.to_ask))), String)} s to the final button</span></dd></div>
         </dl>
-        <ul class="plain real">${c.real.map((p) => `<li><span class="chip ${p.live ? "sage" : "apricot"}">${p.live ? "live" : "flawed"}</span> <span class="small">${esc(p.result.replace(/^live,?\s*/, "").replace(/[;.]$/, "")) || "public"}</span></li>`).join("")}</ul>
+        <ul class="plain real">${c.real.map((p) => `<li><span class="chip ${p.live ? "sage" : "apricot"}">${p.live ? "live" : "flawed"}</span> <span class="small">${esc(p.live ? postText(c.name, p.inputs) : p.note)} · ${p.calls} model calls in Envoy</span></li>`).join("")}</ul>
         <div class="label-rec" style="margin-top:8px">${srcA(c.yaml_src, `v${c.version}.yaml`)} ${srcA(c.src, "versions")}</div>
       </article>`;
     };
@@ -321,7 +324,7 @@
       ${head("acts", "Acts", "It acts in the apps, and waits for a yes on the iPhone.",
         "Some things exist only inside an app. Muse can post plain Instagram content itself, but library songs and poll stickers exist only in the apps, and Muse has no connector for TikTok. So Envoy learned these four posts as routines on its phone and shares each with agents as a tool. Every final button waits for the person's yes on their iPhone. No agent can approve: there is no tool for it.")}
       <div class="posts four">${S.cards.map(card).join("")}</div>
-      <p class="small" style="margin:10px 4px 0">Rehearsals ran on a test copy of Envoy on Nov 1–2 and were declined at the final button, every one. A rehearsal declines the final tap, so the compiler adds it back as the routine's last step, marked irreversible. The live posts went out on Nov 2 on test accounts. ${srcA(S.runs_src, "rehearsals")} ${srcA(S.report_src, "the posts")} ${srcA(S.doc_src, "demo-showcase.md")}</p>
+      <p class="small" style="margin:10px 4px 0">Rehearsals ran on a test copy of Envoy on Nov 1–2 and were declined at the final button, every one. A rehearsal declines the final tap, so the compiler adds it back as the routine's last step, marked irreversible. The live posts went out on Nov 2 on test accounts. ${srcA(S.runs_src, "rehearsals")} ${srcA(S.live_src, "the posts' task rows")} ${srcA(S.doc_src, "demo-showcase.md")}</p>
       <div class="callout" style="margin-top:14px"><b>As recorded, flaws included.</b> The first live TikTok went out without its sound. The agent had noticed the sound hadn't attached and redone it, but the compiler dropped that correction as a back-track, and the step's check never looked at the editor. The compiler now keeps such a correction, the recompiled routine checks that the editor names the sound, and the re-post had it. Checks like these show the routine reached the right screens, not that the clip, sound or caption were right; the Story routine fails while a Story is already live.</div>
       <div class="agent-row">
         <div class="card" style="padding:20px">
@@ -487,7 +490,7 @@
       [`Starbucks replays (${L.loop.replay.calls.n}) and first runs (${L.loop.first.calls.n})`, "Oct 30", "Android emulator", `${L.loop.replay.commits} code versions`, "", "", srcA(F.total.src, "runs.jsonl")],
       ["The Spark agent's four-post dry run (section 3)", date(X.started_et + ":00"), "Envoy's phone (Pixel 5)", `main <code>${esc(D.agents.crosspost_commit)}</code>, a test copy`, `${esc(X.model)} (the agent)`, "", srcA(D.agents.crosspost_src, "event log")],
       ["Muse's dry run (section 3)", "Nov 2, 11:41–12:20 ET", "Envoy's phone", "the live Envoy", "", MD.tasks.map((t) => `<code>${esc(t.id)}</code>`).join(" "), srcA(D.agents.muse.dry_run_src, "task-rows.json")],
-      ["The live posts (sections 1, 3)", "Nov 2, 01:00–02:31 ET", "Envoy's phone", "the live Envoy", "", allPosts().map((p) => `<code>${esc(p.task)}</code>`).join(" "), srcA(D.showcase.report_src, "showcase-report.md")],
+      ["The live posts (sections 1, 3)", "Nov 2, 01:00–02:31 ET", "Envoy's phone", "the live Envoy", "", allPosts().map((p) => `<code>${esc(p.task)}</code>`).join(" "), srcA(D.showcase.live_src, "task-rows.json")],
       ["The posting routines' rehearsals", "Nov 1–2", "Envoy's phone", "a test copy", "", "", srcA(D.showcase.runs_src, "runs.md")],
       [`Real apps, ${RA.final ? "the final evaluation" : "the evaluation's real-app suite"} (${D.real.rows.length} workflows; section 5)`, day(RA.date), "Android emulator", `<code>${esc(RA.commit)}</code>${RA.runs > 1 ? `, rows from ${RA.runs} runs` : ""}`, `${RA.profile}, ${RA.tier} tier`, `run ${esc(RA.run_id)}`, srcA(D.real.md_src, "real.md")],
       ...D.real.passes.filter((p) => p.commit !== RA.commit).map((p) => [`Real apps, ${passLabel(p)}${/pass$/.test(passLabel(p)) ? "" : " pass"}`, p.date, "Android emulator", `<code>${esc(p.commit)}</code>`, p.profile, "", srcA(D.real.passes_src, "README")]),

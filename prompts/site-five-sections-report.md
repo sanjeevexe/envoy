@@ -63,9 +63,15 @@ New: `?open=1` opens every evidence group, and `#ev-<group>` opens one.
 
 ## Still open
 
-1. **The live posts' raw rows.** I asked the coordinator for the five task rows. Until they're committed (for example `eval/results/showcase/live-2026-11-02/task-rows.json`), section 1's "one post" and section 3's live results cite `prompts/showcase-report.md`.
-2. **Section 1's "one live run" has no capture.** A take from V2 or V3 (Muse → Envoy's phone → iPhone yes → live post) would go there. I asked whether one will be committed.
-3. **The C5 cold start.** If its evidence is committed (first run, compile, share, a second input someone else picked), section 2 can show it in place of, or next to, the Oct 30 Starbucks run.
+1. **The live posts' raw rows: done.** The coordinator's five task rows are now
+   `eval/results/showcase/live-2026-11-02/task-rows.json`. Sections 1 and 3 and the evidence read them: what each post
+   carried, Envoy's model calls, and the songless TikTok in plain words. The build no longer reads
+   `prompts/showcase-report.md`. The Muse rows were replaced with the coordinator's cleaned copy (only its source line and
+   notes changed; the site uses its own wording for the two Story notes).
+2. **Section 1's capture:** planned. The coordinator will send a still or frames from tonight's take once the user is happy
+   to publish it. Until then, section 1 shows the live rows plus the dry-run timeline, labeled.
+3. **The C5 cold start** is now an Uber fare quote on the Pixel, filmed Tue 14:00–16:15. Its evidence comes Tue afternoon
+   at the earliest, with card digits removed. Section 2 keeps the Oct 30 Starbucks run until then.
 4. **The watch timings** still cite `prompts/phone-watch-report.md`. There's no raw file in `eval/results/` for them.
 5. **Rebuild** after WS-E merges and again after the eval's report (Nov 3, about 22:00). Both are a plain build plus a commit of `site/data/`.
 
