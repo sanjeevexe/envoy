@@ -647,3 +647,19 @@ def test_mcp_run_task_asks_the_lead_for_a_cross_app_question():
     assert "parts" not in out
     out, jobs, started, calls = run(message, RuntimeError("timeout"))
     assert jobs == ["lead"] and calls == [] and len(started) == 1
+
+
+def test_stop_closes_a_task_whose_run_already_ended_needing_you():
+    """Nov 2: a Story run hit the agent's step limit and ended needing you. With no run behind it, Stop used to do
+    nothing and the card stayed under Needs you; now Stop closes it. A finished task stays as it was."""
+    async def scenario():
+        r, _, _ = make()
+        t = r.store.create("Post the newest gallery video to an Instagram story with a poll sticker", "mcp")
+        r.store.update(t["id"], status="needs_you", detail="the agent could not finish (step_limit); asking the user")
+        done = r.store.create("q", "chat")
+        r.store.update(done["id"], status="done")
+        return r, t["id"], done["id"]
+    r, tid, did = asyncio.run(scenario())
+    assert r.stop(tid) and r.store.get(tid)["status"] == "stopped" and r.store.get(tid)["waiting_for"] is None
+    assert not r.stop(did) and r.store.get(did)["status"] == "done"
+    assert not r.stop("task-no-such-id")

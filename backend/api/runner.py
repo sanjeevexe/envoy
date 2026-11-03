@@ -55,7 +55,7 @@ from api.install import Installer, app_named_in
 from api.preflight import check as preflight_check
 from api.routing import (BLOCKS_EMULATOR, Choice, app_label, app_names as blocking_app_names, asks_for_phone, blocks_emulator, choose,
                          needs_real_phone, strip_phone_words)
-from api.store import API_DIR, TaskStore
+from api.store import ACTIVE as ACTIVE_STATUSES, API_DIR, TaskStore
 from testapps.skylark import SkyLark
 
 SHOTS = API_DIR / "shots"
@@ -204,6 +204,12 @@ class TaskRunner:
         job = self.jobs.get(tid)
         if job and not job.done():
             job.cancel()
+            return True
+        # A task still listed as active with no run behind it (Nov 2: the agent hit its step limit and the task ended
+        # needing you, and Stop did nothing): Stop closes it.
+        task = self.store.get(tid)
+        if task and task.get("status") in ACTIVE_STATUSES:
+            self._set(tid, status="stopped", detail="you stopped it", waiting_for=None)
             return True
         return False
 
