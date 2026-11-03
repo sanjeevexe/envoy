@@ -1515,12 +1515,21 @@ def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str 
             return None  # the row isn't on screen: the output is missing, and the ladder takes over
     elif loc is not None and (loc.text or loc.desc or loc.text_has or (loc.resource_id and ids_shown)):
         # An ID-only locator means nothing on a screen that shows no IDs: fall back to the label (`near`).
-        el = locators.locate(loc, screen, threshold=locators.RELAXED, margin=0.0, role="check").element
+        if loc.in_list:
+            # Read in a list row (the row that names an input): the first row, in reading order, that shows the input as a
+            # part of its own, else the first that shows it. Never an overlay that shows it too (Nov 2, YouTube Music's mini
+            # player, while the results reloaded), nor a later row whose words happen to be closer to the input's.
+            rows = sorted((e for e in locators.all_matching(loc, screen, threshold=locators.RELAXED, role="check") if e.in_list),
+                          key=lambda e: (e.bounds[1], e.bounds[0]))
+            whole = [e for e in rows if len(ps := parts_of(e.full_label or e.label)) > 1 and any(norm(p) == norm(loc.text_has or "") for p in ps)]
+            el = (whole or rows or [None])[0]
+        else:
+            el = locators.locate(loc, screen, threshold=locators.RELAXED, margin=0.0, role="check").element
         if el is not None and loc.text_has and norm(el.label) == norm(loc.text_has):
             # The element shows only the input itself (the search box, a "pizza" chip): it holds no output. Take the
             # first element of that type that shows the input among other text (a result row).
-            el = next((e for e in screen.numbered if (not loc.kind or e.kind == loc.kind) and norm(e.label) != norm(loc.text_has)
-                       and contains_value(e.label, loc.text_has)), None)
+            el = next((e for e in screen.numbered if (not loc.kind or e.kind == loc.kind) and (e.in_list or not loc.in_list)
+                       and norm(e.label) != norm(loc.text_has) and contains_value(e.label, loc.text_has)), None)
     near = norm(spec.near) if spec.near else ""
     if el is None and spec.card and loc is None and near:
         el = _after_card(spec.card, near, screen)
@@ -1544,8 +1553,8 @@ def _extract(spec: Extract, screen: ScreenState, inputs: dict[str, str]) -> str 
         # No ID shown and no element starting with the label: the element of that type that shows one of the routine's
         # inputs (a status line containing the flight number that was searched, with "Gate A7" inside it). Never one that
         # shows only the input (the search box, while results load).
-        shown = [e for e in screen.numbered if e.kind == loc.kind and any(v and contains_value(e.label, v) and norm(e.label) != norm(v)
-                                                                          for v in inputs.values())]
+        shown = [e for e in screen.numbered if e.kind == loc.kind and (e.in_list or not loc.in_list)
+                 and any(v and contains_value(e.label, v) and norm(e.label) != norm(v) for v in inputs.values())]
         el = shown[0] if len(shown) == 1 else None
     if el is None:
         return None

@@ -888,7 +888,12 @@ def _extract_for(name: str, near: str, example: str, final: ScreenState, example
         # did I fly to Seattle?", answered off the list): read in the row that shows {{input}}. By its ID (trip_row_<code>,
         # which every row shares) the routine would read whichever row comes first, and with no action choosing the row the
         # input was dropped as unused.
-        loc = Locator(text_has="{{" + row_input + "}}", kind=el.kind)
+        # Read only in a list row, and with the row's own ID where it has one (the type then adds nothing): another element
+        # that shows the input is never the answer (Nov 2, YouTube Music: while the results reloaded, the mini player's
+        # "Bohemian Rhapsody · Royal Philharmonic Orchestra" was read as the first song's artist).
+        rid = _glob_data_segments(_glob_id(short_id(el.resource_id), examples, data_values)) if usable_id(el.resource_id) else None
+        loc = (Locator(resource_id=rid, text_has="{{" + row_input + "}}", in_list=True) if rid and usable_id(rid)
+               else Locator(text_has="{{" + row_input + "}}", kind=el.kind, in_list=True))
     elif usable_id(el.resource_id):
         loc = Locator(resource_id=_glob_id(short_id(el.resource_id), examples, data_values), kind=el.kind)
         card = _card_of(el, final, examples, near, data_values)
@@ -1227,9 +1232,25 @@ async def compile_trace(trace_dir: Path, *, adapter: ModelAdapter | None = None,
             post = chk.derive_post(s.before, s.after, s.kind, s.target, s.typed, examples, submit=s.submit)
         pre = [g for c in pre if (g := chk_generalize(c, examples, data_values)) is not None and not _before_typed(g, i, typed_at)]
         post = [g for c in post if (g := chk_generalize(c, examples, data_values)) is not None and not _before_typed(g, i, typed_at)]
+        after = s.after
+        if s.kind != "scroll_until" and (settled := _next_screen(trace_dir, records, s, steps[i] if i < len(steps) else None)) is not None:
+            # The after-screen caught mid-change (Nov 2, YouTube Music: 45 ms after the Songs filter's tap, the chips and results
+            # were gone while the list reloaded, so the only after-check was "chip_cloud absent"; it held on the reload frame and
+            # on a results page that never showed the chips, and the answer was read from the mini player or an unfiltered
+            # row). When none of its checks that something is shown still holds where the run went on, the step's arrival
+            # isn't checked at all: its checks come from that screen instead.
+            stale = [c for c in post if c.kind in _SCREEN_CHECKS and not chk.evaluate(c, settled, examples).passed]
+            shown = [c for c in post if c.kind in ("element_present", "text_visible") and c not in stale]
+            again = [g for c in chk.derive_post(s.before, settled, s.kind, s.target, s.typed, examples, submit=s.submit)
+                     if (g := chk_generalize(c, examples, data_values)) is not None and not _before_typed(g, i, typed_at)]
+            if stale and not shown and any(c.kind in ("element_present", "text_visible") for c in again) \
+                    and all(chk.evaluate(c, settled, examples).passed for c in again):
+                report.warnings.append(f"step {i}: after-check {', '.join(c.describe() for c in stale)} held only while the screen "
+                                       f"changed; after-checks from the screen it settled on")
+                post, after = again, settled
         # A check on something only passing through the screen holds by chance (a scroll indicator, a label gone a moment later).
         nxt_before = steps[i].before if i < len(steps) else None
-        derived = [(pre, s.before, None)] + ([(post, s.after, nxt_before)] if s.kind != "scroll_until" else [])
+        derived = [(pre, s.before, None)] + ([(post, after, nxt_before)] if s.kind != "scroll_until" else [])
         for checks, screen, nxt in derived:
             for c in list(checks):
                 if (why := _passing(c, screen, nxt, examples)) is not None:
@@ -1472,6 +1493,22 @@ def _add_witnesses(out_steps: list[Step], steps: list[TStep], examples: dict[str
 
 def chk_generalize(c: Check, examples: dict[str, str], data_values: list[str]) -> Check | None:
     return generalize_check(c, examples, data_values)
+
+
+_SCREEN_CHECKS = ("element_present", "element_absent", "text_visible", "text_absent")
+
+
+def _next_screen(trace_dir: Path, records: list[dict], s: TStep, nxt_step: TStep | None) -> ScreenState | None:
+    """The screen the run went on from after trace step `s`, when nothing happened in between: the next kept step's
+    before-screen, or the done step's, if it is the same app's."""
+    nxt = next((r for r in records if r.get("kind") == "action" and r.get("step") == s.n + 1 and r.get("tree_before")), None)
+    if nxt is None:
+        return None
+    done = (nxt.get("decision") or {}).get("action", {}).get("type") == "done"
+    if not (done and nxt_step is None) and not (nxt_step is not None and nxt_step.n == s.n + 1):
+        return None
+    screen = load_tree(trace_dir / nxt["tree_before"])
+    return screen if screen.package == s.after.package else None
 
 
 def _done_screen(trace_dir: Path, records: list[dict]) -> ScreenState | None:
