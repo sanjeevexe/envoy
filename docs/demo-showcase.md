@@ -3,8 +3,8 @@
 The video's climax. One clip is posted from Envoy's phone (the Pixel 5) to Instagram, TikTok and YouTube Shorts. Each
 post uses a feature Muse's connectors can't reach: library music on a Reel, a Story poll, a library sound on TikTok and
 on a Short (TikTok's web support for sounds is unclear). Muse had no connector for TikTok or YouTube when we checked
-(Nov 1). Each post is a routine Envoy learned from one agent run (TikTok's and YouTube's with small hand edits), which an
-agent calls as a tool of its own (`docs/technical-design.md`, "Routines as agent tools").
+(Nov 1). Each post is a routine Envoy learned from one agent run (TikTok's and YouTube's with small hand edits), which
+an agent calls as a tool of its own (`docs/technical-design.md`, "Routines as agent tools").
 
 **Where it stands (Nov 2):**
 - **Real posts, night of Nov 1.** All four app-only features have each gone live once. The Reel with a library song,
@@ -40,27 +40,31 @@ and recompiled with the compiler fix (main ffde928); `prompts/showcase-report.md
 Since Nov 2 the library runs v3 of all four. The Reel's and the Short's v3 are automatic repairs Envoy made during the
 live posts (after-checks rewritten); both passed their trial in Muse's dry run at 0 calls in Envoy's
 replay. Each `data/routines/<name>/index.json`
-lists every version and every hand edit.
+lists every version and every hand edit. Since Nov 3 the Reel runs v4,
+a hand edit after the posting batch: the caption edit ends with Instagram's OK instead of Back, and the caption is typed
+again if it's empty before Share (`eval/results/showcase-batch/RESULTS.md`, "After the batch").
 
 The song for all three: JVKE's "golden hour" (in all three libraries). Which features work on the test accounts is
 pre-check P3 (`eval/results/showcase/p3.md`).
 
-**The real posts (Nov 2, about 01:00–02:31 ET).** meta-agent started each one on :8700 on the author's word, and the author
-approved each in Envoy on the iPhone:
+**The real posts (Nov 2, about 01:00–02:31 ET).** meta-agent started each one on :8700 on the author's word, and the
+author approved each in Envoy on the iPhone:
 - Reel (`instagram_reel_song` v2): live, with the song, 0 model calls in Envoy's replay.
 - Story with a poll (`instagram_story_poll` v3): live, 0 model calls in Envoy's replay.
-- TikTok (`tiktok_post_sound` v2): went up **without the sound** ("Original sound by envoy"). The routine never
-  attaches it. In its source run the agent's first try left the editor at "Add sound". The agent noticed and redid it
-  (steps 19–24), but the compiler dropped that correction as a "back-track". The step's after-checks look only for the label
-  "Music", never the sound's name, and the rehearsals stopped at Post, whose screen doesn't show the sound. That post was left up.
-- TikTok re-post (`tiktok_post_sound` v3, built with the compiler fix, v2's hand edits re-applied, and rehearsed 3/3): live as envoy, captioned
-  "Posted by Envoy · test 2", with **♫ golden hour - JVKE**. 3 calls, 53 s, the editor's sound checked before Next.
+- TikTok (`tiktok_post_sound` v2): went up **without the sound** ("Original sound by envoy"). The routine never attaches
+  it. In its source run the agent's first try left the editor at "Add sound". The agent noticed and redid it (steps
+  19–24), but the compiler dropped that correction as a "back-track". The step's after-checks look only for the label
+  "Music", never the sound's name, and the rehearsals stopped at Post, whose screen doesn't show the sound. That post
+  was left up.
+- TikTok re-post (`tiktok_post_sound` v3, built with the compiler fix, v2's hand edits re-applied, and rehearsed 3/3):
+  live as envoy, captioned "Posted by Envoy · test 2", with **♫ golden hour - JVKE**. 3 calls, 53 s, the editor's sound
+  checked before Next.
 - YouTube Short (`youtube_short_sound` v2): live and public. The details screen showed YouTube's music notice and
   #goldenhour, so the sound was on before Upload Short.
 
-A routine learned from a declined post kept a done-check ("the caption is visible") that no run had seen after the
-post. TikTok's ended a real post "failed". `compile --final-from-declined` drops it now (`tiktok_post_sound` v3 has none; the library's `youtube_short_sound` v3 is
-an automatic repair that still has it).
+A routine learned from a declined post kept a done-check ("the caption is visible") that no run had seen after the post.
+TikTok's ended a real post "failed". `compile --final-from-declined` drops it now (`tiktok_post_sound` v3 has none; the
+library's `youtube_short_sound` v3 is an automatic repair that still has it).
 
 ## Before a take
 - The newest video in the gallery is the clip: every routine picks the gallery's first slot. Push it last.
@@ -74,11 +78,11 @@ an automatic repair that still has it).
 
 ## Kept honest on purpose
 
-- **Test accounts only:** Instagram `envoy3955`, plus the TikTok and YouTube test accounts the author made and signed in to
-  on the Pixel. Envoy and the coding sessions that built it never sign in, create accounts or type passwords.
+- **Test accounts only:** Instagram `envoy3955`, plus the TikTok and YouTube test accounts the author made and signed in
+  to on the Pixel. Envoy and the coding sessions that built it never sign in, create accounts or type passwords.
 - **Every post stops at the app's final button** (Instagram's Share, or Next with id `share_button`; TikTok's Post;
-  YouTube's Upload Short) and waits for the person's OK. Rehearsals decline it. A real post happens only after the author
-  says yes in chat.
+  YouTube's Upload Short) and waits for the person's OK. Rehearsals decline it. A real post happens only after the
+  author says yes in chat.
 - **No likes, follows, comments or DMs.** `eval/run_showcase.py tap` refuses them, and any publishing button, whatever
   flag it's given.
 - **Wording:** "no connector" for TikTok and YouTube, never "Muse can't". Muse posts plain Instagram content itself, so
@@ -102,7 +106,8 @@ Sources: the apps' and APIs' own help pages, collected Nov 1 (the research notes
 
 ## How it's run
 
-Claim the Pixel first with the shared device lock (a local script outside the repo: `devices.sh claim pixel5 showcase 60 "<purpose>"`) and keep it upright.
+Claim the Pixel first with the shared device lock (a local script outside the repo: `devices.sh claim pixel5 showcase 60
+"<purpose>"`) and keep it upright.
 
 **Stage 0 (P3), by hand, with no model calls:** `uv run --project backend python eval/run_showcase.py …`
 
@@ -121,8 +126,8 @@ Screenshots stay outside the repo until checked (`keep <stem>`), and none is tak
 - `add-routine <yaml>` puts it in the library.
 - `replay --routine <name> --input caption="…"` replays it once, declined at the post (each routine got three).
 
-Calls, seconds and dollars go to `eval/results/showcase/runs/`. Before every run the copy is set to "always ask" for
-the three apps: a request typed in Envoy's own app counts as approval for a button it names (`policy/approval_rules.py`).
+Calls, seconds and dollars go to `eval/results/showcase/runs/`. Before every run the copy is set to "always ask" for the
+three apps: a request typed in Envoy's own app counts as approval for a button it names (`policy/approval_rules.py`).
 
 **Cross-posting from the Mac:** a sidecar `{"app": "TikTok" | "YouTube", "caption": "…"}` next to a clip in the outbox
 gets the same kind of offer as Instagram ("Put clip.mp4 on Envoy's phone and post it to TikTok?"): a plain post with

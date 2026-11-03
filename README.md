@@ -129,12 +129,43 @@ called back as a tool.
   agent stopped after 25 steps; Amazon's new input read no price; Play's rating routine, given another app's name, ended
   with the Play Store not in front.
 
-**The showcase batch** was declared before the final evaluation's tag: the four posting workflows (Reel, TikTok, Short,
-Story), 10 attempts each on the tagged code, every attempt kept and every final button declined
-([`eval/results/showcase-batch/PROTOCOL.md`](eval/results/showcase-batch/PROTOCOL.md)). It runs after the evaluation.
+### The posting batch
 
-<!-- SLOT reliability batch (run on the tag after the eval): its table goes here, reported narrowly (this version, these
-workflows, these inputs, every attempt). -->
+Declared before the tag ([`PROTOCOL.md`](eval/results/showcase-batch/PROTOCOL.md)) and run once on it, Nov 3, on
+Envoy's phone: the four posting routines (all v3), 10 attempts each, from a cold start, an open app or a saved draft,
+with the test accounts. Every final button that was asked was declined, so nothing was posted. These numbers are for
+this version, these workflows and inputs, one phone and one set of accounts, one afternoon
+([`RESULTS.md`](eval/results/showcase-batch/RESULTS.md); every attempt in `attempts.md`).
+
+| Workflow | Reached the final button | …with every outcome check yes | Time to the final ask, median (range) |
+| --- | --- | --- | --- |
+| Reel with a library song | 7/10 | 7 | 59.6 s (55.6–111.8) |
+| TikTok with a library sound | 10/10 | 10 | 60.6 s (57.6–69.7) |
+| Short with a library sound | 5/10 | 4 | 41.5 s (40.4–116.9) |
+| Story with a poll | 10/10 | 10 (the poll checked by eye) | 32.5 s (31.4–41.5) |
+
+- **The outcome checks stopped 5 runs before the final button,** each missing something the post would have gone out
+  without. Two Reels had lost their caption: closing the keyboard with Back sometimes cancelled Instagram's caption
+  edit. Three Shorts never showed their song on the editor: YouTube's sound search didn't list "Flowers", "Watermelon
+  Sugar" or "Levitating" as the routine looks for them.
+- **The Short works with "golden hour" and not yet with other songs.** Of its runs with another song, three stopped at
+  the song check and one was finished by the agent, so its sound couldn't be checked. The cause was found after the
+  batch, by a search-only check on Envoy's phone, and wasn't measured in it: in YouTube's sound search, Enter doesn't
+  search; only tapping its suggestion does. v3 skips that tap, so the list stays on YouTube's trending sounds, where
+  "golden hour" was and the other songs weren't. A fix was tried and not merged: it needs a tie-break in the locator
+  matcher ([`yt-song-fix-writeup.md`](eval/results/showcase-batch/yt-song-fix-writeup.md)). Two more Shorts, started
+  from a saved draft, stopped at YouTube's "Continue your draft video?" prompt.
+- **The Reel's third miss:** Instagram's music search didn't show "Levitating", which the library check had found
+  earlier, and the agent stopped at its step limit.
+- **Model calls in Envoy's replay:** 95 over the 40 attempts, $1.0342. TikTok reads its drawn sound list by vision on
+  every run, by design.
+
+**After the batch, not part of it:** `instagram_reel_song` v4 (merged in `0d28e5a`) ends the caption edit with
+Instagram's OK instead of Back, and types the caption again if it's empty before Share. On Envoy's phone, on a test
+copy with every Share declined, 5 of 5 Reels from a cold start reached Share with clip, song and caption checked, at 0
+model calls in Envoy's replay; TikTok 1 of 1, as a check that nothing else broke
+([`index.json`](data/routines/instagram_reel_song/index.json), v4). The Short's song pick and draft prompt weren't
+fixed.
 
 ### SkyLark (our test app)
 
@@ -185,6 +216,10 @@ by side:
   ([`runs.md`](eval/results/showcase/runs/runs.md), Nov 2 19:27–20:35;
   [`test_outcome_checks.py`](backend/tests/test_outcome_checks.py)). The checks cover the posting routines' song,
   caption and clip, nothing else, and live in code, not in the routines.
+  In the posting batch they stopped 5 runs before the final button.
+- **The Short only works with some songs.** In the posting batch it reached Upload Short 5 times in 10: songs other
+  than "golden hour" stopped at the song check or needed the agent, and runs from a saved draft stopped at YouTube's
+  draft prompt. Neither is fixed.
 - **The Story routine fails while a Story is already live:** its first tap opens the live Story's poll results.
 - **Envoy doesn't make a routine on its own:** the person presses "Make it a routine" on a finished task, or teaches it,
   and the compiler can refuse a run. The button is new (Nov 2) and was measured once, after the evaluation: it saved 8
@@ -305,6 +340,8 @@ and compile on Muse Wonder 1.0 and the rest on Muse Spark 1.3; the Spark profile
 | The cloud phone, 48/48 | SkyLark routines compiled on the Mac, replayed on an emulator on Google Cloud, Oct 29 | — | [`docs/cloud.md`](docs/cloud.md) |
 | `cross_post` on Envoy's phone | one request, four parts, a test copy of the branch, every final button declined, Nov 2 20:57–21:37 | the branch's code, merged in `79dfb8d` | [`cross-post-pixel.json`](eval/results/agent-door/cross-post-pixel.json) and the `cross-post-pixel-*.json` beside it |
 | Outcome checks on Envoy's phone | the wrong-clip stop and the clean Reel, TikTok and Short runs, Nov 2 19:27–20:35, every final button declined | merged in `373eb86` | [`runs.md`](eval/results/showcase/runs/runs.md) and each run's JSON |
+| The posting batch | 40 attempts, the four posting routines at v3, 10 each, cold / open / draft, Envoy's phone, Nov 3 12:27–14:55 ET, every final button declined; declared before the tag | `eval-final` = `cf78fa0` (the API copy); driver commits in each record | [`RESULTS.md`](eval/results/showcase-batch/RESULTS.md), `attempts.md`, `attempts/` |
+| `instagram_reel_song` v4, after the batch | 5 cold Reels to Share and 1 TikTok, a test copy at the fix, every final button declined, Nov 3 14:57–15:10 ET | merged in `0d28e5a` | `data/routines/instagram_reel_song/index.json` (v4's `verification`), [`test_reel_caption_fix.py`](backend/tests/test_reel_caption_fix.py) |
 
 Earlier development passes stay in `eval/results/` (for real apps: `real_pass_2026-10-28/`, `real_rerun_2026-10-29/`,
 `real_rerun_2026-10-31/`, `real_rerun_2026-11-02_wsd-baseline/` and `real-apps/loop-a/`) with their own commits and

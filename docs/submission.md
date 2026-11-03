@@ -145,12 +145,13 @@ or by Envoy, are listed in `data/routines/<name>/index.json`.
 
 | Routine (active version) | By hand | Since |
 | --- | --- | --- |
-| `instagram_reel_song` (v3) | none to its steps | recompiled once after a compiler fix, from the same run; after the live post, Envoy repaired two after-checks on its own, and that version passed its trial in Muse's dry run (0 model calls in Envoy's replay, declined at Share) |
+| `instagram_reel_song` (v4) | v4 (Nov 3, after the posting batch): the caption edit ends with Instagram's OK instead of Back, and the caption is typed again if it's empty before Share; no hand edits before that | recompiled once after a compiler fix, from the same run; after the live post, Envoy repaired two after-checks on its own (v3), and that version passed its trial in Muse's dry run (0 model calls in Envoy's replay, declined at Share). v4 is the hand edit |
 | `instagram_story_poll` (v3) | none | recompiled twice after compiler fixes, from the same run |
 | `tiktok_post_sound` (v3) | a 3 s wait before tapping TikTok's drawn sound list; the app's name corrected (the source run predates TikTok in Envoy's app list); the launch step's before-checks dropped | recompiled after compiler fixes, from the same run, with those edits re-applied: it now checks that the editor names the sound |
 | `youtube_short_sound` (v3) | one before-check dropped (a "Captions unavailable" label from a video playing when the run was recorded) | recompiled once after a compiler fix, from the same run; after the live post, Envoy repaired one after-check on its own, and that version passed its trial in Muse's dry run (0 model calls in Envoy's replay, declined at Upload Short) |
 
-The outcome checks added on Nov 2 (song, caption, clip) live in code and change none of these routines.
+The outcome checks added on Nov 2 (song, caption, clip) live in code and change none of these routines. The posting
+batch (in [Results](#results)) ran every routine at v3, before the Reel's v4.
 
 ## Public GitHub repository
 
@@ -192,8 +193,9 @@ controls when the accessibility tree is missing.**
   replay). The two tries at the poll Story failed: an unanswered phone ask, since fixed, and the live-Story gap in
   Limits. Nothing was posted (`eval/results/showcase/muse-2026-11-02/task-rows.json`). On Nov 1, Muse saw a tool newly
   added to a test connector without reconnecting (`docs/muse-link.md` › "Nov 1–2").
-- **Wonder turns a run into an API.** Each showcase routine was compiled by Muse Wonder from one agent run; Instagram's
-  two needed no hand edits to their steps ([above](#hand-edits-stated-exactly)). Shared with agents, each becomes a
+- **Wonder turns a run into an API.** Each showcase routine was compiled by Muse Wonder from one agent run; the Story
+  needed no hand edits, and the Reel none until a caption fix after the posting batch
+  ([above](#hand-edits-stated-exactly)). Shared with agents, each becomes a
   typed MCP tool. On the default `hybrid` profile Wonder also plans and takes the agent's steps on a first run.
   Compiling is paid once: on the same 13 real-app workflows, a median $0.0455 to compile against $0.0376 for the first
   run itself; after that, Envoy's replay used 0 model calls (the final evaluation).
@@ -320,12 +322,41 @@ pressed on each finished task; each saved routine was shared and called back as 
   agent stopped after 25 steps; Amazon's new input read no price; Play's rating routine, given another app's name, ended
   with the Play Store not in front.
 
-**The showcase batch** was declared before the final evaluation's tag: the four posting workflows (Reel, TikTok, Short,
-Story), 10 attempts each on the tagged code, every attempt kept and every final button declined
-(`eval/results/showcase-batch/PROTOCOL.md`). It runs after the evaluation.
+**The posting batch.** Declared before the tag (`eval/results/showcase-batch/PROTOCOL.md`) and run once on it, Nov 3, on
+Envoy's phone: the four posting routines (all v3), 10 attempts each, from a cold start, an open app or a saved draft,
+with the test accounts. Every final button that was asked was declined, so nothing was posted. These numbers are for
+this version, these workflows and inputs, one phone and one set of accounts, one afternoon
+(`eval/results/showcase-batch/RESULTS.md`; every attempt in `attempts.md`).
 
-<!-- SLOT reliability batch: its results, reported narrowly: this version, these workflows, these inputs, every attempt
-and every intervention. -->
+| Workflow | Reached the final button | …with every outcome check yes | Time to the final ask, median (range) |
+| --- | --- | --- | --- |
+| Reel with a library song | 7/10 | 7 | 59.6 s (55.6–111.8) |
+| TikTok with a library sound | 10/10 | 10 | 60.6 s (57.6–69.7) |
+| Short with a library sound | 5/10 | 4 | 41.5 s (40.4–116.9) |
+| Story with a poll | 10/10 | 10 (the poll checked by eye) | 32.5 s (31.4–41.5) |
+
+- **The outcome checks stopped 5 runs before the final button,** each missing something the post would have gone out
+  without. Two Reels had lost their caption: closing the keyboard with Back sometimes cancelled Instagram's caption
+  edit. Three Shorts never showed their song on the editor: YouTube's sound search didn't list "Flowers", "Watermelon
+  Sugar" or "Levitating" as the routine looks for them.
+- **The Short works with "golden hour" and not yet with other songs.** Of its runs with another song, three stopped at
+  the song check and one was finished by the agent, so its sound couldn't be checked. The cause was found after the
+  batch, by a search-only check on Envoy's phone, and wasn't measured in it: in YouTube's sound search, Enter doesn't
+  search; only tapping its suggestion does. v3 skips that tap, so the list stays on YouTube's trending sounds, where
+  "golden hour" was and the other songs weren't. A fix was tried and not merged: it needs a tie-break in the locator
+  matcher (`eval/results/showcase-batch/yt-song-fix-writeup.md`). Two more Shorts, started from a saved draft, stopped
+  at YouTube's "Continue your draft video?" prompt.
+- **The Reel's third miss:** Instagram's music search didn't show "Levitating", which the library check had found
+  earlier, and the agent stopped at its step limit.
+- **Model calls in Envoy's replay:** 95 over the 40 attempts, $1.0342. TikTok reads its drawn sound list by vision on
+  every run, by design.
+
+**After the batch, not part of it:** `instagram_reel_song` v4 (merged in `0d28e5a`) ends the caption edit with
+Instagram's OK instead of Back, and types the caption again if it's empty before Share. On Envoy's phone, on a test
+copy with every Share declined, 5 of 5 Reels from a cold start reached Share with clip, song and caption checked, at 0
+model calls in Envoy's replay; TikTok 1 of 1, as a check that nothing else broke
+(`data/routines/instagram_reel_song/index.json`, v4). The Short's song pick and draft prompt weren't
+fixed.
 
 <!-- SLOT cold start: the routine that didn't exist, its first run and compile (timed), the share, Muse listing the new
 tool, a second input someone else picked, and the checked answer. -->
@@ -369,6 +400,10 @@ Measured outside the evaluation (these stay as they are):
   first step, and the Reel, TikTok and Short then reached their final buttons with all three checked
   (`eval/results/showcase/runs/runs.md`, Nov 2 19:27–20:35; `backend/tests/test_outcome_checks.py`). The checks cover
   the posting routines' song, caption and clip, nothing else, and live in code, not in the routines.
+  In the posting batch they stopped 5 runs before the final button.
+- **The Short only works with some songs.** In the posting batch it reached Upload Short 5 times in 10: songs other
+  than "golden hour" stopped at the song check or needed the agent, and runs from a saved draft stopped at YouTube's
+  draft prompt. Neither is fixed.
 - **The Story routine fails while a Story is already live:** its first tap opens the live Story's poll results.
 - **Envoy doesn't make a routine on its own:** the person presses "Make it a routine" on a finished task, or teaches it,
   and the compiler can refuse a run. The button is new (Nov 2) and was measured once, after the evaluation: it saved 8
