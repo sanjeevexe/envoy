@@ -13,7 +13,7 @@ An agent such as Muse (Meta's assistant) already has the web, its connectors and
 | Pillar | What Envoy does | Built in |
 | --- | --- | --- |
 | **Acts** | Runs real Android apps the way a person would: on **Envoy's phone** (a Pixel 5 on Android 13, over USB), on emulators on the Mac, or on a cloud phone. Anything irreversible stops for the person's yes on their iPhone. | Device layer, Agent runtime, Safety |
-| **Learns** | Compiles a successful run into a **routine**: a program that checks every screen, repairs itself when the app changes, and keeps versions. The next run takes seconds and few or no model calls. Teach mode learns a routine from the person doing the task once. A routine the person shares with agents becomes an MCP **tool of its own**, by name. | App routines |
+| **Learns** | Compiles a verified run into a **routine** when the person taps Make it a routine on the task (or a script or the evaluation compiles it): a program that checks every screen, repairs itself when the app changes, and keeps versions. The next run takes seconds and few or no model calls. Teach mode learns a routine from the person doing the task once. A routine the person shares with agents becomes an MCP **tool of its own**, by name. | App routines |
 | **Watches** | **Notification triggers** (a notification on Envoy's phone starts a task or reaches the agent), time triggers, change alerts, habits, and `phone_updates`, which tells an agent what happened on the phone. | Scheduled and event-triggered tasks |
 
 Underneath all three is a **memory** of what Envoy has seen in apps, in email and in shared screenshots. Every fact keeps its source.
@@ -357,6 +357,7 @@ Built Oct 31 (`api/teach.py`). Instead of an agent run, the person does the task
 - **What's recorded:** each tap, typing and scroll, with the screen before and after. A tap is the smallest clickable element under it.
 - **What isn't:** sign-in and secure screens pause the recording and store nothing, and password fields are never recorded. Cancelling, "it didn't work" or 20 idle minutes delete it all.
 - **Compiling:** the recording compiles like an agent's trace. Envoy then replays it once, strictly, on the same phone, before saving it, marked "taught".
+- **Make it a routine** (Nov 2, `learn_task`): a task the agent finished takes the same path from the compile on. The person taps it on the task's card; Envoy compiles that run, replays it once strictly on the phone it ran on (no repair, no agent; irreversible steps still ask), and saves it as "learned from task <id>", not shared with agents. A run that can't be compiled, or a replay that fails, says why and saves nothing (`backend/tests/test_teach.py`).
 
 On Oct 31, a scripted demonstrator taught Google Calculator "what is 1234 times 5678?". The routine replayed 3 of 3 with 0 model calls in about 6 s, and got a new input (4321 × 8765) right; the agent took about 40 s and $0.08 for the same question. Teaching Wikipedia failed: the answer was prose with nothing to anchor a read on (`eval/results/teach_trials_2026-11-01/README.md`).
 

@@ -38,9 +38,9 @@ into a routine that replays for a fraction of a cent when its checks pass, and *
 
 **Muse has a computer. Envoy gives it a phone.**
 
-Envoy gives a machine a new capability: it lets AI agents like Meta's Muse work real Android apps, can compile a
-verified run into a checked routine they then call by name, and tells them what happens on the phone, while the
-irreversible steps an agent starts wait for the person's yes on their iPhone.
+Envoy gives a machine a new capability: it lets AI agents like Meta's Muse work real Android apps, turns a verified run,
+at one tap on its task's card, into a checked routine they then call by name, and tells them what happens on the phone,
+while the irreversible steps an agent starts wait for the person's yes on their iPhone.
 
 Envoy is the phone layer AI agents call. Muse, Meta's assistant, is the front door: it adds Envoy as a custom MCP
 connector. Any MCP agent can do the same; the Spark agent (a small agent built on Meta's Muse Spark) and Claude Code have
@@ -50,16 +50,18 @@ connector. Any MCP agent can do the same; the Spark agent (a small agent built o
   phone" (a Pixel 5) or an emulator, and agents can choose which; a copy on Google Cloud was tested too. The showcase uses features Muse's connectors can't reach: one clip from the Mac became an Instagram Reel with a library song, an Instagram
   Story with a poll sticker, a YouTube Short with a sound, and a TikTok with a sound. On the night of Nov 1 all four
   went live on test accounts, each one started by the Spark agent and approved on the iPhone (`docs/demo-showcase.md`).
-- **Learns.** A verified run can be compiled into a **routine** (today a script or the evaluation compiles agent runs,
-  and teach mode compiles inside the app; the compiler can still refuse a run): Muse Wonder writes a small program with
-  inputs, checks before and after its steps, and targets found by what they are rather than where they were. When the
-  app changes, the routine repairs the broken step (the agent finishes if that fails) and keeps the fix as a new
-  version, on trial until it passes. In the live posts (one each), the Reel, the Story and the Short replayed with 0
-  model calls in Envoy's replay and the TikTok with 3; the agent that calls Envoy pays
-  for its own turns (the Spark agent used 11 model calls, $0.044, to drive a three-post run:
-  `agents/meta-agent/evidence/2026-11-01/crosspost/README.md`). On 12 read-only real-app workflows (Nov 2, `hybrid`,
-  standard tier), Envoy's replay used 0 model calls at a median 5.40 s, against the agent's first run at a median 5 calls
-  and 19.36 s ([Results](#results)).
+- **Learns.** A verified run becomes a **routine** when the person taps **Make it a routine** on its task's card: Envoy
+  compiles it, replays it once strictly on the same phone and saves it with sharing off (`backend/api/teach.py`,
+  `learn_task`; `backend/tests/test_teach.py`). A script or the evaluation can compile a run too, teach mode compiles a
+  person's demonstration, and the compiler can still refuse a run. Muse Wonder writes a small program with inputs,
+  checks before and after its steps, and targets found by what they are rather than where they were. When the app
+  changes, the routine repairs the broken step (the agent finishes if that fails) and keeps the fix as a new version, on
+  trial until it passes. In the live posts (one each), the Reel, the Story and the Short replayed with 0 model calls in
+  Envoy's replay and the TikTok with 3; the agent that calls Envoy pays for its own turns (in a declined dry run on a test
+  copy, Nov 1, the Spark agent used 11 model calls, $0.044, to drive three posts:
+  `agents/meta-agent/evidence/2026-11-01/crosspost/README.md`). On the 12 of 18 read-only real-app workflows whose first
+  run and same-input rerun both passed (Nov 2, `hybrid`, standard tier), Envoy's replay used 0 model calls at a median 5.40 s,
+  against the agent's first run at a median 5 calls and 19.36 s ([Results](#results)).
 - **Learned tasks become tools.** A routine the person shares becomes a tool of its own for every agent allowed to run
   tasks, such as `instagram_reel_song(song_title, song_artist, caption)`, with no restart
   (`eval/results/agent-door/tools-before.json`, `tools-after.json`). Teach mode learns a routine from one demonstration
@@ -179,7 +181,7 @@ controls when the accessibility tree is missing.**
 - **Wonder turns a run into an API.** Each showcase routine was compiled by Muse Wonder from one agent run; Instagram's
   two needed no hand edits to their steps ([above](#hand-edits-stated-exactly)). Shared with agents, each becomes a typed
   MCP tool. On the default `hybrid` profile Wonder also plans and takes the agent's steps on a first run. Compiling is
-  paid once: on 12 real-app workflows, a median $0.0415 to compile against $0.0368 for the first run itself; after that,
+  paid once: on the same 12 real-app workflows, a median $0.0415 to compile against $0.0368 for the first run itself; after that,
   Envoy's replay used 0 model calls (measured Nov 2).
 - **An agent on Meta's own API calls Envoy.** The Spark agent runs on Muse Spark 1.3 through the Responses API, reaches
   Envoy only over MCP with its own key, and started the real posts. Asked to approve, it said only the person can
