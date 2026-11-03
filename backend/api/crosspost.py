@@ -213,7 +213,8 @@ class CrossPost:
                 self.runner.stop(current)
                 self._ended_part(pid, current, said="stopped with the cross-post")
             self.queues.pop(pid, None)
-            self._set(pid, status="stopped", detail="stopped by you", waiting_for=None)
+            self._set(pid, status="stopped", detail="stopped by you", result=self._result(self.view(pid)), waiting_for=None,
+                      **self._spend(pid))
             self.bus.publish("task_finished", task_id=pid, duration_s=round(time.time() - t0, 1))
             raise
         except Exception as e:  # noqa: BLE001 - a failure is reported, never crashes the server
@@ -252,7 +253,6 @@ class CrossPost:
 
     def _finish(self, pid: str, t0: float) -> None:
         rows = self.view(pid)
-        kids = [self.store.get(p["task_id"]) or {} for p in self.parts(pid)]
         said = {r["status"] for r in rows}
         unknown = [r["label"] for r in rows if r["status"] == "unknown"]
         undone = [r for r in rows if r["status"] in RETRYABLE]
@@ -267,9 +267,12 @@ class CrossPost:
             detail = "Not posted: " + "; ".join(f"{r['label']} ({r['status']})" for r in undone)
         if undone:
             detail = (detail + "; " if detail else "") + "a retry runs only " + _join([r["label"] for r in undone])
-        self._set(pid, status=status, result=self._result(rows), detail=detail, waiting_for=None,
-                  model_calls=sum(k.get("model_calls") or 0 for k in kids), cost_usd=round(sum(k.get("cost_usd") or 0 for k in kids), 5))
+        self._set(pid, status=status, result=self._result(rows), detail=detail, waiting_for=None, **self._spend(pid))
         self.bus.publish("task_finished", task_id=pid, duration_s=round(time.time() - t0, 1))
+
+    def _spend(self, pid: str) -> dict[str, Any]:
+        kids = [self.store.get(p["task_id"]) or {} for p in self.parts(pid)]
+        return {"model_calls": sum(k.get("model_calls") or 0 for k in kids), "cost_usd": round(sum(k.get("cost_usd") or 0 for k in kids), 5)}
 
     # ---- what it shows -------------------------------------------------------------------------------
 
@@ -300,7 +303,8 @@ class CrossPost:
             if tries:
                 tid = tries[-1]["task_id"]
                 task = self.store.get(tid) or {}
-                status = outcome(task, self.store.approvals(task_id=tid), self.ended(tid), ends.get(tid))
+                # a part_end is the cross-post done with that part, even while a stopped part's run is still unwinding
+                status = outcome(task, self.store.approvals(task_id=tid), tid in ends or self.ended(tid), ends.get(tid))
             if post["routine"] in queued and status in (*RETRYABLE, "queued"):
                 status = "queued"
             text = TEXT[status]

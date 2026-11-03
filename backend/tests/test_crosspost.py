@@ -393,12 +393,15 @@ def test_stopping_the_cross_post_stops_its_part_and_runs_nothing_more():
             await r.jobs[pid]
         await asyncio.gather(r.jobs[part], return_exceptions=True)
         stopped = (r.store.get(pid)["status"], r.store.get(part)["status"])
+        result = r.store.get(pid)["result"]
         approver.decide(asked["id"], True, by="test")  # a yes after the stop reaches nothing: the part is gone
         await asyncio.sleep(0.1)
-        return r, cp, pid, stopped
-    r, cp, pid, stopped = asyncio.run(scenario())
+        return r, cp, pid, stopped, result
+    r, cp, pid, stopped, result = asyncio.run(scenario())
     assert stopped == ("stopped", "stopped")
     assert statuses(cp, pid) == {"Instagram": "failed", "TikTok": "queued"} and POSTS == {}  # not "unknown": no tap ran
+    # The parent's own line says how each ended, not how it looked at the stop (Pixel, Nov 2: "YouTube: waiting for the user")
+    assert result == "Instagram: not posted (failed) · TikTok: queued"
 
 
 def test_outcomes_hold_after_a_restart_from_the_store_alone():
