@@ -135,6 +135,33 @@ section 2's lede, and the limit, which now reads that Envoy doesn't make a routi
 or teaches it, and the compiler can refuse a run), and that the routines on the page were compiled before the button, by the
 evaluation or a script. The rebuild's only data change is the test count (765 test functions).
 
+## The final evaluation (Nov 3)
+
+Fast-forwarded to main `a5761ef` (this branch was already merged there) and rebuilt: `numbers.json` reads final: true,
+10 of 10 suites on `eval-final`. What changed on the page:
+- **No development wording is left.** The banner reads "Final numbers"; no "final numbers after Nov 3" chips; the real-app
+  table ends with the final row (13/18, 14/18, 13/18 (14), 7/11), and the Oct 28 row is gone (its file is now the final).
+  The cost curve switched to the final pass: 13 of 18 workflows; the agent's first run 5 calls, 19.59 s, $0.0376; Envoy's
+  replay 0 calls, 4.88 s; compiling once $0.0455. The README's final row still says TBD, so the build's check skips it.
+- **Profiles follow the data:** the final suites ran on hybrid, so the lines that said "the SkyLark suite ran on the Spark
+  profile" and "(Spark profile)" for the planted-text runs now read each suite's profile; the targets group and the real-app
+  chart's caption ("the final evaluation") too.
+- **The learn path** (`eval/results/learn-agent-path/`), a new card in section 2: over MCP on the tag, Envoy answered 14 of
+  18 (4 through a routine already in its library); "Make it a routine" saved 8 of 18 (compile median $0.0433, replay median
+  4.77 s, no model); new inputs 3 of 3, 2 with no model call. The 10 not saved, each with its reason (6 ran a library
+  routine, which the button doesn't take; 1 refused by the compiler; 1 failed its checking replay; 1 Target bot check; 1
+  timed out on a harness fault), and the empty-library pass outside the headline (5 of 6 saved, new inputs 3 of 5).
+- **Outcome checks (C2):** the posting cards say what was checked before the final button (song or sound shown, caption or
+  title held, clip), and the flaws note says the checks exist since Nov 2 and that a planted wrong clip stopped TikTok
+  before it started. The rehearsal tallies count "reached the final button" from where each run asked, leave the planted
+  test out, and now include Nov 2's evening rehearsals: 17 of 19 since each last compile, 45 of 55 across all versions.
+- **A build fix:** the final reports' run lines say "on `eval-final`", which the old pattern didn't read (the safety and
+  memory runs came back empty and section 3 stopped rendering). The pattern now reads a tag name.
+- **Checked:** no console errors (a fresh tab), no horizontal overflow at 375 px, all 35 images load; the six images the eval
+  regenerated (four charts, the SkyLark repair's before and after) looked at full size: test-app data and charts only. A
+  sweep of `site/` for handles, emails, tokens, phone or card numbers and the tailnet name found nothing; the only name is
+  SkyLark's test persona.
+
 ## Still open
 
 1. **The live posts' raw rows: done.** The coordinator's five task rows are now

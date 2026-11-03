@@ -709,12 +709,58 @@ def _stages(md: str) -> dict:
     return out
 
 
+LEARN = REPO / "eval/results/learn-agent-path"
+
+
+def _learn_pass(rows: list[dict]) -> dict:
+    """One learn-path pass: the agent path, "Make it a routine", and the saved routines' calls (retry rows left out, as the
+    headline leaves them out)."""
+    rows = [r for r in rows if not r["row"].endswith("-retry")]
+    agent = [r["agent"] for r in rows]
+    learn = [r.get("learn") or {} for r in rows]
+    saved = [l for l in learn if l.get("outcome") == "saved"]
+    new = [r["call"] for r in rows if (r.get("call") or {}).get("case") == "new input"]
+    by_library = [r for r in rows if r["agent"].get("library_routine")]
+    return {"n": len(rows), "right": sum(1 for a in agent if a.get("outcome") == "right"),
+            "right_by_library": sum(1 for r in by_library if r["agent"].get("outcome") == "right"),
+            "by_library": len(by_library), "saved": len(saved),
+            "not_compilable": sum(1 for l in learn if l.get("outcome") == "not compilable"),
+            "replay_failed": sum(1 for l in learn if l.get("outcome") == "replay failed"),
+            "blocked": sum(1 for l in learn if l.get("outcome") == "blocked"),
+            "not_learnable_other": sum(1 for r, l in zip(rows, learn) if l.get("outcome") == "not learnable"
+                                       and not r["agent"].get("library_routine")),
+            "new": len(new), "new_right": sum(1 for c in new if str(c.get("outcome", "")).startswith("right")),
+            "new_zero": sum(1 for c in new if c.get("outcome") == "right, 0 calls"),
+            "replay_s": _spread([l["replay_seconds"] for l in saved]) if saved else None,
+            "compile_usd": _spread([l["compile_cost_usd"] for l in saved]) if saved else None}
+
+
+def learn_path() -> dict:
+    """The agent path and "Make it a routine" on the eval-final tag (eval/results/learn-agent-path): counted from
+    results.json, and checked against the headline its README publishes, so the two can't drift."""
+    main = json.loads((LEARN / "results.json").read_text())
+    sup = json.loads((LEARN / "supplementary.json").read_text())
+    readme = (LEARN / "README.md").read_text()
+    m, x = _learn_pass(main["rows"]), _learn_pass(sup["rows"])
+    heads = re.findall(r"\*\*Agent path:\*\* right (\d+)/(\d+)\.\s*- \*\*Learn rate:\*\* saved (\d+)/(\d+)\.\s*"
+                       r"- \*\*New input:\*\* right (\d+)/(\d+) saved routines with a second input; (\d+) of them with 0 model calls",
+                       readme)
+    for (ar, an, sv, sn, nr, nn, nz), p in zip(heads, (m, x)):
+        got = (p["right"], p["n"], p["saved"], p["n"], p["new_right"], p["new"], p["new_zero"])
+        assert tuple(map(int, (ar, an, sv, sn, nr, nn, nz))) == got, ("learn-agent-path README vs results.json", got)
+    assert len(heads) == 2, "learn-agent-path README: two headlines expected"
+    return {"main": m, "supplementary": x, "started": main["started"], "phone": main["phone"],
+            "tag": main["versions"]["eval_final"][:7],
+            "src": src("eval/results/learn-agent-path/README.md"), "results_src": src("eval/results/learn-agent-path/results.json"),
+            "protocol_src": src("eval/results/learn-agent-path/PROTOCOL.md")}
+
+
 def memory() -> dict:
     md = (REPO / "eval/results/final/memory.md").read_text()
     t = md_tables(md)
     m = re.search(r"\*\*(\d+) labeled items: (\d+)/(\d+) \((\d+)%\) of attributes right, (\d+) wrong values\.\*\*", md)
     stale = re.search(r"\*\*Stale facts served without a warning: (\d+) of (\d+)\.\*\*", md)
-    run = re.search(r"Run (\d+) on `(\w+)`[^,]*, (\d{4}-\d\d-\d\d)", md)
+    run = re.search(r"Run (\d+) on `([\w-]+)`[^,]*, (\d{4}-\d\d-\d\d)", md)
     ages = [r for r in t[2] if "gate" in r["Question"].lower()] if len(t) > 2 else []
     return {
         "demo": json.loads((REC / "memory.json").read_text()),
@@ -736,8 +782,8 @@ def safety() -> dict:
     st = md_tables(s_md)
     caught = re.search(r"\*\*The policy gate caught (\d+) of (\d+)\*\* \(code signals alone: (\d+); the step model's own label: (\d+)\)", s_md)
     rev = re.search(r"Flagged by the code signals: (\d+) of (\d+); by the gate \(model included\): (\d+) of (\d+)", s_md)
-    s_run = re.search(r"Run (\d+) on `(\w+)`[^,]*, (\d{4}-\d\d-\d\d)", s_md)
-    i_run = re.search(r"Run (\d+) on `(\w+)`[^,]*, (\d{4}-\d\d-\d\d)", i_md)
+    s_run = re.search(r"Run (\d+) on `([\w-]+)`[^,]*, (\d{4}-\d\d-\d\d)", s_md)
+    i_run = re.search(r"Run (\d+) on `([\w-]+)`[^,]*, (\d{4}-\d\d-\d\d)", i_md)
     agent = re.search(r"Agent: (\d+) of (\d+) runs still did the task right[^;]*; it asked to do something else in (\d+)", i_md)
     routines = re.search(r"Routines: (\d+) of (\d+)", i_md)
     planted = dict(re.findall(r"- \*\*(\w+)\*\*: “(.+?)”", i_md))
@@ -1003,11 +1049,19 @@ def showcase() -> dict:
     assert set(LIVE_NOTES) <= {t["id"] for t in live}, set(LIVE_NOTES) - {t["id"] for t in live}
     muse = {t["id"]: t for t in json.loads((REPO / "eval/results/showcase/muse-2026-11-02/task-rows.json").read_text())["tasks"]}
     # A rehearsal the agent finished: its run file's model jobs include a plan or a step (vision reads and repairs don't).
-    agent_runs = set()
+    # A planted test of the outcome checks (a wrong clip) stops before starting, as it should; it isn't a rehearsal.
+    agent_runs, planted, checked = set(), {}, {}
     for f in sorted((REPO / "eval/results/showcase/runs").glob("*-replay-*.json")):
         j = json.loads(f.read_text())
         if {"plan", "step"} & set((j.get("spent") or {}).get("jobs") or {}):
             agent_runs.add(j["time"])
+        detail = (j.get("task") or {}).get("detail") or ""
+        if detail.startswith("stopped before starting (outcome check)"):
+            planted[j["time"]] = {"routine": j["request"]["routine"], "detail": detail, "src": src(rel(f))}
+        oc = [c for c in j.get("outcome_checks") or [] if not c.get("problems")]
+        if oc and j.get("asked_at"):
+            checked[j["request"]["routine"]] = {"picks": oc[0].get("picks"), "fields": oc[0].get("fields"),
+                                                "clip": oc[0].get("clip"), "when": j["time"], "src": src(rel(f))}
     cards = []
     for name, (app, what) in SHOWCASE.items():
         lib = REPO / f"data/routines/{name}"
@@ -1029,10 +1083,11 @@ def showcase() -> dict:
         compiled = yaml.safe_load((lib / f"v{base['version']}.yaml").read_text())["compiled_from"]["compiled_at"]
         marks = {f"(routine {name} v{base['version']})", f"(routine {name} v{ix['active']})"}
         reps = [r for r in runs if r["mode"] == "replay" and r["routine"] == name and r["when"] >= compiled.replace(" ", "T")
-                and (any(m in r["approvals"] for m in marks) or "(routine " not in r["approvals"])]
-        row = lambda r: {"when": r["when"], "ok": r["ok"] == "yes", "asked": r["asked at"], "to_ask": r["start → post asked"],
+                and (any(m in r["approvals"] for m in marks) or "(routine " not in r["approvals"]) and r["when"] not in planted]
+        # reached its final button: the run recorded where it asked (a run that stopped earlier says "never asked")
+        row = lambda r: {"when": r["when"], "ok": r["asked at"] != "never asked", "asked": r["asked at"], "to_ask": r["start → post asked"],
                          "calls": int(r["calls"]), "usd": float(r["$"]), "agent": r["when"] in agent_runs}
-        every = [r for r in runs if r["mode"] == "replay" and r["routine"] == name]
+        every = [r for r in runs if r["mode"] == "replay" and r["routine"] == name and r["when"] not in planted]
         # Envoy's own model calls; "seconds" isn't shown: it includes the waits for both yeses on the iPhone.
         real = [{"task": t["id"], "live": t["status"] == "done", "calls": t["model_calls"], "inputs": t["inputs"],
                  "created": t["created"], "note": LIVE_NOTES.get(t["id"], "")}
@@ -1051,7 +1106,8 @@ def showcase() -> dict:
             "name": name, "app": app, "what": what, "version": ix["active"], "base": base["version"], "steps": len(y["steps"]),
             "inputs": list(y["inputs"].keys()), "outputs": y["outputs"], "hand": hand, "compiled": compiled,
             "first": row(first) | {"task": source.group(0)}, "replays": [row(r) for r in reps], "real": real, "repair": repair,
-            "every": {"ok": sum(1 for r in every if r["ok"] == "yes"), "n": len(every)},
+            "every": {"ok": sum(1 for r in every if r["asked at"] != "never asked"), "n": len(every)},
+            "checked": checked.get(name), "planted": [v for v in planted.values() if v["routine"] == name],
             "src": src(f"data/routines/{name}/index.json"), "yaml_src": src(f"data/routines/{name}/v{ix['active']}.yaml"),
         })
     return {"cards": cards, "runs_src": src("eval/results/showcase/runs/runs.md"),
@@ -1119,6 +1175,7 @@ def build() -> dict:
         "learned": learned(),
         "repair": repair(),
         "real": real_apps(),
+        "learn_path": learn_path(),
         "teach": teach(),
         "memory": memory(),
         "safety": safety(),

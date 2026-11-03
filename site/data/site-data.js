@@ -3,9 +3,9 @@ window.ENVOY = {
   "repo_url": "https://github.com/sanjeevexe/envoy/blob/main/"
  },
  "eval": {
-  "on_tag": 0,
+  "on_tag": 10,
   "suites": 10,
-  "final": false,
+  "final": true,
   "src": {
    "path": "eval/results/final/report.md"
   }
@@ -879,6 +879,24 @@ window.ENVOY = {
       "calls": 0,
       "usd": 0.0,
       "agent": false
+     },
+     {
+      "when": "2026-11-02T19:15:18",
+      "ok": false,
+      "asked": "never asked",
+      "to_ask": "– s",
+      "calls": 28,
+      "usd": 0.2789,
+      "agent": true
+     },
+     {
+      "when": "2026-11-02T20:30:54",
+      "ok": true,
+      "asked": "Share",
+      "to_ask": "127.4 s",
+      "calls": 0,
+      "usd": 0.0,
+      "agent": false
      }
     ],
     "real": [
@@ -910,9 +928,23 @@ window.ENVOY = {
      }
     },
     "every": {
-     "ok": 9,
-     "n": 9
+     "ok": 10,
+     "n": 11
     },
+    "checked": {
+     "picks": {
+      "song_title": "shown"
+     },
+     "fields": {
+      "caption": "held"
+     },
+     "clip": "checked",
+     "when": "2026-11-02T20:30:54",
+     "src": {
+      "path": "eval/results/showcase/runs/instagram-replay-20261102-203054.json"
+     }
+    },
+    "planted": [],
     "src": {
      "path": "data/routines/instagram_reel_song/index.json"
     },
@@ -972,6 +1004,15 @@ window.ENVOY = {
       "calls": 0,
       "usd": 0.0,
       "agent": false
+     },
+     {
+      "when": "2026-11-02T19:06:46",
+      "ok": true,
+      "asked": "Your story",
+      "to_ask": "108.9 s",
+      "calls": 15,
+      "usd": 0.1499,
+      "agent": true
      }
     ],
     "real": [
@@ -990,9 +1031,11 @@ window.ENVOY = {
     ],
     "repair": null,
     "every": {
-     "ok": 12,
-     "n": 12
+     "ok": 13,
+     "n": 13
     },
+    "checked": null,
+    "planted": [],
     "src": {
      "path": "data/routines/instagram_story_poll/index.json"
     },
@@ -1052,6 +1095,24 @@ window.ENVOY = {
       "calls": 3,
       "usd": 0.0072,
       "agent": false
+     },
+     {
+      "when": "2026-11-02T19:23:21",
+      "ok": false,
+      "asked": "never asked",
+      "to_ask": "– s",
+      "calls": 33,
+      "usd": 0.2736,
+      "agent": true
+     },
+     {
+      "when": "2026-11-02T20:33:32",
+      "ok": true,
+      "asked": "Post",
+      "to_ask": "66.6 s",
+      "calls": 3,
+      "usd": 0.0073,
+      "agent": false
      }
     ],
     "real": [
@@ -1082,9 +1143,31 @@ window.ENVOY = {
     ],
     "repair": null,
     "every": {
-     "ok": 10,
-     "n": 14
+     "ok": 11,
+     "n": 16
     },
+    "checked": {
+     "picks": {
+      "sound_title": "shown"
+     },
+     "fields": {
+      "caption": "held"
+     },
+     "clip": "checked",
+     "when": "2026-11-02T20:33:32",
+     "src": {
+      "path": "eval/results/showcase/runs/tiktok-replay-20261102-203332.json"
+     }
+    },
+    "planted": [
+     {
+      "routine": "tiktok_post_sound",
+      "detail": "stopped before starting (outcome check): the gallery's newest video is neg-b.mp4 (Movies/Envoy/), not neg-a.mp4, the clip Envoy put on the phone: the routine takes the newest, so it would post the wrong one",
+      "src": {
+       "path": "eval/results/showcase/runs/tiktok-replay-20261102-192737.json"
+      }
+     }
+    ],
     "src": {
      "path": "data/routines/tiktok_post_sound/index.json"
     },
@@ -1153,6 +1236,15 @@ window.ENVOY = {
       "calls": 0,
       "usd": 0.0,
       "agent": false
+     },
+     {
+      "when": "2026-11-02T20:35:05",
+      "ok": true,
+      "asked": "Upload Short",
+      "to_ask": "41.5 s",
+      "calls": 0,
+      "usd": 0.0,
+      "agent": false
      }
     ],
     "real": [
@@ -1184,9 +1276,23 @@ window.ENVOY = {
      }
     },
     "every": {
-     "ok": 10,
-     "n": 14
+     "ok": 11,
+     "n": 15
     },
+    "checked": {
+     "picks": {
+      "sound_title": "shown"
+     },
+     "fields": {
+      "short_title": "held"
+     },
+     "clip": "checked",
+     "when": "2026-11-02T20:35:05",
+     "src": {
+      "path": "eval/results/showcase/runs/youtube-replay-20261102-203505.json"
+     }
+    },
+    "planted": [],
     "src": {
      "path": "data/routines/youtube_short_sound/index.json"
     },
@@ -2470,25 +2576,25 @@ window.ENVOY = {
    "task": "Check me in for my flight",
    "routine": "skylark_check_in_flight",
    "layout": "3: extra screen",
-   "patch": "after 'continue_after_hazmat_declaration', an extra screen appeared; inserted continue_after_hazmat_declaration_extra_1 (tap Looks good)",
-   "reason": "Continue appears renamed to Looks good, tapping it should advance to Confirm check-in.",
-   "repair_model": "muse-spark-1.3",
-   "profile": "Spark",
+   "patch": "after 'tap_continue_hazmat', an extra screen appeared; inserted tap_continue_hazmat_extra_1 (tap Looks good)",
+   "reason": "The expected Continue (btn_continue, hazmat acknowledgement) is not present; instead an extra Review your trip interstitial blocks the path to the Confirm check-in screen required by the after-checks. Its main affirmative button, \"Looks good\", is the user-intended way forward toward completing check-in for SL 1782, consistent with the goal and remaining step.",
+   "repair_model": "muse-wonder-1.0",
+   "profile": "hybrid",
    "tier": "standard",
    "first": {
     "passed": true,
     "status": "done",
     "rung": 4,
-    "duration_s": 8.81,
+    "duration_s": 14.9,
     "calls": 1,
-    "standard_usd": 0.0049,
+    "standard_usd": 0.0241,
     "version": 1
    },
    "trial": {
     "passed": true,
     "status": "done",
     "rung": 0,
-    "duration_s": 4.21,
+    "duration_s": 4.72,
     "calls": 0,
     "standard_usd": 0.0,
     "version": 2
@@ -2497,7 +2603,7 @@ window.ENVOY = {
     "passed": true,
     "status": "done",
     "rung": 0,
-    "duration_s": 4.1,
+    "duration_s": 4.78,
     "calls": 0,
     "standard_usd": 0.0,
     "version": 2
@@ -2506,24 +2612,24 @@ window.ENVOY = {
     "passed": true,
     "status": "done",
     "rung": 0,
-    "duration_s": 5.58,
+    "duration_s": 6.02,
     "calls": 0,
     "standard_usd": 0.0,
     "version": 2
    },
    "steps_first": [
     {
-     "id": "open_my_trips",
+     "id": "tap_my_trips",
      "status": "done",
      "rung": 0
     },
     {
-     "id": "find_select_trip",
+     "id": "find_tap_trip_row",
      "status": "done",
      "rung": 0
     },
     {
-     "id": "select_trip",
+     "id": "tap_trip_row",
      "status": "done",
      "rung": 0
     },
@@ -2538,22 +2644,22 @@ window.ENVOY = {
      "rung": 0
     },
     {
-     "id": "continue_after_passenger_selection",
+     "id": "tap_continue_passenger",
      "status": "done",
      "rung": 0
     },
     {
-     "id": "confirm_no_hazardous_materials",
+     "id": "acknowledge_hazardous_materials",
      "status": "done",
      "rung": 0
     },
     {
-     "id": "continue_after_hazmat_declaration",
+     "id": "tap_continue_hazmat",
      "status": "done",
      "rung": 4
     },
     {
-     "id": "confirm_check_in",
+     "id": "tap_confirm_check_in",
      "status": "done",
      "rung": 0
     }
@@ -2570,10 +2676,12 @@ window.ENVOY = {
     "+version: 2",
     "+status: active",
     " intent: Check in for a SkyLark flight",
-    "@@ -171,2 +171,22 @@",
-    "   note: trace step 9",
-    "+- id: continue_after_hazmat_declaration_extra_1",
-    "+  intent: Continue appears renamed to Looks good, tapping it should advance to Confirm check-in.",
+    "@@ -171,2 +171,24 @@",
+    "   note: trace step 7",
+    "+- id: tap_continue_hazmat_extra_1",
+    "+  intent: The expected Continue (btn_continue, hazmat acknowledgement) is not present; instead an extra Review your trip interstitial blocks the",
+    "+    path to the Confirm check-in screen required by the after-checks. Its main affirmative button, \"Looks good\", is the user-intended way forward",
+    "+    toward completing check-in for SL 1782, consistent with the goal and remaining step.",
     "+  optional: true",
     "+  pre:",
     "+  - {app_foreground: com.skylark.air}",
@@ -2592,18 +2700,17 @@ window.ENVOY = {
     "+  - element_present: {resource_id: row_confirm_passenger, text: Passenger, kind: Text}",
     "+  risk: reversible",
     "+  note: added by local repair",
-    " - id: confirm_check_in",
-    "@@ -220,3 +240,5 @@",
-    " - element_present: {text: Boarding pass}",
-    "-changes: [v1 compiled from f7-1027215614-src-check_in-a1]",
+    " - id: tap_confirm_check_in",
+    "@@ -208,3 +230,4 @@",
+    "   note: trace step 8",
+    "-changes: [v1 compiled from f7-1103001513-src-check_in-a1]",
     "+parent_version: 1",
-    "+changes: ['after ''continue_after_hazmat_declaration'', an extra screen appeared; inserted continue_after_hazmat_declaration_extra_1 (tap Looks",
-    "+    good)']",
+    "+changes: ['after ''tap_continue_hazmat'', an extra screen appeared; inserted tap_continue_hazmat_extra_1 (tap Looks good)']",
     " compiled_from:"
    ],
-   "commit": "6c507f3",
-   "dirty": true,
-   "date": "2026-10-28",
+   "commit": "cf78fa0",
+   "dirty": false,
+   "date": "2026-11-03",
    "src": {
     "path": "eval/results/final/change.json",
     "note": "check_in, layout 3"
@@ -2650,23 +2757,23 @@ window.ENVOY = {
     "Layout": "4: hidden IDs",
     "Experiments": "10",
     "Recovered": "10/10",
-    "Saved by": "relaxed match or scroll ×8, nothing needed ×2",
-    "Model calls (first)": "0",
-    "Patched": "8",
-    "Trial passed": "8/8",
-    "After, no model call": "10/10",
-    "Back on original": "8/8"
+    "Saved by": "relaxed match or scroll ×4, nothing needed ×4, the agent ×2",
+    "Model calls (first)": "12",
+    "Patched": "0",
+    "Trial passed": "0/0",
+    "After, no model call": "8/10",
+    "Back on original": "0/0"
    },
    {
     "Layout": "5: renamed labels + hidden IDs",
     "Experiments": "10",
     "Recovered": "10/10",
-    "Saved by": "relaxed match or scroll ×6, local repair ×2, nothing needed ×2",
-    "Model calls (first)": "3",
+    "Saved by": "relaxed match or scroll ×5, the agent ×2, nothing needed ×2, local repair ×1",
+    "Model calls (first)": "14",
     "Patched": "8",
-    "Trial passed": "8/8",
-    "After, no model call": "10/10",
-    "Back on original": "8/8"
+    "Trial passed": "6/8",
+    "After, no model call": "8/10",
+    "Back on original": "6/6"
    }
   ],
   "layouts_src": {
@@ -2678,7 +2785,7 @@ window.ENVOY = {
    "Runs": "50",
    "Passed": "**50**",
    "No model call": "50",
-   "Median s": "3.1"
+   "Median s": "3.0"
   },
   "real": [
    {
@@ -2779,104 +2886,83 @@ window.ENVOY = {
  },
  "real": {
   "current": {
-   "date": "2026-10-28",
-   "commit": "00ec5d9",
-   "final": false,
-   "profile": "Spark",
+   "date": "2026-11-03",
+   "commit": "cf78fa0",
+   "final": true,
+   "profile": "hybrid",
    "tier": "standard",
-   "runs": 4,
-   "run_id": "1028032143",
-   "breakdown": [
-    {
-     "run": "1028023735",
-     "commit": "524b93a",
-     "rows": 12
-    },
-    {
-     "run": "1028030222",
-     "commit": "401e994",
-     "rows": 4
-    },
-    {
-     "run": "1028031054",
-     "commit": "cddf1b2",
-     "rows": 1
-    },
-    {
-     "run": "1028032143",
-     "commit": "00ec5d9",
-     "rows": 1
-    }
-   ],
+   "runs": 1,
+   "run_id": "1103034419",
+   "breakdown": [],
    "stages": {
-    "First run right": "14/18",
+    "First run right": "13/18",
     "Compiled": "14/18",
     "Same input, no model call": "13/18 (14 with a repair)",
-    "New input, no model call": "4/11"
+    "New input, no model call": "7/11"
    }
   },
   "curve": {
-   "n": 12,
+   "n": 13,
    "of": 18,
    "pass": {
-    "date": "Nov 2",
-    "commit": "192cd29",
-    "final": false,
+    "date": "Nov 3",
+    "commit": "cf78fa0",
+    "final": true,
     "profile": "hybrid",
     "tier": "standard",
-    "run": "1102175459",
+    "run": "1103034419",
     "src": {
-     "path": "eval/results/real_rerun_2026-11-02_wsd-baseline/real.json"
+     "path": "eval/results/final/real.json"
     },
     "md_src": {
-     "path": "eval/results/real_rerun_2026-11-02_wsd-baseline/real.md"
+     "path": "eval/results/final/real.md"
     }
    },
    "first": {
     "calls": {
-     "median": 5.0,
+     "median": 5,
      "min": 2,
      "max": 13,
-     "n": 12
+     "n": 13
     },
     "seconds": {
-     "median": 19.36,
-     "min": 6.62,
-     "max": 43.82,
-     "n": 12
+     "median": 19.59,
+     "min": 8.49,
+     "max": 52.82,
+     "n": 13
     },
     "usd": {
-     "median": 0.0368,
-     "min": 0.015659199999999998,
-     "max": 0.0864344,
-     "n": 12
+     "median": 0.0376,
+     "min": 0.0185832,
+     "max": 0.08723279999999999,
+     "n": 13
     }
    },
    "rerun": {
     "calls": {
-     "median": 0.0,
+     "median": 0,
      "min": 0,
      "max": 0,
-     "n": 12
+     "n": 13
     },
     "seconds": {
-     "median": 5.395,
-     "min": 0.74,
-     "max": 15.18,
-     "n": 12
+     "median": 4.88,
+     "min": 0.75,
+     "max": 12.26,
+     "n": 13
     },
     "usd": {
      "median": 0.0,
      "min": 0.0,
      "max": 0.0,
-     "n": 12
+     "n": 13
     }
    },
    "compile": {
-    "median": 0.0415,
-    "min": 0.0244,
-    "max": 0.0855,
-    "n": 12
+    "median": 0.0455,
+    "min": 0.0328,
+    "max": 0.077,
+    "n": 13
    }
   },
   "rows": [
@@ -2886,21 +2972,21 @@ window.ENVOY = {
     "graded_by": "shape",
     "first_run": "pass",
     "agent": {
-     "actions": 2,
-     "calls": 4,
-     "seconds": 33.37
+     "actions": 3,
+     "calls": 5,
+     "seconds": 43.8
     },
     "compiled": true,
     "steps": 2,
     "same": {
-     "result": "pass after repair",
-     "calls": 1,
-     "seconds": 39.53
+     "result": "pass",
+     "calls": 0,
+     "seconds": 6.95
     },
     "new": {
      "result": "fail",
-     "calls": 2,
-     "seconds": 75.96
+     "calls": 0,
+     "seconds": 34.02
     }
    },
    {
@@ -2911,7 +2997,7 @@ window.ENVOY = {
     "agent": {
      "actions": 0,
      "calls": 2,
-     "seconds": 10.1
+     "seconds": 17.74
     },
     "compiled": false,
     "steps": null,
@@ -2926,7 +3012,7 @@ window.ENVOY = {
     "agent": {
      "actions": 0,
      "calls": 2,
-     "seconds": 8.6
+     "seconds": 17.81
     },
     "compiled": false,
     "steps": null,
@@ -2941,19 +3027,19 @@ window.ENVOY = {
     "agent": {
      "actions": 7,
      "calls": 9,
-     "seconds": 29.9
+     "seconds": 30.8
     },
     "compiled": true,
     "steps": 8,
     "same": {
      "result": "pass",
      "calls": 0,
-     "seconds": 9.37
+     "seconds": 10.58
     },
     "new": {
      "result": "pass",
      "calls": 0,
-     "seconds": 10.11
+     "seconds": 10.96
     }
    },
    {
@@ -2962,21 +3048,21 @@ window.ENVOY = {
     "graded_by": "shape",
     "first_run": "pass",
     "agent": {
-     "actions": 11,
+     "actions": 10,
      "calls": 13,
-     "seconds": 43.82
+     "seconds": 52.82
     },
     "compiled": true,
-    "steps": 12,
+    "steps": 9,
     "same": {
      "result": "pass",
      "calls": 0,
-     "seconds": 15.18
+     "seconds": 12.26
     },
     "new": {
      "result": "pass",
      "calls": 0,
-     "seconds": 19.73
+     "seconds": 23.17
     }
    },
    {
@@ -2985,9 +3071,9 @@ window.ENVOY = {
     "graded_by": "truth",
     "first_run": "failed",
     "agent": {
-     "actions": 7,
-     "calls": 12,
-     "seconds": 50.0
+     "actions": 5,
+     "calls": 8,
+     "seconds": 32.3
     },
     "compiled": false,
     "steps": null,
@@ -3002,19 +3088,19 @@ window.ENVOY = {
     "agent": {
      "actions": 2,
      "calls": 4,
-     "seconds": 14.8
+     "seconds": 17.96
     },
     "compiled": true,
     "steps": 2,
     "same": {
      "result": "pass",
      "calls": 0,
-     "seconds": 7.72
+     "seconds": 6.85
     },
     "new": {
      "result": "pass",
      "calls": 0,
-     "seconds": 8.16
+     "seconds": 6.68
     }
    },
    {
@@ -3023,16 +3109,16 @@ window.ENVOY = {
     "graded_by": "truth",
     "first_run": "pass",
     "agent": {
-     "actions": 5,
-     "calls": 7,
-     "seconds": 26.7
+     "actions": 4,
+     "calls": 6,
+     "seconds": 24.89
     },
     "compiled": true,
     "steps": 3,
     "same": {
      "result": "pass",
      "calls": 0,
-     "seconds": 10.07
+     "seconds": 7.74
     },
     "new": null
    },
@@ -3044,14 +3130,14 @@ window.ENVOY = {
     "agent": {
      "actions": 3,
      "calls": 5,
-     "seconds": 15.35
+     "seconds": 17.74
     },
     "compiled": true,
     "steps": 3,
     "same": {
      "result": "pass",
      "calls": 0,
-     "seconds": 3.28
+     "seconds": 2.66
     },
     "new": null
    },
@@ -3063,14 +3149,14 @@ window.ENVOY = {
     "agent": {
      "actions": 1,
      "calls": 3,
-     "seconds": 11.78
+     "seconds": 16.77
     },
     "compiled": true,
     "steps": 1,
     "same": {
      "result": "pass",
      "calls": 0,
-     "seconds": 3.18
+     "seconds": 2.32
     },
     "new": null
    },
@@ -3082,19 +3168,19 @@ window.ENVOY = {
     "agent": {
      "actions": 3,
      "calls": 5,
-     "seconds": 21.51
+     "seconds": 20.85
     },
     "compiled": true,
     "steps": 3,
     "same": {
      "result": "pass",
      "calls": 0,
-     "seconds": 5.48
+     "seconds": 4.27
     },
     "new": {
      "result": "pass",
      "calls": 0,
-     "seconds": 5.2
+     "seconds": 4.34
     }
    },
    {
@@ -3105,14 +3191,14 @@ window.ENVOY = {
     "agent": {
      "actions": 0,
      "calls": 2,
-     "seconds": 9.5
+     "seconds": 8.49
     },
     "compiled": true,
     "steps": 1,
     "same": {
      "result": "pass",
      "calls": 0,
-     "seconds": 0.85
+     "seconds": 0.8
     },
     "new": null
    },
@@ -3124,14 +3210,14 @@ window.ENVOY = {
     "agent": {
      "actions": 0,
      "calls": 2,
-     "seconds": 6.62
+     "seconds": 9.47
     },
     "compiled": true,
     "steps": 1,
     "same": {
      "result": "pass",
      "calls": 0,
-     "seconds": 0.74
+     "seconds": 0.75
     },
     "new": null
    },
@@ -3141,21 +3227,21 @@ window.ENVOY = {
     "graded_by": "truth",
     "first_run": "pass",
     "agent": {
-     "actions": 4,
-     "calls": 6,
-     "seconds": 28.62
+     "actions": 3,
+     "calls": 5,
+     "seconds": 26.44
     },
     "compiled": true,
-    "steps": 3,
+    "steps": 2,
     "same": {
      "result": "pass",
      "calls": 0,
-     "seconds": 11.63
+     "seconds": 11.17
     },
     "new": {
      "result": "pass",
      "calls": 0,
-     "seconds": 11.98
+     "seconds": 10.71
     }
    },
    {
@@ -3166,65 +3252,57 @@ window.ENVOY = {
     "agent": {
      "actions": 3,
      "calls": 5,
-     "seconds": 17.21
+     "seconds": 17.99
     },
     "compiled": true,
     "steps": 3,
     "same": {
      "result": "pass",
      "calls": 0,
-     "seconds": 4.66
+     "seconds": 4.17
     },
     "new": {
      "result": "pass",
      "calls": 0,
-     "seconds": 4.28
+     "seconds": 4.08
     }
    },
    {
     "workflow": "youtube_search",
     "goal": "In the YouTube app, search for lofi hip hop and tell me the title of the first video in the results.",
     "graded_by": "shape",
-    "first_run": "pass",
+    "first_run": "right, unverified",
     "agent": {
      "actions": 3,
      "calls": 6,
-     "seconds": 24.97
+     "seconds": 27.14
     },
-    "compiled": true,
-    "steps": 2,
-    "same": {
-     "result": "pass",
-     "calls": 0,
-     "seconds": 5.31
-    },
-    "new": {
-     "result": "pass",
-     "calls": 0,
-     "seconds": 5.09
-    }
+    "compiled": false,
+    "steps": null,
+    "same": null,
+    "new": null
    },
    {
     "workflow": "ytmusic_artist",
-    "goal": "In the YouTube Music app, search for the song Bohemian Rhapsody and tell me the artist of the first song result.",
+    "goal": "In the YouTube Music app, search for the song Blinding Lights and tell me the artist of the first song result.",
     "graded_by": "truth",
     "first_run": "pass",
     "agent": {
-     "actions": 4,
-     "calls": 6,
-     "seconds": 21.7
+     "actions": 3,
+     "calls": 5,
+     "seconds": 19.59
     },
     "compiled": true,
-    "steps": 4,
+    "steps": 3,
     "same": {
-     "result": "wrong",
+     "result": "pass",
      "calls": 0,
-     "seconds": 4.79
+     "seconds": 4.88
     },
     "new": {
      "result": "pass",
      "calls": 0,
-     "seconds": 5.44
+     "seconds": 5.14
     }
    },
    {
@@ -3233,40 +3311,25 @@ window.ENVOY = {
     "graded_by": "truth",
     "first_run": "right, unverified",
     "agent": {
-     "actions": 4,
-     "calls": 7,
-     "seconds": 44.66
+     "actions": 5,
+     "calls": 8,
+     "seconds": 56.25
     },
     "compiled": true,
-    "steps": 1,
+    "steps": 3,
     "same": {
      "result": "pass after repair",
      "calls": 3,
-     "seconds": 17.67
+     "seconds": 21.77
     },
     "new": {
-     "result": "input not learned",
-     "calls": null,
-     "seconds": null
+     "result": "pass after repair",
+     "calls": 7,
+     "seconds": 43.54
     }
    }
   ],
   "passes": [
-   {
-    "date": "Oct 28",
-    "commit": "00ec5d9",
-    "profile": "Spark",
-    "cells": {
-     "First run right": "14/18",
-     "Compiled": "14/18",
-     "Same input, no model call": "13/18 (14 with a repair)",
-     "New input, no model call": "4/11"
-    },
-    "src": {
-     "path": "eval/results/final/real.md",
-     "note": "stages"
-    }
-   },
    {
     "date": "Oct 29",
     "commit": "53ab459",
@@ -3337,6 +3400,72 @@ window.ENVOY = {
   "passes_src": {
    "path": "eval/results/real_rerun_2026-10-31/README.md",
    "note": "The four stages"
+  }
+ },
+ "learn_path": {
+  "main": {
+   "n": 18,
+   "right": 14,
+   "right_by_library": 4,
+   "by_library": 6,
+   "saved": 8,
+   "not_compilable": 1,
+   "replay_failed": 1,
+   "blocked": 1,
+   "not_learnable_other": 1,
+   "new": 3,
+   "new_right": 3,
+   "new_zero": 2,
+   "replay_s": {
+    "median": 4.77,
+    "min": 0.75,
+    "max": 10.01,
+    "n": 8
+   },
+   "compile_usd": {
+    "median": 0.0433,
+    "min": 0.026,
+    "max": 0.0539,
+    "n": 8
+   }
+  },
+  "supplementary": {
+   "n": 6,
+   "right": 5,
+   "right_by_library": 0,
+   "by_library": 0,
+   "saved": 5,
+   "not_compilable": 0,
+   "replay_failed": 0,
+   "blocked": 0,
+   "not_learnable_other": 1,
+   "new": 5,
+   "new_right": 3,
+   "new_zero": 3,
+   "replay_s": {
+    "median": 4.74,
+    "min": 1.18,
+    "max": 9.8,
+    "n": 5
+   },
+   "compile_usd": {
+    "median": 0.0494,
+    "min": 0.0313,
+    "max": 0.0525,
+    "n": 5
+   }
+  },
+  "started": "2026-11-03T09:05:08+00:00",
+  "phone": "envoy-real",
+  "tag": "cf78fa0",
+  "src": {
+   "path": "eval/results/learn-agent-path/README.md"
+  },
+  "results_src": {
+   "path": "eval/results/learn-agent-path/results.json"
+  },
+  "protocol_src": {
+   "path": "eval/results/learn-agent-path/PROTOCOL.md"
   }
  },
  "teach": {
@@ -4250,9 +4379,9 @@ window.ENVOY = {
   },
   "extraction": {
    "items": 62,
-   "right": 459,
+   "right": 454,
    "of": 468,
-   "pct": 98,
+   "pct": 97,
    "wrong": 0
   },
   "extraction_sets": [
@@ -4266,16 +4395,16 @@ window.ENVOY = {
    {
     "Set": "A fresh inbox (new bookings)",
     "Items": "15 emails",
-    "Right": "95/97 (98%)",
+    "Right": "94/97 (97%)",
     "Wrong": "0",
-    "Missing": "2"
+    "Missing": "3"
    },
    {
     "Set": "SkyLark trip screens",
     "Items": "12 app screens",
-    "Right": "80/84 (95%)",
+    "Right": "76/84 (90%)",
     "Wrong": "0",
-    "Missing": "4"
+    "Missing": "8"
    },
    {
     "Set": "Screenshots (Phase 5's set)",
@@ -4309,18 +4438,18 @@ window.ENVOY = {
     "Question": "What's my gate for my Chicago flight?",
     "Stale": "yes",
     "Warned": "yes",
-    "Answer": "Gate C14, from the SkyLark app yesterday at 10:05 PM, but it may have changed."
+    "Answer": "Gate C14, from the SkyLark app 8 hours ago, but it may have changed."
    },
    {
     "Age": "10 days later",
     "Question": "What's my gate for my Chicago flight?",
     "Stale": "yes",
     "Warned": "yes",
-    "Answer": "Gate C14, from the SkyLark app 10 days ago, but it may be out of date."
+    "Answer": "Gate C14, from the SkyLark app 10 days ago, but it may have changed."
    }
   ],
-  "commit": "5c3d716",
-  "date": "2026-10-28",
+  "commit": "eval-final",
+  "date": "2026-11-03",
   "src": {
    "path": "eval/results/final/memory.md"
   },
@@ -4344,7 +4473,7 @@ window.ENVOY = {
   "reversible": [
    0,
    22,
-   1,
+   3,
    22
   ],
   "controls": [
@@ -4450,12 +4579,12 @@ window.ENVOY = {
    }
   ],
   "safety_run": {
-   "commit": "849e51a",
-   "date": "2026-10-28"
+   "commit": "eval-final",
+   "date": "2026-11-03"
   },
   "injection_run": {
-   "commit": "7395743",
-   "date": "2026-10-28"
+   "commit": "eval-final",
+   "date": "2026-11-03"
   },
   "agent": [
    20,
@@ -4463,7 +4592,7 @@ window.ENVOY = {
    0
   ],
   "routines": [
-   9,
+   10,
    10
   ],
   "planted_texts": {
@@ -4655,76 +4784,76 @@ window.ENVOY = {
    {
     "suite": "0. The core set's routines",
     "result": "10 of 10 routines compiled and verified",
-    "ran_on": "ad9a67b (uncommitted changes)",
-    "profile": "Spark",
+    "ran_on": "eval-final, hybrid",
+    "profile": "hybrid",
     "tier": "standard"
    },
    {
     "suite": "1. Three systems on SkyLark's core set",
-    "result": "Envoy routines 40/40 (100%) first try, 40/40 within 3, median 1.0 calls, 5.5 s; Full agent every time 40/40 (100%) first try, 40/40 within 3, median 5.0 calls, 10.1 s; Fixed replay 14/40 (35%) first try, 17/40 within 3, median 0.0 calls, 2.6 s",
-    "ran_on": "ad9a67b (uncommitted changes)",
-    "profile": "Spark",
+    "result": "Envoy routines 120/120 (100%) first try, 120/120 within 3, median 1.0 calls, 7.6 s; Full agent every time 119/120 (99%) first try, 120/120 within 3, median 5.0 calls, 17.9 s; Fixed replay 38/120 (32%) first try, 39/120 within 3, median 0.0 calls, 3.6 s",
+    "ran_on": "eval-final, hybrid",
+    "profile": "hybrid",
     "tier": "standard"
    },
    {
     "suite": "2. First run vs later runs",
-    "result": "request 1 median $0.051 and 27.9 s; requests 2–10 90/90 right, median 1.0 call, $0.0023, 5.9 s",
-    "ran_on": "5c3d716 (uncommitted changes)",
-    "profile": "Spark",
+    "result": "request 1 median $0.0869 and 44.5 s; requests 2–10 90/90 right, median 1.0 call, $0.0022, 7.6 s",
+    "ran_on": "eval-final, hybrid",
+    "profile": "hybrid",
     "tier": "standard"
    },
    {
     "suite": "3. Routines under change",
-    "result": "new inputs 50/50 (100%) (50 with no model call); injected changes recovered 50/50 (100%), then 50/50 ran alone with no model call",
-    "ran_on": "6c507f3 (uncommitted changes)",
-    "profile": "Spark",
+    "result": "new inputs 50/50 (100%) (50 with no model call); injected changes recovered 50/50 (100%), then 46/50 ran alone with no model call",
+    "ran_on": "eval-final, hybrid",
+    "profile": "hybrid",
     "tier": "standard"
    },
    {
     "suite": "3b. Three screen sizes and the real phone",
-    "result": "envoy-test 30/30; envoy-small 30/30; envoy-large 29/30",
-    "ran_on": "5504260 (uncommitted changes)",
-    "profile": "Spark",
+    "result": "envoy-test 30/30; envoy-small 30/30; envoy-large 30/30; phone 30/30",
+    "ran_on": "eval-final, hybrid",
+    "profile": "hybrid",
     "tier": "standard"
    },
    {
     "suite": "4. Real apps",
-    "result": "first run 14/18, compiled 14/18, rerun right with no call 13/18, new input 4/11; bot checks: target, target_search",
-    "ran_on": "4 runs, the last on 00ec5d9 (uncommitted changes)",
-    "profile": "Spark",
+    "result": "first run 13/18, compiled 14/18, rerun right with no call 13/18, new input 7/11; bot checks: target, target_search",
+    "ran_on": "eval-final, hybrid",
+    "profile": "hybrid",
     "tier": "standard"
    },
    {
     "suite": "5. Memory",
-    "result": "extraction 459/468 (98%) on 62 labeled items, 0 wrong; stale facts served without a warning 0/12",
-    "ran_on": "5c3d716 (uncommitted changes)",
-    "profile": "Spark",
+    "result": "extraction 454/468 (97%) on 62 labeled items, 0 wrong; stale facts served without a warning 0/12",
+    "ran_on": "eval-final, hybrid",
+    "profile": "hybrid",
     "tier": "standard"
    },
    {
     "suite": "6. Safety: irreversible actions",
     "result": "irreversible caught 20/20 (code alone 20); reversible flagged by code 0/22; live declines held 7/7",
-    "ran_on": "849e51a (uncommitted changes)",
-    "profile": "Spark",
+    "ran_on": "eval-final, hybrid",
+    "profile": "hybrid",
     "tier": "standard"
    },
    {
     "suite": "6b. Safety: planted instructions",
     "result": "agent right 20/20 with planted text, tried to follow it 0; irreversible without approval 0; injected values stored from email 0",
-    "ran_on": "7395743 (uncommitted changes)",
-    "profile": "Spark",
+    "ran_on": "eval-final, hybrid",
+    "profile": "hybrid",
     "tier": "standard"
    },
    {
     "suite": "7. Interfaces, end to end",
     "result": "phase4 passed; approval_modes passed; phase5 passed",
-    "ran_on": "e18e434 (uncommitted changes)",
-    "profile": "Spark",
+    "ran_on": "eval-final, hybrid",
+    "profile": "hybrid",
     "tier": "standard"
    },
    {
-    "suite": "8. AndroidWorld (the other chat's branch)",
-    "result": "see the branch's report",
+    "suite": "8. AndroidWorld (a separate run)",
+    "result": "Envoy as on main solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001).",
     "ran_on": "androidworld branch",
     "profile": "",
     "tier": ""
@@ -4734,7 +4863,7 @@ window.ENVOY = {
    {
     "Target": "First-run task success on the test task set",
     "Goal": "70% or more",
-    "Measured": "10/10 (100%) on the original layout, 40/40 (100%) across all 4 layouts (the agent, first try)"
+    "Measured": "29/30 (97%) on the original layout, 119/120 (99%) across all 4 layouts (the agent, first try)"
    },
    {
     "Target": "Routine success on new inputs",
@@ -4749,12 +4878,12 @@ window.ENVOY = {
    {
     "Target": "Model calls on a routine rerun vs the first run",
     "Goal": "80% fewer",
-    "Measured": "86% fewer (1.0 vs 7.4 per request, the matcher's call included)"
+    "Measured": "84% fewer (1.0 vs 6.4 per request, the matcher's call included)"
    },
    {
     "Target": "Time per task on a routine rerun",
     "Goal": "Under 30 s for a 10-step task",
-    "Measured": "median 5.9 s; slowest 11.47 s (check_in)"
+    "Measured": "median 7.6 s; slowest 14.7 s (change_seat)"
    },
    {
     "Target": "Facts traceable to a source",
@@ -4812,19 +4941,19 @@ window.ENVOY = {
    "passed": 30,
    "runs": 30,
    "calls": 0,
-   "median_s": 6.59,
-   "commit": "a9b923d",
-   "profile": "Spark",
+   "median_s": 8.04,
+   "commit": "cf78fa0",
+   "profile": "hybrid",
    "tier": "standard",
-   "date": "2026-10-28",
+   "date": "2026-11-03",
    "src": {
     "path": "eval/results/final/sizes.json",
     "note": "devices.phone"
    }
   },
   "tests": {
-   "functions": 765,
-   "files": 50,
+   "functions": 802,
+   "files": 53,
    "src": {
     "path": "backend/tests"
    }
@@ -5131,9 +5260,9 @@ window.ENVOY = {
  },
  "numbers": {
   "eval_final": {
-   "on_tag": 0,
+   "on_tag": 10,
    "suites": 10,
-   "final": false,
+   "final": true,
    "src": {
     "path": "eval/results/final/report.md"
    }
@@ -5142,76 +5271,76 @@ window.ENVOY = {
    {
     "what": "0. The core set's routines",
     "value": "10 of 10 routines compiled and verified",
-    "commit": "ad9a67b (uncommitted changes)",
-    "final": false,
+    "commit": "eval-final, hybrid",
+    "final": true,
     "src": "eval/results/final/report.md"
    },
    {
     "what": "1. Three systems on SkyLark's core set",
-    "value": "Envoy routines 40/40 (100%) first try, 40/40 within 3, median 1.0 calls, 5.5 s; Full agent every time 40/40 (100%) first try, 40/40 within 3, median 5.0 calls, 10.1 s; Fixed replay 14/40 (35%) first try, 17/40 within 3, median 0.0 calls, 2.6 s",
-    "commit": "ad9a67b (uncommitted changes)",
-    "final": false,
+    "value": "Envoy routines 120/120 (100%) first try, 120/120 within 3, median 1.0 calls, 7.6 s; Full agent every time 119/120 (99%) first try, 120/120 within 3, median 5.0 calls, 17.9 s; Fixed replay 38/120 (32%) first try, 39/120 within 3, median 0.0 calls, 3.6 s",
+    "commit": "eval-final, hybrid",
+    "final": true,
     "src": "eval/results/final/report.md"
    },
    {
     "what": "2. First run vs later runs",
-    "value": "request 1 median $0.051 and 27.9 s; requests 2–10 90/90 right, median 1.0 call, $0.0023, 5.9 s",
-    "commit": "5c3d716 (uncommitted changes)",
-    "final": false,
+    "value": "request 1 median $0.0869 and 44.5 s; requests 2–10 90/90 right, median 1.0 call, $0.0022, 7.6 s",
+    "commit": "eval-final, hybrid",
+    "final": true,
     "src": "eval/results/final/report.md"
    },
    {
     "what": "3. Routines under change",
-    "value": "new inputs 50/50 (100%) (50 with no model call); injected changes recovered 50/50 (100%), then 50/50 ran alone with no model call",
-    "commit": "6c507f3 (uncommitted changes)",
-    "final": false,
+    "value": "new inputs 50/50 (100%) (50 with no model call); injected changes recovered 50/50 (100%), then 46/50 ran alone with no model call",
+    "commit": "eval-final, hybrid",
+    "final": true,
     "src": "eval/results/final/report.md"
    },
    {
     "what": "3b. Three screen sizes and the real phone",
-    "value": "envoy-test 30/30; envoy-small 30/30; envoy-large 29/30",
-    "commit": "5504260 (uncommitted changes)",
-    "final": false,
+    "value": "envoy-test 30/30; envoy-small 30/30; envoy-large 30/30; phone 30/30",
+    "commit": "eval-final, hybrid",
+    "final": true,
     "src": "eval/results/final/report.md"
    },
    {
     "what": "4. Real apps",
-    "value": "first run 14/18, compiled 14/18, rerun right with no call 13/18, new input 4/11; bot checks: target, target_search",
-    "commit": "4 runs, the last on 00ec5d9 (uncommitted changes)",
-    "final": false,
+    "value": "first run 13/18, compiled 14/18, rerun right with no call 13/18, new input 7/11; bot checks: target, target_search",
+    "commit": "eval-final, hybrid",
+    "final": true,
     "src": "eval/results/final/report.md"
    },
    {
     "what": "5. Memory",
-    "value": "extraction 459/468 (98%) on 62 labeled items, 0 wrong; stale facts served without a warning 0/12",
-    "commit": "5c3d716 (uncommitted changes)",
-    "final": false,
+    "value": "extraction 454/468 (97%) on 62 labeled items, 0 wrong; stale facts served without a warning 0/12",
+    "commit": "eval-final, hybrid",
+    "final": true,
     "src": "eval/results/final/report.md"
    },
    {
     "what": "6. Safety: irreversible actions",
     "value": "irreversible caught 20/20 (code alone 20); reversible flagged by code 0/22; live declines held 7/7",
-    "commit": "849e51a (uncommitted changes)",
-    "final": false,
+    "commit": "eval-final, hybrid",
+    "final": true,
     "src": "eval/results/final/report.md"
    },
    {
     "what": "6b. Safety: planted instructions",
     "value": "agent right 20/20 with planted text, tried to follow it 0; irreversible without approval 0; injected values stored from email 0",
-    "commit": "7395743 (uncommitted changes)",
-    "final": false,
+    "commit": "eval-final, hybrid",
+    "final": true,
     "src": "eval/results/final/report.md"
    },
    {
     "what": "7. Interfaces, end to end",
     "value": "phase4 passed; approval_modes passed; phase5 passed",
-    "commit": "e18e434 (uncommitted changes)",
-    "final": false,
+    "commit": "eval-final, hybrid",
+    "final": true,
     "src": "eval/results/final/report.md"
    },
    {
-    "what": "8. AndroidWorld (the other chat's branch)",
-    "value": "see the branch's report",
+    "what": "8. AndroidWorld (a separate run)",
+    "value": "Envoy as on main solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001).",
     "commit": "androidworld branch",
     "final": false,
     "src": "eval/results/final/report.md"
@@ -5219,7 +5348,7 @@ window.ENVOY = {
    {
     "what": "Pixel 5: the 10 core routines on 3 new bookings each",
     "value": "30/30, 0 model calls",
-    "commit": "a9b923d",
+    "commit": "cf78fa0",
     "final": false,
     "src": "eval/results/final/sizes.json"
    },

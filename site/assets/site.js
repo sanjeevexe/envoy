@@ -24,7 +24,7 @@
   // internal names put in plain words.
   const plainText = (t) => String(t ?? "")
     .replace(/loop A's copy/g, "a test copy").replace(/\(loop A, /g, "(").replace(/\bloop A\b/g, "the reliability loop")
-    .replace(/\bloop B\b/g, "the new-apps loop").replace(/ \(the other chat's branch\)/g, "")
+    .replace(/\bloop B\b/g, "the new-apps loop")
     .replace(/\brung (\d)\b/g, (m, n) => LADDER[n] || m).replace(/ ?\(?backlog #\d+\)?/g, "");
   const date = (s) => {
     const d = new Date(s.replace(" ", "T"));
@@ -72,6 +72,7 @@
   };
   // A recorded run's profile and tier, from its own model calls: hybrid when Muse Wonder decided its steps.
   const runProfile = (calls) => `${calls.some((c) => c.job === "step" && /wonder/.test(c.model)) ? "hybrid" : "Spark"} profile, ${calls.some((c) => /contributor/.test(c.model)) ? "Contributor" : "standard"} tier`;
+  const suiteProfile = (n) => (D.proof.suites.find((s) => s.suite.startsWith(n + ".")) || {}).profile || "";
   const allPosts = () => D.showcase.cards.flatMap((c) => c.real.map((p) => ({ ...p, card: c })));
 
   // ---- 1: the idea ----
@@ -205,7 +206,7 @@
         </div>
         <div class="card" style="padding:20px">
           <h3>When the app changes, it repairs one step</h3>
-          <p class="small" style="margin:6px 0 0">A failed check climbs a ladder: wait and retry, a relaxed match, a known pop-up, then a local repair by a model (Muse Wonder by default; the SkyLark suite ran on the Spark profile). A repair becomes a new version on trial, kept only if a clean replay passes.</p>
+          <p class="small" style="margin:6px 0 0">A failed check climbs a ladder: wait and retry, a relaxed match, a known pop-up, then a local repair by a model (Muse Wonder by default${RP.skylark.profile !== "hybrid" ? `; the SkyLark suite ran on the ${RP.skylark.profile} profile` : ""}). A repair becomes a new version on trial, kept only if a clean replay passes.</p>
           <ul class="plain" style="margin-top:8px">
             <li class="small"><b>On real apps:</b> self-repair proposed ${RP.real.length} versions and the trials kept ${kept.length}. ${repaired.length ? `Among them, the ${repaired.map((c) => c.app === "Instagram" ? "Reel's" : "Short's").join(" and the ")} checks, rewritten after their live posts on Nov 2; both passed their trial in Muse's dry run with 0 model calls in Envoy's replay.` : ""}</li>
             <li class="small"><b>On SkyLark, the stress test:</b> 50 injected layout changes, ${esc(RP.layouts.length)} kinds; all recovered, then ran alone with no model call. ${testApp}</li>
@@ -221,6 +222,7 @@
           <p class="small" style="margin:8px 0 0">One of the learned tools is on SkyLark, our test app. ${srcA(D.agents.crosspost_src, "event log")}</p>
         </div>
       </div>
+      ${learnCard()}
       <div class="block who-does" style="margin-top:16px">
         <b>Meta's models, by job.</b> Muse Wonder turns task experience into routines: it plans and decides a first run's steps, compiles the run, and repairs a broken step. Muse Spark handles matching and extraction: which routine a request means, the answer on screen, facts for memory. SAM 3.1 helps find drawn controls when the accessibility tree is missing: with SAM first and Spark's grounding second, Envoy found ${sg[0]} of ${sg[1]} targets on saved screens (16 of them drawn seats in our test app, the rest real-app controls); grounding alone, ${sg[2]}. ${srcA(M.phase6_src, "phase-6-results.md")} ${ev("models", "SAM on a drawn screen")}
       </div>`;
@@ -276,6 +278,25 @@
     show((+new URLSearchParams(location.search).get("step") || 2) - 1);
   }
 
+  // "Make it a routine", measured on the final tag (the learn-path pass), with what it couldn't take next to it.
+  function learnCard() {
+    const LP = D.learn_path, m = LP.main, x = LP.supplementary;
+    const not = [
+      m.by_library && `${m.by_library} ran a routine already in Envoy's library, which the request matched first, and the button doesn't take a routine's task`,
+      m.not_compilable && `the compiler refused ${m.not_compilable} (Calendar's answer couldn't be read back from its own final screen)`,
+      m.replay_failed && `${m.replay_failed} failed its checking replay (Chrome)`,
+      m.blocked && `Target's bot check blocked ${m.blocked}`,
+      m.not_learnable_other && `${m.not_learnable_other} timed out waiting for the phone, a fault in the test harness`,
+    ].filter(Boolean);
+    return `
+      <div class="card learn-path" style="padding:20px;margin-top:16px">
+        <div class="row-between"><h3>“Make it a routine”, measured</h3><span class="chip sage">the final evaluation's tag · Nov 3</span></div>
+        <p style="margin:8px 0 0;color:var(--ink-2);font-size:14.5px">The same ${m.n} read-only real-app workflows, asked over MCP on Envoy's emulator (hybrid profile, standard tier). Envoy answered <b style="color:var(--ink)">${m.right} of ${m.n}</b> right${m.right_by_library ? `, ${m.right_by_library} of them through a routine already in its library` : ""}. Then “Make it a routine” on each finished task <b style="color:var(--ink)">saved ${m.saved} of ${m.n}</b>, each compiled with one Wonder call (median ${usd(m.compile_usd.median)}) and replayed once on its own with no model (median ${s2(m.replay_s.median)}). The saved routines that had a second input to try got it right <b style="color:var(--ink)">${m.new_right} of ${m.new}</b>, ${m.new_zero} with no model call.</p>
+        <p class="small" style="margin:10px 0 0"><b>Not saved, ${m.n - m.saved}:</b> ${not.join("; ")}. A second pass with an empty library, outside the headline, measured those ${x.n}: the agent right ${x.right} of ${x.n}, saved ${x.saved} of ${x.n}, new inputs right ${x.new_right} of ${x.new} (${x.new_zero} with no model call).</p>
+        <div class="label-rec">${srcA(LP.src, "README.md")} ${srcA(LP.results_src, "results.json")} ${srcA(LP.protocol_src, "PROTOCOL.md")}</div>
+      </div>`;
+  }
+
   // ---- the Spark agent's runs, from its page's event log ----
   function sparkLog(run) {
     const t0 = (run.rows.find((x) => x.kind === "user") || { t: 0 }).t;
@@ -305,21 +326,26 @@
   // What a real post carried, from its task's inputs.
   const postText = (name, i) => name === "instagram_story_poll" ? `poll “${i.poll_question}” ${i.poll_option_1} / ${i.poll_option_2}`
     : `“${i.song_title || i.sound_title}” by ${i.song_artist || i.sound_artist}, ${i.short_title ? "title" : "caption"} “${i.caption || i.short_title}”`;
+  // The outcome checks a rehearsal ran before the final button, in words.
+  const FIELD = { song_title: "the song", sound_title: "the sound", caption: "the caption", short_title: "the title" };
+  const checkText = (k) => [...Object.keys(k.picks || {}).map((f) => `${FIELD[f] || f} shown`),
+    ...Object.keys(k.fields || {}).map((f) => `${FIELD[f] || f} still in its field`), k.clip === "checked" ? "the clip is the one put on the phone" : ""].filter(Boolean).join(", ");
   const POST = { instagram_reel_song: "Reel", instagram_story_poll: "Story", tiktok_post_sound: "TikTok", youtube_short_sound: "Short" };
   function renderActs() {
     const S = D.showcase, A = D.agents, X = A.crosspost, MD = A.muse.dry_run, K = D.keys, R = K.readonly, SF = D.safety;
     const range = (xs, f) => { const a = Math.min(...xs), b = Math.max(...xs); return a === b ? f(a) : `${f(a)}–${f(b)}`; };
     const card = (c) => {
       const R = c.replays, ok = R.filter((r) => r.ok);
-      const asked = R[0] ? R[0].asked : c.first.asked;
+      const asked = (R.find((r) => r.ok) || c.first).asked;
       return `<article class="card post-card">
         <div class="row-between"><span class="chip sage">${esc(c.app)}</span><span class="chip">v${c.version} · ${c.steps} steps</span></div>
         <h3>${esc(c.what)}</h3>
         <div class="sig small"><code>${esc(c.name)}(${c.inputs.map(esc).join(", ")})</code></div>
         <dl class="fr">
           <div><dt>Made</dt><dd><b>${c.hand ? "Compiled from one agent run" : "Learned from one agent run"}</b><span>${c.hand ? esc(c.hand.replace(/^./, (x) => x.toUpperCase())) : "No hand edits"}${c.repair && c.repair.passed ? ". Its checks were repaired automatically after its live post" : ""}.</span></dd></div>
-          <div class="rp"><dt>Rehearsals of v${c.base}</dt><dd><b>${ok.length} of ${R.length} reached ${esc(asked)}</b><span>${R.some((r) => r.agent) ? `${R.filter((r) => r.agent).length} finished by the agent · ` : ""}${range(R.map((r) => r.calls), String)} model calls in Envoy's replay · ${range(R.map((r) => Math.round(parseFloat(r.to_ask))), String)} s to the final button</span></dd></div>
+          <div class="rp"><dt>Rehearsals since v${c.base}</dt><dd><b>${ok.length} of ${R.length} reached ${esc(asked)}</b><span>${R.some((r) => r.agent) ? `${R.filter((r) => r.agent).length} finished by the agent · ` : ""}${range(R.map((r) => r.calls), String)} model calls in Envoy's replay · ${range(ok.map((r) => Math.round(parseFloat(r.to_ask))), String)} s to the final button</span></dd></div>
         </dl>
+        ${c.checked ? `<p class="small" style="margin:6px 0 0"><b>Checked before the final button</b> (Nov 2): ${checkText(c.checked)}.</p>` : ""}
         <ul class="plain real">${c.real.map((p) => `<li><span class="chip ${p.live ? "sage" : "apricot"}">${p.live ? "live" : "flawed"}</span> <span class="small">${esc(p.live ? postText(c.name, p.inputs) : p.note)} · ${p.calls} model calls in Envoy</span></li>`).join("")}</ul>
         <div class="label-rec" style="margin-top:8px">${srcA(c.yaml_src, `v${c.version}.yaml`)} ${srcA(c.src, "versions")}</div>
       </article>`;
@@ -330,8 +356,8 @@
       ${head("acts", "Acts", "It acts in the apps, and waits for a yes on the iPhone.",
         "Some things exist only inside an app. Muse can post plain Instagram content itself, but library songs and poll stickers exist only in the apps, and Muse has no connector for TikTok. So each of these four posts was compiled from one agent run on Envoy's phone into a routine, and shared with agents as a tool. Each final button here waited for the person's yes on their iPhone. No agent can approve: there is no tool for it.")}
       <div class="posts four">${S.cards.map(card).join("")}</div>
-      <p class="small" style="margin:10px 4px 0">Rehearsals ran on a test copy of Envoy (hybrid profile, as each run file records) on Nov 1–2 and were declined at the final button, every one. A rehearsal declines the final tap, so the compiler adds it back as the routine's last step, marked irreversible. The live posts went out on Nov 2 on test accounts. ${srcA(S.runs_src, "rehearsals")} ${srcA(S.live_src, "the posts' task rows")} ${srcA(S.doc_src, "demo-showcase.md")}</p>
-      <div class="callout" style="margin-top:14px"><b>As recorded, flaws included.</b> The first live TikTok went out without its sound. The agent had noticed the sound hadn't attached and redone it, but the compiler dropped that correction as a back-track, and the step's check never looked at the editor. The compiler now keeps such a correction, the recompiled routine checks that the editor names the sound, and the re-post had it. Checks like these show the routine reached the right screens, not that the clip, sound or caption were right; the Story routine fails while a Story is already live.</div>
+      <p class="small" style="margin:10px 4px 0">Rehearsals ran on a test copy of Envoy (hybrid profile, as each run file records) on Nov 1–2; every one that reached its final button was declined there. A planted wrong-clip test, which stopped before starting as it should, isn't counted. A rehearsal declines the final tap, so the compiler adds it back as the routine's last step, marked irreversible. The live posts went out on Nov 2 on test accounts. ${srcA(S.runs_src, "rehearsals")} ${srcA(S.live_src, "the posts' task rows")} ${srcA(S.doc_src, "demo-showcase.md")}</p>
+      <div class="callout" style="margin-top:14px"><b>As recorded, flaws included.</b> The first live TikTok went out without its sound. The agent had noticed the sound hadn't attached and redone it, but the compiler dropped that correction as a back-track, and the step's check never looked at the editor. The compiler now keeps such a correction, the recompiled routine checks that the editor names the sound, and the re-post had it. The routines' step checks show they reached the right screens, not that the clip, sound or caption were right. Since Nov 2, code also checks just before the final button that the song or sound asked for is shown, the caption or title is still in its field, and the clip is the one put on the phone (the Reel, TikTok and Short; not yet the Story). A planted wrong clip stopped TikTok before it started. The Story routine still fails while a Story is already live.</div>
       <div class="agent-row">
         <div class="card" style="padding:20px">
           <div class="row-between"><h3>One request, four posts: a dry run</h3><span class="chip">the Spark agent · ${X.model_calls} model calls · ${usd(X.usd)}</span></div>
@@ -359,7 +385,7 @@
           <ul class="plain">
             <li><b>No agent can approve.</b> There's no tool for it, whatever an agent's key allows. A request from an agent, a trigger or an email waits for the person's yes on their iPhone, unless they've set that routine to run without asking; money always asks. A request the person types into Envoy themselves counts as their OK for what they asked.</li>
             <li><b>A key per agent.</b> You make each agent's key in Envoy's settings, with only the tool groups it needs; the key is stored as a hash. Each agent can start at most ${K.per_minute} tasks a minute, and every task says which agent asked.${refusal ? ` On a read-only key, the Spark agent saw ${R.tools.length} tools; a call outside them was refused: “${esc(refusal.text)}”` : ""}</li>
-            <li><b>Tested.</b> ${SF.caught[0]} of ${SF.caught[1]} irreversible controls were caught, among ${SF.captured.controls} controls on ${SF.captured.screens} captured screens from ${SF.captured.apps} apps (${SF.captured.skylark_screens} of the screens from SkyLark, our test app); text planted on screen to redirect the agent was followed in ${SF.agent[2]} of ${SF.agent[1]} runs on SkyLark (Spark profile). ${testApp} ${notFinal(SF.safety_run.commit)} ${srcA(SF.safety_src, "safety.md")} ${srcA(SF.injection_src, "injection.md")} ${ev("safety", "the tests")}</li>
+            <li><b>Tested.</b> ${SF.caught[0]} of ${SF.caught[1]} irreversible controls were caught, among ${SF.captured.controls} controls on ${SF.captured.screens} captured screens from ${SF.captured.apps} apps (${SF.captured.skylark_screens} of the screens from SkyLark, our test app); text planted on screen to redirect the agent was followed in ${SF.agent[2]} of ${SF.agent[1]} runs on SkyLark (${esc(suiteProfile("6b"))} profile). ${testApp} ${notFinal(SF.safety_run.commit)} ${srcA(SF.safety_src, "safety.md")} ${srcA(SF.injection_src, "injection.md")} ${ev("safety", "the tests")}</li>
           </ul>
           ${shot(A.muse.no_accept, "Muse in the iPhone app saying it can't accept Envoy's offers: there's no accept or approve tool", "Asked to accept for the person, Muse: “there's no accept or approve tool” (Oct 29).", "phone-shot")}
         </div>
@@ -601,12 +627,12 @@
           <tbody>${RA.rows.map((r) => `<tr><td><code class="small">${esc(r.workflow)}</code><div class="small">${esc(r.goal)}</div></td><td>${esc(r.first_run)}</td><td class="r">${r.agent.calls} calls, ${s0(r.agent.seconds)}</td><td>${r.compiled ? `yes, ${r.steps} steps` : "no"}</td><td>${r.same ? `${res(r.same)}${r.same.seconds != null ? `, ${s0(r.same.seconds)}` : ""}` : "–"}</td><td>${res(r.new)}</td><td class="small">${esc(r.graded_by === "truth" ? "the app's truth" : "the answer's shape")}</td></tr>`).join("")}</tbody>
         </table></div>
         <p class="small" style="margin:8px 0 0">“Graded by shape” answers (a price, a title) are also read by a person; the pass's real.md says how many were. ${srcA(RA.curve.pass.md_src, "real.md")} ${srcA(RA.curve.pass.src, "real.json")}</p>`)}
-      ${group("targets", "The design's targets on our test app, and four charts", "three on SkyLark, one on real apps; Spark profile", `
+      ${group("targets", "The design's targets on our test app, and four charts", `three on SkyLark, one on real apps; ${esc(suiteProfile("1"))} profile`, `
         <div class="tbl-wrap card"><table class="tbl"><thead><tr><th>Target</th><th>Goal</th><th>Measured</th></tr></thead>
           <tbody>${P.targets.map((t) => `<tr><td>${esc(t.Target)}</td><td>${esc(t.Goal)}</td><td>${esc(t.Measured)}</td></tr>`).join("")}</tbody></table></div>
         <div class="charts">
           ${chart("cost_and_time_over_repeated_runs", "First run vs later runs", "SkyLark's 10 core tasks, a new booking each time.")}
-          ${chart("real_apps_stages", "Real apps: where learning holds and where it breaks", "18 read-only workflows, Oct 28.")}
+          ${chart("real_apps_stages", "Real apps: where learning holds and where it breaks", `18 read-only workflows, ${D.real.current.final ? "the final evaluation" : day(D.real.current.date)}.`)}
           ${chart("recovery_by_injected_change", "Recovery from injected UI changes", "SkyLark, 50 of 50.")}
           ${chart("success_by_system_and_layout", "Envoy vs the full agent vs a fixed replay", "SkyLark core set.")}
         </div>`)}

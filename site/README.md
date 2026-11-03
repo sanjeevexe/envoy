@@ -72,6 +72,8 @@ page):
 - `eval/results/showcase/live-2026-11-02/task-rows.json` (with the build's note for the songless TikTok, keyed by task id;
   every other row must be "done");
 - `prompts/phone-watch-report.md` (the Stage 2 table with "Landed on the Pixel");
+- `eval/results/learn-agent-path/README.md` (its two "**Agent path:** … **Learn rate:** … **New input:**" headlines must match
+  the counts from `results.json` and `supplementary.json`);
 - `eval/results/showcase/runs/runs.md`; `eval/results/showcase/muse-2026-11-02/task-rows.json` (with the build's own notes for
   the two Story tasks, keyed by task id);
 - `agents/meta-agent/evidence/2026-11-01/crosspost/README.md` (run 2's commit);
@@ -108,11 +110,13 @@ Section numbers are positions on the page (the page numbers itself); "E:" is a g
 | 2 | A new input (Caramel Macchiato, one run); new inputs pass by pass | `runs.jsonl`; `eval/results/real_rerun_2026-10-31/README.md` |
 | 2 | Real-app self-repairs proposed and kept; the Reel's and Short's repairs and their trials | `data/routines/*/index.json` (versions with a `source_task`); trials matched to `eval/results/showcase/muse-2026-11-02/task-rows.json` |
 | 2 | SkyLark, 50 injected changes | `eval/results/final/change.md` |
+| 2 | "Make it a routine", measured on the eval-final tag: the agent path, routines saved, new inputs, what wasn't saved and why; the empty-library pass | `eval/results/learn-agent-path/results.json` and `supplementary.json` (counted by the build, retry rows left out), checked against the headlines in its `README.md` |
 | 2 | The Spark agent's Envoy tools and its first call | `agents/meta-agent/evidence/2026-11-01/crosspost/run2-four-posts.json` |
 | 2 | Muse saw a new tool without reconnecting | **No file in the repo** (pre-check P1, Nov 1). The page says so |
 | 2 | Meta's models by job; SAM then grounding 52 of 52, grounding alone 49 | `docs/phase-6-results.md` (Results, the fresh sample) |
 | 3. Acts | Each posting routine: version, steps, inputs, how it was made (hand edits), automatic repair | `data/routines/<name>/index.json` and `v<active>.yaml`; `HAND_EDITS` in the build, checked against them |
-| 3 | Rehearsals: reached the final button, Envoy's calls, seconds to the final button | `eval/results/showcase/runs/runs.md` (rows after the compiled base, per its `compiled_from.compiled_at`, naming the base or active version) |
+| 3 | Rehearsals: reached the final button (the row records where it asked), Envoy's calls, seconds to the final button, which the agent finished | `eval/results/showcase/runs/runs.md` (rows after the compiled base, per its `compiled_from.compiled_at`, naming the base or active version) and each run's file in `eval/results/showcase/runs/` (its model jobs). A planted outcome-check test (a run that "stopped before starting (outcome check)") isn't counted |
+| 3 | Checked before the final button: the song or sound shown, the caption or title held, the clip | the latest run file with `outcome_checks` for each routine (Nov 2) |
 | 3 | The real posts: what each carried (its inputs), Envoy's model calls, and the songless TikTok in the build's words (`LIVE_NOTES`, from the file's notes) | `eval/results/showcase/live-2026-11-02/task-rows.json` |
 | 3 | The Spark agent's four-post dry run: request, calls, asks, answers, its calls and dollars; two captures | `agents/meta-agent/evidence/2026-11-01/crosspost/` (event log, README, PNGs) |
 | 3 | Muse's Nov 2 dry run: five tasks, how each ended, calls, time | `eval/results/showcase/muse-2026-11-02/task-rows.json` (the live API's rows, read read-only); the Story notes are the build's words for the file's notes |

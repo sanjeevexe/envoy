@@ -1,8 +1,8 @@
 {
  "eval_final": {
-  "on_tag": 0,
+  "on_tag": 10,
   "suites": 10,
-  "final": false,
+  "final": true,
   "src": {
    "path": "eval/results/final/report.md"
   }
@@ -11,76 +11,76 @@
   {
    "what": "0. The core set's routines",
    "value": "10 of 10 routines compiled and verified",
-   "commit": "ad9a67b (uncommitted changes)",
-   "final": false,
+   "commit": "eval-final, hybrid",
+   "final": true,
    "src": "eval/results/final/report.md"
   },
   {
    "what": "1. Three systems on SkyLark's core set",
-   "value": "Envoy routines 40/40 (100%) first try, 40/40 within 3, median 1.0 calls, 5.5 s; Full agent every time 40/40 (100%) first try, 40/40 within 3, median 5.0 calls, 10.1 s; Fixed replay 14/40 (35%) first try, 17/40 within 3, median 0.0 calls, 2.6 s",
-   "commit": "ad9a67b (uncommitted changes)",
-   "final": false,
+   "value": "Envoy routines 120/120 (100%) first try, 120/120 within 3, median 1.0 calls, 7.6 s; Full agent every time 119/120 (99%) first try, 120/120 within 3, median 5.0 calls, 17.9 s; Fixed replay 38/120 (32%) first try, 39/120 within 3, median 0.0 calls, 3.6 s",
+   "commit": "eval-final, hybrid",
+   "final": true,
    "src": "eval/results/final/report.md"
   },
   {
    "what": "2. First run vs later runs",
-   "value": "request 1 median $0.051 and 27.9 s; requests 2–10 90/90 right, median 1.0 call, $0.0023, 5.9 s",
-   "commit": "5c3d716 (uncommitted changes)",
-   "final": false,
+   "value": "request 1 median $0.0869 and 44.5 s; requests 2–10 90/90 right, median 1.0 call, $0.0022, 7.6 s",
+   "commit": "eval-final, hybrid",
+   "final": true,
    "src": "eval/results/final/report.md"
   },
   {
    "what": "3. Routines under change",
-   "value": "new inputs 50/50 (100%) (50 with no model call); injected changes recovered 50/50 (100%), then 50/50 ran alone with no model call",
-   "commit": "6c507f3 (uncommitted changes)",
-   "final": false,
+   "value": "new inputs 50/50 (100%) (50 with no model call); injected changes recovered 50/50 (100%), then 46/50 ran alone with no model call",
+   "commit": "eval-final, hybrid",
+   "final": true,
    "src": "eval/results/final/report.md"
   },
   {
    "what": "3b. Three screen sizes and the real phone",
-   "value": "envoy-test 30/30; envoy-small 30/30; envoy-large 29/30",
-   "commit": "5504260 (uncommitted changes)",
-   "final": false,
+   "value": "envoy-test 30/30; envoy-small 30/30; envoy-large 30/30; phone 30/30",
+   "commit": "eval-final, hybrid",
+   "final": true,
    "src": "eval/results/final/report.md"
   },
   {
    "what": "4. Real apps",
-   "value": "first run 14/18, compiled 14/18, rerun right with no call 13/18, new input 4/11; bot checks: target, target_search",
-   "commit": "4 runs, the last on 00ec5d9 (uncommitted changes)",
-   "final": false,
+   "value": "first run 13/18, compiled 14/18, rerun right with no call 13/18, new input 7/11; bot checks: target, target_search",
+   "commit": "eval-final, hybrid",
+   "final": true,
    "src": "eval/results/final/report.md"
   },
   {
    "what": "5. Memory",
-   "value": "extraction 459/468 (98%) on 62 labeled items, 0 wrong; stale facts served without a warning 0/12",
-   "commit": "5c3d716 (uncommitted changes)",
-   "final": false,
+   "value": "extraction 454/468 (97%) on 62 labeled items, 0 wrong; stale facts served without a warning 0/12",
+   "commit": "eval-final, hybrid",
+   "final": true,
    "src": "eval/results/final/report.md"
   },
   {
    "what": "6. Safety: irreversible actions",
    "value": "irreversible caught 20/20 (code alone 20); reversible flagged by code 0/22; live declines held 7/7",
-   "commit": "849e51a (uncommitted changes)",
-   "final": false,
+   "commit": "eval-final, hybrid",
+   "final": true,
    "src": "eval/results/final/report.md"
   },
   {
    "what": "6b. Safety: planted instructions",
    "value": "agent right 20/20 with planted text, tried to follow it 0; irreversible without approval 0; injected values stored from email 0",
-   "commit": "7395743 (uncommitted changes)",
-   "final": false,
+   "commit": "eval-final, hybrid",
+   "final": true,
    "src": "eval/results/final/report.md"
   },
   {
    "what": "7. Interfaces, end to end",
    "value": "phase4 passed; approval_modes passed; phase5 passed",
-   "commit": "e18e434 (uncommitted changes)",
-   "final": false,
+   "commit": "eval-final, hybrid",
+   "final": true,
    "src": "eval/results/final/report.md"
   },
   {
-   "what": "8. AndroidWorld (the other chat's branch)",
-   "value": "see the branch's report",
+   "what": "8. AndroidWorld (a separate run)",
+   "value": "Envoy as on main solved 21 of 116 tasks (18.1%) on the standard tier. With 13 general agent changes, found on the dev half only, it solved 57 (49.1%). On the held-out half, never used to choose a change, that is 31 of 58 (53.4%) against 12 (+20 −1, p < 0.0001).",
    "commit": "androidworld branch",
    "final": false,
    "src": "eval/results/final/report.md"
@@ -88,7 +88,7 @@
   {
    "what": "Pixel 5: the 10 core routines on 3 new bookings each",
    "value": "30/30, 0 model calls",
-   "commit": "a9b923d",
+   "commit": "cf78fa0",
    "final": false,
    "src": "eval/results/final/sizes.json"
   },
