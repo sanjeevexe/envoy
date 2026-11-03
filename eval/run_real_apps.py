@@ -161,9 +161,11 @@ WORKFLOWS = [
     Workflow("youtube_search", "com.google.android.youtube", "media",
              "In the YouTube app, search for lofi hip hop and tell me the title of the first video in the results.",
              second={"lofi hip hop": "pasta carbonara recipe"}, memory=NO_ACCOUNT),
+    # Nov 2, 2026: envoy-real's Songs results for "Bohemian Rhapsody" no longer listed Queen (they began with Die Hoërskool
+    # Rustenburg Koor), so ^queen$ was false for the app as it is. Blinding Lights' first song result is The Weeknd's.
     Workflow("ytmusic_artist", "com.google.android.apps.youtube.music", "media",
-             "In the YouTube Music app, search for the song Bohemian Rhapsody and tell me the artist of the first song result.",
-             expect=r"^\W*queen\W*$", second={"Bohemian Rhapsody": "Shape of You"}, expect_second=r"^\W*ed sheeran\W*$",
+             "In the YouTube Music app, search for the song Blinding Lights and tell me the artist of the first song result.",
+             expect=r"^\W*the weeknd\W*$", second={"Blinding Lights": "Shape of You"}, expect_second=r"^\W*ed sheeran\W*$",
              graded_by="truth", memory=NO_ACCOUNT),
     Workflow("chrome_wikipedia", "com.android.chrome", "web",
              "In Chrome, go to en.m.wikipedia.org, search for Eiffel Tower and tell me the year it opened.",
