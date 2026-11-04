@@ -304,6 +304,7 @@ class TaskRunner:
                 self.approvers[tid] = approver
                 skylark = app == SKYLARK
                 scope = "test_app" if skylark else "real"
+                contributes = skylark and getattr(self.adapter, "contributor_enabled", False)  # off by default: the standard tier
                 status, result, outputs, final = "failed", "", {}, None
                 moved, installed, end = None, None, None
                 if not choice.real_phone and (app or named):
@@ -332,8 +333,8 @@ class TaskRunner:
                         notes = f"{notes}\n{FRESH_INSTALL.format(name=installed)}".strip()
                     if routine:
                         ex = RoutineExecutor(gated, adapter=self.adapter, approver=approver,
-                                             config=ExecConfig(data_scope=scope, contributor=skylark,
-                                                               agent=RunConfig(data_scope=scope, contributor=skylark, max_cost_usd=TASK_CAP_USD,
+                                             config=ExecConfig(data_scope=scope, contributor=contributes,
+                                                               agent=RunConfig(data_scope=scope, contributor=contributes, max_cost_usd=TASK_CAP_USD,
                                                                                max_cost_usd_wonder=WONDER_TASK_CAP_USD)),
                                              app_notes=self.app_notes)
                         out = await ex.run(routine, inputs, task_id=trace_id, launch="if_needed", allow_repair=True, allow_agent=True, memory=notes,
@@ -352,7 +353,7 @@ class TaskRunner:
                             learn += [d for d in (getattr(out, "trace_dir", None), (getattr(out, "agent", None) or {}).get("trace_dir")) if d]
                     else:
                         res = await AgentRunner(gated, adapter=self.adapter, approver=approver,
-                                                config=RunConfig(data_scope=scope, contributor=skylark, max_cost_usd=TASK_CAP_USD,
+                                                config=RunConfig(data_scope=scope, contributor=contributes, max_cost_usd=TASK_CAP_USD,
                                                                  max_cost_usd_wonder=WONDER_TASK_CAP_USD),
                                                 app_notes=self.app_notes).run(goal, task_id=trace_id, memory=notes)
                         status, result = res.status, res.result
@@ -677,7 +678,7 @@ class TaskRunner:
         for trace in traces:
             try:
                 rep = await self.app_notes.learn(trace, app=app, goal=goal, status=status, result=result, inputs=inputs, outputs=outputs,
-                                                 task_id=tid, data_scope=scope, contributor=scope == "test_app")  # type: ignore[arg-type]
+                                                 task_id=tid, data_scope=scope, contributor=scope == "test_app" and getattr(self.adapter, "contributor_enabled", False))  # type: ignore[arg-type]
             except Exception as e:  # noqa: BLE001 - notes never fail a task
                 self._step(tid, {"kind": "error", "text": f"app notes: {type(e).__name__}: {e}"[:300]})
                 continue

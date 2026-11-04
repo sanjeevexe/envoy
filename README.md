@@ -251,13 +251,16 @@ an app that uses accessibility features to act on its own, so any on-phone helpe
 
 ## Run it
 
-You need a Mac (built on Apple silicon, macOS 26), the Android SDK and emulator, Python 3.13 with `uv`, Node, and a Meta
-Model API key. It runs on SkyLark, our own test app, so it needs no personal accounts.
+You need a Mac on Apple silicon (built on macOS 26), Homebrew's `openjdk@21` (`scripts/env.sh` expects it there), the
+Android command-line tools in `~/Library/Android/sdk/cmdline-tools/latest`, `uv`, Node, about 9 GB free, and a Meta Model
+API key for chat and `demo_setup.py`'s memory step. It runs on SkyLark, our own test app, so it needs no personal accounts.
+From a fresh clone to a checked-in flight took about 15 minutes in our test.
 
 ```bash
 source scripts/env.sh                                    # JAVA_HOME, ANDROID_HOME, PATH
 (cd backend && uv sync)                                  # Python 3.13 environment
-cp .env.example .env                                     # then set META_API_KEY (and MCP_BEARER_TOKEN for Muse)
+cp .env.example .env                                     # then set META_API_KEY and MCP_BEARER_TOKEN (the API needs it:
+                                                         # python3 -c "import secrets; print(secrets.token_urlsafe(32))")
 ```
 
 The test phone, once (on Linux use `x86_64`, as `scripts/cloud/vm-setup.sh` does):
@@ -265,6 +268,7 @@ The test phone, once (on Linux use `x86_64`, as `scripts/cloud/vm-setup.sh` does
 ```bash
 sdkmanager --install "platform-tools" "emulator" "system-images;android-35;google_apis_playstore;arm64-v8a"
 avdmanager create avd -n envoy-test -k "system-images;android-35;google_apis_playstore;arm64-v8a" -d pixel_6
+sed -i '' 's/^hw.keyboard=no/hw.keyboard=yes/' ~/.android/avd/envoy-test.avd/config.ini      # so you can type during sign-in
 (cd testapps/skylark && ./gradlew :app:assembleDebug)                                       # SkyLark
 scripts/start_emulator.sh envoy-test                                                         # headless, gRPC 8554
 adb -s emulator-5554 install -r testapps/skylark/app/build/outputs/apk/debug/app-debug.apk
@@ -278,12 +282,24 @@ uv run --project backend python scripts/demo_setup.py    # SkyLark signed out + 
 uv run --project backend python -m api                   # http://127.0.0.1:8700, MCP at /mcp; prints a sign-in link
 ```
 
-Open the sign-in link it prints and ask in Chat: "Check me in for my flight". Envoy hands you SkyLark's sign-in (any
-email and password, then the test SMS code `demo_setup.py` printed), then checks you in, because asking was your OK. To
+Open the sign-in link it prints and type "Check me in for my flight" in the Ask Envoy box. When Envoy says it needs you,
+click Take over, click a field on the phone and type (any email and password, then the test SMS code `demo_setup.py`
+printed), then click Hand back. It checks you in, because asking was your OK. To
 approve it on your iPhone first, set approvals to "Always ask" in Settings, or send the same request from an agent over
 MCP. Real apps
 use a second emulator, `envoy-real`, made the same way with a 16 GB data partition
 ([`docs/phase-0-findings.md`](docs/phase-0-findings.md)).
+
+**No key?** The tests pass without one (`cd backend && uv run pytest -q`), and saved routines replay with no model calls:
+
+```bash
+uv run --project backend python scripts/demo_setup.py --app-only --signed-in
+uv run --project backend python -m api                   # open the sign-in link it prints in your browser too
+curl -c /tmp/envoy -s -o /dev/null "<the sign-in link>"
+curl -b /tmp/envoy -H 'X-Envoy: 1' -H 'Content-Type: application/json' -d '{"routine":"skylark_check_in_flight","inputs":{"trip_city":"Chicago"}}' http://127.0.0.1:8700/api/tasks
+```
+
+Then approve it in the web app. Chat and memory need a key.
 
 **Connect an agent.** Make it a key in Settings › Agents, then:
 - **Any MCP client,** such as Claude Code: `claude mcp add --transport http …`, step by step in

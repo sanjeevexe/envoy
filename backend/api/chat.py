@@ -27,6 +27,10 @@ from api.crossapp import lead, may_span_apps
 from api.recurring import may_schedule
 
 
+NO_KEY = "Chat needs a Meta Model API key: set META_API_KEY in .env and restart. Saved routines still run without one."
+NOT_CAUGHT = "Sorry, I didn't catch that. Please try again."
+
+
 async def chat(message: str, *, adapter: Any, memory: Any, runner: Any, routines: Any, source: str = "chat") -> dict[str, Any]:
     """`source` is "chat" (typed) or "voice" (spoken): either way your own words, which the approval rules honor.
     `spoken` is the short line a voice reply reads aloud.
@@ -34,6 +38,8 @@ async def chat(message: str, *, adapter: Any, memory: Any, runner: Any, routines
     again and again may set up a recurring job (api/recurring.py); the rest is unchanged."""
     if source in VIA and (usual := said(message, _app_names(runner))) is not None:
         return told(memory, usual, source)
+    if not getattr(adapter, "api_key", True):  # a fresh checkout with no key: say so, instead of a 500
+        return {"kind": "reply", "model_calls": 0, "cost_usd": 0.0, "reply": NO_KEY, "spoken": NO_KEY}
     lead_calls, lead_cost = 0, 0.0
     recurring = getattr(runner, "recurring", None)
     if recurring is not None and may_schedule(message):
@@ -60,6 +66,13 @@ async def chat(message: str, *, adapter: Any, memory: Any, runner: Any, routines
     content = f"REQUEST: {message}\n\nAPPS (learned routines):\n" + "\n".join(f"- {a}" for a in apps) + "\n"
     res = await asyncio.to_thread(adapter.call, "chat", content, instructions=CHAT_INSTRUCTIONS, data_scope="real", task_id="chat")
     route = res.parsed
+    if route is None:  # now and then the reply doesn't parse (a clean-clone test, Nov 4: a 500 on 1 chat in 4): ask once more
+        lead_calls, lead_cost = lead_calls + 1, lead_cost + res.cost_at_standard_usd
+        res = await asyncio.to_thread(adapter.call, "chat", content, instructions=CHAT_INSTRUCTIONS, data_scope="real", task_id="chat")
+        route = res.parsed
+    if route is None:
+        return {"kind": "reply", "model_calls": 1 + lead_calls, "cost_usd": round(res.cost_at_standard_usd + lead_cost, 5),
+                "reply": NOT_CAUGHT, "spoken": NOT_CAUGHT}
     out: dict[str, Any] = {"kind": route.kind, "model_calls": 1 + lead_calls, "cost_usd": round(res.cost_at_standard_usd + lead_cost, 5)}
     if route.kind == "memory":
         ans = await Retriever(memory).answer(message, adapter, data_scope="real", task_id="chat-answer")

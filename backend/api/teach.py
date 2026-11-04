@@ -823,7 +823,7 @@ class Teacher:
         skylark = routine.app == "com.skylark.air"
         try:
             ex = RoutineExecutor(self.pool.gated(avd, device), adapter=self.adapter, approver=approver,
-                                 config=ExecConfig(data_scope="test_app" if skylark else "real", contributor=skylark, patch_screenshots=False))
+                                 config=ExecConfig(data_scope="test_app" if skylark else "real", contributor=skylark and getattr(self.adapter, "contributor_enabled", False), patch_screenshots=False))
             out = await ex.run(routine, inputs, task_id=trace_id, launch="fresh", allow_repair=False, allow_agent=False)
             s.cost_usd += out.cost_at_standard_usd
             set_(tid, status="done" if out.status == "done" else "failed", result=out.detail, detail=out.detail,
