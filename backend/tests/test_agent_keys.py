@@ -15,7 +15,7 @@ from test_mcp_link import make, me
 
 BASE = {"Accept": "application/json, text/event-stream", "Content-Type": "application/json", "MCP-Protocol-Version": "2025-11-25"}
 MUSE = {**BASE, "Authorization": "Bearer mcp-test-token"}
-EVERY_TOOL = {"run_task", "get_task", "list_routines", "run_routine", "cross_post", "memory_search", "memory_get", "memory_note",
+EVERY_TOOL = {"run_task", "get_task", "wait_for_task", "list_routines", "run_routine", "cross_post", "memory_search", "memory_get", "memory_note",
               "send_to_phone", "phone_updates", "create_trigger", "list_phones", "get_file"}
 
 

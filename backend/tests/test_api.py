@@ -238,7 +238,7 @@ def test_mcp_has_no_approve_tool_and_needs_its_token(api):
         r = c.post("/mcp", json=body, headers={**hdr, "Authorization": "Bearer mcp-test-token"})
         assert r.status_code == 200
         names = {t["name"] for t in r.json()["result"]["tools"]}
-        assert names == {"run_task", "get_task", "list_routines", "run_routine", "cross_post", "memory_search", "memory_get", "memory_note",
+        assert names == {"run_task", "get_task", "wait_for_task", "list_routines", "run_routine", "cross_post", "memory_search", "memory_get", "memory_note",
                          "send_to_phone", "phone_updates", "create_trigger", "list_phones", "get_file"}
         assert not any("approv" in n for n in names)
         assert c.get("/api/state", headers={"Authorization": "Bearer mcp-test-token"}).status_code == 401  # the MCP token is not a session

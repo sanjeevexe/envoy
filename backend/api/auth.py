@@ -60,7 +60,7 @@ def _hash(token: str) -> str:
 MUSE = "Muse"  # who holds MCP_BEARER_TOKEN: the connector in Muse
 AGENT = "agent:"  # an agent key's scope is agent:<name>
 TOOL_GROUPS: dict[str, frozenset[str]] = {
-    "read": frozenset({"get_task", "list_routines", "memory_search", "memory_get", "phone_updates", "list_phones"}),
+    "read": frozenset({"get_task", "wait_for_task", "list_routines", "memory_search", "memory_get", "phone_updates", "list_phones"}),
     "run": frozenset({"run_task", "run_routine"}),  # and every learned routine's own tool: see group_of
     "memory": frozenset({"memory_note"}),
     "files": frozenset({"send_to_phone", "get_file"}),
