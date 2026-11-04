@@ -2007,7 +2007,8 @@
     "list_routines",
     "memory_get",
     "memory_search",
-    "phone_updates"
+    "phone_updates",
+    "wait_for_task"
    ],
    "run": [
     "run_routine",
@@ -5624,8 +5625,8 @@
    }
   },
   "tests": {
-   "functions": 811,
-   "files": 55,
+   "functions": 836,
+   "files": 58,
    "src": {
     "path": "backend/tests"
    }
