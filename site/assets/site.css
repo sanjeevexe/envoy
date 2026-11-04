@@ -196,7 +196,16 @@ h3 { font-size: 20px; line-height: 1.25; }
 .larrow { display: grid; place-items: center; color: var(--sage); font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; position: relative; }
 .larrow::after { content: "→"; font-size: 22px; line-height: 1; }
 .larrow span { position: absolute; top: calc(50% - 26px); }
-.pillars { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+.pillars { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 10px; }
+.pillar.lead { grid-column: span 2; }
+.pillar.lead .big { font-size: 34px; }
+.num-head { margin: 22px 0 0; font-size: 14px; color: var(--muted); }
+.num-head b { color: var(--ink); }
+.hero-links { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin-top: 18px; }
+.hero-links .btn { text-decoration: none; display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; width: auto; border-radius: 999px; }
+.hero-links .btn.video { background: var(--sage); border-color: var(--sage); color: #fff; font-size: 15.5px; min-height: 46px; padding: 0 22px; }
+.hero-links .btn.video:hover { filter: brightness(0.94); background: var(--sage); }
+.hero-links .run-needs { flex-basis: 100%; }
 .pillar { padding: 18px 18px 16px; text-decoration: none; color: var(--ink); display: grid; gap: 6px; align-content: start; transition: border-color 0.2s; }
 .pillar:hover { color: var(--ink); border-color: var(--sage); }
 .pillar .big { font-family: var(--serif); font-size: 28px; line-height: 1.1; font-variant-numeric: tabular-nums; color: var(--sage-ink); }
@@ -568,6 +577,8 @@ details.ev > .ev-body { padding: 4px 18px 18px; }
   .stats.two { grid-template-columns: minmax(0, 1fr); }
   .facts li { grid-template-columns: 1fr; }
   .pillars, .posts, .posts.four { grid-template-columns: minmax(0, 1fr); }
+  .pillar.lead { grid-column: auto; }
+  .pillar.lead .big { font-size: 28px; }
   .kinds li { grid-template-columns: 1fr; gap: 2px; }
   .live-posts { grid-template-columns: minmax(0, 1fr); }
   .aw-grid { grid-template-columns: minmax(0, 1fr); }

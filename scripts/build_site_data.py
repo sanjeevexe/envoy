@@ -858,6 +858,41 @@ def aw_hybrid() -> dict:
             "compare_src": src(rel(AW_HYBRID / "compare_final-standard.json"))}
 
 
+def headlines(suites: list[dict]) -> dict:
+    """The README's top numbers, read from the final report's suite rows (the build stops if a row's wording changes)."""
+    row = lambda n: next(s["result"] for s in suites if s["suite"].startswith(n + "."))
+    r = re.search(r"Envoy routines (\d+)/(\d+) .*?median ([\d.]+) calls?, ([\d.]+) s; Full agent every time (\d+)/(\d+) .*?median ([\d.]+) calls?, ([\d.]+) s", row("1"))
+    q = re.search(r"request 1 median \$([\d.]+) and ([\d.]+) s; requests 2–10 (\d+)/(\d+) right, median ([\d.]+) calls?, \$([\d.]+), ([\d.]+) s", row("2"))
+    c = re.search(r"injected changes recovered (\d+)/(\d+)", row("3"))
+    f = re.search(r"irreversible caught (\d+)/(\d+) \(code alone (\d+)\)", row("6"))
+    i = re.search(r"agent right (\d+)/(\d+) with planted text, tried to follow it (\d+)", row("6b"))
+    return {"routines": {"ok": int(r[1]), "n": int(r[2]), "calls": float(r[3]), "s": float(r[4]), "agent_ok": int(r[5]), "agent_n": int(r[6]),
+                         "agent_calls": float(r[7]), "agent_s": float(r[8])},
+            "repeats": {"first_usd": float(q[1]), "first_s": float(q[2]), "ok": int(q[3]), "n": int(q[4]), "calls": float(q[5]), "usd": float(q[6]),
+                        "s": float(q[7]), "times": round(float(q[1]) / float(q[6]))},
+            "recovered": {"ok": int(c[1]), "n": int(c[2])},
+            "safety": {"ok": int(f[1]), "n": int(f[2]), "code": int(f[3])},
+            "planted": {"ok": int(i[1]), "n": int(i[2]), "followed": int(i[3])}}
+
+
+def readme_facts() -> dict:
+    """What the page takes from the README, its source for wording and scope: the tool count (checked against the code), the
+    Nov 4 cross_post take, and "Changes since the evaluation". Each is left out if the README stops saying it."""
+    md = (REPO / "README.md").read_text()
+    code = (REPO / "backend/mcp_server/server.py").read_text()
+    tools = len(re.findall(r"@\w+\.tool\b|\.tool\(", code))
+    said = re.search(r"(\d+) built-in tools", md)
+    assert not said or int(said[1]) == tools, ("README's tool count vs the code", said[1], tools)
+    take = re.search(r"In a (\w+ \d+) take, Muse made one `cross_post` call for ([^,]+, [^,]+ and [^,]+), and all three finished, at ([\d, and]+) model calls in Envoy's replay", md)
+    since = md.split("### Changes since the evaluation", 1)[1].split("\n## ", 1)[0] if "### Changes since the evaluation" in md else ""
+    items = re.findall(r"^- \*\*(.+?)\*\*:? (.+?)(?=^- \*\*|\Z)", since, re.M | re.S)
+    clean = lambda t: re.sub(r"\s+", " ", plain(t)).strip().rstrip(":")
+    return {"tools": tools, "take": take and {"date": take[1], "posts": take[2], "calls": take[3]},
+            "since": [{"name": clean(a), "text": re.sub(r"\s*\([^()]*\.(?:md|py)\)", "", clean(b))} for a, b in items],
+            "run_it": src("README.md#run-it"), "readme": src("README.md"),
+            "cross_post_src": src("eval/results/agent-door/cross-post-pixel.json"), "cross_post_tests": src("backend/tests/test_crosspost.py")}
+
+
 # Each suite's own file beside report.md (suite 8, AndroidWorld, reports elsewhere).
 SUITE_FILES = {"0": "compile", "1": "systems", "2": "repeats", "3": "change", "3b": "sizes", "4": "real", "5": "memory",
                "6": "safety", "6b": "injection", "7": "interfaces"}
@@ -896,6 +931,7 @@ def proof() -> dict:
                      and n.name.startswith("test"))
     return {
         "suites": suites, "targets": targets, "charts": charts, "src": src("eval/results/final/report.md"),
+        "headlines": headlines(suites),
         "charts_src": src("eval/results/final/charts"),
         "aw": {"headline": plain(head), "held_out": plain(held.group(1)) if held else "",
                # framed by cost: routines against the full agent on new seeds, and the agent's held-out half
@@ -1061,7 +1097,7 @@ SHOWCASE = {
 # What a person changed by hand in each, worded from the version's own changes (checked below against index.json, so a new
 # version with other edits stops the build instead of leaving this wrong).
 HAND_EDITS = {
-    "instagram_reel_song": ("two hand edits for the caption fix after the posting batch: Instagram's OK closes the caption edit "
+    "instagram_reel_song": ("two for the caption fix after the posting batch: Instagram's OK closes the caption edit "
                             "instead of Back, and an empty caption is typed again before Share"),
     "instagram_story_poll": None,
     "tiktok_post_sound": "three hand edits: a 3 s wait before TikTok's drawn sound list, the app's name, and no before-check on its launch",
@@ -1083,22 +1119,32 @@ def day_et(stamp: str) -> str:
     return datetime.fromisoformat(stamp.replace(" ", "T")).strftime("%b %-d")
 
 
-def _after_batch(ix: dict) -> dict | None:
-    """The active version, if it was made on or after the posting batch's day: what kind of change it is and its device
-    check, read from its own verification. Never counted with the batch. If the device check's wording can't be read, the
-    page links the version history instead of quoting it."""
-    v = next((v for v in ix["versions"] if v["version"] == ix["active"]), None)
-    if not v or v["created"][:10] < batch_day():
-        return None
-    text = " ".join(v["changes"])
-    kind = ("hand edits" if "hand edit" in text.replace("no hand edits", "") else
-            "an automatic repair" if v.get("source_task") else "a new version")
-    dev = ((v.get("verification") or {}).get("device")) or ""
-    m = re.search(r"(\d+)/(\d+) ([^;:]*?)reached ([\w ]+?) with [^;]*?(all yes|every check yes)", dev)
-    calls = re.search(r"(\d+) model calls", dev)
-    return {"version": v["version"], "date": day_et(v["created"]), "kind": kind,
-            "check": m and {"ok": int(m.group(1)), "n": int(m.group(2)), "what": m.group(3).strip(), "final": m.group(4),
-                            "calls": int(calls.group(1)) if calls else None}}
+# What a hand-edited version after the batch changed, in plain words. A version with no entry here just reads "a hand edit".
+VERSION_WORDS = {
+    ("instagram_reel_song", 4): "the caption fix",
+    ("instagram_reel_song", 5): "a wait for the upload after Share",
+}
+
+
+def _after_batch(ix: dict) -> list[dict]:
+    """Versions made on or after the posting batch's day, up to the active one: what kind of change each is, its device check
+    if its verification records one, and its own runs. Never counted with the batch."""
+    out = []
+    for v in ix["versions"]:
+        if v["version"] > (ix.get("active") or 0) or v["created"][:10] < batch_day():
+            continue
+        text = " ".join(v["changes"]).replace("no hand edits", "")
+        kind = ("a hand edit" if "hand edit" in text else "an automatic repair" if v.get("source_task") else "a new version")
+        dev = ((v.get("verification") or {}).get("device")) or ""
+        m = re.search(r"(\d+)/(\d+) ([^;:]*?)reached ([\w ]+?) with [^;]*?(all yes|every check yes)", dev)
+        calls = re.search(r"(\d+) model calls", dev)
+        runs = [r for r in ix.get("runs") or [] if r.get("version") == v["version"] and r.get("kind") == "run"]
+        out.append({"version": v["version"], "date": day_et(v["created"]), "kind": kind, "what": VERSION_WORDS.get((ix["name"], v["version"])),
+                    "check": m and {"ok": int(m.group(1)), "n": int(m.group(2)), "what": m.group(3).strip(), "final": m.group(4),
+                                    "calls": int(calls.group(1)) if calls else None},
+                    "runs": [{"status": r.get("status"), "calls": r.get("model_calls"), "seconds": r.get("duration_s"), "date": day_et(r["time"])}
+                             for r in runs]})
+    return out
 
 
 def batch_day() -> str:
@@ -1178,7 +1224,9 @@ def showcase() -> dict:
         base = ver[ix["active"] - 1] if active.get("source_task") else active
         made = " ".join(base["changes"])
         hand = HAND_EDITS[name]
-        assert ("no hand edits" in made) == (hand is None) and (hand is None or "hand edit" in made), (name, made[:200])
+        if hand is None and "hand edit" in made.replace("no hand edits", ""):
+            print(f"note: {name} v{base['version']} has a hand edit HAND_EDITS doesn't word; the card says so generically")
+            hand = "hand edits, in its version history"
         y = routine_yaml(lib / f"v{ix['active']}.yaml")
         # Learned with no hand edits, then edited by hand later: the first hand-edited version after the last clean one.
         lineage = [v for v in ix["versions"] if v["version"] <= ix["active"]]
@@ -1279,6 +1327,7 @@ def build() -> dict:
         "repair": repair(),
         "real": real_apps(),
         "learn_path": learn_path(),
+        "readme": readme_facts(),
         "teach": teach(),
         "memory": memory(),
         "safety": safety(),

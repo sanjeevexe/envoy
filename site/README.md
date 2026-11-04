@@ -1,23 +1,29 @@
 # Envoy's showcase site
 
 A guided tour of Envoy for judges and other readers, built only from real recordings, captures and eval results in this
-repo. Five sections tell one story, the same one as the demo video, then an evidence appendix keeps the rest:
+repo. Five sections tell one story, the same one as the demo video and the README's top, then an evidence appendix keeps the
+rest:
 
-- **1, the idea:** "Muse has a computer. Envoy gives it a phone." One plain line on what Envoy is, how an agent, Envoy,
-  Envoy's phone and the person's iPhone fit, one live post start to finish, and three numbers.
-- **2, learns:** a first run step by step, the checked routine a verified run can be compiled into, first run vs routine on
-  real apps, a new input, repairs,
-  and a routine shared as an agent's tool; Meta's models by job.
-- **3, acts:** the four app-only posts (how each was made, its rehearsals, its live post), the Spark agent's one-request dry
-  run, Muse's dry run, and "only a person approves".
+- **1, the idea:** "Muse has a computer. Envoy gives it a phone." What it does, agent first; the demo video and the links; the
+  diagram; the headline numbers, from the final evaluation and from separate runs, as the README's top gives them; one request,
+  start to finish.
+- **2, learns:** a first run step by step, the routine it becomes, first run vs routine on real apps, a new input, repairs,
+  and a routine shared as an agent's tool; "Make it a routine", measured; Meta's models by job.
+- **3, acts:** `cross_post`, the four app-only posts (how each was made, the posting batch, versions since it, its live post),
+  "only a person approves", with the earlier dry runs closed.
 - **4, watches:** real comments on the live posts reaching the iPhone, the trigger kinds, and how an agent hears.
-- **5, results:** real apps first (one pass per row, then first run vs routine as medians with their range), SkyLark second
-  as the stress test, AndroidWorld framed by cost, and the limits.
+- **5, results:** real apps first (first run vs routine as medians with their range, then the final pass, earlier passes
+  closed), SkyLark second as the stress test, AndroidWorld, the limits, and the changes since the evaluation.
 - **Evidence** (not numbered, every group closed until clicked): every run cited with its date, phone, commit, profile and
-  task ids; the Starbucks routine, call by call; all 50 SkyLark repairs; real apps workflow by workflow; the design's
-  targets and charts; the share switch; SAM; safety tests; agent keys; Claude Code; teach mode; memory; how it's built.
+  task ids; the Starbucks routine, call by call; the batch's 40 attempts; all 50 SkyLark repairs; real apps workflow by
+  workflow; the design's targets and charts; the share switch; SAM; safety tests; agent keys; Claude Code; teach mode; memory;
+  how it's built.
 
 Task ids and commits stay out of the five sections' prose (each number names its model profile); they live in the evidence.
+
+**The demo video:** paste its YouTube link into `<meta name="envoy-demo-video" content="">` in `site/index.html`. That's the one
+place it's set, and no rebuild is needed. Empty hides the button; set, a "Watch the 3-minute demo" button leads the hero's links.
+It links out, so the page itself still calls no third party.
 
 It is static: no server, no analytics, no third-party calls (fonts are self-hosted). It's light by default, whatever the
 device's setting; the sun/moon button in the top bar switches to dark and is remembered in that browser.
@@ -104,6 +110,8 @@ Section numbers are positions on the page (the page numbers itself); "E:" is a g
 | Section | What it shows | Source |
 | --- | --- | --- |
 | 1. The idea | The one-liner and the plain line | The words are in `site/index.html` |
+| 1 | The headline numbers | `eval/results/final/report.md`'s suite rows, parsed by the build (`headlines`), and the runs below; the wording follows the README's top |
+| 1, 3 | Muse's Nov 4 `cross_post` take; the tool count; "Changes since the evaluation" | `README.md` (`readme_facts` in the build; the tool count is checked against `backend/mcp_server/server.py`) |
 | 1 | One post, start to finish; the four posts and which went live | `eval/results/showcase/live-2026-11-02/task-rows.json` (the live API's rows for the five real posts, read read-only); "live" for each done row, per `docs/demo-showcase.md` |
 | 1 | Learns: first run vs routine, medians over the real-app workflows | the cost curve's pass (see section 5) |
 | 1 | Watches: 1.57 s | `prompts/phone-watch-report.md` (see section 4) |
@@ -119,7 +127,7 @@ Section numbers are positions on the page (the page numbers itself); "E:" is a g
 | 2 | Meta's models by job; SAM then grounding 52 of 52, grounding alone 49 | `docs/phase-6-results.md` (Results, the fresh sample) |
 | 3. Acts | Each posting routine: version, steps, inputs, how it was made (hand edits), automatic repair | `data/routines/<name>/index.json` and `v<active>.yaml`; `HAND_EDITS` in the build, checked against them |
 | 3 | The posting batch on the final tag, per routine: reached the final button, every check yes, median seconds to the final button, Envoy's model calls, the version it ran, what stopped its runs and its songs | `eval/results/showcase-batch/attempts/*.json` (counted by the build), checked against `RESULTS.md`'s per-workflow table; the Story's "every check yes" cell (the poll read by eye) is shown as RESULTS.md writes it |
-| 3 | After the batch, not part of it: any routine's active version made on or after the batch's day, its kind of change and its device check (today the Reel's v4: 5 of 5 cold Reels to Share). A Short fix that lands later shows the same way on rebuild | each routine's `data/routines/<name>/index.json` (the active version's `created` and `verification.device`) |
+| 3 | After the batch, not part of it: each version made on or after the batch's day, up to the active one: its kind of change, its device check, or its one run. No version is hard-coded, so a new routine snapshot shows on rebuild | each routine's `data/routines/<name>/index.json` (`created`, `verification.device`, `runs`); `VERSION_WORDS` in the build words a hand edit, and a version without an entry reads "a hand edit" |
 | 3 | "No hand edits until vN": a routine learned with no hand edits and edited by hand later (the Reel since v4; the Story has none) | each routine's `index.json`: the last version saying "no hand edits", then the first later version with a hand edit |
 | E: batch | Each of the 40 attempts: start, song, class, reached, the clip, song and text checks, calls | `eval/results/showcase-batch/attempts/*.json` |
 | 3 | The real posts: what each carried (its inputs), Envoy's model calls, and the songless TikTok in the build's words (`LIVE_NOTES`, from the file's notes) | `eval/results/showcase/live-2026-11-02/task-rows.json` |
@@ -158,13 +166,13 @@ the five sections only as the stress test.
 ## Privacy checklist
 
 Every image on the site was looked at, at full size, before it was added. Accounts: SkyLark (our test app, test persona), the
-envoy3955 test Google account, and the test accounts on Envoy's phone. The Starbucks frames show no account details.
+test Google account, and the test accounts on Envoy's phone. The Starbucks frames show no account details.
 
 | Image(s) | What it shows | Checked |
 | --- | --- | --- |
 | `img/starbucks-first-02` … `08` | Starbucks on envoy-real, Oct 30: location prompt, empty café map (location denied), menu, search, Caffè Latte | No account, no location, no names |
 | `img/repair-skylark-before`, `-after`, `img/approval-skylark`, `img/planted-trip-notice`, `img/sam-seat-map` | SkyLark screens: the test persona (Maya Patel), test bookings, a test known traveler number | Test app data only |
-| `img/teach-shown-01` … `07`, `img/teach-replay-01` … `07` | Google Calendar on envoy-real, the envoy3955 test account: the Halloween holiday, a new "Dentist" event, the time picker, the saved events | Test account only; no other events or contacts |
+| `img/teach-shown-01` … `07`, `img/teach-replay-01` … `07` | Google Calendar on envoy-real, the test account: the Halloween holiday, a new "Dentist" event, the time picker, the saved events | Test account only; no other events or contacts |
 | `img/chart-*`, `img/diagram-*` | Eval charts and design diagrams | No personal data |
 | `img/agents-spark-four-asks`, `agents-spark-all-declined`, `tools-spark-by-name`, `keys-spark-read-only` | The Spark agent's page (1920×1080 headless captures, Nov 1) against Envoy test copies on 127.0.0.1: tool calls, task ids, SkyLark's test persona | No keys, no handles, no tailnet name |
 | `img/muse-mac-outbox` | Muse for Mac moving a test clip (pier-sunset.mp4) into Envoy's outbox, Oct 29 | Cropped to Muse's window (the Dock and desktop left out); no account names |
