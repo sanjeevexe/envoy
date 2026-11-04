@@ -1,0 +1,17 @@
+[
+ {
+  "kind": "locator",
+  "step": "open_ride_planning",
+  "description": "step 'open_ride_planning': the element moved or changed; new locator {text='Where are you going?', kind='Button'}",
+  "evidence": {
+   "screenshots": [
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/task-1104-182010-606c-r1/screens/repair_01_1_before.png",
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/task-1104-182010-606c-r1/screens/repair_01_1_after.png"
+   ],
+   "reasons": [
+    "Tap the renamed ride-planning entry on the home screen to open place search."
+   ],
+   "task_id": "task-1104-182010-606c-r1"
+  }
+ }
+]

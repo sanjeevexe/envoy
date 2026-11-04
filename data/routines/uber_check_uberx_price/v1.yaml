@@ -1,0 +1,95 @@
+routine: uber_check_uberx_price
+app: com.ubercab
+version: 1
+status: retired
+intent: Check the UberX price to a destination in Uber
+description: Checks the UberX fare from the phone's current location to a requested destination in Uber and stops at the ride-options price screen
+  without requesting a ride.
+patterns: [Check the UberX price to a destination, How much is an UberX to a destination, What's the UberX fare from here]
+outputs: [uberx_fare, estimated_drop_off_time, driver_eta]
+start: fresh_launch
+inputs:
+  destination: {type: text, description: The destination to check the UberX price for., example: Truist Park}
+steps:
+- id: tap_where_to
+  intent: Tap 'Where to?' to start destination entry
+  pre:
+  - {app_foreground: com.ubercab}
+  - element_present: {resource_id: content_frame, kind: List}
+  action:
+    tap:
+      text: Where to?
+      kind: Button
+      cls: View
+      in_list: true
+      position: [0.5, 0.212]
+  post:
+  - {screen_changed: true}
+  - element_present: {resource_id: location_editor_bottom_sheet_view, text: Sheet height controller, kind: Button}
+  - element_present:
+      resource_id: pill_button_guest
+      text: For me
+      desc: "Rider: For me. Switch rider"
+      kind: Button
+  risk: reversible
+  note: trace step 2
+- id: enter_destination
+  intent: "Type {{destination}} into the 'Where to?' field"
+  pre:
+  - {app_foreground: com.ubercab}
+  action:
+    type:
+      field:
+        resource_id: edit_text
+        text: Where to?
+        hint: Where to?
+        kind: EditText
+        cls: EditText
+        parent: vertical_layout
+        in_list: false
+        position: [0.479, 0.316]
+      value: "{{destination}}"
+  post:
+  - field_equals:
+      field: {resource_id: edit_text, text: 'Where to?', kind: EditText}
+      value: "{{destination}}"
+  risk: reversible
+  note: trace step 3
+- id: select_destination_result
+  intent: "Tap the {{destination}} search result"
+  pre:
+  - {app_foreground: com.ubercab}
+  action:
+    tap:
+      text_has: "{{destination}}"
+      kind: Button
+      cls: Button
+      in_list: false
+      nth: 0
+  post:
+  - {screen_changed: true}
+  - element_present:
+      resource_id: text_container
+      text: "{{destination}}"
+      kind: Text
+  - element_present: {resource_id: ub__payment_bar_background_container, text: Add payment method, kind: Text}
+  risk: reversible
+  extract:
+    uberx_fare: {near: 'selected,UberX,Fare', expect_digits: true}
+    estimated_drop_off_time:
+      locator: {text: Choose UberX, kind: Button}
+    driver_eta:
+      locator: {text: Choose UberX, kind: Button}
+  note: trace step 4
+done:
+- {text_visible: UberX}
+changes: [learned from task task-1104-014743-0a15]
+compiled_from:
+  task_id: task-1104-014743-0a15-r1
+  goal: On Envoy's phone, check the UberX price from the phone's current location to Truist Park, stopping at the price screen without requesting
+    a ride
+  compiler: muse-wonder-1.0
+  compiled_at: "2026-11-04 01:51:12"
+  trace_steps_kept: [1, 2, 3, 4]
+  trace_steps_dropped: 0
+  cost_usd: 0.064

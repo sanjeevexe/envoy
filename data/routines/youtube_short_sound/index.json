@@ -167,6 +167,50 @@
    "model_calls": 0,
    "duration_s": 51.95,
    "patches": 0
+  },
+  {
+   "time": "2026-11-04 12:22:13",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1104-122203-ee10-r1",
+   "status": "failed",
+   "rung": 0,
+   "model_calls": 0,
+   "duration_s": 1.38,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-04 12:24:33",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1104-122334-c97b-r1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 50.77,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-04 12:43:48",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1104-124251-0586-r1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 46.23,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-04 12:59:11",
+   "kind": "run",
+   "version": 3,
+   "task_id": "task-1104-125809-7f5e-r1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 48.27,
+   "patches": 0
   }
  ],
  "needs_recompile": false,

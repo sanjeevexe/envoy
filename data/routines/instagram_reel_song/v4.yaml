@@ -1,7 +1,7 @@
 routine: instagram_reel_song
 app: com.instagram.android
 version: 4
-status: active
+status: retired
 intent: Post a gallery video to Instagram as a reel
 description: Posts the newest video from the phone's gallery to Instagram as a reel, adds a selected track from Instagram's music library, and
   enters a caption before the final share step.
