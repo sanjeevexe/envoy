@@ -4,7 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Envoy: the phone layer agents call</title>
-<meta name="description" content="Muse has a computer. Envoy gives it a phone. Envoy gives an AI agent its own Android phone: it acts in the apps, turns a verified run into a checked routine agents can call as a tool, and watches the phone, with anything an agent asks for that can't be undone approved on your iPhone. Built only from real recordings.">
+<meta name="description" content="Muse has a computer. Envoy gives it a phone. Envoy gives an AI agent its own Android phone: it works the apps, turns a verified run into a checked routine agents call by name, and tells them what happens on the phone, while anything an agent starts that can't be undone waits for your yes on your iPhone. Built only from real recordings.">
+<!-- The demo video: paste its YouTube link between the quotes. Empty hides the button. This is the only place it's set. -->
+<meta name="envoy-demo-video" content="">
 <meta name="theme-color" content="#ece7dc">
 <!-- Light unless the visitor picked dark here (the toggle in the top bar, remembered in this browser): set before the
      first paint, so a dark visit never flashes cream. -->
@@ -33,10 +35,11 @@
     <div class="wrap">
       <div class="hero-grid">
         <div>
-          <span class="eyebrow"><span class="num">1</span> The idea</span>
+          <span class="eyebrow"><span class="num">1</span> The phone layer agents call</span>
           <h1 id="claim-h" style="margin-top:14px">Muse has a computer. <em>Envoy gives it a phone.</em></h1>
-          <p class="lede">Envoy gives an AI agent its own Android phone, so it can use what only exists in apps: a song from Instagram's library on a Reel, a poll on a Story, a TikTok sound. Anything an agent asks for that can't be undone waits for your yes on your iPhone. And a run Envoy has verified can be compiled into a checked routine it replays with few or no model calls, which you can give every agent as a new tool.</p>
-          <p class="sub">Muse is Meta's assistant, on the Mac and in its iPhone app. Any agent that speaks MCP calls Envoy the same way.</p>
+          <p class="lede">Envoy lets AI agents like Meta's Muse work real Android apps, including what only exists in apps: a song from Instagram's library on a Reel, a poll on a Story, a TikTok sound. One tap turns a verified run into a checked routine agents call by name, and Envoy tells them what happens on the phone. Whatever an agent starts that can't be undone waits for your yes in Envoy's app on your iPhone, where you stay in control.</p>
+          <p class="sub">Muse is Meta's assistant, on the Mac and in its iPhone app; any agent that speaks MCP calls Envoy the same way. You can also chat with Envoy directly in its app.</p>
+          <div class="hero-links" id="hero-links"></div>
         </div>
         <div class="hero-avatar" aria-hidden="true">
           <div class="glow"></div>
@@ -50,8 +53,8 @@
         </div>
       </div>
       <div id="layer"></div>
-      <div id="live"></div>
       <div id="pillars"></div>
+      <div id="live"></div>
     </div>
   </section>
 

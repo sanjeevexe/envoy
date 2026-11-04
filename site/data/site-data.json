@@ -839,7 +839,7 @@
      "caption"
     ],
     "outputs": [],
-    "hand": "two hand edits for the caption fix after the posting batch: Instagram's OK closes the caption edit instead of Back, and an empty caption is typed again before Share",
+    "hand": "two for the caption fix after the posting batch: Instagram's OK closes the caption edit instead of Back, and an empty caption is typed again before Share",
     "hand_from": {
      "version": 4,
      "date": "Nov 3"
@@ -872,18 +872,22 @@
       "by": "Muse's dry run, Nov 2"
      }
     },
-    "after_batch": {
-     "version": 4,
-     "date": "Nov 3",
-     "kind": "hand edits",
-     "check": {
-      "ok": 5,
-      "n": 5,
-      "what": "cold Reels with golden hour",
-      "final": "Share",
-      "calls": 0
+    "after_batch": [
+     {
+      "version": 4,
+      "date": "Nov 3",
+      "kind": "a hand edit",
+      "what": "the caption fix",
+      "check": {
+       "ok": 5,
+       "n": 5,
+       "what": "cold Reels with golden hour",
+       "final": "Share",
+       "calls": 0
+      },
+      "runs": []
      }
-    },
+    ],
     "src": {
      "path": "data/routines/instagram_reel_song/index.json"
     },
@@ -920,7 +924,7 @@
      }
     ],
     "repair": null,
-    "after_batch": null,
+    "after_batch": [],
     "src": {
      "path": "data/routines/instagram_story_poll/index.json"
     },
@@ -969,7 +973,7 @@
      }
     ],
     "repair": null,
-    "after_batch": null,
+    "after_batch": [],
     "src": {
      "path": "data/routines/tiktok_post_sound/index.json"
     },
@@ -1019,7 +1023,7 @@
       "by": "Muse's dry run, Nov 2"
      }
     },
-    "after_batch": null,
+    "after_batch": [],
     "src": {
      "path": "data/routines/youtube_short_sound/index.json"
     },
@@ -4094,6 +4098,40 @@
    "path": "eval/results/learn-agent-path/PROTOCOL.md"
   }
  },
+ "readme": {
+  "tools": 14,
+  "take": {
+   "date": "Nov 4",
+   "posts": "a Reel, a Short and a TikTok",
+   "calls": "0, 0 and 3"
+  },
+  "since": [
+   {
+    "name": "wait_for_task",
+    "text": "a new tool that holds a call for up to about 45 s and says whether the task is still going, so an agent can stay in its turn until the task is final."
+   },
+   {
+    "name": "Lyft's \"Confirm drop-off location\"",
+    "text": "no longer asks for approval, because it only sets where you're going. \"Confirm pickup\" and \"Request …\" still ask."
+   },
+   {
+    "name": "Tied rows",
+    "text": "in a routine with no irreversible step, when rows named by an input tie and their list can't scroll right now, the routine takes the top one instead of failing."
+   }
+  ],
+  "run_it": {
+   "path": "README.md#run-it"
+  },
+  "readme": {
+   "path": "README.md"
+  },
+  "cross_post_src": {
+   "path": "eval/results/agent-door/cross-post-pixel.json"
+  },
+  "cross_post_tests": {
+   "path": "backend/tests/test_crosspost.py"
+  }
+ },
  "teach": {
   "rec": {
    "calendar": {
@@ -5530,6 +5568,42 @@
   },
   "src": {
    "path": "eval/results/final/report.md"
+  },
+  "headlines": {
+   "routines": {
+    "ok": 120,
+    "n": 120,
+    "calls": 1.0,
+    "s": 7.6,
+    "agent_ok": 119,
+    "agent_n": 120,
+    "agent_calls": 5.0,
+    "agent_s": 17.9
+   },
+   "repeats": {
+    "first_usd": 0.0869,
+    "first_s": 44.5,
+    "ok": 90,
+    "n": 90,
+    "calls": 1.0,
+    "usd": 0.0022,
+    "s": 7.6,
+    "times": 40
+   },
+   "recovered": {
+    "ok": 50,
+    "n": 50
+   },
+   "safety": {
+    "ok": 20,
+    "n": 20,
+    "code": 20
+   },
+   "planted": {
+    "ok": 20,
+    "n": 20,
+    "followed": 0
+   }
   },
   "charts_src": {
    "path": "eval/results/final/charts"
