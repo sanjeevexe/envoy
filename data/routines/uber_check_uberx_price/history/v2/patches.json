@@ -1,0 +1,17 @@
+[
+ {
+  "kind": "insert_after",
+  "step": "tap_where_to",
+  "description": "after 'tap_where_to', an extra screen appeared; inserted tap_where_to_extra_1 (tap Where to?)",
+  "evidence": {
+   "screenshots": [
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/task-1104-031234-e392-r1/screens/repair_01_1_before.png",
+    "/Users/sanjeevvarma/Desktop/Envoy/data/runs/task-1104-031234-e392-r1/screens/repair_01_1_after.png"
+   ],
+   "reasons": [
+    "The step's target element is still present under its original name and is directly tappable at [9]. Tapping it should open the destination entry sheet, satisfying both presence checks and the screen-changed check. No interstitial or renamed element needs handling, and the step has not already been completed since the sheet is not visible on the current home screen."
+   ],
+   "task_id": "task-1104-031234-e392-r1"
+  }
+ }
+]

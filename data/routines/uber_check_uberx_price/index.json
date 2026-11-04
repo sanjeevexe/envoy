@@ -1,0 +1,88 @@
+{
+ "name": "uber_check_uberx_price",
+ "active": 2,
+ "versions": [
+  {
+   "version": 1,
+   "status": "retired",
+   "created": "2026-11-04 01:51:26",
+   "parent": null,
+   "changes": [
+    "learned from task task-1104-014743-0a15"
+   ],
+   "verification": {
+    "by": "learn",
+    "from": "task-1104-014743-0a15",
+    "cases": [
+     {
+      "case": "replay",
+      "passed": true,
+      "inputs": {
+       "destination": "Truist Park"
+      },
+      "duration_s": 14.0,
+      "status": "done"
+     }
+    ]
+   }
+  },
+  {
+   "version": 2,
+   "status": "active",
+   "created": "2026-11-04 03:13:17",
+   "parent": 1,
+   "changes": [
+    "after 'tap_where_to', an extra screen appeared; inserted tap_where_to_extra_1 (tap Where to?)"
+   ],
+   "source_task": "task-1104-031234-e392-r1",
+   "screenshots": [
+    "history/v2/repair_01_1_before.png",
+    "history/v2/repair_01_1_after.png"
+   ],
+   "trial": {
+    "passed": true,
+    "task_id": "task-1104-034144-10e7-r1",
+    "status": "done",
+    "model_calls": 0,
+    "duration_s": 12.81
+   }
+  }
+ ],
+ "runs": [
+  {
+   "time": "2026-11-04 01:55:20",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1104-015457-7ee0-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 11.33,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-04 03:13:17",
+   "kind": "run",
+   "version": 1,
+   "task_id": "task-1104-031234-e392-r1",
+   "status": "done",
+   "rung": 4,
+   "model_calls": 1,
+   "duration_s": 32.9,
+   "patches": 1
+  },
+  {
+   "time": "2026-11-04 03:45:14",
+   "kind": "run",
+   "version": 2,
+   "task_id": "task-1104-034144-10e7-r1",
+   "status": "done",
+   "rung": 1,
+   "model_calls": 0,
+   "duration_s": 12.81,
+   "patches": 0
+  }
+ ],
+ "needs_recompile": false,
+ "app": "com.ubercab"
+}

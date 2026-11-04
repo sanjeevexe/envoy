@@ -1,6 +1,6 @@
 {
  "name": "instagram_reel_song",
- "active": 4,
+ "active": 5,
  "versions": [
   {
    "version": 1,
@@ -59,7 +59,7 @@
   },
   {
    "version": 4,
-   "status": "active",
+   "status": "retired",
    "created": "2026-11-03 14:05:58",
    "parent": 3,
    "changes": [
@@ -70,6 +70,33 @@
    "verification": {
     "offline": "backend/tests/test_reel_caption_fix.py",
     "device": "Nov 3, 14:57-15:10 ET, Envoy's phone (Pixel 5), a test copy at f2671b0, approvals asking, every Share declined: 5/5 cold Reels with golden hour reached Share with clip, song and caption checks all yes, 0 model calls (the retype guard ran in 1 of 5: OK left the caption empty); TikTok v3 no-regression 1/1"
+   }
+  },
+  {
+   "version": 5,
+   "status": "active",
+   "created": "2026-11-04 12:49:03",
+   "parent": 4,
+   "changes": [
+    "hand edit: demo (Nov 4). wait_for_post_to_finish after Share, optional: the done-check's 5 s ended before Instagram finished sharing"
+   ]
+  },
+  {
+   "version": 6,
+   "status": "rejected",
+   "created": "2026-11-04 12:58:08",
+   "parent": 5,
+   "changes": [
+    "step 'search_song_title': after-checks failed (no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00); no match (best 0.00 < ) but the next step was ready; after-checks rewritten from what happened"
+   ],
+   "source_task": "task-1104-125621-58f5-r1",
+   "screenshots": [],
+   "trial": {
+    "passed": false,
+    "task_id": "task-1104-183557-d224-r1",
+    "status": "declined",
+    "model_calls": 2,
+    "duration_s": 127.59
    }
   }
  ],
@@ -172,6 +199,50 @@
    "model_calls": 15,
    "duration_s": 197.88,
    "patches": 0
+  },
+  {
+   "time": "2026-11-04 12:19:26",
+   "kind": "run",
+   "version": 4,
+   "task_id": "task-1104-121601-4ea5-r1",
+   "status": "agent_done",
+   "rung": 5,
+   "model_calls": 17,
+   "duration_s": 195.67,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-04 12:42:51",
+   "kind": "run",
+   "version": 4,
+   "task_id": "task-1104-124006-6bf1-r1",
+   "status": "failed",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 151.34,
+   "patches": 0
+  },
+  {
+   "time": "2026-11-04 12:58:08",
+   "kind": "run",
+   "version": 5,
+   "task_id": "task-1104-125621-58f5-r1",
+   "status": "done",
+   "rung": 2,
+   "model_calls": 0,
+   "duration_s": 95.79,
+   "patches": 1
+  },
+  {
+   "time": "2026-11-04 18:38:11",
+   "kind": "run",
+   "version": 6,
+   "task_id": "task-1104-183557-d224-r1",
+   "status": "declined",
+   "rung": 4,
+   "model_calls": 2,
+   "duration_s": 127.59,
+   "patches": 2
   }
  ],
  "needs_recompile": false,
