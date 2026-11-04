@@ -156,6 +156,37 @@ def test_confirm_pickup_is_irreversible_by_rule():
     assert v.irreversible and "rule: target says 'Confirm pickup'" in v.reasons
 
 
+@pytest.mark.parametrize("label", [
+    "Confirm drop-off location: Mercedes-Benz Stadium, 1 AMB Dr NW, Atlanta", "Confirm drop-off location", "Confirm drop-off",
+    "Confirm dropoff location: Pay Less Drugs", "CONFIRM DROP-OFF",
+])
+def test_lyfts_confirm_drop_off_only_sets_the_destination(label):
+    """The button on Lyft's "Set your drop-off" map screen requests nothing, so it doesn't ask, whatever the place is called."""
+    s = _buttons("Back", label, package="me.lyft.android")
+    v = classify(Action(kind="tap", element=s.numbered[1].number), s, model_risk="reversible")
+    assert not v.irreversible, v.reasons
+
+
+@pytest.mark.parametrize("label, app", [
+    ("Confirm pickup", "me.lyft.android"), ("Confirm pickup spot", "me.lyft.android"), ("Request Lyft", "me.lyft.android"),
+    ("Confirm Lyft", "me.lyft.android"), ("Confirm drop-off change", "me.lyft.android"), ("Confirm drop-off and request", "me.lyft.android"),
+    ("Confirm", "me.lyft.android"), ("Confirm UberX", "com.ubercab"), ("Confirm drop-off location: Home", "com.ubercab"),
+    ("Confirm drop-off", "com.doordash.driverapp"), ("Confirm drop-off location: Home", "com.example.app"),
+])
+def test_every_other_confirm_still_asks(label, app):
+    """The exception is Lyft's drop-off button alone: other wording in Lyft, and the same wording in any other app, still ask."""
+    s = _buttons("Back", label, package=app)
+    v = classify(Action(kind="tap", element=s.numbered[1].number), s, model_risk="reversible")
+    assert v.irreversible, label
+
+
+def test_lyfts_drop_off_still_asks_on_a_payment_screen_or_when_the_model_says_so():
+    s = _buttons("Payment method", "Confirm drop-off", package="me.lyft.android")
+    assert classify(Action(kind="tap", element=s.numbered[1].number), s, model_risk="reversible").irreversible
+    s = _buttons("Back", "Confirm drop-off", package="me.lyft.android")
+    assert classify(Action(kind="tap", element=s.numbered[1].number), s, model_risk="irreversible").irreversible
+
+
 @pytest.mark.parametrize("label, app", [
     ("Request a feature", "com.example.app"), ("Request refund", "com.example.app"), ("Request desktop site", "com.android.chrome"),
     ("Ride history", "com.ubercab"), ("Ride details", "me.lyft.android"), ("Set pickup", "com.ubercab"),
