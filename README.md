@@ -43,10 +43,6 @@ checked (Nov 1), so today every clip means four rounds of tapping in three apps.
 the Mac. Envoy's phone works each app from a routine it learned from its own runs, and stops at each app's final button
 until the creator says yes on their iPhone. The agent does the heavy lifting; the person keeps the keys.
 
-<!-- SLOT measured benefit (the timed run by hand): the same clip and app features by hand vs through Envoy, as
-hands-on time, elapsed time, interventions and whether every post was right, with the one-time setup kept apart from
-repeat use. One trial: say so. -->
-
 Beyond creators, the same layer is meant for anyone whose work lives in phone apps no agent can reach: a small business
 that runs on its ordering and messaging apps, someone for whom tapping through apps is hard, and any agent platform that
 wants a phone.
@@ -60,7 +56,7 @@ approval only the person can give ([`docs/technical-design.md`](docs/technical-d
 
 | | What | Evidence |
 | --- | --- | --- |
-| **Agents call it** | MCP at `/mcp` (Streamable HTTP), 13 built-in tools: run a task or a routine, post to several apps in one request, search memory, send a file to the phone, get files back, propose a trigger, list phones, read phone updates… Muse for Mac and the Muse app add it as a custom connector | [`backend/mcp_server/README.md`](backend/mcp_server/README.md), [`docs/muse-link.md`](docs/muse-link.md) |
+| **Agents call it** | MCP at `/mcp` (Streamable HTTP), 14 built-in tools: run a task or a routine, wait for it in the same turn (`wait_for_task`), post to several apps in one request, search memory, send a file to the phone, get files back, propose a trigger, list phones, read phone updates… Muse for Mac and the Muse app add it as a custom connector | [`backend/mcp_server/README.md`](backend/mcp_server/README.md), [`docs/muse-link.md`](docs/muse-link.md) |
 | **Any MCP agent** | Muse; the Spark agent, a small agent on Meta's Muse Spark that reaches Envoy only over MCP; and any MCP client (Claude Code tested). Each has its own key and tool groups; every task says which agent asked | [`docs/agents.md`](docs/agents.md), [`agents/meta-agent/evidence/2026-11-01/`](agents/meta-agent/evidence/2026-11-01/) |
 | **Learned tasks become tools** | Share a routine in Settings › Agents (off by default) and it appears in agents' tool lists under its own name, with typed inputs, no restart. In a Nov 2 dry run, Muse called the Reel, TikTok and Short routines by name; each reached its final button and was declined, and the two tries at the poll Story failed. Nothing was posted | [`eval/results/agent-door/`](eval/results/agent-door/) (`tools-before.json`, `tools-after.json`, `call.json`), [`eval/results/showcase/muse-2026-11-02/task-rows.json`](eval/results/showcase/muse-2026-11-02/task-rows.json) |
 | **App-only posts** | One clip from the Mac → an Instagram Reel with a library song, a Story with a poll sticker, a TikTok with a sound and a YouTube Short with a sound. All four went live on test accounts on the night of Nov 1, each started by the Spark agent and approved on the iPhone: the Reel, Story and Short with 0 model calls in Envoy's replay, the TikTok with 3. The agent that calls pays for its own turns: in a declined dry run on a test copy (Nov 1), the Spark agent used 11 model calls ($0.044) to drive three posts. Which routines were tuned by hand is in [the write-up](docs/submission.md#hand-edits-stated-exactly) | [`docs/demo-showcase.md`](docs/demo-showcase.md), [`data/routines/`](data/routines/) (each `index.json`), [`agents/meta-agent/evidence/2026-11-01/crosspost/`](agents/meta-agent/evidence/2026-11-01/crosspost/README.md) |
@@ -160,12 +156,18 @@ this version, these workflows and inputs, one phone and one set of accounts, one
 - **Model calls in Envoy's replay:** 95 over the 40 attempts, $1.0342. TikTok reads its drawn sound list by vision on
   every run, by design.
 
-**After the batch, not part of it:** `instagram_reel_song` v4 (merged in `0d28e5a`) ends the caption edit with
+**After the batch, not part of it (Nov 3):** `instagram_reel_song` v4 (merged in `0d28e5a`) ends the caption edit with
 Instagram's OK instead of Back, and types the caption again if it's empty before Share. On Envoy's phone, on a test
 copy with every Share declined, 5 of 5 Reels from a cold start reached Share with clip, song and caption checked, at 0
 model calls in Envoy's replay; TikTok 1 of 1, as a check that nothing else broke
 ([`index.json`](data/routines/instagram_reel_song/index.json), v4). The Short's song pick and draft prompt weren't
 fixed.
+
+**That 5 of 5 isn't the Reel's current state.** In live runs on Nov 4, v4 fell back to the agent once (17 model calls,
+195.67 s) and failed once (0 calls, 151.34 s). v5, a hand edit that waits for Instagram to finish sharing, then ran
+once: done, 0 model calls in Envoy's replay, 95.79 s. Envoy's own repair from that run, v6, is on trial, not active.
+(Before the batch, on Nov 2, v3 had fallen back to the agent in a live run too: 15 calls.) These are single runs, not a
+reliability figure.
 
 ### SkyLark (our test app)
 
@@ -202,6 +204,19 @@ by side:
   their own seed-30 task did 55 of 69 new-seed instances at a median 1 model call, $0.0021 and 8.3 s; the full agent
   did 63 at 6 calls, $0.0122 and 19.0 s. Pairing each routine miss with the agent's own run on that instance gives 67
   of 69 (computed, not run) ([`docs/androidworld-results.md`](docs/androidworld-results.md)).
+
+### Changes since the evaluation
+
+Made after the `eval-final` tag, and not measured by it:
+- **`wait_for_task`:** a new tool that holds a call for up to about 45 s and says whether the task is still going, so an
+  agent can stay in its turn until the task is final. In an earlier take, Muse had ended its turn and nothing woke it
+  ([`backend/mcp_server/README.md`](backend/mcp_server/README.md)).
+- **Lyft's "Confirm drop-off location"** no longer asks for approval, because it only sets where you're going. "Confirm
+  pickup" and "Request …" still ask ([`backend/policy/risk.py`](backend/policy/risk.py)).
+- **Tied rows:** in a routine with no irreversible step, when rows named by an input tie and their list can't scroll
+  right now, the routine takes the top one instead of failing.
+- **Muse and `cross_post`:** in a Nov 4 take, Muse made one `cross_post` call for a Reel, a Short and a TikTok, and all
+  three finished: 0, 0 and 3 model calls in Envoy's replay (each routine's `index.json`).
 
 ## Limits, said plainly
 
@@ -342,6 +357,8 @@ and compile on Muse Wonder 1.0 and the rest on Muse Spark 1.3; the Spark profile
 | Outcome checks on Envoy's phone | the wrong-clip stop and the clean Reel, TikTok and Short runs, Nov 2 19:27–20:35, every final button declined | merged in `373eb86` | [`runs.md`](eval/results/showcase/runs/runs.md) and each run's JSON |
 | The posting batch | 40 attempts, the four posting routines at v3, 10 each, cold / open / draft, Envoy's phone, Nov 3 12:27–14:55 ET, every final button declined; declared before the tag | `eval-final` = `cf78fa0` (the API copy); driver commits in each record | [`RESULTS.md`](eval/results/showcase-batch/RESULTS.md), `attempts.md`, `attempts/` |
 | `instagram_reel_song` v4, after the batch | 5 cold Reels to Share and 1 TikTok, a test copy at the fix, every final button declined, Nov 3 14:57–15:10 ET | merged in `0d28e5a` | `data/routines/instagram_reel_song/index.json` (v4's `verification`), [`test_reel_caption_fix.py`](backend/tests/test_reel_caption_fix.py) |
+| The Reel since v4's check, and Muse's `cross_post` take | single live runs, Nov 4 (and v3's on Nov 2), Envoy's phone; each row gives its version, status, model calls and seconds | the runs' task ids in each file | `runs` and `versions` in `data/routines/instagram_reel_song/index.json`, `tiktok_post_sound/index.json`, `youtube_short_sound/index.json` |
+| Changes since the evaluation | code only, not in any measured run above | `2a8e029` (`wait_for_task`), `7a0520b` (Lyft), `bbf1e0f` (tied rows) | the commits, and their tests |
 
 Earlier development passes stay in `eval/results/` (for real apps: `real_pass_2026-10-28/`, `real_rerun_2026-10-29/`,
 `real_rerun_2026-10-31/`, `real_rerun_2026-11-02_wsd-baseline/` and `real-apps/loop-a/`) with their own commits and

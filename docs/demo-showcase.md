@@ -38,11 +38,12 @@ and recompiled with the compiler fix (main ffde928); `prompts/showcase-report.md
 | `youtube_short_sound` | sound_title, sound_artist, short_title | v2 reached Upload Short every run (2 of the first 3 with the agent's help, 2–8 calls); with the case fix (953b014), 0 calls (1 rehearsal, then the live post) | learned, one step tuned |
 
 Since Nov 2 the library runs v3 of all four. The Reel's and the Short's v3 are automatic repairs Envoy made during the
-live posts (after-checks rewritten); both passed their trial in Muse's dry run at 0 calls in Envoy's
-replay. Each `data/routines/<name>/index.json`
-lists every version and every hand edit. Since Nov 3 the Reel runs v4,
-a hand edit after the posting batch: the caption edit ends with Instagram's OK instead of Back, and the caption is typed
-again if it's empty before Share (`eval/results/showcase-batch/RESULTS.md`, "After the batch").
+live posts (after-checks rewritten); both passed their trial in Muse's dry run at 0 calls in Envoy's replay. Each
+`data/routines/<name>/index.json` lists every version and every hand edit. On Nov 3 the Reel moved to v4, a hand edit
+after the posting batch: the caption edit ends with Instagram's OK instead of Back, and the caption is typed again if
+it's empty before Share (`eval/results/showcase-batch/RESULTS.md`, "After the batch"). Since Nov 4 it runs v5, another
+hand edit: an optional wait after Share. `data/routines/instagram_reel_song/index.json` has each version's runs; v6,
+Envoy's own repair, is on trial.
 
 The song for all three: JVKE's "golden hour" (in all three libraries). Which features work on the test accounts is
 pre-check P3 (`eval/results/showcase/p3.md`).

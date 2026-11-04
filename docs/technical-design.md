@@ -93,7 +93,7 @@ The person asks Muse for Mac to post a clip from the Mac as an Instagram Reel, s
 3. **The phone.** Instagram is set to run on Envoy's phone, so the task first asks the person "use Envoy's phone?" on the iPhone. A "no" moves the task to an emulator. No answer within 15 minutes ends the task as not done.
 4. **The run.** The executor replays the routine step by step, with a check before and after each one. While the checks pass, it makes no model calls. Every step streams to Envoy's web app and iPhone app.
 5. **The approval.** Share is irreversible, so the task stops and Envoy pushes an approval to the person's iPhone. Muse is told the task is waiting for the person's OK in Envoy. Muse has no tool to approve it.
-6. **Back to the agent.** Muse follows the task with `get_task`, or later with `phone_updates`, and tells the person how it ended. `get_file` can give it the final screen and the approval screens.
+6. **Back to the agent.** Muse follows the task with `wait_for_task` or `get_task`, or later with `phone_updates`, and tells the person how it ended. `get_file` can give it the final screen and the approval screens.
 7. **Memory.** The routine's outputs become facts, each linked to the app screen it came from.
 
 If the app has changed since the routine was learned, step 4 climbs the fallback ladder, repairs the broken step, and puts a new version on trial (see App routines).
@@ -557,8 +557,8 @@ Built Nov 1 (`api/agents.py`, `api/auth.py`):
 
   | Group | Tools |
   | --- | --- |
-  | read | `get_task`, `list_routines`, `memory_search`, `memory_get`, `phone_updates`, `list_phones` |
-  | run | `run_task`, `run_routine`, and every shared routine's tool |
+  | read | `get_task`, `wait_for_task`, `list_routines`, `memory_search`, `memory_get`, `phone_updates`, `list_phones` |
+  | run | `run_task`, `run_routine`, `cross_post`, and every shared routine's tool |
   | memory | `memory_note` |
   | files | `send_to_phone`, `get_file` |
   | triggers | `create_trigger` |

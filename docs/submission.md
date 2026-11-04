@@ -93,9 +93,6 @@ checked (Nov 1), so today every clip means four rounds of tapping in three apps.
 the Mac. Envoy's phone works each app from a routine it learned from its own runs and stops at each final button until
 the creator says yes on their iPhone. The agent does the heavy lifting; the person keeps the keys.
 
-<!-- SLOT measured benefit (the timed run by hand): hands-on time, elapsed time, interventions and whether every post was
-right, by hand vs through Envoy, with the one-time setup kept apart from repeat use. One trial: say so. -->
-
 Beyond creators, the same layer is meant for anyone whose work lives in phone apps no agent can reach: a small business
 that runs on its ordering and messaging apps, someone for whom tapping through apps is hard, and any agent platform that
 wants a phone.
@@ -145,13 +142,13 @@ or by Envoy, are listed in `data/routines/<name>/index.json`.
 
 | Routine (active version) | By hand | Since |
 | --- | --- | --- |
-| `instagram_reel_song` (v4) | v4 (Nov 3, after the posting batch): the caption edit ends with Instagram's OK instead of Back, and the caption is typed again if it's empty before Share; no hand edits before that | recompiled once after a compiler fix, from the same run; after the live post, Envoy repaired two after-checks on its own (v3), and that version passed its trial in Muse's dry run (0 model calls in Envoy's replay, declined at Share). v4 is the hand edit |
+| `instagram_reel_song` (v5) | v4 (Nov 3, after the posting batch): the caption edit ends with Instagram's OK instead of Back, and the caption is typed again if it's empty before Share. v5 (Nov 4): an optional wait after Share, because the done-check ended before Instagram finished sharing. No hand edits before v4 | recompiled once after a compiler fix, from the same run; after the live post, Envoy repaired two after-checks on its own (v3), and that version passed its trial in Muse's dry run (0 model calls in Envoy's replay, declined at Share). v4 and v5 are the hand edits; v6, Envoy's own repair from a Nov 4 run, is on trial |
 | `instagram_story_poll` (v3) | none | recompiled twice after compiler fixes, from the same run |
 | `tiktok_post_sound` (v3) | a 3 s wait before tapping TikTok's drawn sound list; the app's name corrected (the source run predates TikTok in Envoy's app list); the launch step's before-checks dropped | recompiled after compiler fixes, from the same run, with those edits re-applied: it now checks that the editor names the sound |
 | `youtube_short_sound` (v3) | one before-check dropped (a "Captions unavailable" label from a video playing when the run was recorded) | recompiled once after a compiler fix, from the same run; after the live post, Envoy repaired one after-check on its own, and that version passed its trial in Muse's dry run (0 model calls in Envoy's replay, declined at Upload Short) |
 
 The outcome checks added on Nov 2 (song, caption, clip) live in code and change none of these routines. The posting
-batch (in [Results](#results)) ran every routine at v3, before the Reel's v4.
+batch (in [Results](#results)) ran every routine at v3, before the Reel's v4 and v5.
 
 ## Public GitHub repository
 
@@ -246,7 +243,8 @@ The full log, kept as we went, with dates and evidence: `docs/meta-feedback.md`.
   - Document that strict JSON output writes keys alphabetically. It silently changes how a model reasons when a
     schema's order matters.
   - A way for a connector to tell Muse that a long task finished. Today Muse polls, and in the Nov 2 dry run it ended
-    its turn after starting each post and waited for a tap before the next.
+    its turn after starting each post and waited for a tap before the next. Envoy's `wait_for_task`, added since, works
+    around it by holding a call up to about 45 s.
   - Say in the connector UI that a newly listed tool needs one more step (Muse adds it to its allowed list) before its
     first call.
   - Fewer "Allow once" prompts when adding a connector.
@@ -265,7 +263,6 @@ Not used. Envoy calls Meta's Model API directly; the cloud phone test ran on Goo
 ## Most Viral track (optional)
 
 Not entered.
-<!-- SLOT: if the author posts on X before submitting, the post's link goes here instead. -->
 
 ## Publicity grant
 
@@ -351,15 +348,27 @@ this version, these workflows and inputs, one phone and one set of accounts, one
 - **Model calls in Envoy's replay:** 95 over the 40 attempts, $1.0342. TikTok reads its drawn sound list by vision on
   every run, by design.
 
-**After the batch, not part of it:** `instagram_reel_song` v4 (merged in `0d28e5a`) ends the caption edit with
+**After the batch, not part of it (Nov 3):** `instagram_reel_song` v4 (merged in `0d28e5a`) ends the caption edit with
 Instagram's OK instead of Back, and types the caption again if it's empty before Share. On Envoy's phone, on a test
 copy with every Share declined, 5 of 5 Reels from a cold start reached Share with clip, song and caption checked, at 0
 model calls in Envoy's replay; TikTok 1 of 1, as a check that nothing else broke
-(`data/routines/instagram_reel_song/index.json`, v4). The Short's song pick and draft prompt weren't
-fixed.
+(`data/routines/instagram_reel_song/index.json`, v4). The Short's song pick and draft prompt weren't fixed.
 
-<!-- SLOT cold start: the routine that didn't exist, its first run and compile (timed), the share, Muse listing the new
-tool, a second input someone else picked, and the checked answer. -->
+**That 5 of 5 isn't the Reel's current state.** In live runs on Nov 4, v4 fell back to the agent once (17 model calls,
+195.67 s) and failed once (0 calls, 151.34 s). v5, a hand edit, then ran once: done, 0 model calls in Envoy's replay,
+95.79 s (`data/routines/instagram_reel_song/index.json`). Single runs, not a reliability figure.
+
+**Changes since the evaluation,** not measured by it: `wait_for_task`, which holds a call up to about 45 s so an agent
+stays in its turn until a task is final; Lyft's "Confirm drop-off location" no longer asks, because it only sets where
+you're going ("Confirm pickup" and "Request …" still ask); and in a routine with no irreversible step, rows named by an
+input that tie when their list can't scroll now take the top one.
+
+**A routine learned cold, on a real app (Nov 4).** With the author's real Uber account, read-only and with no ride
+requested, "Make it a routine" on one finished agent task saved `uber_check_uberx_price`. Its checking replay took 14.0
+s (destination: Truist Park). Its next run took 11.33 s with 0 model calls in Envoy's replay. On a later run an extra
+screen appeared: it repaired that step with 1 model call in 32.9 s, and the repaired version passed its trial in 12.81 s
+with 0 model calls in Envoy's replay (`data/routines/uber_check_uberx_price/index.json`). Three runs, not a reliability
+figure.
 
 Measured outside the evaluation (these stay as they are):
 
@@ -413,9 +422,11 @@ Measured outside the evaluation (these stay as they are):
 - **TikTok** sent no phone notification for any comment in testing, so Envoy can't watch TikTok comments yet.
 - **Muse hears about phone events when it next checks** `phone_updates` (a Muse scheduled task checked about every 10
   minutes). Envoy's own push to the iPhone is immediate.
-- **One post per Muse turn,** with one routine tool per post: in the Nov 2 dry run Muse started one post, ended its
-  turn, and waited for a tap before the next. `cross_post`, added after, takes every post in one request; the records
-  here show it called by a test driver over MCP, not yet by Muse.
+- **Muse can stop between posts when it uses one routine tool per post:** in the Nov 2 dry run it started one post,
+  ended its turn, and waited for a tap before the next. `cross_post` and `wait_for_task`, added since, address this: in
+  a Nov 4 take Muse made one `cross_post` call for a Reel, a Short and a TikTok, and all three finished (0, 0 and 3
+  model calls in Envoy's replay; each routine's `index.json`). Muse doesn't always choose it: in an earlier take that
+  day it used the separate tools (working notes, not in the repo).
 - **Apps that refuse emulators** (Target's bot check; banking apps are expected to, untested) need a real Android phone
   (Target on Envoy's phone isn't tested yet). iPhone-only users can't reach them.
 - **Where it runs:** on a Mac today, with Envoy's phone over USB. The cloud phone was tested (`docs/cloud.md`), but it
