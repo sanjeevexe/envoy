@@ -17,7 +17,7 @@ Mac, `phone_updates`, what was tested) is in [muse-link.md](muse-link.md).
 
   | Group | Tools |
   | --- | --- |
-  | read | `get_task`, `list_routines`, `memory_search`, `memory_get`, `phone_updates`, `list_phones` |
+  | read | `get_task`, `wait_for_task`, `list_routines`, `memory_search`, `memory_get`, `phone_updates`, `list_phones` |
   | run | `run_task`, `run_routine`, `cross_post`, and every learned routine you share as a tool |
   | memory | `memory_note` |
   | files | `send_to_phone`, `get_file` |

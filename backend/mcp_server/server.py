@@ -53,6 +53,7 @@ from api.notifications import redact, update_line
 from api.preflight import step_label
 from api.routing import EMULATOR_REFUSED, blocks_emulator, choose, known_apps
 from api.sharing import tool_names
+from api.store import ACTIVE
 from api.task_files import link_base, request_headers
 from memory.retrieval import Retriever
 from memory.service import MemoryService
@@ -66,8 +67,10 @@ except ImportError:
 
 INSTRUCTIONS = (
     "Envoy operates the user's Android phone apps and remembers what it sees there and in their email. "
-    "Use memory_search first for facts (trips, flights, gates, orders); use run_task to have Envoy do something in an app, "
-    "then get_task to follow it. Irreversible steps (check-in, orders, payments, posts) wait for the user's approval in Envoy on "
+    "Use memory_search first for facts (trips, flights, gates, orders); use run_task to have Envoy do something in an app. "
+    "After starting a task, keep calling wait_for_task in the same turn until it says still_going is false, then go on to your "
+    "next step, unless the user asked otherwise; don't end your turn on a running task, because nothing wakes you when it finishes. "
+    "get_task reads a task's status at once. Irreversible steps (check-in, orders, payments, posts) wait for the user's approval in Envoy on "
     "their phone: tell them it's waiting for their OK there. If run_task returns heads_up lines, tell the user before they wait "
     "on the task. "
     "send_to_phone puts a photo or video on the phone: a file the user (or you, on their Mac) put in Envoy's outbox folder, "
@@ -77,8 +80,8 @@ INSTRUCTIONS = (
     "routine tools (their optional phone; leave it out and Envoy picks). "
     "Routines the user shares with agents are also tools of their own, named after the routine (skylark_check_in_flight, say), "
     "with the routine's inputs as arguments: calling one is run_routine with that routine. "
-    "cross_post posts to several apps in one request (one task, a part per destination, each a shared routine); get_task's "
-    "posts says how each went. A post whose outcome is unknown may exist: tell the user to check that app, never post it again. "
+    "cross_post posts to several apps in one request (one task, a part per destination, each a shared routine); wait_for_task's "
+    "and get_task's posts say how each went. A post whose outcome is unknown may exist: tell the user to check that app, never post it again. "
     "phone_updates lists what happened on the phone since its cursor (finished tasks, tasks waiting for the user, changes, files, "
     "Envoy's questions, routines learned or repaired, notifications a watch matched); pass the cursor back next time. "
     "create_trigger proposes a recurring or event-triggered phone task: it is created switched off, and stays off until the user "
@@ -110,6 +113,12 @@ def public_base(port: int) -> str:
 
 
 WAITING_FOR_OK = "Waiting for the user's OK in Envoy, on their phone."
+# wait_for_task: the longest one call holds (lower it if a client cuts long tool calls short), and how often it looks.
+WAIT_FOR_TASK_S = 45.0
+WAIT_POLL_S = 1.0
+STILL_GOING = "Still going. Call wait_for_task again with this task_id, in this same turn, until still_going is false."
+STILL_WAITING = ("It's waiting for the user, who answers in Envoy on their phone; you can't answer for them. Tell them if you "
+                 "haven't, then call wait_for_task again with this task_id, in this same turn, until still_going is false.")
 
 
 def task_view(task: dict[str, Any], steps: list[dict[str, Any]], approvals: list[dict[str, Any]], base: str) -> dict[str, Any]:
@@ -515,7 +524,8 @@ def routine_description(r: Routine, app: str, idx: dict[str, Any]) -> str:
         parts.append(_line(r.description, 300))
     parts.append(what_it_changes(r))
     gives = f": {', '.join(o.replace('_', ' ') for o in r.outputs)}" if r.outputs else ""
-    parts.append(f"Returns a task_id at once; follow it with get_task, whose result has what the run found{gives}.")
+    parts.append("Returns a task_id at once; keep calling wait_for_task with it in the same turn until it's final, then go on "
+                 f"to your next step, unless the user asked otherwise. The final result has what the run found{gives}.")
     parts.append(LEARNED.format(how=how, date=_learned_on(idx)))
     return " ".join(parts)
 
@@ -693,7 +703,8 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> EnvoyMCP:
     async def run_task(goal: str, phone: str | None = None) -> dict:
         """Ask Envoy to do something in one of the user's phone apps, e.g. "check me in for my flight".
 
-        Returns a task ID; follow it with get_task. Irreversible steps wait for the user's approval in Envoy, on their phone.
+        Returns a task ID. Keep calling wait_for_task with it in the same turn until it's final, then go on to your next
+        step, unless the user asked otherwise. Irreversible steps wait for the user's approval in Envoy, on their phone.
         `phone`: an id from list_phones, "phone" (the user's own; Envoy asks them first) or "emulator"; leave it out and
         Envoy picks. With a phone named, the task runs there as one task.
         """
@@ -715,18 +726,47 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> EnvoyMCP:
         task = ctx.runner.start(goal, "mcp", **({"phone": asked} if asked else {}))
         return {"task_id": task["id"], "status": task["status"], "task_url": f"{base}/?task={task['id']}", **({"heads_up": heads} if heads else {})}
 
-    @server.tool(annotations=ToolAnnotations(title="Get a task's status", readOnlyHint=True, openWorldHint=False))
-    def get_task(task_id: str) -> dict:
-        """Status, recent steps, result, and pending approvals (each waits for the user's OK in Envoy, on their phone)."""
-        task = ctx.tasks.get(task_id)
-        if task is None:
-            return {"error": f"no task {task_id}"}
+    def view_of(task: dict[str, Any]) -> dict[str, Any]:
+        """What get_task and wait_for_task say about a task."""
+        task_id = task["id"]
         view = task_view(task, ctx.tasks.steps(task_id), ctx.tasks.approvals(task_id=task_id), base)
         if task.get("kind") == "crossapp" and crossposts().is_crosspost(task_id):
             view["posts"] = crossposts().view(task_id)
             if undone := [p.get("label") or p["app_name"] for p in view["posts"] if p["status"] in RETRYABLE]:
                 view["retry"] = f"cross_post with retry={task_id} runs only {', '.join(undone)} again"
         return view
+
+    @server.tool(annotations=ToolAnnotations(title="Get a task's status", readOnlyHint=True, openWorldHint=False))
+    def get_task(task_id: str) -> dict:
+        """Status, recent steps, result, and pending approvals (each waits for the user's OK in Envoy, on their phone)."""
+        task = ctx.tasks.get(task_id)
+        if task is None:
+            return {"error": f"no task {task_id}"}
+        return view_of(task)
+
+    @server.tool(annotations=ToolAnnotations(title="Wait for a task to finish", readOnlyHint=True, openWorldHint=False))
+    async def wait_for_task(task_id: str) -> dict:
+        """Wait for a task you started, so you can stay in your turn: nothing wakes you if you end it while the task runs.
+
+        Returns what get_task returns, as soon as the task is final (still_going false), or after about 45 seconds with
+        still_going true and a `next` line. Then call this again in the same turn, until it's final, and go on to your next
+        step, unless the user asked otherwise. A task waiting for the user keeps waiting: they answer in Envoy on their
+        phone, and you can't answer for them. This only reads: it decides nothing.
+        """
+        deadline = time.monotonic() + WAIT_FOR_TASK_S
+        while True:
+            task = ctx.tasks.get(task_id)
+            if task is None:
+                return {"error": f"no task {task_id}"}
+            if task["status"] not in ACTIVE:
+                return {**view_of(task), "still_going": False}
+            left = deadline - time.monotonic()
+            if left <= 0:
+                break
+            await anyio.sleep(min(WAIT_POLL_S, left))
+        view = view_of(task)
+        waiting = view["waiting_for_user"] or view["pending_approvals"] or task["status"] == "waiting_approval"
+        return {**view, "still_going": True, "next": STILL_WAITING if waiting else STILL_GOING}
 
     @server.tool(annotations=ToolAnnotations(title="List learned routines", readOnlyHint=True, openWorldHint=False))
     def list_routines() -> dict:
@@ -739,8 +779,9 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> EnvoyMCP:
 
     @server.tool(annotations=ToolAnnotations(title="Run a learned routine", readOnlyHint=False, destructiveHint=False, openWorldHint=True))
     def run_routine(name: str, inputs: dict[str, str] | None = None, phone: str | None = None) -> dict:
-        """Run a routine by name with its inputs (missing inputs are filled from memory). Returns a task ID. `phone`: an id
-        from list_phones, "phone" (the user's own; Envoy asks them first) or "emulator"; leave it out and Envoy picks."""
+        """Run a routine by name with its inputs (missing inputs are filled from memory). Returns a task ID: keep calling
+        wait_for_task with it in the same turn until it's final, then go on to your next step, unless the user asked otherwise.
+        `phone`: an id from list_phones, "phone" (the user's own; Envoy asks them first) or "emulator"; leave it out and Envoy picks."""
         return start_routine(ctx, base, name, inputs or {}, phone)
 
     @server.tool(annotations=ToolAnnotations(title="Post to several apps in one request", readOnlyHint=False, destructiveHint=False,
@@ -754,7 +795,8 @@ def build_mcp(ctx: Any, port: int, base: str | None = None) -> EnvoyMCP:
         shares with agents (instagram_reel_song, tiktok_post_sound, youtube_short_sound, say) with that routine's own inputs.
         The parts run one after another (TikTok last: it saves its own copy of each post in the phone's gallery, where the
         other routines take the newest video), and each post waits for the user's OK in Envoy on their phone: nothing is
-        posted without it. Returns the task_id at once; follow it with get_task, whose `posts` gives each destination's outcome:
+        posted without it. Returns the task_id at once; keep calling wait_for_task with it in the same turn until it's final
+        (unless the user asked otherwise). Its `posts`, like get_task's, gives each destination's outcome:
         done, failed, declined or not started (not posted), waiting, verifying… or outcome unknown. Outcome unknown means the post tap
         went through and the run ended before its check: tell the user to check that app; Envoy never posts there again by
         itself. To finish the rest, call cross_post with retry set to the task_id: only destinations that failed, were
