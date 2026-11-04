@@ -27,7 +27,8 @@ from api.crossapp import lead, may_span_apps
 from api.recurring import may_schedule
 
 
-NO_KEY = "Chat needs a Meta Model API key: set META_API_KEY in .env and restart. Saved routines still run without one."
+NO_KEY = ("Chat needs a Meta Model API key: set META_API_KEY in .env and restart. Without one, saved routines still run by name: "
+          'see "No key?" in the README.')
 NOT_CAUGHT = "Sorry, I didn't catch that. Please try again."
 
 

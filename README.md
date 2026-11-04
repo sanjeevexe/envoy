@@ -256,7 +256,7 @@ an app that uses accessibility features to act on its own, so any on-phone helpe
 You need a Mac on Apple silicon (built on macOS 26), Homebrew's `openjdk@21` (`scripts/env.sh` expects it there), the
 Android command-line tools in `~/Library/Android/sdk/cmdline-tools/latest`, `uv`, Node, about 9 GB free, and a Meta Model
 API key for chat and `demo_setup.py`'s memory step. It runs on SkyLark, our own test app, so it needs no personal accounts.
-From a fresh clone to a checked-in flight took about 15 minutes in our test.
+With those in place, a fresh clone reached a checked-in flight in about 5 minutes in our test (the first run also downloads about 4 GB of Android tools).
 
 ```bash
 source scripts/env.sh                                    # JAVA_HOME, ANDROID_HOME, PATH
@@ -285,23 +285,31 @@ uv run --project backend python -m api                   # http://127.0.0.1:8700
 ```
 
 Open the sign-in link it prints and type "Check me in for my flight" in the Ask Envoy box. When Envoy says it needs you,
-click Take over, click a field on the phone and type (any email and password, then the test SMS code `demo_setup.py`
+click Take over, click a field on the phone (if the page only scrolls, click it again) and type (any email and password, then the test SMS code `demo_setup.py`
 printed), then click Hand back. It checks you in, because asking was your OK. To
 approve it on your iPhone first, set approvals to "Always ask" in Settings, or send the same request from an agent over
 MCP. Real apps
 use a second emulator, `envoy-real`, made the same way with a 16 GB data partition
 ([`docs/phase-0-findings.md`](docs/phase-0-findings.md)).
 
-**No key?** The tests pass without one (`cd backend && uv run pytest -q`), and saved routines replay with no model calls:
+**No key?** The tests pass without one (`cd backend && uv run pytest -q`), and saved routines replay with no model calls.
+Do the test phone steps and the `web` build above, set `MCP_BEARER_TOKEN`, and skip the plain `demo_setup.py` line, which
+stops at its memory step without a key. Then:
 
 ```bash
 uv run --project backend python scripts/demo_setup.py --app-only --signed-in
-uv run --project backend python -m api                   # open the sign-in link it prints in your browser too
+uv run --project backend python -m api                   # keeps running; open the sign-in link it prints in your browser
+```
+
+In a second terminal:
+
+```bash
 curl -c /tmp/envoy -s -o /dev/null "<the sign-in link>"
 curl -b /tmp/envoy -H 'X-Envoy: 1' -H 'Content-Type: application/json' -d '{"routine":"skylark_check_in_flight","inputs":{"trip_city":"Chicago"}}' http://127.0.0.1:8700/api/tasks
 ```
 
-Then approve it in the web app. Chat and memory need a key.
+Then, in the web app: Activity › Review › Confirm check-in. To repeat it, run the `demo_setup.py` line again first. Chat,
+memory and the Routines page's Run button need a key.
 
 **Connect an agent.** Make it a key in Settings › Agents, then:
 - **Any MCP client,** such as Claude Code: `claude mcp add --transport http …`, step by step in

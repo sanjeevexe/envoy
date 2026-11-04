@@ -195,7 +195,7 @@ export default function LivePhone({ avd, lease, needsYou, mobile, teachAsk, task
     const d = { ...p, t: performance.now() } as NonNullable<typeof down.current>;
     d.timer = setTimeout(() => { d.long = true; send({ type: "long_press", x: d.x, y: d.y }, true); navigator.vibrate?.(10); }, 550);
     down.current = d;
-    if (!mobile) canvas.current?.focus();
+    if (!mobile) canvas.current?.focus({ preventScroll: true });
   };
   const onMove = (e: React.PointerEvent) => {
     const d = down.current;
