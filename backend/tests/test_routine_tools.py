@@ -23,7 +23,7 @@ from test_mcp_link import HDR, make
 
 LIB = Path(__file__).resolve().parents[2] / "data" / "routines"  # the live library (test_crosspost's creator routines)
 SKYLARK_LIB = Path(__file__).resolve().parent / "traces" / "library"  # the pinned SkyLark routines
-BUILTIN = {"run_task", "get_task", "list_routines", "run_routine", "cross_post", "memory_search", "memory_get", "memory_note", "send_to_phone",
+BUILTIN = {"run_task", "get_task", "wait_for_task", "list_routines", "run_routine", "cross_post", "memory_search", "memory_get", "memory_note", "send_to_phone",
            "phone_updates", "create_trigger", "list_phones", "get_file"}
 
 
@@ -90,7 +90,8 @@ def test_the_tool_has_the_routines_inputs_intent_app_outputs_and_how_it_runs(env
     assert d.startswith("Check in for a SkyLark flight. Runs a routine Envoy learned in the SkyLark app (com.skylark.air), on a phone Envoy operates.")
     assert ('Its step "Tap Confirm check-in to complete check-in for the flight to <trip_city>" can\'t be undone, so Envoy asks '
             "the user on their phone first and does it only with their OK (or a standing approval they gave this routine in Envoy).") in d
-    assert ("Returns a task_id at once; follow it with get_task, whose result has what the run found: seat, gate, boarding time, "
+    assert ("Returns a task_id at once; keep calling wait_for_task with it in the same turn until it's final, then go on to your "
+            "next step, unless the user asked otherwise. The final result has what the run found: seat, gate, boarding time, "
             "boarding group, flight.") in d
     assert ("Learned by Envoy from a run on Oct 27, 2026; replays without model calls while the app looks as it did; anything "
             "irreversible waits for the user's OK on their phone.") in d

@@ -181,6 +181,7 @@ class RoutineExecutor:
         self.config = config or ExecConfig()
         self.app_notes = app_notes  # memory's AppNotes: a repair (and the fallback agent) reads the app's notes
         self._watch: chk.OutcomeWatch | None = None  # this run's picked inputs, followed over every screen it reads
+        self._top_on_tie = False  # this run may take the top of tied rows (`list_choice`): its routine changes nothing for good
 
     def _app_notes(self, package: str) -> Any:
         if self.app_notes is None:
@@ -242,7 +243,7 @@ class RoutineExecutor:
         if step.action.kind not in ("tap", "long_press", "type") or step.action.target is None or step.action.target.visual:
             return None  # a drawn target (no node in the tree) is found by looking, when the step acts
         th = locators.RELAXED if relaxed else locators.STRICT
-        return list_choice(step.action.target, screen, inputs, th)
+        return list_choice(step.action.target, screen, inputs, th, top_on_tie=self._top_on_tie)
 
     @staticmethod
     def _next_required(ctx: "_Ctx", idx: int) -> Step | None:
@@ -278,6 +279,7 @@ class RoutineExecutor:
                     await self.device.launch(routine.app)
             ctx.plan = chk.outcome_plan(routine)
             self._watch = chk.OutcomeWatch(ctx.plan, ctx.inputs)
+            self._top_on_tie = not any(s.risk == "irreversible" for s in routine.steps)
             if (why := await self._clip_problem(ctx)) is not None:  # the routine would pick another clip: stop before any step
                 trace.step({"kind": "outcome_checks", "when": "start", "problems": [why]})
                 return self._finish(ctx, "failed", f"stopped before starting (outcome check): {why}")
@@ -840,9 +842,9 @@ class RoutineExecutor:
         flipped = searched = False
         for k in range(2 * (a.max_scrolls or 8) + 1):
             s = await self._observe()
-            m = list_choice(a.target, s, ctx.inputs, locators.STRICT)
+            m = list_choice(a.target, s, ctx.inputs, locators.STRICT, top_on_tie=self._top_on_tie)
             if not m.ok:
-                rm = list_choice(a.target, s, ctx.inputs, locators.RELAXED)
+                rm = list_choice(a.target, s, ctx.inputs, locators.RELAXED, top_on_tie=self._top_on_tie)
                 if rm.ok:
                     sr.climb(2, f"relaxed match while scrolling: {rm.summary()}")
                     m = rm
@@ -1366,9 +1368,13 @@ def extract_value(spec: Extract, screen: ScreenState, inputs: dict[str, str], sp
     return value
 
 
-def list_choice(loc: Locator, screen: ScreenState, inputs: dict[str, str], threshold: float) -> locators.Match:
+def list_choice(loc: Locator, screen: ScreenState, inputs: dict[str, str], threshold: float, *, top_on_tie: bool = False) -> locators.Match:
     """A list row named by an input ("{{app_name}}"), never the search box that shows only the input after a search
-    ("Spotify" at the top, while "Spotify: Music and Podcasts …" is the row): the top row of the list that names it."""
+    ("Spotify" at the top, while "Spotify: Music and Podcasts …" is the row): the top row of the list that names it.
+
+    With `top_on_tie` (a routine with no irreversible step), so do look-alike rows that tie when their list can't scroll right
+    now, which leaves them out of `in_list`: Uber's results for "State Farm Arena", all with more words than the input, tied
+    under the bar, Nov 4. Anything that would ask on its own (`classify`) stays ambiguous."""
     m = locators.locate(loc, screen, inputs, threshold=threshold)
     raw = loc.text_has or ""
     if not (loc.in_list and has_slot(raw)) or (m.element is not None and m.element.in_list):
@@ -1376,6 +1382,12 @@ def list_choice(loc: Locator, screen: ScreenState, inputs: dict[str, str], thres
     term = render_str(raw, inputs) or ""
     rows = [e for e in screen.numbered if e.in_list and (not loc.kind or e.kind == loc.kind) and norm(e.label) != norm(term)
             and contains_value(e.full_label or e.label, term)]
+    if not rows and top_on_tie:
+        tied = [e for e in locators.tied(loc, screen, inputs, threshold=locators.RELAXED) if (not loc.kind or e.kind == loc.kind)
+                and norm(e.label) != norm(term) and contains_value(e.full_label or e.label, term)]
+        ordered = locators.in_order(tied, screen) if len(tied) > 1 else None
+        if ordered and not any(classify(Action(kind="tap", element=e.number), screen, None).irreversible for e in ordered):
+            return locators.Match(ordered[0], max(m.score, threshold), m.runner_up, threshold)
     if not rows:
         return m if m.element is None or m.element.in_list else locators.Match(None, m.score, m.runner_up, threshold)
     return locators.Match(min(rows, key=lambda e: e.bounds[1]), max(m.score, threshold), m.runner_up, threshold)
