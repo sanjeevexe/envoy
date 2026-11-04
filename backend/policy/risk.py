@@ -86,6 +86,12 @@ _RIDE = re.compile(r"^((request|book|schedule) (a |an |the |this |your |my )?(ri
                    r"request (a |an |the |this |your |my )?(trip|pickup|car|driver))\b", re.I)
 _RIDE_APPS = {"com.ubercab", "me.lyft.android"}
 _RIDE_APP_REQUEST = re.compile(r"^request\b", re.I)
+# Lyft's "Set your drop-off" map screen names its button "Confirm drop-off location: <the place>". It only sets where you're
+# going: the ride is requested later, by "Request …" and "Confirm pickup", which still ask (Nov 3: it asked in a take, and a
+# routine learned from that run would have asked on every replay). Only in Lyft and only this wording up to the place's name,
+# so "Confirm drop-off change" or "Confirm UberX" still ask.
+_LYFT = "me.lyft.android"
+_LYFT_SET_DROPOFF = re.compile(r"^confirm drop-?off( location)?(:.*)?$", re.I)
 # Labels that are safe whatever the screen says (dismissing, going back, declining).
 _SAFE = re.compile(r"^(back|navigate up|close|cancel|keep\b.*|not now|no,? thanks|don.?t allow|deny|dismiss|later|maybe later|skip|done)$", re.I)
 # Screen text that means money or a final step is involved.
@@ -178,7 +184,8 @@ def classify(action: Action, screen: ScreenState, model_risk: Risk | None) -> Ri
         if action.kind != "type" or action.submit:
             rid = target.resource_id.split("/")[-1]
             named_reversible = _GENERIC.match(target.label.strip()) and _REVERSIBLE_ID.search(rid) and not _IRREVERSIBLE_ID.search(rid)
-            if _IRREVERSIBLE.search(text) and not _SAFE.match(target.label.strip()) and not named_reversible:
+            sets_dropoff = _LYFT_SET_DROPOFF.match(target.label.strip()) and target.kind == "Button" and screen.package == _LYFT
+            if _IRREVERSIBLE.search(text) and not _SAFE.match(target.label.strip()) and not named_reversible and not sets_dropoff:
                 reasons.append(f"rule: target says {target.label!r}")
             elif _IRREVERSIBLE_ID.search(rid) and not (_PICKER_OK.match(target.label.strip()) and any(
                     _PICKER_ID.search(e.resource_id.split("/")[-1]) for e in screen.elements)):
