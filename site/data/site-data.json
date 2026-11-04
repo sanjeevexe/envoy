@@ -831,8 +831,8 @@
     "name": "instagram_reel_song",
     "app": "Instagram",
     "what": "A Reel set to a song from Instagram's music library",
-    "version": 4,
-    "steps": 15,
+    "version": 5,
+    "steps": 16,
     "inputs": [
      "song_title",
      "song_artist",
@@ -885,14 +885,42 @@
        "final": "Share",
        "calls": 0
       },
-      "runs": []
+      "runs": [
+       {
+        "status": "agent_done",
+        "calls": 17,
+        "seconds": 195.67,
+        "date": "Nov 4"
+       },
+       {
+        "status": "failed",
+        "calls": 0,
+        "seconds": 151.34,
+        "date": "Nov 4"
+       }
+      ]
+     },
+     {
+      "version": 5,
+      "date": "Nov 4",
+      "kind": "a hand edit",
+      "what": "a wait for the upload after Share",
+      "check": null,
+      "runs": [
+       {
+        "status": "done",
+        "calls": 0,
+        "seconds": 95.79,
+        "date": "Nov 4"
+       }
+      ]
      }
     ],
     "src": {
      "path": "data/routines/instagram_reel_song/index.json"
     },
     "yaml_src": {
-     "path": "data/routines/instagram_reel_song/v4.yaml"
+     "path": "data/routines/instagram_reel_song/v5.yaml"
     }
    },
    {
@@ -3456,6 +3484,24 @@
     ]
    },
    {
+    "routine": "instagram_reel_song",
+    "version": 6,
+    "status": "rejected",
+    "passed": false,
+    "changes": [
+     "step 'search_song_title': after-checks failed (no match (best 0.00 < 0.80 or ambiguous, runner-up 0.00); no match (best 0.00 < ) but the next step was ready; after-checks rewritten from what happened"
+    ]
+   },
+   {
+    "routine": "lyft_get_ride_fare",
+    "version": 6,
+    "status": "rejected",
+    "passed": false,
+    "changes": [
+     "step 'open_ride_planning': the element moved or changed; new locator {text='Where are you going?', kind='Button'}"
+    ]
+   },
+   {
     "routine": "starbucks_drink_calories",
     "version": 2,
     "status": "rejected",
@@ -3472,6 +3518,15 @@
     "passed": true,
     "changes": [
      "after 'tap_order', an extra screen appeared; inserted tap_order_extra_1 (tap Choose a café)"
+    ]
+   },
+   {
+    "routine": "uber_check_uberx_price",
+    "version": 2,
+    "status": "active",
+    "passed": true,
+    "changes": [
+     "after 'tap_where_to', an extra screen appeared; inserted tap_where_to_extra_1 (tap Where to?)"
     ]
    },
    {
