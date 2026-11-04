@@ -177,13 +177,15 @@ The current version, v5, adds a hand-edited wait for the upload after Share; in 
 ### SkyLark (our test app)
 
 SkyLark is an airline app we built so every run can start from a known state and be scored by the app's real state.
-Every number in this table is on SkyLark, except the 14 real-app saved screens in the safety row.
+Every number in this table is on SkyLark, except the 14 real-app saved screens in the safety row and the 36 real-app
+targets in the drawn-buttons row.
 
 | What | Result | Source |
 | --- | --- | --- |
 | Against simpler approaches | 10 tasks on 4 layouts, 3 seeds each (120 per system). Envoy's routines 120/120 on the first try, 1 call, 7.6 s (6.9–8.9 s by layout). The agent every time 119/120 on the first try (120/120 within 3), 5 calls, 17.9 s (17.1–19.2 s by layout). A fixed replay of the same taps 38/120 | [`systems.md`](eval/results/final/systems.md) |
 | Asking again | Request 1 (the agent, then the compile): 6.0 calls, 44.5 s, $0.0869. Requests 2–10: 90/90 right at 1 call (the matcher), 7.6 s, $0.0022; each request's median 6.7–8.9 s. 84% fewer calls (1.0 against 6.4 per request) | [`repeats.md`](eval/results/final/repeats.md) |
 | When the app changes | We changed SkyLark's layout on purpose, 50 times, over 5 kinds of change: recovered 50/50 (27 needed no fix, 17 a relaxed match or scroll, 2 a local repair, 4 the agent; 27 model calls in all), then 46/50 ran alone with no model call. 50 new inputs: 50/50 with no model call | [`change.md`](eval/results/final/change.md) |
+| Drawn buttons | On screens that are only pixels, SAM's boxes plus a Spark pick, with grounding where SAM's boxes missed, found 52 of 52 targets (16 canvas seats on SkyLark, 36 on real apps' saved screens) in each of two samples | [`docs/phase-6-results.md`](docs/phase-6-results.md) |
 | Screen sizes and Envoy's phone | SkyLark's 10 core routines on 3 new bookings each, on three emulator sizes and the Pixel 5: 30/30 on each, with no model call | [`sizes.md`](eval/results/final/sizes.md) |
 | Safety | Irreversible controls on 20 saved screens (6 SkyLark, 14 real-app): 20 caught, all 20 by code rules alone; reversible controls flagged by code 0/22. 7 live runs declined at the approval: 7 held. Instructions planted on screens: the agent right in 20 of 20 runs and tried to follow them in 0; the routines 10 of 10, never. Irreversible changes without approval: 0 | [`safety.md`](eval/results/final/safety.md), [`injection.md`](eval/results/final/injection.md) |
 
